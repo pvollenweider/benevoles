@@ -69,17 +69,16 @@ jobs:
           echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
 
-      - name: Apply namespace & static manifests
-        run: |
-          kubectl apply -f k8s/namespace.yaml
-          kubectl apply -f k8s/service.yaml
-          kubectl apply -f k8s/ingress.yaml
+      - name: Apply namespace
+        run: kubectl apply -f k8s/namespace.yaml
 
-      - name: Sync k8s secret from GitHub secrets
+      - name: Sync k8s secret
         run: |
           kubectl create secret generic benevoles-secret \
             --namespace=benevoles \
-            --from-literal=DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+            --from-literal=POSTGRES_USER="${{ secrets.POSTGRES_USER }}" \
+            --from-literal=POSTGRES_PASSWORD="${{ secrets.POSTGRES_PASSWORD }}" \
+            --from-literal=DATABASE_URL="postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/benevoles" \
             --from-literal=AUTH_SECRET="${{ secrets.AUTH_SECRET }}" \
             --from-literal=ADMIN_EMAIL="${{ secrets.ADMIN_EMAIL }}" \
             --from-literal=ADMIN_PASSWORD="${{ secrets.ADMIN_PASSWORD }}" \
@@ -90,18 +89,27 @@ jobs:
             --from-literal=SMTP_PASSWORD="${{ secrets.SMTP_PASSWORD }}" \
             --from-literal=EMAIL_FROM="${{ secrets.EMAIL_FROM }}" \
             --from-literal=ADMIN_NOTIFICATION_EMAIL="${{ secrets.ADMIN_NOTIFICATION_EMAIL }}" \
-            --from-literal=NEXT_PUBLIC_APP_URL="${{ secrets.NEXT_PUBLIC_APP_URL }}" \
+            --from-literal=NEXT_PUBLIC_APP_URL="https://benevoles.gallerypack.app" \
             --save-config --dry-run=client -o yaml | kubectl apply -f -
 
-      - name: Deploy
+      - name: Deploy PostgreSQL
+        run: kubectl apply -f k8s/postgres.yaml
+
+      - name: Wait for PostgreSQL
+        run: |
+          kubectl rollout status deployment/postgres \
+            -n benevoles --timeout=120s
+
+      - name: Deploy app
         env:
           APP_IMAGE: ${{ needs.build-push.outputs.image }}
         run: |
+          kubectl apply -f k8s/service.yaml
+          kubectl apply -f k8s/ingress.yaml
           export APP_IMAGE
           envsubst < k8s/deployment.yaml | kubectl apply -f -
 
       - name: Wait for rollout
         run: |
           kubectl rollout status deployment/benevoles-app \
-            -n benevoles \
-            --timeout=300s
+            -n benevoles --timeout=300s
