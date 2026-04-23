@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: benevoles-app
+  namespace: benevoles
+  labels:
+    app: benevoles-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: benevoles-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: benevoles-app
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+
+      initContainers:
+        - name: migrate
+          image: ${APP_IMAGE}
+          command: ["./node_modules/.bin/prisma", "migrate", "deploy"]
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: DATABASE_URL
+
+      containers:
+        - name: app
+          image: ${APP_IMAGE}
+          command: ["node", "server.js"]
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: benevoles-secret
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: PORT
+              value: "3000"
+            - name: HOSTNAME
+              value: "0.0.0.0"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:
+            httpGet:
+              path: /api/public/events
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /api/public/events
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            failureThreshold: 3

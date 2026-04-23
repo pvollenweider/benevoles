@@ -1,0 +1,29 @@
+# Adapter selon votre ingress controller (nginx, traefik, etc.)
+# et votre configuration TLS (cert-manager, etc.)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: benevoles-app
+  namespace: benevoles
+  annotations:
+    # nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    # cert-manager (si utilisé)
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  # ingressClassName: nginx
+  tls:
+    - hosts:
+        - benevoles.votre-domaine.com
+      secretName: benevoles-tls
+  rules:
+    - host: benevoles.votre-domaine.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: benevoles-app
+                port:
+                  number: 80
