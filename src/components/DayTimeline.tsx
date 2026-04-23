@@ -1,0 +1,207 @@
+"use client"
+
+import { getBarClasses } from "@/lib/roles"
+
+export type TimelineShift = {
+  id: string
+  roleName: string
+  label: string
+  startTime: string
+  endTime: string
+  status: string
+  spotsLeft: number
+}
+
+type Show = { name: string; date: string; startTime: string; endTime: string }
+
+function toMin(t: string) {
+  const [h, m] = t.split(":").map(Number)
+  return h * 60 + m
+}
+
+export function fmt(t: string) {
+  const [h, m] = t.split(":")
+  return m === "00" ? `${h}h` : `${h}h${m}`
+}
+
+const ROW_H   = 36
+const GAP     = 4
+const LABEL_W = 72
+const SHOW_H  = 22
+const AXIS_H  = 18
+
+export default function DayTimeline({
+  shifts,
+  shows,
+  selected,
+  registered,
+  conflicts,
+  onToggle,
+}: {
+  shifts: TimelineShift[]
+  shows: Show[]
+  selected: Set<string>
+  registered?: Set<string>
+  conflicts?: Set<string>
+  onToggle: (id: string, status: string) => void
+}) {
+  const visible = shifts.filter((s) => s.status !== "cancelled")
+  if (visible.length === 0) return null
+
+  const allMins = [
+    ...visible.flatMap((s) => [toMin(s.startTime), toMin(s.endTime)]),
+    ...shows.flatMap((s) => [toMin(s.startTime), toMin(s.endTime)]),
+  ]
+  const dayStart = Math.floor(Math.min(...allMins) / 60) * 60
+  const dayEnd   = Math.ceil(Math.max(...allMins)  / 60) * 60
+  const span     = dayEnd - dayStart
+
+  const pct = (min: number) => `${((min - dayStart) / span) * 100}%`
+  const wid = (s: number, e: number) => `${Math.max(((e - s) / span) * 100, 0.5)}%`
+
+  const fullLeft = (min: number) => {
+    const f = (min - dayStart) / span
+    return `calc(${LABEL_W}px + (100% - ${LABEL_W}px) * ${f})`
+  }
+  const fullWid = (s: number, e: number) => {
+    const f = (e - s) / span
+    return `calc(max((100% - ${LABEL_W}px) * ${f}, 2px))`
+  }
+
+  const roleOrder: string[] = []
+  const byRole: Record<string, TimelineShift[]> = {}
+  for (const s of visible) {
+    if (!byRole[s.roleName]) { roleOrder.push(s.roleName); byRole[s.roleName] = [] }
+    byRole[s.roleName].push(s)
+  }
+
+  const hours: number[] = []
+  for (let h = dayStart / 60; h <= dayEnd / 60; h++) hours.push(h)
+
+  return (
+    <div className="mb-5 rounded-xl border border-gray-100 bg-white overflow-x-auto select-none">
+      <div style={{ minWidth: 280 }} className="p-3">
+        <div className="flex relative">
+
+          {/* Full-height show bands */}
+          {shows.map((show, i) => (
+            <div
+              key={i}
+              className="absolute inset-y-0 bg-indigo-50 border-x border-indigo-100 pointer-events-none z-0"
+              style={{
+                left:  fullLeft(toMin(show.startTime)),
+                width: fullWid(toMin(show.startTime), toMin(show.endTime)),
+              }}
+            />
+          ))}
+
+          {/* Label column */}
+          <div className="flex-shrink-0 flex flex-col relative z-10" style={{ width: LABEL_W }}>
+            {roleOrder.map((role) => (
+              <div
+                key={role}
+                className="flex items-center justify-end pr-2"
+                style={{ height: ROW_H, marginBottom: GAP }}
+              >
+                <span className="text-[10px] text-gray-400 truncate leading-tight text-right">
+                  {role.split(" &")[0].split(" —")[0].trim()}
+                </span>
+              </div>
+            ))}
+            <div style={{ height: SHOW_H + AXIS_H }} />
+          </div>
+
+          {/* Timeline area */}
+          <div className="flex-1 min-w-0 relative z-10">
+
+            {roleOrder.map((role) => (
+              <div
+                key={role}
+                className="relative"
+                style={{ height: ROW_H, marginBottom: GAP }}
+              >
+                {byRole[role].map((shift) => {
+                  const isRegistered = registered?.has(shift.id) ?? false
+                  const isConflict  = conflicts?.has(shift.id) ?? false
+                  const isFull      = shift.status === "full"
+                  const isClosed    = shift.status === "closed"
+                  const unavail     = isFull || isClosed
+                  const isSelected  = selected.has(shift.id)
+                  // visual: selected (incl. registered) / unavailable (full, conflict) / default
+                  const state   = isSelected ? "selected" : (isConflict || unavail) ? "unavailable" : "default"
+                  const barCls  = getBarClasses(shift.roleName, state)
+                  const clickable = !isRegistered && !isConflict && !unavail
+
+                  return (
+                    <button
+                      key={shift.id}
+                      disabled={!clickable}
+                      onClick={() => onToggle(shift.id, shift.status)}
+                      className={`absolute inset-y-0 rounded flex items-center justify-center overflow-hidden transition-colors ${clickable ? "cursor-pointer" : "cursor-default"} ${barCls}`}
+                      style={{
+                        left:  pct(toMin(shift.startTime)),
+                        width: wid(toMin(shift.startTime), toMin(shift.endTime)),
+                      }}
+                    >
+                      {isConflict || (unavail && !isSelected) ? (
+                        <span className="text-[8px] px-1 truncate leading-none text-gray-400">
+                          {isFull ? "Complet" : isClosed ? "Fermé" : ""}
+                        </span>
+                      ) : (
+                        <div className="flex items-center gap-0.5 px-1.5 max-w-full overflow-hidden">
+                          {isSelected && (
+                            <svg className="w-2.5 h-2.5 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          )}
+                          <span
+                            className="text-white text-[10px] font-bold truncate leading-none"
+                            style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
+                          >
+                            {fmt(shift.startTime)}–{fmt(shift.endTime)}
+                          </span>
+                        </div>
+                      )}
+                    </button>
+                  )
+                })}
+              </div>
+            ))}
+
+            {/* Show label row */}
+            <div className="relative" style={{ height: SHOW_H }}>
+              {shows.map((show, i) => (
+                <div
+                  key={i}
+                  className="absolute inset-y-0 bg-indigo-100 rounded-sm flex items-center overflow-hidden px-1"
+                  style={{
+                    left:  pct(toMin(show.startTime)),
+                    width: wid(toMin(show.startTime), toMin(show.endTime)),
+                  }}
+                >
+                  <span className="text-[9px] text-indigo-700 font-medium truncate whitespace-nowrap">
+                    🎪 {show.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Time axis */}
+            <div className="relative border-t border-gray-100" style={{ height: AXIS_H }}>
+              {hours.map((h) => (
+                <div
+                  key={h}
+                  className="absolute top-1 text-[10px] text-gray-300 leading-none"
+                  style={{ left: pct(h * 60), transform: "translateX(-50%)" }}
+                >
+                  {h}h
+                </div>
+              ))}
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

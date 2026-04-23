@@ -69,16 +69,34 @@ jobs:
           echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
 
-      - name: Deploy
-        env:
-          APP_IMAGE: ${{ needs.build-push.outputs.image }}
+      - name: Apply namespace & static manifests
         run: |
-          # Ordre important : namespace d'abord
           kubectl apply -f k8s/namespace.yaml
           kubectl apply -f k8s/service.yaml
           kubectl apply -f k8s/ingress.yaml
 
-          # Deployment avec l'image SHA injectée
+      - name: Sync k8s secret from GitHub secrets
+        run: |
+          kubectl create secret generic benevoles-secret \
+            --namespace=benevoles \
+            --from-literal=DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+            --from-literal=AUTH_SECRET="${{ secrets.AUTH_SECRET }}" \
+            --from-literal=ADMIN_EMAIL="${{ secrets.ADMIN_EMAIL }}" \
+            --from-literal=ADMIN_PASSWORD="${{ secrets.ADMIN_PASSWORD }}" \
+            --from-literal=SMTP_HOST="${{ secrets.SMTP_HOST }}" \
+            --from-literal=SMTP_PORT="${{ secrets.SMTP_PORT }}" \
+            --from-literal=SMTP_SECURE="${{ secrets.SMTP_SECURE }}" \
+            --from-literal=SMTP_USER="${{ secrets.SMTP_USER }}" \
+            --from-literal=SMTP_PASSWORD="${{ secrets.SMTP_PASSWORD }}" \
+            --from-literal=EMAIL_FROM="${{ secrets.EMAIL_FROM }}" \
+            --from-literal=ADMIN_NOTIFICATION_EMAIL="${{ secrets.ADMIN_NOTIFICATION_EMAIL }}" \
+            --from-literal=NEXT_PUBLIC_APP_URL="${{ secrets.NEXT_PUBLIC_APP_URL }}" \
+            --save-config --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy
+        env:
+          APP_IMAGE: ${{ needs.build-push.outputs.image }}
+        run: |
           export APP_IMAGE
           envsubst < k8s/deployment.yaml | kubectl apply -f -
 

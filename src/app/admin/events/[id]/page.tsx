@@ -81,7 +81,14 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
           href={`/api/admin/events/${event.id}/export`}
           className="bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors flex-1 text-center"
         >
-          Exporter CSV
+          Exporter Excel
+        </a>
+        <a
+          href={`/api/admin/events/${event.id}/export/pdf`}
+          target="_blank"
+          className="bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors flex-1 text-center"
+        >
+          Exporter PDF ↗
         </a>
       </div>
 

@@ -6,20 +6,22 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
-  const passwordHash = await bcrypt.hash("admin123", 12)
+  const email    = process.env.ADMIN_EMAIL    ?? "admin@benevoles.fr"
+  const password = process.env.ADMIN_PASSWORD ?? "admin123"
+  const passwordHash = await bcrypt.hash(password, 12)
 
   await prisma.adminUser.upsert({
-    where: { email: "admin@benevoles.fr" },
-    update: {},
+    where: { email },
+    update: { passwordHash },
     create: {
-      email: "admin@benevoles.fr",
+      email,
       name: "Administrateur",
       passwordHash,
       role: "super_admin",
     },
   })
 
-  console.log("✓ Admin créé : admin@benevoles.fr / admin123")
+  console.log(`✓ Admin créé : ${email}`)
 
   const event = await prisma.event.upsert({
     where: { slug: "spectacle-cirque-2026" },

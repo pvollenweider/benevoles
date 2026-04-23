@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
-import { formatDate } from "@/lib/utils"
+import { formatDate, shiftsOverlap } from "@/lib/utils"
+import DayTimeline, { fmt } from "@/components/DayTimeline"
 
 type Shift = {
   id: string
@@ -20,6 +21,8 @@ type Shift = {
   locationDetails: string | null
 }
 
+type Show = { name: string; date: string; startTime: string; endTime: string }
+
 type EventData = {
   id: string
   slug: string
@@ -30,6 +33,7 @@ type EventData = {
   endDate: string
   publicInstructions: string | null
   confirmationMessage: string | null
+  showSchedule: Show[]
   shifts: Shift[]
 }
 
@@ -38,16 +42,21 @@ export default function EventPage() {
   const router = useRouter()
   const slug = params.slug as string
 
+  type MyReg = { shiftId: string; token: string; label: string; roleName: string; startTime: string; endTime: string }
+
   const [event, setEvent] = useState<EventData | null>(null)
   const [loading, setLoading] = useState(true)
   const [selectedShifts, setSelectedShifts] = useState<Set<string>>(new Set())
-  const [showFull, setShowFull] = useState(false)
+  const [myRegistrations, setMyRegistrations] = useState<MyReg[]>([])
+  const [pendingCancel, setPendingCancel] = useState<{ token: string; shiftId: string; label: string } | null>(null)
   const [step, setStep] = useState<"select" | "form">("select")
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [form, setForm] = useState({
     firstName: "", lastName: "", email: "", phone: "", comment: "", consent: false,
   })
+
+  const myShiftIds = new Set(myRegistrations.map((r) => r.shiftId))
 
   useEffect(() => {
     fetch(`/api/public/events/${slug}`)
@@ -59,6 +68,48 @@ export default function EventPage() {
       })
   }, [slug])
 
+  useEffect(() => {
+    const token = localStorage.getItem(`benevoles_token_${slug}`)
+    if (!token) return
+    fetch(`/api/public/registrations/${token}`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (!data?.registrations) return
+        const regs: MyReg[] = data.registrations.map((r: { editToken: string; shift: { id: string; label: string; roleName?: string; startTime: string; endTime: string } }) => ({
+          shiftId: r.shift.id,
+          token: r.editToken,
+          label: r.shift.label,
+          roleName: r.shift.roleName ?? "",
+          startTime: r.shift.startTime,
+          endTime: r.shift.endTime,
+        }))
+        setMyRegistrations(regs)
+        // Pre-fill the registration form with known volunteer info
+        if (data.volunteer) {
+          setForm((f) => ({
+            ...f,
+            firstName: data.volunteer.firstName || f.firstName,
+            lastName:  data.volunteer.lastName  || f.lastName,
+            email:     data.volunteer.email     || f.email,
+            phone:     data.volunteer.phone     || f.phone,
+          }))
+        }
+        // Pre-select registered shifts so conflicts are auto-computed
+        setSelectedShifts((prev) => {
+          const next = new Set(prev)
+          regs.forEach((r) => next.add(r.shiftId))
+          return next
+        })
+      })
+      .catch(() => {})
+  }, [slug])
+
+  async function cancelRegistration(regToken: string, shiftId: string) {
+    await fetch(`/api/public/registrations/${regToken}`, { method: "DELETE" })
+    setMyRegistrations((prev) => prev.filter((r) => r.token !== regToken))
+    setSelectedShifts((prev) => { const next = new Set(prev); next.delete(shiftId); return next })
+  }
+
   if (loading) return <div className="flex items-center justify-center min-h-screen text-gray-400">Chargement…</div>
   if (!event) return <div className="flex items-center justify-center min-h-screen text-gray-400">Événement introuvable.</div>
 
@@ -69,15 +120,17 @@ export default function EventPage() {
     return acc
   }, {})
 
-  const openShifts = event.shifts.filter((s) => s.status !== "full" && s.status !== "closed" && s.status !== "cancelled")
-  const fullShifts = event.shifts.filter((s) => s.status === "full")
+  const hasAvailableShift = event.shifts.some(
+    (s) => s.status !== "full" && s.status !== "closed" && s.status !== "cancelled"
+  )
 
   function toggleShift(id: string, status: string) {
     if (status === "full" || status === "closed" || status === "cancelled") return
+    if (myShiftIds.has(id)) return  // registered shifts are locked
     setSelectedShifts((prev) => {
       const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
+      if (next.has(id)) { next.delete(id); return next }
+      next.add(id)
       return next
     })
   }
@@ -95,7 +148,7 @@ export default function EventPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         eventId: event!.id,
-        shiftIds: Array.from(selectedShifts),
+        shiftIds: Array.from(selectedShifts).filter((id) => !myShiftIds.has(id)),
         ...form,
       }),
     })
@@ -115,20 +168,30 @@ export default function EventPage() {
       return
     }
 
+    localStorage.setItem(`benevoles_token_${slug}`, data.editToken)
     router.push(`/events/${slug}/success?token=${data.editToken}`)
   }
+
+  const conflictingShiftIds = new Set(
+    event.shifts
+      .filter((s) => !selectedShifts.has(s.id) && !myShiftIds.has(s.id))
+      .filter((candidate) =>
+        event.shifts.some((sel) => selectedShifts.has(sel.id) && shiftsOverlap(candidate, sel))
+      )
+      .map((s) => s.id)
+  )
 
   return (
     <main className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200 px-4 py-4">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-2xl lg:max-w-4xl mx-auto">
           <Link href="/" className="text-blue-600 text-sm">← Retour</Link>
           <h1 className="text-xl font-bold text-gray-900 mt-2">{event.title}</h1>
           {event.location && <p className="text-sm text-gray-400">📍 {event.location}</p>}
         </div>
       </header>
 
-      <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-2xl lg:max-w-4xl mx-auto px-4 py-6 space-y-6">
         {event.publicInstructions && (
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800">
             {event.publicInstructions}
@@ -139,56 +202,78 @@ export default function EventPage() {
           <>
             <div className="space-y-6">
               {Object.entries(shiftsByDay).map(([day, dayShifts]) => {
-                const visibleShifts = dayShifts.filter((s) =>
-                  s.status !== "full" && s.status !== "closed" && s.status !== "cancelled"
-                )
-                const hiddenShifts = dayShifts.filter((s) => s.status === "full")
-
+                const dayShows = (event.showSchedule ?? []).filter((s) => s.date === day)
                 return (
                   <div key={day}>
                     <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-3">
                       {formatDate(day)}
                     </h2>
-                    <div className="space-y-2">
-                      {visibleShifts.map((shift) => (
-                        <ShiftCard
-                          key={shift.id}
-                          shift={shift}
-                          selected={selectedShifts.has(shift.id)}
-                          onToggle={() => toggleShift(shift.id, shift.status)}
-                        />
-                      ))}
-                      {hiddenShifts.length > 0 && (
-                        <div>
-                          <button
-                            onClick={() => setShowFull((v) => !v)}
-                            className="text-xs text-gray-400 mt-1 underline"
-                          >
-                            {showFull ? "Masquer" : `Voir ${hiddenShifts.length} créneau(x) complet(s)`}
-                          </button>
-                          {showFull && hiddenShifts.map((shift) => (
-                            <ShiftCard key={shift.id} shift={shift} selected={false} onToggle={() => {}} />
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                    <DayTimeline
+                      shifts={dayShifts}
+                      shows={dayShows}
+                      selected={selectedShifts}
+                      registered={myShiftIds}
+                      conflicts={conflictingShiftIds}
+                      onToggle={toggleShift}
+                    />
                   </div>
                 )
               })}
             </div>
 
-            {selectedShifts.size > 0 && (
-              <div className="sticky bottom-4">
-                <button
-                  onClick={() => setStep("form")}
-                  className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold shadow-lg hover:bg-blue-700 transition-colors"
-                >
-                  Continuer ({selectedShifts.size} créneau{selectedShifts.size > 1 ? "x" : ""} sélectionné{selectedShifts.size > 1 ? "s" : ""})
-                </button>
-              </div>
-            )}
+            {selectedShifts.size > 0 && (() => {
+              const newShiftIds = new Set([...selectedShifts].filter((id) => !myShiftIds.has(id)))
+              const allSelected = event.shifts.filter((s) => selectedShifts.has(s.id))
+              return (
+                <>
+                  <div className="rounded-xl border border-gray-200 bg-white overflow-hidden divide-y divide-gray-100">
+                    {allSelected.map((s) => {
+                      const isReg = myShiftIds.has(s.id)
+                      const reg   = isReg ? myRegistrations.find((r) => r.shiftId === s.id) : null
+                      return (
+                        <div key={s.id} className={`flex items-center gap-3 px-4 py-2.5 ${isReg ? "bg-green-50" : ""}`}>
+                          <svg className={`w-3.5 h-3.5 flex-shrink-0 ${isReg ? "text-green-400" : "text-blue-400"}`} fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                          <span className={`flex-1 text-sm ${isReg ? "text-green-900" : "text-blue-900"}`}>
+                            {s.label && s.label !== s.roleName ? s.label : s.roleName}
+                          </span>
+                          <span className={`text-xs font-mono flex-shrink-0 ${isReg ? "text-green-500" : "text-blue-400"}`}>
+                            {fmt(s.startTime)}–{fmt(s.endTime)}
+                          </span>
+                          {isReg ? (
+                            <button
+                              onClick={() => reg && setPendingCancel({ token: reg.token, shiftId: s.id, label: s.label || s.roleName })}
+                              className="text-green-300 hover:text-red-400 text-xs flex-shrink-0 ml-1 transition-colors"
+                              aria-label="Annuler l'inscription"
+                            >✕</button>
+                          ) : (
+                            <button
+                              onClick={() => toggleShift(s.id, s.status)}
+                              className="text-blue-300 hover:text-red-400 text-xs flex-shrink-0 ml-1 transition-colors"
+                              aria-label="Retirer"
+                            >✕</button>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
 
-            {openShifts.length === 0 && fullShifts.length === event.shifts.length && (
+                  {newShiftIds.size > 0 && (
+                    <div className="sticky bottom-4">
+                      <button
+                        onClick={() => setStep("form")}
+                        className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold shadow-lg hover:bg-blue-700 transition-colors"
+                      >
+                        Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
+                      </button>
+                    </div>
+                  )}
+                </>
+              )
+            })()}
+
+            {!hasAvailableShift && (
               <div className="text-center py-8 text-gray-400">
                 <p className="text-lg font-medium">Tous les créneaux sont complets.</p>
                 <p className="text-sm mt-1">Merci pour votre intérêt !</p>
@@ -292,54 +377,37 @@ export default function EventPage() {
           </div>
         )}
       </div>
+
+      {/* Confirmation désinscription */}
+      {pendingCancel && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full space-y-4">
+            <h2 className="text-base font-semibold text-gray-900">Se désinscrire ?</h2>
+            <p className="text-sm text-gray-600">
+              Voulez-vous annuler votre inscription à&nbsp;
+              <span className="font-medium text-gray-900">« {pendingCancel.label} »</span>&nbsp;?
+            </p>
+            <div className="flex gap-3 pt-1">
+              <button
+                onClick={() => {
+                  cancelRegistration(pendingCancel.token, pendingCancel.shiftId)
+                  setPendingCancel(null)
+                }}
+                className="flex-1 bg-red-500 text-white rounded-xl py-2.5 text-sm font-medium hover:bg-red-600 transition-colors"
+              >
+                Me désinscrire
+              </button>
+              <button
+                onClick={() => setPendingCancel(null)}
+                className="flex-1 border border-gray-200 text-gray-700 rounded-xl py-2.5 text-sm font-medium hover:bg-gray-50 transition-colors"
+              >
+                Annuler
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }
 
-function ShiftCard({ shift, selected, onToggle }: { shift: Shift; selected: boolean; onToggle: () => void }) {
-  const isFull = shift.status === "full"
-  const isClosed = shift.status === "closed" || shift.status === "cancelled"
-  const isUnavailable = isFull || isClosed
-
-  return (
-    <button
-      onClick={onToggle}
-      disabled={isUnavailable}
-      className={`w-full text-left rounded-xl border p-4 transition-all ${
-        selected
-          ? "border-blue-500 bg-blue-50"
-          : isUnavailable
-          ? "border-gray-200 bg-gray-50 opacity-60 cursor-default"
-          : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm"
-      }`}
-    >
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex-1 min-w-0">
-          <div className="font-medium text-gray-900 text-sm">{shift.label}</div>
-          <div className="text-sm text-gray-500 mt-0.5">{shift.startTime} – {shift.endTime}</div>
-          {shift.description && <div className="text-xs text-gray-400 mt-1">{shift.description}</div>}
-        </div>
-        <div className="flex-shrink-0 text-right">
-          {isFull ? (
-            <span className="text-xs font-medium text-gray-400 bg-gray-100 px-2 py-1 rounded-full">Complet</span>
-          ) : isClosed ? (
-            <span className="text-xs font-medium text-gray-400 bg-gray-100 px-2 py-1 rounded-full">Fermé</span>
-          ) : (
-            <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-              shift.spotsLeft <= 2 ? "bg-orange-100 text-orange-700" : "bg-green-100 text-green-700"
-            }`}>
-              {shift.spotsLeft} place{shift.spotsLeft > 1 ? "s" : ""}
-            </span>
-          )}
-          {selected && !isUnavailable && (
-            <div className="mt-1 text-blue-600">
-              <svg className="w-5 h-5 inline" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-            </div>
-          )}
-        </div>
-      </div>
-    </button>
-  )
-}

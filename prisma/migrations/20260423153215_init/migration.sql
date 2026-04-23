@@ -10,6 +10,7 @@ CREATE TABLE "Event" (
     "endDate" TIMESTAMP(3) NOT NULL,
     "publicInstructions" TEXT,
     "confirmationMessage" TEXT,
+    "showSchedule" JSONB NOT NULL DEFAULT '[]',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
