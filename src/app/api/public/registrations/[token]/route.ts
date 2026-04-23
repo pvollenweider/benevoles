@@ -8,8 +8,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ token: 
     where: { editToken: token, status: "active" },
     include: {
       volunteer: true,
-      shift: true,
-      event: { select: { title: true, slug: true } },
+      event: { select: { id: true, title: true, slug: true } },
     },
   })
 
@@ -17,21 +16,34 @@ export async function GET(_req: Request, { params }: { params: Promise<{ token: 
     return NextResponse.json({ error: "Inscription introuvable ou déjà annulée." }, { status: 404 })
   }
 
-  return NextResponse.json({
-    id: registration.id,
-    event: registration.event,
-    shift: {
-      label: registration.shift.label,
-      date: registration.shift.date,
-      startTime: registration.shift.startTime,
-      endTime: registration.shift.endTime,
+  // Toutes les inscriptions actives du même bénévole pour le même événement
+  const allRegistrations = await prisma.registration.findMany({
+    where: {
+      volunteerId: registration.volunteerId,
+      eventId: registration.eventId,
+      status: "active",
     },
+    include: { shift: true },
+    orderBy: [{ shift: { date: "asc" } }, { shift: { startTime: "asc" } }],
+  })
+
+  return NextResponse.json({
+    event: registration.event,
     volunteer: {
       firstName: registration.volunteer.firstName,
       lastName: registration.volunteer.lastName,
       email: registration.volunteer.email,
     },
-    createdAt: registration.createdAt,
+    registrations: allRegistrations.map((r) => ({
+      id: r.id,
+      editToken: r.editToken,
+      shift: {
+        label: r.shift.label,
+        date: r.shift.date,
+        startTime: r.shift.startTime,
+        endTime: r.shift.endTime,
+      },
+    })),
   })
 }
 

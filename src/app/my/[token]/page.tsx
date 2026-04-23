@@ -4,61 +4,64 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 
-type RegistrationData = {
+type ShiftRef = {
+  label: string
+  date: string
+  startTime: string
+  endTime: string
+}
+
+type RegistrationItem = {
   id: string
-  event: { title: string; slug: string }
-  shift: { label: string; date: string; startTime: string; endTime: string }
+  editToken: string
+  shift: ShiftRef
+}
+
+type PageData = {
+  event: { id: string; title: string; slug: string }
   volunteer: { firstName: string; lastName: string; email: string }
-  createdAt: string
+  registrations: RegistrationItem[]
 }
 
 export default function MyRegistrationPage() {
   const params = useParams()
   const token = params.token as string
 
-  const [data, setData] = useState<RegistrationData | null>(null)
+  const [data, setData] = useState<PageData | null>(null)
   const [loading, setLoading] = useState(true)
-  const [cancelled, setCancelled] = useState(false)
-  const [cancelling, setCancelling] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [cancelling, setCancelling] = useState<string | null>(null)
 
   useEffect(() => {
     fetch(`/api/public/registrations/${token}`)
       .then((r) => r.json())
       .then((d) => {
-        if (!d.error) setData(d)
-        else setError(d.error)
+        if (d.error) setError(d.error)
+        else setData(d)
         setLoading(false)
       })
   }, [token])
 
-  async function handleCancel() {
-    if (!confirm("Confirmer l'annulation de cette inscription ?")) return
-    setCancelling(true)
-    const res = await fetch(`/api/public/registrations/${token}`, { method: "DELETE" })
+  async function handleCancel(editToken: string) {
+    if (!confirm("Confirmer l'annulation de ce créneau ?")) return
+    setCancelling(editToken)
+
+    const res = await fetch(`/api/public/registrations/${editToken}`, { method: "DELETE" })
+
     if (res.ok) {
-      setCancelled(true)
+      setData((prev) =>
+        prev
+          ? { ...prev, registrations: prev.registrations.filter((r) => r.editToken !== editToken) }
+          : prev
+      )
     } else {
       const d = await res.json()
       setError(d.error)
     }
-    setCancelling(false)
+    setCancelling(null)
   }
 
   if (loading) return <div className="flex items-center justify-center min-h-screen text-gray-400">Chargement…</div>
-
-  if (cancelled) {
-    return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-8 text-center">
-          <div className="text-4xl mb-4">✓</div>
-          <h1 className="text-lg font-bold text-gray-900 mb-2">Inscription annulée</h1>
-          <p className="text-gray-500 text-sm mb-6">Votre place a été libérée.</p>
-          <Link href="/" className="text-blue-600 text-sm">Retour à l'accueil</Link>
-        </div>
-      </main>
-    )
-  }
 
   if (error || !data) {
     return (
@@ -72,41 +75,53 @@ export default function MyRegistrationPage() {
     )
   }
 
-  const shiftDate = new Date(data.shift.date).toLocaleDateString("fr-FR", {
-    weekday: "long", day: "numeric", month: "long",
-  })
+  if (data.registrations.length === 0) {
+    return (
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-8 text-center">
+          <div className="text-4xl mb-4">✓</div>
+          <h1 className="text-lg font-bold text-gray-900 mb-2">Toutes vos inscriptions ont été annulées</h1>
+          <Link href="/" className="text-blue-600 text-sm mt-4 block">Retour à l'accueil</Link>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className="min-h-screen bg-gray-50 px-4 py-10">
       <div className="max-w-md mx-auto space-y-4">
-        <h1 className="text-xl font-bold text-gray-900">Mon inscription</h1>
-
-        <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-3">
-          <div>
-            <p className="text-xs text-gray-400 uppercase tracking-wide">Événement</p>
-            <p className="font-semibold text-gray-900">{data.event.title}</p>
-          </div>
-          <div>
-            <p className="text-xs text-gray-400 uppercase tracking-wide">Créneau</p>
-            <p className="text-gray-800 font-medium">{data.shift.label}</p>
-            <p className="text-gray-500 text-sm">{shiftDate} · {data.shift.startTime} – {data.shift.endTime}</p>
-          </div>
-          <div>
-            <p className="text-xs text-gray-400 uppercase tracking-wide">Inscrit(e) en tant que</p>
-            <p className="text-gray-800">{data.volunteer.firstName} {data.volunteer.lastName}</p>
-            <p className="text-gray-500 text-sm">{data.volunteer.email}</p>
-          </div>
+        <div>
+          <h1 className="text-xl font-bold text-gray-900">Mes inscriptions</h1>
+          <p className="text-sm text-gray-500 mt-1">{data.event.title}</p>
+          <p className="text-sm text-gray-400">
+            {data.volunteer.firstName} {data.volunteer.lastName} · {data.volunteer.email}
+          </p>
         </div>
 
-        <button
-          onClick={handleCancel}
-          disabled={cancelling}
-          className="w-full border border-red-300 text-red-600 rounded-xl py-3 text-sm font-medium hover:bg-red-50 transition-colors disabled:opacity-50"
-        >
-          {cancelling ? "Annulation…" : "Annuler cette inscription"}
-        </button>
+        <div className="space-y-3">
+          {data.registrations.map((reg) => {
+            const date = new Date(reg.shift.date).toLocaleDateString("fr-FR", {
+              weekday: "long", day: "numeric", month: "long",
+            })
+            return (
+              <div key={reg.id} className="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-gray-900 text-sm">{reg.shift.label}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{date} · {reg.shift.startTime}–{reg.shift.endTime}</p>
+                </div>
+                <button
+                  onClick={() => handleCancel(reg.editToken)}
+                  disabled={cancelling === reg.editToken}
+                  className="text-xs text-red-500 hover:text-red-700 border border-red-200 rounded-lg px-3 py-1.5 flex-shrink-0 transition-colors disabled:opacity-40"
+                >
+                  {cancelling === reg.editToken ? "…" : "Annuler"}
+                </button>
+              </div>
+            )
+          })}
+        </div>
 
-        <Link href="/" className="block text-center text-sm text-gray-400 hover:text-gray-600">
+        <Link href="/" className="block text-center text-sm text-gray-400 hover:text-gray-600 pt-2">
           Retour à l'accueil
         </Link>
       </div>
