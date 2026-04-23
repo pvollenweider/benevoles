@@ -1,0 +1,10 @@
+.git
+.next
+node_modules
+.env
+.env.*
+!.env.example
+docker-compose*.yml
+*.md
+.DS_Store
+coverage

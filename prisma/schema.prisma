@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Event {
+  id                  String   @id @default(cuid())
+  slug                String   @unique
+  title               String
+  description         String?
+  location            String?
+  publicStatus        String   @default("draft")
+  startDate           DateTime
+  endDate             DateTime
+  publicInstructions  String?
+  confirmationMessage String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  shifts        Shift[]
+  registrations Registration[]
+}
+
+model Shift {
+  id              String   @id @default(cuid())
+  eventId         String
+  roleName        String
+  label           String
+  description     String?
+  date            DateTime
+  startTime       String
+  endTime         String
+  capacity        Int
+  status          String   @default("open")
+  locationDetails String?
+  displayOrder    Int      @default(0)
+  internalNotes   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  event         Event          @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  registrations Registration[]
+}
+
+model Volunteer {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  registrations Registration[]
+}
+
+model Registration {
+  id          String   @id @default(cuid())
+  eventId     String
+  shiftId     String
+  volunteerId String
+  status      String   @default("active")
+  source      String   @default("public_form")
+  comment     String?
+  editToken   String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  shift     Shift     @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+  volunteer Volunteer @relation(fields: [volunteerId], references: [id])
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("admin")
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
