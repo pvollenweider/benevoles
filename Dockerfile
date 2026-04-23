@@ -38,9 +38,11 @@ COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 # Prisma CLI + schéma + migrations
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.ts
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.bin/prisma* ./node_modules/.bin/
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/prisma ./node_modules/prisma
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
+# Wrapper qui préserve le bon __dirname pour que prisma trouve son .wasm
+RUN printf '#!/bin/sh\nexec node /app/node_modules/prisma/build/index.js "$@"\n' \
+    > ./node_modules/.bin/prisma && chmod +x ./node_modules/.bin/prisma
 
 # Script d'entrée
 COPY --chown=nextjs:nodejs docker-entrypoint.sh /usr/local/bin/
