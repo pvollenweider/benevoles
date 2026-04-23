@@ -88,8 +88,8 @@ export async function POST(req: Request) {
     }
   }
 
-  const editToken = generateToken()
-
+  // Chaque inscription reçoit son propre token unique.
+  // On retourne le token de la première comme lien de confirmation.
   const registrations = await prisma.$transaction(
     shiftIds.map((shiftId) =>
       prisma.registration.create({
@@ -105,24 +105,7 @@ export async function POST(req: Request) {
     )
   )
 
-  const groupToken = editToken
-
-  await prisma.registration.updateMany({
-    where: { id: { in: registrations.map((r) => r.id) } },
-    data: { editToken: groupToken },
-  })
-  if (registrations.length > 1) {
-    for (let i = 1; i < registrations.length; i++) {
-      await prisma.registration.update({
-        where: { id: registrations[i].id },
-        data: { editToken: generateToken() },
-      })
-    }
-    await prisma.registration.update({
-      where: { id: registrations[0].id },
-      data: { editToken: groupToken },
-    })
-  }
+  const editToken = registrations[0].editToken
 
   const shiftData = shifts.map((s) => ({
     label: s.label,
@@ -137,7 +120,7 @@ export async function POST(req: Request) {
       volunteerName: `${firstName} ${lastName}`,
       eventTitle: event.title,
       shifts: shiftData,
-      editToken: groupToken,
+      editToken,
     })
     await sendAdminNotification({
       eventTitle: event.title,
@@ -151,7 +134,7 @@ export async function POST(req: Request) {
 
   return NextResponse.json({
     success: true,
-    editToken: groupToken,
+    editToken,
     confirmationMessage: event.confirmationMessage,
     registrationCount: registrations.length,
   }, { status: 201 })

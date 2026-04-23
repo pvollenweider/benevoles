@@ -100,7 +100,14 @@ export default function EventPage() {
       }),
     })
 
-    const data = await res.json()
+    let data: Record<string, string> = {}
+    try {
+      data = await res.json()
+    } catch {
+      setError("Une erreur inattendue est survenue. Veuillez réessayer.")
+      setSubmitting(false)
+      return
+    }
     setSubmitting(false)
 
     if (!res.ok) {
