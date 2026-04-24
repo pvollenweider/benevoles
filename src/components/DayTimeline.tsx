@@ -24,7 +24,7 @@ export function fmt(t: string) {
   return m === "00" ? `${h}h` : `${h}h${m}`
 }
 
-const ROW_H   = 36
+const ROW_H   = 44
 const GAP     = 4
 const LABEL_W = 72
 const SHOW_H  = 22
@@ -103,7 +103,7 @@ export default function DayTimeline({
                 className="flex items-center justify-end pr-2"
                 style={{ height: ROW_H, marginBottom: GAP }}
               >
-                <span className="text-[10px] text-gray-400 truncate leading-tight text-right">
+                <span className="text-[10px] text-gray-600 truncate leading-tight text-right">
                   {role.split(" &")[0].split(" —")[0].trim()}
                 </span>
               </div>
@@ -127,42 +127,55 @@ export default function DayTimeline({
                   const isClosed    = shift.status === "closed"
                   const unavail     = isFull || isClosed
                   const isSelected  = selected.has(shift.id)
-                  // visual: selected (incl. registered) / unavailable (full, conflict) / default
-                  const state   = isSelected ? "selected" : (isConflict || unavail) ? "unavailable" : "default"
-                  const barCls  = getBarClasses(shift.roleName, state)
-                  const clickable = !isRegistered && !isConflict && !unavail
+                  const state       = isSelected ? "selected" : (isConflict || unavail) ? "unavailable" : "default"
+                  const barCls      = getBarClasses(shift.roleName, state)
+                  const clickable   = !isRegistered && !isConflict && !unavail
+                  const hasLabel    = shift.label !== shift.roleName
+                  const startMin    = toMin(shift.startTime)
+                  const endMin      = toMin(shift.endTime)
+                  const LABEL_H     = 14
 
                   return (
-                    <button
+                    <div
                       key={shift.id}
-                      disabled={!clickable}
-                      onClick={() => onToggle(shift.id, shift.status)}
-                      className={`absolute inset-y-0 rounded flex items-center justify-center overflow-hidden transition-colors ${clickable ? "cursor-pointer" : "cursor-default"} ${barCls}`}
-                      style={{
-                        left:  pct(toMin(shift.startTime)),
-                        width: wid(toMin(shift.startTime), toMin(shift.endTime)),
-                      }}
+                      className="absolute inset-y-0"
+                      style={{ left: pct(startMin), width: wid(startMin, endMin) }}
                     >
-                      {isConflict || (unavail && !isSelected) ? (
-                        <span className="text-[8px] px-1 truncate leading-none text-gray-400">
-                          {isFull ? "Complet" : isClosed ? "Fermé" : ""}
-                        </span>
-                      ) : (
-                        <div className="flex items-center gap-0.5 px-1.5 max-w-full overflow-hidden">
-                          {isSelected && (
-                            <svg className="w-2.5 h-2.5 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                          )}
-                          <span
-                            className="text-white text-[10px] font-bold truncate leading-none"
-                            style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
-                          >
-                            {fmt(shift.startTime)}–{fmt(shift.endTime)}
+                      <button
+                        disabled={!clickable}
+                        onClick={() => onToggle(shift.id, shift.status)}
+                        className={`absolute inset-x-0 rounded flex items-center justify-center overflow-hidden transition-colors ${clickable ? "cursor-pointer" : "cursor-default"} ${barCls}`}
+                        style={{ top: 0, bottom: hasLabel ? LABEL_H : 0, borderLeft: "4px solid rgba(255,255,255,0.7)" }}
+                      >
+                        {isConflict || (unavail && !isSelected) ? (
+                          <span className="text-[8px] px-1 truncate leading-none text-gray-400">
+                            {isFull ? "Complet" : isClosed ? "Fermé" : ""}
                           </span>
-                        </div>
+                        ) : (
+                          <div className="flex items-center gap-0.5 px-1.5 max-w-full overflow-hidden">
+                            {isSelected && (
+                              <svg className="w-2.5 h-2.5 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            )}
+                            <span
+                              className="text-white text-[10px] font-bold truncate leading-none"
+                              style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
+                            >
+                              {fmt(shift.startTime)}–{fmt(shift.endTime)}
+                            </span>
+                          </div>
+                        )}
+                      </button>
+                      {hasLabel && (
+                        <span
+                          className="absolute inset-x-0 bottom-0 text-[8px] text-gray-500 truncate text-center pointer-events-none"
+                          style={{ height: LABEL_H, lineHeight: `${LABEL_H}px` }}
+                        >
+                          {shift.label}
+                        </span>
                       )}
-                    </button>
+                    </div>
                   )
                 })}
               </div>
@@ -191,7 +204,7 @@ export default function DayTimeline({
               {hours.map((h) => (
                 <div
                   key={h}
-                  className="absolute top-1 text-[10px] text-gray-300 leading-none"
+                  className="absolute top-1 text-[10px] text-gray-500 leading-none"
                   style={{ left: pct(h * 60), transform: "translateX(-50%)" }}
                 >
                   {h}h

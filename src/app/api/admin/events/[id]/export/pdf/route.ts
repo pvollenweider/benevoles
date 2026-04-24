@@ -9,6 +9,7 @@ type ShiftRow = {
   startTime: string; endTime: string; capacity: number; status: string
   registrations: RegData[]
 }
+type ShowEntry = { name: string; date: string; startTime: string; endTime: string }
 
 function toMin(t: string) {
   const [h, m] = t.split(":").map(Number)
@@ -33,8 +34,18 @@ function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
 }
 
-function buildDayHtml(date: Date, shifts: ShiftRow[]): string {
-  const allMins = shifts.flatMap((s) => [toMin(s.startTime), toMin(s.endTime)])
+function volsList(regs: RegData[]): string {
+  return [...regs]
+    .sort((a, b) => a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr"))
+    .map((r) => esc(shortName(r.volunteer)))
+    .join("<br>") || "—"
+}
+
+function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): string {
+  const allMins = [
+    ...shifts.flatMap((s) => [toMin(s.startTime), toMin(s.endTime)]),
+    ...shows.flatMap((s) => [toMin(s.startTime), toMin(s.endTime)]),
+  ]
   const dayStart = Math.floor(Math.min(...allMins) / 30) * 30
   const dayEnd   = Math.ceil(Math.max(...allMins)  / 30) * 30
 
@@ -48,38 +59,53 @@ function buildDayHtml(date: Date, shifts: ShiftRow[]): string {
     return ri !== 0 ? ri : a.startTime.localeCompare(b.startTime)
   })
 
+  // Group by (roleName, label) — one Gantt row per group
+  type GroupEntry = { roleName: string; label: string; shifts: ShiftRow[] }
+  const groups: GroupEntry[] = []
+  const groupMap = new Map<string, GroupEntry>()
+  for (const shift of sorted) {
+    const key = `${shift.roleName}\0${shift.label}`
+    if (!groupMap.has(key)) {
+      const g: GroupEntry = { roleName: shift.roleName, label: shift.label, shifts: [] }
+      groups.push(g)
+      groupMap.set(key, g)
+    }
+    groupMap.get(key)!.shifts.push(shift)
+  }
+
   // ── Gantt ────────────────────────────────────────────────────────────────
   let ganttRows = ""
-  let i = 0
-  while (i < sorted.length) {
-    const role = sorted[i].roleName
-    let j = i + 1
-    while (j < sorted.length && sorted[j].roleName === role) j++
-    const span = j - i
+  let gi = 0
+  while (gi < groups.length) {
+    const role = groups[gi].roleName
+    let roleEnd = gi + 1
+    while (roleEnd < groups.length && groups[roleEnd].roleName === role) roleEnd++
+    const roleSpan = roleEnd - gi
 
-    for (let k = i; k < j; k++) {
-      const shift = sorted[k]
-      const startSlot = (toMin(shift.startTime) - dayStart) / 30
-      const endSlot   = (toMin(shift.endTime)   - dayStart) / 30
-      const colspan   = endSlot - startSlot
-      const vols      = shift.registrations.map((r) => shortName(r.volunteer)).join(", ") || "—"
-      const isLastInRole = k === j - 1
+    for (let m = gi; m < roleEnd; m++) {
+      const group       = groups[m]
+      const displayLbl  = group.label !== role ? group.label : ""
+      const isLastInRole = m === roleEnd - 1
 
       let row = `<tr class="${isLastInRole ? "role-last" : ""}">`
 
-      if (k === i) {
-        row += `<td class="role-cell" rowspan="${span}">${esc(role)}</td>`
+      if (m === gi) {
+        row += `<td class="role-cell"${roleSpan > 1 ? ` rowspan="${roleSpan}"` : ""}>${esc(role)}</td>`
       }
 
-      const lbl = shift.label !== shift.roleName ? shift.label : ""
-      row += `<td class="label-cell">${esc(lbl)}</td>`
+      row += `<td class="label-cell">${esc(displayLbl)}</td>`
 
-      for (let s = 0; s < slots.length; ) {
-        if (s < startSlot) {
-          row += `<td class="empty-cell"></td>`
-          s++
-        } else if (s === startSlot) {
-          row += `<td class="shift-cell" colspan="${colspan}">${esc(vols)}</td>`
+      // Generate time slot cells for all shifts in this group
+      let s = 0
+      while (s < slots.length) {
+        const shift = group.shifts.find((sh) => (toMin(sh.startTime) - dayStart) / 30 === s)
+        if (shift) {
+          const endSlot = (toMin(shift.endTime) - dayStart) / 30
+          const colspan = endSlot - s
+          const vols    = volsList(shift.registrations)
+          row += colspan > 1
+            ? `<td class="shift-cell" colspan="${colspan}">${vols}</td>`
+            : `<td class="shift-cell">${vols}</td>`
           s = endSlot
         } else {
           row += `<td class="empty-cell"></td>`
@@ -91,7 +117,30 @@ function buildDayHtml(date: Date, shifts: ShiftRow[]): string {
       ganttRows += row
     }
 
-    i = j
+    gi = roleEnd
+  }
+
+  // ── Show row ─────────────────────────────────────────────────────────────
+  let showRow = ""
+  if (shows.length > 0) {
+    showRow = `<tr class="show-row"><td class="show-label-cell" colspan="2"></td>`
+    let s = 0
+    while (s < slots.length) {
+      const show = shows.find((sh) => Math.round((toMin(sh.startTime) - dayStart) / 30) === s)
+      if (show) {
+        const endSlot = Math.min(Math.round((toMin(show.endTime) - dayStart) / 30), slots.length)
+        const colspan = endSlot - s
+        const label   = `🎪 ${esc(show.name)}`
+        showRow += colspan > 1
+          ? `<td class="show-band-cell" colspan="${colspan}">${label}</td>`
+          : `<td class="show-band-cell">${label}</td>`
+        s = endSlot
+      } else {
+        showRow += `<td class="show-empty-cell"></td>`
+        s++
+      }
+    }
+    showRow += `</tr>`
   }
 
   const slotHeaders = slots.map((s) => `<th class="slot-th">${fmtSlot(s)}</th>`).join("")
@@ -105,13 +154,13 @@ function buildDayHtml(date: Date, shifts: ShiftRow[]): string {
           ${slotHeaders}
         </tr>
       </thead>
-      <tbody>${ganttRows}</tbody>
+      <tbody>${ganttRows}${showRow}</tbody>
     </table>`
 
   // ── Recap ────────────────────────────────────────────────────────────────
   let recapRows = ""
   for (const shift of sorted) {
-    const vols = shift.registrations.map((r) => shortName(r.volunteer)).join(", ") || "—"
+    const vols = volsList(shift.registrations)
     const lbl  = shift.label !== shift.roleName ? shift.label : ""
     recapRows += `<tr>
       <td>${esc(shift.roleName)}</td>
@@ -119,7 +168,7 @@ function buildDayHtml(date: Date, shifts: ShiftRow[]): string {
       <td class="center">${fmtSlot(toMin(shift.startTime))}–${fmtSlot(toMin(shift.endTime))}</td>
       <td class="center">${shift.capacity}</td>
       <td class="center">${shift.registrations.length}</td>
-      <td>${esc(vols)}</td>
+      <td>${vols}</td>
     </tr>`
   }
 
@@ -174,9 +223,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     dayMap.get(key)!.shifts.push(shift as ShiftRow)
   }
 
+  const showSchedule = (event.showSchedule as ShowEntry[] | null) ?? []
+
   let daySections = ""
-  for (const [, { date, shifts }] of dayMap) {
-    daySections += buildDayHtml(date, shifts)
+  for (const [key, { date, shifts }] of dayMap) {
+    const dayShows = showSchedule.filter((s) => s.date === key)
+    daySections += buildDayHtml(date, shifts, dayShows)
   }
 
   // ── Inscriptions section ─────────────────────────────────────────────────
@@ -191,7 +243,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
         <td colspan="4" class="center text-muted">—</td>
       </tr>`
     } else {
-      for (const reg of shift.registrations) {
+      const sortedRegs = [...shift.registrations].sort((a, b) =>
+        a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr")
+      )
+      for (const reg of sortedRegs) {
         inscRows += `<tr>
           <td>${esc(day)}</td><td class="center">${hours}</td>
           <td>${esc(shift.roleName)}</td><td>${esc(shift.label)}</td>
@@ -313,12 +368,30 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       background: #E0E7FF;
       color: #3730A3;
       font-size: 8px;
-      text-align: center;
+      text-align: left;
+      vertical-align: top;
+      white-space: normal;
       border-left: 2px solid #6366F1;
       border-right: 2px solid #6366F1;
     }
     .empty-cell { background: #FAFAFA; }
     tr.role-last td { border-bottom: 2px solid #6366F1 !important; }
+    tr.label-last td:not(.role-cell) { border-bottom: 1px solid #C7D2FE !important; }
+
+    /* ── Show row ─────────────────────────────────────────────────────── */
+    .show-row td { border-top: 2px solid #C7D2FE; }
+    .show-label-cell { background: #F5F3FF; }
+    .show-band-cell {
+      background: #EEF2FF;
+      color: #4338CA;
+      font-size: 8px;
+      font-style: italic;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .show-empty-cell { background: #F5F3FF; }
 
     /* ── Recap ────────────────────────────────────────────────────────── */
     .recap-table td, .recap-table th { font-size: 9px; }

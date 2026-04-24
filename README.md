@@ -2,13 +2,21 @@
 
 Application de gestion de bénévoles pour événements. Permet aux organisateurs de créer des événements, définir des créneaux de bénévolat, et aux bénévoles de s'inscrire en ligne.
 
-## Fonctionnalités
+## Documentation
 
-- **Côté public** : listing des événements publiés, inscription à un ou plusieurs créneaux, modification ou annulation via un lien personnel envoyé par email
-- **Côté admin** : création et gestion des événements, des créneaux (rôle, horaire, capacité), suivi des inscriptions, export Excel et PDF
+| Document | Destinataires |
+|----------|---------------|
+| [Guide bénévole](GUIDE_BENEVOLE.md) | Personnes qui s'inscrivent comme bénévoles |
+| [Guide administrateur](GUIDE_ADMIN.md) | Organisateurs qui gèrent les événements |
+| [Fonctionnalités](FONCTIONNALITES.md) | Liste exhaustive de tout ce que fait l'application |
+
+## Aperçu
+
+- **Côté public** : listing des événements publiés, inscription à un ou plusieurs créneaux via une timeline interactive, modification ou annulation via un lien personnel envoyé par email
+- **Côté admin** : création et gestion des événements, des créneaux (rôle, horaire, capacité, programme des spectacles), suivi des inscriptions, export Excel et PDF
 - Détection de conflits d'horaires en temps réel lors de l'inscription
 - Notifications email (confirmation bénévole + alerte admin optionnelle)
-- Vue planning Gantt par jour dans l'export
+- Export Gantt (Excel + PDF) avec plages des spectacles en fond
 
 ## Stack
 

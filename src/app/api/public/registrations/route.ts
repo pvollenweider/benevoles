@@ -71,7 +71,10 @@ export async function POST(req: Request) {
     where: { volunteerId: volunteer.id, shiftId: { in: shiftIds }, status: "active" },
   })
   if (existingRegs.length > 0) {
-    return NextResponse.json({ error: "Vous êtes déjà inscrit(e) à un de ces créneaux." }, { status: 409 })
+    return NextResponse.json({
+      error: "Vous êtes déjà inscrit(e) à un de ces créneaux.",
+      editToken: existingRegs[0].editToken,
+    }, { status: 409 })
   }
 
   const allEventRegs = await prisma.registration.findMany({
@@ -83,6 +86,7 @@ export async function POST(req: Request) {
       if (shiftsOverlap(existing.shift, newShift)) {
         return NextResponse.json({
           error: `Ce créneau chevauche une inscription existante (${existing.shift.label}).`,
+          editToken: existing.editToken,
         }, { status: 409 })
       }
     }

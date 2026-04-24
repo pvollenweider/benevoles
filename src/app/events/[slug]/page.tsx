@@ -164,6 +164,39 @@ export default function EventPage() {
     setSubmitting(false)
 
     if (!res.ok) {
+      if (data.editToken) {
+        localStorage.setItem(`benevoles_token_${slug}`, data.editToken)
+        try {
+          const regRes = await fetch(`/api/public/registrations/${data.editToken}`)
+          if (regRes.ok) {
+            const regData = await regRes.json()
+            if (regData.registrations) {
+              const regs: MyReg[] = regData.registrations.map((r: { editToken: string; shift: { id: string; label: string; roleName?: string; startTime: string; endTime: string } }) => ({
+                shiftId: r.shift.id,
+                token: r.editToken,
+                label: r.shift.label,
+                roleName: r.shift.roleName ?? "",
+                startTime: r.shift.startTime,
+                endTime: r.shift.endTime,
+              }))
+              setMyRegistrations(regs)
+              setSelectedShifts(new Set(regs.map((r) => r.shiftId)))
+              if (regData.volunteer) {
+                setForm((f) => ({
+                  ...f,
+                  firstName: regData.volunteer.firstName || f.firstName,
+                  lastName:  regData.volunteer.lastName  || f.lastName,
+                  email:     regData.volunteer.email     || f.email,
+                  phone:     regData.volunteer.phone     || f.phone,
+                }))
+              }
+            }
+          }
+        } catch { /* ignore */ }
+        setError(data.error ?? "Une erreur est survenue.")
+        setStep("select")
+        return
+      }
       setError(data.error ?? "Une erreur est survenue.")
       return
     }
@@ -176,22 +209,46 @@ export default function EventPage() {
     event.shifts
       .filter((s) => !selectedShifts.has(s.id) && !myShiftIds.has(s.id))
       .filter((candidate) =>
-        event.shifts.some((sel) => selectedShifts.has(sel.id) && shiftsOverlap(candidate, sel))
+        event.shifts.some(
+          (ref) => (selectedShifts.has(ref.id) || myShiftIds.has(ref.id)) && shiftsOverlap(candidate, ref)
+        )
       )
       .map((s) => s.id)
   )
+
+  function quitSession() {
+    localStorage.removeItem(`benevoles_token_${slug}`)
+    setMyRegistrations([])
+    setSelectedShifts(new Set())
+    setForm({ firstName: "", lastName: "", email: "", phone: "", comment: "", consent: false })
+  }
 
   return (
     <main className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200 px-4 py-4">
         <div className="max-w-2xl lg:max-w-4xl mx-auto">
-          <Link href="/" className="text-blue-600 text-sm">← Retour</Link>
+          <div className="flex items-center justify-between">
+            <Link href="/" className="text-blue-600 text-sm">← Retour</Link>
+            {myRegistrations.length > 0 && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600 font-medium">
+                  {form.firstName} {form.lastName}
+                </span>
+                <button
+                  onClick={quitSession}
+                  className="text-xs text-gray-400 hover:text-red-500 transition-colors border border-gray-200 rounded-lg px-2 py-1"
+                >
+                  Quitter la session
+                </button>
+              </div>
+            )}
+          </div>
           <h1 className="text-xl font-bold text-gray-900 mt-2">{event.title}</h1>
           {event.location && <p className="text-sm text-gray-400">📍 {event.location}</p>}
         </div>
       </header>
 
-      <div className="max-w-2xl lg:max-w-4xl mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-2xl lg:max-w-4xl mx-auto px-4 py-6 pb-28 space-y-6">
         {event.publicInstructions && (
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800">
             {event.publicInstructions}
@@ -200,6 +257,12 @@ export default function EventPage() {
 
         {step === "select" && (
           <>
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700 flex items-start gap-2">
+                <span className="flex-1">{error}</span>
+                <button onClick={() => setError(null)} className="text-red-300 hover:text-red-500 flex-shrink-0">✕</button>
+              </div>
+            )}
             <div className="space-y-6">
               {Object.entries(shiftsByDay).map(([day, dayShifts]) => {
                 const dayShows = (event.showSchedule ?? []).filter((s) => s.date === day)
@@ -208,6 +271,9 @@ export default function EventPage() {
                     <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-3">
                       {formatDate(day)}
                     </h2>
+                    <p className="sm:hidden text-[11px] text-gray-400 text-center mb-1.5">
+                      ← Faites défiler pour voir toutes les plages →
+                    </p>
                     <DayTimeline
                       shifts={dayShifts}
                       shows={dayShows}
@@ -260,13 +326,15 @@ export default function EventPage() {
                   </div>
 
                   {newShiftIds.size > 0 && (
-                    <div className="sticky bottom-4">
-                      <button
-                        onClick={() => setStep("form")}
-                        className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold shadow-lg hover:bg-blue-700 transition-colors"
-                      >
-                        Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
-                      </button>
+                    <div className="fixed bottom-0 left-0 right-0 z-40 pointer-events-none">
+                      <div className="max-w-2xl lg:max-w-4xl mx-auto px-4 pb-5 pt-10 bg-gradient-to-t from-gray-50 via-gray-50/90 to-transparent pointer-events-none">
+                        <button
+                          onClick={() => setStep("form")}
+                          className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold shadow-xl hover:bg-blue-700 transition-colors pointer-events-auto"
+                        >
+                          Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
+                        </button>
+                      </div>
                     </div>
                   )}
                 </>
