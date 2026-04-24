@@ -51,10 +51,12 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.
 # Appeler index.js directement préserve __dirname = node_modules/prisma/build/
 # ce qui permet de trouver prisma_schema_build_bg.wasm et tous les modules
 COPY --from=prisma-cli --chown=nextjs:nodejs /prisma/node_modules/. ./node_modules/
-RUN echo '#!/bin/sh' > ./node_modules/.bin/prisma \
+# Le symlink .bin/prisma pointe vers prisma/build/index.js — écrire dessus corromprait le JS.
+# On le supprime et on crée un vrai wrapper shell.
+RUN rm -f ./node_modules/.bin/prisma \
+ && echo '#!/bin/sh' > ./node_modules/.bin/prisma \
  && echo 'exec node /app/node_modules/prisma/build/index.js "$@"' >> ./node_modules/.bin/prisma \
- && chmod +x ./node_modules/.bin/prisma \
- && chown nextjs:nodejs ./node_modules/.bin/prisma
+ && chmod +x ./node_modules/.bin/prisma
 
 # Script d'entrée
 COPY --chown=nextjs:nodejs docker-entrypoint.sh /usr/local/bin/
