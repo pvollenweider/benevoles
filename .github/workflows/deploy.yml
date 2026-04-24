@@ -72,6 +72,15 @@ jobs:
       - name: Apply namespace
         run: kubectl apply -f k8s/namespace.yaml
 
+      - name: Sync GHCR pull secret
+        run: |
+          kubectl create secret docker-registry ghcr-secret \
+            --namespace=benevoles \
+            --docker-server=ghcr.io \
+            --docker-username=pvollenweider \
+            --docker-password="${{ secrets.GHCR_PULL_TOKEN }}" \
+            --save-config --dry-run=client -o yaml | kubectl apply -f -
+
       - name: Sync k8s secret
         run: |
           kubectl create secret generic benevoles-secret \
@@ -90,6 +99,8 @@ jobs:
             --from-literal=EMAIL_FROM="${{ secrets.EMAIL_FROM }}" \
             --from-literal=ADMIN_NOTIFICATION_EMAIL="${{ secrets.ADMIN_NOTIFICATION_EMAIL }}" \
             --from-literal=NEXT_PUBLIC_APP_URL="https://benevoles.gallerypack.app" \
+            --from-literal=AUTH_URL="https://benevoles.gallerypack.app" \
+            --from-literal=AUTH_TRUST_HOST="true" \
             --save-config --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Deploy PostgreSQL
