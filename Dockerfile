@@ -1,19 +1,19 @@
-# ── Stage 1 : dépendances ───────────────────────────────────────────────────
+# ── Stage 1 : dépendances app ────────────────────────────────────────────────
 FROM node:22-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --legacy-peer-deps
 
-# ── Stage 2 : dépendances Prisma CLI isolées ─────────────────────────────────
-# Install uniquement prisma pour avoir son arbre de dépendances complet
+# ── Stage 2 : prisma CLI avec toutes ses dépendances (engines inclus) ─────────
 FROM node:22-alpine AS prisma-cli
 WORKDIR /prisma
-COPY package.json package-lock.json ./
-RUN npm install --legacy-peer-deps --ignore-scripts \
-    $(node -e "const v=require('./package.json').dependencies.prisma;console.log('prisma@'+v.replace(/[\^~]/,''))") \
-    2>/dev/null
+RUN npm install prisma@7.8.0 \
+    --save-exact \
+    --legacy-peer-deps \
+    --no-fund \
+    --no-audit
 
-# ── Stage 3 : build ──────────────────────────────────────────────────────────
+# ── Stage 3 : build Next.js ──────────────────────────────────────────────────
 FROM node:22-alpine AS builder
 WORKDIR /app
 
@@ -21,7 +21,6 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
-# Valeurs factices pour le build uniquement
 ENV DATABASE_URL=postgresql://build:build@localhost/build
 ENV AUTH_SECRET=build-placeholder-secret-32-characters-min
 
@@ -48,11 +47,13 @@ COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.ts
 
-# Prisma CLI avec toutes ses dépendances (arbre complet depuis prisma-cli stage)
-COPY --from=prisma-cli --chown=nextjs:nodejs /prisma/node_modules ./node_modules/prisma-deps
+# Prisma CLI isolé avec ses deps complètes (engines linux-musl inclus)
+COPY --from=prisma-cli --chown=nextjs:nodejs /prisma/node_modules ./prisma-node-modules
+
+# Wrapper : NODE_PATH pointe vers prisma-node-modules pour la résolution des modules
 RUN mkdir -p ./node_modules/.bin \
- && echo '#!/bin/sh' > ./node_modules/.bin/prisma \
- && echo 'exec node /app/node_modules/prisma-deps/prisma/build/index.js "$@"' >> ./node_modules/.bin/prisma \
+ && printf '#!/bin/sh\nNODE_PATH=/app/prisma-node-modules exec node /app/prisma-node-modules/prisma/build/index.js "$@"\n' \
+    > ./node_modules/.bin/prisma \
  && chmod +x ./node_modules/.bin/prisma \
  && chown nextjs:nodejs ./node_modules/.bin/prisma
 
