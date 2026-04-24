@@ -47,13 +47,12 @@ COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.ts
 
-# Prisma CLI isolé avec ses deps complètes (engines linux-musl inclus)
-COPY --from=prisma-cli --chown=nextjs:nodejs /prisma/node_modules ./prisma-node-modules
-
-# Wrapper : NODE_PATH pointe vers prisma-node-modules pour la résolution des modules
-RUN mkdir -p ./node_modules/.bin \
- && printf '#!/bin/sh\nNODE_PATH=/app/prisma-node-modules exec node /app/prisma-node-modules/prisma/build/index.js "$@"\n' \
-    > ./node_modules/.bin/prisma \
+# Merge prisma CLI (+ toutes ses deps) dans node_modules
+# Appeler index.js directement préserve __dirname = node_modules/prisma/build/
+# ce qui permet de trouver prisma_schema_build_bg.wasm et tous les modules
+COPY --from=prisma-cli --chown=nextjs:nodejs /prisma/node_modules/. ./node_modules/
+RUN echo '#!/bin/sh' > ./node_modules/.bin/prisma \
+ && echo 'exec node /app/node_modules/prisma/build/index.js "$@"' >> ./node_modules/.bin/prisma \
  && chmod +x ./node_modules/.bin/prisma \
  && chown nextjs:nodejs ./node_modules/.bin/prisma
 
