@@ -21,6 +21,7 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
     publicInstructions: event.publicInstructions ?? "",
     confirmationMessage: event.confirmationMessage ?? "",
     publicStatus: event.publicStatus as "draft" | "published" | "archived",
+    showSchedule: (event.showSchedule ?? []) as Array<{ name: string; date: string; startTime: string; endTime: string }>,
   }
 
   return (

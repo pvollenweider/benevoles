@@ -33,12 +33,15 @@ export async function GET(_req: Request, { params }: { params: Promise<{ token: 
       firstName: registration.volunteer.firstName,
       lastName: registration.volunteer.lastName,
       email: registration.volunteer.email,
+      phone: registration.volunteer.phone ?? "",
     },
     registrations: allRegistrations.map((r) => ({
       id: r.id,
       editToken: r.editToken,
       shift: {
+        id: r.shift.id,
         label: r.shift.label,
+        roleName: r.shift.roleName,
         date: r.shift.date,
         startTime: r.shift.startTime,
         endTime: r.shift.endTime,

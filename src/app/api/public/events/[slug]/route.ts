@@ -10,7 +10,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
       shifts: {
         where: { status: { not: "cancelled" } },
         include: { registrations: { where: { status: "active" } } },
-        orderBy: [{ date: "asc" }, { displayOrder: "asc" }, { startTime: "asc" }],
+        orderBy: [{ date: "asc" }, { startTime: "asc" }, { displayOrder: "asc" }],
       },
     },
   })
@@ -42,6 +42,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
     endDate: event.endDate,
     publicInstructions: event.publicInstructions,
     confirmationMessage: event.confirmationMessage,
+    showSchedule: event.showSchedule,
     shifts,
   })
 }

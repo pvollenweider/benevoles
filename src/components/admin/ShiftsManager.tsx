@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import StatusBadge from "./StatusBadge"
+import { KNOWN_ROLES, getRoleAccent, RoleIcon } from "@/lib/roles"
 
 type Shift = {
   id: string
@@ -134,8 +135,17 @@ export default function ShiftsManager({ eventId, initialShifts }: { eventId: str
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Poste *</label>
-              <input type="text" value={form.roleName} onChange={(e) => setField("roleName", e.target.value)}
-                placeholder="ex. Billetterie" className="input" />
+              <input
+                type="text"
+                list="role-options"
+                value={form.roleName}
+                onChange={(e) => setField("roleName", e.target.value)}
+                placeholder="ex. Billetterie"
+                className="input"
+              />
+              <datalist id="role-options">
+                {KNOWN_ROLES.map((r) => <option key={r} value={r} />)}
+              </datalist>
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Libellé *</label>
@@ -202,14 +212,17 @@ export default function ShiftsManager({ eventId, initialShifts }: { eventId: str
             {dayShifts.map((shift) => {
               const missing = shift.capacity - shift.registrationCount
               return (
-                <div key={shift.id} className="bg-white rounded-xl border border-gray-200 p-4">
+                <div key={shift.id} className={`relative bg-white rounded-xl border border-gray-200 p-4 pl-5 overflow-hidden`}>
+                  <div className={`absolute left-0 inset-y-0 w-1 ${getRoleAccent(shift.roleName)}`} />
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="font-medium text-gray-900 text-sm">{shift.label}</span>
                         <StatusBadge status={shift.status} />
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5">{shift.startTime}–{shift.endTime} · {shift.roleName}</p>
+                      <p className="text-xs text-gray-500 mt-0.5 flex items-center gap-1">
+                        {shift.startTime}–{shift.endTime} · <RoleIcon roleName={shift.roleName} /> {shift.roleName}
+                      </p>
                       <div className="flex items-center gap-3 mt-1.5 text-xs text-gray-500">
                         <span>{shift.registrationCount}/{shift.capacity} inscrits</span>
                         {missing > 0 && <span className="text-orange-600 font-medium">{missing} manquant{missing > 1 ? "s" : ""}</span>}

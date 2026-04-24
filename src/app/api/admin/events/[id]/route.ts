@@ -3,6 +3,13 @@ import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 
+const showSchema = z.object({
+  name: z.string(),
+  date: z.string(),
+  startTime: z.string(),
+  endTime: z.string(),
+})
+
 const schema = z.object({
   title: z.string().min(1).optional(),
   description: z.string().optional().nullable(),
@@ -12,6 +19,7 @@ const schema = z.object({
   publicInstructions: z.string().optional().nullable(),
   confirmationMessage: z.string().optional().nullable(),
   publicStatus: z.enum(["draft", "published", "archived"]).optional(),
+  showSchedule: z.array(showSchema).optional(),
 })
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -49,8 +57,13 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (data.startDate) updateData.startDate = new Date(data.startDate)
   if (data.endDate) updateData.endDate = new Date(data.endDate)
 
-  const event = await prisma.event.update({ where: { id }, data: updateData })
-  return NextResponse.json(event)
+  try {
+    const event = await prisma.event.update({ where: { id }, data: updateData })
+    return NextResponse.json(event)
+  } catch (err) {
+    console.error("Event PATCH error:", err)
+    return NextResponse.json({ error: "Erreur serveur", detail: String(err) }, { status: 500 })
+  }
 }
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {

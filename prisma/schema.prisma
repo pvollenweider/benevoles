@@ -18,6 +18,7 @@ model Event {
   endDate             DateTime
   publicInstructions  String?
   confirmationMessage String?
+  showSchedule        Json     @default("[]")
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
