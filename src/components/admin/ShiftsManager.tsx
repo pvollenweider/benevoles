@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
+import { flushSync } from "react-dom"
 import { useRouter } from "next/navigation"
 import StatusBadge from "./StatusBadge"
 import { KNOWN_ROLES, getRoleAccent, RoleIcon } from "@/lib/roles"
@@ -26,6 +27,7 @@ const emptyShift = {
 
 export default function ShiftsManager({ eventId, initialShifts }: { eventId: string; initialShifts: Shift[] }) {
   const router = useRouter()
+  const formRef = useRef<HTMLDivElement>(null)
   const [shifts, setShifts] = useState<Shift[]>(initialShifts)
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -71,28 +73,30 @@ export default function ShiftsManager({ eventId, initialShifts }: { eventId: str
     setEditingId(null)
   }
 
+  function openForm(patch: Partial<typeof emptyShift>, editId: string | null) {
+    flushSync(() => {
+      setForm({ ...emptyShift, ...patch })
+      setEditingId(editId)
+      setShowForm(true)
+      setError(null)
+    })
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }
+
   function startEdit(shift: Shift) {
-    setForm({
+    openForm({
       roleName: shift.roleName, label: shift.label, description: shift.description ?? "",
       date: shift.date, startTime: shift.startTime, endTime: shift.endTime,
-      capacity: shift.capacity, locationDetails: "", displayOrder: 0,
-      internalNotes: shift.internalNotes ?? "",
-    })
-    setEditingId(shift.id)
-    setShowForm(true)
-    setError(null)
+      capacity: shift.capacity, internalNotes: shift.internalNotes ?? "",
+    }, shift.id)
   }
 
   function startDuplicate(shift: Shift) {
-    setForm({
+    openForm({
       roleName: shift.roleName, label: shift.label, description: shift.description ?? "",
       date: shift.date, startTime: shift.startTime, endTime: shift.endTime,
-      capacity: shift.capacity, locationDetails: "", displayOrder: 0,
-      internalNotes: shift.internalNotes ?? "",
-    })
-    setEditingId(null)
-    setShowForm(true)
-    setError(null)
+      capacity: shift.capacity, internalNotes: shift.internalNotes ?? "",
+    }, null)
   }
 
   async function handleStatusChange(shiftId: string, status: string) {
@@ -122,7 +126,7 @@ export default function ShiftsManager({ eventId, initialShifts }: { eventId: str
     <div className="space-y-6">
       <div className="flex justify-end">
         <button
-          onClick={() => { setForm(emptyShift); setEditingId(null); setShowForm(true); setError(null) }}
+          onClick={() => openForm({}, null)}
           className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"
         >
           + Ajouter un créneau
@@ -130,7 +134,7 @@ export default function ShiftsManager({ eventId, initialShifts }: { eventId: str
       </div>
 
       {showForm && (
-        <div className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
+        <div ref={formRef} className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
           <h3 className="font-semibold text-gray-800">{editingId ? "Modifier le créneau" : "Nouveau créneau"}</h3>
           <div className="grid grid-cols-2 gap-3">
             <div>
