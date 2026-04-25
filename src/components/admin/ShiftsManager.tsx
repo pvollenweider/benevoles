@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react"
 import { flushSync } from "react-dom"
-import { useRouter } from "next/navigation"
 import StatusBadge from "./StatusBadge"
 import { KNOWN_ROLES, getRoleAccent, RoleIcon } from "@/lib/roles"
 
@@ -48,7 +47,6 @@ export default function ShiftsManager({
   eventEndDate: string
   initialShifts: Shift[]
 }) {
-  const router = useRouter()
   const formRef = useRef<HTMLDivElement>(null)
   const dates = eventDates(eventStartDate, eventEndDate)
   const singleDay = dates.length === 1

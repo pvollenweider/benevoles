@@ -51,11 +51,6 @@ function b(style: ExcelJS.BorderStyle, argb = C_BORDER): ExcelJS.Border {
   return { style, color: { argb } }
 }
 
-const THIN_ALL = { top: b("thin"), left: b("thin"), bottom: b("thin"), right: b("thin") }
-const HEAD_BORDER = {
-  top: b("medium", C_STRONG), left: b("medium", C_STRONG),
-  bottom: b("medium", C_STRONG), right: b("medium", C_STRONG),
-}
 
 function solidFill(argb: string): ExcelJS.Fill {
   return { type: "pattern", pattern: "solid", fgColor: { argb } }
