@@ -26,11 +26,16 @@ export default async function ShiftsPage({ params }: { params: Promise<{ id: str
         <Link href={`/admin/events/${id}`} className="text-sm text-blue-600">← {event.title}</Link>
         <h1 className="text-xl font-bold text-gray-900 mt-1">Créneaux</h1>
       </div>
-      <ShiftsManager eventId={id} initialShifts={event.shifts.map(s => ({
-        ...s,
-        date: s.date.toISOString().split("T")[0],
-        registrationCount: s.registrations.length,
-      }))} />
+      <ShiftsManager
+        eventId={id}
+        eventStartDate={event.startDate.toISOString().split("T")[0]}
+        eventEndDate={event.endDate.toISOString().split("T")[0]}
+        initialShifts={event.shifts.map(s => ({
+          ...s,
+          date: s.date.toISOString().split("T")[0],
+          registrationCount: s.registrations.length,
+        }))}
+      />
     </div>
   )
 }

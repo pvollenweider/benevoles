@@ -25,9 +25,33 @@ const emptyShift = {
   capacity: 2, locationDetails: "", displayOrder: 0, internalNotes: "",
 }
 
-export default function ShiftsManager({ eventId, initialShifts }: { eventId: string; initialShifts: Shift[] }) {
+function eventDates(start: string, end: string): string[] {
+  const dates: string[] = []
+  const cur = new Date(start + "T00:00:00")
+  const last = new Date(end + "T00:00:00")
+  while (cur <= last) {
+    dates.push(cur.toISOString().split("T")[0])
+    cur.setDate(cur.getDate() + 1)
+  }
+  return dates
+}
+
+function fmtDate(iso: string) {
+  return new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "long" })
+}
+
+export default function ShiftsManager({
+  eventId, eventStartDate, eventEndDate, initialShifts,
+}: {
+  eventId: string
+  eventStartDate: string
+  eventEndDate: string
+  initialShifts: Shift[]
+}) {
   const router = useRouter()
   const formRef = useRef<HTMLDivElement>(null)
+  const dates = eventDates(eventStartDate, eventEndDate)
+  const singleDay = dates.length === 1
   const [shifts, setShifts] = useState<Shift[]>(initialShifts)
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -126,7 +150,7 @@ export default function ShiftsManager({ eventId, initialShifts }: { eventId: str
     <div className="space-y-6">
       <div className="flex justify-end">
         <button
-          onClick={() => openForm({}, null)}
+          onClick={() => openForm(singleDay ? { date: dates[0] } : {}, null)}
           className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"
         >
           + Ajouter un créneau
@@ -160,7 +184,16 @@ export default function ShiftsManager({ eventId, initialShifts }: { eventId: str
           <div className="grid grid-cols-3 gap-3">
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Date *</label>
-              <input type="date" value={form.date} onChange={(e) => setField("date", e.target.value)} className="input" />
+              {singleDay ? (
+                <div className="input bg-gray-50 text-gray-500 cursor-default">{fmtDate(dates[0])}</div>
+              ) : (
+                <select value={form.date} onChange={(e) => setField("date", e.target.value)} className="input">
+                  <option value="">— choisir —</option>
+                  {dates.map((d) => (
+                    <option key={d} value={d}>{fmtDate(d)}</option>
+                  ))}
+                </select>
+              )}
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Début *</label>
