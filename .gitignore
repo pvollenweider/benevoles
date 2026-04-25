@@ -43,3 +43,12 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# IDE
+.idea/
+
+# AI assistant config (machine-specific)
+.claude/
+
+# local dev scripts
+prisma/setup-horizon.ts
