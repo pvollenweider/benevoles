@@ -36,6 +36,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Tests unitaires
+        run: npm test
+
   build-push:
     name: Build & push image
     runs-on: ubuntu-latest
