@@ -68,7 +68,7 @@ jobs:
           echo "ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${SHA}" >> $GITHUB_OUTPUT
 
       - name: Build & push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: true
