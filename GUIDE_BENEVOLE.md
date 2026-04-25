@@ -26,12 +26,13 @@ La page affiche un **planning par jour**. Chaque ligne correspond à un poste (a
 |----------------|---------------|
 | Barre colorée (bleue, verte, orange…) | Créneau ouvert — cliquez pour le sélectionner |
 | Barre avec ✓ et fond foncé | Créneau sélectionné |
+| Barre avec ✓ vert clair | Créneau auquel vous êtes déjà inscrit(e) |
 | Barre grisée « Complet » | Plus de place disponible |
 | Barre grisée « Fermé » | Inscriptions désactivées |
 | Barre grisée (striée) | Créneau qui chevauche une de vos sélections — impossible de le choisir |
 | Fond violet (🎪) | Plage d'un spectacle — repère visuel uniquement |
 
-Sur mobile, faites défiler horizontalement pour voir toutes les plages horaires.
+Sur mobile, **faites défiler horizontalement** pour voir toutes les plages horaires de la journée.
 
 ### Sélectionner un créneau
 
@@ -60,7 +61,7 @@ Cliquez sur **Confirmer mon inscription**.
 
 Après l'inscription, un **email de confirmation** est envoyé à votre adresse. Il récapitule vos créneaux et contient un **lien personnel** pour gérer votre inscription.
 
-La page de succès affiche également ce lien — pensez à le noter ou à revenir sur l'email.
+La page de succès affiche également ce lien — pensez à le noter si vous n'avez pas accès à votre email immédiatement.
 
 ---
 
@@ -100,4 +101,4 @@ Annulez le créneau concerné via votre lien personnel, puis retournez sur la pa
 La place peut se libérer si un autre bénévole annule. Revenez ultérieurement ou contactez l'organisateur.
 
 **J'ai un message « Ce créneau chevauche une inscription existante ».**
-Vous êtes déjà inscrit à un créneau qui se passe en même temps. Vos inscriptions existantes apparaissent alors en vert dans le planning — les créneaux en conflit sont grisés automatiquement.
+Vous êtes déjà inscrit(e) à un créneau qui se passe en même temps. Vos inscriptions existantes apparaissent en vert dans le planning — les créneaux en conflit sont grisés automatiquement.

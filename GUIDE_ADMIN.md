@@ -20,7 +20,7 @@ Accéder à `/admin/login` et saisir les identifiants administrateur (définis v
 | Slug | Identifiant URL (`festival-2025` → `/events/festival-2025`) — généré automatiquement, modifiable |
 | Dates | Date de début et de fin de l'événement |
 | Lieu | Affiché sur la page publique |
-| Description | Texte libre (non affiché côté public pour l'instant) |
+| Description | Texte libre (usage interne) |
 | Instructions publiques | Message visible en haut de la page d'inscription (consignes, dress code, accès…) |
 | Message de confirmation | Texte affiché sur la page de succès après inscription |
 
@@ -36,21 +36,23 @@ Un créneau correspond à un poste de bénévolat sur une plage horaire précise
 
 ### Ajouter un créneau
 
-Renseigner :
-- **Poste (rôle)** — intitulé générique du poste (ex. : `Accueil`, `Photos & Vidéo`). Les créneaux du même rôle sont regroupés sur la même ligne du planning.
-- **Libellé** — intitulé spécifique affiché sous la barre dans le planning (ex. : `Entrée principale`, `Scène B`). Si identique au rôle, laissé vide.
-- **Date** — jour du créneau.
-- **Horaires** — heure de début et de fin.
-- **Capacité** — nombre maximum de bénévoles.
-- **Statut** — `Ouvert` (inscriptions possibles), `Complet` (automatique quand la capacité est atteinte), `Fermé` (inscriptions désactivées manuellement), `Annulé`.
+| Champ | Description |
+|-------|-------------|
+| Poste (rôle) | Intitulé générique (ex. : `Accueil`). Les créneaux du même rôle sont regroupés sur la même ligne du planning. |
+| Libellé | Intitulé spécifique affiché sous la barre (ex. : `Entrée principale`). Laisser vide si identique au rôle. |
+| Date | Jour du créneau |
+| Horaires | Heure de début et de fin |
+| Capacité | Nombre maximum de bénévoles |
+| Statut | `Ouvert`, `Complet`, `Fermé`, `Annulé` |
+| Ordre | Ordre d'affichage dans le planning |
 
 ### Modifier ou supprimer
 
 Cliquer sur le créneau dans la liste pour l'éditer. La suppression n'est disponible que pour les créneaux sans inscription.
 
-### Ordre d'affichage
+### Ajouter une inscription manuellement
 
-Les créneaux sont affichés dans l'ordre de la liste. Réorganiser par glisser-déposer (ou via le champ `Ordre`).
+Le formulaire d'ajout manuel (bouton **+ Ajouter**) pré-sélectionne automatiquement le créneau affiché dans le filtre courant. Pratique pour inscrire un bénévole par téléphone ou en cas de problème technique.
 
 ---
 
@@ -68,7 +70,7 @@ Les modifications sont sauvegardées automatiquement après 1 seconde d'inactivi
 
 ## Publier un événement
 
-Depuis la page de l'événement (`/admin/events/[id]`), cliquer sur le bouton **Publier**. L'événement devient visible à l'URL `/events/[slug]`.
+Depuis la page de l'événement (`/admin/events/[id]`), cliquer sur **Publier**. L'événement devient visible à l'URL `/events/[slug]`.
 
 Pour dépublier (repasser en brouillon), cliquer à nouveau sur le bouton.
 
@@ -78,11 +80,11 @@ Pour dépublier (repasser en brouillon), cliquer à nouveau sur le bouton.
 
 **`/admin/events/[id]/registrations`**
 
-Vue tabulaire de toutes les inscriptions actives : nom, email, téléphone, créneau, commentaire, source.
+Vue tabulaire de toutes les inscriptions actives : nom, email, téléphone, créneau, commentaire, source, date.
 
 Depuis la page principale de l'événement (`/admin/events/[id]`) :
-- **Récap global** : nombre de créneaux, places totales, inscrits, places restantes.
-- **Créneaux critiques** : liste des créneaux encore ouverts avec des places disponibles.
+- **Récap global** : créneaux, places totales, inscrits, places restantes
+- **Créneaux critiques** : liste des créneaux encore ouverts avec des places disponibles
 
 ---
 
@@ -98,17 +100,17 @@ Deux formats disponibles depuis la page de l'événement :
 
 ### Export Excel (`.xlsx`)
 
-- Un onglet par jour avec un **Gantt** : rôles en lignes, tranches horaires en colonnes, noms des bénévoles dans les cellules.
-- Les créneaux de même libellé sont fusionnés sur une seule ligne.
-- Un tableau récapitulatif sous le Gantt (horaires, capacité, inscrits, liste des bénévoles).
-- Un onglet **Inscriptions** avec toutes les données détaillées (nom, email, téléphone, commentaire).
-- Les bénévoles sont triés alphabétiquement par prénom.
+- Un onglet par jour avec un **Gantt** : rôles en lignes, tranches de 30 min en colonnes, noms des bénévoles dans les cellules
+- Créneaux de même libellé fusionnés sur une seule ligne Gantt
+- Tableau récapitulatif sous le Gantt (horaires, capacité, inscrits, liste des bénévoles)
+- Onglet **Inscriptions** avec toutes les données détaillées (nom, email, téléphone, commentaire)
+- Bénévoles triés alphabétiquement par prénom
 
 ### Export PDF (impression)
 
-- Même structure Gantt + récapitulatif, optimisée pour l'impression (format A4 paysage).
-- Les plages des spectacles apparaissent en fond coloré dans le Gantt.
-- Cliquer sur **Imprimer / Enregistrer en PDF** dans la page pour générer le PDF via le navigateur.
+- Même structure Gantt + récapitulatif, optimisée pour l'impression (format A4 paysage)
+- Plages des spectacles en fond coloré dans le Gantt
+- Cliquer sur **Imprimer / Enregistrer en PDF** pour générer le PDF via le navigateur
 
 ---
 

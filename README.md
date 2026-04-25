@@ -1,6 +1,11 @@
 # Bénévoles
 
-Application de gestion de bénévoles pour événements. Permet aux organisateurs de créer des événements, définir des créneaux de bénévolat, et aux bénévoles de s'inscrire en ligne.
+Application de gestion de bénévoles pour événements. Les organisateurs créent des événements et des créneaux de bénévolat ; les bénévoles s'inscrivent en ligne via une timeline interactive.
+
+**Démo en production :** https://benevoles.gallerypack.app
+
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
+[![Node.js 22](https://img.shields.io/badge/Node.js-22-green.svg)](https://nodejs.org/)
 
 ## Documentation
 
@@ -9,13 +14,19 @@ Application de gestion de bénévoles pour événements. Permet aux organisateur
 | [Guide bénévole](GUIDE_BENEVOLE.md) | Personnes qui s'inscrivent comme bénévoles |
 | [Guide administrateur](GUIDE_ADMIN.md) | Organisateurs qui gèrent les événements |
 | [Fonctionnalités](FONCTIONNALITES.md) | Liste exhaustive de tout ce que fait l'application |
+| [Changelog](CHANGELOG.md) | Historique des versions |
 
 ## Aperçu
 
-- **Côté public** : listing des événements publiés, inscription à un ou plusieurs créneaux via une timeline interactive, modification ou annulation via un lien personnel envoyé par email
-- **Côté admin** : création et gestion des événements, des créneaux (rôle, horaire, capacité, programme des spectacles), suivi des inscriptions, export Excel et PDF
-- Détection de conflits d'horaires en temps réel lors de l'inscription
-- Notifications email (confirmation bénévole + alerte admin optionnelle)
+**Côté public**
+- Listing des événements publiés
+- Inscription à un ou plusieurs créneaux via une timeline Gantt interactive (scroll horizontal sur mobile)
+- Détection de conflits d'horaires en temps réel
+- Gestion personnelle via un lien unique envoyé par email
+
+**Côté admin**
+- Création et gestion des événements, créneaux et programme des spectacles
+- Suivi des inscriptions en temps réel
 - Export Gantt (Excel + PDF) avec plages des spectacles en fond
 
 ## Stack
@@ -51,7 +62,7 @@ cp .env.example .env
 # Créer les tables
 npm run db:migrate
 
-# Créer le compte admin + données de démonstration
+# Créer le compte admin (+ données de démonstration)
 npm run db:seed
 ```
 
@@ -93,11 +104,13 @@ ADMIN_NOTIFICATION_EMAIL=""
 NEXT_PUBLIC_APP_URL="https://votre-domaine.com"
 ```
 
+> Pour un déploiement derrière un reverse proxy, ajouter aussi `AUTH_TRUST_HOST=true` et `AUTH_URL=https://votre-domaine.com`.
+
 ## Scripts
 
 | Commande | Description |
 |----------|-------------|
-| `npm run dev` | Serveur de développement |
+| `npm run dev` | Serveur de développement (Turbopack) |
 | `npm run build` | Build de production |
 | `npm start` | Démarrer le serveur de production |
 | `npm run db:migrate` | Appliquer les migrations Prisma |
@@ -119,16 +132,16 @@ docker compose -f docker-compose.dev.yml up
 
 ### Kubernetes
 
-Les manifestes sont dans `k8s/`. L'application est déployée sur `benevoles.gallerypack.app`.
+Les manifestes sont dans `k8s/`. Un init container exécute `prisma migrate deploy` automatiquement avant le démarrage de l'application.
 
 ```bash
 # 1. Build et push de l'image
 docker build -t ghcr.io/<org>/benevoles:<tag> .
 docker push ghcr.io/<org>/benevoles:<tag>
 
-# 2. Appliquer les secrets (à faire une seule fois ou après modif)
+# 2. Appliquer les secrets (une seule fois ou après modification)
 kubectl apply -f k8s/namespace.yaml
-kubectl apply -f k8s/secret.yaml   # après avoir renseigné les valeurs
+kubectl apply -f k8s/secret.yaml
 
 # 3. Déployer
 APP_IMAGE=ghcr.io/<org>/benevoles:<tag> envsubst < k8s/deployment.yaml | kubectl apply -f -
@@ -136,7 +149,7 @@ kubectl apply -f k8s/service.yaml
 kubectl apply -f k8s/ingress.yaml
 ```
 
-Un init container exécute `prisma migrate deploy` automatiquement avant le démarrage de l'application.
+Le CI/CD GitHub Actions gère automatiquement le build et le déploiement sur push vers `main`.
 
 ## Structure du projet
 
@@ -148,25 +161,33 @@ src/
 │   ├── my/[token]/                 # Gestion de son inscription (bénévole)
 │   ├── admin/                      # Interface d'administration
 │   └── api/
-│       ├── admin/                  # API protégée (CRUD événements, créneaux)
+│       ├── admin/                  # API protégée (CRUD événements, créneaux, exports)
 │       └── public/                 # API publique (événements, inscriptions)
-├── components/                     # Composants réutilisables
-└── lib/                            # Utilitaires (email, prisma, rôles)
+├── components/
+│   └── DayTimeline.tsx             # Timeline Gantt interactive
+└── lib/
+    ├── email.ts                    # Envoi d'emails (Nodemailer)
+    ├── prisma.ts                   # Client Prisma singleton
+    ├── roles.tsx                   # Palette de couleurs par rôle
+    └── utils.ts                    # Utilitaires (token, dates, détection de conflits)
 prisma/
-├── schema.prisma                   # Schéma de la base (Event, Shift, Volunteer…)
-├── migrations/                     # Migrations SQL
+├── schema.prisma                   # Schéma BDD (Event, Shift, Volunteer…)
+├── migrations/                     # Migrations SQL versionnées
 └── seed.ts                         # Données initiales
 k8s/                                # Manifestes Kubernetes
+.github/workflows/                  # CI/CD GitHub Actions
 ```
 
 ## Modèle de données
 
-- **Event** — événement avec dates, statut de publication, programme des spectacles
-- **Shift** — créneau horaire rattaché à un événement (rôle, capacité, statut)
-- **Volunteer** — bénévole identifié par son email
-- **Registration** — inscription d'un bénévole à un créneau, avec token d'édition unique
-- **AdminUser** — compte administrateur avec mot de passe hashé (bcrypt)
+| Modèle | Description |
+|--------|-------------|
+| `Event` | Événement avec dates, statut de publication et programme des spectacles |
+| `Shift` | Créneau horaire rattaché à un événement (rôle, capacité, statut) |
+| `Volunteer` | Bénévole identifié par son email |
+| `Registration` | Inscription d'un bénévole à un créneau, avec token d'édition unique |
+| `AdminUser` | Compte administrateur avec mot de passe hashé (bcrypt) |
 
 ## Licence
 
-[AGPL-3.0](https://www.gnu.org/licenses/agpl-3.0.html)
+[GNU Affero General Public License v3.0](LICENSE)
