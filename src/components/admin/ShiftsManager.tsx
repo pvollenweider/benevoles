@@ -28,6 +28,18 @@ function eventDates(start: string, end: string): string[] {
   return dates
 }
 
+function addHour(time: string): string {
+  const [h, m] = time.split(":").map(Number)
+  const newH = (h + 1) % 24
+  return `${String(newH).padStart(2, "0")}:${String(m || 0).padStart(2, "0")}`
+}
+
+function normalizeTime(val: string): string {
+  if (!val) return val
+  const [h, m] = val.split(":")
+  return `${String(parseInt(h, 10)).padStart(2, "0")}:${m ? String(parseInt(m, 10)).padStart(2, "0") : "00"}`
+}
+
 function fmtDate(iso: string) {
   return new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", {
     weekday: "long", day: "numeric", month: "long",
@@ -225,11 +237,26 @@ export default function ShiftsManager({
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Début *</label>
-              <input type="time" value={form.startTime} onChange={e => setField("startTime", e.target.value)} className="input" />
+              <input
+                type="time" value={form.startTime} className="input"
+                onChange={e => {
+                  const start = e.target.value
+                  setForm(f => ({
+                    ...f,
+                    startTime: start,
+                    endTime: (!f.endTime || f.endTime <= start) && start ? addHour(start) : f.endTime,
+                  }))
+                }}
+                onBlur={e => setField("startTime", normalizeTime(e.target.value))}
+              />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Fin *</label>
-              <input type="time" value={form.endTime} onChange={e => setField("endTime", e.target.value)} className="input" />
+              <input
+                type="time" value={form.endTime} className="input"
+                onChange={e => setField("endTime", e.target.value)}
+                onBlur={e => setField("endTime", normalizeTime(e.target.value))}
+              />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">

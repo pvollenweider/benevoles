@@ -145,7 +145,12 @@ export default function DayTimeline({
                       disabled={!clickable}
                       onClick={() => onToggle(shift.id, shift.status)}
                       className={`absolute inset-x-0 rounded flex items-center justify-center overflow-hidden transition-colors ${clickable ? "cursor-pointer" : "cursor-default"} ${barCls}`}
-                      style={{ top: 0, bottom: hasLabel ? LABEL_H : 0, borderLeft: "4px solid rgba(255,255,255,0.7)" }}
+                      style={{
+                        top: 0,
+                        bottom: hasLabel ? LABEL_H : 0,
+                        borderLeft: "4px solid rgba(255,255,255,0.7)",
+                        ...(isFull ? { backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.18) 5px, rgba(255,255,255,0.18) 7px)" } : {}),
+                      }}
                     >
                       {isConflict || (unavail && !isSelected) ? (
                         <span className="text-[8px] px-1 truncate leading-none text-gray-400">
