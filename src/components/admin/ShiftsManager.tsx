@@ -10,12 +10,19 @@ const emptyShift = {
   capacity: 2, locationDetails: "", displayOrder: 0, internalNotes: "",
 }
 
+function localISO(d: Date) {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, "0")
+  const day = String(d.getDate()).padStart(2, "0")
+  return `${y}-${m}-${day}`
+}
+
 function eventDates(start: string, end: string): string[] {
   const dates: string[] = []
   const cur  = new Date(start + "T00:00:00")
   const last = new Date(end   + "T00:00:00")
   while (cur <= last) {
-    dates.push(cur.toISOString().split("T")[0])
+    dates.push(localISO(cur))
     cur.setDate(cur.getDate() + 1)
   }
   return dates
