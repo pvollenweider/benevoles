@@ -50,6 +50,7 @@ export default function ShiftsManager({
   const [form, setForm] = useState(emptyShift)
   const [saving, setSaving] = useState(false)
   const [error, setError]   = useState<string | null>(null)
+  const [view, setView]     = useState<"timeline" | "list">("timeline")
 
   function setField(k: string, v: string | number) {
     setForm(f => ({ ...f, [k]: v }))
@@ -119,6 +120,12 @@ export default function ShiftsManager({
     setShifts(prev => prev.filter(s => s.id !== id))
   }
 
+  async function handleDeleteShift(id: string) {
+    if (!confirm("Supprimer ce créneau ?")) return
+    const res = await fetch(`/api/admin/shifts/${id}`, { method: "DELETE" })
+    if (res.ok) handleDeleted(id)
+  }
+
   // Group by day (all dates, not just those with shifts)
   const shiftsByDay = shifts
     .filter(s => s.status !== "cancelled")
@@ -130,10 +137,36 @@ export default function ShiftsManager({
 
   const daysWithShifts = dates.filter(d => shiftsByDay[d]?.length > 0)
 
+  const sortedShifts = [...shifts]
+    .filter(s => s.status !== "cancelled")
+    .sort((a, b) => a.date.localeCompare(b.date) || a.startTime.localeCompare(b.startTime))
+
+  const statusCls: Record<string, string> = {
+    open:   "bg-green-100 text-green-700",
+    full:   "bg-orange-100 text-orange-700",
+    closed: "bg-gray-100 text-gray-500",
+  }
+  const statusLabel: Record<string, string> = { open: "Ouvert", full: "Complet", closed: "Fermé" }
+
   return (
     <div className="space-y-8">
-      {/* Top action */}
-      <div className="flex justify-end">
+      {/* Top bar */}
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        {/* View toggle */}
+        <div className="flex rounded-xl border border-gray-200 overflow-hidden text-sm">
+          <button
+            onClick={() => setView("timeline")}
+            className={`px-3 py-1.5 font-medium transition-colors ${view === "timeline" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
+          >
+            Timeline
+          </button>
+          <button
+            onClick={() => setView("list")}
+            className={`px-3 py-1.5 font-medium transition-colors ${view === "list" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
+          >
+            Liste
+          </button>
+        </div>
         <button
           onClick={() => openForm(singleDay ? { date: dates[0] } : {}, null)}
           className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"
@@ -222,14 +255,14 @@ export default function ShiftsManager({
         </div>
       )}
 
-      {daysWithShifts.length === 0 && !showForm && (
+      {shifts.filter(s => s.status !== "cancelled").length === 0 && !showForm && (
         <div className="text-center py-12 text-gray-400">
           <p>Aucun créneau. Cliquez sur « + Ajouter un créneau » pour commencer.</p>
         </div>
       )}
 
-      {/* One timeline per day */}
-      {daysWithShifts.map(day => (
+      {/* ── Timeline view ───────────────────────────────────────────────────── */}
+      {view === "timeline" && daysWithShifts.map(day => (
         <div key={day} className="space-y-2">
           <h2 className="text-xs font-semibold uppercase tracking-wide text-gray-400">
             {fmtDate(day)}
@@ -248,6 +281,68 @@ export default function ShiftsManager({
           </p>
         </div>
       ))}
+
+      {/* ── List view ───────────────────────────────────────────────────────── */}
+      {view === "list" && sortedShifts.length > 0 && (
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <table className="w-full text-sm">
+            <thead className="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Date · Horaire</th>
+                <th className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Poste</th>
+                <th className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden sm:table-cell">Places</th>
+                <th className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden md:table-cell">Statut</th>
+                <th className="px-4 py-2.5" />
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {sortedShifts.map(s => (
+                <tr key={s.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
+                    <p>{fmtDate(s.date)}</p>
+                    <p className="font-medium text-gray-700">{s.startTime}–{s.endTime}</p>
+                  </td>
+                  <td className="px-4 py-3">
+                    <p className="font-medium text-gray-800">{s.roleName}</p>
+                    {s.label !== s.roleName && <p className="text-xs text-gray-400">{s.label}</p>}
+                  </td>
+                  <td className="px-4 py-3 hidden sm:table-cell text-gray-600 tabular-nums">
+                    {s.registrationCount}/{s.capacity}
+                  </td>
+                  <td className="px-4 py-3 hidden md:table-cell">
+                    <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${statusCls[s.status] ?? "bg-gray-100 text-gray-500"}`}>
+                      {statusLabel[s.status] ?? s.status}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-right whitespace-nowrap">
+                    <button
+                      onClick={() => openForm({
+                        roleName: s.roleName,
+                        label: s.label === s.roleName ? "" : s.label,
+                        description: s.description ?? "",
+                        date: s.date,
+                        startTime: s.startTime,
+                        endTime: s.endTime,
+                        capacity: s.capacity,
+                        internalNotes: s.internalNotes ?? "",
+                      }, s.id)}
+                      className="text-xs text-blue-500 hover:text-blue-700 mr-3"
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      onClick={() => handleDeleteShift(s.id)}
+                      className="text-xs text-red-400 hover:text-red-600"
+                    >
+                      Supprimer
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }
