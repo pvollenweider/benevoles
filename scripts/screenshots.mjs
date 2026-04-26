@@ -6,8 +6,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const OUT = path.join(__dirname, "../docs/screenshots")
 const BASE = "https://benevoles.gallerypack.app"
 
-const ADMIN_EMAIL    = process.env.ADMIN_EMAIL    ?? "admin@benevoles.fr"
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "admin123"
+const ADMIN_EMAIL    = process.env.ADMIN_EMAIL    ?? "admin@localhost"
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "change-me"
 
 const DESKTOP = { width: 1440, height: 900 }
 const MOBILE  = { width: 390, height: 844, isMobile: true, hasTouch: true }
