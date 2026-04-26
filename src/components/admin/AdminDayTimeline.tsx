@@ -1,16 +1,16 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { getRoleAccent } from "@/lib/roles"
+import { getRoleAccent, getBarClasses } from "@/lib/roles"
 
 // ── Constants ─────────────────────────────────────────────────────────────────
-const PX_PER_MIN = 2.5     // 150 px / h
-const SNAP       = 15      // minutes
+const PX_PER_MIN = 2.5
+const SNAP       = 15
 const ROW_H      = 48
 const GAP        = 8
 const LABEL_W    = 92
 const HANDLE_W   = 8
-const MIN_DUR    = 15      // minimum shift duration
+const MIN_DUR    = 15
 const AXIS_H     = 20
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -44,18 +44,18 @@ export type AdminShift = {
 }
 
 type Draft  = { roleName: string; startMin: number; endMin: number }
-type Resize = { shiftId: string; side: "left" | "right"; origStart: number; origEnd: number; mouseX: number }
+type Resize = { shiftId: string; side: "left" | "right"; origStart: number; origEnd: number }
 
 interface Props {
-  eventId:  string
-  date:     string
-  shifts:   AdminShift[]
+  eventId:   string
+  date:      string
+  shifts:    AdminShift[]
   onCreated: (s: AdminShift) => void
   onUpdated: (s: AdminShift) => void
   onDeleted: (id: string)    => void
 }
 
-// ── Popover form ──────────────────────────────────────────────────────────────
+// ── Popover ───────────────────────────────────────────────────────────────────
 function ShiftPopover({
   shift, anchor, onClose, onPatch, onDelete,
 }: {
@@ -70,7 +70,6 @@ function ShiftPopover({
   const [status, setStatus]     = useState(shift.status)
   const ref = useRef<HTMLDivElement>(null)
 
-  // close on outside click
   useEffect(() => {
     function handler(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) onClose()
@@ -79,39 +78,32 @@ function ShiftPopover({
     return () => document.removeEventListener("mousedown", handler)
   }, [onClose])
 
-  // close on Escape
   useEffect(() => {
     function handler(e: KeyboardEvent) { if (e.key === "Escape") onClose() }
     document.addEventListener("keydown", handler)
     return () => document.removeEventListener("keydown", handler)
   }, [onClose])
 
-  function save(patch: Partial<AdminShift>) { onPatch(shift.id, patch) }
+  const save = (patch: Partial<AdminShift>) => onPatch(shift.id, patch)
 
-  const popW = 240
-  // position: below the bar, centered, clamped to viewport
-  const left = clamp(anchor.x + anchor.w / 2 - popW / 2, 8, window.innerWidth - popW - 8)
+  const POPW = 244
+  const left = clamp(anchor.x + anchor.w / 2 - POPW / 2, 8, window.innerWidth - POPW - 8)
   const top  = anchor.y + ROW_H + 6
-
-  const statusOpts: { v: string; label: string }[] = [
-    { v: "open",      label: "Ouvert" },
-    { v: "full",      label: "Complet" },
-    { v: "closed",    label: "Fermé" },
-    { v: "cancelled", label: "Annulé" },
-  ]
 
   return (
     <div
       ref={ref}
       className="fixed z-50 bg-white rounded-xl shadow-xl border border-gray-200 p-3 space-y-2.5"
-      style={{ left, top, width: popW }}
+      style={{ left, top, width: POPW }}
+      onMouseDown={e => e.stopPropagation()}
     >
-      {/* Header */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 min-w-0">
           <span className={`w-2 h-2 rounded-full flex-shrink-0 ${getRoleAccent(shift.roleName)}`} />
           <span className="text-xs font-semibold text-gray-700 truncate">{shift.roleName}</span>
-          <span className="text-[10px] text-gray-400 flex-shrink-0">{fmt(shift.startTime)}–{fmt(shift.endTime)}</span>
+          <span className="text-[10px] text-gray-400 flex-shrink-0">
+            {fmt(shift.startTime)}–{fmt(shift.endTime)}
+          </span>
         </div>
         <button onClick={onClose} className="text-gray-400 hover:text-gray-700 flex-shrink-0">
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -120,7 +112,6 @@ function ShiftPopover({
         </button>
       </div>
 
-      {/* Label */}
       <div>
         <input
           type="text"
@@ -130,39 +121,39 @@ function ShiftPopover({
           placeholder={shift.roleName}
           className="w-full text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-400 placeholder-gray-300"
         />
-        <p className="text-[9px] text-gray-400 mt-0.5 ml-0.5">Libellé (laisser vide = identique au poste)</p>
+        <p className="text-[9px] text-gray-400 mt-0.5 ml-0.5">
+          Libellé — laisser vide si identique au poste
+        </p>
       </div>
 
-      {/* Capacity + Status */}
       <div className="flex items-center gap-2">
-        <div className="flex items-center gap-1.5 flex-1">
-          <span className="text-[10px] text-gray-500 flex-shrink-0">Places</span>
-          <input
-            type="number"
-            min={shift.registrationCount || 1}
-            value={capacity}
-            onChange={e => setCapacity(Number(e.target.value))}
-            onBlur={() => save({ capacity })}
-            className="w-14 text-xs border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400 text-center"
-          />
-        </div>
+        <label className="text-[10px] text-gray-500 flex-shrink-0">Places</label>
+        <input
+          type="number"
+          min={Math.max(shift.registrationCount, 1)}
+          value={capacity}
+          onChange={e => setCapacity(Number(e.target.value))}
+          onBlur={() => save({ capacity })}
+          className="w-14 text-xs border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400 text-center"
+        />
         <select
           value={status}
           onChange={e => { setStatus(e.target.value); save({ status: e.target.value }) }}
-          className="text-[10px] border border-gray-200 rounded-lg px-1.5 py-1 text-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-400 flex-1"
+          className="flex-1 text-[10px] border border-gray-200 rounded-lg px-1.5 py-1 text-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-400"
         >
-          {statusOpts.map(o => <option key={o.v} value={o.v}>{o.label}</option>)}
+          <option value="open">Ouvert</option>
+          <option value="full">Complet</option>
+          <option value="closed">Fermé</option>
+          <option value="cancelled">Annulé</option>
         </select>
       </div>
 
-      {/* Registered count info */}
       {shift.registrationCount > 0 && (
         <p className="text-[9px] text-orange-600">
           {shift.registrationCount} inscription{shift.registrationCount > 1 ? "s" : ""} existante{shift.registrationCount > 1 ? "s" : ""}
         </p>
       )}
 
-      {/* Delete */}
       <button
         onClick={() => { if (confirm("Supprimer ce créneau ?")) onDelete(shift.id) }}
         className="w-full text-[10px] text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg py-1 transition-colors"
@@ -177,36 +168,34 @@ function ShiftPopover({
 export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onUpdated, onDeleted }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Local copy for optimistic updates — sync when parent pushes new shifts
-  const [local, setLocal] = useState<AdminShift[]>(shifts)
-  const prevShiftsRef = useRef(shifts)
-  useEffect(() => {
-    if (prevShiftsRef.current !== shifts) {
-      prevShiftsRef.current = shifts
-      setTimeout(() => setLocal(shifts), 0)
-    }
-  }, [shifts])
+  // Optimistic overlay only during drag-resize; otherwise use shifts prop directly
+  const [resizeOverlay, setResizeOverlay] = useState<Record<string, { startTime: string; endTime: string }>>({})
+  const [draft,  setDraft]  = useState<Draft | null>(null)
+  const [resize, setResize] = useState<Resize | null>(null)
+  const [selected, setSelected] = useState<string | null>(null)
+  const [anchor,   setAnchor]   = useState<{ x: number; y: number; w: number } | null>(null)
 
-  const [selected, setSelected]     = useState<string | null>(null)
-  const [anchor, setAnchor]         = useState<{ x: number; y: number; w: number } | null>(null)
-  const [draft, setDraft]           = useState<Draft | null>(null)
-  const [resize, setResize]         = useState<Resize | null>(null)
+  // Merge shifts with any in-progress resize overlay
+  const visible = shifts
+    .filter(s => s.status !== "cancelled")
+    .map(s => resizeOverlay[s.id] ? { ...s, ...resizeOverlay[s.id] } : s)
 
   // ── Time range ──────────────────────────────────────────────────────────────
-  const allMins = local.flatMap(s => [toMin(s.startTime), toMin(s.endTime)])
+  const allMins = visible.flatMap(s => [toMin(s.startTime), toMin(s.endTime)])
   const rawStart = allMins.length ? Math.min(...allMins) : 8 * 60
   const rawEnd   = allMins.length ? Math.max(...allMins) : 20 * 60
-  const dayStart = Math.floor(rawStart / 60) * 60 - 60   // 1h buffer before
-  const dayEnd   = Math.ceil(rawEnd   / 60) * 60 + 60    // 1h buffer after
+  const dayStart = Math.floor(rawStart / 60) * 60 - 60
+  const dayEnd   = Math.ceil(rawEnd   / 60) * 60 + 60
   const span     = dayEnd - dayStart
   const totalW   = LABEL_W + span * PX_PER_MIN
 
-  // ── Coordinate helpers ──────────────────────────────────────────────────────
+  // ── Coordinate conversion ──────────────────────────────────────────────────
   const xToMin = useCallback((clientX: number) => {
-    const rect = containerRef.current?.getBoundingClientRect()
-    if (!rect) return dayStart
-    const scrollLeft = containerRef.current?.scrollLeft ?? 0
-    const localX = clientX - rect.left + scrollLeft - LABEL_W
+    const el = containerRef.current
+    if (!el) return dayStart
+    const rect       = el.getBoundingClientRect()
+    const scrollLeft = el.scrollLeft
+    const localX     = clientX - rect.left + scrollLeft - LABEL_W
     return snapTo(clamp(dayStart + localX / PX_PER_MIN, dayStart, dayEnd))
   }, [dayStart, dayEnd])
 
@@ -215,22 +204,19 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
   // ── Role rows ───────────────────────────────────────────────────────────────
   const roles: string[] = []
   const byRole: Record<string, AdminShift[]> = {}
-  for (const s of local.filter(s => s.status !== "cancelled")) {
+  for (const s of visible) {
     if (!byRole[s.roleName]) { roles.push(s.roleName); byRole[s.roleName] = [] }
     byRole[s.roleName].push(s)
   }
 
-  // ── Mouse handlers ───────────────────────────────────────────────────────────
-
-  // Create: drag on empty row area
+  // ── Create drag ─────────────────────────────────────────────────────────────
   function startCreate(roleName: string, e: React.MouseEvent) {
     e.preventDefault()
     setSelected(null)
-    const startMin = xToMin(e.clientX)
-    setDraft({ roleName, startMin, endMin: startMin + SNAP })
+    setDraft({ roleName, startMin: xToMin(e.clientX), endMin: xToMin(e.clientX) + SNAP })
   }
 
-  // Resize: drag on handle
+  // ── Resize drag ─────────────────────────────────────────────────────────────
   function startResize(shift: AdminShift, side: "left" | "right", e: React.MouseEvent) {
     e.preventDefault()
     e.stopPropagation()
@@ -240,72 +226,75 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
       side,
       origStart: toMin(shift.startTime),
       origEnd:   toMin(shift.endTime),
-      mouseX:    e.clientX,
     })
   }
 
-  // Global mouse move
+  // ── Global mouse move / up ──────────────────────────────────────────────────
   const onMouseMove = useCallback((e: MouseEvent) => {
+    const cur = xToMin(e.clientX)
     if (draft) {
-      const endMin = xToMin(e.clientX)
-      setDraft(d => d ? { ...d, endMin: Math.max(d.startMin + SNAP, endMin) } : null)
+      setDraft(d => d ? { ...d, endMin: Math.max(d.startMin + SNAP, cur) } : null)
     }
     if (resize) {
-      const cur  = xToMin(e.clientX)
-      setLocal(prev => prev.map(s => {
-        if (s.id !== resize.shiftId) return s
+      setResizeOverlay(prev => {
+        const orig = shifts.find(s => s.id === resize.shiftId)
+        if (!orig) return prev
+        const startMin = toMin(orig.startTime)
+        const endMin   = toMin(orig.endTime)
         if (resize.side === "right") {
-          const newEnd = clamp(cur, toMin(s.startTime) + MIN_DUR, dayEnd)
-          return { ...s, endTime: fromMin(snapTo(newEnd)) }
+          const newEnd = snapTo(clamp(cur, startMin + MIN_DUR, dayEnd))
+          return { ...prev, [resize.shiftId]: { startTime: orig.startTime, endTime: fromMin(newEnd) } }
         } else {
-          const newStart = clamp(cur, dayStart, toMin(s.endTime) - MIN_DUR)
-          return { ...s, startTime: fromMin(snapTo(newStart)) }
+          const newStart = snapTo(clamp(cur, dayStart, endMin - MIN_DUR))
+          return { ...prev, [resize.shiftId]: { startTime: fromMin(newStart), endTime: orig.endTime } }
         }
-      }))
+      })
     }
-  }, [draft, resize, xToMin, dayStart, dayEnd])
+  }, [draft, resize, xToMin, shifts, dayStart, dayEnd])
 
-  // Global mouse up
   const onMouseUp = useCallback(async () => {
-    // Finalize resize
     if (resize) {
-      const s = local.find(x => x.id === resize.shiftId)
-      if (s) {
-        const res = await fetch(`/api/admin/shifts/${s.id}`, {
+      const overlay = resizeOverlay[resize.shiftId]
+      const orig    = shifts.find(s => s.id === resize.shiftId)
+      if (orig && overlay) {
+        const res = await fetch(`/api/admin/shifts/${resize.shiftId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ startTime: s.startTime, endTime: s.endTime }),
+          body: JSON.stringify({ startTime: overlay.startTime, endTime: overlay.endTime }),
         })
-        if (res.ok) onUpdated({ ...s, ...await res.json() })
+        if (res.ok) onUpdated({ ...orig, ...overlay })
       }
+      setResizeOverlay({})
       setResize(null)
       return
     }
-    // Finalize create
     if (draft && draft.endMin - draft.startMin >= MIN_DUR) {
-      const body = {
-        eventId,
-        roleName:  draft.roleName,
-        label:     draft.roleName,
-        date,
-        startTime: fromMin(draft.startMin),
-        endTime:   fromMin(draft.endMin),
-        capacity:  2,
-      }
       const res = await fetch("/api/admin/shifts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify({
+          eventId,
+          roleName:  draft.roleName,
+          label:     draft.roleName,
+          date,
+          startTime: fromMin(draft.startMin),
+          endTime:   fromMin(draft.endMin),
+          capacity:  2,
+        }),
       })
       if (res.ok) {
-        const created: AdminShift = { ...await res.json(), registrationCount: 0 }
+        const data = await res.json()
+        const created: AdminShift = {
+          ...data,
+          date: (data.date as string).split("T")[0],
+          registrationCount: 0,
+        }
         onCreated(created)
-        // select the new shift → open popover
-        setTimeout(() => openPopover(created.id), 50)
+        setTimeout(() => openPopover(created.id), 60)
       }
     }
     setDraft(null)
-  }, [draft, resize, local, eventId, date, onCreated, onUpdated])
+  }, [draft, resize, resizeOverlay, shifts, eventId, date, onCreated, onUpdated])
 
   useEffect(() => {
     if (!draft && !resize) return
@@ -327,48 +316,60 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
   }
 
   async function handlePatch(id: string, data: Partial<AdminShift>) {
-    const cur = local.find(s => s.id === id)
-    if (!cur) return
-    const patch = { ...data }
-    if (!patch.label || patch.label.trim() === "") patch.label = cur.roleName
-    setLocal(prev => prev.map(s => s.id === id ? { ...s, ...patch } : s))
+    const orig = shifts.find(s => s.id === id)
+    if (!orig) return
+    const patch = { ...data, label: data.label?.trim() || orig.roleName }
     const res = await fetch(`/api/admin/shifts/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(patch),
     })
-    if (res.ok) onUpdated({ ...cur, ...patch, ...await res.json() })
+    if (res.ok) onUpdated({ ...orig, ...patch })
   }
 
   async function handleDelete(id: string) {
     setSelected(null)
-    setLocal(prev => prev.filter(s => s.id !== id))
-    await fetch(`/api/admin/shifts/${id}`, { method: "DELETE" })
-    onDeleted(id)
+    const res = await fetch(`/api/admin/shifts/${id}`, { method: "DELETE" })
+    if (res.ok) onDeleted(id)
   }
 
-  // ── Hours axis ───────────────────────────────────────────────────────────────
+  // ── Hour ticks ──────────────────────────────────────────────────────────────
   const hours: number[] = []
-  for (let h = dayStart / 60; h <= dayEnd / 60; h++) hours.push(h)
+  for (let h = Math.ceil(dayStart / 60); h <= Math.floor(dayEnd / 60); h++) hours.push(h)
 
-  const selectedShift = selected ? local.find(s => s.id === selected) : null
+  const selectedShift = selected ? visible.find(s => s.id === selected) : null
 
   // ── Render ───────────────────────────────────────────────────────────────────
   return (
     <>
-      <div ref={containerRef} className="overflow-x-auto select-none rounded-xl border border-gray-100 bg-white">
-        <div style={{ width: totalW + 24, padding: "12px 12px 0" }}>
+      <div
+        ref={containerRef}
+        className="overflow-x-auto select-none rounded-xl border border-gray-100 bg-white"
+      >
+        <div style={{ width: totalW + 24, paddingTop: 10, paddingBottom: 0, paddingLeft: 12, paddingRight: 12 }}>
           <div className="relative" style={{ width: totalW }}>
 
-            {/* Label column */}
-            <div className="absolute top-0 left-0 flex flex-col z-10 bg-white" style={{ width: LABEL_W }}>
+            {/* Hour grid */}
+            {hours.map(h => (
+              <div
+                key={h}
+                className="absolute top-0 bottom-0 border-l border-gray-100 pointer-events-none"
+                style={{ left: LABEL_W + (h * 60 - dayStart) * PX_PER_MIN }}
+              />
+            ))}
+
+            {/* Sticky label column */}
+            <div
+              className="absolute top-0 left-0 flex flex-col z-10"
+              style={{ width: LABEL_W, background: "white" }}
+            >
               {roles.map(role => (
                 <div
                   key={role}
-                  className="flex items-center justify-end pr-2"
+                  className="flex items-center justify-end pr-2 shrink-0"
                   style={{ height: ROW_H, marginBottom: GAP }}
                 >
-                  <span className="text-[10px] text-gray-500 truncate text-right leading-tight">
+                  <span className="text-[10px] text-gray-500 truncate text-right leading-tight max-w-full">
                     {role.split(" &")[0].trim()}
                   </span>
                 </div>
@@ -376,60 +377,58 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
               <div style={{ height: AXIS_H }} />
             </div>
 
-            {/* Hour grid lines */}
-            {hours.map(h => (
-              <div
-                key={h}
-                className="absolute top-0 border-l border-gray-100 pointer-events-none"
-                style={{ left: LABEL_W + (h * 60 - dayStart) * PX_PER_MIN, bottom: AXIS_H }}
-              />
-            ))}
-
             {/* Role rows */}
             {roles.map((role, rowIdx) => {
-              const top = rowIdx * (ROW_H + GAP)
+              const rowTop = rowIdx * (ROW_H + GAP)
               return (
                 <div
                   key={role}
                   className="absolute cursor-crosshair"
-                  style={{ left: LABEL_W, top, width: span * PX_PER_MIN, height: ROW_H }}
-                  onMouseDown={e => { if ((e.target as HTMLElement).dataset.handle) return; startCreate(role, e) }}
+                  style={{ left: LABEL_W, top: rowTop, width: span * PX_PER_MIN, height: ROW_H }}
+                  onMouseDown={e => {
+                    // don't start create if the click was on a shift bar or handle
+                    const target = e.target as HTMLElement
+                    if (target.closest("[data-shift-bar]")) return
+                    startCreate(role, e)
+                  }}
                 >
                   {/* Row background */}
-                  <div className="absolute inset-0 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors" />
+                  <div className="absolute inset-0 rounded-lg bg-gray-50" />
 
-                  {/* Existing shifts */}
+                  {/* Shifts */}
                   {(byRole[role] ?? []).map(shift => {
-                    const startMin = toMin(shift.startTime)
-                    const endMin   = toMin(shift.endTime)
-                    const left     = px(startMin)
-                    const width    = Math.max((endMin - startMin) * PX_PER_MIN, 4)
+                    const startMin   = toMin(shift.startTime)
+                    const endMin     = toMin(shift.endTime)
+                    const barLeft    = px(startMin)
+                    const barWidth   = Math.max((endMin - startMin) * PX_PER_MIN, 4)
                     const isSelected = selected === shift.id
-                    const accentCls  = getRoleAccent(shift.roleName).replace("bg-", "bg-").replace("-400", "-500")
-                    const hasCustomLabel = shift.label && shift.label !== shift.roleName
+                    const barCls     = getBarClasses(shift.roleName, isSelected ? "selected" : "default")
+                    const hasLabel   = shift.label && shift.label !== shift.roleName
 
                     return (
                       <div
                         key={shift.id}
                         id={`shift-bar-${shift.id}`}
-                        className={`absolute inset-y-1 rounded-lg cursor-pointer flex items-center overflow-hidden transition-shadow ${
-                          isSelected
-                            ? "ring-2 ring-offset-1 ring-blue-400 shadow-md"
-                            : "hover:shadow-sm"
-                        }`}
-                        style={{ left, width }}
+                        data-shift-bar="1"
+                        className={`absolute inset-y-1.5 rounded-lg cursor-pointer overflow-hidden
+                          flex items-center transition-shadow
+                          ${isSelected ? "shadow-md" : "hover:shadow-sm"} ${barCls}`}
+                        style={{ left: barLeft, width: barWidth }}
+                        onMouseDown={e => e.stopPropagation()}
                         onClick={e => { e.stopPropagation(); openPopover(shift.id) }}
                       >
-                        {/* Color bar */}
-                        <div className={`absolute inset-0 ${accentCls} opacity-80 rounded-lg`} />
-
                         {/* Content */}
-                        <div className="relative z-10 flex flex-col justify-center px-2 max-w-full overflow-hidden">
-                          <span className="text-white text-[9px] font-bold leading-none truncate" style={{ textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
+                        <div className="flex flex-col justify-center px-2 overflow-hidden w-full">
+                          <span
+                            className="text-white text-[9px] font-bold leading-none truncate"
+                            style={{ textShadow: "0 1px 2px rgba(0,0,0,.3)" }}
+                          >
                             {fmt(shift.startTime)}–{fmt(shift.endTime)}
                           </span>
-                          {hasCustomLabel && (
-                            <span className="text-white/80 text-[8px] leading-none truncate mt-0.5">{shift.label}</span>
+                          {hasLabel && (
+                            <span className="text-white/80 text-[8px] leading-none truncate mt-0.5">
+                              {shift.label}
+                            </span>
                           )}
                           <span className="text-white/70 text-[8px] leading-none mt-0.5">
                             {shift.capacity} pl.{shift.registrationCount > 0 ? ` · ${shift.registrationCount}✓` : ""}
@@ -438,38 +437,37 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
 
                         {/* Left resize handle */}
                         <div
-                          data-handle="left"
-                          className="absolute left-0 inset-y-0 cursor-ew-resize z-20 flex items-center"
+                          className="absolute left-0 inset-y-0 cursor-ew-resize z-10 flex items-center"
                           style={{ width: HANDLE_W }}
                           onMouseDown={e => startResize(shift, "left", e)}
                         >
-                          <div className="w-0.5 h-3 bg-white/50 rounded-full mx-auto" />
+                          <div className="w-px h-4 bg-white/40 rounded-full mx-auto" />
                         </div>
 
                         {/* Right resize handle */}
                         <div
-                          data-handle="right"
-                          className="absolute right-0 inset-y-0 cursor-ew-resize z-20 flex items-center"
+                          className="absolute right-0 inset-y-0 cursor-ew-resize z-10 flex items-center"
                           style={{ width: HANDLE_W }}
                           onMouseDown={e => startResize(shift, "right", e)}
                         >
-                          <div className="w-0.5 h-3 bg-white/50 rounded-full mx-auto" />
+                          <div className="w-px h-4 bg-white/40 rounded-full mx-auto" />
                         </div>
                       </div>
                     )
                   })}
 
-                  {/* Draft ghost bar */}
+                  {/* Ghost bar during create */}
                   {draft?.roleName === role && (
                     <div
-                      className="absolute inset-y-1 bg-blue-300/60 rounded-lg border-2 border-blue-400 border-dashed pointer-events-none"
+                      className="absolute inset-y-1.5 rounded-lg border-2 border-blue-400 border-dashed pointer-events-none flex items-center justify-center"
                       style={{
-                        left:  px(Math.min(draft.startMin, draft.endMin)),
-                        width: Math.abs(draft.endMin - draft.startMin) * PX_PER_MIN,
+                        left:  px(draft.startMin),
+                        width: Math.max((draft.endMin - draft.startMin) * PX_PER_MIN, 2),
+                        background: "rgba(96,165,250,0.25)",
                       }}
                     >
-                      <span className="absolute inset-0 flex items-center justify-center text-[9px] text-blue-700 font-medium">
-                        {fmt(fromMin(Math.min(draft.startMin, draft.endMin)))}–{fmt(fromMin(Math.max(draft.startMin, draft.endMin)))}
+                      <span className="text-[9px] text-blue-700 font-medium px-1 truncate">
+                        {fmt(fromMin(draft.startMin))}–{fmt(fromMin(draft.endMin))}
                       </span>
                     </div>
                   )}
@@ -477,8 +475,8 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
               )
             })}
 
-            {/* Spacer */}
-            <div style={{ height: roles.length * (ROW_H + GAP) + GAP }} />
+            {/* Spacer gives height to the relative container */}
+            <div style={{ height: roles.length * (ROW_H + GAP) }} />
 
             {/* Time axis */}
             <div className="relative border-t border-gray-100" style={{ height: AXIS_H }}>
@@ -486,17 +484,20 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
                 <div
                   key={h}
                   className="absolute top-1 text-[10px] text-gray-400 leading-none"
-                  style={{ left: LABEL_W + (h * 60 - dayStart) * PX_PER_MIN, transform: "translateX(-50%)" }}
+                  style={{
+                    left: LABEL_W + (h * 60 - dayStart) * PX_PER_MIN,
+                    transform: "translateX(-50%)",
+                  }}
                 >
                   {h}h
                 </div>
               ))}
             </div>
+
           </div>
         </div>
       </div>
 
-      {/* Popover */}
       {selectedShift && anchor && (
         <ShiftPopover
           shift={selectedShift}
