@@ -35,9 +35,13 @@ function addHour(time: string): string {
 }
 
 function normalizeTime(val: string): string {
-  if (!val) return val
-  const [h, m] = val.split(":")
-  return `${String(parseInt(h, 10)).padStart(2, "0")}:${m ? String(parseInt(m, 10)).padStart(2, "0") : "00"}`
+  const clean = val.trim()
+  if (!clean) return ""
+  const [h, m] = clean.split(":")
+  const hours   = parseInt(h, 10)
+  const minutes = m !== undefined ? parseInt(m, 10) : 0
+  if (isNaN(hours)) return clean
+  return `${String(Math.min(23, hours)).padStart(2, "0")}:${String(Math.min(59, isNaN(minutes) ? 0 : minutes)).padStart(2, "0")}`
 }
 
 function fmtDate(iso: string) {
@@ -67,10 +71,14 @@ export default function ShiftsManager({
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [form, setForm] = useState(emptyShift)
-  const [saving, setSaving]     = useState(false)
-  const [error, setError]       = useState<string | null>(null)
-  const [attempted, setAttempted] = useState(false)
-  const [view, setView]         = useState<"timeline" | "list">("timeline")
+  const [saving, setSaving]         = useState(false)
+  const [error, setError]           = useState<string | null>(null)
+  const [attempted, setAttempted]   = useState(false)
+  const [view, setView]             = useState<"timeline" | "list">("timeline")
+  const [showReorder, setShowReorder]     = useState(false)
+  const [reorderRoles, setReorderRoles]   = useState<string[]>([])
+  const [dragRoleIdx, setDragRoleIdx]     = useState<number | null>(null)
+  const [savingOrder, setSavingOrder]     = useState(false)
 
   function setField(k: string, v: string | number) {
     setForm(f => ({ ...f, [k]: v }))
@@ -147,6 +155,46 @@ export default function ShiftsManager({
     if (res.ok) handleDeleted(id)
   }
 
+  // ── Role ordering ─────────────────────────────────────────────────────────
+  const uniqueRoles = [...new Set(
+    [...shifts]
+      .filter(s => s.status !== "cancelled")
+      .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0))
+      .map(s => s.roleName)
+  )]
+
+  function openReorder() {
+    setReorderRoles([...uniqueRoles])
+    setShowReorder(true)
+  }
+
+  function handleRoleDragOver(e: React.DragEvent, toIdx: number) {
+    e.preventDefault()
+    if (dragRoleIdx === null || dragRoleIdx === toIdx) return
+    setReorderRoles(prev => {
+      const next = [...prev]
+      const [item] = next.splice(dragRoleIdx, 1)
+      next.splice(toIdx, 0, item)
+      return next
+    })
+    setDragRoleIdx(toIdx)
+  }
+
+  async function saveRoleOrder() {
+    setSavingOrder(true)
+    await fetch(`/api/admin/events/${eventId}/reorder-roles`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ roleOrder: reorderRoles }),
+    })
+    setShifts(prev => prev.map(s => {
+      const idx = reorderRoles.indexOf(s.roleName)
+      return idx >= 0 ? { ...s, displayOrder: idx * 100 } : s
+    }))
+    setSavingOrder(false)
+    setShowReorder(false)
+  }
+
   // Group by day (all dates, not just those with shifts)
   const shiftsByDay = shifts
     .filter(s => s.status !== "cancelled")
@@ -160,7 +208,11 @@ export default function ShiftsManager({
 
   const sortedShifts = [...shifts]
     .filter(s => s.status !== "cancelled")
-    .sort((a, b) => a.date.localeCompare(b.date) || a.startTime.localeCompare(b.startTime))
+    .sort((a, b) =>
+      a.date.localeCompare(b.date) ||
+      (a.displayOrder ?? 0) - (b.displayOrder ?? 0) ||
+      a.startTime.localeCompare(b.startTime)
+    )
 
   const statusCls: Record<string, string> = {
     open:   "bg-green-100 text-green-700",
@@ -173,20 +225,33 @@ export default function ShiftsManager({
     <div className="space-y-8">
       {/* Top bar */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        {/* View toggle */}
-        <div className="flex rounded-xl border border-gray-200 overflow-hidden text-sm">
-          <button
-            onClick={() => setView("timeline")}
-            className={`px-3 py-1.5 font-medium transition-colors ${view === "timeline" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
-          >
-            Timeline
-          </button>
-          <button
-            onClick={() => setView("list")}
-            className={`px-3 py-1.5 font-medium transition-colors ${view === "list" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
-          >
-            Liste
-          </button>
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* View toggle */}
+          <div className="flex rounded-xl border border-gray-200 overflow-hidden text-sm">
+            <button
+              onClick={() => setView("timeline")}
+              className={`px-3 py-1.5 font-medium transition-colors ${view === "timeline" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
+            >
+              Timeline
+            </button>
+            <button
+              onClick={() => setView("list")}
+              className={`px-3 py-1.5 font-medium transition-colors ${view === "list" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
+            >
+              Liste
+            </button>
+          </div>
+          {uniqueRoles.length > 1 && (
+            <button
+              onClick={openReorder}
+              className="text-xs text-gray-500 border border-gray-200 rounded-xl px-3 py-1.5 hover:bg-gray-50 transition-colors flex items-center gap-1.5"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4" />
+              </svg>
+              Ordonner les postes
+            </button>
+          )}
         </div>
         <button
           onClick={() => openForm(singleDay ? { date: dates[0] } : {}, null)}
@@ -195,6 +260,47 @@ export default function ShiftsManager({
           + Ajouter un créneau
         </button>
       </div>
+
+      {/* Role reorder panel */}
+      {showReorder && (
+        <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
+          <div>
+            <h3 className="font-semibold text-gray-800">Ordonner les postes</h3>
+            <p className="text-xs text-gray-400 mt-0.5">Glissez-déposez pour changer l'ordre d'affichage dans les timelines.</p>
+          </div>
+          <div className="space-y-1.5">
+            {reorderRoles.map((role, i) => (
+              <div
+                key={role}
+                draggable
+                onDragStart={() => setDragRoleIdx(i)}
+                onDragOver={e => handleRoleDragOver(e, i)}
+                onDragEnd={() => setDragRoleIdx(null)}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl border select-none transition-colors
+                  ${dragRoleIdx === i
+                    ? "opacity-40 border-blue-200 bg-blue-50"
+                    : "border-gray-100 bg-gray-50 hover:bg-gray-100 cursor-grab active:cursor-grabbing"}`}
+              >
+                <svg className="w-4 h-4 text-gray-300 flex-shrink-0" fill="currentColor" viewBox="0 0 16 16">
+                  <circle cx="5" cy="4" r="1.2"/><circle cx="5" cy="8" r="1.2"/><circle cx="5" cy="12" r="1.2"/>
+                  <circle cx="11" cy="4" r="1.2"/><circle cx="11" cy="8" r="1.2"/><circle cx="11" cy="12" r="1.2"/>
+                </svg>
+                <span className="text-sm font-medium text-gray-700">{role}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex gap-3">
+            <button onClick={saveRoleOrder} disabled={savingOrder}
+              className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 disabled:opacity-50">
+              {savingOrder ? "…" : "Enregistrer l'ordre"}
+            </button>
+            <button onClick={() => setShowReorder(false)}
+              className="text-gray-500 px-3 py-2 text-sm hover:text-gray-800">
+              Annuler
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Quick-add / edit form */}
       {showForm && (
@@ -240,7 +346,8 @@ export default function ShiftsManager({
             <div>
               <label className={`block text-xs font-medium mb-1 ${attempted && !form.startTime ? "text-red-500" : "text-gray-600"}`}>Début *</label>
               <input
-                type="time" value={form.startTime} className={`input ${attempted && !form.startTime ? "!border-red-400" : ""}`}
+                type="text" placeholder="HH:MM" value={form.startTime}
+                className={`input ${attempted && !form.startTime ? "!border-red-400" : ""}`}
                 onChange={e => {
                   const start = e.target.value
                   setForm(f => ({
@@ -255,7 +362,8 @@ export default function ShiftsManager({
             <div>
               <label className={`block text-xs font-medium mb-1 ${attempted && !form.endTime ? "text-red-500" : "text-gray-600"}`}>Fin *</label>
               <input
-                type="time" value={form.endTime} className={`input ${attempted && !form.endTime ? "!border-red-400" : ""}`}
+                type="text" placeholder="HH:MM" value={form.endTime}
+                className={`input ${attempted && !form.endTime ? "!border-red-400" : ""}`}
                 onChange={e => setField("endTime", e.target.value)}
                 onBlur={e => setField("endTime", normalizeTime(e.target.value))}
               />
@@ -345,8 +453,12 @@ export default function ShiftsManager({
                     <p className="font-medium text-gray-800">{s.roleName}</p>
                     {s.label !== s.roleName && <p className="text-xs text-gray-400">{s.label}</p>}
                   </td>
-                  <td className="px-4 py-3 hidden sm:table-cell text-gray-600 tabular-nums">
-                    {s.registrationCount}/{s.capacity}
+                  <td className="px-4 py-3 hidden sm:table-cell tabular-nums">
+                    <p className="text-gray-700 font-medium">{s.registrationCount}/{s.capacity}</p>
+                    {s.registrationCount >= s.capacity
+                      ? <p className="text-[11px] text-orange-500">Complet</p>
+                      : <p className="text-[11px] text-emerald-600">{s.capacity - s.registrationCount} libre{s.capacity - s.registrationCount > 1 ? "s" : ""}</p>
+                    }
                   </td>
                   <td className="px-4 py-3 hidden md:table-cell">
                     <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${statusCls[s.status] ?? "bg-gray-100 text-gray-500"}`}>

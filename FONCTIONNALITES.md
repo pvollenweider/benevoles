@@ -62,14 +62,26 @@ Liste exhaustive des fonctionnalités de l'application.
 
 ### Gestion des créneaux (`/admin/events/[id]/shifts`)
 - Ajout de créneaux : rôle, libellé, date, horaires, capacité, statut, ordre d'affichage
+  - Saisie des horaires tolérante : `9` → `09:00`, `14:3` → `14:30`
+  - Fin automatiquement fixée à start + 1 h si non renseignée
 - Icônes colorées par rôle (palette prédéfinie avec correspondance automatique)
 - Autocomplétion des rôles existants
 - Modification, suppression et changement de statut : ouvert → fermé → complet → annulé
-- **Ajout manuel d'inscription** avec pré-sélection du créneau filtré
+- **Réordonnancement des postes** : panneau glisser-déposer pour changer l'ordre des lignes dans toutes les timelines (admin et public), persisté via `displayOrder`
+- **Vue timeline** (par jour) et **vue liste** (tableau plat) commutables
+  - Vue timeline : glisser pour créer un créneau, redimensionner les bords
+  - Vue liste : affichage places occupées/total + places libres restantes en couleur
+- Popover au clic sur un créneau : éditer libellé, capacité, statut — bouton direct vers les inscriptions filtrées sur ce créneau
 
 ### Suivi des inscriptions (`/admin/events/[id]/registrations`)
 - Vue tabulaire : bénévole, créneau, horaires, commentaire, source, date
 - Annulation d'une inscription individuelle
+- **Filtres cumulables** : recherche texte, filtre par poste, filtre par créneau (dropdown avec date/horaire/statut coloré)
+- Accès direct depuis un créneau (timeline admin) : pré-filtrage automatique sur le créneau et le poste
+- **Ajout manuel** avec détection de conflits :
+  - Liste déroulante stylisée : date, horaires, poste, statut (vert/rouge/vide)
+  - Dès qu'un email est saisi, les créneaux déjà pris par ce bénévole sont marqués « Déjà inscrit » (orange) et les créneaux en conflit horaire sont marqués « ⚠ conflit » (amber)
+  - Message contextuel si le créneau sélectionné est en conflit avec une inscription existante
 
 ### Exports
 

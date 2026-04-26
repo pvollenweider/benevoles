@@ -16,6 +16,7 @@ type Props = {
   eventId: string
   initialRegistrations: Registration[]
   shifts: ShiftRef[]
+  initialShiftFilter?: string
 }
 
 const sourceLabels: Record<string, string> = {
@@ -178,11 +179,12 @@ function ShiftSelect({
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function RegistrationsManager({ eventId, initialRegistrations, shifts }: Props) {
+export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter }: Props) {
   const [registrations, setRegistrations] = useState<Registration[]>(initialRegistrations)
   const [search, setSearch] = useState("")
-  const [roleFilter, setRoleFilter] = useState("")
-  const [shiftFilter, setShiftFilter] = useState("")
+  const initialShift = initialShiftFilter ? shifts.find(s => s.id === initialShiftFilter) ?? null : null
+  const [roleFilter, setRoleFilter] = useState(initialShift?.roleName ?? "")
+  const [shiftFilter, setShiftFilter] = useState(initialShiftFilter ?? "")
   const [showAddForm, setShowAddForm] = useState(false)
   const [addForm, setAddForm] = useState({ firstName: "", lastName: "", email: "", phone: "", shiftId: "", comment: "" })
   const [adding, setAdding] = useState(false)
@@ -198,6 +200,20 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     const found = registrations.filter(r => r.volunteer.email.toLowerCase() === email).map(r => r.shift)
     return found.length > 0 ? found : undefined
   }, [addForm.email, registrations])
+
+  const selectedShiftObj = useMemo(
+    () => (addForm.shiftId ? shifts.find(s => s.id === addForm.shiftId) ?? null : null),
+    [addForm.shiftId, shifts]
+  )
+
+  const conflictMessage = useMemo<string | null>(() => {
+    if (!selectedShiftObj || !volunteerShifts) return null
+    if (volunteerShifts.some(e => e.id === selectedShiftObj.id))
+      return "Ce bénévole est déjà inscrit à ce créneau."
+    if (volunteerShifts.some(e => shiftsOverlap(selectedShiftObj, e)))
+      return "Ce bénévole est déjà inscrit à un autre créneau pour cette plage horaire."
+    return null
+  }, [selectedShiftObj, volunteerShifts])
 
   const filtered = registrations.filter((r) => {
     const q = search.toLowerCase()
@@ -327,10 +343,8 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
               placeholder="Sélectionner un créneau…"
               existingShifts={volunteerShifts}
             />
-            {volunteerShifts && (
-              <p className="text-[10px] text-orange-600 mt-1 ml-0.5">
-                Ce bénévole est déjà inscrit à {volunteerShifts.length} créneau{volunteerShifts.length > 1 ? "x" : ""}.
-              </p>
+            {conflictMessage && (
+              <p className="text-[10px] text-orange-600 mt-1 ml-0.5">{conflictMessage}</p>
             )}
           </div>
           <div>

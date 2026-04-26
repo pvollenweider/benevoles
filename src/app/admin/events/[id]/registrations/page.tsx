@@ -5,8 +5,15 @@ import RegistrationsManager from "@/components/admin/RegistrationsManager"
 
 export const dynamic = "force-dynamic"
 
-export default async function RegistrationsPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function RegistrationsPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ shift?: string }>
+}) {
   const { id } = await params
+  const { shift: initialShiftFilter } = await searchParams
 
   const event = await prisma.event.findUnique({
     where: { id },
@@ -41,6 +48,7 @@ export default async function RegistrationsPage({ params }: { params: Promise<{ 
 
       <RegistrationsManager
         eventId={id}
+        initialShiftFilter={initialShiftFilter}
         initialRegistrations={event.registrations.map((r) => ({
           id: r.id,
           status: r.status,

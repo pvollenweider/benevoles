@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
+import Link from "next/link"
 import { getRoleAccent, getBarClasses } from "@/lib/roles"
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -40,6 +41,7 @@ export type AdminShift = {
   capacity: number
   status: string
   registrationCount: number
+  displayOrder: number
   internalNotes?: string | null
   description?: string | null
 }
@@ -60,10 +62,11 @@ interface Props {
 
 // ── Popover ───────────────────────────────────────────────────────────────────
 function ShiftPopover({
-  shift, anchor, onClose, onPatch, onDelete,
+  shift, anchor, eventId, onClose, onPatch, onDelete,
 }: {
   shift:    AdminShift
   anchor:   { x: number; y: number; w: number }
+  eventId:  string
   onClose:  () => void
   onPatch:  (id: string, data: Partial<AdminShift>) => void
   onDelete: (id: string) => void
@@ -167,6 +170,14 @@ function ShiftPopover({
         </p>
       )}
 
+      <Link
+        href={`/admin/events/${eventId}/registrations?shift=${shift.id}`}
+        className="block w-full text-center text-[10px] text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-lg py-1 transition-colors"
+        onClick={onClose}
+      >
+        Voir les inscriptions →
+      </Link>
+
       <button
         onClick={() => { if (confirm("Supprimer ce créneau ?")) onDelete(shift.id) }}
         className="w-full text-[10px] text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg py-1 transition-colors"
@@ -225,13 +236,15 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], on
 
   const px = (min: number) => (min - dayStart) * PX_PER_MIN
 
-  // ── Role rows ───────────────────────────────────────────────────────────────
-  const roles: string[] = []
+  // ── Role rows (sorted by displayOrder) ────────────────────────────────────
   const byRole: Record<string, AdminShift[]> = {}
+  const roleMinOrder: Record<string, number> = {}
   for (const s of visible) {
-    if (!byRole[s.roleName]) { roles.push(s.roleName); byRole[s.roleName] = [] }
+    if (!byRole[s.roleName]) { byRole[s.roleName] = []; roleMinOrder[s.roleName] = s.displayOrder }
     byRole[s.roleName].push(s)
+    if (s.displayOrder < roleMinOrder[s.roleName]) roleMinOrder[s.roleName] = s.displayOrder
   }
+  const roles = Object.keys(byRole).sort((a, b) => roleMinOrder[a] - roleMinOrder[b])
 
   const rowsH = roles.length * (ROW_H + GAP)
 
@@ -487,7 +500,10 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], on
                             </span>
                           )}
                           <span className="text-white/70 text-[8px] leading-none mt-0.5">
-                            {shift.capacity} pl.{shift.registrationCount > 0 ? ` · ${shift.registrationCount}✓` : ""}
+                            {shift.registrationCount}/{shift.capacity}
+                            {shift.capacity - shift.registrationCount > 0
+                              ? ` · ${shift.capacity - shift.registrationCount} libre`
+                              : " · Complet"}
                           </span>
                         </div>
 
@@ -576,6 +592,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], on
         <ShiftPopover
           shift={selectedShift}
           anchor={anchor}
+          eventId={eventId}
           onClose={() => setSelected(null)}
           onPatch={handlePatch}
           onDelete={handleDelete}

@@ -10,7 +10,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
       shifts: {
         where: { status: { not: "cancelled" } },
         include: { registrations: { where: { status: "active" } } },
-        orderBy: [{ date: "asc" }, { startTime: "asc" }, { displayOrder: "asc" }],
+        orderBy: [{ date: "asc" }, { displayOrder: "asc" }, { startTime: "asc" }],
       },
     },
   })
@@ -30,6 +30,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
     spotsLeft: Math.max(0, shift.capacity - shift.registrations.length),
     status: shift.registrations.length >= shift.capacity ? "full" : shift.status,
     locationDetails: shift.locationDetails,
+    displayOrder: shift.displayOrder,
   }))
 
   return NextResponse.json({

@@ -19,6 +19,7 @@ type Shift = {
   spotsLeft: number
   status: string
   locationDetails: string | null
+  displayOrder: number
 }
 
 type Show = { name: string; date: string; startTime: string; endTime: string }

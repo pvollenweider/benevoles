@@ -10,6 +10,7 @@ export type TimelineShift = {
   endTime: string
   status: string
   spotsLeft: number
+  displayOrder?: number
 }
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
@@ -63,12 +64,14 @@ export default function DayTimeline({
   const px  = (min: number) => LABEL_W + (min - dayStart) * pxPerMin
   const pxW = (s: number, e: number) => Math.max((e - s) * pxPerMin, 2)
 
-  const roleOrder: string[] = []
   const byRole: Record<string, TimelineShift[]> = {}
+  const roleMinOrder: Record<string, number> = {}
   for (const s of visible) {
-    if (!byRole[s.roleName]) { roleOrder.push(s.roleName); byRole[s.roleName] = [] }
+    if (!byRole[s.roleName]) { byRole[s.roleName] = []; roleMinOrder[s.roleName] = s.displayOrder ?? 0 }
     byRole[s.roleName].push(s)
+    if ((s.displayOrder ?? 0) < roleMinOrder[s.roleName]) roleMinOrder[s.roleName] = s.displayOrder ?? 0
   }
+  const roleOrder = Object.keys(byRole).sort((a, b) => roleMinOrder[a] - roleMinOrder[b])
 
   const hours: number[] = []
   for (let h = dayStart / 60; h <= dayEnd / 60; h++) hours.push(h)
