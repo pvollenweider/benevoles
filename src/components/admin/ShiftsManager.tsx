@@ -67,9 +67,10 @@ export default function ShiftsManager({
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [form, setForm] = useState(emptyShift)
-  const [saving, setSaving] = useState(false)
-  const [error, setError]   = useState<string | null>(null)
-  const [view, setView]     = useState<"timeline" | "list">("timeline")
+  const [saving, setSaving]     = useState(false)
+  const [error, setError]       = useState<string | null>(null)
+  const [attempted, setAttempted] = useState(false)
+  const [view, setView]         = useState<"timeline" | "list">("timeline")
 
   function setField(k: string, v: string | number) {
     setForm(f => ({ ...f, [k]: v }))
@@ -81,13 +82,14 @@ export default function ShiftsManager({
       setEditingId(editId)
       setShowForm(true)
       setError(null)
+      setAttempted(false)
     })
     formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
   }
 
   async function handleSave() {
     if (!form.roleName || !form.date || !form.startTime || !form.endTime) {
-      setError("Tous les champs obligatoires doivent être remplis.")
+      setAttempted(true)
       return
     }
     setSaving(true)
@@ -200,13 +202,13 @@ export default function ShiftsManager({
           <h3 className="font-semibold text-gray-800">{editingId ? "Modifier le créneau" : "Nouveau créneau"}</h3>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Poste *</label>
+              <label className={`block text-xs font-medium mb-1 ${attempted && !form.roleName ? "text-red-500" : "text-gray-600"}`}>Poste *</label>
               <input
                 type="text" list="role-options"
                 value={form.roleName}
                 onChange={e => setField("roleName", e.target.value)}
                 placeholder="ex. Billetterie"
-                className="input"
+                className={`input ${attempted && !form.roleName ? "!border-red-400" : ""}`}
               />
               <datalist id="role-options">
                 {KNOWN_ROLES.map(r => <option key={r} value={r} />)}
@@ -225,20 +227,20 @@ export default function ShiftsManager({
           </div>
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Date *</label>
+              <label className={`block text-xs font-medium mb-1 ${attempted && !form.date ? "text-red-500" : "text-gray-600"}`}>Date *</label>
               {singleDay ? (
                 <div className="input bg-gray-50 text-gray-500 cursor-default">{fmtDate(dates[0])}</div>
               ) : (
-                <select value={form.date} onChange={e => setField("date", e.target.value)} className="input">
+                <select value={form.date} onChange={e => setField("date", e.target.value)} className={`input ${attempted && !form.date ? "!border-red-400" : ""}`}>
                   <option value="">— choisir —</option>
                   {dates.map(d => <option key={d} value={d}>{fmtDate(d)}</option>)}
                 </select>
               )}
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Début *</label>
+              <label className={`block text-xs font-medium mb-1 ${attempted && !form.startTime ? "text-red-500" : "text-gray-600"}`}>Début *</label>
               <input
-                type="time" value={form.startTime} className="input"
+                type="time" value={form.startTime} className={`input ${attempted && !form.startTime ? "!border-red-400" : ""}`}
                 onChange={e => {
                   const start = e.target.value
                   setForm(f => ({
@@ -251,9 +253,9 @@ export default function ShiftsManager({
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Fin *</label>
+              <label className={`block text-xs font-medium mb-1 ${attempted && !form.endTime ? "text-red-500" : "text-gray-600"}`}>Fin *</label>
               <input
-                type="time" value={form.endTime} className="input"
+                type="time" value={form.endTime} className={`input ${attempted && !form.endTime ? "!border-red-400" : ""}`}
                 onChange={e => setField("endTime", e.target.value)}
                 onBlur={e => setField("endTime", normalizeTime(e.target.value))}
               />
@@ -275,6 +277,9 @@ export default function ShiftsManager({
           </div>
 
           {error && <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{error}</div>}
+          {attempted && (!form.roleName || !form.date || !form.startTime || !form.endTime) && (
+            <p className="text-xs text-red-500">Veuillez remplir les champs en rouge.</p>
+          )}
 
           <div className="flex gap-3">
             <button onClick={handleSave} disabled={saving}
