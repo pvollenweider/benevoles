@@ -419,6 +419,7 @@ export default function ShiftsManager({
             date={day}
             shifts={shiftsByDay[day]}
             shows={showSchedule.filter(s => s.date === day)}
+            roleOrder={uniqueRoles}
             onCreated={handleCreated}
             onUpdated={handleUpdated}
             onDeleted={handleDeleted}

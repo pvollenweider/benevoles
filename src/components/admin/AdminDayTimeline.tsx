@@ -55,6 +55,7 @@ interface Props {
   date:      string
   shifts:    AdminShift[]
   shows?:    Show[]
+  roleOrder?: string[]   // global stable order from parent
   onCreated: (s: AdminShift) => void
   onUpdated: (s: AdminShift) => void
   onDeleted: (id: string)    => void
@@ -198,7 +199,7 @@ function Toast({ message }: { message: string }) {
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function AdminDayTimeline({ eventId, date, shifts, shows = [], onCreated, onUpdated, onDeleted }: Props) {
+export default function AdminDayTimeline({ eventId, date, shifts, shows = [], roleOrder, onCreated, onUpdated, onDeleted }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   const [resizeOverlay, setResizeOverlay] = useState<Record<string, { startTime: string; endTime: string }>>({})
@@ -236,7 +237,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], on
 
   const px = (min: number) => (min - dayStart) * PX_PER_MIN
 
-  // ── Role rows (sorted by displayOrder) ────────────────────────────────────
+  // ── Role rows ─────────────────────────────────────────────────────────────
   const byRole: Record<string, AdminShift[]> = {}
   const roleMinOrder: Record<string, number> = {}
   for (const s of visible) {
@@ -244,7 +245,11 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], on
     byRole[s.roleName].push(s)
     if (s.displayOrder < roleMinOrder[s.roleName]) roleMinOrder[s.roleName] = s.displayOrder
   }
-  const roles = Object.keys(byRole).sort((a, b) => roleMinOrder[a] - roleMinOrder[b])
+  // Use the global stable order from the parent when provided (avoids per-day inconsistency
+  // when multiple roles share the same displayOrder value).
+  const roles = roleOrder
+    ? roleOrder.filter(r => !!byRole[r])
+    : Object.keys(byRole).sort((a, b) => roleMinOrder[a] - roleMinOrder[b])
 
   const rowsH = roles.length * (ROW_H + GAP)
 
