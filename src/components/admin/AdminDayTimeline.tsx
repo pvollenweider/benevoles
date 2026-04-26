@@ -452,6 +452,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], on
                     const barLeft    = px(startMin)
                     const barWidth   = Math.max((endMin - startMin) * PX_PER_MIN, 4)
                     const isSelected = selected === shift.id
+                    const isFull     = shift.status === "full" || shift.registrationCount >= shift.capacity
                     const barCls     = getBarClasses(shift.roleName, isSelected ? "selected" : "default")
                     const hasLabel   = shift.label && shift.label !== shift.roleName
 
@@ -463,7 +464,13 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], on
                         className={`absolute inset-y-1.5 rounded-lg cursor-pointer overflow-hidden
                           flex items-center transition-shadow
                           ${isSelected ? "shadow-md" : "hover:shadow-sm"} ${barCls}`}
-                        style={{ left: barLeft, width: barWidth }}
+                        style={{
+                          left: barLeft,
+                          width: barWidth,
+                          ...(isFull ? {
+                            backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.3) 5px, rgba(255,255,255,0.3) 7px)",
+                          } : {}),
+                        }}
                         onMouseDown={e => e.stopPropagation()}
                         onClick={e => { e.stopPropagation(); openPopover(shift.id) }}
                       >
