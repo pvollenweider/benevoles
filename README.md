@@ -2,8 +2,6 @@
 
 Application de gestion de bénévoles pour événements. Les organisateurs créent des événements et des créneaux de bénévolat ; les bénévoles s'inscrivent en ligne via une timeline interactive.
 
-**Démo en production :** https://benevoles.gallerypack.app
-
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
 [![Node.js 22](https://img.shields.io/badge/Node.js-22-green.svg)](https://nodejs.org/)
 
