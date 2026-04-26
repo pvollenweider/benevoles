@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { shiftsOverlap, slugify, cn, generateToken } from "../utils"
+import { shiftsOverlap, slugify, cn, generateToken, formatDate, formatShortDate } from "../utils"
 
 // ── shiftsOverlap ────────────────────────────────────────────────────────────
 
@@ -108,5 +108,35 @@ describe("generateToken", () => {
 
   it("ne contient que des caractères alphanumériques minuscules", () => {
     expect(generateToken()).toMatch(/^[a-z0-9]+$/)
+  })
+})
+
+// ── formatDate / formatShortDate ──────────────────────────────────────────────
+
+describe("formatDate", () => {
+  it("formate avec jour de la semaine, jour et mois en français", () => {
+    const result = formatDate("2025-08-02")
+    expect(result).toMatch(/samedi/)
+    expect(result).toMatch(/2/)
+    expect(result).toMatch(/août/)
+  })
+
+  it("accepte un objet Date", () => {
+    const result = formatDate(new Date("2025-12-25T12:00:00Z"))
+    expect(result).toMatch(/décembre/)
+  })
+})
+
+describe("formatShortDate", () => {
+  it("formate avec jour, mois et année en français", () => {
+    const result = formatShortDate("2025-08-02")
+    expect(result).toMatch(/2/)
+    expect(result).toMatch(/août/)
+    expect(result).toMatch(/2025/)
+  })
+
+  it("n'inclut pas le jour de la semaine", () => {
+    const result = formatShortDate("2025-08-02")
+    expect(result).not.toMatch(/samedi/)
   })
 })

@@ -43,6 +43,9 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/bcryptjs": "^3.0.0",
     "@types/node": "^22",
     "@types/nodemailer": "^8.0.0",
@@ -53,6 +56,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "husky": "^9.1.7",
+    "jsdom": "^29.0.2",
     "lint-staged": "^16.4.0",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
