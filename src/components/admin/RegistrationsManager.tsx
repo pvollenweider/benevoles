@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
 
 type Volunteer = { id: string; firstName: string; lastName: string; email: string; phone: string | null }
 type ShiftRef  = {
@@ -59,13 +59,14 @@ function StatusPill({ s }: { s: ShiftRef }) {
 
 // ── Custom shift dropdown ─────────────────────────────────────────────────────
 function ShiftSelect({
-  shifts, value, onChange, placeholder = "Sélectionner…", nullable = false,
+  shifts, value, onChange, placeholder = "Sélectionner…", nullable = false, existingShifts,
 }: {
   shifts: ShiftRef[]
   value: string
   onChange: (id: string) => void
   placeholder?: string
   nullable?: boolean
+  existingShifts?: ShiftRef[]
 }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -84,10 +85,13 @@ function ShiftSelect({
     }
   }, [open])
 
-  const selected     = shifts.find(s => s.id === value) ?? null
-  const conflictIds  = selected
-    ? new Set(shifts.filter(s => s.id !== value && shiftsOverlap(s, selected)).map(s => s.id))
-    : new Set<string>()
+  const selected      = shifts.find(s => s.id === value) ?? null
+  const alreadyIds    = useMemo(() => new Set((existingShifts ?? []).map(s => s.id)), [existingShifts])
+  const conflictIds   = useMemo(() => new Set(
+    existingShifts
+      ? shifts.filter(s => !alreadyIds.has(s.id) && existingShifts.some(e => shiftsOverlap(s, e))).map(s => s.id)
+      : []
+  ), [existingShifts, shifts, alreadyIds])
 
   return (
     <div ref={ref} className="relative">
@@ -126,34 +130,40 @@ function ShiftSelect({
             </div>
           )}
           {shifts.map(s => {
-            const full      = s.registrationCount >= s.capacity
-            const empty     = s.registrationCount === 0
+            const full       = s.registrationCount >= s.capacity
+            const empty      = s.registrationCount === 0
+            const alreadyReg = alreadyIds.has(s.id)
             const isConflict = conflictIds.has(s.id)
             const isSelected = value === s.id
-            const rowCls = isConflict
-              ? "border-amber-300 hover:bg-amber-50"
-              : full
-                ? "border-red-200 hover:bg-red-50"
-                : !empty
-                  ? "border-emerald-200 hover:bg-emerald-50"
-                  : "border-gray-100 hover:bg-gray-50"
+            const rowCls = alreadyReg
+              ? "border-orange-300 hover:bg-orange-50"
+              : isConflict
+                ? "border-amber-300 hover:bg-amber-50"
+                : full
+                  ? "border-red-200 hover:bg-red-50"
+                  : !empty
+                    ? "border-emerald-200 hover:bg-emerald-50"
+                    : "border-gray-100 hover:bg-gray-50"
             return (
               <div
                 key={s.id}
                 onClick={() => { onChange(s.id); setOpen(false) }}
                 className={`flex items-center gap-3 pl-3 pr-4 py-2 cursor-pointer border-l-2 transition-colors
-                  ${rowCls} ${isSelected ? "bg-blue-50" : isConflict ? "bg-amber-50/40" : ""}`}
+                  ${rowCls} ${isSelected ? "bg-blue-50" : alreadyReg ? "bg-orange-50/50" : isConflict ? "bg-amber-50/40" : ""}`}
               >
                 <span className="shrink-0 w-28 text-xs text-gray-500">{fmtDate(s.date)}</span>
                 <span className="shrink-0 w-20 text-xs text-gray-600 tabular-nums">
                   {fmtTime(s.startTime)}–{fmtTime(s.endTime)}
                 </span>
-                <span className={`flex-1 text-sm font-medium min-w-0 ${isConflict ? "text-amber-800" : "text-gray-800"}`}>
+                <span className={`flex-1 text-sm font-medium min-w-0 ${alreadyReg ? "text-orange-800" : isConflict ? "text-amber-800" : "text-gray-800"}`}>
                   {s.roleName}
                   {s.label !== s.roleName && (
                     <span className="font-normal text-gray-400"> · {s.label}</span>
                   )}
                 </span>
+                {alreadyReg && (
+                  <span className="shrink-0 text-[10px] text-orange-600 font-medium">Déjà inscrit</span>
+                )}
                 {isConflict && (
                   <span className="shrink-0 text-[10px] text-amber-600 font-medium">⚠ conflit</span>
                 )}
@@ -180,6 +190,14 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
 
   const uniqueRoles = [...new Set(shifts.map(s => s.roleName))]
   const visibleShifts = roleFilter ? shifts.filter(s => s.roleName === roleFilter) : shifts
+
+  // Shifts already held by the volunteer identified by the email in the add form
+  const volunteerShifts = useMemo<ShiftRef[] | undefined>(() => {
+    const email = addForm.email.trim().toLowerCase()
+    if (!email) return undefined
+    const found = registrations.filter(r => r.volunteer.email.toLowerCase() === email).map(r => r.shift)
+    return found.length > 0 ? found : undefined
+  }, [addForm.email, registrations])
 
   const filtered = registrations.filter((r) => {
     const q = search.toLowerCase()
@@ -307,7 +325,13 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
               value={addForm.shiftId}
               onChange={(id) => setAddForm((f) => ({ ...f, shiftId: id }))}
               placeholder="Sélectionner un créneau…"
+              existingShifts={volunteerShifts}
             />
+            {volunteerShifts && (
+              <p className="text-[10px] text-orange-600 mt-1 ml-0.5">
+                Ce bénévole est déjà inscrit à {volunteerShifts.length} créneau{volunteerShifts.length > 1 ? "x" : ""}.
+              </p>
+            )}
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">Note</label>
