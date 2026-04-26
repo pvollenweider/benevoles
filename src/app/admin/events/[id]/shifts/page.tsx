@@ -20,6 +20,9 @@ export default async function ShiftsPage({ params }: { params: Promise<{ id: str
 
   if (!event) notFound()
 
+  type Show = { name: string; date: string; startTime: string; endTime: string }
+  const showSchedule = (event.showSchedule as Show[]) ?? []
+
   return (
     <div className="space-y-6">
       <div>
@@ -30,6 +33,7 @@ export default async function ShiftsPage({ params }: { params: Promise<{ id: str
         eventId={id}
         eventStartDate={event.startDate.toISOString().split("T")[0]}
         eventEndDate={event.endDate.toISOString().split("T")[0]}
+        showSchedule={showSchedule}
         initialShifts={event.shifts.map(s => ({
           ...s,
           date: s.date.toISOString().split("T")[0],

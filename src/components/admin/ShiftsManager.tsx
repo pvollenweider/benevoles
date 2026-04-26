@@ -29,14 +29,16 @@ function fmtDate(iso: string) {
 
 // ── Helper: convert Prisma shift to AdminShift ────────────────────────────────
 type RawShift = AdminShift & { description?: string | null; internalNotes?: string | null }
+type Show = { name: string; date: string; startTime: string; endTime: string }
 
 export default function ShiftsManager({
-  eventId, eventStartDate, eventEndDate, initialShifts,
+  eventId, eventStartDate, eventEndDate, initialShifts, showSchedule = [],
 }: {
   eventId:        string
   eventStartDate: string
   eventEndDate:   string
   initialShifts:  RawShift[]
+  showSchedule?:  Show[]
 }) {
   const formRef   = useRef<HTMLDivElement>(null)
   const dates     = eventDates(eventStartDate, eventEndDate)
@@ -236,6 +238,7 @@ export default function ShiftsManager({
             eventId={eventId}
             date={day}
             shifts={shiftsByDay[day]}
+            shows={showSchedule.filter(s => s.date === day)}
             onCreated={handleCreated}
             onUpdated={handleUpdated}
             onDeleted={handleDeleted}

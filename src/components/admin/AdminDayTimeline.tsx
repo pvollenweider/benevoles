@@ -12,6 +12,7 @@ const LABEL_W    = 92
 const HANDLE_W   = 8
 const MIN_DUR    = 15
 const AXIS_H     = 20
+const SHOW_H     = 22
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function toMin(t: string) {
@@ -43,6 +44,7 @@ export type AdminShift = {
   description?: string | null
 }
 
+type Show   = { name: string; date: string; startTime: string; endTime: string }
 type Draft  = { roleName: string; startMin: number; endMin: number }
 type Resize = { shiftId: string; side: "left" | "right"; origStart: number; origEnd: number }
 
@@ -50,6 +52,7 @@ interface Props {
   eventId:   string
   date:      string
   shifts:    AdminShift[]
+  shows?:    Show[]
   onCreated: (s: AdminShift) => void
   onUpdated: (s: AdminShift) => void
   onDeleted: (id: string)    => void
@@ -70,21 +73,33 @@ function ShiftPopover({
   const [status, setStatus]     = useState(shift.status)
   const ref = useRef<HTMLDivElement>(null)
 
+  // Sync latest values into refs so closeAndSave closure stays stable
+  const labelRef    = useRef(label)
+  const capacityRef = useRef(capacity)
+  useEffect(() => { labelRef.current = label },    [label])
+  useEffect(() => { capacityRef.current = capacity }, [capacity])
+
+  const closeAndSave = useCallback(() => {
+    onPatch(shift.id, {
+      label:    labelRef.current.trim() || shift.roleName,
+      capacity: capacityRef.current,
+    })
+    onClose()
+  }, [shift.id, shift.roleName, onPatch, onClose])
+
   useEffect(() => {
-    function handler(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose()
+    function onMD(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) closeAndSave()
     }
-    document.addEventListener("mousedown", handler)
-    return () => document.removeEventListener("mousedown", handler)
-  }, [onClose])
+    document.addEventListener("mousedown", onMD)
+    return () => document.removeEventListener("mousedown", onMD)
+  }, [closeAndSave])
 
   useEffect(() => {
-    function handler(e: KeyboardEvent) { if (e.key === "Escape") onClose() }
-    document.addEventListener("keydown", handler)
-    return () => document.removeEventListener("keydown", handler)
-  }, [onClose])
-
-  const save = (patch: Partial<AdminShift>) => onPatch(shift.id, patch)
+    function onKey(e: KeyboardEvent) { if (e.key === "Escape") closeAndSave() }
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
+  }, [closeAndSave])
 
   const POPW = 244
   const left = clamp(anchor.x + anchor.w / 2 - POPW / 2, 8, window.innerWidth - POPW - 8)
@@ -105,7 +120,7 @@ function ShiftPopover({
             {fmt(shift.startTime)}–{fmt(shift.endTime)}
           </span>
         </div>
-        <button onClick={onClose} className="text-gray-400 hover:text-gray-700 flex-shrink-0">
+        <button onClick={closeAndSave} className="text-gray-400 hover:text-gray-700 flex-shrink-0">
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
@@ -117,7 +132,6 @@ function ShiftPopover({
           type="text"
           value={label}
           onChange={e => setLabel(e.target.value)}
-          onBlur={() => save({ label: label.trim() || shift.roleName })}
           placeholder={shift.roleName}
           className="w-full text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-400 placeholder-gray-300"
         />
@@ -133,12 +147,11 @@ function ShiftPopover({
           min={Math.max(shift.registrationCount, 1)}
           value={capacity}
           onChange={e => setCapacity(Number(e.target.value))}
-          onBlur={() => save({ capacity })}
           className="w-14 text-xs border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-400 text-center"
         />
         <select
           value={status}
-          onChange={e => { setStatus(e.target.value); save({ status: e.target.value }) }}
+          onChange={e => { setStatus(e.target.value); onPatch(shift.id, { status: e.target.value }) }}
           className="flex-1 text-[10px] border border-gray-200 rounded-lg px-1.5 py-1 text-gray-600 focus:outline-none focus:ring-1 focus:ring-blue-400"
         >
           <option value="open">Ouvert</option>
@@ -164,24 +177,35 @@ function ShiftPopover({
   )
 }
 
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function Toast({ message }: { message: string }) {
+  return (
+    <div className="fixed bottom-5 right-5 z-50 bg-green-600 text-white text-xs font-medium px-3.5 py-2 rounded-xl shadow-lg pointer-events-none">
+      ✓ {message}
+    </div>
+  )
+}
+
 // ── Main component ────────────────────────────────────────────────────────────
-export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onUpdated, onDeleted }: Props) {
+export default function AdminDayTimeline({ eventId, date, shifts, shows = [], onCreated, onUpdated, onDeleted }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Optimistic overlay only during drag-resize; otherwise use shifts prop directly
   const [resizeOverlay, setResizeOverlay] = useState<Record<string, { startTime: string; endTime: string }>>({})
-  const [draft,  setDraft]  = useState<Draft | null>(null)
-  const [resize, setResize] = useState<Resize | null>(null)
+  const [draft,    setDraft]    = useState<Draft | null>(null)
+  const [resize,   setResize]   = useState<Resize | null>(null)
   const [selected, setSelected] = useState<string | null>(null)
   const [anchor,   setAnchor]   = useState<{ x: number; y: number; w: number } | null>(null)
+  const [toast,    setToast]    = useState<string | null>(null)
 
-  // Merge shifts with any in-progress resize overlay
   const visible = shifts
     .filter(s => s.status !== "cancelled")
     .map(s => resizeOverlay[s.id] ? { ...s, ...resizeOverlay[s.id] } : s)
 
-  // ── Time range ──────────────────────────────────────────────────────────────
-  const allMins = visible.flatMap(s => [toMin(s.startTime), toMin(s.endTime)])
+  // ── Time range (include show times) ────────────────────────────────────────
+  const allMins = [
+    ...visible.flatMap(s => [toMin(s.startTime), toMin(s.endTime)]),
+    ...shows.flatMap(s => [toMin(s.startTime), toMin(s.endTime)]),
+  ]
   const rawStart = allMins.length ? Math.min(...allMins) : 8 * 60
   const rawEnd   = allMins.length ? Math.max(...allMins) : 20 * 60
   const dayStart = Math.floor(rawStart / 60) * 60 - 60
@@ -208,6 +232,8 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
     if (!byRole[s.roleName]) { roles.push(s.roleName); byRole[s.roleName] = [] }
     byRole[s.roleName].push(s)
   }
+
+  const rowsH = roles.length * (ROW_H + GAP)
 
   // ── Create drag ─────────────────────────────────────────────────────────────
   function startCreate(roleName: string, e: React.MouseEvent) {
@@ -252,6 +278,11 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
     }
   }, [draft, resize, xToMin, shifts, dayStart, dayEnd])
 
+  const showToast = useCallback((msg: string) => {
+    setToast(msg)
+    setTimeout(() => setToast(null), 2000)
+  }, [])
+
   const onMouseUp = useCallback(async () => {
     if (resize) {
       const overlay = resizeOverlay[resize.shiftId]
@@ -262,7 +293,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ startTime: overlay.startTime, endTime: overlay.endTime }),
         })
-        if (res.ok) onUpdated({ ...orig, ...overlay })
+        if (res.ok) { onUpdated({ ...orig, ...overlay }); showToast("Horaires mis à jour") }
       }
       setResizeOverlay({})
       setResize(null)
@@ -294,7 +325,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
       }
     }
     setDraft(null)
-  }, [draft, resize, resizeOverlay, shifts, eventId, date, onCreated, onUpdated])
+  }, [draft, resize, resizeOverlay, shifts, eventId, date, onCreated, onUpdated, showToast])
 
   useEffect(() => {
     if (!draft && !resize) return
@@ -324,7 +355,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(patch),
     })
-    if (res.ok) onUpdated({ ...orig, ...patch })
+    if (res.ok) { onUpdated({ ...orig, ...patch }); showToast("Enregistré") }
   }
 
   async function handleDelete(id: string) {
@@ -338,6 +369,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
   for (let h = Math.ceil(dayStart / 60); h <= Math.floor(dayEnd / 60); h++) hours.push(h)
 
   const selectedShift = selected ? visible.find(s => s.id === selected) : null
+  const hasShows      = shows.length > 0
 
   // ── Render ───────────────────────────────────────────────────────────────────
   return (
@@ -358,6 +390,20 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
               />
             ))}
 
+            {/* Show bands — full-height indigo strips behind rows */}
+            {shows.map((show, i) => (
+              <div
+                key={i}
+                className="absolute bg-indigo-50 border-x border-indigo-100 pointer-events-none z-0"
+                style={{
+                  left:   LABEL_W + px(toMin(show.startTime)),
+                  width:  Math.max((toMin(show.endTime) - toMin(show.startTime)) * PX_PER_MIN, 2),
+                  top:    0,
+                  height: rowsH,
+                }}
+              />
+            ))}
+
             {/* Sticky label column */}
             <div
               className="absolute top-0 left-0 flex flex-col z-10"
@@ -375,6 +421,11 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
                 </div>
               ))}
               <div style={{ height: AXIS_H }} />
+              {hasShows && (
+                <div className="flex items-center justify-end pr-2" style={{ height: SHOW_H }}>
+                  <span className="text-[9px] text-indigo-400">Spectacles</span>
+                </div>
+              )}
             </div>
 
             {/* Role rows */}
@@ -386,7 +437,6 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
                   className="absolute cursor-crosshair"
                   style={{ left: LABEL_W, top: rowTop, width: span * PX_PER_MIN, height: ROW_H }}
                   onMouseDown={e => {
-                    // don't start create if the click was on a shift bar or handle
                     const target = e.target as HTMLElement
                     if (target.closest("[data-shift-bar]")) return
                     startCreate(role, e)
@@ -417,7 +467,6 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
                         onMouseDown={e => e.stopPropagation()}
                         onClick={e => { e.stopPropagation(); openPopover(shift.id) }}
                       >
-                        {/* Content */}
                         <div className="flex flex-col justify-center px-2 overflow-hidden w-full">
                           <span
                             className="text-white text-[9px] font-bold leading-none truncate"
@@ -475,8 +524,8 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
               )
             })}
 
-            {/* Spacer gives height to the relative container */}
-            <div style={{ height: roles.length * (ROW_H + GAP) }} />
+            {/* Spacer */}
+            <div style={{ height: rowsH }} />
 
             {/* Time axis */}
             <div className="relative border-t border-gray-100" style={{ height: AXIS_H }}>
@@ -494,6 +543,24 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
               ))}
             </div>
 
+            {/* Show labels row */}
+            {hasShows && (
+              <div className="relative border-t border-indigo-50" style={{ height: SHOW_H }}>
+                {shows.map((show, i) => (
+                  <div
+                    key={i}
+                    className="absolute inset-y-1 flex items-center px-1.5 rounded-md bg-indigo-50 text-[9px] text-indigo-700 truncate pointer-events-none"
+                    style={{
+                      left:  LABEL_W + px(toMin(show.startTime)),
+                      width: Math.max((toMin(show.endTime) - toMin(show.startTime)) * PX_PER_MIN, 48),
+                    }}
+                  >
+                    🎪 {show.name} · {fmt(show.startTime)}–{fmt(show.endTime)}
+                  </div>
+                ))}
+              </div>
+            )}
+
           </div>
         </div>
       </div>
@@ -507,6 +574,8 @@ export default function AdminDayTimeline({ eventId, date, shifts, onCreated, onU
           onDelete={handleDelete}
         />
       )}
+
+      {toast && <Toast message={toast} />}
     </>
   )
 }
