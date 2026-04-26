@@ -151,12 +151,16 @@ export default function DayTimeline({
                       style={{
                         top: 0,
                         bottom: hasLabel ? LABEL_H : 0,
-                        borderLeft: "4px solid rgba(255,255,255,0.7)",
-                        ...(isFull ? { backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.18) 5px, rgba(255,255,255,0.18) 7px)" } : {}),
+                        borderLeft: isFull ? "3px solid rgba(0,0,0,0.08)" : "4px solid rgba(255,255,255,0.7)",
+                        ...(isFull ? {
+                          backgroundColor: "white",
+                          backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 6px, rgba(0,0,0,0.06) 6px, rgba(0,0,0,0.06) 8px)",
+                          outline: "1px solid rgba(0,0,0,0.07)",
+                        } : {}),
                       }}
                     >
                       {isConflict || (unavail && !isSelected) ? (
-                        <span className="text-[8px] px-1 truncate leading-none text-gray-400">
+                        <span className="text-[8px] px-1 truncate leading-none text-gray-600">
                           {isFull ? "Complet" : isClosed ? "Fermé" : ""}
                         </span>
                       ) : (
@@ -177,7 +181,7 @@ export default function DayTimeline({
                     </button>
                     {hasLabel && (
                       <span
-                        className="absolute inset-x-0 bottom-0 text-[8px] text-gray-500 truncate text-center pointer-events-none"
+                        className="absolute inset-x-0 bottom-0 text-[8px] text-gray-600 truncate text-center pointer-events-none"
                         style={{ height: LABEL_H, lineHeight: `${LABEL_H}px` }}
                       >
                         {shift.label}
@@ -215,7 +219,7 @@ export default function DayTimeline({
             {hours.map((h) => (
               <div
                 key={h}
-                className="absolute top-1 text-[10px] text-gray-500 leading-none"
+                className="absolute top-1 text-[10px] text-gray-600 leading-none"
                 style={{ left: px(h * 60), transform: "translateX(-50%)" }}
               >
                 {h}h
