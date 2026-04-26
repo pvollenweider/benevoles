@@ -103,7 +103,11 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
               return (
                 <div key={shift.id} className="bg-orange-50 border border-orange-200 rounded-xl p-3 flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-800">{shift.label}</p>
+                    <p className="text-sm font-medium text-gray-800">
+                      {shift.label !== shift.roleName
+                        ? <>{shift.roleName} <span className="font-normal text-gray-400">·</span> {shift.label}</>
+                        : shift.label}
+                    </p>
                     <p className="text-xs text-gray-500">{shift.date.toLocaleDateString("fr-FR")} · {shift.startTime}–{shift.endTime}</p>
                   </div>
                   <span className="text-sm font-semibold text-orange-700">{missing} manquant{missing > 1 ? "s" : ""}</span>
