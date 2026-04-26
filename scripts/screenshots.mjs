@@ -100,6 +100,15 @@ async function run() {
   await adm.goto(`${BASE}/admin/events/${eventId}/shows`, { waitUntil: "networkidle" })
   await shot(adm, "09-admin-shows", { fullPage: true, wait: 800 })
 
+  // PDF export page — higher resolution
+  const pdf = await browser.newPage()
+  await pdf.setViewportSize({ width: 1440, height: 900 })
+  await pdf.context().addCookies(await adm.context().cookies())
+  await pdf.goto(`${BASE}/api/admin/events/${eventId}/export/pdf`, { waitUntil: "networkidle" })
+  await pdf.evaluate(() => document.documentElement.style.zoom = "1.5")
+  await shot(pdf, "10-export-pdf", { fullPage: true, wait: 1200 })
+  await pdf.close()
+
   await adm.close()
   await browser.close()
   console.log(`\nDone — ${OUT}\n`)

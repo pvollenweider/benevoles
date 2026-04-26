@@ -129,6 +129,9 @@ Liste exhaustive des fonctionnalités de l'application.
 - Bénévoles triés alphabétiquement par prénom
 
 #### PDF (impression navigateur)
+
+![Export PDF](docs/screenshots/10-export-pdf.png)
+
 - Même structure Gantt + récapitulatif, optimisée A4 paysage
 - Tableau complet des inscriptions en fin de document
 - Bouton « Imprimer / Enregistrer en PDF »
