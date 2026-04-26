@@ -91,7 +91,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
         >
           <option value="">Tous les créneaux</option>
           {shifts.map((s) => (
-            <option key={s.id} value={s.id}>{s.label} ({s.date})</option>
+            <option key={s.id} value={s.id}>{s.label} — {s.date} {s.startTime}–{s.endTime}</option>
           ))}
         </select>
         <button
