@@ -4,15 +4,35 @@ Liste exhaustive des fonctionnalités de l'application.
 
 ---
 
+## Aperçu
+
+| Vue publique | Interface admin |
+|:---:|:---:|
+| ![Page d'accueil](docs/screenshots/01-home.png) | ![Liste des événements admin](docs/screenshots/06-admin-events.png) |
+| ![Timeline bénévole — desktop](docs/screenshots/02-timeline-desktop.png) | ![Gestion des créneaux](docs/screenshots/07-admin-shifts.png) |
+| ![Timeline bénévole — mobile](docs/screenshots/03-timeline-mobile.png) | ![Suivi des inscriptions](docs/screenshots/08-admin-registrations.png) |
+| ![Formulaire d'inscription](docs/screenshots/04-register-form.png) | ![Connexion admin](docs/screenshots/05-admin-login.png) |
+
+---
+
 ## Côté public (bénévoles)
 
 ### Page d'accueil
+
+![Page d'accueil](docs/screenshots/01-home.png)
+
 - Liste des événements publiés avec titre, dates et lieu
 - Accès direct à la page d'inscription de chaque événement
 
 ### Page d'inscription (`/events/[slug]`)
 
 #### Timeline Gantt
+
+![Timeline bénévole desktop](docs/screenshots/02-timeline-desktop.png)
+
+> Vue mobile avec scroll horizontal
+
+![Timeline bénévole mobile](docs/screenshots/03-timeline-mobile.png)
 - Planning visuel par jour sous forme de **timeline Gantt scrollable**
   - Échelle horizontale calculée dynamiquement à partir du créneau le plus large (scroll tactile fonctionnel sur mobile)
   - Une ligne par rôle ; libellé spécifique affiché sous la barre quand il diffère du rôle
@@ -29,6 +49,9 @@ Liste exhaustive des fonctionnalités de l'application.
   - Créneaux existants chargés en vert, conflits mis en évidence automatiquement
 
 ### Formulaire d'inscription
+
+![Formulaire d'inscription](docs/screenshots/04-register-form.png)
+
 - Champs : prénom, nom, email, téléphone (optionnel), commentaire (optionnel)
 - Pré-remplissage automatique si une session est reconnue
 - Case de consentement obligatoire
@@ -45,10 +68,16 @@ Liste exhaustive des fonctionnalités de l'application.
 ## Côté administrateur (`/admin`)
 
 ### Authentification
+
+![Connexion admin](docs/screenshots/05-admin-login.png)
+
 - Connexion par email + mot de passe (hashé bcrypt, NextAuth v5)
 - Déconnexion
 
 ### Gestion des événements
+
+![Liste des événements](docs/screenshots/06-admin-events.png)
+
 - Création, édition et suppression d'événements
 - Champs : titre, slug, dates, lieu, description, instructions publiques, message de confirmation
 - **Publication / dépublication** en un clic (`draft` → `published`)
@@ -61,6 +90,9 @@ Liste exhaustive des fonctionnalités de l'application.
 - Affichage en fond coloré sur la timeline publique et dans les exports
 
 ### Gestion des créneaux (`/admin/events/[id]/shifts`)
+
+![Gestion des créneaux](docs/screenshots/07-admin-shifts.png)
+
 - Ajout de créneaux : rôle, libellé, date, horaires, capacité, statut, ordre d'affichage
   - Saisie des horaires tolérante : `9` → `09:00`, `14:3` → `14:30`
   - Fin automatiquement fixée à start + 1 h si non renseignée
@@ -74,6 +106,9 @@ Liste exhaustive des fonctionnalités de l'application.
 - Popover au clic sur un créneau : éditer libellé, capacité, statut — bouton direct vers les inscriptions filtrées sur ce créneau
 
 ### Suivi des inscriptions (`/admin/events/[id]/registrations`)
+
+![Suivi des inscriptions](docs/screenshots/08-admin-registrations.png)
+
 - Vue tabulaire : bénévole, créneau, horaires, commentaire, source, date
 - Annulation d'une inscription individuelle
 - **Filtres cumulables** : recherche texte, filtre par poste, filtre par créneau (dropdown avec date/horaire/statut coloré)
