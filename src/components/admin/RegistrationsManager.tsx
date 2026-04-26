@@ -3,7 +3,19 @@
 import { useState } from "react"
 
 type Volunteer = { id: string; firstName: string; lastName: string; email: string; phone: string | null }
-type ShiftRef = { id: string; label: string; date: string; startTime: string; endTime: string }
+type ShiftRef = { id: string; roleName: string; label: string; date: string; startTime: string; endTime: string }
+
+function fmtDate(iso: string) {
+  return new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })
+}
+function fmtTime(t: string) {
+  const [h, m] = t.split(":")
+  return m === "00" ? `${Number(h)}h` : `${Number(h)}h${m}`
+}
+function shiftLabel(s: ShiftRef) {
+  const base = `${fmtDate(s.date)} · ${fmtTime(s.startTime)}–${fmtTime(s.endTime)} · ${s.roleName}`
+  return s.label !== s.roleName ? `${base} · ${s.label}` : base
+}
 type Registration = {
   id: string; status: string; source: string; comment: string | null
   createdAt: string; volunteer: Volunteer; shift: ShiftRef
@@ -67,7 +79,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       comment: data.comment,
       createdAt: data.createdAt,
       volunteer: data.volunteer,
-      shift: { id: data.shift.id, label: data.shift.label, date: data.shift.date.split("T")[0], startTime: data.shift.startTime, endTime: data.shift.endTime },
+      shift: { id: data.shift.id, roleName: data.shift.roleName, label: data.shift.label, date: data.shift.date.split("T")[0], startTime: data.shift.startTime, endTime: data.shift.endTime },
     }
     setRegistrations((prev) => [newReg, ...prev])
     setAddForm({ firstName: "", lastName: "", email: "", phone: "", shiftId: "", comment: "" })
@@ -91,7 +103,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
         >
           <option value="">Tous les créneaux</option>
           {shifts.map((s) => (
-            <option key={s.id} value={s.id}>{s.label} — {s.date} {s.startTime}–{s.endTime}</option>
+            <option key={s.id} value={s.id}>{shiftLabel(s)}</option>
           ))}
         </select>
         <button
@@ -130,7 +142,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
             <select value={addForm.shiftId} onChange={(e) => setAddForm((f) => ({ ...f, shiftId: e.target.value }))} className="input">
               <option value="">Sélectionner…</option>
               {shifts.map((s) => (
-                <option key={s.id} value={s.id}>{s.label} — {s.date} {s.startTime}–{s.endTime}</option>
+                <option key={s.id} value={s.id}>{shiftLabel(s)}</option>
               ))}
             </select>
           </div>
@@ -175,8 +187,12 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                     {reg.comment && <p className="text-xs text-gray-400 italic mt-0.5">"{reg.comment}"</p>}
                   </td>
                   <td className="px-4 py-3 hidden sm:table-cell">
-                    <p className="text-gray-700">{reg.shift.label}</p>
-                    <p className="text-xs text-gray-400">{reg.shift.date} · {reg.shift.startTime}–{reg.shift.endTime}</p>
+                    <p className="text-gray-700">
+                      {reg.shift.label !== reg.shift.roleName
+                        ? <>{reg.shift.roleName} <span className="text-gray-400 font-normal">·</span> {reg.shift.label}</>
+                        : reg.shift.label}
+                    </p>
+                    <p className="text-xs text-gray-400">{fmtDate(reg.shift.date)} · {fmtTime(reg.shift.startTime)}–{fmtTime(reg.shift.endTime)}</p>
                   </td>
                   <td className="px-4 py-3 hidden md:table-cell">
                     <span className="text-xs text-gray-400">{sourceLabels[reg.source] ?? reg.source}</span>

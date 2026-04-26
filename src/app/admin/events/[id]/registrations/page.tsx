@@ -44,6 +44,7 @@ export default async function RegistrationsPage({ params }: { params: Promise<{ 
           volunteer: r.volunteer,
           shift: {
             id: r.shift.id,
+            roleName: r.shift.roleName,
             label: r.shift.label,
             date: r.shift.date.toISOString().split("T")[0],
             startTime: r.shift.startTime,
@@ -52,6 +53,7 @@ export default async function RegistrationsPage({ params }: { params: Promise<{ 
         }))}
         shifts={event.shifts.map((s) => ({
           id: s.id,
+          roleName: s.roleName,
           label: s.label,
           date: s.date.toISOString().split("T")[0],
           startTime: s.startTime,
