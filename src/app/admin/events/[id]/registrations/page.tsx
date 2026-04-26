@@ -25,6 +25,12 @@ export default async function RegistrationsPage({ params }: { params: Promise<{ 
 
   if (!event) notFound()
 
+  // Count active registrations per shift from the already-loaded list
+  const regCountByShift = event.registrations.reduce<Record<string, number>>((acc, r) => {
+    acc[r.shift.id] = (acc[r.shift.id] ?? 0) + 1
+    return acc
+  }, {})
+
   return (
     <div className="space-y-6">
       <div>
@@ -49,6 +55,8 @@ export default async function RegistrationsPage({ params }: { params: Promise<{ 
             date: r.shift.date.toISOString().split("T")[0],
             startTime: r.shift.startTime,
             endTime: r.shift.endTime,
+            capacity: r.shift.capacity,
+            registrationCount: regCountByShift[r.shift.id] ?? 0,
           },
         }))}
         shifts={event.shifts.map((s) => ({
@@ -58,6 +66,8 @@ export default async function RegistrationsPage({ params }: { params: Promise<{ 
           date: s.date.toISOString().split("T")[0],
           startTime: s.startTime,
           endTime: s.endTime,
+          capacity: s.capacity,
+          registrationCount: regCountByShift[s.id] ?? 0,
         }))}
       />
     </div>

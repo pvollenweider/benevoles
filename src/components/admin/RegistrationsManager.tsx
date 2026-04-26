@@ -1,20 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 
 type Volunteer = { id: string; firstName: string; lastName: string; email: string; phone: string | null }
-type ShiftRef = { id: string; roleName: string; label: string; date: string; startTime: string; endTime: string }
-
-function fmtDate(iso: string) {
-  return new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })
-}
-function fmtTime(t: string) {
-  const [h, m] = t.split(":")
-  return m === "00" ? `${Number(h)}h` : `${Number(h)}h${m}`
-}
-function shiftLabel(s: ShiftRef) {
-  const base = `${fmtDate(s.date)} · ${fmtTime(s.startTime)}–${fmtTime(s.endTime)} · ${s.roleName}`
-  return s.label !== s.roleName ? `${base} · ${s.label}` : base
+type ShiftRef  = {
+  id: string; roleName: string; label: string; date: string
+  startTime: string; endTime: string; capacity: number; registrationCount: number
 }
 type Registration = {
   id: string; status: string; source: string; comment: string | null
@@ -33,20 +24,150 @@ const sourceLabels: Record<string, string> = {
   import: "Import",
 }
 
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function fmtDate(iso: string) {
+  return new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })
+}
+function fmtTime(t: string) {
+  const [h, m] = t.split(":")
+  return m === "00" ? `${Number(h)}h` : `${Number(h)}h${m}`
+}
+
+// ── Status pill ───────────────────────────────────────────────────────────────
+function StatusPill({ s }: { s: ShiftRef }) {
+  if (s.registrationCount >= s.capacity) {
+    return <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-red-100 text-red-600 font-medium">Complet</span>
+  }
+  if (s.registrationCount === 0) {
+    return <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-400 font-medium">0/{s.capacity}</span>
+  }
+  return (
+    <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-medium">
+      {s.registrationCount}/{s.capacity}
+    </span>
+  )
+}
+
+// ── Custom shift dropdown ─────────────────────────────────────────────────────
+function ShiftSelect({
+  shifts, value, onChange, placeholder = "Sélectionner…", nullable = false,
+}: {
+  shifts: ShiftRef[]
+  value: string
+  onChange: (id: string) => void
+  placeholder?: string
+  nullable?: boolean
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    function onMD(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    function onKey(e: KeyboardEvent) { if (e.key === "Escape") setOpen(false) }
+    document.addEventListener("mousedown", onMD)
+    document.addEventListener("keydown", onKey)
+    return () => {
+      document.removeEventListener("mousedown", onMD)
+      document.removeEventListener("keydown", onKey)
+    }
+  }, [open])
+
+  const selected = shifts.find(s => s.id === value) ?? null
+
+  return (
+    <div ref={ref} className="relative">
+      {/* Trigger */}
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        className="flex items-center justify-between gap-2 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[38px]"
+      >
+        <span className={`truncate text-left ${selected ? "text-gray-800" : "text-gray-400"}`}>
+          {selected
+            ? `${fmtDate(selected.date)} · ${fmtTime(selected.startTime)}–${fmtTime(selected.endTime)} · ${selected.roleName}${selected.label !== selected.roleName ? ` · ${selected.label}` : ""}`
+            : placeholder}
+        </span>
+        <svg
+          className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
+          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {/* Dropdown list */}
+      {open && (
+        <div
+          className="absolute top-full mt-1 left-0 z-50 bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden"
+          style={{ minWidth: "100%", width: "max-content", maxWidth: "90vw" }}
+        >
+          {nullable && (
+            <div
+              onClick={() => { onChange(""); setOpen(false) }}
+              className={`px-4 py-2.5 text-sm cursor-pointer hover:bg-gray-50 border-b border-gray-100
+                ${!value ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-500"}`}
+            >
+              Tous les créneaux
+            </div>
+          )}
+          {shifts.map(s => {
+            const full  = s.registrationCount >= s.capacity
+            const empty = s.registrationCount === 0
+            const rowCls = full
+              ? "border-red-200 hover:bg-red-50"
+              : !empty
+                ? "border-emerald-200 hover:bg-emerald-50"
+                : "border-gray-100 hover:bg-gray-50"
+            return (
+              <div
+                key={s.id}
+                onClick={() => { onChange(s.id); setOpen(false) }}
+                className={`flex items-center gap-3 pl-3 pr-4 py-2 cursor-pointer border-l-2 transition-colors
+                  ${rowCls} ${value === s.id ? "bg-blue-50" : ""}`}
+              >
+                <span className="shrink-0 w-28 text-xs text-gray-500">{fmtDate(s.date)}</span>
+                <span className="shrink-0 w-20 text-xs text-gray-600 tabular-nums">
+                  {fmtTime(s.startTime)}–{fmtTime(s.endTime)}
+                </span>
+                <span className="flex-1 text-sm font-medium text-gray-800 min-w-0">
+                  {s.roleName}
+                  {s.label !== s.roleName && (
+                    <span className="font-normal text-gray-400"> · {s.label}</span>
+                  )}
+                </span>
+                <StatusPill s={s} />
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Main component ────────────────────────────────────────────────────────────
 export default function RegistrationsManager({ eventId, initialRegistrations, shifts }: Props) {
   const [registrations, setRegistrations] = useState<Registration[]>(initialRegistrations)
   const [search, setSearch] = useState("")
+  const [roleFilter, setRoleFilter] = useState("")
   const [shiftFilter, setShiftFilter] = useState("")
   const [showAddForm, setShowAddForm] = useState(false)
   const [addForm, setAddForm] = useState({ firstName: "", lastName: "", email: "", phone: "", shiftId: "", comment: "" })
   const [adding, setAdding] = useState(false)
   const [addError, setAddError] = useState<string | null>(null)
 
+  const uniqueRoles = [...new Set(shifts.map(s => s.roleName))]
+  const visibleShifts = roleFilter ? shifts.filter(s => s.roleName === roleFilter) : shifts
+
   const filtered = registrations.filter((r) => {
     const q = search.toLowerCase()
     const matchSearch = !q || `${r.volunteer.firstName} ${r.volunteer.lastName} ${r.volunteer.email}`.toLowerCase().includes(q)
+    const matchRole  = !roleFilter  || r.shift.roleName === roleFilter
     const matchShift = !shiftFilter || r.shift.id === shiftFilter
-    return matchSearch && matchShift
+    return matchSearch && matchRole && matchShift
   })
 
   async function handleCancel(id: string) {
@@ -72,6 +193,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
 
     if (!res.ok) { setAddError(data.error ?? "Erreur."); return }
 
+    const shiftRef = shifts.find(s => s.id === addForm.shiftId)
     const newReg: Registration = {
       id: data.id,
       status: data.status,
@@ -79,7 +201,16 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       comment: data.comment,
       createdAt: data.createdAt,
       volunteer: data.volunteer,
-      shift: { id: data.shift.id, roleName: data.shift.roleName, label: data.shift.label, date: data.shift.date.split("T")[0], startTime: data.shift.startTime, endTime: data.shift.endTime },
+      shift: {
+        id: data.shift.id,
+        roleName: data.shift.roleName,
+        label: data.shift.label,
+        date: data.shift.date.split("T")[0],
+        startTime: data.shift.startTime,
+        endTime: data.shift.endTime,
+        capacity: shiftRef?.capacity ?? data.shift.capacity ?? 0,
+        registrationCount: (shiftRef?.registrationCount ?? 0) + 1,
+      },
     }
     setRegistrations((prev) => [newReg, ...prev])
     setAddForm({ firstName: "", lastName: "", email: "", phone: "", shiftId: "", comment: "" })
@@ -97,15 +228,28 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           className="flex-1 min-w-48 border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <select
-          value={shiftFilter}
-          onChange={(e) => setShiftFilter(e.target.value)}
+          value={roleFilter}
+          onChange={(e) => {
+            setRoleFilter(e.target.value)
+            if (shiftFilter) {
+              const s = shifts.find(x => x.id === shiftFilter)
+              if (s && e.target.value && s.roleName !== e.target.value) setShiftFilter("")
+            }
+          }}
           className="border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          <option value="">Tous les créneaux</option>
-          {shifts.map((s) => (
-            <option key={s.id} value={s.id}>{shiftLabel(s)}</option>
-          ))}
+          <option value="">Tous les postes</option>
+          {uniqueRoles.map(r => <option key={r} value={r}>{r}</option>)}
         </select>
+        <div className="min-w-64">
+          <ShiftSelect
+            shifts={visibleShifts}
+            value={shiftFilter}
+            onChange={setShiftFilter}
+            placeholder="Tous les créneaux"
+            nullable
+          />
+        </div>
         <button
           onClick={() => { setShowAddForm(true); setAddError(null); setAddForm((f) => ({ ...f, shiftId: shiftFilter || f.shiftId })) }}
           className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"
@@ -139,12 +283,12 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">Créneau *</label>
-            <select value={addForm.shiftId} onChange={(e) => setAddForm((f) => ({ ...f, shiftId: e.target.value }))} className="input">
-              <option value="">Sélectionner…</option>
-              {shifts.map((s) => (
-                <option key={s.id} value={s.id}>{shiftLabel(s)}</option>
-              ))}
-            </select>
+            <ShiftSelect
+              shifts={shifts}
+              value={addForm.shiftId}
+              onChange={(id) => setAddForm((f) => ({ ...f, shiftId: id }))}
+              placeholder="Sélectionner un créneau…"
+            />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">Note</label>
