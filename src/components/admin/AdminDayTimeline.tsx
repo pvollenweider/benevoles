@@ -458,9 +458,6 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                     startCreate(role, e)
                   }}
                 >
-                  {/* Row background */}
-                  <div className="absolute inset-0 rounded-lg bg-gray-50" />
-
                   {/* Shifts */}
                   {(byRole[role] ?? []).map(shift => {
                     const startMin   = toMin(shift.startTime)
