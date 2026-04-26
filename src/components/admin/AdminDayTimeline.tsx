@@ -412,12 +412,10 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
             {shows.map((show, i) => (
               <div
                 key={i}
-                className="absolute bg-indigo-50 border-x border-indigo-100 pointer-events-none z-0"
+                className="absolute top-0 bottom-0 bg-indigo-50 border-x border-indigo-100 pointer-events-none z-0"
                 style={{
-                  left:   LABEL_W + px(toMin(show.startTime)),
-                  width:  Math.max((toMin(show.endTime) - toMin(show.startTime)) * PX_PER_MIN, 2),
-                  top:    0,
-                  height: rowsH,
+                  left:  LABEL_W + px(toMin(show.startTime)),
+                  width: Math.max((toMin(show.endTime) - toMin(show.startTime)) * PX_PER_MIN, 2),
                 }}
               />
             ))}
