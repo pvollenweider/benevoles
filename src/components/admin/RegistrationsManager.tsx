@@ -25,6 +25,15 @@ const sourceLabels: Record<string, string> = {
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
+function toMin(t: string) {
+  const [h, m] = t.split(":").map(Number)
+  return h * 60 + m
+}
+function shiftsOverlap(a: ShiftRef, b: ShiftRef) {
+  if (a.date !== b.date) return false
+  return toMin(a.startTime) < toMin(b.endTime) && toMin(b.startTime) < toMin(a.endTime)
+}
+
 function fmtDate(iso: string) {
   return new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })
 }
@@ -75,7 +84,10 @@ function ShiftSelect({
     }
   }, [open])
 
-  const selected = shifts.find(s => s.id === value) ?? null
+  const selected     = shifts.find(s => s.id === value) ?? null
+  const conflictIds  = selected
+    ? new Set(shifts.filter(s => s.id !== value && shiftsOverlap(s, selected)).map(s => s.id))
+    : new Set<string>()
 
   return (
     <div ref={ref} className="relative">
@@ -114,30 +126,37 @@ function ShiftSelect({
             </div>
           )}
           {shifts.map(s => {
-            const full  = s.registrationCount >= s.capacity
-            const empty = s.registrationCount === 0
-            const rowCls = full
-              ? "border-red-200 hover:bg-red-50"
-              : !empty
-                ? "border-emerald-200 hover:bg-emerald-50"
-                : "border-gray-100 hover:bg-gray-50"
+            const full      = s.registrationCount >= s.capacity
+            const empty     = s.registrationCount === 0
+            const isConflict = conflictIds.has(s.id)
+            const isSelected = value === s.id
+            const rowCls = isConflict
+              ? "border-amber-300 hover:bg-amber-50"
+              : full
+                ? "border-red-200 hover:bg-red-50"
+                : !empty
+                  ? "border-emerald-200 hover:bg-emerald-50"
+                  : "border-gray-100 hover:bg-gray-50"
             return (
               <div
                 key={s.id}
                 onClick={() => { onChange(s.id); setOpen(false) }}
                 className={`flex items-center gap-3 pl-3 pr-4 py-2 cursor-pointer border-l-2 transition-colors
-                  ${rowCls} ${value === s.id ? "bg-blue-50" : ""}`}
+                  ${rowCls} ${isSelected ? "bg-blue-50" : isConflict ? "bg-amber-50/40" : ""}`}
               >
                 <span className="shrink-0 w-28 text-xs text-gray-500">{fmtDate(s.date)}</span>
                 <span className="shrink-0 w-20 text-xs text-gray-600 tabular-nums">
                   {fmtTime(s.startTime)}–{fmtTime(s.endTime)}
                 </span>
-                <span className="flex-1 text-sm font-medium text-gray-800 min-w-0">
+                <span className={`flex-1 text-sm font-medium min-w-0 ${isConflict ? "text-amber-800" : "text-gray-800"}`}>
                   {s.roleName}
                   {s.label !== s.roleName && (
                     <span className="font-normal text-gray-400"> · {s.label}</span>
                   )}
                 </span>
+                {isConflict && (
+                  <span className="shrink-0 text-[10px] text-amber-600 font-medium">⚠ conflit</span>
+                )}
                 <StatusPill s={s} />
               </div>
             )
