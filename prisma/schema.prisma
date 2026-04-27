@@ -7,9 +7,22 @@ datasource db {
   provider = "postgresql"
 }
 
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  events  Event[]
+  members Member[]
+  admins  AdminUser[]
+}
+
 model Event {
   id                  String   @id @default(cuid())
-  slug                String   @unique
+  organizationId      String
+  slug                String
   title               String
   description         String?
   location            String?
@@ -22,8 +35,12 @@ model Event {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
+  organization  Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   shifts        Shift[]
   registrations Registration[]
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
 }
 
 model Shift {
@@ -57,6 +74,8 @@ model Volunteer {
   updatedAt DateTime @updatedAt
 
   registrations Registration[]
+
+  @@index([email])
 }
 
 model Registration {
@@ -76,13 +95,37 @@ model Registration {
   volunteer Volunteer @relation(fields: [volunteerId], references: [id])
 }
 
+model Member {
+  id             String   @id @default(cuid())
+  organizationId String
+  firstName      String
+  lastName       String
+  email          String?
+  phone          String?
+  tags           String[]
+  active         Boolean  @default(true)
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, email])
+  @@index([organizationId])
+}
+
 model AdminUser {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  name         String
-  passwordHash String
-  role         String   @default("admin")
-  isActive     Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id             String   @id @default(cuid())
+  organizationId String?
+  email          String   @unique
+  name           String
+  passwordHash   String
+  role           String   @default("admin")
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
 }
