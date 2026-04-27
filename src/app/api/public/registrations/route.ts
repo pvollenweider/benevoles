@@ -13,6 +13,7 @@ const schema = z.object({
   phone: z.string().optional(),
   comment: z.string().optional(),
   consent: z.literal(true),
+  inviteToken: z.string().optional(),
 })
 
 export async function POST(req: Request) {
@@ -22,7 +23,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Données invalides", details: parsed.error.flatten() }, { status: 400 })
   }
 
-  const { eventId, shiftIds, firstName, lastName, email, phone, comment } = parsed.data
+  const { eventId, shiftIds, firstName, lastName, email, phone, comment, inviteToken } = parsed.data
 
   const event = await prisma.event.findFirst({
     where: { id: eventId, publicStatus: "published" },
@@ -110,6 +111,17 @@ export async function POST(req: Request) {
   )
 
   const editToken = registrations[0].editToken
+
+  // Mark the member invite as used (kept valid for re-visits per product
+  // decision — only the first usage is timestamped).
+  if (inviteToken) {
+    await prisma.memberInvite
+      .updateMany({
+        where: { token: inviteToken, eventId, usedAt: null },
+        data: { usedAt: new Date() },
+      })
+      .catch(() => {})
+  }
 
   const shiftData = shifts.map((s) => ({
     label: s.label,
