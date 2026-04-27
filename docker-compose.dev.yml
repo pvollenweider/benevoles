@@ -1,7 +1,17 @@
-# Juste PostgreSQL — pour développer avec `npm run dev` en local
+# Stack de développement local — à utiliser avec `npm run dev`
+#
+#   make dev-up      # démarre postgres + mailpit
+#   make dev-down    # arrête tout
+#   make dev-logs    # suit les logs
+#   make dev-reset   # wipe la DB (⚠ destructif)
+#
+# Postgres expose le port 5432 (DATABASE_URL dans .env).
+# Mailpit expose deux ports : 1025 (SMTP) et 8025 (UI web pour lire les emails).
+
 services:
   postgres:
     image: postgres:16-alpine
+    container_name: benevoles_postgres_dev
     restart: unless-stopped
     environment:
       POSTGRES_DB: benevoles
@@ -16,6 +26,19 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+
+  # Mailpit : capture tous les emails envoyés en dev pour les inspecter
+  # dans une UI web sans envoyer de vraies notifications.
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: benevoles_mailpit_dev
+    restart: unless-stopped
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # UI web → http://localhost:8025
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
 
 volumes:
   postgres_dev_data:
