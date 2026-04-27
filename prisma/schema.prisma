@@ -38,6 +38,7 @@ model Event {
   organization  Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   shifts        Shift[]
   registrations Registration[]
+  memberInvites MemberInvite[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -108,10 +109,26 @@ model Member {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invites      MemberInvite[]
 
   @@unique([organizationId, email])
   @@index([organizationId])
+}
+
+model MemberInvite {
+  id       String    @id @default(cuid())
+  eventId  String
+  memberId String
+  token    String    @unique @default(cuid())
+  sentAt   DateTime  @default(now())
+  usedAt   DateTime?
+
+  event  Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, memberId])
+  @@index([token])
 }
 
 model AdminUser {
