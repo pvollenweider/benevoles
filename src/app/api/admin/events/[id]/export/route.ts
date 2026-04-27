@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
-import { auth } from "@/auth"
-import { prisma } from "@/lib/prisma"
+import { requireOrgSession } from "@/lib/auth-guard"
 import ExcelJS from "exceljs"
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -318,12 +317,13 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
 // ── Main handler ─────────────────────────────────────────────────────────────
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
+  const guard = await requireOrgSession()
+  if (guard instanceof NextResponse) return guard
+  const { db } = guard
 
   const { id } = await params
 
-  const event = await prisma.event.findUnique({
+  const event = await db.event.findFirst({
     where: { id },
     include: {
       shifts: {

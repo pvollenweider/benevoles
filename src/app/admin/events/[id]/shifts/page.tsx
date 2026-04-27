@@ -1,14 +1,18 @@
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
-import { prisma } from "@/lib/prisma"
+import { getOrgContext } from "@/lib/auth-guard"
 import ShiftsManager from "@/components/admin/ShiftsManager"
 
 export const dynamic = "force-dynamic"
 
 export default async function ShiftsPage({ params }: { params: Promise<{ id: string }> }) {
+  const ctx = await getOrgContext()
+  if (!ctx) redirect("/admin/login")
+  const { db } = ctx
+
   const { id } = await params
 
-  const event = await prisma.event.findUnique({
+  const event = await db.event.findFirst({
     where: { id },
     include: {
       shifts: {

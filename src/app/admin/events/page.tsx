@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { prisma } from "@/lib/prisma"
+import { redirect } from "next/navigation"
+import { getOrgContext } from "@/lib/auth-guard"
 import { formatShortDate } from "@/lib/utils"
 import DuplicateButton from "@/components/admin/DuplicateButton"
 import StatusBadge from "@/components/admin/StatusBadge"
@@ -7,7 +8,11 @@ import StatusBadge from "@/components/admin/StatusBadge"
 export const dynamic = "force-dynamic"
 
 export default async function AdminEventsPage() {
-  const events = await prisma.event.findMany({
+  const ctx = await getOrgContext()
+  if (!ctx) redirect("/admin/login")
+  const { db } = ctx
+
+  const events = await db.event.findMany({
     include: {
       shifts: {
         where: { status: { not: "cancelled" } },

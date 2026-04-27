@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
-import { auth } from "@/auth"
-import { prisma } from "@/lib/prisma"
+import { requireOrgSession } from "@/lib/auth-guard"
 import { slugify } from "@/lib/utils"
 import { z } from "zod"
 
@@ -16,10 +15,11 @@ const schema = z.object({
 })
 
 export async function GET() {
-  const session = await auth()
-  if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
+  const guard = await requireOrgSession()
+  if (guard instanceof NextResponse) return guard
+  const { db } = guard
 
-  const events = await prisma.event.findMany({
+  const events = await db.event.findMany({
     include: {
       shifts: {
         include: { registrations: { where: { status: "active" } } },
@@ -50,8 +50,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const session = await auth()
-  if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
+  const guard = await requireOrgSession()
+  if (guard instanceof NextResponse) return guard
+  const { db, organizationId } = guard
 
   const body = await req.json()
   const parsed = schema.safeParse(body)
@@ -60,13 +61,14 @@ export async function POST(req: Request) {
   const data = parsed.data
   let slug = slugify(data.title)
 
-  const existing = await prisma.event.findUnique({ where: { slug } })
+  const existing = await db.event.findFirst({ where: { slug } })
   if (existing) slug = `${slug}-${Date.now()}`
 
-  const event = await prisma.event.create({
+  const event = await db.event.create({
     data: {
       ...data,
       slug,
+      organizationId,
       startDate: new Date(data.startDate),
       endDate: new Date(data.endDate),
       publicStatus: data.publicStatus ?? "draft",
