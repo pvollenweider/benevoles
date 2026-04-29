@@ -1,7 +1,7 @@
 # Bénévoles — tâches de développement.
 # Usage : `make` (équivalent à `make help`).
 
-.PHONY: help dev dev-up dev-down dev-logs dev-reset dev-setup db-migrate db-seed db-studio test lint typecheck install
+.PHONY: help dev dev-up dev-down dev-logs dev-reset dev-setup db-generate db-migrate db-seed db-studio test lint typecheck install
 
 DEFAULT_GOAL := help
 
@@ -27,6 +27,7 @@ dev-setup: ## Setup complet : .env, deps, postgres, migrations, seed
 		echo "→ AUTH_SECRET généré"; \
 	fi
 	@$(MAKE) install
+	@$(MAKE) db-generate
 	@$(MAKE) dev-up
 	@echo "→ Attente de PostgreSQL…"
 	@until docker exec benevoles_postgres_dev pg_isready -U benevoles >/dev/null 2>&1; do sleep 0.5; done
@@ -66,15 +67,20 @@ dev: ## Lance le serveur Next.js en dev
 	npm run dev
 
 # ── Base de données ──────────────────────────────────────────────────────────
+# Prisma 7 (avec prisma.config.ts) ne charge pas .env automatiquement.
+# Ces commandes utilisent --env-file pour le faire explicitement.
+
+db-generate: ## Génère le client Prisma (src/generated/prisma)
+	node --env-file=.env node_modules/.bin/prisma generate
 
 db-migrate: ## Applique les migrations Prisma
-	npx prisma migrate deploy
+	node --env-file=.env node_modules/.bin/prisma migrate deploy
 
 db-seed: ## Crée le compte admin + données démo
-	npm run db:seed
+	node --env-file=.env node_modules/.bin/prisma db seed
 
 db-studio: ## Ouvre Prisma Studio (http://localhost:5555)
-	npm run db:studio
+	node --env-file=.env node_modules/.bin/prisma studio
 
 # ── Qualité ──────────────────────────────────────────────────────────────────
 
