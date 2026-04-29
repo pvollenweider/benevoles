@@ -36,6 +36,11 @@ async function main() {
       endDate: new Date("2026-06-15"),
       publicInstructions: "Merci pour votre aide ! Présentez-vous 15 minutes avant le début de votre créneau.",
       confirmationMessage: "Merci pour votre inscription ! Nous vous contacterons si besoin. À bientôt !",
+      showSchedule: [
+        { name: "Représentation samedi après-midi", date: "2026-06-14", startTime: "14:30", endTime: "16:00" },
+        { name: "Représentation samedi soir",       date: "2026-06-14", startTime: "20:00", endTime: "21:30" },
+        { name: "Représentation dimanche",          date: "2026-06-15", startTime: "14:30", endTime: "16:00" },
+      ],
     },
   })
 
