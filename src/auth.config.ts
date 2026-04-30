@@ -14,11 +14,22 @@ export const authConfig: NextAuthConfig = {
       return true
     },
     jwt({ token, user }) {
-      if (user) token.role = (user as { role?: string }).role
+      if (user) {
+        const u = user as { role?: string; organizationId?: string | null }
+        token.role = u.role
+        token.organizationId = u.organizationId ?? null
+      }
       return token
     },
     session({ session, token }) {
-      if (session.user) (session.user as { role?: unknown }).role = token.role
+      if (session.user) {
+        const u = session.user as {
+          role?: string
+          organizationId?: string | null
+        }
+        u.role = token.role as string | undefined
+        u.organizationId = (token.organizationId as string | null | undefined) ?? null
+      }
       return session
     },
   },

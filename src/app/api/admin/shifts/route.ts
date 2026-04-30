@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { auth } from "@/auth"
+import { requireOrgSession } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 
@@ -18,14 +18,19 @@ const schema = z.object({
 })
 
 export async function POST(req: Request) {
-  const session = await auth()
-  if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
+  const guard = await requireOrgSession()
+  if (guard instanceof NextResponse) return guard
+  const { db } = guard
 
   const body = await req.json()
   const parsed = schema.safeParse(body)
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
 
   const data = parsed.data
+
+  const owned = await db.event.findFirst({ where: { id: data.eventId }, select: { id: true } })
+  if (!owned) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
+
   const shift = await prisma.shift.create({
     data: { ...data, date: new Date(data.date), status: "open" },
   })

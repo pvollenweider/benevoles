@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server"
-import { auth } from "@/auth"
-import { prisma } from "@/lib/prisma"
+import { requireOrgSession } from "@/lib/auth-guard"
 import { slugify } from "@/lib/utils"
 
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
+  const guard = await requireOrgSession()
+  if (guard instanceof NextResponse) return guard
+  const { db, organizationId } = guard
 
   const { id } = await params
 
-  const source = await prisma.event.findUnique({
+  const source = await db.event.findFirst({
     where: { id },
     include: { shifts: true },
   })
@@ -17,12 +17,13 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   if (!source) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   let slug = slugify(`${source.title}-copie`)
-  const existing = await prisma.event.findUnique({ where: { slug } })
+  const existing = await db.event.findFirst({ where: { slug } })
   if (existing) slug = `${slug}-${Date.now()}`
 
-  const newEvent = await prisma.event.create({
+  const newEvent = await db.event.create({
     data: {
       slug,
+      organizationId,
       title: `${source.title} (copie)`,
       description: source.description,
       location: source.location,
