@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { requireSuperAdmin } from "@/lib/auth-guard"
 import bcrypt from "bcryptjs"
+import { randomBytes } from "crypto"
 import { z } from "zod"
 
 const createOrgSchema = z.object({
@@ -19,10 +20,8 @@ function slugify(name: string): string {
     .slice(0, 60)
 }
 
-function generatePassword(length = 12): string {
-  const chars = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$"
-  const bytes = crypto.getRandomValues(new Uint8Array(length))
-  return Array.from(bytes, (b) => chars[b % chars.length]).join("")
+function generateToken(): string {
+  return randomBytes(32).toString("hex")
 }
 
 export async function GET() {
@@ -77,8 +76,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Cet email admin est déjà utilisé." }, { status: 409 })
   }
 
-  const tempPassword = generatePassword()
-  const passwordHash = await bcrypt.hash(tempPassword, 12)
+  const setupToken = generateToken()
+  const setupTokenExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+  const placeholderHash = await bcrypt.hash(generateToken(), 4)
 
   const org = await db.organization.create({
     data: {
@@ -89,9 +89,11 @@ export async function POST(req: Request) {
         create: {
           email: adminEmail,
           name: adminName,
-          passwordHash,
+          passwordHash: placeholderHash,
           role: "admin",
-          isActive: true,
+          isActive: false,
+          setupToken,
+          setupTokenExpiresAt,
         },
       },
     },
@@ -104,5 +106,8 @@ export async function POST(req: Request) {
     },
   })
 
-  return NextResponse.json({ org, tempPassword }, { status: 201 })
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
+  const inviteUrl = `${appUrl}/admin/accept-invite?token=${setupToken}`
+
+  return NextResponse.json({ org, inviteUrl }, { status: 201 })
 }

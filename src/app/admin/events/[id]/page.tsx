@@ -18,6 +18,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
   const event = await db.event.findFirst({
     where: { id },
     include: {
+      organization: { select: { slug: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
         include: { registrations: { where: { status: "active" } } },
@@ -56,13 +57,15 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
           >
             Modifier
           </Link>
-          <Link
-            href={`/events/${event.slug}`}
-            target="_blank"
-            className="text-sm text-blue-600 border border-blue-200 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors"
-          >
-            Vue publique ↗
-          </Link>
+          {event.publicStatus === "published" && (
+            <Link
+              href={`/${event.organization.slug}/${event.slug}`}
+              target="_blank"
+              className="text-sm text-blue-600 border border-blue-200 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors"
+            >
+              Vue publique ↗
+            </Link>
+          )}
         </div>
       </div>
 

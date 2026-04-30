@@ -14,12 +14,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
   const event = await db.event.findFirst({
     where: { id },
-    select: { slug: true, title: true },
+    select: { slug: true, title: true, organization: { select: { slug: true } } },
   })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   const baseUrl = env.NEXT_PUBLIC_APP_URL ?? new URL(req.url).origin
-  const target = `${baseUrl.replace(/\/$/, "")}/events/${event.slug}`
+  const target = `${baseUrl.replace(/\/$/, "")}/${event.organization.slug}/${event.slug}`
 
   if (format === "svg") {
     const svg = await QRCode.toString(target, { type: "svg", margin: 2, width: 600 })

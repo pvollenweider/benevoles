@@ -10,7 +10,7 @@ export default function NewOrgForm() {
   const [adminName, setAdminName] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [result, setResult] = useState<{ orgName: string; tempPassword: string } | null>(null)
+  const [result, setResult] = useState<{ orgName: string; inviteUrl: string } | null>(null)
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -36,7 +36,7 @@ export default function NewOrgForm() {
     }
 
     const data = await res.json()
-    setResult({ orgName: data.org.name, tempPassword: data.tempPassword })
+    setResult({ orgName: data.org.name, inviteUrl: data.inviteUrl })
   }
 
   if (result) {
@@ -49,15 +49,27 @@ export default function NewOrgForm() {
           </p>
         </div>
 
-        <div className="bg-yellow-50 border border-yellow-300 rounded-xl p-4 space-y-2">
-          <p className="text-sm font-semibold text-yellow-900">
-            Mot de passe temporaire — à communiquer maintenant
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-3">
+          <p className="text-sm font-semibold text-blue-900">
+            Lien d'invitation — à envoyer à l'administrateur
           </p>
-          <p className="text-xs text-yellow-700">
-            Ce mot de passe ne sera plus affiché après avoir quitté cette page.
+          <p className="text-xs text-blue-700">
+            Ce lien est valable 7 jours. Il sera révoqué dès que le mot de passe sera créé.
           </p>
-          <div className="font-mono text-lg font-bold text-yellow-900 bg-white border border-yellow-200 rounded-lg px-4 py-2 inline-block select-all">
-            {result.tempPassword}
+          <div className="flex items-center gap-2">
+            <input
+              readOnly
+              value={result.inviteUrl}
+              className="flex-1 font-mono text-xs bg-white border border-blue-200 rounded-lg px-3 py-2 text-blue-900 select-all"
+              onClick={(e) => (e.target as HTMLInputElement).select()}
+            />
+            <button
+              type="button"
+              onClick={() => navigator.clipboard.writeText(result.inviteUrl)}
+              className="text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 shrink-0"
+            >
+              Copier
+            </button>
           </div>
         </div>
 

@@ -4,8 +4,9 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
 
-export default function AdminNav({ userName }: { userName: string }) {
+export default function AdminNav({ userName, role }: { userName: string; role?: string }) {
   const pathname = usePathname()
+  const isSuperAdmin = role === "super_admin"
 
   return (
     <nav className="bg-white border-b border-gray-200 px-4">
@@ -26,8 +27,24 @@ export default function AdminNav({ userName }: { userName: string }) {
           >
             Membres
           </Link>
+          {isSuperAdmin && (
+            <>
+              <span className="text-gray-200 select-none">|</span>
+              <Link
+                href="/super-admin/organizations"
+                className={`text-sm ${pathname.startsWith("/super-admin") ? "text-purple-600 font-medium" : "text-purple-400 hover:text-purple-700"}`}
+              >
+                Organisations
+              </Link>
+            </>
+          )}
         </div>
         <div className="flex items-center gap-4">
+          {isSuperAdmin && (
+            <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">
+              Super Admin
+            </span>
+          )}
           <span className="text-xs text-gray-400">{userName}</span>
           <button
             onClick={() => signOut({ callbackUrl: "/admin/login" })}

@@ -96,6 +96,7 @@ function renderMemberInvite(p: NotificationPayload): RenderedEmail {
     eventTitle,
     eventDate,
     eventLocation,
+    orgSlug,
     eventSlug,
     message,
     token,
@@ -105,11 +106,12 @@ function renderMemberInvite(p: NotificationPayload): RenderedEmail {
     eventTitle: string
     eventDate: string
     eventLocation: string | null
+    orgSlug: string
     eventSlug: string
     message: string | null
     token: string
   }
-  const inviteUrl = `${APP_URL}/events/${eventSlug}?token=${token}`
+  const inviteUrl = `${APP_URL}/${orgSlug}/${eventSlug}?token=${token}`
   const subject = `[${organizationName}] On a besoin de toi pour ${eventTitle}`
 
   const text = [
@@ -304,11 +306,12 @@ function renderShiftCancelled(p: NotificationPayload): RenderedEmail {
   const d = p.data as {
     volunteerName: string
     eventTitle: string
+    orgSlug: string
     eventSlug: string
     shiftLabel: string
     shiftDate: string
   }
-  const eventUrl = `${APP_URL}/events/${d.eventSlug}`
+  const eventUrl = `${APP_URL}/${d.orgSlug}/${d.eventSlug}`
   const subject = `Créneau annulé — ${d.eventTitle}`
 
   const text = [
@@ -335,10 +338,11 @@ function renderRegistrationCancelled(p: NotificationPayload): RenderedEmail {
   const d = p.data as {
     volunteerName: string
     eventTitle: string
+    orgSlug: string
     eventSlug: string
     shiftLabel: string
   }
-  const eventUrl = `${APP_URL}/events/${d.eventSlug}`
+  const eventUrl = `${APP_URL}/${d.orgSlug}/${d.eventSlug}`
   const subject = `Désinscription — ${d.eventTitle}`
 
   const text = [

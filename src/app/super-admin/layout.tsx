@@ -1,5 +1,5 @@
 import { auth } from "@/auth"
-import SuperAdminNav from "@/components/super-admin/SuperAdminNav"
+import AdminNav from "@/components/admin/AdminNav"
 
 export default async function SuperAdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
@@ -10,7 +10,7 @@ export default async function SuperAdminLayout({ children }: { children: React.R
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <SuperAdminNav userName={session.user?.name ?? "Super Admin"} />
+      <AdminNav userName={session.user?.name ?? "Super Admin"} role={session.user?.role} />
       <main className="max-w-5xl mx-auto px-4 py-6">{children}</main>
     </div>
   )

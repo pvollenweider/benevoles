@@ -42,7 +42,8 @@ export default function EventPage() {
   const params = useParams()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const slug = params.slug as string
+  const orgSlug = params.orgSlug as string
+  const eventSlug = params.eventSlug as string
   const inviteToken = searchParams.get("token")
 
   type MyReg = { shiftId: string; token: string; label: string; roleName: string; startTime: string; endTime: string }
@@ -59,26 +60,24 @@ export default function EventPage() {
     firstName: "", lastName: "", email: "", phone: "", comment: "", consent: false,
   })
 
+  const storageKey = `benevoles_token_${orgSlug}_${eventSlug}`
   const myShiftIds = new Set(myRegistrations.map((r) => r.shiftId))
 
   useEffect(() => {
-    fetch(`/api/public/events/${slug}`)
+    fetch(`/api/public/${orgSlug}/${eventSlug}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.error) { setLoading(false); return }
         setEvent(data)
         setLoading(false)
       })
-  }, [slug])
+  }, [orgSlug, eventSlug])
 
-  // Pre-fill from a MemberInvite token (?token=xxx in the email link).
-  // Skipped if the visitor already has a session token in localStorage —
-  // their existing registration data takes precedence.
   useEffect(() => {
     if (!inviteToken) return
-    const sessionToken = localStorage.getItem(`benevoles_token_${slug}`)
+    const sessionToken = localStorage.getItem(storageKey)
     if (sessionToken) return
-    fetch(`/api/public/member-invite/${inviteToken}?slug=${encodeURIComponent(slug)}`)
+    fetch(`/api/public/member-invite/${inviteToken}?slug=${encodeURIComponent(eventSlug)}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (!data?.member) return
@@ -91,10 +90,10 @@ export default function EventPage() {
         }))
       })
       .catch(() => {})
-  }, [inviteToken, slug])
+  }, [inviteToken, eventSlug, storageKey])
 
   useEffect(() => {
-    const token = localStorage.getItem(`benevoles_token_${slug}`)
+    const token = localStorage.getItem(storageKey)
     if (!token) return
     fetch(`/api/public/registrations/${token}`)
       .then((r) => r.ok ? r.json() : null)
@@ -109,7 +108,6 @@ export default function EventPage() {
           endTime: r.shift.endTime,
         }))
         setMyRegistrations(regs)
-        // Pre-fill the registration form with known volunteer info
         if (data.volunteer) {
           setForm((f) => ({
             ...f,
@@ -119,7 +117,6 @@ export default function EventPage() {
             phone:     data.volunteer.phone     || f.phone,
           }))
         }
-        // Pre-select registered shifts so conflicts are auto-computed
         setSelectedShifts((prev) => {
           const next = new Set(prev)
           regs.forEach((r) => next.add(r.shiftId))
@@ -127,7 +124,7 @@ export default function EventPage() {
         })
       })
       .catch(() => {})
-  }, [slug])
+  }, [storageKey])
 
   async function cancelRegistration(regToken: string, shiftId: string) {
     await fetch(`/api/public/registrations/${regToken}`, { method: "DELETE" })
@@ -151,7 +148,7 @@ export default function EventPage() {
 
   function toggleShift(id: string, status: string) {
     if (status === "full" || status === "closed" || status === "cancelled") return
-    if (myShiftIds.has(id)) return  // registered shifts are locked
+    if (myShiftIds.has(id)) return
     setSelectedShifts((prev) => {
       const next = new Set(prev)
       if (next.has(id)) { next.delete(id); return next }
@@ -191,7 +188,7 @@ export default function EventPage() {
 
     if (!res.ok) {
       if (data.editToken) {
-        localStorage.setItem(`benevoles_token_${slug}`, data.editToken)
+        localStorage.setItem(storageKey, data.editToken)
         try {
           const regRes = await fetch(`/api/public/registrations/${data.editToken}`)
           if (regRes.ok) {
@@ -227,8 +224,8 @@ export default function EventPage() {
       return
     }
 
-    localStorage.setItem(`benevoles_token_${slug}`, data.editToken)
-    router.push(`/events/${slug}/success?token=${data.editToken}`)
+    localStorage.setItem(storageKey, data.editToken)
+    router.push(`/${orgSlug}/${eventSlug}/success?token=${data.editToken}`)
   }
 
   const conflictingShiftIds = new Set(
@@ -243,7 +240,7 @@ export default function EventPage() {
   )
 
   function quitSession() {
-    localStorage.removeItem(`benevoles_token_${slug}`)
+    localStorage.removeItem(storageKey)
     setMyRegistrations([])
     setSelectedShifts(new Set())
     setForm({ firstName: "", lastName: "", email: "", phone: "", comment: "", consent: false })
@@ -472,7 +469,6 @@ export default function EventPage() {
         )}
       </div>
 
-      {/* Confirmation désinscription */}
       {pendingCancel && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
           <div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full space-y-4">
@@ -504,4 +500,3 @@ export default function EventPage() {
     </main>
   )
 }
-

@@ -8,6 +8,7 @@ export default async function HomePage() {
   const events = await prisma.event.findMany({
     where: { publicStatus: "published" },
     include: {
+      organization: { select: { slug: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
         include: { registrations: { where: { status: "active" } } },
@@ -42,7 +43,7 @@ export default async function HomePage() {
             {enriched.map((event) => (
               <Link
                 key={event.id}
-                href={`/events/${event.slug}`}
+                href={`/${event.organization.slug}/${event.slug}`}
                 className="block bg-white rounded-2xl border border-gray-200 p-5 hover:border-blue-300 hover:shadow-sm transition-all"
               >
                 <h2 className="text-lg font-semibold text-gray-900">{event.title}</h2>
