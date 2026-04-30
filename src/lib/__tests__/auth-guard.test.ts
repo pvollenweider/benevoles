@@ -5,9 +5,12 @@ const { authMock } = vi.hoisted(() => ({ authMock: vi.fn() }))
 
 vi.mock("@/auth", () => ({ auth: authMock }))
 
+const { firstOrgMock } = vi.hoisted(() => ({ firstOrgMock: vi.fn() }))
+
 vi.mock("../prisma", () => ({
   prisma: {
     $extends: () => ({ __scoped: true }),
+    organization: { findFirst: firstOrgMock },
   },
 }))
 
@@ -74,6 +77,7 @@ describe("requireSuperAdmin", () => {
 describe("getOrgContext (SSR helper)", () => {
   beforeEach(() => {
     authMock.mockReset()
+    firstOrgMock.mockReset()
   })
 
   it("returns null when not authenticated", async () => {
@@ -82,8 +86,23 @@ describe("getOrgContext (SSR helper)", () => {
     expect(result).toBeNull()
   })
 
-  it("returns null when user has no organizationId", async () => {
+  it("returns null when an org admin has no organizationId", async () => {
+    authMock.mockResolvedValue({ user: { role: "admin", organizationId: null } })
+    const result = await getOrgContext()
+    expect(result).toBeNull()
+  })
+
+  it("falls back to the first organization for a super_admin without org", async () => {
     authMock.mockResolvedValue({ user: { role: "super_admin", organizationId: null } })
+    firstOrgMock.mockResolvedValue({ id: "first-org" })
+    const result = await getOrgContext()
+    expect(result).not.toBeNull()
+    expect(result?.organizationId).toBe("first-org")
+  })
+
+  it("returns null for a super_admin if no organization exists yet", async () => {
+    authMock.mockResolvedValue({ user: { role: "super_admin", organizationId: null } })
+    firstOrgMock.mockResolvedValue(null)
     const result = await getOrgContext()
     expect(result).toBeNull()
   })
