@@ -16,6 +16,11 @@ function createTransport() {
     // Mailpit accepts unauth'd connections; nodemailer needs the auth
     // object to be omitted in that case.
     auth: SMTP_USER && SMTP_PASSWORD ? { user: SMTP_USER, pass: SMTP_PASSWORD } : undefined,
+    // Hard fail fast when SMTP is unreachable so the route doesn't
+    // hang for 30s+ per recipient on a misconfigured port.
+    connectionTimeout: 5_000,
+    greetingTimeout: 5_000,
+    socketTimeout: 10_000,
   })
 }
 
