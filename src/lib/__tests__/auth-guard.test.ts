@@ -19,6 +19,7 @@ import { requireOrgSession, requireSuperAdmin, getOrgContext } from "../auth-gua
 describe("requireOrgSession", () => {
   beforeEach(() => {
     authMock.mockReset()
+    firstOrgMock.mockReset()
   })
 
   it("returns 401 when no session", async () => {
@@ -28,8 +29,25 @@ describe("requireOrgSession", () => {
     expect((result as NextResponse).status).toBe(401)
   })
 
-  it("returns 403 when user has no organizationId (e.g. super admin)", async () => {
+  it("returns 403 for an org admin without organizationId", async () => {
+    authMock.mockResolvedValue({ user: { role: "admin", organizationId: null } })
+    const result = await requireOrgSession()
+    expect(result).toBeInstanceOf(NextResponse)
+    expect((result as NextResponse).status).toBe(403)
+  })
+
+  it("falls back to the first organization for a super_admin without org", async () => {
     authMock.mockResolvedValue({ user: { role: "super_admin", organizationId: null } })
+    firstOrgMock.mockResolvedValue({ id: "first-org" })
+    const result = await requireOrgSession()
+    expect(result).not.toBeInstanceOf(NextResponse)
+    if (result instanceof NextResponse) return
+    expect(result.organizationId).toBe("first-org")
+  })
+
+  it("returns 403 for a super_admin if no organization exists", async () => {
+    authMock.mockResolvedValue({ user: { role: "super_admin", organizationId: null } })
+    firstOrgMock.mockResolvedValue(null)
     const result = await requireOrgSession()
     expect(result).toBeInstanceOf(NextResponse)
     expect((result as NextResponse).status).toBe(403)

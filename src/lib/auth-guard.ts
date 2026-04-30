@@ -27,16 +27,26 @@ function forbidden(): GuardError {
  *   const guard = await requireOrgSession()
  *   if (guard instanceof NextResponse) return guard
  *   const { db, organizationId } = guard
+ *
+ * Super admins (no organizationId in their JWT) are silently routed to
+ * the first organization, mirroring `getOrgContext` so the SSR pages
+ * and the API routes they call agree on which org to use until a
+ * proper super-admin UI with an org switcher exists (issue #35).
  */
 export async function requireOrgSession() {
   const session = await auth()
   if (!session?.user) return unauthorized()
-  const organizationId = session.user.organizationId
-  if (!organizationId) {
-    // Super admins must use the dedicated super-admin routes; refuse to
-    // operate without an org context to avoid accidental cross-tenant writes.
-    return forbidden()
+
+  let organizationId = session.user.organizationId
+  if (!organizationId && session.user.role === "super_admin") {
+    const fallback = await prisma.organization.findFirst({
+      orderBy: { createdAt: "asc" },
+      select: { id: true },
+    })
+    if (fallback) organizationId = fallback.id
   }
+  if (!organizationId) return forbidden()
+
   return {
     session,
     organizationId,
