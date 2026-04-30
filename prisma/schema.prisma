@@ -11,6 +11,7 @@ model Organization {
   id        String   @id @default(cuid())
   name      String
   slug      String   @unique
+  active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
