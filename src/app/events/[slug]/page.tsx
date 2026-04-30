@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useParams, useRouter } from "next/navigation"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { formatDate, shiftsOverlap } from "@/lib/utils"
 import DayTimeline, { fmt } from "@/components/DayTimeline"
@@ -41,7 +41,9 @@ type EventData = {
 export default function EventPage() {
   const params = useParams()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const slug = params.slug as string
+  const inviteToken = searchParams.get("token")
 
   type MyReg = { shiftId: string; token: string; label: string; roleName: string; startTime: string; endTime: string }
 
@@ -68,6 +70,28 @@ export default function EventPage() {
         setLoading(false)
       })
   }, [slug])
+
+  // Pre-fill from a MemberInvite token (?token=xxx in the email link).
+  // Skipped if the visitor already has a session token in localStorage —
+  // their existing registration data takes precedence.
+  useEffect(() => {
+    if (!inviteToken) return
+    const sessionToken = localStorage.getItem(`benevoles_token_${slug}`)
+    if (sessionToken) return
+    fetch(`/api/public/member-invite/${inviteToken}?slug=${encodeURIComponent(slug)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data?.member) return
+        setForm((f) => ({
+          ...f,
+          firstName: f.firstName || data.member.firstName,
+          lastName: f.lastName || data.member.lastName,
+          email: f.email || data.member.email,
+          phone: f.phone || data.member.phone,
+        }))
+      })
+      .catch(() => {})
+  }, [inviteToken, slug])
 
   useEffect(() => {
     const token = localStorage.getItem(`benevoles_token_${slug}`)
@@ -151,6 +175,7 @@ export default function EventPage() {
         eventId: event!.id,
         shiftIds: Array.from(selectedShifts).filter((id) => !myShiftIds.has(id)),
         ...form,
+        inviteToken: inviteToken ?? undefined,
       }),
     })
 

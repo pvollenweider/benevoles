@@ -60,6 +60,64 @@ export async function sendConfirmationEmail(data: RegistrationEmailData) {
   })
 }
 
+type MemberInviteEmailData = {
+  to: string
+  memberName: string
+  organizationName: string
+  eventTitle: string
+  eventDate: string
+  eventLocation: string | null
+  eventSlug: string
+  message: string | null
+  token: string
+}
+
+export async function sendMemberInvite(data: MemberInviteEmailData) {
+  const inviteUrl = `${appUrl}/events/${data.eventSlug}?token=${data.token}`
+  const from = process.env.EMAIL_FROM ?? "no-reply@example.com"
+
+  const html = `
+    <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#111">
+      <h2>Bonjour ${data.memberName},</h2>
+      <p>${data.organizationName} a besoin de toi pour <strong>${data.eventTitle}</strong>.</p>
+      ${data.message ? `<p style="background:#f3f4f6;padding:12px;border-radius:8px;margin:16px 0">${escapeHtml(data.message)}</p>` : ""}
+      <p>
+        📅 ${data.eventDate}
+        ${data.eventLocation ? `<br>📍 ${data.eventLocation}` : ""}
+      </p>
+      <p style="margin-top:1.5em">
+        <a href="${inviteUrl}" style="background:#2563eb;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block">
+          Voir les missions et m'inscrire
+        </a>
+      </p>
+      <p style="color:#888;font-size:0.85em;margin-top:2em">Si tu ne peux pas, ignore cet email. Merci !</p>
+    </div>
+  `
+
+  const transport = createTransport()
+  if (!transport) {
+    console.log("[EMAIL - pas de SMTP configuré]")
+    console.log(`To: ${data.to} | Sujet: [${data.organizationName}] On a besoin de toi pour ${data.eventTitle}`)
+    console.log(`Lien : ${inviteUrl}`)
+    return
+  }
+
+  await transport.sendMail({
+    from,
+    to: data.to,
+    subject: `[${data.organizationName}] On a besoin de toi pour ${data.eventTitle}`,
+    html,
+  })
+}
+
+function escapeHtml(s: string) {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+}
+
 export async function sendAdminNotification(data: {
   eventTitle: string
   volunteerName: string
