@@ -57,13 +57,30 @@ export async function requireSuperAdmin() {
 
 /**
  * SSR variant for Server Components. Returns the org-scoped client or
- * `null` when the caller is not attached to an organization. Pages should
- * `redirect()` or call `notFound()` based on the result.
+ * `null` when the caller is not authenticated. Pages should `redirect()`
+ * or call `notFound()` based on the result.
+ *
+ * Super admins (no organizationId in their JWT) are silently routed to
+ * the first organization in the database so they can use the regular
+ * /admin/* pages without bouncing back to the login page. A proper
+ * /super-admin UI with an org switcher is on the roadmap (issue #35);
+ * until then this acts as the impersonation default.
  */
 export async function getOrgContext() {
   const session = await auth()
-  const organizationId = session?.user?.organizationId
-  if (!session?.user || !organizationId) return null
+  if (!session?.user) return null
+
+  let organizationId = session.user.organizationId
+  if (!organizationId && session.user.role === "super_admin") {
+    const fallback = await prisma.organization.findFirst({
+      orderBy: { createdAt: "asc" },
+      select: { id: true },
+    })
+    if (!fallback) return null
+    organizationId = fallback.id
+  }
+  if (!organizationId) return null
+
   return {
     session,
     organizationId,
