@@ -4,6 +4,7 @@ import { getOrgContext } from "@/lib/auth-guard"
 import { formatShortDate } from "@/lib/utils"
 import StatusBadge from "@/components/admin/StatusBadge"
 import PublishToggle from "@/components/admin/PublishToggle"
+import SendReminderButton from "@/components/admin/SendReminderButton"
 
 export const dynamic = "force-dynamic"
 
@@ -30,6 +31,10 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
   const totalCapacity = event.shifts.reduce((s, sh) => s + sh.capacity, 0)
   const totalRegistered = event.shifts.reduce((s, sh) => s + sh.registrations.length, 0)
   const criticalShifts = event.shifts.filter((sh) => sh.capacity - sh.registrations.length >= 2)
+
+  // Unique volunteers across all shifts (one reminder email per person)
+  const uniqueVolunteerIds = new Set<string>()
+  for (const sh of event.shifts) for (const r of sh.registrations) uniqueVolunteerIds.add(r.volunteerId)
 
   return (
     <div className="space-y-6">
@@ -106,6 +111,16 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         >
           Exporter PDF ↗
         </a>
+      </div>
+
+      <div className="border-t border-gray-200 pt-4">
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Communications</h2>
+        <SendReminderButton
+          eventId={event.id}
+          hasMessage={!!event.reminderMessage?.trim()}
+          volunteerCount={uniqueVolunteerIds.size}
+          lastSentAt={event.reminderSentAt?.toISOString() ?? null}
+        />
       </div>
 
       {criticalShifts.length > 0 && (

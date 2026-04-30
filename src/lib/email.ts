@@ -1,19 +1,10 @@
-import nodemailer from "nodemailer"
+/**
+ * Thin wrappers kept for backwards compatibility with existing call
+ * sites. New code should call `sendNotification` from `./notifications`
+ * directly.
+ */
 
-const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
-
-function createTransport() {
-  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_SECURE } = process.env
-
-  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASSWORD) return null
-
-  return nodemailer.createTransport({
-    host: SMTP_HOST,
-    port: Number(SMTP_PORT ?? 587),
-    secure: SMTP_SECURE === "true",
-    auth: { user: SMTP_USER, pass: SMTP_PASSWORD },
-  })
-}
+import { sendNotification } from "./notifications"
 
 type RegistrationEmailData = {
   to: string
@@ -24,39 +15,15 @@ type RegistrationEmailData = {
 }
 
 export async function sendConfirmationEmail(data: RegistrationEmailData) {
-  const editUrl = `${appUrl}/my/${data.editToken}`
-  const from = process.env.EMAIL_FROM ?? "no-reply@example.com"
-
-  const html = `
-    <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#111">
-      <h2>Merci pour votre inscription, ${data.volunteerName} !</h2>
-      <p>Vous êtes inscrit(e) aux créneaux suivants pour <strong>${data.eventTitle}</strong> :</p>
-      <ul style="padding-left:1.2em;line-height:1.8">
-        ${data.shifts.map((s) => `<li><strong>${s.label}</strong> — ${s.date} de ${s.startTime} à ${s.endTime}</li>`).join("")}
-      </ul>
-      <p style="margin-top:1.5em">
-        <a href="${editUrl}" style="background:#2563eb;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block">
-          Voir / annuler mes inscriptions
-        </a>
-      </p>
-      <p style="color:#888;font-size:0.85em;margin-top:2em">Merci pour votre aide précieuse !</p>
-    </div>
-  `
-
-  const transport = createTransport()
-
-  if (!transport) {
-    console.log("[EMAIL - pas de SMTP configuré]")
-    console.log(`To: ${data.to} | Sujet: Confirmation — ${data.eventTitle}`)
-    console.log(`Lien d'édition : ${editUrl}`)
-    return
-  }
-
-  await transport.sendMail({
-    from,
-    to: data.to,
-    subject: `Confirmation d'inscription — ${data.eventTitle}`,
-    html,
+  await sendNotification({
+    kind: "registration_confirmation",
+    recipient: { email: data.to, name: data.volunteerName },
+    data: {
+      volunteerName: data.volunteerName,
+      eventTitle: data.eventTitle,
+      shifts: data.shifts,
+      editToken: data.editToken,
+    },
   })
 }
 
@@ -73,49 +40,20 @@ type MemberInviteEmailData = {
 }
 
 export async function sendMemberInvite(data: MemberInviteEmailData) {
-  const inviteUrl = `${appUrl}/events/${data.eventSlug}?token=${data.token}`
-  const from = process.env.EMAIL_FROM ?? "no-reply@example.com"
-
-  const html = `
-    <div style="font-family:sans-serif;max-width:520px;margin:0 auto;color:#111">
-      <h2>Bonjour ${data.memberName},</h2>
-      <p>${data.organizationName} a besoin de toi pour <strong>${data.eventTitle}</strong>.</p>
-      ${data.message ? `<p style="background:#f3f4f6;padding:12px;border-radius:8px;margin:16px 0">${escapeHtml(data.message)}</p>` : ""}
-      <p>
-        📅 ${data.eventDate}
-        ${data.eventLocation ? `<br>📍 ${data.eventLocation}` : ""}
-      </p>
-      <p style="margin-top:1.5em">
-        <a href="${inviteUrl}" style="background:#2563eb;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block">
-          Voir les missions et m'inscrire
-        </a>
-      </p>
-      <p style="color:#888;font-size:0.85em;margin-top:2em">Si tu ne peux pas, ignore cet email. Merci !</p>
-    </div>
-  `
-
-  const transport = createTransport()
-  if (!transport) {
-    console.log("[EMAIL - pas de SMTP configuré]")
-    console.log(`To: ${data.to} | Sujet: [${data.organizationName}] On a besoin de toi pour ${data.eventTitle}`)
-    console.log(`Lien : ${inviteUrl}`)
-    return
-  }
-
-  await transport.sendMail({
-    from,
-    to: data.to,
-    subject: `[${data.organizationName}] On a besoin de toi pour ${data.eventTitle}`,
-    html,
+  await sendNotification({
+    kind: "member_invite",
+    recipient: { email: data.to, name: data.memberName },
+    data: {
+      memberName: data.memberName,
+      organizationName: data.organizationName,
+      eventTitle: data.eventTitle,
+      eventDate: data.eventDate,
+      eventLocation: data.eventLocation,
+      eventSlug: data.eventSlug,
+      message: data.message,
+      token: data.token,
+    },
   })
-}
-
-function escapeHtml(s: string) {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
 }
 
 export async function sendAdminNotification(data: {
@@ -126,19 +64,9 @@ export async function sendAdminNotification(data: {
 }) {
   const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL
   if (!adminEmail) return
-
-  const transport = createTransport()
-  if (!transport) return
-
-  const from = process.env.EMAIL_FROM ?? "no-reply@example.com"
-
-  await transport.sendMail({
-    from,
-    to: adminEmail,
-    subject: `Nouvelle inscription — ${data.eventTitle}`,
-    html: `
-      <p><strong>${data.volunteerName}</strong> (${data.volunteerEmail}) vient de s'inscrire à <strong>${data.eventTitle}</strong>.</p>
-      <p>Créneaux : ${data.shifts.map((s) => s.label).join(", ")}</p>
-    `,
+  await sendNotification({
+    kind: "admin_notification",
+    recipient: { email: adminEmail, name: "Admin" },
+    data,
   })
 }

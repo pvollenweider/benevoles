@@ -20,6 +20,8 @@ const schema = z.object({
   confirmationMessage: z.string().optional().nullable(),
   publicStatus: z.enum(["draft", "published", "archived"]).optional(),
   showSchedule: z.array(showSchema).optional(),
+  reminderMessage: z.string().max(2000).optional().nullable(),
+  remindersEnabled: z.boolean().optional(),
 })
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
