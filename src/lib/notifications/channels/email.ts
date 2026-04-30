@@ -34,7 +34,8 @@ export const emailChannel: NotificationChannelImpl = {
     }
 
     const { subject, html, text } = render(payload)
-    const from = process.env.EMAIL_FROM ?? "Bénévoles <no-reply@example.com>"
+    const from = process.env.EMAIL_FROM ?? "Bénévoles <notifications@benevol.app>"
+    const replyTo = process.env.EMAIL_REPLY_TO || undefined
     const transport = createTransport()
 
     if (!transport) {
@@ -44,7 +45,7 @@ export const emailChannel: NotificationChannelImpl = {
     }
 
     try {
-      await transport.sendMail({ from, to, subject, html, text })
+      await transport.sendMail({ from, to, subject, html, text, replyTo })
       return { ok: true as const }
     } catch (err) {
       console.error(`[notif:email→${to}] failed:`, err)
