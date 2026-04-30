@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { auth } from "@/auth"
+import { requireOrgSession } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 
@@ -23,12 +23,13 @@ const schema = z.object({
 })
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
+  const guard = await requireOrgSession()
+  if (guard instanceof NextResponse) return guard
+  const { db } = guard
 
   const { id } = await params
 
-  const event = await prisma.event.findUnique({
+  const event = await db.event.findFirst({
     where: { id },
     include: {
       shifts: {
@@ -44,13 +45,17 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 }
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
+  const guard = await requireOrgSession()
+  if (guard instanceof NextResponse) return guard
+  const { db } = guard
 
   const { id } = await params
   const body = await req.json()
   const parsed = schema.safeParse(body)
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+
+  const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
+  if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   const data = parsed.data
   const updateData: Record<string, unknown> = { ...data }
@@ -67,10 +72,14 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 }
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 })
+  const guard = await requireOrgSession()
+  if (guard instanceof NextResponse) return guard
+  const { db } = guard
 
   const { id } = await params
+
+  const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
+  if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   await prisma.event.update({ where: { id }, data: { publicStatus: "archived" } })
   return NextResponse.json({ success: true })

@@ -1,6 +1,6 @@
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
-import { prisma } from "@/lib/prisma"
+import { getOrgContext } from "@/lib/auth-guard"
 import RegistrationsManager from "@/components/admin/RegistrationsManager"
 
 export const dynamic = "force-dynamic"
@@ -12,10 +12,14 @@ export default async function RegistrationsPage({
   params: Promise<{ id: string }>
   searchParams: Promise<{ shift?: string }>
 }) {
+  const ctx = await getOrgContext()
+  if (!ctx) redirect("/admin/login")
+  const { db } = ctx
+
   const { id } = await params
   const { shift: initialShiftFilter } = await searchParams
 
-  const event = await prisma.event.findUnique({
+  const event = await db.event.findFirst({
     where: { id },
     include: {
       shifts: {

@@ -6,22 +6,55 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
-  const email    = process.env.ADMIN_EMAIL    ?? "admin@localhost"
-  const password = process.env.ADMIN_PASSWORD ?? "change-me"
-  const passwordHash = await bcrypt.hash(password, 12)
+  const superAdminEmail    = process.env.ADMIN_EMAIL    ?? "admin@localhost"
+  const superAdminPassword = process.env.ADMIN_PASSWORD ?? "change-me"
+  const passwordHash       = await bcrypt.hash(superAdminPassword, 12)
 
-  await prisma.adminUser.upsert({
-    where: { email },
-    update: { passwordHash },
+  // Default organization (also used by the multi-tenant migration to backfill
+  // existing data; safe to upsert since the migration may already have created it).
+  const org = await prisma.organization.upsert({
+    where: { id: "default" },
+    update: {},
     create: {
-      email,
-      name: "Administrateur",
-      passwordHash,
-      role: "super_admin",
+      id: "default",
+      slug: "default",
+      name: "Organisation par défaut",
     },
   })
 
-  console.log(`✓ Admin créé : ${email}`)
+  // Super admin: not attached to any organization (cross-tenant role).
+  await prisma.adminUser.upsert({
+    where: { email: superAdminEmail },
+    update: { passwordHash, organizationId: null, role: "super_admin" },
+    create: {
+      email: superAdminEmail,
+      name: "Super Administrateur",
+      passwordHash,
+      role: "super_admin",
+      organizationId: null,
+    },
+  })
+
+  console.log(`✓ Super admin créé : ${superAdminEmail}`)
+
+  // Demo org admin so the default organization is usable out of the box.
+  const orgAdminEmail = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
+  const orgAdminPassword = process.env.ORG_ADMIN_PASSWORD ?? superAdminPassword
+  const orgAdminHash = await bcrypt.hash(orgAdminPassword, 12)
+
+  await prisma.adminUser.upsert({
+    where: { email: orgAdminEmail },
+    update: { passwordHash: orgAdminHash, organizationId: org.id, role: "admin" },
+    create: {
+      email: orgAdminEmail,
+      name: "Administrateur (org par défaut)",
+      passwordHash: orgAdminHash,
+      role: "admin",
+      organizationId: org.id,
+    },
+  })
+
+  console.log(`✓ Admin d'org créé : ${orgAdminEmail} (org: ${org.slug})`)
 
   const demoShowSchedule = [
     { name: "Représentation samedi après-midi", date: "2026-06-14", startTime: "14:30", endTime: "16:00" },
@@ -30,9 +63,10 @@ async function main() {
   ]
 
   const event = await prisma.event.upsert({
-    where: { slug: "spectacle-cirque-2026" },
+    where: { organizationId_slug: { organizationId: org.id, slug: "spectacle-cirque-2026" } },
     update: { showSchedule: demoShowSchedule },
     create: {
+      organizationId: org.id,
       slug: "spectacle-cirque-2026",
       title: "Spectacle de Cirque 2026",
       description: "Le grand spectacle annuel de fin d'année.",

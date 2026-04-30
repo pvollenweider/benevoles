@@ -1,14 +1,18 @@
-import { notFound } from "next/navigation"
-import { prisma } from "@/lib/prisma"
+import { notFound, redirect } from "next/navigation"
+import { getOrgContext } from "@/lib/auth-guard"
 import EventForm from "@/components/admin/EventForm"
 import Link from "next/link"
 
 export const dynamic = "force-dynamic"
 
 export default async function EditEventPage({ params }: { params: Promise<{ id: string }> }) {
+  const ctx = await getOrgContext()
+  if (!ctx) redirect("/admin/login")
+  const { db } = ctx
+
   const { id } = await params
 
-  const event = await prisma.event.findUnique({ where: { id } })
+  const event = await db.event.findFirst({ where: { id } })
   if (!event) notFound()
 
   const initialData = {
