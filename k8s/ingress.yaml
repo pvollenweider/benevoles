@@ -12,10 +12,10 @@ spec:
   ingressClassName: traefik
   tls:
     - hosts:
-        - benevol.app
+        - www.benevol.app
       secretName: benevol-app-tls
   rules:
-    - host: benevol.app
+    - host: www.benevol.app
       http:
         paths:
           - path: /

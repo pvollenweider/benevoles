@@ -130,8 +130,8 @@ jobs:
             --from-literal=EMAIL_FROM="${{ secrets.EMAIL_FROM }}" \
             --from-literal=EMAIL_REPLY_TO="${{ secrets.EMAIL_REPLY_TO }}" \
             --from-literal=ADMIN_NOTIFICATION_EMAIL="${{ secrets.ADMIN_NOTIFICATION_EMAIL }}" \
-            --from-literal=NEXT_PUBLIC_APP_URL="https://benevol.app" \
-            --from-literal=AUTH_URL="https://benevol.app" \
+            --from-literal=NEXT_PUBLIC_APP_URL="https://www.benevol.app" \
+            --from-literal=AUTH_URL="https://www.benevol.app" \
             --from-literal=AUTH_TRUST_HOST="true" \
             --save-config --dry-run=client -o yaml | kubectl apply -f -
 
