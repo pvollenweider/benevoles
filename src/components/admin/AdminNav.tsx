@@ -20,6 +20,12 @@ export default function AdminNav({ userName }: { userName: string }) {
           >
             Événements
           </Link>
+          <Link
+            href="/admin/members"
+            className={`text-sm ${pathname.startsWith("/admin/members") ? "text-blue-600 font-medium" : "text-gray-500 hover:text-gray-800"}`}
+          >
+            Membres
+          </Link>
         </div>
         <div className="flex items-center gap-4">
           <span className="text-xs text-gray-400">{userName}</span>

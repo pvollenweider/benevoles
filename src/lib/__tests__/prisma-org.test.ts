@@ -167,6 +167,34 @@ describe("getOrgClient", () => {
     })
   })
 
+  describe("memberInvite scoping (via parent event)", () => {
+    it("injects event.organizationId filter into memberInvite.findMany", async () => {
+      getOrgClient("org-A")
+      const cfg = getConfig()
+      const query = vi.fn().mockResolvedValue([])
+      const args = { where: {} }
+
+      await cfg.query.memberInvite.findMany({ args, query })
+
+      expect(args.where).toEqual({
+        event: { organizationId: "org-A" },
+      })
+    })
+
+    it("preserves existing event filter when scoping memberInvite queries", async () => {
+      getOrgClient("org-A")
+      const cfg = getConfig()
+      const query = vi.fn().mockResolvedValue(null)
+      const args = { where: { event: { id: "evt-1" } } }
+
+      await cfg.query.memberInvite.findFirst({ args, query })
+
+      expect(args.where).toEqual({
+        event: { id: "evt-1", organizationId: "org-A" },
+      })
+    })
+  })
+
   describe("cross-tenant isolation", () => {
     it("two clients with different orgs scope to their own org id", async () => {
       const clientA = getOrgClient("org-A")

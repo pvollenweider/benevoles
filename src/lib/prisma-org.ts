@@ -113,6 +113,29 @@ export function getOrgClient(organizationId: string) {
           return query(args)
         },
       },
+      memberInvite: {
+        async findMany({ args, query }) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const w = (args.where ?? {}) as any
+          w.event = { ...(w.event ?? {}), organizationId }
+          args.where = w
+          return query(args)
+        },
+        async findFirst({ args, query }) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const w = (args.where ?? {}) as any
+          w.event = { ...(w.event ?? {}), organizationId }
+          args.where = w
+          return query(args)
+        },
+        async count({ args, query }) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const w = (args.where ?? {}) as any
+          w.event = { ...(w.event ?? {}), organizationId }
+          args.where = w
+          return query(args)
+        },
+      },
     },
   })
 }
