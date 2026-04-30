@@ -129,8 +129,8 @@ jobs:
             --from-literal=SMTP_PASSWORD="${{ secrets.SMTP_PASSWORD }}" \
             --from-literal=EMAIL_FROM="${{ secrets.EMAIL_FROM }}" \
             --from-literal=ADMIN_NOTIFICATION_EMAIL="${{ secrets.ADMIN_NOTIFICATION_EMAIL }}" \
-            --from-literal=NEXT_PUBLIC_APP_URL="https://benevoles.gallerypack.app" \
-            --from-literal=AUTH_URL="https://benevoles.gallerypack.app" \
+            --from-literal=NEXT_PUBLIC_APP_URL="https://benevol.app" \
+            --from-literal=AUTH_URL="https://benevol.app" \
             --from-literal=AUTH_TRUST_HOST="true" \
             --save-config --dry-run=client -o yaml | kubectl apply -f -
 

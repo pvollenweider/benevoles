@@ -7,14 +7,15 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
     traefik.ingress.kubernetes.io/router.priority: "100"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: traefik
   tls:
     - hosts:
-        - benevoles.gallerypack.app
-      secretName: gallerypack-wildcard-tls
+        - benevol.app
+      secretName: benevol-app-tls
   rules:
-    - host: benevoles.gallerypack.app
+    - host: benevol.app
       http:
         paths:
           - path: /
