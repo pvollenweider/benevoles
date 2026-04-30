@@ -1,12 +1,14 @@
 # Guide administrateur
 
-Ce guide couvre l'utilisation quotidienne de l'interface d'administration : créer un événement, configurer les créneaux, suivre les inscriptions et exporter les données.
+Ce guide couvre l'utilisation quotidienne de l'interface d'administration : créer un événement, configurer les créneaux, inviter des membres, suivre les inscriptions et exporter les données.
 
 ---
 
 ## Se connecter
 
-Accéder à `/admin/login` et saisir les identifiants administrateur (définis via `ADMIN_EMAIL` et `ADMIN_PASSWORD` lors du déploiement, ou créés par `npm run db:seed`).
+Accéder à `/admin/login` et saisir les identifiants administrateur.
+
+Si vous avez reçu un **lien d'invitation** (email « Invitation à rejoindre… »), cliquez sur le bouton « Créer mon compte » dans l'email pour définir votre mot de passe avant votre première connexion.
 
 ---
 
@@ -17,11 +19,11 @@ Accéder à `/admin/login` et saisir les identifiants administrateur (définis v
 | Champ | Description |
 |-------|-------------|
 | Titre | Nom affiché publiquement |
-| Slug | Identifiant URL (`festival-2025` → `/events/festival-2025`) — généré automatiquement, modifiable |
+| Slug | Identifiant URL (`festival-2025`) — généré automatiquement, modifiable |
 | Dates | Date de début et de fin de l'événement |
 | Lieu | Affiché sur la page publique |
 | Description | Texte libre (usage interne) |
-| Instructions publiques | Message visible en haut de la page d'inscription (consignes, dress code, accès…) |
+| Instructions publiques | Message visible en haut de la page d'inscription |
 | Message de confirmation | Texte affiché sur la page de succès après inscription |
 
 L'événement est créé en **brouillon** (`draft`) — il n'est pas visible du public tant qu'il n'est pas publié.
@@ -39,20 +41,15 @@ Un créneau correspond à un poste de bénévolat sur une plage horaire précise
 | Champ | Description |
 |-------|-------------|
 | Poste (rôle) | Intitulé générique (ex. : `Accueil`). Les créneaux du même rôle sont regroupés sur la même ligne du planning. |
-| Libellé | Intitulé spécifique affiché sous la barre (ex. : `Entrée principale`). Laisser vide si identique au rôle. |
+| Libellé | Intitulé spécifique (ex. : `Entrée principale`). Laisser vide si identique au rôle. |
 | Date | Jour du créneau |
 | Horaires | Heure de début et de fin |
 | Capacité | Nombre maximum de bénévoles |
 | Statut | `Ouvert`, `Complet`, `Fermé`, `Annulé` |
-| Ordre | Ordre d'affichage dans le planning |
 
-### Modifier ou supprimer
+### Réordonner les postes
 
-Cliquer sur le créneau dans la liste pour l'éditer. La suppression n'est disponible que pour les créneaux sans inscription.
-
-### Ajouter une inscription manuellement
-
-Le formulaire d'ajout manuel (bouton **+ Ajouter**) pré-sélectionne automatiquement le créneau affiché dans le filtre courant. Pratique pour inscrire un bénévole par téléphone ou en cas de problème technique.
+Le bouton **Réordonner les postes** ouvre un panneau glisser-déposer. L'ordre défini ici s'applique à la timeline admin **et** à la page publique.
 
 ---
 
@@ -60,19 +57,23 @@ Le formulaire d'ajout manuel (bouton **+ Ajouter**) pré-sélectionne automatiqu
 
 Dans la page d'édition de l'événement (**`/admin/events/[id]/edit`**), section **Programme des spectacles**.
 
-Chaque entrée définit une plage horaire qui apparaît en fond coloré sur la timeline publique et dans les exports, permettant aux bénévoles de visualiser quand ils travaillent par rapport aux spectacles.
+Chaque entrée définit une plage horaire qui apparaît en fond coloré sur la timeline, permettant aux bénévoles de visualiser quand ils travaillent par rapport aux spectacles.
 
 Champs : **Nom du spectacle**, **Date**, **Heure de début**, **Heure de fin**.
-
-Les modifications sont sauvegardées automatiquement après 1 seconde d'inactivité.
 
 ---
 
 ## Publier un événement
 
-Depuis la page de l'événement (`/admin/events/[id]`), cliquer sur **Publier**. L'événement devient visible à l'URL `/events/[slug]`.
+Depuis la page de l'événement (`/admin/events/[id]`), cliquer sur **Publier**.
 
-Pour dépublier (repasser en brouillon), cliquer à nouveau sur le bouton.
+L'événement devient alors visible à l'URL :
+
+```
+https://[site]/[slug-organisation]/[slug-evenement]
+```
+
+Le lien **Vue publique ↗** apparaît sur la page admin dès que l'événement est publié.
 
 ---
 
@@ -88,32 +89,105 @@ Depuis la page principale de l'événement (`/admin/events/[id]`) :
 
 ---
 
-## Annuler une inscription
+## Gérer les membres
 
-Sur la page des inscriptions, chaque ligne dispose d'un bouton de suppression. L'annulation est immédiate et irréversible ; le bénévole n'en est pas notifié automatiquement.
+**`/admin/members`**
+
+Le répertoire des membres est le pool de bénévoles connus de votre organisation.
+
+- **Ajouter** un membre : prénom, nom, email, téléphone, tags, notes internes
+- **Modifier** ou désactiver un membre existant
+- **Importer** des membres en masse via fichier CSV/TSV (`/admin/members/import`)
+- **Rechercher** par texte libre ou filtrer par tag
 
 ---
 
-## Exporter les données
+## Inviter des membres à un événement
+
+**`/admin/events/[id]/invitations`**
+
+Les invitations permettent d'envoyer des emails personnalisés aux membres de votre liste, avec un lien pré-rempli vers la page d'inscription.
+
+### Envoyer des invitations
+
+1. Cliquer sur **+ Inviter des membres**
+2. Sélectionner les membres par nom ou par tag
+3. Optionnel : ajouter un message personnalisé (visible dans l'email)
+4. Cliquer sur **Envoyer les invitations**
+
+Chaque membre reçoit un email avec un lien unique qui pré-remplit son prénom, nom, email et téléphone sur la page d'inscription.
+
+### Suivre l'état des invitations
+
+Le tableau affiche pour chaque membre invité :
+- **✅ Inscrit** — avec le ou les créneaux choisis
+- **⏳ Pas encore répondu**
+
+Les compteurs en haut récapitulent : total invités · inscrits · sans réponse.
+
+### Relancer les non-inscrits
+
+Le bouton **Relancer les non-inscrits** envoie un rappel à tous les membres invités qui ne sont pas encore inscrits. Un message personnalisé optionnel peut être ajouté.
+
+---
+
+## Communications bénévoles
+
+### Rappel manuel
+
+Depuis la page de l'événement, le bouton **Envoyer le rappel** permet d'envoyer un email de rappel à **tous les bénévoles inscrits** de l'événement.
+
+Avant d'envoyer, rédiger un message dans la section « Message de rappel » (page d'édition de l'événement, `/admin/events/[id]/edit`). Ce message apparaîtra dans l'email, avec le récapitulatif des créneaux de chaque bénévole.
+
+### Rappels automatiques
+
+L'application envoie automatiquement des rappels :
+- **J-2** (48 h avant le shift) : rappel avec détails du créneau
+- **J-1** (24 h avant) : rappel court
+- **Jour J** (2–4 h avant) : rappel de dernière minute
+
+Ces rappels sont envoyés sans intervention de votre part, tant que `remindersEnabled` est actif sur l'événement.
+
+### Notifications de modification
+
+- **Annulation d'un créneau** → les bénévoles inscrits sont avertis automatiquement et leur inscription est annulée
+- **Modification des horaires** → email envoyé aux bénévoles inscrits (peut être désactivé lors de la modification)
+
+---
+
+## Exports
 
 Deux formats disponibles depuis la page de l'événement :
 
 ### Export Excel (`.xlsx`)
 
 - Un onglet par jour avec un **Gantt** : rôles en lignes, tranches de 30 min en colonnes, noms des bénévoles dans les cellules
-- Créneaux de même libellé fusionnés sur une seule ligne Gantt
-- Tableau récapitulatif sous le Gantt (horaires, capacité, inscrits, liste des bénévoles)
-- Onglet **Inscriptions** avec toutes les données détaillées (nom, email, téléphone, commentaire)
-- Bénévoles triés alphabétiquement par prénom
+- Tableau récapitulatif sous le Gantt
+- Onglet **Inscriptions** avec toutes les données détaillées
 
 ### Export PDF (impression)
 
-- Même structure Gantt + récapitulatif, optimisée pour l'impression (format A4 paysage)
-- Plages des spectacles en fond coloré dans le Gantt
-- Cliquer sur **Imprimer / Enregistrer en PDF** pour générer le PDF via le navigateur
+- Même structure Gantt + récapitulatif, optimisée A4 paysage
+- Cliquer sur **Imprimer / Enregistrer en PDF**
+
+---
+
+## QR code
+
+Depuis la page de l'événement → **QR code**, télécharger le QR code de la page publique de l'événement (formats PNG ou SVG). Pratique pour l'affichage en salle ou sur une affiche.
+
+---
+
+## Gérer l'équipe admin
+
+**`/admin/settings/admins`**
+
+- **Liste** des administrateurs de votre organisation (actifs et invitations en attente)
+- **Inviter** un nouvel admin : saisir son nom et email → un email d'invitation avec lien d'activation est envoyé (lien valable 7 jours)
+- **Retirer** un admin (impossible de se retirer soi-même ou de retirer le dernier admin actif)
 
 ---
 
 ## Vue publique
 
-Le lien **Vue publique ↗** sur la page de l'événement ouvre la page telle qu'un bénévole la voit, dans un nouvel onglet. Pratique pour vérifier l'affichage avant de partager.
+Le lien **Vue publique ↗** (visible uniquement si l'événement est publié) ouvre la page telle qu'un bénévole la voit, dans un nouvel onglet. Pratique pour vérifier l'affichage avant de partager.
