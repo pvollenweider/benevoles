@@ -42,34 +42,44 @@ Application de gestion de bénévoles pour événements. Les organisateurs crée
 ## Prérequis
 
 - Node.js **22** (`nvm use 22`)
-- PostgreSQL 16+
+- Docker (pour la stack dev locale)
 
-## Installation
+## Démarrage rapide (dev)
+
+Tout est piloté par le `Makefile`. Une seule commande pour partir de zéro :
 
 ```bash
 git clone <repo>
 cd benevoles
-npm install
-cp .env.example .env
-# Remplir .env (voir section Variables d'environnement)
+make dev-setup   # .env, npm install, docker (postgres + mailpit), migrations, seed
+make dev         # lance le serveur Next.js
 ```
 
-### Base de données
+Trois services exposés en dev :
+- App : http://localhost:3000 (admin sur `/admin`, identifiants par défaut `admin@local` / `admin`)
+- Mailpit : http://localhost:8025 (captures de tous les emails envoyés en dev)
+- Postgres : `localhost:5432` (`benevoles` / `benevoles`)
+
+| Commande | Effet |
+|----------|-------|
+| `make help` | Liste toutes les tâches |
+| `make dev` | `npm run dev` |
+| `make dev-up` / `dev-down` | Démarre / arrête postgres + mailpit |
+| `make dev-reset` | ⚠ Supprime la DB locale et la réinitialise |
+| `make db-migrate` / `db-seed` / `db-studio` | Tâches Prisma |
+| `make test` / `lint` / `typecheck` | Qualité |
+
+### Setup manuel (sans Make)
 
 ```bash
-# Créer les tables
-npm run db:migrate
-
-# Créer le compte admin (+ données de démonstration)
+docker compose -f docker-compose.dev.yml up -d
+npm install --legacy-peer-deps
+cp .env.development.example .env
+# Génère un AUTH_SECRET et colle-le dans .env
+openssl rand -base64 48
+npx prisma migrate deploy
 npm run db:seed
-```
-
-### Développement
-
-```bash
 npm run dev
-# → http://localhost:3000         (vue publique)
-# → http://localhost:3000/admin   (interface admin)
 ```
 
 ## Variables d'environnement
