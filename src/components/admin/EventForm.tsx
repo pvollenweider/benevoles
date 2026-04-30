@@ -13,6 +13,7 @@ type EventFormData = {
   endDate: string
   publicInstructions: string
   confirmationMessage: string
+  reminderMessage: string
   publicStatus: "draft" | "published" | "archived"
 }
 
@@ -28,6 +29,7 @@ const defaultData: EventFormData = {
   endDate: "",
   publicInstructions: "",
   confirmationMessage: "Merci pour votre inscription ! À bientôt.",
+  reminderMessage: "",
   publicStatus: "draft",
 }
 
@@ -296,6 +298,15 @@ export default function EventForm({ initialData }: Props) {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Message de confirmation</label>
           <textarea rows={2} value={form.confirmationMessage} onChange={(e) => set("confirmationMessage", e.target.value)}
+            className={`${inputCls} resize-none`} />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Message de rappel <span className="text-gray-400 font-normal">(envoyé manuellement avant l&apos;événement)</span>
+          </label>
+          <textarea rows={3} value={form.reminderMessage} onChange={(e) => set("reminderMessage", e.target.value)}
+            placeholder="Consignes vestimentaires, point de RDV, accès, parking…"
             className={`${inputCls} resize-none`} />
         </div>
 

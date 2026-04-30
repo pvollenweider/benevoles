@@ -21,7 +21,9 @@ type Props = {
 
 export default function MembersManager({ initialMembers, allTags }: Props) {
   const router = useRouter()
-  const [members, setMembers] = useState(initialMembers)
+  // No local state for members: derive from props directly so a
+  // router.refresh() (after import / deactivate) shows the new list.
+  const members = initialMembers
   const [search, setSearch] = useState("")
   const [tagFilter, setTagFilter] = useState<string>("")
   const [showInactive, setShowInactive] = useState(false)
@@ -51,9 +53,7 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
   async function deactivate(id: string) {
     if (!confirm("Désactiver ce membre ?")) return
     const res = await fetch(`/api/admin/members/${id}`, { method: "DELETE" })
-    if (res.ok) {
-      setMembers((prev) => prev.map((m) => (m.id === id ? { ...m, active: false } : m)))
-    }
+    if (res.ok) refresh()
   }
 
   return (

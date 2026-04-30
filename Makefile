@@ -53,11 +53,13 @@ dev-down: ## Stoppe la stack dev
 dev-logs: ## Suit les logs des services dev
 	docker compose -f docker-compose.dev.yml logs -f
 
-dev-reset: ## ⚠ Supprime la DB locale (volume) et redémarre tout
+dev-reset: ## ⚠ Supprime la DB locale (volume) et redémarre tout (deps + migrations + seed)
+	@$(MAKE) install
 	docker compose -f docker-compose.dev.yml down -v
 	docker compose -f docker-compose.dev.yml up -d
 	@echo "→ Attente de PostgreSQL…"
 	@until docker exec benevoles_postgres_dev pg_isready -U benevoles >/dev/null 2>&1; do sleep 0.5; done
+	@$(MAKE) db-generate
 	@$(MAKE) db-migrate
 	@$(MAKE) db-seed
 

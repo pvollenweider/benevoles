@@ -125,31 +125,36 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     created.push(invite)
   }
 
-  // Send emails (only to members with an email and never invited yet).
-  let sent = 0
-  let failed = 0
-  for (const member of members) {
-    if (!member.email) continue
-    const invite = existingByMember.get(member.id) ?? created.find((c) => c.memberId === member.id)
-    if (!invite) continue
-    try {
-      await sendMemberInvite({
-        to: member.email,
-        memberName: member.firstName,
-        organizationName: event.organization.name,
-        eventTitle: event.title,
-        eventDate: event.startDate.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
-        eventLocation: event.location,
-        eventSlug: event.slug,
-        message: parsed.data.message ?? null,
-        token: invite.token,
-      })
-      sent++
-    } catch (err) {
-      console.error("Member invite email error:", err)
-      failed++
-    }
-  }
+  // Send emails in parallel so a slow SMTP doesn't make the route
+  // hang for `members.length × timeout`. Promise.allSettled keeps a
+  // partial failure from cancelling the others.
+  const sends = members
+    .filter((m) => m.email)
+    .map(async (member) => {
+      const invite = existingByMember.get(member.id) ?? created.find((c) => c.memberId === member.id)
+      if (!invite) return { ok: false }
+      try {
+        await sendMemberInvite({
+          to: member.email!,
+          memberName: member.firstName,
+          organizationName: event.organization.name,
+          eventTitle: event.title,
+          eventDate: event.startDate.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
+          eventLocation: event.location,
+          eventSlug: event.slug,
+          message: parsed.data.message ?? null,
+          token: invite.token,
+        })
+        return { ok: true }
+      } catch (err) {
+        console.error("Member invite email error:", err)
+        return { ok: false }
+      }
+    })
+
+  const results = await Promise.allSettled(sends)
+  const sent = results.filter((r) => r.status === "fulfilled" && r.value.ok).length
+  const failed = results.length - sent
 
   return NextResponse.json({
     invitedNew: created.length,
