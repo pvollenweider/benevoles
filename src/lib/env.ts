@@ -1,10 +1,12 @@
 import { z } from "zod"
 
+// Variables runtime indispensables à l'app. ADMIN_EMAIL / ADMIN_PASSWORD
+// ne sont utilisées que par `prisma/seed.ts` (jamais par l'app), donc
+// elles n'ont pas leur place ici — elles cassaient le build d'image
+// Docker quand elles n'étaient pas fournies en build args.
 const schema = z.object({
   DATABASE_URL: z.string().min(1, "DATABASE_URL est requis"),
   AUTH_SECRET: z.string().min(32, "AUTH_SECRET doit faire au moins 32 caractères"),
-  ADMIN_EMAIL: z.string().email("ADMIN_EMAIL doit être une adresse email valide"),
-  ADMIN_PASSWORD: z.string().min(1, "ADMIN_PASSWORD est requis"),
   NEXT_PUBLIC_APP_URL: z.string().url("NEXT_PUBLIC_APP_URL doit être une URL valide").optional(),
 })
 
