@@ -51,6 +51,8 @@ export function render(payload: NotificationPayload): RenderedEmail {
       return renderRegistrationCancelled(payload)
     case "admin_notification":
       return renderAdminNotification(payload)
+    case "admin_invite":
+      return renderAdminInvite(payload)
   }
 }
 
@@ -358,6 +360,35 @@ function renderRegistrationCancelled(p: NotificationPayload): RenderedEmail {
     <p>Bonjour ${escapeHtml(d.volunteerName)},</p>
     <p>Ta désinscription du créneau <strong>${escapeHtml(d.shiftLabel)}</strong> pour <strong>${escapeHtml(d.eventTitle)}</strong> est bien prise en compte.</p>
     <p style="margin-top:1.5em">${btn(eventUrl, "Voir les créneaux disponibles")}</p>
+  `)
+
+  return { subject, html, text }
+}
+
+// ── Invitation d'un admin ────────────────────────────────────────────────────
+
+function renderAdminInvite(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    adminName: string
+    organizationName: string
+    inviteUrl: string
+  }
+  const subject = `Invitation à rejoindre ${d.organizationName} sur Bénévoles`
+
+  const text = [
+    `Bonjour ${d.adminName},`,
+    ``,
+    `Vous avez été invité·e à rejoindre ${d.organizationName} en tant qu'administrateur sur Bénévoles.`,
+    ``,
+    `Créez votre compte en cliquant sur ce lien (valable 7 jours) :`,
+    d.inviteUrl,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.5em">Bonjour ${escapeHtml(d.adminName)},</h2>
+    <p>Vous avez été invité·e à rejoindre <strong>${escapeHtml(d.organizationName)}</strong> en tant qu'administrateur sur Bénévoles.</p>
+    <p style="margin-top:1.5em">${btn(d.inviteUrl, "Créer mon compte")}</p>
+    <p style="color:#888;font-size:0.85em;margin-top:2em">Ce lien est valable 7 jours. Si vous n'attendiez pas cette invitation, ignorez cet email.</p>
   `)
 
   return { subject, html, text }

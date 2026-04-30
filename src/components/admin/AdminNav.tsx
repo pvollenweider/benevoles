@@ -27,6 +27,12 @@ export default function AdminNav({ userName, role }: { userName: string; role?: 
           >
             Membres
           </Link>
+          <Link
+            href="/admin/settings/admins"
+            className={`text-sm ${pathname.startsWith("/admin/settings") ? "text-blue-600 font-medium" : "text-gray-500 hover:text-gray-800"}`}
+          >
+            Équipe
+          </Link>
           {isSuperAdmin && (
             <>
               <span className="text-gray-200 select-none">|</span>

@@ -20,6 +20,7 @@ export type NotificationKind =
   | "shift_cancelled"
   | "registration_cancelled"
   | "admin_notification"
+  | "admin_invite"
 
 export type Recipient = {
   email?: string | null
