@@ -77,6 +77,12 @@ export default function LoginPage() {
           >
             {loading ? "Connexion…" : "Se connecter"}
           </button>
+
+          <div className="text-center pt-2">
+            <a href="/admin/forgot-password" className="text-xs text-gray-500 hover:text-gray-800">
+              Mot de passe oublié ?
+            </a>
+          </div>
         </form>
       </div>
     </main>

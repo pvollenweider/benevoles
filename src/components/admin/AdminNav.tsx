@@ -4,7 +4,12 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
 
-export default function AdminNav({ userName }: { userName: string }) {
+type Props = {
+  userName: string
+  isSuperAdmin?: boolean
+}
+
+export default function AdminNav({ userName, isSuperAdmin = false }: Props) {
   const pathname = usePathname()
 
   return (
@@ -26,6 +31,20 @@ export default function AdminNav({ userName }: { userName: string }) {
           >
             Membres
           </Link>
+          <Link
+            href="/admin/settings/members"
+            className={`text-sm ${pathname.startsWith("/admin/settings") ? "text-blue-600 font-medium" : "text-gray-500 hover:text-gray-800"}`}
+          >
+            Équipe
+          </Link>
+          {isSuperAdmin && (
+            <Link
+              href="/super-admin/organizations"
+              className="text-sm text-purple-600 font-medium hover:text-purple-800"
+            >
+              ⚙ Super admin
+            </Link>
+          )}
         </div>
         <div className="flex items-center gap-4">
           <span className="text-xs text-gray-400">{userName}</span>

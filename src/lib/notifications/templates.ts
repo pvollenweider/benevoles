@@ -51,6 +51,10 @@ export function render(payload: NotificationPayload): RenderedEmail {
       return renderRegistrationCancelled(payload)
     case "admin_notification":
       return renderAdminNotification(payload)
+    case "admin_invitation":
+      return renderAdminInvitation(payload)
+    case "password_reset":
+      return renderPasswordReset(payload)
   }
 }
 
@@ -376,6 +380,82 @@ function renderAdminNotification(p: NotificationPayload): RenderedEmail {
     <p><strong>${escapeHtml(d.volunteerName)}</strong> (${escapeHtml(d.volunteerEmail)}) vient de s'inscrire à <strong>${escapeHtml(d.eventTitle)}</strong>.</p>
     <p>Créneaux : ${d.shifts.map((s) => escapeHtml(s.label)).join(", ")}</p>
   `
+
+  return { subject, html, text }
+}
+
+// ── Invitation admin ─────────────────────────────────────────────────────────
+
+function renderAdminInvitation(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    organizationName: string
+    inviterName: string
+    token: string
+    expiresAt: Date | string
+  }
+  const inviteUrl = `${APP_URL}/invite/${d.token}`
+  const expiresFormatted = new Date(d.expiresAt).toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  })
+  const subject = `Invitation administrateur — ${d.organizationName}`
+
+  const text = [
+    `Bonjour,`,
+    ``,
+    `${d.inviterName} t'invite à rejoindre l'administration de ${d.organizationName} sur Bénévoles.`,
+    ``,
+    `Pour créer ton compte et accepter l'invitation :`,
+    inviteUrl,
+    ``,
+    `Ce lien est valable jusqu'au ${expiresFormatted}.`,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.5em">Invitation à rejoindre ${escapeHtml(d.organizationName)}</h2>
+    <p><strong>${escapeHtml(d.inviterName)}</strong> t'invite à devenir administrateur de <strong>${escapeHtml(d.organizationName)}</strong> sur Bénévoles.</p>
+    <p style="margin-top:1.5em">${btn(inviteUrl, "Créer mon compte et accepter")}</p>
+    <p style="color:#888;font-size:0.85em;margin-top:2em">Ce lien expire le ${escapeHtml(expiresFormatted)}. Si tu ne reconnais pas cette invitation, ignore cet email.</p>
+  `)
+
+  return { subject, html, text }
+}
+
+// ── Reset mot de passe ───────────────────────────────────────────────────────
+
+function renderPasswordReset(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    userName: string
+    token: string
+    expiresAt: Date | string
+  }
+  const resetUrl = `${APP_URL}/admin/reset-password/${d.token}`
+  const expiresFormatted = new Date(d.expiresAt).toLocaleString("fr-FR", {
+    dateStyle: "short",
+    timeStyle: "short",
+  })
+  const subject = `Réinitialisation de ton mot de passe`
+
+  const text = [
+    `Bonjour ${d.userName},`,
+    ``,
+    `Une demande de réinitialisation de mot de passe a été faite pour ton compte.`,
+    `Si ce n'était pas toi, ignore simplement cet email.`,
+    ``,
+    `Pour choisir un nouveau mot de passe :`,
+    resetUrl,
+    ``,
+    `Ce lien est valable jusqu'au ${expiresFormatted}.`,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.5em">Réinitialisation de ton mot de passe</h2>
+    <p>Bonjour ${escapeHtml(d.userName)},</p>
+    <p>Une demande de réinitialisation a été faite pour ton compte. Si ce n'était pas toi, ignore cet email.</p>
+    <p style="margin-top:1.5em">${btn(resetUrl, "Choisir un nouveau mot de passe")}</p>
+    <p style="color:#888;font-size:0.85em;margin-top:2em">Lien valable jusqu'au ${escapeHtml(expiresFormatted)}.</p>
+  `)
 
   return { subject, html, text }
 }
