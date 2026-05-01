@@ -20,6 +20,12 @@ function toMin(t: string) {
   return h * 60 + m
 }
 
+// End times at or before their start time are overnight (e.g. 23:00 → 00:00)
+function toMinEnd(end: string, start: string) {
+  const e = toMin(end), s = toMin(start)
+  return e <= s ? e + 1440 : e
+}
+
 export function fmt(t: string) {
   const [h, m] = t.split(":")
   return m === "00" ? `${h}h` : `${h}h${m}`
@@ -50,8 +56,8 @@ export default function DayTimeline({
   if (visible.length === 0) return null
 
   const allMins = [
-    ...visible.flatMap((s) => [toMin(s.startTime), toMin(s.endTime)]),
-    ...shows.flatMap((s) => [toMin(s.startTime), toMin(s.endTime)]),
+    ...visible.flatMap((s) => [toMin(s.startTime), toMinEnd(s.endTime, s.startTime)]),
+    ...shows.flatMap((s) => [toMin(s.startTime), toMinEnd(s.endTime, s.startTime)]),
   ]
   const dayStart = Math.floor(Math.min(...allMins) / 60) * 60
   const dayEnd   = Math.ceil(Math.max(...allMins)  / 60) * 60
@@ -135,7 +141,7 @@ export default function DayTimeline({
                 const clickable   = !isRegistered && !isConflict && !unavail
                 const hasLabel    = shift.label !== shift.roleName
                 const startMin    = toMin(shift.startTime)
-                const endMin      = toMin(shift.endTime)
+                const endMin      = toMinEnd(shift.endTime, shift.startTime)
                 const LABEL_H     = 14
 
                 return (

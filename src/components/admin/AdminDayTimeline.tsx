@@ -20,6 +20,10 @@ function toMin(t: string) {
   const [h, m] = t.split(":").map(Number)
   return h * 60 + m
 }
+function toMinEnd(end: string, start: string) {
+  const e = toMin(end), s = toMin(start)
+  return e <= s ? e + 1440 : e
+}
 function fromMin(n: number) {
   return `${String(Math.floor(n / 60)).padStart(2, "0")}:${String(n % 60).padStart(2, "0")}`
 }
@@ -215,8 +219,8 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
 
   // ── Time range (include show times) ────────────────────────────────────────
   const allMins = [
-    ...visible.flatMap(s => [toMin(s.startTime), toMin(s.endTime)]),
-    ...shows.flatMap(s => [toMin(s.startTime), toMin(s.endTime)]),
+    ...visible.flatMap(s => [toMin(s.startTime), toMinEnd(s.endTime, s.startTime)]),
+    ...shows.flatMap(s => [toMin(s.startTime), toMinEnd(s.endTime, s.startTime)]),
   ]
   const rawStart = allMins.length ? Math.min(...allMins) : 8 * 60
   const rawEnd   = allMins.length ? Math.max(...allMins) : 20 * 60
@@ -461,7 +465,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                   {/* Shifts */}
                   {(byRole[role] ?? []).map(shift => {
                     const startMin   = toMin(shift.startTime)
-                    const endMin     = toMin(shift.endTime)
+                    const endMin     = toMinEnd(shift.endTime, shift.startTime)
                     const barLeft    = px(startMin)
                     const barWidth   = Math.max((endMin - startMin) * PX_PER_MIN, 4)
                     const isSelected = selected === shift.id
