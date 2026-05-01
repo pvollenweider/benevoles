@@ -150,10 +150,12 @@ model AdminUser {
   passwordHash        String
   role                String    @default("admin")
   isActive            Boolean   @default(true)
-  setupToken          String?   @unique
-  setupTokenExpiresAt DateTime?
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  setupToken              String?   @unique
+  setupTokenExpiresAt     DateTime?
+  passwordResetToken      String?   @unique
+  passwordResetExpiresAt  DateTime?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
 
   organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
 

@@ -53,6 +53,8 @@ export function render(payload: NotificationPayload): RenderedEmail {
       return renderAdminNotification(payload)
     case "admin_invite":
       return renderAdminInvite(payload)
+    case "password_reset":
+      return renderPasswordReset(payload)
   }
 }
 
@@ -411,6 +413,32 @@ function renderAdminNotification(p: NotificationPayload): RenderedEmail {
     <p><strong>${escapeHtml(d.volunteerName)}</strong> (${escapeHtml(d.volunteerEmail)}) vient de s'inscrire à <strong>${escapeHtml(d.eventTitle)}</strong>.</p>
     <p>Créneaux : ${d.shifts.map((s) => escapeHtml(s.label)).join(", ")}</p>
   `
+
+  return { subject, html, text }
+}
+
+// ── Réinitialisation mot de passe ────────────────────────────────────────────
+
+function renderPasswordReset(p: NotificationPayload): RenderedEmail {
+  const d = p.data as { adminName: string; resetUrl: string }
+  const subject = `Réinitialisation de votre mot de passe`
+
+  const text = [
+    `Bonjour ${d.adminName},`,
+    ``,
+    `Vous avez demandé à réinitialiser votre mot de passe. Cliquez sur le lien ci-dessous (valable 1 heure) :`,
+    d.resetUrl,
+    ``,
+    `Si vous n'avez pas fait cette demande, ignorez cet email — votre mot de passe reste inchangé.`,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.5em">Réinitialisation de mot de passe</h2>
+    <p>Bonjour ${escapeHtml(d.adminName)},</p>
+    <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
+    <p style="margin-top:1.5em">${btn(d.resetUrl, "Réinitialiser mon mot de passe")}</p>
+    <p style="color:#888;font-size:0.85em;margin-top:2em">Ce lien est valable 1 heure. Si vous n'avez pas fait cette demande, ignorez cet email.</p>
+  `)
 
   return { subject, html, text }
 }
