@@ -23,12 +23,19 @@ const ROLE_ACCENTS: [string, string][] = [
   ["preparation", "bg-teal-400"],
 ]
 
+const ACCENT_FALLBACK = [
+  "bg-indigo-400", "bg-cyan-500", "bg-lime-500", "bg-rose-400",
+  "bg-fuchsia-400", "bg-sky-400", "bg-emerald-500", "bg-yellow-500",
+]
+
 export function getRoleAccent(roleName: string): string {
   const lower = roleName.toLowerCase()
   for (const [key, color] of ROLE_ACCENTS) {
     if (lower.includes(key)) return color
   }
-  return "bg-gray-300"
+  let h = 0
+  for (let i = 0; i < lower.length; i++) h = (h * 31 + lower.charCodeAt(i)) >>> 0
+  return ACCENT_FALLBACK[h % ACCENT_FALLBACK.length]
 }
 
 // ── Timeline bar classes — solid dark fills, white text ──────────────────────
@@ -98,12 +105,30 @@ const BAR_KEYS: [string, string][] = [
   ["preparation", "preparation"],
 ]
 
+// Fallback palette for custom roles — distinct colors, WCAG AA with white text
+const FALLBACK_PALETTE: Record<BarState, string>[] = [
+  { default: "bg-indigo-600 hover:bg-indigo-700", selected: "bg-indigo-700 ring-2 ring-offset-1 ring-indigo-400", unavailable: "bg-indigo-100" },
+  { default: "bg-cyan-700 hover:bg-cyan-800",     selected: "bg-cyan-800 ring-2 ring-offset-1 ring-cyan-400",     unavailable: "bg-cyan-100" },
+  { default: "bg-lime-700 hover:bg-lime-800",     selected: "bg-lime-800 ring-2 ring-offset-1 ring-lime-400",     unavailable: "bg-lime-100" },
+  { default: "bg-rose-600 hover:bg-rose-700",     selected: "bg-rose-700 ring-2 ring-offset-1 ring-rose-400",     unavailable: "bg-rose-100" },
+  { default: "bg-fuchsia-600 hover:bg-fuchsia-700", selected: "bg-fuchsia-700 ring-2 ring-offset-1 ring-fuchsia-400", unavailable: "bg-fuchsia-100" },
+  { default: "bg-sky-600 hover:bg-sky-700",       selected: "bg-sky-700 ring-2 ring-offset-1 ring-sky-400",       unavailable: "bg-sky-100" },
+  { default: "bg-emerald-700 hover:bg-emerald-800", selected: "bg-emerald-800 ring-2 ring-offset-1 ring-emerald-400", unavailable: "bg-emerald-100" },
+  { default: "bg-yellow-700 hover:bg-yellow-800", selected: "bg-yellow-800 ring-2 ring-offset-1 ring-yellow-400", unavailable: "bg-yellow-100" },
+]
+
+function hashRole(name: string): number {
+  let h = 0
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0
+  return h % FALLBACK_PALETTE.length
+}
+
 export function getBarClasses(roleName: string, state: BarState): string {
   const lower = roleName.toLowerCase()
   for (const [key, colorKey] of BAR_KEYS) {
     if (lower.includes(key)) return BAR[colorKey][state]
   }
-  return BAR["_default"][state]
+  return FALLBACK_PALETTE[hashRole(lower)][state]
 }
 
 const cls = "w-3.5 h-3.5 text-gray-400 flex-shrink-0"
