@@ -1,14 +1,24 @@
 import Link from "next/link"
 import { headers } from "next/headers"
+import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { formatShortDate } from "@/lib/utils"
 import { eventPublicUrl } from "@/lib/urls"
+import { resolveOrgSlug } from "@/lib/resolve-org"
 import PublicFooter from "@/components/PublicFooter"
 
 export const dynamic = "force-dynamic"
 
 export default async function HomePage() {
-  const orgSlug = (await headers()).get("x-org-slug")
+  const rawOrgSlug = (await headers()).get("x-org-slug")
+
+  let orgSlug = rawOrgSlug
+  if (rawOrgSlug) {
+    const resolved = await resolveOrgSlug(rawOrgSlug)
+    if (!resolved) orgSlug = null
+    else if (resolved.redirectUrl) redirect(resolved.redirectUrl)
+    else orgSlug = resolved.org.slug
+  }
 
   const events = await prisma.event.findMany({
     where: {
