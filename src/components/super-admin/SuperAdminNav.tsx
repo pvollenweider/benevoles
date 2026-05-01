@@ -20,6 +20,12 @@ export default function SuperAdminNav({ userName }: { userName: string }) {
           >
             Organisations
           </Link>
+          <Link
+            href="/super-admin/profile"
+            className={`text-sm ${pathname.startsWith("/super-admin/profile") ? "text-blue-600 font-medium" : "text-gray-500 hover:text-gray-800"}`}
+          >
+            Profil
+          </Link>
         </div>
         <div className="flex items-center gap-4">
           <span className="text-xs text-gray-400">{userName}</span>
