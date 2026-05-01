@@ -292,7 +292,6 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
             )}
             <div className="space-y-6">
               {Object.entries(shiftsByDay).map(([day, dayShifts]) => {
-                const dayShows = (event.showSchedule ?? []).filter((s) => s.date === day)
                 return (
                   <div key={day}>
                     <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-3">
@@ -303,7 +302,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
                     </p>
                     <DayTimeline
                       shifts={dayShifts}
-                      shows={dayShows}
+                      shows={[]}
                       selected={selectedShifts}
                       registered={myShiftIds}
                       conflicts={conflictingShiftIds}
