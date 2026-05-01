@@ -1,0 +1,225 @@
+# ── PKI : auto-signé pour le serving TLS du webhook ────────────────────────
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: cert-manager-webhook-gandi-selfsigned
+  namespace: cert-manager
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-manager-webhook-gandi-ca
+  namespace: cert-manager
+spec:
+  secretName: cert-manager-webhook-gandi-ca
+  duration: 43800h
+  issuerRef:
+    name: cert-manager-webhook-gandi-selfsigned
+  commonName: "ca.cert-manager-webhook-gandi.cert-manager"
+  isCA: true
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: cert-manager-webhook-gandi-ca
+  namespace: cert-manager
+spec:
+  ca:
+    secretName: cert-manager-webhook-gandi-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-manager-webhook-gandi-serving-cert
+  namespace: cert-manager
+spec:
+  secretName: cert-manager-webhook-gandi-serving-cert
+  duration: 8760h
+  issuerRef:
+    name: cert-manager-webhook-gandi-ca
+  dnsNames:
+    - cert-manager-webhook-gandi
+    - cert-manager-webhook-gandi.cert-manager
+    - cert-manager-webhook-gandi.cert-manager.svc
+---
+# ── ServiceAccount ──────────────────────────────────────────────────────────
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cert-manager-webhook-gandi
+  namespace: cert-manager
+---
+# ── RBAC : lire le ConfigMap d'auth de l'apiserver ─────────────────────────
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cert-manager-webhook-gandi:webhook-authentication-reader
+  namespace: kube-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: extension-apiserver-authentication-reader
+subjects:
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: cert-manager-webhook-gandi
+    namespace: cert-manager
+---
+# ── RBAC : délégation d'auth ────────────────────────────────────────────────
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: cert-manager-webhook-gandi:auth-delegator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:auth-delegator
+subjects:
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: cert-manager-webhook-gandi
+    namespace: cert-manager
+---
+# ── RBAC : cert-manager peut appeler le solver ─────────────────────────────
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cert-manager-webhook-gandi:domain-solver
+rules:
+  - apiGroups:
+      - acme.bwolf.me
+    resources:
+      - "*"
+    verbs:
+      - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: cert-manager-webhook-gandi:domain-solver
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cert-manager-webhook-gandi:domain-solver
+subjects:
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: cert-manager
+    namespace: cert-manager
+---
+# ── RBAC : lire le secret Gandi ────────────────────────────────────────────
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cert-manager-webhook-gandi:secret-reader
+  namespace: cert-manager
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    resourceNames:
+      - gandi-api-key
+    verbs:
+      - get
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cert-manager-webhook-gandi:secret-reader
+  namespace: cert-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cert-manager-webhook-gandi:secret-reader
+subjects:
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: cert-manager-webhook-gandi
+    namespace: cert-manager
+---
+# ── Deployment ──────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cert-manager-webhook-gandi
+  namespace: cert-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cert-manager-webhook-gandi
+  template:
+    metadata:
+      labels:
+        app: cert-manager-webhook-gandi
+    spec:
+      serviceAccountName: cert-manager-webhook-gandi
+      containers:
+        - name: cert-manager-webhook-gandi
+          image: ghcr.io/pvollenweider/benevoles/gandi-webhook:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - --tls-cert-file=/tls/tls.crt
+            - --tls-private-key-file=/tls/tls.key
+            - --v=2
+          env:
+            - name: GROUP_NAME
+              value: "acme.bwolf.me"
+          ports:
+            - name: https
+              containerPort: 443
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              scheme: HTTPS
+              path: /healthz
+              port: https
+          readinessProbe:
+            httpGet:
+              scheme: HTTPS
+              path: /healthz
+              port: https
+          volumeMounts:
+            - name: certs
+              mountPath: /tls
+              readOnly: true
+      volumes:
+        - name: certs
+          secret:
+            secretName: cert-manager-webhook-gandi-serving-cert
+---
+# ── Service ─────────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: cert-manager-webhook-gandi
+  namespace: cert-manager
+spec:
+  type: ClusterIP
+  ports:
+    - port: 443
+      targetPort: https
+      protocol: TCP
+      name: https
+  selector:
+    app: cert-manager-webhook-gandi
+---
+# ── APIService : enregistrement dans l'apiserver ───────────────────────────
+apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+metadata:
+  name: v1alpha1.acme.bwolf.me
+  annotations:
+    cert-manager.io/inject-ca-from: "cert-manager/cert-manager-webhook-gandi-serving-cert"
+spec:
+  group: acme.bwolf.me
+  groupPriorityMinimum: 1000
+  versionPriority: 15
+  service:
+    name: cert-manager-webhook-gandi
+    namespace: cert-manager
+  version: v1alpha1
