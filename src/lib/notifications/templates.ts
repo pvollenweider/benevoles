@@ -406,7 +406,7 @@ function renderShiftCancelled(p: NotificationPayload): RenderedEmail {
     `D'autres créneaux sont peut-être disponibles, jette un œil ici :`,
     eventUrl,
     ``,
-    `Merci pour ta compréhension et désolé·e pour la gêne occasionnée !`,
+    `Merci pour ta compréhension et toutes nos excuses pour la gêne occasionnée !`,
   ].join("\n")
 
   const html = wrap(`
@@ -414,7 +414,7 @@ function renderShiftCancelled(p: NotificationPayload): RenderedEmail {
     <p style="color:#555">Le créneau <strong>${escapeHtml(d.shiftLabel)}</strong> du ${escapeHtml(d.shiftDate)} pour <strong>${escapeHtml(d.eventTitle)}</strong> a malheureusement été annulé.</p>
     <p style="color:#555">D'autres créneaux sont peut-être disponibles, jette un œil ici :</p>
     <p style="margin-top:1.5em">${btn(eventUrl, "Voir les créneaux disponibles")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">Merci pour ta compréhension et désolé·e pour la gêne occasionnée !</p>
+    <p style="color:#888;font-size:0.85em;margin-top:2em">Merci pour ta compréhension et toutes nos excuses pour la gêne occasionnée !</p>
   `)
 
   return { subject, html, text }
@@ -469,7 +469,7 @@ function renderAdminInvite(p: NotificationPayload): RenderedEmail {
   const text = [
     `Bonjour ${d.adminName},`,
     ``,
-    `Vous avez été invité·e à rejoindre ${d.organizationName} en tant qu'administrateur sur Bénévoles.`,
+    `Nous vous invitons à rejoindre ${d.organizationName} en tant qu'administratrice ou administrateur sur Bénévoles.`,
     ``,
     `Créez votre compte en cliquant sur ce lien (valable 7 jours) :`,
     d.inviteUrl,
@@ -477,7 +477,7 @@ function renderAdminInvite(p: NotificationPayload): RenderedEmail {
 
   const html = wrap(`
     <h2 style="margin:0 0 0.5em">Bonjour ${escapeHtml(d.adminName)},</h2>
-    <p>Vous avez été invité·e à rejoindre <strong>${escapeHtml(d.organizationName)}</strong> en tant qu'administrateur sur Bénévoles.</p>
+    <p>Nous vous invitons à rejoindre <strong>${escapeHtml(d.organizationName)}</strong> en tant qu'administratrice ou administrateur sur Bénévoles.</p>
     <p style="margin-top:1.5em">${btn(d.inviteUrl, "Créer mon compte")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Ce lien est valable 7 jours. Si vous n'attendiez pas cette invitation, ignorez cet email.</p>
   `)

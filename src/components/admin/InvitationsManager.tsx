@@ -171,7 +171,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
                     <td className="px-4 py-3">
                       {i.registered ? (
                         <span className="text-xs font-medium text-green-700 bg-green-50 px-2 py-1 rounded-full">
-                          ✓ Inscrit·e
+                          ✓ Participation confirmée
                         </span>
                       ) : (
                         <span className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-full">
