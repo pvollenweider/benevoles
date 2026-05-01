@@ -3,6 +3,13 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { slugify } from "@/lib/utils"
 import { z } from "zod"
 
+const showSchema = z.object({
+  name: z.string(),
+  date: z.string(),
+  startTime: z.string(),
+  endTime: z.string(),
+})
+
 const schema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
@@ -12,6 +19,7 @@ const schema = z.object({
   publicInstructions: z.string().optional(),
   confirmationMessage: z.string().optional(),
   publicStatus: z.enum(["draft", "published", "archived"]).optional(),
+  showSchedule: z.array(showSchema).optional(),
 })
 
 export async function GET() {
@@ -72,6 +80,7 @@ export async function POST(req: Request) {
       startDate: new Date(data.startDate),
       endDate: new Date(data.endDate),
       publicStatus: data.publicStatus ?? "draft",
+      showSchedule: data.showSchedule ?? [],
     },
   })
 
