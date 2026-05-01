@@ -19,7 +19,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
 
   const event = await db.event.findFirst({
     where: { id },
-    include: { organization: { select: { name: true } } },
+    include: { organization: { select: { name: true, slug: true } } },
   })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
@@ -67,6 +67,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       data: {
         volunteerName: bundle.volunteer.firstName,
         organizationName: event.organization.name,
+        orgSlug: event.organization.slug,
         eventTitle: event.title,
         customMessage: event.reminderMessage ?? "",
         shifts: bundle.shifts.map((s) => ({

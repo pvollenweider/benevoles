@@ -4,9 +4,14 @@
  */
 
 import type { NotificationPayload } from "./types"
-import { eventPublicUrl } from "@/lib/urls"
+import { eventPublicUrl, orgBaseUrl } from "@/lib/urls"
 
 const BASE_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
+
+function myPageUrl(orgSlug: string | undefined, editToken: string): string {
+  const base = orgSlug ? orgBaseUrl(orgSlug) : BASE_URL
+  return `${base}/my/${editToken}`
+}
 
 function escapeHtml(s: string): string {
   return s
@@ -64,13 +69,14 @@ export function render(payload: NotificationPayload): RenderedEmail {
 // ── Inscription confirmée ────────────────────────────────────────────────────
 
 function renderConfirmation(p: NotificationPayload): RenderedEmail {
-  const { volunteerName, eventTitle, shifts, editToken } = p.data as {
+  const { volunteerName, eventTitle, shifts, editToken, orgSlug } = p.data as {
     volunteerName: string
     eventTitle: string
     shifts: { label: string; date: string; startTime: string; endTime: string }[]
     editToken: string
+    orgSlug?: string
   }
-  const editUrl = `${BASE_URL}/my/${editToken}`
+  const editUrl = myPageUrl(orgSlug, editToken)
   const subject = `Confirmation d'inscription — ${eventTitle}`
 
   const text = [
@@ -158,11 +164,12 @@ type ReminderData = {
   shiftLocation: string | null
   editToken: string
   hoursUntil?: number
+  orgSlug?: string
 }
 
 function renderReminderJ2(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
-  const editUrl = `${BASE_URL}/my/${d.editToken}`
+  const editUrl = myPageUrl(d.orgSlug, d.editToken)
   const subject = `J-2 — ${d.eventTitle}`
 
   const text = [
@@ -195,7 +202,7 @@ function renderReminderJ2(p: NotificationPayload): RenderedEmail {
 
 function renderReminderJ1(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
-  const editUrl = `${BASE_URL}/my/${d.editToken}`
+  const editUrl = myPageUrl(d.orgSlug, d.editToken)
   const subject = `Demain — ${d.eventTitle}`
 
   const text = `Plus que 24h ! ${d.eventTitle} demain à ${d.shiftStart}${d.shiftLocation ? `, à ${d.shiftLocation}` : ""}.\nTu fais : ${d.shiftRoleName}\n\n${editUrl}`
@@ -212,7 +219,7 @@ function renderReminderJ1(p: NotificationPayload): RenderedEmail {
 
 function renderReminderDd(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
-  const editUrl = `${BASE_URL}/my/${d.editToken}`
+  const editUrl = myPageUrl(d.orgSlug, d.editToken)
   const subject = `C'est aujourd'hui — ${d.eventTitle}`
   const hoursLabel = d.hoursUntil && d.hoursUntil > 0 ? `dans ${d.hoursUntil}h` : "très bientôt"
 
@@ -239,8 +246,9 @@ function renderManualReminder(p: NotificationPayload): RenderedEmail {
     customMessage: string
     shifts: { label: string; date: string; startTime: string; endTime: string; roleName: string }[]
     editToken: string
+    orgSlug?: string
   }
-  const editUrl = `${BASE_URL}/my/${d.editToken}`
+  const editUrl = myPageUrl(d.orgSlug, d.editToken)
   const subject = `Rappel — ${d.eventTitle}`
 
   const text = [
@@ -282,8 +290,9 @@ function renderShiftModified(p: NotificationPayload): RenderedEmail {
     oldEnd: string
     newEnd: string
     editToken: string
+    orgSlug?: string
   }
-  const editUrl = `${BASE_URL}/my/${d.editToken}`
+  const editUrl = myPageUrl(d.orgSlug, d.editToken)
   const subject = `Changement d'horaire — ${d.eventTitle}`
 
   const text = [

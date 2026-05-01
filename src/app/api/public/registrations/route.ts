@@ -27,6 +27,7 @@ export async function POST(req: Request) {
 
   const event = await prisma.event.findFirst({
     where: { id: eventId, publicStatus: "published" },
+    include: { organization: { select: { slug: true } } },
   })
   if (!event) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
 
@@ -137,6 +138,7 @@ export async function POST(req: Request) {
       eventTitle: event.title,
       shifts: shiftData,
       editToken,
+      orgSlug: event.organization.slug,
     })
     await sendAdminNotification({
       eventTitle: event.title,

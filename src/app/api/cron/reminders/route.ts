@@ -73,7 +73,7 @@ async function run(req: Request) {
       include: {
         volunteer: true,
         shift: true,
-        event: { include: { organization: { select: { name: true } } } },
+        event: { include: { organization: { select: { name: true, slug: true } } } },
       },
     })
 
@@ -93,6 +93,7 @@ async function run(req: Request) {
           volunteerName: r.volunteer.firstName,
           eventTitle: r.event.title,
           organizationName: r.event.organization.name,
+          orgSlug: r.event.organization.slug,
           shiftLabel: r.shift.label,
           shiftRoleName: r.shift.roleName,
           shiftDate: r.shift.date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),

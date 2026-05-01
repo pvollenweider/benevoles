@@ -37,7 +37,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const before = await db.shift.findFirst({
     where: { id },
     include: {
-      event: { select: { id: true, title: true, slug: true, organizationId: true } },
+      event: { select: { id: true, title: true, slug: true, organizationId: true, organization: { select: { slug: true } } } },
       registrations: {
         where: { status: "active" },
         include: { volunteer: true },
@@ -67,6 +67,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         data: {
           volunteerName: reg.volunteer.firstName,
           eventTitle: before.event.title,
+          orgSlug: before.event.organization.slug,
           shiftLabel: after.label,
           oldDate: fmtDate(before.date),
           newDate: fmtDate(after.date),
