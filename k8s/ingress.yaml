@@ -14,6 +14,7 @@ spec:
     - hosts:
         - "*.benevol.app"
         - "benevol.app"
+        - "www.benevol.app"
       secretName: benevol-app-wildcard-tls
   rules:
     # Wildcard: org subdomains (lausanne-rocks.benevol.app, etc.)

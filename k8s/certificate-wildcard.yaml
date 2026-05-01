@@ -11,3 +11,4 @@ spec:
   dnsNames:
     - "*.benevol.app"
     - "benevol.app"
+    - "www.benevol.app"
