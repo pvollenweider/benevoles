@@ -1,3 +1,6 @@
+-- CreateSchema
+CREATE SCHEMA IF NOT EXISTS "public";
+
 -- CreateTable
 CREATE TABLE "Organization" (
     "id" TEXT NOT NULL,
@@ -8,6 +11,16 @@ CREATE TABLE "Organization" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Organization_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "OrgSlugHistory" (
+    "id" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "organizationId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "OrgSlugHistory_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -126,6 +139,8 @@ CREATE TABLE "AdminUser" (
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "setupToken" TEXT,
     "setupTokenExpiresAt" TIMESTAMP(3),
+    "passwordResetToken" TEXT,
+    "passwordResetExpiresAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -134,6 +149,9 @@ CREATE TABLE "AdminUser" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Organization_slug_key" ON "Organization"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "OrgSlugHistory_slug_key" ON "OrgSlugHistory"("slug");
 
 -- CreateIndex
 CREATE INDEX "Event_organizationId_idx" ON "Event"("organizationId");
@@ -178,10 +196,16 @@ CREATE UNIQUE INDEX "AdminUser_email_key" ON "AdminUser"("email");
 CREATE UNIQUE INDEX "AdminUser_setupToken_key" ON "AdminUser"("setupToken");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "AdminUser_passwordResetToken_key" ON "AdminUser"("passwordResetToken");
+
+-- CreateIndex
 CREATE INDEX "AdminUser_organizationId_idx" ON "AdminUser"("organizationId");
 
 -- CreateIndex
 CREATE INDEX "AdminUser_setupToken_idx" ON "AdminUser"("setupToken");
+
+-- AddForeignKey
+ALTER TABLE "OrgSlugHistory" ADD CONSTRAINT "OrgSlugHistory_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Event" ADD CONSTRAINT "Event_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
