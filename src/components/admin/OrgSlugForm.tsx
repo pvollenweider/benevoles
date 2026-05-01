@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { orgBaseUrl } from "@/lib/urls"
 
 type HistoryEntry = { slug: string; createdAt: string }
 
@@ -76,7 +75,9 @@ export default function OrgSlugForm({
     setHistory((h) => h.filter((e) => e.slug !== oldSlug))
   }
 
-  const baseDomain = orgBaseUrl("").replace(/https?:\/\//, "").replace(/\/$/, "") || "benevol.app"
+  const host = typeof window !== "undefined" ? window.location.host : "benevol.app"
+  const hostParts = host.split(".")
+  const baseDomain = hostParts.length >= 3 ? hostParts.slice(1).join(".") : host
 
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
