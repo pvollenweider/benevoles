@@ -28,10 +28,10 @@ function eventDates(start: string, end: string): string[] {
   return dates
 }
 
-function addHour(time: string): string {
+function addMinutes(time: string, minutes: number): string {
   const [h, m] = time.split(":").map(Number)
-  const newH = (h + 1) % 24
-  return `${String(newH).padStart(2, "0")}:${String(m || 0).padStart(2, "0")}`
+  const total = h * 60 + m + minutes
+  return `${String(Math.floor(total / 60) % 24).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`
 }
 
 function normalizeTime(val: string): string {
@@ -353,7 +353,7 @@ export default function ShiftsManager({
                   setForm(f => ({
                     ...f,
                     startTime: start,
-                    endTime: (!f.endTime || f.endTime <= start) && start ? addHour(start) : f.endTime,
+                    endTime: (!f.endTime || f.endTime <= start) && start ? addMinutes(start, 90) : f.endTime,
                   }))
                 }}
                 onBlur={e => setField("startTime", normalizeTime(e.target.value))}
