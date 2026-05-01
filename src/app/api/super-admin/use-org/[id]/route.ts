@@ -14,5 +14,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const cookieStore = await cookies()
   cookieStore.set("sa-org-id", id, { path: "/", httpOnly: true, sameSite: "lax" })
 
-  return NextResponse.redirect(new URL("/admin/events", req.url))
+  const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host") ?? "localhost:3000"
+  const proto = req.headers.get("x-forwarded-proto") ?? "http"
+  return NextResponse.redirect(`${proto}://${host}/admin/events`)
 }
