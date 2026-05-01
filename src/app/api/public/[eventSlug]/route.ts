@@ -7,7 +7,9 @@ export async function GET(
   { params }: { params: Promise<{ eventSlug: string }> }
 ) {
   const { eventSlug } = await params
-  const orgSlug = (await headers()).get("x-org-slug")
+  const orgSlug =
+    (await headers()).get("x-org-slug") ??
+    new URL(_req.url).searchParams.get("org")
 
   if (!orgSlug) return NextResponse.json({ error: "Organisation introuvable" }, { status: 404 })
 

@@ -63,14 +63,15 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
   const myShiftIds = new Set(myRegistrations.map((r) => r.shiftId))
 
   useEffect(() => {
-    fetch(`/api/public/${eventSlug}`)
+    const url = `/api/public/${eventSlug}?org=${encodeURIComponent(orgSlug)}`
+    fetch(url)
       .then((r) => r.json())
       .then((data) => {
         if (data.error) { setLoading(false); return }
         setEvent(data)
         setLoading(false)
       })
-  }, [eventSlug])
+  }, [eventSlug, orgSlug])
 
   useEffect(() => {
     if (!inviteToken) return
