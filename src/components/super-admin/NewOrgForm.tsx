@@ -10,7 +10,8 @@ export default function NewOrgForm() {
   const [adminName, setAdminName] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [result, setResult] = useState<{ orgName: string; inviteUrl: string } | null>(null)
+  const [result, setResult] = useState<{ orgId: string; orgName: string; inviteUrl: string } | null>(null)
+  const [inviteSent, setInviteSent] = useState<"idle" | "sending" | "sent" | "error">("idle")
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -36,7 +37,7 @@ export default function NewOrgForm() {
     }
 
     const data = await res.json()
-    setResult({ orgName: data.org.name, inviteUrl: data.inviteUrl })
+    setResult({ orgId: data.org.id, orgName: data.org.name, inviteUrl: data.inviteUrl })
   }
 
   if (result) {
@@ -70,6 +71,26 @@ export default function NewOrgForm() {
             >
               Copier
             </button>
+          </div>
+          <div className="pt-1">
+            {inviteSent === "sent" ? (
+              <p className="text-sm text-green-700 font-medium">✓ Invitation envoyée par email.</p>
+            ) : inviteSent === "error" ? (
+              <p className="text-sm text-red-600">Échec de l'envoi. Copiez le lien manuellement.</p>
+            ) : (
+              <button
+                type="button"
+                disabled={inviteSent === "sending"}
+                onClick={async () => {
+                  setInviteSent("sending")
+                  const res = await fetch(`/api/super-admin/organizations/${result.orgId}/send-invite`, { method: "POST" })
+                  setInviteSent(res.ok ? "sent" : "error")
+                }}
+                className="text-sm text-blue-700 underline hover:text-blue-900 disabled:opacity-50"
+              >
+                {inviteSent === "sending" ? "Envoi en cours…" : "Envoyer l'invitation par email"}
+              </button>
+            )}
           </div>
         </div>
 

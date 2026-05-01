@@ -21,6 +21,7 @@ export type NotificationKind =
   | "registration_cancelled"
   | "admin_notification"
   | "admin_invite"
+  | "admin_welcome"
   | "password_reset"
 
 export type Recipient = {

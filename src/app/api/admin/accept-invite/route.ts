@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
+import { sendNotification } from "@/lib/notifications"
+import { orgBaseUrl } from "@/lib/urls"
 
 const schema = z.object({
   token: z.string().min(1),
@@ -19,7 +21,14 @@ export async function POST(req: Request) {
 
   const admin = await prisma.adminUser.findUnique({
     where: { setupToken: token },
-    select: { id: true, setupTokenExpiresAt: true, isActive: true },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      setupTokenExpiresAt: true,
+      isActive: true,
+      organization: { select: { name: true, slug: true } },
+    },
   })
 
   if (!admin) {
@@ -41,6 +50,19 @@ export async function POST(req: Request) {
       setupTokenExpiresAt: null,
     },
   })
+
+  if (admin.organization) {
+    const adminUrl = `${orgBaseUrl(admin.organization.slug)}/admin/events`
+    sendNotification({
+      kind: "admin_welcome",
+      recipient: { email: admin.email, name: admin.name },
+      data: {
+        adminName: admin.name,
+        organizationName: admin.organization.name,
+        adminUrl,
+      },
+    }).catch(() => {})
+  }
 
   return NextResponse.json({ ok: true })
 }

@@ -54,6 +54,8 @@ export function render(payload: NotificationPayload): RenderedEmail {
       return renderAdminNotification(payload)
     case "admin_invite":
       return renderAdminInvite(payload)
+    case "admin_welcome":
+      return renderAdminWelcome(payload)
     case "password_reset":
       return renderPasswordReset(payload)
   }
@@ -439,6 +441,38 @@ function renderPasswordReset(p: NotificationPayload): RenderedEmail {
     <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
     <p style="margin-top:1.5em">${btn(d.resetUrl, "Réinitialiser mon mot de passe")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Ce lien est valable 1 heure. Si vous n'avez pas fait cette demande, ignorez cet email.</p>
+  `)
+
+  return { subject, html, text }
+}
+
+// ── Bienvenue après activation du compte admin ───────────────────────────────
+
+function renderAdminWelcome(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    adminName: string
+    organizationName: string
+    adminUrl: string
+  }
+  const subject = `Bienvenue sur Bénévoles — ${d.organizationName}`
+
+  const text = [
+    `Bonjour ${d.adminName},`,
+    ``,
+    `Votre compte administrateur pour ${d.organizationName} est maintenant actif.`,
+    ``,
+    `Gérez vos événements et bénévoles ici :`,
+    d.adminUrl,
+    ``,
+    `Bonne organisation !`,
+    `L'équipe Bénévoles`,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.5em">Bienvenue, ${escapeHtml(d.adminName)} !</h2>
+    <p>Votre compte administrateur pour <strong>${escapeHtml(d.organizationName)}</strong> est maintenant actif.</p>
+    <p style="margin-top:1.5em">${btn(d.adminUrl, "Accéder à mon espace admin")}</p>
+    <p style="color:#888;font-size:0.85em;margin-top:2em">Vous pouvez utiliser ce lien à tout moment pour gérer vos événements et vos bénévoles.</p>
   `)
 
   return { subject, html, text }
