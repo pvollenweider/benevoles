@@ -40,7 +40,8 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - Champs : prénom, nom, email, téléphone (optionnel), commentaire (optionnel)
 - Pré-remplissage automatique si une session ou un token membre est reconnu
-- Case de consentement obligatoire
+- **Charte du bénévole** : lien « Lire la charte » ouvre un modal avec le texte complet ; case à cocher obligatoire avant soumission
+- Case de consentement RGPD obligatoire
 - Validation côté client et côté serveur (Zod)
 
 ### Confirmation et gestion (`/my/[token]`)
@@ -49,6 +50,8 @@ Liste exhaustive des fonctionnalités de l'application.
 - Envoi automatique d'un email de confirmation avec récapitulatif des créneaux inscrits
 - Page de gestion : liste de toutes les inscriptions actives du bénévole pour l'événement
 - Annulation individuelle d'un créneau depuis la page de gestion
+- Arrivée depuis un lien email : le token est stocké en `localStorage` — le bénévole est automatiquement reconnu s'il navigue vers la page de l'événement
+- Lien « Retour à l'accueil » pointe directement sur la page de l'événement
 
 ---
 
@@ -166,6 +169,7 @@ Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscr
 
 - **Slug de l'organisation** : modification avec validation (`[a-z0-9-]`), avertissement si des événements publiés existent (liens potentiellement cassés), redirection automatique vers le nouveau sous-domaine après changement
 - **Historique des slugs** : les anciens slugs sont archivés et redirigent vers le slug courant ; suppression individuelle possible
+- **Charte du bénévole** : texte par défaut éditable en texte libre ; bouton « Réinitialiser le texte par défaut » ; affiché aux bénévoles lors de l'inscription
 - **Équipe admin** : liste des administrateurs avec statut (actif / en attente)
 - **Invitation** : saisir nom + email → lien d'activation envoyé par email (token 7 jours)
 - **Retrait** d'un admin (sauf soi-même et dernier admin actif)
@@ -206,6 +210,10 @@ Toutes les notifications passent par `sendNotification()` — aucun appel direct
 | `registration_cancelled` | Annulation d'une inscription publique |
 | `admin_notification` | Alerte admin à chaque nouvelle inscription (optionnel) |
 | `admin_invite` | Invitation d'un nouvel admin à l'équipe |
+| `admin_welcome` | Bienvenue après activation du compte admin |
+| `password_reset` | Réinitialisation du mot de passe admin |
+
+Tous les templates bénévoles utilisent un ton chaleureux et personnel (tutoiement, `Hello [Prénom] !`, signature chaleureuse).
 
 Fallback console si SMTP non configuré (développement).
 

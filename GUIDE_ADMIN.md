@@ -184,7 +184,20 @@ Depuis la page de l'événement → **QR code**, télécharger le QR code de la 
 
 - **Liste** des administrateurs de votre organisation (actifs et invitations en attente)
 - **Inviter** un nouvel admin : saisir son nom et email → un email d'invitation avec lien d'activation est envoyé (lien valable 7 jours)
-- **Retirer** un admin (impossible de se retirer soi-même ou de retirer le dernier admin actif)
+- **Retrait** d'un admin (impossible de se retirer soi-même ou de retirer le dernier admin actif)
+
+---
+
+## Charte du bénévole
+
+**`/admin/settings/admins`** → section **Charte du bénévole**
+
+La charte est le texte que les bénévoles doivent lire et accepter avant de finaliser leur inscription. Un texte par défaut est fourni ; vous pouvez le personnaliser librement ou le réinitialiser.
+
+- Modifier le texte dans la textarea et cliquer sur **Enregistrer**
+- Cliquer sur **Réinitialiser le texte par défaut** pour revenir au texte standard
+
+Les bénévoles voient la charte sous forme de lien « Lire la charte » dans le formulaire d'inscription. Cliquer dessus ouvre un modal avec le texte complet et un bouton « J'ai lu et j'accepte ».
 
 ---
 

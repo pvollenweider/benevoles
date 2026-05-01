@@ -51,6 +51,7 @@ Renseignez :
 - **Email** (obligatoire — vous recevrez la confirmation ici)
 - **Téléphone** (facultatif)
 - **Commentaire** (facultatif — informations utiles pour l'organisateur)
+- **Charte du bénévole** — cliquez sur « charte du bénévole » pour lire le texte complet dans un modal, puis cochez la case ou cliquez sur « J'ai lu et j'accepte »
 - **Consentement** — cochez la case pour accepter l'utilisation de vos données
 
 Cliquez sur **Confirmer mon inscription**.
@@ -76,6 +77,8 @@ https://[site]/my/[token]
 Vous pouvez :
 - Voir tous vos créneaux inscrits pour cet événement
 - **Annuler** un créneau individuellement — la place est immédiatement libérée
+
+Le lien « Retour à l'accueil » vous ramène directement sur la page de l'événement — vous y êtes automatiquement reconnu(e).
 
 Pour vous inscrire à de nouveaux créneaux, retournez sur la page de l'événement. Si vous utilisez le même navigateur, vos inscriptions existantes sont automatiquement reconnues et affichées en vert.
 
