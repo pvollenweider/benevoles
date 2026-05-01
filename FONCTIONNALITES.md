@@ -85,8 +85,8 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - Ajout de créneaux : rôle, libellé, date, horaires, capacité, statut, ordre d'affichage
   - Saisie des horaires tolérante : `9` → `09:00`, `14:3` → `14:30`
-  - Fin automatiquement fixée à start + 1 h si non renseignée
-- Icônes colorées par rôle (palette prédéfinie avec correspondance automatique)
+  - Fin automatiquement fixée à start + 90 min si non renseignée
+- Icônes colorées par rôle (palette prédéfinie + couleur déterministe par hash du nom pour les rôles personnalisés — 8 teintes)
 - Autocomplétion des rôles existants
 - Modification, suppression et changement de statut : ouvert → fermé → complet → annulé
 - **Réordonnancement des postes** : panneau glisser-déposer pour changer l'ordre des lignes dans toutes les timelines, persisté via `displayOrder`
@@ -162,9 +162,11 @@ Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscr
 - Tableau complet des inscriptions
 - Bouton « Imprimer / Enregistrer en PDF »
 
-### Gestion de l'équipe admin (`/admin/settings/admins`)
+### Paramètres de l'organisation (`/admin/settings/admins`)
 
-- Liste des administrateurs de l'organisation avec statut (actif / en attente)
+- **Slug de l'organisation** : modification avec validation (`[a-z0-9-]`), avertissement si des événements publiés existent (liens potentiellement cassés), redirection automatique vers le nouveau sous-domaine après changement
+- **Historique des slugs** : les anciens slugs sont archivés et redirigent vers le slug courant ; suppression individuelle possible
+- **Équipe admin** : liste des administrateurs avec statut (actif / en attente)
 - **Invitation** : saisir nom + email → lien d'activation envoyé par email (token 7 jours)
 - **Retrait** d'un admin (sauf soi-même et dernier admin actif)
 
@@ -181,6 +183,9 @@ Accessible uniquement aux comptes avec rôle `super_admin` (protégé au niveau 
   - Génère un **lien d'invitation** à durée limitée (7 jours) pour le premier admin
   - Aucun mot de passe temporaire — le compte est activé lors de la première connexion
 - Activation / désactivation d'une organisation
+- **Édition inline** : nom et slug modifiables directement depuis la fiche organisation
+- **URLs par slug** : `/super-admin/organizations/<slug>` au lieu de l'identifiant interne
+- **Basculement d'organisation** : bouton « Gérer → » bascule le contexte admin vers l'organisation choisie (cookie `sa-org-id`) sans déconnexion
 
 ---
 
@@ -212,6 +217,7 @@ Fallback console si SMTP non configuré (développement).
 - API REST séparée public / admin / super-admin / cron
 - PostgreSQL 16 + Prisma 7 ORM (driver natif pg, migration unique squashée)
 - Architecture multi-tenant : isolation par `organizationId` avec client Prisma étendu
+- **Routage par sous-domaine** : `[orgSlug].benevol.app` → le middleware injecte `x-org-slug` ; fallback `?org=<slug>` pour le développement localhost
 - 20 tests d'isolation cross-tenant (Vitest) — 113 tests au total
 - Déploiement Docker Compose ou image standalone
 - Déploiement Kubernetes avec init container pour migrations automatiques
