@@ -31,7 +31,7 @@ export default function AdminNav({ userName, role }: { userName: string; role?: 
             href="/admin/settings/admins"
             className={`text-sm ${pathname.startsWith("/admin/settings") ? "text-blue-600 font-medium" : "text-gray-500 hover:text-gray-800"}`}
           >
-            Équipe
+            Paramètres
           </Link>
           {isSuperAdmin && (
             <>
