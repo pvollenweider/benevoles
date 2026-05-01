@@ -129,15 +129,23 @@ export default function OrgDetail({ org }: { org: Org }) {
           <p className="text-xs text-gray-400 mt-1">Créée le {createdAt}</p>
         </div>
 
-        <button
-          onClick={toggleActive}
-          disabled={toggling}
-          className={`text-sm px-4 py-2 rounded-xl font-medium disabled:opacity-50 ${
-            org.active ? "bg-red-600 text-white hover:bg-red-700" : "bg-green-600 text-white hover:bg-green-700"
-          }`}
-        >
-          {toggling ? "…" : org.active ? "Désactiver" : "Réactiver"}
-        </button>
+        <div className="flex items-center gap-2">
+          <a
+            href={`/api/super-admin/use-org/${org.id}`}
+            className="text-sm bg-blue-600 text-white px-4 py-2 rounded-xl font-medium hover:bg-blue-700"
+          >
+            Gérer →
+          </a>
+          <button
+            onClick={toggleActive}
+            disabled={toggling}
+            className={`text-sm px-4 py-2 rounded-xl font-medium disabled:opacity-50 ${
+              org.active ? "bg-red-600 text-white hover:bg-red-700" : "bg-green-600 text-white hover:bg-green-700"
+            }`}
+          >
+            {toggling ? "…" : org.active ? "Désactiver" : "Réactiver"}
+          </button>
+        </div>
       </div>
 
       {/* Stats */}
