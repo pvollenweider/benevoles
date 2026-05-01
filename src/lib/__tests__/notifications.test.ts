@@ -141,7 +141,7 @@ describe("notification templates — render()", () => {
     expect(out.html).toContain("samedi 14")
     expect(out.html).toContain("dimanche 15")
     expect(out.html).toContain("15:00")
-    expect(out.subject).toContain("Changement")
+    expect(out.subject).toContain("changement")
   })
 
   it("renders shift cancelled with link back to event", () => {
