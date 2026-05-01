@@ -18,12 +18,14 @@ export default async function EventQrPage({
 
   const event = await db.event.findFirst({
     where: { id },
-    select: { id: true, slug: true, title: true, location: true, startDate: true, endDate: true },
+    select: { id: true, slug: true, title: true, location: true, startDate: true, endDate: true, organization: { select: { slug: true } } },
   })
   if (!event) notFound()
 
   const baseUrl = (env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/$/, "") || ""
-  const publicUrl = baseUrl ? `${baseUrl}/events/${event.slug}` : `/events/${event.slug}`
+  const publicUrl = baseUrl
+    ? `${baseUrl}/${event.organization.slug}/${event.slug}`
+    : `/${event.organization.slug}/${event.slug}`
 
   return (
     <QrPrintView

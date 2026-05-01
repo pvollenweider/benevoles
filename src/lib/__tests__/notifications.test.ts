@@ -44,6 +44,7 @@ describe("notification templates — render()", () => {
         eventTitle: "Spectacle",
         eventDate: "14 juin",
         eventLocation: "Salle A",
+        orgSlug: "ecole",
         eventSlug: "spectacle",
         message: '<img src=x onerror="alert(1)">',
         token: "t1",
@@ -150,12 +151,13 @@ describe("notification templates — render()", () => {
       data: {
         volunteerName: "Bob",
         eventTitle: "Concert",
+        orgSlug: "asso",
         eventSlug: "concert-2026",
         shiftLabel: "Bar",
         shiftDate: "samedi 14",
       },
     })
-    expect(out.html).toContain("/events/concert-2026")
+    expect(out.html).toContain("/asso/concert-2026")
     expect(out.subject).toContain("annulé")
   })
 })

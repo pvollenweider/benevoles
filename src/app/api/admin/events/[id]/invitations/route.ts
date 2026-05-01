@@ -95,7 +95,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const event = await db.event.findFirst({
     where: { id: eventId },
-    include: { organization: { select: { name: true } } },
+    include: { organization: { select: { name: true, slug: true } } },
   })
   if (!event) return NextResponse.json({ error: "Événement non trouvé" }, { status: 404 })
 
@@ -141,6 +141,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           eventTitle: event.title,
           eventDate: event.startDate.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
           eventLocation: event.location,
+          orgSlug: event.organization.slug,
           eventSlug: event.slug,
           message: parsed.data.message ?? null,
           token: invite.token,

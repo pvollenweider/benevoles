@@ -11,6 +11,7 @@ model Organization {
   id        String   @id @default(cuid())
   name      String
   slug      String   @unique
+  active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -142,17 +143,20 @@ model MemberInvite {
 }
 
 model AdminUser {
-  id             String   @id @default(cuid())
-  organizationId String?
-  email          String   @unique
-  name           String
-  passwordHash   String
-  role           String   @default("admin")
-  isActive       Boolean  @default(true)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id                  String    @id @default(cuid())
+  organizationId      String?
+  email               String    @unique
+  name                String
+  passwordHash        String
+  role                String    @default("admin")
+  isActive            Boolean   @default(true)
+  setupToken          String?   @unique
+  setupTokenExpiresAt DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
   organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
 
   @@index([organizationId])
+  @@index([setupToken])
 }

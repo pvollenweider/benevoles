@@ -9,7 +9,7 @@ Ce guide explique comment s'inscrire à un créneau de bénévolat, recevoir sa 
 L'organisateur vous communique un lien du type :
 
 ```
-https://[site]/events/[nom-de-levenement]
+https://[site]/[organisation]/[nom-de-levenement]
 ```
 
 Ouvrez ce lien depuis n'importe quel navigateur, sur téléphone ou ordinateur.

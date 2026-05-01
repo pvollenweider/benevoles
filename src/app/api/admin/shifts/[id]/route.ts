@@ -94,7 +94,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const shift = await db.shift.findFirst({
     where: { id },
     include: {
-      event: { select: { title: true, slug: true } },
+      event: { select: { title: true, slug: true, organization: { select: { slug: true } } } },
       registrations: { where: { status: "active" }, include: { volunteer: true } },
     },
   })
@@ -115,6 +115,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
       data: {
         volunteerName: reg.volunteer.firstName,
         eventTitle: shift.event.title,
+        orgSlug: shift.event.organization.slug,
         eventSlug: shift.event.slug,
         shiftLabel: shift.label,
         shiftDate: fmtDate(shift.date),

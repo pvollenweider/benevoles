@@ -34,6 +34,7 @@ type MemberInviteEmailData = {
   eventTitle: string
   eventDate: string
   eventLocation: string | null
+  orgSlug: string
   eventSlug: string
   message: string | null
   token: string
@@ -49,6 +50,7 @@ export async function sendMemberInvite(data: MemberInviteEmailData) {
       eventTitle: data.eventTitle,
       eventDate: data.eventDate,
       eventLocation: data.eventLocation,
+      orgSlug: data.orgSlug,
       eventSlug: data.eventSlug,
       message: data.message,
       token: data.token,
