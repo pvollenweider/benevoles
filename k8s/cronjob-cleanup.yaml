@@ -1,0 +1,45 @@
+# Appelle POST /api/cron/cleanup chaque nuit à 02h00 UTC.
+# Supprime les organisations/admins inactifs depuis > 30 jours,
+# les bénévoles orphelins, et les tokens expirés.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: app-cleanup
+  namespace: benevoles
+spec:
+  schedule: "0 2 * * *"   # 02:00 UTC chaque nuit
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: cleanup
+              image: curlimages/curl:8.7.1
+              command:
+                - sh
+                - -c
+                - |
+                  set -e
+                  STATUS=$(curl -s -o /tmp/body -w "%{http_code}" \
+                    -X POST \
+                    -H "Authorization: Bearer ${CRON_SECRET}" \
+                    -H "Content-Type: application/json" \
+                    "${APP_URL}/api/cron/cleanup")
+                  echo "HTTP ${STATUS}: $(cat /tmp/body)"
+                  [ "${STATUS}" = "200" ] || exit 1
+              env:
+                - name: APP_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: benevoles-secret
+                      key: NEXT_PUBLIC_APP_URL
+                - name: CRON_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: benevoles-secret
+                      key: CRON_SECRET

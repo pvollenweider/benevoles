@@ -1,0 +1,90 @@
+# pg_dump chiffré (AES-256) vers un PVC, rétention 30 jours.
+# Exécuté chaque nuit à 01h00 UTC (avant le cleanup à 02h00).
+#
+# Format du fichier : /backups/benevoles_YYYY-MM-DD_HH-MM.sql.gz.enc
+# Déchiffrement : openssl enc -d -aes-256-cbc -pbkdf2 -pass pass:<PASSPHRASE> \
+#                   -in benevoles_<date>.sql.gz.enc | gunzip > dump.sql
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backup-pvc
+  namespace: benevoles
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup
+  namespace: benevoles
+spec:
+  schedule: "0 1 * * *"   # 01:00 UTC chaque nuit
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: OnFailure
+          volumes:
+            - name: backup-storage
+              persistentVolumeClaim:
+                claimName: backup-pvc
+          containers:
+            - name: backup
+              image: postgres:16-alpine
+              volumeMounts:
+                - name: backup-storage
+                  mountPath: /backups
+              env:
+                - name: PGHOST
+                  value: postgres
+                - name: PGPORT
+                  value: "5432"
+                - name: PGDATABASE
+                  value: benevoles
+                - name: PGUSER
+                  valueFrom:
+                    secretKeyRef:
+                      name: benevoles-secret
+                      key: POSTGRES_USER
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: benevoles-secret
+                      key: POSTGRES_PASSWORD
+                - name: BACKUP_PASSPHRASE
+                  valueFrom:
+                    secretKeyRef:
+                      name: benevoles-secret
+                      key: BACKUP_PASSPHRASE
+              command:
+                - sh
+                - -c
+                - |
+                  set -e
+                  FILENAME="benevoles_$(date -u +%Y-%m-%d_%H-%M).sql.gz.enc"
+                  echo "==> Dump : ${FILENAME}"
+
+                  pg_dump --no-password \
+                    | gzip \
+                    | openssl enc -aes-256-cbc -pbkdf2 -iter 100000 \
+                        -pass "pass:${BACKUP_PASSPHRASE}" \
+                    > "/backups/${FILENAME}"
+
+                  echo "==> Taille : $(du -sh /backups/${FILENAME} | cut -f1)"
+
+                  # Rotation : supprime les backups de plus de 30 jours
+                  DELETED=$(find /backups -name "benevoles_*.sql.gz.enc" \
+                    -mtime +30 -print -delete | wc -l)
+                  echo "==> ${DELETED} ancien(s) backup(s) supprimé(s)"
+
+                  # Inventaire final
+                  echo "==> Backups conservés :"
+                  ls -lh /backups/benevoles_*.sql.gz.enc 2>/dev/null || echo "(aucun)"
