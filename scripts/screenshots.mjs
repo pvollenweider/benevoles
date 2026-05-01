@@ -79,7 +79,8 @@ async function run() {
   await shot(adm, "06-admin-events", { wait: 1000 })
 
   // Click "Gérer" on the published event (look for badge "Publié" in the same card)
-  const publishedGerer = adm.locator("div", { hasText: /Publié/ }).locator("..").locator("a", { hasText: /Gérer/i })
+  // locator kept for reference but unused — navigate via gererLinks instead
+  // adm.locator("div", { hasText: /Publié/ }).locator("..").locator("a", { hasText: /Gérer/i })
   const gererLinks = adm.locator("a", { hasText: /Gérer/i })
   const count = await gererLinks.count()
   // Click the last "Gérer" (HORIZON is last in the list)
