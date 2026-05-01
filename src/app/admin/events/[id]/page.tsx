@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import { formatShortDate } from "@/lib/utils"
+import { eventPublicUrl } from "@/lib/urls"
 import StatusBadge from "@/components/admin/StatusBadge"
 import PublishToggle from "@/components/admin/PublishToggle"
 import SendReminderButton from "@/components/admin/SendReminderButton"
@@ -59,7 +60,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
           </Link>
           {event.publicStatus === "published" && (
             <Link
-              href={`/${event.organization.slug}/${event.slug}`}
+              href={eventPublicUrl(event.organization.slug, event.slug)}
               target="_blank"
               className="text-sm text-blue-600 border border-blue-200 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors"
             >

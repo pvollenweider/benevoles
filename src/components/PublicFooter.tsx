@@ -5,12 +5,12 @@ export default function PublicFooter() {
   return (
     <footer className="mt-12 pb-6 flex flex-wrap justify-center gap-x-5 gap-y-1 text-xs text-gray-400">
       <a
-        href="https://github.com/pvollenweider"
+        href="https://github.com/pvollenweider/benevoles"
         target="_blank"
         rel="noopener noreferrer"
         className="hover:text-gray-600 transition-colors"
       >
-        Philippe Vollenweider
+        benevol.app
       </a>
       <span className="select-none">·</span>
       <span>v{pkg.version}</span>

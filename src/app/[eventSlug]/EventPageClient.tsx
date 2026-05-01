@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useParams, useRouter, useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { formatDate, shiftsOverlap } from "@/lib/utils"
 import DayTimeline, { fmt } from "@/components/DayTimeline"
@@ -29,6 +29,7 @@ type EventData = {
   id: string
   slug: string
   title: string
+  organizationName: string
   description: string | null
   location: string | null
   startDate: string
@@ -39,12 +40,9 @@ type EventData = {
   shifts: Shift[]
 }
 
-export default function EventPage() {
-  const params = useParams()
+export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: string; eventSlug: string }) {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const orgSlug = params.orgSlug as string
-  const eventSlug = params.eventSlug as string
   const inviteToken = searchParams.get("token")
 
   type MyReg = { shiftId: string; token: string; label: string; roleName: string; startTime: string; endTime: string }
@@ -61,18 +59,18 @@ export default function EventPage() {
     firstName: "", lastName: "", email: "", phone: "", comment: "", consent: false,
   })
 
-  const storageKey = `benevoles_token_${orgSlug}_${eventSlug}`
+  const storageKey = `benevoles_token_${eventSlug}`
   const myShiftIds = new Set(myRegistrations.map((r) => r.shiftId))
 
   useEffect(() => {
-    fetch(`/api/public/${orgSlug}/${eventSlug}`)
+    fetch(`/api/public/${eventSlug}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.error) { setLoading(false); return }
         setEvent(data)
         setLoading(false)
       })
-  }, [orgSlug, eventSlug])
+  }, [eventSlug])
 
   useEffect(() => {
     if (!inviteToken) return
@@ -120,7 +118,7 @@ export default function EventPage() {
         }
         setSelectedShifts((prev) => {
           const next = new Set(prev)
-          regs.forEach((r) => next.add(r.shiftId))
+          regs.forEach((r: MyReg) => next.add(r.shiftId))
           return next
         })
       })
@@ -226,7 +224,7 @@ export default function EventPage() {
     }
 
     localStorage.setItem(storageKey, data.editToken)
-    router.push(`/${orgSlug}/${eventSlug}/success?token=${data.editToken}`)
+    router.push(`/${eventSlug}/success?token=${data.editToken}`)
   }
 
   const conflictingShiftIds = new Set(
@@ -246,6 +244,9 @@ export default function EventPage() {
     setSelectedShifts(new Set())
     setForm({ firstName: "", lastName: "", email: "", phone: "", comment: "", consent: false })
   }
+
+  // orgSlug is received as prop but only used in the storageKey (already included via eventSlug)
+  void orgSlug
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -267,7 +268,8 @@ export default function EventPage() {
               </div>
             )}
           </div>
-          <h1 className="text-xl font-bold text-gray-900 mt-2">{event.title}</h1>
+          <p className="text-xs text-gray-400 font-medium uppercase tracking-wide mt-2">{event.organizationName}</p>
+          <h1 className="text-xl font-bold text-gray-900">{event.title}</h1>
           {event.location && <p className="text-sm text-gray-400">📍 {event.location}</p>}
         </div>
       </header>
@@ -448,7 +450,7 @@ export default function EventPage() {
                   className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
                 />
                 <span className="text-sm text-gray-600">
-                  J'accepte que mes données soient utilisées pour la gestion des bénévoles de cet événement.
+                  J&apos;accepte que mes données soient utilisées pour la gestion des bénévoles de cet événement.
                 </span>
               </label>
 
@@ -498,6 +500,7 @@ export default function EventPage() {
           </div>
         </div>
       )}
+
       <PublicFooter />
     </main>
   )

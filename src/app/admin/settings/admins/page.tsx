@@ -2,6 +2,7 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import AdminsManager from "@/components/admin/AdminsManager"
+import OrgNameForm from "@/components/admin/OrgNameForm"
 
 export const dynamic = "force-dynamic"
 

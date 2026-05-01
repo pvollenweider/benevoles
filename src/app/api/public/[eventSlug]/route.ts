@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server"
+import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
 
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<{ orgSlug: string; eventSlug: string }> }
+  { params }: { params: Promise<{ eventSlug: string }> }
 ) {
-  const { orgSlug, eventSlug } = await params
+  const { eventSlug } = await params
+  const orgSlug = (await headers()).get("x-org-slug")
+
+  if (!orgSlug) return NextResponse.json({ error: "Organisation introuvable" }, { status: 404 })
 
   const event = await prisma.event.findFirst({
     where: {
@@ -14,6 +18,7 @@ export async function GET(
       organization: { slug: orgSlug },
     },
     include: {
+      organization: { select: { name: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
         include: { registrations: { where: { status: "active" } } },
@@ -44,6 +49,7 @@ export async function GET(
     id: event.id,
     slug: event.slug,
     title: event.title,
+    organizationName: event.organization.name,
     description: event.description,
     location: event.location,
     startDate: event.startDate,

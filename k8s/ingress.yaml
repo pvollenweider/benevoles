@@ -12,9 +12,32 @@ spec:
   ingressClassName: traefik
   tls:
     - hosts:
-        - www.benevol.app
-      secretName: benevol-app-tls
+        - "*.benevol.app"
+        - "benevol.app"
+      secretName: benevol-app-wildcard-tls
   rules:
+    # Wildcard: org subdomains (lausanne-rocks.benevol.app, etc.)
+    - host: "*.benevol.app"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: benevoles-app
+                port:
+                  number: 80
+    # Apex + www: marketing page or super-admin
+    - host: benevol.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: benevoles-app
+                port:
+                  number: 80
     - host: www.benevol.app
       http:
         paths:

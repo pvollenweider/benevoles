@@ -4,8 +4,9 @@
  */
 
 import type { NotificationPayload } from "./types"
+import { eventPublicUrl } from "@/lib/urls"
 
-const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
+const BASE_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
 
 function escapeHtml(s: string): string {
   return s
@@ -67,7 +68,7 @@ function renderConfirmation(p: NotificationPayload): RenderedEmail {
     shifts: { label: string; date: string; startTime: string; endTime: string }[]
     editToken: string
   }
-  const editUrl = `${APP_URL}/my/${editToken}`
+  const editUrl = `${BASE_URL}/my/${editToken}`
   const subject = `Confirmation d'inscription — ${eventTitle}`
 
   const text = [
@@ -115,7 +116,7 @@ function renderMemberInvite(p: NotificationPayload): RenderedEmail {
     message: string | null
     token: string
   }
-  const inviteUrl = `${APP_URL}/${orgSlug}/${eventSlug}?token=${token}`
+  const inviteUrl = `${eventPublicUrl(orgSlug, eventSlug)}?token=${token}`
   const subject = `[${organizationName}] On a besoin de toi pour ${eventTitle}`
 
   const text = [
@@ -159,7 +160,7 @@ type ReminderData = {
 
 function renderReminderJ2(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
-  const editUrl = `${APP_URL}/my/${d.editToken}`
+  const editUrl = `${BASE_URL}/my/${d.editToken}`
   const subject = `J-2 — ${d.eventTitle}`
 
   const text = [
@@ -192,7 +193,7 @@ function renderReminderJ2(p: NotificationPayload): RenderedEmail {
 
 function renderReminderJ1(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
-  const editUrl = `${APP_URL}/my/${d.editToken}`
+  const editUrl = `${BASE_URL}/my/${d.editToken}`
   const subject = `Demain — ${d.eventTitle}`
 
   const text = `Plus que 24h ! ${d.eventTitle} demain à ${d.shiftStart}${d.shiftLocation ? `, à ${d.shiftLocation}` : ""}.\nTu fais : ${d.shiftRoleName}\n\n${editUrl}`
@@ -209,7 +210,7 @@ function renderReminderJ1(p: NotificationPayload): RenderedEmail {
 
 function renderReminderDd(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
-  const editUrl = `${APP_URL}/my/${d.editToken}`
+  const editUrl = `${BASE_URL}/my/${d.editToken}`
   const subject = `C'est aujourd'hui — ${d.eventTitle}`
   const hoursLabel = d.hoursUntil && d.hoursUntil > 0 ? `dans ${d.hoursUntil}h` : "très bientôt"
 
@@ -237,7 +238,7 @@ function renderManualReminder(p: NotificationPayload): RenderedEmail {
     shifts: { label: string; date: string; startTime: string; endTime: string; roleName: string }[]
     editToken: string
   }
-  const editUrl = `${APP_URL}/my/${d.editToken}`
+  const editUrl = `${BASE_URL}/my/${d.editToken}`
   const subject = `Rappel — ${d.eventTitle}`
 
   const text = [
@@ -280,7 +281,7 @@ function renderShiftModified(p: NotificationPayload): RenderedEmail {
     newEnd: string
     editToken: string
   }
-  const editUrl = `${APP_URL}/my/${d.editToken}`
+  const editUrl = `${BASE_URL}/my/${d.editToken}`
   const subject = `Changement d'horaire — ${d.eventTitle}`
 
   const text = [
@@ -315,7 +316,7 @@ function renderShiftCancelled(p: NotificationPayload): RenderedEmail {
     shiftLabel: string
     shiftDate: string
   }
-  const eventUrl = `${APP_URL}/${d.orgSlug}/${d.eventSlug}`
+  const eventUrl = eventPublicUrl(d.orgSlug, d.eventSlug)
   const subject = `Créneau annulé — ${d.eventTitle}`
 
   const text = [
@@ -346,7 +347,7 @@ function renderRegistrationCancelled(p: NotificationPayload): RenderedEmail {
     eventSlug: string
     shiftLabel: string
   }
-  const eventUrl = `${APP_URL}/${d.orgSlug}/${d.eventSlug}`
+  const eventUrl = eventPublicUrl(d.orgSlug, d.eventSlug)
   const subject = `Désinscription — ${d.eventTitle}`
 
   const text = [

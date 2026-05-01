@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { env } from "@/lib/env"
+import { eventPublicUrl } from "@/lib/urls"
 import QRCode from "qrcode"
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -18,8 +18,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const baseUrl = env.NEXT_PUBLIC_APP_URL ?? new URL(req.url).origin
-  const target = `${baseUrl.replace(/\/$/, "")}/${event.organization.slug}/${event.slug}`
+  const target = eventPublicUrl(event.organization.slug, event.slug)
 
   if (format === "svg") {
     const svg = await QRCode.toString(target, { type: "svg", margin: 2, width: 600 })

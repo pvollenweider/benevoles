@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
-import { env } from "@/lib/env"
+import { eventPublicUrl } from "@/lib/urls"
 import QrPrintView from "@/components/admin/QrPrintView"
 
 export const dynamic = "force-dynamic"
@@ -22,10 +22,7 @@ export default async function EventQrPage({
   })
   if (!event) notFound()
 
-  const baseUrl = (env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/$/, "") || ""
-  const publicUrl = baseUrl
-    ? `${baseUrl}/${event.organization.slug}/${event.slug}`
-    : `/${event.organization.slug}/${event.slug}`
+  const publicUrl = eventPublicUrl(event.organization.slug, event.slug)
 
   return (
     <QrPrintView

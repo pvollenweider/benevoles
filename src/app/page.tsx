@@ -1,15 +1,22 @@
 import Link from "next/link"
+import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
 import { formatShortDate } from "@/lib/utils"
+import { eventPublicUrl } from "@/lib/urls"
 import PublicFooter from "@/components/PublicFooter"
 
 export const dynamic = "force-dynamic"
 
 export default async function HomePage() {
+  const orgSlug = (await headers()).get("x-org-slug")
+
   const events = await prisma.event.findMany({
-    where: { publicStatus: "published" },
+    where: {
+      publicStatus: "published",
+      ...(orgSlug ? { organization: { slug: orgSlug } } : {}),
+    },
     include: {
-      organization: { select: { slug: true } },
+      organization: { select: { slug: true, name: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
         include: { registrations: { where: { status: "active" } } },
@@ -23,6 +30,12 @@ export default async function HomePage() {
     const totalRegistered = event.shifts.reduce((s, sh) => s + sh.registrations.length, 0)
     return { ...event, totalCapacity, totalRegistered, spotsLeft: totalCapacity - totalRegistered }
   })
+
+  // On an org subdomain, links are relative (same host). On www, links are absolute.
+  function eventHref(orgSlug: string | null, eventOrgSlug: string, eventSlug: string) {
+    if (orgSlug) return `/${eventSlug}`
+    return eventPublicUrl(eventOrgSlug, eventSlug)
+  }
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -44,9 +57,12 @@ export default async function HomePage() {
             {enriched.map((event) => (
               <Link
                 key={event.id}
-                href={`/${event.organization.slug}/${event.slug}`}
+                href={eventHref(orgSlug, event.organization.slug, event.slug)}
                 className="block bg-white rounded-2xl border border-gray-200 p-5 hover:border-blue-300 hover:shadow-sm transition-all"
               >
+                {!orgSlug && (
+                  <p className="text-xs text-gray-400 font-medium uppercase tracking-wide mb-1">{event.organization.name}</p>
+                )}
                 <h2 className="text-lg font-semibold text-gray-900">{event.title}</h2>
                 <p className="text-sm text-gray-500 mt-1">
                   {formatShortDate(event.startDate)}
