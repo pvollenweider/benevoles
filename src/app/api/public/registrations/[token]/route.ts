@@ -29,9 +29,11 @@ export async function GET(_req: Request, { params }: { params: Promise<{ token: 
   })
 
   const orgSlug = registration.event.organization.slug
+  const baseUrl = orgBaseUrl(orgSlug)
   return NextResponse.json({
     event: registration.event,
-    orgHomeUrl: orgBaseUrl(orgSlug),
+    orgHomeUrl: baseUrl,
+    eventUrl: `${baseUrl}/${registration.event.slug}`,
     volunteer: {
       firstName: registration.volunteer.firstName,
       lastName: registration.volunteer.lastName,
