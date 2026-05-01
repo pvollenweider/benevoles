@@ -8,7 +8,7 @@ export default function PrivacyPage() {
 
       <p>
         La présente politique décrit comment <strong>benevol.app</strong>, éditée par{" "}
-        <strong>[À PRÉCISER — entité juridique]</strong> (« nous »), collecte, utilise et protège
+        <strong>Philippe Vollenweider</strong>, particulier (« nous »), collecte, utilise et protège
         les données personnelles dans le cadre de son Service de gestion de bénévoles.
       </p>
 
@@ -106,21 +106,16 @@ export default function PrivacyPage() {
       <h2>4. Transferts et sous-traitants</h2>
       <p>
         Les données sont hébergées sur des serveurs situés en{" "}
-        <strong>[À PRÉCISER — ex. Union européenne / Suisse]</strong>. Nous faisons appel aux
-        sous-traitants techniques suivants :
+        <strong>Union européenne (France)</strong>. Nous faisons appel aux sous-traitants techniques
+        suivants :
       </p>
       <ul>
         <li>
-          <strong>Hébergeur</strong> : [À PRÉCISER — ex. Vercel / Hetzner / OVH] — hébergement de
-          l&apos;application
+          <strong>Hébergeur &amp; base de données</strong> : Kimsufi / OVH (France) — hébergement
+          de l&apos;application et de la base de données PostgreSQL auto-hébergée
         </li>
         <li>
-          <strong>Base de données</strong> : [À PRÉCISER — ex. Supabase / Neon] — stockage des
-          données
-        </li>
-        <li>
-          <strong>Service e-mail transactionnel</strong> : [À PRÉCISER — ex. Resend / Sendgrid] —
-          envoi des notifications
+          <strong>Service e-mail transactionnel</strong> : Gandi (France) — envoi des notifications
         </li>
       </ul>
       <p>
@@ -145,14 +140,18 @@ export default function PrivacyPage() {
 
       <h2>6. Droits des personnes concernées</h2>
       <p>
-        Conformément au RGPD (ou à la loi fédérale suisse sur la protection des données, selon la
-        juridiction applicable), vous disposez des droits suivants :
+        Conformément à la loi fédérale suisse sur la protection des données (nLPD) et, le cas
+        échéant, au RGPD, vous disposez des droits suivants :
       </p>
       <ul>
         <li>Droit d&apos;accès, de rectification et d&apos;effacement de vos données ;</li>
         <li>Droit à la portabilité ;</li>
         <li>Droit d&apos;opposition et de limitation du traitement ;</li>
-        <li>Droit d&apos;introduire une réclamation auprès de l&apos;autorité de contrôle compétente.</li>
+        <li>
+          Droit d&apos;introduire une réclamation auprès du Préposé fédéral à la protection des
+          données et à la transparence (PFPDT), ou de l&apos;autorité de contrôle compétente dans
+          votre pays.
+        </li>
       </ul>
       <p>
         <strong>Pour les administrateurs</strong> : exercez vos droits à{" "}

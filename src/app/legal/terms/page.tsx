@@ -12,7 +12,7 @@ export default function TermsPage() {
       <p>
         Les présentes conditions générales d&apos;utilisation (« CGU ») régissent l&apos;accès et
         l&apos;utilisation de la plateforme <strong>benevol.app</strong> (le « Service »), éditée
-        par <strong>[À PRÉCISER — entité juridique]</strong> (« nous »).
+        par <strong>Philippe Vollenweider</strong>, particulier (« je » / « nous »).
       </p>
       <p>
         En accédant au Service, l&apos;utilisateur accepte les présentes CGU sans réserve.
@@ -127,8 +127,8 @@ export default function TermsPage() {
 
       <h2>9. Droit applicable et juridiction</h2>
       <p>
-        Les présentes CGU sont régies par le droit [suisse / français — À PRÉCISER]. Tout litige
-        sera soumis à la juridiction exclusive des tribunaux de [ville — À PRÉCISER].
+        Les présentes CGU sont régies par le droit suisse. Tout litige sera soumis à la
+        juridiction exclusive des tribunaux de Genève (Suisse).
       </p>
 
       <h2>10. Contact</h2>
