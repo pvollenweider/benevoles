@@ -28,8 +28,10 @@ describe("getRoleAccent", () => {
     expect(getRoleAccent("Démontage & rangement")).toBe("bg-stone-400")
   })
 
-  it("fallback gris pour un rôle inconnu", () => {
-    expect(getRoleAccent("Jardinage")).toBe("bg-gray-300")
+  it("fallback coloré (palette hash) pour un rôle inconnu", () => {
+    const color = getRoleAccent("Jardinage")
+    expect(color).toBeTruthy()
+    expect(color).not.toBe("bg-gray-300")
   })
 
   it("insensible à la casse", () => {

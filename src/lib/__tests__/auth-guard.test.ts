@@ -2,11 +2,9 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { NextResponse } from "next/server"
 
 const { authMock } = vi.hoisted(() => ({ authMock: vi.fn() }))
-
 vi.mock("@/auth", () => ({ auth: authMock }))
 
 const { firstOrgMock } = vi.hoisted(() => ({ firstOrgMock: vi.fn() }))
-
 vi.mock("../prisma", () => ({
   prisma: {
     $extends: () => ({ __scoped: true }),
@@ -14,12 +12,16 @@ vi.mock("../prisma", () => ({
   },
 }))
 
+const { cookiesMock } = vi.hoisted(() => ({ cookiesMock: vi.fn() }))
+vi.mock("next/headers", () => ({ cookies: cookiesMock }))
+
 import { requireOrgSession, requireSuperAdmin, getOrgContext } from "../auth-guard"
 
 describe("requireOrgSession", () => {
   beforeEach(() => {
     authMock.mockReset()
     firstOrgMock.mockReset()
+    cookiesMock.mockResolvedValue({ get: () => undefined })
   })
 
   it("returns 401 when no session", async () => {
@@ -96,6 +98,7 @@ describe("getOrgContext (SSR helper)", () => {
   beforeEach(() => {
     authMock.mockReset()
     firstOrgMock.mockReset()
+    cookiesMock.mockResolvedValue({ get: () => undefined })
   })
 
   it("returns null when not authenticated", async () => {

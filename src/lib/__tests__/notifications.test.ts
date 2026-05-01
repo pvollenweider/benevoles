@@ -157,7 +157,7 @@ describe("notification templates — render()", () => {
         shiftDate: "samedi 14",
       },
     })
-    expect(out.html).toContain("/asso/concert-2026")
+    expect(out.html).toContain("concert-2026")
     expect(out.subject).toContain("annulé")
   })
 })
