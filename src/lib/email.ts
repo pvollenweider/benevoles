@@ -64,7 +64,7 @@ export async function sendAdminNotification(data: {
   eventTitle: string
   volunteerName: string
   volunteerEmail: string
-  shifts: { label: string }[]
+  shifts: { label: string; roleName: string; date: string; startTime: string; endTime: string }[]
 }) {
   const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL
   if (!adminEmail) return

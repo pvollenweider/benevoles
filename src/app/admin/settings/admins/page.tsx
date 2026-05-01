@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma"
 import AdminsManager from "@/components/admin/AdminsManager"
 import OrgNameForm from "@/components/admin/OrgNameForm"
 import OrgSlugForm from "@/components/admin/OrgSlugForm"
+import OrgCharterForm from "@/components/admin/OrgCharterForm"
 
 export const dynamic = "force-dynamic"
 
@@ -27,7 +28,7 @@ export default async function AdminsSettingsPage() {
       },
       orderBy: { createdAt: "asc" },
     }),
-    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true } }),
+    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, volunteerCharter: true } }),
     prisma.orgSlugHistory.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
@@ -55,6 +56,8 @@ export default async function AdminsSettingsPage() {
           initialHasPublishedEvents={publishedEventCount > 0}
         />
       )}
+
+      {org && <OrgCharterForm initialCharter={org.volunteerCharter ?? null} />}
 
       <AdminsManager
         initialAdmins={admins.map((a) => ({

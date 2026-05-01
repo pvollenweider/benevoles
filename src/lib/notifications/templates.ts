@@ -492,15 +492,31 @@ function renderAdminNotification(p: NotificationPayload): RenderedEmail {
     eventTitle: string
     volunteerName: string
     volunteerEmail: string
-    shifts: { label: string }[]
+    shifts: { label: string; roleName: string; date: string; startTime: string; endTime: string }[]
   }
   const subject = `Nouvelle inscription — ${d.eventTitle}`
 
-  const text = `${d.volunteerName} (${d.volunteerEmail}) vient de s'inscrire à ${d.eventTitle}.\nCréneaux : ${d.shifts.map((s) => s.label).join(", ")}`
+  const shiftLines = d.shifts.map((s) => {
+    const name = s.label && s.label !== s.roleName ? `${s.roleName} — ${s.label}` : s.roleName
+    return `  • ${name} · ${s.date} · ${s.startTime}–${s.endTime}`
+  })
+
+  const text = [
+    `${d.volunteerName} (${d.volunteerEmail}) vient de s'inscrire à ${d.eventTitle}.`,
+    ``,
+    ...shiftLines,
+  ].join("\n")
 
   const html = `
     <p><strong>${escapeHtml(d.volunteerName)}</strong> (${escapeHtml(d.volunteerEmail)}) vient de s'inscrire à <strong>${escapeHtml(d.eventTitle)}</strong>.</p>
-    <p>Créneaux : ${d.shifts.map((s) => escapeHtml(s.label)).join(", ")}</p>
+    <ul style="padding-left:1.2em;line-height:1.8">
+      ${d.shifts.map((s) => {
+        const name = s.label && s.label !== s.roleName
+          ? `${escapeHtml(s.roleName)} — ${escapeHtml(s.label)}`
+          : escapeHtml(s.roleName)
+        return `<li><strong>${name}</strong> · ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</li>`
+      }).join("")}
+    </ul>
   `
 
   return { subject, html, text }

@@ -11,7 +11,7 @@ export async function PATCH(req: Request) {
   const { organizationId } = guard
 
   const body = await req.json().catch(() => ({}))
-  const updates: { name?: string; slug?: string } = {}
+  const updates: { name?: string; slug?: string; volunteerCharter?: string | null } = {}
   let oldSlug: string | null = null
 
   if (typeof body.name === "string") {
@@ -51,6 +51,12 @@ export async function PATCH(req: Request) {
     }
   }
 
+  if ("volunteerCharter" in body) {
+    updates.volunteerCharter = typeof body.volunteerCharter === "string" && body.volunteerCharter.trim()
+      ? body.volunteerCharter.trim()
+      : null
+  }
+
   if (Object.keys(updates).length === 0) {
     return NextResponse.json({ error: "Aucune modification." }, { status: 400 })
   }
@@ -65,7 +71,7 @@ export async function PATCH(req: Request) {
     return tx.organization.update({
       where: { id: organizationId },
       data: updates,
-      select: { name: true, slug: true },
+      select: { name: true, slug: true, volunteerCharter: true },
     })
   })
 

@@ -126,6 +126,7 @@ export async function POST(req: Request) {
 
   const shiftData = shifts.map((s) => ({
     label: s.label,
+    roleName: s.roleName,
     date: s.date.toLocaleDateString("fr-FR"),
     startTime: s.startTime,
     endTime: s.endTime,

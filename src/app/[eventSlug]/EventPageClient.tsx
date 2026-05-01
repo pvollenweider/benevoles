@@ -6,6 +6,7 @@ import Link from "next/link"
 import { formatDate, shiftsOverlap } from "@/lib/utils"
 import DayTimeline, { fmt } from "@/components/DayTimeline"
 import PublicFooter from "@/components/PublicFooter"
+import { DEFAULT_VOLUNTEER_CHARTER } from "@/lib/volunteer-charter"
 
 type Shift = {
   id: string
@@ -37,6 +38,7 @@ type EventData = {
   publicInstructions: string | null
   confirmationMessage: string | null
   showSchedule: Show[]
+  volunteerCharter: string | null
   shifts: Shift[]
 }
 
@@ -55,6 +57,8 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
   const [step, setStep] = useState<"select" | "form">("select")
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [charterAccepted, setCharterAccepted] = useState(false)
+  const [showCharter, setShowCharter] = useState(false)
   const [form, setForm] = useState({
     firstName: "", lastName: "", email: "", phone: "", comment: "", consent: false,
   })
@@ -159,6 +163,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (!charterAccepted) { setError("Veuillez accepter la charte du bénévole."); return }
     if (!form.consent) { setError("Veuillez accepter la politique de confidentialité."); return }
     if (!form.firstName || !form.lastName || !form.email) { setError("Prénom, nom et email sont obligatoires."); return }
 
@@ -446,6 +451,26 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
+                  checked={charterAccepted}
+                  onChange={(e) => setCharterAccepted(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
+                />
+                <span className="text-sm text-gray-600">
+                  J&apos;ai lu et j&apos;accepte la{" "}
+                  <button
+                    type="button"
+                    onClick={() => setShowCharter(true)}
+                    className="text-blue-600 underline underline-offset-2 hover:text-blue-800"
+                  >
+                    charte du bénévole
+                  </button>
+                  .
+                </span>
+              </label>
+
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
                   checked={form.consent}
                   onChange={(e) => setForm((f) => ({ ...f, consent: e.target.checked }))}
                   className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
@@ -472,6 +497,28 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
           </div>
         )}
       </div>
+
+      {showCharter && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[80vh] flex flex-col">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+              <h2 className="text-base font-semibold text-gray-900">Charte du bénévole</h2>
+              <button onClick={() => setShowCharter(false)} className="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
+            </div>
+            <div className="overflow-y-auto px-5 py-4 text-sm text-gray-700 whitespace-pre-wrap leading-relaxed flex-1">
+              {event.volunteerCharter ?? DEFAULT_VOLUNTEER_CHARTER}
+            </div>
+            <div className="px-5 py-4 border-t border-gray-100">
+              <button
+                onClick={() => { setCharterAccepted(true); setShowCharter(false) }}
+                className="w-full bg-blue-600 text-white rounded-xl py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors"
+              >
+                J&apos;ai lu et j&apos;accepte
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {pendingCancel && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">

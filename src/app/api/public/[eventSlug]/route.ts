@@ -20,7 +20,7 @@ export async function GET(
       organization: { slug: orgSlug },
     },
     include: {
-      organization: { select: { name: true } },
+      organization: { select: { name: true, volunteerCharter: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
         include: { registrations: { where: { status: "active" } } },
@@ -59,6 +59,7 @@ export async function GET(
     publicInstructions: event.publicInstructions,
     confirmationMessage: event.confirmationMessage,
     showSchedule: event.showSchedule,
+    volunteerCharter: event.organization.volunteerCharter,
     shifts,
   })
 }
