@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
 import { formatShortDate } from "@/lib/utils"
+import PublicFooter from "@/components/PublicFooter"
 
 export const dynamic = "force-dynamic"
 
@@ -74,6 +75,7 @@ export default async function HomePage() {
           </div>
         )}
       </div>
+      <PublicFooter />
     </main>
   )
 }

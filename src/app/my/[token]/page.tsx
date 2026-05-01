@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
+import PublicFooter from "@/components/PublicFooter"
 
 type ShiftRef = {
   label: string
@@ -125,6 +126,7 @@ export default function MyRegistrationPage() {
           Retour à l'accueil
         </Link>
       </div>
+      <PublicFooter />
     </main>
   )
 }

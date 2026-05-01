@@ -5,6 +5,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { formatDate, shiftsOverlap } from "@/lib/utils"
 import DayTimeline, { fmt } from "@/components/DayTimeline"
+import PublicFooter from "@/components/PublicFooter"
 
 type Shift = {
   id: string
@@ -497,6 +498,7 @@ export default function EventPage() {
           </div>
         </div>
       )}
+      <PublicFooter />
     </main>
   )
 }
