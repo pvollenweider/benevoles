@@ -36,6 +36,9 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
   const [, startTransition] = useTransition()
   const [reminding, setReminding] = useState(false)
   const [remindResult, setRemindResult] = useState<string | null>(null)
+  const [testEmail, setTestEmail] = useState("")
+  const [testState, setTestState] = useState<"idle" | "sending" | "sent" | "error">("idle")
+  const [showTest, setShowTest] = useState(false)
 
   const total = invites.length
   const registered = invites.filter((i) => i.registered).length
@@ -85,7 +88,47 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
           </button>
         )}
         {remindResult && <span className="text-sm text-gray-600 self-center">{remindResult}</span>}
+        <button
+          onClick={() => setShowTest((v) => !v)}
+          className="text-xs text-gray-400 hover:text-gray-600 ml-auto self-center"
+        >
+          Tester l&apos;envoi d&apos;email
+        </button>
       </div>
+
+      {showTest && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col sm:flex-row gap-3 items-start sm:items-end">
+          <div className="flex-1">
+            <label className="block text-xs font-medium text-amber-900 mb-1">
+              Envoyer un exemple d&apos;email d&apos;invitation à :
+            </label>
+            <input
+              type="email"
+              value={testEmail}
+              onChange={(e) => { setTestEmail(e.target.value); setTestState("idle") }}
+              placeholder="votre@email.com"
+              className="w-full border border-amber-300 rounded-lg px-3 py-1.5 text-sm bg-white"
+            />
+          </div>
+          <button
+            disabled={!testEmail || testState === "sending"}
+            onClick={async () => {
+              setTestState("sending")
+              const res = await fetch(`/api/admin/events/${eventId}/invitations/test-email`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: testEmail }),
+              })
+              setTestState(res.ok ? "sent" : "error")
+            }}
+            className="text-sm bg-amber-600 text-white px-4 py-1.5 rounded-lg hover:bg-amber-700 disabled:opacity-50 shrink-0"
+          >
+            {testState === "sending" ? "Envoi…" : "Envoyer le test"}
+          </button>
+          {testState === "sent" && <span className="text-sm text-green-700 self-center">✓ Envoyé !</span>}
+          {testState === "error" && <span className="text-sm text-red-600 self-center">Échec de l&apos;envoi.</span>}
+        </div>
+      )}
 
       {invites.length === 0 ? (
         <div className="bg-white border border-gray-200 rounded-xl p-10 text-center text-gray-400">
