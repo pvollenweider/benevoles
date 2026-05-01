@@ -3,6 +3,7 @@
 import { useState, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
+import PasswordRules from "@/components/PasswordRules"
 
 function ResetForm() {
   const searchParams = useSearchParams()
@@ -77,12 +78,12 @@ function ResetForm() {
         <input
           type="password"
           required
-          minLength={8}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="8 caractères minimum"
+          placeholder="10 caractères minimum"
         />
+        <PasswordRules password={password} />
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">

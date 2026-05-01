@@ -3,12 +3,13 @@ import { requireSuperAdmin } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
+import { passwordSchema } from "@/lib/password"
 
 const schema = z
   .object({
     email: z.string().email().optional(),
     currentPassword: z.string().min(1),
-    newPassword: z.string().min(8).optional(),
+    newPassword: passwordSchema.optional(),
   })
   .refine((d) => d.email || d.newPassword, {
     message: "Au moins un champ à modifier (email ou nouveau mot de passe).",

@@ -22,6 +22,7 @@ type PageData = {
   event: { id: string; title: string; slug: string }
   volunteer: { firstName: string; lastName: string; email: string }
   registrations: RegistrationItem[]
+  orgHomeUrl: string
 }
 
 export default function MyRegistrationPage() {
@@ -70,7 +71,7 @@ export default function MyRegistrationPage() {
         <div className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-8 text-center">
           <h1 className="text-lg font-semibold text-gray-700 mb-2">Inscription introuvable</h1>
           <p className="text-sm text-gray-400 mb-6">{error ?? "Ce lien est invalide ou a déjà été annulé."}</p>
-          <Link href="/" className="text-blue-600 text-sm">Retour à l'accueil</Link>
+          <Link href={data?.orgHomeUrl ?? "/"} className="text-blue-600 text-sm">Retour à l'accueil</Link>
         </div>
       </main>
     )
@@ -82,7 +83,7 @@ export default function MyRegistrationPage() {
         <div className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-8 text-center">
           <div className="text-4xl mb-4">✓</div>
           <h1 className="text-lg font-bold text-gray-900 mb-2">Toutes vos inscriptions ont été annulées</h1>
-          <Link href="/" className="text-blue-600 text-sm mt-4 block">Retour à l'accueil</Link>
+          <Link href={data?.orgHomeUrl ?? "/"} className="text-blue-600 text-sm mt-4 block">Retour à l'accueil</Link>
         </div>
       </main>
     )
@@ -122,7 +123,7 @@ export default function MyRegistrationPage() {
           })}
         </div>
 
-        <Link href="/" className="block text-center text-sm text-gray-400 hover:text-gray-600 pt-2">
+        <Link href={data?.orgHomeUrl ?? "/"} className="block text-center text-sm text-gray-400 hover:text-gray-600 pt-2">
           Retour à l'accueil
         </Link>
       </div>

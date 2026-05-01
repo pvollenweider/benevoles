@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense } from "react"
+import PasswordRules from "@/components/PasswordRules"
 
 function AcceptInviteForm() {
   const searchParams = useSearchParams()
@@ -74,10 +75,10 @@ function AcceptInviteForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          minLength={8}
           className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
-          placeholder="8 caractères minimum"
+          placeholder="10 caractères minimum"
         />
+        <PasswordRules password={password} />
       </div>
       <div>
         <label className="block text-sm text-gray-700 mb-1">Confirmer le mot de passe *</label>

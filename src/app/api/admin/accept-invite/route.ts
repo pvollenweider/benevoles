@@ -4,10 +4,11 @@ import bcrypt from "bcryptjs"
 import { z } from "zod"
 import { sendNotification } from "@/lib/notifications"
 import { orgBaseUrl } from "@/lib/urls"
+import { passwordSchema } from "@/lib/password"
 
 const schema = z.object({
   token: z.string().min(1),
-  password: z.string().min(8, "Le mot de passe doit contenir au moins 8 caractères"),
+  password: passwordSchema,
 })
 
 export async function POST(req: Request) {

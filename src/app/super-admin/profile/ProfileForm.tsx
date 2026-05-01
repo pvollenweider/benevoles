@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import PasswordRules from "@/components/PasswordRules"
 
 export default function ProfileForm({ currentEmail }: { currentEmail: string }) {
   const [email, setEmail] = useState(currentEmail)
@@ -72,6 +73,7 @@ export default function ProfileForm({ currentEmail }: { currentEmail: string }) 
           placeholder="Laisser vide pour ne pas changer"
           className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        <PasswordRules password={newPassword} />
       </div>
 
       {newPassword && (

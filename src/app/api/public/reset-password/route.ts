@@ -1,12 +1,18 @@
 import { NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
+import { passwordErrors } from "@/lib/password"
 
 export async function POST(req: Request) {
   const { token, password } = await req.json().catch(() => ({}))
 
-  if (typeof token !== "string" || typeof password !== "string" || password.length < 8) {
+  if (typeof token !== "string" || typeof password !== "string") {
     return NextResponse.json({ error: "Données invalides." }, { status: 400 })
+  }
+
+  const errors = passwordErrors(password)
+  if (errors.length > 0) {
+    return NextResponse.json({ error: errors[0] }, { status: 400 })
   }
 
   const admin = await prisma.adminUser.findUnique({ where: { passwordResetToken: token } })

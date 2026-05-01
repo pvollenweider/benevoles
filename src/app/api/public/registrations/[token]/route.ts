@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { orgBaseUrl } from "@/lib/urls"
 
 export async function GET(_req: Request, { params }: { params: Promise<{ token: string }> }) {
   const { token } = await params
@@ -8,7 +9,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ token: 
     where: { editToken: token, status: "active" },
     include: {
       volunteer: true,
-      event: { select: { id: true, title: true, slug: true } },
+      event: { select: { id: true, title: true, slug: true, organization: { select: { slug: true } } } },
     },
   })
 
@@ -27,8 +28,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ token: 
     orderBy: [{ shift: { date: "asc" } }, { shift: { startTime: "asc" } }],
   })
 
+  const orgSlug = registration.event.organization.slug
   return NextResponse.json({
     event: registration.event,
+    orgHomeUrl: orgBaseUrl(orgSlug),
     volunteer: {
       firstName: registration.volunteer.firstName,
       lastName: registration.volunteer.lastName,
