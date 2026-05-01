@@ -96,8 +96,9 @@ export default function OrgDetail({ org }: { org: Org }) {
       setSlugError(typeof d.error === "string" ? d.error : "Erreur.")
       return
     }
+    const d = await res.json()
     setSlugSaved(true)
-    refresh()
+    router.push(`/super-admin/organizations/${d.slug}`)
   }
 
   const createdAt = new Date(org.createdAt).toLocaleDateString("fr-FR", {

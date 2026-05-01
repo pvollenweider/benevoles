@@ -35,7 +35,7 @@ export default function OrgsManager({ initialOrgs }: Props) {
   async function toggleActive(org: Org) {
     const label = org.active ? "Désactiver" : "Réactiver"
     if (!confirm(`${label} l'organisation « ${org.name} » ?`)) return
-    const res = await fetch(`/api/super-admin/organizations/${org.id}`, {
+    const res = await fetch(`/api/super-admin/organizations/${org.slug}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ active: !org.active }),
@@ -82,7 +82,7 @@ export default function OrgsManager({ initialOrgs }: Props) {
                 <tr key={org.id} className={`border-t border-gray-100 ${!org.active ? "opacity-50" : ""}`}>
                   <td className="px-4 py-3">
                     <Link
-                      href={`/super-admin/organizations/${org.id}`}
+                      href={`/super-admin/organizations/${org.slug}`}
                       className="font-medium text-gray-900 hover:text-blue-600"
                     >
                       {org.name}
@@ -98,7 +98,7 @@ export default function OrgsManager({ initialOrgs }: Props) {
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-3">
                       <Link
-                        href={`/super-admin/organizations/${org.id}`}
+                        href={`/super-admin/organizations/${org.slug}`}
                         className="text-xs text-gray-400 hover:text-blue-600"
                       >
                         Détail

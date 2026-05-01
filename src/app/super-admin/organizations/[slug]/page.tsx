@@ -5,15 +5,15 @@ import OrgDetail from "@/components/super-admin/OrgDetail"
 
 export const dynamic = "force-dynamic"
 
-export default async function OrgDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function OrgDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const session = await auth()
   if (!session?.user) redirect("/admin/login")
   if (session.user.role !== "super_admin") redirect("/admin/login")
 
-  const { id } = await params
+  const { slug } = await params
 
   const org = await prisma.organization.findUnique({
-    where: { id },
+    where: { slug },
     select: {
       id: true,
       name: true,
