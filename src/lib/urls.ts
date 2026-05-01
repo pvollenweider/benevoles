@@ -11,5 +11,6 @@ export function orgBaseUrl(orgSlug: string): string {
 }
 
 export function eventPublicUrl(orgSlug: string, eventSlug: string): string {
+  if (APP_URL.includes("localhost")) return `${APP_URL}/${eventSlug}?org=${orgSlug}`
   return `${orgBaseUrl(orgSlug)}/${eventSlug}`
 }

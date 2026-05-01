@@ -38,6 +38,10 @@ export default auth((req) => {
   const requestHeaders = new Headers(req.headers)
   if (parts.length === 3 && !NON_ORG_SUBDOMAINS.has(parts[0])) {
     requestHeaders.set("x-org-slug", parts[0])
+  } else {
+    // Dev fallback: ?org=slug query param when no subdomain available
+    const orgFromQuery = req.nextUrl.searchParams.get("org")
+    if (orgFromQuery) requestHeaders.set("x-org-slug", orgFromQuery)
   }
 
   return NextResponse.next({ request: { headers: requestHeaders } })
