@@ -41,6 +41,9 @@ export default async function HomePage() {
     return { ...event, totalCapacity, totalRegistered, spotsLeft: totalCapacity - totalRegistered }
   })
 
+  // No org context → marketing landing page
+  if (!orgSlug) return <LandingPage />
+
   // On an org subdomain, links are relative (same host). On www, links are absolute.
   function eventHref(orgSlug: string | null, eventOrgSlug: string, eventSlug: string) {
     if (orgSlug) return `/${eventSlug}`
@@ -103,5 +106,83 @@ export default async function HomePage() {
       </div>
       <PublicFooter />
     </main>
+  )
+}
+
+function LandingPage() {
+  return (
+    <main className="min-h-screen bg-white">
+      {/* Hero */}
+      <section className="bg-gray-50 border-b border-gray-200 px-6 py-20">
+        <div className="max-w-3xl mx-auto text-center">
+          <h1 className="text-4xl font-bold text-gray-900 leading-tight">
+            Gérez vos bénévoles simplement
+          </h1>
+          <p className="mt-4 text-lg text-gray-600 max-w-xl mx-auto">
+            Benevol est une plateforme SaaS pour les associations et festivals qui organisent des événements avec des équipes de bénévoles.
+          </p>
+          <a
+            href="mailto:contact@benevol.app"
+            className="mt-8 inline-block bg-blue-600 text-white text-sm font-semibold px-6 py-3 rounded-full hover:bg-blue-700 transition-colors"
+          >
+            Demander l&apos;accès →
+          </a>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="max-w-4xl mx-auto px-6 py-16">
+        <div className="grid sm:grid-cols-2 gap-6">
+          <FeatureCard
+            icon="📅"
+            title="Planning par créneaux"
+            description="Créez vos postes et créneaux horaires en quelques clics. Visualisez la couverture de votre événement sur une timeline interactive."
+          />
+          <FeatureCard
+            icon="👋"
+            title="Inscription publique"
+            description="Vos bénévoles s'inscrivent sans créer de compte. Un lien, un clic, et c'est fait — depuis un téléphone ou un ordinateur."
+          />
+          <FeatureCard
+            icon="📊"
+            title="Suivi en temps réel"
+            description="Consultez les inscriptions au fil de l'eau. Exportez vos listes en Excel ou PDF pour la coordination sur le terrain."
+          />
+          <FeatureCard
+            icon="✉️"
+            title="Communications automatiques"
+            description="Confirmations d'inscription, rappels avant l'événement, notifications de modification — tout est géré automatiquement."
+          />
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="bg-gray-50 border-t border-gray-200 px-6 py-14">
+        <div className="max-w-xl mx-auto text-center">
+          <h2 className="text-xl font-semibold text-gray-900">Prêt à simplifier votre organisation ?</h2>
+          <p className="mt-2 text-gray-500 text-sm">
+            Benevol est actuellement en accès anticipé. Contactez-nous pour en savoir plus.
+          </p>
+          <a
+            href="mailto:contact@benevol.app"
+            className="mt-6 inline-block border border-blue-600 text-blue-600 text-sm font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition-colors"
+          >
+            contact@benevol.app
+          </a>
+        </div>
+      </section>
+
+      <PublicFooter />
+    </main>
+  )
+}
+
+function FeatureCard({ icon, title, description }: { icon: string; title: string; description: string }) {
+  return (
+    <div className="bg-white border border-gray-200 rounded-2xl p-6">
+      <div className="text-2xl mb-3">{icon}</div>
+      <h3 className="text-base font-semibold text-gray-900">{title}</h3>
+      <p className="mt-1 text-sm text-gray-500 leading-relaxed">{description}</p>
+    </div>
   )
 }
