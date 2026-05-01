@@ -82,7 +82,13 @@ export default function EventForm({ initialData }: Props) {
   }, [form, shows])
 
   function set(field: keyof EventFormData, value: string) {
-    setForm((f) => ({ ...f, [field]: value }))
+    setForm((f) => {
+      const next = { ...f, [field]: value }
+      if (field === "startDate" && (!f.endDate || f.endDate < value)) {
+        next.endDate = value
+      }
+      return next
+    })
   }
 
   function setShow(field: keyof Show, value: string) {
@@ -181,16 +187,17 @@ export default function EventForm({ initialData }: Props) {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Date fin *</label>
-            <input type="date" required value={form.endDate} onChange={(e) => set("endDate", e.target.value)} className={inputCls} />
+            <input type="date" required value={form.endDate} min={form.startDate || undefined} onChange={(e) => set("endDate", e.target.value)} className={inputCls} />
           </div>
         </div>
 
-        {/* Spectacles */}
+        {/* Spectacles — visible only once both dates are set */}
+        {form.startDate && form.endDate && (
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="text-sm font-medium text-gray-700">Spectacles</label>
             {!addingShow && (
-              <button type="button" onClick={() => setAddingShow(true)} className="text-xs text-blue-600 hover:underline">
+              <button type="button" onClick={() => { setNewShow({ ...emptyShow, date: form.startDate }); setAddingShow(true) }} className="text-xs text-blue-600 hover:underline">
                 + Ajouter
               </button>
             )}
@@ -211,7 +218,7 @@ export default function EventForm({ initialData }: Props) {
                     <div className="grid grid-cols-3 gap-2">
                       <div>
                         <label className="block text-xs text-gray-500 mb-1">Date</label>
-                        <input type="date" value={editShow.date} onChange={(e) => setEditShow((s) => ({ ...s, date: e.target.value }))} className={inputCls} />
+                        <input type="date" value={editShow.date} min={form.startDate} max={form.endDate} onChange={(e) => setEditShow((s) => ({ ...s, date: e.target.value }))} className={inputCls} />
                       </div>
                       <div>
                         <label className="block text-xs text-gray-500 mb-1">Début</label>
@@ -251,6 +258,7 @@ export default function EventForm({ initialData }: Props) {
             <p className="text-xs text-gray-400 mb-2">Aucun spectacle configuré.</p>
           )}
 
+
           {addingShow && (
             <div className="border border-blue-200 rounded-xl p-3 space-y-2.5 bg-blue-50/40">
               <input
@@ -263,7 +271,7 @@ export default function EventForm({ initialData }: Props) {
               <div className="grid grid-cols-3 gap-2">
                 <div>
                   <label className="block text-xs text-gray-500 mb-1">Date</label>
-                  <input type="date" value={newShow.date} onChange={(e) => setShow("date", e.target.value)} className={inputCls} />
+                  <input type="date" value={newShow.date} min={form.startDate} max={form.endDate} onChange={(e) => setShow("date", e.target.value)} className={inputCls} />
                 </div>
                 <div>
                   <label className="block text-xs text-gray-500 mb-1">Début</label>
@@ -287,6 +295,7 @@ export default function EventForm({ initialData }: Props) {
             </div>
           )}
         </div>
+        )}
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Instructions publiques</label>
