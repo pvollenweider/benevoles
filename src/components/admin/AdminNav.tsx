@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
 
-export default function AdminNav({ userName, role }: { userName: string; role?: string }) {
+export default function AdminNav({ userName, role, orgName }: { userName: string; role?: string; orgName?: string }) {
   const pathname = usePathname()
   const isSuperAdmin = role === "super_admin"
 
@@ -13,7 +13,7 @@ export default function AdminNav({ userName, role }: { userName: string; role?: 
       <div className="max-w-5xl mx-auto flex items-center justify-between h-14">
         <div className="flex items-center gap-6">
           <Link href="/admin/events" className="font-semibold text-gray-900 text-sm">
-            🗂 Admin
+            {orgName ?? "Admin"}
           </Link>
           <Link
             href="/admin/events"
