@@ -91,8 +91,20 @@ export default function EventForm({ initialData }: Props) {
     })
   }
 
+  function addMinutes(time: string, minutes: number): string {
+    const [h, m] = time.split(":").map(Number)
+    const total = h * 60 + m + minutes
+    return `${String(Math.floor(total / 60) % 24).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`
+  }
+
   function setShow(field: keyof Show, value: string) {
-    setNewShow((s) => ({ ...s, [field]: value }))
+    setNewShow((s) => {
+      const next = { ...s, [field]: value }
+      if (field === "startTime" && value && !s.endTime) {
+        next.endTime = addMinutes(value, 90)
+      }
+      return next
+    })
   }
 
   function addShow() {
