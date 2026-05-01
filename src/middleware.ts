@@ -13,6 +13,7 @@ export default auth((req) => {
   const isSuperAdminPath = pathname.startsWith("/super-admin")
   const isAdminPath = pathname.startsWith("/admin")
   const isLoginPage = pathname === "/admin/login"
+  const isPublicAdminPage = pathname === "/admin/accept-invite" || pathname === "/admin/reset-password" || pathname === "/admin/forgot-password"
 
   if (isSuperAdminPath) {
     if (!req.auth) {
@@ -25,7 +26,7 @@ export default auth((req) => {
     }
   }
 
-  if (isAdminPath && !isLoginPage && !req.auth) {
+  if (isAdminPath && !isLoginPage && !isPublicAdminPage && !req.auth) {
     const loginUrl = new URL("/admin/login", req.url)
     loginUrl.searchParams.set("callbackUrl", req.url)
     return Response.redirect(loginUrl)
