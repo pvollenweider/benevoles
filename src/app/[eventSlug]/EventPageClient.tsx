@@ -431,7 +431,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone <span className="text-gray-400 font-normal">(facultatif)</span></label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone <span className="text-gray-400 font-normal">(facultatif, mais super utile)</span></label>
                 <input
                   type="tel"
                   value={form.phone}
