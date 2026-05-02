@@ -9,9 +9,11 @@ const nextConfig: NextConfig = {
 export default withSentryConfig(nextConfig, {
   org: "pvollenweider",
   project: "benevoles",
-  // Upload source maps only in CI (requires SENTRY_AUTH_TOKEN)
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  widenClientFileUpload: true,
+  // Proxy Sentry requests through /monitoring to bypass ad-blockers
+  tunnelRoute: "/monitoring",
   silent: !process.env.CI,
   disableLogger: true,
-  // Avoid the Sentry build plugin blocking local dev when DSN is absent
   telemetry: false,
 })
