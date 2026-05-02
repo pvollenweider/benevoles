@@ -24,6 +24,12 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV DATABASE_URL=postgresql://build:build@localhost/build
 ENV AUTH_SECRET=build-placeholder-secret-32-characters-min
 
+# Sentry source map upload + bake public DSN into the browser bundle
+ARG SENTRY_AUTH_TOKEN
+ARG NEXT_PUBLIC_SENTRY_DSN
+ENV SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
+ENV NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
+
 RUN npx prisma generate && npm run build
 
 # ── Stage 4 : runner ─────────────────────────────────────────────────────────
