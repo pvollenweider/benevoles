@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
 }
 
 export default withSentryConfig(nextConfig, {
-  org: "pvollenweider",
+  org: "benevolapp",
   project: "benevoles",
   authToken: process.env.SENTRY_AUTH_TOKEN,
   widenClientFileUpload: true,
