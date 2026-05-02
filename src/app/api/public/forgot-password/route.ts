@@ -2,8 +2,14 @@ import { NextResponse } from "next/server"
 import { randomBytes } from "crypto"
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
+import { rateLimit, getClientIp } from "@/lib/rate-limit"
 
 export async function POST(req: Request) {
+  const rl = rateLimit(getClientIp(req), "forgot-password", 5, 60 * 60 * 1000)
+  if (!rl.ok) {
+    return NextResponse.json({ ok: true }) // don't leak rate-limit info on auth routes
+  }
+
   const { email } = await req.json().catch(() => ({}))
   if (typeof email !== "string" || !email.includes("@")) {
     return NextResponse.json({ error: "Email invalide." }, { status: 400 })

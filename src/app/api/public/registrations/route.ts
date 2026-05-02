@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { generateToken, shiftsOverlap } from "@/lib/utils"
 import { sendConfirmationEmail, sendAdminNotification } from "@/lib/email"
+import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { z } from "zod"
 
 const schema = z.object({
@@ -17,6 +18,14 @@ const schema = z.object({
 })
 
 export async function POST(req: Request) {
+  const rl = rateLimit(getClientIp(req), "registrations", 20, 60 * 60 * 1000)
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: "Trop de tentatives. Réessayez dans quelques minutes." },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfter) } },
+    )
+  }
+
   const body = await req.json()
   const parsed = schema.safeParse(body)
   if (!parsed.success) {
