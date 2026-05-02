@@ -28,6 +28,9 @@ jobs:
 
       - name: Type-check
         run: npx tsc --noEmit
+        env:
+          SENTRY_DSN: ""
+          NEXT_PUBLIC_SENTRY_DSN: ""
 
       - name: Lint
         run: npm run lint
