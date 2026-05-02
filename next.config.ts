@@ -14,6 +14,5 @@ export default withSentryConfig(nextConfig, {
   // Proxy Sentry requests through /monitoring to bypass ad-blockers
   tunnelRoute: "/monitoring",
   silent: !process.env.CI,
-  disableLogger: true,
   telemetry: false,
 })
