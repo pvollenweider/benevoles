@@ -134,18 +134,42 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
           </h2>
           <div className="space-y-2">
             {criticalShifts.map((shift) => {
-              const missing = shift.capacity - shift.registrations.length
+              const filled = shift.registrations.length
+              const { capacity } = shift
+              const pct = capacity > 0 ? Math.round((filled / capacity) * 100) : 0
+              const barColor =
+                pct >= 75 ? "bg-green-500" :
+                pct >= 50 ? "bg-yellow-400" :
+                pct >= 25 ? "bg-orange-400" :
+                "bg-red-400"
+              const countColor =
+                pct >= 75 ? "text-green-700" :
+                pct >= 50 ? "text-yellow-700" :
+                pct >= 25 ? "text-orange-600" :
+                "text-red-600"
               return (
-                <div key={shift.id} className="bg-orange-50 border border-orange-200 rounded-xl p-3 flex items-center justify-between">
-                  <div>
+                <div key={shift.id} className="bg-white border border-gray-200 rounded-xl p-3">
+                  <div className="flex items-start justify-between gap-3 mb-2.5">
                     <p className="text-sm font-medium text-gray-800">
                       {shift.label !== shift.roleName
                         ? <>{shift.roleName} <span className="font-normal text-gray-400">·</span> {shift.label}</>
                         : shift.label}
                     </p>
-                    <p className="text-xs text-gray-500">{shift.date.toLocaleDateString("fr-FR")} · {shift.startTime}–{shift.endTime}</p>
+                    <p className="text-xs text-gray-400 whitespace-nowrap flex-shrink-0">
+                      {shift.date.toLocaleDateString("fr-FR")} · {shift.startTime}–{shift.endTime}
+                    </p>
                   </div>
-                  <span className="text-sm font-semibold text-orange-700">{missing} manquant{missing > 1 ? "s" : ""}</span>
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${barColor}`}
+                        style={{ width: `${Math.max(pct, filled > 0 ? 3 : 0)}%` }}
+                      />
+                    </div>
+                    <span className={`text-xs font-semibold tabular-nums whitespace-nowrap ${countColor}`}>
+                      {filled}/{capacity} bénévole{capacity > 1 ? "s" : ""}
+                    </span>
+                  </div>
                 </div>
               )
             })}

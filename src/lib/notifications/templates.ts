@@ -21,11 +21,35 @@ function escapeHtml(s: string): string {
 }
 
 function btn(href: string, label: string): string {
-  return `<a href="${href}" style="background:#2563eb;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600">${label}</a>`
+  return `<a href="${href}" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">${label}</a>`
 }
 
-function wrap(inner: string): string {
-  return `<div style="font-family:-apple-system,system-ui,sans-serif;max-width:520px;margin:0 auto;color:#111;line-height:1.5">${inner}</div>`
+// preheader = invisible text shown in inbox preview after the subject line
+function wrap(inner: string, preheader?: string): string {
+  const ph = preheader
+    ? `<div style="display:none;font-size:1px;color:#f5f5f5;max-height:0;overflow:hidden;opacity:0;">${escapeHtml(preheader)}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>`
+    : ""
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+</head>
+<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+${ph}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;">
+<tr><td align="center" style="padding:32px 16px 24px;">
+<div style="max-width:520px;background:#ffffff;border-radius:12px;padding:28px 28px 20px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
+${inner}
+<div style="margin-top:28px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#aaaaaa;text-align:center;">
+  <a href="https://benevol.app" style="color:#aaaaaa;text-decoration:none;">benevol.app</a>
+</div>
+</div>
+</td></tr>
+</table>
+</body>
+</html>`
 }
 
 export type RenderedEmail = {
@@ -93,19 +117,20 @@ function renderConfirmation(p: NotificationPayload): RenderedEmail {
     `Un grand M E R C I et à très vite !`,
   ].join("\n")
 
+  const preheader = `${shifts.length} créneau${shifts.length > 1 ? "x" : ""} confirmé${shifts.length > 1 ? "s" : ""} — on a hâte de te retrouver !`
   const html = wrap(`
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 🎉</h2>
     <p style="margin:0 0 1.25em;color:#555">Super, ton inscription pour <strong>${escapeHtml(eventTitle)}</strong> est confirmée !</p>
     <div style="background:#f9fafb;border-radius:10px;padding:14px 16px">
       ${shifts.map((s) => `
-        <div style="padding:6px 0;border-bottom:1px solid #e5e7eb;last-child:border:0">
+        <div style="padding:6px 0;border-bottom:1px solid #e5e7eb">
           <strong style="color:#111">${escapeHtml(s.label)}</strong>
           <span style="color:#666;font-size:0.9em"> — ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</span>
         </div>`).join("")}
     </div>
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Un grand M E R C I et à très vite ! 🙌</p>
-  `)
+  `, preheader)
 
   return { subject, html, text }
 }
@@ -153,6 +178,7 @@ function renderMemberInvite(p: NotificationPayload): RenderedEmail {
     `L'équipe ${organizationName}`,
   ].filter(Boolean).join("\n")
 
+  const preheader = `${organizationName} t'invite à rejoindre l'équipe bénévole — inscris-toi en un clic.`
   const html = wrap(`
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 👋</h2>
     <p style="margin:0 0 1em;color:#555">On a besoin de bénévoles géniaux comme toi pour <strong>${escapeHtml(eventTitle)}</strong> !</p>
@@ -161,7 +187,7 @@ function renderMemberInvite(p: NotificationPayload): RenderedEmail {
     <p style="margin-top:1.5em">${btn(inviteUrl, "Voir les missions et m'inscrire")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Un grand merci d'avance, une grosse bise et à très vite !<br><strong>${escapeHtml(organizationName)}</strong></p>
     <p style="color:#bbb;font-size:0.8em">Si tu ne peux pas participer, ignore cet email.</p>
-  `)
+  `, preheader)
 
   return { subject, html, text }
 }
@@ -218,7 +244,7 @@ function renderReminderJ2(p: NotificationPayload): RenderedEmail {
     </div>
     <p style="margin-top:1.5em">${btn(editUrl, "Annuler si je ne peux plus venir")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
-  `)
+  `, `${escapeHtml(d.shiftRoleName)} · ${escapeHtml(d.shiftDate)} · ${escapeHtml(d.shiftStart)}–${escapeHtml(d.shiftEnd)}`)
 
   return { subject, html, text }
 }
@@ -248,7 +274,7 @@ function renderReminderJ1(p: NotificationPayload): RenderedEmail {
     <p>Tu fais : <strong>${escapeHtml(d.shiftRoleName)}</strong></p>
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mon inscription")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
-  `)
+  `, `RDV demain à ${d.shiftStart}${d.shiftLocation ? ` · ${d.shiftLocation}` : ""} — mission : ${d.shiftRoleName}`)
 
   return { subject, html, text }
 }
@@ -284,7 +310,7 @@ function renderReminderDd(p: NotificationPayload): RenderedEmail {
     </div>
     <p style="margin-top:1.5em">${btn(editUrl, "Voir mon inscription")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
-  `)
+  `, `${d.shiftRoleName} · RDV ${hoursLabel}${d.shiftLocation ? ` à ${d.shiftLocation}` : ""}`)
 
   return { subject, html, text }
 }
@@ -319,6 +345,9 @@ function renderManualReminder(p: NotificationPayload): RenderedEmail {
     d.organizationName,
   ].join("\n")
 
+  const preheader = d.customMessage
+    ? d.customMessage.slice(0, 100) + (d.customMessage.length > 100 ? "…" : "")
+    : `Un message de ${d.organizationName} concernant ${d.eventTitle}.`
   const html = wrap(`
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 👋</h2>
     ${d.customMessage ? `<div style="background:#f3f4f6;padding:14px;border-radius:10px;white-space:pre-wrap;margin-bottom:1.25em">${escapeHtml(d.customMessage)}</div>` : ""}
@@ -332,7 +361,7 @@ function renderManualReminder(p: NotificationPayload): RenderedEmail {
     </div>
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Un grand M E R C I, une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
-  `)
+  `, preheader)
 
   return { subject, html, text }
 }
@@ -378,7 +407,7 @@ function renderShiftModified(p: NotificationPayload): RenderedEmail {
     </div>
     <p style="color:#555;font-size:0.9em">Si ces nouveaux horaires ne te conviennent pas, tu peux gérer ton inscription ci-dessous.</p>
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mon inscription")}</p>
-  `)
+  `, `Nouvel horaire : ${d.newDate} · ${d.newStart}–${d.newEnd} (était ${d.oldStart}–${d.oldEnd})`)
 
   return { subject, html, text }
 }
@@ -415,7 +444,7 @@ function renderShiftCancelled(p: NotificationPayload): RenderedEmail {
     <p style="color:#555">D'autres créneaux sont peut-être disponibles, jette un œil ici :</p>
     <p style="margin-top:1.5em">${btn(eventUrl, "Voir les créneaux disponibles")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Merci pour ta compréhension et toutes nos excuses pour la gêne occasionnée !</p>
-  `)
+  `, `Toutes nos excuses — d'autres créneaux restent peut-être disponibles.`)
 
   return { subject, html, text }
 }
@@ -451,7 +480,7 @@ function renderRegistrationCancelled(p: NotificationPayload): RenderedEmail {
     <p style="color:#555">Si tu changes d'avis, les créneaux disponibles sont par ici :</p>
     <p style="margin-top:1.5em">${btn(eventUrl, "Voir les créneaux disponibles")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">On espère te revoir bientôt ! 🙏</p>
-  `)
+  `, `Ta désinscription est confirmée — on espère te revoir à une prochaine occasion.`)
 
   return { subject, html, text }
 }
@@ -480,7 +509,7 @@ function renderAdminInvite(p: NotificationPayload): RenderedEmail {
     <p>Nous vous invitons à rejoindre <strong>${escapeHtml(d.organizationName)}</strong> en tant qu'administratrice ou administrateur sur Bénévoles.</p>
     <p style="margin-top:1.5em">${btn(d.inviteUrl, "Créer mon compte")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Ce lien est valable 7 jours. Si vous n'attendiez pas cette invitation, ignorez cet email.</p>
-  `)
+  `, `Créez votre compte en un clic — lien valable 7 jours.`)
 
   return { subject, html, text }
 }
@@ -507,7 +536,7 @@ function renderAdminNotification(p: NotificationPayload): RenderedEmail {
     ...shiftLines,
   ].join("\n")
 
-  const html = `
+  const html = wrap(`
     <p><strong>${escapeHtml(d.volunteerName)}</strong> (${escapeHtml(d.volunteerEmail)}) vient de s'inscrire à <strong>${escapeHtml(d.eventTitle)}</strong>.</p>
     <ul style="padding-left:1.2em;line-height:1.8">
       ${d.shifts.map((s) => {
@@ -517,7 +546,7 @@ function renderAdminNotification(p: NotificationPayload): RenderedEmail {
         return `<li><strong>${name}</strong> · ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</li>`
       }).join("")}
     </ul>
-  `
+  `, `${d.volunteerName} · ${d.shifts.length} créneau${d.shifts.length > 1 ? "x" : ""}`)
 
   return { subject, html, text }
 }
@@ -543,7 +572,7 @@ function renderPasswordReset(p: NotificationPayload): RenderedEmail {
     <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
     <p style="margin-top:1.5em">${btn(d.resetUrl, "Réinitialiser mon mot de passe")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Ce lien est valable 1 heure. Si vous n'avez pas fait cette demande, ignorez cet email.</p>
-  `)
+  `, `Cliquez dans l'heure qui suit — si ce n'est pas vous, ignorez cet email.`)
 
   return { subject, html, text }
 }
@@ -575,7 +604,7 @@ function renderAdminWelcome(p: NotificationPayload): RenderedEmail {
     <p>Votre compte administrateur pour <strong>${escapeHtml(d.organizationName)}</strong> est maintenant actif.</p>
     <p style="margin-top:1.5em">${btn(d.adminUrl, "Accéder à mon espace admin")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Vous pouvez utiliser ce lien à tout moment pour gérer vos événements et vos bénévoles.</p>
-  `)
+  `, `Votre espace admin est prêt — gérez vos événements et bénévoles dès maintenant.`)
 
   return { subject, html, text }
 }

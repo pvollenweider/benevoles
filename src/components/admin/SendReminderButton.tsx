@@ -48,28 +48,53 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
   }
 
   return (
-    <div className="flex flex-col gap-1">
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        disabled={disabled}
-        className="bg-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-orange-700 disabled:opacity-40 disabled:cursor-not-allowed"
-      >
-        📧 Envoyer le rappel ({volunteerCount} bénévole{volunteerCount > 1 ? "s" : ""})
-      </button>
-      {lastSentAt && (
-        <span className="text-xs text-gray-400">
-          Dernier envoi {formatRelative(lastSentAt)}
-        </span>
-      )}
+    <div className="space-y-4">
+      {/* Automatic reminders — informational */}
+      <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 space-y-1">
+        <p className="text-xs font-semibold text-gray-700">Rappels automatiques ✓ actifs</p>
+        <p className="text-xs text-gray-500 leading-relaxed">
+          Chaque bénévole inscrit reçoit automatiquement un email avec le récapitulatif de son créneau :
+        </p>
+        <ul className="text-xs text-gray-500 space-y-0.5 pl-3">
+          <li>• <strong>J-2</strong> — 48 h avant le début du créneau</li>
+          <li>• <strong>J-1</strong> — 24 h avant le début du créneau</li>
+          <li>• <strong>Jour J</strong> — 3 h avant le début du créneau</li>
+        </ul>
+        <p className="text-xs text-gray-400">Ces emails partent sans action de votre part.</p>
+      </div>
+
+      {/* Manual reminder */}
+      <div className="flex flex-col gap-2">
+        <p className="text-xs font-semibold text-gray-700">Rappel ponctuel manuel</p>
+        <p className="text-xs text-gray-500 leading-relaxed">
+          Envoie un message libre à tous les bénévoles inscrits, en plus des rappels automatiques.
+          Utile pour transmettre des infos de dernière minute, un point de rendez-vous, ou toute communication urgente.
+          {!hasMessage && !disabled && (
+            <> <a href={`/admin/events/${eventId}/edit`} className="text-orange-600 underline underline-offset-2">Configurer le message</a> dans les paramètres de l&apos;événement.</>
+          )}
+        </p>
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          disabled={disabled}
+          className="self-start bg-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-orange-700 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          📧 Envoyer le rappel ({volunteerCount} bénévole{volunteerCount > 1 ? "s" : ""})
+        </button>
+        {lastSentAt && (
+          <span className="text-xs text-gray-400">Dernier envoi {formatRelative(lastSentAt)}</span>
+        )}
+      </div>
 
       {open && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4" onClick={() => setOpen(false)}>
           <div className="bg-white rounded-2xl p-5 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-lg font-semibold text-gray-900 mb-3">Envoyer le rappel ?</h2>
             <p className="text-sm text-gray-600 mb-4">
-              Un email sera envoyé à <strong>{volunteerCount} bénévole{volunteerCount > 1 ? "s" : ""}</strong>.
-              Chacun recevra ses créneaux et le message de rappel configuré dans l&apos;event.
+              Un email individuel sera envoyé à chaque bénévole inscrit
+              (<strong>{volunteerCount} destinataire{volunteerCount > 1 ? "s" : ""}</strong>).
+              Chaque email contient le récapitulatif personnel des créneaux de la personne,
+              suivi du message de rappel configuré sur l&apos;événement.
             </p>
             {!hasMessage && (
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 text-xs text-orange-800 mb-4">
