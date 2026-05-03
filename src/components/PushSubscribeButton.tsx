@@ -5,19 +5,18 @@ import { useEffect, useState } from "react"
 type State = "idle" | "loading" | "subscribed" | "denied" | "unsupported" | "no-vapid"
 
 export default function PushSubscribeButton({ email }: { email: string }) {
-  const [state, setState] = useState<State>("idle")
+  const [state, setState] = useState<State>(() => {
+    if (typeof window === "undefined") return "idle"
+    if (!("serviceWorker" in navigator) || !("PushManager" in window)) return "unsupported"
+    return "idle"
+  })
 
   useEffect(() => {
-    if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-      setState("unsupported")
-      return
-    }
-    // Check if already subscribed
-    navigator.serviceWorker.ready.then((reg) =>
-      reg.pushManager.getSubscription().then((sub) => {
-        if (sub) setState("subscribed")
-      })
-    ).catch(() => {})
+    // Async-only: check whether the browser already holds a subscription
+    navigator.serviceWorker?.ready
+      .then((reg) => reg.pushManager.getSubscription())
+      .then((sub) => { if (sub) setState("subscribed") })
+      .catch(() => {})
   }, [])
 
   if (state === "unsupported" || state === "no-vapid") return null
