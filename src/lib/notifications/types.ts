@@ -23,6 +23,8 @@ export type NotificationKind =
   | "admin_invite"
   | "admin_welcome"
   | "password_reset"
+  | "waitlist_confirmation"
+  | "waitlist_offered"
 
 export type Recipient = {
   email?: string | null

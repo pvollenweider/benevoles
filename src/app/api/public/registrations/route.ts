@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { generateToken, shiftsOverlap } from "@/lib/utils"
 import { sendConfirmationEmail, sendAdminNotification } from "@/lib/email"
+import { sendNotification } from "@/lib/notifications"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { z } from "zod"
 
@@ -51,10 +52,13 @@ export async function POST(req: Request) {
 
   for (const shift of shifts) {
     if (shift.registrations.length >= shift.capacity) {
-      return NextResponse.json({
-        error: `Le créneau "${shift.label}" est complet. Veuillez recharger la page.`,
-        fullShiftId: shift.id,
-      }, { status: 409 })
+      if (!shift.waitlistEnabled) {
+        return NextResponse.json({
+          error: `Le créneau "${shift.label}" est complet. Veuillez recharger la page.`,
+          fullShiftId: shift.id,
+        }, { status: 409 })
+      }
+      // Waitlist enabled — fall through; will be created with status "waiting" below
     }
   }
 
@@ -105,9 +109,26 @@ export async function POST(req: Request) {
 
   // Chaque inscription reçoit son propre token unique.
   // On retourne le token de la première comme lien de confirmation.
+
+  // Determine which shifts go to waitlist
+  const fullShiftIds = new Set(
+    shifts.filter((s) => s.registrations.length >= s.capacity && s.waitlistEnabled).map((s) => s.id)
+  )
+
+  // For each shift going to waitlist, get current max position
+  const waitlistPositions: Record<string, number> = {}
+  for (const shiftId of fullShiftIds) {
+    const maxPos = await prisma.registration.aggregate({
+      where: { shiftId, status: { in: ["waiting", "offered"] } },
+      _max: { waitingPosition: true },
+    })
+    waitlistPositions[shiftId] = (maxPos._max.waitingPosition ?? 0) + 1
+  }
+
   const registrations = await prisma.$transaction(
-    shiftIds.map((shiftId) =>
-      prisma.registration.create({
+    shiftIds.map((shiftId) => {
+      const onWaitlist = fullShiftIds.has(shiftId)
+      return prisma.registration.create({
         data: {
           eventId,
           shiftId,
@@ -115,9 +136,11 @@ export async function POST(req: Request) {
           source: "public_form",
           comment,
           editToken: generateToken(),
+          status: onWaitlist ? "waiting" : "active",
+          waitingPosition: onWaitlist ? waitlistPositions[shiftId] : null,
         },
       })
-    )
+    })
   )
 
   const editToken = registrations[0].editToken
@@ -133,37 +156,75 @@ export async function POST(req: Request) {
       .catch(() => {})
   }
 
-  const shiftData = shifts.map((s) => ({
-    label: s.label,
-    roleName: s.roleName,
-    date: s.date.toLocaleDateString("fr-FR"),
-    startTime: s.startTime,
-    endTime: s.endTime,
-  }))
+  const waitlistRegs = registrations.filter((r) => r.status === "waiting")
+  const activeRegs = registrations.filter((r) => r.status === "active")
+
+  const activeShiftData = shifts
+    .filter((s) => activeRegs.some((r) => r.shiftId === s.id))
+    .map((s) => ({
+      label: s.label,
+      roleName: s.roleName,
+      date: s.date.toLocaleDateString("fr-FR"),
+      startTime: s.startTime,
+      endTime: s.endTime,
+    }))
 
   try {
-    await sendConfirmationEmail({
-      to: email,
-      volunteerName: `${firstName} ${lastName}`,
-      eventTitle: event.title,
-      shifts: shiftData,
-      editToken,
-      orgSlug: event.organization.slug,
-    })
+    if (activeRegs.length > 0) {
+      await sendConfirmationEmail({
+        to: email,
+        volunteerName: `${firstName} ${lastName}`,
+        eventTitle: event.title,
+        shifts: activeShiftData,
+        editToken,
+        orgSlug: event.organization.slug,
+        confirmationMessage: event.confirmationMessage ?? undefined,
+      })
+    }
     await sendAdminNotification({
       eventTitle: event.title,
       volunteerName: `${firstName} ${lastName}`,
       volunteerEmail: email,
-      shifts: shiftData,
+      shifts: shifts.map((s) => ({
+        label: s.label,
+        roleName: s.roleName,
+        date: s.date.toLocaleDateString("fr-FR"),
+        startTime: s.startTime,
+        endTime: s.endTime,
+      })),
     })
   } catch (e) {
     console.error("Email error:", e)
   }
 
+  // Send waitlist confirmation for waiting registrations
+  for (const wr of waitlistRegs) {
+    const shift = shifts.find((s) => s.id === wr.shiftId)
+    if (!shift) continue
+    await sendNotification({
+      kind: "waitlist_confirmation",
+      recipient: { email, name: `${firstName} ${lastName}` },
+      data: {
+        volunteerName: `${firstName} ${lastName}`,
+        eventTitle: event.title,
+        shiftLabel: shift.label,
+        shiftDate: shift.date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
+        shiftStart: shift.startTime,
+        shiftEnd: shift.endTime,
+        waitingPosition: wr.waitingPosition ?? 1,
+        orgSlug: event.organization.slug,
+      },
+    }).catch(() => {})
+  }
+
+  const onWaitlist = waitlistRegs.length > 0 && activeRegs.length === 0
+
   return NextResponse.json({
     success: true,
     editToken,
-    confirmationMessage: event.confirmationMessage,
+    confirmationMessage: onWaitlist ? null : event.confirmationMessage,
     registrationCount: registrations.length,
+    onWaitlist,
+    waitlistShifts: waitlistRegs.length,
   }, { status: 201 })
 }

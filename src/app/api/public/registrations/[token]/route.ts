@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { orgBaseUrl } from "@/lib/urls"
+import { promoteNextInWaitlist } from "@/lib/waitlist"
 
 export async function GET(_req: Request, { params }: { params: Promise<{ token: string }> }) {
   const { token } = await params
@@ -9,7 +10,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ token: 
     where: { editToken: token, status: "active" },
     include: {
       volunteer: true,
-      event: { select: { id: true, title: true, slug: true, organization: { select: { slug: true } } } },
+      event: { select: { id: true, title: true, slug: true, confirmationMessage: true, organization: { select: { slug: true } } } },
     },
   })
 
@@ -31,7 +32,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ token: 
   const orgSlug = registration.event.organization.slug
   const baseUrl = orgBaseUrl(orgSlug)
   return NextResponse.json({
-    event: registration.event,
+    event: { id: registration.event.id, title: registration.event.title, slug: registration.event.slug },
+    confirmationMessage: registration.event.confirmationMessage ?? null,
     orgHomeUrl: baseUrl,
     eventUrl: `${baseUrl}/${registration.event.slug}`,
     volunteer: {
@@ -70,6 +72,8 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ toke
     where: { id: registration.id },
     data: { status: "cancelled" },
   })
+
+  await promoteNextInWaitlist(registration.shiftId).catch(() => {})
 
   return NextResponse.json({ success: true })
 }

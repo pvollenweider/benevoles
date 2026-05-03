@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 import type { NotificationKind } from "@/lib/notifications"
+import { promoteNextInWaitlist } from "@/lib/waitlist"
+import { sendPushToEmail } from "@/lib/push"
 
 export const dynamic = "force-dynamic"
 
@@ -109,6 +111,16 @@ async function run(req: Request) {
           where: { id: r.id },
           data: { [win.field]: now },
         })
+        // Also fire a push notification if the volunteer has subscribed
+        const hoursLabel =
+          win.kind === "reminder_j2" ? "dans 2 jours" :
+          win.kind === "reminder_j1" ? "demain" : "aujourd'hui"
+        sendPushToEmail(r.volunteer.email, {
+          title: r.event.title,
+          body: `Rappel : votre créneau "${r.shift.label}" commence ${hoursLabel}.`,
+          url: `/my/${r.editToken}`,
+          tag: `reminder-${r.id}-${win.kind}`,
+        }).catch(() => {})
         sent++
       } else {
         failed++
@@ -118,8 +130,26 @@ async function run(req: Request) {
     totals[win.kind] = { eligible: inWindow.length, sent, failed }
   }
 
+  // Expire offered waitlist spots and promote next in line
+  const expiredOffers = await prisma.registration.findMany({
+    where: {
+      status: "offered",
+      waitingExpiresAt: { lt: now },
+    },
+    select: { id: true, shiftId: true },
+  })
+
+  for (const reg of expiredOffers) {
+    await prisma.registration.update({
+      where: { id: reg.id },
+      data: { status: "cancelled" },
+    })
+    await promoteNextInWaitlist(reg.shiftId).catch(() => {})
+  }
+
   return NextResponse.json({
     runAt: now.toISOString(),
     totals,
+    expiredOffers: expiredOffers.length,
   })
 }

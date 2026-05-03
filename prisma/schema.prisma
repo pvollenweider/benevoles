@@ -72,6 +72,7 @@ model Shift {
   locationDetails String?
   displayOrder    Int      @default(0)
   internalNotes   String?
+  waitlistEnabled Boolean  @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -102,11 +103,14 @@ model Registration {
   source         String    @default("public_form")
   comment        String?
   editToken      String    @unique
-  reminderJ2Sent DateTime?
-  reminderJ1Sent DateTime?
-  reminderDdSent DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  reminderJ2Sent    DateTime?
+  reminderJ1Sent    DateTime?
+  reminderDdSent    DateTime?
+  waitingPosition   Int?
+  waitingOfferedAt  DateTime?
+  waitingExpiresAt  DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   shift     Shift     @relation(fields: [shiftId], references: [id], onDelete: Cascade)
@@ -115,6 +119,8 @@ model Registration {
   @@index([status, reminderJ2Sent])
   @@index([status, reminderJ1Sent])
   @@index([status, reminderDdSent])
+  @@index([status, shiftId])
+  @@index([waitingPosition, shiftId])
 }
 
 model Member {
@@ -150,6 +156,17 @@ model MemberInvite {
 
   @@unique([eventId, memberId])
   @@index([token])
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  endpoint  String   @unique
+  auth      String
+  p256dh    String
+  email     String
+  createdAt DateTime @default(now())
+
+  @@index([email])
 }
 
 model AdminUser {

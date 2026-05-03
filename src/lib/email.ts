@@ -13,6 +13,7 @@ type RegistrationEmailData = {
   shifts: { label: string; date: string; startTime: string; endTime: string }[]
   editToken: string
   orgSlug?: string
+  confirmationMessage?: string
 }
 
 export async function sendConfirmationEmail(data: RegistrationEmailData) {
@@ -25,6 +26,7 @@ export async function sendConfirmationEmail(data: RegistrationEmailData) {
       shifts: data.shifts,
       editToken: data.editToken,
       orgSlug: data.orgSlug,
+      confirmationMessage: data.confirmationMessage,
     },
   })
 }

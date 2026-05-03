@@ -22,6 +22,7 @@ type Shift = {
   status: string
   locationDetails: string | null
   displayOrder: number
+  waitlistEnabled: boolean
 }
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
@@ -145,11 +146,17 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
   }, {})
 
   const hasAvailableShift = event.shifts.some(
-    (s) => s.status !== "full" && s.status !== "closed" && s.status !== "cancelled"
+    (s) =>
+      (s.status !== "full" && s.status !== "closed" && s.status !== "cancelled") ||
+      (s.status === "full" && s.waitlistEnabled)
   )
 
   function toggleShift(id: string, status: string) {
-    if (status === "full" || status === "closed" || status === "cancelled") return
+    if (status === "closed" || status === "cancelled") return
+    if (status === "full") {
+      const shift = event?.shifts.find((s) => s.id === id)
+      if (!shift?.waitlistEnabled) return
+    }
     if (myShiftIds.has(id)) return
     setSelectedShifts((prev) => {
       const next = new Set(prev)
@@ -228,7 +235,11 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
     }
 
     localStorage.setItem(storageKey, data.editToken)
-    router.push(`/${eventSlug}/success?token=${data.editToken}`)
+    if (data.onWaitlist) {
+      router.push(`/${eventSlug}/success?token=${data.editToken}&waitlist=1`)
+    } else {
+      router.push(`/${eventSlug}/success?token=${data.editToken}`)
+    }
   }
 
   const conflictingShiftIds = new Set(

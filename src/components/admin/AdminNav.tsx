@@ -16,6 +16,12 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
             {orgName ?? "Admin"}
           </Link>
           <Link
+            href="/admin/dashboard"
+            className={`text-sm ${pathname.startsWith("/admin/dashboard") ? "text-blue-600 font-medium" : "text-gray-500 hover:text-gray-800"}`}
+          >
+            Tableau de bord
+          </Link>
+          <Link
             href="/admin/events"
             className={`text-sm ${pathname.startsWith("/admin/events") ? "text-blue-600 font-medium" : "text-gray-500 hover:text-gray-800"}`}
           >

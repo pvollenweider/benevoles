@@ -320,6 +320,7 @@ export default function EventForm({ initialData }: Props) {
           <label className="block text-sm font-medium text-gray-700 mb-1">Message de confirmation</label>
           <textarea rows={2} value={form.confirmationMessage} onChange={(e) => set("confirmationMessage", e.target.value)}
             className={`${inputCls} resize-none`} />
+          <p className="text-xs text-gray-400 mt-1">{"Supporte le **gras**, les listes (- item) et les liens [texte](url). Variables : {{prenom}}, {{créneau}}, {{date}}."}</p>
         </div>
 
         <div>

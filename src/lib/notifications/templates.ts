@@ -86,18 +86,23 @@ export function render(payload: NotificationPayload): RenderedEmail {
       return renderAdminWelcome(payload)
     case "password_reset":
       return renderPasswordReset(payload)
+    case "waitlist_confirmation":
+      return renderWaitlistConfirmation(payload)
+    case "waitlist_offered":
+      return renderWaitlistOffered(payload)
   }
 }
 
 // ── Inscription confirmée ────────────────────────────────────────────────────
 
 function renderConfirmation(p: NotificationPayload): RenderedEmail {
-  const { volunteerName, eventTitle, shifts, editToken, orgSlug } = p.data as {
+  const { volunteerName, eventTitle, shifts, editToken, orgSlug, confirmationMessage } = p.data as {
     volunteerName: string
     eventTitle: string
     shifts: { label: string; date: string; startTime: string; endTime: string }[]
     editToken: string
     orgSlug?: string
+    confirmationMessage?: string
   }
   const editUrl = myPageUrl(orgSlug, editToken)
   const firstName = volunteerName.split(" ")[0]
@@ -111,6 +116,7 @@ function renderConfirmation(p: NotificationPayload): RenderedEmail {
     `Tes créneaux :`,
     ...shifts.map((s) => `  • ${s.label} — ${s.date} · ${s.startTime}–${s.endTime}`),
     ``,
+    ...(confirmationMessage ? [confirmationMessage, ``] : []),
     `Un empêchement ? Tu peux gérer tes inscriptions ici :`,
     editUrl,
     ``,
@@ -128,6 +134,7 @@ function renderConfirmation(p: NotificationPayload): RenderedEmail {
           <span style="color:#666;font-size:0.9em"> — ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</span>
         </div>`).join("")}
     </div>
+    ${confirmationMessage ? `<div style="background:#eff6ff;border-radius:8px;padding:14px 16px;margin-top:1em;font-size:0.9em;color:#1e40af;white-space:pre-wrap">${escapeHtml(confirmationMessage)}</div>` : ""}
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Un grand M E R C I et à très vite ! 🙌</p>
   `, preheader)
@@ -574,6 +581,82 @@ function renderPasswordReset(p: NotificationPayload): RenderedEmail {
     <p style="color:#888;font-size:0.85em;margin-top:2em">Ce lien est valable 1 heure. Si vous n'avez pas fait cette demande, ignorez cet email.</p>
   `, `Cliquez dans l'heure qui suit — si ce n'est pas vous, ignorez cet email.`)
 
+  return { subject, html, text }
+}
+
+// ── Liste d'attente : confirmation ───────────────────────────────────────────
+
+function renderWaitlistConfirmation(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    volunteerName: string
+    eventTitle: string
+    shiftLabel: string
+    shiftDate: string
+    shiftStart: string
+    shiftEnd: string
+    waitingPosition: number
+    orgSlug?: string
+    eventSlug?: string
+  }
+  const firstName = d.volunteerName.split(" ")[0]
+  const subject = `Liste d'attente — ${d.eventTitle}`
+  const text = [
+    `Hello ${firstName} !`,
+    ``,
+    `Tu es sur la liste d'attente pour le créneau "${d.shiftLabel}" (${d.shiftDate} · ${d.shiftStart}–${d.shiftEnd}).`,
+    `Position : ${d.waitingPosition}`,
+    ``,
+    `On te préviendra dès qu'une place se libère !`,
+  ].join("\n")
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 🕐</h2>
+    <p style="color:#555;margin:0 0 1em">Tu es sur la liste d'attente pour <strong>${escapeHtml(d.eventTitle)}</strong>.</p>
+    <div style="background:#f9fafb;border-radius:10px;padding:14px 16px;line-height:2">
+      <div>📋 ${escapeHtml(d.shiftLabel)}</div>
+      <div>📅 ${escapeHtml(d.shiftDate)}</div>
+      <div>🕐 ${escapeHtml(d.shiftStart)}–${escapeHtml(d.shiftEnd)}</div>
+      <div>Position : <strong>#${d.waitingPosition}</strong></div>
+    </div>
+    <p style="color:#888;font-size:0.85em;margin-top:1.5em">On te préviendra par email dès qu'une place se libère !</p>
+  `, `Tu es en position #${d.waitingPosition} — on te prévient dès qu'une place se libère.`)
+  return { subject, html, text }
+}
+
+// ── Liste d'attente : place proposée ─────────────────────────────────────────
+
+function renderWaitlistOffered(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    volunteerName: string
+    eventTitle: string
+    shiftLabel: string
+    shiftDate: string
+    shiftStart: string
+    shiftEnd: string
+    confirmUrl: string
+    expiresAt: string // human-readable
+  }
+  const firstName = d.volunteerName.split(" ")[0]
+  const subject = `🎉 Une place s'est libérée — ${d.eventTitle}`
+  const text = [
+    `Hello ${firstName} !`,
+    ``,
+    `Bonne nouvelle : une place s'est libérée pour "${d.shiftLabel}" (${d.shiftDate} · ${d.shiftStart}–${d.shiftEnd}) !`,
+    ``,
+    `Confirme ta participation avant le ${d.expiresAt} :`,
+    d.confirmUrl,
+    ``,
+    `Passé ce délai, la place sera proposée à la personne suivante.`,
+  ].join("\n")
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 🎉</h2>
+    <p style="color:#555;margin:0 0 1em">Bonne nouvelle : une place s'est libérée pour <strong>${escapeHtml(d.shiftLabel)}</strong> lors de <strong>${escapeHtml(d.eventTitle)}</strong> !</p>
+    <div style="background:#f9fafb;border-radius:10px;padding:14px 16px;line-height:2;margin-bottom:1.25em">
+      <div>📅 ${escapeHtml(d.shiftDate)}</div>
+      <div>🕐 ${escapeHtml(d.shiftStart)}–${escapeHtml(d.shiftEnd)}</div>
+    </div>
+    <p style="margin-top:1.5em">${btn(d.confirmUrl, "Confirmer ma participation")}</p>
+    <p style="color:#e55;font-size:0.85em;margin-top:1em">⏱ Ce lien expire le <strong>${escapeHtml(d.expiresAt)}</strong>. Passé ce délai, la place sera proposée à quelqu'un d'autre.</p>
+  `, `Une place s'est libérée ! Confirme avant le ${d.expiresAt}.`)
   return { subject, html, text }
 }
 

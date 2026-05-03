@@ -22,7 +22,12 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
       organization: { select: { slug: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
-        include: { registrations: { where: { status: "active" } } },
+        include: {
+          registrations: {
+            where: { status: { in: ["active", "waiting", "offered"] } },
+            select: { id: true, status: true, volunteerId: true },
+          },
+        },
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
       },
     },
@@ -31,12 +36,19 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
   if (!event) notFound()
 
   const totalCapacity = event.shifts.reduce((s, sh) => s + sh.capacity, 0)
-  const totalRegistered = event.shifts.reduce((s, sh) => s + sh.registrations.length, 0)
-  const criticalShifts = event.shifts.filter((sh) => sh.capacity - sh.registrations.length >= 2)
+  const totalRegistered = event.shifts.reduce(
+    (s, sh) => s + sh.registrations.filter((r) => r.status === "active").length,
+    0
+  )
+  const criticalShifts = event.shifts.filter(
+    (sh) => sh.capacity - sh.registrations.filter((r) => r.status === "active").length >= 2
+  )
 
   // Unique volunteers across all shifts (one reminder email per person)
   const uniqueVolunteerIds = new Set<string>()
-  for (const sh of event.shifts) for (const r of sh.registrations) uniqueVolunteerIds.add(r.volunteerId)
+  for (const sh of event.shifts)
+    for (const r of sh.registrations)
+      if (r.status === "active") uniqueVolunteerIds.add(r.volunteerId)
 
   return (
     <div className="space-y-6">
@@ -134,7 +146,8 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
           </h2>
           <div className="space-y-2">
             {criticalShifts.map((shift) => {
-              const filled = shift.registrations.length
+              const filled = shift.registrations.filter((r) => r.status === "active").length
+              const waitingCount = shift.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length
               const { capacity } = shift
               const pct = capacity > 0 ? Math.round((filled / capacity) * 100) : 0
               const barColor =
@@ -169,6 +182,11 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
                     <span className={`text-xs font-semibold tabular-nums whitespace-nowrap ${countColor}`}>
                       {filled}/{capacity} bénévole{capacity > 1 ? "s" : ""}
                     </span>
+                    {waitingCount > 0 && (
+                      <span className="text-xs text-gray-400">
+                        {waitingCount} en attente
+                      </span>
+                    )}
                   </div>
                 </div>
               )

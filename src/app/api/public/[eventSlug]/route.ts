@@ -45,6 +45,7 @@ export async function GET(
     status: shift.registrations.length >= shift.capacity ? "full" : shift.status,
     locationDetails: shift.locationDetails,
     displayOrder: shift.displayOrder,
+    waitlistEnabled: shift.waitlistEnabled,
   }))
 
   return NextResponse.json({

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import PublicFooter from "@/components/PublicFooter"
+import { renderMarkdown, interpolate } from "@/lib/markdown"
+import PushSubscribeButton from "@/components/PushSubscribeButton"
 
 type ShiftRef = {
   label: string
@@ -24,6 +26,7 @@ type PageData = {
   registrations: RegistrationItem[]
   orgHomeUrl: string
   eventUrl: string
+  confirmationMessage: string | null
 }
 
 export default function MyRegistrationPage() {
@@ -131,9 +134,25 @@ export default function MyRegistrationPage() {
           })}
         </div>
 
-        <Link href={data?.eventUrl ?? data?.orgHomeUrl ?? "/"} className="block text-center text-sm text-gray-400 hover:text-gray-600 pt-2">
-          Retour à l'accueil
-        </Link>
+        {data.confirmationMessage && data.confirmationMessage.trim() && (() => {
+          const html = renderMarkdown(interpolate(data.confirmationMessage, { prenom: data.volunteer.firstName, "créneau": data.registrations[0]?.shift.label ?? "", date: "", heure: "" }))
+          return (
+            <div>
+              <p className="text-xs text-gray-400 uppercase tracking-wide mb-2">Informations pratiques</p>
+              <div
+                className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-900"
+                dangerouslySetInnerHTML={{ __html: html }}
+              />
+            </div>
+          )
+        })()}
+
+        <div className="flex items-center justify-between pt-2">
+          <Link href={data?.eventUrl ?? data?.orgHomeUrl ?? "/"} className="text-sm text-gray-400 hover:text-gray-600">
+            Retour à l&apos;accueil
+          </Link>
+          <PushSubscribeButton email={data.volunteer.email} />
+        </div>
       </div>
       <PublicFooter />
     </main>
