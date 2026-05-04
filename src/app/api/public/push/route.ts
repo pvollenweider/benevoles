@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
+import { rateLimit, getClientIp } from "@/lib/rate-limit"
 
 const schema = z.object({
   email: z.string().email(),
@@ -11,6 +12,9 @@ const schema = z.object({
 
 // Register or refresh a push subscription
 export async function POST(req: Request) {
+  const rl = rateLimit(getClientIp(req), "push-subscribe", 10, 60 * 60 * 1000)
+  if (!rl.ok) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
+
   const body = await req.json().catch(() => null)
   const parsed = schema.safeParse(body)
   if (!parsed.success) {
@@ -19,9 +23,15 @@ export async function POST(req: Request) {
 
   const { email, endpoint, auth, p256dh } = parsed.data
 
+  // Prevent hijacking: an existing subscription cannot change its email
+  const existing = await prisma.pushSubscription.findUnique({ where: { endpoint } })
+  if (existing && existing.email !== email) {
+    return NextResponse.json({ error: "Données invalides" }, { status: 400 })
+  }
+
   await prisma.pushSubscription.upsert({
     where: { endpoint },
-    update: { auth, p256dh, email },
+    update: { auth, p256dh },
     create: { endpoint, auth, p256dh, email },
   })
 

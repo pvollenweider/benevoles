@@ -3,6 +3,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { sendMemberInvite } from "@/lib/email"
 import { z } from "zod"
+import { randomBytes } from "crypto"
 
 const postSchema = z.object({
   memberIds: z.array(z.string()).min(1).max(500),
@@ -119,7 +120,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   for (const member of members) {
     if (existingByMember.has(member.id)) continue
     const invite = await prisma.memberInvite.create({
-      data: { eventId, memberId: member.id },
+      data: { eventId, memberId: member.id, token: randomBytes(24).toString("hex") },
       select: { id: true, memberId: true, token: true },
     })
     created.push(invite)

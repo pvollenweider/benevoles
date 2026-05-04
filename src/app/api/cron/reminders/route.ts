@@ -12,11 +12,9 @@ export const dynamic = "force-dynamic"
 // `curl http://localhost:3000/api/cron/reminders` works for testing.
 function isAuthorized(req: Request): boolean {
   const expected = process.env.CRON_SECRET
-  const auth = req.headers.get("authorization")
-  if (expected) {
-    return auth === `Bearer ${expected}`
-  }
-  // No secret configured → only allow on localhost (dev mode).
+  if (expected) return req.headers.get("authorization") === `Bearer ${expected}`
+  // No secret configured: fail-closed in production, allow localhost in dev.
+  if (process.env.NODE_ENV === "production") return false
   const host = req.headers.get("host") ?? ""
   return host.startsWith("localhost") || host.startsWith("127.0.0.1")
 }

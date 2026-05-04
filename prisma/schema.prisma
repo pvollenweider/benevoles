@@ -147,7 +147,7 @@ model MemberInvite {
   id       String    @id @default(cuid())
   eventId  String
   memberId String
-  token    String    @unique @default(cuid())
+  token    String    @unique
   sentAt   DateTime  @default(now())
   usedAt   DateTime?
 

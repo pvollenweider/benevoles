@@ -2,8 +2,12 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { orgBaseUrl } from "@/lib/urls"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
+import { rateLimit, getClientIp } from "@/lib/rate-limit"
 
-export async function GET(_req: Request, { params }: { params: Promise<{ token: string }> }) {
+export async function GET(req: Request, { params }: { params: Promise<{ token: string }> }) {
+  const rl = rateLimit(getClientIp(req), "reg-token-read", 10, 60 * 60 * 1000)
+  if (!rl.ok) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
+
   const { token } = await params
 
   const registration = await prisma.registration.findFirst({
@@ -57,7 +61,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ token: 
   })
 }
 
-export async function DELETE(_req: Request, { params }: { params: Promise<{ token: string }> }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ token: string }> }) {
+  const rl = rateLimit(getClientIp(req), "reg-token-delete", 5, 60 * 60 * 1000)
+  if (!rl.ok) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
+
   const { token } = await params
 
   const registration = await prisma.registration.findFirst({
