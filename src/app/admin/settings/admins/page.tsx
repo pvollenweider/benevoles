@@ -6,6 +6,7 @@ import AdminsManager from "@/components/admin/AdminsManager"
 import OrgNameForm from "@/components/admin/OrgNameForm"
 import OrgSlugForm from "@/components/admin/OrgSlugForm"
 import OrgCharterForm from "@/components/admin/OrgCharterForm"
+import ChangePasswordForm from "@/components/admin/ChangePasswordForm"
 
 export const dynamic = "force-dynamic"
 
@@ -58,6 +59,11 @@ export default async function AdminsSettingsPage() {
       )}
 
       {org && <OrgCharterForm initialCharter={org.volunteerCharter ?? null} />}
+
+      <section className="bg-white rounded-2xl border border-gray-200 p-6">
+        <h2 className="text-sm font-semibold text-gray-900 mb-4">Change password</h2>
+        <ChangePasswordForm />
+      </section>
 
       <AdminsManager
         initialAdmins={admins.map((a) => ({
