@@ -1,36 +1,33 @@
-export const DEFAULT_VOLUNTEER_CHARTER = `A été convenu que :
+export function buildVolunteerCharter({ hasOrgInsurance = true }: { hasOrgInsurance?: boolean } = {}): string {
+  const insuranceClause = hasOrgInsurance
+    ? `La personne bénévole sera couverte pendant toute la durée de sa présence par l'assurance responsabilité civile de l'organisation. Elle reste néanmoins responsable auprès des tiers de tout dommage qu'elle causerait personnellement.`
+    : `La personne bénévole est responsable de sa propre couverture accidents (LAA ou assurance personnelle équivalente). Elle reste responsable auprès des tiers de tout dommage qu'elle causerait personnellement.`
+
+  return `A été convenu que :
 
 1. Engagement bénévole
 
-Les bénévoles s'engagent librement pour mener une activité non rémunérée. Cet engagement est distinct de tout contrat de travail au sens du Code des obligations suisse (CO art. 319 ss).
+La personne bénévole s'engage librement pour mener une activité non salariée en faveur de l'organisation, en dehors de son temps professionnel et familial. Elle s'engage :
 
-2. Engagements des bénévoles
+- À respecter toutes les personnes avec qui elle sera en contact, quelles que soient leur origine, leur genre, leur sexualité ou leur identité d'expression,
+- À respecter ses disponibilités validées avec la responsable bénévole,
+- À participer aux missions confiées par la responsable bénévole selon ses disponibilités,
+- À s'assurer d'une couverture accidents personnelle adéquate (LAA).
 
-Les bénévoles s'engagent à :
+2. En outre, la personne bénévole accepte
 
-- Respecter toutes les personnes avec qui elles et ils seront en contact, quelles que soient leur origine, leur genre, leur sexualité ou leur identité d'expression,
-- Respecter leurs disponibilités validées avec les responsables bénévoles,
-- Participer aux missions confiées par les responsables bénévoles,
-- Respecter les consignes de sécurité en vigueur,
-- Préserver l'image et la réputation de l'organisation,
-- Prévenir les responsables bénévoles au moins 48h à l'avance en cas de désistement ou de changement de disponibilité.
+- De respecter les consignes de sécurité en vigueur,
+- D'être garante de l'image de l'organisation,
+- De considérer son engagement avec tout le sérieux nécessaire au bon déroulement des activités,
+- De prévenir la responsable bénévole au moins 48 heures à l'avance en cas de désistement ou de changement de disponibilité, afin de ne pas compromettre l'organisation générale de l'équipe.
 
-3. Couverture accidents
+3. L'organisation s'engage envers la personne bénévole
 
-Les bénévoles sont responsables de leur propre couverture accidents (assurance accidents personnelle, LCA). L'organisation décline toute responsabilité en cas d'accident survenu en dehors des activités qu'elle organise.
+- À fournir les informations et le matériel nécessaires à l'exercice des missions,
+- À assurer un environnement de travail respectueux et bienveillant,
+- À remettre, sur demande, un certificat de bénévolat à l'issue de l'engagement.
 
-4. Responsabilité
+${insuranceClause}`
+}
 
-Chaque bénévole reste personnellement responsable auprès des tiers de tout dommage qu'elle ou il causerait dans l'exercice de son activité bénévole.
-
-5. Droit à l'image
-
-Des photos et vidéos peuvent être prises lors des activités à des fins de communication de l'organisation. Toute personne souhaitant s'y opposer est invitée à en informer les responsables bénévoles avant le début de l'activité.
-
-6. Protection des données
-
-Les données personnelles des bénévoles (nom, prénom, coordonnées) sont traitées uniquement dans le cadre de l'organisation des activités, conformément à la loi fédérale sur la protection des données (LPD). Elles ne sont pas transmises à des tiers sans consentement.
-
-7. Frais
-
-Le bénévolat est exercé à titre gratuit. Sauf accord préalable écrit, aucun remboursement de frais (transport, repas, matériel) n'est prévu.`
+export const DEFAULT_VOLUNTEER_CHARTER = buildVolunteerCharter()
