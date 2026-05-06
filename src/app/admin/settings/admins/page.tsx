@@ -29,7 +29,7 @@ export default async function AdminsSettingsPage() {
       },
       orderBy: { createdAt: "asc" },
     }),
-    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, volunteerCharter: true } }),
+    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true } }),
     prisma.orgSlugHistory.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
@@ -58,7 +58,12 @@ export default async function AdminsSettingsPage() {
         />
       )}
 
-      {org && <OrgCharterForm initialCharter={org.volunteerCharter ?? null} />}
+      {org && (
+        <OrgCharterForm
+          initialCharter={org.volunteerCharter ?? null}
+          initialHasOrgInsurance={org.hasOrgInsurance}
+        />
+      )}
 
       <section className="bg-white rounded-2xl border border-gray-200 p-6">
         <h2 className="text-sm font-semibold text-gray-900">Mon compte</h2>

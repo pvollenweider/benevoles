@@ -168,7 +168,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!charterAccepted) { setError("Veuillez accepter la charte du bénévole."); return }
+    if (!charterAccepted) { setError("Veuillez accepter la convention des bénévoles."); return }
     if (!form.consent) { setError("Veuillez accepter la politique de confidentialité."); return }
     if (!form.firstName || !form.lastName || !form.email) { setError("Prénom, nom et email sont obligatoires."); return }
 
@@ -522,7 +522,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
                       onClick={() => setShowCharter(true)}
                       className="text-blue-600 underline underline-offset-2 hover:text-blue-800"
                     >
-                      charte du bénévole
+                      convention des bénévoles
                     </button>
                     .
                   </span>
@@ -585,7 +585,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[80vh] flex flex-col">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-              <h2 className="text-base font-semibold text-gray-900">Charte du bénévole</h2>
+              <h2 className="text-base font-semibold text-gray-900">Convention des Bénévoles</h2>
               <button onClick={() => setShowCharter(false)} className="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
             </div>
             <div className="overflow-y-auto px-5 py-4 text-sm text-gray-700 whitespace-pre-wrap leading-relaxed flex-1">
