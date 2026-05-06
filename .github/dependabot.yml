@@ -8,6 +8,10 @@ updates:
     groups:
       all-deps:
         patterns: ["*"]
+    ignore:
+      # eslint-plugin-react (via eslint-config-next) doesn't support ESLint 10 yet
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
     labels: ["deps"]
     open-pull-requests-limit: 5
 
