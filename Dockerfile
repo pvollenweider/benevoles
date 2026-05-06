@@ -1,11 +1,11 @@
 # ── Stage 1 : dépendances app ────────────────────────────────────────────────
-FROM node:22-alpine AS deps
+FROM node:24-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --legacy-peer-deps
 
 # ── Stage 2 : prisma CLI avec toutes ses dépendances (engines inclus) ─────────
-FROM node:22-alpine AS prisma-cli
+FROM node:24-alpine AS prisma-cli
 WORKDIR /prisma
 RUN npm install prisma@7.8.0 \
     --save-exact \
@@ -14,7 +14,7 @@ RUN npm install prisma@7.8.0 \
     --no-audit
 
 # ── Stage 3 : build Next.js ──────────────────────────────────────────────────
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -33,7 +33,7 @@ ENV NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
 RUN npx prisma generate && npm run build
 
 # ── Stage 4 : runner ─────────────────────────────────────────────────────────
-FROM node:22-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
