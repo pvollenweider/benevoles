@@ -14,6 +14,4 @@ export const DEFAULT_VOLUNTEER_CHARTER = `A été convenu que :
 - Considérer leur engagement avec tout le sérieux nécessaire au bon déroulement de la manifestation,
 - Prévenir les responsables bénévoles 48h à l'avance en cas de désistement ou de changement de disponibilité.
 
-Sur demande, un certificat de bénévolat peut être remis à chaque bénévole.
-
-Les bénévoles sont couverts par l'assurance responsabilité civile de l'organisation pendant toute la durée de leur présence. Chaque personne reste néanmoins responsable auprès des tiers de tout dommage qu'elle causerait personnellement.`
+Chaque personne reste responsable auprès des tiers de tout dommage qu'elle causerait personnellement.`
