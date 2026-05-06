@@ -61,7 +61,10 @@ export default async function AdminsSettingsPage() {
       {org && <OrgCharterForm initialCharter={org.volunteerCharter ?? null} />}
 
       <section className="bg-white rounded-2xl border border-gray-200 p-6">
-        <h2 className="text-sm font-semibold text-gray-900 mb-4">Change password</h2>
+        <h2 className="text-sm font-semibold text-gray-900">Mon compte</h2>
+        <p className="text-xs text-gray-400 mt-0.5 mb-4">
+          {session.user?.name} · {currentEmail}
+        </p>
         <ChangePasswordForm />
       </section>
 
