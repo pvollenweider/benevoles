@@ -34,6 +34,8 @@ Application **SaaS multi-tenant** de gestion de bénévoles pour événements. C
 - CRUD des organisations
 - Invitation des premiers admins par lien sécurisé (token révocable)
 
+![lego.png](docs/lego.png)
+
 ## Stack
 
 | Couche | Technologie |
