@@ -71,7 +71,7 @@ function SuccessContent() {
             />
           ) : (
             <p className="text-gray-500 text-sm mb-6">
-              Merci pour ton engagement. Un email de confirmation t'a été envoyé.
+              Merci pour ton engagement. Un email de confirmation a été envoyé.
             </p>
           )}
 
