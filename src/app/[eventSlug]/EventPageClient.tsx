@@ -367,7 +367,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
                 {!hasAvailableShift && (
                   <div className="text-center py-8 text-gray-400">
                     <p className="text-lg font-medium">Tous les créneaux sont complets.</p>
-                    <p className="text-sm mt-1">Merci pour votre intérêt !</p>
+                    <p className="text-sm mt-1">Merci pour ton intérêt !</p>
                   </div>
                 )}
 
@@ -608,7 +608,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
           <div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full space-y-4">
             <h2 className="text-base font-semibold text-gray-900">Se désinscrire ?</h2>
             <p className="text-sm text-gray-600">
-              Voulez-vous annuler votre inscription à&nbsp;
+              Tu veux annuler ton inscription à&nbsp;
               <span className="font-medium text-gray-900">« {pendingCancel.label} »</span>&nbsp;?
             </p>
             <div className="flex gap-3 pt-1">

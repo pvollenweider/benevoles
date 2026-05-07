@@ -28,7 +28,7 @@ const defaultData: EventFormData = {
   startDate: "",
   endDate: "",
   publicInstructions: "",
-  confirmationMessage: "Merci pour votre inscription ! À bientôt.",
+  confirmationMessage: "Merci pour ton inscription ! À bientôt.",
   reminderMessage: "",
   publicStatus: "draft",
 }
