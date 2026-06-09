@@ -145,6 +145,13 @@ export async function POST(req: Request) {
 
   const editToken = registrations[0].editToken
 
+  // Sync volunteer into the org member list (non-blocking)
+  prisma.member.upsert({
+    where: { organizationId_email: { organizationId: event.organizationId, email } },
+    create: { organizationId: event.organizationId, firstName, lastName, email, phone },
+    update: { firstName, lastName, phone: phone ?? undefined },
+  }).catch((e) => console.error("Member sync error:", e))
+
   // Mark the member invite as used (kept valid for re-visits per product
   // decision — only the first usage is timestamped).
   if (inviteToken) {
