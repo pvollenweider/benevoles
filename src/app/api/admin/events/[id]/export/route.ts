@@ -174,10 +174,13 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
       }
     }
 
-    // One block per shift in the group
-    for (const shift of group.shifts) {
+    // One block per shift in the group — sort + skip overlaps to avoid duplicate mergeCells
+    let cursor = 0
+    const sortedGroupShifts = [...group.shifts].sort((a, b) => toMin(a.startTime) - toMin(b.startTime))
+    for (const shift of sortedGroupShifts) {
       const startSlot = Math.round((toMin(shift.startTime) - dayStart) / STEP)
       const endSlot   = Math.min(slots.length, Math.max(startSlot + 1, Math.round((toMin(shift.endTime) - dayStart) / STEP)))
+      if (startSlot < cursor) continue
 
       const vols = [...shift.registrations]
         .sort((a, b) => a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr"))
@@ -204,6 +207,7 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
       if (endSlot - startSlot > 1) {
         ws.mergeCells(rowNum, T0 + startSlot, rowNum, T0 + endSlot - 1)
       }
+      cursor = endSlot
     }
   })
 
@@ -232,11 +236,13 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
     labelCell.fill   = solidFill("FFF5F3FF")
     labelCell.border = { top: b("medium", "FFC7D2FE"), bottom: b("thin", "FFE0E7FF"), left: b("thin"), right: b("thin") }
 
-    // Show bands and empty cells
+    // Show bands and empty cells — sort + skip overlaps
     const occupied = new Set<number>()
-    for (const show of shows) {
+    let showCursor = 0
+    for (const show of [...shows].sort((a, b) => toMin(a.startTime) - toMin(b.startTime))) {
       const s0 = Math.round((toMin(show.startTime) - dayStart) / STEP)
       const s1 = Math.min(Math.round((toMin(show.endTime) - dayStart) / STEP), slots.length)
+      if (s0 < showCursor) continue
       for (let s = s0; s < s1; s++) occupied.add(s)
 
       const startCell = sRow.getCell(T0 + s0)
@@ -249,6 +255,7 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
       if (s1 - s0 > 1) {
         ws.mergeCells(showRowNum, T0 + s0, showRowNum, T0 + s1 - 1)
       }
+      showCursor = s1
     }
 
     for (let s = 0; s < slots.length; s++) {
