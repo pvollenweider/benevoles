@@ -33,13 +33,6 @@ function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
 }
 
-function volsList(regs: RegData[]): string {
-  return [...regs]
-    .sort((a, b) => a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr"))
-    .map((r) => esc(shortName(r.volunteer)))
-    .join("<br>") || "—"
-}
-
 function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): string {
   const allMins = [
     ...shifts.flatMap((s) => [toMin(s.startTime), toMin(s.endTime)]),
