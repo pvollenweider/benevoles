@@ -7,7 +7,7 @@ import Link from "next/link"
 type OrgCount = {
   events: number
   admins: number
-  members: number
+  volunteers: number
 }
 
 type Org = {
@@ -94,7 +94,7 @@ export default function OrgsManager({ initialOrgs }: Props) {
                   <td className="px-4 py-3 text-gray-500 font-mono text-xs">{org.slug}</td>
                   <td className="px-4 py-3 text-right text-gray-600">{org._count.events}</td>
                   <td className="px-4 py-3 text-right text-gray-600">{org._count.admins}</td>
-                  <td className="px-4 py-3 text-right text-gray-600">{org._count.members}</td>
+                  <td className="px-4 py-3 text-right text-gray-600">{org._count.volunteers}</td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-3">
                       <Link

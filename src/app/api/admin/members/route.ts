@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
 
-const memberSchema = z.object({
+const volunteerSchema = z.object({
   firstName: z.string().min(1).max(100),
   lastName: z.string().min(1).max(100),
   email: z.string().email().optional().or(z.literal("")),
@@ -21,7 +21,7 @@ export async function GET(req: Request) {
   const search = url.searchParams.get("q")?.trim() ?? ""
   const tag = url.searchParams.get("tag")?.trim() ?? ""
 
-  const members = await db.member.findMany({
+  const volunteers = await db.volunteer.findMany({
     where: {
       ...(search
         ? {
@@ -37,23 +37,23 @@ export async function GET(req: Request) {
     orderBy: [{ active: "desc" }, { lastName: "asc" }, { firstName: "asc" }],
   })
 
-  return NextResponse.json(members)
+  return NextResponse.json(volunteers)
 }
 
 export async function POST(req: Request) {
   const guard = await requireOrgSession()
   if (guard instanceof NextResponse) return guard
-  const { db, organizationId } = guard
+  const { db } = guard
 
   const body = await req.json()
-  const parsed = memberSchema.safeParse(body)
+  const parsed = volunteerSchema.safeParse(body)
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
   }
   const data = parsed.data
 
   if (data.email) {
-    const existing = await db.member.findFirst({ where: { email: data.email } })
+    const existing = await db.volunteer.findFirst({ where: { email: data.email } })
     if (existing) {
       return NextResponse.json(
         { error: "Un membre avec cet email existe déjà." },
@@ -62,9 +62,8 @@ export async function POST(req: Request) {
     }
   }
 
-  const member = await db.member.create({
+  const volunteer = await db.volunteer.create({
     data: {
-      organizationId,
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email || null,
@@ -75,5 +74,5 @@ export async function POST(req: Request) {
     },
   })
 
-  return NextResponse.json(member, { status: 201 })
+  return NextResponse.json(volunteer, { status: 201 })
 }

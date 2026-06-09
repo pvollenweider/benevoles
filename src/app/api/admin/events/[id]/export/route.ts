@@ -4,7 +4,7 @@ import ExcelJS from "exceljs"
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-type VolData = { firstName: string; lastName: string; email: string; phone: string | null }
+type VolData = { firstName: string; lastName: string; email: string | null; phone: string | null }
 type RegData  = { volunteer: VolData; comment: string | null; source: string }
 type ShiftRow = {
   id: string; roleName: string; label: string; date: Date
@@ -81,7 +81,8 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
   // Compute duplicate first names across all volunteers in this day
   const uniqueVols = new Map<string, VolData>()
   for (const s of shifts) for (const reg of s.registrations) {
-    if (!uniqueVols.has(reg.volunteer.email)) uniqueVols.set(reg.volunteer.email, reg.volunteer)
+    const key = reg.volunteer.email ?? ""
+    if (!uniqueVols.has(key)) uniqueVols.set(key, reg.volunteer)
   }
   const firstNameCount = new Map<string, number>()
   for (const v of uniqueVols.values())
@@ -441,7 +442,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const volMap = new Map<string, VolData>()
   for (const shift of event.shifts) {
     for (const reg of shift.registrations) {
-      if (!volMap.has(reg.volunteer.email)) volMap.set(reg.volunteer.email, reg.volunteer)
+      const volEmail = reg.volunteer.email ?? ""
+      if (!volMap.has(volEmail)) volMap.set(volEmail, reg.volunteer)
     }
   }
   const allVols = [...volMap.values()].sort((a, b) =>

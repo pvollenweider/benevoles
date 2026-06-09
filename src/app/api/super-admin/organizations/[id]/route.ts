@@ -26,7 +26,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       active: true,
       createdAt: true,
       updatedAt: true,
-      _count: { select: { events: true, admins: true, members: true } },
+      _count: { select: { events: true, admins: true, volunteers: true } },
       admins: {
         select: { id: true, name: true, email: true, role: true, isActive: true, createdAt: true },
         orderBy: { createdAt: "asc" },

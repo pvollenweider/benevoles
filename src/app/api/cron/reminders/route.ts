@@ -113,7 +113,7 @@ async function run(req: Request) {
         const hoursLabel =
           win.kind === "reminder_j2" ? "dans 2 jours" :
           win.kind === "reminder_j1" ? "demain" : "aujourd'hui"
-        sendPushToEmail(r.volunteer.email, {
+        sendPushToEmail(r.volunteer.email ?? "", {
           title: r.event.title,
           body: `Rappel : votre créneau "${r.shift.label}" commence ${hoursLabel}.`,
           url: `/my/${r.editToken}`,

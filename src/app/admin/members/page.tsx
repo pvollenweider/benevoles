@@ -9,11 +9,11 @@ export default async function MembersPage() {
   if (!ctx) redirect("/admin/login")
   const { db } = ctx
 
-  const [members, allTags] = await Promise.all([
-    db.member.findMany({
+  const [volunteers, allTags] = await Promise.all([
+    db.volunteer.findMany({
       orderBy: [{ active: "desc" }, { lastName: "asc" }, { firstName: "asc" }],
     }),
-    db.member.findMany({ select: { tags: true } }).then((rows) => {
+    db.volunteer.findMany({ select: { tags: true } }).then((rows) => {
       const set = new Set<string>()
       for (const r of rows) for (const t of r.tags) set.add(t)
       return Array.from(set).sort()
@@ -22,15 +22,15 @@ export default async function MembersPage() {
 
   return (
     <MembersManager
-      initialMembers={members.map((m) => ({
-        id: m.id,
-        firstName: m.firstName,
-        lastName: m.lastName,
-        email: m.email,
-        phone: m.phone,
-        tags: m.tags,
-        active: m.active,
-        notes: m.notes,
+      initialMembers={volunteers.map((v) => ({
+        id: v.id,
+        firstName: v.firstName,
+        lastName: v.lastName,
+        email: v.email,
+        phone: v.phone,
+        tags: v.tags,
+        active: v.active,
+        notes: v.notes,
       }))}
       allTags={allTags}
     />
