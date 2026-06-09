@@ -59,6 +59,24 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
     return ri !== 0 ? ri : a.startTime.localeCompare(b.startTime)
   })
 
+  // Duplicate first-name detection for smart name display
+  const uniqueVols = new Map<string, VolData>()
+  for (const s of shifts) for (const reg of s.registrations) {
+    if (!uniqueVols.has(reg.volunteer.email)) uniqueVols.set(reg.volunteer.email, reg.volunteer)
+  }
+  const firstNameCount = new Map<string, number>()
+  for (const v of uniqueVols.values())
+    firstNameCount.set(v.firstName, (firstNameCount.get(v.firstName) ?? 0) + 1)
+  const smartName = (v: VolData) =>
+    (firstNameCount.get(v.firstName) ?? 0) > 1
+      ? `${v.firstName} ${v.lastName.charAt(0).toUpperCase()}.`
+      : v.firstName
+  const smartVolsList = (regs: RegData[]): string =>
+    [...regs]
+      .sort((a, b) => a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr"))
+      .map((r) => esc(smartName(r.volunteer)))
+      .join("<br>") || "—"
+
   // Group by (roleName, label) — one Gantt row per group
   type GroupEntry = { roleName: string; label: string; shifts: ShiftRow[] }
   const groups: GroupEntry[] = []
@@ -104,7 +122,7 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
         if (startSlot < s) continue // skip overlapping shift already covered
         while (s < startSlot) { row += `<td class="empty-cell${slots[s] % 60 === 0 ? " hour-mark" : ""}"></td>`; s++ }
         const colspan    = endSlot - startSlot
-        const vols       = volsList(sh.registrations)
+        const vols       = smartVolsList(sh.registrations)
         const hourMark   = slots[startSlot] % 60 === 0 ? " hour-mark" : ""
         row += colspan > 1
           ? `<td class="shift-cell${hourMark}" colspan="${colspan}">${vols}</td>`
@@ -160,7 +178,7 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
   // ── Recap ────────────────────────────────────────────────────────────────
   let recapRows = ""
   sorted.forEach((shift, i) => {
-    const vols        = volsList(shift.registrations)
+    const vols        = smartVolsList(shift.registrations)
     const lbl         = shift.label !== shift.roleName ? shift.label : ""
     const isFirstRole = i === 0 || sorted[i - 1].roleName !== shift.roleName
     const isLastRole  = i === sorted.length - 1 || sorted[i + 1].roleName !== shift.roleName
@@ -273,10 +291,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     }
   }
   const allVols = [...volMap.values()].sort((a, b) =>
-    a.firstName.localeCompare(b.firstName, "fr") || a.lastName.localeCompare(b.lastName, "fr")
+    a.lastName.localeCompare(b.lastName, "fr") || a.firstName.localeCompare(b.firstName, "fr")
   )
   const volRows = allVols.map((v) => `<tr>
-    <td>${esc(v.firstName)} ${esc(v.lastName)}</td>
+    <td>${esc(v.lastName)} ${esc(v.firstName)}</td>
     <td>${esc(v.email)}</td>
     <td>${esc(v.phone ?? "")}</td>
   </tr>`).join("")
@@ -370,7 +388,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     .gantt-table { table-layout: auto; }
     .th-role  { min-width: 100px; }
     .th-label { min-width: 130px; }
-    .slot-th  { min-width: 36px; text-align: center; font-size: 8px; color: #6B7280; }
+    .slot-th  { min-width: 22px; text-align: center; font-size: 8px; color: #6B7280; }
     .hour-th  { border-left: 2px solid #9CA3AF !important; font-weight: 700; color: #374151; }
     .hour-mark { border-left: 2px solid #D1D5DB !important; }
 
@@ -437,7 +455,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     .vol-table td, .vol-table th { white-space: nowrap; font-size: 9px; }
 
     /* ── Page setup ───────────────────────────────────────────────────── */
-    @page { size: A4 landscape; margin: 1.2cm 1cm; }
+    @page { size: A4 portrait; margin: 1.2cm 1cm; }
     @media print {
       body { padding: 0; }
       .day-section { page-break-inside: avoid; }
@@ -473,7 +491,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     <table class="vol-table">
       <thead>
         <tr>
-          <th>Prénom Nom</th><th>Email</th><th>Téléphone</th>
+          <th>Nom Prénom</th><th>Email</th><th>Téléphone</th>
         </tr>
       </thead>
       <tbody>${volRows}</tbody>

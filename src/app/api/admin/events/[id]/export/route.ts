@@ -78,6 +78,19 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
     return ri !== 0 ? ri : a.startTime.localeCompare(b.startTime)
   })
 
+  // Compute duplicate first names across all volunteers in this day
+  const uniqueVols = new Map<string, VolData>()
+  for (const s of shifts) for (const reg of s.registrations) {
+    if (!uniqueVols.has(reg.volunteer.email)) uniqueVols.set(reg.volunteer.email, reg.volunteer)
+  }
+  const firstNameCount = new Map<string, number>()
+  for (const v of uniqueVols.values())
+    firstNameCount.set(v.firstName, (firstNameCount.get(v.firstName) ?? 0) + 1)
+  const smartName = (v: VolData) =>
+    (firstNameCount.get(v.firstName) ?? 0) > 1
+      ? `${v.firstName} ${v.lastName.charAt(0).toUpperCase()}.`
+      : v.firstName
+
   const T0 = 3 // 1-indexed: col1=Rôle, col2=Libellé, col3+=slots
   const totalCols = 2 + slots.length
 
@@ -185,7 +198,7 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
 
       const vols = [...shift.registrations]
         .sort((a, b) => a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr"))
-        .map((r) => shortName(r.volunteer))
+        .map((r) => smartName(r.volunteer))
         .join("\n") || "—"
 
       for (let s = startSlot; s < endSlot; s++) {
@@ -461,7 +474,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const wsV = wb.addWorksheet("Bénévoles")
   wsV.columns = [{ width: 16 }, { width: 18 }, { width: 32 }, { width: 18 }]
 
-  const vHeaders = ["Prénom", "Nom", "Email", "Téléphone"]
+  const vHeaders = ["Nom", "Prénom", "Email", "Téléphone"]
   const vhRow = wsV.addRow(vHeaders)
   vhRow.height = 18
   vhRow.eachCell({ includeEmpty: true }, (cell, col) => {
@@ -483,12 +496,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     }
   }
   const allVols = [...volMap.values()].sort((a, b) =>
-    a.firstName.localeCompare(b.firstName, "fr") || a.lastName.localeCompare(b.lastName, "fr")
+    a.lastName.localeCompare(b.lastName, "fr") || a.firstName.localeCompare(b.firstName, "fr")
   )
 
   allVols.forEach((vol, idx) => {
     const isLast = idx === allVols.length - 1
-    const row    = wsV.addRow([vol.firstName, vol.lastName, vol.email, vol.phone ?? ""])
+    const row    = wsV.addRow([vol.lastName, vol.firstName, vol.email, vol.phone ?? ""])
     row.height   = 15
     row.eachCell({ includeEmpty: true }, (cell, col) => {
       cell.font      = { size: 9 }
