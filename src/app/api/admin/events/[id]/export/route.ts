@@ -175,8 +175,8 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
 
     // One block per shift in the group
     for (const shift of group.shifts) {
-      const startSlot = (toMin(shift.startTime) - dayStart) / 30
-      const endSlot   = (toMin(shift.endTime)   - dayStart) / 30
+      const startSlot = Math.floor((toMin(shift.startTime) - dayStart) / 30)
+      const endSlot   = Math.ceil((toMin(shift.endTime)   - dayStart) / 30)
 
       const vols = [...shift.registrations]
         .sort((a, b) => a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr"))
