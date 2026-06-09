@@ -106,10 +106,11 @@ Liste exhaustive des fonctionnalités de l'application.
 
 ### Gestion des membres (`/admin/members`)
 
-Pool de bénévoles connus de l'organisation (indépendant des inscriptions) :
+Pool de bénévoles connus de l'organisation (source de vérité partagée avec les inscriptions) :
 
 - Création, édition et désactivation de membres
 - Champs : prénom, nom, email, téléphone, tags libres, notes internes
+- **Colonnes Prénom et Nom séparées** ; tri par colonne au clic sur l'en-tête (croissant → décroissant → reset) ; changement annoncé aux lecteurs d'écran via live region
 - Recherche par texte et filtre par tag
 - Import CSV/TSV (`/admin/members/import`)
 
@@ -155,14 +156,14 @@ Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscr
 
 - Un onglet par jour avec Gantt : rôles × tranches de 30 minutes, noms des bénévoles dans les cellules
 - Plages des spectacles en fond coloré
-- Tableau récapitulatif : rôle, libellé, horaires, capacité, inscrits, liste des bénévoles
-- Onglet « Inscriptions » avec toutes les données détaillées
+- Onglet **« Récap par poste »** (feuille dédiée) : tableau récapitulatif par jour — rôle, libellé, horaires, capacité, inscrits, liste des bénévoles
+- Onglet **« Bénévoles »** avec toutes les données détaillées
 - Bénévoles triés alphabétiquement
 
 #### PDF (impression navigateur)
 
-- Même structure Gantt + récapitulatif, optimisée A4 paysage
-- Tableau complet des inscriptions
+- **3 sections uniformes** : Planning (Gantt par jour), Récap par poste, Liste des bénévoles
+- Aucun saut de page forcé entre les sections — rendu continu optimisé impression
 - Bouton « Imprimer / Enregistrer en PDF »
 
 ### Paramètres de l'organisation (`/admin/settings/admins`)

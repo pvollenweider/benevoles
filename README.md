@@ -3,7 +3,7 @@
 Application **SaaS multi-tenant** de gestion de bénévoles pour événements. Chaque organisation dispose de son propre espace isolé ; les bénévoles s'inscrivent via une timeline Gantt interactive accessible sans compte.
 
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
-[![Node.js 22](https://img.shields.io/badge/Node.js-22-green.svg)](https://nodejs.org/)
+[![Node.js 26](https://img.shields.io/badge/Node.js-26-green.svg)](https://nodejs.org/)
 
 ## Documentation
 
@@ -46,11 +46,11 @@ Application **SaaS multi-tenant** de gestion de bénévoles pour événements. C
 | Email | Nodemailer (SMTP configurable) |
 | Export | ExcelJS (xlsx), HTML print (PDF) |
 | Styles | Tailwind CSS v4 |
-| Runtime | Node.js 22 |
+| Runtime | Node.js 26 |
 
 ## Prérequis
 
-- Node.js **22** (`nvm use 22`)
+- Node.js **26** (`nvm use 26`)
 - Docker (pour la stack dev locale)
 
 ## Démarrage rapide (dev)
@@ -223,10 +223,9 @@ src/__tests__/security/                   # Tests d'isolation cross-tenant
 | `AdminUser` | Compte admin rattaché à une org (ou super admin sans org) ; onboarding par token révocable |
 | `Event` | Événement avec dates, statut, slug unique par org |
 | `Shift` | Créneau horaire (rôle, capacité, statut, ordre) |
-| `Volunteer` | Bénévole identifié par email (partagé entre orgs) |
+| `Volunteer` | Bénévole identifié par email ; porte les données propres à l'org (tags, notes, actif/inactif, `organizationId`) |
 | `Registration` | Inscription bénévole ↔ créneau avec token d'édition unique et flags de rappels |
-| `Member` | Membre du pool bénévole d'une org (tags, notes, actif/inactif) |
-| `MemberInvite` | Token d'invitation d'un membre à un événement (révocable, réutilisable) |
+| `MemberInvite` | Token d'invitation d'un bénévole à un événement (FK vers `Volunteer`, révocable, réutilisable) |
 
 ## Architecture multi-tenant
 

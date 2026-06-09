@@ -99,6 +99,7 @@ Le répertoire des membres est le pool de bénévoles connus de votre organisati
 - **Modifier** ou désactiver un membre existant
 - **Importer** des membres en masse via fichier CSV/TSV (`/admin/members/import`)
 - **Rechercher** par texte libre ou filtrer par tag
+- **Trier** par prénom ou par nom : cliquer sur l'en-tête de colonne (croissant → décroissant → reset)
 
 ---
 
@@ -162,12 +163,12 @@ Deux formats disponibles depuis la page de l'événement :
 ### Export Excel (`.xlsx`)
 
 - Un onglet par jour avec un **Gantt** : rôles en lignes, tranches de 30 min en colonnes, noms des bénévoles dans les cellules
-- Tableau récapitulatif sous le Gantt
-- Onglet **Inscriptions** avec toutes les données détaillées
+- Onglet **Récap par poste** (feuille dédiée) : tableau par jour avec rôle, horaires, capacité, inscrits et liste des bénévoles
+- Onglet **Bénévoles** avec toutes les données détaillées
 
 ### Export PDF (impression)
 
-- Même structure Gantt + récapitulatif, optimisée A4 paysage
+- **3 sections** : Planning (Gantt par jour), Récap par poste, Liste des bénévoles
 - Cliquer sur **Imprimer / Enregistrer en PDF**
 
 ---
