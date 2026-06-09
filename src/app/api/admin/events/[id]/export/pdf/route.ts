@@ -96,21 +96,20 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
 
       // Generate time slot cells for all shifts in this group
       let s = 0
-      while (s < slots.length) {
-        const shift = group.shifts.find((sh) => Math.floor((toMin(sh.startTime) - dayStart) / 30) === s)
-        if (shift) {
-          const endSlot = Math.ceil((toMin(shift.endTime) - dayStart) / 30)
-          const colspan = endSlot - s
-          const vols    = volsList(shift.registrations)
-          row += colspan > 1
-            ? `<td class="shift-cell" colspan="${colspan}">${vols}</td>`
-            : `<td class="shift-cell">${vols}</td>`
-          s = endSlot
-        } else {
-          row += `<td class="empty-cell"></td>`
-          s++
-        }
+      const sortedShifts = [...group.shifts].sort((a, b) => toMin(a.startTime) - toMin(b.startTime))
+      for (const sh of sortedShifts) {
+        const startSlot = Math.round((toMin(sh.startTime) - dayStart) / 30)
+        const endSlot   = Math.min(slots.length, Math.max(startSlot + 1, Math.round((toMin(sh.endTime) - dayStart) / 30)))
+        if (startSlot < s) continue // skip overlapping shift already covered
+        while (s < startSlot) { row += `<td class="empty-cell"></td>`; s++ }
+        const colspan = endSlot - startSlot
+        const vols    = volsList(sh.registrations)
+        row += colspan > 1
+          ? `<td class="shift-cell" colspan="${colspan}">${vols}</td>`
+          : `<td class="shift-cell">${vols}</td>`
+        s = endSlot
       }
+      while (s < slots.length) { row += `<td class="empty-cell"></td>`; s++ }
 
       row += "</tr>"
       ganttRows += row
