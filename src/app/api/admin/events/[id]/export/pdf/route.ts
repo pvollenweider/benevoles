@@ -25,10 +25,6 @@ function fmtDate(d: Date) {
   return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
 }
 
-function shortName(v: VolData) {
-  return `${v.firstName} ${v.lastName.charAt(0).toUpperCase()}.`
-}
-
 function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
 }
