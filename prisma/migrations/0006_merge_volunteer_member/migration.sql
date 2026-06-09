@@ -145,7 +145,8 @@ ALTER TABLE "MemberInvite" DROP CONSTRAINT "MemberInvite_memberId_fkey";
 ALTER TABLE "MemberInvite" DROP COLUMN "memberId";
 
 -- Replace unique index (eventId, memberId) → (eventId, volunteerId)
-DROP INDEX "MemberInvite_eventId_memberId_key";
+-- IF EXISTS: prod schema may not have this index if @@unique was never added
+DROP INDEX IF EXISTS "MemberInvite_eventId_memberId_key";
 CREATE UNIQUE INDEX "MemberInvite_eventId_volunteerId_key"
   ON "MemberInvite"("eventId", "volunteerId");
 
