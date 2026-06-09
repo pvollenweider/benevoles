@@ -97,9 +97,9 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
       // Generate time slot cells for all shifts in this group
       let s = 0
       while (s < slots.length) {
-        const shift = group.shifts.find((sh) => (toMin(sh.startTime) - dayStart) / 30 === s)
+        const shift = group.shifts.find((sh) => Math.floor((toMin(sh.startTime) - dayStart) / 30) === s)
         if (shift) {
-          const endSlot = (toMin(shift.endTime) - dayStart) / 30
+          const endSlot = Math.ceil((toMin(shift.endTime) - dayStart) / 30)
           const colspan = endSlot - s
           const vols    = volsList(shift.registrations)
           row += colspan > 1
