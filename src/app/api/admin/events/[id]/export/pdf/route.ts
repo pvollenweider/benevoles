@@ -378,7 +378,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     .gantt-table { table-layout: auto; }
     .th-role  { min-width: 100px; }
     .th-label { min-width: 130px; }
-    .slot-th  { min-width: 22px; text-align: center; font-size: 8px; color: #6B7280; }
+    .slot-th  { min-width: 22px; text-align: center; font-size: 8px; color: #6B7280; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB; }
     .hour-th  { border-left: 2px solid #9CA3AF !important; font-weight: 700; color: #374151; }
     .hour-mark { border-left: 2px solid #D1D5DB !important; }
 
@@ -406,7 +406,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       border-left: 2px solid #6366F1;
       border-right: 2px solid #6366F1;
     }
-    .empty-cell { background: #FAFAFA; }
+    .empty-cell { background: #FAFAFA; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB; }
     .show-active { background: #F5F3FF !important; }
     tr.role-last td { border-bottom: 2px solid #6366F1 !important; }
     tr.label-last td:not(.role-cell) { border-bottom: 1px solid #C7D2FE !important; }
@@ -424,7 +424,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .show-empty-cell { }
+    .show-empty-cell { border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB; }
 
     /* ── Recap ────────────────────────────────────────────────────────── */
     .recap-table td, .recap-table th { font-size: 9px; }
