@@ -64,11 +64,12 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
     ...shifts.flatMap((s) => [toMin(s.startTime), toMin(s.endTime)]),
     ...shows.flatMap((s) => [toMin(s.startTime), toMin(s.endTime)]),
   ]
-  const dayStart = Math.floor(Math.min(...allMins) / 30) * 30
-  const dayEnd   = Math.ceil(Math.max(...allMins)  / 30) * 30
+  const STEP = 15
+  const dayStart = Math.floor(Math.min(...allMins) / STEP) * STEP
+  const dayEnd   = Math.ceil(Math.max(...allMins)  / STEP) * STEP
 
   const slots: number[] = []
-  for (let t = dayStart; t < dayEnd; t += 30) slots.push(t)
+  for (let t = dayStart; t < dayEnd; t += STEP) slots.push(t)
 
   const roleOrder: string[] = []
   for (const s of shifts) if (!roleOrder.includes(s.roleName)) roleOrder.push(s.roleName)
@@ -83,7 +84,7 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
   ws.columns = [
     { width: 18 },
     { width: 26 },
-    ...slots.map(() => ({ width: 6.5 })),
+    ...slots.map(() => ({ width: 4 })),
   ]
 
   // ── Gantt header ───────────────────────────────────────────────────────────
@@ -154,8 +155,8 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
     // Mark occupied slots
     const occupiedSlots = new Set<number>()
     for (const sh of group.shifts) {
-      const s0 = (toMin(sh.startTime) - dayStart) / 30
-      const s1 = (toMin(sh.endTime)   - dayStart) / 30
+      const s0 = Math.round((toMin(sh.startTime) - dayStart) / STEP)
+      const s1 = Math.min(slots.length, Math.max(s0 + 1, Math.round((toMin(sh.endTime) - dayStart) / STEP)))
       for (let s = s0; s < s1; s++) occupiedSlots.add(s)
     }
 
@@ -175,8 +176,8 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
 
     // One block per shift in the group
     for (const shift of group.shifts) {
-      const startSlot = Math.round((toMin(shift.startTime) - dayStart) / 30)
-      const endSlot   = Math.min(slots.length, Math.max(startSlot + 1, Math.round((toMin(shift.endTime) - dayStart) / 30)))
+      const startSlot = Math.round((toMin(shift.startTime) - dayStart) / STEP)
+      const endSlot   = Math.min(slots.length, Math.max(startSlot + 1, Math.round((toMin(shift.endTime) - dayStart) / STEP)))
 
       const vols = [...shift.registrations]
         .sort((a, b) => a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr"))
@@ -234,8 +235,8 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
     // Show bands and empty cells
     const occupied = new Set<number>()
     for (const show of shows) {
-      const s0 = Math.round((toMin(show.startTime) - dayStart) / 30)
-      const s1 = Math.min(Math.round((toMin(show.endTime) - dayStart) / 30), slots.length)
+      const s0 = Math.round((toMin(show.startTime) - dayStart) / STEP)
+      const s1 = Math.min(Math.round((toMin(show.endTime) - dayStart) / STEP), slots.length)
       for (let s = s0; s < s1; s++) occupied.add(s)
 
       const startCell = sRow.getCell(T0 + s0)

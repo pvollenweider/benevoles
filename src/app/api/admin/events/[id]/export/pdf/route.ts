@@ -45,11 +45,12 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
     ...shifts.flatMap((s) => [toMin(s.startTime), toMin(s.endTime)]),
     ...shows.flatMap((s) => [toMin(s.startTime), toMin(s.endTime)]),
   ]
-  const dayStart = Math.floor(Math.min(...allMins) / 30) * 30
-  const dayEnd   = Math.ceil(Math.max(...allMins)  / 30) * 30
+  const STEP = 15
+  const dayStart = Math.floor(Math.min(...allMins) / STEP) * STEP
+  const dayEnd   = Math.ceil(Math.max(...allMins)  / STEP) * STEP
 
   const slots: number[] = []
-  for (let t = dayStart; t < dayEnd; t += 30) slots.push(t)
+  for (let t = dayStart; t < dayEnd; t += STEP) slots.push(t)
 
   const roleOrder: string[] = []
   for (const s of shifts) if (!roleOrder.includes(s.roleName)) roleOrder.push(s.roleName)
@@ -98,8 +99,8 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
       let s = 0
       const sortedShifts = [...group.shifts].sort((a, b) => toMin(a.startTime) - toMin(b.startTime))
       for (const sh of sortedShifts) {
-        const startSlot = Math.round((toMin(sh.startTime) - dayStart) / 30)
-        const endSlot   = Math.min(slots.length, Math.max(startSlot + 1, Math.round((toMin(sh.endTime) - dayStart) / 30)))
+        const startSlot = Math.round((toMin(sh.startTime) - dayStart) / STEP)
+        const endSlot   = Math.min(slots.length, Math.max(startSlot + 1, Math.round((toMin(sh.endTime) - dayStart) / STEP)))
         if (startSlot < s) continue // skip overlapping shift already covered
         while (s < startSlot) { row += `<td class="empty-cell"></td>`; s++ }
         const colspan = endSlot - startSlot
@@ -124,9 +125,9 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
     showRow = `<tr class="show-row"><td class="show-label-cell" colspan="2"></td>`
     let s = 0
     while (s < slots.length) {
-      const show = shows.find((sh) => Math.round((toMin(sh.startTime) - dayStart) / 30) === s)
+      const show = shows.find((sh) => Math.round((toMin(sh.startTime) - dayStart) / STEP) === s)
       if (show) {
-        const endSlot = Math.min(Math.round((toMin(show.endTime) - dayStart) / 30), slots.length)
+        const endSlot = Math.min(Math.round((toMin(show.endTime) - dayStart) / STEP), slots.length)
         const colspan = endSlot - s
         const label   = `🎪 ${esc(show.name)}`
         showRow += colspan > 1
