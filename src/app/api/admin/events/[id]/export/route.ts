@@ -335,6 +335,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     where: { id },
     include: {
       shifts: {
+        where: { status: { not: "cancelled" } },
         include: {
           registrations: {
             where: { status: "active" },
