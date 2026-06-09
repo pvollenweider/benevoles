@@ -130,6 +130,14 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
     groupMap.get(key)!.shifts.push(shift)
   }
 
+  // Pre-compute slots covered by shows (for background highlight)
+  const showSlots = new Set<number>()
+  for (const show of shows) {
+    const s0 = Math.round((toMin(show.startTime) - dayStart) / STEP)
+    const s1 = Math.min(Math.round((toMin(show.endTime) - dayStart) / STEP), slots.length)
+    for (let s = Math.max(0, s0); s < s1; s++) showSlots.add(s)
+  }
+
   // ── Gantt rows ─────────────────────────────────────────────────────────────
   groups.forEach((group, idx) => {
     const rowNum       = idx + 2
@@ -174,11 +182,12 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
       for (let s = s0; s < s1; s++) occupiedSlots.add(s)
     }
 
-    // Empty slot borders
+    // Empty slot borders (show background when show is active)
     for (let s = 0; s < slots.length; s++) {
       if (!occupiedSlots.has(s)) {
         const col  = T0 + s
         const cell = row.getCell(col)
+        if (showSlots.has(s)) cell.fill = solidFill("FFF5F3FF")
         cell.border = {
           top:    isNewRole    ? b("medium", C_STRONG) : b("thin", "FFF3F4F6"),
           bottom: nextSameRole ? b("thin", "FFF3F4F6") : b("medium", C_STRONG),

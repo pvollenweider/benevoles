@@ -91,6 +91,14 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
     groupMap.get(key)!.shifts.push(shift)
   }
 
+  // Pre-compute slots covered by shows (for background highlight)
+  const showSlots = new Set<number>()
+  for (const show of shows) {
+    const s0 = Math.round((toMin(show.startTime) - dayStart) / STEP)
+    const s1 = Math.min(Math.round((toMin(show.endTime) - dayStart) / STEP), slots.length)
+    for (let s = Math.max(0, s0); s < s1; s++) showSlots.add(s)
+  }
+
   // ── Gantt ────────────────────────────────────────────────────────────────
   let ganttRows = ""
   let gi = 0
@@ -120,7 +128,10 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
         const startSlot = Math.round((toMin(sh.startTime) - dayStart) / STEP)
         const endSlot   = Math.min(slots.length, Math.max(startSlot + 1, Math.round((toMin(sh.endTime) - dayStart) / STEP)))
         if (startSlot < s) continue // skip overlapping shift already covered
-        while (s < startSlot) { row += `<td class="empty-cell${slots[s] % 60 === 0 ? " hour-mark" : ""}"></td>`; s++ }
+        while (s < startSlot) {
+          const cls = ["empty-cell", slots[s] % 60 === 0 ? "hour-mark" : "", showSlots.has(s) ? "show-active" : ""].filter(Boolean).join(" ")
+          row += `<td class="${cls}"></td>`; s++
+        }
         const colspan    = endSlot - startSlot
         const vols       = smartVolsList(sh.registrations)
         const hourMark   = slots[startSlot] % 60 === 0 ? " hour-mark" : ""
@@ -129,7 +140,10 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
           : `<td class="shift-cell${hourMark}">${vols}</td>`
         s = endSlot
       }
-      while (s < slots.length) { row += `<td class="empty-cell${slots[s] % 60 === 0 ? " hour-mark" : ""}"></td>`; s++ }
+      while (s < slots.length) {
+        const cls = ["empty-cell", slots[s] % 60 === 0 ? "hour-mark" : "", showSlots.has(s) ? "show-active" : ""].filter(Boolean).join(" ")
+        row += `<td class="${cls}"></td>`; s++
+      }
 
       row += "</tr>"
       ganttRows += row
@@ -417,6 +431,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       border-right: 2px solid #6366F1;
     }
     .empty-cell { background: #FAFAFA; }
+    .show-active { background: #F5F3FF !important; }
     tr.role-last td { border-bottom: 2px solid #6366F1 !important; }
     tr.label-last td:not(.role-cell) { border-bottom: 1px solid #C7D2FE !important; }
 
