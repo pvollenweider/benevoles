@@ -29,7 +29,12 @@ function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
 }
 
-function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): string {
+// Returns {gantt, recap} HTML fragments for one day
+function buildDayParts(
+  date: Date,
+  shifts: ShiftRow[],
+  shows: ShowEntry[],
+): { gantt: string; recap: string } {
   const allMins = [
     ...shifts.flatMap((s) => [toMin(s.startTime), toMin(s.endTime)]),
     ...shows.flatMap((s) => [toMin(s.startTime), toMin(s.endTime)]),
@@ -48,7 +53,7 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
     return ri !== 0 ? ri : a.startTime.localeCompare(b.startTime)
   })
 
-  // Duplicate first-name detection for smart name display
+  // Smart name: first name only if unique across the day, else "Prénom N."
   const uniqueVols = new Map<string, VolData>()
   for (const s of shifts) for (const reg of s.registrations) {
     const key = reg.volunteer.email ?? ""
@@ -67,7 +72,8 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
       .map((r) => esc(smartName(r.volunteer)))
       .join("<br>") || "—"
 
-  // Group by (roleName, label) — one Gantt row per group
+  // ── Gantt ──────────────────────────────────────────────────────────────────
+
   type GroupEntry = { roleName: string; label: string; shifts: ShiftRow[] }
   const groups: GroupEntry[] = []
   const groupMap = new Map<string, GroupEntry>()
@@ -81,7 +87,6 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
     groupMap.get(key)!.shifts.push(shift)
   }
 
-  // Pre-compute slots covered by shows (for background highlight)
   const showSlots = new Set<number>()
   for (const show of shows) {
     const s0 = Math.round((toMin(show.startTime) - dayStart) / STEP)
@@ -89,7 +94,6 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
     for (let s = Math.max(0, s0); s < s1; s++) showSlots.add(s)
   }
 
-  // ── Gantt ────────────────────────────────────────────────────────────────
   let ganttRows = ""
   let gi = 0
   while (gi < groups.length) {
@@ -111,19 +115,18 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
 
       row += `<td class="label-cell">${esc(displayLbl)}</td>`
 
-      // Generate time slot cells for all shifts in this group
       let s = 0
       const sortedShifts = [...group.shifts].sort((a, b) => toMin(a.startTime) - toMin(b.startTime))
       for (const sh of sortedShifts) {
         const startSlot = Math.round((toMin(sh.startTime) - dayStart) / STEP)
         const endSlot   = Math.min(slots.length, Math.max(startSlot + 1, Math.round((toMin(sh.endTime) - dayStart) / STEP)))
-        if (startSlot < s) continue // skip overlapping shift already covered
+        if (startSlot < s) continue
         while (s < startSlot) {
           const cls = ["empty-cell", slots[s] % 60 === 0 ? "hour-mark" : "", showSlots.has(s) ? "show-active" : ""].filter(Boolean).join(" ")
           row += `<td class="${cls}"></td>`; s++
         }
-        const colspan    = endSlot - startSlot
-        const vols       = smartVolsList(sh.registrations)
+        const colspan = endSlot - startSlot
+        const vols    = smartVolsList(sh.registrations)
         row += colspan > 1
           ? `<td class="shift-cell" colspan="${colspan}">${vols}</td>`
           : `<td class="shift-cell">${vols}</td>`
@@ -141,7 +144,6 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
     gi = roleEnd
   }
 
-  // ── Show row ─────────────────────────────────────────────────────────────
   let showRow = ""
   if (shows.length > 0) {
     showRow = `<tr class="show-row"><td class="show-label-cell" colspan="2"></td>`
@@ -166,7 +168,7 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
 
   const slotHeaders = slots.map((s) => `<th class="slot-th${s % 60 === 0 ? " hour-th" : ""}">${s % 60 === 0 ? fmtSlot(s) : ""}</th>`).join("")
 
-  const gantt = `
+  const ganttHtml = `
     <table class="gantt-table">
       <thead>
         <tr>
@@ -178,7 +180,8 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
       <tbody>${ganttRows}${showRow}</tbody>
     </table>`
 
-  // ── Recap ────────────────────────────────────────────────────────────────
+  // ── Recap ──────────────────────────────────────────────────────────────────
+
   let recapRows = ""
   sorted.forEach((shift, i) => {
     const vols        = smartVolsList(shift.registrations)
@@ -200,7 +203,7 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
     </tr>`
   })
 
-  const recap = `
+  const recapHtml = `
     <table class="recap-table">
       <thead>
         <tr>
@@ -211,13 +214,12 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
       <tbody>${recapRows}</tbody>
     </table>`
 
-  return `
-    <section class="day-section">
-      <h2 class="day-title">${fmtDate(date)}</h2>
-      ${gantt}
-      <h3 class="recap-title">Récap par poste</h3>
-      ${recap}
-    </section>`
+  const dayLabel = `<h3 class="day-sub-title">${fmtDate(date)}</h3>`
+
+  return {
+    gantt: `<div class="day-block">${dayLabel}${ganttHtml}</div>`,
+    recap: `<div class="day-block">${dayLabel}${recapHtml}</div>`,
+  }
 }
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -245,7 +247,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  // ── Day sections ─────────────────────────────────────────────────────────
+  // ── Build 3 global sections ───────────────────────────────────────────────
   const dayMap = new Map<string, { date: Date; shifts: ShiftRow[] }>()
   for (const shift of event.shifts) {
     const key = shift.date.toISOString().split("T")[0]
@@ -255,13 +257,15 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
   const showSchedule = (event.showSchedule as ShowEntry[] | null) ?? []
 
-  let daySections = ""
+  let allGantts = ""
+  let allRecaps = ""
   for (const [key, { date, shifts }] of dayMap) {
     const dayShows = showSchedule.filter((s) => s.date === key)
-    daySections += buildDayHtml(date, shifts, dayShows)
+    const { gantt, recap } = buildDayParts(date, shifts, dayShows)
+    allGantts += gantt
+    allRecaps += recap
   }
 
-  // ── Bénévoles section ────────────────────────────────────────────────────
   const volMap = new Map<string, VolData>()
   for (const shift of event.shifts) {
     for (const reg of shift.registrations) {
@@ -324,24 +328,24 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     .event-title { font-size: 18px; font-weight: 700; color: #111827; }
     .event-meta  { font-size: 10px; color: #6B7280; margin-top: 2px; }
 
-    /* ── Day section ──────────────────────────────────────────────────── */
-    .day-section { margin-bottom: 32px; page-break-inside: avoid; }
-    .day-title {
+    /* ── Sections (3 identical containers) ───────────────────────────── */
+    .section { margin-bottom: 28px; }
+    .section-title {
       font-size: 13px;
       font-weight: 700;
       color: #4338CA;
       text-transform: capitalize;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       padding-bottom: 4px;
       border-bottom: 2px solid #E0E7FF;
     }
-    .recap-title {
-      font-size: 10px;
-      font-weight: 700;
+    .day-block { margin-bottom: 12px; }
+    .day-sub-title {
+      font-size: 11px;
+      font-weight: 600;
       color: #6B7280;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin: 14px 0 6px;
+      text-transform: capitalize;
+      margin-bottom: 4px;
     }
 
     /* ── Tables ───────────────────────────────────────────────────────── */
@@ -362,7 +366,6 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       color: #374151;
     }
     .center { text-align: center; }
-    .text-muted { color: #9CA3AF; }
 
     /* ── Gantt ────────────────────────────────────────────────────────── */
     .gantt-table { table-layout: auto; }
@@ -399,11 +402,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     .empty-cell { background: #FAFAFA; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB; }
     .show-active { background: #F5F3FF !important; }
     tr.role-last td { border-bottom: 2px solid #6366F1 !important; }
-    tr.label-last td:not(.role-cell) { border-bottom: 1px solid #C7D2FE !important; }
 
     /* ── Show row ─────────────────────────────────────────────────────── */
     .show-row td { border-top: 2px solid #C7D2FE; }
-    .show-label-cell { }
     .show-band-cell {
       background: #EEF2FF;
       color: #4338CA;
@@ -422,16 +423,11 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     .role-end   td { border-bottom: 2px solid #9CA3AF !important; }
 
     /* ── Bénévoles ────────────────────────────────────────────────────── */
-    .vol-section { margin-top: 32px; page-break-before: always; }
-    .insc-title { font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 8px; }
     .vol-table td, .vol-table th { white-space: nowrap; font-size: 9px; }
 
     /* ── Page setup ───────────────────────────────────────────────────── */
     @page { size: A4 portrait; margin: 1.2cm 1cm; }
-    @media print {
-      body { padding: 0; }
-      .day-section { page-break-inside: avoid; }
-    }
+    @media print { body { padding: 0; } }
   </style>
 </head>
 <body>
@@ -443,10 +439,18 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     <button class="print-btn" onclick="window.print()">Imprimer / Enregistrer en PDF</button>
   </div>
 
-  ${daySections}
+  <section class="section" aria-label="Planning">
+    <h2 class="section-title">Planning</h2>
+    ${allGantts}
+  </section>
 
-  <section class="vol-section">
-    <h2 class="insc-title">Liste des bénévoles</h2>
+  <section class="section" aria-label="Récap par poste">
+    <h2 class="section-title">Récap par poste</h2>
+    ${allRecaps}
+  </section>
+
+  <section class="section" aria-label="Liste des bénévoles">
+    <h2 class="section-title">Liste des bénévoles</h2>
     <table class="vol-table">
       <thead>
         <tr>
