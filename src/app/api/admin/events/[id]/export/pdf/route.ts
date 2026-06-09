@@ -327,7 +327,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     }
 
     /* ── Tables ───────────────────────────────────────────────────────── */
-    table { border-collapse: collapse; width: 100%; margin-bottom: 4px; }
+    table { border-collapse: collapse; margin-bottom: 4px; }
     th, td {
       border: 1px solid #D1D5DB;
       padding: 3px 5px;
