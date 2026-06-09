@@ -203,7 +203,8 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
     recapRows += `<tr${cls ? ` class="${cls}"` : ""}>
       <td>${esc(shift.roleName)}</td>
       <td>${esc(lbl)}</td>
-      <td class="center">${fmtSlot(toMin(shift.startTime))}–${fmtSlot(toMin(shift.endTime))}</td>
+      <td class="center">${fmtSlot(toMin(shift.startTime))}</td>
+      <td class="center">${fmtSlot(toMin(shift.endTime))}</td>
       <td class="center">${shift.capacity}</td>
       <td class="center">${shift.registrations.length}</td>
       <td>${vols}</td>
@@ -214,7 +215,7 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
     <table class="recap-table">
       <thead>
         <tr>
-          <th>Poste</th><th>Libellé</th><th class="center">Horaires</th>
+          <th>Poste</th><th>Libellé</th><th class="center">Début</th><th class="center">Fin</th>
           <th class="center">Places</th><th class="center">Inscrits</th><th>Bénévoles</th>
         </tr>
       </thead>
@@ -271,32 +272,6 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     daySections += buildDayHtml(date, shifts, dayShows)
   }
 
-  // ── Inscriptions section ─────────────────────────────────────────────────
-  let inscRows = ""
-  for (const shift of event.shifts) {
-    const day   = fmtDate(shift.date)
-    const hours = `${fmtSlot(toMin(shift.startTime))}–${fmtSlot(toMin(shift.endTime))}`
-    const sortedRegs = [...shift.registrations].sort((a, b) =>
-      a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr")
-    )
-    if (sortedRegs.length === 0) {
-      inscRows += `<tr>
-        <td>${esc(day)}</td><td class="center">${hours}</td>
-        <td>${esc(shift.roleName)}</td><td>${esc(shift.label)}</td>
-        <td colspan="2" class="center text-muted">—</td>
-      </tr>`
-    } else {
-      for (const reg of sortedRegs) {
-        inscRows += `<tr>
-          <td>${esc(day)}</td><td class="center">${hours}</td>
-          <td>${esc(shift.roleName)}</td><td>${esc(shift.label)}</td>
-          <td>${esc(reg.volunteer.firstName)} ${esc(reg.volunteer.lastName)}</td>
-          <td>${esc(reg.comment ?? "")}</td>
-        </tr>`
-      }
-    }
-  }
-
   // ── Bénévoles section ────────────────────────────────────────────────────
   const volMap = new Map<string, VolData>()
   for (const shift of event.shifts) {
@@ -308,7 +283,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     a.lastName.localeCompare(b.lastName, "fr") || a.firstName.localeCompare(b.firstName, "fr")
   )
   const volRows = allVols.map((v) => `<tr>
-    <td>${esc(v.lastName)} ${esc(v.firstName)}</td>
+    <td>${esc(v.lastName)}</td>
+    <td>${esc(v.firstName)}</td>
     <td>${esc(v.email)}</td>
     <td>${esc(v.phone ?? "")}</td>
   </tr>`).join("")
@@ -437,7 +413,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
     /* ── Show row ─────────────────────────────────────────────────────── */
     .show-row td { border-top: 2px solid #C7D2FE; }
-    .show-label-cell { background: #F5F3FF; }
+    .show-label-cell { }
     .show-band-cell {
       background: #EEF2FF;
       color: #4338CA;
@@ -448,25 +424,16 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .show-empty-cell { background: #F5F3FF; }
+    .show-empty-cell { }
 
     /* ── Recap ────────────────────────────────────────────────────────── */
     .recap-table td, .recap-table th { font-size: 9px; }
     .role-start td { border-top: 2px solid #9CA3AF !important; }
     .role-end   td { border-bottom: 2px solid #9CA3AF !important; }
 
-    /* ── Inscriptions ─────────────────────────────────────────────────── */
-    .insc-section { margin-top: 32px; page-break-before: always; }
-    .insc-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #111827;
-      margin-bottom: 8px;
-    }
-    .insc-table td, .insc-table th { white-space: nowrap; font-size: 9px; }
-
     /* ── Bénévoles ────────────────────────────────────────────────────── */
     .vol-section { margin-top: 32px; page-break-before: always; }
+    .insc-title { font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 8px; }
     .vol-table td, .vol-table th { white-space: nowrap; font-size: 9px; }
 
     /* ── Page setup ───────────────────────────────────────────────────── */
@@ -488,25 +455,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
   ${daySections}
 
-  <section class="insc-section">
-    <h2 class="insc-title">Inscriptions complètes</h2>
-    <table class="insc-table">
-      <thead>
-        <tr>
-          <th>Jour</th><th class="center">Horaires</th><th>Rôle</th><th>Libellé</th>
-          <th>Prénom Nom</th><th>Commentaire</th>
-        </tr>
-      </thead>
-      <tbody>${inscRows}</tbody>
-    </table>
-  </section>
-
   <section class="vol-section">
     <h2 class="insc-title">Liste des bénévoles</h2>
     <table class="vol-table">
       <thead>
         <tr>
-          <th>Nom Prénom</th><th>Email</th><th>Téléphone</th>
+          <th>Nom</th><th>Prénom</th><th>Email</th><th>Téléphone</th>
         </tr>
       </thead>
       <tbody>${volRows}</tbody>

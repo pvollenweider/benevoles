@@ -256,7 +256,6 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
     // Merge role + label cells
     ws.mergeCells(showRowNum, 1, showRowNum, 2)
     const labelCell = sRow.getCell(1)
-    labelCell.fill   = solidFill("FFF5F3FF")
     labelCell.border = { top: b("medium", "FFC7D2FE"), bottom: b("thin", "FFE0E7FF"), left: b("thin"), right: b("thin") }
 
     // Show bands and empty cells — sort + skip overlaps
@@ -284,7 +283,6 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
     for (let s = 0; s < slots.length; s++) {
       if (!occupied.has(s)) {
         const cell = sRow.getCell(T0 + s)
-        cell.fill   = solidFill("FFF5F3FF")
         cell.border = { top: b("medium", "FFC7D2FE"), bottom: b("thin", "FFE0E7FF"), left: b("thin"), right: T0 + s === totalCols ? b("medium", C_STRONG) : b("thin") }
       }
     }
@@ -298,7 +296,8 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
   titleRow.height = 16
   titleRow.getCell(1).font = { bold: true, size: 10, color: { argb: "FF374151" } }
 
-  const recapCols = ["Poste", "Libellé", "Horaires", "Places", "Inscrits", "Bénévoles"]
+  const recapCols = ["Poste", "Libellé", "Début", "Fin", "Places", "Inscrits", "Bénévoles"]
+  const RECAP_COLS = recapCols.length
   const rhRow = ws.addRow(recapCols)
   rhRow.height = 18
   rhRow.eachCell({ includeEmpty: true }, (cell, col) => {
@@ -309,7 +308,7 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
       top:    b("medium", C_STRONG),
       bottom: b("medium", C_STRONG),
       left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
-      right:  col === 6 ? b("medium", C_STRONG) : b("thin"),
+      right:  col === RECAP_COLS ? b("medium", C_STRONG) : b("thin"),
     }
   })
 
@@ -333,7 +332,8 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
       const dRow = ws.addRow([
         isFirstVol ? shift.roleName : null,
         isFirstVol ? (shift.label !== shift.roleName ? shift.label : "") : null,
-        isFirstVol ? `${fmtSlot(toMin(shift.startTime))}–${fmtSlot(toMin(shift.endTime))}` : null,
+        isFirstVol ? fmtSlot(toMin(shift.startTime)) : null,
+        isFirstVol ? fmtSlot(toMin(shift.endTime)) : null,
         isFirstVol ? shift.capacity : null,
         isFirstVol ? shift.registrations.length : null,
         volNames[vi] ?? (isFirstVol ? "—" : null),
@@ -341,21 +341,21 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
       dRow.height = 15
       dRow.eachCell({ includeEmpty: true }, (cell, col) => {
         cell.font      = { size: 9 }
-        cell.alignment = { vertical: "middle", horizontal: col >= 3 && col <= 5 ? "center" : "left" }
+        cell.alignment = { vertical: "middle", horizontal: col >= 3 && col <= 6 ? "center" : "left" }
         const topRole    = isFirstVol && isFirstRole && shiftIdx > 0
         const bottomRole = isLastVol  && isLastRole
         cell.border    = {
           top:    topRole    ? b("medium", C_STRONG) : (isFirstVol ? b("thin") : b("thin", "FFFAFAFA")),
           bottom: bottomRole ? b("medium", C_STRONG) : (isLastVol  ? b("thin") : b("thin", "FFFAFAFA")),
           left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
-          right:  col === 6 ? b("medium", C_STRONG) : b("thin"),
+          right:  col === RECAP_COLS ? b("medium", C_STRONG) : b("thin"),
         }
       })
       recapRowNum++
     }
 
     if (rowCount > 1) {
-      for (let col = 1; col <= 5; col++) {
+      for (let col = 1; col <= RECAP_COLS - 1; col++) {
         ws.mergeCells(firstRow, col, firstRow + rowCount - 1, col)
         const master = ws.getCell(firstRow, col)
         master.border = {
@@ -364,7 +364,7 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
           left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
           right:  b("thin"),
         }
-        master.alignment = { vertical: "middle", horizontal: col >= 3 && col <= 5 ? "center" : "left" }
+        master.alignment = { vertical: "middle", horizontal: col >= 3 && col <= RECAP_COLS - 1 ? "center" : "left" }
       }
     }
   })
@@ -418,66 +418,6 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     const dayShows = showSchedule.filter((s) => s.date === key)
     buildDaySheet(wb, name, shifts, dayShows)
   }
-
-  // ── Inscriptions sheet ────────────────────────────────────────────────────
-  const wsI = wb.addWorksheet("Inscriptions")
-  wsI.columns = [
-    { width: 28 }, { width: 7 },  { width: 7 },  { width: 16 },
-    { width: 30 }, { width: 10 }, { width: 14 }, { width: 14 },
-    { width: 28 }, { width: 12 },
-  ]
-
-  const iHeaders = ["Jour", "Début", "Fin", "Rôle", "Libellé", "Statut", "Prénom", "Nom", "Commentaire", "Source"]
-  const INSC_COLS = iHeaders.length
-  const ihRow = wsI.addRow(iHeaders)
-  ihRow.height = 18
-  ihRow.eachCell({ includeEmpty: true }, (cell, col) => {
-    cell.font      = { bold: true, size: 9 }
-    cell.fill      = solidFill(C_HEAD_BG)
-    cell.alignment = { vertical: "middle" }
-    cell.border    = {
-      top:    b("medium", C_STRONG),
-      bottom: b("medium", C_STRONG),
-      left:   col === 1         ? b("medium", C_STRONG) : b("thin"),
-      right:  col === INSC_COLS ? b("medium", C_STRONG) : b("thin"),
-    }
-  })
-
-  const iRows: (string | number)[][] = []
-  for (const shift of event.shifts) {
-    const day   = fmtDate(shift.date)
-    const start = fmtSlot(toMin(shift.startTime))
-    const end   = fmtSlot(toMin(shift.endTime))
-    const sortedRegs = [...shift.registrations].sort((a, b) =>
-      a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr")
-    )
-    if (sortedRegs.length === 0) {
-      iRows.push([day, start, end, shift.roleName, shift.label, shift.status, "", "", "", ""])
-    } else {
-      for (const reg of sortedRegs) {
-        iRows.push([
-          day, start, end, shift.roleName, shift.label, shift.status,
-          reg.volunteer.firstName, reg.volunteer.lastName, reg.comment ?? "", reg.source,
-        ])
-      }
-    }
-  }
-
-  iRows.forEach((data, idx) => {
-    const isLast = idx === iRows.length - 1
-    const row    = wsI.addRow(data)
-    row.height   = 15
-    row.eachCell({ includeEmpty: true }, (cell, col) => {
-      cell.font      = { size: 9 }
-      cell.alignment = { vertical: "middle" }
-      cell.border    = {
-        top:    b("thin"),
-        bottom: isLast ? b("medium", C_STRONG) : b("thin"),
-        left:   col === 1         ? b("medium", C_STRONG) : b("thin"),
-        right:  col === INSC_COLS ? b("medium", C_STRONG) : b("thin"),
-      }
-    })
-  })
 
   // ── Bénévoles sheet ───────────────────────────────────────────────────────
   const wsV = wb.addWorksheet("Bénévoles")
