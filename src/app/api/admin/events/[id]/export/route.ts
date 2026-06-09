@@ -292,10 +292,13 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
   })
 
   // One row per volunteer — cols 1-5 merged across volunteers for the same shift
+  // Role order preserved from roleOrder (Gantt order = chronological first appearance)
   let recapRowNum = ws.rowCount + 1
 
   sorted.forEach((shift, shiftIdx) => {
-    const isLastShift = shiftIdx === sorted.length - 1
+    const isLastShift  = shiftIdx === sorted.length - 1
+    const isFirstRole  = shiftIdx === 0 || sorted[shiftIdx - 1].roleName !== shift.roleName
+    const isLastRole   = isLastShift || sorted[shiftIdx + 1].roleName !== shift.roleName
     const volNames = [...shift.registrations]
       .sort((a, b) => a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr"))
       .map((r) => shortName(r.volunteer))
@@ -317,9 +320,11 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
       dRow.eachCell({ includeEmpty: true }, (cell, col) => {
         cell.font      = { size: 9 }
         cell.alignment = { vertical: "middle", horizontal: col >= 3 && col <= 5 ? "center" : "left" }
+        const topRole    = isFirstVol && isFirstRole && shiftIdx > 0
+        const bottomRole = isLastVol  && isLastRole
         cell.border    = {
-          top:    isFirstVol ? b("thin") : b("thin", "FFFAFAFA"),
-          bottom: isLastShift && isLastVol ? b("medium", C_STRONG) : (isLastVol ? b("thin") : b("thin", "FFFAFAFA")),
+          top:    topRole    ? b("medium", C_STRONG) : (isFirstVol ? b("thin") : b("thin", "FFFAFAFA")),
+          bottom: bottomRole ? b("medium", C_STRONG) : (isLastVol  ? b("thin") : b("thin", "FFFAFAFA")),
           left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
           right:  col === 6 ? b("medium", C_STRONG) : b("thin"),
         }
@@ -332,8 +337,8 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
         ws.mergeCells(firstRow, col, firstRow + rowCount - 1, col)
         const master = ws.getCell(firstRow, col)
         master.border = {
-          top:    b("thin"),
-          bottom: isLastShift ? b("medium", C_STRONG) : b("thin"),
+          top:    isFirstRole && shiftIdx > 0 ? b("medium", C_STRONG) : b("thin"),
+          bottom: isLastRole ? b("medium", C_STRONG) : b("thin"),
           left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
           right:  b("thin"),
         }

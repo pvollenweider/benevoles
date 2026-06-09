@@ -159,10 +159,16 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
 
   // ── Recap ────────────────────────────────────────────────────────────────
   let recapRows = ""
-  for (const shift of sorted) {
-    const vols = volsList(shift.registrations)
-    const lbl  = shift.label !== shift.roleName ? shift.label : ""
-    recapRows += `<tr>
+  sorted.forEach((shift, i) => {
+    const vols        = volsList(shift.registrations)
+    const lbl         = shift.label !== shift.roleName ? shift.label : ""
+    const isFirstRole = i === 0 || sorted[i - 1].roleName !== shift.roleName
+    const isLastRole  = i === sorted.length - 1 || sorted[i + 1].roleName !== shift.roleName
+    const cls = [
+      isFirstRole && i > 0 ? "role-start" : "",
+      isLastRole            ? "role-end"   : "",
+    ].filter(Boolean).join(" ")
+    recapRows += `<tr${cls ? ` class="${cls}"` : ""}>
       <td>${esc(shift.roleName)}</td>
       <td>${esc(lbl)}</td>
       <td class="center">${fmtSlot(toMin(shift.startTime))}–${fmtSlot(toMin(shift.endTime))}</td>
@@ -170,7 +176,7 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
       <td class="center">${shift.registrations.length}</td>
       <td>${vols}</td>
     </tr>`
-  }
+  })
 
   const recap = `
     <table class="recap-table">
@@ -413,6 +419,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
     /* ── Recap ────────────────────────────────────────────────────────── */
     .recap-table td, .recap-table th { font-size: 9px; }
+    .role-start td { border-top: 2px solid #9CA3AF !important; }
+    .role-end   td { border-bottom: 2px solid #9CA3AF !important; }
 
     /* ── Inscriptions ─────────────────────────────────────────────────── */
     .insc-section { margin-top: 32px; page-break-before: always; }
