@@ -134,10 +134,9 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
         }
         const colspan    = endSlot - startSlot
         const vols       = smartVolsList(sh.registrations)
-        const hourMark   = slots[startSlot] % 60 === 0 ? " hour-mark" : ""
         row += colspan > 1
-          ? `<td class="shift-cell${hourMark}" colspan="${colspan}">${vols}</td>`
-          : `<td class="shift-cell${hourMark}">${vols}</td>`
+          ? `<td class="shift-cell" colspan="${colspan}">${vols}</td>`
+          : `<td class="shift-cell">${vols}</td>`
         s = endSlot
       }
       while (s < slots.length) {
@@ -403,8 +402,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       text-align: left;
       vertical-align: top;
       white-space: normal;
-      border-left: 2px solid #6366F1;
-      border-right: 2px solid #6366F1;
+      border-left: 2px solid #6366F1 !important;
+      border-right: 2px solid #6366F1 !important;
     }
     .empty-cell { background: #FAFAFA; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB; }
     .show-active { background: #F5F3FF !important; }
