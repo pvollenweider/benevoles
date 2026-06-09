@@ -32,9 +32,10 @@ const prismaMock = {
     update: vi.fn().mockResolvedValue({ id: "evt-b", title: "Event B", publicStatus: "draft" }),
     findFirst: vi.fn().mockResolvedValue({ id: "evt-b", organizationId: "org-b" }), // org-B data!
   },
-  member: {
+  volunteer: {
     update: vi.fn().mockResolvedValue({ id: "mem-b" }),
     findFirst: vi.fn().mockResolvedValue(null),
+    create: vi.fn().mockResolvedValue({ id: "vol-1", email: "v@x.com", firstName: "V", lastName: "L" }),
   },
   shift: {
     update: vi.fn().mockResolvedValue({ id: "shift-b", status: "open", capacity: 5 }),
@@ -45,10 +46,6 @@ const prismaMock = {
     create: vi.fn().mockResolvedValue({ id: "reg-new" }),
     count: vi.fn().mockResolvedValue(0),
     findFirst: vi.fn().mockResolvedValue(null),
-  },
-  volunteer: {
-    findFirst: vi.fn().mockResolvedValue(null),
-    create: vi.fn().mockResolvedValue({ id: "vol-1", email: "v@x.com", firstName: "V", lastName: "L" }),
   },
   adminUser: {
     findUnique: vi.fn().mockResolvedValue(null),
@@ -91,12 +88,12 @@ function mockScopedDb(overrides: DbOverrides = {}) {
       count: vi.fn().mockResolvedValue(0),
       ...((overrides.event as object) ?? {}),
     },
-    member: {
+    volunteer: {
       findMany: vi.fn().mockResolvedValue([]),
       findFirst: vi.fn().mockResolvedValue(null),
       create: vi.fn().mockResolvedValue({ id: "mem-a" }),
       count: vi.fn().mockResolvedValue(0),
-      ...((overrides.member as object) ?? {}),
+      ...((overrides.volunteer as object) ?? {}),
     },
     shift: {
       findMany: vi.fn().mockResolvedValue([]),
@@ -220,22 +217,22 @@ describe("Events — cross-tenant isolation", () => {
 describe("Members — cross-tenant isolation", () => {
   beforeEach(() => vi.clearAllMocks())
 
-  it("GET /api/admin/members returns only org-A members", async () => {
+  it("GET /api/admin/members returns only org-A volunteers", async () => {
     const { GET } = await import("@/app/api/admin/members/route")
     const db = setupGuard({
-      member: { findMany: vi.fn().mockResolvedValue([{ id: "mem-a", organizationId: ORG_A, firstName: "Alice", lastName: "M", tags: [], active: true }]) },
+      volunteer: { findMany: vi.fn().mockResolvedValue([{ id: "mem-a", organizationId: ORG_A, firstName: "Alice", lastName: "M", tags: [], active: true }]) },
     })
 
     const res = await GET(makeRequest("/api/admin/members"))
     expect(res.status).toBe(200)
     const body = await res.json()
-    // All returned members belong to org-A (from mock)
+    // All returned volunteers belong to org-A (from mock)
     expect(Array.isArray(body)).toBe(true)
     expect((body as { organizationId: string }[]).every((m) => m.organizationId === ORG_A)).toBe(true)
-    expect(db.member.findMany).toHaveBeenCalledOnce()
+    expect(db.volunteer.findMany).toHaveBeenCalledOnce()
   })
 
-  it("PATCH /api/admin/members/[id] returns 404 for org-B member (scoped db returns null)", async () => {
+  it("PATCH /api/admin/members/[id] returns 404 for org-B volunteer (scoped db returns null)", async () => {
     const { PATCH } = await import("@/app/api/admin/members/[id]/route")
     setupGuard() // findFirst → null
 
@@ -244,16 +241,16 @@ describe("Members — cross-tenant isolation", () => {
       params("mem-b"),
     )
     expect(res.status).toBe(404)
-    expect(prismaMock.member.update).not.toHaveBeenCalled()
+    expect(prismaMock.volunteer.update).not.toHaveBeenCalled()
   })
 
-  it("DELETE /api/admin/members/[id] returns 404 for org-B member", async () => {
+  it("DELETE /api/admin/members/[id] returns 404 for org-B volunteer", async () => {
     const { DELETE } = await import("@/app/api/admin/members/[id]/route")
     setupGuard()
 
     const res = await DELETE(makeRequest("/api/admin/members/mem-b", "DELETE"), params("mem-b"))
     expect(res.status).toBe(404)
-    expect(prismaMock.member.update).not.toHaveBeenCalled()
+    expect(prismaMock.volunteer.update).not.toHaveBeenCalled()
   })
 
   it("PATCH does not bypass ownership check using raw prisma", async () => {
@@ -261,14 +258,14 @@ describe("Members — cross-tenant isolation", () => {
     setupGuard() // scoped db → null
 
     // Raw prisma has data — if route used raw prisma for check, it would patch
-    prismaMock.member.findFirst.mockResolvedValue({ id: "mem-b", organizationId: "org-b" })
+    prismaMock.volunteer.findFirst.mockResolvedValue({ id: "mem-b", organizationId: "org-b" })
 
     const res = await PATCH(
       makeRequest("/api/admin/members/mem-b", "PATCH", { firstName: "Hacked" }),
       params("mem-b"),
     )
     expect(res.status).toBe(404)
-    expect(prismaMock.member.update).not.toHaveBeenCalled()
+    expect(prismaMock.volunteer.update).not.toHaveBeenCalled()
   })
 })
 
@@ -425,7 +422,7 @@ describe("Invitations — cross-tenant isolation", () => {
     setupGuard() // event.findFirst → null
 
     const res = await POST(
-      makeRequest("/api/admin/events/evt-b/invitations", "POST", { memberIds: ["mem-a"] }),
+      makeRequest("/api/admin/events/evt-b/invitations", "POST", { volunteerIds: ["mem-a"] }),
       params("evt-b"),
     )
     expect(res.status).toBe(404)

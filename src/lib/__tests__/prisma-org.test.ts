@@ -45,8 +45,8 @@ describe("getOrgClient", () => {
     expect(cfg.query.event.findMany).toBeTypeOf("function")
     expect(cfg.query.event.findFirst).toBeTypeOf("function")
     expect(cfg.query.event.create).toBeTypeOf("function")
-    expect(cfg.query.member.findMany).toBeTypeOf("function")
-    expect(cfg.query.member.create).toBeTypeOf("function")
+    expect(cfg.query.volunteer.findMany).toBeTypeOf("function")
+    expect(cfg.query.volunteer.create).toBeTypeOf("function")
     expect(cfg.query.shift.findMany).toBeTypeOf("function")
     expect(cfg.query.registration.findMany).toBeTypeOf("function")
   })
@@ -98,25 +98,25 @@ describe("getOrgClient", () => {
     })
   })
 
-  describe("member scoping", () => {
-    it("injects organizationId into member.findMany where clause", async () => {
+  describe("volunteer scoping", () => {
+    it("injects organizationId into volunteer.findMany where clause", async () => {
       getOrgClient("org-A")
       const cfg = getConfig()
       const query = vi.fn().mockResolvedValue([])
       const args = { where: { active: true } }
 
-      await cfg.query.member.findMany({ args, query })
+      await cfg.query.volunteer.findMany({ args, query })
 
       expect(args.where).toEqual({ active: true, organizationId: "org-A" })
     })
 
-    it("forces member.create to use the calling org's id", async () => {
+    it("forces volunteer.create to use the calling org's id", async () => {
       getOrgClient("org-A")
       const cfg = getConfig()
       const query = vi.fn().mockResolvedValue({})
       const args = { data: { firstName: "Alice", lastName: "M.", organizationId: "ATTACKER" } }
 
-      await cfg.query.member.create({ args, query })
+      await cfg.query.volunteer.create({ args, query })
 
       expect((args.data as { organizationId: string }).organizationId).toBe("org-A")
     })
