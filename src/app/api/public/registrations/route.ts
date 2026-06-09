@@ -148,7 +148,7 @@ export async function POST(req: Request) {
   // Sync volunteer into the org member list (non-blocking)
   prisma.member.upsert({
     where: { organizationId_email: { organizationId: event.organizationId, email } },
-    create: { organizationId: event.organizationId, firstName, lastName, email, phone },
+    create: { organizationId: event.organizationId, firstName, lastName, email, phone, tags: ["Bénévole"] },
     update: { firstName, lastName, phone: phone ?? undefined },
   }).catch((e) => console.error("Member sync error:", e))
 
