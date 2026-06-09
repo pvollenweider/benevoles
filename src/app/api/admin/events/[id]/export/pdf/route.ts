@@ -102,15 +102,16 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
         const startSlot = Math.round((toMin(sh.startTime) - dayStart) / STEP)
         const endSlot   = Math.min(slots.length, Math.max(startSlot + 1, Math.round((toMin(sh.endTime) - dayStart) / STEP)))
         if (startSlot < s) continue // skip overlapping shift already covered
-        while (s < startSlot) { row += `<td class="empty-cell"></td>`; s++ }
-        const colspan = endSlot - startSlot
-        const vols    = volsList(sh.registrations)
+        while (s < startSlot) { row += `<td class="empty-cell${slots[s] % 60 === 0 ? " hour-mark" : ""}"></td>`; s++ }
+        const colspan    = endSlot - startSlot
+        const vols       = volsList(sh.registrations)
+        const hourMark   = slots[startSlot] % 60 === 0 ? " hour-mark" : ""
         row += colspan > 1
-          ? `<td class="shift-cell" colspan="${colspan}">${vols}</td>`
-          : `<td class="shift-cell">${vols}</td>`
+          ? `<td class="shift-cell${hourMark}" colspan="${colspan}">${vols}</td>`
+          : `<td class="shift-cell${hourMark}">${vols}</td>`
         s = endSlot
       }
-      while (s < slots.length) { row += `<td class="empty-cell"></td>`; s++ }
+      while (s < slots.length) { row += `<td class="empty-cell${slots[s] % 60 === 0 ? " hour-mark" : ""}"></td>`; s++ }
 
       row += "</tr>"
       ganttRows += row
@@ -135,14 +136,14 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
           : `<td class="show-band-cell">${label}</td>`
         s = endSlot
       } else {
-        showRow += `<td class="show-empty-cell"></td>`
+        showRow += `<td class="show-empty-cell${slots[s] % 60 === 0 ? " hour-mark" : ""}"></td>`
         s++
       }
     }
     showRow += `</tr>`
   }
 
-  const slotHeaders = slots.map((s) => `<th class="slot-th">${fmtSlot(s)}</th>`).join("")
+  const slotHeaders = slots.map((s) => `<th class="slot-th${s % 60 === 0 ? " hour-th" : ""}">${s % 60 === 0 ? fmtSlot(s) : ""}</th>`).join("")
 
   const gantt = `
     <table class="gantt-table">
@@ -350,6 +351,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     .th-role  { min-width: 100px; }
     .th-label { min-width: 130px; }
     .slot-th  { min-width: 36px; text-align: center; font-size: 8px; color: #6B7280; }
+    .hour-th  { border-left: 2px solid #9CA3AF !important; font-weight: 700; color: #374151; }
+    .hour-mark { border-left: 2px solid #D1D5DB !important; }
 
     .role-cell {
       background: #EEF2FF;

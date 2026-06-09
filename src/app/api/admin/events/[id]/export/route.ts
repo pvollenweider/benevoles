@@ -88,16 +88,17 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
   ]
 
   // ── Gantt header ───────────────────────────────────────────────────────────
-  const hRow = ws.addRow(["Rôle", "Libellé", ...slots.map(fmtSlot)])
+  const hRow = ws.addRow(["Rôle", "Libellé", ...slots.map(s => s % 60 === 0 ? fmtSlot(s) : "")])
   hRow.height = 18
   hRow.eachCell({ includeEmpty: true }, (cell, col) => {
+    const isHourCol = col >= T0 && slots[col - T0] % 60 === 0
     cell.font      = { bold: true, size: 9, color: { argb: "FF374151" } }
     cell.fill      = solidFill(C_HEAD_BG)
     cell.alignment = { horizontal: col >= T0 ? "center" : "left", vertical: "middle" }
     cell.border    = {
       top:    b("medium", C_STRONG),
       bottom: b("medium", C_STRONG),
-      left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
+      left:   col === 1 ? b("medium", C_STRONG) : (isHourCol ? b("medium", C_STRONG) : b("thin")),
       right:  col === totalCols ? b("medium", C_STRONG) : b("thin"),
     }
   })
@@ -168,7 +169,7 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
         cell.border = {
           top:    isNewRole    ? b("medium", C_STRONG) : b("thin", "FFF3F4F6"),
           bottom: nextSameRole ? b("thin", "FFF3F4F6") : b("medium", C_STRONG),
-          left:   b("thin", "FFF3F4F6"),
+          left:   slots[s] % 60 === 0 ? b("medium", C_BORDER) : b("thin", "FFF3F4F6"),
           right:  col === totalCols ? b("medium", C_STRONG) : b("thin", "FFF3F4F6"),
         }
       }
@@ -194,7 +195,7 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
         cell.border = {
           top:    isNewRole    ? b("medium", C_INDIGO) : b("thin", C_SLOT_BG),
           bottom: nextSameRole ? b("thin",  C_SLOT_BG) : b("medium", C_INDIGO),
-          left:   s === startSlot   ? b("medium", C_INDIGO) : b("thin", C_SLOT_BG),
+          left:   s === startSlot ? b("medium", C_INDIGO) : (slots[s] % 60 === 0 ? b("medium", C_BORDER) : b("thin", C_SLOT_BG)),
           right:  s === endSlot - 1 ? b("medium", C_INDIGO) : (col === totalCols ? b("medium", C_STRONG) : b("thin", C_SLOT_BG)),
         }
       }
@@ -290,35 +291,55 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
     }
   })
 
-  sorted.forEach((shift, idx) => {
-    const isLast = idx === sorted.length - 1
-    const vols   = [...shift.registrations]
+  // One row per volunteer — cols 1-5 merged across volunteers for the same shift
+  let recapRowNum = ws.rowCount + 1
+
+  sorted.forEach((shift, shiftIdx) => {
+    const isLastShift = shiftIdx === sorted.length - 1
+    const volNames = [...shift.registrations]
       .sort((a, b) => a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr"))
       .map((r) => shortName(r.volunteer))
-      .join("\n") || "—"
-    const dRow = ws.addRow([
-      shift.roleName,
-      shift.label !== shift.roleName ? shift.label : "",
-      `${fmtSlot(toMin(shift.startTime))}–${fmtSlot(toMin(shift.endTime))}`,
-      shift.capacity,
-      shift.registrations.length,
-      vols,
-    ])
-    dRow.height = Math.max(16, shift.registrations.length * 12 || 16)
-    dRow.eachCell({ includeEmpty: true }, (cell, col) => {
-      cell.font      = { size: 9 }
-      cell.alignment = {
-        vertical: "middle",
-        horizontal: col >= 3 && col <= 5 ? "center" : "left",
-        wrapText: col === 6,
+    const rowCount = Math.max(1, volNames.length)
+    const firstRow = recapRowNum
+
+    for (let vi = 0; vi < rowCount; vi++) {
+      const isFirstVol = vi === 0
+      const isLastVol  = vi === rowCount - 1
+      const dRow = ws.addRow([
+        isFirstVol ? shift.roleName : null,
+        isFirstVol ? (shift.label !== shift.roleName ? shift.label : "") : null,
+        isFirstVol ? `${fmtSlot(toMin(shift.startTime))}–${fmtSlot(toMin(shift.endTime))}` : null,
+        isFirstVol ? shift.capacity : null,
+        isFirstVol ? shift.registrations.length : null,
+        volNames[vi] ?? (isFirstVol ? "—" : null),
+      ])
+      dRow.height = 15
+      dRow.eachCell({ includeEmpty: true }, (cell, col) => {
+        cell.font      = { size: 9 }
+        cell.alignment = { vertical: "middle", horizontal: col >= 3 && col <= 5 ? "center" : "left" }
+        cell.border    = {
+          top:    isFirstVol ? b("thin") : b("thin", "FFFAFAFA"),
+          bottom: isLastShift && isLastVol ? b("medium", C_STRONG) : (isLastVol ? b("thin") : b("thin", "FFFAFAFA")),
+          left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
+          right:  col === 6 ? b("medium", C_STRONG) : b("thin"),
+        }
+      })
+      recapRowNum++
+    }
+
+    if (rowCount > 1) {
+      for (let col = 1; col <= 5; col++) {
+        ws.mergeCells(firstRow, col, firstRow + rowCount - 1, col)
+        const master = ws.getCell(firstRow, col)
+        master.border = {
+          top:    b("thin"),
+          bottom: isLastShift ? b("medium", C_STRONG) : b("thin"),
+          left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
+          right:  b("thin"),
+        }
+        master.alignment = { vertical: "middle", horizontal: col >= 3 && col <= 5 ? "center" : "left" }
       }
-      cell.border    = {
-        top:    b("thin"),
-        bottom: isLast ? b("medium", C_STRONG) : b("thin"),
-        left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
-        right:  col === 6 ? b("medium", C_STRONG) : b("thin"),
-      }
-    })
+    }
   })
 }
 
