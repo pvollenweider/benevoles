@@ -285,86 +285,103 @@ function buildDaySheet(wb: ExcelJS.Workbook, name: string, shifts: ShiftRow[], s
     }
   }
 
-  // ── Recap section ──────────────────────────────────────────────────────────
-  ws.addRow([])
-  ws.addRow([])
+}
 
-  const titleRow = ws.addRow(["RÉCAP PAR POSTE"])
-  titleRow.height = 16
-  titleRow.getCell(1).font = { bold: true, size: 10, color: { argb: "FF374151" } }
+// ── Recap sheet builder ───────────────────────────────────────────────────────
 
-  const recapCols = ["Poste", "Libellé", "Début", "Fin", "Places", "Inscrits", "Bénévoles"]
-  const RECAP_COLS = recapCols.length
-  const rhRow = ws.addRow(recapCols)
-  rhRow.height = 18
-  rhRow.eachCell({ includeEmpty: true }, (cell, col) => {
-    cell.font      = { bold: true, size: 9, color: { argb: "FF374151" } }
-    cell.fill      = solidFill(C_HEAD_BG)
-    cell.alignment = { horizontal: col >= 3 ? "center" : "left", vertical: "middle" }
-    cell.border    = {
-      top:    b("medium", C_STRONG),
-      bottom: b("medium", C_STRONG),
-      left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
-      right:  col === RECAP_COLS ? b("medium", C_STRONG) : b("thin"),
-    }
-  })
+function buildRecapSheet(
+  wb: ExcelJS.Workbook,
+  days: { label: string; shifts: ShiftRow[] }[],
+) {
+  const ws = wb.addWorksheet("Récap par poste")
+  ws.columns = [{ width: 20 }, { width: 22 }, { width: 8 }, { width: 8 }, { width: 8 }, { width: 9 }, { width: 36 }]
 
-  // One row per volunteer — cols 1-5 merged across volunteers for the same shift
-  // Role order preserved from roleOrder (Gantt order = chronological first appearance)
-  let recapRowNum = ws.rowCount + 1
+  const RECAP_COLS = 7
 
-  sorted.forEach((shift, shiftIdx) => {
-    const isLastShift  = shiftIdx === sorted.length - 1
-    const isFirstRole  = shiftIdx === 0 || sorted[shiftIdx - 1].roleName !== shift.roleName
-    const isLastRole   = isLastShift || sorted[shiftIdx + 1].roleName !== shift.roleName
-    const volNames = [...shift.registrations]
-      .sort((a, b) => a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr"))
-      .map((r) => shortName(r.volunteer))
-    const rowCount = Math.max(1, volNames.length)
-    const firstRow = recapRowNum
+  for (const [di, { label, shifts }] of days.entries()) {
+    const roleOrder: string[] = []
+    for (const s of shifts) if (!roleOrder.includes(s.roleName)) roleOrder.push(s.roleName)
+    const sorted = [...shifts].sort((a, b) => {
+      const ri = roleOrder.indexOf(a.roleName) - roleOrder.indexOf(b.roleName)
+      return ri !== 0 ? ri : a.startTime.localeCompare(b.startTime)
+    })
 
-    for (let vi = 0; vi < rowCount; vi++) {
-      const isFirstVol = vi === 0
-      const isLastVol  = vi === rowCount - 1
-      const dRow = ws.addRow([
-        isFirstVol ? shift.roleName : null,
-        isFirstVol ? (shift.label !== shift.roleName ? shift.label : "") : null,
-        isFirstVol ? fmtSlot(toMin(shift.startTime)) : null,
-        isFirstVol ? fmtSlot(toMin(shift.endTime)) : null,
-        isFirstVol ? shift.capacity : null,
-        isFirstVol ? shift.registrations.length : null,
-        volNames[vi] ?? (isFirstVol ? "—" : null),
-      ])
-      dRow.height = 15
-      dRow.eachCell({ includeEmpty: true }, (cell, col) => {
-        cell.font      = { size: 9 }
-        cell.alignment = { vertical: "middle", horizontal: col >= 3 && col <= 6 ? "center" : "left" }
-        const topRole    = isFirstVol && isFirstRole && shiftIdx > 0
-        const bottomRole = isLastVol  && isLastRole
-        cell.border    = {
-          top:    topRole    ? b("medium", C_STRONG) : (isFirstVol ? b("thin") : b("thin", "FFFAFAFA")),
-          bottom: bottomRole ? b("medium", C_STRONG) : (isLastVol  ? b("thin") : b("thin", "FFFAFAFA")),
-          left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
-          right:  col === RECAP_COLS ? b("medium", C_STRONG) : b("thin"),
-        }
-      })
-      recapRowNum++
-    }
+    // Day header
+    if (di > 0) ws.addRow([])
+    const dayRow = ws.addRow([label.toUpperCase()])
+    dayRow.height = 16
+    dayRow.getCell(1).font = { bold: true, size: 10, color: { argb: "FF4338CA" } }
 
-    if (rowCount > 1) {
-      for (let col = 1; col <= RECAP_COLS - 1; col++) {
-        ws.mergeCells(firstRow, col, firstRow + rowCount - 1, col)
-        const master = ws.getCell(firstRow, col)
-        master.border = {
-          top:    isFirstRole && shiftIdx > 0 ? b("medium", C_STRONG) : b("thin"),
-          bottom: isLastRole ? b("medium", C_STRONG) : b("thin"),
-          left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
-          right:  b("thin"),
-        }
-        master.alignment = { vertical: "middle", horizontal: col >= 3 && col <= RECAP_COLS - 1 ? "center" : "left" }
+    // Column header
+    const rhRow = ws.addRow(["Poste", "Libellé", "Début", "Fin", "Places", "Inscrits", "Bénévoles"])
+    rhRow.height = 18
+    rhRow.eachCell({ includeEmpty: true }, (cell, col) => {
+      cell.font      = { bold: true, size: 9, color: { argb: "FF374151" } }
+      cell.fill      = solidFill(C_HEAD_BG)
+      cell.alignment = { horizontal: col >= 3 ? "center" : "left", vertical: "middle" }
+      cell.border    = {
+        top:    b("medium", C_STRONG),
+        bottom: b("medium", C_STRONG),
+        left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
+        right:  col === RECAP_COLS ? b("medium", C_STRONG) : b("thin"),
       }
-    }
-  })
+    })
+
+    let recapRowNum = ws.rowCount + 1
+
+    sorted.forEach((shift, shiftIdx) => {
+      const isLastShift = shiftIdx === sorted.length - 1
+      const isFirstRole = shiftIdx === 0 || sorted[shiftIdx - 1].roleName !== shift.roleName
+      const isLastRole  = isLastShift || sorted[shiftIdx + 1].roleName !== shift.roleName
+      const volNames = [...shift.registrations]
+        .sort((a, b) => a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr"))
+        .map((r) => shortName(r.volunteer))
+      const rowCount = Math.max(1, volNames.length)
+      const firstRow = recapRowNum
+
+      for (let vi = 0; vi < rowCount; vi++) {
+        const isFirstVol = vi === 0
+        const isLastVol  = vi === rowCount - 1
+        const dRow = ws.addRow([
+          isFirstVol ? shift.roleName : null,
+          isFirstVol ? (shift.label !== shift.roleName ? shift.label : "") : null,
+          isFirstVol ? fmtSlot(toMin(shift.startTime)) : null,
+          isFirstVol ? fmtSlot(toMin(shift.endTime)) : null,
+          isFirstVol ? shift.capacity : null,
+          isFirstVol ? shift.registrations.length : null,
+          volNames[vi] ?? (isFirstVol ? "—" : null),
+        ])
+        dRow.height = 15
+        dRow.eachCell({ includeEmpty: true }, (cell, col) => {
+          cell.font      = { size: 9 }
+          cell.alignment = { vertical: "middle", horizontal: col >= 3 && col <= 6 ? "center" : "left" }
+          const topRole    = isFirstVol && isFirstRole && shiftIdx > 0
+          const bottomRole = isLastVol  && isLastRole
+          cell.border = {
+            top:    topRole    ? b("medium", C_STRONG) : (isFirstVol ? b("thin") : b("thin", "FFFAFAFA")),
+            bottom: bottomRole ? b("medium", C_STRONG) : (isLastVol  ? b("thin") : b("thin", "FFFAFAFA")),
+            left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
+            right:  col === RECAP_COLS ? b("medium", C_STRONG) : b("thin"),
+          }
+        })
+        recapRowNum++
+      }
+
+      if (rowCount > 1) {
+        for (let col = 1; col <= RECAP_COLS - 1; col++) {
+          ws.mergeCells(firstRow, col, firstRow + rowCount - 1, col)
+          const master = ws.getCell(firstRow, col)
+          master.border = {
+            top:    isFirstRole && shiftIdx > 0 ? b("medium", C_STRONG) : b("thin"),
+            bottom: isLastRole ? b("medium", C_STRONG) : b("thin"),
+            left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
+            right:  b("thin"),
+          }
+          master.alignment = { vertical: "middle", horizontal: col >= 3 && col <= RECAP_COLS - 1 ? "center" : "left" }
+        }
+      }
+    })
+  }
 }
 
 // ── Main handler ─────────────────────────────────────────────────────────────
@@ -408,13 +425,18 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
   const showSchedule = (event.showSchedule as ShowEntry[] | null) ?? []
 
+  const recapDays: { label: string; shifts: ShiftRow[] }[] = []
+
   for (const [key, { date, shifts }] of dayMap) {
     const name = date
       .toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })
       .replace(/\./g, "").trim().slice(0, 31)
     const dayShows = showSchedule.filter((s) => s.date === key)
     buildDaySheet(wb, name, shifts, dayShows)
+    recapDays.push({ label: name, shifts })
   }
+
+  buildRecapSheet(wb, recapDays)
 
   // ── Bénévoles sheet ───────────────────────────────────────────────────────
   const wsV = wb.addWorksheet("Bénévoles")
