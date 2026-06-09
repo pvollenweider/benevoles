@@ -19,6 +19,9 @@ type Props = {
   allTags: string[]
 }
 
+type SortCol = "firstName" | "lastName"
+type SortDir = "asc" | "desc"
+
 export default function MembersManager({ initialMembers, allTags }: Props) {
   const router = useRouter()
   const members = initialMembers
@@ -28,11 +31,30 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
   const [showAdd, setShowAdd] = useState(false)
   const [showImport, setShowImport] = useState(false)
   const [editingMember, setEditingMember] = useState<Member | null>(null)
+  const [sortCol, setSortCol] = useState<SortCol | null>(null)
+  const [sortDir, setSortDir] = useState<SortDir>("asc")
+  const [sortAnnouncement, setSortAnnouncement] = useState("")
   const [, startTransition] = useTransition()
+
+  function toggleSort(col: SortCol) {
+    let nextCol: SortCol | null = col
+    let nextDir: SortDir = "asc"
+    if (sortCol === col) {
+      if (sortDir === "asc") nextDir = "desc"
+      else { nextCol = null }
+    }
+    setSortCol(nextCol)
+    setSortDir(nextDir)
+    setSortAnnouncement(
+      nextCol
+        ? `Trié par ${nextCol === "firstName" ? "prénom" : "nom"}, ${nextDir === "asc" ? "croissant" : "décroissant"}`
+        : "Tri réinitialisé"
+    )
+  }
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
-    return members.filter((m) => {
+    const list = members.filter((m) => {
       if (!showInactive && !m.active) return false
       if (tagFilter && !m.tags.includes(tagFilter)) return false
       if (!q) return true
@@ -43,7 +65,14 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
         (m.phone ?? "").toLowerCase().includes(q)
       )
     })
-  }, [members, search, tagFilter, showInactive])
+    if (!sortCol) return list
+    return [...list].sort((a, b) => {
+      const av = a[sortCol].toLowerCase()
+      const bv = b[sortCol].toLowerCase()
+      const cmp = av.localeCompare(bv, "fr")
+      return sortDir === "asc" ? cmp : -cmp
+    })
+  }, [members, search, tagFilter, showInactive, sortCol, sortDir])
 
   function refresh() {
     startTransition(() => router.refresh())
@@ -109,14 +138,17 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
             : "Aucun membre ne correspond aux filtres."}
         </div>
       ) : (
+        <>
+        <div role="status" aria-live="polite" className="sr-only">{sortAnnouncement}</div>
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
+          <table aria-label="Liste des membres" className="w-full text-sm">
             <thead className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
               <tr>
-                <th className="text-left px-4 py-2 font-medium">Nom</th>
-                <th className="text-left px-4 py-2 font-medium">Contact</th>
-                <th className="text-left px-4 py-2 font-medium">Tags</th>
-                <th className="text-right px-4 py-2 font-medium">
+                <SortTh col="firstName" label="Prénom" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
+                <SortTh col="lastName"  label="Nom"    sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
+                <th scope="col" className="text-left px-4 py-2 font-medium">Contact</th>
+                <th scope="col" className="text-left px-4 py-2 font-medium">Tags</th>
+                <th scope="col" className="text-right px-4 py-2 font-medium">
                   <span className="sr-only">Actions</span>
                 </th>
               </tr>
@@ -125,9 +157,10 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
               {filtered.map((m) => (
                 <tr key={m.id} className={`border-t border-gray-100 ${!m.active ? "opacity-50" : ""}`}>
                   <td className="px-4 py-3">
-                    <div className="font-medium text-gray-900">{m.firstName} {m.lastName}</div>
+                    <div className="font-medium text-gray-900">{m.firstName}</div>
                     {!m.active && <div className="text-xs text-gray-400">inactif</div>}
                   </td>
+                  <td className="px-4 py-3 font-medium text-gray-900">{m.lastName}</td>
                   <td className="px-4 py-3 text-gray-600">
                     {m.email && <div className="text-xs">{m.email}</div>}
                     {m.phone && <div className="text-xs text-gray-400">{m.phone}</div>}
@@ -165,6 +198,7 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
             </tbody>
           </table>
         </div>
+        </>
       )}
 
       {showAdd && <AddMemberModal onClose={() => setShowAdd(false)} onCreated={refresh} />}
@@ -501,6 +535,35 @@ function ModalShell({
         {children}
       </div>
     </div>
+  )
+}
+
+// ── SortTh ───────────────────────────────────────────────────────────────────
+
+function SortTh({
+  col, label, sortCol, sortDir, onSort,
+}: {
+  col: SortCol
+  label: string
+  sortCol: SortCol | null
+  sortDir: SortDir
+  onSort: (col: SortCol) => void
+}) {
+  const active = sortCol === col
+  const ariaSort = active ? (sortDir === "asc" ? "ascending" : "descending") : "none"
+  const icon = active ? (sortDir === "asc" ? "↑" : "↓") : "↕"
+
+  return (
+    <th scope="col" aria-sort={ariaSort} className="text-left px-4 py-2 font-medium">
+      <button
+        type="button"
+        onClick={() => onSort(col)}
+        className="flex items-center gap-1 text-xs text-gray-500 uppercase tracking-wide font-medium hover:text-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 rounded"
+      >
+        {label}
+        <span aria-hidden="true" className={active ? "text-blue-600" : "text-gray-300"}>{icon}</span>
+      </button>
+    </th>
   )
 }
 
