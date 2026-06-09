@@ -397,13 +397,11 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   wsI.columns = [
     { width: 28 }, { width: 7 },  { width: 7 },  { width: 16 },
     { width: 30 }, { width: 10 }, { width: 14 }, { width: 14 },
-    { width: 28 }, { width: 14 }, { width: 28 }, { width: 12 },
+    { width: 28 }, { width: 12 },
   ]
 
-  const iHeaders = [
-    "Jour", "Début", "Fin", "Rôle", "Libellé", "Statut",
-    "Prénom", "Nom", "Email", "Téléphone", "Commentaire", "Source",
-  ]
+  const iHeaders = ["Jour", "Début", "Fin", "Rôle", "Libellé", "Statut", "Prénom", "Nom", "Commentaire", "Source"]
+  const INSC_COLS = iHeaders.length
   const ihRow = wsI.addRow(iHeaders)
   ihRow.height = 18
   ihRow.eachCell({ includeEmpty: true }, (cell, col) => {
@@ -413,8 +411,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     cell.border    = {
       top:    b("medium", C_STRONG),
       bottom: b("medium", C_STRONG),
-      left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
-      right:  col === 12 ? b("medium", C_STRONG) : b("thin"),
+      left:   col === 1         ? b("medium", C_STRONG) : b("thin"),
+      right:  col === INSC_COLS ? b("medium", C_STRONG) : b("thin"),
     }
   })
 
@@ -423,14 +421,16 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     const day   = fmtDate(shift.date)
     const start = fmtSlot(toMin(shift.startTime))
     const end   = fmtSlot(toMin(shift.endTime))
-    if (shift.registrations.length === 0) {
-      iRows.push([day, start, end, shift.roleName, shift.label, shift.status, "", "", "", "", "", ""])
+    const sortedRegs = [...shift.registrations].sort((a, b) =>
+      a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr")
+    )
+    if (sortedRegs.length === 0) {
+      iRows.push([day, start, end, shift.roleName, shift.label, shift.status, "", "", "", ""])
     } else {
-      for (const reg of shift.registrations) {
+      for (const reg of sortedRegs) {
         iRows.push([
           day, start, end, shift.roleName, shift.label, shift.status,
-          reg.volunteer.firstName, reg.volunteer.lastName, reg.volunteer.email,
-          reg.volunteer.phone ?? "", reg.comment ?? "", reg.source,
+          reg.volunteer.firstName, reg.volunteer.lastName, reg.comment ?? "", reg.source,
         ])
       }
     }
@@ -446,8 +446,53 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       cell.border    = {
         top:    b("thin"),
         bottom: isLast ? b("medium", C_STRONG) : b("thin"),
-        left:   col === 1  ? b("medium", C_STRONG) : b("thin"),
-        right:  col === 12 ? b("medium", C_STRONG) : b("thin"),
+        left:   col === 1         ? b("medium", C_STRONG) : b("thin"),
+        right:  col === INSC_COLS ? b("medium", C_STRONG) : b("thin"),
+      }
+    })
+  })
+
+  // ── Bénévoles sheet ───────────────────────────────────────────────────────
+  const wsV = wb.addWorksheet("Bénévoles")
+  wsV.columns = [{ width: 16 }, { width: 18 }, { width: 32 }, { width: 18 }]
+
+  const vHeaders = ["Prénom", "Nom", "Email", "Téléphone"]
+  const vhRow = wsV.addRow(vHeaders)
+  vhRow.height = 18
+  vhRow.eachCell({ includeEmpty: true }, (cell, col) => {
+    cell.font      = { bold: true, size: 9 }
+    cell.fill      = solidFill(C_HEAD_BG)
+    cell.alignment = { vertical: "middle" }
+    cell.border    = {
+      top:    b("medium", C_STRONG),
+      bottom: b("medium", C_STRONG),
+      left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
+      right:  col === 4 ? b("medium", C_STRONG) : b("thin"),
+    }
+  })
+
+  const volMap = new Map<string, VolData>()
+  for (const shift of event.shifts) {
+    for (const reg of shift.registrations) {
+      if (!volMap.has(reg.volunteer.email)) volMap.set(reg.volunteer.email, reg.volunteer)
+    }
+  }
+  const allVols = [...volMap.values()].sort((a, b) =>
+    a.firstName.localeCompare(b.firstName, "fr") || a.lastName.localeCompare(b.lastName, "fr")
+  )
+
+  allVols.forEach((vol, idx) => {
+    const isLast = idx === allVols.length - 1
+    const row    = wsV.addRow([vol.firstName, vol.lastName, vol.email, vol.phone ?? ""])
+    row.height   = 15
+    row.eachCell({ includeEmpty: true }, (cell, col) => {
+      cell.font      = { size: 9 }
+      cell.alignment = { vertical: "middle" }
+      cell.border    = {
+        top:    b("thin"),
+        bottom: isLast ? b("medium", C_STRONG) : b("thin"),
+        left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
+        right:  col === 4 ? b("medium", C_STRONG) : b("thin"),
       }
     })
   })

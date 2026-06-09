@@ -238,28 +238,42 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   for (const shift of event.shifts) {
     const day   = fmtDate(shift.date)
     const hours = `${fmtSlot(toMin(shift.startTime))}–${fmtSlot(toMin(shift.endTime))}`
-    if (shift.registrations.length === 0) {
+    const sortedRegs = [...shift.registrations].sort((a, b) =>
+      a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr")
+    )
+    if (sortedRegs.length === 0) {
       inscRows += `<tr>
         <td>${esc(day)}</td><td class="center">${hours}</td>
         <td>${esc(shift.roleName)}</td><td>${esc(shift.label)}</td>
-        <td colspan="4" class="center text-muted">—</td>
+        <td colspan="2" class="center text-muted">—</td>
       </tr>`
     } else {
-      const sortedRegs = [...shift.registrations].sort((a, b) =>
-        a.volunteer.firstName.localeCompare(b.volunteer.firstName, "fr")
-      )
       for (const reg of sortedRegs) {
         inscRows += `<tr>
           <td>${esc(day)}</td><td class="center">${hours}</td>
           <td>${esc(shift.roleName)}</td><td>${esc(shift.label)}</td>
           <td>${esc(reg.volunteer.firstName)} ${esc(reg.volunteer.lastName)}</td>
-          <td>${esc(reg.volunteer.email)}</td>
-          <td>${esc(reg.volunteer.phone ?? "")}</td>
           <td>${esc(reg.comment ?? "")}</td>
         </tr>`
       }
     }
   }
+
+  // ── Bénévoles section ────────────────────────────────────────────────────
+  const volMap = new Map<string, VolData>()
+  for (const shift of event.shifts) {
+    for (const reg of shift.registrations) {
+      if (!volMap.has(reg.volunteer.email)) volMap.set(reg.volunteer.email, reg.volunteer)
+    }
+  }
+  const allVols = [...volMap.values()].sort((a, b) =>
+    a.firstName.localeCompare(b.firstName, "fr") || a.lastName.localeCompare(b.lastName, "fr")
+  )
+  const volRows = allVols.map((v) => `<tr>
+    <td>${esc(v.firstName)} ${esc(v.lastName)}</td>
+    <td>${esc(v.email)}</td>
+    <td>${esc(v.phone ?? "")}</td>
+  </tr>`).join("")
 
   const ts = new Date().toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" })
 
@@ -410,6 +424,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     }
     .insc-table td, .insc-table th { white-space: nowrap; font-size: 9px; }
 
+    /* ── Bénévoles ────────────────────────────────────────────────────── */
+    .vol-section { margin-top: 32px; page-break-before: always; }
+    .vol-table td, .vol-table th { white-space: nowrap; font-size: 9px; }
+
     /* ── Page setup ───────────────────────────────────────────────────── */
     @page { size: A4 landscape; margin: 1.2cm 1cm; }
     @media print {
@@ -435,10 +453,22 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       <thead>
         <tr>
           <th>Jour</th><th class="center">Horaires</th><th>Rôle</th><th>Libellé</th>
-          <th>Prénom Nom</th><th>Email</th><th>Téléphone</th><th>Commentaire</th>
+          <th>Prénom Nom</th><th>Commentaire</th>
         </tr>
       </thead>
       <tbody>${inscRows}</tbody>
+    </table>
+  </section>
+
+  <section class="vol-section">
+    <h2 class="insc-title">Liste des bénévoles</h2>
+    <table class="vol-table">
+      <thead>
+        <tr>
+          <th>Prénom Nom</th><th>Email</th><th>Téléphone</th>
+        </tr>
+      </thead>
+      <tbody>${volRows}</tbody>
     </table>
   </section>
 </body>
