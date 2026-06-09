@@ -6,7 +6,7 @@ import { z } from "zod"
 import { randomBytes } from "crypto"
 
 const postSchema = z.object({
-  memberIds: z.array(z.string()).min(1).max(500),
+  volunteerIds: z.array(z.string()).min(1).max(500),
   message: z.string().max(500).optional(),
 })
 
@@ -23,26 +23,26 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const invites = await db.memberInvite.findMany({
     where: { eventId },
     include: {
-      member: {
+      volunteer: {
         select: { id: true, firstName: true, lastName: true, email: true, tags: true, active: true },
       },
     },
     orderBy: { sentAt: "desc" },
   })
 
-  // Pull the active registrations for the same members on this event so
+  // Pull the active registrations for the same volunteers on this event so
   // the UI can show "registered" vs "no answer".
-  const memberIds = invites.map((i) => i.memberId)
-  const memberEmails = invites
-    .map((i) => i.member.email)
+  const volunteerIds = invites.map((i) => i.volunteerId)
+  const volunteerEmails = invites
+    .map((i) => i.volunteer.email)
     .filter((e): e is string => !!e)
 
-  const registrationsByEmail = memberEmails.length
+  const registrationsByEmail = volunteerEmails.length
     ? await prisma.registration.findMany({
         where: {
           eventId,
           status: "active",
-          volunteer: { email: { in: memberEmails } },
+          volunteer: { email: { in: volunteerEmails } },
         },
         include: {
           volunteer: { select: { email: true } },
@@ -54,12 +54,13 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const regsByEmail = new Map<string, typeof registrationsByEmail>()
   for (const r of registrationsByEmail) {
     const key = r.volunteer.email
+    if (!key) continue
     if (!regsByEmail.has(key)) regsByEmail.set(key, [])
     regsByEmail.get(key)!.push(r)
   }
 
   const total = invites.length
-  const registered = invites.filter((i) => i.member.email && (regsByEmail.get(i.member.email)?.length ?? 0) > 0).length
+  const registered = invites.filter((i) => i.volunteer.email && (regsByEmail.get(i.volunteer.email)?.length ?? 0) > 0).length
   const noAnswer = total - registered
 
   return NextResponse.json({
@@ -68,10 +69,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       id: i.id,
       sentAt: i.sentAt,
       usedAt: i.usedAt,
-      member: i.member,
+      volunteer: i.volunteer,
       registrations:
-        i.member.email
-          ? (regsByEmail.get(i.member.email) ?? []).map((r) => ({
+        i.volunteer.email
+          ? (regsByEmail.get(i.volunteer.email) ?? []).map((r) => ({
               shiftId: r.shift.id,
               label: r.shift.label,
               roleName: r.shift.roleName,
@@ -80,7 +81,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
             }))
           : [],
     })),
-    memberIds,
+    volunteerIds,
   })
 }
 
@@ -100,44 +101,44 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   })
   if (!event) return NextResponse.json({ error: "Événement non trouvé" }, { status: 404 })
 
-  // Only consider members that belong to this org.
-  const members = await db.member.findMany({
-    where: { id: { in: parsed.data.memberIds }, active: true },
+  // Only consider volunteers that belong to this org.
+  const volunteers = await db.volunteer.findMany({
+    where: { id: { in: parsed.data.volunteerIds }, active: true },
   })
 
-  if (members.length === 0) {
+  if (volunteers.length === 0) {
     return NextResponse.json({ error: "Aucun membre valide à inviter" }, { status: 400 })
   }
 
   // Existing invites for this event so we don't recreate them.
   const existing = await prisma.memberInvite.findMany({
-    where: { eventId, memberId: { in: members.map((m) => m.id) } },
-    select: { memberId: true, id: true, token: true },
+    where: { eventId, volunteerId: { in: volunteers.map((v) => v.id) } },
+    select: { volunteerId: true, id: true, token: true },
   })
-  const existingByMember = new Map(existing.map((e) => [e.memberId, e]))
+  const existingByVolunteer = new Map(existing.map((e) => [e.volunteerId, e]))
 
-  const created: { id: string; memberId: string; token: string }[] = []
-  for (const member of members) {
-    if (existingByMember.has(member.id)) continue
+  const created: { id: string; volunteerId: string; token: string }[] = []
+  for (const volunteer of volunteers) {
+    if (existingByVolunteer.has(volunteer.id)) continue
     const invite = await prisma.memberInvite.create({
-      data: { eventId, memberId: member.id, token: randomBytes(24).toString("hex") },
-      select: { id: true, memberId: true, token: true },
+      data: { eventId, volunteerId: volunteer.id, token: randomBytes(24).toString("hex") },
+      select: { id: true, volunteerId: true, token: true },
     })
     created.push(invite)
   }
 
   // Send emails in parallel so a slow SMTP doesn't make the route
-  // hang for `members.length × timeout`. Promise.allSettled keeps a
+  // hang for `volunteers.length × timeout`. Promise.allSettled keeps a
   // partial failure from cancelling the others.
-  const sends = members
-    .filter((m) => m.email)
-    .map(async (member) => {
-      const invite = existingByMember.get(member.id) ?? created.find((c) => c.memberId === member.id)
+  const sends = volunteers
+    .filter((v) => v.email)
+    .map(async (volunteer) => {
+      const invite = existingByVolunteer.get(volunteer.id) ?? created.find((c) => c.volunteerId === volunteer.id)
       if (!invite) return { ok: false }
       try {
         await sendMemberInvite({
-          to: member.email!,
-          memberName: member.firstName,
+          to: volunteer.email!,
+          memberName: volunteer.firstName,
           organizationName: event.organization.name,
           eventTitle: event.title,
           eventDate: event.startDate.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
@@ -160,9 +161,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   return NextResponse.json({
     invitedNew: created.length,
-    skippedExisting: members.length - created.length,
+    skippedExisting: volunteers.length - created.length,
     emailsSent: sent,
     emailsFailed: failed,
-    membersWithoutEmail: members.filter((m) => !m.email).length,
+    membersWithoutEmail: volunteers.filter((v) => !v.email).length,
   }, { status: 201 })
 }

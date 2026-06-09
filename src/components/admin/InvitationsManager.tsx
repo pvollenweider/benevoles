@@ -15,7 +15,7 @@ type Invite = {
   id: string
   sentAt: string
   usedAt: string | null
-  memberId: string
+  volunteerId: string
   firstName: string
   lastName: string
   email: string | null
@@ -192,7 +192,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
           eventId={eventId}
           members={members}
           allTags={allTags}
-          alreadyInvitedIds={new Set(invites.map((i) => i.memberId))}
+          alreadyInvitedIds={new Set(invites.map((i) => i.volunteerId))}
           onClose={() => setShowInvite(false)}
           onDone={() => {
             setShowInvite(false)
@@ -270,7 +270,7 @@ function InviteModal({
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        memberIds: Array.from(selected),
+        volunteerIds: Array.from(selected),
         message: message.trim() || undefined,
       }),
     })

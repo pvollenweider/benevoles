@@ -17,7 +17,7 @@ const schema = z.object({
 export async function POST(req: Request) {
   const guard = await requireOrgSession()
   if (guard instanceof NextResponse) return guard
-  const { db } = guard
+  const { db, organizationId } = guard
 
   const body = await req.json()
   const parsed = schema.safeParse(body)
@@ -32,13 +32,15 @@ export async function POST(req: Request) {
 
   if (!shift) return NextResponse.json({ error: "Créneau introuvable" }, { status: 404 })
 
-  const usedEmail = email || `admin-${Date.now()}@internal`
-  let volunteer = email
-    ? await prisma.volunteer.findFirst({ where: { email } })
+  const usedEmail = email || null
+  let volunteer = usedEmail
+    ? await prisma.volunteer.findFirst({ where: { email: usedEmail, organizationId } })
     : null
 
   if (!volunteer) {
-    volunteer = await prisma.volunteer.create({ data: { firstName, lastName, email: usedEmail, phone } })
+    volunteer = await prisma.volunteer.create({
+      data: { firstName, lastName, email: usedEmail, phone: phone || null, organizationId },
+    })
   }
 
   const registration = await prisma.registration.create({

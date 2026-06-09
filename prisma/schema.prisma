@@ -18,7 +18,7 @@ model Organization {
   updatedAt DateTime @updatedAt
 
   events      Event[]
-  members     Member[]
+  volunteers  Volunteer[]
   admins      AdminUser[]
   slugHistory OrgSlugHistory[]
 }
@@ -82,17 +82,25 @@ model Shift {
 }
 
 model Volunteer {
-  id        String   @id @default(cuid())
-  firstName String
-  lastName  String
-  email     String
-  phone     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(cuid())
+  organizationId String?
+  firstName      String
+  lastName       String
+  email          String?
+  phone          String?
+  tags           String[] @default([])
+  active         Boolean  @default(true)
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
+  organization  Organization?  @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   registrations Registration[]
+  invites       MemberInvite[]
 
+  @@unique([organizationId, email])
   @@index([email])
+  @@index([organizationId])
 }
 
 model Registration {
@@ -124,38 +132,18 @@ model Registration {
   @@index([waitingPosition, shiftId])
 }
 
-model Member {
-  id             String   @id @default(cuid())
-  organizationId String
-  firstName      String
-  lastName       String
-  email          String?
-  phone          String?
-  tags           String[]
-  active         Boolean  @default(true)
-  notes          String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  organization Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  invites      MemberInvite[]
-
-  @@unique([organizationId, email])
-  @@index([organizationId])
-}
-
 model MemberInvite {
-  id       String    @id @default(cuid())
-  eventId  String
-  memberId String
-  token    String    @unique
-  sentAt   DateTime  @default(now())
-  usedAt   DateTime?
+  id          String    @id @default(cuid())
+  eventId     String
+  volunteerId String
+  token       String    @unique
+  sentAt      DateTime  @default(now())
+  usedAt      DateTime?
 
-  event  Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
 
-  @@unique([eventId, memberId])
+  @@unique([eventId, volunteerId])
   @@index([token])
 }
 

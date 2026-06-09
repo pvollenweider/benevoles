@@ -41,7 +41,7 @@ export async function GET() {
         select: {
           events: true,
           admins: true,
-          members: true,
+          volunteers: true,
         },
       },
     },

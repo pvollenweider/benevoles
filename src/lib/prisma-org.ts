@@ -45,7 +45,7 @@ export function getOrgClient(organizationId: string) {
           return query(args)
         },
       },
-      member: {
+      volunteer: {
         async findMany({ args, query }) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           ;(args.where as any) = { ...args.where, organizationId }

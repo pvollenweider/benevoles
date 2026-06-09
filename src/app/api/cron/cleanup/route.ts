@@ -34,9 +34,10 @@ async function run(req: Request) {
 
   // --- 2. Orphan volunteers ---
   // Registrations were cascade-deleted with their organization's events above.
-  // Volunteers have no direct org link so they must be cleaned up separately.
+  // Only delete volunteers with no org link and no remaining registrations —
+  // org-scoped volunteers (organizationId set) are roster members and must be kept.
   const deletedVolunteers = await prisma.volunteer.deleteMany({
-    where: { registrations: { none: {} } },
+    where: { organizationId: null, registrations: { none: {} } },
   })
 
   // --- 3. Deactivated admin users ---

@@ -43,18 +43,18 @@ export async function POST(req: Request) {
   // Pre-fetch existing emails to avoid one query per row.
   const emailsInImport = preview.rows.map((r) => r.email).filter((e): e is string => !!e)
   const existing = emailsInImport.length
-    ? await prisma.member.findMany({
+    ? await prisma.volunteer.findMany({
         where: { organizationId, email: { in: emailsInImport } },
         select: { id: true, email: true },
       })
     : []
-  const existingByEmail = new Map(existing.map((m) => [m.email, m.id]))
+  const existingByEmail = new Map(existing.map((v) => [v.email, v.id]))
 
   for (const row of preview.rows) {
     const existingId = row.email ? existingByEmail.get(row.email) : undefined
     if (existingId) {
       if (onDuplicate === "update") {
-        await prisma.member.update({
+        await prisma.volunteer.update({
           where: { id: existingId },
           data: {
             firstName: row.firstName,
@@ -70,7 +70,7 @@ export async function POST(req: Request) {
       }
     } else {
       try {
-        await prisma.member.create({
+        await prisma.volunteer.create({
           data: {
             organizationId,
             firstName: row.firstName,

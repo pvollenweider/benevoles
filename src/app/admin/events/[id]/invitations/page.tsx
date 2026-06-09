@@ -23,30 +23,30 @@ export default async function EventInvitationsPage({
   })
   if (!event) notFound()
 
-  const [invites, members] = await Promise.all([
+  const [invites, volunteers] = await Promise.all([
     db.memberInvite.findMany({
       where: { eventId: id },
       include: {
-        member: { select: { id: true, firstName: true, lastName: true, email: true, tags: true, active: true } },
+        volunteer: { select: { id: true, firstName: true, lastName: true, email: true, tags: true, active: true } },
       },
       orderBy: { sentAt: "desc" },
     }),
-    db.member.findMany({
+    db.volunteer.findMany({
       where: { active: true },
       orderBy: [{ lastName: "asc" }, { firstName: "asc" }],
     }),
   ])
 
-  const memberEmails = invites
-    .map((i) => i.member.email)
+  const volunteerEmails = invites
+    .map((i) => i.volunteer.email)
     .filter((e): e is string => !!e)
 
-  const registrations = memberEmails.length
+  const registrations = volunteerEmails.length
     ? await prisma.registration.findMany({
         where: {
           eventId: id,
           status: "active",
-          volunteer: { email: { in: memberEmails } },
+          volunteer: { email: { in: volunteerEmails } },
           // Defense in depth: ensure the registration belongs to this org
           // even if someone bypasses the helper's where injection.
           event: { organizationId },
@@ -54,10 +54,10 @@ export default async function EventInvitationsPage({
         select: { volunteer: { select: { email: true } } },
       })
     : []
-  const registeredEmails = new Set(registrations.map((r) => r.volunteer.email))
+  const registeredEmails = new Set(registrations.map((r) => r.volunteer.email).filter((e): e is string => !!e))
 
   const allTags = new Set<string>()
-  for (const m of members) for (const t of m.tags) allTags.add(t)
+  for (const v of volunteers) for (const t of v.tags) allTags.add(t)
 
   return (
     <div className="space-y-5">
@@ -68,24 +68,24 @@ export default async function EventInvitationsPage({
 
       <InvitationsManager
         eventId={id}
-        members={members.map((m) => ({
-          id: m.id,
-          firstName: m.firstName,
-          lastName: m.lastName,
-          email: m.email,
-          tags: m.tags,
+        members={volunteers.map((v) => ({
+          id: v.id,
+          firstName: v.firstName,
+          lastName: v.lastName,
+          email: v.email,
+          tags: v.tags,
         }))}
         allTags={Array.from(allTags).sort()}
         invites={invites.map((i) => ({
           id: i.id,
           sentAt: i.sentAt.toISOString(),
           usedAt: i.usedAt?.toISOString() ?? null,
-          memberId: i.member.id,
-          firstName: i.member.firstName,
-          lastName: i.member.lastName,
-          email: i.member.email,
-          tags: i.member.tags,
-          registered: i.member.email ? registeredEmails.has(i.member.email) : false,
+          volunteerId: i.volunteer.id,
+          firstName: i.volunteer.firstName,
+          lastName: i.volunteer.lastName,
+          email: i.volunteer.email,
+          tags: i.volunteer.tags,
+          registered: i.volunteer.email ? registeredEmails.has(i.volunteer.email) : false,
         }))}
       />
     </div>

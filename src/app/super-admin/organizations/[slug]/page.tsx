@@ -25,7 +25,7 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
         select: {
           events: true,
           admins: true,
-          members: true,
+          volunteers: true,
         },
       },
       admins: {

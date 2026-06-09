@@ -22,7 +22,7 @@ export default async function SuperAdminOrgsPage() {
         select: {
           events: true,
           admins: true,
-          members: true,
+          volunteers: true,
         },
       },
     },

@@ -72,9 +72,11 @@ export async function POST(req: Request) {
     }
   }
 
-  let volunteer = await prisma.volunteer.findFirst({ where: { email } })
+  // Volunteer is org-scoped: each (organizationId, email) is a unique roster entry.
+  const organizationId = event.organizationId
+  let volunteer = await prisma.volunteer.findFirst({ where: { email, organizationId } })
   if (!volunteer) {
-    volunteer = await prisma.volunteer.create({ data: { firstName, lastName, email, phone } })
+    volunteer = await prisma.volunteer.create({ data: { firstName, lastName, email, phone, organizationId } })
   } else {
     volunteer = await prisma.volunteer.update({
       where: { id: volunteer.id },
@@ -144,13 +146,6 @@ export async function POST(req: Request) {
   )
 
   const editToken = registrations[0].editToken
-
-  // Sync volunteer into the org member list (non-blocking)
-  prisma.member.upsert({
-    where: { organizationId_email: { organizationId: event.organizationId, email } },
-    create: { organizationId: event.organizationId, firstName, lastName, email, phone, tags: ["Bénévole"] },
-    update: { firstName, lastName, phone: phone ?? undefined },
-  }).catch((e) => console.error("Member sync error:", e))
 
   // Mark the member invite as used (kept valid for re-visits per product
   // decision — only the first usage is timestamped).

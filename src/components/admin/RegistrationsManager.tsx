@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useMemo } from "react"
 
-type Volunteer = { id: string; firstName: string; lastName: string; email: string; phone: string | null }
+type Volunteer = { id: string; firstName: string; lastName: string; email: string | null; phone: string | null }
 type ShiftRef  = {
   id: string; roleName: string; label: string; date: string
   startTime: string; endTime: string; capacity: number; registrationCount: number
@@ -197,7 +197,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   const volunteerShifts = useMemo<ShiftRef[] | undefined>(() => {
     const email = addForm.email.trim().toLowerCase()
     if (!email) return undefined
-    const found = registrations.filter(r => r.volunteer.email.toLowerCase() === email).map(r => r.shift)
+    const found = registrations.filter(r => r.volunteer.email?.toLowerCase() === email).map(r => r.shift)
     return found.length > 0 ? found : undefined
   }, [addForm.email, registrations])
 
@@ -217,7 +217,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
 
   const filtered = registrations.filter((r) => {
     const q = search.toLowerCase()
-    const matchSearch = !q || `${r.volunteer.firstName} ${r.volunteer.lastName} ${r.volunteer.email}`.toLowerCase().includes(q)
+    const matchSearch = !q || `${r.volunteer.firstName} ${r.volunteer.lastName} ${r.volunteer.email ?? ""}`.toLowerCase().includes(q)
     const matchRole  = !roleFilter  || r.shift.roleName === roleFilter
     const matchShift = !shiftFilter || r.shift.id === shiftFilter
     return matchSearch && matchRole && matchShift

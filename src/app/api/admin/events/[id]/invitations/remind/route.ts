@@ -9,7 +9,7 @@ const schema = z.object({
 })
 
 /**
- * Re-sends the invitation email to every invited member who has not yet
+ * Re-sends the invitation email to every invited volunteer who has not yet
  * registered to the event. Reuses the existing token (no duplicate row).
  */
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -30,38 +30,38 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const invites = await db.memberInvite.findMany({
     where: { eventId },
-    include: { member: true },
+    include: { volunteer: true },
   })
 
-  const memberEmails = invites
-    .map((i) => i.member.email)
+  const volunteerEmails = invites
+    .map((i) => i.volunteer.email)
     .filter((e): e is string => !!e)
 
   const registeredEmails = new Set(
-    memberEmails.length
+    volunteerEmails.length
       ? (
           await prisma.registration.findMany({
             where: {
               eventId,
               status: "active",
-              volunteer: { email: { in: memberEmails } },
+              volunteer: { email: { in: volunteerEmails } },
             },
             select: { volunteer: { select: { email: true } } },
           })
-        ).map((r) => r.volunteer.email)
+        ).map((r) => r.volunteer.email).filter((e): e is string => !!e)
       : [],
   )
 
   let sent = 0
   let failed = 0
   for (const invite of invites) {
-    const m = invite.member
-    if (!m.email || !m.active) continue
-    if (registeredEmails.has(m.email)) continue
+    const v = invite.volunteer
+    if (!v.email || !v.active) continue
+    if (registeredEmails.has(v.email)) continue
     try {
       await sendMemberInvite({
-        to: m.email,
-        memberName: m.firstName,
+        to: v.email,
+        memberName: v.firstName,
         organizationName: event.organization.name,
         eventTitle: event.title,
         eventDate: event.startDate.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),

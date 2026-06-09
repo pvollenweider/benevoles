@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 
-type VolData = { firstName: string; lastName: string; email: string; phone: string | null }
+type VolData = { firstName: string; lastName: string; email: string | null; phone: string | null }
 type RegData  = { volunteer: VolData; comment: string | null; source: string }
 type ShiftRow = {
   id: string; roleName: string; label: string; date: Date
@@ -62,7 +62,8 @@ function buildDayHtml(date: Date, shifts: ShiftRow[], shows: ShowEntry[]): strin
   // Duplicate first-name detection for smart name display
   const uniqueVols = new Map<string, VolData>()
   for (const s of shifts) for (const reg of s.registrations) {
-    if (!uniqueVols.has(reg.volunteer.email)) uniqueVols.set(reg.volunteer.email, reg.volunteer)
+    const key = reg.volunteer.email ?? ""
+    if (!uniqueVols.has(key)) uniqueVols.set(key, reg.volunteer)
   }
   const firstNameCount = new Map<string, number>()
   for (const v of uniqueVols.values())
@@ -275,7 +276,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const volMap = new Map<string, VolData>()
   for (const shift of event.shifts) {
     for (const reg of shift.registrations) {
-      if (!volMap.has(reg.volunteer.email)) volMap.set(reg.volunteer.email, reg.volunteer)
+      const volEmail = reg.volunteer.email ?? ""
+      if (!volMap.has(volEmail)) volMap.set(volEmail, reg.volunteer)
     }
   }
   const allVols = [...volMap.values()].sort((a, b) =>
@@ -284,7 +286,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const volRows = allVols.map((v) => `<tr>
     <td>${esc(v.lastName)}</td>
     <td>${esc(v.firstName)}</td>
-    <td>${esc(v.email)}</td>
+    <td>${esc(v.email ?? "")}</td>
     <td>${esc(v.phone ?? "")}</td>
   </tr>`).join("")
 

@@ -16,7 +16,7 @@ type Admin = {
 type OrgCount = {
   events: number
   admins: number
-  members: number
+  volunteers: number
 }
 
 type Org = {
@@ -152,7 +152,7 @@ export default function OrgDetail({ org }: { org: Org }) {
       <div className="grid grid-cols-3 gap-4">
         <StatCard label="Événements" value={org._count.events} />
         <StatCard label="Administrateurs" value={org._count.admins} />
-        <StatCard label="Membres" value={org._count.members} />
+        <StatCard label="Membres" value={org._count.volunteers} />
       </div>
 
       {/* Edit name + slug */}

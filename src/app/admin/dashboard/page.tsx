@@ -11,7 +11,7 @@ export default async function DashboardPage() {
 
   const now = new Date()
 
-  const [events, members, volunteersResult] = await Promise.all([
+  const [events, volunteers, volunteersResult] = await Promise.all([
     db.event.findMany({
       include: {
         shifts: {
@@ -21,7 +21,7 @@ export default async function DashboardPage() {
       },
       orderBy: { startDate: "desc" },
     }),
-    db.member.findMany({ select: { id: true, email: true, active: true } }),
+    db.volunteer.findMany({ select: { id: true, email: true, active: true } }),
     db.registration.findMany({
       where: { status: "active" },
       select: { volunteerId: true },
@@ -45,8 +45,8 @@ export default async function DashboardPage() {
   )
   const fillRate = totalCapacity > 0 ? Math.round((totalRegistered / totalCapacity) * 100) : 0
 
-  const totalMembers = members.length
-  const membersWithEmail = members.filter((m) => m.email).length
+  const totalMembers = volunteers.length
+  const membersWithEmail = volunteers.filter((v) => v.email).length
   const membersWithoutEmail = totalMembers - membersWithEmail
   const totalVolunteers = volunteersResult.length
 
