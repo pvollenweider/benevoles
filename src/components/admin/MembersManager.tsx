@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState, useTransition } from "react"
+import { useEffect, useId, useMemo, useRef, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 
 type Member = {
@@ -21,14 +21,13 @@ type Props = {
 
 export default function MembersManager({ initialMembers, allTags }: Props) {
   const router = useRouter()
-  // No local state for members: derive from props directly so a
-  // router.refresh() (after import / deactivate) shows the new list.
   const members = initialMembers
   const [search, setSearch] = useState("")
   const [tagFilter, setTagFilter] = useState<string>("")
   const [showInactive, setShowInactive] = useState(false)
   const [showAdd, setShowAdd] = useState(false)
   const [showImport, setShowImport] = useState(false)
+  const [editingMember, setEditingMember] = useState<Member | null>(null)
   const [, startTransition] = useTransition()
 
   const filtered = useMemo(() => {
@@ -50,8 +49,8 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
     startTransition(() => router.refresh())
   }
 
-  async function deactivate(id: string) {
-    if (!confirm("Désactiver ce membre ?")) return
+  async function deactivate(id: string, name: string) {
+    if (!confirm(`Désactiver ${name} ?`)) return
     const res = await fetch(`/api/admin/members/${id}`, { method: "DELETE" })
     if (res.ok) refresh()
   }
@@ -117,7 +116,9 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
                 <th className="text-left px-4 py-2 font-medium">Nom</th>
                 <th className="text-left px-4 py-2 font-medium">Contact</th>
                 <th className="text-left px-4 py-2 font-medium">Tags</th>
-                <th className="text-right px-4 py-2 font-medium"></th>
+                <th className="text-right px-4 py-2 font-medium">
+                  <span className="sr-only">Actions</span>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -141,11 +142,19 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
                       ))}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-4 py-3 text-right space-x-3">
+                    <button
+                      onClick={() => setEditingMember(m)}
+                      aria-label={`Éditer ${m.firstName} ${m.lastName}`}
+                      className="text-xs text-gray-500 hover:text-blue-600"
+                    >
+                      Éditer
+                    </button>
                     {m.active && (
                       <button
-                        onClick={() => deactivate(m.id)}
-                        className="text-xs text-gray-400 hover:text-red-600"
+                        onClick={() => deactivate(m.id, `${m.firstName} ${m.lastName}`)}
+                        aria-label={`Désactiver ${m.firstName} ${m.lastName}`}
+                        className="text-xs text-gray-500 hover:text-red-600"
                       >
                         Désactiver
                       </button>
@@ -160,9 +169,97 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
 
       {showAdd && <AddMemberModal onClose={() => setShowAdd(false)} onCreated={refresh} />}
       {showImport && <ImportModal onClose={() => setShowImport(false)} onImported={refresh} />}
+      {editingMember && (
+        <EditMemberModal
+          member={editingMember}
+          onClose={() => setEditingMember(null)}
+          onSaved={() => { setEditingMember(null); refresh() }}
+        />
+      )}
     </div>
   )
 }
+
+// ── Edit modal ────────────────────────────────────────────────────────────────
+
+function EditMemberModal({ member, onClose, onSaved }: { member: Member; onClose: () => void; onSaved: () => void }) {
+  const [firstName, setFirstName] = useState(member.firstName)
+  const [lastName, setLastName] = useState(member.lastName)
+  const [email, setEmail] = useState(member.email ?? "")
+  const [phone, setPhone] = useState(member.phone ?? "")
+  const [tags, setTags] = useState(member.tags.join(", "))
+  const [notes, setNotes] = useState(member.notes ?? "")
+  const [active, setActive] = useState(member.active)
+  const [error, setError] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+  const activeId = useId()
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault()
+    setSubmitting(true)
+    setError(null)
+    const res = await fetch(`/api/admin/members/${member.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email: email || undefined,
+        phone: phone || undefined,
+        tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
+        notes: notes || undefined,
+        active,
+      }),
+    })
+    setSubmitting(false)
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}))
+      setError(typeof data?.error === "string" ? data.error : "Erreur lors de la mise à jour")
+      return
+    }
+    onSaved()
+  }
+
+  return (
+    <ModalShell title="Modifier le membre" onClose={onClose}>
+      <form onSubmit={submit} className="space-y-3">
+        <p className="text-xs text-gray-500">* champ obligatoire</p>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="Prénom" required value={firstName} onChange={setFirstName} />
+          <Field label="Nom" required value={lastName} onChange={setLastName} />
+        </div>
+        <Field label="Email" type="email" value={email} onChange={setEmail} />
+        <Field label="Téléphone" value={phone} onChange={setPhone} />
+        <Field label="Tags (séparés par des virgules)" value={tags} onChange={setTags} placeholder="bénévole, bar" />
+        <Field label="Notes" value={notes} onChange={setNotes} multiline />
+        <div className="flex items-center gap-2">
+          <input
+            id={activeId}
+            type="checkbox"
+            checked={active}
+            onChange={(e) => setActive(e.target.checked)}
+          />
+          <label htmlFor={activeId} className="text-sm text-gray-700">Membre actif</label>
+        </div>
+        {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
+        <div className="flex justify-end gap-2 pt-2">
+          <button type="button" onClick={onClose} className="text-sm px-4 py-2 text-gray-600 hover:text-gray-900">
+            Annuler
+          </button>
+          <button
+            type="submit"
+            disabled={submitting}
+            className="bg-blue-600 text-white text-sm px-4 py-2 rounded-xl font-medium hover:bg-blue-700 disabled:opacity-50"
+          >
+            {submitting ? "…" : "Enregistrer"}
+          </button>
+        </div>
+      </form>
+    </ModalShell>
+  )
+}
+
+// ── Add modal ─────────────────────────────────────────────────────────────────
 
 function AddMemberModal({ onClose, onCreated }: { onClose: () => void; onCreated: () => void }) {
   const [firstName, setFirstName] = useState("")
@@ -201,6 +298,7 @@ function AddMemberModal({ onClose, onCreated }: { onClose: () => void; onCreated
   return (
     <ModalShell title="Nouveau membre" onClose={onClose}>
       <form onSubmit={submit} className="space-y-3">
+        <p className="text-xs text-gray-500">* champ obligatoire</p>
         <div className="grid grid-cols-2 gap-3">
           <Field label="Prénom" required value={firstName} onChange={setFirstName} />
           <Field label="Nom" required value={lastName} onChange={setLastName} />
@@ -208,7 +306,7 @@ function AddMemberModal({ onClose, onCreated }: { onClose: () => void; onCreated
         <Field label="Email" type="email" value={email} onChange={setEmail} />
         <Field label="Téléphone" value={phone} onChange={setPhone} />
         <Field label="Tags (séparés par des virgules)" value={tags} onChange={setTags} placeholder="parent CM2, bar" />
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
         <div className="flex justify-end gap-2 pt-2">
           <button type="button" onClick={onClose} className="text-sm px-4 py-2 text-gray-600 hover:text-gray-900">
             Annuler
@@ -225,6 +323,8 @@ function AddMemberModal({ onClose, onCreated }: { onClose: () => void; onCreated
     </ModalShell>
   )
 }
+
+// ── Import modal ──────────────────────────────────────────────────────────────
 
 function ImportModal({ onClose, onImported }: { onClose: () => void; onImported: () => void }) {
   const [file, setFile] = useState<File | null>(null)
@@ -280,24 +380,16 @@ function ImportModal({ onClose, onImported }: { onClose: () => void; onImported:
             <label className="block text-sm text-gray-700 mb-1">Si un email existe déjà</label>
             <div className="flex gap-3">
               <label className="text-sm text-gray-700 flex items-center gap-1.5">
-                <input
-                  type="radio"
-                  checked={onDuplicate === "skip"}
-                  onChange={() => setOnDuplicate("skip")}
-                />
+                <input type="radio" checked={onDuplicate === "skip"} onChange={() => setOnDuplicate("skip")} />
                 Ignorer
               </label>
               <label className="text-sm text-gray-700 flex items-center gap-1.5">
-                <input
-                  type="radio"
-                  checked={onDuplicate === "update"}
-                  onChange={() => setOnDuplicate("update")}
-                />
+                <input type="radio" checked={onDuplicate === "update"} onChange={() => setOnDuplicate("update")} />
                 Mettre à jour
               </label>
             </div>
           </div>
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
           <div className="flex justify-end gap-2">
             <button type="button" onClick={onClose} className="text-sm px-4 py-2 text-gray-600 hover:text-gray-900">
               Annuler
@@ -321,10 +413,7 @@ function ImportModal({ onClose, onImported }: { onClose: () => void; onImported:
               <p className="font-medium mb-2">{result.errors.length} ligne{result.errors.length > 1 ? "s" : ""} ignorée{result.errors.length > 1 ? "s" : ""} :</p>
               <ul className="text-xs space-y-1 max-h-40 overflow-y-auto">
                 {result.errors.slice(0, 50).map((e, i) => (
-                  <li key={i}>
-                    {e.line > 0 ? `Ligne ${e.line} : ` : ""}
-                    {e.reason}
-                  </li>
+                  <li key={i}>{e.line > 0 ? `Ligne ${e.line} : ` : ""}{e.reason}</li>
                 ))}
                 {result.errors.length > 50 && <li>… et {result.errors.length - 50} autres</li>}
               </ul>
@@ -338,10 +427,7 @@ function ImportModal({ onClose, onImported }: { onClose: () => void; onImported:
           </div>
           <div className="flex justify-end">
             <button
-              onClick={() => {
-                onImported()
-                onClose()
-              }}
+              onClick={() => { onImported(); onClose() }}
               className="bg-blue-600 text-white text-sm px-4 py-2 rounded-xl font-medium hover:bg-blue-700"
             >
               Fermer
@@ -353,6 +439,8 @@ function ImportModal({ onClose, onImported }: { onClose: () => void; onImported:
   )
 }
 
+// ── ModalShell ────────────────────────────────────────────────────────────────
+
 function ModalShell({
   title,
   onClose,
@@ -362,18 +450,61 @@ function ModalShell({
   onClose: () => void
   children: React.ReactNode
 }) {
+  const dialogRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = dialogRef.current
+    if (!el) return
+
+    const focusableSelectors =
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
+    const getFocusable = () => [...el.querySelectorAll<HTMLElement>(focusableSelectors)]
+
+    // Move focus into modal on open
+    getFocusable()[0]?.focus()
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") { onClose(); return }
+      if (e.key !== "Tab") return
+
+      const els = getFocusable()
+      if (!els.length) return
+      const first = els[0]
+      const last = els[els.length - 1]
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus() }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus() }
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown)
+    return () => document.removeEventListener("keydown", onKeyDown)
+  }, [onClose])
+
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-2xl p-5 max-w-lg w-full" onClick={(e) => e.stopPropagation()}>
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        className="bg-white rounded-2xl p-5 max-w-lg w-full"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-700 text-xl leading-none">×</button>
+          <h2 id="modal-title" className="text-lg font-semibold text-gray-900">{title}</h2>
+          <button onClick={onClose} aria-label="Fermer" className="text-gray-500 hover:text-gray-700 text-xl leading-none">×</button>
         </div>
         {children}
       </div>
     </div>
   )
 }
+
+// ── Field ─────────────────────────────────────────────────────────────────────
 
 function Field({
   label,
@@ -382,6 +513,7 @@ function Field({
   type = "text",
   required = false,
   placeholder,
+  multiline = false,
 }: {
   label: string
   value: string
@@ -389,18 +521,34 @@ function Field({
   type?: string
   required?: boolean
   placeholder?: string
+  multiline?: boolean
 }) {
+  const id = useId()
   return (
     <div>
-      <label className="block text-sm text-gray-700 mb-1">{label}{required && " *"}</label>
-      <input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        required={required}
-        placeholder={placeholder}
-        className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
-      />
+      <label htmlFor={id} className="block text-sm text-gray-700 mb-1">
+        {label}{required && " *"}
+      </label>
+      {multiline ? (
+        <textarea
+          id={id}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          rows={3}
+          className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+        />
+      ) : (
+        <input
+          id={id}
+          type={type}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          required={required}
+          placeholder={placeholder}
+          className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+        />
+      )}
     </div>
   )
 }
