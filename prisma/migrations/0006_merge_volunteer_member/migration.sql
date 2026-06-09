@@ -4,20 +4,19 @@
 -- MemberInvite.memberId → volunteerId.
 -- No data is lost: Member rows without a matching Volunteer
 -- are inserted as new Volunteer rows.
+-- Fully idempotent: safe to re-run from any partial state.
 -- ============================================================
 
 -- Step 1: Extend Volunteer with new columns (nullable initially)
-ALTER TABLE "Volunteer"
-  ADD COLUMN "organizationId" TEXT,
-  ADD COLUMN "tags"           TEXT[]   NOT NULL DEFAULT '{}',
-  ADD COLUMN "active"         BOOLEAN  NOT NULL DEFAULT TRUE,
-  ADD COLUMN "notes"          TEXT;
+ALTER TABLE "Volunteer" ADD COLUMN IF NOT EXISTS "organizationId" TEXT;
+ALTER TABLE "Volunteer" ADD COLUMN IF NOT EXISTS "tags"           TEXT[]   NOT NULL DEFAULT '{}';
+ALTER TABLE "Volunteer" ADD COLUMN IF NOT EXISTS "active"         BOOLEAN  NOT NULL DEFAULT TRUE;
+ALTER TABLE "Volunteer" ADD COLUMN IF NOT EXISTS "notes"          TEXT;
 
--- email was NOT NULL; make it nullable to support roster entries without email
+-- email was NOT NULL; make it nullable (no-op if already nullable)
 ALTER TABLE "Volunteer" ALTER COLUMN "email" DROP NOT NULL;
 
 -- Step 2: Set organizationId on existing Volunteers from their registrations
--- (picks the most-recent event's org for each volunteer)
 UPDATE "Volunteer" v
 SET "organizationId" = (
   SELECT e."organizationId"
@@ -29,8 +28,7 @@ SET "organizationId" = (
 )
 WHERE v."organizationId" IS NULL;
 
--- Step 3: Dedup — if two Volunteers now share (organizationId, email),
--- keep the earliest-created one and reassign Registrations to it.
+-- Step 3: Dedup — keep earliest-created volunteer per (organizationId, email)
 WITH ranked AS (
   SELECT id, "organizationId", email,
          ROW_NUMBER() OVER (
@@ -68,104 +66,136 @@ WITH ranked AS (
 )
 DELETE FROM "Volunteer" WHERE id IN (SELECT id FROM ranked WHERE rn > 1);
 
--- Step 4: Copy tags / active / notes from Member to the matching Volunteer
-UPDATE "Volunteer" v
-SET tags   = m.tags,
-    active = m.active,
-    notes  = m.notes
-FROM "Member" m
-WHERE v.email IS NOT DISTINCT FROM m.email
-  AND v."organizationId" = m."organizationId";
+-- Steps 4 & 5: Copy from Member only if Member table still exists
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'Member' AND table_schema = 'public') THEN
 
--- Step 5: Create Volunteer rows for Members that have no matching Volunteer
--- (roster entries added manually, never registered)
-INSERT INTO "Volunteer" (
-  id, "organizationId", "firstName", "lastName",
-  email, phone, tags, active, notes,
-  "createdAt", "updatedAt"
-)
-SELECT
-  gen_random_uuid(),
-  m."organizationId",
-  m."firstName",
-  m."lastName",
-  m.email,
-  m.phone,
-  m.tags,
-  m.active,
-  m.notes,
-  m."createdAt",
-  NOW()
-FROM "Member" m
-WHERE NOT EXISTS (
-  SELECT 1 FROM "Volunteer" v
-  WHERE v.email IS NOT DISTINCT FROM m.email
-    AND v."organizationId" = m."organizationId"
-);
+    -- Step 4: Copy tags / active / notes from Member to matching Volunteer
+    UPDATE "Volunteer" v
+    SET tags   = m.tags,
+        active = m.active,
+        notes  = m.notes
+    FROM "Member" m
+    WHERE v.email IS NOT DISTINCT FROM m.email
+      AND v."organizationId" = m."organizationId";
+
+    -- Step 5: Create Volunteer rows for Members with no matching Volunteer
+    INSERT INTO "Volunteer" (
+      id, "organizationId", "firstName", "lastName",
+      email, phone, tags, active, notes,
+      "createdAt", "updatedAt"
+    )
+    SELECT
+      gen_random_uuid(),
+      m."organizationId",
+      m."firstName",
+      m."lastName",
+      m.email,
+      m.phone,
+      m.tags,
+      m.active,
+      m.notes,
+      m."createdAt",
+      NOW()
+    FROM "Member" m
+    WHERE NOT EXISTS (
+      SELECT 1 FROM "Volunteer" v
+      WHERE v.email IS NOT DISTINCT FROM m.email
+        AND v."organizationId" = m."organizationId"
+    );
+
+  END IF;
+END $$;
 
 -- Step 6: Migrate MemberInvite — add volunteerId, populate, drop memberId
 
-ALTER TABLE "MemberInvite" ADD COLUMN "volunteerId" TEXT;
+ALTER TABLE "MemberInvite" ADD COLUMN IF NOT EXISTS "volunteerId" TEXT;
 
--- Populate from Member→Volunteer by (email, orgId)
-UPDATE "MemberInvite" mi
-SET "volunteerId" = v.id
-FROM "Member" m
-JOIN "Volunteer" v
-  ON v.email IS NOT DISTINCT FROM m.email
- AND v."organizationId" = m."organizationId"
-WHERE mi."memberId" = m.id;
+-- Populate volunteerId from memberId only if memberId column still exists
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'MemberInvite' AND column_name = 'memberId' AND table_schema = 'public'
+  ) AND EXISTS (
+    SELECT 1 FROM information_schema.tables WHERE table_name = 'Member' AND table_schema = 'public'
+  ) THEN
 
--- Fallback: if still null, match by email only (edge case with null orgId)
-UPDATE "MemberInvite" mi
-SET "volunteerId" = (
-  SELECT v.id
-  FROM "Member" m
-  JOIN "Volunteer" v ON v.email IS NOT DISTINCT FROM m.email
-  WHERE m.id = mi."memberId"
-  ORDER BY v."createdAt" ASC
-  LIMIT 1
-)
-WHERE mi."volunteerId" IS NULL;
+    UPDATE "MemberInvite" mi
+    SET "volunteerId" = v.id
+    FROM "Member" m
+    JOIN "Volunteer" v
+      ON v.email IS NOT DISTINCT FROM m.email
+     AND v."organizationId" = m."organizationId"
+    WHERE mi."memberId" = m.id;
 
--- Drop invites that have no resolvable volunteer (orphaned invites)
+    -- Fallback: match by email only (edge case with null orgId)
+    UPDATE "MemberInvite" mi
+    SET "volunteerId" = (
+      SELECT v.id
+      FROM "Member" m
+      JOIN "Volunteer" v ON v.email IS NOT DISTINCT FROM m.email
+      WHERE m.id = mi."memberId"
+      ORDER BY v."createdAt" ASC
+      LIMIT 1
+    )
+    WHERE mi."volunteerId" IS NULL;
+
+  END IF;
+END $$;
+
+-- Drop invites with no resolvable volunteer
 DELETE FROM "MemberInvite" WHERE "volunteerId" IS NULL;
 
--- Make volunteerId required
+-- Make volunteerId required (no-op if already NOT NULL)
 ALTER TABLE "MemberInvite" ALTER COLUMN "volunteerId" SET NOT NULL;
 
--- Add FK: MemberInvite → Volunteer
-ALTER TABLE "MemberInvite"
-  ADD CONSTRAINT "MemberInvite_volunteerId_fkey"
-    FOREIGN KEY ("volunteerId") REFERENCES "Volunteer"("id")
-    ON DELETE CASCADE ON UPDATE CASCADE;
+-- Add FK: MemberInvite → Volunteer (skip if already exists)
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.table_constraints
+    WHERE constraint_name = 'MemberInvite_volunteerId_fkey' AND table_name = 'MemberInvite'
+  ) THEN
+    ALTER TABLE "MemberInvite"
+      ADD CONSTRAINT "MemberInvite_volunteerId_fkey"
+        FOREIGN KEY ("volunteerId") REFERENCES "Volunteer"("id")
+        ON DELETE CASCADE ON UPDATE CASCADE;
+  END IF;
+END $$;
 
--- Drop old memberId FK and column
-ALTER TABLE "MemberInvite" DROP CONSTRAINT "MemberInvite_memberId_fkey";
-ALTER TABLE "MemberInvite" DROP COLUMN "memberId";
+-- Drop old memberId FK and column (IF EXISTS = safe if already gone)
+ALTER TABLE "MemberInvite" DROP CONSTRAINT IF EXISTS "MemberInvite_memberId_fkey";
+ALTER TABLE "MemberInvite" DROP COLUMN IF EXISTS "memberId";
 
 -- Replace unique index (eventId, memberId) → (eventId, volunteerId)
--- IF EXISTS: prod schema may not have this index if @@unique was never added
 DROP INDEX IF EXISTS "MemberInvite_eventId_memberId_key";
-CREATE UNIQUE INDEX "MemberInvite_eventId_volunteerId_key"
+CREATE UNIQUE INDEX IF NOT EXISTS "MemberInvite_eventId_volunteerId_key"
   ON "MemberInvite"("eventId", "volunteerId");
 
 -- Step 7: Add unique constraint and indices on Volunteer
--- (Postgres treats NULLs as distinct — no enforcement when either field is NULL)
-CREATE UNIQUE INDEX "Volunteer_organizationId_email_key"
+CREATE UNIQUE INDEX IF NOT EXISTS "Volunteer_organizationId_email_key"
   ON "Volunteer"("organizationId", email);
 
-CREATE INDEX "Volunteer_organizationId_idx" ON "Volunteer"("organizationId");
+CREATE INDEX IF NOT EXISTS "Volunteer_organizationId_idx" ON "Volunteer"("organizationId");
 
--- Add FK: Volunteer → Organization (SET NULL on org delete)
-ALTER TABLE "Volunteer"
-  ADD CONSTRAINT "Volunteer_organizationId_fkey"
-    FOREIGN KEY ("organizationId") REFERENCES "Organization"("id")
-    ON DELETE SET NULL ON UPDATE CASCADE;
+-- Add FK: Volunteer → Organization (skip if already exists)
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.table_constraints
+    WHERE constraint_name = 'Volunteer_organizationId_fkey' AND table_name = 'Volunteer'
+  ) THEN
+    ALTER TABLE "Volunteer"
+      ADD CONSTRAINT "Volunteer_organizationId_fkey"
+        FOREIGN KEY ("organizationId") REFERENCES "Organization"("id")
+        ON DELETE SET NULL ON UPDATE CASCADE;
+  END IF;
+END $$;
 
--- Step 8: Drop Member table
--- (MemberInvite FK to Member was already dropped above)
-DROP INDEX "Member_organizationId_email_key";
-DROP INDEX "Member_organizationId_idx";
-ALTER TABLE "Member" DROP CONSTRAINT "Member_organizationId_fkey";
-DROP TABLE "Member";
+-- Step 8: Drop Member table (IF EXISTS = safe if already gone)
+DROP INDEX IF EXISTS "Member_organizationId_email_key";
+DROP INDEX IF EXISTS "Member_organizationId_idx";
+ALTER TABLE "Member" DROP CONSTRAINT IF EXISTS "Member_organizationId_fkey";
+DROP TABLE IF EXISTS "Member";
