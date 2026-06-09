@@ -23,7 +23,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const parsed = patchSchema.safeParse(body)
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
 
-  const owned = await db.member.findFirst({ where: { id }, select: { id: true } })
+  const owned = await db.member.findFirst({ where: { id }, select: { id: true, email: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   const data = parsed.data
@@ -37,6 +37,17 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (data.active !== undefined) updateData.active = data.active
 
   const member = await prisma.member.update({ where: { id }, data: updateData })
+
+  // Keep Volunteer in sync so exports reflect member edits
+  const volEmail = owned.email
+  if (volEmail && (data.firstName !== undefined || data.lastName !== undefined || data.phone !== undefined)) {
+    const volUpdate: Record<string, unknown> = {}
+    if (data.firstName !== undefined) volUpdate.firstName = data.firstName
+    if (data.lastName !== undefined) volUpdate.lastName = data.lastName
+    if (data.phone !== undefined) volUpdate.phone = data.phone || null
+    prisma.volunteer.updateMany({ where: { email: volEmail }, data: volUpdate }).catch(() => {})
+  }
+
   return NextResponse.json(member)
 }
 
