@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
+import { rateLimit, getClientIp } from "@/lib/rate-limit"
 
 export async function POST(_req: Request, { params }: { params: Promise<{ token: string }> }) {
+  const rl = rateLimit(getClientIp(_req), "waitlist-confirm", 10, 60 * 60 * 1000)
+  if (!rl.ok) return NextResponse.json({ error: "Trop de requêtes." }, { status: 429 })
+
   const { token } = await params
 
   const reg = await prisma.registration.findFirst({

@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer"
+import { env } from "@/lib/env"
 import type {
   NotificationChannelImpl,
   NotificationPayload,
@@ -34,8 +35,8 @@ export const emailChannel: NotificationChannelImpl = {
     }
 
     const { subject, html, text } = render(payload)
-    const from = process.env.EMAIL_FROM ?? "Bénévoles <notifications@benevol.app>"
-    const replyTo = process.env.EMAIL_REPLY_TO || undefined
+    const from = env.EMAIL_FROM ?? "Bénévoles <notifications@benevol.app>"
+    const replyTo = env.EMAIL_REPLY_TO || undefined
     const transport = createTransport()
 
     if (!transport) {

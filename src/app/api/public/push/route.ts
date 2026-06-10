@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { env } from "@/lib/env"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
@@ -50,6 +51,6 @@ export async function DELETE(req: Request) {
 
 // Return the VAPID public key (needed by the client to subscribe)
 export async function GET() {
-  const publicKey = process.env.VAPID_PUBLIC_KEY ?? null
+  const publicKey = env.VAPID_PUBLIC_KEY ?? null
   return NextResponse.json({ publicKey })
 }

@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server"
+import { env } from "@/lib/env"
 import { prisma } from "@/lib/prisma"
 
 export const dynamic = "force-dynamic"
 
 function isAuthorized(req: Request): boolean {
-  const expected = process.env.CRON_SECRET
+  const expected = env.CRON_SECRET
   if (expected) return req.headers.get("authorization") === `Bearer ${expected}`
   // No secret configured: fail-closed in production, allow localhost in dev.
   if (process.env.NODE_ENV === "production") return false

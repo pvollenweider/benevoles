@@ -4,6 +4,7 @@
  * directly.
  */
 
+import { env } from "./env"
 import { sendNotification } from "./notifications"
 
 type RegistrationEmailData = {
@@ -68,7 +69,7 @@ export async function sendAdminNotification(data: {
   volunteerEmail: string
   shifts: { label: string; roleName: string; date: string; startTime: string; endTime: string }[]
 }) {
-  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL
+  const adminEmail = env.ADMIN_NOTIFICATION_EMAIL
   if (!adminEmail) return
   await sendNotification({
     kind: "admin_notification",

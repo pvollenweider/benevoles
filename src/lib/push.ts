@@ -1,13 +1,14 @@
 import webpush from "web-push"
+import { env } from "./env"
 import { prisma } from "./prisma"
 
 let configured = false
 
 function ensureConfigured() {
   if (configured) return
-  const publicKey = process.env.VAPID_PUBLIC_KEY
-  const privateKey = process.env.VAPID_PRIVATE_KEY
-  const email = process.env.VAPID_EMAIL ?? process.env.EMAIL_FROM ?? "mailto:admin@benevol.app"
+  const publicKey = env.VAPID_PUBLIC_KEY
+  const privateKey = env.VAPID_PRIVATE_KEY
+  const email = env.VAPID_EMAIL ?? env.EMAIL_FROM ?? "mailto:admin@benevol.app"
 
   if (!publicKey || !privateKey) return
 
