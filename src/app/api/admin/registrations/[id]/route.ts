@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
+import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { z } from "zod"
 
 const schema = z.object({
@@ -40,6 +41,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   await prisma.shift.update({ where: { id: registration.shiftId }, data: { status: shiftStatus } })
 
+  if (parsed.data.status === "cancelled") {
+    await promoteNextInWaitlist(registration.shiftId).catch(() => {})
+  }
+
   return NextResponse.json(registration)
 }
 
@@ -66,6 +71,8 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   if (activeCount < registration.shift.capacity && registration.shift.status === "full") {
     await prisma.shift.update({ where: { id: registration.shiftId }, data: { status: "open" } })
   }
+
+  await promoteNextInWaitlist(registration.shiftId).catch(() => {})
 
   return NextResponse.json({ success: true })
 }

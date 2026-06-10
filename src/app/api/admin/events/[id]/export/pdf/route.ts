@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 
-type VolData = { firstName: string; lastName: string; email: string | null; phone: string | null }
-type RegData  = { volunteer: VolData; comment: string | null; source: string }
+type VolData       = { firstName: string; lastName: string; email: string | null; phone: string | null }
+type RegData       = { volunteer: VolData; comment: string | null; source: string }
+type WaitlistEntry = { volunteer: VolData; status: string; position: number | null }
 type ShiftRow = {
   id: string; roleName: string; label: string; date: Date
   startTime: string; endTime: string; capacity: number; status: string
   registrations: RegData[]
+  waitlistEntries: WaitlistEntry[]
 }
 type ShowEntry = { name: string; date: string; startTime: string; endTime: string }
 
@@ -34,6 +36,7 @@ function buildDayParts(
   date: Date,
   shifts: ShiftRow[],
   shows: ShowEntry[],
+  showWaitlist: boolean,
 ): { gantt: string; recap: string } {
   const allMins = [
     ...shifts.flatMap((s) => [toMin(s.startTime), toMin(s.endTime)]),
@@ -192,6 +195,15 @@ function buildDayParts(
       isFirstRole && i > 0 ? "role-start" : "",
       isLastRole            ? "role-end"   : "",
     ].filter(Boolean).join(" ")
+    const waitlist = (shift.waitlistEntries ?? [])
+      .sort((a, b) => (a.position ?? 99) - (b.position ?? 99))
+    const waitlistCell = showWaitlist
+      ? `<td class="waitlist-cell">${waitlist.length > 0
+          ? waitlist.map((e, idx) =>
+              `${idx + 1}. ${esc(e.volunteer.firstName)} ${esc(e.volunteer.lastName.charAt(0))}.${e.status === "offered" ? " ✓" : ""}`
+            ).join("<br>")
+          : ""}</td>`
+      : ""
     recapRows += `<tr${cls ? ` class="${cls}"` : ""}>
       <td>${esc(shift.roleName)}</td>
       <td>${esc(lbl)}</td>
@@ -200,15 +212,18 @@ function buildDayParts(
       <td class="center">${shift.capacity}</td>
       <td class="center">${shift.registrations.length}</td>
       <td>${vols}</td>
+      ${waitlistCell}
     </tr>`
   })
 
+  const waitlistHeader = showWaitlist ? `<th class="waitlist-th">File d'attente</th>` : ""
   const recapHtml = `
     <table class="recap-table">
       <thead>
         <tr>
           <th>Poste</th><th>Libellé</th><th class="center">Début</th><th class="center">Fin</th>
           <th class="center">Places</th><th class="center">Inscrits</th><th>Bénévoles</th>
+          ${waitlistHeader}
         </tr>
       </thead>
       <tbody>${recapRows}</tbody>
@@ -236,7 +251,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
         where: { status: { not: "cancelled" } },
         include: {
           registrations: {
-            where: { status: "active" },
+            where: { status: { in: ["active", "waiting", "offered"] } },
             include: { volunteer: true },
           },
         },
@@ -252,8 +267,23 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   for (const shift of event.shifts) {
     const key = shift.date.toISOString().split("T")[0]
     if (!dayMap.has(key)) dayMap.set(key, { date: shift.date, shifts: [] })
-    dayMap.get(key)!.shifts.push(shift as ShiftRow)
+    const shiftRow: ShiftRow = {
+      ...(shift as unknown as ShiftRow),
+      registrations: shift.registrations.filter((r: { status: string }) => r.status === "active"),
+      waitlistEntries: shift.registrations
+        .filter((r: { status: string }) => r.status === "waiting" || r.status === "offered")
+        .map((r: { volunteer: VolData; status: string; waitingPosition?: number | null }) => ({
+          volunteer: r.volunteer,
+          status: r.status,
+          position: r.waitingPosition ?? null,
+        })),
+    }
+    dayMap.get(key)!.shifts.push(shiftRow)
   }
+
+  const showWaitlist = [...dayMap.values()].some(({ shifts }) =>
+    shifts.some((s) => s.waitlistEntries.length > 0)
+  )
 
   const showSchedule = (event.showSchedule as ShowEntry[] | null) ?? []
 
@@ -261,7 +291,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   let allRecaps = ""
   for (const [key, { date, shifts }] of dayMap) {
     const dayShows = showSchedule.filter((s) => s.date === key)
-    const { gantt, recap } = buildDayParts(date, shifts, dayShows)
+    const { gantt, recap } = buildDayParts(date, shifts, dayShows, showWaitlist)
     allGantts += gantt
     allRecaps += recap
   }
@@ -421,6 +451,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     .recap-table td, .recap-table th { font-size: 9px; }
     .role-start td { border-top: 2px solid #9CA3AF !important; }
     .role-end   td { border-bottom: 2px solid #9CA3AF !important; }
+
+    /* ── File d'attente ──────────────────────────────────────────────── */
+    .waitlist-th { color: #92400E; background: #FEF3C7 !important; min-width: 120px; }
+    .waitlist-cell { font-size: 8px; font-style: italic; color: #6B7280; white-space: normal; vertical-align: top; }
 
     /* ── Bénévoles ────────────────────────────────────────────────────── */
     .vol-table td, .vol-table th { white-space: nowrap; font-size: 9px; }
