@@ -155,7 +155,7 @@ export default function DayTimeline({
                       className={`absolute inset-x-0 rounded flex items-center justify-center overflow-hidden transition-colors ${clickable ? "cursor-pointer" : "cursor-default"} ${barCls}`}
                       style={{
                         top: 0,
-                        bottom: hasLabel ? LABEL_H : 0,
+                        bottom: (hasLabel || (isWaitlistable && !isSelected)) ? LABEL_H : 0,
                         borderLeft: (isFull && !isWaitlistable) ? "3px solid rgba(0,0,0,0.08)" : "4px solid rgba(255,255,255,0.7)",
                         ...((isFull && !isWaitlistable) ? {
                           backgroundColor: "white",
@@ -189,8 +189,8 @@ export default function DayTimeline({
                     </button>
                     {(hasLabel || (isWaitlistable && !isSelected)) && (
                       <span
-                        className="absolute inset-x-0 bottom-0 text-[8px] truncate text-center pointer-events-none"
-                        style={{ height: LABEL_H, lineHeight: `${LABEL_H}px`, color: isWaitlistable && !isSelected ? "currentColor" : undefined }}
+                        className="absolute inset-x-0 bottom-0 text-[8px] text-gray-500 truncate text-center pointer-events-none"
+                        style={{ height: LABEL_H, lineHeight: `${LABEL_H}px` }}
                         aria-hidden="true"
                       >
                         {isWaitlistable && !isSelected ? "Complet · file d'attente" : shift.label}
