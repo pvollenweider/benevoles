@@ -1,0 +1,129 @@
+{
+  "batchIndex": 7,
+  "nodes": [
+    {
+      "id": "file:src/app/api/admin/events/[id]/send-reminder/route.ts",
+      "label": "send-reminder/route.ts",
+      "type": "file",
+      "path": "src/app/api/admin/events/[id]/send-reminder/route.ts",
+      "language": "typescript",
+      "exports": ["POST"],
+      "summary": "POST route: sends manual reminder emails to all registered volunteers for an event, grouping shifts per volunteer before calling sendNotification.",
+      "metrics": { "totalLines": 93, "functions": 1, "exports": 1 }
+    },
+    {
+      "id": "file:src/app/api/admin/settings/admins/route.ts",
+      "label": "settings/admins/route.ts",
+      "type": "file",
+      "path": "src/app/api/admin/settings/admins/route.ts",
+      "language": "typescript",
+      "exports": ["GET", "POST"],
+      "summary": "Admin users API: GET lists org admins; POST invites a new admin by creating a hashed placeholder password and sending an invite notification.",
+      "metrics": { "totalLines": 89, "functions": 3, "exports": 2 }
+    },
+    {
+      "id": "file:src/app/api/admin/shifts/[id]/route.ts",
+      "label": "shifts/[id]/route.ts",
+      "type": "file",
+      "path": "src/app/api/admin/shifts/[id]/route.ts",
+      "language": "typescript",
+      "exports": ["PATCH", "DELETE"],
+      "summary": "Shift CRUD: PATCH updates shift schedule and notifies registered volunteers of changes; DELETE cancels shift, notifies volunteers, and removes registrations.",
+      "metrics": { "totalLines": 129, "functions": 3, "exports": 2 }
+    },
+    {
+      "id": "file:src/app/api/public/waitlist/[token]/confirm/route.ts",
+      "label": "waitlist/confirm/route.ts",
+      "type": "file",
+      "path": "src/app/api/public/waitlist/[token]/confirm/route.ts",
+      "language": "typescript",
+      "exports": ["POST", "GET"],
+      "summary": "Waitlist confirmation: POST promotes volunteer from waitlist to confirmed registration and sends confirmation notification; GET delegates to POST.",
+      "metrics": { "totalLines": 59, "functions": 2, "exports": 2 }
+    },
+    {
+      "id": "file:src/app/api/super-admin/organizations/[id]/send-invite/route.ts",
+      "label": "send-invite/route.ts",
+      "type": "file",
+      "path": "src/app/api/super-admin/organizations/[id]/send-invite/route.ts",
+      "language": "typescript",
+      "exports": ["POST"],
+      "summary": "Super-admin route: sends admin invitation email to the first admin user of an organization.",
+      "metrics": { "totalLines": 41, "functions": 1, "exports": 1 }
+    },
+    {
+      "id": "file:src/lib/__tests__/notifications.test.ts",
+      "label": "notifications.test.ts",
+      "type": "file",
+      "path": "src/lib/__tests__/notifications.test.ts",
+      "language": "typescript",
+      "exports": [],
+      "summary": "Unit tests for the notifications template renderer, verifying HTML/text output for all notification kinds.",
+      "metrics": { "totalLines": 163, "functions": 0, "exports": 0 }
+    },
+    {
+      "id": "file:src/lib/notifications/channels/email.ts",
+      "label": "channels/email.ts",
+      "type": "file",
+      "path": "src/lib/notifications/channels/email.ts",
+      "language": "typescript",
+      "exports": ["emailChannel"],
+      "summary": "Email notification channel: creates Nodemailer transport from env config, renders templates, and sends via SMTP.",
+      "metrics": { "totalLines": 55, "functions": 1, "exports": 1 }
+    },
+    {
+      "id": "file:src/lib/notifications/index.ts",
+      "label": "notifications/index.ts",
+      "type": "file",
+      "path": "src/lib/notifications/index.ts",
+      "language": "typescript",
+      "exports": ["sendNotification", "NotificationKind", "NotificationChannel", "NotificationPayload"],
+      "summary": "Notification entry point: sendNotification() dispatches a typed payload to the appropriate channel implementation (default: email).",
+      "metrics": { "totalLines": 33, "functions": 1, "exports": 4 }
+    },
+    {
+      "id": "file:src/lib/notifications/templates.ts",
+      "label": "templates.ts",
+      "type": "file",
+      "path": "src/lib/notifications/templates.ts",
+      "language": "typescript",
+      "exports": ["render"],
+      "summary": "Email template renderer: render() dispatches to per-kind HTML/text builders covering confirmation, invites, reminders, shift changes, waitlist, password reset, and admin welcome.",
+      "metrics": { "totalLines": 693, "functions": 20, "exports": 1 }
+    },
+    {
+      "id": "file:src/lib/notifications/types.ts",
+      "label": "notifications/types.ts",
+      "type": "file",
+      "path": "src/lib/notifications/types.ts",
+      "language": "typescript",
+      "exports": [],
+      "summary": "Type definitions for the notifications system: NotificationKind union, per-kind payload types, NotificationChannel interface, and NotificationPayload discriminated union.",
+      "metrics": { "totalLines": 50, "functions": 0, "exports": 0 }
+    }
+  ],
+  "edges": [
+    { "from": "file:src/app/api/admin/events/[id]/send-reminder/route.ts", "to": "file:src/lib/auth-guard.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/app/api/admin/events/[id]/send-reminder/route.ts", "to": "file:src/lib/notifications/index.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/app/api/admin/events/[id]/send-reminder/route.ts", "to": "file:src/lib/prisma.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/app/api/admin/settings/admins/route.ts", "to": "file:src/lib/auth-guard.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/app/api/admin/settings/admins/route.ts", "to": "file:src/lib/notifications/index.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/app/api/admin/settings/admins/route.ts", "to": "file:src/lib/prisma.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/app/api/admin/shifts/[id]/route.ts", "to": "file:src/lib/auth-guard.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/app/api/admin/shifts/[id]/route.ts", "to": "file:src/lib/notifications/index.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/app/api/admin/shifts/[id]/route.ts", "to": "file:src/lib/prisma.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/app/api/public/waitlist/[token]/confirm/route.ts", "to": "file:src/lib/notifications/index.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/app/api/public/waitlist/[token]/confirm/route.ts", "to": "file:src/lib/prisma.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/app/api/super-admin/organizations/[id]/send-invite/route.ts", "to": "file:src/lib/auth-guard.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/app/api/super-admin/organizations/[id]/send-invite/route.ts", "to": "file:src/lib/notifications/index.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/app/api/super-admin/organizations/[id]/send-invite/route.ts", "to": "file:src/lib/prisma.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/lib/__tests__/notifications.test.ts", "to": "file:src/lib/notifications/templates.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/lib/notifications/channels/email.ts", "to": "file:src/lib/notifications/templates.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/lib/notifications/channels/email.ts", "to": "file:src/lib/notifications/types.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/lib/notifications/index.ts", "to": "file:src/lib/notifications/channels/email.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/lib/notifications/index.ts", "to": "file:src/lib/notifications/types.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/lib/notifications/templates.ts", "to": "file:src/lib/notifications/types.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/lib/notifications/templates.ts", "to": "file:src/lib/urls.ts", "type": "imports", "label": "imports" }
+  ],
+  "skipped": []
+}

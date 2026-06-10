@@ -1,0 +1,265 @@
+{
+  "batchIndex": 5,
+  "nodes": [
+    {
+      "id": "src/app/admin/accept-invite/page.tsx",
+      "label": "AcceptInvitePage",
+      "type": "file",
+      "category": "page",
+      "language": "typescript",
+      "path": "src/app/admin/accept-invite/page.tsx",
+      "exports": ["AcceptInvitePage"],
+      "functions": ["AcceptInviteForm", "AcceptInvitePage"],
+      "description": "Admin invite acceptance page. Token-based form where invited admins set their initial password. Uses search params for the invite token."
+    },
+    {
+      "id": "src/app/admin/reset-password/page.tsx",
+      "label": "ResetPasswordPage",
+      "type": "file",
+      "category": "page",
+      "language": "typescript",
+      "path": "src/app/admin/reset-password/page.tsx",
+      "exports": ["ResetPasswordPage"],
+      "functions": ["ResetForm", "ResetPasswordPage"],
+      "description": "Admin password reset page. Token-based form for resetting a forgotten password, similar structure to accept-invite page."
+    },
+    {
+      "id": "src/app/admin/settings/admins/page.tsx",
+      "label": "AdminsSettingsPage",
+      "type": "file",
+      "category": "page",
+      "language": "typescript",
+      "path": "src/app/admin/settings/admins/page.tsx",
+      "exports": ["AdminsSettingsPage", "dynamic"],
+      "functions": ["AdminsSettingsPage"],
+      "description": "Server component settings page for admin and organization management. Fetches admin list, org data, slug history, and event count from database before rendering settings components."
+    },
+    {
+      "id": "src/app/api/admin/accept-invite/route.ts",
+      "label": "POST /api/admin/accept-invite",
+      "type": "file",
+      "category": "api-route",
+      "language": "typescript",
+      "path": "src/app/api/admin/accept-invite/route.ts",
+      "exports": ["POST"],
+      "functions": ["POST"],
+      "description": "API route to finalize admin invitation. Validates invite token, hashes the chosen password with bcrypt, activates the admin account, and sends a welcome notification email."
+    },
+    {
+      "id": "src/app/api/admin/settings/password/route.ts",
+      "label": "POST /api/admin/settings/password",
+      "type": "file",
+      "category": "api-route",
+      "language": "typescript",
+      "path": "src/app/api/admin/settings/password/route.ts",
+      "exports": ["POST"],
+      "functions": ["POST"],
+      "description": "Authenticated API route to change an admin's password. Verifies current password via bcrypt, validates new password rules, then updates the hash."
+    },
+    {
+      "id": "src/app/api/super-admin/profile/route.ts",
+      "label": "PATCH /api/super-admin/profile",
+      "type": "file",
+      "category": "api-route",
+      "language": "typescript",
+      "path": "src/app/api/super-admin/profile/route.ts",
+      "exports": ["PATCH"],
+      "functions": ["PATCH"],
+      "description": "Super-admin profile update route. Requires super-admin session, verifies current password, checks email uniqueness, then updates profile fields and optionally re-hashes password."
+    },
+    {
+      "id": "src/components/PasswordRules.tsx",
+      "label": "PasswordRules",
+      "type": "file",
+      "category": "component",
+      "language": "typescript",
+      "path": "src/components/PasswordRules.tsx",
+      "exports": ["PasswordRules"],
+      "functions": ["PasswordRules"],
+      "description": "UI component that displays real-time password strength rules. Maps PASSWORD_RULES array and visually indicates which rules the current password satisfies."
+    },
+    {
+      "id": "src/components/admin/AdminsManager.tsx",
+      "label": "AdminsManager",
+      "type": "file",
+      "category": "component",
+      "language": "typescript",
+      "path": "src/components/admin/AdminsManager.tsx",
+      "exports": ["AdminsManager"],
+      "functions": ["AdminsManager"],
+      "description": "Client component for managing admin users. Handles inviting new admins (displays invite URL with copy button), listing existing admins, and removing admins. No external lib dependencies."
+    },
+    {
+      "id": "src/components/admin/ChangePasswordForm.tsx",
+      "label": "ChangePasswordForm",
+      "type": "file",
+      "category": "component",
+      "language": "typescript",
+      "path": "src/components/admin/ChangePasswordForm.tsx",
+      "exports": ["ChangePasswordForm"],
+      "functions": ["ChangePasswordForm"],
+      "description": "Client form component for changing an admin's password. Includes current/new/confirm fields, validates against PASSWORD_RULES before submitting to the password API route."
+    },
+    {
+      "id": "src/components/admin/OrgNameForm.tsx",
+      "label": "OrgNameForm",
+      "type": "file",
+      "category": "component",
+      "language": "typescript",
+      "path": "src/components/admin/OrgNameForm.tsx",
+      "exports": ["OrgNameForm"],
+      "functions": ["OrgNameForm"],
+      "description": "Client form component for updating the organization's display name. Submits to an org name API route and shows save/error feedback."
+    },
+    {
+      "id": "src/components/admin/OrgSlugForm.tsx",
+      "label": "OrgSlugForm",
+      "type": "file",
+      "category": "component",
+      "language": "typescript",
+      "path": "src/components/admin/OrgSlugForm.tsx",
+      "exports": ["OrgSlugForm"],
+      "functions": ["OrgSlugForm"],
+      "description": "Client form for changing the organization's URL slug. Supports confirmation dialog for destructive slug changes (when published events exist), displays slug history with delete capability, and computes the preview URL from the window host."
+    },
+    {
+      "id": "src/lib/password.ts",
+      "label": "password.ts",
+      "type": "file",
+      "category": "utility",
+      "language": "typescript",
+      "path": "src/lib/password.ts",
+      "exports": ["PASSWORD_RULES", "passwordErrors", "passwordSchema"],
+      "functions": ["passwordErrors"],
+      "description": "Password validation utility. Exports PASSWORD_RULES (regex array with labels), passwordErrors (returns list of failing rule messages), and passwordSchema (zod schema) for use across API routes and UI components."
+    }
+  ],
+  "edges": [
+    {
+      "source": "src/app/admin/accept-invite/page.tsx",
+      "target": "src/components/PasswordRules.tsx",
+      "type": "imports",
+      "label": "uses PasswordRules component"
+    },
+    {
+      "source": "src/app/admin/reset-password/page.tsx",
+      "target": "src/components/PasswordRules.tsx",
+      "type": "imports",
+      "label": "uses PasswordRules component"
+    },
+    {
+      "source": "src/app/admin/settings/admins/page.tsx",
+      "target": "src/components/admin/AdminsManager.tsx",
+      "type": "imports",
+      "label": "renders AdminsManager"
+    },
+    {
+      "source": "src/app/admin/settings/admins/page.tsx",
+      "target": "src/components/admin/ChangePasswordForm.tsx",
+      "type": "imports",
+      "label": "renders ChangePasswordForm"
+    },
+    {
+      "source": "src/app/admin/settings/admins/page.tsx",
+      "target": "src/components/admin/OrgNameForm.tsx",
+      "type": "imports",
+      "label": "renders OrgNameForm"
+    },
+    {
+      "source": "src/app/admin/settings/admins/page.tsx",
+      "target": "src/components/admin/OrgSlugForm.tsx",
+      "type": "imports",
+      "label": "renders OrgSlugForm"
+    },
+    {
+      "source": "src/app/admin/settings/admins/page.tsx",
+      "target": "src/lib/auth-guard.ts",
+      "type": "imports",
+      "label": "getOrgContext auth guard"
+    },
+    {
+      "source": "src/app/admin/settings/admins/page.tsx",
+      "target": "src/lib/prisma.ts",
+      "type": "imports",
+      "label": "database queries"
+    },
+    {
+      "source": "src/app/api/admin/accept-invite/route.ts",
+      "target": "src/lib/notifications/index.ts",
+      "type": "imports",
+      "label": "sends admin_welcome notification"
+    },
+    {
+      "source": "src/app/api/admin/accept-invite/route.ts",
+      "target": "src/lib/password.ts",
+      "type": "imports",
+      "label": "uses passwordSchema"
+    },
+    {
+      "source": "src/app/api/admin/accept-invite/route.ts",
+      "target": "src/lib/prisma.ts",
+      "type": "imports",
+      "label": "adminUser lookup and update"
+    },
+    {
+      "source": "src/app/api/admin/accept-invite/route.ts",
+      "target": "src/lib/urls.ts",
+      "type": "imports",
+      "label": "orgBaseUrl for welcome email"
+    },
+    {
+      "source": "src/app/api/admin/settings/password/route.ts",
+      "target": "src/lib/auth-guard.ts",
+      "type": "imports",
+      "label": "requireOrgSession"
+    },
+    {
+      "source": "src/app/api/admin/settings/password/route.ts",
+      "target": "src/lib/password.ts",
+      "type": "imports",
+      "label": "passwordErrors validation"
+    },
+    {
+      "source": "src/app/api/admin/settings/password/route.ts",
+      "target": "src/lib/prisma.ts",
+      "type": "imports",
+      "label": "adminUser lookup and update"
+    },
+    {
+      "source": "src/app/api/super-admin/profile/route.ts",
+      "target": "src/lib/auth-guard.ts",
+      "type": "imports",
+      "label": "requireSuperAdmin"
+    },
+    {
+      "source": "src/app/api/super-admin/profile/route.ts",
+      "target": "src/lib/password.ts",
+      "type": "imports",
+      "label": "passwordSchema validation"
+    },
+    {
+      "source": "src/app/api/super-admin/profile/route.ts",
+      "target": "src/lib/prisma.ts",
+      "type": "imports",
+      "label": "adminUser lookup and update"
+    },
+    {
+      "source": "src/components/PasswordRules.tsx",
+      "target": "src/lib/password.ts",
+      "type": "imports",
+      "label": "imports PASSWORD_RULES"
+    },
+    {
+      "source": "src/components/admin/ChangePasswordForm.tsx",
+      "target": "src/components/PasswordRules.tsx",
+      "type": "imports",
+      "label": "renders PasswordRules"
+    },
+    {
+      "source": "src/components/admin/ChangePasswordForm.tsx",
+      "target": "src/lib/password.ts",
+      "type": "imports",
+      "label": "imports PASSWORD_RULES for client validation"
+    }
+  ]
+}

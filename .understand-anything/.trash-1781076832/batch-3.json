@@ -1,0 +1,955 @@
+{
+  "batchIndex": 3,
+  "nodes": [
+    {
+      "id": "file:src/app/[eventSlug]/EventPageClient.tsx",
+      "type": "file",
+      "label": "EventPageClient.tsx",
+      "path": "src/app/[eventSlug]/EventPageClient.tsx",
+      "language": "typescript",
+      "sizeLines": 638,
+      "fileCategory": "code"
+    },
+    {
+      "id": "fn:src/app/[eventSlug]/EventPageClient.tsx::EventPageClient",
+      "type": "function",
+      "label": "EventPageClient",
+      "path": "src/app/[eventSlug]/EventPageClient.tsx",
+      "startLine": 46,
+      "endLine": 638,
+      "exported": true,
+      "isDefault": true,
+      "description": "Main public volunteer registration page: loads event data, manages shift selection with conflict detection, multi-step form (select shifts, enter personal info, charter acceptance, submit), cancel registration flow"
+    },
+    {
+      "id": "file:src/app/[eventSlug]/success/page.tsx",
+      "type": "file",
+      "label": "success/page.tsx",
+      "path": "src/app/[eventSlug]/success/page.tsx",
+      "language": "typescript",
+      "sizeLines": 114,
+      "fileCategory": "code"
+    },
+    {
+      "id": "fn:src/app/[eventSlug]/success/page.tsx::SuccessContent",
+      "type": "function",
+      "label": "SuccessContent",
+      "path": "src/app/[eventSlug]/success/page.tsx",
+      "startLine": 16,
+      "endLine": 106,
+      "exported": false,
+      "description": "Client component that fetches registration data by token and renders a confirmation message with markdown interpolation"
+    },
+    {
+      "id": "fn:src/app/[eventSlug]/success/page.tsx::SuccessPage",
+      "type": "function",
+      "label": "SuccessPage",
+      "path": "src/app/[eventSlug]/success/page.tsx",
+      "startLine": 108,
+      "endLine": 114,
+      "exported": true,
+      "isDefault": true,
+      "description": "Next.js page that wraps SuccessContent in Suspense"
+    },
+    {
+      "id": "file:src/app/admin/events/[id]/shifts/page.tsx",
+      "type": "file",
+      "label": "admin/shifts/page.tsx",
+      "path": "src/app/admin/events/[id]/shifts/page.tsx",
+      "language": "typescript",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "id": "fn:src/app/admin/events/[id]/shifts/page.tsx::ShiftsPage",
+      "type": "function",
+      "label": "ShiftsPage",
+      "path": "src/app/admin/events/[id]/shifts/page.tsx",
+      "startLine": 8,
+      "endLine": 49,
+      "exported": true,
+      "isDefault": true,
+      "description": "Server-side admin page: fetches event with shifts from DB, auth-guards, serialises dates, renders ShiftsManager"
+    },
+    {
+      "id": "file:src/app/my/[token]/page.tsx",
+      "type": "file",
+      "label": "my/[token]/page.tsx",
+      "path": "src/app/my/[token]/page.tsx",
+      "language": "typescript",
+      "sizeLines": 160,
+      "fileCategory": "code"
+    },
+    {
+      "id": "fn:src/app/my/[token]/page.tsx::MyRegistrationPage",
+      "type": "function",
+      "label": "MyRegistrationPage",
+      "path": "src/app/my/[token]/page.tsx",
+      "startLine": 32,
+      "endLine": 160,
+      "exported": true,
+      "isDefault": true,
+      "description": "Volunteer self-service page: shows own registrations by token, allows cancellation, renders confirmation message with markdown"
+    },
+    {
+      "id": "file:src/components/DayTimeline.tsx",
+      "type": "file",
+      "label": "DayTimeline.tsx",
+      "path": "src/components/DayTimeline.tsx",
+      "language": "typescript",
+      "sizeLines": 240,
+      "fileCategory": "code"
+    },
+    {
+      "id": "fn:src/components/DayTimeline.tsx::toMin",
+      "type": "function",
+      "label": "toMin",
+      "path": "src/components/DayTimeline.tsx",
+      "startLine": 18,
+      "endLine": 21,
+      "exported": false,
+      "description": "Converts HH:MM time string to minutes since midnight"
+    },
+    {
+      "id": "fn:src/components/DayTimeline.tsx::toMinEnd",
+      "type": "function",
+      "label": "toMinEnd",
+      "path": "src/components/DayTimeline.tsx",
+      "startLine": 24,
+      "endLine": 27,
+      "exported": false,
+      "description": "Computes duration in minutes, handling midnight-crossing shifts"
+    },
+    {
+      "id": "fn:src/components/DayTimeline.tsx::fmt",
+      "type": "function",
+      "label": "fmt",
+      "path": "src/components/DayTimeline.tsx",
+      "startLine": 29,
+      "endLine": 32,
+      "exported": true,
+      "description": "Formats HH:MM time string to display (HHhMM or HHh)"
+    },
+    {
+      "id": "fn:src/components/DayTimeline.tsx::DayTimeline",
+      "type": "function",
+      "label": "DayTimeline",
+      "path": "src/components/DayTimeline.tsx",
+      "startLine": 40,
+      "endLine": 240,
+      "exported": true,
+      "isDefault": true,
+      "description": "Read-only Gantt timeline for public event page: renders shifts by role as horizontal bars with selection state, conflicts, and show schedule overlay"
+    },
+    {
+      "id": "file:src/components/PublicFooter.tsx",
+      "type": "file",
+      "label": "PublicFooter.tsx",
+      "path": "src/components/PublicFooter.tsx",
+      "language": "typescript",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "id": "fn:src/components/PublicFooter.tsx::PublicFooter",
+      "type": "function",
+      "label": "PublicFooter",
+      "path": "src/components/PublicFooter.tsx",
+      "startLine": 4,
+      "endLine": 23,
+      "exported": true,
+      "isDefault": true,
+      "description": "Footer component for public-facing pages showing app version from package.json"
+    },
+    {
+      "id": "file:src/components/PushSubscribeButton.tsx",
+      "type": "file",
+      "label": "PushSubscribeButton.tsx",
+      "path": "src/components/PushSubscribeButton.tsx",
+      "language": "typescript",
+      "sizeLines": 97,
+      "fileCategory": "code"
+    },
+    {
+      "id": "fn:src/components/PushSubscribeButton.tsx::PushSubscribeButton",
+      "type": "function",
+      "label": "PushSubscribeButton",
+      "path": "src/components/PushSubscribeButton.tsx",
+      "startLine": 7,
+      "endLine": 90,
+      "exported": true,
+      "isDefault": true,
+      "description": "Button that registers a browser push notification subscription: requests Notification permission, registers service worker, subscribes via Web Push API and POSTs to /api/public/push"
+    },
+    {
+      "id": "fn:src/components/PushSubscribeButton.tsx::urlBase64ToUint8Array",
+      "type": "function",
+      "label": "urlBase64ToUint8Array",
+      "path": "src/components/PushSubscribeButton.tsx",
+      "startLine": 92,
+      "endLine": 97,
+      "exported": false,
+      "description": "Converts URL-safe base64 VAPID public key to Uint8Array for pushManager.subscribe"
+    },
+    {
+      "id": "file:src/components/admin/AdminDayTimeline.tsx",
+      "type": "file",
+      "label": "AdminDayTimeline.tsx",
+      "path": "src/components/admin/AdminDayTimeline.tsx",
+      "language": "typescript",
+      "sizeLines": 609,
+      "fileCategory": "code"
+    },
+    {
+      "id": "fn:src/components/admin/AdminDayTimeline.tsx::AdminDayTimeline",
+      "type": "function",
+      "label": "AdminDayTimeline",
+      "path": "src/components/admin/AdminDayTimeline.tsx",
+      "startLine": 206,
+      "endLine": 609,
+      "exported": true,
+      "isDefault": true,
+      "description": "Interactive admin Gantt timeline: drag-to-create/resize shifts on a timeline canvas, inline popover for editing shift label/capacity/status/delete, PATCH/POST/DELETE API calls"
+    },
+    {
+      "id": "fn:src/components/admin/AdminDayTimeline.tsx::ShiftPopover",
+      "type": "function",
+      "label": "ShiftPopover",
+      "path": "src/components/admin/AdminDayTimeline.tsx",
+      "startLine": 69,
+      "endLine": 194,
+      "exported": false,
+      "description": "Floating popover for editing a shift's label, capacity, and status; closes and saves on outside click or Enter"
+    },
+    {
+      "id": "fn:src/components/admin/AdminDayTimeline.tsx::Toast",
+      "type": "function",
+      "label": "Toast",
+      "path": "src/components/admin/AdminDayTimeline.tsx",
+      "startLine": 197,
+      "endLine": 203,
+      "exported": false,
+      "description": "Simple toast notification overlay component"
+    },
+    {
+      "id": "fn:src/components/admin/AdminDayTimeline.tsx::toMin",
+      "type": "function",
+      "label": "toMin (admin)",
+      "path": "src/components/admin/AdminDayTimeline.tsx",
+      "startLine": 19,
+      "endLine": 22,
+      "exported": false,
+      "description": "Time string to minutes utility (local duplicate of public DayTimeline version)"
+    },
+    {
+      "id": "fn:src/components/admin/AdminDayTimeline.tsx::fromMin",
+      "type": "function",
+      "label": "fromMin",
+      "path": "src/components/admin/AdminDayTimeline.tsx",
+      "startLine": 27,
+      "endLine": 29,
+      "exported": false,
+      "description": "Converts minutes since midnight back to HH:MM string"
+    },
+    {
+      "id": "fn:src/components/admin/AdminDayTimeline.tsx::snapTo",
+      "type": "function",
+      "label": "snapTo",
+      "path": "src/components/admin/AdminDayTimeline.tsx",
+      "startLine": 30,
+      "endLine": 30,
+      "exported": false,
+      "description": "Snaps minute value to 15-minute grid"
+    },
+    {
+      "id": "file:src/components/admin/OrgCharterForm.tsx",
+      "type": "file",
+      "label": "OrgCharterForm.tsx",
+      "path": "src/components/admin/OrgCharterForm.tsx",
+      "language": "typescript",
+      "sizeLines": 106,
+      "fileCategory": "code"
+    },
+    {
+      "id": "fn:src/components/admin/OrgCharterForm.tsx::OrgCharterForm",
+      "type": "function",
+      "label": "OrgCharterForm",
+      "path": "src/components/admin/OrgCharterForm.tsx",
+      "startLine": 6,
+      "endLine": 106,
+      "exported": true,
+      "isDefault": true,
+      "description": "Admin form for editing the organization's volunteer charter text; toggles between with/without org insurance using buildVolunteerCharter, saves via PATCH API"
+    },
+    {
+      "id": "file:src/components/admin/ShiftsManager.tsx",
+      "type": "file",
+      "label": "ShiftsManager.tsx",
+      "path": "src/components/admin/ShiftsManager.tsx",
+      "language": "typescript",
+      "sizeLines": 500,
+      "fileCategory": "code"
+    },
+    {
+      "id": "fn:src/components/admin/ShiftsManager.tsx::ShiftsManager",
+      "type": "function",
+      "label": "ShiftsManager",
+      "path": "src/components/admin/ShiftsManager.tsx",
+      "startLine": 57,
+      "endLine": 500,
+      "exported": true,
+      "isDefault": true,
+      "description": "Full admin shift management UI: list/timeline views, create/edit/delete shift form, drag-to-reorder roles, integrates AdminDayTimeline for visual editing"
+    },
+    {
+      "id": "fn:src/components/admin/ShiftsManager.tsx::localISO",
+      "type": "function",
+      "label": "localISO",
+      "path": "src/components/admin/ShiftsManager.tsx",
+      "startLine": 13,
+      "endLine": 18,
+      "exported": false,
+      "description": "Formats a Date to YYYY-MM-DD string using local time"
+    },
+    {
+      "id": "fn:src/components/admin/ShiftsManager.tsx::eventDates",
+      "type": "function",
+      "label": "eventDates",
+      "path": "src/components/admin/ShiftsManager.tsx",
+      "startLine": 20,
+      "endLine": 29,
+      "exported": false,
+      "description": "Generates array of YYYY-MM-DD date strings between event start and end dates"
+    },
+    {
+      "id": "fn:src/components/admin/ShiftsManager.tsx::addMinutes",
+      "type": "function",
+      "label": "addMinutes",
+      "path": "src/components/admin/ShiftsManager.tsx",
+      "startLine": 31,
+      "endLine": 35,
+      "exported": false,
+      "description": "Adds minutes to an HH:MM time string, wrapping at 24h"
+    },
+    {
+      "id": "fn:src/components/admin/ShiftsManager.tsx::normalizeTime",
+      "type": "function",
+      "label": "normalizeTime",
+      "path": "src/components/admin/ShiftsManager.tsx",
+      "startLine": 37,
+      "endLine": 45,
+      "exported": false,
+      "description": "Parses and normalizes user-entered time input to HH:MM format"
+    },
+    {
+      "id": "fn:src/components/admin/ShiftsManager.tsx::fmtDate",
+      "type": "function",
+      "label": "fmtDate",
+      "path": "src/components/admin/ShiftsManager.tsx",
+      "startLine": 47,
+      "endLine": 51,
+      "exported": false,
+      "description": "Formats ISO date string to localized display string"
+    },
+    {
+      "id": "file:src/lib/__tests__/roles.react.test.tsx",
+      "type": "file",
+      "label": "roles.react.test.tsx",
+      "path": "src/lib/__tests__/roles.react.test.tsx",
+      "language": "typescript",
+      "sizeLines": 43,
+      "fileCategory": "test"
+    },
+    {
+      "id": "file:src/lib/__tests__/roles.test.ts",
+      "type": "file",
+      "label": "roles.test.ts",
+      "path": "src/lib/__tests__/roles.test.ts",
+      "language": "typescript",
+      "sizeLines": 64,
+      "fileCategory": "test"
+    },
+    {
+      "id": "file:src/lib/markdown.ts",
+      "type": "file",
+      "label": "markdown.ts",
+      "path": "src/lib/markdown.ts",
+      "language": "typescript",
+      "sizeLines": 103,
+      "fileCategory": "code"
+    },
+    {
+      "id": "fn:src/lib/markdown.ts::renderMarkdown",
+      "type": "function",
+      "label": "renderMarkdown",
+      "path": "src/lib/markdown.ts",
+      "startLine": 19,
+      "endLine": 53,
+      "exported": true,
+      "description": "Converts a markdown subset (headers, bold, italic, links, bullet lists) to safe HTML string without external deps"
+    },
+    {
+      "id": "fn:src/lib/markdown.ts::renderInline",
+      "type": "function",
+      "label": "renderInline",
+      "path": "src/lib/markdown.ts",
+      "startLine": 56,
+      "endLine": 93,
+      "exported": false,
+      "description": "Processes inline markdown tokens (bold, italic, links) within a text segment"
+    },
+    {
+      "id": "fn:src/lib/markdown.ts::interpolate",
+      "type": "function",
+      "label": "interpolate",
+      "path": "src/lib/markdown.ts",
+      "startLine": 99,
+      "endLine": 103,
+      "exported": true,
+      "description": "Replaces {{variable}} placeholders in a template string with values from a vars map"
+    },
+    {
+      "id": "fn:src/lib/markdown.ts::escapeHtml",
+      "type": "function",
+      "label": "escapeHtml",
+      "path": "src/lib/markdown.ts",
+      "startLine": 6,
+      "endLine": 12,
+      "exported": false,
+      "description": "Escapes HTML special characters to prevent XSS"
+    },
+    {
+      "id": "file:src/lib/roles.tsx",
+      "type": "file",
+      "label": "roles.tsx",
+      "path": "src/lib/roles.tsx",
+      "language": "typescript",
+      "sizeLines": 207,
+      "fileCategory": "code"
+    },
+    {
+      "id": "fn:src/lib/roles.tsx::getRoleAccent",
+      "type": "function",
+      "label": "getRoleAccent",
+      "path": "src/lib/roles.tsx",
+      "startLine": 31,
+      "endLine": 39,
+      "exported": true,
+      "description": "Returns Tailwind accent color classes for a role name (keyword match then hash-based fallback)"
+    },
+    {
+      "id": "fn:src/lib/roles.tsx::hashRole",
+      "type": "function",
+      "label": "hashRole",
+      "path": "src/lib/roles.tsx",
+      "startLine": 120,
+      "endLine": 124,
+      "exported": false,
+      "description": "Hashes a role name string to a stable palette index"
+    },
+    {
+      "id": "fn:src/lib/roles.tsx::getBarClasses",
+      "type": "function",
+      "label": "getBarClasses",
+      "path": "src/lib/roles.tsx",
+      "startLine": 126,
+      "endLine": 132,
+      "exported": true,
+      "description": "Returns Tailwind classes for a shift Gantt bar based on role and interaction state (selected, registered, conflict, available)"
+    },
+    {
+      "id": "fn:src/lib/roles.tsx::RoleIcon",
+      "type": "function",
+      "label": "RoleIcon",
+      "path": "src/lib/roles.tsx",
+      "startLine": 145,
+      "endLine": 207,
+      "exported": true,
+      "description": "React component that renders an appropriate SVG icon for a given role name via keyword matching"
+    },
+    {
+      "id": "file:src/lib/volunteer-charter.ts",
+      "type": "file",
+      "label": "volunteer-charter.ts",
+      "path": "src/lib/volunteer-charter.ts",
+      "language": "typescript",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "id": "fn:src/lib/volunteer-charter.ts::buildVolunteerCharter",
+      "type": "function",
+      "label": "buildVolunteerCharter",
+      "path": "src/lib/volunteer-charter.ts",
+      "startLine": 1,
+      "endLine": 31,
+      "exported": true,
+      "description": "Generates the volunteer charter markdown text; includes or excludes org insurance clause based on hasOrgInsurance flag"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/app/[eventSlug]/EventPageClient.tsx",
+      "target": "fn:src/app/[eventSlug]/EventPageClient.tsx::EventPageClient",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/app/[eventSlug]/success/page.tsx",
+      "target": "fn:src/app/[eventSlug]/success/page.tsx::SuccessContent",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/app/[eventSlug]/success/page.tsx",
+      "target": "fn:src/app/[eventSlug]/success/page.tsx::SuccessPage",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/app/admin/events/[id]/shifts/page.tsx",
+      "target": "fn:src/app/admin/events/[id]/shifts/page.tsx::ShiftsPage",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/app/my/[token]/page.tsx",
+      "target": "fn:src/app/my/[token]/page.tsx::MyRegistrationPage",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/DayTimeline.tsx",
+      "target": "fn:src/components/DayTimeline.tsx::toMin",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/DayTimeline.tsx",
+      "target": "fn:src/components/DayTimeline.tsx::toMinEnd",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/DayTimeline.tsx",
+      "target": "fn:src/components/DayTimeline.tsx::fmt",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/DayTimeline.tsx",
+      "target": "fn:src/components/DayTimeline.tsx::DayTimeline",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/PublicFooter.tsx",
+      "target": "fn:src/components/PublicFooter.tsx::PublicFooter",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/PushSubscribeButton.tsx",
+      "target": "fn:src/components/PushSubscribeButton.tsx::PushSubscribeButton",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/PushSubscribeButton.tsx",
+      "target": "fn:src/components/PushSubscribeButton.tsx::urlBase64ToUint8Array",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/admin/AdminDayTimeline.tsx",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::toMin",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/admin/AdminDayTimeline.tsx",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::fromMin",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/admin/AdminDayTimeline.tsx",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::snapTo",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/admin/AdminDayTimeline.tsx",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::ShiftPopover",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/admin/AdminDayTimeline.tsx",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::Toast",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/admin/AdminDayTimeline.tsx",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::AdminDayTimeline",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/admin/OrgCharterForm.tsx",
+      "target": "fn:src/components/admin/OrgCharterForm.tsx::OrgCharterForm",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/admin/ShiftsManager.tsx",
+      "target": "fn:src/components/admin/ShiftsManager.tsx::localISO",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/admin/ShiftsManager.tsx",
+      "target": "fn:src/components/admin/ShiftsManager.tsx::eventDates",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/admin/ShiftsManager.tsx",
+      "target": "fn:src/components/admin/ShiftsManager.tsx::addMinutes",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/admin/ShiftsManager.tsx",
+      "target": "fn:src/components/admin/ShiftsManager.tsx::normalizeTime",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/admin/ShiftsManager.tsx",
+      "target": "fn:src/components/admin/ShiftsManager.tsx::fmtDate",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/components/admin/ShiftsManager.tsx",
+      "target": "fn:src/components/admin/ShiftsManager.tsx::ShiftsManager",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/lib/markdown.ts",
+      "target": "fn:src/lib/markdown.ts::escapeHtml",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/lib/markdown.ts",
+      "target": "fn:src/lib/markdown.ts::renderMarkdown",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/lib/markdown.ts",
+      "target": "fn:src/lib/markdown.ts::renderInline",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/lib/markdown.ts",
+      "target": "fn:src/lib/markdown.ts::interpolate",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/lib/roles.tsx",
+      "target": "fn:src/lib/roles.tsx::getRoleAccent",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/lib/roles.tsx",
+      "target": "fn:src/lib/roles.tsx::hashRole",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/lib/roles.tsx",
+      "target": "fn:src/lib/roles.tsx::getBarClasses",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/lib/roles.tsx",
+      "target": "fn:src/lib/roles.tsx::RoleIcon",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/lib/volunteer-charter.ts",
+      "target": "fn:src/lib/volunteer-charter.ts::buildVolunteerCharter",
+      "type": "contains"
+    },
+    {
+      "source": "file:src/app/[eventSlug]/EventPageClient.tsx",
+      "target": "file:src/components/DayTimeline.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/app/[eventSlug]/EventPageClient.tsx",
+      "target": "file:src/components/PublicFooter.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/app/[eventSlug]/EventPageClient.tsx",
+      "target": "file:src/lib/volunteer-charter.ts",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/app/[eventSlug]/success/page.tsx",
+      "target": "file:src/components/PublicFooter.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/app/[eventSlug]/success/page.tsx",
+      "target": "file:src/components/PushSubscribeButton.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/app/[eventSlug]/success/page.tsx",
+      "target": "file:src/lib/markdown.ts",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/app/admin/events/[id]/shifts/page.tsx",
+      "target": "file:src/components/admin/ShiftsManager.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/app/my/[token]/page.tsx",
+      "target": "file:src/components/PublicFooter.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/app/my/[token]/page.tsx",
+      "target": "file:src/components/PushSubscribeButton.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/app/my/[token]/page.tsx",
+      "target": "file:src/lib/markdown.ts",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/components/DayTimeline.tsx",
+      "target": "file:src/lib/roles.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/components/admin/AdminDayTimeline.tsx",
+      "target": "file:src/lib/roles.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/components/admin/OrgCharterForm.tsx",
+      "target": "file:src/lib/volunteer-charter.ts",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/components/admin/ShiftsManager.tsx",
+      "target": "file:src/components/admin/AdminDayTimeline.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/components/admin/ShiftsManager.tsx",
+      "target": "file:src/lib/roles.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/lib/__tests__/roles.react.test.tsx",
+      "target": "file:src/lib/roles.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "file:src/lib/__tests__/roles.test.ts",
+      "target": "file:src/lib/roles.tsx",
+      "type": "imports"
+    },
+    {
+      "source": "fn:src/app/[eventSlug]/EventPageClient.tsx::EventPageClient",
+      "target": "fn:src/components/DayTimeline.tsx::DayTimeline",
+      "type": "uses",
+      "description": "renders DayTimeline per event day"
+    },
+    {
+      "source": "fn:src/app/[eventSlug]/EventPageClient.tsx::EventPageClient",
+      "target": "fn:src/components/PublicFooter.tsx::PublicFooter",
+      "type": "uses",
+      "description": "renders PublicFooter"
+    },
+    {
+      "source": "fn:src/app/[eventSlug]/EventPageClient.tsx::EventPageClient",
+      "target": "fn:src/lib/volunteer-charter.ts::buildVolunteerCharter",
+      "type": "uses",
+      "description": "builds charter text for display in registration form"
+    },
+    {
+      "source": "fn:src/app/[eventSlug]/success/page.tsx::SuccessContent",
+      "target": "fn:src/lib/markdown.ts::renderMarkdown",
+      "type": "calls",
+      "description": "renders confirmation message markdown to HTML"
+    },
+    {
+      "source": "fn:src/app/[eventSlug]/success/page.tsx::SuccessContent",
+      "target": "fn:src/lib/markdown.ts::interpolate",
+      "type": "calls",
+      "description": "interpolates volunteer name/shift placeholders in confirmation message"
+    },
+    {
+      "source": "fn:src/app/[eventSlug]/success/page.tsx::SuccessPage",
+      "target": "fn:src/app/[eventSlug]/success/page.tsx::SuccessContent",
+      "type": "uses",
+      "description": "wraps SuccessContent in Suspense"
+    },
+    {
+      "source": "fn:src/app/admin/events/[id]/shifts/page.tsx::ShiftsPage",
+      "target": "fn:src/components/admin/ShiftsManager.tsx::ShiftsManager",
+      "type": "uses",
+      "description": "passes event and shifts data to ShiftsManager"
+    },
+    {
+      "source": "fn:src/app/my/[token]/page.tsx::MyRegistrationPage",
+      "target": "fn:src/lib/markdown.ts::renderMarkdown",
+      "type": "calls",
+      "description": "renders confirmation message markdown to HTML"
+    },
+    {
+      "source": "fn:src/app/my/[token]/page.tsx::MyRegistrationPage",
+      "target": "fn:src/lib/markdown.ts::interpolate",
+      "type": "calls",
+      "description": "interpolates volunteer name/shift placeholders"
+    },
+    {
+      "source": "fn:src/components/DayTimeline.tsx::DayTimeline",
+      "target": "fn:src/lib/roles.tsx::getBarClasses",
+      "type": "calls",
+      "description": "computes Tailwind classes for each shift bar"
+    },
+    {
+      "source": "fn:src/components/DayTimeline.tsx::toMinEnd",
+      "target": "fn:src/components/DayTimeline.tsx::toMin",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/components/DayTimeline.tsx::DayTimeline",
+      "target": "fn:src/components/DayTimeline.tsx::toMin",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/components/DayTimeline.tsx::DayTimeline",
+      "target": "fn:src/components/DayTimeline.tsx::toMinEnd",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/components/DayTimeline.tsx::DayTimeline",
+      "target": "fn:src/components/DayTimeline.tsx::fmt",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/components/admin/AdminDayTimeline.tsx::AdminDayTimeline",
+      "target": "fn:src/lib/roles.tsx::getBarClasses",
+      "type": "calls",
+      "description": "computes Tailwind classes for each shift bar"
+    },
+    {
+      "source": "fn:src/components/admin/AdminDayTimeline.tsx::ShiftPopover",
+      "target": "fn:src/lib/roles.tsx::getRoleAccent",
+      "type": "calls",
+      "description": "gets accent color for shift popover header"
+    },
+    {
+      "source": "fn:src/components/admin/AdminDayTimeline.tsx::AdminDayTimeline",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::ShiftPopover",
+      "type": "uses",
+      "description": "renders ShiftPopover when a shift is selected"
+    },
+    {
+      "source": "fn:src/components/admin/AdminDayTimeline.tsx::AdminDayTimeline",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::Toast",
+      "type": "uses",
+      "description": "renders Toast on save confirmation"
+    },
+    {
+      "source": "fn:src/components/admin/AdminDayTimeline.tsx::AdminDayTimeline",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::fromMin",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/components/admin/AdminDayTimeline.tsx::AdminDayTimeline",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::snapTo",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/components/admin/OrgCharterForm.tsx::OrgCharterForm",
+      "target": "fn:src/lib/volunteer-charter.ts::buildVolunteerCharter",
+      "type": "calls",
+      "description": "regenerates charter text on insurance toggle"
+    },
+    {
+      "source": "fn:src/components/admin/ShiftsManager.tsx::ShiftsManager",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::AdminDayTimeline",
+      "type": "uses",
+      "description": "embeds AdminDayTimeline per event day in timeline view"
+    },
+    {
+      "source": "fn:src/components/admin/ShiftsManager.tsx::ShiftsManager",
+      "target": "fn:src/components/admin/ShiftsManager.tsx::eventDates",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/components/admin/ShiftsManager.tsx::ShiftsManager",
+      "target": "fn:src/components/admin/ShiftsManager.tsx::fmtDate",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/components/admin/ShiftsManager.tsx::ShiftsManager",
+      "target": "fn:src/components/admin/ShiftsManager.tsx::addMinutes",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/components/admin/ShiftsManager.tsx::ShiftsManager",
+      "target": "fn:src/components/admin/ShiftsManager.tsx::normalizeTime",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/components/admin/ShiftsManager.tsx::eventDates",
+      "target": "fn:src/components/admin/ShiftsManager.tsx::localISO",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/lib/markdown.ts::renderMarkdown",
+      "target": "fn:src/lib/markdown.ts::renderInline",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/lib/markdown.ts::renderInline",
+      "target": "fn:src/lib/markdown.ts::escapeHtml",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/lib/roles.tsx::getBarClasses",
+      "target": "fn:src/lib/roles.tsx::hashRole",
+      "type": "calls"
+    },
+    {
+      "source": "file:src/lib/__tests__/roles.react.test.tsx",
+      "target": "fn:src/lib/roles.tsx::RoleIcon",
+      "type": "tests",
+      "description": "React render tests for RoleIcon component"
+    },
+    {
+      "source": "file:src/lib/__tests__/roles.test.ts",
+      "target": "fn:src/lib/roles.tsx::getRoleAccent",
+      "type": "tests",
+      "description": "Unit tests for getRoleAccent and getBarClasses"
+    },
+    {
+      "source": "file:src/lib/__tests__/roles.test.ts",
+      "target": "fn:src/lib/roles.tsx::getBarClasses",
+      "type": "tests"
+    },
+    {
+      "source": "fn:src/components/admin/AdminDayTimeline.tsx::AdminDayTimeline",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::toMin",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/components/admin/AdminDayTimeline.tsx::AdminDayTimeline",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::toMinEnd",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/components/admin/AdminDayTimeline.tsx::toMinEnd",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::toMin",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/components/admin/AdminDayTimeline.tsx::ShiftPopover",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::fmt",
+      "type": "calls"
+    },
+    {
+      "source": "fn:src/components/admin/AdminDayTimeline.tsx::AdminDayTimeline",
+      "target": "fn:src/components/admin/AdminDayTimeline.tsx::fmt",
+      "type": "calls"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "issues": [],
+  "warnings": [
+    {
+      "code": "UNKNOWN_NODE_TYPE",
+      "message": "3 nodes have type 'export' instead of a standard type (file, function, config, etc.). They represent named exports from src/auth.config.ts, src/auth.ts, and src/middleware.ts. They are structurally valid but may not render correctly in the dashboard.",
+      "affectedNodes": [
+        "file:export:authConfig",
+        "file:export:auth-handlers",
+        "file:export:middleware-config"
+      ]
+    },
+    {
+      "code": "ORPHAN_INFRA_NODES",
+      "message": "77 nodes have no edges (neither source nor target). These are predominantly infra/config/document nodes (k8s resources, GitHub workflows, markdown docs, Docker files, migration tables). This is expected — infra and doc nodes are rarely linked to application code. However, 13 TypeScript/TSX source files are also orphaned, meaning the LLM did not emit edges for them.",
+      "affectedNodes": [
+        "file:instrumentation-client.ts",
+        "file:instrumentation.ts",
+        "file:prisma/seed.ts",
+        "file:sentry.edge.config.ts",
+        "file:sentry.server.config.ts",
+        "file:src/__tests__/security/cross-tenant-isolation.test.ts",
+        "file:src/app/admin/forgot-password/page.tsx",
+        "file:src/app/admin/login/page.tsx",
+        "file:src/app/admin/page.tsx",
+        "file:src/app/global-error.tsx",
+        "file:src/app/super-admin/page.tsx",
+        "file:src/app/waitlist/[token]/confirm/page.tsx",
+        "file:src/components/super-admin/SuperAdminNav.tsx"
+      ]
+    },
+    {
+      "code": "MISSING_FILE_NODE",
+      "message": "vitest.config.ts appears in the scan as a code file but is represented as config:vitest.config.ts (type=config) rather than a file node. This is acceptable but inconsistent with how other TS config files are typed.",
+      "affectedNodes": ["config:vitest.config.ts"]
+    }
+  ],
+  "stats": {
+    "totalNodes": 329,
+    "totalEdges": 427,
+    "danglingEdges": 0,
+    "duplicateNodeIds": 0,
+    "duplicateEdges": 0,
+    "selfLoops": 0,
+    "orphanNodes": 77,
+    "nodeTypes": {
+      "file": 155,
+      "function": 121,
+      "export": 3,
+      "config": 10,
+      "service": 6,
+      "pipeline": 3,
+      "document": 15,
+      "resource": 9,
+      "table": 6,
+      "schema": 1
+    },
+    "edgeTypes": {
+      "imports": 205,
+      "contains": 110,
+      "calls": 64,
+      "renders": 12,
+      "uses": 11,
+      "tests": 3,
+      "defines": 14,
+      "extends": 1,
+      "referenced-by": 1,
+      "tested_by": 6
+    }
+  }
+}

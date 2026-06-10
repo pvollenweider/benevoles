@@ -1,0 +1,779 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 12,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "k8s/certificate-wildcard.yaml",
+      "language": "yaml",
+      "fileCategory": "infra",
+      "totalLines": 14,
+      "nonEmptyLines": 14,
+      "sections": [
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 6
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": "k8s/cronjob-backup.yaml",
+      "language": "yaml",
+      "fileCategory": "infra",
+      "totalLines": 90,
+      "nonEmptyLines": 86,
+      "sections": [
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 9
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 10
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 13
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 19
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 20
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 21
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 24
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 8
+      }
+    },
+    {
+      "path": "k8s/cronjob-cleanup.yaml",
+      "language": "yaml",
+      "fileCategory": "infra",
+      "totalLines": 45,
+      "nonEmptyLines": 45,
+      "sections": [
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 9
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": "k8s/cronjob-reminders.yaml",
+      "language": "yaml",
+      "fileCategory": "infra",
+      "totalLines": 48,
+      "nonEmptyLines": 48,
+      "sections": [
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 9
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 12
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": "k8s/deployment.yaml",
+      "language": "yaml",
+      "fileCategory": "infra",
+      "totalLines": 61,
+      "nonEmptyLines": 60,
+      "sections": [
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 8
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": "k8s/gandi-webhook.yaml",
+      "language": "yaml",
+      "fileCategory": "infra",
+      "totalLines": 225,
+      "nonEmptyLines": 225,
+      "sections": [
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 10
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 11
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 12
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 15
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 23
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 24
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 25
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 28
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 32
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 33
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 34
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 37
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 48
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 49
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 50
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 55
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 56
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 57
+        },
+        {
+          "heading": "roleRef",
+          "level": 1,
+          "line": 60
+        },
+        {
+          "heading": "subjects",
+          "level": 1,
+          "line": 64
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 71
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 72
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 73
+        },
+        {
+          "heading": "roleRef",
+          "level": 1,
+          "line": 75
+        },
+        {
+          "heading": "subjects",
+          "level": 1,
+          "line": 79
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 86
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 87
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 88
+        },
+        {
+          "heading": "rules",
+          "level": 1,
+          "line": 90
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 98
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 99
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 100
+        },
+        {
+          "heading": "roleRef",
+          "level": 1,
+          "line": 102
+        },
+        {
+          "heading": "subjects",
+          "level": 1,
+          "line": 106
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 113
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 114
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 115
+        },
+        {
+          "heading": "rules",
+          "level": 1,
+          "line": 118
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 129
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 130
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 131
+        },
+        {
+          "heading": "roleRef",
+          "level": 1,
+          "line": 134
+        },
+        {
+          "heading": "subjects",
+          "level": 1,
+          "line": 138
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 145
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 146
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 147
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 150
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 196
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 197
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 198
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 201
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 212
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 213
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 214
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 218
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 59
+      }
+    },
+    {
+      "path": "k8s/ingress.yaml",
+      "language": "yaml",
+      "fileCategory": "infra",
+      "totalLines": 51,
+      "nonEmptyLines": 51,
+      "sections": [
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 11
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": "k8s/log-rotation.md",
+      "language": "markdown",
+      "fileCategory": "infra",
+      "totalLines": 73,
+      "nonEmptyLines": 52,
+      "sections": [
+        {
+          "heading": "Rétention des logs — 90 jours (conformité politique de confidentialité)",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Option A — Kubelet (logs containers stdout/stderr)",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Option B — logrotate sur les nœuds (logs kubectl)",
+          "level": 2,
+          "line": 22
+        },
+        {
+          "heading": "Option C — Loki (recommandé si déjà déployé)",
+          "level": 2,
+          "line": 42
+        },
+        {
+          "heading": "Vérification",
+          "level": 2,
+          "line": 63
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": "k8s/namespace.yaml",
+      "language": "yaml",
+      "fileCategory": "infra",
+      "totalLines": 4,
+      "nonEmptyLines": 4,
+      "sections": [
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 3
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 3
+      }
+    },
+    {
+      "path": "k8s/postgres.yaml",
+      "language": "yaml",
+      "fileCategory": "infra",
+      "totalLines": 81,
+      "nonEmptyLines": 79,
+      "sections": [
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 14
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 15
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 16
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 19
+        },
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 70
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 71
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 72
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 75
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 12
+      }
+    },
+    {
+      "path": "k8s/secret.yaml",
+      "language": "yaml",
+      "fileCategory": "infra",
+      "totalLines": 30,
+      "nonEmptyLines": 30,
+      "sections": [
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "type",
+          "level": 1,
+          "line": 9
+        },
+        {
+          "heading": "stringData",
+          "level": 1,
+          "line": 10
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": "k8s/service.yaml",
+      "language": "yaml",
+      "fileCategory": "infra",
+      "totalLines": 12,
+      "nonEmptyLines": 12,
+      "sections": [
+        {
+          "heading": "apiVersion",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "kind",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "metadata",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "spec",
+          "level": 1,
+          "line": 6
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    }
+  ]
+}

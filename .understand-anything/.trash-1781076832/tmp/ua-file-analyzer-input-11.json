@@ -1,0 +1,9 @@
+{
+  "projectRoot": "/Users/pol/Desktop/benevoles",
+  "batchFiles": [
+    {"path": "gandi-webhook/Dockerfile", "language": "dockerfile", "sizeLines": 10, "fileCategory": "infra"}
+  ],
+  "batchImportData": {
+    "gandi-webhook/Dockerfile": []
+  }
+}

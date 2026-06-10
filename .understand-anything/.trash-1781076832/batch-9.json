@@ -1,0 +1,42 @@
+{
+  "batchIndex": 9,
+  "nodes": [
+    {
+      "id": "file:src/app/api/admin/members/import/route.ts",
+      "label": "members/import/route.ts",
+      "type": "file",
+      "path": "src/app/api/admin/members/import/route.ts",
+      "language": "typescript",
+      "exports": ["POST"],
+      "summary": "POST route: accepts CSV or XLSX file upload, parses via csv-import lib, upserts member records (volunteer) in the org database.",
+      "metrics": { "totalLines": 98, "functions": 1, "exports": 1 }
+    },
+    {
+      "id": "file:src/lib/__tests__/csv-import.test.ts",
+      "label": "csv-import.test.ts",
+      "type": "file",
+      "path": "src/lib/__tests__/csv-import.test.ts",
+      "language": "typescript",
+      "exports": [],
+      "summary": "Unit tests for parseCsv and parseXlsx: validates column detection, email validation, tag parsing, and error handling.",
+      "metrics": { "totalLines": 97, "functions": 0, "exports": 0 }
+    },
+    {
+      "id": "file:src/lib/csv-import.ts",
+      "label": "csv-import.ts",
+      "type": "file",
+      "path": "src/lib/csv-import.ts",
+      "language": "typescript",
+      "exports": ["parseCsv", "parseXlsx"],
+      "summary": "CSV/XLSX import parser: auto-detects columns by fuzzy header matching, validates emails, parses tags, and returns { rows, errors } with per-row error reporting.",
+      "metrics": { "totalLines": 161, "functions": 6, "exports": 2 }
+    }
+  ],
+  "edges": [
+    { "from": "file:src/app/api/admin/members/import/route.ts", "to": "file:src/lib/auth-guard.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/app/api/admin/members/import/route.ts", "to": "file:src/lib/csv-import.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/app/api/admin/members/import/route.ts", "to": "file:src/lib/prisma.ts", "type": "imports", "label": "imports" },
+    { "from": "file:src/lib/__tests__/csv-import.test.ts", "to": "file:src/lib/csv-import.ts", "type": "imports", "label": "imports" }
+  ],
+  "skipped": []
+}

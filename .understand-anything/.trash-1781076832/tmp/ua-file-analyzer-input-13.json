@@ -1,0 +1,41 @@
+{
+  "projectRoot": "/Users/pol/Desktop/benevoles",
+  "batchFiles": [
+    {"path": ".env.development.example", "language": "config", "sizeLines": 40, "fileCategory": "config"},
+    {"path": ".env.example", "language": "config", "sizeLines": 37, "fileCategory": "config"},
+    {"path": "AGENTS.md", "language": "markdown", "sizeLines": 5, "fileCategory": "docs"},
+    {"path": "CHANGELOG.md", "language": "markdown", "sizeLines": 161, "fileCategory": "docs"},
+    {"path": "CLAUDE.md", "language": "markdown", "sizeLines": 1, "fileCategory": "docs"},
+    {"path": "CODE_OF_CONDUCT.md", "language": "markdown", "sizeLines": 39, "fileCategory": "docs"},
+    {"path": "CONTRIBUTING.md", "language": "markdown", "sizeLines": 113, "fileCategory": "docs"},
+    {"path": "FONCTIONNALITES.md", "language": "markdown", "sizeLines": 233, "fileCategory": "docs"},
+    {"path": "GUIDE_ADMIN.md", "language": "markdown", "sizeLines": 207, "fileCategory": "docs"},
+    {"path": "GUIDE_BENEVOLE.md", "language": "markdown", "sizeLines": 107, "fileCategory": "docs"},
+    {"path": "Makefile", "language": "makefile", "sizeLines": 96, "fileCategory": "infra"},
+    {"path": "README.md", "language": "markdown", "sizeLines": 236, "fileCategory": "docs"},
+    {"path": "SECURITY.md", "language": "markdown", "sizeLines": 31, "fileCategory": "docs"},
+    {"path": "docker-entrypoint.sh", "language": "shell", "sizeLines": 19, "fileCategory": "script"},
+    {"path": "package.json", "language": "json", "sizeLines": 82, "fileCategory": "config"},
+    {"path": "resume.txt", "language": "txt", "sizeLines": 1, "fileCategory": "docs"},
+    {"path": "tsconfig.json", "language": "json", "sizeLines": 34, "fileCategory": "config"}
+  ],
+  "batchImportData": {
+    ".env.development.example": [],
+    ".env.example": [],
+    "AGENTS.md": [],
+    "CHANGELOG.md": [],
+    "CLAUDE.md": [],
+    "CODE_OF_CONDUCT.md": [],
+    "CONTRIBUTING.md": [],
+    "FONCTIONNALITES.md": [],
+    "GUIDE_ADMIN.md": [],
+    "GUIDE_BENEVOLE.md": [],
+    "Makefile": [],
+    "README.md": [],
+    "SECURITY.md": [],
+    "docker-entrypoint.sh": [],
+    "package.json": [],
+    "resume.txt": [],
+    "tsconfig.json": []
+  }
+}

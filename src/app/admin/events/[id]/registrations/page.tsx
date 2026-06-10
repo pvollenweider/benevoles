@@ -27,9 +27,9 @@ export default async function RegistrationsPage({
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
       },
       registrations: {
-        where: { status: "active" },
+        where: { status: { in: ["active", "waiting", "offered"] } },
         include: { volunteer: true, shift: true },
-        orderBy: { createdAt: "desc" },
+        orderBy: [{ status: "asc" }, { createdAt: "desc" }],
       },
     },
   })
@@ -47,7 +47,12 @@ export default async function RegistrationsPage({
       <div>
         <Link href={`/admin/events/${id}`} className="text-sm text-blue-600">← {event.title}</Link>
         <h1 className="text-xl font-bold text-gray-900 mt-1">Inscriptions</h1>
-        <p className="text-sm text-gray-500">{event.registrations.length} inscription(s) active(s)</p>
+        <p className="text-sm text-gray-500">
+          {event.registrations.filter(r => r.status === "active").length} inscription(s) active(s)
+          {event.registrations.some(r => r.status === "waiting" || r.status === "offered") && (
+            <> · {event.registrations.filter(r => r.status === "waiting" || r.status === "offered").length} en liste d'attente</>
+          )}
+        </p>
       </div>
 
       <RegistrationsManager
@@ -59,6 +64,7 @@ export default async function RegistrationsPage({
           source: r.source,
           comment: r.comment,
           createdAt: r.createdAt.toISOString(),
+          waitingPosition: r.waitingPosition,
           volunteer: r.volunteer,
           shift: {
             id: r.shift.id,

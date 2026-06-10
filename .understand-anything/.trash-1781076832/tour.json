@@ -1,0 +1,108 @@
+[
+  {
+    "order": 1,
+    "title": "Project Overview",
+    "description": "Start here to understand what Benevol is: a multi-tenant SaaS platform for managing volunteers at events. Each organization gets an isolated space; volunteers sign up via a Gantt-style timeline without creating an account. The README explains the architecture, the feature set, and how to run the project locally. FONCTIONNALITES.md provides a French-language breakdown of every user-facing feature, and GUIDE_BENEVOLE.md describes the volunteer experience end-to-end.",
+    "nodeIds": [
+      "document:README.md",
+      "document:FONCTIONNALITES.md",
+      "document:GUIDE_BENEVOLE.md"
+    ]
+  },
+  {
+    "order": 2,
+    "title": "Data Model",
+    "description": "The Prisma schema is the backbone of the entire application. It defines every entity — Organization, Event, Shift, Registration, Member, and more — along with their relationships and constraints. Reading it alongside the initial migration (0001_init) gives you the original design, and the subsequent migrations (volunteer charter, waitlist, push subscriptions, org insurance, member merge) show how the model evolved. Understanding this layer is essential before reading any business logic.",
+    "nodeIds": [
+      "schema:prisma/schema.prisma",
+      "table:prisma/migrations/0001_init/migration.sql:Organization",
+      "table:prisma/migrations/0002_add_volunteer_charter/migration.sql:volunteer_charter",
+      "table:prisma/migrations/0003_waitlist/migration.sql:waitlist",
+      "table:prisma/migrations/0004_push_subscriptions/migration.sql:PushSubscription",
+      "table:prisma/migrations/0006_merge_volunteer_member/migration.sql:merge"
+    ]
+  },
+  {
+    "order": 3,
+    "title": "Multi-Tenant Foundation",
+    "description": "Every admin API call is protected by two small but critical library files. auth-guard.ts provides requireOrgSession, requireSuperAdmin, and getOrgContext — the functions that verify the caller's session and resolve which organization they belong to. prisma-org.ts wraps the Prisma client so that all database queries are automatically scoped to the current tenant, preventing cross-organization data leaks. The test suites next to each file and the cross-tenant isolation security test confirm this guarantee.",
+    "nodeIds": [
+      "file:src/lib/auth-guard.ts",
+      "file:src/lib/prisma-org.ts",
+      "file:src/lib/resolve-org.ts",
+      "file:src/lib/__tests__/auth-guard.test.ts",
+      "file:src/lib/__tests__/prisma-org.test.ts",
+      "file:src/__tests__/security/cross-tenant-isolation.test.ts"
+    ]
+  },
+  {
+    "order": 4,
+    "title": "Public Volunteer Registration Flow",
+    "description": "This is the user-facing heart of the product. When a volunteer visits /<eventSlug>, the Next.js page server-renders the event details and hands off to EventPageClient.tsx, a rich React component that orchestrates the registration wizard. DayTimeline.tsx renders the interactive Gantt grid where volunteers pick their shifts. The public API route at /api/public/[eventSlug] feeds the initial data, and /api/public/registrations handles submission. After registration, the volunteer lands on the success page.",
+    "nodeIds": [
+      "file:src/app/[eventSlug]/page.tsx",
+      "file:src/app/[eventSlug]/EventPageClient.tsx",
+      "file:src/components/DayTimeline.tsx",
+      "file:src/app/api/public/[eventSlug]/route.ts",
+      "file:src/app/api/public/registrations/route.ts",
+      "file:src/app/[eventSlug]/success/page.tsx"
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Admin Event Management",
+    "description": "Admins manage events through a dedicated section. The admin layout enforces authentication via NextAuth, and the dashboard is the landing page. EventForm.tsx handles creation and editing of events, while the API route for a specific event (GET/PATCH/DELETE) shows how the REST layer applies auth-guard before any database operation. ShiftsManager lets admins define time slots, and RegistrationsManager gives a live view of who signed up for what. The registrations API route handles approval and deletion.",
+    "nodeIds": [
+      "file:src/app/admin/layout.tsx",
+      "file:src/app/admin/dashboard/page.tsx",
+      "file:src/components/admin/EventForm.tsx",
+      "file:src/app/api/admin/events/[id]/route.ts",
+      "file:src/app/api/admin/events/route.ts",
+      "file:src/components/admin/ShiftsManager.tsx",
+      "file:src/components/admin/RegistrationsManager.tsx",
+      "file:src/app/api/admin/registrations/[id]/route.ts"
+    ]
+  },
+  {
+    "order": 6,
+    "title": "Notifications System",
+    "description": "The notifications layer sends transactional emails at key lifecycle moments: registration confirmations, shift reminders, member invitations, and admin alerts. notifications/index.ts is the entry point that selects the right template and dispatches it. notifications/templates.ts defines each email template. notifications/channels/email.ts handles the actual SMTP send via the email.ts wrapper. The cron routes in the API layer trigger scheduled reminders automatically.",
+    "nodeIds": [
+      "file:src/lib/notifications/index.ts",
+      "file:src/lib/notifications/templates.ts",
+      "file:src/lib/notifications/types.ts",
+      "file:src/lib/notifications/channels/email.ts",
+      "file:src/lib/email.ts",
+      "file:src/app/api/cron/reminders/route.ts",
+      "file:src/lib/__tests__/notifications.test.ts"
+    ]
+  },
+  {
+    "order": 7,
+    "title": "Exports: Excel and PDF",
+    "description": "Admins can download registration data as Excel workbooks or PDF documents. The Excel export route builds two sheets: a day-by-day breakdown (buildDaySheet) and a recap-by-role sheet (buildRecapSheet) — the result of the most recent architectural change in this codebase. The PDF export route (buildDayParts) generates a printable schedule. Both routes live under /api/admin/events/[id]/export/ and are protected by auth-guard, ensuring only the owning organization can access its data.",
+    "nodeIds": [
+      "file:src/app/api/admin/events/[id]/export/route.ts",
+      "file:src/app/api/admin/events/[id]/export/pdf/route.ts"
+    ]
+  },
+  {
+    "order": 8,
+    "title": "CI/CD and Infrastructure",
+    "description": "The deployment pipeline automates testing and production releases. ci.yml runs linting and the full test suite on every pull request. deploy.yml builds a Docker image and rolls it out to Kubernetes. The Dockerfile defines the production image, and k8s/deployment.yaml describes the Kubernetes Deployment. Supporting resources include the Ingress for routing, a wildcard TLS certificate, the Postgres StatefulSet, and cron jobs for cleanup and reminders. The gandi-webhook sidecar handles DNS record updates via the Gandi API.",
+    "nodeIds": [
+      "pipeline:.github/workflows/ci.yml",
+      "pipeline:.github/workflows/deploy.yml",
+      "file:Dockerfile",
+      "service:k8s/deployment.yaml",
+      "service:k8s/service.yaml",
+      "resource:k8s/ingress.yaml",
+      "resource:k8s/certificate-wildcard.yaml",
+      "resource:k8s/postgres.yaml",
+      "resource:k8s/cronjob-cleanup.yaml",
+      "resource:k8s/cronjob-reminders.yaml",
+      "pipeline:.github/workflows/gandi-webhook.yml",
+      "service:gandi-webhook/Dockerfile"
+    ]
+  }
+]

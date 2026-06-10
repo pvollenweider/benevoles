@@ -1,0 +1,202 @@
+{
+  "batchIndex": 13,
+  "nodes": [
+    {
+      "id": "config:.env.development.example",
+      "type": "config",
+      "label": ".env.development.example",
+      "path": ".env.development.example",
+      "language": "config",
+      "fileCategory": "config",
+      "totalLines": 40,
+      "tags": ["env", "config", "development"],
+      "description": "Example environment variable file for local development configuration"
+    },
+    {
+      "id": "config:.env.example",
+      "type": "config",
+      "label": ".env.example",
+      "path": ".env.example",
+      "language": "config",
+      "fileCategory": "config",
+      "totalLines": 37,
+      "tags": ["env", "config"],
+      "symbols": ["DATABASE_URL", "AUTH_SECRET", "SMTP_HOST", "SMTP_PORT", "SMTP_SECURE", "SMTP_USER", "SMTP_PASSWORD", "EMAIL_FROM", "EMAIL_REPLY_TO", "ADMIN_NOTIFICATION_EMAIL", "NEXT_PUBLIC_APP_URL", "AUTH_URL", "AUTH_TRUST_HOST", "CRON_SECRET", "VAPID_PUBLIC_KEY", "VAPID_PRIVATE_KEY"],
+      "description": "Production environment variable template listing all required configuration keys: database, auth, SMTP, push notification (VAPID), and cron secret"
+    },
+    {
+      "id": "document:AGENTS.md",
+      "type": "document",
+      "label": "AGENTS.md",
+      "path": "AGENTS.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 5,
+      "tags": ["docs", "agents"],
+      "description": "Agent instructions note: this project uses a non-standard Next.js version — read the bundled docs before writing code"
+    },
+    {
+      "id": "document:CHANGELOG.md",
+      "type": "document",
+      "label": "CHANGELOG.md",
+      "path": "CHANGELOG.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 161,
+      "tags": ["docs", "changelog"],
+      "description": "Project changelog tracking versions from 0.1.0 to 1.10.0 with added/improved/fixed entries"
+    },
+    {
+      "id": "document:CLAUDE.md",
+      "type": "document",
+      "label": "CLAUDE.md",
+      "path": "CLAUDE.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 1,
+      "tags": ["docs"],
+      "description": "Claude AI agent instructions file (delegates to AGENTS.md)"
+    },
+    {
+      "id": "document:CODE_OF_CONDUCT.md",
+      "type": "document",
+      "label": "CODE_OF_CONDUCT.md",
+      "path": "CODE_OF_CONDUCT.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 39,
+      "tags": ["docs", "community"],
+      "description": "Community code of conduct covering standards, responsibilities, scope, and application"
+    },
+    {
+      "id": "document:CONTRIBUTING.md",
+      "type": "document",
+      "label": "CONTRIBUTING.md",
+      "path": "CONTRIBUTING.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 113,
+      "tags": ["docs", "contributing"],
+      "description": "Contributor guide covering prerequisites, local setup, workflow, commit conventions, project structure, database migrations, testing, and security reporting"
+    },
+    {
+      "id": "document:FONCTIONNALITES.md",
+      "type": "document",
+      "label": "FONCTIONNALITES.md",
+      "path": "FONCTIONNALITES.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 233,
+      "tags": ["docs", "features"],
+      "description": "Detailed feature catalogue covering public volunteer flows, admin dashboard capabilities, super-admin management, email notifications, and infrastructure"
+    },
+    {
+      "id": "document:GUIDE_ADMIN.md",
+      "type": "document",
+      "label": "GUIDE_ADMIN.md",
+      "path": "GUIDE_ADMIN.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 207,
+      "tags": ["docs", "admin"],
+      "description": "Administrator user guide covering login, event creation, shift configuration, publishing, registration tracking, member management, invitations, communications, exports, QR code, and admin team management"
+    },
+    {
+      "id": "document:GUIDE_BENEVOLE.md",
+      "type": "document",
+      "label": "GUIDE_BENEVOLE.md",
+      "path": "GUIDE_BENEVOLE.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 107,
+      "tags": ["docs", "volunteer"],
+      "description": "Volunteer user guide covering registration page navigation, shift selection, sign-up form, confirmation, and managing existing registrations"
+    },
+    {
+      "id": "file:Makefile",
+      "type": "file",
+      "label": "Makefile",
+      "path": "Makefile",
+      "language": "makefile",
+      "fileCategory": "infra",
+      "totalLines": 96,
+      "tags": ["build", "infra"],
+      "symbols": ["help", "dev-setup", "install", "dev-up", "dev-down", "dev-logs", "dev-reset", "dev", "db-generate", "db-migrate", "db-seed", "db-studio", "test", "lint", "typecheck"],
+      "description": "Makefile providing developer targets for project setup, Docker dev environment management, database operations (generate, migrate, seed, studio), testing, linting, and type-checking"
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "label": "README.md",
+      "path": "README.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 236,
+      "tags": ["docs"],
+      "description": "Project README covering feature overview, tech stack, prerequisites, quick start, environment variables, scripts, cron reminders, Docker Compose and Kubernetes deployment, project structure, data model, and multi-tenant architecture"
+    },
+    {
+      "id": "document:SECURITY.md",
+      "type": "document",
+      "label": "SECURITY.md",
+      "path": "SECURITY.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 31,
+      "tags": ["docs", "security"],
+      "description": "Security policy: supported versions, vulnerability reporting process, and deployment best practices"
+    },
+    {
+      "id": "file:docker-entrypoint.sh",
+      "type": "file",
+      "label": "docker-entrypoint.sh",
+      "path": "docker-entrypoint.sh",
+      "language": "shell",
+      "fileCategory": "script",
+      "totalLines": 19,
+      "tags": ["docker", "script"],
+      "description": "Docker entrypoint shell script that runs Prisma migrations before starting the Next.js app"
+    },
+    {
+      "id": "config:package.json",
+      "type": "config",
+      "label": "package.json",
+      "path": "package.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 82,
+      "tags": ["npm", "config"],
+      "description": "NPM package manifest defining project scripts, dependencies (Next.js, Prisma, NextAuth, Sentry, etc.), dev dependencies, and lint-staged configuration"
+    },
+    {
+      "id": "document:resume.txt",
+      "type": "document",
+      "label": "resume.txt",
+      "path": "resume.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 1,
+      "tags": ["docs"],
+      "description": "Minimal resume text file"
+    },
+    {
+      "id": "config:tsconfig.json",
+      "type": "config",
+      "label": "tsconfig.json",
+      "path": "tsconfig.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 34,
+      "tags": ["typescript", "config"],
+      "description": "TypeScript compiler configuration with Next.js path aliases and strict settings"
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:package.json",
+      "target": "file:src/components/PublicFooter.tsx",
+      "type": "referenced-by",
+      "label": "version display"
+    }
+  ]
+}

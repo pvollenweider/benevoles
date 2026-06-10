@@ -1,0 +1,685 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 8,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "src/app/[eventSlug]/page.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 16,
+      "nonEmptyLines": 13,
+      "functions": [
+        {
+          "name": "EventPage",
+          "startLine": 6,
+          "endLine": 16,
+          "params": [
+            "{ params }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "EventPage",
+          "line": 6,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "EventPage",
+          "callee": "(await headers()).get",
+          "lineNumber": 8
+        },
+        {
+          "caller": "EventPage",
+          "callee": "headers",
+          "lineNumber": 8
+        },
+        {
+          "caller": "EventPage",
+          "callee": "notFound",
+          "lineNumber": 9
+        },
+        {
+          "caller": "EventPage",
+          "callee": "resolveOrgSlug",
+          "lineNumber": 11
+        },
+        {
+          "caller": "EventPage",
+          "callee": "notFound",
+          "lineNumber": 12
+        },
+        {
+          "caller": "EventPage",
+          "callee": "redirect",
+          "lineNumber": 13
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/admin/events/[id]/qr/page.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 38,
+      "nonEmptyLines": 32,
+      "functions": [
+        {
+          "name": "EventQrPage",
+          "startLine": 8,
+          "endLine": 38,
+          "params": [
+            "{\n  params,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "dynamic",
+          "line": 6,
+          "isDefault": false
+        },
+        {
+          "name": "EventQrPage",
+          "line": 8,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "EventQrPage",
+          "callee": "getOrgContext",
+          "lineNumber": 13
+        },
+        {
+          "caller": "EventQrPage",
+          "callee": "redirect",
+          "lineNumber": 14
+        },
+        {
+          "caller": "EventQrPage",
+          "callee": "db.event.findFirst",
+          "lineNumber": 19
+        },
+        {
+          "caller": "EventQrPage",
+          "callee": "notFound",
+          "lineNumber": 23
+        },
+        {
+          "caller": "EventQrPage",
+          "callee": "eventPublicUrl",
+          "lineNumber": 25
+        },
+        {
+          "caller": "EventQrPage",
+          "callee": "event.startDate.toISOString",
+          "lineNumber": 32
+        },
+        {
+          "caller": "EventQrPage",
+          "callee": "event.endDate.toISOString",
+          "lineNumber": 33
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/api/admin/events/[id]/qr/route.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 40,
+      "nonEmptyLines": 34,
+      "functions": [
+        {
+          "name": "GET",
+          "startLine": 6,
+          "endLine": 40,
+          "params": [
+            "req",
+            "{ params }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "GET",
+          "line": 6,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "GET",
+          "callee": "requireOrgSession",
+          "lineNumber": 7
+        },
+        {
+          "caller": "GET",
+          "callee": "(url.searchParams.get(\"format\") ?? \"png\").toLowerCase",
+          "lineNumber": 13
+        },
+        {
+          "caller": "GET",
+          "callee": "url.searchParams.get",
+          "lineNumber": 13
+        },
+        {
+          "caller": "GET",
+          "callee": "db.event.findFirst",
+          "lineNumber": 15
+        },
+        {
+          "caller": "GET",
+          "callee": "NextResponse.json",
+          "lineNumber": 19
+        },
+        {
+          "caller": "GET",
+          "callee": "eventPublicUrl",
+          "lineNumber": 21
+        },
+        {
+          "caller": "GET",
+          "callee": "QRCode.toString",
+          "lineNumber": 24
+        },
+        {
+          "caller": "GET",
+          "callee": "QRCode.toBuffer",
+          "lineNumber": 33
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/api/admin/settings/organization/route.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 84,
+      "nonEmptyLines": 70,
+      "functions": [
+        {
+          "name": "PATCH",
+          "startLine": 8,
+          "endLine": 84,
+          "params": [
+            "req"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "PATCH",
+          "line": 8,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "PATCH",
+          "callee": "requireOrgSession",
+          "lineNumber": 9
+        },
+        {
+          "caller": "PATCH",
+          "callee": "req.json().catch",
+          "lineNumber": 13
+        },
+        {
+          "caller": "PATCH",
+          "callee": "req.json",
+          "lineNumber": 13
+        },
+        {
+          "caller": "PATCH",
+          "callee": "body.name.trim",
+          "lineNumber": 18
+        },
+        {
+          "caller": "PATCH",
+          "callee": "NextResponse.json",
+          "lineNumber": 20
+        },
+        {
+          "caller": "PATCH",
+          "callee": "body.slug.trim().toLowerCase",
+          "lineNumber": 26
+        },
+        {
+          "caller": "PATCH",
+          "callee": "body.slug.trim",
+          "lineNumber": 26
+        },
+        {
+          "caller": "PATCH",
+          "callee": "SLUG_RE.test",
+          "lineNumber": 27
+        },
+        {
+          "caller": "PATCH",
+          "callee": "NextResponse.json",
+          "lineNumber": 28
+        },
+        {
+          "caller": "PATCH",
+          "callee": "prisma.organization.findUnique",
+          "lineNumber": 34
+        },
+        {
+          "caller": "PATCH",
+          "callee": "NextResponse.json",
+          "lineNumber": 38
+        },
+        {
+          "caller": "PATCH",
+          "callee": "prisma.organization.findFirst",
+          "lineNumber": 41
+        },
+        {
+          "caller": "PATCH",
+          "callee": "NextResponse.json",
+          "lineNumber": 42
+        },
+        {
+          "caller": "PATCH",
+          "callee": "prisma.orgSlugHistory.findFirst",
+          "lineNumber": 44
+        },
+        {
+          "caller": "PATCH",
+          "callee": "NextResponse.json",
+          "lineNumber": 47
+        },
+        {
+          "caller": "PATCH",
+          "callee": "body.volunteerCharter.trim",
+          "lineNumber": 55
+        },
+        {
+          "caller": "PATCH",
+          "callee": "body.volunteerCharter.trim",
+          "lineNumber": 56
+        },
+        {
+          "caller": "PATCH",
+          "callee": "Object.keys",
+          "lineNumber": 64
+        },
+        {
+          "caller": "PATCH",
+          "callee": "NextResponse.json",
+          "lineNumber": 65
+        },
+        {
+          "caller": "PATCH",
+          "callee": "prisma.$transaction",
+          "lineNumber": 68
+        },
+        {
+          "caller": "PATCH",
+          "callee": "tx.orgSlugHistory.deleteMany",
+          "lineNumber": 71
+        },
+        {
+          "caller": "PATCH",
+          "callee": "tx.orgSlugHistory.create",
+          "lineNumber": 73
+        },
+        {
+          "caller": "PATCH",
+          "callee": "tx.organization.update",
+          "lineNumber": 75
+        },
+        {
+          "caller": "PATCH",
+          "callee": "orgBaseUrl",
+          "lineNumber": 82
+        },
+        {
+          "caller": "PATCH",
+          "callee": "NextResponse.json",
+          "lineNumber": 83
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/page.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 188,
+      "nonEmptyLines": 174,
+      "functions": [
+        {
+          "name": "HomePage",
+          "startLine": 12,
+          "endLine": 110,
+          "params": []
+        },
+        {
+          "name": "LandingPage",
+          "startLine": 112,
+          "endLine": 178,
+          "params": []
+        },
+        {
+          "name": "FeatureCard",
+          "startLine": 180,
+          "endLine": 188,
+          "params": [
+            "{ icon, title, description }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "dynamic",
+          "line": 10,
+          "isDefault": false
+        },
+        {
+          "name": "HomePage",
+          "line": 12,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "HomePage",
+          "callee": "(await headers()).get",
+          "lineNumber": 13
+        },
+        {
+          "caller": "HomePage",
+          "callee": "headers",
+          "lineNumber": 13
+        },
+        {
+          "caller": "HomePage",
+          "callee": "resolveOrgSlug",
+          "lineNumber": 17
+        },
+        {
+          "caller": "HomePage",
+          "callee": "redirect",
+          "lineNumber": 19
+        },
+        {
+          "caller": "HomePage",
+          "callee": "prisma.event.findMany",
+          "lineNumber": 23
+        },
+        {
+          "caller": "HomePage",
+          "callee": "events.map",
+          "lineNumber": 38
+        },
+        {
+          "caller": "HomePage",
+          "callee": "event.shifts.reduce",
+          "lineNumber": 39
+        },
+        {
+          "caller": "HomePage",
+          "callee": "event.shifts.reduce",
+          "lineNumber": 40
+        },
+        {
+          "caller": "eventHref",
+          "callee": "eventPublicUrl",
+          "lineNumber": 50
+        },
+        {
+          "caller": "HomePage",
+          "callee": "enriched.map",
+          "lineNumber": 70
+        },
+        {
+          "caller": "HomePage",
+          "callee": "eventHref",
+          "lineNumber": 73
+        },
+        {
+          "caller": "HomePage",
+          "callee": "formatShortDate",
+          "lineNumber": 81
+        },
+        {
+          "caller": "HomePage",
+          "callee": "event.endDate.toDateString",
+          "lineNumber": 82
+        },
+        {
+          "caller": "HomePage",
+          "callee": "event.startDate.toDateString",
+          "lineNumber": 82
+        },
+        {
+          "caller": "HomePage",
+          "callee": "formatShortDate",
+          "lineNumber": 83
+        }
+      ],
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 2,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/admin/QrPrintView.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 100,
+      "nonEmptyLines": 91,
+      "functions": [
+        {
+          "name": "formatDateRange",
+          "startLine": 15,
+          "endLine": 23,
+          "params": [
+            "startISO",
+            "endISO"
+          ]
+        },
+        {
+          "name": "QrPrintView",
+          "startLine": 25,
+          "endLine": 100,
+          "params": [
+            "{\n  eventId,\n  title,\n  location,\n  startDate,\n  endDate,\n  publicUrl,\n  backHref,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "QrPrintView",
+          "line": 25,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "formatDateRange",
+          "callee": "start.toDateString",
+          "lineNumber": 19
+        },
+        {
+          "caller": "formatDateRange",
+          "callee": "end.toDateString",
+          "lineNumber": 19
+        },
+        {
+          "caller": "formatDateRange",
+          "callee": "start.toLocaleDateString",
+          "lineNumber": 20
+        },
+        {
+          "caller": "formatDateRange",
+          "callee": "start.toLocaleDateString",
+          "lineNumber": 22
+        },
+        {
+          "caller": "formatDateRange",
+          "callee": "end.toLocaleDateString",
+          "lineNumber": 22
+        },
+        {
+          "caller": "QrPrintView",
+          "callee": "window.print",
+          "lineNumber": 60
+        },
+        {
+          "caller": "QrPrintView",
+          "callee": "formatDateRange",
+          "lineNumber": 70
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/lib/resolve-org.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 31,
+      "nonEmptyLines": 27,
+      "functions": [
+        {
+          "name": "resolveOrgSlug",
+          "startLine": 14,
+          "endLine": 31,
+          "params": [
+            "subdomain",
+            "path"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "resolveOrgSlug",
+          "line": 14,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "resolveOrgSlug",
+          "callee": "prisma.organization.findUnique",
+          "lineNumber": 15
+        },
+        {
+          "caller": "resolveOrgSlug",
+          "callee": "prisma.orgSlugHistory.findUnique",
+          "lineNumber": 21
+        },
+        {
+          "caller": "resolveOrgSlug",
+          "callee": "orgBaseUrl",
+          "lineNumber": 29
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/lib/urls.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 16,
+      "nonEmptyLines": 14,
+      "functions": [
+        {
+          "name": "orgBaseUrl",
+          "startLine": 6,
+          "endLine": 11,
+          "params": [
+            "orgSlug"
+          ]
+        },
+        {
+          "name": "eventPublicUrl",
+          "startLine": 13,
+          "endLine": 16,
+          "params": [
+            "orgSlug",
+            "eventSlug"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "orgBaseUrl",
+          "line": 6,
+          "isDefault": false
+        },
+        {
+          "name": "eventPublicUrl",
+          "line": 13,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "orgBaseUrl",
+          "callee": "APP_URL.includes",
+          "lineNumber": 7
+        },
+        {
+          "caller": "orgBaseUrl",
+          "callee": "url.hostname.replace",
+          "lineNumber": 9
+        },
+        {
+          "caller": "eventPublicUrl",
+          "callee": "APP_URL.includes",
+          "lineNumber": 14
+        },
+        {
+          "caller": "eventPublicUrl",
+          "callee": "orgBaseUrl",
+          "lineNumber": 15
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    }
+  ]
+}

@@ -15,6 +15,7 @@ const schema = z.object({
   locationDetails: z.string().optional(),
   displayOrder: z.number().int().optional(),
   internalNotes: z.string().optional(),
+  waitlistEnabled: z.boolean().optional(),
 })
 
 export async function POST(req: Request) {

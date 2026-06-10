@@ -1,0 +1,17 @@
+{
+  "batchIndex": 11,
+  "nodes": [
+    {
+      "id": "service:gandi-webhook/Dockerfile",
+      "type": "service",
+      "label": "gandi-webhook/Dockerfile",
+      "path": "gandi-webhook/Dockerfile",
+      "language": "dockerfile",
+      "fileCategory": "infra",
+      "totalLines": 10,
+      "tags": ["docker", "gandi-webhook", "go"],
+      "description": "Multi-stage Dockerfile building the Gandi DNS webhook binary from Go source using golang:1.23-alpine, producing a minimal alpine:3.19 runtime image"
+    }
+  ],
+  "edges": []
+}

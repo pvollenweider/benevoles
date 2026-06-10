@@ -1,0 +1,1555 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 12,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "src/app/admin/accept-invite/page.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 121,
+      "nonEmptyLines": 109,
+      "functions": [
+        {
+          "name": "AcceptInviteForm",
+          "startLine": 8,
+          "endLine": 105,
+          "params": []
+        },
+        {
+          "name": "AcceptInvitePage",
+          "startLine": 107,
+          "endLine": 121,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "AcceptInvitePage",
+          "line": 107,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "AcceptInviteForm",
+          "callee": "useSearchParams",
+          "lineNumber": 9
+        },
+        {
+          "caller": "AcceptInviteForm",
+          "callee": "searchParams.get",
+          "lineNumber": 10
+        },
+        {
+          "caller": "AcceptInviteForm",
+          "callee": "useRouter",
+          "lineNumber": 11
+        },
+        {
+          "caller": "AcceptInviteForm",
+          "callee": "useState",
+          "lineNumber": 13
+        },
+        {
+          "caller": "AcceptInviteForm",
+          "callee": "useState",
+          "lineNumber": 14
+        },
+        {
+          "caller": "AcceptInviteForm",
+          "callee": "useState",
+          "lineNumber": 15
+        },
+        {
+          "caller": "AcceptInviteForm",
+          "callee": "useState",
+          "lineNumber": 16
+        },
+        {
+          "caller": "AcceptInviteForm",
+          "callee": "useState",
+          "lineNumber": 17
+        },
+        {
+          "caller": "AcceptInviteForm",
+          "callee": "router.push",
+          "lineNumber": 34
+        },
+        {
+          "caller": "submit",
+          "callee": "e.preventDefault",
+          "lineNumber": 44
+        },
+        {
+          "caller": "submit",
+          "callee": "setError",
+          "lineNumber": 46
+        },
+        {
+          "caller": "submit",
+          "callee": "setSubmitting",
+          "lineNumber": 49
+        },
+        {
+          "caller": "submit",
+          "callee": "setError",
+          "lineNumber": 50
+        },
+        {
+          "caller": "submit",
+          "callee": "fetch",
+          "lineNumber": 52
+        },
+        {
+          "caller": "submit",
+          "callee": "JSON.stringify",
+          "lineNumber": 55
+        },
+        {
+          "caller": "submit",
+          "callee": "setSubmitting",
+          "lineNumber": 58
+        },
+        {
+          "caller": "submit",
+          "callee": "res.json().catch",
+          "lineNumber": 61
+        },
+        {
+          "caller": "submit",
+          "callee": "res.json",
+          "lineNumber": 61
+        },
+        {
+          "caller": "submit",
+          "callee": "setError",
+          "lineNumber": 62
+        },
+        {
+          "caller": "submit",
+          "callee": "setDone",
+          "lineNumber": 66
+        },
+        {
+          "caller": "AcceptInviteForm",
+          "callee": "setPassword",
+          "lineNumber": 76
+        },
+        {
+          "caller": "AcceptInviteForm",
+          "callee": "setConfirm",
+          "lineNumber": 88
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/admin/reset-password/page.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 132,
+      "nonEmptyLines": 120,
+      "functions": [
+        {
+          "name": "ResetForm",
+          "startLine": 8,
+          "endLine": 114,
+          "params": []
+        },
+        {
+          "name": "ResetPasswordPage",
+          "startLine": 116,
+          "endLine": 132,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "ResetPasswordPage",
+          "line": 116,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "ResetForm",
+          "callee": "useSearchParams",
+          "lineNumber": 9
+        },
+        {
+          "caller": "ResetForm",
+          "callee": "searchParams.get",
+          "lineNumber": 10
+        },
+        {
+          "caller": "ResetForm",
+          "callee": "useRouter",
+          "lineNumber": 11
+        },
+        {
+          "caller": "ResetForm",
+          "callee": "useState",
+          "lineNumber": 13
+        },
+        {
+          "caller": "ResetForm",
+          "callee": "useState",
+          "lineNumber": 14
+        },
+        {
+          "caller": "ResetForm",
+          "callee": "useState",
+          "lineNumber": 15
+        },
+        {
+          "caller": "ResetForm",
+          "callee": "useState",
+          "lineNumber": 16
+        },
+        {
+          "caller": "ResetForm",
+          "callee": "useState",
+          "lineNumber": 17
+        },
+        {
+          "caller": "ResetForm",
+          "callee": "router.push",
+          "lineNumber": 37
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "e.preventDefault",
+          "lineNumber": 47
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 49
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setLoading",
+          "lineNumber": 52
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 53
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "fetch",
+          "lineNumber": 55
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "JSON.stringify",
+          "lineNumber": 58
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setLoading",
+          "lineNumber": 61
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "res.json().catch",
+          "lineNumber": 64
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "res.json",
+          "lineNumber": 64
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 65
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setDone",
+          "lineNumber": 69
+        },
+        {
+          "caller": "ResetForm",
+          "callee": "setPassword",
+          "lineNumber": 82
+        },
+        {
+          "caller": "ResetForm",
+          "callee": "setConfirm",
+          "lineNumber": 96
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/admin/settings/admins/page.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 90,
+      "nonEmptyLines": 80,
+      "functions": [
+        {
+          "name": "AdminsSettingsPage",
+          "startLine": 13,
+          "endLine": 90,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "dynamic",
+          "line": 11,
+          "isDefault": false
+        },
+        {
+          "name": "AdminsSettingsPage",
+          "line": 13,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "AdminsSettingsPage",
+          "callee": "getOrgContext",
+          "lineNumber": 14
+        },
+        {
+          "caller": "AdminsSettingsPage",
+          "callee": "redirect",
+          "lineNumber": 15
+        },
+        {
+          "caller": "AdminsSettingsPage",
+          "callee": "Promise.all",
+          "lineNumber": 18
+        },
+        {
+          "caller": "AdminsSettingsPage",
+          "callee": "db.adminUser.findMany",
+          "lineNumber": 19
+        },
+        {
+          "caller": "AdminsSettingsPage",
+          "callee": "db.organization.findUnique",
+          "lineNumber": 32
+        },
+        {
+          "caller": "AdminsSettingsPage",
+          "callee": "prisma.orgSlugHistory.findMany",
+          "lineNumber": 33
+        },
+        {
+          "caller": "AdminsSettingsPage",
+          "callee": "prisma.event.count",
+          "lineNumber": 38
+        },
+        {
+          "caller": "AdminsSettingsPage",
+          "callee": "slugHistory.map",
+          "lineNumber": 56
+        },
+        {
+          "caller": "AdminsSettingsPage",
+          "callee": "e.createdAt.toISOString",
+          "lineNumber": 56
+        },
+        {
+          "caller": "AdminsSettingsPage",
+          "callee": "admins.map",
+          "lineNumber": 77
+        },
+        {
+          "caller": "AdminsSettingsPage",
+          "callee": "a.createdAt.toISOString",
+          "lineNumber": 83
+        }
+      ],
+      "metrics": {
+        "importCount": 7,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/api/admin/accept-invite/route.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 69,
+      "nonEmptyLines": 59,
+      "functions": [
+        {
+          "name": "POST",
+          "startLine": 14,
+          "endLine": 69,
+          "params": [
+            "req"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "POST",
+          "line": 14,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "POST",
+          "callee": "req.json",
+          "lineNumber": 15
+        },
+        {
+          "caller": "POST",
+          "callee": "schema.safeParse",
+          "lineNumber": 16
+        },
+        {
+          "caller": "POST",
+          "callee": "NextResponse.json",
+          "lineNumber": 18
+        },
+        {
+          "caller": "POST",
+          "callee": "parsed.error.flatten",
+          "lineNumber": 18
+        },
+        {
+          "caller": "POST",
+          "callee": "prisma.adminUser.findUnique",
+          "lineNumber": 23
+        },
+        {
+          "caller": "POST",
+          "callee": "NextResponse.json",
+          "lineNumber": 36
+        },
+        {
+          "caller": "POST",
+          "callee": "NextResponse.json",
+          "lineNumber": 40
+        },
+        {
+          "caller": "POST",
+          "callee": "bcrypt.hash",
+          "lineNumber": 43
+        },
+        {
+          "caller": "POST",
+          "callee": "prisma.adminUser.update",
+          "lineNumber": 45
+        },
+        {
+          "caller": "POST",
+          "callee": "orgBaseUrl",
+          "lineNumber": 56
+        },
+        {
+          "caller": "POST",
+          "callee": "sendNotification({\n      kind: \"admin_welcome\",\n      recipient: { email: admin.email, name: admin.name },\n      data: {\n        adminName: admin.name,\n        organizationName: admin.organization.name,\n        adminUrl,\n      },\n    }).catch",
+          "lineNumber": 57
+        },
+        {
+          "caller": "POST",
+          "callee": "sendNotification",
+          "lineNumber": 57
+        },
+        {
+          "caller": "POST",
+          "callee": "NextResponse.json",
+          "lineNumber": 68
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/api/admin/settings/password/route.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 48,
+      "nonEmptyLines": 39,
+      "functions": [
+        {
+          "name": "POST",
+          "startLine": 13,
+          "endLine": 48,
+          "params": [
+            "req"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "POST",
+          "line": 13,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "POST",
+          "callee": "requireOrgSession",
+          "lineNumber": 14
+        },
+        {
+          "caller": "POST",
+          "callee": "req.json().catch",
+          "lineNumber": 17
+        },
+        {
+          "caller": "POST",
+          "callee": "req.json",
+          "lineNumber": 17
+        },
+        {
+          "caller": "POST",
+          "callee": "schema.safeParse",
+          "lineNumber": 18
+        },
+        {
+          "caller": "POST",
+          "callee": "NextResponse.json",
+          "lineNumber": 20
+        },
+        {
+          "caller": "POST",
+          "callee": "passwordErrors",
+          "lineNumber": 25
+        },
+        {
+          "caller": "POST",
+          "callee": "NextResponse.json",
+          "lineNumber": 27
+        },
+        {
+          "caller": "POST",
+          "callee": "prisma.adminUser.findUnique",
+          "lineNumber": 30
+        },
+        {
+          "caller": "POST",
+          "callee": "NextResponse.json",
+          "lineNumber": 34
+        },
+        {
+          "caller": "POST",
+          "callee": "bcrypt.compare",
+          "lineNumber": 36
+        },
+        {
+          "caller": "POST",
+          "callee": "NextResponse.json",
+          "lineNumber": 38
+        },
+        {
+          "caller": "POST",
+          "callee": "bcrypt.hash",
+          "lineNumber": 41
+        },
+        {
+          "caller": "POST",
+          "callee": "prisma.adminUser.update",
+          "lineNumber": 42
+        },
+        {
+          "caller": "POST",
+          "callee": "NextResponse.json",
+          "lineNumber": 47
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/api/super-admin/profile/route.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 48,
+      "nonEmptyLines": 40,
+      "functions": [
+        {
+          "name": "PATCH",
+          "startLine": 18,
+          "endLine": 48,
+          "params": [
+            "req"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "PATCH",
+          "line": 18,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "PATCH",
+          "callee": "requireSuperAdmin",
+          "lineNumber": 19
+        },
+        {
+          "caller": "PATCH",
+          "callee": "req.json",
+          "lineNumber": 23
+        },
+        {
+          "caller": "PATCH",
+          "callee": "schema.safeParse",
+          "lineNumber": 24
+        },
+        {
+          "caller": "PATCH",
+          "callee": "NextResponse.json",
+          "lineNumber": 25
+        },
+        {
+          "caller": "PATCH",
+          "callee": "parsed.error.flatten",
+          "lineNumber": 25
+        },
+        {
+          "caller": "PATCH",
+          "callee": "prisma.adminUser.findUnique",
+          "lineNumber": 28
+        },
+        {
+          "caller": "PATCH",
+          "callee": "NextResponse.json",
+          "lineNumber": 29
+        },
+        {
+          "caller": "PATCH",
+          "callee": "bcrypt.compare",
+          "lineNumber": 31
+        },
+        {
+          "caller": "PATCH",
+          "callee": "NextResponse.json",
+          "lineNumber": 32
+        },
+        {
+          "caller": "PATCH",
+          "callee": "prisma.adminUser.findUnique",
+          "lineNumber": 35
+        },
+        {
+          "caller": "PATCH",
+          "callee": "NextResponse.json",
+          "lineNumber": 36
+        },
+        {
+          "caller": "PATCH",
+          "callee": "prisma.adminUser.update",
+          "lineNumber": 39
+        },
+        {
+          "caller": "PATCH",
+          "callee": "bcrypt.hash",
+          "lineNumber": 43
+        },
+        {
+          "caller": "PATCH",
+          "callee": "NextResponse.json",
+          "lineNumber": 47
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/PasswordRules.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 20,
+      "nonEmptyLines": 18,
+      "functions": [
+        {
+          "name": "PasswordRules",
+          "startLine": 5,
+          "endLine": 20,
+          "params": [
+            "{ password }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "PasswordRules",
+          "line": 5,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "PasswordRules",
+          "callee": "PASSWORD_RULES.map",
+          "lineNumber": 9
+        },
+        {
+          "caller": "PasswordRules",
+          "callee": "rule.test",
+          "lineNumber": 10
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/admin/AdminsManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 189,
+      "nonEmptyLines": 178,
+      "functions": [
+        {
+          "name": "AdminsManager",
+          "startLine": 15,
+          "endLine": 189,
+          "params": [
+            "{\n  initialAdmins,\n  currentEmail,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "AdminsManager",
+          "line": 15,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "AdminsManager",
+          "callee": "useState",
+          "lineNumber": 22
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "useState",
+          "lineNumber": 23
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "useState",
+          "lineNumber": 24
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "useState",
+          "lineNumber": 25
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "useState",
+          "lineNumber": 26
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "useState",
+          "lineNumber": 27
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "useState",
+          "lineNumber": 28
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "useState",
+          "lineNumber": 29
+        },
+        {
+          "caller": "handleInvite",
+          "callee": "e.preventDefault",
+          "lineNumber": 32
+        },
+        {
+          "caller": "handleInvite",
+          "callee": "setSubmitting",
+          "lineNumber": 33
+        },
+        {
+          "caller": "handleInvite",
+          "callee": "setError",
+          "lineNumber": 34
+        },
+        {
+          "caller": "handleInvite",
+          "callee": "fetch",
+          "lineNumber": 35
+        },
+        {
+          "caller": "handleInvite",
+          "callee": "JSON.stringify",
+          "lineNumber": 38
+        },
+        {
+          "caller": "handleInvite",
+          "callee": "res.json",
+          "lineNumber": 40
+        },
+        {
+          "caller": "handleInvite",
+          "callee": "setSubmitting",
+          "lineNumber": 41
+        },
+        {
+          "caller": "handleInvite",
+          "callee": "setError",
+          "lineNumber": 43
+        },
+        {
+          "caller": "handleInvite",
+          "callee": "setAdmins",
+          "lineNumber": 46
+        },
+        {
+          "caller": "handleInvite",
+          "callee": "setInviteUrl",
+          "lineNumber": 47
+        },
+        {
+          "caller": "handleInvite",
+          "callee": "setForm",
+          "lineNumber": 48
+        },
+        {
+          "caller": "handleInvite",
+          "callee": "setShowForm",
+          "lineNumber": 49
+        },
+        {
+          "caller": "handleRemove",
+          "callee": "setRemoving",
+          "lineNumber": 53
+        },
+        {
+          "caller": "handleRemove",
+          "callee": "fetch",
+          "lineNumber": 54
+        },
+        {
+          "caller": "handleRemove",
+          "callee": "res.json",
+          "lineNumber": 55
+        },
+        {
+          "caller": "handleRemove",
+          "callee": "setRemoving",
+          "lineNumber": 56
+        },
+        {
+          "caller": "handleRemove",
+          "callee": "setError",
+          "lineNumber": 58
+        },
+        {
+          "caller": "handleRemove",
+          "callee": "setAdmins",
+          "lineNumber": 61
+        },
+        {
+          "caller": "handleRemove",
+          "callee": "prev.filter",
+          "lineNumber": 61
+        },
+        {
+          "caller": "copyUrl",
+          "callee": "navigator.clipboard.writeText(url).then",
+          "lineNumber": 65
+        },
+        {
+          "caller": "copyUrl",
+          "callee": "navigator.clipboard.writeText",
+          "lineNumber": 65
+        },
+        {
+          "caller": "copyUrl",
+          "callee": "setCopied",
+          "lineNumber": 66
+        },
+        {
+          "caller": "copyUrl",
+          "callee": "setTimeout",
+          "lineNumber": 67
+        },
+        {
+          "caller": "copyUrl",
+          "callee": "setCopied",
+          "lineNumber": 67
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "setError",
+          "lineNumber": 76
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "copyUrl",
+          "lineNumber": 85
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "setShowForm",
+          "lineNumber": 100
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "setInviteUrl",
+          "lineNumber": 100
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "setError",
+          "lineNumber": 100
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "setForm",
+          "lineNumber": 116
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "setForm",
+          "lineNumber": 127
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "setShowForm",
+          "lineNumber": 143
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "admins.map",
+          "lineNumber": 153
+        },
+        {
+          "caller": "AdminsManager",
+          "callee": "handleRemove",
+          "lineNumber": 175
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/admin/ChangePasswordForm.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 107,
+      "nonEmptyLines": 93,
+      "functions": [
+        {
+          "name": "ChangePasswordForm",
+          "startLine": 7,
+          "endLine": 107,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "ChangePasswordForm",
+          "line": 7,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "ChangePasswordForm",
+          "callee": "useState",
+          "lineNumber": 8
+        },
+        {
+          "caller": "ChangePasswordForm",
+          "callee": "useState",
+          "lineNumber": 9
+        },
+        {
+          "caller": "ChangePasswordForm",
+          "callee": "useState",
+          "lineNumber": 10
+        },
+        {
+          "caller": "ChangePasswordForm",
+          "callee": "useState",
+          "lineNumber": 11
+        },
+        {
+          "caller": "ChangePasswordForm",
+          "callee": "useState",
+          "lineNumber": 12
+        },
+        {
+          "caller": "ChangePasswordForm",
+          "callee": "useState",
+          "lineNumber": 13
+        },
+        {
+          "caller": "ChangePasswordForm",
+          "callee": "PASSWORD_RULES.every",
+          "lineNumber": 15
+        },
+        {
+          "caller": "ChangePasswordForm",
+          "callee": "r.test",
+          "lineNumber": 15
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "e.preventDefault",
+          "lineNumber": 20
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setLoading",
+          "lineNumber": 22
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 23
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "fetch",
+          "lineNumber": 25
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "JSON.stringify",
+          "lineNumber": 28
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "res.json",
+          "lineNumber": 31
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setLoading",
+          "lineNumber": 32
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 35
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setSuccess",
+          "lineNumber": 39
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setCurrent",
+          "lineNumber": 40
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setNext",
+          "lineNumber": 41
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setConfirm",
+          "lineNumber": 42
+        },
+        {
+          "caller": "ChangePasswordForm",
+          "callee": "setCurrent",
+          "lineNumber": 60
+        },
+        {
+          "caller": "ChangePasswordForm",
+          "callee": "setNext",
+          "lineNumber": 71
+        },
+        {
+          "caller": "ChangePasswordForm",
+          "callee": "setConfirm",
+          "lineNumber": 87
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/admin/OrgNameForm.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 60,
+      "nonEmptyLines": 52,
+      "functions": [
+        {
+          "name": "OrgNameForm",
+          "startLine": 5,
+          "endLine": 60,
+          "params": [
+            "{ initialName }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "OrgNameForm",
+          "line": 5,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "OrgNameForm",
+          "callee": "useState",
+          "lineNumber": 6
+        },
+        {
+          "caller": "OrgNameForm",
+          "callee": "useState",
+          "lineNumber": 7
+        },
+        {
+          "caller": "OrgNameForm",
+          "callee": "useState",
+          "lineNumber": 8
+        },
+        {
+          "caller": "OrgNameForm",
+          "callee": "useState",
+          "lineNumber": 9
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "e.preventDefault",
+          "lineNumber": 12
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "name.trim",
+          "lineNumber": 13
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setLoading",
+          "lineNumber": 14
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 15
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setSaved",
+          "lineNumber": 16
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "fetch",
+          "lineNumber": 18
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "JSON.stringify",
+          "lineNumber": 21
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setLoading",
+          "lineNumber": 24
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "res.json().catch",
+          "lineNumber": 27
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "res.json",
+          "lineNumber": 27
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 28
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setSaved",
+          "lineNumber": 32
+        },
+        {
+          "caller": "OrgNameForm",
+          "callee": "setName",
+          "lineNumber": 42
+        },
+        {
+          "caller": "OrgNameForm",
+          "callee": "setSaved",
+          "lineNumber": 42
+        },
+        {
+          "caller": "OrgNameForm",
+          "callee": "name.trim",
+          "lineNumber": 50
+        },
+        {
+          "caller": "OrgNameForm",
+          "callee": "name.trim",
+          "lineNumber": 50
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/admin/OrgSlugForm.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 162,
+      "nonEmptyLines": 144,
+      "functions": [
+        {
+          "name": "OrgSlugForm",
+          "startLine": 7,
+          "endLine": 162,
+          "params": [
+            "{\n  initialSlug,\n  initialHistory,\n  initialHasPublishedEvents,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "OrgSlugForm",
+          "line": 7,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "OrgSlugForm",
+          "callee": "useState",
+          "lineNumber": 16
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "useState",
+          "lineNumber": 17
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "useState",
+          "lineNumber": 18
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "useState",
+          "lineNumber": 19
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "useState",
+          "lineNumber": 20
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "useState",
+          "lineNumber": 21
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "useState",
+          "lineNumber": 22
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "useState",
+          "lineNumber": 23
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "slug.trim().toLowerCase",
+          "lineNumber": 25
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "slug.trim",
+          "lineNumber": 25
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "e.preventDefault",
+          "lineNumber": 29
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setShowConfirm",
+          "lineNumber": 32
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setShowConfirm",
+          "lineNumber": 35
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setSaving",
+          "lineNumber": 36
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 37
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "fetch",
+          "lineNumber": 39
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "JSON.stringify",
+          "lineNumber": 42
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setSaving",
+          "lineNumber": 45
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "res.json().catch",
+          "lineNumber": 47
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "res.json",
+          "lineNumber": 47
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 48
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "res.json",
+          "lineNumber": 52
+        },
+        {
+          "caller": "handleDelete",
+          "callee": "setDeletingSlug",
+          "lineNumber": 59
+        },
+        {
+          "caller": "handleDelete",
+          "callee": "setDeleteErrors",
+          "lineNumber": 60
+        },
+        {
+          "caller": "handleDelete",
+          "callee": "fetch",
+          "lineNumber": 62
+        },
+        {
+          "caller": "handleDelete",
+          "callee": "JSON.stringify",
+          "lineNumber": 65
+        },
+        {
+          "caller": "handleDelete",
+          "callee": "setDeletingSlug",
+          "lineNumber": 68
+        },
+        {
+          "caller": "handleDelete",
+          "callee": "res.json().catch",
+          "lineNumber": 70
+        },
+        {
+          "caller": "handleDelete",
+          "callee": "res.json",
+          "lineNumber": 70
+        },
+        {
+          "caller": "handleDelete",
+          "callee": "setDeleteErrors",
+          "lineNumber": 71
+        },
+        {
+          "caller": "handleDelete",
+          "callee": "setHistory",
+          "lineNumber": 75
+        },
+        {
+          "caller": "handleDelete",
+          "callee": "h.filter",
+          "lineNumber": 75
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "host.split",
+          "lineNumber": 79
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "hostParts.slice(1).join",
+          "lineNumber": 80
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "hostParts.slice",
+          "lineNumber": 80
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "setSlug",
+          "lineNumber": 93
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "setError",
+          "lineNumber": 93
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "setShowConfirm",
+          "lineNumber": 93
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "setShowConfirm",
+          "lineNumber": 124
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "history.map",
+          "lineNumber": 143
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "handleDelete",
+          "lineNumber": 147
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "Object.entries(deleteErrors).map",
+          "lineNumber": 155
+        },
+        {
+          "caller": "OrgSlugForm",
+          "callee": "Object.entries",
+          "lineNumber": 155
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/lib/password.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 19,
+      "nonEmptyLines": 16,
+      "functions": [
+        {
+          "name": "passwordErrors",
+          "startLine": 11,
+          "endLine": 13,
+          "params": [
+            "password"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "PASSWORD_RULES",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "passwordErrors",
+          "line": 11,
+          "isDefault": false
+        },
+        {
+          "name": "passwordSchema",
+          "line": 15,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "passwordErrors",
+          "callee": "PASSWORD_RULES.filter((r) => !r.test(password)).map",
+          "lineNumber": 12
+        },
+        {
+          "caller": "passwordErrors",
+          "callee": "PASSWORD_RULES.filter",
+          "lineNumber": 12
+        },
+        {
+          "caller": "passwordErrors",
+          "callee": "r.test",
+          "lineNumber": 12
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 3,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    }
+  ]
+}

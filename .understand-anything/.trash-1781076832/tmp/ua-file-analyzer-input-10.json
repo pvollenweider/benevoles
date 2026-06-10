@@ -1,0 +1,15 @@
+{
+  "projectRoot": "/Users/pol/Desktop/benevoles",
+  "batchFiles": [
+    {"path": ".dockerignore", "language": "unknown", "sizeLines": 10, "fileCategory": "infra"},
+    {"path": "docker-compose.dev.yml", "language": "yaml", "sizeLines": 44, "fileCategory": "infra"},
+    {"path": "docker-compose.yml", "language": "yaml", "sizeLines": 43, "fileCategory": "infra"},
+    {"path": "Dockerfile", "language": "dockerfile", "sizeLines": 78, "fileCategory": "infra"}
+  ],
+  "batchImportData": {
+    ".dockerignore": [],
+    "docker-compose.dev.yml": [],
+    "docker-compose.yml": [],
+    "Dockerfile": []
+  }
+}

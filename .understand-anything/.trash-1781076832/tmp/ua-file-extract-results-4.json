@@ -1,0 +1,1264 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 15,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "src/app/admin/layout.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 35,
+      "nonEmptyLines": 31,
+      "functions": [
+        {
+          "name": "AdminLayout",
+          "startLine": 5,
+          "endLine": 35,
+          "params": [
+            "{ children }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "AdminLayout",
+          "line": 5,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "AdminLayout",
+          "callee": "auth",
+          "lineNumber": 6
+        },
+        {
+          "caller": "AdminLayout",
+          "callee": "prisma.organization.findFirst",
+          "lineNumber": 15
+        },
+        {
+          "caller": "AdminLayout",
+          "callee": "prisma.organization.findUnique",
+          "lineNumber": 22
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/api/auth/[...nextauth]/route.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 3,
+      "nonEmptyLines": 2,
+      "exports": [
+        {
+          "name": "{ GET, POST }",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/super-admin/layout.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 27,
+      "nonEmptyLines": 23,
+      "functions": [
+        {
+          "name": "SuperAdminLayout",
+          "startLine": 6,
+          "endLine": 27,
+          "params": [
+            "{ children }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "SuperAdminLayout",
+          "line": 6,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "SuperAdminLayout",
+          "callee": "auth",
+          "lineNumber": 7
+        },
+        {
+          "caller": "SuperAdminLayout",
+          "callee": "cookies",
+          "lineNumber": 13
+        },
+        {
+          "caller": "SuperAdminLayout",
+          "callee": "cookieStore.get",
+          "lineNumber": 14
+        },
+        {
+          "caller": "SuperAdminLayout",
+          "callee": "prisma.organization.findUnique",
+          "lineNumber": 17
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/super-admin/organizations/[slug]/page.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 57,
+      "nonEmptyLines": 51,
+      "functions": [
+        {
+          "name": "OrgDetailPage",
+          "startLine": 8,
+          "endLine": 57,
+          "params": [
+            "{ params }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "dynamic",
+          "line": 6,
+          "isDefault": false
+        },
+        {
+          "name": "OrgDetailPage",
+          "line": 8,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "OrgDetailPage",
+          "callee": "auth",
+          "lineNumber": 9
+        },
+        {
+          "caller": "OrgDetailPage",
+          "callee": "redirect",
+          "lineNumber": 10
+        },
+        {
+          "caller": "OrgDetailPage",
+          "callee": "redirect",
+          "lineNumber": 11
+        },
+        {
+          "caller": "OrgDetailPage",
+          "callee": "prisma.organization.findUnique",
+          "lineNumber": 15
+        },
+        {
+          "caller": "OrgDetailPage",
+          "callee": "notFound",
+          "lineNumber": 45
+        },
+        {
+          "caller": "OrgDetailPage",
+          "callee": "org.createdAt.toISOString",
+          "lineNumber": 51
+        },
+        {
+          "caller": "OrgDetailPage",
+          "callee": "org.updatedAt.toISOString",
+          "lineNumber": 52
+        },
+        {
+          "caller": "OrgDetailPage",
+          "callee": "org.admins.map",
+          "lineNumber": 53
+        },
+        {
+          "caller": "OrgDetailPage",
+          "callee": "a.createdAt.toISOString",
+          "lineNumber": 53
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/super-admin/organizations/new/page.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 13,
+      "nonEmptyLines": 10,
+      "functions": [
+        {
+          "name": "NewOrgPage",
+          "startLine": 7,
+          "endLine": 13,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "dynamic",
+          "line": 5,
+          "isDefault": false
+        },
+        {
+          "name": "NewOrgPage",
+          "line": 7,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "NewOrgPage",
+          "callee": "auth",
+          "lineNumber": 8
+        },
+        {
+          "caller": "NewOrgPage",
+          "callee": "redirect",
+          "lineNumber": 9
+        },
+        {
+          "caller": "NewOrgPage",
+          "callee": "redirect",
+          "lineNumber": 10
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/super-admin/organizations/page.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 39,
+      "nonEmptyLines": 35,
+      "functions": [
+        {
+          "name": "SuperAdminOrgsPage",
+          "startLine": 8,
+          "endLine": 39,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "dynamic",
+          "line": 6,
+          "isDefault": false
+        },
+        {
+          "name": "SuperAdminOrgsPage",
+          "line": 8,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "SuperAdminOrgsPage",
+          "callee": "auth",
+          "lineNumber": 9
+        },
+        {
+          "caller": "SuperAdminOrgsPage",
+          "callee": "redirect",
+          "lineNumber": 10
+        },
+        {
+          "caller": "SuperAdminOrgsPage",
+          "callee": "redirect",
+          "lineNumber": 11
+        },
+        {
+          "caller": "SuperAdminOrgsPage",
+          "callee": "prisma.organization.findMany",
+          "lineNumber": 13
+        },
+        {
+          "caller": "SuperAdminOrgsPage",
+          "callee": "orgs.map",
+          "lineNumber": 33
+        },
+        {
+          "caller": "SuperAdminOrgsPage",
+          "callee": "o.createdAt.toISOString",
+          "lineNumber": 35
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/super-admin/profile/ProfileForm.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 118,
+      "nonEmptyLines": 102,
+      "functions": [
+        {
+          "name": "ProfileForm",
+          "startLine": 6,
+          "endLine": 118,
+          "params": [
+            "{ currentEmail }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ProfileForm",
+          "line": 6,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "ProfileForm",
+          "callee": "useState",
+          "lineNumber": 7
+        },
+        {
+          "caller": "ProfileForm",
+          "callee": "useState",
+          "lineNumber": 8
+        },
+        {
+          "caller": "ProfileForm",
+          "callee": "useState",
+          "lineNumber": 9
+        },
+        {
+          "caller": "ProfileForm",
+          "callee": "useState",
+          "lineNumber": 10
+        },
+        {
+          "caller": "ProfileForm",
+          "callee": "useState",
+          "lineNumber": 11
+        },
+        {
+          "caller": "ProfileForm",
+          "callee": "useState",
+          "lineNumber": 12
+        },
+        {
+          "caller": "ProfileForm",
+          "callee": "useState",
+          "lineNumber": 13
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "e.preventDefault",
+          "lineNumber": 16
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 17
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setSuccess",
+          "lineNumber": 18
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 21
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 30
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setLoading",
+          "lineNumber": 34
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "fetch",
+          "lineNumber": 35
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "JSON.stringify",
+          "lineNumber": 38
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setLoading",
+          "lineNumber": 40
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setSuccess",
+          "lineNumber": 43
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setCurrentPassword",
+          "lineNumber": 44
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setNewPassword",
+          "lineNumber": 45
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setConfirm",
+          "lineNumber": 46
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "res.json",
+          "lineNumber": 48
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 49
+        },
+        {
+          "caller": "ProfileForm",
+          "callee": "setEmail",
+          "lineNumber": 60
+        },
+        {
+          "caller": "ProfileForm",
+          "callee": "setNewPassword",
+          "lineNumber": 72
+        },
+        {
+          "caller": "ProfileForm",
+          "callee": "setConfirm",
+          "lineNumber": 85
+        },
+        {
+          "caller": "ProfileForm",
+          "callee": "setCurrentPassword",
+          "lineNumber": 100
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/super-admin/profile/page.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 15,
+      "nonEmptyLines": 13,
+      "functions": [
+        {
+          "name": "SuperAdminProfilePage",
+          "startLine": 5,
+          "endLine": 15,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "SuperAdminProfilePage",
+          "line": 5,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "SuperAdminProfilePage",
+          "callee": "auth",
+          "lineNumber": 6
+        },
+        {
+          "caller": "SuperAdminProfilePage",
+          "callee": "redirect",
+          "lineNumber": 7
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/auth.config.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 37,
+      "nonEmptyLines": 35,
+      "exports": [
+        {
+          "name": "authConfig",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "authorized",
+          "callee": "nextUrl.pathname.startsWith",
+          "lineNumber": 10
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/auth.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 37,
+      "nonEmptyLines": 32,
+      "exports": [
+        {
+          "name": "{ handlers, auth, signIn, signOut }",
+          "line": 7,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/admin/AdminNav.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 71,
+      "nonEmptyLines": 68,
+      "functions": [
+        {
+          "name": "AdminNav",
+          "startLine": 7,
+          "endLine": 71,
+          "params": [
+            "{ userName, role, orgName }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "AdminNav",
+          "line": 7,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "AdminNav",
+          "callee": "usePathname",
+          "lineNumber": 8
+        },
+        {
+          "caller": "AdminNav",
+          "callee": "pathname.startsWith",
+          "lineNumber": 20
+        },
+        {
+          "caller": "AdminNav",
+          "callee": "pathname.startsWith",
+          "lineNumber": 26
+        },
+        {
+          "caller": "AdminNav",
+          "callee": "pathname.startsWith",
+          "lineNumber": 32
+        },
+        {
+          "caller": "AdminNav",
+          "callee": "pathname.startsWith",
+          "lineNumber": 38
+        },
+        {
+          "caller": "AdminNav",
+          "callee": "pathname.startsWith",
+          "lineNumber": 47
+        },
+        {
+          "caller": "AdminNav",
+          "callee": "signOut",
+          "lineNumber": 62
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/super-admin/NewOrgForm.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 220,
+      "nonEmptyLines": 204,
+      "functions": [
+        {
+          "name": "NewOrgForm",
+          "startLine": 6,
+          "endLine": 187,
+          "params": []
+        },
+        {
+          "name": "Field",
+          "startLine": 189,
+          "endLine": 220,
+          "params": [
+            "{\n  label,\n  value,\n  onChange,\n  type = \"text\",\n  required = false,\n  placeholder,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "NewOrgForm",
+          "line": 6,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "NewOrgForm",
+          "callee": "useRouter",
+          "lineNumber": 7
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "useState",
+          "lineNumber": 8
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "useState",
+          "lineNumber": 9
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "useState",
+          "lineNumber": 10
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "useState",
+          "lineNumber": 11
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "useState",
+          "lineNumber": 12
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "useState",
+          "lineNumber": 13
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "useState",
+          "lineNumber": 14
+        },
+        {
+          "caller": "submit",
+          "callee": "e.preventDefault",
+          "lineNumber": 17
+        },
+        {
+          "caller": "submit",
+          "callee": "setSubmitting",
+          "lineNumber": 18
+        },
+        {
+          "caller": "submit",
+          "callee": "setError",
+          "lineNumber": 19
+        },
+        {
+          "caller": "submit",
+          "callee": "fetch",
+          "lineNumber": 21
+        },
+        {
+          "caller": "submit",
+          "callee": "JSON.stringify",
+          "lineNumber": 24
+        },
+        {
+          "caller": "submit",
+          "callee": "setSubmitting",
+          "lineNumber": 27
+        },
+        {
+          "caller": "submit",
+          "callee": "res.json().catch",
+          "lineNumber": 30
+        },
+        {
+          "caller": "submit",
+          "callee": "res.json",
+          "lineNumber": 30
+        },
+        {
+          "caller": "submit",
+          "callee": "setError",
+          "lineNumber": 32
+        },
+        {
+          "caller": "submit",
+          "callee": "setError",
+          "lineNumber": 34
+        },
+        {
+          "caller": "submit",
+          "callee": "res.json",
+          "lineNumber": 39
+        },
+        {
+          "caller": "submit",
+          "callee": "setResult",
+          "lineNumber": 40
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "(e.target as HTMLInputElement).select",
+          "lineNumber": 65
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "navigator.clipboard.writeText",
+          "lineNumber": 69
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "setInviteSent",
+          "lineNumber": 85
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "fetch",
+          "lineNumber": 86
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "setInviteSent",
+          "lineNumber": 87
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "router.push",
+          "lineNumber": 99
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "setResult",
+          "lineNumber": 106
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "setName",
+          "lineNumber": 107
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "setAdminEmail",
+          "lineNumber": 108
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "setAdminName",
+          "lineNumber": 109
+        },
+        {
+          "caller": "NewOrgForm",
+          "callee": "router.push",
+          "lineNumber": 171
+        },
+        {
+          "caller": "Field",
+          "callee": "onChange",
+          "lineNumber": 213
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/super-admin/OrgDetail.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 255,
+      "nonEmptyLines": 237,
+      "functions": [
+        {
+          "name": "OrgDetail",
+          "startLine": 33,
+          "endLine": 246,
+          "params": [
+            "{ org }"
+          ]
+        },
+        {
+          "name": "StatCard",
+          "startLine": 248,
+          "endLine": 255,
+          "params": [
+            "{ label, value }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "OrgDetail",
+          "line": 33,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "OrgDetail",
+          "callee": "useRouter",
+          "lineNumber": 34
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "useTransition",
+          "lineNumber": 35
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "useState",
+          "lineNumber": 36
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "useState",
+          "lineNumber": 37
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "useState",
+          "lineNumber": 38
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "useState",
+          "lineNumber": 39
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "useState",
+          "lineNumber": 40
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "useState",
+          "lineNumber": 41
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "useState",
+          "lineNumber": 42
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "useState",
+          "lineNumber": 43
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "useState",
+          "lineNumber": 44
+        },
+        {
+          "caller": "refresh",
+          "callee": "startTransition",
+          "lineNumber": 47
+        },
+        {
+          "caller": "refresh",
+          "callee": "router.refresh",
+          "lineNumber": 47
+        },
+        {
+          "caller": "patch",
+          "callee": "fetch",
+          "lineNumber": 51
+        },
+        {
+          "caller": "patch",
+          "callee": "JSON.stringify",
+          "lineNumber": 54
+        },
+        {
+          "caller": "toggleActive",
+          "callee": "confirm",
+          "lineNumber": 60
+        },
+        {
+          "caller": "toggleActive",
+          "callee": "setToggling",
+          "lineNumber": 61
+        },
+        {
+          "caller": "toggleActive",
+          "callee": "patch",
+          "lineNumber": 62
+        },
+        {
+          "caller": "toggleActive",
+          "callee": "setToggling",
+          "lineNumber": 63
+        },
+        {
+          "caller": "toggleActive",
+          "callee": "refresh",
+          "lineNumber": 64
+        },
+        {
+          "caller": "saveName",
+          "callee": "e.preventDefault",
+          "lineNumber": 68
+        },
+        {
+          "caller": "saveName",
+          "callee": "name.trim",
+          "lineNumber": 69
+        },
+        {
+          "caller": "saveName",
+          "callee": "setSavingName",
+          "lineNumber": 71
+        },
+        {
+          "caller": "saveName",
+          "callee": "setNameError",
+          "lineNumber": 72
+        },
+        {
+          "caller": "saveName",
+          "callee": "setNameSaved",
+          "lineNumber": 73
+        },
+        {
+          "caller": "saveName",
+          "callee": "patch",
+          "lineNumber": 74
+        },
+        {
+          "caller": "saveName",
+          "callee": "setSavingName",
+          "lineNumber": 75
+        },
+        {
+          "caller": "saveName",
+          "callee": "res.json().catch",
+          "lineNumber": 77
+        },
+        {
+          "caller": "saveName",
+          "callee": "res.json",
+          "lineNumber": 77
+        },
+        {
+          "caller": "saveName",
+          "callee": "setNameError",
+          "lineNumber": 78
+        },
+        {
+          "caller": "saveName",
+          "callee": "setNameSaved",
+          "lineNumber": 81
+        },
+        {
+          "caller": "saveName",
+          "callee": "refresh",
+          "lineNumber": 82
+        },
+        {
+          "caller": "saveSlug",
+          "callee": "e.preventDefault",
+          "lineNumber": 86
+        },
+        {
+          "caller": "saveSlug",
+          "callee": "slug.trim().toLowerCase",
+          "lineNumber": 87
+        },
+        {
+          "caller": "saveSlug",
+          "callee": "slug.trim",
+          "lineNumber": 87
+        },
+        {
+          "caller": "saveSlug",
+          "callee": "setSavingSlug",
+          "lineNumber": 89
+        },
+        {
+          "caller": "saveSlug",
+          "callee": "setSlugError",
+          "lineNumber": 90
+        },
+        {
+          "caller": "saveSlug",
+          "callee": "setSlugSaved",
+          "lineNumber": 91
+        },
+        {
+          "caller": "saveSlug",
+          "callee": "patch",
+          "lineNumber": 92
+        },
+        {
+          "caller": "saveSlug",
+          "callee": "setSavingSlug",
+          "lineNumber": 93
+        },
+        {
+          "caller": "saveSlug",
+          "callee": "res.json().catch",
+          "lineNumber": 95
+        },
+        {
+          "caller": "saveSlug",
+          "callee": "res.json",
+          "lineNumber": 95
+        },
+        {
+          "caller": "saveSlug",
+          "callee": "setSlugError",
+          "lineNumber": 96
+        },
+        {
+          "caller": "saveSlug",
+          "callee": "res.json",
+          "lineNumber": 99
+        },
+        {
+          "caller": "saveSlug",
+          "callee": "setSlugSaved",
+          "lineNumber": 100
+        },
+        {
+          "caller": "saveSlug",
+          "callee": "router.push",
+          "lineNumber": 101
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "new Date(org.createdAt).toLocaleDateString",
+          "lineNumber": 104
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "setName",
+          "lineNumber": 165
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "setNameSaved",
+          "lineNumber": 165
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "name.trim",
+          "lineNumber": 173
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "name.trim",
+          "lineNumber": 173
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "setSlug",
+          "lineNumber": 188
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "setSlugSaved",
+          "lineNumber": 188
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "slug.trim().toLowerCase",
+          "lineNumber": 197
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "slug.trim",
+          "lineNumber": 197
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "slug.trim",
+          "lineNumber": 197
+        },
+        {
+          "caller": "OrgDetail",
+          "callee": "org.admins.map",
+          "lineNumber": 225
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/super-admin/OrgsManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 122,
+      "nonEmptyLines": 113,
+      "functions": [
+        {
+          "name": "OrgsManager",
+          "startLine": 26,
+          "endLine": 122,
+          "params": [
+            "{ initialOrgs }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "OrgsManager",
+          "line": 26,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "OrgsManager",
+          "callee": "useRouter",
+          "lineNumber": 27
+        },
+        {
+          "caller": "OrgsManager",
+          "callee": "useTransition",
+          "lineNumber": 29
+        },
+        {
+          "caller": "refresh",
+          "callee": "startTransition",
+          "lineNumber": 32
+        },
+        {
+          "caller": "refresh",
+          "callee": "router.refresh",
+          "lineNumber": 32
+        },
+        {
+          "caller": "toggleActive",
+          "callee": "confirm",
+          "lineNumber": 37
+        },
+        {
+          "caller": "toggleActive",
+          "callee": "fetch",
+          "lineNumber": 38
+        },
+        {
+          "caller": "toggleActive",
+          "callee": "JSON.stringify",
+          "lineNumber": 41
+        },
+        {
+          "caller": "toggleActive",
+          "callee": "refresh",
+          "lineNumber": 43
+        },
+        {
+          "caller": "OrgsManager",
+          "callee": "orgs.map",
+          "lineNumber": 81
+        },
+        {
+          "caller": "OrgsManager",
+          "callee": "toggleActive",
+          "lineNumber": 107
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/middleware.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 53,
+      "nonEmptyLines": 44,
+      "exports": [
+        {
+          "name": "config",
+          "line": 51,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    }
+  ]
+}

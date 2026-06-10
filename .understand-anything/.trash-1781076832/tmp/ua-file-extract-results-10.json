@@ -1,0 +1,301 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 4,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": ".dockerignore",
+      "language": "unknown",
+      "fileCategory": "infra",
+      "totalLines": 10,
+      "nonEmptyLines": 10,
+      "metrics": {}
+    },
+    {
+      "path": "docker-compose.dev.yml",
+      "language": "yaml",
+      "fileCategory": "infra",
+      "totalLines": 44,
+      "nonEmptyLines": 41,
+      "sections": [
+        {
+          "heading": "services",
+          "level": 1,
+          "line": 11
+        },
+        {
+          "heading": "volumes",
+          "level": 1,
+          "line": 43
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 2
+      }
+    },
+    {
+      "path": "docker-compose.yml",
+      "language": "yaml",
+      "fileCategory": "infra",
+      "totalLines": 43,
+      "nonEmptyLines": 41,
+      "sections": [
+        {
+          "heading": "services",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "volumes",
+          "level": 1,
+          "line": 42
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 2
+      }
+    },
+    {
+      "path": "Dockerfile",
+      "language": "dockerfile",
+      "fileCategory": "infra",
+      "totalLines": 78,
+      "nonEmptyLines": 63,
+      "services": [
+        {
+          "name": "deps",
+          "image": "node:26-alpine",
+          "ports": [],
+          "startLine": 4,
+          "endLine": 9
+        },
+        {
+          "name": "prisma-cli",
+          "image": "node:26-alpine",
+          "ports": [],
+          "startLine": 10,
+          "endLine": 18
+        },
+        {
+          "name": "builder",
+          "image": "node:26-alpine",
+          "ports": [],
+          "startLine": 19,
+          "endLine": 38
+        },
+        {
+          "name": "runner",
+          "image": "node:26-alpine",
+          "ports": [
+            3000
+          ],
+          "startLine": 39,
+          "endLine": 79
+        }
+      ],
+      "steps": [
+        {
+          "name": "FROM node:26-alpine AS deps",
+          "startLine": 4,
+          "endLine": 4
+        },
+        {
+          "name": "WORKDIR /app",
+          "startLine": 5,
+          "endLine": 5
+        },
+        {
+          "name": "COPY package.json package-lock.json ./",
+          "startLine": 6,
+          "endLine": 6
+        },
+        {
+          "name": "RUN npm ci --legacy-peer-deps",
+          "startLine": 7,
+          "endLine": 7
+        },
+        {
+          "name": "FROM node:26-alpine AS prisma-cli",
+          "startLine": 10,
+          "endLine": 10
+        },
+        {
+          "name": "WORKDIR /prisma",
+          "startLine": 11,
+          "endLine": 11
+        },
+        {
+          "name": "RUN npm install prisma@7.8.0 \\",
+          "startLine": 12,
+          "endLine": 12
+        },
+        {
+          "name": "FROM node:26-alpine AS builder",
+          "startLine": 19,
+          "endLine": 19
+        },
+        {
+          "name": "WORKDIR /app",
+          "startLine": 20,
+          "endLine": 20
+        },
+        {
+          "name": "COPY --from=deps /app/node_modules ./node_modules",
+          "startLine": 22,
+          "endLine": 22
+        },
+        {
+          "name": "COPY . .",
+          "startLine": 23,
+          "endLine": 23
+        },
+        {
+          "name": "ENV NEXT_TELEMETRY_DISABLED=1",
+          "startLine": 25,
+          "endLine": 25
+        },
+        {
+          "name": "ENV DATABASE_URL=postgresql://build:build@localhost/build",
+          "startLine": 26,
+          "endLine": 26
+        },
+        {
+          "name": "ENV AUTH_SECRET=build-placeholder-secret-32-characters-min",
+          "startLine": 27,
+          "endLine": 27
+        },
+        {
+          "name": "ARG NEXT_PUBLIC_SENTRY_DSN",
+          "startLine": 30,
+          "endLine": 30
+        },
+        {
+          "name": "ENV NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN",
+          "startLine": 31,
+          "endLine": 31
+        },
+        {
+          "name": "RUN --mount=type=secret,id=sentry_auth_token,env=SENTRY_AUTH_TOK",
+          "startLine": 35,
+          "endLine": 35
+        },
+        {
+          "name": "FROM node:26-alpine AS runner",
+          "startLine": 39,
+          "endLine": 39
+        },
+        {
+          "name": "WORKDIR /app",
+          "startLine": 40,
+          "endLine": 40
+        },
+        {
+          "name": "ENV NODE_ENV=production",
+          "startLine": 42,
+          "endLine": 42
+        },
+        {
+          "name": "ENV NEXT_TELEMETRY_DISABLED=1",
+          "startLine": 43,
+          "endLine": 43
+        },
+        {
+          "name": "ENV PORT=3000",
+          "startLine": 44,
+          "endLine": 44
+        },
+        {
+          "name": "ENV HOSTNAME=0.0.0.0",
+          "startLine": 45,
+          "endLine": 45
+        },
+        {
+          "name": "RUN addgroup --system --gid 1001 nodejs \\",
+          "startLine": 47,
+          "endLine": 47
+        },
+        {
+          "name": "COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone .",
+          "startLine": 51,
+          "endLine": 51
+        },
+        {
+          "name": "COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.ne",
+          "startLine": 52,
+          "endLine": 52
+        },
+        {
+          "name": "COPY --from=builder --chown=nextjs:nodejs /app/public ./public",
+          "startLine": 53,
+          "endLine": 53
+        },
+        {
+          "name": "COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma",
+          "startLine": 56,
+          "endLine": 56
+        },
+        {
+          "name": "COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts .",
+          "startLine": 57,
+          "endLine": 57
+        },
+        {
+          "name": "COPY --from=prisma-cli --chown=nextjs:nodejs /prisma/node_modules",
+          "startLine": 62,
+          "endLine": 62
+        },
+        {
+          "name": "RUN rm -f ./node_modules/.bin/prisma \\",
+          "startLine": 65,
+          "endLine": 65
+        },
+        {
+          "name": "COPY --chown=nextjs:nodejs docker-entrypoint.sh /usr/local/bin/",
+          "startLine": 71,
+          "endLine": 71
+        },
+        {
+          "name": "RUN chmod +x /usr/local/bin/docker-entrypoint.sh",
+          "startLine": 72,
+          "endLine": 72
+        },
+        {
+          "name": "USER nextjs",
+          "startLine": 74,
+          "endLine": 74
+        },
+        {
+          "name": "EXPOSE 3000",
+          "startLine": 75,
+          "endLine": 75
+        },
+        {
+          "name": "ENTRYPOINT [\"docker-entrypoint.sh\"]",
+          "startLine": 77,
+          "endLine": 77
+        },
+        {
+          "name": "CMD [\"node\", \"server.js\"]",
+          "startLine": 78,
+          "endLine": 78
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "serviceCount": 4,
+        "stepCount": 37
+      }
+    }
+  ]
+}

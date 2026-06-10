@@ -1,0 +1,272 @@
+{
+  "batchIndex": 15,
+  "nodes": [
+    {
+      "id": "config:.github/dependabot.yml",
+      "type": "config",
+      "label": "dependabot.yml",
+      "path": ".github/dependabot.yml",
+      "language": "yaml",
+      "fileCategory": "config",
+      "totalLines": 30,
+      "tags": ["dependabot", "config"],
+      "description": "Dependabot configuration for automated dependency updates"
+    },
+    {
+      "id": "document:.github/ISSUE_TEMPLATE/bug_report.md",
+      "type": "document",
+      "label": "bug_report.md",
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 23,
+      "tags": ["docs", "github", "issue-template"],
+      "description": "GitHub issue template for bug reports with sections for current/expected behavior, reproduction steps, environment, and context"
+    },
+    {
+      "id": "document:.github/ISSUE_TEMPLATE/feature_request.md",
+      "type": "document",
+      "label": "feature_request.md",
+      "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 17,
+      "tags": ["docs", "github", "issue-template"],
+      "description": "GitHub issue template for feature requests with problem, proposed solution, alternatives, and context sections"
+    },
+    {
+      "id": "document:.github/pull_request_template.md",
+      "type": "document",
+      "label": "pull_request_template.md",
+      "path": ".github/pull_request_template.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 17,
+      "tags": ["docs", "github", "pr-template"],
+      "description": "GitHub pull request template with summary, change type, tests, and related issues sections"
+    },
+    {
+      "id": "file:.husky/pre-commit",
+      "type": "file",
+      "label": "pre-commit hook",
+      "path": ".husky/pre-commit",
+      "language": "unknown",
+      "fileCategory": "code",
+      "totalLines": 2,
+      "tags": ["git-hook", "lint-staged"],
+      "description": "Husky pre-commit hook running lint-staged before each commit"
+    },
+    {
+      "id": "file:.nvmrc",
+      "type": "file",
+      "label": ".nvmrc",
+      "path": ".nvmrc",
+      "language": "unknown",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "tags": ["node", "nvm"],
+      "description": "Node.js version specifier for nvm (Node 22)"
+    },
+    {
+      "id": "file:eslint.config.mjs",
+      "type": "file",
+      "label": "eslint.config.mjs",
+      "path": "eslint.config.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 24,
+      "tags": ["eslint", "config"],
+      "description": "ESLint flat config for the Next.js TypeScript project"
+    },
+    {
+      "id": "file:gandi-webhook/gandiclient.go",
+      "type": "file",
+      "label": "gandiclient.go",
+      "path": "gandi-webhook/gandiclient.go",
+      "language": "go",
+      "fileCategory": "code",
+      "totalLines": 184,
+      "tags": ["go", "gandi", "dns", "webhook"],
+      "symbols": ["GandiClient", "GandiRRSet", "GandiRRSetValues", "NewGandiClient", "HasTxtRecord", "CreateTxtRecord", "UpdateTxtRecord", "DeleteTxtRecord"],
+      "description": "Go client for the Gandi LiveDNS API providing TXT DNS record CRUD operations used by the cert-manager ACME webhook solver"
+    },
+    {
+      "id": "config:gandi-webhook/go.mod",
+      "type": "config",
+      "label": "go.mod",
+      "path": "gandi-webhook/go.mod",
+      "language": "mod",
+      "fileCategory": "config",
+      "totalLines": 106,
+      "tags": ["go", "modules"],
+      "description": "Go module definition and dependency manifest for the gandi-webhook service"
+    },
+    {
+      "id": "config:gandi-webhook/go.sum",
+      "type": "config",
+      "label": "go.sum",
+      "path": "gandi-webhook/go.sum",
+      "language": "sum",
+      "fileCategory": "config",
+      "totalLines": 336,
+      "tags": ["go", "modules"],
+      "description": "Go module checksum file for dependency verification"
+    },
+    {
+      "id": "file:gandi-webhook/main.go",
+      "type": "file",
+      "label": "main.go",
+      "path": "gandi-webhook/main.go",
+      "language": "go",
+      "fileCategory": "code",
+      "totalLines": 226,
+      "tags": ["go", "gandi", "dns", "webhook", "cert-manager"],
+      "symbols": ["Name", "Present", "CleanUp", "Initialize"],
+      "description": "Go main entry point for the cert-manager Gandi DNS01 ACME webhook solver, implementing the DNS provider interface (Present/CleanUp) and reading API keys from Kubernetes secrets"
+    },
+    {
+      "id": "file:instrumentation-client.ts",
+      "type": "file",
+      "label": "instrumentation-client.ts",
+      "path": "instrumentation-client.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 17,
+      "tags": ["sentry", "instrumentation"],
+      "symbols": ["onRouterTransitionStart"],
+      "description": "Next.js client-side instrumentation hook exporting onRouterTransitionStart for Sentry router transition tracking"
+    },
+    {
+      "id": "file:instrumentation.ts",
+      "type": "file",
+      "label": "instrumentation.ts",
+      "path": "instrumentation.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 13,
+      "tags": ["sentry", "instrumentation"],
+      "symbols": ["register", "onRequestError"],
+      "description": "Next.js root instrumentation file initializing Sentry for Node.js/Edge runtimes via conditional dynamic imports"
+    },
+    {
+      "id": "file:next.config.ts",
+      "type": "file",
+      "label": "next.config.ts",
+      "path": "next.config.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 18,
+      "tags": ["nextjs", "config"],
+      "description": "Next.js configuration file with Sentry integration and custom settings"
+    },
+    {
+      "id": "file:postcss.config.mjs",
+      "type": "file",
+      "label": "postcss.config.mjs",
+      "path": "postcss.config.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 7,
+      "tags": ["postcss", "tailwind", "config"],
+      "description": "PostCSS configuration enabling Tailwind CSS"
+    },
+    {
+      "id": "file:prisma.config.ts",
+      "type": "file",
+      "label": "prisma.config.ts",
+      "path": "prisma.config.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 12,
+      "tags": ["prisma", "config"],
+      "description": "Prisma configuration file (Prisma 7 config format)"
+    },
+    {
+      "id": "table:prisma/migrations/0001_init/migration.sql:Organization",
+      "type": "table",
+      "label": "Migration 0001 — init",
+      "path": "prisma/migrations/0001_init/migration.sql",
+      "language": "sql",
+      "fileCategory": "data",
+      "totalLines": 235,
+      "tags": ["migration", "sql", "database"],
+      "symbols": ["Organization", "OrgSlugHistory", "Event", "Shift", "Volunteer", "Registration", "Member", "MemberInvite", "AdminUser"],
+      "description": "Initial database migration creating all core tables: Organization, OrgSlugHistory, Event, Shift, Volunteer, Registration, Member, MemberInvite, AdminUser with their indexes"
+    },
+    {
+      "id": "table:prisma/migrations/0002_add_volunteer_charter/migration.sql:volunteer_charter",
+      "type": "table",
+      "label": "Migration 0002 — volunteer charter",
+      "path": "prisma/migrations/0002_add_volunteer_charter/migration.sql",
+      "language": "sql",
+      "fileCategory": "data",
+      "totalLines": 1,
+      "tags": ["migration", "sql"],
+      "description": "Migration adding volunteerCharter column to Organization"
+    },
+    {
+      "id": "table:prisma/migrations/0003_waitlist/migration.sql:waitlist",
+      "type": "table",
+      "label": "Migration 0003 — waitlist",
+      "path": "prisma/migrations/0003_waitlist/migration.sql",
+      "language": "sql",
+      "fileCategory": "data",
+      "totalLines": 6,
+      "tags": ["migration", "sql"],
+      "description": "Migration adding waitlist support: waitingPosition column and indexes on Registration"
+    },
+    {
+      "id": "table:prisma/migrations/0004_push_subscriptions/migration.sql:PushSubscription",
+      "type": "table",
+      "label": "Migration 0004 — push subscriptions",
+      "path": "prisma/migrations/0004_push_subscriptions/migration.sql",
+      "language": "sql",
+      "fileCategory": "data",
+      "totalLines": 12,
+      "tags": ["migration", "sql", "push"],
+      "symbols": ["PushSubscription"],
+      "description": "Migration creating the PushSubscription table for Web Push notification endpoints"
+    },
+    {
+      "id": "table:prisma/migrations/0005_org_insurance/migration.sql:org_insurance",
+      "type": "table",
+      "label": "Migration 0005 — org insurance",
+      "path": "prisma/migrations/0005_org_insurance/migration.sql",
+      "language": "sql",
+      "fileCategory": "data",
+      "totalLines": 1,
+      "tags": ["migration", "sql"],
+      "description": "Migration adding insurance-related column to Organization"
+    },
+    {
+      "id": "table:prisma/migrations/0006_merge_volunteer_member/migration.sql:merge",
+      "type": "table",
+      "label": "Migration 0006 — merge volunteer/member",
+      "path": "prisma/migrations/0006_merge_volunteer_member/migration.sql",
+      "language": "sql",
+      "fileCategory": "data",
+      "totalLines": 201,
+      "tags": ["migration", "sql"],
+      "description": "Large migration merging Volunteer and Member into a single model with organizationId scoping"
+    },
+    {
+      "id": "config:prisma/migrations/migration_lock.toml",
+      "type": "config",
+      "label": "migration_lock.toml",
+      "path": "prisma/migrations/migration_lock.toml",
+      "language": "toml",
+      "fileCategory": "config",
+      "totalLines": 3,
+      "tags": ["prisma", "migration"],
+      "description": "Prisma migration lock file specifying the database provider (postgresql)"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:gandi-webhook/main.go",
+      "target": "file:gandi-webhook/gandiclient.go",
+      "type": "imports",
+      "label": "uses GandiClient"
+    }
+  ]
+}

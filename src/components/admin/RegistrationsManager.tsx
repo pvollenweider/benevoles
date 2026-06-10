@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect, useMemo } from "react"
+import StatusBadge from "./StatusBadge"
 
 type Volunteer = { id: string; firstName: string; lastName: string; email: string | null; phone: string | null }
 type ShiftRef  = {
@@ -9,7 +10,7 @@ type ShiftRef  = {
 }
 type Registration = {
   id: string; status: string; source: string; comment: string | null
-  createdAt: string; volunteer: Volunteer; shift: ShiftRef
+  createdAt: string; waitingPosition: number | null; volunteer: Volunteer; shift: ShiftRef
 }
 
 type Props = {
@@ -253,6 +254,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       source: data.source,
       comment: data.comment,
       createdAt: data.createdAt,
+      waitingPosition: data.waitingPosition ?? null,
       volunteer: data.volunteer,
       shift: {
         id: data.shift.id,
@@ -273,14 +275,18 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   return (
     <div className="space-y-4">
       <div className="flex gap-3 flex-wrap">
+        <label htmlFor="reg-search" className="sr-only">Rechercher un bénévole</label>
         <input
+          id="reg-search"
           type="text"
           placeholder="Rechercher (nom, email…)"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 min-w-48 border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        <label htmlFor="role-filter" className="sr-only">Filtrer par poste</label>
         <select
+          id="role-filter"
           value={roleFilter}
           onChange={(e) => {
             setRoleFilter(e.target.value)
@@ -372,10 +378,11 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Bénévole</th>
-                <th className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden sm:table-cell">Créneau</th>
-                <th className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden md:table-cell">Source</th>
-                <th className="px-4 py-2.5"></th>
+                <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Bénévole</th>
+                <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden sm:table-cell">Créneau</th>
+                <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden md:table-cell">Source</th>
+                <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden md:table-cell">Statut</th>
+                <th scope="col" className="px-4 py-2.5"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -398,13 +405,22 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                   <td className="px-4 py-3 hidden md:table-cell">
                     <span className="text-xs text-gray-400">{sourceLabels[reg.source] ?? reg.source}</span>
                   </td>
+                  <td className="px-4 py-3 hidden md:table-cell">
+                    {reg.status !== "active" && <StatusBadge status={reg.status} />}
+                    {reg.status === "waiting" && reg.waitingPosition != null && (
+                      <span className="ml-1 text-xs text-gray-400">#{reg.waitingPosition}</span>
+                    )}
+                  </td>
                   <td className="px-4 py-3 text-right">
-                    <button
-                      onClick={() => handleCancel(reg.id)}
-                      className="text-xs text-red-400 hover:text-red-600 transition-colors"
-                    >
-                      Annuler
-                    </button>
+                    {reg.status === "active" && (
+                      <button
+                        onClick={() => handleCancel(reg.id)}
+                        aria-label={`Annuler l'inscription de ${reg.volunteer.firstName} ${reg.volunteer.lastName}`}
+                        className="text-xs text-red-400 hover:text-red-600 transition-colors"
+                      >
+                        Annuler
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}

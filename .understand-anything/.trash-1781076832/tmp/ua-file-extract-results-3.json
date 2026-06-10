@@ -1,0 +1,4137 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 15,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "src/app/[eventSlug]/EventPageClient.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 638,
+      "nonEmptyLines": 592,
+      "functions": [
+        {
+          "name": "EventPageClient",
+          "startLine": 46,
+          "endLine": 638,
+          "params": [
+            "{ orgSlug, eventSlug }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "EventPageClient",
+          "line": 46,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "EventPageClient",
+          "callee": "useRouter",
+          "lineNumber": 47
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "useSearchParams",
+          "lineNumber": 48
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "searchParams.get",
+          "lineNumber": 49
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "useState",
+          "lineNumber": 53
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "useState",
+          "lineNumber": 54
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "useState",
+          "lineNumber": 55
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "useState",
+          "lineNumber": 56
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "useState",
+          "lineNumber": 57
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "useState",
+          "lineNumber": 58
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "useState",
+          "lineNumber": 59
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "useState",
+          "lineNumber": 60
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "useState",
+          "lineNumber": 61
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "useState",
+          "lineNumber": 62
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "useState",
+          "lineNumber": 63
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "myRegistrations.map",
+          "lineNumber": 68
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "useEffect",
+          "lineNumber": 70
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "encodeURIComponent",
+          "lineNumber": 71
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "fetch(url)\n      .then((r) => r.json())\n      .then",
+          "lineNumber": 72
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "fetch(url)\n      .then",
+          "lineNumber": 72
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "fetch",
+          "lineNumber": 72
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "r.json",
+          "lineNumber": 73
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setLoading",
+          "lineNumber": 75
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setEvent",
+          "lineNumber": 76
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setLoading",
+          "lineNumber": 77
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "useEffect",
+          "lineNumber": 81
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "fetch(`/api/public/member-invite/${inviteToken}?slug=${encodeURIComponent(eventSlug)}`)\n      .then((r) => (r.ok ? r.json() : null))\n      .then((data) => {\n        if (!data?.member) return\n        setForm((f) => ({\n          ...f,\n          firstName: f.firstName || data.member.firstName,\n          lastName: f.lastName || data.member.lastName,\n          email: f.email || data.member.email,\n          phone: f.phone || data.member.phone,\n        }))\n      })\n      .catch",
+          "lineNumber": 83
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "fetch(`/api/public/member-invite/${inviteToken}?slug=${encodeURIComponent(eventSlug)}`)\n      .then((r) => (r.ok ? r.json() : null))\n      .then",
+          "lineNumber": 83
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "fetch(`/api/public/member-invite/${inviteToken}?slug=${encodeURIComponent(eventSlug)}`)\n      .then",
+          "lineNumber": 83
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "fetch",
+          "lineNumber": 83
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "encodeURIComponent",
+          "lineNumber": 83
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "r.json",
+          "lineNumber": 84
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setForm",
+          "lineNumber": 87
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "useEffect",
+          "lineNumber": 98
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "localStorage.getItem",
+          "lineNumber": 99
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "fetch(`/api/public/registrations/${token}`)\n      .then((r) => r.ok ? r.json() : null)\n      .then((data) => {\n        if (!data?.registrations) return\n        const regs: MyReg[] = data.registrations.map((r: { editToken: string; shift: { id: string; label: string; roleName?: string; startTime: string; endTime: string } }) => ({\n          shiftId: r.shift.id,\n          token: r.editToken,\n          label: r.shift.label,\n          roleName: r.shift.roleName ?? \"\",\n          startTime: r.shift.startTime,\n          endTime: r.shift.endTime,\n        }))\n        setMyRegistrations(regs)\n        if (data.volunteer) {\n          setForm((f) => ({\n            ...f,\n            firstName: data.volunteer.firstName || f.firstName,\n            lastName:  data.volunteer.lastName  || f.lastName,\n            email:     data.volunteer.email     || f.email,\n            phone:     data.volunteer.phone     || f.phone,\n          }))\n        }\n        setSelectedShifts((prev) => {\n          const next = new Set(prev)\n          regs.forEach((r: MyReg) => next.add(r.shiftId))\n          return next\n        })\n      })\n      .catch",
+          "lineNumber": 101
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "fetch(`/api/public/registrations/${token}`)\n      .then((r) => r.ok ? r.json() : null)\n      .then",
+          "lineNumber": 101
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "fetch(`/api/public/registrations/${token}`)\n      .then",
+          "lineNumber": 101
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "fetch",
+          "lineNumber": 101
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "r.json",
+          "lineNumber": 102
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "data.registrations.map",
+          "lineNumber": 105
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setMyRegistrations",
+          "lineNumber": 113
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setForm",
+          "lineNumber": 115
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setSelectedShifts",
+          "lineNumber": 123
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "regs.forEach",
+          "lineNumber": 125
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "next.add",
+          "lineNumber": 125
+        },
+        {
+          "caller": "cancelRegistration",
+          "callee": "fetch",
+          "lineNumber": 133
+        },
+        {
+          "caller": "cancelRegistration",
+          "callee": "setMyRegistrations",
+          "lineNumber": 134
+        },
+        {
+          "caller": "cancelRegistration",
+          "callee": "prev.filter",
+          "lineNumber": 134
+        },
+        {
+          "caller": "cancelRegistration",
+          "callee": "setSelectedShifts",
+          "lineNumber": 135
+        },
+        {
+          "caller": "cancelRegistration",
+          "callee": "next.delete",
+          "lineNumber": 135
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "event.shifts.reduce",
+          "lineNumber": 141
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "new Date(shift.date).toISOString().split",
+          "lineNumber": 142
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "new Date(shift.date).toISOString",
+          "lineNumber": 142
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "acc[day].push",
+          "lineNumber": 144
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "event.shifts.some",
+          "lineNumber": 148
+        },
+        {
+          "caller": "toggleShift",
+          "callee": "event?.shifts.find",
+          "lineNumber": 157
+        },
+        {
+          "caller": "toggleShift",
+          "callee": "myShiftIds.has",
+          "lineNumber": 160
+        },
+        {
+          "caller": "toggleShift",
+          "callee": "setSelectedShifts",
+          "lineNumber": 161
+        },
+        {
+          "caller": "toggleShift",
+          "callee": "next.has",
+          "lineNumber": 163
+        },
+        {
+          "caller": "toggleShift",
+          "callee": "next.delete",
+          "lineNumber": 163
+        },
+        {
+          "caller": "toggleShift",
+          "callee": "next.add",
+          "lineNumber": 164
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "e.preventDefault",
+          "lineNumber": 170
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 171
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 172
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 173
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setSubmitting",
+          "lineNumber": 175
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 176
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "fetch",
+          "lineNumber": 178
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "JSON.stringify",
+          "lineNumber": 181
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "Array.from(selectedShifts).filter",
+          "lineNumber": 183
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "Array.from",
+          "lineNumber": 183
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "myShiftIds.has",
+          "lineNumber": 183
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "res.json",
+          "lineNumber": 191
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 193
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setSubmitting",
+          "lineNumber": 194
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setSubmitting",
+          "lineNumber": 197
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "localStorage.setItem",
+          "lineNumber": 201
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "fetch",
+          "lineNumber": 203
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "regRes.json",
+          "lineNumber": 205
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "regData.registrations.map",
+          "lineNumber": 207
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setMyRegistrations",
+          "lineNumber": 215
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setSelectedShifts",
+          "lineNumber": 216
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "regs.map",
+          "lineNumber": 216
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setForm",
+          "lineNumber": 218
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 229
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setStep",
+          "lineNumber": 230
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "setError",
+          "lineNumber": 233
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "localStorage.setItem",
+          "lineNumber": 237
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "router.push",
+          "lineNumber": 239
+        },
+        {
+          "caller": "handleSubmit",
+          "callee": "router.push",
+          "lineNumber": 241
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "event.shifts\n      .filter((s) => !selectedShifts.has(s.id) && !myShiftIds.has(s.id))\n      .filter((candidate) =>\n        event.shifts.some(\n          (ref) => (selectedShifts.has(ref.id) || myShiftIds.has(ref.id)) && shiftsOverlap(candidate, ref)\n        )\n      )\n      .map",
+          "lineNumber": 246
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "event.shifts\n      .filter((s) => !selectedShifts.has(s.id) && !myShiftIds.has(s.id))\n      .filter",
+          "lineNumber": 246
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "event.shifts\n      .filter",
+          "lineNumber": 246
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "selectedShifts.has",
+          "lineNumber": 247
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "myShiftIds.has",
+          "lineNumber": 247
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "event.shifts.some",
+          "lineNumber": 249
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "selectedShifts.has",
+          "lineNumber": 250
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "myShiftIds.has",
+          "lineNumber": 250
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "shiftsOverlap",
+          "lineNumber": 250
+        },
+        {
+          "caller": "quitSession",
+          "callee": "localStorage.removeItem",
+          "lineNumber": 257
+        },
+        {
+          "caller": "quitSession",
+          "callee": "setMyRegistrations",
+          "lineNumber": 258
+        },
+        {
+          "caller": "quitSession",
+          "callee": "setSelectedShifts",
+          "lineNumber": 259
+        },
+        {
+          "caller": "quitSession",
+          "callee": "setForm",
+          "lineNumber": 260
+        },
+        {
+          "caller": "ShiftRow",
+          "callee": "myShiftIds.has",
+          "lineNumber": 268
+        },
+        {
+          "caller": "ShiftRow",
+          "callee": "myRegistrations.find",
+          "lineNumber": 269
+        },
+        {
+          "caller": "ShiftRow",
+          "callee": "fmt",
+          "lineNumber": 278
+        },
+        {
+          "caller": "ShiftRow",
+          "callee": "fmt",
+          "lineNumber": 278
+        },
+        {
+          "caller": "ShiftRow",
+          "callee": "setPendingCancel",
+          "lineNumber": 282
+        },
+        {
+          "caller": "ShiftRow",
+          "callee": "toggleShift",
+          "lineNumber": 288
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "event.shifts.filter",
+          "lineNumber": 297
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "selectedShifts.has",
+          "lineNumber": 297
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "allSelectedShifts.map((s) => s.id).filter",
+          "lineNumber": 298
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "allSelectedShifts.map",
+          "lineNumber": 298
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "myShiftIds.has",
+          "lineNumber": 298
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setError",
+          "lineNumber": 338
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "Object.entries(shiftsByDay).map",
+          "lineNumber": 345
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "Object.entries",
+          "lineNumber": 345
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "(event.showSchedule ?? []).filter",
+          "lineNumber": 346
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "formatDate",
+          "lineNumber": 350
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "allSelectedShifts.map",
+          "lineNumber": 377
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "formatDate",
+          "lineNumber": 394
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "formatDate",
+          "lineNumber": 395
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "allSelectedShifts.map",
+          "lineNumber": 408
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setStep",
+          "lineNumber": 413
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setStep",
+          "lineNumber": 431
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setStep",
+          "lineNumber": 447
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "event.shifts.filter((s) => selectedShifts.has(s.id)).map",
+          "lineNumber": 453
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "event.shifts.filter",
+          "lineNumber": 453
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "selectedShifts.has",
+          "lineNumber": 453
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setForm",
+          "lineNumber": 468
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setForm",
+          "lineNumber": 478
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setForm",
+          "lineNumber": 489
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setForm",
+          "lineNumber": 498
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setForm",
+          "lineNumber": 507
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setCharterAccepted",
+          "lineNumber": 515
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setShowCharter",
+          "lineNumber": 522
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setForm",
+          "lineNumber": 535
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "event.shifts.filter((s) => selectedShifts.has(s.id)).map",
+          "lineNumber": 566
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "event.shifts.filter",
+          "lineNumber": 566
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "selectedShifts.has",
+          "lineNumber": 566
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "fmt",
+          "lineNumber": 569
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "fmt",
+          "lineNumber": 569
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setShowCharter",
+          "lineNumber": 589
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setCharterAccepted",
+          "lineNumber": 596
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setShowCharter",
+          "lineNumber": 596
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "cancelRegistration",
+          "lineNumber": 617
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setPendingCancel",
+          "lineNumber": 618
+        },
+        {
+          "caller": "EventPageClient",
+          "callee": "setPendingCancel",
+          "lineNumber": 625
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/[eventSlug]/success/page.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 114,
+      "nonEmptyLines": 103,
+      "functions": [
+        {
+          "name": "SuccessContent",
+          "startLine": 16,
+          "endLine": 106,
+          "params": []
+        },
+        {
+          "name": "SuccessPage",
+          "startLine": 108,
+          "endLine": 114,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "SuccessPage",
+          "line": 108,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "SuccessContent",
+          "callee": "useSearchParams",
+          "lineNumber": 17
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "params.get",
+          "lineNumber": 18
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "params.get",
+          "lineNumber": 19
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "useState",
+          "lineNumber": 21
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "useState",
+          "lineNumber": 22
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "useEffect",
+          "lineNumber": 24
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "fetch(`/api/public/registrations/${token}`)\n      .then((r) => (r.ok ? r.json() : null))\n      .then((d) => {\n        if (d && !d.error) setRegData(d)\n      })\n      .catch(() => {})\n      .finally",
+          "lineNumber": 26
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "fetch(`/api/public/registrations/${token}`)\n      .then((r) => (r.ok ? r.json() : null))\n      .then((d) => {\n        if (d && !d.error) setRegData(d)\n      })\n      .catch",
+          "lineNumber": 26
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "fetch(`/api/public/registrations/${token}`)\n      .then((r) => (r.ok ? r.json() : null))\n      .then",
+          "lineNumber": 26
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "fetch(`/api/public/registrations/${token}`)\n      .then",
+          "lineNumber": 26
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "fetch",
+          "lineNumber": 26
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "r.json",
+          "lineNumber": 27
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "setRegData",
+          "lineNumber": 29
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "setFetching",
+          "lineNumber": 32
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "(() => {\n    if (!regData?.confirmationMessage) return null\n    const vars: Record<string, string> = {\n      prenom: regData.volunteer.firstName,\n      \"créneau\": regData.registrations[0]?.shift.label ?? \"\",\n      date: \"\",\n      heure: \"\",\n    }\n    return renderMarkdown(interpolate(regData.confirmationMessage, vars))\n  })",
+          "lineNumber": 35
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "renderMarkdown",
+          "lineNumber": 43
+        },
+        {
+          "caller": "SuccessContent",
+          "callee": "interpolate",
+          "lineNumber": 43
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/admin/events/[id]/shifts/page.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 49,
+      "nonEmptyLines": 42,
+      "functions": [
+        {
+          "name": "ShiftsPage",
+          "startLine": 8,
+          "endLine": 49,
+          "params": [
+            "{ params }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "dynamic",
+          "line": 6,
+          "isDefault": false
+        },
+        {
+          "name": "ShiftsPage",
+          "line": 8,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "ShiftsPage",
+          "callee": "getOrgContext",
+          "lineNumber": 9
+        },
+        {
+          "caller": "ShiftsPage",
+          "callee": "redirect",
+          "lineNumber": 10
+        },
+        {
+          "caller": "ShiftsPage",
+          "callee": "db.event.findFirst",
+          "lineNumber": 15
+        },
+        {
+          "caller": "ShiftsPage",
+          "callee": "notFound",
+          "lineNumber": 25
+        },
+        {
+          "caller": "ShiftsPage",
+          "callee": "event.startDate.toISOString().split",
+          "lineNumber": 38
+        },
+        {
+          "caller": "ShiftsPage",
+          "callee": "event.startDate.toISOString",
+          "lineNumber": 38
+        },
+        {
+          "caller": "ShiftsPage",
+          "callee": "event.endDate.toISOString().split",
+          "lineNumber": 39
+        },
+        {
+          "caller": "ShiftsPage",
+          "callee": "event.endDate.toISOString",
+          "lineNumber": 39
+        },
+        {
+          "caller": "ShiftsPage",
+          "callee": "event.shifts.map",
+          "lineNumber": 41
+        },
+        {
+          "caller": "ShiftsPage",
+          "callee": "s.date.toISOString().split",
+          "lineNumber": 43
+        },
+        {
+          "caller": "ShiftsPage",
+          "callee": "s.date.toISOString",
+          "lineNumber": 43
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/app/my/[token]/page.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 160,
+      "nonEmptyLines": 143,
+      "functions": [
+        {
+          "name": "MyRegistrationPage",
+          "startLine": 32,
+          "endLine": 160,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "MyRegistrationPage",
+          "line": 32,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "useParams",
+          "lineNumber": 33
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "useState",
+          "lineNumber": 36
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "useState",
+          "lineNumber": 37
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "useState",
+          "lineNumber": 38
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "useState",
+          "lineNumber": 39
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "useEffect",
+          "lineNumber": 41
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "fetch(`/api/public/registrations/${token}`)\n      .then((r) => r.json())\n      .then",
+          "lineNumber": 42
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "fetch(`/api/public/registrations/${token}`)\n      .then",
+          "lineNumber": 42
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "fetch",
+          "lineNumber": 42
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "r.json",
+          "lineNumber": 43
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "setError",
+          "lineNumber": 46
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "setData",
+          "lineNumber": 48
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "localStorage.setItem",
+          "lineNumber": 51
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "setLoading",
+          "lineNumber": 54
+        },
+        {
+          "caller": "handleCancel",
+          "callee": "confirm",
+          "lineNumber": 59
+        },
+        {
+          "caller": "handleCancel",
+          "callee": "setCancelling",
+          "lineNumber": 60
+        },
+        {
+          "caller": "handleCancel",
+          "callee": "fetch",
+          "lineNumber": 62
+        },
+        {
+          "caller": "handleCancel",
+          "callee": "setData",
+          "lineNumber": 65
+        },
+        {
+          "caller": "handleCancel",
+          "callee": "prev.registrations.filter",
+          "lineNumber": 67
+        },
+        {
+          "caller": "handleCancel",
+          "callee": "res.json",
+          "lineNumber": 71
+        },
+        {
+          "caller": "handleCancel",
+          "callee": "setError",
+          "lineNumber": 72
+        },
+        {
+          "caller": "handleCancel",
+          "callee": "setCancelling",
+          "lineNumber": 74
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "data.registrations.map",
+          "lineNumber": 115
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "new Date(reg.shift.date).toLocaleDateString",
+          "lineNumber": 116
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "handleCancel",
+          "lineNumber": 126
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "data.confirmationMessage.trim",
+          "lineNumber": 137
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "(() => {\n          const html = renderMarkdown(interpolate(data.confirmationMessage, { prenom: data.volunteer.firstName, \"créneau\": data.registrations[0]?.shift.label ?? \"\", date: \"\", heure: \"\" }))\n          return (\n            <div>\n              <p className=\"text-xs text-gray-400 uppercase tracking-wide mb-2\">Informations pratiques</p>\n              <div\n                className=\"bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-900\"\n                dangerouslySetInnerHTML={{ __html: html }}\n              />\n            </div>\n          )\n        })",
+          "lineNumber": 137
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "renderMarkdown",
+          "lineNumber": 138
+        },
+        {
+          "caller": "MyRegistrationPage",
+          "callee": "interpolate",
+          "lineNumber": 138
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/DayTimeline.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 240,
+      "nonEmptyLines": 217,
+      "functions": [
+        {
+          "name": "toMin",
+          "startLine": 18,
+          "endLine": 21,
+          "params": [
+            "t"
+          ]
+        },
+        {
+          "name": "toMinEnd",
+          "startLine": 24,
+          "endLine": 27,
+          "params": [
+            "end",
+            "start"
+          ]
+        },
+        {
+          "name": "fmt",
+          "startLine": 29,
+          "endLine": 32,
+          "params": [
+            "t"
+          ]
+        },
+        {
+          "name": "DayTimeline",
+          "startLine": 40,
+          "endLine": 240,
+          "params": [
+            "{\n  shifts,\n  shows,\n  selected,\n  registered,\n  conflicts,\n  onToggle,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "fmt",
+          "line": 29,
+          "isDefault": false
+        },
+        {
+          "name": "DayTimeline",
+          "line": 40,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "toMin",
+          "callee": "t.split(\":\").map",
+          "lineNumber": 19
+        },
+        {
+          "caller": "toMin",
+          "callee": "t.split",
+          "lineNumber": 19
+        },
+        {
+          "caller": "toMinEnd",
+          "callee": "toMin",
+          "lineNumber": 25
+        },
+        {
+          "caller": "toMinEnd",
+          "callee": "toMin",
+          "lineNumber": 25
+        },
+        {
+          "caller": "fmt",
+          "callee": "t.split",
+          "lineNumber": 30
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "shifts.filter",
+          "lineNumber": 55
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "visible.flatMap",
+          "lineNumber": 59
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "toMin",
+          "lineNumber": 59
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "toMinEnd",
+          "lineNumber": 59
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "shows.flatMap",
+          "lineNumber": 60
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "toMin",
+          "lineNumber": 60
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "toMinEnd",
+          "lineNumber": 60
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "Math.floor",
+          "lineNumber": 62
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "Math.min",
+          "lineNumber": 62
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "Math.ceil",
+          "lineNumber": 63
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "Math.max",
+          "lineNumber": 63
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "Math.max",
+          "lineNumber": 66
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "visible.map",
+          "lineNumber": 66
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "toMin",
+          "lineNumber": 66
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "toMin",
+          "lineNumber": 66
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "Math.round",
+          "lineNumber": 68
+        },
+        {
+          "caller": "pxW",
+          "callee": "Math.max",
+          "lineNumber": 71
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "byRole[s.roleName].push",
+          "lineNumber": 77
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "Object.keys(byRole).sort",
+          "lineNumber": 80
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "Object.keys",
+          "lineNumber": 80
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "hours.push",
+          "lineNumber": 83
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "shows.map",
+          "lineNumber": 93
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "px",
+          "lineNumber": 98
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "toMin",
+          "lineNumber": 98
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "pxW",
+          "lineNumber": 99
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "toMin",
+          "lineNumber": 99
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "toMin",
+          "lineNumber": 99
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "roleOrder.map",
+          "lineNumber": 106
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "role.split(\" &\")[0].split(\" —\")[0].trim",
+          "lineNumber": 113
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "role.split(\" &\")[0].split",
+          "lineNumber": 113
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "role.split",
+          "lineNumber": 113
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "roleOrder.map",
+          "lineNumber": 121
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "byRole[role].map",
+          "lineNumber": 132
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "registered?.has",
+          "lineNumber": 133
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "conflicts?.has",
+          "lineNumber": 134
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "selected.has",
+          "lineNumber": 138
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "getBarClasses",
+          "lineNumber": 140
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "toMin",
+          "lineNumber": 143
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "toMinEnd",
+          "lineNumber": 144
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "pxLocal",
+          "lineNumber": 151
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "pxW",
+          "lineNumber": 151
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "onToggle",
+          "lineNumber": 155
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "fmt",
+          "lineNumber": 183
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "fmt",
+          "lineNumber": 183
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "shows.map",
+          "lineNumber": 207
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "px",
+          "lineNumber": 212
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "toMin",
+          "lineNumber": 212
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "pxW",
+          "lineNumber": 213
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "toMin",
+          "lineNumber": 213
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "toMin",
+          "lineNumber": 213
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "hours.map",
+          "lineNumber": 225
+        },
+        {
+          "caller": "DayTimeline",
+          "callee": "px",
+          "lineNumber": 229
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/PublicFooter.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 23,
+      "nonEmptyLines": 22,
+      "functions": [
+        {
+          "name": "PublicFooter",
+          "startLine": 4,
+          "endLine": 23,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "PublicFooter",
+          "line": 4,
+          "isDefault": true
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/PushSubscribeButton.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 97,
+      "nonEmptyLines": 82,
+      "functions": [
+        {
+          "name": "PushSubscribeButton",
+          "startLine": 7,
+          "endLine": 90,
+          "params": [
+            "{ email }"
+          ]
+        },
+        {
+          "name": "urlBase64ToUint8Array",
+          "startLine": 92,
+          "endLine": 97,
+          "params": [
+            "base64String"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "PushSubscribeButton",
+          "line": 7,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "PushSubscribeButton",
+          "callee": "useState",
+          "lineNumber": 8
+        },
+        {
+          "caller": "PushSubscribeButton",
+          "callee": "useEffect",
+          "lineNumber": 14
+        },
+        {
+          "caller": "PushSubscribeButton",
+          "callee": "navigator.serviceWorker?.ready\n      .then((reg) => reg.pushManager.getSubscription())\n      .then((sub) => { if (sub) setState(\"subscribed\") })\n      .catch",
+          "lineNumber": 16
+        },
+        {
+          "caller": "PushSubscribeButton",
+          "callee": "navigator.serviceWorker?.ready\n      .then((reg) => reg.pushManager.getSubscription())\n      .then",
+          "lineNumber": 16
+        },
+        {
+          "caller": "PushSubscribeButton",
+          "callee": "navigator.serviceWorker?.ready\n      .then",
+          "lineNumber": 16
+        },
+        {
+          "caller": "PushSubscribeButton",
+          "callee": "reg.pushManager.getSubscription",
+          "lineNumber": 17
+        },
+        {
+          "caller": "PushSubscribeButton",
+          "callee": "setState",
+          "lineNumber": 18
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "setState",
+          "lineNumber": 25
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "fetch(\"/api/public/push\").then",
+          "lineNumber": 27
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "fetch",
+          "lineNumber": 27
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "r.json",
+          "lineNumber": 27
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "setState",
+          "lineNumber": 28
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "navigator.serviceWorker.register",
+          "lineNumber": 30
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "reg.pushManager.getSubscription",
+          "lineNumber": 33
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "Notification.requestPermission",
+          "lineNumber": 35
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "setState",
+          "lineNumber": 36
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "reg.pushManager.subscribe",
+          "lineNumber": 38
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "urlBase64ToUint8Array",
+          "lineNumber": 40
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "sub.toJSON",
+          "lineNumber": 44
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "fetch",
+          "lineNumber": 45
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "JSON.stringify",
+          "lineNumber": 48
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "setState",
+          "lineNumber": 56
+        },
+        {
+          "caller": "handleSubscribe",
+          "callee": "setState",
+          "lineNumber": 58
+        },
+        {
+          "caller": "urlBase64ToUint8Array",
+          "callee": "\"=\".repeat",
+          "lineNumber": 93
+        },
+        {
+          "caller": "urlBase64ToUint8Array",
+          "callee": "(base64String + padding).replace(/-/g, \"+\").replace",
+          "lineNumber": 94
+        },
+        {
+          "caller": "urlBase64ToUint8Array",
+          "callee": "(base64String + padding).replace",
+          "lineNumber": 94
+        },
+        {
+          "caller": "urlBase64ToUint8Array",
+          "callee": "atob",
+          "lineNumber": 95
+        },
+        {
+          "caller": "urlBase64ToUint8Array",
+          "callee": "Uint8Array.from",
+          "lineNumber": 96
+        },
+        {
+          "caller": "urlBase64ToUint8Array",
+          "callee": "[...raw].map",
+          "lineNumber": 96
+        },
+        {
+          "caller": "urlBase64ToUint8Array",
+          "callee": "c.charCodeAt",
+          "lineNumber": 96
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/admin/AdminDayTimeline.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 609,
+      "nonEmptyLines": 556,
+      "functions": [
+        {
+          "name": "toMin",
+          "startLine": 19,
+          "endLine": 22,
+          "params": [
+            "t"
+          ]
+        },
+        {
+          "name": "toMinEnd",
+          "startLine": 23,
+          "endLine": 26,
+          "params": [
+            "end",
+            "start"
+          ]
+        },
+        {
+          "name": "fromMin",
+          "startLine": 27,
+          "endLine": 29,
+          "params": [
+            "n"
+          ]
+        },
+        {
+          "name": "snapTo",
+          "startLine": 30,
+          "endLine": 30,
+          "params": [
+            "n"
+          ]
+        },
+        {
+          "name": "clamp",
+          "startLine": 31,
+          "endLine": 31,
+          "params": [
+            "n",
+            "lo",
+            "hi"
+          ]
+        },
+        {
+          "name": "fmt",
+          "startLine": 32,
+          "endLine": 35,
+          "params": [
+            "t"
+          ]
+        },
+        {
+          "name": "ShiftPopover",
+          "startLine": 69,
+          "endLine": 194,
+          "params": [
+            "{\n  shift, anchor, eventId, onClose, onPatch, onDelete,\n}"
+          ]
+        },
+        {
+          "name": "Toast",
+          "startLine": 197,
+          "endLine": 203,
+          "params": [
+            "{ message }"
+          ]
+        },
+        {
+          "name": "AdminDayTimeline",
+          "startLine": 206,
+          "endLine": 609,
+          "params": [
+            "{ eventId, date, shifts, shows = [], roleOrder, onCreated, onUpdated, onDeleted }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "AdminDayTimeline",
+          "line": 206,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "toMin",
+          "callee": "t.split(\":\").map",
+          "lineNumber": 20
+        },
+        {
+          "caller": "toMin",
+          "callee": "t.split",
+          "lineNumber": 20
+        },
+        {
+          "caller": "toMinEnd",
+          "callee": "toMin",
+          "lineNumber": 24
+        },
+        {
+          "caller": "toMinEnd",
+          "callee": "toMin",
+          "lineNumber": 24
+        },
+        {
+          "caller": "fromMin",
+          "callee": "String(Math.floor(n / 60)).padStart",
+          "lineNumber": 28
+        },
+        {
+          "caller": "fromMin",
+          "callee": "String",
+          "lineNumber": 28
+        },
+        {
+          "caller": "fromMin",
+          "callee": "Math.floor",
+          "lineNumber": 28
+        },
+        {
+          "caller": "fromMin",
+          "callee": "String(n % 60).padStart",
+          "lineNumber": 28
+        },
+        {
+          "caller": "fromMin",
+          "callee": "String",
+          "lineNumber": 28
+        },
+        {
+          "caller": "snapTo",
+          "callee": "Math.round",
+          "lineNumber": 30
+        },
+        {
+          "caller": "clamp",
+          "callee": "Math.max",
+          "lineNumber": 31
+        },
+        {
+          "caller": "clamp",
+          "callee": "Math.min",
+          "lineNumber": 31
+        },
+        {
+          "caller": "fmt",
+          "callee": "t.split",
+          "lineNumber": 33
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "useState",
+          "lineNumber": 79
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "useState",
+          "lineNumber": 80
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "useState",
+          "lineNumber": 81
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "useRef",
+          "lineNumber": 82
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "useRef",
+          "lineNumber": 85
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "useRef",
+          "lineNumber": 86
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "useEffect",
+          "lineNumber": 87
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "useEffect",
+          "lineNumber": 88
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "useCallback",
+          "lineNumber": 90
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "onPatch",
+          "lineNumber": 91
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "labelRef.current.trim",
+          "lineNumber": 92
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "onClose",
+          "lineNumber": 95
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "useEffect",
+          "lineNumber": 98
+        },
+        {
+          "caller": "onMD",
+          "callee": "ref.current.contains",
+          "lineNumber": 100
+        },
+        {
+          "caller": "onMD",
+          "callee": "closeAndSave",
+          "lineNumber": 100
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "document.addEventListener",
+          "lineNumber": 102
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "document.removeEventListener",
+          "lineNumber": 103
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "useEffect",
+          "lineNumber": 106
+        },
+        {
+          "caller": "onKey",
+          "callee": "closeAndSave",
+          "lineNumber": 107
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "document.addEventListener",
+          "lineNumber": 108
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "document.removeEventListener",
+          "lineNumber": 109
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "clamp",
+          "lineNumber": 113
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "e.stopPropagation",
+          "lineNumber": 121
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "getRoleAccent",
+          "lineNumber": 125
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "fmt",
+          "lineNumber": 128
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "fmt",
+          "lineNumber": 128
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "setLabel",
+          "lineNumber": 142
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "Math.max",
+          "lineNumber": 155
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "setCapacity",
+          "lineNumber": 157
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "Number",
+          "lineNumber": 157
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "setStatus",
+          "lineNumber": 162
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "onPatch",
+          "lineNumber": 162
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "confirm",
+          "lineNumber": 187
+        },
+        {
+          "caller": "ShiftPopover",
+          "callee": "onDelete",
+          "lineNumber": 187
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "useRef",
+          "lineNumber": 207
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "useState",
+          "lineNumber": 209
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "useState",
+          "lineNumber": 210
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "useState",
+          "lineNumber": 211
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "useState",
+          "lineNumber": 212
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "useState",
+          "lineNumber": 213
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "useState",
+          "lineNumber": 214
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "shifts\n    .filter(s => s.status !== \"cancelled\")\n    .map",
+          "lineNumber": 216
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "shifts\n    .filter",
+          "lineNumber": 216
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "visible.flatMap",
+          "lineNumber": 222
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "toMin",
+          "lineNumber": 222
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "toMinEnd",
+          "lineNumber": 222
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "shows.flatMap",
+          "lineNumber": 223
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "toMin",
+          "lineNumber": 223
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "toMinEnd",
+          "lineNumber": 223
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "Math.min",
+          "lineNumber": 225
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "Math.max",
+          "lineNumber": 226
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "Math.floor",
+          "lineNumber": 227
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "Math.ceil",
+          "lineNumber": 228
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "useCallback",
+          "lineNumber": 233
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "el.getBoundingClientRect",
+          "lineNumber": 236
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "snapTo",
+          "lineNumber": 239
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "clamp",
+          "lineNumber": 239
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "byRole[s.roleName].push",
+          "lineNumber": 249
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "roleOrder.filter",
+          "lineNumber": 255
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "Object.keys(byRole).sort",
+          "lineNumber": 256
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "Object.keys",
+          "lineNumber": 256
+        },
+        {
+          "caller": "startCreate",
+          "callee": "e.preventDefault",
+          "lineNumber": 262
+        },
+        {
+          "caller": "startCreate",
+          "callee": "setSelected",
+          "lineNumber": 263
+        },
+        {
+          "caller": "startCreate",
+          "callee": "setDraft",
+          "lineNumber": 264
+        },
+        {
+          "caller": "startCreate",
+          "callee": "xToMin",
+          "lineNumber": 264
+        },
+        {
+          "caller": "startCreate",
+          "callee": "xToMin",
+          "lineNumber": 264
+        },
+        {
+          "caller": "startResize",
+          "callee": "e.preventDefault",
+          "lineNumber": 269
+        },
+        {
+          "caller": "startResize",
+          "callee": "e.stopPropagation",
+          "lineNumber": 270
+        },
+        {
+          "caller": "startResize",
+          "callee": "setSelected",
+          "lineNumber": 271
+        },
+        {
+          "caller": "startResize",
+          "callee": "setResize",
+          "lineNumber": 272
+        },
+        {
+          "caller": "startResize",
+          "callee": "toMin",
+          "lineNumber": 275
+        },
+        {
+          "caller": "startResize",
+          "callee": "toMin",
+          "lineNumber": 276
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "useCallback",
+          "lineNumber": 281
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "xToMin",
+          "lineNumber": 282
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "setDraft",
+          "lineNumber": 284
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "Math.max",
+          "lineNumber": 284
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "setResizeOverlay",
+          "lineNumber": 287
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "shifts.find",
+          "lineNumber": 288
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "toMin",
+          "lineNumber": 290
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "toMin",
+          "lineNumber": 291
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "snapTo",
+          "lineNumber": 293
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "clamp",
+          "lineNumber": 293
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "fromMin",
+          "lineNumber": 294
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "snapTo",
+          "lineNumber": 296
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "clamp",
+          "lineNumber": 296
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "fromMin",
+          "lineNumber": 297
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "useCallback",
+          "lineNumber": 303
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "setToast",
+          "lineNumber": 304
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "setTimeout",
+          "lineNumber": 305
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "setToast",
+          "lineNumber": 305
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "useCallback",
+          "lineNumber": 308
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "shifts.find",
+          "lineNumber": 311
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "fetch",
+          "lineNumber": 313
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "JSON.stringify",
+          "lineNumber": 316
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "onUpdated",
+          "lineNumber": 318
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "showToast",
+          "lineNumber": 318
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "setResizeOverlay",
+          "lineNumber": 320
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "setResize",
+          "lineNumber": 321
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "fetch",
+          "lineNumber": 325
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "JSON.stringify",
+          "lineNumber": 328
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "fromMin",
+          "lineNumber": 333
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "fromMin",
+          "lineNumber": 334
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "res.json",
+          "lineNumber": 339
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "(data.date as string).split",
+          "lineNumber": 342
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "onCreated",
+          "lineNumber": 345
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "setTimeout",
+          "lineNumber": 346
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "openPopover",
+          "lineNumber": 346
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "setDraft",
+          "lineNumber": 349
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "useEffect",
+          "lineNumber": 352
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "window.addEventListener",
+          "lineNumber": 354
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "window.addEventListener",
+          "lineNumber": 355
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "window.removeEventListener",
+          "lineNumber": 357
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "window.removeEventListener",
+          "lineNumber": 358
+        },
+        {
+          "caller": "openPopover",
+          "callee": "document.getElementById",
+          "lineNumber": 364
+        },
+        {
+          "caller": "openPopover",
+          "callee": "el.getBoundingClientRect",
+          "lineNumber": 366
+        },
+        {
+          "caller": "openPopover",
+          "callee": "setAnchor",
+          "lineNumber": 367
+        },
+        {
+          "caller": "openPopover",
+          "callee": "setSelected",
+          "lineNumber": 368
+        },
+        {
+          "caller": "handlePatch",
+          "callee": "shifts.find",
+          "lineNumber": 372
+        },
+        {
+          "caller": "handlePatch",
+          "callee": "data.label?.trim",
+          "lineNumber": 374
+        },
+        {
+          "caller": "handlePatch",
+          "callee": "fetch",
+          "lineNumber": 375
+        },
+        {
+          "caller": "handlePatch",
+          "callee": "JSON.stringify",
+          "lineNumber": 378
+        },
+        {
+          "caller": "handlePatch",
+          "callee": "onUpdated",
+          "lineNumber": 380
+        },
+        {
+          "caller": "handlePatch",
+          "callee": "showToast",
+          "lineNumber": 380
+        },
+        {
+          "caller": "handleDelete",
+          "callee": "setSelected",
+          "lineNumber": 384
+        },
+        {
+          "caller": "handleDelete",
+          "callee": "fetch",
+          "lineNumber": 385
+        },
+        {
+          "caller": "handleDelete",
+          "callee": "onDeleted",
+          "lineNumber": 386
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "Math.ceil",
+          "lineNumber": 391
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "Math.floor",
+          "lineNumber": 391
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "hours.push",
+          "lineNumber": 391
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "visible.find",
+          "lineNumber": 393
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "hours.map",
+          "lineNumber": 407
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "shows.map",
+          "lineNumber": 416
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "px",
+          "lineNumber": 421
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "toMin",
+          "lineNumber": 421
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "Math.max",
+          "lineNumber": 422
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "toMin",
+          "lineNumber": 422
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "toMin",
+          "lineNumber": 422
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "roles.map",
+          "lineNumber": 432
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "role.split(\" &\")[0].trim",
+          "lineNumber": 439
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "role.split",
+          "lineNumber": 439
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "roles.map",
+          "lineNumber": 452
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "target.closest",
+          "lineNumber": 461
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "startCreate",
+          "lineNumber": 462
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "(byRole[role] ?? []).map",
+          "lineNumber": 466
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "toMin",
+          "lineNumber": 467
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "toMinEnd",
+          "lineNumber": 468
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "px",
+          "lineNumber": 469
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "Math.max",
+          "lineNumber": 470
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "getBarClasses",
+          "lineNumber": 473
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "e.stopPropagation",
+          "lineNumber": 491
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "e.stopPropagation",
+          "lineNumber": 492
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "openPopover",
+          "lineNumber": 492
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "fmt",
+          "lineNumber": 499
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "fmt",
+          "lineNumber": 499
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "startResize",
+          "lineNumber": 518
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "startResize",
+          "lineNumber": 527
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "px",
+          "lineNumber": 540
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "Math.max",
+          "lineNumber": 541
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "fmt",
+          "lineNumber": 546
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "fromMin",
+          "lineNumber": 546
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "fmt",
+          "lineNumber": 546
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "fromMin",
+          "lineNumber": 546
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "hours.map",
+          "lineNumber": 559
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "shows.map",
+          "lineNumber": 576
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "px",
+          "lineNumber": 581
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "toMin",
+          "lineNumber": 581
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "Math.max",
+          "lineNumber": 582
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "toMin",
+          "lineNumber": 582
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "toMin",
+          "lineNumber": 582
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "fmt",
+          "lineNumber": 585
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "fmt",
+          "lineNumber": 585
+        },
+        {
+          "caller": "AdminDayTimeline",
+          "callee": "setSelected",
+          "lineNumber": 600
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 9,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/admin/OrgCharterForm.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 106,
+      "nonEmptyLines": 98,
+      "functions": [
+        {
+          "name": "OrgCharterForm",
+          "startLine": 6,
+          "endLine": 106,
+          "params": [
+            "{\n  initialCharter,\n  initialHasOrgInsurance,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "OrgCharterForm",
+          "line": 6,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "OrgCharterForm",
+          "callee": "useState",
+          "lineNumber": 13
+        },
+        {
+          "caller": "OrgCharterForm",
+          "callee": "useState",
+          "lineNumber": 14
+        },
+        {
+          "caller": "OrgCharterForm",
+          "callee": "buildVolunteerCharter",
+          "lineNumber": 14
+        },
+        {
+          "caller": "OrgCharterForm",
+          "callee": "useState",
+          "lineNumber": 15
+        },
+        {
+          "caller": "OrgCharterForm",
+          "callee": "useState",
+          "lineNumber": 16
+        },
+        {
+          "caller": "OrgCharterForm",
+          "callee": "useState",
+          "lineNumber": 17
+        },
+        {
+          "caller": "handleToggle",
+          "callee": "setHasOrgInsurance",
+          "lineNumber": 20
+        },
+        {
+          "caller": "handleToggle",
+          "callee": "setText",
+          "lineNumber": 21
+        },
+        {
+          "caller": "handleToggle",
+          "callee": "buildVolunteerCharter",
+          "lineNumber": 21
+        },
+        {
+          "caller": "handleToggle",
+          "callee": "setSuccess",
+          "lineNumber": 22
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setSaving",
+          "lineNumber": 26
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setSuccess",
+          "lineNumber": 27
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setError",
+          "lineNumber": 28
+        },
+        {
+          "caller": "handleSave",
+          "callee": "fetch",
+          "lineNumber": 29
+        },
+        {
+          "caller": "handleSave",
+          "callee": "JSON.stringify",
+          "lineNumber": 32
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setSaving",
+          "lineNumber": 34
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setSuccess",
+          "lineNumber": 35
+        },
+        {
+          "caller": "handleSave",
+          "callee": "res.json().catch",
+          "lineNumber": 37
+        },
+        {
+          "caller": "handleSave",
+          "callee": "res.json",
+          "lineNumber": 37
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setError",
+          "lineNumber": 38
+        },
+        {
+          "caller": "OrgCharterForm",
+          "callee": "handleToggle",
+          "lineNumber": 64
+        },
+        {
+          "caller": "OrgCharterForm",
+          "callee": "setText",
+          "lineNumber": 79
+        },
+        {
+          "caller": "OrgCharterForm",
+          "callee": "setSuccess",
+          "lineNumber": 79
+        },
+        {
+          "caller": "OrgCharterForm",
+          "callee": "setText",
+          "lineNumber": 87
+        },
+        {
+          "caller": "OrgCharterForm",
+          "callee": "buildVolunteerCharter",
+          "lineNumber": 87
+        },
+        {
+          "caller": "OrgCharterForm",
+          "callee": "setSuccess",
+          "lineNumber": 87
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/components/admin/ShiftsManager.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 500,
+      "nonEmptyLines": 463,
+      "functions": [
+        {
+          "name": "localISO",
+          "startLine": 13,
+          "endLine": 18,
+          "params": [
+            "d"
+          ]
+        },
+        {
+          "name": "eventDates",
+          "startLine": 20,
+          "endLine": 29,
+          "params": [
+            "start",
+            "end"
+          ]
+        },
+        {
+          "name": "addMinutes",
+          "startLine": 31,
+          "endLine": 35,
+          "params": [
+            "time",
+            "minutes"
+          ]
+        },
+        {
+          "name": "normalizeTime",
+          "startLine": 37,
+          "endLine": 45,
+          "params": [
+            "val"
+          ]
+        },
+        {
+          "name": "fmtDate",
+          "startLine": 47,
+          "endLine": 51,
+          "params": [
+            "iso"
+          ]
+        },
+        {
+          "name": "ShiftsManager",
+          "startLine": 57,
+          "endLine": 500,
+          "params": [
+            "{\n  eventId, eventStartDate, eventEndDate, initialShifts, showSchedule = [],\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ShiftsManager",
+          "line": 57,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "localISO",
+          "callee": "d.getFullYear",
+          "lineNumber": 14
+        },
+        {
+          "caller": "localISO",
+          "callee": "String(d.getMonth() + 1).padStart",
+          "lineNumber": 15
+        },
+        {
+          "caller": "localISO",
+          "callee": "String",
+          "lineNumber": 15
+        },
+        {
+          "caller": "localISO",
+          "callee": "d.getMonth",
+          "lineNumber": 15
+        },
+        {
+          "caller": "localISO",
+          "callee": "String(d.getDate()).padStart",
+          "lineNumber": 16
+        },
+        {
+          "caller": "localISO",
+          "callee": "String",
+          "lineNumber": 16
+        },
+        {
+          "caller": "localISO",
+          "callee": "d.getDate",
+          "lineNumber": 16
+        },
+        {
+          "caller": "eventDates",
+          "callee": "dates.push",
+          "lineNumber": 25
+        },
+        {
+          "caller": "eventDates",
+          "callee": "localISO",
+          "lineNumber": 25
+        },
+        {
+          "caller": "eventDates",
+          "callee": "cur.setDate",
+          "lineNumber": 26
+        },
+        {
+          "caller": "eventDates",
+          "callee": "cur.getDate",
+          "lineNumber": 26
+        },
+        {
+          "caller": "addMinutes",
+          "callee": "time.split(\":\").map",
+          "lineNumber": 32
+        },
+        {
+          "caller": "addMinutes",
+          "callee": "time.split",
+          "lineNumber": 32
+        },
+        {
+          "caller": "addMinutes",
+          "callee": "String(Math.floor(total / 60) % 24).padStart",
+          "lineNumber": 34
+        },
+        {
+          "caller": "addMinutes",
+          "callee": "String",
+          "lineNumber": 34
+        },
+        {
+          "caller": "addMinutes",
+          "callee": "Math.floor",
+          "lineNumber": 34
+        },
+        {
+          "caller": "addMinutes",
+          "callee": "String(total % 60).padStart",
+          "lineNumber": 34
+        },
+        {
+          "caller": "addMinutes",
+          "callee": "String",
+          "lineNumber": 34
+        },
+        {
+          "caller": "normalizeTime",
+          "callee": "val.trim",
+          "lineNumber": 38
+        },
+        {
+          "caller": "normalizeTime",
+          "callee": "clean.split",
+          "lineNumber": 40
+        },
+        {
+          "caller": "normalizeTime",
+          "callee": "parseInt",
+          "lineNumber": 41
+        },
+        {
+          "caller": "normalizeTime",
+          "callee": "parseInt",
+          "lineNumber": 42
+        },
+        {
+          "caller": "normalizeTime",
+          "callee": "isNaN",
+          "lineNumber": 43
+        },
+        {
+          "caller": "normalizeTime",
+          "callee": "String(Math.min(23, hours)).padStart",
+          "lineNumber": 44
+        },
+        {
+          "caller": "normalizeTime",
+          "callee": "String",
+          "lineNumber": 44
+        },
+        {
+          "caller": "normalizeTime",
+          "callee": "Math.min",
+          "lineNumber": 44
+        },
+        {
+          "caller": "normalizeTime",
+          "callee": "String(Math.min(59, isNaN(minutes) ? 0 : minutes)).padStart",
+          "lineNumber": 44
+        },
+        {
+          "caller": "normalizeTime",
+          "callee": "String",
+          "lineNumber": 44
+        },
+        {
+          "caller": "normalizeTime",
+          "callee": "Math.min",
+          "lineNumber": 44
+        },
+        {
+          "caller": "normalizeTime",
+          "callee": "isNaN",
+          "lineNumber": 44
+        },
+        {
+          "caller": "fmtDate",
+          "callee": "new Date(iso + \"T00:00:00\").toLocaleDateString",
+          "lineNumber": 48
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "useRef",
+          "lineNumber": 66
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "eventDates",
+          "lineNumber": 67
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "useState",
+          "lineNumber": 70
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "useState",
+          "lineNumber": 71
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "useState",
+          "lineNumber": 72
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "useState",
+          "lineNumber": 73
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "useState",
+          "lineNumber": 74
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "useState",
+          "lineNumber": 75
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "useState",
+          "lineNumber": 76
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "useState",
+          "lineNumber": 77
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "useState",
+          "lineNumber": 78
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "useState",
+          "lineNumber": 79
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "useState",
+          "lineNumber": 80
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "useState",
+          "lineNumber": 81
+        },
+        {
+          "caller": "setField",
+          "callee": "setForm",
+          "lineNumber": 84
+        },
+        {
+          "caller": "openForm",
+          "callee": "flushSync",
+          "lineNumber": 88
+        },
+        {
+          "caller": "openForm",
+          "callee": "setForm",
+          "lineNumber": 89
+        },
+        {
+          "caller": "openForm",
+          "callee": "setEditingId",
+          "lineNumber": 90
+        },
+        {
+          "caller": "openForm",
+          "callee": "setShowForm",
+          "lineNumber": 91
+        },
+        {
+          "caller": "openForm",
+          "callee": "setError",
+          "lineNumber": 92
+        },
+        {
+          "caller": "openForm",
+          "callee": "setAttempted",
+          "lineNumber": 93
+        },
+        {
+          "caller": "openForm",
+          "callee": "formRef.current?.scrollIntoView",
+          "lineNumber": 95
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setAttempted",
+          "lineNumber": 100
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setSaving",
+          "lineNumber": 103
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setError",
+          "lineNumber": 104
+        },
+        {
+          "caller": "handleSave",
+          "callee": "form.label.trim",
+          "lineNumber": 106
+        },
+        {
+          "caller": "handleSave",
+          "callee": "Number",
+          "lineNumber": 110
+        },
+        {
+          "caller": "handleSave",
+          "callee": "Number",
+          "lineNumber": 111
+        },
+        {
+          "caller": "handleSave",
+          "callee": "fetch",
+          "lineNumber": 113
+        },
+        {
+          "caller": "handleSave",
+          "callee": "JSON.stringify",
+          "lineNumber": 113
+        },
+        {
+          "caller": "handleSave",
+          "callee": "res.json",
+          "lineNumber": 114
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setSaving",
+          "lineNumber": 115
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setError",
+          "lineNumber": 117
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setShifts",
+          "lineNumber": 120
+        },
+        {
+          "caller": "handleSave",
+          "callee": "prev.map",
+          "lineNumber": 120
+        },
+        {
+          "caller": "handleSave",
+          "callee": "data.date?.split",
+          "lineNumber": 122
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setShifts",
+          "lineNumber": 126
+        },
+        {
+          "caller": "handleSave",
+          "callee": "data.date.split",
+          "lineNumber": 126
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setForm",
+          "lineNumber": 128
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setShowForm",
+          "lineNumber": 129
+        },
+        {
+          "caller": "handleSave",
+          "callee": "setEditingId",
+          "lineNumber": 130
+        },
+        {
+          "caller": "handleCreated",
+          "callee": "setShifts",
+          "lineNumber": 135
+        },
+        {
+          "caller": "handleCreated",
+          "callee": "prev.find",
+          "lineNumber": 136
+        },
+        {
+          "caller": "handleUpdated",
+          "callee": "setShifts",
+          "lineNumber": 142
+        },
+        {
+          "caller": "handleUpdated",
+          "callee": "prev.map",
+          "lineNumber": 142
+        },
+        {
+          "caller": "handleDeleted",
+          "callee": "setShifts",
+          "lineNumber": 149
+        },
+        {
+          "caller": "handleDeleted",
+          "callee": "prev.filter",
+          "lineNumber": 149
+        },
+        {
+          "caller": "handleDeleteShift",
+          "callee": "confirm",
+          "lineNumber": 153
+        },
+        {
+          "caller": "handleDeleteShift",
+          "callee": "fetch",
+          "lineNumber": 154
+        },
+        {
+          "caller": "handleDeleteShift",
+          "callee": "handleDeleted",
+          "lineNumber": 155
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "[...shifts]\n      .filter(s => s.status !== \"cancelled\")\n      .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0))\n      .map",
+          "lineNumber": 160
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "[...shifts]\n      .filter(s => s.status !== \"cancelled\")\n      .sort",
+          "lineNumber": 160
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "[...shifts]\n      .filter",
+          "lineNumber": 160
+        },
+        {
+          "caller": "openReorder",
+          "callee": "setReorderRoles",
+          "lineNumber": 167
+        },
+        {
+          "caller": "openReorder",
+          "callee": "setShowReorder",
+          "lineNumber": 168
+        },
+        {
+          "caller": "handleRoleDragOver",
+          "callee": "e.preventDefault",
+          "lineNumber": 172
+        },
+        {
+          "caller": "handleRoleDragOver",
+          "callee": "setReorderRoles",
+          "lineNumber": 174
+        },
+        {
+          "caller": "handleRoleDragOver",
+          "callee": "next.splice",
+          "lineNumber": 176
+        },
+        {
+          "caller": "handleRoleDragOver",
+          "callee": "next.splice",
+          "lineNumber": 177
+        },
+        {
+          "caller": "handleRoleDragOver",
+          "callee": "setDragRoleIdx",
+          "lineNumber": 180
+        },
+        {
+          "caller": "saveRoleOrder",
+          "callee": "setSavingOrder",
+          "lineNumber": 184
+        },
+        {
+          "caller": "saveRoleOrder",
+          "callee": "fetch",
+          "lineNumber": 185
+        },
+        {
+          "caller": "saveRoleOrder",
+          "callee": "JSON.stringify",
+          "lineNumber": 188
+        },
+        {
+          "caller": "saveRoleOrder",
+          "callee": "setShifts",
+          "lineNumber": 190
+        },
+        {
+          "caller": "saveRoleOrder",
+          "callee": "prev.map",
+          "lineNumber": 190
+        },
+        {
+          "caller": "saveRoleOrder",
+          "callee": "reorderRoles.indexOf",
+          "lineNumber": 191
+        },
+        {
+          "caller": "saveRoleOrder",
+          "callee": "setSavingOrder",
+          "lineNumber": 194
+        },
+        {
+          "caller": "saveRoleOrder",
+          "callee": "setShowReorder",
+          "lineNumber": 195
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "shifts\n    .filter(s => s.status !== \"cancelled\")\n    .reduce",
+          "lineNumber": 199
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "shifts\n    .filter",
+          "lineNumber": 199
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "acc[s.date].push",
+          "lineNumber": 203
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "dates.filter",
+          "lineNumber": 207
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "[...shifts]\n    .filter(s => s.status !== \"cancelled\")\n    .sort",
+          "lineNumber": 209
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "[...shifts]\n    .filter",
+          "lineNumber": 209
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "a.date.localeCompare",
+          "lineNumber": 212
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "a.startTime.localeCompare",
+          "lineNumber": 214
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setView",
+          "lineNumber": 232
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setView",
+          "lineNumber": 238
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "openForm",
+          "lineNumber": 257
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "reorderRoles.map",
+          "lineNumber": 272
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setDragRoleIdx",
+          "lineNumber": 276
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "handleRoleDragOver",
+          "lineNumber": 277
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setDragRoleIdx",
+          "lineNumber": 278
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setShowReorder",
+          "lineNumber": 297
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setField",
+          "lineNumber": 315
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "KNOWN_ROLES.map",
+          "lineNumber": 320
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setField",
+          "lineNumber": 328
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "fmtDate",
+          "lineNumber": 338
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setField",
+          "lineNumber": 340
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "dates.map",
+          "lineNumber": 342
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "fmtDate",
+          "lineNumber": 342
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setForm",
+          "lineNumber": 353
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "addMinutes",
+          "lineNumber": 356
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setField",
+          "lineNumber": 359
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "normalizeTime",
+          "lineNumber": 359
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setField",
+          "lineNumber": 367
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setField",
+          "lineNumber": 368
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "normalizeTime",
+          "lineNumber": 368
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setField",
+          "lineNumber": 375
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setField",
+          "lineNumber": 379
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setField",
+          "lineNumber": 384
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setShowForm",
+          "lineNumber": 397
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "setEditingId",
+          "lineNumber": 397
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "shifts.filter",
+          "lineNumber": 405
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "daysWithShifts.map",
+          "lineNumber": 412
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "fmtDate",
+          "lineNumber": 415
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "showSchedule.filter",
+          "lineNumber": 421
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "sortedShifts.map",
+          "lineNumber": 447
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "fmtDate",
+          "lineNumber": 450
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "openForm",
+          "lineNumber": 471
+        },
+        {
+          "caller": "ShiftsManager",
+          "callee": "handleDeleteShift",
+          "lineNumber": 486
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 6,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/lib/__tests__/roles.react.test.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 43,
+      "nonEmptyLines": 36,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/lib/__tests__/roles.test.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 64,
+      "nonEmptyLines": 50,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/lib/markdown.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 103,
+      "nonEmptyLines": 90,
+      "functions": [
+        {
+          "name": "escapeHtml",
+          "startLine": 6,
+          "endLine": 12,
+          "params": [
+            "s"
+          ]
+        },
+        {
+          "name": "renderMarkdown",
+          "startLine": 19,
+          "endLine": 53,
+          "params": [
+            "text"
+          ]
+        },
+        {
+          "name": "renderInline",
+          "startLine": 56,
+          "endLine": 93,
+          "params": [
+            "text"
+          ]
+        },
+        {
+          "name": "interpolate",
+          "startLine": 99,
+          "endLine": 103,
+          "params": [
+            "text",
+            "vars"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "renderMarkdown",
+          "line": 19,
+          "isDefault": false
+        },
+        {
+          "name": "interpolate",
+          "line": 99,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "escapeHtml",
+          "callee": "s\n    .replace(/&/g, \"&amp;\")\n    .replace(/</g, \"&lt;\")\n    .replace(/>/g, \"&gt;\")\n    .replace",
+          "lineNumber": 7
+        },
+        {
+          "caller": "escapeHtml",
+          "callee": "s\n    .replace(/&/g, \"&amp;\")\n    .replace(/</g, \"&lt;\")\n    .replace",
+          "lineNumber": 7
+        },
+        {
+          "caller": "escapeHtml",
+          "callee": "s\n    .replace(/&/g, \"&amp;\")\n    .replace",
+          "lineNumber": 7
+        },
+        {
+          "caller": "escapeHtml",
+          "callee": "s\n    .replace",
+          "lineNumber": 7
+        },
+        {
+          "caller": "renderMarkdown",
+          "callee": "text.split",
+          "lineNumber": 20
+        },
+        {
+          "caller": "renderMarkdown",
+          "callee": "rawLine.trimEnd",
+          "lineNumber": 25
+        },
+        {
+          "caller": "renderMarkdown",
+          "callee": "line.match",
+          "lineNumber": 27
+        },
+        {
+          "caller": "renderMarkdown",
+          "callee": "output.push",
+          "lineNumber": 30
+        },
+        {
+          "caller": "renderMarkdown",
+          "callee": "line.replace",
+          "lineNumber": 33
+        },
+        {
+          "caller": "renderMarkdown",
+          "callee": "output.push",
+          "lineNumber": 34
+        },
+        {
+          "caller": "renderMarkdown",
+          "callee": "renderInline",
+          "lineNumber": 34
+        },
+        {
+          "caller": "renderMarkdown",
+          "callee": "output.push",
+          "lineNumber": 37
+        },
+        {
+          "caller": "renderMarkdown",
+          "callee": "output.push",
+          "lineNumber": 41
+        },
+        {
+          "caller": "renderMarkdown",
+          "callee": "output.push",
+          "lineNumber": 43
+        },
+        {
+          "caller": "renderMarkdown",
+          "callee": "renderInline",
+          "lineNumber": 43
+        },
+        {
+          "caller": "renderMarkdown",
+          "callee": "output.push",
+          "lineNumber": 49
+        },
+        {
+          "caller": "renderMarkdown",
+          "callee": "output.join",
+          "lineNumber": 52
+        },
+        {
+          "caller": "renderInline",
+          "callee": "remaining.match",
+          "lineNumber": 64
+        },
+        {
+          "caller": "renderInline",
+          "callee": "remaining.match",
+          "lineNumber": 66
+        },
+        {
+          "caller": "renderInline",
+          "callee": "escapeHtml",
+          "lineNumber": 70
+        },
+        {
+          "caller": "renderInline",
+          "callee": "escapeHtml",
+          "lineNumber": 79
+        },
+        {
+          "caller": "renderInline",
+          "callee": "escapeHtml",
+          "lineNumber": 80
+        },
+        {
+          "caller": "renderInline",
+          "callee": "remaining.slice",
+          "lineNumber": 81
+        },
+        {
+          "caller": "renderInline",
+          "callee": "escapeHtml",
+          "lineNumber": 83
+        },
+        {
+          "caller": "renderInline",
+          "callee": "escapeHtml",
+          "lineNumber": 84
+        },
+        {
+          "caller": "renderInline",
+          "callee": "escapeHtml",
+          "lineNumber": 84
+        },
+        {
+          "caller": "renderInline",
+          "callee": "remaining.slice",
+          "lineNumber": 85
+        },
+        {
+          "caller": "renderInline",
+          "callee": "escapeHtml",
+          "lineNumber": 87
+        },
+        {
+          "caller": "interpolate",
+          "callee": "text.replace",
+          "lineNumber": 100
+        },
+        {
+          "caller": "interpolate",
+          "callee": "Object.prototype.hasOwnProperty.call",
+          "lineNumber": 101
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/lib/roles.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 207,
+      "nonEmptyLines": 186,
+      "functions": [
+        {
+          "name": "getRoleAccent",
+          "startLine": 31,
+          "endLine": 39,
+          "params": [
+            "roleName"
+          ]
+        },
+        {
+          "name": "hashRole",
+          "startLine": 120,
+          "endLine": 124,
+          "params": [
+            "name"
+          ]
+        },
+        {
+          "name": "getBarClasses",
+          "startLine": 126,
+          "endLine": 132,
+          "params": [
+            "roleName",
+            "state"
+          ]
+        },
+        {
+          "name": "RoleIcon",
+          "startLine": 145,
+          "endLine": 207,
+          "params": [
+            "{ roleName }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "KNOWN_ROLES",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "getRoleAccent",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "getBarClasses",
+          "line": 126,
+          "isDefault": false
+        },
+        {
+          "name": "RoleIcon",
+          "line": 145,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "getRoleAccent",
+          "callee": "roleName.toLowerCase",
+          "lineNumber": 32
+        },
+        {
+          "caller": "getRoleAccent",
+          "callee": "lower.includes",
+          "lineNumber": 34
+        },
+        {
+          "caller": "getRoleAccent",
+          "callee": "lower.charCodeAt",
+          "lineNumber": 37
+        },
+        {
+          "caller": "hashRole",
+          "callee": "name.charCodeAt",
+          "lineNumber": 122
+        },
+        {
+          "caller": "getBarClasses",
+          "callee": "roleName.toLowerCase",
+          "lineNumber": 127
+        },
+        {
+          "caller": "getBarClasses",
+          "callee": "lower.includes",
+          "lineNumber": 129
+        },
+        {
+          "caller": "getBarClasses",
+          "callee": "hashRole",
+          "lineNumber": 131
+        },
+        {
+          "caller": "RoleIcon",
+          "callee": "roleName.toLowerCase",
+          "lineNumber": 146
+        },
+        {
+          "caller": "RoleIcon",
+          "callee": "lower.includes",
+          "lineNumber": 148
+        },
+        {
+          "caller": "RoleIcon",
+          "callee": "lower.includes",
+          "lineNumber": 155
+        },
+        {
+          "caller": "RoleIcon",
+          "callee": "lower.includes",
+          "lineNumber": 165
+        },
+        {
+          "caller": "RoleIcon",
+          "callee": "lower.includes",
+          "lineNumber": 171
+        },
+        {
+          "caller": "RoleIcon",
+          "callee": "lower.includes",
+          "lineNumber": 178
+        },
+        {
+          "caller": "RoleIcon",
+          "callee": "lower.includes",
+          "lineNumber": 185
+        },
+        {
+          "caller": "RoleIcon",
+          "callee": "lower.includes",
+          "lineNumber": 185
+        },
+        {
+          "caller": "RoleIcon",
+          "callee": "lower.includes",
+          "lineNumber": 193
+        },
+        {
+          "caller": "RoleIcon",
+          "callee": "lower.includes",
+          "lineNumber": 199
+        },
+        {
+          "caller": "RoleIcon",
+          "callee": "lower.includes",
+          "lineNumber": 199
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 4,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/lib/volunteer-charter.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 33,
+      "nonEmptyLines": 23,
+      "functions": [
+        {
+          "name": "buildVolunteerCharter",
+          "startLine": 1,
+          "endLine": 31,
+          "params": [
+            "{ hasOrgInsurance = true }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "buildVolunteerCharter",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DEFAULT_VOLUNTEER_CHARTER",
+          "line": 33,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    }
+  ]
+}

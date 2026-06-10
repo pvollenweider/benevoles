@@ -1,0 +1,550 @@
+{
+  "batchIndex": 4,
+  "parts": 1,
+  "nodes": [
+    {
+      "id": "file:src/app/admin/layout.tsx",
+      "type": "file",
+      "label": "admin/layout.tsx",
+      "path": "src/app/admin/layout.tsx",
+      "language": "typescript",
+      "category": "layout",
+      "lines": 35,
+      "description": "Admin section layout: checks auth session, resolves org context from cookie or first available org via Prisma, renders AdminNav with org/user context and wraps children."
+    },
+    {
+      "id": "file:src/app/api/auth/[...nextauth]/route.ts",
+      "type": "file",
+      "label": "api/auth/[...nextauth]/route.ts",
+      "path": "src/app/api/auth/[...nextauth]/route.ts",
+      "language": "typescript",
+      "category": "api-route",
+      "lines": 3,
+      "description": "NextAuth v5 catch-all API route: re-exports GET and POST handlers from auth.ts."
+    },
+    {
+      "id": "file:src/app/super-admin/layout.tsx",
+      "type": "file",
+      "label": "super-admin/layout.tsx",
+      "path": "src/app/super-admin/layout.tsx",
+      "language": "typescript",
+      "category": "layout",
+      "lines": 27,
+      "description": "Super-admin section layout: enforces SUPER_ADMIN role, reads active-org cookie, resolves org from Prisma, renders AdminNav with super-admin context."
+    },
+    {
+      "id": "file:src/app/super-admin/organizations/[slug]/page.tsx",
+      "type": "file",
+      "label": "organizations/[slug]/page.tsx",
+      "path": "src/app/super-admin/organizations/[slug]/page.tsx",
+      "language": "typescript",
+      "category": "page",
+      "lines": 57,
+      "description": "Super-admin org detail page: loads org by slug with admins/members/events, serializes dates, passes data to OrgDetail component."
+    },
+    {
+      "id": "file:src/app/super-admin/organizations/new/page.tsx",
+      "type": "file",
+      "label": "organizations/new/page.tsx",
+      "path": "src/app/super-admin/organizations/new/page.tsx",
+      "language": "typescript",
+      "category": "page",
+      "lines": 13,
+      "description": "Super-admin new organization page: guards with auth/role check, renders NewOrgForm."
+    },
+    {
+      "id": "file:src/app/super-admin/organizations/page.tsx",
+      "type": "file",
+      "label": "organizations/page.tsx",
+      "path": "src/app/super-admin/organizations/page.tsx",
+      "language": "typescript",
+      "category": "page",
+      "lines": 39,
+      "description": "Super-admin organizations listing page: loads all orgs with admin/member/event counts, serializes dates, passes to OrgsManager."
+    },
+    {
+      "id": "file:src/app/super-admin/profile/ProfileForm.tsx",
+      "type": "file",
+      "label": "profile/ProfileForm.tsx",
+      "path": "src/app/super-admin/profile/ProfileForm.tsx",
+      "language": "typescript",
+      "category": "component",
+      "lines": 118,
+      "description": "Client-side profile form for super-admin: handles email and password change via fetch to profile API, uses PasswordRules component for validation feedback."
+    },
+    {
+      "id": "file:src/app/super-admin/profile/page.tsx",
+      "type": "file",
+      "label": "profile/page.tsx",
+      "path": "src/app/super-admin/profile/page.tsx",
+      "language": "typescript",
+      "category": "page",
+      "lines": 15,
+      "description": "Super-admin profile page: checks auth, redirects unauthenticated users, renders ProfileForm with current email."
+    },
+    {
+      "id": "file:src/auth.config.ts",
+      "type": "file",
+      "label": "auth.config.ts",
+      "path": "src/auth.config.ts",
+      "language": "typescript",
+      "category": "config",
+      "lines": 37,
+      "description": "NextAuth v5 base configuration: credentials provider setup, session strategy, authorization callback that gates protected routes by checking session existence."
+    },
+    {
+      "id": "file:src/auth.ts",
+      "type": "file",
+      "label": "auth.ts",
+      "path": "src/auth.ts",
+      "language": "typescript",
+      "category": "auth",
+      "lines": 37,
+      "description": "NextAuth v5 main auth module: extends authConfig with Prisma adapter and password-hashing credentials logic; exports handlers, auth, signIn, signOut."
+    },
+    {
+      "id": "file:src/components/admin/AdminNav.tsx",
+      "type": "file",
+      "label": "AdminNav.tsx",
+      "path": "src/components/admin/AdminNav.tsx",
+      "language": "typescript",
+      "category": "component",
+      "lines": 71,
+      "description": "Navigation sidebar component for admin and super-admin sections: highlights active route via usePathname, shows org name, user name, role badge, and sign-out button."
+    },
+    {
+      "id": "file:src/components/super-admin/NewOrgForm.tsx",
+      "type": "file",
+      "label": "NewOrgForm.tsx",
+      "path": "src/components/super-admin/NewOrgForm.tsx",
+      "language": "typescript",
+      "category": "component",
+      "lines": 220,
+      "description": "Multi-step form for creating a new organization: POSTs to org API, displays generated invite link with clipboard copy, option to send invite email, then redirects to org detail or listing."
+    },
+    {
+      "id": "file:src/components/super-admin/OrgDetail.tsx",
+      "type": "file",
+      "label": "OrgDetail.tsx",
+      "path": "src/components/super-admin/OrgDetail.tsx",
+      "language": "typescript",
+      "category": "component",
+      "lines": 255,
+      "description": "Org detail management component: allows super-admin to rename org, change slug (with redirect), toggle active/inactive status, view stats (admins, members, events), and list admins."
+    },
+    {
+      "id": "file:src/components/super-admin/OrgsManager.tsx",
+      "type": "file",
+      "label": "OrgsManager.tsx",
+      "path": "src/components/super-admin/OrgsManager.tsx",
+      "language": "typescript",
+      "category": "component",
+      "lines": 122,
+      "description": "Organizations list manager: renders sortable/filterable table of all orgs with stats, toggle-active action, and link to org detail page."
+    },
+    {
+      "id": "file:src/middleware.ts",
+      "type": "file",
+      "label": "middleware.ts",
+      "path": "src/middleware.ts",
+      "language": "typescript",
+      "category": "middleware",
+      "lines": 53,
+      "description": "Next.js middleware: uses authConfig to protect /admin and /super-admin routes, redirects unauthenticated requests to /login, matcher excludes static assets and API auth routes."
+    },
+    {
+      "id": "func:AdminLayout",
+      "type": "function",
+      "label": "AdminLayout",
+      "path": "src/app/admin/layout.tsx",
+      "description": "Server component layout for the admin section; resolves org context and renders nav with children."
+    },
+    {
+      "id": "func:SuperAdminLayout",
+      "type": "function",
+      "label": "SuperAdminLayout",
+      "path": "src/app/super-admin/layout.tsx",
+      "description": "Server component layout for super-admin section; enforces role and resolves org from cookie."
+    },
+    {
+      "id": "func:OrgDetailPage",
+      "type": "function",
+      "label": "OrgDetailPage",
+      "path": "src/app/super-admin/organizations/[slug]/page.tsx",
+      "description": "Server page component loading full org data by slug for super-admin detail view."
+    },
+    {
+      "id": "func:NewOrgPage",
+      "type": "function",
+      "label": "NewOrgPage",
+      "path": "src/app/super-admin/organizations/new/page.tsx",
+      "description": "Server page component gating new-org creation behind auth/role check."
+    },
+    {
+      "id": "func:SuperAdminOrgsPage",
+      "type": "function",
+      "label": "SuperAdminOrgsPage",
+      "path": "src/app/super-admin/organizations/page.tsx",
+      "description": "Server page component loading all orgs with counts for the super-admin org list."
+    },
+    {
+      "id": "func:ProfileForm",
+      "type": "function",
+      "label": "ProfileForm",
+      "path": "src/app/super-admin/profile/ProfileForm.tsx",
+      "description": "Client component for changing super-admin email and password."
+    },
+    {
+      "id": "func:SuperAdminProfilePage",
+      "type": "function",
+      "label": "SuperAdminProfilePage",
+      "path": "src/app/super-admin/profile/page.tsx",
+      "description": "Server page that passes current email to ProfileForm."
+    },
+    {
+      "id": "func:AdminNav",
+      "type": "function",
+      "label": "AdminNav",
+      "path": "src/components/admin/AdminNav.tsx",
+      "description": "Navigation sidebar component, shared by admin and super-admin layouts."
+    },
+    {
+      "id": "func:NewOrgForm",
+      "type": "function",
+      "label": "NewOrgForm",
+      "path": "src/components/super-admin/NewOrgForm.tsx",
+      "description": "Client component multi-step form for creating a new organization with admin user."
+    },
+    {
+      "id": "func:OrgDetail",
+      "type": "function",
+      "label": "OrgDetail",
+      "path": "src/components/super-admin/OrgDetail.tsx",
+      "description": "Client component for viewing and editing a single organization's settings and stats."
+    },
+    {
+      "id": "func:OrgsManager",
+      "type": "function",
+      "label": "OrgsManager",
+      "path": "src/components/super-admin/OrgsManager.tsx",
+      "description": "Client component rendering the table of all organizations with management actions."
+    },
+    {
+      "id": "export:authConfig",
+      "type": "export",
+      "label": "authConfig",
+      "path": "src/auth.config.ts",
+      "description": "Base NextAuth configuration object used by both auth.ts and middleware.ts."
+    },
+    {
+      "id": "export:auth-handlers",
+      "type": "export",
+      "label": "{ handlers, auth, signIn, signOut }",
+      "path": "src/auth.ts",
+      "description": "NextAuth v5 exports: HTTP handlers for the API route, auth() session helper, signIn/signOut actions."
+    },
+    {
+      "id": "export:middleware-config",
+      "type": "export",
+      "label": "config (matcher)",
+      "path": "src/middleware.ts",
+      "description": "Next.js middleware matcher config excluding static files and auth API routes."
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/app/admin/layout.tsx",
+      "target": "file:src/auth.ts",
+      "type": "imports",
+      "label": "imports auth"
+    },
+    {
+      "source": "file:src/app/admin/layout.tsx",
+      "target": "file:src/components/admin/AdminNav.tsx",
+      "type": "imports",
+      "label": "imports AdminNav"
+    },
+    {
+      "source": "file:src/app/admin/layout.tsx",
+      "target": "file:src/lib/prisma.ts",
+      "type": "imports",
+      "label": "imports prisma"
+    },
+    {
+      "source": "file:src/app/admin/layout.tsx",
+      "target": "func:AdminLayout",
+      "type": "defines",
+      "label": "defines"
+    },
+    {
+      "source": "file:src/app/api/auth/[...nextauth]/route.ts",
+      "target": "file:src/auth.ts",
+      "type": "imports",
+      "label": "re-exports handlers"
+    },
+    {
+      "source": "file:src/app/super-admin/layout.tsx",
+      "target": "file:src/auth.ts",
+      "type": "imports",
+      "label": "imports auth"
+    },
+    {
+      "source": "file:src/app/super-admin/layout.tsx",
+      "target": "file:src/components/admin/AdminNav.tsx",
+      "type": "imports",
+      "label": "imports AdminNav"
+    },
+    {
+      "source": "file:src/app/super-admin/layout.tsx",
+      "target": "file:src/lib/prisma.ts",
+      "type": "imports",
+      "label": "imports prisma"
+    },
+    {
+      "source": "file:src/app/super-admin/layout.tsx",
+      "target": "func:SuperAdminLayout",
+      "type": "defines",
+      "label": "defines"
+    },
+    {
+      "source": "file:src/app/super-admin/organizations/[slug]/page.tsx",
+      "target": "file:src/auth.ts",
+      "type": "imports",
+      "label": "imports auth"
+    },
+    {
+      "source": "file:src/app/super-admin/organizations/[slug]/page.tsx",
+      "target": "file:src/components/super-admin/OrgDetail.tsx",
+      "type": "imports",
+      "label": "imports OrgDetail"
+    },
+    {
+      "source": "file:src/app/super-admin/organizations/[slug]/page.tsx",
+      "target": "file:src/lib/prisma.ts",
+      "type": "imports",
+      "label": "imports prisma"
+    },
+    {
+      "source": "file:src/app/super-admin/organizations/[slug]/page.tsx",
+      "target": "func:OrgDetailPage",
+      "type": "defines",
+      "label": "defines"
+    },
+    {
+      "source": "file:src/app/super-admin/organizations/new/page.tsx",
+      "target": "file:src/auth.ts",
+      "type": "imports",
+      "label": "imports auth"
+    },
+    {
+      "source": "file:src/app/super-admin/organizations/new/page.tsx",
+      "target": "file:src/components/super-admin/NewOrgForm.tsx",
+      "type": "imports",
+      "label": "imports NewOrgForm"
+    },
+    {
+      "source": "file:src/app/super-admin/organizations/new/page.tsx",
+      "target": "func:NewOrgPage",
+      "type": "defines",
+      "label": "defines"
+    },
+    {
+      "source": "file:src/app/super-admin/organizations/page.tsx",
+      "target": "file:src/auth.ts",
+      "type": "imports",
+      "label": "imports auth"
+    },
+    {
+      "source": "file:src/app/super-admin/organizations/page.tsx",
+      "target": "file:src/components/super-admin/OrgsManager.tsx",
+      "type": "imports",
+      "label": "imports OrgsManager"
+    },
+    {
+      "source": "file:src/app/super-admin/organizations/page.tsx",
+      "target": "file:src/lib/prisma.ts",
+      "type": "imports",
+      "label": "imports prisma"
+    },
+    {
+      "source": "file:src/app/super-admin/organizations/page.tsx",
+      "target": "func:SuperAdminOrgsPage",
+      "type": "defines",
+      "label": "defines"
+    },
+    {
+      "source": "file:src/app/super-admin/profile/ProfileForm.tsx",
+      "target": "file:src/components/PasswordRules.tsx",
+      "type": "imports",
+      "label": "imports PasswordRules"
+    },
+    {
+      "source": "file:src/app/super-admin/profile/ProfileForm.tsx",
+      "target": "func:ProfileForm",
+      "type": "defines",
+      "label": "defines"
+    },
+    {
+      "source": "file:src/app/super-admin/profile/page.tsx",
+      "target": "file:src/app/super-admin/profile/ProfileForm.tsx",
+      "type": "imports",
+      "label": "imports ProfileForm"
+    },
+    {
+      "source": "file:src/app/super-admin/profile/page.tsx",
+      "target": "file:src/auth.ts",
+      "type": "imports",
+      "label": "imports auth"
+    },
+    {
+      "source": "file:src/app/super-admin/profile/page.tsx",
+      "target": "func:SuperAdminProfilePage",
+      "type": "defines",
+      "label": "defines"
+    },
+    {
+      "source": "file:src/auth.config.ts",
+      "target": "export:authConfig",
+      "type": "defines",
+      "label": "exports"
+    },
+    {
+      "source": "file:src/auth.ts",
+      "target": "file:src/auth.config.ts",
+      "type": "imports",
+      "label": "imports authConfig"
+    },
+    {
+      "source": "file:src/auth.ts",
+      "target": "file:src/lib/prisma.ts",
+      "type": "imports",
+      "label": "imports prisma"
+    },
+    {
+      "source": "file:src/auth.ts",
+      "target": "export:auth-handlers",
+      "type": "defines",
+      "label": "exports"
+    },
+    {
+      "source": "file:src/components/admin/AdminNav.tsx",
+      "target": "func:AdminNav",
+      "type": "defines",
+      "label": "defines"
+    },
+    {
+      "source": "file:src/components/super-admin/NewOrgForm.tsx",
+      "target": "func:NewOrgForm",
+      "type": "defines",
+      "label": "defines"
+    },
+    {
+      "source": "file:src/components/super-admin/OrgDetail.tsx",
+      "target": "func:OrgDetail",
+      "type": "defines",
+      "label": "defines"
+    },
+    {
+      "source": "file:src/components/super-admin/OrgsManager.tsx",
+      "target": "func:OrgsManager",
+      "type": "defines",
+      "label": "defines"
+    },
+    {
+      "source": "file:src/middleware.ts",
+      "target": "file:src/auth.config.ts",
+      "type": "imports",
+      "label": "imports authConfig"
+    },
+    {
+      "source": "file:src/middleware.ts",
+      "target": "export:middleware-config",
+      "type": "defines",
+      "label": "exports matcher config"
+    },
+    {
+      "source": "func:AdminLayout",
+      "target": "func:AdminNav",
+      "type": "renders",
+      "label": "renders"
+    },
+    {
+      "source": "func:SuperAdminLayout",
+      "target": "func:AdminNav",
+      "type": "renders",
+      "label": "renders"
+    },
+    {
+      "source": "func:OrgDetailPage",
+      "target": "func:OrgDetail",
+      "type": "renders",
+      "label": "renders"
+    },
+    {
+      "source": "func:NewOrgPage",
+      "target": "func:NewOrgForm",
+      "type": "renders",
+      "label": "renders"
+    },
+    {
+      "source": "func:SuperAdminOrgsPage",
+      "target": "func:OrgsManager",
+      "type": "renders",
+      "label": "renders"
+    },
+    {
+      "source": "func:SuperAdminProfilePage",
+      "target": "func:ProfileForm",
+      "type": "renders",
+      "label": "renders"
+    },
+    {
+      "source": "func:AdminLayout",
+      "target": "export:auth-handlers",
+      "type": "calls",
+      "label": "calls auth()"
+    },
+    {
+      "source": "func:SuperAdminLayout",
+      "target": "export:auth-handlers",
+      "type": "calls",
+      "label": "calls auth()"
+    },
+    {
+      "source": "func:OrgDetailPage",
+      "target": "export:auth-handlers",
+      "type": "calls",
+      "label": "calls auth()"
+    },
+    {
+      "source": "func:NewOrgPage",
+      "target": "export:auth-handlers",
+      "type": "calls",
+      "label": "calls auth()"
+    },
+    {
+      "source": "func:SuperAdminOrgsPage",
+      "target": "export:auth-handlers",
+      "type": "calls",
+      "label": "calls auth()"
+    },
+    {
+      "source": "func:SuperAdminProfilePage",
+      "target": "export:auth-handlers",
+      "type": "calls",
+      "label": "calls auth()"
+    },
+    {
+      "source": "file:src/middleware.ts",
+      "target": "export:authConfig",
+      "type": "uses",
+      "label": "uses for route protection"
+    },
+    {
+      "source": "file:src/auth.ts",
+      "target": "export:authConfig",
+      "type": "extends",
+      "label": "extends with Prisma adapter"
+    }
+  ]
+}

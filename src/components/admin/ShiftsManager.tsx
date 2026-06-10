@@ -7,7 +7,7 @@ import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
 
 const emptyShift = {
   roleName: "", label: "", description: "", date: "", startTime: "", endTime: "",
-  capacity: 2, locationDetails: "", displayOrder: 0, internalNotes: "",
+  capacity: 2, locationDetails: "", displayOrder: 0, internalNotes: "", waitlistEnabled: false,
 }
 
 function localISO(d: Date) {
@@ -80,7 +80,7 @@ export default function ShiftsManager({
   const [dragRoleIdx, setDragRoleIdx]     = useState<number | null>(null)
   const [savingOrder, setSavingOrder]     = useState(false)
 
-  function setField(k: string, v: string | number) {
+  function setField(k: string, v: string | number | boolean) {
     setForm(f => ({ ...f, [k]: v }))
   }
 
@@ -246,7 +246,7 @@ export default function ShiftsManager({
               onClick={openReorder}
               className="text-xs text-gray-500 border border-gray-200 rounded-xl px-3 py-1.5 hover:bg-gray-50 transition-colors flex items-center gap-1.5"
             >
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4" />
               </svg>
               Ordonner les postes
@@ -383,6 +383,18 @@ export default function ShiftsManager({
             <label className="block text-xs font-medium text-gray-600 mb-1">Notes internes</label>
             <input type="text" value={form.internalNotes} onChange={e => setField("internalNotes", e.target.value)} className="input" />
           </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id={`waitlistEnabled-${editingId ?? "new"}`}
+              checked={Boolean(form.waitlistEnabled)}
+              onChange={e => setField("waitlistEnabled", e.target.checked)}
+              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+            />
+            <label htmlFor={`waitlistEnabled-${editingId ?? "new"}`} className="text-xs font-medium text-gray-600 select-none cursor-pointer">
+              Activer la liste d'attente (si complet, les bénévoles peuvent s'y inscrire)
+            </label>
+          </div>
 
           {error && <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{error}</div>}
           {attempted && (!form.roleName || !form.date || !form.startTime || !form.endTime) && (
@@ -436,11 +448,11 @@ export default function ShiftsManager({
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Date · Horaire</th>
-                <th className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Poste</th>
-                <th className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden sm:table-cell">Places</th>
-                <th className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden md:table-cell">Statut</th>
-                <th className="px-4 py-2.5" />
+                <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Date · Horaire</th>
+                <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Poste</th>
+                <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden sm:table-cell">Places</th>
+                <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden md:table-cell">Statut</th>
+                <th scope="col" className="px-4 py-2.5" />
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -477,6 +489,7 @@ export default function ShiftsManager({
                         endTime: s.endTime,
                         capacity: s.capacity,
                         internalNotes: s.internalNotes ?? "",
+                        waitlistEnabled: s.waitlistEnabled ?? false,
                       }, s.id)}
                       className="text-xs text-blue-500 hover:text-blue-700 mr-3"
                     >

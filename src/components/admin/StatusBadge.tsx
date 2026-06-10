@@ -7,6 +7,8 @@ export default function StatusBadge({ status }: { status: string }) {
     full: { label: "Complet", className: "bg-blue-100 text-blue-700" },
     closed: { label: "Fermé", className: "bg-gray-100 text-gray-600" },
     cancelled: { label: "Annulé", className: "bg-red-100 text-red-700" },
+    waiting: { label: "Liste d'attente", className: "bg-amber-100 text-amber-800" },
+    offered: { label: "Place proposée", className: "bg-purple-100 text-purple-800" },
   }
 
   const config = map[status] ?? { label: status, className: "bg-gray-100 text-gray-600" }

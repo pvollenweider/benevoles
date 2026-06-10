@@ -16,6 +16,7 @@ const schema = z.object({
   locationDetails: z.string().optional().nullable(),
   displayOrder: z.number().int().optional(),
   internalNotes: z.string().optional().nullable(),
+  waitlistEnabled: z.boolean().optional(),
   // Caller can opt out of notifying volunteers (default true).
   notifyVolunteers: z.boolean().optional(),
 })

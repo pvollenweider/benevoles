@@ -48,6 +48,7 @@ export type AdminShift = {
   displayOrder: number
   internalNotes?: string | null
   description?: string | null
+  waitlistEnabled?: boolean
 }
 
 type Show   = { name: string; date: string; startTime: string; endTime: string }
