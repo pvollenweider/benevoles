@@ -267,6 +267,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
   function ShiftRow({ s, compact = false }: { s: Shift; compact?: boolean }) {
     const isReg = myShiftIds.has(s.id)
     const reg = isReg ? myRegistrations.find((r) => r.shiftId === s.id) : null
+    const isWaitlistPending = !isReg && s.status === "full" && (s.waitlistEnabled ?? false)
     const name = s.label && s.label !== s.roleName ? s.label : s.roleName
     return (
       <div className={`flex items-start gap-2 px-4 ${compact ? "py-2" : "py-2.5"} ${isReg ? "bg-green-50" : ""}`}>
@@ -276,6 +277,9 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
         <div className="flex-1 min-w-0">
           <p className={`text-xs font-medium leading-snug ${isReg ? "text-green-900" : "text-gray-900"}`}>{name}</p>
           <p className="text-[11px] text-gray-400 mt-0.5 font-mono">{fmt(s.startTime)}–{fmt(s.endTime)}</p>
+          {isWaitlistPending && (
+            <p className="text-[11px] text-gray-400 mt-0.5">Complet · liste d&apos;attente si place libérée</p>
+          )}
         </div>
         {isReg ? (
           <button

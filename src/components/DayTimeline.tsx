@@ -163,16 +163,11 @@ export default function DayTimeline({
                           outline: "1px solid rgba(0,0,0,0.07)",
                         } : {}),
                         ...(isWaitlistable && !isSelected ? {
-                          border: "2px dashed currentColor",
-                          opacity: 0.85,
+                          backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.35) 5px, rgba(255,255,255,0.35) 7px)",
                         } : {}),
                       }}
                     >
-                      {isWaitlistable && !isSelected ? (
-                        <span className="text-[8px] px-1 truncate leading-none font-medium">
-                          File d&apos;attente
-                        </span>
-                      ) : isConflict || (unavail && !isSelected) ? (
+                      {isConflict || (unavail && !isSelected) ? (
                         <span className="text-[8px] px-1 truncate leading-none text-gray-600">
                           {isFull ? "Complet" : isClosed ? "Fermé" : ""}
                         </span>
@@ -192,12 +187,13 @@ export default function DayTimeline({
                         </div>
                       )}
                     </button>
-                    {hasLabel && (
+                    {(hasLabel || (isWaitlistable && !isSelected)) && (
                       <span
-                        className="absolute inset-x-0 bottom-0 text-[8px] text-gray-600 truncate text-center pointer-events-none"
-                        style={{ height: LABEL_H, lineHeight: `${LABEL_H}px` }}
+                        className="absolute inset-x-0 bottom-0 text-[8px] truncate text-center pointer-events-none"
+                        style={{ height: LABEL_H, lineHeight: `${LABEL_H}px`, color: isWaitlistable && !isSelected ? "currentColor" : undefined }}
+                        aria-hidden="true"
                       >
-                        {shift.label}
+                        {isWaitlistable && !isSelected ? "Complet · file d'attente" : shift.label}
                       </span>
                     )}
                   </div>
