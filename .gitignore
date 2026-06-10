@@ -52,3 +52,6 @@ next-env.d.ts
 
 # local dev scripts
 prisma/setup-horizon.ts
+
+# understand-anything generated files
+.understand-anything/
