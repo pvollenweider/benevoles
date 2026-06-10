@@ -5,15 +5,31 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ---
 
-## [Unreleased]
+## [1.11.0] — 2026-06-10
+
+### Ajouté
+
+- **Liste d'attente — interface publique** : les créneaux complets avec liste d'attente activée s'affichent en couleur du rôle avec rayures diagonales blanches (distinctif du gris hachuré « Complet ») ; les horaires restent visibles ; un sous-label « Complet · file d'attente » apparaît sous la barre ; un bénévole qui sélectionne ce créneau voit « En attente » avec une coche dans le récap
+- **Liste d'attente — récap sidebar** : les créneaux en liste d'attente sélectionnés sont listés avec une note « Complet · liste d'attente si place libérée » dans le style secondaire (cohérent avec les sous-labels existants)
+- **Liste d'attente — export Excel** : feuille Récap par poste — 8e colonne « File d'attente » avec noms ordonnés par position (✓ = place proposée) ; feuille Bénévoles — section « File d'attente » en bas avec email et créneaux souhaités
+- **Liste d'attente — export PDF** : colonne « File d'attente » conditionnelle dans le tableau Récap par poste (affichée uniquement si au moins un créneau a des personnes en attente)
+- **Liste d'attente — promotion admin** : l'annulation d'une inscription depuis l'interface admin (via DELETE ou PATCH `status: cancelled`) déclenche désormais la promotion automatique de la première personne en liste d'attente, comme c'était déjà le cas pour les annulations publiques
 
 ### Refactoring
 
-- **`gantt-utils.ts`** : extraction des utilitaires partagés des deux composants timeline (`toMin`, `toMinEnd`, `fromMin`, `fmt`, `clamp`, `GanttShow`) dans `src/lib/gantt-utils.ts` — pas de changement de comportement
+- **`gantt-utils.ts`** : extraction des utilitaires partagés (`toMin`, `toMinEnd`, `fromMin`, `fmt`, `clamp`, `GanttShow`) dans `src/lib/gantt-utils.ts`
 
 ### Infrastructure
 
-- **`.understand-anything/`** ajouté à `.gitignore` (fichiers générés localement, ne doivent pas être versionnés) ; dossier retiré du dépôt
+- **`.understand-anything/`** ajouté à `.gitignore` ; dossier retiré du dépôt
+
+### Documentation
+
+- Incohérence Node.js corrigée (`≥ 22` → `26` dans `CONTRIBUTING.md`)
+- `README.md` : structure `lib/` mise à jour (`gantt-utils.ts`, `waitlist.ts`, `AdminDayTimeline`)
+- `FONCTIONNALITES.md` : liste d'attente documentée (côté public et admin), notifications `waitlist_*` ajoutées au tableau, compteur de tests supprimé
+- `GUIDE_ADMIN.md` : section « Activer la liste d'attente » dans la gestion des créneaux
+- `GUIDE_BENEVOLE.md` : FAQ créneau complet explique la liste d'attente et le délai de 24 h
 
 ---
 

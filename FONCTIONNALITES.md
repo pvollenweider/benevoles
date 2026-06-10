@@ -50,7 +50,7 @@ Liste exhaustive des fonctionnalités de l'application.
 - Envoi automatique d'un email de confirmation avec récapitulatif des créneaux inscrits
 - Page de gestion : liste de toutes les inscriptions actives du bénévole pour l'événement
 - Annulation individuelle d'un créneau depuis la page de gestion
-- **Liste d'attente** : si un créneau est complet et que la liste d'attente est activée, le bénévole peut s'y inscrire ; quand une place se libère, la première personne en attente reçoit un email avec un lien de confirmation valable 24 h
+- **Liste d'attente** : si un créneau est complet et que la liste d'attente est activée, le bénévole peut s'y inscrire (barre rayée cliquable avec sous-label « Complet · file d'attente ») ; quand une place se libère, la première personne en attente reçoit un email avec un lien de confirmation valable 24 h
 - Arrivée depuis un lien email : le token est stocké en `localStorage` — le bénévole est automatiquement reconnu s'il navigue vers la page de l'événement
 - Lien « Retour à l'accueil » pointe directement sur la page de l'événement
 
@@ -93,7 +93,7 @@ Liste exhaustive des fonctionnalités de l'application.
 - Icônes colorées par rôle (palette prédéfinie + couleur déterministe par hash du nom pour les rôles personnalisés — 8 teintes)
 - Autocomplétion des rôles existants
 - Modification, suppression et changement de statut : ouvert → fermé → complet → annulé
-- **Liste d'attente par créneau** : case à cocher `Activer la liste d'attente` sur chaque créneau ; quand le créneau est complet, les bénévoles peuvent s'inscrire en liste d'attente ; une place libérée déclenche automatiquement une offre à la première personne en attente (email + lien de confirmation, expiration 24 h)
+- **Liste d'attente par créneau** : case à cocher `Activer la liste d'attente` sur chaque créneau ; quand le créneau est complet, les bénévoles peuvent s'inscrire en liste d'attente ; une place libérée (annulation publique ou admin) déclenche automatiquement une offre à la première personne en attente (email + lien de confirmation, expiration 24 h)
 - **Réordonnancement des postes** : panneau glisser-déposer pour changer l'ordre des lignes dans toutes les timelines, persisté via `displayOrder`
 - **Vue timeline** (par jour) et **vue liste** (tableau plat) commutables
 - Popover au clic sur un créneau : éditer libellé, capacité, statut — bouton direct vers les inscriptions filtrées sur ce créneau
@@ -158,14 +158,15 @@ Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscr
 
 - Un onglet par jour avec Gantt : rôles × tranches de 30 minutes, noms des bénévoles dans les cellules
 - Plages des spectacles en fond coloré
-- Onglet **« Récap par poste »** (feuille dédiée) : tableau récapitulatif par jour — rôle, libellé, horaires, capacité, inscrits, liste des bénévoles
-- Onglet **« Bénévoles »** avec toutes les données détaillées
+- Onglet **« Récap par poste »** (feuille dédiée) : tableau récapitulatif par jour — rôle, libellé, horaires, capacité, inscrits, liste des bénévoles ; colonne « File d'attente » avec noms ordonnés par position si des listes d'attente existent
+- Onglet **« Bénévoles »** avec toutes les données détaillées ; section « File d'attente » en bas si applicable
 - Bénévoles triés alphabétiquement
 
 #### PDF (impression navigateur)
 
 - **3 sections uniformes** : Planning (Gantt par jour), Récap par poste, Liste des bénévoles
 - Aucun saut de page forcé entre les sections — rendu continu optimisé impression
+- Colonne « File d'attente » conditionnelle dans le récap (affichée uniquement si au moins un créneau a des personnes en attente)
 - Bouton « Imprimer / Enregistrer en PDF »
 
 ### Paramètres de l'organisation (`/admin/settings/admins`)
