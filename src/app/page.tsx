@@ -112,63 +112,132 @@ export default async function HomePage() {
 function LandingPage() {
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero */}
-      <section className="bg-gray-50 border-b border-gray-200 px-6 py-20">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="inline-block mb-4 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-medium">
-            Projet communautaire · En développement actif
-          </div>
-          <h1 className="text-4xl font-bold text-gray-900 leading-tight">
-            Gérez vos bénévoles simplement
-          </h1>
-          <p className="mt-4 text-lg text-gray-600 max-w-xl mx-auto">
-            Benevol est un outil open source pour les associations et festivals qui organisent des événements avec des équipes de bénévoles.
-          </p>
-          <a
-            href="mailto:contact@benevol.app"
-            className="mt-8 inline-block bg-blue-600 text-white text-sm font-semibold px-6 py-3 rounded-full hover:bg-blue-700 transition-colors"
+
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <section className="bg-blue-900 px-6 py-24 sm:py-32">
+        <div className="max-w-3xl mx-auto">
+          <h1
+            className="text-4xl sm:text-5xl font-extrabold text-white leading-tight"
+            style={{ textWrap: "balance" } as React.CSSProperties}
           >
-            Tester le projet →
-          </a>
+            Vos bénévoles s'inscrivent sans créer de compte.
+          </h1>
+          <p className="mt-5 text-lg text-blue-200 max-w-2xl leading-relaxed">
+            Un lien, ils choisissent leur créneau, c'est fait. Benevol est un outil open source
+            pour les associations et festivals qui gèrent des équipes de bénévoles.
+          </p>
+          <div className="mt-10 flex flex-wrap gap-4 items-center">
+            <a
+              href="mailto:contact@benevol.app"
+              className="inline-flex items-center gap-2 bg-white text-blue-900 text-sm font-bold px-6 py-3 rounded-full hover:bg-blue-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white"
+            >
+              Tester le projet<span aria-hidden="true"> →</span>
+            </a>
+            <a
+              href="https://github.com/pvollenweider/benevoles"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-white text-sm font-medium hover:text-blue-200 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white underline-offset-4 hover:underline"
+            >
+              <svg
+                aria-hidden="true"
+                focusable="false"
+                className="w-5 h-5 flex-shrink-0"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+              </svg>
+              Voir sur GitHub
+              <span className="sr-only">(ouvre dans un nouvel onglet)</span>
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="max-w-4xl mx-auto px-6 py-16">
-        <div className="grid sm:grid-cols-2 gap-6">
-          <FeatureCard
-            icon="📅"
-            title="Planning par créneaux"
-            description="Créez vos postes et créneaux horaires en quelques clics. Visualisez la couverture de votre événement sur une timeline interactive."
-          />
-          <FeatureCard
-            icon="👋"
-            title="Inscription publique"
-            description="Vos bénévoles s'inscrivent sans créer de compte. Un lien, un clic, et c'est fait — depuis un téléphone ou un ordinateur."
-          />
-          <FeatureCard
-            icon="📊"
-            title="Suivi en temps réel"
-            description="Consultez les inscriptions au fil de l'eau. Exportez vos listes en Excel ou PDF pour la coordination sur le terrain."
-          />
-          <FeatureCard
-            icon="✉️"
-            title="Communications automatiques"
-            description="Confirmations d'inscription, rappels avant l'événement, notifications de modification — tout est géré automatiquement."
-          />
+      {/* ── Différenciateur principal ─────────────────────────────────────── */}
+      <section
+        aria-labelledby="features-heading"
+        className="max-w-4xl mx-auto px-6 py-20"
+      >
+        <h2 id="features-heading" className="sr-only">Fonctionnalités</h2>
+
+        {/* Primary feature */}
+        <div className="bg-blue-50 rounded-2xl p-8 sm:p-10 mb-16">
+          <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight" style={{ textWrap: "balance" } as React.CSSProperties}>
+            Inscription sans friction
+          </h3>
+          <p className="mt-4 text-base text-gray-600 leading-relaxed max-w-xl">
+            Pas de compte, pas de mot de passe. Vous publiez l'événement, vous envoyez un lien.
+            Les bénévoles voient la timeline Gantt, choisissent leur créneau, confirment.
+            Depuis leur téléphone, en 30 secondes.
+          </p>
+          <p className="mt-3 text-sm text-gray-500 max-w-md">
+            Un lien unique leur permet de modifier ou d'annuler leur inscription à tout moment,
+            sans se connecter.
+          </p>
         </div>
+
+        {/* Secondary features — horizontal strip */}
+        <ul className="grid sm:grid-cols-3 gap-8" role="list">
+          <li>
+            <h3 className="text-base font-semibold text-gray-900">Planning par créneaux</h3>
+            <p className="mt-2 text-sm text-gray-500 leading-relaxed">
+              Timeline Gantt interactive par jour, réordonnement des postes, couverture visible d'un coup d'œil.
+            </p>
+          </li>
+          <li>
+            <h3 className="text-base font-semibold text-gray-900">Suivi et exports</h3>
+            <p className="mt-2 text-sm text-gray-500 leading-relaxed">
+              Inscriptions en temps réel, exports Excel et PDF pour la coordination sur le terrain.
+            </p>
+          </li>
+          <li>
+            <h3 className="text-base font-semibold text-gray-900">Communications automatiques</h3>
+            <p className="mt-2 text-sm text-gray-500 leading-relaxed">
+              Confirmations, rappels J-2/J-1/Jour J, notifications de modification — sans intervention manuelle.
+            </p>
+          </li>
+        </ul>
       </section>
 
-      {/* CTA */}
+      {/* ── Signal communauté ─────────────────────────────────────────────── */}
       <section className="bg-gray-50 border-t border-gray-200 px-6 py-14">
+        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-start gap-8">
+          <div className="flex-1">
+            <h2 className="text-lg font-bold text-gray-900">Construit par des organisateurs</h2>
+            <p className="mt-2 text-sm text-gray-600 leading-relaxed max-w-md">
+              Benevol est un projet open source, en développement actif, utilisé pour de vrais
+              événements. Le code est sur GitHub. Les retours et contributions sont bienvenus.
+            </p>
+          </div>
+          <div className="flex-shrink-0">
+            <a
+              href="https://github.com/pvollenweider/benevoles"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border border-gray-300 rounded-full px-4 py-2 text-sm font-medium text-gray-700 hover:border-gray-400 hover:bg-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            >
+              <svg aria-hidden="true" focusable="false" className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+              </svg>
+              pvollenweider/benevoles
+              <span className="sr-only">(ouvre dans un nouvel onglet)</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA bas ──────────────────────────────────────────────────────── */}
+      <section className="px-6 py-14">
         <div className="max-w-xl mx-auto text-center">
-          <h2 className="text-xl font-semibold text-gray-900">Vous voulez tester ?</h2>
-          <p className="mt-2 text-gray-500 text-sm">
-            Le projet est en développement actif et ouvert aux testeurs externes. Écrivez-nous et on vous crée un espace.
+          <h2 className="text-xl font-bold text-gray-900">On vous crée un espace</h2>
+          <p className="mt-3 text-sm text-gray-500 max-w-sm mx-auto leading-relaxed">
+            Le projet est ouvert aux testeurs. Écrivez-nous, on configure une organisation pour vous.
           </p>
           <a
             href="mailto:contact@benevol.app"
-            className="mt-6 inline-block border border-blue-600 text-blue-600 text-sm font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition-colors"
+            className="mt-6 inline-flex items-center gap-2 border border-blue-600 text-blue-600 text-sm font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
             contact@benevol.app
           </a>
@@ -177,15 +246,5 @@ function LandingPage() {
 
       <PublicFooter />
     </main>
-  )
-}
-
-function FeatureCard({ icon, title, description }: { icon: string; title: string; description: string }) {
-  return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-6">
-      <div className="text-2xl mb-3">{icon}</div>
-      <h3 className="text-base font-semibold text-gray-900">{title}</h3>
-      <p className="mt-1 text-sm text-gray-500 leading-relaxed">{description}</p>
-    </div>
   )
 }
