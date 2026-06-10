@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-10T00:00:00Z",
+  "title": "Design System: Benevol",
+  "extensions": {
+    "colorMeta": {
+      "action-blue":         { "role": "primary",  "displayName": "Bleu Décision",         "canonical": "oklch(50.5% 0.22 258)", "tonalRamp": ["#1e3a8a","#1e40af","#1d4ed8","#2563eb","#3b82f6","#60a5fa","#93c5fd","#dbeafe"] },
+      "ink-primary":         { "role": "neutral",  "displayName": "Encre Principale",       "canonical": "oklch(16.8% 0.01 264)", "tonalRamp": ["#030712","#111827","#1f2937","#374151","#4b5563","#6b7280","#9ca3af","#f3f4f6"] },
+      "surface-page":        { "role": "neutral",  "displayName": "Page",                   "canonical": "oklch(98.0% 0.003 247)", "tonalRamp": ["#e5e7eb","#f3f4f6","#f9fafb","#ffffff"] },
+      "border-default":      { "role": "neutral",  "displayName": "Bordure",                "canonical": "oklch(91.5% 0.004 258)", "tonalRamp": ["#9ca3af","#d1d5db","#e5e7eb","#f3f4f6"] },
+      "status-active-bg":    { "role": "semantic", "displayName": "Statut Actif Fond",      "canonical": "oklch(93.4% 0.07 145)", "tonalRamp": ["#14532d","#15803d","#16a34a","#4ade80","#bbf7d0","#dcfce7","#f0fdf4"] },
+      "status-cancelled-bg": { "role": "semantic", "displayName": "Statut Annulé Fond",     "canonical": "oklch(93.6% 0.04 25)",  "tonalRamp": ["#7f1d1d","#b91c1c","#ef4444","#fca5a5","#fecaca","#fee2e2","#fef2f2"] },
+      "status-waiting-bg":   { "role": "semantic", "displayName": "Statut Attente Fond",    "canonical": "oklch(96.4% 0.05 85)",  "tonalRamp": ["#451a03","#92400e","#d97706","#fbbf24","#fde68a","#fef3c7","#fffbeb"] },
+      "status-offered-bg":   { "role": "semantic", "displayName": "Statut Proposé Fond",    "canonical": "oklch(94.4% 0.04 296)", "tonalRamp": ["#2e1065","#3730a3","#6d28d9","#a78bfa","#c4b5fd","#ede9fe","#f5f3ff"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Titres de page et d'événements dans les en-têtes." },
+      "body":    { "displayName": "Body",    "purpose": "Contenu principal. Max 65–75ch sur les blocs prose." },
+      "label":   { "displayName": "Label",   "purpose": "Badges, headers de tableau, chips. Jamais uppercase par défaut." }
+    },
+    "shadows": [
+      { "name": "hover-card",  "value": "0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06)", "purpose": "Cartes cliquables au hover uniquement. Pas au repos." },
+      { "name": "focus-ring",  "value": "0 0 0 2px rgba(59,130,246,0.2)",                          "purpose": "Focus sur inputs et boutons, combiné avec border-color #2563eb." }
+    ],
+    "motion": [
+      { "name": "ease-standard", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Transitions d'état par défaut (hover, focus, toggle). 150ms." },
+      { "name": "ease-out",      "value": "cubic-bezier(0, 0, 0.2, 1)",   "purpose": "Entrées (apparition d'un élément). 200ms max." }
+    ],
+    "breakpoints": [
+      { "name": "sm",  "value": "640px" },
+      { "name": "md",  "value": "768px" },
+      { "name": "lg",  "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Action principale de la page. Pill shape, bleu décision.",
+      "html": "<button class=\"ds-btn-primary\">Ajouter un créneau</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; background: #2563eb; color: #fff; padding: 10px 20px; border-radius: 9999px; font-size: 0.875rem; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; border: none; cursor: pointer; transition: background 150ms cubic-bezier(0.4,0,0.2,1); outline: none; } .ds-btn-primary:hover { background: #1d4ed8; } .ds-btn-primary:focus-visible { background: #1d4ed8; box-shadow: 0 0 0 2px rgba(59,130,246,0.4); } .ds-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Action secondaire. Contour bleu, fond transparent.",
+      "html": "<button class=\"ds-btn-ghost\">Annuler</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; background: transparent; color: #2563eb; padding: 10px 20px; border-radius: 9999px; font-size: 0.875rem; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; border: 1px solid #2563eb; cursor: pointer; transition: background 150ms cubic-bezier(0.4,0,0.2,1); outline: none; } .ds-btn-ghost:hover { background: #eff6ff; } .ds-btn-ghost:focus-visible { box-shadow: 0 0 0 2px rgba(59,130,246,0.3); }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Conteneur de contenu. Blanc sur fond page gris. Bordure légère, pas d'ombre au repos.",
+      "html": "<div class=\"ds-card\"><p class=\"ds-card-title\">Titre de section</p><p class=\"ds-card-body\">Contenu de la carte avec du texte représentatif pour vérifier la lisibilité.</p></div>",
+      "css": ".ds-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; transition: border-color 150ms, box-shadow 150ms; } .ds-card:hover { border-color: #bfdbfe; box-shadow: 0 1px 3px rgba(0,0,0,0.1); } .ds-card-title { font-size: 1rem; font-weight: 600; color: #111827; margin: 0 0 8px; } .ds-card-body { font-size: 0.875rem; color: #4b5563; line-height: 1.6; margin: 0; }"
+    },
+    {
+      "name": "Input Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Champ de saisie standard. Radius 12px, focus ring bleu.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-label\" for=\"ds-input-demo\">Prénom</label><input class=\"ds-input\" id=\"ds-input-demo\" type=\"text\" placeholder=\"ex. Marie\" /></div>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 4px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; } .ds-label { font-size: 0.75rem; font-weight: 500; color: #4b5563; } .ds-input { border: 1px solid #d1d5db; border-radius: 12px; padding: 8px 12px; font-size: 0.875rem; font-family: inherit; color: #111827; background: #fff; outline: none; transition: border-color 150ms, box-shadow 150ms; width: 100%; box-sizing: border-box; } .ds-input:focus { border-color: #2563eb; box-shadow: 0 0 0 2px rgba(59,130,246,0.2); } .ds-input::placeholder { color: #9ca3af; }"
+    },
+    {
+      "name": "Status Badge — Active",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Badge statut vert pour inscriptions actives, créneaux ouverts, événements publiés.",
+      "html": "<span class=\"ds-badge-active\">Actif</span>",
+      "css": ".ds-badge-active { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #dcfce7; color: #15803d; }"
+    },
+    {
+      "name": "Status Badge — Waiting",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Badge amber pour bénévoles en liste d'attente.",
+      "html": "<span class=\"ds-badge-waiting\">Liste d'attente</span>",
+      "css": ".ds-badge-waiting { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fef3c7; color: #92400e; }"
+    },
+    {
+      "name": "Status Badge — Offered",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Badge violet pour places proposées en attente de confirmation (expire 24h).",
+      "html": "<span class=\"ds-badge-offered\">Place proposée</span>",
+      "css": ".ds-badge-offered { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #ede9fe; color: #3730a3; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Le carnet de terrain",
+    "overview": "Benevol est un outil qu'on sort sous la pression d'un événement : à 7h du matin le jour J, sur téléphone, avec des bénévoles qui arrivent en retard. Ce n'est pas une interface qu'on contemple — c'est un outil qu'on consulte vite et qu'on pose.\n\nLe système est délibérément sobre. La couleur est réservée à l'action et au statut, jamais à la décoration. La typographie est le système sans-serif natif. L'espacement crée le rythme ; les bords arrondis signalent la douceur sans chercher à être mignons.\n\nCe système s'interdit explicitement l'esthétique SaaS corporate : pas de hero-metrics, pas de gradient, pas de dark mode obsidien pour faire dev-centric, pas de motion qui distrait.",
+    "keyCharacteristics": [
+      "Hiérarchie forte, densité contrôlée",
+      "Chrome minimal — les bordures font le travail des ombres",
+      "Couleur = action + statut, jamais décoration",
+      "Radius généreux (12–16px) sans être ludique",
+      "Système sans-serif natif : pas de web font pour l'interface admin"
+    ],
+    "rules": [
+      { "name": "La Règle du Bleu Unique",        "body": "#2563eb est la seule couleur d'action. Sa rareté est sa puissance.", "section": "colors" },
+      { "name": "La Règle des Paires de Statut",  "body": "Chaque statut a une paire fond/texte figée. Ne jamais mélanger.", "section": "colors" },
+      { "name": "La Règle No-Caps",               "body": "Pas de labels UPPERCASE avec letter-spacing. Le poids (600) crée l'autorité.", "section": "typography" },
+      { "name": "La Règle Plat-par-Défaut",        "body": "Les surfaces sont plates au repos. L'ombre signale l'interactivité, pas la hiérarchie.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do utiliser #2563eb comme seule couleur d'action",
+      "Do différencier fond de page (#f9fafb) et fond de carte (#fff) pour la profondeur sans ombre",
+      "Do utiliser border-radius: 9999px (pill) pour les boutons et 16px pour les cartes",
+      "Do placer scope=\"col\" sur tous les <th> de tableaux (WCAG 1.3.1)",
+      "Do ajouter aria-hidden=\"true\" sur les SVG décoratifs dans les boutons avec texte visible"
+    ],
+    "donts": [
+      "Don't ajouter un deuxième bleu ou une deuxième couleur d'action",
+      "Don't utiliser des ombres au repos sur les cartes",
+      "Don't imbriquer des cartes (fond blanc dans fond blanc)",
+      "Don't utiliser border-left épais comme accent de couleur (side-stripe border)",
+      "Don't créer de gradient text (background-clip: text)",
+      "Don't mettre de kicker UPPERCASE au-dessus de chaque section",
+      "Don't copier l'esthétique Salesforce / Monday.com",
+      "Don't introduire de web font pour l'interface admin",
+      "Don't utiliser des animations qui distraient de la tâche"
+    ]
+  }
+}
