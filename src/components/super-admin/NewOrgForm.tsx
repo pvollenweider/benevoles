@@ -60,6 +60,7 @@ export default function NewOrgForm() {
           <div className="flex items-center gap-2">
             <input
               readOnly
+              aria-label="Lien d'invitation (lecture seule)"
               value={result.inviteUrl}
               className="flex-1 font-mono text-xs bg-white border border-blue-200 rounded-lg px-3 py-2 text-blue-900 select-all"
               onClick={(e) => (e.target as HTMLInputElement).select()}
@@ -128,7 +129,7 @@ export default function NewOrgForm() {
 
       <form onSubmit={submit} className="bg-white border border-gray-200 rounded-xl p-5 space-y-4 max-w-lg">
         <div>
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Organisation</p>
+          <p className="text-xs font-semibold text-gray-600 mb-3">Organisation</p>
           <Field
             label="Nom de l'organisation"
             required
@@ -139,7 +140,7 @@ export default function NewOrgForm() {
         </div>
 
         <div>
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Premier administrateur</p>
+          <p className="text-xs font-semibold text-gray-600 mb-3">Premier administrateur</p>
           <div className="space-y-3">
             <Field
               label="Nom complet"
@@ -160,7 +161,7 @@ export default function NewOrgForm() {
         </div>
 
         {error && (
-          <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+          <p role="alert" className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
             {error}
           </p>
         )}
@@ -201,13 +202,15 @@ function Field({
   required?: boolean
   placeholder?: string
 }) {
+  const id = `field-${label.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")}`
   return (
     <div>
-      <label className="block text-sm text-gray-700 mb-1">
+      <label htmlFor={id} className="block text-sm text-gray-700 mb-1">
         {label}
         {required && " *"}
       </label>
       <input
+        id={id}
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}

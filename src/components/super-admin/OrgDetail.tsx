@@ -111,7 +111,7 @@ export default function OrgDetail({ org }: { org: Org }) {
       <div className="flex items-start justify-between flex-wrap gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <Link href="/super-admin/organizations" className="text-sm text-gray-400 hover:text-gray-600">
+            <Link href="/super-admin/organizations" className="text-sm text-gray-500 hover:text-gray-700">
               Organisations
             </Link>
             <span className="text-gray-300">/</span>
@@ -126,12 +126,13 @@ export default function OrgDetail({ org }: { org: Org }) {
               <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-medium">Désactivée</span>
             )}
           </div>
-          <p className="text-xs text-gray-400 mt-1">Créée le {createdAt}</p>
+          <p className="text-xs text-gray-500 mt-1">Créée le {createdAt}</p>
         </div>
 
         <div className="flex items-center gap-2">
           <a
             href={`/api/super-admin/use-org/${org.id}`}
+            aria-label={`Gérer l'organisation ${org.name}`}
             className="text-sm bg-blue-600 text-white px-4 py-2 rounded-xl font-medium hover:bg-blue-700"
           >
             Gérer →
@@ -158,9 +159,10 @@ export default function OrgDetail({ org }: { org: Org }) {
       {/* Edit name + slug */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <form onSubmit={saveName} className="bg-white border border-gray-200 rounded-xl p-4 space-y-2">
-          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Nom</label>
+          <label htmlFor="sa-org-name" className="text-xs font-semibold text-gray-600">Nom</label>
           <div className="flex gap-2">
             <input
+              id="sa-org-name"
               value={name}
               onChange={(e) => { setName(e.target.value); setNameSaved(false) }}
               minLength={2}
@@ -176,14 +178,15 @@ export default function OrgDetail({ org }: { org: Org }) {
               {savingName ? "…" : "OK"}
             </button>
           </div>
-          {nameSaved && <p className="text-xs text-green-600">Enregistré.</p>}
-          {nameError && <p className="text-xs text-red-600">{nameError}</p>}
+          {nameSaved && <p role="status" className="text-xs text-green-600">Enregistré.</p>}
+          {nameError && <p role="alert" className="text-xs text-red-600">{nameError}</p>}
         </form>
 
         <form onSubmit={saveSlug} className="bg-white border border-gray-200 rounded-xl p-4 space-y-2">
-          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Slug</label>
+          <label htmlFor="sa-org-slug" className="text-xs font-semibold text-gray-600">Slug</label>
           <div className="flex gap-2">
             <input
+              id="sa-org-slug"
               value={slug}
               onChange={(e) => { setSlug(e.target.value); setSlugSaved(false) }}
               minLength={2}
@@ -200,8 +203,8 @@ export default function OrgDetail({ org }: { org: Org }) {
               {savingSlug ? "…" : "OK"}
             </button>
           </div>
-          {slugSaved && <p className="text-xs text-green-600">Enregistré. L&apos;ancien slug redirige vers le nouveau.</p>}
-          {slugError && <p className="text-xs text-red-600">{slugError}</p>}
+          {slugSaved && <p role="status" className="text-xs text-green-600">Enregistré. L&apos;ancien slug redirige vers le nouveau.</p>}
+          {slugError && <p role="alert" className="text-xs text-red-600">{slugError}</p>}
         </form>
       </div>
 
@@ -209,16 +212,16 @@ export default function OrgDetail({ org }: { org: Org }) {
       <div>
         <h2 className="text-sm font-semibold text-gray-700 mb-3">Administrateurs</h2>
         {org.admins.length === 0 ? (
-          <p className="text-sm text-gray-400">Aucun administrateur.</p>
+          <p className="text-sm text-gray-500">Aucun administrateur.</p>
         ) : (
           <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
+              <thead className="bg-gray-50 text-xs text-gray-500">
                 <tr>
-                  <th className="text-left px-4 py-2 font-medium">Nom</th>
-                  <th className="text-left px-4 py-2 font-medium">Email</th>
-                  <th className="text-left px-4 py-2 font-medium">Rôle</th>
-                  <th className="text-left px-4 py-2 font-medium">Statut</th>
+                  <th scope="col" className="text-left px-4 py-2 font-medium">Nom</th>
+                  <th scope="col" className="text-left px-4 py-2 font-medium">Email</th>
+                  <th scope="col" className="text-left px-4 py-2 font-medium">Rôle</th>
+                  <th scope="col" className="text-left px-4 py-2 font-medium">Statut</th>
                 </tr>
               </thead>
               <tbody>

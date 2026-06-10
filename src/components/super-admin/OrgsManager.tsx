@@ -61,20 +61,20 @@ export default function OrgsManager({ initialOrgs }: Props) {
       </div>
 
       {orgs.length === 0 ? (
-        <div className="text-center py-16 text-gray-400">
+        <div className="text-center py-16 text-gray-500">
           Aucune organisation. Créez-en une pour commencer.
         </div>
       ) : (
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
+            <thead className="bg-gray-50 text-xs text-gray-500">
               <tr>
-                <th className="text-left px-4 py-2 font-medium">Nom</th>
-                <th className="text-left px-4 py-2 font-medium">Slug</th>
-                <th className="text-right px-4 py-2 font-medium">Événements</th>
-                <th className="text-right px-4 py-2 font-medium">Admins</th>
-                <th className="text-right px-4 py-2 font-medium">Membres</th>
-                <th className="text-right px-4 py-2 font-medium"></th>
+                <th scope="col" className="text-left px-4 py-2 font-medium">Nom</th>
+                <th scope="col" className="text-left px-4 py-2 font-medium">Slug</th>
+                <th scope="col" className="text-right px-4 py-2 font-medium">Événements</th>
+                <th scope="col" className="text-right px-4 py-2 font-medium">Admins</th>
+                <th scope="col" className="text-right px-4 py-2 font-medium">Membres</th>
+                <th scope="col" className="text-right px-4 py-2 font-medium"></th>
               </tr>
             </thead>
             <tbody>
