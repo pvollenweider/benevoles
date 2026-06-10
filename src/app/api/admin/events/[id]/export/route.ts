@@ -4,12 +4,14 @@ import ExcelJS from "exceljs"
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-type VolData = { firstName: string; lastName: string; email: string | null; phone: string | null }
-type RegData  = { volunteer: VolData; comment: string | null; source: string }
+type VolData      = { firstName: string; lastName: string; email: string | null; phone: string | null }
+type RegData      = { volunteer: VolData; comment: string | null; source: string }
+type WaitlistEntry = { volunteer: VolData; status: string; position: number | null }
 type ShiftRow = {
   id: string; roleName: string; label: string; date: Date
   startTime: string; endTime: string; capacity: number; status: string
   registrations: RegData[]
+  waitlistEntries: WaitlistEntry[]
 }
 type ShowEntry = { name: string; date: string; startTime: string; endTime: string }
 
@@ -294,9 +296,9 @@ function buildRecapSheet(
   days: { label: string; shifts: ShiftRow[] }[],
 ) {
   const ws = wb.addWorksheet("Récap par poste")
-  ws.columns = [{ width: 20 }, { width: 22 }, { width: 8 }, { width: 8 }, { width: 8 }, { width: 9 }, { width: 36 }]
+  ws.columns = [{ width: 20 }, { width: 22 }, { width: 8 }, { width: 8 }, { width: 8 }, { width: 9 }, { width: 36 }, { width: 36 }]
 
-  const RECAP_COLS = 7
+  const RECAP_COLS = 8
 
   for (const [di, { label, shifts }] of days.entries()) {
     const roleOrder: string[] = []
@@ -313,7 +315,7 @@ function buildRecapSheet(
     dayRow.getCell(1).font = { bold: true, size: 10, color: { argb: "FF4338CA" } }
 
     // Column header
-    const rhRow = ws.addRow(["Poste", "Libellé", "Début", "Fin", "Places", "Inscrits", "Bénévoles"])
+    const rhRow = ws.addRow(["Poste", "Libellé", "Début", "Fin", "Places", "Inscrits", "Bénévoles", "File d'attente"])
     rhRow.height = 18
     rhRow.eachCell({ includeEmpty: true }, (cell, col) => {
       cell.font      = { bold: true, size: 9, color: { argb: "FF374151" } }
@@ -339,9 +341,17 @@ function buildRecapSheet(
       const rowCount = Math.max(1, volNames.length)
       const firstRow = recapRowNum
 
+      const waitlist = shift.waitlistEntries ?? []
+      const hasWaitlist = waitlist.length > 0
+      const waitlistNames = waitlist
+        .sort((a, b) => (a.position ?? 99) - (b.position ?? 99))
+        .map((e, i) => `${i + 1}. ${shortName(e.volunteer)}${e.status === "offered" ? " ✓" : ""}`)
+        .join("\n")
+
       for (let vi = 0; vi < rowCount; vi++) {
         const isFirstVol = vi === 0
         const isLastVol  = vi === rowCount - 1
+        const isRealLast = isLastVol && !hasWaitlist
         const dRow = ws.addRow([
           isFirstVol ? shift.roleName : null,
           isFirstVol ? (shift.label !== shift.roleName ? shift.label : "") : null,
@@ -350,16 +360,17 @@ function buildRecapSheet(
           isFirstVol ? shift.capacity : null,
           isFirstVol ? shift.registrations.length : null,
           volNames[vi] ?? (isFirstVol ? "—" : null),
+          null,
         ])
         dRow.height = 15
         dRow.eachCell({ includeEmpty: true }, (cell, col) => {
           cell.font      = { size: 9 }
           cell.alignment = { vertical: "middle", horizontal: col >= 3 && col <= 6 ? "center" : "left" }
           const topRole    = isFirstVol && isFirstRole && shiftIdx > 0
-          const bottomRole = isLastVol  && isLastRole
+          const bottomRole = isRealLast && isLastRole
           cell.border = {
             top:    topRole    ? b("medium", C_STRONG) : (isFirstVol ? b("thin") : b("thin", "FFFAFAFA")),
-            bottom: bottomRole ? b("medium", C_STRONG) : (isLastVol  ? b("thin") : b("thin", "FFFAFAFA")),
+            bottom: bottomRole ? b("medium", C_STRONG) : (isRealLast ? b("thin") : b("thin", "FFFAFAFA")),
             left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
             right:  col === RECAP_COLS ? b("medium", C_STRONG) : b("thin"),
           }
@@ -373,12 +384,32 @@ function buildRecapSheet(
           const master = ws.getCell(firstRow, col)
           master.border = {
             top:    isFirstRole && shiftIdx > 0 ? b("medium", C_STRONG) : b("thin"),
-            bottom: isLastRole ? b("medium", C_STRONG) : b("thin"),
+            bottom: !hasWaitlist && isLastRole ? b("medium", C_STRONG) : b("thin"),
             left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
             right:  b("thin"),
           }
           master.alignment = { vertical: "middle", horizontal: col >= 3 && col <= RECAP_COLS - 1 ? "center" : "left" }
         }
+      }
+
+      // Waitlist row — spans cols 1-6 merged, col 7 empty, col 8 = names
+      if (hasWaitlist) {
+        const wRow = ws.addRow([null, null, null, null, null, null, null, waitlistNames])
+        wRow.height = Math.max(15, waitlist.length * 13)
+        ws.mergeCells(recapRowNum, 1, recapRowNum, 7)
+        wRow.eachCell({ includeEmpty: true }, (cell, col) => {
+          cell.border = {
+            top:    b("thin", "FFEEEEEE"),
+            bottom: isLastRole ? b("medium", C_STRONG) : b("thin"),
+            left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
+            right:  col === RECAP_COLS ? b("medium", C_STRONG) : b("thin"),
+          }
+          cell.fill = solidFill("FFFAFAFA")
+        })
+        const wCell = wRow.getCell(8)
+        wCell.font      = { size: 8, italic: true, color: { argb: "FF6B7280" } }
+        wCell.alignment = { vertical: "top", wrapText: true }
+        recapRowNum++
       }
     })
   }
@@ -400,7 +431,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
         where: { status: { not: "cancelled" } },
         include: {
           registrations: {
-            where: { status: "active" },
+            where: { status: { in: ["active", "waiting", "offered"] } },
             include: { volunteer: true },
           },
         },
@@ -420,7 +451,19 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   for (const shift of event.shifts) {
     const key = shift.date.toISOString().split("T")[0]
     if (!dayMap.has(key)) dayMap.set(key, { date: shift.date, shifts: [] })
-    dayMap.get(key)!.shifts.push(shift as ShiftRow)
+    const shiftRow: ShiftRow = {
+      ...(shift as unknown as ShiftRow),
+      registrations: shift.registrations.filter((r: { status: string }) => r.status === "active"),
+      waitlistEntries: shift.registrations
+        .filter((r: { status: string }) => r.status === "waiting" || r.status === "offered")
+        .map((r: { volunteer: VolData; status: string; waitingPosition?: number | null }) => ({
+          volunteer: r.volunteer,
+          status: r.status,
+          position: r.waitingPosition ?? null,
+        }))
+        .sort((a: WaitlistEntry, b: WaitlistEntry) => (a.position ?? 99) - (b.position ?? 99)),
+    }
+    dayMap.get(key)!.shifts.push(shiftRow)
   }
 
   const showSchedule = (event.showSchedule as ShowEntry[] | null) ?? []
@@ -457,11 +500,14 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     }
   })
 
+  // Active volunteers (deduped)
   const volMap = new Map<string, VolData>()
-  for (const shift of event.shifts) {
-    for (const reg of shift.registrations) {
-      const volEmail = reg.volunteer.email ?? ""
-      if (!volMap.has(volEmail)) volMap.set(volEmail, reg.volunteer)
+  for (const shift of dayMap.values()) {
+    for (const s of shift.shifts) {
+      for (const reg of s.registrations) {
+        const k = reg.volunteer.email ?? reg.volunteer.firstName + reg.volunteer.lastName
+        if (!volMap.has(k)) volMap.set(k, reg.volunteer)
+      }
     }
   }
   const allVols = [...volMap.values()].sort((a, b) =>
@@ -483,6 +529,60 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       }
     })
   })
+
+  // Waitlist section
+  const waitVolMap = new Map<string, { vol: VolData; shifts: string[] }>()
+  for (const { shifts } of dayMap.values()) {
+    for (const s of shifts) {
+      for (const e of s.waitlistEntries) {
+        const k = e.volunteer.email ?? e.volunteer.firstName + e.volunteer.lastName
+        const label = `${s.roleName} ${fmtSlot(toMin(s.startTime))}–${fmtSlot(toMin(s.endTime))}${e.status === "offered" ? " (place proposée)" : ""}`
+        if (!waitVolMap.has(k)) waitVolMap.set(k, { vol: e.volunteer, shifts: [] })
+        waitVolMap.get(k)!.shifts.push(label)
+      }
+    }
+  }
+
+  if (waitVolMap.size > 0) {
+    wsV.addRow([])
+    const wlHeader = wsV.addRow(["File d'attente", "", "", ""])
+    wlHeader.height = 16
+    wlHeader.getCell(1).font = { bold: true, size: 10, color: { argb: "FFD97706" } }
+
+    const wlColRow = wsV.addRow(["Nom", "Prénom", "Email", "Créneaux souhaités"])
+    wlColRow.height = 18
+    wlColRow.eachCell({ includeEmpty: true }, (cell, col) => {
+      cell.font      = { bold: true, size: 9 }
+      cell.fill      = solidFill("FFFEF3C7")
+      cell.alignment = { vertical: "middle" }
+      cell.border    = {
+        top:    b("medium", C_STRONG),
+        bottom: b("medium", C_STRONG),
+        left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
+        right:  col === 4 ? b("medium", C_STRONG) : b("thin"),
+      }
+    })
+
+    const waitVols = [...waitVolMap.values()].sort((a, b) =>
+      a.vol.lastName.localeCompare(b.vol.lastName, "fr") || a.vol.firstName.localeCompare(b.vol.firstName, "fr")
+    )
+    waitVols.forEach(({ vol, shifts }, idx) => {
+      const isLast = idx === waitVols.length - 1
+      const row = wsV.addRow([vol.lastName, vol.firstName, vol.email, shifts.join(", ")])
+      row.height = 15
+      row.eachCell({ includeEmpty: true }, (cell, col) => {
+        cell.font      = { size: 9, italic: true }
+        cell.fill      = solidFill("FFFFFFEE")
+        cell.alignment = { vertical: "middle", wrapText: col === 4 }
+        cell.border    = {
+          top:    b("thin"),
+          bottom: isLast ? b("medium", C_STRONG) : b("thin"),
+          left:   col === 1 ? b("medium", C_STRONG) : b("thin"),
+          right:  col === 4 ? b("medium", C_STRONG) : b("thin"),
+        }
+      })
+    })
+  }
 
   const buf = Buffer.from(await wb.xlsx.writeBuffer())
 
