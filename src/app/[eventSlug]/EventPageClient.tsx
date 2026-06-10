@@ -275,7 +275,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
     const isWaitlistPending = !isReg && s.status === "full" && (s.waitlistEnabled ?? false)
     const name = s.label && s.label !== s.roleName ? s.label : s.roleName
     return (
-      <div className={`flex items-start gap-2 px-4 ${compact ? "py-2" : "py-2.5"} ${isReg ? "bg-green-50" : ""}`}>
+      <div className={`flex items-start gap-2 px-4 ${compact ? "py-2" : "py-2.5"} ${isReg ? "bg-green-50" : selectedShifts.has(s.id) ? "bg-blue-50/60" : ""}`}>
         <svg aria-hidden="true" className={`w-3.5 h-3.5 flex-shrink-0 mt-0.5 ${isReg ? "text-green-400" : "text-blue-400"}`} fill="currentColor" viewBox="0 0 20 20">
           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
         </svg>
@@ -451,7 +451,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
         {step === "form" && (
           <div className="lg:grid lg:grid-cols-[1fr_300px] lg:gap-8 lg:items-start">
             {/* Form */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-5">
+            <div className="bg-white rounded-2xl border border-blue-200 p-5">
               <div className="flex items-center gap-2 mb-5">
                 <button onClick={() => setStep("select")} className="text-blue-600 text-sm">← Retour</button>
                 <h2 className="text-base font-semibold text-gray-800">Vos informations</h2>
