@@ -115,17 +115,20 @@ function LandingPage() {
       {/* Hero */}
       <section className="bg-gray-50 border-b border-gray-200 px-6 py-20">
         <div className="max-w-3xl mx-auto text-center">
+          <div className="inline-block mb-4 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-medium">
+            Projet communautaire · En développement actif
+          </div>
           <h1 className="text-4xl font-bold text-gray-900 leading-tight">
             Gérez vos bénévoles simplement
           </h1>
           <p className="mt-4 text-lg text-gray-600 max-w-xl mx-auto">
-            Benevol est une plateforme SaaS pour les associations et festivals qui organisent des événements avec des équipes de bénévoles.
+            Benevol est un outil open source pour les associations et festivals qui organisent des événements avec des équipes de bénévoles.
           </p>
           <a
             href="mailto:contact@benevol.app"
             className="mt-8 inline-block bg-blue-600 text-white text-sm font-semibold px-6 py-3 rounded-full hover:bg-blue-700 transition-colors"
           >
-            Demander l&apos;accès →
+            Tester le projet →
           </a>
         </div>
       </section>
@@ -159,9 +162,9 @@ function LandingPage() {
       {/* CTA */}
       <section className="bg-gray-50 border-t border-gray-200 px-6 py-14">
         <div className="max-w-xl mx-auto text-center">
-          <h2 className="text-xl font-semibold text-gray-900">Prêt à simplifier votre organisation ?</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Vous voulez tester ?</h2>
           <p className="mt-2 text-gray-500 text-sm">
-            Benevol est actuellement en accès anticipé. Contactez-nous pour en savoir plus.
+            Le projet est en développement actif et ouvert aux testeurs externes. Écrivez-nous et on vous crée un espace.
           </p>
           <a
             href="mailto:contact@benevol.app"
