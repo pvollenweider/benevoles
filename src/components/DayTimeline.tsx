@@ -1,6 +1,9 @@
 "use client"
 
 import { getBarClasses } from "@/lib/roles"
+import { toMin, toMinEnd, fmt, type GanttShow } from "@/lib/gantt-utils"
+
+export { fmt }
 
 export type TimelineShift = {
   id: string
@@ -13,23 +16,7 @@ export type TimelineShift = {
   displayOrder?: number
 }
 
-type Show = { name: string; date: string; startTime: string; endTime: string }
-
-function toMin(t: string) {
-  const [h, m] = t.split(":").map(Number)
-  return h * 60 + m
-}
-
-// End times at or before their start time are overnight (e.g. 23:00 → 00:00)
-function toMinEnd(end: string, start: string) {
-  const e = toMin(end), s = toMin(start)
-  return e <= s ? e + 1440 : e
-}
-
-export function fmt(t: string) {
-  const [h, m] = t.split(":")
-  return m === "00" ? `${h}h` : `${h}h${m}`
-}
+type Show = GanttShow
 
 const ROW_H   = 44
 const GAP     = 4

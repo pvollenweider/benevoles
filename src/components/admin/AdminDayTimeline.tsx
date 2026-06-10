@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react"
 import Link from "next/link"
 import { getRoleAccent, getBarClasses } from "@/lib/roles"
+import { toMin, toMinEnd, fromMin, fmt, clamp, type GanttShow } from "@/lib/gantt-utils"
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const PX_PER_MIN = 2.5
@@ -16,23 +17,7 @@ const AXIS_H     = 20
 const SHOW_H     = 22
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-function toMin(t: string) {
-  const [h, m] = t.split(":").map(Number)
-  return h * 60 + m
-}
-function toMinEnd(end: string, start: string) {
-  const e = toMin(end), s = toMin(start)
-  return e <= s ? e + 1440 : e
-}
-function fromMin(n: number) {
-  return `${String(Math.floor(n / 60)).padStart(2, "0")}:${String(n % 60).padStart(2, "0")}`
-}
 function snapTo(n: number) { return Math.round(n / SNAP) * SNAP }
-function clamp(n: number, lo: number, hi: number) { return Math.max(lo, Math.min(hi, n)) }
-function fmt(t: string) {
-  const [h, m] = t.split(":")
-  return m === "00" ? `${h}h` : `${h}h${m}`
-}
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 export type AdminShift = {
@@ -51,7 +36,7 @@ export type AdminShift = {
   waitlistEnabled?: boolean
 }
 
-type Show   = { name: string; date: string; startTime: string; endTime: string }
+type Show = GanttShow
 type Draft  = { roleName: string; startMin: number; endMin: number }
 type Resize = { shiftId: string; side: "left" | "right"; origStart: number; origEnd: number }
 
