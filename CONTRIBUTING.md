@@ -4,7 +4,7 @@ Merci de votre intérêt pour ce projet !
 
 ## Prérequis
 
-- Node.js ≥ 22
+- Node.js **26**
 - PostgreSQL 16
 - `npm` (pas yarn, pas pnpm)
 

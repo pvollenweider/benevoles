@@ -193,9 +193,9 @@ src/
 │       ├── cron/reminders/               # Endpoint rappels automatiques
 │       └── public/                       # API publique (événements, inscriptions)
 ├── components/
-│   ├── admin/                            # Composants interface admin
+│   ├── admin/                            # Composants interface admin (AdminDayTimeline…)
 │   ├── super-admin/                      # Composants super admin
-│   └── DayTimeline.tsx                   # Timeline Gantt interactive
+│   └── DayTimeline.tsx                   # Timeline Gantt publique interactive
 └── lib/
     ├── auth-guard.ts                     # Guards d'authentification + scoping org
     ├── prisma-org.ts                     # Client Prisma scopé par organisation
@@ -203,7 +203,8 @@ src/
     │   ├── types.ts                      # Types NotificationKind, Payload
     │   ├── templates.ts                  # Templates HTML + texte
     │   └── index.ts                      # sendNotification()
-    ├── email.ts                          # Wrappers sendMemberInvite, etc.
+    ├── gantt-utils.ts                    # Utilitaires partagés des timelines Gantt
+    ├── waitlist.ts                       # Promotion liste d'attente
     ├── prisma.ts                         # Client Prisma singleton
     └── utils.ts                          # Utilitaires (token, dates, conflits)
 prisma/

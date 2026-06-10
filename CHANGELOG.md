@@ -5,6 +5,18 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ---
 
+## [Unreleased]
+
+### Refactoring
+
+- **`gantt-utils.ts`** : extraction des utilitaires partagés des deux composants timeline (`toMin`, `toMinEnd`, `fromMin`, `fmt`, `clamp`, `GanttShow`) dans `src/lib/gantt-utils.ts` — pas de changement de comportement
+
+### Infrastructure
+
+- **`.understand-anything/`** ajouté à `.gitignore` (fichiers générés localement, ne doivent pas être versionnés) ; dossier retiré du dépôt
+
+---
+
 ## [1.10.0] — 2026-06-09
 
 ### Ajouté

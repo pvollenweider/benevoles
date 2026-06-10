@@ -50,6 +50,7 @@ Liste exhaustive des fonctionnalités de l'application.
 - Envoi automatique d'un email de confirmation avec récapitulatif des créneaux inscrits
 - Page de gestion : liste de toutes les inscriptions actives du bénévole pour l'événement
 - Annulation individuelle d'un créneau depuis la page de gestion
+- **Liste d'attente** : si un créneau est complet et que la liste d'attente est activée, le bénévole peut s'y inscrire ; quand une place se libère, la première personne en attente reçoit un email avec un lien de confirmation valable 24 h
 - Arrivée depuis un lien email : le token est stocké en `localStorage` — le bénévole est automatiquement reconnu s'il navigue vers la page de l'événement
 - Lien « Retour à l'accueil » pointe directement sur la page de l'événement
 
@@ -92,6 +93,7 @@ Liste exhaustive des fonctionnalités de l'application.
 - Icônes colorées par rôle (palette prédéfinie + couleur déterministe par hash du nom pour les rôles personnalisés — 8 teintes)
 - Autocomplétion des rôles existants
 - Modification, suppression et changement de statut : ouvert → fermé → complet → annulé
+- **Liste d'attente par créneau** : case à cocher `Activer la liste d'attente` sur chaque créneau ; quand le créneau est complet, les bénévoles peuvent s'inscrire en liste d'attente ; une place libérée déclenche automatiquement une offre à la première personne en attente (email + lien de confirmation, expiration 24 h)
 - **Réordonnancement des postes** : panneau glisser-déposer pour changer l'ordre des lignes dans toutes les timelines, persisté via `displayOrder`
 - **Vue timeline** (par jour) et **vue liste** (tableau plat) commutables
 - Popover au clic sur un créneau : éditer libellé, capacité, statut — bouton direct vers les inscriptions filtrées sur ce créneau
@@ -210,6 +212,8 @@ Toutes les notifications passent par `sendNotification()` — aucun appel direct
 | `shift_cancelled` | Annulation d'un créneau |
 | `registration_cancelled` | Annulation d'une inscription publique |
 | `admin_notification` | Alerte admin à chaque nouvelle inscription (optionnel) |
+| `waitlist_confirmation` | Inscription en liste d'attente |
+| `waitlist_offered` | Place disponible — offre avec lien de confirmation (24 h) |
 | `admin_invite` | Invitation d'un nouvel admin à l'équipe |
 | `admin_welcome` | Bienvenue après activation du compte admin |
 | `password_reset` | Réinitialisation du mot de passe admin |
@@ -227,7 +231,7 @@ Fallback console si SMTP non configuré (développement).
 - PostgreSQL 16 + Prisma 7 ORM (driver natif pg, migration unique squashée)
 - Architecture multi-tenant : isolation par `organizationId` avec client Prisma étendu
 - **Routage par sous-domaine** : `[orgSlug].benevol.app` → le middleware injecte `x-org-slug` ; fallback `?org=<slug>` pour le développement localhost
-- 20 tests d'isolation cross-tenant (Vitest) — 113 tests au total
+- Tests d'isolation cross-tenant (Vitest) — vérifient que chaque route admin utilise le client Prisma scopé
 - Déploiement Docker Compose ou image standalone
 - Déploiement Kubernetes avec init container pour migrations automatiques
 - CI/CD GitHub Actions : build, push image GHCR, déploiement automatique sur push `main`

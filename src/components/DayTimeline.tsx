@@ -14,6 +14,7 @@ export type TimelineShift = {
   status: string
   spotsLeft: number
   displayOrder?: number
+  waitlistEnabled?: boolean
 }
 
 type Show = GanttShow
@@ -117,19 +118,28 @@ export default function DayTimeline({
               }}
             >
               {byRole[role].map((shift) => {
-                const isRegistered = registered?.has(shift.id) ?? false
-                const isConflict  = conflicts?.has(shift.id) ?? false
-                const isFull      = shift.status === "full"
-                const isClosed    = shift.status === "closed"
-                const unavail     = isFull || isClosed
-                const isSelected  = selected.has(shift.id)
-                const state       = isSelected ? "selected" : (isConflict || unavail) ? "unavailable" : "default"
-                const barCls      = getBarClasses(shift.roleName, state)
-                const clickable   = !isRegistered && !isConflict && !unavail
-                const hasLabel    = shift.label !== shift.roleName
-                const startMin    = toMin(shift.startTime)
-                const endMin      = toMinEnd(shift.endTime, shift.startTime)
-                const LABEL_H     = 14
+                const isRegistered    = registered?.has(shift.id) ?? false
+                const isConflict      = conflicts?.has(shift.id) ?? false
+                const isFull          = shift.status === "full"
+                const isClosed        = shift.status === "closed"
+                const isWaitlistable  = isFull && (shift.waitlistEnabled ?? false)
+                const unavail         = (isFull && !isWaitlistable) || isClosed
+                const isSelected      = selected.has(shift.id)
+                const state           = isSelected ? "selected" : (isConflict || unavail) ? "unavailable" : "default"
+                const barCls          = getBarClasses(shift.roleName, state)
+                const clickable       = !isRegistered && !isConflict && !unavail
+                const hasLabel        = shift.label !== shift.roleName
+                const startMin        = toMin(shift.startTime)
+                const endMin          = toMinEnd(shift.endTime, shift.startTime)
+                const LABEL_H         = 14
+                const timeLabel       = `${fmt(shift.startTime)}–${fmt(shift.endTime)}`
+                const ariaLabel       = isWaitlistable
+                  ? (isSelected
+                    ? `Retirer de la file d'attente — ${shift.roleName} ${timeLabel}`
+                    : `Rejoindre la file d'attente — ${shift.roleName} ${timeLabel}`)
+                  : (isSelected
+                    ? `Désélectionner — ${shift.roleName} ${timeLabel}`
+                    : `Sélectionner — ${shift.roleName} ${timeLabel}`)
 
                 return (
                   <div
@@ -139,27 +149,37 @@ export default function DayTimeline({
                   >
                     <button
                       disabled={!clickable}
+                      aria-pressed={clickable ? isSelected : undefined}
+                      aria-label={ariaLabel}
                       onClick={() => onToggle(shift.id, shift.status)}
                       className={`absolute inset-x-0 rounded flex items-center justify-center overflow-hidden transition-colors ${clickable ? "cursor-pointer" : "cursor-default"} ${barCls}`}
                       style={{
                         top: 0,
                         bottom: hasLabel ? LABEL_H : 0,
-                        borderLeft: isFull ? "3px solid rgba(0,0,0,0.08)" : "4px solid rgba(255,255,255,0.7)",
-                        ...(isFull ? {
+                        borderLeft: (isFull && !isWaitlistable) ? "3px solid rgba(0,0,0,0.08)" : "4px solid rgba(255,255,255,0.7)",
+                        ...((isFull && !isWaitlistable) ? {
                           backgroundColor: "white",
                           backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 6px, rgba(0,0,0,0.06) 6px, rgba(0,0,0,0.06) 8px)",
                           outline: "1px solid rgba(0,0,0,0.07)",
                         } : {}),
+                        ...(isWaitlistable && !isSelected ? {
+                          border: "2px dashed currentColor",
+                          opacity: 0.85,
+                        } : {}),
                       }}
                     >
-                      {isConflict || (unavail && !isSelected) ? (
+                      {isWaitlistable && !isSelected ? (
+                        <span className="text-[8px] px-1 truncate leading-none font-medium">
+                          File d&apos;attente
+                        </span>
+                      ) : isConflict || (unavail && !isSelected) ? (
                         <span className="text-[8px] px-1 truncate leading-none text-gray-600">
                           {isFull ? "Complet" : isClosed ? "Fermé" : ""}
                         </span>
                       ) : (
                         <div className="flex items-center gap-0.5 px-1.5 max-w-full overflow-hidden">
                           {isSelected && (
-                            <svg className="w-2.5 h-2.5 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <svg aria-hidden="true" className="w-2.5 h-2.5 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                             </svg>
                           )}
@@ -167,7 +187,7 @@ export default function DayTimeline({
                             className="text-white text-[10px] font-bold truncate leading-none"
                             style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
                           >
-                            {fmt(shift.startTime)}–{fmt(shift.endTime)}
+                            {isSelected && isWaitlistable ? "En attente" : timeLabel}
                           </span>
                         </div>
                       )}

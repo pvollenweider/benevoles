@@ -47,6 +47,12 @@ Un créneau correspond à un poste de bénévolat sur une plage horaire précise
 | Capacité | Nombre maximum de bénévoles |
 | Statut | `Ouvert`, `Complet`, `Fermé`, `Annulé` |
 
+### Activer la liste d'attente
+
+Cochez **Activer la liste d'attente** dans le formulaire du créneau (ou dans le popover de la timeline admin). Quand le créneau est complet, les bénévoles peuvent s'y inscrire ; une place libérée déclenche automatiquement l'envoi d'un email à la première personne en attente, avec un lien de confirmation valable **24 heures**. Passé ce délai sans réponse, la place est proposée à la personne suivante.
+
+La vue des inscriptions (`/admin/events/[id]/registrations`) affiche les bénévoles en attente (`En attente`) et ceux à qui une place a été proposée (`Offerte`).
+
 ### Réordonner les postes
 
 Le bouton **Réordonner les postes** ouvre un panneau glisser-déposer. L'ordre défini ici s'applique à la timeline admin **et** à la page publique.

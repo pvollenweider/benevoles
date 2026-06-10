@@ -101,7 +101,7 @@ Vérifiez vos courriers indésirables. Si vous avez conservé le lien affiché s
 Annulez le créneau concerné via votre lien personnel, puis retournez sur la page de l'événement pour en choisir un autre.
 
 **Le créneau que je veux est complet.**
-La place peut se libérer si un autre bénévole annule. Revenez ultérieurement ou contactez l'organisateur.
+Si la liste d'attente est activée sur ce créneau, un bouton **Rejoindre la liste d'attente** apparaît. En vous y inscrivant, vous recevrez un email dès qu'une place se libère. Vous aurez alors **24 heures** pour confirmer via le lien dans l'email. Sans réponse, la place passe à la personne suivante. Si la liste d'attente n'est pas disponible, revenez ultérieurement ou contactez l'organisateur.
 
 **J'ai un message « Ce créneau chevauche une inscription existante ».**
 Vous êtes déjà inscrit(e) à un créneau qui se passe en même temps. Vos inscriptions existantes apparaissent en vert dans le planning — les créneaux en conflit sont grisés automatiquement.
