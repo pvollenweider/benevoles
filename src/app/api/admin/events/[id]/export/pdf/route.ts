@@ -325,10 +325,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
     body {
       font-family: system-ui, -apple-system, sans-serif;
-      font-size: 10px;
+      font-size: 11px;
       color: #111827;
       background: #fff;
-      padding: 20px;
+      padding: 24px;
     }
 
     /* ── Print button ─────────────────────────────────────────────────── */
@@ -356,33 +356,32 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
     /* ── Header ───────────────────────────────────────────────────────── */
     .event-title { font-size: 18px; font-weight: 700; color: #111827; }
-    .event-meta  { font-size: 10px; color: #6B7280; margin-top: 2px; }
+    .event-meta  { font-size: 11px; color: #374151; margin-top: 3px; }
 
     /* ── Sections (3 identical containers) ───────────────────────────── */
-    .section { margin-bottom: 28px; }
+    .section { margin-bottom: 32px; }
     .section-title {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 700;
-      color: #4338CA;
-      text-transform: capitalize;
-      margin-bottom: 10px;
-      padding-bottom: 4px;
-      border-bottom: 2px solid #E0E7FF;
+      color: #1E40AF;
+      margin-bottom: 12px;
+      padding-bottom: 5px;
+      border-bottom: 2px solid #BFDBFE;
+      letter-spacing: -0.01em;
     }
-    .day-block { margin-bottom: 12px; }
+    .day-block { margin-bottom: 14px; }
     .day-sub-title {
       font-size: 11px;
       font-weight: 600;
-      color: #6B7280;
-      text-transform: capitalize;
-      margin-bottom: 4px;
+      color: #1F2937;
+      margin-bottom: 5px;
     }
 
     /* ── Tables ───────────────────────────────────────────────────────── */
     table { border-collapse: collapse; margin-bottom: 4px; }
     th, td {
       border: 1px solid #D1D5DB;
-      padding: 3px 5px;
+      padding: 4px 6px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -392,7 +391,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     th {
       background: #F3F4F6;
       font-weight: 600;
-      font-size: 9px;
+      font-size: 10px;
       color: #374151;
     }
     .center { text-align: center; }
@@ -410,8 +409,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       color: #4338CA;
       font-weight: 700;
       font-size: 9px;
-      border-left: 3px solid #6366F1;
-      border-right: 1px solid #C7D2FE;
+      border: 1px solid #C7D2FE;
+      border-top: 2px solid #6366F1;
     }
     .label-cell {
       background: #EEF2FF;
