@@ -432,12 +432,13 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       vertical-align: top;
       white-space: normal;
       line-height: 1.35;
-      border-left: 2px solid #1E3A8A !important;
-      border-right: 2px solid #1E3A8A !important;
+      border-left: 2px solid #FFFFFF !important;
+      border-right: 2px solid #FFFFFF !important;
     }
     .empty-cell { background: #F9FAFB; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB; }
     .show-active { background: #EFF6FF !important; }
-    tr.role-last td { border-bottom: 2px solid #1E40AF !important; }
+    tr.role-last td { border-bottom: 2px solid #FFFFFF !important; }
+    tr.role-last .shift-cell { border-bottom: 2px solid #FFFFFF !important; }
 
     /* ── Show row ─────────────────────────────────────────────────────── */
     .show-row td { border-top: 2px solid #93C5FD; }
