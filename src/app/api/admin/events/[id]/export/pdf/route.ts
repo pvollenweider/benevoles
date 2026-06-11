@@ -328,7 +328,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       font-size: 11px;
       color: #111827;
       background: #fff;
-      padding: 24px;
+      padding: 20px 24px;
     }
 
     /* ── Print button ─────────────────────────────────────────────────── */
@@ -336,12 +336,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 20px;
-      padding-bottom: 16px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
       border-bottom: 2px solid #E5E7EB;
     }
     .print-btn {
-      background: #4F46E5;
+      background: #1E40AF;
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -349,118 +349,154 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      letter-spacing: 0.02em;
     }
-    .print-btn:hover { background: #4338CA; }
+    .print-btn:hover { background: #1E3A8A; }
     @media print { .toolbar { display: none; } }
 
     /* ── Header ───────────────────────────────────────────────────────── */
-    .event-title { font-size: 18px; font-weight: 700; color: #111827; }
-    .event-meta  { font-size: 11px; color: #374151; margin-top: 3px; }
+    .event-title { font-size: 17px; font-weight: 700; color: #111827; }
+    .event-meta  { font-size: 10px; color: #374151; margin-top: 3px; }
 
-    /* ── Sections (3 identical containers) ───────────────────────────── */
-    .section { margin-bottom: 32px; }
+    /* ── Sections ─────────────────────────────────────────────────────── */
+    .section { margin-bottom: 28px; }
     .section-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       color: #1E40AF;
-      margin-bottom: 12px;
-      padding-bottom: 5px;
+      margin-bottom: 10px;
+      padding-bottom: 4px;
       border-bottom: 2px solid #BFDBFE;
-      letter-spacing: -0.01em;
     }
-    .day-block { margin-bottom: 14px; }
+    .day-block { margin-bottom: 14px; page-break-inside: avoid; }
     .day-sub-title {
       font-size: 11px;
-      font-weight: 600;
-      color: #1F2937;
+      font-weight: 700;
+      color: #111827;
       margin-bottom: 5px;
+      text-transform: capitalize;
     }
 
     /* ── Tables ───────────────────────────────────────────────────────── */
-    table { border-collapse: collapse; margin-bottom: 4px; }
+    table { border-collapse: collapse; margin-bottom: 4px; width: 100%; }
     th, td {
-      border: 1px solid #D1D5DB;
+      border: 1px solid #9CA3AF;
       padding: 4px 6px;
-      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 200px;
       vertical-align: middle;
     }
     th {
-      background: #F3F4F6;
-      font-weight: 600;
+      background: #E5E7EB;
+      font-weight: 700;
       font-size: 10px;
-      color: #374151;
+      color: #111827;
+      white-space: nowrap;
     }
+    tr { page-break-inside: avoid; }
     .center { text-align: center; }
 
     /* ── Gantt ────────────────────────────────────────────────────────── */
-    .gantt-table { table-layout: auto; }
-    .th-role  { min-width: 100px; }
-    .th-label { min-width: 130px; }
-    .slot-th  { min-width: 22px; text-align: center; font-size: 8px; color: #6B7280; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB; }
-    .hour-th  { border-left: 2px solid #9CA3AF !important; font-weight: 700; color: #374151; }
-    .hour-mark { border-left: 2px solid #D1D5DB !important; }
+    .gantt-table { table-layout: auto; width: auto; }
+    .th-role  { min-width: 90px; }
+    .th-label { min-width: 100px; }
+    .slot-th  {
+      min-width: 20px; text-align: center; font-size: 8px;
+      color: #374151; border-left: 1px solid #9CA3AF; border-right: 1px solid #9CA3AF;
+    }
+    .hour-th  { border-left: 2px solid #374151 !important; font-weight: 700; color: #111827; font-size: 9px; }
+    .hour-mark { border-left: 2px solid #9CA3AF !important; }
 
     .role-cell {
-      background: #EEF2FF;
-      color: #4338CA;
+      background: #DBEAFE;
+      color: #1E3A8A;
       font-weight: 700;
-      font-size: 9px;
-      border: 1px solid #C7D2FE;
-      border-top: 2px solid #6366F1;
+      font-size: 10px;
+      border: 1px solid #93C5FD;
+      border-top: 2px solid #1E40AF;
+      white-space: normal;
     }
     .label-cell {
-      background: #EEF2FF;
-      color: #6B7280;
+      background: #DBEAFE;
+      color: #1E3A8A;
       font-size: 9px;
-      border-right: 1px solid #C7D2FE;
+      border-right: 1px solid #93C5FD;
+      white-space: normal;
     }
+    /* Shift cells: darker blue for clear print contrast (survives B&W) */
     .shift-cell {
-      background: #E0E7FF;
-      color: #3730A3;
-      font-size: 8px;
+      background: #1E40AF;
+      color: #FFFFFF;
+      font-size: 9px;
+      font-weight: 600;
       text-align: left;
       vertical-align: top;
       white-space: normal;
-      border-left: 2px solid #6366F1 !important;
-      border-right: 2px solid #6366F1 !important;
+      line-height: 1.35;
+      border-left: 2px solid #1E3A8A !important;
+      border-right: 2px solid #1E3A8A !important;
     }
-    .empty-cell { background: #FAFAFA; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB; }
-    .show-active { background: #F5F3FF !important; }
-    tr.role-last td { border-bottom: 2px solid #6366F1 !important; }
+    .empty-cell { background: #F9FAFB; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB; }
+    .show-active { background: #EFF6FF !important; }
+    tr.role-last td { border-bottom: 2px solid #1E40AF !important; }
 
     /* ── Show row ─────────────────────────────────────────────────────── */
-    .show-row td { border-top: 2px solid #C7D2FE; }
+    .show-row td { border-top: 2px solid #93C5FD; }
     .show-band-cell {
-      background: #EEF2FF;
-      color: #4338CA;
-      font-size: 8px;
-      font-style: italic;
+      background: #DBEAFE;
+      color: #1E3A8A;
+      font-size: 9px;
+      font-weight: 600;
       text-align: center;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .show-empty-cell { border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB; }
+    .show-label-cell { background: #DBEAFE; border: 1px solid #93C5FD; }
 
     /* ── Recap ────────────────────────────────────────────────────────── */
-    .recap-table td, .recap-table th { font-size: 9px; }
-    .role-start td { border-top: 2px solid #9CA3AF !important; }
-    .role-end   td { border-bottom: 2px solid #9CA3AF !important; }
+    .recap-table { width: 100%; }
+    .recap-table td { font-size: 10px; white-space: normal; }
+    .recap-table th { font-size: 10px; }
+    .role-start td { border-top: 2px solid #374151 !important; }
+    .role-end   td { border-bottom: 2px solid #374151 !important; }
 
     /* ── File d'attente ──────────────────────────────────────────────── */
-    .waitlist-th { color: #92400E; background: #FEF3C7 !important; min-width: 120px; }
-    .waitlist-cell { font-size: 8px; font-style: italic; color: #6B7280; white-space: normal; vertical-align: top; }
+    .waitlist-th  { color: #78350F; background: #FEF3C7 !important; min-width: 120px; font-size: 10px; }
+    .waitlist-cell { font-size: 9px; font-style: italic; color: #374151; white-space: normal; vertical-align: top; }
 
     /* ── Bénévoles ────────────────────────────────────────────────────── */
-    .vol-table td, .vol-table th { white-space: nowrap; font-size: 9px; }
+    .vol-table { width: 100%; }
+    .vol-table td { font-size: 10px; white-space: normal; word-break: break-word; }
+    .vol-table th { font-size: 10px; }
+
+    /* ── Page breaks ──────────────────────────────────────────────────── */
+    .section-planning { page-break-after: always; }
+    .section-recap    { page-break-after: always; }
 
     /* ── Page setup ───────────────────────────────────────────────────── */
-    @page { size: A4 portrait; margin: 1.2cm 1cm; }
-    @media print { body { padding: 0; } }
+    /* Planning section: landscape for wide Gantt tables */
+    @page          { size: A4 portrait;  margin: 1cm 1.2cm; }
+    @page planning { size: A4 landscape; margin: 1cm 1.5cm; }
+    @page recap    { size: A4 portrait;  margin: 1cm 1.2cm; }
+    @page vols     { size: A4 portrait;  margin: 1cm 1.2cm; }
+
+    .section-planning { page: planning; }
+    .section-recap    { page: recap; }
+    .section-vols     { page: vols; }
+
+    @media print {
+      body { padding: 0; }
+      .section-title { color: #000 !important; border-bottom-color: #000 !important; }
+    }
+
+    /* ── Print color fallback (force background printing) ─────────────── */
+    @media print {
+      .role-cell, .label-cell, .show-band-cell, .show-label-cell { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .shift-cell { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .empty-cell, .show-active { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
   </style>
 </head>
 <body>
@@ -472,17 +508,17 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     <button class="print-btn" onclick="window.print()">Imprimer / Enregistrer en PDF</button>
   </div>
 
-  <section class="section" aria-label="Planning">
+  <section class="section section-planning" aria-label="Planning">
     <h2 class="section-title">Planning</h2>
     ${allGantts}
   </section>
 
-  <section class="section" aria-label="Récap par poste">
+  <section class="section section-recap" aria-label="Récap par poste">
     <h2 class="section-title">Récap par poste</h2>
     ${allRecaps}
   </section>
 
-  <section class="section" aria-label="Liste des bénévoles">
+  <section class="section section-vols" aria-label="Liste des bénévoles">
     <h2 class="section-title">Liste des bénévoles</h2>
     <table class="vol-table">
       <thead>
