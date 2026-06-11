@@ -34,7 +34,14 @@ Application **SaaS multi-tenant** de gestion de bénévoles pour événements. C
 - CRUD des organisations
 - Invitation des premiers admins par lien sécurisé (token révocable)
 
-![lego.png](docs/lego.png)
+## Captures d'écran
+
+| Landing page | Timeline bénévole (desktop) | Timeline mobile |
+|---|---|---|
+| ![Landing](docs/screenshots/01-landing.png) | ![Timeline desktop](docs/screenshots/03-timeline-desktop.png) | ![Timeline mobile](docs/screenshots/02-landing-mobile.png) |
+
+> Les captures admin (dashboard, événements, membres, export PDF) sont générées avec `npm run screenshots`.
+> Voir `scripts/screenshots.mjs` pour la configuration des URL et des credentials.
 
 ## Stack
 
