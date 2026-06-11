@@ -41,8 +41,22 @@ export default async function AdminEventsPage() {
       </div>
 
       {enriched.length === 0 ? (
-        <div className="text-center py-16 text-gray-400">
-          <p>Aucun événement. Créez-en un pour commencer.</p>
+        <div className="text-center py-20 px-4">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-blue-50 mb-5">
+            <svg aria-hidden="true" className="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
+            </svg>
+          </div>
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">Aucun événement pour l'instant</h2>
+          <p className="text-sm text-gray-500 max-w-xs mx-auto mb-6">
+            Créez votre premier événement pour commencer à gérer les créneaux et les bénévoles.
+          </p>
+          <Link
+            href="/admin/events/new"
+            className="inline-flex items-center gap-2 bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-blue-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+          >
+            Créer un événement
+          </Link>
         </div>
       ) : (
         <div className="space-y-3">
