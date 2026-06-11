@@ -126,7 +126,7 @@ function ShiftSelect({
             <div
               onClick={() => { onChange(""); setOpen(false) }}
               className={`px-4 py-2.5 text-sm cursor-pointer hover:bg-gray-50 border-b border-gray-100
-                ${!value ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-500"}`}
+                ${!value ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-600"}`}
             >
               Tous les créneaux
             </div>

@@ -114,7 +114,7 @@ function renderConfirmation(p: NotificationPayload): RenderedEmail {
     `Super, ton inscription pour ${eventTitle} est confirmée !`,
     ``,
     `Tes créneaux :`,
-    ...shifts.map((s) => `  • ${s.label} — ${s.date} · ${s.startTime}–${s.endTime}`),
+    ...shifts.map((s) => `  • ${s.label} · ${s.date} · ${s.startTime}–${s.endTime}`),
     ``,
     ...(confirmationMessage ? [confirmationMessage, ``] : []),
     `Un empêchement ? Tu peux gérer tes inscriptions ici :`,
@@ -131,7 +131,7 @@ function renderConfirmation(p: NotificationPayload): RenderedEmail {
       ${shifts.map((s) => `
         <div style="padding:6px 0;border-bottom:1px solid #e5e7eb">
           <strong style="color:#111">${escapeHtml(s.label)}</strong>
-          <span style="color:#666;font-size:0.9em"> — ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</span>
+          <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</span>
         </div>`).join("")}
     </div>
     ${confirmationMessage ? `<div style="background:#eff6ff;border-radius:8px;padding:14px 16px;margin-top:1em;font-size:0.9em;color:#1e40af;white-space:pre-wrap">${escapeHtml(confirmationMessage)}</div>` : ""}
@@ -363,7 +363,7 @@ function renderManualReminder(p: NotificationPayload): RenderedEmail {
       ${d.shifts.map((s) => `
         <div style="padding:6px 0;border-bottom:1px solid #e5e7eb">
           <strong>${escapeHtml(s.label)}</strong>
-          <span style="color:#666;font-size:0.9em"> — ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</span>
+          <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</span>
         </div>`).join("")}
     </div>
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
@@ -533,7 +533,7 @@ function renderAdminNotification(p: NotificationPayload): RenderedEmail {
   const subject = `Nouvelle inscription — ${d.eventTitle}`
 
   const shiftLines = d.shifts.map((s) => {
-    const name = s.label && s.label !== s.roleName ? `${s.roleName} — ${s.label}` : s.roleName
+    const name = s.label && s.label !== s.roleName ? `${s.roleName} · ${s.label}` : s.roleName
     return `  • ${name} · ${s.date} · ${s.startTime}–${s.endTime}`
   })
 
@@ -548,7 +548,7 @@ function renderAdminNotification(p: NotificationPayload): RenderedEmail {
     <ul style="padding-left:1.2em;line-height:1.8">
       ${d.shifts.map((s) => {
         const name = s.label && s.label !== s.roleName
-          ? `${escapeHtml(s.roleName)} — ${escapeHtml(s.label)}`
+          ? `${escapeHtml(s.roleName)} · ${escapeHtml(s.label)}`
           : escapeHtml(s.roleName)
         return `<li><strong>${name}</strong> · ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</li>`
       }).join("")}
