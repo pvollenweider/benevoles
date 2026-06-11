@@ -137,7 +137,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
       ) : (
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
+            <thead className="bg-gray-50 text-xs text-gray-500">
               <tr>
                 <th className="text-left px-4 py-2 font-medium">Membre</th>
                 <th className="text-left px-4 py-2 font-medium">Tags</th>

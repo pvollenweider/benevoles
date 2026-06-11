@@ -31,7 +31,7 @@ export default async function AdminEventsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">Événements</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Événements</h1>
         <Link
           href="/admin/events/new"
           className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"

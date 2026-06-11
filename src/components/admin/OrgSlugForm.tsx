@@ -134,7 +134,7 @@ export default function OrgSlugForm({
 
       {history.length > 0 && (
         <div className="space-y-2 pt-2 border-t border-gray-100">
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Anciens slugs (redirigent vers l&apos;actuel)</p>
+          <p className="text-xs font-medium text-gray-600">Anciens slugs (redirigent vers l&apos;actuel)</p>
           {hasPublishedEvents && (
             <p className="text-xs text-orange-600">
               Attention : supprimer un ancien slug cassera les liens existants vers vos événements publiés.

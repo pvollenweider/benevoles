@@ -57,7 +57,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-xl font-bold text-gray-900">Tableau de bord</h1>
+      <h1 className="text-2xl font-bold text-gray-900">Tableau de bord</h1>
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -70,7 +70,7 @@ export default async function DashboardPage() {
       {/* Fill rate per event */}
       {eventsWithShifts.length > 0 && (
         <section>
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          <h2 className="text-sm font-semibold text-gray-700 mb-3">
             Remplissage par événement
           </h2>
           <div className="space-y-2">
@@ -114,7 +114,7 @@ export default async function DashboardPage() {
 
       {/* Members */}
       <section>
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+        <h2 className="text-sm font-semibold text-gray-700 mb-3">
           Membres
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

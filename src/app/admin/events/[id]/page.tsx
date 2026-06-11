@@ -55,7 +55,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <Link href="/admin/events" className="text-sm text-blue-600">← Événements</Link>
-          <h1 className="text-xl font-bold text-gray-900 mt-1">{event.title}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mt-1">{event.title}</h1>
           <p className="text-sm text-gray-500">
             {formatShortDate(event.startDate)}
             {event.location && ` · ${event.location}`}
@@ -124,7 +124,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
       </div>
 
       <div className="border-t border-gray-200 pt-4">
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Communications</h2>
+        <h2 className="text-sm font-semibold text-gray-700 mb-3">Communications</h2>
         <SendReminderButton
           eventId={event.id}
           hasMessage={!!event.reminderMessage?.trim()}
@@ -135,7 +135,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
 
       {criticalShifts.length > 0 && (
         <div>
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          <h2 className="text-sm font-semibold text-gray-700 mb-3">
             Créneaux à pourvoir ({criticalShifts.length})
           </h2>
           <div className="space-y-2">

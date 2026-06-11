@@ -170,7 +170,7 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
         <div role="status" aria-live="polite" className="sr-only">{sortAnnouncement}</div>
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
           <table aria-label="Liste des membres" className="w-full text-sm">
-            <thead className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
+            <thead className="bg-gray-50 text-xs text-gray-500">
               <tr>
                 <SortTh col="firstName" label="Prénom" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <SortTh col="lastName"  label="Nom"    sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
@@ -586,7 +586,7 @@ function SortTh({
       <button
         type="button"
         onClick={() => onSort(col)}
-        className="flex items-center gap-1 text-xs text-gray-500 uppercase tracking-wide font-medium hover:text-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 rounded"
+        className="flex items-center gap-1 text-xs text-gray-500 font-medium hover:text-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 rounded"
       >
         {label}
         <span aria-hidden="true" className={active ? "text-blue-600" : "text-gray-300"}>{icon}</span>

@@ -423,7 +423,7 @@ export default function ShiftsManager({
       {/* ── Timeline view ───────────────────────────────────────────────────── */}
       {view === "timeline" && daysWithShifts.map(day => (
         <div key={day} className="space-y-2">
-          <h2 className="text-xs font-semibold uppercase tracking-wide text-gray-400">
+          <h2 className="text-xs font-semibold text-gray-600">
             {fmtDate(day)}
           </h2>
           <AdminDayTimeline
