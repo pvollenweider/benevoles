@@ -275,7 +275,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
     const isWaitlistPending = !isReg && s.status === "full" && (s.waitlistEnabled ?? false)
     const name = s.label && s.label !== s.roleName ? s.label : s.roleName
     return (
-      <div className={`flex items-start gap-2 px-4 ${compact ? "py-2" : "py-2.5"} ${isReg ? "bg-green-50" : selectedShifts.has(s.id) ? "bg-blue-50/60" : ""}`}>
+      <div className={`flex items-start gap-2 px-4 transition-colors duration-150 ${compact ? "py-2" : "py-2.5"} ${isReg ? "bg-green-50" : selectedShifts.has(s.id) ? "bg-blue-50/60" : ""}`}>
         <svg aria-hidden="true" className={`w-3.5 h-3.5 flex-shrink-0 mt-0.5 ${isReg ? "text-green-400" : "text-blue-400"}`} fill="currentColor" viewBox="0 0 20 20">
           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
         </svg>
@@ -420,7 +420,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
                         <div className="p-3 border-t border-gray-100">
                           <button
                             onClick={() => setStep("form")}
-                            className="w-full bg-blue-600 text-white rounded-xl py-3 text-sm font-semibold hover:bg-blue-700 transition-colors"
+                            className="w-full bg-blue-600 text-white rounded-xl py-3 text-sm font-semibold hover:bg-blue-700 active:scale-[0.98] transition-all"
                           >
                             Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
                           </button>
@@ -438,7 +438,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
                 <div className="max-w-2xl mx-auto px-4 pb-5 pt-10 bg-gradient-to-t from-gray-50 via-gray-50/90 to-transparent pointer-events-none">
                   <button
                     onClick={() => setStep("form")}
-                    className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold shadow-xl hover:bg-blue-700 transition-colors pointer-events-auto"
+                    className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold shadow-xl hover:bg-blue-700 active:scale-[0.98] transition-all pointer-events-auto"
                   >
                     Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
                   </button>
@@ -568,7 +568,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-50"
                 >
                   {submitting ? "Envoi en cours…" : "Confirmer mon inscription"}
                 </button>
