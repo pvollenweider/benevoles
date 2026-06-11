@@ -66,7 +66,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
           <PublishToggle eventId={event.id} currentStatus={event.publicStatus} />
           <Link
             href={`/admin/events/${event.id}/edit`}
-            className="text-sm border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors"
+            className="text-sm border border-gray-200 px-3 py-1.5 rounded-full hover:bg-gray-50 transition-colors"
           >
             Modifier
           </Link>
@@ -74,7 +74,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
             <Link
               href={eventPublicUrl(event.organization.slug, event.slug)}
               target="_blank"
-              className="text-sm text-blue-600 border border-blue-200 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors"
+              className="text-sm text-blue-600 border border-blue-200 px-3 py-1.5 rounded-full hover:bg-blue-50 transition-colors"
             >
               Vue publique ↗
             </Link>
@@ -86,39 +86,36 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         <StatCard label="Créneaux" value={event.shifts.length} />
         <StatCard label="Places" value={totalCapacity} />
         <StatCard label="Inscrits" value={totalRegistered} />
-        <StatCard label="Restants" value={totalCapacity - totalRegistered} highlight={totalCapacity - totalRegistered > 0} />
+        <StatCard label="Restants" value={totalCapacity - totalRegistered} highlight={totalCapacity - totalRegistered === 0 || (totalCapacity > 0 && (totalCapacity - totalRegistered) / totalCapacity <= 0.15)} />
       </div>
 
+      {/* Primary actions */}
       <div className="flex gap-3 flex-wrap">
         <Link
           href={`/admin/events/${event.id}/shifts`}
-          className="bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors flex-1 text-center"
+          className="bg-blue-600 text-white rounded-full px-5 py-2.5 text-sm font-semibold hover:bg-blue-700 transition-colors flex-1 text-center"
         >
           Gérer les créneaux
         </Link>
         <Link
           href={`/admin/events/${event.id}/registrations`}
-          className="bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors flex-1 text-center"
+          className="bg-blue-600 text-white rounded-full px-5 py-2.5 text-sm font-semibold hover:bg-blue-700 transition-colors flex-1 text-center"
         >
           Voir les inscriptions
         </Link>
         <Link
           href={`/admin/events/${event.id}/invitations`}
-          className="bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors flex-1 text-center"
+          className="border border-gray-300 text-gray-700 rounded-full px-5 py-2.5 text-sm font-medium hover:bg-gray-50 transition-colors flex-1 text-center"
         >
           Inviter des membres
         </Link>
-        <Link
-          href={`/admin/events/${event.id}/qr`}
-          className="bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors flex-1 text-center"
-        >
+      </div>
+      {/* Utility actions */}
+      <div className="flex gap-4 flex-wrap">
+        <Link href={`/admin/events/${event.id}/qr`} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
           QR code
         </Link>
-        <a
-          href={`/api/admin/events/${event.id}/export/pdf`}
-          target="_blank"
-          className="bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors flex-1 text-center"
-        >
+        <a href={`/api/admin/events/${event.id}/export/pdf`} target="_blank" className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
           Exporter PDF ↗
         </a>
       </div>

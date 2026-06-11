@@ -70,14 +70,14 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
           Envoie un message libre à tous les bénévoles inscrits, en plus des rappels automatiques.
           Utile pour transmettre des infos de dernière minute, un point de rendez-vous, ou toute communication urgente.
           {!hasMessage && !disabled && (
-            <> <a href={`/admin/events/${eventId}/edit`} className="text-orange-600 underline underline-offset-2">Configurer le message</a> dans les paramètres de l&apos;événement.</>
+            <> <a href={`/admin/events/${eventId}/edit`} className="text-blue-600 underline underline-offset-2">Configurer le message</a> dans les paramètres de l&apos;événement.</>
           )}
         </p>
         <button
           type="button"
           onClick={() => setOpen(true)}
           disabled={disabled}
-          className="self-start bg-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-orange-700 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="self-start bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           📧 Envoyer le rappel ({volunteerCount} bénévole{volunteerCount > 1 ? "s" : ""})
         </button>
@@ -97,7 +97,7 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
               suivi du message de rappel configuré sur l&apos;événement.
             </p>
             {!hasMessage && (
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 text-xs text-orange-800 mb-4">
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800 mb-4">
                 ⚠ Le message de rappel est vide. L&apos;email contiendra uniquement le récap des créneaux.
                 <br />
                 <a href={`/admin/events/${eventId}/edit`} className="underline">Ajouter un message</a>
@@ -114,7 +114,7 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
                 <button
                   onClick={send}
                   disabled={submitting}
-                  className="bg-orange-600 text-white text-sm px-4 py-2 rounded-xl font-medium hover:bg-orange-700 disabled:opacity-50"
+                  className="bg-blue-600 text-white text-sm px-4 py-2 rounded-full font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
                 >
                   {submitting ? "Envoi…" : "Envoyer"}
                 </button>
