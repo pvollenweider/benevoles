@@ -154,14 +154,6 @@ Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscr
 
 ### Exports
 
-#### Excel (`.xlsx`)
-
-- Un onglet par jour avec Gantt : rôles × tranches de 30 minutes, noms des bénévoles dans les cellules
-- Plages des spectacles en fond coloré
-- Onglet **« Récap par poste »** (feuille dédiée) : tableau récapitulatif par jour — rôle, libellé, horaires, capacité, inscrits, liste des bénévoles ; colonne « File d'attente » avec noms ordonnés par position si des listes d'attente existent
-- Onglet **« Bénévoles »** avec toutes les données détaillées ; section « File d'attente » en bas si applicable
-- Bénévoles triés alphabétiquement
-
 #### PDF (impression navigateur)
 
 - **3 sections uniformes** : Planning (Gantt par jour), Récap par poste, Liste des bénévoles

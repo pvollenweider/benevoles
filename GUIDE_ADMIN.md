@@ -164,14 +164,6 @@ Ces rappels sont envoyés sans intervention de votre part, tant que `remindersEn
 
 ## Exports
 
-Deux formats disponibles depuis la page de l'événement :
-
-### Export Excel (`.xlsx`)
-
-- Un onglet par jour avec un **Gantt** : rôles en lignes, tranches de 30 min en colonnes, noms des bénévoles dans les cellules
-- Onglet **Récap par poste** (feuille dédiée) : tableau par jour avec rôle, horaires, capacité, inscrits et liste des bénévoles
-- Onglet **Bénévoles** avec toutes les données détaillées
-
 ### Export PDF (impression)
 
 - **3 sections** : Planning (Gantt par jour), Récap par poste, Liste des bénévoles
