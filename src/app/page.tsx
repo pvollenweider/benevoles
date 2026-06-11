@@ -109,6 +109,121 @@ export default async function HomePage() {
   )
 }
 
+// ── Static Gantt mockup — decorative illustration, aria-hidden ────────────────
+// Text contrast: white on each bar color ≥ 4.5:1 (WCAG AA)
+const GANTT_HOURS = ["09h", "10h", "11h", "12h", "13h", "14h", "15h", "16h"]
+const GANTT_ROWS = [
+  {
+    role: "Bar",
+    bars: [
+      { name: "Marie D.", left: 0,  width: 50,   bg: "#4f46e5" }, // indigo-600
+      { name: "Lucas M.", left: 50, width: 50,   bg: "#312e81", selected: true }, // indigo-900
+    ],
+  },
+  {
+    role: "Accueil",
+    bars: [
+      { name: "Sophie B.", left: 0,  width: 25,   bg: "#0284c7" }, // sky-600
+      { name: "Paul R.",   left: 50, width: 37.5, bg: "#0284c7" },
+    ],
+  },
+  {
+    role: "Billetterie",
+    bars: [
+      { name: "Ana K.", left: 0, width: 50, bg: "#059669" }, // emerald-600
+    ],
+  },
+  {
+    role: "Sono",
+    bars: [
+      { name: "Jean P.", left: 25, width: 75, bg: "#e11d48" }, // rose-600
+    ],
+  },
+]
+
+function GanttMockup() {
+  return (
+    <div
+      aria-hidden="true"
+      className="mt-8 sm:mt-0 rounded-xl overflow-hidden border border-blue-200 shadow-sm select-none pointer-events-none"
+    >
+      {/* Browser chrome */}
+      <div className="bg-white border-b border-gray-100 px-3 py-2 flex items-center gap-2">
+        <div className="flex gap-1.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-gray-200" />
+          <span className="w-2.5 h-2.5 rounded-full bg-gray-200" />
+          <span className="w-2.5 h-2.5 rounded-full bg-gray-200" />
+        </div>
+        <div className="flex-1 bg-gray-100 rounded-md px-2 py-0.5 text-[10px] text-gray-400 font-mono truncate">
+          festival.benevol.app/programme-2026
+        </div>
+      </div>
+
+      {/* Timeline */}
+      <div className="bg-white overflow-x-auto">
+        <div style={{ minWidth: 400 }}>
+          {/* Time header */}
+          <div className="flex border-b border-gray-100">
+            <div className="w-[72px] flex-shrink-0 border-r border-gray-100" />
+            {GANTT_HOURS.map((h) => (
+              <div
+                key={h}
+                className="flex-1 text-center text-[10px] text-gray-500 py-1.5 border-l border-gray-100"
+              >
+                {h}
+              </div>
+            ))}
+          </div>
+
+          {/* Role rows */}
+          {GANTT_ROWS.map((row) => (
+            <div key={row.role} className="flex border-b border-gray-100 last:border-b-0">
+              <div className="w-[72px] flex-shrink-0 border-r border-gray-100 px-2 flex items-center">
+                <span className="text-[10px] font-semibold text-gray-700 truncate">{row.role}</span>
+              </div>
+              <div className="flex-1 relative" style={{ height: 34 }}>
+                {row.bars.map((bar) => (
+                  <div
+                    key={bar.name}
+                    className="absolute top-1.5 bottom-1.5 rounded flex items-center px-2 overflow-hidden"
+                    style={{
+                      left: `${bar.left}%`,
+                      width: `calc(${bar.width}% - 2px)`,
+                      backgroundColor: bar.bg,
+                      boxShadow: bar.selected
+                        ? `0 0 0 2px white, 0 0 0 3.5px ${bar.bg}`
+                        : undefined,
+                    }}
+                  >
+                    {bar.selected && (
+                      <svg
+                        aria-hidden="true"
+                        className="w-2.5 h-2.5 text-white flex-shrink-0 mr-1"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                      </svg>
+                    )}
+                    <span className="text-[10px] font-medium text-white truncate leading-none">
+                      {bar.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Caption */}
+      <div className="bg-gray-50 border-t border-gray-100 px-3 py-1.5 text-[10px] text-gray-400 text-center">
+        Timeline bénévoles — Festival du Rhône 2026
+      </div>
+    </div>
+  )
+}
+
 function LandingPage() {
   return (
     <main className="min-h-screen bg-white">
@@ -158,38 +273,40 @@ function LandingPage() {
       {/* ── Différenciateur principal ─────────────────────────────────────── */}
       <section
         aria-labelledby="features-heading"
-        className="max-w-4xl mx-auto px-6 py-20"
+        className="max-w-5xl mx-auto px-6 py-20"
       >
         <h2 id="features-heading" className="sr-only">Fonctionnalités</h2>
 
-        {/* Primary feature */}
-        <div className="bg-blue-50 rounded-2xl p-8 sm:p-10 mb-16">
-          <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight" style={{ textWrap: "balance" } as React.CSSProperties}>
-            Inscription sans friction
-          </h3>
-          <p className="mt-4 text-base text-gray-600 leading-relaxed max-w-xl">
-            Pas de compte, pas de mot de passe. Vous publiez l'événement, vous envoyez un lien.
-            Les bénévoles voient la timeline Gantt, choisissent leur créneau, confirment.
-            Depuis leur téléphone, en 30 secondes.
-          </p>
-          <p className="mt-3 text-sm text-gray-500 max-w-md">
-            Un lien unique leur permet de modifier ou d'annuler leur inscription à tout moment,
-            sans se connecter.
-          </p>
+        {/* Primary feature — 2-col on desktop */}
+        <div className="bg-blue-50 rounded-2xl p-8 sm:p-10 mb-16 sm:grid sm:grid-cols-2 sm:gap-10 sm:items-center">
+          <div>
+            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight" style={{ textWrap: "balance" } as React.CSSProperties}>
+              Inscription sans friction
+            </h3>
+            <p className="mt-4 text-base text-gray-600 leading-relaxed">
+              Pas de compte, pas de mot de passe. Vous publiez l'événement,
+              vous envoyez un lien. Les bénévoles choisissent leur créneau
+              sur la timeline, confirment en 30 secondes — depuis leur téléphone.
+            </p>
+            <p className="mt-3 text-sm text-gray-500">
+              Un lien unique leur permet de modifier ou d'annuler à tout moment.
+            </p>
+          </div>
+          <GanttMockup />
         </div>
 
-        {/* Secondary features — horizontal strip */}
+        {/* Secondary features */}
         <ul className="grid sm:grid-cols-3 gap-8" role="list">
           <li>
             <h3 className="text-base font-semibold text-gray-900">Planning par créneaux</h3>
             <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-              Timeline Gantt interactive par jour, réordonnement des postes, couverture visible d'un coup d'œil.
+              Timeline Gantt par jour, réordonnement des postes, couverture visible d'un coup d'œil.
             </p>
           </li>
           <li>
-            <h3 className="text-base font-semibold text-gray-900">Suivi et exports</h3>
+            <h3 className="text-base font-semibold text-gray-900">Suivi et export PDF</h3>
             <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-              Inscriptions en temps réel, exports Excel et PDF pour la coordination sur le terrain.
+              Inscriptions en temps réel, export PDF pour la coordination sur le terrain.
             </p>
           </li>
           <li>
