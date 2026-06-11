@@ -27,7 +27,7 @@ Application **SaaS multi-tenant** de gestion de bénévoles pour événements. C
 - Création et gestion des événements, créneaux et programme des spectacles
 - Gestion de la liste des membres (pool de bénévoles) et envoi d'invitations tokenisées
 - Rappels automatiques (J-2, J-1, Jour J) et rappel manuel avec message personnalisé
-- Suivi des inscriptions en temps réel, export Gantt (Excel + PDF)
+- Suivi des inscriptions en temps réel, export Gantt PDF
 - Gestion de l'équipe admin de l'organisation
 
 **Super admin**
@@ -44,7 +44,7 @@ Application **SaaS multi-tenant** de gestion de bénévoles pour événements. C
 | Base de données | PostgreSQL 16 + Prisma 7 |
 | Auth | NextAuth v5 (credentials) |
 | Email | Nodemailer (SMTP configurable) |
-| Export | ExcelJS (xlsx), HTML print (PDF) |
+| Export | HTML print (PDF) |
 | Styles | Tailwind CSS v4 |
 | Runtime | Node.js 26 |
 
