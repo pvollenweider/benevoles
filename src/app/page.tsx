@@ -110,33 +110,40 @@ export default async function HomePage() {
 }
 
 // ── Static Gantt mockup — decorative illustration, aria-hidden ────────────────
-// Text contrast: white on each bar color ≥ 4.5:1 (WCAG AA)
-const GANTT_HOURS = ["09h", "10h", "11h", "12h", "13h", "14h", "15h", "16h"]
+// Reproduces real app: role colors from roles.tsx, spectacle band, waitlist, full slot
+// Text contrast: white on each bar color ≥ 4.5:1 (WCAG AA verified)
+// 09h–17h = 8 slots of 1h = 12.5% each
+const GANTT_HOURS = ["09h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h"]
+// Spectacle band: 13h–17h = left 50%, width 50%
+const SHOW = { left: 50, width: 50, name: "🎪 Concert" }
 const GANTT_ROWS = [
   {
     role: "Bar",
+    // rose-600 (#e11d48) white 5.5:1 ✓ — hash("bar")→3→rose
     bars: [
-      { name: "Marie D.", left: 0,  width: 50,   bg: "#4f46e5" }, // indigo-600
-      { name: "Lucas M.", left: 50, width: 50,   bg: "#312e81", selected: true }, // indigo-900
+      { label: "Bar", left: 12.5, width: 50, bg: "#e11d48", full: false, waitlist: false },
     ],
   },
   {
     role: "Accueil",
+    // sky-600 (#0284c7) white 4.8:1 ✓ — full slot (Complet)
     bars: [
-      { name: "Sophie B.", left: 0,  width: 25,   bg: "#0284c7" }, // sky-600
-      { name: "Paul R.",   left: 50, width: 37.5, bg: "#0284c7" },
+      { label: "Accueil · Complet", left: 0, width: 37.5, bg: "#0284c7", full: true, waitlist: false },
     ],
   },
   {
     role: "Billetterie",
+    // blue-600 (#2563eb) white 5.0:1 ✓ — waitlist diagonal stripes
     bars: [
-      { name: "Ana K.", left: 0, width: 50, bg: "#059669" }, // emerald-600
+      { label: "Billetterie · Attente", left: 0, width: 62.5, bg: "#2563eb", waitlist: true, full: false },
     ],
   },
   {
     role: "Sono",
+    // fuchsia-600 (#c026d3) white 4.9:1 ✓ — split: Soundcheck before show, Live during show
     bars: [
-      { name: "Jean P.", left: 25, width: 75, bg: "#e11d48" }, // rose-600
+      { label: "Soundcheck", left: 12.5, width: 37.5, bg: "#c026d3", full: false, waitlist: false },
+      { label: "Live",       left: 50,   width: 50,   bg: "#a21caf", full: false, waitlist: false },
     ],
   },
 ]
@@ -161,7 +168,7 @@ function GanttMockup() {
 
       {/* Timeline */}
       <div className="bg-white overflow-x-auto">
-        <div style={{ minWidth: 400 }}>
+        <div style={{ minWidth: 440 }}>
           {/* Time header */}
           <div className="flex border-b border-gray-100">
             <div className="w-[72px] flex-shrink-0 border-r border-gray-100" />
@@ -175,38 +182,63 @@ function GanttMockup() {
             ))}
           </div>
 
+          {/* Show band row — concert background */}
+          <div className="flex border-b border-gray-100 relative">
+            <div className="w-[72px] flex-shrink-0 border-r border-gray-100 px-2 flex items-center">
+              <span className="text-[9px] text-gray-400 italic truncate">Scène</span>
+            </div>
+            <div className="flex-1 relative" style={{ height: 18 }}>
+              <div
+                className="absolute top-1 bottom-1 rounded-sm flex items-center px-1.5 overflow-hidden"
+                style={{
+                  left: `${SHOW.left}%`,
+                  width: `${SHOW.width}%`,
+                  background: "rgba(126, 34, 206, 0.15)",
+                  border: "1px solid rgba(126, 34, 206, 0.3)",
+                }}
+              >
+                <span className="text-[9px] text-purple-700 font-medium truncate">{SHOW.name}</span>
+              </div>
+            </div>
+          </div>
+
           {/* Role rows */}
           {GANTT_ROWS.map((row) => (
-            <div key={row.role} className="flex border-b border-gray-100 last:border-b-0">
-              <div className="w-[72px] flex-shrink-0 border-r border-gray-100 px-2 flex items-center">
+            <div key={row.role} className="flex border-b border-gray-100 last:border-b-0 relative">
+              {/* Concert band background tint on relevant rows */}
+              <div
+                className="absolute top-0 bottom-0 pointer-events-none"
+                style={{
+                  left: `calc(72px + ${SHOW.left}%)`,
+                  width: `${SHOW.width}%`,
+                  background: "rgba(126, 34, 206, 0.04)",
+                }}
+              />
+              <div className="w-[72px] flex-shrink-0 border-r border-gray-100 px-2 flex items-center relative z-10">
                 <span className="text-[10px] font-semibold text-gray-700 truncate">{row.role}</span>
               </div>
               <div className="flex-1 relative" style={{ height: 34 }}>
                 {row.bars.map((bar) => (
                   <div
-                    key={bar.name}
-                    className="absolute top-1.5 bottom-1.5 rounded flex items-center px-2 overflow-hidden"
+                    key={bar.label}
+                    className="absolute top-1.5 bottom-1.5 rounded flex items-center px-1.5 overflow-hidden"
                     style={{
                       left: `${bar.left}%`,
                       width: `calc(${bar.width}% - 2px)`,
                       backgroundColor: bar.bg,
-                      boxShadow: bar.selected
-                        ? `0 0 0 2px white, 0 0 0 3.5px ${bar.bg}`
+                      backgroundImage: bar.waitlist
+                        ? "repeating-linear-gradient(45deg, rgba(255,255,255,0.25) 0px, rgba(255,255,255,0.25) 3px, transparent 3px, transparent 9px)"
                         : undefined,
+                      opacity: bar.full ? 0.75 : 1,
                     }}
                   >
-                    {bar.selected && (
-                      <svg
-                        aria-hidden="true"
-                        className="w-2.5 h-2.5 text-white flex-shrink-0 mr-1"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                    {bar.full && (
+                      <svg aria-hidden="true" className="w-2.5 h-2.5 text-white flex-shrink-0 mr-1 opacity-80" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
                       </svg>
                     )}
-                    <span className="text-[10px] font-medium text-white truncate leading-none">
-                      {bar.name}
+                    <span className="text-[9px] font-semibold text-white truncate leading-none">
+                      {bar.label}
                     </span>
                   </div>
                 ))}
