@@ -184,6 +184,7 @@ export async function POST(req: Request) {
       })
     }
     await sendAdminNotification({
+      organizationId: event.organizationId,
       eventTitle: event.title,
       volunteerName: `${firstName} ${lastName}`,
       volunteerEmail: email,

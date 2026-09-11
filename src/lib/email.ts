@@ -5,6 +5,7 @@
  */
 
 import { env } from "./env"
+import { prisma } from "./prisma"
 import { sendNotification } from "./notifications"
 
 type RegistrationEmailData = {
@@ -64,16 +65,35 @@ export async function sendMemberInvite(data: MemberInviteEmailData) {
 }
 
 export async function sendAdminNotification(data: {
+  organizationId: string
   eventTitle: string
   volunteerName: string
   volunteerEmail: string
   shifts: { label: string; roleName: string; date: string; startTime: string; endTime: string }[]
 }) {
-  const adminEmail = env.ADMIN_NOTIFICATION_EMAIL
-  if (!adminEmail) return
-  await sendNotification({
-    kind: "admin_notification",
-    recipient: { email: adminEmail, name: "Admin" },
-    data,
+  const { organizationId, ...templateData } = data
+
+  const orgAdmins = await prisma.adminUser.findMany({
+    where: { organizationId, isActive: true },
+    select: { email: true, name: true },
   })
+
+  // Fall back to the global notification address only when the org has no
+  // active admin on record — orgAdmins is the source of truth otherwise, so
+  // cross-org leakage to a single shared inbox can't happen.
+  const recipients = orgAdmins.length > 0
+    ? orgAdmins
+    : env.ADMIN_NOTIFICATION_EMAIL
+      ? [{ email: env.ADMIN_NOTIFICATION_EMAIL, name: "Admin" }]
+      : []
+
+  await Promise.all(
+    recipients.map((r) =>
+      sendNotification({
+        kind: "admin_notification",
+        recipient: { email: r.email, name: r.name },
+        data: templateData,
+      })
+    )
+  )
 }
