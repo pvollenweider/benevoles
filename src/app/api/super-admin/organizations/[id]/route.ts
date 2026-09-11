@@ -38,6 +38,56 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   return NextResponse.json(org)
 }
 
+const deleteSchema = z.object({
+  confirmSlug: z.string(),
+})
+
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const guard = await requireSuperAdmin()
+  if (guard instanceof NextResponse) return guard
+
+  const { id } = await params
+
+  const org = await prisma.organization.findUnique({
+    where: { id },
+    select: { id: true, slug: true, active: true },
+  })
+  if (!org) return NextResponse.json({ error: "Organisation non trouvée" }, { status: 404 })
+  if (org.active) {
+    return NextResponse.json(
+      { error: "Désactivez l'organisation avant de la supprimer." },
+      { status: 409 },
+    )
+  }
+
+  const body = await req.json().catch(() => ({}))
+  const parsed = deleteSchema.safeParse(body)
+  if (!parsed.success || parsed.data.confirmSlug !== org.slug) {
+    return NextResponse.json(
+      { error: "Confirmation invalide : le slug saisi ne correspond pas." },
+      { status: 400 },
+    )
+  }
+
+  await prisma.$transaction(async (tx) => {
+    // Events/Shifts/Registrations/MemberInvites/OrgSlugHistory cascade via
+    // FK on organization delete. AdminUser and Volunteer only SET NULL
+    // (kept orphaned on purpose elsewhere — invite tokens, audit trails) so
+    // they're deleted explicitly here, scoped to this org's rows only.
+    const [volunteers, admins] = await Promise.all([
+      tx.volunteer.findMany({ where: { organizationId: id }, select: { id: true } }),
+      tx.adminUser.findMany({ where: { organizationId: id }, select: { id: true } }),
+    ])
+
+    await tx.organization.delete({ where: { id } })
+
+    await tx.volunteer.deleteMany({ where: { id: { in: volunteers.map((v) => v.id) } } })
+    await tx.adminUser.deleteMany({ where: { id: { in: admins.map((a) => a.id) } } })
+  })
+
+  return NextResponse.json({ success: true })
+}
+
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireSuperAdmin()
   if (guard instanceof NextResponse) return guard

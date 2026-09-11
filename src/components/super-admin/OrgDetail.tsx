@@ -34,6 +34,8 @@ export default function OrgDetail({ org }: { org: Org }) {
   const router = useRouter()
   const [, startTransition] = useTransition()
   const [toggling, setToggling] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
   const [name, setName] = useState(org.name)
   const [slug, setSlug] = useState(org.slug)
   const [savingName, setSavingName] = useState(false)
@@ -62,6 +64,35 @@ export default function OrgDetail({ org }: { org: Org }) {
     const res = await patch({ active: !org.active })
     setToggling(false)
     if (res.ok) refresh()
+  }
+
+  async function deleteOrg() {
+    setDeleteError(null)
+    const typed = prompt(
+      `Cette action supprime définitivement « ${org.name} » et toutes ses données ` +
+      `(${org._count.events} événement${org._count.events > 1 ? "s" : ""}, ` +
+      `${org._count.volunteers} membre${org._count.volunteers > 1 ? "s" : ""}, ` +
+      `${org._count.admins} administrateur${org._count.admins > 1 ? "s" : ""}). ` +
+      `Cette action est irréversible.\n\nTapez le slug « ${org.slug} » pour confirmer :`
+    )
+    if (typed === null) return
+    if (typed.trim() !== org.slug) {
+      setDeleteError("Slug incorrect — suppression annulée.")
+      return
+    }
+    setDeleting(true)
+    const res = await fetch(`/api/super-admin/organizations/${org.id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ confirmSlug: typed.trim() }),
+    })
+    setDeleting(false)
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}))
+      setDeleteError(typeof d.error === "string" ? d.error : "Erreur lors de la suppression.")
+      return
+    }
+    router.push("/super-admin/organizations")
   }
 
   async function saveName(e: React.FormEvent) {
@@ -146,8 +177,20 @@ export default function OrgDetail({ org }: { org: Org }) {
           >
             {toggling ? "…" : org.active ? "Désactiver" : "Réactiver"}
           </button>
+          {!org.active && (
+            <button
+              onClick={deleteOrg}
+              disabled={deleting}
+              className="text-sm px-4 py-2 rounded-xl font-medium border border-red-300 text-red-700 hover:bg-red-50 disabled:opacity-50"
+            >
+              {deleting ? "…" : "Supprimer définitivement"}
+            </button>
+          )}
         </div>
       </div>
+      {deleteError && (
+        <p role="alert" className="text-sm text-red-600 -mt-2">{deleteError}</p>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
