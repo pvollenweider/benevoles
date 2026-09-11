@@ -1,7 +1,7 @@
 # Bénévoles — tâches de développement.
 # Usage : `make` (équivalent à `make help`).
 
-.PHONY: help dev dev-up dev-down dev-logs dev-reset dev-setup db-generate db-migrate db-seed db-studio test lint typecheck install
+.PHONY: help dev dev-up dev-down dev-logs dev-reset dev-setup db-generate db-migrate db-seed db-studio test lint typecheck install e2e e2e-up e2e-down e2e-setup
 
 DEFAULT_GOAL := help
 
@@ -83,6 +83,42 @@ db-seed: ## Crée le compte admin + données démo
 
 db-studio: ## Ouvre Prisma Studio (http://localhost:5555)
 	node --env-file=.env node_modules/.bin/prisma studio
+
+# ── e2e (Playwright) ──────────────────────────────────────────────────────────
+# Stack isolée de dev-up : ports 5433/1026/8026, jamais la DB/mailbox perso.
+#   make e2e-up && make e2e-setup && make e2e   # première fois
+#   make e2e                                    # relances suivantes (stack déjà up)
+#   make e2e-down                                # arrête tout (état perdu, pas de volume)
+
+e2e-up: ## Démarre postgres + mailpit e2e (docker-compose.e2e.yml)
+	docker compose -f docker-compose.e2e.yml up -d
+	@echo "→ Attente de PostgreSQL (e2e)…"
+	@until docker exec benevoles_postgres_e2e pg_isready -U benevoles >/dev/null 2>&1; do sleep 0.5; done
+
+e2e-down: ## Stoppe la stack e2e
+	docker compose -f docker-compose.e2e.yml down
+
+e2e-setup: ## Crée .env.e2e si absent, migre + seed la DB e2e
+	@if [ ! -f .env.e2e ]; then \
+		echo "→ Copie e2e/e2e.env.example → .env.e2e"; \
+		cp e2e/e2e.env.example .env.e2e; \
+	fi
+	@if ! grep -q '^AUTH_SECRET=".\+"' .env.e2e; then \
+		SECRET=$$(openssl rand -base64 48 | tr -d '\n='); \
+		if [ "$$(uname)" = "Darwin" ]; then \
+			sed -i '' "s|^AUTH_SECRET=.*|AUTH_SECRET=\"$$SECRET\"|" .env.e2e; \
+		else \
+			sed -i "s|^AUTH_SECRET=.*|AUTH_SECRET=\"$$SECRET\"|" .env.e2e; \
+		fi; \
+		echo "→ AUTH_SECRET (e2e) généré"; \
+	fi
+	node --env-file=.env.e2e node_modules/.bin/prisma generate
+	node --env-file=.env.e2e node_modules/.bin/prisma migrate deploy
+	node --env-file=.env.e2e node_modules/.bin/prisma db seed
+	npx playwright install --with-deps chromium
+
+e2e: ## Lance les tests Playwright (stack e2e déjà up + seedée)
+	node --env-file=.env.e2e node_modules/.bin/playwright test
 
 # ── Qualité ──────────────────────────────────────────────────────────────────
 

@@ -1,0 +1,38 @@
+# Stack éphémère pour les tests e2e (Playwright) — isolée de docker-compose.dev.yml
+# pour ne jamais toucher la base de dev personnelle.
+#
+#   make e2e-up     # démarre postgres + mailpit sur des ports dédiés
+#   make e2e-setup  # migre + seed la DB e2e
+#   make e2e        # lance les tests Playwright (démarre le serveur next lui-même)
+#   make e2e-down   # arrête et supprime tout (pas de volume nommé : état perdu à chaque down)
+#
+# Postgres : 5433 (au lieu de 5432 en dev)
+# Mailpit  : 1026 (SMTP) / 8026 (UI web) (au lieu de 1025/8025 en dev)
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: benevoles_postgres_e2e
+    environment:
+      POSTGRES_DB: benevoles_e2e
+      POSTGRES_USER: benevoles
+      POSTGRES_PASSWORD: benevoles
+    ports:
+      - "5433:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U benevoles"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: benevoles_mailpit_e2e
+    ports:
+      - "1026:1025"   # SMTP
+      - "8026:8025"   # UI web + API → http://localhost:8026
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1

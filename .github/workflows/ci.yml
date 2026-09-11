@@ -40,3 +40,82 @@ jobs:
 
       - name: Tests
         run: npm test
+
+  e2e:
+    name: E2E (Playwright)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: benevoles_e2e
+          POSTGRES_USER: benevoles
+          POSTGRES_PASSWORD: benevoles
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U benevoles"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+      mailpit:
+        image: axllent/mailpit:latest
+        ports: ["1025:1025", "8025:8025"]
+        env:
+          MP_SMTP_AUTH_ACCEPT_ANY: 1
+          MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+    env:
+      DATABASE_URL: postgresql://benevoles:benevoles@localhost:5432/benevoles_e2e
+      # Throwaway secret, CI-only — never used outside this ephemeral job.
+      AUTH_SECRET: ci-e2e-only-secret-not-used-anywhere-else-0000
+      ADMIN_EMAIL: admin@localhost
+      ADMIN_PASSWORD: ci-e2e-admin-password
+      ORG_ADMIN_EMAIL: org-admin@localhost
+      ORG_ADMIN_PASSWORD: ci-e2e-org-admin-password
+      # Deliberately distinct from ORG_ADMIN_EMAIL — registration.spec.ts
+      # asserts admin notifications never land here (see src/lib/email.ts).
+      ADMIN_NOTIFICATION_EMAIL: fallback-should-not-receive@localhost
+      SMTP_HOST: localhost
+      SMTP_PORT: "1025"
+      SMTP_SECURE: "false"
+      SMTP_USER: dev
+      SMTP_PASSWORD: dev
+      EMAIL_FROM: "Bénévoles e2e <notifications@benevol.app>"
+      MAILPIT_URL: http://localhost:8025
+      NEXT_PUBLIC_APP_URL: http://localhost:3100
+      AUTH_URL: http://localhost:3100
+      AUTH_TRUST_HOST: "true"
+      E2E_PORT: "3100"
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Migrate + seed e2e database
+        run: |
+          npx prisma generate
+          npx prisma migrate deploy
+          npx prisma db seed
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run e2e tests
+        run: npx playwright test
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
