@@ -13,16 +13,16 @@ type ResolvedOrg = {
  */
 export async function resolveOrgSlug(subdomain: string, path: string = ""): Promise<ResolvedOrg | null> {
   const org = await prisma.organization.findUnique({
-    where: { slug: subdomain },
+    where: { slug: subdomain, active: true },
     select: { id: true, slug: true, name: true },
   })
   if (org) return { org, redirectUrl: null }
 
   const history = await prisma.orgSlugHistory.findUnique({
     where: { slug: subdomain },
-    include: { organization: { select: { id: true, slug: true, name: true } } },
+    include: { organization: { select: { id: true, slug: true, name: true, active: true } } },
   })
-  if (!history) return null
+  if (!history || !history.organization.active) return null
 
   return {
     org: history.organization,

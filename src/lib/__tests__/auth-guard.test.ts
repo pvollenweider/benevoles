@@ -4,11 +4,14 @@ import { NextResponse } from "next/server"
 const { authMock } = vi.hoisted(() => ({ authMock: vi.fn() }))
 vi.mock("@/auth", () => ({ auth: authMock }))
 
-const { firstOrgMock } = vi.hoisted(() => ({ firstOrgMock: vi.fn() }))
+const { firstOrgMock, findUniqueOrgMock } = vi.hoisted(() => ({
+  firstOrgMock: vi.fn(),
+  findUniqueOrgMock: vi.fn(),
+}))
 vi.mock("../prisma", () => ({
   prisma: {
     $extends: () => ({ __scoped: true }),
-    organization: { findFirst: firstOrgMock },
+    organization: { findFirst: firstOrgMock, findUnique: findUniqueOrgMock },
   },
 }))
 
@@ -21,6 +24,8 @@ describe("requireOrgSession", () => {
   beforeEach(() => {
     authMock.mockReset()
     firstOrgMock.mockReset()
+    findUniqueOrgMock.mockReset()
+    findUniqueOrgMock.mockResolvedValue({ active: true })
     cookiesMock.mockResolvedValue({ get: () => undefined })
   })
 
@@ -29,6 +34,14 @@ describe("requireOrgSession", () => {
     const result = await requireOrgSession()
     expect(result).toBeInstanceOf(NextResponse)
     expect((result as NextResponse).status).toBe(401)
+  })
+
+  it("returns 403 when the admin's organization is disabled", async () => {
+    authMock.mockResolvedValue({ user: { role: "admin", organizationId: "org-A" } })
+    findUniqueOrgMock.mockResolvedValue({ active: false })
+    const result = await requireOrgSession()
+    expect(result).toBeInstanceOf(NextResponse)
+    expect((result as NextResponse).status).toBe(403)
   })
 
   it("returns 403 for an org admin without organizationId", async () => {
@@ -98,7 +111,16 @@ describe("getOrgContext (SSR helper)", () => {
   beforeEach(() => {
     authMock.mockReset()
     firstOrgMock.mockReset()
+    findUniqueOrgMock.mockReset()
+    findUniqueOrgMock.mockResolvedValue({ active: true })
     cookiesMock.mockResolvedValue({ get: () => undefined })
+  })
+
+  it("returns null when the admin's organization is disabled", async () => {
+    authMock.mockResolvedValue({ user: { role: "admin", organizationId: "org-B" } })
+    findUniqueOrgMock.mockResolvedValue({ active: false })
+    const result = await getOrgContext()
+    expect(result).toBeNull()
   })
 
   it("returns null when not authenticated", async () => {

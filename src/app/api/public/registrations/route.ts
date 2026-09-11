@@ -36,7 +36,7 @@ export async function POST(req: Request) {
   const { eventId, shiftIds, firstName, lastName, email, phone, comment, inviteToken } = parsed.data
 
   const event = await prisma.event.findFirst({
-    where: { id: eventId, publicStatus: "published" },
+    where: { id: eventId, publicStatus: "published", organization: { active: true } },
     include: { organization: { select: { slug: true } } },
   })
   if (!event) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })

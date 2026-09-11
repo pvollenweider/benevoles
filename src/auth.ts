@@ -17,9 +17,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const user = await prisma.adminUser.findUnique({
           where: { email: credentials.email as string },
+          include: { organization: { select: { active: true } } },
         })
 
         if (!user || !user.isActive) return null
+        // super_admin has no organization (cross-tenant); org admins are
+        // locked out once their organization is disabled.
+        if (user.organization && !user.organization.active) return null
 
         const valid = await bcrypt.compare(credentials.password as string, user.passwordHash)
         if (!valid) return null

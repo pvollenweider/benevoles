@@ -25,6 +25,11 @@ async function resolveSuperAdminOrg(): Promise<string | null> {
   return fallback?.id ?? null
 }
 
+async function isOrgActive(organizationId: string): Promise<boolean> {
+  const org = await prisma.organization.findUnique({ where: { id: organizationId }, select: { active: true } })
+  return org?.active ?? false
+}
+
 export async function requireOrgSession() {
   const session = await auth()
   if (!session?.user) return unauthorized()
@@ -34,6 +39,9 @@ export async function requireOrgSession() {
     organizationId = await resolveSuperAdminOrg()
   }
   if (!organizationId) return forbidden()
+  // Org admin's session may predate the org being disabled — reject on
+  // every request, not just at login.
+  if (session.user.role !== "super_admin" && !(await isOrgActive(organizationId))) return forbidden()
 
   return {
     session,
@@ -58,6 +66,7 @@ export async function getOrgContext() {
     organizationId = await resolveSuperAdminOrg()
   }
   if (!organizationId) return null
+  if (session.user.role !== "super_admin" && !(await isOrgActive(organizationId))) return null
 
   return {
     session,

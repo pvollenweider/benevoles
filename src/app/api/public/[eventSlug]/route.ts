@@ -17,7 +17,7 @@ export async function GET(
     where: {
       slug: eventSlug,
       publicStatus: "published",
-      organization: { slug: orgSlug },
+      organization: { slug: orgSlug, active: true },
     },
     include: {
       organization: { select: { name: true, volunteerCharter: true } },
