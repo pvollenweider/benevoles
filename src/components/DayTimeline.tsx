@@ -1,7 +1,7 @@
 "use client"
 
 import { getBarClasses } from "@/lib/roles"
-import { toMin, toMinEnd, fmt, type GanttShow } from "@/lib/gantt-utils"
+import { toMin, toMinEnd, fmt, assignLanes, type GanttShow } from "@/lib/gantt-utils"
 
 export { fmt }
 
@@ -20,6 +20,7 @@ export type TimelineShift = {
 type Show = GanttShow
 
 const ROW_H   = 44
+const LANE_GAP = 4
 const GAP     = 4
 const LABEL_W = 72
 const SHOW_H  = 22
@@ -67,6 +68,25 @@ export default function DayTimeline({
   }
   const roleOrder = Object.keys(byRole).sort((a, b) => roleMinOrder[a] - roleMinOrder[b])
 
+  // Lane-pack overlapping shifts within each role (same post, same time, different
+  // label) onto separate sub-rows instead of letting them stack invisibly.
+  const roleLane: Record<string, Record<string, number>> = {}
+  const roleHeight: Record<string, number> = {}
+  for (const role of roleOrder) {
+    const { lane, count } = assignLanes(byRole[role])
+    roleLane[role] = lane
+    roleHeight[role] = count * ROW_H + (count - 1) * LANE_GAP
+    // Render in visual scan order (start time, then lane) so DOM/tab order matches layout.
+    byRole[role] = [...byRole[role]].sort((a, b) =>
+      toMin(a.startTime) - toMin(b.startTime) || lane[a.id] - lane[b.id])
+  }
+  const roleTop: Record<string, number> = {}
+  {
+    let acc = 0
+    for (const role of roleOrder) { roleTop[role] = acc; acc += roleHeight[role] + GAP }
+  }
+  const rowsTotalH = roleOrder.reduce((sum, r) => sum + roleHeight[r] + GAP, 0)
+
   const hours: number[] = []
   for (let h = dayStart / 60; h <= dayEnd / 60; h++) hours.push(h)
 
@@ -95,7 +115,7 @@ export default function DayTimeline({
               <div
                 key={role}
                 className="flex items-center justify-end pr-2 bg-white"
-                style={{ height: ROW_H, marginBottom: GAP }}
+                style={{ height: roleHeight[role], marginBottom: GAP }}
               >
                 <span className="text-[10px] text-gray-600 truncate leading-tight text-right">
                   {role.split(" &")[0].split(" —")[0].trim()}
@@ -106,15 +126,15 @@ export default function DayTimeline({
           </div>
 
           {/* Shift rows */}
-          {roleOrder.map((role, rowIdx) => (
+          {roleOrder.map((role) => (
             <div
               key={role}
               className="absolute"
               style={{
                 left: LABEL_W,
-                top: rowIdx * (ROW_H + GAP),
+                top: roleTop[role],
                 width: span * pxPerMin,
-                height: ROW_H,
+                height: roleHeight[role],
               }}
             >
               {byRole[role].map((shift) => {
@@ -131,21 +151,23 @@ export default function DayTimeline({
                 const hasLabel        = shift.label !== shift.roleName
                 const startMin        = toMin(shift.startTime)
                 const endMin          = toMinEnd(shift.endTime, shift.startTime)
+                const laneTop         = roleLane[role][shift.id] * (ROW_H + LANE_GAP)
                 const LABEL_H         = 14
                 const timeLabel       = `${fmt(shift.startTime)}–${fmt(shift.endTime)}`
+                const roleLabel       = hasLabel ? `${shift.roleName} (${shift.label})` : shift.roleName
                 const ariaLabel       = isWaitlistable
                   ? (isSelected
-                    ? `Retirer de la file d'attente — ${shift.roleName} ${timeLabel}`
-                    : `Rejoindre la file d'attente — ${shift.roleName} ${timeLabel}`)
+                    ? `Retirer de la file d'attente — ${roleLabel} ${timeLabel}`
+                    : `Rejoindre la file d'attente — ${roleLabel} ${timeLabel}`)
                   : (isSelected
-                    ? `Désélectionner — ${shift.roleName} ${timeLabel}`
-                    : `Sélectionner — ${shift.roleName} ${timeLabel}`)
+                    ? `Désélectionner — ${roleLabel} ${timeLabel}`
+                    : `Sélectionner — ${roleLabel} ${timeLabel}`)
 
                 return (
                   <div
                     key={shift.id}
-                    className="absolute inset-y-0"
-                    style={{ left: pxLocal(startMin), width: pxW(startMin, endMin) }}
+                    className="absolute"
+                    style={{ left: pxLocal(startMin), width: pxW(startMin, endMin), top: laneTop, height: ROW_H }}
                   >
                     <button
                       disabled={!clickable}
@@ -203,7 +225,7 @@ export default function DayTimeline({
           ))}
 
           {/* Spacer for label rows */}
-          <div style={{ height: roleOrder.length * (ROW_H + GAP) }} />
+          <div style={{ height: rowsTotalH }} />
 
           {/* Show label row */}
           <div className="relative" style={{ height: SHOW_H }}>

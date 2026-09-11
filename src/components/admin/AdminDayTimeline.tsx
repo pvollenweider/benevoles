@@ -3,12 +3,13 @@
 import { useState, useRef, useCallback, useEffect } from "react"
 import Link from "next/link"
 import { getRoleAccent, getBarClasses } from "@/lib/roles"
-import { toMin, toMinEnd, fromMin, fmt, clamp, type GanttShow } from "@/lib/gantt-utils"
+import { toMin, toMinEnd, fromMin, fmt, clamp, assignLanes, type GanttShow } from "@/lib/gantt-utils"
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const PX_PER_MIN = 2.5
 const SNAP       = 15
 const ROW_H      = 48
+const LANE_GAP   = 4
 const GAP        = 8
 const LABEL_W    = 92
 const HANDLE_W   = 8
@@ -241,7 +242,26 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
     ? roleOrder.filter(r => !!byRole[r])
     : Object.keys(byRole).sort((a, b) => roleMinOrder[a] - roleMinOrder[b])
 
-  const rowsH = roles.length * (ROW_H + GAP)
+  // Lane-pack overlapping shifts within each role (same post, same time, different
+  // label) onto separate sub-rows instead of letting them stack invisibly.
+  const roleLane: Record<string, Record<string, number>> = {}
+  const roleLaneCount: Record<string, number> = {}
+  const roleHeight: Record<string, number> = {}
+  for (const role of roles) {
+    const { lane, count } = assignLanes(byRole[role])
+    roleLane[role] = lane
+    roleLaneCount[role] = count
+    roleHeight[role] = count * ROW_H + (count - 1) * LANE_GAP
+    // Render in visual scan order (start time, then lane) so DOM/tab order matches layout.
+    byRole[role] = [...byRole[role]].sort((a, b) =>
+      toMin(a.startTime) - toMin(b.startTime) || lane[a.id] - lane[b.id])
+  }
+  const roleTop: Record<string, number> = {}
+  {
+    let acc = 0
+    for (const role of roles) { roleTop[role] = acc; acc += roleHeight[role] + GAP }
+  }
+  const rowsH = roles.reduce((sum, r) => sum + roleHeight[r] + GAP, 0)
 
   // ── Create drag ─────────────────────────────────────────────────────────────
   function startCreate(roleName: string, e: React.MouseEvent) {
@@ -419,7 +439,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                 <div
                   key={role}
                   className="flex items-center justify-end pr-2 shrink-0"
-                  style={{ height: ROW_H, marginBottom: GAP }}
+                  style={{ height: roleHeight[role], marginBottom: GAP }}
                 >
                   <span className="text-[10px] text-gray-500 truncate text-right leading-tight max-w-full">
                     {role.split(" &")[0].trim()}
@@ -435,13 +455,13 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
             </div>
 
             {/* Role rows */}
-            {roles.map((role, rowIdx) => {
-              const rowTop = rowIdx * (ROW_H + GAP)
+            {roles.map(role => {
+              const rowTop = roleTop[role]
               return (
                 <div
                   key={role}
                   className="absolute cursor-crosshair"
-                  style={{ left: LABEL_W, top: rowTop, width: span * PX_PER_MIN, height: ROW_H }}
+                  style={{ left: LABEL_W, top: rowTop, width: span * PX_PER_MIN, height: roleHeight[role] }}
                   onMouseDown={e => {
                     const target = e.target as HTMLElement
                     if (target.closest("[data-shift-bar]")) return
@@ -454,6 +474,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                     const endMin     = toMinEnd(shift.endTime, shift.startTime)
                     const barLeft    = px(startMin)
                     const barWidth   = Math.max((endMin - startMin) * PX_PER_MIN, 4)
+                    const laneTop    = roleLane[role][shift.id] * (ROW_H + LANE_GAP)
                     const isSelected = selected === shift.id
                     const isFull     = shift.status === "full" || shift.registrationCount >= shift.capacity
                     const barCls     = getBarClasses(shift.roleName, isSelected ? "selected" : "default")
@@ -464,12 +485,14 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                         key={shift.id}
                         id={`shift-bar-${shift.id}`}
                         data-shift-bar="1"
-                        className={`absolute inset-y-1.5 rounded-lg cursor-pointer overflow-hidden
+                        className={`absolute rounded-lg cursor-pointer overflow-hidden
                           flex items-center transition-shadow
                           ${isSelected ? "shadow-md" : "hover:shadow-sm"} ${barCls}`}
                         style={{
                           left: barLeft,
                           width: barWidth,
+                          top: laneTop + 6,
+                          height: ROW_H - 12,
                           ...(isFull ? {
                             backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.3) 5px, rgba(255,255,255,0.3) 7px)",
                           } : {}),
@@ -521,10 +544,12 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                   {/* Ghost bar during create */}
                   {draft?.roleName === role && (
                     <div
-                      className="absolute inset-y-1.5 rounded-lg border-2 border-blue-400 border-dashed pointer-events-none flex items-center justify-center"
+                      className="absolute rounded-lg border-2 border-blue-400 border-dashed pointer-events-none flex items-center justify-center"
                       style={{
                         left:  px(draft.startMin),
                         width: Math.max((draft.endMin - draft.startMin) * PX_PER_MIN, 2),
+                        top:   6,
+                        height: ROW_H - 12,
                         background: "rgba(96,165,250,0.25)",
                       }}
                     >
