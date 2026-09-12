@@ -37,7 +37,7 @@ export default function AdminsManager({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     })
-    const data = await res.json()
+    const data = await res.json().catch(() => ({}))
     setSubmitting(false)
     if (!res.ok) {
       setError(data.error ?? "Une erreur est survenue.")
@@ -52,7 +52,7 @@ export default function AdminsManager({
   async function handleRemove(id: string) {
     setRemoving(id)
     const res = await fetch(`/api/admin/settings/admins/${id}`, { method: "DELETE" })
-    const data = await res.json()
+    const data = await res.json().catch(() => ({}))
     setRemoving(null)
     if (!res.ok) {
       setError(data.error ?? "Une erreur est survenue.")

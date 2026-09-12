@@ -28,7 +28,7 @@ export default function ChangePasswordForm() {
       body: JSON.stringify({ currentPassword: current, newPassword: next }),
     })
 
-    const data = await res.json()
+    const data = await res.json().catch(() => ({}))
     setLoading(false)
 
     if (!res.ok) {
