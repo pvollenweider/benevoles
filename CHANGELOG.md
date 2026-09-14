@@ -7,6 +7,16 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+---
+
+## [1.11.2] — 2026-09-14
+
+### Sécurité
+
+- **Dépendances** : correction de 8 alertes Dependabot — `google.golang.org/grpc` (DoS xDS, gandi-webhook), `mysql2` (fuite d'identifiants via downgrade d'auth, DoS zlib), `deepmerge-ts` (épuisement de pile), `@hono/node-server` (path traversal et bypass serveStatic), `valibot`, `uuid`. Les dépendances transitives figées par Prisma sont désormais forcées via `overrides` dans `package.json`.
+- **`nodemailer`** : mise à jour 9 → 10.
+- **`baseline-browser-mapping`** : mise à jour des données de compatibilité navigateurs.
+
 ### Supprimé
 
 - **Export Excel (`.xlsx`)** : fonctionnalité retirée ; le bouton « Exporter Excel » est supprimé de l'interface admin. L'export PDF reste disponible. L'import de membres via xlsx n'est pas affecté.
