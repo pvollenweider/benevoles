@@ -48,7 +48,12 @@
     "zod": "^4.4.3"
   },
   "overrides": {
-    "tmp": "^0.2.6"
+    "tmp": "^0.2.6",
+    "mysql2": "^3.23.1",
+    "deepmerge-ts": "^8.0.0",
+    "@hono/node-server": "^1.19.15",
+    "valibot": "^1.4.2",
+    "uuid": "^11.1.1"
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix"
