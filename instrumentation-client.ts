@@ -8,6 +8,10 @@ Sentry.init({
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
   enableLogs: true,
+  // iOS browsers (Firefox, Brave) inject scripts into WKWebView (app:/// origin)
+  // that throw on missing globals (__firefox__, DarkReader, window.ethereum). Not app code.
+  ignoreErrors: [/__firefox__/, /DarkReader/, /window\.ethereum/],
+  denyUrls: [/^app:\/\//],
   integrations: [
     Sentry.replayIntegration({ maskAllText: true, blockAllMedia: true }),
   ],
