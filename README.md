@@ -294,7 +294,7 @@ src/__tests__/security/                   # Tests d'isolation cross-tenant
 
 ## Architecture multi-tenant
 
-Chaque organisation dispose d'un client Prisma étendu (`getOrgClient`) qui injecte automatiquement `organizationId` dans tous les reads. Les mutations passent par une vérification de propriété (read scopé) avant d'accéder au client brut. 20 tests de sécurité valident l'isolation cross-tenant dans `src/__tests__/security/`.
+Chaque organisation dispose d'un client Prisma étendu (`getOrgClient`) qui injecte automatiquement `organizationId` dans tous les reads. Les mutations passent par une vérification de propriété (read scopé) avant d'accéder au client brut. 23 tests de sécurité valident l'isolation cross-tenant dans `src/__tests__/security/`.
 
 L'organisation courante est déterminée par le sous-domaine (`[orgSlug].benevol.app`, injecté par `src/middleware.ts` dans l'en-tête `x-org-slug`). En développement, sans sous-domaine, le paramètre `?org=<slug>` joue le même rôle.
 

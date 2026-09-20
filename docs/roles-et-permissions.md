@@ -27,7 +27,7 @@ Isolation entre organisations :
 1. `requireOrgSession()` (`src/lib/auth-guard.ts`) vérifie la session, résout l'organisation et refuse l'accès (403) si l'organisation est désactivée. La vérification a lieu à chaque requête, pas seulement à la connexion.
 2. Le client `db` renvoyé par le guard est un client Prisma étendu (`getOrgClient`, `src/lib/prisma-org.ts`) qui ajoute `organizationId` à toutes les lectures.
 3. Les modifications et suppressions sur `Shift` et `Registration` passent d'abord par une lecture scopée pour vérifier l'appartenance, car Prisma ne permet pas d'injecter ce filtre dans un `where` unique.
-4. Les tests `src/__tests__/security/cross-tenant-isolation.test.ts` (20 tests) vérifient que chaque route admin utilise `db` et non le client brut `prisma`.
+4. Les tests `src/__tests__/security/cross-tenant-isolation.test.ts` (23 tests) vérifient que chaque route admin utilise `db` et non le client brut `prisma`.
 
 Toute nouvelle route admin doit ajouter son test d'isolation (voir [CONTRIBUTING.md](../CONTRIBUTING.md)).
 
