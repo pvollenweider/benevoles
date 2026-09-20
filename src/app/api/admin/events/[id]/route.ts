@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
+import { titlesMatch } from "@/lib/confirm-title"
 import { z } from "zod"
 
 const showSchema = z.object({
@@ -73,16 +74,38 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   }
 }
 
-export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+const deleteSchema = z.object({ confirmTitle: z.string() })
+
+/**
+ * Permanently deletes an event. Only an archived event can be deleted, and the
+ * caller must send the exact event title as confirmation. Shifts, registrations
+ * and invitations are removed by cascade; volunteers stay in the org roster.
+ * Archiving goes through PATCH { publicStatus: "archived" }.
+ */
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireOrgSession()
   if (guard instanceof NextResponse) return guard
   const { db } = guard
 
   const { id } = await params
 
-  const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
+  const owned = await db.event.findFirst({ where: { id }, select: { id: true, title: true, publicStatus: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  await prisma.event.update({ where: { id }, data: { publicStatus: "archived" } })
-  return NextResponse.json({ success: true })
+  if (owned.publicStatus !== "archived") {
+    return NextResponse.json({ error: "Archivez l'événement avant de le supprimer." }, { status: 409 })
+  }
+
+  const body = deleteSchema.safeParse(await req.json().catch(() => null))
+  if (!body.success || !titlesMatch(body.data.confirmTitle, owned.title)) {
+    return NextResponse.json({ error: "Le titre saisi ne correspond pas à celui de l'événement." }, { status: 400 })
+  }
+
+  try {
+    await prisma.event.delete({ where: { id } })
+    return NextResponse.json({ success: true })
+  } catch (err) {
+    console.error("Event DELETE error:", err)
+    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 })
+  }
 }

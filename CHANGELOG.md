@@ -7,6 +7,14 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Ajouté
+
+- **Archiver et supprimer un événement** : bouton « Archiver » sur la page de l'événement, et suppression définitive possible uniquement pour un événement archivé. La fenêtre de confirmation affiche un avertissement fort avec le nombre de créneaux, d'inscriptions et d'invitations effacés, propose d'ouvrir l'export PDF avant de supprimer et demande de saisir le titre de l'événement (sans tenir compte des accents ni de la casse). Les bénévoles ne sont pas prévenus. Un bandeau confirme la suppression sur la liste des événements.
+
+### Modifié
+
+- **`DELETE /api/admin/events/[id]`** supprime désormais l'événement au lieu de l'archiver ; il exige un événement archivé (409 sinon) et le titre en confirmation (400 sinon). L'archivage passe par `PATCH { publicStatus: "archived" }`.
+
 ---
 
 ## [1.11.3] — 2026-09-20

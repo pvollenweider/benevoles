@@ -4,13 +4,15 @@ import { getOrgContext } from "@/lib/auth-guard"
 import { formatShortDate } from "@/lib/utils"
 import DuplicateButton from "@/components/admin/DuplicateButton"
 import StatusBadge from "@/components/admin/StatusBadge"
+import FlashMessage from "@/components/admin/FlashMessage"
 
 export const dynamic = "force-dynamic"
 
-export default async function AdminEventsPage() {
+export default async function AdminEventsPage({ searchParams }: { searchParams: Promise<{ deleted?: string }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { db } = ctx
+  const { deleted } = await searchParams
 
   const events = await db.event.findMany({
     include: {
@@ -30,6 +32,7 @@ export default async function AdminEventsPage() {
 
   return (
     <div className="space-y-6">
+      {deleted === "1" && <FlashMessage message="Événement supprimé." />}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Événements</h1>
         <Link
