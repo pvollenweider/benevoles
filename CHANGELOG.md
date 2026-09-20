@@ -12,6 +12,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Titre de la page publique modifiable** : chaque organisation peut définir le titre affiché en haut de sa page publique (et dans l'onglet du navigateur) depuis les paramètres ; « Bénévoles » par défaut. Le nom de l'organisation reste affiché au-dessus. Migration `0007_org_public_title`.
 - **Archiver et supprimer un événement** : bouton « Archiver » sur la page de l'événement, et suppression définitive possible uniquement pour un événement archivé. La fenêtre de confirmation affiche un avertissement fort avec le nombre de créneaux, d'inscriptions et d'invitations effacés, propose d'ouvrir l'export PDF avant de supprimer et demande de saisir le titre de l'événement (sans tenir compte des accents ni de la casse). Les bénévoles ne sont pas prévenus. Un bandeau confirme la suppression sur la liste des événements.
 
+### Sécurité
+
+- **Sentry** : `sendDefaultPii` passe à `false` (plus d'adresse IP, de cookies ni d'en-têtes de requête envoyés) sur le navigateur, le serveur et l'edge ; `includeLocalVariables` est désactivé côté serveur (il ouvrait l'inspecteur Node et joignait les valeurs des variables locales aux événements). Les jetons d'accès contenus dans les URLs (`/my/…`, `/waitlist/…/confirm`, `?token=…`) sont masqués dans les événements, transactions, spans et fils d'Ariane avant envoi. La politique de confidentialité cite désormais Sentry (région UE) comme sous-traitant.
+
 ### Modifié
 
 - **`DELETE /api/admin/events/[id]`** supprime désormais l'événement au lieu de l'archiver ; il exige un événement archivé (409 sinon) et le titre en confirmation (400 sinon). L'archivage passe par `PATCH { publicStatus: "archived" }`.
