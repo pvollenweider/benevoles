@@ -62,6 +62,8 @@ Le client Sentry ignore les erreurs provoquées par les scripts injectés par le
 
 Données envoyées à Sentry (navigateur, serveur et edge) :
 
+- Sentry n'est actif que dans les builds de production (`enabled: NODE_ENV === "production"`). Le développement local et les tests E2E, qui chargent le vrai DSN depuis `.env`, n'envoient rien.
+
 - `sendDefaultPii: false` : ni adresse IP, ni cookies, ni en-têtes de requête. `includeLocalVariables` est désactivé côté serveur.
 - `src/lib/sentry-scrub.ts` masque les jetons d'accès dans les URLs (`/my/<jeton>`, `/waitlist/<jeton>/confirm`, `/api/public/registrations/<jeton>`, `/api/public/member-invite/<jeton>` et le paramètre `token`) avant l'envoi des événements, transactions, spans et fils d'Ariane. Les enregistrements de session (Session Replay : 10 % des sessions, 100 % de celles avec erreur) masquent tous les textes et les médias ; leurs URLs ne sont pas nettoyées par ce module.
 - Région du compte : Union européenne (Allemagne), d'après le DSN public du navigateur (`ingest.de.sentry.io`).
