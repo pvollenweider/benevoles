@@ -11,7 +11,7 @@ export async function PATCH(req: Request) {
   const { organizationId } = guard
 
   const body = await req.json().catch(() => ({}))
-  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean } = {}
+  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; publicTitle?: string | null } = {}
   let oldSlug: string | null = null
 
   if (typeof body.name === "string") {
@@ -61,6 +61,18 @@ export async function PATCH(req: Request) {
     updates.hasOrgInsurance = body.hasOrgInsurance
   }
 
+  // Headline of the public events page. Empty means "use the default" (Bénévoles).
+  if ("publicTitle" in body) {
+    const title = typeof body.publicTitle === "string" ? body.publicTitle.trim() : ""
+    if (title.length === 0) {
+      updates.publicTitle = null
+    } else if (title.length < 2 || title.length > 100) {
+      return NextResponse.json({ error: "Titre invalide (2–100 caractères, ou vide pour « Bénévoles »)." }, { status: 400 })
+    } else {
+      updates.publicTitle = title
+    }
+  }
+
   if (Object.keys(updates).length === 0) {
     return NextResponse.json({ error: "Aucune modification." }, { status: 400 })
   }
@@ -75,10 +87,10 @@ export async function PATCH(req: Request) {
     return tx.organization.update({
       where: { id: organizationId },
       data: updates,
-      select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true },
+      select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, publicTitle: true },
     })
   })
 
   const adminUrl = oldSlug ? `${orgBaseUrl(org.slug)}/admin/settings/admins` : null
-  return NextResponse.json({ name: org.name, slug: org.slug, adminUrl })
+  return NextResponse.json({ name: org.name, slug: org.slug, publicTitle: org.publicTitle, adminUrl })
 }

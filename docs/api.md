@@ -55,7 +55,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/admin/members` | GET, POST | Lister, créer des membres |
 | `/api/admin/members/[id]` | PATCH, DELETE | Modifier, supprimer un membre |
 | `/api/admin/members/import` | POST | Import CSV ou xlsx (multipart) |
-| `/api/admin/settings/organization` | PATCH | Nom, slug, charte du bénévole, assurance RC |
+| `/api/admin/settings/organization` | PATCH | Nom, slug, charte du bénévole, assurance RC, titre de la page publique (`publicTitle`, 2 à 100 caractères, vide = « Bénévoles ») |
 | `/api/admin/settings/organization/slugs` | GET, DELETE | Historique des slugs |
 | `/api/admin/settings/admins` | GET, POST | Équipe admin, invitation d'un admin |
 | `/api/admin/settings/admins/[id]` | DELETE | Retirer un admin |
