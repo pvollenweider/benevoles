@@ -82,4 +82,4 @@ Avec `.env.development.example`, le super admin est `admin@local` / `admin`.
 
 ## Secrets Kubernetes
 
-`k8s/secret.yaml` liste les clés du secret `benevoles-secret`. Il ne contient pas `AUTH_URL`, `AUTH_TRUST_HOST`, `VAPID_*` ni les variables Sentry : à ajouter au secret réel si vous les utilisez. `BACKUP_PASSPHRASE` sert à chiffrer les sauvegardes (`k8s/cronjob-backup.yaml`).
+`k8s/secret.yaml` est un modèle qui liste les clés attendues. Le secret réel `benevoles-secret` est régénéré par l'étape « Sync k8s secret » de `.github/workflows/deploy.yml` à partir des secrets GitHub : il contient notamment `AUTH_URL`, `AUTH_TRUST_HOST`, `VAPID_*` et `SENTRY_DSN` (secret GitHub `SENTRY_DSN`, à défaut `NEXT_PUBLIC_SENTRY_DSN`). `BACKUP_PASSPHRASE` sert à chiffrer les sauvegardes (`k8s/cronjob-backup.yaml`).

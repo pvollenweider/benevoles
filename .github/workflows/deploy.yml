@@ -24,7 +24,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version: 26
           cache: npm
 
       - name: Install dependencies
@@ -147,6 +147,7 @@ jobs:
             --from-literal=CRON_SECRET="${{ secrets.CRON_SECRET }}" \
             --from-literal=VAPID_PUBLIC_KEY="${{ secrets.VAPID_PUBLIC_KEY }}" \
             --from-literal=VAPID_PRIVATE_KEY="${{ secrets.VAPID_PRIVATE_KEY }}" \
+            --from-literal=SENTRY_DSN="${{ secrets.SENTRY_DSN || secrets.NEXT_PUBLIC_SENTRY_DSN }}" \
             --from-literal=NEXT_PUBLIC_APP_URL="https://www.benevol.app" \
             --from-literal=AUTH_URL="https://www.benevol.app" \
             --from-literal=AUTH_TRUST_HOST="true" \

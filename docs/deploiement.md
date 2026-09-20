@@ -67,8 +67,8 @@ Les migrations sont appliquées par l'entrypoint de l'image à chaque démarrage
 
 Points d'attention :
 
-- `k8s/secret.yaml` ne contient pas `AUTH_URL`, `AUTH_TRUST_HOST`, `VAPID_*` ni Sentry. À ajouter au secret réel.
-- Les sondes `readiness` et `liveness` interrogent `/api/public/events`. `/api/health` vérifie la connexion à la base et peut servir de sonde plus précise.
+- Le secret `benevoles-secret` réel n'est pas appliqué depuis `k8s/secret.yaml` (simple modèle) : l'étape « Sync k8s secret » de `deploy.yml` le régénère à chaque déploiement à partir des secrets GitHub, avec `AUTH_URL`, `AUTH_TRUST_HOST`, `VAPID_*` et `SENTRY_DSN` (secret GitHub `SENTRY_DSN`, à défaut `NEXT_PUBLIC_SENTRY_DSN`). Le DSN navigateur, lui, est injecté au build.
+- Les sondes `readiness` et `liveness` interrogent `/api/health` (requête `SELECT 1`, délais de 3 et 5 s). Elles interrogeaient auparavant `/api/public/events`, plus lourd ; des événements Kubernetes « Readiness probe failed (Client.Timeout exceeded) » ont été observés sur plusieurs pods lors des déploiements du 20 septembre 2026.
 - Les cron jobs de rappels et de purge lisent `NEXT_PUBLIC_APP_URL` et `CRON_SECRET` dans `benevoles-secret`.
 
 ## Webhook DNS Gandi

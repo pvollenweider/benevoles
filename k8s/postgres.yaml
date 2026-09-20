@@ -58,7 +58,9 @@ spec:
               memory: 512Mi
           readinessProbe:
             exec:
-              command: [pg_isready, -U, $(POSTGRES_USER), -d, benevoles]
+              # `-U $(POSTGRES_USER)` was not resolved by the probe: Postgres logged
+              # `FATAL: role "root" does not exist` every 5 s. Use a shell instead.
+              command: [sh, -c, 'pg_isready -U "$POSTGRES_USER" -d benevoles']
             initialDelaySeconds: 5
             periodSeconds: 5
       volumes:

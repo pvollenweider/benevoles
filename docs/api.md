@@ -19,7 +19,6 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 |-------|----------|-------|------|
 | `/api/public/events` | GET | public | Événements publiés avec leurs créneaux ouverts ou complets |
 | `/api/public/[eventSlug]` | GET | public | Un événement publié de l'organisation courante (sous-domaine ou `?org=`) |
-| `/api/public/events/[slug]` | GET | public | Un événement publié par slug, sans filtre d'organisation |
 | `/api/public/registrations` | POST | public | Inscription à un ou plusieurs créneaux (liste d'attente si le créneau est complet). Limitée à 20 requêtes par heure et par IP |
 | `/api/public/registrations/[token]` | GET, DELETE | public (jeton) | Consulter ou annuler une inscription |
 | `/api/public/member-invite/[token]` | GET | public (jeton) | Données de pré-remplissage d'une invitation |
@@ -80,4 +79,4 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/cron/cleanup` | GET, POST | cron | Purge RGPD |
 | `/api/health` | GET | public | `200 { "ok": true }` si la base répond, sinon `503` |
 
-Les sondes Kubernetes (`k8s/deployment.yaml`) interrogent `/api/public/events` et non `/api/health`.
+Les sondes Kubernetes (`k8s/deployment.yaml`) interrogent `/api/health`.

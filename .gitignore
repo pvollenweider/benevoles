@@ -62,3 +62,6 @@ prisma/setup-horizon.ts
 
 # vendored AI skills (third-party, flagged by CodeQL)
 .github/skills/
+
+# compiled Go binary (built by gandi-webhook/Dockerfile)
+gandi-webhook/cert-manager-webhook-gandi
