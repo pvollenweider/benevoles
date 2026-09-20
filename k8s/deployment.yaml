@@ -38,6 +38,10 @@ spec:
               value: "3000"
             - name: HOSTNAME
               value: "0.0.0.0"
+            # Diagnostic: prints the stack of MaxListenersExceededWarning
+            # ("11 close listeners added to [ServerResponse]"). Remove once fixed.
+            - name: NODE_OPTIONS
+              value: "--trace-warnings"
           resources:
             requests:
               cpu: 100m
