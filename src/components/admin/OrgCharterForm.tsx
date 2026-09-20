@@ -43,7 +43,7 @@ export default function OrgCharterForm({
     <div className="bg-white border border-gray-200 rounded-2xl p-5 space-y-4">
       <div>
         <h2 className="text-sm font-semibold text-gray-800">Convention des Bénévoles</h2>
-        <p className="text-xs text-gray-400 mt-0.5">
+        <p className="text-xs text-gray-500 mt-0.5">
           Ce texte est présenté aux bénévoles lors de l'inscription.
         </p>
       </div>
@@ -51,7 +51,7 @@ export default function OrgCharterForm({
       <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3">
         <div>
           <p className="text-sm font-medium text-gray-800">Assurance RC fournie par l'organisation</p>
-          <p className="text-xs text-gray-400 mt-0.5">
+          <p className="text-xs text-gray-500 mt-0.5">
             {hasOrgInsurance
               ? "La charte indique que les bénévoles sont couverts par votre RC."
               : "La charte indique que chaque bénévole doit avoir sa propre couverture."}
@@ -85,7 +85,7 @@ export default function OrgCharterForm({
         <button
           type="button"
           onClick={() => { setText(buildVolunteerCharter({ hasOrgInsurance })); setSuccess(false) }}
-          className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+          className="text-xs text-gray-500 hover:text-gray-700 transition-colors"
         >
           Réinitialiser la convention par défaut
         </button>

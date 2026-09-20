@@ -131,7 +131,7 @@ export function getBarClasses(roleName: string, state: BarState): string {
   return FALLBACK_PALETTE[hashRole(lower)][state]
 }
 
-const cls = "w-3.5 h-3.5 text-gray-400 flex-shrink-0"
+const cls = "w-3.5 h-3.5 text-gray-500 flex-shrink-0"
 const svgProps = {
   viewBox: "0 0 24 24",
   fill: "none",

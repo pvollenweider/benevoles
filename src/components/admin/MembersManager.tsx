@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect, useId, useMemo, useRef, useState, useTransition } from "react"
+import { useId, useMemo, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
+import ModalShell from "./ModalShell"
 
 type Member = {
   id: string
@@ -186,13 +187,13 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
                 <tr key={m.id} className={`border-t border-gray-100 ${!m.active ? "opacity-50" : ""}`}>
                   <td className="px-4 py-3">
                     <div className="font-medium text-gray-900">{m.firstName}</div>
-                    {!m.active && <div className="text-xs text-gray-400">inactif</div>}
+                    {!m.active && <div className="text-xs text-gray-500">inactif</div>}
                   </td>
                   <td className="px-4 py-3 font-medium text-gray-900">{m.lastName}</td>
                   <td className="px-4 py-3 text-gray-600">
                     {m.email && <div className="text-xs">{m.email}</div>}
-                    {m.phone && <div className="text-xs text-gray-400">{m.phone}</div>}
-                    {!m.email && !m.phone && <span className="text-xs text-gray-300">—</span>}
+                    {m.phone && <div className="text-xs text-gray-500">{m.phone}</div>}
+                    {!m.email && !m.phone && <span className="text-xs text-gray-500">—</span>}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-1">
@@ -498,80 +499,6 @@ function ImportModal({ onClose, onImported }: { onClose: () => void; onImported:
         </div>
       )}
     </ModalShell>
-  )
-}
-
-// ── ModalShell ────────────────────────────────────────────────────────────────
-
-function ModalShell({
-  title,
-  onClose,
-  children,
-}: {
-  title: string
-  onClose: () => void
-  children: React.ReactNode
-}) {
-  const dialogRef = useRef<HTMLDivElement>(null)
-
-  // Return focus to the opener on close. Kept separate from the effect below:
-  // that one re-runs whenever `onClose` changes identity.
-  useEffect(() => {
-    const opener = document.activeElement as HTMLElement | null
-    return () => {
-      if (opener?.isConnected) opener.focus()
-    }
-  }, [])
-
-  useEffect(() => {
-    const el = dialogRef.current
-    if (!el) return
-
-    const focusableSelectors =
-      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-
-    const getFocusable = () => [...el.querySelectorAll<HTMLElement>(focusableSelectors)]
-
-    // Move focus into modal on open
-    getFocusable()[0]?.focus()
-
-    function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") { onClose(); return }
-      if (e.key !== "Tab") return
-
-      const els = getFocusable()
-      if (!els.length) return
-      const first = els[0]
-      const last = els[els.length - 1]
-
-      if (e.shiftKey) {
-        if (document.activeElement === first) { e.preventDefault(); last.focus() }
-      } else {
-        if (document.activeElement === last) { e.preventDefault(); first.focus() }
-      }
-    }
-
-    document.addEventListener("keydown", onKeyDown)
-    return () => document.removeEventListener("keydown", onKeyDown)
-  }, [onClose])
-
-  return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-title"
-        className="bg-white rounded-2xl p-5 max-w-lg w-full"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between mb-4">
-          <h2 id="modal-title" className="text-lg font-semibold text-gray-900">{title}</h2>
-          <button onClick={onClose} aria-label="Fermer" className="text-gray-500 hover:text-gray-700 text-xl leading-none">×</button>
-        </div>
-        {children}
-      </div>
-    </div>
   )
 }
 

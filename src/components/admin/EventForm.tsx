@@ -171,7 +171,7 @@ export default function EventForm({ initialData }: Props) {
         {/* Saving indicator (edit mode) */}
         {isEdit && (
           <div className="flex justify-end -mb-3">
-            <span className={`text-xs transition-opacity ${saving ? "text-gray-400 opacity-100" : "opacity-0"}`}>
+            <span className={`text-xs transition-opacity ${saving ? "text-gray-500 opacity-100" : "opacity-0"}`}>
               Sauvegarde…
             </span>
           </div>
@@ -267,7 +267,7 @@ export default function EventForm({ initialData }: Props) {
           )}
 
           {shows.length === 0 && !addingShow && (
-            <p className="text-xs text-gray-400 mb-2">Aucun spectacle configuré.</p>
+            <p className="text-xs text-gray-500 mb-2">Aucun spectacle configuré.</p>
           )}
 
 
@@ -320,12 +320,12 @@ export default function EventForm({ initialData }: Props) {
           <label className="block text-sm font-medium text-gray-700 mb-1">Message de confirmation</label>
           <textarea rows={2} value={form.confirmationMessage} onChange={(e) => set("confirmationMessage", e.target.value)}
             className={`${inputCls} resize-none`} />
-          <p className="text-xs text-gray-400 mt-1">{"Supporte le **gras**, les listes (- item) et les liens [texte](url). Variables : {{prenom}}, {{créneau}}, {{date}}."}</p>
+          <p className="text-xs text-gray-500 mt-1">{"Supporte le **gras**, les listes (- item) et les liens [texte](url). Variables : {{prenom}}, {{créneau}}, {{date}}."}</p>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Message de rappel <span className="text-gray-400 font-normal">(envoyé manuellement avant l&apos;événement)</span>
+            Message de rappel <span className="text-gray-500 font-normal">(envoyé manuellement avant l&apos;événement)</span>
           </label>
           <textarea rows={3} value={form.reminderMessage} onChange={(e) => set("reminderMessage", e.target.value)}
             placeholder="Consignes vestimentaires, point de RDV, accès, parking…"

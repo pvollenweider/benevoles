@@ -12,11 +12,15 @@ export default async function HomePage() {
   const rawOrgSlug = (await headers()).get("x-org-slug")
 
   let orgSlug = rawOrgSlug
+  let orgName: string | null = null
   if (rawOrgSlug) {
     const resolved = await resolveOrgSlug(rawOrgSlug)
     if (!resolved) orgSlug = null
     else if (resolved.redirectUrl) redirect(resolved.redirectUrl)
-    else orgSlug = resolved.org.slug
+    else {
+      orgSlug = resolved.org.slug
+      orgName = resolved.org.name
+    }
   }
 
   // No org context → marketing landing page (no data needed)
@@ -52,8 +56,8 @@ export default async function HomePage() {
     <main className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200 px-4 py-5">
         <div className="max-w-2xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-900">Bénévoles</h1>
-          <p className="text-gray-500 text-sm mt-1">Inscrivez-vous pour aider lors de nos spectacles</p>
+          <h1 className="text-2xl font-bold text-gray-900 break-words">{orgName || "Bénévoles"}</h1>
+          <p className="text-gray-500 text-sm mt-1">Inscrivez-vous pour aider lors de nos événements</p>
         </div>
       </header>
 
@@ -83,11 +87,11 @@ export default async function HomePage() {
                 <div className="mt-4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     {event.spotsLeft > 0 ? (
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-orange-50 text-orange-700">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
                         {event.spotsLeft} place{event.spotsLeft > 1 ? "s" : ""} à pourvoir
                       </span>
                     ) : (
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
                         Complet
                       </span>
                     )}

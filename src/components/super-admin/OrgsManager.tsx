@@ -99,13 +99,13 @@ export default function OrgsManager({ initialOrgs }: Props) {
                     <div className="flex items-center justify-end gap-3">
                       <Link
                         href={`/super-admin/organizations/${org.slug}`}
-                        className="text-xs text-gray-400 hover:text-blue-600"
+                        className="text-xs text-gray-500 hover:text-blue-600"
                       >
                         Détail
                       </Link>
                       <button
                         onClick={() => toggleActive(org)}
-                        className={`text-xs ${org.active ? "text-gray-400 hover:text-red-600" : "text-gray-400 hover:text-green-600"}`}
+                        className={`text-xs ${org.active ? "text-gray-500 hover:text-red-600" : "text-gray-500 hover:text-green-600"}`}
                       >
                         {org.active ? "Désactiver" : "Réactiver"}
                       </button>

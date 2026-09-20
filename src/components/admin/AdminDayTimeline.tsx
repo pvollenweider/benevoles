@@ -111,11 +111,11 @@ function ShiftPopover({
         <div className="flex items-center gap-1.5 min-w-0">
           <span className={`w-2 h-2 rounded-full flex-shrink-0 ${getRoleAccent(shift.roleName)}`} />
           <span className="text-xs font-semibold text-gray-700 truncate">{shift.roleName}</span>
-          <span className="text-[10px] text-gray-400 flex-shrink-0">
+          <span className="text-[10px] text-gray-500 flex-shrink-0">
             {fmt(shift.startTime)}–{fmt(shift.endTime)}
           </span>
         </div>
-        <button onClick={closeAndSave} className="text-gray-400 hover:text-gray-700 flex-shrink-0">
+        <button onClick={closeAndSave} className="text-gray-500 hover:text-gray-700 flex-shrink-0">
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
@@ -130,7 +130,7 @@ function ShiftPopover({
           placeholder={shift.roleName}
           className="w-full text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-400 placeholder-gray-300"
         />
-        <p className="text-[9px] text-gray-400 mt-0.5 ml-0.5">
+        <p className="text-[9px] text-gray-500 mt-0.5 ml-0.5">
           Libellé — laisser vide si identique au poste
         </p>
       </div>
@@ -570,7 +570,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
               {hours.map(h => (
                 <div
                   key={h}
-                  className="absolute top-1 text-[10px] text-gray-400 leading-none"
+                  className="absolute top-1 text-[10px] text-gray-500 leading-none"
                   style={{
                     left: LABEL_W + (h * 60 - dayStart) * PX_PER_MIN,
                     transform: "translateX(-50%)",

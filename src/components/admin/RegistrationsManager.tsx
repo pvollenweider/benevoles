@@ -50,7 +50,7 @@ function StatusPill({ s }: { s: ShiftRef }) {
     return <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-red-100 text-red-600 font-medium">Complet</span>
   }
   if (s.registrationCount === 0) {
-    return <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-400 font-medium">0/{s.capacity}</span>
+    return <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium">0/{s.capacity}</span>
   }
   return (
     <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-medium">
@@ -103,13 +103,13 @@ function ShiftSelect({
         onClick={() => setOpen(o => !o)}
         className="flex items-center justify-between gap-2 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[38px]"
       >
-        <span className={`truncate text-left ${selected ? "text-gray-800" : "text-gray-400"}`}>
+        <span className={`truncate text-left ${selected ? "text-gray-800" : "text-gray-500"}`}>
           {selected
             ? `${fmtDate(selected.date)} · ${fmtTime(selected.startTime)}–${fmtTime(selected.endTime)} · ${selected.roleName}${selected.label !== selected.roleName ? ` · ${selected.label}` : ""}`
             : placeholder}
         </span>
         <svg
-          className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
+          className={`w-4 h-4 text-gray-500 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
           fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -160,7 +160,7 @@ function ShiftSelect({
                 <span className={`flex-1 text-sm font-medium min-w-0 ${alreadyReg ? "text-orange-800" : isConflict ? "text-amber-800" : "text-gray-800"}`}>
                   {s.roleName}
                   {s.label !== s.roleName && (
-                    <span className="font-normal text-gray-400"> · {s.label}</span>
+                    <span className="font-normal text-gray-500"> · {s.label}</span>
                   )}
                 </span>
                 {alreadyReg && (
@@ -370,7 +370,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       )}
 
       {filtered.length === 0 ? (
-        <div className="text-center py-12 text-gray-400">
+        <div className="text-center py-12 text-gray-500">
           <p>{registrations.length === 0 ? "Aucune inscription." : "Aucun résultat."}</p>
         </div>
       ) : (
@@ -390,25 +390,25 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                 <tr key={reg.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3">
                     <p className="font-medium text-gray-900">{reg.volunteer.firstName} {reg.volunteer.lastName}</p>
-                    <p className="text-xs text-gray-400">{reg.volunteer.email}</p>
-                    {reg.volunteer.phone && <p className="text-xs text-gray-400">{reg.volunteer.phone}</p>}
-                    {reg.comment && <p className="text-xs text-gray-400 italic mt-0.5">"{reg.comment}"</p>}
+                    <p className="text-xs text-gray-500">{reg.volunteer.email}</p>
+                    {reg.volunteer.phone && <p className="text-xs text-gray-500">{reg.volunteer.phone}</p>}
+                    {reg.comment && <p className="text-xs text-gray-500 italic mt-0.5">"{reg.comment}"</p>}
                   </td>
                   <td className="px-4 py-3 hidden sm:table-cell">
                     <p className="text-gray-700">
                       {reg.shift.label !== reg.shift.roleName
-                        ? <>{reg.shift.roleName} <span className="text-gray-400 font-normal">·</span> {reg.shift.label}</>
+                        ? <>{reg.shift.roleName} <span className="text-gray-500 font-normal">·</span> {reg.shift.label}</>
                         : reg.shift.label}
                     </p>
-                    <p className="text-xs text-gray-400">{fmtDate(reg.shift.date)} · {fmtTime(reg.shift.startTime)}–{fmtTime(reg.shift.endTime)}</p>
+                    <p className="text-xs text-gray-500">{fmtDate(reg.shift.date)} · {fmtTime(reg.shift.startTime)}–{fmtTime(reg.shift.endTime)}</p>
                   </td>
                   <td className="px-4 py-3 hidden md:table-cell">
-                    <span className="text-xs text-gray-400">{sourceLabels[reg.source] ?? reg.source}</span>
+                    <span className="text-xs text-gray-500">{sourceLabels[reg.source] ?? reg.source}</span>
                   </td>
                   <td className="px-4 py-3 hidden md:table-cell">
                     {reg.status !== "active" && <StatusBadge status={reg.status} />}
                     {reg.status === "waiting" && reg.waitingPosition != null && (
-                      <span className="ml-1 text-xs text-gray-400">#{reg.waitingPosition}</span>
+                      <span className="ml-1 text-xs text-gray-500">#{reg.waitingPosition}</span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-right">

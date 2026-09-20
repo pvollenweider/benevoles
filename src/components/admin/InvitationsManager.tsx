@@ -1,7 +1,8 @@
 "use client"
 
-import { useMemo, useState, useTransition } from "react"
+import { useMemo, useRef, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
+import ModalShell from "./ModalShell"
 
 type Member = {
   id: string
@@ -90,7 +91,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
         {remindResult && <span className="text-sm text-gray-600 self-center">{remindResult}</span>}
         <button
           onClick={() => setShowTest((v) => !v)}
-          className="text-xs text-gray-400 hover:text-gray-600 ml-auto self-center"
+          className="text-xs text-gray-500 hover:text-gray-700 ml-auto self-center"
         >
           Tester l&apos;envoi d&apos;email
         </button>
@@ -131,7 +132,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
       )}
 
       {invites.length === 0 ? (
-        <div className="bg-white border border-gray-200 rounded-xl p-10 text-center text-gray-400">
+        <div className="bg-white border border-gray-200 rounded-xl p-10 text-center text-gray-500">
           Aucune invitation envoyée pour cet événement.
         </div>
       ) : (
@@ -219,6 +220,7 @@ function InviteModal({
   onClose: () => void
   onDone: () => void
 }) {
+  const searchRef = useRef<HTMLInputElement>(null)
   const [search, setSearch] = useState("")
   const [tagFilter, setTagFilter] = useState("")
   const [hideInvited, setHideInvited] = useState(true)
@@ -291,25 +293,26 @@ function InviteModal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div
-        className="bg-white rounded-2xl p-5 max-w-2xl w-full max-h-[85vh] flex flex-col"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-semibold text-gray-900">Inviter des membres</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-700 text-xl leading-none">×</button>
-        </div>
+    <ModalShell
+      title="Inviter des membres"
+      onClose={onClose}
+      panelClassName="max-w-2xl flex flex-col"
+      initialFocusRef={searchRef}
+      closeOnBackdrop={false}
+    >
 
         <div className="flex flex-wrap gap-2 mb-3">
           <input
+            ref={searchRef}
             type="search"
+            aria-label="Rechercher un membre"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Rechercher…"
-            className="flex-1 min-w-[180px] border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+            className="flex-1 min-w-[180px] border border-gray-200 rounded-lg px-3 py-1.5 text-sm placeholder:text-gray-500"
           />
           <select
+            aria-label="Filtrer par tag"
             value={tagFilter}
             onChange={(e) => setTagFilter(e.target.value)}
             className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
@@ -331,15 +334,16 @@ function InviteModal({
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto border border-gray-200 rounded-xl">
+        <div className="flex-1 min-h-0 overflow-y-auto border border-gray-200 rounded-xl">
           {filtered.length === 0 ? (
-            <div className="p-8 text-center text-sm text-gray-400">Aucun membre à inviter</div>
+            <div className="p-8 text-center text-sm text-gray-500">Aucun membre à inviter</div>
           ) : (
             <ul className="divide-y divide-gray-100">
               {filtered.map((m) => (
                 <li key={m.id} className="flex items-center gap-3 p-3">
                   <input
                     type="checkbox"
+                    aria-label={`Inviter ${m.firstName} ${m.lastName}`}
                     checked={selected.has(m.id)}
                     onChange={() => toggle(m.id)}
                   />
@@ -358,18 +362,19 @@ function InviteModal({
 
         <div className="mt-4 space-y-3">
           <div>
-            <label className="block text-sm text-gray-700 mb-1">Message (optionnel)</label>
+            <label htmlFor="invite-message" className="block text-sm text-gray-700 mb-1">Message (optionnel)</label>
             <textarea
+              id="invite-message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               maxLength={500}
               rows={2}
               placeholder="Un mot d'accompagnement court qui sera inclus dans l'email"
-              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm placeholder:text-gray-500"
             />
           </div>
 
-          {result && <div className="text-sm text-gray-700 bg-gray-50 px-3 py-2 rounded-lg">{result}</div>}
+          {result && <div role="status" className="text-sm text-gray-700 bg-gray-50 px-3 py-2 rounded-lg">{result}</div>}
 
           <div className="flex justify-end gap-2">
             <button type="button" onClick={onClose} className="text-sm px-4 py-2 text-gray-600 hover:text-gray-900">
@@ -384,8 +389,7 @@ function InviteModal({
             </button>
           </div>
         </div>
-      </div>
-    </div>
+    </ModalShell>
   )
 }
 

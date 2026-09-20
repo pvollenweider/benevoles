@@ -168,13 +168,13 @@ export default function AdminsManager({
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-gray-400 truncate">{admin.email}</p>
+                  <p className="text-xs text-gray-500 truncate">{admin.email}</p>
                 </div>
                 {!isSelf && (
                   <button
                     onClick={() => handleRemove(admin.id)}
                     disabled={removing === admin.id}
-                    className="text-xs text-gray-400 hover:text-red-500 transition-colors disabled:opacity-40 flex-shrink-0"
+                    className="text-xs text-gray-500 hover:text-red-500 transition-colors disabled:opacity-40 flex-shrink-0"
                   >
                     {removing === admin.id ? "…" : "Retirer"}
                   </button>

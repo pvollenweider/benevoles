@@ -8,7 +8,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
           <Link href="/" className="text-sm font-semibold text-gray-900 hover:text-gray-600 transition-colors">
             benevol.app
           </Link>
-          <span className="text-xs text-gray-400">Documents légaux</span>
+          <span className="text-xs text-gray-500">Documents légaux</span>
         </div>
       </header>
 
@@ -29,7 +29,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
           {children}
         </article>
 
-        <footer className="mt-16 pt-6 border-t border-gray-100 flex gap-6 text-xs text-gray-400">
+        <footer className="mt-16 pt-6 border-t border-gray-100 flex gap-6 text-xs text-gray-500">
           <Link href="/legal/terms" className="hover:text-gray-600 transition-colors">CGU</Link>
           <Link href="/legal/privacy" className="hover:text-gray-600 transition-colors">Confidentialité</Link>
           <a href="mailto:contact@benevol.app" className="hover:text-gray-600 transition-colors">Contact</a>

@@ -156,10 +156,10 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
                   <div className="flex items-start justify-between gap-3 mb-2.5">
                     <p className="text-sm font-medium text-gray-800">
                       {shift.label !== shift.roleName
-                        ? <>{shift.roleName} <span className="font-normal text-gray-400">·</span> {shift.label}</>
+                        ? <>{shift.roleName} <span className="font-normal text-gray-500">·</span> {shift.label}</>
                         : shift.label}
                     </p>
-                    <p className="text-xs text-gray-400 whitespace-nowrap flex-shrink-0">
+                    <p className="text-xs text-gray-500 whitespace-nowrap flex-shrink-0">
                       {shift.date.toLocaleDateString("fr-FR")} · {shift.startTime}–{shift.endTime}
                     </p>
                   </div>
@@ -174,7 +174,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
                       {filled}/{capacity} bénévole{capacity > 1 ? "s" : ""}
                     </span>
                     {waitingCount > 0 && (
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-gray-500">
                         {waitingCount} en attente
                       </span>
                     )}

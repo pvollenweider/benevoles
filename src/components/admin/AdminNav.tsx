@@ -57,7 +57,7 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
               Super Admin
             </span>
           )}
-          <span className="text-xs text-gray-400">{userName}</span>
+          <span className="text-xs text-gray-500">{userName}</span>
           <button
             onClick={() => signOut({ callbackUrl: "/admin/login" })}
             className="text-xs text-gray-500 hover:text-gray-800"
