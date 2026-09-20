@@ -9,6 +9,24 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ---
 
+## [1.11.3] — 2026-09-20
+
+### Corrigé
+
+- **Sentry côté serveur** : `instrumentation.ts` à la racine était ignoré par Next.js (l'application vit dans `src/app`). Les configurations Sentry serveur et edge ne se chargeaient pas et `onRequestError` n'était pas branché. Le fichier est fusionné dans `src/instrumentation.ts`, les erreurs serveur remontent désormais dans Sentry.
+- **Sentry côté client** : les erreurs provoquées par les scripts injectés par les navigateurs iOS (Firefox, Brave : `__firefox__`, `DarkReader`, `window.ethereum`) sont filtrées.
+
+### Sécurité
+
+- **Dépendances** : `go.opentelemetry.io/otel` (gandi-webhook) mis à jour en 1.45.0, ce qui ferme les alertes Dependabot associées. Mise à jour groupée de 28 dépendances npm.
+- **Code scanning** : le répertoire `.github/skills/` (outils de développement tiers, 20 alertes CodeQL) n'est plus versionné.
+
+### Modifié
+
+- **CI** : `actions/upload-artifact` 4 → 7.
+
+---
+
 ## [1.11.2] — 2026-09-14
 
 ### Sécurité
