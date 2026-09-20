@@ -80,6 +80,10 @@ Vous pouvez :
 
 Le lien « Retour à l'accueil » vous ramène directement sur la page de l'événement — vous y êtes automatiquement reconnu(e).
 
+### Recevoir les rappels sur votre téléphone
+
+Sur la page de confirmation et sur votre page personnelle, vous pouvez activer les **notifications du navigateur**. Vous recevez alors, en plus de l'email, un rappel 2 jours avant, la veille et le jour de votre créneau. Votre navigateur vous demande d'abord votre autorisation ; vous pouvez la retirer à tout moment dans ses réglages. Le bouton n'apparaît pas si votre navigateur ne gère pas les notifications ou si le site ne les propose pas.
+
 Pour vous inscrire à de nouveaux créneaux, retournez sur la page de l'événement. Si vous utilisez le même navigateur, vos inscriptions existantes sont automatiquement reconnues et affichées en vert.
 
 ---
@@ -102,6 +106,9 @@ Annulez le créneau concerné via votre lien personnel, puis retournez sur la pa
 
 **Le créneau que je veux est complet.**
 Si la liste d'attente est activée sur ce créneau, un bouton **Rejoindre la liste d'attente** apparaît. En vous y inscrivant, vous recevrez un email dès qu'une place se libère. Vous aurez alors **24 heures** pour confirmer via le lien dans l'email. Sans réponse, la place passe à la personne suivante. Si la liste d'attente n'est pas disponible, revenez ultérieurement ou contactez l'organisateur.
+
+**Où sont mes données personnelles utilisées ?**
+La politique de confidentialité et les conditions d'utilisation sont accessibles par les liens en bas de page du site.
 
 **J'ai un message « Ce créneau chevauche une inscription existante ».**
 Vous êtes déjà inscrit(e) à un créneau qui se passe en même temps. Vos inscriptions existantes apparaissent en vert dans le planning — les créneaux en conflit sont grisés automatiquement.

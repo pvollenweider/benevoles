@@ -51,8 +51,13 @@ Liste exhaustive des fonctionnalités de l'application.
 - Page de gestion : liste de toutes les inscriptions actives du bénévole pour l'événement
 - Annulation individuelle d'un créneau depuis la page de gestion
 - **Liste d'attente** : si un créneau est complet et que la liste d'attente est activée, le bénévole peut s'y inscrire (barre rayée cliquable avec sous-label « Complet · file d'attente ») ; quand une place se libère, la première personne en attente reçoit un email avec un lien de confirmation valable 24 h
+- **Notifications push** : un bouton d'abonnement est proposé sur la page de succès et sur la page de gestion ; les rappels J-2, J-1 et Jour J sont alors aussi envoyés en push. Aucun push n'est envoyé si les clés VAPID ne sont pas configurées côté serveur ; les abonnements expirés sont supprimés automatiquement
 - Arrivée depuis un lien email : le token est stocké en `localStorage` — le bénévole est automatiquement reconnu s'il navigue vers la page de l'événement
 - Lien « Retour à l'accueil » pointe directement sur la page de l'événement
+
+### Pages légales
+
+- Politique de confidentialité (`/legal/privacy`) et conditions d'utilisation (`/legal/terms`)
 
 ---
 
@@ -62,6 +67,7 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - Connexion par email + mot de passe (hashé bcrypt, NextAuth v5)
 - Déconnexion
+- Mot de passe oublié : email de réinitialisation (`/admin/forgot-password`, `/admin/reset-password`)
 - Onboarding par lien sécurisé : le super admin crée un compte admin et envoie un lien d'invitation avec token révocable (validité 7 jours) ; le mot de passe est créé à la première connexion
 
 ### Isolation multi-tenant
@@ -69,6 +75,11 @@ Liste exhaustive des fonctionnalités de l'application.
 - Chaque admin ne voit et ne peut modifier que les données de son organisation
 - Scoping automatique via un client Prisma étendu (`getOrgClient`) qui injecte `organizationId` dans tous les reads
 - Middleware Next.js protège les routes `/admin/*` (authentification) et `/super-admin/*` (rôle `super_admin`)
+
+### Tableau de bord (`/admin/dashboard`)
+
+- Compteurs : événements (publiés, à venir), bénévoles inscrits (et bénévoles uniques), taux de remplissage global
+- Répartition des membres : total, avec email, sans email (ne peuvent pas recevoir d'invitations)
 
 ### Gestion des événements
 
@@ -114,7 +125,7 @@ Pool de bénévoles connus de l'organisation (source de vérité partagée avec 
 - Champs : prénom, nom, email, téléphone, tags libres, notes internes
 - **Colonnes Prénom et Nom séparées** ; tri par colonne au clic sur l'en-tête (croissant → décroissant → reset) ; changement annoncé aux lecteurs d'écran via live region
 - Recherche par texte et filtre par tag
-- Import CSV/TSV (`/admin/members/import`)
+- Import CSV ou Excel (`.xlsx`) via le bouton « Importer CSV/Excel » : colonnes reconnues par leur intitulé (français ou anglais), bilan créés / mis à jour / ignorés, lignes en erreur listées
 
 ### Invitations membres (`/admin/events/[id]/invitations`)
 
@@ -165,7 +176,8 @@ Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscr
 
 - **Slug de l'organisation** : modification avec validation (`[a-z0-9-]`), avertissement si des événements publiés existent (liens potentiellement cassés), redirection automatique vers le nouveau sous-domaine après changement
 - **Historique des slugs** : les anciens slugs sont archivés et redirigent vers le slug courant ; suppression individuelle possible
-- **Charte du bénévole** : texte par défaut éditable en texte libre ; bouton « Réinitialiser le texte par défaut » ; affiché aux bénévoles lors de l'inscription
+- **Charte du bénévole** (« Convention des Bénévoles » dans l'écran) : texte par défaut éditable en texte libre ; bouton « Réinitialiser la convention par défaut » ; affiché aux bénévoles lors de l'inscription
+- **Assurance RC de l'organisation** : commutateur qui choisit la variante du texte par défaut (bénévoles couverts par la RC de l'organisation, ou couverture accidents personnelle à leur charge) ; changer le commutateur remplace le texte de la zone de saisie
 - **Équipe admin** : liste des administrateurs avec statut (actif / en attente)
 - **Invitation** : saisir nom + email → lien d'activation envoyé par email (token 7 jours)
 - **Retrait** d'un admin (sauf soi-même et dernier admin actif)
@@ -221,10 +233,13 @@ Fallback console si SMTP non configuré (développement).
 
 - Next.js 16 App Router (SSR + client), Turbopack par défaut
 - API REST séparée public / admin / super-admin / cron
-- PostgreSQL 16 + Prisma 7 ORM (driver natif pg, migration unique squashée)
+- PostgreSQL 16 + Prisma 7 ORM (driver natif pg, historique de migrations dans `prisma/migrations/`)
 - Architecture multi-tenant : isolation par `organizationId` avec client Prisma étendu
 - **Routage par sous-domaine** : `[orgSlug].benevol.app` → le middleware injecte `x-org-slug` ; fallback `?org=<slug>` pour le développement localhost
 - Tests d'isolation cross-tenant (Vitest) — vérifient que chaque route admin utilise le client Prisma scopé
 - Déploiement Docker Compose ou image standalone
 - Déploiement Kubernetes avec init container pour migrations automatiques
+- Cron jobs Kubernetes : rappels (toutes les heures), purge RGPD (`/api/cron/cleanup` : organisations et comptes admin désactivés depuis plus de 30 jours, bénévoles orphelins, jetons expirés), sauvegarde `pg_dump` chiffrée (rétention 30 jours)
+- Certificat wildcard via cert-manager et le webhook DNS Gandi (`gandi-webhook/`)
+- Suivi des erreurs avec Sentry (serveur, edge et navigateur)
 - CI/CD GitHub Actions : build, push image GHCR, déploiement automatique sur push `main`

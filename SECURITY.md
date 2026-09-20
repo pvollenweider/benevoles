@@ -6,8 +6,8 @@ Seule la dernière version publiée reçoit des correctifs de sécurité.
 
 | Version | Supportée |
 |---------|-----------|
-| 1.0.x   | ✅ |
-| < 1.0   | ❌ |
+| 1.11.x  | ✅ |
+| < 1.11  | ❌ |
 
 ## Signaler une vulnérabilité
 
@@ -29,3 +29,5 @@ Vous recevrez un accusé de réception sous 48 h. Une fois la faille confirmée 
 - Restreindre l'accès à la base de données au seul pod/container de l'application
 - Activer HTTPS en production ; ne pas désactiver la vérification TLS
 - Renouveler régulièrement les mots de passe SMTP et les secrets NextAuth
+- Définir `CRON_SECRET` : sans lui, les endpoints `/api/cron/*` refusent toutes les requêtes en production
+- Ne pas laisser les valeurs par défaut du seed en production (mot de passe `change-me`) : définir `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ORG_ADMIN_EMAIL` et `ORG_ADMIN_PASSWORD` avant `npm run db:seed`

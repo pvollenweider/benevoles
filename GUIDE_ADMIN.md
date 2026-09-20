@@ -10,6 +10,16 @@ Accéder à `/admin/login` et saisir les identifiants administrateur.
 
 Si vous avez reçu un **lien d'invitation** (email « Invitation à rejoindre… »), cliquez sur le bouton « Créer mon compte » dans l'email pour définir votre mot de passe avant votre première connexion.
 
+**Mot de passe oublié ?** Depuis la page de connexion, utilisez le lien de réinitialisation (`/admin/forgot-password`) : un email contenant un lien de réinitialisation vous est envoyé.
+
+---
+
+## Tableau de bord
+
+**`/admin/dashboard`**
+
+Vue d'ensemble de votre organisation : nombre d'événements (publiés et à venir), bénévoles inscrits, taux de remplissage global (places occupées sur places disponibles) et répartition des membres (total, avec email, sans email : ces derniers ne peuvent pas recevoir d'invitations).
+
 ---
 
 ## Créer un événement
@@ -103,7 +113,7 @@ Le répertoire des membres est le pool de bénévoles connus de votre organisati
 
 - **Ajouter** un membre : prénom, nom, email, téléphone, tags, notes internes
 - **Modifier** ou désactiver un membre existant
-- **Importer** des membres en masse via fichier CSV/TSV (`/admin/members/import`)
+- **Importer** des membres en masse : bouton **Importer CSV/Excel** (fichiers `.csv` ou `.xlsx`). Les colonnes sont reconnues par leur intitulé (prénom, nom, email, téléphone, tags ; par exemple `prenom`, `courriel`, `mobile`, `groupes`). Plusieurs tags dans une cellule se séparent par `,`, `;` ou `|`. Le résultat indique le nombre de membres créés, mis à jour et ignorés ; les lignes en erreur sont listées avec leur numéro (50 au maximum affichées).
 - **Rechercher** par texte libre ou filtrer par tag
 - **Trier** par prénom ou par nom : cliquer sur l'en-tête de colonne (croissant → décroissant → reset)
 
@@ -193,8 +203,11 @@ Depuis la page de l'événement → **QR code**, télécharger le QR code de la 
 
 La charte est le texte que les bénévoles doivent lire et accepter avant de finaliser leur inscription. Un texte par défaut est fourni ; vous pouvez le personnaliser librement ou le réinitialiser.
 
+- Le commutateur **Assurance RC fournie par l'organisation** choisit la variante du texte par défaut : couverture par l'assurance responsabilité civile de l'organisation, ou couverture accidents personnelle à la charge de chaque bénévole. Changer le commutateur remplace le texte affiché dans la zone de saisie par la variante correspondante ; les modifications non enregistrées sont perdues.
 - Modifier le texte dans la textarea et cliquer sur **Enregistrer**
-- Cliquer sur **Réinitialiser le texte par défaut** pour revenir au texte standard
+- Cliquer sur **Réinitialiser la convention par défaut** pour revenir au texte standard
+
+Dans l'interface, ce bloc s'intitule « Convention des Bénévoles » ; côté bénévole, le lien du formulaire s'intitule « charte du bénévole ».
 
 Les bénévoles voient la charte sous forme de lien « Lire la charte » dans le formulaire d'inscription. Cliquer dessus ouvre un modal avec le texte complet et un bouton « J'ai lu et j'accepte ».
 

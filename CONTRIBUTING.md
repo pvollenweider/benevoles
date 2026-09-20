@@ -4,8 +4,9 @@ Merci de votre intérêt pour ce projet !
 
 ## Prérequis
 
-- Node.js **26**
-- PostgreSQL 16
+- Node.js **24** (`nvm use`, version lue dans `.nvmrc`)
+- PostgreSQL 16 (fourni par `make dev-up` via Docker)
+- Docker (stack de développement : postgres + mailpit)
 - `npm` (pas yarn, pas pnpm)
 
 ## Mise en place locale
@@ -33,7 +34,9 @@ Mailpit (capture emails) accessible sur http://localhost:8025.
 3. Développer et commiter (voir conventions ci-dessous)
 4. Ouvrir une Pull Request vers `main`
 
-Les PRs doivent passer le CI (type-check + lint) avant d'être mergées.
+Les PRs doivent passer le CI avant d'être mergées : type-check (`tsc --noEmit`), lint, tests Vitest et tests E2E Playwright. Les mêmes contrôles se lancent en local avec `make typecheck`, `make lint`, `make test` et `npm run test:e2e`.
+
+Les messages de commit et les titres de PR sont rédigés en anglais.
 
 ## Conventions de commit
 
@@ -50,7 +53,7 @@ Format : `type(scope): description courte`
 | `ops` | Infrastructure, Docker, K8s |
 | `chore` | Tâches diverses (dépendances, config) |
 
-Exemples : `feat(admin): export PDF multi-pages`, `fix(timeline): scroll mobile cassé`
+Exemples : `feat(admin): multi-page PDF export`, `fix(timeline): broken mobile scroll`
 
 ## Structure du projet
 
@@ -60,16 +63,19 @@ src/
     [orgSlug]/[eventSlug]/  # Page publique d'un événement
     my/                     # Gestion inscription bénévole (/my/[token])
     admin/                  # Interface admin (protégée, scopée par org)
+      dashboard/            # Tableau de bord
       events/               # CRUD événements, créneaux, inscriptions, invitations
       members/              # Pool de bénévoles de l'organisation
-      settings/admins/      # Gestion de l'équipe admin
+      settings/admins/      # Équipe admin, slug, charte du bénévole
     super-admin/            # Interface super admin (rôle super_admin requis)
       organizations/        # CRUD organisations
+    waitlist/[token]/       # Confirmation d'une place de liste d'attente
+    legal/                  # Politique de confidentialité, conditions d'utilisation
     api/
-      public/               # API publique (événements, inscriptions)
+      public/               # API publique (événements, inscriptions, push)
       admin/                # API admin scopée par organisation
       super-admin/          # API super admin
-      cron/reminders/       # Rappels automatiques (toutes les heures)
+      cron/                 # reminders (rappels) et cleanup (purge RGPD)
   components/
     admin/                  # Composants interface admin
     super-admin/            # Composants super admin
@@ -77,12 +83,15 @@ src/
     notifications/          # Couche email (sendNotification, templates, types)
     prisma-org.ts           # Client Prisma scopé par organisation (getOrgClient)
     auth-guard.ts           # Guards d'authentification (requireOrgSession)
+    env.ts                  # Validation des variables d'environnement
+  middleware.ts             # Auth /admin et /super-admin, routage par sous-domaine
   __tests__/security/       # Tests d'isolation cross-tenant (Vitest)
   generated/prisma/         # Client Prisma (généré, ne pas éditer)
 prisma/
   schema.prisma             # Schéma de base de données
-  migrations/               # Migration unique (squashée)
+  migrations/               # Historique des migrations Prisma
 k8s/                        # Manifestes Kubernetes
+gandi-webhook/              # Webhook DNS Gandi pour cert-manager (Go)
 ```
 
 ## Base de données
@@ -104,6 +113,7 @@ Ne jamais modifier les fichiers dans `src/generated/prisma/` — ils sont régé
 make test        # lance la suite Vitest
 make typecheck   # vérifie les types TypeScript
 make lint        # ESLint
+npm run test:e2e # tests end-to-end Playwright (demandent une base migrée et seedée)
 ```
 
 Toute nouvelle route API admin doit être accompagnée d'un test d'isolation cross-tenant dans `src/__tests__/security/cross-tenant-isolation.test.ts`. Ces tests vérifient que la route utilise le client Prisma scopé (`db` de `requireOrgSession`) et non le client brut (`prisma`).
