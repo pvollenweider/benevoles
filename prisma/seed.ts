@@ -57,9 +57,9 @@ async function main() {
   console.log(`✓ Admin d'org créé : ${orgAdminEmail} (org: ${org.slug})`)
 
   const demoShowSchedule = [
-    { name: "Représentation samedi après-midi", date: "2026-06-14", startTime: "14:30", endTime: "16:00" },
-    { name: "Représentation samedi soir",       date: "2026-06-14", startTime: "20:00", endTime: "21:30" },
-    { name: "Représentation dimanche",          date: "2026-06-15", startTime: "14:30", endTime: "16:00" },
+    { name: "Représentation samedi après-midi", date: "2026-06-13", startTime: "14:30", endTime: "16:00" },
+    { name: "Représentation samedi soir",       date: "2026-06-13", startTime: "20:00", endTime: "21:30" },
+    { name: "Représentation dimanche",          date: "2026-06-14", startTime: "14:30", endTime: "16:00" },
   ]
 
   const event = await prisma.event.upsert({
@@ -72,8 +72,8 @@ async function main() {
       description: "Le grand spectacle annuel de fin d'année.",
       location: "Salle des fêtes, Paris",
       publicStatus: "published",
-      startDate: new Date("2026-06-14"),
-      endDate: new Date("2026-06-15"),
+      startDate: new Date("2026-06-13"),
+      endDate: new Date("2026-06-14"),
       publicInstructions: "Merci pour votre aide ! Présentez-vous 15 minutes avant le début de votre créneau.",
       confirmationMessage: "Merci pour votre inscription ! Nous vous contacterons si besoin. À bientôt !",
       showSchedule: demoShowSchedule,
@@ -81,14 +81,14 @@ async function main() {
   })
 
   const shifts = [
-    { roleName: "Billetterie", label: "Billetterie — Samedi matin", date: new Date("2026-06-14"), startTime: "09:00", endTime: "12:00", capacity: 3 },
-    { roleName: "Billetterie", label: "Billetterie — Samedi après-midi", date: new Date("2026-06-14"), startTime: "13:00", endTime: "17:00", capacity: 3 },
-    { roleName: "Buvette", label: "Buvette — Samedi", date: new Date("2026-06-14"), startTime: "10:00", endTime: "18:00", capacity: 4 },
-    { roleName: "Loge", label: "Gestion des loges", date: new Date("2026-06-14"), startTime: "08:00", endTime: "12:00", capacity: 2 },
-    { roleName: "Montage", label: "Montage décors", date: new Date("2026-06-14"), startTime: "07:00", endTime: "09:00", capacity: 5 },
-    { roleName: "Billetterie", label: "Billetterie — Dimanche matin", date: new Date("2026-06-15"), startTime: "09:00", endTime: "12:00", capacity: 3 },
-    { roleName: "Buvette", label: "Buvette — Dimanche", date: new Date("2026-06-15"), startTime: "10:00", endTime: "18:00", capacity: 4 },
-    { roleName: "Démontage", label: "Démontage décors", date: new Date("2026-06-15"), startTime: "18:00", endTime: "21:00", capacity: 5 },
+    { roleName: "Billetterie", label: "Billetterie — Samedi matin", date: new Date("2026-06-13"), startTime: "09:00", endTime: "12:00", capacity: 3 },
+    { roleName: "Billetterie", label: "Billetterie — Samedi après-midi", date: new Date("2026-06-13"), startTime: "13:00", endTime: "17:00", capacity: 3 },
+    { roleName: "Buvette", label: "Buvette — Samedi", date: new Date("2026-06-13"), startTime: "10:00", endTime: "18:00", capacity: 4 },
+    { roleName: "Loge", label: "Gestion des loges", date: new Date("2026-06-13"), startTime: "08:00", endTime: "12:00", capacity: 2 },
+    { roleName: "Montage", label: "Montage décors", date: new Date("2026-06-13"), startTime: "07:00", endTime: "09:00", capacity: 5 },
+    { roleName: "Billetterie", label: "Billetterie — Dimanche matin", date: new Date("2026-06-14"), startTime: "09:00", endTime: "12:00", capacity: 3 },
+    { roleName: "Buvette", label: "Buvette — Dimanche", date: new Date("2026-06-14"), startTime: "10:00", endTime: "18:00", capacity: 4 },
+    { roleName: "Démontage", label: "Démontage décors", date: new Date("2026-06-14"), startTime: "18:00", endTime: "21:00", capacity: 5 },
   ]
 
   for (const shift of shifts) {

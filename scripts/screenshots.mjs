@@ -5,6 +5,7 @@
  *   ADMIN_EMAIL=admin@org.com ADMIN_PASSWORD=xxx node scripts/screenshots.mjs
  *
  * Optional env vars:
+ *   PUBLIC_ONLY   set to 1 to capture only the public pages (no admin login)
  *   BASE_PUBLIC   default: https://www.benevol.app
  *   BASE_ADMIN    default: https://cdp.benevol.app   (org subdomain)
  */
@@ -72,6 +73,12 @@ async function run() {
     console.log("  ⚠ No published event found — skipping timeline screenshots")
   }
   await tl.close()
+
+  if (process.env.PUBLIC_ONLY) {
+    await browser.close()
+    console.log(`\nDone (public pages only) — ${OUT}\n`)
+    return
+  }
 
   // ── 3. Admin pages ─────────────────────────────────────────────────────────
   console.log("\n3. Admin pages…")
