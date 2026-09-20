@@ -75,6 +75,22 @@ Points d'attention :
 
 `gandi-webhook/` est un programme Go (`main.go`, `gandiclient.go`) construit par son propre `Dockerfile`. Il implémente le webhook cert-manager qui crée les enregistrements DNS-01 chez Gandi, nécessaire au certificat wildcard.
 
+Le workflow `gandi-webhook.yml` construit l'image à chaque pull request touchant `gandi-webhook/` (sans la publier) et la publie sur GHCR (`:latest` et `:<sha du commit>`) à chaque push sur `main`. Le déploiement Kubernetes de ce webhook n'est pas appliqué par `deploy.yml` : il se met à jour à la main.
+
+Le manifeste `k8s/gandi-webhook.yaml` référence le tag du commit et non `:latest`, avec `imagePullPolicy: IfNotPresent` : avec `:latest`, un redémarrage réutiliserait l'image en cache sur le nœud et ne chargerait jamais la nouvelle. Pour mettre à jour après un changement de `gandi-webhook/` :
+
+```bash
+# 1. Attendre la fin du workflow « Build Gandi Webhook » sur main, puis :
+SHA=$(git rev-parse origin/main)
+kubectl -n cert-manager set image deploy/cert-manager-webhook-gandi \
+  cert-manager-webhook-gandi=ghcr.io/pvollenweider/benevoles/gandi-webhook:$SHA
+kubectl -n cert-manager rollout status deploy/cert-manager-webhook-gandi
+kubectl get apiservice v1alpha1.acme.bwolf.me   # AVAILABLE doit être True
+# 2. Reporter le tag dans k8s/gandi-webhook.yaml (image:) et commiter.
+```
+
+Retour arrière : `set image` avec l'empreinte de l'image précédente (`kubectl -n cert-manager get pod <pod> -o jsonpath='{.status.containerStatuses[0].imageID}'`, à noter avant la mise à jour). Le renouvellement du certificat wildcard (visible avec `kubectl -n benevoles get certificate benevol-app-wildcard`) est le seul test réel du webhook contre l'API Gandi.
+
 ## CI/CD
 
 | Workflow | Déclencheur | Étapes |
