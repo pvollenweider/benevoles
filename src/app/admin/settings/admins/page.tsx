@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation"
+import { headers } from "next/headers"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
@@ -15,6 +16,12 @@ export default async function AdminsSettingsPage() {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { db, organizationId, session } = ctx
+
+  // Domain the org slug is a subdomain of (e.g. "benevol.app" for "cdp.benevol.app").
+  // Computed here so the server and the client render the same address.
+  const host = (await headers()).get("host") ?? "benevol.app"
+  const hostParts = host.split(".")
+  const baseDomain = hostParts.length >= 3 ? hostParts.slice(1).join(".") : host
 
   const [admins, org, slugHistory, publishedEventCount] = await Promise.all([
     db.adminUser.findMany({
@@ -58,6 +65,7 @@ export default async function AdminsSettingsPage() {
           initialSlug={org.slug}
           initialHistory={slugHistory.map((e) => ({ slug: e.slug, createdAt: e.createdAt.toISOString() }))}
           initialHasPublishedEvents={publishedEventCount > 0}
+          baseDomain={baseDomain}
         />
       )}
 

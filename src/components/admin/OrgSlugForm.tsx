@@ -1,128 +1,207 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useId, useRef, useState } from "react"
 
 type HistoryEntry = { slug: string; createdAt: string }
+
+const focusRing =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
 
 export default function OrgSlugForm({
   initialSlug,
   initialHistory,
   initialHasPublishedEvents,
+  baseDomain,
 }: {
   initialSlug: string
   initialHistory: HistoryEntry[]
   initialHasPublishedEvents: boolean
+  /** Domain the slug is a subdomain of, computed on the server so the server and client render the same text. */
+  baseDomain: string
 }) {
   const [slug, setSlug] = useState(initialSlug)
   const [history, setHistory] = useState(initialHistory)
   const [hasPublishedEvents] = useState(initialHasPublishedEvents)
   const [saving, setSaving] = useState(false)
+  const [status, setStatus] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [deleteErrors, setDeleteErrors] = useState<Record<string, string>>({})
   const [deletingSlug, setDeletingSlug] = useState<string | null>(null)
   const [showConfirm, setShowConfirm] = useState(false)
 
+  const inputRef = useRef<HTMLInputElement>(null)
+  const submitRef = useRef<HTMLButtonElement>(null)
+  const confirmRef = useRef<HTMLButtonElement>(null)
+  const historyHeadingRef = useRef<HTMLParagraphElement>(null)
+  const restoreFocus = useRef(false)
+
+  const inputId = useId()
+  const helpId = useId()
+  const errorId = useId()
+  const confirmId = useId()
+  const warningId = useId()
+
   const trimmed = slug.trim().toLowerCase()
   const changed = trimmed !== initialSlug && trimmed.length >= 2
 
-  async function handleSubmit(e: React.FormEvent) {
+  useEffect(() => {
+    if (showConfirm) confirmRef.current?.focus()
+    else if (restoreFocus.current) {
+      submitRef.current?.focus()
+      restoreFocus.current = false
+    }
+  }, [showConfirm])
+
+  function cancelConfirm() {
+    restoreFocus.current = true
+    setShowConfirm(false)
+  }
+
+  async function doSave() {
+    setShowConfirm(false)
+    setSaving(true)
+    setError(null)
+    setStatus("")
+    try {
+      const res = await fetch("/api/admin/settings/organization", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug: trimmed }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setError(typeof data.error === "string" ? data.error : "Une erreur est survenue.")
+        inputRef.current?.focus()
+        return
+      }
+      const data = await res.json()
+      setStatus("Identifiant modifié. Redirection vers la nouvelle adresse…")
+      if (data.adminUrl) window.location.href = data.adminUrl
+    } catch {
+      setError("Impossible d'enregistrer. Vérifiez votre connexion et réessayez.")
+      inputRef.current?.focus()
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!changed) return
+    if (saving) return
+    if (!changed) {
+      setStatus("Aucune modification.")
+      return
+    }
     if (hasPublishedEvents && !showConfirm) {
       setShowConfirm(true)
       return
     }
-    setShowConfirm(false)
-    setSaving(true)
-    setError(null)
-
-    const res = await fetch("/api/admin/settings/organization", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ slug: trimmed }),
-    })
-
-    setSaving(false)
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      setError(typeof data.error === "string" ? data.error : "Une erreur est survenue.")
-      return
-    }
-
-    const data = await res.json()
-    if (data.adminUrl) {
-      window.location.href = data.adminUrl
-    }
+    void doSave()
   }
 
   async function handleDelete(oldSlug: string) {
     setDeletingSlug(oldSlug)
-    setDeleteErrors((prev) => { const n = { ...prev }; delete n[oldSlug]; return n })
-
-    const res = await fetch("/api/admin/settings/organization/slugs", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ slug: oldSlug }),
+    setStatus("")
+    setDeleteErrors((prev) => {
+      const n = { ...prev }
+      delete n[oldSlug]
+      return n
     })
-
-    setDeletingSlug(null)
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      setDeleteErrors((prev) => ({ ...prev, [oldSlug]: data.error ?? "Erreur." }))
-      return
+    try {
+      const res = await fetch("/api/admin/settings/organization/slugs", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug: oldSlug }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setDeleteErrors((prev) => ({ ...prev, [oldSlug]: typeof data.error === "string" ? data.error : "Erreur." }))
+        return
+      }
+      setHistory((h) => h.filter((e) => e.slug !== oldSlug))
+      setStatus(`Ancien identifiant « ${oldSlug} » supprimé.`)
+      // The button that had focus is gone: keep focus inside the section.
+      historyHeadingRef.current?.focus()
+    } catch {
+      setDeleteErrors((prev) => ({ ...prev, [oldSlug]: "Impossible de supprimer. Vérifiez votre connexion." }))
+    } finally {
+      setDeletingSlug(null)
     }
-
-    setHistory((h) => h.filter((e) => e.slug !== oldSlug))
   }
-
-  const host = typeof window !== "undefined" ? window.location.host : "benevol.app"
-  const hostParts = host.split(".")
-  const baseDomain = hostParts.length >= 3 ? hostParts.slice(1).join(".") : host
 
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
       <h2 className="text-sm font-semibold text-gray-900">Identifiant public (slug)</h2>
-      <p className="text-xs text-gray-500">
-        L&apos;identifiant détermine l&apos;adresse de votre espace : <span className="font-mono">{trimmed || "…"}.{baseDomain}</span>
-      </p>
 
-      <form onSubmit={handleSubmit} className="flex gap-2">
-        <input
-          type="text"
-          value={slug}
-          onChange={(e) => { setSlug(e.target.value); setError(null); setShowConfirm(false) }}
-          placeholder="mon-organisation"
-          minLength={2}
-          maxLength={40}
-          pattern="^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"
-          title="Lettres minuscules, chiffres et tirets, sans tiret en début ou fin"
-          required
-          className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <button
-          type="submit"
-          disabled={saving || !changed}
-          className="bg-gray-900 text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors disabled:opacity-40"
-        >
-          {saving ? "…" : "Modifier"}
-        </button>
+      <form onSubmit={handleSubmit} className="space-y-2">
+        <label htmlFor={inputId} className="block text-sm text-gray-800">
+          Identifiant
+        </label>
+        <div className="flex gap-2">
+          <input
+            ref={inputRef}
+            id={inputId}
+            type="text"
+            value={slug}
+            onChange={(e) => {
+              setSlug(e.target.value)
+              setError(null)
+              setStatus("")
+              setShowConfirm(false)
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Escape" && showConfirm) cancelConfirm()
+            }}
+            placeholder="votre-identifiant"
+            minLength={2}
+            maxLength={40}
+            pattern="^[a-z0-9]([a-z0-9\-]*[a-z0-9])?$"
+            required
+            aria-describedby={error ? `${helpId} ${errorId}` : helpId}
+            aria-invalid={error ? true : undefined}
+            className="flex-1 min-w-0 border border-gray-300 rounded-xl px-3 py-2 text-sm font-mono placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            ref={submitRef}
+            type="submit"
+            disabled={saving}
+            className={`bg-gray-900 text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors disabled:opacity-60 ${focusRing}`}
+          >
+            {saving ? "Enregistrement…" : "Modifier"}
+          </button>
+        </div>
+        <p id={helpId} className="text-xs text-gray-600">
+          Adresse de votre espace : <span className="font-mono break-all">{trimmed || "votre-identifiant"}.{baseDomain}</span>
+          <span className="block">2 à 40 caractères : lettres minuscules, chiffres et tirets, sans tiret au début ni à la fin.</span>
+        </p>
       </form>
 
       {showConfirm && (
-        <div className="bg-orange-50 border border-orange-200 rounded-xl p-3 space-y-2">
-          <p className="text-sm text-orange-800">
-            Des événements publiés existent. L&apos;ancien slug continuera de rediriger, mais les liens partagés afficheront la nouvelle adresse. Confirmer ?
+        <div
+          role="group"
+          aria-labelledby={confirmId}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") cancelConfirm()
+          }}
+          className="bg-orange-50 border border-orange-300 rounded-xl p-3 space-y-2"
+        >
+          <p id={confirmId} className="text-sm text-orange-900">
+            Des événements publiés existent. L&apos;ancien identifiant continuera de rediriger, mais les liens partagés
+            afficheront la nouvelle adresse. Confirmer ?
           </p>
           <div className="flex gap-2">
             <button
-              onClick={handleSubmit as unknown as React.MouseEventHandler}
-              className="bg-orange-600 text-white rounded-lg px-3 py-1.5 text-sm font-medium hover:bg-orange-700"
+              ref={confirmRef}
+              type="button"
+              onClick={() => void doSave()}
+              className={`bg-orange-800 text-white rounded-lg px-3 py-1.5 text-sm font-medium hover:bg-orange-900 ${focusRing}`}
             >
               Confirmer
             </button>
             <button
-              onClick={() => setShowConfirm(false)}
-              className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50"
+              type="button"
+              onClick={cancelConfirm}
+              className={`border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-800 hover:bg-gray-50 ${focusRing}`}
             >
               Annuler
             </button>
@@ -130,30 +209,40 @@ export default function OrgSlugForm({
         </div>
       )}
 
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      <p role="status" className="text-sm font-medium text-green-800 min-h-5">{status}</p>
+      {error && <p id={errorId} role="alert" className="text-sm font-medium text-red-700">{error}</p>}
 
       {history.length > 0 && (
         <div className="space-y-2 pt-2 border-t border-gray-100">
-          <p className="text-xs font-medium text-gray-600">Anciens slugs (redirigent vers l&apos;actuel)</p>
+          <p ref={historyHeadingRef} tabIndex={-1} className="text-xs font-medium text-gray-700 outline-none">
+            Anciens identifiants (redirigent vers l&apos;actuel)
+          </p>
           {hasPublishedEvents && (
-            <p className="text-xs text-orange-600">
-              Attention : supprimer un ancien slug cassera les liens existants vers vos événements publiés.
+            <p id={warningId} className="text-sm text-orange-900">
+              Attention : supprimer un ancien identifiant cassera les liens existants vers vos événements publiés.
             </p>
           )}
-          {history.map((entry) => (
-            <div key={entry.slug} className="flex items-center justify-between gap-2 rounded-lg bg-gray-50 px-3 py-2">
-              <span className="text-sm font-mono text-gray-700">{entry.slug}</span>
-              <button
-                onClick={() => handleDelete(entry.slug)}
-                disabled={deletingSlug === entry.slug}
-                className="text-xs text-red-500 hover:text-red-700 disabled:opacity-40"
-              >
-                {deletingSlug === entry.slug ? "…" : "Supprimer"}
-              </button>
-            </div>
-          ))}
+          <ul className="space-y-2">
+            {history.map((entry) => (
+              <li key={entry.slug} className="flex items-center justify-between gap-2 rounded-lg bg-gray-50 px-3 py-2">
+                <span className="text-sm font-mono text-gray-800 break-all">{entry.slug}</span>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(entry.slug)}
+                  disabled={deletingSlug === entry.slug}
+                  aria-label={`Supprimer l'ancien identifiant ${entry.slug}`}
+                  aria-describedby={hasPublishedEvents ? warningId : undefined}
+                  className={`text-sm px-2 py-1 rounded text-red-700 hover:text-red-900 hover:bg-red-50 disabled:opacity-60 ${focusRing}`}
+                >
+                  {deletingSlug === entry.slug ? "Suppression…" : "Supprimer"}
+                </button>
+              </li>
+            ))}
+          </ul>
           {Object.entries(deleteErrors).map(([s, msg]) => (
-            <p key={s} className="text-xs text-red-600">{msg}</p>
+            <p key={s} role="alert" className="text-sm font-medium text-red-700">
+              Impossible de supprimer « {s} » : {msg}
+            </p>
           ))}
         </div>
       )}
