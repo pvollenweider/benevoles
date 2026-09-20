@@ -3,7 +3,7 @@
 Application **SaaS multi-tenant** de gestion de bénévoles pour événements. Chaque organisation dispose de son propre espace isolé ; les bénévoles s'inscrivent via une timeline Gantt interactive accessible sans compte.
 
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
-[![Node.js 26](https://img.shields.io/badge/Node.js-26-green.svg)](https://nodejs.org/)
+[![Node.js 24](https://img.shields.io/badge/Node.js-24-green.svg)](https://nodejs.org/)
 
 ## Documentation
 
@@ -20,7 +20,9 @@ Application **SaaS multi-tenant** de gestion de bénévoles pour événements. C
 - Listing des événements publiés
 - Inscription à un ou plusieurs créneaux via une timeline Gantt interactive (scroll horizontal sur mobile)
 - Détection de conflits d'horaires en temps réel
+- Liste d'attente sur les créneaux complets (offre de place valable 24 h)
 - Gestion personnelle via un lien unique envoyé par email
+- Rappels par notification push navigateur (optionnel, sur abonnement du bénévole)
 
 **Côté admin**
 - Multi-tenant : chaque organisation a ses propres événements, membres et admins, isolés des autres
@@ -28,7 +30,8 @@ Application **SaaS multi-tenant** de gestion de bénévoles pour événements. C
 - Gestion de la liste des membres (pool de bénévoles) et envoi d'invitations tokenisées
 - Rappels automatiques (J-2, J-1, Jour J) et rappel manuel avec message personnalisé
 - Suivi des inscriptions en temps réel, export Gantt PDF
-- Gestion de l'équipe admin de l'organisation
+- Tableau de bord : événements, taux de remplissage, membres
+- Réglages de l'organisation : slug, charte du bénévole, équipe admin
 
 **Super admin**
 - CRUD des organisations
@@ -51,13 +54,15 @@ Application **SaaS multi-tenant** de gestion de bénévoles pour événements. C
 | Base de données | PostgreSQL 16 + Prisma 7 |
 | Auth | NextAuth v5 (credentials) |
 | Email | Nodemailer (SMTP configurable) |
+| Notifications push | Web Push (VAPID, optionnel) |
+| Monitoring | Sentry (`@sentry/nextjs`) |
 | Export | HTML print (PDF) |
 | Styles | Tailwind CSS v4 |
-| Runtime | Node.js 26 |
+| Runtime | Node.js 24 (voir `.nvmrc`) ; l'image Docker de production utilise Node 26 |
 
 ## Prérequis
 
-- Node.js **26** (`nvm use 26`)
+- Node.js **24** (`nvm use`, version lue dans `.nvmrc`)
 - Docker (pour la stack dev locale)
 
 ## Démarrage rapide (dev)
@@ -106,7 +111,7 @@ npm run dev
 
 ## Variables d'environnement
 
-Copier `.env.example` vers `.env` et renseigner :
+Copier `.env.example` vers `.env` (production) ou `.env.development.example` vers `.env` (développement local, prérempli pour la stack Docker) et renseigner :
 
 ```env
 # Base de données (requis)
@@ -115,13 +120,19 @@ DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/benevoles"
 # Auth (requis) — chaîne aléatoire ≥ 32 caractères
 AUTH_SECRET="..."
 
-# SMTP (requis pour l'envoi d'emails)
+# NextAuth v5 derrière un reverse proxy (obligatoire en production)
+AUTH_URL="https://votre-domaine.com"
+AUTH_TRUST_HOST="true"
+
+# SMTP (requis pour l'envoi d'emails ; sans SMTP_HOST, les emails sont affichés dans la console)
 SMTP_HOST="smtp.votre-fournisseur.com"
 SMTP_PORT="587"
 SMTP_SECURE="false"
 SMTP_USER="..."
 SMTP_PASSWORD="..."
-EMAIL_FROM="notifications@votre-domaine.com"
+EMAIL_FROM="Bénévoles <notifications@votre-domaine.com>"
+# Adresse à laquelle les bénévoles atterrissent s'ils répondent (optionnel)
+EMAIL_REPLY_TO="contact@votre-domaine.com"
 
 # Email qui reçoit une copie à chaque inscription (optionnel)
 ADMIN_NOTIFICATION_EMAIL=""
@@ -129,34 +140,63 @@ ADMIN_NOTIFICATION_EMAIL=""
 # URL publique de l'application (utilisée dans les emails et les QR codes)
 NEXT_PUBLIC_APP_URL="https://votre-domaine.com"
 
-# Secret partagé pour le endpoint cron /api/cron/reminders (recommandé en prod)
+# Secret partagé pour les endpoints /api/cron/* (indispensable en production : sans lui, ils refusent toute requête)
 CRON_SECRET="..."
+
+# Notifications push navigateur (optionnel). Sans clés VAPID, aucun push n'est envoyé.
+VAPID_PUBLIC_KEY=""
+VAPID_PRIVATE_KEY=""
+VAPID_EMAIL=""
 ```
 
-> Pour un déploiement derrière un reverse proxy, ajouter aussi `AUTH_TRUST_HOST=true` et `AUTH_URL=https://votre-domaine.com`.
+Variables supplémentaires lues par le code :
+
+| Variable | Rôle |
+|----------|------|
+| `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` | Envoi des erreurs à Sentry (serveur / navigateur) |
+| `SENTRY_AUTH_TOKEN` | Upload des source maps au build (secret de build Docker) |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Compte super admin créé par `npm run db:seed` (défauts : `admin@localhost` / `change-me`) |
+| `ORG_ADMIN_EMAIL`, `ORG_ADMIN_PASSWORD` | Admin de l'organisation `default` créé par le seed (défauts : `org-admin@localhost` / valeur de `ADMIN_PASSWORD`) |
+
+Générer les clés VAPID : `node -e "const wp=require('web-push'); console.log(JSON.stringify(wp.generateVAPIDKeys()))"`.
 
 ## Scripts
 
 | Commande | Description |
 |----------|-------------|
-| `npm run dev` | Serveur de développement (Turbopack) |
+| `npm run dev` | Serveur de développement (génère le client Prisma puis lance Next.js) |
 | `npm run build` | Build de production |
 | `npm start` | Démarrer le serveur de production |
-| `npm run db:migrate` | Appliquer les migrations Prisma |
+| `npm run lint` | ESLint |
+| `npm test` | Tests unitaires et d'isolation (Vitest) |
+| `npm run test:watch` / `test:coverage` | Vitest en continu / avec couverture |
+| `npm run test:e2e` | Tests end-to-end (Playwright) |
+| `npm run db:migrate` | Crée et applique une migration en développement (`prisma migrate dev`) |
+| `npm run db:push` | Pousse le schéma sans migration (développement uniquement) |
 | `npm run db:seed` | Créer super admin + org de démo |
 | `npm run db:studio` | Interface graphique Prisma Studio |
 | `npm run db:generate` | Régénérer le client Prisma |
+| `npm run screenshots` | Génère les captures d'écran (`scripts/screenshots.mjs`) |
 
-## Rappels automatiques (cron)
+En production, les migrations s'appliquent avec `npx prisma migrate deploy` (fait par l'init container Kubernetes).
 
-Le endpoint `GET /api/cron/reminders` envoie les rappels J-2, J-1 et Jour J. Il doit être appelé toutes les heures par un scheduler externe.
+## Tâches planifiées (cron)
+
+Deux endpoints, appelables en `GET` ou `POST`, protégés par `Authorization: Bearer $CRON_SECRET` :
+
+| Endpoint | Rôle | Fréquence |
+|----------|------|-----------|
+| `/api/cron/reminders` | Rappels J-2, J-1, Jour J (email et push), expiration des offres de liste d'attente | toutes les heures |
+| `/api/cron/cleanup` | Purge RGPD : organisations et comptes admin désactivés depuis plus de 30 jours, bénévoles orphelins, jetons expirés | une fois par jour |
+
+Si `CRON_SECRET` est vide, les endpoints refusent toutes les requêtes en production et n'acceptent que `localhost` en développement. `CRON_SECRET` est donc indispensable en production.
 
 ```bash
 # Exemple crontab
 0 * * * * curl -s -H "Authorization: Bearer $CRON_SECRET" https://votre-domaine.com/api/cron/reminders
 ```
 
-Sur Vercel, configurer un Cron Job natif vers `/api/cron/reminders` (intervalle `0 * * * *`).
+Sur Kubernetes, `k8s/cronjob-reminders.yaml` (toutes les heures), `k8s/cronjob-cleanup.yaml` (02:00 UTC) et `k8s/cronjob-backup.yaml` (`pg_dump` chiffré à 01:00 UTC, rétention 30 jours) sont fournis.
 
 ## Déploiement
 
@@ -168,7 +208,7 @@ docker compose up -d
 
 ### Kubernetes
 
-Les manifestes sont dans `k8s/`. Un init container exécute `prisma migrate deploy` automatiquement avant le démarrage.
+Les manifestes sont dans `k8s/` (application, PostgreSQL, ingress, cron jobs, certificat wildcard via le webhook DNS Gandi de `gandi-webhook/`). Un init container exécute `prisma migrate deploy` automatiquement avant le démarrage.
 
 ```bash
 kubectl apply -f k8s/namespace.yaml
@@ -178,7 +218,7 @@ kubectl apply -f k8s/service.yaml
 kubectl apply -f k8s/ingress.yaml
 ```
 
-Le CI/CD GitHub Actions gère automatiquement le build et le déploiement sur push vers `main`.
+Le CI/CD GitHub Actions (`.github/workflows/`) exécute le type-check, le lint et les tests, construit l'image (GHCR) puis déploie sur Kubernetes à chaque push vers `main`. La CI de pull request exécute en plus les tests E2E Playwright.
 
 ## Structure du projet
 
@@ -189,15 +229,19 @@ src/
 │   ├── [orgSlug]/[eventSlug]/            # Page publique d'un événement
 │   ├── my/[token]/                       # Gestion de son inscription (bénévole)
 │   ├── admin/                            # Interface d'administration par org
+│   │   ├── dashboard/                    # Tableau de bord
 │   │   ├── events/                       # CRUD événements, créneaux, inscriptions
 │   │   ├── members/                      # Gestion des membres (pool bénévoles)
-│   │   └── settings/admins/              # Gestion de l'équipe admin
+│   │   ├── settings/admins/              # Équipe admin, slug, charte du bénévole
+│   │   └── login, forgot-password, reset-password, accept-invite/
+│   ├── waitlist/[token]/confirm/         # Confirmation d'une place de liste d'attente
+│   ├── legal/                            # Politique de confidentialité, conditions d'utilisation
 │   ├── super-admin/                      # Interface super administrateur
 │   │   └── organizations/                # CRUD des organisations
 │   └── api/
 │       ├── admin/                        # API protégée par org
 │       ├── super-admin/                  # API super admin
-│       ├── cron/reminders/               # Endpoint rappels automatiques
+│       ├── cron/                         # reminders (rappels) et cleanup (purge RGPD)
 │       └── public/                       # API publique (événements, inscriptions)
 ├── components/
 │   ├── admin/                            # Composants interface admin (AdminDayTimeline…)
@@ -212,13 +256,16 @@ src/
     │   └── index.ts                      # sendNotification()
     ├── gantt-utils.ts                    # Utilitaires partagés des timelines Gantt
     ├── waitlist.ts                       # Promotion liste d'attente
+    ├── push.ts                           # Notifications push (Web Push)
+    ├── env.ts                            # Validation des variables d'environnement (Zod)
     ├── prisma.ts                         # Client Prisma singleton
     └── utils.ts                          # Utilitaires (token, dates, conflits)
 prisma/
 ├── schema.prisma                         # Schéma BDD
-├── migrations/                           # Migration unique (squashée)
+├── migrations/                           # Historique des migrations Prisma
 └── seed.ts                               # Données initiales
 k8s/                                      # Manifestes Kubernetes
+gandi-webhook/                            # Webhook DNS Gandi pour cert-manager (Go)
 .github/workflows/                        # CI/CD GitHub Actions
 src/__tests__/security/                   # Tests d'isolation cross-tenant
 ```
@@ -227,17 +274,21 @@ src/__tests__/security/                   # Tests d'isolation cross-tenant
 
 | Modèle | Description |
 |--------|-------------|
-| `Organization` | Tenant (org) avec slug unique et flag `active` |
+| `Organization` | Tenant (org) avec slug unique, flag `active`, charte du bénévole et option d'assurance de l'organisation |
 | `AdminUser` | Compte admin rattaché à une org (ou super admin sans org) ; onboarding par token révocable |
 | `Event` | Événement avec dates, statut, slug unique par org |
 | `Shift` | Créneau horaire (rôle, capacité, statut, ordre) |
 | `Volunteer` | Bénévole identifié par email ; porte les données propres à l'org (tags, notes, actif/inactif, `organizationId`) |
 | `Registration` | Inscription bénévole ↔ créneau avec token d'édition unique et flags de rappels |
 | `MemberInvite` | Token d'invitation d'un bénévole à un événement (FK vers `Volunteer`, révocable, réutilisable) |
+| `PushSubscription` | Abonnement Web Push d'un bénévole (identifié par email) |
+| `OrgSlugHistory` | Anciens slugs d'une organisation, pour rediriger les anciens liens |
 
 ## Architecture multi-tenant
 
 Chaque organisation dispose d'un client Prisma étendu (`getOrgClient`) qui injecte automatiquement `organizationId` dans tous les reads. Les mutations passent par une vérification de propriété (read scopé) avant d'accéder au client brut. 20 tests de sécurité valident l'isolation cross-tenant dans `src/__tests__/security/`.
+
+L'organisation courante est déterminée par le sous-domaine (`[orgSlug].benevol.app`, injecté par `src/middleware.ts` dans l'en-tête `x-org-slug`). En développement, sans sous-domaine, le paramètre `?org=<slug>` joue le même rôle.
 
 ## Licence
 
