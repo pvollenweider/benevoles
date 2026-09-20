@@ -69,7 +69,7 @@ export default function PushSubscribeButton({ email }: { email: string }) {
 
   if (state === "denied") {
     return (
-      <p className="text-xs text-gray-400">
+      <p className="text-xs text-gray-500">
         Notifications bloquées dans les paramètres du navigateur.
       </p>
     )

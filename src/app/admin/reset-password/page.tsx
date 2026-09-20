@@ -122,7 +122,7 @@ export default function ResetPasswordPage() {
           <p className="text-gray-500 text-sm mt-1">Choisissez un mot de passe sécurisé.</p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 p-6">
-          <Suspense fallback={<p className="text-sm text-gray-400 text-center">Chargement…</p>}>
+          <Suspense fallback={<p className="text-sm text-gray-500 text-center">Chargement…</p>}>
             <ResetForm />
           </Suspense>
         </div>

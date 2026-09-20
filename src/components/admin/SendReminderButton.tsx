@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useTransition } from "react"
+import { useRef, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
+import ModalShell from "./ModalShell"
 
 type Props = {
   eventId: string
@@ -29,6 +30,8 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
   const [submitting, setSubmitting] = useState(false)
   const [result, setResult] = useState<string | null>(null)
   const [, startTransition] = useTransition()
+  // Confirmation of a send-to-many action: focus the safe choice first.
+  const cancelRef = useRef<HTMLButtonElement>(null)
 
   const disabled = volunteerCount === 0
 
@@ -60,7 +63,7 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
           <li>• <strong>J-1</strong> — 24 h avant le début du créneau</li>
           <li>• <strong>Jour J</strong> — 3 h avant le début du créneau</li>
         </ul>
-        <p className="text-xs text-gray-400">Ces emails partent sans action de votre part.</p>
+        <p className="text-xs text-gray-500">Ces emails partent sans action de votre part.</p>
       </div>
 
       {/* Manual reminder */}
@@ -82,46 +85,55 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
           📧 Envoyer le rappel ({volunteerCount} bénévole{volunteerCount > 1 ? "s" : ""})
         </button>
         {lastSentAt && (
-          <span className="text-xs text-gray-400">Dernier envoi {formatRelative(lastSentAt)}</span>
+          <span className="text-xs text-gray-500">Dernier envoi {formatRelative(lastSentAt)}</span>
         )}
       </div>
 
       {open && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4" onClick={() => setOpen(false)}>
-          <div className="bg-white rounded-2xl p-5 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-lg font-semibold text-gray-900 mb-3">Envoyer le rappel ?</h2>
-            <p className="text-sm text-gray-600 mb-4">
-              Un email individuel sera envoyé à chaque bénévole inscrit
-              (<strong>{volunteerCount} destinataire{volunteerCount > 1 ? "s" : ""}</strong>).
-              Chaque email contient le récapitulatif personnel des créneaux de la personne,
-              suivi du message de rappel configuré sur l&apos;événement.
-            </p>
-            {!hasMessage && (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800 mb-4">
-                ⚠ Le message de rappel est vide. L&apos;email contiendra uniquement le récap des créneaux.
-                <br />
-                <a href={`/admin/events/${eventId}/edit`} className="underline">Ajouter un message</a>
-              </div>
-            )}
-            {result && (
-              <div className="bg-gray-50 rounded-lg p-3 text-sm text-gray-700 mb-4">{result}</div>
-            )}
-            <div className="flex justify-end gap-2">
-              <button onClick={() => setOpen(false)} className="text-sm px-4 py-2 text-gray-600 hover:text-gray-900">
-                {result ? "Fermer" : "Annuler"}
-              </button>
-              {!result && (
-                <button
-                  onClick={send}
-                  disabled={submitting}
-                  className="bg-blue-600 text-white text-sm px-4 py-2 rounded-full font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
-                >
-                  {submitting ? "Envoi…" : "Envoyer"}
-                </button>
-              )}
+        <ModalShell
+          title="Envoyer le rappel ?"
+          onClose={() => setOpen(false)}
+          panelClassName="max-w-md"
+          initialFocusRef={cancelRef}
+          describedBy="send-reminder-description"
+        >
+          <p id="send-reminder-description" className="text-sm text-gray-600 mb-4">
+            Un email individuel sera envoyé à chaque bénévole inscrit
+            (<strong>{volunteerCount} destinataire{volunteerCount > 1 ? "s" : ""}</strong>).
+            Chaque email contient le récapitulatif personnel des créneaux de la personne,
+            suivi du message de rappel configuré sur l&apos;événement.
+          </p>
+          {!hasMessage && (
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800 mb-4">
+              ⚠ Le message de rappel est vide. L&apos;email contiendra uniquement le récap des créneaux.
+              <br />
+              <a href={`/admin/events/${eventId}/edit`} className="underline">Ajouter un message</a>
             </div>
+          )}
+          {result && (
+            <div role="status" className="bg-gray-50 rounded-lg p-3 text-sm text-gray-700 mb-4">{result}</div>
+          )}
+          <div className="flex justify-end gap-2">
+            <button
+              ref={cancelRef}
+              type="button"
+              onClick={() => setOpen(false)}
+              className="text-sm px-4 py-2 text-gray-600 hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+            >
+              {result ? "Fermer" : "Annuler"}
+            </button>
+            {!result && (
+              <button
+                type="button"
+                onClick={send}
+                disabled={submitting}
+                className="bg-blue-600 text-white text-sm px-4 py-2 rounded-full font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+              >
+                {submitting ? "Envoi…" : "Envoyer"}
+              </button>
+            )}
           </div>
-        </div>
+        </ModalShell>
       )}
     </div>
   )

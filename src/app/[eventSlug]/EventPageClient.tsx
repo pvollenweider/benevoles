@@ -151,7 +151,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
     setSelectedShifts((prev) => { const next = new Set(prev); next.delete(shiftId); return next })
   }
 
-  if (loading) return <div role="status" className="flex items-center justify-center min-h-screen text-gray-400">Chargement…</div>
+  if (loading) return <div role="status" className="flex items-center justify-center min-h-screen text-gray-500">Chargement…</div>
   if (!event) return <div role="alert" className="flex items-center justify-center min-h-screen text-gray-500">Événement introuvable.</div>
 
   const shiftsByDay = event.shifts.reduce<Record<string, Shift[]>>((acc, shift) => {
@@ -319,7 +319,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
                 </span>
                 <button
                   onClick={quitSession}
-                  className="text-xs text-gray-400 hover:text-red-500 transition-colors border border-gray-200 rounded-lg px-2 py-1"
+                  className="text-xs text-gray-500 hover:text-red-500 transition-colors border border-gray-200 rounded-lg px-2 py-1"
                 >
                   Quitter la session
                 </button>
@@ -358,7 +358,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
                       <h2 className="text-sm font-semibold text-gray-600 mb-3">
                         {formatDate(day)}
                       </h2>
-                      <p className="sm:hidden text-[11px] text-gray-400 text-center mb-1.5">
+                      <p className="sm:hidden text-[11px] text-gray-500 text-center mb-1.5">
                         ← Faites défiler pour voir toutes les plages →
                       </p>
                       <DayTimeline
@@ -506,7 +506,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
                   />
                 </div>
                 <div>
-                  <label htmlFor="reg-phone" className="block text-sm font-medium text-gray-700 mb-1">Téléphone <span className="text-gray-400 font-normal">(facultatif, mais super utile)</span></label>
+                  <label htmlFor="reg-phone" className="block text-sm font-medium text-gray-700 mb-1">Téléphone <span className="text-gray-500 font-normal">(facultatif, mais super utile)</span></label>
                   <input
                     id="reg-phone"
                     type="tel"
@@ -517,7 +517,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
                   />
                 </div>
                 <div>
-                  <label htmlFor="reg-comment" className="block text-sm font-medium text-gray-700 mb-1">Commentaire <span className="text-gray-400 font-normal">(facultatif)</span></label>
+                  <label htmlFor="reg-comment" className="block text-sm font-medium text-gray-700 mb-1">Commentaire <span className="text-gray-500 font-normal">(facultatif)</span></label>
                   <textarea
                     id="reg-comment"
                     rows={2}
@@ -617,7 +617,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
               <button
                 onClick={() => { setShowCharter(false); charterTriggerRef.current?.focus() }}
                 aria-label="Fermer la convention des bénévoles"
-                className="text-gray-400 hover:text-gray-600 text-xl leading-none"
+                className="text-gray-500 hover:text-gray-700 text-xl leading-none"
               ><span aria-hidden="true">✕</span></button>
             </div>
             <div className="overflow-y-auto px-5 py-4 text-sm text-gray-700 whitespace-pre-wrap leading-relaxed flex-1">

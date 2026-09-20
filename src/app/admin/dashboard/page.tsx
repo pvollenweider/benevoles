@@ -93,7 +93,7 @@ export default async function DashboardPage() {
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 truncate">{event.title}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">{formatShortDate(event.startDate)}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">{formatShortDate(event.startDate)}</p>
                     </div>
                     <span className={`text-xs font-semibold tabular-nums whitespace-nowrap ${countColor}`}>
                       {reg}/{cap} inscrits
@@ -141,7 +141,7 @@ function BigStatCard({ label, value, sub }: { label: string; value: string | num
     <div className="bg-white border border-gray-200 rounded-xl p-5 text-center">
       <p className="text-3xl font-bold text-gray-900">{value}</p>
       <p className="text-sm font-medium text-gray-700 mt-1">{label}</p>
-      {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
+      {sub && <p className="text-xs text-gray-500 mt-1">{sub}</p>}
     </div>
   )
 }

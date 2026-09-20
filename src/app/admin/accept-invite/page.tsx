@@ -112,7 +112,7 @@ export default function AcceptInvitePage() {
           <h1 className="text-xl font-bold text-gray-900">Bienvenue</h1>
           <p className="text-sm text-gray-500 mt-1">Créez votre mot de passe pour activer votre compte.</p>
         </div>
-        <Suspense fallback={<p className="text-sm text-gray-400">Chargement…</p>}>
+        <Suspense fallback={<p className="text-sm text-gray-500">Chargement…</p>}>
           <AcceptInviteForm />
         </Suspense>
       </div>

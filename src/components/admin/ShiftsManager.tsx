@@ -266,7 +266,7 @@ export default function ShiftsManager({
         <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
           <div>
             <h3 className="font-semibold text-gray-800">Ordonner les postes</h3>
-            <p className="text-xs text-gray-400 mt-0.5">Glissez-déposez pour changer l'ordre d'affichage dans les timelines.</p>
+            <p className="text-xs text-gray-500 mt-0.5">Glissez-déposez pour changer l'ordre d'affichage dans les timelines.</p>
           </div>
           <div className="space-y-1.5">
             {reorderRoles.map((role, i) => (
@@ -415,7 +415,7 @@ export default function ShiftsManager({
       )}
 
       {shifts.filter(s => s.status !== "cancelled").length === 0 && !showForm && (
-        <div className="text-center py-12 text-gray-400">
+        <div className="text-center py-12 text-gray-500">
           <p>Aucun créneau. Cliquez sur « + Ajouter un créneau » pour commencer.</p>
         </div>
       )}
@@ -436,7 +436,7 @@ export default function ShiftsManager({
             onUpdated={handleUpdated}
             onDeleted={handleDeleted}
           />
-          <p className="text-[10px] text-gray-400 pl-1">
+          <p className="text-[10px] text-gray-500 pl-1">
             Cliquer + glisser sur un poste pour ajouter un créneau · Glisser les bords pour redimensionner
           </p>
         </div>
@@ -464,7 +464,7 @@ export default function ShiftsManager({
                   </td>
                   <td className="px-4 py-3">
                     <p className="font-medium text-gray-800">{s.roleName}</p>
-                    {s.label !== s.roleName && <p className="text-xs text-gray-400">{s.label}</p>}
+                    {s.label !== s.roleName && <p className="text-xs text-gray-500">{s.label}</p>}
                   </td>
                   <td className="px-4 py-3 hidden sm:table-cell tabular-nums">
                     <p className="text-gray-700 font-medium">{s.registrationCount}/{s.capacity}</p>

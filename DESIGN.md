@@ -125,7 +125,7 @@ Un bleu d'action unique sur fond blanc/gris très clair. Les couleurs sémantiqu
 - **Encre Secondaire** (`#1f2937`): Noms, labels de champs, contenu de formulaire.
 - **Encre Atténuée** (`#4b5563`): Corps de texte, descriptions, labels secondaires.
 - **Encre Subtile** (`#6b7280`): Métadonnées, sources, horodatages, notes.
-- **Encre Fantôme** (`#9ca3af`): Placeholders, états désactivés, indicateurs de tri inactifs.
+- **Encre Fantôme** (`#9ca3af`): Éléments décoratifs et états désactivés uniquement (2,54:1 sur blanc, sous le seuil AA de 4,5:1). Jamais pour du texte porteur d'information, ni pour un placeholder : utiliser Encre Subtile (`#6b7280`, 4,83:1 sur blanc) ; sur fond `#f3f4f6` ou plus foncé, Encre Atténuée.
 - **Page** (`#f9fafb`): Fond de page. Gris très légèrement teinté, jamais pur blanc.
 - **Carte** (`#ffffff`): Surface des cartes, formulaires, tableaux. Blanc pur pour différencier du fond page.
 - **Hover** (`#f3f4f6`): Fond de ligne au survol, état hover des items de liste.

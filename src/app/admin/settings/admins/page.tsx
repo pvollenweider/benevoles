@@ -67,7 +67,7 @@ export default async function AdminsSettingsPage() {
 
       <section className="bg-white rounded-2xl border border-gray-200 p-6">
         <h2 className="text-sm font-semibold text-gray-900">Mon compte</h2>
-        <p className="text-xs text-gray-400 mt-0.5 mb-4">
+        <p className="text-xs text-gray-500 mt-0.5 mb-4">
           {session.user?.name} · {currentEmail}
         </p>
         <ChangePasswordForm />
