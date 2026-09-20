@@ -3,7 +3,6 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { formatShortDate } from "@/lib/utils"
-import { eventPublicUrl } from "@/lib/urls"
 import { resolveOrgSlug } from "@/lib/resolve-org"
 import PublicFooter from "@/components/PublicFooter"
 
@@ -20,10 +19,18 @@ export default async function HomePage() {
     else orgSlug = resolved.org.slug
   }
 
+  // No org context → marketing landing page (no data needed)
+  if (!orgSlug) return <LandingPage />
+
+  // Hide events that are already over: they would show "N places à pourvoir".
+  const startOfToday = new Date()
+  startOfToday.setHours(0, 0, 0, 0)
+
   const events = await prisma.event.findMany({
     where: {
       publicStatus: "published",
-      ...(orgSlug ? { organization: { slug: orgSlug } } : {}),
+      organization: { slug: orgSlug },
+      endDate: { gte: startOfToday },
     },
     include: {
       organization: { select: { slug: true, name: true } },
@@ -41,15 +48,6 @@ export default async function HomePage() {
     return { ...event, totalCapacity, totalRegistered, spotsLeft: totalCapacity - totalRegistered }
   })
 
-  // No org context → marketing landing page
-  if (!orgSlug) return <LandingPage />
-
-  // On an org subdomain, links are relative (same host). On www, links are absolute.
-  function eventHref(orgSlug: string | null, eventOrgSlug: string, eventSlug: string) {
-    if (orgSlug) return `/${eventSlug}`
-    return eventPublicUrl(eventOrgSlug, eventSlug)
-  }
-
   return (
     <main className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200 px-4 py-5">
@@ -61,7 +59,7 @@ export default async function HomePage() {
 
       <div className="max-w-2xl mx-auto px-4 py-8">
         {enriched.length === 0 ? (
-          <div className="text-center py-16 text-gray-400">
+          <div className="text-center py-16 text-gray-500">
             <p className="text-lg">Aucun événement en cours.</p>
             <p className="text-sm mt-2">Revenez bientôt !</p>
           </div>
@@ -70,12 +68,9 @@ export default async function HomePage() {
             {enriched.map((event) => (
               <Link
                 key={event.id}
-                href={eventHref(orgSlug, event.organization.slug, event.slug)}
+                href={`/${event.slug}`}
                 className="block bg-white rounded-2xl border border-gray-200 p-5 hover:border-blue-300 hover:shadow-sm transition-all"
               >
-                {!orgSlug && (
-                  <p className="text-xs text-gray-400 font-medium uppercase tracking-wide mb-1">{event.organization.name}</p>
-                )}
                 <h2 className="text-lg font-semibold text-gray-900">{event.title}</h2>
                 <p className="text-sm text-gray-500 mt-1">
                   {formatShortDate(event.startDate)}
@@ -83,7 +78,7 @@ export default async function HomePage() {
                     ` — ${formatShortDate(event.endDate)}`}
                 </p>
                 {event.location && (
-                  <p className="text-sm text-gray-400 mt-1">📍 {event.location}</p>
+                  <p className="text-sm text-gray-500 mt-1">📍 {event.location}</p>
                 )}
                 <div className="mt-4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
