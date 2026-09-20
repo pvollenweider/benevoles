@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useId, useMemo, useRef, useState, useTransition } from "react"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 type Member = {
@@ -152,12 +151,13 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
               >
                 Ajouter un membre
               </button>
-              <Link
-                href="/admin/members/import"
-                className="inline-flex items-center gap-2 border border-gray-300 text-gray-700 text-sm font-medium px-5 py-2.5 rounded-full hover:bg-gray-50 transition-colors"
+              <button
+                type="button"
+                onClick={() => setShowImport(true)}
+                className="inline-flex items-center gap-2 border border-gray-300 text-gray-700 text-sm font-medium px-5 py-2.5 rounded-full hover:bg-gray-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
               >
                 Importer un fichier
-              </Link>
+              </button>
             </div>
           </div>
         ) : (
@@ -513,6 +513,15 @@ function ModalShell({
   children: React.ReactNode
 }) {
   const dialogRef = useRef<HTMLDivElement>(null)
+
+  // Return focus to the opener on close. Kept separate from the effect below:
+  // that one re-runs whenever `onClose` changes identity.
+  useEffect(() => {
+    const opener = document.activeElement as HTMLElement | null
+    return () => {
+      if (opener?.isConnected) opener.focus()
+    }
+  }, [])
 
   useEffect(() => {
     const el = dialogRef.current
