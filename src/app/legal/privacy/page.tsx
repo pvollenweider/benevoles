@@ -117,6 +117,13 @@ export default function PrivacyPage() {
         <li>
           <strong>Service e-mail transactionnel</strong> : Gandi (France) — envoi des notifications
         </li>
+        <li>
+          <strong>Suivi des erreurs techniques</strong> : Sentry (région Union européenne, Allemagne) —
+          reçoit les rapports d&apos;erreur de l&apos;application (message d&apos;erreur, page concernée sans
+          ses jetons d&apos;accès, type de navigateur) et, pour une partie des sessions, un enregistrement de
+          la navigation dont les textes et les médias sont masqués. Aucun cookie ni en-tête de requête
+          n&apos;est transmis.
+        </li>
       </ul>
       <p>
         Chaque sous-traitant est lié par un accord de traitement de données conforme aux exigences
