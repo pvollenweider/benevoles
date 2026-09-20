@@ -12,6 +12,13 @@ Application **SaaS multi-tenant** de gestion de bénévoles pour événements. C
 | [Guide bénévole](GUIDE_BENEVOLE.md) | Personnes qui s'inscrivent comme bénévoles |
 | [Guide administrateur](GUIDE_ADMIN.md) | Organisateurs qui gèrent les événements |
 | [Fonctionnalités](FONCTIONNALITES.md) | Liste exhaustive de tout ce que fait l'application |
+| [Architecture](docs/architecture.md) | Découpage du code, multi-tenant, flux principaux |
+| [Configuration](docs/configuration.md) | Toutes les variables d'environnement |
+| [Déploiement](docs/deploiement.md) | Docker, Kubernetes, CI/CD, sauvegardes |
+| [Rôles et permissions](docs/roles-et-permissions.md) | Bénévoles, admins, super admin, isolation entre organisations |
+| [API](docs/api.md) | Routes HTTP de l'application |
+| [Contribuer](CONTRIBUTING.md) | Mise en place, conventions, tests |
+| [Sécurité](SECURITY.md) | Signaler une vulnérabilité |
 | [Changelog](CHANGELOG.md) | Historique des versions |
 
 ## Aperçu
