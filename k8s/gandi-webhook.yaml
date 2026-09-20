@@ -160,7 +160,11 @@ spec:
       serviceAccountName: cert-manager-webhook-gandi
       containers:
         - name: cert-manager-webhook-gandi
-          image: ghcr.io/pvollenweider/benevoles/gandi-webhook:latest
+          # Pinned to the commit tag published by .github/workflows/gandi-webhook.yml.
+          # With `:latest` and IfNotPresent a pod restart reuses the node's cached
+          # image, so a rebuilt image would never be picked up. Bump this tag (and
+          # apply) after changing gandi-webhook/. This file is not applied by deploy.yml.
+          image: ghcr.io/pvollenweider/benevoles/gandi-webhook:606e95da7880fcd4884047baa75ef99d5c2f00e5
           imagePullPolicy: IfNotPresent
           args:
             - --tls-cert-file=/tls/tls.crt
