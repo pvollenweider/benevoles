@@ -97,7 +97,7 @@ Retour arrière : `set image` avec l'empreinte de l'image précédente (`kubectl
 |----------|-------------|--------|
 | `ci.yml` | pull request vers `main` | type-check, lint, tests Vitest ; tests E2E Playwright (base migrée et seedée) |
 | `deploy.yml` | push sur `main` | type-check, lint, tests ; construction et publication de l'image sur GHCR ; déploiement Kubernetes |
-| `gandi-webhook.yml` | push sur `main` touchant `gandi-webhook/` | construction et publication de l'image du webhook sur GHCR |
+| `gandi-webhook.yml` | pull request ou push sur `main` touchant `gandi-webhook/` | construction de l'image du webhook ; publication sur GHCR seulement sur push |
 
 L'analyse CodeQL (JavaScript/TypeScript, Go, Actions) ne figure pas dans `.github/workflows/` : elle est configurée côté GitHub (paramètres de sécurité du dépôt).
 
