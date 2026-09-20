@@ -20,7 +20,7 @@ Le rôle est stocké dans `AdminUser.role` (`admin` par défaut). Une session es
 
 ## Admin d'organisation
 
-Crée et gère les événements, créneaux, inscriptions, membres, invitations et réglages de sa propre organisation.
+Crée et gère les événements, créneaux, inscriptions, membres, invitations et réglages de sa propre organisation (nom, titre de la page publique, slug, charte). Il peut archiver un événement, puis le supprimer définitivement : la suppression est refusée (409) tant que l'événement n'est pas archivé, et exige la saisie du titre.
 
 Isolation entre organisations :
 

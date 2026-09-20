@@ -33,12 +33,12 @@ Application **SaaS multi-tenant** de gestion de bénévoles pour événements. C
 
 **Côté admin**
 - Multi-tenant : chaque organisation a ses propres événements, membres et admins, isolés des autres
-- Création et gestion des événements, créneaux et programme des spectacles
+- Création et gestion des événements, créneaux et programme des spectacles ; archivage, puis suppression définitive avec confirmation et sauvegarde PDF préalable
 - Gestion de la liste des membres (pool de bénévoles) et envoi d'invitations tokenisées
 - Rappels automatiques (J-2, J-1, Jour J) et rappel manuel avec message personnalisé
 - Suivi des inscriptions en temps réel, export Gantt PDF
 - Tableau de bord : événements, taux de remplissage, membres
-- Réglages de l'organisation : slug, charte du bénévole, équipe admin
+- Réglages de l'organisation : nom, titre de la page publique, slug, charte du bénévole, équipe admin
 
 **Super admin**
 - CRUD des organisations
@@ -282,7 +282,7 @@ src/__tests__/security/                   # Tests d'isolation cross-tenant
 
 | Modèle | Description |
 |--------|-------------|
-| `Organization` | Tenant (org) avec slug unique, flag `active`, charte du bénévole et option d'assurance de l'organisation |
+| `Organization` | Tenant (org) avec slug unique, flag `active`, charte du bénévole, option d'assurance de l'organisation et titre de la page publique |
 | `AdminUser` | Compte admin rattaché à une org (ou super admin sans org) ; onboarding par token révocable |
 | `Event` | Événement avec dates, statut, slug unique par org |
 | `Shift` | Créneau horaire (rôle, capacité, statut, ordre) |
