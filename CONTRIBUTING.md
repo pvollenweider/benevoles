@@ -4,7 +4,7 @@ Merci de votre intérêt pour ce projet !
 
 ## Prérequis
 
-- Node.js **24** (`nvm use`, version lue dans `.nvmrc`)
+- Node.js **26** (`nvm use`, version lue dans `.nvmrc`)
 - PostgreSQL 16 (fourni par `make dev-up` via Docker)
 - Docker (stack de développement : postgres + mailpit)
 - `npm` (pas yarn, pas pnpm)

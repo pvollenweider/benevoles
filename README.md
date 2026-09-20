@@ -3,7 +3,7 @@
 Application **SaaS multi-tenant** de gestion de bénévoles pour événements. Chaque organisation dispose de son propre espace isolé ; les bénévoles s'inscrivent via une timeline Gantt interactive accessible sans compte.
 
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
-[![Node.js 24](https://img.shields.io/badge/Node.js-24-green.svg)](https://nodejs.org/)
+[![Node.js 26](https://img.shields.io/badge/Node.js-26-green.svg)](https://nodejs.org/)
 
 ## Documentation
 
@@ -66,11 +66,11 @@ Application **SaaS multi-tenant** de gestion de bénévoles pour événements. C
 | Monitoring | Sentry (`@sentry/nextjs`) |
 | Export | HTML print (PDF) |
 | Styles | Tailwind CSS v4 |
-| Runtime | Node.js 24 (voir `.nvmrc`) ; l'image Docker de production utilise Node 26 |
+| Runtime | Node.js 26 (voir `.nvmrc` ; CI et image Docker alignées) |
 
 ## Prérequis
 
-- Node.js **24** (`nvm use`, version lue dans `.nvmrc`)
+- Node.js **26** (`nvm use`, version lue dans `.nvmrc`)
 - Docker (pour la stack dev locale)
 
 ## Démarrage rapide (dev)
