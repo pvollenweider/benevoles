@@ -178,6 +178,7 @@ Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscr
 
 - **Slug de l'organisation** : modification avec validation (`[a-z0-9-]`), avertissement si des événements publiés existent (liens potentiellement cassés), redirection automatique vers le nouveau sous-domaine après changement
 - **Historique des slugs** : les anciens slugs sont archivés et redirigent vers le slug courant ; suppression individuelle possible
+- **Titre de la page publique** : titre modifiable affiché en haut de la page publique de l'organisation et dans l'onglet du navigateur (2 à 100 caractères, « Bénévoles » par défaut, bouton pour rétablir) ; le nom de l'organisation reste affiché au-dessus
 - **Charte du bénévole** (« Convention des Bénévoles » dans l'écran) : texte par défaut éditable en texte libre ; bouton « Réinitialiser la convention par défaut » ; affiché aux bénévoles lors de l'inscription
 - **Assurance RC de l'organisation** : commutateur qui choisit la variante du texte par défaut (bénévoles couverts par la RC de l'organisation, ou couverture accidents personnelle à leur charge) ; changer le commutateur remplace le texte de la zone de saisie
 - **Équipe admin** : liste des administrateurs avec statut (actif / en attente)

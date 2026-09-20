@@ -4,6 +4,7 @@ import { getOrgContext } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import AdminsManager from "@/components/admin/AdminsManager"
 import OrgNameForm from "@/components/admin/OrgNameForm"
+import OrgPublicTitleForm from "@/components/admin/OrgPublicTitleForm"
 import OrgSlugForm from "@/components/admin/OrgSlugForm"
 import OrgCharterForm from "@/components/admin/OrgCharterForm"
 import ChangePasswordForm from "@/components/admin/ChangePasswordForm"
@@ -29,7 +30,7 @@ export default async function AdminsSettingsPage() {
       },
       orderBy: { createdAt: "asc" },
     }),
-    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true } }),
+    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, publicTitle: true } }),
     prisma.orgSlugHistory.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
@@ -49,6 +50,8 @@ export default async function AdminsSettingsPage() {
       </div>
 
       {org && <OrgNameForm initialName={org.name} />}
+
+      {org && <OrgPublicTitleForm initialTitle={org.publicTitle ?? ""} />}
 
       {org && (
         <OrgSlugForm

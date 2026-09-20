@@ -213,6 +213,14 @@ Depuis la page de l'événement → **QR code**, télécharger le QR code de la 
 
 ---
 
+## Titre de la page publique
+
+**`/admin/settings/admins`** → section **Titre de la page publique**
+
+Le titre affiché en haut de la page publique de vos événements (l'adresse de votre organisation, sans nom d'événement). Par défaut : « Bénévoles ». Saisissez le texte de votre choix (2 à 100 caractères) puis **Enregistrer** ; le même texte devient le titre de l'onglet du navigateur. Le nom de l'organisation reste affiché juste au-dessus. **Rétablir « Bénévoles »** revient au titre par défaut. Ce titre ne s'applique pas aux pages d'événement, qui gardent le titre de l'événement.
+
+---
+
 ## Charte du bénévole
 
 **`/admin/settings/admins`** → section **Charte du bénévole**

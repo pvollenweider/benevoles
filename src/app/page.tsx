@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
+import type { Metadata } from "next"
 import { prisma } from "@/lib/prisma"
 import { formatShortDate } from "@/lib/utils"
 import { resolveOrgSlug } from "@/lib/resolve-org"
@@ -8,11 +9,24 @@ import PublicFooter from "@/components/PublicFooter"
 
 export const dynamic = "force-dynamic"
 
+const DEFAULT_TITLE = "Bénévoles"
+
+// Document title = the organization's public title (h1), default "Bénévoles".
+// resolveOrgSlug is cached per request, so this adds no extra query.
+export async function generateMetadata(): Promise<Metadata> {
+  const rawOrgSlug = (await headers()).get("x-org-slug")
+  if (!rawOrgSlug) return {}
+  const resolved = await resolveOrgSlug(rawOrgSlug)
+  if (!resolved || resolved.redirectUrl) return {}
+  return { title: resolved.org.publicTitle?.trim() || DEFAULT_TITLE }
+}
+
 export default async function HomePage() {
   const rawOrgSlug = (await headers()).get("x-org-slug")
 
   let orgSlug = rawOrgSlug
   let orgName: string | null = null
+  let orgTitle = DEFAULT_TITLE
   if (rawOrgSlug) {
     const resolved = await resolveOrgSlug(rawOrgSlug)
     if (!resolved) orgSlug = null
@@ -20,6 +34,7 @@ export default async function HomePage() {
     else {
       orgSlug = resolved.org.slug
       orgName = resolved.org.name
+      orgTitle = resolved.org.publicTitle?.trim() || DEFAULT_TITLE
     }
   }
 
@@ -56,7 +71,8 @@ export default async function HomePage() {
     <main className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200 px-4 py-5">
         <div className="max-w-2xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-900 break-words">{orgName || "Bénévoles"}</h1>
+          {orgName && orgName !== orgTitle && <p className="text-sm text-gray-600 break-words">{orgName}</p>}
+          <h1 className="text-2xl font-bold text-gray-900 break-words">{orgTitle}</h1>
           <p className="text-gray-500 text-sm mt-1">Inscrivez-vous pour aider lors de nos événements</p>
         </div>
       </header>

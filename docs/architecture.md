@@ -58,7 +58,7 @@ Modèles Prisma (`prisma/schema.prisma`) :
 
 | Modèle | Rôle |
 |--------|------|
-| `Organization` | Tenant : slug, `active`, charte, assurance |
+| `Organization` | Tenant : slug, `active`, charte, assurance, titre de la page publique (`publicTitle`) |
 | `OrgSlugHistory` | Anciens slugs |
 | `AdminUser` | Compte admin ou super admin, jetons d'activation et de réinitialisation |
 | `Event` | Événement : dates, statut de publication, rappels activés |

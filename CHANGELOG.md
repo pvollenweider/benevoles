@@ -9,6 +9,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Titre de la page publique modifiable** : chaque organisation peut définir le titre affiché en haut de sa page publique (et dans l'onglet du navigateur) depuis les paramètres ; « Bénévoles » par défaut. Le nom de l'organisation reste affiché au-dessus. Migration `0007_org_public_title`.
 - **Archiver et supprimer un événement** : bouton « Archiver » sur la page de l'événement, et suppression définitive possible uniquement pour un événement archivé. La fenêtre de confirmation affiche un avertissement fort avec le nombre de créneaux, d'inscriptions et d'invitations effacés, propose d'ouvrir l'export PDF avant de supprimer et demande de saisir le titre de l'événement (sans tenir compte des accents ni de la casse). Les bénévoles ne sont pas prévenus. Un bandeau confirme la suppression sur la liste des événements.
 
 ### Modifié
