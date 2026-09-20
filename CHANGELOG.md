@@ -7,21 +7,36 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+---
+
+## [1.12.0] — 2026-09-20
+
 ### Ajouté
 
+- **Documentation** : `README.md`, les guides administrateur et bénévole, `FONCTIONNALITES.md`, `CONTRIBUTING.md` et `SECURITY.md` sont remis à jour d'après le code (variables d'environnement, scripts, tâches planifiées, structure, modèle de données). Nouvelles pages dans `docs/` : architecture, configuration, déploiement, rôles et permissions, API. Les captures d'écran du README sont refaites (page d'accueil, timeline sur ordinateur et sur mobile, à partir de l'événement de démonstration du seed).
+- **Tests E2E** : isolation de la suppression d'événement entre organisations, titre de la page publique, formulaires de réglages.
 - **Titre de la page publique modifiable** : chaque organisation peut définir le titre affiché en haut de sa page publique (et dans l'onglet du navigateur) depuis les paramètres ; « Bénévoles » par défaut. Le nom de l'organisation reste affiché au-dessus. Migration `0007_org_public_title`.
 - **Archiver et supprimer un événement** : bouton « Archiver » sur la page de l'événement, et suppression définitive possible uniquement pour un événement archivé. La fenêtre de confirmation affiche un avertissement fort avec le nombre de créneaux, d'inscriptions et d'invitations effacés, propose d'ouvrir l'export PDF avant de supprimer et demande de saisir le titre de l'événement (sans tenir compte des accents ni de la casse). Les bénévoles ne sont pas prévenus. Un bandeau confirme la suppression sur la liste des événements.
 
 ### Corrigé
 
+- **Page publique d'une organisation** : les événements terminés ne s'affichent plus comme ouverts avec des places à pourvoir ; les badges de statut suivent `DESIGN.md` (places à pourvoir en vert, complet en bleu) ; la page d'accueil du site n'exécute plus la requête sur tous les événements pour afficher la page de présentation ; le pied de page a un lien « Espace organisateur » vers la connexion.
+- **Membres** : le bouton « Importer un fichier » de l'état vide menait à une page inexistante (404) ; il ouvre maintenant la fenêtre d'import.
+- **Accessibilité** : les fenêtres « Envoyer le rappel » et « Inviter des membres » ont une vraie sémantique de dialogue (titre lié, Échap, piège de focus, retour du focus, verrou de défilement) via un composant partagé ; le texte gris trop clair (2,5:1) est remplacé sur 22 fichiers ; `DESIGN.md` réserve « Encre Fantôme » au décoratif.
+- **Infrastructure** : les sondes Kubernetes de l'application interrogent `/api/health` avec des délais de 3 et 5 s (des échecs par délai apparaissaient pendant les déploiements) ; la sonde Postgres passe par un shell (elle journalisait `FATAL: role "root" does not exist` toutes les 5 s) ; l'image du webhook Gandi se construit de nouveau (Go 1.25) et est validée à chaque pull request.
+- **Données de démonstration** : les dates du seed correspondent aux jours annoncés (samedi 13 et dimanche 14 juin 2026).
 - **Réglages de l'organisation** : les formulaires « Nom de l'organisation » et « Identifiant public (slug) » ont désormais des étiquettes, des textes d'aide, des messages de succès et d'erreur annoncés aux lecteurs d'écran, des contrastes conformes et des noms explicites sur les boutons de suppression des anciens identifiants. L'adresse affichée par le formulaire du slug est calculée côté serveur, ce qui supprime une erreur d'hydratation React sur cette page.
 
 ### Sécurité
 
 - **Sentry** : `sendDefaultPii` passe à `false` (plus d'adresse IP, de cookies ni d'en-têtes de requête envoyés) sur le navigateur, le serveur et l'edge ; `includeLocalVariables` est désactivé côté serveur (il ouvrait l'inspecteur Node et joignait les valeurs des variables locales aux événements). Les jetons d'accès contenus dans les URLs (`/my/…`, `/waitlist/…/confirm`, `?token=…`) sont masqués dans les événements, transactions, spans et fils d'Ariane avant envoi. La politique de confidentialité cite désormais Sentry (région UE) comme sous-traitant.
+- **Route publique supprimée** : `GET /api/public/events/[slug]` n'était appelée nulle part et cherchait un événement par slug sans filtrer par organisation, alors que le slug n'est unique que par organisation.
+- **Dépôt** : le binaire compilé du webhook Gandi (83 Mo) n'est plus suivi par git.
 
 ### Modifié
 
+- **Node 26** partout : `.nvmrc` (`26.9.0`, la version du cluster), CI, déploiement, README et guide de contribution. Auparavant la CI testait Node 24 alors que la production tournait sous Node 26. L'image Docker installe la CLI Prisma 7.10.0, alignée sur `package-lock.json`.
+- **Déploiement** : `SENTRY_DSN` est synchronisé dans le secret Kubernetes (il manquait, donc Sentry ne recevait pas les erreurs serveur) ; le manifeste du webhook Gandi référence le tag de son commit, avec la procédure de mise à jour documentée.
 - **`DELETE /api/admin/events/[id]`** supprime désormais l'événement au lieu de l'archiver ; il exige un événement archivé (409 sinon) et le titre en confirmation (400 sinon). L'archivage passe par `PATCH { publicStatus: "archived" }`.
 
 ---
