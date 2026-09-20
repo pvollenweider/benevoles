@@ -5,6 +5,8 @@ import { formatShortDate } from "@/lib/utils"
 import { eventPublicUrl } from "@/lib/urls"
 import StatusBadge from "@/components/admin/StatusBadge"
 import PublishToggle from "@/components/admin/PublishToggle"
+import ArchiveButton from "@/components/admin/ArchiveButton"
+import DeleteEventSection from "@/components/admin/DeleteEventSection"
 import SendReminderButton from "@/components/admin/SendReminderButton"
 
 export const dynamic = "force-dynamic"
@@ -35,6 +37,17 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
 
   if (!event) notFound()
 
+  // Everything that permanent deletion would erase (all statuses, cancelled
+  // shifts included), only computed for an archived event.
+  const isArchived = event.publicStatus === "archived"
+  const [shiftTotal, registrationTotal, invitationTotal] = isArchived
+    ? await Promise.all([
+        db.shift.count({ where: { eventId: id } }),
+        db.registration.count({ where: { eventId: id } }),
+        db.memberInvite.count({ where: { eventId: id } }),
+      ])
+    : [0, 0, 0]
+
   const totalCapacity = event.shifts.reduce((s, sh) => s + sh.capacity, 0)
   const totalRegistered = event.shifts.reduce(
     (s, sh) => s + sh.registrations.filter((r) => r.status === "active").length,
@@ -64,6 +77,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         <div className="flex items-center gap-3 flex-wrap">
           <StatusBadge status={event.publicStatus} />
           <PublishToggle eventId={event.id} currentStatus={event.publicStatus} />
+          <ArchiveButton eventId={event.id} currentStatus={event.publicStatus} />
           <Link
             href={`/admin/events/${event.id}/edit`}
             className="text-sm border border-gray-200 px-3 py-1.5 rounded-full hover:bg-gray-50 transition-colors"
@@ -185,6 +199,20 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
           </div>
         </div>
       )}
+
+      <div className="border-t border-gray-200 pt-4">
+        <h2 className="text-sm font-semibold text-gray-700 mb-3">Suppression définitive</h2>
+        {isArchived ? (
+          <DeleteEventSection
+            eventId={event.id}
+            title={event.title}
+            counts={{ shifts: shiftTotal, registrations: registrationTotal, invitations: invitationTotal }}
+            exportUrl={`/api/admin/events/${event.id}/export/pdf`}
+          />
+        ) : (
+          <p className="text-sm text-gray-600">Archivez cet événement pour pouvoir le supprimer.</p>
+        )}
+      </div>
     </div>
   )
 }

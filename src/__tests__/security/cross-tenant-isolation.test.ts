@@ -31,6 +31,7 @@ const prismaMock = {
   event: {
     update: vi.fn().mockResolvedValue({ id: "evt-b", title: "Event B", publicStatus: "draft" }),
     findFirst: vi.fn().mockResolvedValue({ id: "evt-b", organizationId: "org-b" }), // org-B data!
+    delete: vi.fn().mockResolvedValue({ id: "evt-a" }),
   },
   volunteer: {
     update: vi.fn().mockResolvedValue({ id: "mem-b" }),
@@ -209,6 +210,52 @@ describe("Events — cross-tenant isolation", () => {
     const res = await DELETE(makeRequest("/api/admin/events/evt-b", "DELETE"), params("evt-b"))
     expect(res.status).toBe(404)
     expect(prismaMock.event.update).not.toHaveBeenCalled()
+    expect(prismaMock.event.delete).not.toHaveBeenCalled()
+  })
+
+  it("DELETE /api/admin/events/[id] returns 409 when the event is not archived", async () => {
+    const { DELETE } = await import("@/app/api/admin/events/[id]/route")
+    setupGuard({
+      event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "Fête", publicStatus: "published" }) },
+    })
+
+    const res = await DELETE(
+      makeRequest("/api/admin/events/evt-a", "DELETE", { confirmTitle: "Fête" }),
+      params("evt-a"),
+    )
+    expect(res.status).toBe(409)
+    expect(prismaMock.event.delete).not.toHaveBeenCalled()
+  })
+
+  it("DELETE /api/admin/events/[id] returns 400 when the confirmation title is missing or wrong", async () => {
+    const { DELETE } = await import("@/app/api/admin/events/[id]/route")
+    const archived = { event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "Fête", publicStatus: "archived" }) } }
+
+    setupGuard(archived)
+    const noBody = await DELETE(makeRequest("/api/admin/events/evt-a", "DELETE"), params("evt-a"))
+    expect(noBody.status).toBe(400)
+
+    setupGuard(archived)
+    const wrong = await DELETE(
+      makeRequest("/api/admin/events/evt-a", "DELETE", { confirmTitle: "Autre" }),
+      params("evt-a"),
+    )
+    expect(wrong.status).toBe(400)
+    expect(prismaMock.event.delete).not.toHaveBeenCalled()
+  })
+
+  it("DELETE /api/admin/events/[id] deletes an archived org-A event when the title matches", async () => {
+    const { DELETE } = await import("@/app/api/admin/events/[id]/route")
+    setupGuard({
+      event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "Fête de l'Été", publicStatus: "archived" }) },
+    })
+
+    const res = await DELETE(
+      makeRequest("/api/admin/events/evt-a", "DELETE", { confirmTitle: "fete de l'ete" }),
+      params("evt-a"),
+    )
+    expect(res.status).toBe(200)
+    expect(prismaMock.event.delete).toHaveBeenCalledWith({ where: { id: "evt-a" } })
   })
 })
 

@@ -40,7 +40,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | Route | Méthodes | Rôle |
 |-------|----------|------|
 | `/api/admin/events` | GET, POST | Lister, créer des événements |
-| `/api/admin/events/[id]` | GET, PATCH, DELETE | Lire, modifier, supprimer un événement |
+| `/api/admin/events/[id]` | GET, PATCH, DELETE | Lire, modifier (dont l'archivage : `publicStatus: "archived"`), supprimer définitivement. `DELETE` exige un événement archivé (409 sinon) et `{ "confirmTitle": "<titre>" }` (400 sinon) ; les créneaux, inscriptions et invitations sont supprimés en cascade |
 | `/api/admin/events/[id]/duplicate` | POST | Dupliquer un événement |
 | `/api/admin/events/[id]/reorder-roles` | POST | Réordonner les postes |
 | `/api/admin/events/[id]/qr` | GET | QR code de la page publique ; `?format=svg` pour le SVG, PNG par défaut |
