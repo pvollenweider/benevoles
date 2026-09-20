@@ -48,10 +48,11 @@ Application **SaaS multi-tenant** de gestion de bénévoles pour événements. C
 
 | Landing page | Timeline bénévole (desktop) | Timeline mobile |
 |---|---|---|
-| ![Landing](docs/screenshots/01-landing.png) | ![Timeline desktop](docs/screenshots/03-timeline-desktop.png) | ![Timeline mobile](docs/screenshots/02-landing-mobile.png) |
+| ![Page d'accueil de Benevol : titre, maquette de la timeline et liens](docs/screenshots/01-landing.png) | ![Timeline d'inscription sur ordinateur : postes en lignes, créneaux en barres, plages de spectacle en fond](docs/screenshots/03-timeline-desktop.png) | ![Timeline d'inscription sur mobile, défilement horizontal](docs/screenshots/04-timeline-mobile.png) |
 
+> Les captures de la timeline montrent l'événement de démonstration du seed (`npm run db:seed`, organisation `default`).
 > Les captures admin (dashboard, événements, membres, export PDF) sont générées avec `npm run screenshots`.
-> Voir `scripts/screenshots.mjs` pour la configuration des URL et des credentials.
+> Voir `scripts/screenshots.mjs` pour la configuration des URL et des credentials ; `PUBLIC_ONLY=1` limite la capture aux pages publiques (sans connexion admin).
 
 ## Stack
 
