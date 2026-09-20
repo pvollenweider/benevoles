@@ -33,12 +33,12 @@ Application **SaaS multi-tenant** de gestion de bénévoles pour événements. C
 
 **Côté admin**
 - Multi-tenant : chaque organisation a ses propres événements, membres et admins, isolés des autres
-- Création et gestion des événements, créneaux et programme des spectacles
+- Création et gestion des événements, créneaux et programme des spectacles ; archivage, puis suppression définitive avec confirmation et sauvegarde PDF préalable
 - Gestion de la liste des membres (pool de bénévoles) et envoi d'invitations tokenisées
 - Rappels automatiques (J-2, J-1, Jour J) et rappel manuel avec message personnalisé
 - Suivi des inscriptions en temps réel, export Gantt PDF
 - Tableau de bord : événements, taux de remplissage, membres
-- Réglages de l'organisation : slug, charte du bénévole, équipe admin
+- Réglages de l'organisation : nom, titre de la page publique, slug, charte du bénévole, équipe admin
 
 **Super admin**
 - CRUD des organisations
@@ -282,7 +282,7 @@ src/__tests__/security/                   # Tests d'isolation cross-tenant
 
 | Modèle | Description |
 |--------|-------------|
-| `Organization` | Tenant (org) avec slug unique, flag `active`, charte du bénévole et option d'assurance de l'organisation |
+| `Organization` | Tenant (org) avec slug unique, flag `active`, charte du bénévole, option d'assurance de l'organisation et titre de la page publique |
 | `AdminUser` | Compte admin rattaché à une org (ou super admin sans org) ; onboarding par token révocable |
 | `Event` | Événement avec dates, statut, slug unique par org |
 | `Shift` | Créneau horaire (rôle, capacité, statut, ordre) |
@@ -294,7 +294,7 @@ src/__tests__/security/                   # Tests d'isolation cross-tenant
 
 ## Architecture multi-tenant
 
-Chaque organisation dispose d'un client Prisma étendu (`getOrgClient`) qui injecte automatiquement `organizationId` dans tous les reads. Les mutations passent par une vérification de propriété (read scopé) avant d'accéder au client brut. 20 tests de sécurité valident l'isolation cross-tenant dans `src/__tests__/security/`.
+Chaque organisation dispose d'un client Prisma étendu (`getOrgClient`) qui injecte automatiquement `organizationId` dans tous les reads. Les mutations passent par une vérification de propriété (read scopé) avant d'accéder au client brut. 23 tests de sécurité valident l'isolation cross-tenant dans `src/__tests__/security/`.
 
 L'organisation courante est déterminée par le sous-domaine (`[orgSlug].benevol.app`, injecté par `src/middleware.ts` dans l'en-tête `x-org-slug`). En développement, sans sous-domaine, le paramètre `?org=<slug>` joue le même rôle.
 

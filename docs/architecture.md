@@ -76,6 +76,7 @@ Statuts d'une inscription : `active`, `waiting` (en liste d'attente), `offered` 
 
 1. Un admin crée un événement (brouillon), ajoute des créneaux et le programme des spectacles.
 2. Il publie l'événement, qui devient visible sur `/{orgSlug}/{eventSlug}`.
+3. Une fois l'événement terminé, il l'archive (`PATCH { publicStatus: "archived" }`). Un événement archivé, et lui seul, peut être supprimé définitivement (`DELETE`, avec confirmation par le titre) : les créneaux, inscriptions et invitations partent en cascade, les membres du pool et l'organisation sont conservés, les bénévoles ne sont pas prévenus.
 
 ### Invitation des membres
 
