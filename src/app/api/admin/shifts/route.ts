@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
+import { clockSchema, firstIssueMessage, SAME_TIME_ERROR } from "@/lib/shift-time"
 
 const schema = z.object({
   eventId: z.string(),
@@ -9,14 +10,14 @@ const schema = z.object({
   label: z.string().min(1),
   description: z.string().optional(),
   date: z.string(),
-  startTime: z.string(),
-  endTime: z.string(),
+  startTime: clockSchema,
+  endTime: clockSchema,
   capacity: z.number().int().min(1),
   locationDetails: z.string().optional(),
   displayOrder: z.number().int().optional(),
   internalNotes: z.string().optional(),
   waitlistEnabled: z.boolean().optional(),
-})
+}).refine((d) => d.startTime !== d.endTime, { message: SAME_TIME_ERROR, path: ["endTime"] })
 
 export async function POST(req: Request) {
   const guard = await requireOrgSession()
@@ -25,7 +26,9 @@ export async function POST(req: Request) {
 
   const body = await req.json()
   const parsed = schema.safeParse(body)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) {
+    return NextResponse.json({ error: firstIssueMessage(parsed.error), details: parsed.error.flatten() }, { status: 400 })
+  }
 
   const data = parsed.data
 

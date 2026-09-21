@@ -103,6 +103,41 @@ L'analyse CodeQL (JavaScript/TypeScript, Go, Actions) ne figure pas dans `.githu
 
 Chaque push sur `main` déploie donc en production. Les versions sont marquées par un commit `chore: release X.Y.Z` (mise à jour de `CHANGELOG.md` et de la version de `package.json`), un tag `vX.Y.Z` et une release GitHub.
 
+## Corriger d'anciens horaires hors plage
+
+Avant la version qui borne les horaires à `00:00`–`23:59`, l'application a pu enregistrer des heures comme `24:00`, `26:00` ou `25:30` (créneaux de nuit saisis en prolongeant la journée, ou créés en faisant glisser une barre sur le planning administrateur), et même des heures négatives (`-2:-15`). L'affichage les lit modulo 24, mais il est préférable de les convertir.
+
+La requête ci-dessous, testée sur une base locale, fait deux choses : un créneau qui commence à `24:00` ou plus passe au **jour suivant** avec l'horloge remise à zéro (vendredi `24:00`–`26:00` devient samedi `00:00`–`02:00`), et un créneau qui commence avant minuit et finit à `24:00` ou plus garde sa date avec une fin qui repart à zéro (`23:00`–`25:00` devient `23:00`–`01:00`). L'instant réel du créneau ne change pas, donc les rappels non plus. Les valeurs qui restent invalides (heures négatives) sont listées pour être corrigées à la main, ou supprimées si le créneau est annulé.
+
+```sql
+BEGIN;
+
+UPDATE "Shift" s SET
+  date = s.date + INTERVAL '1 day',
+  "startTime" = lpad((split_part(s."startTime", ':', 1)::int - 24)::text, 2, '0') || ':' || split_part(s."startTime", ':', 2),
+  "endTime" = CASE
+    WHEN split_part(s."endTime", ':', 1)::int >= 24
+    THEN lpad((split_part(s."endTime", ':', 1)::int - 24)::text, 2, '0') || ':' || split_part(s."endTime", ':', 2)
+    ELSE s."endTime" END
+WHERE s."startTime" ~ '^[0-9]{2}:[0-9]{2}$' AND s."endTime" ~ '^[0-9]{2}:[0-9]{2}$'
+  AND split_part(s."startTime", ':', 1)::int >= 24;
+
+UPDATE "Shift" s SET
+  "endTime" = lpad((split_part(s."endTime", ':', 1)::int - 24)::text, 2, '0') || ':' || split_part(s."endTime", ':', 2)
+WHERE s."startTime" ~ '^[0-9]{2}:[0-9]{2}$' AND s."endTime" ~ '^[0-9]{2}:[0-9]{2}$'
+  AND split_part(s."startTime", ':', 1)::int < 24
+  AND split_part(s."endTime", ':', 1)::int >= 24;
+
+-- Ce qui reste hors format, à corriger à la main :
+SELECT s.id, s.date::date AS jour, s."roleName", s."startTime", s."endTime", s.status
+FROM "Shift" s
+WHERE s."startTime" !~ '^([01][0-9]|2[0-3]):[0-5][0-9]$' OR s."endTime" !~ '^([01][0-9]|2[0-3]):[0-5][0-9]$';
+
+-- Vérifier, puis COMMIT; (ou ROLLBACK; pour annuler)
+```
+
+Ne la lancer qu'après avoir listé les lignes concernées avec le `SELECT` final seul, et de préférence en dehors d'un événement en cours : les créneaux déplacés changent de colonne de jour sur le planning. La sauvegarde chiffrée de la nuit (`k8s/cronjob-backup.yaml`) permet de revenir en arrière.
+
 ## Sauvegarde et restauration
 
 `cronjob-backup.yaml` produit chaque nuit, à 01:00 UTC, un `pg_dump` chiffré avec `BACKUP_PASSPHRASE`, sur le volume `backup-pvc`, conservé 30 jours. Les fichiers s'appellent `/backups/benevoles_YYYY-MM-DD_HH-MM.sql.gz.enc`.

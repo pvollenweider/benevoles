@@ -48,8 +48,8 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/admin/events/[id]/invitations` | GET, POST | État des invitations, envoi d'invitations |
 | `/api/admin/events/[id]/invitations/remind` | POST | Relance des membres non inscrits |
 | `/api/admin/events/[id]/invitations/test-email` | POST | Email de test |
-| `/api/admin/shifts` | POST | Créer un créneau |
-| `/api/admin/shifts/[id]` | PATCH, DELETE | Modifier, supprimer un créneau |
+| `/api/admin/shifts` | POST | Créer un créneau. `startTime` et `endTime` au format `HH:MM` de `00:00` à `23:59` (400 sinon, avec un message) et différents l'un de l'autre ; une fin plus petite que le début désigne le lendemain matin |
+| `/api/admin/shifts/[id]` | PATCH, DELETE | Modifier, supprimer un créneau. Mêmes règles pour `startTime` et `endTime` quand ils sont fournis |
 | `/api/admin/registrations` | POST | Ajout manuel d'une inscription |
 | `/api/admin/registrations/[id]` | PATCH, DELETE | Modifier, annuler une inscription |
 | `/api/admin/members` | GET, POST | Lister, créer des membres |

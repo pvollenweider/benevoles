@@ -53,9 +53,18 @@ Un créneau correspond à un poste de bénévolat sur une plage horaire précise
 | Poste (rôle) | Intitulé générique (ex. : `Accueil`). Les créneaux du même rôle sont regroupés sur la même ligne du planning. |
 | Libellé | Intitulé spécifique (ex. : `Entrée principale`). Laisser vide si identique au rôle. |
 | Date | Jour du créneau |
-| Horaires | Heure de début et de fin |
+| Horaires | Heure de début et de fin, de `00:00` à `23:59` |
 | Capacité | Nombre maximum de bénévoles |
 | Statut | `Ouvert`, `Complet`, `Fermé`, `Annulé` |
+
+#### Horaires et nuit
+
+L'horloge va de `00:00` à `23:59` : on ne saisit jamais `24:00`, `25:00` ou `26:00`, l'horloge repart à zéro après minuit.
+
+- **Créneau qui passe minuit** : saisissez une heure de fin plus petite que le début, par exemple `22:00` à `02:00`. Il est affiché « 22h–02h +1 » sur le planning.
+- **Créneau qui commence après minuit** : il appartient au jour suivant. Créez-le à la date du lendemain, à `00:00`, `01:00`, etc.
+- Un créneau qui se termine exactement à minuit s'écrit avec `00:00` comme fin (`22:00` à `00:00`).
+- Les heures invalides (`26:00`, `-2:30`, `12:75`) sont refusées avec un message. Sur le planning administrateur, glisser une barre ne permet pas de sortir de la journée.
 
 ### Activer la liste d'attente
 

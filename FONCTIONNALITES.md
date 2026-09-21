@@ -16,7 +16,7 @@ Liste exhaustive des fonctionnalités de l'application.
 #### Timeline Gantt
 
 - Planning visuel par jour sous forme de **timeline Gantt scrollable**
-  - Échelle horizontale calculée dynamiquement à partir du créneau le plus large
+  - Le graphique de chaque jour occupe toute la largeur de sa carte (mise en page fluide) ; en dessous d'environ 36 px par heure, il défile horizontalement. Le texte d'une barre n'est affiché que s'il tient ; l'axe des heures repart à zéro après minuit (`00h`, `01h`…)
   - Scroll tactile fonctionnel sur mobile
   - Une ligne par rôle ; libellé spécifique affiché sous la barre quand il diffère du rôle
   - Bandes colorées en fond représentant le programme des spectacles
@@ -101,7 +101,7 @@ Liste exhaustive des fonctionnalités de l'application.
 ### Gestion des créneaux (`/admin/events/[id]/shifts`)
 
 - Ajout de créneaux : rôle, libellé, date, horaires, capacité, statut, ordre d'affichage
-  - Saisie des horaires tolérante : `9` → `09:00`, `14:3` → `14:30`
+  - Saisie des horaires tolérante : `9` → `09:00`, `14:3` → `14:30`. Les heures valides vont de `00:00` à `23:59` ; une valeur hors plage (`26:00`, `-2:30`) est refusée avec un message au lieu d'être modifiée en silence. Un créneau qui passe minuit s'écrit avec une fin plus petite que le début (`22:00` à `02:00`, affiché « 22h–02h +1 »)
   - Fin automatiquement fixée à start + 90 min si non renseignée
 - Icônes colorées par rôle (palette prédéfinie + couleur déterministe par hash du nom pour les rôles personnalisés — 8 teintes)
 - Autocomplétion des rôles existants

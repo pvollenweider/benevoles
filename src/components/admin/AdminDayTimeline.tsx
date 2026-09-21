@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react"
 import Link from "next/link"
 import { getRoleAccent, getBarClasses } from "@/lib/roles"
-import { toMin, toMinEnd, fromMin, fmt, clamp, assignLanes, type GanttShow } from "@/lib/gantt-utils"
+import { toMin, toMinEnd, fromMin, fmt, clamp, assignLanes, hourLabel, type GanttShow } from "@/lib/gantt-utils"
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const PX_PER_MIN = 2.5
@@ -223,7 +223,10 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
     const rect       = el.getBoundingClientRect()
     const scrollLeft = el.scrollLeft
     const localX     = clientX - rect.left + scrollLeft - LABEL_W
-    return snapTo(clamp(dayStart + localX / PX_PER_MIN, dayStart, dayEnd))
+    // Shift times are wall-clock times of the date (00:00 to 23:59, end at most
+    // midnight): the padding hour around the shifts is display only, so drag
+    // never leaves 0..1440.
+    return snapTo(clamp(dayStart + localX / PX_PER_MIN, Math.max(dayStart, 0), Math.min(dayEnd, 1440)))
   }, [dayStart, dayEnd])
 
   const px = (min: number) => (min - dayStart) * PX_PER_MIN
@@ -267,7 +270,8 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
   function startCreate(roleName: string, e: React.MouseEvent) {
     e.preventDefault()
     setSelected(null)
-    setDraft({ roleName, startMin: xToMin(e.clientX), endMin: xToMin(e.clientX) + SNAP })
+    const startMin = Math.min(xToMin(e.clientX), 1440 - SNAP)
+    setDraft({ roleName, startMin, endMin: startMin + SNAP })
   }
 
   // ── Resize drag ─────────────────────────────────────────────────────────────
@@ -287,19 +291,19 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
   const onMouseMove = useCallback((e: MouseEvent) => {
     const cur = xToMin(e.clientX)
     if (draft) {
-      setDraft(d => d ? { ...d, endMin: Math.max(d.startMin + SNAP, cur) } : null)
+      setDraft(d => d ? { ...d, endMin: Math.min(1440, Math.max(d.startMin + SNAP, cur)) } : null)
     }
     if (resize) {
       setResizeOverlay(prev => {
         const orig = shifts.find(s => s.id === resize.shiftId)
         if (!orig) return prev
         const startMin = toMin(orig.startTime)
-        const endMin   = toMin(orig.endTime)
+        const endMin   = toMinEnd(orig.endTime, orig.startTime)
         if (resize.side === "right") {
-          const newEnd = snapTo(clamp(cur, startMin + MIN_DUR, dayEnd))
+          const newEnd = snapTo(clamp(cur, startMin + MIN_DUR, Math.min(dayEnd, 1440)))
           return { ...prev, [resize.shiftId]: { startTime: orig.startTime, endTime: fromMin(newEnd) } }
         } else {
-          const newStart = snapTo(clamp(cur, dayStart, endMin - MIN_DUR))
+          const newStart = snapTo(clamp(cur, Math.max(dayStart, 0), Math.min(endMin - MIN_DUR, 1440 - SNAP)))
           return { ...prev, [resize.shiftId]: { startTime: fromMin(newStart), endTime: orig.endTime } }
         }
       })
@@ -576,7 +580,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                     transform: "translateX(-50%)",
                   }}
                 >
-                  {h}h
+                  {hourLabel(h)}
                 </div>
               ))}
             </div>

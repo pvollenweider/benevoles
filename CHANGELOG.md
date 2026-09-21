@@ -9,6 +9,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Horaires des créneaux** : ils sont bornés à `00:00`–`23:59`. Le glisser-déposer du planning administrateur pouvait écrire des heures comme `24:00`–`26:00`, voire négatives (`-2:-15`), sans aucun contrôle ; l'horloge repart désormais à zéro après minuit (`fromMin` ramène au jour), l'API refuse les heures hors plage ou identiques avec un message lisible, et le formulaire n'altère plus en silence une heure invalide. Un créneau de nuit s'écrit avec une fin plus petite que le début (`22:00`–`02:00`, affiché « 22h–02h +1 ») ; les anciennes valeurs restent lisibles (affichées modulo 24) et une requête de correction est documentée dans `docs/deploiement.md`.
+- **Planning public** : le graphique de chaque jour occupe toute la largeur de la carte (il était comprimé à environ 300 px les jours qui comptent un long créneau, ce qui chevauchait les heures et coupait les textes) ; mise en page fluide en pourcentage, défilement horizontal sur mobile, texte des barres affiché seulement quand il tient, heures de l'axe qui repartent à zéro après minuit et espacées quand la journée est longue, textes plus lisibles, région de défilement nommée.
+- **Conflits d'horaires** : la détection de chevauchement comprend maintenant les créneaux qui passent minuit et les chevauchements entre deux dates (côté bénévole et côté administrateur).
+
 - **Sentry** : n'est plus actif qu'en production. Le développement local et les tests E2E chargeaient le vrai DSN depuis `.env` et envoyaient leurs erreurs (environnement `development`) dans le projet Sentry de production.
 
 ---
