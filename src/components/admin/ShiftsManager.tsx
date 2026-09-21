@@ -3,6 +3,7 @@
 import { useState, useRef } from "react"
 import { flushSync } from "react-dom"
 import { KNOWN_ROLES } from "@/lib/roles"
+import { fmtRange } from "@/lib/gantt-utils"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
 
 const emptyShift = {
@@ -41,7 +42,10 @@ function normalizeTime(val: string): string {
   const hours   = parseInt(h, 10)
   const minutes = m !== undefined ? parseInt(m, 10) : 0
   if (isNaN(hours)) return clean
-  return `${String(Math.min(23, hours)).padStart(2, "0")}:${String(Math.min(59, isNaN(minutes) ? 0 : minutes)).padStart(2, "0")}`
+  // Out-of-range values (24, 26, -2, 75 minutes) are kept as typed so the server
+  // reports them, instead of being silently changed to a different time.
+  if (hours < 0 || hours > 23 || isNaN(minutes) || minutes < 0 || minutes > 59) return clean
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`
 }
 
 function fmtDate(iso: string) {
@@ -114,7 +118,10 @@ export default function ShiftsManager({
     const data = await res.json()
     setSaving(false)
 
-    if (!res.ok) { setError("Erreur lors de la sauvegarde."); return }
+    if (!res.ok) {
+      setError(typeof data?.error === "string" ? data.error : "Erreur lors de la sauvegarde.")
+      return
+    }
 
     if (editingId) {
       setShifts(prev => prev.map(s =>
@@ -460,7 +467,7 @@ export default function ShiftsManager({
                 <tr key={s.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
                     <p>{fmtDate(s.date)}</p>
-                    <p className="font-medium text-gray-700">{s.startTime}–{s.endTime}</p>
+                    <p className="font-medium text-gray-700">{fmtRange(s.startTime, s.endTime)}</p>
                   </td>
                   <td className="px-4 py-3">
                     <p className="font-medium text-gray-800">{s.roleName}</p>

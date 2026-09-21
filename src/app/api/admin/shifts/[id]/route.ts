@@ -3,14 +3,15 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 import { z } from "zod"
+import { clockSchema, firstIssueMessage, SAME_TIME_ERROR } from "@/lib/shift-time"
 
 const schema = z.object({
   roleName: z.string().optional(),
   label: z.string().optional(),
   description: z.string().optional().nullable(),
   date: z.string().optional(),
-  startTime: z.string().optional(),
-  endTime: z.string().optional(),
+  startTime: clockSchema.optional(),
+  endTime: clockSchema.optional(),
   capacity: z.number().int().min(1).optional(),
   status: z.enum(["open", "full", "closed", "cancelled"]).optional(),
   locationDetails: z.string().optional().nullable(),
@@ -19,7 +20,7 @@ const schema = z.object({
   waitlistEnabled: z.boolean().optional(),
   // Caller can opt out of notifying volunteers (default true).
   notifyVolunteers: z.boolean().optional(),
-})
+}).refine((d) => !(d.startTime && d.endTime) || d.startTime !== d.endTime, { message: SAME_TIME_ERROR, path: ["endTime"] })
 
 function fmtDate(d: Date) {
   return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
@@ -33,7 +34,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const { id } = await params
   const body = await req.json()
   const parsed = schema.safeParse(body)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) {
+    return NextResponse.json({ error: firstIssueMessage(parsed.error), details: parsed.error.flatten() }, { status: 400 })
+  }
 
   const before = await db.shift.findFirst({
     where: { id },

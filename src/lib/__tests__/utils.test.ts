@@ -140,3 +140,28 @@ describe("formatShortDate", () => {
     expect(result).not.toMatch(/samedi/)
   })
 })
+
+describe("shiftsOverlap — shifts that run past midnight", () => {
+  const s = (startTime: string, endTime: string, date: string) => ({ startTime, endTime, date })
+
+  it("an overnight shift (22:00 to 02:00) overlaps an evening shift of the same date", () => {
+    expect(shiftsOverlap(s("22:00", "02:00", "2026-09-25"), s("23:00", "23:30", "2026-09-25"))).toBe(true)
+  })
+
+  it("an overnight shift overlaps an early-morning shift of the next calendar date", () => {
+    expect(shiftsOverlap(s("22:00", "02:00", "2026-09-25"), s("01:00", "03:00", "2026-09-26"))).toBe(true)
+  })
+
+  it("but not one that starts after it ends, or on another day", () => {
+    expect(shiftsOverlap(s("22:00", "02:00", "2026-09-25"), s("02:00", "04:00", "2026-09-26"))).toBe(false)
+    expect(shiftsOverlap(s("22:00", "02:00", "2026-09-25"), s("10:00", "12:00", "2026-09-26"))).toBe(false)
+  })
+
+  it("a shift ending exactly at midnight does not overlap the next day's first shift", () => {
+    expect(shiftsOverlap(s("22:00", "00:00", "2026-09-25"), s("00:00", "02:00", "2026-09-26"))).toBe(false)
+  })
+
+  it("legacy hours above 23 still compare correctly", () => {
+    expect(shiftsOverlap(s("24:00", "26:00", "2026-09-25"), s("00:30", "01:30", "2026-09-26"))).toBe(true)
+  })
+})

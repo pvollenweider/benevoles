@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useMemo } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { formatDate, shiftsOverlap } from "@/lib/utils"
+import { fmtRange } from "@/lib/gantt-utils"
 import DayTimeline, { fmt } from "@/components/DayTimeline"
 import PublicFooter from "@/components/PublicFooter"
 import { DEFAULT_VOLUNTEER_CHARTER } from "@/lib/volunteer-charter"
@@ -348,7 +349,8 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
               </div>
             )}
 
-            <div className="lg:grid lg:grid-cols-[1fr_300px] lg:gap-8 lg:items-start">
+            {/* minmax(0,1fr): the timelines column may shrink below the chart width and scroll */}
+            <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-8 lg:items-start">
               {/* Left: timelines */}
               <div className="space-y-6">
                 {Object.entries(shiftsByDay).map(([day, dayShifts]) => {
@@ -461,7 +463,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
               <div className="lg:hidden bg-gray-50 rounded-xl p-3 mb-5 space-y-1">
                 {event.shifts.filter((s) => selectedShifts.has(s.id)).map((s) => (
                   <div key={s.id} className="text-sm text-gray-700">
-                    ✓ {s.label} — {s.startTime}–{s.endTime}
+                    ✓ {s.label} — {fmtRange(s.startTime, s.endTime)}
                   </div>
                 ))}
               </div>

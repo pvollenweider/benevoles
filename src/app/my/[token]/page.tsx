@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { fmtRange } from "@/lib/gantt-utils"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import PublicFooter from "@/components/PublicFooter"
@@ -122,7 +123,7 @@ export default function MyRegistrationPage() {
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 text-sm">{reg.shift.label}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{date} · {reg.shift.startTime}–{reg.shift.endTime}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{date} · {fmtRange(reg.shift.startTime, reg.shift.endTime)}</p>
                   </div>
                   {!isPending && (
                     <button

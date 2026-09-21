@@ -1,4 +1,5 @@
 import { customAlphabet } from "nanoid"
+import { toMin, toMinEnd } from "./gantt-utils"
 
 const nanoid = customAlphabet("abcdefghijklmnopqrstuvwxyz0123456789", 24)
 
@@ -29,10 +30,15 @@ export function shiftsOverlap(
   a: { startTime: string; endTime: string; date: Date | string },
   b: { startTime: string; endTime: string; date: Date | string }
 ): boolean {
-  const dateA = new Date(a.date).toISOString().split("T")[0]
-  const dateB = new Date(b.date).toISOString().split("T")[0]
-  if (dateA !== dateB) return false
-  return a.startTime < b.endTime && b.startTime < a.endTime
+  // Compare absolute intervals: a shift that runs past midnight (22:00 to 02:00) also
+  // overlaps shifts of the next calendar day, and legacy hours above 23 still work.
+  const interval = (s: { startTime: string; endTime: string; date: Date | string }) => {
+    const day = new Date(new Date(s.date).toISOString().split("T")[0]).getTime() / 60000
+    return { start: day + toMin(s.startTime), end: day + toMinEnd(s.endTime, s.startTime) }
+  }
+  const ia = interval(a)
+  const ib = interval(b)
+  return ia.start < ib.end && ib.start < ia.end
 }
 
 export function cn(...classes: (string | undefined | false | null)[]): string {

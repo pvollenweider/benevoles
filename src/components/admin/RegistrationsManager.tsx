@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useMemo } from "react"
 import StatusBadge from "./StatusBadge"
+import { shiftsOverlap as sharedShiftsOverlap } from "@/lib/utils"
 
 type Volunteer = { id: string; firstName: string; lastName: string; email: string | null; phone: string | null }
 type ShiftRef  = {
@@ -27,14 +28,8 @@ const sourceLabels: Record<string, string> = {
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-function toMin(t: string) {
-  const [h, m] = t.split(":").map(Number)
-  return h * 60 + m
-}
-function shiftsOverlap(a: ShiftRef, b: ShiftRef) {
-  if (a.date !== b.date) return false
-  return toMin(a.startTime) < toMin(b.endTime) && toMin(b.startTime) < toMin(a.endTime)
-}
+// Shared with the public registration flow: handles shifts that run past midnight.
+const shiftsOverlap = (a: ShiftRef, b: ShiftRef) => sharedShiftsOverlap(a, b)
 
 function fmtDate(iso: string) {
   return new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })

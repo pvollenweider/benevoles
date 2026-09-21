@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import { formatShortDate } from "@/lib/utils"
+import { fmtRange } from "@/lib/gantt-utils"
 import { eventPublicUrl } from "@/lib/urls"
 import StatusBadge from "@/components/admin/StatusBadge"
 import PublishToggle from "@/components/admin/PublishToggle"
@@ -174,7 +175,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
                         : shift.label}
                     </p>
                     <p className="text-xs text-gray-500 whitespace-nowrap flex-shrink-0">
-                      {shift.date.toLocaleDateString("fr-FR")} · {shift.startTime}–{shift.endTime}
+                      {shift.date.toLocaleDateString("fr-FR")} · {fmtRange(shift.startTime, shift.endTime)}
                     </p>
                   </div>
                   <div className="flex items-center gap-2.5">
