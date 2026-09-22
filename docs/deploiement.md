@@ -142,14 +142,16 @@ Ne la lancer qu'après avoir listé les lignes concernées avec le `SELECT` fina
 
 `cronjob-backup.yaml` produit chaque nuit, à 01:00 UTC, un `pg_dump` chiffré avec `BACKUP_PASSPHRASE`, sur le volume `backup-pvc`, conservé 30 jours. Les fichiers s'appellent `/backups/benevoles_YYYY-MM-DD_HH-MM.sql.gz.enc`.
 
+> **Incident (corrigé le 2026-09-22)** : de la création du CronJob (début mai 2026) jusqu'à cette date, chaque exécution a échoué silencieusement. L'image `postgres:16-alpine` ne fournit pas de CLI `openssl` ; l'ancien script (`pg_dump | gzip | openssl enc > fichier`) ne vérifiait que le code retour de la dernière commande du pipe, et la redirection `>` crée le fichier de sortie avant même que le pipe échoue. Résultat : 144 jours de fichiers `.sql.gz.enc` de 0 octet, sans qu'aucune alerte ne se déclenche. **Aucun fichier antérieur au 22/09/2026 n'est restaurable — ignorer les backups datés d'avant cette correction.** Le script installe maintenant `openssl` au démarrage, écrit chaque étape dans un fichier (plus de pipe qui masque un échec), vérifie que le dump dépasse 1 Ko, et re-déchiffre le fichier produit pour confirmer qu'il redonne la même taille avant de le garder ; toute anomalie fait échouer le job au lieu de produire un fichier silencieusement vide.
+
 Déchiffrement (commande donnée en en-tête du manifeste) :
 
 ```bash
-openssl enc -d -aes-256-cbc -pbkdf2 -pass pass:<PASSPHRASE> \
-  -in benevoles_<date>.sql.gz.enc | gunzip > dump.sql
+openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -pass pass:<PASSPHRASE> \
+  -in benevoles_<date>.sql.gz.enc -out dump.sql.gz && gunzip dump.sql.gz
 ```
 
-Le volume de sauvegarde est sur le même cluster que la base : prévoir une copie hors cluster. Tester une restauration complète avant d'en dépendre : ce test n'a pas été fait pour cette documentation.
+Le volume de sauvegarde est sur le même cluster que la base : une panne de cluster ou de ce volume emporte les deux. Une copie hors cluster (voir pistes ci-dessous) reste à mettre en place. Tester une restauration complète avant d'en dépendre : ce test n'a pas encore été fait.
 
 ## Journaux
 
