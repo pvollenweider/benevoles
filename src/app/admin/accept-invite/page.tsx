@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense } from "react"
 import PasswordRules from "@/components/PasswordRules"
@@ -15,11 +15,58 @@ function AcceptInviteForm() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [done, setDone] = useState(false)
+  const [tokenError, setTokenError] = useState<string | null>(null)
+  const [checking, setChecking] = useState(() => !!token)
+
+  useEffect(() => {
+    if (!token) return
+    let cancelled = false
+    fetch(`/api/admin/accept-invite?token=${encodeURIComponent(token)}`)
+      .then((res) => res.json().catch(() => ({})))
+      .then((data) => {
+        if (cancelled) return
+        if (data?.valid !== true) {
+          setTokenError(typeof data?.error === "string" ? data.error : "Ce lien n'est plus valide.")
+        }
+      })
+      .catch(() => {
+        // Precheck failing (e.g. offline) shouldn't block the form; the POST on submit re-validates.
+      })
+      .finally(() => {
+        if (!cancelled) setChecking(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [token])
 
   if (!token) {
     return (
       <div className="text-center py-12">
         <p className="text-gray-500">Lien invalide.</p>
+      </div>
+    )
+  }
+
+  if (checking) {
+    return (
+      <p className="text-sm text-gray-500 text-center py-12" role="status">
+        Vérification du lien…
+      </p>
+    )
+  }
+
+  if (tokenError) {
+    return (
+      <div className="text-center space-y-4 py-8" role="alert">
+        <p className="font-semibold text-gray-900">Lien invalide</p>
+        <p className="text-sm text-gray-500">{tokenError}</p>
+        <button
+          onClick={() => router.push("/admin/login")}
+          className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700"
+        >
+          Se connecter
+        </button>
       </div>
     )
   }
