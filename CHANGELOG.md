@@ -17,6 +17,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 - **Sentry** : n'est plus actif qu'en production. Le développement local et les tests E2E chargeaient le vrai DSN depuis `.env` et envoyaient leurs erreurs (environnement `development`) dans le projet Sentry de production.
 
+### Ajouté
+
+- **Copie de sauvegarde hors site (Dropbox)** : `cronjob-backup-offsite.yaml` copie chaque nuit les fichiers déjà chiffrés du dump vers Dropbox via `rclone` (upload seulement, jamais de suppression côté Dropbox pilotée par la rotation locale), avec une rétention de 90 jours côté Dropbox, plus longue que les 30 jours du volume local. Mise en place documentée dans `docs/deploiement.md` (jeton OAuth à créer en local, jamais dans le dépôt).
+
 ---
 
 ## [1.12.0] — 2026-09-20

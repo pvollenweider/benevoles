@@ -170,6 +170,7 @@ jobs:
           kubectl apply -f k8s/cronjob-reminders.yaml
           kubectl apply -f k8s/cronjob-cleanup.yaml
           kubectl apply -f k8s/cronjob-backup.yaml
+          kubectl apply -f k8s/cronjob-backup-offsite.yaml
           export APP_IMAGE
           envsubst < k8s/deployment.yaml | kubectl apply -f -
 
