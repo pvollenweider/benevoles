@@ -47,21 +47,19 @@ async function run(req: Request) {
     where: { isActive: false, updatedAt: { lt: cutoff30d } },
   })
 
-  // --- 4. Expired tokens (housekeeping, not GDPR-critical) ---
+  // --- 4. Expired password-reset tokens (housekeeping, not GDPR-critical) ---
+  // Note: setup tokens (invite links) are deliberately NOT cleared here. Their
+  // route already returns a dedicated "lien expiré" message by checking
+  // setupTokenExpiresAt itself; clearing the token first would make an expired
+  // invite indistinguishable from an already-used one (generic 404 instead of
+  // the specific expiry message). The row (and its token) is still removed
+  // after 30 days of inactivity by step 3 above.
   const clearedResetTokens = await prisma.adminUser.updateMany({
     where: {
       passwordResetExpiresAt: { lt: now },
       passwordResetToken: { not: null },
     },
     data: { passwordResetToken: null, passwordResetExpiresAt: null },
-  })
-
-  const clearedSetupTokens = await prisma.adminUser.updateMany({
-    where: {
-      setupTokenExpiresAt: { lt: now },
-      setupToken: { not: null },
-    },
-    data: { setupToken: null, setupTokenExpiresAt: null },
   })
 
   return NextResponse.json({
@@ -73,7 +71,6 @@ async function run(req: Request) {
     },
     tokensCleaned: {
       passwordReset: clearedResetTokens.count,
-      setup: clearedSetupTokens.count,
     },
   })
 }
