@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { orgBaseUrl } from "@/lib/urls"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
+import { logEvent } from "@/lib/event-log"
 
 export async function GET(req: Request, { params }: { params: Promise<{ token: string }> }) {
   const rl = rateLimit(getClientIp(req), "reg-token-read", 10, 60 * 60 * 1000)
@@ -80,7 +81,18 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
     data: { status: "cancelled" },
   })
 
-  await promoteNextInWaitlist(registration.shiftId).catch(() => {})
+  const cancelLogId = await logEvent({
+    eventId: registration.eventId,
+    actor: { type: "volunteer", id: registration.volunteerId },
+    action: "registration.cancelled",
+    entityType: "Registration",
+    entityId: registration.id,
+    // shiftId unchanged: recorded so the narrative can still name the shift — see
+    // describeChanges's shiftId filter in event-log-narrative.ts.
+    changes: { status: { from: "active", to: "cancelled" }, shiftId: { from: registration.shiftId, to: registration.shiftId } },
+  })
+
+  await promoteNextInWaitlist(registration.shiftId, cancelLogId ?? undefined).catch(() => {})
 
   return NextResponse.json({ success: true })
 }

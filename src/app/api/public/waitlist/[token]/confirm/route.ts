@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
+import { logEvent } from "@/lib/event-log"
 
 export async function POST(_req: Request, { params }: { params: Promise<{ token: string }> }) {
   const rl = rateLimit(getClientIp(_req), "waitlist-confirm", 10, 60 * 60 * 1000)
@@ -34,6 +35,24 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
       waitingOfferedAt: null,
       waitingExpiresAt: null,
     },
+  })
+
+  // Link back to the offer that made this possible, itself already linked to whatever
+  // cancellation freed the spot — closes the causal chain for narrative mode.
+  const offerLog = await prisma.eventLog.findFirst({
+    where: { entityType: "Registration", entityId: reg.id, action: "registration.waitlist_offered" },
+    orderBy: { createdAt: "desc" },
+    select: { id: true },
+  })
+
+  await logEvent({
+    eventId: reg.eventId,
+    actor: { type: "volunteer", id: reg.volunteerId },
+    action: "registration.waitlist_confirmed",
+    entityType: "Registration",
+    entityId: reg.id,
+    changes: { status: { from: "offered", to: "active" } },
+    causedByLogId: offerLog?.id,
   })
 
   // Send confirmation email

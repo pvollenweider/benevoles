@@ -3,6 +3,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { generateToken } from "@/lib/utils"
 import { z } from "zod"
+import { adminActor, logEvent } from "@/lib/event-log"
 
 const schema = z.object({
   eventId: z.string(),
@@ -58,6 +59,15 @@ export async function POST(req: Request) {
   if (shift.registrations.length + 1 >= shift.capacity) {
     await prisma.shift.update({ where: { id: shiftId }, data: { status: "full" } })
   }
+
+  await logEvent({
+    eventId,
+    actor: adminActor(guard.session),
+    action: "registration.created",
+    entityType: "Registration",
+    entityId: registration.id,
+    changes: { shiftId: { from: null, to: shiftId }, source: { from: null, to: "admin_manual" } },
+  })
 
   return NextResponse.json(registration, { status: 201 })
 }

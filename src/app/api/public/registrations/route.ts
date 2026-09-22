@@ -4,6 +4,7 @@ import { generateToken, shiftsOverlap } from "@/lib/utils"
 import { sendConfirmationEmail, sendAdminNotification } from "@/lib/email"
 import { sendNotification } from "@/lib/notifications"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
+import { logEvent } from "@/lib/event-log"
 import { z } from "zod"
 
 const schema = z.object({
@@ -146,6 +147,17 @@ export async function POST(req: Request) {
   )
 
   const editToken = registrations[0].editToken
+
+  for (const reg of registrations) {
+    await logEvent({
+      eventId,
+      actor: { type: "volunteer", id: volunteer.id },
+      action: reg.status === "waiting" ? "registration.waitlist_joined" : "registration.created",
+      entityType: "Registration",
+      entityId: reg.id,
+      changes: { shiftId: { from: null, to: reg.shiftId }, source: { from: null, to: "public_form" } },
+    })
+  }
 
   // Mark the member invite as used (kept valid for re-visits per product
   // decision — only the first usage is timestamped).

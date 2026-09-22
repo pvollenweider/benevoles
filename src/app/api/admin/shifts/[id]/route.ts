@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 import { z } from "zod"
 import { clockSchema, firstIssueMessage, SAME_TIME_ERROR } from "@/lib/shift-time"
+import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 
 const schema = z.object({
   roleName: z.string().optional(),
@@ -56,6 +57,27 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   const after = await prisma.shift.update({ where: { id }, data: updateData })
 
+  const shiftChanges = diffFields(before, after, [
+    "roleName",
+    "label",
+    "date",
+    "startTime",
+    "endTime",
+    "capacity",
+    "status",
+    "waitlistEnabled",
+  ])
+  if (shiftChanges) {
+    await logEvent({
+      eventId: before.event.id,
+      actor: adminActor(guard.session),
+      action: "shift.updated",
+      entityType: "Shift",
+      entityId: id,
+      changes: shiftChanges,
+    })
+  }
+
   // Detect schedule changes worth notifying about (date / start / end).
   const scheduleChanged =
     (rest.date && before.date.toISOString() !== after.date.toISOString()) ||
@@ -99,7 +121,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const shift = await db.shift.findFirst({
     where: { id },
     include: {
-      event: { select: { title: true, slug: true, organization: { select: { slug: true } } } },
+      event: { select: { id: true, title: true, slug: true, organization: { select: { slug: true } } } },
       registrations: { where: { status: "active" }, include: { volunteer: true } },
     },
   })
@@ -107,12 +129,32 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
 
   await prisma.shift.update({ where: { id }, data: { status: "cancelled" } })
 
+  const cancelLogId = await logEvent({
+    eventId: shift.event.id,
+    actor: adminActor(guard.session),
+    action: "shift.cancelled",
+    entityType: "Shift",
+    entityId: id,
+    changes: { status: { from: shift.status, to: "cancelled" } },
+  })
+
   // Cascade-cancel active registrations and notify each volunteer.
   let notified = 0
   for (const reg of shift.registrations) {
     await prisma.registration.update({
       where: { id: reg.id },
       data: { status: "cancelled" },
+    })
+    await logEvent({
+      eventId: shift.event.id,
+      actor: adminActor(guard.session),
+      action: "registration.cancelled",
+      entityType: "Registration",
+      entityId: reg.id,
+      // shiftId unchanged (from === to): recorded so the narrative can still name the shift —
+      // see describeChanges's shiftId filter in event-log-narrative.ts.
+      changes: { status: { from: "active", to: "cancelled" }, shiftId: { from: id, to: id } },
+      causedByLogId: cancelLogId ?? undefined,
     })
     const result = await sendNotification({
       kind: "shift_cancelled",
