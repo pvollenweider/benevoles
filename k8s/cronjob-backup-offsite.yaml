@@ -1,0 +1,70 @@
+# Copie chaque nuit à 01h30 UTC (30 min après le dump, cronjob-backup.yaml) les fichiers
+# chiffrés du volume backup-pvc vers Dropbox, via rclone. Les fichiers sont déjà chiffrés
+# AES-256 avant d'arriver ici : rclone ne voit et n'envoie que du contenu déjà illisible sans
+# BACKUP_PASSPHRASE.
+#
+# Utilise "copy" (upload uniquement, ne touche jamais aux fichiers déjà présents côté Dropbox)
+# puis "delete --min-age" pour purger côté Dropbox les fichiers de plus de 90 jours. Ce n'est
+# volontairement pas "sync" : la rotation locale du PVC est à 30 jours, donc un sync effacerait
+# côté Dropbox tout fichier que le PVC a déjà purgé, rendant la copie hors site inutile en cas
+# de perte du cluster (le PVC et son historique auraient disparu en même temps).
+#
+# Mise en place du remote Dropbox (à faire une fois, en local, jamais dans ce dépôt) :
+#   1. rclone config  →  nouveau remote nommé "dropbox", type "dropbox", autoriser dans le
+#      navigateur. Produit ~/.config/rclone/rclone.conf (contient un jeton OAuth, secret).
+#   2. kubectl create secret generic rclone-config -n benevoles \
+#        --from-file=rclone.conf=$HOME/.config/rclone/rclone.conf
+#      (à refaire si le jeton est révoqué ou expire ; Dropbox ne fait pas expirer les jetons
+#      rclone par défaut, mais une révocation manuelle côté Dropbox le ferait.)
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-offsite-dropbox
+  namespace: benevoles
+spec:
+  schedule: "30 1 * * *"   # 01:30 UTC chaque nuit
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: OnFailure
+          volumes:
+            - name: backup-storage
+              persistentVolumeClaim:
+                claimName: backup-pvc
+                readOnly: true
+            - name: rclone-config
+              secret:
+                secretName: rclone-config
+          containers:
+            - name: offsite-sync
+              image: rclone/rclone:1.68
+              volumeMounts:
+                - name: backup-storage
+                  mountPath: /backups
+                  readOnly: true
+                - name: rclone-config
+                  mountPath: /config/rclone
+                  readOnly: true
+              command:
+                - sh
+                - -c
+                - |
+                  set -e
+                  echo "==> Envoi vers Dropbox"
+                  rclone copy /backups dropbox:/benevol-backups \
+                    --config /config/rclone/rclone.conf \
+                    --checksum -v
+
+                  echo "==> Purge des fichiers Dropbox de plus de 90 jours"
+                  rclone delete dropbox:/benevol-backups \
+                    --config /config/rclone/rclone.conf \
+                    --min-age 90d -v
+
+                  echo "==> Inventaire Dropbox :"
+                  rclone lsl dropbox:/benevol-backups --config /config/rclone/rclone.conf

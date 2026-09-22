@@ -52,6 +52,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `cronjob-reminders.yaml` | Rappels, toutes les heures |
 | `cronjob-cleanup.yaml` | Purge RGPD, 02:00 UTC |
 | `cronjob-backup.yaml` | `pg_dump` chiffré (AES-256) vers un volume, 01:00 UTC, rétention 30 jours |
+| `cronjob-backup-offsite.yaml` | Copie des fichiers déjà chiffrés vers Dropbox (`rclone`), 01:30 UTC, rétention 90 jours côté Dropbox |
 | `log-rotation.md` | Rétention des logs sur 90 jours |
 
 Mise en place manuelle :
@@ -151,7 +152,33 @@ openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -pass pass:<PASSPHRASE> \
   -in benevoles_<date>.sql.gz.enc -out dump.sql.gz && gunzip dump.sql.gz
 ```
 
-Le volume de sauvegarde est sur le même cluster que la base : une panne de cluster ou de ce volume emporte les deux. Une copie hors cluster (voir pistes ci-dessous) reste à mettre en place. Tester une restauration complète avant d'en dépendre : ce test n'a pas encore été fait.
+### Copie hors site (Dropbox)
+
+`cronjob-backup-offsite.yaml` copie chaque nuit à 01h30 UTC (30 min après le dump) les fichiers déjà chiffrés du volume `backup-pvc` vers Dropbox avec `rclone`. Comme les fichiers sont déjà chiffrés AES-256 avant d'être lus par ce job, Dropbox ne voit jamais rien de lisible sans `BACKUP_PASSPHRASE`.
+
+- Envoi avec `rclone copy` (upload seulement, ne touche jamais aux fichiers déjà présents côté Dropbox) puis purge côté Dropbox des fichiers de plus de **90 jours** avec `rclone delete --min-age`. Volontairement plus long que la rétention locale de 30 jours du PVC : le but est de pouvoir revenir à un état antérieur à une erreur découverte tard, indépendamment de ce que la rotation locale a déjà supprimé.
+- Ce n'est pas un `rclone sync` : un `sync` effacerait côté Dropbox tout fichier que le PVC a déjà purgé, ce qui viderait la copie hors site en même temps que le volume local en cas de perte du cluster — exactement le scénario que la copie hors site est censée couvrir.
+
+**Mise en place du remote Dropbox** (à faire une fois, en local — jamais dans ce dépôt, le jeton produit est un secret) :
+
+```bash
+rclone config
+# Nouveau remote → nom "dropbox" → type "dropbox" → autoriser dans le navigateur
+# Produit ~/.config/rclone/rclone.conf
+```
+
+```bash
+kubectl create secret generic rclone-config -n benevoles \
+  --from-file=rclone.conf=$HOME/.config/rclone/rclone.conf
+```
+
+À refaire si le jeton est révoqué côté Dropbox (Dropbox ne fait pas expirer les jetons rclone par défaut). Tant que ce secret n'existe pas, le CronJob échoue simplement (pod bloqué faute de volume) ; ça n'affecte pas le dump local (`cronjob-backup.yaml`), qui est un job séparé.
+
+Restauration depuis Dropbox : télécharger le fichier voulu (`rclone copy dropbox:/benevol-backups/<fichier> .`), puis déchiffrer comme ci-dessus.
+
+### Limites actuelles
+
+Le volume de sauvegarde local est sur le même cluster que la base : une panne de cluster emporte les deux, d'où la copie Dropbox ci-dessus. Pas encore fait : alerte en cas d'échec d'un des deux CronJobs (ni l'un ni l'autre n'envoie de notification — un échec silencieux comme celui du 22/09/2026 resterait invisible sans consulter `kubectl` manuellement) ; test de restauration complète, jamais effectué.
 
 ## Journaux
 
