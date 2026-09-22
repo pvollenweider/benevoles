@@ -152,6 +152,18 @@ openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -pass pass:<PASSPHRASE> \
   -in benevoles_<date>.sql.gz.enc -out dump.sql.gz && gunzip dump.sql.gz
 ```
 
+### `BACKUP_PASSPHRASE` est un point unique de défaillance
+
+Elle n'existe qu'à un seul endroit : la clé `BACKUP_PASSPHRASE` du secret `benevoles-secret`, sur ce cluster. Elle n'est **pas** synchronisée depuis les secrets GitHub Actions (`deploy.yml` ne la gère pas, contrairement au reste de `benevoles-secret`) — elle a été ajoutée directement dans le cluster, à la main.
+
+Conséquence : si le cluster est perdu **et** que personne n'a cette valeur ailleurs, la copie hors site sur Dropbox (voir ci-dessous) ne sert à rien — elle ne contient que du binaire chiffré, pour toujours illisible sans elle. La copie Dropbox protège contre « le fichier a disparu », pas contre « la clé a disparu » ; les deux protections sont indépendantes.
+
+**À faire une fois, en dehors du cluster** : récupérer la valeur et la noter dans un gestionnaire de mots de passe (jamais dans ce dépôt, ni dans un fichier sur ce même serveur) :
+
+```bash
+kubectl -n benevoles get secret benevoles-secret -o jsonpath='{.data.BACKUP_PASSPHRASE}' | base64 -d; echo
+```
+
 ### Copie hors site (Dropbox)
 
 `cronjob-backup-offsite.yaml` copie chaque nuit à 01h30 UTC (30 min après le dump) les fichiers déjà chiffrés du volume `backup-pvc` vers Dropbox avec `rclone`. Comme les fichiers sont déjà chiffrés AES-256 avant d'être lus par ce job, Dropbox ne voit jamais rien de lisible sans `BACKUP_PASSPHRASE`.
