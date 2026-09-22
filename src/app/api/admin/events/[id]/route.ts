@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { titlesMatch } from "@/lib/confirm-title"
+import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 
 const showSchema = z.object({
@@ -57,7 +58,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const parsed = schema.safeParse(body)
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
 
-  const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
+  const owned = await db.event.findFirst({
+    where: { id },
+    select: { id: true, title: true, publicStatus: true, startDate: true, endDate: true, publicInstructions: true, remindersEnabled: true },
+  })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   const data = parsed.data
@@ -67,6 +71,27 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   try {
     const event = await prisma.event.update({ where: { id }, data: updateData })
+
+    const eventChanges = diffFields(owned, event, [
+      "title",
+      "publicStatus",
+      "startDate",
+      "endDate",
+      "publicInstructions",
+      "remindersEnabled",
+    ])
+    if (eventChanges) {
+      const statusChangedTo = eventChanges.publicStatus?.to
+      await logEvent({
+        eventId: id,
+        actor: adminActor(guard.session),
+        action: statusChangedTo === "published" ? "event.published" : statusChangedTo === "archived" ? "event.archived" : "event.updated",
+        entityType: "Event",
+        entityId: id,
+        changes: eventChanges,
+      })
+    }
+
     return NextResponse.json(event)
   } catch (err) {
     console.error("Event PATCH error:", err)

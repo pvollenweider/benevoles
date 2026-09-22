@@ -8,15 +8,15 @@ datasource db {
 }
 
 model Organization {
-  id               String  @id @default(cuid())
+  id               String   @id @default(cuid())
   name             String
-  slug             String  @unique
-  active           Boolean @default(true)
+  slug             String   @unique
+  active           Boolean  @default(true)
   volunteerCharter String?
-  hasOrgInsurance  Boolean @default(true)
+  hasOrgInsurance  Boolean  @default(true)
   publicTitle      String? // headline of the public events page; null = "Bénévoles"
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   events      Event[]
   volunteers  Volunteer[]
@@ -55,9 +55,44 @@ model Event {
   shifts        Shift[]
   registrations Registration[]
   memberInvites MemberInvite[]
+  logs          EventLog[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
+}
+
+// Attached to the event, not to the entity it documents: it must survive the deletion of the
+// Shift/Registration/etc. it's about (that's the whole point — "a registration disappeared,
+// why?" needs an answer even after the registration is gone). Purged only when the whole event
+// is deleted, same as the rest of its data.
+//
+// No actor display name is stored here (no `actorLabel`), on purpose: it would duplicate the
+// admin's or volunteer's name into a place that outlives their own record, exactly what the
+// minimal-PII rule on `changes` already rules out for the subject of an action. `actorId` (no
+// foreign key) is resolved to a display name at read time by joining AdminUser/Volunteer; when
+// that join misses (removed admin, RGPD-purged volunteer), the UI falls back to a generic label
+// per `actorType` — see docs/roles-et-permissions.md.
+model EventLog {
+  id            String   @id @default(cuid())
+  eventId       String
+  actorType     String // "admin" | "volunteer" | "system"
+  actorId       String? // AdminUser.id or Volunteer.id depending on actorType; null for system actions
+  action        String // dot-namespaced, e.g. "shift.created", "registration.cancelled"
+  entityType    String // "Shift" | "Registration" | "Event" | "MemberInvite"
+  entityId      String
+  changes       Json? // { field: { from, to } }, non-PII values only
+  causedByLogId String? // set when this entry is a direct, known consequence of another one
+  // (e.g. a cancellation that triggers a waitlist offer) — never inferred from timing, only
+  // ever set explicitly by the code path that knows the causal link. Powers narrative mode:
+  // it follows this chain, it does not guess one from proximity.
+  createdAt     DateTime @default(now())
+
+  event     Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  causedBy  EventLog?  @relation("LogCausality", fields: [causedByLogId], references: [id], onDelete: SetNull)
+  caused    EventLog[] @relation("LogCausality")
+
+  @@index([eventId, createdAt])
+  @@index([causedByLogId])
 }
 
 model Shift {
@@ -105,22 +140,22 @@ model Volunteer {
 }
 
 model Registration {
-  id             String    @id @default(cuid())
-  eventId        String
-  shiftId        String
-  volunteerId    String
-  status         String    @default("active")
-  source         String    @default("public_form")
-  comment        String?
-  editToken      String    @unique
-  reminderJ2Sent    DateTime?
-  reminderJ1Sent    DateTime?
-  reminderDdSent    DateTime?
-  waitingPosition   Int?
-  waitingOfferedAt  DateTime?
-  waitingExpiresAt  DateTime?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  id               String    @id @default(cuid())
+  eventId          String
+  shiftId          String
+  volunteerId      String
+  status           String    @default("active")
+  source           String    @default("public_form")
+  comment          String?
+  editToken        String    @unique
+  reminderJ2Sent   DateTime?
+  reminderJ1Sent   DateTime?
+  reminderDdSent   DateTime?
+  waitingPosition  Int?
+  waitingOfferedAt DateTime?
+  waitingExpiresAt DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
   event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   shift     Shift     @relation(fields: [shiftId], references: [id], onDelete: Cascade)
@@ -160,19 +195,19 @@ model PushSubscription {
 }
 
 model AdminUser {
-  id                  String    @id @default(cuid())
-  organizationId      String?
-  email               String    @unique
-  name                String
-  passwordHash        String
-  role                String    @default("admin")
-  isActive            Boolean   @default(true)
-  setupToken              String?   @unique
-  setupTokenExpiresAt     DateTime?
-  passwordResetToken      String?   @unique
-  passwordResetExpiresAt  DateTime?
-  createdAt               DateTime  @default(now())
-  updatedAt               DateTime  @updatedAt
+  id                     String    @id @default(cuid())
+  organizationId         String?
+  email                  String    @unique
+  name                   String
+  passwordHash           String
+  role                   String    @default("admin")
+  isActive               Boolean   @default(true)
+  setupToken             String?   @unique
+  setupTokenExpiresAt    DateTime?
+  passwordResetToken     String?   @unique
+  passwordResetExpiresAt DateTime?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
 
   organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
 

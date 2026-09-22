@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { sendMemberInvite } from "@/lib/email"
+import { adminActor, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { randomBytes } from "crypto"
 
@@ -125,6 +126,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       select: { id: true, volunteerId: true, token: true },
     })
     created.push(invite)
+    await logEvent({
+      eventId,
+      actor: adminActor(guard.session),
+      action: "memberinvite.sent",
+      entityType: "MemberInvite",
+      entityId: invite.id,
+    })
   }
 
   // Send emails in parallel so a slow SMTP doesn't make the route

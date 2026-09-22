@@ -3,6 +3,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { clockSchema, firstIssueMessage, SAME_TIME_ERROR } from "@/lib/shift-time"
+import { adminActor, logEvent } from "@/lib/event-log"
 
 const schema = z.object({
   eventId: z.string(),
@@ -37,6 +38,21 @@ export async function POST(req: Request) {
 
   const shift = await prisma.shift.create({
     data: { ...data, date: new Date(data.date), status: "open" },
+  })
+
+  await logEvent({
+    eventId: data.eventId,
+    actor: adminActor(guard.session),
+    action: "shift.created",
+    entityType: "Shift",
+    entityId: shift.id,
+    changes: {
+      roleName: { from: null, to: data.roleName },
+      date: { from: null, to: data.date },
+      startTime: { from: null, to: data.startTime },
+      endTime: { from: null, to: data.endTime },
+      capacity: { from: null, to: data.capacity },
+    },
   })
 
   return NextResponse.json(shift, { status: 201 })

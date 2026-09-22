@@ -28,7 +28,15 @@ body {
 }
 
 .input:focus {
-  ring: 2px solid #3b82f6;
   border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  /* `ring: ...` here was never a real CSS property (a Tailwind class name misused in plain
+     CSS) — the only visible indicator was this box-shadow, at 20% opacity (~1.26:1 against
+     white), well under the 3:1 WCAG 1.4.11 minimum for a focus indicator. Full opacity fixes it. */
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 1);
+}
+
+button:focus-visible,
+input[type="range"]:focus-visible {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
 }
