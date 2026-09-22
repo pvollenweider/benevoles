@@ -2,8 +2,8 @@
 # Exécuté chaque nuit à 01h00 UTC (avant le cleanup à 02h00).
 #
 # Format du fichier : /backups/benevoles_YYYY-MM-DD_HH-MM.sql.gz.enc
-# Déchiffrement : openssl enc -d -aes-256-cbc -pbkdf2 -pass pass:<PASSPHRASE> \
-#                   -in benevoles_<date>.sql.gz.enc | gunzip > dump.sql
+# Déchiffrement : openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -pass pass:<PASSPHRASE> \
+#                   -in benevoles_<date>.sql.gz.enc -out dump.sql.gz && gunzip dump.sql.gz
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -72,13 +72,47 @@ spec:
                   FILENAME="benevoles_$(date -u +%Y-%m-%d_%H-%M).sql.gz.enc"
                   echo "==> Dump : ${FILENAME}"
 
-                  pg_dump --no-password \
-                    | gzip \
-                    | openssl enc -aes-256-cbc -pbkdf2 -iter 100000 \
-                        -pass "pass:${BACKUP_PASSPHRASE}" \
-                    > "/backups/${FILENAME}"
+                  # postgres:16-alpine does not ship an openssl CLI (only libssl3). Every backup
+                  # has failed on this ever since the job was created: with the old "cmd | cmd |
+                  # openssl > file" pipeline, the redirection still creates the (empty) output
+                  # file before "openssl: not found" fails the last stage of the pipe.
+                  apk add --no-cache -q openssl
 
-                  echo "==> Taille : $(du -sh /backups/${FILENAME} | cut -f1)"
+                  # pg_dump writes to a plain file (not a pipe) on purpose: "cmd | gzip | openssl"
+                  # only checks the LAST command's exit code, so a failing pg_dump would still
+                  # produce a "successful", empty encrypted file. A direct redirection is caught
+                  # by set -e like any other command.
+                  pg_dump --no-password > /tmp/dump.sql
+                  DUMP_SIZE=$(wc -c < /tmp/dump.sql)
+                  echo "==> Dump non compressé : ${DUMP_SIZE} octets"
+                  if [ "$DUMP_SIZE" -lt 1024 ]; then
+                    echo "ERREUR : dump anormalement petit (${DUMP_SIZE} octets), backup abandonné." >&2
+                    exit 1
+                  fi
+
+                  gzip -c /tmp/dump.sql > /tmp/dump.sql.gz
+                  openssl enc -aes-256-cbc -pbkdf2 -iter 100000 \
+                    -pass "pass:${BACKUP_PASSPHRASE}" \
+                    -in /tmp/dump.sql.gz -out "/backups/${FILENAME}"
+
+                  # Verify the file just written actually decrypts back to the same dump, instead
+                  # of trusting that openssl/gzip exiting 0 means the backup is usable. Each step
+                  # writes to a plain file so a failure is caught by its own exit code (set -e),
+                  # not hidden behind the exit code of a later stage in a pipe.
+                  openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 \
+                    -pass "pass:${BACKUP_PASSPHRASE}" \
+                    -in "/backups/${FILENAME}" -out /tmp/verify.sql.gz
+                  gunzip -c /tmp/verify.sql.gz > /tmp/verify.sql
+                  VERIFY_SIZE=$(wc -c < /tmp/verify.sql)
+                  if [ "$VERIFY_SIZE" != "$DUMP_SIZE" ]; then
+                    echo "ERREUR : vérification échouée (${VERIFY_SIZE} vs ${DUMP_SIZE} octets), fichier corrompu." >&2
+                    rm -f "/backups/${FILENAME}"
+                    exit 1
+                  fi
+                  echo "==> Vérifié : déchiffrement + décompression redonnent ${VERIFY_SIZE} octets"
+
+                  rm -f /tmp/dump.sql /tmp/dump.sql.gz /tmp/verify.sql.gz /tmp/verify.sql
+                  echo "==> Taille finale : $(du -sh /backups/${FILENAME} | cut -f1)"
 
                   # Rotation : supprime les backups de plus de 30 jours
                   DELETED=$(find /backups -name "benevoles_*.sql.gz.enc" \
