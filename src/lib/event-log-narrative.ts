@@ -84,6 +84,9 @@ const ACTION_VERB: Record<string, (actor: string) => string> = {
   "event.archived": (a) => `${a} a archivé l'événement`,
   "event.updated": (a) => `${a} a modifié les paramètres de l'événement`,
   "memberinvite.sent": (a) => `${a} a envoyé une invitation`,
+  "eventpage.created": (a) => `${a} a créé une page`,
+  "eventpage.updated": (a) => `${a} a modifié une page`,
+  "eventpage.deleted": (a) => `${a} a supprimé une page`,
   // Not a real event: a synthetic snapshot of current state for entities that predate logging
   // (see the baseline endpoint). Worded as an observation, never as something that "happened".
   "shift.baseline": () => "état initial observé (avant le suivi du journal)",

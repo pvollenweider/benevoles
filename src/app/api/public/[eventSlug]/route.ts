@@ -26,6 +26,10 @@ export async function GET(
         include: { registrations: { where: { status: "active" } } },
         orderBy: [{ date: "asc" }, { displayOrder: "asc" }, { startTime: "asc" }],
       },
+      pages: {
+        select: { slug: true, title: true },
+        orderBy: { displayOrder: "asc" },
+      },
     },
   })
 
@@ -62,5 +66,6 @@ export async function GET(
     showSchedule: event.showSchedule,
     volunteerCharter: event.organization.volunteerCharter,
     shifts,
+    pages: event.pages,
   })
 }
