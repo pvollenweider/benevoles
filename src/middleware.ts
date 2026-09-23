@@ -1,10 +1,9 @@
 import NextAuth from "next-auth"
 import { authConfig } from "./auth.config"
 import { NextResponse } from "next/server"
+import { orgSlugFromHost } from "@/lib/org-subdomain"
 
 const { auth } = NextAuth(authConfig)
-
-const NON_ORG_SUBDOMAINS = new Set(["www", "app", "admin", "api", "staging"])
 
 export default auth((req) => {
   const { pathname } = req.nextUrl
@@ -34,11 +33,10 @@ export default auth((req) => {
 
   // --- Org subdomain injection ---
   // [orgSlug].benevol.app → inject x-org-slug header for server components and API routes
-  const host = (req.headers.get("host") ?? "").split(":")[0]
-  const parts = host.split(".")
   const requestHeaders = new Headers(req.headers)
-  if (parts.length === 3 && !NON_ORG_SUBDOMAINS.has(parts[0])) {
-    requestHeaders.set("x-org-slug", parts[0])
+  const orgSlug = orgSlugFromHost(req.headers.get("host") ?? "")
+  if (orgSlug) {
+    requestHeaders.set("x-org-slug", orgSlug)
   } else {
     // Dev fallback: ?org=slug query param when no subdomain available
     const orgFromQuery = req.nextUrl.searchParams.get("org")
