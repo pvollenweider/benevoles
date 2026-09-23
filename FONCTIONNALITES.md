@@ -55,6 +55,13 @@ Liste exhaustive des fonctionnalités de l'application.
 - Arrivée depuis un lien email : le token est stocké en `localStorage` — le bénévole est automatiquement reconnu s'il navigue vers la page de l'événement
 - Lien « Retour à l'accueil » pointe directement sur la page de l'événement
 
+### Pages personnalisées de l'événement (`/{orgSlug}/{eventSlug}/{pageSlug}`)
+
+- Pages statiques additionnelles créées par l'admin pour un événement, en complément des instructions publiques (ex. FAQ, accès et lieu, règlement, infos pratiques, matériel à apporter)
+- Liste des pages affichée sous forme de liens sur la page de l'événement, juste après les instructions publiques
+- Contenu rédigé en Markdown par l'admin (gras, listes, titres, liens, tableaux) et rendu en HTML sécurisé
+- Pas de contenu personnalisé par bénévole : chaque page est la même pour tout le monde
+
 ### Pages légales
 
 - Politique de confidentialité (`/legal/privacy`) et conditions d'utilisation (`/legal/terms`)
@@ -91,6 +98,15 @@ Liste exhaustive des fonctionnalités de l'application.
 - Vue de synthèse : créneaux, places totales, inscrits, places restantes
 - Lien direct vers la vue publique (affiché uniquement si l'événement est publié)
 - QR code de la page publique (formats PNG et SVG téléchargeables)
+
+### Pages personnalisées (`/admin/events/[id]/pages`)
+
+- Liste ordonnée de pages statiques par événement, en plus du champ unique « instructions publiques » (ex. Règlement, FAQ, Accès et lieu, Ce qu'il faut apporter)
+- Création et édition : titre + contenu en Markdown (zone de texte simple) — pas d'éditeur riche, pas de variables à injecter, le contenu est identique pour tous les bénévoles
+- Slug généré automatiquement depuis le titre, dédoublonné (`faq`, `faq-2`…)
+- **Réordonnancement** : boutons monter/descendre (accessibles au clavier), persisté via `displayOrder`
+- Suppression avec confirmation
+- Chaque création, modification et suppression est tracée dans le journal d'événement ; le contenu de la page n'est jamais stocké dans le journal (seuls le titre et le slug le sont, le contenu est noté « (modifié) »)
 
 ### Programme des spectacles
 
