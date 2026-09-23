@@ -54,6 +54,10 @@ export default function MyRegistrationPage() {
         }
         setLoading(false)
       })
+      .catch(() => {
+        setError("Une erreur est survenue. Réessayez.")
+        setLoading(false)
+      })
   }, [token])
 
   async function handleCancel(editToken: string) {
