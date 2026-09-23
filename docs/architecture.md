@@ -18,6 +18,7 @@ CronJobs Kubernetes ──► /api/cron/reminders, /api/cron/cleanup
 |--------|---------|
 | `src/app/[orgSlug]/[eventSlug]/` | Page publique d'un événement (timeline Gantt, formulaire d'inscription) |
 | `src/app/[eventSlug]/[pageSlug]/` | Page personnalisée d'un événement (FAQ, lieu, règlement…), rendue depuis le Markdown en base |
+| `src/app/leader/[token]/` | Roster lecture seule d'un responsable de secteur (#186) |
 | `src/app/my/[token]/` | Gestion de son inscription par le bénévole |
 | `src/app/waitlist/[token]/confirm/` | Confirmation d'une place de liste d'attente |
 | `src/app/admin/` | Administration d'une organisation |
@@ -45,6 +46,7 @@ Modules `src/lib/` à connaître :
 | `csv-import.ts` | Import CSV et xlsx des membres |
 | `volunteer-charter.ts` | Texte par défaut de la charte du bénévole |
 | `event-page-markdown.ts` | Rend le Markdown des pages personnalisées d'événement en HTML (`marked`), sanitisé avec DOMPurify (liste blanche de balises/attributs) à la lecture, pas à l'écriture |
+| `sector-leaders.ts` | Notifie les responsables de secteur d'un poste à chaque nouvelle inscription (#186) |
 
 ## Multi-tenant
 
@@ -70,6 +72,7 @@ Modèles Prisma (`prisma/schema.prisma`) :
 | `MemberInvite` | Invitation d'un membre à un événement |
 | `PushSubscription` | Abonnement push |
 | `EventPage` | Page statique additionnelle d'un événement (FAQ, lieu, règlement…) : titre, slug, contenu Markdown, ordre |
+| `SectorLeader` | Responsable d'un poste (`roleName`) au sein d'un événement : nom, email, jeton d'accès lecture seule (#186) |
 
 Statuts d'une inscription : `active`, `waiting` (en liste d'attente), `offered` (place proposée) et `cancelled`.
 

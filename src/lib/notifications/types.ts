@@ -25,6 +25,8 @@ export type NotificationKind =
   | "password_reset"
   | "waitlist_confirmation"
   | "waitlist_offered"
+  | "sector_leader_invite"
+  | "sector_leader_new_signup"
 
 export type Recipient = {
   email?: string | null

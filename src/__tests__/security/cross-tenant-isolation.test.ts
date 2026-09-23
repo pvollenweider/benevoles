@@ -483,3 +483,39 @@ describe("Invitations — cross-tenant isolation", () => {
     expect(res.status).toBe(404)
   })
 })
+
+// ── Sector leaders (#186) ────────────────────────────────────────────────────
+
+describe("Sector leaders — cross-tenant isolation", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("GET /api/admin/events/[id]/sector-leaders returns 404 for org-B event", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/sector-leaders/route")
+    setupGuard() // event.findFirst → null
+
+    const res = await GET(makeRequest("/api/admin/events/evt-b/sector-leaders"), params("evt-b"))
+    expect(res.status).toBe(404)
+  })
+
+  it("POST /api/admin/events/[id]/sector-leaders returns 404 for org-B event", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/sector-leaders/route")
+    setupGuard()
+
+    const res = await POST(
+      makeRequest("/api/admin/events/evt-b/sector-leaders", "POST", { roleName: "Bar", name: "Alice", email: "a@x.com" }),
+      params("evt-b"),
+    )
+    expect(res.status).toBe(404)
+  })
+
+  it("DELETE /api/admin/events/[id]/sector-leaders/[leaderId] returns 404 for org-B event", async () => {
+    const { DELETE } = await import("@/app/api/admin/events/[id]/sector-leaders/[leaderId]/route")
+    setupGuard()
+
+    const res = await DELETE(
+      makeRequest("/api/admin/events/evt-b/sector-leaders/leader-1", "DELETE"),
+      { params: Promise.resolve({ id: "evt-b", leaderId: "leader-1" }) },
+    )
+    expect(res.status).toBe(404)
+  })
+})

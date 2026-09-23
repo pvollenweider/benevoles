@@ -24,6 +24,7 @@ const ENTITY_LABELS: Record<string, string> = {
   Event: "Événement",
   MemberInvite: "Invitation",
   EventPage: "Page",
+  SectorLeader: "Responsable de secteur",
 }
 
 const ACTOR_TYPE_LABELS: Record<string, string> = {
@@ -39,6 +40,7 @@ const ACTION_PREFIXES = [
   { value: "event", label: "Événement" },
   { value: "memberinvite", label: "Invitations" },
   { value: "eventpage", label: "Pages" },
+  { value: "sectorleader", label: "Responsables de secteur" },
 ]
 
 function fmtDateTime(iso: string) {

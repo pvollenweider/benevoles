@@ -23,6 +23,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/public/registrations/[token]` | GET, DELETE | public (jeton) | Consulter ou annuler une inscription |
 | `/api/public/member-invite/[token]` | GET | public (jeton) | Données de pré-remplissage d'une invitation |
 | `/api/public/waitlist/[token]/confirm` | GET, POST | public (jeton) | Consulter puis confirmer une place de liste d'attente |
+| `/api/public/leader/[token]` | GET | public (jeton) | Roster lecture seule d'un responsable de secteur : bénévoles inscrits sur son poste (#186) |
 | `/api/public/push` | GET, POST, DELETE | public | Clé VAPID publique, abonnement et désabonnement push |
 | `/api/public/forgot-password` | POST | public | Envoie un email de réinitialisation du mot de passe admin |
 | `/api/public/reset-password` | POST | public (jeton) | Définit un nouveau mot de passe |
@@ -45,6 +46,8 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/admin/events/[id]/pages` | GET, POST | Lister, créer une page personnalisée de l'événement (titre, contenu Markdown) ; slug généré depuis le titre et dédoublonné |
 | `/api/admin/events/[id]/pages/[pageId]` | PATCH, DELETE | Modifier, supprimer une page |
 | `/api/admin/events/[id]/pages/reorder` | POST | Réordonner les pages (`{ "pageIds": [...] }`, ordre = position dans le tableau) |
+| `/api/admin/events/[id]/sector-leaders` | GET, POST | Lister, désigner un·e responsable d'un poste (`roleName`) ; envoie automatiquement le lien d'accès par email (#186) |
+| `/api/admin/events/[id]/sector-leaders/[leaderId]` | DELETE | Retirer un·e responsable |
 | `/api/admin/events/[id]/qr` | GET | QR code de la page publique ; `?format=svg` pour le SVG, PNG par défaut |
 | `/api/admin/events/[id]/export/pdf` | GET | Page HTML de l'export (planning, récap, bénévoles) destinée à l'impression en PDF depuis le navigateur |
 | `/api/admin/events/[id]/send-reminder` | POST | Rappel manuel à tous les inscrits |
