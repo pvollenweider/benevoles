@@ -1,10 +1,12 @@
 # Rôles et permissions
 
-Trois profils, sans compte pour les bénévoles.
+Quatre profils. Seuls les deux admins ont un compte (email + mot de passe) ; bénévoles et
+responsables de secteur s'authentifient par un jeton dans l'URL, sans compte à créer.
 
 | Profil | Authentification | Périmètre |
 |--------|------------------|-----------|
 | Bénévole | aucune ; jeton unique par inscription | Ses propres inscriptions |
+| Responsable de secteur | aucune ; jeton unique par désignation | Lecture seule du roster de son poste (#186) |
 | Admin d'organisation (`admin`) | email + mot de passe | Une seule organisation |
 | Super admin (`super_admin`) | email + mot de passe | Toutes les organisations |
 
@@ -17,6 +19,18 @@ Le rôle est stocké dans `AdminUser.role` (`admin` par défaut). Une session es
 - Une invitation (`?token=` sur la page de l'événement) pré-remplit le formulaire ; elle est révocable et réutilisable.
 - Une offre de liste d'attente se confirme via `/waitlist/[token]/confirm`, dans les 24 heures.
 - Les endpoints publics sensibles (inscription, gestion d'inscription, liste d'attente, push, mot de passe oublié et réinitialisation) sont protégés par un limiteur en mémoire par IP (`src/lib/rate-limit.ts`). L'inscription (`POST /api/public/registrations`) est limitée à 20 requêtes par heure. Le compteur est propre à chaque instance de l'application.
+
+## Responsable de secteur
+
+Un admin peut désigner un ou plusieurs bénévoles responsables d'un poste (`Shift.roleName`) sur un
+événement — voir issue [#186](https://github.com/pvollenweider/benevoles/issues/186).
+
+- Aucun compte : un `SectorLeader.token` unique, envoyé par email, ouvre `/leader/[token]`.
+- Accès strictement lecture seule : liste des bénévoles inscrits sur son poste (nom, email,
+  téléphone, commentaire), groupée par créneau. Pas de validation ni d'annulation d'inscription,
+  pas d'édition des créneaux — v1 volontairement minimale, pas de surface de mutation à sécuriser.
+- Reçoit un email à chaque nouvelle inscription sur son poste (`sector_leader_new_signup`).
+- Le lien reste valable pour toute la durée de l'événement (pas d'expiration).
 
 ## Admin d'organisation
 

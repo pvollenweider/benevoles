@@ -4,8 +4,8 @@ import { NON_ORG_SUBDOMAINS } from "@/lib/org-subdomain"
 import { orgBaseUrl, isKnownHost } from "@/lib/urls"
 
 // Token-bearing and admin/API surfaces: never worth indexing, and some carry secrets in the URL
-// (/my/[token], /waitlist/[token]/confirm, /admin/accept-invite?token=...).
-const DISALLOW = ["/admin", "/api/", "/my/", "/waitlist/"]
+// (/my/[token], /waitlist/[token]/confirm, /leader/[token] (#186), /admin/accept-invite?token=...).
+const DISALLOW = ["/admin", "/api/", "/my/", "/waitlist/", "/leader/"]
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const host = (await headers()).get("host") ?? ""

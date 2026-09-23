@@ -217,6 +217,7 @@ const ENTITY_TYPE_LABEL: Record<string, string> = {
   Event: "Événement",
   MemberInvite: "Invitation",
   EventPage: "Page",
+  SectorLeader: "Responsable de secteur",
 }
 
 export interface StoryCandidate {

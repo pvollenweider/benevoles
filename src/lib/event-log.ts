@@ -30,7 +30,7 @@ export function adminActor(session: { user?: { id?: string } }): LogActor {
 
 export type LogChanges = Record<string, { from: unknown; to: unknown }>
 
-export type LogEntityType = "Shift" | "Registration" | "Event" | "MemberInvite" | "EventPage"
+export type LogEntityType = "Shift" | "Registration" | "Event" | "MemberInvite" | "EventPage" | "SectorLeader"
 
 interface LogEventParams {
   eventId: string

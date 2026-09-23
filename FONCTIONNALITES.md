@@ -62,6 +62,13 @@ Liste exhaustive des fonctionnalités de l'application.
 - Contenu rédigé en Markdown par l'admin (gras, listes, titres, liens, tableaux) et rendu en HTML sécurisé
 - Pas de contenu personnalisé par bénévole : chaque page est la même pour tout le monde
 
+### Espace responsable de secteur (`/leader/[token]`)
+
+- Lien personnel envoyé par email à un·e bénévole désigné·e responsable d'un poste (ex. « Bar »)
+- Lecture seule : liste des bénévoles inscrits sur ce poste (nom, email, téléphone, commentaire), groupée par créneau
+- Pas de compte à créer ni de mot de passe : le lien reste valable pour toute la durée de l'événement
+- Email automatique à chaque nouvelle inscription sur le poste, avec lien vers la liste à jour
+
 ### Pages légales
 
 - Politique de confidentialité (`/legal/privacy`) et conditions d'utilisation (`/legal/terms`)
@@ -107,6 +114,13 @@ Liste exhaustive des fonctionnalités de l'application.
 - **Réordonnancement** : boutons monter/descendre (accessibles au clavier), persisté via `displayOrder`
 - Suppression avec confirmation
 - Chaque création, modification et suppression est tracée dans le journal d'événement ; le contenu de la page n'est jamais stocké dans le journal (seuls le titre et le slug le sont, le contenu est noté « (modifié) »)
+
+### Responsables de secteur (`/admin/events/[id]/sector-leaders`)
+
+- Désigner un ou plusieurs bénévoles responsables d'un poste (`roleName`, ex. « Bar »), avec autocomplétion sur les postes déjà utilisés dans l'événement
+- L'ajout envoie automatiquement un email au responsable avec son lien personnel (lecture seule, sans compte)
+- Un responsable peut être retiré à tout moment (confirmation demandée)
+- Chaque ajout et retrait est tracé dans le journal d'événement (poste concerné seulement, jamais le nom ni l'email en clair dans le journal)
 
 ### Programme des spectacles
 

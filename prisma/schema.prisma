@@ -57,6 +57,7 @@ model Event {
   memberInvites MemberInvite[]
   logs          EventLog[]
   pages         EventPage[]
+  sectorLeaders SectorLeader[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -83,6 +84,27 @@ model EventPage {
   @@index([eventId])
 }
 
+// "Sector leader" (responsable de secteur) — see issue #186. Scoped to a roleName within an
+// event (matches how shifts already group on the planning, not per-shift: finer-grained scope
+// wasn't a proven need). No login: a stable magic-link token, same pattern as MemberInvite,
+// opens a read-only roster of who's signed up for that role — name, email, phone — without
+// giving admin access to the rest of the event. v1 is read-only on purpose: no mutation surface
+// to secure yet. Several leaders can share a roleName, and one person can lead several.
+model SectorLeader {
+  id        String   @id @default(cuid())
+  eventId   String
+  roleName  String
+  name      String
+  email     String
+  token     String   @unique
+  createdAt DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, roleName, email])
+  @@index([eventId])
+}
+
 // Attached to the event, not to the entity it documents: it must survive the deletion of the
 // Shift/Registration/etc. it's about (that's the whole point — "a registration disappeared,
 // why?" needs an answer even after the registration is gone). Purged only when the whole event
@@ -100,7 +122,7 @@ model EventLog {
   actorType     String // "admin" | "volunteer" | "system"
   actorId       String? // AdminUser.id or Volunteer.id depending on actorType; null for system actions
   action        String // dot-namespaced, e.g. "shift.created", "registration.cancelled"
-  entityType    String // "Shift" | "Registration" | "Event" | "MemberInvite"
+  entityType    String // "Shift" | "Registration" | "Event" | "MemberInvite" | "EventPage" | "SectorLeader"
   entityId      String
   changes       Json? // { field: { from, to } }, non-PII values only
   causedByLogId String? // set when this entry is a direct, known consequence of another one

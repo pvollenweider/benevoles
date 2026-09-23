@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { generateToken, shiftsOverlap } from "@/lib/utils"
 import { sendConfirmationEmail, sendAdminNotification } from "@/lib/email"
 import { sendNotification } from "@/lib/notifications"
+import { notifySectorLeadersOfSignup } from "@/lib/sector-leaders"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
 import { z } from "zod"
@@ -208,6 +209,17 @@ export async function POST(req: Request) {
         endTime: s.endTime,
       })),
     })
+    await Promise.all(
+      shifts.map((shift) =>
+        notifySectorLeadersOfSignup({
+          eventId,
+          eventTitle: event.title,
+          orgSlug: event.organization.slug,
+          volunteerName: `${firstName} ${lastName}`,
+          shift,
+        })
+      )
+    )
   } catch (e) {
     console.error("Email error:", e)
   }
