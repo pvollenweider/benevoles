@@ -10,12 +10,20 @@ export type SectorLeaderRow = {
   email: string
 }
 
+export type RegisteredVolunteer = {
+  id: string
+  name: string
+  email: string
+  roleNames: string[]
+}
+
 export default function SectorLeadersManager({
-  eventId, initialLeaders, roleNames,
+  eventId, initialLeaders, roleNames, registeredVolunteers = [],
 }: {
   eventId: string
   initialLeaders: SectorLeaderRow[]
   roleNames: string[]
+  registeredVolunteers?: RegisteredVolunteer[]
 }) {
   const [leaders, setLeaders] = useState(initialLeaders)
   const [announcement, setAnnouncement] = useState("")
@@ -24,6 +32,7 @@ export default function SectorLeadersManager({
   const roleId = useId()
   const nameId = useId()
   const emailId = useId()
+  const pickId = useId()
   const [roleName, setRoleName] = useState("")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -53,6 +62,16 @@ export default function SectorLeadersManager({
   function closeForm() {
     setShowForm(false)
     setError(null)
+  }
+
+  function pickRegisteredVolunteer(volunteerId: string) {
+    const volunteer = registeredVolunteers.find((v) => v.id === volunteerId)
+    if (!volunteer) return
+    setName(volunteer.name)
+    setEmail(volunteer.email)
+    // Several roles for the same person: default to the first, still adjustable in the field
+    // above (it's a free-text input with a datalist, not locked to this list).
+    setRoleName(volunteer.roleNames[0] ?? "")
   }
 
   async function handleAdd(e: React.FormEvent) {
@@ -114,6 +133,26 @@ export default function SectorLeadersManager({
 
       {showForm && (
         <form onSubmit={handleAdd} className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+          {registeredVolunteers.length > 0 && (
+            <div>
+              <label htmlFor={pickId} className="block text-sm text-gray-700 mb-1">Depuis les inscrits (optionnel)</label>
+              <select
+                id={pickId}
+                defaultValue=""
+                onChange={(e) => {
+                  if (e.target.value) pickRegisteredVolunteer(e.target.value)
+                  e.target.value = ""
+                }}
+                className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white"
+              >
+                <option value="">Sélectionner un·e bénévole déjà inscrit·e…</option>
+                {registeredVolunteers.map((v) => (
+                  <option key={v.id} value={v.id}>{v.name} · {v.roleNames.join(", ")}</option>
+                ))}
+              </select>
+              <p className="text-xs text-gray-400 mt-1">Remplit le nom, l&apos;email et le poste ci-dessous — modifiable avant l&apos;ajout.</p>
+            </div>
+          )}
           <div>
             <label htmlFor={roleId} className="block text-sm text-gray-700 mb-1">Poste *</label>
             <input
