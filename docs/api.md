@@ -18,7 +18,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | Route | Méthodes | Accès | Rôle |
 |-------|----------|-------|------|
 | `/api/public/events` | GET | public | Événements publiés avec leurs créneaux ouverts ou complets |
-| `/api/public/[eventSlug]` | GET | public | Un événement publié de l'organisation courante (sous-domaine ou `?org=`) |
+| `/api/public/[eventSlug]` | GET | public | Un événement publié de l'organisation courante (sous-domaine ou `?org=`), avec la liste de ses pages personnalisées (titre, slug) |
 | `/api/public/registrations` | POST | public | Inscription à un ou plusieurs créneaux (liste d'attente si le créneau est complet). Limitée à 20 requêtes par heure et par IP |
 | `/api/public/registrations/[token]` | GET, DELETE | public (jeton) | Consulter ou annuler une inscription |
 | `/api/public/member-invite/[token]` | GET | public (jeton) | Données de pré-remplissage d'une invitation |
@@ -42,6 +42,9 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/admin/events/[id]` | GET, PATCH, DELETE | Lire, modifier (dont l'archivage : `publicStatus: "archived"`), supprimer définitivement. `DELETE` exige un événement archivé (409 sinon) et `{ "confirmTitle": "<titre>" }` (400 sinon) ; les créneaux, inscriptions et invitations sont supprimés en cascade |
 | `/api/admin/events/[id]/duplicate` | POST | Dupliquer un événement |
 | `/api/admin/events/[id]/reorder-roles` | POST | Réordonner les postes |
+| `/api/admin/events/[id]/pages` | GET, POST | Lister, créer une page personnalisée de l'événement (titre, contenu Markdown) ; slug généré depuis le titre et dédoublonné |
+| `/api/admin/events/[id]/pages/[pageId]` | PATCH, DELETE | Modifier, supprimer une page |
+| `/api/admin/events/[id]/pages/reorder` | POST | Réordonner les pages (`{ "pageIds": [...] }`, ordre = position dans le tableau) |
 | `/api/admin/events/[id]/qr` | GET | QR code de la page publique ; `?format=svg` pour le SVG, PNG par défaut |
 | `/api/admin/events/[id]/export/pdf` | GET | Page HTML de l'export (planning, récap, bénévoles) destinée à l'impression en PDF depuis le navigateur |
 | `/api/admin/events/[id]/send-reminder` | POST | Rappel manuel à tous les inscrits |
