@@ -118,9 +118,12 @@ Liste exhaustive des fonctionnalités de l'application.
 ### Responsables de secteur (`/admin/events/[id]/sector-leaders`)
 
 - Désigner un ou plusieurs bénévoles responsables d'un poste (`roleName`, ex. « Bar »), avec autocomplétion sur les postes déjà utilisés dans l'événement
+- Choix rapide « Depuis les inscrits » : sélectionner un bénévole déjà inscrit à l'événement pré-remplit nom, email et poste
+- Depuis la page des inscriptions, bouton « Rendre responsable » par ligne : si le bénévole a plusieurs inscriptions sous des postes différents, le poste de la ligne cliquée est proposé par défaut, modifiable
 - L'ajout envoie automatiquement un email au responsable avec son lien personnel (lecture seule, sans compte)
 - Un responsable peut être retiré à tout moment (confirmation demandée)
 - Chaque ajout et retrait est tracé dans le journal d'événement (poste concerné seulement, jamais le nom ni l'email en clair dans le journal)
+- Le tag « responsable » est ajouté/retiré automatiquement sur la fiche du bénévole (`/admin/members`) ; retiré uniquement s'il n'est plus responsable d'aucun poste dans l'organisation
 
 ### Programme des spectacles
 

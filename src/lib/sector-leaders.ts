@@ -39,3 +39,33 @@ export async function notifySectorLeadersOfSignup(params: {
     )
   )
 }
+
+/**
+ * Keeps the member pool's "responsable" tag (`src/app/admin/members`) in sync with sector-leader
+ * status, so admins can spot/filter responsables from the member list too, not just the
+ * per-event sector-leaders page. Org-scoped explicitly (not via the request's `db` client, since
+ * this is shared logic called from more than one route) — mirrors the isolation the extended
+ * Prisma client would otherwise apply automatically.
+ */
+const RESPONSABLE_TAG = "responsable"
+
+export async function tagVolunteerAsResponsable(organizationId: string, email: string): Promise<void> {
+  const volunteer = await prisma.volunteer.findFirst({ where: { organizationId, email } })
+  if (!volunteer || volunteer.tags.includes(RESPONSABLE_TAG)) return
+  await prisma.volunteer.update({ where: { id: volunteer.id }, data: { tags: { push: RESPONSABLE_TAG } } })
+}
+
+/**
+ * Removes the tag only if the volunteer isn't a sector leader for anything else in this org
+ * (they can lead several roles/events at once — losing one shouldn't untag them).
+ */
+export async function untagVolunteerIfNoLongerResponsable(organizationId: string, email: string): Promise<void> {
+  const stillLeading = await prisma.sectorLeader.findFirst({ where: { email, event: { organizationId } } })
+  if (stillLeading) return
+  const volunteer = await prisma.volunteer.findFirst({ where: { organizationId, email } })
+  if (!volunteer || !volunteer.tags.includes(RESPONSABLE_TAG)) return
+  await prisma.volunteer.update({
+    where: { id: volunteer.id },
+    data: { tags: volunteer.tags.filter((t) => t !== RESPONSABLE_TAG) },
+  })
+}

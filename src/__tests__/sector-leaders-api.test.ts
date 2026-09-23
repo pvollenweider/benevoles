@@ -7,8 +7,14 @@ const findMany = vi.hoisted(() => vi.fn())
 const findFirst = vi.hoisted(() => vi.fn())
 const create = vi.hoisted(() => vi.fn())
 const logCreate = vi.hoisted(() => vi.fn())
+const volunteerFindFirst = vi.hoisted(() => vi.fn())
+const volunteerUpdate = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({
-  prisma: { sectorLeader: { findMany, findFirst, create }, eventLog: { create: logCreate } },
+  prisma: {
+    sectorLeader: { findMany, findFirst, create },
+    eventLog: { create: logCreate },
+    volunteer: { findFirst: volunteerFindFirst, update: volunteerUpdate },
+  },
 }))
 
 const sendNotificationMock = vi.hoisted(() => vi.fn())
@@ -38,6 +44,7 @@ describe("GET/POST /api/admin/events/[id]/sector-leaders", () => {
     })
     logCreate.mockResolvedValue({ id: "log-1" })
     sendNotificationMock.mockResolvedValue({ ok: true })
+    volunteerFindFirst.mockResolvedValue(null)
   })
 
   it("GET 404s when the event isn't owned by the caller's org", async () => {
@@ -89,5 +96,16 @@ describe("GET/POST /api/admin/events/[id]/sector-leaders", () => {
     expect(sendNotificationMock).toHaveBeenCalledWith(
       expect.objectContaining({ kind: "sector_leader_invite", recipient: { email: "a@x.com", name: "Alice" } }),
     )
+  })
+
+  it("POST tags the matching volunteer as 'responsable' in the member pool", async () => {
+    findFirst.mockResolvedValue(null)
+    create.mockResolvedValue({ id: "l2", eventId: "evt-1", roleName: "Bar", name: "Alice", email: "a@x.com", token: "tok123" })
+    volunteerFindFirst.mockResolvedValue({ id: "vol-1", tags: ["cuisine"] })
+    const { POST } = await import("@/app/api/admin/events/[id]/sector-leaders/route")
+    await POST(post({ roleName: "Bar", name: "Alice", email: "a@x.com" }), { params: Promise.resolve({ id: "evt-1" }) })
+
+    expect(volunteerFindFirst).toHaveBeenCalledWith({ where: { organizationId: "org-a", email: "a@x.com" } })
+    expect(volunteerUpdate).toHaveBeenCalledWith({ where: { id: "vol-1" }, data: { tags: { push: "responsable" } } })
   })
 })
