@@ -1,12 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const findMany = vi.hoisted(() => vi.fn())
-vi.mock("../prisma", () => ({ prisma: { sectorLeader: { findMany } } }))
+const sectorLeaderFindFirst = vi.hoisted(() => vi.fn())
+const volunteerFindFirst = vi.hoisted(() => vi.fn())
+const volunteerUpdate = vi.hoisted(() => vi.fn())
+vi.mock("../prisma", () => ({
+  prisma: {
+    sectorLeader: { findMany, findFirst: sectorLeaderFindFirst },
+    volunteer: { findFirst: volunteerFindFirst, update: volunteerUpdate },
+  },
+}))
 
 const sendNotificationMock = vi.hoisted(() => vi.fn())
 vi.mock("../notifications", () => ({ sendNotification: sendNotificationMock }))
 
-import { notifySectorLeadersOfSignup } from "../sector-leaders"
+import { notifySectorLeadersOfSignup, tagVolunteerAsResponsable, untagVolunteerIfNoLongerResponsable } from "../sector-leaders"
 
 describe("notifySectorLeadersOfSignup", () => {
   beforeEach(() => {
@@ -60,5 +68,54 @@ describe("notifySectorLeadersOfSignup", () => {
         shift: { roleName: "Bar", label: "Bar", date: new Date("2026-06-01"), startTime: "18:00", endTime: "22:00" },
       }),
     ).resolves.toBeUndefined()
+  })
+})
+
+describe("tagVolunteerAsResponsable", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("adds the tag when the volunteer exists and doesn't have it yet", async () => {
+    volunteerFindFirst.mockResolvedValue({ id: "vol-1", tags: ["cuisine"] })
+    await tagVolunteerAsResponsable("org-a", "a@x.com")
+    expect(volunteerFindFirst).toHaveBeenCalledWith({ where: { organizationId: "org-a", email: "a@x.com" } })
+    expect(volunteerUpdate).toHaveBeenCalledWith({ where: { id: "vol-1" }, data: { tags: { push: "responsable" } } })
+  })
+
+  it("does nothing when the tag is already there", async () => {
+    volunteerFindFirst.mockResolvedValue({ id: "vol-1", tags: ["responsable"] })
+    await tagVolunteerAsResponsable("org-a", "a@x.com")
+    expect(volunteerUpdate).not.toHaveBeenCalled()
+  })
+
+  it("does nothing when no volunteer matches (manual email not yet a member)", async () => {
+    volunteerFindFirst.mockResolvedValue(null)
+    await tagVolunteerAsResponsable("org-a", "unknown@x.com")
+    expect(volunteerUpdate).not.toHaveBeenCalled()
+  })
+})
+
+describe("untagVolunteerIfNoLongerResponsable", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("removes the tag when the volunteer has no remaining sector-leader role in the org", async () => {
+    sectorLeaderFindFirst.mockResolvedValue(null)
+    volunteerFindFirst.mockResolvedValue({ id: "vol-1", tags: ["responsable", "cuisine"] })
+    await untagVolunteerIfNoLongerResponsable("org-a", "a@x.com")
+    expect(sectorLeaderFindFirst).toHaveBeenCalledWith({ where: { email: "a@x.com", event: { organizationId: "org-a" } } })
+    expect(volunteerUpdate).toHaveBeenCalledWith({ where: { id: "vol-1" }, data: { tags: ["cuisine"] } })
+  })
+
+  it("keeps the tag when the volunteer still leads another role/event", async () => {
+    sectorLeaderFindFirst.mockResolvedValue({ id: "l2" })
+    await untagVolunteerIfNoLongerResponsable("org-a", "a@x.com")
+    expect(volunteerFindFirst).not.toHaveBeenCalled()
+    expect(volunteerUpdate).not.toHaveBeenCalled()
+  })
+
+  it("does nothing when the volunteer doesn't have the tag", async () => {
+    sectorLeaderFindFirst.mockResolvedValue(null)
+    volunteerFindFirst.mockResolvedValue({ id: "vol-1", tags: ["cuisine"] })
+    await untagVolunteerIfNoLongerResponsable("org-a", "a@x.com")
+    expect(volunteerUpdate).not.toHaveBeenCalled()
   })
 })

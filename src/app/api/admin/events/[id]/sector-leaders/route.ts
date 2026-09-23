@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { generateToken } from "@/lib/utils"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { sendNotification } from "@/lib/notifications"
+import { tagVolunteerAsResponsable } from "@/lib/sector-leaders"
 import { z } from "zod"
 
 const postSchema = z.object({
@@ -61,6 +62,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     entityId: leader.id,
     changes: { roleName: { from: null, to: leader.roleName } },
   })
+
+  await tagVolunteerAsResponsable(guard.organizationId, leader.email).catch((e) => console.error("tagVolunteerAsResponsable error:", e))
 
   await sendNotification({
     kind: "sector_leader_invite",
