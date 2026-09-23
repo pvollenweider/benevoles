@@ -56,9 +56,31 @@ model Event {
   registrations Registration[]
   memberInvites MemberInvite[]
   logs          EventLog[]
+  pages         EventPage[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
+}
+
+// Free-form extra content per event (rules, FAQ, practical info) beyond the single
+// publicInstructions field — see issue #188. Flat, ordered list: no nesting, an event doesn't
+// need a page hierarchy. `content` is Markdown, sanitized at render time, not on write — see
+// src/lib/event-page-markdown.ts. Purely static: no variable injection (volunteer name, shift,
+// ...), the public event page has no visitor identity to personalize with.
+model EventPage {
+  id           String   @id @default(cuid())
+  eventId      String
+  slug         String
+  title        String
+  content      String
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, slug])
+  @@index([eventId])
 }
 
 // Attached to the event, not to the entity it documents: it must survive the deletion of the

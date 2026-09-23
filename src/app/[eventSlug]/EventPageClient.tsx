@@ -42,6 +42,7 @@ type EventData = {
   showSchedule: Show[]
   volunteerCharter: string | null
   shifts: Shift[]
+  pages: { slug: string; title: string }[]
 }
 
 export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: string; eventSlug: string }) {
@@ -338,6 +339,20 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800">
             {event.publicInstructions}
           </div>
+        )}
+
+        {event.pages.length > 0 && (
+          <nav aria-label="Pages de l'événement" className="flex flex-wrap gap-2">
+            {event.pages.map((p) => (
+              <Link
+                key={p.slug}
+                href={`/${eventSlug}/${p.slug}`}
+                className="text-sm text-blue-600 border border-blue-200 px-3 py-1.5 rounded-full hover:bg-blue-50 transition-colors"
+              >
+                {p.title}
+              </Link>
+            ))}
+          </nav>
         )}
 
         {step === "select" && (
