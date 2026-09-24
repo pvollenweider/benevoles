@@ -35,6 +35,7 @@ export type AdminShift = {
   internalNotes?: string | null
   description?: string | null
   waitlistEnabled?: boolean
+  minAge?: number | null
 }
 
 type Show = GanttShow

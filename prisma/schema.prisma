@@ -197,6 +197,12 @@ model Shift {
   displayOrder    Int      @default(0)
   internalNotes   String?
   waitlistEnabled Boolean  @default(false)
+  // Minimum age to self-register, in years — see issue #192. Enforced server-side at
+  // registration (Volunteer.birthDate, collected on the public form only when at least one
+  // selected shift requires it). Not proactively greyed out on the public timeline: we don't
+  // know a first-time visitor's age until they fill the form, so the timeline shows it as an
+  // informational badge instead — see DayTimeline.tsx.
+  minAge          Int?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -214,6 +220,9 @@ model Volunteer {
   tags           String[] @default([])
   active         Boolean  @default(true)
   notes          String?
+  // Collected only when the volunteer selects a shift with a minimum age (Shift.minAge, #192) —
+  // never asked upfront for everyone. Kept on the profile (not re-asked every event) once given.
+  birthDate      DateTime?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 

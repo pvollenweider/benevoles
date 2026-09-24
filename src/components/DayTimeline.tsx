@@ -15,6 +15,7 @@ export type TimelineShift = {
   spotsLeft: number
   displayOrder?: number
   waitlistEnabled?: boolean
+  minAge?: number | null
 }
 
 type Show = GanttShow
@@ -168,13 +169,23 @@ export default function DayTimeline({
                   // Longer texts ("22h–02h +1", "En attente") need a wider bar to be shown whole.
                   const longText        = overnight || (isSelected && isWaitlistable)
                   const roleLabel       = hasLabel ? `${shift.roleName} (${shift.label})` : shift.roleName
-                  const ariaLabel       = isWaitlistable
+                  // Informational only: we don't know a first-time visitor's age until the form,
+                  // so this never blocks selection here — real enforcement is server-side at
+                  // submit (see #192). Announced in the accessible name since the visual sub-label
+                  // below is aria-hidden.
+                  const hasMinAge       = shift.minAge != null
+                  const minAgeSuffix    = hasMinAge ? ` (${shift.minAge} ans minimum)` : ""
+                  const ariaLabel       = (isWaitlistable
                     ? (isSelected
                       ? `Retirer de la file d'attente — ${roleLabel} ${timeSpoken}`
                       : `Rejoindre la file d'attente — ${roleLabel} ${timeSpoken}`)
                     : (isSelected
                       ? `Désélectionner — ${roleLabel} ${timeSpoken}`
-                      : `Sélectionner — ${roleLabel} ${timeSpoken}`)
+                      : `Sélectionner — ${roleLabel} ${timeSpoken}`)) + minAgeSuffix
+                  const subLabelText    = isWaitlistable && !isSelected
+                    ? ["Complet · file d'attente", hasMinAge ? `${shift.minAge}+` : null].filter(Boolean).join(" · ")
+                    : [hasLabel ? shift.label : null, hasMinAge ? `${shift.minAge}+` : null].filter(Boolean).join(" · ")
+                  const showSubLabel    = hasLabel || (isWaitlistable && !isSelected) || hasMinAge
 
                   return (
                     // @container: the text inside hides itself when the bar is too narrow for it
@@ -198,7 +209,7 @@ export default function DayTimeline({
                         className={`absolute inset-x-0 rounded flex items-center justify-center overflow-hidden transition-colors ${clickable ? "cursor-pointer" : "cursor-default"} ${barCls}`}
                         style={{
                           top: 0,
-                          bottom: (hasLabel || (isWaitlistable && !isSelected)) ? LABEL_H : 0,
+                          bottom: showSubLabel ? LABEL_H : 0,
                           borderLeft: (isFull && !isWaitlistable) ? "3px solid rgba(0,0,0,0.08)" : "4px solid rgba(255,255,255,0.7)",
                           ...((isFull && !isWaitlistable) ? {
                             backgroundColor: "white",
@@ -230,13 +241,13 @@ export default function DayTimeline({
                           </div>
                         )}
                       </button>
-                      {(hasLabel || (isWaitlistable && !isSelected)) && (
+                      {showSubLabel && (
                         <span
                           className="absolute inset-x-0 bottom-0 text-[10px] text-gray-600 truncate text-center pointer-events-none"
                           style={{ height: LABEL_H, lineHeight: `${LABEL_H}px` }}
                           aria-hidden="true"
                         >
-                          {isWaitlistable && !isSelected ? "Complet · file d'attente" : shift.label}
+                          {subLabelText}
                         </span>
                       )}
                     </div>

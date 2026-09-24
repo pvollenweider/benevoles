@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useMemo } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { formatDate, shiftsOverlap } from "@/lib/utils"
+import { formatDate, shiftsOverlap, calculateAge } from "@/lib/utils"
 import { fmtRange } from "@/lib/gantt-utils"
 import DayTimeline, { fmt } from "@/components/DayTimeline"
 import PublicFooter from "@/components/PublicFooter"
@@ -24,6 +24,7 @@ type Shift = {
   locationDetails: string | null
   displayOrder: number
   waitlistEnabled: boolean
+  minAge: number | null
 }
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
@@ -65,11 +66,19 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
   const charterTriggerRef = useRef<HTMLButtonElement>(null)
   const cancelTriggerRef = useRef<HTMLButtonElement | null>(null)
   const [form, setForm] = useState({
-    firstName: "", lastName: "", email: "", phone: "", comment: "", consent: false,
+    firstName: "", lastName: "", email: "", phone: "", birthDate: "", comment: "", consent: false,
   })
 
   const storageKey = `benevoles_token_${eventSlug}`
   const myShiftIds = useMemo(() => new Set(myRegistrations.map((r) => r.shiftId)), [myRegistrations])
+
+  // Shifts among the current selection that require a minimum age (#192) — drives whether the
+  // form asks for a date of birth, and what the highest age requirement among them is.
+  const ageGatedSelectedShifts = useMemo(
+    () => (event?.shifts ?? []).filter((s) => selectedShifts.has(s.id) && !myShiftIds.has(s.id) && s.minAge != null),
+    [event, selectedShifts, myShiftIds]
+  )
+  const requiredMinAge = ageGatedSelectedShifts.reduce((max, s) => Math.max(max, s.minAge ?? 0), 0)
 
   const conflictingShiftIds = useMemo(() => {
     if (!event) return new Set<string>()
@@ -190,6 +199,13 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
     if (!charterAccepted) { setError("Veuillez accepter la convention des bénévoles."); return }
     if (!form.consent) { setError("Veuillez accepter la politique de confidentialité."); return }
     if (!form.firstName || !form.lastName || !form.email) { setError("Prénom, nom et email sont obligatoires."); return }
+    if (ageGatedSelectedShifts.length > 0) {
+      if (!form.birthDate) { setError("Date de naissance requise pour au moins un des créneaux sélectionnés."); return }
+      if (calculateAge(form.birthDate) < requiredMinAge) {
+        setError(`Âge minimum non atteint pour : ${ageGatedSelectedShifts.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}.`)
+        return
+      }
+    }
 
     setSubmitting(true)
     setError(null)
@@ -265,7 +281,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
     localStorage.removeItem(storageKey)
     setMyRegistrations([])
     setSelectedShifts(new Set())
-    setForm({ firstName: "", lastName: "", email: "", phone: "", comment: "", consent: false })
+    setForm({ firstName: "", lastName: "", email: "", phone: "", birthDate: "", comment: "", consent: false })
   }
 
   // orgSlug is received as prop but only used in the storageKey (already included via eventSlug)
@@ -534,6 +550,24 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
                     className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
+                {ageGatedSelectedShifts.length > 0 && (
+                  <div>
+                    <label htmlFor="reg-birthdate" className="block text-sm font-medium text-gray-700 mb-1">Date de naissance *</label>
+                    <input
+                      id="reg-birthdate"
+                      type="date"
+                      required
+                      autoComplete="bday"
+                      aria-describedby="reg-birthdate-hint"
+                      value={form.birthDate}
+                      onChange={(e) => setForm((f) => ({ ...f, birthDate: e.target.value }))}
+                      className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <p id="reg-birthdate-hint" className="text-xs text-gray-500 mt-1">
+                      Requis : {ageGatedSelectedShifts.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}
+                    </p>
+                  </div>
+                )}
                 <div>
                   <label htmlFor="reg-comment" className="block text-sm font-medium text-gray-700 mb-1">Commentaire <span className="text-gray-500 font-normal">(facultatif)</span></label>
                   <textarea

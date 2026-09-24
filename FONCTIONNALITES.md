@@ -23,6 +23,7 @@ Liste exhaustive des fonctionnalités de l'application.
 - **Sélection multi-créneaux** par clic sur les barres
 - **Détection de conflits en temps réel** : les créneaux qui se chevauchent avec une sélection ou une inscription existante sont grisés automatiquement
 - Affichage du statut de chaque créneau : ouvert, complet, fermé
+- **Âge minimum** (#192) : affiché en petit sous le créneau concerné (ex. « 18+ »), informatif — le créneau reste sélectionnable (l'âge du visiteur n'est pas connu avant le formulaire) ; l'inscription est réellement bloquée à la soumission si la condition n'est pas remplie
 - Récapitulatif des créneaux sélectionnés sous le planning
 - Bouton d'action fixe en bas d'écran
 
@@ -39,6 +40,7 @@ Liste exhaustive des fonctionnalités de l'application.
 ### Formulaire d'inscription
 
 - Champs : prénom, nom, email, téléphone (optionnel), commentaire (optionnel)
+- **Date de naissance** : demandée uniquement si un créneau sélectionné a un âge minimum (#192) ; jamais demandée sinon. Vérifiée côté client (message immédiat) et côté serveur (source de vérité)
 - Pré-remplissage automatique si une session ou un token membre est reconnu
 - **Charte du bénévole** : lien « Lire la charte » ouvre un modal avec le texte complet ; case à cocher obligatoire avant soumission
 - Case de consentement RGPD obligatoire
@@ -151,6 +153,7 @@ Liste exhaustive des fonctionnalités de l'application.
 - **Réordonnancement des postes** : panneau glisser-déposer pour changer l'ordre des lignes dans toutes les timelines, persisté via `displayOrder`
 - **Vue timeline** (par jour) et **vue liste** (tableau plat) commutables
 - Popover au clic sur un créneau : éditer libellé, capacité, statut — bouton direct vers les inscriptions filtrées sur ce créneau
+- **Âge minimum** (optionnel, #192) : condition simple pour restreindre un créneau (ex. 18 ans pour un poste avec permis de conduire) ; affichée aux bénévoles, vérifiée à l'inscription
 
 ### Suivi des inscriptions (`/admin/events/[id]/registrations`)
 

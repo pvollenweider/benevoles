@@ -50,6 +50,7 @@ export async function GET(
     locationDetails: shift.locationDetails,
     displayOrder: shift.displayOrder,
     waitlistEnabled: shift.waitlistEnabled,
+    minAge: shift.minAge,
   }))
 
   return NextResponse.json({

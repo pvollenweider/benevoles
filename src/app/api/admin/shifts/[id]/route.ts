@@ -19,6 +19,7 @@ const schema = z.object({
   displayOrder: z.number().int().optional(),
   internalNotes: z.string().optional().nullable(),
   waitlistEnabled: z.boolean().optional(),
+  minAge: z.number().int().min(0).max(120).nullable().optional(),
   // Caller can opt out of notifying volunteers (default true).
   notifyVolunteers: z.boolean().optional(),
 }).refine((d) => !(d.startTime && d.endTime) || d.startTime !== d.endTime, { message: SAME_TIME_ERROR, path: ["endTime"] })
@@ -66,6 +67,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     "capacity",
     "status",
     "waitlistEnabled",
+    "minAge",
   ])
   if (shiftChanges) {
     await logEvent({

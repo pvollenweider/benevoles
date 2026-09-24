@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest"
-import { shiftsOverlap, slugify, cn, generateToken, formatDate, formatShortDate } from "../utils"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
+import { shiftsOverlap, slugify, cn, generateToken, formatDate, formatShortDate, calculateAge } from "../utils"
 
 // ── shiftsOverlap ────────────────────────────────────────────────────────────
 
@@ -163,5 +163,31 @@ describe("shiftsOverlap — shifts that run past midnight", () => {
 
   it("legacy hours above 23 still compare correctly", () => {
     expect(shiftsOverlap(s("24:00", "26:00", "2026-09-25"), s("00:30", "01:30", "2026-09-26"))).toBe(true)
+  })
+})
+
+// ── calculateAge ─────────────────────────────────────────────────────────────
+
+describe("calculateAge", () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date("2026-09-24T12:00:00"))
+  })
+  afterEach(() => vi.useRealTimers())
+
+  it("computes whole years elapsed", () => {
+    expect(calculateAge("2008-09-24")).toBe(18)
+  })
+
+  it("hasn't had this year's birthday yet", () => {
+    expect(calculateAge("2008-09-25")).toBe(17)
+  })
+
+  it("already had this year's birthday", () => {
+    expect(calculateAge("2008-09-23")).toBe(18)
+  })
+
+  it("accepts a Date object as well as a string", () => {
+    expect(calculateAge(new Date("2008-09-24"))).toBe(18)
   })
 })

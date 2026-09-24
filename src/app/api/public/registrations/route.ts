@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { generateToken, shiftsOverlap } from "@/lib/utils"
+import { generateToken, shiftsOverlap, calculateAge } from "@/lib/utils"
 import { sendConfirmationEmail, sendAdminNotification } from "@/lib/email"
 import { sendNotification } from "@/lib/notifications"
 import { notifySectorLeadersOfSignup } from "@/lib/sector-leaders"
@@ -15,6 +15,7 @@ const schema = z.object({
   lastName: z.string().min(1).max(100),
   email: z.string().email(),
   phone: z.string().optional(),
+  birthDate: z.string().optional(),
   comment: z.string().optional(),
   consent: z.literal(true),
   inviteToken: z.string().optional(),
@@ -35,7 +36,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Données invalides", details: parsed.error.flatten() }, { status: 400 })
   }
 
-  const { eventId, shiftIds, firstName, lastName, email, phone, comment, inviteToken } = parsed.data
+  const { eventId, shiftIds, firstName, lastName, email, phone, birthDate, comment, inviteToken } = parsed.data
 
   const event = await prisma.event.findFirst({
     where: { id: eventId, publicStatus: "published", organization: { active: true } },
@@ -74,15 +75,37 @@ export async function POST(req: Request) {
     }
   }
 
+  // Minimum age (#192) — authoritative check, the client-side one in EventPageClient.tsx is
+  // only a courtesy. Never trust an age the client itself computed: birthDate is what's
+  // validated, not a client-supplied age.
+  const ageGated = shifts.filter((s) => s.minAge != null)
+  if (ageGated.length > 0) {
+    if (!birthDate) {
+      return NextResponse.json({
+        error: `Date de naissance requise pour : ${ageGated.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}.`,
+      }, { status: 400 })
+    }
+    const age = calculateAge(birthDate)
+    const tooYoungFor = ageGated.filter((s) => age < (s.minAge ?? 0))
+    if (tooYoungFor.length > 0) {
+      return NextResponse.json({
+        error: `Âge minimum non atteint pour : ${tooYoungFor.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}.`,
+      }, { status: 403 })
+    }
+  }
+
   // Volunteer is org-scoped: each (organizationId, email) is a unique roster entry.
   const organizationId = event.organizationId
+  const birthDateValue = birthDate ? new Date(birthDate) : undefined
   let volunteer = await prisma.volunteer.findFirst({ where: { email, organizationId } })
   if (!volunteer) {
-    volunteer = await prisma.volunteer.create({ data: { firstName, lastName, email, phone, organizationId } })
+    volunteer = await prisma.volunteer.create({ data: { firstName, lastName, email, phone, birthDate: birthDateValue, organizationId } })
   } else {
     volunteer = await prisma.volunteer.update({
       where: { id: volunteer.id },
-      data: { firstName, lastName, phone },
+      // Keep the profile's existing birthDate if this submission didn't provide one (most
+      // registrations aren't age-gated), rather than clearing it.
+      data: { firstName, lastName, phone, ...(birthDateValue ? { birthDate: birthDateValue } : {}) },
     })
   }
 
