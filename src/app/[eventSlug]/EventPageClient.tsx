@@ -94,6 +94,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
         setEvent(data)
         setLoading(false)
       })
+      .catch(() => setLoading(false))
   }, [eventSlug, orgSlug])
 
   useEffect(() => {
