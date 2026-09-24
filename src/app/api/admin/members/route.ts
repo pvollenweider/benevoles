@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
+import { adminActor, logOrgEvent } from "@/lib/org-log"
 import { z } from "zod"
 
 const volunteerSchema = z.object({
@@ -43,7 +44,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   const guard = await requireOrgSession()
   if (guard instanceof NextResponse) return guard
-  const { db } = guard
+  const { db, organizationId } = guard
 
   const body = await req.json()
   const parsed = volunteerSchema.safeParse(body)
@@ -72,6 +73,14 @@ export async function POST(req: Request) {
       notes: data.notes || null,
       active: data.active ?? true,
     },
+  })
+
+  await logOrgEvent({
+    organizationId,
+    actor: adminActor(guard.session),
+    action: "member.created",
+    entityType: "Member",
+    entityId: volunteer.id,
   })
 
   return NextResponse.json(volunteer, { status: 201 })

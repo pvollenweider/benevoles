@@ -226,6 +226,12 @@ Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscr
 - **Invitation** : saisir nom + email → lien d'activation envoyé par email (token 7 jours)
 - **Retrait** d'un admin (sauf soi-même et dernier admin actif)
 
+### Journal d'activité (`/admin/settings/activity`)
+
+- Liste chronologique filtrable des changements sur les membres et les comptes admin (#194) : création, modification, désactivation d'un membre ; invitation, retrait d'un compte admin
+- Indépendant du journal par événement (`EventLog`) : les membres et comptes admin sont au niveau de l'organisation, pas d'un événement
+- Le contenu d'un membre (nom, email, téléphone, notes) n'apparaît jamais dans le journal, seuls les noms de champs modifiés
+
 ---
 
 ## Super Admin (`/super-admin`)

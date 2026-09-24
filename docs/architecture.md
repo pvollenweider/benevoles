@@ -47,6 +47,7 @@ Modules `src/lib/` à connaître :
 | `volunteer-charter.ts` | Texte par défaut de la charte du bénévole |
 | `event-page-markdown.ts` | Rend le Markdown des pages personnalisées d'événement en HTML (`marked`), sanitisé avec DOMPurify (liste blanche de balises/attributs) à la lecture, pas à l'écriture |
 | `sector-leaders.ts` | Notifie les responsables de secteur d'un poste à chaque nouvelle inscription (#186) |
+| `org-log.ts` / `org-log-read.ts` | Journal d'activité au niveau de l'organisation — écriture et lecture (#194) |
 
 ## Multi-tenant
 
@@ -74,6 +75,7 @@ Modèles Prisma (`prisma/schema.prisma`) :
 | `EventPage` | Page statique additionnelle d'un événement (FAQ, lieu, règlement…) : titre, slug, contenu Markdown, ordre |
 | `SectorLeader` | Responsable d'un poste (`roleName`) au sein d'un événement : nom, email, jeton d'accès lecture seule (#186) |
 | `EventMilestone` | Jalon/échéance d'un événement : titre, date, fait/pas fait — purement informatif (#189) |
+| `OrgLog` | Journal d'audit au niveau de l'organisation : changements sur `Volunteer`/`AdminUser`, pas rattachés à un événement (#194) |
 
 Statuts d'une inscription : `active`, `waiting` (en liste d'attente), `offered` (place proposée) et `cancelled`.
 

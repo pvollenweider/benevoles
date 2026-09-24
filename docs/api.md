@@ -68,6 +68,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/admin/settings/admins` | GET, POST | Équipe admin, invitation d'un admin |
 | `/api/admin/settings/admins/[id]` | DELETE | Retirer un admin |
 | `/api/admin/settings/password` | POST | Changer son mot de passe |
+| `/api/admin/settings/activity` | GET | Journal d'activité de l'organisation : membres et comptes admin créés/modifiés/retirés (#194) |
 
 ## Super admin
 

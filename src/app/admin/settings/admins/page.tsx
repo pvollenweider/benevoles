@@ -50,10 +50,15 @@ export default async function AdminsSettingsPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <Link href="/admin/events" className="text-sm text-blue-600">← Événements</Link>
-        <h1 className="text-xl font-bold text-gray-900 mt-1">Paramètres</h1>
-        {org && <p className="text-sm text-gray-500">{org.name}</p>}
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <Link href="/admin/events" className="text-sm text-blue-600">← Événements</Link>
+          <h1 className="text-xl font-bold text-gray-900 mt-1">Paramètres</h1>
+          {org && <p className="text-sm text-gray-500">{org.name}</p>}
+        </div>
+        <Link href="/admin/settings/activity" className="text-sm text-blue-600 hover:text-blue-800 transition-colors">
+          Journal d&apos;activité
+        </Link>
       </div>
 
       {org && <OrgNameForm initialName={org.name} />}

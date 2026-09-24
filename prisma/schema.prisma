@@ -22,6 +22,7 @@ model Organization {
   volunteers  Volunteer[]
   admins      AdminUser[]
   slugHistory OrgSlugHistory[]
+  logs        OrgLog[]
 }
 
 model OrgSlugHistory {
@@ -156,6 +157,29 @@ model EventLog {
 
   @@index([eventId, createdAt])
   @@index([causedByLogId])
+}
+
+// Org-scoped counterpart to EventLog — see issue #194. Member (Volunteer) and AdminUser are
+// organization-level entities, not attached to one event, so they can't use EventLog without an
+// artificial eventId. Same principles: survives the entity it documents (member removed, admin
+// removed), purged only with the organization (same 30-day cleanup cycle as the rest of org
+// data), minimal PII in `changes`, no stored actor display name (resolved at read time, generic
+// fallback if the actor record is gone). Simpler than EventLog on purpose — no causality chain,
+// no narrative/replay modes: this log is smaller and read far less often.
+model OrgLog {
+  id             String   @id @default(cuid())
+  organizationId String
+  actorType      String // "admin" | "system"
+  actorId        String? // AdminUser.id; null for system actions
+  action         String // dot-namespaced, e.g. "member.created", "adminuser.removed"
+  entityType     String // "Member" | "AdminUser"
+  entityId       String
+  changes        Json? // { field: { from, to } }, non-PII values only
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, createdAt])
 }
 
 model Shift {
