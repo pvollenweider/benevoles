@@ -9,6 +9,7 @@ import PublishToggle from "@/components/admin/PublishToggle"
 import ArchiveButton from "@/components/admin/ArchiveButton"
 import DeleteEventSection from "@/components/admin/DeleteEventSection"
 import SendReminderButton from "@/components/admin/SendReminderButton"
+import MilestonesSection from "@/components/admin/MilestonesSection"
 
 export const dynamic = "force-dynamic"
 
@@ -33,6 +34,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         },
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
       },
+      milestones: { orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }] },
     },
   })
 
@@ -142,6 +144,19 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         <Link href={`/admin/events/${event.id}/sector-leaders`} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
           Responsables de secteur
         </Link>
+      </div>
+
+      <div className="border-t border-gray-200 pt-4">
+        <h2 className="text-sm font-semibold text-gray-700 mb-3">Jalons</h2>
+        <MilestonesSection
+          eventId={event.id}
+          initialMilestones={event.milestones.map((m) => ({
+            id: m.id,
+            title: m.title,
+            dueDate: m.dueDate.toISOString(),
+            done: m.done,
+          }))}
+        />
       </div>
 
       <div className="border-t border-gray-200 pt-4">

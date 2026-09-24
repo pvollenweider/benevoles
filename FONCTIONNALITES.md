@@ -125,6 +125,14 @@ Liste exhaustive des fonctionnalités de l'application.
 - Chaque ajout et retrait est tracé dans le journal d'événement (poste concerné seulement, jamais le nom ni l'email en clair dans le journal)
 - Le tag « responsable » est ajouté/retiré automatiquement sur la fiche du bénévole (`/admin/members`) ; retiré uniquement s'il n'est plus responsable d'aucun poste dans l'organisation
 
+### Jalons (section sur la page de l'événement)
+
+- Checklist simple de dates clés pour l'événement (ex. « Fermer les inscriptions », « Envoyer les rappels ») : titre, échéance, fait / pas fait
+- Purement informatif, aucune automatisation (une échéance ne déclenche rien elle-même)
+- Un jalon dépassé et non coché est mis en évidence
+- Visible par les admins de l'organisation uniquement, pas par les responsables de secteur (#186)
+- Chaque ajout, modification et suppression est tracé dans le journal d'événement
+
 ### Programme des spectacles
 
 - Ajout, édition et suppression de plages de spectacles par jour

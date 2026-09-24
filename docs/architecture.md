@@ -73,6 +73,7 @@ Modèles Prisma (`prisma/schema.prisma`) :
 | `PushSubscription` | Abonnement push |
 | `EventPage` | Page statique additionnelle d'un événement (FAQ, lieu, règlement…) : titre, slug, contenu Markdown, ordre |
 | `SectorLeader` | Responsable d'un poste (`roleName`) au sein d'un événement : nom, email, jeton d'accès lecture seule (#186) |
+| `EventMilestone` | Jalon/échéance d'un événement : titre, date, fait/pas fait — purement informatif (#189) |
 
 Statuts d'une inscription : `active`, `waiting` (en liste d'attente), `offered` (place proposée) et `cancelled`.
 

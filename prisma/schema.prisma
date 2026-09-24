@@ -58,6 +58,7 @@ model Event {
   logs          EventLog[]
   pages         EventPage[]
   sectorLeaders SectorLeader[]
+  milestones    EventMilestone[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -105,6 +106,24 @@ model SectorLeader {
   @@index([eventId])
 }
 
+// Organizer milestone/deadline — see issue #189. Purely informational (name, due date,
+// done/not-done): no automation, nothing it triggers on the rest of the event. Admin-only for
+// now, not surfaced to sector leaders (#186) — most milestones cut across the whole event, not
+// one role. Sorted by dueDate, not a manual displayOrder like EventPage/Shift.
+model EventMilestone {
+  id        String   @id @default(cuid())
+  eventId   String
+  title     String
+  dueDate   DateTime
+  done      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+}
+
 // Attached to the event, not to the entity it documents: it must survive the deletion of the
 // Shift/Registration/etc. it's about (that's the whole point — "a registration disappeared,
 // why?" needs an answer even after the registration is gone). Purged only when the whole event
@@ -122,7 +141,7 @@ model EventLog {
   actorType     String // "admin" | "volunteer" | "system"
   actorId       String? // AdminUser.id or Volunteer.id depending on actorType; null for system actions
   action        String // dot-namespaced, e.g. "shift.created", "registration.cancelled"
-  entityType    String // "Shift" | "Registration" | "Event" | "MemberInvite" | "EventPage" | "SectorLeader"
+  entityType    String // "Shift" | "Registration" | "Event" | "MemberInvite" | "EventPage" | "SectorLeader" | "EventMilestone"
   entityId      String
   changes       Json? // { field: { from, to } }, non-PII values only
   causedByLogId String? // set when this entry is a direct, known consequence of another one
