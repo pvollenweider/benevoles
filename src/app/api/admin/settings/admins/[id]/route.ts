@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
+import { adminActor, logOrgEvent } from "@/lib/org-log"
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireOrgSession()
@@ -22,6 +23,14 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   }
 
   await prisma.adminUser.delete({ where: { id } })
+
+  await logOrgEvent({
+    organizationId,
+    actor: adminActor(session),
+    action: "adminuser.removed",
+    entityType: "AdminUser",
+    entityId: id,
+  })
 
   return NextResponse.json({ success: true })
 }

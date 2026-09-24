@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
+import { adminActor, logOrgEvent } from "@/lib/org-log"
 import { randomBytes } from "crypto"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
@@ -74,6 +75,14 @@ export async function POST(req: Request) {
       setupTokenExpiresAt,
     },
     select: { id: true, name: true, email: true, role: true, isActive: true, createdAt: true, setupTokenExpiresAt: true },
+  })
+
+  await logOrgEvent({
+    organizationId,
+    actor: adminActor(guard.session),
+    action: "adminuser.invited",
+    entityType: "AdminUser",
+    entityId: admin.id,
   })
 
   const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
