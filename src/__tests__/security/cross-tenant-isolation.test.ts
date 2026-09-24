@@ -519,3 +519,50 @@ describe("Sector leaders — cross-tenant isolation", () => {
     expect(res.status).toBe(404)
   })
 })
+
+// ── Milestones (#189) ────────────────────────────────────────────────────────
+
+describe("Milestones — cross-tenant isolation", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("GET /api/admin/events/[id]/milestones returns 404 for org-B event", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/milestones/route")
+    setupGuard() // event.findFirst → null
+
+    const res = await GET(makeRequest("/api/admin/events/evt-b/milestones"), params("evt-b"))
+    expect(res.status).toBe(404)
+  })
+
+  it("POST /api/admin/events/[id]/milestones returns 404 for org-B event", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/milestones/route")
+    setupGuard()
+
+    const res = await POST(
+      makeRequest("/api/admin/events/evt-b/milestones", "POST", { title: "Fermer les inscriptions", dueDate: "2026-09-20" }),
+      params("evt-b"),
+    )
+    expect(res.status).toBe(404)
+  })
+
+  it("PATCH /api/admin/events/[id]/milestones/[milestoneId] returns 404 for org-B event", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/milestones/[milestoneId]/route")
+    setupGuard()
+
+    const res = await PATCH(
+      makeRequest("/api/admin/events/evt-b/milestones/m-1", "PATCH", { done: true }),
+      { params: Promise.resolve({ id: "evt-b", milestoneId: "m-1" }) },
+    )
+    expect(res.status).toBe(404)
+  })
+
+  it("DELETE /api/admin/events/[id]/milestones/[milestoneId] returns 404 for org-B event", async () => {
+    const { DELETE } = await import("@/app/api/admin/events/[id]/milestones/[milestoneId]/route")
+    setupGuard()
+
+    const res = await DELETE(
+      makeRequest("/api/admin/events/evt-b/milestones/m-1", "DELETE"),
+      { params: Promise.resolve({ id: "evt-b", milestoneId: "m-1" }) },
+    )
+    expect(res.status).toBe(404)
+  })
+})

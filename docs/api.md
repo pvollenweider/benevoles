@@ -48,6 +48,8 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/admin/events/[id]/pages/reorder` | POST | Réordonner les pages (`{ "pageIds": [...] }`, ordre = position dans le tableau) |
 | `/api/admin/events/[id]/sector-leaders` | GET, POST | Lister, désigner un·e responsable d'un poste (`roleName`) ; envoie automatiquement le lien d'accès par email (#186) |
 | `/api/admin/events/[id]/sector-leaders/[leaderId]` | DELETE | Retirer un·e responsable |
+| `/api/admin/events/[id]/milestones` | GET, POST | Lister, créer un jalon (titre, échéance) (#189) |
+| `/api/admin/events/[id]/milestones/[milestoneId]` | PATCH, DELETE | Modifier (dont cocher `done`), supprimer un jalon |
 | `/api/admin/events/[id]/qr` | GET | QR code de la page publique ; `?format=svg` pour le SVG, PNG par défaut |
 | `/api/admin/events/[id]/export/pdf` | GET | Page HTML de l'export (planning, récap, bénévoles) destinée à l'impression en PDF depuis le navigateur |
 | `/api/admin/events/[id]/send-reminder` | POST | Rappel manuel à tous les inscrits |
