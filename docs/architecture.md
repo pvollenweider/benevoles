@@ -67,8 +67,8 @@ Modèles Prisma (`prisma/schema.prisma`) :
 | `OrgSlugHistory` | Anciens slugs |
 | `AdminUser` | Compte admin ou super admin, jetons d'activation et de réinitialisation |
 | `Event` | Événement : dates, statut de publication, rappels activés |
-| `Shift` | Créneau : rôle, capacité, statut, liste d'attente activée, ordre |
-| `Volunteer` | Bénévole d'une organisation, unique par email et organisation |
+| `Shift` | Créneau : rôle, capacité, statut, liste d'attente activée, ordre, âge minimum optionnel (`minAge`, #192) |
+| `Volunteer` | Bénévole d'une organisation, unique par email et organisation ; `birthDate` optionnel, collecté seulement si un créneau l'exige |
 | `Registration` | Inscription d'un bénévole à un créneau : statut, jeton, position en liste d'attente, dates d'envoi des rappels |
 | `MemberInvite` | Invitation d'un membre à un événement |
 | `PushSubscription` | Abonnement push |

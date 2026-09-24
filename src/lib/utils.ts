@@ -17,6 +17,17 @@ export function formatShortDate(date: Date | string): string {
   return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
 }
 
+// Age in whole years as of today — shared by the public registration form's client-side check
+// and the server-side enforcement it mirrors (#192), so the two never drift apart.
+export function calculateAge(birthDate: Date | string): number {
+  const birth = typeof birthDate === "string" ? new Date(birthDate) : birthDate
+  const today = new Date()
+  let age = today.getFullYear() - birth.getFullYear()
+  const monthDiff = today.getMonth() - birth.getMonth()
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) age--
+  return age
+}
+
 export function slugify(text: string): string {
   return text
     .toLowerCase()

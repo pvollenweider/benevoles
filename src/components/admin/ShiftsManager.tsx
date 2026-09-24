@@ -9,6 +9,7 @@ import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
 const emptyShift = {
   roleName: "", label: "", description: "", date: "", startTime: "", endTime: "",
   capacity: 2, locationDetails: "", displayOrder: 0, internalNotes: "", waitlistEnabled: false,
+  minAge: "" as number | string,
 }
 
 function localISO(d: Date) {
@@ -110,9 +111,10 @@ export default function ShiftsManager({
     const label  = form.label.trim() || form.roleName
     const url    = editingId ? `/api/admin/shifts/${editingId}` : "/api/admin/shifts"
     const method = editingId ? "PATCH" : "POST"
+    const minAge = form.minAge === "" ? null : Number(form.minAge)
     const body   = editingId
-      ? { ...form, label, capacity: Number(form.capacity) }
-      : { ...form, label, eventId, capacity: Number(form.capacity) }
+      ? { ...form, label, capacity: Number(form.capacity), minAge }
+      : { ...form, label, eventId, capacity: Number(form.capacity), minAge }
 
     const res  = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
     const data = await res.json()
@@ -390,6 +392,20 @@ export default function ShiftsManager({
             <label className="block text-xs font-medium text-gray-600 mb-1">Notes internes</label>
             <input type="text" value={form.internalNotes} onChange={e => setField("internalNotes", e.target.value)} className="input" />
           </div>
+          <div>
+            <label htmlFor={`minAge-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Âge minimum (optionnel)</label>
+            <input
+              id={`minAge-${editingId ?? "new"}`}
+              type="number" min="0" max="120" placeholder="ex. 18"
+              value={form.minAge}
+              onChange={e => setField("minAge", e.target.value === "" ? "" : Number(e.target.value))}
+              aria-describedby={`minAge-hint-${editingId ?? "new"}`}
+              className="input"
+            />
+            <p id={`minAge-hint-${editingId ?? "new"}`} className="text-[11px] text-gray-500 mt-1">
+              Affiché en info sur le créneau public ; vérifié à l&apos;inscription (date de naissance demandée si besoin).
+            </p>
+          </div>
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -472,6 +488,7 @@ export default function ShiftsManager({
                   <td className="px-4 py-3">
                     <p className="font-medium text-gray-800">{s.roleName}</p>
                     {s.label !== s.roleName && <p className="text-xs text-gray-500">{s.label}</p>}
+                    {s.minAge != null && <p className="text-[11px] text-gray-500">{s.minAge} ans min.</p>}
                   </td>
                   <td className="px-4 py-3 hidden sm:table-cell tabular-nums">
                     <p className="text-gray-700 font-medium">{s.registrationCount}/{s.capacity}</p>
@@ -497,6 +514,7 @@ export default function ShiftsManager({
                         capacity: s.capacity,
                         internalNotes: s.internalNotes ?? "",
                         waitlistEnabled: s.waitlistEnabled ?? false,
+                        minAge: s.minAge ?? "",
                       }, s.id)}
                       className="text-xs text-blue-500 hover:text-blue-700 mr-3"
                     >
