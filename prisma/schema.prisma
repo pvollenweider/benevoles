@@ -182,6 +182,20 @@ model OrgLog {
   @@index([organizationId, createdAt])
 }
 
+// One row per manual product-update broadcast to the beta-tester (AdminUser) pool — see
+// issue #200. Not a queue/job table: sending is synchronous within the request (a handful of
+// recipients, admin-triggered by hand, not periodic) — this is a history/log of what was sent,
+// for the admin UI to show past sends, not a work queue to drain.
+model ProductUpdateSend {
+  id             String   @id @default(cuid())
+  subject        String
+  content        String // Markdown, same source rendered for every recipient
+  sentByAdminId  String? // AdminUser.id; no FK — must survive that admin being removed later
+  recipientCount Int
+  successCount   Int
+  createdAt      DateTime @default(now())
+}
+
 model Shift {
   id              String   @id @default(cuid())
   eventId         String
@@ -302,6 +316,11 @@ model AdminUser {
   setupTokenExpiresAt    DateTime?
   passwordResetToken     String?   @unique
   passwordResetExpiresAt DateTime?
+  // Product-update emails (#200) — distinct from having an account at all. Defaults to opted
+  // in (this is how the super admin reaches the beta-tester pool); an admin can unsubscribe via
+  // a signed link in the email itself, no login required.
+  receiveProductUpdates       Boolean   @default(true)
+  productUpdatesUnsubscribedAt DateTime?
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
 

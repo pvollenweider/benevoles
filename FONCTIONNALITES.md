@@ -252,6 +252,15 @@ Accessible uniquement aux comptes avec rôle `super_admin` (protégé au niveau 
 - **URLs par slug** : `/super-admin/organizations/<slug>` au lieu de l'identifiant interne
 - **Basculement d'organisation** : bouton « Gérer → » bascule le contexte admin vers l'organisation choisie (cookie `sa-org-id`) sans déconnexion
 
+### Nouveautés produit (`/super-admin/product-updates`)
+
+- Communication manuelle des nouveautés de benevol.app aux administrateurs de toutes les organisations (#200), sans plateforme de newsletter externe
+- Rédaction en Markdown (objet + contenu), aperçu en direct
+- **Envoyer un test** : email uniquement à soi-même, jamais compté dans l'historique
+- **Envoi** : à tous les administrateurs actifs et abonnés (`receiveProductUpdates`), confirmation demandée avant envoi ; envoi synchrone (pas de file d'attente — volume trop faible pour le justifier), échec d'un destinataire n'empêche pas les autres
+- **Désabonnement** : lien signé dans chaque email, sans connexion requise ; le compte reste actif, seules les communications de nouveautés s'arrêtent
+- **Historique** : liste des envois passés avec nombre de destinataires atteints
+
 ---
 
 ## Notifications email

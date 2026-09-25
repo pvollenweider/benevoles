@@ -27,6 +27,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/public/push` | GET, POST, DELETE | public | Clé VAPID publique, abonnement et désabonnement push |
 | `/api/public/forgot-password` | POST | public | Envoie un email de réinitialisation du mot de passe admin |
 | `/api/public/reset-password` | POST | public (jeton) | Définit un nouveau mot de passe |
+| `/api/public/product-updates/unsubscribe` | GET | public (jeton signé) | Désabonnement des communications de nouveautés produit (#200) ; redirige vers `/product-updates/unsubscribed` |
 
 ## Authentification
 
@@ -79,6 +80,9 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/super-admin/organizations/[id]/send-invite` | POST | Envoyer l'email d'invitation aux admins de l'organisation qui n'ont pas encore activé leur compte |
 | `/api/super-admin/use-org/[id]` | GET | Enregistre l'organisation dans le cookie `sa-org-id` puis redirige vers `/admin/events` |
 | `/api/super-admin/profile` | PATCH | Changer l'email ou le mot de passe du super admin |
+| `/api/super-admin/product-updates` | GET | Historique des envois, nombre d'administrateurs abonnés (#200) |
+| `/api/super-admin/product-updates/send` | POST | Diffuser une communication à tous les administrateurs actifs et abonnés |
+| `/api/super-admin/product-updates/test` | POST | Envoyer un test à soi-même uniquement, non enregistré dans l'historique |
 
 ## Cron et supervision
 

@@ -27,6 +27,7 @@ export type NotificationKind =
   | "waitlist_offered"
   | "sector_leader_invite"
   | "sector_leader_new_signup"
+  | "product_update"
 
 export type Recipient = {
   email?: string | null
