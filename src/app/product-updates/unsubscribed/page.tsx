@@ -19,7 +19,7 @@ export default async function UnsubscribedPage({
             <span aria-hidden="true" className="text-4xl block mb-4">✓</span>
             <h1 className="text-lg font-bold text-gray-900 mb-2">Désabonnement confirmé</h1>
             <p className="text-sm text-gray-500">
-              Vous ne recevrez plus d&apos;emails de nouveautés produit benevol.app. Votre compte reste actif.
+              Vous ne recevrez plus les communications admin de benevol.app. Votre compte reste actif.
             </p>
           </>
         ) : (

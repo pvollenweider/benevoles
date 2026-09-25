@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
+import SuperAdminMenu from "./SuperAdminMenu"
 
 export default function AdminNav({ userName, role, orgName }: { userName: string; role?: string; orgName?: string }) {
   const pathname = usePathname()
@@ -39,30 +40,9 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
           >
             Paramètres
           </Link>
-          {isSuperAdmin && (
-            <>
-              <span aria-hidden="true" className="text-gray-200 select-none">|</span>
-              <Link
-                href="/super-admin/organizations"
-                className={`text-sm ${pathname.startsWith("/super-admin/organizations") ? "text-purple-600 font-medium" : "text-purple-700 hover:text-purple-900"}`}
-              >
-                Organisations
-              </Link>
-              <Link
-                href="/super-admin/product-updates"
-                className={`text-sm ${pathname.startsWith("/super-admin/product-updates") ? "text-purple-600 font-medium" : "text-purple-700 hover:text-purple-900"}`}
-              >
-                Nouveautés produit
-              </Link>
-            </>
-          )}
         </div>
         <div className="flex items-center gap-4">
-          {isSuperAdmin && (
-            <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium">
-              Super Admin
-            </span>
-          )}
+          {isSuperAdmin && <SuperAdminMenu />}
           <Link href="/doc/admin" target="_blank" className="text-xs text-gray-500 hover:text-gray-800 underline underline-offset-2">
             Aide
             <span className="sr-only"> (ouvre dans un nouvel onglet)</span>
