@@ -9,7 +9,7 @@ Hello ! Ce guide explique comment s'inscrire à un créneau de bénévolat, rece
 L'organisateur vous communique un lien du type :
 
 ```
-https://[site]/[organisation]/[nom-de-levenement]
+https://[organisation].benevol.app/[nom-de-levenement]
 ```
 
 Ouvrez ce lien depuis n'importe quel navigateur, sur téléphone ou ordinateur.
@@ -82,7 +82,7 @@ La page de succès affiche également ce lien — pensez à le noter si vous n'a
 Depuis votre **lien personnel** (reçu par email ou affiché après inscription) :
 
 ```
-https://[site]/my/[token]
+https://[organisation].benevol.app/my/[token]
 ```
 
 Vous pouvez :

@@ -151,8 +151,10 @@ Depuis la page de l'événement (`/admin/events/[id]`), cliquer sur **Publier**.
 L'événement devient alors visible à l'URL :
 
 ```
-https://[site]/[slug-organisation]/[slug-evenement]
+https://[slug-organisation].benevol.app/[slug-evenement]
 ```
+
+Le slug de l'organisation est un sous-domaine, pas un chemin — chaque organisation a sa propre adresse.
 
 Le lien **Vue publique ↗** apparaît sur la page admin dès que l'événement est publié.
 
