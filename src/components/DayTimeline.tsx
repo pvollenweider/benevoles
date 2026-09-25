@@ -23,7 +23,9 @@ type Show = GanttShow
 const ROW_H   = 44
 const LANE_GAP = 4
 const GAP     = 4
-const LABEL_W = 72
+// 92, not 72: long role names ("Chauffeurs artistes", "Techniciens de scène"…) were truncated
+// to near-illegibility, especially on mobile where the card is already narrow (#217).
+const LABEL_W = 92
 const SHOW_H  = 22
 const AXIS_H  = 18
 // The chart is fluid: it takes the whole width of its card and positions everything
@@ -115,7 +117,10 @@ export default function DayTimeline({
                 className="flex items-center justify-end pr-2 bg-white"
                 style={{ height: roleHeight[role], marginBottom: GAP }}
               >
-                <span className="text-[10px] text-gray-600 truncate leading-tight text-right">
+                <span
+                  className="text-[10px] text-gray-600 line-clamp-2 leading-tight text-right"
+                  title={role}
+                >
                   {role.split(" &")[0].split(" —")[0].trim()}
                 </span>
               </div>

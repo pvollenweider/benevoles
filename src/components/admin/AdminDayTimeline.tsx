@@ -11,7 +11,9 @@ const SNAP       = 15
 const ROW_H      = 48
 const LANE_GAP   = 4
 const GAP        = 8
-const LABEL_W    = 92
+// 112, not 92: long role names ("Chauffeurs artistes", "Techniciens de scène"…) were truncated
+// to near-illegibility, especially on mobile (#217).
+const LABEL_W    = 112
 const HANDLE_W   = 8
 const MIN_DUR    = 15
 const AXIS_H     = 20
@@ -446,7 +448,10 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                   className="flex items-center justify-end pr-2 shrink-0"
                   style={{ height: roleHeight[role], marginBottom: GAP }}
                 >
-                  <span className="text-[10px] text-gray-500 truncate text-right leading-tight max-w-full">
+                  <span
+                    className="text-[10px] text-gray-500 line-clamp-2 text-right leading-tight max-w-full"
+                    title={role}
+                  >
                     {role.split(" &")[0].trim()}
                   </span>
                 </div>
