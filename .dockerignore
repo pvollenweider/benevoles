@@ -6,5 +6,10 @@ node_modules
 !.env.example
 docker-compose*.yml
 *.md
+# GUIDE_ADMIN.md / GUIDE_BENEVOLE.md are read at build time (next build prerenders /doc/admin
+# and /doc/benevole, both fs.readFileSync these at the repo root) and at runtime — excluded by
+# the *.md rule above like every other doc file, which broke the production build (ENOENT).
+!GUIDE_ADMIN.md
+!GUIDE_BENEVOLE.md
 .DS_Store
 coverage
