@@ -15,6 +15,12 @@ describe("renderEventPageMarkdown", () => {
     expect(html).not.toContain("<h1>")
   })
 
+  it("renders headings at their literal depth when shiftHeadings is false (#200's /doc pages, whose own page.tsx supplies the <h1>)", () => {
+    const html = renderEventPageMarkdown("## Section\n\n### Sous-section", { shiftHeadings: false })
+    expect(html).toContain("<h2>Section</h2>")
+    expect(html).toContain("<h3>Sous-section</h3>")
+  })
+
   it("renders a safe link with href intact", () => {
     const html = renderEventPageMarkdown("[Plan d'accès](https://example.com/plan)")
     expect(html).toContain('href="https://example.com/plan"')
@@ -40,6 +46,12 @@ describe("renderEventPageMarkdown", () => {
   it("strips a style attribute (not in the allowlist) even on an allowed tag", () => {
     const html = renderEventPageMarkdown('<p style="display:none">masqué</p>')
     expect(html).not.toContain("style=")
+  })
+
+  it("preserves an image with its alt text (needed for embedding screenshots in the /doc guides)", () => {
+    const html = renderEventPageMarkdown("![Le planning des créneaux](/doc-img/admin-shifts.png)")
+    expect(html).toContain('src="/doc-img/admin-shifts.png"')
+    expect(html).toContain('alt="Le planning des créneaux"')
   })
 
   it("preserves a table (GFM)", () => {
