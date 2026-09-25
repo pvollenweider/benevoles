@@ -48,6 +48,7 @@ Modules `src/lib/` à connaître :
 | `event-page-markdown.ts` | Rend le Markdown des pages personnalisées d'événement en HTML (`marked`), sanitisé avec DOMPurify (liste blanche de balises/attributs) à la lecture, pas à l'écriture |
 | `sector-leaders.ts` | Notifie les responsables de secteur d'un poste à chaque nouvelle inscription (#186) |
 | `org-log.ts` / `org-log-read.ts` | Journal d'activité au niveau de l'organisation — écriture et lecture (#194) |
+| `product-updates.ts` | Signature/vérification du lien de désabonnement des nouveautés produit, sans colonne de jeton dédiée (#200) |
 
 ## Multi-tenant
 
@@ -65,7 +66,7 @@ Modèles Prisma (`prisma/schema.prisma`) :
 |--------|------|
 | `Organization` | Tenant : slug, `active`, charte, assurance, titre de la page publique (`publicTitle`) |
 | `OrgSlugHistory` | Anciens slugs |
-| `AdminUser` | Compte admin ou super admin, jetons d'activation et de réinitialisation |
+| `AdminUser` | Compte admin ou super admin, jetons d'activation et de réinitialisation, abonnement aux nouveautés produit (`receiveProductUpdates`, #200) |
 | `Event` | Événement : dates, statut de publication, rappels activés |
 | `Shift` | Créneau : rôle, capacité, statut, liste d'attente activée, ordre, âge minimum optionnel (`minAge`, #192) |
 | `Volunteer` | Bénévole d'une organisation, unique par email et organisation ; `birthDate` optionnel, collecté seulement si un créneau l'exige |
@@ -76,6 +77,7 @@ Modèles Prisma (`prisma/schema.prisma`) :
 | `SectorLeader` | Responsable d'un poste (`roleName`) au sein d'un événement : nom, email, jeton d'accès lecture seule (#186) |
 | `EventMilestone` | Jalon/échéance d'un événement : titre, date, fait/pas fait — purement informatif (#189) |
 | `OrgLog` | Journal d'audit au niveau de l'organisation : changements sur `Volunteer`/`AdminUser`, pas rattachés à un événement (#194) |
+| `ProductUpdateSend` | Historique des communications de nouveautés produit diffusées aux administrateurs (#200) |
 
 Statuts d'une inscription : `active`, `waiting` (en liste d'attente), `offered` (place proposée) et `cancelled`.
 

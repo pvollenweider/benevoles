@@ -4,6 +4,7 @@
 
 import type { NotificationPayload } from "./types"
 import { eventPublicUrl, orgBaseUrl } from "@/lib/urls"
+import { renderMarkdown } from "@/lib/markdown"
 
 const BASE_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
 
@@ -99,6 +100,8 @@ export function render(payload: NotificationPayload): RenderedEmail {
       return renderSectorLeaderInvite(payload)
     case "sector_leader_new_signup":
       return renderSectorLeaderNewSignup(payload)
+    case "product_update":
+      return renderProductUpdate(payload)
   }
 }
 
@@ -766,6 +769,33 @@ function renderSectorLeaderNewSignup(p: NotificationPayload): RenderedEmail {
     <p><strong>${escapeHtml(d.volunteerName)}</strong> vient de s'inscrire sur <strong>${escapeHtml(d.shiftLabel)}</strong> (${escapeHtml(d.shiftDate)} · ${escapeHtml(d.startTime)}–${escapeHtml(d.endTime)}), dont vous êtes responsable pour <strong>${escapeHtml(d.eventTitle)}</strong>.</p>
     <p style="margin-top:1.25em">${btn(leaderUrl, "Voir la liste complète")}</p>
   `, `${d.volunteerName} vient de s'inscrire sur ${d.roleName}.`)
+
+  return { subject, html, text }
+}
+
+// ── Nouveautés produit (#200) ─────────────────────────────────────────────────
+
+function renderProductUpdate(p: NotificationPayload): RenderedEmail {
+  const { subject, content, unsubscribeUrl } = p.data as {
+    subject: string
+    content: string
+    unsubscribeUrl: string
+  }
+
+  const text = [
+    content,
+    ``,
+    `Vous recevez cet email en tant qu'administrateur benevol.app.`,
+    `Se désabonner de ces communications : ${unsubscribeUrl}`,
+  ].join("\n")
+
+  const html = wrap(`
+    <div style="line-height:1.6">${renderMarkdown(content)}</div>
+    <p style="color:#aaaaaa;font-size:0.8em;margin-top:2em;padding-top:1em;border-top:1px solid #f0f0f0">
+      Vous recevez cet email en tant qu'administrateur benevol.app.
+      <a href="${unsubscribeUrl}" style="color:#aaaaaa">Se désabonner</a> de ces communications.
+    </p>
+  `, subject)
 
   return { subject, html, text }
 }

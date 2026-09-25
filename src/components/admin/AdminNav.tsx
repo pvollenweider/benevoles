@@ -41,12 +41,18 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
           </Link>
           {isSuperAdmin && (
             <>
-              <span className="text-gray-200 select-none">|</span>
+              <span aria-hidden="true" className="text-gray-200 select-none">|</span>
               <Link
                 href="/super-admin/organizations"
-                className={`text-sm ${pathname.startsWith("/super-admin") ? "text-purple-600 font-medium" : "text-purple-400 hover:text-purple-700"}`}
+                className={`text-sm ${pathname.startsWith("/super-admin/organizations") ? "text-purple-600 font-medium" : "text-purple-700 hover:text-purple-900"}`}
               >
                 Organisations
+              </Link>
+              <Link
+                href="/super-admin/product-updates"
+                className={`text-sm ${pathname.startsWith("/super-admin/product-updates") ? "text-purple-600 font-medium" : "text-purple-700 hover:text-purple-900"}`}
+              >
+                Nouveautés produit
               </Link>
             </>
           )}
