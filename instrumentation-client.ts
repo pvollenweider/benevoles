@@ -18,8 +18,11 @@ Sentry.init({
   enableLogs: true,
   // iOS browsers (Firefox, Brave) inject scripts into WKWebView (app:/// origin)
   // that throw on missing globals (__firefox__, DarkReader, window.ethereum). Not app code.
-  ignoreErrors: [/__firefox__/, /DarkReader/, /window\.ethereum/],
-  denyUrls: [/^app:\/\//],
+  // MetaMask (and other wallet extensions' inpage.js) likewise auto-connects on every page
+  // load and throws when its own extension backend isn't reachable — nothing to do with this
+  // site, which has no Web3/crypto code at all.
+  ignoreErrors: [/__firefox__/, /DarkReader/, /window\.ethereum/, /MetaMask/],
+  denyUrls: [/^app:\/\//, /inpage\.js/],
   integrations: [
     Sentry.replayIntegration({ maskAllText: true, blockAllMedia: true }),
   ],
