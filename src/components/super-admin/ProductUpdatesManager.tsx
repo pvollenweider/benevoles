@@ -81,9 +81,9 @@ export default function ProductUpdatesManager({
       <div role="status" aria-live="polite" className="sr-only">{announcement}</div>
 
       <div>
-        <h1 className="text-xl font-bold text-gray-900">Nouveautés produit</h1>
+        <h1 className="text-xl font-bold text-gray-900">Communications admin</h1>
         <p className="text-sm text-gray-500">
-          {recipientCount} administrateur{recipientCount > 1 ? "s" : ""} abonné{recipientCount > 1 ? "s" : ""} aux communications de nouveautés.
+          {recipientCount} administrateur{recipientCount > 1 ? "s" : ""} abonné{recipientCount > 1 ? "s" : ""} à ces communications.
         </p>
       </div>
 
@@ -99,7 +99,7 @@ export default function ProductUpdatesManager({
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               maxLength={150}
-              placeholder="Nouveautés de benevol.app — septembre"
+              placeholder="Nouveautés de benevol.app — septembre, ou toute autre communication"
               className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
             />
           </div>
