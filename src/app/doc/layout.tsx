@@ -1,7 +1,10 @@
 import Link from "next/link"
+import PublicFooter from "@/components/PublicFooter"
 
 // Same prose recipe as src/app/legal/layout.tsx, for visual consistency between the two
-// "static content rendered from source" page families.
+// "static content rendered from source" page families. Uses the real PublicFooter (the one every
+// other public page has) rather than a hand-rolled subset, so /doc doesn't drift from
+// benevol.app's actual footer (version number, "benevol.app" GitHub link, "Espace organisateur"...).
 export default function DocLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-white">
@@ -36,11 +39,7 @@ export default function DocLayout({ children }: { children: React.ReactNode }) {
           {children}
         </article>
 
-        <footer className="mt-16 pt-6 border-t border-gray-100 flex gap-6 text-xs text-gray-500">
-          <Link href="/legal/terms" className="hover:text-gray-600 transition-colors">CGU</Link>
-          <Link href="/legal/privacy" className="hover:text-gray-600 transition-colors">Confidentialité</Link>
-          <a href="mailto:contact@benevol.app" className="hover:text-gray-600 transition-colors">Contact</a>
-        </footer>
+        <PublicFooter />
       </main>
     </div>
   )
