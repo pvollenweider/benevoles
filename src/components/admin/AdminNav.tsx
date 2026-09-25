@@ -63,6 +63,10 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
               Super Admin
             </span>
           )}
+          <Link href="/doc/admin" target="_blank" className="text-xs text-gray-500 hover:text-gray-800 underline underline-offset-2">
+            Aide
+            <span className="sr-only"> (ouvre dans un nouvel onglet)</span>
+          </Link>
           <span className="text-xs text-gray-500">{userName}</span>
           <button
             onClick={() => signOut({ callbackUrl: "/admin/login" })}

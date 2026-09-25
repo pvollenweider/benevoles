@@ -20,6 +20,8 @@ export default function PublicFooter() {
         <span aria-hidden="true" className="select-none py-1">·</span>
         <span className="py-1">v{pkg.version}</span>
         <span aria-hidden="true" className="select-none py-1">·</span>
+        <Link href="/doc" className={linkClass}>Documentation</Link>
+        <span aria-hidden="true" className="select-none py-1">·</span>
         <Link href="/legal/terms" className={linkClass}>CGU</Link>
         <span aria-hidden="true" className="select-none py-1">·</span>
         <Link href="/legal/privacy" className={linkClass}>Confidentialité</Link>

@@ -20,27 +20,35 @@ import DOMPurify from "isomorphic-dompurify"
 
 // Page title is already rendered as the page's own <h1> (see [eventSlug]/[pageSlug]/page.tsx).
 // Shift every Markdown heading down one level so admin content can't produce a second/duplicate
-// <h1>, capping at h6 since HTML has no deeper level.
-const renderer = new Renderer()
-renderer.heading = function ({ tokens, depth }) {
-  const level = Math.min(depth + 1, 6)
-  const text = this.parser.parseInline(tokens)
-  return `<h${level}>${text}</h${level}>\n`
+// <h1>, capping at h6 since HTML has no deeper level. Only correct when the source's own
+// top-level "# Title" is left in place (it becomes the shifted <h2>) — callers that strip that
+// line themselves (see src/app/doc/*/page.tsx, whose *remaining* headings already start at ##
+// and should render at their literal depth) must pass shiftHeadings: false, or every section
+// loses a level (## → h3, ### → h4, ...) with no h2 ever appearing.
+function makeRenderer(shiftHeadings: boolean): Renderer {
+  const renderer = new Renderer()
+  renderer.heading = function ({ tokens, depth }) {
+    const level = Math.min(shiftHeadings ? depth + 1 : depth, 6)
+    const text = this.parser.parseInline(tokens)
+    return `<h${level}>${text}</h${level}>\n`
+  }
+  return renderer
 }
 
-marked.setOptions({ gfm: true, breaks: true, renderer })
+const ALLOWED_TAGS = [
+  "p", "br", "hr",
+  "h1", "h2", "h3", "h4", "h5", "h6",
+  "strong", "em", "del", "code", "pre",
+  "ul", "ol", "li",
+  "a", "blockquote", "img",
+  "table", "thead", "tbody", "tr", "th", "td",
+]
+// img needs its own alt text (WCAG 1.1.1) — Markdown's ![alt](src) already forces authors to
+// supply one syntactically, but DOMPurify still needs "alt" allowlisted for it to survive.
+const ALLOWED_ATTR = ["href", "title", "src", "alt", "width", "height"]
 
-export function renderEventPageMarkdown(content: string): string {
-  const html = marked.parse(content, { async: false })
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: [
-      "p", "br", "hr",
-      "h1", "h2", "h3", "h4", "h5", "h6",
-      "strong", "em", "del", "code", "pre",
-      "ul", "ol", "li",
-      "a", "blockquote",
-      "table", "thead", "tbody", "tr", "th", "td",
-    ],
-    ALLOWED_ATTR: ["href", "title"],
-  })
+export function renderEventPageMarkdown(content: string, options: { shiftHeadings?: boolean } = {}): string {
+  const { shiftHeadings = true } = options
+  const html = marked.parse(content, { async: false, gfm: true, breaks: true, renderer: makeRenderer(shiftHeadings) })
+  return DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR })
 }

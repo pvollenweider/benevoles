@@ -1,6 +1,6 @@
 # Guide bénévole
 
-Ce guide explique comment s'inscrire à un créneau de bénévolat, recevoir sa confirmation et gérer son inscription.
+Hello ! Ce guide explique comment s'inscrire à un créneau de bénévolat, recevoir sa confirmation, et gérer son inscription si un imprévu arrive — en 2 minutes montre en main.
 
 ---
 
@@ -14,11 +14,15 @@ https://[site]/[organisation]/[nom-de-levenement]
 
 Ouvrez ce lien depuis n'importe quel navigateur, sur téléphone ou ordinateur.
 
+Selon l'événement, des liens vers des pages complémentaires (règlement, FAQ, accès, ce qu'il faut apporter…) peuvent apparaître juste sous les instructions de l'organisateur.
+
 ---
 
 ## Choisir ses créneaux
 
 La page affiche un **planning par jour**. Chaque ligne correspond à un poste (accueil, photos, buvette…) et chaque barre colorée représente un créneau disponible.
+
+![Planning public d'un événement sur plusieurs jours, avec les postes en lignes, les créneaux en barres colorées, et les liens vers les pages personnalisées (règlement, accès)](/doc-img/public-timeline.png)
 
 ### Lire le planning
 
@@ -33,6 +37,10 @@ La page affiche un **planning par jour**. Chaque ligne correspond à un poste (a
 | Fond violet (🎪) | Plage d'un spectacle — repère visuel uniquement |
 
 Sur mobile, **faites défiler horizontalement** pour voir toutes les plages horaires de la journée.
+
+![Planning public d'un événement affiché sur mobile, avec les créneaux du jour en barres colorées](/doc-img/public-timeline-mobile.png)
+
+Certains postes affichent un petit repère (ex. « 18+ ») : ils demandent un âge minimum. Vous pouvez sélectionner le créneau normalement — votre date de naissance vous sera demandée dans le formulaire d'inscription si besoin, et l'inscription n'aboutit que si la condition d'âge est remplie.
 
 ### Sélectionner un créneau
 
@@ -51,10 +59,13 @@ Renseignez :
 - **Email** (obligatoire — vous recevrez la confirmation ici)
 - **Téléphone** (facultatif)
 - **Commentaire** (facultatif — informations utiles pour l'organisateur)
+- **Date de naissance** — demandée uniquement si l'un des créneaux choisis a un âge minimum
 - **Charte du bénévole** — cliquez sur « charte du bénévole » pour lire le texte complet dans un modal, puis cochez la case ou cliquez sur « J'ai lu et j'accepte »
 - **Consentement** — cochez la case pour accepter l'utilisation de vos données
 
 Cliquez sur **Confirmer mon inscription**.
+
+![Formulaire d'inscription pour un poste avec âge minimum (« Navette gare ↔ backstage »), montrant le champ Date de naissance et son message « Requis : 21 ans min. »](/doc-img/public-registration-birthdate.png)
 
 ---
 
@@ -112,3 +123,15 @@ La politique de confidentialité et les conditions d'utilisation sont accessible
 
 **J'ai un message « Ce créneau chevauche une inscription existante ».**
 Vous êtes déjà inscrit(e) à un créneau qui se passe en même temps. Vos inscriptions existantes apparaissent en vert dans le planning — les créneaux en conflit sont grisés automatiquement.
+
+**Je veux m'inscrire à plusieurs créneaux différents (ex. accueil le vendredi, bar le samedi).**
+Sélectionnez-les tous avant de cliquer sur **Continuer** — un seul formulaire suffit pour valider plusieurs créneaux d'un coup. Vous pourrez les annuler individuellement plus tard depuis votre lien personnel.
+
+**Le poste que je veux demande un âge minimum, mais je n'ai pas mon acte de naissance sur moi.**
+Pas besoin de justificatif à l'inscription : indiquez simplement votre date de naissance dans le formulaire. Si la condition n'est pas remplie, l'inscription est refusée avec un message clair ; sinon, elle passe normalement.
+
+**Je veux être sûr·e de ne pas oublier mon créneau le jour J.**
+Activez les notifications du navigateur sur la page de confirmation ou votre page personnelle (voir « Recevoir les rappels sur votre téléphone » plus haut) — en plus de l'email, vous recevrez un rappel 2 jours avant, la veille et le jour même.
+
+**Je n'ai plus le lien vers ma page personnelle.**
+Rouvrez la page de l'événement depuis le même navigateur : si votre session est encore reconnue, vos créneaux apparaissent en vert directement sur cette page et vous pouvez les annuler sans avoir besoin du lien. Pour retrouver le lien lui-même, l'email de confirmation le contient toujours.
