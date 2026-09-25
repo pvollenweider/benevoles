@@ -151,8 +151,10 @@ Depuis la page de l'événement (`/admin/events/[id]`), cliquer sur **Publier**.
 L'événement devient alors visible à l'URL :
 
 ```
-https://[site]/[slug-organisation]/[slug-evenement]
+https://[slug-organisation].benevol.app/[slug-evenement]
 ```
+
+Le slug de l'organisation est un sous-domaine, pas un chemin — chaque organisation a sa propre adresse.
 
 Le lien **Vue publique ↗** apparaît sur la page admin dès que l'événement est publié.
 
@@ -183,8 +185,8 @@ Vue tabulaire de toutes les inscriptions actives : nom, email, téléphone, cré
 ![Tableau des inscriptions d'un événement, avec bénévole, créneau, source et actions rendre responsable / annuler](/doc-img/admin-registrations.png)
 
 Depuis la page principale de l'événement (`/admin/events/[id]`) :
-- **Récap global** : créneaux, places totales, inscrits, places restantes
-- **Créneaux critiques** : liste des créneaux encore ouverts avec des places disponibles
+- 4 chiffres en un coup d'œil en haut de page : créneaux, places totales, inscrits, places restantes
+- **Créneaux à pourvoir** : liste des créneaux encore ouverts avec des places disponibles, avec une barre de remplissage par créneau (n'apparaît que s'il en reste au moins un)
 
 ---
 
@@ -227,21 +229,21 @@ Les invitations permettent d'envoyer des emails personnalisés aux membres de vo
 1. Cliquer sur **+ Inviter des membres**
 2. Sélectionner les membres par nom ou par tag
 3. Optionnel : ajouter un message personnalisé (visible dans l'email)
-4. Cliquer sur **Envoyer les invitations**
+4. Cliquer sur **Envoyer N invitation(s)**
 
 Chaque membre reçoit un email avec un lien unique qui pré-remplit son prénom, nom, email et téléphone sur la page d'inscription.
 
 ### Suivre l'état des invitations
 
 Le tableau affiche pour chaque membre invité :
-- **✅ Inscrit** — avec le ou les créneaux choisis
-- **⏳ Pas encore répondu**
+- **✓ Participation confirmée**
+- **Sans réponse**
 
-Les compteurs en haut récapitulent : total invités · inscrits · sans réponse.
+Les compteurs en haut récapitulent : invités · inscrits · sans réponse.
 
 ### Relancer les non-inscrits
 
-Le bouton **Relancer les non-inscrits** envoie un rappel à tous les membres invités qui ne sont pas encore inscrits. Un message personnalisé optionnel peut être ajouté.
+Le bouton **Relancer les N sans réponse** (visible s'il reste au moins un membre sans réponse) envoie un rappel à tous les membres invités qui ne se sont pas encore inscrits — sans message personnalisé, contrairement à l'invitation initiale.
 
 ---
 
@@ -341,7 +343,7 @@ Un seul événement, un seul planning : la timeline des créneaux affiche chaque
 Renseignez le champ **Âge minimum** sur le créneau concerné (voir « Âge minimum sur un poste » plus haut). Le poste reste visible et sélectionnable pour tout le monde sur la page publique — c'est la date de naissance, demandée à l'inscription, qui filtre. Rien à gérer à la main : un bénévole trop jeune reçoit un message clair et son inscription n'aboutit pas.
 
 **Un poste critique risque d'être en sous-effectif (sécurité, premiers secours…) — comment je le surveille ?**
-Le bloc **Créneaux critiques** sur la page de l'événement liste en direct tous les créneaux encore ouverts avec des places libres, tous postes confondus — pas besoin d'éplucher le planning entier la veille pour repérer ce qui manque.
+Le bloc **Créneaux à pourvoir** sur la page de l'événement liste en direct tous les créneaux encore ouverts avec des places libres, tous postes confondus, avec une barre de remplissage par créneau — pas besoin d'éplucher le planning entier la veille pour repérer ce qui manque.
 
 **Je veux qu'une personne suive « son » poste sans lui donner accès à tout l'admin.**
 Faites-en un·e responsable de secteur (voir plus haut). Elle reçoit un lien personnel, sans compte à créer, qui affiche uniquement qui est inscrit sur son poste — parfait pour un chef d'équipe sécurité ou un responsable bar qui doit juste savoir qui arrive et quand.

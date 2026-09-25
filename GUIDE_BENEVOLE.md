@@ -9,7 +9,7 @@ Hello ! Ce guide explique comment s'inscrire à un créneau de bénévolat, rece
 L'organisateur vous communique un lien du type :
 
 ```
-https://[site]/[organisation]/[nom-de-levenement]
+https://[organisation].benevol.app/[nom-de-levenement]
 ```
 
 Ouvrez ce lien depuis n'importe quel navigateur, sur téléphone ou ordinateur.
@@ -32,6 +32,7 @@ La page affiche un **planning par jour**. Chaque ligne correspond à un poste (a
 | Barre avec ✓ et fond foncé | Créneau sélectionné |
 | Barre avec ✓ vert clair | Créneau auquel vous êtes déjà inscrit(e) |
 | Barre grisée « Complet » | Plus de place disponible |
+| Barre colorée rayée blanc, « Complet · file d'attente » | Complet, mais la liste d'attente est ouverte — cliquez pour la rejoindre |
 | Barre grisée « Fermé » | Inscriptions désactivées |
 | Barre grisée (striée) | Créneau qui chevauche une de vos sélections — impossible de le choisir |
 | Fond violet (🎪) | Plage d'un spectacle — repère visuel uniquement |
@@ -82,7 +83,7 @@ La page de succès affiche également ce lien — pensez à le noter si vous n'a
 Depuis votre **lien personnel** (reçu par email ou affiché après inscription) :
 
 ```
-https://[site]/my/[token]
+https://[organisation].benevol.app/my/[token]
 ```
 
 Vous pouvez :
@@ -116,7 +117,7 @@ Vérifiez vos courriers indésirables. Si vous avez conservé le lien affiché s
 Annulez le créneau concerné via votre lien personnel, puis retournez sur la page de l'événement pour en choisir un autre.
 
 **Le créneau que je veux est complet.**
-Si la liste d'attente est activée sur ce créneau, un bouton **Rejoindre la liste d'attente** apparaît. En vous y inscrivant, vous recevrez un email dès qu'une place se libère. Vous aurez alors **24 heures** pour confirmer via le lien dans l'email. Sans réponse, la place passe à la personne suivante. Si la liste d'attente n'est pas disponible, revenez ultérieurement ou contactez l'organisateur.
+Si la liste d'attente est activée sur ce créneau, sa barre reste cliquable (rayée, avec « Complet · file d'attente »). En la sélectionnant et en vous inscrivant, vous recevrez un email dès qu'une place se libère. Vous aurez alors **24 heures** pour confirmer via le lien dans l'email. Sans réponse, la place passe à la personne suivante. Si la liste d'attente n'est pas disponible, la barre est grisée et non cliquable : revenez ultérieurement ou contactez l'organisateur.
 
 **Où sont mes données personnelles utilisées ?**
 La politique de confidentialité et les conditions d'utilisation sont accessibles par les liens en bas de page du site.
