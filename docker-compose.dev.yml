@@ -7,6 +7,11 @@
 #
 # Postgres expose le port 5432 (DATABASE_URL dans .env).
 # Mailpit expose deux ports : 1025 (SMTP) et 8025 (UI web pour lire les emails).
+#
+# `name:` explicite pour ne jamais partager de projet Compose avec docker-compose.e2e.yml (voir
+# son propre commentaire) ni avec docker-compose.yml, qui déclarent eux aussi des services
+# "postgres"/"mailpit" — sans ça, Compose retombe sur le nom du dossier pour les trois.
+name: benevoles-dev
 
 services:
   postgres:

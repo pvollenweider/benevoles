@@ -8,6 +8,15 @@
 #
 # Postgres : 5433 (au lieu de 5432 en dev)
 # Mailpit  : 1026 (SMTP) / 8026 (UI web) (au lieu de 1025/8025 en dev)
+#
+# `name:` est indispensable ici, pas juste les ports distincts : sans lui, Compose retombe sur le
+# nom du dossier ("benevoles") comme nom de projet, IDENTIQUE à celui de docker-compose.yml et
+# docker-compose.dev.yml (qui n'en déclarent pas non plus). Les trois services s'appellent tous
+# "postgres" / "mailpit" ; sous le même projet, `docker compose -f docker-compose.e2e.yml up`
+# reconcilie ces noms de service contre les containers dev déjà en place et les recrée avec la
+# définition e2e (vécu : ça a coupé puis recréé benevoles-postgres-1 et benevoles_mailpit_dev).
+# Les volumes nommés ont survécu (tmpfs ici, volume nommé en dev), mais ça n'aurait pas dû arriver.
+name: benevoles-e2e
 
 services:
   postgres:

@@ -11,7 +11,11 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
 
   const source = await db.event.findFirst({
     where: { id },
-    include: { shifts: true },
+    // Deleting a shift is a soft-cancel (status: "cancelled"), never a real delete — see
+    // ShiftsManager.handleDeleteShift / DELETE /api/admin/shifts/[id]. Duplicating used to copy
+    // every shift regardless of status and force it back to "open", resurrecting shifts the
+    // admin had already removed from the source event (#216).
+    include: { shifts: { where: { status: { not: "cancelled" } } } },
   })
 
   if (!source) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
