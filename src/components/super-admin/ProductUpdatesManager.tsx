@@ -25,6 +25,7 @@ export default function ProductUpdatesManager({
   const [sends, setSends] = useState(initialSends)
   const [subject, setSubject] = useState("")
   const [content, setContent] = useState("")
+  const [testEmail, setTestEmail] = useState("")
   const [sendingTest, setSendingTest] = useState(false)
   const [sending, setSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -32,6 +33,7 @@ export default function ProductUpdatesManager({
 
   const subjectId = useId()
   const contentId = useId()
+  const testEmailId = useId()
 
   const canSend = subject.trim().length > 0 && content.trim().length > 0
 
@@ -39,10 +41,11 @@ export default function ProductUpdatesManager({
     if (!canSend) return
     setSendingTest(true)
     setError(null)
+    const email = testEmail.trim()
     const res = await fetch("/api/super-admin/product-updates/test", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ subject, content }),
+      body: JSON.stringify(email ? { subject, content, email } : { subject, content }),
     })
     setSendingTest(false)
     if (!res.ok) {
@@ -50,7 +53,7 @@ export default function ProductUpdatesManager({
       setError(typeof data?.error === "string" ? data.error : "Échec de l'envoi du test.")
       return
     }
-    setAnnouncement("Email de test envoyé à votre propre adresse.")
+    setAnnouncement(email ? `Email de test envoyé à ${email}.` : "Email de test envoyé à votre propre adresse.")
   }
 
   async function sendBroadcast() {
@@ -120,6 +123,20 @@ export default function ProductUpdatesManager({
           {error && (
             <p role="alert" className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
           )}
+          <div>
+            <label htmlFor={testEmailId} className="block text-xs font-medium text-gray-600 mb-1">
+              Adresse du test (optionnel — sinon envoyé à vous-même)
+            </label>
+            <input
+              id={testEmailId}
+              type="email"
+              value={testEmail}
+              onChange={(e) => setTestEmail(e.target.value)}
+              placeholder="prenom@example.com"
+              maxLength={255}
+              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+            />
+          </div>
           <div className="flex justify-end gap-2 pt-1">
             <button
               type="button"
