@@ -3,7 +3,11 @@
   "version": "1.13.0",
   "license": "AGPL-3.0",
   "private": true,
+  "engines": {
+    "node": ">=26 <27"
+  },
   "scripts": {
+    "predev": "node scripts/check-node-version.mjs",
     "dev": "prisma generate && next dev",
     "build": "prisma generate && next build",
     "start": "next start",
@@ -16,6 +20,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "pretest:e2e": "node scripts/check-node-version.mjs",
     "test:e2e": "playwright test",
     "screenshots": "node scripts/screenshots.mjs",
     "prepare": "husky",
