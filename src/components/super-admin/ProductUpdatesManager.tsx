@@ -105,7 +105,7 @@ export default function ProductUpdatesManager({
           </div>
           <div>
             <label htmlFor={contentId} className="block text-xs font-medium text-gray-600 mb-1">
-              Contenu (Markdown : **gras**, listes avec « - », liens [texte](url))
+              Contenu (Markdown : titres avec #, **gras**, *italique*, ~~barré~~, listes avec « - » ou « 1. », citations avec «{" > "}», `code`, tableaux, liens [texte](url))
             </label>
             <textarea
               id={contentId}
