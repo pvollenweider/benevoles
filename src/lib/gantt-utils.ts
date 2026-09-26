@@ -5,6 +5,23 @@ export function toMin(t: string): number {
   return h * 60 + m
 }
 
+// "HH:MM" or "H:MM", complete — not a prefix someone's still typing ("1", "14:", "14:0"). Guards
+// the two default-end-time callers below (ShiftsManager's shift form, EventForm's show/spectacle
+// form), which both recompute a default end time on every keystroke of the start field: without
+// this check, addMinutes() ran on partial input too — "1".split(":") -> ["1"], Number(undefined)
+// is NaN, producing an end time of "NaN:NaN" while still typing the start time (#234).
+export function isCompleteTime(time: string): boolean {
+  return /^\d{1,2}:\d{2}$/.test(time)
+}
+
+// Wall-clock "HH:MM" `minutes` after `time`, wrapping at midnight. Only meaningful for a
+// complete time — callers should check isCompleteTime(time) first.
+export function addMinutes(time: string, minutes: number): string {
+  const [h, m] = time.split(":").map(Number)
+  const total = h * 60 + m + minutes
+  return `${String(Math.floor(total / 60) % 24).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`
+}
+
 // End times at or before their start time are overnight (e.g. 23:00 → 00:00)
 export function toMinEnd(end: string, start: string): number {
   const e = toMin(end), s = toMin(start)

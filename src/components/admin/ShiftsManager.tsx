@@ -3,7 +3,7 @@
 import { useState, useRef } from "react"
 import { flushSync } from "react-dom"
 import { KNOWN_ROLES, COLOR_OPTIONS, getRoleAccent } from "@/lib/roles"
-import { fmtRange, resolveNewShiftDisplayOrder } from "@/lib/gantt-utils"
+import { fmtRange, resolveNewShiftDisplayOrder, isCompleteTime, addMinutes } from "@/lib/gantt-utils"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
 
 const emptyShift = {
@@ -30,11 +30,6 @@ function eventDates(start: string, end: string): string[] {
   return dates
 }
 
-function addMinutes(time: string, minutes: number): string {
-  const [h, m] = time.split(":").map(Number)
-  const total = h * 60 + m + minutes
-  return `${String(Math.floor(total / 60) % 24).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`
-}
 
 function normalizeTime(val: string): string {
   const clean = val.trim()
@@ -531,7 +526,7 @@ export default function ShiftsManager({
                   setForm(f => ({
                     ...f,
                     startTime: start,
-                    endTime: (!f.endTime || f.endTime <= start) && start ? addMinutes(start, 90) : f.endTime,
+                    endTime: isCompleteTime(start) && (!f.endTime || f.endTime <= start) ? addMinutes(start, 60) : f.endTime,
                   }))
                 }}
                 onBlur={e => setField("startTime", normalizeTime(e.target.value))}
