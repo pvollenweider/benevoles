@@ -66,4 +66,21 @@ describe("buildDayParts (PDF export)", () => {
     const barIndex = gantt.indexOf(">Bar<")
     expect(accueilIndex).toBeLessThan(barIndex)
   })
+
+  it("wraps hours past midnight back to 00h instead of printing 24h/25h/26h (regression)", () => {
+    // Overnight shifts are stored with an hour above 23 on the raw "HH:MM" string itself
+    // (e.g. "26:00" for 2am the next morning) — the same convention fmt() in gantt-utils.ts
+    // already reads modulo 24 for the on-screen timeline. The axis header and the recap table's
+    // Début/Fin columns must read it the same way, not print the raw hour past 24.
+    const shifts = [shift({ id: "1", roleName: "Buvette", startTime: "24:00", endTime: "26:00" })]
+    const { gantt, recap } = buildDayParts(new Date("2026-07-10"), shifts, [], false)
+    expect(gantt).toContain(">0h<")
+    expect(gantt).not.toContain(">24h<")
+    expect(gantt).not.toContain(">25h<")
+    expect(gantt).not.toContain(">26h<")
+    expect(recap).toContain('class="center">0h<')
+    expect(recap).toContain('class="center">2h<')
+    expect(recap).not.toContain(">24h<")
+    expect(recap).not.toContain(">26h<")
+  })
 })
