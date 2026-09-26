@@ -3,7 +3,7 @@
 import { useState, useRef } from "react"
 import { flushSync } from "react-dom"
 import { KNOWN_ROLES } from "@/lib/roles"
-import { fmtRange } from "@/lib/gantt-utils"
+import { fmtRange, resolveNewShiftDisplayOrder } from "@/lib/gantt-utils"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
 
 const emptyShift = {
@@ -112,9 +112,12 @@ export default function ShiftsManager({
     const url    = editingId ? `/api/admin/shifts/${editingId}` : "/api/admin/shifts"
     const method = editingId ? "PATCH" : "POST"
     const minAge = form.minAge === "" ? null : Number(form.minAge)
+    const displayOrder = editingId
+      ? form.displayOrder
+      : resolveNewShiftDisplayOrder(shifts, form.roleName, form.displayOrder)
     const body   = editingId
-      ? { ...form, label, capacity: Number(form.capacity), minAge }
-      : { ...form, label, eventId, capacity: Number(form.capacity), minAge }
+      ? { ...form, label, capacity: Number(form.capacity), minAge, displayOrder }
+      : { ...form, label, eventId, capacity: Number(form.capacity), minAge, displayOrder }
 
     const res  = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
     const data = await res.json()
@@ -512,6 +515,11 @@ export default function ShiftsManager({
                         startTime: s.startTime,
                         endTime: s.endTime,
                         capacity: s.capacity,
+                        // Carried through so saving doesn't reset it to emptyShift's 0 default,
+                        // which silently dragged the whole role back to the front of the
+                        // timeline on every edit (#215) — displayOrder is shared per role
+                        // (see reorder-roles/route.ts) and this form has no field for it.
+                        displayOrder: s.displayOrder,
                         internalNotes: s.internalNotes ?? "",
                         waitlistEnabled: s.waitlistEnabled ?? false,
                         minAge: s.minAge ?? "",
