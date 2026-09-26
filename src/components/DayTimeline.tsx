@@ -12,6 +12,8 @@ export type TimelineShift = {
   startTime: string
   endTime: string
   status: string
+  capacity: number
+  registered: number
   spotsLeft: number
   displayOrder?: number
   waitlistEnabled?: boolean
@@ -181,17 +183,22 @@ export default function DayTimeline({
                   // below is aria-hidden.
                   const hasMinAge       = shift.minAge != null
                   const minAgeSuffix    = hasMinAge ? ` (${shift.minAge} ans minimum)` : ""
+                  // Same "N/capacity" indicator as the admin timeline (#243), so small groups
+                  // can see at a glance whether a shift has enough room for everyone. Skipped
+                  // once full (the "Complet" / waitlist wording already says all that matters).
+                  const spotsText       = unavail ? null : `${shift.registered}/${shift.capacity}`
+                  const spotsSuffix     = spotsText ? ` (${shift.spotsLeft} place${shift.spotsLeft > 1 ? "s" : ""} libre${shift.spotsLeft > 1 ? "s" : ""} sur ${shift.capacity})` : ""
                   const ariaLabel       = (isWaitlistable
                     ? (isSelected
                       ? `Retirer de la file d'attente — ${roleLabel} ${timeSpoken}`
                       : `Rejoindre la file d'attente — ${roleLabel} ${timeSpoken}`)
                     : (isSelected
                       ? `Désélectionner — ${roleLabel} ${timeSpoken}`
-                      : `Sélectionner — ${roleLabel} ${timeSpoken}`)) + minAgeSuffix
+                      : `Sélectionner — ${roleLabel} ${timeSpoken}`)) + minAgeSuffix + spotsSuffix
                   const subLabelText    = isWaitlistable && !isSelected
                     ? ["Complet · file d'attente", hasMinAge ? `${shift.minAge}+` : null].filter(Boolean).join(" · ")
-                    : [hasLabel ? shift.label : null, hasMinAge ? `${shift.minAge}+` : null].filter(Boolean).join(" · ")
-                  const showSubLabel    = hasLabel || (isWaitlistable && !isSelected) || hasMinAge
+                    : [spotsText, hasLabel ? shift.label : null, hasMinAge ? `${shift.minAge}+` : null].filter(Boolean).join(" · ")
+                  const showSubLabel    = hasLabel || (isWaitlistable && !isSelected) || hasMinAge || !!spotsText
 
                   return (
                     // @container: the text inside hides itself when the bar is too narrow for it
