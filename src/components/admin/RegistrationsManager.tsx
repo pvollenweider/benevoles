@@ -282,6 +282,8 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     volunteerId: string; volunteerName: string; volunteerEmail: string | null; roleOptions: string[]; defaultRole: string
   } | null>(null)
   const [leaderAnnouncement, setLeaderAnnouncement] = useState("")
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [bulkBusy, setBulkBusy] = useState(false)
 
   const uniqueRoles = [...new Set(shifts.map(s => s.roleName))]
   const visibleShifts = roleFilter ? shifts.filter(s => s.roleName === roleFilter) : shifts
@@ -333,6 +335,88 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     if (!confirm("Annuler cette inscription ?")) return
     await fetch(`/api/admin/registrations/${id}`, { method: "DELETE" })
     setRegistrations((prev) => prev.filter((r) => r.id !== id))
+  }
+
+  // ── Bulk actions on the current selection ───────────────────────────────────
+  // Uses the full registrations list, not `filtered`: a row selected before a search/filter
+  // change hides it must still be included in the bulk action, matching what the toolbar's own
+  // "N sélectionnée(s)" count already promises.
+  const selectedRegs = registrations.filter((r) => selectedIds.has(r.id))
+  const selectedActiveRegs = selectedRegs.filter((r) => r.status === "active")
+
+  function toggleSelected(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id); else next.add(id)
+      return next
+    })
+  }
+
+  function toggleSelectAllVisible() {
+    setSelectedIds((prev) => {
+      const visibleIds = filtered.map((r) => r.id)
+      const allSelected = visibleIds.length > 0 && visibleIds.every((id) => prev.has(id))
+      if (allSelected) return new Set()
+      return new Set(visibleIds)
+    })
+  }
+
+  async function handleBulkCancel() {
+    if (selectedActiveRegs.length === 0) return
+    if (!confirm(`Annuler ${selectedActiveRegs.length} inscription${selectedActiveRegs.length > 1 ? "s" : ""} ?`)) return
+    setBulkBusy(true)
+    const results = await Promise.allSettled(
+      selectedActiveRegs.map((r) => fetch(`/api/admin/registrations/${r.id}`, { method: "DELETE" }))
+    )
+    const cancelledIds = new Set(
+      selectedActiveRegs.filter((_, i) => results[i].status === "fulfilled" && (results[i] as PromiseFulfilledResult<Response>).value.ok).map((r) => r.id)
+    )
+    setRegistrations((prev) => prev.filter((r) => !cancelledIds.has(r.id)))
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      cancelledIds.forEach((id) => next.delete(id))
+      return next
+    })
+    setBulkBusy(false)
+    const failed = selectedActiveRegs.length - cancelledIds.size
+    setLeaderAnnouncement(
+      failed > 0
+        ? `${cancelledIds.size} inscription${cancelledIds.size > 1 ? "s" : ""} annulée${cancelledIds.size > 1 ? "s" : ""}, ${failed} échec${failed > 1 ? "s" : ""}.`
+        : `${cancelledIds.size} inscription${cancelledIds.size > 1 ? "s" : ""} annulée${cancelledIds.size > 1 ? "s" : ""}.`
+    )
+  }
+
+  async function handleBulkMakeLeader() {
+    if (selectedRegs.length === 0) return
+    const withEmail = selectedRegs.filter((r) => r.volunteer.email)
+    const withoutEmail = selectedRegs.length - withEmail.length
+    if (withEmail.length === 0) return
+    if (!confirm(`Rendre ${withEmail.length} bénévole${withEmail.length > 1 ? "s" : ""} responsable de leur poste respectif ?${withoutEmail > 0 ? ` (${withoutEmail} ignoré${withoutEmail > 1 ? "s" : ""}, pas d'email)` : ""}`)) return
+    setBulkBusy(true)
+    const results = await Promise.allSettled(
+      withEmail.map((r) =>
+        fetch(`/api/admin/events/${eventId}/sector-leaders`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            roleName: r.shift.roleName,
+            name: `${r.volunteer.firstName} ${r.volunteer.lastName}`,
+            email: r.volunteer.email,
+          }),
+        })
+      )
+    )
+    setBulkBusy(false)
+    const succeeded = results.filter((res) => res.status === "fulfilled" && (res as PromiseFulfilledResult<Response>).value.ok).length
+    const failed = withEmail.length - succeeded
+    setSelectedIds(new Set())
+    setLeaderAnnouncement(
+      [
+        succeeded > 0 ? `${succeeded} responsable${succeeded > 1 ? "s" : ""} ajouté${succeeded > 1 ? "s" : ""}.` : null,
+        failed > 0 ? `${failed} échec${failed > 1 ? "s" : ""}.` : null,
+        withoutEmail > 0 ? `${withoutEmail} ignoré${withoutEmail > 1 ? "s" : ""} (pas d'email).` : null,
+      ].filter(Boolean).join(" ")
+    )
   }
 
   async function handleAdd(e: React.FormEvent) {
@@ -476,6 +560,37 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
         </form>
       )}
 
+      {selectedIds.size > 0 && (
+        <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-2.5 flex-wrap">
+          <span className="text-sm text-blue-900 font-medium">
+            {selectedIds.size} sélectionnée{selectedIds.size > 1 ? "s" : ""}
+          </span>
+          <button
+            type="button"
+            onClick={handleBulkMakeLeader}
+            disabled={bulkBusy || selectedRegs.every((r) => !r.volunteer.email)}
+            className="text-xs text-blue-700 border border-blue-300 bg-white px-3 py-1.5 rounded-full hover:bg-blue-50 disabled:opacity-50 transition-colors"
+          >
+            Rendre responsable
+          </button>
+          <button
+            type="button"
+            onClick={handleBulkCancel}
+            disabled={bulkBusy || selectedActiveRegs.length === 0}
+            className="text-xs text-red-600 border border-red-300 bg-white px-3 py-1.5 rounded-full hover:bg-red-50 disabled:opacity-50 transition-colors"
+          >
+            {bulkBusy ? "…" : `Annuler (${selectedActiveRegs.length})`}
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedIds(new Set())}
+            className="text-xs text-blue-600 hover:text-blue-800 ml-auto"
+          >
+            Désélectionner
+          </button>
+        </div>
+      )}
+
       {filtered.length === 0 ? (
         <div className="text-center py-12 text-gray-500">
           <p>{registrations.length === 0 ? "Aucune inscription." : "Aucun résultat."}</p>
@@ -485,6 +600,19 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
+                <th scope="col" className="px-4 py-2.5 w-8">
+                  <label className="sr-only" htmlFor="reg-select-all">Sélectionner toutes les inscriptions visibles</label>
+                  <input
+                    id="reg-select-all"
+                    type="checkbox"
+                    checked={filtered.length > 0 && filtered.every((r) => selectedIds.has(r.id))}
+                    ref={(el) => {
+                      if (el) el.indeterminate = selectedIds.size > 0 && !filtered.every((r) => selectedIds.has(r.id))
+                    }}
+                    onChange={toggleSelectAllVisible}
+                    className="rounded border-gray-300"
+                  />
+                </th>
                 <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Bénévole</th>
                 <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden sm:table-cell">Créneau</th>
                 <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden md:table-cell">Source</th>
@@ -494,7 +622,19 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
             </thead>
             <tbody className="divide-y divide-gray-100">
               {filtered.map((reg) => (
-                <tr key={reg.id} className="hover:bg-gray-50">
+                <tr key={reg.id} className={`hover:bg-gray-50 ${selectedIds.has(reg.id) ? "bg-blue-50/60" : ""}`}>
+                  <td className="px-4 py-3">
+                    <label className="sr-only" htmlFor={`reg-select-${reg.id}`}>
+                      Sélectionner l&apos;inscription de {reg.volunteer.firstName} {reg.volunteer.lastName}
+                    </label>
+                    <input
+                      id={`reg-select-${reg.id}`}
+                      type="checkbox"
+                      checked={selectedIds.has(reg.id)}
+                      onChange={() => toggleSelected(reg.id)}
+                      className="rounded border-gray-300"
+                    />
+                  </td>
                   <td className="px-4 py-3">
                     <p className="font-medium text-gray-900">{reg.volunteer.firstName} {reg.volunteer.lastName}</p>
                     <p className="text-xs text-gray-500">{reg.volunteer.email}</p>
