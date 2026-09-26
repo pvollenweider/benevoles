@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* Class-based dark mode (opt-in via a `dark` class on <html>, toggled by DocThemeToggle) instead
+   of Tailwind's default `prefers-color-scheme` media query — needed so a manual override can win
+   over system preference. Only /doc's own layout ever adds this class, and no other part of the
+   app uses a `dark:` utility today, so this has zero effect anywhere else. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #111827;
