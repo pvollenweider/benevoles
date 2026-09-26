@@ -83,6 +83,12 @@ export function buildDayParts(
     return ri !== 0 ? ri : a.startTime.localeCompare(b.startTime)
   })
 
+  // The "Libellé" column only carries information when at least one shift that day has a label
+  // distinct from its role name (e.g. "Bar" role, "Bar — service" label). Most days have none —
+  // rendering the column anyway printed a header with an entirely empty column under it, in both
+  // tables.
+  const hasAnyLabel = shifts.some((s) => s.label !== s.roleName)
+
   // Smart name: first name only if unique across the day, else "Prénom N."
   const uniqueVols = new Map<string, VolData>()
   for (const s of shifts) for (const reg of s.registrations) {
@@ -143,7 +149,7 @@ export function buildDayParts(
         row += `<td class="role-cell"${roleSpan > 1 ? ` rowspan="${roleSpan}"` : ""}>${esc(role)}</td>`
       }
 
-      row += `<td class="label-cell">${esc(displayLbl)}</td>`
+      if (hasAnyLabel) row += `<td class="label-cell">${esc(displayLbl)}</td>`
 
       let s = 0
       const sortedShifts = [...group.shifts].sort((a, b) => toMin(a.startTime) - toMin(b.startTime))
@@ -176,7 +182,7 @@ export function buildDayParts(
 
   let showRow = ""
   if (shows.length > 0) {
-    showRow = `<tr class="show-row"><td class="show-label-cell" colspan="2"></td>`
+    showRow = `<tr class="show-row"><td class="show-label-cell"${hasAnyLabel ? ` colspan="2"` : ""}></td>`
     let s = 0
     while (s < slots.length) {
       const show = shows.find((sh) => Math.round((toMin(sh.startTime) - dayStart) / STEP) === s)
@@ -203,7 +209,7 @@ export function buildDayParts(
       <thead>
         <tr>
           <th class="th-role">Rôle</th>
-          <th class="th-label">Libellé</th>
+          ${hasAnyLabel ? `<th class="th-label">Libellé</th>` : ""}
           ${slotHeaders}
         </tr>
       </thead>
@@ -233,7 +239,7 @@ export function buildDayParts(
       : ""
     recapRows += `<tr${cls ? ` class="${cls}"` : ""}>
       <td>${esc(shift.roleName)}</td>
-      <td>${esc(lbl)}</td>
+      ${hasAnyLabel ? `<td>${esc(lbl)}</td>` : ""}
       <td class="center">${fmtSlot(toMin(shift.startTime))}</td>
       <td class="center">${fmtSlot(toMin(shift.endTime))}</td>
       <td class="center">${shift.capacity}</td>
@@ -248,7 +254,7 @@ export function buildDayParts(
     <table class="recap-table">
       <thead>
         <tr>
-          <th>Poste</th><th>Libellé</th><th class="center">Début</th><th class="center">Fin</th>
+          <th>Poste</th>${hasAnyLabel ? `<th>Libellé</th>` : ""}<th class="center">Début</th><th class="center">Fin</th>
           <th class="center">Places</th><th class="center">Inscrits</th><th>Bénévoles</th>
           ${waitlistHeader}
         </tr>
