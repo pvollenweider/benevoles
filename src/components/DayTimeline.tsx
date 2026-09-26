@@ -172,6 +172,11 @@ export default function DayTimeline({
                   const overnight       = crossesMidnight(shift.startTime, shift.endTime)
                   const timeRange       = `${fmt(shift.startTime)}–${fmt(shift.endTime)}`
                   const timeLabel       = overnight ? `${timeRange} +1` : timeRange
+                  // Fallback for bars too narrow for the full range (common on phones: a 45–70min
+                  // shift at a natural day-wide zoom often lands just under the full-range
+                  // threshold) — the start time alone, so the bar still says *something* useful
+                  // instead of going blank. Never used for "En attente", which has no shorter form.
+                  const timeShort       = fmt(shift.startTime)
                   // The +1 mark is visual; the accessible name spells it out.
                   const timeSpoken      = overnight ? `${timeRange}, jusqu'au lendemain` : timeRange
                   // Longer texts ("22h–02h +1", "En attente") need a wider bar to be shown whole.
@@ -247,22 +252,43 @@ export default function DayTimeline({
                                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                 </svg>
                               )}
-                              <span
-                                className={`${longText ? "hidden @min-[92px]:inline" : "hidden @min-[68px]:inline"} text-white text-xs font-bold truncate leading-none`}
-                                style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
-                              >
-                                {isSelected && isWaitlistable ? "En attente" : timeLabel}
-                              </span>
+                              {isSelected && isWaitlistable ? (
+                                <span
+                                  className="hidden @min-[68px]:inline text-white text-xs font-bold truncate leading-none"
+                                  style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
+                                >
+                                  En attente
+                                </span>
+                              ) : (
+                                <>
+                                  {/* Narrow bars (common on phones: a 45–70min shift at a natural
+                                      day-wide zoom often lands here) get the start time alone
+                                      instead of nothing; the full range takes over once there's
+                                      room, hiding this one. */}
+                                  <span
+                                    className={`hidden @min-[34px]:inline ${longText ? "@min-[92px]:hidden" : "@min-[64px]:hidden"} text-white text-xs font-bold truncate leading-none`}
+                                    style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
+                                  >
+                                    {timeShort}
+                                  </span>
+                                  <span
+                                    className={`${longText ? "hidden @min-[92px]:inline" : "hidden @min-[64px]:inline"} text-white text-xs font-bold truncate leading-none`}
+                                    style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
+                                  >
+                                    {timeLabel}
+                                  </span>
+                                </>
+                              )}
                             </div>
                             {spotsText && (
-                              // Same breakpoint as the time text above, not a higher one: "3/5" is
-                              // shorter than any time range, and on its own line it doesn't compete
-                              // with the selected-state checkmark for width. A higher threshold
-                              // here left it invisible on the exact bar sizes common on phones,
-                              // where the time already fits but this didn't — reported by a beta
-                              // tester right after #244 shipped.
+                              // Much lower breakpoint than the time text above: "3/5" is short
+                              // enough to fit right alongside the narrow-bar start-time fallback,
+                              // and being on its own line it never competes with the selected-state
+                              // checkmark for width. The old, higher threshold here left it
+                              // invisible on the exact bar sizes common on phones — reported by
+                              // beta testers right after #244/#248 shipped.
                               <span
-                                className={`${longText ? "hidden @min-[92px]:inline" : "hidden @min-[68px]:inline"} text-white/85 text-[9px] font-medium truncate leading-none`}
+                                className="hidden @min-[34px]:inline text-white/85 text-[9px] font-medium truncate leading-none"
                                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
                               >
                                 {spotsText}
