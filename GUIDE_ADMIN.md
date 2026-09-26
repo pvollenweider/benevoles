@@ -189,6 +189,8 @@ Vue tabulaire de toutes les inscriptions actives : nom, email, téléphone, cré
 
 ![Tableau des inscriptions d'un événement, avec bénévole, créneau, source et actions rendre responsable / annuler](/doc-img/admin-registrations.png)
 
+Une case à cocher sur chaque ligne (et une case d'en-tête pour tout sélectionner d'un coup) permet d'agir sur plusieurs inscriptions en même temps : **annuler** ou **rendre responsable** de leur poste. La barre d'actions groupées porte sur toute la sélection, même une inscription masquée entre-temps par un filtre ou une recherche.
+
 Depuis la page principale de l'événement (`/admin/events/[id]`) :
 - 4 chiffres en un coup d'œil en haut de page : créneaux, places totales, inscrits, places restantes
 - **Créneaux à pourvoir** : liste des créneaux encore ouverts avec des places disponibles, avec une barre de remplissage par créneau (n'apparaît que s'il en reste au moins un)

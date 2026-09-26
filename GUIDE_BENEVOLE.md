@@ -37,6 +37,8 @@ La page affiche un **planning par jour**. Chaque ligne correspond à un poste (a
 | Barre grisée (striée) | Créneau qui chevauche une de vos sélections — impossible de le choisir |
 | Fond violet (🎪) | Plage d'un spectacle — repère visuel uniquement |
 
+Chaque créneau ouvert affiche aussi le nombre d'inscrits sur la capacité totale (ex. « 3/5 ») — pratique pour repérer un créneau avec assez de place pour s'inscrire à plusieurs.
+
 Sur mobile, **faites défiler horizontalement** pour voir toutes les plages horaires de la journée.
 
 ![Planning public d'un événement affiché sur mobile, avec les créneaux du jour en barres colorées](/doc-img/public-timeline-mobile.png)

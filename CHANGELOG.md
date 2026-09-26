@@ -11,6 +11,11 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 - **Renommer ou supprimer un poste** : le panneau « Gérer les postes » (ex-« Réordonner les postes ») permet, poste par poste, de renommer d'un coup tous ses créneaux (refuse un nom déjà pris par un autre poste, pour ne pas fusionner deux postes par erreur) ou de tous les annuler — même confirmation et notification des bénévoles qu'une suppression de créneau individuelle.
 - **Couleur d'un poste** : un point coloré cliquable dans « Gérer les postes » ouvre un choix parmi 16 couleurs prédéfinies (ou « Automatique »), appliqué à la timeline admin et à la page publique.
+- **Documentation publique adaptée au mobile, avec un thème sombre** : les pages `/doc` s'affichent correctement sur petit écran (plus de débordement horizontal, zones de clic des liens de navigation agrandies) et proposent un bouton clair/sombre indépendant des préférences système, mémorisé d'une visite à l'autre.
+- **Markdown complet dans les communications admin** : le composeur de « Nouveautés produit » et le message de confirmation d'inscription acceptent la syntaxe Markdown complète (titres, gras, italique, listes, citations, code, tableaux, texte barré, listes de tâches, liens automatiques), plus seulement le gras, les liens et les puces.
+- **Adresse personnalisée pour « Envoyer un test »** : un champ optionnel permet d'envoyer l'email de test des « Nouveautés produit » à une adresse différente de celle du compte super-admin connecté, sans que cet envoi soit compté dans l'historique des diffusions.
+- **Actions groupées sur la liste des inscriptions** : sélection multiple par cases à cocher (avec case d'en-tête pour tout sélectionner) pour annuler plusieurs inscriptions d'un coup ou désigner plusieurs responsables de secteur en une seule action.
+- **Nombre de places sur le planning public** : chaque créneau affiche désormais, comme sur la timeline admin, le nombre d'inscrits sur la capacité totale (ex. « 3/5 »), pour faciliter la réservation en petit groupe.
 
 ### Corrigé
 
@@ -20,6 +25,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Export PDF** : le planning affichait parfois la journée entière (00h–24h) au lieu de la plage réelle des créneaux ; l'ordre des postes dans l'export ne suivait pas toujours l'ordre choisi via « Gérer les postes ».
 - **Menu admin sur deux lignes** pour un compte super-admin : les liens « Organisations » et « Communications admin » (ex-« Nouveautés produit ») sont regroupés dans un menu déroulant « Super Admin ».
 - **Documentation** (`/doc`) : le pied de page ne reprenait pas le vrai pied de page du site (numéro de version, lien « Espace organisateur »…) ; plusieurs URLs d'exemple montraient l'organisation comme un segment de chemin (`/[org]/[évènement]`) au lieu du sous-domaine réel (`[org].benevol.app/[évènement]`) ; quelques libellés de l'interface décrits dans les guides ne correspondaient plus exactement à l'interface actuelle (inscriptions, créneaux à pourvoir, liste d'attente).
+- **Heure de fin d'un nouveau créneau affichée « NaN:NaN »** pendant la saisie de l'heure de début, avant qu'elle ne soit complète ; l'écart par défaut proposé pour l'heure de fin passe de +1h30 à +1h.
+- **Un nouveau poste rejoignait le début d'une liste réordonnée manuellement** au lieu de s'ajouter à la fin, dès son premier créneau.
 
 ---
 
