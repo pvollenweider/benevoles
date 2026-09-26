@@ -1,3 +1,10 @@
+# Local prod-like stack (`docker compose up -d` — see README). `name:` explicit so this never
+# shares a Compose project with docker-compose.dev.yml or docker-compose.e2e.yml, which declare
+# services with the same names ("postgres", "mailpit"/none here) — see docker-compose.e2e.yml's
+# comment for what happens without it. Matches the directory-name default this already had, so no
+# volume rename/migration needed (still resolves to benevoles_postgres_data).
+name: benevoles
+
 services:
   postgres:
     image: postgres:16-alpine
