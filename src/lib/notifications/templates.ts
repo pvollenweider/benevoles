@@ -46,9 +46,12 @@ function wrap(inner: string, preheader?: string): string {
 ${ph}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;">
 <tr><td align="center" style="padding:32px 16px 24px;">
-<div style="max-width:520px;background:#ffffff;border-radius:12px;padding:28px 28px 20px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
+<!-- align="center" above only centers this table CELL on the page; text-align is inherited CSS,
+     so without an explicit override here every unstyled heading/paragraph inside would inherit
+     "center" too instead of reading left-aligned like normal body text. -->
+<div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
 ${inner}
-<div style="margin-top:28px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#aaaaaa;text-align:center;">
+<div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#aaaaaa;text-align:center;">
   <a href="https://benevol.app" style="color:#aaaaaa;text-decoration:none;">benevol.app</a>
 </div>
 </div>
