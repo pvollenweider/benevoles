@@ -255,8 +255,14 @@ export default function DayTimeline({
                               </span>
                             </div>
                             {spotsText && (
+                              // Same breakpoint as the time text above, not a higher one: "3/5" is
+                              // shorter than any time range, and on its own line it doesn't compete
+                              // with the selected-state checkmark for width. A higher threshold
+                              // here left it invisible on the exact bar sizes common on phones,
+                              // where the time already fits but this didn't — reported by a beta
+                              // tester right after #244 shipped.
                               <span
-                                className="hidden @min-[80px]:inline text-white/85 text-[9px] font-medium truncate leading-none"
+                                className={`${longText ? "hidden @min-[92px]:inline" : "hidden @min-[68px]:inline"} text-white/85 text-[9px] font-medium truncate leading-none`}
                                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
                               >
                                 {spotsText}
