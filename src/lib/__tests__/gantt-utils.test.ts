@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { resolveNewShiftDisplayOrder } from "../gantt-utils"
+import { resolveNewShiftDisplayOrder, isCompleteTime, addMinutes } from "../gantt-utils"
 
 describe("resolveNewShiftDisplayOrder", () => {
   it("inherits the existing role's displayOrder instead of a hardcoded 0 (#215 regression)", () => {
@@ -19,5 +19,44 @@ describe("resolveNewShiftDisplayOrder", () => {
 
   it("falls back when there are no existing shifts at all", () => {
     expect(resolveNewShiftDisplayOrder([], "Bar", 0)).toBe(0)
+  })
+})
+
+describe("isCompleteTime", () => {
+  it("accepts complete HH:MM and H:MM times", () => {
+    expect(isCompleteTime("14:30")).toBe(true)
+    expect(isCompleteTime("9:05")).toBe(true)
+    expect(isCompleteTime("00:00")).toBe(true)
+  })
+
+  it("rejects a value still being typed", () => {
+    expect(isCompleteTime("")).toBe(false)
+    expect(isCompleteTime("1")).toBe(false)
+    expect(isCompleteTime("14")).toBe(false)
+    expect(isCompleteTime("14:")).toBe(false)
+    expect(isCompleteTime("14:0")).toBe(false)
+  })
+})
+
+describe("addMinutes", () => {
+  it("adds minutes within the same day", () => {
+    expect(addMinutes("14:00", 60)).toBe("15:00")
+    expect(addMinutes("14:15", 50)).toBe("15:05")
+  })
+
+  it("wraps at midnight", () => {
+    expect(addMinutes("23:30", 60)).toBe("00:30")
+  })
+
+  it("never produces NaN:NaN for a complete time (#234 regression)", () => {
+    // The bug: this used to run against whatever partial string was in the input on every
+    // keystroke (e.g. "1" while typing "14:00"), producing "NaN:NaN". Callers now gate this with
+    // isCompleteTime() first — this test locks in that addMinutes() itself is correct once fed a
+    // genuinely complete time, whatever hour/minute combination.
+    for (const start of ["00:00", "09:05", "23:59", "12:00"]) {
+      const result = addMinutes(start, 60)
+      expect(result).not.toContain("NaN")
+      expect(result).toMatch(/^\d{2}:\d{2}$/)
+    }
   })
 })

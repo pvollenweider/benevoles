@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
+import { isCompleteTime, addMinutes } from "@/lib/gantt-utils"
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
@@ -91,16 +92,10 @@ export default function EventForm({ initialData }: Props) {
     })
   }
 
-  function addMinutes(time: string, minutes: number): string {
-    const [h, m] = time.split(":").map(Number)
-    const total = h * 60 + m + minutes
-    return `${String(Math.floor(total / 60) % 24).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`
-  }
-
   function setShow(field: keyof Show, value: string) {
     setNewShow((s) => {
       const next = { ...s, [field]: value }
-      if (field === "startTime" && value && !s.endTime) {
+      if (field === "startTime" && isCompleteTime(value) && !s.endTime) {
         next.endTime = addMinutes(value, 90)
       }
       return next
