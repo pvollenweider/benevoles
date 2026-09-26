@@ -102,7 +102,7 @@ describe("renderMarkdown — security", () => {
   it("neutralizes a script tag written directly as inline HTML (rendered as inert escaped text, not live markup)", () => {
     const html = renderMarkdown("Bonjour <script>alert('x')</script>")
     expect(html).not.toContain("<script")
-    expect(html).not.toMatch(/<script[\s>]/)
+    expect(html).not.toMatch(/<script[\s>]/i)
     expect(html).toContain("&lt;script&gt;")
   })
 
@@ -115,7 +115,7 @@ describe("renderMarkdown — security", () => {
     // No *live* tag/attribute carrying the payload: DOMPurify's serializer can drop the escaping
     // on a quote inside text content (harmless — quotes aren't structurally significant outside
     // an attribute value), but < and > stay escaped, so this never re-parses as a real <p> tag.
-    expect(html).not.toMatch(/<p[^>]*style="[^"]*javascript/)
+    expect(html).not.toMatch(/<p[^>]*style="[^"]*javascript/i)
     expect(html).toContain("&lt;p style=")
     // The renderer's own hardcoded styles (e.g. the wrapping <p> around **gras**) still come through.
     expect(html).toContain("<strong>gras</strong>")
