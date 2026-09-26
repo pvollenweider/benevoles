@@ -12,12 +12,18 @@ describe("resolveNewShiftDisplayOrder", () => {
     expect(resolveNewShiftDisplayOrder(existing, "Bar", 0)).toBe(200)
   })
 
-  it("falls back to the given default for a genuinely new role", () => {
-    const existing = [{ roleName: "Bar", displayOrder: 200 }]
-    expect(resolveNewShiftDisplayOrder(existing, "Accueil", 0)).toBe(0)
+  it("appends a genuinely new role after the highest displayOrder in use, not at the front", () => {
+    // A manually sorted list (e.g. Sécurité=0, Bar=100, Accueil=200) must not have a new role
+    // jump to the front just because the naive default is 0 — it belongs at the end.
+    const existing = [
+      { roleName: "Sécurité", displayOrder: 0 },
+      { roleName: "Bar", displayOrder: 100 },
+      { roleName: "Accueil", displayOrder: 200 },
+    ]
+    expect(resolveNewShiftDisplayOrder(existing, "Infirmerie", 0)).toBe(300)
   })
 
-  it("falls back when there are no existing shifts at all", () => {
+  it("falls back to the given default when there are no existing shifts at all", () => {
     expect(resolveNewShiftDisplayOrder([], "Bar", 0)).toBe(0)
   })
 })

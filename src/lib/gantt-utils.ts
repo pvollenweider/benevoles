@@ -78,13 +78,20 @@ export function clamp(n: number, lo: number, hi: number): number {
 // see reorder-roles/route.ts), not a hardcoded 0 default: a role's position on the timeline is
 // derived from the minimum displayOrder across its own shifts, so a stray 0 on a freshly added
 // shift silently dragged the whole role back to the front every time one was added to it (#215).
-// A genuinely new role (no existing shift to match) has nothing to inherit and keeps `fallback`.
+//
+// A genuinely new role has nothing to inherit — it appends after the highest displayOrder in use
+// (matching reorder-roles/route.ts's own index*100 spacing), landing at the *end* of a manually
+// sorted list instead of jumping to the front. `fallback` only applies when there are no existing
+// shifts at all yet (the very first shift of the very first role — nothing to append after).
 export function resolveNewShiftDisplayOrder(
   existingShifts: { roleName: string; displayOrder: number }[],
   roleName: string,
   fallback: number,
 ): number {
-  return existingShifts.find((s) => s.roleName === roleName)?.displayOrder ?? fallback
+  const ownRole = existingShifts.find((s) => s.roleName === roleName)
+  if (ownRole) return ownRole.displayOrder
+  if (existingShifts.length === 0) return fallback
+  return Math.max(...existingShifts.map((s) => s.displayOrder)) + 100
 }
 
 // Greedy interval-graph coloring: overlapping items (same post, same time) get
