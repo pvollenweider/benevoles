@@ -172,6 +172,32 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **`SENTRY_AUTH_TOKEN` passé via secret Docker** (`--mount=type=secret`) au lieu d'une variable d'environnement — le token ne se retrouve plus dans les couches de l'image
 - Node.js mis à jour vers **26** dans les images Docker et la configuration CI
 
+### Ajouté (repris de la période beta.6 → 1.10.0, jamais documenté)
+
+- **Auto-inscription au répertoire de l'organisation** : un bénévole qui s'inscrit à un créneau, sans être déjà dans la liste des membres, y est automatiquement ajouté avec le tag « Bénévole ». Une modification de sa fiche membre met à son tour à jour ses inscriptions (exports, rappels).
+- **Modale d'édition d'un membre** sur la page Membres, avec piège de focus, sémantique de dialogue et annonces aux lecteurs d'écran.
+
+---
+
+## [1.0.0-beta.6] — 2026-05-07
+
+### Ajouté
+
+- **Liste d'attente pour créneaux complets** : un créneau peut être ouvert à la liste d'attente une fois complet ; une place libérée est automatiquement proposée à la personne suivante (email, 24h pour confirmer via `/waitlist/[token]/confirm`, sinon la place passe au suivant). Une tâche planifiée expire les offres non confirmées et relance la promotion.
+- **Tableau de bord admin** : statistiques globales de l'organisation (événements, taux de remplissage, bénévoles, membres) et barres de remplissage par événement (rouge/orange/jaune/vert).
+- **Message de confirmation personnalisable** : un texte en Markdown, avec variables ({{prenom}}, {{créneau}}…), affiché sur la page de succès, sur `/my/[token]` et dans l'email de confirmation.
+- **Notifications push navigateur** : un bénévole peut s'abonner (page de succès ou `/my/[token]`) pour recevoir un rappel J-2, J-1 et jour J en plus de l'email.
+- **Changement de mot de passe** depuis les réglages admin, sans passer par le lien « mot de passe oublié » (mot de passe actuel requis).
+- **Charte du bénévole configurable** : bascule pour mentionner ou non une assurance de l'organisation ; texte mis à jour pour le contexte légal suisse (LPD, code des obligations, LAA).
+
+### Amélioré
+
+- **Mise en page desktop de la page publique** : timeline et barre latérale (infos événement, créneaux sélectionnés, appel à l'action) sur deux colonnes.
+- **Page événement admin** : la mention « X manquants » est remplacée par une barre de progression colorée (places pourvues / capacité).
+- **Rappels automatiques** : une tâche planifiée horaire envoie les rappels J-2/J-1/jour J, distincts du rappel manuel ponctuel.
+- **Emails** : structure HTML complète (carte blanche sur fond gris, texte d'aperçu avant ouverture) sur tous les templates ; tutoiement unifié côté bénévole.
+- **Monitoring d'erreurs (Sentry)** ajouté.
+
 ---
 
 ## [1.0.0-beta.5] — 2026-05-01
