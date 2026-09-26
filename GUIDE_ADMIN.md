@@ -81,9 +81,14 @@ Cochez **Activer la liste d'attente** dans le formulaire du créneau (ou dans le
 
 La vue des inscriptions (`/admin/events/[id]/registrations`) affiche les bénévoles en attente (`En attente`) et ceux à qui une place a été proposée (`Offerte`).
 
-### Réordonner les postes
+### Gérer les postes
 
-Le bouton **Réordonner les postes** ouvre un panneau glisser-déposer. L'ordre défini ici s'applique à la timeline admin **et** à la page publique.
+Le bouton **Gérer les postes** ouvre un panneau qui regroupe trois actions, poste par poste :
+
+- **Réordonner** : glissez-déposez une ligne. L'ordre défini ici s'applique à la timeline admin **et** à la page publique.
+- **Renommer** : clique sur « Renommer », tape le nouveau nom, valide. Tous les créneaux de ce poste sont renommés d'un coup — impossible de renommer vers un nom déjà utilisé par un autre poste (pour ne pas fusionner deux postes par erreur).
+- **Supprimer** : annule tous les créneaux de ce poste (comme une suppression de créneau individuelle) — une confirmation indique le nombre de créneaux et de bénévoles concernés ; ces derniers sont prévenus par email.
+- **Couleur** : le point coloré à gauche du nom ouvre un choix parmi 16 couleurs prédéfinies (ou « Automatique » pour revenir à la couleur assignée par défaut). S'applique à la timeline admin et à la page publique.
 
 ### Âge minimum sur un poste
 
