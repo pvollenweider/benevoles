@@ -5,6 +5,7 @@ import { sendNotification } from "@/lib/notifications"
 import { z } from "zod"
 import { clockSchema, firstIssueMessage, SAME_TIME_ERROR } from "@/lib/shift-time"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
+import { cancelShift } from "@/lib/shift-cancel"
 
 const schema = z.object({
   roleName: z.string().optional(),
@@ -129,49 +130,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   })
   if (!shift) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  await prisma.shift.update({ where: { id }, data: { status: "cancelled" } })
+  const result = await cancelShift(shift, adminActor(guard.session))
 
-  const cancelLogId = await logEvent({
-    eventId: shift.event.id,
-    actor: adminActor(guard.session),
-    action: "shift.cancelled",
-    entityType: "Shift",
-    entityId: id,
-    changes: { status: { from: shift.status, to: "cancelled" } },
-  })
-
-  // Cascade-cancel active registrations and notify each volunteer.
-  let notified = 0
-  for (const reg of shift.registrations) {
-    await prisma.registration.update({
-      where: { id: reg.id },
-      data: { status: "cancelled" },
-    })
-    await logEvent({
-      eventId: shift.event.id,
-      actor: adminActor(guard.session),
-      action: "registration.cancelled",
-      entityType: "Registration",
-      entityId: reg.id,
-      // shiftId unchanged (from === to): recorded so the narrative can still name the shift —
-      // see describeChanges's shiftId filter in event-log-narrative.ts.
-      changes: { status: { from: "active", to: "cancelled" }, shiftId: { from: id, to: id } },
-      causedByLogId: cancelLogId ?? undefined,
-    })
-    const result = await sendNotification({
-      kind: "shift_cancelled",
-      recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
-      data: {
-        volunteerName: reg.volunteer.firstName,
-        eventTitle: shift.event.title,
-        orgSlug: shift.event.organization.slug,
-        eventSlug: shift.event.slug,
-        shiftLabel: shift.label,
-        shiftDate: fmtDate(shift.date),
-      },
-    })
-    if (result.ok) notified++
-  }
-
-  return NextResponse.json({ success: true, cancelledRegistrations: shift.registrations.length, notified })
+  return NextResponse.json({ success: true, ...result })
 }

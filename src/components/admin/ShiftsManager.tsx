@@ -84,6 +84,11 @@ export default function ShiftsManager({
   const [reorderRoles, setReorderRoles]   = useState<string[]>([])
   const [dragRoleIdx, setDragRoleIdx]     = useState<number | null>(null)
   const [savingOrder, setSavingOrder]     = useState(false)
+  const [renamingRole, setRenamingRole]   = useState<string | null>(null)
+  const [renameValue, setRenameValue]     = useState("")
+  const [roleActionError, setRoleActionError] = useState<string | null>(null)
+  const [roleActionBusy, setRoleActionBusy]   = useState<string | null>(null)
+  const [roleAnnouncement, setRoleAnnouncement] = useState("")
 
   function setField(k: string, v: string | number | boolean) {
     setForm(f => ({ ...f, [k]: v }))
@@ -207,6 +212,59 @@ export default function ShiftsManager({
     setShowReorder(false)
   }
 
+  function startRenameRole(role: string) {
+    setRoleActionError(null)
+    setRenamingRole(role)
+    setRenameValue(role)
+  }
+
+  async function submitRenameRole(oldName: string) {
+    const newName = renameValue.trim()
+    if (!newName || newName === oldName) { setRenamingRole(null); return }
+    setRoleActionError(null)
+    setRoleActionBusy(oldName)
+    const res = await fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(oldName)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: newName }),
+    })
+    const data = await res.json()
+    setRoleActionBusy(null)
+    if (!res.ok) {
+      setRoleActionError(typeof data?.error === "string" ? data.error : "Erreur lors du renommage.")
+      return
+    }
+    setShifts(prev => prev.map(s => s.roleName === oldName
+      ? { ...s, roleName: newName, label: s.label === oldName ? newName : s.label }
+      : s
+    ))
+    setReorderRoles(prev => prev.map(r => r === oldName ? newName : r))
+    setRenamingRole(null)
+    setRoleAnnouncement(`Poste renommé « ${oldName} » → « ${newName} ».`)
+  }
+
+  async function handleDeleteRole(role: string) {
+    const roleShifts = shifts.filter(s => s.roleName === role && s.status !== "cancelled")
+    const totalRegs = roleShifts.reduce((n, s) => n + s.registrationCount, 0)
+    const warning = totalRegs > 0
+      ? `Supprimer le poste « ${role} » (${roleShifts.length} créneau${roleShifts.length > 1 ? "x" : ""}) ? ${totalRegs} bénévole${totalRegs > 1 ? "s" : ""} inscrit${totalRegs > 1 ? "s" : ""} seront prévenu${totalRegs > 1 ? "s" : ""} par email.`
+      : `Supprimer le poste « ${role} » (${roleShifts.length} créneau${roleShifts.length > 1 ? "x" : ""}) ?`
+    if (!confirm(warning)) return
+
+    setRoleActionError(null)
+    setRoleActionBusy(role)
+    const res = await fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(role)}`, { method: "DELETE" })
+    const data = await res.json()
+    setRoleActionBusy(null)
+    if (!res.ok) {
+      setRoleActionError(typeof data?.error === "string" ? data.error : "Erreur lors de la suppression.")
+      return
+    }
+    setShifts(prev => prev.filter(s => s.roleName !== role))
+    setReorderRoles(prev => prev.filter(r => r !== role))
+    setRoleAnnouncement(`Poste « ${role} » supprimé.`)
+  }
+
   // Group by day (all dates, not just those with shifts)
   const shiftsByDay = shifts
     .filter(s => s.status !== "cancelled")
@@ -253,7 +311,7 @@ export default function ShiftsManager({
               Liste
             </button>
           </div>
-          {uniqueRoles.length > 1 && (
+          {uniqueRoles.length > 0 && (
             <button
               onClick={openReorder}
               className="text-xs text-gray-500 border border-gray-200 rounded-xl px-3 py-1.5 hover:bg-gray-50 transition-colors flex items-center gap-1.5"
@@ -261,7 +319,7 @@ export default function ShiftsManager({
               <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4" />
               </svg>
-              Ordonner les postes
+              Gérer les postes
             </button>
           )}
         </div>
@@ -273,33 +331,87 @@ export default function ShiftsManager({
         </button>
       </div>
 
-      {/* Role reorder panel */}
+      {/* Role management panel: reorder, rename, delete */}
       {showReorder && (
         <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
           <div>
-            <h3 className="font-semibold text-gray-800">Ordonner les postes</h3>
-            <p className="text-xs text-gray-500 mt-0.5">Glissez-déposez pour changer l'ordre d'affichage dans les timelines.</p>
+            <h3 className="font-semibold text-gray-800">Gérer les postes</h3>
+            <p className="text-xs text-gray-500 mt-0.5">Glissez-déposez pour réordonner, renommez ou supprimez un poste (tous ses créneaux).</p>
           </div>
+          <div role="status" aria-live="polite" className="sr-only">{roleAnnouncement}</div>
+          {roleActionError && (
+            <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{roleActionError}</p>
+          )}
           <div className="space-y-1.5">
-            {reorderRoles.map((role, i) => (
-              <div
-                key={role}
-                draggable
-                onDragStart={() => setDragRoleIdx(i)}
-                onDragOver={e => handleRoleDragOver(e, i)}
-                onDragEnd={() => setDragRoleIdx(null)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl border select-none transition-colors
-                  ${dragRoleIdx === i
-                    ? "opacity-40 border-blue-200 bg-blue-50"
-                    : "border-gray-100 bg-gray-50 hover:bg-gray-100 cursor-grab active:cursor-grabbing"}`}
-              >
-                <svg className="w-4 h-4 text-gray-300 flex-shrink-0" fill="currentColor" viewBox="0 0 16 16">
-                  <circle cx="5" cy="4" r="1.2"/><circle cx="5" cy="8" r="1.2"/><circle cx="5" cy="12" r="1.2"/>
-                  <circle cx="11" cy="4" r="1.2"/><circle cx="11" cy="8" r="1.2"/><circle cx="11" cy="12" r="1.2"/>
-                </svg>
-                <span className="text-sm font-medium text-gray-700">{role}</span>
-              </div>
-            ))}
+            {reorderRoles.map((role, i) => {
+              const isRenaming = renamingRole === role
+              const isBusy = roleActionBusy === role
+              return (
+                <div
+                  key={role}
+                  draggable={!isRenaming}
+                  onDragStart={() => setDragRoleIdx(i)}
+                  onDragOver={e => handleRoleDragOver(e, i)}
+                  onDragEnd={() => setDragRoleIdx(null)}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl border select-none transition-colors
+                    ${dragRoleIdx === i
+                      ? "opacity-40 border-blue-200 bg-blue-50"
+                      : `border-gray-100 bg-gray-50 hover:bg-gray-100 ${isRenaming ? "" : "cursor-grab active:cursor-grabbing"}`}`}
+                >
+                  <svg aria-hidden="true" className="w-4 h-4 text-gray-300 flex-shrink-0" fill="currentColor" viewBox="0 0 16 16">
+                    <circle cx="5" cy="4" r="1.2"/><circle cx="5" cy="8" r="1.2"/><circle cx="5" cy="12" r="1.2"/>
+                    <circle cx="11" cy="4" r="1.2"/><circle cx="11" cy="8" r="1.2"/><circle cx="11" cy="12" r="1.2"/>
+                  </svg>
+                  {isRenaming ? (
+                    <>
+                      <label className="sr-only" htmlFor={`rename-${i}`}>Nouveau nom du poste « {role} »</label>
+                      <input
+                        id={`rename-${i}`}
+                        type="text"
+                        value={renameValue}
+                        autoFocus
+                        onChange={e => setRenameValue(e.target.value)}
+                        onKeyDown={e => {
+                          if (e.key === "Enter") submitRenameRole(role)
+                          if (e.key === "Escape") setRenamingRole(null)
+                        }}
+                        className="input flex-1 py-1"
+                      />
+                      <button
+                        onClick={() => submitRenameRole(role)}
+                        disabled={isBusy}
+                        className="text-xs text-blue-600 font-medium hover:text-blue-800 disabled:opacity-50 flex-shrink-0"
+                      >
+                        {isBusy ? "…" : "Valider"}
+                      </button>
+                      <button onClick={() => setRenamingRole(null)} className="text-xs text-gray-500 hover:text-gray-800 flex-shrink-0">
+                        Annuler
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-sm font-medium text-gray-700 flex-1 truncate">{role}</span>
+                      <button
+                        onClick={() => startRenameRole(role)}
+                        disabled={isBusy}
+                        aria-label={`Renommer le poste ${role}`}
+                        className="text-xs text-gray-500 hover:text-blue-600 disabled:opacity-50 flex-shrink-0"
+                      >
+                        Renommer
+                      </button>
+                      <button
+                        onClick={() => handleDeleteRole(role)}
+                        disabled={isBusy}
+                        aria-label={`Supprimer le poste ${role}`}
+                        className="text-xs text-red-400 hover:text-red-600 disabled:opacity-50 flex-shrink-0"
+                      >
+                        {isBusy ? "…" : "Supprimer"}
+                      </button>
+                    </>
+                  )}
+                </div>
+              )
+            })}
           </div>
           <div className="flex gap-3">
             <button onClick={saveRoleOrder} disabled={savingOrder}
@@ -308,7 +420,7 @@ export default function ShiftsManager({
             </button>
             <button onClick={() => setShowReorder(false)}
               className="text-gray-500 px-3 py-2 text-sm hover:text-gray-800">
-              Annuler
+              Fermer
             </button>
           </div>
         </div>
