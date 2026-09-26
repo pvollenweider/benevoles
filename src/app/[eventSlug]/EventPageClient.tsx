@@ -302,6 +302,9 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
         <div className="flex-1 min-w-0">
           <p className={`text-xs font-medium leading-snug ${isReg ? "text-green-900" : "text-gray-900"}`}>{name}</p>
           <p className="text-[11px] text-gray-500 mt-0.5 font-mono">{fmt(s.startTime)}–{fmt(s.endTime)}</p>
+          {s.minAge != null && (
+            <p className="text-[11px] text-amber-700 mt-0.5 font-medium">{s.minAge} ans minimum</p>
+          )}
           {isWaitlistPending && (
             <p className="text-[11px] text-gray-500 mt-0.5">Complet · liste d&apos;attente si place libérée</p>
           )}

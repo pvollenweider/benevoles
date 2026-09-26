@@ -183,9 +183,10 @@ export default function DayTimeline({
                   // below is aria-hidden.
                   const hasMinAge       = shift.minAge != null
                   const minAgeSuffix    = hasMinAge ? ` (${shift.minAge} ans minimum)` : ""
-                  // Same "N/capacity" indicator as the admin timeline (#243), so small groups
-                  // can see at a glance whether a shift has enough room for everyone. Skipped
-                  // once full (the "Complet" / waitlist wording already says all that matters).
+                  // Same "N/capacity" indicator as the admin timeline (#243), shown inside the bar
+                  // itself the same way, so small groups can see at a glance whether a shift has
+                  // enough room. Skipped once full (the "Complet" / waitlist wording already says
+                  // all that matters).
                   const spotsText       = unavail ? null : `${shift.registered}/${shift.capacity}`
                   const spotsSuffix     = spotsText ? ` (${shift.spotsLeft} place${shift.spotsLeft > 1 ? "s" : ""} libre${shift.spotsLeft > 1 ? "s" : ""} sur ${shift.capacity})` : ""
                   const ariaLabel       = (isWaitlistable
@@ -197,8 +198,8 @@ export default function DayTimeline({
                       : `Sélectionner — ${roleLabel} ${timeSpoken}`)) + minAgeSuffix + spotsSuffix
                   const subLabelText    = isWaitlistable && !isSelected
                     ? ["Complet · file d'attente", hasMinAge ? `${shift.minAge}+` : null].filter(Boolean).join(" · ")
-                    : [spotsText, hasLabel ? shift.label : null, hasMinAge ? `${shift.minAge}+` : null].filter(Boolean).join(" · ")
-                  const showSubLabel    = hasLabel || (isWaitlistable && !isSelected) || hasMinAge || !!spotsText
+                    : [hasLabel ? shift.label : null, hasMinAge ? `${shift.minAge}+` : null].filter(Boolean).join(" · ")
+                  const showSubLabel    = hasLabel || (isWaitlistable && !isSelected) || hasMinAge
 
                   return (
                     // @container: the text inside hides itself when the bar is too narrow for it
@@ -239,18 +240,28 @@ export default function DayTimeline({
                             {isFull ? "Complet" : isClosed ? "Fermé" : ""}
                           </span>
                         ) : (
-                          <div className="flex items-center gap-0.5 px-1.5 max-w-full overflow-hidden">
-                            {isSelected && (
-                              <svg aria-hidden="true" className="w-2.5 h-2.5 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                              </svg>
+                          <div className="flex flex-col items-center justify-center gap-0.5 px-1.5 max-w-full overflow-hidden">
+                            <div className="flex items-center gap-0.5 max-w-full overflow-hidden">
+                              {isSelected && (
+                                <svg aria-hidden="true" className="w-2.5 h-2.5 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                </svg>
+                              )}
+                              <span
+                                className={`${longText ? "hidden @min-[92px]:inline" : "hidden @min-[68px]:inline"} text-white text-xs font-bold truncate leading-none`}
+                                style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
+                              >
+                                {isSelected && isWaitlistable ? "En attente" : timeLabel}
+                              </span>
+                            </div>
+                            {spotsText && (
+                              <span
+                                className="hidden @min-[80px]:inline text-white/85 text-[9px] font-medium truncate leading-none"
+                                style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
+                              >
+                                {spotsText}
+                              </span>
                             )}
-                            <span
-                              className={`${longText ? "hidden @min-[92px]:inline" : "hidden @min-[68px]:inline"} text-white text-xs font-bold truncate leading-none`}
-                              style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
-                            >
-                              {isSelected && isWaitlistable ? "En attente" : timeLabel}
-                            </span>
                           </div>
                         )}
                       </button>
