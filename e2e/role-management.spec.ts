@@ -125,6 +125,38 @@ test.describe("role management", () => {
     expect(detail.shifts.find((s: { roleName: string }) => s.roleName === "Accueil").status).toBe("cancelled")
   })
 
+  // ── Role order for a brand-new role (#215 follow-up) ────────────────────────
+
+  test("adding a shift for a brand-new role appends it after a manually reordered list, not at the front", async ({ page }) => {
+    const stamp = Date.now()
+    const eventRes = await page.request.post("/api/admin/events", {
+      data: { title: `E2E New Role Order ${stamp}`, startDate: "2030-09-08", endDate: "2030-09-08", publicStatus: "draft" },
+    })
+    const event: { id: string } = await eventRes.json()
+    await page.request.post("/api/admin/shifts", {
+      data: { eventId: event.id, roleName: "Sécurité", label: "Sécurité", date: "2030-09-08", startTime: "10:00", endTime: "12:00", capacity: 2 },
+    })
+    await page.request.post("/api/admin/shifts", {
+      data: { eventId: event.id, roleName: "Bar", label: "Bar", date: "2030-09-08", startTime: "10:00", endTime: "12:00", capacity: 2 },
+    })
+    // Explicit manual order: Bar first, Sécurité second — the reverse of creation order, so this
+    // wouldn't pass by accident if the fix regressed to "first appearance" or "always 0".
+    await page.request.post(`/api/admin/events/${event.id}/reorder-roles`, {
+      data: { roleOrder: ["Bar", "Sécurité"] },
+    })
+
+    await page.goto(`/admin/events/${event.id}/shifts`)
+    await page.getByRole("button", { name: "+ Ajouter un créneau" }).click()
+    await page.getByPlaceholder("ex. Billetterie").fill("Infirmerie")
+    await page.getByPlaceholder("HH:MM").first().fill("14:00")
+    await page.getByRole("button", { name: "Ajouter", exact: true }).click()
+
+    const detail = await (await page.request.get(`/api/admin/events/${event.id}`)).json()
+    const orderOf = (role: string) => detail.shifts.find((s: { roleName: string; displayOrder: number }) => s.roleName === role).displayOrder
+    expect(orderOf("Infirmerie")).toBeGreaterThan(orderOf("Bar"))
+    expect(orderOf("Infirmerie")).toBeGreaterThan(orderOf("Sécurité"))
+  })
+
   // ── Color (#219) ─────────────────────────────────────────────────────────────
 
   test("setting a role's color applies it to every one of its shifts", async ({ page }) => {
