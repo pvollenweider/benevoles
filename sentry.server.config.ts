@@ -17,4 +17,9 @@ Sentry.init({
   // attaches local variable values to events, which can hold volunteer data.
   includeLocalVariables: false,
   enableLogs: true,
+  // Next.js throws this when the client disconnects before an in-flight streamed SSR response
+  // finishes — tab closed mid-load, navigated away, or (the observed case) an RSC prefetch
+  // (`?_rsc=...`) aborted by the browser. A client-side abort, not an app error; nothing to fix
+  // on this end.
+  ignoreErrors: [/The destination stream closed early/],
 })
