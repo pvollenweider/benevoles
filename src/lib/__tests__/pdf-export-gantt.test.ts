@@ -83,4 +83,25 @@ describe("buildDayParts (PDF export)", () => {
     expect(recap).not.toContain(">24h<")
     expect(recap).not.toContain(">26h<")
   })
+
+  it("omits the Libellé column entirely when no shift that day has a label distinct from its role", () => {
+    const shifts = [shift({ id: "1", roleName: "Bar", startTime: "18:00", endTime: "20:00" })]
+    const { gantt, recap } = buildDayParts(new Date("2026-07-10"), shifts, [], false)
+    expect(gantt).not.toContain("th-label")
+    expect(gantt).not.toContain("Libellé")
+    expect(gantt).not.toContain("label-cell")
+    expect(recap).not.toContain("Libellé")
+  })
+
+  it("keeps the Libellé column when at least one shift that day has a distinct label", () => {
+    const shifts = [
+      shift({ id: "1", roleName: "Bar", label: "Bar — service", startTime: "18:00", endTime: "20:00" }),
+      shift({ id: "2", roleName: "Accueil", startTime: "18:00", endTime: "20:00" }),
+    ]
+    const { gantt, recap } = buildDayParts(new Date("2026-07-10"), shifts, [], false)
+    expect(gantt).toContain("th-label")
+    expect(gantt).toContain("Bar — service")
+    expect(recap).toContain("Libellé")
+    expect(recap).toContain("Bar — service")
+  })
 })
