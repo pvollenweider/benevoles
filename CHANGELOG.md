@@ -7,6 +7,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+## [1.14.0] — 2026-09-26
+
 ### Ajouté
 
 - **Renommer ou supprimer un poste** : le panneau « Gérer les postes » (ex-« Réordonner les postes ») permet, poste par poste, de renommer d'un coup tous ses créneaux (refuse un nom déjà pris par un autre poste, pour ne pas fusionner deux postes par erreur) ou de tous les annuler — même confirmation et notification des bénévoles qu'une suppression de créneau individuelle.
