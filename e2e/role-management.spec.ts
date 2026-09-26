@@ -1,14 +1,15 @@
 import { test, expect } from "@playwright/test"
 
 /**
- * Renaming or deleting a role (#218) — a role only exists implicitly as the roleName shared by a
- * group of shifts on one event, so both operations act on every shift carrying that name.
+ * Renaming, recoloring or deleting a role (#218, #219) — a role only exists implicitly as the
+ * roleName shared by a group of shifts on one event, so every operation here acts on every shift
+ * carrying that name.
  */
 
 const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
 const ORG_ADMIN_PASSWORD = process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password"
 
-test.describe("role rename / delete", () => {
+test.describe("role management", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/admin/login")
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
@@ -35,7 +36,7 @@ test.describe("role rename / delete", () => {
       data: { name: "Buvette" },
     })
     expect(renameRes.ok()).toBeTruthy()
-    expect((await renameRes.json()).renamed).toBe(2)
+    expect((await renameRes.json()).updated).toBe(2)
 
     const detail = await (await page.request.get(`/api/admin/events/${event.id}`)).json()
     expect(detail.shifts.every((s: { roleName: string }) => s.roleName === "Buvette")).toBe(true)
@@ -122,5 +123,76 @@ test.describe("role rename / delete", () => {
     const detail = await (await page.request.get(`/api/admin/events/${event.id}`)).json()
     expect(detail.shifts.find((s: { roleName: string }) => s.roleName === "Buvette")).toBeTruthy()
     expect(detail.shifts.find((s: { roleName: string }) => s.roleName === "Accueil").status).toBe("cancelled")
+  })
+
+  // ── Color (#219) ─────────────────────────────────────────────────────────────
+
+  test("setting a role's color applies it to every one of its shifts", async ({ page }) => {
+    const stamp = Date.now()
+    const eventRes = await page.request.post("/api/admin/events", {
+      data: { title: `E2E Role Color ${stamp}`, startDate: "2030-09-05", endDate: "2030-09-05", publicStatus: "draft" },
+    })
+    const event: { id: string } = await eventRes.json()
+    for (const startTime of ["10:00", "14:00"]) {
+      await page.request.post("/api/admin/shifts", {
+        data: { eventId: event.id, roleName: "Bar", label: "Bar", date: "2030-09-05", startTime, endTime: "16:00", capacity: 2 },
+      })
+    }
+
+    const colorRes = await page.request.patch(`/api/admin/events/${event.id}/roles/${encodeURIComponent("Bar")}`, {
+      data: { colorKey: "fuchsia" },
+    })
+    expect(colorRes.ok()).toBeTruthy()
+    expect((await colorRes.json()).updated).toBe(2)
+
+    const detail = await (await page.request.get(`/api/admin/events/${event.id}`)).json()
+    expect(detail.shifts.every((s: { colorKey: string }) => s.colorKey === "fuchsia")).toBe(true)
+
+    // "Automatique" (null) resets it.
+    const resetRes = await page.request.patch(`/api/admin/events/${event.id}/roles/${encodeURIComponent("Bar")}`, {
+      data: { colorKey: null },
+    })
+    expect(resetRes.ok()).toBeTruthy()
+    const afterReset = await (await page.request.get(`/api/admin/events/${event.id}`)).json()
+    expect(afterReset.shifts.every((s: { colorKey: string | null }) => s.colorKey === null)).toBe(true)
+  })
+
+  test("rejects a color that isn't in the curated palette", async ({ page }) => {
+    const stamp = Date.now()
+    const eventRes = await page.request.post("/api/admin/events", {
+      data: { title: `E2E Role Color Invalid ${stamp}`, startDate: "2030-09-06", endDate: "2030-09-06", publicStatus: "draft" },
+    })
+    const event: { id: string } = await eventRes.json()
+    await page.request.post("/api/admin/shifts", {
+      data: { eventId: event.id, roleName: "Bar", label: "Bar", date: "2030-09-06", startTime: "10:00", endTime: "12:00", capacity: 2 },
+    })
+
+    const res = await page.request.patch(`/api/admin/events/${event.id}/roles/${encodeURIComponent("Bar")}`, {
+      data: { colorKey: "#ff00ff" },
+    })
+    expect(res.status()).toBe(400)
+  })
+
+  test("picking a color through the admin UI applies it and shows the selection", async ({ page }) => {
+    const stamp = Date.now()
+    const eventRes = await page.request.post("/api/admin/events", {
+      data: { title: `E2E Role Color UI ${stamp}`, startDate: "2030-09-07", endDate: "2030-09-07", publicStatus: "draft" },
+    })
+    const event: { id: string } = await eventRes.json()
+    await page.request.post("/api/admin/shifts", {
+      data: { eventId: event.id, roleName: "Bar", label: "Bar", date: "2030-09-07", startTime: "10:00", endTime: "12:00", capacity: 2 },
+    })
+
+    await page.goto(`/admin/events/${event.id}/shifts`)
+    await page.getByRole("button", { name: "Gérer les postes" }).click()
+    await page.getByRole("button", { name: "Changer la couleur du poste Bar" }).click()
+    await page.getByRole("button", { name: "Émeraude" }).click()
+
+    // The picker closes on pick (click-to-apply), so the visible confirmation is the sr-only
+    // announcement, matching MilestonesSection/EventPagesManager's existing announcement pattern.
+    await expect(page.getByText("Couleur du poste « Bar » : Émeraude.")).toBeAttached()
+
+    const detail = await (await page.request.get(`/api/admin/events/${event.id}`)).json()
+    expect(detail.shifts[0].colorKey).toBe("emerald")
   })
 })

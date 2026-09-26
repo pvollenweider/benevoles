@@ -51,6 +51,7 @@ export async function GET(
     displayOrder: shift.displayOrder,
     waitlistEnabled: shift.waitlistEnabled,
     minAge: shift.minAge,
+    colorKey: shift.colorKey,
   }))
 
   return NextResponse.json({

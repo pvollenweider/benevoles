@@ -217,6 +217,12 @@ model Shift {
   // know a first-time visitor's age until they fill the form, so the timeline shows it as an
   // informational badge instead — see DayTimeline.tsx.
   minAge          Int?
+  // Admin override for the role's display color — a key into the curated palette in
+  // src/lib/roles.tsx (never a raw hex/CSS color: every option there is pre-checked for AA
+  // contrast with the white bar text). Null falls back to the existing keyword/hash-based
+  // default. Shared per role, set uniformly across its shifts — see displayOrder above and
+  // issue #219.
+  colorKey        String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 

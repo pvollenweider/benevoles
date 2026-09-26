@@ -38,6 +38,7 @@ export type AdminShift = {
   description?: string | null
   waitlistEnabled?: boolean
   minAge?: number | null
+  colorKey?: string | null
 }
 
 type Show = GanttShow
@@ -112,7 +113,7 @@ function ShiftPopover({
     >
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 min-w-0">
-          <span className={`w-2 h-2 rounded-full flex-shrink-0 ${getRoleAccent(shift.roleName)}`} />
+          <span className={`w-2 h-2 rounded-full flex-shrink-0 ${getRoleAccent(shift.roleName, shift.colorKey)}`} />
           <span className="text-xs font-semibold text-gray-700 truncate">{shift.roleName}</span>
           <span className="text-[10px] text-gray-500 flex-shrink-0">
             {fmt(shift.startTime)}–{fmt(shift.endTime)}
@@ -487,7 +488,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                     const laneTop    = roleLane[role][shift.id] * (ROW_H + LANE_GAP)
                     const isSelected = selected === shift.id
                     const isFull     = shift.status === "full" || shift.registrationCount >= shift.capacity
-                    const barCls     = getBarClasses(shift.roleName, isSelected ? "selected" : "default")
+                    const barCls     = getBarClasses(shift.roleName, isSelected ? "selected" : "default", shift.colorKey)
                     const hasLabel   = shift.label && shift.label !== shift.roleName
 
                     return (

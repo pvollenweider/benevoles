@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react"
 import { flushSync } from "react-dom"
-import { KNOWN_ROLES } from "@/lib/roles"
+import { KNOWN_ROLES, COLOR_OPTIONS, getRoleAccent } from "@/lib/roles"
 import { fmtRange, resolveNewShiftDisplayOrder } from "@/lib/gantt-utils"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
 
@@ -89,6 +89,7 @@ export default function ShiftsManager({
   const [roleActionError, setRoleActionError] = useState<string | null>(null)
   const [roleActionBusy, setRoleActionBusy]   = useState<string | null>(null)
   const [roleAnnouncement, setRoleAnnouncement] = useState("")
+  const [colorPickerRole, setColorPickerRole] = useState<string | null>(null)
 
   function setField(k: string, v: string | number | boolean) {
     setForm(f => ({ ...f, [k]: v }))
@@ -265,6 +266,30 @@ export default function ShiftsManager({
     setRoleAnnouncement(`Poste « ${role} » supprimé.`)
   }
 
+  function roleColorOf(role: string): string | null {
+    return shifts.find(s => s.roleName === role)?.colorKey ?? null
+  }
+
+  async function setRoleColor(role: string, colorKey: string | null) {
+    setColorPickerRole(null)
+    setRoleActionError(null)
+    setRoleActionBusy(role)
+    const res = await fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(role)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ colorKey }),
+    })
+    const data = await res.json()
+    setRoleActionBusy(null)
+    if (!res.ok) {
+      setRoleActionError(typeof data?.error === "string" ? data.error : "Erreur lors du changement de couleur.")
+      return
+    }
+    setShifts(prev => prev.map(s => s.roleName === role ? { ...s, colorKey } : s))
+    const label = COLOR_OPTIONS.find(c => c.key === colorKey)?.label ?? "automatique"
+    setRoleAnnouncement(`Couleur du poste « ${role} » : ${label}.`)
+  }
+
   // Group by day (all dates, not just those with shifts)
   const shiftsByDay = shifts
     .filter(s => s.status !== "cancelled")
@@ -346,9 +371,10 @@ export default function ShiftsManager({
             {reorderRoles.map((role, i) => {
               const isRenaming = renamingRole === role
               const isBusy = roleActionBusy === role
+              const isPickingColor = colorPickerRole === role
               return (
+              <div key={role}>
                 <div
-                  key={role}
                   draggable={!isRenaming}
                   onDragStart={() => setDragRoleIdx(i)}
                   onDragOver={e => handleRoleDragOver(e, i)}
@@ -362,6 +388,13 @@ export default function ShiftsManager({
                     <circle cx="5" cy="4" r="1.2"/><circle cx="5" cy="8" r="1.2"/><circle cx="5" cy="12" r="1.2"/>
                     <circle cx="11" cy="4" r="1.2"/><circle cx="11" cy="8" r="1.2"/><circle cx="11" cy="12" r="1.2"/>
                   </svg>
+                  <button
+                    onClick={() => setColorPickerRole(isPickingColor ? null : role)}
+                    disabled={isBusy || isRenaming}
+                    aria-label={`Changer la couleur du poste ${role}`}
+                    aria-expanded={isPickingColor}
+                    className={`w-4 h-4 rounded-full flex-shrink-0 disabled:opacity-50 ring-offset-1 ${isPickingColor ? "ring-2 ring-blue-400" : ""} ${getRoleAccent(role, roleColorOf(role))}`}
+                  />
                   {isRenaming ? (
                     <>
                       <label className="sr-only" htmlFor={`rename-${i}`}>Nouveau nom du poste « {role} »</label>
@@ -410,6 +443,27 @@ export default function ShiftsManager({
                     </>
                   )}
                 </div>
+                {isPickingColor && (
+                  <div className="flex flex-wrap items-center gap-2 px-3 py-2.5 mt-1 rounded-xl border border-blue-100 bg-blue-50/50">
+                    <button
+                      onClick={() => setRoleColor(role, null)}
+                      className={`text-xs px-2 py-1 rounded-full border ${roleColorOf(role) === null ? "border-blue-400 bg-white font-medium" : "border-gray-200 text-gray-500 hover:bg-white"}`}
+                    >
+                      Automatique
+                    </button>
+                    {COLOR_OPTIONS.map(c => (
+                      <button
+                        key={c.key}
+                        onClick={() => setRoleColor(role, c.key)}
+                        aria-label={c.label}
+                        aria-pressed={roleColorOf(role) === c.key}
+                        title={c.label}
+                        className={`w-6 h-6 rounded-full flex-shrink-0 ${c.swatch} ${roleColorOf(role) === c.key ? "ring-2 ring-offset-1 ring-blue-500" : ""}`}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
               )
             })}
           </div>

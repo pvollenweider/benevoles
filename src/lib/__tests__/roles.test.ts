@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { getRoleAccent, getBarClasses } from "../roles"
+import { getRoleAccent, getBarClasses, COLOR_OPTIONS } from "../roles"
 
 // ── getRoleAccent ─────────────────────────────────────────────────────────────
 
@@ -60,5 +60,35 @@ describe("getBarClasses", () => {
   it("fallback pour rôle inconnu — retourne une classe non vide", () => {
     const cls = getBarClasses("Inconnue", "default")
     expect(cls.length).toBeGreaterThan(0)
+  })
+})
+
+// ── Admin-chosen colorKey override (#219) ───────────────────────────────────────
+
+describe("colorKey override", () => {
+  it("wins over a keyword-matched default", () => {
+    // "Billetterie" would normally match the blue keyword default — an explicit choice must win.
+    expect(getBarClasses("Billetterie", "default", "red")).toContain("bg-red")
+    expect(getRoleAccent("Billetterie", "red")).toBe("bg-red-400")
+  })
+
+  it("wins over the hash-based fallback for an unknown role", () => {
+    expect(getBarClasses("Un poste jamais vu", "default", "emerald")).toContain("bg-emerald")
+  })
+
+  it("is ignored when null, undefined, or not a real palette key", () => {
+    const withoutOverride = getBarClasses("Billetterie", "default")
+    expect(getBarClasses("Billetterie", "default", null)).toBe(withoutOverride)
+    expect(getBarClasses("Billetterie", "default", undefined)).toBe(withoutOverride)
+    expect(getBarClasses("Billetterie", "default", "not-a-real-color")).toBe(withoutOverride)
+  })
+
+  it("every listed color option resolves to real bar and accent classes for all 3 states", () => {
+    for (const { key } of COLOR_OPTIONS) {
+      for (const state of ["default", "selected", "unavailable"] as const) {
+        expect(getBarClasses("Peu importe", state, key).length).toBeGreaterThan(0)
+      }
+      expect(getRoleAccent("Peu importe", key)).toMatch(/^bg-/)
+    }
   })
 })
