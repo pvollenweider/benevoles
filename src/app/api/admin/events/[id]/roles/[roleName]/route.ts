@@ -4,12 +4,18 @@ import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { cancelShift } from "@/lib/shift-cancel"
+import { COLOR_OPTIONS } from "@/lib/roles"
 
 // A "role" only exists implicitly, as the roleName shared by a group of shifts on one event —
-// there's no separate Role table. Renaming/deleting one therefore means renaming/cancelling
-// every shift in this event that currently carries that roleName (#218).
+// there's no separate Role table. Renaming, recoloring or deleting one therefore means updating
+// or cancelling every shift in this event that currently carries that roleName (#218, #219).
 
-const renameSchema = z.object({ name: z.string().trim().min(1).max(100) })
+const COLOR_KEYS = COLOR_OPTIONS.map((c) => c.key) as [string, ...string[]]
+
+const updateSchema = z.object({
+  name: z.string().trim().min(1).max(100).optional(),
+  colorKey: z.enum(COLOR_KEYS).nullable().optional(),
+}).refine((d) => d.name !== undefined || d.colorKey !== undefined, { message: "Rien à modifier." })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string; roleName: string }> }) {
   const guard = await requireOrgSession()
@@ -20,11 +26,11 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const decodedRole = decodeURIComponent(roleName)
 
   const body = await req.json()
-  const parsed = renameSchema.safeParse(body)
+  const parsed = updateSchema.safeParse(body)
   if (!parsed.success) {
-    return NextResponse.json({ error: "Nom de poste invalide." }, { status: 400 })
+    return NextResponse.json({ error: "Données invalides." }, { status: 400 })
   }
-  const newName = parsed.data.name
+  const { name: newName, colorKey } = parsed.data
 
   const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
@@ -33,42 +39,51 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // on top of that, matching reorder-roles/route.ts's own pattern for the same raw-prisma calls.
   const shifts = await prisma.shift.findMany({
     where: { eventId: id, roleName: decodedRole, event: { organizationId } },
-    select: { id: true },
+    select: { id: true, colorKey: true },
   })
   if (shifts.length === 0) return NextResponse.json({ error: "Poste introuvable" }, { status: 404 })
 
-  if (newName !== decodedRole) {
+  const actor = adminActor(guard.session)
+
+  if (newName !== undefined && newName !== decodedRole) {
     const clash = await prisma.shift.findFirst({ where: { eventId: id, roleName: newName, event: { organizationId } } })
     if (clash) {
       return NextResponse.json({ error: `Le poste « ${newName} » existe déjà — fusionner deux postes par renommage n'est pas pris en charge.` }, { status: 409 })
     }
-  }
 
-  await prisma.shift.updateMany({
-    where: { eventId: id, roleName: decodedRole, event: { organizationId } },
-    data: { roleName: newName },
-  })
-  // A shift's own label defaults to matching its role name (see ShiftsManager's form) — keep
-  // that in sync for shifts that never had a distinct label, in a second pass, since updateMany
-  // can't conditionally set "label = new value only where label used to equal the old role name".
-  await prisma.shift.updateMany({
-    where: { eventId: id, roleName: newName, label: decodedRole, event: { organizationId } },
-    data: { label: newName },
-  })
-
-  const actor = adminActor(guard.session)
-  for (const s of shifts) {
-    await logEvent({
-      eventId: id,
-      actor,
-      action: "shift.updated",
-      entityType: "Shift",
-      entityId: s.id,
-      changes: { roleName: { from: decodedRole, to: newName } },
+    await prisma.shift.updateMany({
+      where: { eventId: id, roleName: decodedRole, event: { organizationId } },
+      data: { roleName: newName },
     })
+    // A shift's own label defaults to matching its role name (see ShiftsManager's form) — keep
+    // that in sync for shifts that never had a distinct label, in a second pass, since updateMany
+    // can't conditionally set "label = new value only where label used to equal the old name".
+    await prisma.shift.updateMany({
+      where: { eventId: id, roleName: newName, label: decodedRole, event: { organizationId } },
+      data: { label: newName },
+    })
+    for (const s of shifts) {
+      await logEvent({
+        eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
+        changes: { roleName: { from: decodedRole, to: newName } },
+      })
+    }
   }
 
-  return NextResponse.json({ success: true, renamed: shifts.length })
+  if (colorKey !== undefined) {
+    await prisma.shift.updateMany({
+      where: { eventId: id, roleName: newName ?? decodedRole, event: { organizationId } },
+      data: { colorKey },
+    })
+    for (const s of shifts) {
+      await logEvent({
+        eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
+        changes: { colorKey: { from: s.colorKey, to: colorKey } },
+      })
+    }
+  }
+
+  return NextResponse.json({ success: true, updated: shifts.length })
 }
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string; roleName: string }> }) {

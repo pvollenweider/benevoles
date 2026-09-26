@@ -25,6 +25,7 @@ type Shift = {
   displayOrder: number
   waitlistEnabled: boolean
   minAge: number | null
+  colorKey: string | null
 }
 
 type Show = { name: string; date: string; startTime: string; endTime: string }

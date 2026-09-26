@@ -16,6 +16,7 @@ export type TimelineShift = {
   displayOrder?: number
   waitlistEnabled?: boolean
   minAge?: number | null
+  colorKey?: string | null
 }
 
 type Show = GanttShow
@@ -159,7 +160,7 @@ export default function DayTimeline({
                   const unavail         = (isFull && !isWaitlistable) || isClosed
                   const isSelected      = selected.has(shift.id)
                   const state           = isSelected ? "selected" : (isConflict || unavail) ? "unavailable" : "default"
-                  const barCls          = getBarClasses(shift.roleName, state)
+                  const barCls          = getBarClasses(shift.roleName, state, shift.colorKey)
                   const clickable       = !isRegistered && !isConflict && !unavail
                   const hasLabel        = shift.label !== shift.roleName
                   const startMin        = toMin(shift.startTime)

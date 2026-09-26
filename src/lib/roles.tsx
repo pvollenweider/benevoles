@@ -28,7 +28,8 @@ const ACCENT_FALLBACK = [
   "bg-fuchsia-400", "bg-sky-400", "bg-emerald-500", "bg-yellow-500",
 ]
 
-export function getRoleAccent(roleName: string): string {
+export function getRoleAccent(roleName: string, colorKey?: string | null): string {
+  if (colorKey && isColorKey(colorKey)) return PALETTE_ACCENT[colorKey]
   const lower = roleName.toLowerCase()
   for (const [key, color] of ROLE_ACCENTS) {
     if (lower.includes(key)) return color
@@ -123,10 +124,58 @@ function hashRole(name: string): number {
   return h % FALLBACK_PALETTE.length
 }
 
-export function getBarClasses(roleName: string, state: BarState): string {
+// ── Curated color picker (#219) ───────────────────────────────────────────────
+// Every option here reuses a bar/accent pair already defined above — all already checked for
+// WCAG AA contrast with white bar text — instead of accepting an arbitrary hex color, which
+// would need its own contrast check and a rewrite of every bar from Tailwind utility classes to
+// inline styles. An admin's explicit choice (Shift.colorKey, shared per role like displayOrder)
+// always wins over both the keyword match and the hash fallback below.
+export type ColorKey =
+  | "blue" | "amber" | "pink" | "violet" | "red" | "orange" | "stone" | "teal"
+  | "indigo" | "cyan" | "lime" | "rose" | "fuchsia" | "sky" | "emerald" | "yellow"
+
+export const COLOR_OPTIONS: { key: ColorKey; label: string; swatch: string }[] = [
+  { key: "blue",     label: "Bleu",         swatch: "bg-blue-600" },
+  { key: "amber",    label: "Ambre",        swatch: "bg-amber-700" },
+  { key: "pink",     label: "Rose",         swatch: "bg-pink-600" },
+  { key: "violet",   label: "Violet",       swatch: "bg-violet-600" },
+  { key: "red",      label: "Rouge",        swatch: "bg-red-600" },
+  { key: "orange",   label: "Orange",       swatch: "bg-orange-700" },
+  { key: "stone",    label: "Gris",         swatch: "bg-stone-600" },
+  { key: "teal",     label: "Sarcelle",     swatch: "bg-teal-700" },
+  { key: "indigo",   label: "Indigo",       swatch: "bg-indigo-600" },
+  { key: "cyan",     label: "Cyan",         swatch: "bg-cyan-700" },
+  { key: "lime",     label: "Citron vert",  swatch: "bg-lime-700" },
+  { key: "rose",     label: "Corail",       swatch: "bg-rose-600" },
+  { key: "fuchsia",  label: "Fuchsia",      swatch: "bg-fuchsia-600" },
+  { key: "sky",      label: "Ciel",         swatch: "bg-sky-600" },
+  { key: "emerald",  label: "Émeraude",     swatch: "bg-emerald-700" },
+  { key: "yellow",   label: "Jaune",        swatch: "bg-yellow-700" },
+]
+
+const PALETTE_BAR: Record<ColorKey, Record<BarState, string>> = {
+  blue: BAR.billetterie, amber: BAR.buvette, pink: BAR.loge, violet: BAR.photo,
+  red: BAR.vid, orange: BAR.montage, stone: BAR.demontage, teal: BAR.preparation,
+  indigo: FALLBACK_PALETTE[0], cyan: FALLBACK_PALETTE[1], lime: FALLBACK_PALETTE[2], rose: FALLBACK_PALETTE[3],
+  fuchsia: FALLBACK_PALETTE[4], sky: FALLBACK_PALETTE[5], emerald: FALLBACK_PALETTE[6], yellow: FALLBACK_PALETTE[7],
+}
+
+const PALETTE_ACCENT: Record<ColorKey, string> = {
+  blue: "bg-blue-400", amber: "bg-amber-400", pink: "bg-pink-400", violet: "bg-violet-400",
+  red: "bg-red-400", orange: "bg-orange-400", stone: "bg-stone-400", teal: "bg-teal-400",
+  indigo: "bg-indigo-400", cyan: "bg-cyan-500", lime: "bg-lime-500", rose: "bg-rose-400",
+  fuchsia: "bg-fuchsia-400", sky: "bg-sky-400", emerald: "bg-emerald-500", yellow: "bg-yellow-500",
+}
+
+function isColorKey(key: string): key is ColorKey {
+  return Object.prototype.hasOwnProperty.call(PALETTE_BAR, key)
+}
+
+export function getBarClasses(roleName: string, state: BarState, colorKey?: string | null): string {
+  if (colorKey && isColorKey(colorKey)) return PALETTE_BAR[colorKey][state]
   const lower = roleName.toLowerCase()
-  for (const [key, colorKey] of BAR_KEYS) {
-    if (lower.includes(key)) return BAR[colorKey][state]
+  for (const [key, barKey] of BAR_KEYS) {
+    if (lower.includes(key)) return BAR[barKey][state]
   }
   return FALLBACK_PALETTE[hashRole(lower)][state]
 }
