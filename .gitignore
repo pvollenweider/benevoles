@@ -65,3 +65,7 @@ prisma/setup-horizon.ts
 
 # compiled Go binary (built by gandi-webhook/Dockerfile)
 gandi-webhook/cert-manager-webhook-gandi
+
+# local tool scratch output (impeccable skill critiques, vitest run artifacts)
+.impeccable/
+.vitest/
