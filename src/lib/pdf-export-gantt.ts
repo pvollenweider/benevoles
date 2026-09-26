@@ -19,8 +19,14 @@ export type ShiftRow = {
 }
 export type ShowEntry = { name: string; date: string; startTime: string; endTime: string }
 
+// `mins` is minutes since the export's day-relative start and can exceed 1440 — both a raw slot
+// position on the axis when the day's shifts run past midnight, and a shift's own endTime read as
+// "HH:MM" when it's stored with an hour above 23 (e.g. "26:00" for 2am the next morning, the same
+// overnight convention `fmt()` in gantt-utils.ts already reads modulo 24 — see its own comment).
+// Without the wrap here, the axis header and the recap table's Début/Fin columns printed the raw
+// hour past 24 ("24h", "25h", "26h") instead of wrapping back to "00h", "01h", "02h".
 function fmtSlot(mins: number) {
-  const h = Math.floor(mins / 60)
+  const h = Math.floor(mins / 60) % 24
   const m = mins % 60
   return m === 0 ? `${h}h` : `${h}h${String(m).padStart(2, "0")}`
 }
