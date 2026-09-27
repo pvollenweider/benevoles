@@ -61,7 +61,7 @@ export default function DocLayout({ children }: { children: React.ReactNode }) {
           {children}
         </article>
 
-        <PublicFooter />
+        <PublicFooter showSupport />
       </main>
     </div>
   )

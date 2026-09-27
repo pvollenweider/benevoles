@@ -408,7 +408,11 @@ function LandingPage() {
         </div>
       </section>
 
-      <PublicFooter />
+      {/* showSupport scoped to this page and /doc (see doc/layout.tsx) only — not the
+          org-subdomain events list above, or any volunteer/admin-facing page: those are seen by
+          someone else's audience, registering for or running someone else's event, not
+          benevol.app's own. */}
+      <PublicFooter showSupport />
     </main>
   )
 }

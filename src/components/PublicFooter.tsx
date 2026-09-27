@@ -4,7 +4,7 @@ import pkg from "../../package.json"
 const linkClass =
   "py-1 underline underline-offset-2 hover:text-gray-700 dark:hover:text-gray-300 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
 
-export default function PublicFooter() {
+export default function PublicFooter({ showSupport = false }: { showSupport?: boolean }) {
   return (
     <footer className="mt-12 pb-6 text-sm text-gray-500 dark:text-gray-400">
       <nav aria-label="Pied de page" className="flex flex-wrap justify-center gap-x-5 gap-y-2">
@@ -27,6 +27,20 @@ export default function PublicFooter() {
         <Link href="/legal/privacy" className={linkClass}>Confidentialité</Link>
         <span aria-hidden="true" className="select-none py-1">·</span>
         <Link href="/admin/login" className={linkClass}>Espace organisateur</Link>
+        {showSupport && (
+          <>
+            <span aria-hidden="true" className="select-none py-1">·</span>
+            <a
+              href="https://buymeacoffee.com/pvollenweider"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkClass}
+            >
+              ☕ Soutenir le projet
+              <span className="sr-only"> (ouvre dans un nouvel onglet)</span>
+            </a>
+          </>
+        )}
       </nav>
     </footer>
   )
