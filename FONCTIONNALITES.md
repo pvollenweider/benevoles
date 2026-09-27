@@ -20,6 +20,7 @@ Liste exhaustive des fonctionnalités de l'application.
   - Scroll tactile fonctionnel sur mobile
   - Une ligne par rôle ; libellé spécifique affiché sous la barre quand il diffère du rôle
   - Bandes colorées en fond représentant le programme des spectacles
+  - **Nombre de places** affiché dans chaque barre ouverte (ex. « 3/5 »), comme sur la timeline admin — masqué une fois le créneau complet
 - **Sélection multi-créneaux** par clic sur les barres
 - **Détection de conflits en temps réel** : les créneaux qui se chevauchent avec une sélection ou une inscription existante sont grisés automatiquement
 - Affichage du statut de chaque créneau : ouvert, complet, fermé
@@ -40,7 +41,7 @@ Liste exhaustive des fonctionnalités de l'application.
 ### Formulaire d'inscription
 
 - Champs : prénom, nom, email, téléphone (optionnel), commentaire (optionnel)
-- **Date de naissance** : demandée uniquement si un créneau sélectionné a un âge minimum (#192) ; jamais demandée sinon. Vérifiée côté client (message immédiat) et côté serveur (source de vérité)
+- **Date de naissance** : demandée uniquement si un créneau sélectionné a un âge minimum (#192) ; jamais demandée sinon. Vérifiée côté client (message immédiat) et côté serveur (source de vérité) ; la condition d'âge est aussi rappelée dans la carte « Créneaux sélectionnés »
 - Pré-remplissage automatique si une session ou un token membre est reconnu
 - **Charte du bénévole** : lien « Lire la charte » ouvre un modal avec le texte complet ; case à cocher obligatoire avant soumission
 - Case de consentement RGPD obligatoire
@@ -50,6 +51,7 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - Page de succès avec lien personnel de gestion
 - Envoi automatique d'un email de confirmation avec récapitulatif des créneaux inscrits
+- **Message de confirmation personnalisable** par l'admin, rédigé en Markdown (titres, gras, italique, listes, citations, code, tableaux, texte barré, liens automatiques), affiché sur la page de succès, sur `/my/[token]` et dans l'email
 - Page de gestion : liste de toutes les inscriptions actives du bénévole pour l'événement
 - Annulation individuelle d'un créneau depuis la page de gestion
 - **Liste d'attente** : si un créneau est complet et que la liste d'attente est activée, le bénévole peut s'y inscrire (barre rayée cliquable avec sous-label « Complet · file d'attente ») ; quand une place se libère, la première personne en attente reçoit un email avec un lien de confirmation valable 24 h
@@ -74,6 +76,13 @@ Liste exhaustive des fonctionnalités de l'application.
 ### Pages légales
 
 - Politique de confidentialité (`/legal/privacy`) et conditions d'utilisation (`/legal/terms`)
+
+### Documentation publique (`/doc`, `/doc/admin`, `/doc/benevole`)
+
+- Guides administrateur et bénévole publiés comme pages du site (captures d'écran, FAQ), au lieu de fichiers Markdown lisibles seulement sur GitHub — sources uniques avec `GUIDE_ADMIN.md`/`GUIDE_BENEVOLE.md`
+- Adaptées au mobile (pas de débordement horizontal, zones de clic agrandies)
+- Thème clair/sombre indépendant des préférences système, mémorisé d'une visite à l'autre
+- Liées depuis le pied de page public et depuis la barre de navigation admin (« Aide »)
 
 ---
 
@@ -135,6 +144,13 @@ Liste exhaustive des fonctionnalités de l'application.
 - Visible par les admins de l'organisation uniquement, pas par les responsables de secteur (#186)
 - Chaque ajout, modification et suppression est tracé dans le journal d'événement
 
+### Journal de l'événement (`/admin/events/[id]/log`)
+
+- Historique complet de ce qui s'est passé sur l'événement : créneaux, inscriptions, pages personnalisées, responsables de secteur, paramètres de l'événement, invitations
+- Trois modes : **Explorer** (liste filtrable), **Rejouer** (reconstitue l'état d'une entité à un instant donné), **Récit** (raconte en une phrase une chaîne d'événements liés, ex. une annulation qui déclenche une offre de liste d'attente)
+- Une génération de référence (« baseline ») reconstitue un point de départ pour les créneaux et inscriptions antérieurs à cette fonctionnalité, visuellement distincte d'une action réelle
+- Aucune donnée personnelle des bénévoles ni contenu de page n'est jamais journalisé
+
 ### Programme des spectacles
 
 - Ajout, édition et suppression de plages de spectacles par jour
@@ -145,12 +161,15 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - Ajout de créneaux : rôle, libellé, date, horaires, capacité, statut, ordre d'affichage
   - Saisie des horaires tolérante : `9` → `09:00`, `14:3` → `14:30`. Les heures valides vont de `00:00` à `23:59` ; une valeur hors plage (`26:00`, `-2:30`) est refusée avec un message au lieu d'être modifiée en silence. Un créneau qui passe minuit s'écrit avec une fin plus petite que le début (`22:00` à `02:00`, affiché « 22h–02h +1 »)
-  - Fin automatiquement fixée à start + 90 min si non renseignée
-- Icônes colorées par rôle (palette prédéfinie + couleur déterministe par hash du nom pour les rôles personnalisés — 8 teintes)
+  - Fin automatiquement fixée à start + 1h si non renseignée
 - Autocomplétion des rôles existants
 - Modification, suppression et changement de statut : ouvert → fermé → complet → annulé
 - **Liste d'attente par créneau** : case à cocher `Activer la liste d'attente` sur chaque créneau ; quand le créneau est complet, les bénévoles peuvent s'inscrire en liste d'attente ; une place libérée (annulation publique ou admin) déclenche automatiquement une offre à la première personne en attente (email + lien de confirmation, expiration 24 h)
-- **Réordonnancement des postes** : panneau glisser-déposer pour changer l'ordre des lignes dans toutes les timelines, persisté via `displayOrder`
+- **Gérer les postes** : panneau dédié pour, poste par poste :
+  - **Réordonner** par glisser-déposer, persisté via `displayOrder` et reflété dans toutes les timelines
+  - **Renommer** d'un coup tous les créneaux d'un poste (refuse un nom déjà pris par un autre poste)
+  - **Supprimer** un poste (annule tous ses créneaux — même confirmation et notification des bénévoles qu'une annulation individuelle)
+  - **Couleur** : 16 couleurs prédéfinies ou automatique (hash du nom), appliquée à la timeline admin et à la page publique
 - **Vue timeline** (par jour) et **vue liste** (tableau plat) commutables
 - Popover au clic sur un créneau : éditer libellé, capacité, statut — bouton direct vers les inscriptions filtrées sur ce créneau
 - **Âge minimum** (optionnel, #192) : condition simple pour restreindre un créneau (ex. 18 ans pour un poste avec permis de conduire) ; affichée aux bénévoles, vérifiée à l'inscription
@@ -159,6 +178,8 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - Vue tabulaire : bénévole, créneau, horaires, commentaire, source, date
 - Annulation d'une inscription individuelle
+- **Actions groupées** : sélection multiple par cases à cocher (case d'en-tête pour tout sélectionner) pour annuler plusieurs inscriptions ou désigner plusieurs responsables de secteur en une seule action ; porte sur toute la sélection, même une ligne masquée entre-temps par un filtre
+- Badge « Responsable » affiché sur une ligne quand ce bénévole est déjà responsable du poste de son créneau
 - **Filtres cumulables** : recherche texte, filtre par poste, filtre par créneau
 - Accès direct depuis un créneau (timeline admin) : pré-filtrage automatique
 - **Ajout manuel** avec détection de conflits
@@ -255,8 +276,8 @@ Accessible uniquement aux comptes avec rôle `super_admin` (protégé au niveau 
 ### Nouveautés produit (`/super-admin/product-updates`)
 
 - Communication manuelle des nouveautés de benevol.app aux administrateurs de toutes les organisations (#200), sans plateforme de newsletter externe
-- Rédaction en Markdown (objet + contenu), aperçu en direct
-- **Envoyer un test** : email uniquement à soi-même, jamais compté dans l'historique
+- Rédaction en Markdown complet (titres, gras, italique, listes, citations, code, tableaux, texte barré, listes de tâches, liens automatiques), aperçu en direct
+- **Envoyer un test** : envoyé par défaut à soi-même, ou à une adresse personnalisée renseignée pour l'occasion ; jamais compté dans l'historique
 - **Envoi** : à tous les administrateurs actifs et abonnés (`receiveProductUpdates`), confirmation demandée avant envoi ; envoi synchrone (pas de file d'attente — volume trop faible pour le justifier), échec d'un destinataire n'empêche pas les autres
 - **Désabonnement** : lien signé dans chaque email, sans connexion requise ; le compte reste actif, seules les communications de nouveautés s'arrêtent
 - **Historique** : liste des envois passés avec nombre de destinataires atteints
@@ -301,7 +322,8 @@ Fallback console si SMTP non configuré (développement).
 - Tests d'isolation cross-tenant (Vitest) — vérifient que chaque route admin utilise le client Prisma scopé
 - Déploiement Docker Compose ou image standalone
 - Déploiement Kubernetes avec init container pour migrations automatiques
-- Cron jobs Kubernetes : rappels (toutes les heures), purge RGPD (`/api/cron/cleanup` : organisations et comptes admin désactivés depuis plus de 30 jours, bénévoles orphelins, jetons expirés), sauvegarde `pg_dump` chiffrée (rétention 30 jours)
+- Cron jobs Kubernetes : rappels (toutes les heures), purge RGPD (`/api/cron/cleanup` : organisations et comptes admin désactivés depuis plus de 30 jours, bénévoles orphelins, jetons expirés), sauvegarde `pg_dump` chiffrée (rétention 30 jours localement, copie hors site vers Dropbox via `rclone` chaque nuit, rétention 90 jours)
+- **`robots.txt` et `sitemap.xml`** multi-tenant : chaque organisation n'expose que ses propres événements publiés et leurs pages personnalisées ; routes à jeton et `/admin`/`/api/` interdites à l'indexation
 - Certificat wildcard via cert-manager et le webhook DNS Gandi (`gandi-webhook/`)
 - Suivi des erreurs avec Sentry (serveur, edge et navigateur)
 - CI/CD GitHub Actions : build, push image GHCR, déploiement automatique sur push `main`
