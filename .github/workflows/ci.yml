@@ -41,6 +41,9 @@ jobs:
       - name: Tests
         run: npm test
 
+      - name: SECURITY.md is up to date with the current version
+        run: node scripts/check-security-md.mjs
+
   e2e:
     name: E2E (Playwright)
     runs-on: ubuntu-latest

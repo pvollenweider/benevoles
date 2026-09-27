@@ -128,6 +128,18 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ---
 
+## [1.11.1] — 2026-09-12
+
+### Corrigé
+
+- **`/admin/settings/admins`** : erreur non gérée quand la réponse serveur arrive vide (proxy/timeout transitoire) — alignement sur le pattern déjà utilisé ailleurs dans le code (`.catch(() => ({}))`).
+
+### Sécurité
+
+- **Dépendances** : `gandi-webhook` — `golang.org/x/crypto` 0.51.0 → 0.52.0, `google.golang.org/grpc` 1.79.3 → 1.83.1 (9 CVE critiques/hautes corrigées) ; `@sentry/nextjs` 10.56.0 → 10.74.0 (`@opentelemetry/core` 2.7.1 → 2.11.0, CVE modérée corrigée).
+
+---
+
 ## [1.11.0] — 2026-06-10
 
 ### Ajouté

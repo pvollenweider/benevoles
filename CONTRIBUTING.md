@@ -118,6 +118,18 @@ npm run test:e2e # tests end-to-end Playwright (demandent une base migrée et se
 
 Toute nouvelle route API admin doit être accompagnée d'un test d'isolation cross-tenant dans `src/__tests__/security/cross-tenant-isolation.test.ts`. Ces tests vérifient que la route utilise le client Prisma scopé (`db` de `requireOrgSession`) et non le client brut (`prisma`).
 
+## Publier une nouvelle version
+
+Checklist à suivre à chaque bump de version (créée après coup — `SECURITY.md` et deux entrées de `CHANGELOG.md` étaient restées désynchronisées pendant plusieurs versions sans que rien ne le signale) :
+
+1. **`CHANGELOG.md`** : backfiller `[Unreleased]` avec tout ce qui a été mergé depuis la dernière version, puis le renommer `[x.y.z] — AAAA-MM-JJ`. Omettre les chores purement internes (bump de dépendance, CI) sans impact utilisateur.
+2. **`package.json` et `package-lock.json`** : bump du champ `"version"` (les deux fichiers — `package-lock.json` a sa propre copie du numéro à la racine et dans `packages[""]`).
+3. **`SECURITY.md`** : mettre à jour la ligne `x.y.x` de la table « Versions supportées ». **Vérifié automatiquement en CI** (`scripts/check-security-md.mjs`, job « Type-check, lint & tests ») — le build échoue si ce fichier n'a pas suivi le bump de `package.json`.
+4. **`FONCTIONNALITES.md`** : vérifier que les fonctionnalités ajoutées/retirées depuis la dernière relecture y figurent. Pas de vérification automatique — audit manuel périodique.
+5. **`GUIDE_ADMIN.md` / `GUIDE_BENEVOLE.md`** : décrivent uniquement l'état actuel du produit, jamais de langage « depuis la version x, … ». Ce sont aussi les pages publiques `/doc/admin` et `/doc/benevole` (même source).
+6. **Tag + release GitHub** : `git tag -a vX.Y.Z -m "vX.Y.Z"`, `git push origin vX.Y.Z`, puis `gh release create vX.Y.Z --notes-file <extrait du CHANGELOG>`. Le numéro affiché dans le pied de page public (`v{version}`) vient directement de `package.json` — rien à modifier à la main de ce côté.
+7. Vérifier le déploiement (`gh run watch` sur le workflow *Build & Deploy* déclenché par le push sur `main`).
+
 ## Signaler un bug de sécurité
 
 Voir [SECURITY.md](SECURITY.md) — ne pas ouvrir d'issue publique.
