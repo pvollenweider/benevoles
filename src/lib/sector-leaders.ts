@@ -69,3 +69,27 @@ export async function untagVolunteerIfNoLongerResponsable(organizationId: string
     data: { tags: volunteer.tags.filter((t) => t !== RESPONSABLE_TAG) },
   })
 }
+
+/**
+ * Pure helpers (no db access) for flagging a registrations-list row as "Responsable" of its own
+ * shift's role, without a second round trip from the client — see registrations/page.tsx.
+ * SectorLeader is keyed by (eventId, roleName, email), not a volunteerId FK (a leader isn't
+ * necessarily a registered volunteer and doesn't need an account), so matching is by role + email.
+ */
+export type SectorLeaderRef = { roleName: string; email: string }
+
+function leaderKey(roleName: string, email: string): string {
+  return `${roleName}\0${email.toLowerCase()}`
+}
+
+export function leaderKeySet(leaders: SectorLeaderRef[]): Set<string> {
+  return new Set(leaders.map((l) => leaderKey(l.roleName, l.email)))
+}
+
+// True when `email` is a registered sector leader of `roleName` for this event. Emails are
+// compared case-insensitively — SectorLeader.email and Volunteer.email aren't guaranteed to have
+// been typed with the same casing.
+export function isSectorLeader(keys: Set<string>, roleName: string, email: string | null): boolean {
+  if (!email) return false
+  return keys.has(leaderKey(roleName, email))
+}
