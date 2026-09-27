@@ -13,6 +13,9 @@ type ShiftRef  = {
 type Registration = {
   id: string; status: string; source: string; comment: string | null
   createdAt: string; waitingPosition: number | null; volunteer: Volunteer; shift: ShiftRef
+  // True when this volunteer is already the (or a) sector leader of this shift's own role —
+  // computed server-side from SectorLeader (role + email), see registrations/page.tsx.
+  isLeader: boolean
 }
 
 type Props = {
@@ -445,6 +448,11 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       createdAt: data.createdAt,
       waitingPosition: data.waitingPosition ?? null,
       volunteer: data.volunteer,
+      // A registration just created client-side can't already be flagged as a sector leader —
+      // that comes from a server-side join against SectorLeader the manual-add response doesn't
+      // carry, and "just registered" is never simultaneously "registered a while ago and later
+      // made a leader" (see registrations/page.tsx's initial computation of this field).
+      isLeader: false,
       shift: {
         id: data.shift.id,
         roleName: data.shift.roleName,
@@ -636,7 +644,17 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                     />
                   </td>
                   <td className="px-4 py-3">
-                    <p className="font-medium text-gray-900">{reg.volunteer.firstName} {reg.volunteer.lastName}</p>
+                    <p className="font-medium text-gray-900 flex items-center gap-1.5">
+                      {reg.volunteer.firstName} {reg.volunteer.lastName}
+                      {reg.isLeader && (
+                        <span
+                          className="inline-flex items-center rounded-full bg-amber-50 px-1.5 py-0.5 text-[10px] font-semibold text-amber-800"
+                          title={`Responsable de ${reg.shift.roleName}`}
+                        >
+                          Responsable
+                        </span>
+                      )}
+                    </p>
                     <p className="text-xs text-gray-500">{reg.volunteer.email}</p>
                     {reg.volunteer.phone && <p className="text-xs text-gray-500">{reg.volunteer.phone}</p>}
                     {reg.comment && <p className="text-xs text-gray-500 italic mt-0.5">"{reg.comment}"</p>}

@@ -14,7 +14,7 @@ vi.mock("../prisma", () => ({
 const sendNotificationMock = vi.hoisted(() => vi.fn())
 vi.mock("../notifications", () => ({ sendNotification: sendNotificationMock }))
 
-import { notifySectorLeadersOfSignup, tagVolunteerAsResponsable, untagVolunteerIfNoLongerResponsable } from "../sector-leaders"
+import { notifySectorLeadersOfSignup, tagVolunteerAsResponsable, untagVolunteerIfNoLongerResponsable, leaderKeySet, isSectorLeader } from "../sector-leaders"
 
 describe("notifySectorLeadersOfSignup", () => {
   beforeEach(() => {
@@ -117,5 +117,32 @@ describe("untagVolunteerIfNoLongerResponsable", () => {
     volunteerFindFirst.mockResolvedValue({ id: "vol-1", tags: ["cuisine"] })
     await untagVolunteerIfNoLongerResponsable("org-a", "a@x.com")
     expect(volunteerUpdate).not.toHaveBeenCalled()
+  })
+})
+
+describe("isSectorLeader", () => {
+  it("matches a leader by role and email", () => {
+    const keys = leaderKeySet([{ roleName: "Bar", email: "julie@example.com" }])
+    expect(isSectorLeader(keys, "Bar", "julie@example.com")).toBe(true)
+  })
+
+  it("is case-insensitive on email", () => {
+    const keys = leaderKeySet([{ roleName: "Bar", email: "Julie@Example.com" }])
+    expect(isSectorLeader(keys, "Bar", "julie@example.com")).toBe(true)
+  })
+
+  it("does not match a leader of a different role", () => {
+    const keys = leaderKeySet([{ roleName: "Accueil", email: "julie@example.com" }])
+    expect(isSectorLeader(keys, "Bar", "julie@example.com")).toBe(false)
+  })
+
+  it("does not match a different email", () => {
+    const keys = leaderKeySet([{ roleName: "Bar", email: "julie@example.com" }])
+    expect(isSectorLeader(keys, "Bar", "marc@example.com")).toBe(false)
+  })
+
+  it("never matches a volunteer with no email on file", () => {
+    const keys = leaderKeySet([{ roleName: "Bar", email: "julie@example.com" }])
+    expect(isSectorLeader(keys, "Bar", null)).toBe(false)
   })
 })

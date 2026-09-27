@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import RegistrationsManager from "@/components/admin/RegistrationsManager"
+import { leaderKeySet, isSectorLeader } from "@/lib/sector-leaders"
 
 export const dynamic = "force-dynamic"
 
@@ -31,6 +32,7 @@ export default async function RegistrationsPage({
         include: { volunteer: true, shift: true },
         orderBy: [{ status: "asc" }, { createdAt: "desc" }],
       },
+      sectorLeaders: true,
     },
   })
 
@@ -41,6 +43,10 @@ export default async function RegistrationsPage({
     acc[r.shift.id] = (acc[r.shift.id] ?? 0) + 1
     return acc
   }, {})
+
+  // Flags a row as "Responsable" of its own shift's role, so the registrations list can show
+  // who's already a sector leader without a second round trip from the client.
+  const leaderKeys = leaderKeySet(event.sectorLeaders)
 
   return (
     <div className="space-y-6">
@@ -66,6 +72,7 @@ export default async function RegistrationsPage({
           createdAt: r.createdAt.toISOString(),
           waitingPosition: r.waitingPosition,
           volunteer: r.volunteer,
+          isLeader: isSectorLeader(leaderKeys, r.shift.roleName, r.volunteer.email),
           shift: {
             id: r.shift.id,
             roleName: r.shift.roleName,
