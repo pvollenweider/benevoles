@@ -28,6 +28,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Sécurité
 
+- **Sessions admin** : un admin désactivé ou supprimé, ou un admin dont l'organisation est désactivée, perd immédiatement l'accès au lieu de le garder jusqu'à l'expiration de sa session (30 jours) ; un changement de rôle s'applique sans reconnexion.
+- **Connexion admin** : après 10 échecs sur un même compte ou 30 depuis une même adresse IP en 15 minutes, les tentatives suivantes sont refusées jusqu'à la fin de la fenêtre.
 - **Abonnements push** : s'abonner aux rappels push exige désormais le lien de gestion du bénévole (token d'inscription) au lieu d'une simple adresse email, et l'abonnement est rattaché au bénévole (donc à son organisation). Auparavant, n'importe qui pouvait abonner son navigateur à l'adresse email d'un autre bénévole et recevoir ses rappels, qui contiennent le lien `/my/[token]`. Les abonnements existants sont supprimés ; un navigateur déjà abonné est ré-enregistré automatiquement à la prochaine visite de la page de gestion.
 
 ## [1.14.0] — 2026-09-26

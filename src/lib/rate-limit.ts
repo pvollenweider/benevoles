@@ -40,6 +40,12 @@ export function rateLimit(
   return { ok: true, remaining, retryAfter: 0 }
 }
 
+/** Whether `key` has already used up `limit` in its current window — reads without counting. */
+export function isRateLimited(ip: string, route: string, limit: number): boolean {
+  const win = store.get(`${route}:${ip}`)
+  return !!win && win.resetAt > Date.now() && win.count >= limit
+}
+
 export function getClientIp(req: Request): string {
   return (
     req.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
