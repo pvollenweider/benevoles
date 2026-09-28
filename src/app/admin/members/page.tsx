@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import MembersManager from "@/components/admin/MembersManager"
+import { toMin, toMinEnd } from "@/lib/gantt-utils"
 
 export const dynamic = "force-dynamic"
 
@@ -12,6 +13,14 @@ export default async function MembersPage() {
   const [volunteers, allTags] = await Promise.all([
     db.volunteer.findMany({
       orderBy: [{ active: "desc" }, { lastName: "asc" }, { firstName: "asc" }],
+      include: {
+        // Active registrations only — a cancelled or still-pending (waiting/offered) shift was
+        // never actually worked. Across every event of the org, not one at a time: this is an
+        // admin-only recognition figure ("who's given the org the most time"), deliberately kept
+        // off the volunteer-facing PDF export where a per-event ranking would read as a
+        // competition between people who showed up to help.
+        registrations: { where: { status: "active" }, select: { shift: { select: { startTime: true, endTime: true } } } },
+      },
     }),
     db.volunteer.findMany({ select: { tags: true } }).then((rows) => {
       const set = new Set<string>()
@@ -31,6 +40,10 @@ export default async function MembersPage() {
         tags: v.tags,
         active: v.active,
         notes: v.notes,
+        hoursTotal: v.registrations.reduce(
+          (sum, r) => sum + (toMinEnd(r.shift.endTime, r.shift.startTime) - toMin(r.shift.startTime)) / 60,
+          0
+        ),
       }))}
       allTags={allTags}
     />

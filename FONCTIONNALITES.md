@@ -192,6 +192,7 @@ Pool de bénévoles connus de l'organisation (source de vérité partagée avec 
 - Création, édition et désactivation de membres
 - Champs : prénom, nom, email, téléphone, tags libres, notes internes
 - **Colonnes Prénom et Nom séparées** ; tri par colonne au clic sur l'en-tête (croissant → décroissant → reset) ; changement annoncé aux lecteurs d'écran via live region
+- **Heures cumulées** : somme de la durée des créneaux actifs de chaque membre, tous événements de l'organisation confondus ; colonne triable. Figure admin uniquement — absente de l'export PDF (qui est, lui, potentiellement partagé avec les bénévoles).
 - Recherche par texte et filtre par tag
 - Import CSV ou Excel (`.xlsx`) via le bouton « Importer CSV/Excel » : colonnes reconnues par leur intitulé (français ou anglais), bilan créés / mis à jour / ignorés, lignes en erreur listées
 

@@ -223,7 +223,8 @@ Le répertoire des membres est le pool de bénévoles connus de votre organisati
 - **Modifier** ou désactiver un membre existant
 - **Importer** des membres en masse : bouton **Importer CSV/Excel** (fichiers `.csv` ou `.xlsx`). Les colonnes sont reconnues par leur intitulé (prénom, nom, email, téléphone, tags ; par exemple `prenom`, `courriel`, `mobile`, `groupes`). Plusieurs tags dans une cellule se séparent par `,`, `;` ou `|`. Le résultat indique le nombre de membres créés, mis à jour et ignorés ; les lignes en erreur sont listées avec leur numéro (50 au maximum affichées).
 - **Rechercher** par texte libre ou filtrer par tag
-- **Trier** par prénom ou par nom : cliquer sur l'en-tête de colonne (croissant → décroissant → reset)
+- **Trier** par prénom, nom ou heures cumulées : cliquer sur l'en-tête de colonne (croissant → décroissant → reset)
+- **Heures cumulées** : total du temps passé sur des créneaux actifs, tous événements confondus — utile pour identifier vos bénévoles les plus investis. Cette colonne n'apparaît que dans cette page ; elle n'est jamais incluse dans l'export PDF, potentiellement partagé avec les bénévoles.
 
 ---
 
