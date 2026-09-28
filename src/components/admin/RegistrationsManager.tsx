@@ -361,7 +361,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
 
   async function handleBulkCancel() {
     if (selectedActiveRegs.length === 0) return
-    if (!confirm(`Annuler ${selectedActiveRegs.length} inscription${selectedActiveRegs.length > 1 ? "s" : ""} ?`)) return
+    if (!confirm(`Retirer ${selectedActiveRegs.length} bénévole${selectedActiveRegs.length > 1 ? "s" : ""} de leur créneau ?`)) return
     setBulkBusy(true)
     const results = await Promise.allSettled(
       selectedActiveRegs.map((r) => fetch(`/api/admin/registrations/${r.id}`, { method: "DELETE" }))
@@ -379,8 +379,8 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     const failed = selectedActiveRegs.length - cancelledIds.size
     setLeaderAnnouncement(
       failed > 0
-        ? `${cancelledIds.size} inscription${cancelledIds.size > 1 ? "s" : ""} annulée${cancelledIds.size > 1 ? "s" : ""}, ${failed} échec${failed > 1 ? "s" : ""}.`
-        : `${cancelledIds.size} inscription${cancelledIds.size > 1 ? "s" : ""} annulée${cancelledIds.size > 1 ? "s" : ""}.`
+        ? `${cancelledIds.size} bénévole${cancelledIds.size > 1 ? "s" : ""} retiré${cancelledIds.size > 1 ? "s" : ""}, ${failed} échec${failed > 1 ? "s" : ""}.`
+        : `${cancelledIds.size} bénévole${cancelledIds.size > 1 ? "s" : ""} retiré${cancelledIds.size > 1 ? "s" : ""}.`
     )
   }
 
@@ -618,7 +618,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
             disabled={bulkBusy || selectedActiveRegs.length === 0}
             className="text-xs text-red-600 border border-red-300 bg-white px-3 py-1.5 rounded-full hover:bg-red-50 disabled:opacity-50 transition-colors"
           >
-            {bulkBusy ? "…" : `Annuler l'inscription (${selectedActiveRegs.length})`}
+            {bulkBusy ? "…" : `Retirer de leur créneau (${selectedActiveRegs.length})`}
           </button>
           <button
             type="button"

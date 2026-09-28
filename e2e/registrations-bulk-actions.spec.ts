@@ -54,7 +54,7 @@ test("selecting all visible rows and bulk-cancelling removes them all", async ({
   await expect(page.getByText("3 sélectionnées")).toBeVisible()
 
   page.once("dialog", (d) => d.accept())
-  await page.getByRole("button", { name: /^Annuler l'inscription \(3\)$/ }).click()
+  await page.getByRole("button", { name: /^Retirer de leur créneau \(3\)$/ }).click()
 
   await expect(page.getByText("Aucune inscription.")).toBeVisible()
 
@@ -76,7 +76,7 @@ test("selecting a subset only cancels those rows", async ({ page }) => {
   await expect(page.getByText("2 sélectionnées")).toBeVisible()
 
   page.once("dialog", (d) => d.accept())
-  await page.getByRole("button", { name: /^Annuler l'inscription \(2\)$/ }).click()
+  await page.getByRole("button", { name: /^Retirer de leur créneau \(2\)$/ }).click()
 
   await expect(rows).toHaveCount(1)
 })
