@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { env } from "@/lib/env"
 import { prisma } from "@/lib/prisma"
+import { encryptLegacyTokens } from "@/lib/token-encryption-job"
+import { reportError } from "@/lib/report-error"
 
 export const dynamic = "force-dynamic"
 
@@ -74,8 +76,16 @@ async function run(req: Request) {
     },
   })
 
+  // --- 6. Encrypt volunteer-facing tokens still stored in clear (#290) ---
+  // No-op until TOKEN_ENCRYPTION_KEY is set; then drains the legacy columns.
+  const tokenEncryption = await encryptLegacyTokens().catch((e) => {
+    reportError("tokens.encrypt_legacy")(e)
+    return null
+  })
+
   return NextResponse.json({
     runAt: now.toISOString(),
+    tokenEncryption,
     deleted: {
       notificationOutbox: deletedOutbox.count,
       organizations: deletedOrgs.count,

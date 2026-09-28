@@ -102,7 +102,13 @@ model SectorLeader {
   roleName  String
   name      String
   email     String
-  token     String   @unique
+  // Access token of the personal link (#290). Looked up by `…Hash` (SHA-256); re-sent from
+  // `…Enc` (AES-256-GCM, key TOKEN_ENCRYPTION_KEY, see src/lib/token-vault.ts). `…Legacy` is the
+  // former clear-text column: only filled when no key is configured, and emptied by the cleanup
+  // cron once one is, so a DB dump alone yields no usable link.
+  tokenLegacy String?  @map("token")
+  tokenHash   String   @unique
+  tokenEnc    String?
   createdAt DateTime @default(now())
 
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
@@ -273,7 +279,13 @@ model Registration {
   // (Event.requirePhone) would be lost for an already-known volunteer. Displayed in priority
   // over the profile's phone — see contactPhone() in src/lib/contact-phone.ts.
   phone            String?
-  editToken        String    @unique
+  // Access token of the personal link (#290). Looked up by `…Hash` (SHA-256); re-sent from
+  // `…Enc` (AES-256-GCM, key TOKEN_ENCRYPTION_KEY, see src/lib/token-vault.ts). `…Legacy` is the
+  // former clear-text column: only filled when no key is configured, and emptied by the cleanup
+  // cron once one is, so a DB dump alone yields no usable link.
+  editTokenLegacy  String?   @map("editToken")
+  editTokenHash    String    @unique
+  editTokenEnc     String?
   reminderJ2Sent   DateTime?
   reminderJ1Sent   DateTime?
   reminderDdSent   DateTime?
@@ -302,7 +314,13 @@ model MemberInvite {
   id          String    @id @default(cuid())
   eventId     String
   volunteerId String
-  token       String    @unique
+  // Access token of the personal link (#290). Looked up by `…Hash` (SHA-256); re-sent from
+  // `…Enc` (AES-256-GCM, key TOKEN_ENCRYPTION_KEY, see src/lib/token-vault.ts). `…Legacy` is the
+  // former clear-text column: only filled when no key is configured, and emptied by the cleanup
+  // cron once one is, so a DB dump alone yields no usable link.
+  tokenLegacy String?   @map("token")
+  tokenHash   String    @unique
+  tokenEnc    String?
   sentAt      DateTime  @default(now())
   usedAt      DateTime?
 
@@ -310,7 +328,6 @@ model MemberInvite {
   volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
 
   @@unique([eventId, volunteerId])
-  @@index([token])
 }
 
 // Outbox for notifications sent as a consequence of a request (#293), starting with public

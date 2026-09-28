@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { sendMemberInvite } from "@/lib/email"
 import { z } from "zod"
+import { linkToken } from "@/lib/token-vault"
 
 const schema = z.object({
   message: z.string().max(500).optional(),
@@ -68,7 +69,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         orgSlug: event.organization.slug,
         eventSlug: event.slug,
         message: parsed.data.message ?? null,
-        token: invite.token,
+        token: linkToken.reveal(invite),
       })
       sent++
     } catch (err) {

@@ -22,7 +22,7 @@ const reg = (phone: string | null, profilePhone: string | null) => ({
 })
 
 const sibling = (phone: string | null) => ({
-  id: "r2", editToken: "t2", phone,
+  id: "r2", editTokenLegacy: "t2", editTokenEnc: null, phone,
   shift: { id: "s2", label: "Bar", roleName: "Bar", date: new Date(), startTime: "10:00", endTime: "12:00" },
 })
 

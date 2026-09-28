@@ -36,8 +36,8 @@ describe("notifySectorLeadersOfSignup", () => {
 
   it("notifies every leader of that role", async () => {
     findMany.mockResolvedValue([
-      { id: "l1", roleName: "Bar", name: "Alice", email: "a@x.com", token: "tok-a" },
-      { id: "l2", roleName: "Bar", name: "Zoe", email: "z@x.com", token: "tok-z" },
+      { id: "l1", roleName: "Bar", name: "Alice", email: "a@x.com", tokenLegacy: "tok-a", tokenEnc: null },
+      { id: "l2", roleName: "Bar", name: "Zoe", email: "z@x.com", tokenLegacy: "tok-z", tokenEnc: null },
     ])
     await notifySectorLeadersOfSignup({
       eventId: "evt-1",
@@ -57,7 +57,7 @@ describe("notifySectorLeadersOfSignup", () => {
   })
 
   it("swallows a send failure for one leader without throwing", async () => {
-    findMany.mockResolvedValue([{ id: "l1", roleName: "Bar", name: "Alice", email: "a@x.com", token: "tok-a" }])
+    findMany.mockResolvedValue([{ id: "l1", roleName: "Bar", name: "Alice", email: "a@x.com", tokenLegacy: "tok-a", tokenEnc: null }])
     sendNotificationMock.mockRejectedValue(new Error("smtp down"))
     await expect(
       notifySectorLeadersOfSignup({

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { linkToken } from "@/lib/token-vault"
 
 /**
  * Public endpoint that resolves a MemberInvite token to the volunteer info
@@ -15,7 +16,7 @@ export async function GET(
   const expectedSlug = url.searchParams.get("slug")
 
   const invite = await prisma.memberInvite.findUnique({
-    where: { token },
+    where: linkToken.where(token),
     include: {
       volunteer: {
         select: {

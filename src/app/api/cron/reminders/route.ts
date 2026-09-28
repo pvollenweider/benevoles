@@ -7,6 +7,7 @@ import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { sendPushToVolunteer } from "@/lib/push"
 import { reportError } from "@/lib/report-error"
 import { deliverOutbox } from "@/lib/notifications/outbox"
+import { registrationToken } from "@/lib/token-vault"
 
 export const dynamic = "force-dynamic"
 
@@ -103,7 +104,7 @@ async function run(req: Request) {
           shiftStart: r.shift.startTime,
           shiftEnd: r.shift.endTime,
           shiftLocation: r.shift.locationDetails,
-          editToken: r.editToken,
+          editToken: registrationToken.reveal(r),
           hoursUntil: Math.max(0, Math.round((start.getTime() - now.getTime()) / (3600 * 1000))),
         },
       })
@@ -119,7 +120,7 @@ async function run(req: Request) {
         sendPushToVolunteer(r.volunteerId, {
           title: r.event.title,
           body: `Rappel : votre créneau "${r.shift.label}" commence ${hoursLabel}.`,
-          url: `/my/${r.editToken}`,
+          url: `/my/${registrationToken.reveal(r)}`,
           tag: `reminder-${r.id}-${win.kind}`,
         }).catch(reportError("push.reminder"))
         sent++

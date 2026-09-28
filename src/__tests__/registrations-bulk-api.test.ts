@@ -16,7 +16,7 @@ vi.mock("@/lib/event-log", () => ({ adminActor: () => ({ type: "admin", id: "adm
 
 const event = { id: "evt-1", title: "Festival", organization: { slug: "a" } }
 const reg = (id: string, over: Record<string, unknown> = {}) => ({
-  id, eventId: "evt-1", shiftId: "s1", status: "active", editToken: `tok-${id}`,
+  id, eventId: "evt-1", shiftId: "s1", status: "active", editTokenLegacy: `tok-${id}`, editTokenEnc: null,
   volunteer: { id: `v-${id}`, firstName: "A", lastName: id, email: `${id}@x.com` },
   shift: { roleName: "Bar" },
   ...over,

@@ -72,6 +72,8 @@ jobs:
       DATABASE_URL: postgresql://benevoles:benevoles@localhost:5432/benevoles_e2e
       # Throwaway secret, CI-only — never used outside this ephemeral job.
       AUTH_SECRET: ci-e2e-only-secret-not-used-anywhere-else-0000
+      # Throwaway key, CI-only: runs E2E through the encrypted-token path (#290).
+      TOKEN_ENCRYPTION_KEY: Y2ktZTJlLW9ubHktdG9rZW4ta2V5LTMyLWJ5dGVzISE=
       ADMIN_EMAIL: admin@localhost
       ADMIN_PASSWORD: ci-e2e-admin-password
       ORG_ADMIN_EMAIL: org-admin@localhost

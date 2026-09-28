@@ -4,6 +4,7 @@ import { sendMemberInvite } from "@/lib/email"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { randomBytes } from "crypto"
+import { linkToken } from "@/lib/token-vault"
 
 const postSchema = z.object({
   volunteerIds: z.array(z.string()).min(1).max(500),
@@ -113,17 +114,20 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   // Existing invites for this event so we don't recreate them.
   const existing = await db.memberInvite.findMany({
     where: { eventId, volunteerId: { in: volunteers.map((v) => v.id) } },
-    select: { volunteerId: true, id: true, token: true },
+    select: { volunteerId: true, id: true, ...linkToken.select },
   })
-  const existingByVolunteer = new Map(existing.map((e) => [e.volunteerId, e]))
+  const existingByVolunteer = new Map(existing.map((e) => [e.volunteerId, { id: e.id, volunteerId: e.volunteerId, token: linkToken.reveal(e) }]))
 
   const created: { id: string; volunteerId: string; token: string }[] = []
   for (const volunteer of volunteers) {
     if (existingByVolunteer.has(volunteer.id)) continue
-    const invite = await db.memberInvite.create({
-      data: { eventId, volunteerId: volunteer.id, token: randomBytes(24).toString("hex") },
-      select: { id: true, volunteerId: true, token: true },
+    // Clear token only in memory (the email needs it); the DB keeps hash + encrypted copy (#290).
+    const token = randomBytes(24).toString("hex")
+    const row = await db.memberInvite.create({
+      data: { eventId, volunteerId: volunteer.id, ...linkToken.data(token) },
+      select: { id: true, volunteerId: true },
     })
+    const invite = { ...row, token }
     created.push(invite)
     await logEvent({
       eventId,

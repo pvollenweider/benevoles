@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { sendNotification } from "@/lib/notifications"
+import { registrationToken } from "@/lib/token-vault"
 
 // Lets an admin resend a volunteer their own personal management link (/my/[token]) — e.g. when
 // they accidentally deleted the confirmation email that carried it. Any of a volunteer's active
@@ -39,7 +40,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       volunteerName: `${registration.volunteer.firstName} ${registration.volunteer.lastName}`,
       eventTitle: registration.event.title,
       orgSlug: registration.event.organization.slug,
-      editToken: registration.editToken,
+      editToken: registrationToken.reveal(registration),
     },
   })
 

@@ -3,6 +3,7 @@ import { prisma } from "../prisma"
 import { reportError } from "../report-error"
 import { sendNotification } from "./index"
 import type { NotificationPayload, Send } from "./types"
+import { decryptToken, encryptToken, encryptionKey } from "../token-vault"
 
 /**
  * Notification outbox (#293).
@@ -34,10 +35,30 @@ export function collectNotifications(): { send: Send; payloads: NotificationPayl
   }
 }
 
+/**
+ * Payloads carry personal links (/my/<token>, leader links) and recipient data. With
+ * TOKEN_ENCRYPTION_KEY set they're stored encrypted like the tokens themselves (#290), so the
+ * outbox doesn't become a clear-text copy of what the token columns protect.
+ */
+export function sealPayload(payload: NotificationPayload): object {
+  const key = encryptionKey()
+  return key ? { enc: encryptToken(JSON.stringify(payload), key) } : (payload as object)
+}
+
+export function openPayload(stored: unknown): NotificationPayload {
+  const enc = (stored as { enc?: unknown }).enc
+  if (typeof enc === "string") {
+    const key = encryptionKey()
+    if (!key) throw new Error("Encrypted outbox payload but TOKEN_ENCRYPTION_KEY is not set")
+    return JSON.parse(decryptToken(enc, key)) as NotificationPayload
+  }
+  return stored as NotificationPayload
+}
+
 export async function enqueueNotifications(payloads: NotificationPayload[]): Promise<string[]> {
   const ids: string[] = []
   for (const payload of payloads) {
-    const row = await prisma.notificationOutbox.create({ data: { payload: payload as object }, select: { id: true } })
+    const row = await prisma.notificationOutbox.create({ data: { payload: sealPayload(payload) }, select: { id: true } })
     ids.push(row.id)
   }
   return ids
@@ -79,7 +100,9 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     if (count === 0) continue // claimed by another delivery meanwhile
 
     const claimed = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
-    const outcome = await sendNotification(claimed.payload as unknown as NotificationPayload).catch(
+    const outcome = await Promise.resolve()
+      .then(() => sendNotification(openPayload(claimed.payload)))
+      .catch(
       (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e) }),
     )
 
@@ -103,7 +126,8 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     })
     if (giveUp) {
       result.failed++
-      const kind = (claimed.payload as { kind?: string }).kind ?? "unknown"
+      let kind = "unknown"
+      try { kind = openPayload(claimed.payload).kind } catch { /* reported below anyway */ }
       reportError(`outbox.gave_up.${kind}`)(new Error(`Notification ${row.id} failed ${attempts} times: ${outcome.reason}`))
     } else {
       result.retried++

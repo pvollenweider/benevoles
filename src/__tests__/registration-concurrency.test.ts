@@ -84,7 +84,7 @@ describe("POST /api/public/registrations under contention", () => {
     m.regCount.mockResolvedValue(0)
     m.regCreate.mockRejectedValue(Object.assign(new Error("unique"), { code: "P2002" }))
     m.regFindFirst.mockResolvedValue({
-      editToken: "existing-tok",
+      editTokenLegacy: "existing-tok", editTokenEnc: null,
       volunteer: { firstName: "A", lastName: "B", email: "a@x.com" },
       event: { title: "F", organization: { slug: "a" } },
     })
@@ -104,7 +104,7 @@ describe("promoteNextInWaitlist under contention", () => {
     m.regCount.mockResolvedValue(1)
     m.regFindFirst.mockResolvedValue({ id: "w1" })
     m.regFindUniqueOrThrow.mockResolvedValue({
-      id: "w1", eventId: "evt-1", editToken: "t",
+      id: "w1", eventId: "evt-1", editTokenLegacy: "t", editTokenEnc: null,
       volunteer: { email: "w@x.com", firstName: "W" },
       shift: { label: "Bar", date: new Date(), startTime: "10:00", endTime: "12:00" },
       event: { title: "F", organization: { slug: "a", name: "A" } },
@@ -138,7 +138,7 @@ describe("conditional transitions", () => {
 
   it("waitlist confirm: a second concurrent confirm gets 404 and sends nothing", async () => {
     m.regFindFirst.mockResolvedValue({
-      id: "r1", eventId: "evt-1", volunteerId: "v1", editToken: "tok", waitingExpiresAt: new Date(Date.now() + 3600_000),
+      id: "r1", eventId: "evt-1", volunteerId: "v1", editTokenLegacy: "tok", editTokenEnc: null, waitingExpiresAt: new Date(Date.now() + 3600_000),
       volunteer: { email: "a@x.com", firstName: "A" }, shift: { label: "Bar", date: new Date(), startTime: "10:00", endTime: "12:00" },
       event: { title: "F", organization: { slug: "a" } },
     })

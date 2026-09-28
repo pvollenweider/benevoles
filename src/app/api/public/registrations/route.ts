@@ -17,6 +17,7 @@ import {
   planPlacement,
 } from "@/lib/registration-capacity"
 import { z } from "zod"
+import { linkToken, registrationToken } from "@/lib/token-vault"
 
 const schema = z.object({
   eventId: z.string(),
@@ -133,7 +134,7 @@ export async function POST(req: Request) {
     }
   } else if (inviteToken) {
     const invite = await prisma.memberInvite.findFirst({
-      where: { token: inviteToken, eventId, volunteerId: volunteer.id },
+      where: { ...linkToken.where(inviteToken), eventId, volunteerId: volunteer.id },
       select: { id: true },
     })
     ownsEmail = invite != null
@@ -164,6 +165,9 @@ export async function POST(req: Request) {
   // selected shifts (#264): two sign-ups racing for the last spot are serialized, so only one
   // gets it and the other is waitlisted or refused. The partial unique index backs up the
   // "already registered" check above against a double submit racing itself.
+  // One token per new registration, kept in clear only in memory: the confirmation email and
+  // the response need it, the DB only stores its hash and encrypted copy (#290).
+  const tokens = new Map(shiftIds.map((id) => [id, generateToken()]))
   let registrations
   try {
     registrations = await prisma.$transaction(async (tx) => {
@@ -203,7 +207,7 @@ export async function POST(req: Request) {
               source: "public_form",
               comment,
               phone: phone?.trim() || null,
-              editToken: generateToken(),
+              ...registrationToken.data(tokens.get(shift.id)!),
               status: placement.status,
               waitingPosition: placement.status === "waiting" ? placement.waitingPosition : null,
             },
@@ -239,7 +243,8 @@ export async function POST(req: Request) {
     })
   }
 
-  const editToken = registrations[0].editToken
+  // Clear tokens exist only in memory here (the DB keeps hash + encrypted copy, #290).
+  const editToken = tokens.get(registrations[0].shiftId)!
 
   for (const reg of registrations) {
     await logEvent({
@@ -257,7 +262,7 @@ export async function POST(req: Request) {
   if (inviteToken) {
     await prisma.memberInvite
       .updateMany({
-        where: { token: inviteToken, eventId, usedAt: null },
+        where: { ...linkToken.where(inviteToken), eventId, usedAt: null },
         data: { usedAt: new Date() },
       })
       .catch(reportError("member_invite.mark_used"))
@@ -403,7 +408,7 @@ async function alreadyRegistered(volunteerId: string, eventId: string) {
       const result = await sendNotification({
         kind: "registration_link_resend",
         recipient: { email: reg.volunteer.email, name },
-        data: { volunteerName: name, eventTitle: reg.event.title, orgSlug: reg.event.organization.slug, editToken: reg.editToken },
+        data: { volunteerName: name, eventTitle: reg.event.title, orgSlug: reg.event.organization.slug, editToken: registrationToken.reveal(reg) },
       }).catch((e) => {
         reportError("notification.registration_link_resend")(e)
         return { ok: false }

@@ -5,6 +5,7 @@ import { z } from "zod"
 import { clockSchema, firstIssueMessage, SAME_TIME_ERROR } from "@/lib/shift-time"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { cancelShift } from "@/lib/shift-cancel"
+import { registrationToken } from "@/lib/token-vault"
 
 const schema = z.object({
   roleName: z.string().optional(),
@@ -103,7 +104,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
           newStart: after.startTime,
           oldEnd: before.endTime,
           newEnd: after.endTime,
-          editToken: reg.editToken,
+          editToken: registrationToken.reveal(reg),
         },
       })
       if (result.ok) notified++

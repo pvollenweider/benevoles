@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { sendNotification } from "@/lib/notifications"
+import { registrationToken } from "@/lib/token-vault"
 
 /**
  * POST /api/admin/events/[id]/send-reminder
@@ -50,7 +51,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   for (const r of regs) {
     let bundle = byVolunteer.get(r.volunteerId)
     if (!bundle) {
-      bundle = { volunteer: r.volunteer, editToken: r.editToken, shifts: [] }
+      bundle = { volunteer: r.volunteer, editToken: registrationToken.reveal(r), shifts: [] }
       byVolunteer.set(r.volunteerId, bundle)
     }
     bundle.shifts.push(r.shift)
