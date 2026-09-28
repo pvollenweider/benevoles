@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+import { hashToken } from "@/lib/token-hash"
 
 const findFirst = vi.hoisted(() => vi.fn())
 const upsert = vi.hoisted(() => vi.fn())
@@ -40,7 +41,7 @@ describe("POST /api/public/push", () => {
     const res = await POST(post({ editToken: "nope", ...sub }))
     expect(res.status).toBe(404)
     expect(findFirst).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { editToken: "nope", status: "active" } }),
+      expect.objectContaining({ where: { editTokenHash: hashToken("nope"), status: "active" } }),
     )
     expect(upsert).not.toHaveBeenCalled()
   })

@@ -6,6 +6,7 @@
 import { prisma } from "./prisma"
 import { sendNotification, type Send } from "./notifications"
 import { reportError } from "./report-error"
+import { linkToken } from "./token-vault"
 
 export async function notifySectorLeadersOfSignup(params: {
   eventId: string
@@ -34,7 +35,7 @@ export async function notifySectorLeadersOfSignup(params: {
           startTime: params.shift.startTime,
           endTime: params.shift.endTime,
           orgSlug: params.orgSlug,
-          token: leader.token,
+          token: linkToken.reveal(leader),
         },
       }).catch(reportError("notification.sector_leader_signup"))
     )

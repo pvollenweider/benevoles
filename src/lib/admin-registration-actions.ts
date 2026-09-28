@@ -5,6 +5,7 @@ import { promoteNextInWaitlist } from "./waitlist"
 import { tagVolunteerAsResponsable } from "./sector-leaders"
 import { reportError } from "./report-error"
 import { generateToken } from "./utils"
+import { linkToken } from "./token-vault"
 
 /**
  * Admin actions on registrations, shared by the single-row routes and the bulk route (#292), so
@@ -74,8 +75,10 @@ export async function addSectorLeader(
   const existing = await db.sectorLeader.findFirst({ where: { eventId: ctx.event.id, roleName: input.roleName, email: input.email } })
   if (existing) return { status: "exists" as const, leader: existing }
 
+  // Clear token only in memory (the invite email needs it); the DB keeps hash + encrypted copy.
+  const token = generateToken()
   const leader = await db.sectorLeader.create({
-    data: { eventId: ctx.event.id, roleName: input.roleName, name: input.name, email: input.email, token: generateToken() },
+    data: { eventId: ctx.event.id, roleName: input.roleName, name: input.name, email: input.email, ...linkToken.data(token) },
   })
 
   await logEvent({
@@ -97,7 +100,7 @@ export async function addSectorLeader(
       roleName: leader.roleName,
       eventTitle: ctx.event.title,
       orgSlug: ctx.event.organization.slug,
-      token: leader.token,
+      token,
     },
   }).catch(reportError("notification.sector_leader_invite"))
 

@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+import { hashToken } from "@/lib/token-hash"
 
 // Public sign-up with someone else's email (#285): nothing proves the submitter owns the
 // address, so for an existing volunteer the response must not reveal a management token and
@@ -61,6 +62,15 @@ vi.mock("@/lib/event-log", () => ({ logEvent: vi.fn() }))
 
 const victim = { id: "vol-victim", firstName: "Real", lastName: "Owner", email: "owner@x.com", phone: "0790000000" }
 
+// The route generates the token and stores only its hash (+ encrypted copy, #290): the token in
+// the response must be the one whose hash was written.
+function expectTokenStored(token: unknown) {
+  expect(typeof token).toBe("string")
+  expect(m.txCreate).toHaveBeenCalledWith(expect.objectContaining({
+    data: expect.objectContaining({ editTokenHash: hashToken(token as string) }),
+  }))
+}
+
 function post(extra: Record<string, unknown> = {}) {
   return new Request("http://localhost/api/public/registrations", {
     method: "POST",
@@ -76,7 +86,7 @@ beforeEach(() => {
   for (const fn of Object.values(m)) fn.mockReset()
   m.regFindMany.mockResolvedValue([])
   m.txRegFindMany.mockResolvedValue([])
-  m.txCreate.mockResolvedValue({ id: "reg-new", shiftId: "shift-2", status: "active", editToken: "new-tok", waitingPosition: null })
+  m.txCreate.mockResolvedValue({ id: "reg-new", shiftId: "shift-2", status: "active", waitingPosition: null })
   m.sendNotification.mockResolvedValue({ ok: true })
 })
 
@@ -98,9 +108,9 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post({ inviteToken: "inv-tok" }))
     expect(res.status).toBe(201)
-    expect((await res.json()).editToken).toBe("new-tok")
+    expectTokenStored((await res.json()).editToken)
     expect(m.inviteFindFirst).toHaveBeenCalledWith(expect.objectContaining({
-      where: { token: "inv-tok", eventId: "evt-1", volunteerId: "vol-victim" },
+      where: { tokenHash: hashToken("inv-tok"), eventId: "evt-1", volunteerId: "vol-victim" },
     }))
     expect(m.volUpdate).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "vol-victim" } }))
   })
@@ -127,7 +137,7 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
   it("throttled after failed sends: doesn't claim the link was emailed", async () => {
     m.volFindFirst.mockResolvedValue({ ...victim, id: "vol-throttle-fail" })
     m.regFindFirst.mockResolvedValue({
-      editToken: "victims-tok",
+      editTokenLegacy: "victims-tok", editTokenEnc: null,
       volunteer: { firstName: "Real", lastName: "Owner", email: "owner@x.com" },
       event: { title: "Festival", organization: { slug: "a" } },
     })
@@ -146,7 +156,7 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
   it("throttled after a successful send: says the link was emailed", async () => {
     m.volFindFirst.mockResolvedValue({ ...victim, id: "vol-throttle-ok" })
     m.regFindFirst.mockResolvedValue({
-      editToken: "victims-tok",
+      editTokenLegacy: "victims-tok", editTokenEnc: null,
       volunteer: { firstName: "Real", lastName: "Owner", email: "owner@x.com" },
       event: { title: "Festival", organization: { slug: "a" } },
     })
@@ -177,14 +187,14 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     m.volCreate.mockResolvedValue({ id: "vol-new" })
     const { POST } = await import("@/app/api/public/registrations/route")
     const data = await (await POST(post({ email: "new@x.com" }))).json()
-    expect(data.editToken).toBe("new-tok")
+    expectTokenStored(data.editToken)
   })
 
   it("already registered: 409 without the existing token, which is emailed to the owner instead", async () => {
     m.volFindFirst.mockResolvedValue(victim)
     m.regFindMany.mockResolvedValueOnce([{ id: "reg-existing" }])
     m.regFindFirst.mockResolvedValue({
-      editToken: "victims-tok",
+      editTokenLegacy: "victims-tok", editTokenEnc: null,
       volunteer: { firstName: "Real", lastName: "Owner", email: "owner@x.com" },
       event: { title: "Festival", organization: { slug: "a" } },
     })
@@ -219,7 +229,7 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     m.volFindFirst.mockResolvedValue({ ...victim, id: "vol-mailfail" })
     m.regFindMany.mockResolvedValueOnce([{ id: "reg-existing" }])
     m.regFindFirst.mockResolvedValue({
-      editToken: "victims-tok",
+      editTokenLegacy: "victims-tok", editTokenEnc: null,
       volunteer: { firstName: "Real", lastName: "Owner", email: "owner@x.com" },
       event: { title: "Festival", organization: { slug: "a" } },
     })
@@ -234,7 +244,7 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     m.volFindFirst.mockResolvedValue(victim)
     m.regFindMany
       .mockResolvedValueOnce([]) // no duplicate on the same shift
-      .mockResolvedValueOnce([{ editToken: "victims-tok", shift: { label: "Accueil", date: new Date("2030-06-01T00:00:00Z"), startTime: "15:00", endTime: "17:00" } }])
+      .mockResolvedValueOnce([{ editTokenLegacy: "victims-tok", editTokenEnc: null, shift: { label: "Accueil", date: new Date("2030-06-01T00:00:00Z"), startTime: "15:00", endTime: "17:00" } }])
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post())
     expect(res.status).toBe(409)

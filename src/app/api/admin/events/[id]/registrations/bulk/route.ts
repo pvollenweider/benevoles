@@ -3,6 +3,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor } from "@/lib/event-log"
 import { addSectorLeader, cancelRegistrations, resendManagementLinks } from "@/lib/admin-registration-actions"
 import { z } from "zod"
+import { registrationToken } from "@/lib/token-vault"
 
 // Bulk actions on the registrations list (#292): one request for the whole selection instead
 // of one per row. All-or-nothing on ownership: every id must be a registration of this event,
@@ -66,7 +67,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     }
     case "resend_link": {
       const active = regs.filter((r) => r.status === "active")
-      const result = await resendManagementLinks(active.map((r) => ({ editToken: r.editToken, volunteer: r.volunteer, event })))
+      const result = await resendManagementLinks(active.map((r) => ({ editToken: registrationToken.reveal(r), volunteer: r.volunteer, event })))
       return NextResponse.json({ done: result.sent, failed: result.failed, skipped: result.skipped + (regs.length - active.length) })
     }
   }

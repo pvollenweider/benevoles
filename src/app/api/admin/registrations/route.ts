@@ -4,6 +4,7 @@ import { generateToken } from "@/lib/utils"
 import { z } from "zod"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { isUniqueViolation } from "@/lib/registration-capacity"
+import { registrationToken } from "@/lib/token-vault"
 
 const schema = z.object({
   eventId: z.string(),
@@ -53,7 +54,7 @@ export async function POST(req: Request) {
         volunteerId: volunteer.id,
         source: "admin_manual",
         comment,
-        editToken: generateToken(),
+        ...registrationToken.data(generateToken()),
       },
       include: { volunteer: true, shift: true },
     })

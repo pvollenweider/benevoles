@@ -6,6 +6,7 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
 import { reportError } from "@/lib/report-error"
 import { contactPhone } from "@/lib/contact-phone"
+import { registrationToken } from "@/lib/token-vault"
 
 export async function GET(req: Request, { params }: { params: Promise<{ token: string }> }) {
   const rl = rateLimit(getClientIp(req), "reg-token-read", 10, 60 * 60 * 1000)
@@ -14,7 +15,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
   const { token } = await params
 
   const registration = await prisma.registration.findFirst({
-    where: { editToken: token, status: "active" },
+    where: { ...registrationToken.where(token), status: "active" },
     include: {
       volunteer: true,
       event: { select: { id: true, title: true, slug: true, confirmationMessage: true, organization: { select: { slug: true } } } },
@@ -56,7 +57,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     },
     registrations: allRegistrations.map((r) => ({
       id: r.id,
-      editToken: r.editToken,
+      editToken: registrationToken.reveal(r),
       shift: {
         id: r.shift.id,
         label: r.shift.label,
@@ -76,7 +77,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
   const { token } = await params
 
   const registration = await prisma.registration.findFirst({
-    where: { editToken: token, status: "active" },
+    where: { ...registrationToken.where(token), status: "active" },
   })
 
   if (!registration) {

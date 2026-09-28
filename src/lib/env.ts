@@ -15,6 +15,12 @@ const schema = z.object({
   VAPID_PUBLIC_KEY: z.string().optional(),
   VAPID_PRIVATE_KEY: z.string().optional(),
   VAPID_EMAIL: z.string().optional(),
+  // Encryption of volunteer-facing tokens (#290, src/lib/token-vault.ts). Optional: without it
+  // tokens stay in clear. Validated here so a malformed key fails at boot, not on a sign-up.
+  TOKEN_ENCRYPTION_KEY: z
+    .string()
+    .optional()
+    .refine((v) => !v?.trim() || Buffer.from(v.trim(), "base64").length === 32, "TOKEN_ENCRYPTION_KEY doit faire 32 octets encodés en base64"),
 })
 
 function parseEnv() {

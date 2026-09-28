@@ -4,6 +4,7 @@ import { sendNotification } from "@/lib/notifications"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
 import { reportError } from "@/lib/report-error"
+import { registrationToken } from "@/lib/token-vault"
 
 export async function POST(_req: Request, { params }: { params: Promise<{ token: string }> }) {
   const rl = rateLimit(getClientIp(_req), "waitlist-confirm", 10, 60 * 60 * 1000)
@@ -12,7 +13,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
   const { token } = await params
 
   const reg = await prisma.registration.findFirst({
-    where: { editToken: token, status: "offered" },
+    where: { ...registrationToken.where(token), status: "offered" },
     include: {
       volunteer: true,
       shift: true,
@@ -79,12 +80,12 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
         startTime: reg.shift.startTime,
         endTime: reg.shift.endTime,
       }],
-      editToken: reg.editToken,
+      editToken: token,
       orgSlug,
     },
   }).catch(reportError("notification.registration_confirmation"))
 
-  return NextResponse.json({ success: true, editToken: reg.editToken })
+  return NextResponse.json({ success: true, editToken: token })
 }
 
 export async function GET(req: Request, ctx: { params: Promise<{ token: string }> }) {

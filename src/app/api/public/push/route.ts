@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { reportError } from "@/lib/report-error"
+import { registrationToken } from "@/lib/token-vault"
 
 const schema = z.object({
   editToken: z.string().min(1),
@@ -30,7 +31,7 @@ export async function POST(req: Request) {
   // Same rule as GET /api/public/registrations/[token]: only an active registration's token
   // opens the volunteer's page, so only that token can subscribe.
   const registration = await prisma.registration.findFirst({
-    where: { editToken, status: "active" },
+    where: { ...registrationToken.where(editToken), status: "active" },
     select: { volunteerId: true },
   })
   if (!registration) {

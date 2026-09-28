@@ -147,6 +147,7 @@ jobs:
             --from-literal=CRON_SECRET="${{ secrets.CRON_SECRET }}" \
             --from-literal=VAPID_PUBLIC_KEY="${{ secrets.VAPID_PUBLIC_KEY }}" \
             --from-literal=VAPID_PRIVATE_KEY="${{ secrets.VAPID_PRIVATE_KEY }}" \
+            --from-literal=TOKEN_ENCRYPTION_KEY="${{ secrets.TOKEN_ENCRYPTION_KEY }}" \
             --from-literal=SENTRY_DSN="${{ secrets.SENTRY_DSN || secrets.NEXT_PUBLIC_SENTRY_DSN }}" \
             --from-literal=NEXT_PUBLIC_APP_URL="https://www.benevol.app" \
             --from-literal=AUTH_URL="https://www.benevol.app" \
