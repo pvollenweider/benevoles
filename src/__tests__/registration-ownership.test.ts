@@ -124,13 +124,43 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post())
     expect(res.status).toBe(409)
-    expect(JSON.stringify(await res.json())).not.toContain("victims-tok")
+    const body = await res.json()
+    expect(JSON.stringify(body)).not.toContain("victims-tok")
+    expect(body.error).toContain("envoyé à votre adresse email")
     expect(m.sendNotification).toHaveBeenCalledWith(expect.objectContaining({
       kind: "registration_link_resend",
       recipient: expect.objectContaining({ email: "owner@x.com" }),
       data: expect.objectContaining({ editToken: "victims-tok" }),
     }))
     expect(m.volUpdate).not.toHaveBeenCalled()
+  })
+
+  it("duplicate of a waitlisted/offered registration only: no email, and the message doesn't claim one", async () => {
+    m.volFindFirst.mockResolvedValue({ ...victim, id: "vol-waiting" })
+    m.regFindMany.mockResolvedValueOnce([{ id: "reg-waiting" }])
+    m.regFindFirst.mockResolvedValue(null) // no *active* registration: /my link doesn't exist
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post())
+    expect(res.status).toBe(409)
+    const { error } = await res.json()
+    expect(error).toContain("liste d'attente")
+    expect(error).not.toContain("a été envoyé")
+    expect(m.sendNotification).not.toHaveBeenCalled()
+  })
+
+  it("duplicate when the link email fails: the message doesn't claim it was sent", async () => {
+    m.volFindFirst.mockResolvedValue({ ...victim, id: "vol-mailfail" })
+    m.regFindMany.mockResolvedValueOnce([{ id: "reg-existing" }])
+    m.regFindFirst.mockResolvedValue({
+      editToken: "victims-tok",
+      volunteer: { firstName: "Real", lastName: "Owner", email: "owner@x.com" },
+      event: { title: "Festival", organization: { slug: "a" } },
+    })
+    m.sendNotification.mockResolvedValue({ ok: false, reason: "smtp down" })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const { error } = await (await POST(post())).json()
+    expect(error).not.toContain("a été envoyé")
+    expect(error).toContain("email de confirmation")
   })
 
   it("overlap with an existing registration: 409 without any token", async () => {
