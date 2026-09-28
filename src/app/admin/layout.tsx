@@ -1,5 +1,6 @@
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import { resolveSuperAdminOrg } from "@/lib/auth-guard"
 import AdminNav from "@/components/admin/AdminNav"
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -12,11 +13,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   let orgName: string | undefined
   let organizationId = session.user?.organizationId
   if (!organizationId && session.user?.role === "super_admin") {
-    const fallback = await prisma.organization.findFirst({
-      orderBy: { createdAt: "asc" },
-      select: { id: true },
-    })
-    if (fallback) organizationId = fallback.id
+    organizationId = await resolveSuperAdminOrg()
   }
   if (organizationId) {
     const org = await prisma.organization.findUnique({

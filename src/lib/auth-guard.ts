@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 import { auth } from "@/auth"
 import { getOrgClient } from "./prisma-org"
 import { prisma } from "./prisma"
@@ -14,16 +15,20 @@ function forbidden(): GuardError {
   return NextResponse.json({ error: "Accès refusé" }, { status: 403 })
 }
 
-async function resolveSuperAdminOrg(): Promise<string | null> {
+/**
+ * The organization a super admin explicitly picked (sa-org-id cookie, set from the org list).
+ * No implicit fallback: without a valid pick there is no tenant context, rather than silently
+ * working on some other organization than the one the super admin believes they're in.
+ */
+export async function resolveSuperAdminOrg(): Promise<string | null> {
   const cookieStore = await cookies()
   const fromCookie = cookieStore.get("sa-org-id")?.value
-  if (fromCookie) return fromCookie
-  const fallback = await prisma.organization.findFirst({
-    orderBy: { createdAt: "asc" },
-    select: { id: true },
-  })
-  return fallback?.id ?? null
+  if (!fromCookie) return null
+  const org = await prisma.organization.findUnique({ where: { id: fromCookie }, select: { id: true } })
+  return org?.id ?? null
 }
+
+export const SUPER_ADMIN_ORG_PICKER = "/super-admin/organizations"
 
 async function isOrgActive(organizationId: string): Promise<boolean> {
   const org = await prisma.organization.findUnique({ where: { id: organizationId }, select: { active: true } })
@@ -37,6 +42,9 @@ export async function requireOrgSession() {
   let organizationId = session.user.organizationId
   if (!organizationId && session.user.role === "super_admin") {
     organizationId = await resolveSuperAdminOrg()
+    if (!organizationId) {
+      return NextResponse.json({ error: "Aucune organisation sélectionnée" }, { status: 409 })
+    }
   }
   if (!organizationId) return forbidden()
   // Org admin's session may predate the org being disabled — reject on
@@ -64,6 +72,8 @@ export async function getOrgContext() {
   let organizationId = session.user.organizationId
   if (!organizationId && session.user.role === "super_admin") {
     organizationId = await resolveSuperAdminOrg()
+    // Admin pages are only reachable for a super admin once an org is picked.
+    if (!organizationId) redirect(SUPER_ADMIN_ORG_PICKER)
   }
   if (!organizationId) return null
   if (session.user.role !== "super_admin" && !(await isOrgActive(organizationId))) return null

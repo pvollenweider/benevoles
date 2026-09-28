@@ -16,7 +16,8 @@ test("disabling an org blocks public access; deletion requires disabled + typed 
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  // A super admin with no organization picked yet lands on the org picker (#267).
+  await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
 
   const slug = `e2e-org-lifecycle-${Date.now()}`
   const createRes = await page.request.post("/api/super-admin/organizations", {

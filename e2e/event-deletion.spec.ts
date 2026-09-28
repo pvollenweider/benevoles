@@ -22,7 +22,8 @@ async function login(browser: Browser, email: string, password: string) {
   await page.getByLabel("Email").fill(email)
   await page.getByLabel("Mot de passe").fill(password)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  // A super admin with no organization picked yet lands on the org picker (#267).
+  await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
   return { context, page }
 }
 

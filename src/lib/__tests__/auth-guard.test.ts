@@ -18,6 +18,15 @@ vi.mock("../prisma", () => ({
 const { cookiesMock } = vi.hoisted(() => ({ cookiesMock: vi.fn() }))
 vi.mock("next/headers", () => ({ cookies: cookiesMock }))
 
+const { redirectMock } = vi.hoisted(() => ({
+  redirectMock: vi.fn((url: string) => { throw new Error(`NEXT_REDIRECT:${url}`) }),
+}))
+vi.mock("next/navigation", () => ({ redirect: redirectMock }))
+
+function withSaCookie(value: string | undefined) {
+  cookiesMock.mockResolvedValue({ get: (name: string) => (name === "sa-org-id" && value ? { value } : undefined) })
+}
+
 import { requireOrgSession, requireSuperAdmin, getOrgContext } from "../auth-guard"
 
 describe("requireOrgSession", () => {
@@ -51,21 +60,33 @@ describe("requireOrgSession", () => {
     expect((result as NextResponse).status).toBe(403)
   })
 
-  it("falls back to the first organization for a super_admin without org", async () => {
+  // Regression (#267): used to fall back silently to the oldest organization.
+  it("rejects a super_admin with no organization selected, without falling back", async () => {
     authMock.mockResolvedValue({ user: { role: "super_admin", organizationId: null } })
     firstOrgMock.mockResolvedValue({ id: "first-org" })
     const result = await requireOrgSession()
-    expect(result).not.toBeInstanceOf(NextResponse)
-    if (result instanceof NextResponse) return
-    expect(result.organizationId).toBe("first-org")
+    expect(result).toBeInstanceOf(NextResponse)
+    expect((result as NextResponse).status).toBe(409)
+    expect(firstOrgMock).not.toHaveBeenCalled()
   })
 
-  it("returns 403 for a super_admin if no organization exists", async () => {
+  it("rejects a super_admin whose selected organization no longer exists", async () => {
     authMock.mockResolvedValue({ user: { role: "super_admin", organizationId: null } })
-    firstOrgMock.mockResolvedValue(null)
+    withSaCookie("deleted-org")
+    findUniqueOrgMock.mockResolvedValue(null)
     const result = await requireOrgSession()
     expect(result).toBeInstanceOf(NextResponse)
-    expect((result as NextResponse).status).toBe(403)
+    expect((result as NextResponse).status).toBe(409)
+  })
+
+  it("scopes a super_admin to the organization they selected", async () => {
+    authMock.mockResolvedValue({ user: { role: "super_admin", organizationId: null } })
+    withSaCookie("org-picked")
+    findUniqueOrgMock.mockResolvedValue({ id: "org-picked" })
+    const result = await requireOrgSession()
+    expect(result).not.toBeInstanceOf(NextResponse)
+    if (result instanceof NextResponse) return
+    expect(result.organizationId).toBe("org-picked")
   })
 
   it("returns scoped client when admin has an organizationId", async () => {
@@ -135,19 +156,20 @@ describe("getOrgContext (SSR helper)", () => {
     expect(result).toBeNull()
   })
 
-  it("falls back to the first organization for a super_admin without org", async () => {
+  // Regression (#267): used to fall back silently to the oldest organization.
+  it("redirects a super_admin with no organization selected to the org picker", async () => {
     authMock.mockResolvedValue({ user: { role: "super_admin", organizationId: null } })
     firstOrgMock.mockResolvedValue({ id: "first-org" })
-    const result = await getOrgContext()
-    expect(result).not.toBeNull()
-    expect(result?.organizationId).toBe("first-org")
+    await expect(getOrgContext()).rejects.toThrow("NEXT_REDIRECT:/super-admin/organizations")
+    expect(firstOrgMock).not.toHaveBeenCalled()
   })
 
-  it("returns null for a super_admin if no organization exists yet", async () => {
+  it("scopes a super_admin to the organization they selected", async () => {
     authMock.mockResolvedValue({ user: { role: "super_admin", organizationId: null } })
-    firstOrgMock.mockResolvedValue(null)
+    withSaCookie("org-picked")
+    findUniqueOrgMock.mockResolvedValue({ id: "org-picked" })
     const result = await getOrgContext()
-    expect(result).toBeNull()
+    expect(result?.organizationId).toBe("org-picked")
   })
 
   it("returns scoped client when admin has an organizationId", async () => {
