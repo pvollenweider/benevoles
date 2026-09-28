@@ -7,6 +7,17 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Ajouté
+
+- **Renvoyer le lien de gestion** : bouton sur la page des inscriptions pour réémettre par email le lien personnel `/my/[token]` d'un bénévole qui l'a perdu ou supprimé par erreur.
+- **Badge « Responsable » sur les inscriptions** : affiché sur une ligne quand ce bénévole est déjà responsable du poste de son créneau.
+- **Nombre de places sur le planning public visible sur mobile** : le compteur (« 3/5 ») et l'heure de début s'affichent désormais dès qu'une barre de créneau est un peu plus large que le minimum, plutôt que de rester vides sur les tailles courantes sur téléphone.
+
+### Corrigé
+
+- **Export PDF** : les heures qui passent minuit s'affichaient en brut au-delà de 23h (« 24h », « 26h ») au lieu de repartir à zéro ; la colonne « Libellé » s'affichait vide quand aucun créneau du jour n'avait de libellé distinct de son poste.
+- **Sentry** : filtre le bruit bénin « The destination stream closed early » (abandon client, pas une erreur applicative).
+
 ## [1.14.0] — 2026-09-26
 
 ### Ajouté

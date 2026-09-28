@@ -25,3 +25,18 @@ describe("render — HTML wrapper", () => {
     expect(cardIndex).toBeLessThan(contentIndex)
   })
 })
+
+describe("render — registration_link_resend", () => {
+  it("includes the volunteer's own /my/[editToken] link", () => {
+    const payload: NotificationPayload = {
+      kind: "registration_link_resend",
+      recipient: { email: "v@example.com", name: "Julie Martin" },
+      data: { volunteerName: "Julie Martin", eventTitle: "Festival du Rhône", orgSlug: "rhone", editToken: "tok-123" },
+    }
+    const { subject, html, text } = render(payload)
+    expect(subject).toContain("Festival du Rhône")
+    expect(html).toContain("tok-123")
+    expect(text).toContain("tok-123")
+    expect(html).toContain("Julie")
+  })
+})
