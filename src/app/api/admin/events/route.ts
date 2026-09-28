@@ -20,6 +20,7 @@ const schema = z.object({
   confirmationMessage: z.string().optional(),
   publicStatus: z.enum(["draft", "published", "archived"]).optional(),
   showSchedule: z.array(showSchema).optional(),
+  requirePhone: z.boolean().optional(),
 })
 
 export async function GET() {

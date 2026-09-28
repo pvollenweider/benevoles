@@ -37,6 +37,7 @@ const FIELD_LABELS: Record<string, string> = {
   endDate: "date de fin",
   publicInstructions: "instructions publiques",
   remindersEnabled: "rappels automatiques",
+  requirePhone: "téléphone obligatoire",
 }
 
 /**

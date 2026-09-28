@@ -40,7 +40,7 @@ Liste exhaustive des fonctionnalités de l'application.
 
 ### Formulaire d'inscription
 
-- Champs : prénom, nom, email, téléphone (optionnel), commentaire (optionnel)
+- Champs : prénom, nom, email, téléphone (optionnel, ou obligatoire si l'événement a l'option « Téléphone obligatoire à l'inscription » ; vérifié côté client et côté serveur), commentaire (optionnel)
 - **Date de naissance** : demandée uniquement si un créneau sélectionné a un âge minimum (#192) ; jamais demandée sinon. Vérifiée côté client (message immédiat) et côté serveur (source de vérité) ; la condition d'âge est aussi rappelée dans la carte « Créneaux sélectionnés »
 - Pré-remplissage automatique si une session ou un token membre est reconnu
 - **Charte du bénévole** : lien « Lire la charte » ouvre un modal avec le texte complet ; case à cocher obligatoire avant soumission

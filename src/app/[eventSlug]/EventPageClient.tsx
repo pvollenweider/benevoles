@@ -41,6 +41,7 @@ type EventData = {
   endDate: string
   publicInstructions: string | null
   confirmationMessage: string | null
+  requirePhone: boolean
   showSchedule: Show[]
   volunteerCharter: string | null
   shifts: Shift[]
@@ -199,6 +200,8 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
     if (!charterAccepted) { setError("Veuillez accepter la convention des bénévoles."); return }
     if (!form.consent) { setError("Veuillez accepter la politique de confidentialité."); return }
     if (!form.firstName || !form.lastName || !form.email) { setError("Prénom, nom et email sont obligatoires."); return }
+    // `required` already blocks an empty field; this catches a whitespace-only one.
+    if (event?.requirePhone && !form.phone.trim()) { setError("Le téléphone est obligatoire pour cet événement."); return }
     if (ageGatedSelectedShifts.length > 0) {
       if (!form.birthDate) { setError("Date de naissance requise pour au moins un des créneaux sélectionnés."); return }
       const tooYoungFor = shiftsTooYoungFor(form.birthDate, ageGatedSelectedShifts)
@@ -548,10 +551,15 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
                   />
                 </div>
                 <div>
-                  <label htmlFor="reg-phone" className="block text-sm font-medium text-gray-700 mb-1">Téléphone <span className="text-gray-500 font-normal">(facultatif, mais super utile)</span></label>
+                  <label htmlFor="reg-phone" className="block text-sm font-medium text-gray-700 mb-1">
+                    {event?.requirePhone
+                      ? "Téléphone *"
+                      : <>Téléphone <span className="text-gray-500 font-normal">(facultatif, mais super utile)</span></>}
+                  </label>
                   <input
                     id="reg-phone"
                     type="tel"
+                    required={event?.requirePhone ?? false}
                     autoComplete="tel"
                     value={form.phone}
                     onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
