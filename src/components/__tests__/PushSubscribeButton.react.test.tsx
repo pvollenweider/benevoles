@@ -49,7 +49,8 @@ describe("PushSubscribeButton — accessibility (#271)", () => {
     const status = screen.getByRole("status")
     await waitFor(() => expect(status.textContent).toContain("Rappels push activés"))
     expect(screen.queryByRole("button")).toBeNull()
-    expect(document.activeElement).toBe(status)
+    // Focus moves in an effect after the render that shows the text: wait for it too.
+    await waitFor(() => expect(document.activeElement).toBe(status))
     expect(status.querySelector("span")?.getAttribute("aria-hidden")).toBe("true")
   })
 
@@ -60,7 +61,8 @@ describe("PushSubscribeButton — accessibility (#271)", () => {
 
     const status = screen.getByRole("status")
     await waitFor(() => expect(status.textContent).toContain("Notifications bloquées"))
-    expect(document.activeElement).toBe(status)
+    // Focus moves in an effect after the render that shows the text: wait for it too.
+    await waitFor(() => expect(document.activeElement).toBe(status))
   })
 
   it("doesn't steal focus on load when the browser is already subscribed", async () => {
