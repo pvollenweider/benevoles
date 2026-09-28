@@ -168,6 +168,7 @@ Variables supplémentaires lues par le code :
 | `SENTRY_AUTH_TOKEN` | Upload des source maps au build (secret de build Docker) |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Compte super admin créé par `npm run db:seed` (défauts : `admin@localhost` / `change-me`) |
 | `ORG_ADMIN_EMAIL`, `ORG_ADMIN_PASSWORD` | Admin de l'organisation `default` créé par le seed (défauts : `org-admin@localhost` / valeur de `ADMIN_PASSWORD`) |
+| `TRUSTED_PROXY_HOPS` | Nombre de proxies qui ajoutent une entrée à `X-Forwarded-For` devant l'application (défaut `1` : Traefik). L'adresse client utilisée pour les limites de débit est la n-ième en partant de la droite ; à augmenter seulement si un autre proxy ou load balancer ajoute sa propre entrée devant Traefik |
 
 Générer les clés VAPID : `node -e "const wp=require('web-push'); console.log(JSON.stringify(wp.generateVAPIDKeys()))"`.
 
