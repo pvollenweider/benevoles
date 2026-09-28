@@ -9,10 +9,14 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
-- **Renvoyer le lien de gestion** : bouton sur la page des inscriptions pour réémettre par email le lien personnel `/my/[token]` d'un bénévole qui l'a perdu ou supprimé par erreur.
+- **Renvoyer le lien de gestion** : action sur la page des inscriptions pour réémettre par email le lien personnel `/my/[token]` d'un ou plusieurs bénévoles qui l'ont perdu ou supprimé par erreur.
 - **Badge « Responsable » sur les inscriptions** : affiché sur une ligne quand ce bénévole est déjà responsable du poste de son créneau.
 - **Nombre de places sur le planning public visible sur mobile** : le compteur (« 3/5 ») et l'heure de début s'affichent désormais dès qu'une barre de créneau est un peu plus large que le minimum, plutôt que de rester vides sur les tailles courantes sur téléphone.
 - **Heures cumulées par membre** (`/admin/members`) : colonne triable indiquant le total du temps sur des créneaux actifs, tous événements confondus. Volontairement absente de l'export PDF pour ne pas exposer un classement entre bénévoles.
+
+### Modifié
+
+- **Page des inscriptions** : les boutons par ligne (rendre responsable, renvoyer le lien, annuler) sont retirés au profit d'une sélection (cases à cocher) suivie d'une action dans la barre d'outils qui apparaît — la même mécanique que les actions groupées, désormais utilisée aussi pour une seule inscription. Le bouton « Annuler » est renommé « Annuler l'inscription » pour éviter toute ambiguïté avec l'annulation d'une action en cours.
 
 ### Corrigé
 

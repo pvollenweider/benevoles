@@ -54,7 +54,7 @@ test("selecting all visible rows and bulk-cancelling removes them all", async ({
   await expect(page.getByText("3 sélectionnées")).toBeVisible()
 
   page.once("dialog", (d) => d.accept())
-  await page.getByRole("button", { name: /^Annuler \(3\)$/ }).click()
+  await page.getByRole("button", { name: /^Annuler l'inscription \(3\)$/ }).click()
 
   await expect(page.getByText("Aucune inscription.")).toBeVisible()
 
@@ -76,7 +76,7 @@ test("selecting a subset only cancels those rows", async ({ page }) => {
   await expect(page.getByText("2 sélectionnées")).toBeVisible()
 
   page.once("dialog", (d) => d.accept())
-  await page.getByRole("button", { name: /^Annuler \(2\)$/ }).click()
+  await page.getByRole("button", { name: /^Annuler l'inscription \(2\)$/ }).click()
 
   await expect(rows).toHaveCount(1)
 })
@@ -114,4 +114,36 @@ test("deselecting clears the selection and hides the toolbar", async ({ page }) 
 
   await page.getByRole("button", { name: "Désélectionner" }).click()
   await expect(page.getByText("2 sélectionnées")).not.toBeVisible()
+})
+
+// Per-row action buttons were removed (#261) — every action now goes through selecting a row's
+// checkbox then a single toolbar button, matching the pattern bulk actions already established.
+test("selecting exactly one row and 'rendre responsable' opens the modal, not the auto bulk flow", async ({ page }) => {
+  await login(page)
+  const stamp = Date.now()
+  const { eventId } = await setUpEventWithRegistrations(page, stamp, 2)
+
+  await page.goto(`/admin/events/${eventId}/registrations`)
+  const rows = page.locator("tbody tr")
+  await rows.nth(0).getByRole("checkbox").check()
+  await expect(page.getByText("1 sélectionnée")).toBeVisible()
+
+  await page.getByRole("button", { name: "Rendre responsable" }).click()
+
+  // The modal, not the auto-assign confirm() dialog the multi-row path uses.
+  await expect(page.getByRole("heading", { name: /Rendre .+ responsable/ })).toBeVisible()
+})
+
+test("bulk 'renvoyer le lien' resends the management link to every selected volunteer", async ({ page }) => {
+  await login(page)
+  const stamp = Date.now()
+  const { eventId } = await setUpEventWithRegistrations(page, stamp, 2)
+
+  await page.goto(`/admin/events/${eventId}/registrations`)
+  await page.getByLabel("Sélectionner toutes les inscriptions visibles").check()
+
+  page.once("dialog", (d) => d.accept())
+  await page.getByRole("button", { name: "Renvoyer le lien" }).click()
+
+  await expect(page.getByText(/Lien renvoyé à \d+ bénévoles?\./)).toBeAttached({ timeout: 20_000 })
 })

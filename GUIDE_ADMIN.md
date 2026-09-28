@@ -132,7 +132,7 @@ Désignez un ou plusieurs bénévoles responsables d'un poste (ex. « Bar »). C
 ![Liste des responsables de secteur d'un événement, avec le poste, le nom et l'action retirer](/doc-img/admin-sector-leaders.png)
 
 - **Ajouter** un·e responsable : poste (autocomplété depuis les postes existants), nom, email — ou **Depuis les inscrits** pour choisir directement un bénévole déjà inscrit à l'événement, qui pré-remplit ces champs
-- Depuis la page des inscriptions, le bouton **Rendre responsable** sur une ligne propose directement le poste de ce créneau
+- Depuis la page des inscriptions, sélectionner une seule ligne puis **Rendre responsable** propose directement le poste de ce créneau
 
   ![Modal « Rendre Julie Moreau responsable » ouvert depuis la page des inscriptions, avec le poste et l'email pré-remplis](/doc-img/admin-make-leader-modal.png)
 - Un email est automatiquement envoyé au responsable avec son lien personnel ; il est aussi prévenu à chaque nouvelle inscription sur son poste
@@ -189,9 +189,11 @@ Vue tabulaire de toutes les inscriptions actives : nom, email, téléphone, cré
 
 ![Tableau des inscriptions d'un événement, avec bénévole, créneau, source et actions rendre responsable / annuler](/doc-img/admin-registrations.png)
 
-Une case à cocher sur chaque ligne (et une case d'en-tête pour tout sélectionner d'un coup) permet d'agir sur plusieurs inscriptions en même temps : **annuler** ou **rendre responsable** de leur poste. La barre d'actions groupées porte sur toute la sélection, même une inscription masquée entre-temps par un filtre ou une recherche.
+Aucune action directement sur une ligne : cocher une ou plusieurs inscriptions (case d'en-tête pour tout sélectionner d'un coup) fait apparaître une barre d'outils avec trois actions, appliquées à toute la sélection — même une inscription masquée entre-temps par un filtre ou une recherche :
 
-Le bouton **Renvoyer le lien** sur une inscription active envoie au bénévole un nouvel email avec son lien personnel de gestion (`/my/[token]`) — utile s'il l'a perdu ou supprimé par erreur. Le lien renvoyé donne accès à toutes ses inscriptions actives pour cet événement, pas seulement au créneau de la ligne cliquée.
+- **Rendre responsable** de leur poste. Avec une seule ligne sélectionnée, une modale s'ouvre pour choisir le poste (si le bénévole a plusieurs inscriptions) et ajuster nom/email avant l'envoi. Avec plusieurs lignes, chaque bénévole est directement rattaché au poste de son propre créneau, sans étape intermédiaire.
+- **Renvoyer le lien** : réenvoie par email le lien personnel de gestion (`/my/[token]`) de chaque bénévole sélectionné — utile s'il l'a perdu ou supprimé par erreur. Le lien renvoyé donne accès à toutes les inscriptions actives du bénévole pour cet événement, pas seulement au créneau de la ligne.
+- **Annuler l'inscription** : annule chaque inscription sélectionnée.
 
 Depuis la page principale de l'événement (`/admin/events/[id]`) :
 - 4 chiffres en un coup d'œil en haut de page : créneaux, places totales, inscrits, places restantes
