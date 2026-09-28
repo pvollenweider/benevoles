@@ -365,6 +365,10 @@ function findOverlap(
  * "Already registered" (#285): never answers with the existing registration's editToken — the
  * submitter may not be that volunteer. The owner gets their management link by email instead
  * (throttled per volunteer, so the form can't be used to flood their inbox).
+ *
+ * The duplicate can be a live registration of any status. Only an *active* one has a management
+ * link (/my requires it), so the message only claims an email when one actually went out:
+ * waitlisted / offered-only duplicates get the waitlist message instead.
  */
 async function alreadyRegistered(volunteerId: string, eventId: string) {
   const reg = await prisma.registration.findFirst({
@@ -374,15 +378,33 @@ async function alreadyRegistered(volunteerId: string, eventId: string) {
       event: { select: { title: true, organization: { select: { slug: true } } } },
     },
   })
-  if (reg?.volunteer.email && rateLimit(volunteerId, "reg-link-resend", 3, 60 * 60 * 1000).ok) {
-    const name = `${reg.volunteer.firstName} ${reg.volunteer.lastName}`
-    await sendNotification({
-      kind: "registration_link_resend",
-      recipient: { email: reg.volunteer.email, name },
-      data: { volunteerName: name, eventTitle: reg.event.title, orgSlug: reg.event.organization.slug, editToken: reg.editToken },
-    }).catch((e) => console.error("registration_link_resend error:", e))
+  if (!reg) {
+    return NextResponse.json({
+      error: "Vous êtes déjà sur la liste d'attente de ce créneau. Vous serez prévenu(e) par email si une place se libère.",
+    }, { status: 409 })
+  }
+
+  let linkSent = false
+  if (reg.volunteer.email) {
+    if (rateLimit(volunteerId, "reg-link-resend", 3, 60 * 60 * 1000).ok) {
+      const name = `${reg.volunteer.firstName} ${reg.volunteer.lastName}`
+      const result = await sendNotification({
+        kind: "registration_link_resend",
+        recipient: { email: reg.volunteer.email, name },
+        data: { volunteerName: name, eventTitle: reg.event.title, orgSlug: reg.event.organization.slug, editToken: reg.editToken },
+      }).catch((e) => {
+        reportError("notification.registration_link_resend")(e)
+        return { ok: false }
+      })
+      linkSent = result.ok
+    } else {
+      // Throttled: the link was already emailed within the last hour.
+      linkSent = true
+    }
   }
   return NextResponse.json({
-    error: "Vous êtes déjà inscrit(e) à un de ces créneaux. Le lien pour gérer vos inscriptions a été envoyé à votre adresse email.",
+    error: linkSent
+      ? "Vous êtes déjà inscrit(e) à un de ces créneaux. Le lien pour gérer vos inscriptions a été envoyé à votre adresse email."
+      : "Vous êtes déjà inscrit(e) à un de ces créneaux. Utilisez le lien de votre email de confirmation pour gérer vos inscriptions.",
   }, { status: 409 })
 }
