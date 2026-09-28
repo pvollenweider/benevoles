@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 
 /**
@@ -25,7 +24,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
 
   // Defense in depth: re-scope the registration lookup explicitly via
   // event.organizationId so a route bug can't leak another org's data.
-  const regs = await prisma.registration.findMany({
+  const regs = await db.registration.findMany({
     where: {
       eventId: id,
       status: "active",
@@ -84,7 +83,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     else failed++
   }
 
-  await prisma.event.update({
+  await db.event.update({
     where: { id },
     data: { reminderSentAt: new Date() },
   })

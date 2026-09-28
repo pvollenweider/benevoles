@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server"
+// Pre-login route: no org session yet, the invite token is the only credential.
+// eslint-disable-next-line no-restricted-imports
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"

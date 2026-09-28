@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { adminActor, diffFields, logOrgEvent } from "@/lib/org-log"
 import { z } from "zod"
 
@@ -37,7 +36,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (data.notes !== undefined) updateData.notes = data.notes || null
   if (data.active !== undefined) updateData.active = data.active
 
-  const volunteer = await prisma.volunteer.update({ where: { id }, data: updateData })
+  const volunteer = await db.volunteer.update({ where: { id }, data: updateData })
 
   // Deactivation is its own action (matches DELETE's "soft delete"), distinct from a plain field
   // edit — logged separately so the activity list reads naturally either way. `tags` excluded:
@@ -81,7 +80,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   // Soft delete: keep history (registrations, future stats) but hide from roster.
-  await prisma.volunteer.update({ where: { id }, data: { active: false } })
+  await db.volunteer.update({ where: { id }, data: { active: false } })
 
   await logOrgEvent({
     organizationId,

@@ -1,4 +1,6 @@
 import { auth } from "@/auth"
+// Reads the Organization row (name for the header), not a tenant-scoped model.
+// eslint-disable-next-line no-restricted-imports
 import { prisma } from "@/lib/prisma"
 import { resolveSuperAdminOrg } from "@/lib/auth-guard"
 import AdminNav from "@/components/admin/AdminNav"

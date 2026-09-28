@@ -39,9 +39,9 @@ Crée et gère les événements, créneaux, inscriptions, membres, invitations e
 Isolation entre organisations :
 
 1. `requireOrgSession()` (`src/lib/auth-guard.ts`) vérifie la session, résout l'organisation et refuse l'accès (403) si l'organisation est désactivée. La vérification a lieu à chaque requête, pas seulement à la connexion.
-2. Le client `db` renvoyé par le guard est un client Prisma étendu (`getOrgClient`, `src/lib/prisma-org.ts`) qui ajoute `organizationId` à toutes les lectures.
-3. Les modifications et suppressions sur `Shift` et `Registration` passent d'abord par une lecture scopée pour vérifier l'appartenance, car Prisma ne permet pas d'injecter ce filtre dans un `where` unique.
-4. Les tests `src/__tests__/security/cross-tenant-isolation.test.ts` (23 tests) vérifient que chaque route admin utilise `db` et non le client brut `prisma`.
+2. Le client `db` renvoyé par le guard est un client Prisma étendu (`getOrgClient`, `src/lib/prisma-org.ts`) qui limite toutes les opérations à l'organisation, sur tous les modèles qui lui appartiennent (`Event`, `Volunteer`, `OrgLog`, `OrgSlugHistory` directement ; `Shift`, `Registration`, `MemberInvite`, `EventPage`, `SectorLeader`, `EventMilestone`, `EventLog` via leur événement). Les requêtes multi-lignes reçoivent le filtre ; les opérations par clé unique (`update`, `delete`, `findUnique`, `upsert`) vérifient d'abord à quelle organisation appartient la ligne ; les créations sont rattachées d'office à l'organisation ou refusées si l'événement visé n'en fait pas partie.
+3. Le code admin ne peut pas importer le client brut `prisma` (règle ESLint `no-restricted-imports` sur `src/app/api/admin/**` et `src/app/admin/**`) ; les rares exceptions (`Organization`, `AdminUser`, contrôle volontairement inter-organisations d'un slug) sont annotées avec leur justification.
+4. Les tests `src/__tests__/security/cross-tenant-isolation.test.ts` et `src/lib/__tests__/prisma-org.test.ts` vérifient l'isolation route par route et opération par opération.
 
 Toute nouvelle route admin doit ajouter son test d'isolation (voir [CONTRIBUTING.md](../CONTRIBUTING.md)).
 

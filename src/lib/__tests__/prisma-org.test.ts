@@ -1,218 +1,176 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
-// Capture the extension config so the tests can drive each callback
-// directly without spinning up Prisma.
+// Capture the extension config so the tests can drive the callback directly without Prisma.
 const lastExtendConfig: { current: unknown } = { current: null }
 
-vi.mock("../prisma", () => {
-  return {
-    prisma: {
-      $extends(config: unknown) {
-        lastExtendConfig.current = config
-        return { __scoped: true, config }
-      },
+const m = vi.hoisted(() => ({
+  eventFindUnique: vi.fn(),
+  eventCount: vi.fn(),
+  shiftFindUnique: vi.fn(),
+  volunteerFindUnique: vi.fn(),
+}))
+
+vi.mock("../prisma", () => ({
+  prisma: {
+    $extends(config: unknown) {
+      lastExtendConfig.current = config
+      return { __scoped: true, config }
     },
-  }
-})
+    event: { findUnique: m.eventFindUnique, count: m.eventCount },
+    shift: { findUnique: m.shiftFindUnique },
+    volunteer: { findUnique: m.volunteerFindUnique },
+  },
+}))
 
-import { getOrgClient } from "../prisma-org"
+import { getOrgClient, TenantAccessError } from "../prisma-org"
 
-type ExtensionConfig = {
-  name: string
-  query: Record<
-    string,
-    Record<
-      string,
-      (input: { args: Record<string, unknown>; query: (a: unknown) => unknown }) => Promise<unknown>
-    >
-  >
-}
+type Args = Record<string, unknown>
+type Hook = (input: { model: string; operation: string; args: Args; query: (a: unknown) => unknown }) => Promise<unknown>
 
-function getConfig(): ExtensionConfig {
-  if (!lastExtendConfig.current) throw new Error("extension not configured")
-  return lastExtendConfig.current as ExtensionConfig
+function run(orgId: string, model: string, operation: string, args: Args, result: unknown = []) {
+  getOrgClient(orgId)
+  const cfg = lastExtendConfig.current as { name: string; query: { $allModels: { $allOperations: Hook } } }
+  const query = vi.fn().mockResolvedValue(result)
+  return { promise: cfg.query.$allModels.$allOperations({ model, operation, args, query }), query, cfg }
 }
 
 describe("getOrgClient", () => {
   beforeEach(() => {
     lastExtendConfig.current = null
+    for (const fn of Object.values(m)) fn.mockReset()
   })
 
-  it("registers an extension named 'org-scoped' for all tenant models", () => {
-    getOrgClient("org-A")
-    const cfg = getConfig()
+  it("registers one extension named 'org-scoped' covering every model and operation", () => {
+    const { cfg } = run("org-A", "Event", "findMany", {})
     expect(cfg.name).toBe("org-scoped")
-    expect(cfg.query.event.findMany).toBeTypeOf("function")
-    expect(cfg.query.event.findFirst).toBeTypeOf("function")
-    expect(cfg.query.event.create).toBeTypeOf("function")
-    expect(cfg.query.volunteer.findMany).toBeTypeOf("function")
-    expect(cfg.query.volunteer.create).toBeTypeOf("function")
-    expect(cfg.query.shift.findMany).toBeTypeOf("function")
-    expect(cfg.query.registration.findMany).toBeTypeOf("function")
+    expect(cfg.query.$allModels.$allOperations).toBeTypeOf("function")
   })
 
-  describe("event scoping", () => {
-    it("injects organizationId into event.findMany where clause", async () => {
-      getOrgClient("org-A")
-      const cfg = getConfig()
-      const query = vi.fn().mockResolvedValue([])
-      const args = { where: { publicStatus: "published" } }
-
-      await cfg.query.event.findMany({ args, query })
-
-      expect(query).toHaveBeenCalledWith(args)
-      expect(args.where).toEqual({ publicStatus: "published", organizationId: "org-A" })
+  describe("multi-row operations get the org filter AND-ed in", () => {
+    it("direct model (event.findMany)", async () => {
+      const args: Args = { where: { publicStatus: "published" } }
+      const { promise, query } = run("org-A", "Event", "findMany", args)
+      await promise
+      expect(query).toHaveBeenCalledWith({ where: { AND: [{ publicStatus: "published" }, { organizationId: "org-A" }] } })
     })
 
-    it("injects organizationId into event.findFirst where clause", async () => {
-      getOrgClient("org-B")
-      const cfg = getConfig()
-      const query = vi.fn().mockResolvedValue(null)
-      const args = { where: { id: "evt-from-other-org" } }
-
-      await cfg.query.event.findFirst({ args, query })
-
-      expect(args.where).toEqual({ id: "evt-from-other-org", organizationId: "org-B" })
+    it("no where at all (event.count)", async () => {
+      const args: Args = {}
+      const { promise, query } = run("org-A", "Event", "count", args, 0)
+      await promise
+      expect(query).toHaveBeenCalledWith({ where: { organizationId: "org-A" } })
     })
 
-    it("forces event.create to use the calling org's id (overrides any caller-provided value)", async () => {
-      getOrgClient("org-A")
-      const cfg = getConfig()
-      const query = vi.fn().mockResolvedValue({})
-      const args = { data: { title: "Festival", organizationId: "ATTACKER" } }
-
-      await cfg.query.event.create({ args, query })
-
-      expect((args.data as { organizationId: string }).organizationId).toBe("org-A")
+    it("event-owned model via the parent event (shift.findFirst)", async () => {
+      const { promise, query } = run("org-A", "Shift", "findFirst", { where: { id: "s1" } }, null)
+      await promise
+      expect(query).toHaveBeenCalledWith({ where: { AND: [{ id: "s1" }, { event: { organizationId: "org-A" } }] } })
     })
 
-    it("event.count is also scoped", async () => {
-      getOrgClient("org-A")
-      const cfg = getConfig()
-      const query = vi.fn().mockResolvedValue(0)
-      const args = {}
-
-      await cfg.query.event.count({ args, query })
-
-      expect((args as { where: unknown }).where).toEqual({ organizationId: "org-A" })
-    })
-  })
-
-  describe("volunteer scoping", () => {
-    it("injects organizationId into volunteer.findMany where clause", async () => {
-      getOrgClient("org-A")
-      const cfg = getConfig()
-      const query = vi.fn().mockResolvedValue([])
-      const args = { where: { active: true } }
-
-      await cfg.query.volunteer.findMany({ args, query })
-
-      expect(args.where).toEqual({ active: true, organizationId: "org-A" })
-    })
-
-    it("forces volunteer.create to use the calling org's id", async () => {
-      getOrgClient("org-A")
-      const cfg = getConfig()
-      const query = vi.fn().mockResolvedValue({})
-      const args = { data: { firstName: "Alice", lastName: "M.", organizationId: "ATTACKER" } }
-
-      await cfg.query.volunteer.create({ args, query })
-
-      expect((args.data as { organizationId: string }).organizationId).toBe("org-A")
-    })
-  })
-
-  describe("shift scoping (via parent event)", () => {
-    it("injects event.organizationId filter into shift.findMany", async () => {
-      getOrgClient("org-A")
-      const cfg = getConfig()
-      const query = vi.fn().mockResolvedValue([])
-      const args = { where: { status: "open" } }
-
-      await cfg.query.shift.findMany({ args, query })
-
-      expect(args.where).toEqual({
-        status: "open",
-        event: { organizationId: "org-A" },
+    it("a caller-provided event filter can't widen the scope (AND, not merge)", async () => {
+      const { promise, query } = run("org-A", "MemberInvite", "findFirst", { where: { event: { organizationId: "org-B" } } }, null)
+      await promise
+      expect(query).toHaveBeenCalledWith({
+        where: { AND: [{ event: { organizationId: "org-B" } }, { event: { organizationId: "org-A" } }] },
       })
     })
 
-    it("preserves existing event filters when scoping shift queries", async () => {
-      getOrgClient("org-A")
-      const cfg = getConfig()
-      const query = vi.fn().mockResolvedValue([])
-      const args = { where: { event: { publicStatus: "published" } } }
+    it("models newly covered (#268): eventPage, sectorLeader, eventMilestone, eventLog, orgLog, orgSlugHistory", async () => {
+      for (const model of ["EventPage", "SectorLeader", "EventMilestone", "EventLog"]) {
+        const { promise, query } = run("org-A", model, "findMany", {})
+        await promise
+        expect(query).toHaveBeenCalledWith({ where: { event: { organizationId: "org-A" } } })
+      }
+      for (const model of ["OrgLog", "OrgSlugHistory"]) {
+        const { promise, query } = run("org-A", model, "findMany", {})
+        await promise
+        expect(query).toHaveBeenCalledWith({ where: { organizationId: "org-A" } })
+      }
+    })
 
-      await cfg.query.shift.findFirst({ args, query })
-
-      expect(args.where).toEqual({
-        event: { publicStatus: "published", organizationId: "org-A" },
-      })
+    it("updateMany/deleteMany are scoped too", async () => {
+      const { promise, query } = run("org-A", "Shift", "updateMany", { where: { eventId: "e1" }, data: { displayOrder: 1 } }, { count: 0 })
+      await promise
+      expect(query).toHaveBeenCalledWith({ where: { AND: [{ eventId: "e1" }, { event: { organizationId: "org-A" } }] }, data: { displayOrder: 1 } })
     })
   })
 
-  describe("registration scoping (via parent event)", () => {
-    it("injects event.organizationId filter into registration.findMany", async () => {
-      getOrgClient("org-A")
-      const cfg = getConfig()
-      const query = vi.fn().mockResolvedValue([])
-      const args = { where: { status: "active" } }
+  describe("unique-key operations check the row's owner first", () => {
+    it("runs update when the row belongs to the org", async () => {
+      m.shiftFindUnique.mockResolvedValue({ event: { organizationId: "org-A" } })
+      const { promise, query } = run("org-A", "Shift", "update", { where: { id: "s1" }, data: { label: "x" } }, {})
+      await promise
+      expect(query).toHaveBeenCalled()
+    })
 
-      await cfg.query.registration.findMany({ args, query })
+    it("refuses update/delete on another org's row, as if it didn't exist", async () => {
+      m.shiftFindUnique.mockResolvedValue({ event: { organizationId: "org-B" } })
+      const upd = run("org-A", "Shift", "update", { where: { id: "s1" }, data: {} })
+      await expect(upd.promise).rejects.toBeInstanceOf(TenantAccessError)
+      expect(upd.query).not.toHaveBeenCalled()
 
-      expect(args.where).toEqual({
-        status: "active",
-        event: { organizationId: "org-A" },
-      })
+      m.volunteerFindUnique.mockResolvedValue({ organizationId: "org-B" })
+      const del = run("org-A", "Volunteer", "delete", { where: { id: "v1" } })
+      await expect(del.promise).rejects.toMatchObject({ code: "P2025" })
+      expect(del.query).not.toHaveBeenCalled()
+    })
+
+    it("findUnique on another org's row returns null", async () => {
+      m.eventFindUnique.mockResolvedValue({ organizationId: "org-B" })
+      const { promise, query } = run("org-A", "Event", "findUnique", { where: { id: "e1" } })
+      expect(await promise).toBeNull()
+      expect(query).not.toHaveBeenCalled()
+    })
+
+    it("refuses update on a row that doesn't exist (no silent pass-through)", async () => {
+      m.shiftFindUnique.mockResolvedValue(null)
+      const { promise } = run("org-A", "Shift", "update", { where: { id: "nope" }, data: {} })
+      await expect(promise).rejects.toBeInstanceOf(TenantAccessError)
     })
   })
 
-  describe("memberInvite scoping (via parent event)", () => {
-    it("injects event.organizationId filter into memberInvite.findMany", async () => {
-      getOrgClient("org-A")
-      const cfg = getConfig()
-      const query = vi.fn().mockResolvedValue([])
-      const args = { where: {} }
-
-      await cfg.query.memberInvite.findMany({ args, query })
-
-      expect(args.where).toEqual({
-        event: { organizationId: "org-A" },
-      })
+  describe("creates", () => {
+    it("forces organizationId on direct models (overrides a caller-provided value)", async () => {
+      const { promise, query } = run("org-A", "Event", "create", { data: { title: "F", organizationId: "ATTACKER" } }, {})
+      await promise
+      expect(query).toHaveBeenCalledWith({ data: { title: "F", organizationId: "org-A" } })
     })
 
-    it("preserves existing event filter when scoping memberInvite queries", async () => {
-      getOrgClient("org-A")
-      const cfg = getConfig()
-      const query = vi.fn().mockResolvedValue(null)
-      const args = { where: { event: { id: "evt-1" } } }
+    it("allows an event-owned create pointing to an event of the org", async () => {
+      m.eventCount.mockResolvedValue(1)
+      const { promise, query } = run("org-A", "EventPage", "create", { data: { eventId: "e1", title: "FAQ" } }, {})
+      await promise
+      expect(m.eventCount).toHaveBeenCalledWith({ where: { id: { in: ["e1"] }, organizationId: "org-A" } })
+      expect(query).toHaveBeenCalled()
+    })
 
-      await cfg.query.memberInvite.findFirst({ args, query })
+    it("refuses an event-owned create pointing to another org's event", async () => {
+      m.eventCount.mockResolvedValue(0)
+      const { promise, query } = run("org-A", "Shift", "create", { data: { eventId: "e-of-B" } })
+      await expect(promise).rejects.toBeInstanceOf(TenantAccessError)
+      expect(query).not.toHaveBeenCalled()
+    })
 
-      expect(args.where).toEqual({
-        event: { id: "evt-1", organizationId: "org-A" },
-      })
+    it("checks every row of a createMany", async () => {
+      m.eventCount.mockResolvedValue(1) // only one of the two distinct events is in the org
+      const { promise } = run("org-A", "MemberInvite", "createMany", { data: [{ eventId: "e1" }, { eventId: "e2" }] })
+      await expect(promise).rejects.toBeInstanceOf(TenantAccessError)
     })
   })
 
-  describe("cross-tenant isolation", () => {
-    it("two clients with different orgs scope to their own org id", async () => {
-      const clientA = getOrgClient("org-A")
-      const cfgA = getConfig()
-      const query = vi.fn().mockResolvedValue([])
-      const argsA = { where: {} }
-      await cfgA.query.event.findMany({ args: argsA, query })
-      expect(argsA.where).toEqual({ organizationId: "org-A" })
+  it("leaves non-tenant models alone (e.g. Organization, AdminUser)", async () => {
+    const args: Args = { where: { id: "o1" } }
+    const { promise, query } = run("org-A", "Organization", "findUnique", args, {})
+    await promise
+    expect(query).toHaveBeenCalledWith({ where: { id: "o1" } })
+  })
 
-      // Different org → fresh extension config
-      const clientB = getOrgClient("org-B")
-      const cfgB = getConfig()
-      const argsB = { where: {} }
-      await cfgB.query.event.findMany({ args: argsB, query })
-      expect(argsB.where).toEqual({ organizationId: "org-B" })
-
-      // Sanity: both produced distinct extended clients
-      expect(clientA).not.toBe(clientB)
-    })
+  it("two clients with different orgs scope to their own org id", async () => {
+    const a = run("org-A", "Event", "findMany", {})
+    await a.promise
+    expect(a.query).toHaveBeenCalledWith({ where: { organizationId: "org-A" } })
+    const b = run("org-B", "Event", "findMany", {})
+    await b.promise
+    expect(b.query).toHaveBeenCalledWith({ where: { organizationId: "org-B" } })
   })
 })

@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { cancelShift } from "@/lib/shift-cancel"
@@ -37,7 +36,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   // eventId is already org-verified above; `event: { organizationId }` here is defense-in-depth
   // on top of that, matching reorder-roles/route.ts's own pattern for the same raw-prisma calls.
-  const shifts = await prisma.shift.findMany({
+  const shifts = await db.shift.findMany({
     where: { eventId: id, roleName: decodedRole, event: { organizationId } },
     select: { id: true, colorKey: true },
   })
@@ -46,19 +45,19 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const actor = adminActor(guard.session)
 
   if (newName !== undefined && newName !== decodedRole) {
-    const clash = await prisma.shift.findFirst({ where: { eventId: id, roleName: newName, event: { organizationId } } })
+    const clash = await db.shift.findFirst({ where: { eventId: id, roleName: newName, event: { organizationId } } })
     if (clash) {
       return NextResponse.json({ error: `Le poste « ${newName} » existe déjà — fusionner deux postes par renommage n'est pas pris en charge.` }, { status: 409 })
     }
 
-    await prisma.shift.updateMany({
+    await db.shift.updateMany({
       where: { eventId: id, roleName: decodedRole, event: { organizationId } },
       data: { roleName: newName },
     })
     // A shift's own label defaults to matching its role name (see ShiftsManager's form) — keep
     // that in sync for shifts that never had a distinct label, in a second pass, since updateMany
     // can't conditionally set "label = new value only where label used to equal the old name".
-    await prisma.shift.updateMany({
+    await db.shift.updateMany({
       where: { eventId: id, roleName: newName, label: decodedRole, event: { organizationId } },
       data: { label: newName },
     })
@@ -71,7 +70,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   }
 
   if (colorKey !== undefined) {
-    await prisma.shift.updateMany({
+    await db.shift.updateMany({
       where: { eventId: id, roleName: newName ?? decodedRole, event: { organizationId } },
       data: { colorKey },
     })
@@ -99,7 +98,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
 
   // eventId is already org-verified above; `event: { organizationId }` here is defense-in-depth
   // on top of that, matching reorder-roles/route.ts's own pattern for the same raw-prisma calls.
-  const shifts = await prisma.shift.findMany({
+  const shifts = await db.shift.findMany({
     where: { eventId: id, roleName: decodedRole, status: { not: "cancelled" }, event: { organizationId } },
     include: {
       event: { select: { id: true, title: true, slug: true, organization: { select: { slug: true } } } },

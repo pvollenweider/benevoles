@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { generateToken } from "@/lib/utils"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { sendNotification } from "@/lib/notifications"
@@ -22,7 +21,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const leaders = await prisma.sectorLeader.findMany({
+  const leaders = await db.sectorLeader.findMany({
     where: { eventId },
     orderBy: [{ roleName: "asc" }, { createdAt: "asc" }],
   })
@@ -47,10 +46,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const { roleName, name, email } = parsed.data
 
-  const existing = await prisma.sectorLeader.findFirst({ where: { eventId, roleName, email } })
+  const existing = await db.sectorLeader.findFirst({ where: { eventId, roleName, email } })
   if (existing) return NextResponse.json({ error: "Cette personne est déjà responsable de ce poste" }, { status: 409 })
 
-  const leader = await prisma.sectorLeader.create({
+  const leader = await db.sectorLeader.create({
     data: { eventId, roleName, name, email, token: generateToken() },
   })
 

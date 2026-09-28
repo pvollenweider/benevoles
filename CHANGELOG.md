@@ -29,6 +29,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Sécurité
 
+- **Isolation entre organisations renforcée** : toutes les opérations de l'espace admin sur les données d'une organisation (lectures, modifications, suppressions, créations, y compris pages d'événement, responsables de secteur, échéances et journaux) sont désormais limitées à l'organisation par construction, et non plus seulement par une vérification faite route par route.
 - **Sessions admin** : un admin désactivé ou supprimé, ou un admin dont l'organisation est désactivée, perd immédiatement l'accès au lieu de le garder jusqu'à l'expiration de sa session (30 jours) ; un changement de rôle s'applique sans reconnexion.
 - **Connexion admin** : après 10 échecs sur un même compte ou 30 depuis une même adresse IP en 15 minutes, les tentatives suivantes sont refusées jusqu'à la fin de la fenêtre.
 - **Liens d'activation et de réinitialisation de mot de passe admin** : seule une empreinte (SHA-256) est conservée en base, jamais le lien lui-même ; une copie ou une sauvegarde de la base ne permet plus de prendre le contrôle d'un compte admin. Les liens déjà envoyés restent valables. Renvoyer l'invitation d'un compte en attente génère désormais un nouveau lien (l'ancien cesse de fonctionner).

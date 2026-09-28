@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 
@@ -18,7 +17,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const milestones = await prisma.eventMilestone.findMany({
+  const milestones = await db.eventMilestone.findMany({
     where: { eventId },
     orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
   })
@@ -38,7 +37,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const milestone = await prisma.eventMilestone.create({
+  const milestone = await db.eventMilestone.create({
     data: { eventId, title: parsed.data.title, dueDate: parsed.data.dueDate },
   })
 

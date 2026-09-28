@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireOrgSession()
@@ -19,7 +18,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   await Promise.all(
     (pageIds as string[]).map((pageId, index) =>
-      prisma.eventPage.updateMany({
+      db.eventPage.updateMany({
         where: { id: pageId, eventId },
         data: { displayOrder: index },
       })

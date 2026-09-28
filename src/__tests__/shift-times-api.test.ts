@@ -38,7 +38,8 @@ describe("shift times: 00:00 to 23:59, overnight by an earlier end", () => {
     vi.clearAllMocks()
     const db = {
       event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) },
-      shift: { findFirst: vi.fn().mockResolvedValue(null) },
+      // create/update reach the shift through the org-scoped `db` (#268).
+      shift: { findFirst: vi.fn().mockResolvedValue(null), create, update: vi.fn() },
     }
     requireOrgSessionMock.mockResolvedValue({ db, organizationId: "org-a", session: {} })
     create.mockResolvedValue({ id: "s1" })

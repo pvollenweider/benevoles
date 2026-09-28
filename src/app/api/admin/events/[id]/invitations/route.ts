@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { sendMemberInvite } from "@/lib/email"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { z } from "zod"
@@ -39,7 +38,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     .filter((e): e is string => !!e)
 
   const registrationsByEmail = volunteerEmails.length
-    ? await prisma.registration.findMany({
+    ? await db.registration.findMany({
         where: {
           eventId,
           status: "active",
@@ -112,7 +111,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   }
 
   // Existing invites for this event so we don't recreate them.
-  const existing = await prisma.memberInvite.findMany({
+  const existing = await db.memberInvite.findMany({
     where: { eventId, volunteerId: { in: volunteers.map((v) => v.id) } },
     select: { volunteerId: true, id: true, token: true },
   })
@@ -121,7 +120,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const created: { id: string; volunteerId: string; token: string }[] = []
   for (const volunteer of volunteers) {
     if (existingByVolunteer.has(volunteer.id)) continue
-    const invite = await prisma.memberInvite.create({
+    const invite = await db.memberInvite.create({
       data: { eventId, volunteerId: volunteer.id, token: randomBytes(24).toString("hex") },
       select: { id: true, volunteerId: true, token: true },
     })

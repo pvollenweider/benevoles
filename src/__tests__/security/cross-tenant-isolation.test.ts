@@ -93,6 +93,7 @@ function mockScopedDb(overrides: DbOverrides = {}) {
       findFirst: vi.fn().mockResolvedValue(null),
       create: vi.fn().mockResolvedValue({ id: "evt-a" }),
       count: vi.fn().mockResolvedValue(0),
+      delete: vi.fn().mockResolvedValue({ id: "evt-a" }),
       ...((overrides.event as object) ?? {}),
     },
     volunteer: {
@@ -252,8 +253,11 @@ describe("Events — cross-tenant isolation", () => {
 
   it("DELETE /api/admin/events/[id] deletes an archived org-A event when the title matches", async () => {
     const { DELETE } = await import("@/app/api/admin/events/[id]/route")
-    setupGuard({
-      event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "Fête de l'Été", publicStatus: "archived" }) },
+    const db = setupGuard({
+      event: {
+        findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "Fête de l'Été", publicStatus: "archived" }),
+        delete: vi.fn().mockResolvedValue({ id: "evt-a" }),
+      },
     })
 
     const res = await DELETE(
@@ -261,7 +265,9 @@ describe("Events — cross-tenant isolation", () => {
       params("evt-a"),
     )
     expect(res.status).toBe(200)
-    expect(prismaMock.event.delete).toHaveBeenCalledWith({ where: { id: "evt-a" } })
+    // Through the org-scoped client (#268), never the raw one.
+    expect(db.event.delete).toHaveBeenCalledWith({ where: { id: "evt-a" } })
+    expect(prismaMock.event.delete).not.toHaveBeenCalled()
   })
 })
 

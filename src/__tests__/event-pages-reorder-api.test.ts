@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Routes reach tenant models through the org-scoped `db` (#268): expose the same model mocks there.
+import { prisma as prismaMock } from "@/lib/prisma"
 
 const requireOrgSessionMock = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: requireOrgSessionMock }))
@@ -18,7 +20,7 @@ describe("POST /api/admin/events/[id]/pages/reorder", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     requireOrgSessionMock.mockResolvedValue({
-      db: { event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-1" }) } },
+      db: { ...prismaMock, event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-1" }) } },
       organizationId: "org-a",
       session: { user: { id: "admin-1" } },
     })

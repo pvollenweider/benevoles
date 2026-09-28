@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 import { z } from "zod"
 import { clockSchema, firstIssueMessage, SAME_TIME_ERROR } from "@/lib/shift-time"
@@ -57,7 +56,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const updateData: Record<string, unknown> = { ...rest }
   if (rest.date) updateData.date = new Date(rest.date)
 
-  const after = await prisma.shift.update({ where: { id }, data: updateData })
+  const after = await db.shift.update({ where: { id }, data: updateData })
 
   const shiftChanges = diffFields(before, after, [
     "roleName",

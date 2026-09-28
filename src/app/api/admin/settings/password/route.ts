@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
+// AdminUser (the signed-in admin's own row, by session id) isn't a tenant-scoped model.
+// eslint-disable-next-line no-restricted-imports
 import { prisma } from "@/lib/prisma"
 import { passwordErrors } from "@/lib/password"
 import bcrypt from "bcryptjs"

@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { untagVolunteerIfNoLongerResponsable } from "@/lib/sector-leaders"
 
@@ -13,10 +12,10 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const leader = await prisma.sectorLeader.findFirst({ where: { id: leaderId, eventId } })
+  const leader = await db.sectorLeader.findFirst({ where: { id: leaderId, eventId } })
   if (!leader) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  await prisma.sectorLeader.delete({ where: { id: leaderId } })
+  await db.sectorLeader.delete({ where: { id: leaderId } })
 
   await logEvent({
     eventId,

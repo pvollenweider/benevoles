@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
+// AdminUser isn't tenant-scoped; ownership is checked by organizationId explicitly before the delete.
+// eslint-disable-next-line no-restricted-imports
 import { prisma } from "@/lib/prisma"
 import { adminActor, logOrgEvent } from "@/lib/org-log"
 

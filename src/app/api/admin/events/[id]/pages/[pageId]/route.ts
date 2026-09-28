@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 
@@ -22,10 +21,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const before = await prisma.eventPage.findFirst({ where: { id: pageId, eventId } })
+  const before = await db.eventPage.findFirst({ where: { id: pageId, eventId } })
   if (!before) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const after = await prisma.eventPage.update({ where: { id: pageId }, data: parsed.data })
+  const after = await db.eventPage.update({ where: { id: pageId }, data: parsed.data })
 
   const changes = diffFields(before, after, ["title", "content"])
   if (changes) {
@@ -56,10 +55,10 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const page = await prisma.eventPage.findFirst({ where: { id: pageId, eventId } })
+  const page = await db.eventPage.findFirst({ where: { id: pageId, eventId } })
   if (!page) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  await prisma.eventPage.delete({ where: { id: pageId } })
+  await db.eventPage.delete({ where: { id: pageId } })
 
   await logEvent({
     eventId,

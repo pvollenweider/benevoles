@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { z } from "zod"
 import { adminActor, logEvent } from "@/lib/event-log"
@@ -26,7 +25,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   let registration
   try {
-    registration = await prisma.registration.update({
+    registration = await db.registration.update({
       where: { id },
       data: parsed.data,
       include: { shift: true },
@@ -40,7 +39,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     throw e
   }
 
-  const activeCount = await prisma.registration.count({
+  const activeCount = await db.registration.count({
     where: { shiftId: registration.shiftId, status: "active" },
   })
 
@@ -51,7 +50,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     shiftStatus = "full"
   }
 
-  await prisma.shift.update({ where: { id: registration.shiftId }, data: { status: shiftStatus } })
+  await db.shift.update({ where: { id: registration.shiftId }, data: { status: shiftStatus } })
 
   const regChanges = {
     ...(parsed.data.status && parsed.data.status !== owned.status ? { status: { from: owned.status, to: parsed.data.status } } : {}),
@@ -91,18 +90,18 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const owned = await db.registration.findFirst({ where: { id }, select: { id: true, status: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const registration = await prisma.registration.update({
+  const registration = await db.registration.update({
     where: { id },
     data: { status: "cancelled" },
     include: { shift: true },
   })
 
-  const activeCount = await prisma.registration.count({
+  const activeCount = await db.registration.count({
     where: { shiftId: registration.shiftId, status: "active" },
   })
 
   if (activeCount < registration.shift.capacity && registration.shift.status === "full") {
-    await prisma.shift.update({ where: { id: registration.shiftId }, data: { status: "open" } })
+    await db.shift.update({ where: { id: registration.shiftId }, data: { status: "open" } })
   }
 
   const cancelLogId = await logEvent({

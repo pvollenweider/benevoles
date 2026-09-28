@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { sendMemberInvite } from "@/lib/email"
 import { z } from "zod"
 
@@ -40,7 +39,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const registeredEmails = new Set(
     volunteerEmails.length
       ? (
-          await prisma.registration.findMany({
+          await db.registration.findMany({
             where: {
               eventId,
               status: "active",
