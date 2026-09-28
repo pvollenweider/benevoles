@@ -1,4 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
+import { randomBytes } from "crypto"
 
 const m = vi.hoisted(() => ({
   findMany: vi.fn(),
@@ -21,7 +22,7 @@ vi.mock("../notifications/index", () => ({ sendNotification: m.sendNotification 
 vi.mock("next/server", () => ({ after: m.after }))
 vi.mock("../report-error", () => ({ reportError: (ctx: string) => (e: unknown) => m.reported(ctx, e) }))
 
-import { backoffMs, collectNotifications, deliverOutbox, enqueueAndDeliver, MAX_ATTEMPTS } from "../notifications/outbox"
+import { backoffMs, collectNotifications, deliverOutbox, enqueueAndDeliver, MAX_ATTEMPTS, openPayload, sealPayload } from "../notifications/outbox"
 
 const payload = { kind: "registration_confirmation" as const, recipient: { email: "a@x.com" }, data: {} }
 const now = new Date("2030-01-01T12:00:00Z")
@@ -114,5 +115,32 @@ describe("deliverOutbox", () => {
 
   it("backoff doubles from 5 minutes", () => {
     expect([1, 2, 3].map(backoffMs)).toEqual([5, 10, 20].map((min) => min * 60 * 1000))
+  })
+})
+
+describe("outbox payload at rest (#290)", () => {
+  afterEach(() => vi.unstubAllEnvs())
+
+  it("is stored as is without a key", () => {
+    vi.stubEnv("TOKEN_ENCRYPTION_KEY", "")
+    expect(sealPayload(payload)).toEqual(payload)
+    expect(openPayload(payload)).toEqual(payload)
+  })
+
+  it("is stored encrypted with a key (no link or address in clear) and opened back", () => {
+    vi.stubEnv("TOKEN_ENCRYPTION_KEY", randomBytes(32).toString("base64"))
+    const withLink = { ...payload, data: { editToken: "secret-link-token" } }
+    const sealed = sealPayload(withLink)
+    expect(JSON.stringify(sealed)).not.toContain("secret-link-token")
+    expect(JSON.stringify(sealed)).not.toContain("a@x.com")
+    expect(openPayload(sealed)).toEqual(withLink)
+  })
+
+  it("delivery decrypts before sending", async () => {
+    vi.stubEnv("TOKEN_ENCRYPTION_KEY", randomBytes(32).toString("base64"))
+    m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, payload: sealPayload(payload) })
+    m.sendNotification.mockResolvedValue({ ok: true })
+    await deliverOutbox({ now })
+    expect(m.sendNotification).toHaveBeenCalledWith(payload)
   })
 })
