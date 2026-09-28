@@ -36,6 +36,8 @@ Mailpit (capture emails) accessible sur http://localhost:8025.
 
 Les PRs doivent passer le CI avant d'être mergées : type-check (`tsc --noEmit`), lint, tests Vitest et tests E2E Playwright. Les mêmes contrôles se lancent en local avec `make typecheck`, `make lint`, `make test` et `npm run test:e2e`.
 
+TypeScript est installé en deux versions côte à côte, selon la procédure officielle de TypeScript 7 : `@typescript/native` (TypeScript 7) fournit la commande `tsc` utilisée pour le type-check, et le paquet `typescript` pointe vers `@typescript/typescript6`, dont l'API reste nécessaire à typescript-eslint et au build Next.js. `tsc6` lance la vérification avec TypeScript 6 si besoin de comparer.
+
 Les messages de commit et les titres de PR sont rédigés en anglais.
 
 ## Conventions de commit
