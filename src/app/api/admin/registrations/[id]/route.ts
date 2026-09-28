@@ -4,6 +4,7 @@ import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { z } from "zod"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { isUniqueViolation } from "@/lib/registration-capacity"
+import { reportError } from "@/lib/report-error"
 
 const schema = z.object({
   status: z.enum(["active", "cancelled", "deleted"]).optional(),
@@ -74,7 +75,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   }
 
   if (parsed.data.status === "cancelled") {
-    await promoteNextInWaitlist(registration.shiftId, cancelLogId ?? undefined).catch(() => {})
+    await promoteNextInWaitlist(registration.shiftId, cancelLogId ?? undefined).catch(reportError("waitlist.promote"))
   }
 
   return NextResponse.json(registration)
@@ -115,7 +116,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     changes: { status: { from: owned.status, to: "cancelled" }, shiftId: { from: registration.shiftId, to: registration.shiftId } },
   })
 
-  await promoteNextInWaitlist(registration.shiftId, cancelLogId ?? undefined).catch(() => {})
+  await promoteNextInWaitlist(registration.shiftId, cancelLogId ?? undefined).catch(reportError("waitlist.promote"))
 
   return NextResponse.json({ success: true })
 }

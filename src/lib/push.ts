@@ -1,6 +1,7 @@
 import webpush from "web-push"
 import { env } from "./env"
 import { prisma } from "./prisma"
+import { reportError } from "./report-error"
 
 let configured = false
 
@@ -48,6 +49,6 @@ export async function sendPushToVolunteer(
   )
 
   if (dead.length > 0) {
-    await prisma.pushSubscription.deleteMany({ where: { id: { in: dead } } }).catch(() => {})
+    await prisma.pushSubscription.deleteMany({ where: { id: { in: dead } } }).catch(reportError("push.cleanup_dead_subscriptions"))
   }
 }

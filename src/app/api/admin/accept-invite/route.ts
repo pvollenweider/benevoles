@@ -9,6 +9,7 @@ import { orgBaseUrl } from "@/lib/urls"
 import { passwordSchema } from "@/lib/password"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { hashToken } from "@/lib/token-hash"
+import { reportError } from "@/lib/report-error"
 
 const schema = z.object({
   token: z.string().min(1),
@@ -91,7 +92,7 @@ export async function POST(req: Request) {
         organizationName: admin.organization.name,
         adminUrl,
       },
-    }).catch(() => {})
+    }).catch(reportError("notification.admin_welcome"))
   }
 
   return NextResponse.json({ ok: true })

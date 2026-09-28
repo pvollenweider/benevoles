@@ -5,6 +5,7 @@ import { sendNotification } from "@/lib/notifications"
 import type { NotificationKind } from "@/lib/notifications"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { sendPushToVolunteer } from "@/lib/push"
+import { reportError } from "@/lib/report-error"
 
 export const dynamic = "force-dynamic"
 
@@ -119,7 +120,7 @@ async function run(req: Request) {
           body: `Rappel : votre créneau "${r.shift.label}" commence ${hoursLabel}.`,
           url: `/my/${r.editToken}`,
           tag: `reminder-${r.id}-${win.kind}`,
-        }).catch(() => {})
+        }).catch(reportError("push.reminder"))
         sent++
       } else {
         failed++
@@ -145,7 +146,7 @@ async function run(req: Request) {
       data: { status: "cancelled" },
     })
     if (count === 0) continue
-    await promoteNextInWaitlist(reg.shiftId).catch(() => {})
+    await promoteNextInWaitlist(reg.shiftId).catch(reportError("waitlist.promote"))
   }
 
   return NextResponse.json({
