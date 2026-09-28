@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
+import { reportError } from "@/lib/report-error"
 
 export async function POST(_req: Request, { params }: { params: Promise<{ token: string }> }) {
   const rl = rateLimit(getClientIp(_req), "waitlist-confirm", 10, 60 * 60 * 1000)
@@ -81,7 +82,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
       editToken: reg.editToken,
       orgSlug,
     },
-  }).catch(() => {})
+  }).catch(reportError("notification.registration_confirmation"))
 
   return NextResponse.json({ success: true, editToken: reg.editToken })
 }

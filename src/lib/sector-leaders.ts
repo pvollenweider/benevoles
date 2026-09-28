@@ -5,6 +5,7 @@
  */
 import { prisma } from "./prisma"
 import { sendNotification } from "./notifications"
+import { reportError } from "./report-error"
 
 export async function notifySectorLeadersOfSignup(params: {
   eventId: string
@@ -35,7 +36,7 @@ export async function notifySectorLeadersOfSignup(params: {
           orgSlug: params.orgSlug,
           token: leader.token,
         },
-      }).catch(() => {})
+      }).catch(reportError("notification.sector_leader_signup"))
     )
   )
 }

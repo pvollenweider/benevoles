@@ -3,6 +3,7 @@ import { sendNotification } from "./notifications"
 import { orgBaseUrl } from "./urls"
 import { logEvent, SYSTEM_ACTOR } from "./event-log"
 import { OCCUPYING_STATUSES, canOfferSpot, lockShifts } from "./registration-capacity"
+import { reportError } from "./report-error"
 
 /**
  * When a spot opens on a shift, offer it to the first person on the waitlist.
@@ -84,5 +85,5 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
       confirmUrl,
       expiresAt: expiresAtLabel,
     },
-  }).catch(() => {})
+  }).catch(reportError("notification.waitlist_offered"))
 }

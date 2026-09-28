@@ -3,6 +3,7 @@ import { env } from "@/lib/env"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
+import { reportError } from "@/lib/report-error"
 
 const schema = z.object({
   editToken: z.string().min(1),
@@ -51,7 +52,7 @@ export async function DELETE(req: Request) {
   const body = await req.json().catch(() => null)
   if (!body?.endpoint) return NextResponse.json({ ok: true })
 
-  await prisma.pushSubscription.deleteMany({ where: { endpoint: body.endpoint } }).catch(() => {})
+  await prisma.pushSubscription.deleteMany({ where: { endpoint: body.endpoint } }).catch(reportError("push.unsubscribe"))
 
   return NextResponse.json({ ok: true })
 }
