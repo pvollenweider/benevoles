@@ -13,6 +13,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     "src/generated/**",
     ".understand-anything/**",
+    // Local, git-ignored tool/skill scripts: not project code, only noise in the lint report.
+    ".claude/**",
+    "coverage/**",
   ]),
   {
     rules: {

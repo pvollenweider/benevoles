@@ -8,14 +8,16 @@ export default defineConfig({
     exclude: ["**/node_modules/**", "e2e/**"],
     coverage: {
       provider: "v8",
-      include: ["src/lib/**"],
-      exclude: ["src/lib/__tests__/**"],
+      // Routes and components too, not just src/lib: the API routes carry most of the
+      // security-sensitive logic (tenant scoping, tokens, capacity).
+      include: ["src/lib/**", "src/app/api/**", "src/components/**"],
+      exclude: ["**/__tests__/**"],
       reporter: ["text", "lcov"],
     },
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(import.meta.dirname, "./src"),
     },
   },
 })
