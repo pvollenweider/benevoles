@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import type { ErrorEvent } from "@sentry/nextjs"
-import { scrubUrl, scrubBreadcrumb, scrubEvent } from "../sentry-scrub"
+import { scrubUrl, scrubBreadcrumb, scrubEvent, scrubSpan, NO_PII_DATA_COLLECTION } from "../sentry-scrub"
 
 const TOKEN = "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4"
 
@@ -68,5 +68,36 @@ describe("scrubEvent", () => {
     } as unknown as ErrorEvent
 
     expect(JSON.stringify(scrubEvent(event))).not.toContain(TOKEN)
+  })
+})
+
+describe("scrubSpan (@sentry/nextjs 11 streamed spans)", () => {
+  it("strips tokens from the span name and its attributes", () => {
+    const span = scrubSpan({
+      trace_id: "t", span_id: "s", name: `GET /my/${TOKEN}`, start_timestamp: 0, status: "ok", is_segment: true,
+      attributes: { "url.full": `https://x.benevol.app/waitlist/${TOKEN}/confirm?token=${TOKEN}`, "http.method": "GET" },
+    })
+    expect(span.name).toBe("GET /my/[token]")
+    expect(span.attributes["url.full"]).toBe("https://x.benevol.app/waitlist/[token]/confirm?token=[token]")
+    expect(span.attributes["http.method"]).toBe("GET")
+    expect(JSON.stringify(span)).not.toContain(TOKEN)
+  })
+})
+
+describe("NO_PII_DATA_COLLECTION", () => {
+  // Every field of @sentry/nextjs 11's dataCollection defaults to *on*: each one must be set.
+  it("turns off every personal-data category explicitly", () => {
+    expect(NO_PII_DATA_COLLECTION).toEqual({
+      userInfo: false,
+      cookies: false,
+      httpHeaders: false,
+      httpBodies: [],
+      urlQueryParams: false,
+      graphQL: { document: false, variables: false },
+      genAI: { inputs: false, outputs: false },
+      databaseQueryData: false,
+      queues: false,
+      stackFrameVariables: false,
+    })
   })
 })

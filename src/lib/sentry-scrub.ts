@@ -1,4 +1,8 @@
-import type { Breadcrumb, Event } from "@sentry/nextjs"
+import type { Breadcrumb, Event, init } from "@sentry/nextjs"
+
+// Derived from init()'s options: @sentry/nextjs doesn't re-export these types itself.
+type InitOptions = NonNullable<Parameters<typeof init>[0]>
+type StreamedSpan = Parameters<NonNullable<InitOptions["beforeSendSpan"]>>[0]
 
 /**
  * Removes secret access tokens from what is sent to Sentry. Some URLs of the
@@ -54,4 +58,29 @@ export function scrubEvent<T extends Event>(event: T): T {
     }))
   }
   return event
+}
+
+// Spans are streamed on their own since @sentry/nextjs 11 (no longer only inside transaction
+// events), so they need their own pass: span name (often the URL) and attributes (url.full,
+// http.target, ...).
+export function scrubSpan(span: StreamedSpan): StreamedSpan {
+  return { ...span, name: scrubUrl(span.name), attributes: scrubDeep(span.attributes) }
+}
+
+/**
+ * What the SDK may collect on its own (@sentry/nextjs 11 replaced `sendDefaultPii: false` with
+ * this, and every field defaults to *on*). Nothing personal: no user info, cookies, headers,
+ * bodies, query strings (they can carry access tokens), DB query data or local variables.
+ */
+export const NO_PII_DATA_COLLECTION: NonNullable<InitOptions["dataCollection"]> = {
+  userInfo: false,
+  cookies: false,
+  httpHeaders: false,
+  httpBodies: [],
+  urlQueryParams: false,
+  graphQL: { document: false, variables: false },
+  genAI: { inputs: false, outputs: false },
+  databaseQueryData: false,
+  queues: false,
+  stackFrameVariables: false,
 }
