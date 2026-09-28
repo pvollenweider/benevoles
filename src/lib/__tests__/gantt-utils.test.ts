@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { resolveNewShiftDisplayOrder, isCompleteTime, addMinutes } from "../gantt-utils"
+import { resolveNewShiftDisplayOrder, isCompleteTime, addMinutes, fmtHours } from "../gantt-utils"
 
 describe("resolveNewShiftDisplayOrder", () => {
   it("inherits the existing role's displayOrder instead of a hardcoded 0 (#215 regression)", () => {
@@ -64,5 +64,27 @@ describe("addMinutes", () => {
       expect(result).not.toContain("NaN")
       expect(result).toMatch(/^\d{2}:\d{2}$/)
     }
+  })
+})
+
+describe("fmtHours", () => {
+  it("formats a whole number of hours with no minutes", () => {
+    expect(fmtHours(3)).toBe("3h")
+    expect(fmtHours(0)).toBe("0h")
+  })
+
+  it("formats a fractional number of hours as HhMM, never a decimal", () => {
+    expect(fmtHours(3.5)).toBe("3h30")
+    expect(fmtHours(1.25)).toBe("1h15")
+  })
+
+  it("rounds to the nearest minute instead of truncating", () => {
+    // 12.9833... hours = 12h59m — truncating minutes would silently read 12h58.
+    expect(fmtHours(12 + 59 / 60)).toBe("12h59")
+  })
+
+  it("carries a rounded 60 minutes into the next hour", () => {
+    // 1h59m59.9s rounds to 2h00, not 1h60.
+    expect(fmtHours(1 + 59.999 / 60)).toBe("2h")
   })
 })

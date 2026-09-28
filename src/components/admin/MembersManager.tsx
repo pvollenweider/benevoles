@@ -3,6 +3,7 @@
 import { useId, useMemo, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import ModalShell from "./ModalShell"
+import { fmtHours } from "@/lib/gantt-utils"
 
 type Member = {
   id: string
@@ -13,6 +14,10 @@ type Member = {
   tags: string[]
   active: boolean
   notes: string | null
+  // Sum of every active registration's shift duration, across all of this org's events —
+  // computed server-side (page.tsx). Admin-only recognition figure, deliberately not on the
+  // volunteer-facing PDF export (see that computation's own comment for why).
+  hoursTotal: number
 }
 
 type Props = {
@@ -20,7 +25,7 @@ type Props = {
   allTags: string[]
 }
 
-type SortCol = "firstName" | "lastName"
+type SortCol = "firstName" | "lastName" | "hoursTotal"
 type SortDir = "asc" | "desc"
 
 export default function MembersManager({ initialMembers, allTags }: Props) {
@@ -46,10 +51,9 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
     }
     setSortCol(nextCol)
     setSortDir(nextDir)
+    const colLabel = nextCol === "firstName" ? "prénom" : nextCol === "lastName" ? "nom" : "heures cumulées"
     setSortAnnouncement(
-      nextCol
-        ? `Trié par ${nextCol === "firstName" ? "prénom" : "nom"}, ${nextDir === "asc" ? "croissant" : "décroissant"}`
-        : "Tri réinitialisé"
+      nextCol ? `Trié par ${colLabel}, ${nextDir === "asc" ? "croissant" : "décroissant"}` : "Tri réinitialisé"
     )
   }
 
@@ -68,9 +72,9 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
     })
     if (!sortCol) return list
     return [...list].sort((a, b) => {
-      const av = a[sortCol].toLowerCase()
-      const bv = b[sortCol].toLowerCase()
-      const cmp = av.localeCompare(bv, "fr")
+      const cmp = sortCol === "hoursTotal"
+        ? a.hoursTotal - b.hoursTotal
+        : a[sortCol].toLowerCase().localeCompare(b[sortCol].toLowerCase(), "fr")
       return sortDir === "asc" ? cmp : -cmp
     })
   }, [members, search, tagFilter, showInactive, sortCol, sortDir])
@@ -177,6 +181,7 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
                 <SortTh col="lastName"  label="Nom"    sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <th scope="col" className="text-left px-4 py-2 font-medium">Contact</th>
                 <th scope="col" className="text-left px-4 py-2 font-medium">Tags</th>
+                <SortTh col="hoursTotal" label="Heures cumulées" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <th scope="col" className="text-right px-4 py-2 font-medium">
                   <span className="sr-only">Actions</span>
                 </th>
@@ -203,6 +208,9 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
                         </span>
                       ))}
                     </div>
+                  </td>
+                  <td className="px-4 py-3 text-gray-600">
+                    {m.hoursTotal > 0 ? fmtHours(m.hoursTotal) : <span className="text-gray-500">—</span>}
                   </td>
                   <td className="px-4 py-3 text-right space-x-3">
                     <button

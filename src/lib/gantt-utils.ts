@@ -70,6 +70,15 @@ export function fmt(t: string): string {
   return m === "00" ? `${h}h` : `${h}h${m}`
 }
 
+// A duration in hours (e.g. a volunteer's cumulative shift time) as "3h" / "3h30" — never a
+// decimal ("3.5h"), matching the HH:MM-derived formatting fmt() uses for a wall-clock time.
+export function fmtHours(totalHours: number): string {
+  const totalMinutes = Math.round(totalHours * 60)
+  const h = Math.floor(totalMinutes / 60)
+  const m = totalMinutes % 60
+  return m === 0 ? `${h}h` : `${h}h${String(m).padStart(2, "0")}`
+}
+
 export function clamp(n: number, lo: number, hi: number): number {
   return Math.max(lo, Math.min(hi, n))
 }
