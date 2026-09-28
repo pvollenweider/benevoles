@@ -17,7 +17,8 @@ function dbFindFirst(result: unknown) {
 
 function setupGuard(volunteerFindFirstImpl: ReturnType<typeof vi.fn>, volunteerCreateImpl?: ReturnType<typeof vi.fn>) {
   requireOrgSessionMock.mockResolvedValue({
-    db: { volunteer: { findFirst: volunteerFindFirstImpl, create: volunteerCreateImpl ?? volunteerCreate } },
+    // Routes reach Volunteer through the org-scoped `db` (#268).
+    db: { volunteer: { findFirst: volunteerFindFirstImpl, create: volunteerCreateImpl ?? volunteerCreate, update: volunteerUpdate } },
     organizationId: "org-a",
     session: { user: { id: "admin-1" } },
   })

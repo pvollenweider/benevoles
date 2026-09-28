@@ -2,7 +2,6 @@ import { redirect } from "next/navigation"
 import { headers } from "next/headers"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import AdminsManager from "@/components/admin/AdminsManager"
 import OrgNameForm from "@/components/admin/OrgNameForm"
 import OrgPublicTitleForm from "@/components/admin/OrgPublicTitleForm"
@@ -38,12 +37,12 @@ export default async function AdminsSettingsPage() {
       orderBy: { createdAt: "asc" },
     }),
     db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, publicTitle: true } }),
-    prisma.orgSlugHistory.findMany({
+    db.orgSlugHistory.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
       select: { slug: true, createdAt: true },
     }),
-    prisma.event.count({ where: { organizationId, publicStatus: "published" } }),
+    db.event.count({ where: { organizationId, publicStatus: "published" } }),
   ])
 
   const currentEmail = session.user?.email ?? ""

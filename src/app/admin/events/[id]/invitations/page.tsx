@@ -1,7 +1,6 @@
 import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import InvitationsManager from "@/components/admin/InvitationsManager"
 
 export const dynamic = "force-dynamic"
@@ -42,7 +41,7 @@ export default async function EventInvitationsPage({
     .filter((e): e is string => !!e)
 
   const registrations = volunteerEmails.length
-    ? await prisma.registration.findMany({
+    ? await db.registration.findMany({
         where: {
           eventId: id,
           status: "active",

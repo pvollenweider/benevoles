@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { slugify } from "@/lib/utils"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { z } from "zod"
@@ -19,7 +18,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const pages = await prisma.eventPage.findMany({
+  const pages = await db.eventPage.findMany({
     where: { eventId },
     orderBy: { displayOrder: "asc" },
   })
@@ -39,7 +38,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const existing = await prisma.eventPage.findMany({ where: { eventId }, select: { slug: true, displayOrder: true } })
+  const existing = await db.eventPage.findMany({ where: { eventId }, select: { slug: true, displayOrder: true } })
   const existingSlugs = new Set(existing.map((p) => p.slug))
   const base = slugify(parsed.data.title) || "page"
   let slug = base
@@ -50,7 +49,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   }
   const nextOrder = existing.length > 0 ? Math.max(...existing.map((p) => p.displayOrder)) + 1 : 0
 
-  const page = await prisma.eventPage.create({
+  const page = await db.eventPage.create({
     data: { eventId, slug, title: parsed.data.title, content: parsed.data.content, displayOrder: nextOrder },
   })
 

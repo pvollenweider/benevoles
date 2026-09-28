@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { clockSchema, firstIssueMessage, SAME_TIME_ERROR } from "@/lib/shift-time"
 import { adminActor, logEvent } from "@/lib/event-log"
@@ -37,7 +36,7 @@ export async function POST(req: Request) {
   const owned = await db.event.findFirst({ where: { id: data.eventId }, select: { id: true } })
   if (!owned) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
 
-  const shift = await prisma.shift.create({
+  const shift = await db.shift.create({
     data: { ...data, date: new Date(data.date), status: "open" },
   })
 

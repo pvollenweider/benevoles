@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
+// AdminUser isn't tenant-scoped; email uniqueness must be checked across all orgs. Scoped by organizationId explicitly.
+// eslint-disable-next-line no-restricted-imports
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 import { adminActor, logOrgEvent } from "@/lib/org-log"

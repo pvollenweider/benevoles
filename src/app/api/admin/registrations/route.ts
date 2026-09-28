@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { generateToken } from "@/lib/utils"
 import { z } from "zod"
 import { adminActor, logEvent } from "@/lib/event-log"
@@ -36,18 +35,18 @@ export async function POST(req: Request) {
 
   const usedEmail = email || null
   let volunteer = usedEmail
-    ? await prisma.volunteer.findFirst({ where: { email: usedEmail, organizationId } })
+    ? await db.volunteer.findFirst({ where: { email: usedEmail, organizationId } })
     : null
 
   if (!volunteer) {
-    volunteer = await prisma.volunteer.create({
+    volunteer = await db.volunteer.create({
       data: { firstName, lastName, email: usedEmail, phone: phone || null, organizationId },
     })
   }
 
   let registration
   try {
-    registration = await prisma.registration.create({
+    registration = await db.registration.create({
       data: {
         eventId,
         shiftId,
@@ -66,7 +65,7 @@ export async function POST(req: Request) {
   }
 
   if (shift.registrations.length + 1 >= shift.capacity) {
-    await prisma.shift.update({ where: { id: shiftId }, data: { status: "full" } })
+    await db.shift.update({ where: { id: shiftId }, data: { status: "full" } })
   }
 
   await logEvent({

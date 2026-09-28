@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 
@@ -23,10 +22,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const before = await prisma.eventMilestone.findFirst({ where: { id: milestoneId, eventId } })
+  const before = await db.eventMilestone.findFirst({ where: { id: milestoneId, eventId } })
   if (!before) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const after = await prisma.eventMilestone.update({ where: { id: milestoneId }, data: parsed.data })
+  const after = await db.eventMilestone.update({ where: { id: milestoneId }, data: parsed.data })
 
   const changes = diffFields(before, after, ["title", "dueDate", "done"])
   if (changes) {
@@ -52,10 +51,10 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const milestone = await prisma.eventMilestone.findFirst({ where: { id: milestoneId, eventId } })
+  const milestone = await db.eventMilestone.findFirst({ where: { id: milestoneId, eventId } })
   if (!milestone) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  await prisma.eventMilestone.delete({ where: { id: milestoneId } })
+  await db.eventMilestone.delete({ where: { id: milestoneId } })
 
   await logEvent({
     eventId,

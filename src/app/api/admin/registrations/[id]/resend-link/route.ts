@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 
 // Lets an admin resend a volunteer their own personal management link (/my/[token]) — e.g. when
@@ -21,7 +20,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     return NextResponse.json({ error: "Cette inscription n'est plus active." }, { status: 409 })
   }
 
-  const registration = await prisma.registration.findUniqueOrThrow({
+  const registration = await db.registration.findUniqueOrThrow({
     where: { id },
     include: {
       volunteer: { select: { firstName: true, lastName: true, email: true } },

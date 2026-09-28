@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { titlesMatch } from "@/lib/confirm-title"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { z } from "zod"
@@ -70,7 +69,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (data.endDate) updateData.endDate = new Date(data.endDate)
 
   try {
-    const event = await prisma.event.update({ where: { id }, data: updateData })
+    const event = await db.event.update({ where: { id }, data: updateData })
 
     const eventChanges = diffFields(owned, event, [
       "title",
@@ -127,7 +126,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
   }
 
   try {
-    await prisma.event.delete({ where: { id } })
+    await db.event.delete({ where: { id } })
     return NextResponse.json({ success: true })
   } catch (err) {
     console.error("Event DELETE error:", err)

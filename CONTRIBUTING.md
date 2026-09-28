@@ -116,7 +116,7 @@ make lint        # ESLint
 npm run test:e2e # tests end-to-end Playwright (demandent une base migrée et seedée)
 ```
 
-Toute nouvelle route API admin doit être accompagnée d'un test d'isolation cross-tenant dans `src/__tests__/security/cross-tenant-isolation.test.ts`. Ces tests vérifient que la route utilise le client Prisma scopé (`db` de `requireOrgSession`) et non le client brut (`prisma`).
+Toute nouvelle route API admin doit être accompagnée d'un test d'isolation cross-tenant dans `src/__tests__/security/cross-tenant-isolation.test.ts`. Ces tests vérifient que la route utilise le client Prisma scopé (`db` de `requireOrgSession`) et non le client brut (`prisma`). L'import de `@/lib/prisma` est d'ailleurs refusé par ESLint dans le code admin ; si une route en a réellement besoin (modèle non rattaché à une organisation comme `Organization` ou `AdminUser`, vérification volontairement inter-organisations), désactiver la règle sur la ligne d'import avec la raison en commentaire.
 
 ## Publier une nouvelle version
 

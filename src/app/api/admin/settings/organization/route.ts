@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
+// Organization itself isn't tenant-scoped, and the slug checks look at other orgs on purpose.
+// eslint-disable-next-line no-restricted-imports
 import { prisma } from "@/lib/prisma"
 import { orgBaseUrl } from "@/lib/urls"
 
@@ -41,6 +43,7 @@ export async function PATCH(req: Request) {
       const taken = await prisma.organization.findFirst({ where: { slug, id: { not: organizationId } } })
       if (taken) return NextResponse.json({ error: "Ce slug est déjà utilisé par une autre organisation." }, { status: 409 })
 
+      // Deliberately cross-tenant: is this slug reserved by *another* organization's history?
       const inHistory = await prisma.orgSlugHistory.findFirst({
         where: { slug, organizationId: { not: organizationId } },
       })

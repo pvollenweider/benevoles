@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { logEvent, SYSTEM_ACTOR, type LogChanges } from "@/lib/event-log"
 
 /**
@@ -33,7 +32,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
 
   const existingEntityIds = new Set(
     (
-      await prisma.eventLog.findMany({
+      await db.eventLog.findMany({
         where: { eventId },
         select: { entityId: true },
         distinct: ["entityId"],

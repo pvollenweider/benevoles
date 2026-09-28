@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireOrgSession()
@@ -19,7 +18,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   await Promise.all(
     (roleOrder as string[]).map((roleName, index) =>
-      prisma.shift.updateMany({
+      db.shift.updateMany({
         where: { eventId: id, roleName, event: { organizationId } },
         data: { displayOrder: index * 100 },
       })

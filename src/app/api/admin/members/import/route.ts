@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { prisma } from "@/lib/prisma"
 import { parseCsv, parseXlsx } from "@/lib/csv-import"
 
 export async function POST(req: Request) {
   const guard = await requireOrgSession()
   if (guard instanceof NextResponse) return guard
-  const { organizationId } = guard
+  const { db, organizationId } = guard
 
   const form = await req.formData()
   const file = form.get("file")
@@ -43,7 +42,7 @@ export async function POST(req: Request) {
   // Pre-fetch existing emails to avoid one query per row.
   const emailsInImport = preview.rows.map((r) => r.email).filter((e): e is string => !!e)
   const existing = emailsInImport.length
-    ? await prisma.volunteer.findMany({
+    ? await db.volunteer.findMany({
         where: { organizationId, email: { in: emailsInImport } },
         select: { id: true, email: true },
       })
@@ -54,7 +53,7 @@ export async function POST(req: Request) {
     const existingId = row.email ? existingByEmail.get(row.email) : undefined
     if (existingId) {
       if (onDuplicate === "update") {
-        await prisma.volunteer.update({
+        await db.volunteer.update({
           where: { id: existingId },
           data: {
             firstName: row.firstName,
@@ -70,7 +69,7 @@ export async function POST(req: Request) {
       }
     } else {
       try {
-        await prisma.volunteer.create({
+        await db.volunteer.create({
           data: {
             organizationId,
             firstName: row.firstName,
