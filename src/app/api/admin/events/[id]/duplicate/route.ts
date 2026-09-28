@@ -36,6 +36,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       endDate: source.endDate,
       publicInstructions: source.publicInstructions,
       confirmationMessage: source.confirmationMessage,
+      requirePhone: source.requirePhone,
       shifts: {
         create: source.shifts.map((s) => ({
           roleName: s.roleName,

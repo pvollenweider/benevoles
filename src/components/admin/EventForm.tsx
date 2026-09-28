@@ -16,6 +16,7 @@ type EventFormData = {
   confirmationMessage: string
   reminderMessage: string
   publicStatus: "draft" | "published" | "archived"
+  requirePhone: boolean
 }
 
 type Props = {
@@ -32,6 +33,7 @@ const defaultData: EventFormData = {
   confirmationMessage: "Merci pour ton inscription ! À bientôt.",
   reminderMessage: "",
   publicStatus: "draft",
+  requirePhone: false,
 }
 
 const emptyShow: Show = { name: "", date: "", startTime: "", endTime: "" }
@@ -309,6 +311,25 @@ export default function EventForm({ initialData }: Props) {
           <textarea rows={2} value={form.publicInstructions} onChange={(e) => set("publicInstructions", e.target.value)}
             placeholder="Texte affiché aux bénévoles en haut de la page"
             className={`${inputCls} resize-none`} />
+        </div>
+
+        <div className="flex items-start gap-3">
+          <input
+            id="event-require-phone"
+            type="checkbox"
+            aria-describedby="event-require-phone-hint"
+            checked={form.requirePhone}
+            onChange={(e) => setForm((f) => ({ ...f, requirePhone: e.target.checked }))}
+            className="mt-0.5 h-4 w-4"
+          />
+          <div>
+            <label htmlFor="event-require-phone" className="text-sm font-medium text-gray-700">
+              Téléphone obligatoire à l&apos;inscription
+            </label>
+            <p id="event-require-phone-hint" className="text-xs text-gray-500">
+              Les bénévoles devront indiquer un numéro pour s&apos;inscrire via le formulaire public.
+            </p>
+          </div>
         </div>
 
         <div>

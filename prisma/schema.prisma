@@ -50,6 +50,9 @@ model Event {
   reminderMessage     String?
   reminderSentAt      DateTime?
   remindersEnabled    Boolean   @default(true)
+  // Public sign-up form requires a phone number (asked by an organizer who calls volunteers on
+  // the day). Only the public form: an admin adding someone by hand may not have it.
+  requirePhone        Boolean   @default(false)
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 

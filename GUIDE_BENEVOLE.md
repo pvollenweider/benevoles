@@ -60,7 +60,7 @@ Une fois vos créneaux choisis, cliquez sur **Continuer**.
 Renseignez :
 - **Prénom** et **Nom** (obligatoires)
 - **Email** (obligatoire — vous recevrez la confirmation ici)
-- **Téléphone** (facultatif)
+- **Téléphone** (facultatif, sauf si l'organisateur l'a rendu obligatoire pour cet événement : il est alors marqué d'un *)
 - **Commentaire** (facultatif — informations utiles pour l'organisateur)
 - **Date de naissance** — demandée uniquement si l'un des créneaux choisis a un âge minimum
 - **Charte du bénévole** — cliquez sur « charte du bénévole » pour lire le texte complet dans un modal, puis cochez la case ou cliquez sur « J'ai lu et j'accepte »

@@ -53,6 +53,11 @@ export async function POST(req: Request) {
   })
   if (!event) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
 
+  // Authoritative check: the form marks the field required too, but only as a courtesy.
+  if (event.requirePhone && !phone?.trim()) {
+    return NextResponse.json({ error: "Le téléphone est obligatoire pour cet événement." }, { status: 400 })
+  }
+
   const shifts = await prisma.shift.findMany({
     where: { id: { in: shiftIds }, eventId, status: { in: ["open"] } },
     include: { registrations: { where: { status: { in: [...OCCUPYING_STATUSES] } } } },

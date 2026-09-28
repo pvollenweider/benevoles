@@ -65,6 +65,7 @@ export async function GET(
     endDate: event.endDate,
     publicInstructions: event.publicInstructions,
     confirmationMessage: event.confirmationMessage,
+    requirePhone: event.requirePhone,
     showSchedule: event.showSchedule,
     volunteerCharter: event.organization.volunteerCharter,
     shifts,
