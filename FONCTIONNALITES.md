@@ -83,6 +83,7 @@ Liste exhaustive des fonctionnalités de l'application.
 - Adaptées au mobile (pas de débordement horizontal, zones de clic agrandies)
 - Thème clair/sombre indépendant des préférences système, mémorisé d'une visite à l'autre
 - Liées depuis le pied de page public et depuis la barre de navigation admin (« Aide »)
+- Lien « Soutenir le projet » dans le pied de page du site benevol.app et de la documentation uniquement (jamais sur les pages d'une organisation, de ses bénévoles ou de l'admin)
 
 ---
 
@@ -90,15 +91,16 @@ Liste exhaustive des fonctionnalités de l'application.
 
 ### Authentification
 
-- Connexion par email + mot de passe (hashé bcrypt, NextAuth v5)
+- Connexion par email + mot de passe (hashé bcrypt, NextAuth v5) ; tentatives échouées limitées (10 par compte, 30 par adresse IP, sur 15 minutes)
+- Session revérifiée en base à chaque requête : un admin désactivé ou supprimé, ou dont l'organisation est désactivée, perd l'accès immédiatement ; un changement de rôle s'applique sans reconnexion
 - Déconnexion
 - Mot de passe oublié : email de réinitialisation (`/admin/forgot-password`, `/admin/reset-password`)
-- Onboarding par lien sécurisé : le super admin crée un compte admin et envoie un lien d'invitation avec token révocable (validité 7 jours) ; le mot de passe est créé à la première connexion
+- Onboarding par lien sécurisé : le super admin crée un compte admin et envoie un lien d'invitation avec token révocable (validité 7 jours) ; le mot de passe est créé à la première connexion. Liens d'invitation et de réinitialisation conservés en base sous forme d'empreinte (SHA-256) uniquement ; renvoyer une invitation génère un nouveau lien
 
 ### Isolation multi-tenant
 
 - Chaque admin ne voit et ne peut modifier que les données de son organisation
-- Scoping automatique via un client Prisma étendu (`getOrgClient`) qui injecte `organizationId` dans tous les reads
+- Scoping automatique via un client Prisma étendu (`getOrgClient`) qui limite à l'organisation toutes les opérations (lectures, modifications, suppressions, créations) sur tous les modèles qui lui appartiennent ; l'import du client brut est interdit par ESLint dans le code admin, sauf exception justifiée
 - Middleware Next.js protège les routes `/admin/*` (authentification) et `/super-admin/*` (rôle `super_admin`)
 
 ### Tableau de bord (`/admin/dashboard`)

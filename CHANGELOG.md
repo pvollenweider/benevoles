@@ -7,12 +7,15 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+## [1.15.0] — 2026-09-28
+
 ### Ajouté
 
 - **Téléphone obligatoire, par événement** : nouvelle option dans les paramètres de l'événement pour exiger un numéro de téléphone sur le formulaire d'inscription public (désactivée par défaut, reprise lors d'une duplication). Le numéro saisi est enregistré avec l'inscription et affiché en priorité dans la liste des inscriptions, l'export PDF et la page du responsable de secteur, y compris pour un bénévole déjà connu dont la fiche n'est pas modifiée par le formulaire public.
 - **Renvoyer le lien de gestion** : action sur la page des inscriptions pour réémettre par email le lien personnel `/my/[token]` d'un ou plusieurs bénévoles qui l'ont perdu ou supprimé par erreur.
 - **Badge « Responsable » sur les inscriptions** : affiché sur une ligne quand ce bénévole est déjà responsable du poste de son créneau.
 - **Nombre de places sur le planning public visible sur mobile** : le compteur (« 3/5 ») et l'heure de début s'affichent désormais dès qu'une barre de créneau est un peu plus large que le minimum, plutôt que de rester vides sur les tailles courantes sur téléphone.
+- **Lien « Soutenir le projet »** dans le pied de page du site benevol.app et de la documentation (jamais sur les pages d'une organisation, de ses bénévoles ou de l'admin).
 - **Heures cumulées par membre** (`/admin/members`) : colonne triable indiquant le total du temps sur des créneaux actifs, tous événements confondus. Volontairement absente de l'export PDF pour ne pas exposer un classement entre bénévoles.
 
 ### Modifié
@@ -21,6 +24,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Planning public** : le nombre de places restantes s'affiche dans la barre du créneau, et l'âge minimum d'un créneau sélectionné est rappelé dans la carte « Créneaux sélectionnés ».
+- **Emails** : le texte de tous les emails (confirmations, rappels, invitations…) était centré par erreur ; il est désormais aligné à gauche, dans une mise en page un peu plus large.
 - **Accessibilité du bouton de rappels push** : le résultat (« Rappels push activés » ou notifications bloquées) est annoncé aux lecteurs d'écran et reçoit le focus quand le bouton disparaît ; contraste du message de succès renforcé ; icônes décoratives masquées aux technologies d'assistance.
 - **Inscriptions simultanées** : deux inscriptions envoyées en même temps pour la dernière place ne peuvent plus dépasser la capacité du créneau, un double envoi du formulaire ne crée plus deux inscriptions, et deux désistements simultanés proposent bien deux places à deux personnes différentes de la liste d'attente. Une place proposée à la liste d'attente reste réservée jusqu'à confirmation ou expiration. Les éventuels doublons existants (même personne inscrite deux fois au même créneau) sont annulés à la mise à jour, en gardant la plus ancienne inscription.
 - **Âge minimum** : l'âge est désormais vérifié à la date du créneau et non à la date d'inscription ; un bénévole qui atteint l'âge requis entre son inscription et le créneau n'est plus refusé.
