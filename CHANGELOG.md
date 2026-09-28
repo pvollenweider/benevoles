@@ -9,6 +9,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Inscription plus rapide et emails plus fiables** : la confirmation d'inscription s'affiche sans attendre l'envoi des emails (confirmation, notification aux admins et aux responsables, liste d'attente), qui partent juste après ; un email qui échoue est renvoyé automatiquement plusieurs fois au lieu d'être perdu.
 - **Actions groupées sur les inscriptions** (retirer de leur créneau, rendre responsable, renvoyer le lien) : une seule opération pour toute la sélection au lieu d'une par ligne, plus rapide ; rien n'est fait si une des inscriptions sélectionnées n'est pas (ou plus) valide. « Renvoyer le lien » n'envoie plus qu'un email par bénévole, même si plusieurs de ses inscriptions sont sélectionnées.
 
 ## [1.15.0] — 2026-09-28

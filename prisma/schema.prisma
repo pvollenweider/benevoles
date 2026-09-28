@@ -313,6 +313,26 @@ model MemberInvite {
   @@index([token])
 }
 
+// Outbox for notifications sent as a consequence of a request (#293), starting with public
+// sign-up: the request only writes rows here, delivery happens right after the response
+// (next/server `after`) and failed sends are retried by the hourly cron with backoff, instead of
+// the volunteer waiting on SMTP and a failed email being lost. `payload` is the
+// NotificationPayload given to sendNotification (recipient + template data, so it holds PII):
+// rows are deleted once sent (cleanup cron), and failed ones after 30 days.
+model NotificationOutbox {
+  id            String    @id @default(cuid())
+  payload       Json
+  status        String    @default("pending") // "pending" | "sending" | "sent" | "failed"
+  attempts      Int       @default(0)
+  nextAttemptAt DateTime  @default(now())
+  claimedAt     DateTime?
+  lastError     String?
+  sentAt        DateTime?
+  createdAt     DateTime  @default(now())
+
+  @@index([status, nextAttemptAt])
+}
+
 // Web push subscription, tied to one Volunteer (hence to one organization through it). Creating
 // one requires the volunteer's registration editToken, not just an email: the reminder payload
 // links to /my/<editToken>, so whoever owns the endpoint receives that link. Same browser can

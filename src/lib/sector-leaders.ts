@@ -4,7 +4,7 @@
  * gets an email pointing back to their read-only roster.
  */
 import { prisma } from "./prisma"
-import { sendNotification } from "./notifications"
+import { sendNotification, type Send } from "./notifications"
 import { reportError } from "./report-error"
 
 export async function notifySectorLeadersOfSignup(params: {
@@ -13,7 +13,7 @@ export async function notifySectorLeadersOfSignup(params: {
   orgSlug: string
   volunteerName: string
   shift: { roleName: string; label: string; date: Date; startTime: string; endTime: string }
-}): Promise<void> {
+}, send: Send = sendNotification): Promise<void> {
   const leaders = await prisma.sectorLeader.findMany({
     where: { eventId: params.eventId, roleName: params.shift.roleName },
   })
@@ -21,7 +21,7 @@ export async function notifySectorLeadersOfSignup(params: {
 
   await Promise.all(
     leaders.map((leader) =>
-      sendNotification({
+      send({
         kind: "sector_leader_new_signup",
         recipient: { email: leader.email, name: leader.name },
         data: {

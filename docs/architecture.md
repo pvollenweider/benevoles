@@ -101,7 +101,7 @@ Statuts d'une inscription : `active`, `waiting` (en liste d'attente), `offered` 
 3. Créneau complet : refus, ou inscription en liste d'attente si elle est activée sur ce créneau.
 4. Détection des chevauchements avec les inscriptions existantes du bénévole (`409`).
 5. Création du `Volunteer` s'il n'existe pas (unique par organisation et email), puis d'une `Registration` par créneau, chacune avec son jeton.
-6. Emails de confirmation, copie à `ADMIN_NOTIFICATION_EMAIL` si défini, email de liste d'attente pour les inscriptions `waiting`.
+6. Emails de confirmation, notification aux admins de l'organisation (à défaut `ADMIN_NOTIFICATION_EMAIL`), aux responsables du poste, email de liste d'attente pour les inscriptions `waiting` : tous mis dans l'outbox (voir Notifications) et envoyés juste après la réponse.
 
 ### Liste d'attente
 
@@ -129,7 +129,8 @@ Chaque envoi est enregistré (`reminderJ2Sent`, `reminderJ1Sent`, `reminderDdSen
 
 - Tous les emails passent par `sendNotification()` : aucune route n'appelle Nodemailer directement. Les types de notification sont listés dans [FONCTIONNALITES.md](../FONCTIONNALITES.md).
 - Sans `SMTP_HOST`, le contenu est affiché dans la console.
-- Le push est envoyé séparément par `sendPushToEmail()`, uniquement pour les rappels, et n'a d'effet que si les clés VAPID sont configurées.
+- Le push est envoyé séparément par `sendPushToVolunteer()`, uniquement pour les rappels, et n'a d'effet que si les clés VAPID sont configurées.
+- **Outbox** (`src/lib/notifications/outbox.ts`, table `NotificationOutbox`) : l'inscription publique n'envoie rien pendant la requête. Les helpers habituels (`sendConfirmationEmail`, `sendAdminNotification`, `notifySectorLeadersOfSignup`) reçoivent un collecteur au lieu de `sendNotification`, les notifications sont enregistrées puis envoyées juste après la réponse (`after()` de Next). Un envoi en échec est retenté par `/api/cron/reminders` (toutes les heures) avec un délai croissant (5, 10, 20, 40, 80 min), puis marqué `failed` et signalé à Sentry après 6 tentatives. Chaque ligne n'est envoyée qu'une fois (réservation conditionnelle). `/api/cron/cleanup` supprime les lignes envoyées et les échecs de plus de 30 jours, car elles contiennent des données personnelles.
 
 ## Observabilité
 
