@@ -193,7 +193,7 @@ Aucune action directement sur une ligne : cocher une ou plusieurs inscriptions (
 
 - **Rendre responsable** de leur poste. Avec une seule ligne sélectionnée, une modale s'ouvre pour choisir le poste (si le bénévole a plusieurs inscriptions) et ajuster nom/email avant l'envoi. Avec plusieurs lignes, chaque bénévole est directement rattaché au poste de son propre créneau, sans étape intermédiaire.
 - **Renvoyer le lien** : réenvoie par email le lien personnel de gestion (`/my/[token]`) de chaque bénévole sélectionné — utile s'il l'a perdu ou supprimé par erreur. Le lien renvoyé donne accès à toutes les inscriptions actives du bénévole pour cet événement, pas seulement au créneau de la ligne.
-- **Annuler l'inscription** : annule chaque inscription sélectionnée.
+- **Retirer de leur créneau** : annule chaque inscription sélectionnée.
 
 Depuis la page principale de l'événement (`/admin/events/[id]`) :
 - 4 chiffres en un coup d'œil en haut de page : créneaux, places totales, inscrits, places restantes

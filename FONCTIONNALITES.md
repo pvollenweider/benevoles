@@ -180,7 +180,7 @@ Liste exhaustive des fonctionnalités de l'application.
 - Pas d'action par ligne : toute action passe par la sélection (cases à cocher, case d'en-tête pour tout sélectionner) puis un bouton dans la barre d'outils qui apparaît, appliqué à toute la sélection — même une ligne masquée entre-temps par un filtre
 - **Rendre responsable** de leur poste : modale (choix du poste, nom/email ajustables) avec une seule ligne sélectionnée ; assignation directe au poste de chaque créneau avec plusieurs lignes
 - **Renvoyer le lien** : réémet par email le lien personnel de gestion (`/my/[token]`) de chaque bénévole sélectionné — donne accès à toutes ses inscriptions actives pour l'événement, pas seulement au créneau de la ligne
-- **Annuler l'inscription** : annule chaque inscription sélectionnée
+- **Retirer de leur créneau** : annule chaque inscription sélectionnée
 - Badge « Responsable » affiché sur une ligne quand ce bénévole est déjà responsable du poste de son créneau
 - **Filtres cumulables** : recherche texte, filtre par poste, filtre par créneau
 - Accès direct depuis un créneau (timeline admin) : pré-filtrage automatique
