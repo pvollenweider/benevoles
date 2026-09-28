@@ -6,6 +6,7 @@ import { adminActor, logOrgEvent } from "@/lib/org-log"
 import { randomBytes } from "crypto"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
+import { hashToken } from "@/lib/token-hash"
 
 const postSchema = z.object({
   email: z.string().email(),
@@ -71,7 +72,7 @@ export async function POST(req: Request) {
       passwordHash: dummyHash,
       role: "admin",
       isActive: false,
-      setupToken,
+      setupTokenHash: hashToken(setupToken),
       setupTokenExpiresAt,
     },
     select: { id: true, name: true, email: true, role: true, isActive: true, createdAt: true, setupTokenExpiresAt: true },

@@ -6,6 +6,7 @@ import { sendNotification } from "@/lib/notifications"
 import { orgBaseUrl } from "@/lib/urls"
 import { passwordSchema } from "@/lib/password"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
+import { hashToken } from "@/lib/token-hash"
 
 const schema = z.object({
   token: z.string().min(1),
@@ -18,7 +19,7 @@ const EXPIRED_ERROR = "Ce lien a expiré. Contactez votre administrateur."
 /** Looks up an invite token and returns its status, without consuming it. */
 async function checkToken(token: string) {
   const admin = await prisma.adminUser.findUnique({
-    where: { setupToken: token },
+    where: { setupTokenHash: hashToken(token) },
     select: {
       id: true,
       name: true,
@@ -73,7 +74,7 @@ export async function POST(req: Request) {
     data: {
       passwordHash,
       isActive: true,
-      setupToken: null,
+      setupTokenHash: null,
       setupTokenExpiresAt: null,
     },
   })

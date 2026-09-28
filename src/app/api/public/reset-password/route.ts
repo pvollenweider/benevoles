@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
 import { passwordErrors } from "@/lib/password"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
+import { hashToken } from "@/lib/token-hash"
 
 export async function POST(req: Request) {
   const rl = rateLimit(getClientIp(req), "reset-password", 10, 60 * 60 * 1000)
@@ -21,7 +22,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: errors[0] }, { status: 400 })
   }
 
-  const admin = await prisma.adminUser.findUnique({ where: { passwordResetToken: token } })
+  const admin = await prisma.adminUser.findUnique({ where: { passwordResetTokenHash: hashToken(token) } })
 
   if (!admin || !admin.passwordResetExpiresAt || admin.passwordResetExpiresAt < new Date()) {
     return NextResponse.json({ error: "Lien invalide ou expiré." }, { status: 400 })
@@ -33,7 +34,7 @@ export async function POST(req: Request) {
     where: { id: admin.id },
     data: {
       passwordHash,
-      passwordResetToken: null,
+      passwordResetTokenHash: null,
       passwordResetExpiresAt: null,
     },
   })

@@ -3,6 +3,7 @@ import { requireSuperAdmin } from "@/lib/auth-guard"
 import bcrypt from "bcryptjs"
 import { randomBytes } from "crypto"
 import { z } from "zod"
+import { hashToken } from "@/lib/token-hash"
 
 const createOrgSchema = z.object({
   name: z.string().min(1).max(100),
@@ -92,7 +93,7 @@ export async function POST(req: Request) {
           passwordHash: placeholderHash,
           role: "admin",
           isActive: false,
-          setupToken,
+          setupTokenHash: hashToken(setupToken),
           setupTokenExpiresAt,
         },
       },

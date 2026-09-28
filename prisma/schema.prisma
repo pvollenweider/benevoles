@@ -331,9 +331,12 @@ model AdminUser {
   passwordHash           String
   role                   String    @default("admin")
   isActive               Boolean   @default(true)
-  setupToken             String?   @unique
+  // SHA-256 (hex) of the one-time links emailed to the admin, never the tokens themselves (#269):
+  // a DB dump or backup must not hand out working account-setup / password-reset links. The
+  // plaintext exists only in the email; see src/lib/token-hash.ts.
+  setupTokenHash         String?   @unique
   setupTokenExpiresAt    DateTime?
-  passwordResetToken     String?   @unique
+  passwordResetTokenHash String?   @unique
   passwordResetExpiresAt DateTime?
   // Product-update emails (#200) — distinct from having an account at all. Defaults to opted
   // in (this is how the super admin reaches the beta-tester pool); an admin can unsubscribe via
@@ -346,5 +349,5 @@ model AdminUser {
   organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
 
   @@index([organizationId])
-  @@index([setupToken])
+  @@index([setupTokenHash])
 }
