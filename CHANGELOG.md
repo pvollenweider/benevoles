@@ -22,6 +22,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 - **Accessibilité du bouton de rappels push** : le résultat (« Rappels push activés » ou notifications bloquées) est annoncé aux lecteurs d'écran et reçoit le focus quand le bouton disparaît ; contraste du message de succès renforcé ; icônes décoratives masquées aux technologies d'assistance.
 - **Âge minimum** : l'âge est désormais vérifié à la date du créneau et non à la date d'inscription ; un bénévole qui atteint l'âge requis entre son inscription et le créneau n'est plus refusé.
+- **Super admin sans organisation sélectionnée** : l'espace admin ne bascule plus silencieusement sur la plus ancienne organisation ; il renvoie vers la liste des organisations pour en choisir une. L'en-tête affiche aussi désormais l'organisation réellement sélectionnée (il affichait toujours la plus ancienne).
 - **Export PDF** : les heures qui passent minuit s'affichaient en brut au-delà de 23h (« 24h », « 26h ») au lieu de repartir à zéro ; la colonne « Libellé » s'affichait vide quand aucun créneau du jour n'avait de libellé distinct de son poste.
 - **Sentry** : filtre le bruit bénin « The destination stream closed early » (abandon client, pas une erreur applicative).
 
