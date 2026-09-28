@@ -6,6 +6,14 @@ import { sendNotification } from "@/lib/notifications"
 import { notifySectorLeadersOfSignup } from "@/lib/sector-leaders"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
+import {
+  LIVE_STATUSES,
+  OCCUPYING_STATUSES,
+  ShiftFullError,
+  isUniqueViolation,
+  lockShifts,
+  planPlacement,
+} from "@/lib/registration-capacity"
 import { z } from "zod"
 
 const schema = z.object({
@@ -46,13 +54,14 @@ export async function POST(req: Request) {
 
   const shifts = await prisma.shift.findMany({
     where: { id: { in: shiftIds }, eventId, status: { in: ["open"] } },
-    include: { registrations: { where: { status: "active" } } },
+    include: { registrations: { where: { status: { in: [...OCCUPYING_STATUSES] } } } },
   })
 
   if (shifts.length !== shiftIds.length) {
     return NextResponse.json({ error: "Un ou plusieurs créneaux sont invalides ou fermés. Veuillez recharger la page." }, { status: 409 })
   }
 
+  // Early, unlocked check for a friendly error — the authoritative one runs under lock below.
   for (const shift of shifts) {
     if (shift.registrations.length >= shift.capacity) {
       if (!shift.waitlistEnabled) {
@@ -98,7 +107,13 @@ export async function POST(req: Request) {
   const birthDateValue = birthDate ? new Date(birthDate) : undefined
   let volunteer = await prisma.volunteer.findFirst({ where: { email, organizationId } })
   if (!volunteer) {
-    volunteer = await prisma.volunteer.create({ data: { firstName, lastName, email, phone, birthDate: birthDateValue, organizationId } })
+    try {
+      volunteer = await prisma.volunteer.create({ data: { firstName, lastName, email, phone, birthDate: birthDateValue, organizationId } })
+    } catch (e) {
+      // A concurrent submission for the same new email created it first (#264).
+      if (!isUniqueViolation(e)) throw e
+      volunteer = await prisma.volunteer.findFirstOrThrow({ where: { email, organizationId } })
+    }
   } else {
     volunteer = await prisma.volunteer.update({
       where: { id: volunteer.id },
@@ -109,7 +124,7 @@ export async function POST(req: Request) {
   }
 
   const existingRegs = await prisma.registration.findMany({
-    where: { volunteerId: volunteer.id, shiftId: { in: shiftIds }, status: "active" },
+    where: { volunteerId: volunteer.id, shiftId: { in: shiftIds }, status: { in: [...LIVE_STATUSES] } },
   })
   if (existingRegs.length > 0) {
     return NextResponse.json({
@@ -135,39 +150,67 @@ export async function POST(req: Request) {
 
   // Chaque inscription reçoit son propre token unique.
   // On retourne le token de la première comme lien de confirmation.
-
-  // Determine which shifts go to waitlist
-  const fullShiftIds = new Set(
-    shifts.filter((s) => s.registrations.length >= s.capacity && s.waitlistEnabled).map((s) => s.id)
-  )
-
-  // For each shift going to waitlist, get current max position
-  const waitlistPositions: Record<string, number> = {}
-  for (const shiftId of fullShiftIds) {
-    const maxPos = await prisma.registration.aggregate({
-      where: { shiftId, status: { in: ["waiting", "offered"] } },
-      _max: { waitingPosition: true },
+  //
+  // Capacity, waitlist position and creation happen in one transaction holding a lock on the
+  // selected shifts (#264): two sign-ups racing for the last spot are serialized, so only one
+  // gets it and the other is waitlisted or refused. The partial unique index backs up the
+  // "already registered" check above against a double submit racing itself.
+  let registrations
+  try {
+    registrations = await prisma.$transaction(async (tx) => {
+      await lockShifts(tx, shiftIds)
+      const created = []
+      for (const shift of shifts) {
+        const occupied = await tx.registration.count({
+          where: { shiftId: shift.id, status: { in: [...OCCUPYING_STATUSES] } },
+        })
+        const maxPos = await tx.registration.aggregate({
+          where: { shiftId: shift.id, status: { in: ["waiting", "offered"] } },
+          _max: { waitingPosition: true },
+        })
+        const placement = planPlacement({
+          capacity: shift.capacity,
+          occupied,
+          waitlistEnabled: shift.waitlistEnabled,
+          maxWaitingPosition: maxPos._max.waitingPosition,
+        })
+        if (placement.status === "full") throw new ShiftFullError(shift.id, shift.label)
+        created.push(
+          await tx.registration.create({
+            data: {
+              eventId,
+              shiftId: shift.id,
+              volunteerId: volunteer.id,
+              source: "public_form",
+              comment,
+              editToken: generateToken(),
+              status: placement.status,
+              waitingPosition: placement.status === "waiting" ? placement.waitingPosition : null,
+            },
+          })
+        )
+      }
+      return created
     })
-    waitlistPositions[shiftId] = (maxPos._max.waitingPosition ?? 0) + 1
-  }
-
-  const registrations = await prisma.$transaction(
-    shiftIds.map((shiftId) => {
-      const onWaitlist = fullShiftIds.has(shiftId)
-      return prisma.registration.create({
-        data: {
-          eventId,
-          shiftId,
-          volunteerId: volunteer.id,
-          source: "public_form",
-          comment,
-          editToken: generateToken(),
-          status: onWaitlist ? "waiting" : "active",
-          waitingPosition: onWaitlist ? waitlistPositions[shiftId] : null,
-        },
+  } catch (e) {
+    if (e instanceof ShiftFullError) {
+      return NextResponse.json({
+        error: `Le créneau "${e.label}" est complet. Veuillez recharger la page.`,
+        fullShiftId: e.shiftId,
+      }, { status: 409 })
+    }
+    if (isUniqueViolation(e)) {
+      const existing = await prisma.registration.findFirst({
+        where: { volunteerId: volunteer.id, shiftId: { in: shiftIds }, status: { in: [...LIVE_STATUSES] } },
+        select: { editToken: true },
       })
-    })
-  )
+      return NextResponse.json({
+        error: "Vous êtes déjà inscrit(e) à un de ces créneaux.",
+        editToken: existing?.editToken,
+      }, { status: 409 })
+    }
+    throw e
+  }
 
   const editToken = registrations[0].editToken
 

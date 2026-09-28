@@ -8,9 +8,15 @@ vi.mock("@/lib/prisma", () => ({
     shift: { findMany: shiftFindMany },
     volunteer: { findFirst: vi.fn(), create: vi.fn().mockResolvedValue({ id: "vol-1" }), update: vi.fn() },
     registration: { findMany: vi.fn().mockResolvedValue([]), aggregate: vi.fn(), create: vi.fn() },
-    $transaction: vi.fn().mockResolvedValue([
-      { id: "reg-1", shiftId: "shift-1", status: "active", editToken: "tok", waitingPosition: null },
-    ]),
+    // Interactive transaction: runs the callback against a minimal tx client.
+    $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn({
+      $queryRaw: vi.fn(),
+      registration: {
+        count: vi.fn().mockResolvedValue(0),
+        aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }),
+        create: vi.fn().mockResolvedValue({ id: "reg-1", shiftId: "shift-1", status: "active", editToken: "tok", waitingPosition: null }),
+      },
+    })),
   },
 }))
 

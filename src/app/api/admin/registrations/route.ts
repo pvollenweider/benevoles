@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { generateToken } from "@/lib/utils"
 import { z } from "zod"
 import { adminActor, logEvent } from "@/lib/event-log"
+import { isUniqueViolation } from "@/lib/registration-capacity"
 
 const schema = z.object({
   eventId: z.string(),
@@ -44,17 +45,25 @@ export async function POST(req: Request) {
     })
   }
 
-  const registration = await prisma.registration.create({
-    data: {
-      eventId,
-      shiftId,
-      volunteerId: volunteer.id,
-      source: "admin_manual",
-      comment,
-      editToken: generateToken(),
-    },
-    include: { volunteer: true, shift: true },
-  })
+  let registration
+  try {
+    registration = await prisma.registration.create({
+      data: {
+        eventId,
+        shiftId,
+        volunteerId: volunteer.id,
+        source: "admin_manual",
+        comment,
+        editToken: generateToken(),
+      },
+      include: { volunteer: true, shift: true },
+    })
+  } catch (e) {
+    if (isUniqueViolation(e)) {
+      return NextResponse.json({ error: "Cette personne est déjà inscrite sur ce créneau." }, { status: 409 })
+    }
+    throw e
+  }
 
   if (shift.registrations.length + 1 >= shift.capacity) {
     await prisma.shift.update({ where: { id: shiftId }, data: { status: "full" } })

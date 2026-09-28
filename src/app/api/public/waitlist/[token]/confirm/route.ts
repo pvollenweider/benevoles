@@ -27,8 +27,14 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
     return NextResponse.json({ error: "Ce lien a expiré. La place a été proposée à quelqu'un d'autre." }, { status: 410 })
   }
 
-  await prisma.registration.update({
-    where: { id: reg.id },
+  // Conditional on the offer still standing (#264): a double confirm (double click, link
+  // prefetch + click) must not confirm twice, and an offer the cron just expired can't be taken.
+  const { count } = await prisma.registration.updateMany({
+    where: {
+      id: reg.id,
+      status: "offered",
+      OR: [{ waitingExpiresAt: null }, { waitingExpiresAt: { gte: new Date() } }],
+    },
     data: {
       status: "active",
       waitingPosition: null,
@@ -36,6 +42,9 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
       waitingExpiresAt: null,
     },
   })
+  if (count === 0) {
+    return NextResponse.json({ error: "Lien invalide, déjà confirmé ou expiré." }, { status: 404 })
+  }
 
   // Link back to the offer that made this possible, itself already linked to whatever
   // cancellation freed the spot — closes the causal chain for narrative mode.

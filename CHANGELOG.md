@@ -21,6 +21,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Corrigé
 
 - **Accessibilité du bouton de rappels push** : le résultat (« Rappels push activés » ou notifications bloquées) est annoncé aux lecteurs d'écran et reçoit le focus quand le bouton disparaît ; contraste du message de succès renforcé ; icônes décoratives masquées aux technologies d'assistance.
+- **Inscriptions simultanées** : deux inscriptions envoyées en même temps pour la dernière place ne peuvent plus dépasser la capacité du créneau, un double envoi du formulaire ne crée plus deux inscriptions, et deux désistements simultanés proposent bien deux places à deux personnes différentes de la liste d'attente. Une place proposée à la liste d'attente reste réservée jusqu'à confirmation ou expiration. Les éventuels doublons existants (même personne inscrite deux fois au même créneau) sont annulés à la mise à jour, en gardant la plus ancienne inscription.
 - **Âge minimum** : l'âge est désormais vérifié à la date du créneau et non à la date d'inscription ; un bénévole qui atteint l'âge requis entre son inscription et le créneau n'est plus refusé.
 - **Export PDF** : les heures qui passent minuit s'affichaient en brut au-delà de 23h (« 24h », « 26h ») au lieu de repartir à zéro ; la colonne « Libellé » s'affichait vide quand aucun créneau du jour n'avait de libellé distinct de son poste.
 - **Sentry** : filtre le bruit bénin « The destination stream closed early » (abandon client, pas une erreur applicative).

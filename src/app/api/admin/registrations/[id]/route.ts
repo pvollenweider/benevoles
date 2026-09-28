@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { z } from "zod"
 import { adminActor, logEvent } from "@/lib/event-log"
+import { isUniqueViolation } from "@/lib/registration-capacity"
 
 const schema = z.object({
   status: z.enum(["active", "cancelled", "deleted"]).optional(),
@@ -23,11 +24,21 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const owned = await db.registration.findFirst({ where: { id }, select: { id: true, status: true, comment: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const registration = await prisma.registration.update({
-    where: { id },
-    data: parsed.data,
-    include: { shift: true },
-  })
+  let registration
+  try {
+    registration = await prisma.registration.update({
+      where: { id },
+      data: parsed.data,
+      include: { shift: true },
+    })
+  } catch (e) {
+    // Reactivating a cancelled registration while the volunteer already has a live one on the
+    // same shift (Registration_shift_volunteer_live_key, #264).
+    if (isUniqueViolation(e)) {
+      return NextResponse.json({ error: "Cette personne a déjà une inscription en cours sur ce créneau." }, { status: 409 })
+    }
+    throw e
+  }
 
   const activeCount = await prisma.registration.count({
     where: { shiftId: registration.shiftId, status: "active" },
