@@ -6,6 +6,7 @@ import { sendNotification } from "@/lib/notifications"
 import { notifySectorLeadersOfSignup } from "@/lib/sector-leaders"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
+import { reportError } from "@/lib/report-error"
 import {
   LIVE_STATUSES,
   OCCUPYING_STATUSES,
@@ -252,7 +253,7 @@ export async function POST(req: Request) {
         where: { token: inviteToken, eventId, usedAt: null },
         data: { usedAt: new Date() },
       })
-      .catch(() => {})
+      .catch(reportError("member_invite.mark_used"))
   }
 
   const waitlistRegs = registrations.filter((r) => r.status === "waiting")
@@ -325,7 +326,7 @@ export async function POST(req: Request) {
         waitingPosition: wr.waitingPosition ?? 1,
         orgSlug: event.organization.slug,
       },
-    }).catch(() => {})
+    }).catch(reportError("notification.waitlist_confirmation"))
   }
 
   const onWaitlist = waitlistRegs.length > 0 && activeRegs.length === 0
