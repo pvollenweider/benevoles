@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import { shiftsOverlap, slugify, cn, generateToken, formatDate, formatShortDate, calculateAge } from "../utils"
+import { describe, it, expect } from "vitest"
+import { shiftsOverlap, slugify, cn, generateToken, formatDate, formatShortDate, calculateAgeAt, shiftsTooYoungFor } from "../utils"
 
 // ── shiftsOverlap ────────────────────────────────────────────────────────────
 
@@ -166,28 +166,49 @@ describe("shiftsOverlap — shifts that run past midnight", () => {
   })
 })
 
-// ── calculateAge ─────────────────────────────────────────────────────────────
+// ── calculateAgeAt / shiftsTooYoungFor ──────────────────────────────────────
 
-describe("calculateAge", () => {
-  beforeEach(() => {
-    vi.useFakeTimers()
-    vi.setSystemTime(new Date("2026-09-24T12:00:00"))
-  })
-  afterEach(() => vi.useRealTimers())
-
-  it("computes whole years elapsed", () => {
-    expect(calculateAge("2008-09-24")).toBe(18)
+describe("calculateAgeAt", () => {
+  it("computes whole years elapsed on the reference date", () => {
+    expect(calculateAgeAt("2008-09-24", "2026-09-24")).toBe(18)
   })
 
-  it("hasn't had this year's birthday yet", () => {
-    expect(calculateAge("2008-09-25")).toBe(17)
+  it("hasn't had that year's birthday yet on the reference date", () => {
+    expect(calculateAgeAt("2008-09-25", "2026-09-24")).toBe(17)
   })
 
-  it("already had this year's birthday", () => {
-    expect(calculateAge("2008-09-23")).toBe(18)
+  it("already had that year's birthday on the reference date", () => {
+    expect(calculateAgeAt("2008-09-23", "2026-09-24")).toBe(18)
   })
 
-  it("accepts a Date object as well as a string", () => {
-    expect(calculateAge(new Date("2008-09-24"))).toBe(18)
+  it("accepts Date objects as well as strings", () => {
+    expect(calculateAgeAt(new Date("2008-09-24"), new Date("2026-09-24T00:00:00Z"))).toBe(18)
+  })
+
+  it("handles a 29 February birth date (birthday counted from 1 March in non-leap years)", () => {
+    expect(calculateAgeAt("2008-02-29", "2026-02-28")).toBe(17)
+    expect(calculateAgeAt("2008-02-29", "2026-03-01")).toBe(18)
+  })
+})
+
+describe("shiftsTooYoungFor", () => {
+  const shift = (id: string, minAge: number | null, date: string) => ({ id, minAge, date: new Date(`${date}T00:00:00Z`) })
+
+  it("uses each shift's own date: birthday between registration and shift is accepted", () => {
+    // Registering on Sep 28, turns 18 on Oct 3, shift on Oct 10.
+    expect(shiftsTooYoungFor("2008-10-03", [shift("a", 18, "2026-10-10")])).toEqual([])
+  })
+
+  it("accepts a birthday on the shift day itself", () => {
+    expect(shiftsTooYoungFor("2008-10-10", [shift("a", 18, "2026-10-10")])).toEqual([])
+  })
+
+  it("rejects when the birthday is the day after the shift", () => {
+    expect(shiftsTooYoungFor("2008-10-11", [shift("a", 18, "2026-10-10")]).map((s) => s.id)).toEqual(["a"])
+  })
+
+  it("checks shifts independently when a selection spans the birthday", () => {
+    const shifts = [shift("before", 18, "2026-10-02"), shift("after", 18, "2026-10-04"), shift("none", null, "2026-10-01")]
+    expect(shiftsTooYoungFor("2008-10-03", shifts).map((s) => s.id)).toEqual(["before"])
   })
 })

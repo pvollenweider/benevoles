@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
 const eventFindFirst = vi.hoisted(() => vi.fn())
 const shiftFindMany = vi.hoisted(() => vi.fn())
@@ -6,8 +6,11 @@ vi.mock("@/lib/prisma", () => ({
   prisma: {
     event: { findFirst: eventFindFirst },
     shift: { findMany: shiftFindMany },
-    volunteer: { findFirst: vi.fn(), create: vi.fn(), update: vi.fn() },
-    registration: { findMany: vi.fn().mockResolvedValue([]), aggregate: vi.fn() },
+    volunteer: { findFirst: vi.fn(), create: vi.fn().mockResolvedValue({ id: "vol-1" }), update: vi.fn() },
+    registration: { findMany: vi.fn().mockResolvedValue([]), aggregate: vi.fn(), create: vi.fn() },
+    $transaction: vi.fn().mockResolvedValue([
+      { id: "reg-1", shiftId: "shift-1", status: "active", editToken: "tok", waitingPosition: null },
+    ]),
   },
 }))
 
@@ -44,7 +47,7 @@ describe("POST /api/public/registrations — minimum age (#192)", () => {
 
   it("rejects when the shift requires an age and no birthDate is given", async () => {
     shiftFindMany.mockResolvedValue([
-      { id: "shift-1", label: "Bar", capacity: 5, minAge: 18, waitlistEnabled: false, registrations: [] },
+      { id: "shift-1", label: "Bar", capacity: 5, minAge: 18, waitlistEnabled: false, registrations: [], date: new Date("2026-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
     ])
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post(baseBody))
@@ -56,7 +59,7 @@ describe("POST /api/public/registrations — minimum age (#192)", () => {
 
   it("rejects when birthDate shows the volunteer is under the shift's minimum age", async () => {
     shiftFindMany.mockResolvedValue([
-      { id: "shift-1", label: "Bar", capacity: 5, minAge: 18, waitlistEnabled: false, registrations: [] },
+      { id: "shift-1", label: "Bar", capacity: 5, minAge: 18, waitlistEnabled: false, registrations: [], date: new Date("2026-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
     ])
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post({ ...baseBody, birthDate: "2015-01-01" }))
@@ -77,5 +80,31 @@ describe("POST /api/public/registrations — minimum age (#192)", () => {
     const data = await res.json()
     expect(data.error).not.toContain("Date de naissance")
     expect(data.error).not.toContain("Âge minimum")
+  })
+
+  describe("age is checked on the shift's date, not today (#265)", () => {
+    beforeEach(() => {
+      vi.useFakeTimers({ toFake: ["Date"] })
+      vi.setSystemTime(new Date("2026-09-28T12:00:00Z"))
+    })
+    afterEach(() => vi.useRealTimers())
+
+    it("accepts a volunteer who turns 18 between registration and the shift", async () => {
+      shiftFindMany.mockResolvedValue([
+        { id: "shift-1", label: "Bar", capacity: 5, minAge: 18, waitlistEnabled: false, registrations: [], date: new Date("2026-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
+      ])
+      const { POST } = await import("@/app/api/public/registrations/route")
+      const res = await POST(post({ ...baseBody, birthDate: "2008-10-03" }))
+      expect(res.status).toBe(201)
+    })
+
+    it("rejects a volunteer who only turns 18 after the shift", async () => {
+      shiftFindMany.mockResolvedValue([
+        { id: "shift-1", label: "Bar", capacity: 5, minAge: 18, waitlistEnabled: false, registrations: [], date: new Date("2026-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
+      ])
+      const { POST } = await import("@/app/api/public/registrations/route")
+      const res = await POST(post({ ...baseBody, birthDate: "2008-10-11" }))
+      expect(res.status).toBe(403)
+    })
   })
 })
