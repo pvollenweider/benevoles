@@ -4,7 +4,7 @@ import { generateToken, shiftsOverlap, shiftsTooYoungFor } from "@/lib/utils"
 import { sendConfirmationEmail, sendAdminNotification } from "@/lib/email"
 import { sendNotification } from "@/lib/notifications"
 import { notifySectorLeadersOfSignup } from "@/lib/sector-leaders"
-import { rateLimit, getClientIp } from "@/lib/rate-limit"
+import { rateLimit, getClientIp, isRateLimited } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
 import { reportError } from "@/lib/report-error"
 import {
@@ -201,6 +201,7 @@ export async function POST(req: Request) {
               volunteerId,
               source: "public_form",
               comment,
+              phone: phone?.trim() || null,
               editToken: generateToken(),
               status: placement.status,
               waitingPosition: placement.status === "waiting" ? placement.waitingPosition : null,
@@ -402,9 +403,11 @@ async function alreadyRegistered(volunteerId: string, eventId: string) {
         return { ok: false }
       })
       linkSent = result.ok
+      // Remember a *successful* send: the throttle counts attempts, failed ones included.
+      if (result.ok) rateLimit(volunteerId, "reg-link-sent", 1, 60 * 60 * 1000)
     } else {
-      // Throttled: the link was already emailed within the last hour.
-      linkSent = true
+      // Throttled: only claim the link was sent if a send actually succeeded within the hour.
+      linkSent = isRateLimited(volunteerId, "reg-link-sent", 1)
     }
   }
   return NextResponse.json({

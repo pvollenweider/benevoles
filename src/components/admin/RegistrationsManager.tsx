@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useMemo, useId } from "react"
 import StatusBadge from "./StatusBadge"
 import ModalShell from "./ModalShell"
 import { shiftsOverlap as sharedShiftsOverlap } from "@/lib/utils"
+import { contactPhone } from "@/lib/contact-phone"
 
 type Volunteer = { id: string; firstName: string; lastName: string; email: string | null; phone: string | null }
 type ShiftRef  = {
@@ -12,6 +13,8 @@ type ShiftRef  = {
 }
 type Registration = {
   id: string; status: string; source: string; comment: string | null
+  // Phone given on the public form for this registration; shown before the profile's.
+  phone?: string | null
   createdAt: string; waitingPosition: number | null; volunteer: Volunteer; shift: ShiftRef
   // True when this volunteer is already the (or a) sector leader of this shift's own role —
   // computed server-side from SectorLeader (role + email), see registrations/page.tsx.
@@ -686,7 +689,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                       )}
                     </p>
                     <p className="text-xs text-gray-500">{reg.volunteer.email}</p>
-                    {reg.volunteer.phone && <p className="text-xs text-gray-500">{reg.volunteer.phone}</p>}
+                    {contactPhone(reg) && <p className="text-xs text-gray-500">{contactPhone(reg)}</p>}
                     {reg.comment && <p className="text-xs text-gray-500 italic mt-0.5">"{reg.comment}"</p>}
                   </td>
                   <td className="px-4 py-3 hidden sm:table-cell">

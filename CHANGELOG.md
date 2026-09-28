@@ -9,7 +9,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
-- **Téléphone obligatoire, par événement** : nouvelle option dans les paramètres de l'événement pour exiger un numéro de téléphone sur le formulaire d'inscription public (désactivée par défaut, reprise lors d'une duplication).
+- **Téléphone obligatoire, par événement** : nouvelle option dans les paramètres de l'événement pour exiger un numéro de téléphone sur le formulaire d'inscription public (désactivée par défaut, reprise lors d'une duplication). Le numéro saisi est enregistré avec l'inscription et affiché en priorité dans la liste des inscriptions, l'export PDF et la page du responsable de secteur, y compris pour un bénévole déjà connu dont la fiche n'est pas modifiée par le formulaire public.
 - **Renvoyer le lien de gestion** : action sur la page des inscriptions pour réémettre par email le lien personnel `/my/[token]` d'un ou plusieurs bénévoles qui l'ont perdu ou supprimé par erreur.
 - **Badge « Responsable » sur les inscriptions** : affiché sur une ligne quand ce bénévole est déjà responsable du poste de son créneau.
 - **Nombre de places sur le planning public visible sur mobile** : le compteur (« 3/5 ») et l'heure de début s'affichent désormais dès qu'une barre de créneau est un peu plus large que le minimum, plutôt que de rester vides sur les tailles courantes sur téléphone.

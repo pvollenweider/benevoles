@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
+import { contactPhone } from "@/lib/contact-phone"
 
 // Read-only roster for a sector leader (#186): who's signed up for their roleName's shifts.
 // No mutation here — v1 is intentionally read-only, see prisma/schema.prisma's SectorLeader doc.
@@ -38,7 +39,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
         firstName: r.volunteer.firstName,
         lastName: r.volunteer.lastName,
         email: r.volunteer.email,
-        phone: r.volunteer.phone ?? "",
+        phone: contactPhone(r) ?? "",
       },
       shift: {
         label: r.shift.label,

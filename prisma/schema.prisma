@@ -268,6 +268,11 @@ model Registration {
   status           String    @default("active")
   source           String    @default("public_form")
   comment          String?
+  // Phone given on the public form for this registration. The volunteer profile is only updated
+  // with proof of email ownership (#285), so without this a phone the event requires
+  // (Event.requirePhone) would be lost for an already-known volunteer. Displayed in priority
+  // over the profile's phone — see contactPhone() in src/lib/contact-phone.ts.
+  phone            String?
   editToken        String    @unique
   reminderJ2Sent   DateTime?
   reminderJ1Sent   DateTime?
