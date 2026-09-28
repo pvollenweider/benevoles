@@ -76,10 +76,15 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
     return NextResponse.json({ error: "Inscription introuvable ou déjà annulée." }, { status: 404 })
   }
 
-  await prisma.registration.update({
-    where: { id: registration.id },
+  // Conditional on still being active (#264): a double click would otherwise cancel twice, log
+  // twice and trigger two waitlist promotions for a single freed spot.
+  const { count } = await prisma.registration.updateMany({
+    where: { id: registration.id, status: "active" },
     data: { status: "cancelled" },
   })
+  if (count === 0) {
+    return NextResponse.json({ error: "Inscription introuvable ou déjà annulée." }, { status: 404 })
+  }
 
   const cancelLogId = await logEvent({
     eventId: registration.eventId,

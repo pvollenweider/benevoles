@@ -139,10 +139,12 @@ async function run(req: Request) {
   })
 
   for (const reg of expiredOffers) {
-    await prisma.registration.update({
-      where: { id: reg.id },
+    // Conditional (#264): the volunteer may have confirmed between the read above and now.
+    const { count } = await prisma.registration.updateMany({
+      where: { id: reg.id, status: "offered", waitingExpiresAt: { lt: now } },
       data: { status: "cancelled" },
     })
+    if (count === 0) continue
     await promoteNextInWaitlist(reg.shiftId).catch(() => {})
   }
 
