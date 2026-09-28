@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 import { requireSuperAdmin } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
+import { generateToken } from "@/lib/utils"
+import { hashToken } from "@/lib/token-hash"
 
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireSuperAdmin()
@@ -14,8 +16,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     select: {
       name: true,
       admins: {
-        where: { isActive: false, setupToken: { not: null } },
-        select: { email: true, name: true, setupToken: true },
+        where: { isActive: false, setupTokenHash: { not: null } },
+        select: { id: true, email: true, name: true },
         take: 1,
       },
     },
@@ -26,8 +28,16 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   const admin = org.admins[0]
   if (!admin) return NextResponse.json({ error: "Aucun compte en attente d'activation." }, { status: 404 })
 
+  // Only the hash is stored (#269), so a resend issues a fresh link (and a fresh 7-day window);
+  // the previous link stops working.
+  const setupToken = generateToken()
+  await prisma.adminUser.update({
+    where: { id: admin.id },
+    data: { setupTokenHash: hashToken(setupToken), setupTokenExpiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
+  })
+
   const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
-  const inviteUrl = `${appUrl}/admin/accept-invite?token=${admin.setupToken}`
+  const inviteUrl = `${appUrl}/admin/accept-invite?token=${setupToken}`
 
   const result = await sendNotification({
     kind: "admin_invite",

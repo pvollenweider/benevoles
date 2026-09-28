@@ -78,7 +78,7 @@ describe("accept-invite: read-only precheck matches what POST would do", () => {
     expect(update).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { id: admin.id },
-        data: expect.objectContaining({ isActive: true, setupToken: null, setupTokenExpiresAt: null }),
+        data: expect.objectContaining({ isActive: true, setupTokenHash: null, setupTokenExpiresAt: null }),
       }),
     )
   })
@@ -90,5 +90,18 @@ describe("accept-invite: read-only precheck matches what POST would do", () => {
     expect(res.status).toBe(410)
     expect((await res.json()).error).toMatch(/expiré/)
     expect(update).not.toHaveBeenCalled()
+  })
+})
+
+describe("accept-invite: token stored hashed (#269)", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("looks the admin up by the SHA-256 of the token from the link, never the token itself", async () => {
+    findUnique.mockResolvedValue(null)
+    const { GET } = await import("@/app/api/admin/accept-invite/route")
+    await GET(get("abc"))
+    expect(findUnique).toHaveBeenCalledWith(expect.objectContaining({
+      where: { setupTokenHash: "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad" },
+    }))
   })
 })

@@ -57,9 +57,9 @@ async function run(req: Request) {
   const clearedResetTokens = await prisma.adminUser.updateMany({
     where: {
       passwordResetExpiresAt: { lt: now },
-      passwordResetToken: { not: null },
+      passwordResetTokenHash: { not: null },
     },
-    data: { passwordResetToken: null, passwordResetExpiresAt: null },
+    data: { passwordResetTokenHash: null, passwordResetExpiresAt: null },
   })
 
   return NextResponse.json({

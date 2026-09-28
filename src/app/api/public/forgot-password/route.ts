@@ -3,6 +3,7 @@ import { randomBytes } from "crypto"
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
+import { hashToken } from "@/lib/token-hash"
 
 export async function POST(req: Request) {
   const rl = rateLimit(getClientIp(req), "forgot-password", 5, 60 * 60 * 1000)
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
 
   await prisma.adminUser.update({
     where: { id: admin.id },
-    data: { passwordResetToken: token, passwordResetExpiresAt: expiresAt },
+    data: { passwordResetTokenHash: hashToken(token), passwordResetExpiresAt: expiresAt },
   })
 
   const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")

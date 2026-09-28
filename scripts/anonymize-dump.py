@@ -55,15 +55,15 @@ def process_volunteer(line: str) -> str:
 
 def process_admin_user(line: str) -> str:
     parts = line.rstrip("\n").split("\t")
-    # id, organizationId, email, name, passwordHash, role, isActive, setupToken,
-    # setupTokenExpiresAt, passwordResetToken, passwordResetExpiresAt, createdAt, updatedAt
+    # id, organizationId, email, name, passwordHash, role, isActive, setupTokenHash,
+    # setupTokenExpiresAt, passwordResetTokenHash, passwordResetExpiresAt, createdAt, updatedAt
     row_id = parts[0]
     first, last, email, _phone = fake_identity(row_id)
     parts[2] = email
     parts[3] = f"{first} {last}"
     parts[4] = FAKE_PASSWORD_HASH
-    parts[7] = "\\N"  # setupToken
-    parts[9] = "\\N"  # passwordResetToken
+    parts[7] = "\\N"  # setupTokenHash
+    parts[9] = "\\N"  # passwordResetTokenHash
     return "\t".join(parts) + "\n"
 
 
