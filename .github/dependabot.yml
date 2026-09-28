@@ -6,8 +6,12 @@ updates:
       interval: weekly
       day: monday
     groups:
+      # Minor and patch updates only: majors come as one PR per package, since they can need a
+      # migration (#263 bundled @sentry/nextjs 11 and TypeScript 7 with safe bumps and couldn't
+      # be merged as a whole).
       all-deps:
         patterns: ["*"]
+        update-types: ["minor", "patch"]
     ignore:
       # eslint-plugin-react (via eslint-config-next) doesn't support ESLint 10 yet
       - dependency-name: "eslint"
