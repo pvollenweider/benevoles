@@ -60,6 +60,9 @@ prisma/setup-horizon.ts
 # understand-anything generated files
 .understand-anything/
 
+# CodeGraph local index
+.codegraph/
+
 # vendored AI skills (third-party, flagged by CodeQL)
 .github/skills/
 
