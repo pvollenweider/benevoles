@@ -29,6 +29,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Sécurité
 
+- **Inscription publique avec l'adresse email d'un autre bénévole** : le formulaire ne renvoie plus le lien de gestion d'un bénévole déjà connu (ni en cas d'inscription en double, ni après une nouvelle inscription), et ne modifie plus ses informations enregistrées (nom, téléphone, date de naissance). Le lien part uniquement par email, sauf pour une adresse nouvelle ou une inscription depuis un lien d'invitation membre. Deux inscriptions simultanées d'une même personne à des créneaux qui se chevauchent ne peuvent plus passer toutes les deux.
 - **Isolation entre organisations renforcée** : toutes les opérations de l'espace admin sur les données d'une organisation (lectures, modifications, suppressions, créations, y compris pages d'événement, responsables de secteur, échéances et journaux) sont désormais limitées à l'organisation par construction, et non plus seulement par une vérification faite route par route.
 - **Sessions admin** : un admin désactivé ou supprimé, ou un admin dont l'organisation est désactivée, perd immédiatement l'accès au lieu de le garder jusqu'à l'expiration de sa session (30 jours) ; un changement de rôle s'applique sans reconnexion.
 - **Connexion admin** : après 10 échecs sur un même compte ou 30 depuis une même adresse IP en 15 minutes, les tentatives suivantes sont refusées jusqu'à la fin de la fenêtre.

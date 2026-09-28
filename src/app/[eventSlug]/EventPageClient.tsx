@@ -270,12 +270,16 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
       return
     }
 
-    localStorage.setItem(storageKey, data.editToken)
-    if (data.onWaitlist) {
-      router.push(`/${eventSlug}/success?token=${data.editToken}&waitlist=1`)
-    } else {
-      router.push(`/${eventSlug}/success?token=${data.editToken}`)
+    // No editToken when the address already belonged to a volunteer and nothing proved the
+    // submitter owns it: the management link then only goes out by email (#285).
+    const params = new URLSearchParams()
+    if (data.editToken) {
+      localStorage.setItem(storageKey, data.editToken)
+      params.set("token", data.editToken)
     }
+    if (data.onWaitlist) params.set("waitlist", "1")
+    const query = params.toString()
+    router.push(`/${eventSlug}/success${query ? `?${query}` : ""}`)
   }
 
   function quitSession() {

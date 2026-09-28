@@ -49,7 +49,7 @@ Liste exhaustive des fonctionnalités de l'application.
 
 ### Confirmation et gestion (`/my/[token]`)
 
-- Page de succès avec lien personnel de gestion
+- Page de succès avec lien personnel de gestion — affiché seulement si l'adresse est nouvelle pour l'organisation ou si l'inscription vient d'un lien d'invitation membre ; sinon envoyé uniquement par email, et les informations déjà enregistrées pour ce bénévole (nom, téléphone, date de naissance) ne sont pas modifiées par le formulaire. Une tentative d'inscription en double renvoie le lien par email au lieu de l'afficher
 - Envoi automatique d'un email de confirmation avec récapitulatif des créneaux inscrits
 - **Message de confirmation personnalisable** par l'admin, rédigé en Markdown (titres, gras, italique, listes, citations, code, tableaux, texte barré, liens automatiques), affiché sur la page de succès, sur `/my/[token]` et dans l'email
 - Page de gestion : liste de toutes les inscriptions actives du bénévole pour l'événement
