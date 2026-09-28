@@ -47,6 +47,12 @@ const prismaMock = {
     create: vi.fn().mockResolvedValue({ id: "reg-new" }),
     count: vi.fn().mockResolvedValue(0),
     findFirst: vi.fn().mockResolvedValue(null),
+    findUniqueOrThrow: vi.fn().mockResolvedValue({
+      id: "reg-b",
+      editToken: "tok-b",
+      volunteer: { firstName: "V", lastName: "B", email: "v@b.com" },
+      event: { title: "Event B", organization: { slug: "org-b" } },
+    }),
   },
   adminUser: {
     findUnique: vi.fn().mockResolvedValue(null),
@@ -390,6 +396,14 @@ describe("Registrations — cross-tenant isolation", () => {
     const res = await DELETE(makeRequest("/api/admin/registrations/reg-b", "DELETE"), params("reg-b"))
     expect(res.status).toBe(404)
     expect(prismaMock.registration.update).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/registrations/[id]/resend-link returns 404 for org-B registration", async () => {
+    const { POST } = await import("@/app/api/admin/registrations/[id]/resend-link/route")
+    setupGuard()
+
+    const res = await POST(makeRequest("/api/admin/registrations/reg-b/resend-link", "POST"), params("reg-b"))
+    expect(res.status).toBe(404)
   })
 
   it("POST /api/admin/registrations returns 404 when shift belongs to org-B", async () => {

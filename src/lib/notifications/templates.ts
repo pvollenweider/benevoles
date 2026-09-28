@@ -105,6 +105,8 @@ export function render(payload: NotificationPayload): RenderedEmail {
       return renderSectorLeaderNewSignup(payload)
     case "product_update":
       return renderProductUpdate(payload)
+    case "registration_link_resend":
+      return renderRegistrationLinkResend(payload)
   }
 }
 
@@ -799,6 +801,38 @@ function renderProductUpdate(p: NotificationPayload): RenderedEmail {
       <a href="${unsubscribeUrl}" style="color:#aaaaaa">Se désabonner</a> de ces communications.
     </p>
   `, subject)
+
+  return { subject, html, text }
+}
+
+// ── Renvoi du lien de gestion ─────────────────────────────────────────────────
+
+function renderRegistrationLinkResend(p: NotificationPayload): RenderedEmail {
+  const { volunteerName, eventTitle, orgSlug, editToken } = p.data as {
+    volunteerName: string
+    eventTitle: string
+    orgSlug?: string
+    editToken: string
+  }
+  const editUrl = myPageUrl(orgSlug, editToken)
+  const firstName = volunteerName.split(" ")[0]
+  const subject = `Ton lien pour gérer ton inscription — ${eventTitle}`
+
+  const text = [
+    `Hello ${firstName} !`,
+    ``,
+    `Voici ton lien personnel pour voir ou modifier ton inscription à ${eventTitle} :`,
+    editUrl,
+    ``,
+    `À très vite !`,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 👋</h2>
+    <p style="color:#555;margin:0 0 1.25em">Voici ton lien personnel pour voir ou modifier ton inscription à <strong>${escapeHtml(eventTitle)}</strong>.</p>
+    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mon inscription")}</p>
+    <p style="color:#888;font-size:0.85em;margin-top:2em">À très vite !</p>
+  `, `Ton lien pour ${escapeHtml(eventTitle)}`)
 
   return { subject, html, text }
 }

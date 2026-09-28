@@ -340,6 +340,23 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     setRegistrations((prev) => prev.filter((r) => r.id !== id))
   }
 
+  const [resendingId, setResendingId] = useState<string | null>(null)
+
+  async function handleResendLink(reg: Registration) {
+    setResendingId(reg.id)
+    try {
+      const res = await fetch(`/api/admin/registrations/${reg.id}/resend-link`, { method: "POST" })
+      const data = await res.json()
+      setLeaderAnnouncement(
+        res.ok
+          ? `Lien renvoyé à ${reg.volunteer.firstName} ${reg.volunteer.lastName}.`
+          : (data.error ?? "Échec de l'envoi.")
+      )
+    } finally {
+      setResendingId(null)
+    }
+  }
+
   // ── Bulk actions on the current selection ───────────────────────────────────
   // Uses the full registrations list, not `filtered`: a row selected before a search/filter
   // change hides it must still be included in the bulk action, matching what the toolbar's own
@@ -684,6 +701,16 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                     >
                       Rendre responsable
                     </button>
+                    {reg.status === "active" && reg.volunteer.email && (
+                      <button
+                        onClick={() => handleResendLink(reg)}
+                        disabled={resendingId === reg.id}
+                        aria-label={`Renvoyer le lien de gestion à ${reg.volunteer.firstName} ${reg.volunteer.lastName}`}
+                        className="text-xs text-blue-500 hover:text-blue-700 transition-colors mr-3 disabled:opacity-50"
+                      >
+                        {resendingId === reg.id ? "Envoi…" : "Renvoyer le lien"}
+                      </button>
+                    )}
                     {reg.status === "active" && (
                       <button
                         onClick={() => handleCancel(reg.id)}

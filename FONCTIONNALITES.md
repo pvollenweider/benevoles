@@ -180,6 +180,7 @@ Liste exhaustive des fonctionnalités de l'application.
 - Annulation d'une inscription individuelle
 - **Actions groupées** : sélection multiple par cases à cocher (case d'en-tête pour tout sélectionner) pour annuler plusieurs inscriptions ou désigner plusieurs responsables de secteur en une seule action ; porte sur toute la sélection, même une ligne masquée entre-temps par un filtre
 - Badge « Responsable » affiché sur une ligne quand ce bénévole est déjà responsable du poste de son créneau
+- **Renvoyer le lien** : réémet par email le lien personnel de gestion (`/my/[token]`) d'un bénévole qui l'a perdu ou supprimé par erreur — donne accès à toutes ses inscriptions actives pour l'événement, pas seulement au créneau de la ligne
 - **Filtres cumulables** : recherche texte, filtre par poste, filtre par créneau
 - Accès direct depuis un créneau (timeline admin) : pré-filtrage automatique
 - **Ajout manuel** avec détection de conflits
