@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useMemo } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { formatDate, shiftsOverlap, calculateAge } from "@/lib/utils"
+import { formatDate, shiftsOverlap, shiftsTooYoungFor } from "@/lib/utils"
 import { fmtRange } from "@/lib/gantt-utils"
 import DayTimeline, { fmt } from "@/components/DayTimeline"
 import PublicFooter from "@/components/PublicFooter"
@@ -74,12 +74,11 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
   const myShiftIds = useMemo(() => new Set(myRegistrations.map((r) => r.shiftId)), [myRegistrations])
 
   // Shifts among the current selection that require a minimum age (#192) — drives whether the
-  // form asks for a date of birth, and what the highest age requirement among them is.
+  // form asks for a date of birth.
   const ageGatedSelectedShifts = useMemo(
     () => (event?.shifts ?? []).filter((s) => selectedShifts.has(s.id) && !myShiftIds.has(s.id) && s.minAge != null),
     [event, selectedShifts, myShiftIds]
   )
-  const requiredMinAge = ageGatedSelectedShifts.reduce((max, s) => Math.max(max, s.minAge ?? 0), 0)
 
   const conflictingShiftIds = useMemo(() => {
     if (!event) return new Set<string>()
@@ -202,8 +201,9 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
     if (!form.firstName || !form.lastName || !form.email) { setError("Prénom, nom et email sont obligatoires."); return }
     if (ageGatedSelectedShifts.length > 0) {
       if (!form.birthDate) { setError("Date de naissance requise pour au moins un des créneaux sélectionnés."); return }
-      if (calculateAge(form.birthDate) < requiredMinAge) {
-        setError(`Âge minimum non atteint pour : ${ageGatedSelectedShifts.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}.`)
+      const tooYoungFor = shiftsTooYoungFor(form.birthDate, ageGatedSelectedShifts)
+      if (tooYoungFor.length > 0) {
+        setError(`Âge minimum non atteint pour : ${tooYoungFor.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}.`)
         return
       }
     }

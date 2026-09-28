@@ -92,7 +92,7 @@ Le bouton **Gérer les postes** ouvre un panneau qui regroupe trois actions, pos
 
 ### Âge minimum sur un poste
 
-Un poste peut exiger un âge minimum (majorité, permis de conduire, qualification…). Une fois renseigné dans le formulaire du créneau, il est affiché en petit sur le planning public (ex. « 18+ »). Le créneau reste sélectionnable — l'âge du bénévole n'est pas connu avant qu'il remplisse le formulaire — mais l'inscription lui demande alors sa date de naissance et est refusée si la condition n'est pas remplie.
+Un poste peut exiger un âge minimum (majorité, permis de conduire, qualification…). Une fois renseigné dans le formulaire du créneau, il est affiché en petit sur le planning public (ex. « 18+ »). Le créneau reste sélectionnable — l'âge du bénévole n'est pas connu avant qu'il remplisse le formulaire — mais l'inscription lui demande alors sa date de naissance et est refusée si la condition n'est pas remplie. L'âge pris en compte est celui qu'aura le bénévole le jour du créneau, pas le jour de l'inscription.
 
 ---
 

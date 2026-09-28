@@ -43,7 +43,7 @@ Sur mobile, **faites défiler horizontalement** pour voir toutes les plages hora
 
 ![Planning public d'un événement affiché sur mobile, avec les créneaux du jour en barres colorées](/doc-img/public-timeline-mobile.png)
 
-Certains postes affichent un petit repère (ex. « 18+ ») : ils demandent un âge minimum. Vous pouvez sélectionner le créneau normalement — votre date de naissance vous sera demandée dans le formulaire d'inscription si besoin, et l'inscription n'aboutit que si la condition d'âge est remplie.
+Certains postes affichent un petit repère (ex. « 18+ ») : ils demandent un âge minimum. Vous pouvez sélectionner le créneau normalement — votre date de naissance vous sera demandée dans le formulaire d'inscription si besoin, et l'inscription n'aboutit que si vous aurez l'âge requis le jour du créneau.
 
 ### Sélectionner un créneau
 

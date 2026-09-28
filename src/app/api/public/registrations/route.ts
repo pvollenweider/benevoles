@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { generateToken, shiftsOverlap, calculateAge } from "@/lib/utils"
+import { generateToken, shiftsOverlap, shiftsTooYoungFor } from "@/lib/utils"
 import { sendConfirmationEmail, sendAdminNotification } from "@/lib/email"
 import { sendNotification } from "@/lib/notifications"
 import { notifySectorLeadersOfSignup } from "@/lib/sector-leaders"
@@ -85,8 +85,7 @@ export async function POST(req: Request) {
         error: `Date de naissance requise pour : ${ageGated.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}.`,
       }, { status: 400 })
     }
-    const age = calculateAge(birthDate)
-    const tooYoungFor = ageGated.filter((s) => age < (s.minAge ?? 0))
+    const tooYoungFor = shiftsTooYoungFor(birthDate, ageGated)
     if (tooYoungFor.length > 0) {
       return NextResponse.json({
         error: `Âge minimum non atteint pour : ${tooYoungFor.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}.`,

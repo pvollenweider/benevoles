@@ -17,15 +17,26 @@ export function formatShortDate(date: Date | string): string {
   return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
 }
 
-// Age in whole years as of today — shared by the public registration form's client-side check
-// and the server-side enforcement it mirrors (#192), so the two never drift apart.
-export function calculateAge(birthDate: Date | string): number {
+// Age in whole years on `referenceDate` — the shift's date for the minimum-age rule (#192): what
+// matters is being old enough on the day of the shift, not on the day of registration. Shared by
+// the public form's client-side check and the server-side enforcement it mirrors, so the two
+// never drift apart. UTC getters: a "YYYY-MM-DD" birth date and Shift.date are both stored as
+// UTC midnight, local getters would shift them by a day west of UTC.
+export function calculateAgeAt(birthDate: Date | string, referenceDate: Date | string): number {
   const birth = typeof birthDate === "string" ? new Date(birthDate) : birthDate
-  const today = new Date()
-  let age = today.getFullYear() - birth.getFullYear()
-  const monthDiff = today.getMonth() - birth.getMonth()
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) age--
+  const ref = typeof referenceDate === "string" ? new Date(referenceDate) : referenceDate
+  let age = ref.getUTCFullYear() - birth.getUTCFullYear()
+  const monthDiff = ref.getUTCMonth() - birth.getUTCMonth()
+  if (monthDiff < 0 || (monthDiff === 0 && ref.getUTCDate() < birth.getUTCDate())) age--
   return age
+}
+
+// Shifts (among `shifts`) whose minimum age the volunteer doesn't reach on the shift's own date.
+export function shiftsTooYoungFor<T extends { minAge: number | null; date: Date | string }>(
+  birthDate: Date | string,
+  shifts: T[],
+): T[] {
+  return shifts.filter((s) => s.minAge != null && calculateAgeAt(birthDate, s.date) < s.minAge)
 }
 
 export function slugify(text: string): string {
