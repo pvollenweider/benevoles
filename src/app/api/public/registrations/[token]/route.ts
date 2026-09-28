@@ -5,6 +5,7 @@ import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
 import { reportError } from "@/lib/report-error"
+import { contactPhone } from "@/lib/contact-phone"
 
 export async function GET(req: Request, { params }: { params: Promise<{ token: string }> }) {
   const rl = rateLimit(getClientIp(req), "reg-token-read", 10, 60 * 60 * 1000)
@@ -46,7 +47,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
       firstName: registration.volunteer.firstName,
       lastName: registration.volunteer.lastName,
       email: registration.volunteer.email,
-      phone: registration.volunteer.phone ?? "",
+      // Same number admins and sector leaders see (contactPhone): the one given for this
+      // registration, else for another of this event's registrations, else the profile's.
+      phone: contactPhone({
+        phone: registration.phone?.trim() || allRegistrations.find((r) => r.phone?.trim())?.phone,
+        volunteer: registration.volunteer,
+      }) ?? "",
     },
     registrations: allRegistrations.map((r) => ({
       id: r.id,
