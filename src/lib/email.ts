@@ -6,7 +6,7 @@
 
 import { env } from "./env"
 import { prisma } from "./prisma"
-import { sendNotification } from "./notifications"
+import { sendNotification, type Send } from "./notifications"
 
 type RegistrationEmailData = {
   to: string
@@ -18,8 +18,8 @@ type RegistrationEmailData = {
   confirmationMessage?: string
 }
 
-export async function sendConfirmationEmail(data: RegistrationEmailData) {
-  await sendNotification({
+export async function sendConfirmationEmail(data: RegistrationEmailData, send: Send = sendNotification) {
+  await send({
     kind: "registration_confirmation",
     recipient: { email: data.to, name: data.volunteerName },
     data: {
@@ -70,7 +70,7 @@ export async function sendAdminNotification(data: {
   volunteerName: string
   volunteerEmail: string
   shifts: { label: string; roleName: string; date: string; startTime: string; endTime: string }[]
-}) {
+}, send: Send = sendNotification) {
   const { organizationId, ...templateData } = data
 
   const orgAdmins = await prisma.adminUser.findMany({
@@ -89,7 +89,7 @@ export async function sendAdminNotification(data: {
 
   await Promise.all(
     recipients.map((r) =>
-      sendNotification({
+      send({
         kind: "admin_notification",
         recipient: { email: r.email, name: r.name },
         data: templateData,

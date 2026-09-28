@@ -24,6 +24,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Inscription plus rapide et emails plus fiables** : la confirmation d'inscription s'affiche sans attendre l'envoi des emails (confirmation, notification aux admins et aux responsables, liste d'attente), qui partent juste après ; un email qui échoue est renvoyé automatiquement plusieurs fois au lieu d'être perdu.
 - **Page des inscriptions** : les boutons par ligne (rendre responsable, renvoyer le lien, annuler) sont retirés au profit d'une sélection (cases à cocher) suivie d'une action dans la barre d'outils qui apparaît — la même mécanique que les actions groupées, désormais utilisée aussi pour une seule inscription. Le bouton « Annuler » est renommé « Retirer de leur créneau » pour éviter toute ambiguïté avec l'annulation d'une action en cours, et pour ne pas laisser croire à un retrait du rôle de responsable de secteur.
 
 ### Corrigé

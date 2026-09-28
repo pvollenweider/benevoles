@@ -14,6 +14,8 @@ const m = vi.hoisted(() => ({
   txRegFindMany: vi.fn(),
   txCreate: vi.fn(),
   sendNotification: vi.fn(),
+  enqueueAndDeliver: vi.fn(),
+  sendConfirmationEmail: vi.fn(),
 }))
 
 vi.mock("@/lib/prisma", () => {
@@ -45,7 +47,14 @@ vi.mock("@/lib/prisma", () => {
     },
   }
 })
-vi.mock("@/lib/email", () => ({ sendConfirmationEmail: vi.fn(), sendAdminNotification: vi.fn() }))
+vi.mock("@/lib/email", () => ({ sendConfirmationEmail: m.sendConfirmationEmail, sendAdminNotification: vi.fn() }))
+vi.mock("@/lib/notifications/outbox", () => ({
+  collectNotifications: () => {
+    const payloads: unknown[] = []
+    return { payloads, send: async (p: unknown) => { payloads.push(p); return { ok: true } } }
+  },
+  enqueueAndDeliver: m.enqueueAndDeliver,
+}))
 vi.mock("@/lib/notifications", () => ({ sendNotification: m.sendNotification }))
 vi.mock("@/lib/sector-leaders", () => ({ notifySectorLeadersOfSignup: vi.fn() }))
 vi.mock("@/lib/event-log", () => ({ logEvent: vi.fn() }))
@@ -150,6 +159,17 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     const { error } = await (await POST(post())).json()
     expect(m.sendNotification).toHaveBeenCalledTimes(3)
     expect(error).toContain("envoyé à votre adresse email")
+  })
+
+  it("sign-up notifications go through the outbox, not sent inline (#293)", async () => {
+    m.volFindFirst.mockResolvedValue(null)
+    m.volCreate.mockResolvedValue({ id: "vol-new" })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    expect((await POST(post({ email: "new@x.com" }))).status).toBe(201)
+    // The confirmation email helper gets the outbox collector as its `send`.
+    expect(m.sendConfirmationEmail).toHaveBeenCalledWith(expect.anything(), expect.any(Function))
+    expect(m.enqueueAndDeliver).toHaveBeenCalledOnce()
+    expect(m.sendNotification).not.toHaveBeenCalled()
   })
 
   it("brand-new address: token returned (nothing to leak yet)", async () => {

@@ -48,6 +48,9 @@ export type NotificationPayload<K extends NotificationKind = NotificationKind> =
   data: Record<string, any>
 }
 
+/** How a helper delivers a notification: sendNotification, or an outbox collector (#293). */
+export type Send = (payload: NotificationPayload) => Promise<{ ok: true } | { ok: false; reason: string }>
+
 export interface NotificationChannelImpl {
   readonly name: NotificationChannel
   send(payload: NotificationPayload): Promise<{ ok: true } | { ok: false; reason: string }>

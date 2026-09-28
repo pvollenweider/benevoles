@@ -62,9 +62,22 @@ async function run(req: Request) {
     data: { passwordResetTokenHash: null, passwordResetExpiresAt: null },
   })
 
+  // --- 5. Notification outbox (#293) ---
+  // Rows hold recipient + template data (PII): delete them once sent, and failed ones after
+  // 30 days (kept that long only to investigate why they failed).
+  const deletedOutbox = await prisma.notificationOutbox.deleteMany({
+    where: {
+      OR: [
+        { status: "sent" },
+        { status: "failed", createdAt: { lt: cutoff30d } },
+      ],
+    },
+  })
+
   return NextResponse.json({
     runAt: now.toISOString(),
     deleted: {
+      notificationOutbox: deletedOutbox.count,
       organizations: deletedOrgs.count,
       volunteers: deletedVolunteers.count,
       adminUsers: deletedAdmins.count,

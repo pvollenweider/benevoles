@@ -31,3 +31,4 @@ export async function sendNotification(
 }
 
 export type { NotificationKind, NotificationChannel, NotificationPayload }
+export type { Send } from "./types"

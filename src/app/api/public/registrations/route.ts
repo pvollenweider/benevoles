@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { generateToken, shiftsOverlap, shiftsTooYoungFor } from "@/lib/utils"
 import { sendConfirmationEmail, sendAdminNotification } from "@/lib/email"
 import { sendNotification } from "@/lib/notifications"
+import { collectNotifications, enqueueAndDeliver } from "@/lib/notifications/outbox"
 import { notifySectorLeadersOfSignup } from "@/lib/sector-leaders"
 import { rateLimit, getClientIp, isRateLimited } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
@@ -275,6 +276,10 @@ export async function POST(req: Request) {
       endTime: s.endTime,
     }))
 
+  // Notifications go through the outbox (#293): built by the usual helpers into `outbox`,
+  // stored, and sent right after this response — the volunteer doesn't wait on SMTP, and a
+  // failed send is retried by the cron instead of being lost.
+  const outbox = collectNotifications()
   try {
     if (activeRegs.length > 0) {
       await sendConfirmationEmail({
@@ -285,7 +290,7 @@ export async function POST(req: Request) {
         editToken,
         orgSlug: event.organization.slug,
         confirmationMessage: event.confirmationMessage ?? undefined,
-      })
+      }, outbox.send)
     }
     await sendAdminNotification({
       organizationId: event.organizationId,
@@ -299,40 +304,41 @@ export async function POST(req: Request) {
         startTime: s.startTime,
         endTime: s.endTime,
       })),
-    })
-    await Promise.all(
-      shifts.map((shift) =>
-        notifySectorLeadersOfSignup({
-          eventId,
-          eventTitle: event.title,
-          orgSlug: event.organization.slug,
-          volunteerName: `${firstName} ${lastName}`,
-          shift,
-        })
-      )
-    )
-  } catch (e) {
-    console.error("Email error:", e)
-  }
-
-  // Send waitlist confirmation for waiting registrations
-  for (const wr of waitlistRegs) {
-    const shift = shifts.find((s) => s.id === wr.shiftId)
-    if (!shift) continue
-    await sendNotification({
-      kind: "waitlist_confirmation",
-      recipient: { email, name: `${firstName} ${lastName}` },
-      data: {
-        volunteerName: `${firstName} ${lastName}`,
+    }, outbox.send)
+    for (const shift of shifts) {
+      await notifySectorLeadersOfSignup({
+        eventId,
         eventTitle: event.title,
-        shiftLabel: shift.label,
-        shiftDate: shift.date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
-        shiftStart: shift.startTime,
-        shiftEnd: shift.endTime,
-        waitingPosition: wr.waitingPosition ?? 1,
         orgSlug: event.organization.slug,
-      },
-    }).catch(reportError("notification.waitlist_confirmation"))
+        volunteerName: `${firstName} ${lastName}`,
+        shift,
+      }, outbox.send)
+    }
+
+    // Waitlist confirmation for waiting registrations
+    for (const wr of waitlistRegs) {
+      const shift = shifts.find((s) => s.id === wr.shiftId)
+      if (!shift) continue
+      await outbox.send({
+        kind: "waitlist_confirmation",
+        recipient: { email, name: `${firstName} ${lastName}` },
+        data: {
+          volunteerName: `${firstName} ${lastName}`,
+          eventTitle: event.title,
+          shiftLabel: shift.label,
+          shiftDate: shift.date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
+          shiftStart: shift.startTime,
+          shiftEnd: shift.endTime,
+          waitingPosition: wr.waitingPosition ?? 1,
+          orgSlug: event.organization.slug,
+        },
+      })
+    }
+
+    await enqueueAndDeliver(outbox.payloads)
+  } catch (e) {
+    // The registration itself is done; only building/storing its notifications failed.
+    reportError("notification.registration_outbox")(e)
   }
 
   const onWaitlist = waitlistRegs.length > 0 && activeRegs.length === 0
