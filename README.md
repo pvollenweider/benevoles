@@ -92,7 +92,7 @@ Trois services exposés en dev :
 - Mailpit : http://localhost:8025 (capture de tous les emails)
 - Postgres : `localhost:5432` (`benevoles` / `benevoles`)
 
-Comptes créés par le seed :
+Comptes créés par le seed avec les valeurs de `.env.development.example` (sans elles, le seed prend `admin@localhost` / `change-me` par défaut, voir `prisma/seed.ts`) :
 
 | Rôle | Email | Mot de passe | URL |
 |------|-------|--------------|-----|
