@@ -83,13 +83,18 @@ describe("POST /api/public/registrations under contention", () => {
   it("answers 409 'already registered' when a racing duplicate hits the unique index", async () => {
     m.regCount.mockResolvedValue(0)
     m.regCreate.mockRejectedValue(Object.assign(new Error("unique"), { code: "P2002" }))
-    m.regFindFirst.mockResolvedValue({ editToken: "existing-tok" })
+    m.regFindFirst.mockResolvedValue({
+      editToken: "existing-tok",
+      volunteer: { firstName: "A", lastName: "B", email: "a@x.com" },
+      event: { title: "F", organization: { slug: "a" } },
+    })
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post())
     expect(res.status).toBe(409)
     const data = await res.json()
     expect(data.error).toContain("déjà inscrit")
-    expect(data.editToken).toBe("existing-tok")
+    // Never the existing registration's token (#285): it goes to the owner by email instead.
+    expect(JSON.stringify(data)).not.toContain("existing-tok")
   })
 })
 

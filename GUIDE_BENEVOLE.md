@@ -76,7 +76,7 @@ Cliquez sur **Confirmer mon inscription**.
 
 Après l'inscription, un **email de confirmation** est envoyé à votre adresse. Il récapitule vos créneaux et contient un **lien personnel** pour gérer votre inscription.
 
-La page de succès affiche également ce lien — pensez à le noter si vous n'avez pas accès à votre email immédiatement.
+Lors d'une première inscription, la page de succès affiche également ce lien — pensez à le noter si vous n'avez pas accès à votre email immédiatement. Si votre adresse email était déjà connue de l'organisation (inscription précédente), le lien vous est envoyé uniquement par email, pour que personne d'autre ne puisse y accéder en saisissant votre adresse ; sauf si vous vous inscrivez depuis un lien d'invitation reçu par email, auquel cas il s'affiche aussi.
 
 ---
 
@@ -113,7 +113,7 @@ Pour vous déconnecter de cette session (par exemple sur un appareil partagé), 
 ## Questions fréquentes
 
 **Je n'ai pas reçu l'email de confirmation.**
-Vérifiez vos courriers indésirables. Si vous avez conservé le lien affiché sur la page de succès, il est toujours valide.
+Vérifiez vos courriers indésirables. Si vous avez conservé le lien affiché sur la page de succès, il est toujours valide. Si vous tentez de vous réinscrire à un créneau où vous êtes déjà inscrit(e), le lien de gestion vous est renvoyé par email.
 
 **Je veux changer de créneau.**
 Annulez le créneau concerné via votre lien personnel, puis retournez sur la page de l'événement pour en choisir un autre.

@@ -12,6 +12,7 @@ vi.mock("@/lib/prisma", () => ({
     $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn({
       $queryRaw: vi.fn(),
       registration: {
+        findMany: vi.fn().mockResolvedValue([]),
         count: vi.fn().mockResolvedValue(0),
         aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }),
         create: vi.fn().mockResolvedValue({ id: "reg-1", shiftId: "shift-1", status: "active", editToken: "tok", waitingPosition: null }),

@@ -103,49 +103,51 @@ export async function POST(req: Request) {
   }
 
   // Volunteer is org-scoped: each (organizationId, email) is a unique roster entry.
+  //
+  // Nothing here proves the submitter owns `email` (#285): anyone can type someone else's
+  // address. So for a volunteer who already exists, this request must neither reveal anything
+  // (no editToken in the response — it opens /my, which lists their registrations, tokens and
+  // phone) nor change their profile. Proof of ownership is either a brand-new address (nothing
+  // to leak yet) or a valid member invite, which was emailed to that volunteer.
   const organizationId = event.organizationId
   const birthDateValue = birthDate ? new Date(birthDate) : undefined
   let volunteer = await prisma.volunteer.findFirst({ where: { email, organizationId } })
+  let ownsEmail = false
+  let createdNow = false
   if (!volunteer) {
     try {
       volunteer = await prisma.volunteer.create({ data: { firstName, lastName, email, phone, birthDate: birthDateValue, organizationId } })
+      ownsEmail = true
+      createdNow = true
     } catch (e) {
       // A concurrent submission for the same new email created it first (#264).
       if (!isUniqueViolation(e)) throw e
       volunteer = await prisma.volunteer.findFirstOrThrow({ where: { email, organizationId } })
     }
-  } else {
-    volunteer = await prisma.volunteer.update({
-      where: { id: volunteer.id },
-      // Keep the profile's existing birthDate if this submission didn't provide one (most
-      // registrations aren't age-gated), rather than clearing it.
-      data: { firstName, lastName, phone, ...(birthDateValue ? { birthDate: birthDateValue } : {}) },
+  } else if (inviteToken) {
+    const invite = await prisma.memberInvite.findFirst({
+      where: { token: inviteToken, eventId, volunteerId: volunteer.id },
+      select: { id: true },
     })
+    ownsEmail = invite != null
   }
+  const volunteerId = volunteer.id
 
   const existingRegs = await prisma.registration.findMany({
-    where: { volunteerId: volunteer.id, shiftId: { in: shiftIds }, status: { in: [...LIVE_STATUSES] } },
+    where: { volunteerId, shiftId: { in: shiftIds }, status: { in: [...LIVE_STATUSES] } },
+    select: { id: true },
   })
-  if (existingRegs.length > 0) {
-    return NextResponse.json({
-      error: "Vous êtes déjà inscrit(e) à un de ces créneaux.",
-      editToken: existingRegs[0].editToken,
-    }, { status: 409 })
-  }
+  if (existingRegs.length > 0) return alreadyRegistered(volunteerId, eventId)
 
   const allEventRegs = await prisma.registration.findMany({
-    where: { volunteerId: volunteer.id, eventId, status: "active" },
+    where: { volunteerId, eventId, status: "active" },
     include: { shift: true },
   })
-  for (const existing of allEventRegs) {
-    for (const newShift of shifts) {
-      if (shiftsOverlap(existing.shift, newShift)) {
-        return NextResponse.json({
-          error: `Ce créneau chevauche une inscription existante (${existing.shift.label}).`,
-          editToken: existing.editToken,
-        }, { status: 409 })
-      }
-    }
+  const clash = findOverlap(allEventRegs, shifts)
+  if (clash) {
+    return NextResponse.json({
+      error: `Ce créneau chevauche une inscription existante (${clash.label}).`,
+    }, { status: 409 })
   }
 
   // Chaque inscription reçoit son propre token unique.
@@ -159,6 +161,16 @@ export async function POST(req: Request) {
   try {
     registrations = await prisma.$transaction(async (tx) => {
       await lockShifts(tx, shiftIds)
+      // Then the volunteer (#285): two concurrent sign-ups of the same person to two different,
+      // overlapping shifts lock different shift rows, so the overlap check has to be redone under
+      // a per-volunteer lock too. Always shifts first, then volunteer: same order everywhere.
+      await tx.$queryRaw`SELECT id FROM "Volunteer" WHERE id = ${volunteerId} FOR UPDATE`
+      const liveNow = await tx.registration.findMany({
+        where: { volunteerId, eventId, status: "active" },
+        include: { shift: true },
+      })
+      const clashNow = findOverlap(liveNow, shifts)
+      if (clashNow) throw new OverlapError(clashNow.label)
       const created = []
       for (const shift of shifts) {
         const occupied = await tx.registration.count({
@@ -180,7 +192,7 @@ export async function POST(req: Request) {
             data: {
               eventId,
               shiftId: shift.id,
-              volunteerId: volunteer.id,
+              volunteerId,
               source: "public_form",
               comment,
               editToken: generateToken(),
@@ -199,17 +211,24 @@ export async function POST(req: Request) {
         fullShiftId: e.shiftId,
       }, { status: 409 })
     }
-    if (isUniqueViolation(e)) {
-      const existing = await prisma.registration.findFirst({
-        where: { volunteerId: volunteer.id, shiftId: { in: shiftIds }, status: { in: [...LIVE_STATUSES] } },
-        select: { editToken: true },
-      })
+    if (e instanceof OverlapError) {
       return NextResponse.json({
-        error: "Vous êtes déjà inscrit(e) à un de ces créneaux.",
-        editToken: existing?.editToken,
+        error: `Ce créneau chevauche une inscription existante (${e.label}).`,
       }, { status: 409 })
     }
+    if (isUniqueViolation(e)) return alreadyRegistered(volunteerId, eventId)
     throw e
+  }
+
+  // Only once the registration went through, and only with proof of ownership (see above):
+  // an anonymous submission must not rewrite an existing volunteer's name, phone or birth date.
+  if (ownsEmail && !createdNow) {
+    await prisma.volunteer.update({
+      where: { id: volunteerId },
+      // Keep the profile's existing birthDate if this submission didn't provide one (most
+      // registrations aren't age-gated), rather than clearing it.
+      data: { firstName, lastName, phone, ...(birthDateValue ? { birthDate: birthDateValue } : {}) },
+    })
   }
 
   const editToken = registrations[0].editToken
@@ -217,7 +236,7 @@ export async function POST(req: Request) {
   for (const reg of registrations) {
     await logEvent({
       eventId,
-      actor: { type: "volunteer", id: volunteer.id },
+      actor: { type: "volunteer", id: volunteerId },
       action: reg.status === "waiting" ? "registration.waitlist_joined" : "registration.created",
       entityType: "Registration",
       entityId: reg.id,
@@ -313,10 +332,56 @@ export async function POST(req: Request) {
 
   return NextResponse.json({
     success: true,
-    editToken,
+    // Without proof of ownership the link only goes out by email (confirmation email above).
+    editToken: ownsEmail ? editToken : null,
+    linkSentByEmail: !ownsEmail,
     confirmationMessage: onWaitlist ? null : event.confirmationMessage,
     registrationCount: registrations.length,
     onWaitlist,
     waitlistShifts: waitlistRegs.length,
   }, { status: 201 })
+}
+
+class OverlapError extends Error {
+  constructor(readonly label: string) {
+    super(`Overlaps ${label}`)
+  }
+}
+
+function findOverlap(
+  existing: { shift: Parameters<typeof shiftsOverlap>[0] & { label: string } }[],
+  shifts: Parameters<typeof shiftsOverlap>[1][],
+): { label: string } | null {
+  for (const reg of existing) {
+    for (const shift of shifts) {
+      if (shiftsOverlap(reg.shift, shift)) return { label: reg.shift.label }
+    }
+  }
+  return null
+}
+
+/**
+ * "Already registered" (#285): never answers with the existing registration's editToken — the
+ * submitter may not be that volunteer. The owner gets their management link by email instead
+ * (throttled per volunteer, so the form can't be used to flood their inbox).
+ */
+async function alreadyRegistered(volunteerId: string, eventId: string) {
+  const reg = await prisma.registration.findFirst({
+    where: { volunteerId, eventId, status: "active" },
+    include: {
+      volunteer: { select: { firstName: true, lastName: true, email: true } },
+      event: { select: { title: true, organization: { select: { slug: true } } } },
+    },
+  })
+  if (reg?.volunteer.email && rateLimit(volunteerId, "reg-link-resend", 3, 60 * 60 * 1000).ok) {
+    const name = `${reg.volunteer.firstName} ${reg.volunteer.lastName}`
+    await sendNotification({
+      kind: "registration_link_resend",
+      recipient: { email: reg.volunteer.email, name },
+      data: { volunteerName: name, eventTitle: reg.event.title, orgSlug: reg.event.organization.slug, editToken: reg.editToken },
+    }).catch((e) => console.error("registration_link_resend error:", e))
+  }
+  return NextResponse.json({
+    error: "Vous êtes déjà inscrit(e) à un de ces créneaux. Le lien pour gérer vos inscriptions a été envoyé à votre adresse email.",
+  }, { status: 409 })
 }
