@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { generateToken } from "@/lib/utils"
-import { adminActor, logEvent } from "@/lib/event-log"
-import { sendNotification } from "@/lib/notifications"
-import { tagVolunteerAsResponsable } from "@/lib/sector-leaders"
+import { adminActor } from "@/lib/event-log"
+import { addSectorLeader } from "@/lib/admin-registration-actions"
 import { z } from "zod"
 
 const postSchema = z.object({
@@ -44,37 +42,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const { roleName, name, email } = parsed.data
+  // Same path as the bulk "Rendre responsable" on the registrations list (#292).
+  const result = await addSectorLeader(
+    db,
+    { organizationId: guard.organizationId, actor: adminActor(guard.session), event: { id: eventId, ...event } },
+    parsed.data,
+  )
+  if (result.status === "exists") return NextResponse.json({ error: "Cette personne est déjà responsable de ce poste" }, { status: 409 })
 
-  const existing = await db.sectorLeader.findFirst({ where: { eventId, roleName, email } })
-  if (existing) return NextResponse.json({ error: "Cette personne est déjà responsable de ce poste" }, { status: 409 })
-
-  const leader = await db.sectorLeader.create({
-    data: { eventId, roleName, name, email, token: generateToken() },
-  })
-
-  await logEvent({
-    eventId,
-    actor: adminActor(guard.session),
-    action: "sectorleader.added",
-    entityType: "SectorLeader",
-    entityId: leader.id,
-    changes: { roleName: { from: null, to: leader.roleName } },
-  })
-
-  await tagVolunteerAsResponsable(guard.organizationId, leader.email).catch((e) => console.error("tagVolunteerAsResponsable error:", e))
-
-  await sendNotification({
-    kind: "sector_leader_invite",
-    recipient: { email: leader.email, name: leader.name },
-    data: {
-      leaderName: leader.name,
-      roleName: leader.roleName,
-      eventTitle: event.title,
-      orgSlug: event.organization.slug,
-      token: leader.token,
-    },
-  }).catch((e) => console.error("sector_leader_invite email error:", e))
-
-  return NextResponse.json(leader, { status: 201 })
+  return NextResponse.json(result.leader, { status: 201 })
 }

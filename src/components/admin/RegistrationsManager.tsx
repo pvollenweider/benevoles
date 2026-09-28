@@ -362,16 +362,24 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     })
   }
 
+  // One request for the whole selection (#292): ownership checked for every row up front on the
+  // server, all or nothing. Returns null on a request-level failure.
+  async function runBulk(action: "cancel" | "make_leader" | "resend_link", ids: string[]) {
+    const res = await fetch(`/api/admin/events/${eventId}/registrations/bulk`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action, registrationIds: ids }),
+    }).catch(() => null)
+    if (!res?.ok) return null
+    return res.json() as Promise<{ done: number; failed?: number; skipped?: number; alreadyLeader?: number; cancelledIds?: string[] }>
+  }
+
   async function handleBulkCancel() {
     if (selectedActiveRegs.length === 0) return
     if (!confirm(`Retirer ${selectedActiveRegs.length} bénévole${selectedActiveRegs.length > 1 ? "s" : ""} de leur créneau ?`)) return
     setBulkBusy(true)
-    const results = await Promise.allSettled(
-      selectedActiveRegs.map((r) => fetch(`/api/admin/registrations/${r.id}`, { method: "DELETE" }))
-    )
-    const cancelledIds = new Set(
-      selectedActiveRegs.filter((_, i) => results[i].status === "fulfilled" && (results[i] as PromiseFulfilledResult<Response>).value.ok).map((r) => r.id)
-    )
+    const result = await runBulk("cancel", selectedActiveRegs.map((r) => r.id))
+    const cancelledIds = new Set(result?.cancelledIds ?? [])
     setRegistrations((prev) => prev.filter((r) => !cancelledIds.has(r.id)))
     setSelectedIds((prev) => {
       const next = new Set(prev)
@@ -394,22 +402,11 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     if (withEmail.length === 0) return
     if (!confirm(`Rendre ${withEmail.length} bénévole${withEmail.length > 1 ? "s" : ""} responsable de leur poste respectif ?${withoutEmail > 0 ? ` (${withoutEmail} ignoré${withoutEmail > 1 ? "s" : ""}, pas d'email)` : ""}`)) return
     setBulkBusy(true)
-    const results = await Promise.allSettled(
-      withEmail.map((r) =>
-        fetch(`/api/admin/events/${eventId}/sector-leaders`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            roleName: r.shift.roleName,
-            name: `${r.volunteer.firstName} ${r.volunteer.lastName}`,
-            email: r.volunteer.email,
-          }),
-        })
-      )
-    )
+    const result = await runBulk("make_leader", withEmail.map((r) => r.id))
     setBulkBusy(false)
-    const succeeded = results.filter((res) => res.status === "fulfilled" && (res as PromiseFulfilledResult<Response>).value.ok).length
-    const failed = withEmail.length - succeeded
+    // Already leader of that role counts as done from the admin's point of view.
+    const succeeded = result ? result.done + (result.alreadyLeader ?? 0) : 0
+    const failed = result ? 0 : withEmail.length
     setSelectedIds(new Set())
     setLeaderAnnouncement(
       [
@@ -434,12 +431,11 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     if (resendable.length === 0) return
     if (!confirm(`Renvoyer le lien de gestion à ${resendable.length} bénévole${resendable.length > 1 ? "s" : ""} ?`)) return
     setBulkBusy(true)
-    const results = await Promise.allSettled(
-      resendable.map((r) => fetch(`/api/admin/registrations/${r.id}/resend-link`, { method: "POST" }))
-    )
+    const result = await runBulk("resend_link", resendable.map((r) => r.id))
     setBulkBusy(false)
-    const succeeded = results.filter((res) => res.status === "fulfilled" && (res as PromiseFulfilledResult<Response>).value.ok).length
-    const failed = resendable.length - succeeded
+    // One email per volunteer, even with several of their rows selected.
+    const succeeded = result?.done ?? 0
+    const failed = result ? (result.failed ?? 0) : resendable.length
     setSelectedIds(new Set())
     setLeaderAnnouncement(
       failed > 0
