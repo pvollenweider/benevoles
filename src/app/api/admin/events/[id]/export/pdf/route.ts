@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { buildDayParts, type VolData, type ShiftRow, type ShowEntry } from "@/lib/pdf-export-gantt"
+import { contactPhone } from "@/lib/contact-phone"
 
 function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
@@ -69,7 +70,11 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   for (const shift of event.shifts) {
     for (const reg of shift.registrations) {
       const volEmail = reg.volunteer.email ?? ""
-      if (!volMap.has(volEmail)) volMap.set(volEmail, reg.volunteer)
+      // Phone given for a registration first, else the profile's (see contactPhone).
+      const phone = contactPhone(reg)
+      const known = volMap.get(volEmail)
+      if (!known) volMap.set(volEmail, { ...reg.volunteer, phone })
+      else if (!known.phone && phone) volMap.set(volEmail, { ...known, phone })
     }
   }
   const allVols = [...volMap.values()].sort((a, b) =>

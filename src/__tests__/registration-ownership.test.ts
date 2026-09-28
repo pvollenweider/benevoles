@@ -105,6 +105,53 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     expect(m.volUpdate).not.toHaveBeenCalled()
   })
 
+  it("existing volunteer, no proof: the submitted phone is kept on the registration (profile untouched)", async () => {
+    m.volFindFirst.mockResolvedValue({ ...victim, phone: null })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    expect((await POST(post({ phone: " 079 222 33 44 " }))).status).toBe(201)
+    expect(m.txCreate).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ phone: "079 222 33 44" }),
+    }))
+    expect(m.volUpdate).not.toHaveBeenCalled()
+  })
+
+  it("throttled after failed sends: doesn't claim the link was emailed", async () => {
+    m.volFindFirst.mockResolvedValue({ ...victim, id: "vol-throttle-fail" })
+    m.regFindFirst.mockResolvedValue({
+      editToken: "victims-tok",
+      volunteer: { firstName: "Real", lastName: "Owner", email: "owner@x.com" },
+      event: { title: "Festival", organization: { slug: "a" } },
+    })
+    m.sendNotification.mockResolvedValue({ ok: false, reason: "smtp down" })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    for (let i = 0; i < 3; i++) {
+      m.regFindMany.mockResolvedValueOnce([{ id: "reg-existing" }])
+      await POST(post())
+    }
+    m.regFindMany.mockResolvedValueOnce([{ id: "reg-existing" }])
+    const { error } = await (await POST(post())).json()
+    expect(m.sendNotification).toHaveBeenCalledTimes(3) // 4th attempt throttled
+    expect(error).not.toContain("a été envoyé")
+  })
+
+  it("throttled after a successful send: says the link was emailed", async () => {
+    m.volFindFirst.mockResolvedValue({ ...victim, id: "vol-throttle-ok" })
+    m.regFindFirst.mockResolvedValue({
+      editToken: "victims-tok",
+      volunteer: { firstName: "Real", lastName: "Owner", email: "owner@x.com" },
+      event: { title: "Festival", organization: { slug: "a" } },
+    })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    for (let i = 0; i < 3; i++) {
+      m.regFindMany.mockResolvedValueOnce([{ id: "reg-existing" }])
+      await POST(post())
+    }
+    m.regFindMany.mockResolvedValueOnce([{ id: "reg-existing" }])
+    const { error } = await (await POST(post())).json()
+    expect(m.sendNotification).toHaveBeenCalledTimes(3)
+    expect(error).toContain("envoyé à votre adresse email")
+  })
+
   it("brand-new address: token returned (nothing to leak yet)", async () => {
     m.volFindFirst.mockResolvedValue(null)
     m.volCreate.mockResolvedValue({ id: "vol-new" })

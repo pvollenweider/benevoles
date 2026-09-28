@@ -69,6 +69,7 @@ export default async function RegistrationsPage({
           status: r.status,
           source: r.source,
           comment: r.comment,
+          phone: r.phone,
           createdAt: r.createdAt.toISOString(),
           waitingPosition: r.waitingPosition,
           volunteer: r.volunteer,

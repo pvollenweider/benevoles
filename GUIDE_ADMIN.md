@@ -36,7 +36,7 @@ Vue d'ensemble de votre organisation : nombre d'événements (publiés et à ven
 | Lieu | Affiché sur la page publique |
 | Description | Texte libre (usage interne) |
 | Instructions publiques | Message visible en haut de la page d'inscription |
-| Téléphone obligatoire à l'inscription | Si coché, le formulaire public exige un numéro de téléphone (désactivé par défaut). Ne s'applique pas aux bénévoles que vous ajoutez vous-même depuis l'administration |
+| Téléphone obligatoire à l'inscription | Si coché, le formulaire public exige un numéro de téléphone (désactivé par défaut). Ne s'applique pas aux bénévoles que vous ajoutez vous-même depuis l'administration. Le numéro saisi est enregistré avec l'inscription : c'est lui qui s'affiche dans la liste des inscriptions, l'export PDF et la page du responsable de secteur (à défaut, celui de la fiche du membre) |
 | Message de confirmation | Texte affiché sur la page de succès après inscription |
 
 L'événement est créé en **brouillon** (`draft`) — il n'est pas visible du public tant qu'il n'est pas publié.
