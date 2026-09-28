@@ -191,7 +191,7 @@ export default function MyRegistrationPage() {
           <Link href={data?.eventUrl ?? data?.orgHomeUrl ?? "/"} className="text-sm text-gray-500 hover:text-gray-700">
             Retour à l&apos;accueil
           </Link>
-          <PushSubscribeButton email={data.volunteer.email} />
+          <PushSubscribeButton editToken={token} />
         </div>
       </div>
       <PublicFooter />

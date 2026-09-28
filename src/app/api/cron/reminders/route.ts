@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 import type { NotificationKind } from "@/lib/notifications"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
-import { sendPushToEmail } from "@/lib/push"
+import { sendPushToVolunteer } from "@/lib/push"
 
 export const dynamic = "force-dynamic"
 
@@ -114,7 +114,7 @@ async function run(req: Request) {
         const hoursLabel =
           win.kind === "reminder_j2" ? "dans 2 jours" :
           win.kind === "reminder_j1" ? "demain" : "aujourd'hui"
-        sendPushToEmail(r.volunteer.email ?? "", {
+        sendPushToVolunteer(r.volunteerId, {
           title: r.event.title,
           body: `Rappel : votre créneau "${r.shift.label}" commence ${hoursLabel}.`,
           url: `/my/${r.editToken}`,

@@ -247,8 +247,9 @@ model Volunteer {
   updatedAt      DateTime @updatedAt
 
   organization  Organization?  @relation(fields: [organizationId], references: [id], onDelete: SetNull)
-  registrations Registration[]
-  invites       MemberInvite[]
+  registrations     Registration[]
+  invites           MemberInvite[]
+  pushSubscriptions PushSubscription[]
 
   @@unique([organizationId, email])
   @@index([email])
@@ -299,15 +300,22 @@ model MemberInvite {
   @@index([token])
 }
 
+// Web push subscription, tied to one Volunteer (hence to one organization through it). Creating
+// one requires the volunteer's registration editToken, not just an email: the reminder payload
+// links to /my/<editToken>, so whoever owns the endpoint receives that link. Same browser can
+// hold subscriptions for several volunteers (shared device, or one person in two orgs).
 model PushSubscription {
-  id        String   @id @default(cuid())
-  endpoint  String   @unique
-  auth      String
-  p256dh    String
-  email     String
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  volunteerId String
+  endpoint    String
+  auth        String
+  p256dh      String
+  createdAt   DateTime @default(now())
 
-  @@index([email])
+  volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+
+  @@unique([endpoint, volunteerId])
+  @@index([volunteerId])
 }
 
 model AdminUser {

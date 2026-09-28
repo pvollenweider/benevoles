@@ -96,8 +96,8 @@ function SuccessContent() {
                   Accéder à mon inscription
                 </Link>
               </div>
-              {regData?.volunteer.email && !isWaitlist && (
-                <PushSubscribeButton email={regData.volunteer.email} />
+              {regData && !isWaitlist && (
+                <PushSubscribeButton editToken={token} />
               )}
             </div>
           )}

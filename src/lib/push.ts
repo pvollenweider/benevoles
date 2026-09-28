@@ -22,14 +22,14 @@ function ensureConfigured() {
   configured = true
 }
 
-export async function sendPushToEmail(
-  email: string,
+export async function sendPushToVolunteer(
+  volunteerId: string,
   payload: { title: string; body: string; url?: string; tag?: string }
 ): Promise<void> {
   ensureConfigured()
   if (!configured) return
 
-  const subs = await prisma.pushSubscription.findMany({ where: { email } })
+  const subs = await prisma.pushSubscription.findMany({ where: { volunteerId } })
   const dead: string[] = []
 
   await Promise.allSettled(

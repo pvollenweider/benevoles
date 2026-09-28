@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 
 type State = "idle" | "loading" | "subscribed" | "denied" | "unsupported" | "no-vapid"
 
-export default function PushSubscribeButton({ email }: { email: string }) {
+export default function PushSubscribeButton({ editToken }: { editToken: string }) {
   const [state, setState] = useState<State>(() => {
     if (typeof window === "undefined") return "idle"
     if (!("serviceWorker" in navigator) || !("PushManager" in window)) return "unsupported"
@@ -12,12 +12,18 @@ export default function PushSubscribeButton({ email }: { email: string }) {
   })
 
   useEffect(() => {
-    // Async-only: check whether the browser already holds a subscription
+    // Async-only: check whether the browser already holds a subscription. If so, (re)link it to
+    // this volunteer server-side: the browser subscription is per device, not per volunteer, and
+    // the server-side one may be missing (another volunteer on the same device, or dropped).
     navigator.serviceWorker?.ready
       .then((reg) => reg.pushManager.getSubscription())
-      .then((sub) => { if (sub) setState("subscribed") })
+      .then((sub) => {
+        if (!sub) return
+        setState("subscribed")
+        return saveSubscription(sub, editToken)
+      })
       .catch(() => {})
-  }, [])
+  }, [editToken])
 
   if (state === "unsupported" || state === "no-vapid") return null
 
@@ -41,18 +47,7 @@ export default function PushSubscribeButton({ email }: { email: string }) {
         })
       }
 
-      const json = sub.toJSON()
-      await fetch("/api/public/push", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          endpoint: json.endpoint,
-          auth: json.keys?.auth ?? "",
-          p256dh: json.keys?.p256dh ?? "",
-        }),
-      })
-
+      await saveSubscription(sub, editToken)
       setState("subscribed")
     } catch {
       setState("idle")
@@ -87,6 +82,21 @@ export default function PushSubscribeButton({ email }: { email: string }) {
       {state === "loading" ? "Activation…" : "Recevoir des rappels push"}
     </button>
   )
+}
+
+async function saveSubscription(sub: PushSubscription, editToken: string): Promise<void> {
+  const json = sub.toJSON()
+  const res = await fetch("/api/public/push", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      editToken,
+      endpoint: json.endpoint,
+      auth: json.keys?.auth ?? "",
+      p256dh: json.keys?.p256dh ?? "",
+    }),
+  })
+  if (!res.ok) throw new Error(`push subscribe failed: ${res.status}`)
 }
 
 function urlBase64ToUint8Array(base64String: string): Uint8Array {

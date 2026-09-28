@@ -5,13 +5,15 @@ import { z } from "zod"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 
 const schema = z.object({
-  email: z.string().email(),
+  editToken: z.string().min(1),
   endpoint: z.string().url(),
   auth: z.string().min(1),
   p256dh: z.string().min(1),
 })
 
-// Register or refresh a push subscription
+// Register or refresh a push subscription. Requires the registration's editToken: reminder
+// pushes link to /my/<editToken>, so subscribing must prove the caller already holds that link
+// — an email alone would let anyone receive another volunteer's management link.
 export async function POST(req: Request) {
   const rl = rateLimit(getClientIp(req), "push-subscribe", 10, 60 * 60 * 1000)
   if (!rl.ok) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
@@ -22,18 +24,23 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Données invalides" }, { status: 400 })
   }
 
-  const { email, endpoint, auth, p256dh } = parsed.data
+  const { editToken, endpoint, auth, p256dh } = parsed.data
 
-  // Prevent hijacking: an existing subscription cannot change its email
-  const existing = await prisma.pushSubscription.findUnique({ where: { endpoint } })
-  if (existing && existing.email !== email) {
-    return NextResponse.json({ error: "Données invalides" }, { status: 400 })
+  // Same rule as GET /api/public/registrations/[token]: only an active registration's token
+  // opens the volunteer's page, so only that token can subscribe.
+  const registration = await prisma.registration.findFirst({
+    where: { editToken, status: "active" },
+    select: { volunteerId: true },
+  })
+  if (!registration) {
+    return NextResponse.json({ error: "Inscription introuvable" }, { status: 404 })
   }
+  const { volunteerId } = registration
 
   await prisma.pushSubscription.upsert({
-    where: { endpoint },
+    where: { endpoint_volunteerId: { endpoint, volunteerId } },
     update: { auth, p256dh },
-    create: { endpoint, auth, p256dh, email },
+    create: { endpoint, auth, p256dh, volunteerId },
   })
 
   return NextResponse.json({ ok: true })
