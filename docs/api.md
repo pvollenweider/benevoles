@@ -61,6 +61,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/admin/shifts/[id]` | PATCH, DELETE | Modifier, supprimer un créneau. Mêmes règles pour `startTime` et `endTime` quand ils sont fournis |
 | `/api/admin/registrations` | POST | Ajout manuel d'une inscription |
 | `/api/admin/registrations/[id]` | PATCH, DELETE | Modifier, annuler une inscription |
+| `/api/admin/events/[id]/registrations/bulk` | POST | Action groupée sur une sélection d'inscriptions de l'événement (`cancel`, `make_leader`, `resend_link`) ; tout ou rien si une inscription n'appartient pas à l'événement |
 | `/api/admin/members` | GET, POST | Lister, créer des membres |
 | `/api/admin/members/[id]` | PATCH, DELETE | Modifier, supprimer un membre |
 | `/api/admin/members/import` | POST | Import CSV ou xlsx (multipart) |

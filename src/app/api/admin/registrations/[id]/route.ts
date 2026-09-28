@@ -3,6 +3,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { z } from "zod"
 import { adminActor, logEvent } from "@/lib/event-log"
+import { cancelRegistrations } from "@/lib/admin-registration-actions"
 import { isUniqueViolation } from "@/lib/registration-capacity"
 import { reportError } from "@/lib/report-error"
 
@@ -88,35 +89,11 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
 
   const { id } = await params
 
-  const owned = await db.registration.findFirst({ where: { id }, select: { id: true, status: true } })
+  const owned = await db.registration.findFirst({ where: { id }, select: { id: true, eventId: true, shiftId: true, status: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const registration = await db.registration.update({
-    where: { id },
-    data: { status: "cancelled" },
-    include: { shift: true },
-  })
-
-  const activeCount = await db.registration.count({
-    where: { shiftId: registration.shiftId, status: "active" },
-  })
-
-  if (activeCount < registration.shift.capacity && registration.shift.status === "full") {
-    await db.shift.update({ where: { id: registration.shiftId }, data: { status: "open" } })
-  }
-
-  const cancelLogId = await logEvent({
-    eventId: registration.eventId,
-    actor: adminActor(guard.session),
-    action: "registration.cancelled",
-    entityType: "Registration",
-    entityId: id,
-    // shiftId unchanged: recorded so the narrative can still name the shift — see
-    // describeChanges's shiftId filter in event-log-narrative.ts.
-    changes: { status: { from: owned.status, to: "cancelled" }, shiftId: { from: registration.shiftId, to: registration.shiftId } },
-  })
-
-  await promoteNextInWaitlist(registration.shiftId, cancelLogId ?? undefined).catch(reportError("waitlist.promote"))
+  // Same path as the bulk "Retirer de leur créneau" (#292).
+  await cancelRegistrations(db, adminActor(guard.session), [owned])
 
   return NextResponse.json({ success: true })
 }

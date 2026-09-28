@@ -428,6 +428,33 @@ describe("Registrations — cross-tenant isolation", () => {
     expect(res.status).toBe(404)
     expect(prismaMock.registration.create).not.toHaveBeenCalled()
   })
+
+  it("POST /api/admin/events/[id]/registrations/bulk returns 404 for an org-B event", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
+    setupGuard() // event.findFirst → null (org-B event not visible to org-A)
+
+    const res = await POST(
+      makeRequest("/api/admin/events/evt-b/registrations/bulk", "POST", { action: "cancel", registrationIds: ["reg-b"] }),
+      params("evt-b"),
+    )
+    expect(res.status).toBe(404)
+    expect(prismaMock.registration.update).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/registrations/bulk returns 404 when a selected registration is org-B's", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
+    setupGuard({
+      event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "A", organization: { slug: "a" } }) },
+      registration: { findMany: vi.fn().mockResolvedValue([{ id: "reg-a", eventId: "evt-a", status: "active" }]) },
+    })
+
+    const res = await POST(
+      makeRequest("/api/admin/events/evt-a/registrations/bulk", "POST", { action: "cancel", registrationIds: ["reg-a", "reg-b"] }),
+      params("evt-a"),
+    )
+    expect(res.status).toBe(404)
+    expect(prismaMock.registration.update).not.toHaveBeenCalled()
+  })
 })
 
 // ── Admin settings ────────────────────────────────────────────────────────────
