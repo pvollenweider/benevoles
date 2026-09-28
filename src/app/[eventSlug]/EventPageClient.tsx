@@ -3,7 +3,19 @@
 import { useEffect, useRef, useState, useMemo } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { formatDate, shiftsOverlap, shiftsTooYoungFor } from "@/lib/utils"
+import { formatDate } from "@/lib/utils"
+import {
+  EMPTY_SIGNUP_FORM,
+  conflictingShiftIds as computeConflictingShiftIds,
+  hasAvailableShift as anyShiftAvailable,
+  isShiftSelectable,
+  prefillContact,
+  shiftsByDay as groupShiftsByDay,
+  toMyRegistrations,
+  validateSignup,
+  type MyRegistration,
+  type SignupForm,
+} from "@/lib/public-signup"
 import { fmtRange } from "@/lib/gantt-utils"
 import DayTimeline, { fmt } from "@/components/DayTimeline"
 import PublicFooter from "@/components/PublicFooter"
@@ -53,7 +65,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
   const searchParams = useSearchParams()
   const inviteToken = searchParams.get("token")
 
-  type MyReg = { shiftId: string; token: string; label: string; roleName: string; startTime: string; endTime: string }
+  type MyReg = MyRegistration
 
   const [event, setEvent] = useState<EventData | null>(null)
   const [loading, setLoading] = useState(true)
@@ -67,9 +79,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
   const [showCharter, setShowCharter] = useState(false)
   const charterTriggerRef = useRef<HTMLButtonElement>(null)
   const cancelTriggerRef = useRef<HTMLButtonElement | null>(null)
-  const [form, setForm] = useState({
-    firstName: "", lastName: "", email: "", phone: "", birthDate: "", comment: "", consent: false,
-  })
+  const [form, setForm] = useState<SignupForm>(EMPTY_SIGNUP_FORM)
 
   const storageKey = `benevoles_token_${eventSlug}`
   const myShiftIds = useMemo(() => new Set(myRegistrations.map((r) => r.shiftId)), [myRegistrations])
@@ -81,19 +91,10 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
     [event, selectedShifts, myShiftIds]
   )
 
-  const conflictingShiftIds = useMemo(() => {
-    if (!event) return new Set<string>()
-    return new Set(
-      event.shifts
-        .filter((s) => !selectedShifts.has(s.id) && !myShiftIds.has(s.id))
-        .filter((candidate) =>
-          event.shifts.some(
-            (ref) => (selectedShifts.has(ref.id) || myShiftIds.has(ref.id)) && shiftsOverlap(candidate, ref)
-          )
-        )
-        .map((s) => s.id)
-    )
-  }, [event, selectedShifts, myShiftIds])
+  const conflictingShiftIds = useMemo(
+    () => (event ? computeConflictingShiftIds(event.shifts, selectedShifts, myShiftIds) : new Set<string>()),
+    [event, selectedShifts, myShiftIds]
+  )
 
   useEffect(() => {
     const url = `/api/public/${eventSlug}?org=${encodeURIComponent(orgSlug)}`
@@ -113,13 +114,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (!data?.member) return
-        setForm((f) => ({
-          ...f,
-          firstName: f.firstName || data.member.firstName,
-          lastName: f.lastName || data.member.lastName,
-          email: f.email || data.member.email,
-          phone: f.phone || data.member.phone,
-        }))
+        setForm((f) => prefillContact(f, data.member, "form"))
       })
       .catch(() => {})
   }, [inviteToken, eventSlug])
@@ -131,24 +126,9 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
       .then((r) => r.ok ? r.json() : null)
       .then((data) => {
         if (!data?.registrations) return
-        const regs: MyReg[] = data.registrations.map((r: { editToken: string; shift: { id: string; label: string; roleName?: string; startTime: string; endTime: string } }) => ({
-          shiftId: r.shift.id,
-          token: r.editToken,
-          label: r.shift.label,
-          roleName: r.shift.roleName ?? "",
-          startTime: r.shift.startTime,
-          endTime: r.shift.endTime,
-        }))
+        const regs = toMyRegistrations(data.registrations)
         setMyRegistrations(regs)
-        if (data.volunteer) {
-          setForm((f) => ({
-            ...f,
-            firstName: data.volunteer.firstName || f.firstName,
-            lastName:  data.volunteer.lastName  || f.lastName,
-            email:     data.volunteer.email     || f.email,
-            phone:     data.volunteer.phone     || f.phone,
-          }))
-        }
+        if (data.volunteer) setForm((f) => prefillContact(f, data.volunteer, "source"))
         setSelectedShifts((prev) => {
           const next = new Set(prev)
           regs.forEach((r: MyReg) => next.add(r.shiftId))
@@ -167,26 +147,11 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
   if (loading) return <div role="status" className="flex items-center justify-center min-h-screen text-gray-500">Chargement…</div>
   if (!event) return <div role="alert" className="flex items-center justify-center min-h-screen text-gray-500">Événement introuvable.</div>
 
-  const shiftsByDay = event.shifts.reduce<Record<string, Shift[]>>((acc, shift) => {
-    const day = new Date(shift.date).toISOString().split("T")[0]
-    if (!acc[day]) acc[day] = []
-    acc[day].push(shift)
-    return acc
-  }, {})
+  const shiftsByDay = groupShiftsByDay(event.shifts)
+  const hasAvailableShift = anyShiftAvailable(event.shifts)
 
-  const hasAvailableShift = event.shifts.some(
-    (s) =>
-      (s.status !== "full" && s.status !== "closed" && s.status !== "cancelled") ||
-      (s.status === "full" && s.waitlistEnabled)
-  )
-
-  function toggleShift(id: string, status: string) {
-    if (status === "closed" || status === "cancelled") return
-    if (status === "full") {
-      const shift = event?.shifts.find((s) => s.id === id)
-      if (!shift?.waitlistEnabled) return
-    }
-    if (myShiftIds.has(id)) return
+  function toggleShift(id: string) {
+    if (!isShiftSelectable(event?.shifts.find((s) => s.id === id), myShiftIds)) return
     setSelectedShifts((prev) => {
       const next = new Set(prev)
       if (next.has(id)) { next.delete(id); return next }
@@ -197,19 +162,13 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!charterAccepted) { setError("Veuillez accepter la convention des bénévoles."); return }
-    if (!form.consent) { setError("Veuillez accepter la politique de confidentialité."); return }
-    if (!form.firstName || !form.lastName || !form.email) { setError("Prénom, nom et email sont obligatoires."); return }
-    // `required` already blocks an empty field; this catches a whitespace-only one.
-    if (event?.requirePhone && !form.phone.trim()) { setError("Le téléphone est obligatoire pour cet événement."); return }
-    if (ageGatedSelectedShifts.length > 0) {
-      if (!form.birthDate) { setError("Date de naissance requise pour au moins un des créneaux sélectionnés."); return }
-      const tooYoungFor = shiftsTooYoungFor(form.birthDate, ageGatedSelectedShifts)
-      if (tooYoungFor.length > 0) {
-        setError(`Âge minimum non atteint pour : ${tooYoungFor.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}.`)
-        return
-      }
-    }
+    const invalid = validateSignup({
+      form,
+      charterAccepted,
+      requirePhone: event?.requirePhone ?? false,
+      ageGatedShifts: ageGatedSelectedShifts,
+    })
+    if (invalid) { setError(invalid); return }
 
     setSubmitting(true)
     setError(null)
@@ -236,39 +195,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
     setSubmitting(false)
 
     if (!res.ok) {
-      if (data.editToken) {
-        localStorage.setItem(storageKey, data.editToken)
-        try {
-          const regRes = await fetch(`/api/public/registrations/${data.editToken}`)
-          if (regRes.ok) {
-            const regData = await regRes.json()
-            if (regData.registrations) {
-              const regs: MyReg[] = regData.registrations.map((r: { editToken: string; shift: { id: string; label: string; roleName?: string; startTime: string; endTime: string } }) => ({
-                shiftId: r.shift.id,
-                token: r.editToken,
-                label: r.shift.label,
-                roleName: r.shift.roleName ?? "",
-                startTime: r.shift.startTime,
-                endTime: r.shift.endTime,
-              }))
-              setMyRegistrations(regs)
-              setSelectedShifts(new Set(regs.map((r) => r.shiftId)))
-              if (regData.volunteer) {
-                setForm((f) => ({
-                  ...f,
-                  firstName: regData.volunteer.firstName || f.firstName,
-                  lastName:  regData.volunteer.lastName  || f.lastName,
-                  email:     regData.volunteer.email     || f.email,
-                  phone:     regData.volunteer.phone     || f.phone,
-                }))
-              }
-            }
-          }
-        } catch { /* ignore */ }
-        setError(data.error ?? "Une erreur est survenue.")
-        setStep("select")
-        return
-      }
+      // Errors never carry a management token (#285): the owner gets it by email instead.
       setError(data.error ?? "Une erreur est survenue.")
       return
     }
@@ -289,7 +216,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
     localStorage.removeItem(storageKey)
     setMyRegistrations([])
     setSelectedShifts(new Set())
-    setForm({ firstName: "", lastName: "", email: "", phone: "", birthDate: "", comment: "", consent: false })
+    setForm(EMPTY_SIGNUP_FORM)
   }
 
   // orgSlug is received as prop but only used in the storageKey (already included via eventSlug)
@@ -324,7 +251,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
           ><span aria-hidden="true">✕</span></button>
         ) : (
           <button
-            onClick={() => toggleShift(s.id, s.status)}
+            onClick={() => toggleShift(s.id)}
             className="text-blue-300 hover:text-red-400 text-xs flex-shrink-0 transition-colors mt-0.5"
             aria-label={`Retirer ${name} de la sélection`}
           ><span aria-hidden="true">✕</span></button>
