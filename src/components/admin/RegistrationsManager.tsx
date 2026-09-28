@@ -334,28 +334,6 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     })
   }
 
-  async function handleCancel(id: string) {
-    if (!confirm("Annuler cette inscription ?")) return
-    await fetch(`/api/admin/registrations/${id}`, { method: "DELETE" })
-    setRegistrations((prev) => prev.filter((r) => r.id !== id))
-  }
-
-  const [resendingId, setResendingId] = useState<string | null>(null)
-
-  async function handleResendLink(reg: Registration) {
-    setResendingId(reg.id)
-    try {
-      const res = await fetch(`/api/admin/registrations/${reg.id}/resend-link`, { method: "POST" })
-      const data = await res.json()
-      setLeaderAnnouncement(
-        res.ok
-          ? `Lien renvoyé à ${reg.volunteer.firstName} ${reg.volunteer.lastName}.`
-          : (data.error ?? "Échec de l'envoi.")
-      )
-    } finally {
-      setResendingId(null)
-    }
-  }
 
   // ── Bulk actions on the current selection ───────────────────────────────────
   // Uses the full registrations list, not `filtered`: a row selected before a search/filter
@@ -436,6 +414,34 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
         failed > 0 ? `${failed} échec${failed > 1 ? "s" : ""}.` : null,
         withoutEmail > 0 ? `${withoutEmail} ignoré${withoutEmail > 1 ? "s" : ""} (pas d'email).` : null,
       ].filter(Boolean).join(" ")
+    )
+  }
+
+  // A single selected row opens the modal (lets the admin pick among several roles if the
+  // volunteer has more than one registration, and edit name/email before sending) — the same
+  // experience the old per-row button gave. Several rows fall back to the bulk flow below, which
+  // auto-assigns each person to their own row's shift role with no per-person confirmation step.
+  function handleMakeResponsibleClick() {
+    if (selectedRegs.length === 1) { openLeaderModal(selectedRegs[0]); return }
+    handleBulkMakeLeader()
+  }
+
+  async function handleBulkResendLink() {
+    const resendable = selectedRegs.filter((r) => r.status === "active" && r.volunteer.email)
+    if (resendable.length === 0) return
+    if (!confirm(`Renvoyer le lien de gestion à ${resendable.length} bénévole${resendable.length > 1 ? "s" : ""} ?`)) return
+    setBulkBusy(true)
+    const results = await Promise.allSettled(
+      resendable.map((r) => fetch(`/api/admin/registrations/${r.id}/resend-link`, { method: "POST" }))
+    )
+    setBulkBusy(false)
+    const succeeded = results.filter((res) => res.status === "fulfilled" && (res as PromiseFulfilledResult<Response>).value.ok).length
+    const failed = resendable.length - succeeded
+    setSelectedIds(new Set())
+    setLeaderAnnouncement(
+      failed > 0
+        ? `Lien renvoyé à ${succeeded} bénévole${succeeded > 1 ? "s" : ""}, ${failed} échec${failed > 1 ? "s" : ""}.`
+        : `Lien renvoyé à ${succeeded} bénévole${succeeded > 1 ? "s" : ""}.`
     )
   }
 
@@ -592,7 +598,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           </span>
           <button
             type="button"
-            onClick={handleBulkMakeLeader}
+            onClick={handleMakeResponsibleClick}
             disabled={bulkBusy || selectedRegs.every((r) => !r.volunteer.email)}
             className="text-xs text-blue-700 border border-blue-300 bg-white px-3 py-1.5 rounded-full hover:bg-blue-50 disabled:opacity-50 transition-colors"
           >
@@ -600,11 +606,19 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           </button>
           <button
             type="button"
+            onClick={handleBulkResendLink}
+            disabled={bulkBusy || selectedActiveRegs.every((r) => !r.volunteer.email)}
+            className="text-xs text-blue-700 border border-blue-300 bg-white px-3 py-1.5 rounded-full hover:bg-blue-50 disabled:opacity-50 transition-colors"
+          >
+            {bulkBusy ? "…" : "Renvoyer le lien"}
+          </button>
+          <button
+            type="button"
             onClick={handleBulkCancel}
             disabled={bulkBusy || selectedActiveRegs.length === 0}
             className="text-xs text-red-600 border border-red-300 bg-white px-3 py-1.5 rounded-full hover:bg-red-50 disabled:opacity-50 transition-colors"
           >
-            {bulkBusy ? "…" : `Annuler (${selectedActiveRegs.length})`}
+            {bulkBusy ? "…" : `Annuler l'inscription (${selectedActiveRegs.length})`}
           </button>
           <button
             type="button"
@@ -642,7 +656,6 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                 <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden sm:table-cell">Créneau</th>
                 <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden md:table-cell">Source</th>
                 <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden md:table-cell">Statut</th>
-                <th scope="col" className="px-4 py-2.5"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -691,34 +704,6 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                     {reg.status !== "active" && <StatusBadge status={reg.status} />}
                     {reg.status === "waiting" && reg.waitingPosition != null && (
                       <span className="ml-1 text-xs text-gray-500">#{reg.waitingPosition}</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-right whitespace-nowrap">
-                    <button
-                      onClick={() => openLeaderModal(reg)}
-                      aria-label={`Rendre ${reg.volunteer.firstName} ${reg.volunteer.lastName} responsable de ${reg.shift.roleName} (${fmtDate(reg.shift.date)} ${fmtTime(reg.shift.startTime)})`}
-                      className="text-xs text-blue-500 hover:text-blue-700 transition-colors mr-3"
-                    >
-                      Rendre responsable
-                    </button>
-                    {reg.status === "active" && reg.volunteer.email && (
-                      <button
-                        onClick={() => handleResendLink(reg)}
-                        disabled={resendingId === reg.id}
-                        aria-label={`Renvoyer le lien de gestion à ${reg.volunteer.firstName} ${reg.volunteer.lastName}`}
-                        className="text-xs text-blue-500 hover:text-blue-700 transition-colors mr-3 disabled:opacity-50"
-                      >
-                        {resendingId === reg.id ? "Envoi…" : "Renvoyer le lien"}
-                      </button>
-                    )}
-                    {reg.status === "active" && (
-                      <button
-                        onClick={() => handleCancel(reg.id)}
-                        aria-label={`Annuler l'inscription de ${reg.volunteer.firstName} ${reg.volunteer.lastName}`}
-                        className="text-xs text-red-400 hover:text-red-600 transition-colors"
-                      >
-                        Annuler
-                      </button>
                     )}
                   </td>
                 </tr>

@@ -177,10 +177,11 @@ Liste exhaustive des fonctionnalités de l'application.
 ### Suivi des inscriptions (`/admin/events/[id]/registrations`)
 
 - Vue tabulaire : bénévole, créneau, horaires, commentaire, source, date
-- Annulation d'une inscription individuelle
-- **Actions groupées** : sélection multiple par cases à cocher (case d'en-tête pour tout sélectionner) pour annuler plusieurs inscriptions ou désigner plusieurs responsables de secteur en une seule action ; porte sur toute la sélection, même une ligne masquée entre-temps par un filtre
+- Pas d'action par ligne : toute action passe par la sélection (cases à cocher, case d'en-tête pour tout sélectionner) puis un bouton dans la barre d'outils qui apparaît, appliqué à toute la sélection — même une ligne masquée entre-temps par un filtre
+- **Rendre responsable** de leur poste : modale (choix du poste, nom/email ajustables) avec une seule ligne sélectionnée ; assignation directe au poste de chaque créneau avec plusieurs lignes
+- **Renvoyer le lien** : réémet par email le lien personnel de gestion (`/my/[token]`) de chaque bénévole sélectionné — donne accès à toutes ses inscriptions actives pour l'événement, pas seulement au créneau de la ligne
+- **Annuler l'inscription** : annule chaque inscription sélectionnée
 - Badge « Responsable » affiché sur une ligne quand ce bénévole est déjà responsable du poste de son créneau
-- **Renvoyer le lien** : réémet par email le lien personnel de gestion (`/my/[token]`) d'un bénévole qui l'a perdu ou supprimé par erreur — donne accès à toutes ses inscriptions actives pour l'événement, pas seulement au créneau de la ligne
 - **Filtres cumulables** : recherche texte, filtre par poste, filtre par créneau
 - Accès direct depuis un créneau (timeline admin) : pré-filtrage automatique
 - **Ajout manuel** avec détection de conflits
