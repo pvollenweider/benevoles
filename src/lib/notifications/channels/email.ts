@@ -46,7 +46,7 @@ export const emailChannel: NotificationChannelImpl = {
     }
 
     try {
-      await transport.sendMail({ from, to, subject, html, text, replyTo })
+      await transport.sendMail({ from, to, subject, html, text, replyTo, ...(payload.messageId ? { messageId: payload.messageId } : {}) })
       return { ok: true as const }
     } catch (err) {
       console.error(`[notif:email→${to}] failed:`, err)

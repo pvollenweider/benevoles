@@ -44,6 +44,10 @@ export type Recipient = {
 export type NotificationPayload<K extends NotificationKind = NotificationKind> = {
   kind: K
   recipient: Recipient
+  /** Outbox only (#315): stored once per key, see NotificationOutbox.dedupeKey. */
+  dedupeKey?: string
+  /** Email Message-ID, stable per outbox row, so a re-send after a crash is the same message. */
+  messageId?: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: Record<string, any>
 }

@@ -55,13 +55,36 @@ export function openPayload(stored: unknown): NotificationPayload {
   return stored as NotificationPayload
 }
 
+/**
+ * Stores the notifications; returns the ids of rows to deliver now. A payload with a
+ * `dedupeKey` already enqueued (#315) is skipped (ON CONFLICT DO NOTHING) and not re-delivered:
+ * the existing row is either sent already or pending its own delivery.
+ */
 export async function enqueueNotifications(payloads: NotificationPayload[]): Promise<string[]> {
   const ids: string[] = []
-  for (const payload of payloads) {
+  for (const { dedupeKey, ...payload } of payloads) {
+    if (dedupeKey) {
+      const { count } = await prisma.notificationOutbox.createMany({
+        data: [{ payload: sealPayload(payload), dedupeKey }],
+        skipDuplicates: true,
+      })
+      if (count === 0) continue
+      const row = await prisma.notificationOutbox.findUniqueOrThrow({ where: { dedupeKey }, select: { id: true } })
+      ids.push(row.id)
+      continue
+    }
     const row = await prisma.notificationOutbox.create({ data: { payload: sealPayload(payload) }, select: { id: true } })
     ids.push(row.id)
   }
   return ids
+}
+
+/** Stable Message-ID per outbox row: a re-send after a crash is recognizable as the same email. */
+export function outboxMessageId(rowId: string): string {
+  const host = (() => {
+    try { return new URL(process.env.NEXT_PUBLIC_APP_URL ?? "").hostname || "benevol.app" } catch { return "benevol.app" }
+  })()
+  return `<outbox-${rowId}@${host}>`
 }
 
 /** Stores the notifications, then delivers them once the response has been sent. */
@@ -105,7 +128,7 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
 
     const claimed = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
     const outcome = await Promise.resolve()
-      .then(() => sendNotification(openPayload(claimed.payload)))
+      .then(() => sendNotification({ ...openPayload(claimed.payload), messageId: outboxMessageId(row.id) }))
       .catch(
       (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e) }),
     )
@@ -138,4 +161,34 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     }
   }
   return result
+}
+
+export type OutboxHealth = {
+  failedLastDay: number
+  oldestPendingMinutes: number | null
+  staleClaims: number
+  healthy: boolean
+}
+
+/** Alert thresholds (#316): a pending email older than this means delivery is stuck. */
+export const MAX_PENDING_AGE_MINUTES = 120
+
+/**
+ * Health of the queue (#316), reported by the hourly cron and sent to Sentry when unhealthy:
+ * rows that gave up in the last day, age of the oldest undelivered row, claims abandoned by a
+ * crashed delivery.
+ */
+export async function outboxHealth(now: Date = new Date()): Promise<OutboxHealth> {
+  const [failedLastDay, oldestPending, staleClaims] = await Promise.all([
+    prisma.notificationOutbox.count({ where: { status: "failed", createdAt: { gte: new Date(now.getTime() - 24 * 60 * 60 * 1000) } } }),
+    prisma.notificationOutbox.findFirst({
+      where: { status: { in: ["pending", "sending"] } },
+      orderBy: { createdAt: "asc" },
+      select: { createdAt: true },
+    }),
+    prisma.notificationOutbox.count({ where: { status: "sending", claimedAt: { lt: new Date(now.getTime() - STALE_CLAIM_MS) } } }),
+  ])
+  const oldestPendingMinutes = oldestPending ? Math.floor((now.getTime() - oldestPending.createdAt.getTime()) / 60000) : null
+  const healthy = failedLastDay === 0 && staleClaims === 0 && (oldestPendingMinutes ?? 0) <= MAX_PENDING_AGE_MINUTES
+  return { failedLastDay, oldestPendingMinutes, staleClaims, healthy }
 }

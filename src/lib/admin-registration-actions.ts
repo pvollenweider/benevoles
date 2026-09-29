@@ -95,6 +95,7 @@ export async function addSectorLeader(
 
   await enqueueAndDeliver([{
     kind: "sector_leader_invite",
+    dedupeKey: `sector_leader_invite:${leader.id}`,
     recipient: { email: leader.email, name: leader.name },
     data: {
       leaderName: leader.name,

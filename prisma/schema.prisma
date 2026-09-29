@@ -344,6 +344,9 @@ model NotificationOutbox {
   nextAttemptAt DateTime  @default(now())
   claimedAt     DateTime?
   lastError     String?
+  // Optional business key (#315): the same notification enqueued twice (retried request,
+  // repeated trigger) is stored once. Nullable and unique, so rows without a key never collide.
+  dedupeKey     String?   @unique
   sentAt        DateTime?
   createdAt     DateTime  @default(now())
 

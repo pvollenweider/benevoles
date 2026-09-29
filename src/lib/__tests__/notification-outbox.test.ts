@@ -7,6 +7,10 @@ const m = vi.hoisted(() => ({
   findUniqueOrThrow: vi.fn(),
   update: vi.fn(),
   create: vi.fn(),
+  createMany: vi.fn(),
+  findUniqueOrThrowByKey: vi.fn(),
+  count: vi.fn(),
+  findFirst: vi.fn(),
   sendNotification: vi.fn(),
   after: vi.fn(),
   reported: vi.fn(),
@@ -14,7 +18,11 @@ const m = vi.hoisted(() => ({
 vi.mock("../prisma", () => ({
   prisma: {
     notificationOutbox: {
-      findMany: m.findMany, updateMany: m.updateMany, findUniqueOrThrow: m.findUniqueOrThrow, update: m.update, create: m.create,
+      findMany: m.findMany, updateMany: m.updateMany, update: m.update, create: m.create,
+      createMany: m.createMany, count: m.count, findFirst: m.findFirst,
+      // By id during delivery, by dedupeKey when enqueuing.
+      findUniqueOrThrow: (args: { where: { id?: string; dedupeKey?: string } }) =>
+        args.where.dedupeKey ? m.findUniqueOrThrowByKey(args) : m.findUniqueOrThrow(args),
     },
   },
 }))
@@ -22,7 +30,7 @@ vi.mock("../notifications/index", () => ({ sendNotification: m.sendNotification 
 vi.mock("next/server", () => ({ after: m.after }))
 vi.mock("../report-error", () => ({ reportError: (ctx: string) => (e: unknown) => m.reported(ctx, e) }))
 
-import { backoffMs, collectNotifications, deliverOutbox, enqueueAndDeliver, MAX_ATTEMPTS, openPayload, sealPayload } from "../notifications/outbox"
+import { backoffMs, collectNotifications, deliverOutbox, enqueueAndDeliver, enqueueNotifications, MAX_ATTEMPTS, openPayload, outboxHealth, outboxMessageId, sealPayload } from "../notifications/outbox"
 
 const payload = { kind: "registration_confirmation" as const, recipient: { email: "a@x.com" }, data: {} }
 const now = new Date("2030-01-01T12:00:00Z")
@@ -141,6 +149,52 @@ describe("outbox payload at rest (#290)", () => {
     m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, payload: sealPayload(payload) })
     m.sendNotification.mockResolvedValue({ ok: true })
     await deliverOutbox({ now })
-    expect(m.sendNotification).toHaveBeenCalledWith(payload)
+    expect(m.sendNotification).toHaveBeenCalledWith({ ...payload, messageId: outboxMessageId("n1") })
+  })
+})
+
+describe("idempotency (#315)", () => {
+  it("a payload with a dedupeKey is stored once; an already-known key isn't delivered again", async () => {
+    m.createMany.mockResolvedValueOnce({ count: 1 }).mockResolvedValueOnce({ count: 0 })
+    m.findUniqueOrThrowByKey.mockResolvedValue({ id: "n-key" })
+    const ids = await enqueueNotifications([
+      { ...payload, dedupeKey: "registration_confirmation:r1:a@x.com" },
+      { ...payload, dedupeKey: "registration_confirmation:r1:a@x.com" },
+    ])
+    expect(ids).toEqual(["n-key"])
+    expect(m.createMany).toHaveBeenCalledWith(expect.objectContaining({ skipDuplicates: true }))
+    // The key isn't part of the stored payload.
+    expect(JSON.stringify(m.createMany.mock.calls[0][0].data[0].payload)).not.toContain("dedupeKey")
+  })
+
+  it("payloads without a key are always stored", async () => {
+    m.create.mockResolvedValue({ id: "n-plain" })
+    expect(await enqueueNotifications([payload, payload])).toEqual(["n-plain", "n-plain"])
+    expect(m.createMany).not.toHaveBeenCalled()
+  })
+
+  it("each row is sent with a stable Message-ID", async () => {
+    m.sendNotification.mockResolvedValue({ ok: true })
+    await deliverOutbox({ now })
+    expect(m.sendNotification).toHaveBeenCalledWith(expect.objectContaining({ messageId: outboxMessageId("n1") }))
+    expect(outboxMessageId("n1")).toMatch(/^<outbox-n1@[^>]+>$/)
+  })
+})
+
+describe("outboxHealth (#316)", () => {
+  it("healthy when nothing failed, nothing stuck", async () => {
+    m.count.mockResolvedValue(0)
+    m.findFirst.mockResolvedValue({ createdAt: new Date(now.getTime() - 5 * 60000) })
+    expect(await outboxHealth(now)).toEqual({ failedLastDay: 0, oldestPendingMinutes: 5, staleClaims: 0, healthy: true })
+  })
+
+  it("unhealthy on a failure, a stale claim, or a pending row older than 2 h", async () => {
+    m.count.mockResolvedValueOnce(1).mockResolvedValueOnce(0)
+    m.findFirst.mockResolvedValue(null)
+    expect((await outboxHealth(now)).healthy).toBe(false)
+
+    m.count.mockResolvedValueOnce(0).mockResolvedValueOnce(0)
+    m.findFirst.mockResolvedValue({ createdAt: new Date(now.getTime() - 3 * 60 * 60000) })
+    expect(await outboxHealth(now)).toMatchObject({ oldestPendingMinutes: 180, healthy: false })
   })
 })

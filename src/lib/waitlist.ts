@@ -77,6 +77,7 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
   // Through the outbox (#311): retried if SMTP fails, the caller isn't slowed down.
   await enqueueAndDeliver([{
     kind: "waitlist_offered",
+    dedupeKey: `waitlist_offered:${next.id}:${expiresAt.toISOString()}`,
     recipient: { email: next.volunteer.email, name: next.volunteer.firstName },
     data: {
       volunteerName: next.volunteer.firstName,
