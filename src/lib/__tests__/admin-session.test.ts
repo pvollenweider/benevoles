@@ -63,6 +63,16 @@ describe("session version (#360)", () => {
   })
 })
 
+describe("session follows the account's email and name", () => {
+  beforeEach(() => findUnique.mockReset())
+
+  it("reloads them on every refresh, e.g. after an email change on the profile page", async () => {
+    findUnique.mockResolvedValue({ sessionVersion: 0, isActive: true, role: "super_admin", organizationId: null, organization: null, email: "new@x.ch", name: "Nouveau nom" })
+    const refreshed = await refreshAdminToken({ ...token(), email: "old@x.ch", name: "Ancien nom" })
+    expect(refreshed).toMatchObject({ email: "new@x.ch", name: "Nouveau nom" })
+  })
+})
+
 describe("login failure budget (#266)", () => {
   it("blocks an account after 10 failures, whatever the IP and email case", async () => {
     const email = `Target-${Math.random()}@x.com`
