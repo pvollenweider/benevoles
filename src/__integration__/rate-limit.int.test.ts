@@ -29,7 +29,9 @@ describe.skipIf(!url)("rate limit on Postgres (#322)", () => {
     const win = await postgresStore.hit(`${tag}-ttl`, 60_000)
     expect(win.count).toBe(1)
     expect(win.msLeft).toBeGreaterThan(55_000)
-    expect(win.msLeft).toBeLessThanOrEqual(60_000)
+    // resetAt is stored to the millisecond (timestamptz(3)) while now() has microseconds: the
+    // window can read up to half a millisecond longer than requested.
+    expect(win.msLeft).toBeLessThanOrEqual(60_001)
   })
 
   it("an expired window restarts at 1 and peek ignores it", async () => {

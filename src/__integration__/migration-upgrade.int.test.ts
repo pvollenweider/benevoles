@@ -16,6 +16,8 @@ import { createHash } from "crypto"
 const url = process.env.DATABASE_URL
 const MIGRATIONS = join(process.cwd(), "prisma/migrations")
 const FIRST_AFTER_FIXTURES = "20260929120000_token_hash_enc"
+// Refuses to run while the fixtures' case-only duplicate emails remain: applied by its own test.
+const EMAIL_CI_UNIQUE = "20260930110000_email_case_insensitive_unique"
 const sha256 = (s: string) => createHash("sha256").update(s, "utf8").digest("hex")
 
 const migrationDirs = readdirSync(MIGRATIONS, { withFileTypes: true })
@@ -64,7 +66,9 @@ describe.skipIf(!url)("migrations on a database with existing data (#318)", () =
       INSERT INTO "AdminUser" (id, email, name, "passwordHash", "updatedAt") VALUES ('a1', 'Admin@X.ch', 'Admin', 'h', now());
     `)
 
-    await applyMigrations(db, migrationDirs.slice(cut))
+    const emailCi = migrationDirs.indexOf(EMAIL_CI_UNIQUE)
+    expect(emailCi).toBeGreaterThan(cut)
+    await applyMigrations(db, migrationDirs.slice(cut, emailCi))
   })
 
   afterAll(async () => {
@@ -103,5 +107,36 @@ describe.skipIf(!url)("migrations on a database with existing data (#318)", () =
     await expect(db.query(`UPDATE "Registration" SET status = 'actvie' WHERE id = 'r1'`)).rejects.toThrow(/check constraint/i)
     await expect(db.query(`UPDATE "Shift" SET status = 'ful' WHERE id = 'sh1'`)).rejects.toThrow(/check constraint/i)
     await db.query(`UPDATE "Registration" SET status = 'cancelled' WHERE id = 'r1'`)
+  })
+
+  it("status constraints are validated, existing rows included (#345)", async () => {
+    const res = await db.query(`SELECT conname, convalidated FROM pg_constraint WHERE conname LIKE '%\\_check' ESCAPE '\\' AND contype = 'c'`)
+    const checks = res.rows.filter((r) => /_(status|source|publicStatus|role|actorType)_check$/.test(r.conname))
+    expect(checks).toHaveLength(8)
+    expect(checks.every((r) => r.convalidated)).toBe(true)
+  })
+
+  it("the case-insensitive email index refuses to build while case-only duplicates remain (#342)", async () => {
+    await expect(applyMigrations(db, [EMAIL_CI_UNIQUE])).rejects.toThrow(/differ only by case.*#342/)
+    // Nothing half-applied: the migration runs as one transaction.
+    const idx = await db.query(`SELECT 1 FROM pg_indexes WHERE indexname = 'Volunteer_organizationId_email_ci_key'`)
+    expect(idx.rowCount).toBe(0)
+  })
+
+  it("once duplicates are merged, emails are unique whatever their case (#342)", async () => {
+    await db.query(`UPDATE "Volunteer" SET email = 'bob.old@x.ch' WHERE id = 'v2'`)
+    await applyMigrations(db, migrationDirs.slice(migrationDirs.indexOf(EMAIL_CI_UNIQUE)))
+
+    await expect(db.query(`INSERT INTO "Volunteer" (id, "organizationId", "firstName", "lastName", email, "updatedAt") VALUES ('v4', 'org1', 'B', 'D', ' BOB@X.ch', now())`))
+      .rejects.toThrow(/Volunteer_organizationId_email_ci_key/)
+    await expect(db.query(`INSERT INTO "AdminUser" (id, email, name, "passwordHash", "updatedAt") VALUES ('a2', 'ADMIN@x.ch', 'A', 'h', now())`))
+      .rejects.toThrow(/AdminUser_email_ci_key/)
+    await expect(db.query(`INSERT INTO "SectorLeader" (id, "eventId", "roleName", name, email, "tokenHash") VALUES ('l2', 'evt1', 'Bar', 'L', 'LEA@x.ch', 'h2')`))
+      .rejects.toThrow(/SectorLeader_eventId_roleName_email_ci_key/)
+
+    // Same address in another organization, or for another role, is still allowed.
+    await db.query(`INSERT INTO "Organization" (id, name, slug, "updatedAt") VALUES ('org2', 'Org 2', 'org2', now())`)
+    await db.query(`INSERT INTO "Volunteer" (id, "organizationId", "firstName", "lastName", email, "updatedAt") VALUES ('v5', 'org2', 'B', 'D', 'bob@x.ch', now())`)
+    await db.query(`INSERT INTO "SectorLeader" (id, "eventId", "roleName", name, email, "tokenHash") VALUES ('l3', 'evt1', 'Accueil', 'L', 'lea@x.ch', 'h3')`)
   })
 })
