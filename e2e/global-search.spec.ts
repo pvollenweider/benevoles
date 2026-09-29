@@ -40,3 +40,21 @@ test("an admin finds an event from the top-bar search", async ({ page }) => {
   await eventsGroup.locator(`a[href="${eventHref}"]`).click()
   await expect(page).toHaveURL(new RegExp(`${eventHref}$`))
 })
+
+test("the search ignores accents (#390)", async ({ page }) => {
+  test.setTimeout(90_000)
+  await page.goto("/admin/login")
+  await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+  await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+  await page.getByRole("button", { name: "Se connecter" }).click()
+  await expect(page).toHaveURL(/\/admin\/events/)
+
+  const stamp = Date.now()
+  const created = await page.request.post("/api/admin/events", { data: { title: `Fête Élodie ${stamp}`, startDate: "2031-06-06", endDate: "2031-06-06" } })
+  expect(created.ok()).toBeTruthy()
+  const event: { id: string } = await created.json()
+
+  await page.goto(`/admin/search?q=${encodeURIComponent(`fete elodie ${stamp}`)}`)
+  const eventsGroup = page.getByRole("region", { name: /Événements/ })
+  await expect(eventsGroup.locator(`a[href="/admin/events/${event.id}"]`)).toBeVisible()
+})
