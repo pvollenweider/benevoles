@@ -113,7 +113,7 @@ Ne jamais modifier une migration déjà appliquée en production : Prisma enregi
 
 ### Migrations compatibles avec le déploiement progressif
 
-Chaque nouveau pod applique les migrations au démarrage (`docker-entrypoint.sh`), puis Kubernetes remplace l'ancien pod progressivement (`maxSurge: 1`, `maxUnavailable: 0`) : pendant quelques secondes, **l'ancienne version du code tourne sur le nouveau schéma**. Une migration doit donc rester compatible avec le code de la version précédente (principe *expand/contract*) :
+Le déploiement applique les migrations une fois, dans un Job Kubernetes lancé avec la nouvelle image (`k8s/job-migrate.yaml`), avant de mettre à jour l'application ; les pods de l'application ne migrent pas au démarrage (`MIGRATE_ON_START=false`, alors que `docker-compose` garde la migration au démarrage). Kubernetes remplace ensuite l'ancien pod progressivement (`maxSurge: 1`, `maxUnavailable: 0`) : entre la migration et la fin du remplacement, **l'ancienne version du code tourne sur le nouveau schéma**. Si la migration échoue, le déploiement s'arrête et l'ancienne version continue de servir. Une migration doit donc rester compatible avec le code de la version précédente (principe *expand/contract*) :
 
 - **ajouter** une colonne : nullable ou avec une valeur par défaut, jamais `NOT NULL` sans défaut dans la même version que le code qui la remplit ;
 - **renommer** ou **changer le sens** d'une colonne : ajouter la nouvelle, écrire dans les deux, lire la nouvelle, et seulement dans une version suivante supprimer l'ancienne ;

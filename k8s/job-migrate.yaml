@@ -1,0 +1,42 @@
+# One-off database migration, run by the deploy workflow before the app Deployment is updated
+# (#314). Uses the image being deployed; the app pods themselves no longer migrate on start
+# (MIGRATE_ON_START=false in deployment.yaml). docker-entrypoint.sh waits for Postgres, runs
+# `prisma migrate deploy`, then execs the command (`true`, so the Job just completes).
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: benevoles-migrate
+  namespace: benevoles
+  labels:
+    app: benevoles-migrate
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 300
+  ttlSecondsAfterFinished: 86400
+  template:
+    metadata:
+      labels:
+        app: benevoles-migrate
+    spec:
+      restartPolicy: Never
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: migrate
+          image: ${APP_IMAGE}
+          args: ["true"]
+          envFrom:
+            - secretRef:
+                name: benevoles-secret
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: MIGRATE_ON_START
+              value: "true"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi

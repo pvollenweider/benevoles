@@ -36,6 +36,9 @@ spec:
           env:
             - name: NODE_ENV
               value: production
+            # Migrations run once per deploy in k8s/job-migrate.yaml (#314), not in every pod.
+            - name: MIGRATE_ON_START
+              value: "false"
             - name: PORT
               value: "3000"
             - name: HOSTNAME
