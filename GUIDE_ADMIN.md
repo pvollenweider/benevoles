@@ -14,6 +14,8 @@ Si vous avez reçu un **lien d'invitation** (email « Invitation à rejoindre…
 
 **Mot de passe oublié ?** Depuis la page de connexion, utilisez le lien de réinitialisation (`/admin/forgot-password`) : un email contenant un lien de réinitialisation vous est envoyé.
 
+**Connexion refusée après plusieurs essais ?** Après 10 mots de passe erronés sur un même compte (ou 30 depuis une même adresse IP) en 15 minutes, les tentatives suivantes sont refusées jusqu'à la fin de ce délai, même avec le bon mot de passe. Patientez un quart d'heure avant de réessayer.
+
 ---
 
 ## Tableau de bord
@@ -40,6 +42,8 @@ Vue d'ensemble de votre organisation : nombre d'événements (publiés et à ven
 | Message de confirmation | Texte affiché sur la page de succès après inscription |
 
 L'événement est créé en **brouillon** (`draft`) — il n'est pas visible du public tant qu'il n'est pas publié.
+
+**Repartir d'un événement existant** (édition suivante d'un festival, même organisation d'une année sur l'autre) : dans la liste des événements, le bouton **Dupliquer** crée une copie en brouillon, intitulée « (copie) », avec ses paramètres et tous ses créneaux encore actifs, rouverts. Les inscriptions, pages personnalisées, jalons et responsables de secteur ne sont pas copiés, et les dates restent celles de l'événement d'origine : ajustez-les avant de publier.
 
 Une fois créé, chaque événement a sa propre page de pilotage : statistiques en un coup d'œil, raccourcis vers les créneaux et les inscriptions, jalons, journal. C'est votre poste de commande pour toute la durée de l'événement.
 
@@ -196,6 +200,8 @@ Aucune action directement sur une ligne : cocher une ou plusieurs inscriptions (
 - **Renvoyer le lien** : réenvoie par email le lien personnel de gestion (`/my/[token]`) de chaque bénévole sélectionné — utile s'il l'a perdu ou supprimé par erreur. Le lien renvoyé donne accès à toutes les inscriptions actives du bénévole pour cet événement, pas seulement au créneau de la ligne.
 - **Retirer de leur créneau** : annule chaque inscription sélectionnée.
 
+Un badge **Responsable** s'affiche sur une ligne quand ce bénévole est déjà responsable du poste de son créneau.
+
 Depuis la page principale de l'événement (`/admin/events/[id]`) :
 - 4 chiffres en un coup d'œil en haut de page : créneaux, places totales, inscrits, places restantes
 - **Créneaux à pourvoir** : liste des créneaux encore ouverts avec des places disponibles, avec une barre de remplissage par créneau (n'apparaît que s'il en reste au moins un)
@@ -213,6 +219,8 @@ L'historique complet de ce qui s'est passé sur un événement : créneaux cré�
 - **Récit** : raconte en une phrase la suite des événements liés (ex. une annulation qui déclenche une offre de liste d'attente)
 
 Le contenu des pages personnalisées et les coordonnées des bénévoles n'apparaissent jamais dans le journal — seuls les champs modifiés sont indiqués.
+
+**Générer l'état initial** : le journal ne trace que ce qui s'est passé depuis sa mise en place. Pour un événement plus ancien, ce bouton (au-dessus des onglets) ajoute une entrée de départ pour chaque créneau et chaque inscription déjà existants, afin de ne pas laisser le journal vide. Ces entrées sont affichées en gris avec la mention « Généré, pas une action réelle ». Relancer la génération ne crée pas de doublon ; une fois faite, le bouton n'est plus proposé sur ce navigateur.
 
 ---
 

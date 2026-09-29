@@ -64,22 +64,25 @@ Modèles Prisma (`prisma/schema.prisma`) :
 
 | Modèle | Rôle |
 |--------|------|
-| `Organization` | Tenant : slug, `active`, charte, assurance, titre de la page publique (`publicTitle`) |
+| `Organization` | Tenant : slug, `active`, charte, assurance, titre de la page publique (`publicTitle`), fuseau horaire (`timeZone`, vide = `APP_TIME_ZONE`) |
 | `OrgSlugHistory` | Anciens slugs |
 | `AdminUser` | Compte admin ou super admin, jetons d'activation et de réinitialisation, abonnement aux nouveautés produit (`receiveProductUpdates`, #200) |
 | `Event` | Événement : dates, statut de publication, rappels activés |
 | `Shift` | Créneau : rôle, capacité, statut, liste d'attente activée, ordre, âge minimum optionnel (`minAge`, #192) |
 | `Volunteer` | Bénévole d'une organisation, unique par email et organisation ; `birthDate` optionnel, collecté seulement si un créneau l'exige |
-| `Registration` | Inscription d'un bénévole à un créneau : statut, jeton, position en liste d'attente, dates d'envoi des rappels |
+| `Registration` | Inscription d'un bénévole à un créneau : statut, jeton (empreinte et copie chiffrée), position en liste d'attente, dates d'envoi des rappels |
 | `MemberInvite` | Invitation d'un membre à un événement |
 | `PushSubscription` | Abonnement push |
 | `EventPage` | Page statique additionnelle d'un événement (FAQ, lieu, règlement…) : titre, slug, contenu Markdown, ordre |
 | `SectorLeader` | Responsable d'un poste (`roleName`) au sein d'un événement : nom, email, jeton d'accès lecture seule (#186) |
 | `EventMilestone` | Jalon/échéance d'un événement : titre, date, fait/pas fait — purement informatif (#189) |
+| `EventLog` | Journal d'un événement : qui a fait quoi sur quel élément, champs modifiés, lien de cause à effet entre entrées (`causedByLogId`) (#187) |
 | `OrgLog` | Journal d'audit au niveau de l'organisation : changements sur `Volunteer`/`AdminUser`, pas rattachés à un événement (#194) |
 | `ProductUpdateSend` | Historique des communications de nouveautés produit diffusées aux administrateurs (#200) |
+| `NotificationOutbox` | File d'envoi des notifications (voir Notifications) |
+| `RateLimit` | Compteurs des limites de tentatives, partagés entre instances (#322) |
 
-Statuts d'une inscription : `active`, `waiting` (en liste d'attente), `offered` (place proposée) et `cancelled`.
+Statuts d'une inscription : `active`, `waiting` (en liste d'attente), `offered` (place proposée), `cancelled` et `deleted`. Les valeurs possibles de chaque colonne de statut sont listées dans `src/lib/statuses.ts` et imposées par des contraintes en base.
 
 ## Flux principaux
 

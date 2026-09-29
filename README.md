@@ -298,15 +298,17 @@ src/__tests__/security/                   # Tests d'isolation cross-tenant
 
 | Modèle | Description |
 |--------|-------------|
-| `Organization` | Tenant (org) avec slug unique, flag `active`, charte du bénévole, option d'assurance de l'organisation et titre de la page publique |
+| `Organization` | Tenant (org) avec slug unique, flag `active`, charte du bénévole, option d'assurance de l'organisation, titre de la page publique et fuseau horaire |
 | `AdminUser` | Compte admin rattaché à une org (ou super admin sans org) ; onboarding par token révocable |
 | `Event` | Événement avec dates, statut, slug unique par org |
 | `Shift` | Créneau horaire (rôle, capacité, statut, ordre) |
 | `Volunteer` | Bénévole identifié par email ; porte les données propres à l'org (tags, notes, actif/inactif, `organizationId`) |
-| `Registration` | Inscription bénévole ↔ créneau avec token d'édition unique et flags de rappels |
+| `Registration` | Inscription bénévole ↔ créneau avec token d'édition unique (empreinte et copie chiffrée en base) et flags de rappels |
 | `MemberInvite` | Token d'invitation d'un bénévole à un événement (FK vers `Volunteer`, révocable, réutilisable) |
-| `PushSubscription` | Abonnement Web Push d'un bénévole (identifié par email) |
+| `PushSubscription` | Abonnement Web Push d'un bénévole (rattaché au bénévole, créé depuis son lien personnel) |
 | `OrgSlugHistory` | Anciens slugs d'une organisation, pour rediriger les anciens liens |
+
+Liste complète, avec les pages d'événement, responsables de secteur, jalons, journaux, file d'envoi et compteurs de limites : [docs/architecture.md](docs/architecture.md#modèle-de-données).
 
 ## Architecture multi-tenant
 
