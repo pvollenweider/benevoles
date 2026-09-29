@@ -3,6 +3,7 @@
 
 import { after } from "next/server"
 import { prisma } from "../prisma"
+import type { Prisma } from "@/generated/prisma/client"
 import { reportError } from "../report-error"
 import { sendNotification } from "./index"
 import type { NotificationPayload, Send } from "./types"
@@ -12,16 +13,13 @@ import { decryptValue, encryptValue } from "../token-vault"
  * Notification outbox (#293).
  *
  * A route builds its notifications with the usual helpers, collected by `collectNotifications()`
- * instead of being sent inline, then `enqueueAndDeliver()` stores them (NotificationOutbox) and
- * schedules delivery right after the response. The request no longer waits on SMTP, and a send
- * that fails is retried by `deliverOutbox()` from the hourly cron with exponential backoff, up to
- * MAX_ATTEMPTS, then left as "failed" and reported to Sentry.
- *
- * Transactional outbox (#352): when the notifications belong to a business change made in a
- * transaction, store them with that transaction's client (`enqueueNotifications(payloads, tx)`)
- * and call `deliverAfterResponse(ids)` once it has committed. The change and its notifications
- * then commit or roll back together: a crash right after the commit can no longer leave, say, a
- * registration whose confirmation was never recorded.
+ * instead of being sent inline. They are stored (NotificationOutbox) with the client of the
+ * transaction that makes the business change, `enqueueNotifications(payloads, tx)`, and
+ * `deliverAfterResponse(ids)` schedules delivery once it has committed (#352): the change and its
+ * notifications commit or roll back together, so a crash right after the commit can't leave, say,
+ * a registration whose confirmation was never recorded. The request doesn't wait on SMTP, and a
+ * send that fails is retried by `deliverOutbox()` from the hourly cron with exponential backoff,
+ * up to MAX_ATTEMPTS, then left as "failed" and reported to Sentry.
  */
 
 export const MAX_ATTEMPTS = 6
@@ -32,8 +30,17 @@ export function backoffMs(attempts: number): number {
 /** A row claimed longer ago than this was abandoned by a crashed delivery: pick it up again. */
 const STALE_CLAIM_MS = 15 * 60 * 1000
 
-/** The global client or a transaction's (`tx`): both expose the outbox table. */
-export type OutboxDb = Pick<typeof prisma, "notificationOutbox">
+/**
+ * The global client or any transaction's (`tx`, org-scoped or not): only the three outbox calls
+ * used here, typed structurally so every client flavour fits.
+ */
+export type OutboxDb = {
+  notificationOutbox: {
+    createMany(args: { data: { payload: Prisma.InputJsonValue; dedupeKey: string }[]; skipDuplicates: boolean }): Promise<{ count: number }>
+    findUniqueOrThrow(args: { where: { dedupeKey: string }; select: { id: true } }): Promise<{ id: string }>
+    create(args: { data: { payload: Prisma.InputJsonValue }; select: { id: true } }): Promise<{ id: string }>
+  }
+}
 
 /** A `send` that only records payloads, to pass to the notification helpers. */
 export function collectNotifications(): { send: Send; payloads: NotificationPayload[] } {
@@ -52,9 +59,9 @@ export function collectNotifications(): { send: Send; payloads: NotificationPayl
  * TOKEN_ENCRYPTION_KEY set they're stored encrypted like the tokens themselves (#290), so the
  * outbox doesn't become a clear-text copy of what the token columns protect.
  */
-export function sealPayload(payload: NotificationPayload): object {
+export function sealPayload(payload: NotificationPayload): Prisma.InputJsonValue {
   const enc = encryptValue(JSON.stringify(payload))
-  return enc ? { enc } : (payload as object)
+  return enc ? { enc } : (payload as unknown as Prisma.InputJsonValue)
 }
 
 export function openPayload(stored: unknown): NotificationPayload {
@@ -104,12 +111,6 @@ export function outboxMessageId(rowId: string): string {
 export function deliverAfterResponse(ids: string[]): void {
   if (ids.length === 0) return
   after(() => deliverOutbox({ ids }).then(() => undefined, reportError("outbox.deliver")))
-}
-
-/** Stores the notifications, then delivers them once the response has been sent. */
-export async function enqueueAndDeliver(payloads: NotificationPayload[]): Promise<void> {
-  if (payloads.length === 0) return
-  deliverAfterResponse(await enqueueNotifications(payloads))
 }
 
 /**

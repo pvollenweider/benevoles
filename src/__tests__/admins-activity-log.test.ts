@@ -11,12 +11,17 @@ vi.mock("@/lib/prisma", () => ({
   prisma: {
     adminUser: { findUnique: adminUserFindUnique, create: adminUserCreate, delete: adminUserDelete },
     orgLog: { create: orgLogCreate },
+    async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
   },
 }))
 
 const sendNotificationMock = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/notifications", () => ({ sendNotification: sendNotificationMock }))
-vi.mock("@/lib/notifications/outbox", () => ({ enqueueAndDeliver: vi.fn() }))
+vi.mock("@/lib/notifications/outbox", () => ({
+  // Stored with the transaction (#352); what matters is the payload queued.
+  enqueueNotifications: async (payloads: unknown[]) => { payloads.forEach((p) => void(p)); return payloads.map((_, i) => `row-${i}`) },
+  deliverAfterResponse: () => {},
+}))
 
 vi.mock("bcryptjs", () => ({ default: { hash: vi.fn().mockResolvedValue("$hashed") }, hash: vi.fn().mockResolvedValue("$hashed") }))
 

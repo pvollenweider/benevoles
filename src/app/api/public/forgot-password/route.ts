@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { hashToken } from "@/lib/token-hash"
 import { normalizeEmail } from "@/lib/email-address"
-import { enqueueAndDeliver } from "@/lib/notifications/outbox"
+import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 
 export async function POST(req: Request) {
   const rl = await rateLimit(getClientIp(req), "forgot-password", 5, 60 * 60 * 1000)
@@ -30,19 +30,22 @@ export async function POST(req: Request) {
   const token = randomBytes(32).toString("hex")
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
 
-  await prisma.adminUser.update({
-    where: { id: admin.id },
-    data: { passwordResetTokenHash: hashToken(token), passwordResetExpiresAt: expiresAt },
-  })
-
   const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
   const resetUrl = `${APP_URL}/admin/reset-password?token=${token}`
 
-  await enqueueAndDeliver([{
-    kind: "password_reset",
-    recipient: { email: admin.email, name: admin.name },
-    data: { adminName: admin.name, resetUrl },
-  }])
+  // The reset token and the email carrying it commit together (#352).
+  const outboxIds = await prisma.$transaction(async (tx) => {
+    await tx.adminUser.update({
+      where: { id: admin.id },
+      data: { passwordResetTokenHash: hashToken(token), passwordResetExpiresAt: expiresAt },
+    })
+    return enqueueNotifications([{
+      kind: "password_reset",
+      recipient: { email: admin.email, name: admin.name },
+      data: { adminName: admin.name, resetUrl },
+    }], tx)
+  })
+  deliverAfterResponse(outboxIds)
 
   return NextResponse.json({ ok: true })
 }

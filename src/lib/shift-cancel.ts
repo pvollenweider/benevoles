@@ -17,7 +17,7 @@
 import { prisma } from "@/lib/prisma"
 import { logEvent, type LogActor } from "@/lib/event-log"
 import { formatDate } from "@/lib/utils"
-import { collectNotifications, enqueueAndDeliver } from "@/lib/notifications/outbox"
+import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 
 export type CancellableShift = {
   id: string
@@ -32,30 +32,9 @@ export type CancellableShift = {
 }
 
 export async function cancelShift(shift: CancellableShift, actor: LogActor): Promise<{ cancelledRegistrations: number; notified: number }> {
-  await prisma.shift.update({ where: { id: shift.id }, data: { status: "cancelled" } })
-
-  const cancelLogId = await logEvent({
-    eventId: shift.event.id,
-    actor,
-    action: "shift.cancelled",
-    entityType: "Shift",
-    entityId: shift.id,
-    changes: { status: { from: shift.status, to: "cancelled" } },
-  })
-
   // Through the outbox (#311): `notified` counts notifications queued, retried if SMTP fails.
   const outbox = collectNotifications()
   for (const reg of shift.registrations) {
-    await prisma.registration.update({ where: { id: reg.id }, data: { status: "cancelled" } })
-    await logEvent({
-      eventId: shift.event.id,
-      actor,
-      action: "registration.cancelled",
-      entityType: "Registration",
-      entityId: reg.id,
-      changes: { status: { from: "active", to: "cancelled" }, shiftId: { from: shift.id, to: shift.id } },
-      causedByLogId: cancelLogId ?? undefined,
-    })
     await outbox.send({
       kind: "shift_cancelled",
       dedupeKey: `shift_cancelled:${reg.id}`,
@@ -70,7 +49,37 @@ export async function cancelShift(shift: CancellableShift, actor: LogActor): Pro
       },
     })
   }
-  await enqueueAndDeliver(outbox.payloads)
+
+  // The cancellation and its notifications commit together (#352): no cancelled registration
+  // whose volunteer is never told.
+  const outboxIds = await prisma.$transaction(async (tx) => {
+    await tx.shift.update({ where: { id: shift.id }, data: { status: "cancelled" } })
+    for (const reg of shift.registrations) {
+      await tx.registration.update({ where: { id: reg.id }, data: { status: "cancelled" } })
+    }
+    return enqueueNotifications(outbox.payloads, tx)
+  })
+
+  const cancelLogId = await logEvent({
+    eventId: shift.event.id,
+    actor,
+    action: "shift.cancelled",
+    entityType: "Shift",
+    entityId: shift.id,
+    changes: { status: { from: shift.status, to: "cancelled" } },
+  })
+  for (const reg of shift.registrations) {
+    await logEvent({
+      eventId: shift.event.id,
+      actor,
+      action: "registration.cancelled",
+      entityType: "Registration",
+      entityId: reg.id,
+      changes: { status: { from: "active", to: "cancelled" }, shiftId: { from: shift.id, to: shift.id } },
+      causedByLogId: cancelLogId ?? undefined,
+    })
+  }
+  deliverAfterResponse(outboxIds)
 
   return { cancelledRegistrations: shift.registrations.length, notified: outbox.payloads.length }
 }

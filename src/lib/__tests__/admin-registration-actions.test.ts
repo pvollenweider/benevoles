@@ -8,7 +8,11 @@ const m = vi.hoisted(() => ({
 }))
 vi.mock("../event-log", () => ({ logEvent: m.logEvent }))
 vi.mock("../notifications", () => ({ sendNotification: m.sendNotification }))
-vi.mock("../notifications/outbox", () => ({ enqueueAndDeliver: (payloads: unknown[]) => { payloads.forEach((p) => m.sendNotification(p)); return Promise.resolve() } }))
+vi.mock("../notifications/outbox", () => ({
+  // Stored with the transaction (#352); what matters is the payload queued.
+  enqueueNotifications: async (payloads: unknown[]) => { payloads.forEach((p) => m.sendNotification(p)); return payloads.map((_, i) => `row-${i}`) },
+  deliverAfterResponse: () => {},
+}))
 vi.mock("../waitlist", () => ({ promoteNextInWaitlist: m.promoteNextInWaitlist }))
 vi.mock("../sector-leaders", () => ({ tagVolunteerAsResponsable: m.tagVolunteerAsResponsable }))
 vi.mock("../report-error", () => ({ reportError: () => () => {} }))
@@ -84,7 +88,7 @@ describe("addSectorLeader", () => {
 
   it("creates, logs, tags and emails a new leader", async () => {
     const leader = { id: "l2", roleName: "Bar", name: "A", email: "a@x.com", token: "tok" }
-    const db = { sectorLeader: { findFirst: vi.fn().mockResolvedValue(null), create: vi.fn().mockResolvedValue(leader) } } as unknown as OrgScopedPrisma
+    const db = { sectorLeader: { findFirst: vi.fn().mockResolvedValue(null), create: vi.fn().mockResolvedValue(leader) }, async $transaction(fn: (tx: unknown) => unknown) { return fn(this) }, } as unknown as OrgScopedPrisma
     expect((await addSectorLeader(db, ctx, { roleName: "Bar", name: "A", email: "a@x.com" })).status).toBe("created")
     expect(m.logEvent).toHaveBeenCalledWith(expect.objectContaining({ action: "sectorleader.added" }))
     expect(m.tagVolunteerAsResponsable).toHaveBeenCalledWith("org-a", "a@x.com")

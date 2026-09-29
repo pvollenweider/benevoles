@@ -5,9 +5,8 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
-import { reportError } from "@/lib/report-error"
 import { registrationToken } from "@/lib/token-vault"
-import { enqueueAndDeliver } from "@/lib/notifications/outbox"
+import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 
 export async function POST(_req: Request, { params }: { params: Promise<{ token: string }> }) {
   const rl = await rateLimit(getClientIp(_req), "waitlist-confirm", 10, 60 * 60 * 1000)
@@ -34,20 +33,41 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
 
   // Conditional on the offer still standing (#264): a double confirm (double click, link
   // prefetch + click) must not confirm twice, and an offer the cron just expired can't be taken.
-  const { count } = await prisma.registration.updateMany({
-    where: {
-      id: reg.id,
-      status: "offered",
-      OR: [{ waitingExpiresAt: null }, { waitingExpiresAt: { gte: new Date() } }],
-    },
-    data: {
-      status: "active",
-      waitingPosition: null,
-      waitingOfferedAt: null,
-      waitingExpiresAt: null,
-    },
+  // The confirmation email is stored in the same transaction (#352).
+  const outboxIds = await prisma.$transaction(async (tx) => {
+    const { count } = await tx.registration.updateMany({
+      where: {
+        id: reg.id,
+        status: "offered",
+        OR: [{ waitingExpiresAt: null }, { waitingExpiresAt: { gte: new Date() } }],
+      },
+      data: {
+        status: "active",
+        waitingPosition: null,
+        waitingOfferedAt: null,
+        waitingExpiresAt: null,
+      },
+    })
+    if (count === 0) return null
+    return enqueueNotifications([{
+      kind: "registration_confirmation",
+      dedupeKey: `waitlist_confirmed:${reg.id}`,
+      recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
+      data: {
+        volunteerName: reg.volunteer.firstName,
+        eventTitle: reg.event.title,
+        shifts: [{
+          label: reg.shift.label,
+          date: reg.shift.date.toLocaleDateString("fr-FR"),
+          startTime: reg.shift.startTime,
+          endTime: reg.shift.endTime,
+        }],
+        editToken: token,
+        orgSlug: reg.event.organization.slug,
+      },
+    }], tx)
   })
-  if (count === 0) {
+  if (!outboxIds) {
     return NextResponse.json({ error: "Lien invalide, déjà confirmé ou expiré." }, { status: 404 })
   }
 
@@ -69,25 +89,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
     causedByLogId: offerLog?.id,
   })
 
-  // Send confirmation email
-  const orgSlug = reg.event.organization.slug
-  await enqueueAndDeliver([{
-    kind: "registration_confirmation",
-    dedupeKey: `waitlist_confirmed:${reg.id}`,
-    recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
-    data: {
-      volunteerName: reg.volunteer.firstName,
-      eventTitle: reg.event.title,
-      shifts: [{
-        label: reg.shift.label,
-        date: reg.shift.date.toLocaleDateString("fr-FR"),
-        startTime: reg.shift.startTime,
-        endTime: reg.shift.endTime,
-      }],
-      editToken: token,
-      orgSlug,
-    },
-  }]).catch(reportError("notification.registration_confirmation"))
+  deliverAfterResponse(outboxIds)
 
   return NextResponse.json({ success: true, editToken: token })
 }

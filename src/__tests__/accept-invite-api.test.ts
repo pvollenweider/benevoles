@@ -3,9 +3,14 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 const findUnique = vi.hoisted(() => vi.fn())
 const update = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({
-  prisma: { adminUser: { findUnique, update } },
+  prisma: { adminUser: { findUnique, update }, async $transaction(fn: (tx: unknown) => unknown) { return fn(this) }, },
 }))
 vi.mock("@/lib/notifications", () => ({ sendNotification: vi.fn().mockResolvedValue({ ok: true }) }))
+vi.mock("@/lib/notifications/outbox", () => ({
+  // Stored with the transaction (#352); what matters is the payload queued.
+  enqueueNotifications: async (payloads: unknown[]) => { payloads.forEach((p) => void(p)); return payloads.map((_, i) => `row-${i}`) },
+  deliverAfterResponse: () => {},
+}))
 
 const admin = {
   id: "admin-1",
