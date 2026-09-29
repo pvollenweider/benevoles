@@ -5,16 +5,22 @@
 
 import { PASSWORD_RULES } from "@/lib/password"
 
-export default function PasswordRules({ password }: { password: string }) {
-  if (!password) return null
+/**
+ * Password requirements, shown before typing (neutral) then ticked as they're met, so they can be
+ * read up front and linked to the field with aria-describedby. The ✓/✗ glyphs are decorative;
+ * each rule's state is spelled out for screen readers.
+ */
+export default function PasswordRules({ password, id }: { password: string; id?: string }) {
   return (
-    <ul className="space-y-1 mt-2">
+    <ul id={id} className="space-y-1 mt-2">
       {PASSWORD_RULES.map((rule) => {
-        const ok = rule.test(password)
+        const state = !password ? "pending" : rule.test(password) ? "ok" : "ko"
+        const color = state === "ok" ? "text-green-800" : state === "ko" ? "text-red-700" : "text-gray-600"
         return (
-          <li key={rule.id} className={`flex items-center gap-1.5 text-xs ${ok ? "text-green-600" : "text-red-500"}`}>
-            <span>{ok ? "✓" : "✗"}</span>
+          <li key={rule.id} className={`flex items-center gap-1.5 text-xs ${color}`}>
+            <span aria-hidden="true">{state === "ok" ? "✓" : state === "ko" ? "✗" : "•"}</span>
             <span>{rule.label}</span>
+            {state !== "pending" && <span className="sr-only">{state === "ok" ? " : respectée" : " : non respectée"}</span>}
           </li>
         )
       })}
