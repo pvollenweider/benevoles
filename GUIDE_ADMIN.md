@@ -152,6 +152,16 @@ L'horloge va de `00:00` à `23:59` : on ne saisit jamais `24:00`, `25:00` ou `26
 - Un créneau qui se termine exactement à minuit s'écrit avec `00:00` comme fin (`22:00` à `00:00`).
 - Les heures invalides (`26:00`, `-2:30`, `12:75`) sont refusées avec un message. Sur le planning administrateur, glisser une barre ne permet pas de sortir de la journée.
 
+### Modifier vite depuis le planning
+
+Un clic sur une barre du planning ouvre une petite fenêtre pour agir sans quitter la vue :
+
+- **Libellé** et **Places** : enregistrés à la fermeture ; **Appliquer à tout le poste** met le même nombre de places sur tous les créneaux du poste (jamais en dessous des inscrits déjà confirmés sur un créneau) ;
+- **Horaires** : changez le début ou la fin puis **Décaler** ; les bénévoles inscrits reçoivent un email si les horaires changent ;
+- **Inscriptions** : ouvertes, fermées (le créneau reste visible, personne ne peut plus s'y inscrire), complet, ou créneau annulé ;
+- **Dupliquer** : crée une copie juste après, de même durée, avec tous les réglages du créneau (places, liste d'attente, âge minimum, infos pratiques) et sans inscriptions ; déplacez-la ensuite si besoin ;
+- **Inscriptions** (lien) et **Supprimer le créneau**.
+
 ### Activer la liste d'attente
 
 Cochez **Activer la liste d'attente** dans le formulaire du créneau (ou dans le popover de la timeline admin). Quand le créneau est complet, les bénévoles peuvent s'y inscrire ; une place libérée déclenche automatiquement l'envoi d'un email à la première personne en attente, avec un lien de confirmation valable **24 heures**. Passé ce délai sans réponse, la place est proposée à la personne suivante.

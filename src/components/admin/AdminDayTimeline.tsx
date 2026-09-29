@@ -201,7 +201,29 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
   async function handleDelete(id: string) {
     setSelected(null)
     const res = await fetch(`/api/admin/shifts/${id}`, { method: "DELETE" })
-    if (res.ok) onDeleted(id)
+    if (res.ok) { onDeleted(id); containerRef.current?.focus() }
+  }
+
+  // Quick edits (#398): a copy right after the shift, and one capacity for the whole role.
+  async function handleDuplicate(id: string) {
+    const res = await fetch(`/api/admin/shifts/${id}/duplicate`, { method: "POST" })
+    if (!res.ok) { showToast("Duplication impossible"); return }
+    const created = await res.json()
+    onCreated({ ...created, date: created.date.split("T")[0], registrationCount: 0 })
+    showToast("Créneau dupliqué")
+  }
+
+  async function handleApplyCapacity(roleName: string, capacity: number) {
+    const res = await fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(roleName)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ capacity }),
+    })
+    if (!res.ok) { showToast("Capacité non appliquée"); return }
+    for (const s of shifts) {
+      if (s.roleName === roleName && s.status !== "cancelled") onUpdated({ ...s, capacity: Math.max(capacity, s.registrationCount) })
+    }
+    showToast("Capacité appliquée au poste")
   }
 
   // ── Hour ticks ──────────────────────────────────────────────────────────────
@@ -214,7 +236,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
   return (
     <>
       <div
-        ref={containerRef}
+        ref={containerRef} tabIndex={-1}
         className="overflow-x-auto select-none rounded-xl border border-gray-100 bg-white"
       >
         <div style={{ width: totalW + 24, paddingTop: 10, paddingBottom: 0, paddingLeft: 12, paddingRight: 12 }}>
@@ -311,8 +333,14 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                             backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.3) 5px, rgba(255,255,255,0.3) 7px)",
                           } : {}),
                         }}
+                        role="button"
+                        tabIndex={0}
+                        aria-haspopup="dialog"
+                        aria-expanded={isSelected}
+                        aria-label={`${shift.roleName}${hasLabel ? ` ${shift.label}` : ""}, ${fmt(shift.startTime)}–${fmt(shift.endTime)}, ${shift.registrationCount} sur ${shift.capacity}, modifier`}
                         onMouseDown={e => e.stopPropagation()}
                         onClick={e => { e.stopPropagation(); openPopover(shift.id) }}
+                        onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openPopover(shift.id) } }}
                       >
                         <div className="flex flex-col justify-center px-2 overflow-hidden w-full">
                           <span
@@ -425,6 +453,8 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
           onClose={() => setSelected(null)}
           onPatch={handlePatch}
           onDelete={handleDelete}
+          onDuplicate={handleDuplicate}
+          onApplyCapacity={handleApplyCapacity}
         />
       )}
 

@@ -402,6 +402,17 @@ describe("Shifts — cross-tenant isolation", () => {
     expect($transaction).not.toHaveBeenCalled()
   })
 
+  it("POST /api/admin/shifts/[id]/duplicate returns 404 for org-B shift, creating nothing", async () => {
+    const { POST } = await import("@/app/api/admin/shifts/[id]/duplicate/route")
+    const db = setupGuard() // shift.findFirst → null
+    const create = vi.fn()
+    Object.assign(db.shift, { create })
+
+    const res = await POST(makeRequest("/api/admin/shifts/shift-b/duplicate", "POST"), params("shift-b"))
+    expect(res.status).toBe(404)
+    expect(create).not.toHaveBeenCalled()
+  })
+
   it("DELETE /api/admin/shifts/[id] returns 404 for org-B shift (cascade cancel blocked)", async () => {
     const { DELETE } = await import("@/app/api/admin/shifts/[id]/route")
     setupGuard()
