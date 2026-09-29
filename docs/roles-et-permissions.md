@@ -20,7 +20,7 @@ Une session est un JWT NextAuth v5 (`src/auth.config.ts`, `src/auth.ts`), mais e
 - `AdminUser.sessionVersion` est copiée dans le JWT à la connexion et incrémentée à chaque changement ou réinitialisation du mot de passe : toute session ouverte auparavant est alors refusée. La session depuis laquelle le mot de passe est changé se reconnecte aussitôt avec le nouveau mot de passe ;
 - la connexion est limitée à 10 échecs par compte et 30 par adresse IP sur 15 minutes ; la vérification du mot de passe actuel (changement de mot de passe, profil du super admin), à 5 échecs par compte et 20 par adresse IP.
 
-Le middleware (`src/middleware.ts`) ne fait qu'un premier filtrage sur les pages, à partir du JWT seul. Les contrôles faisant autorité sont côté serveur : les guards et `auth()` relisent le compte à chaque requête.
+Le proxy (`src/proxy.ts`, la convention Next.js 16 qui remplace le middleware) ne fait qu'un premier filtrage sur les pages, à partir du JWT seul. Les contrôles faisant autorité sont côté serveur : les guards et `auth()` relisent le compte à chaque requête.
 
 ## Bénévole
 
@@ -65,13 +65,13 @@ Règles sur l'équipe :
 - Gère les organisations : création, édition (nom, slug), activation ou désactivation, suppression.
 - Crée une organisation avec son premier admin : un lien d'invitation valable 7 jours est généré, sans mot de passe temporaire.
 - N'est rattaché à aucune organisation (`organizationId` nul). Le bouton « Gérer » enregistre l'organisation choisie dans le cookie `sa-org-id`. Sans ce cookie (ou s'il désigne une organisation qui n'existe plus), aucune organisation n'est choisie à sa place : les pages de `/admin` redirigent vers la liste des organisations (`/super-admin/organizations`) pour en sélectionner une, et les routes de l'API admin répondent 403.
-- Protégé par `requireSuperAdmin()` côté API et par le middleware côté pages.
+- Protégé par `requireSuperAdmin()` côté API et par le proxy côté pages.
 
 ## Où les droits sont appliqués
 
 | Couche | Fichier | Règle |
 |--------|---------|-------|
-| Pages | `src/middleware.ts` | `/admin/*` exige une session, sauf `login`, `accept-invite`, `forgot-password`, `reset-password`. `/super-admin/*` exige le rôle `super_admin`, sinon redirection vers `/admin` |
+| Pages | `src/proxy.ts` | `/admin/*` exige une session, sauf `login`, `accept-invite`, `forgot-password`, `reset-password`. `/super-admin/*` exige le rôle `super_admin`, sinon redirection vers `/admin` |
 | API admin | `requireOrgSession()` | 401 sans session, 403 sans organisation ou organisation désactivée |
 | API super admin | `requireSuperAdmin()` | 401 sans session, 403 si le rôle n'est pas `super_admin` |
 | API cron | `isAuthorized()` | `Authorization: Bearer $CRON_SECRET` |
