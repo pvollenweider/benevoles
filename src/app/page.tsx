@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma"
 import { formatShortDate } from "@/lib/utils"
 import { resolveOrgSlug } from "@/lib/resolve-org"
 import PublicFooter from "@/components/PublicFooter"
+import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
 
 export const dynamic = "force-dynamic"
 
@@ -47,7 +48,7 @@ export default async function HomePage() {
 
   const events = await prisma.event.findMany({
     where: {
-      publicStatus: "published",
+      ...PUBLIC_LIST_WHERE,
       organization: { slug: orgSlug },
       endDate: { gte: startOfToday },
     },

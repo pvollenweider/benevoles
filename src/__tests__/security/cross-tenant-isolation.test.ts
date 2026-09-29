@@ -30,6 +30,7 @@ vi.mock("@/lib/auth-guard", () => ({
 const prismaMock = {
   event: {
     update: vi.fn().mockResolvedValue({ id: "evt-b", title: "Event B", publicStatus: "draft" }),
+    updateMany: vi.fn().mockResolvedValue({ count: 0 }),
     findFirst: vi.fn().mockResolvedValue({ id: "evt-b", organizationId: "org-b" }), // org-B data!
     delete: vi.fn().mockResolvedValue({ id: "evt-a" }),
   },
@@ -41,6 +42,7 @@ const prismaMock = {
   shift: {
     update: vi.fn().mockResolvedValue({ id: "shift-b", status: "open", capacity: 5 }),
     findFirst: vi.fn().mockResolvedValue(null),
+    count: vi.fn().mockResolvedValue(1),
   },
   registration: {
     update: vi.fn().mockResolvedValue({ id: "reg-b", shiftId: "shift-b", shift: { status: "open", capacity: 5 } }),

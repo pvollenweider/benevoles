@@ -23,6 +23,8 @@ import {
   sortShifts,
 } from "@/lib/shifts-admin"
 
+const UNPUBLISHED_NOTICE = "C'était le dernier créneau : l'événement est repassé en brouillon, sa page publique n'est plus accessible."
+
 const emptyShift = {
   roleName: "", label: "", description: "", date: "", startTime: "", endTime: "",
   capacity: 2, locationDetails: "", displayOrder: 0, internalNotes: "", waitlistEnabled: false,
@@ -170,7 +172,10 @@ export default function ShiftsManager({
   async function handleDeleteShift(id: string) {
     if (!confirm("Supprimer ce créneau ?")) return
     const res = await fetch(`/api/admin/shifts/${id}`, { method: "DELETE" })
-    if (res.ok) handleDeleted(id)
+    if (!res.ok) return
+    const data = await res.json().catch(() => ({}))
+    handleDeleted(id)
+    if (data?.unpublished) setRoleAnnouncement(UNPUBLISHED_NOTICE)
   }
 
   // ── Role ordering ─────────────────────────────────────────────────────────
@@ -242,7 +247,7 @@ export default function ShiftsManager({
     }
     setShifts(prev => prev.filter(s => s.roleName !== role))
     setReorderRoles(prev => prev.filter(r => r !== role))
-    setRoleAnnouncement(`Poste « ${role} » supprimé.`)
+    setRoleAnnouncement(data?.unpublished ? `Poste « ${role} » supprimé. ${UNPUBLISHED_NOTICE}` : `Poste « ${role} » supprimé.`)
   }
 
   function roleColorOf(role: string): string | null {
@@ -336,7 +341,7 @@ export default function ShiftsManager({
         </div>
       </div>
       {/* Announces role actions and series creation, whether or not the roles panel is open. */}
-      <div role="status" aria-live="polite" className="sr-only">{roleAnnouncement}</div>
+      <div role="status" aria-live="polite" className={roleAnnouncement.includes(UNPUBLISHED_NOTICE) ? "text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2" : "sr-only"}>{roleAnnouncement}</div>
 
       {showSeries && (
         <ShiftSeriesForm

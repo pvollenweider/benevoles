@@ -69,13 +69,15 @@ describe("PATCH /api/admin/events/[id] — publication rule", () => {
   })
 })
 
-describe("POST /api/admin/events — publication rule", () => {
-  it("refuses to create an event already published", async () => {
-    const create = vi.fn()
+describe("POST /api/admin/events — always a listed draft", () => {
+  it("ignores any requested status and creates a listed draft", async () => {
+    const create = vi.fn().mockImplementation(async ({ data }: { data: object }) => ({ id: "e", ...data }))
     requireOrgSessionMock.mockResolvedValue({ db: { event: { findFirst: vi.fn().mockResolvedValue(null), create } }, organizationId: "org-a", session: {} })
     const { POST } = await import("@/app/api/admin/events/route")
-    const res = await POST(new Request("http://localhost/api/admin/events", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title: "F", startDate: "2026-07-04", endDate: "2026-07-04", publicStatus: "published" }) }))
-    expect(res.status).toBe(409)
-    expect(create).not.toHaveBeenCalled()
+    for (const publicStatus of ["published", "archived"]) {
+      const res = await POST(new Request("http://localhost/api/admin/events", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title: "F", startDate: "2026-07-04", endDate: "2026-07-04", publicStatus }) }))
+      expect(res.status).toBe(201)
+      expect(create.mock.calls.at(-1)![0].data).toMatchObject({ publicStatus: "draft", isListed: true })
+    }
   })
 })

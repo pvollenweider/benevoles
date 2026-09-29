@@ -78,7 +78,7 @@ Raccourci : **Ctrl + K** (**⌘ + K** sur Mac) place le curseur dans le champ de
 
 **`/admin/events/new`**
 
-La création se fait en trois étapes, indiquées en haut de page : **1. Informations**, **2. Postes et créneaux**, **3. Vérification et publication**. Après l'étape 1, vous arrivez sur les créneaux avec un bouton **Continuer** ; l'étape 3 (`/admin/events/[id]/review`) récapitule ce qui est prêt et ce qui manque (dates, créneaux, lieu, message de confirmation, instructions, responsables), propose l'aperçu bénévole, puis **Publier** ou **Rester en brouillon**. On peut publier sans les points facultatifs, mais pas sans créneau : cette règle vaut partout (page de l'événement, formulaire d'édition), pas seulement dans l'assistant, et un événement est toujours créé en brouillon. **Quitter l'assistant** ramène à tout moment à la page de l'événement : rien n'est perdu, chaque étape est une page normale de l'administration.
+La création se fait en trois étapes, indiquées en haut de page : **1. Informations**, **2. Postes et créneaux**, **3. Vérification et publication**. Après l'étape 1, vous arrivez sur les créneaux avec un bouton **Continuer** ; l'étape 3 (`/admin/events/[id]/review`) récapitule ce qui est prêt et ce qui manque (dates, créneaux, lieu, message de confirmation, instructions, responsables), propose l'aperçu bénévole, puis **Publier** ou **Rester en brouillon**. On peut publier sans les points facultatifs, mais pas sans créneau : cette règle vaut partout (page de l'événement, formulaire d'édition), pas seulement dans l'assistant, et un événement est toujours créé en brouillon. Dans l'autre sens, si le dernier créneau d'un événement publié est annulé (ou son dernier poste supprimé), l'événement repasse en brouillon, avec une entrée dans le journal. **Quitter l'assistant** ramène à tout moment à la page de l'événement : rien n'est perdu, chaque étape est une page normale de l'administration.
 
 ### Partir d'un modèle
 
@@ -239,6 +239,19 @@ Une checklist simple de dates clés pour l'événement (ex. « Fermer les inscri
 ---
 
 ## Publier un événement
+
+### Brouillon, publié, répertorié, archivé
+
+| État | Page d'inscription | Sur la page publique de l'organisation |
+|---|---|---|
+| Brouillon | inaccessible (sauf l'aperçu admin) | non |
+| Publié, répertorié | accessible par son lien | oui, avec la liste publique et le sitemap |
+| Publié, **non répertorié** | accessible par son lien | non : absent de la page d'accueil, de la liste publique et du sitemap, et non indexé par les moteurs de recherche |
+| Archivé | inaccessible | non |
+
+**Non répertorié** sert à séparer des publics : par exemple un planning réservé aux organisateurs, avec les mêmes postes que celui des bénévoles, que l'on ne veut pas voir sur la page d'accueil. Dans le formulaire d'édition, décochez **Afficher cet événement sur la page publique de l'organisation**, puis partagez le lien ou le QR code aux personnes concernées. L'administration affiche alors « Publié — non répertorié ».
+
+Ce n'est pas une protection : toute personne qui a le lien, ou qui le devine, peut ouvrir l'événement et s'y inscrire. Pour un accès vraiment restreint, il n'existe pas encore de mot de passe. Une copie ou un événement créé depuis un modèle est toujours répertorié : le choix se refait pour chaque événement.
 
 **Avant de publier**, le bouton **Prévisualiser comme un bénévole** de la page de l'événement montre la page publique exactement comme la verront les bénévoles, même tant que l'événement est en brouillon : planning et places, pages personnalisées, charte, champs demandés dans le formulaire (téléphone si vous l'avez rendu obligatoire, date de naissance pour un créneau avec âge minimum). Vous pouvez remplir le formulaire : au lieu de vous inscrire, l'aperçu affiche le message de confirmation et l'email que recevrait le bénévole. Rien n'est enregistré ni envoyé. Pour voir le rendu sur téléphone, réduisez la largeur de la fenêtre ou ouvrez l'aperçu depuis votre téléphone.
 

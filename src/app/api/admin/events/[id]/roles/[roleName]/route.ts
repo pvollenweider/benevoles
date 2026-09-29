@@ -137,11 +137,13 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const actor = adminActor(guard.session)
   let cancelledRegistrations = 0
   let notified = 0
+  let unpublished = false
   for (const s of shifts) {
     const result = await cancelShift(s, actor)
     cancelledRegistrations += result.cancelledRegistrations
     notified += result.notified
+    unpublished ||= result.unpublished
   }
 
-  return NextResponse.json({ success: true, cancelledShifts: shifts.length, cancelledRegistrations, notified })
+  return NextResponse.json({ success: true, cancelledShifts: shifts.length, cancelledRegistrations, notified, unpublished })
 }

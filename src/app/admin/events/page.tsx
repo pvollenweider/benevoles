@@ -7,6 +7,7 @@ import StatusBadge from "@/components/admin/StatusBadge"
 import FlashMessage from "@/components/admin/FlashMessage"
 import OnboardingChecklist from "@/components/admin/OnboardingChecklist"
 import { loadOnboarding } from "@/lib/onboarding-data"
+import { isUnlistedPublic } from "@/lib/event-visibility"
 
 export const dynamic = "force-dynamic"
 
@@ -80,6 +81,9 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
                       {event.title}
                     </Link>
                     <StatusBadge status={event.publicStatus} />
+                    {isUnlistedPublic(event) && (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-900">non répertorié</span>
+                    )}
                   </div>
                   <p className="text-sm text-gray-500 mt-0.5">
                     {formatShortDate(event.startDate)}

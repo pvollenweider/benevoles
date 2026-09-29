@@ -66,7 +66,7 @@ describe("sitemap", () => {
     const entries = await sitemap()
 
     expect(findMany).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { organizationId: "org-1", publicStatus: "published" } }),
+      expect.objectContaining({ where: { organizationId: "org-1", publicStatus: "published", isListed: true } }),
     )
     expect(entries).toEqual([
       { url: "https://lausanne-rocks.benevol.app", changeFrequency: "daily" },

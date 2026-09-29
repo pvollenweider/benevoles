@@ -10,6 +10,7 @@ import ArchiveButton from "@/components/admin/ArchiveButton"
 import DeleteEventSection from "@/components/admin/DeleteEventSection"
 import SendReminderButton from "@/components/admin/SendReminderButton"
 import MilestonesSection from "@/components/admin/MilestonesSection"
+import { isUnlistedPublic, UNLISTED_HINT } from "@/lib/event-visibility"
 
 export const dynamic = "force-dynamic"
 
@@ -86,6 +87,11 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           <StatusBadge status={event.publicStatus} />
+          {isUnlistedPublic(event) && (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-900">
+              non répertorié
+            </span>
+          )}
           <PublishToggle eventId={event.id} currentStatus={event.publicStatus} />
           <ArchiveButton eventId={event.id} currentStatus={event.publicStatus} />
           <Link
@@ -111,6 +117,12 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
           )}
         </div>
       </div>
+
+      {isUnlistedPublic(event) && (
+        <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2">
+          <strong>Publié — non répertorié.</strong> {UNLISTED_HINT} L&apos;événement n&apos;apparaît pas sur la page publique de l&apos;organisation ; partagez son lien ou son QR code.
+        </p>
+      )}
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <StatCard label="Créneaux" value={event.shifts.length} />

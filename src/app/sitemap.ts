@@ -3,6 +3,7 @@ import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
 import { resolveOrgSlug } from "@/lib/resolve-org"
 import { orgBaseUrl } from "@/lib/urls"
+import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
 
 // Multi-tenant by subdomain: each org's own [orgSlug].benevol.app/sitemap.xml lists only that
 // org's published events (and their custom pages, #188) — the host already scopes it via
@@ -15,7 +16,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!resolved || resolved.redirectUrl) return []
 
   const events = await prisma.event.findMany({
-    where: { organizationId: resolved.org.id, publicStatus: "published" },
+    // Listed events only (#414): an unlisted event and its pages stay out of the sitemap.
+    where: { organizationId: resolved.org.id, ...PUBLIC_LIST_WHERE },
     select: {
       slug: true,
       updatedAt: true,
