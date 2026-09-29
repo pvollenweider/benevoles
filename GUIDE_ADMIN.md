@@ -101,7 +101,13 @@ En haut de la page, **Comment commencer ?** propose une page blanche ou un modè
 
 L'événement est créé en **brouillon** (`draft`) — il n'est pas visible du public tant qu'il n'est pas publié.
 
-**Repartir d'un événement existant** (édition suivante d'un festival, même organisation d'une année sur l'autre) : dans la liste des événements, le bouton **Dupliquer** crée une copie en brouillon, intitulée « (copie) », avec ses paramètres et tous ses créneaux encore actifs, rouverts. Les inscriptions, pages personnalisées, jalons et responsables de secteur ne sont pas copiés, et les dates restent celles de l'événement d'origine : ajustez-les avant de publier.
+**Repartir d'un événement existant** (édition suivante d'un festival, même organisation d'une année sur l'autre) : **Dupliquer**, depuis la liste des événements ou la page de l'événement, ouvre une page de choix :
+
+- le **titre** de la copie (« (copie) » par défaut) ;
+- le **premier jour** de la copie : toutes les dates (fin, créneaux, spectacles) sont décalées du même nombre de jours ;
+- ce qui suit : les **créneaux** (postes, horaires, places, listes d'attente, âge minimum, infos pratiques, rouverts et sans inscriptions), les **messages et réglages d'inscription**, les **pages personnalisées**, et, décochés par défaut, les **responsables de secteur** (chacun reçoit alors un email avec son lien pour la copie).
+
+Un récapitulatif dit ce qui va être créé avant de confirmer. La copie est un brouillon ; les inscriptions et les jalons ne sont jamais copiés.
 
 Une fois créé, chaque événement a sa propre page de pilotage : statistiques en un coup d'œil, raccourcis vers les créneaux et les inscriptions, jalons, journal. C'est votre poste de commande pour toute la durée de l'événement.
 
