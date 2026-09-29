@@ -70,6 +70,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
   const orgSlug = reg.event.organization.slug
   await enqueueAndDeliver([{
     kind: "registration_confirmation",
+    dedupeKey: `waitlist_confirmed:${reg.id}`,
     recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
     data: {
       volunteerName: reg.volunteer.firstName,

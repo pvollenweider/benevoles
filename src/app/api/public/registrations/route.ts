@@ -361,7 +361,11 @@ export async function POST(req: Request) {
       })
     }
 
-    await enqueueAndDeliver(outbox.payloads)
+    // One key per notification of this sign-up (#315): a repeated enqueue stores it once.
+    await enqueueAndDeliver(outbox.payloads.map((p) => ({
+      ...p,
+      dedupeKey: `${p.kind}:${registrations[0].id}:${p.recipient.email ?? ""}`,
+    })))
   } catch (e) {
     // The registration itself is done; only building/storing its notifications failed.
     reportError("notification.registration_outbox")(e)

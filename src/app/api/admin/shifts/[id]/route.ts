@@ -93,6 +93,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     for (const reg of before.registrations) {
       await outbox.send({
         kind: "shift_modified",
+        dedupeKey: `shift_modified:${reg.id}:${after.updatedAt.toISOString()}`,
         recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
         data: {
           volunteerName: reg.volunteer.firstName,

@@ -6,7 +6,8 @@ import type { NotificationKind } from "@/lib/notifications"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { sendPushToVolunteer } from "@/lib/push"
 import { reportError } from "@/lib/report-error"
-import { deliverOutbox } from "@/lib/notifications/outbox"
+import { deliverOutbox, outboxHealth } from "@/lib/notifications/outbox"
+import * as Sentry from "@sentry/nextjs"
 import { registrationToken } from "@/lib/token-vault"
 import { localDateTimeToUtc } from "@/lib/time-zone"
 
@@ -153,11 +154,20 @@ async function run(req: Request) {
     reportError("outbox.cron_deliver")(e)
     return null
   })
+  // Queue health (#316): alert when something is stuck or gave up.
+  const outboxStatus = await outboxHealth(now).catch((e) => {
+    reportError("outbox.health")(e)
+    return null
+  })
+  if (outboxStatus && !outboxStatus.healthy) {
+    Sentry.captureMessage("Notification outbox unhealthy", { level: "warning", extra: { ...outboxStatus } })
+  }
 
   return NextResponse.json({
     runAt: now.toISOString(),
     totals,
     expiredOffers: expiredOffers.length,
     outbox,
+    outboxStatus,
   })
 }

@@ -55,6 +55,7 @@ export async function cancelShift(shift: CancellableShift, actor: LogActor): Pro
     })
     await outbox.send({
       kind: "shift_cancelled",
+      dedupeKey: `shift_cancelled:${reg.id}`,
       recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
       data: {
         volunteerName: reg.volunteer.firstName,

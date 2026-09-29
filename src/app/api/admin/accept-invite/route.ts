@@ -86,6 +86,7 @@ export async function POST(req: Request) {
     const adminUrl = `${orgBaseUrl(admin.organization.slug)}/admin/events`
     await enqueueAndDeliver([{
       kind: "admin_welcome",
+      dedupeKey: `admin_welcome:${admin.id}`,
       recipient: { email: admin.email, name: admin.name },
       data: {
         adminName: admin.name,
