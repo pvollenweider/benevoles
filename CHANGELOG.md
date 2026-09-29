@@ -30,6 +30,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Modifié
 
 - **Accessibilité** : un lien « Aller au contenu », visible dès qu'on le tabule, ouvre chaque page de l'administration et saute la barre du haut.
+- **Interne** : le fichier `src/middleware.ts` devient `src/proxy.ts`, la convention Next.js 16 ; comportement identique (protection des pages admin, en-tête `x-org-slug`).
 - **Rapports** : le lien « Imprimer » de la page d'un événement devient **Rapports** et regroupe l'export complet (en premier) et les feuilles à imprimer ; le lien « Exporter PDF » séparé disparaît. Les plannings par jour, par poste et individuels reprennent la frise de l'export complet, en noir et blanc, avec les prénoms dans les créneaux ; en-têtes, tableaux et feuille de présence ont été redessinés pour l'impression.
 - **Où manque-t-il du monde ?** : la page s'ouvre sur une vue d'ensemble (places pourvues, barre de remplissage, phrase de synthèse) ; chaque créneau montre son taux de remplissage à côté des chiffres ; les groupes portent leur compteur ; un message confirme quand il n'y a rien à faire.
 - **Publication** : un événement ne peut plus être publié sans créneau, quel que soit le chemin (formulaire d'édition, bouton Publier, API) ; le message l'explique. La création se fait toujours en brouillon, le choix du statut n'apparaît plus à cette étape.

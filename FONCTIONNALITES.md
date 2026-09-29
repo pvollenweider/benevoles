@@ -297,7 +297,7 @@ Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscr
 
 ## Super Admin (`/super-admin`)
 
-Accessible uniquement aux comptes avec rôle `super_admin` (protégé au niveau middleware).
+Accessible uniquement aux comptes avec rôle `super_admin` (protégé au niveau du proxy).
 
 ### Gestion des organisations
 
@@ -355,7 +355,7 @@ Fallback console si SMTP non configuré (développement).
 - API REST séparée public / admin / super-admin / cron
 - PostgreSQL 16 + Prisma 7 ORM (driver natif pg, historique de migrations dans `prisma/migrations/`)
 - Architecture multi-tenant : isolation par `organizationId` avec client Prisma étendu
-- **Routage par sous-domaine** : `[orgSlug].benevol.app` → le middleware injecte `x-org-slug` ; fallback `?org=<slug>` pour le développement localhost
+- **Routage par sous-domaine** : `[orgSlug].benevol.app` → le proxy (`src/proxy.ts`) injecte `x-org-slug` ; fallback `?org=<slug>` pour le développement localhost
 - Tests d'isolation cross-tenant (Vitest) — vérifient que chaque route admin utilise le client Prisma scopé
 - Déploiement Docker Compose ou image standalone
 - Déploiement Kubernetes avec migrations automatiques, appliquées une fois par déploiement avant la mise à jour de l'application (voir `docs/deploiement.md`)
