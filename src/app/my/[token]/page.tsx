@@ -8,6 +8,7 @@ import PublicFooter from "@/components/PublicFooter"
 import { renderMarkdown, interpolate } from "@/lib/markdown"
 import PushSubscribeButton from "@/components/PushSubscribeButton"
 import ShiftInfoList from "@/components/ShiftInfoList"
+import AvailabilityForm from "@/components/AvailabilityForm"
 
 type ShiftRef = {
   label: string
@@ -28,7 +29,7 @@ type RegistrationItem = {
 
 type PageData = {
   event: { id: string; title: string; slug: string }
-  volunteer: { firstName: string; lastName: string; email: string }
+  volunteer: { firstName: string; lastName: string; email: string; availabilityPeriods?: string[]; availabilityNote?: string | null }
   registrations: RegistrationItem[]
   orgHomeUrl: string
   eventUrl: string
@@ -184,7 +185,7 @@ export default function MyRegistrationPage() {
           const html = renderMarkdown(interpolate(data.confirmationMessage, { prenom: data.volunteer.firstName, "créneau": data.registrations[0]?.shift.label ?? "", date: "", heure: "" }))
           return (
             <div>
-              <p className="text-xs font-semibold text-gray-600 mb-2">Informations pratiques</p>
+              <h2 className="text-xs font-semibold text-gray-600 mb-2">Informations pratiques</h2>
               <div
                 className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-900"
                 dangerouslySetInnerHTML={{ __html: html }}
@@ -192,6 +193,8 @@ export default function MyRegistrationPage() {
             </div>
           )
         })()}
+
+        <AvailabilityForm token={token} initialPeriods={data.volunteer.availabilityPeriods ?? []} initialNote={data.volunteer.availabilityNote ?? null} />
 
         <div className="flex items-center justify-between pt-2">
           <Link href={data?.eventUrl ?? data?.orgHomeUrl ?? "/"} className="text-sm text-gray-500 hover:text-gray-700">

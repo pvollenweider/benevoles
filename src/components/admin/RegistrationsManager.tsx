@@ -9,6 +9,7 @@ import StatusBadge from "./StatusBadge"
 import ShiftSelect from "./registrations/ShiftSelect"
 import MakeLeaderModal from "./registrations/MakeLeaderModal"
 import { contactPhone } from "@/lib/contact-phone"
+import { availabilityLabel, hasAvailability } from "@/lib/availability"
 import {
   addConflictMessage,
   cancelAnnouncement,
@@ -22,7 +23,11 @@ import {
   type ShiftRef,
 } from "@/lib/registrations-list"
 
-type Volunteer = { id: string; firstName: string; lastName: string; email: string | null; phone: string | null }
+type Volunteer = {
+  id: string; firstName: string; lastName: string; email: string | null; phone: string | null
+  /** Optional general availability (#402), for manual placement. */
+  availabilityPeriods?: string[]; availabilityNote?: string | null
+}
 type Registration = {
   id: string; status: string; source: string; comment: string | null
   // Phone given on the public form for this registration; shown before the profile's.
@@ -78,6 +83,13 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     () => shiftsOfEmail(registrations, addForm.email),
     [addForm.email, registrations]
   )
+
+  // Availability of the person being added by hand, when their email matches someone already on
+  // the event (#402): the organizer sees it before picking the shift.
+  const knownVolunteer = useMemo(() => {
+    const email = addForm.email.trim().toLowerCase()
+    return email ? registrations.find((r) => r.volunteer.email?.toLowerCase() === email)?.volunteer : undefined
+  }, [addForm.email, registrations])
 
   const selectedShiftObj = useMemo(
     () => (addForm.shiftId ? shifts.find(s => s.id === addForm.shiftId) ?? null : null),
@@ -344,8 +356,11 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Email</label>
-              <input type="email" value={addForm.email} onChange={(e) => setAddForm((f) => ({ ...f, email: e.target.value }))} className="input" />
+              <label htmlFor="add-email" className="block text-xs font-medium text-gray-600 mb-1">Email</label>
+              <input id="add-email" type="email" value={addForm.email} aria-describedby={knownVolunteer && hasAvailability(knownVolunteer) ? "add-email-availability" : undefined} onChange={(e) => setAddForm((f) => ({ ...f, email: e.target.value }))} className="input" />
+              {knownVolunteer && hasAvailability(knownVolunteer) && (
+                <p id="add-email-availability" aria-live="polite" className="text-xs text-gray-700 mt-1">Disponible en général : {availabilityLabel(knownVolunteer)}</p>
+              )}
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Téléphone</label>
@@ -500,6 +515,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                     </p>
                     <p className="text-xs text-gray-500">{reg.volunteer.email}</p>
                     {contactPhone(reg) && <p className="text-xs text-gray-500">{contactPhone(reg)}</p>}
+                    {hasAvailability(reg.volunteer) && <p className="text-xs text-gray-700"><span className="sr-only">Disponible : </span><span aria-hidden="true">🕒 </span>{availabilityLabel(reg.volunteer)}</p>}
                     {reg.comment && <p className="text-xs text-gray-500 italic mt-0.5">"{reg.comment}"</p>}
                   </td>
                   <td className="px-4 py-3 hidden sm:table-cell">

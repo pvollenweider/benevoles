@@ -10,6 +10,7 @@ import { filterMembers, nextSort, sortAnnouncement as announceSort, sortMembers,
 import { AddMemberModal, EditMemberModal } from "./members/MemberFormModals"
 import ImportModal from "./members/ImportModal"
 import SortTh from "./members/SortTh"
+import { availabilityLabel, hasAvailability } from "@/lib/availability"
 
 type Props = {
   initialMembers: Member[]
@@ -167,6 +168,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch 
                     {m.email && <div className="text-xs">{m.email}</div>}
                     {m.phone && <div className="text-xs text-gray-500">{m.phone}</div>}
                     {!m.email && !m.phone && <span className="text-xs text-gray-500">—</span>}
+                    {hasAvailability(m) && <div className="text-xs text-gray-700 mt-0.5"><span className="sr-only">Disponible : </span><span aria-hidden="true">🕒 </span>{availabilityLabel(m)}</div>}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-1">

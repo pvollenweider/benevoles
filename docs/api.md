@@ -21,6 +21,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/public/[eventSlug]` | GET | public | Un événement publié de l'organisation courante (sous-domaine ou `?org=`), avec la liste de ses pages personnalisées (titre, slug) |
 | `/api/public/registrations` | POST | public | Inscription à un ou plusieurs créneaux (liste d'attente si le créneau est complet). Limitée à 20 requêtes par heure et par IP |
 | `/api/public/registrations/[token]` | GET, DELETE | public (jeton) | Consulter ou annuler une inscription |
+| `/api/public/registrations/[token]/availability` | PATCH | Le bénévole enregistre ses disponibilités générales (`availabilityPeriods`, `availabilityNote`) ; lien actif requis ; 10 tentatives/heure/IP. |
 | `/api/public/member-invite/[token]` | GET | public (jeton) | Données de pré-remplissage d'une invitation |
 | `/api/public/waitlist/[token]/confirm` | GET, POST | public (jeton) | Consulter puis confirmer une place de liste d'attente |
 | `/api/public/leader/[token]` | GET | public (jeton) | Roster lecture seule d'un responsable de secteur : bénévoles inscrits sur son poste (#186) |
@@ -74,7 +75,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/admin/registrations/[id]` | PATCH, DELETE | Modifier, annuler une inscription |
 | `/api/admin/registrations/[id]/resend-link` | POST | Renvoyer au bénévole son lien personnel de gestion (`/my/[token]`) ; il donne accès à toutes ses inscriptions actives de l'événement |
 | `/api/admin/events/[id]/registrations/bulk` | POST | Action groupée sur une sélection d'inscriptions de l'événement (`cancel`, `make_leader`, `resend_link`) ; tout ou rien si une inscription n'appartient pas à l'événement Actions `check_in` / `undo_check_in` (#399) : marque ou retire la présence des inscriptions confirmées sélectionnées ; renvoie `{ done, changedIds, skipped }`. |
-| `/api/admin/members` | GET, POST | Lister, créer des membres |
+| `/api/admin/members` | GET, POST | Lister, créer des membres Disponibilités facultatives : `availabilityPeriods` (`morning` / `afternoon` / `evening`), `availabilityNote` (≤ 140). |
 | `/api/admin/members/[id]` | PATCH, DELETE | Modifier, supprimer un membre |
 | `/api/admin/members/import` | POST | Import CSV ou xlsx (multipart) |
 | `/api/admin/settings/organization` | PATCH | Nom, slug, charte du bénévole, assurance RC, titre de la page publique (`publicTitle`, 2 à 100 caractères, vide = « Bénévoles »), fuseau horaire (`timeZone`, nom IANA, vide = défaut de la plateforme) |

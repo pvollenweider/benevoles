@@ -334,7 +334,7 @@ Le contenu des pages personnalisées et les coordonnées des bénévoles n'appar
 
 Le répertoire des membres est le pool de bénévoles connus de votre organisation.
 
-- **Ajouter** un membre : prénom, nom, email, téléphone, tags, notes internes
+- **Ajouter** un membre : prénom, nom, email, téléphone, tags, notes internes, et ses **disponibilités** en général (matin, après-midi, soir, plus une remarque comme « pas le dimanche »), facultatives. Le bénévole peut les renseigner lui-même depuis sa page personnelle. Elles s'affichent dans la liste des membres et sous chaque nom dans les inscriptions, et quand vous ajoutez quelqu'un à la main dès que son email correspond à une personne déjà inscrite à l'événement. C'est une information pour vous : rien n'est filtré ni attribué automatiquement.
 - **Modifier** ou désactiver un membre existant
 - **Importer** des membres en masse : bouton **Importer CSV/Excel** (fichiers `.csv` ou `.xlsx`). Les colonnes sont reconnues par leur intitulé (prénom, nom, email, téléphone, tags ; par exemple `prenom`, `courriel`, `mobile`, `groupes`). Plusieurs tags dans une cellule se séparent par `,`, `;` ou `|`. Le résultat indique le nombre de membres créés, mis à jour et ignorés ; les lignes en erreur sont listées avec leur numéro (50 au maximum affichées).
 - **Rechercher** par texte libre (prénom, nom, email, téléphone) ou filtrer par tag

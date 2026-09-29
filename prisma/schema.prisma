@@ -270,6 +270,11 @@ model Volunteer {
   // Collected only when the volunteer selects a shift with a minimum age (Shift.minAge, #192) —
   // never asked upfront for everyone. Kept on the profile (not re-asked every event) once given.
   birthDate      DateTime?
+  // Optional general availability (#402): "morning" / "afternoon" / "evening", and a short note
+  // on exceptions. Read by organizers when placing someone by hand; never used to match or filter
+  // automatically, and not asked on the public form.
+  availabilityPeriods String[] @default([])
+  availabilityNote    String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 

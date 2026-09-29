@@ -91,6 +91,7 @@ https://[organisation].benevol.app/my/[token]
 Vous pouvez :
 - Voir tous vos créneaux inscrits pour cet événement
 - **Annuler** un créneau individuellement — la place est immédiatement libérée
+- Indiquer, si vous le souhaitez, **vos disponibilités** en général (matin, après-midi, soir, et une remarque comme « pas le dimanche »). C'est facultatif : cela aide l'organisation si elle doit vous proposer un autre créneau, mais vous choisissez toujours vos créneaux vous-même.
 
 Le lien « Retour à l'accueil » vous ramène directement sur la page de l'événement — vous y êtes automatiquement reconnu(e).
 

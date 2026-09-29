@@ -43,6 +43,8 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
         tags: v.tags,
         active: v.active,
         notes: v.notes,
+        availabilityPeriods: v.availabilityPeriods,
+        availabilityNote: v.availabilityNote,
         hoursTotal: v.registrations.reduce(
           (sum, r) => sum + (toMinEnd(r.shift.endTime, r.shift.startTime) - toMin(r.shift.startTime)) / 60,
           0

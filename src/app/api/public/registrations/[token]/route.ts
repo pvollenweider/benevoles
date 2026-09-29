@@ -52,6 +52,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
       firstName: registration.volunteer.firstName,
       lastName: registration.volunteer.lastName,
       email: registration.volunteer.email,
+      availabilityPeriods: registration.volunteer.availabilityPeriods,
+      availabilityNote: registration.volunteer.availabilityNote,
       // Same number admins and sector leaders see (contactPhone): the one given for this
       // registration, else for another of this event's registrations, else the profile's.
       phone: contactPhone({

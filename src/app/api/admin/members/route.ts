@@ -6,6 +6,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, logOrgEvent } from "@/lib/org-log"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
+import { availabilitySchema } from "@/lib/availability"
 
 const volunteerSchema = z.object({
   firstName: z.string().min(1).max(100),
@@ -15,6 +16,8 @@ const volunteerSchema = z.object({
   tags: z.array(z.string()).optional(),
   notes: z.string().optional(),
   active: z.boolean().optional(),
+  availabilityPeriods: availabilitySchema.shape.availabilityPeriods.optional(),
+  availabilityNote: availabilitySchema.shape.availabilityNote.optional(),
 })
 
 export async function GET(req: Request) {
@@ -76,6 +79,8 @@ export async function POST(req: Request) {
       tags: data.tags ?? [],
       notes: data.notes || null,
       active: data.active ?? true,
+      availabilityPeriods: data.availabilityPeriods ?? [],
+      availabilityNote: data.availabilityNote ?? null,
     },
   })
 
