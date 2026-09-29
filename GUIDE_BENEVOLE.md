@@ -120,7 +120,15 @@ Vérifiez vos courriers indésirables. Si vous tentez de vous réinscrire à un 
 Annulez le créneau concerné via votre lien personnel, puis retournez sur la page de l'événement pour en choisir un autre.
 
 **Le créneau que je veux est complet.**
-Si la liste d'attente est activée sur ce créneau, sa barre reste cliquable (rayée, avec « Complet · file d'attente »). En la sélectionnant et en vous inscrivant, vous recevrez un email dès qu'une place se libère. Vous aurez alors **24 heures** pour confirmer via le lien dans l'email. Sans réponse, la place passe à la personne suivante. Si la liste d'attente n'est pas disponible, la barre est grisée et non cliquable : revenez ultérieurement ou contactez l'organisateur.
+Si la liste d'attente est activée sur ce créneau, sa barre reste cliquable (rayée, avec « Complet · file d'attente ») et le récapitulatif avant confirmation le signale. Concrètement :
+
+1. votre inscription **n'est pas encore confirmée** : le créneau est complet ;
+2. l'ordre est celui des inscriptions : la première personne inscrite en liste d'attente est la première prévenue (votre position figure dans l'email et sur votre page personnelle) ;
+3. dès qu'une place se libère, vous recevez un **email avec un lien** pour la prendre, valable **24 heures** ;
+4. pour accepter, cliquez sur ce lien (ou sur **Prendre la place** depuis votre page personnelle) : la place est à vous et vous recevez la confirmation ;
+5. sans réponse dans le délai, la place passe à la personne suivante ; vous restez en liste d'attente.
+
+Si la liste d'attente n'est pas disponible, la barre est grisée et non cliquable : revenez ultérieurement ou contactez l'organisateur.
 
 **Où sont mes données personnelles utilisées ?**
 La politique de confidentialité et les conditions d'utilisation sont accessibles par les liens en bas de page du site.

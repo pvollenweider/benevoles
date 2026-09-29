@@ -1,6 +1,7 @@
 "use client"
 
 import { useSearchParams } from "next/navigation"
+import { WAITLIST_STEPS } from "@/lib/waitlist-copy"
 import Link from "next/link"
 import { Suspense, useEffect, useState } from "react"
 import PublicFooter from "@/components/PublicFooter"
@@ -58,8 +59,10 @@ function SuccessContent() {
 
           {isWaitlist ? (
             <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-sm text-amber-900 text-left mb-6">
-              <p className="font-medium mb-1"><span aria-hidden="true">🕐 </span>Tu es sur la liste d&apos;attente !</p>
-              <p>On t&apos;enverra un email dès qu&apos;une place se libère. Tu auras 24h pour confirmer.</p>
+              <h2 className="font-medium mb-2">Comment ça marche</h2>
+              <ol className="list-decimal pl-5 space-y-1">
+                {WAITLIST_STEPS.map((step) => <li key={step}>{step}</li>)}
+              </ol>
             </div>
           ) : fetching ? (
             <div role="status" aria-label="Chargement des détails" className="flex justify-center py-4">

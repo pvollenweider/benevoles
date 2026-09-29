@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { offerDeadline, WAITLIST_STEPS, waitlistLabel } from "@/lib/waitlist-copy"
 import { fmtRange } from "@/lib/gantt-utils"
 import { useParams } from "next/navigation"
 import Link from "next/link"
@@ -24,6 +25,9 @@ type ShiftRef = {
 type RegistrationItem = {
   id: string
   editToken: string
+  status: string
+  waitingPosition?: number | null
+  waitingExpiresAt?: string | null
   shift: ShiftRef
 }
 
@@ -33,6 +37,7 @@ type PageData = {
   registrations: RegistrationItem[]
   orgHomeUrl: string
   eventUrl: string
+  timeZone?: string
   confirmationMessage: string | null
 }
 
@@ -132,8 +137,17 @@ export default function MyRegistrationPage() {
               <div key={reg.id} className="bg-white rounded-xl border border-gray-200 p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 text-sm">{reg.shift.label}</p>
+                    <p className="font-medium text-gray-900 text-sm">
+                      {reg.shift.label}
+                      {waitlistLabel(reg) && <span className="ml-2 inline-block rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-900">{waitlistLabel(reg)}</span>}
+                    </p>
                     <p className="text-xs text-gray-500 mt-0.5">{date} · {fmtRange(reg.shift.startTime, reg.shift.endTime)}</p>
+                    {reg.status === "offered" && (
+                      <p className="text-xs text-amber-900 mt-1">
+                        {offerDeadline(reg.waitingExpiresAt, data.timeZone ?? "Europe/Zurich")}{" "}
+                        <Link href={`/waitlist/${reg.editToken}/confirm`} aria-label={`Prendre la place : ${reg.shift.label}`} className="font-medium underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-900">Prendre la place</Link>
+                      </p>
+                    )}
                     <ShiftInfoList info={reg.shift} className="mt-2 text-xs text-gray-700" />
                   </div>
                   {!isPending && (
@@ -180,6 +194,15 @@ export default function MyRegistrationPage() {
             )
           })}
         </div>
+
+        {data.registrations.some((r) => r.status !== "active") && (
+          <section aria-labelledby="waitlist-how" className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-sm text-amber-900">
+            <h2 id="waitlist-how" className="font-medium mb-2">Liste d&apos;attente : comment ça marche</h2>
+            <ol className="list-decimal pl-5 space-y-1">
+              {WAITLIST_STEPS.map((step) => <li key={step}>{step}</li>)}
+            </ol>
+          </section>
+        )}
 
         {data.confirmationMessage && data.confirmationMessage.trim() && (() => {
           const html = renderMarkdown(interpolate(data.confirmationMessage, { prenom: data.volunteer.firstName, "créneau": data.registrations[0]?.shift.label ?? "", date: "", heure: "" }))

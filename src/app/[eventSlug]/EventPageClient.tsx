@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useEffect, useRef, useState, useMemo } from "react"
+import { WAITLIST_SHORT } from "@/lib/waitlist-copy"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { formatDate } from "@/lib/utils"
@@ -24,6 +25,9 @@ import DayTimeline, { fmt } from "@/components/DayTimeline"
 import PublicFooter from "@/components/PublicFooter"
 import { DEFAULT_VOLUNTEER_CHARTER } from "@/lib/volunteer-charter"
 import ShiftInfoList from "@/components/ShiftInfoList"
+
+/** A selected full shift with the waitlist open: the sign-up will be a waitlist entry, not a firm one (#374). */
+const isWaitlistShift = (s: { status?: string; waitlistEnabled?: boolean | null }) => s.status === "full" && !!s.waitlistEnabled
 
 type Shift = {
   id: string
@@ -103,6 +107,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   // Preview (#370): focus the result when it appears, and the submit button when going back to
   // the form (the result panel unmounts, focus would otherwise fall to <body>).
   const resultHeadingRef = useRef<HTMLHeadingElement>(null)
+  const hasWaitlistSelection = event?.shifts.some((s) => selectedShifts.has(s.id) && isWaitlistShift(s)) ?? false
   const submitButtonRef = useRef<HTMLButtonElement>(null)
   const hadPreviewResult = useRef(false)
   useEffect(() => {
@@ -539,9 +544,11 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                 {event.shifts.filter((s) => selectedShifts.has(s.id)).map((s) => (
                   <div key={s.id} className="text-sm text-gray-700">
                     ✓ {s.label} — {fmtRange(s.startTime, s.endTime)}
+                    {isWaitlistShift(s) && <span className="ml-2 inline-block rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-900">liste d&apos;attente</span>}
                     <ShiftInfoList info={s} className="ml-5 text-xs text-gray-600" />
                   </div>
                 ))}
+                {hasWaitlistSelection && <p className="text-xs text-amber-900 pt-1">{WAITLIST_SHORT}</p>}
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -688,6 +695,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                     <div key={s.id} className="px-4 py-3">
                       <p className="text-xs font-medium text-gray-900">{s.label && s.label !== s.roleName ? s.label : s.roleName}</p>
                       <p className="text-[11px] text-gray-500 mt-0.5 font-mono">{fmt(s.startTime)}–{fmt(s.endTime)}</p>
+                      {isWaitlistShift(s) && <p className="text-[11px] text-amber-900 mt-0.5 font-medium">Liste d&apos;attente (complet)</p>}
                       <ShiftInfoList info={s} className="mt-1 text-xs text-gray-600" />
                     </div>
                   ))}
