@@ -2,7 +2,6 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import { formatShortDate } from "@/lib/utils"
-import DuplicateButton from "@/components/admin/DuplicateButton"
 import StatusBadge from "@/components/admin/StatusBadge"
 import FlashMessage from "@/components/admin/FlashMessage"
 import OnboardingChecklist from "@/components/admin/OnboardingChecklist"
@@ -98,7 +97,12 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
                   </div>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  <DuplicateButton eventId={event.id} />
+                  <Link
+                    href={`/admin/events/${event.id}/duplicate`}
+                    className="text-xs text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg px-2 py-1 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                  >
+                    Dupliquer<span className="sr-only"> {event.title}</span>
+                  </Link>
                   <Link
                     href={`/admin/events/${event.id}`}
                     className="text-sm text-blue-600 hover:underline"
