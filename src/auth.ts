@@ -9,6 +9,7 @@ import { prisma } from "@/lib/prisma"
 import { getClientIp } from "@/lib/rate-limit"
 import { loginAllowed, recordLoginFailure, refreshAdminToken } from "@/lib/admin-session"
 import { normalizeEmail } from "@/lib/email-address"
+import { MAX_LOGIN_PASSWORD_LENGTH } from "@/lib/password"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -29,6 +30,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       authorize: async (credentials, request) => {
         if (!credentials?.email || !credentials?.password) return null
+        // Oversized input refused before bcrypt (#359); not the 72-byte policy, which only applies
+        // when a password is set, so longer passwords set before it still work.
+        if (String(credentials.password).length > MAX_LOGIN_PASSWORD_LENGTH) return null
         const ip = getClientIp(request)
         const email = normalizeEmail(credentials.email as string)
         if (!(await loginAllowed(ip, email))) return null
