@@ -12,8 +12,15 @@ until node -e "
 done
 echo "✓ PostgreSQL prêt"
 
-echo "⏳ Migrations Prisma…"
-./node_modules/.bin/prisma migrate deploy
-echo "✓ Migrations appliquées"
+# Migrations: on by default (docker-compose / self-hosting). In Kubernetes they run once per
+# deploy in a dedicated Job (k8s/job-migrate.yaml, #314) and the app pods set
+# MIGRATE_ON_START=false, so pods starting during a rollout never migrate concurrently.
+if [ "${MIGRATE_ON_START:-true}" != "false" ]; then
+  echo "⏳ Migrations Prisma…"
+  ./node_modules/.bin/prisma migrate deploy
+  echo "✓ Migrations appliquées"
+else
+  echo "↷ Migrations ignorées (MIGRATE_ON_START=false, appliquées par le Job de migration)"
+fi
 
 exec "$@"

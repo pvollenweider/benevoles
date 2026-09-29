@@ -175,6 +175,31 @@ jobs:
           kubectl rollout status deployment/postgres \
             -n benevoles --timeout=120s
 
+      - name: Run database migrations
+        env:
+          APP_IMAGE: ${{ needs.build-push.outputs.image }}
+        run: |
+          # Once per deploy, from the new image, before the app is updated (#314). The app pods
+          # no longer migrate on start. On failure the deploy stops and the running version
+          # keeps serving: migrations must stay compatible with it (CONTRIBUTING, expand/contract).
+          kubectl delete job benevoles-migrate -n benevoles --ignore-not-found --wait=true
+          export APP_IMAGE
+          envsubst < k8s/job-migrate.yaml | kubectl apply -f -
+          for i in $(seq 1 60); do
+            succeeded=$(kubectl get job benevoles-migrate -n benevoles -o jsonpath='{.status.succeeded}')
+            failed=$(kubectl get job benevoles-migrate -n benevoles -o jsonpath='{.status.failed}')
+            if [ "$succeeded" = "1" ]; then kubectl logs job/benevoles-migrate -n benevoles; exit 0; fi
+            if [ -n "$failed" ] && [ "$failed" != "0" ]; then
+              kubectl logs job/benevoles-migrate -n benevoles || true
+              echo "::error::Database migration failed"
+              exit 1
+            fi
+            sleep 5
+          done
+          kubectl logs job/benevoles-migrate -n benevoles || true
+          echo "::error::Database migration timed out"
+          exit 1
+
       - name: Deploy app
         env:
           APP_IMAGE: ${{ needs.build-push.outputs.image }}
