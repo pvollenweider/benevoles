@@ -64,7 +64,7 @@ describe("EventTemplatePicker", () => {
 
     fireEvent.change(screen.getByLabelText("Date (obligatoire)"), { target: { value: "2026-08-01" } })
     fireEvent.click(screen.getByRole("button", { name: /Créer le brouillon/ }))
-    await waitFor(() => expect(push).toHaveBeenCalledWith("/admin/events/evt-9/shifts"))
+    await waitFor(() => expect(push).toHaveBeenCalledWith("/admin/events/evt-9/shifts?wizard=1"))
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ templateId: "buvette", title: "Buvette", startDate: "2026-08-01" })
   })
 

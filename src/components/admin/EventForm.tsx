@@ -24,6 +24,9 @@ type EventFormData = {
 
 type Props = {
   initialData?: Partial<EventFormData> & { id?: string; showSchedule?: Show[] }
+  /** Where to go once created (create mode), `{id}` replaced; defaults to the event page. A
+   *  string, not a function: this component is rendered from server pages. */
+  createdHref?: string
 }
 
 const defaultData: EventFormData = {
@@ -42,7 +45,7 @@ const defaultData: EventFormData = {
 const emptyShow: Show = { name: "", date: "", startTime: "", endTime: "" }
 const inputCls = "w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
 
-export default function EventForm({ initialData }: Props) {
+export default function EventForm({ initialData, createdHref }: Props) {
   const router = useRouter()
   const isEdit = !!initialData?.id
 
@@ -153,7 +156,7 @@ export default function EventForm({ initialData }: Props) {
     setSaving(false)
 
     if (!res.ok) { setError("Erreur lors de la création."); return }
-    router.push(`/admin/events/${data.id}`)
+    router.push(createdHref ? createdHref.replace("{id}", data.id) : `/admin/events/${data.id}`)
     router.refresh()
   }
 
@@ -178,28 +181,28 @@ export default function EventForm({ initialData }: Props) {
         )}
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Titre *</label>
-          <input type="text" required value={form.title} onChange={(e) => set("title", e.target.value)} className={inputCls} />
+          <label htmlFor="event-title" className="block text-sm font-medium text-gray-700 mb-1">Titre *</label>
+          <input id="event-title" type="text" required value={form.title} onChange={(e) => set("title", e.target.value)} className={inputCls} />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-          <textarea rows={3} value={form.description} onChange={(e) => set("description", e.target.value)} className={`${inputCls} resize-none`} />
+          <label htmlFor="event-description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <textarea id="event-description" rows={3} value={form.description} onChange={(e) => set("description", e.target.value)} className={`${inputCls} resize-none`} />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Lieu</label>
-          <input type="text" value={form.location} onChange={(e) => set("location", e.target.value)} className={inputCls} />
+          <label htmlFor="event-location" className="block text-sm font-medium text-gray-700 mb-1">Lieu</label>
+          <input id="event-location" type="text" value={form.location} onChange={(e) => set("location", e.target.value)} className={inputCls} />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Date début *</label>
-            <input type="date" required value={form.startDate} onChange={(e) => set("startDate", e.target.value)} className={inputCls} />
+            <label htmlFor="event-start" className="block text-sm font-medium text-gray-700 mb-1">Date début *</label>
+            <input id="event-start" type="date" required value={form.startDate} onChange={(e) => set("startDate", e.target.value)} className={inputCls} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Date fin *</label>
-            <input type="date" required value={form.endDate} min={form.startDate || undefined} onChange={(e) => set("endDate", e.target.value)} className={inputCls} />
+            <label htmlFor="event-end" className="block text-sm font-medium text-gray-700 mb-1">Date fin *</label>
+            <input id="event-end" type="date" required value={form.endDate} min={form.startDate || undefined} onChange={(e) => set("endDate", e.target.value)} className={inputCls} />
           </div>
         </div>
 
