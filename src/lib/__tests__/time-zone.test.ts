@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { localDateTimeToUtc } from "../time-zone"
+import { APP_TIME_ZONE, isValidTimeZone, localDateTimeToUtc, orgTimeZone, timeZoneChoices } from "../time-zone"
 
 // Shift.date is stored at midnight UTC for its calendar day; times are local to Europe/Zurich.
 const day = (iso: string) => new Date(`${iso}T00:00:00Z`)
@@ -36,5 +36,37 @@ describe("localDateTimeToUtc (#308)", () => {
 
   it("other zones work too", () => {
     expect(localDateTimeToUtc(day("2026-07-01"), "10:00", "America/New_York").toISOString()).toBe("2026-07-01T14:00:00.000Z")
+  })
+})
+
+describe("per-organization time zone (#344)", () => {
+  it("validates IANA names", () => {
+    expect(isValidTimeZone("America/New_York")).toBe(true)
+    expect(isValidTimeZone("UTC")).toBe(true)
+    expect(isValidTimeZone("Europe/Zuric")).toBe(false)
+    expect(isValidTimeZone("  ")).toBe(false)
+  })
+
+  it("uses the organization's zone, else the deployment default", () => {
+    expect(orgTimeZone({ timeZone: "America/New_York" })).toBe("America/New_York")
+    expect(orgTimeZone({ timeZone: null })).toBe(APP_TIME_ZONE)
+    expect(orgTimeZone({ timeZone: " " })).toBe(APP_TIME_ZONE)
+    expect(orgTimeZone(null)).toBe(APP_TIME_ZONE)
+    expect(orgTimeZone(undefined)).toBe(APP_TIME_ZONE)
+  })
+
+  it("falls back to the default for a stored zone this runtime doesn't know", () => {
+    expect(orgTimeZone({ timeZone: "Mars/Olympus" })).toBe(APP_TIME_ZONE)
+  })
+
+  it("the same local shift time is a different instant in another zone", () => {
+    const nyc = localDateTimeToUtc(day("2026-07-01"), "10:00", orgTimeZone({ timeZone: "America/New_York" }))
+    expect(nyc.toISOString()).toBe("2026-07-01T14:00:00.000Z")
+  })
+
+  it("offers every known zone, plus the stored one if missing", () => {
+    expect(timeZoneChoices()).toContain("Europe/Zurich")
+    expect(timeZoneChoices("Etc/Legacy")).toContain("Etc/Legacy")
+    expect(timeZoneChoices("Europe/Zurich").filter((z) => z === "Europe/Zurich")).toHaveLength(1)
   })
 })

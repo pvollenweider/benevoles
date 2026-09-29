@@ -7,7 +7,7 @@ import { logEvent, SYSTEM_ACTOR } from "./event-log"
 import { OCCUPYING_STATUSES, canOfferSpot, lockShifts } from "./registration-capacity"
 import { reportError } from "./report-error"
 import { registrationToken } from "./token-vault"
-import { APP_TIME_ZONE } from "./time-zone"
+import { orgTimeZone } from "./time-zone"
 import { enqueueAndDeliver } from "./notifications/outbox"
 
 /**
@@ -57,7 +57,7 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
     include: {
       volunteer: true,
       shift: true,
-      event: { include: { organization: { select: { slug: true, name: true } } } },
+      event: { include: { organization: { select: { slug: true, name: true, timeZone: true } } } },
     },
   })
 
@@ -74,7 +74,7 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
   const orgSlug = next.event.organization.slug
   const confirmUrl = `${orgBaseUrl(orgSlug)}/waitlist/${registrationToken.reveal(next)}/confirm`
   const expiresAtLabel = expiresAt.toLocaleDateString("fr-FR", {
-    weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit", timeZone: APP_TIME_ZONE,
+    weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit", timeZone: orgTimeZone(next.event.organization),
   })
 
   // Through the outbox (#311): retried if SMTP fails, the caller isn't slowed down.

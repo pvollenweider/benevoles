@@ -6,6 +6,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 // Organization itself isn't tenant-scoped, and the slug checks look at other orgs on purpose.
 // eslint-disable-next-line no-restricted-imports
 import { prisma } from "@/lib/prisma"
+import { isValidTimeZone } from "@/lib/time-zone"
 import { orgBaseUrl } from "@/lib/urls"
 
 const SLUG_RE = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/
@@ -16,7 +17,7 @@ export async function PATCH(req: Request) {
   const { organizationId } = guard
 
   const body = await req.json().catch(() => ({}))
-  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; publicTitle?: string | null } = {}
+  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; publicTitle?: string | null; timeZone?: string | null } = {}
   let oldSlug: string | null = null
 
   if (typeof body.name === "string") {
@@ -79,6 +80,18 @@ export async function PATCH(req: Request) {
     }
   }
 
+  // Time zone of the organization's events (#344). Empty means the deployment default.
+  if ("timeZone" in body) {
+    const timeZone = typeof body.timeZone === "string" ? body.timeZone.trim() : ""
+    if (!timeZone) {
+      updates.timeZone = null
+    } else if (!isValidTimeZone(timeZone)) {
+      return NextResponse.json({ error: "Fuseau horaire inconnu." }, { status: 400 })
+    } else {
+      updates.timeZone = timeZone
+    }
+  }
+
   if (Object.keys(updates).length === 0) {
     return NextResponse.json({ error: "Aucune modification." }, { status: 400 })
   }
@@ -93,10 +106,10 @@ export async function PATCH(req: Request) {
     return tx.organization.update({
       where: { id: organizationId },
       data: updates,
-      select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, publicTitle: true },
+      select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, publicTitle: true, timeZone: true },
     })
   })
 
   const adminUrl = oldSlug ? `${orgBaseUrl(org.slug)}/admin/settings/admins` : null
-  return NextResponse.json({ name: org.name, slug: org.slug, publicTitle: org.publicTitle, adminUrl })
+  return NextResponse.json({ name: org.name, slug: org.slug, publicTitle: org.publicTitle, timeZone: org.timeZone, adminUrl })
 }

@@ -12,7 +12,6 @@ import { fmtRange } from "./gantt-utils"
 import { APP_TIME_ZONE } from "./time-zone"
 
 const shiftDateFmt = new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "2-digit" })
-const dateTimeFmt = new Intl.DateTimeFormat("fr-FR", { timeZone: APP_TIME_ZONE, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })
 
 export interface EventLogEntry {
   id: string
@@ -237,7 +236,7 @@ export interface StoryCandidate {
  * isolated entry still "narrates" (one sentence), but isn't a story; nothing here is picked at
  * random or ranked by relevance, just genuinely chained sequences.
  */
-export async function listStoryCandidates(eventId: string): Promise<StoryCandidate[]> {
+export async function listStoryCandidates(eventId: string, timeZone: string = APP_TIME_ZONE): Promise<StoryCandidate[]> {
   const roots = await prisma.eventLog.findMany({
     where: { eventId, causedByLogId: null },
     select: { id: true, action: true, actorType: true, actorId: true, createdAt: true },
@@ -260,6 +259,7 @@ export async function listStoryCandidates(eventId: string): Promise<StoryCandida
   if (candidates.length === 0) return []
 
   const actorLabelById = await buildActorLabelMap(candidates)
+  const dateTimeFmt = new Intl.DateTimeFormat("fr-FR", { timeZone, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })
 
   return candidates
     .slice(0, 100)

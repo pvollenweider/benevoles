@@ -19,6 +19,9 @@ model Organization {
   volunteerCharter String?
   hasOrgInsurance  Boolean  @default(true)
   publicTitle      String? // headline of the public events page; null = "Bénévoles"
+  // IANA time zone of the organization's events (#344): shift times are local wall-clock times in
+  // this zone (reminders, emails, event log, PDF export). null = deployment default (APP_TIME_ZONE).
+  timeZone         String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

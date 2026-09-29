@@ -1,0 +1,107 @@
+"use client"
+
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
+import { useId, useState } from "react"
+
+/**
+ * Time zone of the organization's events (#344). Empty means the deployment default. The list of
+ * zones comes from the server, so server and browser render the same options.
+ */
+export default function OrgTimeZoneForm({
+  initialTimeZone,
+  defaultTimeZone,
+  choices,
+}: {
+  initialTimeZone: string
+  defaultTimeZone: string
+  choices: string[]
+}) {
+  const [saved, setSaved] = useState(initialTimeZone)
+  const [value, setValue] = useState(initialTimeZone)
+  const [loading, setLoading] = useState(false)
+  const [status, setStatus] = useState("")
+  const [error, setError] = useState<string | null>(null)
+  const selectId = useId()
+  const helpId = useId()
+  const errorId = useId()
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (loading) return
+    if (value === saved) {
+      setError(null)
+      // Cleared first so a second click re-announces the same text.
+      setStatus("")
+      requestAnimationFrame(() => setStatus("Aucune modification."))
+      return
+    }
+    setLoading(true)
+    setError(null)
+    setStatus("")
+    try {
+      const res = await fetch("/api/admin/settings/organization", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ timeZone: value }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setError(typeof data?.error === "string" ? data.error : "Une erreur est survenue.")
+        return
+      }
+      const data = await res.json()
+      const stored: string = data.timeZone ?? ""
+      setSaved(stored)
+      setValue(stored)
+      setStatus(`Fuseau horaire enregistré : ${stored || `${defaultTimeZone} (par défaut)`}.`)
+    } catch {
+      setError("Impossible d'enregistrer. Vérifiez votre connexion et réessayez.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-200 p-5 space-y-3">
+      <h2 className="text-sm font-semibold text-gray-900">Fuseau horaire</h2>
+      <div>
+        <label htmlFor={selectId} className="block text-sm text-gray-800 mb-1">
+          Fuseau horaire de vos événements
+        </label>
+        <select
+          id={selectId}
+          value={value}
+          onChange={(e) => {
+            setValue(e.target.value)
+            setStatus("")
+            setError(null)
+          }}
+          aria-describedby={error ? `${helpId} ${errorId}` : helpId}
+          aria-invalid={error ? true : undefined}
+          className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">Par défaut ({defaultTimeZone})</option>
+          {choices.map((tz) => (
+            <option key={tz} value={tz}>{tz}</option>
+          ))}
+        </select>
+        <p id={helpId} className="mt-1 text-xs text-gray-600">
+          Les heures des créneaux sont lues dans ce fuseau : rappels par email, heure limite des places
+          proposées en liste d&apos;attente, journal de l&apos;événement et export PDF. Le changer décale
+          les rappels des créneaux existants, sans modifier leurs heures affichées.
+        </p>
+      </div>
+      <button
+        type="submit"
+        disabled={loading}
+        className="bg-gray-900 text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+      >
+        {loading ? "Enregistrement…" : "Enregistrer"}
+      </button>
+      <p role="status" className="text-sm font-medium text-green-800 min-h-5">{status}</p>
+      {error && <p id={errorId} role="alert" className="text-sm font-medium text-red-700">{error}</p>}
+    </form>
+  )
+}

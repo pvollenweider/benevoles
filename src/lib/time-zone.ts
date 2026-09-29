@@ -7,8 +7,8 @@
  * in UTC: turning them into real instants, or formatting instants for people, must go through
  * this zone, or everything is off by 1 h in winter and 2 h in summer for Swiss events.
  *
- * One zone for the whole app (benevol.app serves Swiss organizations); override with
- * APP_TIME_ZONE (IANA name) for another deployment.
+ * Each organization can set its own zone (`Organization.timeZone`, #344); APP_TIME_ZONE (IANA
+ * name, default Europe/Zurich) is the default for organizations that haven't.
  */
 export function appTimeZone(env: Record<string, string | undefined> = process.env): string {
   return env.APP_TIME_ZONE?.trim() || "Europe/Zurich"
@@ -22,13 +22,38 @@ export const APP_TIME_ZONE = appTimeZone()
  * PDF export, event log), long after the deploy looked healthy.
  */
 export function assertTimeZone(timeZone: string): void {
-  try {
-    new Intl.DateTimeFormat("en", { timeZone })
-  } catch {
+  if (!isValidTimeZone(timeZone)) {
     throw new Error(
       `APP_TIME_ZONE "${timeZone}" is not a valid IANA time zone (e.g. "Europe/Zurich"). See README, variables d'environnement.`,
     )
   }
+}
+
+/** Whether `timeZone` is an IANA name this runtime knows ("Europe/Zurich", "UTC"). */
+export function isValidTimeZone(timeZone: string): boolean {
+  if (!timeZone.trim()) return false
+  try {
+    new Intl.DateTimeFormat("en", { timeZone })
+    return true
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Time zone of an organization's events (#344): its own setting, or the deployment default
+ * (APP_TIME_ZONE) when unset. A stored value this runtime doesn't know falls back to the default
+ * rather than making every date of the organization throw.
+ */
+export function orgTimeZone(org?: { timeZone?: string | null } | null): string {
+  const tz = org?.timeZone?.trim()
+  return tz && isValidTimeZone(tz) ? tz : APP_TIME_ZONE
+}
+
+/** Zones offered in the settings: every IANA zone this runtime knows, plus `current` if it's missing. */
+export function timeZoneChoices(current?: string | null): string[] {
+  const all = Intl.supportedValuesOf("timeZone")
+  return current && !all.includes(current) ? [...all, current].sort() : all
 }
 
 /** Offset (ms) of `timeZone` from UTC at `instant`: local wall time minus UTC. */

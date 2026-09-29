@@ -5,7 +5,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { buildDayParts, type VolData, type ShiftRow, type ShowEntry } from "@/lib/pdf-export-gantt"
 import { contactPhone } from "@/lib/contact-phone"
-import { APP_TIME_ZONE } from "@/lib/time-zone"
+import { orgTimeZone } from "@/lib/time-zone"
 
 function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
@@ -21,6 +21,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const event = await db.event.findFirst({
     where: { id },
     include: {
+      organization: { select: { timeZone: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
         include: {
@@ -91,7 +92,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     <td>${esc(v.phone ?? "")}</td>
   </tr>`).join("")
 
-  const ts = new Date().toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short", timeZone: APP_TIME_ZONE })
+  const ts = new Date().toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short", timeZone: orgTimeZone(event.organization) })
 
   const html = `<!DOCTYPE html>
 <html lang="fr">
