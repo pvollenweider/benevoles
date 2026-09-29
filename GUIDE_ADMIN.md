@@ -411,6 +411,20 @@ Ces rappels sont envoyés sans intervention de votre part, tant que `remindersEn
 
 ## Exports
 
+### Feuilles à imprimer
+
+**`/admin/events/[id]/print`**, depuis la page de l'événement (**Imprimer**). Cinq feuilles lisibles en noir et blanc, chacune ouverte dans un nouvel onglet puis imprimée ou enregistrée en PDF depuis le navigateur :
+
+| Feuille | Contenu | Pour qui |
+|---|---|---|
+| Planning par jour | pour chaque jour, les créneaux par poste avec les noms et les places libres | affichage, bénévoles |
+| Planning par poste | une page par poste : ses créneaux, ses bénévoles, son responsable de secteur | chaque responsable |
+| Liste avec téléphones | tous les bénévoles par ordre alphabétique, téléphone, email et créneaux | organisateurs seulement |
+| Feuille de présence | par créneau, une case à cocher par bénévole (déjà cochée si la présence a été marquée dans l'application), heure d'arrivée, remarque, et des lignes vides pour les arrivées imprévues | organisateurs |
+| Planning individuel | une page par bénévole avec ses créneaux, lieux de rendez-vous, contacts et consignes | à remettre à l'arrivée |
+
+Les heures cumulées des membres n'y figurent jamais ; les feuilles avec téléphones portent la mention « ne pas afficher ni distribuer ».
+
 ### Export PDF (impression)
 
 - **3 sections** : Planning (Gantt par jour), Récap par poste, Liste des bénévoles
