@@ -126,7 +126,8 @@ Liste exhaustive des fonctionnalités de l'application.
 - **Suppression définitive**, réservée aux événements archivés : avertissement fort, nombre de créneaux / inscriptions / invitations effacés, lien vers l'export PDF pour sauvegarder l'état, confirmation en saisissant le titre (accents et casse ignorés). Les créneaux, inscriptions et invitations sont effacés avec l'événement ; les membres du pool et l'organisation sont conservés. Les bénévoles ne sont pas prévenus : pour cela, annuler d'abord les créneaux
 - Champs : titre, slug, dates, lieu, description, instructions publiques, message de confirmation
 - **Publication / dépublication** en un clic (`draft` → `published`)
-- Vue de synthèse : créneaux, places totales, inscrits, places restantes
+- Vue de synthèse : créneaux, places totales, inscrits, places restantes ; phrase « Il manque encore N personnes sur M places » et lien vers la vue de complétion
+- **Où manque-t-il du monde ?** (`/admin/events/[id]/staffing`) : postes sans personne, créneaux à compléter (du plus dégarni au plus proche du complet, créneaux fermés exclus), personnes en liste d'attente, postes sans responsable de secteur, créneaux complets ; chaque ligne mène aux inscriptions filtrées sur le créneau, aux créneaux ou aux responsables
 - Lien direct vers la vue publique (affiché uniquement si l'événement est publié)
 - QR code de la page publique (formats PNG et SVG téléchargeables)
 

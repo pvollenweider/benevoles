@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import { formatShortDate } from "@/lib/utils"
-import { fmtRange } from "@/lib/gantt-utils"
+import { staffingHeadline, staffingSummary } from "@/lib/staffing"
 import { eventPublicUrl } from "@/lib/urls"
 import StatusBadge from "@/components/admin/StatusBadge"
 import PublishToggle from "@/components/admin/PublishToggle"
@@ -35,6 +35,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
       },
       milestones: { orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }] },
+      sectorLeaders: { select: { roleName: true } },
     },
   })
 
@@ -56,8 +57,14 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
     (s, sh) => s + sh.registrations.filter((r) => r.status === "active").length,
     0
   )
-  const criticalShifts = event.shifts.filter(
-    (sh) => sh.capacity - sh.registrations.filter((r) => r.status === "active").length >= 2
+  const staffing = staffingSummary(
+    event.shifts.map((sh) => ({
+      id: sh.id, roleName: sh.roleName, label: sh.label, date: sh.date.toISOString().slice(0, 10),
+      startTime: sh.startTime, endTime: sh.endTime, capacity: sh.capacity, closed: sh.status === "closed",
+      active: sh.registrations.filter((r) => r.status === "active").length,
+      waiting: sh.registrations.filter((r) => r.status !== "active").length,
+    })),
+    event.sectorLeaders.map((l) => l.roleName),
   )
 
   // Unique volunteers across all shifts (one reminder email per person)
@@ -175,61 +182,18 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         />
       </div>
 
-      {criticalShifts.length > 0 && (
-        <div>
-          <h2 className="text-sm font-semibold text-gray-700 mb-3">
-            Créneaux à pourvoir ({criticalShifts.length})
-          </h2>
-          <div className="space-y-2">
-            {criticalShifts.map((shift) => {
-              const filled = shift.registrations.filter((r) => r.status === "active").length
-              const waitingCount = shift.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length
-              const { capacity } = shift
-              const pct = capacity > 0 ? Math.round((filled / capacity) * 100) : 0
-              const barColor =
-                pct >= 75 ? "bg-green-500" :
-                pct >= 50 ? "bg-yellow-400" :
-                pct >= 25 ? "bg-orange-400" :
-                "bg-red-400"
-              const countColor =
-                pct >= 75 ? "text-green-700" :
-                pct >= 50 ? "text-yellow-700" :
-                pct >= 25 ? "text-orange-600" :
-                "text-red-600"
-              return (
-                <div key={shift.id} className="bg-white border border-gray-200 rounded-xl p-3">
-                  <div className="flex items-start justify-between gap-3 mb-2.5">
-                    <p className="text-sm font-medium text-gray-800">
-                      {shift.label !== shift.roleName
-                        ? <>{shift.roleName} <span className="font-normal text-gray-500">·</span> {shift.label}</>
-                        : shift.label}
-                    </p>
-                    <p className="text-xs text-gray-500 whitespace-nowrap flex-shrink-0">
-                      {shift.date.toLocaleDateString("fr-FR")} · {fmtRange(shift.startTime, shift.endTime)}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full rounded-full transition-all ${barColor}`}
-                        style={{ width: `${Math.max(pct, filled > 0 ? 3 : 0)}%` }}
-                      />
-                    </div>
-                    <span className={`text-xs font-semibold tabular-nums whitespace-nowrap ${countColor}`}>
-                      {filled}/{capacity} bénévole{capacity > 1 ? "s" : ""}
-                    </span>
-                    {waitingCount > 0 && (
-                      <span className="text-xs text-gray-500">
-                        {waitingCount} en attente
-                      </span>
-                    )}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )}
+      <div className="border-t border-gray-200 pt-4">
+        <h2 className="text-sm font-semibold text-gray-700 mb-2">Où manque-t-il du monde ?</h2>
+        <p className="text-sm text-gray-800">
+          {staffingHeadline(staffing.totals)}
+          {staffing.totals.waiting > 0 && ` ${staffing.totals.waiting} personne${staffing.totals.waiting > 1 ? "s" : ""} en liste d'attente.`}
+        </p>
+        {staffing.totals.shifts > 0 && (
+          <Link href={`/admin/events/${event.id}/staffing`} className="inline-block mt-1 text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            {staffing.underfilled.length > 0 ? `Voir les créneaux à compléter (${staffing.underfilled.length})` : "Voir le détail des créneaux"}
+          </Link>
+        )}
+      </div>
 
       <div className="border-t border-gray-200 pt-4">
         <h2 className="text-sm font-semibold text-gray-700 mb-3">Suppression définitive</h2>
