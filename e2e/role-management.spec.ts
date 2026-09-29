@@ -73,7 +73,7 @@ test.describe("role management", () => {
     // fixed, extend this to register a volunteer and assert cancelledRegistrations/notified too.
     const stamp = Date.now()
     const eventRes = await page.request.post("/api/admin/events", {
-      data: { title: `E2E Role Delete ${stamp}`, startDate: "2030-09-03", endDate: "2030-09-03", publicStatus: "published" },
+      data: { title: `E2E Role Delete ${stamp}`, startDate: "2030-09-03", endDate: "2030-09-03" },
     })
     const event: { id: string; slug: string } = await eventRes.json()
 

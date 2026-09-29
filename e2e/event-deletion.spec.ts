@@ -103,7 +103,7 @@ test("archive then delete an event from the admin UI", async ({ browser }) => {
   const { context, page } = await login(browser, ORG_ADMIN_EMAIL, ORG_ADMIN_PASSWORD)
   const title = `E2E UI Delete ${Date.now()}`
   const created = await page.request.post("/api/admin/events", {
-    data: { title, startDate: "2030-07-01", endDate: "2030-07-02", publicStatus: "published" },
+    data: { title, startDate: "2030-07-01", endDate: "2030-07-02" },
   })
   const { id } = await created.json()
 
