@@ -9,7 +9,7 @@ import { contactPhone } from "@/lib/contact-phone"
 import { registrationToken } from "@/lib/token-vault"
 
 export async function GET(req: Request, { params }: { params: Promise<{ token: string }> }) {
-  const rl = rateLimit(getClientIp(req), "reg-token-read", 10, 60 * 60 * 1000)
+  const rl = await rateLimit(getClientIp(req), "reg-token-read", 10, 60 * 60 * 1000)
   if (!rl.ok) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
 
   const { token } = await params
@@ -71,7 +71,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
 }
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ token: string }> }) {
-  const rl = rateLimit(getClientIp(req), "reg-token-delete", 5, 60 * 60 * 1000)
+  const rl = await rateLimit(getClientIp(req), "reg-token-delete", 5, 60 * 60 * 1000)
   if (!rl.ok) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
 
   const { token } = await params

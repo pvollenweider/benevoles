@@ -1,53 +1,104 @@
+import { prisma } from "./prisma"
+import { reportError } from "./report-error"
+
 /**
- * Sliding-window in-memory rate limiter.
+ * Fixed-window rate limiter, shared by every app replica (#322).
  *
- * Single-instance only: counters live in this process, reset on restart and aren't shared
- * between pods. Fine with `replicas: 1` (k8s/deployment.yaml); running more replicas requires
- * moving `store` to a shared backend (Redis/Upstash) first, otherwise every limit is multiplied
- * by the number of pods (#289).
+ * Counters live in Postgres (`RateLimit` table): one row per key, bumped with a single atomic
+ * upsert that starts a new window once the previous one has expired. Times come from the
+ * database clock, so pods with drifting clocks still agree on when a window ends. Expired rows
+ * are pruned by the cleanup cron.
+ *
+ * Postgres rather than Redis: the volume is tiny (logins, sign-ups, token links), and it avoids
+ * running and securing another service. Unit tests use the in-memory store (no database).
+ *
+ * If the store fails, the request is allowed and the error reported: a rate limit must never be
+ * the reason the app is down (and when Postgres is down, nothing else works anyway).
  */
 
-type Window = { count: number; resetAt: number }
+/** Hits in the key's current window, and the milliseconds left in it. */
+export type WindowState = { count: number; msLeft: number }
 
-const store = new Map<string, Window>()
-
-// Prune expired entries every 10 minutes to prevent unbounded growth
-if (typeof setInterval !== "undefined") {
-  setInterval(() => {
-    const now = Date.now()
-    for (const [key, win] of store) {
-      if (win.resetAt <= now) store.delete(key)
-    }
-  }, 10 * 60 * 1000)
+export type RateLimitStore = {
+  /** Counts one hit, starting a new window of `windowMs` if there's none or it has expired. */
+  hit(key: string, windowMs: number): Promise<WindowState>
+  /** The current window, without counting; null if none or expired. */
+  peek(key: string): Promise<WindowState | null>
 }
 
-export function rateLimit(
+export const postgresStore: RateLimitStore = {
+  async hit(key, windowMs) {
+    const [row] = await prisma.$queryRaw<{ count: number; msLeft: number }[]>`
+      INSERT INTO "RateLimit" ("key", "count", "resetAt")
+      VALUES (${key}, 1, now() + ${windowMs}::integer * interval '1 millisecond')
+      ON CONFLICT ("key") DO UPDATE SET
+        "count"   = CASE WHEN "RateLimit"."resetAt" <= now() THEN 1 ELSE "RateLimit"."count" + 1 END,
+        "resetAt" = CASE WHEN "RateLimit"."resetAt" <= now() THEN EXCLUDED."resetAt" ELSE "RateLimit"."resetAt" END
+      RETURNING "count", (EXTRACT(EPOCH FROM ("resetAt" - now())) * 1000)::float8 AS "msLeft"`
+    return { count: row.count, msLeft: row.msLeft }
+  },
+  async peek(key) {
+    const [row] = await prisma.$queryRaw<{ count: number; msLeft: number }[]>`
+      SELECT "count", (EXTRACT(EPOCH FROM ("resetAt" - now())) * 1000)::float8 AS "msLeft"
+      FROM "RateLimit" WHERE "key" = ${key} AND "resetAt" > now()`
+    return row ? { count: row.count, msLeft: row.msLeft } : null
+  },
+}
+
+/** Same semantics in this process only: for unit tests, which run without a database. */
+export function memoryStore(): RateLimitStore {
+  const windows = new Map<string, { count: number; resetAt: number }>()
+  return {
+    async hit(key, windowMs) {
+      const now = Date.now()
+      const win = windows.get(key)
+      if (!win || win.resetAt <= now) {
+        windows.set(key, { count: 1, resetAt: now + windowMs })
+        return { count: 1, msLeft: windowMs }
+      }
+      win.count++
+      return { count: win.count, msLeft: win.resetAt - now }
+    },
+    async peek(key) {
+      const now = Date.now()
+      const win = windows.get(key)
+      return win && win.resetAt > now ? { count: win.count, msLeft: win.resetAt - now } : null
+    },
+  }
+}
+
+const store: RateLimitStore = process.env.NODE_ENV === "test" ? memoryStore() : postgresStore
+
+/** Whether a hit is allowed, from the window it was counted in. */
+export function decide(win: WindowState, limit: number): { ok: boolean; remaining: number; retryAfter: number } {
+  if (win.count > limit) return { ok: false, remaining: 0, retryAfter: Math.max(1, Math.ceil(win.msLeft / 1000)) }
+  return { ok: true, remaining: Math.max(0, limit - win.count), retryAfter: 0 }
+}
+
+export async function rateLimit(
   ip: string,
   route: string,
   limit: number,
   windowMs: number,
-): { ok: boolean; remaining: number; retryAfter: number } {
-  const key = `${route}:${ip}`
-  const now = Date.now()
-  const existing = store.get(key)
-
-  if (!existing || existing.resetAt <= now) {
-    store.set(key, { count: 1, resetAt: now + windowMs })
-    return { ok: true, remaining: limit - 1, retryAfter: 0 }
+  using: RateLimitStore = store,
+): Promise<{ ok: boolean; remaining: number; retryAfter: number }> {
+  try {
+    return decide(await using.hit(`${route}:${ip}`, windowMs), limit)
+  } catch (e) {
+    reportError("rate_limit.hit")(e)
+    return { ok: true, remaining: limit, retryAfter: 0 }
   }
-
-  existing.count++
-  const remaining = Math.max(0, limit - existing.count)
-  if (existing.count > limit) {
-    return { ok: false, remaining: 0, retryAfter: Math.ceil((existing.resetAt - now) / 1000) }
-  }
-  return { ok: true, remaining, retryAfter: 0 }
 }
 
 /** Whether `key` has already used up `limit` in its current window — reads without counting. */
-export function isRateLimited(ip: string, route: string, limit: number): boolean {
-  const win = store.get(`${route}:${ip}`)
-  return !!win && win.resetAt > Date.now() && win.count >= limit
+export async function isRateLimited(ip: string, route: string, limit: number, using: RateLimitStore = store): Promise<boolean> {
+  try {
+    const win = await using.peek(`${route}:${ip}`)
+    return !!win && win.count >= limit
+  } catch (e) {
+    reportError("rate_limit.peek")(e)
+    return false
+  }
 }
 
 /**

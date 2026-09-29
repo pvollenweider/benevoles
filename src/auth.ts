@@ -28,7 +28,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!credentials?.email || !credentials?.password) return null
         const ip = getClientIp(request)
         const email = normalizeEmail(credentials.email as string)
-        if (!loginAllowed(ip, email)) return null
+        if (!(await loginAllowed(ip, email))) return null
 
         const user = await prisma.adminUser.findUnique({
           where: { email },
@@ -36,7 +36,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         })
 
         if (!user || !user.isActive) {
-          recordLoginFailure(ip, email)
+          await recordLoginFailure(ip, email)
           return null
         }
         // super_admin has no organization (cross-tenant); org admins are
@@ -45,7 +45,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const valid = await bcrypt.compare(credentials.password as string, user.passwordHash)
         if (!valid) {
-          recordLoginFailure(ip, email)
+          await recordLoginFailure(ip, email)
           return null
         }
 

@@ -76,7 +76,10 @@ async function run(req: Request) {
     },
   })
 
-  // --- 6. Encrypt volunteer-facing tokens still stored in clear (#290) ---
+  // --- 6. Expired rate limit windows (#322) ---
+  const deletedRateLimits = await prisma.rateLimit.deleteMany({ where: { resetAt: { lt: now } } })
+
+  // --- 7. Encrypt volunteer-facing tokens still stored in clear (#290) ---
   // No-op until TOKEN_ENCRYPTION_KEY is set; then drains the legacy columns.
   const tokenEncryption = await encryptLegacyTokens().catch((e) => {
     reportError("tokens.encrypt_legacy")(e)
@@ -88,6 +91,7 @@ async function run(req: Request) {
     tokenEncryption,
     deleted: {
       notificationOutbox: deletedOutbox.count,
+      rateLimits: deletedRateLimits.count,
       organizations: deletedOrgs.count,
       volunteers: deletedVolunteers.count,
       adminUsers: deletedAdmins.count,

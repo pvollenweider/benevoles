@@ -353,6 +353,17 @@ model NotificationOutbox {
   @@index([status, nextAttemptAt])
 }
 
+// Rate limit counters (#322), shared by every app replica: one fixed window per "<route>:<key>",
+// bumped by an atomic upsert in src/lib/rate-limit.ts (raw SQL, database clock). Expired rows
+// are deleted by the cleanup cron.
+model RateLimit {
+  key     String   @id
+  count   Int
+  resetAt DateTime @db.Timestamptz(3)
+
+  @@index([resetAt])
+}
+
 // Web push subscription, tied to one Volunteer (hence to one organization through it). Creating
 // one requires the volunteer's registration editToken, not just an email: the reminder payload
 // links to /my/<editToken>, so whoever owns the endpoint receives that link. Same browser can

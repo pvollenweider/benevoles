@@ -17,7 +17,7 @@ const schema = z.object({
 // pushes link to /my/<editToken>, so subscribing must prove the caller already holds that link
 // — an email alone would let anyone receive another volunteer's management link.
 export async function POST(req: Request) {
-  const rl = rateLimit(getClientIp(req), "push-subscribe", 10, 60 * 60 * 1000)
+  const rl = await rateLimit(getClientIp(req), "push-subscribe", 10, 60 * 60 * 1000)
   if (!rl.ok) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
 
   const body = await req.json().catch(() => null)

@@ -35,14 +35,17 @@ const normalizeEmail = (email: string) => email.trim().toLowerCase()
  * password guessing. Only failures count, so normal repeated logins never lock anyone out.
  * Checked before the password, so a blocked attempt says nothing about whether it was right.
  */
-export function loginAllowed(ip: string, email: string): boolean {
-  return (
-    !isRateLimited(normalizeEmail(email), "login-email", LOGIN_MAX_PER_EMAIL) &&
-    !isRateLimited(ip, "login-ip", LOGIN_MAX_PER_IP)
-  )
+export async function loginAllowed(ip: string, email: string): Promise<boolean> {
+  const [byEmail, byIp] = await Promise.all([
+    isRateLimited(normalizeEmail(email), "login-email", LOGIN_MAX_PER_EMAIL),
+    isRateLimited(ip, "login-ip", LOGIN_MAX_PER_IP),
+  ])
+  return !byEmail && !byIp
 }
 
-export function recordLoginFailure(ip: string, email: string): void {
-  rateLimit(normalizeEmail(email), "login-email", LOGIN_MAX_PER_EMAIL, LOGIN_WINDOW_MS)
-  rateLimit(ip, "login-ip", LOGIN_MAX_PER_IP, LOGIN_WINDOW_MS)
+export async function recordLoginFailure(ip: string, email: string): Promise<void> {
+  await Promise.all([
+    rateLimit(normalizeEmail(email), "login-email", LOGIN_MAX_PER_EMAIL, LOGIN_WINDOW_MS),
+    rateLimit(ip, "login-ip", LOGIN_MAX_PER_IP, LOGIN_WINDOW_MS),
+  ])
 }

@@ -42,7 +42,7 @@ Modules `src/lib/` à connaître :
 | `notifications/` | `sendNotification()`, gabarits, canal email |
 | `push.ts` | Envoi Web Push, purge des abonnements expirés |
 | `waitlist.ts` | Promotion du premier de la liste d'attente |
-| `rate-limit.ts` | Limiteur de requêtes en mémoire |
+| `rate-limit.ts` | Limiteur de requêtes, compteurs dans PostgreSQL (partagés entre instances) |
 | `csv-import.ts` | Import CSV et xlsx des membres |
 | `volunteer-charter.ts` | Texte par défaut de la charte du bénévole |
 | `event-page-markdown.ts` | Rend le Markdown des pages personnalisées d'événement en HTML (`marked`), sanitisé avec DOMPurify (liste blanche de balises/attributs) à la lecture, pas à l'écriture |

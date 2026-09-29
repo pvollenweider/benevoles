@@ -6,8 +6,8 @@ metadata:
   labels:
     app: benevoles-app
 spec:
-  # Keep at 1 until rate limiting uses a shared store: src/lib/rate-limit.ts counts in memory,
-  # so each extra replica would multiply every limit (login, token routes, sign-ups) — #289.
+  # Can be raised: rate limit counters are in Postgres, shared by every replica (#322), and the
+  # notification outbox claims rows in the database. Migrations run in their own Job, not per pod.
   replicas: 1
   selector:
     matchLabels:

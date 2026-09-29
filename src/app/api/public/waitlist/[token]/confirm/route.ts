@@ -7,7 +7,7 @@ import { registrationToken } from "@/lib/token-vault"
 import { enqueueAndDeliver } from "@/lib/notifications/outbox"
 
 export async function POST(_req: Request, { params }: { params: Promise<{ token: string }> }) {
-  const rl = rateLimit(getClientIp(_req), "waitlist-confirm", 10, 60 * 60 * 1000)
+  const rl = await rateLimit(getClientIp(_req), "waitlist-confirm", 10, 60 * 60 * 1000)
   if (!rl.ok) return NextResponse.json({ error: "Trop de requêtes." }, { status: 429 })
 
   const { token } = await params
