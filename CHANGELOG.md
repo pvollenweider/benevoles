@@ -9,6 +9,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Premiers pas** : une nouvelle organisation voit, en haut de la liste des événements et du tableau de bord, la liste des étapes de mise en place dans l'ordre (page publique et charte, fuseau horaire, premier événement, créneaux, publication, inscription de test), avec un lien vers chacune. Les étapes se cochent d'elles-mêmes ; la liste disparaît une fois la mise en place faite, ou peut être masquée.
 - **Fuseau horaire par organisation** : dans les paramètres, une organisation peut choisir le fuseau de ses événements (Europe/Zurich par défaut). Il sert aux rappels, à l'heure limite des places proposées en liste d'attente, au journal de l'événement et à l'export PDF.
 
 ### Modifié

@@ -48,3 +48,31 @@ describe("PATCH /api/admin/settings/organization — timeZone (#344)", () => {
     expect(update).not.toHaveBeenCalled()
   })
 })
+
+describe("PATCH /api/admin/settings/organization — onboarding checklist (#369)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    requireOrgSessionMock.mockResolvedValue({ organizationId: "org-a", session: { user: { id: "admin-1" } } })
+    update.mockResolvedValue({ name: "Org", slug: "org", volunteerCharter: null, hasOrgInsurance: true, publicTitle: null, timeZone: null })
+  })
+
+  it("hides the checklist for the caller's organization", async () => {
+    const { PATCH } = await import("@/app/api/admin/settings/organization/route")
+    expect((await PATCH(patch({ onboardingDismissed: true }))).status).toBe(200)
+    const { where, data } = update.mock.calls[0][0]
+    expect(where).toEqual({ id: "org-a" })
+    expect(data.onboardingDismissedAt).toBeInstanceOf(Date)
+  })
+
+  it("shows it again with false", async () => {
+    const { PATCH } = await import("@/app/api/admin/settings/organization/route")
+    await PATCH(patch({ onboardingDismissed: false }))
+    expect(update.mock.calls[0][0].data).toEqual({ onboardingDismissedAt: null })
+  })
+
+  it("ignores a non-boolean value", async () => {
+    const { PATCH } = await import("@/app/api/admin/settings/organization/route")
+    expect((await PATCH(patch({ onboardingDismissed: "yes" }))).status).toBe(400)
+    expect(update).not.toHaveBeenCalled()
+  })
+})
