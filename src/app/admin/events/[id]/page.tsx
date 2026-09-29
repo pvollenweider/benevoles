@@ -87,6 +87,12 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
           >
             Modifier
           </Link>
+          <Link
+            href={`/admin/events/${event.id}/preview`}
+            className="text-sm border border-gray-200 px-3 py-1.5 rounded-full hover:bg-gray-50 transition-colors"
+          >
+            Prévisualiser comme un bénévole
+          </Link>
           {event.publicStatus === "published" && (
             <Link
               href={eventPublicUrl(event.organization.slug, event.slug)}

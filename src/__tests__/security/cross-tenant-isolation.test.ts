@@ -279,6 +279,30 @@ describe("Events — cross-tenant isolation", () => {
 
 // ── Members ───────────────────────────────────────────────────────────────────
 
+describe("Event preview — cross-tenant isolation (#370)", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("GET /api/admin/events/[id]/preview returns 404 for an org-B event, even though raw prisma has it", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/preview/route")
+    const db = setupGuard() // scoped findFirst → null for org-B
+    prismaMock.event.findFirst.mockResolvedValue({ id: "evt-b", organizationId: "org-b" })
+
+    const res = await GET(makeRequest("/api/admin/events/evt-b/preview"), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-b" } }))
+  })
+
+  it("POST /api/admin/events/[id]/preview returns 404 for an org-B event", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/preview/route")
+    setupGuard()
+    const res = await POST(
+      makeRequest("/api/admin/events/evt-b/preview", "POST", { firstName: "A", lastName: "B", shiftIds: ["shift-b"] }),
+      params("evt-b"),
+    )
+    expect(res.status).toBe(404)
+  })
+})
+
 describe("Members — cross-tenant isolation", () => {
   beforeEach(() => vi.clearAllMocks())
 

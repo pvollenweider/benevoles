@@ -175,6 +175,8 @@ Une checklist simple de dates clés pour l'événement (ex. « Fermer les inscri
 
 ## Publier un événement
 
+**Avant de publier**, le bouton **Prévisualiser comme un bénévole** de la page de l'événement montre la page publique exactement comme la verront les bénévoles, même tant que l'événement est en brouillon : planning et places, pages personnalisées, charte, champs demandés dans le formulaire (téléphone si vous l'avez rendu obligatoire, date de naissance pour un créneau avec âge minimum). Vous pouvez remplir le formulaire : au lieu de vous inscrire, l'aperçu affiche le message de confirmation et l'email que recevrait le bénévole. Rien n'est enregistré ni envoyé. Pour voir le rendu sur téléphone, réduisez la largeur de la fenêtre ou ouvrez l'aperçu depuis votre téléphone.
+
 Depuis la page de l'événement (`/admin/events/[id]`), cliquer sur **Publier**.
 
 L'événement devient alors visible à l'URL :

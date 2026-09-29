@@ -112,6 +112,7 @@ Liste exhaustive des fonctionnalités de l'application.
 ### Gestion des événements
 
 - Création et édition d'événements
+- **Aperçu comme un bénévole** (`/admin/events/[id]/preview`), brouillons compris : même page publique (planning, places, pages, charte, champs du formulaire), bandeau « Aperçu » ; le formulaire affiche le message de confirmation et l'email qu'on recevrait (rendu avec le vrai modèle, lien factice) sans rien enregistrer ni envoyer
 - **Duplication** depuis la liste des événements : copie en brouillon (« (copie) ») des paramètres et des créneaux non annulés, rouverts ; ni inscriptions, ni pages, ni jalons, ni responsables ; mêmes dates que l'original
 - **Archivage** en un clic (bouton « Archiver » ou statut « Archivé » du formulaire d'édition)
 - **Suppression définitive**, réservée aux événements archivés : avertissement fort, nombre de créneaux / inscriptions / invitations effacés, lien vers l'export PDF pour sauvegarder l'état, confirmation en saisissant le titre (accents et casse ignorés). Les créneaux, inscriptions et invitations sont effacés avec l'événement ; les membres du pool et l'organisation sont conservés. Les bénévoles ne sont pas prévenus : pour cela, annuler d'abord les créneaux

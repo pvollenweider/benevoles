@@ -4,6 +4,7 @@
 import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
+import { publicEventInclude, toPublicEvent } from "@/lib/public-event"
 
 export async function GET(
   _req: Request,
@@ -22,56 +23,10 @@ export async function GET(
       publicStatus: "published",
       organization: { slug: orgSlug, active: true },
     },
-    include: {
-      organization: { select: { name: true, volunteerCharter: true } },
-      shifts: {
-        where: { status: { not: "cancelled" } },
-        include: { registrations: { where: { status: "active" } } },
-        orderBy: [{ date: "asc" }, { displayOrder: "asc" }, { startTime: "asc" }],
-      },
-      pages: {
-        select: { slug: true, title: true },
-        orderBy: { displayOrder: "asc" },
-      },
-    },
+    include: publicEventInclude,
   })
 
   if (!event) return NextResponse.json({ error: "Événement non trouvé" }, { status: 404 })
 
-  const shifts = event.shifts.map((shift) => ({
-    id: shift.id,
-    roleName: shift.roleName,
-    label: shift.label,
-    description: shift.description,
-    date: shift.date,
-    startTime: shift.startTime,
-    endTime: shift.endTime,
-    capacity: shift.capacity,
-    registered: shift.registrations.length,
-    spotsLeft: Math.max(0, shift.capacity - shift.registrations.length),
-    status: shift.registrations.length >= shift.capacity ? "full" : shift.status,
-    locationDetails: shift.locationDetails,
-    displayOrder: shift.displayOrder,
-    waitlistEnabled: shift.waitlistEnabled,
-    minAge: shift.minAge,
-    colorKey: shift.colorKey,
-  }))
-
-  return NextResponse.json({
-    id: event.id,
-    slug: event.slug,
-    title: event.title,
-    organizationName: event.organization.name,
-    description: event.description,
-    location: event.location,
-    startDate: event.startDate,
-    endDate: event.endDate,
-    publicInstructions: event.publicInstructions,
-    confirmationMessage: event.confirmationMessage,
-    requirePhone: event.requirePhone,
-    showSchedule: event.showSchedule,
-    volunteerCharter: event.organization.volunteerCharter,
-    shifts,
-    pages: event.pages,
-  })
+  return NextResponse.json(toPublicEvent(event))
 }
