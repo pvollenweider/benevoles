@@ -39,7 +39,7 @@ test("an admin creates and publishes an event through the three steps", async ({
   await page.getByRole("link", { name: /Continuer : vérification et publication/ }).click()
   await expect(page).toHaveURL(/\/review$/)
   await expect(steps.getByRole("listitem").nth(2)).toHaveAttribute("aria-current", "step")
-  await expect(page.getByText("2 créneaux, 1 poste, 4 places")).toBeVisible()
+  await expect(page.getByText("2 créneaux, 1 poste, 4 places").first()).toBeVisible()
   await page.getByRole("button", { name: "Publier" }).click()
   await expect(page.getByText("L'événement est publié : les bénévoles peuvent s'inscrire.")).toBeVisible()
   await expect(page.getByRole("link", { name: /Ouvrir la page de l'événement/ })).toBeVisible()
