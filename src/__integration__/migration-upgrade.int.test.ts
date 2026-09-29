@@ -98,4 +98,10 @@ describe.skipIf(!url)("migrations on a database with existing data (#318)", () =
     expect((await db.query(`SELECT email FROM "SectorLeader" WHERE id = 'l1'`)).rows[0].email).toBe("lea@x.ch")
     expect((await db.query(`SELECT email FROM "AdminUser" WHERE id = 'a1'`)).rows[0].email).toBe("admin@x.ch")
   })
+
+  it("status columns reject values outside their set (#321)", async () => {
+    await expect(db.query(`UPDATE "Registration" SET status = 'actvie' WHERE id = 'r1'`)).rejects.toThrow(/check constraint/i)
+    await expect(db.query(`UPDATE "Shift" SET status = 'ful' WHERE id = 'sh1'`)).rejects.toThrow(/check constraint/i)
+    await db.query(`UPDATE "Registration" SET status = 'cancelled' WHERE id = 'r1'`)
+  })
 })

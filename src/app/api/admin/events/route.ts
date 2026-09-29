@@ -3,6 +3,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { slugify } from "@/lib/utils"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
+import { EVENT_PUBLIC_STATUSES } from "@/lib/statuses"
 
 const showSchema = z.object({
   name: z.string(),
@@ -19,7 +20,7 @@ const schema = z.object({
   endDate: z.string(),
   publicInstructions: z.string().optional(),
   confirmationMessage: z.string().optional(),
-  publicStatus: z.enum(["draft", "published", "archived"]).optional(),
+  publicStatus: z.enum(EVENT_PUBLIC_STATUSES).optional(),
   showSchedule: z.array(showSchema).optional(),
   requirePhone: z.boolean().optional(),
 })
