@@ -79,6 +79,12 @@ export function staffingSummary(shifts: StaffingShift[], leaderRoles: string[]):
   }
 }
 
+/** Filled share of a shift or an event, 0–100, for the meters; an empty capacity counts as full. */
+export function fillPercent(active: number, capacity: number): number {
+  if (capacity <= 0) return 100
+  return Math.max(0, Math.min(100, Math.round((active / capacity) * 100)))
+}
+
 /** One sentence for the event page: « Il manque encore 12 personnes sur 7 créneaux. » */
 export function staffingHeadline(t: StaffingSummary["totals"]): string {
   if (t.shifts === 0) return "Aucun créneau pour l'instant."

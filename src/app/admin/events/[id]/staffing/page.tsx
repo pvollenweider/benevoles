@@ -6,7 +6,7 @@ import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import { fmtRange } from "@/lib/gantt-utils"
-import { staffingHeadline, staffingSummary, type StaffingShiftLine } from "@/lib/staffing"
+import { fillPercent, staffingHeadline, staffingSummary, type StaffingShiftLine } from "@/lib/staffing"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Où manque-t-il du monde ?" }
@@ -16,14 +16,34 @@ const linkClass =
 
 // Shift.date is a UTC midnight.
 const day = (iso: string) => new Date(`${iso}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", weekday: "short", day: "numeric", month: "short" })
+const plural = (n: number, w: string) => `${n} ${n > 1 ? (w.endsWith("eau") ? `${w}x` : `${w}s`) : w}`
+
+/** Filled share as a bar. Decorative: the figures next to it carry the meaning. */
+function Meter({ active, capacity, className = "" }: { active: number; capacity: number; className?: string }) {
+  const pct = fillPercent(active, capacity)
+  return (
+    <span aria-hidden="true" className={`block h-2 rounded-full bg-gray-200 overflow-hidden ${className}`}>
+      <span className={`block h-full rounded-full ${pct >= 100 ? "bg-gray-700" : "bg-blue-600"}`} style={{ width: `${pct}%` }} />
+    </span>
+  )
+}
+
+/** « 2/5 » on screen, « 2 sur 5 » for screen readers. */
+function Ratio({ active, capacity }: { active: number; capacity: number }) {
+  return <>{active}<span aria-hidden="true">/</span><span className="sr-only"> sur </span>{capacity}</>
+}
 
 function Group({ id, title, count, hint, children }: { id: string; title: string; count: number; hint?: string; children: React.ReactNode }) {
   return (
     <section aria-labelledby={id} className="space-y-2">
-      <h2 id={id} className="text-base font-semibold text-gray-900">
-        {title} <span className="text-sm font-normal text-gray-600">({count})</span>
-      </h2>
-      {hint && <p className="text-sm text-gray-600">{hint}</p>}
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <h2 id={id} className="text-base font-semibold text-gray-900">
+          {title}
+          <span className="sr-only"> : </span>
+          <span className="ml-2 inline-block align-middle rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-700 tabular-nums">{count}</span>
+        </h2>
+        {hint && <p className="text-sm text-gray-600 basis-full">{hint}</p>}
+      </div>
       {/* role="list": Safari/VoiceOver drops list semantics once Tailwind removes the bullets. */}
       <ul role="list" className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">{children}</ul>
     </section>
@@ -34,13 +54,18 @@ function ShiftLine({ eventId, group, s, detail }: { eventId: string; group: stri
   const name = s.label !== s.roleName ? `${s.roleName} · ${s.label}` : s.roleName
   const detailId = `${group}-${s.id}-detail`
   return (
-    <li className="px-4 py-3 text-sm flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-      {/* Date and time inside the link: its name is what's visible, nothing duplicated for AT. */}
-      <Link href={`/admin/events/${eventId}/registrations?shift=${encodeURIComponent(s.id)}`} aria-describedby={detailId} className={`${linkClass} min-w-0`}>
-        {name}
-        <span className="font-normal text-gray-600 ml-2">{day(s.date)} · {fmtRange(s.startTime, s.endTime)}</span>
-      </Link>
-      <p id={detailId} className="text-gray-800 tabular-nums">{detail}</p>
+    <li className="px-4 py-3 text-sm grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_auto] gap-x-6 gap-y-2 items-center">
+      <div className="min-w-0">
+        {/* Date and time inside the link: its name is what's visible, nothing duplicated for AT. */}
+        <Link href={`/admin/events/${eventId}/registrations?shift=${encodeURIComponent(s.id)}`} aria-describedby={detailId} className={linkClass}>
+          {name}
+          <span className="block sm:inline font-normal text-gray-600 sm:ml-2">{day(s.date)} · {fmtRange(s.startTime, s.endTime)}</span>
+        </Link>
+      </div>
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 sm:justify-end">
+        <Meter active={s.active} capacity={s.capacity} className="w-full sm:w-24 shrink-0" />
+        <p id={detailId} className="text-gray-800 tabular-nums">{detail}</p>
+      </div>
     </li>
   )
 }
@@ -77,34 +102,52 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
     event.sectorLeaders.map((l) => l.roleName),
   )
   const base = `/admin/events/${event.id}`
-  const plural = (n: number, w: string) => `${n} ${n > 1 ? (w.endsWith("eau") ? `${w}x` : `${w}s`) : w}`
+  const t = summary.totals
+  const nothingToDo = summary.emptyRoles.length === 0 && summary.underfilled.length === 0 && summary.waitlisted.length === 0
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 max-w-3xl">
       <div>
         <Link href={base} className={`text-sm ${linkClass}`}><span aria-hidden="true">← </span>Retour à {event.title}</Link>
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 mt-1 focus:outline-none">Où manque-t-il du monde ?</h1>
-        <p className="text-sm text-gray-700 mt-1">
-          {staffingHeadline(summary.totals)}
-          {summary.totals.waiting > 0 && ` ${plural(summary.totals.waiting, "personne")} en liste d'attente.`}
-        </p>
       </div>
 
-      {summary.totals.shifts === 0 ? (
-        <p className="text-sm text-gray-600">
+      {t.shifts === 0 ? (
+        <p className="text-sm text-gray-700">
           <Link href={`${base}/shifts`} className={linkClass}>Ajoutez des créneaux</Link> pour voir où il manque du monde.
         </p>
       ) : (
         <>
+          {/* One line and one bar for the whole event: the figures are the content, the bar the glance. */}
+          <section aria-labelledby="staffing-overview" className="bg-white border border-gray-200 rounded-xl px-5 py-4">
+            <h2 id="staffing-overview" className="sr-only">Vue d&apos;ensemble</h2>
+            <p className="text-base text-gray-900">
+              <strong className="tabular-nums">{t.active}</strong> place{t.active > 1 ? "s" : ""} pourvue{t.active > 1 ? "s" : ""} sur <span className="tabular-nums">{t.capacity}</span>
+              <span className="text-gray-600"> · {plural(t.shifts, "créneau")}</span>
+            </p>
+            <Meter active={t.active} capacity={t.capacity} className="mt-2" />
+            <p className="mt-2 text-sm text-gray-700">
+              {staffingHeadline(t)}
+              {t.waiting > 0 && ` ${plural(t.waiting, "personne")} en liste d'attente.`}
+            </p>
+          </section>
+
+          {nothingToDo && (
+            <p className="text-sm text-gray-700">Rien à faire pour l&apos;instant : personne ne manque et personne n&apos;attend.</p>
+          )}
+
           {summary.emptyRoles.length > 0 && (
             <Group id="staffing-empty" title="Postes sans personne" count={summary.emptyRoles.length} hint="Personne n'est inscrit sur aucun créneau de ces postes.">
-              {summary.emptyRoles.map((r) => (
-                <li key={r.roleName} className="px-4 py-3 text-sm flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                  <Link href={`${base}/shifts`} className={linkClass}>
+              {summary.emptyRoles.map((r, i) => (
+                <li key={r.roleName} className="px-4 py-3 text-sm grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_auto] gap-x-6 gap-y-2 items-center">
+                  <Link href={`${base}/shifts`} aria-describedby={`empty-${i}-detail`} className={linkClass}>
                     {r.roleName}
                     <span className="sr-only"> : voir ses créneaux</span>
                   </Link>
-                  <p className="text-gray-800 tabular-nums">{plural(r.shiftCount, "créneau")} · {plural(r.capacity, "place")} à pourvoir</p>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 sm:justify-end">
+                    <Meter active={0} capacity={r.capacity} className="w-full sm:w-24 shrink-0" />
+                    <p id={`empty-${i}-detail`} className="text-gray-800 tabular-nums">{plural(r.shiftCount, "créneau")} · <strong>{plural(r.capacity, "place")}</strong> à pourvoir</p>
+                  </div>
                 </li>
               ))}
             </Group>
@@ -113,7 +156,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
           {summary.underfilled.length > 0 && (
             <Group id="staffing-underfilled" title="Créneaux à compléter" count={summary.underfilled.length} hint="Du plus dégarni au plus proche du complet. Les créneaux fermés aux inscriptions ne sont pas comptés.">
               {summary.underfilled.map((s) => (
-                <ShiftLine key={s.id} eventId={event.id} group="underfilled" s={s} detail={<><strong>{plural(s.missing, "personne")} manque{s.missing > 1 ? "nt" : ""}</strong> ({s.active}/{s.capacity})</>} />
+                <ShiftLine key={s.id} eventId={event.id} group="underfilled" s={s} detail={<><strong><Ratio active={s.active} capacity={s.capacity} /></strong> · manque {s.missing}</>} />
               ))}
             </Group>
           )}
@@ -121,7 +164,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
           {summary.waitlisted.length > 0 && (
             <Group id="staffing-waitlist" title="Personnes en liste d'attente" count={summary.waitlisted.length} hint="Créneaux complets où des bénévoles attendent une place : une place de plus, ou un autre créneau à leur proposer.">
               {summary.waitlisted.map((s) => (
-                <ShiftLine key={s.id} eventId={event.id} group="waitlist" s={s} detail={<>{plural(s.waiting, "personne")} en attente ({s.active}/{s.capacity})</>} />
+                <ShiftLine key={s.id} eventId={event.id} group="waitlist" s={s} detail={<><strong><Ratio active={s.active} capacity={s.capacity} /></strong> · {plural(s.waiting, "personne")} en attente</>} />
               ))}
             </Group>
           )}
@@ -147,7 +190,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
           {summary.full.length > 0 && (
             <Group id="staffing-full" title="Créneaux complets" count={summary.full.length} hint={summary.waitlisted.length > 0 ? "Sans compter ceux qui ont une liste d'attente, ci-dessus." : undefined}>
               {summary.full.map((s) => (
-                <ShiftLine key={s.id} eventId={event.id} group="full" s={s} detail={<>{s.active}/{s.capacity}</>} />
+                <ShiftLine key={s.id} eventId={event.id} group="full" s={s} detail={<Ratio active={s.active} capacity={s.capacity} />} />
               ))}
             </Group>
           )}

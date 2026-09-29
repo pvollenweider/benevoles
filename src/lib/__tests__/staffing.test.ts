@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { staffingHeadline, staffingSummary, type StaffingShift } from "../staffing"
+import { fillPercent, staffingHeadline, staffingSummary, type StaffingShift } from "../staffing"
 
 const shift = (over: Partial<StaffingShift> & { id: string }): StaffingShift => ({
   roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00",
@@ -57,5 +57,12 @@ describe("staffingHeadline", () => {
     expect(staffingHeadline({ shifts: 2, capacity: 4, active: 4, missing: 0, waiting: 0 })).toBe("Tous les créneaux sont complets.")
     expect(staffingHeadline({ shifts: 7, capacity: 20, active: 8, missing: 12, waiting: 0 })).toBe("Il manque encore 12 personnes sur 20 places (7 créneaux).")
     expect(staffingHeadline({ shifts: 1, capacity: 1, active: 0, missing: 1, waiting: 0 })).toBe("Il manque encore 1 personne sur 1 place (1 créneau).")
+  })
+
+  it("fillPercent: clamped share, an empty capacity counts as full", () => {
+    expect(fillPercent(0, 4)).toBe(0)
+    expect(fillPercent(1, 3)).toBe(33)
+    expect(fillPercent(5, 4)).toBe(100)
+    expect(fillPercent(0, 0)).toBe(100)
   })
 })
