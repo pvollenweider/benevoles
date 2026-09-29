@@ -111,6 +111,10 @@ jobs:
           npx prisma migrate deploy
           npx prisma db seed
 
+      - name: Integration tests (real Postgres)
+        # Migrations on a database with data (#318) and the outbox under concurrency (#319).
+        run: npm run test:integration
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
