@@ -75,6 +75,10 @@ export async function enqueueAndDeliver(payloads: NotificationPayload[]): Promis
  * Sends due notifications: the given ids (right after a request), or every due row (cron).
  * Each row is claimed with a conditional update first, so two deliveries running at the same
  * time never send the same notification twice.
+ *
+ * Delivery is at-least-once: a crash after the SMTP server accepted the message but before the
+ * row is marked "sent" leaves it claimed, and the stale-claim pickup sends it again. A rare
+ * duplicate email is the accepted trade-off against a lost one.
  */
 export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?: Date } = {}): Promise<{ sent: number; retried: number; failed: number }> {
   const now = opts.now ?? new Date()

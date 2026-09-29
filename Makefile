@@ -128,5 +128,5 @@ test: ## Lance la suite de tests (vitest)
 lint: ## Lint le code
 	npm run lint
 
-typecheck: ## Vérifie les types TypeScript
-	npx tsc --noEmit
+typecheck: ## Vérifie les types TypeScript (régénère d'abord le client Prisma : un client obsolète donne de faux échecs)
+	npm run typecheck

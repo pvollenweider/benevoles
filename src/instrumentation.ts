@@ -3,6 +3,8 @@ import * as Sentry from "@sentry/nextjs"
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     await import("./lib/env")
+    const { assertProductionSecrets } = await import("./lib/production-guards")
+    assertProductionSecrets()
     await import("../sentry.server.config")
   }
   if (process.env.NEXT_RUNTIME === "edge") {
