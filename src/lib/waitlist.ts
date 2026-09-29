@@ -1,11 +1,11 @@
 import { prisma } from "./prisma"
-import { sendNotification } from "./notifications"
 import { orgBaseUrl } from "./urls"
 import { logEvent, SYSTEM_ACTOR } from "./event-log"
 import { OCCUPYING_STATUSES, canOfferSpot, lockShifts } from "./registration-capacity"
 import { reportError } from "./report-error"
 import { registrationToken } from "./token-vault"
 import { APP_TIME_ZONE } from "./time-zone"
+import { enqueueAndDeliver } from "./notifications/outbox"
 
 /**
  * When a spot opens on a shift, offer it to the first person on the waitlist.
@@ -74,7 +74,8 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
     weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit", timeZone: APP_TIME_ZONE,
   })
 
-  await sendNotification({
+  // Through the outbox (#311): retried if SMTP fails, the caller isn't slowed down.
+  await enqueueAndDeliver([{
     kind: "waitlist_offered",
     recipient: { email: next.volunteer.email, name: next.volunteer.firstName },
     data: {
@@ -87,5 +88,5 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
       confirmUrl,
       expiresAt: expiresAtLabel,
     },
-  }).catch(reportError("notification.waitlist_offered"))
+  }]).catch(reportError("notification.waitlist_offered"))
 }

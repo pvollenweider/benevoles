@@ -3,12 +3,12 @@ import { requireOrgSession } from "@/lib/auth-guard"
 // AdminUser isn't tenant-scoped; email uniqueness must be checked across all orgs. Scoped by organizationId explicitly.
 // eslint-disable-next-line no-restricted-imports
 import { prisma } from "@/lib/prisma"
-import { sendNotification } from "@/lib/notifications"
 import { adminActor, logOrgEvent } from "@/lib/org-log"
 import { randomBytes } from "crypto"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
 import { hashToken } from "@/lib/token-hash"
+import { enqueueAndDeliver } from "@/lib/notifications/outbox"
 
 const postSchema = z.object({
   email: z.string().trim().toLowerCase().email(),
@@ -91,11 +91,11 @@ export async function POST(req: Request) {
   const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
   const inviteUrl = `${appUrl}/admin/accept-invite?token=${setupToken}`
 
-  await sendNotification({
+  await enqueueAndDeliver([{
     kind: "admin_invite",
     recipient: { email, name },
     data: { adminName: name, organizationName: org.name, inviteUrl },
-  })
+  }])
 
   return NextResponse.json({ ...admin, pending: true, inviteUrl }, { status: 201 })
 }

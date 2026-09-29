@@ -8,6 +8,8 @@ const update = vi.hoisted(() => vi.fn())
 const sendNotification = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({ prisma: { adminUser: { findUnique, update } } }))
 vi.mock("@/lib/notifications", () => ({ sendNotification }))
+// Sent through the outbox (#311): what matters is the payload queued.
+vi.mock("@/lib/notifications/outbox", () => ({ enqueueAndDeliver: sendNotification }))
 
 const json = (url: string, body: unknown) =>
   new Request(url, {
@@ -26,7 +28,7 @@ describe("password reset tokens are stored hashed (#269)", () => {
     await POST(json("http://localhost/api/public/forgot-password", { email: "a@x.com" }))
 
     const stored: string = update.mock.calls[0][0].data.passwordResetTokenHash
-    const resetUrl: string = sendNotification.mock.calls[0][0].data.resetUrl
+    const resetUrl: string = sendNotification.mock.calls[0][0][0].data.resetUrl
     const plaintext = new URL(resetUrl).searchParams.get("token")!
     expect(plaintext).toBeTruthy()
     expect(stored).not.toBe(plaintext)

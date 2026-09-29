@@ -51,6 +51,8 @@ vi.mock("@/lib/prisma", () => {
 })
 vi.mock("@/lib/email", () => ({ sendConfirmationEmail: vi.fn(), sendAdminNotification: vi.fn() }))
 vi.mock("@/lib/notifications", () => ({ sendNotification: vi.fn().mockResolvedValue({ ok: true }) }))
+const enqueueAndDeliver = vi.hoisted(() => vi.fn().mockResolvedValue(undefined))
+vi.mock("@/lib/notifications/outbox", () => ({ enqueueAndDeliver, collectNotifications: () => ({ payloads: [], send: async () => ({ ok: true }) }) }))
 vi.mock("@/lib/sector-leaders", () => ({ notifySectorLeadersOfSignup: vi.fn() }))
 vi.mock("@/lib/event-log", () => ({ logEvent: vi.fn().mockResolvedValue("log-1"), SYSTEM_ACTOR: { type: "system" } }))
 
@@ -117,8 +119,7 @@ describe("promoteNextInWaitlist under contention", () => {
     const { promoteNextInWaitlist } = await import("@/lib/waitlist")
     await promoteNextInWaitlist("shift-1")
     expect(m.regUpdate).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "w1" }, data: expect.objectContaining({ status: "offered" }) }))
-    const { sendNotification } = await import("@/lib/notifications")
-    expect(sendNotification).toHaveBeenCalledWith(expect.objectContaining({ kind: "waitlist_offered" }))
+    expect(enqueueAndDeliver.mock.calls[0][0][0]).toEqual(expect.objectContaining({ kind: "waitlist_offered" }))
   })
 
   it("doesn't offer when no spot is actually free (e.g. second promotion for the same freed spot)", async () => {
@@ -148,11 +149,10 @@ describe("conditional transitions", () => {
       event: { title: "F", organization: { slug: "a" } },
     })
     m.regUpdateMany.mockResolvedValue({ count: 0 })
-    const { sendNotification } = await import("@/lib/notifications")
-    vi.mocked(sendNotification).mockClear()
+    enqueueAndDeliver.mockClear()
     const { POST } = await import("@/app/api/public/waitlist/[token]/confirm/route")
     const res = await POST(new Request("http://localhost/x", { method: "POST", headers: ip() }), { params: Promise.resolve({ token: "tok" }) })
     expect(res.status).toBe(404)
-    expect(sendNotification).not.toHaveBeenCalled()
+    expect(enqueueAndDeliver).not.toHaveBeenCalled()
   })
 })

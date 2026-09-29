@@ -20,6 +20,7 @@ vi.mock("@/lib/prisma", () => ({
 }))
 
 const sendNotificationMock = vi.hoisted(() => vi.fn())
+vi.mock("@/lib/notifications/outbox", () => ({ enqueueAndDeliver: (payloads: unknown[]) => { payloads.forEach((p) => sendNotificationMock(p)); return Promise.resolve() } }))
 vi.mock("@/lib/notifications", () => ({ sendNotification: sendNotificationMock }))
 
 function get() {
