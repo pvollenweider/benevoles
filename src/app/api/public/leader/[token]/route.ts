@@ -7,7 +7,7 @@ import { linkToken } from "@/lib/token-vault"
 // Read-only roster for a sector leader (#186): who's signed up for their roleName's shifts.
 // No mutation here — v1 is intentionally read-only, see prisma/schema.prisma's SectorLeader doc.
 export async function GET(req: Request, { params }: { params: Promise<{ token: string }> }) {
-  const rl = rateLimit(getClientIp(req), "leader-token-read", 30, 60 * 60 * 1000)
+  const rl = await rateLimit(getClientIp(req), "leader-token-read", 30, 60 * 60 * 1000)
   if (!rl.ok) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
 
   const { token } = await params

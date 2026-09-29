@@ -34,7 +34,7 @@ const schema = z.object({
 })
 
 export async function POST(req: Request) {
-  const rl = rateLimit(getClientIp(req), "registrations", 20, 60 * 60 * 1000)
+  const rl = await rateLimit(getClientIp(req), "registrations", 20, 60 * 60 * 1000)
   if (!rl.ok) {
     return NextResponse.json(
       { error: "Trop de tentatives. Réessayez dans quelques minutes." },
@@ -427,7 +427,7 @@ async function alreadyRegistered(volunteerId: string, eventId: string) {
 
   let linkSent = false
   if (reg.volunteer.email) {
-    if (rateLimit(volunteerId, "reg-link-resend", 3, 60 * 60 * 1000).ok) {
+    if ((await rateLimit(volunteerId, "reg-link-resend", 3, 60 * 60 * 1000)).ok) {
       const name = `${reg.volunteer.firstName} ${reg.volunteer.lastName}`
       const result = await sendNotification({
         kind: "registration_link_resend",
@@ -439,10 +439,10 @@ async function alreadyRegistered(volunteerId: string, eventId: string) {
       })
       linkSent = result.ok
       // Remember a *successful* send: the throttle counts attempts, failed ones included.
-      if (result.ok) rateLimit(volunteerId, "reg-link-sent", 1, 60 * 60 * 1000)
+      if (result.ok) await rateLimit(volunteerId, "reg-link-sent", 1, 60 * 60 * 1000)
     } else {
       // Throttled: only claim the link was sent if a send actually succeeded within the hour.
-      linkSent = isRateLimited(volunteerId, "reg-link-sent", 1)
+      linkSent = await isRateLimited(volunteerId, "reg-link-sent", 1)
     }
   }
   return NextResponse.json({

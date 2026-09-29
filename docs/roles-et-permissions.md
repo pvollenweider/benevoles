@@ -18,7 +18,7 @@ Le rôle est stocké dans `AdminUser.role` (`admin` par défaut). Une session es
 - S'inscrit sans compte. Chaque inscription reçoit un `editToken` unique, envoyé par email, qui ouvre `/my/[token]` pour consulter et annuler ses créneaux.
 - Une invitation (`?token=` sur la page de l'événement) pré-remplit le formulaire ; elle est révocable et réutilisable.
 - Une offre de liste d'attente se confirme via `/waitlist/[token]/confirm`, dans les 24 heures.
-- Les endpoints publics sensibles (inscription, gestion d'inscription, liste d'attente, push, mot de passe oublié et réinitialisation) sont protégés par un limiteur en mémoire par IP (`src/lib/rate-limit.ts`). L'inscription (`POST /api/public/registrations`) est limitée à 20 requêtes par heure. Le compteur est propre à chaque instance de l'application.
+- Les endpoints publics sensibles (inscription, gestion d'inscription, liste d'attente, push, mot de passe oublié et réinitialisation) sont protégés par un limiteur par IP (`src/lib/rate-limit.ts`). L'inscription (`POST /api/public/registrations`) est limitée à 20 requêtes par heure. Les compteurs sont stockés dans PostgreSQL : ils sont communs à toutes les instances de l'application et survivent à un redémarrage.
 
 ## Responsable de secteur
 

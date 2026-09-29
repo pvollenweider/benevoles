@@ -7,7 +7,7 @@ import { normalizeEmail } from "@/lib/email-address"
 import { enqueueAndDeliver } from "@/lib/notifications/outbox"
 
 export async function POST(req: Request) {
-  const rl = rateLimit(getClientIp(req), "forgot-password", 5, 60 * 60 * 1000)
+  const rl = await rateLimit(getClientIp(req), "forgot-password", 5, 60 * 60 * 1000)
   if (!rl.ok) {
     return NextResponse.json({ ok: true }) // don't leak rate-limit info on auth routes
   }

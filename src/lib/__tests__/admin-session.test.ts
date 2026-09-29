@@ -42,24 +42,24 @@ describe("refreshAdminToken (#266)", () => {
 })
 
 describe("login failure budget (#266)", () => {
-  it("blocks an account after 10 failures, whatever the IP and email case", () => {
+  it("blocks an account after 10 failures, whatever the IP and email case", async () => {
     const email = `Target-${Math.random()}@x.com`
     for (let i = 0; i < 10; i++) {
-      expect(loginAllowed(`10.0.0.${i}`, email)).toBe(true)
-      recordLoginFailure(`10.0.0.${i}`, email)
+      expect(await loginAllowed(`10.0.0.${i}`, email)).toBe(true)
+      await recordLoginFailure(`10.0.0.${i}`, email)
     }
-    expect(loginAllowed("10.0.1.1", email.toLowerCase())).toBe(false)
+    expect(await loginAllowed("10.0.1.1", email.toLowerCase())).toBe(false)
   })
 
-  it("blocks an IP after 30 failures across accounts", () => {
+  it("blocks an IP after 30 failures across accounts", async () => {
     const ip = `ip-${Math.random()}`
-    for (let i = 0; i < 30; i++) recordLoginFailure(ip, `user${i}-${Math.random()}@x.com`)
-    expect(loginAllowed(ip, "fresh@x.com")).toBe(false)
-    expect(loginAllowed(`other-${ip}`, "fresh@x.com")).toBe(true)
+    for (let i = 0; i < 30; i++) await recordLoginFailure(ip, `user${i}-${Math.random()}@x.com`)
+    expect(await loginAllowed(ip, "fresh@x.com")).toBe(false)
+    expect(await loginAllowed(`other-${ip}`, "fresh@x.com")).toBe(true)
   })
 
-  it("doesn't count successful logins (only failures are recorded)", () => {
+  it("doesn't count successful logins (only failures are recorded)", async () => {
     const email = `ok-${Math.random()}@x.com`
-    for (let i = 0; i < 50; i++) expect(loginAllowed("10.9.9.9", email)).toBe(true)
+    for (let i = 0; i < 50; i++) expect(await loginAllowed("10.9.9.9", email)).toBe(true)
   })
 })

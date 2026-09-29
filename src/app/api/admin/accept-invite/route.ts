@@ -43,7 +43,7 @@ async function checkToken(token: string) {
 
 /** Read-only precheck so the page can show an error before the person fills the form. */
 export async function GET(req: Request) {
-  const rl = rateLimit(getClientIp(req), "accept-invite-check", 30, 60 * 60 * 1000)
+  const rl = await rateLimit(getClientIp(req), "accept-invite-check", 30, 60 * 60 * 1000)
   if (!rl.ok) {
     return NextResponse.json({ error: "Trop de tentatives. Réessayez plus tard." }, { status: 429 })
   }

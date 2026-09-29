@@ -6,7 +6,7 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { hashToken } from "@/lib/token-hash"
 
 export async function POST(req: Request) {
-  const rl = rateLimit(getClientIp(req), "reset-password", 10, 60 * 60 * 1000)
+  const rl = await rateLimit(getClientIp(req), "reset-password", 10, 60 * 60 * 1000)
   if (!rl.ok) {
     return NextResponse.json({ error: "Trop de tentatives. Réessayez plus tard." }, { status: 429 })
   }
