@@ -2,13 +2,16 @@ import { redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import MembersManager from "@/components/admin/MembersManager"
 import { toMin, toMinEnd } from "@/lib/gantt-utils"
+import { SEARCH_MAX_LENGTH } from "@/lib/admin-search"
 
 export const dynamic = "force-dynamic"
 
-export default async function MembersPage() {
+export default async function MembersPage({ searchParams }: { searchParams: Promise<{ q?: string | string[] }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { db } = ctx
+  const { q } = await searchParams
+  const initialSearch = (Array.isArray(q) ? q[0] : q)?.slice(0, SEARCH_MAX_LENGTH).trim() || undefined
 
   const [volunteers, allTags] = await Promise.all([
     db.volunteer.findMany({
@@ -46,6 +49,7 @@ export default async function MembersPage() {
         ),
       }))}
       allTags={allTags}
+      initialSearch={initialSearch}
     />
   )
 }

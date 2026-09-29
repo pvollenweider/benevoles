@@ -56,6 +56,7 @@ export function filterMembers<M extends MemberRow>(
     return (
       m.firstName.toLowerCase().includes(q) ||
       m.lastName.toLowerCase().includes(q) ||
+      `${m.firstName} ${m.lastName}`.toLowerCase().includes(q) ||
       (m.email ?? "").toLowerCase().includes(q) ||
       (m.phone ?? "").toLowerCase().includes(q)
     )

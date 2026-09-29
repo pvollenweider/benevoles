@@ -57,6 +57,23 @@ Vue d'ensemble de votre organisation : nombre d'événements (publiés et à ven
 
 ---
 
+## Rechercher
+
+**`/admin/search`**
+
+Le champ **Rechercher** de la barre du haut (dans le **Menu** sur un petit écran) retrouve en une fois, dans toute votre organisation :
+
+- les **bénévoles** dont le prénom, le nom, l'email ou le téléphone correspond : le lien ouvre la page Membres filtrée sur cette personne, membres désactivés compris ;
+- leurs **inscriptions** (confirmées, en liste d'attente ou place proposée), avec l'événement et le créneau : le lien ouvre les inscriptions de l'événement filtrées sur cette personne ;
+- les **événements** dont le titre ou le lieu correspond ;
+- les **créneaux** dont le poste ou l'intitulé correspond : le lien ouvre les inscriptions de ce créneau.
+
+Tous les mots doivent correspondre : « alice martin » trouve Alice Martin, « fête bar » les créneaux du poste Bar de l'événement « Fête d'été ». Les majuscules ne comptent pas, mais les accents oui : « Zoe » ne trouve pas « Zoé ». Chaque groupe affiche les 20 premiers résultats ; au-delà, précisez la recherche.
+
+Raccourci : **Ctrl + K** (**⌘ + K** sur Mac) place le curseur dans le champ de recherche depuis n'importe quelle page de l'admin.
+
+---
+
 ## Créer un événement
 
 **`/admin/events/new`**
@@ -266,7 +283,7 @@ Le répertoire des membres est le pool de bénévoles connus de votre organisati
 - **Ajouter** un membre : prénom, nom, email, téléphone, tags, notes internes
 - **Modifier** ou désactiver un membre existant
 - **Importer** des membres en masse : bouton **Importer CSV/Excel** (fichiers `.csv` ou `.xlsx`). Les colonnes sont reconnues par leur intitulé (prénom, nom, email, téléphone, tags ; par exemple `prenom`, `courriel`, `mobile`, `groupes`). Plusieurs tags dans une cellule se séparent par `,`, `;` ou `|`. Le résultat indique le nombre de membres créés, mis à jour et ignorés ; les lignes en erreur sont listées avec leur numéro (50 au maximum affichées).
-- **Rechercher** par texte libre ou filtrer par tag
+- **Rechercher** par texte libre (prénom, nom, email, téléphone) ou filtrer par tag
 - **Trier** par prénom, nom ou heures cumulées : cliquer sur l'en-tête de colonne (croissant → décroissant → reset)
 - **Heures cumulées** : total du temps passé sur des créneaux actifs, tous événements confondus — utile pour identifier vos bénévoles les plus investis. Cette colonne n'apparaît que dans cette page ; elle n'est jamais incluse dans l'export PDF, potentiellement partagé avec les bénévoles.
 
