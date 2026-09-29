@@ -418,6 +418,14 @@ describe("Shifts — cross-tenant isolation", () => {
     expect($transaction).not.toHaveBeenCalled()
   })
 
+  it("POST /api/admin/events/[id]/duplicate returns 404 for org-B event, creating nothing (#378)", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/duplicate/route")
+    const db = setupGuard() // event.findFirst → null
+    const res = await POST(makeRequest("/api/admin/events/evt-b/duplicate", "POST", { startDate: "2031-01-01", copy: { leaders: true } }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.event.create).not.toHaveBeenCalled()
+  })
+
   it("POST /api/admin/shifts/[id]/duplicate returns 404 for org-B shift, creating nothing", async () => {
     const { POST } = await import("@/app/api/admin/shifts/[id]/duplicate/route")
     const db = setupGuard() // shift.findFirst → null
