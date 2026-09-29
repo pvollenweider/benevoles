@@ -6,7 +6,7 @@ import { z } from "zod"
 const patchSchema = z.object({
   firstName: z.string().min(1).optional(),
   lastName: z.string().min(1).optional(),
-  email: z.string().email().optional().nullable().or(z.literal("")),
+  email: z.string().trim().toLowerCase().email().optional().nullable().or(z.literal("")),
   phone: z.string().optional().nullable(),
   tags: z.array(z.string()).optional(),
   notes: z.string().optional().nullable(),

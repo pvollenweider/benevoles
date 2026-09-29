@@ -6,7 +6,7 @@ import { z } from "zod"
 const volunteerSchema = z.object({
   firstName: z.string().min(1).max(100),
   lastName: z.string().min(1).max(100),
-  email: z.string().email().optional().or(z.literal("")),
+  email: z.string().trim().toLowerCase().email().optional().or(z.literal("")),
   phone: z.string().max(50).optional(),
   tags: z.array(z.string()).optional(),
   notes: z.string().optional(),

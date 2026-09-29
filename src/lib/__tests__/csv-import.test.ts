@@ -95,3 +95,10 @@ Bob,Dupont,bob@x.com,,musicien`
     expect(result.errors).toHaveLength(1)
   })
 })
+
+describe("parseCsv — email normalization (#310)", () => {
+  it("stores emails trimmed and lower-cased", () => {
+    const result = parseCsv("prenom,nom,email\nAlice,Martin, Alice.Martin@Example.COM ")
+    expect(result.rows[0].email).toBe("alice.martin@example.com")
+  })
+})

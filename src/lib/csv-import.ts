@@ -1,5 +1,6 @@
 import { parse } from "csv-parse/sync"
 import ExcelJS from "exceljs"
+import { normalizeEmail } from "./email-address"
 
 export type ParsedMemberRow = {
   firstName: string
@@ -85,7 +86,7 @@ function rowToMember(
     return { ok: false, error: { line: lineNumber, reason: "Nom manquant" } }
   }
 
-  const email = get("email") || undefined
+  const email = get("email") ? normalizeEmail(get("email")!) : undefined
   const phone = get("phone") || undefined
   const tags = parseTagsValue(get("tags"))
 

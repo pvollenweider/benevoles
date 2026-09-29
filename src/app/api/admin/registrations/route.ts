@@ -11,7 +11,7 @@ const schema = z.object({
   shiftId: z.string(),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
-  email: z.string().email().optional().or(z.literal("")),
+  email: z.string().trim().toLowerCase().email().optional().or(z.literal("")),
   phone: z.string().optional(),
   comment: z.string().optional(),
 })

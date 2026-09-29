@@ -24,7 +24,7 @@ const schema = z.object({
   shiftIds: z.array(z.string()).min(1),
   firstName: z.string().min(1).max(100),
   lastName: z.string().min(1).max(100),
-  email: z.string().email(),
+  email: z.string().trim().toLowerCase().email(),
   phone: z.string().optional(),
   birthDate: z.string().optional(),
   comment: z.string().optional(),

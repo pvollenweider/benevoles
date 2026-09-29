@@ -7,7 +7,7 @@ import { hashToken } from "@/lib/token-hash"
 
 const createOrgSchema = z.object({
   name: z.string().min(1).max(100),
-  adminEmail: z.string().email(),
+  adminEmail: z.string().trim().toLowerCase().email(),
   adminName: z.string().min(1).max(100),
 })
 

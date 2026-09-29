@@ -7,7 +7,7 @@ import { z } from "zod"
 const postSchema = z.object({
   roleName: z.string().min(1).max(100),
   name: z.string().min(1).max(100),
-  email: z.string().email(),
+  email: z.string().trim().toLowerCase().email(),
 })
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {

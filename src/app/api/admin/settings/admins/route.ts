@@ -11,7 +11,7 @@ import { z } from "zod"
 import { hashToken } from "@/lib/token-hash"
 
 const postSchema = z.object({
-  email: z.string().email(),
+  email: z.string().trim().toLowerCase().email(),
   name: z.string().min(1).max(100),
 })
 
