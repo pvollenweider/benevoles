@@ -17,25 +17,26 @@ test("an admin finds an event from the top-bar search", async ({ page }) => {
   await page.getByRole("button", { name: "Se connecter" }).click()
   await expect(page).toHaveURL(/\/admin\/events/)
 
-  // An event of the list, by its title: each card links to the event twice, by title and « Gérer ».
-  // (Other links to an event, such as the onboarding checklist's, don't carry the title.)
-  const links = await page.locator('a[href^="/admin/events/"]').evaluateAll((as) =>
-    as.map((a) => ({ href: a.getAttribute("href") ?? "", text: (a.textContent ?? "").trim() })),
-  )
-  const managed = new Set(links.filter((l) => l.text.startsWith("Gérer")).map((l) => l.href))
-  const event = links.find((l) => managed.has(l.href) && !l.text.startsWith("Gérer") && l.text)
-  expect(event).toBeTruthy()
-  const word = event!.text.split(/\s+/)[0]
+  // An event of the list (its « Gérer » link), and its title as its own page shows it. Other links
+  // to an event, such as the onboarding checklist's, carry other text.
+  const eventHref = await page.getByRole("link", { name: /^Gérer/ }).first().getAttribute("href")
+  expect(eventHref).toMatch(/^\/admin\/events\/[^/]+$/)
+  await page.goto(eventHref!)
+  const title = (await page.getByRole("heading", { level: 1 }).textContent())!.trim()
+  const word = title.split(/\s+/)[0]
 
-  await page.keyboard.press("Control+k")
   const field = page.getByRole("searchbox", { name: "Rechercher un bénévole, un événement ou un poste" }).first()
-  await expect(field).toBeFocused()
+  // Retried: the shortcut only works once the page is hydrated.
+  await expect(async () => {
+    await page.keyboard.press("Control+k")
+    await expect(field).toBeFocused({ timeout: 1_000 })
+  }).toPass()
   await field.fill(word)
   await field.press("Enter")
 
   await expect(page).toHaveURL(/\/admin\/search\?q=/)
   const eventsGroup = page.getByRole("region", { name: /Événements/ })
   await expect(eventsGroup).toBeVisible()
-  await eventsGroup.locator(`a[href="${event!.href}"]`).click()
-  await expect(page).toHaveURL(new RegExp(`${event!.href}$`))
+  await eventsGroup.locator(`a[href="${eventHref}"]`).click()
+  await expect(page).toHaveURL(new RegExp(`${eventHref}$`))
 })
