@@ -18,7 +18,7 @@ test("overlapping same-post shifts render on separate lanes in the admin Gantt",
   await page.getByRole("button", { name: "Se connecter" }).click()
   await expect(page).toHaveURL(/\/admin\/events/)
 
-  await page.getByRole("link", { name: /Spectacle de Cirque 2026/ }).click()
+  await page.getByRole("link", { name: /^Spectacle de Cirque 2026/ }).click()
   await expect(page).toHaveURL(/\/admin\/events\/[^/]+$/)
   const eventId = page.url().split("/admin/events/")[1].split(/[/?]/)[0]
 
