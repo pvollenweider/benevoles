@@ -1,32 +1,17 @@
 "use client"
 
-import { useId, useMemo, useState, useTransition } from "react"
+import { useMemo, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
-import ModalShell from "./ModalShell"
 import { fmtHours } from "@/lib/gantt-utils"
-
-type Member = {
-  id: string
-  firstName: string
-  lastName: string
-  email: string | null
-  phone: string | null
-  tags: string[]
-  active: boolean
-  notes: string | null
-  // Sum of every active registration's shift duration, across all of this org's events —
-  // computed server-side (page.tsx). Admin-only recognition figure, deliberately not on the
-  // volunteer-facing PDF export (see that computation's own comment for why).
-  hoursTotal: number
-}
+import { filterMembers, nextSort, sortAnnouncement as announceSort, sortMembers, type Member, type SortCol, type SortDir } from "@/lib/members-list"
+import { AddMemberModal, EditMemberModal } from "./members/MemberFormModals"
+import ImportModal from "./members/ImportModal"
+import SortTh from "./members/SortTh"
 
 type Props = {
   initialMembers: Member[]
   allTags: string[]
 }
-
-type SortCol = "firstName" | "lastName" | "hoursTotal"
-type SortDir = "asc" | "desc"
 
 export default function MembersManager({ initialMembers, allTags }: Props) {
   const router = useRouter()
@@ -43,41 +28,19 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
   const [, startTransition] = useTransition()
 
   function toggleSort(col: SortCol) {
-    let nextCol: SortCol | null = col
-    let nextDir: SortDir = "asc"
-    if (sortCol === col) {
-      if (sortDir === "asc") nextDir = "desc"
-      else { nextCol = null }
-    }
-    setSortCol(nextCol)
-    setSortDir(nextDir)
-    const colLabel = nextCol === "firstName" ? "prénom" : nextCol === "lastName" ? "nom" : "heures cumulées"
-    setSortAnnouncement(
-      nextCol ? `Trié par ${colLabel}, ${nextDir === "asc" ? "croissant" : "décroissant"}` : "Tri réinitialisé"
-    )
+    const next = nextSort({ col: sortCol, dir: sortDir }, col)
+    setSortCol(next.col)
+    setSortDir(next.dir)
+    setSortAnnouncement(announceSort(next))
   }
 
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase()
-    const list = members.filter((m) => {
-      if (!showInactive && !m.active) return false
-      if (tagFilter && !m.tags.includes(tagFilter)) return false
-      if (!q) return true
-      return (
-        m.firstName.toLowerCase().includes(q) ||
-        m.lastName.toLowerCase().includes(q) ||
-        (m.email ?? "").toLowerCase().includes(q) ||
-        (m.phone ?? "").toLowerCase().includes(q)
-      )
-    })
-    if (!sortCol) return list
-    return [...list].sort((a, b) => {
-      const cmp = sortCol === "hoursTotal"
-        ? a.hoursTotal - b.hoursTotal
-        : a[sortCol].toLowerCase().localeCompare(b[sortCol].toLowerCase(), "fr")
-      return sortDir === "asc" ? cmp : -cmp
-    })
-  }, [members, search, tagFilter, showInactive, sortCol, sortDir])
+  const filtered = useMemo(
+    () => sortMembers(
+      filterMembers(members, { search, tag: tagFilter, showInactive }),
+      { col: sortCol, dir: sortDir },
+    ),
+    [members, search, tagFilter, showInactive, sortCol, sortDir],
+  )
 
   function refresh() {
     startTransition(() => router.refresh())
@@ -245,343 +208,6 @@ export default function MembersManager({ initialMembers, allTags }: Props) {
           member={editingMember}
           onClose={() => setEditingMember(null)}
           onSaved={() => { setEditingMember(null); refresh() }}
-        />
-      )}
-    </div>
-  )
-}
-
-// ── Edit modal ────────────────────────────────────────────────────────────────
-
-function EditMemberModal({ member, onClose, onSaved }: { member: Member; onClose: () => void; onSaved: () => void }) {
-  const [firstName, setFirstName] = useState(member.firstName)
-  const [lastName, setLastName] = useState(member.lastName)
-  const [email, setEmail] = useState(member.email ?? "")
-  const [phone, setPhone] = useState(member.phone ?? "")
-  const [tags, setTags] = useState(member.tags.join(", "))
-  const [notes, setNotes] = useState(member.notes ?? "")
-  const [active, setActive] = useState(member.active)
-  const [error, setError] = useState<string | null>(null)
-  const [submitting, setSubmitting] = useState(false)
-  const activeId = useId()
-
-  async function submit(e: React.FormEvent) {
-    e.preventDefault()
-    setSubmitting(true)
-    setError(null)
-    const res = await fetch(`/api/admin/members/${member.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        email: email || undefined,
-        phone: phone || undefined,
-        tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
-        notes: notes || undefined,
-        active,
-      }),
-    })
-    setSubmitting(false)
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      setError(typeof data?.error === "string" ? data.error : "Erreur lors de la mise à jour")
-      return
-    }
-    onSaved()
-  }
-
-  return (
-    <ModalShell title="Modifier le membre" onClose={onClose}>
-      <form onSubmit={submit} className="space-y-3">
-        <p className="text-xs text-gray-500">* champ obligatoire</p>
-        <div className="grid grid-cols-2 gap-3">
-          <Field label="Prénom" required value={firstName} onChange={setFirstName} />
-          <Field label="Nom" required value={lastName} onChange={setLastName} />
-        </div>
-        <Field label="Email" type="email" value={email} onChange={setEmail} />
-        <Field label="Téléphone" value={phone} onChange={setPhone} />
-        <Field label="Tags (séparés par des virgules)" value={tags} onChange={setTags} placeholder="bénévole, bar" />
-        <Field label="Notes" value={notes} onChange={setNotes} multiline />
-        <div className="flex items-center gap-2">
-          <input
-            id={activeId}
-            type="checkbox"
-            checked={active}
-            onChange={(e) => setActive(e.target.checked)}
-          />
-          <label htmlFor={activeId} className="text-sm text-gray-700">Membre actif</label>
-        </div>
-        {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
-        <div className="flex justify-end gap-2 pt-2">
-          <button type="button" onClick={onClose} className="text-sm px-4 py-2 text-gray-600 hover:text-gray-900">
-            Annuler
-          </button>
-          <button
-            type="submit"
-            disabled={submitting}
-            className="bg-blue-600 text-white text-sm px-4 py-2 rounded-xl font-medium hover:bg-blue-700 disabled:opacity-50"
-          >
-            {submitting ? "…" : "Enregistrer"}
-          </button>
-        </div>
-      </form>
-    </ModalShell>
-  )
-}
-
-// ── Add modal ─────────────────────────────────────────────────────────────────
-
-function AddMemberModal({ onClose, onCreated }: { onClose: () => void; onCreated: () => void }) {
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
-  const [email, setEmail] = useState("")
-  const [phone, setPhone] = useState("")
-  const [tags, setTags] = useState("")
-  const [error, setError] = useState<string | null>(null)
-  const [submitting, setSubmitting] = useState(false)
-
-  async function submit(e: React.FormEvent) {
-    e.preventDefault()
-    setSubmitting(true)
-    setError(null)
-    const res = await fetch("/api/admin/members", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        email: email || undefined,
-        phone: phone || undefined,
-        tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
-      }),
-    })
-    setSubmitting(false)
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      setError(typeof data?.error === "string" ? data.error : "Erreur lors de la création")
-      return
-    }
-    onCreated()
-    onClose()
-  }
-
-  return (
-    <ModalShell title="Nouveau membre" onClose={onClose}>
-      <form onSubmit={submit} className="space-y-3">
-        <p className="text-xs text-gray-500">* champ obligatoire</p>
-        <div className="grid grid-cols-2 gap-3">
-          <Field label="Prénom" required value={firstName} onChange={setFirstName} />
-          <Field label="Nom" required value={lastName} onChange={setLastName} />
-        </div>
-        <Field label="Email" type="email" value={email} onChange={setEmail} />
-        <Field label="Téléphone" value={phone} onChange={setPhone} />
-        <Field label="Tags (séparés par des virgules)" value={tags} onChange={setTags} placeholder="parent CM2, bar" />
-        {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
-        <div className="flex justify-end gap-2 pt-2">
-          <button type="button" onClick={onClose} className="text-sm px-4 py-2 text-gray-600 hover:text-gray-900">
-            Annuler
-          </button>
-          <button
-            type="submit"
-            disabled={submitting}
-            className="bg-blue-600 text-white text-sm px-4 py-2 rounded-xl font-medium hover:bg-blue-700 disabled:opacity-50"
-          >
-            {submitting ? "…" : "Créer"}
-          </button>
-        </div>
-      </form>
-    </ModalShell>
-  )
-}
-
-// ── Import modal ──────────────────────────────────────────────────────────────
-
-function ImportModal({ onClose, onImported }: { onClose: () => void; onImported: () => void }) {
-  const [file, setFile] = useState<File | null>(null)
-  const [onDuplicate, setOnDuplicate] = useState<"skip" | "update">("skip")
-  const [submitting, setSubmitting] = useState(false)
-  const [result, setResult] = useState<{
-    created: number
-    updated: number
-    skipped: number
-    errors: { line: number; reason: string }[]
-    detectedColumns: Record<string, string | null>
-    totalParsed: number
-  } | null>(null)
-  const [error, setError] = useState<string | null>(null)
-
-  async function submit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!file) return
-    setSubmitting(true)
-    setError(null)
-    const fd = new FormData()
-    fd.append("file", file)
-    fd.append("onDuplicate", onDuplicate)
-    const res = await fetch("/api/admin/members/import", { method: "POST", body: fd })
-    setSubmitting(false)
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      setError(typeof data?.error === "string" ? data.error : "Erreur lors de l'import")
-      return
-    }
-    const data = await res.json()
-    setResult(data)
-  }
-
-  return (
-    <ModalShell title="Importer des membres" onClose={onClose}>
-      {!result ? (
-        <form onSubmit={submit} className="space-y-4">
-          <div>
-            <label className="block text-sm text-gray-700 mb-1">Fichier CSV ou Excel</label>
-            <input
-              type="file"
-              accept=".csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
-              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-              required
-              className="text-sm w-full"
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Colonnes attendues : prénom, nom, email, téléphone, tags. Les variantes courantes sont reconnues.
-            </p>
-          </div>
-          <div>
-            <label className="block text-sm text-gray-700 mb-1">Si un email existe déjà</label>
-            <div className="flex gap-3">
-              <label className="text-sm text-gray-700 flex items-center gap-1.5">
-                <input type="radio" checked={onDuplicate === "skip"} onChange={() => setOnDuplicate("skip")} />
-                Ignorer
-              </label>
-              <label className="text-sm text-gray-700 flex items-center gap-1.5">
-                <input type="radio" checked={onDuplicate === "update"} onChange={() => setOnDuplicate("update")} />
-                Mettre à jour
-              </label>
-            </div>
-          </div>
-          {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
-          <div className="flex justify-end gap-2">
-            <button type="button" onClick={onClose} className="text-sm px-4 py-2 text-gray-600 hover:text-gray-900">
-              Annuler
-            </button>
-            <button
-              type="submit"
-              disabled={!file || submitting}
-              className="bg-blue-600 text-white text-sm px-4 py-2 rounded-xl font-medium hover:bg-blue-700 disabled:opacity-50"
-            >
-              {submitting ? "Import en cours…" : "Importer"}
-            </button>
-          </div>
-        </form>
-      ) : (
-        <div className="space-y-4">
-          <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-sm text-green-800">
-            <strong>{result.created}</strong> créés, <strong>{result.updated}</strong> mis à jour, <strong>{result.skipped}</strong> ignorés ({result.totalParsed} lignes lues)
-          </div>
-          {result.errors.length > 0 && (
-            <div className="bg-orange-50 border border-orange-200 rounded-xl p-3 text-sm text-orange-800">
-              <p className="font-medium mb-2">{result.errors.length} ligne{result.errors.length > 1 ? "s" : ""} ignorée{result.errors.length > 1 ? "s" : ""} :</p>
-              <ul className="text-xs space-y-1 max-h-40 overflow-y-auto">
-                {result.errors.slice(0, 50).map((e, i) => (
-                  <li key={i}>{e.line > 0 ? `Ligne ${e.line} : ` : ""}{e.reason}</li>
-                ))}
-                {result.errors.length > 50 && <li>… et {result.errors.length - 50} autres</li>}
-              </ul>
-            </div>
-          )}
-          <div className="text-xs text-gray-500">
-            Colonnes détectées :
-            {Object.entries(result.detectedColumns).map(([k, v]) => (
-              <span key={k} className="ml-2">{k} → {v ?? "—"}</span>
-            ))}
-          </div>
-          <div className="flex justify-end">
-            <button
-              onClick={() => { onImported(); onClose() }}
-              className="bg-blue-600 text-white text-sm px-4 py-2 rounded-xl font-medium hover:bg-blue-700"
-            >
-              Fermer
-            </button>
-          </div>
-        </div>
-      )}
-    </ModalShell>
-  )
-}
-
-// ── SortTh ───────────────────────────────────────────────────────────────────
-
-function SortTh({
-  col, label, sortCol, sortDir, onSort,
-}: {
-  col: SortCol
-  label: string
-  sortCol: SortCol | null
-  sortDir: SortDir
-  onSort: (col: SortCol) => void
-}) {
-  const active = sortCol === col
-  const ariaSort = active ? (sortDir === "asc" ? "ascending" : "descending") : "none"
-  const icon = active ? (sortDir === "asc" ? "↑" : "↓") : "↕"
-
-  return (
-    <th scope="col" aria-sort={ariaSort} className="text-left px-4 py-2 font-medium">
-      <button
-        type="button"
-        onClick={() => onSort(col)}
-        className="flex items-center gap-1 text-xs text-gray-500 font-medium hover:text-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 rounded"
-      >
-        {label}
-        <span aria-hidden="true" className={active ? "text-blue-600" : "text-gray-300"}>{icon}</span>
-      </button>
-    </th>
-  )
-}
-
-// ── Field ─────────────────────────────────────────────────────────────────────
-
-function Field({
-  label,
-  value,
-  onChange,
-  type = "text",
-  required = false,
-  placeholder,
-  multiline = false,
-}: {
-  label: string
-  value: string
-  onChange: (v: string) => void
-  type?: string
-  required?: boolean
-  placeholder?: string
-  multiline?: boolean
-}) {
-  const id = useId()
-  return (
-    <div>
-      <label htmlFor={id} className="block text-sm text-gray-700 mb-1">
-        {label}{required && " *"}
-      </label>
-      {multiline ? (
-        <textarea
-          id={id}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          rows={3}
-          className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
-        />
-      ) : (
-        <input
-          id={id}
-          type={type}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          required={required}
-          placeholder={placeholder}
-          className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
         />
       )}
     </div>
