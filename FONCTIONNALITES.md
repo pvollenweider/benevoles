@@ -114,6 +114,10 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - Liste des 200 dernières lignes de `NotificationOutbox` de l'organisation (colonne `organizationId`, #382, posée à l'enqueue par chaque route ; sans elle, la ligne n'apparaît nulle part), payload déchiffré côté serveur pour n'afficher que le type et le destinataire ; états dérivés : en attente, nouvel essai (`attempts` > 0), envoyé, échec définitif ; raison du dernier échec ; `POST /api/admin/settings/notifications/[id]/retry` remet une ligne en échec de l'organisation en file (`attempts` 0, journalisé `notification.retried`), 404 sinon ; test d'isolation cross-tenant
 - Rétention inchangée : envoyés purgés chaque nuit, échecs après 30 jours
+### Santé du service (`/super-admin/health`, super admin)
+
+- Base (latence `SELECT 1`), file d'emails (`outboxHealth`), tâches planifiées et sauvegardes (table `JobRun`, #383 : `recordJobRun` autour des routes cron rappels et nettoyage ; `POST /api/cron/heartbeat` avec `CRON_SECRET` pour `backup`, `backup-offsite` et le `restore-test` manuel, appelé par les CronJobs k8s), migrations appliquées (`_prisma_migrations`) et en attente (dossier `prisma/migrations` de l'image), version (`package.json`) et commit (`GIT_SHA`, build arg), configuration (SMTP, VAPID, CRON_SECRET, TOKEN_ENCRYPTION_KEY, Sentry)
+- Seuils dans `src/lib/health-view.ts` : rappels 2 h, nettoyage et sauvegardes 26 h, test de restauration 45 jours (à surveiller) / 90 jours (problème)
 
 ### Recherche globale (`/admin/search`)
 

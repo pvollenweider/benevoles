@@ -33,6 +33,8 @@ ENV AUTH_SECRET=build-placeholder-secret-32-characters-min
 # NEXT_PUBLIC_SENTRY_DSN is a public value baked into the browser bundle
 ARG NEXT_PUBLIC_SENTRY_DSN
 ENV NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
+ARG GIT_SHA
+ENV GIT_SHA=$GIT_SHA
 
 # SENTRY_AUTH_TOKEN is only needed at build time for source-map upload;
 # use --mount=type=secret so it never appears in image layers or history.
@@ -44,6 +46,8 @@ FROM node:26-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+ARG GIT_SHA
+ENV GIT_SHA=$GIT_SHA
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0

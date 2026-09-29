@@ -452,3 +452,16 @@ model AdminUser {
   @@index([organizationId])
   @@index([setupTokenHash])
 }
+
+// Last run of each scheduled job (#383): reminders and cleanup write it themselves, the backup
+// CronJobs and the manual restore test post a heartbeat (POST /api/cron/heartbeat). One row per
+// job, overwritten each time: the health page only needs the latest state.
+model JobRun {
+  job        String    @id
+  startedAt  DateTime
+  finishedAt DateTime?
+  ok         Boolean?
+  error      String?
+  summary    Json?
+  updatedAt  DateTime  @updatedAt
+}

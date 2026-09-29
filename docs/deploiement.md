@@ -233,6 +233,7 @@ Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut don
 - [ ] `TOKEN_ENCRYPTION_KEY` et `BACKUP_PASSPHRASE` notées dans un gestionnaire de mots de passe, hors du cluster et hors de ce dépôt ;
 - [ ] secret `rclone-config` créé, et une première copie Dropbox constatée le lendemain ;
 - [ ] le Job de migration a réussi (`kubectl -n benevoles logs job/benevoles-migrate`) ;
+- [ ] `/super-admin/health` (connecté en super admin) est tout vert : base, file d'emails, rappels, nettoyage, sauvegarde, copie hors site, migrations, configuration ;
 - [ ] `/api/health` répond `200` ;
 - [ ] un appel manuel de `/api/cron/reminders` et `/api/cron/cleanup` avec `CRON_SECRET` répond `200`.
 
@@ -241,6 +242,15 @@ Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut don
 - [ ] les derniers CronJobs de sauvegarde ont réussi : `kubectl -n benevoles get jobs` (dump et copie hors site) ;
 - [ ] le dernier fichier sur `backup-pvc` et sur Dropbox a une taille plausible (pas 0 octet) ;
 - [ ] **test de restauration** : télécharger un dump, le déchiffrer et le charger dans une base PostgreSQL jetable (`psql -f dump.sql`), puis vérifier quelques comptages (organisations, événements, inscriptions) ;
+  puis le signaler à la page de santé (elle réclame ce test tous les 45 jours) :
+
+  ```bash
+  curl -s -X POST -H "Authorization: Bearer $CRON_SECRET" -H "Content-Type: application/json" \
+    -d '{"job":"restore-test","ok":true,"summary":{"dump":"benevoles_2026-09-30_01-00"}}' \
+    https://www.benevol.app/api/cron/heartbeat
+  ```
+
+  Les CronJobs de sauvegarde et de copie hors site envoient le même battement de cœur (`backup`, `backup-offsite`) à la fin de chaque exécution réussie ; les rappels et le nettoyage s'enregistrent eux-mêmes.
 - [ ] certificat wildcard valide (`kubectl -n benevoles get certificate benevol-app-wildcard`) ;
 - [ ] pas d'alerte en attente dans Sentry, en particulier sur la file d'envoi des emails.
 

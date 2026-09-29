@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { recordJobRun } from "@/lib/job-runs"
 import { env } from "@/lib/env"
 import { prisma } from "@/lib/prisma"
 import { encryptLegacyTokens } from "@/lib/token-encryption-job"
@@ -25,6 +26,8 @@ async function run(req: Request) {
   if (!isAuthorized(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
+
+  return recordJobRun("cleanup", async () => {
 
   const now = new Date()
   // 30-day retention cutoff. We use updatedAt as a proxy for deactivation
@@ -102,5 +105,6 @@ async function run(req: Request) {
     tokensCleaned: {
       passwordReset: clearedResetTokens.count,
     },
+  })
   })
 }

@@ -15,6 +15,7 @@ import { usePathname } from "next/navigation"
 // interactive-menu conventions.
 export const SUPER_ADMIN_ITEMS = [
   { href: "/super-admin/organizations", label: "Organisations" },
+  { href: "/super-admin/health", label: "Santé du service" },
   { href: "/super-admin/product-updates", label: "Communications admin" },
 ]
 
