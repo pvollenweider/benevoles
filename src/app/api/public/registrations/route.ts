@@ -119,7 +119,12 @@ export async function POST(req: Request) {
   // to leak yet) or a valid member invite, which was emailed to that volunteer.
   const organizationId = event.organizationId
   const birthDateValue = birthDate ? new Date(birthDate) : undefined
-  const existing = await prisma.volunteer.findFirst({ where: { email, organizationId }, select: { id: true } })
+  // Case-insensitive: addresses stored before normalization (#310) may still have capitals
+  // (case-only duplicates left for manual review); `email` itself is already normalized.
+  const existing = await prisma.volunteer.findFirst({
+    where: { email: { equals: email, mode: "insensitive" }, organizationId },
+    select: { id: true },
+  })
   let ownsEmail = false
   if (existing) {
     if (inviteToken) {
@@ -237,7 +242,7 @@ export async function POST(req: Request) {
     if (isUniqueViolation(e)) {
       // Our transaction rolled back; the duplicate belongs to a volunteer that exists
       // independently of it (created before, or by a concurrent sign-up).
-      const owner = existing ?? await prisma.volunteer.findFirst({ where: { email, organizationId }, select: { id: true } })
+      const owner = existing ?? await prisma.volunteer.findFirst({ where: { email: { equals: email, mode: "insensitive" }, organizationId }, select: { id: true } })
       if (owner) return alreadyRegistered(owner.id, eventId)
       return NextResponse.json({ error: "Vous êtes déjà inscrit(e) à un de ces créneaux." }, { status: 409 })
     }
