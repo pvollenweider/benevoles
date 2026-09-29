@@ -13,7 +13,7 @@ import { usePathname } from "next/navigation"
 // (button + role="menu") rather than <details>/<summary> so we control focus movement into the
 // first item on open and back to the trigger on close/Escape, matching the rest of this app's
 // interactive-menu conventions.
-const ITEMS = [
+export const SUPER_ADMIN_ITEMS = [
   { href: "/super-admin/organizations", label: "Organisations" },
   { href: "/super-admin/product-updates", label: "Communications admin" },
 ]
@@ -24,7 +24,7 @@ export default function SuperAdminMenu() {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   const menuId = useId()
-  const isActive = ITEMS.some((i) => pathname.startsWith(i.href))
+  const isActive = SUPER_ADMIN_ITEMS.some((i) => pathname.startsWith(i.href))
 
   useEffect(() => {
     if (!open) return
@@ -90,7 +90,7 @@ export default function SuperAdminMenu() {
           aria-label="Menu super admin"
           className="absolute right-0 mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg py-1 z-50"
         >
-          {ITEMS.map((item) => (
+          {SUPER_ADMIN_ITEMS.map((item) => (
             <Link
               key={item.href}
               href={item.href}
