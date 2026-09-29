@@ -72,6 +72,8 @@ Tous les mots doivent correspondre : « alice martin » trouve Alice Martin, « 
 
 Raccourci : **Ctrl + K** (**⌘ + K** sur Mac) place le curseur dans le champ de recherche depuis n'importe quelle page de l'admin.
 
+Au clavier, la première pression sur **Tab** en haut d'une page fait apparaître un lien **Aller au contenu**, qui saute la barre du haut.
+
 ---
 
 ## Créer un événement
