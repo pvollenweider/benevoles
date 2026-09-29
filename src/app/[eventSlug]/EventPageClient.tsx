@@ -61,9 +61,24 @@ type EventData = {
   volunteerCharter: string | null
   shifts: Shift[]
   pages: { slug: string; title: string }[]
+  /** Only in the admin preview (#370). */
+  publicStatus?: string
 }
 
-export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: string; eventSlug: string }) {
+type PreviewResult = { subject: string; html: string; confirmationMessage: string | null; waitlistedShiftIds: string[] }
+
+/**
+ * `preview` (#370): the admin's « Prévisualiser comme un bénévole ». Reads the event through the
+ * admin API (drafts included), keeps no local session, ignores invitation links, and shows the
+ * confirmation and email a volunteer would get instead of registering.
+ */
+export default function EventPageClient({ orgSlug, eventSlug, preview }: {
+  orgSlug: string
+  eventSlug: string
+  preview?: { eventId: string; adminEventUrl: string }
+}) {
+  const previewEventId = preview?.eventId ?? null
+  const [previewResult, setPreviewResult] = useState<PreviewResult | null>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
   const inviteToken = searchParams.get("token")
@@ -83,6 +98,20 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
   const charterTriggerRef = useRef<HTMLButtonElement>(null)
   const cancelTriggerRef = useRef<HTMLButtonElement | null>(null)
   const [form, setForm] = useState<SignupForm>(EMPTY_SIGNUP_FORM)
+  // Preview (#370): focus the result when it appears, and the submit button when going back to
+  // the form (the result panel unmounts, focus would otherwise fall to <body>).
+  const resultHeadingRef = useRef<HTMLHeadingElement>(null)
+  const submitButtonRef = useRef<HTMLButtonElement>(null)
+  const hadPreviewResult = useRef(false)
+  useEffect(() => {
+    if (previewResult) {
+      hadPreviewResult.current = true
+      resultHeadingRef.current?.focus()
+    } else if (hadPreviewResult.current) {
+      hadPreviewResult.current = false
+      submitButtonRef.current?.focus()
+    }
+  }, [previewResult])
 
   const storageKey = `benevoles_token_${eventSlug}`
   const myShiftIds = useMemo(() => new Set(myRegistrations.map((r) => r.shiftId)), [myRegistrations])
@@ -100,7 +129,9 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
   )
 
   useEffect(() => {
-    const url = `/api/public/${eventSlug}?org=${encodeURIComponent(orgSlug)}`
+    const url = previewEventId
+      ? `/api/admin/events/${previewEventId}/preview`
+      : `/api/public/${eventSlug}?org=${encodeURIComponent(orgSlug)}`
     fetch(url)
       .then((r) => r.json())
       .then((data) => {
@@ -109,10 +140,10 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
         setLoading(false)
       })
       .catch(() => setLoading(false))
-  }, [eventSlug, orgSlug])
+  }, [eventSlug, orgSlug, previewEventId])
 
   useEffect(() => {
-    if (!inviteToken) return
+    if (!inviteToken || previewEventId) return
     fetch(`/api/public/member-invite/${inviteToken}?slug=${encodeURIComponent(eventSlug)}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
@@ -120,9 +151,10 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
         setForm((f) => prefillContact(f, data.member, "form"))
       })
       .catch(() => {})
-  }, [inviteToken, eventSlug])
+  }, [inviteToken, eventSlug, previewEventId])
 
   useEffect(() => {
+    if (previewEventId) return // a preview never picks up a volunteer's session on this browser
     const token = localStorage.getItem(storageKey)
     if (!token) return
     fetch(`/api/public/registrations/${token}`)
@@ -139,7 +171,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
         })
       })
       .catch(() => {})
-  }, [storageKey])
+  }, [storageKey, previewEventId])
 
   async function cancelRegistration(regToken: string, shiftId: string) {
     await fetch(`/api/public/registrations/${regToken}`, { method: "DELETE" })
@@ -175,6 +207,25 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
 
     setSubmitting(true)
     setError(null)
+
+    if (previewEventId) {
+      // Preview: render what the volunteer would receive, register nothing.
+      try {
+        const res = await fetch(`/api/admin/events/${previewEventId}/preview`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ firstName: form.firstName, lastName: form.lastName, shiftIds: Array.from(selectedShifts) }),
+        })
+        const data = await res.json().catch(() => ({}))
+        if (!res.ok) setError(typeof data?.error === "string" ? data.error : "Aperçu indisponible.")
+        else setPreviewResult(data as PreviewResult)
+      } catch {
+        setError("Aperçu indisponible. Vérifiez votre connexion et réessayez.")
+      } finally {
+        setSubmitting(false)
+      }
+      return
+    }
 
     const res = await fetch("/api/public/registrations", {
       method: "POST",
@@ -266,12 +317,25 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
   const allSelectedShifts = event.shifts.filter((s) => selectedShifts.has(s.id))
   const newShiftIds = new Set(allSelectedShifts.map((s) => s.id).filter((id) => !myShiftIds.has(id)))
 
+  const Root = previewEventId ? "div" : "main"
+
   return (
-    <main className="min-h-screen bg-gray-50">
+    <Root className="min-h-screen bg-gray-50">
+      {preview && (
+        <div className="bg-amber-50 border-b border-amber-300 px-4 py-3 text-sm text-amber-950">
+          <div className="max-w-6xl mx-auto flex items-center justify-between gap-3 flex-wrap">
+            <p>
+              <strong>Aperçu</strong> : la page telle que la verront les bénévoles
+              {event.publicStatus === "published" ? "" : ", alors que l'événement n'est pas encore publié"}. Rien n'est enregistré ni envoyé.
+            </p>
+            <Link href={preview.adminEventUrl} className="font-medium underline underline-offset-2">Retour à l&apos;événement</Link>
+          </div>
+        </div>
+      )}
       <header className="bg-white border-b border-gray-200 px-4 py-4">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between">
-            <Link href="/" className="text-blue-600 text-sm">← Retour</Link>
+            <Link href={preview ? preview.adminEventUrl : "/"} className="text-blue-600 text-sm">← Retour</Link>
             {myRegistrations.length > 0 && (
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-600 font-medium">
@@ -304,7 +368,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
             {event.pages.map((p) => (
               <Link
                 key={p.slug}
-                href={`/${eventSlug}/${p.slug}`}
+                href={preview ? `${preview.adminEventUrl}/pages` : `/${eventSlug}/${p.slug}`}
                 className="text-sm text-blue-600 border border-blue-200 px-3 py-1.5 rounded-full hover:bg-blue-50 transition-colors"
               >
                 {p.title}
@@ -313,7 +377,43 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
           </nav>
         )}
 
-        {step === "select" && (
+        {previewResult && (
+          <section aria-labelledby="preview-result-heading" className="bg-white border border-amber-300 rounded-2xl p-5 space-y-4">
+            <h2 id="preview-result-heading" tabIndex={-1} ref={resultHeadingRef} className="text-lg font-semibold text-gray-900 focus:outline-none">
+              Aperçu de la confirmation (rien n&apos;a été enregistré)
+            </h2>
+            {previewResult.waitlistedShiftIds.length > 0 && (
+              <p className="text-sm text-amber-950">
+                {previewResult.waitlistedShiftIds.length} créneau{previewResult.waitlistedShiftIds.length > 1 ? "x" : ""} déjà complet{previewResult.waitlistedShiftIds.length > 1 ? "s" : ""} : le bénévole y serait placé en liste d&apos;attente et recevrait un autre email.
+              </p>
+            )}
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900">Message affiché après l&apos;inscription</h3>
+              <p className="text-sm text-gray-700 mt-1 whitespace-pre-line">
+                {previewResult.confirmationMessage || "Aucun message de confirmation personnalisé (réglable dans les paramètres de l'événement)."}
+              </p>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900">Email de confirmation : {previewResult.subject}</h3>
+              <iframe
+                title={`Aperçu de l'email : ${previewResult.subject}`}
+                srcDoc={previewResult.html}
+                sandbox=""
+                className="mt-2 w-full h-[70vh] max-h-[32rem] border border-gray-200 rounded-xl bg-white"
+              />
+              <p className="text-xs text-gray-600 mt-1">Le lien personnel de l&apos;email est factice dans cet aperçu.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setPreviewResult(null)}
+              className="text-sm font-medium text-blue-700 underline underline-offset-2"
+            >
+              Revenir au formulaire
+            </button>
+          </section>
+        )}
+
+        {!previewResult && step === "select" && (
           <>
             {error && (
               <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700 flex items-start gap-2">
@@ -423,7 +523,7 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
           </>
         )}
 
-        {step === "form" && (
+        {!previewResult && step === "form" && (
           <div className="lg:grid lg:grid-cols-[1fr_300px] lg:gap-8 lg:items-start">
             {/* Form */}
             <div className="bg-white rounded-2xl border border-blue-200 p-5">
@@ -564,11 +664,12 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
                 )}
 
                 <button
+                  ref={submitButtonRef}
                   type="submit"
                   disabled={submitting}
                   className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-50"
                 >
-                  {submitting ? "Envoi en cours…" : "Confirmer mon inscription"}
+                  {submitting ? "Envoi en cours…" : preview ? "Voir la confirmation (aperçu)" : "Confirmer mon inscription"}
                 </button>
               </form>
             </div>
@@ -674,6 +775,6 @@ export default function EventPageClient({ orgSlug, eventSlug }: { orgSlug: strin
       )}
 
       <PublicFooter />
-    </main>
+    </Root>
   )
 }
