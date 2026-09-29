@@ -12,7 +12,7 @@ export default function NewEventPage() {
       <WizardSteps current={1} eventId={null} />
       <h1 className="text-xl font-bold text-gray-900">Nouvel événement</h1>
       <EventTemplatePicker>
-        <EventForm createdHref={(id) => wizardHrefs(id)[2]} />
+        <EventForm createdHref={wizardHrefs("{id}")[2]} />
       </EventTemplatePicker>
     </div>
   )

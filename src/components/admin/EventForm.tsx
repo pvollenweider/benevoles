@@ -24,8 +24,9 @@ type EventFormData = {
 
 type Props = {
   initialData?: Partial<EventFormData> & { id?: string; showSchedule?: Show[] }
-  /** Where to go once created (create mode). Defaults to the event page. */
-  createdHref?: (id: string) => string
+  /** Where to go once created (create mode), `{id}` replaced; defaults to the event page. A
+   *  string, not a function: this component is rendered from server pages. */
+  createdHref?: string
 }
 
 const defaultData: EventFormData = {
@@ -155,7 +156,7 @@ export default function EventForm({ initialData, createdHref }: Props) {
     setSaving(false)
 
     if (!res.ok) { setError("Erreur lors de la création."); return }
-    router.push(createdHref ? createdHref(data.id) : `/admin/events/${data.id}`)
+    router.push(createdHref ? createdHref.replace("{id}", data.id) : `/admin/events/${data.id}`)
     router.refresh()
   }
 
