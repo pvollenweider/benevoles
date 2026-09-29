@@ -161,3 +161,47 @@ describe("notification templates — render()", () => {
     expect(out.subject).toContain("annulé")
   })
 })
+
+// Practical info per shift (#397) in the volunteer emails.
+describe("notification templates — shift practical info", () => {
+  const info = { locationDetails: "Entrée B", contactName: "Léa", contactPhone: "079 000 00 00", instructions: "Venir 10 min <avant>." }
+
+  it("lists place, contact and instructions under each confirmed shift, escaped", () => {
+    const out = render({
+      kind: "registration_confirmation",
+      recipient: { email: "a@x.ch", name: "Alice" },
+      data: { volunteerName: "Alice", eventTitle: "Fête", editToken: "tok", shifts: [{ label: "Bar", date: "samedi", startTime: "10:00", endTime: "12:00", ...info }] },
+    })
+    expect(out.text).toContain("Lieu : Entrée B")
+    expect(out.text).toContain("Contact : Léa · 079 000 00 00")
+    expect(out.text).toContain("À savoir : Venir 10 min <avant>.")
+    expect(out.html).toContain("Contact : Léa · 079 000 00 00")
+    expect(out.html).toContain("Venir 10 min &lt;avant&gt;.")
+    expect(out.html).not.toContain("<avant>")
+  })
+
+  it("says nothing extra for a shift without info", () => {
+    const out = render({
+      kind: "registration_confirmation",
+      recipient: { email: "a@x.ch", name: "Alice" },
+      data: { volunteerName: "Alice", eventTitle: "Fête", editToken: "tok", shifts: [{ label: "Bar", date: "samedi", startTime: "10:00", endTime: "12:00" }] },
+    })
+    expect(out.text).not.toContain("Lieu :")
+    expect(out.html).not.toContain("Contact :")
+  })
+
+  it.each(["reminder_j2", "reminder_j1", "reminder_dd"] as const)("%s carries the contact and instructions", (kind) => {
+    const out = render({
+      kind,
+      recipient: { email: "a@x.ch", name: "Alice" },
+      data: {
+        volunteerName: "Alice", eventTitle: "Fête", organizationName: "Org", shiftLabel: "Bar", shiftRoleName: "Bar",
+        shiftDate: "samedi 4 juillet", shiftStart: "10:00", shiftEnd: "12:00", shiftLocation: "Entrée B",
+        shiftContactName: "Léa", shiftContactPhone: "079 000 00 00", shiftInstructions: "Gilet fourni", editToken: "tok", hoursUntil: 3,
+      },
+    })
+    expect(out.text).toContain("Contact : Léa · 079 000 00 00")
+    expect(out.text).toContain("À savoir : Gilet fourni")
+    expect(out.html).toContain("À savoir : Gilet fourni")
+  })
+})

@@ -23,6 +23,7 @@ import { fmtRange } from "@/lib/gantt-utils"
 import DayTimeline, { fmt } from "@/components/DayTimeline"
 import PublicFooter from "@/components/PublicFooter"
 import { DEFAULT_VOLUNTEER_CHARTER } from "@/lib/volunteer-charter"
+import ShiftInfoList from "@/components/ShiftInfoList"
 
 type Shift = {
   id: string
@@ -37,6 +38,9 @@ type Shift = {
   spotsLeft: number
   status: string
   locationDetails: string | null
+  contactName?: string | null
+  contactPhone?: string | null
+  instructions?: string | null
   displayOrder: number
   waitlistEnabled: boolean
   minAge: number | null
@@ -537,6 +541,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                 {event.shifts.filter((s) => selectedShifts.has(s.id)).map((s) => (
                   <div key={s.id} className="text-sm text-gray-700">
                     ✓ {s.label} — {fmtRange(s.startTime, s.endTime)}
+                    <ShiftInfoList info={s} className="ml-5 text-xs text-gray-600" />
                   </div>
                 ))}
               </div>
@@ -685,6 +690,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                     <div key={s.id} className="px-4 py-3">
                       <p className="text-xs font-medium text-gray-900">{s.label && s.label !== s.roleName ? s.label : s.roleName}</p>
                       <p className="text-[11px] text-gray-500 mt-0.5 font-mono">{fmt(s.startTime)}–{fmt(s.endTime)}</p>
+                      <ShiftInfoList info={s} className="mt-1 text-xs text-gray-600" />
                     </div>
                   ))}
                 </div>

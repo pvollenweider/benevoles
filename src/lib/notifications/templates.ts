@@ -8,6 +8,7 @@
 import type { NotificationPayload } from "./types"
 import { eventPublicUrl, orgBaseUrl } from "@/lib/urls"
 import { renderMarkdown } from "@/lib/markdown"
+import { shiftInfoLines, shiftInfoText, type ShiftInfo } from "../shift-info"
 
 const BASE_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
 
@@ -27,6 +28,13 @@ function escapeHtml(s: string): string {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
+}
+
+/** Place, contact and instructions of a shift as small lines under it (#397). */
+function shiftInfoHtml(info: ShiftInfo): string {
+  const lines = shiftInfoLines(info)
+  if (lines.length === 0) return ""
+  return `<div style="color:#444;font-size:0.85em;margin-top:4px">${lines.map((l) => `<div>${escapeHtml(l.label)} : ${escapeHtml(l.text)}</div>`).join("")}</div>`
 }
 
 function btn(href: string, label: string): string {
@@ -119,7 +127,7 @@ function renderConfirmation(p: NotificationPayload): RenderedEmail {
   const { volunteerName, eventTitle, shifts, editToken, orgSlug, confirmationMessage } = p.data as {
     volunteerName: string
     eventTitle: string
-    shifts: { label: string; date: string; startTime: string; endTime: string }[]
+    shifts: ({ label: string; date: string; startTime: string; endTime: string } & ShiftInfo)[]
     editToken: string
     orgSlug?: string
     confirmationMessage?: string
@@ -134,7 +142,7 @@ function renderConfirmation(p: NotificationPayload): RenderedEmail {
     `Super, ton inscription pour ${eventTitle} est confirmée !`,
     ``,
     `Tes créneaux :`,
-    ...shifts.map((s) => `  • ${s.label} · ${s.date} · ${s.startTime}–${s.endTime}`),
+    ...shifts.flatMap((s) => [`  • ${s.label} · ${s.date} · ${s.startTime}–${s.endTime}`, ...shiftInfoText(s).map((l) => `      ${l}`)]),
     ``,
     ...(confirmationMessage ? [confirmationMessage, ``] : []),
     `Un empêchement ? Tu peux gérer tes inscriptions ici :`,
@@ -152,6 +160,7 @@ function renderConfirmation(p: NotificationPayload): RenderedEmail {
         <div style="padding:6px 0;border-bottom:1px solid #e5e7eb">
           <strong style="color:#111">${escapeHtml(s.label)}</strong>
           <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</span>
+          ${shiftInfoHtml(s)}
         </div>`).join("")}
     </div>
     ${confirmationMessage ? `<div style="background:#eff6ff;border-radius:8px;padding:14px 16px;margin-top:1em;font-size:0.9em;color:#1e40af;white-space:pre-wrap">${escapeHtml(confirmationMessage)}</div>` : ""}
@@ -231,10 +240,20 @@ type ReminderData = {
   shiftStart: string
   shiftEnd: string
   shiftLocation: string | null
+  shiftContactName?: string | null
+  shiftContactPhone?: string | null
+  shiftInstructions?: string | null
   editToken: string
   hoursUntil?: number
   orgSlug?: string
 }
+
+/** Contact and instructions of the reminded shift (the place is already in each template). */
+function reminderExtras(d: ReminderData) {
+  return shiftInfoLines({ contactName: d.shiftContactName, contactPhone: d.shiftContactPhone, instructions: d.shiftInstructions })
+}
+const extrasText = (d: ReminderData) => reminderExtras(d).map((l) => `${l.label} : ${l.text}`)
+const extrasHtml = (d: ReminderData) => reminderExtras(d).map((l) => `<div>${escapeHtml(l.label)} : ${escapeHtml(l.text)}</div>`).join("")
 
 function renderReminderJ2(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
@@ -252,6 +271,7 @@ function renderReminderJ2(p: NotificationPayload): RenderedEmail {
     `🕐 ${d.shiftStart}–${d.shiftEnd}`,
     d.shiftLocation ? `📍 ${d.shiftLocation}` : ``,
     `Mission : ${d.shiftRoleName}`,
+    ...extrasText(d),
     ``,
     `Un empêchement ? Préviens-nous le plus vite possible :`,
     editUrl,
@@ -268,6 +288,7 @@ function renderReminderJ2(p: NotificationPayload): RenderedEmail {
       <div>🕐 ${escapeHtml(d.shiftStart)}–${escapeHtml(d.shiftEnd)}</div>
       ${d.shiftLocation ? `<div>📍 ${escapeHtml(d.shiftLocation)}</div>` : ""}
       <div>Mission : <strong>${escapeHtml(d.shiftRoleName)}</strong></div>
+      ${extrasHtml(d)}
     </div>
     <p style="margin-top:1.5em">${btn(editUrl, "Annuler si je ne peux plus venir")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
@@ -287,6 +308,7 @@ function renderReminderJ1(p: NotificationPayload): RenderedEmail {
     ``,
     `C'est demain ! ${d.eventTitle} à ${d.shiftStart}${d.shiftLocation ? `, à ${d.shiftLocation}` : ""}.`,
     `Tu fais : ${d.shiftRoleName}`,
+    ...extrasText(d),
     ``,
     `Un empêchement de dernière minute ? Préviens-nous vite :`,
     editUrl,
@@ -299,6 +321,7 @@ function renderReminderJ1(p: NotificationPayload): RenderedEmail {
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! C'est demain ! 🙌</h2>
     <p style="color:#555;margin:0 0 1.25em"><strong>${escapeHtml(d.eventTitle)}</strong> demain à ${escapeHtml(d.shiftStart)}${d.shiftLocation ? `, à ${escapeHtml(d.shiftLocation)}` : ""}.</p>
     <p>Tu fais : <strong>${escapeHtml(d.shiftRoleName)}</strong></p>
+    ${reminderExtras(d).length ? `<div style="background:#f9fafb;border-radius:10px;padding:14px 16px;line-height:2">${extrasHtml(d)}</div>` : ""}
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mon inscription")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `RDV demain à ${d.shiftStart}${d.shiftLocation ? ` · ${d.shiftLocation}` : ""} — mission : ${d.shiftRoleName}`)
@@ -320,6 +343,7 @@ function renderReminderDd(p: NotificationPayload): RenderedEmail {
     d.shiftLocation ? `📍 ${d.shiftLocation}` : ``,
     `🕐 ${d.shiftStart}`,
     `Mission : ${d.shiftRoleName}`,
+    ...extrasText(d),
     ``,
     editUrl,
     ``,
@@ -334,6 +358,7 @@ function renderReminderDd(p: NotificationPayload): RenderedEmail {
       ${d.shiftLocation ? `<div>📍 ${escapeHtml(d.shiftLocation)}</div>` : ""}
       <div>🕐 ${escapeHtml(d.shiftStart)}</div>
       <div>Mission : <strong>${escapeHtml(d.shiftRoleName)}</strong></div>
+      ${extrasHtml(d)}
     </div>
     <p style="margin-top:1.5em">${btn(editUrl, "Voir mon inscription")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>

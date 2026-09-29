@@ -10,6 +10,7 @@ import { cancelShift } from "@/lib/shift-cancel"
 import { registrationToken } from "@/lib/token-vault"
 import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
+import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 
 const schema = z.object({
   roleName: z.string().optional(),
@@ -21,6 +22,9 @@ const schema = z.object({
   capacity: z.number().int().min(1).optional(),
   status: z.enum(["open", "full", "closed", "cancelled"]).optional(),
   locationDetails: z.string().optional().nullable(),
+  contactName: z.string().max(SHIFT_CONTACT_NAME_MAX).optional().nullable(),
+  contactPhone: z.string().max(SHIFT_CONTACT_PHONE_MAX).optional().nullable(),
+  instructions: z.string().max(SHIFT_INSTRUCTIONS_MAX).optional().nullable(),
   displayOrder: z.number().int().optional(),
   internalNotes: z.string().optional().nullable(),
   waitlistEnabled: z.boolean().optional(),

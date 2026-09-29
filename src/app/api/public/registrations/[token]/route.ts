@@ -10,6 +10,7 @@ import { logEvent } from "@/lib/event-log"
 import { reportError } from "@/lib/report-error"
 import { contactPhone } from "@/lib/contact-phone"
 import { registrationToken } from "@/lib/token-vault"
+import { pickShiftInfo } from "@/lib/shift-info"
 
 export async function GET(req: Request, { params }: { params: Promise<{ token: string }> }) {
   const rl = await rateLimit(getClientIp(req), "reg-token-read", 10, 60 * 60 * 1000)
@@ -68,6 +69,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
         date: r.shift.date,
         startTime: r.shift.startTime,
         endTime: r.shift.endTime,
+        ...pickShiftInfo(r.shift),
       },
     })),
   })
