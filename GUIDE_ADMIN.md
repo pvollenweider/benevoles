@@ -251,6 +251,8 @@ Une checklist simple de dates clés pour l'événement (ex. « Fermer les inscri
 | Publié, **non répertorié** | accessible par son lien | non : absent de la page d'accueil, de la liste publique et du sitemap, et non indexé par les moteurs de recherche |
 | Archivé | inaccessible | non |
 
+**Où en est l'événement ?** En haut de sa page, une barre d'étapes le situe : **Brouillon → Prêt à publier → Publié → Terminé → Archivé**. « Prêt à publier » est un brouillon qui a au moins un créneau ; « Terminé » un événement publié dont le dernier jour est passé. Sous la barre, **À faire** dit ce qui manque encore (par exemple « aucun créneau ») et **Concrètement** ce que l'étape signifie : visible ou non pour les bénévoles, rappels envoyés ou non, suppression possible seulement une fois archivé.
+
 **Non répertorié** sert à séparer des publics : par exemple un planning réservé aux organisateurs, avec les mêmes postes que celui des bénévoles, que l'on ne veut pas voir sur la page d'accueil. Dans le formulaire d'édition, décochez **Afficher cet événement sur la page publique de l'organisation**, puis partagez le lien ou le QR code aux personnes concernées. L'administration affiche alors « Publié — non répertorié ».
 
 Ce n'est pas une protection : toute personne qui a le lien, ou qui le devine, peut ouvrir l'événement et s'y inscrire. Pour un accès vraiment restreint, il n'existe pas encore de mot de passe. Une copie ou un événement créé depuis un modèle est toujours répertorié : le choix se refait pour chaque événement.
