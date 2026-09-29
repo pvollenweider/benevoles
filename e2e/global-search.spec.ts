@@ -17,11 +17,13 @@ test("an admin finds an event from the top-bar search", async ({ page }) => {
   await page.getByRole("button", { name: "Se connecter" }).click()
   await expect(page).toHaveURL(/\/admin\/events/)
 
-  // An event of the list, by its title.
-  const events = await page.locator('a[href^="/admin/events/"]').evaluateAll((as) =>
+  // An event of the list, by its title: each card links to the event twice, by title and « Gérer ».
+  // (Other links to an event, such as the onboarding checklist's, don't carry the title.)
+  const links = await page.locator('a[href^="/admin/events/"]').evaluateAll((as) =>
     as.map((a) => ({ href: a.getAttribute("href") ?? "", text: (a.textContent ?? "").trim() })),
   )
-  const event = events.find((e) => /^\/admin\/events\/[^/]+$/.test(e.href) && e.href !== "/admin/events/new" && e.text)
+  const managed = new Set(links.filter((l) => l.text.startsWith("Gérer")).map((l) => l.href))
+  const event = links.find((l) => managed.has(l.href) && !l.text.startsWith("Gérer") && l.text)
   expect(event).toBeTruthy()
   const word = event!.text.split(/\s+/)[0]
 
