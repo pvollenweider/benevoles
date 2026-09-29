@@ -22,6 +22,21 @@ Sur un téléphone ou un petit écran, les liens de la barre du haut (Tableau de
 
 ---
 
+## Premiers pas
+
+Tant que votre organisation n'a pas terminé sa mise en place, une liste **Premiers pas** s'affiche en haut de la liste des événements et du tableau de bord. Elle indique dans quel ordre procéder, avec un lien vers chaque étape :
+
+1. personnaliser la page publique et la charte (facultatif, des valeurs par défaut existent) ;
+2. vérifier le fuseau horaire (facultatif, Europe/Zurich par défaut) ;
+3. créer votre premier événement ;
+4. définir les postes et les créneaux ;
+5. publier l'événement ;
+6. faire une inscription de test depuis la page publique, pour vérifier le parcours et l'email reçu ; vous pourrez l'annuler ensuite.
+
+Les étapes se cochent d'elles-mêmes au fur et à mesure. La liste disparaît quand les étapes obligatoires sont faites ; **Masquer ces étapes** la retire plus tôt, pour tous les admins de l'organisation.
+
+---
+
 ## Tableau de bord
 
 **`/admin/dashboard`**

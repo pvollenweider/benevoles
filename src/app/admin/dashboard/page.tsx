@@ -1,13 +1,16 @@
 import { redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import { formatShortDate } from "@/lib/utils"
+import OnboardingChecklist from "@/components/admin/OnboardingChecklist"
+import { loadOnboarding } from "@/lib/onboarding-data"
 
 export const dynamic = "force-dynamic"
 
 export default async function DashboardPage() {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
-  const { db } = ctx
+  const { db, organizationId } = ctx
+  const onboarding = await loadOnboarding(db, organizationId)
 
   const now = new Date()
 
@@ -57,7 +60,8 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold text-gray-900">Tableau de bord</h1>
+      <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Tableau de bord</h1>
+      {onboarding && <OnboardingChecklist steps={onboarding} />}
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

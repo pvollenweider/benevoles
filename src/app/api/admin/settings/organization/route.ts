@@ -17,7 +17,7 @@ export async function PATCH(req: Request) {
   const { organizationId } = guard
 
   const body = await req.json().catch(() => ({}))
-  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; publicTitle?: string | null; timeZone?: string | null } = {}
+  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; publicTitle?: string | null; timeZone?: string | null; onboardingDismissedAt?: Date | null } = {}
   let oldSlug: string | null = null
 
   if (typeof body.name === "string") {
@@ -90,6 +90,11 @@ export async function PATCH(req: Request) {
     } else {
       updates.timeZone = timeZone
     }
+  }
+
+  // First-run checklist hidden (true) or shown again (false) for the whole organization (#369).
+  if (typeof body.onboardingDismissed === "boolean") {
+    updates.onboardingDismissedAt = body.onboardingDismissed ? new Date() : null
   }
 
   if (Object.keys(updates).length === 0) {

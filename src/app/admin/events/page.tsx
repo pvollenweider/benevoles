@@ -5,15 +5,18 @@ import { formatShortDate } from "@/lib/utils"
 import DuplicateButton from "@/components/admin/DuplicateButton"
 import StatusBadge from "@/components/admin/StatusBadge"
 import FlashMessage from "@/components/admin/FlashMessage"
+import OnboardingChecklist from "@/components/admin/OnboardingChecklist"
+import { loadOnboarding } from "@/lib/onboarding-data"
 
 export const dynamic = "force-dynamic"
 
 export default async function AdminEventsPage({ searchParams }: { searchParams: Promise<{ deleted?: string }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
-  const { db } = ctx
+  const { db, organizationId } = ctx
   const { deleted } = await searchParams
 
+  const onboarding = await loadOnboarding(db, organizationId)
   const events = await db.event.findMany({
     include: {
       shifts: {
@@ -34,7 +37,7 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
     <div className="space-y-6">
       {deleted === "1" && <FlashMessage message="Événement supprimé." />}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Événements</h1>
+        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Événements</h1>
         <Link
           href="/admin/events/new"
           className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"
@@ -42,6 +45,8 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
           + Nouvel événement
         </Link>
       </div>
+
+      {onboarding && <OnboardingChecklist steps={onboarding} />}
 
       {enriched.length === 0 ? (
         <div className="text-center py-20 px-4">
