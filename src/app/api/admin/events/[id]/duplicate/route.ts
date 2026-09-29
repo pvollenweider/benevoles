@@ -4,6 +4,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { slugify } from "@/lib/utils"
+import { copiedShift } from "@/lib/event-duplicate"
 
 export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireOrgSession()
@@ -43,22 +44,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       confirmationMessage: source.confirmationMessage,
       requirePhone: source.requirePhone,
       shifts: {
-        create: source.shifts.map((s) => ({
-          roleName: s.roleName,
-          label: s.label,
-          description: s.description,
-          date: s.date,
-          startTime: s.startTime,
-          endTime: s.endTime,
-          capacity: s.capacity,
-          status: "open",
-          locationDetails: s.locationDetails,
-          contactName: s.contactName,
-          contactPhone: s.contactPhone,
-          instructions: s.instructions,
-          displayOrder: s.displayOrder,
-          internalNotes: s.internalNotes,
-        })),
+        create: source.shifts.map(copiedShift),
       },
     },
   })

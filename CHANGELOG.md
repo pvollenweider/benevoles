@@ -42,6 +42,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Duplication d'un événement** : les créneaux copiés gardent leur âge minimum, leur liste d'attente et la couleur choisie pour le poste (#356).
 - **Dernier créneau annulé** : annuler le dernier créneau actif d'un événement publié (ou supprimer son dernier poste) le repasse en brouillon au lieu de laisser une page publique vide ; l'administration le signale et le journal le note.
 - **Création d'événement** : l'API ne peut plus créer un événement directement archivé ; tout statut envoyé à la création est ignoré.
 - **Formulaire d'édition** : après un refus de publication, le statut revient au dernier statut confirmé par le serveur, et non à celui affiché à l'ouverture de la page.
