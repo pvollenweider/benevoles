@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import Link from "next/link"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useRef } from "react"
 import StatusBadge from "./StatusBadge"
 import ShiftSelect from "./registrations/ShiftSelect"
 import MakeLeaderModal from "./registrations/MakeLeaderModal"
@@ -31,6 +31,8 @@ type Registration = {
   // True when this volunteer is already the (or a) sector leader of this shift's own role —
   // computed server-side from SectorLeader (role + email), see registrations/page.tsx.
   isLeader: boolean
+  /** Lightweight check-in (#399): when the organizer marked this person present. */
+  checkedInAt?: string | null
 }
 
 type Props = {
@@ -62,6 +64,9 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     volunteerId: string; volunteerName: string; volunteerEmail: string | null; roleOptions: string[]; defaultRole: string
   } | null>(null)
   const [leaderAnnouncement, setLeaderAnnouncement] = useState("")
+  const [bulkError, setBulkError] = useState<string | null>(null)
+  // After a bulk action the toolbar unmounts with the selection: focus lands here instead of body.
+  const afterBulkRef = useRef<HTMLParagraphElement>(null)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [bulkBusy, setBulkBusy] = useState(false)
 
@@ -124,14 +129,42 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
 
   // One request for the whole selection (#292): ownership checked for every row up front on the
   // server, all or nothing. Returns null on a request-level failure.
-  async function runBulk(action: "cancel" | "make_leader" | "resend_link", ids: string[]) {
+  async function runBulk(action: "cancel" | "make_leader" | "resend_link" | "check_in" | "undo_check_in", ids: string[]) {
     const res = await fetch(`/api/admin/events/${eventId}/registrations/bulk`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action, registrationIds: ids }),
     }).catch(() => null)
     if (!res?.ok) return null
-    return res.json() as Promise<{ done: number; failed?: number; skipped?: number; alreadyLeader?: number; cancelledIds?: string[] }>
+    return res.json() as Promise<{ done: number; failed?: number; skipped?: number; alreadyLeader?: number; cancelledIds?: string[]; changedIds?: string[] }>
+  }
+
+  // Lightweight check-in (#399): mark the selected confirmed people present, or undo it.
+  const selectedToCheckIn = selectedActiveRegs.filter((r) => !r.checkedInAt)
+  const selectedToUndo = selectedActiveRegs.filter((r) => r.checkedInAt)
+  const presentCount = registrations.filter((r) => r.status === "active" && r.checkedInAt).length
+  const activeCount = registrations.filter((r) => r.status === "active").length
+
+  async function handlePresence(present: boolean) {
+    const targets = present ? selectedToCheckIn : selectedToUndo
+    if (targets.length === 0) return
+    setBulkBusy(true)
+    const result = await runBulk(present ? "check_in" : "undo_check_in", targets.map((r) => r.id))
+    setBulkBusy(false)
+    if (!result) { setBulkError("Erreur : présence non enregistrée. Réessayez."); return }
+    setBulkError(null)
+    const changed = new Set(result.changedIds ?? [])
+    const at = new Date().toISOString()
+    setRegistrations((prev) => prev.map((r) => (changed.has(r.id) ? { ...r, checkedInAt: present ? at : null } : r)))
+    setSelectedIds(new Set())
+    // Cleared first so the same sentence twice in a row is announced again.
+    setLeaderAnnouncement("")
+    requestAnimationFrame(() => {
+      setLeaderAnnouncement(present
+        ? `${changed.size} personne${changed.size > 1 ? "s" : ""} marquée${changed.size > 1 ? "s" : ""} présente${changed.size > 1 ? "s" : ""}.`
+        : `Présence annulée pour ${changed.size} personne${changed.size > 1 ? "s" : ""}.`)
+      afterBulkRef.current?.focus()
+    })
   }
 
   async function handleBulkCancel() {
@@ -240,6 +273,12 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   return (
     <div className="space-y-4">
       <div role="status" aria-live="polite" className="sr-only">{leaderAnnouncement}</div>
+      {bulkError && <p role="alert" className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-3 py-2">{bulkError}</p>}
+      <p ref={afterBulkRef} tabIndex={-1} className={`text-sm text-gray-700 focus:outline-none ${presentCount > 0 ? "" : "sr-only"}`}>
+        {presentCount > 0
+          ? <><span className="font-medium text-green-800">{presentCount} présent{presentCount > 1 ? "s" : ""}</span> sur {activeCount} inscrit{activeCount > 1 ? "s" : ""}.</>
+          : `${activeCount} inscrit${activeCount > 1 ? "s" : ""}, personne encore marqué présent.`}
+      </p>
 
       <div className="flex gap-3 flex-wrap">
         <label htmlFor="reg-search" className="sr-only">Rechercher un bénévole</label>
@@ -349,6 +388,24 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           </span>
           <button
             type="button"
+            onClick={() => { if (!bulkBusy && selectedToCheckIn.length > 0) handlePresence(true) }}
+            aria-disabled={bulkBusy || selectedToCheckIn.length === 0}
+            className={`text-xs text-green-800 border border-green-300 bg-white px-3 py-1.5 rounded-full hover:bg-green-50 transition-colors ${bulkBusy || selectedToCheckIn.length === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+          >
+            {`Marquer présent${selectedToCheckIn.length > 1 ? "s" : ""} (${selectedToCheckIn.length})`}
+          </button>
+          {selectedToUndo.length > 0 && (
+            <button
+              type="button"
+              onClick={() => handlePresence(false)}
+              disabled={bulkBusy}
+              className="text-xs text-gray-700 border border-gray-300 bg-white px-3 py-1.5 rounded-full hover:bg-gray-50 disabled:opacity-50 transition-colors"
+            >
+              {`Annuler la présence (${selectedToUndo.length})`}
+            </button>
+          )}
+          <button
+            type="button"
             onClick={handleMakeResponsibleClick}
             disabled={bulkBusy || selectedRegs.every((r) => !r.volunteer.email)}
             className="text-xs text-blue-700 border border-blue-300 bg-white px-3 py-1.5 rounded-full hover:bg-blue-50 disabled:opacity-50 transition-colors"
@@ -433,6 +490,11 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                           title={`Responsable de ${reg.shift.roleName}`}
                         >
                           Responsable
+                        </span>
+                      )}
+                      {reg.checkedInAt && reg.status === "active" && (
+                        <span className="inline-flex items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-semibold text-green-800">
+                          <span aria-hidden="true">✓ </span>Présent<span className="sr-only"> depuis {new Date(reg.checkedInAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}</span>
                         </span>
                       )}
                     </p>

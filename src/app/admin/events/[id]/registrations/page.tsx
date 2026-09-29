@@ -54,7 +54,15 @@ export default async function RegistrationsPage({
     <div className="space-y-6">
       <div>
         <Link href={`/admin/events/${id}`} className="text-sm text-blue-600">← {event.title}</Link>
-        <h1 className="text-xl font-bold text-gray-900 mt-1">Inscriptions</h1>
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <h1 className="text-xl font-bold text-gray-900 mt-1">Inscriptions</h1>
+          <a
+            href={`/api/admin/events/${id}/export/attendance`}
+            className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Exporter les présences (CSV)
+          </a>
+        </div>
         <p className="text-sm text-gray-500">
           {event.registrations.filter(r => r.status === "active").length} inscription(s) active(s)
           {event.registrations.some(r => r.status === "waiting" || r.status === "offered") && (
@@ -75,6 +83,7 @@ export default async function RegistrationsPage({
           phone: r.phone,
           createdAt: r.createdAt.toISOString(),
           waitingPosition: r.waitingPosition,
+          checkedInAt: r.checkedInAt?.toISOString() ?? null,
           volunteer: r.volunteer,
           isLeader: isSectorLeader(leaderKeys, r.shift.roleName, r.volunteer.email),
           shift: {

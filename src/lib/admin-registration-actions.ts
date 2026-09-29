@@ -65,6 +65,35 @@ export async function cancelRegistrations(db: OrgScopedPrisma, actor: LogActor, 
   return cancelled.map((c) => c.reg.id)
 }
 
+export type PresenceTarget = { id: string; eventId: string; shiftId: string; status: string }
+
+/**
+ * Lightweight check-in (#399): marks the given registrations present (or undoes it). Only
+ * confirmed registrations, and only rows whose mark actually changes, so a row selected twice
+ * or already marked isn't logged twice. Returns the ids changed.
+ */
+export async function setPresence(db: OrgScopedPrisma, actor: LogActor, targets: PresenceTarget[], present: boolean, now: Date = new Date()): Promise<string[]> {
+  const changed: string[] = []
+  for (const reg of targets) {
+    if (reg.status !== "active") continue
+    const { count } = await db.registration.updateMany({
+      where: { id: reg.id, status: "active", checkedInAt: present ? null : { not: null } },
+      data: { checkedInAt: present ? now : null },
+    })
+    if (count === 0) continue
+    changed.push(reg.id)
+    await logEvent({
+      eventId: reg.eventId,
+      actor,
+      action: present ? "registration.checked_in" : "registration.check_in_undone",
+      entityType: "Registration",
+      entityId: reg.id,
+      changes: { checkedInAt: { from: present ? null : "set", to: present ? now.toISOString() : null }, shiftId: { from: reg.shiftId, to: reg.shiftId } },
+    })
+  }
+  return changed
+}
+
 export type LeaderInput = { roleName: string; name: string; email: string }
 
 /**

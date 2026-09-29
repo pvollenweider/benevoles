@@ -4,7 +4,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor } from "@/lib/event-log"
-import { addSectorLeader, cancelRegistrations, resendManagementLinks } from "@/lib/admin-registration-actions"
+import { addSectorLeader, cancelRegistrations, resendManagementLinks, setPresence } from "@/lib/admin-registration-actions"
 import { z } from "zod"
 import { registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
@@ -13,7 +13,7 @@ import { validationError } from "@/lib/api-error"
 // of one per row. All-or-nothing on ownership: every id must be a registration of this event,
 // in this organization, or nothing is done.
 const schema = z.object({
-  action: z.enum(["cancel", "make_leader", "resend_link"]),
+  action: z.enum(["cancel", "make_leader", "resend_link", "check_in", "undo_check_in"]),
   registrationIds: z.array(z.string().min(1)).min(1).max(500),
 })
 
@@ -68,6 +68,11 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         if (result.status === "created") done++; else alreadyLeader++
       }
       return NextResponse.json({ done, alreadyLeader, skipped })
+    }
+    case "check_in":
+    case "undo_check_in": {
+      const changedIds = await setPresence(db, actor, regs, parsed.data.action === "check_in")
+      return NextResponse.json({ done: changedIds.length, changedIds, skipped: ids.length - changedIds.length })
     }
     case "resend_link": {
       const active = regs.filter((r) => r.status === "active")

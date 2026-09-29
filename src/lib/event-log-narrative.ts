@@ -85,6 +85,8 @@ const ACTION_VERB: Record<string, (actor: string) => string> = {
   "registration.waitlist_joined": (a) => `${a} s'est mis·e en liste d'attente`,
   "registration.waitlist_offered": () => "une place s'est libérée et a été proposée",
   "registration.waitlist_confirmed": (a) => `${a} a confirmé sa place`,
+  "registration.checked_in": (a) => `${a} a marqué la personne présente`,
+  "registration.check_in_undone": (a) => `${a} a annulé la présence`,
   "event.published": (a) => `${a} a publié l'événement`,
   "event.archived": (a) => `${a} a archivé l'événement`,
   "event.updated": (a) => `${a} a modifié les paramètres de l'événement`,
@@ -109,6 +111,7 @@ const ACTION_VERB: Record<string, (actor: string) => string> = {
 const SHIFT_AWARE_ACTIONS = new Set([
   "registration.created", "registration.cancelled", "registration.waitlist_joined",
   "registration.waitlist_offered", "registration.waitlist_confirmed", "registration.baseline",
+  "registration.checked_in", "registration.check_in_undone",
 ])
 
 function buildSentence(entry: Pick<EventLogEntry, "action" | "actorLabel" | "changes">, shiftLabels?: Record<string, ShiftLabel>): string {

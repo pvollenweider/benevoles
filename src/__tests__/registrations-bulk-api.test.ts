@@ -10,6 +10,7 @@ const actions = vi.hoisted(() => ({
   cancelRegistrations: vi.fn(),
   addSectorLeader: vi.fn(),
   resendManagementLinks: vi.fn(),
+  setPresence: vi.fn(),
 }))
 vi.mock("@/lib/admin-registration-actions", () => actions)
 vi.mock("@/lib/event-log", () => ({ adminActor: () => ({ type: "admin", id: "admin-1" }) }))
@@ -55,6 +56,19 @@ describe("POST /api/admin/events/[id]/registrations/bulk", () => {
     const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
     expect((await POST(post({ action: "delete_all", registrationIds: ["r1"] }), params)).status).toBe(400)
     expect((await POST(post({ action: "cancel", registrationIds: [] }), params)).status).toBe(400)
+  })
+
+  it("check_in / undo_check_in: hands the rows to setPresence and reports what changed (#399)", async () => {
+    regFindMany.mockResolvedValue([reg("r1"), reg("r2")])
+    actions.setPresence.mockResolvedValue(["r1"])
+    const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
+    const res = await POST(post({ action: "check_in", registrationIds: ["r1", "r2"] }), params)
+    expect(res.status).toBe(200)
+    expect(actions.setPresence).toHaveBeenCalledWith(expect.anything(), expect.anything(), [expect.objectContaining({ id: "r1" }), expect.objectContaining({ id: "r2" })], true)
+    expect(await res.json()).toEqual({ done: 1, changedIds: ["r1"], skipped: 1 })
+    regFindMany.mockResolvedValue([reg("r1")])
+    await POST(post({ action: "undo_check_in", registrationIds: ["r1"] }), params)
+    expect(actions.setPresence).toHaveBeenLastCalledWith(expect.anything(), expect.anything(), expect.anything(), false)
   })
 
   it("cancel: only active rows, duplicates in the selection counted once", async () => {
