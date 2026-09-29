@@ -39,7 +39,7 @@ jobs:
         run: npm run lint
 
       - name: Tests
-        run: npm test
+        run: npm run test:coverage
 
       - name: SECURITY.md is up to date with the current version
         run: node scripts/check-security-md.mjs
