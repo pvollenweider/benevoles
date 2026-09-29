@@ -1,3 +1,4 @@
+import { appTimeZone, assertTimeZone } from "./time-zone"
 import { keyring } from "./token-vault"
 
 /**
@@ -13,6 +14,8 @@ export function assertProductionSecrets(env: Record<string, string | undefined> 
   // Malformed keys (current or previous, #313) fail at startup in every environment rather
   // than on the first token read or written.
   keyring(env)
+  // Same for the time zone (#343), in every environment.
+  assertTimeZone(appTimeZone(env))
   if (env.NODE_ENV !== "production") return
   if (!env.TOKEN_ENCRYPTION_KEY?.trim()) {
     throw new Error(

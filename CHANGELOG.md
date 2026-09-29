@@ -18,6 +18,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Journal de l'événement** : après « Générer l'état initial », le message annonçait « états initialaux générés » au lieu de « états initiaux générés ».
 - **Adresses email** : les majuscules et espaces ne sont plus pris en compte ; `Alice@Exemple.ch` et `alice@exemple.ch` désignent le même bénévole ou le même admin (connexion comprise), au lieu de créer deux fiches. Les adresses existantes sont converties en minuscules, sauf les rares doublons qui ne diffèrent que par la casse, laissés tels quels pour un traitement manuel.
 - **Heures des rappels et des emails** : les heures des créneaux étaient traitées comme des heures UTC, ce qui décalait de 1 h (hiver) ou 2 h (été) les rappels « jour J » et l'heure d'expiration affichée dans l'email d'offre de liste d'attente ; même décalage dans les heures du journal de l'événement et de l'export PDF. Elles sont désormais calculées dans le fuseau des événements (Europe/Zurich).
+- **Configuration du fuseau horaire** : une valeur `APP_TIME_ZONE` invalide empêche désormais l'application de démarrer, avec un message explicite, au lieu de faire échouer plus tard les rappels, les emails, l'export PDF ou le journal.
 - **Inscription refusée** : une inscription publique refusée (créneau complet entre-temps, chevauchement, doublon) ne laisse plus de fiche membre créée pour une nouvelle adresse email.
 
 ### Sécurité

@@ -20,4 +20,15 @@ describe("assertProductionSecrets", () => {
     expect(() => assertProductionSecrets({ NODE_ENV: "development", TOKEN_ENCRYPTION_KEY: "a2V5" })).toThrow(/32 bytes/)
     expect(() => assertProductionSecrets({ NODE_ENV: "development", TOKEN_ENCRYPTION_PREVIOUS_KEYS: "nocolon" })).toThrow(/id:base64key/)
   })
+
+  it("rejects an invalid APP_TIME_ZONE at startup, naming the value (#343)", () => {
+    expect(() => assertProductionSecrets({ NODE_ENV: "development", APP_TIME_ZONE: "Europe/Zuric" })).toThrow(/APP_TIME_ZONE "Europe\/Zuric"/)
+    expect(() => assertProductionSecrets({ NODE_ENV: "development", APP_TIME_ZONE: "UTC+1" })).toThrow(/APP_TIME_ZONE/)
+  })
+
+  it("accepts a valid APP_TIME_ZONE, and uses the default when unset or blank", () => {
+    expect(() => assertProductionSecrets({ NODE_ENV: "development", APP_TIME_ZONE: " America/New_York " })).not.toThrow()
+    expect(() => assertProductionSecrets({ NODE_ENV: "development", APP_TIME_ZONE: "UTC" })).not.toThrow()
+    expect(() => assertProductionSecrets({ NODE_ENV: "development", APP_TIME_ZONE: "  " })).not.toThrow()
+  })
 })

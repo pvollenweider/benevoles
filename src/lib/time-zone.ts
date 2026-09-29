@@ -7,7 +7,26 @@
  * One zone for the whole app (benevol.app serves Swiss organizations); override with
  * APP_TIME_ZONE (IANA name) for another deployment.
  */
-export const APP_TIME_ZONE = process.env.APP_TIME_ZONE?.trim() || "Europe/Zurich"
+export function appTimeZone(env: Record<string, string | undefined> = process.env): string {
+  return env.APP_TIME_ZONE?.trim() || "Europe/Zurich"
+}
+
+export const APP_TIME_ZONE = appTimeZone()
+
+/**
+ * Throws unless `timeZone` is an IANA name this runtime knows (#343). Checked at startup: an
+ * invalid value would otherwise only fail on the first date formatted (reminders cron, emails,
+ * PDF export, event log), long after the deploy looked healthy.
+ */
+export function assertTimeZone(timeZone: string): void {
+  try {
+    new Intl.DateTimeFormat("en", { timeZone })
+  } catch {
+    throw new Error(
+      `APP_TIME_ZONE "${timeZone}" is not a valid IANA time zone (e.g. "Europe/Zurich"). See README, variables d'environnement.`,
+    )
+  }
+}
 
 /** Offset (ms) of `timeZone` from UTC at `instant`: local wall time minus UTC. */
 function zoneOffsetMs(instant: number, timeZone: string): number {
