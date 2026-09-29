@@ -4,6 +4,7 @@ import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import { resolveSuperAdminOrg } from "@/lib/auth-guard"
 import AdminNav from "@/components/admin/AdminNav"
+import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
@@ -27,8 +28,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SkipLink />
       <AdminNav userName={session.user?.name ?? "Admin"} role={session.user?.role} orgName={orgName} />
-      <main className="max-w-5xl mx-auto px-4 py-6">{children}</main>
+      <main id={MAIN_CONTENT_ID} tabIndex={-1} className="max-w-5xl mx-auto px-4 py-6 focus:outline-none">{children}</main>
     </div>
   )
 }
