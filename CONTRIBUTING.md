@@ -122,6 +122,8 @@ Chaque nouveau pod applique les migrations au démarrage (`docker-entrypoint.sh`
 
 ## Tests
 
+La CI des PR lance les tests avec la couverture (`npm run test:coverage`) et échoue si elle passe sous les seuils de `vitest.config.mts`. Ces seuils suivent la couverture mesurée : les relever quand elle progresse, ne jamais les baisser pour faire passer une PR.
+
 ```bash
 make test        # lance la suite Vitest
 make typecheck   # vérifie les types TypeScript
