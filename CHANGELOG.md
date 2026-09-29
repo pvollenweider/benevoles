@@ -9,6 +9,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Feuilles à imprimer** : depuis un événement, **Imprimer** propose cinq feuilles lisibles en noir et blanc : planning par jour, planning par poste (avec le responsable), liste avec téléphones (organisateurs), feuille de présence avec cases à cocher et lignes vides, planning individuel par bénévole avec lieux, contacts et consignes.
 - **Modifications rapides depuis le planning** : la fenêtre d'un créneau permet de le dupliquer (copie juste après, mêmes réglages), de décaler ses horaires (les inscrits sont prévenus), de fermer ou rouvrir ses inscriptions et d'appliquer un nombre de places à tous les créneaux du poste, jamais en dessous des inscrits déjà confirmés. Ses champs ont désormais des libellés lisibles.
 - **Présences** : dans les inscriptions d'un événement, **Marquer présents** note qui est venu (badge **Présent**, compteur, journal), **Annuler la présence** corrige, et **Exporter les présences (CSV)** télécharge la feuille de présence. Sans terminal ni badge : juste savoir qui est venu.
 - **Modèles d'événement** : à la création d'un événement, cinq modèles (festival sur plusieurs jours, buvette, manifestation sportive, fête de village, montage / exploitation / démontage) créent un brouillon déjà rempli de ses postes et créneaux à partir d'un titre et d'une date. Tout se modifie ensuite comme d'habitude.
