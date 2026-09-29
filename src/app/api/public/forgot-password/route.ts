@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server"
 import { randomBytes } from "crypto"
 import { prisma } from "@/lib/prisma"
-import { sendNotification } from "@/lib/notifications"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { hashToken } from "@/lib/token-hash"
 import { normalizeEmail } from "@/lib/email-address"
+import { enqueueAndDeliver } from "@/lib/notifications/outbox"
 
 export async function POST(req: Request) {
   const rl = rateLimit(getClientIp(req), "forgot-password", 5, 60 * 60 * 1000)
@@ -35,11 +35,11 @@ export async function POST(req: Request) {
   const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
   const resetUrl = `${APP_URL}/admin/reset-password?token=${token}`
 
-  await sendNotification({
+  await enqueueAndDeliver([{
     kind: "password_reset",
     recipient: { email: admin.email, name: admin.name },
     data: { adminName: admin.name, resetUrl },
-  })
+  }])
 
   return NextResponse.json({ ok: true })
 }

@@ -4,12 +4,12 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
-import { sendNotification } from "@/lib/notifications"
 import { orgBaseUrl } from "@/lib/urls"
 import { passwordSchema } from "@/lib/password"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { hashToken } from "@/lib/token-hash"
 import { reportError } from "@/lib/report-error"
+import { enqueueAndDeliver } from "@/lib/notifications/outbox"
 
 const schema = z.object({
   token: z.string().min(1),
@@ -84,7 +84,7 @@ export async function POST(req: Request) {
 
   if (admin.organization) {
     const adminUrl = `${orgBaseUrl(admin.organization.slug)}/admin/events`
-    sendNotification({
+    await enqueueAndDeliver([{
       kind: "admin_welcome",
       recipient: { email: admin.email, name: admin.name },
       data: {
@@ -92,7 +92,7 @@ export async function POST(req: Request) {
         organizationName: admin.organization.name,
         adminUrl,
       },
-    }).catch(reportError("notification.admin_welcome"))
+    }]).catch(reportError("notification.admin_welcome"))
   }
 
   return NextResponse.json({ ok: true })

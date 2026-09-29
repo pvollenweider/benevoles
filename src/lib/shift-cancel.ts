@@ -12,9 +12,9 @@
  * cross-tenant-isolation.test.ts: routes must not fall back to raw prisma for ownership).
  */
 import { prisma } from "@/lib/prisma"
-import { sendNotification } from "@/lib/notifications"
 import { logEvent, type LogActor } from "@/lib/event-log"
 import { formatDate } from "@/lib/utils"
+import { collectNotifications, enqueueAndDeliver } from "@/lib/notifications/outbox"
 
 export type CancellableShift = {
   id: string
@@ -40,7 +40,8 @@ export async function cancelShift(shift: CancellableShift, actor: LogActor): Pro
     changes: { status: { from: shift.status, to: "cancelled" } },
   })
 
-  let notified = 0
+  // Through the outbox (#311): `notified` counts notifications queued, retried if SMTP fails.
+  const outbox = collectNotifications()
   for (const reg of shift.registrations) {
     await prisma.registration.update({ where: { id: reg.id }, data: { status: "cancelled" } })
     await logEvent({
@@ -52,7 +53,7 @@ export async function cancelShift(shift: CancellableShift, actor: LogActor): Pro
       changes: { status: { from: "active", to: "cancelled" }, shiftId: { from: shift.id, to: shift.id } },
       causedByLogId: cancelLogId ?? undefined,
     })
-    const result = await sendNotification({
+    await outbox.send({
       kind: "shift_cancelled",
       recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
       data: {
@@ -64,8 +65,8 @@ export async function cancelShift(shift: CancellableShift, actor: LogActor): Pro
         shiftDate: formatDate(shift.date),
       },
     })
-    if (result.ok) notified++
   }
+  await enqueueAndDeliver(outbox.payloads)
 
-  return { cancelledRegistrations: shift.registrations.length, notified }
+  return { cancelledRegistrations: shift.registrations.length, notified: outbox.payloads.length }
 }

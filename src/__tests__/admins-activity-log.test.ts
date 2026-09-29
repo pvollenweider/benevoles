@@ -16,6 +16,7 @@ vi.mock("@/lib/prisma", () => ({
 
 const sendNotificationMock = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/notifications", () => ({ sendNotification: sendNotificationMock }))
+vi.mock("@/lib/notifications/outbox", () => ({ enqueueAndDeliver: vi.fn() }))
 
 vi.mock("bcryptjs", () => ({ default: { hash: vi.fn().mockResolvedValue("$hashed") }, hash: vi.fn().mockResolvedValue("$hashed") }))
 

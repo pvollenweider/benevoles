@@ -6,6 +6,7 @@ import { tagVolunteerAsResponsable } from "./sector-leaders"
 import { reportError } from "./report-error"
 import { generateToken } from "./utils"
 import { linkToken } from "./token-vault"
+import { enqueueAndDeliver } from "./notifications/outbox"
 
 /**
  * Admin actions on registrations, shared by the single-row routes and the bulk route (#292), so
@@ -92,7 +93,7 @@ export async function addSectorLeader(
 
   await tagVolunteerAsResponsable(ctx.organizationId, leader.email).catch(reportError("sector_leader.tag_member"))
 
-  await sendNotification({
+  await enqueueAndDeliver([{
     kind: "sector_leader_invite",
     recipient: { email: leader.email, name: leader.name },
     data: {
@@ -102,7 +103,7 @@ export async function addSectorLeader(
       orgSlug: ctx.event.organization.slug,
       token,
     },
-  }).catch(reportError("notification.sector_leader_invite"))
+  }]).catch(reportError("notification.sector_leader_invite"))
 
   return { status: "created" as const, leader }
 }

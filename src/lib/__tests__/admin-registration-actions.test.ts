@@ -8,6 +8,7 @@ const m = vi.hoisted(() => ({
 }))
 vi.mock("../event-log", () => ({ logEvent: m.logEvent }))
 vi.mock("../notifications", () => ({ sendNotification: m.sendNotification }))
+vi.mock("../notifications/outbox", () => ({ enqueueAndDeliver: (payloads: unknown[]) => { payloads.forEach((p) => m.sendNotification(p)); return Promise.resolve() } }))
 vi.mock("../waitlist", () => ({ promoteNextInWaitlist: m.promoteNextInWaitlist }))
 vi.mock("../sector-leaders", () => ({ tagVolunteerAsResponsable: m.tagVolunteerAsResponsable }))
 vi.mock("../report-error", () => ({ reportError: () => () => {} }))

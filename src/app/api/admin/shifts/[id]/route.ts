@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { sendNotification } from "@/lib/notifications"
 import { z } from "zod"
 import { clockSchema, firstIssueMessage, SAME_TIME_ERROR } from "@/lib/shift-time"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { cancelShift } from "@/lib/shift-cancel"
 import { registrationToken } from "@/lib/token-vault"
+import { collectNotifications, enqueueAndDeliver } from "@/lib/notifications/outbox"
 
 const schema = z.object({
   roleName: z.string().optional(),
@@ -87,10 +87,11 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     (rest.startTime && before.startTime !== after.startTime) ||
     (rest.endTime && before.endTime !== after.endTime)
 
-  let notified = 0
+  // Through the outbox (#311): `notified` counts notifications queued, retried if SMTP fails.
+  const outbox = collectNotifications()
   if (scheduleChanged && notifyVolunteers !== false && before.registrations.length > 0) {
     for (const reg of before.registrations) {
-      const result = await sendNotification({
+      await outbox.send({
         kind: "shift_modified",
         recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
         data: {
@@ -107,11 +108,11 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
           editToken: registrationToken.reveal(reg),
         },
       })
-      if (result.ok) notified++
     }
   }
+  await enqueueAndDeliver(outbox.payloads)
 
-  return NextResponse.json({ ...after, notified })
+  return NextResponse.json({ ...after, notified: outbox.payloads.length })
 }
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
