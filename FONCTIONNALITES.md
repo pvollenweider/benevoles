@@ -188,7 +188,7 @@ Liste exhaustive des fonctionnalités de l'application.
   - **Supprimer** un poste (annule tous ses créneaux — même confirmation et notification des bénévoles qu'une annulation individuelle)
   - **Couleur** : 16 couleurs prédéfinies ou automatique (hash du nom), appliquée à la timeline admin et à la page publique
 - **Vue timeline** (par jour) et **vue liste** (tableau plat) commutables
-- Popover au clic sur un créneau : éditer libellé, capacité, statut — bouton direct vers les inscriptions filtrées sur ce créneau
+- Popover au clic sur un créneau : libellé, places (pour ce créneau ou **appliquées à tout le poste**, jamais sous le nombre d'inscrits d'un créneau), **horaires à décaler** (les inscrits sont prévenus), inscriptions ouvertes / fermées, **dupliquer** (copie juste après, même durée, tous réglages copiés, sans inscriptions), lien vers les inscriptions filtrées, suppression
 - **Âge minimum** (optionnel, #192) : condition simple pour restreindre un créneau (ex. 18 ans pour un poste avec permis de conduire) ; affichée aux bénévoles, vérifiée à l'inscription
 
 ### Suivi des inscriptions (`/admin/events/[id]/registrations`)

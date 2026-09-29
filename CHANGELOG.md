@@ -9,6 +9,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Modifications rapides depuis le planning** : la fenêtre d'un créneau permet de le dupliquer (copie juste après, mêmes réglages), de décaler ses horaires (les inscrits sont prévenus), de fermer ou rouvrir ses inscriptions et d'appliquer un nombre de places à tous les créneaux du poste, jamais en dessous des inscrits déjà confirmés. Ses champs ont désormais des libellés lisibles.
 - **Modèles d'événement** : à la création d'un événement, cinq modèles (festival sur plusieurs jours, buvette, manifestation sportive, fête de village, montage / exploitation / démontage) créent un brouillon déjà rempli de ses postes et créneaux à partir d'un titre et d'une date. Tout se modifie ensuite comme d'habitude.
 - **Écrire aux bénévoles** : depuis un événement, un email avec objet et message à tous les inscrits, aux bénévoles d'un poste ou d'un créneau, ou aux personnes en liste d'attente. Le nombre de destinataires s'affiche, l'aperçu montre l'email tel qu'il sera reçu, et l'envoi est confirmé puis noté dans le journal. Chaque personne le reçoit une fois, avec ses créneaux concernés.
 - **Infos pratiques par créneau** : un créneau peut porter un lieu de rendez-vous, une personne de contact (nom, téléphone) et une consigne courte. Le bénévole les retrouve dans l'email de confirmation, les rappels, sa page personnelle et le récapitulatif avant de s'inscrire.

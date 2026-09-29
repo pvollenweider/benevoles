@@ -7,6 +7,7 @@ import { z } from "zod"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { cancelShift } from "@/lib/shift-cancel"
 import { COLOR_OPTIONS } from "@/lib/roles"
+import { capacityPlan } from "@/lib/shift-quick-edit"
 
 // A "role" only exists implicitly, as the roleName shared by a group of shifts on one event —
 // there's no separate Role table. Renaming, recoloring or deleting one therefore means updating
@@ -17,7 +18,9 @@ const COLOR_KEYS = COLOR_OPTIONS.map((c) => c.key) as [string, ...string[]]
 const updateSchema = z.object({
   name: z.string().trim().min(1).max(100).optional(),
   colorKey: z.enum(COLOR_KEYS).nullable().optional(),
-}).refine((d) => d.name !== undefined || d.colorKey !== undefined, { message: "Rien à modifier." })
+  /** Applied to every live shift of the role (#398), never below the people confirmed on a shift. */
+  capacity: z.number().int().min(1).optional(),
+}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined, { message: "Rien à modifier." })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string; roleName: string }> }) {
   const guard = await requireOrgSession()
@@ -32,7 +35,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (!parsed.success) {
     return NextResponse.json({ error: "Données invalides." }, { status: 400 })
   }
-  const { name: newName, colorKey } = parsed.data
+  const { name: newName, colorKey, capacity } = parsed.data
 
   const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
@@ -41,7 +44,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // on top of that, matching reorder-roles/route.ts's own pattern for the same raw-prisma calls.
   const shifts = await db.shift.findMany({
     where: { eventId: id, roleName: decodedRole, event: { organizationId } },
-    select: { id: true, colorKey: true },
+    select: { id: true, colorKey: true, capacity: true, status: true, _count: { select: { registrations: { where: { status: "active" } } } } },
   })
   if (shifts.length === 0) return NextResponse.json({ error: "Poste introuvable" }, { status: 404 })
 
@@ -85,7 +88,28 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     }
   }
 
-  return NextResponse.json({ success: true, updated: shifts.length })
+  let keptHigher = 0
+  let capacityUpdated = 0
+  if (capacity !== undefined) {
+    const plan = capacityPlan(
+      shifts.filter((s) => s.status !== "cancelled").map((s) => ({ id: s.id, capacity: s.capacity, active: s._count.registrations })),
+      capacity,
+    )
+    keptHigher = plan.keptHigher.length
+    capacityUpdated = plan.updates.length
+    await db.$transaction(async (tx) => {
+      for (const u of plan.updates) await tx.shift.update({ where: { id: u.id }, data: { capacity: u.capacity } })
+    })
+    for (const u of plan.updates) {
+      const before = shifts.find((s) => s.id === u.id)!
+      await logEvent({
+        eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: u.id,
+        changes: { capacity: { from: before.capacity, to: u.capacity } },
+      })
+    }
+  }
+
+  return NextResponse.json({ success: true, updated: capacity !== undefined ? capacityUpdated : shifts.length, keptHigher })
 }
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string; roleName: string }> }) {
