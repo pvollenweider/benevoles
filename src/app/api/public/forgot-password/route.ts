@@ -41,6 +41,7 @@ export async function POST(req: Request) {
     })
     return enqueueNotifications([{
       kind: "password_reset",
+      organizationId: admin.organizationId,
       recipient: { email: admin.email, name: admin.name },
       data: { adminName: admin.name, resetUrl },
     }], tx)

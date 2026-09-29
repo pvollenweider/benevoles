@@ -24,7 +24,7 @@ export type CancellableShift = {
   label: string
   date: Date
   status: string
-  event: { id: string; title: string; slug: string; organization: { slug: string } }
+  event: { id: string; title: string; slug: string; organizationId: string; organization: { slug: string } }
   registrations: {
     id: string
     volunteer: { email: string | null; firstName: string }
@@ -66,7 +66,7 @@ export async function cancelShift(shift: CancellableShift, actor: LogActor): Pro
       const { count } = await tx.event.updateMany({ where: { id: shift.event.id, publicStatus: "published" }, data: { publicStatus: "draft" } })
       unpublished = count > 0
     }
-    const outboxIds = await enqueueNotifications(outbox.payloads, tx)
+    const outboxIds = await enqueueNotifications(outbox.payloads, tx, { organizationId: shift.event.organizationId })
     return { outboxIds, unpublished }
   })
 

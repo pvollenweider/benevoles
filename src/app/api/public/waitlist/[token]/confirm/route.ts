@@ -52,6 +52,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
     if (count === 0) return null
     return enqueueNotifications([{
       kind: "registration_confirmation",
+      organizationId: reg.event.organizationId,
       dedupeKey: `waitlist_confirmed:${reg.id}`,
       recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
       data: {

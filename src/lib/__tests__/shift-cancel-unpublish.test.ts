@@ -16,7 +16,7 @@ vi.mock("@/lib/notifications/outbox", () => ({
 
 const shift = {
   id: "s1", label: "Bar", date: new Date("2026-07-04T00:00:00Z"), status: "open",
-  event: { id: "evt-a", title: "Fête", slug: "fete", organization: { slug: "org" } },
+  event: { id: "evt-a", title: "Fête", slug: "fete", organizationId: "org-a", organization: { slug: "org" } },
   registrations: [],
 }
 

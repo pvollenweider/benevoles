@@ -22,6 +22,7 @@ const ACTION_LABEL: Record<string, string> = {
   "member.updated": "a modifié un membre",
   "member.deactivated": "a désactivé un membre",
   "adminuser.invited": "a invité un admin",
+  "notification.retried": "a renvoyé un email",
   "adminuser.removed": "a retiré un admin",
 }
 
@@ -29,6 +30,7 @@ const ENTITY_FILTERS = [
   { value: "", label: "Tous les types" },
   { value: "Member", label: "Membres" },
   { value: "AdminUser", label: "Comptes admin" },
+  { value: "NotificationOutbox", label: "Emails" },
 ]
 
 function fmtDateTime(iso: string) {

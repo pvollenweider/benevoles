@@ -469,6 +469,17 @@ Depuis la page de l'événement → **QR code**, télécharger le QR code de la 
 
 ---
 
+## Emails envoyés
+
+**Paramètres → Emails envoyés** (`/admin/settings/notifications`) liste les emails de l'organisation des plus récents aux plus anciens : date, type (confirmation, rappel, message aux bénévoles…), destinataire et état :
+
+- **En attente d'envoi** : mis en file, part dans la minute ;
+- **Nouvel essai prévu** : le premier envoi a échoué, l'application réessaie toute seule (jusqu'à six fois, à intervalles croissants), la raison du dernier échec est affichée ;
+- **Envoyé** : parti, avec l'heure ;
+- **Échec définitif** : six échecs ; la raison est affichée et le bouton **Renvoyer** remet l'email en file.
+
+Les emails envoyés sont effacés chaque nuit (ils contiennent des données personnelles) ; ceux en échec restent 30 jours. Les 200 plus récents sont affichés.
+
 ## Journal d'activité de l'organisation
 
 **`/admin/settings/activity`**

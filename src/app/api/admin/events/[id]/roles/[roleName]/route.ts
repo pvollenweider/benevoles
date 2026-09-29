@@ -128,7 +128,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const shifts = await db.shift.findMany({
     where: { eventId: id, roleName: decodedRole, status: { not: "cancelled" }, event: { organizationId } },
     include: {
-      event: { select: { id: true, title: true, slug: true, organization: { select: { slug: true } } } },
+      event: { select: { id: true, title: true, slug: true, organizationId: true, organization: { select: { slug: true } } } },
       registrations: { where: { status: "active" }, include: { volunteer: true } },
     },
   })

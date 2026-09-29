@@ -7,6 +7,7 @@ import type { Prisma } from "@/generated/prisma/client"
 import { reportError } from "../report-error"
 import { sendNotification } from "./index"
 import type { NotificationPayload, Send } from "./types"
+import { MAX_ATTEMPTS } from "./types"
 import { decryptValue, encryptValue } from "../token-vault"
 
 /**
@@ -22,7 +23,7 @@ import { decryptValue, encryptValue } from "../token-vault"
  * up to MAX_ATTEMPTS, then left as "failed" and reported to Sentry.
  */
 
-export const MAX_ATTEMPTS = 6
+export { MAX_ATTEMPTS }
 /** 5 min, 10, 20, 40, 80 between attempts. */
 export function backoffMs(attempts: number): number {
   return 5 * 60 * 1000 * 2 ** Math.max(0, attempts - 1)
@@ -36,9 +37,9 @@ const STALE_CLAIM_MS = 15 * 60 * 1000
  */
 export type OutboxDb = {
   notificationOutbox: {
-    createMany(args: { data: { payload: Prisma.InputJsonValue; dedupeKey: string }[]; skipDuplicates: boolean }): Promise<{ count: number }>
+    createMany(args: { data: { payload: Prisma.InputJsonValue; dedupeKey: string; organizationId?: string | null }[]; skipDuplicates: boolean }): Promise<{ count: number }>
     findUniqueOrThrow(args: { where: { dedupeKey: string }; select: { id: true } }): Promise<{ id: string }>
-    create(args: { data: { payload: Prisma.InputJsonValue }; select: { id: true } }): Promise<{ id: string }>
+    create(args: { data: { payload: Prisma.InputJsonValue; organizationId?: string | null }; select: { id: true } }): Promise<{ id: string }>
   }
 }
 
@@ -77,12 +78,18 @@ export function openPayload(stored: unknown): NotificationPayload {
  * `dedupeKey` already enqueued (#315) is skipped (ON CONFLICT DO NOTHING) and not re-delivered:
  * the existing row is either sent already or pending its own delivery.
  */
-export async function enqueueNotifications(payloads: NotificationPayload[], db: OutboxDb = prisma): Promise<string[]> {
+export async function enqueueNotifications(
+  payloads: NotificationPayload[],
+  db: OutboxDb = prisma,
+  opts: { organizationId?: string | null } = {},
+): Promise<string[]> {
   const ids: string[] = []
   for (const { dedupeKey, ...payload } of payloads) {
+    // Stored in clear on the row (#382): the page filters on it, the payload stays sealed.
+    const organizationId = payload.organizationId ?? opts.organizationId ?? null
     if (dedupeKey) {
       const { count } = await db.notificationOutbox.createMany({
-        data: [{ payload: sealPayload(payload), dedupeKey }],
+        data: [{ payload: sealPayload(payload), dedupeKey, organizationId }],
         skipDuplicates: true,
       })
       if (count === 0) continue
@@ -90,7 +97,7 @@ export async function enqueueNotifications(payloads: NotificationPayload[], db: 
       ids.push(row.id)
       continue
     }
-    const row = await db.notificationOutbox.create({ data: { payload: sealPayload(payload) }, select: { id: true } })
+    const row = await db.notificationOutbox.create({ data: { payload: sealPayload(payload), organizationId }, select: { id: true } })
     ids.push(row.id)
   }
   return ids

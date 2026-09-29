@@ -110,6 +110,11 @@ Liste exhaustive des fonctionnalités de l'application.
 - Compteurs : événements (publiés, à venir), bénévoles inscrits (et bénévoles uniques), taux de remplissage global
 - Répartition des membres : total, avec email, sans email (ne peuvent pas recevoir d'invitations)
 
+### Emails envoyés (`/admin/settings/notifications`)
+
+- Liste des 200 dernières lignes de `NotificationOutbox` de l'organisation (colonne `organizationId`, #382, posée à l'enqueue par chaque route ; sans elle, la ligne n'apparaît nulle part), payload déchiffré côté serveur pour n'afficher que le type et le destinataire ; états dérivés : en attente, nouvel essai (`attempts` > 0), envoyé, échec définitif ; raison du dernier échec ; `POST /api/admin/settings/notifications/[id]/retry` remet une ligne en échec de l'organisation en file (`attempts` 0, journalisé `notification.retried`), 404 sinon ; test d'isolation cross-tenant
+- Rétention inchangée : envoyés purgés chaque nuit, échecs après 30 jours
+
 ### Recherche globale (`/admin/search`)
 
 - Champ **Rechercher** dans la barre du haut (dans le menu sur mobile), raccourci **Ctrl + K** (**⌘ + K** sur Mac)

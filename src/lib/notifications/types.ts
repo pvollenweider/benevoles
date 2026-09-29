@@ -34,6 +34,9 @@ export type NotificationKind =
   | "registration_link_resend"
   | "targeted_message"
 
+/** Delivery attempts before the outbox gives up (5 min, 10, 20, 40, 80 between them). */
+export const MAX_ATTEMPTS = 6
+
 export type Recipient = {
   email?: string | null
   phone?: string | null
@@ -52,6 +55,8 @@ export type NotificationPayload<K extends NotificationKind = NotificationKind> =
   dedupeKey?: string
   /** Email Message-ID, stable per outbox row, so a re-send after a crash is the same message. */
   messageId?: string
+  /** Organization the notification belongs to (#382); stored on the outbox row for the admin delivery page. */
+  organizationId?: string | null
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: Record<string, any>
 }
