@@ -16,6 +16,12 @@ import { decryptValue, encryptValue } from "../token-vault"
  * schedules delivery right after the response. The request no longer waits on SMTP, and a send
  * that fails is retried by `deliverOutbox()` from the hourly cron with exponential backoff, up to
  * MAX_ATTEMPTS, then left as "failed" and reported to Sentry.
+ *
+ * Transactional outbox (#352): when the notifications belong to a business change made in a
+ * transaction, store them with that transaction's client (`enqueueNotifications(payloads, tx)`)
+ * and call `deliverAfterResponse(ids)` once it has committed. The change and its notifications
+ * then commit or roll back together: a crash right after the commit can no longer leave, say, a
+ * registration whose confirmation was never recorded.
  */
 
 export const MAX_ATTEMPTS = 6
@@ -25,6 +31,9 @@ export function backoffMs(attempts: number): number {
 }
 /** A row claimed longer ago than this was abandoned by a crashed delivery: pick it up again. */
 const STALE_CLAIM_MS = 15 * 60 * 1000
+
+/** The global client or a transaction's (`tx`): both expose the outbox table. */
+export type OutboxDb = Pick<typeof prisma, "notificationOutbox">
 
 /** A `send` that only records payloads, to pass to the notification helpers. */
 export function collectNotifications(): { send: Send; payloads: NotificationPayload[] } {
@@ -61,20 +70,20 @@ export function openPayload(stored: unknown): NotificationPayload {
  * `dedupeKey` already enqueued (#315) is skipped (ON CONFLICT DO NOTHING) and not re-delivered:
  * the existing row is either sent already or pending its own delivery.
  */
-export async function enqueueNotifications(payloads: NotificationPayload[]): Promise<string[]> {
+export async function enqueueNotifications(payloads: NotificationPayload[], db: OutboxDb = prisma): Promise<string[]> {
   const ids: string[] = []
   for (const { dedupeKey, ...payload } of payloads) {
     if (dedupeKey) {
-      const { count } = await prisma.notificationOutbox.createMany({
+      const { count } = await db.notificationOutbox.createMany({
         data: [{ payload: sealPayload(payload), dedupeKey }],
         skipDuplicates: true,
       })
       if (count === 0) continue
-      const row = await prisma.notificationOutbox.findUniqueOrThrow({ where: { dedupeKey }, select: { id: true } })
+      const row = await db.notificationOutbox.findUniqueOrThrow({ where: { dedupeKey }, select: { id: true } })
       ids.push(row.id)
       continue
     }
-    const row = await prisma.notificationOutbox.create({ data: { payload: sealPayload(payload) }, select: { id: true } })
+    const row = await db.notificationOutbox.create({ data: { payload: sealPayload(payload) }, select: { id: true } })
     ids.push(row.id)
   }
   return ids
@@ -88,11 +97,19 @@ export function outboxMessageId(rowId: string): string {
   return `<outbox-${rowId}@${host}>`
 }
 
+/**
+ * Delivers stored rows once the response has been sent. After a transactional enqueue, call it
+ * only once the transaction has committed: before that, the rows aren't visible to delivery.
+ */
+export function deliverAfterResponse(ids: string[]): void {
+  if (ids.length === 0) return
+  after(() => deliverOutbox({ ids }).then(() => undefined, reportError("outbox.deliver")))
+}
+
 /** Stores the notifications, then delivers them once the response has been sent. */
 export async function enqueueAndDeliver(payloads: NotificationPayload[]): Promise<void> {
   if (payloads.length === 0) return
-  const ids = await enqueueNotifications(payloads)
-  after(() => deliverOutbox({ ids }).then(() => undefined, reportError("outbox.deliver")))
+  deliverAfterResponse(await enqueueNotifications(payloads))
 }
 
 /**

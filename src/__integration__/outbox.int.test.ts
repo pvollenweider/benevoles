@@ -79,6 +79,28 @@ describe.skipIf(!url)("outbox on Postgres (#319)", () => {
     expect(await deliverOutbox({ ids: [id2] })).toEqual({ sent: 0, retried: 0, failed: 0 })
   })
 
+  it("stored with a transaction's client, rows commit or roll back with it (#352)", async () => {
+    // Rolled back: the business change failed after its notifications were enqueued.
+    const keyRolledBack = `${tag}-tx-rollback`
+    await expect(prisma.$transaction(async (tx) => {
+      await enqueueNotifications([{ ...payload(400), dedupeKey: keyRolledBack }], tx)
+      throw new Error("business failure after enqueue")
+    })).rejects.toThrow("business failure after enqueue")
+    expect(await prisma.notificationOutbox.count({ where: { dedupeKey: keyRolledBack } })).toBe(0)
+
+    // Committed: the rows exist only once the transaction is done, then deliver normally.
+    const keyCommitted = `${tag}-tx-commit`
+    const rowIds = await prisma.$transaction(async (tx) => {
+      const ids = await enqueueNotifications([{ ...payload(401), dedupeKey: keyCommitted }], tx)
+      // Not visible outside the transaction before it commits.
+      expect(await prisma.notificationOutbox.count({ where: { dedupeKey: keyCommitted } })).toBe(0)
+      return ids
+    })
+    ids.push(...rowIds)
+    expect(rowIds).toHaveLength(1)
+    expect(await deliverOutbox({ ids: rowIds })).toEqual({ sent: 1, retried: 0, failed: 0 })
+  })
+
   it("a dedupe key is stored once even when enqueued concurrently", async () => {
     const key = `${tag}-dedupe`
     const results = await Promise.all([1, 2, 3].map(() => enqueueNotifications([{ ...payload(300), dedupeKey: key }])))

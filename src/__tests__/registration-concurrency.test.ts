@@ -51,8 +51,13 @@ vi.mock("@/lib/prisma", () => {
 })
 vi.mock("@/lib/email", () => ({ sendConfirmationEmail: vi.fn(), sendAdminNotification: vi.fn() }))
 vi.mock("@/lib/notifications", () => ({ sendNotification: vi.fn().mockResolvedValue({ ok: true }) }))
-const enqueueAndDeliver = vi.hoisted(() => vi.fn().mockResolvedValue(undefined))
-vi.mock("@/lib/notifications/outbox", () => ({ enqueueAndDeliver, collectNotifications: () => ({ payloads: [], send: async () => ({ ok: true }) }) }))
+const outboxMocks = vi.hoisted(() => ({
+  enqueueAndDeliver: vi.fn().mockResolvedValue(undefined),
+  enqueueNotifications: vi.fn().mockResolvedValue(["row-1"]),
+  deliverAfterResponse: vi.fn(),
+}))
+const { enqueueAndDeliver, enqueueNotifications, deliverAfterResponse } = outboxMocks
+vi.mock("@/lib/notifications/outbox", () => ({ ...outboxMocks, collectNotifications: () => ({ payloads: [], send: async () => ({ ok: true }) }) }))
 vi.mock("@/lib/sector-leaders", () => ({ notifySectorLeadersOfSignup: vi.fn() }))
 vi.mock("@/lib/event-log", () => ({ logEvent: vi.fn().mockResolvedValue("log-1"), SYSTEM_ACTOR: { type: "system" } }))
 
@@ -119,16 +124,23 @@ describe("promoteNextInWaitlist under contention", () => {
     const { promoteNextInWaitlist } = await import("@/lib/waitlist")
     await promoteNextInWaitlist("shift-1")
     expect(m.regUpdate).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "w1" }, data: expect.objectContaining({ status: "offered" }) }))
-    expect(enqueueAndDeliver.mock.calls[0][0][0]).toEqual(expect.objectContaining({ kind: "waitlist_offered" }))
+    // The offer email is stored in the offer's transaction (#352), then delivered after commit.
+    const [payloads, db] = enqueueNotifications.mock.calls.at(-1)!
+    expect(payloads[0]).toEqual(expect.objectContaining({ kind: "waitlist_offered" }))
+    expect(db).toHaveProperty("registration")
+    expect(db).not.toHaveProperty("$transaction")
+    expect(deliverAfterResponse).toHaveBeenLastCalledWith(["row-1"])
   })
 
   it("doesn't offer when no spot is actually free (e.g. second promotion for the same freed spot)", async () => {
     m.shiftFindUnique.mockResolvedValue({ capacity: 2, status: "open" })
     m.regCount.mockResolvedValue(2) // the first promotion's offer already holds the spot
     const { promoteNextInWaitlist } = await import("@/lib/waitlist")
+    enqueueNotifications.mockClear()
     await promoteNextInWaitlist("shift-1")
     expect(m.regFindFirst).not.toHaveBeenCalled()
     expect(m.regUpdate).not.toHaveBeenCalled()
+    expect(enqueueNotifications).not.toHaveBeenCalled()
   })
 })
 

@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma"
 import { generateToken, shiftsOverlap, shiftsTooYoungFor } from "@/lib/utils"
 import { sendConfirmationEmail, sendAdminNotification } from "@/lib/email"
 import { sendNotification } from "@/lib/notifications"
-import { collectNotifications, enqueueAndDeliver } from "@/lib/notifications/outbox"
+import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { notifySectorLeadersOfSignup } from "@/lib/sector-leaders"
 import { rateLimit, getClientIp, isRateLimited } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
@@ -167,7 +167,88 @@ export async function POST(req: Request) {
   // One token per new registration, kept in clear only in memory: the confirmation email and
   // the response need it, the DB only stores its hash and encrypted copy (#290).
   const tokens = new Map(shiftIds.map((id) => [id, generateToken()]))
-  let outcome: { registrations: Awaited<ReturnType<typeof prisma.registration.create>>[]; volunteerId: string; createdNow: boolean }
+
+  // Notifications of this sign-up, built by the usual helpers into an outbox collector (#293).
+  // Built and stored inside the registration transaction (#352): the registrations and their
+  // notifications commit together, then delivery runs after the response. The helpers only read
+  // (admins, sector leaders), so the shift locks are held a few queries longer, no more.
+  const buildNotifications = async (registrations: { id: string; shiftId: string; status: string; waitingPosition: number | null }[]) => {
+    const editToken = tokens.get(registrations[0].shiftId)!
+    const waitlistRegs = registrations.filter((r) => r.status === "waiting")
+    const activeRegs = registrations.filter((r) => r.status === "active")
+
+    const activeShiftData = shifts
+      .filter((s) => activeRegs.some((r) => r.shiftId === s.id))
+      .map((s) => ({
+        label: s.label,
+        roleName: s.roleName,
+        date: s.date.toLocaleDateString("fr-FR"),
+        startTime: s.startTime,
+        endTime: s.endTime,
+      }))
+    const outbox = collectNotifications()
+    if (activeRegs.length > 0) {
+      await sendConfirmationEmail({
+        to: email,
+        volunteerName: `${firstName} ${lastName}`,
+        eventTitle: event.title,
+        shifts: activeShiftData,
+        editToken,
+        orgSlug: event.organization.slug,
+        confirmationMessage: event.confirmationMessage ?? undefined,
+      }, outbox.send)
+    }
+    await sendAdminNotification({
+      organizationId: event.organizationId,
+      eventTitle: event.title,
+      volunteerName: `${firstName} ${lastName}`,
+      volunteerEmail: email,
+      shifts: shifts.map((s) => ({
+        label: s.label,
+        roleName: s.roleName,
+        date: s.date.toLocaleDateString("fr-FR"),
+        startTime: s.startTime,
+        endTime: s.endTime,
+      })),
+    }, outbox.send)
+    for (const shift of shifts) {
+      await notifySectorLeadersOfSignup({
+        eventId,
+        eventTitle: event.title,
+        orgSlug: event.organization.slug,
+        volunteerName: `${firstName} ${lastName}`,
+        shift,
+      }, outbox.send)
+    }
+
+    // Waitlist confirmation for waiting registrations
+    for (const wr of waitlistRegs) {
+      const shift = shifts.find((s) => s.id === wr.shiftId)
+      if (!shift) continue
+      await outbox.send({
+        kind: "waitlist_confirmation",
+        recipient: { email, name: `${firstName} ${lastName}` },
+        data: {
+          volunteerName: `${firstName} ${lastName}`,
+          eventTitle: event.title,
+          shiftLabel: shift.label,
+          shiftDate: shift.date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
+          shiftStart: shift.startTime,
+          shiftEnd: shift.endTime,
+          waitingPosition: wr.waitingPosition ?? 1,
+          orgSlug: event.organization.slug,
+        },
+      })
+    }
+
+    // One key per notification of this sign-up (#315): a repeated enqueue stores it once.
+    return outbox.payloads.map((p) => ({
+      ...p,
+      dedupeKey: `${p.kind}:${registrations[0].id}:${p.recipient.email ?? ""}`,
+    }))
+  }
+
+  let outcome: { registrations: Awaited<ReturnType<typeof prisma.registration.create>>[]; volunteerId: string; createdNow: boolean; outboxIds: string[] }
   try {
     outcome = await prisma.$transaction(async (tx) => {
       await lockShifts(tx, shiftIds)
@@ -229,7 +310,8 @@ export async function POST(req: Request) {
           })
         )
       }
-      return { registrations: created, volunteerId, createdNow }
+      const outboxIds = await enqueueNotifications(await buildNotifications(created), tx)
+      return { registrations: created, volunteerId, createdNow, outboxIds }
     })
   } catch (e) {
     if (e instanceof ShiftFullError) {
@@ -253,7 +335,7 @@ export async function POST(req: Request) {
     throw e
   }
 
-  const { registrations, volunteerId, createdNow } = outcome
+  const { registrations, volunteerId, createdNow, outboxIds } = outcome
 
   // Only once the registration went through, and only with proof of ownership (see above):
   // an anonymous submission must not rewrite an existing volunteer's name, phone or birth date.
@@ -294,84 +376,8 @@ export async function POST(req: Request) {
   const waitlistRegs = registrations.filter((r) => r.status === "waiting")
   const activeRegs = registrations.filter((r) => r.status === "active")
 
-  const activeShiftData = shifts
-    .filter((s) => activeRegs.some((r) => r.shiftId === s.id))
-    .map((s) => ({
-      label: s.label,
-      roleName: s.roleName,
-      date: s.date.toLocaleDateString("fr-FR"),
-      startTime: s.startTime,
-      endTime: s.endTime,
-    }))
-
-  // Notifications go through the outbox (#293): built by the usual helpers into `outbox`,
-  // stored, and sent right after this response — the volunteer doesn't wait on SMTP, and a
-  // failed send is retried by the cron instead of being lost.
-  const outbox = collectNotifications()
-  try {
-    if (activeRegs.length > 0) {
-      await sendConfirmationEmail({
-        to: email,
-        volunteerName: `${firstName} ${lastName}`,
-        eventTitle: event.title,
-        shifts: activeShiftData,
-        editToken,
-        orgSlug: event.organization.slug,
-        confirmationMessage: event.confirmationMessage ?? undefined,
-      }, outbox.send)
-    }
-    await sendAdminNotification({
-      organizationId: event.organizationId,
-      eventTitle: event.title,
-      volunteerName: `${firstName} ${lastName}`,
-      volunteerEmail: email,
-      shifts: shifts.map((s) => ({
-        label: s.label,
-        roleName: s.roleName,
-        date: s.date.toLocaleDateString("fr-FR"),
-        startTime: s.startTime,
-        endTime: s.endTime,
-      })),
-    }, outbox.send)
-    for (const shift of shifts) {
-      await notifySectorLeadersOfSignup({
-        eventId,
-        eventTitle: event.title,
-        orgSlug: event.organization.slug,
-        volunteerName: `${firstName} ${lastName}`,
-        shift,
-      }, outbox.send)
-    }
-
-    // Waitlist confirmation for waiting registrations
-    for (const wr of waitlistRegs) {
-      const shift = shifts.find((s) => s.id === wr.shiftId)
-      if (!shift) continue
-      await outbox.send({
-        kind: "waitlist_confirmation",
-        recipient: { email, name: `${firstName} ${lastName}` },
-        data: {
-          volunteerName: `${firstName} ${lastName}`,
-          eventTitle: event.title,
-          shiftLabel: shift.label,
-          shiftDate: shift.date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
-          shiftStart: shift.startTime,
-          shiftEnd: shift.endTime,
-          waitingPosition: wr.waitingPosition ?? 1,
-          orgSlug: event.organization.slug,
-        },
-      })
-    }
-
-    // One key per notification of this sign-up (#315): a repeated enqueue stores it once.
-    await enqueueAndDeliver(outbox.payloads.map((p) => ({
-      ...p,
-      dedupeKey: `${p.kind}:${registrations[0].id}:${p.recipient.email ?? ""}`,
-    })))
-  } catch (e) {
-    // The registration itself is done; only building/storing its notifications failed.
-    reportError("notification.registration_outbox")(e)
-  }
+  // Stored with the registrations (#352); sent once this response is out, retried by the cron.
+  deliverAfterResponse(outboxIds)
 
   const onWaitlist = waitlistRegs.length > 0 && activeRegs.length === 0
 

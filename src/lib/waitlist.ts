@@ -5,10 +5,9 @@ import { prisma } from "./prisma"
 import { orgBaseUrl } from "./urls"
 import { logEvent, SYSTEM_ACTOR } from "./event-log"
 import { OCCUPYING_STATUSES, canOfferSpot, lockShifts } from "./registration-capacity"
-import { reportError } from "./report-error"
 import { registrationToken } from "./token-vault"
 import { orgTimeZone } from "./time-zone"
-import { enqueueAndDeliver } from "./notifications/outbox"
+import { deliverAfterResponse, enqueueNotifications } from "./notifications/outbox"
 
 /**
  * When a spot opens on a shift, offer it to the first person on the waitlist.
@@ -25,7 +24,7 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
   // them to two different people, and a spot is only offered if one is actually free — callers
   // don't have to know whether their cancellation really freed one (already-cancelled row,
   // over-capacity shift, spot already re-taken).
-  const offeredId = await prisma.$transaction(async (tx) => {
+  const offered = await prisma.$transaction(async (tx) => {
     await lockShifts(tx, [shiftId])
     const shift = await tx.shift.findUnique({ where: { id: shiftId }, select: { capacity: true, status: true } })
     if (!shift) return null
@@ -48,18 +47,43 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
         waitingExpiresAt: expiresAt,
       },
     })
-    return candidate.id
-  })
-  if (!offeredId) return
 
-  const next = await prisma.registration.findUniqueOrThrow({
-    where: { id: offeredId },
-    include: {
-      volunteer: true,
-      shift: true,
-      event: { include: { organization: { select: { slug: true, name: true, timeZone: true } } } },
-    },
+    const next = await tx.registration.findUniqueOrThrow({
+      where: { id: candidate.id },
+      include: {
+        volunteer: true,
+        shift: true,
+        event: { include: { organization: { select: { slug: true, name: true, timeZone: true } } } },
+      },
+    })
+    const orgSlug = next.event.organization.slug
+    const confirmUrl = `${orgBaseUrl(orgSlug)}/waitlist/${registrationToken.reveal(next)}/confirm`
+    const expiresAtLabel = expiresAt.toLocaleDateString("fr-FR", {
+      weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit", timeZone: orgTimeZone(next.event.organization),
+    })
+
+    // Stored in the same transaction as the offer (#352): an offer is never left without its
+    // email, which is the only way the volunteer learns about it before it expires. Delivered
+    // after commit, retried by the cron if SMTP fails (#311).
+    const outboxIds = await enqueueNotifications([{
+      kind: "waitlist_offered",
+      dedupeKey: `waitlist_offered:${next.id}:${expiresAt.toISOString()}`,
+      recipient: { email: next.volunteer.email, name: next.volunteer.firstName },
+      data: {
+        volunteerName: next.volunteer.firstName,
+        eventTitle: next.event.title,
+        shiftLabel: next.shift.label,
+        shiftDate: next.shift.date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
+        shiftStart: next.shift.startTime,
+        shiftEnd: next.shift.endTime,
+        confirmUrl,
+        expiresAt: expiresAtLabel,
+      },
+    }], tx)
+    return { next, outboxIds }
   })
+  if (!offered) return
+  const { next, outboxIds } = offered
 
   await logEvent({
     eventId: next.eventId,
@@ -71,26 +95,5 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
     causedByLogId,
   })
 
-  const orgSlug = next.event.organization.slug
-  const confirmUrl = `${orgBaseUrl(orgSlug)}/waitlist/${registrationToken.reveal(next)}/confirm`
-  const expiresAtLabel = expiresAt.toLocaleDateString("fr-FR", {
-    weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit", timeZone: orgTimeZone(next.event.organization),
-  })
-
-  // Through the outbox (#311): retried if SMTP fails, the caller isn't slowed down.
-  await enqueueAndDeliver([{
-    kind: "waitlist_offered",
-    dedupeKey: `waitlist_offered:${next.id}:${expiresAt.toISOString()}`,
-    recipient: { email: next.volunteer.email, name: next.volunteer.firstName },
-    data: {
-      volunteerName: next.volunteer.firstName,
-      eventTitle: next.event.title,
-      shiftLabel: next.shift.label,
-      shiftDate: next.shift.date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
-      shiftStart: next.shift.startTime,
-      shiftEnd: next.shift.endTime,
-      confirmUrl,
-      expiresAt: expiresAtLabel,
-    },
-  }]).catch(reportError("notification.waitlist_offered"))
+  deliverAfterResponse(outboxIds)
 }
