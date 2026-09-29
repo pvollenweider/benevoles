@@ -13,6 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Barre du haut de l'administration sur mobile** : sur un petit écran, les liens sont regroupés sous un bouton **Menu** au lieu de déborder de l'écran ; le menu du compte reste accessible. La page en cours est aussi soulignée, en plus d'être en couleur.
 - **Menu du compte** : dans la barre du haut, votre nom ouvre un menu avec **Mon compte** et **Se déconnecter**. Le changement de mot de passe quitte la page Paramètres pour une page **Mon compte** dédiée, avec des libellés et messages d'erreur désormais en français.
 - **Limitation des tentatives** (connexion, inscription, liens de gestion, mot de passe oublié) : les compteurs sont désormais stockés dans la base de données. Ils ne sont plus remis à zéro à chaque redéploiement et restent justes si l'application tourne sur plusieurs instances.
 - **Emails plus fiables** : l'offre et la confirmation de place en liste d'attente, les avis de créneau modifié ou annulé, l'invitation d'un responsable de secteur, l'invitation et la bienvenue d'un admin et la réinitialisation de mot de passe passent eux aussi par la file d'envoi : l'action n'attend plus l'envoi, et un email en échec est renvoyé automatiquement.
