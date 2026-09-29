@@ -42,7 +42,6 @@ type Props = {
 const sourceLabels: Record<string, string> = {
   public_form: "Formulaire",
   admin_manual: "Manuel",
-  import: "Import",
 }
 
 // ── Main component ────────────────────────────────────────────────────────────

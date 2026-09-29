@@ -116,6 +116,9 @@ model SectorLeader {
 
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
+  // Also unique case-insensitively: "SectorLeader_eventId_roleName_email_ci_key" on lower(trim(email)), created by migration
+  // 20260930110000_email_case_insensitive_unique (#342). Expression indexes can't be declared here;
+  // if `prisma migrate dev` ever proposes dropping it, remove that statement from the generated SQL.
   @@unique([eventId, roleName, email])
   @@index([eventId])
 }
@@ -264,6 +267,9 @@ model Volunteer {
   invites           MemberInvite[]
   pushSubscriptions PushSubscription[]
 
+  // Also unique case-insensitively: "Volunteer_organizationId_email_ci_key" on lower(trim(email)), created by migration
+  // 20260930110000_email_case_insensitive_unique (#342). Expression indexes can't be declared here;
+  // if `prisma migrate dev` ever proposes dropping it, remove that statement from the generated SQL.
   @@unique([organizationId, email])
   @@index([email])
   @@index([organizationId])
@@ -388,6 +394,9 @@ model PushSubscription {
 model AdminUser {
   id                     String    @id @default(cuid())
   organizationId         String?
+  // Also unique case-insensitively: "AdminUser_email_ci_key" on lower(trim(email)), created by migration
+  // 20260930110000_email_case_insensitive_unique (#342). Expression indexes can't be declared here;
+  // if `prisma migrate dev` ever proposes dropping it, remove that statement from the generated SQL.
   email                  String    @unique
   name                   String
   passwordHash           String
