@@ -1,9 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
 import PasswordRules from "@/components/PasswordRules"
 
 export default function ProfileForm({ currentEmail }: { currentEmail: string }) {
+  const router = useRouter()
   const [email, setEmail] = useState(currentEmail)
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
@@ -40,6 +43,14 @@ export default function ProfileForm({ currentEmail }: { currentEmail: string }) 
     setLoading(false)
 
     if (res.ok) {
+      // A new password signed out every session, this one included (#360): sign in again with it.
+      if (payload.newPassword) {
+        const again = await signIn("credentials", { email: payload.email ?? currentEmail, password: payload.newPassword, redirect: false })
+        if (!again || again.error) {
+          router.push("/admin/login")
+          return
+        }
+      }
       setSuccess(true)
       setCurrentPassword("")
       setNewPassword("")

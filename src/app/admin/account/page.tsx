@@ -28,7 +28,10 @@ export default async function AccountPage() {
 
       <section aria-labelledby="password-heading" className="bg-white rounded-2xl border border-gray-200 p-6">
         <h2 id="password-heading" className="text-sm font-semibold text-gray-900 mb-4">Mot de passe</h2>
-        <ChangePasswordForm />
+        <p className="text-xs text-gray-600 mb-4">
+          Changer votre mot de passe déconnecte vos autres sessions (autres navigateurs ou appareils).
+        </p>
+        <ChangePasswordForm email={session.user?.email ?? ""} />
       </section>
     </div>
   )

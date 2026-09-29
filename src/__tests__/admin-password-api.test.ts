@@ -56,7 +56,8 @@ describe("POST /api/admin/settings/password", () => {
     const { POST } = await import("@/app/api/admin/settings/password/route")
     const res = await POST(post({ currentPassword: "ok", newPassword: "Nouveau-mot2passe" }))
     expect(res.status).toBe(200)
-    expect(update).toHaveBeenCalledWith({ where: { id: adminId }, data: { passwordHash: "$new" } })
+    // Signs out every session opened before the change (#360).
+    expect(update).toHaveBeenCalledWith({ where: { id: adminId }, data: { passwordHash: "$new", sessionVersion: { increment: 1 } } })
   })
 
   it("blocks after 5 wrong current passwords on one account, without running bcrypt (#358)", async () => {

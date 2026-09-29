@@ -54,7 +54,8 @@ export async function PATCH(req: Request) {
     where: { id: user.id },
     data: {
       ...(email ? { email } : {}),
-      ...(newPassword ? { passwordHash: await bcrypt.hash(newPassword, 12) } : {}),
+      // A new password ends every session opened before (#360); the form signs in again.
+      ...(newPassword ? { passwordHash: await bcrypt.hash(newPassword, 12), sessionVersion: { increment: 1 } } : {}),
     },
   })
 

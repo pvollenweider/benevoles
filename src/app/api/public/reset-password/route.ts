@@ -37,6 +37,9 @@ export async function POST(req: Request) {
     where: { id: admin.id },
     data: {
       passwordHash,
+      // Signs out every session opened before the reset (#360), e.g. one opened by whoever
+      // made the reset necessary.
+      sessionVersion: { increment: 1 },
       passwordResetTokenHash: null,
       passwordResetExpiresAt: null,
     },

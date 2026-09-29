@@ -403,6 +403,9 @@ model AdminUser {
   email                  String    @unique
   name                   String
   passwordHash           String
+  // Incremented on every password change or reset (#360); copied into the JWT at sign-in and
+  // re-checked on every request (refreshAdminToken), so sessions opened before the change end.
+  sessionVersion         Int       @default(0)
   role                   String    @default("admin")
   isActive               Boolean   @default(true)
   // SHA-256 (hex) of the one-time links emailed to the admin, never the tokens themselves (#269):
