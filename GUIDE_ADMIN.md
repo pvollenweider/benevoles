@@ -117,6 +117,8 @@ Un créneau correspond à un poste de bénévolat sur une plage horaire précise
 | Horaires | Heure de début et de fin, de `00:00` à `23:59` |
 | Capacité | Nombre maximum de bénévoles |
 | Statut | `Ouvert`, `Complet`, `Fermé`, `Annulé` |
+| Infos pratiques pour les bénévoles | Lieu de rendez-vous, personne de contact (nom, téléphone) et consigne pratique. Affichés au bénévole dans l'email de confirmation, les rappels, sa page personnelle et le récapitulatif avant inscription. Facultatifs, courts : pas de fiche de mission. |
+| Notes internes | Jamais montrées aux bénévoles |
 | Âge minimum (optionnel) | Condition d'âge pour ce poste (ex. : `18` pour un poste avec permis de conduire). Affiché en info sur le planning public ; vérifié à l'inscription — voir « Âge minimum sur un poste » ci-dessous. |
 
 ### Créer une série de créneaux

@@ -7,6 +7,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { validationError } from "@/lib/api-error"
 import { publicEventInclude, toPublicEvent } from "@/lib/public-event"
 import { render } from "@/lib/notifications/templates"
+import { pickShiftInfo } from "@/lib/shift-info"
 
 /**
  * Preview of an event as a volunteer (#370), whatever its status (draft included): the same data
@@ -66,6 +67,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           date: s.date.toLocaleDateString("fr-FR"),
           startTime: s.startTime,
           endTime: s.endTime,
+          ...pickShiftInfo(s),
         })),
       editToken: "apercu",
       orgSlug: event.organization.slug,

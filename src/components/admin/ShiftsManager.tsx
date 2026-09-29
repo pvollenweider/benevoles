@@ -9,6 +9,7 @@ import { KNOWN_ROLES, COLOR_OPTIONS, getRoleAccent } from "@/lib/roles"
 import { fmtRange, resolveNewShiftDisplayOrder, isCompleteTime, addMinutes } from "@/lib/gantt-utils"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
 import ShiftSeriesForm from "./ShiftSeriesForm"
+import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import {
   activeShiftsByDay,
   applyRoleOrder,
@@ -26,10 +27,14 @@ const emptyShift = {
   roleName: "", label: "", description: "", date: "", startTime: "", endTime: "",
   capacity: 2, locationDetails: "", displayOrder: 0, internalNotes: "", waitlistEnabled: false,
   minAge: "" as number | string,
+  contactName: "", contactPhone: "", instructions: "",
 }
 
 // ── Helper: convert Prisma shift to AdminShift ────────────────────────────────
-type RawShift = AdminShift & { description?: string | null; internalNotes?: string | null }
+type RawShift = AdminShift & {
+  description?: string | null; internalNotes?: string | null; locationDetails?: string | null
+  contactName?: string | null; contactPhone?: string | null; instructions?: string | null
+}
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
 export default function ShiftsManager({
@@ -147,7 +152,7 @@ export default function ShiftsManager({
   function handleCreated(s: AdminShift) {
     setShifts(prev => {
       if (prev.find(x => x.id === s.id)) return prev
-      return [...prev, { ...s, description: null, internalNotes: null }]
+      return [...prev, { ...s, description: null, internalNotes: null, locationDetails: null, contactName: null, contactPhone: null, instructions: null }]
     })
   }
 
@@ -473,8 +478,9 @@ export default function ShiftsManager({
           <h3 className="font-semibold text-gray-800">{editingId ? "Modifier le créneau" : "Nouveau créneau"}</h3>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className={`block text-xs font-medium mb-1 ${attempted && !form.roleName ? "text-red-500" : "text-gray-600"}`}>Poste *</label>
+              <label htmlFor={`roleName-${editingId ?? "new"}`} className={`block text-xs font-medium mb-1 ${attempted && !form.roleName ? "text-red-500" : "text-gray-600"}`}>Poste *</label>
               <input
+                id={`roleName-${editingId ?? "new"}`}
                 type="text" list="role-options"
                 value={form.roleName}
                 onChange={e => setField("roleName", e.target.value)}
@@ -486,8 +492,9 @@ export default function ShiftsManager({
               </datalist>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Libellé</label>
+              <label htmlFor={`label-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Libellé</label>
               <input
+                id={`label-${editingId ?? "new"}`}
                 type="text"
                 value={form.label}
                 onChange={e => setField("label", e.target.value)}
@@ -498,19 +505,20 @@ export default function ShiftsManager({
           </div>
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className={`block text-xs font-medium mb-1 ${attempted && !form.date ? "text-red-500" : "text-gray-600"}`}>Date *</label>
+              <label htmlFor={`date-${editingId ?? "new"}`} className={`block text-xs font-medium mb-1 ${attempted && !form.date ? "text-red-500" : "text-gray-600"}`}>Date *</label>
               {singleDay ? (
-                <div className="input bg-gray-50 text-gray-500 cursor-default">{fmtDate(dates[0])}</div>
+                <input id={`date-${editingId ?? "new"}`} type="text" readOnly value={fmtDate(dates[0])} className="input bg-gray-50 text-gray-700" />
               ) : (
-                <select value={form.date} onChange={e => setField("date", e.target.value)} className={`input ${attempted && !form.date ? "!border-red-400" : ""}`}>
+                <select id={`date-${editingId ?? "new"}`} value={form.date} onChange={e => setField("date", e.target.value)} className={`input ${attempted && !form.date ? "!border-red-400" : ""}`}>
                   <option value="">— choisir —</option>
                   {dates.map(d => <option key={d} value={d}>{fmtDate(d)}</option>)}
                 </select>
               )}
             </div>
             <div>
-              <label className={`block text-xs font-medium mb-1 ${attempted && !form.startTime ? "text-red-500" : "text-gray-600"}`}>Début *</label>
+              <label htmlFor={`startTime-${editingId ?? "new"}`} className={`block text-xs font-medium mb-1 ${attempted && !form.startTime ? "text-red-500" : "text-gray-600"}`}>Début *</label>
               <input
+                id={`startTime-${editingId ?? "new"}`}
                 type="text" placeholder="HH:MM" value={form.startTime}
                 className={`input ${attempted && !form.startTime ? "!border-red-400" : ""}`}
                 onChange={e => {
@@ -525,8 +533,9 @@ export default function ShiftsManager({
               />
             </div>
             <div>
-              <label className={`block text-xs font-medium mb-1 ${attempted && !form.endTime ? "text-red-500" : "text-gray-600"}`}>Fin *</label>
+              <label htmlFor={`endTime-${editingId ?? "new"}`} className={`block text-xs font-medium mb-1 ${attempted && !form.endTime ? "text-red-500" : "text-gray-600"}`}>Fin *</label>
               <input
+                id={`endTime-${editingId ?? "new"}`}
                 type="text" placeholder="HH:MM" value={form.endTime}
                 className={`input ${attempted && !form.endTime ? "!border-red-400" : ""}`}
                 onChange={e => setField("endTime", e.target.value)}
@@ -536,17 +545,40 @@ export default function ShiftsManager({
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Capacité *</label>
-              <input type="number" min="1" value={form.capacity} onChange={e => setField("capacity", e.target.value)} className="input" />
+              <label htmlFor={`capacity-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Capacité *</label>
+              <input id={`capacity-${editingId ?? "new"}`} type="number" min="1" value={form.capacity} onChange={e => setField("capacity", e.target.value)} className="input" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Description</label>
-              <input type="text" value={form.description} onChange={e => setField("description", e.target.value)} className="input" />
+              <label htmlFor={`description-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Description</label>
+              <input id={`description-${editingId ?? "new"}`} type="text" value={form.description} onChange={e => setField("description", e.target.value)} className="input" />
             </div>
           </div>
+          <fieldset aria-describedby={`shiftinfo-hint-${editingId ?? "new"}`} className="border border-gray-200 rounded-xl p-3 space-y-3">
+            <legend className="text-xs font-semibold text-gray-700 px-1">Infos pratiques pour les bénévoles</legend>
+            <p id={`shiftinfo-hint-${editingId ?? "new"}`} className="text-xs text-gray-600">Affichées dans l&apos;email de confirmation, les rappels et la page personnelle du bénévole.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label htmlFor={`locationDetails-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Lieu de rendez-vous</label>
+                <input id={`locationDetails-${editingId ?? "new"}`} type="text" value={form.locationDetails} onChange={e => setField("locationDetails", e.target.value)} placeholder="ex. Entrée B, côté parking" className="input" />
+              </div>
+              <div>
+                <label htmlFor={`contactName-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Personne de contact</label>
+                <input id={`contactName-${editingId ?? "new"}`} type="text" maxLength={SHIFT_CONTACT_NAME_MAX} value={form.contactName} onChange={e => setField("contactName", e.target.value)} placeholder="ex. Léa (responsable bar)" className="input" />
+              </div>
+              <div>
+                <label htmlFor={`contactPhone-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Téléphone du contact</label>
+                <input id={`contactPhone-${editingId ?? "new"}`} type="tel" maxLength={SHIFT_CONTACT_PHONE_MAX} value={form.contactPhone} onChange={e => setField("contactPhone", e.target.value)} placeholder="ex. 079 000 00 00" className="input" />
+              </div>
+            </div>
+            <div>
+              <label htmlFor={`instructions-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Consigne pratique</label>
+              <textarea id={`instructions-${editingId ?? "new"}`} rows={2} maxLength={SHIFT_INSTRUCTIONS_MAX} aria-describedby={`instructions-hint-${editingId ?? "new"}`} value={form.instructions} onChange={e => setField("instructions", e.target.value)} placeholder="ex. Venir 10 min avant, tenue noire, gilet fourni sur place." className="input" />
+              <p id={`instructions-hint-${editingId ?? "new"}`} className="text-xs text-gray-600 mt-1">{form.instructions.length}/{SHIFT_INSTRUCTIONS_MAX} caractères</p>
+            </div>
+          </fieldset>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Notes internes</label>
-            <input type="text" value={form.internalNotes} onChange={e => setField("internalNotes", e.target.value)} className="input" />
+            <label htmlFor={`internalNotes-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Notes internes (jamais montrées aux bénévoles)</label>
+            <input id={`internalNotes-${editingId ?? "new"}`} type="text" value={form.internalNotes} onChange={e => setField("internalNotes", e.target.value)} className="input" />
           </div>
           <div>
             <label htmlFor={`minAge-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Âge minimum (optionnel)</label>
@@ -676,6 +708,10 @@ export default function ShiftsManager({
                         internalNotes: s.internalNotes ?? "",
                         waitlistEnabled: s.waitlistEnabled ?? false,
                         minAge: s.minAge ?? "",
+                        locationDetails: s.locationDetails ?? "",
+                        contactName: s.contactName ?? "",
+                        contactPhone: s.contactPhone ?? "",
+                        instructions: s.instructions ?? "",
                       }, s.id)}
                       className="text-xs text-blue-500 hover:text-blue-700 mr-3"
                     >

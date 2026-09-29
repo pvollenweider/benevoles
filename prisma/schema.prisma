@@ -232,6 +232,12 @@ model Shift {
   displayOrder    Int      @default(0)
   internalNotes   String?
   waitlistEnabled Boolean  @default(false)
+  // Practical info for the volunteers of this shift (#397), shown with the place
+  // (locationDetails) in the confirmation email, the reminders, the personal page and the
+  // public sign-up recap. Short by design: no mission sheets, files or workflows.
+  contactName     String?
+  contactPhone    String?
+  instructions    String?
   // Minimum age to self-register, in years — see issue #192. Enforced server-side at
   // registration (Volunteer.birthDate, collected on the public form only when at least one
   // selected shift requires it). Not proactively greyed out on the public timeline: we don't

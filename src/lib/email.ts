@@ -10,12 +10,13 @@
 import { env } from "./env"
 import { prisma } from "./prisma"
 import { sendNotification, type Send } from "./notifications"
+import type { ShiftInfo } from "./shift-info"
 
 type RegistrationEmailData = {
   to: string
   volunteerName: string
   eventTitle: string
-  shifts: { label: string; date: string; startTime: string; endTime: string }[]
+  shifts: ({ label: string; date: string; startTime: string; endTime: string } & ShiftInfo)[]
   editToken: string
   orgSlug?: string
   confirmationMessage?: string

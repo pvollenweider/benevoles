@@ -7,12 +7,17 @@ import Link from "next/link"
 import PublicFooter from "@/components/PublicFooter"
 import { renderMarkdown, interpolate } from "@/lib/markdown"
 import PushSubscribeButton from "@/components/PushSubscribeButton"
+import ShiftInfoList from "@/components/ShiftInfoList"
 
 type ShiftRef = {
   label: string
   date: string
   startTime: string
   endTime: string
+  locationDetails?: string | null
+  contactName?: string | null
+  contactPhone?: string | null
+  instructions?: string | null
 }
 
 type RegistrationItem = {
@@ -128,6 +133,7 @@ export default function MyRegistrationPage() {
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 text-sm">{reg.shift.label}</p>
                     <p className="text-xs text-gray-500 mt-0.5">{date} · {fmtRange(reg.shift.startTime, reg.shift.endTime)}</p>
+                    <ShiftInfoList info={reg.shift} className="mt-2 text-xs text-gray-700" />
                   </div>
                   {!isPending && (
                     <button

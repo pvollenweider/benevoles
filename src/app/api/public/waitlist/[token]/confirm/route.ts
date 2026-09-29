@@ -7,6 +7,7 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
 import { registrationToken } from "@/lib/token-vault"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { pickShiftInfo } from "@/lib/shift-info"
 
 export async function POST(_req: Request, { params }: { params: Promise<{ token: string }> }) {
   const rl = await rateLimit(getClientIp(_req), "waitlist-confirm", 10, 60 * 60 * 1000)
@@ -61,6 +62,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
           date: reg.shift.date.toLocaleDateString("fr-FR"),
           startTime: reg.shift.startTime,
           endTime: reg.shift.endTime,
+          ...pickShiftInfo(reg.shift),
         }],
         editToken: token,
         orgSlug: reg.event.organization.slug,

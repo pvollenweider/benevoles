@@ -8,6 +8,7 @@ import { clockSchema } from "@/lib/shift-time"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
 import { generateShiftSeries, seriesProblem } from "@/lib/shift-series"
+import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 
 const schema = z.object({
   eventId: z.string(),
@@ -21,6 +22,9 @@ const schema = z.object({
   breakMinutes: z.number().int().optional(),
   capacity: z.number().int().min(1),
   locationDetails: z.string().optional(),
+  contactName: z.string().max(SHIFT_CONTACT_NAME_MAX).optional().nullable(),
+  contactPhone: z.string().max(SHIFT_CONTACT_PHONE_MAX).optional().nullable(),
+  instructions: z.string().max(SHIFT_INSTRUCTIONS_MAX).optional().nullable(),
   displayOrder: z.number().int().optional(),
   waitlistEnabled: z.boolean().optional(),
   minAge: z.number().int().min(0).max(120).nullable().optional(),

@@ -5,6 +5,7 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { generateToken, shiftsOverlap, shiftsTooYoungFor } from "@/lib/utils"
 import { sendConfirmationEmail, sendAdminNotification } from "@/lib/email"
+import { pickShiftInfo } from "@/lib/shift-info"
 import { sendNotification } from "@/lib/notifications"
 import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { notifySectorLeadersOfSignup } from "@/lib/sector-leaders"
@@ -185,6 +186,7 @@ export async function POST(req: Request) {
         date: s.date.toLocaleDateString("fr-FR"),
         startTime: s.startTime,
         endTime: s.endTime,
+        ...pickShiftInfo(s),
       }))
     const outbox = collectNotifications()
     if (activeRegs.length > 0) {
