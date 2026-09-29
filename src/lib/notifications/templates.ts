@@ -6,6 +6,7 @@
  */
 
 import type { NotificationPayload } from "./types"
+import { WAITLIST_STEPS } from "../waitlist-copy"
 import { eventPublicUrl, orgBaseUrl } from "@/lib/urls"
 import { renderMarkdown } from "@/lib/markdown"
 import { shiftInfoLines, shiftInfoText, type ShiftInfo } from "../shift-info"
@@ -706,7 +707,8 @@ function renderWaitlistConfirmation(p: NotificationPayload): RenderedEmail {
     `Tu es sur la liste d'attente pour le créneau "${d.shiftLabel}" (${d.shiftDate} · ${d.shiftStart}–${d.shiftEnd}).`,
     `Position : ${d.waitingPosition}`,
     ``,
-    `On te préviendra dès qu'une place se libère !`,
+    `Comment ça marche :`,
+    ...WAITLIST_STEPS.map((s, i) => `${i + 1}. ${s}`),
   ].join("\n")
   const html = wrap(`
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 🕐</h2>
@@ -717,7 +719,8 @@ function renderWaitlistConfirmation(p: NotificationPayload): RenderedEmail {
       <div>🕐 ${escapeHtml(d.shiftStart)}–${escapeHtml(d.shiftEnd)}</div>
       <div>Position : <strong>#${d.waitingPosition}</strong></div>
     </div>
-    <p style="color:#888;font-size:0.85em;margin-top:1.5em">On te préviendra par email dès qu'une place se libère !</p>
+    <h3 style="margin:1.25em 0 0.25em;font-size:1em">Comment ça marche</h3>
+    <ol style="color:#555;margin:0;padding-left:1.25em;line-height:1.6">${WAITLIST_STEPS.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ol>
   `, `Tu es en position #${d.waitingPosition} — on te prévient dès qu'une place se libère.`)
   return { subject, html, text }
 }

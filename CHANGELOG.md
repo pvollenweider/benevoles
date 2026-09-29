@@ -30,6 +30,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Liste d'attente expliquée** : la même explication en cinq points (inscription pas encore confirmée, ordre, email avec 24 heures pour prendre la place, comment accepter, ce qui se passe sans réponse) apparaît dans le récapitulatif avant confirmation, sur la page de succès, dans l'email et sur la page personnelle, qui montre désormais aussi les inscriptions en liste d'attente avec leur position et, quand une place est proposée, le délai et le lien pour la prendre.
 - **Accessibilité** : un lien « Aller au contenu », visible dès qu'on le tabule, ouvre chaque page de l'administration et saute la barre du haut.
 - **Interne** : le fichier `src/middleware.ts` devient `src/proxy.ts`, la convention Next.js 16 ; comportement identique (protection des pages admin, en-tête `x-org-slug`).
 - **Rapports** : le lien « Imprimer » de la page d'un événement devient **Rapports** et regroupe l'export complet (en premier) et les feuilles à imprimer ; le lien « Exporter PDF » séparé disparaît. Les plannings par jour, par poste et individuels reprennent la frise de l'export complet, en noir et blanc, avec les prénoms dans les créneaux ; en-têtes, tableaux et feuille de présence ont été redessinés pour l'impression.

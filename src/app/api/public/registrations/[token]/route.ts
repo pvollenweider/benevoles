@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { orgTimeZone } from "@/lib/time-zone"
 import { prisma } from "@/lib/prisma"
 import { orgBaseUrl } from "@/lib/urls"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
@@ -18,11 +19,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
 
   const { token } = await params
 
+  // Waiting and offered registrations open the page too (#374): the volunteer sees where they stand.
+  const LIVE = ["active", "waiting", "offered"]
   const registration = await prisma.registration.findFirst({
-    where: { ...registrationToken.where(token), status: "active" },
+    where: { ...registrationToken.where(token), status: { in: LIVE } },
     include: {
       volunteer: true,
-      event: { select: { id: true, title: true, slug: true, confirmationMessage: true, organization: { select: { slug: true } } } },
+      event: { select: { id: true, title: true, slug: true, confirmationMessage: true, organization: { select: { slug: true, timeZone: true } } } },
     },
   })
 
@@ -35,7 +38,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     where: {
       volunteerId: registration.volunteerId,
       eventId: registration.eventId,
-      status: "active",
+      status: { in: LIVE },
     },
     include: { shift: true },
     orderBy: [{ shift: { date: "asc" } }, { shift: { startTime: "asc" } }],
@@ -48,6 +51,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     confirmationMessage: registration.event.confirmationMessage ?? null,
     orgHomeUrl: baseUrl,
     eventUrl: `${baseUrl}/${registration.event.slug}`,
+    timeZone: orgTimeZone(registration.event.organization),
     volunteer: {
       firstName: registration.volunteer.firstName,
       lastName: registration.volunteer.lastName,
@@ -64,6 +68,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     registrations: allRegistrations.map((r) => ({
       id: r.id,
       editToken: registrationToken.reveal(r),
+      status: r.status,
+      waitingPosition: r.waitingPosition,
+      waitingExpiresAt: r.waitingExpiresAt,
       shift: {
         id: r.shift.id,
         label: r.shift.label,
