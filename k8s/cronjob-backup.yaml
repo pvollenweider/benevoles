@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
 # pg_dump chiffré (AES-256) vers un PVC, rétention 30 jours.
 # Exécuté chaque nuit à 01h00 UTC (avant le cleanup à 02h00).
 #

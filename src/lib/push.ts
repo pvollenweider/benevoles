@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import webpush from "web-push"
 import { env } from "./env"
 import { prisma } from "./prisma"

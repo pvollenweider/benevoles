@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Writes to EventLog. Never throws: a logging failure must not break the mutation it documents,
  * so every call here swallows its own errors (logged to the console, nothing more).

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
 # One-off database migration, run by the deploy workflow before the app Deployment is updated
 # (#314). Uses the image being deployed; the app pods themselves no longer migrate on start
 # (MIGRATE_ON_START=false in deployment.yaml). docker-entrypoint.sh waits for Postgres, runs

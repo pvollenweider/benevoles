@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Cancels one shift and cascades to its active registrations — extracted from
  * DELETE /api/admin/shifts/[id] so the same "delete a shift" behavior (soft-cancel, notify every

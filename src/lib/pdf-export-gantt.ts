@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Pure HTML-fragment builder for the admin PDF export's per-day Gantt + recap tables
  * (src/app/api/admin/events/[id]/export/pdf/route.ts). Split out into its own module, with no

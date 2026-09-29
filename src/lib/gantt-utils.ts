@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 export type GanttShow = { name: string; date: string; startTime: string; endTime: string }
 
 export function toMin(t: string): number {

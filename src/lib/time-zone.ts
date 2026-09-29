@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Time zone of the events (#308). Shift dates and times are local wall-clock values (a
  * `Shift.date` at midnight UTC for the calendar day + a "HH:MM" `startTime`), while servers run

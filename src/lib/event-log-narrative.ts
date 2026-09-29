@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Turns EventLog entries into readable French. Two levels:
  *   - `describeEntry`: one line, used in the explorer list.

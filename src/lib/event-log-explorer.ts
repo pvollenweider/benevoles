@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Pure logic of the event log explorer (EventLogExplorer, #291): labels, list filters as query
  * parameters, live region texts, tab keyboard navigation. Kept out of the component so it can be

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Read side of OrgLog: query with filters, resolve actor display names at render time (never
  * stored — see org-log.ts). Simpler than event-log-read.ts on purpose: a flat filtered list, no

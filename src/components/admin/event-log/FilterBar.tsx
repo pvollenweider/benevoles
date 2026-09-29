@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { ACTION_PREFIXES, ACTOR_TYPE_LABELS, ENTITY_LABELS } from "@/lib/event-log-explorer"
 
 export default function FilterBar(props: {

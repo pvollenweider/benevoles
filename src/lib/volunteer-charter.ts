@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 export function buildVolunteerCharter({ hasOrgInsurance = true }: { hasOrgInsurance?: boolean } = {}): string {
   const insuranceClause = hasOrgInsurance
     ? `La personne bénévole sera couverte pendant toute la durée de sa présence par l'assurance responsabilité civile de l'organisation. Elle reste néanmoins responsable auprès des tiers de tout dommage qu'elle causerait personnellement.`

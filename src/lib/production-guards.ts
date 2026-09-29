@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { appTimeZone, assertTimeZone } from "./time-zone"
 import { keyring } from "./token-vault"
 

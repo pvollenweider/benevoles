@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
 # Appelle POST /api/cron/cleanup chaque nuit à 02h00 UTC.
 # Supprime les organisations/admins inactifs depuis > 30 jours,
 # les bénévoles orphelins, et les tokens expirés.

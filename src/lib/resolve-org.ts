@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { cache } from "react"
 import { prisma } from "./prisma"
 import { orgBaseUrl } from "./urls"

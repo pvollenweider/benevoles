@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { describeChanges, describeEntry } from "@/lib/event-log-narrative"
 import type { ShiftLabel } from "@/lib/event-log-read"
 import { ENTITY_LABELS, entityBadgeClass, entryCountByEntity, fmtDateTime, isBaseline, type ExplorerEntry as EventLogEntry } from "@/lib/event-log-explorer"

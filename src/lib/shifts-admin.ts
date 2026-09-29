@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Pure logic of the admin shifts page (ShiftsManager, #291): event days, time input
  * normalization, role order, rename/delete of a role, grouping and sorting. Kept out of the

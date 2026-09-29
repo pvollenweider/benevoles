@@ -1,5 +1,8 @@
 "use client"
 
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { useState, useRef } from "react"
 import { flushSync } from "react-dom"
 import { KNOWN_ROLES, COLOR_OPTIONS, getRoleAccent } from "@/lib/roles"

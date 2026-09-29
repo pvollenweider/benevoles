@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import type { JWT } from "next-auth/jwt"
 import { prisma } from "./prisma"
 import { isRateLimited, rateLimit } from "./rate-limit"

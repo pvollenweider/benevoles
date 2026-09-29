@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 // Runs in CI (see ci.yml) so SECURITY.md's "supported versions" table can't silently fall out of
 // date the way it did before: it stayed pinned at 1.12.x through three later releases (1.13.0,
 // 1.14.0, ...) with nobody noticing, because nothing forced it to be touched at release time.

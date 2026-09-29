@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Read side of EventLog: query with filters, and resolve actor display names at render time
  * (never stored — see event-log.ts). A missing join (removed admin, RGPD-purged volunteer)

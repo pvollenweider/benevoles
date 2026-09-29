@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Markdown renderer for emails and other raw-HTML contexts (product-update broadcasts,
  * confirmation messages) — inline styles throughout, never CSS classes or a <style> block, since

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import type { Tab } from "@/lib/event-log-explorer"
 
 // Arrow/Home/End handling lives on the parent role="tablist" (one listener, no synthetic event
