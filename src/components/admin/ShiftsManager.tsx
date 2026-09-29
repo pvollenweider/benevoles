@@ -3,11 +3,12 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useState, useRef } from "react"
+import { useId, useState, useRef } from "react"
 import { flushSync } from "react-dom"
 import { KNOWN_ROLES, COLOR_OPTIONS, getRoleAccent } from "@/lib/roles"
 import { fmtRange, resolveNewShiftDisplayOrder, isCompleteTime, addMinutes } from "@/lib/gantt-utils"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
+import ShiftSeriesForm from "./ShiftSeriesForm"
 import {
   activeShiftsByDay,
   applyRoleOrder,
@@ -46,6 +47,9 @@ export default function ShiftsManager({
 
   const [shifts, setShifts] = useState<RawShift[]>(initialShifts)
   const [showForm, setShowForm] = useState(false)
+  const [showSeries, setShowSeries] = useState(false)
+  const seriesButtonRef = useRef<HTMLButtonElement>(null)
+  const seriesPanelId = useId()
   const [editingId, setEditingId] = useState<string | null>(null)
   const [form, setForm] = useState(emptyShift)
   const [saving, setSaving]         = useState(false)
@@ -69,6 +73,7 @@ export default function ShiftsManager({
 
   function openForm(patch: Partial<typeof emptyShift>, editId: string | null) {
     flushSync(() => {
+      setShowSeries(false)
       setForm({ ...emptyShift, ...patch })
       setEditingId(editId)
       setShowForm(true)
@@ -118,6 +123,24 @@ export default function ShiftsManager({
     setForm(emptyShift)
     setShowForm(false)
     setEditingId(null)
+  }
+
+  // ── Series of shifts (#393) ───────────────────────────────────────────────
+  function openSeries() {
+    setShowForm(false)
+    setEditingId(null)
+    setShowSeries(true)
+  }
+
+  function closeSeries() {
+    setShowSeries(false)
+    seriesButtonRef.current?.focus()
+  }
+
+  function handleSeriesCreated(created: AdminShift[]) {
+    setShifts(prev => [...prev, ...created.map(s => ({ ...s, description: s.description ?? null, internalNotes: s.internalNotes ?? null }))])
+    setRoleAnnouncement(`${created.length} créneau${created.length > 1 ? "x" : ""} créé${created.length > 1 ? "s" : ""}.`)
+    closeSeries()
   }
 
   // ── Callbacks for AdminDayTimeline ────────────────────────────────────────
@@ -287,13 +310,39 @@ export default function ShiftsManager({
             </button>
           )}
         </div>
-        <button
-          onClick={() => openForm(singleDay ? { date: dates[0] } : {}, null)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"
-        >
-          + Ajouter un créneau
-        </button>
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            ref={seriesButtonRef}
+            type="button"
+            onClick={openSeries}
+            aria-expanded={showSeries}
+            aria-controls={seriesPanelId}
+            className="border border-blue-600 text-blue-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Créer une série
+          </button>
+          <button
+            type="button"
+            onClick={() => openForm(singleDay ? { date: dates[0] } : {}, null)}
+            className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            + Ajouter un créneau
+          </button>
+        </div>
       </div>
+      {/* Announces role actions and series creation, whether or not the roles panel is open. */}
+      <div role="status" aria-live="polite" className="sr-only">{roleAnnouncement}</div>
+
+      {showSeries && (
+        <ShiftSeriesForm
+          panelId={seriesPanelId}
+          eventId={eventId}
+          dates={dates}
+          existingShifts={shifts}
+          onCreated={handleSeriesCreated}
+          onClose={closeSeries}
+        />
+      )}
 
       {/* Role management panel: reorder, rename, delete */}
       {showReorder && (
@@ -302,7 +351,6 @@ export default function ShiftsManager({
             <h3 className="font-semibold text-gray-800">Gérer les postes</h3>
             <p className="text-xs text-gray-500 mt-0.5">Glissez-déposez pour réordonner, renommez ou supprimez un poste (tous ses créneaux).</p>
           </div>
-          <div role="status" aria-live="polite" className="sr-only">{roleAnnouncement}</div>
           {roleActionError && (
             <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{roleActionError}</p>
           )}
@@ -545,9 +593,9 @@ export default function ShiftsManager({
         </div>
       )}
 
-      {shifts.filter(s => s.status !== "cancelled").length === 0 && !showForm && (
+      {shifts.filter(s => s.status !== "cancelled").length === 0 && !showForm && !showSeries && (
         <div className="text-center py-12 text-gray-500">
-          <p>Aucun créneau. Cliquez sur « + Ajouter un créneau » pour commencer.</p>
+          <p>Aucun créneau. Cliquez sur « + Ajouter un créneau », ou « Créer une série » pour plusieurs créneaux d&apos;un coup.</p>
         </div>
       )}
 
