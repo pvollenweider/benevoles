@@ -26,7 +26,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/public/leader/[token]` | GET | public (jeton) | Roster lecture seule d'un responsable de secteur : bénévoles inscrits sur son poste (#186) |
 | `/api/public/push` | GET, POST, DELETE | public | Clé VAPID publique, abonnement et désabonnement push |
 | `/api/public/forgot-password` | POST | public | Envoie un email de réinitialisation du mot de passe admin |
-| `/api/public/reset-password` | POST | public (jeton) | Définit un nouveau mot de passe |
+| `/api/public/reset-password` | POST | public (jeton) | Définit un nouveau mot de passe (72 octets UTF-8 au plus, règles de `src/lib/password.ts`) ; ferme toutes les sessions ouvertes auparavant (`sessionVersion`). Limitée à 10 requêtes par heure et par IP |
 | `/api/public/product-updates/unsubscribe` | GET | public (jeton signé) | Désabonnement des communications de nouveautés produit (#200) ; redirige vers `/product-updates/unsubscribed` |
 
 ## Authentification
@@ -74,7 +74,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/admin/settings/organization/slugs` | GET, DELETE | Historique des slugs |
 | `/api/admin/settings/admins` | GET, POST | Équipe admin, invitation d'un admin |
 | `/api/admin/settings/admins/[id]` | DELETE | Retirer un admin |
-| `/api/admin/settings/password` | POST | Changer son mot de passe |
+| `/api/admin/settings/password` | POST | Changer son mot de passe (page « Mon compte ») : `currentPassword` obligatoire ; nouveau mot de passe de 72 octets UTF-8 au plus. `400` si le mot de passe actuel est faux ou si une règle n'est pas respectée (`details.errors`) ; `429` après 5 échecs sur le compte ou 20 depuis l'IP en 15 minutes. Ferme toutes les autres sessions (`sessionVersion`) |
 | `/api/admin/settings/activity` | GET | Journal d'activité de l'organisation : membres et comptes admin créés/modifiés/retirés (#194) |
 
 ## Super admin
@@ -85,7 +85,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/super-admin/organizations/[id]` | GET, PATCH, DELETE | Lire, modifier (nom, slug, activation), supprimer |
 | `/api/super-admin/organizations/[id]/send-invite` | POST | Envoyer l'email d'invitation aux admins de l'organisation qui n'ont pas encore activé leur compte |
 | `/api/super-admin/use-org/[id]` | GET | Enregistre l'organisation dans le cookie `sa-org-id` puis redirige vers `/admin/events` |
-| `/api/super-admin/profile` | PATCH | Changer l'email ou le mot de passe du super admin |
+| `/api/super-admin/profile` | PATCH | Changer l'email ou le mot de passe du super admin : `currentPassword` obligatoire, mêmes règles et même limite d'échecs (`429`) que `/api/admin/settings/password` ; un nouveau mot de passe ferme toutes les autres sessions |
 | `/api/super-admin/product-updates` | GET | Historique des envois, nombre d'administrateurs abonnés (#200) |
 | `/api/super-admin/product-updates/send` | POST | Diffuser une communication à tous les administrateurs actifs et abonnés |
 | `/api/super-admin/product-updates/test` | POST | Envoyer un test à soi-même uniquement, non enregistré dans l'historique |

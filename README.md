@@ -202,7 +202,7 @@ Pour remplacer `TOKEN_ENCRYPTION_KEY` sans casser les liens existants :
 | `npm run db:generate` | Régénérer le client Prisma |
 | `npm run screenshots` | Génère les captures d'écran (`scripts/screenshots.mjs`) |
 
-En production, les migrations s'appliquent avec `npx prisma migrate deploy` (fait par l'init container Kubernetes).
+En production, les migrations sont appliquées une fois par déploiement, par un Job Kubernetes lancé avant la mise à jour de l'application (voir [docs/deploiement.md](docs/deploiement.md#ordre-de-déploiement)).
 
 ## Tâches planifiées (cron)
 
@@ -232,15 +232,7 @@ docker compose up -d
 
 ### Kubernetes
 
-Les manifestes sont dans `k8s/` (application, PostgreSQL, ingress, cron jobs, certificat wildcard via le webhook DNS Gandi de `gandi-webhook/`). Un init container exécute `prisma migrate deploy` automatiquement avant le démarrage.
-
-```bash
-kubectl apply -f k8s/namespace.yaml
-kubectl apply -f k8s/secret.yaml
-APP_IMAGE=ghcr.io/<org>/benevoles:<tag> envsubst < k8s/deployment.yaml | kubectl apply -f -
-kubectl apply -f k8s/service.yaml
-kubectl apply -f k8s/ingress.yaml
-```
+Les manifestes sont dans `k8s/` (application, Job de migration, PostgreSQL, ingress, cron jobs, certificat wildcard via le webhook DNS Gandi de `gandi-webhook/`). Les migrations passent par un Job dédié, **avant** la mise à jour de l'application ; l'ordre complet des étapes, pour un déploiement manuel comme automatique, est dans [docs/deploiement.md](docs/deploiement.md#kubernetes).
 
 Le CI/CD GitHub Actions (`.github/workflows/`) exécute le type-check, le lint et les tests, construit l'image (GHCR) puis déploie sur Kubernetes à chaque push vers `main`. La CI de pull request exécute en plus les tests E2E Playwright.
 
