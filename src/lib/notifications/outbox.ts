@@ -3,7 +3,7 @@ import { prisma } from "../prisma"
 import { reportError } from "../report-error"
 import { sendNotification } from "./index"
 import type { NotificationPayload, Send } from "./types"
-import { decryptToken, encryptToken, encryptionKey } from "../token-vault"
+import { decryptValue, encryptValue } from "../token-vault"
 
 /**
  * Notification outbox (#293).
@@ -41,16 +41,14 @@ export function collectNotifications(): { send: Send; payloads: NotificationPayl
  * outbox doesn't become a clear-text copy of what the token columns protect.
  */
 export function sealPayload(payload: NotificationPayload): object {
-  const key = encryptionKey()
-  return key ? { enc: encryptToken(JSON.stringify(payload), key) } : (payload as object)
+  const enc = encryptValue(JSON.stringify(payload))
+  return enc ? { enc } : (payload as object)
 }
 
 export function openPayload(stored: unknown): NotificationPayload {
   const enc = (stored as { enc?: unknown }).enc
   if (typeof enc === "string") {
-    const key = encryptionKey()
-    if (!key) throw new Error("Encrypted outbox payload but TOKEN_ENCRYPTION_KEY is not set")
-    return JSON.parse(decryptToken(enc, key)) as NotificationPayload
+    return JSON.parse(decryptValue(enc)) as NotificationPayload
   }
   return stored as NotificationPayload
 }

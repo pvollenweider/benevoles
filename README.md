@@ -168,11 +168,21 @@ Variables supplémentaires lues par le code :
 | `SENTRY_AUTH_TOKEN` | Upload des source maps au build (secret de build Docker) |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Compte super admin créé par `npm run db:seed` (défauts : `admin@localhost` / `change-me`) |
 | `ORG_ADMIN_EMAIL`, `ORG_ADMIN_PASSWORD` | Admin de l'organisation `default` créé par le seed (défauts : `org-admin@localhost` / valeur de `ADMIN_PASSWORD`) |
-| `TOKEN_ENCRYPTION_KEY` | Chiffrement en base des liens personnels des bénévoles, responsables et invitations (32 octets en base64, `openssl rand -base64 32`). **Obligatoire en production** : le serveur refuse de démarrer sans elle. Facultative en développement, où ces jetons restent alors en clair. Avec la clé, les nouveaux jetons sont chiffrés et le cron de nettoyage chiffre les anciens. Ne doit jamais changer ni être perdue une fois utilisée |
+| `TOKEN_ENCRYPTION_KEY` | Chiffrement en base des liens personnels des bénévoles, responsables et invitations (32 octets en base64, `openssl rand -base64 32`). **Obligatoire en production** : le serveur refuse de démarrer sans elle. Facultative en développement, où ces jetons restent alors en clair. Avec la clé, les nouveaux jetons sont chiffrés et le cron de nettoyage chiffre les anciens. Ne doit jamais être perdue ; pour la changer, voir « Rotation de la clé de chiffrement » ci-dessous |
+| `TOKEN_ENCRYPTION_KEY_ID` | Identifiant de la clé courante, enregistré dans chaque valeur chiffrée (défaut `k1`) |
+| `TOKEN_ENCRYPTION_PREVIOUS_KEYS` | Anciennes clés encore nécessaires pour lire les valeurs qu'elles ont chiffrées, pendant une rotation : `id:base64,id:base64` |
 | `APP_TIME_ZONE` | Fuseau horaire des événements (nom IANA, défaut `Europe/Zurich`). Les dates et heures des créneaux sont des heures locales : ce fuseau sert à calculer les rappels et à afficher les heures dans les emails, le journal et l'export PDF |
 | `TRUSTED_PROXY_HOPS` | Nombre de proxies qui ajoutent une entrée à `X-Forwarded-For` devant l'application (défaut `1` : Traefik). L'adresse client utilisée pour les limites de débit est la n-ième en partant de la droite ; à augmenter seulement si un autre proxy ou load balancer ajoute sa propre entrée devant Traefik |
 
 Générer les clés VAPID : `node -e "const wp=require('web-push'); console.log(JSON.stringify(wp.generateVAPIDKeys()))"`.
+
+### Rotation de la clé de chiffrement
+
+Pour remplacer `TOKEN_ENCRYPTION_KEY` sans casser les liens existants :
+
+1. Générer une nouvelle clé (`openssl rand -base64 32`) et la conserver avec les autres secrets.
+2. Mettre l'ancienne clé dans `TOKEN_ENCRYPTION_PREVIOUS_KEYS` sous son identifiant actuel (`k1:<ancienne clé>` si `TOKEN_ENCRYPTION_KEY_ID` n'était pas défini), la nouvelle dans `TOKEN_ENCRYPTION_KEY`, et un nouvel identifiant dans `TOKEN_ENCRYPTION_KEY_ID` (par exemple `k2`), puis déployer.
+3. Le cron de nettoyage rechiffre tout avec la nouvelle clé ; sa réponse indique `reencrypted` à chaque passage. Quand un passage ne rechiffre plus rien, et au moins un jour plus tard pour que les emails en attente de l'ancienne clé soient partis, retirer l'ancienne clé de `TOKEN_ENCRYPTION_PREVIOUS_KEYS` et redéployer.
 
 ## Scripts
 

@@ -1,3 +1,5 @@
+import { keyring } from "./token-vault"
+
 /**
  * Checks run once when the server starts (instrumentation.ts), not at build time: the Docker
  * build evaluates env.ts with placeholder values, so a hard requirement there would break it.
@@ -8,6 +10,9 @@
  * `maxUnavailable: 0` the previous pod keeps serving and the deploy's rollout check fails.
  */
 export function assertProductionSecrets(env: Record<string, string | undefined> = process.env): void {
+  // Malformed keys (current or previous, #313) fail at startup in every environment rather
+  // than on the first token read or written.
+  keyring(env)
   if (env.NODE_ENV !== "production") return
   if (!env.TOKEN_ENCRYPTION_KEY?.trim()) {
     throw new Error(
