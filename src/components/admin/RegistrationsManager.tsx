@@ -3,6 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import Link from "next/link"
 import { useState, useMemo } from "react"
 import StatusBadge from "./StatusBadge"
 import ShiftSelect from "./registrations/ShiftSelect"
@@ -275,6 +276,12 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
             nullable
           />
         </div>
+        <Link
+          href={`/admin/events/${eventId}/message${shiftFilter ? `?shift=${encodeURIComponent(shiftFilter)}` : roleFilter ? `?role=${encodeURIComponent(roleFilter)}` : ""}`}
+          className="border border-gray-300 text-gray-800 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        >
+          {shiftFilter ? "Écrire à ce créneau" : roleFilter ? "Écrire à ce poste" : "Écrire aux bénévoles"}
+        </Link>
         <button
           onClick={() => { setShowAddForm(true); setAddError(null); setAddForm((f) => ({ ...f, shiftId: shiftFilter || f.shiftId })) }}
           className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"

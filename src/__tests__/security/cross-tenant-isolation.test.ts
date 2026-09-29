@@ -374,6 +374,19 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(res.status).toBe(404)
   })
 
+  it("POST /api/admin/events/[id]/message returns 404 for an org-B event, sending nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/message/route")
+    setupGuard() // event.findFirst → null
+
+    const res = await POST(
+      makeRequest("/api/admin/events/evt-b/message", "POST", { audience: { kind: "event" }, subject: "Hi", message: "Hello" }),
+      params("evt-b"),
+    )
+    expect(res.status).toBe(404)
+    expect(prismaMock.notificationOutbox.create).not.toHaveBeenCalled()
+    expect(prismaMock.notificationOutbox.createMany).not.toHaveBeenCalled()
+  })
+
   it("POST /api/admin/shifts/series returns 404 for an org-B event, creating nothing", async () => {
     const { POST } = await import("@/app/api/admin/shifts/series/route")
     const db = setupGuard() // event.findFirst → null

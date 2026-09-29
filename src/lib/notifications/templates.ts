@@ -118,6 +118,8 @@ export function render(payload: NotificationPayload): RenderedEmail {
       return renderProductUpdate(payload)
     case "registration_link_resend":
       return renderRegistrationLinkResend(payload)
+    case "targeted_message":
+      return renderTargetedMessage(payload)
   }
 }
 
@@ -413,6 +415,59 @@ function renderManualReminder(p: NotificationPayload): RenderedEmail {
     </div>
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Un grand M E R C I, une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
+  `, preheader)
+
+  return { subject, html, text }
+}
+
+// ── Message ciblé (#396) ─────────────────────────────────────────────────────
+
+function renderTargetedMessage(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    volunteerName: string
+    organizationName: string
+    eventTitle: string
+    subject: string
+    message: string
+    /** The volunteer's shifts in the audience; empty for a waitlist message. */
+    shifts: { label: string; date: string; startTime: string; endTime: string }[]
+    editToken: string
+    orgSlug?: string
+  }
+  const editUrl = myPageUrl(d.orgSlug, d.editToken)
+  const firstName = d.volunteerName.split(" ")[0]
+  const subject = `${d.subject} — ${d.eventTitle}`
+
+  const text = [
+    `Hello ${firstName} !`,
+    ``,
+    d.message,
+    ``,
+    ...(d.shifts.length > 0
+      ? [`Tes créneaux concernés pour ${d.eventTitle} :`, ...d.shifts.map((s) => `  • ${s.date} · ${s.label} · ${s.startTime}–${s.endTime}`), ``]
+      : []),
+    `Gérer tes inscriptions : ${editUrl}`,
+    ``,
+    `À très vite !`,
+    d.organizationName,
+  ].join("\n")
+
+  const preheader = d.message.slice(0, 100) + (d.message.length > 100 ? "…" : "")
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 👋</h2>
+    <p style="color:#555;margin:0 0 1em">Un message de <strong>${escapeHtml(d.organizationName)}</strong> au sujet de <strong>${escapeHtml(d.eventTitle)}</strong>.</p>
+    <div style="background:#f3f4f6;padding:14px;border-radius:10px;white-space:pre-wrap;margin-bottom:1.25em">${escapeHtml(d.message)}</div>
+    ${d.shifts.length > 0 ? `
+    <p style="color:#555">Tes créneaux concernés :</p>
+    <div style="background:#f9fafb;border-radius:10px;padding:14px 16px">
+      ${d.shifts.map((s) => `
+        <div style="padding:6px 0;border-bottom:1px solid #e5e7eb">
+          <strong>${escapeHtml(s.label)}</strong>
+          <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</span>
+        </div>`).join("")}
+    </div>` : ""}
+    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
+    <p style="color:#888;font-size:0.85em;margin-top:2em">À très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, preheader)
 
   return { subject, html, text }

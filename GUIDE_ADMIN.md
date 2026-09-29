@@ -352,6 +352,19 @@ Le bouton **Relancer les N sans réponse** (visible s'il reste au moins un membr
 
 ## Communications bénévoles
 
+### Écrire aux bénévoles
+
+**`/admin/events/[id]/message`**, depuis la page de l'événement (**Écrire aux bénévoles**) ou depuis les inscriptions (le bouton reprend le poste ou le créneau filtré).
+
+Un email simple, à qui c'est utile :
+
+- **tous les bénévoles inscrits** de l'événement ;
+- **les bénévoles d'un poste** ;
+- **les bénévoles d'un créneau** ;
+- **les personnes en liste d'attente** (en attente ou à qui une place est proposée).
+
+Vous saisissez un objet et un message texte (les retours à la ligne sont conservés). Le nombre de destinataires s'affiche dès le choix ; **Voir l'aperçu et envoyer** montre l'email tel qu'il sera reçu, puis demande une confirmation avec le nombre de personnes. Chaque personne reçoit un seul email, avec ses créneaux concernés et le lien vers ses inscriptions ; l'envoi est noté dans le journal de l'événement. Pas d'éditeur HTML, de segments enregistrés ni de programmation : pour relancer les membres invités sans réponse, voir « Relancer les non-inscrits » dans les invitations.
+
 ### Rappel manuel
 
 Depuis la page de l'événement, le bouton **Envoyer le rappel** permet d'envoyer un email de rappel à **tous les bénévoles inscrits** de l'événement.

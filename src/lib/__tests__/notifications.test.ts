@@ -205,3 +205,32 @@ describe("notification templates — shift practical info", () => {
     expect(out.html).toContain("À savoir : Gilet fourni")
   })
 })
+
+// Targeted message (#396).
+describe("notification templates — targeted_message", () => {
+  it("puts the admin's subject and message first, then the volunteer's shifts, escaped", () => {
+    const out = render({
+      kind: "targeted_message",
+      recipient: { email: "a@x.ch", name: "Alice" },
+      data: {
+        volunteerName: "Alice", organizationName: "Org", eventTitle: "Fête", subject: "Parking", message: "Entrée par la rue <Basse>.",
+        shifts: [{ label: "Bar", date: "samedi 4 juillet", startTime: "10:00", endTime: "12:00" }], editToken: "tok",
+      },
+    })
+    expect(out.subject).toBe("Parking — Fête")
+    expect(out.text).toContain("Entrée par la rue <Basse>.")
+    expect(out.text).toContain("Tes créneaux concernés")
+    expect(out.html).toContain("Entrée par la rue &lt;Basse&gt;.")
+    expect(out.html).toContain("/my/tok")
+  })
+
+  it("has no shift list for the waitlist", () => {
+    const out = render({
+      kind: "targeted_message",
+      recipient: { email: "a@x.ch", name: "Alice" },
+      data: { volunteerName: "Alice", organizationName: "Org", eventTitle: "Fête", subject: "Place", message: "Une place se libère peut-être.", shifts: [], editToken: "tok" },
+    })
+    expect(out.text).not.toContain("créneaux concernés")
+    expect(out.html).not.toContain("créneaux concernés")
+  })
+})

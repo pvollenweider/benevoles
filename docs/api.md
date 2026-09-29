@@ -58,6 +58,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/admin/events/[id]/milestones/[milestoneId]` | PATCH, DELETE | Modifier (dont cocher `done`), supprimer un jalon |
 | `/api/admin/events/[id]/qr` | GET | QR code de la page publique ; `?format=svg` pour le SVG, PNG par défaut |
 | `/api/admin/events/[id]/export/pdf` | GET | Page HTML de l'export (planning, récap, bénévoles) destinée à l'impression en PDF depuis le navigateur |
+| `/api/admin/events/[id]/message` | POST | Message ciblé : `audience` (`{kind:"event"}`, `{kind:"role",roleName}`, `{kind:"shift",shiftId}`, `{kind:"waitlist"}`), `subject` (≤ 120), `message` (≤ 2000), `dryRun` (compte et aperçu sans envoi). Un email par personne via la file d'envoi ; 30 envois/heure/organisation (429 au-delà). |
 | `/api/admin/events/[id]/send-reminder` | POST | Rappel manuel à tous les inscrits |
 | `/api/admin/events/[id]/invitations` | GET, POST | État des invitations, envoi d'invitations |
 | `/api/admin/events/[id]/invitations/remind` | POST | Relance des membres non inscrits |

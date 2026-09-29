@@ -174,6 +174,15 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
 
       <div className="border-t border-gray-200 pt-4">
         <h2 className="text-sm font-semibold text-gray-700 mb-3">Communications</h2>
+        <div className="mb-4">
+          <Link
+            href={`/admin/events/${event.id}/message`}
+            className="inline-block bg-white border border-gray-300 text-gray-800 rounded-full px-4 py-2 text-sm font-medium hover:bg-gray-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Écrire aux bénévoles
+          </Link>
+          <p className="text-xs text-gray-600 mt-1">Un email à tous les inscrits, à un poste, à un créneau ou à la liste d&apos;attente, avec objet, aperçu et nombre de destinataires.</p>
+        </div>
         <SendReminderButton
           eventId={event.id}
           hasMessage={!!event.reminderMessage?.trim()}
