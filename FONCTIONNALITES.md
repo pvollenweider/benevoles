@@ -106,6 +106,7 @@ Liste exhaustive des fonctionnalités de l'application.
 ### Tableau de bord (`/admin/dashboard`)
 
 - **Premiers pas** (aussi en haut de `/admin/events`) : checklist de mise en place d'une nouvelle organisation, dans l'ordre (page publique et charte, fuseau horaire, premier événement, créneaux, publication, inscription de test), cochée automatiquement d'après les données ; disparaît une fois les étapes obligatoires faites, ou masquée pour toute l'organisation
+- **Ce qui demande votre attention** : situations à traiter sur les événements publiés, de la plus urgente à la moins urgente, avec un lien vers chacune (créneaux des 7 prochains jours pas complets, places de liste d'attente qui expirent dans les 12 h, jalons en retard, invitations non utilisées après 3 jours, postes sans responsable, événement qui commence dans la semaine, événement terminé à archiver)
 - Compteurs : événements (publiés, à venir), bénévoles inscrits (et bénévoles uniques), taux de remplissage global
 - Répartition des membres : total, avec email, sans email (ne peuvent pas recevoir d'invitations)
 

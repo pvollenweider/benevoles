@@ -10,6 +10,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Ajouté
 
 - **Aperçu comme un bénévole** : depuis la page d'un événement, **Prévisualiser comme un bénévole** montre la page publique telle que la verront les bénévoles, même pour un brouillon. Le formulaire peut être rempli : l'aperçu affiche alors le message de confirmation et l'email que recevrait le bénévole, sans rien enregistrer ni envoyer.
+- **Ce qui demande votre attention** : le tableau de bord commence par les situations à traiter sur vos événements publiés (créneaux bientôt pas complets, places de liste d'attente qui expirent, jalons en retard, invitations non utilisées, postes sans responsable, événement qui commence, événement terminé à archiver), de la plus urgente à la moins urgente, avec un lien vers chacune.
 - **Premiers pas** : une nouvelle organisation voit, en haut de la liste des événements et du tableau de bord, la liste des étapes de mise en place dans l'ordre (page publique et charte, fuseau horaire, premier événement, créneaux, publication, inscription de test), avec un lien vers chacune. Les étapes se cochent d'elles-mêmes ; la liste disparaît une fois la mise en place faite, ou peut être masquée.
 - **Fuseau horaire par organisation** : dans les paramètres, une organisation peut choisir le fuseau de ses événements (Europe/Zurich par défaut). Il sert aux rappels, à l'heure limite des places proposées en liste d'attente, au journal de l'événement et à l'export PDF.
 
