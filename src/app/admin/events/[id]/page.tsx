@@ -11,6 +11,8 @@ import DeleteEventSection from "@/components/admin/DeleteEventSection"
 import SendReminderButton from "@/components/admin/SendReminderButton"
 import MilestonesSection from "@/components/admin/MilestonesSection"
 import { isUnlistedPublic, UNLISTED_HINT } from "@/lib/event-visibility"
+import EventLifecycleBar from "@/components/admin/EventLifecycleBar"
+import { orgTimeZone } from "@/lib/time-zone"
 
 export const dynamic = "force-dynamic"
 
@@ -24,7 +26,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
   const event = await db.event.findFirst({
     where: { id },
     include: {
-      organization: { select: { slug: true } },
+      organization: { select: { slug: true, timeZone: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
         include: {
@@ -117,6 +119,20 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
           )}
         </div>
       </div>
+
+      <EventLifecycleBar
+        eventId={event.id}
+        facts={{
+          publicStatus: event.publicStatus,
+          isListed: event.isListed,
+          endDate: event.endDate.toISOString().slice(0, 10),
+          // « Terminé » flips at midnight in the organization's time zone, not UTC.
+          today: new Date().toLocaleDateString("sv-SE", { timeZone: orgTimeZone(event.organization) }),
+          shiftCount: event.shifts.length,
+          confirmationMessage: event.confirmationMessage,
+          remindersEnabled: event.remindersEnabled,
+        }}
+      />
 
       {isUnlistedPublic(event) && (
         <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2">
