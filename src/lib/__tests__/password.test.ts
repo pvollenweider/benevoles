@@ -21,7 +21,7 @@ describe("password rules", () => {
     expect(passwordBytes(at72)).toBe(72)
     expect(passwordErrors(at72)).toEqual([])
     const at73 = at72 + "a"
-    expect(passwordErrors(at73)).toEqual([expect.stringContaining("72 caractères maximum")])
+    expect(passwordErrors(at73)).toEqual([expect.stringContaining("72 octets maximum")])
     expect(passwordSchema.safeParse(at73).success).toBe(false)
   })
 
@@ -30,6 +30,10 @@ describe("password rules", () => {
     const accented = valid + "é".repeat(31) // 10 + 62 = 72 bytes, 41 characters
     expect(passwordBytes(accented)).toBe(72)
     expect(passwordErrors(accented)).toEqual([])
-    expect(passwordErrors(accented + "é")).toEqual([expect.stringContaining("72 caractères maximum")])
+    expect(passwordErrors(accented + "é")).toEqual([expect.stringContaining("72 octets maximum")])
+  })
+
+  it("counts an emoji as 4 bytes", () => {
+    expect(passwordBytes("🙂")).toBe(4)
   })
 })

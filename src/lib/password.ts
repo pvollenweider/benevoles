@@ -21,7 +21,7 @@ export const PASSWORD_RULES = [
   { id: "lower",     label: "Une lettre minuscule",            test: (p: string) => /[a-z]/.test(p) },
   { id: "digit",     label: "Un chiffre",                      test: (p: string) => /[0-9]/.test(p) },
   { id: "special",   label: "Un caractère spécial (!@#$…)",    test: (p: string) => /[^A-Za-z0-9]/.test(p) },
-  { id: "maxBytes",  label: "72 caractères maximum (un caractère accentué compte double)", test: (p: string) => passwordBytes(p) <= MAX_PASSWORD_BYTES },
+  { id: "maxBytes",  label: "72 octets maximum (une lettre accentuée compte pour 2, un emoji pour 4)", test: (p: string) => passwordBytes(p) <= MAX_PASSWORD_BYTES },
 ]
 
 export function passwordErrors(password: string): string[] {
