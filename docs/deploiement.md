@@ -20,7 +20,7 @@ Le `Dockerfile` est multi-étapes (`node:26-alpine`) :
 3. `builder` : `prisma generate` puis `npm run build`. `DATABASE_URL` et `AUTH_SECRET` reçoivent des valeurs factices pendant le build. `NEXT_PUBLIC_SENTRY_DSN` est un argument de build et `SENTRY_AUTH_TOKEN` un secret de build (`sentry_auth_token`)
 4. `runner` : sortie `standalone` de Next.js, utilisateur non root, port 3000
 
-Au démarrage, `docker-entrypoint.sh` attend PostgreSQL, exécute `prisma migrate deploy`, puis lance `node server.js`.
+Au démarrage, `docker-entrypoint.sh` attend PostgreSQL, exécute `prisma migrate deploy` sauf si `MIGRATE_ON_START=false`, puis lance `node server.js`. Avec Docker Compose, les migrations s'appliquent donc au démarrage de l'application. Sur Kubernetes, les pods de l'application ont `MIGRATE_ON_START=false` : c'est le Job de migration qui les applique, une seule fois par déploiement (voir ci-dessous).
 
 ## Docker Compose
 
@@ -45,6 +45,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `namespace.yaml` | Namespace |
 | `secret.yaml` | Modèle du secret `benevoles-secret` (toutes les valeurs à remplacer) |
 | `postgres.yaml` | PostgreSQL |
+| `job-migrate.yaml` | Job de migration (`prisma migrate deploy` avec l'image déployée), exécuté avant la mise à jour de l'application |
 | `deployment.yaml` | Application : 1 réplica, mise à jour progressive sans indisponibilité, secret injecté avec `envFrom`, limites 500m CPU et 512 Mi |
 | `service.yaml`, `ingress.yaml` | Exposition via Traefik pour `*.benevol.app`, `benevol.app` et `www.benevol.app`, TLS |
 | `certificate-wildcard.yaml` | Certificat wildcard (cert-manager, `ClusterIssuer` `letsencrypt-prod`) |
@@ -55,16 +56,47 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `cronjob-backup-offsite.yaml` | Copie des fichiers déjà chiffrés vers Dropbox (`rclone`), 01:30 UTC, rétention 90 jours côté Dropbox |
 | `log-rotation.md` | Rétention des logs sur 90 jours |
 
-Mise en place manuelle :
+### Ordre de déploiement
+
+À chaque push sur `main`, `deploy.yml` applique les migrations **avant** de mettre à jour l'application :
+
+1. supprime le Job de migration précédent, puis applique `k8s/job-migrate.yaml` avec la nouvelle image ;
+2. attend sa réussite ; en cas d'échec, le déploiement s'arrête et la version en cours continue de servir (journaux du Job affichés dans le workflow) ;
+3. seulement ensuite, applique `k8s/deployment.yaml` : Kubernetes remplace l'ancien pod progressivement.
+
+Entre l'étape 1 et la fin du remplacement, l'ancienne version du code tourne sur le nouveau schéma : chaque migration doit rester compatible avec la version précédente (règles *expand/contract* dans [CONTRIBUTING.md](../CONTRIBUTING.md), vérifiées par la CI).
+
+### Mise en place manuelle
+
+Même ordre que `deploy.yml`, sans quoi une nouvelle version pourrait démarrer sur un schéma pas encore migré :
 
 ```bash
+IMAGE=ghcr.io/<org>/benevoles:<tag>
+
+# 1. Namespace et secrets (secret.yaml est un modèle : remplacer les valeurs ; secret de tirage : ghcr-secret)
 kubectl apply -f k8s/namespace.yaml
-kubectl apply -f k8s/secret.yaml        # après avoir remplacé les valeurs
-APP_IMAGE=ghcr.io/<org>/benevoles:<tag> envsubst < k8s/deployment.yaml | kubectl apply -f -
-kubectl apply -f k8s/service.yaml -f k8s/ingress.yaml
+kubectl apply -f k8s/secret.yaml
+
+# 2. PostgreSQL, puis attendre qu'il soit prêt
+kubectl apply -f k8s/postgres.yaml
+kubectl -n benevoles rollout status deploy/postgres
+
+# 3. Migrations avec la nouvelle image, et attendre leur réussite
+kubectl -n benevoles delete job benevoles-migrate --ignore-not-found --wait=true
+APP_IMAGE=$IMAGE envsubst < k8s/job-migrate.yaml | kubectl apply -f -
+kubectl -n benevoles wait --for=condition=complete job/benevoles-migrate --timeout=300s
+kubectl -n benevoles logs job/benevoles-migrate
+
+# 4. Seulement ensuite, l'application
+APP_IMAGE=$IMAGE envsubst < k8s/deployment.yaml | kubectl apply -f -
+kubectl -n benevoles rollout status deploy/benevoles-app
+
+# 5. Exposition et tâches planifiées
+kubectl apply -f k8s/service.yaml -f k8s/ingress.yaml -f k8s/certificate-wildcard.yaml
+kubectl apply -f k8s/cronjob-reminders.yaml -f k8s/cronjob-cleanup.yaml -f k8s/cronjob-backup.yaml -f k8s/cronjob-backup-offsite.yaml
 ```
 
-Les migrations sont appliquées par l'entrypoint de l'image à chaque démarrage. Le secret de tirage d'image s'appelle `ghcr-secret`.
+Si l'étape 3 échoue (`kubectl wait` en erreur), ne pas passer à l'étape 4 : lire les journaux du Job, corriger, relancer.
 
 Points d'attention :
 
@@ -97,7 +129,7 @@ Retour arrière : `set image` avec l'empreinte de l'image précédente (`kubectl
 | Workflow | Déclencheur | Étapes |
 |----------|-------------|--------|
 | `ci.yml` | pull request vers `main` | type-check, lint, tests Vitest ; tests E2E Playwright (base migrée et seedée) |
-| `deploy.yml` | push sur `main` | type-check, lint, tests ; construction et publication de l'image sur GHCR ; déploiement Kubernetes |
+| `deploy.yml` | push sur `main` | type-check, lint, tests ; construction et publication de l'image sur GHCR ; Job de migration, puis déploiement Kubernetes (voir « Ordre de déploiement ») |
 | `gandi-webhook.yml` | pull request ou push sur `main` touchant `gandi-webhook/` | construction de l'image du webhook ; publication sur GHCR seulement sur push |
 
 L'analyse CodeQL (JavaScript/TypeScript, Go, Actions) ne figure pas dans `.github/workflows/` : elle est configurée côté GitHub (paramètres de sécurité du dépôt).
@@ -191,6 +223,26 @@ Restauration depuis Dropbox : télécharger le fichier voulu (`rclone copy dropb
 ### Limites actuelles
 
 Le volume de sauvegarde local est sur le même cluster que la base : une panne de cluster emporte les deux, d'où la copie Dropbox ci-dessus. Pas encore fait : alerte en cas d'échec d'un des deux CronJobs (ni l'un ni l'autre n'envoie de notification — un échec silencieux comme celui du 22/09/2026 resterait invisible sans consulter `kubectl` manuellement) ; test de restauration complète, jamais effectué.
+
+## Checklist opérationnelle
+
+Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut donc vérifier à la main.
+
+**Avant une mise en production** (premier déploiement ou nouveau cluster) :
+
+- [ ] `TOKEN_ENCRYPTION_KEY` et `BACKUP_PASSPHRASE` notées dans un gestionnaire de mots de passe, hors du cluster et hors de ce dépôt ;
+- [ ] secret `rclone-config` créé, et une première copie Dropbox constatée le lendemain ;
+- [ ] le Job de migration a réussi (`kubectl -n benevoles logs job/benevoles-migrate`) ;
+- [ ] `/api/health` répond `200` ;
+- [ ] un appel manuel de `/api/cron/reminders` et `/api/cron/cleanup` avec `CRON_SECRET` répond `200`.
+
+**Chaque mois** :
+
+- [ ] les derniers CronJobs de sauvegarde ont réussi : `kubectl -n benevoles get jobs` (dump et copie hors site) ;
+- [ ] le dernier fichier sur `backup-pvc` et sur Dropbox a une taille plausible (pas 0 octet) ;
+- [ ] **test de restauration** : télécharger un dump, le déchiffrer et le charger dans une base PostgreSQL jetable (`psql -f dump.sql`), puis vérifier quelques comptages (organisations, événements, inscriptions) ;
+- [ ] certificat wildcard valide (`kubectl -n benevoles get certificate benevol-app-wildcard`) ;
+- [ ] pas d'alerte en attente dans Sentry, en particulier sur la file d'envoi des emails.
 
 ## Journaux
 

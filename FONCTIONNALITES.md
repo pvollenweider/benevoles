@@ -328,7 +328,7 @@ Fallback console si SMTP non configuré (développement).
 - **Routage par sous-domaine** : `[orgSlug].benevol.app` → le middleware injecte `x-org-slug` ; fallback `?org=<slug>` pour le développement localhost
 - Tests d'isolation cross-tenant (Vitest) — vérifient que chaque route admin utilise le client Prisma scopé
 - Déploiement Docker Compose ou image standalone
-- Déploiement Kubernetes avec init container pour migrations automatiques
+- Déploiement Kubernetes avec migrations automatiques, appliquées une fois par déploiement avant la mise à jour de l'application (voir `docs/deploiement.md`)
 - Cron jobs Kubernetes : rappels (toutes les heures), purge RGPD (`/api/cron/cleanup` : organisations et comptes admin désactivés depuis plus de 30 jours, bénévoles orphelins, jetons expirés), sauvegarde `pg_dump` chiffrée (rétention 30 jours localement, copie hors site vers Dropbox via `rclone` chaque nuit, rétention 90 jours)
 - **`robots.txt` et `sitemap.xml`** multi-tenant : chaque organisation n'expose que ses propres événements publiés et leurs pages personnalisées ; routes à jeton et `/admin`/`/api/` interdites à l'indexation
 - Certificat wildcard via cert-manager et le webhook DNS Gandi (`gandi-webhook/`)

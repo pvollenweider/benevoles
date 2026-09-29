@@ -10,11 +10,21 @@ responsables de secteur s'authentifient par un jeton dans l'URL, sans compte à 
 | Admin d'organisation (`admin`) | email + mot de passe | Une seule organisation |
 | Super admin (`super_admin`) | email + mot de passe | Toutes les organisations |
 
-Le rôle est stocké dans `AdminUser.role` (`admin` par défaut). Une session est un JWT NextAuth v5 (`src/auth.config.ts`).
+Le rôle est stocké dans `AdminUser.role` (`admin` par défaut).
+
+## Sessions admin
+
+Une session est un JWT NextAuth v5 (`src/auth.config.ts`, `src/auth.ts`), mais elle n'est pas figée à la connexion :
+
+- à chaque appel de `auth()` côté serveur (pages admin, `requireOrgSession()`, `requireSuperAdmin()`), le compte est relu en base (`refreshAdminToken`, `src/lib/admin-session.ts`) : un compte supprimé ou désactivé, ou dont l'organisation est désactivée, perd l'accès immédiatement ; le rôle, l'organisation, l'email et le nom sont réévalués sans reconnexion ;
+- `AdminUser.sessionVersion` est copiée dans le JWT à la connexion et incrémentée à chaque changement ou réinitialisation du mot de passe : toute session ouverte auparavant est alors refusée. La session depuis laquelle le mot de passe est changé se reconnecte aussitôt avec le nouveau mot de passe ;
+- la connexion est limitée à 10 échecs par compte et 30 par adresse IP sur 15 minutes ; la vérification du mot de passe actuel (changement de mot de passe, profil du super admin), à 5 échecs par compte et 20 par adresse IP.
+
+Le middleware (`src/middleware.ts`) ne fait qu'un premier filtrage sur les pages, à partir du JWT seul. Les contrôles faisant autorité sont côté serveur : les guards et `auth()` relisent le compte à chaque requête.
 
 ## Bénévole
 
-- Accède aux pages publiques : liste des événements, page d'un événement (`/{orgSlug}/{eventSlug}`), pages légales.
+- Accède aux pages publiques : liste des événements, page d'un événement (`https://<orgSlug>.benevol.app/<eventSlug>` ; en local, sans sous-domaine, `?org=<orgSlug>`), pages légales.
 - S'inscrit sans compte. Chaque inscription reçoit un `editToken` unique, envoyé par email, qui ouvre `/my/[token]` pour consulter et annuler ses créneaux.
 - Une invitation (`?token=` sur la page de l'événement) pré-remplit le formulaire ; elle est révocable et réutilisable.
 - Une offre de liste d'attente se confirme via `/waitlist/[token]/confirm`, dans les 24 heures.
@@ -54,7 +64,7 @@ Règles sur l'équipe :
 
 - Gère les organisations : création, édition (nom, slug), activation ou désactivation, suppression.
 - Crée une organisation avec son premier admin : un lien d'invitation valable 7 jours est généré, sans mot de passe temporaire.
-- N'est rattaché à aucune organisation (`organizationId` nul). Le bouton « Gérer » enregistre l'organisation choisie dans le cookie `sa-org-id` ; sans cookie, le guard retient l'organisation la plus ancienne.
+- N'est rattaché à aucune organisation (`organizationId` nul). Le bouton « Gérer » enregistre l'organisation choisie dans le cookie `sa-org-id`. Sans ce cookie (ou s'il désigne une organisation qui n'existe plus), aucune organisation n'est choisie à sa place : les pages de `/admin` redirigent vers la liste des organisations (`/super-admin/organizations`) pour en sélectionner une, et les routes de l'API admin répondent 403.
 - Protégé par `requireSuperAdmin()` côté API et par le middleware côté pages.
 
 ## Où les droits sont appliqués
