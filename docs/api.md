@@ -17,7 +17,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 
 | Route | Méthodes | Accès | Rôle |
 |-------|----------|-------|------|
-| `/api/public/events` | GET | public | Événements publiés avec leurs créneaux ouverts ou complets |
+| `/api/public/events` | GET | Événements publiés **et répertoriés** de l'organisation de l'hôte (`x-org-slug`, ou `?org=`) ; 404 sans organisation. |
 | `/api/public/[eventSlug]` | GET | public | Un événement publié de l'organisation courante (sous-domaine ou `?org=`), avec la liste de ses pages personnalisées (titre, slug) |
 | `/api/public/registrations` | POST | public | Inscription à un ou plusieurs créneaux (liste d'attente si le créneau est complet). Limitée à 20 requêtes par heure et par IP |
 | `/api/public/registrations/[token]` | GET, DELETE | public (jeton) | Consulter ou annuler une inscription |
@@ -41,8 +41,8 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 
 | Route | Méthodes | Rôle |
 |-------|----------|------|
-| `/api/admin/events` | GET, POST | Lister, créer des événements |
-| `/api/admin/events/[id]` | GET, PATCH, DELETE | Lire, modifier (dont l'archivage : `publicStatus: "archived"`), supprimer définitivement. `DELETE` exige un événement archivé (409 sinon) et `{ "confirmTitle": "<titre>" }` (400 sinon) ; les créneaux, inscriptions et invitations sont supprimés en cascade |
+| `/api/admin/events` | GET, POST | Lister, créer des événements. La création ignore `publicStatus` : toujours un brouillon répertorié. |
+| `/api/admin/events/[id]` | GET, PATCH, DELETE | Lire, modifier (dont l'archivage : `publicStatus: "archived"`), supprimer définitivement. `DELETE` exige un événement archivé (409 sinon) et `{ "confirmTitle": "<titre>" }` (400 sinon) ; les créneaux, inscriptions et invitations sont supprimés en cascade `isListed` (booléen strict, #414) : `false` = accessible par lien seulement ; `publicStatus: "published"` refusé (409) sans créneau actif. |
 | `/api/admin/events/from-template` | POST | Créer un brouillon depuis un modèle : `templateId` (`festival`, `buvette`, `sport`, `fete`, `chantier`), `title` (facultatif), `startDate` (`YYYY-MM-DD`). Renvoie `{ id, shiftCount }` (201). |
 | `/api/admin/events/[id]/duplicate` | POST | Dupliquer un événement |
 | `/api/admin/events/[id]/preview` | GET, POST | Aperçu comme un bénévole, brouillons compris (#370). `GET` : mêmes données que `/api/public/[eventSlug]`, plus `publicStatus`. `POST` (`firstName`, `lastName`, `shiftIds`) : email de confirmation rendu avec le vrai modèle (lien personnel factice) et créneaux qui passeraient en liste d'attente ; rien n'est enregistré ni envoyé |

@@ -6,6 +6,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { isCompleteTime, addMinutes } from "@/lib/gantt-utils"
+import { LISTED_FIELD_HELP, LISTED_FIELD_LABEL, UNLISTED_HINT, visibilityLabel } from "@/lib/event-visibility"
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
@@ -20,6 +21,8 @@ type EventFormData = {
   reminderMessage: string
   publicStatus: "draft" | "published" | "archived"
   requirePhone: boolean
+  /** Unlisted events (#414): false = reachable by link only. */
+  isListed: boolean
 }
 
 type Props = {
@@ -40,6 +43,7 @@ const defaultData: EventFormData = {
   reminderMessage: "",
   publicStatus: "draft",
   requirePhone: false,
+  isListed: true,
 }
 
 const emptyShow: Show = { name: "", date: "", startTime: "", endTime: "" }
@@ -60,6 +64,9 @@ export default function EventForm({ initialData, createdHref }: Props) {
   const [toast, setToast]     = useState<{ msg: string; ok: boolean } | null>(null)
 
   const mounted = useRef(false)
+  // The last status the server confirmed (each PATCH answers with the saved event), so a
+  // refused publication restores what's really stored, not what the page loaded with.
+  const savedStatusRef = useRef<EventFormData["publicStatus"]>(initialData?.publicStatus ?? "draft")
 
   function showToast(msg: string, ok = true) {
     setToast({ msg, ok })
@@ -79,13 +86,19 @@ export default function EventForm({ initialData, createdHref }: Props) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ ...form, showSchedule: shows }),
         })
-        if (res.ok) { setError(null); showToast("Enregistré ✓"); return }
         const data = await res.json().catch(() => ({}))
-        // A refused publication (no shift yet) is a rule, not a glitch: say it and stay a draft.
+        if (res.ok) {
+          if (data?.publicStatus) savedStatusRef.current = data.publicStatus
+          setError(null)
+          showToast("Enregistré ✓")
+          return
+        }
+        // A refused publication (no shift yet) is a rule, not a glitch: say it and go back to
+        // the last status the server confirmed.
         if (res.status === 409) {
-          const previous = initialData?.publicStatus ?? "draft"
+          const previous = savedStatusRef.current
           setForm((f) => ({ ...f, publicStatus: previous }))
-          setError(`${typeof data?.error === "string" ? data.error : "Modification refusée."} Le statut a été remis sur « ${previous === "archived" ? "Archivé" : "Brouillon"} ».`)
+          setError(`${typeof data?.error === "string" ? data.error : "Modification refusée."} Le statut a été remis sur « ${previous === "archived" ? "Archivé" : previous === "published" ? "Publié" : "Brouillon"} ».`)
           return
         }
         console.error("Save error:", res.status)
@@ -369,7 +382,8 @@ export default function EventForm({ initialData, createdHref }: Props) {
         </div>
 
         {isEdit ? (
-          <div>
+          <fieldset>
+            <legend className="text-sm font-medium text-gray-700 mb-2">Visibilité</legend>
             <label htmlFor="event-status" className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
             <select id="event-status" aria-describedby="event-status-hint" value={form.publicStatus} onChange={(e) => set("publicStatus", e.target.value)} className={inputCls}>
               <option value="draft">Brouillon (non visible)</option>
@@ -377,7 +391,24 @@ export default function EventForm({ initialData, createdHref }: Props) {
               <option value="archived">Archivé</option>
             </select>
             <p id="event-status-hint" className="text-xs text-gray-600 mt-1">Un événement ne peut être publié qu&apos;avec au moins un créneau.</p>
-          </div>
+            <div className="mt-3 flex items-start gap-2">
+              <input
+                id="event-listed"
+                type="checkbox"
+                checked={form.isListed}
+                aria-describedby={form.publicStatus === "published" && !form.isListed ? "event-listed-help event-listed-warning" : "event-listed-help"}
+                onChange={(e) => setForm((f) => ({ ...f, isListed: e.target.checked }))}
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+              />
+              <div>
+                <label htmlFor="event-listed" className="text-sm font-medium text-gray-700">{LISTED_FIELD_LABEL}</label>
+                <p id="event-listed-help" className="text-xs text-gray-600 mt-0.5">{LISTED_FIELD_HELP}</p>
+                {form.publicStatus === "published" && !form.isListed && (
+                  <p id="event-listed-warning" role="status" className="text-xs text-amber-900 mt-1"><strong>{visibilityLabel(form)}.</strong> {UNLISTED_HINT}</p>
+                )}
+              </div>
+            </div>
+          </fieldset>
         ) : (
           <p className="text-sm text-gray-700">L&apos;événement est créé en brouillon : les créneaux viennent ensuite, la publication à la fin.</p>
         )}

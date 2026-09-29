@@ -39,6 +39,7 @@ export async function POST(req: Request) {
       startDate: new Date(draft.startDate),
       endDate: new Date(draft.endDate),
       publicStatus: "draft",
+      isListed: true,
       shifts: {
         create: draft.shifts.map((s) => ({ ...s, date: new Date(s.date), status: "open" })),
       },

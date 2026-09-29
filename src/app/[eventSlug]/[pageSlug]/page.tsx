@@ -1,9 +1,23 @@
+import type { Metadata } from "next"
 import { headers } from "next/headers"
 import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
 import { resolveOrgSlug } from "@/lib/resolve-org"
 import { renderEventPageMarkdown } from "@/lib/event-page-markdown"
+import { robotsFor } from "@/lib/event-visibility"
+
+// The pages of an unlisted event (#414) aren't indexed either.
+export async function generateMetadata({ params }: { params: Promise<{ eventSlug: string; pageSlug: string }> }): Promise<Metadata> {
+  const { eventSlug } = await params
+  const rawOrgSlug = (await headers()).get("x-org-slug")
+  if (!rawOrgSlug) return {}
+  const resolved = await resolveOrgSlug(rawOrgSlug)
+  if (!resolved || resolved.redirectUrl) return {}
+  const event = await prisma.event.findFirst({ where: { slug: eventSlug, organizationId: resolved.org.id }, select: { publicStatus: true, isListed: true } })
+  const robots = robotsFor(event)
+  return robots ? { robots } : {}
+}
 
 export default async function EventCustomPage({
   params,

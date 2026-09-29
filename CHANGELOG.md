@@ -9,6 +9,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Événements non répertoriés** : dans l'édition d'un événement, décocher **Afficher cet événement sur la page publique de l'organisation** le retire de la page d'accueil, de la liste publique et du sitemap (et des moteurs de recherche) tout en le laissant accessible par son lien, avec ses inscriptions. Utile pour un planning réservé aux organisateurs. Ce n'est pas un accès protégé : toute personne qui a le lien peut l'ouvrir. L'administration affiche « Publié — non répertorié » ; les copies et les modèles créent toujours un événement répertorié.
 - **Disponibilités des bénévoles** (facultatives) : un bénévole peut indiquer sur sa page personnelle quand il est en général disponible (matin, après-midi, soir) et une remarque ; l'admin le voit et peut le modifier dans la fiche du membre, la liste des membres, les inscriptions et l'ajout manuel. Aucune attribution automatique : chacun choisit toujours ses créneaux.
 - **Feuilles à imprimer** : depuis un événement, **Imprimer** propose cinq feuilles lisibles en noir et blanc : planning par jour, planning par poste (avec le responsable), liste avec téléphones (organisateurs), feuille de présence avec cases à cocher et lignes vides, planning individuel par bénévole avec lieux, contacts et consignes.
 - **Création en trois étapes** : informations, postes et créneaux, puis une page de vérification qui liste ce qui est prêt et ce qui manque, propose l'aperçu bénévole et publie (ou laisse en brouillon). L'assistant se quitte à tout moment, chaque étape restant une page normale de l'administration.
@@ -39,6 +40,9 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Dernier créneau annulé** : annuler le dernier créneau actif d'un événement publié (ou supprimer son dernier poste) le repasse en brouillon au lieu de laisser une page publique vide ; l'administration le signale et le journal le note.
+- **Création d'événement** : l'API ne peut plus créer un événement directement archivé ; tout statut envoyé à la création est ignoré.
+- **Formulaire d'édition** : après un refus de publication, le statut revient au dernier statut confirmé par le serveur, et non à celui affiché à l'ouverture de la page.
 - **Message à la liste d'attente** : le bouton « Gérer mes inscriptions » menait à une page « introuvable » (la page personnelle n'ouvre que les inscriptions confirmées) ; les messages à la liste d'attente n'ont plus de lien.
 - **Assistant de création** : revenir à l'étape « Informations » garde l'indicateur d'étapes et un bouton pour continuer ; une coupure réseau à la création ne bloque plus le formulaire.
 - **Erreurs serveur** : les réponses d'erreur de la modification d'un événement et de l'import de membres ne contiennent plus de détails techniques.

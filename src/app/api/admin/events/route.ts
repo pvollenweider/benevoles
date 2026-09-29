@@ -6,8 +6,6 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { slugify } from "@/lib/utils"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
-import { EVENT_PUBLIC_STATUSES } from "@/lib/statuses"
-import { PUBLISH_WITHOUT_SHIFT_ERROR } from "@/lib/event-publish"
 
 const showSchema = z.object({
   name: z.string(),
@@ -24,7 +22,6 @@ const schema = z.object({
   endDate: z.string(),
   publicInstructions: z.string().optional(),
   confirmationMessage: z.string().optional(),
-  publicStatus: z.enum(EVENT_PUBLIC_STATUSES).optional(),
   showSchedule: z.array(showSchema).optional(),
   requirePhone: z.boolean().optional(),
 })
@@ -73,11 +70,9 @@ export async function POST(req: Request) {
   const parsed = schema.safeParse(body)
   if (!parsed.success) return validationError(parsed.error)
 
+  // Always a draft: a new event has no shift yet, and publication is a deliberate later step
+  // (PATCH enforces the rule). Any publicStatus in the body is ignored, listed by default.
   const data = parsed.data
-  // A brand-new event has no shift yet, so it can't be born published (same rule as PATCH).
-  if (data.publicStatus === "published") {
-    return NextResponse.json({ error: PUBLISH_WITHOUT_SHIFT_ERROR }, { status: 409 })
-  }
   let slug = slugify(data.title)
 
   const existing = await db.event.findFirst({ where: { slug } })
@@ -90,7 +85,8 @@ export async function POST(req: Request) {
       organizationId,
       startDate: new Date(data.startDate),
       endDate: new Date(data.endDate),
-      publicStatus: data.publicStatus ?? "draft",
+      publicStatus: "draft",
+      isListed: true,
       showSchedule: data.showSchedule ?? [],
     },
   })

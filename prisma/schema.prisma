@@ -50,6 +50,10 @@ model Event {
   description         String?
   location            String?
   publicStatus        String    @default("draft")
+  // Unlisted events (#414): published and reachable by their link, but absent from the
+  // organization's public page, the public list API and the sitemap (noindex). Discretion, not
+  // access control: anyone with the link can open it. Independent from publicStatus.
+  isListed            Boolean   @default(true)
   startDate           DateTime
   endDate             DateTime
   publicInstructions  String?

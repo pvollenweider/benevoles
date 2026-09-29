@@ -1,0 +1,46 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
+/**
+ * Event visibility (#414). Two independent axes: the lifecycle (`publicStatus`: draft, published,
+ * archived) and the listing (`isListed`). An unlisted published event opens by its link and takes
+ * sign-ups, but is absent from the organization's public page, the public list API and the
+ * sitemap. Discretion, not access control.
+ */
+
+export type Visibility = { publicStatus: string; isListed: boolean }
+
+/** Prisma filter for every public discovery surface (home page, list API, sitemap). */
+export const PUBLIC_LIST_WHERE = { publicStatus: "published", isListed: true } as const
+
+/** Direct access (event page, its pages, sign-up): published is enough, listed or not. */
+export const PUBLIC_ACCESS_WHERE = { publicStatus: "published" } as const
+
+export function isUnlistedPublic(e: Visibility): boolean {
+  return e.publicStatus === "published" && !e.isListed
+}
+
+/** « Publié — non répertorié » where the plain status badge isn't enough. */
+export function visibilityLabel(e: Visibility): string {
+  switch (e.publicStatus) {
+    case "published": return e.isListed ? "Publié" : "Publié — non répertorié"
+    case "archived": return "Archivé"
+    default: return "Brouillon"
+  }
+}
+
+export const UNLISTED_HINT = "Accessible uniquement par lien direct. Ce mode ne protège pas l'événement par mot de passe : toute personne qui a le lien peut l'ouvrir."
+
+export const LISTED_FIELD_LABEL = "Afficher cet événement sur la page publique de l'organisation"
+export const LISTED_FIELD_HELP =
+  "Si cette option est désactivée, l'événement reste accessible aux personnes disposant de son lien, mais il n'apparaît pas sur la page publique de l'organisation, dans sa liste publique ni dans le sitemap."
+
+/** How a listing change reads in the event log. */
+export function listingChangeLabel(v: unknown): string {
+  return v === true ? "répertorié" : v === false ? "non répertorié" : String(v)
+}
+
+/** Robots metadata for a public event page: unlisted events aren't indexed. */
+export function robotsFor(e: Visibility | null): { index: boolean; follow: boolean } | undefined {
+  return e && isUnlistedPublic(e) ? { index: false, follow: false } : undefined
+}

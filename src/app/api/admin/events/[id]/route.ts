@@ -26,6 +26,8 @@ const schema = z.object({
   publicInstructions: z.string().optional().nullable(),
   confirmationMessage: z.string().optional().nullable(),
   publicStatus: z.enum(EVENT_PUBLIC_STATUSES).optional(),
+  /** Unlisted events (#414): a strict boolean, logged as « visibilité ». */
+  isListed: z.boolean().optional(),
   showSchedule: z.array(showSchema).optional(),
   reminderMessage: z.string().max(2000).optional().nullable(),
   remindersEnabled: z.boolean().optional(),
@@ -66,7 +68,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   const owned = await db.event.findFirst({
     where: { id },
-    select: { id: true, title: true, publicStatus: true, startDate: true, endDate: true, publicInstructions: true, remindersEnabled: true, requirePhone: true },
+    select: { id: true, title: true, publicStatus: true, isListed: true, startDate: true, endDate: true, publicInstructions: true, remindersEnabled: true, requirePhone: true },
   })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
@@ -92,6 +94,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       "publicInstructions",
       "remindersEnabled",
       "requirePhone",
+      "isListed",
     ])
     if (eventChanges) {
       const statusChangedTo = eventChanges.publicStatus?.to

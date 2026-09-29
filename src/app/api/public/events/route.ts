@@ -2,11 +2,20 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
+import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
 
-export async function GET() {
+/**
+ * Public list of an organization's events: published and listed ones only (#414), scoped to the
+ * organization of the host (x-org-slug) or of `?org=`. Never a list across organizations.
+ */
+export async function GET(req: Request) {
+  const orgSlug = (await headers()).get("x-org-slug") ?? new URL(req.url).searchParams.get("org")
+  if (!orgSlug) return NextResponse.json({ error: "Organisation introuvable" }, { status: 404 })
+
   const events = await prisma.event.findMany({
-    where: { publicStatus: "published" },
+    where: { ...PUBLIC_LIST_WHERE, organization: { slug: orgSlug, active: true } },
     include: {
       shifts: {
         where: { status: { in: ["open", "full"] } },

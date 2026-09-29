@@ -11,6 +11,7 @@
  */
 import type { EventLogEntry, ShiftLabel } from "./event-log-read"
 import { APP_TIME_ZONE } from "./time-zone"
+import { listingChangeLabel } from "./event-visibility"
 
 const dateFmt = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long" })
 
@@ -42,6 +43,7 @@ const FIELD_LABELS: Record<string, string> = {
   publicInstructions: "instructions publiques",
   remindersEnabled: "rappels automatiques",
   requirePhone: "téléphone obligatoire",
+  isListed: "visibilité",
 }
 
 /**
@@ -61,7 +63,10 @@ export function describeChanges(changes: EventLogEntry["changes"], shiftLabels?:
     .filter(([field, { from, to }]) => field !== "shiftId" || from !== to)
     .map(([field, { from, to }]) => {
       const label = FIELD_LABELS[field] ?? field
-      const fmt = (v: unknown) => (field === "shiftId" && typeof v === "string" ? shiftLabels?.[v]?.compact ?? v : fmtValue(v))
+      const fmt = (v: unknown) =>
+        field === "shiftId" && typeof v === "string" ? shiftLabels?.[v]?.compact ?? v
+        : field === "isListed" ? listingChangeLabel(v)
+        : fmtValue(v)
       return `${label} : ${fmt(from)} → ${fmt(to)}`
     })
 }
@@ -88,6 +93,7 @@ const ACTION_VERB: Record<string, (actor: string) => string> = {
   "registration.checked_in": (a) => `${a} a marqué la personne présente`,
   "registration.check_in_undone": (a) => `${a} a annulé la présence`,
   "event.published": (a) => `${a} a publié l'événement`,
+  "event.unpublished": () => "l'événement est repassé en brouillon, son dernier créneau ayant été annulé",
   "event.archived": (a) => `${a} a archivé l'événement`,
   "event.updated": (a) => `${a} a modifié les paramètres de l'événement`,
   "memberinvite.sent": (a) => `${a} a envoyé une invitation`,

@@ -29,6 +29,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
     reminderMessage: event.reminderMessage ?? "",
     requirePhone: event.requirePhone,
     publicStatus: event.publicStatus as "draft" | "published" | "archived",
+    isListed: event.isListed,
     showSchedule: (event.showSchedule ?? []) as Array<{ name: string; date: string; startTime: string; endTime: string }>,
   }
 

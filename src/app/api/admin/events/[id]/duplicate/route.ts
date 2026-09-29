@@ -35,6 +35,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       description: source.description,
       location: source.location,
       publicStatus: "draft",
+      // The unlisted choice is a deliberate decision per event, never copied.
+      isListed: true,
       startDate: source.startDate,
       endDate: source.endDate,
       publicInstructions: source.publicInstructions,
