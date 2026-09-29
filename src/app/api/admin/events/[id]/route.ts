@@ -8,6 +8,7 @@ import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
 import { EVENT_PUBLIC_STATUSES } from "@/lib/statuses"
+import { isPublishing, publishBlocker } from "@/lib/event-publish"
 
 const showSchema = z.object({
   name: z.string(),
@@ -70,6 +71,12 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   const data = parsed.data
+  // Whatever the interface (edit form, publish toggle, review page, direct call): no
+  // publication without a live shift.
+  if (isPublishing(owned.publicStatus, data.publicStatus)) {
+    const blocker = await publishBlocker(db, id)
+    if (blocker) return NextResponse.json({ error: blocker }, { status: 409 })
+  }
   const updateData: Record<string, unknown> = { ...data }
   if (data.startDate) updateData.startDate = new Date(data.startDate)
   if (data.endDate) updateData.endDate = new Date(data.endDate)
@@ -100,8 +107,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
     return NextResponse.json(event)
   } catch (err) {
+    // Details stay in the server log: they can name tables or constraints.
     console.error("Event PATCH error:", err)
-    return NextResponse.json({ error: "Erreur serveur", detail: String(err) }, { status: 500 })
+    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 })
   }
 }
 

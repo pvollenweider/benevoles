@@ -18,7 +18,7 @@ describe("WizardSteps", () => {
     expect(items).toHaveLength(3)
     expect(items[2]).toHaveAttribute("aria-current", "step")
     expect(items[2]).toHaveTextContent(/Étape 3, en cours :\s*Vérification et publication/)
-    expect(within(items[0]).getByRole("link", { name: "Étape 1, faite : Informations" })).toHaveAttribute("href", "/admin/events/evt-1/edit")
+    expect(within(items[0]).getByRole("link", { name: "Étape 1, faite : Informations" })).toHaveAttribute("href", "/admin/events/evt-1/edit?wizard=1")
     expect(within(items[1]).getByRole("link", { name: "Étape 2, faite : Postes et créneaux" })).toHaveAttribute("href", "/admin/events/evt-1/shifts?wizard=1")
     expect(within(nav).getByRole("link", { name: "Quitter l'assistant" })).toHaveAttribute("href", "/admin/events/evt-1")
   })

@@ -80,6 +80,8 @@ describe("POST /api/admin/events/[id]/message", () => {
     const payloads = enqueueNotifications.mock.calls[0][0]
     expect(payloads.map((p: { recipient: { email: string } }) => p.recipient.email)).toEqual(["carla@x.ch"])
     expect(payloads[0].data.shifts).toEqual([])
+    // A waitlist entry's link would open on « introuvable »: none is sent.
+    expect(payloads[0].data.editToken).toBeUndefined()
   })
 
   it("refuses an empty audience, a shift of another event, a bad body, and too many sends", async () => {

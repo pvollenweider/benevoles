@@ -18,8 +18,9 @@ async function login(page: import("@playwright/test").Page) {
 }
 
 async function publishedShift(request: APIRequestContext, stamp: number, opts: { capacity: number; waitlistEnabled: boolean }) {
+  // Created as a draft, published once it has its shift: the API refuses to publish an empty event.
   const eventRes = await request.post("/api/admin/events", {
-    data: { title: `E2E Concurrency ${stamp}`, startDate: "2030-11-01", endDate: "2030-11-01", publicStatus: "published" },
+    data: { title: `E2E Concurrency ${stamp}`, startDate: "2030-11-01", endDate: "2030-11-01" },
   })
   const event: { id: string } = await eventRes.json()
   const shiftRes = await request.post("/api/admin/shifts", {
@@ -29,6 +30,8 @@ async function publishedShift(request: APIRequestContext, stamp: number, opts: {
     },
   })
   const shift: { id: string } = await shiftRes.json()
+  const publishRes = await request.patch(`/api/admin/events/${event.id}`, { data: { publicStatus: "published" } })
+  expect(publishRes.ok()).toBeTruthy()
   return { eventId: event.id, shiftId: shift.id }
 }
 

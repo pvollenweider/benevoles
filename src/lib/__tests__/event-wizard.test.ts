@@ -11,6 +11,7 @@ describe("event wizard", () => {
   it("has three steps and knows where each one lives", () => {
     expect(WIZARD_STEPS.map((s) => s.label)).toEqual(["Informations", "Postes et créneaux", "Vérification et publication"])
     expect(wizardHrefs(null)[1]).toBe("/admin/events/new")
+    expect(wizardHrefs("e")[1]).toBe("/admin/events/e/edit?wizard=1")
     expect(wizardHrefs("e")[2]).toBe("/admin/events/e/shifts?wizard=1")
     expect(wizardHrefs("e")[3]).toBe("/admin/events/e/review")
     expect(wizardHrefs("e").exit).toBe("/admin/events/e")

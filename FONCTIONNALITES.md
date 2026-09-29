@@ -127,7 +127,7 @@ Liste exhaustive des fonctionnalités de l'application.
 - **Archivage** en un clic (bouton « Archiver » ou statut « Archivé » du formulaire d'édition)
 - **Suppression définitive**, réservée aux événements archivés : avertissement fort, nombre de créneaux / inscriptions / invitations effacés, lien vers l'export PDF pour sauvegarder l'état, confirmation en saisissant le titre (accents et casse ignorés). Les créneaux, inscriptions et invitations sont effacés avec l'événement ; les membres du pool et l'organisation sont conservés. Les bénévoles ne sont pas prévenus : pour cela, annuler d'abord les créneaux
 - Champs : titre, slug, dates, lieu, description, instructions publiques, message de confirmation
-- **Publication / dépublication** en un clic (`draft` → `published`)
+- **Publication / dépublication** en un clic (`draft` → `published`) ; **règle serveur** : pas de publication sans créneau actif (409 sur `POST`/`PATCH`), un événement est toujours créé en brouillon
 - Vue de synthèse : créneaux, places totales, inscrits, places restantes ; phrase « Il manque encore N personnes sur M places » et lien vers la vue de complétion
 - **Où manque-t-il du monde ?** (`/admin/events/[id]/staffing`) : postes sans personne, créneaux à compléter (du plus dégarni au plus proche du complet, créneaux fermés exclus), personnes en liste d'attente, postes sans responsable de secteur, créneaux complets ; chaque ligne mène aux inscriptions filtrées sur le créneau, aux créneaux ou aux responsables
 - Lien direct vers la vue publique (affiché uniquement si l'événement est publié)
@@ -176,7 +176,7 @@ Liste exhaustive des fonctionnalités de l'application.
 ### Gestion des créneaux (`/admin/events/[id]/shifts`)
 
 - Ajout de créneaux : rôle, libellé, date, horaires, capacité, statut, ordre d'affichage
-- **Infos pratiques par créneau** : lieu de rendez-vous, personne de contact (nom, téléphone), consigne courte ; affichées dans l'email de confirmation, les trois rappels automatiques, la page personnelle `/my/[token]` et le récapitulatif du formulaire public ; copiées à la duplication
+- **Infos pratiques par créneau** : lieu de rendez-vous et consigne courte (page publique, email de confirmation, rappels, page personnelle) ; personne de contact (nom, téléphone) réservée aux inscrits (email de confirmation, rappels, page personnelle), absente de l'API publique ; copiées à la duplication
   - Saisie des horaires tolérante : `9` → `09:00`, `14:3` → `14:30`. Les heures valides vont de `00:00` à `23:59` ; une valeur hors plage (`26:00`, `-2:30`) est refusée avec un message au lieu d'être modifiée en silence. Un créneau qui passe minuit s'écrit avec une fin plus petite que le début (`22:00` à `02:00`, affiché « 22h–02h +1 »)
   - Fin automatiquement fixée à start + 1h si non renseignée
 - **Série de créneaux** : un poste, une date, une plage horaire, une durée de créneau (et une pause facultative) créent d'un coup tous les créneaux qui se suivent, avec un aperçu avant création ; dernier créneau plus court si la plage ne se divise pas exactement, créneaux après minuit datés du lendemain, 48 créneaux au plus ; tous créés dans une même transaction

@@ -27,10 +27,8 @@ export async function POST(req: Request) {
   try {
     preview = isXlsx ? await parseXlsx(buffer) : parseCsv(buffer)
   } catch (err) {
-    return NextResponse.json(
-      { error: "Impossible de lire le fichier", detail: String(err) },
-      { status: 400 },
-    )
+    console.error("Member import parse error:", err)
+    return NextResponse.json({ error: "Impossible de lire le fichier : vérifiez qu'il s'agit d'un CSV ou d'un .xlsx." }, { status: 400 })
   }
 
   if (preview.rows.length === 0 && preview.errors.length === 0) {
@@ -84,7 +82,8 @@ export async function POST(req: Request) {
         })
         created++
       } catch (err) {
-        errors.push({ line: -1, reason: `Échec création ${row.firstName} ${row.lastName} : ${String(err).slice(0, 100)}` })
+        console.error("Member import row error:", err)
+        errors.push({ line: -1, reason: `Échec création ${row.firstName} ${row.lastName}` })
       }
     }
   }

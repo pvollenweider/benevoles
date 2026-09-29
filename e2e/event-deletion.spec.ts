@@ -28,8 +28,9 @@ async function login(browser: Browser, email: string, password: string) {
 }
 
 async function createArchivedEventWithShift(request: APIRequestContext, title: string, status = "archived") {
+  // Publishing needs a shift, so the event is born a draft and gets its status once it has one.
   const res = await request.post("/api/admin/events", {
-    data: { title, startDate: "2030-07-01", endDate: "2030-07-02", publicStatus: status },
+    data: { title, startDate: "2030-07-01", endDate: "2030-07-02" },
   })
   expect(res.ok()).toBeTruthy()
   const event = await res.json()
@@ -37,6 +38,8 @@ async function createArchivedEventWithShift(request: APIRequestContext, title: s
     data: { eventId: event.id, roleName: "Test", label: "Test shift", date: "2030-07-01", startTime: "10:00", endTime: "12:00", capacity: 3 },
   })
   expect(shift.ok()).toBeTruthy()
+  const statusRes = await request.patch(`/api/admin/events/${event.id}`, { data: { publicStatus: status } })
+  expect(statusRes.ok()).toBeTruthy()
   return event as { id: string; slug: string; title: string }
 }
 
@@ -103,7 +106,7 @@ test("archive then delete an event from the admin UI", async ({ browser }) => {
   const { context, page } = await login(browser, ORG_ADMIN_EMAIL, ORG_ADMIN_PASSWORD)
   const title = `E2E UI Delete ${Date.now()}`
   const created = await page.request.post("/api/admin/events", {
-    data: { title, startDate: "2030-07-01", endDate: "2030-07-02", publicStatus: "published" },
+    data: { title, startDate: "2030-07-01", endDate: "2030-07-02" },
   })
   const { id } = await created.json()
 

@@ -78,7 +78,7 @@ Raccourci : **Ctrl + K** (**⌘ + K** sur Mac) place le curseur dans le champ de
 
 **`/admin/events/new`**
 
-La création se fait en trois étapes, indiquées en haut de page : **1. Informations**, **2. Postes et créneaux**, **3. Vérification et publication**. Après l'étape 1, vous arrivez sur les créneaux avec un bouton **Continuer** ; l'étape 3 (`/admin/events/[id]/review`) récapitule ce qui est prêt et ce qui manque (dates, créneaux, lieu, message de confirmation, instructions, responsables), propose l'aperçu bénévole, puis **Publier** ou **Rester en brouillon**. On peut publier sans les points facultatifs, mais pas sans créneau. **Quitter l'assistant** ramène à tout moment à la page de l'événement : rien n'est perdu, chaque étape est une page normale de l'administration.
+La création se fait en trois étapes, indiquées en haut de page : **1. Informations**, **2. Postes et créneaux**, **3. Vérification et publication**. Après l'étape 1, vous arrivez sur les créneaux avec un bouton **Continuer** ; l'étape 3 (`/admin/events/[id]/review`) récapitule ce qui est prêt et ce qui manque (dates, créneaux, lieu, message de confirmation, instructions, responsables), propose l'aperçu bénévole, puis **Publier** ou **Rester en brouillon**. On peut publier sans les points facultatifs, mais pas sans créneau : cette règle vaut partout (page de l'événement, formulaire d'édition), pas seulement dans l'assistant, et un événement est toujours créé en brouillon. **Quitter l'assistant** ramène à tout moment à la page de l'événement : rien n'est perdu, chaque étape est une page normale de l'administration.
 
 ### Partir d'un modèle
 
@@ -125,7 +125,7 @@ Un créneau correspond à un poste de bénévolat sur une plage horaire précise
 | Horaires | Heure de début et de fin, de `00:00` à `23:59` |
 | Capacité | Nombre maximum de bénévoles |
 | Statut | `Ouvert`, `Complet`, `Fermé`, `Annulé` |
-| Infos pratiques pour les bénévoles | Lieu de rendez-vous, personne de contact (nom, téléphone) et consigne pratique. Affichés au bénévole dans l'email de confirmation, les rappels, sa page personnelle et le récapitulatif avant inscription. Facultatifs, courts : pas de fiche de mission. |
+| Infos pratiques pour les bénévoles | Lieu de rendez-vous et consigne pratique, visibles sur la page publique d'inscription et dans les emails ; personne de contact (nom, téléphone), envoyée seulement aux inscrits (email de confirmation, rappels, page personnelle), jamais affichée publiquement. Facultatifs, courts : pas de fiche de mission. |
 | Notes internes | Jamais montrées aux bénévoles |
 | Âge minimum (optionnel) | Condition d'âge pour ce poste (ex. : `18` pour un poste avec permis de conduire). Affiché en info sur le planning public ; vérifié à l'inscription — voir « Âge minimum sur un poste » ci-dessous. |
 

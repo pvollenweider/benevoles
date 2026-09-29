@@ -38,8 +38,6 @@ type Shift = {
   spotsLeft: number
   status: string
   locationDetails: string | null
-  contactName?: string | null
-  contactPhone?: string | null
   instructions?: string | null
   displayOrder: number
   waitlistEnabled: boolean
