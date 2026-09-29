@@ -33,6 +33,9 @@ services:
       POSTGRES_HOST: postgres
       POSTGRES_USER: benevoles
       AUTH_SECRET: ${AUTH_SECRET:-change-me-in-production-32chars}
+      # Required by the production image (openssl rand -base64 32); the server won't start
+      # without it. Never change or lose it once used — see README.
+      TOKEN_ENCRYPTION_KEY: ${TOKEN_ENCRYPTION_KEY:-}
       SMTP_HOST: ${SMTP_HOST:-}
       SMTP_PORT: ${SMTP_PORT:-587}
       SMTP_SECURE: ${SMTP_SECURE:-false}

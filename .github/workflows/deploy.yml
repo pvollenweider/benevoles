@@ -126,6 +126,17 @@ jobs:
             --docker-password="${{ secrets.GHCR_PULL_TOKEN }}" \
             --save-config --dry-run=client -o yaml | kubectl apply -f -
 
+      - name: Check required secrets
+        env:
+          TOKEN_ENCRYPTION_KEY: ${{ secrets.TOKEN_ENCRYPTION_KEY }}
+        run: |
+          # The app refuses to start in production without it (src/lib/production-guards.ts);
+          # fail here, before touching the cluster, rather than on a stuck rollout.
+          if [ -z "$TOKEN_ENCRYPTION_KEY" ]; then
+            echo "::error::TOKEN_ENCRYPTION_KEY secret is not set (gh secret set TOKEN_ENCRYPTION_KEY)"
+            exit 1
+          fi
+
       - name: Sync k8s secret
         run: |
           kubectl create secret generic benevoles-secret \

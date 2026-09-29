@@ -34,7 +34,7 @@ Mailpit (capture emails) accessible sur http://localhost:8025.
 3. Développer et commiter (voir conventions ci-dessous)
 4. Ouvrir une Pull Request vers `main`
 
-Les PRs doivent passer le CI avant d'être mergées : type-check (`tsc --noEmit`), lint, tests Vitest et tests E2E Playwright. Les mêmes contrôles se lancent en local avec `make typecheck`, `make lint`, `make test` et `npm run test:e2e`.
+Les PRs doivent passer le CI avant d'être mergées : type-check (`tsc --noEmit`), lint, tests Vitest et tests E2E Playwright. Les mêmes contrôles se lancent en local avec `make typecheck` (ou `npm run typecheck`, qui régénère le client Prisma avant `tsc` : après un changement de schéma ou de branche, un client obsolète produit de faux échecs), `make lint`, `make test` et `npm run test:e2e`.
 
 TypeScript est installé en deux versions côte à côte, selon la procédure officielle de TypeScript 7 : `@typescript/native` (TypeScript 7) fournit la commande `tsc` utilisée pour le type-check, et le paquet `typescript` pointe vers `@typescript/typescript6`, dont l'API reste nécessaire à typescript-eslint et au build Next.js. `tsc6` lance la vérification avec TypeScript 6 si besoin de comparer.
 
@@ -108,6 +108,17 @@ npx prisma migrate dev --name ma-migration
 ```
 
 Ne jamais modifier les fichiers dans `src/generated/prisma/` — ils sont régénérés automatiquement.
+
+Ne jamais modifier une migration déjà appliquée en production : Prisma enregistre une somme de contrôle de chaque migration appliquée, et le déploiement suivant échouerait.
+
+### Migrations compatibles avec le déploiement progressif
+
+Chaque nouveau pod applique les migrations au démarrage (`docker-entrypoint.sh`), puis Kubernetes remplace l'ancien pod progressivement (`maxSurge: 1`, `maxUnavailable: 0`) : pendant quelques secondes, **l'ancienne version du code tourne sur le nouveau schéma**. Une migration doit donc rester compatible avec le code de la version précédente (principe *expand/contract*) :
+
+- **ajouter** une colonne : nullable ou avec une valeur par défaut, jamais `NOT NULL` sans défaut dans la même version que le code qui la remplit ;
+- **renommer** ou **changer le sens** d'une colonne : ajouter la nouvelle, écrire dans les deux, lire la nouvelle, et seulement dans une version suivante supprimer l'ancienne ;
+- **supprimer** une colonne, une table ou une contrainte : uniquement quand plus aucune version déployée ne l'utilise (donc dans une release ultérieure) ;
+- une migration qui ne peut pas respecter ces règles doit être déployée sans coexistence : passer ponctuellement `strategy` à `Recreate` dans `k8s/deployment.yaml` (courte coupure assumée), puis revenir à `RollingUpdate`.
 
 ## Tests
 
