@@ -17,6 +17,12 @@ Modèles de fichiers fournis :
 | `AUTH_TRUST_HOST` | en production | `true` derrière un reverse proxy |
 | `NEXT_PUBLIC_APP_URL` | recommandé | URL publique, utilisée dans les emails et les QR codes. Doit être une URL valide |
 | `CRON_SECRET` | en production | Secret des endpoints `/api/cron/*`. Vide : refus de toute requête en production, `localhost` seul accepté en développement |
+| `TOKEN_ENCRYPTION_KEY` | en production | Chiffrement en base des liens personnels des bénévoles, responsables et invitations (32 octets en base64, `openssl rand -base64 32`). Le serveur refuse de démarrer sans elle en production ; en développement, les jetons restent en clair. Ne doit jamais être perdue : pour la changer, voir « Rotation de la clé de chiffrement » dans le README |
+| `TOKEN_ENCRYPTION_KEY_ID` | non | Identifiant de la clé courante, enregistré dans chaque valeur chiffrée (défaut `k1`) |
+| `TOKEN_ENCRYPTION_PREVIOUS_KEYS` | non | Anciennes clés encore nécessaires pendant une rotation : `id:base64,id:base64`. Une entrée mal formée empêche le démarrage |
+| `APP_TIME_ZONE` | non | Fuseau horaire par défaut des événements (nom IANA, défaut `Europe/Zurich`), pour les organisations qui n'ont pas choisi le leur dans leurs paramètres. Une valeur invalide empêche le démarrage |
+| `TRUSTED_PROXY_HOPS` | non | Nombre de proxies qui ajoutent une entrée à `X-Forwarded-For` devant l'application (défaut `1` : Traefik). L'adresse client utilisée pour les limites de débit est la n-ième en partant de la droite |
+| `MIGRATE_ON_START` | non | `false` : le conteneur n'applique pas les migrations au démarrage. Défaut `true` (Docker Compose) ; mis à `false` dans `k8s/deployment.yaml`, où le Job `k8s/job-migrate.yaml` les applique une seule fois par déploiement |
 
 ## Email
 

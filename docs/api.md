@@ -44,6 +44,10 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/admin/events/[id]` | GET, PATCH, DELETE | Lire, modifier (dont l'archivage : `publicStatus: "archived"`), supprimer définitivement. `DELETE` exige un événement archivé (409 sinon) et `{ "confirmTitle": "<titre>" }` (400 sinon) ; les créneaux, inscriptions et invitations sont supprimés en cascade |
 | `/api/admin/events/[id]/duplicate` | POST | Dupliquer un événement |
 | `/api/admin/events/[id]/reorder-roles` | POST | Réordonner les postes |
+| `/api/admin/events/[id]/roles/[roleName]` | PATCH, DELETE | Renommer un poste ou changer sa couleur (`name`, `colorKey`) sur tous ses créneaux ; supprimer un poste (annule ses créneaux, les inscrits sont prévenus par email) |
+| `/api/admin/events/[id]/log` | GET | Journal de l'événement : filtres (`entityType`, `entityId`, `actorType`, `actorId`, `action` en préfixe, `since`, `until`), pagination (`cursor`, `limit`), ou chaîne causale d'une entrée (`chainOf`, avec le fuseau horaire de l'organisation pour le récit) |
+| `/api/admin/events/[id]/log/candidates` | GET | Éléments proposés dans les onglets Rejouer (`?kind=replay` : entités avec plusieurs entrées) et Récit (`?kind=story` : chaînes d'au moins deux entrées) |
+| `/api/admin/events/[id]/log/baseline` | POST | « Générer l'état initial » : une entrée de départ par créneau et inscription qui n'a encore aucune entrée ; sans effet la deuxième fois |
 | `/api/admin/events/[id]/pages` | GET, POST | Lister, créer une page personnalisée de l'événement (titre, contenu Markdown) ; slug généré depuis le titre et dédoublonné |
 | `/api/admin/events/[id]/pages/[pageId]` | PATCH, DELETE | Modifier, supprimer une page |
 | `/api/admin/events/[id]/pages/reorder` | POST | Réordonner les pages (`{ "pageIds": [...] }`, ordre = position dans le tableau) |
@@ -61,11 +65,12 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/admin/shifts/[id]` | PATCH, DELETE | Modifier, supprimer un créneau. Mêmes règles pour `startTime` et `endTime` quand ils sont fournis |
 | `/api/admin/registrations` | POST | Ajout manuel d'une inscription |
 | `/api/admin/registrations/[id]` | PATCH, DELETE | Modifier, annuler une inscription |
+| `/api/admin/registrations/[id]/resend-link` | POST | Renvoyer au bénévole son lien personnel de gestion (`/my/[token]`) ; il donne accès à toutes ses inscriptions actives de l'événement |
 | `/api/admin/events/[id]/registrations/bulk` | POST | Action groupée sur une sélection d'inscriptions de l'événement (`cancel`, `make_leader`, `resend_link`) ; tout ou rien si une inscription n'appartient pas à l'événement |
 | `/api/admin/members` | GET, POST | Lister, créer des membres |
 | `/api/admin/members/[id]` | PATCH, DELETE | Modifier, supprimer un membre |
 | `/api/admin/members/import` | POST | Import CSV ou xlsx (multipart) |
-| `/api/admin/settings/organization` | PATCH | Nom, slug, charte du bénévole, assurance RC, titre de la page publique (`publicTitle`, 2 à 100 caractères, vide = « Bénévoles ») |
+| `/api/admin/settings/organization` | PATCH | Nom, slug, charte du bénévole, assurance RC, titre de la page publique (`publicTitle`, 2 à 100 caractères, vide = « Bénévoles »), fuseau horaire (`timeZone`, nom IANA, vide = défaut de la plateforme) |
 | `/api/admin/settings/organization/slugs` | GET, DELETE | Historique des slugs |
 | `/api/admin/settings/admins` | GET, POST | Équipe admin, invitation d'un admin |
 | `/api/admin/settings/admins/[id]` | DELETE | Retirer un admin |

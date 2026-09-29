@@ -82,7 +82,7 @@ Ce lien vous est envoyé uniquement par email, jamais affiché à l'écran, pour
 
 ## Gérer son inscription
 
-Depuis votre **lien personnel** (reçu par email ou affiché après inscription) :
+Depuis votre **lien personnel** (reçu par email) :
 
 ```
 https://[organisation].benevol.app/my/[token]
@@ -96,7 +96,7 @@ Le lien « Retour à l'accueil » vous ramène directement sur la page de l'év�
 
 ### Recevoir les rappels sur votre téléphone
 
-Sur la page de confirmation et sur votre page personnelle, vous pouvez activer les **notifications du navigateur**. Vous recevez alors, en plus de l'email, un rappel 2 jours avant, la veille et le jour de votre créneau. Votre navigateur vous demande d'abord votre autorisation ; vous pouvez la retirer à tout moment dans ses réglages. Le bouton n'apparaît pas si votre navigateur ne gère pas les notifications ou si le site ne les propose pas.
+Sur votre page personnelle, vous pouvez activer les **notifications du navigateur** (aussi sur la page de confirmation si vous vous êtes inscrit·e depuis un lien d'invitation). Vous recevez alors, en plus de l'email, un rappel 2 jours avant, la veille et le jour de votre créneau. Votre navigateur vous demande d'abord votre autorisation ; vous pouvez la retirer à tout moment dans ses réglages. Le bouton n'apparaît pas si votre navigateur ne gère pas les notifications ou si le site ne les propose pas.
 
 Pour vous inscrire à de nouveaux créneaux, retournez sur la page de l'événement. Si vous utilisez le même navigateur, vos inscriptions existantes sont automatiquement reconnues et affichées en vert.
 
@@ -134,7 +134,7 @@ Sélectionnez-les tous avant de cliquer sur **Continuer** — un seul formulaire
 Pas besoin de justificatif à l'inscription : indiquez simplement votre date de naissance dans le formulaire. Si la condition n'est pas remplie, l'inscription est refusée avec un message clair ; sinon, elle passe normalement.
 
 **Je veux être sûr·e de ne pas oublier mon créneau le jour J.**
-Activez les notifications du navigateur sur la page de confirmation ou votre page personnelle (voir « Recevoir les rappels sur votre téléphone » plus haut) — en plus de l'email, vous recevrez un rappel 2 jours avant, la veille et le jour même.
+Activez les notifications du navigateur sur votre page personnelle (voir « Recevoir les rappels sur votre téléphone » plus haut) — en plus de l'email, vous recevrez un rappel 2 jours avant, la veille et le jour même.
 
 **Je n'ai plus le lien vers ma page personnelle.**
-Rouvrez la page de l'événement depuis le même navigateur : si votre session est encore reconnue, vos créneaux apparaissent en vert directement sur cette page et vous pouvez les annuler sans avoir besoin du lien. Pour retrouver le lien lui-même, l'email de confirmation le contient toujours.
+Rouvrez la page de l'événement depuis le même navigateur : si votre session est encore reconnue, vos créneaux apparaissent en vert directement sur cette page et vous pouvez les annuler sans avoir besoin du lien. Pour retrouver le lien lui-même, l'email de confirmation le contient toujours. Si vous l'avez supprimé, demandez à l'organisateur : il peut vous le renvoyer par email depuis son espace.
