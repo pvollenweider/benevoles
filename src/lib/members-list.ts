@@ -23,6 +23,8 @@ export type MemberRow = {
 export type Member = MemberRow & {
   id: string
   notes: string | null
+  availabilityPeriods?: string[]
+  availabilityNote?: string | null
 }
 
 export type SortCol = "firstName" | "lastName" | "hoursTotal"

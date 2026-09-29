@@ -6,6 +6,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, diffFields, logOrgEvent } from "@/lib/org-log"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
+import { availabilitySchema } from "@/lib/availability"
 
 const patchSchema = z.object({
   firstName: z.string().min(1).optional(),
@@ -15,6 +16,8 @@ const patchSchema = z.object({
   tags: z.array(z.string()).optional(),
   notes: z.string().optional().nullable(),
   active: z.boolean().optional(),
+  availabilityPeriods: availabilitySchema.shape.availabilityPeriods.optional(),
+  availabilityNote: availabilitySchema.shape.availabilityNote.optional(),
 })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -39,6 +42,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (data.tags !== undefined) updateData.tags = data.tags
   if (data.notes !== undefined) updateData.notes = data.notes || null
   if (data.active !== undefined) updateData.active = data.active
+  if (data.availabilityPeriods !== undefined) updateData.availabilityPeriods = data.availabilityPeriods
+  if (data.availabilityNote !== undefined) updateData.availabilityNote = data.availabilityNote
 
   const volunteer = await db.volunteer.update({ where: { id }, data: updateData })
 

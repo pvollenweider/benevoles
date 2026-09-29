@@ -6,6 +6,8 @@
 import { useId, useState } from "react"
 import ModalShell from "../ModalShell"
 import { parseTags, type Member } from "@/lib/members-list"
+import AvailabilityFields from "@/components/AvailabilityFields"
+import type { AvailabilityPeriod } from "@/lib/availability"
 
 export function EditMemberModal({ member, onClose, onSaved }: { member: Member; onClose: () => void; onSaved: () => void }) {
   const [firstName, setFirstName] = useState(member.firstName)
@@ -14,6 +16,9 @@ export function EditMemberModal({ member, onClose, onSaved }: { member: Member; 
   const [phone, setPhone] = useState(member.phone ?? "")
   const [tags, setTags] = useState(member.tags.join(", "))
   const [notes, setNotes] = useState(member.notes ?? "")
+  const [availability, setAvailability] = useState<{ periods: AvailabilityPeriod[]; note: string }>({
+    periods: (member.availabilityPeriods ?? []) as AvailabilityPeriod[], note: member.availabilityNote ?? "",
+  })
   const [active, setActive] = useState(member.active)
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
@@ -34,6 +39,8 @@ export function EditMemberModal({ member, onClose, onSaved }: { member: Member; 
         tags: parseTags(tags),
         notes: notes || undefined,
         active,
+        availabilityPeriods: availability.periods,
+        availabilityNote: availability.note.trim() || null,
       }),
     })
     setSubmitting(false)
@@ -57,6 +64,7 @@ export function EditMemberModal({ member, onClose, onSaved }: { member: Member; 
         <Field label="Téléphone" value={phone} onChange={setPhone} />
         <Field label="Tags (séparés par des virgules)" value={tags} onChange={setTags} placeholder="bénévole, bar" />
         <Field label="Notes" value={notes} onChange={setNotes} multiline />
+        <AvailabilityFields periods={availability.periods} note={availability.note} onChange={setAvailability} />
         <div className="flex items-center gap-2">
           <input
             id={activeId}
@@ -90,6 +98,7 @@ export function AddMemberModal({ onClose, onCreated }: { onClose: () => void; on
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
   const [tags, setTags] = useState("")
+  const [availability, setAvailability] = useState<{ periods: AvailabilityPeriod[]; note: string }>({ periods: [], note: "" })
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
@@ -106,6 +115,8 @@ export function AddMemberModal({ onClose, onCreated }: { onClose: () => void; on
         email: email || undefined,
         phone: phone || undefined,
         tags: parseTags(tags),
+        availabilityPeriods: availability.periods,
+        availabilityNote: availability.note.trim() || null,
       }),
     })
     setSubmitting(false)
@@ -129,6 +140,7 @@ export function AddMemberModal({ onClose, onCreated }: { onClose: () => void; on
         <Field label="Email" type="email" value={email} onChange={setEmail} />
         <Field label="Téléphone" value={phone} onChange={setPhone} />
         <Field label="Tags (séparés par des virgules)" value={tags} onChange={setTags} placeholder="parent CM2, bar" />
+        <AvailabilityFields periods={availability.periods} note={availability.note} onChange={setAvailability} />
         {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
         <div className="flex justify-end gap-2 pt-2">
           <button type="button" onClick={onClose} className="text-sm px-4 py-2 text-gray-600 hover:text-gray-900">
