@@ -91,7 +91,7 @@ Liste exhaustive des fonctionnalités de l'application.
 
 ### Authentification
 
-- Connexion par email + mot de passe (hashé bcrypt, NextAuth v5) ; tentatives échouées limitées (10 par compte, 30 par adresse IP, sur 15 minutes)
+- Connexion par email + mot de passe (hashé bcrypt, NextAuth v5) ; tentatives échouées limitées (10 par compte, 30 par adresse IP, sur 15 minutes) ; même limite pour la vérification du mot de passe actuel lors d'un changement (5 échecs par compte, 20 par adresse IP)
 - Session revérifiée en base à chaque requête : un admin désactivé ou supprimé, ou dont l'organisation est désactivée, perd l'accès immédiatement ; un changement de rôle s'applique sans reconnexion
 - Menu du compte sous le nom de l'utilisateur, en haut à droite : **Mon compte** (`/admin/account`, changement du mot de passe ; profil du super admin pour un super admin) et **Se déconnecter**
 - Mot de passe oublié : email de réinitialisation (`/admin/forgot-password`, `/admin/reset-password`)

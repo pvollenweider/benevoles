@@ -13,16 +13,22 @@ vi.mock("@/lib/prisma", () => ({ prisma: { adminUser: { findUnique, update } } }
 const compare = vi.hoisted(() => vi.fn())
 vi.mock("bcryptjs", () => ({ default: { compare, hash: vi.fn().mockResolvedValue("$new") }, compare, hash: vi.fn().mockResolvedValue("$new") }))
 
-const post = (body: unknown) => new Request("http://localhost/api/admin/settings/password", {
+const post = (body: unknown, ip = "203.0.113.1") => new Request("http://localhost/api/admin/settings/password", {
   method: "POST",
-  headers: { "Content-Type": "application/json" },
+  headers: { "Content-Type": "application/json", "x-forwarded-for": ip },
   body: JSON.stringify(body),
 })
+// The rate limiter's in-memory test store persists across tests: one admin per test.
+let adminId = "admin-1"
+const asAdmin = (id: string) => {
+  adminId = id
+  requireOrgSessionMock.mockResolvedValue({ session: { user: { id } }, organizationId: "org-a" })
+}
 
 describe("POST /api/admin/settings/password", () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    requireOrgSessionMock.mockResolvedValue({ session: { user: { id: "admin-1" } }, organizationId: "org-a" })
+    asAdmin(`admin-${Math.random()}`)
     findUnique.mockResolvedValue({ passwordHash: "$old" })
   })
 
@@ -50,6 +56,40 @@ describe("POST /api/admin/settings/password", () => {
     const { POST } = await import("@/app/api/admin/settings/password/route")
     const res = await POST(post({ currentPassword: "ok", newPassword: "Nouveau-mot2passe" }))
     expect(res.status).toBe(200)
-    expect(update).toHaveBeenCalledWith({ where: { id: "admin-1" }, data: { passwordHash: "$new" } })
+    expect(update).toHaveBeenCalledWith({ where: { id: adminId }, data: { passwordHash: "$new" } })
+  })
+
+  it("blocks after 5 wrong current passwords on one account, without running bcrypt (#358)", async () => {
+    compare.mockResolvedValue(false)
+    const { POST } = await import("@/app/api/admin/settings/password/route")
+    for (let i = 0; i < 5; i++) {
+      expect((await POST(post({ currentPassword: "guess", newPassword: "Nouveau-mot2passe" }, `198.51.100.${i}`))).status).toBe(400)
+    }
+    compare.mockClear()
+    const res = await POST(post({ currentPassword: "right", newPassword: "Nouveau-mot2passe" }, "198.51.100.99"))
+    expect(res.status).toBe(429)
+    expect((await res.json()).error).toContain("Trop de tentatives")
+    expect(compare).not.toHaveBeenCalled()
+    expect(update).not.toHaveBeenCalled()
+  })
+
+  it("blocks an IP after 20 failures across accounts (#358)", async () => {
+    compare.mockResolvedValue(false)
+    const { POST } = await import("@/app/api/admin/settings/password/route")
+    const ip = `192.0.2.${Math.floor(Math.random() * 200)}`
+    for (let i = 0; i < 20; i++) {
+      asAdmin(`spray-${i}-${Math.random()}`)
+      await POST(post({ currentPassword: "guess", newPassword: "Nouveau-mot2passe" }, ip))
+    }
+    asAdmin(`fresh-${Math.random()}`)
+    expect((await POST(post({ currentPassword: "guess", newPassword: "Nouveau-mot2passe" }, ip))).status).toBe(429)
+  })
+
+  it("doesn't count successful checks", async () => {
+    compare.mockResolvedValue(true)
+    const { POST } = await import("@/app/api/admin/settings/password/route")
+    for (let i = 0; i < 8; i++) {
+      expect((await POST(post({ currentPassword: "right", newPassword: "Nouveau-mot2passe" }))).status).toBe(200)
+    }
   })
 })

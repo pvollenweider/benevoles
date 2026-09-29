@@ -7,6 +7,8 @@ import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
 import { passwordSchema } from "@/lib/password"
+import { PASSWORD_CHECK_BLOCKED, passwordCheckAllowed, recordPasswordCheckFailure } from "@/lib/admin-session"
+import { getClientIp } from "@/lib/rate-limit"
 import { validationError } from "@/lib/api-error"
 
 const schema = z
@@ -32,8 +34,16 @@ export async function PATCH(req: Request) {
   const user = await prisma.adminUser.findUnique({ where: { id: session.user.id } })
   if (!user) return NextResponse.json({ error: "Utilisateur introuvable." }, { status: 404 })
 
+  // Failed checks are limited per account and IP (#358), before bcrypt runs.
+  const ip = getClientIp(req)
+  if (!(await passwordCheckAllowed(ip, user.id))) {
+    return NextResponse.json({ error: PASSWORD_CHECK_BLOCKED }, { status: 429 })
+  }
   const valid = await bcrypt.compare(currentPassword, user.passwordHash)
-  if (!valid) return NextResponse.json({ error: "Mot de passe actuel incorrect." }, { status: 400 })
+  if (!valid) {
+    await recordPasswordCheckFailure(ip, user.id)
+    return NextResponse.json({ error: "Mot de passe actuel incorrect." }, { status: 400 })
+  }
 
   if (email && email !== user.email) {
     const conflict = await prisma.adminUser.findUnique({ where: { email } })
