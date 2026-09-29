@@ -149,7 +149,7 @@ export function buildDayParts(
       let row = `<tr class="${isLastInRole ? "role-last" : ""}">`
 
       if (m === gi) {
-        row += `<td class="role-cell"${roleSpan > 1 ? ` rowspan="${roleSpan}"` : ""}>${esc(role)}</td>`
+        row += `<th scope="${roleSpan > 1 ? "rowgroup" : "row"}" class="role-cell"${roleSpan > 1 ? ` rowspan="${roleSpan}"` : ""}>${esc(role)}</th>`
       }
 
       if (hasAnyLabel) row += `<td class="label-cell">${esc(displayLbl)}</td>`
@@ -165,7 +165,8 @@ export function buildDayParts(
           row += `<td class="${cls}"></td>`; s++
         }
         const colspan = endSlot - startSlot
-        const vols    = smartVolsList(sh.registrations)
+        // The time survives the colspan for screen readers (column headers only cover the first slot).
+        const vols    = `<span class="sr-only">${esc(sh.startTime)}–${esc(sh.endTime)} : </span>${smartVolsList(sh.registrations)}`
         row += colspan > 1
           ? `<td class="shift-cell" colspan="${colspan}">${vols}</td>`
           : `<td class="shift-cell">${vols}</td>`
@@ -205,14 +206,15 @@ export function buildDayParts(
     showRow += `</tr>`
   }
 
-  const slotHeaders = slots.map((s) => `<th class="slot-th${s % 60 === 0 ? " hour-th" : ""}">${s % 60 === 0 ? fmtSlot(s) : ""}</th>`).join("")
+  const slotHeaders = slots.map((s) => `<th scope="col" class="slot-th${s % 60 === 0 ? " hour-th" : ""}">${s % 60 === 0 ? fmtSlot(s) : `<span class="sr-only">${fmtSlot(s)}</span>`}</th>`).join("")
 
   const ganttHtml = `
     <table class="gantt-table">
+      <caption class="sr-only">Frise horaire du ${fmtDate(date)}</caption>
       <thead>
         <tr>
-          <th class="th-role">Rôle</th>
-          ${hasAnyLabel ? `<th class="th-label">Libellé</th>` : ""}
+          <th scope="col" class="th-role">Rôle</th>
+          ${hasAnyLabel ? `<th scope="col" class="th-label">Libellé</th>` : ""}
           ${slotHeaders}
         </tr>
       </thead>

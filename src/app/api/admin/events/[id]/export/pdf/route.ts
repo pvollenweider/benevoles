@@ -178,6 +178,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     .gantt-table { table-layout: auto; width: auto; }
     .th-role  { min-width: 90px; }
     .th-label { min-width: 100px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); border: 0; white-space: nowrap; }
     .slot-th  {
       min-width: 20px; text-align: center; font-size: 8px;
       color: #374151; border-left: 1px solid #9CA3AF; border-right: 1px solid #9CA3AF;
@@ -186,6 +187,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     .hour-mark { border-left: 2px solid #9CA3AF !important; }
 
     .role-cell {
+      text-align: left;
       background: #DBEAFE;
       color: #1E3A8A;
       font-weight: 700;
@@ -216,7 +218,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     }
     .empty-cell { background: #F9FAFB; border-left: 1px solid #D1D5DB; border-right: 1px solid #D1D5DB; }
     .show-active { background: #EFF6FF !important; }
-    tr.role-last td { border-bottom: 2px solid #FFFFFF !important; }
+    tr.role-last td, tr.role-last th { border-bottom: 2px solid #FFFFFF !important; }
     tr.role-last .shift-cell { border-bottom: 2px solid #FFFFFF !important; }
 
     /* ── Show row ─────────────────────────────────────────────────────── */

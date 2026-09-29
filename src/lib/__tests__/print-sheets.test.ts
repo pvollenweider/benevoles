@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { ATTENDANCE_SPARE_LINES, isSheetView, renderSheet, SHEET_VIEWS, volunteersOf, type SheetData, type SheetShift } from "../print-sheets"
+import { ATTENDANCE_SPARE_LINES, ganttOf, isSheetView, renderSheet, SHEET_VIEWS, staffingLine, volunteersOf, type SheetData, type SheetShift } from "../print-sheets"
 
 const alice = { firstName: "Alice", lastName: "Martin", email: "alice@x.ch", phone: "079 1", comment: null, checkedIn: true }
 const bob = { firstName: "Bob <B>", lastName: "Durand", email: null, phone: null, comment: "vient tard", checkedIn: false }
@@ -19,8 +19,8 @@ const data: SheetData = {
 }
 
 describe("print sheets", () => {
-  it("knows its five views", () => {
-    expect(SHEET_VIEWS.map((v) => v.id)).toEqual(["day", "role", "phones", "attendance", "individual"])
+  it("knows its five views, volunteers' first", () => {
+    expect(SHEET_VIEWS.map((v) => v.id)).toEqual(["day", "role", "individual", "attendance", "phones"])
     expect(isSheetView("day")).toBe(true)
     expect(isSheetView("badge")).toBe(false)
   })
@@ -31,32 +31,50 @@ describe("print sheets", () => {
     expect(rows[1].shifts.map((s) => s.id)).toEqual(["s2", "s1"])
   })
 
-  it("day: one table per day, names and free spots, escaped", () => {
+  it("sums staffing for a section head", () => {
+    expect(staffingLine(data.shifts.slice(0, 2))).toBe("2 créneaux · 3/4 inscrits · <strong>1 place à pourvoir</strong>")
+    expect(staffingLine([shift({ id: "x", capacity: 1, registrations: [alice] })])).toBe("1 créneau · 1/1 inscrits · complet")
+  })
+
+  it("builds the export's Gantt for one day, first names in the bars, without its own day title", () => {
+    const html = ganttOf(data.shifts.slice(0, 2))
+    expect(html).toContain('class="gantt-table"')
+    expect(html).toContain("shift-cell")
+    expect(html).toContain("Alice")
+    expect(html).not.toContain("day-sub-title")
+    expect(ganttOf([])).toBe("")
+  })
+
+  it("day: per day a Gantt then a detail table, names and free spots, escaped", () => {
     const html = renderSheet("day", data)
-    expect(html).toContain("<title>Planning par jour – Fête d&#39;été".replace("&#39;", "'"))
-    expect(html).toContain("samedi 4 juillet 2026")
-    expect(html).toContain("dimanche 5 juillet 2026")
+    expect(html).toContain("<title>Planning par jour – Fête d'été")
+    expect(html).toContain("<h2>Samedi 4 juillet 2026</h2>")
+    expect(html).toContain("<h2>Dimanche 5 juillet 2026</h2>")
+    expect((html.match(/class="gantt-table"/g) ?? []).length).toBe(2)
     expect(html).toContain("Bob &lt;B&gt; Durand")
     expect(html).toContain("1 place libre")
     expect(html).toContain("2 places libres")
+    expect(html).toContain("3/4 inscrits")
     expect(html).toContain("size: A4 landscape")
   })
 
-  it("role: one page per role with its leader", () => {
+  it("role: one page per role with its Gantt and leader", () => {
     const html = renderSheet("role", data)
     expect(html).toContain("<h2>Bar</h2>")
-    expect(html).toContain("Responsable : Léa (lea@x.ch)")
+    expect(html).toContain("Responsable : <strong>Léa</strong> (lea@x.ch)")
     expect(html).toContain("<h2>Accueil</h2>")
     expect(html).toContain("Pas de responsable de secteur désigné.")
-    expect((html.match(/class="block page"/g) ?? []).length).toBe(2)
+    expect((html.match(/class="block page/g) ?? []).length).toBe(2)
+    expect((html.match(/class="gantt-table"/g) ?? []).length).toBe(3) // Bar: two days, Accueil: one
   })
 
   it("phones: an organizers-only notice, one row per volunteer with their shifts", () => {
     const html = renderSheet("phones", data)
     expect(html).toContain("Ne pas afficher ni distribuer")
-    expect(html).toContain("<td class=\"nowrap\">079 1</td>")
+    expect(html).toContain('<td class="nowrap mono">079 1</td>')
     expect(html).toContain("2 bénévoles.")
     expect(html).toContain("size: A4 portrait")
+    expect(html).not.toContain('class="gantt-table"')
   })
 
   it("attendance: a checkbox per person, already-present people ticked, spare blank lines", () => {
@@ -67,7 +85,7 @@ describe("print sheets", () => {
     expect(s1).toContain("vient tard")
   })
 
-  it("individual: one page per volunteer with their shifts and the practical info", () => {
+  it("individual: one page per volunteer with their day's Gantt, shifts and practical info", () => {
     const html = renderSheet("individual", data)
     expect(html).toContain("<h2>Alice Martin</h2>")
     expect(html).toContain("2 créneaux")
@@ -75,6 +93,7 @@ describe("print sheets", () => {
     expect(html).toContain("Contact : Léa")
     expect(html).toContain("À savoir : Gilet fourni")
     expect(html).toContain("<h2>Bob &lt;B&gt; Durand</h2>")
+    expect((html.match(/class="gantt-table"/g) ?? []).length).toBe(2) // one day each
   })
 
   it("says so when the event has no shift", () => {
