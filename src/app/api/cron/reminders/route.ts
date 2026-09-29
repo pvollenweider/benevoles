@@ -8,6 +8,7 @@ import { sendPushToVolunteer } from "@/lib/push"
 import { reportError } from "@/lib/report-error"
 import { deliverOutbox } from "@/lib/notifications/outbox"
 import { registrationToken } from "@/lib/token-vault"
+import { localDateTimeToUtc } from "@/lib/time-zone"
 
 export const dynamic = "force-dynamic"
 
@@ -32,15 +33,11 @@ const WINDOWS: Window[] = [
 ]
 
 /**
- * Combines a Shift.date (calendar day) with its startTime ("HH:MM") into
- * a real timestamp. Stored times are local strings; we treat them as UTC
- * which is fine for relative windows.
+ * Real start instant of a shift: its calendar day at its local startTime, in the events' time
+ * zone (#308). Treating the local "HH:MM" as UTC put every window 1-2 h off in Switzerland.
  */
 function shiftStartAt(date: Date, startTime: string): Date {
-  const [h, m] = startTime.split(":").map(Number)
-  const d = new Date(date)
-  d.setUTCHours(h ?? 0, m ?? 0, 0, 0)
-  return d
+  return localDateTimeToUtc(date, startTime)
 }
 
 export async function GET(req: Request) {

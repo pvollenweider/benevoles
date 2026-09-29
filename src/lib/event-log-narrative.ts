@@ -7,9 +7,10 @@
  *     of inventing a "which caused" that isn't backed by data.
  */
 import type { EventLogEntry, ShiftLabel } from "./event-log-read"
+import { APP_TIME_ZONE } from "./time-zone"
 
 const dateFmt = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long" })
-const dateTimeFmt = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })
+const dateTimeFmt = new Intl.DateTimeFormat("fr-FR", { timeZone: APP_TIME_ZONE, day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })
 
 function fmtValue(v: unknown): string {
   if (v === null || v === undefined) return "—"
@@ -150,7 +151,7 @@ export function narrateChain(chain: EventLogEntry[], shiftLabels?: Record<string
 
     const withTime = day !== lastDay
       ? `Le ${dateTimeFmt.format(entry.createdAt)} : ${sentence}.`
-      : `${sentence.charAt(0).toUpperCase()}${sentence.slice(1)} à ${entry.createdAt.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}.`
+      : `${sentence.charAt(0).toUpperCase()}${sentence.slice(1)} à ${entry.createdAt.toLocaleTimeString("fr-FR", { timeZone: APP_TIME_ZONE, hour: "2-digit", minute: "2-digit" })}.`
     parts.push(withTime)
     lastDay = day
   })

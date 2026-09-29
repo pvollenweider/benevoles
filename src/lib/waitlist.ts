@@ -5,6 +5,7 @@ import { logEvent, SYSTEM_ACTOR } from "./event-log"
 import { OCCUPYING_STATUSES, canOfferSpot, lockShifts } from "./registration-capacity"
 import { reportError } from "./report-error"
 import { registrationToken } from "./token-vault"
+import { APP_TIME_ZONE } from "./time-zone"
 
 /**
  * When a spot opens on a shift, offer it to the first person on the waitlist.
@@ -70,7 +71,7 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
   const orgSlug = next.event.organization.slug
   const confirmUrl = `${orgBaseUrl(orgSlug)}/waitlist/${registrationToken.reveal(next)}/confirm`
   const expiresAtLabel = expiresAt.toLocaleDateString("fr-FR", {
-    weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit",
+    weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit", timeZone: APP_TIME_ZONE,
   })
 
   await sendNotification({
