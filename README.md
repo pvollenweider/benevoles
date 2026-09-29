@@ -169,6 +169,7 @@ Variables supplémentaires lues par le code :
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Compte super admin créé par `npm run db:seed` (défauts : `admin@localhost` / `change-me`) |
 | `ORG_ADMIN_EMAIL`, `ORG_ADMIN_PASSWORD` | Admin de l'organisation `default` créé par le seed (défauts : `org-admin@localhost` / valeur de `ADMIN_PASSWORD`) |
 | `TOKEN_ENCRYPTION_KEY` | Chiffrement en base des liens personnels des bénévoles, responsables et invitations (32 octets en base64, `openssl rand -base64 32`). **Obligatoire en production** : le serveur refuse de démarrer sans elle. Facultative en développement, où ces jetons restent alors en clair. Avec la clé, les nouveaux jetons sont chiffrés et le cron de nettoyage chiffre les anciens. Ne doit jamais changer ni être perdue une fois utilisée |
+| `APP_TIME_ZONE` | Fuseau horaire des événements (nom IANA, défaut `Europe/Zurich`). Les dates et heures des créneaux sont des heures locales : ce fuseau sert à calculer les rappels et à afficher les heures dans les emails, le journal et l'export PDF |
 | `TRUSTED_PROXY_HOPS` | Nombre de proxies qui ajoutent une entrée à `X-Forwarded-For` devant l'application (défaut `1` : Traefik). L'adresse client utilisée pour les limites de débit est la n-ième en partant de la droite ; à augmenter seulement si un autre proxy ou load balancer ajoute sa propre entrée devant Traefik |
 
 Générer les clés VAPID : `node -e "const wp=require('web-push'); console.log(JSON.stringify(wp.generateVAPIDKeys()))"`.

@@ -6,9 +6,10 @@
 import { prisma } from "./prisma"
 import type { EventLog as EventLogRow } from "@/generated/prisma/client"
 import { fmtRange } from "./gantt-utils"
+import { APP_TIME_ZONE } from "./time-zone"
 
 const shiftDateFmt = new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "2-digit" })
-const dateTimeFmt = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })
+const dateTimeFmt = new Intl.DateTimeFormat("fr-FR", { timeZone: APP_TIME_ZONE, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })
 
 export interface EventLogEntry {
   id: string

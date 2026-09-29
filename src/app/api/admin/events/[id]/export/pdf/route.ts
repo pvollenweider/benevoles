@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { buildDayParts, type VolData, type ShiftRow, type ShowEntry } from "@/lib/pdf-export-gantt"
 import { contactPhone } from "@/lib/contact-phone"
+import { APP_TIME_ZONE } from "@/lib/time-zone"
 
 function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
@@ -87,7 +88,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     <td>${esc(v.phone ?? "")}</td>
   </tr>`).join("")
 
-  const ts = new Date().toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" })
+  const ts = new Date().toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short", timeZone: APP_TIME_ZONE })
 
   const html = `<!DOCTYPE html>
 <html lang="fr">
