@@ -224,6 +224,13 @@ Pool de bénévoles connus de l'organisation (source de vérité partagée avec 
 
 ### Communications (`/admin/events/[id]`)
 
+#### Écrire aux bénévoles (`/admin/events/[id]/message`)
+
+- Destinataires : tous les inscrits, un poste, un créneau, ou la liste d'attente (statuts `waiting` et `offered`)
+- Objet (≤ 120) et message texte (≤ 2000) ; compteur de destinataires en direct, aperçu de l'email (rendu réel, lien factice), confirmation avec le nombre de personnes
+- Un email par personne (`targeted_message`), avec ses créneaux concernés, via la file d'envoi ; envoi noté dans le journal (`message.sent`) ; limite de 30 envois par heure et par organisation
+- Accès direct depuis les inscriptions, avec le poste ou le créneau filtré prérempli
+
 #### Rappel manuel
 
 - Champ « Message de rappel » dans l'édition de l'événement (sauvegarde auto)

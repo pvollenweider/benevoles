@@ -9,6 +9,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Écrire aux bénévoles** : depuis un événement, un email avec objet et message à tous les inscrits, aux bénévoles d'un poste ou d'un créneau, ou aux personnes en liste d'attente. Le nombre de destinataires s'affiche, l'aperçu montre l'email tel qu'il sera reçu, et l'envoi est confirmé puis noté dans le journal. Chaque personne le reçoit une fois, avec ses créneaux concernés.
 - **Infos pratiques par créneau** : un créneau peut porter un lieu de rendez-vous, une personne de contact (nom, téléphone) et une consigne courte. Le bénévole les retrouve dans l'email de confirmation, les rappels, sa page personnelle et le récapitulatif avant de s'inscrire.
 - **Série de créneaux** : dans les créneaux d'un événement, **Créer une série** crée d'un coup tous les créneaux qui se suivent sur une plage horaire (par exemple une buvette de 10 h à 22 h par créneaux de deux heures), avec un aperçu avant création. Chaque créneau reste ensuite modifiable séparément.
 - **Où manque-t-il du monde ?** : chaque événement a une page qui répond à cette question : postes sans personne, créneaux à compléter du plus dégarni au plus proche du complet, personnes en liste d'attente, postes sans responsable de secteur, créneaux complets, chaque ligne menant là où on agit. Sur la page de l'événement, le bloc « Créneaux à pourvoir » et ses barres colorées sont remplacés par une phrase (« Il manque encore 12 personnes sur 20 places ») et le lien vers cette page.

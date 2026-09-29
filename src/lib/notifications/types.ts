@@ -32,6 +32,7 @@ export type NotificationKind =
   | "sector_leader_new_signup"
   | "product_update"
   | "registration_link_resend"
+  | "targeted_message"
 
 export type Recipient = {
   email?: string | null
