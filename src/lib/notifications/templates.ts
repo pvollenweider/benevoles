@@ -431,10 +431,11 @@ function renderTargetedMessage(p: NotificationPayload): RenderedEmail {
     message: string
     /** The volunteer's shifts in the audience; empty for a waitlist message. */
     shifts: { label: string; date: string; startTime: string; endTime: string }[]
-    editToken: string
+    /** Absent for the waitlist: the personal page only opens confirmed registrations. */
+    editToken?: string
     orgSlug?: string
   }
-  const editUrl = myPageUrl(d.orgSlug, d.editToken)
+  const editUrl = d.editToken ? myPageUrl(d.orgSlug, d.editToken) : null
   const firstName = d.volunteerName.split(" ")[0]
   const subject = `${d.subject} — ${d.eventTitle}`
 
@@ -446,8 +447,7 @@ function renderTargetedMessage(p: NotificationPayload): RenderedEmail {
     ...(d.shifts.length > 0
       ? [`Tes créneaux concernés pour ${d.eventTitle} :`, ...d.shifts.map((s) => `  • ${s.date} · ${s.label} · ${s.startTime}–${s.endTime}`), ``]
       : []),
-    `Gérer tes inscriptions : ${editUrl}`,
-    ``,
+    ...(editUrl ? [`Gérer tes inscriptions : ${editUrl}`, ``] : []),
     `À très vite !`,
     d.organizationName,
   ].join("\n")
@@ -466,7 +466,7 @@ function renderTargetedMessage(p: NotificationPayload): RenderedEmail {
           <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</span>
         </div>`).join("")}
     </div>` : ""}
-    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
+    ${editUrl ? `<p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>` : ""}
     <p style="color:#888;font-size:0.85em;margin-top:2em">À très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, preheader)
 

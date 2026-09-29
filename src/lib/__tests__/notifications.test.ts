@@ -224,13 +224,15 @@ describe("notification templates — targeted_message", () => {
     expect(out.html).toContain("/my/tok")
   })
 
-  it("has no shift list for the waitlist", () => {
+  it("has no shift list and no personal link for the waitlist", () => {
     const out = render({
       kind: "targeted_message",
       recipient: { email: "a@x.ch", name: "Alice" },
-      data: { volunteerName: "Alice", organizationName: "Org", eventTitle: "Fête", subject: "Place", message: "Une place se libère peut-être.", shifts: [], editToken: "tok" },
+      data: { volunteerName: "Alice", organizationName: "Org", eventTitle: "Fête", subject: "Place", message: "Une place se libère peut-être.", shifts: [] },
     })
     expect(out.text).not.toContain("créneaux concernés")
     expect(out.html).not.toContain("créneaux concernés")
+    expect(out.text).not.toContain("Gérer tes inscriptions")
+    expect(out.html).not.toContain("Gérer mes inscriptions")
   })
 })

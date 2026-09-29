@@ -25,12 +25,15 @@ export default function PublishToggle({ eventId, currentStatus }: { eventId: str
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ publicStatus: newStatus }),
       })
-      if (!res.ok) throw new Error()
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(typeof data?.error === "string" ? data.error : "")
+      }
       router.refresh()
       // The page changes under the user (and this button may unmount): land on the heading.
       document.getElementById("page-heading")?.focus()
-    } catch {
-      setError("Impossible de modifier le statut. Réessayez.")
+    } catch (e) {
+      setError(e instanceof Error && e.message ? e.message : "Impossible de modifier le statut. Réessayez.")
     } finally {
       setLoading(false)
     }

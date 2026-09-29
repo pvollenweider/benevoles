@@ -18,7 +18,7 @@ export type WizardStep = (typeof WIZARD_STEPS)[number]["n"]
 /** Where each step lives; step 1 has no event yet. */
 export function wizardHrefs(eventId: string | null) {
   return {
-    1: eventId ? `/admin/events/${eventId}/edit` : "/admin/events/new",
+    1: eventId ? `/admin/events/${eventId}/edit?wizard=1` : "/admin/events/new",
     2: eventId ? `/admin/events/${eventId}/shifts?wizard=1` : "/admin/events/new",
     3: eventId ? `/admin/events/${eventId}/review` : "/admin/events/new",
     exit: eventId ? `/admin/events/${eventId}` : "/admin/events",

@@ -73,16 +73,27 @@ export default function EventForm({ initialData, createdHref }: Props) {
 
     const timer = setTimeout(async () => {
       setSaving(true)
-      const res = await fetch(`/api/admin/events/${initialData!.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, showSchedule: shows }),
-      })
-      setSaving(false)
-      if (res.ok) showToast("Enregistré ✓")
-      else {
+      try {
+        const res = await fetch(`/api/admin/events/${initialData!.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...form, showSchedule: shows }),
+        })
+        if (res.ok) { setError(null); showToast("Enregistré ✓"); return }
+        const data = await res.json().catch(() => ({}))
+        // A refused publication (no shift yet) is a rule, not a glitch: say it and stay a draft.
+        if (res.status === 409) {
+          const previous = initialData?.publicStatus ?? "draft"
+          setForm((f) => ({ ...f, publicStatus: previous }))
+          setError(`${typeof data?.error === "string" ? data.error : "Modification refusée."} Le statut a été remis sur « ${previous === "archived" ? "Archivé" : "Brouillon"} ».`)
+          return
+        }
         console.error("Save error:", res.status)
         showToast("Erreur lors de la sauvegarde", false)
+      } catch {
+        showToast("Erreur réseau, modification non enregistrée", false)
+      } finally {
+        setSaving(false)
       }
     }, 800)
 
@@ -145,19 +156,22 @@ export default function EventForm({ initialData, createdHref }: Props) {
     e.preventDefault()
     setSaving(true)
     setError(null)
-
-    const res = await fetch("/api/admin/events", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, showSchedule: shows }),
-    })
-
-    const data = await res.json()
-    setSaving(false)
-
-    if (!res.ok) { setError("Erreur lors de la création."); return }
-    router.push(createdHref ? createdHref.replace("{id}", data.id) : `/admin/events/${data.id}`)
-    router.refresh()
+    try {
+      // Always a draft: shifts come next, and publication is the last step.
+      const res = await fetch("/api/admin/events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, publicStatus: "draft", showSchedule: shows }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) { setError(typeof data?.error === "string" ? data.error : "Erreur lors de la création."); return }
+      router.push(createdHref ? createdHref.replace("{id}", data.id) : `/admin/events/${data.id}`)
+      router.refresh()
+    } catch {
+      setError("Erreur réseau : l'événement n'a pas été créé. Réessayez.")
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -354,16 +368,21 @@ export default function EventForm({ initialData, createdHref }: Props) {
             className={`${inputCls} resize-none`} />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
-          <select value={form.publicStatus} onChange={(e) => set("publicStatus", e.target.value)} className={inputCls}>
-            <option value="draft">Brouillon (non visible)</option>
-            <option value="published">Publié (visible)</option>
-            <option value="archived">Archivé</option>
-          </select>
-        </div>
+        {isEdit ? (
+          <div>
+            <label htmlFor="event-status" className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+            <select id="event-status" aria-describedby="event-status-hint" value={form.publicStatus} onChange={(e) => set("publicStatus", e.target.value)} className={inputCls}>
+              <option value="draft">Brouillon (non visible)</option>
+              <option value="published">Publié (visible)</option>
+              <option value="archived">Archivé</option>
+            </select>
+            <p id="event-status-hint" className="text-xs text-gray-600 mt-1">Un événement ne peut être publié qu&apos;avec au moins un créneau.</p>
+          </div>
+        ) : (
+          <p className="text-sm text-gray-700">L&apos;événement est créé en brouillon : les créneaux viennent ensuite, la publication à la fin.</p>
+        )}
 
-        {error && <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{error}</div>}
+        {error && <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{error}</div>}
 
         <div className="flex gap-3 pt-2">
           {!isEdit && (

@@ -27,6 +27,9 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Publication** : un événement ne peut plus être publié sans créneau, quel que soit le chemin (formulaire d'édition, bouton Publier, API) ; le message l'explique. La création se fait toujours en brouillon, le choix du statut n'apparaît plus à cette étape.
+- **Infos pratiques d'un créneau** : la personne de contact et son téléphone ne sont plus visibles sur la page publique d'inscription ; ils ne sont envoyés qu'aux inscrits (confirmation, rappels, page personnelle). Le lieu et la consigne restent publics.
+
 - **Barre du haut de l'administration sur mobile** : sur un petit écran, les liens sont regroupés sous un bouton **Menu** au lieu de déborder de l'écran ; le menu du compte reste accessible. La page en cours est aussi soulignée, en plus d'être en couleur.
 - **Menu du compte** : dans la barre du haut, votre nom ouvre un menu avec **Mon compte** et **Se déconnecter**. Le changement de mot de passe quitte la page Paramètres pour une page **Mon compte** dédiée, avec des libellés et messages d'erreur désormais en français.
 - **Limitation des tentatives** (connexion, inscription, liens de gestion, mot de passe oublié) : les compteurs sont désormais stockés dans la base de données. Ils ne sont plus remis à zéro à chaque redéploiement et restent justes si l'application tourne sur plusieurs instances.
@@ -35,6 +38,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Actions groupées sur les inscriptions** (retirer de leur créneau, rendre responsable, renvoyer le lien) : une seule opération pour toute la sélection au lieu d'une par ligne, plus rapide ; rien n'est fait si une des inscriptions sélectionnées n'est pas (ou plus) valide. « Renvoyer le lien » n'envoie plus qu'un email par bénévole, même si plusieurs de ses inscriptions sont sélectionnées.
 
 ### Corrigé
+
+- **Message à la liste d'attente** : le bouton « Gérer mes inscriptions » menait à une page « introuvable » (la page personnelle n'ouvre que les inscriptions confirmées) ; les messages à la liste d'attente n'ont plus de lien.
+- **Assistant de création** : revenir à l'étape « Informations » garde l'indicateur d'étapes et un bouton pour continuer ; une coupure réseau à la création ne bloque plus le formulaire.
+- **Erreurs serveur** : les réponses d'erreur de la modification d'un événement et de l'import de membres ne contiennent plus de détails techniques.
 
 - **Emails liés à une action** : ils sont désormais enregistrés dans la même transaction que l'action elle-même (inscription, offre et confirmation de place en liste d'attente, créneau modifié ou annulé, ajout d'un responsable de secteur, invitation et activation d'un admin, réinitialisation de mot de passe). Un arrêt du serveur au mauvais moment (redéploiement, plantage) ne peut plus laisser l'action faite sans son email, par exemple une inscription sans confirmation ou une place proposée sans que la personne en soit avertie.
 - **Journal de l'événement** : après « Générer l'état initial », le message annonçait « états initialaux générés » au lieu de « états initiaux générés ».

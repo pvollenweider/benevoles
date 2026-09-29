@@ -68,12 +68,16 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       shifts: audience.kind === "waitlist" ? [] : r.registrations.map((x) => ({
         label: x.shift.label, date: fmtDate(x.shift.date), startTime: x.shift.startTime, endTime: x.shift.endTime,
       })),
-      editToken: registrationToken.reveal(r.registrations[0]),
+      // The personal page only opens live confirmed registrations: a waitlist entry's link
+      // would land on « introuvable », so the waitlist gets no link at all.
+      editToken: audience.kind === "waitlist" ? undefined : registrationToken.reveal(r.registrations[0]),
     },
   })
 
   if (dryRun) {
-    const preview = recipients[0] ? render({ ...payloadFor(recipients[0], "preview"), data: { ...payloadFor(recipients[0], "preview").data, editToken: "apercu" } }) : null
+    const preview = recipients[0]
+      ? render({ ...payloadFor(recipients[0], "preview"), data: { ...payloadFor(recipients[0], "preview").data, editToken: audience.kind === "waitlist" ? undefined : "apercu" } })
+      : null
     return NextResponse.json({ recipients: recipients.length, audience: label, preview: preview && { subject: preview.subject, html: preview.html } })
   }
 

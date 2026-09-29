@@ -7,6 +7,7 @@ import { slugify } from "@/lib/utils"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
 import { EVENT_PUBLIC_STATUSES } from "@/lib/statuses"
+import { PUBLISH_WITHOUT_SHIFT_ERROR } from "@/lib/event-publish"
 
 const showSchema = z.object({
   name: z.string(),
@@ -73,6 +74,10 @@ export async function POST(req: Request) {
   if (!parsed.success) return validationError(parsed.error)
 
   const data = parsed.data
+  // A brand-new event has no shift yet, so it can't be born published (same rule as PATCH).
+  if (data.publicStatus === "published") {
+    return NextResponse.json({ error: PUBLISH_WITHOUT_SHIFT_ERROR }, { status: 409 })
+  }
   let slug = slugify(data.title)
 
   const existing = await db.event.findFirst({ where: { slug } })

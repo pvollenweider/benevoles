@@ -35,9 +35,9 @@ export function toPublicEvent(event: PublicEventRow) {
     registered: shift.registrations.length,
     spotsLeft: Math.max(0, shift.capacity - shift.registrations.length),
     status: shift.registrations.length >= shift.capacity ? "full" : shift.status,
+    // Place and instructions are public; the contact person (often a personal mobile) is only
+    // in the confirmation email, the reminders and the personal page of registered volunteers.
     locationDetails: shift.locationDetails,
-    contactName: shift.contactName,
-    contactPhone: shift.contactPhone,
     instructions: shift.instructions,
     displayOrder: shift.displayOrder,
     waitlistEnabled: shift.waitlistEnabled,
