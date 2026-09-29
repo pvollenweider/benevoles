@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs"
 import { randomBytes } from "crypto"
 import { z } from "zod"
 import { hashToken } from "@/lib/token-hash"
+import { validationError } from "@/lib/api-error"
 
 const createOrgSchema = z.object({
   name: z.string().min(1).max(100),
@@ -59,7 +60,7 @@ export async function POST(req: Request) {
   const body = await req.json()
   const parsed = createOrgSchema.safeParse(body)
   if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+    return validationError(parsed.error)
   }
   const { name, adminEmail, adminName } = parsed.data
 

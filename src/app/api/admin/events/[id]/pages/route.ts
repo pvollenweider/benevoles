@@ -3,6 +3,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { slugify } from "@/lib/utils"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { z } from "zod"
+import { validationError } from "@/lib/api-error"
 
 const postSchema = z.object({
   title: z.string().min(1).max(120),
@@ -33,7 +34,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const { id: eventId } = await params
   const body = await req.json()
   const parsed = postSchema.safeParse(body)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) return validationError(parsed.error)
 
   const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })

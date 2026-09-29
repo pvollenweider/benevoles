@@ -4,6 +4,7 @@ import { adminActor } from "@/lib/event-log"
 import { addSectorLeader, cancelRegistrations, resendManagementLinks } from "@/lib/admin-registration-actions"
 import { z } from "zod"
 import { registrationToken } from "@/lib/token-vault"
+import { validationError } from "@/lib/api-error"
 
 // Bulk actions on the registrations list (#292): one request for the whole selection instead
 // of one per row. All-or-nothing on ownership: every id must be a registration of this event,
@@ -20,7 +21,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const { id: eventId } = await params
   const parsed = schema.safeParse(await req.json().catch(() => null))
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) return validationError(parsed.error)
 
   const event = await db.event.findFirst({
     where: { id: eventId },

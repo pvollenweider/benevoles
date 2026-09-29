@@ -5,6 +5,7 @@ import { adminActor, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { randomBytes } from "crypto"
 import { linkToken } from "@/lib/token-vault"
+import { validationError } from "@/lib/api-error"
 
 const postSchema = z.object({
   volunteerIds: z.array(z.string()).min(1).max(500),
@@ -94,7 +95,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const { id: eventId } = await params
   const body = await req.json()
   const parsed = postSchema.safeParse(body)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) return validationError(parsed.error)
 
   const event = await db.event.findFirst({
     where: { id: eventId },

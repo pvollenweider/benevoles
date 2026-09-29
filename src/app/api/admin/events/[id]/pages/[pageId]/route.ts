@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { z } from "zod"
+import { validationError } from "@/lib/api-error"
 
 const patchSchema = z.object({
   title: z.string().min(1).max(120).optional(),
@@ -16,7 +17,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const { id: eventId, pageId } = await params
   const body = await req.json()
   const parsed = patchSchema.safeParse(body)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) return validationError(parsed.error)
 
   const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })

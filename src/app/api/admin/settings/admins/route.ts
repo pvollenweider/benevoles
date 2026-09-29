@@ -9,6 +9,7 @@ import bcrypt from "bcryptjs"
 import { z } from "zod"
 import { hashToken } from "@/lib/token-hash"
 import { enqueueAndDeliver } from "@/lib/notifications/outbox"
+import { validationError } from "@/lib/api-error"
 
 const postSchema = z.object({
   email: z.string().trim().toLowerCase().email(),
@@ -53,7 +54,7 @@ export async function POST(req: Request) {
 
   const body = await req.json()
   const parsed = postSchema.safeParse(body)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) return validationError(parsed.error)
   const { email, name } = parsed.data
 
   const existing = await prisma.adminUser.findUnique({ where: { email } })

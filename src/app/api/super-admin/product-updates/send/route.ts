@@ -3,6 +3,7 @@ import { requireSuperAdmin } from "@/lib/auth-guard"
 import { sendNotification } from "@/lib/notifications"
 import { unsubscribeToken } from "@/lib/product-updates"
 import { z } from "zod"
+import { validationError } from "@/lib/api-error"
 
 const schema = z.object({
   subject: z.string().min(1).max(150),
@@ -21,7 +22,7 @@ export async function POST(req: Request) {
 
   const body = await req.json()
   const parsed = schema.safeParse(body)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) return validationError(parsed.error)
   const { subject, content } = parsed.data
 
   const recipients = await db.adminUser.findMany({

@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
 import { passwordSchema } from "@/lib/password"
+import { validationError } from "@/lib/api-error"
 
 const schema = z
   .object({
@@ -22,7 +23,7 @@ export async function PATCH(req: Request) {
 
   const body = await req.json()
   const parsed = schema.safeParse(body)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) return validationError(parsed.error)
   const { email, currentPassword, newPassword } = parsed.data
 
   const user = await prisma.adminUser.findUnique({ where: { id: session.user.id } })

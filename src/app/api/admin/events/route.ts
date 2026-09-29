@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { slugify } from "@/lib/utils"
 import { z } from "zod"
+import { validationError } from "@/lib/api-error"
 
 const showSchema = z.object({
   name: z.string(),
@@ -65,7 +66,7 @@ export async function POST(req: Request) {
 
   const body = await req.json()
   const parsed = schema.safeParse(body)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) return validationError(parsed.error)
 
   const data = parsed.data
   let slug = slugify(data.title)
