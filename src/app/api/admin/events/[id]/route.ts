@@ -3,6 +3,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { titlesMatch } from "@/lib/confirm-title"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { z } from "zod"
+import { validationError } from "@/lib/api-error"
 
 const showSchema = z.object({
   name: z.string(),
@@ -56,7 +57,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const { id } = await params
   const body = await req.json()
   const parsed = schema.safeParse(body)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) return validationError(parsed.error)
 
   const owned = await db.event.findFirst({
     where: { id },

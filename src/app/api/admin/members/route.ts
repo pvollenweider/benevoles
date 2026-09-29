@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, logOrgEvent } from "@/lib/org-log"
 import { z } from "zod"
+import { validationError } from "@/lib/api-error"
 
 const volunteerSchema = z.object({
   firstName: z.string().min(1).max(100),
@@ -49,7 +50,7 @@ export async function POST(req: Request) {
   const body = await req.json()
   const parsed = volunteerSchema.safeParse(body)
   if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+    return validationError(parsed.error)
   }
   const data = parsed.data
 

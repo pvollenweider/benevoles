@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
-import { clockSchema, firstIssueMessage, SAME_TIME_ERROR } from "@/lib/shift-time"
+import { clockSchema, SAME_TIME_ERROR } from "@/lib/shift-time"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { cancelShift } from "@/lib/shift-cancel"
 import { registrationToken } from "@/lib/token-vault"
 import { collectNotifications, enqueueAndDeliver } from "@/lib/notifications/outbox"
+import { validationError } from "@/lib/api-error"
 
 const schema = z.object({
   roleName: z.string().optional(),
@@ -38,7 +39,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const body = await req.json()
   const parsed = schema.safeParse(body)
   if (!parsed.success) {
-    return NextResponse.json({ error: firstIssueMessage(parsed.error), details: parsed.error.flatten() }, { status: 400 })
+    return validationError(parsed.error, { useIssueMessage: true })
   }
 
   const before = await db.shift.findFirst({

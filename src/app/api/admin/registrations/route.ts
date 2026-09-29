@@ -5,6 +5,7 @@ import { z } from "zod"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { isUniqueViolation } from "@/lib/registration-capacity"
 import { registrationToken } from "@/lib/token-vault"
+import { validationError } from "@/lib/api-error"
 
 const schema = z.object({
   eventId: z.string(),
@@ -23,7 +24,7 @@ export async function POST(req: Request) {
 
   const body = await req.json()
   const parsed = schema.safeParse(body)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) return validationError(parsed.error)
 
   const { eventId, shiftId, firstName, lastName, email, phone, comment } = parsed.data
 

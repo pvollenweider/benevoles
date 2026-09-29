@@ -18,6 +18,7 @@ import {
 } from "@/lib/registration-capacity"
 import { z } from "zod"
 import { linkToken, registrationToken } from "@/lib/token-vault"
+import { validationError } from "@/lib/api-error"
 
 const schema = z.object({
   eventId: z.string(),
@@ -44,7 +45,7 @@ export async function POST(req: Request) {
   const body = await req.json()
   const parsed = schema.safeParse(body)
   if (!parsed.success) {
-    return NextResponse.json({ error: "Données invalides", details: parsed.error.flatten() }, { status: 400 })
+    return validationError(parsed.error)
   }
 
   const { eventId, shiftIds, firstName, lastName, email, phone, birthDate, comment, inviteToken } = parsed.data

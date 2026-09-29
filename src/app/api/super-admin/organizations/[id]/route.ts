@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { requireSuperAdmin } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
+import { validationError } from "@/lib/api-error"
 
 const SLUG_RE = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/
 
@@ -96,7 +97,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const body = await req.json()
   const parsed = patchSchema.safeParse(body)
   if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+    return validationError(parsed.error)
   }
 
   const existing = await prisma.organization.findUnique({ where: { id }, select: { id: true, slug: true } })

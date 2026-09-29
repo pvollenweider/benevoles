@@ -120,6 +120,10 @@ Le déploiement applique les migrations une fois, dans un Job Kubernetes lancé 
 - **supprimer** une colonne, une table ou une contrainte : uniquement quand plus aucune version déployée ne l'utilise (donc dans une release ultérieure) ;
 - une migration qui ne peut pas respecter ces règles doit être déployée sans coexistence : passer ponctuellement `strategy` à `Recreate` dans `k8s/deployment.yaml` (courte coupure assumée), puis revenir à `RollingUpdate`.
 
+## Erreurs d'API
+
+Toutes les routes répondent en erreur avec `{ error: string, details?: … }` : `error` est un message en français affichable tel quel, `details` porte des données structurées si utile. Pour un échec de validation zod, utiliser `validationError(parsed.error)` (`src/lib/api-error.ts`), jamais `{ error: parsed.error.flatten() }`.
+
 ## Tests
 
 Les tests d'intégration (`src/__integration__`, `npm run test:integration`) tournent contre un vrai Postgres (`DATABASE_URL`) : application des migrations sur une base contenant déjà des données, file d'envoi sous concurrence. Ils sont ignorés sans `DATABASE_URL` et lancés par le job E2E de la CI. Toute migration qui transforme des données existantes doit y avoir son scénario.

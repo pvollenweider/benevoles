@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, diffFields, logOrgEvent } from "@/lib/org-log"
 import { z } from "zod"
+import { validationError } from "@/lib/api-error"
 
 const patchSchema = z.object({
   firstName: z.string().min(1).optional(),
@@ -21,7 +22,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const { id } = await params
   const body = await req.json()
   const parsed = patchSchema.safeParse(body)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) return validationError(parsed.error)
 
   const before = await db.volunteer.findFirst({ where: { id } })
   if (!before) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })

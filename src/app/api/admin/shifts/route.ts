@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
-import { clockSchema, firstIssueMessage, SAME_TIME_ERROR } from "@/lib/shift-time"
+import { clockSchema, SAME_TIME_ERROR } from "@/lib/shift-time"
 import { adminActor, logEvent } from "@/lib/event-log"
+import { validationError } from "@/lib/api-error"
 
 const schema = z.object({
   eventId: z.string(),
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
   const body = await req.json()
   const parsed = schema.safeParse(body)
   if (!parsed.success) {
-    return NextResponse.json({ error: firstIssueMessage(parsed.error), details: parsed.error.flatten() }, { status: 400 })
+    return validationError(parsed.error, { useIssueMessage: true })
   }
 
   const data = parsed.data

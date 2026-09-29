@@ -3,6 +3,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor } from "@/lib/event-log"
 import { addSectorLeader } from "@/lib/admin-registration-actions"
 import { z } from "zod"
+import { validationError } from "@/lib/api-error"
 
 const postSchema = z.object({
   roleName: z.string().min(1).max(100),
@@ -34,7 +35,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const { id: eventId } = await params
   const body = await req.json()
   const parsed = postSchema.safeParse(body)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) return validationError(parsed.error)
 
   const event = await db.event.findFirst({
     where: { id: eventId },

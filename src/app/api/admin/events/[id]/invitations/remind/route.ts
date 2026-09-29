@@ -3,6 +3,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { sendMemberInvite } from "@/lib/email"
 import { z } from "zod"
 import { linkToken } from "@/lib/token-vault"
+import { validationError } from "@/lib/api-error"
 
 const schema = z.object({
   message: z.string().max(500).optional(),
@@ -20,7 +21,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const { id: eventId } = await params
   const body = await req.json().catch(() => ({}))
   const parsed = schema.safeParse(body)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) return validationError(parsed.error)
 
   const event = await db.event.findFirst({
     where: { id: eventId },

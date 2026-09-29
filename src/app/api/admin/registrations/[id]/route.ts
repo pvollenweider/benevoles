@@ -6,6 +6,7 @@ import { adminActor, logEvent } from "@/lib/event-log"
 import { cancelRegistrations } from "@/lib/admin-registration-actions"
 import { isUniqueViolation } from "@/lib/registration-capacity"
 import { reportError } from "@/lib/report-error"
+import { validationError } from "@/lib/api-error"
 
 const schema = z.object({
   status: z.enum(["active", "cancelled", "deleted"]).optional(),
@@ -20,7 +21,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const { id } = await params
   const body = await req.json()
   const parsed = schema.safeParse(body)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+  if (!parsed.success) return validationError(parsed.error)
 
   const owned = await db.registration.findFirst({ where: { id }, select: { id: true, status: true, comment: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
