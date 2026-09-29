@@ -158,11 +158,8 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
           QR code
         </Link>
         <Link href={`/admin/events/${event.id}/print`} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
-          Imprimer
+          Rapports
         </Link>
-        <a href={`/api/admin/events/${event.id}/export/pdf`} target="_blank" className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
-          Exporter PDF ↗
-        </a>
         <Link href={`/admin/events/${event.id}/log`} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
           Journal
         </Link>

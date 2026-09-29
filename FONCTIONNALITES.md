@@ -262,10 +262,10 @@ Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscr
 
 ### Exports
 
-#### Feuilles à imprimer (`/admin/events/[id]/print`)
+#### Rapports (`/admin/events/[id]/print`)
 
-- Cinq feuilles HTML noir et blanc (`/api/admin/events/[id]/export/sheets/[view]`) : `day` (planning par jour, paysage), `role` (une page par poste avec son responsable, paysage), `phones` (liste alphabétique avec téléphones, mention organisateurs), `attendance` (feuille de présence : case par bénévole, cochée si `checkedInAt`, lignes vides = places libres + 2), `individual` (une page par bénévole avec ses créneaux et les infos pratiques)
-- Rendu pur dans `src/lib/print-sheets.ts` ; téléphone de l'inscription avant celui du profil ; jamais les heures cumulées
+- L'export complet en premier, puis cinq feuilles HTML noir et blanc (`/api/admin/events/[id]/export/sheets/[view]`) : `day` (frise par jour avec les prénoms dans les créneaux + détail, paysage), `role` (une page par poste : frise, détail, responsable, paysage), `individual` (une page par bénévole : sa frise du jour, ses créneaux avec infos pratiques), `attendance` (feuille de présence : case par bénévole, cochée si `checkedInAt`, lignes vides = places libres + 2), `phones` (liste alphabétique avec téléphones, mention organisateurs)
+- La frise réutilise `buildDayParts` de l'export complet, restylée en monochrome ; rendu pur dans `src/lib/print-sheets.ts` ; téléphone de l'inscription avant celui du profil ; jamais les heures cumulées
 
 #### PDF (impression navigateur)
 

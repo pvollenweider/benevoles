@@ -33,7 +33,7 @@ describe("GET /api/admin/events/[id]/export/sheets/[view]", () => {
     expect(res.status).toBe(200)
     expect(res.headers.get("Content-Type")).toContain("text/html")
     const html = await res.text()
-    expect(html).toContain("<h1>Liste avec téléphones</h1>")
+    expect(html).toContain("<strong>Liste avec téléphones</strong>")
     expect(html).toContain("078 9")
     expect(html).not.toContain("079 1")
     expect(findFirst.mock.calls[0][0].where).toEqual({ id: "evt-a" })

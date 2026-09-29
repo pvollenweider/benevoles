@@ -28,6 +28,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Rapports** : le lien « Imprimer » de la page d'un événement devient **Rapports** et regroupe l'export complet (en premier) et les feuilles à imprimer ; le lien « Exporter PDF » séparé disparaît. Les plannings par jour, par poste et individuels reprennent la frise de l'export complet, en noir et blanc, avec les prénoms dans les créneaux ; en-têtes, tableaux et feuille de présence ont été redessinés pour l'impression.
+
 - **Publication** : un événement ne peut plus être publié sans créneau, quel que soit le chemin (formulaire d'édition, bouton Publier, API) ; le message l'explique. La création se fait toujours en brouillon, le choix du statut n'apparaît plus à cette étape.
 - **Infos pratiques d'un créneau** : la personne de contact et son téléphone ne sont plus visibles sur la page publique d'inscription ; ils ne sont envoyés qu'aux inscrits (confirmation, rappels, page personnelle). Le lieu et la consigne restent publics.
 
