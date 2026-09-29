@@ -16,11 +16,16 @@ vi.mock("@/lib/prisma", () => ({
     sectorLeader: { findMany, findFirst, create },
     eventLog: { create: logCreate },
     volunteer: { findFirst: volunteerFindFirst, update: volunteerUpdate },
+    async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
   },
 }))
 
 const sendNotificationMock = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/notifications/outbox", () => ({ enqueueAndDeliver: (payloads: unknown[]) => { payloads.forEach((p) => sendNotificationMock(p)); return Promise.resolve() } }))
+vi.mock("@/lib/notifications/outbox", () => ({
+  // Stored with the transaction (#352); what matters is the payload queued.
+  enqueueNotifications: async (payloads: unknown[]) => { payloads.forEach((p) => sendNotificationMock(p)); return payloads.map((_, i) => `row-${i}`) },
+  deliverAfterResponse: () => {},
+}))
 vi.mock("@/lib/notifications", () => ({ sendNotification: sendNotificationMock }))
 
 function get() {

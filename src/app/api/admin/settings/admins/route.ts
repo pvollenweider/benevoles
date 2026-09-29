@@ -11,7 +11,7 @@ import { randomBytes } from "crypto"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
 import { hashToken } from "@/lib/token-hash"
-import { enqueueAndDeliver } from "@/lib/notifications/outbox"
+import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
 
 const postSchema = z.object({
@@ -70,18 +70,30 @@ export async function POST(req: Request) {
   const setupTokenExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   const dummyHash = await bcrypt.hash(randomBytes(16).toString("hex"), 10)
 
-  const admin = await prisma.adminUser.create({
-    data: {
-      organizationId,
-      email,
-      name,
-      passwordHash: dummyHash,
-      role: "admin",
-      isActive: false,
-      setupTokenHash: hashToken(setupToken),
-      setupTokenExpiresAt,
-    },
-    select: { id: true, name: true, email: true, role: true, isActive: true, createdAt: true, setupTokenExpiresAt: true },
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
+  const inviteUrl = `${appUrl}/admin/accept-invite?token=${setupToken}`
+
+  // The admin account and its invitation email commit together (#352).
+  const { admin, outboxIds } = await prisma.$transaction(async (tx) => {
+    const admin = await tx.adminUser.create({
+      data: {
+        organizationId,
+        email,
+        name,
+        passwordHash: dummyHash,
+        role: "admin",
+        isActive: false,
+        setupTokenHash: hashToken(setupToken),
+        setupTokenExpiresAt,
+      },
+      select: { id: true, name: true, email: true, role: true, isActive: true, createdAt: true, setupTokenExpiresAt: true },
+    })
+    const outboxIds = await enqueueNotifications([{
+      kind: "admin_invite",
+      recipient: { email, name },
+      data: { adminName: name, organizationName: org.name, inviteUrl },
+    }], tx)
+    return { admin, outboxIds }
   })
 
   await logOrgEvent({
@@ -92,14 +104,7 @@ export async function POST(req: Request) {
     entityId: admin.id,
   })
 
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
-  const inviteUrl = `${appUrl}/admin/accept-invite?token=${setupToken}`
-
-  await enqueueAndDeliver([{
-    kind: "admin_invite",
-    recipient: { email, name },
-    data: { adminName: name, organizationName: org.name, inviteUrl },
-  }])
+  deliverAfterResponse(outboxIds)
 
   return NextResponse.json({ ...admin, pending: true, inviteUrl }, { status: 201 })
 }

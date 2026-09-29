@@ -64,6 +64,12 @@ const prismaMock = {
     findMany: vi.fn().mockResolvedValue([]),
     create: vi.fn().mockResolvedValue({ id: "inv-1", token: "tok" }),
   },
+  notificationOutbox: {
+    create: vi.fn().mockResolvedValue({ id: "row-1" }),
+    createMany: vi.fn().mockResolvedValue({ count: 1 }),
+    findUniqueOrThrow: vi.fn().mockResolvedValue({ id: "row-1" }),
+  },
+  async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
 }
 vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }))
 

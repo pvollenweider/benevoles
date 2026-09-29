@@ -11,8 +11,7 @@ import { orgBaseUrl } from "@/lib/urls"
 import { passwordSchema } from "@/lib/password"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { hashToken } from "@/lib/token-hash"
-import { reportError } from "@/lib/report-error"
-import { enqueueAndDeliver } from "@/lib/notifications/outbox"
+import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
 
 const schema = z.object({
@@ -76,29 +75,31 @@ export async function POST(req: Request) {
 
   const passwordHash = await bcrypt.hash(password, 12)
 
-  await prisma.adminUser.update({
-    where: { id: admin.id },
-    data: {
-      passwordHash,
-      isActive: true,
-      setupTokenHash: null,
-      setupTokenExpiresAt: null,
-    },
-  })
-
-  if (admin.organization) {
-    const adminUrl = `${orgBaseUrl(admin.organization.slug)}/admin/events`
-    await enqueueAndDeliver([{
+  // Activation and welcome email commit together (#352).
+  const organization = admin.organization
+  const outboxIds = await prisma.$transaction(async (tx) => {
+    await tx.adminUser.update({
+      where: { id: admin.id },
+      data: {
+        passwordHash,
+        isActive: true,
+        setupTokenHash: null,
+        setupTokenExpiresAt: null,
+      },
+    })
+    if (!organization) return []
+    return enqueueNotifications([{
       kind: "admin_welcome",
       dedupeKey: `admin_welcome:${admin.id}`,
       recipient: { email: admin.email, name: admin.name },
       data: {
         adminName: admin.name,
-        organizationName: admin.organization.name,
-        adminUrl,
+        organizationName: organization.name,
+        adminUrl: `${orgBaseUrl(organization.slug)}/admin/events`,
       },
-    }]).catch(reportError("notification.admin_welcome"))
-  }
+    }], tx)
+  })
+  deliverAfterResponse(outboxIds)
 
   return NextResponse.json({ ok: true })
 }

@@ -9,7 +9,7 @@ import { tagVolunteerAsResponsable } from "./sector-leaders"
 import { reportError } from "./report-error"
 import { generateToken } from "./utils"
 import { linkToken } from "./token-vault"
-import { enqueueAndDeliver } from "./notifications/outbox"
+import { deliverAfterResponse, enqueueNotifications } from "./notifications/outbox"
 
 /**
  * Admin actions on registrations, shared by the single-row routes and the bulk route (#292), so
@@ -81,8 +81,24 @@ export async function addSectorLeader(
 
   // Clear token only in memory (the invite email needs it); the DB keeps hash + encrypted copy.
   const token = generateToken()
-  const leader = await db.sectorLeader.create({
-    data: { eventId: ctx.event.id, roleName: input.roleName, name: input.name, email: input.email, ...linkToken.data(token) },
+  // The leader and their invite email commit together (#352).
+  const { leader, outboxIds } = await db.$transaction(async (tx) => {
+    const leader = await tx.sectorLeader.create({
+      data: { eventId: ctx.event.id, roleName: input.roleName, name: input.name, email: input.email, ...linkToken.data(token) },
+    })
+    const outboxIds = await enqueueNotifications([{
+      kind: "sector_leader_invite",
+      dedupeKey: `sector_leader_invite:${leader.id}`,
+      recipient: { email: leader.email, name: leader.name },
+      data: {
+        leaderName: leader.name,
+        roleName: leader.roleName,
+        eventTitle: ctx.event.title,
+        orgSlug: ctx.event.organization.slug,
+        token,
+      },
+    }], tx)
+    return { leader, outboxIds }
   })
 
   await logEvent({
@@ -96,18 +112,7 @@ export async function addSectorLeader(
 
   await tagVolunteerAsResponsable(ctx.organizationId, leader.email).catch(reportError("sector_leader.tag_member"))
 
-  await enqueueAndDeliver([{
-    kind: "sector_leader_invite",
-    dedupeKey: `sector_leader_invite:${leader.id}`,
-    recipient: { email: leader.email, name: leader.name },
-    data: {
-      leaderName: leader.name,
-      roleName: leader.roleName,
-      eventTitle: ctx.event.title,
-      orgSlug: ctx.event.organization.slug,
-      token,
-    },
-  }]).catch(reportError("notification.sector_leader_invite"))
+  deliverAfterResponse(outboxIds)
 
   return { status: "created" as const, leader }
 }

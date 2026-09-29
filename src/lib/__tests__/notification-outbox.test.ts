@@ -30,7 +30,7 @@ vi.mock("../notifications/index", () => ({ sendNotification: m.sendNotification 
 vi.mock("next/server", () => ({ after: m.after }))
 vi.mock("../report-error", () => ({ reportError: (ctx: string) => (e: unknown) => m.reported(ctx, e) }))
 
-import { backoffMs, collectNotifications, deliverOutbox, enqueueAndDeliver, enqueueNotifications, MAX_ATTEMPTS, openPayload, outboxHealth, outboxMessageId, sealPayload } from "../notifications/outbox"
+import { backoffMs, collectNotifications, deliverAfterResponse, deliverOutbox, enqueueNotifications, MAX_ATTEMPTS, openPayload, outboxHealth, outboxMessageId, sealPayload } from "../notifications/outbox"
 
 const payload = { kind: "registration_confirmation" as const, recipient: { email: "a@x.com" }, data: {} }
 const now = new Date("2030-01-01T12:00:00Z")
@@ -42,7 +42,7 @@ beforeEach(() => {
   m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, payload })
 })
 
-describe("collectNotifications / enqueueAndDeliver", () => {
+describe("collectNotifications / enqueueNotifications / deliverAfterResponse", () => {
   it("collects payloads instead of sending them", async () => {
     const c = collectNotifications()
     expect(await c.send(payload)).toEqual({ ok: true })
@@ -50,17 +50,27 @@ describe("collectNotifications / enqueueAndDeliver", () => {
     expect(m.sendNotification).not.toHaveBeenCalled()
   })
 
-  it("stores the notifications and schedules delivery after the response", async () => {
+  it("stores the notifications, then delivery is scheduled after the response", async () => {
     m.create.mockResolvedValueOnce({ id: "n1" }).mockResolvedValueOnce({ id: "n2" })
-    await enqueueAndDeliver([payload, payload])
+    const ids = await enqueueNotifications([payload, payload])
+    expect(ids).toEqual(["n1", "n2"])
     expect(m.create).toHaveBeenCalledTimes(2)
+    expect(m.after).not.toHaveBeenCalled() // storing doesn't deliver
+    deliverAfterResponse(ids)
     expect(m.after).toHaveBeenCalledOnce()
     expect(m.sendNotification).not.toHaveBeenCalled() // not inline
   })
 
-  it("does nothing for an empty batch", async () => {
-    await enqueueAndDeliver([])
+  it("stores through the client it is given (a transaction's), not the global one (#352)", async () => {
+    const txCreate = vi.fn().mockResolvedValue({ id: "t1" })
+    const tx = { notificationOutbox: { create: txCreate, createMany: vi.fn(), findUniqueOrThrow: vi.fn() } }
+    expect(await enqueueNotifications([payload], tx)).toEqual(["t1"])
+    expect(txCreate).toHaveBeenCalledOnce()
     expect(m.create).not.toHaveBeenCalled()
+  })
+
+  it("schedules nothing for an empty batch", () => {
+    deliverAfterResponse([])
     expect(m.after).not.toHaveBeenCalled()
   })
 })

@@ -8,7 +8,7 @@ import { clockSchema, SAME_TIME_ERROR } from "@/lib/shift-time"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { cancelShift } from "@/lib/shift-cancel"
 import { registrationToken } from "@/lib/token-vault"
-import { collectNotifications, enqueueAndDeliver } from "@/lib/notifications/outbox"
+import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
 
 const schema = z.object({
@@ -61,7 +61,43 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const updateData: Record<string, unknown> = { ...rest }
   if (rest.date) updateData.date = new Date(rest.date)
 
-  const after = await db.shift.update({ where: { id }, data: updateData })
+  // The update and its notifications commit together (#352): volunteers are never left
+  // unaware of a schedule change that was saved.
+  const { after, outboxIds, notified } = await db.$transaction(async (tx) => {
+    const after = await tx.shift.update({ where: { id }, data: updateData })
+
+    // Detect schedule changes worth notifying about (date / start / end).
+    const scheduleChanged =
+      (rest.date && before.date.toISOString() !== after.date.toISOString()) ||
+      (rest.startTime && before.startTime !== after.startTime) ||
+      (rest.endTime && before.endTime !== after.endTime)
+
+    // Through the outbox (#311): `notified` counts notifications queued, retried if SMTP fails.
+    const outbox = collectNotifications()
+    if (scheduleChanged && notifyVolunteers !== false && before.registrations.length > 0) {
+      for (const reg of before.registrations) {
+        await outbox.send({
+          kind: "shift_modified",
+          dedupeKey: `shift_modified:${reg.id}:${after.updatedAt.toISOString()}`,
+          recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
+          data: {
+            volunteerName: reg.volunteer.firstName,
+            eventTitle: before.event.title,
+            orgSlug: before.event.organization.slug,
+            shiftLabel: after.label,
+            oldDate: fmtDate(before.date),
+            newDate: fmtDate(after.date),
+            oldStart: before.startTime,
+            newStart: after.startTime,
+            oldEnd: before.endTime,
+            newEnd: after.endTime,
+            editToken: registrationToken.reveal(reg),
+          },
+        })
+      }
+    }
+    return { after, outboxIds: await enqueueNotifications(outbox.payloads, tx), notified: outbox.payloads.length }
+  })
 
   const shiftChanges = diffFields(before, after, [
     "roleName",
@@ -84,40 +120,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       changes: shiftChanges,
     })
   }
+  deliverAfterResponse(outboxIds)
 
-  // Detect schedule changes worth notifying about (date / start / end).
-  const scheduleChanged =
-    (rest.date && before.date.toISOString() !== after.date.toISOString()) ||
-    (rest.startTime && before.startTime !== after.startTime) ||
-    (rest.endTime && before.endTime !== after.endTime)
-
-  // Through the outbox (#311): `notified` counts notifications queued, retried if SMTP fails.
-  const outbox = collectNotifications()
-  if (scheduleChanged && notifyVolunteers !== false && before.registrations.length > 0) {
-    for (const reg of before.registrations) {
-      await outbox.send({
-        kind: "shift_modified",
-        dedupeKey: `shift_modified:${reg.id}:${after.updatedAt.toISOString()}`,
-        recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
-        data: {
-          volunteerName: reg.volunteer.firstName,
-          eventTitle: before.event.title,
-          orgSlug: before.event.organization.slug,
-          shiftLabel: after.label,
-          oldDate: fmtDate(before.date),
-          newDate: fmtDate(after.date),
-          oldStart: before.startTime,
-          newStart: after.startTime,
-          oldEnd: before.endTime,
-          newEnd: after.endTime,
-          editToken: registrationToken.reveal(reg),
-        },
-      })
-    }
-  }
-  await enqueueAndDeliver(outbox.payloads)
-
-  return NextResponse.json({ ...after, notified: outbox.payloads.length })
+  return NextResponse.json({ ...after, notified })
 }
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
