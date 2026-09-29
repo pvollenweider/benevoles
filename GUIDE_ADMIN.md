@@ -78,6 +78,12 @@ Raccourci : **Ctrl + K** (**⌘ + K** sur Mac) place le curseur dans le champ de
 
 **`/admin/events/new`**
 
+### Partir d'un modèle
+
+En haut de la page, **Comment commencer ?** propose une page blanche ou un modèle : festival sur plusieurs jours, buvette, manifestation sportive, fête de village, montage / exploitation / démontage. Un modèle n'est qu'un événement déjà rempli : choisissez-le, donnez un titre et la date du premier jour, et le brouillon est créé avec ses postes et ses créneaux (la liste de ce qui sera créé est affichée avant). Vous arrivez sur ses créneaux : horaires, effectifs et postes sont des points de départ, chacun se modifie ou se supprime comme d'habitude. Rien n'est publié.
+
+### Page blanche
+
 | Champ | Description |
 |-------|-------------|
 | Titre | Nom affiché publiquement |

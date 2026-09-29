@@ -9,6 +9,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Modèles d'événement** : à la création d'un événement, cinq modèles (festival sur plusieurs jours, buvette, manifestation sportive, fête de village, montage / exploitation / démontage) créent un brouillon déjà rempli de ses postes et créneaux à partir d'un titre et d'une date. Tout se modifie ensuite comme d'habitude.
 - **Écrire aux bénévoles** : depuis un événement, un email avec objet et message à tous les inscrits, aux bénévoles d'un poste ou d'un créneau, ou aux personnes en liste d'attente. Le nombre de destinataires s'affiche, l'aperçu montre l'email tel qu'il sera reçu, et l'envoi est confirmé puis noté dans le journal. Chaque personne le reçoit une fois, avec ses créneaux concernés.
 - **Infos pratiques par créneau** : un créneau peut porter un lieu de rendez-vous, une personne de contact (nom, téléphone) et une consigne courte. Le bénévole les retrouve dans l'email de confirmation, les rappels, sa page personnelle et le récapitulatif avant de s'inscrire.
 - **Série de créneaux** : dans les créneaux d'un événement, **Créer une série** crée d'un coup tous les créneaux qui se suivent sur une plage horaire (par exemple une buvette de 10 h à 22 h par créneaux de deux heures), avec un aperçu avant création. Chaque créneau reste ensuite modifiable séparément.
