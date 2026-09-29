@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 // Subdomains that never identify an organization (system/infra hostnames),
-// shared between the middleware (org-slug injection) and robots.ts (crawl rules) so the
+// shared between the proxy (org-slug injection) and robots.ts (crawl rules) so the
 // two never drift apart.
 export const NON_ORG_SUBDOMAINS = new Set(["www", "app", "admin", "api", "staging"])
 

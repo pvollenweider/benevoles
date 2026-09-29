@@ -11,7 +11,7 @@ import { isRateLimited, rateLimit } from "./rate-limit"
  * admin, or an org admin whose organization was disabled, gets `null` (NextAuth then clears the
  * session cookie); a changed role or organization is picked up from the DB instead of the token.
  *
- * Not used by the middleware (edge runtime, no Prisma): it only gates redirects on the token as
+ * Not used by the proxy (no Prisma there): it only gates redirects on the token as
  * issued. Every page and API route that reads data goes through auth() from src/auth.ts.
  */
 export async function refreshAdminToken(token: JWT): Promise<JWT | null> {

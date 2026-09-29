@@ -8,6 +8,8 @@ import { orgSlugFromHost } from "@/lib/org-subdomain"
 
 const { auth } = NextAuth(authConfig)
 
+// Proxy file convention (Next.js 16, formerly `middleware`): a first filter on pages from the JWT
+// alone and the organization header; the authoritative checks stay server-side (auth-guard.ts).
 export default auth((req) => {
   const { pathname } = req.nextUrl
 

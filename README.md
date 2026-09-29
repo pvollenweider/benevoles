@@ -306,7 +306,7 @@ Liste complète, avec les pages d'événement, responsables de secteur, jalons, 
 
 Chaque organisation dispose d'un client Prisma étendu (`getOrgClient`) qui limite à l'organisation toutes les opérations sur les modèles rattachés à une organisation (directement ou via leur événement) : lectures, modifications, suppressions et créations. Une ligne d'une autre organisation se comporte comme une ligne inexistante. Le code admin (`src/app/api/admin/**`, `src/app/admin/**`) n'a pas le droit d'importer le client brut (règle ESLint `no-restricted-imports`, exceptions justifiées fichier par fichier). Les tests de `src/__tests__/security/` et `src/lib/__tests__/prisma-org.test.ts` valident l'isolation.
 
-L'organisation courante est déterminée par le sous-domaine (`[orgSlug].benevol.app`, injecté par `src/middleware.ts` dans l'en-tête `x-org-slug`). En développement, sans sous-domaine, le paramètre `?org=<slug>` joue le même rôle.
+L'organisation courante est déterminée par le sous-domaine (`[orgSlug].benevol.app`, injecté par `src/proxy.ts` dans l'en-tête `x-org-slug`). En développement, sans sous-domaine, le paramètre `?org=<slug>` joue le même rôle.
 
 ## Auteur
 

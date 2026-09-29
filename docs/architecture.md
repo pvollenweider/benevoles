@@ -27,7 +27,7 @@ CronJobs Kubernetes ──► /api/cron/reminders, /api/cron/cleanup
 | `src/app/api/` | Routes HTTP, voir [api.md](api.md) |
 | `src/components/` | Composants (`admin/`, `super-admin/`, timeline publique `DayTimeline.tsx`) |
 | `src/lib/` | Logique métier partagée |
-| `src/middleware.ts` | Authentification des pages et routage par sous-domaine |
+| `src/proxy.ts` | Proxy (ex-middleware) : authentification des pages et routage par sous-domaine |
 | `prisma/` | Schéma, migrations, seed |
 | `k8s/`, `Dockerfile`, `docker-compose*.yml` | Déploiement |
 | `gandi-webhook/` | Webhook DNS Gandi pour cert-manager (Go, hors application) |
@@ -53,7 +53,7 @@ Modules `src/lib/` à connaître :
 ## Multi-tenant
 
 - Chaque organisation (`Organization`) possède ses événements, créneaux, membres et admins.
-- L'organisation courante d'une page publique vient du sous-domaine : `src/middleware.ts` copie `[orgSlug]` de `[orgSlug].benevol.app` dans l'en-tête `x-org-slug`, sauf pour `www`, `app`, `admin`, `api` et `staging`. Sans sous-domaine (développement), `?org=<slug>` joue le même rôle.
+- L'organisation courante d'une page publique vient du sous-domaine : `src/proxy.ts` copie `[orgSlug]` de `[orgSlug].benevol.app` dans l'en-tête `x-org-slug`, sauf pour `www`, `app`, `admin`, `api` et `staging`. Sans sous-domaine (développement), `?org=<slug>` joue le même rôle.
 - Côté admin, l'organisation vient de la session. L'isolation est décrite dans [roles-et-permissions.md](roles-et-permissions.md).
 - Un changement de slug archive l'ancien dans `OrgSlugHistory` pour rediriger les anciens liens.
 - Le slug d'un événement est unique au sein d'une organisation, pas globalement.

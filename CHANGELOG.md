@@ -28,6 +28,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Interne** : le fichier `src/middleware.ts` devient `src/proxy.ts`, la convention Next.js 16 ; comportement identique (protection des pages admin, en-tête `x-org-slug`).
 - **Rapports** : le lien « Imprimer » de la page d'un événement devient **Rapports** et regroupe l'export complet (en premier) et les feuilles à imprimer ; le lien « Exporter PDF » séparé disparaît. Les plannings par jour, par poste et individuels reprennent la frise de l'export complet, en noir et blanc, avec les prénoms dans les créneaux ; en-têtes, tableaux et feuille de présence ont été redessinés pour l'impression.
 
 - **Publication** : un événement ne peut plus être publié sans créneau, quel que soit le chemin (formulaire d'édition, bouton Publier, API) ; le message l'explique. La création se fait toujours en brouillon, le choix du statut n'apparaît plus à cette étape.
