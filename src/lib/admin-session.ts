@@ -52,3 +52,30 @@ export async function recordLoginFailure(ip: string, email: string): Promise<voi
     rateLimit(ip, "login-ip", LOGIN_MAX_PER_IP, LOGIN_WINDOW_MS),
   ])
 }
+
+const PASSWORD_CHECK_WINDOW_MS = 15 * 60 * 1000
+const PASSWORD_CHECK_MAX_PER_ACCOUNT = 5
+const PASSWORD_CHECK_MAX_PER_IP = 20
+
+/**
+ * Budget for the "current password" check of a signed-in admin (change password, super-admin
+ * profile, #358): without it a stolen session could guess the current password indefinitely, at
+ * the cost of one bcrypt comparison per request. Same approach as login: only failures count,
+ * per account and per IP, checked before bcrypt runs.
+ */
+export async function passwordCheckAllowed(ip: string, adminId: string): Promise<boolean> {
+  const [byAccount, byIp] = await Promise.all([
+    isRateLimited(adminId, "password-check-account", PASSWORD_CHECK_MAX_PER_ACCOUNT),
+    isRateLimited(ip, "password-check-ip", PASSWORD_CHECK_MAX_PER_IP),
+  ])
+  return !byAccount && !byIp
+}
+
+export async function recordPasswordCheckFailure(ip: string, adminId: string): Promise<void> {
+  await Promise.all([
+    rateLimit(adminId, "password-check-account", PASSWORD_CHECK_MAX_PER_ACCOUNT, PASSWORD_CHECK_WINDOW_MS),
+    rateLimit(ip, "password-check-ip", PASSWORD_CHECK_MAX_PER_IP, PASSWORD_CHECK_WINDOW_MS),
+  ])
+}
+
+export const PASSWORD_CHECK_BLOCKED = "Trop de tentatives avec un mot de passe incorrect. Réessayez dans un quart d'heure."

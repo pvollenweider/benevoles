@@ -3,6 +3,8 @@
 
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
+import { PASSWORD_CHECK_BLOCKED, passwordCheckAllowed, recordPasswordCheckFailure } from "@/lib/admin-session"
+import { getClientIp } from "@/lib/rate-limit"
 // AdminUser (the signed-in admin's own row, by session id) isn't a tenant-scoped model.
 // eslint-disable-next-line no-restricted-imports
 import { prisma } from "@/lib/prisma"
@@ -32,20 +34,29 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: `Le nouveau mot de passe ne respecte pas les règles : ${errors.join(", ").toLowerCase()}.`, details: { errors } }, { status: 400 })
   }
 
+  const adminId = guard.session.user.id
+  if (!adminId) return NextResponse.json({ error: "Non authentifié." }, { status: 401 })
+
   const admin = await prisma.adminUser.findUnique({
-    where: { id: guard.session.user.id },
+    where: { id: adminId },
     select: { passwordHash: true },
   })
   if (!admin) return NextResponse.json({ error: "Compte introuvable." }, { status: 404 })
 
+  // Failed checks are limited per account and IP (#358), before bcrypt runs.
+  const ip = getClientIp(req)
+  if (!(await passwordCheckAllowed(ip, adminId))) {
+    return NextResponse.json({ error: PASSWORD_CHECK_BLOCKED }, { status: 429 })
+  }
   const valid = await bcrypt.compare(currentPassword, admin.passwordHash)
   if (!valid) {
+    await recordPasswordCheckFailure(ip, adminId)
     return NextResponse.json({ error: "Le mot de passe actuel est incorrect." }, { status: 400 })
   }
 
   const passwordHash = await bcrypt.hash(newPassword, 12)
   await prisma.adminUser.update({
-    where: { id: guard.session.user.id },
+    where: { id: adminId },
     data: { passwordHash },
   })
 
