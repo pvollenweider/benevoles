@@ -119,6 +119,22 @@ Un créneau correspond à un poste de bénévolat sur une plage horaire précise
 | Statut | `Ouvert`, `Complet`, `Fermé`, `Annulé` |
 | Âge minimum (optionnel) | Condition d'âge pour ce poste (ex. : `18` pour un poste avec permis de conduire). Affiché en info sur le planning public ; vérifié à l'inscription — voir « Âge minimum sur un poste » ci-dessous. |
 
+### Créer une série de créneaux
+
+Pour couvrir une plage horaire avec des créneaux qui se suivent (une buvette de 10 h à 22 h par créneaux de deux heures, trois personnes à chaque fois), cliquez sur **Créer une série** au lieu de saisir chaque créneau.
+
+| Champ | Description |
+|-------|-------------|
+| Poste, libellé | Comme pour un créneau seul |
+| Date, début, fin | La plage à couvrir ; une fin plus petite que le début passe minuit |
+| Durée d'un créneau | Choix courant (30 min à 4 h) ou saisie en minutes (15 au minimum) |
+| Pause entre deux créneaux | Facultative, en minutes |
+| Personnes par créneau, liste d'attente | Appliqués à chaque créneau |
+
+L'aperçu se met à jour au fur et à mesure : nombre de créneaux, horaires de chacun. Si la plage ne se divise pas exactement, le dernier créneau est plus court (indiqué dans l'aperçu) ; supprimez-le ensuite s'il ne sert pas. Les créneaux qui commencent après minuit sont datés du lendemain. Une série compte au plus 48 créneaux.
+
+Une fois créés, ce sont des créneaux ordinaires : chacun se modifie ou se supprime séparément.
+
 #### Horaires et nuit
 
 L'horloge va de `00:00` à `23:59` : on ne saisit jamais `24:00`, `25:00` ou `26:00`, l'horloge repart à zéro après minuit.
