@@ -119,43 +119,33 @@ export async function POST(req: Request) {
   // to leak yet) or a valid member invite, which was emailed to that volunteer.
   const organizationId = event.organizationId
   const birthDateValue = birthDate ? new Date(birthDate) : undefined
-  let volunteer = await prisma.volunteer.findFirst({ where: { email, organizationId } })
+  const existing = await prisma.volunteer.findFirst({ where: { email, organizationId }, select: { id: true } })
   let ownsEmail = false
-  let createdNow = false
-  if (!volunteer) {
-    try {
-      volunteer = await prisma.volunteer.create({ data: { firstName, lastName, email, phone, birthDate: birthDateValue, organizationId } })
-      ownsEmail = true
-      createdNow = true
-    } catch (e) {
-      // A concurrent submission for the same new email created it first (#264).
-      if (!isUniqueViolation(e)) throw e
-      volunteer = await prisma.volunteer.findFirstOrThrow({ where: { email, organizationId } })
+  if (existing) {
+    if (inviteToken) {
+      const invite = await prisma.memberInvite.findFirst({
+        where: { ...linkToken.where(inviteToken), eventId, volunteerId: existing.id },
+        select: { id: true },
+      })
+      ownsEmail = invite != null
     }
-  } else if (inviteToken) {
-    const invite = await prisma.memberInvite.findFirst({
-      where: { ...linkToken.where(inviteToken), eventId, volunteerId: volunteer.id },
+
+    const existingRegs = await prisma.registration.findMany({
+      where: { volunteerId: existing.id, shiftId: { in: shiftIds }, status: { in: [...LIVE_STATUSES] } },
       select: { id: true },
     })
-    ownsEmail = invite != null
-  }
-  const volunteerId = volunteer.id
+    if (existingRegs.length > 0) return alreadyRegistered(existing.id, eventId)
 
-  const existingRegs = await prisma.registration.findMany({
-    where: { volunteerId, shiftId: { in: shiftIds }, status: { in: [...LIVE_STATUSES] } },
-    select: { id: true },
-  })
-  if (existingRegs.length > 0) return alreadyRegistered(volunteerId, eventId)
-
-  const allEventRegs = await prisma.registration.findMany({
-    where: { volunteerId, eventId, status: "active" },
-    include: { shift: true },
-  })
-  const clash = findOverlap(allEventRegs, shifts)
-  if (clash) {
-    return NextResponse.json({
-      error: `Ce créneau chevauche une inscription existante (${clash.label}).`,
-    }, { status: 409 })
+    const allEventRegs = await prisma.registration.findMany({
+      where: { volunteerId: existing.id, eventId, status: "active" },
+      include: { shift: true },
+    })
+    const clash = findOverlap(allEventRegs, shifts)
+    if (clash) {
+      return NextResponse.json({
+        error: `Ce créneau chevauche une inscription existante (${clash.label}).`,
+      }, { status: 409 })
+    }
   }
 
   // Chaque inscription reçoit son propre token unique.
@@ -168,10 +158,26 @@ export async function POST(req: Request) {
   // One token per new registration, kept in clear only in memory: the confirmation email and
   // the response need it, the DB only stores its hash and encrypted copy (#290).
   const tokens = new Map(shiftIds.map((id) => [id, generateToken()]))
-  let registrations
+  let outcome: { registrations: Awaited<ReturnType<typeof prisma.registration.create>>[]; volunteerId: string; createdNow: boolean }
   try {
-    registrations = await prisma.$transaction(async (tx) => {
+    outcome = await prisma.$transaction(async (tx) => {
       await lockShifts(tx, shiftIds)
+
+      // A new volunteer is created in the same transaction as their registrations (#309): if the
+      // registration fails (shift full, overlap, duplicate), no member record is left behind.
+      // ON CONFLICT DO NOTHING (skipDuplicates) so a concurrent first sign-up with the same
+      // address doesn't abort this transaction; whoever inserted it "created" it.
+      let volunteerId = existing?.id
+      let createdNow = false
+      if (!volunteerId) {
+        const { count } = await tx.volunteer.createMany({
+          data: [{ firstName, lastName, email, phone, birthDate: birthDateValue, organizationId }],
+          skipDuplicates: true,
+        })
+        createdNow = count === 1
+        volunteerId = (await tx.volunteer.findFirstOrThrow({ where: { email, organizationId }, select: { id: true } })).id
+      }
+
       // Then the volunteer (#285): two concurrent sign-ups of the same person to two different,
       // overlapping shifts lock different shift rows, so the overlap check has to be redone under
       // a per-volunteer lock too. Always shifts first, then volunteer: same order everywhere.
@@ -214,7 +220,7 @@ export async function POST(req: Request) {
           })
         )
       }
-      return created
+      return { registrations: created, volunteerId, createdNow }
     })
   } catch (e) {
     if (e instanceof ShiftFullError) {
@@ -228,9 +234,19 @@ export async function POST(req: Request) {
         error: `Ce créneau chevauche une inscription existante (${e.label}).`,
       }, { status: 409 })
     }
-    if (isUniqueViolation(e)) return alreadyRegistered(volunteerId, eventId)
+    if (isUniqueViolation(e)) {
+      // Our transaction rolled back; the duplicate belongs to a volunteer that exists
+      // independently of it (created before, or by a concurrent sign-up).
+      const owner = existing ?? await prisma.volunteer.findFirst({ where: { email, organizationId }, select: { id: true } })
+      if (owner) return alreadyRegistered(owner.id, eventId)
+      return NextResponse.json({ error: "Vous êtes déjà inscrit(e) à un de ces créneaux." }, { status: 409 })
+    }
     throw e
   }
+
+  const { registrations, volunteerId, createdNow } = outcome
+  // A brand-new address is proof of ownership (nothing to leak yet), see above.
+  if (createdNow) ownsEmail = true
 
   // Only once the registration went through, and only with proof of ownership (see above):
   // an anonymous submission must not rewrite an existing volunteer's name, phone or birth date.

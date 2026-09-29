@@ -8,6 +8,8 @@ import { hashToken } from "@/lib/token-hash"
 const m = vi.hoisted(() => ({
   volFindFirst: vi.fn(),
   volCreate: vi.fn(),
+  txVolCreateMany: vi.fn(),
+  txVolFindFirstOrThrow: vi.fn(),
   volUpdate: vi.fn(),
   inviteFindFirst: vi.fn(),
   regFindMany: vi.fn(),
@@ -22,6 +24,8 @@ const m = vi.hoisted(() => ({
 vi.mock("@/lib/prisma", () => {
   const tx = {
     $queryRaw: vi.fn(),
+    // A new volunteer is created inside the registration transaction (#309).
+    volunteer: { createMany: m.txVolCreateMany, findFirstOrThrow: m.txVolFindFirstOrThrow },
     registration: {
       findMany: m.txRegFindMany,
       count: vi.fn().mockResolvedValue(0),
@@ -173,7 +177,7 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
 
   it("sign-up notifications go through the outbox, not sent inline (#293)", async () => {
     m.volFindFirst.mockResolvedValue(null)
-    m.volCreate.mockResolvedValue({ id: "vol-new" })
+    m.txVolCreateMany.mockResolvedValue({ count: 1 }); m.txVolFindFirstOrThrow.mockResolvedValue({ id: "vol-new" })
     const { POST } = await import("@/app/api/public/registrations/route")
     expect((await POST(post({ email: "new@x.com" }))).status).toBe(201)
     // The confirmation email helper gets the outbox collector as its `send`.
@@ -182,9 +186,31 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     expect(m.sendNotification).not.toHaveBeenCalled()
   })
 
+  it("a new volunteer is only created inside the registration transaction (no orphan if it fails, #309)", async () => {
+    m.volFindFirst.mockResolvedValue(null)
+    m.txVolCreateMany.mockResolvedValue({ count: 1 })
+    m.txVolFindFirstOrThrow.mockResolvedValue({ id: "vol-new" })
+    m.txRegFindMany.mockResolvedValue([{ shift: { label: "Accueil", date: new Date("2030-06-01T00:00:00Z"), startTime: "15:00", endTime: "17:00" } }])
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post({ email: "new@x.com" }))
+    expect(res.status).toBe(409) // failed inside the transaction → rolled back with the volunteer
+    expect(m.volCreate).not.toHaveBeenCalled()
+    expect(m.txVolCreateMany).toHaveBeenCalledWith(expect.objectContaining({ skipDuplicates: true }))
+  })
+
+  it("an address created concurrently by another sign-up isn't proof of ownership", async () => {
+    m.volFindFirst.mockResolvedValue(null)
+    m.txVolCreateMany.mockResolvedValue({ count: 0 }) // the other request inserted it first
+    m.txVolFindFirstOrThrow.mockResolvedValue({ id: "vol-other" })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post({ email: "new@x.com" }))
+    expect(res.status).toBe(201)
+    expect((await res.json()).editToken).toBeNull()
+  })
+
   it("brand-new address: token returned (nothing to leak yet)", async () => {
     m.volFindFirst.mockResolvedValue(null)
-    m.volCreate.mockResolvedValue({ id: "vol-new" })
+    m.txVolCreateMany.mockResolvedValue({ count: 1 }); m.txVolFindFirstOrThrow.mockResolvedValue({ id: "vol-new" })
     const { POST } = await import("@/app/api/public/registrations/route")
     const data = await (await POST(post({ email: "new@x.com" }))).json()
     expectTokenStored(data.editToken)
@@ -253,7 +279,7 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
 
   it("overlap created concurrently is caught under the volunteer lock", async () => {
     m.volFindFirst.mockResolvedValue(null)
-    m.volCreate.mockResolvedValue({ id: "vol-new" })
+    m.txVolCreateMany.mockResolvedValue({ count: 1 }); m.txVolFindFirstOrThrow.mockResolvedValue({ id: "vol-new" })
     // Nothing before the lock, but a concurrent request registered an overlapping shift meanwhile.
     m.txRegFindMany.mockResolvedValue([{ shift: { label: "Accueil", date: new Date("2030-06-01T00:00:00Z"), startTime: "15:00", endTime: "17:00" } }])
     const { POST } = await import("@/app/api/public/registrations/route")
