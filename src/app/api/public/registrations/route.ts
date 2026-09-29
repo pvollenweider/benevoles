@@ -112,11 +112,11 @@ export async function POST(req: Request) {
 
   // Volunteer is org-scoped: each (organizationId, email) is a unique roster entry.
   //
-  // Nothing here proves the submitter owns `email` (#285): anyone can type someone else's
-  // address. So for a volunteer who already exists, this request must neither reveal anything
-  // (no editToken in the response — it opens /my, which lists their registrations, tokens and
-  // phone) nor change their profile. Proof of ownership is either a brand-new address (nothing
-  // to leak yet) or a valid member invite, which was emailed to that volunteer.
+  // Nothing here proves the submitter owns `email` (#285, #312): anyone can type someone else's
+  // address, known to the organization or not. So the management link (editToken: it opens
+  // /my, which lists the volunteer's registrations, tokens and phone) is never returned on
+  // screen — it goes out by email only — and an existing profile isn't changed. The one proof
+  // of ownership is a valid member invite, which was emailed to that very volunteer.
   const organizationId = event.organizationId
   const birthDateValue = birthDate ? new Date(birthDate) : undefined
   // Case-insensitive: addresses stored before normalization (#310) may still have capitals
@@ -250,8 +250,6 @@ export async function POST(req: Request) {
   }
 
   const { registrations, volunteerId, createdNow } = outcome
-  // A brand-new address is proof of ownership (nothing to leak yet), see above.
-  if (createdNow) ownsEmail = true
 
   // Only once the registration went through, and only with proof of ownership (see above):
   // an anonymous submission must not rewrite an existing volunteer's name, phone or birth date.
@@ -375,7 +373,7 @@ export async function POST(req: Request) {
 
   return NextResponse.json({
     success: true,
-    // Without proof of ownership the link only goes out by email (confirmation email above).
+    // Only with proof of ownership (member invite); otherwise the link is in the email only.
     editToken: ownsEmail ? editToken : null,
     linkSentByEmail: !ownsEmail,
     confirmationMessage: onWaitlist ? null : event.confirmationMessage,
