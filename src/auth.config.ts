@@ -18,9 +18,10 @@ export const authConfig: NextAuthConfig = {
     },
     jwt({ token, user }) {
       if (user) {
-        const u = user as { role?: string; organizationId?: string | null }
+        const u = user as { role?: string; organizationId?: string | null; sessionVersion?: number }
         token.role = u.role
         token.organizationId = u.organizationId ?? null
+        token.sessionVersion = u.sessionVersion ?? 0
       }
       return token
     },

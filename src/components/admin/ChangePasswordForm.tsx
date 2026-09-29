@@ -4,10 +4,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useId, useState } from "react"
+import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
 import PasswordRules from "@/components/PasswordRules"
 import { PASSWORD_RULES } from "@/lib/password"
 
-export default function ChangePasswordForm() {
+export default function ChangePasswordForm({ email }: { email: string }) {
+  const router = useRouter()
   const [current, setCurrent] = useState("")
   const [next, setNext] = useState("")
   const [confirm, setConfirm] = useState("")
@@ -45,6 +48,13 @@ export default function ChangePasswordForm() {
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
         setError(typeof data?.error === "string" ? data.error : "Une erreur est survenue.")
+        return
+      }
+      // The change signed out every session, this one included (#360): sign it in again with the
+      // password just set, so only sessions opened before the change are lost.
+      const again = await signIn("credentials", { email, password: next, redirect: false })
+      if (!again || again.error) {
+        router.push("/admin/login")
         return
       }
       setSuccess(true)

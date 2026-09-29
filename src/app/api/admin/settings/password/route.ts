@@ -57,7 +57,8 @@ export async function POST(req: Request) {
   const passwordHash = await bcrypt.hash(newPassword, 12)
   await prisma.adminUser.update({
     where: { id: adminId },
-    data: { passwordHash },
+    // Ends every session opened before (#360); the form signs this one in again right after.
+    data: { passwordHash, sessionVersion: { increment: 1 } },
   })
 
   return NextResponse.json({ ok: true })

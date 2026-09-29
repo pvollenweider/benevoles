@@ -47,4 +47,13 @@ describe("PATCH /api/super-admin/profile", () => {
     expect((await PATCH(patch({ currentPassword: "right", email: "new@x.ch" }))).status).toBe(200)
     expect(update).toHaveBeenCalledOnce()
   })
+
+  it("a new password ends the other sessions; an email change alone doesn't (#360)", async () => {
+    compare.mockResolvedValue(true)
+    const { PATCH } = await import("@/app/api/super-admin/profile/route")
+    await PATCH(patch({ currentPassword: "right", newPassword: "Nouveau-mot2passe" }))
+    expect(update.mock.calls.at(-1)![0].data).toMatchObject({ sessionVersion: { increment: 1 } })
+    await PATCH(patch({ currentPassword: "right", email: "other@x.ch" }))
+    expect(update.mock.calls.at(-1)![0].data).not.toHaveProperty("sessionVersion")
+  })
 })

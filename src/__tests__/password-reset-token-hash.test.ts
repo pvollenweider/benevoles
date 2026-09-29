@@ -45,4 +45,15 @@ describe("password reset tokens are stored hashed (#269)", () => {
     expect(res.status).toBe(400)
     expect(findUnique).toHaveBeenCalledWith({ where: { passwordResetTokenHash: hashToken("abc") } })
   })
+
+  it("a reset signs out every session opened before it (#360)", async () => {
+    findUnique.mockResolvedValue({ id: "a1", passwordResetExpiresAt: new Date(Date.now() + 60_000) })
+    const { POST } = await import("@/app/api/public/reset-password/route")
+    const res = await POST(json("http://localhost/api/public/reset-password", { token: "abc", password: "Correct-horse-battery-9" }))
+    expect(res.status).toBe(200)
+    expect(update).toHaveBeenCalledWith(expect.objectContaining({
+      where: { id: "a1" },
+      data: expect.objectContaining({ sessionVersion: { increment: 1 }, passwordResetTokenHash: null }),
+    }))
+  })
 })
