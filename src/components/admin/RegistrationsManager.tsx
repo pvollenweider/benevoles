@@ -1,16 +1,24 @@
 "use client"
 
-import { useState, useRef, useEffect, useMemo, useId } from "react"
+import { useState, useMemo } from "react"
 import StatusBadge from "./StatusBadge"
-import ModalShell from "./ModalShell"
-import { shiftsOverlap as sharedShiftsOverlap } from "@/lib/utils"
+import ShiftSelect from "./registrations/ShiftSelect"
+import MakeLeaderModal from "./registrations/MakeLeaderModal"
 import { contactPhone } from "@/lib/contact-phone"
+import {
+  addConflictMessage,
+  cancelAnnouncement,
+  filterRegistrations,
+  fmtHour,
+  fmtShortDate,
+  leaderAnnouncement as leaderAddedAnnouncement,
+  leaderRoleOptions,
+  resendAnnouncement,
+  shiftsOfEmail,
+  type ShiftRef,
+} from "@/lib/registrations-list"
 
 type Volunteer = { id: string; firstName: string; lastName: string; email: string | null; phone: string | null }
-type ShiftRef  = {
-  id: string; roleName: string; label: string; date: string
-  startTime: string; endTime: string; capacity: number; registrationCount: number
-}
 type Registration = {
   id: string; status: string; source: string; comment: string | null
   // Phone given on the public form for this registration; shown before the profile's.
@@ -32,245 +40,6 @@ const sourceLabels: Record<string, string> = {
   public_form: "Formulaire",
   admin_manual: "Manuel",
   import: "Import",
-}
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
-// Shared with the public registration flow: handles shifts that run past midnight.
-const shiftsOverlap = (a: ShiftRef, b: ShiftRef) => sharedShiftsOverlap(a, b)
-
-function fmtDate(iso: string) {
-  return new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })
-}
-function fmtTime(t: string) {
-  const [h, m] = t.split(":")
-  return m === "00" ? `${Number(h)}h` : `${Number(h)}h${m}`
-}
-
-// ── Status pill ───────────────────────────────────────────────────────────────
-function StatusPill({ s }: { s: ShiftRef }) {
-  if (s.registrationCount >= s.capacity) {
-    return <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-red-100 text-red-600 font-medium">Complet</span>
-  }
-  if (s.registrationCount === 0) {
-    return <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium">0/{s.capacity}</span>
-  }
-  return (
-    <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-medium">
-      {s.registrationCount}/{s.capacity}
-    </span>
-  )
-}
-
-// ── Custom shift dropdown ─────────────────────────────────────────────────────
-function ShiftSelect({
-  shifts, value, onChange, placeholder = "Sélectionner…", nullable = false, existingShifts,
-}: {
-  shifts: ShiftRef[]
-  value: string
-  onChange: (id: string) => void
-  placeholder?: string
-  nullable?: boolean
-  existingShifts?: ShiftRef[]
-}) {
-  const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!open) return
-    function onMD(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
-    }
-    function onKey(e: KeyboardEvent) { if (e.key === "Escape") setOpen(false) }
-    document.addEventListener("mousedown", onMD)
-    document.addEventListener("keydown", onKey)
-    return () => {
-      document.removeEventListener("mousedown", onMD)
-      document.removeEventListener("keydown", onKey)
-    }
-  }, [open])
-
-  const selected      = shifts.find(s => s.id === value) ?? null
-  const alreadyIds    = useMemo(() => new Set((existingShifts ?? []).map(s => s.id)), [existingShifts])
-  const conflictIds   = useMemo(() => new Set(
-    existingShifts
-      ? shifts.filter(s => !alreadyIds.has(s.id) && existingShifts.some(e => shiftsOverlap(s, e))).map(s => s.id)
-      : []
-  ), [existingShifts, shifts, alreadyIds])
-
-  return (
-    <div ref={ref} className="relative">
-      {/* Trigger */}
-      <button
-        type="button"
-        onClick={() => setOpen(o => !o)}
-        className="flex items-center justify-between gap-2 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[38px]"
-      >
-        <span className={`truncate text-left ${selected ? "text-gray-800" : "text-gray-500"}`}>
-          {selected
-            ? `${fmtDate(selected.date)} · ${fmtTime(selected.startTime)}–${fmtTime(selected.endTime)} · ${selected.roleName}${selected.label !== selected.roleName ? ` · ${selected.label}` : ""}`
-            : placeholder}
-        </span>
-        <svg
-          className={`w-4 h-4 text-gray-500 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
-          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
-
-      {/* Dropdown list */}
-      {open && (
-        <div
-          className="absolute top-full mt-1 left-0 z-50 bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden"
-          style={{ minWidth: "100%", width: "max-content", maxWidth: "90vw" }}
-        >
-          {nullable && (
-            <div
-              onClick={() => { onChange(""); setOpen(false) }}
-              className={`px-4 py-2.5 text-sm cursor-pointer hover:bg-gray-50 border-b border-gray-100
-                ${!value ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-600"}`}
-            >
-              Tous les créneaux
-            </div>
-          )}
-          {shifts.map(s => {
-            const full       = s.registrationCount >= s.capacity
-            const empty      = s.registrationCount === 0
-            const alreadyReg = alreadyIds.has(s.id)
-            const isConflict = conflictIds.has(s.id)
-            const isSelected = value === s.id
-            const rowCls = alreadyReg
-              ? "border-orange-300 hover:bg-orange-50"
-              : isConflict
-                ? "border-amber-300 hover:bg-amber-50"
-                : full
-                  ? "border-red-200 hover:bg-red-50"
-                  : !empty
-                    ? "border-emerald-200 hover:bg-emerald-50"
-                    : "border-gray-100 hover:bg-gray-50"
-            return (
-              <div
-                key={s.id}
-                onClick={() => { onChange(s.id); setOpen(false) }}
-                className={`flex items-center gap-3 pl-3 pr-4 py-2 cursor-pointer border-l-2 transition-colors
-                  ${rowCls} ${isSelected ? "bg-blue-50" : alreadyReg ? "bg-orange-50/50" : isConflict ? "bg-amber-50/40" : ""}`}
-              >
-                <span className="shrink-0 w-28 text-xs text-gray-500">{fmtDate(s.date)}</span>
-                <span className="shrink-0 w-20 text-xs text-gray-600 tabular-nums">
-                  {fmtTime(s.startTime)}–{fmtTime(s.endTime)}
-                </span>
-                <span className={`flex-1 text-sm font-medium min-w-0 ${alreadyReg ? "text-orange-800" : isConflict ? "text-amber-800" : "text-gray-800"}`}>
-                  {s.roleName}
-                  {s.label !== s.roleName && (
-                    <span className="font-normal text-gray-500"> · {s.label}</span>
-                  )}
-                </span>
-                {alreadyReg && (
-                  <span className="shrink-0 text-[10px] text-orange-600 font-medium">Déjà inscrit</span>
-                )}
-                {isConflict && (
-                  <span className="shrink-0 text-[10px] text-amber-600 font-medium">⚠ conflit</span>
-                )}
-                <StatusPill s={s} />
-              </div>
-            )
-          })}
-        </div>
-      )}
-    </div>
-  )
-}
-
-// ── "Rendre responsable" modal ───────────────────────────────────────────────
-function MakeLeaderModal({
-  eventId, volunteerName, volunteerEmail, roleOptions, defaultRole, onClose, onDone,
-}: {
-  eventId: string
-  volunteerName: string
-  volunteerEmail: string | null
-  roleOptions: string[]
-  defaultRole: string
-  onClose: () => void
-  onDone: (roleName: string) => void
-}) {
-  const roleId = useId()
-  const emailId = useId()
-  const [roleName, setRoleName] = useState(defaultRole)
-  const [email, setEmail] = useState(volunteerEmail ?? "")
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  async function submit(e: React.FormEvent) {
-    e.preventDefault()
-    setSaving(true)
-    setError(null)
-    const res = await fetch(`/api/admin/events/${eventId}/sector-leaders`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ roleName, name: volunteerName, email }),
-    })
-    setSaving(false)
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      setError(typeof data?.error === "string" ? data.error : "Une erreur est survenue.")
-      return
-    }
-    onDone(roleName)
-  }
-
-  return (
-    <ModalShell title={`Rendre ${volunteerName} responsable`} onClose={onClose}>
-      <form onSubmit={submit} className="space-y-4">
-        <div>
-          <label htmlFor={roleId} className="block text-sm text-gray-700 mb-1">Poste</label>
-          {roleOptions.length > 1 ? (
-            <select
-              id={roleId}
-              value={roleName}
-              onChange={(e) => setRoleName(e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white"
-            >
-              {roleOptions.map((r) => <option key={r} value={r}>{r}</option>)}
-            </select>
-          ) : (
-            <input id={roleId} type="text" value={roleName} readOnly className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-gray-50 text-gray-700" />
-          )}
-          {roleOptions.length > 1 && (
-            <p className="text-xs text-gray-400 mt-1">{volunteerName} est inscrit·e sur plusieurs postes — choisissez lequel.</p>
-          )}
-        </div>
-        <div>
-          <label htmlFor={emailId} className="block text-sm text-gray-700 mb-1">Email *</label>
-          <input
-            id={emailId}
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
-          />
-          {!volunteerEmail && (
-            <p className="text-xs text-amber-600 mt-1">Aucun email enregistré pour ce bénévole — le lien responsable en a besoin.</p>
-          )}
-        </div>
-        {error && (
-          <p role="alert" className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
-        )}
-        <div className="flex justify-end gap-2">
-          <button type="button" onClick={onClose} className="text-sm text-gray-600 px-4 py-2 rounded-full hover:bg-gray-50 transition-colors">
-            Annuler
-          </button>
-          <button
-            type="submit"
-            disabled={saving}
-            className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
-          >
-            {saving ? "Envoi…" : "Rendre responsable"}
-          </button>
-        </div>
-      </form>
-    </ModalShell>
-  )
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
@@ -295,39 +64,25 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   const visibleShifts = roleFilter ? shifts.filter(s => s.roleName === roleFilter) : shifts
 
   // Shifts already held by the volunteer identified by the email in the add form
-  const volunteerShifts = useMemo<ShiftRef[] | undefined>(() => {
-    const email = addForm.email.trim().toLowerCase()
-    if (!email) return undefined
-    const found = registrations.filter(r => r.volunteer.email?.toLowerCase() === email).map(r => r.shift)
-    return found.length > 0 ? found : undefined
-  }, [addForm.email, registrations])
+  const volunteerShifts = useMemo<ShiftRef[] | undefined>(
+    () => shiftsOfEmail(registrations, addForm.email),
+    [addForm.email, registrations]
+  )
 
   const selectedShiftObj = useMemo(
     () => (addForm.shiftId ? shifts.find(s => s.id === addForm.shiftId) ?? null : null),
     [addForm.shiftId, shifts]
   )
 
-  const conflictMessage = useMemo<string | null>(() => {
-    if (!selectedShiftObj || !volunteerShifts) return null
-    if (volunteerShifts.some(e => e.id === selectedShiftObj.id))
-      return "Ce bénévole est déjà inscrit à ce créneau."
-    if (volunteerShifts.some(e => shiftsOverlap(selectedShiftObj, e)))
-      return "Ce bénévole est déjà inscrit à un autre créneau pour cette plage horaire."
-    return null
-  }, [selectedShiftObj, volunteerShifts])
+  const conflictMessage = useMemo(
+    () => addConflictMessage(selectedShiftObj, volunteerShifts),
+    [selectedShiftObj, volunteerShifts]
+  )
 
-  const filtered = registrations.filter((r) => {
-    const q = search.toLowerCase()
-    const matchSearch = !q || `${r.volunteer.firstName} ${r.volunteer.lastName} ${r.volunteer.email ?? ""}`.toLowerCase().includes(q)
-    const matchRole  = !roleFilter  || r.shift.roleName === roleFilter
-    const matchShift = !shiftFilter || r.shift.id === shiftFilter
-    return matchSearch && matchRole && matchShift
-  })
+  const filtered = filterRegistrations(registrations, { search, role: roleFilter, shiftId: shiftFilter })
 
   function openLeaderModal(reg: Registration) {
-    const roleOptions = [...new Set(
-      registrations.filter((r) => r.volunteer.id === reg.volunteer.id).map((r) => r.shift.roleName)
-    )]
+    const roleOptions = leaderRoleOptions(registrations, reg.volunteer.id)
     setLeaderTarget({
       volunteerId: reg.volunteer.id,
       volunteerName: `${reg.volunteer.firstName} ${reg.volunteer.lastName}`,
@@ -388,11 +143,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     })
     setBulkBusy(false)
     const failed = selectedActiveRegs.length - cancelledIds.size
-    setLeaderAnnouncement(
-      failed > 0
-        ? `${cancelledIds.size} bénévole${cancelledIds.size > 1 ? "s" : ""} retiré${cancelledIds.size > 1 ? "s" : ""}, ${failed} échec${failed > 1 ? "s" : ""}.`
-        : `${cancelledIds.size} bénévole${cancelledIds.size > 1 ? "s" : ""} retiré${cancelledIds.size > 1 ? "s" : ""}.`
-    )
+    setLeaderAnnouncement(cancelAnnouncement(cancelledIds.size, failed))
   }
 
   async function handleBulkMakeLeader() {
@@ -408,13 +159,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     const succeeded = result ? result.done + (result.alreadyLeader ?? 0) : 0
     const failed = result ? 0 : withEmail.length
     setSelectedIds(new Set())
-    setLeaderAnnouncement(
-      [
-        succeeded > 0 ? `${succeeded} responsable${succeeded > 1 ? "s" : ""} ajouté${succeeded > 1 ? "s" : ""}.` : null,
-        failed > 0 ? `${failed} échec${failed > 1 ? "s" : ""}.` : null,
-        withoutEmail > 0 ? `${withoutEmail} ignoré${withoutEmail > 1 ? "s" : ""} (pas d'email).` : null,
-      ].filter(Boolean).join(" ")
-    )
+    setLeaderAnnouncement(leaderAddedAnnouncement(succeeded, failed, withoutEmail))
   }
 
   // A single selected row opens the modal (lets the admin pick among several roles if the
@@ -437,11 +182,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     const succeeded = result?.done ?? 0
     const failed = result ? (result.failed ?? 0) : resendable.length
     setSelectedIds(new Set())
-    setLeaderAnnouncement(
-      failed > 0
-        ? `Lien renvoyé à ${succeeded} bénévole${succeeded > 1 ? "s" : ""}, ${failed} échec${failed > 1 ? "s" : ""}.`
-        : `Lien renvoyé à ${succeeded} bénévole${succeeded > 1 ? "s" : ""}.`
-    )
+    setLeaderAnnouncement(resendAnnouncement(succeeded, failed))
   }
 
   async function handleAdd(e: React.FormEvent) {
@@ -694,7 +435,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                         ? <>{reg.shift.roleName} <span className="text-gray-500 font-normal">·</span> {reg.shift.label}</>
                         : reg.shift.label}
                     </p>
-                    <p className="text-xs text-gray-500">{fmtDate(reg.shift.date)} · {fmtTime(reg.shift.startTime)}–{fmtTime(reg.shift.endTime)}</p>
+                    <p className="text-xs text-gray-500">{fmtShortDate(reg.shift.date)} · {fmtHour(reg.shift.startTime)}–{fmtHour(reg.shift.endTime)}</p>
                   </td>
                   <td className="px-4 py-3 hidden md:table-cell">
                     <span className="text-xs text-gray-500">{sourceLabels[reg.source] ?? reg.source}</span>
