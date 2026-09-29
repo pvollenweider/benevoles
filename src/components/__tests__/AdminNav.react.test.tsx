@@ -6,7 +6,8 @@ import "@testing-library/jest-dom/vitest"
 import { render, screen, fireEvent, cleanup, within } from "@testing-library/react"
 
 vi.mock("next-auth/react", () => ({ signOut: vi.fn() }))
-vi.mock("next/navigation", () => ({ usePathname: () => "/admin/members" }))
+let pathname = "/admin/members"
+vi.mock("next/navigation", () => ({ usePathname: () => pathname }))
 
 import AdminNav from "../admin/AdminNav"
 
@@ -80,5 +81,62 @@ describe("AdminNav — mobile menu", () => {
     fireEvent.click(toggle())
     fireEvent.click(within(panel()).getByRole("link", { name: "Membres" }))
     expect(toggle()).toHaveFocus()
+  })
+})
+
+// Global search (#377): a search form in the bar (in the panel below md), Ctrl+K / ⌘K to reach it.
+describe("AdminNav — search", () => {
+  afterEach(() => {
+    cleanup()
+    pathname = "/admin/members"
+  })
+
+  const fields = () => screen.getAllByRole("searchbox", { name: "Rechercher un bénévole, un événement ou un poste", hidden: true })
+
+  it("submits q to the search page", () => {
+    render(<AdminNav userName="Alice" role="admin" />)
+    expect(fields()).toHaveLength(2)
+    for (const input of fields()) {
+      expect(input).toHaveAttribute("name", "q")
+      expect(input.closest("form")).toHaveAttribute("action", "/admin/search")
+      expect(input.closest("form")).toHaveAttribute("role", "search")
+    }
+    expect(screen.getAllByRole("button", { name: "Rechercher", hidden: true })).toHaveLength(2)
+  })
+
+  it("Ctrl+K and ⌘K focus the bar's field when it's shown", () => {
+    render(<AdminNav userName="Alice" role="admin" />)
+    const desktop = document.getElementById("admin-search")!
+    // jsdom has no layout: offsetParent is null for every element unless faked.
+    Object.defineProperty(desktop, "offsetParent", { get: () => document.body })
+    fireEvent.keyDown(document.body, { key: "k", ctrlKey: true })
+    expect(desktop).toHaveFocus()
+    desktop.blur()
+    fireEvent.keyDown(document.body, { key: "k", metaKey: true })
+    expect(desktop).toHaveFocus()
+  })
+
+  it("Ctrl+K opens the menu and focuses its field on a small screen", () => {
+    render(<AdminNav userName="Alice" role="admin" />)
+    fireEvent.keyDown(document.body, { key: "k", ctrlKey: true })
+    expect(screen.getByRole("button", { name: "Menu" })).toHaveAttribute("aria-expanded", "true")
+    expect(document.getElementById("admin-search-mobile")).toHaveFocus()
+  })
+
+  it("single keys don't move focus (WCAG 2.1.4)", () => {
+    render(<AdminNav userName="Alice" role="admin" />)
+    fireEvent.keyDown(document.body, { key: "k" })
+    fireEvent.keyDown(document.body, { key: "/" })
+    expect(screen.getByRole("button", { name: "Menu" })).toHaveAttribute("aria-expanded", "false")
+    expect(document.body).toHaveFocus()
+  })
+
+  it("on the search page, no second form in the bar; Ctrl+K goes to the page's field", () => {
+    pathname = "/admin/search"
+    render(<><AdminNav userName="Alice" role="admin" /><input id="search-page-q" type="search" aria-label="page" /></>)
+    expect(document.getElementById("admin-search")).toBeNull()
+    expect(document.getElementById("admin-search-mobile")).toBeNull()
+    fireEvent.keyDown(document.body, { key: "k", ctrlKey: true })
+    expect(screen.getByRole("searchbox", { name: "page" })).toHaveFocus()
   })
 })

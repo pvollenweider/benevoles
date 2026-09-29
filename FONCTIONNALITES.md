@@ -110,6 +110,13 @@ Liste exhaustive des fonctionnalités de l'application.
 - Compteurs : événements (publiés, à venir), bénévoles inscrits (et bénévoles uniques), taux de remplissage global
 - Répartition des membres : total, avec email, sans email (ne peuvent pas recevoir d'invitations)
 
+### Recherche globale (`/admin/search`)
+
+- Champ **Rechercher** dans la barre du haut (dans le menu sur mobile), raccourci **Ctrl + K** (**⌘ + K** sur Mac)
+- Résultats groupés : bénévoles (nom, email, téléphone), leurs inscriptions en cours (confirmées, liste d'attente, place proposée), événements (titre, lieu, slug), créneaux (poste, intitulé, titre de l'événement) ; 20 résultats par groupe
+- Tous les mots doivent correspondre, sans tenir compte des majuscules ; les accents comptent
+- Liens vers la page Membres ou les inscriptions de l'événement déjà filtrées (`?q=`, `?shift=`)
+
 ### Gestion des événements
 
 - Création et édition d'événements

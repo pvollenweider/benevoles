@@ -25,6 +25,10 @@ describe("filterMembers", () => {
     expect(filterMembers(members, { ...all, search: "nobody" })).toEqual([])
   })
 
+  it("matches the full name, as linked from the global search for a member without email", () => {
+    expect(filterMembers(members, { ...all, search: "Bob Durand" }).map((x) => x.id)).toEqual(["b"])
+  })
+
   it("filters by tag, combined with the inactive toggle", () => {
     expect(filterMembers(members, { ...all, tag: "bar" }).map((x) => x.id)).toEqual(["a"])
     expect(filterMembers(members, { ...all, tag: "bar", showInactive: true }).map((x) => x.id)).toEqual(["a", "c"])

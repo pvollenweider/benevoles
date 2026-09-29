@@ -8,6 +8,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import SuperAdminMenu, { SUPER_ADMIN_ITEMS } from "./SuperAdminMenu"
 import UserMenu from "./UserMenu"
+import { SEARCH_MAX_LENGTH } from "@/lib/admin-search"
 
 const LINKS = [
   { href: "/admin/dashboard", match: "/admin/dashboard", label: "Tableau de bord" },
@@ -26,6 +27,45 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
   const toggleRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
   const panelId = useId()
+  const searchRef = useRef<HTMLInputElement>(null)
+  const mobileSearchRef = useRef<HTMLInputElement>(null)
+  const focusMobileSearch = useRef(false)
+
+  // The search page has its own field: the bar's would be a second, identical search form.
+  const onSearchPage = pathname === "/admin/search"
+
+  // Ctrl+K / ⌘K focuses the search field (#377). A modifier shortcut, not a single character key,
+  // so it can't fire while someone types or dictates (WCAG 2.1.4). Below `md` the field is in the
+  // menu panel: open it, then focus once it's shown. On the search page, its own field.
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key.toLowerCase() !== "k" || !(e.ctrlKey || e.metaKey) || e.altKey || e.shiftKey) return
+      const t = e.target as HTMLElement | null
+      // Rich-text editors use Ctrl+K for links.
+      if (t?.isContentEditable) return
+      // A dialog open over the page keeps the keyboard.
+      if (document.querySelector("dialog[open], [aria-modal='true']")) return
+      e.preventDefault()
+      const pageField = document.getElementById("search-page-q")
+      if (pageField) {
+        pageField.focus()
+      } else if (searchRef.current && searchRef.current.offsetParent !== null) {
+        searchRef.current.focus()
+      } else {
+        focusMobileSearch.current = true
+        setMobileOpen(true)
+      }
+    }
+    document.addEventListener("keydown", onKeyDown)
+    return () => document.removeEventListener("keydown", onKeyDown)
+  }, [])
+
+  useEffect(() => {
+    if (mobileOpen && focusMobileSearch.current) {
+      focusMobileSearch.current = false
+      mobileSearchRef.current?.focus()
+    }
+  }, [mobileOpen])
 
   useEffect(() => {
     if (!mobileOpen) return
@@ -74,6 +114,32 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
         </div>
         <div className="flex items-center gap-4 shrink-0">
           <div className="hidden md:flex items-center gap-4">
+            {!onSearchPage && (
+              <form role="search" aria-label="Recherche globale" action="/admin/search" className="flex">
+                <label htmlFor="admin-search" className="sr-only">Rechercher un bénévole, un événement ou un poste</label>
+                <input
+                  ref={searchRef}
+                  id="admin-search"
+                  type="search"
+                  name="q"
+                  maxLength={SEARCH_MAX_LENGTH}
+                  placeholder="Rechercher"
+                  aria-keyshortcuts="Control+K Meta+K"
+                  className="w-32 lg:w-48 border border-gray-500 rounded-l-lg px-2.5 py-1.5 text-sm placeholder:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+                />
+                {/* The button labels the field visibly once the placeholder is gone. */}
+                <button
+                  type="submit"
+                  className="px-2.5 border border-l-0 border-gray-500 rounded-r-lg text-gray-700 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+                >
+                  <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
+                    <circle cx="8.5" cy="8.5" r="5.5" />
+                    <path d="m13 13 4 4" strokeLinecap="round" />
+                  </svg>
+                  <span className="sr-only">Rechercher</span>
+                </button>
+              </form>
+            )}
             {isSuperAdmin && <SuperAdminMenu />}
             <Link href="/doc/admin" target="_blank" className="text-xs text-gray-500 hover:text-gray-800 underline underline-offset-2">
               Aide
@@ -96,6 +162,24 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
       </div>
 
       <div ref={panelRef} id={panelId} hidden={!mobileOpen} className="md:hidden border-t border-gray-100 -mx-4 py-1">
+        {!onSearchPage && <form role="search" aria-label="Recherche globale" action="/admin/search" className="flex gap-2 px-4 py-2">
+          <label htmlFor="admin-search-mobile" className="sr-only">Rechercher un bénévole, un événement ou un poste</label>
+          <input
+            ref={mobileSearchRef}
+            id="admin-search-mobile"
+            type="search"
+            name="q"
+            maxLength={SEARCH_MAX_LENGTH}
+            placeholder="Rechercher"
+            className="flex-1 min-w-0 min-h-11 border border-gray-500 rounded-lg px-3 text-sm placeholder:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+          />
+          <button
+            type="submit"
+            className="min-h-11 px-3 text-sm font-medium text-blue-700 border border-gray-500 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Rechercher
+          </button>
+        </form>}
         <ul>
           {LINKS.map((l) => {
             const active = pathname.startsWith(l.match)

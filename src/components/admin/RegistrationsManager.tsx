@@ -37,6 +37,8 @@ type Props = {
   initialRegistrations: Registration[]
   shifts: ShiftRef[]
   initialShiftFilter?: string
+  /** `?q=` from the global search (#377). */
+  initialSearch?: string
 }
 
 const sourceLabels: Record<string, string> = {
@@ -45,9 +47,9 @@ const sourceLabels: Record<string, string> = {
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter }: Props) {
+export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch }: Props) {
   const [registrations, setRegistrations] = useState<Registration[]>(initialRegistrations)
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState(initialSearch ?? "")
   const initialShift = initialShiftFilter ? shifts.find(s => s.id === initialShiftFilter) ?? null : null
   const [roleFilter, setRoleFilter] = useState(initialShift?.roleName ?? "")
   const [shiftFilter, setShiftFilter] = useState(initialShiftFilter ?? "")

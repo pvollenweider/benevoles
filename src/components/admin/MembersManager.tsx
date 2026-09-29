@@ -14,14 +14,16 @@ import SortTh from "./members/SortTh"
 type Props = {
   initialMembers: Member[]
   allTags: string[]
+  /** `?q=` from the global search (#377): pre-filled, inactive members included. */
+  initialSearch?: string
 }
 
-export default function MembersManager({ initialMembers, allTags }: Props) {
+export default function MembersManager({ initialMembers, allTags, initialSearch }: Props) {
   const router = useRouter()
   const members = initialMembers
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState(initialSearch ?? "")
   const [tagFilter, setTagFilter] = useState<string>("")
-  const [showInactive, setShowInactive] = useState(false)
+  const [showInactive, setShowInactive] = useState(Boolean(initialSearch))
   const [showAdd, setShowAdd] = useState(false)
   const [showImport, setShowImport] = useState(false)
   const [editingMember, setEditingMember] = useState<Member | null>(null)

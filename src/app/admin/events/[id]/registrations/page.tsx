@@ -3,6 +3,7 @@ import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import RegistrationsManager from "@/components/admin/RegistrationsManager"
 import { leaderKeySet, isSectorLeader } from "@/lib/sector-leaders"
+import { SEARCH_MAX_LENGTH } from "@/lib/admin-search"
 
 export const dynamic = "force-dynamic"
 
@@ -11,14 +12,15 @@ export default async function RegistrationsPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>
-  searchParams: Promise<{ shift?: string }>
+  searchParams: Promise<{ shift?: string; q?: string | string[] }>
 }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { db } = ctx
 
   const { id } = await params
-  const { shift: initialShiftFilter } = await searchParams
+  const { shift: initialShiftFilter, q } = await searchParams
+  const initialSearch = (Array.isArray(q) ? q[0] : q)?.slice(0, SEARCH_MAX_LENGTH).trim() || undefined
 
   const event = await db.event.findFirst({
     where: { id },
@@ -64,6 +66,7 @@ export default async function RegistrationsPage({
       <RegistrationsManager
         eventId={id}
         initialShiftFilter={initialShiftFilter}
+        initialSearch={initialSearch}
         initialRegistrations={event.registrations.map((r) => ({
           id: r.id,
           status: r.status,
