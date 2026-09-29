@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 // AdminUser isn't tenant-scoped; email uniqueness must be checked across all orgs. Scoped by organizationId explicitly.

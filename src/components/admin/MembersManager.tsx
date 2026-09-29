@@ -1,5 +1,8 @@
 "use client"
 
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { useMemo, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { fmtHours } from "@/lib/gantt-utils"

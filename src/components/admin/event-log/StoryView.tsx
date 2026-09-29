@@ -1,5 +1,8 @@
 "use client"
 
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { useEffect, useState } from "react"
 import { narrateChain } from "@/lib/event-log-narrative"
 import type { ExplorerEntry as EventLogEntry } from "@/lib/event-log-explorer"

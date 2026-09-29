@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Pure logic of the admin members page (MembersManager, #291): filtering, the three-state column
  * sort and its screen reader announcement, tag input parsing. Kept out of the component so it can

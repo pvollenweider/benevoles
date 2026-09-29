@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import type { Breadcrumb, Event, init } from "@sentry/nextjs"
 
 // Derived from init()'s options: @sentry/nextjs doesn't re-export these types itself.

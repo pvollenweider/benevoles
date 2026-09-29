@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
 # Appelle POST /api/cron/reminders toutes les heures.
 # Envoie les rappels automatiques aux bénévoles inscrits :
 #   • J-2  : 47–49 h avant le début du créneau

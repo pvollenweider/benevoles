@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Sector leader notifications (#186). A sector leader is scoped to one roleName within an
  * event; when a volunteer signs up for a shift under that role, every leader for that role

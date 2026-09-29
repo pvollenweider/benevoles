@@ -1,5 +1,8 @@
 "use client"
 
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"

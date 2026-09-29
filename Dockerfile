@@ -1,5 +1,9 @@
 # syntax=docker/dockerfile:1
 # check=skip=SecretsUsedInArgOrEnv
+
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
 # ── Stage 1 : dépendances app ────────────────────────────────────────────────
 FROM node:26-alpine AS deps
 WORKDIR /app

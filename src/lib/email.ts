@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Thin wrappers kept for backwards compatibility with existing call
  * sites. New code should call `sendNotification` from `./notifications`

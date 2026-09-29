@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 export default function StatusBadge({ status }: { status: string }) {
   const map: Record<string, { label: string; className: string }> = {
     draft: { label: "Brouillon", className: "bg-gray-100 text-gray-600" },

@@ -314,6 +314,15 @@ Chaque organisation dispose d'un client Prisma étendu (`getOrgClient`) qui limi
 
 L'organisation courante est déterminée par le sous-domaine (`[orgSlug].benevol.app`, injecté par `src/middleware.ts` dans l'en-tête `x-org-slug`). En développement, sans sous-domaine, le paramètre `?org=<slug>` joue le même rôle.
 
+## Auteur
+
+**Bénévoles** a été créé et est maintenu par **Philippe Vollenweider**.
+
+Copyright © 2026 Philippe Vollenweider.\
+Distribué sous licence [GNU Affero General Public License v3.0](LICENSE).
+
+Les contributions restent la propriété de leurs auteurs respectifs, et les composants tiers restent soumis à leurs propres licences (voir [NOTICE](NOTICE)).
+
 ## Licence
 
 [GNU Affero General Public License v3.0](LICENSE)

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Unsubscribe link signing for product-update emails (#200). Stateless — no token column on
  * AdminUser, no extra table: the link is `?admin=<id>&token=<hmac>`, verified by recomputing the

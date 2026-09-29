@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
 # Copie chaque nuit à 01h30 UTC (30 min après le dump, cronjob-backup.yaml) les fichiers
 # chiffrés du volume backup-pvc vers Dropbox, via rclone. Les fichiers sont déjà chiffrés
 # AES-256 avant d'arriver ici : rclone ne voit et n'envoie que du contenu déjà illisible sans

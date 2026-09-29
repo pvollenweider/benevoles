@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Writes to OrgLog — see issue #194 and prisma/schema.prisma's doc comment on the model. Mirrors
  * event-log.ts's write side exactly (never throws, same minimal-PII discipline on `changes`), for

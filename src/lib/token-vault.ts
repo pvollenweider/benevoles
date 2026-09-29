@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { createCipheriv, createDecipheriv, randomBytes } from "crypto"
 import { hashToken } from "./token-hash"
 

@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
 """
 Anonymizes a pg_dump plain-SQL dump for local test use: replaces real names, emails, phone
 numbers and password hashes with deterministic fake values, keyed off each row's id so the

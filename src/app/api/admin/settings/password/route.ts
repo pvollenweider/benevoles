@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 // AdminUser (the signed-in admin's own row, by session id) isn't a tenant-scoped model.

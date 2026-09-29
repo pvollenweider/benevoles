@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Renders admin-authored Markdown for custom event pages (issue #188) to safe HTML for the
  * public page. Distinct from src/lib/markdown.ts's `renderMarkdown` (a minimal inline-styled

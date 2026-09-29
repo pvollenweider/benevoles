@@ -1,5 +1,8 @@
 "use client"
 
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { useState, useRef, useCallback, useEffect } from "react"
 import Link from "next/link"
 import { getRoleAccent } from "@/lib/roles"

@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 // Runs automatically before `npm run dev` and `npm run test:e2e` (see package.json's
 // predev/pretest:e2e scripts — npm's own lifecycle convention, no extra wiring needed).
 //

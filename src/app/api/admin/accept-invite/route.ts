@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { NextResponse } from "next/server"
 // Pre-login route: no org session yet, the invite token is the only credential.
 // eslint-disable-next-line no-restricted-imports

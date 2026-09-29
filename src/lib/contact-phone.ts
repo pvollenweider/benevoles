@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * The phone number to show admins and sector leaders for a registration: the one given on the
  * public form for this very registration first (Registration.phone), else the volunteer

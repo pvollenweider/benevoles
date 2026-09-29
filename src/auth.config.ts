@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import type { NextAuthConfig } from "next-auth"
 
 export const authConfig: NextAuthConfig = {

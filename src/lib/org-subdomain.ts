@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 // Subdomains that never identify an organization (system/infra hostnames),
 // shared between the middleware (org-slug injection) and robots.ts (crawl rules) so the
 // two never drift apart.

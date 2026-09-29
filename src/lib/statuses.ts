@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Closed sets of values stored as strings (#321). The database enforces the same lists with
  * CHECK constraints (migration 20260929200000_status_check_constraints); a unit test keeps the

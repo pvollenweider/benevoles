@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import type { SortCol, SortDir } from "@/lib/members-list"
 
 export default function SortTh({

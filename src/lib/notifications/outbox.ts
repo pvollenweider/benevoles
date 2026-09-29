@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { after } from "next/server"
 import { prisma } from "../prisma"
 import { reportError } from "../report-error"

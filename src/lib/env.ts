@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { z } from "zod"
 
 // Variables runtime indispensables à l'app. ADMIN_EMAIL / ADMIN_PASSWORD

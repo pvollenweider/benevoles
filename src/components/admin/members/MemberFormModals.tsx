@@ -1,5 +1,8 @@
 "use client"
 
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { useId, useState } from "react"
 import ModalShell from "../ModalShell"
 import { parseTags, type Member } from "@/lib/members-list"

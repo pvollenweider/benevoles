@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Pure logic of the admin day timeline (AdminDayTimeline, #291): the visible time range, pointer
  * position to snapped minutes, role rows with lane packing, and the drag-to-create and resize
