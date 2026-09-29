@@ -21,6 +21,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Sécurité
 
+- **Lien de gestion après inscription** : il n'est plus affiché sur la page de succès pour une adresse email nouvelle, seulement envoyé par email : n'importe qui pouvait inscrire une autre personne avec une adresse encore inconnue de l'organisation et obtenir son lien. Il reste affiché pour une inscription depuis un lien d'invitation membre.
 - **Liens personnels des bénévoles, responsables de secteur et invitations** : ne sont plus lisibles dans une copie de la base une fois la clé `TOKEN_ENCRYPTION_KEY` configurée. La base ne garde qu'une empreinte (pour reconnaître un lien) et une copie chiffrée (pour renvoyer le lien par email) ; les liens existants sont chiffrés automatiquement par la tâche de nettoyage quotidienne et restent valables.
 
 ## [1.15.0] — 2026-09-28

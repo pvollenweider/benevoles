@@ -208,12 +208,15 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     expect((await res.json()).editToken).toBeNull()
   })
 
-  it("brand-new address: token returned (nothing to leak yet)", async () => {
+  it("brand-new address: registered, but the link goes by email only, not on screen (#312)", async () => {
     m.volFindFirst.mockResolvedValue(null)
     m.txVolCreateMany.mockResolvedValue({ count: 1 }); m.txVolFindFirstOrThrow.mockResolvedValue({ id: "vol-new" })
     const { POST } = await import("@/app/api/public/registrations/route")
-    const data = await (await POST(post({ email: "new@x.com" }))).json()
-    expectTokenStored(data.editToken)
+    const res = await POST(post({ email: "new@x.com" }))
+    expect(res.status).toBe(201)
+    const data = await res.json()
+    expect(data.editToken).toBeNull()
+    expect(data.linkSentByEmail).toBe(true)
   })
 
   it("already registered: 409 without the existing token, which is emailed to the owner instead", async () => {
