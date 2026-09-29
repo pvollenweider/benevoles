@@ -16,9 +16,11 @@ test("an admin previews an event as a volunteer and comes back", async ({ page }
   await page.getByRole("button", { name: "Se connecter" }).click()
   await expect(page).toHaveURL(/\/admin\/events/)
 
-  // First event of the list.
-  await page.locator('a[href^="/admin/events/"]:not([href$="/new"])').first().click()
-  await expect(page).toHaveURL(/\/admin\/events\/[^/]+$/)
+  // An event page from the list (not /new, and not a sub-page such as the checklist's /shifts link).
+  const hrefs = await page.locator('a[href^="/admin/events/"]').evaluateAll((as) => as.map((a) => a.getAttribute("href") ?? ""))
+  const eventHref = hrefs.find((h) => /^\/admin\/events\/[^/]+$/.test(h) && h !== "/admin/events/new")
+  expect(eventHref).toBeTruthy()
+  await page.goto(eventHref!)
   const eventUrl = page.url()
 
   await page.getByRole("link", { name: "Prévisualiser comme un bénévole" }).click()
