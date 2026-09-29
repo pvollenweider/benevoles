@@ -5,6 +5,7 @@ import { authConfig } from "./auth.config"
 import { prisma } from "@/lib/prisma"
 import { getClientIp } from "@/lib/rate-limit"
 import { loginAllowed, recordLoginFailure, refreshAdminToken } from "@/lib/admin-session"
+import { normalizeEmail } from "@/lib/email-address"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -26,7 +27,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       authorize: async (credentials, request) => {
         if (!credentials?.email || !credentials?.password) return null
         const ip = getClientIp(request)
-        const email = credentials.email as string
+        const email = normalizeEmail(credentials.email as string)
         if (!loginAllowed(ip, email)) return null
 
         const user = await prisma.adminUser.findUnique({

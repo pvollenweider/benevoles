@@ -7,7 +7,7 @@ import { passwordSchema } from "@/lib/password"
 
 const schema = z
   .object({
-    email: z.string().email().optional(),
+    email: z.string().trim().toLowerCase().email().optional(),
     currentPassword: z.string().min(1),
     newPassword: passwordSchema.optional(),
   })

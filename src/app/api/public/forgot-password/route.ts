@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { hashToken } from "@/lib/token-hash"
+import { normalizeEmail } from "@/lib/email-address"
 
 export async function POST(req: Request) {
   const rl = rateLimit(getClientIp(req), "forgot-password", 5, 60 * 60 * 1000)
@@ -16,7 +17,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Email invalide." }, { status: 400 })
   }
 
-  const admin = await prisma.adminUser.findUnique({ where: { email: email.toLowerCase().trim() } })
+  const admin = await prisma.adminUser.findUnique({ where: { email: normalizeEmail(email) } })
 
   // Always return 200 to avoid user enumeration
   if (!admin || !admin.isActive) {
