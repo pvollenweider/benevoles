@@ -31,7 +31,7 @@ export default function PublicFooter({ showSupport = false }: { showSupport?: bo
           <>
             <span aria-hidden="true" className="select-none py-1">·</span>
             <a
-              href="https://buymeacoffee.com/pvollenweider"
+              href="https://buymeacoffee.com/benevol.app"
               target="_blank"
               rel="noopener noreferrer"
               className={linkClass}
