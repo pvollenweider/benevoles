@@ -5,49 +5,23 @@ import { flushSync } from "react-dom"
 import { KNOWN_ROLES, COLOR_OPTIONS, getRoleAccent } from "@/lib/roles"
 import { fmtRange, resolveNewShiftDisplayOrder, isCompleteTime, addMinutes } from "@/lib/gantt-utils"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
+import {
+  activeShiftsByDay,
+  applyRoleOrder,
+  eventDates,
+  fmtLongDate as fmtDate,
+  moveItem,
+  normalizeTime,
+  renameRole,
+  roleDeletionWarning,
+  roleOrder,
+  sortShifts,
+} from "@/lib/shifts-admin"
 
 const emptyShift = {
   roleName: "", label: "", description: "", date: "", startTime: "", endTime: "",
   capacity: 2, locationDetails: "", displayOrder: 0, internalNotes: "", waitlistEnabled: false,
   minAge: "" as number | string,
-}
-
-function localISO(d: Date) {
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, "0")
-  const day = String(d.getDate()).padStart(2, "0")
-  return `${y}-${m}-${day}`
-}
-
-function eventDates(start: string, end: string): string[] {
-  const dates: string[] = []
-  const cur  = new Date(start + "T00:00:00")
-  const last = new Date(end   + "T00:00:00")
-  while (cur <= last) {
-    dates.push(localISO(cur))
-    cur.setDate(cur.getDate() + 1)
-  }
-  return dates
-}
-
-
-function normalizeTime(val: string): string {
-  const clean = val.trim()
-  if (!clean) return ""
-  const [h, m] = clean.split(":")
-  const hours   = parseInt(h, 10)
-  const minutes = m !== undefined ? parseInt(m, 10) : 0
-  if (isNaN(hours)) return clean
-  // Out-of-range values (24, 26, -2, 75 minutes) are kept as typed so the server
-  // reports them, instead of being silently changed to a different time.
-  if (hours < 0 || hours > 23 || isNaN(minutes) || minutes < 0 || minutes > 59) return clean
-  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`
-}
-
-function fmtDate(iso: string) {
-  return new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", {
-    weekday: "long", day: "numeric", month: "long",
-  })
 }
 
 // ── Helper: convert Prisma shift to AdminShift ────────────────────────────────
@@ -169,12 +143,7 @@ export default function ShiftsManager({
   }
 
   // ── Role ordering ─────────────────────────────────────────────────────────
-  const uniqueRoles = [...new Set(
-    [...shifts]
-      .filter(s => s.status !== "cancelled")
-      .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0))
-      .map(s => s.roleName)
-  )]
+  const uniqueRoles = roleOrder(shifts)
 
   function openReorder() {
     setReorderRoles([...uniqueRoles])
@@ -184,12 +153,7 @@ export default function ShiftsManager({
   function handleRoleDragOver(e: React.DragEvent, toIdx: number) {
     e.preventDefault()
     if (dragRoleIdx === null || dragRoleIdx === toIdx) return
-    setReorderRoles(prev => {
-      const next = [...prev]
-      const [item] = next.splice(dragRoleIdx, 1)
-      next.splice(toIdx, 0, item)
-      return next
-    })
+    setReorderRoles(prev => moveItem(prev, dragRoleIdx, toIdx))
     setDragRoleIdx(toIdx)
   }
 
@@ -200,10 +164,7 @@ export default function ShiftsManager({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ roleOrder: reorderRoles }),
     })
-    setShifts(prev => prev.map(s => {
-      const idx = reorderRoles.indexOf(s.roleName)
-      return idx >= 0 ? { ...s, displayOrder: idx * 100 } : s
-    }))
+    setShifts(prev => applyRoleOrder(prev, reorderRoles))
     setSavingOrder(false)
     setShowReorder(false)
   }
@@ -230,22 +191,14 @@ export default function ShiftsManager({
       setRoleActionError(typeof data?.error === "string" ? data.error : "Erreur lors du renommage.")
       return
     }
-    setShifts(prev => prev.map(s => s.roleName === oldName
-      ? { ...s, roleName: newName, label: s.label === oldName ? newName : s.label }
-      : s
-    ))
+    setShifts(prev => renameRole(prev, oldName, newName))
     setReorderRoles(prev => prev.map(r => r === oldName ? newName : r))
     setRenamingRole(null)
     setRoleAnnouncement(`Poste renommé « ${oldName} » → « ${newName} ».`)
   }
 
   async function handleDeleteRole(role: string) {
-    const roleShifts = shifts.filter(s => s.roleName === role && s.status !== "cancelled")
-    const totalRegs = roleShifts.reduce((n, s) => n + s.registrationCount, 0)
-    const warning = totalRegs > 0
-      ? `Supprimer le poste « ${role} » (${roleShifts.length} créneau${roleShifts.length > 1 ? "x" : ""}) ? ${totalRegs} bénévole${totalRegs > 1 ? "s" : ""} inscrit${totalRegs > 1 ? "s" : ""} seront prévenu${totalRegs > 1 ? "s" : ""} par email.`
-      : `Supprimer le poste « ${role} » (${roleShifts.length} créneau${roleShifts.length > 1 ? "x" : ""}) ?`
-    if (!confirm(warning)) return
+    if (!confirm(roleDeletionWarning(shifts, role))) return
 
     setRoleActionError(null)
     setRoleActionBusy(role)
@@ -286,23 +239,11 @@ export default function ShiftsManager({
   }
 
   // Group by day (all dates, not just those with shifts)
-  const shiftsByDay = shifts
-    .filter(s => s.status !== "cancelled")
-    .reduce<Record<string, RawShift[]>>((acc, s) => {
-      if (!acc[s.date]) acc[s.date] = []
-      acc[s.date].push(s)
-      return acc
-    }, {})
+  const shiftsByDay = activeShiftsByDay(shifts)
 
   const daysWithShifts = dates.filter(d => shiftsByDay[d]?.length > 0)
 
-  const sortedShifts = [...shifts]
-    .filter(s => s.status !== "cancelled")
-    .sort((a, b) =>
-      a.date.localeCompare(b.date) ||
-      (a.displayOrder ?? 0) - (b.displayOrder ?? 0) ||
-      a.startTime.localeCompare(b.startTime)
-    )
+  const sortedShifts = sortShifts(shifts)
 
   const statusCls: Record<string, string> = {
     open:   "bg-green-100 text-green-700",
