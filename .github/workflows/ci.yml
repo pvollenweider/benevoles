@@ -14,6 +14,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          # The PR merge commit and its first parent (the base), for the migration check.
+          fetch-depth: 2
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
@@ -43,6 +46,9 @@ jobs:
 
       - name: SECURITY.md is up to date with the current version
         run: node scripts/check-security-md.mjs
+
+      - name: Migrations stay compatible with the previous release
+        run: node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-migrations.mjs
 
   e2e:
     name: E2E (Playwright)

@@ -120,6 +120,13 @@ Le déploiement applique les migrations une fois, dans un Job Kubernetes lancé 
 - **supprimer** une colonne, une table ou une contrainte : uniquement quand plus aucune version déployée ne l'utilise (donc dans une release ultérieure) ;
 - une migration qui ne peut pas respecter ces règles doit être déployée sans coexistence : passer ponctuellement `strategy` à `Recreate` dans `k8s/deployment.yaml` (courte coupure assumée), puis revenir à `RollingUpdate`.
 
+La CI des PR vérifie ces règles (`scripts/check-migrations.mjs`, logique dans `src/lib/migration-safety.ts`) :
+
+- une migration déjà présente sur `main` ne doit jamais être modifiée, supprimée ou renommée (Prisma en garde une empreinte, la production ne correspondrait plus au dépôt) ;
+- une nouvelle migration qui supprime ou renomme une table ou une colonne, change un type, ou rend une colonne obligatoire sans défaut fait échouer la CI, sauf si elle contient une ligne `-- migration-safety: <pourquoi c'est sans risque>` (par exemple : colonne plus lue depuis la version précédente, déploiement en `Recreate`). Cette justification est relue avec la PR.
+
+En local : `node scripts/check-migrations.mjs origin/main`.
+
 ## Erreurs d'API
 
 Toutes les routes répondent en erreur avec `{ error: string, details?: … }` : `error` est un message en français affichable tel quel, `details` porte des données structurées si utile. Pour un échec de validation zod, utiliser `validationError(parsed.error)` (`src/lib/api-error.ts`), jamais `{ error: parsed.error.flatten() }`.
