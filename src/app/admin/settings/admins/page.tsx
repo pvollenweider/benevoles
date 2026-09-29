@@ -9,7 +9,6 @@ import OrgSlugForm from "@/components/admin/OrgSlugForm"
 import OrgTimeZoneForm from "@/components/admin/OrgTimeZoneForm"
 import { APP_TIME_ZONE, timeZoneChoices } from "@/lib/time-zone"
 import OrgCharterForm from "@/components/admin/OrgCharterForm"
-import ChangePasswordForm from "@/components/admin/ChangePasswordForm"
 
 export const dynamic = "force-dynamic"
 
@@ -89,14 +88,6 @@ export default async function AdminsSettingsPage() {
           initialHasOrgInsurance={org.hasOrgInsurance}
         />
       )}
-
-      <section className="bg-white rounded-2xl border border-gray-200 p-6">
-        <h2 className="text-sm font-semibold text-gray-900">Mon compte</h2>
-        <p className="text-xs text-gray-500 mt-0.5 mb-4">
-          {session.user?.name} · {currentEmail}
-        </p>
-        <ChangePasswordForm />
-      </section>
 
       <AdminsManager
         initialAdmins={admins.map((a) => ({

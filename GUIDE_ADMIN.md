@@ -14,6 +14,8 @@ Si vous avez reçu un **lien d'invitation** (email « Invitation à rejoindre…
 
 **Mot de passe oublié ?** Depuis la page de connexion, utilisez le lien de réinitialisation (`/admin/forgot-password`) : un email contenant un lien de réinitialisation vous est envoyé.
 
+**Mon compte et déconnexion** : cliquez sur votre nom, en haut à droite de chaque page. Le menu propose **Mon compte** (`/admin/account`), où vous pouvez changer votre mot de passe, et **Se déconnecter**.
+
 **Connexion refusée après plusieurs essais ?** Après 10 mots de passe erronés sur un même compte (ou 30 depuis une même adresse IP) en 15 minutes, les tentatives suivantes sont refusées jusqu'à la fin de ce délai, même avec le bon mot de passe. Patientez un quart d'heure avant de réessayer.
 
 ---

@@ -5,8 +5,8 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { signOut } from "next-auth/react"
 import SuperAdminMenu from "./SuperAdminMenu"
+import UserMenu from "./UserMenu"
 
 export default function AdminNav({ userName, role, orgName }: { userName: string; role?: string; orgName?: string }) {
   const pathname = usePathname()
@@ -50,13 +50,7 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
             Aide
             <span className="sr-only"> (ouvre dans un nouvel onglet)</span>
           </Link>
-          <span className="text-xs text-gray-500">{userName}</span>
-          <button
-            onClick={() => signOut({ callbackUrl: "/admin/login" })}
-            className="text-xs text-gray-500 hover:text-gray-800"
-          >
-            Déconnexion
-          </button>
+          <UserMenu userName={userName} isSuperAdmin={isSuperAdmin} />
         </div>
       </div>
     </nav>

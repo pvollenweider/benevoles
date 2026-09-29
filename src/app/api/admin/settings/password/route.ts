@@ -22,25 +22,25 @@ export async function POST(req: Request) {
   const body = await req.json().catch(() => null)
   const parsed = schema.safeParse(body)
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 })
+    return NextResponse.json({ error: "Requête invalide." }, { status: 400 })
   }
 
   const { currentPassword, newPassword } = parsed.data
 
   const errors = passwordErrors(newPassword)
   if (errors.length > 0) {
-    return NextResponse.json({ error: "Password does not meet requirements", errors }, { status: 400 })
+    return NextResponse.json({ error: `Le nouveau mot de passe ne respecte pas les règles : ${errors.join(", ").toLowerCase()}.`, details: { errors } }, { status: 400 })
   }
 
   const admin = await prisma.adminUser.findUnique({
     where: { id: guard.session.user.id },
     select: { passwordHash: true },
   })
-  if (!admin) return NextResponse.json({ error: "Account not found" }, { status: 404 })
+  if (!admin) return NextResponse.json({ error: "Compte introuvable." }, { status: 404 })
 
   const valid = await bcrypt.compare(currentPassword, admin.passwordHash)
   if (!valid) {
-    return NextResponse.json({ error: "Current password is incorrect" }, { status: 400 })
+    return NextResponse.json({ error: "Le mot de passe actuel est incorrect." }, { status: 400 })
   }
 
   const passwordHash = await bcrypt.hash(newPassword, 12)

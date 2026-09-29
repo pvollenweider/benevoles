@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useState } from "react"
+import { useId, useState } from "react"
 import PasswordRules from "@/components/PasswordRules"
 import { PASSWORD_RULES } from "@/lib/password"
 
@@ -14,97 +14,115 @@ export default function ChangePasswordForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+  // The mismatch message waits until the confirmation field is left (or the form submitted),
+  // instead of flagging an error from the first character typed.
+  const [confirmTouched, setConfirmTouched] = useState(false)
+  const currentId = useId()
+  const nextId = useId()
+  const rulesId = useId()
+  const confirmId = useId()
+  const mismatchId = useId()
 
   const rulesOk = PASSWORD_RULES.every((r) => r.test(next))
   const match = next === confirm && next.length > 0
+  const mismatch = confirmTouched && confirm.length > 0 && !match
   const canSubmit = current.length > 0 && rulesOk && match
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    setConfirmTouched(true)
     if (!canSubmit) return
     setLoading(true)
     setError(null)
+    setSuccess(false)
 
-    const res = await fetch("/api/admin/settings/password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ currentPassword: current, newPassword: next }),
-    })
-
-    const data = await res.json().catch(() => ({}))
-    setLoading(false)
-
-    if (!res.ok) {
-      setError(data.error ?? "An error occurred")
-      return
+    try {
+      const res = await fetch("/api/admin/settings/password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword: current, newPassword: next }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        setError(typeof data?.error === "string" ? data.error : "Une erreur est survenue.")
+        return
+      }
+      setSuccess(true)
+      setCurrent("")
+      setNext("")
+      setConfirm("")
+      setConfirmTouched(false)
+    } catch {
+      setError("Impossible d'enregistrer. Vérifiez votre connexion et réessayez.")
+    } finally {
+      setLoading(false)
     }
-
-    setSuccess(true)
-    setCurrent("")
-    setNext("")
-    setConfirm("")
   }
 
-  if (success) {
-    return (
-      <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-sm text-green-800">
-        Password updated successfully.
-      </div>
-    )
-  }
+  const inputClass = "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 max-w-sm">
       <div>
-        <label className="block text-xs font-medium text-gray-700 mb-1">Current password</label>
+        <label htmlFor={currentId} className="block text-xs font-medium text-gray-700 mb-1">Mot de passe actuel</label>
         <input
+          id={currentId}
           type="password"
           value={current}
-          onChange={(e) => setCurrent(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={(e) => { setCurrent(e.target.value); setSuccess(false) }}
+          className={inputClass}
           autoComplete="current-password"
+          required
         />
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-gray-700 mb-1">New password</label>
+        <label htmlFor={nextId} className="block text-xs font-medium text-gray-700 mb-1">Nouveau mot de passe</label>
         <input
+          id={nextId}
           type="password"
           value={next}
-          onChange={(e) => setNext(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={(e) => { setNext(e.target.value); setSuccess(false) }}
+          className={inputClass}
           autoComplete="new-password"
+          aria-describedby={rulesId}
+          required
         />
-        {next.length > 0 && (
-          <div className="mt-2">
-            <PasswordRules password={next} />
-          </div>
-        )}
+        <PasswordRules id={rulesId} password={next} />
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-gray-700 mb-1">Confirm new password</label>
+        <label htmlFor={confirmId} className="block text-xs font-medium text-gray-700 mb-1">Confirmer le nouveau mot de passe</label>
         <input
+          id={confirmId}
           type="password"
           value={confirm}
-          onChange={(e) => setConfirm(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={(e) => { setConfirm(e.target.value); setSuccess(false) }}
+          onBlur={() => setConfirmTouched(true)}
+          className={inputClass}
           autoComplete="new-password"
+          aria-invalid={mismatch || undefined}
+          aria-describedby={mismatch ? mismatchId : undefined}
+          required
         />
-        {confirm.length > 0 && !match && (
-          <p className="text-xs text-red-500 mt-1">Passwords do not match</p>
+        {mismatch && (
+          <p id={mismatchId} className="text-xs text-red-700 mt-1">Les deux mots de passe ne correspondent pas.</p>
         )}
       </div>
 
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <p role="alert" className="text-xs font-medium text-red-700">{error}</p>}
 
       <button
         type="submit"
         disabled={!canSubmit || loading}
-        className="bg-gray-900 text-white text-sm px-4 py-2 rounded-lg hover:bg-gray-800 disabled:opacity-40 transition-colors"
+        className="bg-gray-900 text-white text-sm px-4 py-2 rounded-lg hover:bg-gray-800 disabled:opacity-40 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
       >
-        {loading ? "Saving…" : "Update password"}
+        {loading ? "Enregistrement…" : "Changer le mot de passe"}
       </button>
+
+      <p role="status" className="text-sm font-medium text-green-800 min-h-5">
+        {success ? "Mot de passe modifié." : ""}
+      </p>
     </form>
   )
 }
