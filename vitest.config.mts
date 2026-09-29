@@ -5,7 +5,7 @@ export default defineConfig({
   test: {
     environment: "node",
     // e2e/**/*.spec.ts are Playwright specs, not vitest tests.
-    exclude: ["**/node_modules/**", "e2e/**"],
+    exclude: ["**/node_modules/**", "e2e/**", "src/__integration__/**"],
     coverage: {
       provider: "v8",
       // Routes and components too, not just src/lib: the API routes carry most of the

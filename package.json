@@ -21,6 +21,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:integration": "vitest run --config vitest.integration.config.mts",
     "pretest:e2e": "node scripts/check-node-version.mjs",
     "test:e2e": "playwright test",
     "screenshots": "node scripts/screenshots.mjs",
