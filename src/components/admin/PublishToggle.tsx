@@ -27,6 +27,8 @@ export default function PublishToggle({ eventId, currentStatus }: { eventId: str
       })
       if (!res.ok) throw new Error()
       router.refresh()
+      // The page changes under the user (and this button may unmount): land on the heading.
+      document.getElementById("page-heading")?.focus()
     } catch {
       setError("Impossible de modifier le statut. Réessayez.")
     } finally {
@@ -61,13 +63,14 @@ export default function PublishToggle({ eventId, currentStatus }: { eventId: str
         <button
           onClick={() => isPublished ? setConfirming(true) : doToggle()}
           disabled={loading}
+          aria-busy={loading}
           className={`text-sm px-3 py-1.5 rounded-full font-medium transition-colors disabled:opacity-50 ${
             isPublished
               ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
               : "bg-green-600 text-white hover:bg-green-700"
           }`}
         >
-          {loading ? "…" : isPublished ? "Dépublier" : "Publier"}
+          {isPublished ? "Dépublier" : "Publier"}{loading && <span className="sr-only"> (en cours)</span>}
         </button>
       )}
       {error && <p role="alert" className="text-xs text-red-600">{error}</p>}

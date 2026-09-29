@@ -78,6 +78,8 @@ Raccourci : **Ctrl + K** (**⌘ + K** sur Mac) place le curseur dans le champ de
 
 **`/admin/events/new`**
 
+La création se fait en trois étapes, indiquées en haut de page : **1. Informations**, **2. Postes et créneaux**, **3. Vérification et publication**. Après l'étape 1, vous arrivez sur les créneaux avec un bouton **Continuer** ; l'étape 3 (`/admin/events/[id]/review`) récapitule ce qui est prêt et ce qui manque (dates, créneaux, lieu, message de confirmation, instructions, responsables), propose l'aperçu bénévole, puis **Publier** ou **Rester en brouillon**. On peut publier sans les points facultatifs, mais pas sans créneau. **Quitter l'assistant** ramène à tout moment à la page de l'événement : rien n'est perdu, chaque étape est une page normale de l'administration.
+
 ### Partir d'un modèle
 
 En haut de la page, **Comment commencer ?** propose une page blanche ou un modèle : festival sur plusieurs jours, buvette, manifestation sportive, fête de village, montage / exploitation / démontage. Un modèle n'est qu'un événement déjà rempli : choisissez-le, donnez un titre et la date du premier jour, et le brouillon est créé avec ses postes et ses créneaux (la liste de ce qui sera créé est affichée avant). Vous arrivez sur ses créneaux : horaires, effectifs et postes sont des points de départ, chacun se modifie ou se supprime comme d'habitude. Rien n'est publié.

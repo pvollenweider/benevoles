@@ -45,7 +45,7 @@ export default function EventTemplatePicker({ children }: { children: React.Reac
     const data = await res.json().catch(() => ({}))
     setSaving(false)
     if (!res.ok) { setError(typeof data?.error === "string" ? data.error : "Erreur lors de la création."); return }
-    router.push(`/admin/events/${data.id}/shifts`)
+    router.push(`/admin/events/${data.id}/shifts?wizard=1`)
     router.refresh()
   }
 
