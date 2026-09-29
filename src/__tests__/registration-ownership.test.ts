@@ -17,7 +17,8 @@ const m = vi.hoisted(() => ({
   txRegFindMany: vi.fn(),
   txCreate: vi.fn(),
   sendNotification: vi.fn(),
-  enqueueAndDeliver: vi.fn(),
+  enqueueNotifications: vi.fn(),
+  deliverAfterResponse: vi.fn(),
   sendConfirmationEmail: vi.fn(),
 }))
 
@@ -58,7 +59,8 @@ vi.mock("@/lib/notifications/outbox", () => ({
     const payloads: unknown[] = []
     return { payloads, send: async (p: unknown) => { payloads.push(p); return { ok: true } } }
   },
-  enqueueAndDeliver: m.enqueueAndDeliver,
+  enqueueNotifications: m.enqueueNotifications,
+  deliverAfterResponse: m.deliverAfterResponse,
 }))
 vi.mock("@/lib/notifications", () => ({ sendNotification: m.sendNotification }))
 vi.mock("@/lib/sector-leaders", () => ({ notifySectorLeadersOfSignup: vi.fn() }))
@@ -88,6 +90,7 @@ function post(extra: Record<string, unknown> = {}) {
 
 beforeEach(() => {
   for (const fn of Object.values(m)) fn.mockReset()
+  m.enqueueNotifications.mockResolvedValue(["row-1"])
   m.regFindMany.mockResolvedValue([])
   m.txRegFindMany.mockResolvedValue([])
   m.txCreate.mockResolvedValue({ id: "reg-new", shiftId: "shift-2", status: "active", waitingPosition: null })
@@ -182,8 +185,21 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     expect((await POST(post({ email: "new@x.com" }))).status).toBe(201)
     // The confirmation email helper gets the outbox collector as its `send`.
     expect(m.sendConfirmationEmail).toHaveBeenCalledWith(expect.anything(), expect.any(Function))
-    expect(m.enqueueAndDeliver).toHaveBeenCalledOnce()
     expect(m.sendNotification).not.toHaveBeenCalled()
+    // Stored with the transaction's client, alongside the registrations (#352), delivered after.
+    expect(m.enqueueNotifications).toHaveBeenCalledOnce()
+    const [, db] = m.enqueueNotifications.mock.calls[0]
+    expect(db).toHaveProperty("registration.create", m.txCreate)
+    expect(m.deliverAfterResponse).toHaveBeenCalledWith(["row-1"])
+  })
+
+  it("a failure storing the notifications fails the whole sign-up: no registration without them (#352)", async () => {
+    m.volFindFirst.mockResolvedValue(null)
+    m.txVolCreateMany.mockResolvedValue({ count: 1 }); m.txVolFindFirstOrThrow.mockResolvedValue({ id: "vol-new" })
+    m.enqueueNotifications.mockRejectedValue(new Error("outbox insert failed"))
+    const { POST } = await import("@/app/api/public/registrations/route")
+    await expect(POST(post({ email: "new@x.com" }))).rejects.toThrow("outbox insert failed")
+    expect(m.deliverAfterResponse).not.toHaveBeenCalled()
   })
 
   it("a new volunteer is only created inside the registration transaction (no orphan if it fails, #309)", async () => {

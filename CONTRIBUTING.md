@@ -133,7 +133,7 @@ Toutes les routes répondent en erreur avec `{ error: string, details?: … }` :
 
 ## Tests
 
-Les tests d'intégration (`src/__integration__`, `npm run test:integration`) tournent contre un vrai Postgres (`DATABASE_URL`) : application des migrations sur une base contenant déjà des données, file d'envoi sous concurrence. Ils sont ignorés sans `DATABASE_URL` et lancés par le job E2E de la CI. Toute migration qui transforme des données existantes doit y avoir son scénario.
+Les tests d'intégration (`src/__integration__`, `npm run test:integration`) tournent contre un vrai Postgres (`DATABASE_URL`) : application des migrations sur une base contenant déjà des données, file d'envoi sous concurrence et validée ou annulée avec la transaction métier. Ils sont ignorés sans `DATABASE_URL` et lancés par le job E2E de la CI. Toute migration qui transforme des données existantes doit y avoir son scénario.
 
 La CI des PR lance les tests avec la couverture (`npm run test:coverage`) et échoue si elle passe sous les seuils de `vitest.config.mts`. Ces seuils suivent la couverture mesurée : les relever quand elle progresse, ne jamais les baisser pour faire passer une PR.
 
