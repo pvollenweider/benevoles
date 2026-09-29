@@ -41,6 +41,18 @@ Les étapes se cochent d'elles-mêmes au fur et à mesure. La liste disparaît q
 
 **`/admin/dashboard`**
 
+En haut, **Ce qui demande votre attention** liste, du plus urgent au moins urgent, les situations de vos événements publiés sur lesquelles agir, chacune avec un lien vers l'endroit où la régler :
+
+- créneaux des 7 prochains jours pas encore complets (urgent à moins de 2 jours) ;
+- places proposées en liste d'attente qui expirent dans les 12 heures sans réponse ;
+- jalons en retard ;
+- invitations envoyées il y a plus de 3 jours et pas encore utilisées ;
+- postes sans responsable de secteur, quand l'événement en a déjà d'autres ;
+- événement qui commence dans la semaine ;
+- événement terminé mais toujours publié, à archiver.
+
+Quand rien ne demande votre attention, la section le dit.
+
 Vue d'ensemble de votre organisation : nombre d'événements (publiés et à venir), bénévoles inscrits, taux de remplissage global (places occupées sur places disponibles) et répartition des membres (total, avec email, sans email : ces derniers ne peuvent pas recevoir d'invitations).
 
 ---
