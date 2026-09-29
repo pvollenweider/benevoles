@@ -120,6 +120,7 @@ Liste exhaustive des fonctionnalités de l'application.
 ### Gestion des événements
 
 - Création et édition d'événements
+- **Modèles d'événement** (`/admin/events/new`) : festival sur plusieurs jours, buvette, manifestation sportive, fête de village, montage / exploitation / démontage ; un titre et une date suffisent, le brouillon est créé avec ses postes et créneaux (datés à partir du premier jour, ordonnés comme dans le modèle), aperçu de ce qui sera créé ; modèles définis dans le code (`src/lib/event-templates.ts`), pas par organisation
 - **Aperçu comme un bénévole** (`/admin/events/[id]/preview`), brouillons compris : même page publique (planning, places, pages, charte, champs du formulaire), bandeau « Aperçu » ; le formulaire affiche le message de confirmation et l'email qu'on recevrait (rendu avec le vrai modèle, lien factice) sans rien enregistrer ni envoyer
 - **Duplication** depuis la liste des événements : copie en brouillon (« (copie) ») des paramètres et des créneaux non annulés, rouverts ; ni inscriptions, ni pages, ni jalons, ni responsables ; mêmes dates que l'original
 - **Archivage** en un clic (bouton « Archiver » ou statut « Archivé » du formulaire d'édition)

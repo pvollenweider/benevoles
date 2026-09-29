@@ -42,6 +42,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 |-------|----------|------|
 | `/api/admin/events` | GET, POST | Lister, créer des événements |
 | `/api/admin/events/[id]` | GET, PATCH, DELETE | Lire, modifier (dont l'archivage : `publicStatus: "archived"`), supprimer définitivement. `DELETE` exige un événement archivé (409 sinon) et `{ "confirmTitle": "<titre>" }` (400 sinon) ; les créneaux, inscriptions et invitations sont supprimés en cascade |
+| `/api/admin/events/from-template` | POST | Créer un brouillon depuis un modèle : `templateId` (`festival`, `buvette`, `sport`, `fete`, `chantier`), `title` (facultatif), `startDate` (`YYYY-MM-DD`). Renvoie `{ id, shiftCount }` (201). |
 | `/api/admin/events/[id]/duplicate` | POST | Dupliquer un événement |
 | `/api/admin/events/[id]/preview` | GET, POST | Aperçu comme un bénévole, brouillons compris (#370). `GET` : mêmes données que `/api/public/[eventSlug]`, plus `publicStatus`. `POST` (`firstName`, `lastName`, `shiftIds`) : email de confirmation rendu avec le vrai modèle (lien personnel factice) et créneaux qui passeraient en liste d'attente ; rien n'est enregistré ni envoyé |
 | `/api/admin/events/[id]/reorder-roles` | POST | Réordonner les postes |
