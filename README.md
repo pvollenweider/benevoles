@@ -4,9 +4,9 @@ Application **SaaS multi-tenant** de gestion de bénévoles pour événements. C
 
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
 [![Node.js 26](https://img.shields.io/badge/Node.js-26-green.svg)](https://nodejs.org/)
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-support-ffdd00.svg)](https://buymeacoffee.com/pvollenweider)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-support-ffdd00.svg)](https://buymeacoffee.com/benevol.app)
 
-Ce projet est gratuit et open source. Si vous l'utilisez et voulez soutenir son développement, un café est toujours apprécié : [buymeacoffee.com/pvollenweider](https://buymeacoffee.com/pvollenweider).
+Ce projet est gratuit et open source. Si vous l'utilisez et voulez soutenir son développement, un café est toujours apprécié : [buymeacoffee.com/benevol.app](https://buymeacoffee.com/benevol.app).
 
 ## Documentation
 
