@@ -4,6 +4,7 @@ import { titlesMatch } from "@/lib/confirm-title"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
+import { EVENT_PUBLIC_STATUSES } from "@/lib/statuses"
 
 const showSchema = z.object({
   name: z.string(),
@@ -20,7 +21,7 @@ const schema = z.object({
   endDate: z.string().optional(),
   publicInstructions: z.string().optional().nullable(),
   confirmationMessage: z.string().optional().nullable(),
-  publicStatus: z.enum(["draft", "published", "archived"]).optional(),
+  publicStatus: z.enum(EVENT_PUBLIC_STATUSES).optional(),
   showSchedule: z.array(showSchema).optional(),
   reminderMessage: z.string().max(2000).optional().nullable(),
   remindersEnabled: z.boolean().optional(),
