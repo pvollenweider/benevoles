@@ -6,6 +6,8 @@ import AdminsManager from "@/components/admin/AdminsManager"
 import OrgNameForm from "@/components/admin/OrgNameForm"
 import OrgPublicTitleForm from "@/components/admin/OrgPublicTitleForm"
 import OrgSlugForm from "@/components/admin/OrgSlugForm"
+import OrgTimeZoneForm from "@/components/admin/OrgTimeZoneForm"
+import { APP_TIME_ZONE, timeZoneChoices } from "@/lib/time-zone"
 import OrgCharterForm from "@/components/admin/OrgCharterForm"
 import ChangePasswordForm from "@/components/admin/ChangePasswordForm"
 
@@ -36,7 +38,7 @@ export default async function AdminsSettingsPage() {
       },
       orderBy: { createdAt: "asc" },
     }),
-    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, publicTitle: true } }),
+    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, publicTitle: true, timeZone: true } }),
     db.orgSlugHistory.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
@@ -70,6 +72,14 @@ export default async function AdminsSettingsPage() {
           initialHistory={slugHistory.map((e) => ({ slug: e.slug, createdAt: e.createdAt.toISOString() }))}
           initialHasPublishedEvents={publishedEventCount > 0}
           baseDomain={baseDomain}
+        />
+      )}
+
+      {org && (
+        <OrgTimeZoneForm
+          initialTimeZone={org.timeZone ?? ""}
+          defaultTimeZone={APP_TIME_ZONE}
+          choices={timeZoneChoices(org.timeZone)}
         />
       )}
 

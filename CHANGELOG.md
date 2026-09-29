@@ -7,6 +7,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Ajouté
+
+- **Fuseau horaire par organisation** : dans les paramètres, une organisation peut choisir le fuseau de ses événements (Europe/Zurich par défaut). Il sert aux rappels, à l'heure limite des places proposées en liste d'attente, au journal de l'événement et à l'export PDF.
+
 ### Modifié
 
 - **Limitation des tentatives** (connexion, inscription, liens de gestion, mot de passe oublié) : les compteurs sont désormais stockés dans la base de données. Ils ne sont plus remis à zéro à chaque redéploiement et restent justes si l'application tourne sur plusieurs instances.

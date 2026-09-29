@@ -12,7 +12,7 @@ import { reportError } from "@/lib/report-error"
 import { deliverOutbox, outboxHealth } from "@/lib/notifications/outbox"
 import * as Sentry from "@sentry/nextjs"
 import { registrationToken } from "@/lib/token-vault"
-import { localDateTimeToUtc } from "@/lib/time-zone"
+import { localDateTimeToUtc, orgTimeZone } from "@/lib/time-zone"
 
 export const dynamic = "force-dynamic"
 
@@ -37,11 +37,11 @@ const WINDOWS: Window[] = [
 ]
 
 /**
- * Real start instant of a shift: its calendar day at its local startTime, in the events' time
- * zone (#308). Treating the local "HH:MM" as UTC put every window 1-2 h off in Switzerland.
+ * Real start instant of a shift: its calendar day at its local startTime, in its organization's
+ * time zone (#308, #344). Treating the local "HH:MM" as UTC put every window 1-2 h off in Switzerland.
  */
-function shiftStartAt(date: Date, startTime: string): Date {
-  return localDateTimeToUtc(date, startTime)
+function shiftStartAt(date: Date, startTime: string, timeZone: string): Date {
+  return localDateTimeToUtc(date, startTime, timeZone)
 }
 
 export async function GET(req: Request) {
@@ -78,19 +78,19 @@ async function run(req: Request) {
       include: {
         volunteer: true,
         shift: true,
-        event: { include: { organization: { select: { name: true, slug: true } } } },
+        event: { include: { organization: { select: { name: true, slug: true, timeZone: true } } } },
       },
     })
 
     const inWindow = candidates.filter((r) => {
-      const start = shiftStartAt(r.shift.date, r.shift.startTime)
+      const start = shiftStartAt(r.shift.date, r.shift.startTime, orgTimeZone(r.event.organization))
       return start >= lower && start <= upper
     })
 
     let sent = 0
     let failed = 0
     for (const r of inWindow) {
-      const start = shiftStartAt(r.shift.date, r.shift.startTime)
+      const start = shiftStartAt(r.shift.date, r.shift.startTime, orgTimeZone(r.event.organization))
       const result = await sendNotification({
         kind: win.kind,
         recipient: { email: r.volunteer.email, name: r.volunteer.firstName },

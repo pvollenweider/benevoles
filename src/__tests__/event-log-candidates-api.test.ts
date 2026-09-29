@@ -46,7 +46,7 @@ describe("GET /api/admin/events/[id]/log/candidates", () => {
     const { GET } = await import("@/app/api/admin/events/[id]/log/candidates/route")
     const res = await GET(get("/api/admin/events/evt-1/log/candidates?kind=story"), { params: Promise.resolve({ id: "evt-1" }) })
     expect(await res.json()).toEqual({ candidates: [{ logId: "log-1", label: "Alain · 3 étapes", entryCount: 3 }] })
-    expect(listStoryCandidates).toHaveBeenCalledWith("evt-1")
+    expect(listStoryCandidates).toHaveBeenCalledWith("evt-1", "Europe/Zurich") // no org time zone set: deployment default (#344)
     expect(listReplayCandidates).not.toHaveBeenCalled()
   })
 })

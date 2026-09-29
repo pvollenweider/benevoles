@@ -17,7 +17,7 @@ export default function StoryView({ eventId, rootId, onClear }: { eventId: strin
       .then((r) => r.json())
       .then((data) => {
         const chain = data.entries.map((e: EventLogEntry) => ({ ...e, createdAt: new Date(e.createdAt) }))
-        setText(narrateChain(chain, data.shiftLabels))
+        setText(narrateChain(chain, data.shiftLabels, data.timeZone))
       })
       .finally(() => setLoading(false))
   }, [eventId, rootId])

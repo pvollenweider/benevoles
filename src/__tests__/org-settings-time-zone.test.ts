@@ -1,0 +1,50 @@
+import { describe, it, expect, vi, beforeEach } from "vitest"
+
+const requireOrgSessionMock = vi.hoisted(() => vi.fn())
+vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: requireOrgSessionMock }))
+
+const update = vi.hoisted(() => vi.fn())
+vi.mock("@/lib/prisma", () => ({
+  prisma: { $transaction: (fn: (tx: unknown) => unknown) => fn({ organization: { update } }) },
+}))
+
+function patch(body: unknown) {
+  return new Request("http://localhost/api/admin/settings/organization", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  })
+}
+
+describe("PATCH /api/admin/settings/organization — timeZone (#344)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    requireOrgSessionMock.mockResolvedValue({ organizationId: "org-a", session: { user: { id: "admin-1" } } })
+    update.mockImplementation(async ({ data }) => ({
+      name: "Org", slug: "org", volunteerCharter: null, hasOrgInsurance: true, publicTitle: null, timeZone: data.timeZone ?? null,
+    }))
+  })
+
+  it("stores a valid zone on the caller's organization", async () => {
+    const { PATCH } = await import("@/app/api/admin/settings/organization/route")
+    const res = await PATCH(patch({ timeZone: " America/New_York " }))
+    expect(res.status).toBe(200)
+    expect(update).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "org-a" }, data: { timeZone: "America/New_York" } }))
+    expect((await res.json()).timeZone).toBe("America/New_York")
+  })
+
+  it("empty resets to the deployment default (null)", async () => {
+    const { PATCH } = await import("@/app/api/admin/settings/organization/route")
+    const res = await PATCH(patch({ timeZone: "" }))
+    expect(res.status).toBe(200)
+    expect(update).toHaveBeenCalledWith(expect.objectContaining({ data: { timeZone: null } }))
+  })
+
+  it("rejects an unknown zone without writing", async () => {
+    const { PATCH } = await import("@/app/api/admin/settings/organization/route")
+    const res = await PATCH(patch({ timeZone: "Europe/Zuric" }))
+    expect(res.status).toBe(400)
+    expect((await res.json()).error).toBe("Fuseau horaire inconnu.")
+    expect(update).not.toHaveBeenCalled()
+  })
+})

@@ -151,3 +151,11 @@ describe("narrateChain", () => {
     expect(text).toMatch(/Le 13 septembre/)
   })
 })
+
+describe("narrateChain time zone (#344)", () => {
+  it("writes days and times in the organization's zone", () => {
+    const chain = [entry({ createdAt: new Date("2026-09-12T22:30:00.000Z") })]
+    expect(narrateChain(chain, undefined, "Europe/Zurich")).toMatch(/^Le 13 septembre à 00:30 : /)
+    expect(narrateChain(chain, undefined, "America/New_York")).toMatch(/^Le 12 septembre à 18:30 : /)
+  })
+})

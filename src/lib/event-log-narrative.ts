@@ -13,7 +13,7 @@ import type { EventLogEntry, ShiftLabel } from "./event-log-read"
 import { APP_TIME_ZONE } from "./time-zone"
 
 const dateFmt = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long" })
-const dateTimeFmt = new Intl.DateTimeFormat("fr-FR", { timeZone: APP_TIME_ZONE, day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })
+
 
 function fmtValue(v: unknown): string {
   if (v === null || v === undefined) return "—"
@@ -128,17 +128,22 @@ export function describeEntry(entry: Pick<EventLogEntry, "action" | "actorLabel"
  * Renders a causal chain (oldest first, as returned by getCausalChain) as connected French
  * sentences. Consecutive entries linked by causedByLogId get a connector phrase; entries with
  * no causal link to the previous one start a new sentence with their own timestamp instead of
- * being glued on with an invented "then".
+ * being glued on with an invented "then". Days and times are in `timeZone`, the organization's
+ * (#344): this also runs in the browser, whose own zone may differ.
  */
-export function narrateChain(chain: EventLogEntry[], shiftLabels?: Record<string, ShiftLabel>): string {
+export function narrateChain(chain: EventLogEntry[], shiftLabels?: Record<string, ShiftLabel>, timeZone: string = APP_TIME_ZONE): string {
   if (chain.length === 0) return ""
+
+  const dayFmt = new Intl.DateTimeFormat("fr-FR", { timeZone, day: "numeric", month: "long" })
+  const dateTimeFmt = new Intl.DateTimeFormat("fr-FR", { timeZone, day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })
+  const timeFmt = new Intl.DateTimeFormat("fr-FR", { timeZone, hour: "2-digit", minute: "2-digit" })
 
   const byId = new Map(chain.map((e) => [e.id, e]))
   const parts: string[] = []
   let lastDay = ""
 
   chain.forEach((entry, i) => {
-    const day = dateFmt.format(entry.createdAt)
+    const day = dayFmt.format(entry.createdAt)
     const sentence = buildSentence(entry, shiftLabels)
     const causedByPrevious = i > 0 && entry.causedByLogId != null && byId.get(entry.causedByLogId)?.id === chain[i - 1].id
 
@@ -154,7 +159,7 @@ export function narrateChain(chain: EventLogEntry[], shiftLabels?: Record<string
 
     const withTime = day !== lastDay
       ? `Le ${dateTimeFmt.format(entry.createdAt)} : ${sentence}.`
-      : `${sentence.charAt(0).toUpperCase()}${sentence.slice(1)} à ${entry.createdAt.toLocaleTimeString("fr-FR", { timeZone: APP_TIME_ZONE, hour: "2-digit", minute: "2-digit" })}.`
+      : `${sentence.charAt(0).toUpperCase()}${sentence.slice(1)} à ${timeFmt.format(entry.createdAt)}.`
     parts.push(withTime)
     lastDay = day
   })

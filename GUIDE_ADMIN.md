@@ -325,6 +325,14 @@ Le titre affiché en haut de la page publique de vos événements (l'adresse de 
 
 ---
 
+## Fuseau horaire
+
+**`/admin/settings/admins`** → section **Fuseau horaire**
+
+Les heures des créneaux sont des heures locales : ce réglage indique dans quel fuseau les lire. Il sert à envoyer les rappels au bon moment, à indiquer l'heure limite d'une place proposée en liste d'attente, et à afficher les heures du journal de l'événement et de l'export PDF. Par défaut, c'est le fuseau de la plateforme (Europe/Zurich) ; choisissez-en un autre si vos événements ont lieu ailleurs, puis **Enregistrer**. Changer de fuseau ne modifie pas les heures affichées des créneaux, mais décale le moment où leurs rappels partent.
+
+---
+
 ## Charte du bénévole
 
 **`/admin/settings/admins`** → section **Charte du bénévole**

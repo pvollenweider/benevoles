@@ -4,6 +4,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { listEventLogs, getCausalChain } from "@/lib/event-log-read"
+import { orgTimeZone } from "@/lib/time-zone"
 
 /**
  * Query/explore an event's log. Filters, not a flat feed — see issue #187:
@@ -20,7 +21,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const { db } = guard
 
   const { id: eventId } = await params
-  const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
+  const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true, organization: { select: { timeZone: true } } } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   const url = new URL(req.url)
@@ -31,7 +32,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     if (chain.length > 0 && chain[0].eventId !== eventId) {
       return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
     }
-    return NextResponse.json({ entries: chain, shiftLabels })
+    // The narrative is written in the browser: it needs the organization's zone, not its own (#344).
+    return NextResponse.json({ entries: chain, shiftLabels, timeZone: orgTimeZone(event.organization) })
   }
 
   const since = url.searchParams.get("since")

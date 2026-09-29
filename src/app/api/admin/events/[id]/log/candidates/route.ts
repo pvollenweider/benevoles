@@ -4,6 +4,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { listReplayCandidates, listStoryCandidates } from "@/lib/event-log-read"
+import { orgTimeZone } from "@/lib/time-zone"
 
 /**
  * Lets the Replay/Récit tabs be usable on their own, not just reachable via a row's button in
@@ -17,12 +18,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const { db } = guard
 
   const { id: eventId } = await params
-  const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
+  const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true, organization: { select: { timeZone: true } } } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   const kind = new URL(req.url).searchParams.get("kind")
   if (kind === "story") {
-    return NextResponse.json({ candidates: await listStoryCandidates(eventId) })
+    return NextResponse.json({ candidates: await listStoryCandidates(eventId, orgTimeZone(event.organization)) })
   }
   return NextResponse.json({ candidates: await listReplayCandidates(eventId) })
 }
