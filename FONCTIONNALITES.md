@@ -114,7 +114,7 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - Champ **Rechercher** dans la barre du haut (dans le menu sur mobile), raccourci **Ctrl + K** (**⌘ + K** sur Mac)
 - Résultats groupés : bénévoles (nom, email, téléphone), leurs inscriptions en cours (confirmées, liste d'attente, place proposée), événements (titre, lieu, slug), créneaux (poste, intitulé, titre de l'événement) ; 20 résultats par groupe
-- Tous les mots doivent correspondre, sans tenir compte des majuscules ; les accents comptent
+- Tous les mots doivent correspondre, sans tenir compte des majuscules ni des accents (Postgres `unaccent`, ids sélectionnés en SQL brut avec le filtre d'organisation explicite, puis lecture par le client scopé)
 - Liens vers la page Membres ou les inscriptions de l'événement déjà filtrées (`?q=`, `?shift=`)
 
 ### Gestion des événements

@@ -52,7 +52,7 @@ export default async function SearchPage({ searchParams }: Search) {
   if (!ctx) redirect("/admin/login")
   const q = queryOf((await searchParams).q)
   const terms = searchTerms(q)
-  const results = terms.length > 0 ? await loadSearch(ctx.db, terms) : null
+  const results = terms.length > 0 ? await loadSearch(ctx.db, ctx.organizationId, terms) : null
   const total = results
     ? results.volunteers.items.length + results.registrations.items.length + results.events.items.length + results.shifts.items.length
     : 0

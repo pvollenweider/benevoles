@@ -68,7 +68,7 @@ Le champ **Rechercher** de la barre du haut (dans le **Menu** sur un petit écra
 - les **événements** dont le titre ou le lieu correspond ;
 - les **créneaux** dont le poste ou l'intitulé correspond : le lien ouvre les inscriptions de ce créneau.
 
-Tous les mots doivent correspondre : « alice martin » trouve Alice Martin, « fête bar » les créneaux du poste Bar de l'événement « Fête d'été ». Les majuscules ne comptent pas, mais les accents oui : « Zoe » ne trouve pas « Zoé ». Chaque groupe affiche les 20 premiers résultats ; au-delà, précisez la recherche.
+Tous les mots doivent correspondre : « alice martin » trouve Alice Martin, « fête bar » les créneaux du poste Bar de l'événement « Fête d'été ». Ni les majuscules ni les accents ne comptent : « zoe » trouve Zoé, dans la recherche globale comme dans les filtres des pages Membres et Inscriptions. Chaque groupe affiche les 20 premiers résultats ; au-delà, précisez la recherche.
 
 Raccourci : **Ctrl + K** (**⌘ + K** sur Mac) place le curseur dans le champ de recherche depuis n'importe quelle page de l'admin.
 

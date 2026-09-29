@@ -32,6 +32,12 @@ describe("filterRegistrations", () => {
     expect(filterRegistrations(regs, { search: "alice@", role: "", shiftId: "" })).toHaveLength(2)
   })
 
+  it("ignores accents (#390)", () => {
+    const zoe = { ...regs[0], id: "z", volunteer: { ...regs[0].volunteer, firstName: "Zoé", lastName: "Roy" } }
+    expect(filterRegistrations([zoe], { search: "zoe", role: "", shiftId: "" }).map((r) => r.id)).toEqual(["z"])
+    expect(filterRegistrations([zoe], { search: "Zoé", role: "", shiftId: "" })).toHaveLength(1)
+  })
+
   it("by role and by shift, combined with search", () => {
     expect(filterRegistrations(regs, { search: "", role: "Accueil", shiftId: "" }).map((r) => r.id)).toEqual(["r2"])
     expect(filterRegistrations(regs, { search: "bob", role: "Bar", shiftId: "s-late" }).map((r) => r.id)).toEqual(["r3"])
