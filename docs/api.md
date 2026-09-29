@@ -59,6 +59,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/admin/events/[id]/milestones/[milestoneId]` | PATCH, DELETE | Modifier (dont cocher `done`), supprimer un jalon |
 | `/api/admin/events/[id]/qr` | GET | QR code de la page publique ; `?format=svg` pour le SVG, PNG par défaut |
 | `/api/admin/events/[id]/export/pdf` | GET | Page HTML de l'export (planning, récap, bénévoles) destinée à l'impression en PDF depuis le navigateur |
+| `/api/admin/events/[id]/export/attendance` | GET | Feuille de présence CSV (UTF-8 avec BOM, point-virgule) : une ligne par inscription confirmée, présent oui/non, heure du pointage. |
 | `/api/admin/events/[id]/message` | POST | Message ciblé : `audience` (`{kind:"event"}`, `{kind:"role",roleName}`, `{kind:"shift",shiftId}`, `{kind:"waitlist"}`), `subject` (≤ 120), `message` (≤ 2000), `dryRun` (compte et aperçu sans envoi). Un email par personne via la file d'envoi ; 30 envois/heure/organisation (429 au-delà). |
 | `/api/admin/events/[id]/send-reminder` | POST | Rappel manuel à tous les inscrits |
 | `/api/admin/events/[id]/invitations` | GET, POST | État des invitations, envoi d'invitations |
@@ -71,7 +72,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 | `/api/admin/registrations` | POST | Ajout manuel d'une inscription |
 | `/api/admin/registrations/[id]` | PATCH, DELETE | Modifier, annuler une inscription |
 | `/api/admin/registrations/[id]/resend-link` | POST | Renvoyer au bénévole son lien personnel de gestion (`/my/[token]`) ; il donne accès à toutes ses inscriptions actives de l'événement |
-| `/api/admin/events/[id]/registrations/bulk` | POST | Action groupée sur une sélection d'inscriptions de l'événement (`cancel`, `make_leader`, `resend_link`) ; tout ou rien si une inscription n'appartient pas à l'événement |
+| `/api/admin/events/[id]/registrations/bulk` | POST | Action groupée sur une sélection d'inscriptions de l'événement (`cancel`, `make_leader`, `resend_link`) ; tout ou rien si une inscription n'appartient pas à l'événement Actions `check_in` / `undo_check_in` (#399) : marque ou retire la présence des inscriptions confirmées sélectionnées ; renvoie `{ done, changedIds, skipped }`. |
 | `/api/admin/members` | GET, POST | Lister, créer des membres |
 | `/api/admin/members/[id]` | PATCH, DELETE | Modifier, supprimer un membre |
 | `/api/admin/members/import` | POST | Import CSV ou xlsx (multipart) |

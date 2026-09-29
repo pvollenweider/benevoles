@@ -286,6 +286,12 @@ Aucune action directement sur une ligne : cocher une ou plusieurs inscriptions (
 
 Un badge **Responsable** s'affiche sur une ligne quand ce bénévole est déjà responsable du poste de son créneau.
 
+### Présences le jour J
+
+Pour savoir qui est venu, sans terminal ni badge : sélectionnez les lignes des personnes arrivées et cliquez **Marquer présents**. Un badge **Présent** apparaît sur la ligne, le compteur « N présents sur M inscrits » se met à jour, et l'action est notée dans le journal. **Annuler la présence** retire la marque (sélection de lignes déjà marquées). Seules les inscriptions confirmées peuvent être marquées.
+
+**Exporter les présences (CSV)**, en haut de la page, télécharge la feuille de présence : une ligne par inscription confirmée avec prénom, nom, email, téléphone, poste, créneau, date, horaires, présent oui/non et l'heure du pointage (fuseau de l'organisation). Elle s'ouvre directement dans Excel ou LibreOffice.
+
 Depuis la page principale de l'événement (`/admin/events/[id]`) :
 - 4 chiffres en un coup d'œil en haut de page : créneaux, places totales, inscrits, places restantes
 - **Où manque-t-il du monde ?** : une phrase (« Il manque encore 12 personnes sur 20 places ») et un lien vers la vue détaillée décrite ci-dessous

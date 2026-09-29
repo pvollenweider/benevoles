@@ -190,6 +190,13 @@ describe("Events — cross-tenant isolation", () => {
     expect(res.status).toBe(404)
   })
 
+  it("GET /api/admin/events/[id]/export/attendance returns 404 for an org-B event", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/export/attendance/route")
+    setupGuard() // event.findFirst → null
+    const res = await GET(makeRequest("/api/admin/events/evt-b/export/attendance"), params("evt-b"))
+    expect(res.status).toBe(404)
+  })
+
   it("GET /api/admin/events/[id] returns 200 for an org-A event", async () => {
     const { GET } = await import("@/app/api/admin/events/[id]/route")
     setupGuard({

@@ -312,6 +312,9 @@ model Registration {
   waitingPosition  Int?
   waitingOfferedAt DateTime?
   waitingExpiresAt DateTime?
+  // Lightweight check-in (#399): when the organizer marked this person present on site. Null
+  // until then; cleared by « Annuler la présence ». No terminals, badges or access control.
+  checkedInAt      DateTime?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 

@@ -199,6 +199,7 @@ Liste exhaustive des fonctionnalités de l'application.
 - **Renvoyer le lien** : réémet par email le lien personnel de gestion (`/my/[token]`) de chaque bénévole sélectionné — donne accès à toutes ses inscriptions actives pour l'événement, pas seulement au créneau de la ligne
 - **Retirer de leur créneau** : annule chaque inscription sélectionnée
 - Badge « Responsable » affiché sur une ligne quand ce bénévole est déjà responsable du poste de son créneau
+- **Présences** (#399) : actions groupées **Marquer présents** / **Annuler la présence** sur les inscriptions confirmées (`checkedInAt`), badge **Présent**, compteur « N présents sur M », journal (`registration.checked_in` / `check_in_undone`) ; **export CSV des présences** (`/api/admin/events/[id]/export/attendance`, BOM + point-virgule, heure du pointage dans le fuseau de l'organisation)
 - **Filtres cumulables** : recherche texte, filtre par poste, filtre par créneau
 - Accès direct depuis un créneau (timeline admin) : pré-filtrage automatique
 - **Ajout manuel** avec détection de conflits
