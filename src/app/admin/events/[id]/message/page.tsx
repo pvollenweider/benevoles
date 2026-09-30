@@ -38,6 +38,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
   })
   if (!event) notFound()
   const history = await loadMessageHistory(ctx.db, ctx.organizationId, event.id)
+  const templates = await ctx.db.messageTemplate.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true, subject: true, body: true } })
 
   const roles = Array.from(new Set(event.shifts.map((s) => s.roleName)))
   const shifts = event.shifts.map((s) => ({
@@ -63,7 +64,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
           Un email, à qui c&apos;est utile : tous les inscrits, un poste, un créneau, la liste d&apos;attente, ou les membres invités qui n&apos;ont pas encore de créneau confirmé (ils reçoivent leur lien d&apos;invitation). Chaque personne le reçoit une fois, avec ses créneaux concernés et le lien vers ses inscriptions.
         </p>
       </div>
-      <TargetedMessageForm eventId={event.id} roles={roles} shifts={shifts} initialAudience={valid ? initial : { kind: "event" }} />
+      <TargetedMessageForm eventId={event.id} roles={roles} shifts={shifts} initialAudience={valid ? initial : { kind: "event" }} templates={templates} />
       <p className="text-sm text-gray-600">
         Pour renvoyer leur lien d&apos;invitation aux membres invités sans créneau confirmé, utilisez « Relancer les … sans créneau » dans{" "}
         <Link href={`/admin/events/${event.id}/invitations`} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900">les invitations</Link>.

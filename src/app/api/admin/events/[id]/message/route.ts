@@ -13,6 +13,7 @@ import { adminActor, logEvent } from "@/lib/event-log"
 import { fmtRange } from "@/lib/gantt-utils"
 import { audienceLabel, messagePushPayload, messageSchema, selectInvitedWithoutShift, selectRecipients, MESSAGE_RATE_LIMIT } from "@/lib/targeted-message"
 import { linkToken } from "@/lib/token-vault"
+import { renderVariables, templateProblems } from "@/lib/message-template"
 import { eventPublicUrl } from "@/lib/urls"
 import { pushDeviceCount, sendTargetedPush } from "@/lib/push"
 import { after } from "next/server"
@@ -86,6 +87,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     : undefined
   const label = audienceLabel(audience, shiftName)
 
+  // Template variables (#482): refused before anything is sent when unknown or out of place, then
+  // replaced per recipient. The history keeps the text as written, variables included.
+  const problems = templateProblems(`${subject}\n${message}`, audience.kind)
+  if (problems.length > 0) return NextResponse.json({ error: problems.join(" ") }, { status: 400 })
+  const roleOfAudience = audience.kind === "role" ? audience.roleName : audience.kind === "shift" ? regs.find((x) => x.shiftId === audience.shiftId)?.shift.roleName : undefined
+  const vars = (r: Target) => ({ prénom: r.firstName, événement: event.title, poste: roleOfAudience, créneau: shiftName })
+
   const payloadFor = (r: Target, batchId: string): NotificationPayload => ({
     kind: "targeted_message",
     dedupeKey: `message:${batchId}:${r.volunteerId}`,
@@ -95,8 +103,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       organizationName: event.organization.name,
       orgSlug: event.organization.slug,
       eventTitle: event.title,
-      subject,
-      message,
+      subject: renderVariables(subject, vars(r)),
+      message: renderVariables(message, vars(r)),
       shifts: r.shifts,
       editToken: r.editToken,
       signupUrl: r.signupUrl,
@@ -156,6 +164,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const messageId = historyId
     const targets = recipients.map((r) => ({
       volunteerId: r.volunteerId,
+      ...messagePushPayload(renderVariables(subject, vars(r)), renderVariables(message, vars(r))),
       url: r.editToken ? `/my/${r.editToken}` : r.signupUrl ? (() => { const u = new URL(r.signupUrl!); return u.pathname + u.search })() : `/${event.slug}`,
     }))
     after(() => sendTargetedPush(messageId, targets, { ...messagePushPayload(subject, message), tag: `message-${messageId}` }).then(() => undefined))

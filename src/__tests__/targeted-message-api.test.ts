@@ -124,7 +124,7 @@ describe("POST /api/admin/events/[id]/message", () => {
     expect(enqueueNotifications).toHaveBeenCalledOnce() // the email goes anyway
     expect(push.sendTargetedPush).not.toHaveBeenCalled()
     for (const fn of afterCallbacks) await fn()
-    expect(push.sendTargetedPush).toHaveBeenCalledWith("msg-1", [{ volunteerId: "alice", url: "/my/tok-r1" }], { title: base.subject, body: "Parking nord.", tag: "message-msg-1" })
+    expect(push.sendTargetedPush).toHaveBeenCalledWith("msg-1", [{ volunteerId: "alice", url: "/my/tok-r1", title: base.subject, body: "Parking nord." }], { title: base.subject, body: "Parking nord.", tag: "message-msg-1" })
   })
 
   it("sends no push without the option", async () => {
@@ -159,5 +159,21 @@ describe("POST /api/admin/events/[id]/message", () => {
       expect(p.data.editToken).toBeUndefined()
       expect(new URL(p.data.signupUrl).searchParams.get("token")).toMatch(/^inv-/)
     }
+  })
+
+  it("replaces template variables per recipient and refuses unknown or misplaced ones (#482)", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/message/route")
+    const bad = await POST(post({ subject: "Bonjour {nom}", message: "x", audience: { kind: "event" } }), params)
+    expect(bad.status).toBe(400)
+    expect((await bad.json()).error).toMatch(/Variable inconnue/)
+    expect((await POST(post({ subject: "Salut", message: "Au {poste}", audience: { kind: "event" } }), params)).status).toBe(400)
+    enqueueNotifications.mockClear()
+    const ok = await POST(post({ subject: "Merci {prénom}", message: "{prénom}, le poste {poste} de {événement} compte sur toi. {{code}}", audience: { kind: "role", roleName: "Bar" } }), params)
+    expect(ok.status).toBe(200)
+    const [payload] = enqueueNotifications.mock.calls[0][0]
+    expect(payload.data.subject).toBe("Merci Alice")
+    expect(payload.data.message).toBe("Alice, le poste Bar de Fête compte sur toi. {code}")
+    // The history keeps the text as written.
+    expect(historyCreate.mock.calls.at(-1)![0].data.subject).toBe("Merci {prénom}")
   })
 })

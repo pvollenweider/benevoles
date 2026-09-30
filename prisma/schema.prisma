@@ -37,6 +37,7 @@ model Organization {
   slugHistory OrgSlugHistory[]
   logs        OrgLog[]
   targetedMessages TargetedMessage[]
+  messageTemplates MessageTemplate[]
 }
 
 model OrgSlugHistory {
@@ -421,6 +422,23 @@ model NotificationOutbox {
   @@index([status, nextAttemptAt])
   @@index([targetedMessageId])
   @@index([organizationId, createdAt])
+}
+
+// Reusable targeted-message templates of an organisation (#482): a name, a subject and a plain
+// text with documented variables ({prénom}, {événement}, {poste}, {créneau}), picked and edited in
+// « Écrire aux bénévoles ». A few per organisation; deleted with it.
+model MessageTemplate {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  subject        String
+  body           String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, name])
 }
 
 // One row per targeted message sent to volunteers (#467): who wrote what, when, to whom, and how

@@ -82,12 +82,13 @@ export async function pushDeviceCount(volunteerIds: string[]): Promise<number> {
  */
 export async function sendTargetedPush(
   targetedMessageId: string,
-  targets: { volunteerId: string; url: string }[],
+  /** Per recipient: their link, and their own title and body when the text has variables (#482). */
+  targets: { volunteerId: string; url: string; title?: string; body?: string }[],
   payload: { title: string; body: string; tag: string },
 ): Promise<PushOutcome> {
   const total: PushOutcome = { sent: 0, failed: 0, removed: 0 }
   for (const t of targets) {
-    const o = await sendPushToVolunteer(t.volunteerId, { ...payload, url: t.url }).catch((e) => { reportError("push.targeted")(e); return { sent: 0, failed: 0, removed: 0 } })
+    const o = await sendPushToVolunteer(t.volunteerId, { ...payload, ...(t.title ? { title: t.title } : {}), ...(t.body ? { body: t.body } : {}), url: t.url }).catch((e) => { reportError("push.targeted")(e); return { sent: 0, failed: 0, removed: 0 } })
     total.sent += o.sent
     total.failed += o.failed
     total.removed += o.removed

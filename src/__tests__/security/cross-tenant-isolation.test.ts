@@ -468,6 +468,18 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(prismaMock.notificationOutbox.updateMany).not.toHaveBeenCalled()
   })
 
+  it("PATCH/DELETE /api/admin/settings/message-templates/[id] return 404 for an org-B template (#482)", async () => {
+    const mod = await import("@/app/api/admin/settings/message-templates/[id]/route")
+    const update = vi.fn(), del = vi.fn()
+    const db = { ...mockScopedDb(), messageTemplate: { findFirst: vi.fn().mockResolvedValue(null), update, delete: del } }
+    requireOrgSessionMock.mockResolvedValue({ db, organizationId: ORG_A, session: SESSION_A })
+    const p = { params: Promise.resolve({ id: "tpl-b" }) }
+    expect((await mod.PATCH(makeRequest("/api/admin/settings/message-templates/tpl-b", "PATCH", { name: "X", subject: "x", body: "y" }), p)).status).toBe(404)
+    expect((await mod.DELETE(makeRequest("/api/admin/settings/message-templates/tpl-b", "DELETE"), p)).status).toBe(404)
+    expect(update).not.toHaveBeenCalled()
+    expect(del).not.toHaveBeenCalled()
+  })
+
   it("GET /api/admin/members/export reads members through the scoped client only (#384)", async () => {
     const { GET } = await import("@/app/api/admin/members/export/route")
     const db = setupGuard({ volunteer: { findMany: vi.fn().mockResolvedValue([]) } })

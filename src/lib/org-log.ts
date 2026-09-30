@@ -15,7 +15,7 @@ import type { LogActor } from "./event-log"
 export type { LogActor }
 export { adminActor, SYSTEM_ACTOR, diffFields } from "./event-log"
 
-export type OrgLogEntityType = "Member" | "AdminUser" | "NotificationOutbox" | "Organization"
+export type OrgLogEntityType = "Member" | "AdminUser" | "NotificationOutbox" | "Organization" | "MessageTemplate"
 
 interface LogOrgEventParams {
   organizationId: string
