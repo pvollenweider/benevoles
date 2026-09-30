@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { civilDateSchema } from "@/lib/civil-date"
 import { z } from "zod"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { validationError } from "@/lib/api-error"
@@ -11,7 +12,7 @@ import { findTemplate, templateToEvent } from "@/lib/event-templates"
 const schema = z.object({
   templateId: z.string().min(1),
   title: z.string().max(200).optional().default(""),
-  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date invalide."),
+  startDate: civilDateSchema,
 })
 
 /** POST /api/admin/events/from-template (#395): a draft event with the template's shifts. */

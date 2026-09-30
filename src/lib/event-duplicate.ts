@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { z } from "zod"
+import { civilDateSchema } from "./civil-date"
 
 /**
  * Event duplication with explicit choices (#378, on top of #356). The organizer picks a title,
@@ -13,7 +14,7 @@ import { z } from "zod"
 export const duplicateOptionsSchema = z.object({
   title: z.string().trim().min(1).max(200).optional(),
   /** "YYYY-MM-DD"; the source's own start date when absent. */
-  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  startDate: civilDateSchema.optional(),
   copy: z.object({
     shifts: z.boolean().optional(),
     pages: z.boolean().optional(),

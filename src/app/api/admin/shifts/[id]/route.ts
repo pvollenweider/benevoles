@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { civilDateSchema, isDayInPeriod, SHIFT_OUTSIDE_EVENT_ERROR } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
@@ -17,7 +18,7 @@ const schema = z.object({
   roleName: z.string().optional(),
   label: z.string().optional(),
   description: z.string().optional().nullable(),
-  date: z.string().optional(),
+  date: civilDateSchema.optional(),
   startTime: clockSchema.optional(),
   endTime: clockSchema.optional(),
   capacity: z.number().int().min(1).optional(),
@@ -55,7 +56,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const before = await db.shift.findFirst({
     where: { id },
     include: {
-      event: { select: { id: true, title: true, slug: true, organizationId: true, organization: { select: { slug: true } } } },
+      event: { select: { id: true, title: true, slug: true, organizationId: true, startDate: true, endDate: true, organization: { select: { slug: true } } } },
       registrations: {
         where: { status: "active" },
         include: { volunteer: true },
@@ -63,6 +64,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     },
   })
   if (!before) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
+  if (parsed.data.date && !isDayInPeriod(parsed.data.date, before.event?.startDate, before.event?.endDate)) {
+    return NextResponse.json({ error: SHIFT_OUTSIDE_EVENT_ERROR }, { status: 400 })
+  }
 
   const { notifyVolunteers, ...rest } = parsed.data
   const updateData: Record<string, unknown> = { ...rest }

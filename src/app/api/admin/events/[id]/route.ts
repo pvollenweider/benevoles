@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { civilDateSchema, DATE_ORDER_ERROR, isOrderedPeriod } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { ACCENT_KEYS } from "@/lib/event-accent"
 import { requireOrgSession } from "@/lib/auth-guard"
@@ -14,7 +15,7 @@ import { isPublishing, publishBlocker } from "@/lib/event-publish"
 
 const showSchema = z.object({
   name: z.string(),
-  date: z.string(),
+  date: civilDateSchema,
   startTime: z.string(),
   endTime: z.string(),
 })
@@ -23,8 +24,8 @@ const schema = z.object({
   title: z.string().min(1).optional(),
   description: z.string().optional().nullable(),
   location: z.string().optional().nullable(),
-  startDate: z.string().optional(),
-  endDate: z.string().optional(),
+  startDate: civilDateSchema.optional(),
+  endDate: civilDateSchema.optional(),
   publicInstructions: z.string().optional().nullable(),
   confirmationMessage: z.string().optional().nullable(),
   publicStatus: z.enum(EVENT_PUBLIC_STATUSES).optional(),
@@ -84,6 +85,12 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (isPublishing(owned.publicStatus, data.publicStatus)) {
     const blocker = await publishBlocker(db, id)
     if (blocker) return NextResponse.json({ error: blocker }, { status: 409 })
+  }
+  // The period stays in order whichever end is changed: compare with the stored other end.
+  const nextStart = data.startDate ?? owned.startDate.toISOString().slice(0, 10)
+  const nextEnd = data.endDate ?? owned.endDate.toISOString().slice(0, 10)
+  if ((data.startDate || data.endDate) && !isOrderedPeriod(nextStart, nextEnd)) {
+    return NextResponse.json({ error: DATE_ORDER_ERROR }, { status: 400 })
   }
   const updateData: Record<string, unknown> = { ...data }
   if (data.startDate) updateData.startDate = new Date(data.startDate)

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { birthDateSchema } from "@/lib/civil-date"
 import { prisma } from "@/lib/prisma"
 import { generateToken, shiftsOverlap, shiftsTooYoungFor } from "@/lib/utils"
 import { sendConfirmationEmail, sendAdminNotification } from "@/lib/email"
@@ -31,7 +32,9 @@ const schema = z.object({
   lastName: z.string().min(1).max(100),
   email: z.string().trim().toLowerCase().email(),
   phone: z.string().optional(),
-  birthDate: z.string().optional(),
+  // A real, past day (audit): an invalid string became an Invalid Date that passed every age check.
+  // The form sends "" when no shift needs it: that is no birth date, not an invalid one.
+  birthDate: z.preprocess((v) => (v === "" ? undefined : v), birthDateSchema.optional()),
   comment: z.string().optional(),
   consent: z.literal(true),
   inviteToken: z.string().optional(),

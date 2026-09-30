@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { civilDateSchema, isDayInPeriod, SHIFT_OUTSIDE_EVENT_ERROR } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { z } from "zod"
 import { requireOrgSession } from "@/lib/auth-guard"
@@ -16,7 +17,7 @@ const schema = z.object({
   roleName: z.string().min(1),
   label: z.string().optional(),
   description: z.string().optional(),
-  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  date: civilDateSchema,
   startTime: clockSchema,
   endTime: clockSchema,
   slotMinutes: z.number().int(),
@@ -46,8 +47,9 @@ export async function POST(req: Request) {
   const problem = seriesProblem({ date, startTime, endTime, slotMinutes, breakMinutes })
   if (problem) return NextResponse.json({ error: problem }, { status: 400 })
 
-  const owned = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
+  const owned = await db.event.findFirst({ where: { id: eventId }, select: { id: true, startDate: true, endDate: true } })
   if (!owned) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
+  if (!isDayInPeriod(parsed.data.date, owned.startDate, owned.endDate)) return NextResponse.json({ error: SHIFT_OUTSIDE_EVENT_ERROR }, { status: 400 })
 
   const slots = generateShiftSeries({ date, startTime, endTime, slotMinutes, breakMinutes })
   const shifts = await db.$transaction((tx) =>
