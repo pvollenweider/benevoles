@@ -1,4 +1,6 @@
 import { notFound, redirect } from "next/navigation"
+import { utcToLocalInput } from "@/lib/registration-window"
+import { orgTimeZone } from "@/lib/time-zone"
 import { getOrgContext } from "@/lib/auth-guard"
 import EventForm from "@/components/admin/EventForm"
 import Link from "next/link"
@@ -14,8 +16,9 @@ export default async function EditEventPage({ params, searchParams }: { params: 
   const { id } = await params
   const { wizard } = await searchParams
 
-  const event = await db.event.findFirst({ where: { id } })
+  const event = await db.event.findFirst({ where: { id }, include: { organization: { select: { timeZone: true } } } })
   if (!event) notFound()
+  const timeZone = orgTimeZone(event.organization)
 
   const initialData = {
     id: event.id,
@@ -30,6 +33,9 @@ export default async function EditEventPage({ params, searchParams }: { params: 
     requirePhone: event.requirePhone,
     publicStatus: event.publicStatus as "draft" | "published" | "archived",
     isListed: event.isListed,
+    registrationsOpen: event.registrationsOpen,
+    registrationOpensAt: utcToLocalInput(event.registrationOpensAt, timeZone),
+    registrationClosesAt: utcToLocalInput(event.registrationClosesAt, timeZone),
     accentColorKey: event.accentColorKey,
     latitude: event.latitude,
     longitude: event.longitude,
@@ -53,7 +59,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
           </Link>
         )}
       </div>
-      <EventForm initialData={initialData} />
+      <EventForm initialData={initialData} timeZone={timeZone} />
     </div>
   )
 }

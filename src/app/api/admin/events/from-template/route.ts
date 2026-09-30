@@ -41,6 +41,8 @@ export async function POST(req: Request) {
       endDate: new Date(draft.endDate),
       publicStatus: "draft",
       isListed: true,
+      // Registrations start closed (#463): opening them is a decision, like publishing.
+      registrationsOpen: false,
       shifts: {
         create: draft.shifts.map((s) => ({ ...s, date: new Date(s.date), status: "open" })),
       },

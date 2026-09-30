@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useEffect, useRef, useState, useMemo } from "react"
+import { closedMessage, openUntilMessage, registrationState } from "@/lib/registration-window"
 import { eventAccent } from "@/lib/event-accent"
 import { coordinatesOf, MAP_LINK_LABEL, MAP_LINK_SR_SUFFIX, osmLink } from "@/lib/map-link"
 import { describeSignupFailure, type Failure } from "@/lib/form-errors"
@@ -67,6 +68,10 @@ type EventData = {
   publicInstructions: string | null
   confirmationMessage: string | null
   requirePhone: boolean
+  registrationsOpen: boolean
+  registrationOpensAt: string | null
+  registrationClosesAt: string | null
+  timeZone: string
   accentColorKey: string | null
   showSchedule: Show[]
   volunteerCharter: string | null
@@ -198,10 +203,17 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   if (loading) return <div role="status" className="flex items-center justify-center min-h-screen text-gray-500">Chargement…</div>
   if (!event) return <div role="alert" className="flex items-center justify-center min-h-screen text-gray-500">Événement introuvable.</div>
 
+  // Registration window (#463). This page only shows published events, or a preview of what
+  // volunteers will see once published: either way, the window decides.
+  const windowState = registrationState({ ...event, publicStatus: "published" })
+  const accepting = windowState.open
+  const windowClosedText = closedMessage(windowState, event.timeZone)
+  const windowUntilText = openUntilMessage(windowState, event.timeZone)
   const shiftsByDay = groupShiftsByDay(event.shifts)
   const hasAvailableShift = anyShiftAvailable(event.shifts)
 
   function toggleShift(id: string) {
+    if (!accepting && !selectedShifts.has(id)) return
     if (!isShiftSelectable(event?.shifts.find((s) => s.id === id), myShiftIds)) return
     setSelectedShifts((prev) => {
       const next = new Set(prev)
@@ -407,6 +419,10 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
       </header>
 
       <div className="max-w-6xl mx-auto px-4 py-6 pb-28 lg:pb-10 space-y-4">
+        {windowClosedText && (
+          <p id="registration-window-msg" className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-950">{windowClosedText}</p>
+        )}
+        {windowUntilText && <p className="text-sm text-gray-700">{windowUntilText}</p>}
         {event.publicInstructions && (
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800">
             {event.publicInstructions}
@@ -493,6 +509,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                         registered={myShiftIds}
                         conflicts={conflictingShiftIds}
                         onToggle={toggleShift}
+                        locked={!accepting}
+                        describedBy={accepting ? undefined : "registration-window-msg"}
                       />
                     </div>
                   )

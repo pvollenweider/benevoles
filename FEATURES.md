@@ -21,6 +21,7 @@ C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles
 - **Un récapitulatif clair avant de confirmer.** Les créneaux dans l'ordre, les pauses entre eux et les informations transmises à l'organisation.
 - **Une liste d'attente.** Quand un créneau est complet, on peut s'inscrire en attente. Si une place se libère, la personne suivante la reçoit par email et a 24 heures pour la prendre.
 - **Vos règles.** Un âge minimum par créneau, un téléphone obligatoire si vous devez pouvoir appeler vos bénévoles.
+- **Ouvrir quand vous êtes prêt.** Le planning peut être publié avant l'ouverture des inscriptions. Ouvrez et fermez-les d'un clic, ou programmez une date d'ouverture et de fermeture ; la page indique aux bénévoles quand revenir.
 - **Visible ou discret.** Un événement peut apparaître sur votre page publique ou rester accessible seulement à ceux qui ont le lien.
 
 ## Garder les bénévoles informés

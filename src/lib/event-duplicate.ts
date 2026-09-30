@@ -135,6 +135,10 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       endDate: shiftDate(source.endDate, offsetDays),
       latitude: source.latitude,
       longitude: source.longitude,
+      // A copy never opens registrations by accident (#463): closed, no schedule.
+      registrationsOpen: false,
+      registrationOpensAt: null,
+      registrationClosesAt: null,
       publicInstructions: copy.settings ? source.publicInstructions : null,
       confirmationMessage: copy.settings ? source.confirmationMessage : null,
       reminderMessage: copy.settings ? source.reminderMessage : null,

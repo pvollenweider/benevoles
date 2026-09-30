@@ -35,6 +35,7 @@ describe("duplicatePlan", () => {
     const plan = duplicatePlan(source, {})
     expect(plan.copy).toEqual(DEFAULT_COPY)
     expect(plan.offsetDays).toBe(0)
+    expect(plan.event).toMatchObject({ registrationsOpen: false, registrationOpensAt: null, registrationClosesAt: null })
     expect(plan.event).toMatchObject({ title: "Fête (copie)", startDate: source.startDate, endDate: source.endDate, requirePhone: true, remindersEnabled: false, confirmationMessage: "cm" })
     expect(plan.shifts).toHaveLength(2)
     expect(plan.pages).toEqual(source.pages)
