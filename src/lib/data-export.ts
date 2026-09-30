@@ -116,12 +116,3 @@ export function exportFileName(base: string, date: Date, ext: string): string {
   const slug = base.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "export"
   return `${slug}-${date.toISOString().slice(0, 10)}.${ext}`
 }
-
-/** What the platform keeps, and for how long; the same table in the guide and the privacy page. */
-export const RETENTION: { what: string; howLong: string }[] = [
-  { what: "Membres, événements, créneaux, inscriptions, pages, journaux", howLong: "tant que l'organisation est active ; effacés 30 jours après sa désactivation" },
-  { what: "Emails envoyés (file d'envoi)", howLong: "effacés chaque nuit une fois partis ; ceux en échec après 30 jours" },
-  { what: "Comptes administrateurs désactivés", howLong: "effacés après 30 jours" },
-  { what: "Sauvegardes chiffrées de la base", howLong: "30 jours sur le serveur, 90 jours en copie hors site" },
-  { what: "Bénévoles sans organisation ni inscription", howLong: "effacés à chaque nettoyage nocturne" },
-]

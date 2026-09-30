@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { activityCsv, csvCell, csvDocument, eventArchive, exportFileName, membersCsv, RETENTION, stripSecrets } from "../data-export"
+import { activityCsv, csvCell, csvDocument, eventArchive, exportFileName, membersCsv, stripSecrets } from "../data-export"
 
 // Data export and portability (#384).
 describe("csv", () => {
@@ -46,10 +46,8 @@ describe("event archive", () => {
     expect(stripSecrets({ a: { tokenHash: "x", keep: 1 } })).toEqual({ a: { keep: 1 } })
   })
 
-  it("names files safely and states the retention", () => {
+  it("names files safely", () => {
     expect(exportFileName("Fête d'été 2026 !", new Date("2026-07-04T10:00:00Z"), "json")).toBe("fete-d-ete-2026-2026-07-04.json")
     expect(exportFileName("", new Date("2026-07-04T10:00:00Z"), "csv")).toBe("export-2026-07-04.csv")
-    expect(RETENTION.length).toBeGreaterThanOrEqual(4)
-    expect(RETENTION.some((r) => r.howLong.includes("30 jours après sa désactivation"))).toBe(true)
   })
 })

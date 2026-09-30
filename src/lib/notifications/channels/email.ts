@@ -10,6 +10,17 @@ import type {
 } from "../types"
 import { render } from "../templates"
 
+/**
+ * Outcome when no SMTP server is configured. Outside production (dev, tests) the message is printed
+ * to the console so it can be read. In production that would log a recipient and a body that may
+ * hold a personal link, and report a success for an email that never left: the send fails instead,
+ * with a reason free of personal data, so the outbox retries it and alerts when it gives up.
+ */
+export function missingSmtpOutcome(nodeEnv: string | undefined): { ok: true } | { ok: false; reason: string } {
+  if (nodeEnv === "production") return { ok: false, reason: "SMTP_HOST manquant : email non envoyé." }
+  return { ok: true }
+}
+
 function createTransport() {
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_SECURE } = process.env
   if (!SMTP_HOST) return null
@@ -55,16 +66,22 @@ export const emailChannel: NotificationChannelImpl = {
     const transport = createTransport()
 
     if (!transport) {
+      const outcome = missingSmtpOutcome(process.env.NODE_ENV)
+      if (!outcome.ok) {
+        console.error(`[notif:email] ${outcome.reason} (${payload.kind})`)
+        return outcome
+      }
       console.log(`[notif:email→${to}] ${subject}`)
       console.log(`[notif:body]\n${text}\n`)
-      return { ok: true as const }
+      return outcome
     }
 
     try {
       await transport.sendMail({ from, to, subject, html, text, replyTo, ...(payload.messageId ? { messageId: payload.messageId } : {}) })
       return { ok: true as const }
     } catch (err) {
-      console.error(`[notif:email→${to}] failed:`, err)
+      // No recipient in the log: an address is personal data, and the outbox keeps the row.
+      console.error(`[notif:email] ${payload.kind} failed:`, err)
       return { ok: false as const, reason: String(err) }
     }
   },
