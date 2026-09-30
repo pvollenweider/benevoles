@@ -63,7 +63,7 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8">
       <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Tableau de bord</h1>
-      {onboarding && <OnboardingChecklist steps={onboarding} />}
+      {onboarding && <OnboardingChecklist steps={onboarding} viewerRole={ctx.session.user?.role} />}
 
       <AttentionList items={attention} />
 

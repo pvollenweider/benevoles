@@ -46,7 +46,7 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
         </Link>
       </div>
 
-      {onboarding && <OnboardingChecklist steps={onboarding} />}
+      {onboarding && <OnboardingChecklist steps={onboarding} viewerRole={ctx.session.user?.role} />}
 
       {enriched.length === 0 ? (
         <div className="text-center py-20 px-4">

@@ -3,14 +3,19 @@
 
 import Link from "next/link"
 import { onboardingProgress, type OnboardingStep } from "@/lib/onboarding"
+import { hasLevel } from "@/lib/permissions"
 import DismissOnboardingButton from "./DismissOnboardingButton"
 
 /**
  * First-run checklist (#369), shown at the top of the events list and the dashboard until the
- * required steps are done or an admin hides it. An ordered list: the order is the point.
+ * required steps are done or an owner hides it. An ordered list: the order is the point.
+ *
+ * `viewerRole` is the session role: hiding writes the organisation settings, which are owner only
+ * (PATCH /api/admin/settings/organization), so an organizer sees the list but not the button.
  */
-export default function OnboardingChecklist({ steps }: { steps: OnboardingStep[] }) {
+export default function OnboardingChecklist({ steps, viewerRole }: { steps: OnboardingStep[]; viewerRole: string | null | undefined }) {
   const { done, total, next } = onboardingProgress(steps)
+  const canDismiss = hasLevel(viewerRole, "owner")
   return (
     <section aria-labelledby="onboarding-heading" className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
       <div className="flex items-start justify-between gap-3 flex-wrap">
@@ -20,7 +25,7 @@ export default function OnboardingChecklist({ steps }: { steps: OnboardingStep[]
             {done} étape{done > 1 ? "s" : ""} sur {total} terminée{done > 1 ? "s" : ""}. Les étapes facultatives peuvent attendre.
           </p>
         </div>
-        <DismissOnboardingButton />
+        {canDismiss && <DismissOnboardingButton />}
       </div>
 
       <ol className="space-y-3">
