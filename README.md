@@ -49,11 +49,11 @@ Ce projet est gratuit et open source. Si vous l'utilisez et voulez soutenir son 
 
 ## Captures d'écran
 
-| Landing page | Timeline bénévole (desktop) | Timeline mobile |
+| Planning bénévole (ordinateur) | Planning bénévole (mobile) | Tableau de bord |
 |---|---|---|
-| ![Page d'accueil de Benevol : titre, maquette de la timeline et liens](docs/screenshots/01-landing.png) | ![Timeline d'inscription sur ordinateur : postes en lignes, créneaux en barres, plages de spectacle en fond](docs/screenshots/03-timeline-desktop.png) | ![Timeline d'inscription sur mobile, défilement horizontal](docs/screenshots/04-timeline-mobile.png) |
+| ![Planning public d'un événement : les postes en lignes, les créneaux en barres colorées par jour, avec places restantes, liste d'attente, « Sur validation » et poste réservé](public/doc-img/public-timeline.png) | ![Planning public sur mobile, les créneaux du jour en barres colorées](public/doc-img/public-timeline-mobile.png) | ![Tableau de bord de l'administration : « Ce qui demande votre attention », du plus urgent au moins urgent](public/doc-img/admin-dashboard.png) |
 
-> Les captures de la timeline montrent l'événement de démonstration du seed (`npm run db:seed`, organisation `default`).
+> Toutes les captures de la documentation viennent de l'événement de démonstration (`scripts/seed-demo.ts`) et se régénèrent avec `npm run screenshots` (voir l'en-tête de `scripts/screenshots.mjs`).
 > Les captures admin (dashboard, événements, membres, export PDF) sont générées avec `npm run screenshots`.
 > Voir `scripts/screenshots.mjs` pour la configuration des URL et des credentials ; `PUBLIC_ONLY=1` limite la capture aux pages publiques (sans connexion admin).
 

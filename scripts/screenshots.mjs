@@ -2,15 +2,20 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 /**
- * Screenshot generator for Benevol documentation.
+ * Documentation screenshots (#497): every image of GUIDE_ADMIN.md / GUIDE_BENEVOLE.md, written
+ * to public/doc-img/ (served as /doc-img/… by /doc). Reproducible: run against a local stack
+ * seeded with the demo event (scripts/seed-demo.ts), never against production.
  *
- * Usage:
- *   ADMIN_EMAIL=admin@org.com ADMIN_PASSWORD=xxx node scripts/screenshots.mjs
+ *   1. A throwaway Postgres, e.g. `docker run -d -p 55432:5432 … postgres:16-alpine`.
+ *   2. DATABASE_URL, AUTH_SECRET, ORG_ADMIN_EMAIL, ORG_ADMIN_PASSWORD and
+ *      NEXT_PUBLIC_APP_URL=http://localhost:3200 in the environment.
+ *   3. npx prisma migrate deploy && npx tsx prisma/seed.ts && npx tsx scripts/seed-demo.ts
+ *   4. npx next dev -p 3200    (from a checkout with its own node_modules: Turbopack refuses a
+ *      symlinked one)
+ *   5. BASE_URL=http://localhost:3200 npm run screenshots
  *
- * Optional env vars:
- *   PUBLIC_ONLY   set to 1 to capture only the public pages (no admin login)
- *   BASE_PUBLIC   default: https://www.benevol.app
- *   BASE_ADMIN    default: https://cdp.benevol.app   (org subdomain)
+ * Only some shots:  ONLY=admin-dashboard,public-timeline npm run screenshots
+ * Each shot is independent: a failure is reported, the others still run, the exit code is 1.
  */
 
 import { chromium } from "playwright"
@@ -18,136 +23,180 @@ import path from "path"
 import { fileURLToPath } from "url"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const OUT = path.join(__dirname, "../docs/screenshots")
+const OUT = path.join(__dirname, "../public/doc-img")
 
-const BASE_PUBLIC = process.env.BASE_PUBLIC ?? "https://www.benevol.app"
-const BASE_ADMIN  = process.env.BASE_ADMIN  ?? "https://cdp.benevol.app"
-const ADMIN_EMAIL    = process.env.ADMIN_EMAIL    ?? "admin@localhost"
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "change-me"
+const BASE = (process.env.BASE_URL ?? "http://localhost:3200").replace(/\/$/, "")
+const ORG = process.env.DEMO_ORG ?? "default"
+const EVENT_SLUG = "fete-du-village"
+// Fixed in scripts/seed-demo.ts (demo database only).
+const TOKENS = { volunteer: "demo-volunteer-camille-0001", leader: "demo-leader-buvette-0001" }
+const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
+const ORG_ADMIN_PASSWORD = process.env.ORG_ADMIN_PASSWORD
+const ONLY = process.env.ONLY ? new Set(process.env.ONLY.split(",")) : null
 
-const DESKTOP = { width: 1440, height: 900 }
-const MOBILE  = { width: 390,  height: 844, isMobile: true, hasTouch: true }
+const DESKTOP = { viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1, locale: "fr-CH", timezoneId: "Europe/Zurich" }
+const MOBILE = { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2, locale: "fr-CH", timezoneId: "Europe/Zurich" }
 
-async function shot(page, name, opts = {}) {
-  await page.waitForTimeout(opts.wait ?? 800)
-  await page.screenshot({
-    path: path.join(OUT, `${name}.png`),
-    fullPage: opts.fullPage ?? false,
-    clip: opts.clip,
-  })
+const withOrg = (p) => `${BASE}${p}${p.includes("?") ? "&" : "?"}org=${ORG}`
+
+async function settle(page) {
+  await page.waitForLoadState("networkidle")
+  // The dev server's floating indicator isn't part of the product.
+  await page.addStyleTag({ content: "nextjs-portal { display: none !important; }" })
+  await page.evaluate(() => document.fonts?.ready)
+  // The timeline measures its card once mounted.
+  await page.waitForTimeout(500)
+}
+
+/** Screenshot of the viewport, of the full page, or of one element. */
+async function save(page, name, { target, fullPage = false } = {}) {
+  const file = path.join(OUT, `${name}.png`)
+  if (target) await target.screenshot({ path: file })
+  else await page.screenshot({ path: file, fullPage })
   console.log(`  ✓ ${name}.png`)
+}
+
+const failures = []
+async function shot(name, fn) {
+  if (ONLY && !ONLY.has(name)) return
+  try {
+    await fn()
+  } catch (e) {
+    failures.push(name)
+    console.error(`  ✗ ${name}: ${String(e.message).split("\n")[0]}`)
+  }
+}
+
+async function adminSession(browser) {
+  if (!ORG_ADMIN_PASSWORD) throw new Error("ORG_ADMIN_PASSWORD is required for the admin screenshots")
+  const context = await browser.newContext(DESKTOP)
+  const page = await context.newPage()
+  await page.goto(`${BASE}/admin/login`)
+  await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+  await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+  await page.getByRole("button", { name: "Se connecter" }).click()
+  await page.waitForURL(/\/admin\/(events|dashboard)/)
+  await page.goto(`${BASE}/admin/events`)
+  await settle(page)
+  const href = await page.getByRole("link", { name: /^Gérer/ }).first().getAttribute("href")
+  const eventId = href?.match(/\/admin\/events\/([^/?#]+)/)?.[1]
+  if (!eventId) throw new Error("demo event not found: run scripts/seed-demo.ts first")
+  return { context, page, eventId }
 }
 
 async function run() {
   const browser = await chromium.launch()
 
-  // ── 1. Landing page (www.benevol.app) ─────────────────────────────────────
-  console.log("\n1. Landing page…")
-  const pub = await browser.newPage()
-  await pub.setViewportSize(DESKTOP)
-  await pub.goto(BASE_PUBLIC, { waitUntil: "networkidle" })
-  await shot(pub, "01-landing", { fullPage: true })
+  // ── What volunteers see ──────────────────────────────────────────────────
+  console.log("Public pages…")
+  const desk = await browser.newContext(DESKTOP)
+  const p = await desk.newPage()
 
-  const mob = await browser.newPage()
-  await mob.setViewportSize(MOBILE)
-  await mob.goto(BASE_PUBLIC, { waitUntil: "networkidle" })
-  await shot(mob, "02-landing-mobile")
-  await mob.close()
-  await pub.close()
+  await shot("public-timeline", async () => {
+    await p.goto(withOrg(`/${EVENT_SLUG}`))
+    await settle(p)
+    await save(p, "public-timeline")
+  })
 
-  // ── 2. Public registration timeline ───────────────────────────────────────
-  console.log("\n2. Public timeline…")
-  const tl = await browser.newPage()
-  await tl.setViewportSize(DESKTOP)
-  await tl.goto(BASE_ADMIN, { waitUntil: "networkidle" })
-  const eventHref = await tl.locator("a[class*='rounded']").first().getAttribute("href")
-  if (eventHref) {
-    const eventUrl = eventHref.startsWith("http") ? eventHref : `${BASE_ADMIN}${eventHref}`
-    console.log(`  → event: ${eventUrl}`)
-    await tl.goto(eventUrl, { waitUntil: "networkidle" })
-    await shot(tl, "03-timeline-desktop", { fullPage: true, wait: 1200 })
+  await shot("public-selection", async () => {
+    await p.goto(withOrg(`/${EVENT_SLUG}`))
+    await settle(p)
+    await p.getByRole("button", { name: /^Sélectionner — Accueil 09/ }).first().click()
+    await p.getByRole("button", { name: /^Sélectionner — Navette \(Chauffeur navette\) 14/ }).first().click()
+    await save(p, "public-selection")
+  })
 
-    const tlm = await browser.newPage()
-    await tlm.setViewportSize(MOBILE)
-    await tlm.goto(eventUrl, { waitUntil: "networkidle" })
-    await shot(tlm, "04-timeline-mobile", { fullPage: true, wait: 1200 })
-    await tlm.close()
-  } else {
-    console.log("  ⚠ No published event found — skipping timeline screenshots")
-  }
-  await tl.close()
+  await shot("public-registration-birthdate", async () => {
+    // Continues from the selection above: the navette asks for a minimum age.
+    await p.getByRole("button", { name: /^Continuer/ }).first().click()
+    await settle(p)
+    const field = p.getByLabel(/naissance/i).first()
+    await field.scrollIntoViewIfNeeded()
+    await save(p, "public-registration-birthdate")
+  })
 
-  if (process.env.PUBLIC_ONLY) {
-    await browser.close()
-    console.log(`\nDone (public pages only) — ${OUT}\n`)
-    return
-  }
+  await shot("public-my-page", async () => {
+    await p.goto(withOrg(`/my/${TOKENS.volunteer}`))
+    await settle(p)
+    await save(p, "public-my-page")
+  })
 
-  // ── 3. Admin pages ─────────────────────────────────────────────────────────
-  console.log("\n3. Admin pages…")
-  const adm = await browser.newPage()
-  await adm.setViewportSize(DESKTOP)
+  await shot("leader-page", async () => {
+    await p.goto(withOrg(`/leader/${TOKENS.leader}`))
+    await settle(p)
+    await save(p, "leader-page")
+  })
+  await desk.close()
 
-  await adm.goto(`${BASE_ADMIN}/admin/login`, { waitUntil: "networkidle" })
-  await shot(adm, "05-admin-login")
-  await adm.locator('input[type="email"]').fill(ADMIN_EMAIL)
-  await adm.locator('input[type="password"]').fill(ADMIN_PASSWORD)
-  await adm.getByRole("button", { name: /connecter/i }).click()
-  await adm.waitForURL(/\/admin/, { timeout: 15000 })
-  await adm.waitForLoadState("networkidle")
+  await shot("public-timeline-mobile", async () => {
+    const mob = await browser.newContext(MOBILE)
+    const m = await mob.newPage()
+    await m.goto(withOrg(`/${EVENT_SLUG}`))
+    await settle(m)
+    await save(m, "public-timeline-mobile")
+    await mob.close()
+  })
 
-  // Dashboard
-  await adm.goto(`${BASE_ADMIN}/admin/dashboard`, { waitUntil: "networkidle" })
-  await shot(adm, "06-admin-dashboard", { wait: 1000, fullPage: true })
+  if (process.env.PUBLIC_ONLY) return finish(browser)
 
-  // Events list
-  await adm.goto(`${BASE_ADMIN}/admin/events`, { waitUntil: "networkidle" })
-  await shot(adm, "07-admin-events", { wait: 800 })
+  // ── Administration ───────────────────────────────────────────────────────
+  console.log("Administration…")
+  const { context, page: a, eventId } = await adminSession(browser)
+  const ev = (suffix = "") => `${BASE}/admin/events/${eventId}${suffix}`
+  const visit = async (url) => { await a.goto(url); await settle(a) }
 
-  // Event detail — find first event link
-  const firstEventLink = adm.locator("a[href*='/admin/events/']").first()
-  let eventId = null
-  if (await firstEventLink.count() > 0) {
-    const href = await firstEventLink.getAttribute("href")
-    eventId = href?.match(/\/admin\/events\/([^/?]+)/)?.[1]
-    if (eventId) {
-      console.log(`  → event id: ${eventId}`)
-      await adm.goto(`${BASE_ADMIN}/admin/events/${eventId}`, { waitUntil: "networkidle" })
-      await shot(adm, "08-admin-event-detail", { wait: 1000, fullPage: true })
+  await shot("admin-dashboard", async () => { await visit(`${BASE}/admin/dashboard`); await save(a, "admin-dashboard") })
+  await shot("admin-event-overview", async () => { await visit(ev()); await save(a, "admin-event-overview") })
+  await shot("admin-staffing", async () => { await visit(ev("/staffing")); await save(a, "admin-staffing") })
+  await shot("admin-shifts", async () => { await visit(ev("/shifts")); await save(a, "admin-shifts") })
+  await shot("admin-registrations", async () => { await visit(ev("/registrations")); await save(a, "admin-registrations") })
+  await shot("admin-registrations-requests", async () => { await visit(ev("/registrations?demandes=1")); await save(a, "admin-registrations-requests") })
 
-      // Shifts
-      await adm.goto(`${BASE_ADMIN}/admin/events/${eventId}/shifts`, { waitUntil: "networkidle" })
-      await shot(adm, "09-admin-shifts", { fullPage: true, wait: 1200 })
+  await shot("admin-refuse-request", async () => {
+    await visit(ev("/registrations?demandes=1"))
+    await a.getByRole("button", { name: /^Refuser la demande de/ }).first().click()
+    const dialog = a.getByRole("alertdialog")
+    await dialog.getByLabel(/Message à la personne/).fill("Merci ! Les deux places de chauffeur sont déjà prises ce matin-là.")
+    await save(a, "admin-refuse-request", { target: dialog })
+    await dialog.getByRole("button", { name: "Annuler" }).click()
+  })
 
-      // Registrations
-      await adm.goto(`${BASE_ADMIN}/admin/events/${eventId}/registrations`, { waitUntil: "networkidle" })
-      await shot(adm, "10-admin-registrations", { fullPage: true, wait: 1000 })
+  await shot("admin-make-leader-modal", async () => {
+    await visit(ev("/registrations"))
+    await a.getByRole("checkbox", { name: /Sélectionner l.inscription de Camille Rochat/ }).first().check()
+    await a.getByRole("button", { name: "Rendre responsable" }).click()
+    const dialog = a.getByRole("dialog")
+    await dialog.waitFor()
+    await save(a, "admin-make-leader-modal", { target: dialog })
+    await a.keyboard.press("Escape")
+  })
 
-      // Invitations
-      await adm.goto(`${BASE_ADMIN}/admin/events/${eventId}/invitations`, { waitUntil: "networkidle" })
-      await shot(adm, "11-admin-invitations", { fullPage: true, wait: 1000 })
+  await shot("admin-sector-leaders", async () => { await visit(ev("/sector-leaders")); await save(a, "admin-sector-leaders") })
+  await shot("admin-questions", async () => { await visit(ev("/questions")); await save(a, "admin-questions") })
+  await shot("admin-pages", async () => { await visit(ev("/pages")); await save(a, "admin-pages") })
+  await shot("admin-message", async () => { await visit(ev("/message")); await save(a, "admin-message") })
+  await shot("admin-print", async () => { await visit(ev("/print")); await save(a, "admin-print") })
+  await shot("admin-members", async () => { await visit(`${BASE}/admin/members`); await save(a, "admin-members") })
 
-      // PDF export (higher resolution)
-      const pdf = await browser.newPage()
-      await pdf.setViewportSize({ width: 1440, height: 900 })
-      await pdf.context().addCookies(await adm.context().cookies())
-      await pdf.goto(`${BASE_ADMIN}/api/admin/events/${eventId}/export/pdf`, { waitUntil: "networkidle" })
-      await shot(pdf, "12-export-pdf", { fullPage: true, wait: 1200 })
-      await pdf.close()
-    }
-  }
+  await shot("admin-member-activity", async () => {
+    await visit(`${BASE}/admin/members`)
+    await a.getByRole("link", { name: "Activité de Camille Rochat" }).click()
+    await a.waitForURL(/\/admin\/members\/[^/]+$/)
+    await settle(a)
+    await save(a, "admin-member-activity")
+  })
 
-  // Members
-  await adm.goto(`${BASE_ADMIN}/admin/members`, { waitUntil: "networkidle" })
-  await shot(adm, "13-admin-members", { fullPage: true, wait: 800 })
-
-  // Settings
-  await adm.goto(`${BASE_ADMIN}/admin/settings/admins`, { waitUntil: "networkidle" })
-  await shot(adm, "14-admin-settings", { fullPage: true, wait: 800 })
-
-  await adm.close()
-  await browser.close()
-  console.log(`\nDone — ${OUT}\n`)
+  await context.close()
+  return finish(browser)
 }
 
-run().catch(err => { console.error(err); process.exit(1) })
+async function finish(browser) {
+  await browser.close()
+  if (failures.length > 0) {
+    console.error(`\n${failures.length} screenshot(s) failed: ${failures.join(", ")}`)
+    process.exit(1)
+  }
+  console.log(`\nDone — ${OUT}`)
+}
+
+run().catch((e) => { console.error(e); process.exit(1) })
