@@ -14,7 +14,7 @@ import MilestonesSection from "@/components/admin/MilestonesSection"
 import { isUnlistedPublic, UNLISTED_HINT } from "@/lib/event-visibility"
 import EventLifecycleBar from "@/components/admin/EventLifecycleBar"
 import { orgTimeZone } from "@/lib/time-zone"
-import { LIVE_STATUSES } from "@/lib/registration-capacity"
+import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
 
 export const dynamic = "force-dynamic"
 
@@ -62,12 +62,21 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
     (s, sh) => s + sh.registrations.filter((r) => r.status === "active").length,
     0
   )
+  // Requests (#484) and waitlist offers hold their spot: the spots left are those the public
+  // form would still give, not capacity minus the confirmed.
+  const totalRequested = event.shifts.reduce((s, sh) => s + sh.registrations.filter((r) => r.status === "requested").length, 0)
+  const totalHeld = event.shifts.reduce(
+    (s, sh) => s + sh.registrations.filter((r) => (OCCUPYING_STATUSES as readonly string[]).includes(r.status)).length,
+    0
+  )
+  const totalLeft = Math.max(0, totalCapacity - totalHeld)
   const staffing = staffingSummary(
     event.shifts.map((sh) => ({
       id: sh.id, roleName: sh.roleName, label: sh.label, date: sh.date.toISOString().slice(0, 10),
       startTime: sh.startTime, endTime: sh.endTime, capacity: sh.capacity, closed: sh.status === "closed",
       active: sh.registrations.filter((r) => r.status === "active").length,
       waiting: sh.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length,
+      requested: sh.registrations.filter((r) => r.status === "requested").length,
     })),
     event.sectorLeaders.map((l) => l.roleName),
   )
@@ -145,8 +154,8 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <StatCard label="Créneaux" value={event.shifts.length} />
         <StatCard label="Places" value={totalCapacity} />
-        <StatCard label="Inscrits" value={totalRegistered} />
-        <StatCard label="Restants" value={totalCapacity - totalRegistered} highlight={totalCapacity - totalRegistered === 0 || (totalCapacity > 0 && (totalCapacity - totalRegistered) / totalCapacity <= 0.15)} />
+        <StatCard label="Inscrits" value={totalRegistered} note={totalRequested > 0 ? `+ ${totalRequested} demande${totalRequested > 1 ? "s" : ""} à traiter` : undefined} />
+        <StatCard label="Restants" value={totalLeft} highlight={totalLeft === 0 || (totalCapacity > 0 && totalLeft / totalCapacity <= 0.15)} />
       </div>
 
       {/* Primary actions */}
@@ -260,11 +269,12 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
   )
 }
 
-function StatCard({ label, value, highlight }: { label: string; value: number; highlight?: boolean }) {
+function StatCard({ label, value, highlight, note }: { label: string; value: number; highlight?: boolean; note?: string }) {
   return (
     <div className={`rounded-xl border p-4 text-center ${highlight ? "bg-orange-50 border-orange-200" : "bg-white border-gray-200"}`}>
       <p className={`text-2xl font-bold ${highlight ? "text-orange-700" : "text-gray-900"}`}>{value}</p>
       <p className="text-xs text-gray-500 mt-1">{label}</p>
+      {note && <p className="text-xs text-amber-900 mt-0.5">{note}</p>}
     </div>
   )
 }

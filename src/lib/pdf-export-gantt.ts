@@ -274,3 +274,12 @@ export function buildDayParts(
     recap: `<div class="day-block">${dayLabel}${recapHtml}</div>`,
   }
 }
+
+/**
+ * Registrations whose people go in the export's contact list: exactly those the planning shows,
+ * the confirmed and, when it is printed, the waitlist. Never a pending request (#484): it may be
+ * refused, and it appears on no shift of the planning.
+ */
+export function directoryRegistrations<R extends { status: string }>(registrations: R[], withWaitlist: boolean): R[] {
+  return registrations.filter((r) => r.status === "active" || (withWaitlist && (r.status === "waiting" || r.status === "offered")))
+}

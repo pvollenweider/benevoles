@@ -3,7 +3,7 @@
 
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { buildDayParts, type VolData, type ShiftRow, type ShowEntry } from "@/lib/pdf-export-gantt"
+import { buildDayParts, type VolData, type ShiftRow, type ShowEntry, directoryRegistrations } from "@/lib/pdf-export-gantt"
 import { contactPhone } from "@/lib/contact-phone"
 import { orgTimeZone } from "@/lib/time-zone"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
@@ -74,7 +74,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
   const volMap = new Map<string, VolData>()
   for (const shift of event.shifts) {
-    for (const reg of shift.registrations) {
+    for (const reg of directoryRegistrations(shift.registrations, showWaitlist)) {
       const volEmail = reg.volunteer.email ?? ""
       // Phone given for a registration first, else the profile's (see contactPhone).
       const phone = contactPhone(reg)

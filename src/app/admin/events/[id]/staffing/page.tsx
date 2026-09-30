@@ -99,6 +99,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
       startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, closed: s.status === "closed",
       active: s.registrations.filter((r) => r.status === "active").length,
       waiting: s.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length,
+      requested: s.registrations.filter((r) => r.status === "requested").length,
     })),
     event.sectorLeaders.map((l) => l.roleName),
   )
@@ -130,6 +131,13 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
             <p className="mt-2 text-sm text-gray-700">
               {staffingHeadline(t)}
               {t.waiting > 0 && ` ${plural(t.waiting, "personne")} en liste d'attente.`}
+              {t.requested > 0 && (
+                <>
+                  {" "}
+                  <Link href={`${base}/registrations?demandes=1`} className={linkClass}>{plural(t.requested, "demande")} à traiter</Link>
+                  {t.requested > 1 ? " gardent leur place" : " garde sa place"} en attendant votre décision.
+                </>
+              )}
             </p>
           </section>
 
@@ -157,7 +165,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
           {summary.underfilled.length > 0 && (
             <Group id="staffing-underfilled" title="Créneaux à compléter" count={summary.underfilled.length} hint="Du plus dégarni au plus proche du complet. Les créneaux fermés aux inscriptions ne sont pas comptés.">
               {summary.underfilled.map((s) => (
-                <ShiftLine key={s.id} eventId={event.id} group="underfilled" s={s} detail={<><strong><Ratio active={s.active} capacity={s.capacity} /></strong> · manque {s.missing}</>} />
+                <ShiftLine key={s.id} eventId={event.id} group="underfilled" s={s} detail={<><strong><Ratio active={s.active} capacity={s.capacity} /></strong>{s.requested ? ` · ${plural(s.requested, "demande")} à traiter` : ""} · manque {s.missing}</>} />
               ))}
             </Group>
           )}
@@ -191,7 +199,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
           {summary.full.length > 0 && (
             <Group id="staffing-full" title="Créneaux complets" count={summary.full.length} hint={summary.waitlisted.length > 0 ? "Sans compter ceux qui ont une liste d'attente, ci-dessus." : undefined}>
               {summary.full.map((s) => (
-                <ShiftLine key={s.id} eventId={event.id} group="full" s={s} detail={<Ratio active={s.active} capacity={s.capacity} />} />
+                <ShiftLine key={s.id} eventId={event.id} group="full" s={s} detail={<><Ratio active={s.active} capacity={s.capacity} />{s.requested ? ` · ${plural(s.requested, "demande")} à traiter` : ""}</>} />
               ))}
             </Group>
           )}
