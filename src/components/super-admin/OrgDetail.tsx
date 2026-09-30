@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useState, useTransition } from "react"
+import { RESENT_LINK_NOTICE } from "@/lib/invite-link"
 import { announce } from "@/lib/announce"
 import { requestJson } from "@/lib/use-submit"
 import { deleteOrgRecap, toggleOrgRecap } from "@/lib/action-recap"
@@ -46,6 +47,20 @@ export default function OrgDetail({ org }: { org: Org }) {
   const [confirming, setConfirming] = useState<"toggle" | "delete" | null>(null)
   const [toggleError, setToggleError] = useState<string | null>(null)
   const [outcome, setOutcome] = useState("")
+  // Resending the invite of a pending admin: the new link is shown (the old one is dead, #269).
+  const [resend, setResend] = useState<{ busy: boolean; link: string | null; email: string | null; error: string | null }>({ busy: false, link: null, email: null, error: null })
+
+  async function resendInvite() {
+    if (resend.busy) return
+    setResend({ busy: true, link: null, email: null, error: null })
+    const result = await requestJson<{ inviteUrl?: string; email?: string }>(() => fetch(`/api/super-admin/organizations/${org.id}/send-invite`, { method: "POST" }), "L'invitation n'a pas pu être renvoyée.")
+    if (result.ok) {
+      setResend({ busy: false, link: result.data.inviteUrl ?? null, email: result.data.email ?? null, error: null })
+      announce(setOutcome, `Invitation renvoyée à ${result.data.email ?? "l'administrateur"}.`)
+    } else {
+      setResend({ busy: false, link: null, email: null, error: result.error })
+    }
+  }
   const [name, setName] = useState(org.name)
   const [slug, setSlug] = useState(org.slug)
   const [savingName, setSavingName] = useState(false)
@@ -293,15 +308,41 @@ export default function OrgDetail({ org }: { org: Org }) {
                     <td className="px-4 py-3 text-gray-500">{admin.role}</td>
                     <td className="px-4 py-3">
                       {admin.isActive ? (
-                        <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Actif</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">Actif</span>
                       ) : (
-                        <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">Inactif</span>
+                        <span className="inline-flex items-center gap-2">
+                          <span className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">En attente d&apos;activation</span>
+                          <button
+                            type="button"
+                            onClick={() => void resendInvite()}
+                            aria-disabled={resend.busy || undefined}
+                            aria-label={`Renvoyer l'invitation à ${admin.email}`}
+                            className="text-xs text-blue-700 underline underline-offset-2 rounded aria-disabled:cursor-wait focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                          >
+                            {resend.busy ? "Envoi…" : "Renvoyer l'invitation"}
+                          </button>
+                        </span>
                       )}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+            <span role="status" className="sr-only">{resend.busy ? "Envoi en cours…" : ""}</span>
+            <p role="alert" className={resend.error ? "m-4 text-sm text-red-800 bg-red-50 border border-red-200 rounded-xl px-3 py-2" : "sr-only"}>{resend.error ?? ""}</p>
+            {resend.link && (
+              <div className="m-4 bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-2">
+                <p className="text-sm font-semibold text-blue-900">Nouveau lien d&apos;activation{resend.email ? ` (envoyé à ${resend.email})` : ""}</p>
+                <p className="text-xs text-blue-900">{RESENT_LINK_NOTICE} Valable 7 jours.</p>
+                <input
+                  readOnly
+                  aria-label="Nouveau lien d'activation (lecture seule)"
+                  value={resend.link}
+                  className="w-full font-mono text-xs bg-white border border-blue-200 rounded-lg px-3 py-2 text-blue-900 select-all"
+                  onClick={(e) => (e.target as HTMLInputElement).select()}
+                />
+              </div>
+            )}
           </div>
         )}
       </div>

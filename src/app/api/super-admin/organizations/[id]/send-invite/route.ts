@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { inviteLink } from "@/lib/invite-link"
 import { requireSuperAdmin } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
@@ -39,8 +40,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     data: { setupTokenHash: hashToken(setupToken), setupTokenExpiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
   })
 
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
-  const inviteUrl = `${appUrl}/admin/accept-invite?token=${setupToken}`
+  const inviteUrl = inviteLink(process.env.NEXT_PUBLIC_APP_URL, setupToken)
 
   const result = await sendNotification({
     kind: "admin_invite",
@@ -48,7 +48,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     data: { adminName: admin.name, organizationName: org.name, inviteUrl },
   })
 
-  if (!result.ok) return NextResponse.json({ error: result.reason }, { status: 500 })
+  // The token was already rotated: whatever happened to the email, the caller needs the new link.
+  if (!result.ok) return NextResponse.json({ error: result.reason, inviteUrl, email: admin.email }, { status: 500 })
 
-  return NextResponse.json({ ok: true })
+  return NextResponse.json({ ok: true, inviteUrl, email: admin.email })
 }
