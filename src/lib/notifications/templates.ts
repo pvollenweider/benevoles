@@ -10,6 +10,7 @@ import { WAITLIST_STEPS } from "../waitlist-copy"
 import { eventPublicUrl, orgBaseUrl } from "@/lib/urls"
 import { renderMarkdown } from "@/lib/markdown"
 import { shiftInfoLines, shiftInfoText, type ShiftInfo } from "../shift-info"
+import { MAP_LINK_EMAIL_LABEL } from "../map-link"
 
 const BASE_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
 
@@ -35,7 +36,7 @@ function escapeHtml(s: string): string {
 function shiftInfoHtml(info: ShiftInfo): string {
   const lines = shiftInfoLines(info)
   if (lines.length === 0) return ""
-  return `<div style="color:#444;font-size:0.85em;margin-top:4px">${lines.map((l) => `<div>${escapeHtml(l.label)} : ${escapeHtml(l.text)}</div>`).join("")}</div>`
+  return `<div style="color:#444;font-size:0.85em;margin-top:4px">${lines.map((l) => `<div>${escapeHtml(l.label)} : ${escapeHtml(l.text)}${l.href ? ` — <a href="${escapeHtml(l.href)}">${MAP_LINK_EMAIL_LABEL}</a>` : ""}</div>`).join("")}</div>`
 }
 
 function btn(href: string, label: string): string {
@@ -243,6 +244,8 @@ type ReminderData = {
   shiftStart: string
   shiftEnd: string
   shiftLocation: string | null
+  /** Map link of the meeting point (#191). */
+  shiftMapUrl?: string | null
   shiftContactName?: string | null
   shiftContactPhone?: string | null
   shiftInstructions?: string | null
@@ -255,8 +258,8 @@ type ReminderData = {
 function reminderExtras(d: ReminderData) {
   return shiftInfoLines({ contactName: d.shiftContactName, contactPhone: d.shiftContactPhone, instructions: d.shiftInstructions })
 }
-const extrasText = (d: ReminderData) => reminderExtras(d).map((l) => `${l.label} : ${l.text}`)
-const extrasHtml = (d: ReminderData) => reminderExtras(d).map((l) => `<div>${escapeHtml(l.label)} : ${escapeHtml(l.text)}</div>`).join("")
+const extrasText = (d: ReminderData) => [d.shiftMapUrl ? `Voir sur la carte : ${d.shiftMapUrl}` : "", ...reminderExtras(d).map((l) => `${l.label} : ${l.text}`)].filter(Boolean)
+const extrasHtml = (d: ReminderData) => [d.shiftMapUrl ? `<div><a href="${escapeHtml(d.shiftMapUrl)}">${MAP_LINK_EMAIL_LABEL}</a></div>` : "", ...reminderExtras(d).map((l) => `<div>${escapeHtml(l.label)} : ${escapeHtml(l.text)}</div>`)].join("")
 
 function renderReminderJ2(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData

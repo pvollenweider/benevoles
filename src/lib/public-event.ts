@@ -39,6 +39,9 @@ export function toPublicEvent(event: PublicEventRow) {
     // in the confirmation email, the reminders and the personal page of registered volunteers.
     locationDetails: shift.locationDetails,
     instructions: shift.instructions,
+    // Meeting point coordinates (#191), the event's when the shift has none.
+    latitude: shift.latitude ?? event.latitude,
+    longitude: shift.longitude ?? event.longitude,
     displayOrder: shift.displayOrder,
     waitlistEnabled: shift.waitlistEnabled,
     minAge: shift.minAge,
@@ -52,6 +55,8 @@ export function toPublicEvent(event: PublicEventRow) {
     organizationName: event.organization.name,
     description: event.description,
     location: event.location,
+    latitude: event.latitude,
+    longitude: event.longitude,
     startDate: event.startDate,
     endDate: event.endDate,
     publicInstructions: event.publicInstructions,

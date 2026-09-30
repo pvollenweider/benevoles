@@ -27,6 +27,8 @@ const schema = z.object({
   requirePhone: z.boolean().optional(),
   /** Accent colour of the public page (#300): a palette key, or null for the neutral header. */
   accentColorKey: z.enum(ACCENT_KEYS).optional().nullable(),
+  latitude: z.number().min(-90).max(90).nullable().optional(),
+  longitude: z.number().min(-180).max(180).nullable().optional(),
 })
 
 export async function GET() {

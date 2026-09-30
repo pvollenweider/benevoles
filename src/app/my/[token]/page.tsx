@@ -22,6 +22,8 @@ type ShiftRef = {
   contactName?: string | null
   contactPhone?: string | null
   instructions?: string | null
+  latitude?: number | null
+  longitude?: number | null
 }
 
 type RegistrationItem = {

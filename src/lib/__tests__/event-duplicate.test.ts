@@ -8,10 +8,10 @@ const shift: DuplicableShift & { id: string; eventId: string; status: string } =
   id: "s1", eventId: "e1", status: "closed",
   roleName: "Bar", label: "Bar soir", description: "Service", date: new Date("2026-07-04T00:00:00Z"),
   startTime: "18:00", endTime: "23:00", capacity: 4, locationDetails: "Cantine", contactName: "Léa", contactPhone: "079 1",
-  instructions: "Gilet fourni", displayOrder: 2, internalNotes: "note", minAge: 18, waitlistEnabled: true, colorKey: "amber",
+  instructions: "Gilet fourni", latitude: 46.18, longitude: 6.12, displayOrder: 2, internalNotes: "note", minAge: 18, waitlistEnabled: true, colorKey: "amber",
 }
 const source: DuplicableEvent = {
-  title: "Fête", description: "d", location: "Salle", startDate: new Date("2026-07-04T00:00:00Z"), endDate: new Date("2026-07-05T00:00:00Z"),
+  title: "Fête", description: "d", location: "Salle", latitude: 46.2, longitude: 6.1, startDate: new Date("2026-07-04T00:00:00Z"), endDate: new Date("2026-07-05T00:00:00Z"),
   publicInstructions: "pi", confirmationMessage: "cm", reminderMessage: "rm", remindersEnabled: false, requirePhone: true, accentColorKey: "teal",
   showSchedule: [{ name: "Concert", date: "2026-07-04", startTime: "20:00", endTime: "22:00" }],
   shifts: [shift, { ...shift, date: new Date("2026-07-05T00:00:00Z") }],

@@ -25,7 +25,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     where: { ...registrationToken.where(token), status: { in: LIVE } },
     include: {
       volunteer: true,
-      event: { select: { id: true, title: true, slug: true, confirmationMessage: true, organization: { select: { slug: true, timeZone: true, replyToEmail: true } } } },
+      event: { select: { id: true, title: true, slug: true, confirmationMessage: true, latitude: true, longitude: true, organization: { select: { slug: true, timeZone: true, replyToEmail: true } } } },
     },
   })
 
@@ -81,7 +81,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
         date: r.shift.date,
         startTime: r.shift.startTime,
         endTime: r.shift.endTime,
-        ...pickShiftInfo(r.shift),
+        ...pickShiftInfo(r.shift, registration.event),
       },
     })),
   })

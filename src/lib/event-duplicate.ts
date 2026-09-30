@@ -36,6 +36,8 @@ export type DuplicableShift = {
   endTime: string
   capacity: number
   locationDetails: string | null
+  latitude: number | null
+  longitude: number | null
   contactName: string | null
   contactPhone: string | null
   instructions: string | null
@@ -50,6 +52,8 @@ export type DuplicableEvent = {
   title: string
   description: string | null
   location: string | null
+  latitude: number | null
+  longitude: number | null
   startDate: Date
   endDate: Date
   publicInstructions: string | null
@@ -76,6 +80,8 @@ export function copiedShift(s: DuplicableShift) {
     capacity: s.capacity,
     status: "open" as const,
     locationDetails: s.locationDetails,
+    latitude: s.latitude,
+    longitude: s.longitude,
     contactName: s.contactName,
     contactPhone: s.contactPhone,
     instructions: s.instructions,
@@ -126,6 +132,8 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       location: source.location,
       startDate: shiftDate(source.startDate, offsetDays),
       endDate: shiftDate(source.endDate, offsetDays),
+      latitude: source.latitude,
+      longitude: source.longitude,
       publicInstructions: copy.settings ? source.publicInstructions : null,
       confirmationMessage: copy.settings ? source.confirmationMessage : null,
       reminderMessage: copy.settings ? source.reminderMessage : null,

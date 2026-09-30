@@ -94,6 +94,7 @@ En haut de la page, **Comment commencer ?** propose une page blanche ou un modè
 | Slug | Identifiant URL (`festival-2025`) — généré automatiquement, modifiable |
 | Dates | Date de début et de fin de l'événement |
 | Lieu | Affiché sur la page publique |
+| Coordonnées GPS ou lien de carte | Collez un lien OpenStreetMap ou Google Maps, ou une paire « latitude, longitude » : les bénévoles ont alors un lien **Voir sur la carte** (OpenStreetMap, aucune requête vers un service tiers tant qu'ils ne cliquent pas) sur la page d'inscription, dans les emails et sur leur page personnelle. Un créneau peut avoir ses propres coordonnées dans ses infos pratiques ; sinon celles de l'événement sont utilisées |
 | Description | Texte libre (usage interne) |
 | Instructions publiques | Message visible en haut de la page d'inscription |
 | Téléphone obligatoire à l'inscription | Si coché, le formulaire public exige un numéro de téléphone (désactivé par défaut). Ne s'applique pas aux bénévoles que vous ajoutez vous-même depuis l'administration. Le numéro saisi est enregistré avec l'inscription : c'est lui qui s'affiche dans la liste des inscriptions, l'export PDF et la page du responsable de secteur (à défaut, celui de la fiche du membre) |

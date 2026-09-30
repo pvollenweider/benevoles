@@ -5,6 +5,7 @@
 
 import { useEffect, useRef, useState, useMemo } from "react"
 import { eventAccent } from "@/lib/event-accent"
+import { coordinatesOf, MAP_LINK_LABEL, MAP_LINK_SR_SUFFIX, osmLink } from "@/lib/map-link"
 import { describeSignupFailure, type Failure } from "@/lib/form-errors"
 import SignupRecap from "@/components/public/SignupRecap"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -42,6 +43,8 @@ type Shift = {
   status: string
   locationDetails: string | null
   instructions?: string | null
+  latitude?: number | null
+  longitude?: number | null
   displayOrder: number
   waitlistEnabled: boolean
   minAge: number | null
@@ -57,6 +60,8 @@ type EventData = {
   organizationName: string
   description: string | null
   location: string | null
+  latitude?: number | null
+  longitude?: number | null
   startDate: string
   endDate: string
   publicInstructions: string | null
@@ -385,7 +390,19 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
           </div>
           <p className={`text-xs font-medium mt-2 ${accent ? accent.soft : "text-gray-500"}`}>{event.organizationName}</p>
           <h1 ref={titleRef} tabIndex={-1} className={`text-xl font-bold focus:outline-none ${accent ? "" : "text-gray-900"}`}>{event.title}</h1>
-          {event.location && <p className={`text-sm ${accent ? accent.soft : "text-gray-500"}`}><span aria-hidden="true">📍 </span>{event.location}</p>}
+          {(event.location || coordinatesOf(event)) && (
+            <p className={`text-sm ${accent ? accent.soft : "text-gray-500"}`}>
+              <span aria-hidden="true">📍 </span>{event.location || "Point de rendez-vous"}
+              {coordinatesOf(event) && (
+                <>
+                  {" "}
+                  <a href={osmLink(coordinatesOf(event)!)} target="_blank" rel="noopener noreferrer" className={`underline underline-offset-2 whitespace-nowrap rounded focus-visible:outline-2 focus-visible:outline-offset-2 ${accent ? accent.focus : "text-blue-700 focus-visible:outline-blue-600"}`}>
+                    {MAP_LINK_LABEL}<span className="sr-only">{MAP_LINK_SR_SUFFIX}</span>
+                  </a>
+                </>
+              )}
+            </p>
+          )}
         </div>
       </header>
 

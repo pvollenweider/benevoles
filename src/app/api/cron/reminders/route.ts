@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { coordinatesOf, osmLink } from "@/lib/map-link"
 import { parseNotificationSettings, reminderEnabled } from "@/lib/notification-settings"
 import { recordJobRun } from "@/lib/job-runs"
 import { env } from "@/lib/env"
@@ -110,6 +111,7 @@ async function run(req: Request) {
           shiftStart: r.shift.startTime,
           shiftEnd: r.shift.endTime,
           shiftLocation: r.shift.locationDetails,
+          shiftMapUrl: (() => { const c = coordinatesOf(r.shift) ?? coordinatesOf(r.event); return c ? osmLink(c) : null })(),
           shiftContactName: r.shift.contactName,
           shiftContactPhone: r.shift.contactPhone,
           shiftInstructions: r.shift.instructions,

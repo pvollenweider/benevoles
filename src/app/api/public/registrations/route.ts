@@ -186,7 +186,7 @@ export async function POST(req: Request) {
         date: s.date.toLocaleDateString("fr-FR"),
         startTime: s.startTime,
         endTime: s.endTime,
-        ...pickShiftInfo(s),
+        ...pickShiftInfo(s, event),
       }))
     const outbox = collectNotifications()
     if (activeRegs.length > 0) {

@@ -63,7 +63,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
           date: reg.shift.date.toLocaleDateString("fr-FR"),
           startTime: reg.shift.startTime,
           endTime: reg.shift.endTime,
-          ...pickShiftInfo(reg.shift),
+          ...pickShiftInfo(reg.shift, reg.event),
         }],
         editToken: token,
         orgSlug: reg.event.organization.slug,

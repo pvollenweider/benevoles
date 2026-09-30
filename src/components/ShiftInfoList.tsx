@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { shiftInfoLines, type ShiftInfo } from "@/lib/shift-info"
+import { MAP_LINK_LABEL, MAP_LINK_SR_SUFFIX } from "@/lib/map-link"
 
 /**
  * Place, contact and instructions of a shift (#397), as a description list. Renders nothing
@@ -21,6 +22,13 @@ export default function ShiftInfoList({ info, className = "" }: { info: ShiftInf
               <>
                 {(info.contactName ?? "").trim() && <>{(info.contactName ?? "").trim()} · </>}
                 <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} aria-label={`Appeler ${(info.contactName ?? "").trim() ? `${(info.contactName ?? "").trim()} au ` : ""}${phone}`} className="underline underline-offset-2">{phone}</a>
+              </>
+            ) : l.href ? (
+              <>
+                {l.text}{" "}
+                <a href={l.href} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 whitespace-nowrap rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                  {MAP_LINK_LABEL}<span className="sr-only">{MAP_LINK_SR_SUFFIX}</span>
+                </a>
               </>
             ) : l.text}
           </dd>
