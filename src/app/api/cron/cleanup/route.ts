@@ -40,10 +40,21 @@ async function run(req: Request) {
   const failedCutoff = daysAgo(now, RETENTION_DAYS.failedNotification)
 
   // --- 1. Inactive organizations ---
-  // Cascades to: Event → Shift → Registration, Member, MemberInvite
-  // AdminUser.organizationId is set to NULL (SetNull) — handled in step 3.
-  const deletedOrgs = await prisma.organization.deleteMany({
-    where: { active: false, updatedAt: { lt: orgCutoff } },
+  // Cascades to: Event → Shift → Registration, Member, MemberInvite.
+  // AdminUser.organizationId is only SET NULL: the organization's admins are deleted with it here,
+  // as the super admin's deletion does. Otherwise an active admin outlived the organization (step 3
+  // only removes inactive ones), with its email and password hash kept indefinitely.
+  const { deletedOrgs, deletedOrgAdmins } = await prisma.$transaction(async (tx) => {
+    const orgs = await tx.organization.findMany({
+      where: { active: false, updatedAt: { lt: orgCutoff } },
+      select: { id: true },
+    })
+    const orgIds = orgs.map((o) => o.id)
+    if (orgIds.length === 0) return { deletedOrgs: { count: 0 }, deletedOrgAdmins: { count: 0 } }
+    const admins = await tx.adminUser.findMany({ where: { organizationId: { in: orgIds } }, select: { id: true } })
+    const deletedOrgs = await tx.organization.deleteMany({ where: { id: { in: orgIds } } })
+    const deletedOrgAdmins = await tx.adminUser.deleteMany({ where: { id: { in: admins.map((a) => a.id) } } })
+    return { deletedOrgs, deletedOrgAdmins }
   })
 
   // --- 2. Orphan volunteers ---
@@ -54,10 +65,15 @@ async function run(req: Request) {
     where: { organizationId: null, registrations: { none: {} } },
   })
 
-  // --- 3. Deactivated admin users ---
-  // Includes admins whose org was just deleted (organizationId = null after SetNull).
+  // --- 3. Admin invitations never accepted (isActive stays false until then), and org accounts
+  // left without an organization by a cleanup that predates step 1 deleting them.
   const deletedAdmins = await prisma.adminUser.deleteMany({
-    where: { isActive: false, updatedAt: { lt: adminCutoff } },
+    where: {
+      OR: [
+        { isActive: false, updatedAt: { lt: adminCutoff } },
+        { organizationId: null, role: { not: "super_admin" } },
+      ],
+    },
   })
 
   // --- 4. Expired password-reset tokens (housekeeping, not GDPR-critical) ---
@@ -119,7 +135,7 @@ async function run(req: Request) {
       rateLimits: deletedRateLimits.count,
       organizations: deletedOrgs.count,
       volunteers: deletedVolunteers.count,
-      adminUsers: deletedAdmins.count,
+      adminUsers: deletedOrgAdmins.count + deletedAdmins.count,
     },
     tokensCleaned: {
       passwordReset: clearedResetTokens.count,

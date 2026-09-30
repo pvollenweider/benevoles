@@ -10,6 +10,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Sécurité
 
 - **Emails sans serveur SMTP configuré** : en production, un envoi sans `SMTP_HOST` était compté comme réussi alors que rien ne partait, et le destinataire comme le contenu de l'email (liens personnels compris) étaient écrits dans les journaux du conteneur. L'envoi échoue désormais avec une raison sans donnée personnelle : la file d'envoi le retente puis alerte, et les envois directs le signalent à l'écran. En développement, les emails restent affichés dans la console. Les journaux d'un échec d'envoi ne contiennent plus l'adresse du destinataire.
+- **Comptes d'une organisation supprimée** : le nettoyage nocturne effaçait une organisation désactivée depuis 30 jours sans effacer ses administrateurs actifs, qui restaient en base sans organisation (email et mot de passe haché conservés sans limite) et pouvaient encore se connecter, sans rien pouvoir administrer. Ils sont maintenant effacés avec l'organisation, comme lors d'une suppression par le super admin ; les comptes laissés sans organisation par un nettoyage précédent sont effacés au nettoyage suivant, et un compte d'organisation sans organisation ne peut plus se connecter.
 
 ---
 

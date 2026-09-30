@@ -17,12 +17,13 @@ vi.mock("@/lib/prisma", () => {
   const tx = {
     notificationOutbox: { findMany: m.outboxFindMany, deleteMany: m.outboxDeleteMany, updateMany: m.outboxUpdateMany },
     targetedMessage: { update: m.messageUpdate, deleteMany: m.messageDeleteMany },
+    organization: { findMany: vi.fn().mockResolvedValue([]) },
   }
   const zero = { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), updateMany: vi.fn().mockResolvedValue({ count: 0 }) }
   return {
     prisma: {
       ...tx,
-      organization: zero, volunteer: zero, adminUser: zero, rateLimit: zero,
+      volunteer: zero, adminUser: zero, rateLimit: zero,
       $transaction: async (fn: (t: typeof tx) => unknown) => fn(tx),
     },
   }
