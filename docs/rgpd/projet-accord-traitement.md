@@ -102,6 +102,7 @@ Implémenté (dépôt) :
 - isolement des données par organisation, imposé par un client de base de données filtré et vérifié par des tests d'isolation ;
 - rôles d'administration (propriétaire, organisateur) vérifiés côté serveur sur chaque route ;
 - limitation de fréquence des requêtes ;
+- jetons personnels exclus des journaux d'accès du proxy (routeur sans journal pour les requêtes qui en portent un) et des rapports d'erreurs ; aucun chemin transmis dans l'en-tête `Referer` ;
 - journaux d'activité sans valeurs personnelles dans les champs modifiés ;
 - suivi des erreurs minimisé (voir l'inventaire) ;
 - sauvegardes quotidiennes chiffrées (AES-256), copie hors site déjà chiffrée, rétention limitée ;

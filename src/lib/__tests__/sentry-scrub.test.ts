@@ -11,6 +11,9 @@ describe("scrubUrl", () => {
     [`/waitlist/${TOKEN}/confirm`, "/waitlist/[token]/confirm"],
     [`/api/public/registrations/${TOKEN}`, "/api/public/registrations/[token]"],
     [`/api/public/member-invite/${TOKEN}`, "/api/public/member-invite/[token]"],
+    // Regression: a sector leader's link was sent to Sentry in clear.
+    [`/leader/${TOKEN}`, "/leader/[token]"],
+    [`/api/public/leader/${TOKEN}`, "/api/public/leader/[token]"],
     [`/admin/accept-invite?token=${TOKEN}`, "/admin/accept-invite?token=[token]"],
     [`/admin/reset-password?foo=1&token=${TOKEN}&bar=2`, "/admin/reset-password?foo=1&token=[token]&bar=2"],
     [`/festival?org=x&token=${TOKEN}#top`, "/festival?org=x&token=[token]#top"],

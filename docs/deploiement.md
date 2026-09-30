@@ -48,6 +48,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `job-migrate.yaml` | Job de migration (`prisma migrate deploy` avec l'image déployée), exécuté avant la mise à jour de l'application |
 | `deployment.yaml` | Application : 1 réplica, mise à jour progressive sans indisponibilité, secret injecté avec `envFrom`, limites 500m CPU et 512 Mi |
 | `service.yaml`, `ingress.yaml` | Exposition via Traefik pour `*.benevol.app`, `benevol.app` et `www.benevol.app`, TLS |
+| `ingressroute-tokens.yaml` | Routeur prioritaire, **sans journal d'accès**, pour les requêtes qui portent un jeton personnel (chemins `/my/`, `/leader/`… et requêtes `token`, `t`) et la recherche admin, en HTTPS et en HTTP (redirigé). Un jeton ne doit jamais être journalisé ; limité à benevol.app, le Traefik partagé n'est pas modifié. Toute nouvelle route à jeton s'y ajoute (vérifié par `no-tokens-in-access-logs.test.ts`) |
 | `traefik-config.yaml` | Réglage du Traefik fourni par k3s (`HelmChartConfig`) : `externalTrafficPolicy: Local` pour conserver l'adresse réelle des visiteurs (voir ci-dessous) |
 | `certificate-wildcard.yaml` | Certificat wildcard (cert-manager, `ClusterIssuer` `letsencrypt-prod`) |
 | `gandi-webhook.yaml` | Webhook DNS Gandi pour la validation DNS-01 du certificat wildcard |

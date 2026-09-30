@@ -34,6 +34,15 @@ Ce que le dépôt ne permet pas d'établir. Pour chaque point : la preuve à con
 - [ ] Conditions applicables des principaux services (Google, Mozilla, Apple, Microsoft), liens officiels.
 - [ ] Qualification juridique du rôle de ces services (sous-traitant ou non), par une personne qualifiée.
 
+## Journaux du proxy
+
+Décision : un jeton personnel n'est jamais écrit dans un journal d'accès (`k8s/ingressroute-tokens.yaml`, `Referrer-Policy: strict-origin`).
+
+- [ ] Après déploiement, requêtes avec des jetons **factices** sur chaque famille (`/my/`, `/waitlist/…/confirm`, `/leader/`, `/api/public/registrations/`, `/api/public/member-invite/`, `/api/public/leader/`, `/api/public/waitlist/`, `?token=` et `?t=` sur une page d'événement), en HTTPS et en HTTP : aucune trace dans `kubectl -n kube-system logs deploy/traefik`. Une page ordinaire reste journalisée (méthode, statut, durée). Les autres sites du Traefik sont inchangés.
+- [ ] Réponses des pages : en-tête `Referrer-Policy: strict-origin` présent.
+- [ ] Journaux antérieurs : la sortie actuelle du conteneur remonte au 2026-09-30 07:29 UTC (7 lignes avec un jeton dans le chemin, 15 dans la requête, décomptées sans les afficher). Les fichiers plus anciens, tournés par kubelet depuis le démarrage du pod (2026-09-01), sont sur le nœud (`/var/log/pods/kube-system_traefik-*/`). Purge à faire sur le nœud une fois le réglage vérifié ; aucune copie ailleurs (pas de Loki, les sauvegardes ne contiennent que la base). Ne jamais recopier une ligne réelle dans un ticket ou un diagnostic.
+- [ ] Tant que la purge n'est pas faite, ces anciens fichiers disparaissent avec la rotation de kubelet (taille et nombre de fichiers à confirmer sur le nœud).
+
 ## Serveur
 
 - [ ] Rotation des journaux réellement installée sur le nœud (`k8s/log-rotation.md`) et durée effective des journaux du proxy et des conteneurs. Tant que ce n'est pas prouvé, ne pas annoncer la durée de la matrice comme garantie.

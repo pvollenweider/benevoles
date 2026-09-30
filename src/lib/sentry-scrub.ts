@@ -11,13 +11,14 @@ type StreamedSpan = Parameters<NonNullable<InitOptions["beforeSendSpan"]>>[0]
  * Removes secret access tokens from what is sent to Sentry. Some URLs of the
  * app carry a token that gives access to a volunteer's registration:
  *   /my/<token>, /waitlist/<token>/confirm, /api/public/registrations/<token>,
- *   /api/public/member-invite/<token> and ?token=<token> (invitations, password
- *   reset, account activation).
+ *   /api/public/member-invite/<token>, a sector leader's /leader/<token> (page and
+ *   API) and ?token=<token> (invitations, password reset, account activation).
  * An error on one of these pages would otherwise attach the full URL, and the
- * token with it, to the event, its breadcrumbs and its spans.
+ * token with it, to the event, its breadcrumbs and its spans. The same families are
+ * kept out of the proxy's access log (k8s/ingressroute-tokens.yaml).
  */
 
-const TOKEN_PATH = /(\/(?:my|waitlist|member-invite|registrations)\/)[^/?#\s"']+/g
+const TOKEN_PATH = /(\/(?:my|waitlist|member-invite|registrations|leader)\/)[^/?#\s"']+/g
 // Also matches a bare query string, as stored in request.query_string.
 const TOKEN_QUERY = /((?:^|[?&])(?:token|t)=)[^&#\s"']*/gi
 
