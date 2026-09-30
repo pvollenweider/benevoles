@@ -3,7 +3,7 @@
 
 /**
  * Closed sets of values stored as strings (#321). The database enforces the same lists with
- * CHECK constraints (migration 20260929200000_status_check_constraints); a unit test keeps the
+ * CHECK constraints (migration 20260929200000_status_check_constraints, widened by later ones); a unit test keeps the
  * two in sync. Adding a value means updating both, in a migration that stays compatible with
  * the previous code (CONTRIBUTING, expand/contract): widen the constraint first, use the new
  * value in a later release.
@@ -12,7 +12,7 @@
  * previous code during a rolling update, and a constraint can be widened without rewriting it.
  */
 
-export const REGISTRATION_STATUSES = ["active", "waiting", "offered", "cancelled", "deleted"] as const
+export const REGISTRATION_STATUSES = ["active", "waiting", "offered", "requested", "cancelled", "refused", "deleted"] as const
 export type RegistrationStatus = (typeof REGISTRATION_STATUSES)[number]
 
 export const REGISTRATION_SOURCES = ["public_form", "admin_manual"] as const

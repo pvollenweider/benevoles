@@ -17,6 +17,7 @@ export type ShiftRef = {
 }
 
 type ListRegistration = {
+  status?: string
   shift: ShiftRef
   volunteer: { id: string; firstName: string; lastName: string; email: string | null }
 }
@@ -35,7 +36,7 @@ export function fmtHour(t: string): string {
 /** Rows matching the search text (name or email), role filter and shift filter. */
 export function filterRegistrations<R extends ListRegistration>(
   registrations: R[],
-  filters: { search: string; role: string; shiftId: string },
+  filters: { search: string; role: string; shiftId: string; requestsOnly?: boolean },
 ): R[] {
   const q = fold(filters.search)
   return registrations.filter((r) => {
@@ -43,7 +44,9 @@ export function filterRegistrations<R extends ListRegistration>(
     const matchSearch = !q || fold(`${r.volunteer.firstName} ${r.volunteer.lastName} ${r.volunteer.email ?? ""}`).includes(q)
     const matchRole = !filters.role || r.shift.roleName === filters.role
     const matchShift = !filters.shiftId || r.shift.id === filters.shiftId
-    return matchSearch && matchRole && matchShift
+    // « Demandes à traiter » (#484): only requests waiting for a decision.
+    const matchStatus = !filters.requestsOnly || r.status === "requested"
+    return matchSearch && matchRole && matchShift && matchStatus
   })
 }
 

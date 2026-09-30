@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import ShiftInfoList from "@/components/ShiftInfoList"
-import { WAITLIST_SHORT_VOUS } from "@/lib/waitlist-copy"
+import { REQUEST_SHORT, WAITLIST_SHORT_VOUS } from "@/lib/waitlist-copy"
 import { gapAfter, gapLabel, hasOverlap, personalDataLines, recapShifts, totalLabel, type RecapShiftInput } from "@/lib/signup-recap"
 import type { ShiftInfo } from "@/lib/shift-info"
 import { workloadMessage, workloadWarnings, type WorkloadShift } from "@/lib/workload"
@@ -72,8 +72,8 @@ export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentG
                 {r.endsNextDay && <span className="ml-1 text-gray-800">(fin le lendemain)</span>}
               </p>
               <p className="flex flex-wrap gap-1.5 mt-1">
-                <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${r.waitlist ? "bg-amber-100 text-amber-900" : "bg-green-100 text-green-900"}`}>
-                  {r.waitlist ? "Liste d'attente" : "Place disponible"}
+                <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${r.waitlist || r.request ? "bg-amber-100 text-amber-900" : "bg-green-100 text-green-900"}`}>
+                  {r.waitlist ? "Liste d'attente" : r.request ? "Sur validation" : "Place disponible"}
                 </span>
                 {r.minAge !== null && (
                   <span className="inline-block rounded-full px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-800">{r.minAge} ans minimum</span>
@@ -90,6 +90,7 @@ export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentG
         })}
       </ol>
       {rows.some((r) => r.waitlist) && <p className={`${dense ? "px-4 pb-2" : ""} text-xs text-amber-900`}>{WAITLIST_SHORT_VOUS}</p>}
+      {rows.some((r) => r.request) && <p className={`${dense ? "px-4 pb-2" : ""} text-xs text-amber-900`}>{REQUEST_SHORT}</p>}
       <div className={`${dense ? "px-4 py-3 border-t border-gray-100" : "rounded-lg bg-white border border-gray-200 px-3 py-2"}`}>
         <p className="text-xs font-semibold text-gray-600">Transmis à l&apos;organisation</p>
         <p className="text-xs text-gray-700 mt-0.5">

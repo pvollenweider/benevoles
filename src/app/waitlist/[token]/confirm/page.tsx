@@ -9,6 +9,7 @@ export default function WaitlistConfirmPage() {
   const [state, setState] = useState<"loading" | "success" | "error">("loading")
   const [message, setMessage] = useState("")
   const [editToken, setEditToken] = useState<string | null>(null)
+  const [requested, setRequested] = useState(false)
 
   useEffect(() => {
     fetch(`/api/public/waitlist/${token}/confirm`, { method: "POST" })
@@ -16,6 +17,7 @@ export default function WaitlistConfirmPage() {
       .then((d) => {
         if (d.success) {
           setEditToken(d.editToken)
+          setRequested(d.requested === true)
           setState("success")
         } else {
           setMessage(d.error ?? "Une erreur est survenue.")
@@ -40,9 +42,18 @@ export default function WaitlistConfirmPage() {
         )}
         {state === "success" && (
           <>
-            <span aria-hidden="true" className="text-5xl block mb-4">🎉</span>
-            <h1 className="text-xl font-bold text-gray-900 mb-2">Place confirmée !</h1>
-            <p className="text-sm text-gray-500 mb-6">Ton inscription est maintenant active. À très vite !</p>
+            {requested ? (
+              <>
+                <h1 className="text-xl font-bold text-gray-900 mb-2">Demande envoyée</h1>
+                <p className="text-sm text-gray-700 mb-6">Ce créneau est sur validation : la place t&apos;est réservée le temps que l&apos;organisation réponde. Tu recevras un email avec sa réponse.</p>
+              </>
+            ) : (
+              <>
+                <span aria-hidden="true" className="text-5xl block mb-4">🎉</span>
+                <h1 className="text-xl font-bold text-gray-900 mb-2">Place confirmée !</h1>
+                <p className="text-sm text-gray-500 mb-6">Ton inscription est maintenant active. À très vite !</p>
+              </>
+            )}
             {editToken && (
               <Link
                 href={`/my/${editToken}`}

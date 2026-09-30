@@ -6,6 +6,7 @@ import { leaderKeySet, isSectorLeader } from "@/lib/sector-leaders"
 import { SEARCH_MAX_LENGTH } from "@/lib/admin-search"
 import { orgTimeZone } from "@/lib/time-zone"
 import { answersByVolunteer } from "@/lib/event-questions"
+import { LIVE_STATUSES } from "@/lib/registration-capacity"
 
 export const dynamic = "force-dynamic"
 
@@ -14,14 +15,14 @@ export default async function RegistrationsPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>
-  searchParams: Promise<{ shift?: string; q?: string | string[] }>
+  searchParams: Promise<{ shift?: string; q?: string | string[]; demandes?: string }>
 }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { db } = ctx
 
   const { id } = await params
-  const { shift: initialShiftFilter, q } = await searchParams
+  const { shift: initialShiftFilter, q, demandes } = await searchParams
   const initialSearch = (Array.isArray(q) ? q[0] : q)?.slice(0, SEARCH_MAX_LENGTH).trim() || undefined
 
   const event = await db.event.findFirst({
@@ -32,7 +33,7 @@ export default async function RegistrationsPage({
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
       },
       registrations: {
-        where: { status: { in: ["active", "waiting", "offered"] } },
+        where: { status: { in: [...LIVE_STATUSES] } },
         include: { volunteer: true, shift: true },
         orderBy: [{ status: "asc" }, { createdAt: "desc" }],
       },
@@ -73,6 +74,9 @@ export default async function RegistrationsPage({
           {event.registrations.some(r => r.status === "waiting" || r.status === "offered") && (
             <> · {event.registrations.filter(r => r.status === "waiting" || r.status === "offered").length} en liste d'attente</>
           )}
+          {event.registrations.some(r => r.status === "requested") && (
+            <> · {event.registrations.filter(r => r.status === "requested").length} demande(s) à traiter</>
+          )}
         </p>
       </div>
 
@@ -82,6 +86,7 @@ export default async function RegistrationsPage({
         answersByVolunteer={answersByVolunteer(event.questions)}
         initialShiftFilter={initialShiftFilter}
         initialSearch={initialSearch}
+        initialRequestsOnly={demandes === "1"}
         initialRegistrations={event.registrations.map((r) => ({
           id: r.id,
           status: r.status,

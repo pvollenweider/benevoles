@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { LIVE_STATUSES } from "./registration-capacity"
+
 /**
  * Admin global search (#377): what a query matches. Every word must match (AND), each in any of
  * the searched fields (OR), regardless of case and accents (#390): « zoe » finds « Zoé ».
@@ -41,7 +43,7 @@ export function likePattern(term: string): string {
 
 /** Live registrations (active, waitlist, offered) of the matched volunteers. */
 export function registrationWhere(volunteerIds: string[]) {
-  return { status: { in: ["active", "waiting", "offered"] }, volunteerId: { in: volunteerIds } }
+  return { status: { in: [...LIVE_STATUSES] }, volunteerId: { in: volunteerIds } }
 }
 
 /** Value for the members page `?q=` that singles out this volunteer. */

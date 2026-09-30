@@ -17,6 +17,7 @@ import { renderVariables, templateProblems } from "@/lib/message-template"
 import { eventPublicUrl } from "@/lib/urls"
 import { pushDeviceCount, sendTargetedPush } from "@/lib/push"
 import { after } from "next/server"
+import { LIVE_STATUSES } from "@/lib/registration-capacity"
 
 const fmtDate = (d: Date) => d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
 
@@ -48,7 +49,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   }
 
   const regs = await db.registration.findMany({
-    where: { eventId: id, status: { in: ["active", "waiting", "offered"] } },
+    where: { eventId: id, status: { in: [...LIVE_STATUSES] } },
     include: { volunteer: true, shift: true },
     orderBy: [{ shift: { date: "asc" } }, { shift: { startTime: "asc" } }],
   })

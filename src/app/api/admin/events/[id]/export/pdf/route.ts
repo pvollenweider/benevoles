@@ -6,6 +6,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { buildDayParts, type VolData, type ShiftRow, type ShowEntry } from "@/lib/pdf-export-gantt"
 import { contactPhone } from "@/lib/contact-phone"
 import { orgTimeZone } from "@/lib/time-zone"
+import { LIVE_STATUSES } from "@/lib/registration-capacity"
 
 function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
@@ -26,7 +27,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
         where: { status: { not: "cancelled" } },
         include: {
           registrations: {
-            where: { status: { in: ["active", "waiting", "offered"] } },
+            where: { status: { in: [...LIVE_STATUSES] } },
             include: { volunteer: true },
           },
         },

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { COMMITTED_STATUSES } from "@/lib/registration-capacity"
 import { civilDateSchema, isDayInPeriod, SHIFT_OUTSIDE_EVENT_ERROR } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { requireOrgSession } from "@/lib/auth-guard"
@@ -32,6 +33,7 @@ const schema = z.object({
   displayOrder: z.number().int().optional(),
   internalNotes: z.string().optional().nullable(),
   waitlistEnabled: z.boolean().optional(),
+  requiresApproval: z.boolean().optional(),
   minAge: z.number().int().min(0).max(120).nullable().optional(),
   // Caller can opt out of notifying volunteers (default true).
   notifyVolunteers: z.boolean().optional(),
@@ -119,6 +121,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     "capacity",
     "status",
     "waitlistEnabled",
+    "requiresApproval",
     "minAge",
   ])
   if (shiftChanges) {
@@ -147,7 +150,8 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     where: { id },
     include: {
       event: { select: { id: true, title: true, slug: true, organizationId: true, organization: { select: { slug: true } } } },
-      registrations: { where: { status: "active" }, include: { volunteer: true } },
+      // Pending requests (#484) are cancelled and told too: they held a spot on this shift.
+      registrations: { where: { status: { in: [...COMMITTED_STATUSES] } }, include: { volunteer: true } },
     },
   })
   if (!shift) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })

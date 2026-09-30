@@ -176,6 +176,9 @@ export default function MyRegistrationPage() {
                         <Link href={`/waitlist/${reg.editToken}/confirm`} aria-label={`Prendre la place : ${reg.shift.label}`} className="font-medium underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-900">Prendre la place</Link>
                       </p>
                     )}
+                    {reg.status === "requested" && (
+                      <p className="text-xs text-amber-900 mt-1">Créneau sur validation : l&apos;organisation va accepter ou refuser ta demande, et te prévient par email. La place t&apos;est réservée d&apos;ici là.</p>
+                    )}
                     <ShiftInfoList info={reg.shift} className="mt-2 text-xs text-gray-700" />
                     {reg.status === "active" && (
                       <a

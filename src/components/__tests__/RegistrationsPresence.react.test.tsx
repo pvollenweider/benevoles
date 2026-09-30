@@ -54,7 +54,7 @@ describe("RegistrationsManager — presence", () => {
     expect(JSON.parse(init.body)).toEqual({ action: "check_in", registrationIds: ["r2"] })
     const bobRow = await screen.findByText("Bob Durand").then((el) => el.closest("tr")!)
     await waitFor(() => expect(within(bobRow).getByText(/Présent/)).toBeInTheDocument())
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("1 personne marquée présente."))
+    await waitFor(() => expect(screen.getAllByRole("status").some((el) => el.textContent?.includes("1 personne marquée présente."))).toBe(true))
     const summary = screen.getByText("1 présent").closest("p")!
     expect(summary).toHaveTextContent("1 présent sur 2 inscrits.")
     expect(summary).toHaveFocus()

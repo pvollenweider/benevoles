@@ -257,6 +257,9 @@ model Shift {
   displayOrder    Int      @default(0)
   internalNotes   String?
   waitlistEnabled Boolean  @default(false)
+  // Sign-up approval (#484): a public sign-up becomes a request (status "requested") that holds
+  // a spot until an organizer accepts it (→ active) or refuses it (→ refused).
+  requiresApproval Boolean @default(false)
   // Practical info for the volunteers of this shift (#397), shown with the place
   // (locationDetails) in the confirmation email, the reminders, the personal page and the
   // public sign-up recap. Short by design: no mission sheets, files or workflows.
@@ -368,7 +371,7 @@ model Registration {
   // One live registration per volunteer and shift (#264). Partial: cancelled rows are kept for
   // history, and a volunteer may cancel then register again. Backstops the route-level check,
   // which alone can't stop a double submit racing itself.
-  @@unique([shiftId, volunteerId], map: "Registration_shift_volunteer_live_key", where: raw("status IN ('active', 'waiting', 'offered')"))
+  @@unique([shiftId, volunteerId], map: "Registration_shift_volunteer_live_key", where: raw("status IN ('active', 'waiting', 'offered', 'requested')"))
   @@index([status, reminderJ2Sent])
   @@index([status, reminderJ1Sent])
   @@index([status, reminderDdSent])

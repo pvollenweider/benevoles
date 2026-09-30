@@ -20,6 +20,8 @@ export type RecapShiftInput = {
   endTime: string
   status: string
   waitlistEnabled: boolean
+  /** « Sur validation » (#484). Optional: older callers and previews may not send it. */
+  requiresApproval?: boolean
   minAge: number | null
 }
 
@@ -31,6 +33,8 @@ export type RecapShift = {
   /** Ends after midnight, i.e. the next calendar day. */
   endsNextDay: boolean
   waitlist: boolean
+  /** A request for the organizer to accept, not a place (#484). Never true with `waitlist`. */
+  request: boolean
   minAge: number | null
   /** Minutes from an arbitrary origin, for ordering and gaps. */
   startAbs: number
@@ -73,6 +77,7 @@ export function recapShifts(shifts: RecapShiftInput[]): RecapShift[] {
         timeLabel: fmtRange(s.startTime, s.endTime),
         endsNextDay: crossesMidnight(s.startTime, s.endTime),
         waitlist: isWaitlistShift(s),
+        request: !isWaitlistShift(s) && (s.requiresApproval ?? false),
         minAge: s.minAge,
         startAbs: d * DAY + toMin(s.startTime),
         endAbs: d * DAY + toMinEnd(s.endTime, s.startTime),

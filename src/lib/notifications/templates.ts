@@ -122,6 +122,10 @@ export function render(payload: NotificationPayload): RenderedEmail {
       return renderRegistrationLinkResend(payload)
     case "targeted_message":
       return renderTargetedMessage(payload)
+    case "registration_requested":
+      return renderRegistrationRequested(payload)
+    case "registration_refused":
+      return renderRegistrationRefused(payload)
   }
 }
 
@@ -596,6 +600,90 @@ function renderRegistrationCancelled(p: NotificationPayload): RenderedEmail {
     <p style="margin-top:1.5em">${btn(eventUrl, "Voir les créneaux disponibles")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">On espère te revoir bientôt ! 🙏</p>
   `, `Ta désinscription est confirmée — on espère te revoir à une prochaine occasion.`)
+
+  return { subject, html, text }
+}
+
+// ── Demande d'inscription (créneau sur validation, #484) ────────────────────
+
+function renderRegistrationRequested(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    volunteerName: string
+    eventTitle: string
+    shifts: { label: string; date: string; startTime: string; endTime: string }[]
+    editToken: string
+    orgSlug?: string
+  }
+  const editUrl = myPageUrl(d.orgSlug, d.editToken)
+  const firstName = d.volunteerName.split(" ")[0]
+  const many = d.shifts.length > 1
+  const subject = `Demande reçue — ${d.eventTitle}`
+
+  const text = [
+    `Hello ${firstName} !`,
+    ``,
+    `Ta demande pour ${d.eventTitle} est bien reçue. ${many ? "Ces créneaux sont" : "Ce créneau est"} sur validation : ce n'est pas encore une inscription confirmée.`,
+    ``,
+    ...d.shifts.map((s) => `  • ${s.label} · ${s.date} · ${s.startTime}–${s.endTime}`),
+    ``,
+    `La place t'est réservée le temps que l'organisation réponde. Tu recevras un email avec sa réponse.`,
+    ``,
+    `Pour suivre ou annuler ta demande :`,
+    editUrl,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} !</h2>
+    <p style="margin:0 0 1.25em;color:#555">Ta demande pour <strong>${escapeHtml(d.eventTitle)}</strong> est bien reçue. ${many ? "Ces créneaux sont" : "Ce créneau est"} <strong>sur validation</strong> : ce n'est pas encore une inscription confirmée.</p>
+    <div style="background:#f9fafb;border-radius:10px;padding:14px 16px">
+      ${d.shifts.map((s) => `
+        <div style="padding:6px 0;border-bottom:1px solid #e5e7eb">
+          <strong style="color:#111">${escapeHtml(s.label)}</strong>
+          <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</span>
+        </div>`).join("")}
+    </div>
+    <p style="color:#555;margin-top:1em">La place t'est réservée le temps que l'organisation réponde. Tu recevras un email avec sa réponse.</p>
+    <p style="margin-top:1.5em">${btn(editUrl, "Suivre ma demande")}</p>
+  `, `Demande reçue : l'organisation va te répondre.`)
+
+  return { subject, html, text }
+}
+
+function renderRegistrationRefused(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    volunteerName: string
+    eventTitle: string
+    shiftLabel: string
+    note?: string | null
+    orgSlug: string
+    eventSlug: string
+  }
+  const eventUrl = eventPublicUrl(d.orgSlug, d.eventSlug)
+  const firstName = d.volunteerName.split(" ")[0]
+  const note = d.note?.trim()
+  const subject = `Ta demande pour ${d.eventTitle}`
+
+  // No reason unless the organizer wrote one (#484).
+  const text = [
+    `Hello ${firstName},`,
+    ``,
+    `Merci pour ta demande pour le créneau "${d.shiftLabel}" de ${d.eventTitle}. L'organisation ne peut pas la retenir cette fois-ci.`,
+    ...(note ? [``, `Message de l'organisation :`, note] : []),
+    ``,
+    `D'autres créneaux sont peut-être ouverts :`,
+    eventUrl,
+    ``,
+    `Merci pour ton envie de donner un coup de main !`,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)},</h2>
+    <p style="color:#555">Merci pour ta demande pour le créneau <strong>${escapeHtml(d.shiftLabel)}</strong> de <strong>${escapeHtml(d.eventTitle)}</strong>. L'organisation ne peut pas la retenir cette fois-ci.</p>
+    ${note ? `<div style="background:#f9fafb;border-radius:8px;padding:14px 16px;margin-top:1em;font-size:0.9em;color:#333;white-space:pre-wrap"><strong>Message de l'organisation :</strong><br>${escapeHtml(note)}</div>` : ""}
+    <p style="color:#555;margin-top:1em">D'autres créneaux sont peut-être ouverts :</p>
+    <p style="margin-top:1.5em">${btn(eventUrl, "Voir les créneaux")}</p>
+    <p style="color:#888;font-size:0.85em;margin-top:2em">Merci pour ton envie de donner un coup de main !</p>
+  `, `L'organisation ne peut pas retenir ta demande cette fois-ci.`)
 
   return { subject, html, text }
 }

@@ -17,13 +17,21 @@ import type { prisma } from "./prisma"
 export type Tx = Parameters<Parameters<typeof prisma.$transaction>[0]>[0]
 
 /** Statuses of a registration that still exists from the volunteer's point of view. */
-export const LIVE_STATUSES = ["active", "waiting", "offered"] as const
+export const LIVE_STATUSES = ["active", "waiting", "offered", "requested"] as const
 
 /**
  * Statuses that hold a spot out of `capacity`. "offered" counts: the spot is reserved for the
  * waitlisted volunteer until they confirm or the offer expires, so a new sign-up can't take it.
+ * "requested" counts too (#484): a request waiting for the organizer's decision keeps its spot,
+ * so the last place can't collect unlimited requests; a refusal frees it.
  */
-export const OCCUPYING_STATUSES = ["active", "offered"] as const
+export const OCCUPYING_STATUSES = ["active", "offered", "requested"] as const
+
+/**
+ * Registrations that commit the volunteer to the shift's hours, for the overlap check: a
+ * confirmed place or a pending request (#484). The waitlist doesn't: it isn't a place yet.
+ */
+export const COMMITTED_STATUSES = ["active", "requested"] as const
 
 /**
  * Row-locks the given shifts until the end of the transaction. Ordered by id so two
@@ -36,6 +44,7 @@ export async function lockShifts(tx: Tx, shiftIds: string[]): Promise<void> {
 
 export type Placement =
   | { status: "active" }
+  | { status: "requested" }
   | { status: "waiting"; waitingPosition: number }
   | { status: "full" }
 
@@ -45,8 +54,10 @@ export function planPlacement(input: {
   occupied: number
   waitlistEnabled: boolean
   maxWaitingPosition: number | null
+  /** The shift is « Sur validation » (#484): a free spot becomes a request, not a place. */
+  requiresApproval?: boolean
 }): Placement {
-  if (input.occupied < input.capacity) return { status: "active" }
+  if (input.occupied < input.capacity) return { status: input.requiresApproval ? "requested" : "active" }
   if (!input.waitlistEnabled) return { status: "full" }
   return { status: "waiting", waitingPosition: (input.maxWaitingPosition ?? 0) + 1 }
 }

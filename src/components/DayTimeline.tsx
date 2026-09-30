@@ -21,6 +21,8 @@ export type TimelineShift = {
   spotsLeft: number
   displayOrder?: number
   waitlistEnabled?: boolean
+  /** « Sur validation » (#484): a sign-up is a request the organizer accepts or refuses. */
+  requiresApproval?: boolean
   minAge?: number | null
   colorKey?: string | null
 }
@@ -205,7 +207,8 @@ export default function DayTimeline({
                   // submit (see #192). Announced in the accessible name since the visual sub-label
                   // below is aria-hidden.
                   const hasMinAge       = shift.minAge != null
-                  const minAgeSuffix    = hasMinAge ? ` (${shift.minAge} ans minimum)` : ""
+                  const needsApproval   = shift.requiresApproval ?? false
+                  const minAgeSuffix    = (hasMinAge ? ` (${shift.minAge} ans minimum)` : "") + (needsApproval ? " (sur validation)" : "")
                   // Same "N/capacity" indicator as the admin timeline (#243), shown inside the bar
                   // itself the same way, so small groups can see at a glance whether a shift has
                   // enough room. Skipped once full (the "Complet" / waitlist wording already says
@@ -222,9 +225,9 @@ export default function DayTimeline({
                       ? `Désélectionner — ${roleLabel} ${timeSpoken}`
                       : `Sélectionner — ${roleLabel} ${timeSpoken}`)) + minAgeSuffix + spotsSuffix + limitSuffix
                   const subLabelText    = isWaitlistable && !isSelected
-                    ? ["Complet · file d'attente", hasMinAge ? `${shift.minAge}+` : null].filter(Boolean).join(" · ")
-                    : [hasLabel ? shift.label : null, hasMinAge ? `${shift.minAge}+` : null].filter(Boolean).join(" · ")
-                  const showSubLabel    = hasLabel || (isWaitlistable && !isSelected) || hasMinAge
+                    ? ["Complet · file d'attente", hasMinAge ? `${shift.minAge}+` : null, needsApproval ? "Sur validation" : null].filter(Boolean).join(" · ")
+                    : [hasLabel ? shift.label : null, hasMinAge ? `${shift.minAge}+` : null, needsApproval ? "Sur validation" : null].filter(Boolean).join(" · ")
+                  const showSubLabel    = hasLabel || (isWaitlistable && !isSelected) || hasMinAge || needsApproval
 
                   return (
                     // @container: the text inside hides itself when the bar is too narrow for it

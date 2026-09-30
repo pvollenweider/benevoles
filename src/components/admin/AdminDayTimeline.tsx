@@ -33,6 +33,7 @@ export type AdminShift = {
   internalNotes?: string | null
   description?: string | null
   waitlistEnabled?: boolean
+  requiresApproval?: boolean
   minAge?: number | null
   colorKey?: string | null
 }

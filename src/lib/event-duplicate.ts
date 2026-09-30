@@ -46,6 +46,7 @@ export type DuplicableShift = {
   internalNotes: string | null
   minAge: number | null
   waitlistEnabled: boolean
+  requiresApproval: boolean
   colorKey: string | null
   maxPerVolunteer?: number | null
   reservedTags?: string[]
@@ -94,6 +95,7 @@ export function copiedShift(s: DuplicableShift) {
     internalNotes: s.internalNotes,
     minAge: s.minAge,
     waitlistEnabled: s.waitlistEnabled,
+    requiresApproval: s.requiresApproval,
     colorKey: s.colorKey,
     maxPerVolunteer: s.maxPerVolunteer ?? null,
     reservedTags: s.reservedTags ?? [],

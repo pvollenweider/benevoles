@@ -182,3 +182,32 @@ export function logLinkFor(eventId: string, startedAt: Date, timeZone?: string):
   const since = startedAt.toLocaleDateString("sv-SE", timeZone ? { timeZone } : undefined)
   return `/admin/events/${eventId}/log?since=${since}`
 }
+
+/** Accepting a request on a « Sur validation » shift (#484). */
+export function acceptRequestRecap(i: { name: string; shift: string; hasEmail: boolean }): ActionRecap {
+  return {
+    title: `Accepter la demande de ${i.name} ?`,
+    lines: [
+      `${i.name} est inscrit·e sur « ${i.shift} » : la place gardée par la demande devient une inscription confirmée.`,
+      i.hasEmail ? "Un email de confirmation lui est envoyé, avec son lien personnel." : "Aucun email : cette personne n'a pas d'adresse.",
+      LOGGED,
+    ],
+    confirmLabel: "Accepter",
+    danger: false,
+  }
+}
+
+/** Refusing a request (#484): the spot is freed; the email gives no reason unless one is written. */
+export function refuseRequestRecap(i: { name: string; shift: string; hasEmail: boolean; waitlist: boolean }): ActionRecap {
+  return {
+    title: `Refuser la demande de ${i.name} ?`,
+    lines: [
+      `La demande sur « ${i.shift} » est refusée et la place est libérée.`,
+      i.hasEmail ? "Un email poli le lui dit, sans raison sauf si vous écrivez un message ci-dessous." : "Aucun email : cette personne n'a pas d'adresse.",
+      ...(i.waitlist ? ["La place libérée sera proposée à la liste d'attente."] : []),
+      LOGGED,
+    ],
+    confirmLabel: "Refuser",
+    danger: true,
+  }
+}

@@ -14,6 +14,7 @@ import MilestonesSection from "@/components/admin/MilestonesSection"
 import { isUnlistedPublic, UNLISTED_HINT } from "@/lib/event-visibility"
 import EventLifecycleBar from "@/components/admin/EventLifecycleBar"
 import { orgTimeZone } from "@/lib/time-zone"
+import { LIVE_STATUSES } from "@/lib/registration-capacity"
 
 export const dynamic = "force-dynamic"
 
@@ -32,7 +33,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         where: { status: { not: "cancelled" } },
         include: {
           registrations: {
-            where: { status: { in: ["active", "waiting", "offered"] } },
+            where: { status: { in: [...LIVE_STATUSES] } },
             select: { id: true, status: true, volunteerId: true },
           },
         },
@@ -66,7 +67,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
       id: sh.id, roleName: sh.roleName, label: sh.label, date: sh.date.toISOString().slice(0, 10),
       startTime: sh.startTime, endTime: sh.endTime, capacity: sh.capacity, closed: sh.status === "closed",
       active: sh.registrations.filter((r) => r.status === "active").length,
-      waiting: sh.registrations.filter((r) => r.status !== "active").length,
+      waiting: sh.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length,
     })),
     event.sectorLeaders.map((l) => l.roleName),
   )

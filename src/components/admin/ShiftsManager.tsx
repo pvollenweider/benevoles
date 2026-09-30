@@ -33,7 +33,7 @@ const UNPUBLISHED_NOTICE = "C'était le dernier créneau : l'événement est rep
 
 const emptyShift = {
   roleName: "", label: "", description: "", date: "", startTime: "", endTime: "",
-  capacity: 2, locationDetails: "", latitude: null as number | null, longitude: null as number | null, displayOrder: 0, internalNotes: "", waitlistEnabled: false,
+  capacity: 2, locationDetails: "", latitude: null as number | null, longitude: null as number | null, displayOrder: 0, internalNotes: "", waitlistEnabled: false, requiresApproval: false,
   minAge: "" as number | string,
   contactName: "", contactPhone: "", instructions: "",
 }
@@ -867,6 +867,24 @@ export default function ShiftsManager({
               Activer la liste d'attente (si complet, les bénévoles peuvent s'y inscrire)
             </label>
           </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id={`requiresApproval-${editingId ?? "new"}`}
+                checked={Boolean(form.requiresApproval)}
+                onChange={e => setField("requiresApproval", e.target.checked)}
+                aria-describedby={`requiresApproval-hint-${editingId ?? "new"}`}
+                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+              />
+              <label htmlFor={`requiresApproval-${editingId ?? "new"}`} className="text-xs font-medium text-gray-600 select-none cursor-pointer">
+                Sur validation (chaque inscription est une demande à accepter ou refuser)
+              </label>
+            </div>
+            <p id={`requiresApproval-hint-${editingId ?? "new"}`} className="text-xs text-gray-600 mt-1 ml-6">
+              Pour un poste sensible (conduite, caisse, sécurité). Une demande garde sa place jusqu&apos;à votre décision ; les inscriptions déjà confirmées ne changent pas.
+            </p>
+          </div>
 
           {error && <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{error}</div>}
           {attempted && (!form.roleName || !form.date || !form.startTime || !form.endTime) && (
@@ -968,6 +986,7 @@ export default function ShiftsManager({
                         displayOrder: s.displayOrder,
                         internalNotes: s.internalNotes ?? "",
                         waitlistEnabled: s.waitlistEnabled ?? false,
+                        requiresApproval: s.requiresApproval ?? false,
                         minAge: s.minAge ?? "",
                         locationDetails: s.locationDetails ?? "",
                         latitude: s.latitude ?? null,

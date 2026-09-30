@@ -41,6 +41,7 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
   const [breakMinutes, setBreakMinutes] = useState(0)
   const [capacity, setCapacity] = useState(2)
   const [waitlistEnabled, setWaitlistEnabled] = useState(false)
+  const [requiresApproval, setRequiresApproval] = useState(false)
   const [attempted, setAttempted] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -67,7 +68,7 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         eventId, roleName: roleName.trim(), label: label.trim() || undefined, date, startTime, endTime,
-        slotMinutes, breakMinutes, capacity: Number(capacity), waitlistEnabled,
+        slotMinutes, breakMinutes, capacity: Number(capacity), waitlistEnabled, requiresApproval,
         displayOrder: resolveNewShiftDisplayOrder(existingShifts, roleName.trim(), 0),
       }),
     }), "Erreur lors de la création.")
@@ -181,6 +182,13 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
         <div className="flex items-center gap-2 min-h-11">
           <input id={`${id}-waitlist`} type="checkbox" checked={waitlistEnabled} onChange={(e) => setWaitlistEnabled(e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500" />
           <label htmlFor={`${id}-waitlist`} className="text-xs font-medium text-gray-600 select-none">Activer la liste d&apos;attente</label>
+        </div>
+        <div className="min-h-11">
+          <div className="flex items-center gap-2">
+            <input id={`${id}-approval`} type="checkbox" checked={requiresApproval} onChange={(e) => setRequiresApproval(e.target.checked)} aria-describedby={`${id}-approval-hint`} className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500" />
+            <label htmlFor={`${id}-approval`} className="text-xs font-medium text-gray-600 select-none">Sur validation (chaque inscription est une demande à accepter ou refuser)</label>
+          </div>
+          <p id={`${id}-approval-hint`} className="text-xs text-gray-600 mt-1 ml-6">Pour un poste sensible (conduite, caisse, sécurité). Une demande garde sa place jusqu&apos;à votre décision.</p>
         </div>
       </div>
 

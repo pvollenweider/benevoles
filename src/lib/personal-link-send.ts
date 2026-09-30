@@ -6,6 +6,7 @@ import { registrationToken } from "./token-vault"
 import { deliverAfterResponse, enqueueNotifications } from "./notifications/outbox"
 import { rateLimit } from "./rate-limit"
 import { LINK_REQUEST_LIMIT, LINK_REQUEST_WINDOW_MS } from "./personal-link"
+import { LIVE_STATUSES } from "./registration-capacity"
 
 /**
  * Sends a volunteer their personal link again (#376), through the outbox, and remembers when.
@@ -13,7 +14,7 @@ import { LINK_REQUEST_LIMIT, LINK_REQUEST_WINDOW_MS } from "./personal-link"
  * volunteer on the event shares the same page, so the newest one is enough.
  */
 
-export const LIVE_STATUSES = ["active", "waiting", "offered"] as const
+export { LIVE_STATUSES } from "./registration-capacity"
 
 type LinkTarget = {
   id: string

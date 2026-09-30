@@ -29,6 +29,7 @@ const schema = z.object({
   displayOrder: z.number().int().optional(),
   internalNotes: z.string().optional(),
   waitlistEnabled: z.boolean().optional(),
+  requiresApproval: z.boolean().optional(),
   minAge: z.number().int().min(0).max(120).nullable().optional(),
 }).refine((d) => d.startTime !== d.endTime, { message: SAME_TIME_ERROR, path: ["endTime"] }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
 

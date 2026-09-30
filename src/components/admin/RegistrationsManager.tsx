@@ -7,7 +7,7 @@ import Link from "next/link"
 import { announce } from "@/lib/announce"
 import { UNDO_MS, useDelayedAction } from "@/lib/use-delayed-action"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
-import { bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, logLinkFor, type ActionRecap } from "@/lib/action-recap"
+import { acceptRequestRecap, bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, logLinkFor, refuseRequestRecap, type ActionRecap } from "@/lib/action-recap"
 import { describeBulkFailure } from "@/lib/form-errors"
 import { useId, useState, useMemo, useRef } from "react"
 import StatusBadge from "./StatusBadge"
@@ -55,6 +55,8 @@ type Props = {
   initialShiftFilter?: string
   /** `?q=` from the global search (#377). */
   initialSearch?: string
+  /** `?demandes=1`: open on the requests waiting for a decision (#484). */
+  initialRequestsOnly?: boolean
   /** Organisation time zone, for the workload warnings (#465). */
   timeZone: string
   /** Answers to the event's custom questions (#483), by volunteer. */
@@ -67,7 +69,7 @@ const sourceLabels: Record<string, string> = {
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, timeZone, answersByVolunteer = {} }: Props) {
+export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, answersByVolunteer = {} }: Props) {
   const [registrations, setRegistrations] = useState<Registration[]>(initialRegistrations)
   // Non-blocking workload warnings per volunteer (#465), from the active registrations shown here.
   const workload = useMemo(
@@ -79,6 +81,13 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   const [roleFilter, setRoleFilter] = useState(initialShift?.roleName ?? "")
   const [shiftFilter, setShiftFilter] = useState(initialShiftFilter ?? "")
   const [showAddForm, setShowAddForm] = useState(false)
+  const [requestsOnly, setRequestsOnly] = useState(initialRequestsOnly)
+  const requestsFilterRef = useRef<HTMLInputElement>(null)
+  // Sign-up approval (#484): the request being accepted or refused, with the optional message.
+  const [decision, setDecision] = useState<{ reg: Registration; kind: "accept" | "refuse" } | null>(null)
+  const [decisionNote, setDecisionNote] = useState("")
+  const [decisionBusy, setDecisionBusy] = useState(false)
+  const [decisionError, setDecisionError] = useState<string | null>(null)
   // The request the role-limit warning is about: the override only applies to that exact form.
   const [overLimitFor, setOverLimitFor] = useState<string | null>(null)
   const [addForm, setAddForm] = useState({ firstName: "", lastName: "", email: "", phone: "", shiftId: "", comment: "" })
@@ -149,7 +158,52 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     [selectedShiftObj, volunteerShifts]
   )
 
-  const filtered = filterRegistrations(registrations, { search, role: roleFilter, shiftId: shiftFilter })
+  const filtered = filterRegistrations(registrations, { search, role: roleFilter, shiftId: shiftFilter, requestsOnly })
+  const requestCount = registrations.filter((r) => r.status === "requested").length
+
+  const shiftName = (r: Registration) => (r.shift.label !== r.shift.roleName ? `${r.shift.roleName} · ${r.shift.label}` : r.shift.label)
+  const personName = (r: Registration) => `${r.volunteer.firstName} ${r.volunteer.lastName}`
+
+  function openDecision(reg: Registration, kind: "accept" | "refuse") {
+    setDecisionNote("")
+    setDecisionError(null)
+    setDecision({ reg, kind })
+  }
+
+  async function runDecision() {
+    if (!decision || decisionBusy) return
+    const { reg, kind } = decision
+    const startedAt = new Date()
+    setDecisionBusy(true)
+    setDecisionError(null)
+    let res: Response
+    try {
+      res = await fetch(`/api/admin/registrations/${reg.id}/decision`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(kind === "refuse" && decisionNote.trim() ? { decision: kind, note: decisionNote } : { decision: kind }),
+      })
+    } catch {
+      setDecisionBusy(false)
+      setDecisionError("La connexion a échoué : rien n'a été fait. Réessayez.")
+      return
+    }
+    const data = await res.json().catch(() => null)
+    setDecisionBusy(false)
+    if (!res.ok) { setDecisionError(data?.error ?? "La décision n'a pas pu être enregistrée."); return }
+    setDecision(null)
+    // A refused request leaves the list (it no longer holds a spot); an accepted one stays, confirmed.
+    setRegistrations((prev) => kind === "accept" ? prev.map((r) => (r.id === reg.id ? { ...r, status: "active" } : r)) : prev.filter((r) => r.id !== reg.id))
+    setLastLogLink(logLinkFor(eventId, startedAt))
+    announce(setLeaderAnnouncement, kind === "accept"
+      ? `Demande de ${personName(reg)} acceptée${reg.volunteer.email ? " : email de confirmation envoyé" : ""}.`
+      : `Demande de ${personName(reg)} refusée${reg.volunteer.email ? " : email envoyé" : ""}.`)
+    // The row's buttons are gone with the decision: on to the next request, else back to the filters.
+    requestAnimationFrame(() => {
+      const next = document.querySelector<HTMLButtonElement>("[data-decision-accept]")
+      ;(next ?? requestsFilterRef.current ?? document.getElementById("reg-search"))?.focus()
+    })
+  }
 
   function openLeaderModal(reg: Registration) {
     const roleOptions = leaderRoleOptions(registrations, reg.volunteer.id)
@@ -432,6 +486,38 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       {pending && (
         <ConfirmActionModal recap={pending.recap} busy={bulkBusy} onConfirm={() => void pending.run()} onCancel={() => setPending(null)} />
       )}
+      {decision && (
+        <ConfirmActionModal
+          recap={decision.kind === "accept"
+            ? acceptRequestRecap({ name: personName(decision.reg), shift: shiftName(decision.reg), hasEmail: !!decision.reg.volunteer.email })
+            : refuseRequestRecap({
+              name: personName(decision.reg),
+              shift: shiftName(decision.reg),
+              hasEmail: !!decision.reg.volunteer.email,
+              waitlist: registrations.some((r) => r.shift.id === decision.reg.shift.id && r.status === "waiting"),
+            })}
+          busy={decisionBusy}
+          error={decisionError}
+          onConfirm={() => void runDecision()}
+          onCancel={() => setDecision(null)}
+        >
+          {decision.kind === "refuse" && decision.reg.volunteer.email && (
+            <div className="mt-4">
+              <label htmlFor="refusal-note" className="block text-sm text-gray-800 mb-1">Message à la personne (facultatif)</label>
+              <textarea
+                id="refusal-note"
+                value={decisionNote}
+                onChange={(e) => setDecisionNote(e.target.value)}
+                maxLength={1000}
+                rows={3}
+                aria-describedby="refusal-note-hint"
+                className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              />
+              <p id="refusal-note-hint" className="text-xs text-gray-600 mt-1">Ajouté tel quel à l&apos;email. Sans message, l&apos;email ne donne aucune raison.</p>
+            </div>
+          )}
+        </ConfirmActionModal>
+      )}
       {/* The one live region for outcomes: visible when there is something to say, empty otherwise. */}
       <p role="status" aria-live="polite" className={leaderAnnouncement ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-1" : "sr-only"}>
         {leaderAnnouncement && <span>{leaderAnnouncement}</span>}
@@ -513,6 +599,14 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           <option value="">Tous les postes</option>
           {uniqueRoles.map(r => <option key={r} value={r}>{r}</option>)}
         </select>
+        {(requestCount > 0 || requestsOnly) && (
+          <label className="flex items-center gap-2 border border-amber-300 bg-amber-50 text-amber-950 rounded-xl px-3 py-2 text-sm font-medium cursor-pointer">
+            <input ref={requestsFilterRef} type="checkbox" checked={requestsOnly} onChange={(e) => setRequestsOnly(e.target.checked)} className="h-4 w-4 rounded border-gray-300" />
+            Demandes à traiter ({requestCount})
+          </label>
+        )}
+        {/* The list changes under the filters without a page load: say how many rows are left. */}
+        <p role="status" className="sr-only">{filtered.length} inscription{filtered.length > 1 ? "s" : ""} affichée{filtered.length > 1 ? "s" : ""}</p>
         <div className="min-w-64">
           <ShiftSelect
             shifts={visibleShifts}
@@ -672,7 +766,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
 
       {filtered.length === 0 ? (
         <div className="text-center py-12 text-gray-500">
-          <p>{registrations.length === 0 ? "Aucune inscription." : "Aucun résultat."}</p>
+          <p>{registrations.length === 0 ? "Aucune inscription." : requestsOnly && requestCount === 0 ? "Aucune demande à traiter." : "Aucun résultat."}</p>
         </div>
       ) : (
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -731,6 +825,26 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                       )}
                     </p>
                     <p className="text-xs text-gray-500">{reg.volunteer.email}</p>
+                    {reg.status === "requested" && (
+                      <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-900">Demande à traiter</span>
+                        <button
+                          type="button"
+                          data-decision-accept=""
+                          onClick={() => openDecision(reg, "accept")}
+                          className="text-xs font-medium text-white bg-green-700 hover:bg-green-800 rounded-full px-3 py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700"
+                        >
+                          Accepter{" "}<span className="sr-only">la demande de {personName(reg)} pour {shiftName(reg)}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => openDecision(reg, "refuse")}
+                          className="text-xs font-medium text-red-800 border border-red-300 bg-white hover:bg-red-50 rounded-full px-3 py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+                        >
+                          Refuser{" "}<span className="sr-only">la demande de {personName(reg)} pour {shiftName(reg)}</span>
+                        </button>
+                      </div>
+                    )}
                     {(answersByVolunteer[reg.volunteer.id] ?? []).length > 0 && (
                       <ul role="list" className="text-xs text-gray-700 mt-0.5">
                         {answersByVolunteer[reg.volunteer.id].map((a) => <li key={a.label}><span className="text-gray-600">{a.label} :</span> {a.text}</li>)}
@@ -755,7 +869,9 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                     <span className="text-xs text-gray-500">{sourceLabels[reg.source] ?? reg.source}</span>
                   </td>
                   <td className="px-4 py-3 hidden md:table-cell">
-                    {reg.status !== "active" && <StatusBadge status={reg.status} />}
+                    {reg.status === "requested"
+                      ? <span className="text-xs text-amber-900">Demande à traiter</span>
+                      : reg.status !== "active" && <StatusBadge status={reg.status} />}
                     {reg.status === "waiting" && reg.waitingPosition != null && (
                       <span className="ml-1 text-xs text-gray-500">#{reg.waitingPosition}</span>
                     )}

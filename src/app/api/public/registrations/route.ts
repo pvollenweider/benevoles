@@ -16,6 +16,7 @@ import { rateLimit, getClientIp, isRateLimited } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
 import { reportError } from "@/lib/report-error"
 import {
+  COMMITTED_STATUSES,
   LIVE_STATUSES,
   OCCUPYING_STATUSES,
   ShiftFullError,
@@ -198,7 +199,7 @@ export async function POST(req: Request) {
     if (existingRegs.length > 0) return alreadyRegistered(existing.id, eventId)
 
     const allEventRegs = await prisma.registration.findMany({
-      where: { volunteerId: existing.id, eventId, status: "active" },
+      where: { volunteerId: existing.id, eventId, status: { in: [...COMMITTED_STATUSES] } },
       include: { shift: true },
     })
     const clash = findOverlap(allEventRegs, shifts)
@@ -228,9 +229,10 @@ export async function POST(req: Request) {
     const editToken = tokens.get(registrations[0].shiftId)!
     const waitlistRegs = registrations.filter((r) => r.status === "waiting")
     const activeRegs = registrations.filter((r) => r.status === "active")
+    const requestedRegs = registrations.filter((r) => r.status === "requested")
 
-    const activeShiftData = shifts
-      .filter((s) => activeRegs.some((r) => r.shiftId === s.id))
+    const shiftData = (regs: typeof registrations) => shifts
+      .filter((s) => regs.some((r) => r.shiftId === s.id))
       .map((s) => ({
         label: s.label,
         roleName: s.roleName,
@@ -239,6 +241,7 @@ export async function POST(req: Request) {
         endTime: s.endTime,
         ...pickShiftInfo(s, event),
       }))
+    const activeShiftData = shiftData(activeRegs)
     const outbox = collectNotifications()
     if (activeRegs.length > 0) {
       await sendConfirmationEmail({
@@ -250,6 +253,20 @@ export async function POST(req: Request) {
         orgSlug: event.organization.slug,
         confirmationMessage: event.confirmationMessage ?? undefined,
       }, outbox.send)
+    }
+    // Sign-up approval (#484): a request is not a place, and the email says so.
+    if (requestedRegs.length > 0) {
+      await outbox.send({
+        kind: "registration_requested",
+        recipient: { email, name: `${firstName} ${lastName}` },
+        data: {
+          volunteerName: `${firstName} ${lastName}`,
+          eventTitle: event.title,
+          shifts: shiftData(requestedRegs).map(({ label, date, startTime, endTime }) => ({ label, date, startTime, endTime })),
+          editToken,
+          orgSlug: event.organization.slug,
+        },
+      })
     }
     await sendAdminNotification({
       organizationId: event.organizationId,
@@ -264,7 +281,8 @@ export async function POST(req: Request) {
         endTime: s.endTime,
       })),
     }, outbox.send)
-    for (const shift of shifts) {
+    // Sector leaders hear of a request once it is accepted (#484).
+    for (const shift of shifts.filter((s) => !requestedRegs.some((r) => r.shiftId === s.id))) {
       await notifySectorLeadersOfSignup({
         eventId,
         eventTitle: event.title,
@@ -326,7 +344,7 @@ export async function POST(req: Request) {
       // a per-volunteer lock too. Always shifts first, then volunteer: same order everywhere.
       await tx.$queryRaw`SELECT id FROM "Volunteer" WHERE id = ${volunteerId} FOR UPDATE`
       const liveNow = await tx.registration.findMany({
-        where: { volunteerId, eventId, status: "active" },
+        where: { volunteerId, eventId, status: { in: [...COMMITTED_STATUSES] } },
         include: { shift: true },
       })
       const clashNow = findOverlap(liveNow, shifts)
@@ -360,6 +378,7 @@ export async function POST(req: Request) {
           occupied,
           waitlistEnabled: shift.waitlistEnabled,
           maxWaitingPosition: maxPos._max.waitingPosition,
+          requiresApproval: shift.requiresApproval,
         })
         if (placement.status === "full") throw new ShiftFullError(shift.id, shift.label)
         created.push(
@@ -435,7 +454,7 @@ export async function POST(req: Request) {
     await logEvent({
       eventId,
       actor: { type: "volunteer", id: volunteerId },
-      action: reg.status === "waiting" ? "registration.waitlist_joined" : "registration.created",
+      action: reg.status === "waiting" ? "registration.waitlist_joined" : reg.status === "requested" ? "registration.requested" : "registration.created",
       entityType: "Registration",
       entityId: reg.id,
       changes: { shiftId: { from: null, to: reg.shiftId }, source: { from: null, to: "public_form" } },
@@ -455,21 +474,25 @@ export async function POST(req: Request) {
 
   const waitlistRegs = registrations.filter((r) => r.status === "waiting")
   const activeRegs = registrations.filter((r) => r.status === "active")
+  const requestedRegs = registrations.filter((r) => r.status === "requested")
 
   // Stored with the registrations (#352); sent once this response is out, retried by the cron.
   deliverAfterResponse(outboxIds)
 
-  const onWaitlist = waitlistRegs.length > 0 && activeRegs.length === 0
+  const onWaitlist = waitlistRegs.length > 0 && activeRegs.length === 0 && requestedRegs.length === 0
 
   return NextResponse.json({
     success: true,
     // Only with proof of ownership (member invite); otherwise the link is in the email only.
     editToken: ownsEmail ? editToken : null,
     linkSentByEmail: !ownsEmail,
-    confirmationMessage: onWaitlist ? null : event.confirmationMessage,
+    confirmationMessage: activeRegs.length === 0 ? null : event.confirmationMessage,
     registrationCount: registrations.length,
     onWaitlist,
     waitlistShifts: waitlistRegs.length,
+    // Requests waiting for the organizer's decision (#484), not places.
+    requestedShifts: requestedRegs.length,
+    activeShifts: activeRegs.length,
   }, { status: 201 })
 }
 
@@ -496,13 +519,13 @@ function findOverlap(
  * submitter may not be that volunteer. The owner gets their management link by email instead
  * (throttled per volunteer, so the form can't be used to flood their inbox).
  *
- * The duplicate can be a live registration of any status. Only an *active* one has a management
- * link (/my requires it), so the message only claims an email when one actually went out:
- * waitlisted / offered-only duplicates get the waitlist message instead.
+ * The duplicate can be a live registration of any status. Only an active one or a request (#484)
+ * gets its management link re-sent here, so the message only claims an email when one actually
+ * went out: waitlisted / offered-only duplicates get the waitlist message instead.
  */
 async function alreadyRegistered(volunteerId: string, eventId: string) {
   const reg = await prisma.registration.findFirst({
-    where: { volunteerId, eventId, status: "active" },
+    where: { volunteerId, eventId, status: { in: [...COMMITTED_STATUSES] } },
     include: {
       volunteer: { select: { firstName: true, lastName: true, email: true } },
       event: { select: { title: true, organization: { select: { slug: true } } } },
@@ -530,7 +553,7 @@ async function alreadyRegistered(volunteerId: string, eventId: string) {
       // Remember a *successful* send: the throttle counts attempts, failed ones included.
       if (result.ok) {
         await rateLimit(volunteerId, "reg-link-sent", 1, 60 * 60 * 1000)
-        await prisma.registration.updateMany({ where: { volunteerId, eventId, status: { in: ["active", "waiting", "offered"] } }, data: { linkEmailedAt: new Date() } })
+        await prisma.registration.updateMany({ where: { volunteerId, eventId, status: { in: [...LIVE_STATUSES] } }, data: { linkEmailedAt: new Date() } })
       }
     } else {
       // Throttled: only claim the link was sent if a send actually succeeded within the hour.

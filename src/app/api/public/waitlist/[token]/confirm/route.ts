@@ -35,6 +35,9 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
   // Conditional on the offer still standing (#264): a double confirm (double click, link
   // prefetch + click) must not confirm twice, and an offer the cron just expired can't be taken.
   // The confirmation email is stored in the same transaction (#352).
+  // On a « Sur validation » shift (#484) the offered spot becomes a request: the spot stays held,
+  // the organizer still decides.
+  const next = reg.shift.requiresApproval ? "requested" : "active"
   const outboxIds = await prisma.$transaction(async (tx) => {
     const { count } = await tx.registration.updateMany({
       where: {
@@ -43,13 +46,28 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
         OR: [{ waitingExpiresAt: null }, { waitingExpiresAt: { gte: new Date() } }],
       },
       data: {
-        status: "active",
+        status: next,
         waitingPosition: null,
         waitingOfferedAt: null,
         waitingExpiresAt: null,
       },
     })
     if (count === 0) return null
+    const shift = {
+      label: reg.shift.label,
+      date: reg.shift.date.toLocaleDateString("fr-FR"),
+      startTime: reg.shift.startTime,
+      endTime: reg.shift.endTime,
+    }
+    if (next === "requested") {
+      return enqueueNotifications([{
+        kind: "registration_requested",
+        organizationId: reg.event.organizationId,
+        dedupeKey: `waitlist_requested:${reg.id}`,
+        recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
+        data: { volunteerName: reg.volunteer.firstName, eventTitle: reg.event.title, shifts: [shift], editToken: token, orgSlug: reg.event.organization.slug },
+      }], tx)
+    }
     return enqueueNotifications([{
       kind: "registration_confirmation",
       organizationId: reg.event.organizationId,
@@ -58,13 +76,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
       data: {
         volunteerName: reg.volunteer.firstName,
         eventTitle: reg.event.title,
-        shifts: [{
-          label: reg.shift.label,
-          date: reg.shift.date.toLocaleDateString("fr-FR"),
-          startTime: reg.shift.startTime,
-          endTime: reg.shift.endTime,
-          ...pickShiftInfo(reg.shift, reg.event),
-        }],
+        shifts: [{ ...shift, ...pickShiftInfo(reg.shift, reg.event) }],
         editToken: token,
         orgSlug: reg.event.organization.slug,
       },
@@ -88,13 +100,13 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
     action: "registration.waitlist_confirmed",
     entityType: "Registration",
     entityId: reg.id,
-    changes: { status: { from: "offered", to: "active" } },
+    changes: { status: { from: "offered", to: next } },
     causedByLogId: offerLog?.id,
   })
 
   deliverAfterResponse(outboxIds)
 
-  return NextResponse.json({ success: true, editToken: token })
+  return NextResponse.json({ success: true, editToken: token, requested: next === "requested" })
 }
 
 export async function GET(req: Request, ctx: { params: Promise<{ token: string }> }) {

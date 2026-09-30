@@ -1,11 +1,14 @@
 import { describe, it, expect } from "vitest"
-import { readFileSync } from "fs"
+import { readdirSync, readFileSync } from "fs"
 import { join } from "path"
 import { CHECKED_COLUMNS } from "../statuses"
 
 // The CHECK constraints (#321) and src/lib/statuses.ts must list the same values: a value only
 // in the code would be rejected by the database, one only in the database is dead.
-const sql = readFileSync(join(process.cwd(), "prisma/migrations/20260929200000_status_check_constraints/migration.sql"), "utf8")
+// Every migration in order: a later one may drop and re-add a constraint to widen it (#484).
+const dir = join(process.cwd(), "prisma/migrations")
+const sql = readdirSync(dir).filter((d) => /^\d{14}_/.test(d)).sort()
+  .map((d) => { try { return readFileSync(join(dir, d, "migration.sql"), "utf8") } catch { return "" } }).join("\n")
 
 describe("status value sets match the database CHECK constraints", () => {
   const constraints = new Map(

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { COMMITTED_STATUSES } from "@/lib/registration-capacity"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
 import { adminActor, logEvent } from "@/lib/event-log"
@@ -164,7 +165,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     where: { eventId: id, roleName: decodedRole, status: { not: "cancelled" }, event: { organizationId } },
     include: {
       event: { select: { id: true, title: true, slug: true, organizationId: true, organization: { select: { slug: true } } } },
-      registrations: { where: { status: "active" }, include: { volunteer: true } },
+      registrations: { where: { status: { in: [...COMMITTED_STATUSES] } }, include: { volunteer: true } },
     },
   })
   if (shifts.length === 0) return NextResponse.json({ error: "Poste introuvable" }, { status: 404 })
