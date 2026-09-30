@@ -5,6 +5,7 @@ import NextAuth from "next-auth"
 import { authConfig } from "./auth.config"
 import { NextResponse } from "next/server"
 import { orgSlugFromHost } from "@/lib/org-subdomain"
+import { cleanPath } from "@/lib/clean-path"
 
 const { auth } = NextAuth(authConfig)
 
@@ -12,6 +13,15 @@ const { auth } = NextAuth(authConfig)
 // alone and the organization header; the authoritative checks stay server-side (auth-guard.ts).
 export default auth((req) => {
   const { pathname } = req.nextUrl
+
+  // `//events` would crash the client router (it reads it as the host « events »): redirect to
+  // the clean path, same host, query kept.
+  const clean = cleanPath(pathname)
+  if (clean) {
+    const url = req.nextUrl.clone()
+    url.pathname = clean
+    return NextResponse.redirect(url, 308)
+  }
 
   // --- Auth guards ---
   const isSuperAdminPath = pathname.startsWith("/super-admin")

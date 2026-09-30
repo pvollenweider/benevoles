@@ -109,6 +109,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 #### Données et exploitation
 
+- **Adresse avec une double barre oblique** : une adresse comme `benevol.app//events` faisait planter la page dans le navigateur. Elle redirige désormais vers l'adresse propre (`/events`), paramètres conservés.
 - **Adresses email** : les majuscules et espaces ne sont plus pris en compte ; `Alice@Exemple.ch` et `alice@exemple.ch` désignent le même bénévole ou le même admin (connexion comprise), au lieu de créer deux fiches, et la base de données refuse deux fiches (bénévoles d'une même organisation, admins, responsables d'un même secteur) dont l'adresse ne diffère que par la casse ou des espaces. Les adresses existantes sont converties en minuscules, sauf les rares doublons qui ne diffèrent que par la casse, laissés tels quels pour un traitement manuel.
 - **Statuts en base** : les contraintes sur les valeurs de statut s'appliquent aussi aux lignes existantes (vérifiées au préalable en production), et non plus seulement aux nouvelles.
 - **Erreurs serveur** : les réponses d'erreur de la modification d'un événement et de l'import de membres ne contiennent plus de détails techniques.
