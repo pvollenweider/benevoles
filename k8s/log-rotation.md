@@ -1,5 +1,7 @@
 # Rétention des logs — 90 jours (conformité politique de confidentialité)
 
+> **État constaté en production le 2026-09-30** : rien de ce document n'est appliqué. Le nœud tourne avec les réglages par défaut de k3s (`containerLogMaxSize: 10Mi`, `containerLogMaxFiles: 5`), sans limite de durée. Voir `docs/rgpd/verifications-production.md`.
+
 ## Option A — Kubelet (logs containers stdout/stderr)
 
 Configurer sur chaque nœud dans `/etc/kubernetes/kubelet-config.yaml` :

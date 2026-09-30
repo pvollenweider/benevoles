@@ -46,6 +46,7 @@ Décision : un jeton personnel n'est jamais écrit dans un journal d'accès (`k8
 ## Serveur
 
 - [ ] Rotation des journaux réellement installée sur le nœud (`k8s/log-rotation.md`) et durée effective des journaux du proxy et des conteneurs. Tant que ce n'est pas prouvé, ne pas annoncer la durée de la matrice comme garantie.
+  Constaté le 2026-09-30 (configuration de kubelet lue par l'API, `configz`) : rotation **par taille** seulement, réglages par défaut de k3s, `containerLogMaxSize` 10 Mi et `containerLogMaxFiles` 5 par conteneur ; aucun logrotate ni durée installés (`k8s/log-rotation.md` n'est pas appliqué). Durée effective variable : environ 4 à 5 jours pour Traefik (volume élevé), mais un conteneur peu bavard garde ses journaux jusqu'à la suppression du pod, **possiblement au-delà de 90 jours**. La durée « Journaux techniques » de la matrice n'est donc pas garantie : décider d'une limite de durée (logrotate sur `/var/log/pods`, ou journalisation centralisée avec rétention) avant de l'annoncer.
 - [ ] Phrase de passe des sauvegardes : qui la détient, où elle est conservée hors du serveur.
 - [ ] Dernier test de restauration réussi (page Santé du service) et procédure qui rejoue les effacements après une restauration.
 - [ ] Personnes ayant accès à la production (SSH, kubectl, base, comptes des fournisseurs), pour l'annexe II.
