@@ -195,7 +195,7 @@ test("the countdown waits while the focus stays on the bar, and runs once it lea
   expect(detail.shifts[0].registrations).toHaveLength(1)
 
   // Focus elsewhere: the window runs out and the removal is committed.
-  await page.getByLabel("Rechercher un bénévole").focus()
+  await page.locator("#reg-search").focus()
   await expect(page.getByRole("status").filter({ hasText: "1 bénévole retiré." })).toBeVisible({ timeout: 15_000 })
   detail = await (await page.request.get(`/api/admin/events/${eventId}`)).json()
   expect(detail.shifts[0].registrations).toHaveLength(0)
