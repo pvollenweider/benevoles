@@ -134,10 +134,31 @@ export default function MyRegistrationPage() {
           </p>
         </div>
 
+        {/* Calendar file of the confirmed shifts (#480): a one-off download, not a subscription. */}
+        {data.registrations.filter((r) => r.status === "active").length > 1 && (
+          <div className="bg-white rounded-xl border border-gray-200 p-4">
+            <a
+              href={`/api/public/registrations/${token}/calendar`}
+              download
+              aria-describedby="calendar-hint"
+              className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            >
+              Ajouter tout mon planning à mon calendrier (fichier .ics)
+            </a>
+            <p id="calendar-hint" className="text-xs text-gray-600 mt-1">
+              Le fichier s&apos;ouvre avec l&apos;agenda de ton téléphone ou de ton ordinateur (Google, Apple, Outlook). Seuls les créneaux confirmés sont ajoutés. Le fichier ne se met pas à jour : si un horaire change, tu recevras un email, et il faudra télécharger à nouveau le fichier.
+            </p>
+          </div>
+        )}
+
+        {/* The caveat of the one-shift calendar links (the card above only shows with several shifts). */}
+        <p id="calendar-hint-shift" className="sr-only">Fichier pour l&apos;agenda de ton téléphone ou ordinateur. Il ne se met pas à jour : si un horaire change, tu recevras un email.</p>
+
         <div className="space-y-3">
           {data.registrations.map((reg) => {
+            // Shift dates are calendar days at midnight UTC: read them in UTC, whatever the visitor's zone.
             const date = new Date(reg.shift.date).toLocaleDateString("fr-FR", {
-              weekday: "long", day: "numeric", month: "long",
+              timeZone: "UTC", weekday: "long", day: "numeric", month: "long",
             })
             const isPending = pendingCancel?.editToken === reg.editToken
             return (
@@ -156,6 +177,16 @@ export default function MyRegistrationPage() {
                       </p>
                     )}
                     <ShiftInfoList info={reg.shift} className="mt-2 text-xs text-gray-700" />
+                    {reg.status === "active" && (
+                      <a
+                        href={`/api/public/registrations/${token}/calendar?registration=${reg.id}`}
+                        download
+                        aria-describedby="calendar-hint-shift"
+                        className="mt-1 py-1 inline-block text-xs font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                      >
+                        Ajouter à mon calendrier <span aria-hidden="true">(.ics)</span><span className="sr-only"> : {reg.shift.label}, {date} (fichier .ics)</span>
+                      </a>
+                    )}
                   </div>
                   {!isPending && (
                     <button
