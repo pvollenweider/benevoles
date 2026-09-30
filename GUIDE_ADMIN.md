@@ -469,9 +469,22 @@ Depuis la page de l'événement → **QR code**, télécharger le QR code de la 
 
 ---
 
-## Emails envoyés
+## Emails
 
-**Paramètres → Emails envoyés** (`/admin/settings/notifications`) liste les emails de l'organisation des plus récents aux plus anciens : date, type (confirmation, rappel, message aux bénévoles…), destinataire et état :
+### Réglages des emails
+
+**Paramètres → Emails** (`/admin/settings/notifications`) commence par les réglages de l'organisation :
+
+- **Rappels automatiques** : cochez ou décochez le rappel J-2, le rappel J-1 et le rappel du jour pour toute l'organisation. Un événement peut en plus couper tous ses rappels dans ses propres réglages.
+- **Prévenir les administrateurs à chaque inscription** : l'email envoyé à chaque administrateur actif quand un bénévole s'inscrit depuis la page publique.
+- **Adresse de réponse** : quand un bénévole répond à un email de l'application, sa réponse arrive à cette adresse (vide : l'adresse par défaut de la plateforme). Elle figure aussi sur la page personnelle des bénévoles (« Écrire à l'organisation »).
+- **M'envoyer un email de test** : un email à votre propre adresse, avec les réglages enregistrés, pour vérifier l'expéditeur, l'adresse de réponse et le rendu (cinq par heure au plus).
+
+Les textes personnalisables restent par événement : instructions publiques, message de confirmation et message de rappel dans les réglages de l'événement.
+
+### Emails envoyés
+
+La même page liste les emails de l'organisation des plus récents aux plus anciens : date, type (confirmation, rappel, message aux bénévoles…), destinataire et état :
 
 - **En attente d'envoi** : mis en file, part dans la minute ;
 - **Nouvel essai prévu** : le premier envoi a échoué, l'application réessaie toute seule (jusqu'à six fois, à intervalles croissants), la raison du dernier échec est affichée ;

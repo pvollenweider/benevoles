@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import nodemailer from "nodemailer"
+import { prisma } from "../../prisma"
 import { env } from "@/lib/env"
 import type {
   NotificationChannelImpl,
@@ -28,6 +29,16 @@ function createTransport() {
   })
 }
 
+/** Reply-to of an organization, looked up per send; the outbox worker sends a handful per run. */
+async function orgReplyTo(organizationId: string): Promise<string | null> {
+  try {
+    const org = await prisma.organization.findUnique({ where: { id: organizationId }, select: { replyToEmail: true } })
+    return org?.replyToEmail?.trim() || null
+  } catch {
+    return null
+  }
+}
+
 export const emailChannel: NotificationChannelImpl = {
   name: "email",
 
@@ -39,7 +50,8 @@ export const emailChannel: NotificationChannelImpl = {
 
     const { subject, html, text } = render(payload)
     const from = env.EMAIL_FROM ?? "Bénévoles <notifications@benevol.app>"
-    const replyTo = env.EMAIL_REPLY_TO || undefined
+    // The organization's own reply-to when it set one (#381), else the platform's.
+    const replyTo = (payload.organizationId ? await orgReplyTo(payload.organizationId) : null) ?? env.EMAIL_REPLY_TO ?? undefined
     const transport = createTransport()
 
     if (!transport) {

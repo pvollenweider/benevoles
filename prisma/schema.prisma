@@ -22,6 +22,10 @@ model Organization {
   // IANA time zone of the organization's events (#344): shift times are local wall-clock times in
   // this zone (reminders, emails, event log, PDF export). null = deployment default (APP_TIME_ZONE).
   timeZone         String?
+  // Notification settings (#381): reply-to for volunteers' answers, and which automatic emails
+  // go out (src/lib/notification-settings.ts). Null = defaults.
+  replyToEmail         String?
+  notificationSettings Json?
   // First-run checklist hidden by an admin (#369). Progress itself is derived from the data.
   onboardingDismissedAt DateTime?
   createdAt        DateTime @default(now())
