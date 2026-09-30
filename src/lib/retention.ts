@@ -156,7 +156,8 @@ export const RETENTION: readonly RetentionEntry[] = [
   },
 ]
 
-const cell = (s: string) => s.replace(/\|/g, "\\|")
+// Markdown table cell: backslashes first, then pipes, so an escape can't be undone.
+const cell = (s: string) => s.replace(/\\/g, "\\\\").replace(/\|/g, "\\|")
 
 /** The organisers' table (GUIDE_ADMIN.md): data and retention. */
 export function retentionGuideTable(): string {
