@@ -14,8 +14,8 @@ import type { ColorKey } from "./roles"
 export type BadgeOptions = {
   /** Only volunteers with a shift on this role. */
   role?: string | null
-  /** Only this volunteer (exact full name, case-insensitive): to reprint one badge. */
-  name?: string | null
+  /** Only this volunteer, by id: to reprint one badge (a name could match two homonyms). */
+  volunteer?: string | null
   /** Print the last name under the first name (default true). */
   lastName: boolean
   /** Print the volunteer's shifts (default true). */
@@ -24,14 +24,14 @@ export type BadgeOptions = {
   color: "role" | "event" | "none"
 }
 
-export const DEFAULT_BADGE_OPTIONS: BadgeOptions = { role: null, name: null, lastName: true, shifts: true, color: "role" }
+export const DEFAULT_BADGE_OPTIONS: BadgeOptions = { role: null, volunteer: null, lastName: true, shifts: true, color: "role" }
 
 /** Reads the options from a query string, ignoring anything unexpected. */
 export function badgeOptionsFrom(params: URLSearchParams): BadgeOptions {
   const color = params.get("color")
   return {
     role: params.get("role")?.trim() || null,
-    name: params.get("name")?.trim() || null,
+    volunteer: params.get("volunteer")?.trim() || null,
     // From the hub's form a ticked box sends "1" and an unticked one nothing; "0" also hides.
     lastName: params.has("lastName") ? params.get("lastName") !== "0" : !params.has("shifts") && !params.has("color"),
     shifts: params.has("shifts") ? params.get("shifts") !== "0" : !params.has("lastName") && !params.has("color"),
@@ -70,14 +70,13 @@ const hexOf = (key: string | null | undefined): string | null =>
 const fmtDayShort = (iso: string) =>
   new Date(`${iso}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", weekday: "short", day: "numeric", month: "short" })
 
-const norm = (s: string) => s.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
 
 /** The badges to print, one per volunteer, filtered and coloured per the options. */
 export function badgesOf(d: BadgeData, o: BadgeOptions = DEFAULT_BADGE_OPTIONS): Badge[] {
   const eventColor = hexOf(d.accentColorKey)
   return volunteersOf(d.shifts)
     .filter(({ shifts }) => !o.role || shifts.some((s) => s.roleName === o.role))
-    .filter(({ volunteer }) => !o.name || norm(`${volunteer.firstName} ${volunteer.lastName}`) === norm(o.name))
+    .filter(({ volunteer }) => !o.volunteer || volunteer.id === o.volunteer)
     .map(({ volunteer, shifts }) => {
       const own = o.role ? shifts.filter((s) => s.roleName === o.role) : shifts
       const roles = [...new Set(own.map((s) => s.roleName))]
@@ -115,10 +114,20 @@ function chunk<T>(items: T[], size: number): T[][] {
   return out
 }
 
+/** Why no badge came out, in words that name what was chosen (the form is on another tab). */
+export function emptyMessage(o: BadgeOptions, chosenName: string | null): string {
+  if (o.volunteer && !chosenName) return "Ce bénévole n'a plus d'inscription active sur cet événement."
+  if (o.volunteer && o.role) return `${esc(chosenName)} n'est inscrit·e sur aucun créneau du poste « ${esc(o.role)} ». Choisissez « Tous les postes » pour imprimer son badge.`
+  return `Aucun bénévole inscrit${o.role ? ` pour le poste « ${esc(o.role)} »` : ""}.`
+}
+
 /** A printable A4 page of badges (2 × 5 per sheet, 90 × 55 mm each), with a screen header. */
 export function renderBadges(d: BadgeData, o: BadgeOptions = DEFAULT_BADGE_OPTIONS): string {
   const badges = badgesOf(d, o)
-  const scope = [o.role ? `poste « ${o.role} »` : null, o.name ? `bénévole « ${o.name} »` : null].filter(Boolean).join(", ")
+  // The chosen person, looked up across every post, so an empty result can still name them.
+  const chosen = o.volunteer ? volunteersOf(d.shifts).find((e) => e.volunteer.id === o.volunteer)?.volunteer ?? null : null
+  const chosenName = chosen ? `${chosen.firstName} ${chosen.lastName}`.trim() : null
+  const scope = [o.role ? `poste « ${o.role} »` : null, chosenName].filter(Boolean).join(", ")
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -170,9 +179,34 @@ export function renderBadges(d: BadgeData, o: BadgeOptions = DEFAULT_BADGE_OPTIO
   </header>
   <main>
     ${badges.length === 0
-      ? `<p class="empty">Aucun bénévole inscrit${scope ? ` pour ${esc(scope)}` : ""}.${o.name ? " Vérifiez l'orthographe : Prénom Nom, tel qu'inscrit." : ""}</p>`
+      ? `<p class="empty">${emptyMessage(o, chosenName)}</p>`
       : chunk(badges, BADGES_PER_SHEET).map((group, i, all) => `<ul class="sheet" role="list" aria-label="Feuille ${i + 1} sur ${all.length}">${group.map((b) => badgeHtml(b, o, d)).join("")}</ul>`).join("")}
   </main>
 </body>
 </html>`
+}
+
+/**
+ * Options of the badge reprint select: one per volunteer id, sorted by name. People sharing a name
+ * are told apart by their email; if that is still ambiguous (no email), by their first post, and
+ * as a last resort by a number, so no two options ever read the same.
+ */
+export function reprintOptions(people: { id: string; firstName: string; lastName: string; email: string | null; post?: string | null }[]): { id: string; label: string }[] {
+  const unique = [...new Map(people.map((p) => [p.id, p])).values()]
+  const nameOf = (p: (typeof unique)[number]) => `${p.firstName} ${p.lastName}`.trim()
+  const tally = (labels: string[]) => labels.reduce((m, l) => m.set(l.toLowerCase(), (m.get(l.toLowerCase()) ?? 0) + 1), new Map<string, number>())
+  let labels = unique.map(nameOf)
+  let seen = tally(labels)
+  labels = unique.map((p, i) => ((seen.get(labels[i].toLowerCase()) ?? 0) > 1 ? `${nameOf(p)} (${p.email ?? "sans email"})` : labels[i]))
+  seen = tally(labels)
+  labels = unique.map((p, i) => ((seen.get(labels[i].toLowerCase()) ?? 0) > 1 && p.post ? `${labels[i].slice(0, -1)}, ${p.post})` : labels[i]))
+  seen = tally(labels)
+  const rank = new Map<string, number>()
+  labels = labels.map((l) => {
+    if ((seen.get(l.toLowerCase()) ?? 0) < 2) return l
+    const n = (rank.get(l.toLowerCase()) ?? 0) + 1
+    rank.set(l.toLowerCase(), n)
+    return `${l} n° ${n}`
+  })
+  return unique.map((p, i) => ({ id: p.id, label: labels[i] })).sort((a, b) => a.label.localeCompare(b.label, "fr"))
 }

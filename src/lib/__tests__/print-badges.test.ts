@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest"
-import { badgeOptionsFrom, badgesOf, DEFAULT_BADGE_OPTIONS, PALETTE_HEX, renderBadges, type BadgeData } from "../print-badges"
+import { badgeOptionsFrom, badgesOf, DEFAULT_BADGE_OPTIONS, emptyMessage, PALETTE_HEX, renderBadges, reprintOptions, type BadgeData } from "../print-badges"
 import { COLOR_OPTIONS } from "../roles"
 
-const alice = { firstName: "Alice", lastName: "Martin", email: "a@x.ch", phone: null }
-const bob = { firstName: "Bob", lastName: "Durand", email: "b@x.ch", phone: null }
+const alice = { id: "v-alice", firstName: "Alice", lastName: "Martin", email: "a@x.ch", phone: null }
+const bob = { id: "v-bob", firstName: "Bob", lastName: "Durand", email: "b@x.ch", phone: null }
 const data: BadgeData = {
   eventTitle: "Fête",
   organizationName: "Org",
@@ -32,7 +32,7 @@ describe("badgesOf", () => {
     expect(bar.map((b) => b.firstName)).toEqual(["Bob", "Alice"])
     expect(bar[1].roles).toEqual(["Bar"])
     expect(badgesOf(data, { ...DEFAULT_BADGE_OPTIONS, role: "Accueil" }).map((b) => b.firstName)).toEqual(["Alice"])
-    expect(badgesOf(data, { ...DEFAULT_BADGE_OPTIONS, name: "alice martin" })).toHaveLength(1)
+    expect(badgesOf(data, { ...DEFAULT_BADGE_OPTIONS, volunteer: "v-alice" }).map((b) => b.firstName)).toEqual(["Alice"])
     expect(badgesOf(data, { ...DEFAULT_BADGE_OPTIONS, color: "event" })[0].color).toBe(PALETTE_HEX.teal)
     expect(badgesOf(data, { ...DEFAULT_BADGE_OPTIONS, color: "none" })[0].color).toBeNull()
   })
@@ -45,7 +45,7 @@ describe("badgesOf", () => {
 describe("badgeOptionsFrom", () => {
   it("reads the query, defaulting to everything shown and the role colour", () => {
     expect(badgeOptionsFrom(new URLSearchParams(""))).toEqual(DEFAULT_BADGE_OPTIONS)
-    expect(badgeOptionsFrom(new URLSearchParams("role=Bar&lastName=0&shifts=0&color=none&name=+Alice+Martin+"))).toEqual({ role: "Bar", name: "Alice Martin", lastName: false, shifts: false, color: "none" })
+    expect(badgeOptionsFrom(new URLSearchParams("role=Bar&lastName=0&shifts=0&color=none&volunteer=+v-alice+"))).toEqual({ role: "Bar", volunteer: "v-alice", lastName: false, shifts: false, color: "none" })
     expect(badgeOptionsFrom(new URLSearchParams("color=rainbow")).color).toBe("role")
     // From the form: a ticked box sends "1", an unticked one nothing.
     expect(badgeOptionsFrom(new URLSearchParams("role=&color=role&lastName=1"))).toMatchObject({ lastName: true, shifts: false })
@@ -67,9 +67,14 @@ describe("renderBadges", () => {
     expect(html).toContain("2 badges")
   })
 
-  it("says when nobody matches, with a spelling hint for a single name", () => {
-    expect(renderBadges(data, { ...DEFAULT_BADGE_OPTIONS, role: "Sécurité" })).toContain("Aucun bénévole inscrit pour poste « Sécurité ».")
-    expect(renderBadges(data, { ...DEFAULT_BADGE_OPTIONS, name: "Alicia" })).toContain("Vérifiez l'orthographe")
+  it("says when nobody matches, naming the post and the person", () => {
+    expect(renderBadges(data, { ...DEFAULT_BADGE_OPTIONS, role: "Sécurité" })).toContain("Aucun bénévole inscrit pour le poste « Sécurité ».")
+    expect(renderBadges(data, { ...DEFAULT_BADGE_OPTIONS, volunteer: "v-gone" })).toContain("Ce bénévole n'a plus d'inscription active sur cet événement.")
+    // Bob is on Bar only: choosing him with the Accueil post names both and says what to do.
+    const html = renderBadges(data, { ...DEFAULT_BADGE_OPTIONS, volunteer: "v-bob", role: "Accueil" })
+    expect(html).toContain("Bob Durand n'est inscrit·e sur aucun créneau du poste « Accueil ». Choisissez « Tous les postes » pour imprimer son badge.")
+    expect(html).toContain("poste « Accueil », Bob Durand")
+    expect(emptyMessage({ ...DEFAULT_BADGE_OPTIONS, role: "Bar" }, null)).toBe("Aucun bénévole inscrit pour le poste « Bar ».")
   })
 
   it("splits the badges into sheets of ten, each its own list", () => {
@@ -78,5 +83,33 @@ describe("renderBadges", () => {
     expect(html.match(/<ul class="sheet" role="list"/g)).toHaveLength(3)
     expect(html).toContain('aria-label="Feuille 3 sur 3"')
     expect(html.match(/<li class="badge">/g)).toHaveLength(23)
+  })
+})
+
+// Two volunteers with the same name and no email are two people (audit #190/#400).
+describe("homonyms", () => {
+  const lea1 = { id: "v1", firstName: "Léa", lastName: "Roy", email: null, phone: null }
+  const lea2 = { id: "v2", firstName: "Léa", lastName: "Roy", email: null, phone: null }
+  const twins: BadgeData = { ...data, shifts: [
+    { ...data.shifts[0], id: "s1", registrations: [lea1] },
+    { ...data.shifts[1], id: "s2", registrations: [lea2] },
+  ] }
+
+  it("prints one badge each, with their own shifts", () => {
+    const badges = badgesOf(twins)
+    expect(badges).toHaveLength(2)
+    expect(badges.map((b) => b.roles).sort()).toEqual([["Accueil"], ["Bar"]])
+    expect(badgesOf(twins, { ...DEFAULT_BADGE_OPTIONS, volunteer: "v2" })[0].roles).toEqual(["Accueil"])
+  })
+
+  it("tells them apart in the reprint list", () => {
+    expect(reprintOptions([{ ...lea1, post: "Bar" }, { ...lea2, post: "Accueil" }, { ...lea1, post: "Bar" }, { id: "v3", firstName: "Bob", lastName: "Durand", email: "b@x.ch" }])).toEqual([
+      { id: "v3", label: "Bob Durand" },
+      { id: "v2", label: "Léa Roy (sans email, Accueil)" },
+      { id: "v1", label: "Léa Roy (sans email, Bar)" },
+    ])
+    // Same name, no email, same post: a number, so no two options read the same.
+    const labels = reprintOptions([{ ...lea1, post: "Bar" }, { ...lea2, post: "Bar" }]).map((o) => o.label)
+    expect(labels).toEqual(["Léa Roy (sans email, Bar) n° 1", "Léa Roy (sans email, Bar) n° 2"])
   })
 })
