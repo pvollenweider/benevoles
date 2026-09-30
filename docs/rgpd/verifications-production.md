@@ -6,7 +6,7 @@ Ce que le dépôt ne permet pas d'établir. Pour chaque point : la preuve à con
 
 - [x] Fournisseur et entité : OVH SAS, Roubaix, éditeur de Kimsufi (adresse du serveur, whois ; mentions légales Kimsufi). Vérifié le 2026-09-30. Reste : entité du contrat dans l'espace client.
 - [x] Centre de données : **RBX3**, Roubaix (France), lu dans l'espace client le 2026-09-30. Accès à distance possible de filiales hors UE sous clauses types (DPA § 6.2) : noté dans [sous-traitants.md](sous-traitants.md).
-- [x] DPA : « Annexe traitement de données à caractère personnel » acceptée le 2026-04-02 (espace client, liste des contrats), avec les conditions Serveurs dédiés. Reste : relever la version du document accepté.
+- [x] DPA : « Annexe traitement de données à caractère personnel » acceptée le 2026-04-02 (espace client, liste des contrats), avec les conditions Serveurs dédiés. Version du 3 octobre 2025 (clauses résumées dans [sous-traitants.md](sous-traitants.md)). Restent : courrier d'instructions écrites (§ 8.1), sort des disques remplacés, examen de la clause d'hébergeur LCEN.
 
 ## Envoi des emails (SMTP)
 
