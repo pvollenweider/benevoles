@@ -51,6 +51,7 @@ export default function DayTimeline({
   onToggle,
   locked = false,
   describedBy,
+  limitReachedRoles,
 }: {
   shifts: TimelineShift[]
   shows: Show[]
@@ -62,6 +63,8 @@ export default function DayTimeline({
   locked?: boolean
   /** Id of the text explaining why, read with the schedule. */
   describedBy?: string
+  /** Roles whose limit per person is reached (#466) → their limit, said on the other bars. */
+  limitReachedRoles?: Map<string, number>
 }) {
   const visible = shifts.filter((s) => s.status !== "cancelled")
   if (visible.length === 0) return null
@@ -204,13 +207,15 @@ export default function DayTimeline({
                   // all that matters).
                   const spotsText       = unavail ? null : `${shift.registered}/${shift.capacity}`
                   const spotsSuffix     = spotsText ? ` (${shift.spotsLeft} place${shift.spotsLeft > 1 ? "s" : ""} libre${shift.spotsLeft > 1 ? "s" : ""} sur ${shift.capacity})` : ""
+                  const limitMax        = !isSelected && !isRegistered ? limitReachedRoles?.get(shift.roleName) : undefined
+                  const limitSuffix     = limitMax !== undefined ? ` (limite de ${limitMax} par personne atteinte)` : ""
                   const ariaLabel       = locked && !isSelected ? `${roleLabel} ${timeSpoken}${minAgeSuffix}${spotsSuffix}` : (isWaitlistable
                     ? (isSelected
                       ? `Retirer de la file d'attente — ${roleLabel} ${timeSpoken}`
                       : `Rejoindre la file d'attente — ${roleLabel} ${timeSpoken}`)
                     : (isSelected
                       ? `Désélectionner — ${roleLabel} ${timeSpoken}`
-                      : `Sélectionner — ${roleLabel} ${timeSpoken}`)) + minAgeSuffix + spotsSuffix
+                      : `Sélectionner — ${roleLabel} ${timeSpoken}`)) + minAgeSuffix + spotsSuffix + limitSuffix
                   const subLabelText    = isWaitlistable && !isSelected
                     ? ["Complet · file d'attente", hasMinAge ? `${shift.minAge}+` : null].filter(Boolean).join(" · ")
                     : [hasLabel ? shift.label : null, hasMinAge ? `${shift.minAge}+` : null].filter(Boolean).join(" · ")

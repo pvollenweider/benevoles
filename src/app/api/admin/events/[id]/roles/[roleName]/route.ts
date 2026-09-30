@@ -20,7 +20,9 @@ const updateSchema = z.object({
   colorKey: z.enum(COLOR_KEYS).nullable().optional(),
   /** Applied to every live shift of the role (#398), never below the people confirmed on a shift. */
   capacity: z.number().int().min(1).optional(),
-}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined, { message: "Rien à modifier." })
+  /** Shifts per volunteer on this role (#466); null removes the limit. */
+  maxPerVolunteer: z.number().int().min(1).max(100).nullable().optional(),
+}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.maxPerVolunteer !== undefined, { message: "Rien à modifier." })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string; roleName: string }> }) {
   const guard = await requireOrgSession()
@@ -35,7 +37,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (!parsed.success) {
     return NextResponse.json({ error: "Données invalides." }, { status: 400 })
   }
-  const { name: newName, colorKey, capacity } = parsed.data
+  const { name: newName, colorKey, capacity, maxPerVolunteer } = parsed.data
 
   const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
@@ -44,7 +46,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // on top of that, matching reorder-roles/route.ts's own pattern for the same raw-prisma calls.
   const shifts = await db.shift.findMany({
     where: { eventId: id, roleName: decodedRole, event: { organizationId } },
-    select: { id: true, colorKey: true, capacity: true, status: true, _count: { select: { registrations: { where: { status: "active" } } } } },
+    select: { id: true, colorKey: true, capacity: true, status: true, maxPerVolunteer: true, _count: { select: { registrations: { where: { status: "active" } } } } },
   })
   if (shifts.length === 0) return NextResponse.json({ error: "Poste introuvable" }, { status: 404 })
 
@@ -84,6 +86,21 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       await logEvent({
         eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
         changes: { colorKey: { from: s.colorKey, to: colorKey } },
+      })
+    }
+  }
+
+  if (maxPerVolunteer !== undefined) {
+    // Every shift of the role, cancelled ones too, so the role keeps one value (#466). Registrations
+    // already above a new limit stay: the limit applies to the next sign-ups.
+    await db.shift.updateMany({
+      where: { eventId: id, roleName: newName ?? decodedRole, event: { organizationId } },
+      data: { maxPerVolunteer },
+    })
+    for (const s of shifts.filter((sh) => sh.maxPerVolunteer !== maxPerVolunteer)) {
+      await logEvent({
+        eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
+        changes: { maxPerVolunteer: { from: s.maxPerVolunteer, to: maxPerVolunteer } },
       })
     }
   }

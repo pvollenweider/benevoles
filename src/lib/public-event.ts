@@ -51,6 +51,7 @@ export function toPublicEvent(event: PublicEventRow) {
     waitlistEnabled: shift.waitlistEnabled,
     minAge: shift.minAge,
     colorKey: shift.colorKey,
+    maxPerVolunteer: shift.maxPerVolunteer,
     }
   })
 

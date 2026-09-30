@@ -34,7 +34,7 @@ vi.mock("@/lib/prisma", () => {
   const tx = {
     $queryRaw: vi.fn(),
     registration,
-    shift: { findUnique: m.shiftFindUnique },
+    shift: { findUnique: m.shiftFindUnique, findMany: vi.fn().mockResolvedValue([]) },
     volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },
   }
   m.transaction.mockImplementation(async (fn: (t: typeof tx) => unknown) => fn(tx))

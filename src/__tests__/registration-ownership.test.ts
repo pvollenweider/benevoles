@@ -25,6 +25,7 @@ const m = vi.hoisted(() => ({
 vi.mock("@/lib/prisma", () => {
   const tx = {
     $queryRaw: vi.fn(),
+    shift: { findMany: vi.fn().mockResolvedValue([]) }, // no role limit (#466)
     // A new volunteer is created inside the registration transaction (#309).
     volunteer: { createMany: m.txVolCreateMany, findFirstOrThrow: m.txVolFindFirstOrThrow },
     registration: {

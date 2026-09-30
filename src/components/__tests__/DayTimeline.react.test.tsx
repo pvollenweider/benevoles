@@ -46,4 +46,11 @@ describe("DayTimeline", () => {
     fireEvent.click(bar)
     expect(onToggle).toHaveBeenCalledWith("a", "open")
   })
+
+  it("says on a bar that the role's limit per person is reached (#466), without disabling it", () => {
+    render(<DayTimeline shifts={[shift("a"), shift("b", { roleName: "Loge", label: "Loge" })]} shows={[]} selected={new Set()} onToggle={() => {}} limitReachedRoles={new Map([["Loge", 2]])} />)
+    const loge = screen.getByRole("button", { name: /Loge 18h–20h.*\(limite de 2 par personne atteinte\)$/ })
+    expect(loge).toBeEnabled()
+    expect(screen.getByRole("button", { name: /^Sélectionner — Bar/ }).getAttribute("aria-label")).not.toMatch(/limite/)
+  })
 })

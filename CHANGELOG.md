@@ -27,6 +27,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 #### Créneaux
 
+- **Limite de créneaux par personne sur un poste** : dans **Gérer les postes**, un poste peut limiter le nombre de ses créneaux qu'une même personne prend (confirmés et liste d'attente comptés). La page publique le dit avant l'envoi ; le serveur le vérifie sous verrou, même pour deux inscriptions simultanées. L'administration peut dépasser la limite en ajoutant quelqu'un à la main, après un avertissement. Copiée avec l'événement.
 - **Série de créneaux** : dans les créneaux d'un événement, **Créer une série** crée d'un coup tous les créneaux qui se suivent sur une plage horaire (par exemple une buvette de 10 h à 22 h par créneaux de deux heures), avec un aperçu avant création. Chaque créneau reste ensuite modifiable séparément.
 - **Modifications rapides depuis le planning** : la fenêtre d'un créneau permet de le dupliquer (copie juste après, mêmes réglages), de décaler ses horaires (les inscrits sont prévenus), de fermer ou rouvrir ses inscriptions et d'appliquer un nombre de places à tous les créneaux du poste, jamais en dessous des inscrits déjà confirmés.
 - **Infos pratiques par créneau** : un créneau peut porter un lieu de rendez-vous, une personne de contact (nom, téléphone) et une consigne courte. Le lieu et la consigne sont visibles sur la page d'inscription ; la personne de contact et son téléphone ne sont envoyés qu'aux inscrits (email de confirmation, rappels, page personnelle).
