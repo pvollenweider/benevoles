@@ -6,9 +6,11 @@ node_modules
 !.env.example
 docker-compose*.yml
 *.md
-# GUIDE_ADMIN.md / GUIDE_BENEVOLE.md are read at build time (next build prerenders /doc/admin
-# and /doc/benevole, both fs.readFileSync these at the repo root) and at runtime — excluded by
-# the *.md rule above like every other doc file, which broke the production build (ENOENT).
+# The sources of the public content pages (PUBLIC_PAGES in src/lib/doc-pages.ts) are read at
+# build time (next build prerenders /fonctionnalites, /doc/admin, /doc/benevole) and at runtime:
+# each must be listed here, or the *.md rule above breaks the production build (ENOENT).
+# Checked by src/lib/__tests__/docker-public-sources.test.ts.
+!FEATURES.md
 !GUIDE_ADMIN.md
 !GUIDE_BENEVOLE.md
 .DS_Store
