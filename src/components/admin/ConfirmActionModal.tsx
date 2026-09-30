@@ -7,20 +7,22 @@ import { useId, useRef } from "react"
 import ModalShell from "@/components/admin/ModalShell"
 import type { ActionRecap } from "@/lib/action-recap"
 
-type Props = { recap: ActionRecap; busy: boolean; onConfirm: () => void; onCancel: () => void }
+type Props = { recap: ActionRecap; busy: boolean; onConfirm: () => void; onCancel: () => void; /** Failure of the last attempt: shown in the dialog, which stays open. */ error?: string | null }
 
 /**
  * Confirmation of a sensitive action (#379): the recap of what is about to happen (people,
  * emails, consequences, logging), Cancel focused first, Confirm styled by the stakes.
  */
-export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel }: Props) {
+export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, error }: Props) {
   const id = useId()
   const cancelRef = useRef<HTMLButtonElement>(null)
   return (
-    <ModalShell title={recap.title} onClose={() => { if (!busy) onCancel() }} initialFocusRef={cancelRef} describedBy={`${id}-recap`} closeOnBackdrop={false}>
+    <ModalShell title={recap.title} onClose={() => { if (!busy) onCancel() }} initialFocusRef={cancelRef} describedBy={`${id}-recap`} closeOnBackdrop={false} role={recap.danger ? "alertdialog" : "dialog"}>
       <ul id={`${id}-recap`} className="list-disc pl-5 space-y-1 text-sm text-gray-800">
         {recap.lines.map((l) => <li key={l}>{l}</li>)}
       </ul>
+      {/* Always mounted so that the failure is voiced when it appears. */}
+      <p role="alert" className={error ? "mt-3 text-sm text-red-800 bg-red-50 border border-red-200 rounded-xl px-3 py-2" : "sr-only"}>{error ?? ""}</p>
       <div className="flex flex-wrap justify-end gap-3 pt-4">
         <button
           ref={cancelRef}
@@ -40,7 +42,7 @@ export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel }:
             recap.danger ? "bg-red-600 hover:bg-red-700 focus-visible:outline-red-700" : "bg-blue-600 hover:bg-blue-700 focus-visible:outline-blue-600"
           } ${busy ? "cursor-wait" : ""}`}
         >
-          {busy ? "En cours…" : recap.confirmLabel}
+          {busy ? "En cours…" : error ? "Réessayer" : recap.confirmLabel}
         </button>
         {/* The label change of the focused button isn't reliably voiced: say it once, politely. */}
         <span role="status" className="sr-only">{busy ? "Action en cours…" : ""}</span>

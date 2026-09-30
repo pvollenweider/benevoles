@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, logLinkFor, remindInvitedRecap, removeLeaderRecap } from "../action-recap"
+import { bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap } from "../action-recap"
 
 // Confirmation before sensitive actions (#379).
 describe("action recaps", () => {
@@ -26,6 +26,18 @@ describe("action recaps", () => {
   it("member deactivation and leader removal", () => {
     expect(deactivateMemberRecap("Zoé Roy")).toMatchObject({ title: "Désactiver Zoé Roy ?", danger: true, confirmLabel: "Désactiver" })
     expect(removeLeaderRecap("Léa", "Bar").title).toBe("Retirer Léa des responsables de « Bar » ?")
+  })
+
+  it("formats the moment of a shift", () => {
+    expect(shiftWhen("2026-07-04", "18:00", "23:00")).toBe("Samedi 4 juillet, 18:00–23:00")
+  })
+
+  it("shift and role deletion", () => {
+    const s = deleteShiftRecap({ name: "Bar · Bar soir", when: "Samedi 4 juillet, 18:00–23:00", registered: 2 })
+    expect(s.title).toBe("Supprimer le créneau « Bar · Bar soir » ?")
+    expect(s.lines[1]).toBe("2 bénévoles inscrits : leurs inscriptions sont annulées et ils sont prévenus par email.")
+    expect(deleteShiftRecap({ name: "Bar", when: "x", registered: 0 }).lines[1]).toBe("Personne n'est inscrit : aucun email.")
+    expect(deleteRoleRecap({ role: "Bar", shifts: 3, registered: 1 }).lines[1]).toBe("1 bénévole inscrit : son inscription est annulée et il est prévenu par email.")
   })
 
   it("links the log filtered from the action's day", () => {

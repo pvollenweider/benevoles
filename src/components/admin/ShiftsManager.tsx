@@ -4,6 +4,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useId, useState, useRef } from "react"
+import { announce } from "@/lib/announce"
+import { deleteRoleRecap, deleteShiftRecap, shiftWhen, type ActionRecap } from "@/lib/action-recap"
+import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
+import { requestJson } from "@/lib/use-submit"
 import { flushSync } from "react-dom"
 import { KNOWN_ROLES, COLOR_OPTIONS, getRoleAccent } from "@/lib/roles"
 import { fmtRange, resolveNewShiftDisplayOrder, isCompleteTime, addMinutes } from "@/lib/gantt-utils"
@@ -18,7 +22,6 @@ import {
   moveItem,
   normalizeTime,
   renameRole,
-  roleDeletionWarning,
   roleOrder,
   sortShifts,
 } from "@/lib/shifts-admin"
@@ -73,6 +76,12 @@ export default function ShiftsManager({
   const [roleActionBusy, setRoleActionBusy]   = useState<string | null>(null)
   const [roleAnnouncement, setRoleAnnouncement] = useState("")
   const [colorPickerRole, setColorPickerRole] = useState<string | null>(null)
+  // A deletion waits for its confirmation (#379): the recap of what it does, then run.
+  const [pendingDelete, setPendingDelete] = useState<{ recap: ActionRecap; run: () => Promise<void> } | null>(null)
+  const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
+  // The row whose « Supprimer » opened the modal is gone once the deletion is done: park the focus on the outcome.
+  const outcomeRef = useRef<HTMLDivElement>(null)
 
   function setField(k: string, v: string | number | boolean) {
     setForm(f => ({ ...f, [k]: v }))
@@ -109,14 +118,14 @@ export default function ShiftsManager({
       ? { ...form, label, capacity: Number(form.capacity), minAge, displayOrder }
       : { ...form, label, eventId, capacity: Number(form.capacity), minAge, displayOrder }
 
-    const res  = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
-    const data = await res.json()
+    const outcome = await requestJson<RawShift & { date?: string }>(() => fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }), "Erreur lors de la sauvegarde.")
     setSaving(false)
 
-    if (!res.ok) {
-      setError(typeof data?.error === "string" ? data.error : "Erreur lors de la sauvegarde.")
+    if (!outcome.ok) {
+      setError(outcome.error)
       return
     }
+    const data = outcome.data
 
     if (editingId) {
       setShifts(prev => prev.map(s =>
@@ -146,7 +155,7 @@ export default function ShiftsManager({
 
   function handleSeriesCreated(created: AdminShift[]) {
     setShifts(prev => [...prev, ...created.map(s => ({ ...s, description: s.description ?? null, internalNotes: s.internalNotes ?? null }))])
-    setRoleAnnouncement(`${created.length} créneau${created.length > 1 ? "x" : ""} créé${created.length > 1 ? "s" : ""}.`)
+    announce(setRoleAnnouncement, `${created.length} créneau${created.length > 1 ? "x" : ""} créé${created.length > 1 ? "s" : ""}.`)
     closeSeries()
   }
 
@@ -169,13 +178,26 @@ export default function ShiftsManager({
     setShifts(prev => prev.filter(s => s.id !== id))
   }
 
-  async function handleDeleteShift(id: string) {
-    if (!confirm("Supprimer ce créneau ?")) return
-    const res = await fetch(`/api/admin/shifts/${id}`, { method: "DELETE" })
-    if (!res.ok) return
-    const data = await res.json().catch(() => ({}))
-    handleDeleted(id)
-    if (data?.unpublished) setRoleAnnouncement(UNPUBLISHED_NOTICE)
+  function handleDeleteShift(id: string) {
+    const shift = shifts.find((s) => s.id === id)
+    if (!shift) return
+    const name = shift.label && shift.label !== shift.roleName ? `${shift.roleName} · ${shift.label}` : shift.roleName
+    setDeleteError(null)
+    setPendingDelete({
+      recap: deleteShiftRecap({ name, when: shiftWhen(shift.date, shift.startTime, shift.endTime), registered: shift.registrationCount }),
+      run: () => runDeleteShift(id),
+    })
+  }
+
+  async function runDeleteShift(id: string) {
+    setDeleting(true)
+    setDeleteError(null)
+    const outcome = await requestJson<{ unpublished?: boolean }>(() => fetch(`/api/admin/shifts/${id}`, { method: "DELETE" }), "Erreur lors de la suppression.")
+    setDeleting(false)
+    if (!outcome.ok) { setDeleteError(outcome.error); return }
+    flushSync(() => { setPendingDelete(null); handleDeleted(id) })
+    announce(setRoleAnnouncement, outcome.data?.unpublished ? UNPUBLISHED_NOTICE : "Créneau supprimé.")
+    outcomeRef.current?.focus()
   }
 
   // ── Role ordering ─────────────────────────────────────────────────────────
@@ -194,15 +216,19 @@ export default function ShiftsManager({
   }
 
   async function saveRoleOrder() {
+    if (savingOrder) return
     setSavingOrder(true)
-    await fetch(`/api/admin/events/${eventId}/reorder-roles`, {
+    setRoleActionError(null)
+    const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/reorder-roles`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ roleOrder: reorderRoles }),
-    })
-    setShifts(prev => applyRoleOrder(prev, reorderRoles))
+    }), "L'ordre n'a pas pu être enregistré.")
     setSavingOrder(false)
+    if (!outcome.ok) { setRoleActionError(outcome.error); return }
+    setShifts(prev => applyRoleOrder(prev, reorderRoles))
     setShowReorder(false)
+    announce(setRoleAnnouncement, "Ordre des postes enregistré.")
   }
 
   function startRenameRole(role: string) {
@@ -216,38 +242,49 @@ export default function ShiftsManager({
     if (!newName || newName === oldName) { setRenamingRole(null); return }
     setRoleActionError(null)
     setRoleActionBusy(oldName)
-    const res = await fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(oldName)}`, {
+    const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(oldName)}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: newName }),
-    })
-    const data = await res.json()
+    }), "Erreur lors du renommage.")
     setRoleActionBusy(null)
-    if (!res.ok) {
-      setRoleActionError(typeof data?.error === "string" ? data.error : "Erreur lors du renommage.")
+    if (!outcome.ok) {
+      setRoleActionError(outcome.error)
       return
     }
     setShifts(prev => renameRole(prev, oldName, newName))
     setReorderRoles(prev => prev.map(r => r === oldName ? newName : r))
     setRenamingRole(null)
-    setRoleAnnouncement(`Poste renommé « ${oldName} » → « ${newName} ».`)
+    announce(setRoleAnnouncement, `Poste renommé « ${oldName} » → « ${newName} ».`)
   }
 
-  async function handleDeleteRole(role: string) {
-    if (!confirm(roleDeletionWarning(shifts, role))) return
+  function handleDeleteRole(role: string) {
+    const own = shifts.filter((s) => s.roleName === role && s.status !== "cancelled")
+    setDeleteError(null)
+    setPendingDelete({
+      recap: deleteRoleRecap({ role, shifts: own.length, registered: own.reduce((sum, s) => sum + s.registrationCount, 0) }),
+      run: () => runDeleteRole(role),
+    })
+  }
 
+  async function runDeleteRole(role: string) {
+    setDeleting(true)
     setRoleActionError(null)
     setRoleActionBusy(role)
-    const res = await fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(role)}`, { method: "DELETE" })
-    const data = await res.json()
+    const outcome = await requestJson<{ unpublished?: boolean }>(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(role)}`, { method: "DELETE" }), "Erreur lors de la suppression.")
     setRoleActionBusy(null)
-    if (!res.ok) {
-      setRoleActionError(typeof data?.error === "string" ? data.error : "Erreur lors de la suppression.")
+    setDeleting(false)
+    if (!outcome.ok) {
+      setDeleteError(outcome.error)
       return
     }
-    setShifts(prev => prev.filter(s => s.roleName !== role))
-    setReorderRoles(prev => prev.filter(r => r !== role))
-    setRoleAnnouncement(data?.unpublished ? `Poste « ${role} » supprimé. ${UNPUBLISHED_NOTICE}` : `Poste « ${role} » supprimé.`)
+    flushSync(() => {
+      setPendingDelete(null)
+      setShifts(prev => prev.filter(s => s.roleName !== role))
+      setReorderRoles(prev => prev.filter(r => r !== role))
+    })
+    announce(setRoleAnnouncement, outcome.data?.unpublished ? `Poste « ${role} » supprimé. ${UNPUBLISHED_NOTICE}` : `Poste « ${role} » supprimé.`)
+    outcomeRef.current?.focus()
   }
 
   function roleColorOf(role: string): string | null {
@@ -258,20 +295,19 @@ export default function ShiftsManager({
     setColorPickerRole(null)
     setRoleActionError(null)
     setRoleActionBusy(role)
-    const res = await fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(role)}`, {
+    const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(role)}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ colorKey }),
-    })
-    const data = await res.json()
+    }), "Erreur lors du changement de couleur.")
     setRoleActionBusy(null)
-    if (!res.ok) {
-      setRoleActionError(typeof data?.error === "string" ? data.error : "Erreur lors du changement de couleur.")
+    if (!outcome.ok) {
+      setRoleActionError(outcome.error)
       return
     }
     setShifts(prev => prev.map(s => s.roleName === role ? { ...s, colorKey } : s))
     const label = COLOR_OPTIONS.find(c => c.key === colorKey)?.label ?? "automatique"
-    setRoleAnnouncement(`Couleur du poste « ${role} » : ${label}.`)
+    announce(setRoleAnnouncement, `Couleur du poste « ${role} » : ${label}.`)
   }
 
   // Group by day (all dates, not just those with shifts)
@@ -340,8 +376,11 @@ export default function ShiftsManager({
           </button>
         </div>
       </div>
+      {pendingDelete && (
+        <ConfirmActionModal recap={pendingDelete.recap} busy={deleting} error={deleteError} onConfirm={() => void pendingDelete.run()} onCancel={() => setPendingDelete(null)} />
+      )}
       {/* Announces role actions and series creation, whether or not the roles panel is open. */}
-      <div role="status" aria-live="polite" className={roleAnnouncement.includes(UNPUBLISHED_NOTICE) ? "text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2" : "sr-only"}>{roleAnnouncement}</div>
+      <div ref={outcomeRef} tabIndex={-1} role="status" className={roleAnnouncement.includes(UNPUBLISHED_NOTICE) ? "text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2 focus:outline-none" : "sr-only"}>{roleAnnouncement}</div>
 
       {showSeries && (
         <ShiftSeriesForm

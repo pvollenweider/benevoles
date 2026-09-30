@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useEffect, useId, useRef, useState } from "react"
+import { requestJson } from "@/lib/use-submit"
 import { KNOWN_ROLES } from "@/lib/roles"
 import { fmtRange, resolveNewShiftDisplayOrder } from "@/lib/gantt-utils"
 import { fmtLongDate as fmtDate, normalizeTime } from "@/lib/shifts-admin"
@@ -58,10 +59,10 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
 
   async function handleCreate() {
     setAttempted(true)
-    if (!complete || problem || slots.length === 0) return
+    if (!complete || problem || slots.length === 0 || saving) return
     setSaving(true)
     setError(null)
-    const res = await fetch("/api/admin/shifts/series", {
+    const outcome = await requestJson<(AdminShift & { date: string })[]>(() => fetch("/api/admin/shifts/series", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -69,14 +70,13 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
         slotMinutes, breakMinutes, capacity: Number(capacity), waitlistEnabled,
         displayOrder: resolveNewShiftDisplayOrder(existingShifts, roleName.trim(), 0),
       }),
-    })
-    const data = await res.json()
+    }), "Erreur lors de la création.")
     setSaving(false)
-    if (!res.ok) {
-      setError(typeof data?.error === "string" ? data.error : "Erreur lors de la création.")
+    if (!outcome.ok) {
+      setError(outcome.error)
       return
     }
-    onCreated((data as (AdminShift & { date: string })[]).map((s) => ({ ...s, date: s.date.split("T")[0], registrationCount: 0 })))
+    onCreated(outcome.data.map((s) => ({ ...s, date: s.date.split("T")[0], registrationCount: 0 })))
   }
 
   const missingNames = [missing.roleName && "poste", missing.date && "date", missing.startTime && "début", missing.endTime && "fin"].filter(Boolean)
@@ -213,8 +213,8 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
 
       <div className="flex gap-3">
         <button
-          type="button" onClick={handleCreate} disabled={saving} aria-describedby={summaryId}
-          className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          type="button" onClick={handleCreate} aria-disabled={saving || undefined} aria-describedby={summaryId}
+          className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:cursor-wait focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         >
           {saving ? "Création…" : slots.length > 0 ? `Créer ${slots.length} créneau${slots.length > 1 ? "x" : ""}` : "Créer les créneaux"}
         </button>

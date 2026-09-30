@@ -219,7 +219,7 @@ export default function ShiftPopover({
         </Link>
         <button
           type="button"
-          onClick={() => { if (confirm("Supprimer ce créneau ?")) onDelete(shift.id) }}
+          onClick={() => onDelete(shift.id)}
           className={`${action} col-span-2 text-red-700 hover:bg-red-50`}
         >
           Supprimer le créneau

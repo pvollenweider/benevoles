@@ -17,6 +17,8 @@ type Props = {
   closeOnBackdrop?: boolean
   /** Id of an element inside the dialog that describes it (aria-describedby). */
   describedBy?: string
+  /** "alertdialog" for a confirmation that interrupts the task (its description is read on open). */
+  role?: "dialog" | "alertdialog"
 }
 
 const FOCUSABLE =
@@ -34,6 +36,7 @@ export default function ModalShell({
   children,
   panelClassName = "max-w-lg",
   initialFocusRef,
+  role = "dialog",
   closeOnBackdrop = true,
   describedBy,
 }: Props) {
@@ -102,7 +105,7 @@ export default function ModalShell({
     >
       <div
         ref={dialogRef}
-        role="dialog"
+        role={role}
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={describedBy}

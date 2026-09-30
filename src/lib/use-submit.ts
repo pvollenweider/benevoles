@@ -25,6 +25,20 @@ export async function errorOf(res: Response, fallback = GENERIC_ERROR): Promise<
   return typeof data?.error === "string" && data.error.trim() ? data.error : fallback
 }
 
+/**
+ * One request outside the hook, same outcome shape: for components that fire several
+ * independent requests (timeline drags, per-role actions) and keep their own busy flags.
+ */
+export async function requestJson<T = unknown>(request: () => Promise<Response>, fallback = GENERIC_ERROR): Promise<SubmitOutcome<T>> {
+  try {
+    const res = await request()
+    if (!res.ok) return { ok: false, error: await errorOf(res, fallback), status: res.status }
+    return { ok: true, data: (await res.json().catch(() => ({}))) as T, status: res.status }
+  } catch {
+    return { ok: false, error: NETWORK_ERROR, status: null }
+  }
+}
+
 export function useSubmit() {
   const busyRef = useRef(false)
   const [busy, setBusy] = useState(false)
