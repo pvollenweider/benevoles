@@ -8,6 +8,7 @@
  */
 
 import { env } from "./env"
+import { parseNotificationSettings } from "./notification-settings"
 import { prisma } from "./prisma"
 import { sendNotification, type Send } from "./notifications"
 import type { ShiftInfo } from "./shift-info"
@@ -76,6 +77,10 @@ export async function sendAdminNotification(data: {
   shifts: { label: string; roleName: string; date: string; startTime: string; endTime: string }[]
 }, send: Send = sendNotification) {
   const { organizationId, ...templateData } = data
+
+  // Switched off in the organization's notification settings (#381): nothing to send.
+  const org = await prisma.organization.findUnique({ where: { id: organizationId }, select: { notificationSettings: true } })
+  if (!parseNotificationSettings(org?.notificationSettings).signupAdminEmail) return
 
   const orgAdmins = await prisma.adminUser.findMany({
     where: { organizationId, isActive: true },

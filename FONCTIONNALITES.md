@@ -113,6 +113,11 @@ Liste exhaustive des fonctionnalités de l'application.
 - Compteurs : événements (publiés, à venir), bénévoles inscrits (et bénévoles uniques), taux de remplissage global
 - Répartition des membres : total, avec email, sans email (ne peuvent pas recevoir d'invitations)
 
+### Réglages des emails (`/admin/settings/notifications`, #381)
+
+- `Organization.replyToEmail` et `Organization.notificationSettings` (JSON validé par `src/lib/notification-settings.ts`, défauts quand absent) ; `GET`/`PATCH /api/admin/settings/notifications` (patch partiel, journalisé `organization.notifications_updated`) ; `POST …/notifications/test` (email `targeted_message` à l'admin connecté, 5 par heure et par organisation)
+- Effets : le cron des rappels ignore les fenêtres décochées ; `sendAdminNotification` se tait si l'email d'inscription est décoché ; le canal email met le reply-to de l'organisation quand la notification porte son `organizationId` ; la page personnelle affiche cette adresse comme contact
+
 ### Emails envoyés (`/admin/settings/notifications`)
 
 - Liste des 200 dernières lignes de `NotificationOutbox` de l'organisation (colonne `organizationId`, #382, posée à l'enqueue par chaque route ; sans elle, la ligne n'apparaît nulle part), payload déchiffré côté serveur pour n'afficher que le type et le destinataire ; états dérivés : en attente, nouvel essai (`attempts` > 0), envoyé, échec définitif ; raison du dernier échec ; `POST /api/admin/settings/notifications/[id]/retry` remet une ligne en échec de l'organisation en file (`attempts` 0, journalisé `notification.retried`), 404 sinon ; test d'isolation cross-tenant

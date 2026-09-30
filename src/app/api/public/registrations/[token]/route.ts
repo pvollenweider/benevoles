@@ -25,7 +25,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     where: { ...registrationToken.where(token), status: { in: LIVE } },
     include: {
       volunteer: true,
-      event: { select: { id: true, title: true, slug: true, confirmationMessage: true, organization: { select: { slug: true, timeZone: true } } } },
+      event: { select: { id: true, title: true, slug: true, confirmationMessage: true, organization: { select: { slug: true, timeZone: true, replyToEmail: true } } } },
     },
   })
 
@@ -54,7 +54,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     timeZone: orgTimeZone(registration.event.organization),
     // The newest email carrying the link, across the volunteer's registrations on this event (#376).
     linkEmailedAt: allRegistrations.reduce<Date | null>((m, r) => (r.linkEmailedAt && (!m || r.linkEmailedAt > m) ? r.linkEmailedAt : m), null),
-    contactEmail: process.env.EMAIL_REPLY_TO || null,
+    contactEmail: registration.event.organization.replyToEmail || process.env.EMAIL_REPLY_TO || null,
     volunteer: {
       firstName: registration.volunteer.firstName,
       lastName: registration.volunteer.lastName,

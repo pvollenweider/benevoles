@@ -58,7 +58,7 @@ export default async function AdminsSettingsPage() {
         </div>
         <div className="flex items-center gap-4">
           <Link href="/admin/settings/notifications" className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-            Emails envoyés
+            Emails
           </Link>
           <Link href="/admin/settings/activity" className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
             Journal d&apos;activité

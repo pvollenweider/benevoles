@@ -9,6 +9,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Réglages des emails** : dans Paramètres → Emails, chaque organisation choisit quels rappels automatiques partent (J-2, J-1, jour J), si les administrateurs sont prévenus à chaque inscription, et l'adresse à laquelle arrivent les réponses des bénévoles ; un bouton envoie un email de test à votre propre adresse.
 - **Lien personnel expliqué** : la page personnelle rappelle que le lien est privé, la date du dernier email qui le contenait, propose de le recevoir à nouveau par email et, si l'organisation a une adresse de contact, d'écrire à l'organisation. Un lien invalide mène à une page qui explique pourquoi et permet de demander un nouveau lien en indiquant son adresse email.
 - **Exports et portabilité** : archive JSON complète d'un événement (depuis Rapports), export CSV de tous les membres et de tout le journal d'activité ; le guide administrateur et la politique de confidentialité indiquent les durées de conservation et la procédure de suppression d'une organisation.
 - **Emails envoyés** : dans les paramètres, la liste des emails de l'organisation (confirmations, rappels, messages…) avec leur état : en attente, nouvel essai prévu, envoyé, échec définitif, la raison du dernier échec et un bouton **Renvoyer** pour ceux en échec.

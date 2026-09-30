@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { parseNotificationSettings, reminderEnabled } from "@/lib/notification-settings"
 import { recordJobRun } from "@/lib/job-runs"
 import { env } from "@/lib/env"
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
-import type { NotificationKind } from "@/lib/notifications"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { sendPushToVolunteer } from "@/lib/push"
 import { reportError } from "@/lib/report-error"
@@ -29,7 +29,7 @@ function isAuthorized(req: Request): boolean {
   return host.startsWith("localhost") || host.startsWith("127.0.0.1")
 }
 
-type Window = { kind: NotificationKind; field: "reminderJ2Sent" | "reminderJ1Sent" | "reminderDdSent"; minHours: number; maxHours: number }
+type Window = { kind: "reminder_j2" | "reminder_j1" | "reminder_dd"; field: "reminderJ2Sent" | "reminderJ1Sent" | "reminderDdSent"; minHours: number; maxHours: number }
 
 const WINDOWS: Window[] = [
   { kind: "reminder_j2", field: "reminderJ2Sent", minHours: 47, maxHours: 49 },
@@ -81,11 +81,13 @@ async function run(req: Request) {
       include: {
         volunteer: true,
         shift: true,
-        event: { include: { organization: { select: { name: true, slug: true, timeZone: true } } } },
+        event: { include: { organization: { select: { name: true, slug: true, timeZone: true, notificationSettings: true } } } },
       },
     })
 
     const inWindow = candidates.filter((r) => {
+      // The organization may have switched this reminder off (#381).
+      if (!reminderEnabled(parseNotificationSettings(r.event.organization.notificationSettings), win.kind)) return false
       const start = shiftStartAt(r.shift.date, r.shift.startTime, orgTimeZone(r.event.organization))
       return start >= lower && start <= upper
     })

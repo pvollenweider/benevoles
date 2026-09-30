@@ -9,12 +9,14 @@ import { loadOutbox, OUTBOX_PAGE_LIMIT } from "@/lib/outbox-data"
 import { outboxHeadline, STATE_LABELS, type OutboxRowView, type OutboxState } from "@/lib/outbox-view"
 import { orgTimeZone } from "@/lib/time-zone"
 import OutboxRetryButton from "@/components/admin/OutboxRetryButton"
+import NotificationSettingsForm from "@/components/admin/NotificationSettingsForm"
+import { parseNotificationSettings } from "@/lib/notification-settings"
 // Reads the Organization row for its time zone, not a tenant-scoped model.
 // eslint-disable-next-line no-restricted-imports
 import { prisma } from "@/lib/prisma"
 
 export const dynamic = "force-dynamic"
-export const metadata: Metadata = { title: "Emails envoyés" }
+export const metadata: Metadata = { title: "Emails" }
 
 const linkClass =
   "font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -32,7 +34,7 @@ export default async function NotificationsPage() {
   if (!ctx) redirect("/admin/login")
   const [{ rows, counts, truncated }, org] = await Promise.all([
     loadOutbox(ctx.organizationId),
-    prisma.organization.findUnique({ where: { id: ctx.organizationId }, select: { timeZone: true } }),
+    prisma.organization.findUnique({ where: { id: ctx.organizationId }, select: { timeZone: true, replyToEmail: true, notificationSettings: true } }),
   ])
   const tz = orgTimeZone(org)
   const when = (d: Date) => d.toLocaleString("fr-FR", { timeZone: tz, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })
@@ -42,7 +44,17 @@ export default async function NotificationsPage() {
     <div className="space-y-6">
       <div>
         <Link href="/admin/settings/admins" className={`text-sm ${linkClass}`}><span aria-hidden="true">← </span>Paramètres</Link>
-        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 mt-1 focus:outline-none">Emails envoyés</h1>
+        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 mt-1 focus:outline-none">Emails</h1>
+      </div>
+
+      <NotificationSettingsForm
+        initialSettings={parseNotificationSettings(org?.notificationSettings)}
+        initialReplyTo={org?.replyToEmail ?? null}
+        adminEmail={ctx.session.user?.email ?? null}
+      />
+
+      <div>
+        <h2 className="text-base font-semibold text-gray-900">Emails envoyés</h2>
         <p className="text-sm text-gray-700 mt-1">{outboxHeadline(counts)}</p>
         <p className="text-sm text-gray-600 mt-1">
           Les emails envoyés sont effacés chaque nuit (ils contiennent des données personnelles) ; ceux en échec restent 30 jours.
