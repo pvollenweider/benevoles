@@ -135,7 +135,7 @@ AUTH_SECRET="..."
 AUTH_URL="https://votre-domaine.com"
 AUTH_TRUST_HOST="true"
 
-# SMTP (requis pour l'envoi d'emails ; sans SMTP_HOST, les emails sont affichés dans la console)
+# SMTP (requis en production : sans SMTP_HOST, aucun email ne part et chaque envoi échoue ; en développement, les emails sont affichés dans la console)
 SMTP_HOST="smtp.votre-fournisseur.com"
 SMTP_PORT="587"
 SMTP_SECURE="false"

@@ -26,7 +26,7 @@ Modèles de fichiers fournis :
 
 ## Email
 
-Sans `SMTP_HOST`, aucun email n'est envoyé : le contenu est affiché dans la console du serveur (voir `src/lib/notifications/channels/email.ts`).
+Sans `SMTP_HOST`, aucun email n'est envoyé. En production, chaque envoi échoue avec la raison « SMTP_HOST manquant » : la file d'envoi le retente puis alerte, les envois directs le signalent à l'écran, et ni le destinataire ni le contenu ne sont écrits dans les journaux. En développement et en test, le contenu est affiché dans la console du serveur (voir `src/lib/notifications/channels/email.ts`). La page **Santé du service** signale un `SMTP_HOST` manquant.
 
 | Variable | Requis | Description |
 |----------|--------|-------------|
