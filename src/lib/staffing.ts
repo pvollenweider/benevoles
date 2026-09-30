@@ -20,6 +20,8 @@ export type StaffingShift = {
   active: number
   /** Waitlist entries (waiting or offered). */
   waiting: number
+  /** Sign-up requests awaiting a decision (#484): they hold their spot, so they aren't missing. */
+  requested?: number
   /** Registrations closed by the organizer. */
   closed: boolean
 }
@@ -38,18 +40,18 @@ export type StaffingSummary = {
   /** Roles without a sector leader (all of them when the event uses none). */
   rolesWithoutLeader: string[]
   usesLeaders: boolean
-  totals: { shifts: number; capacity: number; active: number; missing: number; waiting: number }
+  totals: { shifts: number; capacity: number; active: number; missing: number; waiting: number; requested: number }
 }
 
 const byDate = (a: StaffingShift, b: StaffingShift) =>
   a.date.localeCompare(b.date) || a.startTime.localeCompare(b.startTime) || a.roleName.localeCompare(b.roleName, "fr")
 
 export function staffingSummary(shifts: StaffingShift[], leaderRoles: string[]): StaffingSummary {
-  const lines: StaffingShiftLine[] = shifts.map((s) => ({ ...s, missing: Math.max(0, s.capacity - s.active) }))
+  const lines: StaffingShiftLine[] = shifts.map((s) => ({ ...s, missing: Math.max(0, s.capacity - s.active - (s.requested ?? 0)) }))
   const roles = Array.from(new Set(shifts.map((s) => s.roleName)))
 
   const emptyRoles = roles
-    .filter((r) => shifts.filter((s) => s.roleName === r).every((s) => s.active === 0))
+    .filter((r) => shifts.filter((s) => s.roleName === r).every((s) => s.active === 0 && !s.requested))
     .map((r) => {
       const own = shifts.filter((s) => s.roleName === r)
       return { roleName: r, shiftCount: own.length, capacity: own.reduce((n, s) => n + s.capacity, 0) }
@@ -75,6 +77,7 @@ export function staffingSummary(shifts: StaffingShift[], leaderRoles: string[]):
       active: shifts.reduce((n, s) => n + s.active, 0),
       missing: lines.reduce((n, s) => n + (s.closed ? 0 : s.missing), 0),
       waiting: shifts.reduce((n, s) => n + s.waiting, 0),
+      requested: shifts.reduce((n, s) => n + (s.requested ?? 0), 0),
     },
   }
 }

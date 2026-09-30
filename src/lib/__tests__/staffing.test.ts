@@ -41,7 +41,7 @@ describe("staffingSummary", () => {
   })
 
   it("totals people and spots, closed shifts not counted as missing", () => {
-    expect(s.totals).toEqual({ shifts: 6, capacity: 17, active: 7, missing: 8, waiting: 2 })
+    expect(s.totals).toEqual({ shifts: 6, capacity: 17, active: 7, missing: 8, waiting: 2, requested: 0 })
   })
 
   it("handles an event without shifts", () => {
@@ -53,10 +53,10 @@ describe("staffingSummary", () => {
 
 describe("staffingHeadline", () => {
   it("says what's missing, or that everything is full", () => {
-    expect(staffingHeadline({ shifts: 0, capacity: 0, active: 0, missing: 0, waiting: 0 })).toBe("Aucun créneau pour l'instant.")
-    expect(staffingHeadline({ shifts: 2, capacity: 4, active: 4, missing: 0, waiting: 0 })).toBe("Tous les créneaux sont complets.")
-    expect(staffingHeadline({ shifts: 7, capacity: 20, active: 8, missing: 12, waiting: 0 })).toBe("Il manque encore 12 personnes sur 20 places (7 créneaux).")
-    expect(staffingHeadline({ shifts: 1, capacity: 1, active: 0, missing: 1, waiting: 0 })).toBe("Il manque encore 1 personne sur 1 place (1 créneau).")
+    expect(staffingHeadline({ shifts: 0, capacity: 0, active: 0, missing: 0, waiting: 0, requested: 0 })).toBe("Aucun créneau pour l'instant.")
+    expect(staffingHeadline({ shifts: 2, capacity: 4, active: 4, missing: 0, waiting: 0, requested: 0 })).toBe("Tous les créneaux sont complets.")
+    expect(staffingHeadline({ shifts: 7, capacity: 20, active: 8, missing: 12, waiting: 0, requested: 0 })).toBe("Il manque encore 12 personnes sur 20 places (7 créneaux).")
+    expect(staffingHeadline({ shifts: 1, capacity: 1, active: 0, missing: 1, waiting: 0, requested: 0 })).toBe("Il manque encore 1 personne sur 1 place (1 créneau).")
   })
 
   it("fillPercent: clamped share, an empty capacity counts as full", () => {
@@ -64,5 +64,19 @@ describe("staffingHeadline", () => {
     expect(fillPercent(1, 3)).toBe(33)
     expect(fillPercent(5, 4)).toBe(100)
     expect(fillPercent(0, 0)).toBe(100)
+  })
+})
+
+// Requests (#484) hold their spot: not missing, counted apart, never « empty ».
+describe("staffing with pending requests", () => {
+  const shift = { id: "n", roleName: "Navette", label: "Navette", date: "2030-06-01", startTime: "08:00", endTime: "12:00", capacity: 5, active: 0, waiting: 0, closed: false }
+  it("a shift filled with requests misses nobody and its role isn't empty", () => {
+    const s = staffingSummary([{ ...shift, requested: 5 }], [])
+    expect(s.underfilled).toHaveLength(0)
+    expect(s.emptyRoles).toHaveLength(0)
+    expect(s.totals).toMatchObject({ missing: 0, requested: 5, active: 0 })
+  })
+  it("partly: the requests reduce what's missing", () => {
+    expect(staffingSummary([{ ...shift, active: 1, requested: 2 }], []).underfilled[0].missing).toBe(2)
   })
 })
