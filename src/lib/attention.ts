@@ -10,6 +10,8 @@
  * here yet: outbox rows aren't linked to an organization until #382.
  */
 
+import { WORKLOAD_LIMITS } from "./workload"
+
 const DAY = 24 * 60 * 60 * 1000
 export const UNDERFILLED_WINDOW_DAYS = 7
 export const OFFER_WARNING_HOURS = 12
@@ -25,6 +27,8 @@ export type AttentionEvent = {
   leaderRoles: string[]
   overdueMilestones: number
   unansweredInvites: number
+  /** Volunteers with a workload warning on this event (#465). */
+  overloadedVolunteers?: number
 }
 export type AttentionInput = {
   now: Date
@@ -93,6 +97,15 @@ export function attentionItems({ now, events, offers }: AttentionInput): Attenti
         id: `milestones:${e.id}`, severity: "high", eventTitle: e.title,
         message: `${e.overdueMilestones} ${plural(e.overdueMilestones, "jalon est en retard", "jalons sont en retard")}.`,
         action: "Voir les jalons", href: base,
+      })
+    }
+
+    const overloaded = e.overloadedVolunteers ?? 0
+    if (overloaded > 0) {
+      items.push({
+        id: `workload:${e.id}`, severity: "medium", eventTitle: e.title,
+        message: `${overloaded} ${plural(overloaded, "bénévole a", "bénévoles ont")} une charge élevée : plus de ${WORKLOAD_LIMITS.dailyMinutes / 60} h dans la journée, ou plus de ${WORKLOAD_LIMITS.continuousMinutes / 60} h d'affilée sans vraie pause.`,
+        action: "Voir les inscriptions", href: `${base}/registrations`,
       })
     }
 

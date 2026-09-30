@@ -136,6 +136,11 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
 
   const storageKey = `benevoles_token_${eventSlug}`
   const myShiftIds = useMemo(() => new Set(myRegistrations.map((r) => r.shiftId)), [myRegistrations])
+  // Shifts already held and not re-selected, for the workload warnings of the recap (#465).
+  const heldShifts = useMemo(
+    () => (event?.shifts ?? []).filter((s) => myShiftIds.has(s.id) && !selectedShifts.has(s.id)),
+    [event, myShiftIds, selectedShifts],
+  )
 
   // Shifts among the current selection that require a minimum age (#192) — drives whether the
   // form asks for a date of birth.
@@ -593,8 +598,27 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
 
         {!previewResult && step === "form" && (
           <div className="lg:grid lg:grid-cols-[1fr_300px] lg:gap-8 lg:items-start">
+            {/* Desktop right sidebar for form step: first in the DOM so the recap is read before the confirm button, placed on the right by the grid. */}
+            <div className="hidden lg:block lg:col-start-2 lg:row-start-1">
+              <div className="sticky top-6 bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                <SignupRecap
+                  shifts={event.shifts.filter((s) => selectedShifts.has(s.id))}
+                  requirePhone={event.requirePhone}
+                  phoneGiven={form.phone.trim().length > 0}
+                  commentGiven={form.comment.trim().length > 0}
+                  heldShifts={heldShifts}
+                  timeZone={event.timeZone}
+                  variant="sidebar"
+                />
+                <div className="px-4 py-3 border-t border-gray-100 bg-gray-50">
+                  <p className="text-[11px] text-gray-500 font-medium">{event.organizationName}</p>
+                  <p className="text-sm font-semibold text-gray-800 mt-0.5">{event.title}</p>
+                  {event.location && <p className="text-xs text-gray-500 mt-1"><span aria-hidden="true">📍 </span>{event.location}</p>}
+                </div>
+              </div>
+            </div>
             {/* Form */}
-            <div className="bg-white rounded-2xl border border-blue-200 p-5">
+            <div className="bg-white rounded-2xl border border-blue-200 p-5 lg:col-start-1 lg:row-start-1">
               <div className="flex items-center gap-2 mb-5">
                 <button onClick={() => setStep("select")} className="text-blue-600 text-sm"><span aria-hidden="true">← </span>Retour</button>
                 <h2 className="text-base font-semibold text-gray-800">Vos informations</h2>
@@ -607,6 +631,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                   requirePhone={event.requirePhone}
                   phoneGiven={form.phone.trim().length > 0}
                   commentGiven={form.comment.trim().length > 0}
+                  heldShifts={heldShifts}
+                  timeZone={event.timeZone}
                   variant="card"
                 />
               </div>
@@ -757,23 +783,6 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
               </form>
             </div>
 
-            {/* Desktop right sidebar for form step */}
-            <div className="hidden lg:block">
-              <div className="sticky top-6 bg-white rounded-2xl border border-gray-200 overflow-hidden">
-                <SignupRecap
-                  shifts={event.shifts.filter((s) => selectedShifts.has(s.id))}
-                  requirePhone={event.requirePhone}
-                  phoneGiven={form.phone.trim().length > 0}
-                  commentGiven={form.comment.trim().length > 0}
-                  variant="sidebar"
-                />
-                <div className="px-4 py-3 border-t border-gray-100 bg-gray-50">
-                  <p className="text-[11px] text-gray-500 font-medium">{event.organizationName}</p>
-                  <p className="text-sm font-semibold text-gray-800 mt-0.5">{event.title}</p>
-                  {event.location && <p className="text-xs text-gray-500 mt-1"><span aria-hidden="true">📍 </span>{event.location}</p>}
-                </div>
-              </div>
-            </div>
           </div>
         )}
       </div>

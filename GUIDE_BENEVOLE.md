@@ -70,6 +70,8 @@ Renseignez :
 
 Avant de confirmer, un **récapitulatif** (dans la colonne de droite sur ordinateur, au-dessus du formulaire sur téléphone) reprend vos créneaux dans l'ordre, avec le jour et les heures (« fin le lendemain » pour un créneau qui passe minuit), ce qui les sépare (enchaînés, pause, ou **chevauchement** : dans ce cas l'inscription sera refusée, retirez un créneau), si chaque inscription est ferme ou en liste d'attente, l'âge minimum éventuel, et la liste exacte des données transmises à l'organisation.
 
+Si vos créneaux font plus de 8 h dans une journée, ou plus de 6 h d'affilée sans pause d'au moins 30 minutes, le récapitulatif le signale sous **Journée chargée**, en comptant aussi les créneaux que vous avez déjà. C'est un conseil : vous pouvez confirmer quand même.
+
 Cliquez sur **Confirmer mon inscription**.
 
 ![Formulaire d'inscription pour un poste avec âge minimum (« Navette gare ↔ backstage »), montrant le champ Date de naissance et son message « Requis : 21 ans min. »](/doc-img/public-registration-birthdate.png)

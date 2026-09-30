@@ -18,7 +18,7 @@ C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles
 
 - **Sans compte ni mot de passe.** Le bénévole ouvre le lien, choisit ses créneaux sur son téléphone et confirme.
 - **Plusieurs créneaux en une fois.** Les chevauchements sont signalés avant l'envoi et les places restantes sont affichées.
-- **Un récapitulatif clair avant de confirmer.** Les créneaux dans l'ordre, les pauses entre eux et les informations transmises à l'organisation.
+- **Un récapitulatif clair avant de confirmer.** Les créneaux dans l'ordre, les pauses entre eux et les informations transmises à l'organisation. Une journée trop longue ou des créneaux enchaînés sans vraie pause sont signalés, sans bloquer.
 - **Une liste d'attente.** Quand un créneau est complet, on peut s'inscrire en attente. Si une place se libère, la personne suivante la reçoit par email et a 24 heures pour la prendre.
 - **Vos règles.** Un âge minimum par créneau, un téléphone obligatoire si vous devez pouvoir appeler vos bénévoles.
 - **Ouvrir quand vous êtes prêt.** Le planning peut être publié avant l'ouverture des inscriptions. Ouvrez et fermez-les d'un clic, ou programmez une date d'ouverture et de fermeture ; la page indique aux bénévoles quand revenir.

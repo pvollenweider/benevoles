@@ -83,4 +83,12 @@ describe("attentionItems", () => {
     })
     expect(items.map((i) => i.severity)).toEqual(["high", "low"])
   })
+
+  it("flags volunteers with a high workload, linking to the registrations (#465)", () => {
+    const items = attentionItems({ now, events: [ev({ overloadedVolunteers: 2 })], offers: [] })
+    const item = items.find((i) => i.id === "workload:e1")
+    expect(item).toMatchObject({ severity: "medium", href: "/admin/events/e1/registrations" })
+    expect(item?.message).toBe("2 bénévoles ont une charge élevée : plus de 8 h dans la journée, ou plus de 6 h d'affilée sans vraie pause.")
+    expect(ids(attentionItems({ now, events: [ev({ overloadedVolunteers: 0 })], offers: [] }))).not.toContain("workload:e1")
+  })
 })

@@ -10,7 +10,8 @@
  * Each organization can set its own zone (`Organization.timeZone`, #344); APP_TIME_ZONE (IANA
  * name, default Europe/Zurich) is the default for organizations that haven't.
  */
-export function appTimeZone(env: Record<string, string | undefined> = process.env): string {
+// Guarded: the workload rule (#465) also runs in the browser, where `process` may not exist.
+export function appTimeZone(env: Record<string, string | undefined> = typeof process !== "undefined" ? process.env : {}): string {
   return env.APP_TIME_ZONE?.trim() || "Europe/Zurich"
 }
 
