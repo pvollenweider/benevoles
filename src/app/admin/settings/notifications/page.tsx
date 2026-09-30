@@ -10,6 +10,7 @@ import { outboxHeadline, STATE_LABELS, type OutboxRowView, type OutboxState } fr
 import { orgTimeZone } from "@/lib/time-zone"
 import OutboxRetryButton from "@/components/admin/OutboxRetryButton"
 import NotificationSettingsForm from "@/components/admin/NotificationSettingsForm"
+import { hasLevel } from "@/lib/permissions"
 import { parseNotificationSettings } from "@/lib/notification-settings"
 // Reads the Organization row for its time zone, not a tenant-scoped model.
 // eslint-disable-next-line no-restricted-imports
@@ -47,11 +48,23 @@ export default async function NotificationsPage() {
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 mt-1 focus:outline-none">Emails</h1>
       </div>
 
-      <NotificationSettingsForm
-        initialSettings={parseNotificationSettings(org?.notificationSettings)}
-        initialReplyTo={org?.replyToEmail ?? null}
-        adminEmail={ctx.session.user?.email ?? null}
-      />
+      {hasLevel(ctx.session.user?.role, "owner") ? (
+        <NotificationSettingsForm
+          initialSettings={parseNotificationSettings(org?.notificationSettings)}
+          initialReplyTo={org?.replyToEmail ?? null}
+          adminEmail={ctx.session.user?.email ?? null}
+        />
+      ) : (
+        // Organisers see the deliveries below, not the email settings (#469).
+        <section aria-labelledby="email-settings-ro" className="bg-white rounded-2xl border border-gray-200 p-4 space-y-2">
+          <h2 id="email-settings-ro" className="text-base font-semibold text-gray-900">Réglages des emails</h2>
+          <p className="text-sm text-gray-700">Votre rôle : organisateur. Ces réglages sont réservés aux propriétaires de l&apos;organisation.</p>
+          <dl className="grid grid-cols-[auto_1fr] gap-x-3 text-sm">
+            <dt className="text-gray-600">Adresse de réponse</dt>
+            <dd className="text-gray-900 break-all">{org?.replyToEmail ?? "celle de la plateforme"}</dd>
+          </dl>
+        </section>
+      )}
 
       <div>
         <h2 className="text-base font-semibold text-gray-900">Emails envoyés</h2>

@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { hasLevel, OWNER_ONLY_MESSAGE, type Level } from "./permissions"
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
@@ -38,9 +39,16 @@ async function isOrgActive(organizationId: string): Promise<boolean> {
   return org?.active ?? false
 }
 
-export async function requireOrgSession() {
+/**
+ * The organisation session of an admin route. `level` (#469): "organizer" (default) lets both
+ * admin levels in; "owner" only owners (and the super admin) — see src/lib/permissions.ts.
+ */
+export async function requireOrgSession(level: Level = "organizer") {
   const session = await auth()
   if (!session?.user) return unauthorized()
+  if (!hasLevel(session.user.role, level)) {
+    return NextResponse.json({ error: OWNER_ONLY_MESSAGE }, { status: 403 })
+  }
 
   let organizationId = session.user.organizationId
   if (!organizationId && session.user.role === "super_admin") {

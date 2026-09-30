@@ -26,6 +26,7 @@ const ACTION_LABEL: Record<string, string> = {
   "notification.retried": "a renvoyé un email",
   "organization.notifications_updated": "a modifié les réglages de notification",
   "adminuser.removed": "a retiré un admin",
+  "adminuser.role_changed": "a changé le rôle d'un admin",
 }
 
 const ENTITY_FILTERS = [

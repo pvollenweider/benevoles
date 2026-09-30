@@ -12,7 +12,7 @@ import { orgBaseUrl } from "@/lib/urls"
 const SLUG_RE = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/
 
 export async function PATCH(req: Request) {
-  const guard = await requireOrgSession()
+  const guard = await requireOrgSession("owner")
   if (guard instanceof NextResponse) return guard
   const { organizationId } = guard
 

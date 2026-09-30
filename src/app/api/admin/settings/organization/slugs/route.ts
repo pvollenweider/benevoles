@@ -22,7 +22,7 @@ export async function GET() {
 }
 
 export async function DELETE(req: Request) {
-  const guard = await requireOrgSession()
+  const guard = await requireOrgSession("owner")
   if (guard instanceof NextResponse) return guard
   const { db, organizationId } = guard
 
