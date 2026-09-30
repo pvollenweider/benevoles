@@ -13,6 +13,8 @@ const n = (count: number, one: string, many: string) => `${count} ${count > 1 ? 
 const LOGGED = "L'action est journalisée : vous la retrouverez dans le journal de l'événement."
 const LOGGED_ORG = "L'action est journalisée : vous la retrouverez dans le journal d'activité de l'organisation."
 
+const UNDO_LINE = "Vous aurez 10 secondes pour annuler : rien n'est envoyé ni enregistré avant. Quitter la page valide le retrait."
+
 export function bulkCancelRecap(i: { people: number; withEmail: number; waitlisted: number }): ActionRecap {
   return {
     title: `Retirer ${n(i.people, "bénévole", "bénévoles")} de leur créneau ?`,
@@ -21,6 +23,7 @@ export function bulkCancelRecap(i: { people: number; withEmail: number; waitlist
       i.withEmail > 0 ? `${n(i.withEmail, "email d'annulation envoyé", "emails d'annulation envoyés")} aux personnes concernées.` : "Aucun email : personne n'a d'adresse.",
       i.waitlisted > 0 ? `${n(i.waitlisted, "place libérée sera proposée", "places libérées seront proposées")} à la liste d'attente.` : "Pas de liste d'attente sur ces créneaux.",
       LOGGED,
+      UNDO_LINE,
     ],
     confirmLabel: "Retirer",
     danger: true,

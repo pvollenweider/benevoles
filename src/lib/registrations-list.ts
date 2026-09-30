@@ -82,6 +82,15 @@ export function cancelAnnouncement(done: number, failed: number): string {
   return failed > 0 ? `${base}, ${failed} ${plural(failed, "échec")}.` : `${base}.`
 }
 
+/** Rows taken out of the list, with the seconds left to change one's mind (#379). */
+export function heldAnnouncement(count: number, seconds: number): string {
+  return `${count} ${plural(count, "bénévole")} ${count > 1 ? "seront retirés" : "sera retiré"} dans ${seconds} secondes. « Annuler le retrait » pour ${count > 1 ? "les" : "le"} garder.`
+}
+
+export function undoneAnnouncement(count: number): string {
+  return `Retrait annulé : ${count > 1 ? `les ${count} bénévoles restent inscrits` : "le bénévole reste inscrit"}, aucun email envoyé.`
+}
+
 export function leaderAnnouncement(succeeded: number, failed: number, withoutEmail: number): string {
   return [
     succeeded > 0 ? `${succeeded} ${plural(succeeded, "responsable")} ${plural(succeeded, "ajouté")}.` : null,
