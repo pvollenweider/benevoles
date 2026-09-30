@@ -17,7 +17,7 @@ import { deliverAfterResponse, enqueueNotifications } from "./notifications/outb
  * (a cancellation, most often) so narrative mode can tell "X cancelled, which let Y move up
  * the waitlist" as one causal chain instead of two coincidentally-timed entries.
  */
-export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: string): Promise<void> {
+export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: string): Promise<boolean> {
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000)
 
   // Under a lock on the shift (#264): two cancellations freeing two spots at once must offer
@@ -83,7 +83,7 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
     }], tx)
     return { next, outboxIds }
   })
-  if (!offered) return
+  if (!offered) return false
   const { next, outboxIds } = offered
 
   await logEvent({
@@ -97,4 +97,35 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
   })
 
   deliverAfterResponse(outboxIds)
+  return true
+}
+
+/** Upper bound of offers made for one shift in one reconciliation run (a shift is small). */
+export const RECONCILE_MAX_OFFERS_PER_SHIFT = 50
+
+/**
+ * Catches up on promotions that didn't happen (audit): a cancellation commits first, then the
+ * promotion runs on its own; if that fails (a database blip), the freed spot would stay free while
+ * people wait. Run by the hourly cron: for every upcoming shift with someone waiting, offer spots
+ * until none is free. promoteNextInWaitlist locks the shift and checks the spot, so this is a no-op
+ * when everything already went well, and safe next to a concurrent cancellation.
+ */
+export async function reconcileWaitlists(
+  now: Date = new Date(),
+  promote: (shiftId: string) => Promise<boolean> = (id) => promoteNextInWaitlist(id),
+): Promise<{ shifts: number; offered: number }> {
+  const today = new Date(`${now.toISOString().slice(0, 10)}T00:00:00Z`)
+  const rows = await prisma.registration.findMany({
+    where: { status: "waiting", shift: { status: { not: "cancelled" }, date: { gte: today } } },
+    select: { shiftId: true },
+    distinct: ["shiftId"],
+  })
+  let offered = 0
+  for (const { shiftId } of rows) {
+    for (let i = 0; i < RECONCILE_MAX_OFFERS_PER_SHIFT; i++) {
+      if (!(await promote(shiftId))) break
+      offered++
+    }
+  }
+  return { shifts: rows.length, offered }
 }

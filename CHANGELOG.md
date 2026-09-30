@@ -68,6 +68,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Liste d'attente** : si la proposition d'une place libérée échoue au moment d'une annulation (panne ponctuelle), la tâche horaire la rattrape : pour chaque créneau à venir ayant une place libre et des personnes en attente, la place est proposée à la suivante. Auparavant elle pouvait rester libre durablement.
 - **Fenêtre d'annulation d'un retrait** : rétablie. Elle avait disparu lors de la publication de la couleur de la page publique (#444), qui écrasait par erreur les fichiers de #442.
 - **Coordonnées GPS** : la latitude et la longitude sont désormais toujours enregistrées ensemble (une seule des deux est refusée), et un créneau prend la paire complète de l'événement quand il n'a pas la sienne, jamais une moitié de chaque.
 - **Événements non publiés** : l'adresse d'un brouillon ou d'un événement archivé ne révèle plus son titre dans l'en-tête de la page et demande aux moteurs de recherche de ne pas l'indexer.
