@@ -61,6 +61,7 @@ C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles
 - **Les liens personnels restent privés** : ils sont envoyés par email, pas affichés à l'écran.
 - **Vos données vous appartiennent** : exportez vos membres, votre journal ou l'archive complète d'un événement à tout moment.
 - **Les emails sont suivis** : vous voyez ceux qui sont partis, en attente ou en échec, et pouvez renvoyer ces derniers.
+- **Pensé pour tous** : inscription et administration conçues pour le clavier et les lecteurs d'écran, analysées automatiquement et revues à chaque modification ; la [déclaration d'accessibilité](ACCESSIBILITE.md) dit ce qui est testé et les limites connues.
 
 ## Pour démarrer
 

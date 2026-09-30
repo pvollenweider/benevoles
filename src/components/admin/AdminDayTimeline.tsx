@@ -318,7 +318,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
               <div style={{ height: AXIS_H }} />
               {hasShows && (
                 <div className="flex items-center justify-end pr-2" style={{ height: SHOW_H }}>
-                  <span className="text-[9px] text-indigo-400">Spectacles</span>
+                  <span className="text-[9px] text-indigo-800">Spectacles</span>
                 </div>
               )}
             </div>
@@ -383,11 +383,11 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                             {fmt(shift.startTime)}–{fmt(shift.endTime)}
                           </span>
                           {hasLabel && (
-                            <span className="text-white/80 text-[8px] leading-none truncate mt-0.5">
+                            <span className="text-white text-[8px] leading-none truncate mt-0.5">
                               {shift.label}
                             </span>
                           )}
-                          <span className="text-white/70 text-[8px] leading-none mt-0.5">
+                          <span className="text-white text-[8px] leading-none mt-0.5">
                             {shift.registrationCount}/{shift.capacity}
                             {shift.capacity - shift.registrationCount > 0
                               ? ` · ${shift.capacity - shift.registrationCount} libre`
@@ -445,7 +445,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
               {hours.map(h => (
                 <div
                   key={h}
-                  className="absolute top-1 text-[10px] text-gray-500 leading-none"
+                  className="absolute top-1 text-[10px] text-gray-700 leading-none"
                   style={{
                     left: LABEL_W + (h * 60 - dayStart) * PX_PER_MIN,
                     transform: "translateX(-50%)",

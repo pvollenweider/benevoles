@@ -24,6 +24,7 @@ describe("sitemap on the apex host", () => {
     expect(entries.map((e) => e.url)).toEqual([
       "https://www.benevol.app/",
       "https://www.benevol.app/fonctionnalites",
+      "https://www.benevol.app/accessibilite",
       "https://www.benevol.app/doc",
       "https://www.benevol.app/doc/admin",
       "https://www.benevol.app/doc/benevole",

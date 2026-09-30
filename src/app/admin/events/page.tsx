@@ -92,7 +92,7 @@ export default async function AdminEventsPage({ searchParams }: { searchParams: 
                     <span>{event.shifts.length} créneau{event.shifts.length > 1 ? "x" : ""}</span>
                     <span>{event.totalRegistered}/{event.totalCapacity} inscrits</span>
                     {event.spotsLeft > 0 && (
-                      <span className="text-orange-600 font-medium">{event.spotsLeft} manquant{event.spotsLeft > 1 ? "s" : ""}</span>
+                      <span className="text-orange-800 font-medium">{event.spotsLeft} manquant{event.spotsLeft > 1 ? "s" : ""}</span>
                     )}
                   </div>
                 </div>

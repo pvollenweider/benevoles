@@ -314,7 +314,7 @@ export default function DayTimeline({
                               // invisible on the exact bar sizes common on phones — reported by
                               // beta testers right after #244/#248 shipped.
                               <span
-                                className="hidden @min-[34px]:inline text-white/85 text-[9px] font-medium truncate leading-none"
+                                className="hidden @min-[34px]:inline text-white text-[9px] font-medium truncate leading-none"
                                 style={{ textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}
                               >
                                 {spotsText}

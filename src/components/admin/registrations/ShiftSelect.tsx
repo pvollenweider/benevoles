@@ -127,7 +127,7 @@ export default function ShiftSelect({
                   )}
                 </span>
                 {alreadyReg && (
-                  <span className="shrink-0 text-[10px] text-orange-600 font-medium">Déjà inscrit</span>
+                  <span className="shrink-0 text-[10px] text-orange-800 font-medium">Déjà inscrit</span>
                 )}
                 {isConflict && (
                   <span className="shrink-0 text-[10px] text-amber-600 font-medium">⚠ conflit</span>

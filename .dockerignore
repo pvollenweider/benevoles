@@ -11,6 +11,7 @@ docker-compose*.yml
 # each must be listed here, or the *.md rule above breaks the production build (ENOENT).
 # Checked by src/lib/__tests__/docker-public-sources.test.ts.
 !FEATURES.md
+!ACCESSIBILITE.md
 !GUIDE_ADMIN.md
 !GUIDE_BENEVOLE.md
 .DS_Store

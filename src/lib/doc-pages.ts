@@ -43,6 +43,16 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     guide: false,
   },
   {
+    path: "/accessibilite",
+    title: "Accessibilité",
+    summary: "Ce qui a été vérifié pour l'accessibilité, comment, et les limites connues.",
+    metaTitle: "Accessibilité",
+    metaDescription: "Déclaration d'accessibilité de benevol.app : niveau visé (WCAG 2.2 AA), méthode de vérification, limites connues et comment signaler un problème.",
+    source: "ACCESSIBILITE.md",
+    priority: 0.3,
+    guide: false,
+  },
+  {
     path: "/doc",
     title: "Documentation",
     summary: "Le point d'entrée des guides.",
