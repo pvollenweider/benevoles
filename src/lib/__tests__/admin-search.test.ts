@@ -1,8 +1,9 @@
 import { describe, it, expect, vi } from "vitest"
 import {
-  capped, eventIdsSql, likePattern, membersHref, registrationWhere, registrationsHref, searchTerms, shiftHref, shiftIdsSql, volunteerIdsSql,
+  capped, likePattern, membersHref, registrationWhere, registrationsHref, searchTerms, shiftHref,
   SEARCH_GROUP_LIMIT, SEARCH_ID_LIMIT, SEARCH_MAX_LENGTH, SEARCH_MAX_TERMS,
 } from "../admin-search"
+import { eventIdsSql, shiftIdsSql, volunteerIdsSql } from "../admin-search-sql"
 import { loadSearch } from "../admin-search-data"
 import type { OrgScopedPrisma } from "../prisma-org"
 

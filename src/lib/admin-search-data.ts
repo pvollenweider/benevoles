@@ -2,9 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { OrgScopedPrisma } from "./prisma-org"
-import {
-  capped, eventIdsSql, registrationWhere, shiftIdsSql, volunteerIdsSql, SEARCH_GROUP_LIMIT,
-} from "./admin-search"
+import { capped, registrationWhere, SEARCH_GROUP_LIMIT } from "./admin-search"
+import { eventIdsSql, shiftIdsSql, volunteerIdsSql } from "./admin-search-sql"
 
 const take = SEARCH_GROUP_LIMIT + 1
 
