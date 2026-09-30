@@ -40,6 +40,7 @@ vi.mock("@/lib/prisma", () => {
   m.transaction.mockImplementation(async (fn: (t: typeof tx) => unknown) => fn(tx))
   return {
     prisma: {
+    eventQuestion: { findMany: vi.fn().mockResolvedValue([]) }, // no custom question (#483)
       event: { findFirst: m.eventFindFirst },
       shift: { findMany: m.shiftFindMany, findUnique: m.shiftFindUnique },
       volunteer: { findFirst: vi.fn().mockResolvedValue(null), create: vi.fn().mockResolvedValue({ id: "vol-1" }), update: vi.fn() },

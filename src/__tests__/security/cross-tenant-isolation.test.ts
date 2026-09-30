@@ -480,6 +480,21 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(del).not.toHaveBeenCalled()
   })
 
+  it("question routes return 404 for an org-B event or question, writing nothing (#483)", async () => {
+    const list = await import("@/app/api/admin/events/[id]/questions/route")
+    const one = await import("@/app/api/admin/events/[id]/questions/[questionId]/route")
+    const create = vi.fn(), update = vi.fn(), del = vi.fn()
+    const db = { ...mockScopedDb(), eventQuestion: { findFirst: vi.fn().mockResolvedValue(null), findMany: vi.fn().mockResolvedValue([]), count: vi.fn().mockResolvedValue(0), create, update, delete: del } }
+    requireOrgSessionMock.mockResolvedValue({ db, organizationId: ORG_A, session: SESSION_A })
+    const p = { params: Promise.resolve({ id: "evt-b", questionId: "q-b" }) }
+    expect((await list.POST(makeRequest("/api/admin/events/evt-b/questions", "POST", { label: "X", type: "text" }), p)).status).toBe(404)
+    expect((await one.PATCH(makeRequest("/api/admin/events/evt-b/questions/q-b", "PATCH", { label: "X", type: "text" }), p)).status).toBe(404)
+    expect((await one.DELETE(makeRequest("/api/admin/events/evt-b/questions/q-b", "DELETE"), p)).status).toBe(404)
+    expect(create).not.toHaveBeenCalled()
+    expect(update).not.toHaveBeenCalled()
+    expect(del).not.toHaveBeenCalled()
+  })
+
   it("GET /api/admin/members/export reads members through the scoped client only (#384)", async () => {
     const { GET } = await import("@/app/api/admin/members/export/route")
     const db = setupGuard({ volunteer: { findMany: vi.fn().mockResolvedValue([]) } })

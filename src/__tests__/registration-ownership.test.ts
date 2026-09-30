@@ -37,6 +37,7 @@ vi.mock("@/lib/prisma", () => {
   }
   return {
     prisma: {
+    eventQuestion: { findMany: vi.fn().mockResolvedValue([]) }, // no custom question (#483)
       event: {
         findFirst: vi.fn().mockResolvedValue({
           id: "evt-1", organizationId: "org-a", title: "Festival", organization: { slug: "a" }, confirmationMessage: null,

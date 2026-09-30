@@ -73,6 +73,8 @@ export type ArchiveInput = {
     volunteer: Record<string, unknown> & { firstName: string; lastName: string; email: string | null; phone: string | null }
   })[]
   pages: Record<string, unknown>[]
+  /** Custom sign-up questions (#483) with their answers, archived ones included. */
+  questions?: Record<string, unknown>[]
   sectorLeaders: { roleName: string; name: string; email: string; createdAt: Date | string }[]
   milestones: Record<string, unknown>[]
   logs: Record<string, unknown>[]
@@ -101,6 +103,7 @@ export function eventArchive(i: ArchiveInput) {
     shifts: i.shifts,
     registrations: i.registrations,
     pages: i.pages,
+    questions: i.questions ?? [],
     sectorLeaders: i.sectorLeaders,
     milestones: i.milestones,
     log: i.logs,

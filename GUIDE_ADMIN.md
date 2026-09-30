@@ -208,6 +208,18 @@ Champs : **Nom du spectacle**, **Date**, **Heure de début**, **Heure de fin**.
 
 ---
 
+## Questions aux bénévoles
+
+**`/admin/events/[id]/questions`**, depuis la page de l'événement (**Questions**).
+
+Jusqu'à 5 questions ajoutées au formulaire d'inscription, quand l'événement demande une information de plus : taille de t-shirt, permis, régime, expérience, transport. Types : **texte court**, **oui / non**, **choix unique** ou **choix multiple** (un choix par ligne, au moins deux), obligatoire ou facultative. L'ordre se change avec **Monter** et **Descendre**.
+
+Chaque bénévole répond une fois pour l'événement ; s'il se réinscrit, sa nouvelle réponse remplace l'ancienne. Le serveur vérifie les réponses (une réponse obligatoire manquante ou un choix inconnu refuse l'inscription, avec la raison). Les réponses apparaissent sous chaque inscription, dans la feuille de présence (CSV, une colonne par question) et dans l'archive de l'événement, et le récapitulatif avant l'envoi les liste dans « Transmis à l'organisation ».
+
+Une question qui a déjà des réponses garde son type, et les choix déjà retenus ne peuvent pas être retirés (créez une nouvelle question si besoin). **Retirer** une question qui a des réponses la sort du formulaire, mais ses réponses restent dans les inscriptions et les exports jusqu'à la suppression de l'événement ; sans réponse, elle est simplement supprimée. Une copie de l'événement reprend les questions (sans les réponses) avec les réglages.
+
+Ne demandez que ce qui est nécessaire à l'organisation, et pas d'information sensible (santé, religion, opinions…) : les réponses sont des données personnelles.
+
 ## Pages personnalisées de l'événement
 
 **`/admin/events/[id]/pages`**

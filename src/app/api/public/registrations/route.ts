@@ -26,6 +26,7 @@ import {
 import { z } from "zod"
 import { linkToken, registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
+import { checkAnswers } from "@/lib/event-questions"
 import { memberMayTake, reservationRefusal, reservedRoles } from "@/lib/role-reservation"
 import { normalizeEmail } from "@/lib/email-address"
 import { RoleLimitError, roleLimitBreaches, roleLimitMessage, roleLimits } from "@/lib/role-limit"
@@ -43,6 +44,8 @@ const schema = z.object({
   comment: z.string().optional(),
   consent: z.literal(true),
   inviteToken: z.string().optional(),
+  /** Answers to the event's custom questions (#483), by question id. */
+  answers: z.record(z.string(), z.unknown()).optional(),
 })
 
 export async function POST(req: Request) {
@@ -133,6 +136,16 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: reservationRefusal(role, proven), reservedRole: role }, { status: 403 })
       }
     }
+  }
+
+  // Custom questions (#483), checked here whatever the page did; stored with the registration.
+  const questions = await prisma.eventQuestion.findMany({
+    where: { eventId, archivedAt: null },
+    select: { id: true, label: true, type: true, options: true, required: true },
+  })
+  const answerCheck = checkAnswers(questions, parsed.data.answers)
+  if (!answerCheck.ok) {
+    return NextResponse.json({ error: answerCheck.errors.map((e) => e.message).join(" "), questionIds: answerCheck.errors.map((e) => e.questionId), questionErrors: answerCheck.errors }, { status: 400 })
   }
 
   // Minimum age (#192) — authoritative check, the client-side one in EventPageClient.tsx is
@@ -367,6 +380,14 @@ export async function POST(req: Request) {
         )
       }
       const outboxIds = await enqueueNotifications(await buildNotifications(created), tx, { organizationId: event.organizationId })
+      // Answers of this sign-up replace the volunteer's previous ones for these questions (#483).
+      for (const [questionId, values] of answerCheck.values) {
+        await tx.questionAnswer.upsert({
+          where: { questionId_volunteerId: { questionId, volunteerId } },
+          create: { questionId, eventId, volunteerId, values },
+          update: { values },
+        })
+      }
       return { registrations: created, volunteerId, createdNow, outboxIds }
     })
   } catch (e) {

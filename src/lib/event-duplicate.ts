@@ -68,6 +68,8 @@ export type DuplicableEvent = {
   showSchedule: unknown
   shifts: DuplicableShift[]
   pages: { slug: string; title: string; content: string; displayOrder: number }[]
+  /** Active custom questions (#483); copied with the registration settings, never their answers. */
+  questions?: { label: string; type: string; options: string[]; required: boolean; position: number }[]
   leaders: { roleName: string; name: string; email: string }[]
 }
 
@@ -153,6 +155,7 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
     },
     shifts: copy.shifts ? source.shifts.map((s) => ({ ...copiedShift(s), date: shiftDate(s.date, offsetDays) })) : [],
     pages: copy.pages ? source.pages.map((p) => ({ slug: p.slug, title: p.title, content: p.content, displayOrder: p.displayOrder })) : [],
+    questions: copy.settings ? (source.questions ?? []).map((q) => ({ label: q.label, type: q.type, options: q.options, required: q.required, position: q.position })) : [],
     leaders: copy.leaders ? source.leaders : [],
   }
 }

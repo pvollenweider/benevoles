@@ -12,6 +12,8 @@ type Props = {
   requirePhone: boolean
   phoneGiven: boolean
   commentGiven: boolean
+  /** Labels of the custom questions answered (#483), listed in « Transmis à l'organisation ». */
+  answeredQuestions?: string[]
   /** Shifts this volunteer already holds on the event, counted in the workload warnings (#465). */
   heldShifts?: WorkloadShift[]
   timeZone: string
@@ -24,7 +26,7 @@ type Props = {
  * what sits between them, waitlist and age flags, and the personal data that will be sent.
  * Pure render; the same component sits in the form card (phone) and the sidebar (desktop).
  */
-export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentGiven, heldShifts = [], timeZone, variant }: Props) {
+export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentGiven, answeredQuestions = [], heldShifts = [], timeZone, variant }: Props) {
   const rows = recapShifts(shifts)
   // Waitlist entries may never become shifts: only firm places count (#465).
   const workload = workloadWarnings([...shifts.filter((sh) => !rows.find((r) => r.id === sh.id)?.waitlist), ...heldShifts], timeZone)
@@ -91,7 +93,7 @@ export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentG
       <div className={`${dense ? "px-4 py-3 border-t border-gray-100" : "rounded-lg bg-white border border-gray-200 px-3 py-2"}`}>
         <p className="text-xs font-semibold text-gray-600">Transmis à l&apos;organisation</p>
         <p className="text-xs text-gray-700 mt-0.5">
-          {personalDataLines({ requirePhone, phoneGiven, needsBirthDate, commentGiven }).join(", ")}. Rien d&apos;autre.
+          {personalDataLines({ requirePhone, phoneGiven, needsBirthDate, commentGiven, answeredQuestions }).join(", ")}. Rien d&apos;autre.
         </p>
       </div>
     </div>

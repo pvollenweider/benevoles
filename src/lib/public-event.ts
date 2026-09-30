@@ -20,6 +20,12 @@ export const publicEventInclude = {
     select: { slug: true, title: true },
     orderBy: { displayOrder: "asc" },
   },
+  // Custom sign-up questions (#483), active ones in their order.
+  questions: {
+    where: { archivedAt: null },
+    orderBy: { position: "asc" },
+    select: { id: true, label: true, type: true, options: true, required: true },
+  },
 } satisfies Prisma.EventInclude
 
 export type PublicEventRow = Prisma.EventGetPayload<{ include: typeof publicEventInclude }>
@@ -58,6 +64,7 @@ export function toPublicEvent(event: PublicEventRow) {
   })
 
   return {
+    questions: event.questions ?? [],
     id: event.id,
     slug: event.slug,
     title: event.title,

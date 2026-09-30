@@ -183,6 +183,9 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         <Link href={`/admin/events/${event.id}/pages`} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
           Pages
         </Link>
+        <Link href={`/admin/events/${event.id}/questions`} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
+          Questions
+        </Link>
         <Link href={`/admin/events/${event.id}/sector-leaders`} className="text-sm text-gray-500 hover:text-gray-800 transition-colors">
           Responsables de secteur
         </Link>

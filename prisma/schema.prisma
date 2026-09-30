@@ -95,6 +95,8 @@ model Event {
   sectorLeaders SectorLeader[]
   milestones    EventMilestone[]
   targetedMessages TargetedMessage[]
+  questions        EventQuestion[]
+  questionAnswers  QuestionAnswer[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -315,6 +317,7 @@ model Volunteer {
   registrations     Registration[]
   invites           MemberInvite[]
   pushSubscriptions PushSubscription[]
+  questionAnswers   QuestionAnswer[]
 
   // Also unique case-insensitively: "Volunteer_organizationId_email_ci_key" on lower(trim(email)), created by migration
   // 20260930110000_email_case_insensitive_unique (#342). Expression indexes can't be declared here;
@@ -439,6 +442,45 @@ model MessageTemplate {
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@index([organizationId, name])
+}
+
+// A question of an event's sign-up form (#483): text, yes/no, single or multiple choice, required
+// or not. At most a few per event. A question with answers is never deleted: removing it archives
+// it (archivedAt), so the answers stay for the admin views and exports until the event goes.
+model EventQuestion {
+  id         String    @id @default(cuid())
+  eventId    String
+  position   Int       @default(0)
+  label      String
+  // "text" | "yesno" | "single" | "multiple"
+  type       String
+  options    String[]  @default([])
+  required   Boolean   @default(false)
+  archivedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  event   Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  answers QuestionAnswer[]
+
+  @@index([eventId, position])
+}
+
+// One volunteer's answer to one question of an event (#483), asked once per event. Values as a
+// list: one item for text / yes-no / single choice, several for multiple choice.
+model QuestionAnswer {
+  id          String   @id @default(cuid())
+  questionId  String
+  eventId     String
+  volunteerId String
+  values      String[]
+  updatedAt   DateTime @updatedAt
+
+  question  EventQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  event     Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  volunteer Volunteer     @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, volunteerId])
+  @@index([eventId])
 }
 
 // One row per targeted message sent to volunteers (#467): who wrote what, when, to whom, and how

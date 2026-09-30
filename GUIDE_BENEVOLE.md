@@ -82,6 +82,8 @@ Cliquez sur **Confirmer mon inscription**.
 
 ---
 
+Selon l'événement, le formulaire pose aussi **quelques questions** de l'organisation (taille de t-shirt, permis…). Celles marquées d'un astérisque sont obligatoires ; vos réponses sont transmises à l'organisation avec votre inscription.
+
 ## Confirmation
 
 Après l'inscription, un **email de confirmation** est envoyé à votre adresse. Il récapitule vos créneaux et contient un **lien personnel** pour gérer votre inscription.
