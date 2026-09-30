@@ -309,6 +309,8 @@ Aucune action directement sur une ligne : cocher une ou plusieurs inscriptions (
 - **Renvoyer le lien** : réenvoie par email le lien personnel de gestion (`/my/[token]`) de chaque bénévole sélectionné — utile s'il l'a perdu ou supprimé par erreur. Le lien renvoyé donne accès à toutes les inscriptions actives du bénévole pour cet événement, pas seulement au créneau de la ligne.
 - **Retirer de leur créneau** : annule chaque inscription sélectionnée.
 
+Chacune de ces actions demande d'abord une confirmation qui récapitule ce qui va se passer : personnes concernées, emails envoyés, places proposées à la liste d'attente, et le fait que l'action est journalisée. Une fois l'action faite, **Voir dans le journal** ouvre le journal de l'événement à la date du jour pour la retrouver (lien « Voir cette action dans le journal »).
+
 Un badge **Responsable** s'affiche sur une ligne quand ce bénévole est déjà responsable du poste de son créneau.
 
 ### Présences le jour J

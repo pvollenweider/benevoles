@@ -53,8 +53,8 @@ test("selecting all visible rows and bulk-cancelling removes them all", async ({
   await page.getByLabel("Sélectionner toutes les inscriptions visibles").check()
   await expect(page.getByText("3 sélectionnées")).toBeVisible()
 
-  page.once("dialog", (d) => d.accept())
   await page.getByRole("button", { name: /^Retirer de leur créneau \(3\)$/ }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Retirer" }).click()
 
   await expect(page.getByText("Aucune inscription.")).toBeVisible()
 
@@ -75,8 +75,8 @@ test("selecting a subset only cancels those rows", async ({ page }) => {
   await rows.nth(1).getByRole("checkbox").check()
   await expect(page.getByText("2 sélectionnées")).toBeVisible()
 
-  page.once("dialog", (d) => d.accept())
   await page.getByRole("button", { name: /^Retirer de leur créneau \(2\)$/ }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Retirer" }).click()
 
   await expect(rows).toHaveCount(1)
 })
@@ -89,8 +89,8 @@ test("bulk 'rendre responsable' makes every selected volunteer a leader of their
   await page.goto(`/admin/events/${eventId}/registrations`)
   await page.getByLabel("Sélectionner toutes les inscriptions visibles").check()
 
-  page.once("dialog", (d) => d.accept())
   await page.getByRole("button", { name: "Rendre responsable" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Désigner" }).click()
 
   // The confirmation is an sr-only aria-live announcement (never visually shown), so
   // toBeAttached() rather than toBeVisible(). Each item sends a real email (sector-leader
@@ -130,7 +130,7 @@ test("selecting exactly one row and 'rendre responsable' opens the modal, not th
 
   await page.getByRole("button", { name: "Rendre responsable" }).click()
 
-  // The modal, not the auto-assign confirm() dialog the multi-row path uses.
+  // The per-person modal, not the recap confirmation the multi-row path shows.
   await expect(page.getByRole("heading", { name: /Rendre .+ responsable/ })).toBeVisible()
 })
 
@@ -142,8 +142,8 @@ test("bulk 'renvoyer le lien' resends the management link to every selected volu
   await page.goto(`/admin/events/${eventId}/registrations`)
   await page.getByLabel("Sélectionner toutes les inscriptions visibles").check()
 
-  page.once("dialog", (d) => d.accept())
   await page.getByRole("button", { name: "Renvoyer le lien" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Renvoyer" }).click()
 
   await expect(page.getByText(/Lien renvoyé à \d+ bénévoles?\./)).toBeAttached({ timeout: 20_000 })
 })
