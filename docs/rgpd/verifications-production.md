@@ -5,8 +5,8 @@ Ce que le dépôt ne permet pas d'établir. Pour chaque point : la preuve à con
 ## Hébergeur du serveur
 
 - [x] Fournisseur et entité : OVH SAS, Roubaix, éditeur de Kimsufi (adresse du serveur, whois ; mentions légales Kimsufi). Vérifié le 2026-09-30. Reste : entité du contrat dans l'espace client.
-- [ ] Centre de données : l'adresse du serveur est allouée à Roubaix (France) ; datacenter exact (RBX) à confirmer dans l'espace client. Accès à distance possible de filiales hors UE sous clauses types (DPA § 6.2) : noté dans [sous-traitants.md](sous-traitants.md).
-- [ ] DPA : documents officiels trouvés (annexe traitement de données FR 7.0, conditions Serveurs dédiés) ; acceptation dans l'espace client à confirmer.
+- [x] Centre de données : **RBX3**, Roubaix (France), lu dans l'espace client le 2026-09-30. Accès à distance possible de filiales hors UE sous clauses types (DPA § 6.2) : noté dans [sous-traitants.md](sous-traitants.md).
+- [x] DPA : « Annexe traitement de données à caractère personnel » acceptée le 2026-04-02 (espace client, liste des contrats), avec les conditions Serveurs dédiés. Reste : relever la version du document accepté.
 
 ## Envoi des emails (SMTP)
 
@@ -24,10 +24,10 @@ Ce que le dépôt ne permet pas d'établir. Pour chaque point : la preuve à con
 ## Sentry
 
 - [x] Région : **UE (Francfort)**, observée le 2026-09-30 (le site envoie ses événements à `ingest.de.sentry.io`). Entité : Functional Software, Inc. ; comptes et réglages toujours aux États-Unis.
-- [ ] DPA accepté dans l'organisation (le DPA et la liste des sous-traitants sont publics) ; **fonctions d'IA** de Sentry (sous-traitants Anthropic, OpenAI) actives ou non.
-- [ ] Offre souscrite, qui fixe la conservation (30 jours en Developer, 90 jours pour erreurs et enregistrements à partir de Team).
+- [ ] DPA accepté dans l'organisation (le DPA et la liste des sous-traitants sont publics). Fonctions d'IA générative : **visibles** dans l'organisation (console, 2026-09-30) ; à désactiver si non utilisées.
+- [x] Offre : **Developer**, donc conservation de **30 jours** (console, 2026-09-30).
 - [ ] Taux effectifs : ceux du code (10 % des traces, 10 % des sessions enregistrées, 100 % des sessions en erreur) ne sont pas surchargés par des règles du projet.
-- [ ] Filtres côté serveur Sentry (données sensibles, IP) : réglages du projet.
+- [ ] Filtres côté serveur : nettoyage des données et nettoyeurs par défaut **actifs** sur le projet ; **stockage des adresses IP non bloqué** (organisation et projet) : à activer.
 
 ## Services push des navigateurs
 
