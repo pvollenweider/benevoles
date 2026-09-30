@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useEffect, useRef, useState } from "react"
+import { ACCENT_KEYS, eventAccent } from "@/lib/event-accent"
 import { useRouter } from "next/navigation"
 import { isCompleteTime, addMinutes } from "@/lib/gantt-utils"
 import { LISTED_FIELD_HELP, LISTED_FIELD_LABEL, UNLISTED_HINT, visibilityLabel } from "@/lib/event-visibility"
@@ -23,6 +24,8 @@ type EventFormData = {
   requirePhone: boolean
   /** Unlisted events (#414): false = reachable by link only. */
   isListed: boolean
+  /** Accent colour of the public page (#300): a palette key, or null for the neutral header. */
+  accentColorKey: string | null
 }
 
 type Props = {
@@ -44,6 +47,7 @@ const defaultData: EventFormData = {
   publicStatus: "draft",
   requirePhone: false,
   isListed: true,
+  accentColorKey: null,
 }
 
 const emptyShow: Show = { name: "", date: "", startTime: "", endTime: "" }
@@ -413,6 +417,36 @@ export default function EventForm({ initialData, createdHref }: Props) {
           <p className="text-sm text-gray-700">L&apos;événement est créé en brouillon : les créneaux viennent ensuite, la publication à la fin.</p>
         )}
 
+        <fieldset aria-describedby="event-accent-hint">
+          <legend className="text-sm font-medium text-gray-700 mb-1">Couleur de la page publique</legend>
+          <p id="event-accent-hint" className="text-xs text-gray-600 mb-2">Une couleur de la palette derrière le titre de la page d&apos;inscription (le texte reste lisible). Sans couleur, l&apos;en-tête reste blanc.</p>
+          <div className="flex flex-wrap gap-2">
+            {/* The radio covers its pill (screen-reader cursor and hit area match); the selected
+                state is a border, a check mark in currentColor and a weight change, so it survives
+                forced-colours mode. */}
+            <AccentPill selected={form.accentColorKey === null} onSelect={() => setForm((f) => ({ ...f, accentColorKey: null }))} value="">
+              <span aria-hidden="true" className="w-4 h-4 rounded-full border border-gray-400 bg-white forced-colors:border-[CanvasText]" />
+              Aucune<span className="sr-only"> (en-tête blanc)</span>
+            </AccentPill>
+            {ACCENT_KEYS.map((key) => {
+              const a = eventAccent(key)!
+              return (
+                <AccentPill key={key} value={key} selected={form.accentColorKey === key} onSelect={() => setForm((f) => ({ ...f, accentColorKey: key }))}>
+                  <span aria-hidden="true" className={`w-4 h-4 rounded-full ${a.swatch} forced-colors:border forced-colors:border-[CanvasText]`} />
+                  {a.label}
+                </AccentPill>
+              )
+            })}
+          </div>
+          {form.accentColorKey && eventAccent(form.accentColorKey) && (
+            <div aria-hidden="true" className={`mt-3 rounded-xl px-4 py-3 ${eventAccent(form.accentColorKey)!.band}`}>
+              <p className={`text-xs font-medium ${eventAccent(form.accentColorKey)!.soft}`}>Aperçu de l&apos;en-tête</p>
+              <p className="text-lg font-bold">{form.title || "Titre de l'événement"}</p>
+            </div>
+          )}
+        </fieldset>
+
+
         {error && <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{error}</div>}
 
         <div className="flex gap-3 pt-2">
@@ -429,5 +463,20 @@ export default function EventForm({ initialData, createdHref }: Props) {
 
       </form>
     </>
+  )
+}
+
+/** One option of the accent colour picker: a pill whose native radio covers it. */
+function AccentPill({ value, selected, onSelect, children }: { value: string; selected: boolean; onSelect: () => void; children: React.ReactNode }) {
+  return (
+    <label
+      className={`relative inline-flex items-center gap-2 text-sm border rounded-full px-3 py-1.5 cursor-pointer has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-blue-600 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-blue-600 ${
+        selected ? "border-gray-900 bg-gray-100 font-medium shadow-[inset_0_0_0_1px_#101828]" : "border-gray-300 hover:border-gray-500"
+      }`}
+    >
+      <input type="radio" name="event-accent" value={value} checked={selected} onChange={onSelect} className="absolute inset-0 h-full w-full appearance-none opacity-0 cursor-pointer rounded-full" />
+      {children}
+      <svg aria-hidden="true" viewBox="0 0 16 16" className={`w-4 h-4 shrink-0 ${selected ? "" : "invisible"}`} fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8.5l3 3 7-7" /></svg>
+    </label>
   )
 }

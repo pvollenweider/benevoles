@@ -57,6 +57,7 @@ export function toPublicEvent(event: PublicEventRow) {
     publicInstructions: event.publicInstructions,
     confirmationMessage: event.confirmationMessage,
     requirePhone: event.requirePhone,
+    accentColorKey: event.accentColorKey,
     showSchedule: event.showSchedule,
     volunteerCharter: event.organization.volunteerCharter,
     shifts,

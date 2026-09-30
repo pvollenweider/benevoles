@@ -30,6 +30,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
     requirePhone: event.requirePhone,
     publicStatus: event.publicStatus as "draft" | "published" | "archived",
     isListed: event.isListed,
+    accentColorKey: event.accentColorKey,
     showSchedule: (event.showSchedule ?? []) as Array<{ name: string; date: string; startTime: string; endTime: string }>,
   }
 
