@@ -97,6 +97,18 @@ Vous pouvez :
 
 Le lien « Retour à l'accueil » vous ramène directement sur la page de l'événement — vous y êtes automatiquement reconnu(e).
 
+### Votre lien personnel
+
+Ce lien donne accès à vos inscriptions et permet de les annuler : **ne le partagez pas**. Sur votre page personnelle, l'encadré **Ton lien personnel** rappelle la date du dernier email qui le contenait et propose **Recevoir ce lien par email** pour l'avoir à nouveau dans votre boîte (au plus trois envois par heure). Si l'organisation a indiqué une adresse de contact, un lien **Écrire à l'organisation** ouvre votre messagerie avec l'objet déjà rempli.
+
+**Le lien ne fonctionne pas** : il a pu être coupé par la messagerie (ouvrez-le depuis l'email plutôt que de le recopier), ou toutes vos inscriptions à cet événement ont été annulées. La page « Ce lien ne fonctionne pas » propose de recevoir un nouveau lien : indiquez l'adresse email utilisée pour vous inscrire ; si une inscription existe à cette adresse dans cette organisation, un email part pour chaque événement à venir. La réponse affichée est la même dans tous les cas, pour que personne ne puisse vérifier qui est inscrit.
+
+### Votre lien personnel
+
+Ce lien donne accès à vos inscriptions et permet de les annuler : **ne le partagez pas**. Sur votre page personnelle, l'encadré **Ton lien personnel** rappelle la date du dernier email qui le contenait et propose **Recevoir ce lien par email** pour l'avoir à nouveau dans votre boîte (au plus trois envois par heure). Si l'organisation a indiqué une adresse de contact, un lien **Écrire à l'organisation** ouvre votre messagerie avec l'objet déjà rempli.
+
+**Le lien ne fonctionne pas** (« Ce lien ne fonctionne pas ») : il a pu être coupé par la messagerie (ouvrez-le depuis l'email plutôt que de le recopier), ou toutes vos inscriptions à cet événement ont été annulées. La page propose de recevoir un nouveau lien : indiquez l'adresse email utilisée pour vous inscrire ; si une inscription existe à cette adresse dans cette organisation, un email part pour chaque événement concerné. La réponse est la même dans tous les cas, pour que personne ne puisse vérifier qui est inscrit.
+
 ### Recevoir les rappels sur votre téléphone
 
 Sur votre page personnelle, vous pouvez activer les **notifications du navigateur** (aussi sur la page de confirmation si vous vous êtes inscrit·e depuis un lien d'invitation). Vous recevez alors, en plus de l'email, un rappel 2 jours avant, la veille et le jour de votre créneau. Votre navigateur vous demande d'abord votre autorisation ; vous pouvez la retirer à tout moment dans ses réglages. Le bouton n'apparaît pas si votre navigateur ne gère pas les notifications ou si le site ne les propose pas.

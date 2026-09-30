@@ -52,6 +52,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     orgHomeUrl: baseUrl,
     eventUrl: `${baseUrl}/${registration.event.slug}`,
     timeZone: orgTimeZone(registration.event.organization),
+    // The newest email carrying the link, across the volunteer's registrations on this event (#376).
+    linkEmailedAt: allRegistrations.reduce<Date | null>((m, r) => (r.linkEmailedAt && (!m || r.linkEmailedAt > m) ? r.linkEmailedAt : m), null),
+    contactEmail: process.env.EMAIL_REPLY_TO || null,
     volunteer: {
       firstName: registration.volunteer.firstName,
       lastName: registration.volunteer.lastName,

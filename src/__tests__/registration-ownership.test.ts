@@ -48,7 +48,7 @@ vi.mock("@/lib/prisma", () => {
       },
       volunteer: { findFirst: m.volFindFirst, create: m.volCreate, update: m.volUpdate, findFirstOrThrow: vi.fn() },
       memberInvite: { findFirst: m.inviteFindFirst, updateMany: vi.fn().mockResolvedValue({ count: 1 }) },
-      registration: { findMany: m.regFindMany, findFirst: m.regFindFirst },
+      registration: { findMany: m.regFindMany, findFirst: m.regFindFirst, updateMany: vi.fn().mockResolvedValue({ count: 1 }) },
       $transaction: vi.fn(async (fn: (t: typeof tx) => unknown) => fn(tx)),
     },
   }
