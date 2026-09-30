@@ -12,6 +12,7 @@ import { renderMarkdown, interpolate } from "@/lib/markdown"
 import PushSubscribeButton from "@/components/PushSubscribeButton"
 import ShiftInfoList from "@/components/ShiftInfoList"
 import AvailabilityForm from "@/components/AvailabilityForm"
+import { withdrawCopy } from "@/lib/volunteer-withdraw"
 
 type ShiftRef = {
   label: string
@@ -161,6 +162,7 @@ export default function MyRegistrationPage() {
               timeZone: "UTC", weekday: "long", day: "numeric", month: "long",
             })
             const isPending = pendingCancel?.editToken === reg.editToken
+            const copy = withdrawCopy(reg.status, reg.shift.label)
             return (
               <div key={reg.id} className="bg-white rounded-xl border border-gray-200 p-4">
                 <div className="flex items-center justify-between gap-3">
@@ -195,10 +197,10 @@ export default function MyRegistrationPage() {
                     <button
                       onClick={() => setPendingCancel({ editToken: reg.editToken, label: reg.shift.label })}
                       disabled={cancelling === reg.editToken}
-                      aria-label={`Annuler le créneau ${reg.shift.label}`}
+                      aria-label={copy.ariaLabel}
                       className="text-xs text-red-500 hover:text-red-700 border border-red-200 rounded-lg px-3 py-1.5 flex-shrink-0 transition-colors disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
                     >
-                      {cancelling === reg.editToken ? "…" : "Annuler"}
+                      {cancelling === reg.editToken ? "…" : copy.button}
                     </button>
                   )}
                 </div>
@@ -210,9 +212,9 @@ export default function MyRegistrationPage() {
                     aria-describedby={`cancel-desc-${reg.id}`}
                     className="mt-3 bg-red-50 border border-red-200 rounded-lg p-3 space-y-2"
                   >
-                    <p id={`cancel-title-${reg.id}`} className="text-sm font-medium text-red-800">Confirmer l'annulation ?</p>
+                    <p id={`cancel-title-${reg.id}`} className="text-sm font-medium text-red-800">{copy.confirmTitle}</p>
                     <p id={`cancel-desc-${reg.id}`} className="text-xs text-red-600">
-                      Tu veux annuler le créneau <strong>{reg.shift.label}</strong> ?
+                      {copy.confirmBefore}<strong>{reg.shift.label}</strong>{copy.confirmAfter}
                     </p>
                     <div className="flex gap-2 pt-1">
                       <button
@@ -220,7 +222,7 @@ export default function MyRegistrationPage() {
                         disabled={cancelling === reg.editToken}
                         className="flex-1 bg-red-500 text-white rounded-lg py-1.5 text-xs font-medium hover:bg-red-600 disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
                       >
-                        {cancelling === reg.editToken ? "…" : "Oui, annuler"}
+                        {cancelling === reg.editToken ? "…" : copy.confirmButton}
                       </button>
                       <button
                         onClick={() => setPendingCancel(null)}

@@ -12,7 +12,8 @@ import { reportError } from "@/lib/report-error"
 import { contactPhone } from "@/lib/contact-phone"
 import { registrationToken } from "@/lib/token-vault"
 import { pickShiftInfo } from "@/lib/shift-info"
-import { COMMITTED_STATUSES, LIVE_STATUSES } from "@/lib/registration-capacity"
+import { LIVE_STATUSES } from "@/lib/registration-capacity"
+import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw } from "@/lib/volunteer-withdraw"
 
 export async function GET(req: Request, { params }: { params: Promise<{ token: string }> }) {
   const rl = await rateLimit(getClientIp(req), "reg-token-read", 10, 60 * 60 * 1000)
@@ -94,18 +95,22 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
 
   const { token } = await params
 
-  // A pending request (#484) can be withdrawn the same way: it frees the spot it holds.
+  // Every live registration the personal page shows can be withdrawn: a place, a pending
+  // request (#484), a waitlist entry or a spot offered from the waitlist.
   const registration = await prisma.registration.findFirst({
-    where: { ...registrationToken.where(token), status: { in: [...COMMITTED_STATUSES] } },
+    where: { ...registrationToken.where(token), status: { in: [...WITHDRAWABLE_STATUSES] } },
   })
+  const plan = registration && planVolunteerWithdraw(registration.status)
 
-  if (!registration) {
+  if (!registration || !plan) {
     return NextResponse.json({ error: "Inscription introuvable ou déjà annulée." }, { status: 404 })
   }
 
-  // Conditional on still being active (#264): a double click would otherwise cancel twice, log
-  // twice and trigger two waitlist promotions for a single freed spot. Same for a request the
-  // organizer is deciding on right now: whichever runs first wins, the other finds it settled.
+  // Conditional on still being in the status read above (#264): a double click would otherwise
+  // cancel twice, log twice and trigger two waitlist promotions for a single freed spot. Same
+  // for a request the organizer is deciding on, an offer being confirmed or expiring, or a
+  // waitlist entry being offered a spot right now: whichever runs first wins, the other finds
+  // it settled.
   const { count } = await prisma.registration.updateMany({
     where: { id: registration.id, status: registration.status },
     data: { status: "cancelled" },
@@ -125,7 +130,11 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
     changes: { status: { from: registration.status, to: "cancelled" }, shiftId: { from: registration.shiftId, to: registration.shiftId } },
   })
 
-  await promoteNextInWaitlist(registration.shiftId, cancelLogId ?? undefined).catch(reportError("waitlist.promote"))
+  // Only a withdrawal that held a spot (place, request, offered spot) hands it to the next
+  // person on the waitlist. Leaving the waitlist frees nothing: the entries behind move up.
+  if (plan.releasesSpot) {
+    await promoteNextInWaitlist(registration.shiftId, cancelLogId ?? undefined).catch(reportError("waitlist.promote"))
+  }
 
   return NextResponse.json({ success: true })
 }
