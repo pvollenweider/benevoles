@@ -57,16 +57,15 @@ export default function NewOrgForm() {
     if (inviteSent === "sending" || inviteSent === "sent") return
     setInviteSent("sending")
     setInviteError(null)
-    const outcome = await requestJson<{ inviteUrl?: string }>(() => fetch(`/api/super-admin/organizations/${orgId}/send-invite`, { method: "POST" }), "L'invitation n'a pas pu être envoyée.")
-    // Sending rotates the token (#269): the link on screen must be the new one, or it is dead.
-    // On failure the route still returns the fresh link when it got that far; a network failure does not.
-    if (outcome.ok && outcome.data.inviteUrl) {
-      const url = outcome.data.inviteUrl
-      setResult((r) => (r ? { ...r, inviteUrl: url } : r))
-      setLinkRenewed(true)
-    }
-    if (!outcome.ok) setInviteError(outcome.error)
-    setInviteSent(outcome.ok ? "sent" : "error")
+    const outcome = await requestJson<{ sent: boolean; emailError: string | null; inviteUrl: string }>(() => fetch(`/api/super-admin/organizations/${orgId}/send-invite`, { method: "POST" }), "L'invitation n'a pas pu être envoyée.")
+    if (!outcome.ok) { setInviteError(outcome.error); setInviteSent("error"); return }
+    // Sending rotates the token (#269): the link on screen must be the new one, or it is dead —
+    // whether or not the email itself went out.
+    const { sent, emailError, inviteUrl } = outcome.data
+    setResult((r) => (r ? { ...r, inviteUrl } : r))
+    setLinkRenewed(true)
+    if (!sent) setInviteError(`${emailError ?? "L'email n'a pas pu être envoyé."} Le lien ci-dessus a été renouvelé : copiez celui-ci.`)
+    setInviteSent(sent ? "sent" : "error")
   }
 
   if (result) {
@@ -103,9 +102,9 @@ export default function NewOrgForm() {
             </button>
           </div>
           <p role="status" className={copied ? "text-xs text-blue-900" : "sr-only"}>{copied}</p>
-          {linkRenewed && <p className="text-xs text-blue-900">{RESENT_LINK_NOTICE}</p>}
+          {linkRenewed && <p aria-hidden="true" className="text-xs text-blue-900">{RESENT_LINK_NOTICE}</p>}
           <div className="pt-1 space-y-2">
-            <p role="status" className={inviteSent === "sent" ? "text-sm text-green-800 font-medium" : "sr-only"}>{inviteSent === "sent" ? "Invitation envoyée par email." : ""}</p>
+            <p role="status" className={inviteSent === "sent" ? "text-sm text-green-800 font-medium" : "sr-only"}>{inviteSent === "sent" ? `Invitation envoyée par email. ${RESENT_LINK_NOTICE}` : ""}</p>
             <p role="alert" className={inviteSent === "error" ? "text-sm text-red-800" : "sr-only"}>{inviteSent === "error" ? `${inviteError ?? "Échec de l'envoi."} Vous pouvez réessayer ou copier le lien.` : ""}</p>
             {/* Stays mounted once sent so the focus does not fall off the page. */}
             <button

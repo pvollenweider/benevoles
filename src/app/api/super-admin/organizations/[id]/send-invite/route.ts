@@ -9,18 +9,21 @@ import { sendNotification } from "@/lib/notifications"
 import { generateToken } from "@/lib/utils"
 import { hashToken } from "@/lib/token-hash"
 
-export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireSuperAdmin()
   if (guard instanceof NextResponse) return guard
 
   const { id } = await params
+  // Optional: which pending administrator, when the organisation has several.
+  const body = await req.json().catch(() => ({})) as { adminId?: unknown }
+  const adminId = typeof body?.adminId === "string" ? body.adminId : undefined
 
   const org = await prisma.organization.findUnique({
     where: { id },
     select: {
       name: true,
       admins: {
-        where: { isActive: false, setupTokenHash: { not: null } },
+        where: { isActive: false, setupTokenHash: { not: null }, ...(adminId ? { id: adminId } : {}) },
         select: { id: true, email: true, name: true },
         take: 1,
       },
@@ -48,8 +51,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     data: { adminName: admin.name, organizationName: org.name, inviteUrl },
   })
 
-  // The token was already rotated: whatever happened to the email, the caller needs the new link.
-  if (!result.ok) return NextResponse.json({ error: result.reason, inviteUrl, email: admin.email }, { status: 500 })
-
-  return NextResponse.json({ ok: true, inviteUrl, email: admin.email })
+  // The token is already rotated: whatever happened to the email, the caller needs the new link,
+  // so the email outcome is part of a successful answer rather than an error status.
+  return NextResponse.json({ ok: true, sent: result.ok, emailError: result.ok ? null : result.reason, inviteUrl, email: admin.email })
 }
