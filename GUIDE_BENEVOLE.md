@@ -101,6 +101,7 @@ https://[organisation].benevol.app/my/[token]
 Vous pouvez :
 - Voir tous vos créneaux inscrits pour cet événement
 - **Annuler** un créneau individuellement — la place est immédiatement libérée
+- **Ajouter vos créneaux à votre calendrier** (téléphone, Google, Outlook, Apple…) : avec plusieurs créneaux, « Ajouter tout mon planning à mon calendrier » télécharge un fichier `.ics` de vos créneaux confirmés, et « Ajouter à mon calendrier » sous un créneau le fait pour lui seul. Ouvrez le fichier pour l'importer. Il ne se met pas à jour tout seul : si un horaire change, vous recevez un email, téléchargez-le à nouveau (le créneau est alors remplacé, pas dupliqué, dans la plupart des calendriers).
 - Indiquer, si vous le souhaitez, **vos disponibilités** en général (matin, après-midi, soir, et une remarque comme « pas le dimanche »). C'est facultatif : cela aide l'organisation si elle doit vous proposer un autre créneau, mais vous choisissez toujours vos créneaux vous-même.
 
 Le lien « Retour à l'accueil » vous ramène directement sur la page de l'événement — vous y êtes automatiquement reconnu(e).
