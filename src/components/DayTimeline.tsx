@@ -49,6 +49,8 @@ export default function DayTimeline({
   registered,
   conflicts,
   onToggle,
+  locked = false,
+  describedBy,
 }: {
   shifts: TimelineShift[]
   shows: Show[]
@@ -56,6 +58,10 @@ export default function DayTimeline({
   registered?: Set<string>
   conflicts?: Set<string>
   onToggle: (id: string, status: string) => void
+  /** Registrations closed (#463): the schedule stays readable, nothing new can be selected. */
+  locked?: boolean
+  /** Id of the text explaining why, read with the schedule. */
+  describedBy?: string
 }) {
   const visible = shifts.filter((s) => s.status !== "cancelled")
   if (visible.length === 0) return null
@@ -109,6 +115,7 @@ export default function DayTimeline({
     <div
       role="region"
       aria-label="Planning de la journée, à faire défiler horizontalement si besoin"
+      aria-describedby={describedBy}
       className="mb-5 rounded-xl border border-gray-100 bg-white overflow-x-auto select-none"
     >
       {/* Fluid width; the min-width only sets the point where the card starts to scroll. */}
@@ -166,7 +173,7 @@ export default function DayTimeline({
                   const isSelected      = selected.has(shift.id)
                   const state           = isSelected ? "selected" : (isConflict || unavail) ? "unavailable" : "default"
                   const barCls          = getBarClasses(shift.roleName, state, shift.colorKey)
-                  const clickable       = !isRegistered && !isConflict && !unavail
+                  const clickable       = !isRegistered && !isConflict && !unavail && (!locked || isSelected)
                   const hasLabel        = shift.label !== shift.roleName
                   const startMin        = toMin(shift.startTime)
                   const endMin          = toMinEnd(shift.endTime, shift.startTime)
@@ -197,7 +204,7 @@ export default function DayTimeline({
                   // all that matters).
                   const spotsText       = unavail ? null : `${shift.registered}/${shift.capacity}`
                   const spotsSuffix     = spotsText ? ` (${shift.spotsLeft} place${shift.spotsLeft > 1 ? "s" : ""} libre${shift.spotsLeft > 1 ? "s" : ""} sur ${shift.capacity})` : ""
-                  const ariaLabel       = (isWaitlistable
+                  const ariaLabel       = locked && !isSelected ? `${roleLabel} ${timeSpoken}${minAgeSuffix}${spotsSuffix}` : (isWaitlistable
                     ? (isSelected
                       ? `Retirer de la file d'attente — ${roleLabel} ${timeSpoken}`
                       : `Rejoindre la file d'attente — ${roleLabel} ${timeSpoken}`)

@@ -72,6 +72,12 @@ model Event {
   // Accent colour of the public page (#300, part 1): a key of the curated palette
   // (src/lib/event-accent.ts), never a free value, so the header stays readable.
   accentColorKey      String?
+  // Registration window (#463), independent from publication: a published event can be visible
+  // while sign-ups are closed. Open by default so existing events keep working; copies and
+  // templates start closed. Optional schedule, as instants (entered in the organisation's zone).
+  registrationsOpen    Boolean   @default(true)
+  registrationOpensAt  DateTime?
+  registrationClosesAt DateTime?
   // Coordinates of the place (#191): typed once, shown as a map link; default for the shifts.
   latitude            Float?
   longitude           Float?

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Prisma } from "@/generated/prisma/client"
+import { orgTimeZone } from "@/lib/time-zone"
 import { coordinatesOf } from "@/lib/map-link"
 
 /**
@@ -9,7 +10,7 @@ import { coordinatesOf } from "@/lib/map-link"
  * preview (#370), so the preview shows exactly what will be published.
  */
 export const publicEventInclude = {
-  organization: { select: { name: true, slug: true, volunteerCharter: true } },
+  organization: { select: { name: true, slug: true, volunteerCharter: true, timeZone: true } },
   shifts: {
     where: { status: { not: "cancelled" } },
     include: { registrations: { where: { status: "active" } } },
@@ -67,6 +68,11 @@ export function toPublicEvent(event: PublicEventRow) {
     publicInstructions: event.publicInstructions,
     confirmationMessage: event.confirmationMessage,
     requirePhone: event.requirePhone,
+    // Registration window (#463): the page shows the schedule either way, the form only when open.
+    registrationsOpen: event.registrationsOpen,
+    registrationOpensAt: event.registrationOpensAt,
+    registrationClosesAt: event.registrationClosesAt,
+    timeZone: orgTimeZone(event.organization),
     accentColorKey: event.accentColorKey,
     showSchedule: event.showSchedule,
     volunteerCharter: event.organization.volunteerCharter,

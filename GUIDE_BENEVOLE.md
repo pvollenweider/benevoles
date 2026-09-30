@@ -24,6 +24,8 @@ La page affiche un **planning par jour**. Chaque ligne correspond à un poste (a
 
 ![Planning public d'un événement sur plusieurs jours, avec les postes en lignes, les créneaux en barres colorées, et les liens vers les pages personnalisées (règlement, accès)](/doc-img/public-timeline.png)
 
+Si les inscriptions ne sont pas encore ouvertes, ou déjà fermées, un encadré en haut de la page le dit, avec la date d'ouverture quand elle est prévue. Le planning reste consultable, mais on ne peut pas choisir de créneau.
+
 ### Lire le planning
 
 | Couleur / état | Signification |

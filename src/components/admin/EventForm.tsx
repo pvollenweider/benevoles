@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react"
 import { ACCENT_KEYS, eventAccent } from "@/lib/event-accent"
 import CoordinatesField from "@/components/admin/CoordinatesField"
 import { useRouter } from "next/navigation"
+import { WINDOW_ORDER_ERROR, localWindowOrderInvalid } from "@/lib/registration-window"
 import { isCompleteTime, addMinutes } from "@/lib/gantt-utils"
 import { LISTED_FIELD_HELP, LISTED_FIELD_LABEL, UNLISTED_HINT, visibilityLabel } from "@/lib/event-visibility"
 
@@ -27,6 +28,10 @@ type EventFormData = {
   isListed: boolean
   /** Accent colour of the public page (#300): a palette key, or null for the neutral header. */
   accentColorKey: string | null
+  /** Registration window (#463): the switch, and local « YYYY-MM-DDTHH:MM » (empty = none). */
+  registrationsOpen: boolean
+  registrationOpensAt: string
+  registrationClosesAt: string
   /** Coordinates of the place (#191), or null. */
   latitude: number | null
   longitude: number | null
@@ -37,6 +42,8 @@ type Props = {
   /** Where to go once created (create mode), `{id}` replaced; defaults to the event page. A
    *  string, not a function: this component is rendered from server pages. */
   createdHref?: string
+  /** Organisation time zone, for the registration schedule (#463). */
+  timeZone?: string
 }
 
 const defaultData: EventFormData = {
@@ -54,16 +61,20 @@ const defaultData: EventFormData = {
   accentColorKey: null,
   latitude: null,
   longitude: null,
+  registrationsOpen: true,
+  registrationOpensAt: "",
+  registrationClosesAt: "",
 }
 
 const emptyShow: Show = { name: "", date: "", startTime: "", endTime: "" }
 const inputCls = "w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
 
-export default function EventForm({ initialData, createdHref }: Props) {
+export default function EventForm({ initialData, createdHref, timeZone = "Europe/Zurich" }: Props) {
   const router = useRouter()
   const isEdit = !!initialData?.id
 
   const [form, setForm]       = useState<EventFormData>({ ...defaultData, ...initialData })
+  const windowOrderBad = localWindowOrderInvalid(form.registrationOpensAt, form.registrationClosesAt)
   const [shows, setShows]     = useState<Show[]>(initialData?.showSchedule ?? [])
   const [newShow, setNewShow] = useState<Show>(emptyShow)
   const [addingShow, setAddingShow] = useState(false)
@@ -426,7 +437,41 @@ export default function EventForm({ initialData, createdHref }: Props) {
               </div>
             </div>
           </fieldset>
-        ) : (
+        ) : null}
+
+        {isEdit && (
+          <fieldset aria-describedby="event-registrations-hint">
+            <legend className="text-sm font-medium text-gray-700 mb-1">Inscriptions</legend>
+            <p id="event-registrations-hint" className="text-xs text-gray-600 mb-2">
+              Indépendantes de la publication : un événement publié reste visible même quand ses inscriptions sont fermées. Vous pouvez toujours ajouter des bénévoles vous-même, et les liens personnels restent valables.
+            </p>
+            <div className="flex items-start gap-2">
+              <input
+                id="event-registrations-open"
+                type="checkbox"
+                aria-describedby="event-registrations-hint event-registrations-zone"
+                checked={form.registrationsOpen}
+                onChange={(e) => setForm((f) => ({ ...f, registrationsOpen: e.target.checked }))}
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+              />
+              <label htmlFor="event-registrations-open" className="text-sm font-medium text-gray-700">Inscriptions ouvertes</label>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 mt-3">
+              <div>
+                <label htmlFor="event-registrations-opens" className="block text-sm font-medium text-gray-700 mb-1">Ouverture programmée (facultatif)</label>
+                <input id="event-registrations-opens" type="datetime-local" value={form.registrationOpensAt} onChange={(e) => set("registrationOpensAt", e.target.value)} aria-describedby="event-registrations-zone" className={inputCls} />
+              </div>
+              <div>
+                <label htmlFor="event-registrations-closes" className="block text-sm font-medium text-gray-700 mb-1">Fermeture programmée (facultatif)</label>
+                <input id="event-registrations-closes" type="datetime-local" value={form.registrationClosesAt} onChange={(e) => set("registrationClosesAt", e.target.value)} aria-invalid={windowOrderBad || undefined} aria-describedby={windowOrderBad ? "event-registrations-order event-registrations-zone" : "event-registrations-zone"} className={inputCls} />
+                {windowOrderBad && <p id="event-registrations-order" className="text-xs text-red-700 mt-1">{WINDOW_ORDER_ERROR}</p>}
+              </div>
+            </div>
+            <p id="event-registrations-zone" className="text-xs text-gray-600 mt-1">Heures du fuseau de l&apos;organisation ({timeZone}). La case « Inscriptions ouvertes » doit être cochée pour qu&apos;une ouverture programmée prenne effet.</p>
+          </fieldset>
+        )}
+
+        {isEdit ? null : (
           <p className="text-sm text-gray-700">L&apos;événement est créé en brouillon : les créneaux viennent ensuite, la publication à la fin.</p>
         )}
 

@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { orgTimeZone } from "@/lib/time-zone"
+import { acceptsRegistrations, refusalMessage, registrationState } from "@/lib/registration-window"
 import { birthDateSchema } from "@/lib/civil-date"
 import { prisma } from "@/lib/prisma"
 import { generateToken, shiftsOverlap, shiftsTooYoungFor } from "@/lib/utils"
@@ -59,9 +61,15 @@ export async function POST(req: Request) {
 
   const event = await prisma.event.findFirst({
     where: { id: eventId, publicStatus: "published", organization: { active: true } },
-    include: { organization: { select: { slug: true } } },
+    include: { organization: { select: { slug: true, timeZone: true } } },
   })
   if (!event) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
+  // Registration window (#463): the page may have been opened before registrations closed. The
+  // query above already requires a published event; what's left to check is the window.
+  const signupWindow = { ...event, publicStatus: "published" }
+  if (!acceptsRegistrations(signupWindow)) {
+    return NextResponse.json({ error: refusalMessage(registrationState(signupWindow), orgTimeZone(event.organization)) }, { status: 409 })
+  }
 
   // Authoritative check: the form marks the field required too, but only as a courtesy.
   if (event.requirePhone && !phone?.trim()) {

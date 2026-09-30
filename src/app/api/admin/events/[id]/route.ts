@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { localDateTimeToUtc, orgTimeZone } from "@/lib/time-zone"
+import { isValidWindow, localInputToUtc, WINDOW_ORDER_ERROR } from "@/lib/registration-window"
 import { civilDateSchema, DATE_ORDER_ERROR, isOrderedPeriod } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { ACCENT_KEYS } from "@/lib/event-accent"
@@ -31,6 +33,10 @@ const schema = z.object({
   publicStatus: z.enum(EVENT_PUBLIC_STATUSES).optional(),
   /** Unlisted events (#414): a strict boolean, logged as « visibilité ». */
   isListed: z.boolean().optional(),
+  /** Registration window (#463): a switch, and an optional schedule as local « YYYY-MM-DDTHH:MM » in the organisation's zone. */
+  registrationsOpen: z.boolean().optional(),
+  registrationOpensAt: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/).nullable().optional().or(z.literal("")),
+  registrationClosesAt: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/).nullable().optional().or(z.literal("")),
   showSchedule: z.array(showSchema).optional(),
   reminderMessage: z.string().max(2000).optional().nullable(),
   remindersEnabled: z.boolean().optional(),
@@ -75,7 +81,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   const owned = await db.event.findFirst({
     where: { id },
-    select: { id: true, title: true, publicStatus: true, isListed: true, startDate: true, endDate: true, publicInstructions: true, remindersEnabled: true, requirePhone: true },
+    select: { id: true, title: true, publicStatus: true, isListed: true, startDate: true, endDate: true, publicInstructions: true, remindersEnabled: true, requirePhone: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, organization: { select: { timeZone: true } } },
   })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
@@ -93,13 +99,23 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     return NextResponse.json({ error: DATE_ORDER_ERROR }, { status: 400 })
   }
   const updateData: Record<string, unknown> = { ...data }
+  // The schedule arrives as local times: convert in the organisation's zone, keep the order.
+  const zone = orgTimeZone(owned.organization)
+  const toInstant = (v: string | null | undefined) => (v ? localInputToUtc(v, zone, localDateTimeToUtc) : null)
+  if (data.registrationOpensAt !== undefined) updateData.registrationOpensAt = toInstant(data.registrationOpensAt)
+  if (data.registrationClosesAt !== undefined) updateData.registrationClosesAt = toInstant(data.registrationClosesAt)
+  const nextOpens = data.registrationOpensAt !== undefined ? (updateData.registrationOpensAt as Date | null) : owned.registrationOpensAt
+  const nextCloses = data.registrationClosesAt !== undefined ? (updateData.registrationClosesAt as Date | null) : owned.registrationClosesAt
+  if (!isValidWindow(nextOpens, nextCloses)) return NextResponse.json({ error: WINDOW_ORDER_ERROR }, { status: 400 })
   if (data.startDate) updateData.startDate = new Date(data.startDate)
   if (data.endDate) updateData.endDate = new Date(data.endDate)
 
   try {
     const event = await db.event.update({ where: { id }, data: updateData })
 
-    const eventChanges = diffFields(owned, event, [
+    const { organization: _ownedOrg, ...ownedFields } = owned
+    void _ownedOrg
+    const eventChanges = diffFields(ownedFields, event, [
       "title",
       "publicStatus",
       "startDate",
@@ -108,6 +124,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       "remindersEnabled",
       "requirePhone",
       "isListed",
+      "registrationsOpen",
+      "registrationOpensAt",
+      "registrationClosesAt",
     ])
     if (eventChanges) {
       const statusChangedTo = eventChanges.publicStatus?.to

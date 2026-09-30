@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { prisma } from "./prisma"
+import { acceptsRegistrations } from "./registration-window"
 import { orgBaseUrl } from "./urls"
 import { logEvent, SYSTEM_ACTOR } from "./event-log"
 import { OCCUPYING_STATUSES, canOfferSpot, lockShifts } from "./registration-capacity"
@@ -26,8 +27,13 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
   // over-capacity shift, spot already re-taken).
   const offered = await prisma.$transaction(async (tx) => {
     await lockShifts(tx, [shiftId])
-    const shift = await tx.shift.findUnique({ where: { id: shiftId }, select: { capacity: true, status: true } })
+    const shift = await tx.shift.findUnique({
+      where: { id: shiftId },
+      select: { capacity: true, status: true, event: { select: { publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true } } },
+    })
     if (!shift) return null
+    // Registrations closed (#463): a freed spot is not offered; offers already made stay valid.
+    if (shift.event && !acceptsRegistrations(shift.event)) return null
     const occupied = await tx.registration.count({ where: { shiftId, status: { in: [...OCCUPYING_STATUSES] } } })
     if (!canOfferSpot({ capacity: shift.capacity, occupied, shiftStatus: shift.status })) return null
 

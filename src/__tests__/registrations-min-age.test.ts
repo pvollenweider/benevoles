@@ -88,6 +88,22 @@ describe("POST /api/public/registrations — minimum age (#192)", () => {
     }
   })
 
+  it("refuses any sign-up while registrations are closed or not open yet, with the reason (#463)", async () => {
+    shiftFindMany.mockResolvedValue([
+      { id: "shift-1", label: "Bar", capacity: 5, minAge: null, waitlistEnabled: false, registrations: [], date: new Date("2026-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
+    ])
+    const { POST } = await import("@/app/api/public/registrations/route")
+    eventFindFirst.mockResolvedValue({ id: "evt-1", organizationId: "org-a", title: "Festival", organization: { slug: "org-a", timeZone: "Europe/Zurich" }, confirmationMessage: null, registrationsOpen: false })
+    const closed = await POST(post(baseBody))
+    expect(closed.status).toBe(409)
+    expect((await closed.json()).error).toContain("fermées")
+    eventFindFirst.mockResolvedValue({ id: "evt-1", organizationId: "org-a", title: "Festival", organization: { slug: "org-a", timeZone: "Europe/Zurich" }, confirmationMessage: null, registrationsOpen: true, registrationOpensAt: new Date("2099-06-01T16:00:00Z") })
+    const early = await POST(post(baseBody))
+    expect(early.status).toBe(409)
+    expect((await early.json()).error).toContain("ouvrent le")
+    expect(shiftFindMany).not.toHaveBeenCalled()
+  })
+
   it("treats an empty birth date as none: no 400 when no shift needs one", async () => {
     shiftFindMany.mockResolvedValue([
       { id: "shift-1", label: "Bar", capacity: 5, minAge: null, waitlistEnabled: false, registrations: [], date: new Date("2026-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
