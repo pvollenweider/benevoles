@@ -1,26 +1,38 @@
 "use client"
 
-import { useState, Suspense } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
+import { useEffect, useId, useRef, useState, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import PasswordRules from "@/components/PasswordRules"
+import FormStatus from "@/components/FormStatus"
+import { useSubmit } from "@/lib/use-submit"
+
+const inputClass = "w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+const buttonLink = "inline-block bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
 function ResetForm() {
+  const id = useId()
   const searchParams = useSearchParams()
   const token = searchParams.get("token") ?? ""
-  const router = useRouter()
-
+  const passwordRef = useRef<HTMLInputElement>(null)
+  const confirmRef = useRef<HTMLInputElement>(null)
+  const doneRef = useRef<HTMLHeadingElement>(null)
   const [password, setPassword] = useState("")
   const [confirm, setConfirm] = useState("")
-  const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
+  const { submit, busy, error, fail, isInvalid } = useSubmit()
+
+  // The form is replaced by the confirmation: the focus follows, onto its heading.
+  useEffect(() => { if (done) doneRef.current?.focus() }, [done])
 
   if (!token) {
     return (
       <div className="text-center py-8 space-y-3">
-        <p className="text-gray-500">Lien invalide ou manquant.</p>
-        <Link href="/admin/forgot-password" className="text-sm text-blue-600 hover:underline">
+        <p className="text-gray-700">Lien invalide ou manquant.</p>
+        <Link href="/admin/forgot-password" className="text-sm text-blue-700 underline underline-offset-2">
           Demander un nouveau lien
         </Link>
       </div>
@@ -30,84 +42,65 @@ function ResetForm() {
   if (done) {
     return (
       <div className="text-center space-y-4 py-8">
-        <p className="text-2xl">✅</p>
-        <p className="font-semibold text-gray-900">Mot de passe mis à jour</p>
-        <p className="text-sm text-gray-500">Vous pouvez maintenant vous connecter.</p>
-        <button
-          onClick={() => router.push("/admin/login")}
-          className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700"
-        >
-          Se connecter
-        </button>
+        <h2 ref={doneRef} tabIndex={-1} className="font-semibold text-gray-900 focus:outline-none">Mot de passe mis à jour</h2>
+        <p className="text-sm text-gray-600">Vous pouvez maintenant vous connecter.</p>
+        <Link href="/admin/login" className={buttonLink}>Se connecter</Link>
       </div>
     )
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (password !== confirm) {
-      setError("Les mots de passe ne correspondent pas.")
-      return
-    }
-    setLoading(true)
-    setError(null)
-
-    const res = await fetch("/api/public/reset-password", {
+    if (!password) { fail("Choisissez un mot de passe.", "password", passwordRef.current); return }
+    if (password !== confirm) { fail("Les mots de passe ne correspondent pas.", "confirm", confirmRef.current); return }
+    const outcome = await submit(() => fetch("/api/public/reset-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token, password }),
-    })
-
-    setLoading(false)
-
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      setError(typeof data?.error === "string" ? data.error : "Une erreur est survenue.")
-      return
-    }
-
-    setDone(true)
+    }), { silent: true })
+    if (outcome.ok) { setDone(true); return }
+    // A refused password concerns the field; an expired link or a network failure, the form.
+    fail(outcome.error, outcome.status === 400 ? "password" : undefined, outcome.status === 400 ? passwordRef.current : null)
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} noValidate className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Nouveau mot de passe
-        </label>
+        <label htmlFor={`${id}-password`} className="block text-sm font-medium text-gray-700 mb-1">Nouveau mot de passe</label>
         <input
+          id={`${id}-password`}
+          ref={passwordRef}
           type="password"
-          required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="10 caractères minimum"
+          aria-describedby={`${id}-rules${error ? ` ${id}-error` : ""}`}
+          aria-invalid={isInvalid("password")}
+          className={inputClass}
+          autoComplete="new-password"
         />
-        <PasswordRules password={password} />
+        <PasswordRules password={password} id={`${id}-rules`} />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Confirmer le mot de passe
-        </label>
+        <label htmlFor={`${id}-confirm`} className="block text-sm font-medium text-gray-700 mb-1">Confirmer le mot de passe</label>
         <input
+          id={`${id}-confirm`}
+          ref={confirmRef}
           type="password"
-          required
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
-          className="w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          aria-describedby={error ? `${id}-error` : undefined}
+          aria-invalid={isInvalid("confirm")}
+          className={inputClass}
+          autoComplete="new-password"
         />
       </div>
-      {error && (
-        <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-          {error}
-        </p>
-      )}
+      <FormStatus error={error} errorId={`${id}-error`} />
       <button
         type="submit"
-        disabled={loading}
-        className="w-full bg-gray-900 text-white rounded-xl py-3 text-sm font-medium hover:bg-gray-800 transition-colors disabled:opacity-50"
+        aria-disabled={busy || undefined}
+        className={`w-full bg-gray-900 text-white rounded-xl py-3 text-sm font-medium hover:bg-gray-800 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800 ${busy ? "opacity-80 cursor-wait" : ""}`}
       >
-        {loading ? "Enregistrement…" : "Mettre à jour le mot de passe"}
+        {busy ? "Enregistrement…" : "Mettre à jour le mot de passe"}
       </button>
     </form>
   )
@@ -119,10 +112,10 @@ export default function ResetPasswordPage() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Nouveau mot de passe</h1>
-          <p className="text-gray-500 text-sm mt-1">Choisissez un mot de passe sécurisé.</p>
+          <p className="text-gray-600 text-sm mt-1">Choisissez un mot de passe sécurisé.</p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 p-6">
-          <Suspense fallback={<p className="text-sm text-gray-500 text-center">Chargement…</p>}>
+          <Suspense fallback={<p className="text-sm text-gray-600 text-center">Chargement…</p>}>
             <ResetForm />
           </Suspense>
         </div>
