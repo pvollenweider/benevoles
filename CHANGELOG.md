@@ -95,6 +95,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Sécurité
 
+- **Désinscription des notifications push** : elle exige désormais le lien personnel du bénévole, comme l'inscription, ne retire que son abonnement et est limitée en fréquence ; une adresse d'abonnement seule ne suffit plus.
 - **Sessions admin après un changement de mot de passe** : changer ou réinitialiser son mot de passe déconnecte désormais toutes les autres sessions ouvertes auparavant (autres navigateurs, appareils, ou session volée). La session depuis laquelle le mot de passe est changé reste ouverte.
 - **Changement de mot de passe** : la vérification du mot de passe actuel (page « Mon compte », profil du super admin) est limitée à 5 échecs par compte et 20 par adresse IP sur 15 minutes. Une session volée ne peut plus essayer des mots de passe à l'infini.
 - **Longueur maximale des mots de passe admin** : un nouveau mot de passe est limité à 72 octets en UTF-8, la limite réellement prise en compte par le chiffrement (bcrypt). Une lettre accentuée occupe 2 octets, un emoji jusqu'à 4. Les mots de passe plus longs déjà définis continuent de fonctionner à la connexion.

@@ -51,12 +51,32 @@ export async function POST(req: Request) {
   return NextResponse.json({ ok: true })
 }
 
-// Remove a subscription
-export async function DELETE(req: Request) {
-  const body = await req.json().catch(() => null)
-  if (!body?.endpoint) return NextResponse.json({ ok: true })
+const unsubscribeSchema = z.object({
+  editToken: z.string().min(1),
+  endpoint: z.string().url(),
+})
 
-  await prisma.pushSubscription.deleteMany({ where: { endpoint: body.endpoint } }).catch(reportError("push.unsubscribe"))
+// Remove a subscription. Same proof as subscribing (audit): the caller must hold the personal
+// link, and only that volunteer's subscription for this endpoint goes — an endpoint alone, if it
+// leaked, would let anyone switch off someone's reminders. A cancelled registration's link still
+// counts: someone who left may want the reminders to stop.
+export async function DELETE(req: Request) {
+  const rl = await rateLimit(getClientIp(req), "push-unsubscribe", 10, 60 * 60 * 1000)
+  if (!rl.ok) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
+
+  const parsed = unsubscribeSchema.safeParse(await req.json().catch(() => null))
+  if (!parsed.success) return NextResponse.json({ error: "Données invalides" }, { status: 400 })
+  const { editToken, endpoint } = parsed.data
+
+  const registration = await prisma.registration.findFirst({
+    where: registrationToken.where(editToken),
+    select: { volunteerId: true },
+  })
+  if (!registration) return NextResponse.json({ error: "Inscription introuvable" }, { status: 404 })
+
+  await prisma.pushSubscription
+    .deleteMany({ where: { endpoint, volunteerId: registration.volunteerId } })
+    .catch(reportError("push.unsubscribe"))
 
   return NextResponse.json({ ok: true })
 }
