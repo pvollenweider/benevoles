@@ -38,6 +38,7 @@ Bob,Dupont,bob@x.com,,musicien`
     expect(result.errors).toHaveLength(0)
     expect(result.rows).toHaveLength(2)
     expect(result.rows[0]).toEqual({
+      line: 2,
       firstName: "Alice",
       lastName: "Martin",
       email: "alice@x.com",
@@ -45,6 +46,7 @@ Bob,Dupont,bob@x.com,,musicien`
       tags: ["parent CM2", "bar"],
     })
     expect(result.rows[1]).toEqual({
+      line: 3,
       firstName: "Bob",
       lastName: "Dupont",
       email: "bob@x.com",

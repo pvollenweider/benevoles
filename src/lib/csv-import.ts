@@ -6,6 +6,8 @@ import ExcelJS from "exceljs"
 import { normalizeEmail } from "./email-address"
 
 export type ParsedMemberRow = {
+  /** Line in the file (the header is line 1), for the preview and error messages. */
+  line?: number
   firstName: string
   lastName: string
   email?: string
@@ -20,7 +22,7 @@ export type ImportPreview = {
   detectedColumns: Record<string, string | null> // canonical -> source header
 }
 
-const HEADER_ALIASES: Record<keyof ParsedMemberRow, string[]> = {
+const HEADER_ALIASES: Record<Exclude<keyof ParsedMemberRow, "line">, string[]> = {
   firstName: ["firstname", "first_name", "first name", "prenom", "prénom", "first"],
   lastName: ["lastname", "last_name", "last name", "nom", "famille", "last", "name", "nom de famille"],
   email: ["email", "e-mail", "mail", "courriel", "adresse email", "adresse mail"],
@@ -100,6 +102,7 @@ function rowToMember(
   return {
     ok: true,
     member: {
+      line: lineNumber,
       firstName,
       lastName,
       email,
