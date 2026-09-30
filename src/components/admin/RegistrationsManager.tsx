@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import Link from "next/link"
+import { describeBulkFailure } from "@/lib/form-errors"
 import { useState, useMemo, useRef } from "react"
 import StatusBadge from "./StatusBadge"
 import ShiftSelect from "./registrations/ShiftSelect"
@@ -74,6 +75,8 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   const afterBulkRef = useRef<HTMLParagraphElement>(null)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [bulkBusy, setBulkBusy] = useState(false)
+  // The last failed bulk action, so « Réessayer » repeats it on the selection that was kept (#375).
+  const [retry, setRetry] = useState<(() => void) | null>(null)
 
   const uniqueRoles = [...new Set(shifts.map(s => s.roleName))]
   const visibleShifts = roleFilter ? shifts.filter(s => s.roleName === roleFilter) : shifts
@@ -141,13 +144,38 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
 
   // One request for the whole selection (#292): ownership checked for every row up front on the
   // server, all or nothing. Returns null on a request-level failure.
-  async function runBulk(action: "cancel" | "make_leader" | "resend_link" | "check_in" | "undo_check_in", ids: string[]) {
-    const res = await fetch(`/api/admin/events/${eventId}/registrations/bulk`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action, registrationIds: ids }),
-    }).catch(() => null)
-    if (!res?.ok) return null
+  const BULK_LABELS = { cancel: "Retrait", make_leader: "Désignation des responsables", resend_link: "Renvoi des liens", check_in: "Présence", undo_check_in: "Présence" } as const
+
+  /**
+   * Runs a bulk action. On a whole-request failure (network, refused, server) it explains what
+   * happened and whether anything may have been applied, keeps the selection and returns null;
+   * the caller then leaves the rows as they are and « Réessayer » repeats the action (#375).
+   */
+  async function runBulk(action: keyof typeof BULK_LABELS, ids: string[], again: () => void) {
+    setRetry(() => again)
+    // The alert stays mounted while the retry runs, so a focused « Réessayer » isn't unmounted under the user.
+    let res: Response
+    try {
+      res = await fetch(`/api/admin/events/${eventId}/registrations/bulk`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, registrationIds: ids }),
+      })
+    } catch {
+      const f = describeBulkFailure({ network: true }, BULK_LABELS[action])
+      setBulkError(`${f.title}. ${f.message} ${f.hint}`)
+      return null
+    }
+    if (!res.ok) {
+      const body = await res.json().catch(() => null)
+      const f = describeBulkFailure({ status: res.status, body }, BULK_LABELS[action])
+      setBulkError(`${f.title}. ${f.message} ${f.hint}`)
+      return null
+    }
+    setRetry(null)
+    setBulkError(null)
+    // The alert (and its button) goes away with the result: park the focus on the summary line.
+    afterBulkRef.current?.focus()
     return res.json() as Promise<{ done: number; failed?: number; skipped?: number; alreadyLeader?: number; cancelledIds?: string[]; changedIds?: string[] }>
   }
 
@@ -161,10 +189,9 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     const targets = present ? selectedToCheckIn : selectedToUndo
     if (targets.length === 0) return
     setBulkBusy(true)
-    const result = await runBulk(present ? "check_in" : "undo_check_in", targets.map((r) => r.id))
+    const result = await runBulk(present ? "check_in" : "undo_check_in", targets.map((r) => r.id), () => handlePresence(present))
     setBulkBusy(false)
-    if (!result) { setBulkError("Erreur : présence non enregistrée. Réessayez."); return }
-    setBulkError(null)
+    if (!result) return
     const changed = new Set(result.changedIds ?? [])
     const at = new Date().toISOString()
     setRegistrations((prev) => prev.map((r) => (changed.has(r.id) ? { ...r, checkedInAt: present ? at : null } : r)))
@@ -183,8 +210,9 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     if (selectedActiveRegs.length === 0) return
     if (!confirm(`Retirer ${selectedActiveRegs.length} bénévole${selectedActiveRegs.length > 1 ? "s" : ""} de leur créneau ?`)) return
     setBulkBusy(true)
-    const result = await runBulk("cancel", selectedActiveRegs.map((r) => r.id))
-    const cancelledIds = new Set(result?.cancelledIds ?? [])
+    const result = await runBulk("cancel", selectedActiveRegs.map((r) => r.id), () => handleBulkCancel())
+    if (!result) { setBulkBusy(false); return }
+    const cancelledIds = new Set(result.cancelledIds ?? [])
     setRegistrations((prev) => prev.filter((r) => !cancelledIds.has(r.id)))
     setSelectedIds((prev) => {
       const next = new Set(prev)
@@ -203,11 +231,12 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     if (withEmail.length === 0) return
     if (!confirm(`Rendre ${withEmail.length} bénévole${withEmail.length > 1 ? "s" : ""} responsable de leur poste respectif ?${withoutEmail > 0 ? ` (${withoutEmail} ignoré${withoutEmail > 1 ? "s" : ""}, pas d'email)` : ""}`)) return
     setBulkBusy(true)
-    const result = await runBulk("make_leader", withEmail.map((r) => r.id))
+    const result = await runBulk("make_leader", withEmail.map((r) => r.id), () => handleBulkMakeLeader())
     setBulkBusy(false)
+    if (!result) return
     // Already leader of that role counts as done from the admin's point of view.
-    const succeeded = result ? result.done + (result.alreadyLeader ?? 0) : 0
-    const failed = result ? 0 : withEmail.length
+    const succeeded = result.done + (result.alreadyLeader ?? 0)
+    const failed = 0
     setSelectedIds(new Set())
     setLeaderAnnouncement(leaderAddedAnnouncement(succeeded, failed, withoutEmail))
   }
@@ -226,11 +255,12 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     if (resendable.length === 0) return
     if (!confirm(`Renvoyer le lien de gestion à ${resendable.length} bénévole${resendable.length > 1 ? "s" : ""} ?`)) return
     setBulkBusy(true)
-    const result = await runBulk("resend_link", resendable.map((r) => r.id))
+    const result = await runBulk("resend_link", resendable.map((r) => r.id), () => handleBulkResendLink())
     setBulkBusy(false)
+    if (!result) return
     // One email per volunteer, even with several of their rows selected.
-    const succeeded = result?.done ?? 0
-    const failed = result ? (result.failed ?? 0) : resendable.length
+    const succeeded = result.done
+    const failed = result.failed ?? 0
     setSelectedIds(new Set())
     setLeaderAnnouncement(resendAnnouncement(succeeded, failed))
   }
@@ -285,7 +315,16 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   return (
     <div className="space-y-4">
       <div role="status" aria-live="polite" className="sr-only">{leaderAnnouncement}</div>
-      {bulkError && <p role="alert" className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-3 py-2">{bulkError}</p>}
+      {bulkError && (
+        <div role="alert" aria-busy={bulkBusy || undefined} className="text-sm text-red-800 bg-red-50 border border-red-200 rounded-xl px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+          <span>{bulkError}</span>
+          {retry && (
+            <button type="button" onClick={() => { if (!bulkBusy) retry() }} aria-disabled={bulkBusy || undefined} className={`font-medium underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700 ${bulkBusy ? "opacity-60" : ""}`}>
+              {bulkBusy ? "Nouvel essai…" : "Réessayer"}
+            </button>
+          )}
+        </div>
+      )}
       <p ref={afterBulkRef} tabIndex={-1} className={`text-sm text-gray-700 focus:outline-none ${presentCount > 0 ? "" : "sr-only"}`}>
         {presentCount > 0
           ? <><span className="font-medium text-green-800">{presentCount} présent{presentCount > 1 ? "s" : ""}</span> sur {activeCount} inscrit{activeCount > 1 ? "s" : ""}.</>

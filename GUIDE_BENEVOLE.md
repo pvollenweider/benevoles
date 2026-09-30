@@ -118,6 +118,9 @@ Pour vous déconnecter de cette session (par exemple sur un appareil partagé), 
 **Je n'ai pas reçu l'email de confirmation.**
 Vérifiez vos courriers indésirables. Si vous tentez de vous réinscrire à un créneau où vous êtes déjà inscrit(e), le lien de gestion vous est renvoyé par email.
 
+**J'ai eu une erreur en confirmant mon inscription.**
+Tout ce que vous avez saisi reste en place. Le message dit de quoi il s'agit : un champ à corriger, un créneau qui n'est plus disponible (revenez au planning pour ajuster votre choix), une connexion interrompue ou une erreur du serveur. Dans ces deux derniers cas, cliquez sur **Réessayer** : si votre inscription était passée malgré tout, vous recevrez simplement votre lien personnel par email au lieu d'une deuxième inscription.
+
 **Je veux changer de créneau.**
 Annulez le créneau concerné via votre lien personnel, puis retournez sur la page de l'événement pour en choisir un autre.
 
