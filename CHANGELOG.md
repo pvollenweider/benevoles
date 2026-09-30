@@ -31,6 +31,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Récapitulatif avant de confirmer** : sur la page d'inscription, le récapitulatif reprend les créneaux choisis dans l'ordre avec le jour et les heures (« fin le lendemain » quand un créneau passe minuit), ce qui les sépare (enchaînés, pause, chevauchement signalé avant l'envoi), inscription ferme ou liste d'attente, âge minimum, et la liste exacte des données transmises à l'organisation.
 - **Liste d'attente expliquée** : la même explication en cinq points (inscription pas encore confirmée, ordre, email avec 24 heures pour prendre la place, comment accepter, ce qui se passe sans réponse) apparaît dans le récapitulatif avant confirmation, sur la page de succès, dans l'email et sur la page personnelle, qui montre désormais aussi les inscriptions en liste d'attente avec leur position et, quand une place est proposée, le délai et le lien pour la prendre.
 - **Accessibilité** : un lien « Aller au contenu », visible dès qu'on le tabule, ouvre chaque page de l'administration et saute la barre du haut.
 - **Interne** : le fichier `src/middleware.ts` devient `src/proxy.ts`, la convention Next.js 16 ; comportement identique (protection des pages admin, en-tête `x-org-slug`).
