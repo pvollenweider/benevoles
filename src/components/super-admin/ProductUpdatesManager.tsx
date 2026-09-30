@@ -4,6 +4,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useState, useId } from "react"
+import { announce } from "@/lib/announce"
+import { requestJson } from "@/lib/use-submit"
+import { broadcastRecap } from "@/lib/action-recap"
+import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { renderMarkdown } from "@/lib/markdown"
 
 export type ProductUpdateSendRow = {
@@ -33,6 +37,8 @@ export default function ProductUpdatesManager({
   const [sending, setSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [announcement, setAnnouncement] = useState("")
+  const [confirming, setConfirming] = useState(false)
+  const [sendError, setSendError] = useState<string | null>(null)
 
   const subjectId = useId()
   const contentId = useId()
@@ -40,51 +46,60 @@ export default function ProductUpdatesManager({
 
   const canSend = subject.trim().length > 0 && content.trim().length > 0
 
+  function missingFields(message: string) {
+    announce(setError, message)
+    document.getElementById(subject.trim() ? contentId : subjectId)?.focus()
+  }
+
   async function sendTest() {
-    if (!canSend) return
+    if (sendingTest || sending) return
+    if (!canSend) { missingFields("Indiquez un objet et un contenu avant d'envoyer un test."); return }
     setSendingTest(true)
     setError(null)
     const email = testEmail.trim()
-    const res = await fetch("/api/super-admin/product-updates/test", {
+    const result = await requestJson(() => fetch("/api/super-admin/product-updates/test", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(email ? { subject, content, email } : { subject, content }),
-    })
+    }), "L'email de test n'a pas pu être envoyé.")
     setSendingTest(false)
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      setError(typeof data?.error === "string" ? data.error : "Échec de l'envoi du test.")
-      return
-    }
-    setAnnouncement(email ? `Email de test envoyé à ${email}.` : "Email de test envoyé à votre propre adresse.")
+    if (!result.ok) { setError(result.error); return }
+    announce(setAnnouncement, email ? `Email de test envoyé à ${email}.` : "Email de test envoyé à votre propre adresse.")
   }
 
-  async function sendBroadcast() {
-    if (!canSend) return
-    if (!confirm(`Envoyer cette communication à ${recipientCount} administrateur${recipientCount > 1 ? "s" : ""} ? Cette action est irréversible.`)) return
-    setSending(true)
+  function sendBroadcast() {
+    if (sendingTest || sending) return
+    if (!canSend) { missingFields("Indiquez un objet et un contenu avant d'envoyer."); return }
     setError(null)
-    const res = await fetch("/api/super-admin/product-updates/send", {
+    setSendError(null)
+    setConfirming(true)
+  }
+
+  async function runBroadcast() {
+    setSending(true)
+    setSendError(null)
+    const result = await requestJson<ProductUpdateSendRow>(() => fetch("/api/super-admin/product-updates/send", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ subject, content }),
-    })
+    }), "La communication n'a pas pu être envoyée.")
     setSending(false)
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      setError(typeof data?.error === "string" ? data.error : "Échec de l'envoi.")
-      return
-    }
-    const send = await res.json()
+    // A failure stays in the dialog with « Réessayer »; the message is kept.
+    if (!result.ok) { setSendError(result.error); return }
+    const send = result.data
+    setConfirming(false)
     setSends((prev) => [send, ...prev])
-    setAnnouncement(`Communication envoyée à ${send.successCount}/${send.recipientCount} destinataire${send.recipientCount > 1 ? "s" : ""}.`)
+    announce(setAnnouncement, `Communication envoyée à ${send.successCount}/${send.recipientCount} destinataire${send.recipientCount > 1 ? "s" : ""}.`)
     setSubject("")
     setContent("")
   }
 
   return (
     <div className="space-y-6">
-      <div role="status" aria-live="polite" className="sr-only">{announcement}</div>
+      <p role="status" className={announcement ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2" : "sr-only"}>{announcement}</p>
+      {confirming && (
+        <ConfirmActionModal recap={broadcastRecap(recipientCount)} busy={sending} error={sendError} onConfirm={() => void runBroadcast()} onCancel={() => setConfirming(false)} />
+      )}
 
       <div>
         <h1 className="text-xl font-bold text-gray-900">Communications admin</h1>
@@ -123,9 +138,7 @@ export default function ProductUpdatesManager({
               className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono"
             />
           </div>
-          {error && (
-            <p role="alert" className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
-          )}
+          <p role="alert" className={error ? "text-sm text-red-800 bg-red-50 border border-red-200 rounded-lg px-3 py-2" : "sr-only"}>{error ?? ""}</p>
           <div>
             <label htmlFor={testEmailId} className="block text-xs font-medium text-gray-600 mb-1">
               Adresse du test (optionnel — sinon envoyé à vous-même)
@@ -144,16 +157,16 @@ export default function ProductUpdatesManager({
             <button
               type="button"
               onClick={sendTest}
-              disabled={!canSend || sendingTest || sending}
-              className="text-sm text-gray-600 border border-gray-200 px-4 py-2 rounded-full hover:bg-gray-50 disabled:opacity-50 transition-colors"
+              aria-disabled={!canSend || sendingTest || sending || undefined}
+              className="text-sm text-gray-700 border border-gray-300 px-4 py-2 rounded-full hover:bg-gray-50 aria-disabled:opacity-60 transition-colors"
             >
               {sendingTest ? "Envoi…" : "Envoyer un test"}
             </button>
             <button
               type="button"
               onClick={sendBroadcast}
-              disabled={!canSend || sending || sendingTest}
-              className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              aria-disabled={!canSend || sending || sendingTest || undefined}
+              className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 aria-disabled:cursor-not-allowed transition-colors"
             >
               {sending ? "Envoi…" : `Envoyer (${recipientCount})`}
             </button>
