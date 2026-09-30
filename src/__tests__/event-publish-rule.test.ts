@@ -81,3 +81,33 @@ describe("POST /api/admin/events — always a listed draft", () => {
     }
   })
 })
+
+// Dates are the API's to check (audit): a real day, and a period that stays in order.
+describe("PATCH /api/admin/events/[id] — dates", () => {
+  const update = vi.fn()
+  const patch = (body: unknown) =>
+    new Request("http://localhost/api/admin/events/evt-a", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+  const params = { params: Promise.resolve({ id: "evt-a" }) }
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+    update.mockImplementation(async ({ data }: { data: object }) => ({ id: "evt-a", publicStatus: "draft", ...data }))
+    requireOrgSessionMock.mockResolvedValue({
+      db: {
+        event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "F", publicStatus: "draft", startDate: new Date("2026-07-04T00:00:00Z"), endDate: new Date("2026-07-05T00:00:00Z"), publicInstructions: null, remindersEnabled: true, requirePhone: false }), update },
+        shift: { count: vi.fn().mockResolvedValue(1) },
+      },
+      organizationId: "org-a", session: {},
+    })
+  })
+
+  it("refuses an unreal day and an end moved before the stored start, and saves nothing", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/route")
+    expect((await PATCH(patch({ startDate: "2026-02-30" }), params)).status).toBe(400)
+    const inverted = await PATCH(patch({ endDate: "2026-07-01" }), params)
+    expect(inverted.status).toBe(400)
+    expect((await inverted.json()).error).toBe("La date de fin ne peut pas précéder la date de début.")
+    expect(update).not.toHaveBeenCalled()
+    expect((await PATCH(patch({ endDate: "2026-07-04" }), params)).status).toBe(200)
+  })
+})

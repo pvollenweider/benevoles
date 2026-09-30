@@ -39,7 +39,8 @@ export function shiftsTooYoungFor<T extends { minAge: number | null; date: Date 
   birthDate: Date | string,
   shifts: T[],
 ): T[] {
-  return shifts.filter((s) => s.minAge != null && calculateAgeAt(birthDate, s.date) < s.minAge)
+  // Fails closed: an age that can't be computed (NaN) never reaches the minimum.
+  return shifts.filter((s) => s.minAge != null && !(calculateAgeAt(birthDate, s.date) >= s.minAge))
 }
 
 export function slugify(text: string): string {

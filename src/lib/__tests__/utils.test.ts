@@ -212,3 +212,10 @@ describe("shiftsTooYoungFor", () => {
     expect(shiftsTooYoungFor("2008-10-03", shifts).map((s) => s.id)).toEqual(["before"])
   })
 })
+
+describe("shiftsTooYoungFor fails closed", () => {
+  it("treats a birth date that can't give an age as too young", () => {
+    const shifts = [{ minAge: 18, date: "2026-10-10" }, { minAge: null, date: "2026-10-10" }]
+    expect(shiftsTooYoungFor("not a date", shifts)).toEqual([shifts[0]])
+  })
+})

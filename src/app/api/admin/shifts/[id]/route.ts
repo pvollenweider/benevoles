@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { civilDateSchema } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
@@ -17,7 +18,7 @@ const schema = z.object({
   roleName: z.string().optional(),
   label: z.string().optional(),
   description: z.string().optional().nullable(),
-  date: z.string().optional(),
+  date: civilDateSchema.optional(),
   startTime: clockSchema.optional(),
   endTime: clockSchema.optional(),
   capacity: z.number().int().min(1).optional(),
