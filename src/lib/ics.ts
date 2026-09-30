@@ -33,7 +33,7 @@ const DESCRIPTION_MAX = 800
 
 /** RFC 5545 TEXT escaping. */
 export function icsEscape(text: string): string {
-  return text.replace(/\\/g, "\\\\").replace(/;/g, "\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n")
+  return text.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n")
 }
 
 /** Folds a content line at 75 octets (UTF-8), continuation lines starting with a space. */
