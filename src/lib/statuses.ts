@@ -24,7 +24,8 @@ export type ShiftStatus = (typeof SHIFT_STATUSES)[number]
 export const EVENT_PUBLIC_STATUSES = ["draft", "published", "archived"] as const
 export type EventPublicStatus = (typeof EVENT_PUBLIC_STATUSES)[number]
 
-export const ADMIN_ROLES = ["admin", "super_admin"] as const
+/** Owner (« admin »), organiser (#469) and platform super admin. */
+export const ADMIN_ROLES = ["admin", "organizer", "super_admin"] as const
 export type AdminRole = (typeof ADMIN_ROLES)[number]
 
 export const OUTBOX_STATUSES = ["pending", "sending", "sent", "failed"] as const
