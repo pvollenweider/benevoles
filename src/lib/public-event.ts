@@ -52,6 +52,8 @@ export function toPublicEvent(event: PublicEventRow) {
     minAge: shift.minAge,
     colorKey: shift.colorKey,
     maxPerVolunteer: shift.maxPerVolunteer,
+    // Reserved to some members (#470): the public page says so, never which tags.
+    reserved: (shift.reservedTags ?? []).length > 0,
     }
   })
 

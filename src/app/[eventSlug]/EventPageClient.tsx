@@ -54,6 +54,8 @@ type Shift = {
   colorKey: string | null
   /** Shifts per volunteer for this role (#466). */
   maxPerVolunteer?: number | null
+  /** Reserved to some members (#470); which tags is never sent to the page. */
+  reserved?: boolean
 }
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
@@ -109,6 +111,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   const [loading, setLoading] = useState(true)
   const [selectedShifts, setSelectedShifts] = useState<Set<string>>(new Set())
   const [limitNotice, setLimitNotice] = useState("")
+  // Reserved roles (#470) the visitor's invitation opens; none without an invitation.
+  const [allowedReserved, setAllowedReserved] = useState<Set<string>>(new Set())
   // The day of the refused shift: the visible note sits under that day's schedule, where the click was.
   const [limitNoticeDay, setLimitNoticeDay] = useState<string | null>(null)
   const [myRegistrations, setMyRegistrations] = useState<MyReg[]>([])
@@ -143,6 +147,12 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
 
   const storageKey = `benevoles_token_${eventSlug}`
   const myShiftIds = useMemo(() => new Set(myRegistrations.map((r) => r.shiftId)), [myRegistrations])
+  // Shifts of reserved roles (#470) this visitor can't take; the server checks it again at sign-up.
+  const reservedShiftIds = useMemo(
+    () => new Set((event?.shifts ?? []).filter((s) => s.reserved && !allowedReserved.has(s.roleName)).map((s) => s.id)),
+    [event, allowedReserved],
+  )
+
   // Roles whose limit per person is already used by held + selected shifts (#466): their other
   // bars say so in their accessible name, before a click is refused.
   const limitReachedRoles = useMemo(() => {
@@ -191,6 +201,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
       .then((data) => {
         if (!data?.member) return
         setForm((f) => prefillContact(f, data.member, "form"))
+        setAllowedReserved(new Set<string>(data.reservedRolesAllowed ?? []))
       })
       .catch(() => {})
   }, [inviteToken, eventSlug, previewEventId])
@@ -237,6 +248,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
     if (!accepting && !selectedShifts.has(id)) return
     const target = event?.shifts.find((s) => s.id === id)
     if (!isShiftSelectable(target, myShiftIds)) return
+    // Reserved bars are disabled (#470); this guards any other way in.
+    if (reservedShiftIds.has(id) && !selectedShifts.has(id)) return
     // Shifts per volunteer for a role (#466): said here, before the form; the server decides.
     if (target && event && !selectedShifts.has(id)) {
       const asked = event.shifts.filter((s) => selectedShifts.has(s.id) && !myShiftIds.has(s.id))
@@ -458,6 +471,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
           <p id="registration-window-msg" className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-950">{windowClosedText}</p>
         )}
         {windowUntilText && <p className="text-sm text-gray-700">{windowUntilText}</p>}
+        {reservedShiftIds.size > 0 && (
+          <p id="reserved-roles-msg" className="text-sm text-gray-700">Les postes marqués « Réservé » sont réservés à certains membres. Si vous en faites partie, inscrivez-vous avec le lien personnel reçu par email.</p>
+        )}
         {event.publicInstructions && (
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800">
             {event.publicInstructions}
@@ -547,8 +563,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                         conflicts={conflictingShiftIds}
                         onToggle={toggleShift}
                         locked={!accepting}
-                        describedBy={accepting ? undefined : "registration-window-msg"}
+                        describedBy={[!accepting && "registration-window-msg", reservedShiftIds.size > 0 && "reserved-roles-msg"].filter(Boolean).join(" ") || undefined}
                         limitReachedRoles={limitReachedRoles}
+                        reservedShiftIds={reservedShiftIds}
                       />
                       {limitNotice && limitNoticeDay === day && (
                         <p className="mt-2 rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-950">{limitNotice}</p>

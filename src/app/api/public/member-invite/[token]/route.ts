@@ -4,6 +4,7 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { linkToken } from "@/lib/token-vault"
+import { allowedReservedRoles, reservedRoles } from "@/lib/role-reservation"
 
 /**
  * Public endpoint that resolves a MemberInvite token to the volunteer info
@@ -29,9 +30,10 @@ export async function GET(
           email: true,
           phone: true,
           active: true,
+          tags: true,
         },
       },
-      event: { select: { slug: true, organizationId: true } },
+      event: { select: { slug: true, organizationId: true, shifts: { where: { status: { not: "cancelled" } }, select: { roleName: true, reservedTags: true } } } },
     },
   })
 
@@ -47,6 +49,8 @@ export async function GET(
 
   return NextResponse.json({
     eventSlug: invite.event.slug,
+    // The reserved roles (#470) this invitation opens; the member's tags themselves stay private.
+    reservedRolesAllowed: allowedReservedRoles(reservedRoles(invite.event.shifts), invite.volunteer.tags),
     member: {
       firstName: invite.volunteer.firstName,
       lastName: invite.volunteer.lastName,

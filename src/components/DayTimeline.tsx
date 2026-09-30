@@ -5,6 +5,7 @@
 
 import { getBarClasses } from "@/lib/roles"
 import { toMin, toMinEnd, fmt, assignLanes, crossesMidnight, hourLabel, type GanttShow } from "@/lib/gantt-utils"
+import { RESERVED_LABEL } from "@/lib/role-reservation"
 
 export { fmt }
 
@@ -52,6 +53,7 @@ export default function DayTimeline({
   locked = false,
   describedBy,
   limitReachedRoles,
+  reservedShiftIds,
 }: {
   shifts: TimelineShift[]
   shows: Show[]
@@ -65,6 +67,8 @@ export default function DayTimeline({
   describedBy?: string
   /** Roles whose limit per person is reached (#466) → their limit, said on the other bars. */
   limitReachedRoles?: Map<string, number>
+  /** Shifts of roles reserved to members (#470) this visitor can't take: shown, not selectable. */
+  reservedShiftIds?: Set<string>
 }) {
   const visible = shifts.filter((s) => s.status !== "cancelled")
   if (visible.length === 0) return null
@@ -174,9 +178,10 @@ export default function DayTimeline({
                   const isWaitlistable  = isFull && (shift.waitlistEnabled ?? false)
                   const unavail         = (isFull && !isWaitlistable) || isClosed
                   const isSelected      = selected.has(shift.id)
-                  const state           = isSelected ? "selected" : (isConflict || unavail) ? "unavailable" : "default"
+                  const isReserved      = !isSelected && !isRegistered && !!reservedShiftIds?.has(shift.id)
+                  const state           = isSelected ? "selected" : (isConflict || unavail || isReserved) ? "unavailable" : "default"
                   const barCls          = getBarClasses(shift.roleName, state, shift.colorKey)
-                  const clickable       = !isRegistered && !isConflict && !unavail && (!locked || isSelected)
+                  const clickable       = !isRegistered && !isConflict && !unavail && !isReserved && (!locked || isSelected)
                   const hasLabel        = shift.label !== shift.roleName
                   const startMin        = toMin(shift.startTime)
                   const endMin          = toMinEnd(shift.endTime, shift.startTime)
@@ -209,7 +214,7 @@ export default function DayTimeline({
                   const spotsSuffix     = spotsText ? ` (${shift.spotsLeft} place${shift.spotsLeft > 1 ? "s" : ""} libre${shift.spotsLeft > 1 ? "s" : ""} sur ${shift.capacity})` : ""
                   const limitMax        = !isSelected && !isRegistered ? limitReachedRoles?.get(shift.roleName) : undefined
                   const limitSuffix     = limitMax !== undefined ? ` (limite de ${limitMax} par personne atteinte)` : ""
-                  const ariaLabel       = locked && !isSelected ? `${roleLabel} ${timeSpoken}${minAgeSuffix}${spotsSuffix}` : (isWaitlistable
+                  const ariaLabel       = isReserved ? `${roleLabel} ${timeSpoken}, ${RESERVED_LABEL}` : locked && !isSelected ? `${roleLabel} ${timeSpoken}${minAgeSuffix}${spotsSuffix}` : (isWaitlistable
                     ? (isSelected
                       ? `Retirer de la file d'attente — ${roleLabel} ${timeSpoken}`
                       : `Rejoindre la file d'attente — ${roleLabel} ${timeSpoken}`)
@@ -255,9 +260,15 @@ export default function DayTimeline({
                           } : {}),
                         }}
                       >
-                        {isConflict || (unavail && !isSelected) ? (
-                          <span className="hidden @min-[64px]:inline text-[10px] px-1 truncate leading-none text-gray-600">
-                            {isFull ? "Complet" : isClosed ? "Fermé" : ""}
+                        {isConflict || isReserved || (unavail && !isSelected) ? (
+                          <span className="inline-flex items-center gap-0.5 text-[10px] px-1 truncate leading-none text-gray-700">
+                            {/* Reserved (#470): a lock that fits the narrowest bar, the word when there is room. */}
+                            {isReserved && (
+                              <svg aria-hidden="true" className="w-2.5 h-2.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 2a4 4 0 00-4 4v2H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-1V6a4 4 0 00-4-4zm2 6V6a2 2 0 10-4 0v2h4z" clipRule="evenodd" />
+                              </svg>
+                            )}
+                            <span className="hidden @min-[64px]:inline">{isReserved ? "Réservé" : isFull ? "Complet" : isClosed ? "Fermé" : ""}</span>
                           </span>
                         ) : (
                           <div className="flex flex-col items-center justify-center gap-0.5 px-1.5 max-w-full overflow-hidden">

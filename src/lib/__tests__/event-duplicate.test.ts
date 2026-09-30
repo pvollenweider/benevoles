@@ -8,7 +8,7 @@ const shift: DuplicableShift & { id: string; eventId: string; status: string } =
   id: "s1", eventId: "e1", status: "closed",
   roleName: "Bar", label: "Bar soir", description: "Service", date: new Date("2026-07-04T00:00:00Z"),
   startTime: "18:00", endTime: "23:00", capacity: 4, locationDetails: "Cantine", contactName: "Léa", contactPhone: "079 1",
-  instructions: "Gilet fourni", latitude: 46.18, longitude: 6.12, displayOrder: 2, internalNotes: "note", minAge: 18, waitlistEnabled: true, colorKey: "amber", maxPerVolunteer: 2,
+  instructions: "Gilet fourni", latitude: 46.18, longitude: 6.12, displayOrder: 2, internalNotes: "note", minAge: 18, waitlistEnabled: true, colorKey: "amber", maxPerVolunteer: 2, reservedTags: ["sécurité"],
 }
 const source: DuplicableEvent = {
   title: "Fête", description: "d", location: "Salle", latitude: 46.2, longitude: 6.1, startDate: new Date("2026-07-04T00:00:00Z"), endDate: new Date("2026-07-05T00:00:00Z"),
@@ -23,7 +23,7 @@ const source: DuplicableEvent = {
 describe("copiedShift", () => {
   it("keeps the minimum age, the waitlist setting and the role color, never the identity or the status", () => {
     const copy = copiedShift(shift) as Record<string, unknown>
-    expect(copy).toMatchObject({ minAge: 18, waitlistEnabled: true, colorKey: "amber", maxPerVolunteer: 2, status: "open", capacity: 4 })
+    expect(copy).toMatchObject({ minAge: 18, waitlistEnabled: true, colorKey: "amber", maxPerVolunteer: 2, reservedTags: ["sécurité"], status: "open", capacity: 4 })
     expect(copy).not.toHaveProperty("id")
     expect(copy).not.toHaveProperty("eventId")
   })

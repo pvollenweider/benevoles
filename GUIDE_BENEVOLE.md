@@ -51,6 +51,8 @@ Certains postes affichent un petit repère (ex. « 18+ ») : ils demandent un â
 
 Cliquez (ou tapez) sur une barre disponible. Le créneau s'ajoute à votre sélection, visible dans la liste en bas de page. Pour le retirer, cliquez sur le **✕** à droite de son nom dans cette liste.
 
+Certains postes sont **réservés** à des membres de l'association : ils sont marqués « Réservé » et on s'y inscrit avec le lien personnel reçu par email dans l'invitation.
+
 Certains postes limitent le nombre de créneaux par personne. Si vous en avez déjà pris le maximum, un message en haut de la page le dit et le créneau n'est pas ajouté.
 
 L'application empêche automatiquement de sélectionner deux créneaux qui se chevauchent.
