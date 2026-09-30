@@ -88,4 +88,4 @@ Règles sur l'équipe :
 
 ## Conservation et suppression
 
-`/api/cron/cleanup` (quotidien) supprime : les organisations désactivées depuis plus de 30 jours (avec leurs événements, créneaux et inscriptions en cascade), les bénévoles sans organisation ni inscription, les comptes admin désactivés depuis plus de 30 jours, les jetons expirés, les emails de la file d'envoi (envoyés chaque nuit, en échec après 30 jours) et les messages ciblés de plus de 12 mois (objet, texte, public et nombre de destinataires ; leur contenu peut contenir des informations personnelles).
+Les durées de conservation, ce qui les déclenche et ce qui efface chaque donnée sont décrites dans [retention.md](retention.md), généré depuis `src/lib/retention.ts` et vérifié par un test contre le nettoyage quotidien, les sauvegardes et la politique de confidentialité.

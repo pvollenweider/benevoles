@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { countsToFreeze, MESSAGE_RETENTION_DAYS } from "@/lib/message-history"
+import { countsToFreeze } from "@/lib/message-history"
+import { daysAgo, RETENTION_DAYS } from "@/lib/retention"
 import { NextResponse } from "next/server"
 import { recordJobRun } from "@/lib/job-runs"
 import { env } from "@/lib/env"
@@ -33,13 +34,16 @@ async function run(req: Request) {
   const now = new Date()
   // 30-day retention cutoff. We use updatedAt as a proxy for deactivation
   // time since neither Organization nor AdminUser tracks deactivatedAt.
-  const cutoff30d = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+  // Durations from the retention policy (#486), the single source the docs are checked against.
+  const orgCutoff = daysAgo(now, RETENTION_DAYS.deactivatedOrganization)
+  const adminCutoff = daysAgo(now, RETENTION_DAYS.deactivatedAdmin)
+  const failedCutoff = daysAgo(now, RETENTION_DAYS.failedNotification)
 
   // --- 1. Inactive organizations ---
   // Cascades to: Event → Shift → Registration, Member, MemberInvite
   // AdminUser.organizationId is set to NULL (SetNull) — handled in step 3.
   const deletedOrgs = await prisma.organization.deleteMany({
-    where: { active: false, updatedAt: { lt: cutoff30d } },
+    where: { active: false, updatedAt: { lt: orgCutoff } },
   })
 
   // --- 2. Orphan volunteers ---
@@ -53,7 +57,7 @@ async function run(req: Request) {
   // --- 3. Deactivated admin users ---
   // Includes admins whose org was just deleted (organizationId = null after SetNull).
   const deletedAdmins = await prisma.adminUser.deleteMany({
-    where: { isActive: false, updatedAt: { lt: cutoff30d } },
+    where: { isActive: false, updatedAt: { lt: adminCutoff } },
   })
 
   // --- 4. Expired password-reset tokens (housekeeping, not GDPR-critical) ---
@@ -76,7 +80,7 @@ async function run(req: Request) {
   // 30 days (kept that long only to investigate why they failed).
   // A targeted message keeps the count of its rows deleted here (#467), in the same transaction,
   // so its delivery summary stays right after the purge.
-  const outboxToDelete = { OR: [{ status: "sent" }, { status: "failed", createdAt: { lt: cutoff30d } }] }
+  const outboxToDelete = { OR: [{ status: "sent" }, { status: "failed", createdAt: { lt: failedCutoff } }] }
   const deletedOutbox = await prisma.$transaction(async (tx) => {
     // Exactly the rows counted are deleted: one that turns « sent » meanwhile waits for tomorrow.
     const linked = await tx.notificationOutbox.findMany({
@@ -93,7 +97,7 @@ async function run(req: Request) {
 
   // Targeted messages are kept 12 months (#467): their content may hold personal information.
   const deletedMessages = await prisma.targetedMessage.deleteMany({
-    where: { createdAt: { lt: new Date(now.getTime() - MESSAGE_RETENTION_DAYS * 24 * 60 * 60 * 1000) } },
+    where: { createdAt: { lt: daysAgo(now, RETENTION_DAYS.targetedMessage) } },
   })
 
   // --- 6. Expired rate limit windows (#322) ---

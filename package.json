@@ -25,6 +25,7 @@
     "pretest:e2e": "node scripts/check-node-version.mjs",
     "test:e2e": "playwright test",
     "screenshots": "node scripts/screenshots.mjs",
+    "retention:docs": "tsx scripts/retention-docs.ts",
     "prepare": "husky",
     "postinstall": "[ -f prisma/schema.prisma ] && prisma generate || true"
   },

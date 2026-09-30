@@ -8,7 +8,6 @@
  * in the outbox. Pure.
  */
 
-export const MESSAGE_RETENTION_DAYS = 365
 
 export type Delivery = { sent: number; failed: number; pending: number }
 
