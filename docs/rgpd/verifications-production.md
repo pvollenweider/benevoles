@@ -11,15 +11,15 @@ Ce que le dépôt ne permet pas d'établir. Pour chaque point : la preuve à con
 ## Envoi des emails (SMTP)
 
 - [x] Fournisseur : **Gandi Mail**, seul expéditeur autorisé du domaine (SPF, DKIM `gm1`–`gm3`, MX, DMARC strict), observé le 2026-09-30. Confirmation formelle : valeur de `SMTP_HOST` dans le secret de production.
-- [ ] DPA v2023.0 et localisation (France, sans transfert) documentés ; durée des journaux SMTP et des files : non documentée, pas de demande prévue (décision du 2026-09-30).
+- [x] DPA v2023.0 et localisation (France, sans transfert) documentés ; durée des journaux SMTP et des files : non documentée, pas de demande prévue (décision du 2026-09-30).
 
 ## Dropbox (copie hors site)
 
 - [x] **Offre du compte utilisé par rclone** : individuelle (confirmée le 2026-09-30), donc sans DPA ; conservée pour l'instant, migration prévue vers Infomaniak Swiss Backup (#524). Voir « Points d'attention » dans [sous-traitants.md](sous-traitants.md).
-- [ ] Région de stockage effective du compte, accès possibles hors de Suisse et de l'UE.
-- [ ] DPA et mécanisme de transfert applicable.
-- [ ] Conservation des fichiers supprimés et des versions (la suppression par rclone au-delà de la durée de la matrice ne dit rien de la corbeille côté Dropbox).
-- [ ] Qui a accès au compte ; jeton OAuth rclone stocké seulement dans le secret Kubernetes.
+- [x] Région de stockage : **États-Unis** (offre individuelle, pas de choix de région) ; accès hors de Suisse et de l'UE possibles par Dropbox et ses sous-traitants. Écart assumé, suivi dans #524.
+- [x] DPA : aucun pour l'offre individuelle ; transferts selon les garanties que Dropbox déclare (clauses contractuelles types, Data Privacy Framework). Écrit dans la politique publique (#528).
+- [x] Fichiers supprimés : rclone les supprime du Dropbox au-delà de la durée de la matrice, mais ils **restent restaurables** pendant la période de récupération des fichiers supprimés de Dropbox (opérateur, 2026-09-30) : 30 jours en Basic ou Plus, 180 jours en Professional, selon l'aide officielle citée dans [sous-traitants.md](sous-traitants.md). **Reste : relever le nom exact de l'offre individuelle.** Les copies sont chiffrées avant l'envoi, clé hors de Dropbox ; elles restent des données personnelles. La durée réelle de conservation hors site est donc celle de la matrice plus cette période.
+- [x] Accès au compte : **l'opérateur uniquement** ; jeton OAuth rclone stocké **seulement dans le secret Kubernetes** (opérateur, 2026-09-30).
 
 ## Sentry
 
@@ -56,4 +56,4 @@ Décision : un jeton personnel n'est jamais écrit dans un journal d'accès (`k8
 - [ ] Relecture juridique de [projet-accord-traitement.md](projet-accord-traitement.md) sur la base des clauses types de la Commission.
 - [ ] Validation de la répartition des rôles ([inventaire.md](inventaire.md)).
 - [ ] Validation de [procedure-violation.md](procedure-violation.md) : personnes, délais, canal de signalement.
-- [ ] Mise à jour de la politique publique ([ecarts.md](ecarts.md)) seulement après tout ce qui précède.
+- [x] Politique publique alignée sur l'état réel, Dropbox compris (#528, 2026-09-30). À revoir après la relecture juridique et le remplacement de Dropbox (#524).
