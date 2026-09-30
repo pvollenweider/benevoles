@@ -118,6 +118,24 @@ export function deleteRoleRecap(i: { role: string; shifts: number; registered: n
   }
 }
 
+export function deleteMilestoneRecap(title: string): ActionRecap {
+  return {
+    title: `Supprimer le jalon « ${title} » ?`,
+    lines: ["Le jalon disparaît de la préparation de l'événement. Aucun email n'est envoyé.", LOGGED],
+    confirmLabel: "Supprimer",
+    danger: true,
+  }
+}
+
+export function deletePageRecap(title: string): ActionRecap {
+  return {
+    title: `Supprimer la page « ${title} » ?`,
+    lines: ["La page n'est plus visible sur la page publique de l'événement ; les liens vers elle ne fonctionnent plus.", "Aucun email n'est envoyé.", LOGGED],
+    confirmLabel: "Supprimer",
+    danger: true,
+  }
+}
+
 /** Link to the event log filtered from the day the action ran (the log's filter is a date), so its entries are on the first page. */
 export function logLinkFor(eventId: string, startedAt: Date, timeZone?: string): string {
   const since = startedAt.toLocaleDateString("sv-SE", timeZone ? { timeZone } : undefined)

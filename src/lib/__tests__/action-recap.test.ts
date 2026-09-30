@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap } from "../action-recap"
+import { bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, deleteMilestoneRecap, deletePageRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap } from "../action-recap"
 
 // Confirmation before sensitive actions (#379).
 describe("action recaps", () => {
@@ -26,6 +26,11 @@ describe("action recaps", () => {
   it("member deactivation and leader removal", () => {
     expect(deactivateMemberRecap("Zoé Roy")).toMatchObject({ title: "Désactiver Zoé Roy ?", danger: true, confirmLabel: "Désactiver" })
     expect(removeLeaderRecap("Léa", "Bar").title).toBe("Retirer Léa des responsables de « Bar » ?")
+  })
+
+  it("milestone and page deletion", () => {
+    expect(deleteMilestoneRecap("Fermer les inscriptions")).toMatchObject({ title: "Supprimer le jalon « Fermer les inscriptions » ?", danger: true })
+    expect(deletePageRecap("Accès").title).toBe("Supprimer la page « Accès » ?")
   })
 
   it("formats the moment of a shift", () => {

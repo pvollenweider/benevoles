@@ -4,6 +4,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useState, useId, useRef, useEffect } from "react"
+import { flushSync } from "react-dom"
+import { announce } from "@/lib/announce"
+import { deleteMilestoneRecap } from "@/lib/action-recap"
+import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
+import FormStatus from "@/components/FormStatus"
+import { requestJson, useSubmit } from "@/lib/use-submit"
 
 export type MilestoneRow = {
   id: string
@@ -37,8 +43,15 @@ export default function MilestonesSection({
   const dateId = useId()
   const [title, setTitle] = useState("")
   const [dueDate, setDueDate] = useState("")
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const { submit, busy: saving, error, fail, isInvalid, reset } = useSubmit()
+  const errorId = useId()
+  // Deletion goes through a confirmation (#379); its failure stays in the dialog.
+  const [pendingRemove, setPendingRemove] = useState<MilestoneRow | null>(null)
+  const [removing, setRemoving] = useState(false)
+  const [removeError, setRemoveError] = useState<string | null>(null)
+  // Outcome of a checkbox or removal: visible when it is an error, voiced in both cases.
+  const [outcome, setOutcome] = useState<{ kind: "ok" | "error"; text: string } | null>(null)
+  const outcomeRef = useRef<HTMLParagraphElement>(null)
 
   const titleInputRef = useRef<HTMLInputElement>(null)
   const addButtonRef = useRef<HTMLButtonElement>(null)
@@ -58,60 +71,79 @@ export default function MilestonesSection({
 
   function closeForm() {
     setShowForm(false)
-    setError(null)
+    reset()
   }
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault()
-    setSaving(true)
-    setError(null)
-    const res = await fetch(`/api/admin/events/${eventId}/milestones`, {
+    if (!title.trim()) { fail("Indiquez le titre du jalon.", "title", titleInputRef.current); return }
+    if (!dueDate) { fail("Indiquez l'échéance.", "dueDate", document.getElementById(dateId)); return }
+    const outcome = await submit<MilestoneRow>(() => fetch(`/api/admin/events/${eventId}/milestones`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, dueDate }),
-    })
-    setSaving(false)
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      setError(typeof data?.error === "string" ? data.error : "Une erreur est survenue.")
+      body: JSON.stringify({ title: title.trim(), dueDate }),
+    }), { silent: true })
+    if (!outcome.ok) {
+      fail(outcome.error, outcome.status === 400 ? "title" : undefined, outcome.status === 400 ? titleInputRef.current : null)
       return
     }
-    const milestone = await res.json()
+    const milestone = outcome.data
     setMilestones((prev) => [...prev, milestone].sort((a, b) => a.dueDate.localeCompare(b.dueDate)))
-    setAnnouncement(`Jalon « ${milestone.title} » ajouté.`)
+    announce(setAnnouncement, `Jalon « ${milestone.title} » ajouté.`)
     setTitle("")
     setDueDate("")
     closeForm()
   }
 
   async function toggleDone(milestone: MilestoneRow) {
-    const res = await fetch(`/api/admin/events/${eventId}/milestones/${milestone.id}`, {
+    const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/milestones/${milestone.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ done: !milestone.done }),
-    })
-    if (!res.ok) {
-      setAnnouncement(`Échec : impossible de mettre à jour le jalon « ${milestone.title} ».`)
+    }), `Impossible de mettre à jour le jalon « ${milestone.title} ».`)
+    if (!outcome.ok) {
+      setOutcome({ kind: "error", text: outcome.error })
       return
     }
     setMilestones((prev) => prev.map((m) => (m.id === milestone.id ? { ...m, done: !m.done } : m)))
-    setAnnouncement(`Jalon « ${milestone.title} » marqué ${!milestone.done ? "fait" : "à faire"}.`)
+    setOutcome(null)
+    announce(setAnnouncement, `Jalon « ${milestone.title} » marqué ${!milestone.done ? "fait" : "à faire"}.`)
   }
 
-  async function handleRemove(milestone: MilestoneRow) {
-    if (!confirm(`Supprimer le jalon « ${milestone.title} » ?`)) return
-    const res = await fetch(`/api/admin/events/${eventId}/milestones/${milestone.id}`, { method: "DELETE" })
-    if (res.ok) {
+  function handleRemove(milestone: MilestoneRow) {
+    setRemoveError(null)
+    setPendingRemove(milestone)
+  }
+
+  async function runRemove(milestone: MilestoneRow) {
+    setRemoving(true)
+    setRemoveError(null)
+    const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/milestones/${milestone.id}`, { method: "DELETE" }), `Impossible de supprimer le jalon « ${milestone.title} ».`)
+    setRemoving(false)
+    if (!outcome.ok) { setRemoveError(outcome.error); return }
+    // The row's button that opened the dialog disappears with it: park the focus on the outcome.
+    flushSync(() => {
+      setPendingRemove(null)
       setMilestones((prev) => prev.filter((m) => m.id !== milestone.id))
-      setAnnouncement(`Jalon « ${milestone.title} » supprimé.`)
-    } else {
-      setAnnouncement(`Échec : impossible de supprimer le jalon « ${milestone.title} ».`)
-    }
+      setOutcome({ kind: "ok", text: `Jalon « ${milestone.title} » supprimé.` })
+    })
+    outcomeRef.current?.focus()
   }
 
   return (
     <div className="space-y-3">
       <div role="status" aria-live="polite" className="sr-only">{announcement}</div>
+      {pendingRemove && (
+        <ConfirmActionModal recap={deleteMilestoneRecap(pendingRemove.title)} busy={removing} error={removeError} onConfirm={() => void runRemove(pendingRemove)} onCancel={() => setPendingRemove(null)} />
+      )}
+      <p
+        ref={outcomeRef}
+        tabIndex={-1}
+        role={outcome?.kind === "error" ? "alert" : "status"}
+        className={outcome ? `text-sm rounded-xl px-3 py-2 border focus:outline-none ${outcome.kind === "error" ? "text-red-800 bg-red-50 border-red-200" : "text-gray-800 bg-green-50 border-green-200"}` : "sr-only"}
+      >
+        {outcome?.text ?? ""}
+      </p>
 
       {milestones.length === 0 && !showForm && (
         <p className="text-sm text-gray-500">Aucun jalon pour l&apos;instant.</p>
@@ -140,6 +172,7 @@ export default function MilestonesSection({
                   {overdue && <span className="sr-only"> (dépassé)</span>}
                 </span>
                 <button
+                  type="button"
                   onClick={() => handleRemove(m)}
                   aria-label={`Supprimer le jalon ${m.title}`}
                   className="text-xs text-gray-500 hover:text-red-600 transition-colors flex-shrink-0"
@@ -153,7 +186,7 @@ export default function MilestonesSection({
       )}
 
       {showForm ? (
-        <form onSubmit={handleAdd} className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+        <form onSubmit={handleAdd} noValidate className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
           <div>
             <label htmlFor={titleId} className="block text-sm text-gray-700 mb-1">Titre *</label>
             <input
@@ -162,7 +195,8 @@ export default function MilestonesSection({
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              required
+              aria-invalid={isInvalid("title")}
+              aria-describedby={isInvalid("title") ? errorId : undefined}
               maxLength={140}
               placeholder="ex. Fermer les inscriptions"
               className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
@@ -175,29 +209,29 @@ export default function MilestonesSection({
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              required
+              aria-invalid={isInvalid("dueDate")}
+              aria-describedby={isInvalid("dueDate") ? errorId : undefined}
               className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
             />
           </div>
-          {error && (
-            <p role="alert" className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
-          )}
+          <FormStatus error={error} errorId={errorId} />
           <div className="flex justify-end gap-2">
             <button type="button" onClick={closeForm} className="text-sm text-gray-600 px-4 py-2 rounded-full hover:bg-gray-50 transition-colors">
               Annuler
             </button>
             <button
               type="submit"
-              disabled={saving}
-              className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              aria-disabled={saving || undefined}
+              className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 aria-disabled:cursor-wait transition-colors"
             >
-              {saving ? "…" : "Ajouter"}
+              {saving ? "Ajout…" : "Ajouter"}
             </button>
           </div>
         </form>
       ) : (
         <button
           ref={addButtonRef}
+          type="button"
           onClick={() => setShowForm(true)}
           className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
         >
