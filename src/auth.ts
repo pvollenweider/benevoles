@@ -10,6 +10,7 @@ import { getClientIp } from "@/lib/rate-limit"
 import { loginAllowed, recordLoginFailure, refreshAdminToken } from "@/lib/admin-session"
 import { normalizeEmail } from "@/lib/email-address"
 import { MAX_LOGIN_PASSWORD_LENGTH } from "@/lib/password"
+import { organizationAllowsSignIn } from "@/lib/admin-sign-in"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -46,9 +47,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           await recordLoginFailure(ip, email)
           return null
         }
-        // super_admin has no organization (cross-tenant); org admins are
-        // locked out once their organization is disabled.
-        if (user.organization && !user.organization.active) return null
+        // super_admin has no organization (cross-tenant); org admins are locked out once their
+        // organization is disabled or gone.
+        if (!organizationAllowsSignIn(user)) return null
 
         const valid = await bcrypt.compare(credentials.password as string, user.passwordHash)
         if (!valid) {

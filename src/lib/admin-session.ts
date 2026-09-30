@@ -4,6 +4,7 @@
 import type { JWT } from "next-auth/jwt"
 import { prisma } from "./prisma"
 import { isRateLimited, rateLimit } from "./rate-limit"
+import { organizationAllowsSignIn } from "./admin-sign-in"
 
 /**
  * Re-reads the admin behind a session token on every server-side auth() call, so a JWT issued
@@ -24,7 +25,7 @@ export async function refreshAdminToken(token: JWT): Promise<JWT | null> {
   // Password changed or reset since this session was opened (#360). Tokens issued before the
   // version existed count as 0, the column's default.
   if ((token.sessionVersion ?? 0) !== admin.sessionVersion) return null
-  if (admin.organization && !admin.organization.active) return null
+  if (!organizationAllowsSignIn(admin)) return null
   token.role = admin.role
   token.organizationId = admin.organizationId
   // Also follow an email or name change (super-admin profile), instead of showing the values
