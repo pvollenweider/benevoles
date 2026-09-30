@@ -445,6 +445,19 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(res.status).toBe(404)
   })
 
+  it("POST /api/admin/members/import/preview reads existing members through the scoped client only (#464)", async () => {
+    const { POST } = await import("@/app/api/admin/members/import/preview/route")
+    const db = setupGuard({ volunteer: { findMany: vi.fn().mockResolvedValue([]) } })
+    const fd = new FormData()
+    fd.append("file", new File(["prenom,nom,email\nAlice,M,a@x.com"], "m.csv", { type: "text/csv" }))
+    const res = await POST(new Request("http://localhost:3000/api/admin/members/import/preview", { method: "POST", body: fd }))
+    expect(res.status).toBe(200)
+    expect(db.volunteer.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ organizationId: ORG_A }) }))
+    expect(db.volunteer.create).not.toHaveBeenCalled()
+    expect(prismaMock.volunteer.findFirst).not.toHaveBeenCalled()
+    expect(prismaMock.volunteer.create).not.toHaveBeenCalled()
+  })
+
   it("GET /api/admin/members/export reads members through the scoped client only (#384)", async () => {
     const { GET } = await import("@/app/api/admin/members/export/route")
     const db = setupGuard({ volunteer: { findMany: vi.fn().mockResolvedValue([]) } })

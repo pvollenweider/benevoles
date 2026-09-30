@@ -3,97 +3,79 @@
 
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { parseCsv, parseXlsx } from "@/lib/csv-import"
+import { rateLimit } from "@/lib/rate-limit"
+import { analyseImport } from "@/lib/member-import-server"
+import { parseOnDuplicate } from "@/lib/member-import-plan"
+import { adminActor, logOrgEvent } from "@/lib/org-log"
 
+/**
+ * Applies a member import the admin has previewed (#464). The same file must come back (same
+ * SHA-256) and plan the same writes; otherwise nothing is written and the new preview is returned.
+ */
 export async function POST(req: Request) {
   const guard = await requireOrgSession()
   if (guard instanceof NextResponse) return guard
   const { db, organizationId } = guard
 
   const form = await req.formData()
-  const file = form.get("file")
-  const onDuplicate = (form.get("onDuplicate") as string) ?? "skip" // "skip" | "update"
-
-  if (!(file instanceof File)) {
-    return NextResponse.json({ error: "Fichier manquant" }, { status: 400 })
+  const fileHash = form.get("fileHash")
+  const planHash = form.get("planHash")
+  if (typeof fileHash !== "string" || typeof planHash !== "string" || !fileHash || !planHash) {
+    return NextResponse.json({ error: "Analysez le fichier avant de l'importer." }, { status: 400 })
   }
 
-  const buffer = Buffer.from(await file.arrayBuffer())
-  const isXlsx =
-    file.name.toLowerCase().endsWith(".xlsx") ||
-    file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  const rl = await rateLimit(`org:${organizationId}`, "member-import", 10, 60 * 60 * 1000)
+  if (!rl.ok) return NextResponse.json({ error: "Trop d'imports cette heure-ci. Réessayez plus tard." }, { status: 429 })
 
-  let preview
-  try {
-    preview = isXlsx ? await parseXlsx(buffer) : parseCsv(buffer)
-  } catch (err) {
-    console.error("Member import parse error:", err)
-    return NextResponse.json({ error: "Impossible de lire le fichier : vérifiez qu'il s'agit d'un CSV ou d'un .xlsx." }, { status: 400 })
+  const onDuplicate = parseOnDuplicate(form.get("onDuplicate"))
+  const result = await analyseImport(form.get("file"), db, organizationId, onDuplicate)
+  if (!result.ok) return NextResponse.json({ error: result.error }, { status: result.status })
+  const { analysis } = result
+
+  if (analysis.fileHash !== fileHash) {
+    return NextResponse.json({ error: "Ce n'est pas le fichier analysé. Analysez-le à nouveau avant d'importer." }, { status: 409 })
   }
-
-  if (preview.rows.length === 0 && preview.errors.length === 0) {
-    return NextResponse.json({ error: "Le fichier est vide" }, { status: 400 })
+  if (analysis.planHash !== planHash) {
+    return NextResponse.json(
+      { error: "Les membres ont changé depuis l'analyse. Voici l'analyse à jour : vérifiez-la puis confirmez.", preview: analysis },
+      { status: 409 },
+    )
   }
 
   let created = 0
   let updated = 0
-  let skipped = 0
-  const errors = [...preview.errors]
-
-  // Pre-fetch existing emails to avoid one query per row.
-  const emailsInImport = preview.rows.map((r) => r.email).filter((e): e is string => !!e)
-  const existing = emailsInImport.length
-    ? await db.volunteer.findMany({
-        where: { organizationId, email: { in: emailsInImport } },
-        select: { id: true, email: true },
-      })
-    : []
-  const existingByEmail = new Map(existing.map((v) => [v.email, v.id]))
-
-  for (const row of preview.rows) {
-    const existingId = row.email ? existingByEmail.get(row.email) : undefined
-    if (existingId) {
-      if (onDuplicate === "update") {
+  const errors = [...analysis.plan.errors]
+  for (const line of analysis.plan.lines) {
+    try {
+      if (line.action === "update" && line.existingId) {
         await db.volunteer.update({
-          where: { id: existingId },
-          data: {
-            firstName: row.firstName,
-            lastName: row.lastName,
-            phone: row.phone ?? null,
-            tags: row.tags ?? [],
-            active: true,
-          },
+          where: { id: line.existingId },
+          data: { firstName: line.firstName, lastName: line.lastName, phone: line.phone, tags: line.tags, active: true },
         })
         updated++
-      } else {
-        skipped++
-      }
-    } else {
-      try {
+      } else if (line.action === "create") {
         await db.volunteer.create({
-          data: {
-            organizationId,
-            firstName: row.firstName,
-            lastName: row.lastName,
-            email: row.email ?? null,
-            phone: row.phone ?? null,
-            tags: row.tags ?? [],
-          },
+          data: { organizationId, firstName: line.firstName, lastName: line.lastName, email: line.email, phone: line.phone, tags: line.tags },
         })
         created++
-      } catch (err) {
-        console.error("Member import row error:", err)
-        errors.push({ line: -1, reason: `Échec création ${row.firstName} ${row.lastName}` })
       }
+    } catch (err) {
+      // Only the error code: the message can quote the member's email.
+      console.error("Member import row error:", (err as { code?: string })?.code ?? "unknown")
+      errors.push({ line: line.line, reason: line.action === "create" ? "Création impossible (membre créé entre-temps ?)" : "Mise à jour impossible" })
     }
   }
+  errors.sort((a, b) => a.line - b.line)
+  const skipped = analysis.plan.counts.skip
 
-  return NextResponse.json({
-    created,
-    updated,
-    skipped,
-    errors,
-    detectedColumns: preview.detectedColumns,
-    totalParsed: preview.rows.length,
+  await logOrgEvent({
+    organizationId,
+    actor: adminActor(guard.session),
+    action: "member.imported",
+    entityType: "Member",
+    entityId: "import",
+    changes: { created: { from: null, to: created }, updated: { from: null, to: updated }, skipped: { from: null, to: skipped }, errors: { from: null, to: errors.length } },
   })
+
+  return NextResponse.json({ created, updated, skipped, errors, detectedColumns: analysis.detectedColumns, totalParsed: analysis.totalParsed })
 }
