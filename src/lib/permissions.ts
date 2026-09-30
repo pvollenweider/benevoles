@@ -79,6 +79,8 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "settings/activity/export": { GET: "organizer" },
   "settings/admins": { GET: "organizer", POST: "owner" },
   "settings/admins/[id]": { PATCH: "owner", DELETE: "owner" },
+  "settings/message-templates": { GET: "organizer", POST: "organizer" },
+  "settings/message-templates/[id]": { PATCH: "organizer", DELETE: "organizer" },
   "settings/notifications": { GET: "organizer", PATCH: "owner" },
   "settings/notifications/[id]/retry": { POST: "organizer" },
   "settings/notifications/test": { POST: "organizer" },

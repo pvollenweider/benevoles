@@ -20,6 +20,9 @@ export type OrgLogEntry = {
 const ACTION_LABEL: Record<string, string> = {
   "member.created": "a créé un membre",
   "member.imported": "a importé des membres",
+  "template.created": "a créé un modèle de message",
+  "template.updated": "a modifié un modèle de message",
+  "template.deleted": "a supprimé un modèle de message",
   "member.updated": "a modifié un membre",
   "member.deactivated": "a désactivé un membre",
   "adminuser.invited": "a invité un admin",

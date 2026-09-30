@@ -7,12 +7,16 @@ import { useEffect, useId, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import ModalShell from "./ModalShell"
 import { MESSAGE_BODY_MAX, MESSAGE_SUBJECT_MAX, type Audience } from "@/lib/targeted-message"
+import { templateProblems, VARIABLES } from "@/lib/message-template"
+import { announce } from "@/lib/announce"
 
 type Props = {
   eventId: string
   roles: string[]
   shifts: { id: string; roleName: string; name: string }[]
   initialAudience: Audience
+  /** The organisation's message templates (#482). */
+  templates?: { id: string; name: string; subject: string; body: string }[]
 }
 
 type DryRun = { recipients: number; pushDevices?: number; waitlistOnly?: number; audience: string; preview: { subject: string; html: string } | null }
@@ -21,7 +25,7 @@ type DryRun = { recipients: number; pushDevices?: number; waitlistOnly?: number;
  * Subject, message, audience; a live recipient count; a preview; then a confirmation naming the
  * number of people written to (#396). Sending goes through the outbox on the server.
  */
-export default function TargetedMessageForm({ eventId, roles, shifts, initialAudience }: Props) {
+export default function TargetedMessageForm({ eventId, roles, shifts, initialAudience, templates = [] }: Props) {
   const router = useRouter()
   const id = useId()
   const [kind, setKind] = useState<Audience["kind"]>(initialAudience.kind)
@@ -38,6 +42,10 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
   const [sent, setSent] = useState<{ sent: number; audience: string; pushDevices?: number; pushRequested?: boolean } | null>(null)
   // Also a push notification (#468); the email always goes.
   const [push, setPush] = useState(false)
+  const [templateNotice, setTemplateNotice] = useState("")
+  // Choosing a template and applying it are two steps (#482), and the replaced text can come back.
+  const [templateId, setTemplateId] = useState("")
+  const [beforeTemplate, setBeforeTemplate] = useState<{ subject: string; message: string } | null>(null)
   const [attempted, setAttempted] = useState(false)
   const cancelRef = useRef<HTMLButtonElement>(null)
   const resultRef = useRef<HTMLHeadingElement>(null)
@@ -45,6 +53,9 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
   const audience: Audience =
     kind === "role" ? { kind, roleName } : kind === "shift" ? { kind, shiftId } : { kind }
   const audienceKey = JSON.stringify(audience)
+  // Template variables (#482) checked as the text is typed, with the same rule as the server.
+  const subjectProblems = templateProblems(subject, kind)
+  const messageProblems = templateProblems(message, kind)
   const subjectMissing = subject.trim().length === 0
   const messageMissing = message.trim().length === 0
 
@@ -72,6 +83,10 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
 
   async function preview() {
     setAttempted(true)
+    if (subjectProblems.length > 0 || messageProblems.length > 0) {
+      document.getElementById(subjectProblems.length > 0 ? `${id}-subject` : `${id}-message`)?.focus()
+      return
+    }
     if (subjectMissing || messageMissing) {
       document.getElementById(subjectMissing ? `${id}-subject` : `${id}-message`)?.focus()
       return
@@ -113,7 +128,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
   const devices = (n: number) => `${n} appareil${n > 1 ? "s" : ""}`
   // What goes out, in one phrase for the preview and the confirmation.
   const pushPart = push ? (pushDevices > 0 ? ` ; une notification part aussi sur ${devices(pushDevices)}` : " ; aucune notification (aucun destinataire ne les a activées)") : ""
-  const inputClass = (bad: boolean) => `input ${attempted && bad ? "!border-red-600" : ""}`
+  const inputClass = (missing: boolean, hasProblems = false) => `input ${(attempted && missing) || hasProblems ? "!border-red-600" : ""}`
 
   if (sent) {
     return (
@@ -127,7 +142,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
           : <p className="text-sm text-gray-700">Aucune notification envoyée : aucun de ces destinataires n&apos;a activé les notifications.</p>)}
         <button
           type="button"
-          onClick={() => { setSent(null); setSubject(""); setMessage(""); setPush(false); setAttempted(false); setRestartCount((n) => n + 1) }}
+          onClick={() => { setSent(null); setSubject(""); setMessage(""); setPush(false); setTemplateId(""); setTemplateNotice(""); setBeforeTemplate(null); setAttempted(false); setRestartCount((n) => n + 1) }}
           className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         >
           Écrire un autre message
@@ -178,16 +193,66 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
         {counting && <p aria-hidden="true" className="text-sm text-gray-600">Comptage…</p>}
       </fieldset>
 
+      {templates.length > 0 && (
+        <div>
+          <label htmlFor={`${id}-template`} className="block text-sm font-medium text-gray-800 mb-1">Partir d&apos;un modèle</label>
+          <div className="flex flex-wrap items-center gap-2">
+            <select id={`${id}-template`} value={templateId} onChange={(e) => setTemplateId(e.target.value)} aria-describedby={`${id}-template-hint`} className="input flex-1 min-w-48">
+              <option value="">Choisir un modèle…</option>
+              {templates.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+            </select>
+            <button
+              type="button"
+              onClick={() => {
+                const t = templates.find((x) => x.id === templateId)
+                if (!t) return
+                setBeforeTemplate(subject.trim() || message.trim() ? { subject, message } : null)
+                setSubject(t.subject)
+                setMessage(t.body)
+                announce(setTemplateNotice, `Modèle « ${t.name} » appliqué : objet et message remplacés, modifiables avant l'envoi.`)
+              }}
+              aria-disabled={!templateId || undefined}
+              className={`text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded px-1 py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${templateId ? "" : "opacity-60 cursor-not-allowed"}`}
+            >
+              Utiliser ce modèle
+            </button>
+            {beforeTemplate && (
+              <button
+                type="button"
+                onClick={() => { setSubject(beforeTemplate.subject); setMessage(beforeTemplate.message); setBeforeTemplate(null); announce(setTemplateNotice, "Objet et message précédents rétablis.") }}
+                className="text-sm text-gray-700 underline underline-offset-2 hover:text-gray-900 rounded px-1 py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              >
+                Rétablir le texte précédent
+              </button>
+            )}
+          </div>
+          <p id={`${id}-template-hint`} className="text-xs text-gray-600 mt-1">Remplace l&apos;objet et le message actuels ; vous pouvez les modifier ensuite.</p>
+          <p role="status" className="text-xs text-gray-700 mt-1">{templateNotice}</p>
+        </div>
+      )}
+
       <div>
         <label htmlFor={`${id}-subject`} className={`block text-sm font-medium mb-1 ${attempted && subjectMissing ? "text-red-700" : "text-gray-800"}`}>Objet *</label>
-        <input id={`${id}-subject`} type="text" value={subject} maxLength={MESSAGE_SUBJECT_MAX} required aria-invalid={attempted && subjectMissing ? true : undefined} aria-describedby={`${id}-subject-hint`} onChange={(e) => setSubject(e.target.value)} className={inputClass(subjectMissing)} />
+        <input id={`${id}-subject`} type="text" value={subject} maxLength={MESSAGE_SUBJECT_MAX} required aria-invalid={subjectProblems.length > 0 || (attempted && subjectMissing) ? true : undefined} aria-describedby={`${id}-subject-hint${subjectProblems.length > 0 ? ` ${id}-subject-problems` : ""}`} onChange={(e) => setSubject(e.target.value)} className={inputClass(subjectMissing, subjectProblems.length > 0)} />
         <p id={`${id}-subject-hint`} className="text-xs text-gray-600 mt-1">Le titre de l&apos;événement est ajouté après l&apos;objet. {subject.length}/{MESSAGE_SUBJECT_MAX} caractères.</p>
+        {subjectProblems.length > 0 && (
+          <ul id={`${id}-subject-problems`} role="list" className="text-xs text-red-700 mt-1 space-y-0.5">
+            {subjectProblems.map((p) => <li key={p}>{p}</li>)}
+          </ul>
+        )}
       </div>
 
       <div>
         <label htmlFor={`${id}-message`} className={`block text-sm font-medium mb-1 ${attempted && messageMissing ? "text-red-700" : "text-gray-800"}`}>Message *</label>
-        <textarea id={`${id}-message`} rows={6} value={message} maxLength={MESSAGE_BODY_MAX} required aria-invalid={attempted && messageMissing ? true : undefined} aria-describedby={`${id}-message-hint`} onChange={(e) => setMessage(e.target.value)} className={inputClass(messageMissing)} />
-        <p id={`${id}-message-hint`} className="text-xs text-gray-600 mt-1">Texte simple, les retours à la ligne sont conservés. {message.length}/{MESSAGE_BODY_MAX} caractères.</p>
+        <textarea id={`${id}-message`} rows={6} value={message} maxLength={MESSAGE_BODY_MAX} required aria-invalid={messageProblems.length > 0 || (attempted && messageMissing) ? true : undefined} aria-describedby={`${id}-message-hint${messageProblems.length > 0 ? ` ${id}-message-problems` : ""}`} onChange={(e) => setMessage(e.target.value)} className={inputClass(messageMissing, messageProblems.length > 0)} />
+        <p id={`${id}-message-hint`} className="text-xs text-gray-600 mt-1">
+          Texte simple, les retours à la ligne sont conservés. {message.length}/{MESSAGE_BODY_MAX} caractères. Variables possibles : {Object.keys(VARIABLES).map((k) => `{${k}}`).join(", ")}.
+        </p>
+        {messageProblems.length > 0 && (
+          <ul id={`${id}-message-problems`} role="list" className="text-xs text-red-700 mt-1 space-y-0.5">
+            {messageProblems.map((p) => <li key={p}>{p}</li>)}
+          </ul>
+        )}
       </div>
 
       <div className="flex items-start gap-2">
