@@ -625,7 +625,7 @@ Les fichiers CSV s'ouvrent tels quels dans Excel ou LibreOffice (UTF-8, point-vi
 |---|---|
 | Membres, événements, créneaux, inscriptions, pages, journaux d'activité, comptes administrateurs de l'organisation | tant que l'organisation est active, événements passés compris ; effacés 30 jours après sa désactivation (délai compté depuis la dernière modification de l'organisation désactivée) |
 | Événement supprimé par un administrateur | effacé immédiatement, avec ses créneaux, inscriptions, invitations, réponses aux questions, responsables, pages, jalons, messages ciblés et son journal |
-| Organisation supprimée par le super admin | effacée immédiatement, avec ses membres et ses administrateurs |
+| Organisation supprimée par l'opérateur de benevol.app | effacée immédiatement, avec ses membres et ses administrateurs |
 | Membres retirés, inscriptions annulées ou refusées, questions archivées | tant que l'organisation existe (tant que leur événement existe pour les inscriptions et les questions) : pas d'effacement individuel |
 | Emails en file d'envoi (destinataire et contenu) | effacés chaque nuit une fois partis ; ceux en échec 30 jours après leur mise en file |
 | Messages ciblés (objet, texte, public, nombres) | 365 jours, ou avec l'événement |

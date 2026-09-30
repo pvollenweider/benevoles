@@ -65,7 +65,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Organisation supprimée par le super admin",
+    data: "Organisation supprimée par l'opérateur de benevol.app",
     purpose: "—",
     duration: "effacée immédiatement, avec ses membres et ses administrateurs",
     trigger: "suppression définitive d'une organisation désactivée",
