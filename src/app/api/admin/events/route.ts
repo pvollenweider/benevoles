@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { ACCENT_KEYS } from "@/lib/event-accent"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { slugify } from "@/lib/utils"
@@ -29,7 +30,7 @@ const schema = z.object({
   accentColorKey: z.enum(ACCENT_KEYS).optional().nullable(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
-})
+}).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
 
 export async function GET() {
   const guard = await requireOrgSession()

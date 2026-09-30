@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Prisma } from "@/generated/prisma/client"
+import { coordinatesOf } from "@/lib/map-link"
 
 /**
  * What volunteers see of an event on its public page. Shared by the public API and the admin
@@ -23,7 +24,11 @@ export const publicEventInclude = {
 export type PublicEventRow = Prisma.EventGetPayload<{ include: typeof publicEventInclude }>
 
 export function toPublicEvent(event: PublicEventRow) {
-  const shifts = event.shifts.map((shift) => ({
+  const eventPoint = coordinatesOf(event)
+  const shifts = event.shifts.map((shift) => {
+    // Meeting point (#191): the shift's whole pair, else the event's, never half of each.
+    const point = coordinatesOf(shift) ?? eventPoint
+    return {
     id: shift.id,
     roleName: shift.roleName,
     label: shift.label,
@@ -39,14 +44,14 @@ export function toPublicEvent(event: PublicEventRow) {
     // in the confirmation email, the reminders and the personal page of registered volunteers.
     locationDetails: shift.locationDetails,
     instructions: shift.instructions,
-    // Meeting point coordinates (#191), the event's when the shift has none.
-    latitude: shift.latitude ?? event.latitude,
-    longitude: shift.longitude ?? event.longitude,
+    latitude: point?.latitude ?? null,
+    longitude: point?.longitude ?? null,
     displayOrder: shift.displayOrder,
     waitlistEnabled: shift.waitlistEnabled,
     minAge: shift.minAge,
     colorKey: shift.colorKey,
-  }))
+    }
+  })
 
   return {
     id: event.id,
@@ -55,8 +60,8 @@ export function toPublicEvent(event: PublicEventRow) {
     organizationName: event.organization.name,
     description: event.description,
     location: event.location,
-    latitude: event.latitude,
-    longitude: event.longitude,
+    latitude: eventPoint?.latitude ?? null,
+    longitude: eventPoint?.longitude ?? null,
     startDate: event.startDate,
     endDate: event.endDate,
     publicInstructions: event.publicInstructions,

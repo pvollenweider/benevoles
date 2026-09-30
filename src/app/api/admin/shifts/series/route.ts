@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { z } from "zod"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { clockSchema } from "@/lib/shift-time"
@@ -30,7 +31,7 @@ const schema = z.object({
   displayOrder: z.number().int().optional(),
   waitlistEnabled: z.boolean().optional(),
   minAge: z.number().int().min(0).max(120).nullable().optional(),
-})
+}).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
 
 /** Creates a series of shifts (#393) in one transaction: all of them, or none. */
 export async function POST(req: Request) {

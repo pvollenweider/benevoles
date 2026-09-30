@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
 import { clockSchema, SAME_TIME_ERROR } from "@/lib/shift-time"
@@ -28,7 +29,7 @@ const schema = z.object({
   internalNotes: z.string().optional(),
   waitlistEnabled: z.boolean().optional(),
   minAge: z.number().int().min(0).max(120).nullable().optional(),
-}).refine((d) => d.startTime !== d.endTime, { message: SAME_TIME_ERROR, path: ["endTime"] })
+}).refine((d) => d.startTime !== d.endTime, { message: SAME_TIME_ERROR, path: ["endTime"] }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
 
 export async function POST(req: Request) {
   const guard = await requireOrgSession()

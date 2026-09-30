@@ -69,6 +69,18 @@ export function parseCoordinates(input: string | null | undefined): Coordinates 
   return null
 }
 
+export const COORDINATE_PAIR_ERROR = "La latitude et la longitude vont ensemble : indiquez les deux, ou aucune."
+
+/**
+ * A request body's coordinates form a pair: both absent (untouched), both null (cleared) or both
+ * numbers. A lone value would be combined with the other half of another point (#191 audit).
+ */
+export function isCoordinatePair(d: { latitude?: number | null; longitude?: number | null }): boolean {
+  const lat = d.latitude, lon = d.longitude
+  if (lat === undefined || lon === undefined) return lat === undefined && lon === undefined
+  return (lat === null) === (lon === null)
+}
+
 /** Coordinates of a row, or null when one of them is missing. */
 export function coordinatesOf(row: { latitude?: number | null; longitude?: number | null } | null | undefined): Coordinates | null {
   if (!row || row.latitude == null || row.longitude == null) return null
