@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
 import { clockSchema, SAME_TIME_ERROR } from "@/lib/shift-time"
@@ -33,7 +34,7 @@ const schema = z.object({
   minAge: z.number().int().min(0).max(120).nullable().optional(),
   // Caller can opt out of notifying volunteers (default true).
   notifyVolunteers: z.boolean().optional(),
-}).refine((d) => !(d.startTime && d.endTime) || d.startTime !== d.endTime, { message: SAME_TIME_ERROR, path: ["endTime"] })
+}).refine((d) => !(d.startTime && d.endTime) || d.startTime !== d.endTime, { message: SAME_TIME_ERROR, path: ["endTime"] }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
 
 function fmtDate(d: Date) {
   return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })

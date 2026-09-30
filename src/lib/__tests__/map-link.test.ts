@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { coordinatesOf, formatCoordinates, osmLink, parseCoordinates } from "../map-link"
+import { coordinatesOf, formatCoordinates, isCoordinatePair, osmLink, parseCoordinates } from "../map-link"
 
 // Map links from stored coordinates (#191).
 describe("parseCoordinates", () => {
@@ -40,5 +40,16 @@ describe("osmLink, formatCoordinates, coordinatesOf", () => {
     expect(coordinatesOf({ latitude: 46.18, longitude: 6.12 })).toEqual({ latitude: 46.18, longitude: 6.12 })
     expect(coordinatesOf({ latitude: 46.18, longitude: null })).toBeNull()
     expect(coordinatesOf(null)).toBeNull()
+  })
+})
+
+describe("isCoordinatePair", () => {
+  it("accepts both absent, both null or both numbers, and nothing half-set", () => {
+    expect(isCoordinatePair({})).toBe(true)
+    expect(isCoordinatePair({ latitude: null, longitude: null })).toBe(true)
+    expect(isCoordinatePair({ latitude: 46.18, longitude: 6.12 })).toBe(true)
+    expect(isCoordinatePair({ latitude: 46.18 })).toBe(false)
+    expect(isCoordinatePair({ latitude: 46.18, longitude: null })).toBe(false)
+    expect(isCoordinatePair({ latitude: null })).toBe(false)
   })
 })
