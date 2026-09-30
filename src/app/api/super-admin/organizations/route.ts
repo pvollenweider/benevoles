@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { inviteLink } from "@/lib/invite-link"
 import { requireSuperAdmin } from "@/lib/auth-guard"
 import bcrypt from "bcryptjs"
 import { randomBytes } from "crypto"
@@ -111,8 +112,7 @@ export async function POST(req: Request) {
     },
   })
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
-  const inviteUrl = `${appUrl}/admin/accept-invite?token=${setupToken}`
+  const inviteUrl = inviteLink(process.env.NEXT_PUBLIC_APP_URL, setupToken)
 
   return NextResponse.json({ org, inviteUrl }, { status: 201 })
 }

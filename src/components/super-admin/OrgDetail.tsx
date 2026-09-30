@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useState, useTransition } from "react"
+import { RESENT_LINK_NOTICE } from "@/lib/invite-link"
 import { announce } from "@/lib/announce"
 import { requestJson } from "@/lib/use-submit"
 import { deleteOrgRecap, toggleOrgRecap } from "@/lib/action-recap"
@@ -46,6 +47,26 @@ export default function OrgDetail({ org }: { org: Org }) {
   const [confirming, setConfirming] = useState<"toggle" | "delete" | null>(null)
   const [toggleError, setToggleError] = useState<string | null>(null)
   const [outcome, setOutcome] = useState("")
+  // Resending the invite of a pending admin: the new link is shown (the old one is dead, #269).
+  const [resend, setResend] = useState<{ busyFor: string | null; link: string | null; email: string | null; error: string | null }>({ busyFor: null, link: null, email: null, error: null })
+
+  async function resendInvite(adminId: string) {
+    if (resend.busyFor) return
+    setResend({ busyFor: adminId, link: null, email: null, error: null })
+    const result = await requestJson<{ sent: boolean; emailError: string | null; inviteUrl: string; email: string }>(() => fetch(`/api/super-admin/organizations/${org.id}/send-invite`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ adminId }),
+    }), "L'invitation n'a pas pu être renvoyée.")
+    if (!result.ok) {
+      setResend({ busyFor: null, link: null, email: null, error: result.error })
+      return
+    }
+    const { sent, emailError, inviteUrl, email } = result.data
+    // Even when the email failed, the token is rotated: the new link is the only valid one.
+    setResend({ busyFor: null, link: inviteUrl, email, error: sent ? null : `${emailError ?? "L'email n'a pas pu être envoyé."} Transmettez le nouveau lien affiché sous le tableau.` })
+    if (sent) announce(setOutcome, `Invitation renvoyée à ${email}. Un nouveau lien d'activation est affiché sous le tableau ; l'ancien ne fonctionne plus.`)
+  }
   const [name, setName] = useState(org.name)
   const [slug, setSlug] = useState(org.slug)
   const [savingName, setSavingName] = useState(false)
@@ -293,15 +314,40 @@ export default function OrgDetail({ org }: { org: Org }) {
                     <td className="px-4 py-3 text-gray-500">{admin.role}</td>
                     <td className="px-4 py-3">
                       {admin.isActive ? (
-                        <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Actif</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">Actif</span>
                       ) : (
-                        <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">Inactif</span>
+                        <span className="inline-flex items-center gap-2">
+                          <span className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">En attente d&apos;activation</span>
+                          <button
+                            type="button"
+                            onClick={() => void resendInvite(admin.id)}
+                            aria-disabled={resend.busyFor ? true : undefined}
+                            className="inline-flex items-center min-h-6 px-1 -mx-1 text-xs text-blue-700 underline underline-offset-2 rounded aria-disabled:cursor-wait focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                          >
+                            Renvoyer l&apos;invitation<span className="sr-only"> à {admin.email}</span>
+                          </button>
+                        </span>
                       )}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+            <span role="status" className="sr-only">{resend.busyFor ? "Envoi en cours…" : ""}</span>
+            <p role="alert" className={resend.error ? "m-4 text-sm text-red-800 bg-red-50 border border-red-200 rounded-xl px-3 py-2" : "sr-only"}>{resend.error ?? ""}</p>
+            {resend.link && (
+              <div className="m-4 bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-2">
+                <p id="resend-link-title" className="text-sm font-semibold text-blue-900">Nouveau lien d&apos;activation{resend.email ? ` pour ${resend.email}` : ""}</p>
+                <p className="text-xs text-blue-900">{RESENT_LINK_NOTICE} Valable 7 jours.</p>
+                <input
+                  readOnly
+                  aria-labelledby="resend-link-title"
+                  value={resend.link}
+                  className="w-full font-mono text-xs bg-white border border-blue-200 rounded-lg px-3 py-2 text-blue-900 select-all"
+                  onClick={(e) => (e.target as HTMLInputElement).select()}
+                />
+              </div>
+            )}
           </div>
         )}
       </div>

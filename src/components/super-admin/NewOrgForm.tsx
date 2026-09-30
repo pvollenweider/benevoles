@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useEffect, useId, useRef, useState } from "react"
+import { RESENT_LINK_NOTICE } from "@/lib/invite-link"
 import { announce } from "@/lib/announce"
 import FormStatus from "@/components/FormStatus"
 import { requestJson, useSubmit } from "@/lib/use-submit"
@@ -19,6 +20,7 @@ export default function NewOrgForm() {
   const [result, setResult] = useState<{ orgId: string; orgName: string; inviteUrl: string } | null>(null)
   const [inviteSent, setInviteSent] = useState<"idle" | "sending" | "sent" | "error">("idle")
   const [inviteError, setInviteError] = useState<string | null>(null)
+  const [linkRenewed, setLinkRenewed] = useState(false)
   const [copied, setCopied] = useState("")
   // The form disappears with the success: the focus lands on the result's heading.
   const doneHeadingRef = useRef<HTMLHeadingElement>(null)
@@ -55,9 +57,15 @@ export default function NewOrgForm() {
     if (inviteSent === "sending" || inviteSent === "sent") return
     setInviteSent("sending")
     setInviteError(null)
-    const outcome = await requestJson(() => fetch(`/api/super-admin/organizations/${orgId}/send-invite`, { method: "POST" }), "L'invitation n'a pas pu être envoyée.")
-    if (!outcome.ok) setInviteError(outcome.error)
-    setInviteSent(outcome.ok ? "sent" : "error")
+    const outcome = await requestJson<{ sent: boolean; emailError: string | null; inviteUrl: string }>(() => fetch(`/api/super-admin/organizations/${orgId}/send-invite`, { method: "POST" }), "L'invitation n'a pas pu être envoyée.")
+    if (!outcome.ok) { setInviteError(outcome.error); setInviteSent("error"); return }
+    // Sending rotates the token (#269): the link on screen must be the new one, or it is dead —
+    // whether or not the email itself went out.
+    const { sent, emailError, inviteUrl } = outcome.data
+    setResult((r) => (r ? { ...r, inviteUrl } : r))
+    setLinkRenewed(true)
+    if (!sent) setInviteError(`${emailError ?? "L'email n'a pas pu être envoyé."} Le lien ci-dessus a été renouvelé : copiez celui-ci.`)
+    setInviteSent(sent ? "sent" : "error")
   }
 
   if (result) {
@@ -94,8 +102,9 @@ export default function NewOrgForm() {
             </button>
           </div>
           <p role="status" className={copied ? "text-xs text-blue-900" : "sr-only"}>{copied}</p>
+          {linkRenewed && <p aria-hidden="true" className="text-xs text-blue-900">{RESENT_LINK_NOTICE}</p>}
           <div className="pt-1 space-y-2">
-            <p role="status" className={inviteSent === "sent" ? "text-sm text-green-800 font-medium" : "sr-only"}>{inviteSent === "sent" ? "Invitation envoyée par email." : ""}</p>
+            <p role="status" className={inviteSent === "sent" ? "text-sm text-green-800 font-medium" : "sr-only"}>{inviteSent === "sent" ? `Invitation envoyée par email. ${RESENT_LINK_NOTICE}` : ""}</p>
             <p role="alert" className={inviteSent === "error" ? "text-sm text-red-800" : "sr-only"}>{inviteSent === "error" ? `${inviteError ?? "Échec de l'envoi."} Vous pouvez réessayer ou copier le lien.` : ""}</p>
             {/* Stays mounted once sent so the focus does not fall off the page. */}
             <button
@@ -126,6 +135,7 @@ export default function NewOrgForm() {
               setAdminName("")
               setInviteSent("idle")
               setInviteError(null)
+              setLinkRenewed(false)
               reset()
             }}
             className="text-sm px-4 py-2 text-gray-600 hover:text-gray-900 border border-gray-200 rounded-xl"

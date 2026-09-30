@@ -2,24 +2,28 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { inviteLink } from "@/lib/invite-link"
 import { requireSuperAdmin } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 import { generateToken } from "@/lib/utils"
 import { hashToken } from "@/lib/token-hash"
 
-export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireSuperAdmin()
   if (guard instanceof NextResponse) return guard
 
   const { id } = await params
+  // Optional: which pending administrator, when the organisation has several.
+  const body = await req.json().catch(() => ({})) as { adminId?: unknown }
+  const adminId = typeof body?.adminId === "string" ? body.adminId : undefined
 
   const org = await prisma.organization.findUnique({
     where: { id },
     select: {
       name: true,
       admins: {
-        where: { isActive: false, setupTokenHash: { not: null } },
+        where: { isActive: false, setupTokenHash: { not: null }, ...(adminId ? { id: adminId } : {}) },
         select: { id: true, email: true, name: true },
         take: 1,
       },
@@ -39,8 +43,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     data: { setupTokenHash: hashToken(setupToken), setupTokenExpiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
   })
 
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
-  const inviteUrl = `${appUrl}/admin/accept-invite?token=${setupToken}`
+  const inviteUrl = inviteLink(process.env.NEXT_PUBLIC_APP_URL, setupToken)
 
   const result = await sendNotification({
     kind: "admin_invite",
@@ -48,7 +51,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     data: { adminName: admin.name, organizationName: org.name, inviteUrl },
   })
 
-  if (!result.ok) return NextResponse.json({ error: result.reason }, { status: 500 })
-
-  return NextResponse.json({ ok: true })
+  // The token is already rotated: whatever happened to the email, the caller needs the new link,
+  // so the email outcome is part of a successful answer rather than an error status.
+  return NextResponse.json({ ok: true, sent: result.ok, emailError: result.ok ? null : result.reason, inviteUrl, email: admin.email })
 }

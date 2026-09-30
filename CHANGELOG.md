@@ -62,6 +62,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Lien d'invitation d'une organisation** : cliquer sur **Envoyer l'invitation par email** renouvelle le lien (l'ancien cesse de fonctionner) ; l'écran affiche désormais le nouveau lien au lieu de l'ancien, et la fiche d'une organisation permet de **Renvoyer l'invitation** à un administrateur en attente en montrant le lien généré.
 - **Duplication d'un événement** : les créneaux copiés gardent leur âge minimum, leur liste d'attente et la couleur choisie pour le poste (#356).
 - **Dernier créneau annulé** : annuler le dernier créneau actif d'un événement publié (ou supprimer son dernier poste) le repasse en brouillon au lieu de laisser une page publique vide ; l'administration le signale et le journal le note.
 - **Création d'événement** : l'API ne peut plus créer un événement directement archivé ; tout statut envoyé à la création est ignoré.
