@@ -235,7 +235,11 @@ Restauration depuis Dropbox : télécharger le fichier voulu (`rclone copy dropb
 
 ### Limites actuelles
 
-Le volume de sauvegarde local est sur le même cluster que la base : une panne de cluster emporte les deux, d'où la copie Dropbox ci-dessus. Pas encore fait : alerte en cas d'échec d'un des deux CronJobs (ni l'un ni l'autre n'envoie de notification — un échec silencieux comme celui du 22/09/2026 resterait invisible sans consulter `kubectl` manuellement) ; test de restauration complète, jamais effectué.
+Le volume de sauvegarde local est sur le même cluster que la base : une panne de cluster emporte les deux, d'où la copie Dropbox ci-dessus.
+
+**Surveillance.** Chaque CronJob de sauvegarde envoie un signal de vie (`/api/cron/heartbeat`) quand il réussit. La page `/super-admin/health` affiche le dernier succès de la sauvegarde chiffrée et de la copie hors site, et les passe en erreur au-delà de 26 heures sans succès : un échec silencieux comme celui du 22/09/2026 y apparaît le lendemain, sans consulter `kubectl`.
+
+**Encore manuel.** Aucune alerte n'est envoyée d'elle-même (ni email ni notification) : il faut ouvrir la page de santé. Le test de restauration complète se fait à la main (voir la checklist ci-dessous) ; il envoie son propre signal de vie, et la page de santé le signale s'il date de plus de 90 jours.
 
 ## Checklist opérationnelle
 
