@@ -312,7 +312,7 @@ export async function POST(req: Request) {
           })
         )
       }
-      const outboxIds = await enqueueNotifications(await buildNotifications(created), tx)
+      const outboxIds = await enqueueNotifications(await buildNotifications(created), tx, { organizationId: event.organizationId })
       return { registrations: created, volunteerId, createdNow, outboxIds }
     })
   } catch (e) {

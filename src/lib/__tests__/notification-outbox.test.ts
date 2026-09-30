@@ -69,6 +69,16 @@ describe("collectNotifications / enqueueNotifications / deliverAfterResponse", (
     expect(m.create).not.toHaveBeenCalled()
   })
 
+  it("stores the organization on the row, from the payload or from the caller (#382)", async () => {
+    m.create.mockResolvedValue({ id: "n1" })
+    await enqueueNotifications([{ ...payload, organizationId: "org-p" }], undefined, { organizationId: "org-c" })
+    expect(m.create).toHaveBeenLastCalledWith(expect.objectContaining({ data: expect.objectContaining({ organizationId: "org-p" }) }))
+    await enqueueNotifications([payload], undefined, { organizationId: "org-c" })
+    expect(m.create).toHaveBeenLastCalledWith(expect.objectContaining({ data: expect.objectContaining({ organizationId: "org-c" }) }))
+    await enqueueNotifications([payload])
+    expect(m.create).toHaveBeenLastCalledWith(expect.objectContaining({ data: expect.objectContaining({ organizationId: null }) }))
+  })
+
   it("schedules nothing for an empty batch", () => {
     deliverAfterResponse([])
     expect(m.after).not.toHaveBeenCalled()

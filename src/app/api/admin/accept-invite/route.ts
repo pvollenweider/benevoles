@@ -32,6 +32,7 @@ async function checkToken(token: string) {
       email: true,
       setupTokenExpiresAt: true,
       isActive: true,
+      organizationId: true,
       organization: { select: { name: true, slug: true } },
     },
   })
@@ -90,6 +91,7 @@ export async function POST(req: Request) {
     if (!organization) return []
     return enqueueNotifications([{
       kind: "admin_welcome",
+      organizationId: admin.organizationId,
       dedupeKey: `admin_welcome:${admin.id}`,
       recipient: { email: admin.email, name: admin.name },
       data: {

@@ -89,6 +89,7 @@ export async function POST(req: Request) {
       select: { id: true, name: true, email: true, role: true, isActive: true, createdAt: true, setupTokenExpiresAt: true },
     })
     const outboxIds = await enqueueNotifications([{
+      organizationId,
       kind: "admin_invite",
       recipient: { email, name },
       data: { adminName: name, organizationName: org.name, inviteUrl },

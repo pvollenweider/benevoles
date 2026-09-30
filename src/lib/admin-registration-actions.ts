@@ -117,6 +117,7 @@ export async function addSectorLeader(
     })
     const outboxIds = await enqueueNotifications([{
       kind: "sector_leader_invite",
+      organizationId: ctx.organizationId,
       dedupeKey: `sector_leader_invite:${leader.id}`,
       recipient: { email: leader.email, name: leader.name },
       data: {

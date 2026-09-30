@@ -56,9 +56,14 @@ export default async function AdminsSettingsPage() {
           <h1 className="text-xl font-bold text-gray-900 mt-1">Paramètres</h1>
           {org && <p className="text-sm text-gray-500">{org.name}</p>}
         </div>
-        <Link href="/admin/settings/activity" className="text-sm text-blue-600 hover:text-blue-800 transition-colors">
-          Journal d&apos;activité
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link href="/admin/settings/notifications" className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            Emails envoyés
+          </Link>
+          <Link href="/admin/settings/activity" className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            Journal d&apos;activité
+          </Link>
+        </div>
       </div>
 
       {org && <OrgNameForm initialName={org.name} />}

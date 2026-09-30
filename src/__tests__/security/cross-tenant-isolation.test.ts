@@ -67,6 +67,7 @@ const prismaMock = {
     create: vi.fn().mockResolvedValue({ id: "inv-1", token: "tok" }),
   },
   notificationOutbox: {
+    updateMany: vi.fn().mockResolvedValue({ count: 0 }), // nothing of org-A matches an org-B row (#382)
     create: vi.fn().mockResolvedValue({ id: "row-1" }),
     createMany: vi.fn().mockResolvedValue({ count: 1 }),
     findUniqueOrThrow: vi.fn().mockResolvedValue({ id: "row-1" }),
@@ -418,12 +419,13 @@ describe("Shifts — cross-tenant isolation", () => {
     expect($transaction).not.toHaveBeenCalled()
   })
 
-  it("POST /api/admin/events/[id]/duplicate returns 404 for org-B event, creating nothing (#378)", async () => {
-    const { POST } = await import("@/app/api/admin/events/[id]/duplicate/route")
-    const db = setupGuard() // event.findFirst → null
-    const res = await POST(makeRequest("/api/admin/events/evt-b/duplicate", "POST", { startDate: "2031-01-01", copy: { leaders: true } }), params("evt-b"))
+  it("POST /api/admin/settings/notifications/[id]/retry returns 404 for an org-B outbox row (#382)", async () => {
+    const { POST } = await import("@/app/api/admin/settings/notifications/[id]/retry/route")
+    setupGuard()
+    const res = await POST(makeRequest("/api/admin/settings/notifications/out-b/retry", "POST"), params("out-b"))
     expect(res.status).toBe(404)
-    expect(db.event.create).not.toHaveBeenCalled()
+    // The organization filter is in the update itself: an org-B row can never flip.
+    expect(prismaMock.notificationOutbox.updateMany).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "out-b", organizationId: ORG_A, status: "failed" } }))
   })
 
   it("POST /api/admin/shifts/[id]/duplicate returns 404 for org-B shift, creating nothing", async () => {

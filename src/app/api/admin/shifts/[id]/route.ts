@@ -100,7 +100,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         })
       }
     }
-    return { after, outboxIds: await enqueueNotifications(outbox.payloads, tx), notified: outbox.payloads.length }
+    return { after, outboxIds: await enqueueNotifications(outbox.payloads, tx, { organizationId: before.event.organizationId }), notified: outbox.payloads.length }
   })
 
   const shiftChanges = diffFields(before, after, [
@@ -139,7 +139,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const shift = await db.shift.findFirst({
     where: { id },
     include: {
-      event: { select: { id: true, title: true, slug: true, organization: { select: { slug: true } } } },
+      event: { select: { id: true, title: true, slug: true, organizationId: true, organization: { select: { slug: true } } } },
       registrations: { where: { status: "active" }, include: { volunteer: true } },
     },
   })

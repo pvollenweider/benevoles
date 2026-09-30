@@ -67,6 +67,7 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
     // after commit, retried by the cron if SMTP fails (#311).
     const outboxIds = await enqueueNotifications([{
       kind: "waitlist_offered",
+      organizationId: next.event.organizationId,
       dedupeKey: `waitlist_offered:${next.id}:${expiresAt.toISOString()}`,
       recipient: { email: next.volunteer.email, name: next.volunteer.firstName },
       data: {

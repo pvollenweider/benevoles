@@ -88,7 +88,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (!rl.ok) return NextResponse.json({ error: "Trop de messages envoyés cette heure. Réessayez plus tard." }, { status: 429 })
 
   const batchId = crypto.randomUUID()
-  const outboxIds = await enqueueNotifications(recipients.map((r) => payloadFor(r, batchId)))
+  const outboxIds = await enqueueNotifications(recipients.map((r) => payloadFor(r, batchId)), undefined, { organizationId })
   deliverAfterResponse(outboxIds)
 
   await logEvent({

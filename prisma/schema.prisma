@@ -381,8 +381,12 @@ model NotificationOutbox {
   dedupeKey     String?   @unique
   sentAt        DateTime?
   createdAt     DateTime  @default(now())
+  // The organization the notification belongs to (#382), for the admin delivery page. Nullable:
+  // rows enqueued before the column existed, and the rare system-level ones.
+  organizationId String?
 
   @@index([status, nextAttemptAt])
+  @@index([organizationId, createdAt])
 }
 
 // Rate limit counters (#322), shared by every app replica: one fixed window per "<route>:<key>",
