@@ -6,6 +6,7 @@ import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import { SHEET_VIEWS } from "@/lib/print-sheets"
+import { reprintOptions } from "@/lib/print-badges"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Rapports" }
@@ -25,14 +26,14 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
       shifts: {
         where: { status: { not: "cancelled" } },
         orderBy: { displayOrder: "asc" },
-        select: { roleName: true, registrations: { where: { status: "active" }, select: { volunteer: { select: { firstName: true, lastName: true } } } } },
+        select: { roleName: true, registrations: { where: { status: "active" }, select: { volunteer: { select: { id: true, firstName: true, lastName: true, email: true } } } } },
       },
     },
   })
   if (!event) notFound()
   const roles = [...new Set(event.shifts.map((s) => s.roleName))]
-  // For the badge reprint field: the names as they are registered, so a typo doesn't end in an empty page.
-  const names = [...new Set(event.shifts.flatMap((s) => s.registrations.map((r) => `${r.volunteer.firstName} ${r.volunteer.lastName}`.trim())))].sort((a, b) => a.localeCompare(b, "fr"))
+  // For the badge reprint: one option per volunteer id; two homonyms are told apart by their email.
+  const volunteers = reprintOptions(event.shifts.flatMap((s) => s.registrations.map((r) => ({ ...r.volunteer, post: s.roleName }))))
   const base = `/api/admin/events/${event.id}/export`
   const forVolunteers = SHEET_VIEWS.filter((v) => v.audience === "volunteers")
   const forOrganizers = SHEET_VIEWS.filter((v) => v.audience === "organizers")
@@ -97,28 +98,31 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
         <p id="reports-badges-desc" className="text-sm text-gray-600">Un badge par bénévole inscrit (prénom, nom, poste, créneaux), dix par feuille A4 à découper. Sans photo ni code QR. La couleur du bandeau est celle du poste, à défaut celle de l&apos;événement.</p>
         {/* A GET form: the options travel in the link, the page opens in a new tab and is printed from there. */}
         <form action={`${base}/badges`} method="get" target="_blank" aria-labelledby="reports-badges" className="bg-white border border-gray-200 rounded-xl px-4 py-3 space-y-3">
+          {/* Post and person side by side: they combine (a person on a post gets only that post's shifts). */}
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
               <label htmlFor="badges-role" className="block text-sm font-medium text-gray-800 mb-1">Poste</label>
-              <select id="badges-role" name="role" className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm">
+              <select id="badges-role" name="role" className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
                 <option value="">Tous les postes</option>
                 {roles.map((r) => <option key={r} value={r}>{r}</option>)}
               </select>
             </div>
             <div>
-              <label htmlFor="badges-color" className="block text-sm font-medium text-gray-800 mb-1">Couleur du bandeau</label>
-              <select id="badges-color" name="color" className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm">
-                <option value="role">Couleur du poste (à défaut celle de l&apos;événement)</option>
-                <option value="event">Couleur de l&apos;événement</option>
-                <option value="none">Noir et blanc</option>
+              <label htmlFor="badges-volunteer" className="block text-sm font-medium text-gray-800 mb-1">Bénévole (réimpression)</label>
+              <select id="badges-volunteer" name="volunteer" aria-describedby="badges-volunteer-help" className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                <option value="">Tous les bénévoles du poste choisi</option>
+                {volunteers.map((v) => <option key={v.id} value={v.id}>{v.label}</option>)}
               </select>
             </div>
           </div>
+          <p id="badges-volunteer-help" className="text-xs text-gray-600 -mt-1">Pour réimprimer le badge d&apos;une seule personne. Si un poste est choisi, seuls ses créneaux sur ce poste figurent sur le badge ; laissez « Tous les postes » pour son badge complet.</p>
           <div>
-            <label htmlFor="badges-name" className="block text-sm font-medium text-gray-800 mb-1">Un seul bénévole (réimpression)</label>
-            <input id="badges-name" name="name" type="text" list="badges-names" autoComplete="off" placeholder="Prénom Nom, tel qu'inscrit" aria-describedby="badges-name-help" className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm placeholder:text-gray-500" />
-            <datalist id="badges-names">{names.map((n) => <option key={n} value={n} />)}</datalist>
-            <p id="badges-name-help" className="text-xs text-gray-600 mt-1">Vide : tous les bénévoles du poste choisi.</p>
+            <label htmlFor="badges-color" className="block text-sm font-medium text-gray-800 mb-1">Couleur du bandeau</label>
+            <select id="badges-color" name="color" className="w-full sm:w-auto border border-gray-300 rounded-xl px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+              <option value="role">Couleur du poste (à défaut celle de l&apos;événement)</option>
+              <option value="event">Couleur de l&apos;événement</option>
+              <option value="none">Noir et blanc</option>
+            </select>
           </div>
           <fieldset className="flex flex-wrap gap-x-6 gap-y-2">
             <legend className="sr-only">Contenu du badge</legend>

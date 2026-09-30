@@ -28,7 +28,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
           locationDetails: true, contactName: true, contactPhone: true, instructions: true,
           registrations: {
             where: { status: "active" },
-            select: { phone: true, comment: true, checkedInAt: true, volunteer: { select: { firstName: true, lastName: true, email: true, phone: true } } },
+            select: { phone: true, comment: true, checkedInAt: true, volunteer: { select: { id: true, firstName: true, lastName: true, email: true, phone: true } } },
           },
         },
       },
@@ -47,7 +47,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       startTime: s.startTime, endTime: s.endTime, capacity: s.capacity,
       locationDetails: s.locationDetails, contactName: s.contactName, contactPhone: s.contactPhone, instructions: s.instructions,
       registrations: s.registrations.map((r) => ({
-        firstName: r.volunteer.firstName, lastName: r.volunteer.lastName, email: r.volunteer.email,
+        id: r.volunteer.id, firstName: r.volunteer.firstName, lastName: r.volunteer.lastName, email: r.volunteer.email,
         phone: contactPhone({ phone: r.phone, volunteer: r.volunteer }), comment: r.comment, checkedIn: !!r.checkedInAt,
       })),
     })),

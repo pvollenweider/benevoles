@@ -26,7 +26,7 @@ export function isSheetView(v: string): v is SheetView {
   return SHEET_VIEWS.some((s) => s.id === v)
 }
 
-export type SheetVolunteer = { firstName: string; lastName: string; email: string | null; phone: string | null; comment?: string | null; checkedIn?: boolean }
+export type SheetVolunteer = { /** Volunteer id: the identity across shifts (two homonyms without email stay two people). */ id?: string; firstName: string; lastName: string; email: string | null; phone: string | null; comment?: string | null; checkedIn?: boolean }
 export type SheetShift = ShiftInfo & {
   id: string
   roleName: string
@@ -77,7 +77,7 @@ export function volunteersOf(shifts: SheetShift[]): { volunteer: SheetVolunteer;
   const map = new Map<string, { volunteer: SheetVolunteer; shifts: SheetShift[] }>()
   for (const s of [...shifts].sort(byDateTime)) {
     for (const v of s.registrations) {
-      const key = (v.email ?? "").toLowerCase() || `${v.firstName}|${v.lastName}`.toLowerCase()
+      const key = v.id ? `id:${v.id}` : (v.email ?? "").toLowerCase() || `${v.firstName}|${v.lastName}`.toLowerCase()
       const entry = map.get(key)
       if (entry) {
         entry.shifts.push(s)

@@ -129,3 +129,19 @@ describe("print sheets use little ink", () => {
     expect(css).not.toMatch(/(th|shift-cell)[^{]*\{[^}]*background: var\(--ink\)/)
   })
 })
+
+describe("volunteersOf identity", () => {
+  it("keeps two homonyms without email apart when their ids differ, and merges one person across shifts", () => {
+    const a = { id: "v1", firstName: "Léa", lastName: "Roy", email: null, phone: null }
+    const b = { id: "v2", firstName: "Léa", lastName: "Roy", email: null, phone: "079 2" }
+    const shifts = [
+      { ...data.shifts[0], id: "x", registrations: [a, b] },
+      { ...data.shifts[0], id: "y", registrations: [{ ...a, phone: "079 1" }] },
+    ]
+    const people = volunteersOf(shifts)
+    expect(people).toHaveLength(2)
+    expect(people.find((p) => p.volunteer.id === "v1")!.shifts.map((s) => s.id)).toEqual(["x", "y"])
+    expect(people.find((p) => p.volunteer.id === "v1")!.volunteer.phone).toBe("079 1")
+    expect(people.find((p) => p.volunteer.id === "v2")!.shifts.map((s) => s.id)).toEqual(["x"])
+  })
+})

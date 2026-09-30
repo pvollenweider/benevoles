@@ -24,7 +24,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
           id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, colorKey: true,
           registrations: {
             where: { status: "active" },
-            select: { volunteer: { select: { firstName: true, lastName: true, email: true } } },
+            select: { volunteer: { select: { id: true, firstName: true, lastName: true, email: true } } },
           },
         },
       },
@@ -39,7 +39,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     shifts: event.shifts.map((s) => ({
       id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10),
       startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, colorKey: s.colorKey,
-      registrations: s.registrations.map((r) => ({ firstName: r.volunteer.firstName, lastName: r.volunteer.lastName, email: r.volunteer.email, phone: null })),
+      registrations: s.registrations.map((r) => ({ id: r.volunteer.id, firstName: r.volunteer.firstName, lastName: r.volunteer.lastName, email: r.volunteer.email, phone: null })),
     })),
   }, badgeOptionsFrom(new URL(req.url).searchParams))
 
