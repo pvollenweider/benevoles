@@ -9,13 +9,20 @@ const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
 const ORG_ADMIN_PASSWORD = process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password"
 
 test.describe("public pages", () => {
-  for (const path of ["/fonctionnalites", "/doc", "/doc/benevole", "/accessibilite", "/legal/privacy"]) {
+  for (const path of ["/", "/fonctionnalites", "/doc", "/doc/benevole", "/accessibilite", "/legal/privacy"]) {
     test(`${path} has no serious violation`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
       expect.soft(await seriousViolations(page)).toEqual([])
     })
   }
+
+  // The FAQ answers are inside closed <details> during the scan above: open them all.
+  test("/ FAQ answers have no serious violation", async ({ page }) => {
+    await page.goto("/")
+    await page.locator("details").evaluateAll((els) => els.forEach((d) => d.setAttribute("open", "")))
+    expect.soft(await seriousViolations(page)).toEqual([])
+  })
 
   test("event page, then the sign-up form, have no serious violation", async ({ page }) => {
     await page.goto("/spectacle-cirque-2026?org=default")

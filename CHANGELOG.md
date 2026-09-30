@@ -7,6 +7,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Modifié
+
+- **Page d'accueil de benevol.app.** Elle dit ce que l'outil change pour une association : la page d'inscription sur téléphone, les trois étapes de la mise en place, trois captures (où il manque du monde, les messages, les feuilles du jour J), ce sur quoi compter (gratuit, open source, hébergé en France, sans pistage, accessible) et une foire aux questions. Pour les moteurs de recherche et les partages : titre et description réécrits, image de partage, données structurées (site, application, code source, questions fréquentes) et une icône propre au site à la place de l'icône par défaut.
+
 ### Sécurité
 
 - **Emails sans serveur SMTP configuré** : en production, un envoi sans `SMTP_HOST` était compté comme réussi alors que rien ne partait, et le destinataire comme le contenu de l'email (liens personnels compris) étaient écrits dans les journaux du conteneur. L'envoi échoue désormais avec une raison sans donnée personnelle : la file d'envoi le retente puis alerte, et les envois directs le signalent à l'écran. En développement, les emails restent affichés dans la console. Les journaux d'un échec d'envoi ne contiennent plus l'adresse du destinataire.
