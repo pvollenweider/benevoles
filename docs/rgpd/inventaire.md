@@ -29,18 +29,27 @@ La répartition des données des administrateurs entre ces finalités est **à d
 |---|---|---|---|
 | Bénévoles (membres) | prénom, nom, email, téléphone, date de naissance (seulement si un créneau exige un âge minimum), disponibilités et remarque, étiquettes et notes internes posées par l'organisation, statut actif | inscription, contact, organisation | `Volunteer` (`prisma/schema.prisma`) |
 | Inscriptions | créneau, statut (confirmée, liste d'attente, place proposée, demande, annulée, refusée), source, commentaire libre du bénévole, téléphone donné pour l'inscription, pointage de présence, dates d'envoi des rappels et du lien | organisation de l'événement | `Registration` |
-| Réponses aux questions de l'événement | valeurs saisies (texte court, oui/non, choix), rattachées au bénévole et à l'événement | information demandée par l'organisation (taille de t-shirt, permis, régime…) | `EventQuestion`, `QuestionAnswer`, `src/lib/event-questions.ts` |
+| Réponses aux questions de l'événement | valeurs saisies (texte court, oui/non, choix), rattachées au bénévole et à l'événement | information demandée par l'organisation (taille de t-shirt, permis, régime…) | `EventQuestion` (archivée et non effacée quand elle a des réponses, `archivedAt`), `QuestionAnswer`, `src/lib/event-questions.ts` |
 | Liens personnels du bénévole | jeton de gestion de l'inscription | accès sans compte à la page personnelle | `Registration.editTokenHash` (SHA-256) et `editTokenEnc` (AES-256-GCM), `src/lib/token-vault.ts` |
 | Invitations de membres | jeton de l'invitation (haché et chiffré), date d'envoi, date de première utilisation | inviter un membre à un événement | `MemberInvite` |
 | Responsables de secteur | nom, email, poste, jeton personnel (haché et chiffré) | suivi d'un poste sans compte | `SectorLeader` |
 | Abonnements aux notifications du navigateur | adresse du service push (`endpoint`), clés `auth` et `p256dh`, date, bénévole | rappels et messages urgents, si le bénévole les active | `PushSubscription`, `src/lib/push.ts` |
-| Emails en file d'envoi | destinataire et contenu rendu à partir des données du bénévole, **liens personnels en clair compris**, tant que la ligne existe | envoi fiable avec reprise | `NotificationOutbox` |
+| Emails en file d'envoi | destinataire et contenu rendu à partir des données du bénévole, liens personnels compris, chiffrés (AES-256-GCM, `TOKEN_ENCRYPTION_KEY`) quand la clé est configurée, en clair sinon ; `lastError` (message du serveur SMTP, qui peut citer l'adresse), `dedupeKey` (identifiants internes), organisation, message ciblé | envoi fiable avec reprise | `NotificationOutbox`, `sealPayload` dans `src/lib/notifications/outbox.ts` |
 | Messages ciblés | objet, texte, public, nombres d'envois, **identité de l'administrateur auteur** (`authorId`, `authorName`) | historique des communications | `TargetedMessage` |
 | Modèles de message | nom, objet, texte | rédaction | `MessageTemplate` |
-| Administrateurs | nom, email, mot de passe haché (bcrypt), rôle, organisation | accès à l'administration | `AdminUser` |
-| Journaux d'activité | acteur (type et identifiant d'un administrateur ou d'un bénévole), action, entité (type et identifiant), champs modifiés avec des valeurs minimisées, date | traçabilité | `EventLog`, `OrgLog` |
-| Compteurs de limitation | clé contenant **l'adresse IP** du client, ou un identifiant (organisation, bénévole) selon la route, nombre, échéance | protection contre les abus | `RateLimit`, `src/lib/rate-limit.ts` (`getClientIp`) |
+| Administrateurs | nom, email, mot de passe haché (bcrypt), rôle, organisation, statut actif (faux tant que l'invitation n'est pas acceptée), `sessionVersion`, empreintes SHA-256 des liens d'activation et de réinitialisation avec leur échéance, abonnement aux nouveautés produit et date de désabonnement | accès à l'administration | `AdminUser` |
+| Sessions d'administration | JWT signé (`AUTH_SECRET`) : identifiant, rôle, organisation, email, nom ; cookie `sa-org-id` du super admin (organisation choisie) | authentification | cookies du navigateur, rien en base |
+| Journaux d'activité | acteur (type et identifiant : administrateur, bénévole pour `EventLog` seulement, ou système), action, entité (type et identifiant), champs modifiés avec des valeurs minimisées, date | traçabilité | `EventLog`, `OrgLog` |
+| Compteurs de limitation | clé `<route>:<valeur>` où la valeur est **l'adresse IP** du client, **l'adresse email saisie à la connexion**, ou un identifiant (administrateur, organisation, bénévole) selon la route ; nombre, échéance | protection contre les abus | `RateLimit`, `src/lib/rate-limit.ts` (`getClientIp`) |
+| Contact d'un créneau | nom et téléphone de la personne de contact, consignes | informer les bénévoles du créneau | `Shift.contactName`, `contactPhone`, `instructions` |
+| Notes internes d'un créneau | texte libre des organisateurs | organisation | `Shift.internalNotes` |
+| Organisation | nom, adresse de réponse des emails (`replyToEmail`, parfois une adresse personnelle), charte | fonctionnement de l'espace | `Organization` |
+| Liste d'attente | position, dates de l'offre et de son échéance | attribution des places libérées | `Registration.waitingPosition`, `waitingOfferedAt`, `waitingExpiresAt` |
+| Nouveautés produit | objet, contenu, auteur (`sentByAdminId`), nombres d'envois | informer les administrateurs | `ProductUpdateSend` (aucune purge) |
+| Exécutions des tâches planifiées | tâche, dates, résultat, résumé chiffré, message d'erreur | supervision | `JobRun`, une ligne par tâche, remplacée à chaque exécution |
 | Champs libres | commentaire d'inscription, notes internes, textes des messages, réponses texte, pages de l'événement | selon l'usage de l'organisation | — |
+
+Sans `TOKEN_ENCRYPTION_KEY`, les jetons de `Registration`, `MemberInvite` et `SectorLeader` sont stockés **en clair** dans les colonnes héritées (`editToken`, `token` en base ; champs Prisma `editTokenLegacy`, `tokenLegacy`), comme le contenu de la file d'envoi. En production, l'application refuse de démarrer sans cette clé (`src/lib/production-guards.ts`) ; le nettoyage quotidien chiffre et vide les valeurs en clair restées d'avant sa configuration (`src/lib/token-encryption-job.ts`).
 
 Les journaux d'activité ne sont **pas** dépourvus de données personnelles : `changes` évite les valeurs (« (rempli) » plutôt que le texte), mais les identifiants d'acteur et d'entité désignent des personnes.
 
@@ -53,18 +62,21 @@ Les champs libres peuvent contenir n'importe quelle donnée, y compris des caté
   - envoi seulement depuis les builds de production ;
   - `dataCollection` coupe les informations utilisateur, cookies, en-têtes HTTP, corps de requête, paramètres de requête, données de requêtes SQL et variables des piles ; `includeLocalVariables: false` côté serveur ;
   - les jetons personnels sont remplacés par `[token]` dans les URL, fils d'Ariane, étiquettes et spans ;
+  - les événements du navigateur passent par `/monitoring` (tunnel sur le domaine de l'application, `next.config.ts`), relayés par le serveur vers Sentry ;
   - traces : 10 % ; enregistrements de navigation : 10 % des sessions et 100 % des sessions avec erreur, textes masqués et médias bloqués (`maskAllText`, `blockAllMedia`).
 
   Ces mesures réduisent fortement ce qui part, sans garantir qu'aucune donnée personnelle ne puisse être transmise : un message d'erreur, une URL nettoyée, un identifiant interne ou la structure d'une page enregistrée peuvent en être.
+
+- **Adresse de secours de l'opérateur** : si une organisation n'a aucun administrateur actif, les notifications de nouvelle inscription (nom, email du bénévole, créneaux) sont envoyées à `ADMIN_NOTIFICATION_EMAIL` (`src/lib/email.ts`). **À confirmer en production** : cette variable est définie, et qui lit cette boîte.
 
 ## Hébergement, envoi et sauvegardes
 
 | Élément | Implémenté (dépôt) | À confirmer |
 |---|---|---|
-| Application et base PostgreSQL | cluster k3s sur un serveur (`k8s/`) | fournisseur, entité, centre de données, contrat (la politique publiée cite Kimsufi / OVH, France) |
+| Application et base PostgreSQL | cluster k3s sur un serveur (`k8s/`) | établi dans [sous-traitants.md](sous-traitants.md) : OVH SAS, Kimsufi KS-LE-1, datacenter RBX3 (Roubaix), DPA accepté le 2026-04-02 |
 | Sauvegardes locales | `pg_dump` chiffré (`openssl enc -aes-256-cbc -pbkdf2`, phrase de passe dans un secret Kubernetes), sur le volume du serveur (`k8s/cronjob-backup.yaml`) | qui détient la phrase de passe, où elle est conservée hors du serveur |
-| Copie hors site | les fichiers déjà chiffrés sont copiés chaque nuit vers Dropbox par rclone, puis supprimés au-delà de la durée de [../retention.md](../retention.md) (`k8s/cronjob-backup-offsite.yaml`) | entité et offre Dropbox, région de stockage du compte, accès possibles hors de Suisse et de l'UE, conservation des fichiers supprimés et des versions chez Dropbox |
-| Envoi des emails | serveur SMTP défini par les secrets (`SMTP_HOST`…), vides dans le dépôt | fournisseur réellement configuré (la politique publiée cite Gandi), conservation de ses journaux et files |
+| Copie hors site | les fichiers déjà chiffrés sont copiés chaque nuit vers Dropbox par rclone, puis supprimés au-delà de la durée de [../retention.md](../retention.md) (`k8s/cronjob-backup-offsite.yaml`) | offre individuelle confirmée le 2026-09-30 : stockage aux États-Unis, pas de DPA (voir [sous-traitants.md](sous-traitants.md)) ; remplacement prévu (#524) |
+| Envoi des emails | serveur SMTP défini par les secrets (`SMTP_HOST`…), vides dans le dépôt | Gandi observé par le DNS (SPF, DKIM, voir [sous-traitants.md](sous-traitants.md)) ; valeur de `SMTP_HOST` en production et durée des journaux SMTP à confirmer |
 | Notifications du navigateur | `web-push` avec clés VAPID (`src/lib/push.ts`) ; le contenu (titre, première ligne, lien relatif) est chiffré pour l'abonnement du navigateur (RFC 8291) ; durée de vie demandée au service : 3 jours (`TTL`) | voir ci-dessous |
 | DNS et certificats | Gandi (DNS, webhook cert-manager), Let's Encrypt (`k8s/gandi-webhook.yaml`, `k8s/certificate-wildcard.yaml`) | inventaire technique seulement : pas de données des bénévoles, a priori pas des sous-traitants au sens contractuel |
 

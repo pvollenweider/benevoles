@@ -189,8 +189,10 @@ export default function PrivacyPage() {
         compte de l&apos;Organisation.
       </p>
       <p>
-        Les données des administrateurs sont supprimées dans un délai de {RETENTION_DAYS.deactivatedAdmin} jours suivant la
-        désactivation ou la suppression du compte.
+        Le compte d&apos;un administrateur retiré de l&apos;équipe est supprimé immédiatement. Les comptes des
+        administrateurs d&apos;une Organisation sont supprimés avec elle, {RETENTION_DAYS.deactivatedOrganization} jours
+        après sa désactivation. Une invitation d&apos;administrateur non acceptée est supprimée{" "}
+        {RETENTION_DAYS.deactivatedAdmin} jours après son dernier envoi.
       </p>
       <p>Plus précisément :</p>
       <ul>
