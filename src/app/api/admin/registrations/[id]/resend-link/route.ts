@@ -48,6 +48,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   })
 
   if (!result.ok) return NextResponse.json({ error: "Échec de l'envoi de l'email." }, { status: 502 })
+  await db.registration.updateMany({ where: { volunteerId: registration.volunteerId, eventId: registration.eventId, status: { in: ["active", "waiting", "offered"] } }, data: { linkEmailedAt: new Date() } })
 
   return NextResponse.json({ success: true })
 }

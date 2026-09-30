@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import PersonalLinkPanel from "@/components/PersonalLinkPanel"
+import LinkRequestForm from "@/components/LinkRequestForm"
 import { offerDeadline, WAITLIST_STEPS, waitlistLabel } from "@/lib/waitlist-copy"
 import { fmtRange } from "@/lib/gantt-utils"
 import { useParams } from "next/navigation"
@@ -38,6 +40,8 @@ type PageData = {
   orgHomeUrl: string
   eventUrl: string
   timeZone?: string
+  linkEmailedAt?: string | null
+  contactEmail?: string | null
   confirmationMessage: string | null
 }
 
@@ -66,7 +70,7 @@ export default function MyRegistrationPage() {
         setLoading(false)
       })
       .catch(() => {
-        setError("Une erreur est survenue. Réessayez.")
+        setError("Une erreur est survenue. Réessaie.")
         setLoading(false)
       })
   }, [token])
@@ -96,9 +100,10 @@ export default function MyRegistrationPage() {
     return (
       <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-8 text-center">
-          <h1 className="text-lg font-semibold text-gray-700 mb-2">Inscription introuvable</h1>
-          <p className="text-sm text-gray-500 mb-6">{error ?? "Ce lien est invalide ou a déjà été annulé."}</p>
-          <Link href={data?.eventUrl ?? data?.orgHomeUrl ?? "/"} className="text-blue-600 text-sm">Retour à l'accueil</Link>
+          <h1 className="text-lg font-semibold text-gray-900 mb-2">Ce lien ne fonctionne pas</h1>
+          <p className="text-sm text-gray-700 mb-4">{error ?? "Ce lien est invalide ou a déjà été annulé."}</p>
+          <LinkRequestForm />
+          <Link href={data?.eventUrl ?? data?.orgHomeUrl ?? "/"} className="inline-block mt-6 text-blue-700 text-sm underline underline-offset-2">Retour à l&apos;accueil</Link>
         </div>
       </main>
     )
@@ -109,7 +114,7 @@ export default function MyRegistrationPage() {
       <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-8 text-center">
           <span aria-hidden="true" className="text-4xl block mb-4">✓</span>
-          <h1 className="text-lg font-bold text-gray-900 mb-2">Toutes vos inscriptions ont été annulées</h1>
+          <h1 className="text-lg font-bold text-gray-900 mb-2">Toutes tes inscriptions ont été annulées</h1>
           <Link href={data?.eventUrl ?? data?.orgHomeUrl ?? "/"} className="text-blue-600 text-sm mt-4 block">Retour à l'accueil</Link>
         </div>
       </main>
@@ -194,6 +199,14 @@ export default function MyRegistrationPage() {
             )
           })}
         </div>
+
+        <PersonalLinkPanel
+          token={token}
+          linkEmailedAt={data.linkEmailedAt ?? null}
+          timeZone={data.timeZone ?? "Europe/Zurich"}
+          contactEmail={data.contactEmail ?? null}
+          eventTitle={data.event.title}
+        />
 
         {data.registrations.some((r) => r.status !== "active") && (
           <section aria-labelledby="waitlist-how" className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-sm text-amber-900">

@@ -324,6 +324,8 @@ model Registration {
   // Lightweight check-in (#399): when the organizer marked this person present on site. Null
   // until then; cleared by « Annuler la présence ». No terminals, badges or access control.
   checkedInAt      DateTime?
+  // Last email carrying the personal link (confirmation or re-send), for the personal page (#376).
+  linkEmailedAt    DateTime?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 

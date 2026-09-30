@@ -299,6 +299,7 @@ export async function POST(req: Request) {
         created.push(
           await tx.registration.create({
             data: {
+              linkEmailedAt: new Date(), // the confirmation email carries the link (#376)
               eventId,
               shiftId: shift.id,
               volunteerId,
@@ -450,7 +451,10 @@ async function alreadyRegistered(volunteerId: string, eventId: string) {
       })
       linkSent = result.ok
       // Remember a *successful* send: the throttle counts attempts, failed ones included.
-      if (result.ok) await rateLimit(volunteerId, "reg-link-sent", 1, 60 * 60 * 1000)
+      if (result.ok) {
+        await rateLimit(volunteerId, "reg-link-sent", 1, 60 * 60 * 1000)
+        await prisma.registration.updateMany({ where: { volunteerId, eventId, status: { in: ["active", "waiting", "offered"] } }, data: { linkEmailedAt: new Date() } })
+      }
     } else {
       // Throttled: only claim the link was sent if a send actually succeeded within the hour.
       linkSent = await isRateLimited(volunteerId, "reg-link-sent", 1)
