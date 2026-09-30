@@ -46,7 +46,8 @@ describe("attentionItems", () => {
     const items = attentionItems({ now, events: [ev({ overdueMilestones: 2, unansweredInvites: 3 })], offers: [] })
     expect(ids(items)).toEqual(["milestones:e1", "invites:e1"])
     expect(items[0].message).toBe("2 jalons sont en retard.")
-    expect(items[1].href).toBe("/admin/events/e1/invitations")
+    expect(items[1].href).toBe("/admin/events/e1/message?audience=invited")
+    expect(items[1].message).toMatch(/aucun créneau confirmé/)
   })
 
   it("flags roles without a leader only once the event uses sector leaders", () => {

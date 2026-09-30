@@ -19,6 +19,8 @@ export const audienceSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("role"), roleName: z.string().min(1) }),
   z.object({ kind: z.literal("shift"), shiftId: z.string().min(1) }),
   z.object({ kind: z.literal("waitlist") }),
+  // Invited members of the event with no confirmed shift (#481), waitlist-only people included.
+  z.object({ kind: z.literal("invited_without_shift") }),
 ])
 export type Audience = z.infer<typeof audienceSchema>
 
@@ -69,6 +71,8 @@ function inAudience(r: RecipientRegistration, audience: Audience): boolean {
     case "role": return r.status === "active" && r.shift.roleName === audience.roleName
     case "shift": return r.status === "active" && r.shiftId === audience.shiftId
     case "waitlist": return r.status === "waiting" || r.status === "offered"
+    // Built from the invitations, not the registrations: see selectInvitedWithoutShift.
+    case "invited_without_shift": return false
   }
 }
 
@@ -94,7 +98,35 @@ export function audienceLabel(audience: Audience, shiftName?: string): string {
     case "role": return `les bénévoles du poste « ${audience.roleName} »`
     case "shift": return `les bénévoles du créneau ${shiftName ?? audience.shiftId}`
     case "waitlist": return "les personnes en liste d'attente"
+    case "invited_without_shift": return "les invités sans créneau confirmé"
   }
+}
+
+export type InvitedWithoutShift<I> = {
+  volunteerId: string
+  invite: I
+  /** Only on the waitlist (waiting or offered) for this event. */
+  waitlistOnly: boolean
+}
+
+/**
+ * « Invités sans créneau confirmé » (#481): members invited to the event (any invitation, used or
+ * not) with an email and no active registration on it, one entry per person (their latest
+ * invitation). Recomputed at send time, like every audience.
+ */
+export function selectInvitedWithoutShift<I extends { volunteerId: string; sentAt: Date; volunteer: { email: string | null } }>(
+  invites: I[],
+  registrations: { volunteerId: string; status: string }[],
+): InvitedWithoutShift<I>[] {
+  const active = new Set(registrations.filter((r) => r.status === "active").map((r) => r.volunteerId))
+  const waiting = new Set(registrations.filter((r) => r.status === "waiting" || r.status === "offered").map((r) => r.volunteerId))
+  const latest = new Map<string, I>()
+  for (const i of invites) {
+    if (!i.volunteer.email || active.has(i.volunteerId)) continue
+    const prev = latest.get(i.volunteerId)
+    if (!prev || i.sentAt > prev.sentAt) latest.set(i.volunteerId, i)
+  }
+  return [...latest.values()].map((invite) => ({ volunteerId: invite.volunteerId, invite, waitlistOnly: waiting.has(invite.volunteerId) }))
 }
 
 /** Audience from the query string of the message page (`?shift=`, `?role=`, `?audience=waitlist`). */
@@ -102,5 +134,6 @@ export function audienceFromQuery(q: { shift?: string; role?: string; audience?:
   if (q.shift) return { kind: "shift", shiftId: q.shift }
   if (q.role) return { kind: "role", roleName: q.role }
   if (q.audience === "waitlist") return { kind: "waitlist" }
+  if (q.audience === "invited") return { kind: "invited_without_shift" }
   return { kind: "event" }
 }

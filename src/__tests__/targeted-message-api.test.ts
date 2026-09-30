@@ -12,7 +12,7 @@ vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications, deliverAfte
 
 const rateLimit = vi.hoisted(() => vi.fn().mockResolvedValue({ ok: true, remaining: 1, retryAfter: 0 }))
 vi.mock("@/lib/rate-limit", () => ({ rateLimit }))
-vi.mock("@/lib/token-vault", () => ({ registrationToken: { reveal: (r: { id: string }) => `tok-${r.id}` } }))
+vi.mock("@/lib/token-vault", () => ({ registrationToken: { reveal: (r: { id: string }) => `tok-${r.id}` }, linkToken: { reveal: (r: { tokenLegacy: string }) => r.tokenLegacy } }))
 const push = vi.hoisted(() => ({ pushDeviceCount: vi.fn().mockResolvedValue(0), sendTargetedPush: vi.fn().mockResolvedValue({ sent: 0, failed: 0, removed: 0 }) }))
 vi.mock("@/lib/push", () => push)
 const afterCallbacks = vi.hoisted(() => [] as (() => unknown)[])
@@ -134,5 +134,30 @@ describe("POST /api/admin/events/[id]/message", () => {
     await POST(post({ ...base, audience: { kind: "event" } }), params)
     for (const fn of afterCallbacks) await fn()
     expect(push.sendTargetedPush).not.toHaveBeenCalled()
+  })
+
+  it("writes to invited people without a confirmed shift, with their invitation link (#481)", async () => {
+    Object.assign(db, {
+      memberInvite: {
+        findMany: vi.fn().mockResolvedValue([
+          { volunteerId: "alice", sentAt: new Date("2026-06-01"), tokenEnc: null, tokenLegacy: "inv-alice", volunteer: { firstName: "Alice", email: "alice@x.ch" } },
+          { volunteerId: "dan", sentAt: new Date("2026-06-01"), tokenEnc: null, tokenLegacy: "inv-dan", volunteer: { firstName: "Dan", email: "dan@x.ch" } },
+          { volunteerId: "carla", sentAt: new Date("2026-06-01"), tokenEnc: null, tokenLegacy: "inv-carla", volunteer: { firstName: "Carla", email: "carla@x.ch" } },
+        ]),
+      },
+    })
+    const { POST } = await import("@/app/api/admin/events/[id]/message/route")
+    const dry = await (await POST(post({ ...base, audience: { kind: "invited_without_shift" }, dryRun: true }), params)).json()
+    // Alice has confirmed shifts; Dan has nothing; Carla is only on the waitlist.
+    expect(dry).toMatchObject({ recipients: 2, waitlistOnly: 1, audience: "les invités sans créneau confirmé" })
+    enqueueNotifications.mockClear()
+    await POST(post({ ...base, audience: { kind: "invited_without_shift" } }), params)
+    const payloads = enqueueNotifications.mock.calls[0][0]
+    expect(payloads.map((p: { recipient: { email: string } }) => p.recipient.email).sort()).toEqual(["carla@x.ch", "dan@x.ch"])
+    for (const p of payloads) {
+      expect(p.data.shifts).toEqual([])
+      expect(p.data.editToken).toBeUndefined()
+      expect(new URL(p.data.signupUrl).searchParams.get("token")).toMatch(/^inv-/)
+    }
   })
 })

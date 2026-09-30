@@ -10,6 +10,7 @@ import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { remindInvitedRecap } from "@/lib/action-recap"
 import { useRouter } from "next/navigation"
 import ModalShell from "./ModalShell"
+import Link from "next/link"
 
 type Member = {
   id: string
@@ -109,7 +110,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
       <div className="grid grid-cols-3 gap-3">
         <StatCard label="Invités" value={total} />
         <StatCard label="Inscrits" value={registered} positive={registered > 0} />
-        <StatCard label="Sans réponse" value={noAnswer} warning={noAnswer > 0} />
+        <StatCard label="Sans créneau confirmé" value={noAnswer} warning={noAnswer > 0} />
       </div>
 
       <div className="flex gap-2 flex-wrap">
@@ -125,8 +126,17 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
             onClick={remindNonRegistered}
             className="text-sm border border-gray-300 px-3 py-2 rounded-xl hover:bg-gray-50"
           >
-            {`Relancer les ${noAnswer} sans réponse`}
+            {noAnswer === 1 ? "Relancer la personne sans créneau" : `Relancer les ${noAnswer} sans créneau`}
           </button>
+        )}
+        {noAnswer > 0 && (
+          // A free text to the same group (#481), through « Écrire aux bénévoles ».
+          <Link
+            href={`/admin/events/${eventId}/message?audience=invited`}
+            className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 self-center rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            {noAnswer === 1 ? "Écrire un message à la personne sans créneau" : `Écrire un message aux ${noAnswer} sans créneau`}
+          </Link>
         )}
         <span role="status" className="text-sm self-center text-gray-600">{remindResult ?? ""}</span>
         <button
@@ -217,7 +227,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
                         </span>
                       ) : (
                         <span className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-full">
-                          Sans réponse
+                          Sans créneau confirmé
                         </span>
                       )}
                     </td>

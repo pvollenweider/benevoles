@@ -26,6 +26,7 @@ export type AttentionEvent = {
   shifts: (AttentionShift & { roleName: string })[]
   leaderRoles: string[]
   overdueMilestones: number
+  /** Invited people (invited more than INVITE_NUDGE_DAYS ago) still without a confirmed shift (#481). */
   unansweredInvites: number
   /** Volunteers with a workload warning on this event (#465). */
   overloadedVolunteers?: number
@@ -112,8 +113,8 @@ export function attentionItems({ now, events, offers }: AttentionInput): Attenti
     if (e.unansweredInvites > 0) {
       items.push({
         id: `invites:${e.id}`, severity: "medium", eventTitle: e.title,
-        message: `${e.unansweredInvites} ${plural(e.unansweredInvites, "invitation envoyée", "invitations envoyées")} il y a plus de ${INVITE_NUDGE_DAYS} jours ${plural(e.unansweredInvites, "n'a", "n'ont")} pas été ${plural(e.unansweredInvites, "utilisée", "utilisées")}.`,
-        action: "Relancer", href: `${base}/invitations`,
+        message: `${e.unansweredInvites} ${plural(e.unansweredInvites, "personne invitée", "personnes invitées")} il y a plus de ${INVITE_NUDGE_DAYS} jours ${plural(e.unansweredInvites, "n'a", "n'ont")} encore aucun créneau confirmé.`,
+        action: "Leur écrire", href: `${base}/message?audience=invited`,
       })
     }
 

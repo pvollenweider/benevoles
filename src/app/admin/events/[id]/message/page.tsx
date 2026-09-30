@@ -50,7 +50,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
   const valid =
     (initial.kind === "shift" && shifts.some((s) => s.id === initial.shiftId)) ||
     (initial.kind === "role" && roles.includes(initial.roleName)) ||
-    initial.kind === "event" || initial.kind === "waitlist"
+    initial.kind === "event" || initial.kind === "waitlist" || initial.kind === "invited_without_shift"
 
   return (
     <div className="space-y-6 max-w-2xl">
@@ -60,12 +60,12 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
         </Link>
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 mt-1 focus:outline-none">Écrire aux bénévoles</h1>
         <p className="text-sm text-gray-700 mt-1">
-          Un email, à qui c&apos;est utile : tous les inscrits, un poste, un créneau ou la liste d&apos;attente. Chaque personne le reçoit une fois, avec ses créneaux concernés et le lien vers ses inscriptions.
+          Un email, à qui c&apos;est utile : tous les inscrits, un poste, un créneau, la liste d&apos;attente, ou les membres invités qui n&apos;ont pas encore de créneau confirmé (ils reçoivent leur lien d&apos;invitation). Chaque personne le reçoit une fois, avec ses créneaux concernés et le lien vers ses inscriptions.
         </p>
       </div>
       <TargetedMessageForm eventId={event.id} roles={roles} shifts={shifts} initialAudience={valid ? initial : { kind: "event" }} />
       <p className="text-sm text-gray-600">
-        Pour relancer les membres invités qui n&apos;ont pas encore répondu, utilisez « Relancer les non-inscrits » dans{" "}
+        Pour renvoyer leur lien d&apos;invitation aux membres invités sans créneau confirmé, utilisez « Relancer les … sans créneau » dans{" "}
         <Link href={`/admin/events/${event.id}/invitations`} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900">les invitations</Link>.
       </p>
       <MessageHistory eventId={event.id} items={history} timeZone={orgTimeZone(event.organization)} />
