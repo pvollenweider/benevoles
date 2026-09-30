@@ -3,6 +3,7 @@
 
 import Link from "next/link"
 import pkg from "../../package.json"
+import GitHubMark from "./GitHubMark"
 
 const linkClass =
   "py-1 underline underline-offset-2 hover:text-gray-700 dark:hover:text-gray-300 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800 dark:focus-visible:outline-blue-400"
@@ -11,17 +12,17 @@ export default function PublicFooter({ showSupport = false }: { showSupport?: bo
   return (
     <footer className="mt-12 pb-6 text-sm text-gray-500 dark:text-gray-400">
       <nav aria-label="Pied de page" className="flex flex-wrap justify-center gap-x-5 gap-y-2">
+        {/* One link (#494): the name, the version and the code, which is on GitHub. */}
         <a
           href="https://github.com/pvollenweider/benevoles"
           target="_blank"
           rel="noopener noreferrer"
-          className={linkClass}
+          className={`${linkClass} inline-flex items-center gap-1.5`}
         >
-          benevol.app
-          <span className="sr-only"> (ouvre dans un nouvel onglet)</span>
+          <GitHubMark className="w-3.5 h-3.5" />
+          benevol.app v{pkg.version}
+          <span className="sr-only">, code source sur GitHub (ouvre dans un nouvel onglet)</span>
         </a>
-        <span aria-hidden="true" className="select-none py-1">·</span>
-        <span className="py-1">v{pkg.version}</span>
         <span aria-hidden="true" className="select-none py-1">·</span>
         <Link href="/doc" className={linkClass}>Documentation</Link>
         <span aria-hidden="true" className="select-none py-1">·</span>

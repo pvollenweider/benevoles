@@ -88,6 +88,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 #### Navigation et accessibilité
 
+- **Pied de page** : le nom, le numéro de version et le lien vers le code source forment un seul lien (« benevol.app v… »), précédé du logo GitHub.
 - **Déclaration d'accessibilité** : une page publique `/accessibilite` (lien en pied de page) dit le niveau visé (WCAG 2.2 AA), l'état (partiellement conforme, en auto-évaluation), ce qui est vérifié et comment, ce qui ne l'est pas encore, les limites connues et comment signaler un problème. Les parcours critiques sont désormais analysés automatiquement par axe-core dans les tests de bout en bout.
 - **Barre du haut de l'administration sur mobile** : sur un petit écran, les liens sont regroupés sous un bouton **Menu** au lieu de déborder de l'écran ; le menu du compte reste accessible. La page en cours est aussi soulignée, en plus d'être en couleur.
 - **Menu du compte** : dans la barre du haut, votre nom ouvre un menu avec **Mon compte** et **Se déconnecter**. Le changement de mot de passe quitte la page Paramètres pour une page **Mon compte** dédiée, avec des libellés et messages d'erreur en français.
