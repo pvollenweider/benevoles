@@ -48,6 +48,7 @@ En haut, **Ce qui demande votre attention** liste, du plus urgent au moins urgen
 - jalons en retard ;
 - invitations envoyées il y a plus de 3 jours et pas encore utilisées ;
 - postes sans responsable de secteur, quand l'événement en a déjà d'autres ;
+- bénévoles avec une charge élevée (plus de 8 h dans la journée, ou plus de 6 h d'affilée sans vraie pause) ;
 - événement qui commence dans la semaine ;
 - événement terminé mais toujours publié, à archiver.
 
@@ -326,6 +327,8 @@ Aucune action directement sur une ligne : cocher une ou plusieurs inscriptions (
 Chacune de ces actions demande d'abord une confirmation qui récapitule ce qui va se passer : personnes concernées, emails envoyés, places proposées à la liste d'attente, et le fait que l'action est journalisée. Une fois l'action faite, **Voir dans le journal** ouvre le journal de l'événement à la date du jour pour la retrouver (lien « Voir cette action dans le journal »).
 
 Un badge **Responsable** s'affiche sur une ligne quand ce bénévole est déjà responsable du poste de son créneau.
+
+**Charge élevée** : une ligne l'indique, en toutes lettres, quand ce bénévole cumule plus de 8 h de créneaux dans une journée, ou plus de 6 h d'affilée sans pause d'au moins 30 minutes (une pause plus courte compte comme du temps continu). Un créneau qui passe minuit compte pour le jour où il commence ; le temps d'affilée se suit d'un jour à l'autre. Seules les inscriptions confirmées comptent, pas la liste d'attente. C'est une information, rien n'est bloqué. En ajoutant quelqu'un à la main, le formulaire prévient avant l'ajout si ce créneau le ferait dépasser ces seuils, quand la personne est déjà inscrite (même email).
 
 ### Présences le jour J
 

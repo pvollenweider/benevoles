@@ -14,6 +14,7 @@ import StatusBadge from "./StatusBadge"
 import ShiftSelect from "./registrations/ShiftSelect"
 import MakeLeaderModal from "./registrations/MakeLeaderModal"
 import { contactPhone } from "@/lib/contact-phone"
+import { workloadByVolunteer, workloadMessage, workloadWarnings } from "@/lib/workload"
 import { availabilityLabel, hasAvailability } from "@/lib/availability"
 import {
   addConflictMessage,
@@ -54,6 +55,8 @@ type Props = {
   initialShiftFilter?: string
   /** `?q=` from the global search (#377). */
   initialSearch?: string
+  /** Organisation time zone, for the workload warnings (#465). */
+  timeZone: string
 }
 
 const sourceLabels: Record<string, string> = {
@@ -62,14 +65,29 @@ const sourceLabels: Record<string, string> = {
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch }: Props) {
+export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, timeZone }: Props) {
   const [registrations, setRegistrations] = useState<Registration[]>(initialRegistrations)
+  // Non-blocking workload warnings per volunteer (#465), from the active registrations shown here.
+  const workload = useMemo(
+    () => workloadByVolunteer(registrations.map((r) => ({ volunteerId: r.volunteer.id, status: r.status, shift: r.shift })), timeZone),
+    [registrations, timeZone],
+  )
   const [search, setSearch] = useState(initialSearch ?? "")
   const initialShift = initialShiftFilter ? shifts.find(s => s.id === initialShiftFilter) ?? null : null
   const [roleFilter, setRoleFilter] = useState(initialShift?.roleName ?? "")
   const [shiftFilter, setShiftFilter] = useState(initialShiftFilter ?? "")
   const [showAddForm, setShowAddForm] = useState(false)
   const [addForm, setAddForm] = useState({ firstName: "", lastName: "", email: "", phone: "", shiftId: "", comment: "" })
+  // Manual addition: what this shift would add to the workload of a volunteer already registered.
+  const addWarnings = useMemo(() => {
+    const email = addForm.email.trim().toLowerCase()
+    const shift = shifts.find((s) => s.id === addForm.shiftId)
+    if (!email || !shift) return []
+    const held = registrations.filter((r) => r.status === "active" && r.volunteer.email?.toLowerCase() === email && r.shift.id !== shift.id)
+    if (held.length === 0) return []
+    const before = new Set(workloadWarnings(held.map((r) => r.shift), timeZone).map(workloadMessage))
+    return workloadWarnings([...held.map((r) => r.shift), shift], timeZone).map(workloadMessage).filter((m) => !before.has(m))
+  }, [addForm.email, addForm.shiftId, shifts, registrations, timeZone])
   const [adding, setAdding] = useState(false)
   const [addError, setAddError] = useState<string | null>(null)
   const [leaderTarget, setLeaderTarget] = useState<{
@@ -512,30 +530,32 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           <h3 className="font-semibold text-gray-800">Inscription manuelle</h3>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Prénom *</label>
-              <input type="text" required value={addForm.firstName} onChange={(e) => setAddForm((f) => ({ ...f, firstName: e.target.value }))} className="input" />
+              <label htmlFor="add-firstname" className="block text-xs font-medium text-gray-600 mb-1">Prénom *</label>
+              <input id="add-firstname" type="text" required value={addForm.firstName} onChange={(e) => setAddForm((f) => ({ ...f, firstName: e.target.value }))} className="input" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Nom *</label>
-              <input type="text" required value={addForm.lastName} onChange={(e) => setAddForm((f) => ({ ...f, lastName: e.target.value }))} className="input" />
+              <label htmlFor="add-lastname" className="block text-xs font-medium text-gray-600 mb-1">Nom *</label>
+              <input id="add-lastname" type="text" required value={addForm.lastName} onChange={(e) => setAddForm((f) => ({ ...f, lastName: e.target.value }))} className="input" />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label htmlFor="add-email" className="block text-xs font-medium text-gray-600 mb-1">Email</label>
               <input id="add-email" type="email" value={addForm.email} aria-describedby={knownVolunteer && hasAvailability(knownVolunteer) ? "add-email-availability" : undefined} onChange={(e) => setAddForm((f) => ({ ...f, email: e.target.value }))} className="input" />
-              {knownVolunteer && hasAvailability(knownVolunteer) && (
-                <p id="add-email-availability" aria-live="polite" className="text-xs text-gray-700 mt-1">Disponible en général : {availabilityLabel(knownVolunteer)}</p>
-              )}
+              {/* Always mounted, so the polite region announces the text when it appears. */}
+              <p id="add-email-availability" aria-live="polite" className={knownVolunteer && hasAvailability(knownVolunteer) ? "text-xs text-gray-700 mt-1" : "sr-only"}>
+                {knownVolunteer && hasAvailability(knownVolunteer) ? `Disponible en général : ${availabilityLabel(knownVolunteer)}` : ""}
+              </p>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Téléphone</label>
-              <input type="tel" value={addForm.phone} onChange={(e) => setAddForm((f) => ({ ...f, phone: e.target.value }))} className="input" />
+              <label htmlFor="add-phone" className="block text-xs font-medium text-gray-600 mb-1">Téléphone</label>
+              <input id="add-phone" type="tel" value={addForm.phone} onChange={(e) => setAddForm((f) => ({ ...f, phone: e.target.value }))} className="input" />
             </div>
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Créneau *</label>
+            <p id="add-shift-label" className="block text-xs font-medium text-gray-600 mb-1">Créneau *</p>
             <ShiftSelect
+              labelledBy="add-shift-label"
               shifts={shifts}
               value={addForm.shiftId}
               onChange={(id) => setAddForm((f) => ({ ...f, shiftId: id }))}
@@ -543,18 +563,28 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
               existingShifts={volunteerShifts}
             />
             {conflictMessage && (
-              <p className="text-[10px] text-orange-600 mt-1 ml-0.5">{conflictMessage}</p>
+              <p className="text-xs text-orange-800 mt-1 ml-0.5">{conflictMessage}</p>
             )}
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Note</label>
-            <input type="text" value={addForm.comment} onChange={(e) => setAddForm((f) => ({ ...f, comment: e.target.value }))} className="input" placeholder="ex. Inscrit par téléphone" />
+            <label htmlFor="add-comment" className="block text-xs font-medium text-gray-600 mb-1">Note</label>
+            <input id="add-comment" type="text" value={addForm.comment} onChange={(e) => setAddForm((f) => ({ ...f, comment: e.target.value }))} className="input" placeholder="ex. Inscrit par téléphone" />
           </div>
 
+          {/* Always mounted, so the warning is announced when the email and shift make it appear. */}
+          <div id="add-workload" role="status" className={addWarnings.length > 0 ? "" : "sr-only"}>
+            {addWarnings.length > 0 && (
+              <div className="bg-amber-50 border border-amber-300 rounded-xl p-3 text-sm text-amber-950">
+                <p className="font-medium">Si vous ajoutez ce créneau, cette personne aura :</p>
+                <ul role="list" className="mt-1 space-y-0.5">{addWarnings.map((m) => <li key={m}>{m}</li>)}</ul>
+                <p className="mt-1">L&apos;ajout reste possible.</p>
+              </div>
+            )}
+          </div>
           {addError && <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{addError}</div>}
 
           <div className="flex gap-3">
-            <button type="submit" disabled={adding} className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 disabled:opacity-50">
+            <button type="submit" disabled={adding} aria-describedby={addWarnings.length > 0 ? "add-workload" : undefined} className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 disabled:opacity-50">
               {adding ? "…" : "Ajouter"}
             </button>
             <button type="button" onClick={() => setShowAddForm(false)} className="text-gray-500 px-3 py-2 text-sm hover:text-gray-800">Annuler</button>
@@ -680,6 +710,9 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                       )}
                     </p>
                     <p className="text-xs text-gray-500">{reg.volunteer.email}</p>
+                    {reg.status === "active" && (workload.get(reg.volunteer.id) ?? []).filter((w) => w.shiftIds.includes(reg.shift.id)).map((w) => (
+                      <p key={`${w.kind}-${w.day}`} className="text-xs text-amber-900 mt-0.5"><span className="font-semibold">Charge élevée :</span> {workloadMessage(w)}</p>
+                    ))}
                     {contactPhone(reg) && <p className="text-xs text-gray-500">{contactPhone(reg)}</p>}
                     {hasAvailability(reg.volunteer) && <p className="text-xs text-gray-700"><span className="sr-only">Disponible : </span><span aria-hidden="true">🕒 </span>{availabilityLabel(reg.volunteer)}</p>}
                     {reg.comment && <p className="text-xs text-gray-500 italic mt-0.5">"{reg.comment}"</p>}

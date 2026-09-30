@@ -4,6 +4,7 @@ import { getOrgContext } from "@/lib/auth-guard"
 import RegistrationsManager from "@/components/admin/RegistrationsManager"
 import { leaderKeySet, isSectorLeader } from "@/lib/sector-leaders"
 import { SEARCH_MAX_LENGTH } from "@/lib/admin-search"
+import { orgTimeZone } from "@/lib/time-zone"
 
 export const dynamic = "force-dynamic"
 
@@ -35,6 +36,7 @@ export default async function RegistrationsPage({
         orderBy: [{ status: "asc" }, { createdAt: "desc" }],
       },
       sectorLeaders: true,
+      organization: { select: { timeZone: true } },
     },
   })
 
@@ -73,6 +75,7 @@ export default async function RegistrationsPage({
 
       <RegistrationsManager
         eventId={id}
+        timeZone={orgTimeZone(event.organization)}
         initialShiftFilter={initialShiftFilter}
         initialSearch={initialSearch}
         initialRegistrations={event.registrations.map((r) => ({

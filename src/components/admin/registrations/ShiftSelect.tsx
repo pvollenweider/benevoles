@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useState, useRef, useEffect, useMemo } from "react"
+import { useState, useRef, useEffect, useMemo, useId } from "react"
 import { fmtHour, fmtShortDate, overlappingShiftIds, type ShiftRef } from "@/lib/registrations-list"
 
 // ── Status pill ───────────────────────────────────────────────────────────────
@@ -23,7 +23,7 @@ function StatusPill({ s }: { s: ShiftRef }) {
 
 // ── Custom shift dropdown ─────────────────────────────────────────────────────
 export default function ShiftSelect({
-  shifts, value, onChange, placeholder = "Sélectionner…", nullable = false, existingShifts,
+  shifts, value, onChange, placeholder = "Sélectionner…", nullable = false, existingShifts, labelledBy,
 }: {
   shifts: ShiftRef[]
   value: string
@@ -31,7 +31,10 @@ export default function ShiftSelect({
   placeholder?: string
   nullable?: boolean
   existingShifts?: ShiftRef[]
+  /** Id of the visible label: the trigger is named by it, then by the current choice. */
+  labelledBy?: string
 }) {
+  const valueId = useId()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -59,9 +62,11 @@ export default function ShiftSelect({
       <button
         type="button"
         onClick={() => setOpen(o => !o)}
+        aria-expanded={open}
+        aria-labelledby={labelledBy ? `${labelledBy} ${valueId}` : undefined}
         className="flex items-center justify-between gap-2 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[38px]"
       >
-        <span className={`truncate text-left ${selected ? "text-gray-800" : "text-gray-500"}`}>
+        <span id={valueId} className={`truncate text-left ${selected ? "text-gray-800" : "text-gray-500"}`}>
           {selected
             ? `${fmtShortDate(selected.date)} · ${fmtHour(selected.startTime)}–${fmtHour(selected.endTime)} · ${selected.roleName}${selected.label !== selected.roleName ? ` · ${selected.label}` : ""}`
             : placeholder}

@@ -29,7 +29,7 @@ describe("RegistrationsManager — presence", () => {
   })
 
   it("shows who is present and offers to mark the selected people", async () => {
-    render(<RegistrationsManager eventId="evt-1" shifts={[shift]} initialRegistrations={[reg("r1", { checkedInAt: "2026-07-04T08:05:00.000Z" }), reg("r2")]} />)
+    render(<RegistrationsManager eventId="evt-1" timeZone="Europe/Zurich" shifts={[shift]} initialRegistrations={[reg("r1", { checkedInAt: "2026-07-04T08:05:00.000Z" }), reg("r2")]} />)
     expect(screen.getByText(/1 présent/)).toBeInTheDocument()
     const aliceRow = screen.getByText("Alice Martin").closest("tr")!
     expect(within(aliceRow).getByText(/Présent/)).toBeInTheDocument()
@@ -44,7 +44,7 @@ describe("RegistrationsManager — presence", () => {
 
   it("marks the selection present through the bulk route and updates the rows", async () => {
     fetchMock.mockResolvedValue({ ok: true, json: async () => ({ done: 1, changedIds: ["r2"], skipped: 0 }) })
-    render(<RegistrationsManager eventId="evt-1" shifts={[shift]} initialRegistrations={[reg("r1"), reg("r2")]} />)
+    render(<RegistrationsManager eventId="evt-1" timeZone="Europe/Zurich" shifts={[shift]} initialRegistrations={[reg("r1"), reg("r2")]} />)
     fireEvent.click(screen.getByLabelText("Sélectionner l'inscription de Bob Durand"))
     fireEvent.click(screen.getByRole("button", { name: "Marquer présent (1)" }))
 
