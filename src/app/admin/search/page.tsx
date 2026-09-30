@@ -9,6 +9,7 @@ import { membersHref, registrationsHref, searchTerms, shiftHref, SEARCH_GROUP_LI
 import { loadSearch } from "@/lib/admin-search-data"
 import { formatShortDate } from "@/lib/utils"
 import StatusBadge from "@/components/admin/StatusBadge"
+import { clockTime } from "@/lib/gantt-utils"
 
 export const dynamic = "force-dynamic"
 type Search = { searchParams: Promise<{ q?: string | string[] }> }
@@ -126,7 +127,7 @@ export default async function SearchPage({ searchParams }: Search) {
                     {r.status !== "active" && <StatusBadge status={r.status} />}
                   </div>
                   <p className="text-gray-600">
-                    {r.event.title} · {r.shift.roleName} {r.shift.label} · {shiftDay(r.shift.date)}, {r.shift.startTime}–{r.shift.endTime}
+                    {r.event.title} · {r.shift.roleName} {r.shift.label} · {shiftDay(r.shift.date)}, {clockTime(r.shift.startTime)}–{clockTime(r.shift.endTime)}
                   </p>
                 </li>
               ))}
@@ -153,10 +154,10 @@ export default async function SearchPage({ searchParams }: Search) {
                 <li key={s.id} className="px-4 py-3 text-sm space-y-1">
                   <Link href={shiftHref(s.event.id, s.id)} className={linkClass}>
                     {s.roleName} {s.label}
-                    <span className="sr-only"> : {s.event.title}, {shiftDay(s.date)}, {s.startTime}</span>
+                    <span className="sr-only"> : {s.event.title}, {shiftDay(s.date)}, {clockTime(s.startTime)}</span>
                   </Link>
                   <p className="text-gray-600">
-                    {s.event.title} · {shiftDay(s.date)}, {s.startTime}–{s.endTime}
+                    {s.event.title} · {shiftDay(s.date)}, {clockTime(s.startTime)}–{clockTime(s.endTime)}
                   </p>
                 </li>
               ))}

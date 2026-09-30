@@ -8,7 +8,7 @@
  * pulls in next-auth (via requireOrgSession), which fails to resolve in vitest's plain node
  * environment.
  */
-import { toMin, toMinEnd } from "@/lib/gantt-utils"
+import { clockTime, toMin, toMinEnd } from "@/lib/gantt-utils"
 
 export type VolData       = { firstName: string; lastName: string; email: string | null; phone: string | null }
 export type RegData       = { volunteer: VolData; comment: string | null; source: string }
@@ -166,7 +166,7 @@ export function buildDayParts(
         }
         const colspan = endSlot - startSlot
         // The time survives the colspan for screen readers (column headers only cover the first slot).
-        const vols    = `<span class="sr-only">${esc(sh.startTime)}–${esc(sh.endTime)} : </span>${smartVolsList(sh.registrations)}`
+        const vols    = `<span class="sr-only">${esc(clockTime(sh.startTime))}–${esc(clockTime(sh.endTime))} : </span>${smartVolsList(sh.registrations)}`
         row += colspan > 1
           ? `<td class="shift-cell" colspan="${colspan}">${vols}</td>`
           : `<td class="shift-cell">${vols}</td>`

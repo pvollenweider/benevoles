@@ -4,6 +4,7 @@
 import { fold } from "./text-fold"
 
 import { shiftsOverlap } from "./utils"
+import { clockTime } from "./gantt-utils"
 
 /**
  * Pure logic of the admin registrations list (RegistrationsManager, #291): filtering, conflicts
@@ -27,9 +28,9 @@ export function fmtShortDate(iso: string): string {
   return new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })
 }
 
-/** "10:00" → "10h", "10:30" → "10h30". */
+/** "10:00" → "10h", "10:30" → "10h30"; legacy "25:30" → "1h30" (modulo 24). */
 export function fmtHour(t: string): string {
-  const [h, m] = t.split(":")
+  const [h, m] = clockTime(t).split(":")
   return m === "00" ? `${Number(h)}h` : `${Number(h)}h${m}`
 }
 

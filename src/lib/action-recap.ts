@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { clockTime } from "./gantt-utils"
+
 /**
  * What a sensitive action is about to do, in plain words, before the admin confirms (#379): how
  * many people, which emails will go out, what happens next, and that the action is logged. Pure;
@@ -74,7 +76,7 @@ export function deactivateMemberRecap(name: string): ActionRecap {
 
 /** "Samedi 4 juillet, 18:00–23:00": the moment of a shift, for a recap. */
 export function shiftWhen(date: string, startTime: string, endTime: string): string {
-  return `${dayLabel(date)}, ${startTime}–${endTime}`
+  return `${dayLabel(date)}, ${clockTime(startTime)}–${clockTime(endTime)}`
 }
 
 /** "Samedi 4 juillet" from an ISO date. */

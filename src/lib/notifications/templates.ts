@@ -11,6 +11,7 @@ import { eventPublicUrl, orgBaseUrl } from "@/lib/urls"
 import { renderMarkdown } from "@/lib/markdown"
 import { shiftInfoLines, shiftInfoText, type ShiftInfo } from "../shift-info"
 import { MAP_LINK_EMAIL_LABEL } from "../map-link"
+import { clockTime } from "../gantt-utils"
 
 const BASE_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
 
@@ -150,7 +151,7 @@ function renderConfirmation(p: NotificationPayload): RenderedEmail {
     `Super, ton inscription pour ${eventTitle} est confirmée !`,
     ``,
     `Tes créneaux :`,
-    ...shifts.flatMap((s) => [`  • ${s.label} · ${s.date} · ${s.startTime}–${s.endTime}`, ...shiftInfoText(s).map((l) => `      ${l}`)]),
+    ...shifts.flatMap((s) => [`  • ${s.label} · ${s.date} · ${clockTime(s.startTime)}–${clockTime(s.endTime)}`, ...shiftInfoText(s).map((l) => `      ${l}`)]),
     ``,
     ...(confirmationMessage ? [confirmationMessage, ``] : []),
     `Un empêchement ? Tu peux gérer tes inscriptions ici :`,
@@ -167,7 +168,7 @@ function renderConfirmation(p: NotificationPayload): RenderedEmail {
       ${shifts.map((s) => `
         <div style="padding:6px 0;border-bottom:1px solid #e5e7eb">
           <strong style="color:#111">${escapeHtml(s.label)}</strong>
-          <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</span>
+          <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(clockTime(s.startTime))}–${escapeHtml(clockTime(s.endTime))}</span>
           ${shiftInfoHtml(s)}
         </div>`).join("")}
     </div>
@@ -278,7 +279,7 @@ function renderReminderJ2(p: NotificationPayload): RenderedEmail {
     ``,
     `Ton créneau :`,
     `📅 ${d.shiftDate}`,
-    `🕐 ${d.shiftStart}–${d.shiftEnd}`,
+    `🕐 ${clockTime(d.shiftStart)}–${clockTime(d.shiftEnd)}`,
     d.shiftLocation ? `📍 ${d.shiftLocation}` : ``,
     `Mission : ${d.shiftRoleName}`,
     ...extrasText(d),
@@ -295,14 +296,14 @@ function renderReminderJ2(p: NotificationPayload): RenderedEmail {
     <p style="color:#555;margin:0 0 1.25em">Plus que 2 jours avant <strong>${escapeHtml(d.eventTitle)}</strong>, on se réjouit de te retrouver !</p>
     <div style="background:#f9fafb;border-radius:10px;padding:14px 16px;line-height:2">
       <div>📅 ${escapeHtml(d.shiftDate)}</div>
-      <div>🕐 ${escapeHtml(d.shiftStart)}–${escapeHtml(d.shiftEnd)}</div>
+      <div>🕐 ${escapeHtml(clockTime(d.shiftStart))}–${escapeHtml(clockTime(d.shiftEnd))}</div>
       ${d.shiftLocation ? `<div>📍 ${escapeHtml(d.shiftLocation)}</div>` : ""}
       <div>Mission : <strong>${escapeHtml(d.shiftRoleName)}</strong></div>
       ${extrasHtml(d)}
     </div>
     <p style="margin-top:1.5em">${btn(editUrl, "Annuler si je ne peux plus venir")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
-  `, `${escapeHtml(d.shiftRoleName)} · ${escapeHtml(d.shiftDate)} · ${escapeHtml(d.shiftStart)}–${escapeHtml(d.shiftEnd)}`)
+  `, `${escapeHtml(d.shiftRoleName)} · ${escapeHtml(d.shiftDate)} · ${escapeHtml(clockTime(d.shiftStart))}–${escapeHtml(clockTime(d.shiftEnd))}`)
 
   return { subject, html, text }
 }
@@ -316,7 +317,7 @@ function renderReminderJ1(p: NotificationPayload): RenderedEmail {
   const text = [
     `Hello ${firstName} !`,
     ``,
-    `C'est demain ! ${d.eventTitle} à ${d.shiftStart}${d.shiftLocation ? `, à ${d.shiftLocation}` : ""}.`,
+    `C'est demain ! ${d.eventTitle} à ${clockTime(d.shiftStart)}${d.shiftLocation ? `, à ${d.shiftLocation}` : ""}.`,
     `Tu fais : ${d.shiftRoleName}`,
     ...extrasText(d),
     ``,
@@ -329,12 +330,12 @@ function renderReminderJ1(p: NotificationPayload): RenderedEmail {
 
   const html = wrap(`
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! C'est demain ! 🙌</h2>
-    <p style="color:#555;margin:0 0 1.25em"><strong>${escapeHtml(d.eventTitle)}</strong> demain à ${escapeHtml(d.shiftStart)}${d.shiftLocation ? `, à ${escapeHtml(d.shiftLocation)}` : ""}.</p>
+    <p style="color:#555;margin:0 0 1.25em"><strong>${escapeHtml(d.eventTitle)}</strong> demain à ${escapeHtml(clockTime(d.shiftStart))}${d.shiftLocation ? `, à ${escapeHtml(d.shiftLocation)}` : ""}.</p>
     <p>Tu fais : <strong>${escapeHtml(d.shiftRoleName)}</strong></p>
     ${reminderExtras(d).length ? `<div style="background:#f9fafb;border-radius:10px;padding:14px 16px;line-height:2">${extrasHtml(d)}</div>` : ""}
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mon inscription")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
-  `, `RDV demain à ${d.shiftStart}${d.shiftLocation ? ` · ${d.shiftLocation}` : ""} — mission : ${d.shiftRoleName}`)
+  `, `RDV demain à ${clockTime(d.shiftStart)}${d.shiftLocation ? ` · ${d.shiftLocation}` : ""} — mission : ${d.shiftRoleName}`)
 
   return { subject, html, text }
 }
@@ -351,7 +352,7 @@ function renderReminderDd(p: NotificationPayload): RenderedEmail {
     ``,
     `C'est aujourd'hui ! RDV ${hoursLabel} pour ${d.eventTitle}.`,
     d.shiftLocation ? `📍 ${d.shiftLocation}` : ``,
-    `🕐 ${d.shiftStart}`,
+    `🕐 ${clockTime(d.shiftStart)}`,
     `Mission : ${d.shiftRoleName}`,
     ...extrasText(d),
     ``,
@@ -366,7 +367,7 @@ function renderReminderDd(p: NotificationPayload): RenderedEmail {
     <p style="color:#555;margin:0 0 1.25em">RDV <strong>${hoursLabel}</strong> pour <strong>${escapeHtml(d.eventTitle)}</strong> !</p>
     <div style="background:#f9fafb;border-radius:10px;padding:14px 16px;line-height:2">
       ${d.shiftLocation ? `<div>📍 ${escapeHtml(d.shiftLocation)}</div>` : ""}
-      <div>🕐 ${escapeHtml(d.shiftStart)}</div>
+      <div>🕐 ${escapeHtml(clockTime(d.shiftStart))}</div>
       <div>Mission : <strong>${escapeHtml(d.shiftRoleName)}</strong></div>
       ${extrasHtml(d)}
     </div>
@@ -399,7 +400,7 @@ function renderManualReminder(p: NotificationPayload): RenderedEmail {
     d.customMessage,
     ``,
     `Tes créneaux pour ${d.eventTitle} :`,
-    ...d.shifts.map((s) => `  • ${s.date} · ${s.label} · ${s.startTime}–${s.endTime}`),
+    ...d.shifts.map((s) => `  • ${s.date} · ${s.label} · ${clockTime(s.startTime)}–${clockTime(s.endTime)}`),
     ``,
     `Gérer tes inscriptions : ${editUrl}`,
     ``,
@@ -418,7 +419,7 @@ function renderManualReminder(p: NotificationPayload): RenderedEmail {
       ${d.shifts.map((s) => `
         <div style="padding:6px 0;border-bottom:1px solid #e5e7eb">
           <strong>${escapeHtml(s.label)}</strong>
-          <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</span>
+          <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(clockTime(s.startTime))}–${escapeHtml(clockTime(s.endTime))}</span>
         </div>`).join("")}
     </div>
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
@@ -455,7 +456,7 @@ function renderTargetedMessage(p: NotificationPayload): RenderedEmail {
     d.message,
     ``,
     ...(d.shifts.length > 0
-      ? [`Tes créneaux concernés pour ${d.eventTitle} :`, ...d.shifts.map((s) => `  • ${s.date} · ${s.label} · ${s.startTime}–${s.endTime}`), ``]
+      ? [`Tes créneaux concernés pour ${d.eventTitle} :`, ...d.shifts.map((s) => `  • ${s.date} · ${s.label} · ${clockTime(s.startTime)}–${clockTime(s.endTime)}`), ``]
       : []),
     ...(editUrl ? [`Gérer tes inscriptions : ${editUrl}`, ``] : []),
     ...(d.signupUrl ? [`Choisir tes créneaux : ${d.signupUrl}`, ``] : []),
@@ -474,7 +475,7 @@ function renderTargetedMessage(p: NotificationPayload): RenderedEmail {
       ${d.shifts.map((s) => `
         <div style="padding:6px 0;border-bottom:1px solid #e5e7eb">
           <strong>${escapeHtml(s.label)}</strong>
-          <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</span>
+          <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(clockTime(s.startTime))}–${escapeHtml(clockTime(s.endTime))}</span>
         </div>`).join("")}
     </div>` : ""}
     ${editUrl ? `<p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>` : ""}
@@ -624,7 +625,7 @@ function renderRegistrationRequested(p: NotificationPayload): RenderedEmail {
     ``,
     `Ta demande pour ${d.eventTitle} est bien reçue. ${many ? "Ces créneaux sont" : "Ce créneau est"} sur validation : ce n'est pas encore une inscription confirmée.`,
     ``,
-    ...d.shifts.map((s) => `  • ${s.label} · ${s.date} · ${s.startTime}–${s.endTime}`),
+    ...d.shifts.map((s) => `  • ${s.label} · ${s.date} · ${clockTime(s.startTime)}–${clockTime(s.endTime)}`),
     ``,
     `La place t'est réservée le temps que l'organisation réponde. Tu recevras un email avec sa réponse.`,
     ``,
@@ -639,7 +640,7 @@ function renderRegistrationRequested(p: NotificationPayload): RenderedEmail {
       ${d.shifts.map((s) => `
         <div style="padding:6px 0;border-bottom:1px solid #e5e7eb">
           <strong style="color:#111">${escapeHtml(s.label)}</strong>
-          <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</span>
+          <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(clockTime(s.startTime))}–${escapeHtml(clockTime(s.endTime))}</span>
         </div>`).join("")}
     </div>
     <p style="color:#555;margin-top:1em">La place t'est réservée le temps que l'organisation réponde. Tu recevras un email avec sa réponse.</p>
@@ -730,7 +731,7 @@ function renderAdminNotification(p: NotificationPayload): RenderedEmail {
 
   const shiftLines = d.shifts.map((s) => {
     const name = s.label && s.label !== s.roleName ? `${s.roleName} · ${s.label}` : s.roleName
-    return `  • ${name} · ${s.date} · ${s.startTime}–${s.endTime}`
+    return `  • ${name} · ${s.date} · ${clockTime(s.startTime)}–${clockTime(s.endTime)}`
   })
 
   const text = [
@@ -746,7 +747,7 @@ function renderAdminNotification(p: NotificationPayload): RenderedEmail {
         const name = s.label && s.label !== s.roleName
           ? `${escapeHtml(s.roleName)} · ${escapeHtml(s.label)}`
           : escapeHtml(s.roleName)
-        return `<li><strong>${name}</strong> · ${escapeHtml(s.date)} · ${escapeHtml(s.startTime)}–${escapeHtml(s.endTime)}</li>`
+        return `<li><strong>${name}</strong> · ${escapeHtml(s.date)} · ${escapeHtml(clockTime(s.startTime))}–${escapeHtml(clockTime(s.endTime))}</li>`
       }).join("")}
     </ul>
   `, `${d.volunteerName} · ${d.shifts.length} créneau${d.shifts.length > 1 ? "x" : ""}`)
@@ -799,7 +800,7 @@ function renderWaitlistConfirmation(p: NotificationPayload): RenderedEmail {
   const text = [
     `Hello ${firstName} !`,
     ``,
-    `Tu es sur la liste d'attente pour le créneau "${d.shiftLabel}" (${d.shiftDate} · ${d.shiftStart}–${d.shiftEnd}).`,
+    `Tu es sur la liste d'attente pour le créneau "${d.shiftLabel}" (${d.shiftDate} · ${clockTime(d.shiftStart)}–${clockTime(d.shiftEnd)}).`,
     `Position : ${d.waitingPosition}`,
     ``,
     `Comment ça marche :`,
@@ -811,7 +812,7 @@ function renderWaitlistConfirmation(p: NotificationPayload): RenderedEmail {
     <div style="background:#f9fafb;border-radius:10px;padding:14px 16px;line-height:2">
       <div>📋 ${escapeHtml(d.shiftLabel)}</div>
       <div>📅 ${escapeHtml(d.shiftDate)}</div>
-      <div>🕐 ${escapeHtml(d.shiftStart)}–${escapeHtml(d.shiftEnd)}</div>
+      <div>🕐 ${escapeHtml(clockTime(d.shiftStart))}–${escapeHtml(clockTime(d.shiftEnd))}</div>
       <div>Position : <strong>#${d.waitingPosition}</strong></div>
     </div>
     <h3 style="margin:1.25em 0 0.25em;font-size:1em">Comment ça marche</h3>
@@ -838,7 +839,7 @@ function renderWaitlistOffered(p: NotificationPayload): RenderedEmail {
   const text = [
     `Hello ${firstName} !`,
     ``,
-    `Bonne nouvelle : une place s'est libérée pour "${d.shiftLabel}" (${d.shiftDate} · ${d.shiftStart}–${d.shiftEnd}) !`,
+    `Bonne nouvelle : une place s'est libérée pour "${d.shiftLabel}" (${d.shiftDate} · ${clockTime(d.shiftStart)}–${clockTime(d.shiftEnd)}) !`,
     ``,
     `Confirme ta participation avant le ${d.expiresAt} :`,
     d.confirmUrl,
@@ -850,7 +851,7 @@ function renderWaitlistOffered(p: NotificationPayload): RenderedEmail {
     <p style="color:#555;margin:0 0 1em">Bonne nouvelle : une place s'est libérée pour <strong>${escapeHtml(d.shiftLabel)}</strong> lors de <strong>${escapeHtml(d.eventTitle)}</strong> !</p>
     <div style="background:#f9fafb;border-radius:10px;padding:14px 16px;line-height:2;margin-bottom:1.25em">
       <div>📅 ${escapeHtml(d.shiftDate)}</div>
-      <div>🕐 ${escapeHtml(d.shiftStart)}–${escapeHtml(d.shiftEnd)}</div>
+      <div>🕐 ${escapeHtml(clockTime(d.shiftStart))}–${escapeHtml(clockTime(d.shiftEnd))}</div>
     </div>
     <p style="margin-top:1.5em">${btn(d.confirmUrl, "Confirmer ma participation")}</p>
     <p style="color:#e55;font-size:0.85em;margin-top:1em">⏱ Ce lien expire le <strong>${escapeHtml(d.expiresAt)}</strong>. Passé ce délai, la place sera proposée à quelqu'un d'autre.</p>
@@ -945,14 +946,14 @@ function renderSectorLeaderNewSignup(p: NotificationPayload): RenderedEmail {
   const text = [
     `Bonjour ${firstName},`,
     ``,
-    `${d.volunteerName} vient de s'inscrire sur « ${d.shiftLabel} » (${d.shiftDate} · ${d.startTime}–${d.endTime}), dont vous êtes responsable pour ${d.eventTitle}.`,
+    `${d.volunteerName} vient de s'inscrire sur « ${d.shiftLabel} » (${d.shiftDate} · ${clockTime(d.startTime)}–${clockTime(d.endTime)}), dont vous êtes responsable pour ${d.eventTitle}.`,
     ``,
     `Voir la liste complète :`,
     leaderUrl,
   ].join("\n")
 
   const html = wrap(`
-    <p><strong>${escapeHtml(d.volunteerName)}</strong> vient de s'inscrire sur <strong>${escapeHtml(d.shiftLabel)}</strong> (${escapeHtml(d.shiftDate)} · ${escapeHtml(d.startTime)}–${escapeHtml(d.endTime)}), dont vous êtes responsable pour <strong>${escapeHtml(d.eventTitle)}</strong>.</p>
+    <p><strong>${escapeHtml(d.volunteerName)}</strong> vient de s'inscrire sur <strong>${escapeHtml(d.shiftLabel)}</strong> (${escapeHtml(d.shiftDate)} · ${escapeHtml(clockTime(d.startTime))}–${escapeHtml(clockTime(d.endTime))}), dont vous êtes responsable pour <strong>${escapeHtml(d.eventTitle)}</strong>.</p>
     <p style="margin-top:1.25em">${btn(leaderUrl, "Voir la liste complète")}</p>
   `, `${d.volunteerName} vient de s'inscrire sur ${d.roleName}.`)
 
