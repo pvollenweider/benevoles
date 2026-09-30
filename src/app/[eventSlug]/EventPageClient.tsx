@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useEffect, useRef, useState, useMemo } from "react"
-import { WAITLIST_SHORT } from "@/lib/waitlist-copy"
+import SignupRecap from "@/components/public/SignupRecap"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { formatDate } from "@/lib/utils"
@@ -20,14 +20,11 @@ import {
   type MyRegistration,
   type SignupForm,
 } from "@/lib/public-signup"
-import { fmtRange } from "@/lib/gantt-utils"
+import {  } from "@/lib/gantt-utils"
 import DayTimeline, { fmt } from "@/components/DayTimeline"
 import PublicFooter from "@/components/PublicFooter"
 import { DEFAULT_VOLUNTEER_CHARTER } from "@/lib/volunteer-charter"
-import ShiftInfoList from "@/components/ShiftInfoList"
 
-/** A selected full shift with the waitlist open: the sign-up will be a waitlist entry, not a firm one (#374). */
-const isWaitlistShift = (s: { status?: string; waitlistEnabled?: boolean | null }) => s.status === "full" && !!s.waitlistEnabled
 
 type Shift = {
   id: string
@@ -107,7 +104,6 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   // Preview (#370): focus the result when it appears, and the submit button when going back to
   // the form (the result panel unmounts, focus would otherwise fall to <body>).
   const resultHeadingRef = useRef<HTMLHeadingElement>(null)
-  const hasWaitlistSelection = event?.shifts.some((s) => selectedShifts.has(s.id) && isWaitlistShift(s)) ?? false
   const submitButtonRef = useRef<HTMLButtonElement>(null)
   const hadPreviewResult = useRef(false)
   useEffect(() => {
@@ -535,20 +531,19 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
             {/* Form */}
             <div className="bg-white rounded-2xl border border-blue-200 p-5">
               <div className="flex items-center gap-2 mb-5">
-                <button onClick={() => setStep("select")} className="text-blue-600 text-sm">← Retour</button>
+                <button onClick={() => setStep("select")} className="text-blue-600 text-sm"><span aria-hidden="true">← </span>Retour</button>
                 <h2 className="text-base font-semibold text-gray-800">Vos informations</h2>
               </div>
 
-              {/* Mobile: shift recap inside form card */}
-              <div className="lg:hidden bg-gray-50 rounded-xl p-3 mb-5 space-y-1">
-                {event.shifts.filter((s) => selectedShifts.has(s.id)).map((s) => (
-                  <div key={s.id} className="text-sm text-gray-700">
-                    ✓ {s.label} — {fmtRange(s.startTime, s.endTime)}
-                    {isWaitlistShift(s) && <span className="ml-2 inline-block rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-900">liste d&apos;attente</span>}
-                    <ShiftInfoList info={s} className="ml-5 text-xs text-gray-600" />
-                  </div>
-                ))}
-                {hasWaitlistSelection && <p className="text-xs text-amber-900 pt-1">{WAITLIST_SHORT}</p>}
+              {/* Mobile: the recap inside the form card (#373); the desktop sidebar shows the same. */}
+              <div className="lg:hidden bg-gray-50 rounded-xl p-3 mb-5">
+                <SignupRecap
+                  shifts={event.shifts.filter((s) => selectedShifts.has(s.id))}
+                  requirePhone={event.requirePhone}
+                  phoneGiven={form.phone.trim().length > 0}
+                  commentGiven={form.comment.trim().length > 0}
+                  variant="card"
+                />
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -687,19 +682,13 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
             {/* Desktop right sidebar for form step */}
             <div className="hidden lg:block">
               <div className="sticky top-6 bg-white rounded-2xl border border-gray-200 overflow-hidden">
-                <p className="px-4 pt-3 pb-2 text-xs font-semibold text-gray-500 border-b border-gray-100">
-                  Vos créneaux
-                </p>
-                <div className="divide-y divide-gray-100">
-                  {event.shifts.filter((s) => selectedShifts.has(s.id)).map((s) => (
-                    <div key={s.id} className="px-4 py-3">
-                      <p className="text-xs font-medium text-gray-900">{s.label && s.label !== s.roleName ? s.label : s.roleName}</p>
-                      <p className="text-[11px] text-gray-500 mt-0.5 font-mono">{fmt(s.startTime)}–{fmt(s.endTime)}</p>
-                      {isWaitlistShift(s) && <p className="text-[11px] text-amber-900 mt-0.5 font-medium">Liste d&apos;attente (complet)</p>}
-                      <ShiftInfoList info={s} className="mt-1 text-xs text-gray-600" />
-                    </div>
-                  ))}
-                </div>
+                <SignupRecap
+                  shifts={event.shifts.filter((s) => selectedShifts.has(s.id))}
+                  requirePhone={event.requirePhone}
+                  phoneGiven={form.phone.trim().length > 0}
+                  commentGiven={form.comment.trim().length > 0}
+                  variant="sidebar"
+                />
                 <div className="px-4 py-3 border-t border-gray-100 bg-gray-50">
                   <p className="text-[11px] text-gray-500 font-medium">{event.organizationName}</p>
                   <p className="text-sm font-semibold text-gray-800 mt-0.5">{event.title}</p>

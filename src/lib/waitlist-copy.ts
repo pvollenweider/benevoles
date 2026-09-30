@@ -20,6 +20,8 @@ export const WAITLIST_STEPS: readonly string[] = [
 
 /** Short version for a recap line or a card: « Complet : liste d'attente, tu seras prévenu·e par email si une place se libère (24 h pour la prendre). » */
 export const WAITLIST_SHORT = `Complet : liste d'attente. Si une place se libère, tu recevras un email et tu auras ${WAITLIST_OFFER_HOURS} heures pour la prendre.`
+/** The same, in the « vous » register of the sign-up recap. */
+export const WAITLIST_SHORT_VOUS = `Complet : liste d'attente. Si une place se libère, vous recevrez un email et aurez ${WAITLIST_OFFER_HOURS} heures pour la prendre.`
 
 export type WaitlistState = { status: string; waitingPosition?: number | null; waitingExpiresAt?: string | Date | null }
 
