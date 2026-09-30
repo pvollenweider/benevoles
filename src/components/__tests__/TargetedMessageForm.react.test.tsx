@@ -82,7 +82,9 @@ describe("TargetedMessageForm", () => {
     fireEvent.click(screen.getByRole("button", { name: "Confirmer l'envoi" }))
 
     const done = await screen.findByRole("heading", { name: "Message envoyé à 3 personnes" })
-    expect(done).toHaveFocus()
+    // The heading is in the DOM before React runs the passive effects (the dialog's cleanup, then
+    // the focus move): under load the assertion used to land in between, with focus on <body>.
+    await waitFor(() => expect(done).toHaveFocus())
     const sends = fetchMock.mock.calls.filter(([, init]) => !JSON.parse(init.body).dryRun)
     expect(sends).toHaveLength(1)
     expect(JSON.parse(sends[0][1].body)).toEqual({ audience: { kind: "role", roleName: "Bar" }, subject: "Parking", message: "Entrée par la rue Basse.", push: false })
