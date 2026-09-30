@@ -91,6 +91,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 #### Fiabilité et technique
 
+- **Politique de conservation vérifiable** : les durées de conservation ont une source unique ; le nettoyage quotidien les lit, et un test vérifie que le guide administrateur, la politique de confidentialité, la nouvelle page technique `docs/retention.md` et la rotation des sauvegardes disent la même chose. Les journaux techniques (90 jours) sont signalés comme une procédure manuelle sur le serveur.
 - **Emails plus fiables** : les emails liés à une action (inscription, notification aux administrateurs et aux responsables, liste d'attente, créneau modifié ou annulé, invitation d'un responsable de secteur, invitation et bienvenue d'un administrateur, mot de passe oublié) passent par une file d'envoi enregistrée en même temps que l'action. L'action n'attend plus l'envoi, un arrêt du serveur au mauvais moment ne peut plus laisser une action faite sans son email, et un email en échec est renvoyé automatiquement.
 - **Limitation des tentatives** (connexion, inscription, liens de gestion, mot de passe oublié) : les compteurs sont stockés dans la base de données. Ils ne sont plus remis à zéro à chaque redéploiement et restent justes si l'application tourne sur plusieurs instances.
 - **Interne** : le fichier `src/middleware.ts` devient `src/proxy.ts`, la convention Next.js 16 ; comportement identique (protection des pages admin, en-tête `x-org-slug`).

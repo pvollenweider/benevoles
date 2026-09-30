@@ -1,3 +1,5 @@
+import { RETENTION, RETENTION_DAYS } from "@/lib/retention"
+
 export const metadata = { title: "Politique de confidentialité — benevol.app" }
 
 export default function PrivacyPage() {
@@ -43,7 +45,7 @@ export default function PrivacyPage() {
             <td>Nom, adresse e-mail</td>
             <td>Création et gestion du compte</td>
             <td>Exécution du contrat</td>
-            <td>Durée du compte + 30 jours</td>
+            <td>Durée du compte + {RETENTION_DAYS.deactivatedAdmin} jours</td>
           </tr>
           <tr>
             <td>Mot de passe (hashé bcrypt)</td>
@@ -55,7 +57,7 @@ export default function PrivacyPage() {
             <td>Logs de connexion</td>
             <td>Sécurité et débogage</td>
             <td>Intérêt légitime</td>
-            <td>90 jours</td>
+            <td>{RETENTION_DAYS.technicalLogs} jours</td>
           </tr>
         </tbody>
       </table>
@@ -174,19 +176,19 @@ export default function PrivacyPage() {
       <h2>7. Conservation des données</h2>
       <p>
         Les données des bénévoles sont conservées tant que l&apos;Organisation maintient son compte
-        sur la plateforme. Elles sont supprimées dans un délai de 30 jours suivant la clôture du
+        sur la plateforme. Elles sont supprimées dans un délai de {RETENTION_DAYS.deactivatedOrganization} jours suivant la clôture du
         compte de l&apos;Organisation.
       </p>
       <p>
-        Les données des administrateurs sont supprimées dans un délai de 30 jours suivant la
+        Les données des administrateurs sont supprimées dans un délai de {RETENTION_DAYS.deactivatedAdmin} jours suivant la
         désactivation ou la suppression du compte.
       </p>
       <p>Plus précisément :</p>
       <ul>
-        <li>membres, événements, créneaux, inscriptions, pages et journaux : conservés tant que l&apos;Organisation est active, effacés 30 jours après sa désactivation ;</li>
-        <li>emails envoyés (file d&apos;envoi) : effacés chaque nuit une fois partis, ceux en échec après 30 jours ;</li>
-        <li>sauvegardes chiffrées de la base : 30 jours sur le serveur, 90 jours en copie hors site ;</li>
-        <li>bénévoles sans organisation ni inscription : effacés à chaque nettoyage nocturne.</li>
+        {/* Generated from the retention policy (#486): the same table as the organisers' guide. */}
+        {RETENTION.filter((e) => e.public).map((e) => (
+          <li key={e.data}>{e.data.charAt(0).toLocaleLowerCase("fr") + e.data.slice(1)} : {e.duration} ;</li>
+        ))}
       </ul>
       <p>
         Une Organisation peut à tout moment exporter ses données (archive JSON d&apos;un événement, membres

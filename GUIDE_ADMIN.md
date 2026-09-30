@@ -544,12 +544,19 @@ Les fichiers CSV s'ouvrent tels quels dans Excel ou LibreOffice (UTF-8, point-vi
 
 **Durées de conservation** :
 
+<!-- retention:start (généré depuis src/lib/retention.ts, npm run retention:docs) -->
 | Données | Conservation |
 |---|---|
-| Membres, événements, créneaux, inscriptions, pages, journaux | tant que l'organisation est active ; effacés 30 jours après sa désactivation |
-| Emails envoyés (file d'envoi) | effacés chaque nuit une fois partis ; ceux en échec après 30 jours |
+| Membres, événements, créneaux, inscriptions, pages, journaux d'activité | tant que l'organisation est active ; effacés 30 jours après sa désactivation |
+| Événement supprimé par un administrateur | effacé immédiatement, avec ses créneaux, inscriptions et invitations |
+| Emails en file d'envoi (destinataire et contenu) | effacés chaque nuit une fois partis ; ceux en échec après 30 jours |
+| Messages ciblés (objet, texte, public, nombres) | 365 jours, ou avec l'événement |
 | Comptes administrateurs désactivés | effacés après 30 jours |
+| Bénévoles sans organisation ni inscription | effacés au nettoyage suivant |
 | Sauvegardes chiffrées de la base | 30 jours sur le serveur, 90 jours en copie hors site |
+<!-- retention:end -->
+
+Une donnée effacée reste dans les sauvegardes chiffrées jusqu'à leur rotation (voir la dernière ligne).
 
 **Supprimer une organisation** : exportez d'abord ce que vous voulez garder, puis demandez la désactivation à l'administrateur de la plateforme (adresse de contact en bas de page). L'organisation devient inaccessible immédiatement ; ses données sont effacées définitivement par le nettoyage automatique 30 jours plus tard, sauvegardes comprises à l'issue de leur propre délai. Pendant ces 30 jours, une réactivation reste possible.
 
