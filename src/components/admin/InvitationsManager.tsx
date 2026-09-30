@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useMemo, useRef, useState, useTransition } from "react"
+import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
+import { remindInvitedRecap } from "@/lib/action-recap"
 import { useRouter } from "next/navigation"
 import ModalShell from "./ModalShell"
 
@@ -40,6 +42,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
   const [, startTransition] = useTransition()
   const [reminding, setReminding] = useState(false)
   const [remindResult, setRemindResult] = useState<string | null>(null)
+  const [confirmingRemind, setConfirmingRemind] = useState(false)
   const [testEmail, setTestEmail] = useState("")
   const [testState, setTestState] = useState<"idle" | "sending" | "sent" | "error">("idle")
   const [showTest, setShowTest] = useState(false)
@@ -52,23 +55,32 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
     startTransition(() => router.refresh())
   }
 
-  async function remindNonRegistered() {
-    if (!confirm(`Envoyer une relance aux ${noAnswer} membres invités sans réponse ?`)) return
+  function remindNonRegistered() {
+    if (noAnswer === 0) return
+    setConfirmingRemind(true)
+  }
+
+  async function runRemind() {
     setReminding(true)
     setRemindResult(null)
     const res = await fetch(`/api/admin/events/${eventId}/invitations/remind`, { method: "POST" })
     setReminding(false)
     if (!res.ok) {
+      setConfirmingRemind(false)
       setRemindResult("Erreur lors de l'envoi des relances")
       return
     }
     const data = await res.json()
+    setConfirmingRemind(false)
     setRemindResult(`${data.sent} relance${data.sent > 1 ? "s" : ""} envoyée${data.sent > 1 ? "s" : ""}`)
     refresh()
   }
 
   return (
     <div className="space-y-5">
+      {confirmingRemind && (
+        <ConfirmActionModal recap={remindInvitedRecap({ people: noAnswer })} busy={reminding} onConfirm={() => void runRemind()} onCancel={() => setConfirmingRemind(false)} />
+      )}
       <div className="grid grid-cols-3 gap-3">
         <StatCard label="Invités" value={total} />
         <StatCard label="Inscrits" value={registered} positive={registered > 0} />
@@ -91,7 +103,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
             {reminding ? "Envoi…" : `Relancer les ${noAnswer} sans réponse`}
           </button>
         )}
-        {remindResult && <span className="text-sm text-gray-600 self-center">{remindResult}</span>}
+        <span role={remindResult?.startsWith("Erreur") ? "alert" : "status"} className={`text-sm self-center ${remindResult?.startsWith("Erreur") ? "text-red-700" : "text-gray-600"}`}>{remindResult ?? ""}</span>
         <button
           onClick={() => setShowTest((v) => !v)}
           className="text-xs text-gray-500 hover:text-gray-700 ml-auto self-center"

@@ -20,7 +20,7 @@ import ReplayView from "./event-log/ReplayView"
 import StoryView from "./event-log/StoryView"
 import TabButton from "./event-log/TabButton"
 
-export default function EventLogExplorer({ eventId }: { eventId: string }) {
+export default function EventLogExplorer({ eventId, initialSince = "" }: { eventId: string; initialSince?: string }) {
   const [tab, setTab] = useState<Tab>("explore")
   const [entries, setEntries] = useState<EventLogEntry[]>([])
   const [shiftLabels, setShiftLabels] = useState<Record<string, ShiftLabel>>({})
@@ -32,7 +32,7 @@ export default function EventLogExplorer({ eventId }: { eventId: string }) {
   const [entityType, setEntityType] = useState("")
   const [actorType, setActorType] = useState("")
   const [action, setAction] = useState("")
-  const [since, setSince] = useState("")
+  const [since, setSince] = useState(initialSince)
   const [until, setUntil] = useState("")
 
   // The entity scoped into "Rejouer" / "Récit" from a list row — Replay/Story stay reachable

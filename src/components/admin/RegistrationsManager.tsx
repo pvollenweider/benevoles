@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import Link from "next/link"
+import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
+import { bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, logLinkFor, type ActionRecap } from "@/lib/action-recap"
 import { describeBulkFailure } from "@/lib/form-errors"
 import { useState, useMemo, useRef } from "react"
 import StatusBadge from "./StatusBadge"
@@ -77,6 +79,10 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   const [bulkBusy, setBulkBusy] = useState(false)
   // The last failed bulk action, so « Réessayer » repeats it on the selection that was kept (#375).
   const [retry, setRetry] = useState<(() => void) | null>(null)
+  // A sensitive action waits for its confirmation (#379): the recap of what it does, then run.
+  const [pending, setPending] = useState<{ recap: ActionRecap; run: () => Promise<void> } | null>(null)
+  // Where the last action's entries are in the event log.
+  const [lastLogLink, setLastLogLink] = useState<string | null>(null)
 
   const uniqueRoles = [...new Set(shifts.map(s => s.roleName))]
   const visibleShifts = roleFilter ? shifts.filter(s => s.roleName === roleFilter) : shifts
@@ -189,9 +195,11 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     const targets = present ? selectedToCheckIn : selectedToUndo
     if (targets.length === 0) return
     setBulkBusy(true)
+    const startedAt = new Date()
     const result = await runBulk(present ? "check_in" : "undo_check_in", targets.map((r) => r.id), () => handlePresence(present))
     setBulkBusy(false)
     if (!result) return
+    setLastLogLink(logLinkFor(eventId, startedAt))
     const changed = new Set(result.changedIds ?? [])
     const at = new Date().toISOString()
     setRegistrations((prev) => prev.map((r) => (changed.has(r.id) ? { ...r, checkedInAt: present ? at : null } : r)))
@@ -206,12 +214,21 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     })
   }
 
-  async function handleBulkCancel() {
+  function handleBulkCancel() {
     if (selectedActiveRegs.length === 0) return
-    if (!confirm(`Retirer ${selectedActiveRegs.length} bénévole${selectedActiveRegs.length > 1 ? "s" : ""} de leur créneau ?`)) return
+    const shiftIds = new Set(selectedActiveRegs.map((r) => r.shift.id))
+    const waitlisted = registrations.filter((r) => r.status !== "active" && shiftIds.has(r.shift.id)).length
+    setPending({
+      recap: bulkCancelRecap({ people: selectedActiveRegs.length, withEmail: selectedActiveRegs.filter((r) => r.volunteer.email).length, waitlisted: Math.min(waitlisted, selectedActiveRegs.length) }),
+      run: runBulkCancel,
+    })
+  }
+
+  async function runBulkCancel() {
+    const startedAt = new Date()
     setBulkBusy(true)
-    const result = await runBulk("cancel", selectedActiveRegs.map((r) => r.id), () => handleBulkCancel())
-    if (!result) { setBulkBusy(false); return }
+    const result = await runBulk("cancel", selectedActiveRegs.map((r) => r.id), () => runBulkCancel())
+    if (!result) { setBulkBusy(false); setPending(null); return }
     const cancelledIds = new Set(result.cancelledIds ?? [])
     setRegistrations((prev) => prev.filter((r) => !cancelledIds.has(r.id)))
     setSelectedIds((prev) => {
@@ -220,24 +237,33 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       return next
     })
     setBulkBusy(false)
+    setPending(null)
+    setLastLogLink(logLinkFor(eventId, startedAt))
     const failed = selectedActiveRegs.length - cancelledIds.size
     setLeaderAnnouncement(cancelAnnouncement(cancelledIds.size, failed))
   }
 
-  async function handleBulkMakeLeader() {
+  function handleBulkMakeLeader() {
     if (selectedRegs.length === 0) return
     const withEmail = selectedRegs.filter((r) => r.volunteer.email)
-    const withoutEmail = selectedRegs.length - withEmail.length
     if (withEmail.length === 0) return
-    if (!confirm(`Rendre ${withEmail.length} bénévole${withEmail.length > 1 ? "s" : ""} responsable de leur poste respectif ?${withoutEmail > 0 ? ` (${withoutEmail} ignoré${withoutEmail > 1 ? "s" : ""}, pas d'email)` : ""}`)) return
+    setPending({ recap: bulkLeaderRecap({ people: withEmail.length, withoutEmail: selectedRegs.length - withEmail.length }), run: runBulkMakeLeader })
+  }
+
+  async function runBulkMakeLeader() {
+    const withEmail = selectedRegs.filter((r) => r.volunteer.email)
+    const withoutEmail = selectedRegs.length - withEmail.length
+    const startedAt = new Date()
     setBulkBusy(true)
-    const result = await runBulk("make_leader", withEmail.map((r) => r.id), () => handleBulkMakeLeader())
+    const result = await runBulk("make_leader", withEmail.map((r) => r.id), () => runBulkMakeLeader())
     setBulkBusy(false)
-    if (!result) return
+    if (!result) { setPending(null); return }
     // Already leader of that role counts as done from the admin's point of view.
     const succeeded = result.done + (result.alreadyLeader ?? 0)
     const failed = 0
     setSelectedIds(new Set())
+    setPending(null)
+    setLastLogLink(logLinkFor(eventId, startedAt))
     setLeaderAnnouncement(leaderAddedAnnouncement(succeeded, failed, withoutEmail))
   }
 
@@ -250,18 +276,26 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     handleBulkMakeLeader()
   }
 
-  async function handleBulkResendLink() {
+  function handleBulkResendLink() {
     const resendable = selectedRegs.filter((r) => r.status === "active" && r.volunteer.email)
     if (resendable.length === 0) return
-    if (!confirm(`Renvoyer le lien de gestion à ${resendable.length} bénévole${resendable.length > 1 ? "s" : ""} ?`)) return
+    const people = new Set(resendable.map((r) => r.volunteer.email)).size
+    setPending({ recap: bulkResendRecap({ people }), run: runBulkResendLink })
+  }
+
+  async function runBulkResendLink() {
+    const resendable = selectedRegs.filter((r) => r.status === "active" && r.volunteer.email)
+    const startedAt = new Date()
     setBulkBusy(true)
-    const result = await runBulk("resend_link", resendable.map((r) => r.id), () => handleBulkResendLink())
+    const result = await runBulk("resend_link", resendable.map((r) => r.id), () => runBulkResendLink())
     setBulkBusy(false)
-    if (!result) return
+    if (!result) { setPending(null); return }
     // One email per volunteer, even with several of their rows selected.
     const succeeded = result.done
     const failed = result.failed ?? 0
     setSelectedIds(new Set())
+    setPending(null)
+    setLastLogLink(logLinkFor(eventId, startedAt))
     setLeaderAnnouncement(resendAnnouncement(succeeded, failed))
   }
 
@@ -314,7 +348,16 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
 
   return (
     <div className="space-y-4">
-      <div role="status" aria-live="polite" className="sr-only">{leaderAnnouncement}</div>
+      {pending && (
+        <ConfirmActionModal recap={pending.recap} busy={bulkBusy} onConfirm={() => void pending.run()} onCancel={() => setPending(null)} />
+      )}
+      {/* The one live region for outcomes: visible when there is something to say, empty otherwise. */}
+      <p role="status" aria-live="polite" className={leaderAnnouncement ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-1" : "sr-only"}>
+        {leaderAnnouncement && <span>{leaderAnnouncement}</span>}
+        {leaderAnnouncement && lastLogLink && (
+          <Link href={lastLogLink} className="font-medium text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Voir cette action dans le journal</Link>
+        )}
+      </p>
       {bulkError && (
         <div role="alert" aria-busy={bulkBusy || undefined} className="text-sm text-red-800 bg-red-50 border border-red-200 rounded-xl px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-1">
           <span>{bulkError}</span>
