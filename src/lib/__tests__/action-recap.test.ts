@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, logLinkFor, remindInvitedRecap } from "../action-recap"
+import { bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, logLinkFor, remindInvitedRecap, removeLeaderRecap } from "../action-recap"
 
 // Confirmation before sensitive actions (#379).
 describe("action recaps", () => {
@@ -21,6 +21,11 @@ describe("action recaps", () => {
     expect(bulkLeaderRecap({ people: 1, withoutEmail: 0 }).lines).toHaveLength(3)
     expect(bulkResendRecap({ people: 4 }).title).toBe("Renvoyer leur lien personnel à 4 bénévoles ?")
     expect(remindInvitedRecap({ people: 1 }).lines[0]).toBe("1 email de relance envoyé.")
+  })
+
+  it("member deactivation and leader removal", () => {
+    expect(deactivateMemberRecap("Zoé Roy")).toMatchObject({ title: "Désactiver Zoé Roy ?", danger: true, confirmLabel: "Désactiver" })
+    expect(removeLeaderRecap("Léa", "Bar").title).toBe("Retirer Léa des responsables de « Bar » ?")
   })
 
   it("links the log filtered from the action's day", () => {

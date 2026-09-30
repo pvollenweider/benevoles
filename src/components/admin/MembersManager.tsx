@@ -3,7 +3,9 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useMemo, useState, useTransition } from "react"
+import { useEffect, useMemo, useRef, useState, useTransition } from "react"
+import { deactivateMemberRecap } from "@/lib/action-recap"
+import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useRouter } from "next/navigation"
 import { fmtHours } from "@/lib/gantt-utils"
 import { filterMembers, nextSort, sortAnnouncement as announceSort, sortMembers, type Member, type SortCol, type SortDir } from "@/lib/members-list"
@@ -52,14 +54,52 @@ export default function MembersManager({ initialMembers, allTags, initialSearch 
     startTransition(() => router.refresh())
   }
 
-  async function deactivate(id: string, name: string) {
-    if (!confirm(`Désactiver ${name} ?`)) return
-    const res = await fetch(`/api/admin/members/${id}`, { method: "DELETE" })
-    if (res.ok) refresh()
+  const [pendingDeactivate, setPendingDeactivate] = useState<{ id: string; name: string } | null>(null)
+  const [deactivating, setDeactivating] = useState(false)
+  const [actionMessage, setActionMessage] = useState<{ kind: "ok" | "error"; text: string } | null>(null)
+  const actionRef = useRef<HTMLParagraphElement>(null)
+
+  // The row's « Désactiver » button is gone after a refresh: park the focus on the outcome line.
+  useEffect(() => {
+    if (!pendingDeactivate && actionMessage) actionRef.current?.focus()
+  }, [pendingDeactivate, actionMessage])
+
+  function deactivate(id: string, name: string) {
+    setPendingDeactivate({ id, name })
+  }
+
+  async function runDeactivate(target: { id: string; name: string }) {
+    setDeactivating(true)
+    try {
+      const res = await fetch(`/api/admin/members/${target.id}`, { method: "DELETE" })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setActionMessage({ kind: "error", text: typeof data?.error === "string" ? data.error : "La désactivation n'a pas abouti. Réessayez." })
+        return
+      }
+      setActionMessage({ kind: "ok", text: `${target.name} désactivé·e.` })
+      refresh()
+    } catch {
+      setActionMessage({ kind: "error", text: "Connexion impossible : rien n'a changé. Réessayez." })
+    } finally {
+      setDeactivating(false)
+      setPendingDeactivate(null)
+    }
   }
 
   return (
     <div className="space-y-5">
+      {pendingDeactivate && (
+        <ConfirmActionModal recap={deactivateMemberRecap(pendingDeactivate.name)} busy={deactivating} onConfirm={() => void runDeactivate(pendingDeactivate)} onCancel={() => setPendingDeactivate(null)} />
+      )}
+      <p
+        ref={actionRef}
+        tabIndex={-1}
+        role={actionMessage?.kind === "error" ? "alert" : "status"}
+        className={actionMessage ? `text-sm rounded-xl px-3 py-2 border focus:outline-none ${actionMessage.kind === "error" ? "text-red-800 bg-red-50 border-red-200" : "text-gray-800 bg-green-50 border-green-200"}` : "sr-only"}
+      >
+        {actionMessage?.text ?? ""}
+      </p>
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-xl font-bold text-gray-900">Membres</h1>
