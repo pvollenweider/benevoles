@@ -4,6 +4,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useState, useRef, useCallback, useEffect } from "react"
+import { announce } from "@/lib/announce"
+import { flushSync } from "react-dom"
+import { dayLabel, deleteShiftRecap, shiftWhen } from "@/lib/action-recap"
+import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
+import { requestJson } from "@/lib/use-submit"
 import { getBarClasses } from "@/lib/roles"
 import { toMin, toMinEnd, fromMin, fmt, hourLabel, type GanttShow } from "@/lib/gantt-utils"
 import {
@@ -56,7 +61,11 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
   const [resize,   setResize]   = useState<Resize | null>(null)
   const [selected, setSelected] = useState<string | null>(null)
   const [anchor,   setAnchor]   = useState<{ x: number; y: number; w: number } | null>(null)
-  const [toast,    setToast]    = useState<string | null>(null)
+  const [toast,    setToast]    = useState<{ text: string; kind: "success" | "error" } | null>(null)
+  const [announcement, setAnnouncement] = useState("")
+  const [pendingDelete, setPendingDelete] = useState<AdminShift | null>(null)
+  const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
 
   const visible = shifts
     .filter(s => s.status !== "cancelled")
@@ -118,9 +127,11 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
     }
   }, [draft, resize, xToMin, shifts, dayStart, dayEnd])
 
-  const showToast = useCallback((msg: string) => {
-    setToast(msg)
-    setTimeout(() => setToast(null), 2000)
+  // Successes fade; errors stay until the next outcome. Both are voiced through the status region.
+  const showToast = useCallback((text: string, kind: "success" | "error" = "success") => {
+    setToast({ text, kind })
+    announce(setAnnouncement, text)
+    if (kind === "success") setTimeout(() => setToast((t) => (t?.text === text ? null : t)), 2500)
   }, [])
 
   const onMouseUp = useCallback(async () => {
@@ -128,19 +139,19 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
       const overlay = resizeOverlay[resize.shiftId]
       const orig    = shifts.find(s => s.id === resize.shiftId)
       if (orig && overlay) {
-        const res = await fetch(`/api/admin/shifts/${resize.shiftId}`, {
+        const outcome = await requestJson(() => fetch(`/api/admin/shifts/${resize.shiftId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ startTime: overlay.startTime, endTime: overlay.endTime }),
-        })
-        if (res.ok) { onUpdated({ ...orig, ...overlay }); showToast("Horaires mis à jour") }
+        }), "Horaires non enregistrés.")
+        if (outcome.ok) { onUpdated({ ...orig, ...overlay }); showToast("Horaires mis à jour") } else showToast(outcome.error, "error")
       }
       setResizeOverlay({})
       setResize(null)
       return
     }
     if (draft && draft.endMin - draft.startMin >= MIN_DUR) {
-      const res = await fetch("/api/admin/shifts", {
+      const outcome = await requestJson<AdminShift & { date: string }>(() => fetch("/api/admin/shifts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -152,9 +163,10 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
           endTime:   fromMin(draft.endMin),
           capacity:  2,
         }),
-      })
-      if (res.ok) {
-        const data = await res.json()
+      }), "Créneau non créé.")
+      if (!outcome.ok) showToast(outcome.error, "error")
+      if (outcome.ok) {
+        const data = outcome.data
         const created: AdminShift = {
           ...data,
           date: (data.date as string).split("T")[0],
@@ -190,36 +202,56 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
     const orig = shifts.find(s => s.id === id)
     if (!orig) return
     const patch = { ...data, label: data.label?.trim() || orig.roleName }
-    const res = await fetch(`/api/admin/shifts/${id}`, {
+    const outcome = await requestJson(() => fetch(`/api/admin/shifts/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(patch),
-    })
-    if (res.ok) { onUpdated({ ...orig, ...patch }); showToast("Enregistré") }
+    }), "Modification non enregistrée.")
+    if (outcome.ok) { onUpdated({ ...orig, ...patch }); showToast("Enregistré") } else showToast(outcome.error, "error")
   }
 
-  async function handleDelete(id: string) {
-    setSelected(null)
-    const res = await fetch(`/api/admin/shifts/${id}`, { method: "DELETE" })
-    if (res.ok) { onDeleted(id); containerRef.current?.focus() }
+  // Deletion asks first (#379): the popover closes, focus goes back to the bar so that the
+  // modal has a real opener to return to on Cancel, then the recap modal takes over.
+  function handleDelete(id: string) {
+    const shift = shifts.find(s => s.id === id)
+    if (!shift) return
+    flushSync(() => setSelected(null))
+    document.getElementById(`shift-bar-${id}`)?.focus()
+    setDeleteError(null)
+    setPendingDelete(shift)
+  }
+
+  async function runDelete(shift: AdminShift) {
+    setDeleting(true)
+    setDeleteError(null)
+    const outcome = await requestJson(() => fetch(`/api/admin/shifts/${shift.id}`, { method: "DELETE" }), "Suppression impossible.")
+    setDeleting(false)
+    if (!outcome.ok) { setDeleteError(outcome.error); return }
+    // The bar that opened the modal disappears with the shift: land on a neighbour, else the day.
+    const siblings = shifts.filter(s => s.roleName === shift.roleName && s.id !== shift.id)
+    const next = siblings.find(s => toMin(s.startTime) >= toMin(shift.startTime)) ?? siblings[siblings.length - 1]
+    flushSync(() => { setPendingDelete(null); onDeleted(shift.id) })
+    showToast("Créneau supprimé")
+    const target = next ? document.getElementById(`shift-bar-${next.id}`) : null
+    ;(target ?? containerRef.current)?.focus()
   }
 
   // Quick edits (#398): a copy right after the shift, and one capacity for the whole role.
   async function handleDuplicate(id: string) {
-    const res = await fetch(`/api/admin/shifts/${id}/duplicate`, { method: "POST" })
-    if (!res.ok) { showToast("Duplication impossible"); return }
-    const created = await res.json()
+    const outcome = await requestJson<AdminShift & { date: string }>(() => fetch(`/api/admin/shifts/${id}/duplicate`, { method: "POST" }), "Duplication impossible.")
+    if (!outcome.ok) { showToast(outcome.error); return }
+    const created = outcome.data
     onCreated({ ...created, date: created.date.split("T")[0], registrationCount: 0 })
     showToast("Créneau dupliqué")
   }
 
   async function handleApplyCapacity(roleName: string, capacity: number) {
-    const res = await fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(roleName)}`, {
+    const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(roleName)}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ capacity }),
-    })
-    if (!res.ok) { showToast("Capacité non appliquée"); return }
+    }), "Capacité non appliquée.")
+    if (!outcome.ok) { showToast(outcome.error); return }
     for (const s of shifts) {
       if (s.roleName === roleName && s.status !== "cancelled") onUpdated({ ...s, capacity: Math.max(capacity, s.registrationCount) })
     }
@@ -237,6 +269,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
     <>
       <div
         ref={containerRef} tabIndex={-1}
+        role="region" aria-label={`Planning du ${dayLabel(date)}`}
         className="overflow-x-auto select-none rounded-xl border border-gray-100 bg-white"
       >
         <div style={{ width: totalW + 24, paddingTop: 10, paddingBottom: 0, paddingLeft: 12, paddingRight: 12 }}>
@@ -458,7 +491,18 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
         />
       )}
 
-      {toast && <Toast message={toast} />}
+      {pendingDelete && (
+        <ConfirmActionModal
+          recap={deleteShiftRecap({ name: pendingDelete.label && pendingDelete.label !== pendingDelete.roleName ? `${pendingDelete.roleName} · ${pendingDelete.label}` : pendingDelete.roleName, when: shiftWhen(date, fmt(pendingDelete.startTime), fmt(pendingDelete.endTime)), registered: pendingDelete.registrationCount })}
+          busy={deleting}
+          error={deleteError}
+          onConfirm={() => void runDelete(pendingDelete)}
+          onCancel={() => setPendingDelete(null)}
+        />
+      )}
+
+      {toast && <Toast message={toast.text} kind={toast.kind} />}
+      <div role="status" className="sr-only">{announcement}</div>
     </>
   )
 }

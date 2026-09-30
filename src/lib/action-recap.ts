@@ -64,6 +64,32 @@ export function deactivateMemberRecap(name: string): ActionRecap {
     title: `Désactiver ${name} ?`,
     lines: ["La personne disparaît de la liste des membres actifs et des filtres ; ses inscriptions passées restent.", "Aucun email n'est envoyé. Un membre désactivé peut être réactivé depuis sa fiche (cochez « Inclure inactifs » pour la retrouver).", LOGGED_ORG],
     confirmLabel: "Désactiver",
+
+    danger: true,
+  }
+}
+
+/** "Samedi 4 juillet, 18:00–23:00": the moment of a shift, for a recap. */
+export function shiftWhen(date: string, startTime: string, endTime: string): string {
+  return `${dayLabel(date)}, ${startTime}–${endTime}`
+}
+
+/** "Samedi 4 juillet" from an ISO date. */
+export function dayLabel(date: string): string {
+  const day = new Date(`${date}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" })
+  return `${day.charAt(0).toUpperCase()}${day.slice(1)}`
+}
+
+export function deleteShiftRecap(i: { name: string; when: string; registered: number }): ActionRecap {
+  return {
+    title: `Supprimer le créneau « ${i.name} » ?`,
+    lines: [
+      `${i.when}.`,
+      i.registered > 0 ? `${n(i.registered, "bénévole inscrit", "bénévoles inscrits")} : ${i.registered > 1 ? "leurs inscriptions sont annulées et ils sont" : "son inscription est annulée et il est"} prévenu${i.registered > 1 ? "s" : ""} par email.` : "Personne n'est inscrit : aucun email.",
+      "Si c'était le dernier créneau d'un événement publié, l'événement repasse en brouillon.",
+      LOGGED,
+    ],
+    confirmLabel: "Supprimer",
     danger: true,
   }
 }
@@ -73,6 +99,21 @@ export function removeLeaderRecap(name: string, roleName: string): ActionRecap {
     title: `Retirer ${name} des responsables de « ${roleName} » ?`,
     lines: ["Son lien de responsable cesse de fonctionner tout de suite.", "Aucun email n'est envoyé. Si la personne n'est plus responsable d'aucun poste, son tag « responsable » lui est retiré.", LOGGED],
     confirmLabel: "Retirer",
+
+    danger: true,
+  }
+}
+
+export function deleteRoleRecap(i: { role: string; shifts: number; registered: number }): ActionRecap {
+  return {
+    title: `Supprimer le poste « ${i.role} » ?`,
+    lines: [
+      `${n(i.shifts, "créneau supprimé", "créneaux supprimés")}.`,
+      i.registered > 0 ? `${n(i.registered, "bénévole inscrit", "bénévoles inscrits")} : ${i.registered > 1 ? "leurs inscriptions sont annulées et ils sont prévenus" : "son inscription est annulée et il est prévenu"} par email.` : "Personne n'est inscrit : aucun email.",
+      "Si c'étaient les derniers créneaux d'un événement publié, l'événement repasse en brouillon.",
+      LOGGED,
+    ],
+    confirmLabel: "Supprimer",
     danger: true,
   }
 }

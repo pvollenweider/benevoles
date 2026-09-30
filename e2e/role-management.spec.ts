@@ -116,8 +116,10 @@ test.describe("role management", () => {
     await expect(page.getByRole("button", { name: "Renommer le poste Buvette" })).toBeVisible()
     await expect(page.getByRole("button", { name: "Renommer le poste Bar" })).not.toBeVisible()
 
-    page.once("dialog", (d) => d.accept())
     await page.getByRole("button", { name: "Supprimer le poste Accueil" }).click()
+    const confirmDialog = page.getByRole("dialog", { name: "Supprimer le poste « Accueil » ?" })
+    await expect(confirmDialog).toBeVisible()
+    await confirmDialog.getByRole("button", { name: "Supprimer" }).click()
     await expect(page.getByRole("button", { name: "Renommer le poste Accueil" })).not.toBeVisible()
 
     const detail = await (await page.request.get(`/api/admin/events/${event.id}`)).json()
