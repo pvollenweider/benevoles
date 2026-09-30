@@ -45,7 +45,7 @@ export default function PrivacyPage() {
             <td>Nom, adresse e-mail</td>
             <td>Création et gestion du compte</td>
             <td>Exécution du contrat</td>
-            <td>Durée du compte + {RETENTION_DAYS.deactivatedAdmin} jours</td>
+            <td>Durée du compte ; effacé avec l'organisation {RETENTION_DAYS.deactivatedOrganization} jours après sa désactivation</td>
           </tr>
           <tr>
             <td>Mot de passe (hashé bcrypt)</td>
