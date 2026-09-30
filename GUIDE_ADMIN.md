@@ -309,7 +309,7 @@ Aucune action directement sur une ligne : cocher une ou plusieurs inscriptions (
 
 - **Rendre responsable** de leur poste. Avec une seule ligne sélectionnée, une modale s'ouvre pour choisir le poste (si le bénévole a plusieurs inscriptions) et ajuster nom/email avant l'envoi. Avec plusieurs lignes, chaque bénévole est directement rattaché au poste de son propre créneau, sans étape intermédiaire.
 - **Renvoyer le lien** : réenvoie par email le lien personnel de gestion (`/my/[token]`) de chaque bénévole sélectionné — utile s'il l'a perdu ou supprimé par erreur. Le lien renvoyé donne accès à toutes les inscriptions actives du bénévole pour cet événement, pas seulement au créneau de la ligne.
-- **Retirer de leur créneau** : annule chaque inscription sélectionnée.
+- **Retirer de leur créneau** : annule chaque inscription sélectionnée. Les lignes quittent la liste tout de suite, mais rien n'est enregistré ni envoyé pendant 10 secondes : **Annuler le retrait** les remet en place (aucun email ne part), **Retirer maintenant** n'attend pas. Le compte à rebours s'arrête tant que le curseur ou le focus clavier est sur cette barre. Quitter la page valide le retrait ; confirmer un second retrait pendant l'attente le regroupe avec le premier et relance les 10 secondes.
 
 Chacune de ces actions demande d'abord une confirmation qui récapitule ce qui va se passer : personnes concernées, emails envoyés, places proposées à la liste d'attente, et le fait que l'action est journalisée. Une fois l'action faite, **Voir dans le journal** ouvre le journal de l'événement à la date du jour pour la retrouver (lien « Voir cette action dans le journal »).
 
