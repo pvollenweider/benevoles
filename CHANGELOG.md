@@ -35,6 +35,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Guide de déploiement** : la section sur les limites des sauvegardes décrit désormais la surveillance en place (signaux de vie, page de santé, test de restauration suivi) et ce qui reste manuel (aucune alerte envoyée d'elle-même).
 - **Liste avec téléphones** : dans la colonne Créneaux, chaque jour n'est écrit qu'une fois, suivi des horaires de chacun de ses créneaux.
 - **Rapports imprimables** : moins d'encre. Dans les plannings, chaque créneau est une case blanche à bordure épaisse au lieu d'un bloc noir ; les en-têtes de tableaux (feuille de présence, liste avec téléphones, détails) sont en gras sur un trait plutôt que sur un bandeau noir.
 - **Formulaires des membres** (fiche membre, import, désactivation, responsables de secteur) : même comportement que les formulaires de connexion : erreurs à côté du champ, message conservé, pas de double envoi, panne de réseau expliquée ; la désactivation d'un membre et le retrait d'un responsable demandent une confirmation qui dit ce qui va se passer.
