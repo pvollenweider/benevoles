@@ -366,7 +366,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
               href={preview ? preview.adminEventUrl : "/"}
               className={`text-sm rounded focus-visible:outline-2 focus-visible:outline-offset-2 ${accent ? `underline underline-offset-2 ${accent.focus}` : "text-blue-600 focus-visible:outline-blue-600"}`}
             >
-              <span aria-hidden="true">← </span>{preview ? "Retour à l'événement" : "Retour"}
+              <span aria-hidden="true">← </span>Retour
             </Link>
             {myRegistrations.length > 0 && (
               <div className="flex items-center gap-2">
