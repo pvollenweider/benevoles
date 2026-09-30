@@ -33,6 +33,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Après une erreur** : sur le formulaire d'inscription, une erreur garde tout ce qui a été saisi et dit de quoi il s'agit (champ à corriger, créneau plus disponible, connexion interrompue, erreur du serveur), avec **Réessayer** quand c'est utile et l'assurance qu'un second envoi ne crée pas de doublon ; dans les inscriptions d'un événement, une action groupée qui échoue garde la sélection, explique si quelque chose a pu être appliqué et propose **Réessayer**.
 - **Récapitulatif avant de confirmer** : sur la page d'inscription, le récapitulatif reprend les créneaux choisis dans l'ordre avec le jour et les heures (« fin le lendemain » quand un créneau passe minuit), ce qui les sépare (enchaînés, pause, chevauchement signalé avant l'envoi), inscription ferme ou liste d'attente, âge minimum, et la liste exacte des données transmises à l'organisation.
 - **Liste d'attente expliquée** : la même explication en cinq points (inscription pas encore confirmée, ordre, email avec 24 heures pour prendre la place, comment accepter, ce qui se passe sans réponse) apparaît dans le récapitulatif avant confirmation, sur la page de succès, dans l'email et sur la page personnelle, qui montre désormais aussi les inscriptions en liste d'attente avec leur position et, quand une place est proposée, le délai et le lien pour la prendre.
 - **Accessibilité** : un lien « Aller au contenu », visible dès qu'on le tabule, ouvre chaque page de l'administration et saute la barre du haut.

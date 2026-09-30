@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useEffect, useRef, useState, useMemo } from "react"
+import { describeSignupFailure, type Failure } from "@/lib/form-errors"
 import SignupRecap from "@/components/public/SignupRecap"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
@@ -96,6 +97,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   const [step, setStep] = useState<"select" | "form">("select")
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // A structured failure of the sign-up itself (#375): kind, what to do, whether to retry.
+  const [failure, setFailure] = useState<Failure | null>(null)
+  const failureRef = useRef<HTMLDivElement>(null)
   const [charterAccepted, setCharterAccepted] = useState(false)
   const [showCharter, setShowCharter] = useState(false)
   const charterTriggerRef = useRef<HTMLButtonElement>(null)
@@ -206,7 +210,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
       requirePhone: event?.requirePhone ?? false,
       ageGatedShifts: ageGatedSelectedShifts,
     })
-    if (invalid) { setError(invalid); return }
+    if (invalid) { setFailure(null); setError(invalid); return }
+    if (submitting) return
 
     setSubmitting(true)
     setError(null)
@@ -230,30 +235,42 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
       return
     }
 
-    const res = await fetch("/api/public/registrations", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        eventId: event!.id,
-        shiftIds: Array.from(selectedShifts).filter((id) => !myShiftIds.has(id)),
-        ...form,
-        inviteToken: inviteToken ?? undefined,
-      }),
-    })
+    setFailure(null)
+    let res: Response
+    try {
+      res = await fetch("/api/public/registrations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          eventId: event!.id,
+          shiftIds: Array.from(selectedShifts).filter((id) => !myShiftIds.has(id)),
+          ...form,
+          inviteToken: inviteToken ?? undefined,
+        }),
+      })
+    } catch {
+      // Everything typed stays in place; retrying is safe, the server re-sends the link instead of duplicating.
+      setFailure(describeSignupFailure({ network: true }))
+      setSubmitting(false)
+      requestAnimationFrame(() => failureRef.current?.focus())
+      return
+    }
 
     let data: Record<string, string> = {}
     try {
       data = await res.json()
     } catch {
-      setError("Une erreur inattendue est survenue. Veuillez réessayer.")
+      setFailure(describeSignupFailure({ status: res.status, network: !res.ok }))
       setSubmitting(false)
+      requestAnimationFrame(() => failureRef.current?.focus())
       return
     }
     setSubmitting(false)
 
     if (!res.ok) {
       // Errors never carry a management token (#285): the owner gets it by email instead.
-      setError(data.error ?? "Une erreur est survenue.")
+      setFailure(describeSignupFailure({ status: res.status, body: data }))
+      requestAnimationFrame(() => failureRef.current?.focus())
       return
     }
 
@@ -421,7 +438,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
             {error && (
               <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700 flex items-start gap-2">
                 <span className="flex-1">{error}</span>
-                <button onClick={() => setError(null)} aria-label="Fermer le message d'erreur" className="text-red-300 hover:text-red-500 flex-shrink-0"><span aria-hidden="true">✕</span></button>
+                <button onClick={() => setError(null)} aria-label="Fermer le message d'erreur" className="text-red-700 hover:text-red-900 flex-shrink-0"><span aria-hidden="true">✕</span></button>
               </div>
             )}
 
@@ -667,12 +684,25 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                     {error}
                   </div>
                 )}
+                {failure && (
+                  // Focused when it appears: the submit button lost the focus while the request ran.
+                  <div ref={failureRef} tabIndex={-1} role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-800 space-y-1 focus:outline-none">
+                    <p className="font-semibold">{failure.title}</p>
+                    <p>{failure.message}</p>
+                    <p className="text-red-700">{failure.hint}</p>
+                    {failure.kind === "conflict" && (
+                      <button type="button" onClick={() => { setFailure(null); setStep("select") }} className="mt-1 text-sm font-medium text-red-800 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700">
+                        Revenir au planning
+                      </button>
+                    )}
+                  </div>
+                )}
 
                 <button
                   ref={submitButtonRef}
                   type="submit"
-                  disabled={submitting}
-                  className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-50"
+                  aria-disabled={submitting || undefined}
+                  className={`w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold hover:bg-blue-700 active:scale-[0.98] transition-all ${submitting ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
                   {submitting ? "Envoi en cours…" : preview ? "Voir la confirmation (aperçu)" : "Confirmer mon inscription"}
                 </button>
