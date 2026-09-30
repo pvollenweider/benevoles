@@ -10,10 +10,11 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - Liste des événements publiés avec titre, dates et lieu
 - Accès direct à la page d'inscription de chaque événement
-- Page d'inscription aux couleurs de l'événement : l'organisateur choisit une couleur de la palette pour l'en-tête (contraste vérifié), ou garde l'en-tête blanc
-- Lien **Voir sur la carte** (OpenStreetMap) quand l'organisateur a renseigné les coordonnées du lieu ou du point de rendez-vous d'un créneau
 
 ### Page d'inscription (`/{orgSlug}/{eventSlug}`)
+
+- En-tête aux couleurs de l'événement (`Event.accentColorKey`, `src/lib/event-accent.ts`) : l'organisateur choisit une des 16 couleurs de la palette des postes (texte blanc, contraste AA vérifié), ou garde l'en-tête blanc ; jamais de couleur libre, pas de logo
+- Lien **Voir sur la carte** (OpenStreetMap, `src/lib/map-link.ts`) quand l'organisateur a renseigné les coordonnées du lieu ou du point de rendez-vous d'un créneau, repris dans les emails et sur la page personnelle ; coordonnées saisies ou collées depuis un lien de carte (OpenStreetMap, Google Maps, `geo:`), sans géocodage ni autocomplétion ; aucune requête vers la carte avant le clic
 
 #### Timeline Gantt
 
@@ -40,6 +41,14 @@ Liste exhaustive des fonctionnalités de l'application.
   - Nom affiché en haut de page, bouton « Quitter la session »
   - Créneaux existants chargés en vert, conflits mis en évidence automatiquement
 
+#### Règles d'inscription
+
+- **Ouverture et fermeture des inscriptions** (`src/lib/registration-window.ts`, #463) : `Event.registrationsOpen`, `registrationOpensAt`, `registrationClosesAt`, indépendants de la publication ; tant que les inscriptions ne sont pas ouvertes (ou après leur fermeture), le planning reste consultable et la page dit quand revenir à la place du formulaire ; l'API, la page publique et la liste d'attente appliquent la même règle ; les liens personnels restent valables
+- **Sur validation** (`Shift.requiresApproval`, #484) : sur ces créneaux, l'inscription devient une demande (`status: "requested"`) qui garde sa place (comptée comme occupée dans la capacité, les statistiques de l'événement et la vue de complétion) ; email `registration_requested` ; le récapitulatif, la page de succès (`src/lib/signup-outcome.ts`) et l'email disent que ce n'est pas encore une inscription confirmée ; décision par l'organisateur depuis les inscriptions
+- **Postes réservés** (`Shift.reservedTags`, `src/lib/role-reservation.ts`, #470) : un poste réservé aux membres portant une des étiquettes choisies (10 au plus, casse ignorée) ne se prend qu'avec le lien d'invitation d'un de ces membres, vérifié par le serveur ; sans ce lien, le poste reste visible, marqué « réservé à certains membres », sans afficher les étiquettes
+- **Limite par personne sur un poste** (`Shift.maxPerVolunteer`, `src/lib/role-limit.ts`, #466) : nombre maximum de créneaux d'un même poste par bénévole, en comptant ses inscriptions confirmées, proposées et en liste d'attente ; la plus petite valeur des créneaux du poste s'applique ; vérifiée par le serveur sous verrou et, par courtoisie, à la sélection ; l'ajout manuel par l'admin qui la dépasserait répond d'abord 409 avec un avertissement, puis passe si l'admin confirme (**Ajouter quand même**, `allowOverLimit`, noté `overRoleLimit` dans le journal)
+- **Questions aux bénévoles** (`EventQuestion`, `src/lib/event-questions.ts`, #483) : 5 questions au plus par événement (`/admin/events/[id]/questions`), texte court (réponse ≤ 200 caractères), oui / non, choix unique ou multiple (2 à 12 choix), obligatoires ou non, réordonnables ; réponses validées par le serveur ; une question qui a des réponses est archivée au lieu d'être supprimée, et son type ou ses choix utilisés ne changent plus ; réponses affichées dans les inscriptions, l'export des présences et l'archive JSON ; les réponses déjà enregistrées d'un bénévole ne sont remplacées qu'avec la preuve qu'il reçoit les emails de l'adresse (lien d'invitation)
+
 ### Formulaire d'inscription
 
 - Champs : prénom, nom, email, téléphone (optionnel, ou obligatoire si l'événement a l'option « Téléphone obligatoire à l'inscription » ; vérifié côté client et côté serveur ; le numéro saisi est enregistré avec l'inscription et affiché en priorité sur celui de la fiche du bénévole), commentaire (optionnel)
@@ -56,13 +65,14 @@ Liste exhaustive des fonctionnalités de l'application.
 - **Message de confirmation personnalisable** par l'admin, rédigé en Markdown (titres, gras, italique, listes, citations, code, tableaux, texte barré, liens automatiques), affiché sur la page de succès, sur `/my/[token]` et dans l'email
 - Page de gestion : liste de toutes les inscriptions actives du bénévole pour l'événement
 - Annulation individuelle d'un créneau depuis la page de gestion
-- **Confirmation des actions sensibles** (`src/lib/action-recap.ts`, `ConfirmActionModal`, #379) : récapitulatif (personnes, emails, conséquences, journalisation) avant retrait groupé, désignation de responsables, renvoi de liens et relance des invités ; lien « Voir dans le journal » (`/admin/events/[id]/log?since=YYYY-MM-DD`, le journal accepte `since` dans l'URL) après l'action ; l'annulation différée (« undo ») n'est pas incluse
-- **Formulaires unifiés** (#380, lot 1 « connexion et accès ») : hook `useSubmit` (`src/lib/use-submit.ts` : garde synchrone contre les doubles envois, try/catch/finally, `{ error }` → phrase française, `fail(message, champ)` qui annonce et met le focus) et `FormStatus` (`role="status"` + `role="alert"` toujours montés) ; appliqués à la connexion, mot de passe oublié, réinitialisation, activation d'un compte, invitation d'un administrateur (lot 1) et aux formulaires des membres : fiche, import, désactivation et responsables de secteur via `ConfirmActionModal` (lot 2) ; lots suivants : créneaux, événements et communication, réglages et super admin
+- **Formulaires unifiés** (#380) : hook `useSubmit` (`src/lib/use-submit.ts` : garde synchrone contre les doubles envois, try/catch/finally, `{ error }` → phrase française, `fail(message, champ)` qui annonce et met le focus) et `FormStatus` (`role="status"` + `role="alert"` toujours montés) ; utilisés par la connexion, le mot de passe oublié, la réinitialisation, l'activation d'un compte, l'équipe admin (`AdminsManager`), l'ajout et la fiche d'un membre, l'import de membres, les responsables de secteur (page dédiée et « Rendre responsable » depuis les inscriptions), les jalons, les pages personnalisées, les questions, les modèles de message, le renvoi des emails en échec d'un message et la création d'une organisation (super admin). Les formulaires de créneau (`ShiftsManager`), de série (`ShiftSeriesForm`), d'invitation (`InvitationsManager`) et de rappel manuel (`SendReminderButton`) n'utilisent ni le hook ni `FormStatus` : ils passent par `requestJson` du même module (même phrase française pour `{ error }` et pour une erreur réseau), avec leur propre indicateur d'envoi (bouton désactivé ou envoi ignoré tant que la requête est en cours, sans garde synchrone) et leurs propres zones `role="status"` / `role="alert"`
 - **Récupération après erreur** (`src/lib/form-errors.ts`, #375) : `describeSignupFailure` / `describeBulkFailure` classent la réponse (400 validation, 409 conflit, 429, réseau, 5xx) en titre, message du serveur, consigne, `retryable`, `maybeRecorded` ; le formulaire public garde la saisie, propose Réessayer ou Revenir au planning ; les actions groupées gardent la sélection et proposent Réessayer
-- **Récapitulatif avant confirmation** (`src/lib/signup-recap.ts`, #373) : créneaux triés avec jour et heures, « fin le lendemain » (`crossesMidnight`), écart entre créneaux consécutifs (chevauchement avec la même règle que le serveur, enchaîné, pause, autre jour), ferme ou liste d'attente, âge minimum, données transmises (téléphone si obligatoire ou saisi, date de naissance si âge minimum, commentaire si saisi)
+- **Récapitulatif avant confirmation** (`src/lib/signup-recap.ts`, #373) : créneaux triés avec jour et heures, « fin le lendemain » (`crossesMidnight`), écart entre créneaux consécutifs (chevauchement avec la même règle que le serveur, enchaîné, pause, autre jour), ferme, liste d'attente ou demande sur validation, âge minimum, données transmises (téléphone si obligatoire ou saisi, date de naissance si âge minimum, commentaire si saisi, réponses aux questions)
+- **Alerte de charge** (`src/lib/workload.ts`, #465), non bloquante : plus de 8 h dans une journée, ou plus de 6 h d'affilée sans pause d'au moins 30 min, en comptant les créneaux déjà pris ; heures réelles dans le fuseau de l'organisation (changement d'heure et créneaux après minuit compris) ; les mêmes situations sont signalées dans les inscriptions et le tableau de bord ; les chevauchements restent une règle bloquante à part
 - **Lien personnel expliqué** (#376) : `Registration.linkEmailedAt` posé à la confirmation, au renvoi depuis le formulaire, au renvoi admin et au renvoi depuis la page personnelle ; `POST /api/public/registrations/[token]/resend-link` (3 par heure et par bénévole, 10 par IP) ; `POST /api/public/registrations/link` avec `{ email }` (organisation de l'en-tête `x-org-slug` posé par le proxy, 5 par IP, réponse identique connue ou non, un email par événement à venir) ; encadré « Ton lien personnel » avec `mailto:` vers `EMAIL_REPLY_TO` quand défini ; page « Ce lien ne fonctionne pas » avec explications et formulaire
 - **Liste d'attente** : si un créneau est complet et que la liste d'attente est activée, le bénévole peut s'y inscrire (barre rayée cliquable avec sous-label « Complet · file d'attente ») ; quand une place se libère, la première personne en attente reçoit un email avec un lien de confirmation valable 24 h ; l'explication en cinq points (`src/lib/waitlist-copy.ts`, #374) figure dans le récapitulatif avant confirmation, la page de succès, l'email de liste d'attente et la page personnelle, qui liste aussi les inscriptions en attente (position) et proposées (délai, lien « Prendre la place »)
-- **Notifications push** : un bouton d'abonnement est proposé sur la page de succès et sur la page de gestion ; les rappels J-2, J-1 et Jour J sont alors aussi envoyés en push. Aucun push n'est envoyé si les clés VAPID ne sont pas configurées côté serveur ; les abonnements expirés sont supprimés automatiquement
+- **Ajouter à mon calendrier** (`GET /api/public/registrations/[token]/calendar`, `src/lib/ics.ts`, #480) : fichier iCalendar (RFC 5545) des créneaux confirmés, depuis la page personnelle ; heures calculées dans le fuseau de l'organisation et écrites en UTC ; identifiant stable par inscription, donc réimporter met l'entrée à jour au lieu de la dupliquer ; 30 téléchargements par heure et par adresse IP
+- **Notifications push** : un bouton d'abonnement est proposé sur la page de succès et sur la page de gestion ; les rappels J-2, J-1 et Jour J sont alors aussi envoyés en push, ainsi que les messages ciblés pour lesquels l'organisateur l'a demandé. L'abonnement (`POST /api/public/push`) exige le lien personnel d'une inscription active ; le désabonnement (`DELETE /api/public/push`) exige aussi le lien personnel (même d'une inscription annulée) et ne retire que l'abonnement de ce bénévole pour cet appareil ; 10 par heure et par adresse IP. Aucun push n'est envoyé si les clés VAPID ne sont pas configurées côté serveur ; les abonnements expirés sont supprimés automatiquement
 - Arrivée depuis un lien email : le token est stocké en `localStorage` — le bénévole est automatiquement reconnu s'il navigue vers la page de l'événement
 - Lien « Retour à l'accueil » pointe directement sur la page de l'événement
 
@@ -83,6 +93,12 @@ Liste exhaustive des fonctionnalités de l'application.
 ### Pages légales
 
 - Politique de confidentialité (`/legal/privacy`) et conditions d'utilisation (`/legal/terms`)
+
+### Fonctionnalités et accessibilité (`/fonctionnalites`, `/accessibilite`)
+
+- `/fonctionnalites` rend `FEATURES.md` (présentation publique, par besoins) ; `/accessibilite` rend `ACCESSIBILITE.md` (déclaration d'accessibilité : ce qui est testé, limites connues) ; pages déclarées dans `src/lib/doc-pages.ts` (métadonnées, navigation, sitemap), fichiers sources copiés dans l'image
+- Contrôles automatiques axe-core dans les tests E2E (`e2e/accessibility.spec.ts`)
+- **Sitemap du domaine principal** (`apexSitemap`) : page d'accueil de benevol.app et pages de contenu publiques, avec la date de modification de leur fichier source ; rien pour les hôtes de préproduction ou inconnus
 
 ### Documentation publique (`/doc`, `/doc/admin`, `/doc/benevole`)
 
@@ -108,24 +124,26 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - Chaque admin ne voit et ne peut modifier que les données de son organisation
 - Scoping automatique via un client Prisma étendu (`getOrgClient`) qui limite à l'organisation toutes les opérations (lectures, modifications, suppressions, créations) sur tous les modèles qui lui appartiennent ; l'import du client brut est interdit par ESLint dans le code admin, sauf exception justifiée
-- Middleware Next.js protège les routes `/admin/*` (authentification) et `/super-admin/*` (rôle `super_admin`)
+- Proxy Next.js (`src/proxy.ts`) protège les routes `/admin/*` (authentification) et `/super-admin/*` (rôle `super_admin`)
 
 ### Tableau de bord (`/admin/dashboard`)
 
 - **Premiers pas** (aussi en haut de `/admin/events`) : checklist de mise en place d'une nouvelle organisation, dans l'ordre (page publique et charte, fuseau horaire, premier événement, créneaux, publication, inscription de test), cochée automatiquement d'après les données ; disparaît une fois les étapes obligatoires faites, ou masquée pour toute l'organisation
-- **Ce qui demande votre attention** : situations à traiter sur les événements publiés, de la plus urgente à la moins urgente, avec un lien vers chacune (créneaux des 7 prochains jours pas complets, places de liste d'attente qui expirent dans les 12 h, jalons en retard, invitations non utilisées après 3 jours, postes sans responsable, événement qui commence dans la semaine, événement terminé à archiver)
+- **Ce qui demande votre attention** : situations à traiter sur les événements publiés, de la plus urgente à la moins urgente, avec un lien vers chacune (créneaux des 7 prochains jours pas complets, demandes sur validation à traiter, places de liste d'attente qui expirent dans les 12 h, jalons en retard, bénévoles à la charge élevée selon `src/lib/workload.ts`, personnes invitées depuis plus de 3 jours toujours sans créneau confirmé, postes sans responsable quand l'événement en a déjà, événement qui commence dans la semaine, événement terminé à archiver)
 - Compteurs : événements (publiés, à venir), bénévoles inscrits (et bénévoles uniques), taux de remplissage global
 - Répartition des membres : total, avec email, sans email (ne peuvent pas recevoir d'invitations)
 
 ### Réglages des emails (`/admin/settings/notifications`, #381)
 
-- `Organization.replyToEmail` et `Organization.notificationSettings` (JSON validé par `src/lib/notification-settings.ts`, défauts quand absent) ; `GET`/`PATCH /api/admin/settings/notifications` (patch partiel, journalisé `organization.notifications_updated`) ; `POST …/notifications/test` (email `targeted_message` à l'admin connecté, 5 par heure et par organisation)
+- `Organization.replyToEmail` et `Organization.notificationSettings` (JSON validé par `src/lib/notification-settings.ts`, défauts quand absent) ; `GET` (propriétaires et organisateurs) / `PATCH /api/admin/settings/notifications` (propriétaires seulement ; patch partiel, journalisé `organization.notifications_updated`) ; `POST …/notifications/test` (email `targeted_message` à l'admin connecté, 5 par heure et par organisation)
+- Réglages : rappels J-2, J-1 et du jour activables un par un, email aux admins à chaque inscription, adresse de réponse (`replyToEmail`) ; l'interrupteur par événement (`Event.remindersEnabled`) reste en place
 - Effets : le cron des rappels ignore les fenêtres décochées ; `sendAdminNotification` se tait si l'email d'inscription est décoché ; le canal email met le reply-to de l'organisation quand la notification porte son `organizationId` ; la page personnelle affiche cette adresse comme contact
 
 ### Emails envoyés (`/admin/settings/notifications`)
 
 - Liste des 200 dernières lignes de `NotificationOutbox` de l'organisation (colonne `organizationId`, #382, posée à l'enqueue par chaque route ; sans elle, la ligne n'apparaît nulle part), payload déchiffré côté serveur pour n'afficher que le type et le destinataire ; états dérivés : en attente, nouvel essai (`attempts` > 0), envoyé, échec définitif ; raison du dernier échec ; `POST /api/admin/settings/notifications/[id]/retry` remet une ligne en échec de l'organisation en file (`attempts` 0, journalisé `notification.retried`), 404 sinon ; test d'isolation cross-tenant
 - Rétention inchangée : envoyés purgés chaque nuit, échecs après 30 jours
+
 ### Exports et portabilité (#384)
 
 - `GET /api/admin/events/[id]/export/archive` : JSON complet (événement, créneaux, inscriptions + bénévoles, pages, responsables sans jetons, jalons, journal), tout jeton ou hachage retiré (`stripSecrets`) ; `GET /api/admin/members/export` et `GET /api/admin/settings/activity/export` : CSV UTF-8 BOM point-virgule ; logique pure dans `src/lib/data-export.ts` ; tests d'isolation cross-tenant ; durées de conservation (`RETENTION`) reprises dans GUIDE_ADMIN et la page de confidentialité
@@ -150,8 +168,8 @@ Liste exhaustive des fonctionnalités de l'application.
 - **Aperçu comme un bénévole** (`/admin/events/[id]/preview`), brouillons compris : même page publique (planning, places, pages, charte, champs du formulaire), bandeau « Aperçu » ; le formulaire affiche le message de confirmation et l'email qu'on recevrait (rendu avec le vrai modèle, lien factice) sans rien enregistrer ni envoyer
 - **Duplication avec choix** (`/admin/events/[id]/duplicate`, #378) : titre, premier jour (toutes les dates décalées du même offset, spectacles compris), cases créneaux / messages et réglages / pages / responsables de secteur (décochée : chaque responsable repris reçoit un email avec un nouveau lien), récapitulatif avant création ; `POST /api/admin/events/[id]/duplicate` accepte `{ title?, startDate?, copy? }` (corps vide = défauts) ; créneaux non annulés seulement, rouverts, tous réglages copiés (#356) ; jamais les inscriptions ni les jalons ; brouillon répertorié ; logique pure dans `src/lib/event-duplicate.ts`
 - **Archivage** en un clic (bouton « Archiver » ou statut « Archivé » du formulaire d'édition)
-- **Suppression définitive**, réservée aux événements archivés : avertissement fort, nombre de créneaux / inscriptions / invitations effacés, lien vers l'export PDF pour sauvegarder l'état, confirmation en saisissant le titre (accents et casse ignorés). Les créneaux, inscriptions et invitations sont effacés avec l'événement ; les membres du pool et l'organisation sont conservés. Les bénévoles ne sont pas prévenus : pour cela, annuler d'abord les créneaux
-- Champs : titre, slug, dates, lieu, description, instructions publiques, message de confirmation
+- **Suppression définitive**, réservée aux événements archivés et aux propriétaires (`DELETE /api/admin/events/[id]`) : avertissement fort, nombre de créneaux / inscriptions / invitations effacés, lien vers l'export PDF pour sauvegarder l'état, confirmation en saisissant le titre (accents et casse ignorés). Les créneaux, inscriptions et invitations sont effacés avec l'événement ; les membres du pool et l'organisation sont conservés. Les bénévoles ne sont pas prévenus : pour cela, annuler d'abord les créneaux
+- Champs : titre, slug, dates, lieu (et coordonnées pour le lien de carte), description, instructions publiques, message de confirmation, couleur de l'en-tête public, ouverture et fermeture des inscriptions (case et dates facultatives), téléphone obligatoire
 - **Publication / dépublication** en un clic (`draft` → `published`) ; **règle serveur** : pas de publication sans créneau actif (409 sur `PATCH`), un événement est toujours créé en brouillon (`POST` ignore tout statut) ; l'annulation du dernier créneau actif d'un événement publié le repasse en brouillon dans la même transaction (`event.unpublished` au journal)
 - **Barre d'étapes** (#371) en haut de la page d'un événement : Brouillon → Prêt à publier (brouillon avec créneau) → Publié → Terminé (dernier jour passé) → Archivé, avec « À faire » (liens) et « Concrètement » (visibilité, rappels, suppression) ; logique pure dans `src/lib/event-lifecycle.ts`
 - **Événements non répertoriés** (`Event.isListed`, #414) : publié mais absent de la page publique de l'organisation, de `/api/public/events` et du sitemap, `robots: noindex, nofollow` sur sa page et ses pages additionnelles ; accès direct, inscription et liens personnels inchangés ; case « Afficher cet événement sur la page publique de l'organisation » dans l'édition, badge « non répertorié » dans l'admin ; duplication et modèles créent toujours un brouillon répertorié ; changement journalisé (« visibilité : répertorié → non répertorié ») ; pas un contrôle d'accès
@@ -173,7 +191,7 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - Désigner un ou plusieurs bénévoles responsables d'un poste (`roleName`, ex. « Bar »), avec autocomplétion sur les postes déjà utilisés dans l'événement
 - Choix rapide « Depuis les inscrits » : sélectionner un bénévole déjà inscrit à l'événement pré-remplit nom, email et poste
-- Depuis la page des inscriptions, bouton « Rendre responsable » par ligne : si le bénévole a plusieurs inscriptions sous des postes différents, le poste de la ligne cliquée est proposé par défaut, modifiable
+- Depuis la page des inscriptions, bouton « Rendre responsable » dans la barre d'outils de la sélection (pas de bouton par ligne) : avec une seule ligne sélectionnée, une modale propose le poste de son créneau, modifiable ; avec plusieurs lignes, chaque bénévole est désigné pour le poste de son créneau
 - L'ajout envoie automatiquement un email au responsable avec son lien personnel (lecture seule, sans compte)
 - Un responsable peut être retiré à tout moment (confirmation demandée)
 - Chaque ajout et retrait est tracé dans le journal d'événement (poste concerné seulement, jamais le nom ni l'email en clair dans le journal)
@@ -215,6 +233,9 @@ Liste exhaustive des fonctionnalités de l'application.
   - **Renommer** d'un coup tous les créneaux d'un poste (refuse un nom déjà pris par un autre poste)
   - **Supprimer** un poste (annule tous ses créneaux — même confirmation et notification des bénévoles qu'une annulation individuelle)
   - **Couleur** : 16 couleurs prédéfinies ou automatique (hash du nom), appliquée à la timeline admin et à la page publique
+  - **Réserver** le poste aux membres portant certaines étiquettes (voir Règles d'inscription)
+  - **Limiter** le nombre de créneaux du poste par bénévole (voir Règles d'inscription)
+- **Sur validation** : case sur le créneau et sur la série (« chaque inscription est une demande à accepter ou refuser »)
 - **Vue timeline** (par jour) et **vue liste** (tableau plat) commutables
 - Popover au clic sur un créneau : libellé, places (pour ce créneau ou **appliquées à tout le poste**, jamais sous le nombre d'inscrits d'un créneau), **horaires à décaler** (les inscrits sont prévenus), inscriptions ouvertes / fermées, **dupliquer** (copie juste après, même durée, tous réglages copiés, sans inscriptions), lien vers les inscriptions filtrées, suppression
 - **Âge minimum** (optionnel, #192) : condition simple pour restreindre un créneau (ex. 18 ans pour un poste avec permis de conduire) ; affichée aux bénévoles, vérifiée à l'inscription
@@ -222,15 +243,19 @@ Liste exhaustive des fonctionnalités de l'application.
 ### Suivi des inscriptions (`/admin/events/[id]/registrations`)
 
 - Vue tabulaire : bénévole, créneau, horaires, commentaire, source, date
-- Pas d'action par ligne : toute action passe par la sélection (cases à cocher, case d'en-tête pour tout sélectionner) puis un bouton dans la barre d'outils qui apparaît, appliqué à toute la sélection — même une ligne masquée entre-temps par un filtre
+- Toute action passe par la sélection (cases à cocher, case d'en-tête pour tout sélectionner) puis un bouton dans la barre d'outils qui apparaît, appliqué à toute la sélection — même une ligne masquée entre-temps par un filtre ; seules les demandes sur validation ont des boutons par ligne (Accepter / Refuser)
+- **Demandes sur validation** (#484) : badge « Demande à traiter », filtre « Demandes à traiter (N) » (`?demandes=1`, lien du tableau de bord), Accepter / Refuser par ligne avec confirmation et note facultative au refus (≤ 1000 caractères, seule raison donnée dans l'email) ; `POST /api/admin/registrations/[id]/decision` (`src/lib/registration-decision.ts`) : accepter change la demande en inscription confirmée (email `registration_confirmation`), refuser libère la place, proposée ensuite à la liste d'attente (email `registration_refused`) ; décision et email dans la même transaction ; 409 si la demande a déjà été traitée ou retirée
+- **Confirmation des actions sensibles** (`src/lib/action-recap.ts`, `ConfirmActionModal`, #379) : récapitulatif (personnes, emails, conséquences, journalisation) avant retrait groupé, désignation de responsables, renvoi de liens et relance des invités ; lien « Voir dans le journal » (`/admin/events/[id]/log?since=YYYY-MM-DD`, le journal accepte `since` dans l'URL) après l'action
+- **Annulation d'un retrait** (`src/lib/use-delayed-action.ts`, #379) : le retrait groupé confirmé part après 10 secondes, pendant lesquelles « Annuler le retrait » garde les bénévoles et « Retirer maintenant » l'exécute tout de suite ; le compte à rebours s'arrête tant que le focus ou le pointeur est sur le bouton ; quitter la page exécute le retrait
 - **Rendre responsable** de leur poste : modale (choix du poste, nom/email ajustables) avec une seule ligne sélectionnée ; assignation directe au poste de chaque créneau avec plusieurs lignes
 - **Renvoyer le lien** : réémet par email le lien personnel de gestion (`/my/[token]`) de chaque bénévole sélectionné — donne accès à toutes ses inscriptions actives pour l'événement, pas seulement au créneau de la ligne
-- **Retirer de leur créneau** : annule chaque inscription sélectionnée
+- **Retirer de leur créneau** : annule chaque inscription sélectionnée (après le délai d'annulation ci-dessus)
+- Réponses aux questions de l'événement et alerte de charge (`src/lib/workload.ts`) affichées sur les lignes concernées
 - Badge « Responsable » affiché sur une ligne quand ce bénévole est déjà responsable du poste de son créneau
-- **Présences** (#399) : actions groupées **Marquer présents** / **Annuler la présence** sur les inscriptions confirmées (`checkedInAt`), badge **Présent**, compteur « N présents sur M », journal (`registration.checked_in` / `check_in_undone`) ; **export CSV des présences** (`/api/admin/events/[id]/export/attendance`, BOM + point-virgule, heure du pointage dans le fuseau de l'organisation)
+- **Présences** (#399) : actions groupées **Marquer présents** / **Annuler la présence** sur les inscriptions confirmées seulement (`checkedInAt` ; les demandes sur validation, la liste d'attente et les places proposées sont exclues, du pointage comme du compteur), badge **Présent**, compteur « N présents sur M », journal (`registration.checked_in` / `check_in_undone`) ; **export CSV des présences** (`/api/admin/events/[id]/export/attendance`, BOM + point-virgule, heure du pointage dans le fuseau de l'organisation)
 - **Filtres cumulables** : recherche texte, filtre par poste, filtre par créneau
 - Accès direct depuis un créneau (timeline admin) : pré-filtrage automatique
-- **Ajout manuel** avec détection de conflits
+- **Ajout manuel** avec détection de conflits ; la limite par personne du poste s'affiche en avertissement, dépassable après confirmation
 
 ### Gestion des membres (`/admin/members`)
 
@@ -241,7 +266,8 @@ Pool de bénévoles connus de l'organisation (source de vérité partagée avec 
 - **Colonnes Prénom et Nom séparées** ; tri par colonne au clic sur l'en-tête (croissant → décroissant → reset) ; changement annoncé aux lecteurs d'écran via live region
 - **Heures cumulées** : somme de la durée des créneaux actifs de chaque membre, tous événements de l'organisation confondus ; colonne triable. Figure admin uniquement — absente de l'export PDF (qui est, lui, potentiellement partagé avec les bénévoles).
 - Recherche par texte et filtre par tag
-- Import CSV ou Excel (`.xlsx`) via le bouton « Importer CSV/Excel » : colonnes reconnues par leur intitulé (français ou anglais), bilan créés / mis à jour / ignorés, lignes en erreur listées
+- Import CSV ou Excel (`.xlsx`) via le bouton « Importer CSV/Excel », en deux étapes (#464) : aperçu (`POST /api/admin/members/import/preview`) ligne par ligne de ce qui sera créé, mis à jour ou ignoré, lignes en erreur, étiquettes nouvelles ou réutilisées, choix pour les doublons (ignorer ou mettre à jour), puis confirmation (`POST /api/admin/members/import`) qui applique exactement le plan de l'aperçu (`src/lib/member-import-plan.ts`, empreinte du plan) ; colonnes reconnues par leur intitulé (français ou anglais) ; 2 Mo et 5000 lignes au plus ; 30 aperçus et 10 imports par heure et par organisation
+- **Activité d'un membre** (`/admin/members/[id]`, `src/lib/member-activity.ts`, #488) : chronologie factuelle, événement par événement (invitations et leur utilisation, inscriptions, liste d'attente, annulations, présences, désignations de responsable, modifications de la fiche), construite à partir des données existantes ; pas de score ni de note
 
 ### Invitations membres (`/admin/events/[id]/invitations`)
 
@@ -256,9 +282,12 @@ Pool de bénévoles connus de l'organisation (source de vérité partagée avec 
 
 #### Écrire aux bénévoles (`/admin/events/[id]/message`)
 
-- Destinataires : tous les inscrits, un poste, un créneau, ou la liste d'attente (statuts `waiting` et `offered`)
+- Destinataires : tous les inscrits, un poste, un créneau, la liste d'attente (statuts `waiting` et `offered`), ou les membres invités à l'événement sans créneau confirmé (personnes seulement en liste d'attente comprises, #481 ; lien du tableau de bord `?audience=invited`)
 - Objet (≤ 120) et message texte (≤ 2000) ; compteur de destinataires en direct, aperçu de l'email (rendu réel, lien factice), confirmation avec le nombre de personnes
 - Un email par personne (`targeted_message`), avec ses créneaux concernés, via la file d'envoi ; envoi noté dans le journal (`message.sent`) ; limite de 30 envois par heure et par organisation
+- **Notification sur le téléphone** en option (#468) : en plus de l'email, un push aux appareils abonnés des destinataires (objet en titre ≤ 60, première ligne du message ≤ 120)
+- **Modèles de message** (`/admin/settings/message-templates`, `src/lib/message-template.ts`, #482) : 20 par organisation, nom ≤ 60 ; un modèle remplit l'objet et le message, qui restent modifiables ; variables `{prénom}`, `{événement}`, `{poste}` (destinataires d'un poste ou d'un créneau), `{créneau}` (destinataires d'un créneau), remplacées pour chaque destinataire ; une variable inconnue ou hors de son public est refusée avant l'envoi
+- **Historique des messages** (`src/lib/message-history.ts`, #467), sur la page du message : qui a écrit quoi, quand, à qui, et le résultat de l'envoi (envoyés, en échec, en attente, compteurs conservés après la purge de la file) ; renvoi des emails en échec (`POST /api/admin/events/[id]/messages/[messageId]/resend-failed`) ; conservé 365 jours (`RETENTION_DAYS.targetedMessage`), ou jusqu'à la suppression de l'événement
 - Accès direct depuis les inscriptions, avec le poste ou le créneau filtré prérempli
 
 #### Rappel manuel
@@ -279,7 +308,9 @@ Déclenchés par le cron `/api/cron/reminders` (toutes les heures) :
 | J-1 | 23–25 h avant |
 | Jour J | 2–4 h avant |
 
-Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscription (`reminderJ2Sent`, `reminderJ1Sent`, `reminderDdSent`).
+Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscription (`reminderJ2Sent`, `reminderJ1Sent`, `reminderDdSent`). Chaque rappel se désactive pour toute l'organisation dans les réglages des emails, et `Event.remindersEnabled` coupe tous ceux d'un événement (champ accepté par `PATCH /api/admin/events/[id]`, sans case dans le formulaire d'édition).
+
+Le même cron propose les places libres oubliées (`reconcileWaitlists`, `src/lib/waitlist.ts`) : si la promotion qui suit une annulation a échoué, chaque créneau à venir avec des personnes en attente reçoit ses offres au passage suivant (50 au plus par créneau et par passage), sans effet quand tout s'est bien passé ; il expire aussi les offres échues et envoie la file d'emails (`deliverOutbox`).
 
 #### Notifications de modification
 
@@ -292,6 +323,10 @@ Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscr
 
 - L'export complet en premier, puis cinq feuilles HTML noir et blanc (`/api/admin/events/[id]/export/sheets/[view]`) : `day` (frise par jour avec les prénoms dans les créneaux + détail, paysage), `role` (une page par poste : frise, détail, responsable, paysage), `individual` (une page par bénévole : sa frise du jour, ses créneaux avec infos pratiques), `attendance` (feuille de présence : case par bénévole, cochée si `checkedInAt`, lignes vides = places libres + 2), `phones` (liste alphabétique avec téléphones, mention organisateurs)
 - La frise réutilise `buildDayParts` de l'export complet, restylée en monochrome ; rendu pur dans `src/lib/print-sheets.ts` ; téléphone de l'inscription avant celui du profil ; jamais les heures cumulées
+
+#### Badges (`/api/admin/events/[id]/export/badges`, depuis `/admin/events/[id]/print`)
+
+- Un badge par bénévole inscrit, dix par feuille A4 (2 × 5, 90 × 55 mm) à découper ; prénom, nom (facultatif), poste, créneaux (facultatifs) ; bandeau à la couleur du poste, de l'événement ou sans couleur ; filtre par poste, réimpression d'un seul badge ; sans photo ni code QR (un badge ne porte aucun lien vers des données personnelles) ; rendu pur dans `src/lib/print-badges.ts`
 
 #### PDF (impression navigateur)
 
@@ -308,9 +343,10 @@ Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscr
 - **Fuseau horaire** : fuseau des événements de l'organisation (liste des fuseaux IANA, « Par défaut » = fuseau de la plateforme, Europe/Zurich) ; utilisé pour les rappels, l'heure limite des offres de liste d'attente, le journal et l'export PDF
 - **Charte du bénévole** (« Convention des Bénévoles » dans l'écran) : texte par défaut éditable en texte libre ; bouton « Réinitialiser la convention par défaut » ; affiché aux bénévoles lors de l'inscription
 - **Assurance RC de l'organisation** : commutateur qui choisit la variante du texte par défaut (bénévoles couverts par la RC de l'organisation, ou couverture accidents personnelle à leur charge) ; changer le commutateur remplace le texte de la zone de saisie
-- **Équipe admin** : liste des administrateurs avec statut (actif / en attente)
-- **Invitation** : saisir nom + email → lien d'activation envoyé par email (token 7 jours)
-- **Retrait** d'un admin (sauf soi-même et dernier admin actif)
+- **Équipe admin** : liste des administrateurs avec statut (actif / en attente) et rôle
+- **Deux rôles** (`src/lib/permissions.ts`, #469) : **Propriétaire** (rôle stocké `admin`, tous les droits) et **Organisateur** (`organizer`) ; vérifiés côté serveur dans chaque route (`requireOrgSession(level)`), la matrice `PERMISSIONS` classe chaque route et méthode de `src/app/api/admin` (un test vérifie qu'elle couvre tous les fichiers). Réservé aux propriétaires : inviter, modifier et retirer des admins, modifier l'organisation (`PATCH settings/organization`), supprimer un ancien slug, modifier les réglages des emails, supprimer définitivement un événement. Tout le reste (événements, créneaux, inscriptions, membres, messages, exports, journaux) est ouvert aux organisateurs
+- **Invitation** (propriétaires) : saisir nom + email → lien d'activation envoyé par email (token 7 jours)
+- **Retrait** d'un admin (propriétaires) : jamais soi-même, ni le dernier admin actif, ni le dernier propriétaire actif ; un changement de rôle garde aussi au moins un propriétaire actif
 
 ### Journal d'activité (`/admin/settings/activity`)
 
@@ -348,7 +384,10 @@ Accessible uniquement aux comptes avec rôle `super_admin` (protégé au niveau 
 
 ## Notifications email
 
-Toutes les notifications passent par `sendNotification()` — aucun appel direct à Nodemailer dans les routes.
+Toutes les notifications passent par la couche `src/lib/notifications` — aucun appel direct à Nodemailer dans les routes.
+
+- **File d'envoi** (`NotificationOutbox`, `src/lib/notifications/outbox.ts`, #293, #352) : les emails qui accompagnent un changement de données (inscription, liste d'attente, demande et décision sur validation, annulation et modification de créneau, désignation de responsable, message ciblé, lien personnel redemandé, invitation et bienvenue d'un admin, réinitialisation de mot de passe) sont enregistrés par `enqueueNotifications(payloads, tx)` dans la même transaction que le changement, puis envoyés après la réponse (`deliverAfterResponse`) ; un envoi en échec est réessayé par le cron horaire (`deliverOutbox`) avec un délai qui double à partir de 5 minutes, 6 essais au plus, puis marqué en échec et signalé à Sentry ; clé de déduplication facultative ; contenu chiffré avec `TOKEN_ENCRYPTION_KEY` quand elle est définie
+- **Envoi direct** (`sendNotification()`, sans file) : rappels automatiques (cron, idempotents), rappel manuel, invitations de membres et leurs relances, renvoi du lien par l'admin, renvoi du lien lors d'une inscription en double, invitation du premier admin par le super admin, nouveautés produit
 
 | Kind | Déclencheur |
 |------|-------------|
@@ -367,6 +406,13 @@ Toutes les notifications passent par `sendNotification()` — aucun appel direct
 | `admin_invite` | Invitation d'un nouvel admin à l'équipe |
 | `admin_welcome` | Bienvenue après activation du compte admin |
 | `password_reset` | Réinitialisation du mot de passe admin |
+| `registration_requested` | Demande d'inscription sur un créneau « Sur validation » |
+| `registration_refused` | Refus d'une demande sur validation (avec la note facultative de l'organisateur) |
+| `registration_link_resend` | Renvoi du lien personnel (admin, inscription en double, lien redemandé) |
+| `targeted_message` | Message ciblé « Écrire aux bénévoles », et email de test des réglages |
+| `sector_leader_invite` | Désignation comme responsable de secteur, avec le lien personnel |
+| `sector_leader_new_signup` | Nouvelle inscription sur le poste d'un responsable de secteur |
+| `product_update` | Nouveautés produit envoyées par le super admin |
 
 Tous les templates bénévoles utilisent un ton chaleureux et personnel (tutoiement, `Hello [Prénom] !`, signature chaleureuse).
 
@@ -380,11 +426,15 @@ Fallback console si SMTP non configuré (développement).
 - API REST séparée public / admin / super-admin / cron
 - PostgreSQL 16 + Prisma 7 ORM (driver natif pg, historique de migrations dans `prisma/migrations/`)
 - Architecture multi-tenant : isolation par `organizationId` avec client Prisma étendu
+- **Coffre à jetons** (`src/lib/token-vault.ts`, #290, #313) : liens personnels, de responsable et d'invitation stockés en empreinte SHA-256 (recherche) et chiffrés en AES-256-GCM avec `TOKEN_ENCRYPTION_KEY` (renvoi du lien) ; rotation de clé (`TOKEN_ENCRYPTION_KEY_ID`, `TOKEN_ENCRYPTION_PREVIOUS_KEYS`) ; le cron de nettoyage chiffre les jetons encore en clair et rechiffre avec la clé courante (`src/lib/token-encryption-job.ts`) ; clé obligatoire en production (le serveur refuse de démarrer sans, `src/lib/production-guards.ts`)
+- **Jetons absents des journaux d'accès** (#485) : `k8s/ingressroute-tokens.yaml` coupe le journal d'accès de Traefik pour les requêtes qui portent un jeton personnel (`/my/…`, `/waitlist/…`, `/leader/…`, routes publiques à jeton, et tout paramètre de jeton dans l'URL : invitations, réinitialisation), les autres restent journalisées
+- **Limites de fréquence** (`src/lib/rate-limit.ts`, #322) : compteurs à fenêtre fixe dans Postgres (table `RateLimit`), partagés par toutes les instances, horloge de la base, purgés par le cron de nettoyage ; en cas d'erreur du stockage, la requête passe ; adresse du visiteur lue dans `X-Forwarded-For` (`TRUSTED_PROXY_HOPS`), conservée par `k8s/traefik-config.yaml` (`externalTrafficPolicy: Local`)
+- **Durées de conservation** (`src/lib/retention.ts`, #486) : source unique ; le cron de nettoyage lit ses durées dans `RETENTION_DAYS`, les tableaux de `GUIDE_ADMIN.md` et `docs/retention.md` sont générés par `npm run retention:docs` et la page de confidentialité en est tirée ; les CronJobs de sauvegarde sont vérifiés contre les mêmes durées
 - **Routage par sous-domaine** : `[orgSlug].benevol.app` → le proxy (`src/proxy.ts`) injecte `x-org-slug` ; fallback `?org=<slug>` pour le développement localhost
 - Tests d'isolation cross-tenant (Vitest) — vérifient que chaque route admin utilise le client Prisma scopé
 - Déploiement Docker Compose ou image standalone
 - Déploiement Kubernetes avec migrations automatiques, appliquées une fois par déploiement avant la mise à jour de l'application (voir `docs/deploiement.md`)
-- Cron jobs Kubernetes : rappels (toutes les heures), purge RGPD (`/api/cron/cleanup` : organisations et comptes admin désactivés depuis plus de 30 jours, bénévoles orphelins, jetons expirés), sauvegarde `pg_dump` chiffrée (rétention 30 jours localement, copie hors site vers Dropbox via `rclone` chaque nuit, rétention 90 jours)
+- Cron jobs Kubernetes : rappels, file d'emails et rattrapage de la liste d'attente (toutes les heures), purge RGPD (`/api/cron/cleanup` : organisations et comptes admin désactivés depuis plus de 30 jours, bénévoles orphelins, jetons expirés), sauvegarde `pg_dump` chiffrée (rétention 30 jours localement, copie hors site vers Dropbox via `rclone` chaque nuit, rétention 90 jours)
 - **`robots.txt` et `sitemap.xml`** multi-tenant : chaque organisation n'expose que ses propres événements publiés et leurs pages personnalisées ; routes à jeton et `/admin`/`/api/` interdites à l'indexation
 - Certificat wildcard via cert-manager et le webhook DNS Gandi (`gandi-webhook/`)
 - Suivi des erreurs avec Sentry (serveur, edge et navigateur)

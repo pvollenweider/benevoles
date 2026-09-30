@@ -151,6 +151,9 @@ ADMIN_NOTIFICATION_EMAIL=""
 # URL publique de l'application (utilisée dans les emails et les QR codes)
 NEXT_PUBLIC_APP_URL="https://votre-domaine.com"
 
+# Chiffrement des liens personnels (obligatoire en production : openssl rand -base64 32, à ne jamais perdre)
+TOKEN_ENCRYPTION_KEY="..."
+
 # Secret partagé pour les endpoints /api/cron/* (indispensable en production : sans lui, ils refusent toute requête)
 CRON_SECRET="..."
 
@@ -227,8 +230,13 @@ Sur Kubernetes, `k8s/cronjob-reminders.yaml` (toutes les heures), `k8s/cronjob-c
 ### Docker Compose
 
 ```bash
-docker compose up -d
+docker compose up -d                       # première installation
+git pull && docker compose up -d --build   # mise à jour
 ```
+
+Variables à ajouter et cron de l'hôte : [docs/deploiement.md](docs/deploiement.md#docker-compose).
+
+**Depuis une version 1.x**, suivre [Mise à jour depuis 1.x](docs/deploiement.md#mise-à-jour-depuis-1x) : nouvelle clé obligatoire, migrations par un Job, deux nouveaux manifestes.
 
 ### Kubernetes
 

@@ -18,6 +18,8 @@ Sur un téléphone ou un petit écran, les liens de la barre du haut (Tableau de
 
 **Mon compte et déconnexion** : cliquez sur votre nom, en haut à droite de chaque page. Le menu propose **Mon compte** (`/admin/account`), où vous pouvez changer votre mot de passe, et **Se déconnecter**. Changer votre mot de passe, ou le réinitialiser via « mot de passe oublié », déconnecte toutes vos autres sessions (autres navigateurs ou appareils) ; vous restez connecté(e) là où vous l'avez changé.
 
+**Règles du mot de passe**, affichées sous le champ et cochées au fur et à mesure : 10 caractères minimum, une lettre majuscule, une lettre minuscule, un chiffre, un caractère spécial, et pas trop long : 72 signes au plus sans accents, une lettre accentuée comptant pour 2 signes et un emoji pour 4. Sur **Mon compte**, après 5 mots de passe actuels erronés (ou 20 depuis une même adresse IP) en 15 minutes, le changement est refusé pendant un quart d'heure.
+
 **Connexion refusée après plusieurs essais ?** Après 10 mots de passe erronés sur un même compte (ou 30 depuis une même adresse IP) en 15 minutes, les tentatives suivantes sont refusées jusqu'à la fin de ce délai, même avec le bon mot de passe. Patientez un quart d'heure avant de réessayer.
 
 ---
@@ -33,7 +35,7 @@ Tant que votre organisation n'a pas terminé sa mise en place, une liste **Premi
 5. publier l'événement ;
 6. faire une inscription de test depuis la page publique, pour vérifier le parcours et l'email reçu ; vous pourrez l'annuler ensuite.
 
-Les étapes se cochent d'elles-mêmes au fur et à mesure. La liste disparaît quand les étapes obligatoires sont faites ; **Masquer ces étapes** la retire plus tôt, pour tous les admins de l'organisation.
+Les étapes se cochent d'elles-mêmes au fur et à mesure. La liste disparaît quand les étapes obligatoires sont faites ; un propriétaire peut la retirer plus tôt, pour tous les admins de l'organisation, avec **Masquer ces étapes**.
 
 ---
 
@@ -65,7 +67,7 @@ Vue d'ensemble de votre organisation : nombre d'événements (publiés et à ven
 
 **`/admin/search`**
 
-La loupe **Rechercher** de la barre du haut ouvre le champ de recherche (**Ctrl + K**, ou **⌘ + K** sur Mac, l'ouvre aussi ; **Échap** le referme). Sur un petit écran, le champ est dans le **Menu**. Il retrouve en une fois, dans toute votre organisation :
+La loupe **Rechercher** de la barre du haut ouvre le champ de recherche (**Ctrl + K**, ou **Cmd + K** (⌘) sur Mac, l'ouvre aussi ; **Échap** le referme). Sur un petit écran, le champ est dans le **Menu**. Il retrouve en une fois, dans toute votre organisation :
 
 - les **bénévoles** dont le prénom, le nom, l'email ou le téléphone correspond : le lien ouvre la page Membres filtrée sur cette personne, membres désactivés compris ;
 - leurs **inscriptions** (confirmées, en liste d'attente ou place proposée), avec l'événement et le créneau : le lien ouvre les inscriptions de l'événement filtrées sur cette personne ;
@@ -73,8 +75,6 @@ La loupe **Rechercher** de la barre du haut ouvre le champ de recherche (**Ctrl 
 - les **créneaux** dont le poste ou l'intitulé correspond : le lien ouvre les inscriptions de ce créneau.
 
 Tous les mots doivent correspondre : « alice martin » trouve Alice Martin, « fête bar » les créneaux du poste Bar de l'événement « Fête d'été ». Ni les majuscules ni les accents ne comptent : « zoe » trouve Zoé, dans la recherche globale comme dans les filtres des pages Membres et Inscriptions. Chaque groupe affiche les 20 premiers résultats ; au-delà, précisez la recherche.
-
-Raccourci : **Ctrl + K** (**⌘ + K** sur Mac) place le curseur dans le champ de recherche depuis n'importe quelle page de l'admin.
 
 Au clavier, la première pression sur **Tab** en haut d'une page fait apparaître un lien **Aller au contenu**, qui saute la barre du haut.
 
@@ -94,14 +94,13 @@ En haut de la page, **Comment commencer ?** propose une page blanche ou un modè
 
 | Champ | Description |
 |-------|-------------|
-| Titre | Nom affiché publiquement |
-| Slug | Identifiant URL (`festival-2025`) — généré automatiquement, modifiable |
+| Titre | Nom affiché publiquement. L'adresse de la page d'inscription (`festival-2025`) en est tirée automatiquement à la création |
 | Dates | Date de début et de fin de l'événement |
 | Lieu | Affiché sur la page publique |
 | Coordonnées GPS ou lien de carte | Collez un lien OpenStreetMap ou Google Maps, ou une paire « latitude, longitude » : les bénévoles ont alors un lien **Voir sur la carte** (OpenStreetMap, aucune requête vers un service tiers tant qu'ils ne cliquent pas) sur la page d'inscription, dans les emails et sur leur page personnelle. Un créneau peut avoir ses propres coordonnées dans ses infos pratiques ; sinon celles de l'événement sont utilisées |
-| Description | Texte libre (usage interne) |
+| Description | Texte libre, affiché publiquement dans l'encadré de l'événement sur la page d'inscription (colonne de droite, sur ordinateur) |
 | Instructions publiques | Message visible en haut de la page d'inscription |
-| Téléphone obligatoire à l'inscription | Si coché, le formulaire public exige un numéro de téléphone (désactivé par défaut). Ne s'applique pas aux bénévoles que vous ajoutez vous-même depuis l'administration. Le numéro saisi est enregistré avec l'inscription : c'est lui qui s'affiche dans la liste des inscriptions, l'export PDF et la page du responsable de secteur (à défaut, celui de la fiche du membre) |
+| Téléphone obligatoire à l'inscription | Si coché, le formulaire public exige un numéro de téléphone (désactivé par défaut). Ne s'applique pas aux bénévoles que vous ajoutez vous-même depuis l'administration. Le numéro saisi est enregistré avec l'inscription : c'est lui qui s'affiche dans la liste des inscriptions, les **Rapports** et la page du responsable de secteur (à défaut, celui de la fiche du membre) |
 | Message de confirmation | Texte affiché sur la page de succès après inscription |
 | Couleur de la page publique | Une couleur de la palette (la même que celle des postes) derrière le titre de la page d'inscription, avec un aperçu dans le formulaire. Le texte reste blanc sur un fond foncé, donc lisible ; sans couleur, l'en-tête reste blanc. La couleur est copiée avec les réglages lors d'une duplication |
 
@@ -138,10 +137,14 @@ Un créneau correspond à un poste de bénévolat sur une plage horaire précise
 | Date | Jour du créneau |
 | Horaires | Heure de début et de fin, de `00:00` à `23:59` |
 | Capacité | Nombre maximum de bénévoles |
-| Statut | `Ouvert`, `Complet`, `Fermé`, `Annulé` |
+| Description | Texte court, qui n'est affiché ni sur la page publique ni dans les emails. Ce n'est pas un champ confidentiel : pour ce qui doit rester à l'organisation, utilisez les notes internes ; pour ce que les bénévoles doivent savoir, les infos pratiques |
 | Infos pratiques pour les bénévoles | Lieu de rendez-vous et consigne pratique, visibles sur la page publique d'inscription et dans les emails ; personne de contact (nom, téléphone), envoyée seulement aux inscrits (email de confirmation, rappels, page personnelle), jamais affichée publiquement. Facultatifs, courts : pas de fiche de mission. |
 | Notes internes | Jamais montrées aux bénévoles |
 | Âge minimum (optionnel) | Condition d'âge pour ce poste (ex. : `18` pour un poste avec permis de conduire). Affiché en info sur le planning public ; vérifié à l'inscription — voir « Âge minimum sur un poste » ci-dessous. |
+| Activer la liste d'attente | Une fois le créneau complet, les bénévoles peuvent s'inscrire en liste d'attente — voir « Activer la liste d'attente » ci-dessous |
+| Sur validation | Chaque inscription devient une demande à accepter ou refuser — voir « Inscriptions sur validation » ci-dessous |
+
+Un créneau est créé ouvert ; son état (inscriptions ouvertes, fermées, complet, créneau annulé) se change ensuite depuis le planning.
 
 ### Créer une série de créneaux
 
@@ -153,7 +156,7 @@ Pour couvrir une plage horaire avec des créneaux qui se suivent (une buvette de
 | Date, début, fin | La plage à couvrir ; une fin plus petite que le début passe minuit |
 | Durée d'un créneau | Choix courant (30 min à 4 h) ou saisie en minutes (15 au minimum) |
 | Pause entre deux créneaux | Facultative, en minutes |
-| Personnes par créneau, liste d'attente | Appliqués à chaque créneau |
+| Personnes par créneau, **Activer la liste d'attente**, **Sur validation** | Appliqués à chaque créneau |
 
 L'aperçu se met à jour au fur et à mesure : nombre de créneaux, horaires de chacun. Si la plage ne se divise pas exactement, le dernier créneau est plus court (indiqué dans l'aperçu) ; supprimez-le ensuite s'il ne sert pas. Les créneaux qui commencent après minuit sont datés du lendemain. Une série compte au plus 48 créneaux.
 
@@ -174,15 +177,15 @@ Un clic sur une barre du planning ouvre une petite fenêtre pour agir sans quitt
 
 - **Libellé** et **Places** : enregistrés à la fermeture ; **Appliquer à tout le poste** met le même nombre de places sur tous les créneaux du poste (jamais en dessous des inscrits déjà confirmés sur un créneau) ;
 - **Horaires** : changez le début ou la fin puis **Décaler** ; les bénévoles inscrits reçoivent un email si les horaires changent ;
-- **Inscriptions** : ouvertes, fermées (le créneau reste visible, personne ne peut plus s'y inscrire), complet, ou créneau annulé ;
+- **Inscriptions** : **Ouvertes**, **Complet**, **Fermées** (le créneau reste visible, personne ne peut plus s'y inscrire) ou **Créneau annulé** ;
 - **Dupliquer** : crée une copie juste après, de même durée, avec tous les réglages du créneau (places, liste d'attente, âge minimum, infos pratiques) et sans inscriptions ; déplacez-la ensuite si besoin ;
 - **Inscriptions** (lien) et **Supprimer le créneau**.
 
 ### Activer la liste d'attente
 
-Cochez **Activer la liste d'attente** dans le formulaire du créneau (ou dans le popover de la timeline admin). Quand le créneau est complet, les bénévoles peuvent s'y inscrire ; une place libérée déclenche automatiquement l'envoi d'un email à la première personne en attente, avec un lien de confirmation valable **24 heures**. Passé ce délai sans réponse, la place est proposée à la personne suivante.
+Cochez **Activer la liste d'attente** dans le formulaire du créneau (ou dans celui d'une série de créneaux). Quand le créneau est complet, les bénévoles peuvent s'y inscrire ; une place libérée déclenche automatiquement l'envoi d'un email à la première personne en attente, avec un lien de confirmation valable **24 heures**. Passé ce délai sans réponse, la place est proposée à la personne suivante.
 
-La vue des inscriptions (`/admin/events/[id]/registrations`) affiche les bénévoles en attente (`En attente`) et ceux à qui une place a été proposée (`Offerte`).
+La vue des inscriptions (`/admin/events/[id]/registrations`) affiche les bénévoles en attente (**Liste d'attente**, avec leur rang dans la file, par exemple `#2`) et ceux à qui une place a été proposée (**Place proposée**).
 
 ### Inscriptions sur validation
 
@@ -199,7 +202,7 @@ Pour un poste sensible (conduite, caisse, sécurité, une qualification), cochez
 
 ![Fenêtre « Refuser la demande de Marc Duc ? » : ce qui va se passer, un message facultatif pour la personne, et les boutons Annuler et Refuser](/doc-img/admin-refuse-request.png)
 
-Les demandes ne reçoivent pas les rappels, ne figurent pas sur les feuilles de présence et les exports, et ne font pas partie de « tous les inscrits » dans les messages ciblés. Une demande compte comme une inscription pour les doublons, les chevauchements et la limite de créneaux par personne. Tant qu'elle n'est pas acceptée, elle garde sa place sans compter parmi les inscrits : la page de l'événement l'affiche à côté des inscrits (« + 2 demandes à traiter ») et ne la compte pas dans les places restantes, et « Où manque-t-il du monde ? » ne compte pas sa place comme manquante, avec un lien vers les demandes à traiter. Les feuilles et l'export PDF ne la montrent nulle part, coordonnées comprises. Une place proposée depuis la liste d'attente sur un créneau sur validation devient, elle aussi, une demande. Si le créneau est annulé, les demandes le sont aussi, avec le même email que les inscrits.
+Les demandes ne reçoivent pas les rappels, ne figurent pas sur les feuilles de présence et les exports, et ne font pas partie de « tous les inscrits » dans les messages ciblés. Une demande compte comme une inscription pour les doublons, les chevauchements et la limite de créneaux par personne. Tant qu'elle n'est pas acceptée, elle garde sa place sans compter parmi les inscrits : la page de l'événement l'affiche à côté des inscrits (« + 2 demandes à traiter ») et ne la compte pas dans les places restantes, et « Où manque-t-il du monde ? » ne compte pas sa place comme manquante, avec un lien vers les demandes à traiter. Les **Rapports** ne la montrent nulle part, coordonnées comprises. Une place proposée depuis la liste d'attente sur un créneau sur validation devient, elle aussi, une demande. Si le créneau est annulé, les demandes le sont aussi, avec le même email que les inscrits.
 
 Une personne ajoutée à la main est inscrite directement, sans demande. Cocher **Sur validation** ne change rien aux inscriptions déjà confirmées ; le décocher laisse les demandes en cours à traiter. Les demandes en attente apparaissent dans **Ce qui demande votre attention**.
 
@@ -222,11 +225,11 @@ Un poste peut exiger un âge minimum (majorité, permis de conduire, qualificati
 
 ## Configurer le programme des spectacles
 
-Dans la page d'édition de l'événement (**`/admin/events/[id]/edit`**), section **Programme des spectacles**.
+Dans le formulaire de l'événement, à la création comme dans la page d'édition (**`/admin/events/[id]/edit`**), section **Spectacles**. Elle apparaît dès que les dates de début et de fin sont renseignées.
 
 Chaque entrée définit une plage horaire qui apparaît en fond coloré sur la timeline, permettant aux bénévoles de visualiser quand ils travaillent par rapport aux spectacles.
 
-Champs : **Nom du spectacle**, **Date**, **Heure de début**, **Heure de fin**.
+**+ Ajouter** propose les champs : **Nom du spectacle**, **Date**, **Début**, **Fin**.
 
 ---
 
@@ -304,7 +307,7 @@ Une checklist simple de dates clés pour l'événement (ex. « Fermer les inscri
 
 **Non répertorié** sert à séparer des publics : par exemple un planning réservé aux organisateurs, avec les mêmes postes que celui des bénévoles, que l'on ne veut pas voir sur la page d'accueil. Dans le formulaire d'édition, décochez **Afficher cet événement sur la page publique de l'organisation**, puis partagez le lien ou le QR code aux personnes concernées. L'administration affiche alors « Publié — non répertorié ».
 
-Ce n'est pas une protection : toute personne qui a le lien, ou qui le devine, peut ouvrir l'événement et s'y inscrire. Pour un accès vraiment restreint, il n'existe pas encore de mot de passe. Une copie ou un événement créé depuis un modèle est toujours répertorié : le choix se refait pour chaque événement.
+Ce n'est pas une protection : toute personne qui a le lien, ou qui le devine, peut ouvrir l'événement et s'y inscrire, et l'application ne propose pas de mot de passe. Pour réserver un poste à certains membres, utilisez l'**Accès réservé** (voir « Gérer les postes »). Une copie ou un événement créé depuis un modèle est toujours répertorié : le choix se refait pour chaque événement.
 
 **Avant de publier**, le bouton **Prévisualiser comme un bénévole** de la page de l'événement montre la page publique exactement comme la verront les bénévoles, même tant que l'événement est en brouillon : planning et places, pages personnalisées, charte, champs demandés dans le formulaire (téléphone si vous l'avez rendu obligatoire, date de naissance pour un créneau avec âge minimum). Vous pouvez remplir le formulaire : au lieu de vous inscrire, l'aperçu affiche le message de confirmation et l'email que recevrait le bénévole. Rien n'est enregistré ni envoyé. Pour voir le rendu sur téléphone, réduisez la largeur de la fenêtre ou ouvrez l'aperçu depuis votre téléphone.
 
@@ -344,7 +347,7 @@ Depuis la page de l'événement, cliquer sur **Archiver** puis **Confirmer**. L'
 
 Seul un événement archivé peut être supprimé. En bas de sa page, section **Suppression définitive**, cliquer sur **Supprimer l'événement…**. La fenêtre de confirmation indique ce qui sera effacé : créneaux, inscriptions (listes d'attente comprises) et invitations. Les membres du pool et l'organisation sont conservés.
 
-- **Sauvegarder avant de supprimer** : le lien **Ouvrir l'export PDF** ouvre le planning, le récapitulatif par poste et la liste des bénévoles ; enregistrez-le depuis la fenêtre d'impression du navigateur. L'application ne conserve aucun export.
+- **Sauvegarder avant de supprimer** : **Rapports** → **Archive de l'événement (JSON)** télécharge toutes ses données (réglages, créneaux, inscriptions, pages, responsables, jalons, journal). Dans la fenêtre de suppression, le lien **Ouvrir l'export PDF** ouvre le planning, le récapitulatif par poste et la liste des bénévoles ; enregistrez-le depuis la fenêtre d'impression du navigateur. L'application ne conserve aucun export.
 - **Les bénévoles ne sont pas prévenus** : leur lien de gestion d'inscription cesse de fonctionner. Pour les prévenir, annulez d'abord les créneaux depuis la page des créneaux : chaque bénévole reçoit un email.
 - **Confirmation** : saisir le titre de l'événement (les accents et les majuscules ne comptent pas) pour activer le bouton **Supprimer définitivement**. Cette action est irréversible.
 
@@ -354,21 +357,37 @@ Seul un événement archivé peut être supprimé. En bas de sa page, section **
 
 **`/admin/events/[id]/registrations`**
 
-Vue tabulaire de toutes les inscriptions actives : nom, email, téléphone, créneau, commentaire, source, date.
+Vue tabulaire des inscriptions, en quatre colonnes :
+
+- **Bénévole** : nom, puis sous le nom l'email, le téléphone, les réponses aux questions, les disponibilités, le commentaire et, s'il y a lieu, l'alerte **Charge élevée** ;
+- **Créneau** : poste, libellé, jour et horaires ;
+- **Source** : **Formulaire** (inscription depuis la page publique) ou **Manuel** (ajout depuis l'administration) ;
+- **Statut** : **Liste d'attente** (avec le rang dans la file, par exemple `#2`), **Place proposée** ou **Demande à traiter** ; rien pour une inscription confirmée.
 
 ![Page des inscriptions d'un événement : compteurs (actives, liste d'attente, demandes à traiter), recherche et filtres, puis le tableau avec bénévole et coordonnées, créneau et source](/doc-img/admin-registrations.png)
 
-Aucune action directement sur une ligne : cocher une ou plusieurs inscriptions (case d'en-tête pour tout sélectionner d'un coup) fait apparaître une barre d'outils avec trois actions, appliquées à toute la sélection — même une inscription masquée entre-temps par un filtre ou une recherche :
+Seules les demandes sur un créneau sur validation ont leurs propres boutons, **Accepter** et **Refuser**, sur la ligne (voir « Inscriptions sur validation »). Tout le reste passe par la sélection : cocher une ou plusieurs inscriptions (case d'en-tête pour tout sélectionner d'un coup) fait apparaître une barre d'outils, appliquée à toute la sélection — même une inscription masquée entre-temps par un filtre ou une recherche :
 
+- **Marquer présents** et **Annuler la présence** : voir « Présences le jour J » ci-dessous.
 - **Rendre responsable** de leur poste. Avec une seule ligne sélectionnée, une modale s'ouvre pour choisir le poste (si le bénévole a plusieurs inscriptions) et ajuster nom/email avant l'envoi. Avec plusieurs lignes, chaque bénévole est directement rattaché au poste de son propre créneau, sans étape intermédiaire.
 - **Renvoyer le lien** : réenvoie par email le lien personnel de gestion (`/my/[token]`) de chaque bénévole sélectionné — utile s'il l'a perdu ou supprimé par erreur. Le lien renvoyé donne accès à toutes les inscriptions actives du bénévole pour cet événement, pas seulement au créneau de la ligne.
 - **Retirer de leur créneau** : annule chaque inscription sélectionnée. Les lignes quittent la liste tout de suite, mais rien n'est enregistré ni envoyé pendant 10 secondes : **Annuler le retrait** les remet en place (aucun email ne part), **Retirer maintenant** n'attend pas. Le compte à rebours s'arrête tant que le curseur ou le focus clavier est sur cette barre. Quitter la page valide le retrait ; confirmer un second retrait pendant l'attente le regroupe avec le premier et relance les 10 secondes.
 
-Chacune de ces actions demande d'abord une confirmation qui récapitule ce qui va se passer : personnes concernées, emails envoyés, places proposées à la liste d'attente, et le fait que l'action est journalisée. Une fois l'action faite, **Voir dans le journal** ouvre le journal de l'événement à la date du jour pour la retrouver (lien « Voir cette action dans le journal »).
+**Rendre responsable**, **Renvoyer le lien** et **Retirer de leur créneau** demandent d'abord une confirmation qui récapitule ce qui va se passer : personnes concernées, emails envoyés, places proposées à la liste d'attente, et le fait que l'action est journalisée. Une fois l'action faite, le lien **Voir cette action dans le journal** ouvre le journal de l'événement à la date du jour pour la retrouver.
 
 Un badge **Responsable** s'affiche sur une ligne quand ce bénévole est déjà responsable du poste de son créneau.
 
 **Charge élevée** : une ligne l'indique, en toutes lettres, quand ce bénévole cumule plus de 8 h de créneaux dans une journée, ou plus de 6 h d'affilée sans pause d'au moins 30 minutes (une pause plus courte compte comme du temps continu). Un créneau qui passe minuit compte pour le jour où il commence ; le temps d'affilée se suit d'un jour à l'autre. Seules les inscriptions confirmées comptent, pas la liste d'attente. C'est une information, rien n'est bloqué. En ajoutant quelqu'un à la main, le formulaire prévient avant l'ajout si ce créneau le ferait dépasser ces seuils, quand la personne est déjà inscrite (même email).
+
+### Ajouter quelqu'un à la main
+
+**+ Ajouter manuellement** ouvre le formulaire **Inscription manuelle** : prénom et nom (obligatoires), email, téléphone, créneau (obligatoire) et une note (par exemple « Inscrit par téléphone »). Si l'email correspond à une personne déjà inscrite à l'événement, ses disponibilités s'affichent sous le champ.
+
+- L'inscription est confirmée directement, même sur un créneau sur validation : pas de demande à traiter.
+- Les conditions du formulaire public ne s'appliquent pas : inscriptions fermées, téléphone obligatoire, âge minimum, accès réservé.
+- Pour une personne déjà inscrite à l'événement (même email), le formulaire signale qu'elle a déjà un créneau sur la même plage horaire, et si ce créneau lui donnerait une charge élevée ; l'ajout reste possible. Une seconde inscription de la même personne sur le même créneau est refusée.
+- Si la personne a déjà atteint la limite de créneaux par personne du poste, l'ajout est refusé avec la raison et le bouton **Ajouter quand même** ; l'ajout au-delà de la limite est noté dans le journal.
+- L'ajout n'envoie aucun email. Pour transmettre son lien personnel à la personne, sélectionnez sa ligne puis **Renvoyer le lien**.
 
 ### Présences le jour J
 
@@ -424,11 +443,11 @@ Le répertoire des membres est le pool de bénévoles connus de votre organisati
 
 - **Ajouter** un membre : prénom, nom, email, téléphone, tags, notes internes, et ses **disponibilités** en général (matin, après-midi, soir, plus une remarque comme « pas le dimanche »), facultatives. Le bénévole peut les renseigner lui-même depuis sa page personnelle. Elles s'affichent dans la liste des membres et sous chaque nom dans les inscriptions, et quand vous ajoutez quelqu'un à la main dès que son email correspond à une personne déjà inscrite à l'événement. C'est une information pour vous : rien n'est filtré ni attribué automatiquement.
 - **Modifier** ou désactiver un membre existant
-- **Importer** des membres en masse : bouton **Importer CSV/Excel** (fichiers `.csv` ou `.xlsx`, 2 Mo et 5000 lignes au plus). Les colonnes sont reconnues par leur intitulé (prénom, nom, email, téléphone, tags ; par exemple `prenom`, `courriel`, `mobile`, `groupes`). Plusieurs tags dans une cellule se séparent par `,`, `;` ou `|`. L'import se fait en deux temps. **Analyser le fichier** montre d'abord, sans rien enregistrer, les membres à créer, à mettre à jour ou ignorés (selon le choix « Si un email existe déjà »), les lignes en erreur avec leur numéro et la raison (nom manquant, email invalide, email en double dans le fichier), et les tags ajoutés ou réutilisés. **Importer** applique ensuite exactement cette analyse. Si des membres ont changé entre-temps, rien n'est enregistré et l'analyse à jour s'affiche, à vérifier avant de confirmer. Les emails sont comparés sans tenir compte des majuscules. Le fichier n'est pas conservé. L'import apparaît une fois dans le journal d'activité de l'organisation, avec les nombres de membres créés et mis à jour.
+- **Importer** des membres en masse : bouton **Importer CSV/Excel** (fichiers `.csv` ou `.xlsx`, 2 Mo et 5000 lignes au plus). Les colonnes sont reconnues par leur intitulé (prénom, nom, email, téléphone, tags ; par exemple `prenom`, `courriel`, `mobile`, `groupes`). Plusieurs tags dans une cellule se séparent par `,`, `;` ou `|`. L'import se fait en deux temps. **Analyser le fichier** montre d'abord, sans rien enregistrer, les membres à créer, à mettre à jour ou ignorés (selon le choix « Si un email existe déjà »), les lignes en erreur avec leur numéro et la raison (nom manquant, email invalide, email en double dans le fichier), et les tags ajoutés ou réutilisés. **Importer** applique ensuite exactement cette analyse. Si des membres ont changé entre-temps, rien n'est enregistré et l'analyse à jour s'affiche, à vérifier avant de confirmer. Les emails sont comparés sans tenir compte des majuscules. Le fichier n'est pas conservé. L'import apparaît une fois dans le journal d'activité de l'organisation, avec les nombres de membres créés et mis à jour. Par organisation, 30 analyses et 10 imports par heure au plus.
 - **Rechercher** par texte libre (prénom, nom, email, téléphone) ou filtrer par tag
 - **Trier** par prénom, nom ou heures cumulées : cliquer sur l'en-tête de colonne (croissant → décroissant → reset)
 - **Activité** : le lien **Activité** d'une ligne ouvre la chronologie du membre, du plus récent au plus ancien : invitations envoyées et utilisées, inscriptions, liste d'attente, annulations, présences, responsabilités de secteur et modifications de la fiche, chacune avec sa date et un lien vers l'événement. Une phrase résume le tout (nombre d'événements, de créneaux, de présences). Ce sont des faits, sans note ni score ; ils disparaissent avec les événements et la fiche.
-- **Heures cumulées** : total du temps passé sur des créneaux actifs, tous événements confondus — utile pour identifier vos bénévoles les plus investis. Cette colonne n'apparaît que dans cette page ; elle n'est jamais incluse dans l'export PDF, potentiellement partagé avec les bénévoles.
+- **Heures cumulées** : total du temps passé sur des créneaux actifs, tous événements confondus — utile pour identifier vos bénévoles les plus investis. Cette colonne n'apparaît que dans cette page ; elle n'est jamais incluse dans les **Rapports**, potentiellement partagés avec les bénévoles.
 
 ![Page « Activité de Camille Rochat » : un résumé en une phrase, puis la chronologie datée, du plus récent au plus ancien, de ses inscriptions, de sa place en liste d'attente et de son invitation, chacune reliée à l'événement](/doc-img/admin-member-activity.png)
 
@@ -453,13 +472,15 @@ Chaque membre reçoit un email avec un lien unique qui pré-remplit son prénom,
 
 Le tableau affiche pour chaque membre invité :
 - **✓ Participation confirmée**
-- **Sans réponse**
+- **Sans créneau confirmé**
 
-Les compteurs en haut récapitulent : invités · inscrits · sans réponse.
+Les compteurs en haut récapitulent : **Invités** · **Inscrits** · **Sans créneau confirmé**.
+
+**Tester l'envoi d'email** envoie un exemple de l'email d'invitation à l'adresse de votre choix, pour vérifier le rendu avant d'inviter.
 
 ### Relancer les invités sans créneau
 
-Le compteur **Sans créneau confirmé** compte les membres invités qui n'ont encore aucune inscription confirmée à l'événement (ceux qui ne sont qu'en liste d'attente en font partie). Le bouton **Relancer les N sans créneau** leur renvoie un rappel, sans message personnalisé, contrairement à l'invitation initiale. **Leur écrire un message** ouvre « Écrire aux bénévoles » avec ce public déjà choisi, pour un texte libre.
+Le compteur **Sans créneau confirmé** compte les membres invités qui n'ont encore aucune inscription confirmée à l'événement (ceux qui ne sont qu'en liste d'attente en font partie). Le bouton **Relancer les N sans créneau** leur renvoie un rappel, sans message personnalisé, contrairement à l'invitation initiale ; une confirmation récapitule l'envoi avant qu'il parte. **Écrire un message aux N sans créneau** ouvre « Écrire aux bénévoles » avec ce public déjà choisi, pour un texte libre.
 
 ---
 
@@ -498,12 +519,12 @@ L'application envoie automatiquement des rappels :
 - **J-1** (24 h avant) : rappel court
 - **Jour J** (2–4 h avant) : rappel de dernière minute
 
-Ces rappels sont envoyés sans intervention de votre part, tant que `remindersEnabled` est actif sur l'événement.
+Ces rappels sont envoyés sans intervention de votre part pour les événements publiés, sauf ceux décochés pour toute l'organisation dans **Paramètres → Emails** (voir « Réglages des emails »).
 
 ### Notifications de modification
 
 - **Annulation d'un créneau** → les bénévoles inscrits sont avertis automatiquement et leur inscription est annulée
-- **Modification des horaires** → email envoyé aux bénévoles inscrits (peut être désactivé lors de la modification)
+- **Modification des horaires** → email envoyé aux bénévoles inscrits
 
 ---
 
@@ -518,19 +539,20 @@ Ces rappels sont envoyés sans intervention de votre part, tant que `remindersEn
 | Document | Contenu | Pour qui |
 |---|---|---|
 | Export complet | le planning en frise par jour, le récapitulatif par poste et la liste des bénévoles (en couleur) | l'équipe d'organisation |
+| Archive de l'événement (JSON) | un fichier téléchargé avec toutes les données de l'événement : réglages, créneaux, inscriptions, pages, responsables, jalons et journal | vos archives, ou pour changer d'outil |
 | Planning par jour | pour chaque jour, la frise des postes avec les prénoms dans les créneaux, puis le détail avec les places libres | affichage, bénévoles |
 | Planning par poste | une page par poste : sa frise, ses créneaux, ses bénévoles, son responsable de secteur | chaque responsable |
 | Planning individuel | une page par bénévole : sa journée en frise, puis chaque créneau avec lieu de rendez-vous, contact et consignes | à remettre à l'arrivée |
 | Feuille de présence | par créneau, une case à cocher par bénévole (déjà cochée si la présence a été marquée dans l'application), heure d'arrivée, remarque, et des lignes vides pour les arrivées imprévues | organisateurs |
 | Liste avec téléphones | tous les bénévoles par ordre alphabétique, téléphone, email et créneaux | organisateurs seulement |
 
-Sauf l'export complet, ces documents sont conçus pour le noir et blanc. Les heures cumulées des membres n'y figurent jamais ; les documents avec téléphones portent la mention « ne pas afficher ni distribuer ».
+Sauf l'export complet, ces documents sont conçus pour le noir et blanc. La feuille de présence en CSV se télécharge depuis les inscriptions (voir « Présences le jour J »). Les heures cumulées des membres n'y figurent jamais ; les documents avec téléphones portent la mention « ne pas afficher ni distribuer ».
 
 ---
 
 ### Badges
 
-Depuis **Rapports**, la section **Badges** imprime un badge d'identification par bénévole inscrit : prénom en grand, nom (optionnel), poste(s) et créneaux (optionnels), avec un bandeau à la couleur du poste (à défaut celle de l'événement, ou noir et blanc). Dix badges par feuille A4, à découper sur les pointillés. Filtre par poste, et liste « Un seul bénévole » pour réimprimer un badge perdu (deux homonymes y sont distingués par leur email). Pas de photo ni de code QR : un badge peut être photographié ou perdu, il ne porte donc aucun lien vers les données du bénévole.
+Depuis **Rapports**, la section **Badges** imprime un badge d'identification par bénévole inscrit : prénom en grand et poste(s), toujours imprimés ; nom de famille et créneaux, cochés par défaut, peuvent être retirés. **Couleur du bandeau** : celle du poste (à défaut celle de l'événement), celle de l'événement, ou noir et blanc. Dix badges par feuille A4, à découper sur les pointillés. Filtre par **Poste**, et liste **Bénévole (réimpression)** pour réimprimer un badge perdu (deux homonymes y sont distingués par leur email) ; avec un poste choisi, seuls ses créneaux sur ce poste figurent sur le badge. Pas de photo ni de code QR : un badge peut être photographié ou perdu, il ne porte donc aucun lien vers les données du bénévole.
 
 ## QR code
 
@@ -544,8 +566,10 @@ Depuis la page de l'événement → **QR code**, télécharger le QR code de la 
 
 Deux rôles :
 
-- **Propriétaire** : tous les droits, dont l'équipe d'administration et les réglages de l'organisation (nom, titre public, adresse, fuseau horaire, charte, réglages des emails), et la suppression définitive d'un événement archivé.
-- **Organisateur** : événements, postes, créneaux, inscriptions, présences, membres et invitations, messages aux bénévoles, exports et journaux. Il voit l'équipe et les réglages, sans pouvoir les changer ; la page le dit.
+- **Propriétaire** : tous les droits, dont l'équipe d'administration, les réglages de l'organisation (nom, titre public, adresse, fuseau horaire, charte, réglages des emails, masquer les **Premiers pas**) et la suppression définitive d'un événement archivé.
+- **Organisateur** : événements (création, duplication, modification, publication, archivage), postes, créneaux, questions, pages personnalisées, responsables de secteur, jalons, inscriptions, demandes et présences, membres (import et export compris) et invitations, messages aux bénévoles et modèles de messages, rappel manuel, rapports et exports, journaux, et renvoi d'un email en échec. Il voit l'équipe et un résumé des réglages de l'organisation, sans pouvoir les changer ; la page le dit.
+
+Dans les sections qui suivent, les réglages marqués **(réservé aux propriétaires)** ne sont modifiables que par un propriétaire.
 
 Sur cette page, un propriétaire peut :
 
@@ -560,9 +584,9 @@ Sur cette page, un propriétaire peut :
 
 ### Réglages des emails
 
-**Paramètres → Emails** (`/admin/settings/notifications`) commence par les réglages de l'organisation :
+**Paramètres → Emails** (`/admin/settings/notifications`) commence par les réglages de l'organisation (réservé aux propriétaires ; un organisateur n'y voit que l'adresse de réponse) :
 
-- **Rappels automatiques** : cochez ou décochez le rappel J-2, le rappel J-1 et le rappel du jour pour toute l'organisation. Un événement peut en plus couper tous ses rappels dans ses propres réglages.
+- **Rappels automatiques** : cochez ou décochez le rappel J-2, le rappel J-1 et le rappel du jour pour toute l'organisation.
 - **Prévenir les administrateurs à chaque inscription** : l'email envoyé à chaque administrateur actif quand un bénévole s'inscrit depuis la page publique.
 - **Adresse de réponse** : quand un bénévole répond à un email de l'application, sa réponse arrive à cette adresse (vide : l'adresse par défaut de la plateforme). Elle figure aussi sur la page personnelle des bénévoles (« Écrire à l'organisation »).
 - **M'envoyer un email de test** : un email à votre propre adresse, avec les réglages enregistrés, pour vérifier l'expéditeur, l'adresse de réponse et le rendu (cinq par heure au plus).
@@ -589,7 +613,8 @@ Vos données vous appartiennent et sortent de l'application à tout moment, sans
 | Un événement complet (réglages, créneaux, inscriptions avec les bénévoles, pages, responsables, jalons, journal) | page de l'événement → **Rapports** → **Archive de l'événement (JSON)** | JSON |
 | Tous les membres (étiquettes, disponibilités, notes, nombre d'inscriptions, membres désactivés compris) | **Membres** → **Exporter les membres (CSV)** | CSV |
 | Le journal d'activité de l'organisation | **Paramètres** → **Journal d'activité** → **Exporter tout le journal (CSV)** | CSV |
-| Une feuille de présence, le planning, la liste des bénévoles | **Rapports** de l'événement | CSV, PDF, HTML |
+| Le planning, la liste des bénévoles, les feuilles à imprimer | **Rapports** de l'événement | PDF (depuis le navigateur) |
+| La feuille de présence | **Inscriptions** de l'événement → **Exporter les présences (CSV)** | CSV |
 
 Les fichiers CSV s'ouvrent tels quels dans Excel ou LibreOffice (UTF-8, point-virgule). Les archives ne contiennent jamais de lien personnel ni de jeton d'accès.
 
@@ -615,13 +640,31 @@ Une donnée effacée reste dans les sauvegardes chiffrées jusqu'à leur rotatio
 
 **`/admin/settings/activity`**
 
-Liste chronologique et filtrable des changements sur les membres et les comptes admin (création, modification, désactivation d'un membre ; invitation, retrait d'un compte admin). Indépendant du journal par événement — les membres et comptes admin appartiennent à l'organisation, pas à un événement précis.
+Liste chronologique de ce qui concerne l'organisation plutôt qu'un événement précis :
+
+- les **membres** : création, modification, désactivation, import ;
+- les **comptes admin** : invitation, changement de rôle, retrait ;
+- les **emails** : un email en échec remis en file d'envoi ;
+- l'**organisation** : modification des réglages des emails ;
+- les **modèles de messages** créés, modifiés ou supprimés.
+
+**Filtrer par type** restreint la liste aux **Membres**, **Comptes admin**, **Emails** ou **Organisation** ; les modèles de messages n'apparaissent qu'avec **Tous les types**. **Exporter tout le journal (CSV)** télécharge le journal complet. Indépendant du journal par événement.
+
+---
+
+## Nom et adresse de l'organisation
+
+**`/admin/settings/admins`** → sections **Nom de l'organisation** et **Identifiant public (slug)** (réservé aux propriétaires)
+
+- **Nom de l'organisation** : 2 à 100 caractères. Affiché dans l'administration, dans les emails et au-dessus du titre de la page publique.
+- **Identifiant public** : l'adresse de votre espace (`identifiant.benevol.app`), 2 à 40 caractères : lettres minuscules, chiffres et tirets, sans tiret au début ni à la fin. Si des événements sont publiés, une confirmation est demandée avant le changement. Après l'enregistrement, vous êtes redirigé(e) vers la nouvelle adresse.
+- **Anciens identifiants** : ils continuent de rediriger vers l'adresse actuelle, pour que les liens déjà partagés fonctionnent. **Supprimer** un ancien identifiant arrête cette redirection : les liens qui l'utilisent ne fonctionnent plus.
 
 ---
 
 ## Titre de la page publique
 
-**`/admin/settings/admins`** → section **Titre de la page publique**
+**`/admin/settings/admins`** → section **Titre de la page publique** (réservé aux propriétaires)
 
 Le titre affiché en haut de la page publique de vos événements (l'adresse de votre organisation, sans nom d'événement). Par défaut : « Bénévoles ». Saisissez le texte de votre choix (2 à 100 caractères) puis **Enregistrer** ; le même texte devient le titre de l'onglet du navigateur. Le nom de l'organisation reste affiché juste au-dessus. **Rétablir « Bénévoles »** revient au titre par défaut. Ce titre ne s'applique pas aux pages d'événement, qui gardent le titre de l'événement.
 
@@ -629,15 +672,17 @@ Le titre affiché en haut de la page publique de vos événements (l'adresse de 
 
 ## Fuseau horaire
 
-**`/admin/settings/admins`** → section **Fuseau horaire**
+**`/admin/settings/admins`** → section **Fuseau horaire** (réservé aux propriétaires)
 
-Les heures des créneaux sont des heures locales : ce réglage indique dans quel fuseau les lire. Il sert à envoyer les rappels au bon moment, à indiquer l'heure limite d'une place proposée en liste d'attente, et à afficher les heures du journal de l'événement et de l'export PDF. Par défaut, c'est le fuseau de la plateforme (Europe/Zurich) ; choisissez-en un autre si vos événements ont lieu ailleurs, puis **Enregistrer**. Changer de fuseau ne modifie pas les heures affichées des créneaux, mais décale le moment où leurs rappels partent.
+Les heures des créneaux sont des heures locales : ce réglage indique dans quel fuseau les lire. Il sert à envoyer les rappels au bon moment, à indiquer l'heure limite d'une place proposée en liste d'attente, et à afficher les heures du journal de l'événement et des **Rapports**. Par défaut, c'est le fuseau de la plateforme (Europe/Zurich) ; choisissez-en un autre si vos événements ont lieu ailleurs, puis **Enregistrer**. Changer de fuseau ne modifie pas les heures affichées des créneaux, mais décale le moment où leurs rappels partent.
 
 ---
 
 ## Charte du bénévole
 
-**`/admin/settings/admins`** → section **Charte du bénévole**
+Dans l'interface, la charte s'appelle « Convention des Bénévoles ».
+
+**`/admin/settings/admins`** → section **Convention des Bénévoles** (réservé aux propriétaires)
 
 La charte est le texte que les bénévoles doivent lire et accepter avant de finaliser leur inscription. Un texte par défaut est fourni ; vous pouvez le personnaliser librement ou le réinitialiser.
 
@@ -645,9 +690,7 @@ La charte est le texte que les bénévoles doivent lire et accepter avant de fin
 - Modifier le texte dans la textarea et cliquer sur **Enregistrer**
 - Cliquer sur **Réinitialiser la convention par défaut** pour revenir au texte standard
 
-Dans l'interface, ce bloc s'intitule « Convention des Bénévoles » ; côté bénévole, le lien du formulaire s'intitule « charte du bénévole ».
-
-Les bénévoles voient la charte sous forme de lien « Lire la charte » dans le formulaire d'inscription. Cliquer dessus ouvre un modal avec le texte complet et un bouton « J'ai lu et j'accepte ».
+Dans le formulaire d'inscription, les bénévoles cochent la case « J'ai lu et j'accepte la convention des bénévoles ». Le lien « convention des bénévoles » ouvre une fenêtre « Convention des Bénévoles » avec le texte complet et un bouton « J'ai lu et j'accepte », qui coche la case.
 
 ---
 

@@ -26,6 +26,7 @@ Au démarrage, `docker-entrypoint.sh` attend PostgreSQL, exécute `prisma migrat
 
 ```bash
 export AUTH_SECRET="$(openssl rand -base64 48)"
+export TOKEN_ENCRYPTION_KEY="$(openssl rand -base64 32)"   # à conserver : voir « Mise à jour depuis 1.x »
 docker compose up -d
 ```
 
@@ -56,7 +57,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `cronjob-cleanup.yaml` | Purge RGPD, 02:00 UTC |
 | `cronjob-backup.yaml` | `pg_dump` chiffré (AES-256) vers un volume, 01:00 UTC, rétention 30 jours |
 | `cronjob-backup-offsite.yaml` | Copie des fichiers déjà chiffrés vers Dropbox (`rclone`), 01:30 UTC, rétention 90 jours côté Dropbox |
-| `log-rotation.md` | Rétention des logs sur 90 jours |
+| `log-rotation.md` | Rotation des journaux du nœud : procédure manuelle, la durée de 90 jours n'est pas encore garantie |
 
 ### Adresse des visiteurs et limites de débit
 
@@ -106,7 +107,7 @@ APP_IMAGE=$IMAGE envsubst < k8s/deployment.yaml | kubectl apply -f -
 kubectl -n benevoles rollout status deploy/benevoles-app
 
 # 5. Exposition et tâches planifiées
-kubectl apply -f k8s/service.yaml -f k8s/ingress.yaml -f k8s/certificate-wildcard.yaml
+kubectl apply -f k8s/service.yaml -f k8s/ingress.yaml -f k8s/ingressroute-tokens.yaml -f k8s/certificate-wildcard.yaml
 kubectl apply -f k8s/cronjob-reminders.yaml -f k8s/cronjob-cleanup.yaml -f k8s/cronjob-backup.yaml -f k8s/cronjob-backup-offsite.yaml
 ```
 
@@ -117,6 +118,110 @@ Points d'attention :
 - Le secret `benevoles-secret` réel n'est pas appliqué depuis `k8s/secret.yaml` (simple modèle) : l'étape « Sync k8s secret » de `deploy.yml` le régénère à chaque déploiement à partir des secrets GitHub, avec `AUTH_URL`, `AUTH_TRUST_HOST`, `VAPID_*` et `SENTRY_DSN` (secret GitHub `SENTRY_DSN`, à défaut `NEXT_PUBLIC_SENTRY_DSN`). Le DSN navigateur, lui, est injecté au build.
 - Les sondes `readiness` et `liveness` interrogent `/api/health` (requête `SELECT 1`, délais de 3 et 5 s). Elles interrogeaient auparavant `/api/public/events`, plus lourd ; des événements Kubernetes « Readiness probe failed (Client.Timeout exceeded) » ont été observés sur plusieurs pods lors des déploiements du 20 septembre 2026.
 - Les cron jobs de rappels et de purge lisent `NEXT_PUBLIC_APP_URL` et `CRON_SECRET` dans `benevoles-secret`.
+
+## Mise à jour depuis 1.x
+
+La version 2.0 ne se met pas à jour sans préparation :
+
+- `TOKEN_ENCRYPTION_KEY` est **obligatoire en production** : sans elle, le serveur refuse de démarrer. Une clé mal formée, ou une valeur invalide de `APP_TIME_ZONE`, bloque aussi le démarrage.
+- Sur Kubernetes, les pods de l'application ne migrent plus la base au démarrage (`MIGRATE_ON_START=false`) : les migrations passent par le Job `k8s/job-migrate.yaml`, **avant** la mise à jour du Deployment.
+- Deux nouveaux manifestes : `k8s/ingressroute-tokens.yaml` (liens personnels exclus des journaux d'accès) et `k8s/traefik-config.yaml` (adresse réelle des visiteurs).
+
+### 1. Sauvegarder
+
+Cette sauvegarde est le seul retour arrière possible (étape 9).
+
+```bash
+# Kubernetes
+kubectl -n benevoles create job --from=cronjob/postgres-backup backup-avant-2-0
+kubectl -n benevoles wait --for=condition=complete job/backup-avant-2-0 --timeout=600s
+
+# Docker Compose
+docker compose exec -T postgres pg_dump -U benevoles benevoles | gzip > benevoles-avant-2.0.sql.gz
+```
+
+### 2. Vérifier que les migrations passeront
+
+Deux migrations s'arrêtent sur des données qu'elles ne savent pas traiter. Chacune de ces requêtes doit renvoyer 0 ligne :
+
+```sql
+-- Emails qui ne diffèrent que par la casse ou des espaces : fusionner les fiches d'abord
+SELECT "organizationId", lower(trim(email)) FROM "Volunteer" WHERE email IS NOT NULL AND "organizationId" IS NOT NULL GROUP BY 1, 2 HAVING count(*) > 1;
+SELECT lower(trim(email)) FROM "AdminUser" GROUP BY 1 HAVING count(*) > 1;
+SELECT "eventId", "roleName", lower(trim(email)) FROM "SectorLeader" GROUP BY 1, 2, 3 HAVING count(*) > 1;
+-- Valeurs de statut hors liste
+SELECT id, status FROM "Registration" WHERE status NOT IN ('active', 'waiting', 'offered', 'cancelled', 'deleted');
+SELECT id, source FROM "Registration" WHERE source NOT IN ('public_form', 'admin_manual');
+SELECT id, status FROM "Shift" WHERE status NOT IN ('open', 'full', 'closed', 'cancelled');
+SELECT id, "publicStatus" FROM "Event" WHERE "publicStatus" NOT IN ('draft', 'published', 'archived');
+SELECT id, role FROM "AdminUser" WHERE role NOT IN ('admin', 'super_admin');
+```
+
+La recherche sans accents demande l'extension PostgreSQL `unaccent` (`CREATE EXTENSION IF NOT EXISTS unaccent`) : l'utilisateur de la base doit avoir le droit de la créer. Les images officielles `postgres` la fournissent.
+
+### 3. Générer la clé et la conserver
+
+```bash
+openssl rand -base64 32
+```
+
+La ranger **d'abord** dans un gestionnaire de mots de passe, hors du serveur et hors du dépôt. Perdue, elle ne casse pas les liens déjà envoyés (ils sont reconnus par leur empreinte), mais l'application ne peut plus les renvoyer : rappels, « renvoyer le lien », notifications aux responsables. Pour la changer plus tard, suivre « Rotation de la clé de chiffrement » dans le README. `TOKEN_ENCRYPTION_KEY_ID` et `TOKEN_ENCRYPTION_PREVIOUS_KEYS` ne servent qu'aux rotations : les laisser vides.
+
+### 4. Installer la clé
+
+- **Avec `deploy.yml`** : `gh secret set TOKEN_ENCRYPTION_KEY`. Le workflow s'arrête avant de toucher au cluster si ce secret manque, et il régénère `benevoles-secret` à chaque déploiement : une modification manuelle du secret serait écrasée.
+- **Kubernetes à la main** : ajouter `TOKEN_ENCRYPTION_KEY` dans `benevoles-secret` (modèle : `k8s/secret.yaml`). Vérifier aussi que ce secret contient `CRON_SECRET` et `NEXT_PUBLIC_APP_URL` : les CronJobs de sauvegarde les lisent, et sans eux leur pod ne démarre pas.
+- **Docker Compose** : `TOKEN_ENCRYPTION_KEY` dans le fichier `.env` à côté de `docker-compose.yml`, et `CRON_SECRET` dans la section `environment` : sans lui, la tâche de nettoyage est refusée et les anciens liens ne sont jamais chiffrés.
+
+### 5. Kubernetes
+
+Avec `deploy.yml`, un push sur `main` applique tout dans le bon ordre. À la main, suivre [Mise en place manuelle](#mise-en-place-manuelle) : migrations d'abord, et ne pas continuer si le Job échoue (`backoffLimit: 0`).
+
+`k8s/traefik-config.yaml` n'est **pas** appliqué par `deploy.yml` : il règle le Traefik de k3s partagé par tous les sites du cluster (`kube-system`). Un `HelmChartConfig` `traefik` existant serait remplacé : fusionner d'abord ses réglages. À appliquer une fois :
+
+```bash
+kubectl apply -f k8s/traefik-config.yaml
+kubectl -n kube-system get svc traefik -o jsonpath='{.spec.externalTrafficPolicy}'   # Local
+```
+
+`ingressroute-tokens.yaml` demande Traefik 3.1 ou plus récent, et ses domaines (`benevol.app`) et son secret TLS sont écrits en dur : les adapter pour un autre domaine.
+
+**Pendant le remplacement du pod**, le code 1.x tourne sur le schéma 2.0 et ne peut plus créer d'inscription, de responsable de secteur ni d'invitation (nouvelle colonne obligatoire qu'il ne remplit pas). Déployer hors période d'inscriptions, ou passer ponctuellement la `strategy` du Deployment à `Recreate` (courte coupure au lieu d'erreurs).
+
+### 6. Docker Compose
+
+```bash
+git pull
+docker compose up -d --build
+docker compose logs -f app   # « ✓ Migrations appliquées », puis démarrage du serveur
+```
+
+Avec Compose, les migrations tournent au démarrage du conteneur (`MIGRATE_ON_START` vaut `true` par défaut).
+
+### 7. Vérifier
+
+- Journaux de l'application : sur Kubernetes, « ↷ Migrations ignorées (MIGRATE_ON_START=false…) », et aucune erreur `TOKEN_ENCRYPTION_KEY` ni `APP_TIME_ZONE`.
+- `/api/health` répond `200`.
+- Page **Santé du service** (super admin) : « Migrations de la base » sans migration en attente, « Chiffrement des liens personnels » à « Configuré. », et le lendemain « Nettoyage nocturne » à jour.
+
+### 8. Liens des bénévoles existants
+
+Aucun lien envoyé n'est cassé : la migration calcule l'empreinte de chaque lien existant. Les nouveaux liens sont chiffrés dès la mise en service ; les anciens le sont au passage suivant de la tâche de nettoyage (02:00 UTC), par lots. Pour le lancer tout de suite :
+
+```bash
+# Kubernetes
+kubectl -n benevoles create job --from=cronjob/app-cleanup cleanup-manuel
+kubectl -n benevoles logs -f job/cleanup-manuel
+
+# Docker Compose
+curl -X POST -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/cleanup
+```
+
+Ce passage fait aussi la purge habituelle des données arrivées en fin de durée de conservation.
+
+### 9. Retour arrière
+
+Revenir à une image 1.x sur une base migrée ne fonctionne pas : le code 1.x ne peut plus créer d'inscription, et il ne retrouve pas les liens chiffrés. Le seul retour arrière est la restauration de la sauvegarde de l'étape 1, en perdant ce qui a été saisi depuis.
 
 ## Webhook DNS Gandi
 
