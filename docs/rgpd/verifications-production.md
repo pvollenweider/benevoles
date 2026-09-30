@@ -4,18 +4,18 @@ Ce que le dépôt ne permet pas d'établir. Pour chaque point : la preuve à con
 
 ## Hébergeur du serveur
 
-- [ ] Fournisseur et entité contractante réels (la politique publiée cite Kimsufi / OVH).
-- [ ] Centre de données (pays, ville) et accès possibles du support depuis d'autres pays.
-- [ ] Conditions et DPA applicables à l'offre souscrite ; lien vers le document officiel.
+- [x] Fournisseur et entité : OVH SAS, Roubaix, éditeur de Kimsufi (adresse du serveur, whois ; mentions légales Kimsufi). Vérifié le 2026-09-30. Reste : entité du contrat dans l'espace client.
+- [ ] Centre de données : l'adresse du serveur est allouée à Roubaix (France) ; datacenter exact (RBX) à confirmer dans l'espace client. Accès à distance possible de filiales hors UE sous clauses types (DPA § 6.2) : noté dans [sous-traitants.md](sous-traitants.md).
+- [ ] DPA : documents officiels trouvés (annexe traitement de données FR 7.0, conditions Serveurs dédiés) ; acceptation dans l'espace client à confirmer.
 
 ## Envoi des emails (SMTP)
 
-- [ ] Fournisseur réellement configuré dans le secret `SMTP_HOST` de production (ne pas reprendre « Gandi » sans le vérifier).
-- [ ] DPA, localisation, durée de conservation des journaux et des files d'envoi du fournisseur.
+- [x] Fournisseur : **Gandi Mail**, seul expéditeur autorisé du domaine (SPF, DKIM `gm1`–`gm3`, MX, DMARC strict), observé le 2026-09-30. Confirmation formelle : valeur de `SMTP_HOST` dans le secret de production.
+- [ ] DPA v2023.0 et localisation (France, sans transfert) documentés ; **durée des journaux SMTP et des files à demander** à Gandi (support ou dpo@gandi.net).
 
 ## Dropbox (copie hors site)
 
-- [ ] Offre et entité contractante du compte utilisé par rclone.
+- [ ] **Offre du compte utilisé par rclone** : décisive, le DPA de Dropbox ne couvre que les offres équipe (voir « Points d'attention » dans [sous-traitants.md](sous-traitants.md)).
 - [ ] Région de stockage effective du compte, accès possibles hors de Suisse et de l'UE.
 - [ ] DPA et mécanisme de transfert applicable.
 - [ ] Conservation des fichiers supprimés et des versions (la suppression par rclone au-delà de la durée de la matrice ne dit rien de la corbeille côté Dropbox).
@@ -23,9 +23,9 @@ Ce que le dépôt ne permet pas d'établir. Pour chaque point : la preuve à con
 
 ## Sentry
 
-- [ ] Entité contractante, région du projet de production (la politique publiée dit UE, Allemagne).
-- [ ] DPA accepté dans l'organisation Sentry ; liste des sous-traitants de Sentry.
-- [ ] Durées de conservation des erreurs, traces et enregistrements selon l'offre.
+- [x] Région : **UE (Francfort)**, observée le 2026-09-30 (le site envoie ses événements à `ingest.de.sentry.io`). Entité : Functional Software, Inc. ; comptes et réglages toujours aux États-Unis.
+- [ ] DPA accepté dans l'organisation (le DPA et la liste des sous-traitants sont publics) ; **fonctions d'IA** de Sentry (sous-traitants Anthropic, OpenAI) actives ou non.
+- [ ] Offre souscrite, qui fixe la conservation (30 jours en Developer, 90 jours pour erreurs et enregistrements à partir de Team).
 - [ ] Taux effectifs : ceux du code (10 % des traces, 10 % des sessions enregistrées, 100 % des sessions en erreur) ne sont pas surchargés par des règles du projet.
 - [ ] Filtres côté serveur Sentry (données sensibles, IP) : réglages du projet.
 
