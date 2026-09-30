@@ -9,7 +9,7 @@ const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
 const ORG_ADMIN_PASSWORD = process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password"
 
 test.describe("public pages", () => {
-  for (const path of ["/fonctionnalites", "/doc", "/doc/benevole", "/accessibilite", "/legal/privacy"]) {
+  for (const path of ["/", "/fonctionnalites", "/doc", "/doc/benevole", "/accessibilite", "/legal/privacy"]) {
     test(`${path} has no serious violation`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()

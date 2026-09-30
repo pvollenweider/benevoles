@@ -1,26 +1,30 @@
 import Link from "next/link"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { prisma } from "@/lib/prisma"
 import { formatShortDate } from "@/lib/utils"
 import { resolveOrgSlug } from "@/lib/resolve-org"
+import Image from "next/image"
 import GitHubMark from "@/components/GitHubMark"
 import PublicFooter from "@/components/PublicFooter"
 import { apexBaseUrl } from "@/lib/urls"
 import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
+import { CONTACT_EMAIL, LANDING_FAQ, REPOSITORY_URL, jsonLdScript, landingJsonLd, landingMetadata } from "@/lib/landing-seo"
 
 export const dynamic = "force-dynamic"
 
 const DEFAULT_TITLE = "Bénévoles"
 
-// The marketing home of the apex host: its own title and description, canonical on the apex.
-const APEX_DESCRIPTION = "Planifiez vos bénévoles par postes et créneaux, partagez un lien d'inscription sans compte et gardez une vue claire du planning. Pour associations et événements."
-const APEX_METADATA: Metadata = {
-  title: "benevol.app — le planning des bénévoles pour associations et événements",
-  description: APEX_DESCRIPTION,
-  alternates: { canonical: `${apexBaseUrl()}/` },
-  openGraph: { type: "website", siteName: "benevol.app", locale: "fr_CH", url: `${apexBaseUrl()}/`, title: "benevol.app", description: APEX_DESCRIPTION },
+// The marketing home of the apex host: its own title, description, social card and structured
+// data (src/lib/landing-seo.ts), canonical on the apex.
+const APEX_METADATA: Metadata = landingMetadata(apexBaseUrl())
+
+// The browser bar takes the hero's colour on the apex home only: organisation pages have their
+// own header colour.
+export async function generateViewport(): Promise<Viewport> {
+  const rawOrgSlug = (await headers()).get("x-org-slug")
+  return rawOrgSlug ? {} : { themeColor: "#1e3a8a" }
 }
 
 // Document title = the organization's public title (h1), default "Bénévoles".
@@ -136,281 +140,264 @@ export default async function HomePage() {
   )
 }
 
-// ── Static Gantt mockup — decorative illustration, aria-hidden ────────────────
-// Reproduces real app: role colors from roles.tsx, spectacle band, waitlist, full slot
-// Text contrast: white on each bar color ≥ 4.5:1 (WCAG AA verified)
-// 09h–17h = 8 slots of 1h = 12.5% each
-const GANTT_HOURS = ["09h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h"]
-// Spectacle band: 13h–17h = left 50%, width 50%
-const SHOW = { left: 50, width: 50, name: "🎪 Concert" }
-const GANTT_ROWS = [
+// ── Apex home ────────────────────────────────────────────────────────────────
+// Everything stated here is shipped (FEATURES.md is the full list, linked below) or stated by the
+// legal pages (free, hosted in France, no tracking cookie). The FAQ text comes from
+// src/lib/landing-seo.ts, which also feeds the FAQPage structured data.
+
+const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+
+const STEPS = [
   {
-    role: "Bar",
-    // rose-600 (#e11d48) white 5.5:1 ✓ — hash("bar")→3→rose
-    bars: [
-      { label: "Bar", left: 12.5, width: 50, bg: "#e11d48", full: false, waitlist: false },
-    ],
+    title: "Vous préparez le planning",
+    text: "Des postes, des créneaux, un nombre de places. Partez d'un modèle (festival, buvette, fête de village) ou de l'édition de l'an dernier, décalée à la bonne date.",
   },
   {
-    role: "Accueil",
-    // sky-600 (#0284c7) white 4.8:1 ✓ — full slot (Complet)
-    bars: [
-      { label: "Accueil · Complet", left: 0, width: 37.5, bg: "#0284c7", full: true, waitlist: false },
-    ],
+    title: "Vous partagez un lien",
+    text: "Votre page, à l'adresse de votre association, s'envoie par email, se poste sur les réseaux ou s'imprime sur une affiche. Vous pouvez aussi inviter directement les membres de votre équipe.",
   },
   {
-    role: "Billetterie",
-    // blue-600 (#2563eb) white 5.0:1 ✓ — waitlist diagonal stripes
-    bars: [
-      { label: "Billetterie · Attente", left: 0, width: 62.5, bg: "#2563eb", waitlist: true, full: false },
-    ],
-  },
-  {
-    role: "Sono",
-    // fuchsia-600 (#c026d3) white 4.9:1 ✓ — split: Soundcheck before show, Live during show
-    bars: [
-      { label: "Soundcheck", left: 12.5, width: 37.5, bg: "#c026d3", full: false, waitlist: false },
-      { label: "Live",       left: 50,   width: 50,   bg: "#a21caf", full: false, waitlist: false },
-    ],
+    title: "Ils choisissent leurs créneaux",
+    text: "Depuis leur téléphone, sans compte ni mot de passe. Ils reçoivent une confirmation, des rappels, et un lien personnel pour modifier ou annuler.",
   },
 ]
 
-function GanttMockup() {
-  return (
-    <div
-      aria-hidden="true"
-      className="mt-8 sm:mt-0 rounded-xl overflow-hidden border border-blue-200 shadow-sm select-none pointer-events-none"
-    >
-      {/* Browser chrome */}
-      <div className="bg-white border-b border-gray-100 px-3 py-2 flex items-center gap-2">
-        <div className="flex gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-gray-200" />
-          <span className="w-2.5 h-2.5 rounded-full bg-gray-200" />
-          <span className="w-2.5 h-2.5 rounded-full bg-gray-200" />
-        </div>
-        <div className="flex-1 bg-gray-100 rounded-md px-2 py-0.5 text-[10px] text-gray-400 font-mono truncate">
-          festival.benevol.app/programme-2026
-        </div>
-      </div>
-
-      {/* Timeline */}
-      <div className="bg-white overflow-x-auto">
-        <div style={{ minWidth: 440 }}>
-          {/* Time header */}
-          <div className="flex border-b border-gray-100">
-            <div className="w-[72px] flex-shrink-0 border-r border-gray-100" />
-            {GANTT_HOURS.map((h) => (
-              <div
-                key={h}
-                className="flex-1 text-center text-[10px] text-gray-500 py-1.5 border-l border-gray-100"
-              >
-                {h}
-              </div>
-            ))}
-          </div>
-
-          {/* Show band row — concert background */}
-          <div className="flex border-b border-gray-100 relative">
-            <div className="w-[72px] flex-shrink-0 border-r border-gray-100 px-2 flex items-center">
-              <span className="text-[9px] text-gray-400 italic truncate">Scène</span>
-            </div>
-            <div className="flex-1 relative" style={{ height: 18 }}>
-              <div
-                className="absolute top-1 bottom-1 rounded-sm flex items-center px-1.5 overflow-hidden"
-                style={{
-                  left: `${SHOW.left}%`,
-                  width: `${SHOW.width}%`,
-                  background: "rgba(126, 34, 206, 0.15)",
-                  border: "1px solid rgba(126, 34, 206, 0.3)",
-                }}
-              >
-                <span className="text-[9px] text-purple-700 font-medium truncate">{SHOW.name}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Role rows */}
-          {GANTT_ROWS.map((row) => (
-            <div key={row.role} className="flex border-b border-gray-100 last:border-b-0 relative">
-              {/* Concert band background tint on relevant rows */}
-              <div
-                className="absolute top-0 bottom-0 pointer-events-none"
-                style={{
-                  left: `calc(72px + ${SHOW.left}%)`,
-                  width: `${SHOW.width}%`,
-                  background: "rgba(126, 34, 206, 0.04)",
-                }}
-              />
-              <div className="w-[72px] flex-shrink-0 border-r border-gray-100 px-2 flex items-center relative z-10">
-                <span className="text-[10px] font-semibold text-gray-700 truncate">{row.role}</span>
-              </div>
-              <div className="flex-1 relative" style={{ height: 34 }}>
-                {row.bars.map((bar) => (
-                  <div
-                    key={bar.label}
-                    className="absolute top-1.5 bottom-1.5 rounded flex items-center px-1.5 overflow-hidden"
-                    style={{
-                      left: `${bar.left}%`,
-                      width: `calc(${bar.width}% - 2px)`,
-                      backgroundColor: bar.bg,
-                      backgroundImage: bar.waitlist
-                        ? "repeating-linear-gradient(45deg, rgba(255,255,255,0.25) 0px, rgba(255,255,255,0.25) 3px, transparent 3px, transparent 9px)"
-                        : undefined,
-                      opacity: bar.full ? 0.75 : 1,
-                    }}
-                  >
-                    {bar.full && (
-                      <svg aria-hidden="true" className="w-2.5 h-2.5 text-white flex-shrink-0 mr-1 opacity-80" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
-                      </svg>
-                    )}
-                    <span className="text-[9px] font-semibold text-white truncate leading-none">
-                      {bar.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Caption */}
-      <div className="bg-gray-50 border-t border-gray-100 px-3 py-1.5 text-[10px] text-gray-400 text-center">
-        Timeline bénévoles — Festival du Rhône 2026
-      </div>
-    </div>
-  )
-}
+const BENEFITS = [
+  {
+    title: "Vous savez où il manque du monde",
+    text: "Le tableau de bord commence par ce qui presse : créneaux pas encore complets, demandes à valider, places de liste d'attente qui expirent. Une page par événement classe les créneaux du plus dégarni au presque complet, et chaque ligne mène là où on agit.",
+    image: "/doc-img/admin-staffing.png",
+    alt: "Page « Où manque-t-il du monde ? » : 29 places pourvues sur 44, puis la liste des créneaux à compléter, chacun avec sa barre de remplissage et le nombre de personnes qui manquent.",
+  },
+  {
+    title: "Les messages partent tout seuls",
+    text: "Confirmation à l'inscription, rappels deux jours avant, la veille et le jour même. Quand une place se libère, la personne suivante sur la liste d'attente est prévenue. Pour le reste, écrivez à tous les inscrits, à un poste ou à un créneau, avec un aperçu avant l'envoi.",
+    image: "/doc-img/admin-message.png",
+    alt: "Page « Écrire aux bénévoles » : choix des destinataires (tous les inscrits, un poste, un créneau, la liste d'attente, les invités sans créneau) et modèles de message réutilisables.",
+  },
+  {
+    title: "Le jour J tient sur une feuille",
+    text: "Plannings par jour, par poste ou par bénévole, feuille de présence à cocher, badges à découper : tout s'imprime lisiblement en noir et blanc, ou s'enregistre en PDF.",
+    image: "/doc-img/admin-print.png",
+    alt: "Page « Rapports » : export complet, archive de l'événement, plannings par jour, par poste et individuel, prêts à imprimer.",
+  },
+]
 
 function LandingPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white text-gray-900">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(landingJsonLd(apexBaseUrl())) }} />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="bg-blue-900 px-6 py-24 sm:py-32">
-        <div className="max-w-3xl mx-auto">
-          <h1
-            className="text-4xl sm:text-5xl font-extrabold text-white leading-tight"
-            style={{ textWrap: "balance" } as React.CSSProperties}
-          >
-            Vos bénévoles s'inscrivent sans créer de compte.
-          </h1>
-          <p className="mt-5 text-lg text-blue-200 max-w-2xl leading-relaxed">
-            Un lien, ils choisissent leur créneau, c'est fait. Benevol est un outil open source
-            pour les associations et festivals qui gèrent des équipes de bénévoles.
+      <section className="bg-blue-900 px-4 sm:px-6 pt-16 pb-0 sm:pt-24 overflow-hidden">
+        <div className="max-w-6xl mx-auto grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end">
+          <div className="pb-4 lg:pb-24">
+            <h1
+              className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.05] tracking-tight"
+              style={{ textWrap: "balance" } as React.CSSProperties}
+            >
+              Un lien, et vos bénévoles s&apos;inscrivent.
+            </h1>
+            <p className="mt-6 text-lg sm:text-xl text-blue-100 max-w-xl leading-relaxed" style={{ textWrap: "pretty" } as React.CSSProperties}>
+              Ils choisissent leurs créneaux sur leur téléphone, sans créer de compte. Vous voyez où il
+              manque du monde, les rappels partent tout seuls, et le jour J tient sur une feuille.
+            </p>
+            <p className="mt-3 text-base text-blue-200 max-w-xl leading-relaxed">
+              Pour les festivals, les buvettes, les fêtes de village et toutes les associations qui
+              comptent sur des bénévoles.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-x-6 gap-y-4 items-center">
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                className={`inline-flex items-center gap-2 bg-white text-blue-900 text-base font-bold px-7 py-3.5 rounded-full hover:bg-blue-50 transition-colors ${focusRing} focus-visible:outline-white`}
+              >
+                Demander un espace<span aria-hidden="true"> →</span>
+              </a>
+              <a
+                href={REPOSITORY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`inline-flex items-center gap-2 py-2 text-white text-base font-medium underline-offset-4 hover:underline rounded ${focusRing} focus-visible:outline-white`}
+              >
+                <GitHubMark className="w-5 h-5" />
+                Voir le code
+                <span className="sr-only">(ouvre dans un nouvel onglet)</span>
+              </a>
+            </div>
+            <p className="mt-8 text-sm text-blue-200">
+              Gratuit <span aria-hidden="true">·</span> Open source <span aria-hidden="true">·</span> Hébergé en France
+            </p>
+          </div>
+
+          {/* The volunteer's side, on a phone: the real sign-up page of the demo event. */}
+          <div className="mx-auto w-full max-w-[300px] lg:max-w-[340px]">
+            <div className="rounded-t-[2.25rem] border-[10px] border-b-0 border-gray-950 bg-gray-950 shadow-2xl">
+              <div className="relative aspect-[390/700] overflow-hidden rounded-t-[1.6rem] bg-white">
+                <Image
+                  src="/doc-img/public-timeline-mobile.png"
+                  width={780}
+                  height={1688}
+                  alt="La page d'inscription sur un téléphone : la Fête du village de Montvert, ses postes (Montage, Accueil, Buvette, Navette, Sécurité) sur une frise horaire, avec les places prises et les créneaux complets."
+                  sizes="(min-width: 1024px) 320px, 280px"
+                  loading="eager"
+                  fetchPriority="high"
+                  className="absolute inset-x-0 top-0 w-full h-auto"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Comment ça marche ────────────────────────────────────────────── */}
+      <section aria-labelledby="steps-heading" className="px-4 sm:px-6 py-20 sm:py-24">
+        <div className="max-w-6xl mx-auto">
+          <h2 id="steps-heading" className="text-3xl sm:text-4xl font-bold tracking-tight" style={{ textWrap: "balance" } as React.CSSProperties}>
+            Prêt en trois étapes
+          </h2>
+          <ol role="list" className="mt-12 grid gap-10 md:grid-cols-3 md:gap-12">
+            {STEPS.map((step, i) => (
+              <li key={step.title}>
+                <span aria-hidden="true" className="block text-5xl font-extrabold text-blue-700 leading-none">{i + 1}</span>
+                <h3 className="mt-4 text-xl font-semibold">
+                  <span className="sr-only">Étape {i + 1} : </span>
+                  {step.title}
+                </h3>
+                <p className="mt-3 text-base text-gray-600 leading-relaxed">{step.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* ── Ce qui change pour vous ──────────────────────────────────────── */}
+      <section aria-labelledby="benefits-heading" className="bg-gray-50 border-y border-gray-200 px-4 sm:px-6 py-20 sm:py-24">
+        <div className="max-w-6xl mx-auto">
+          <h2 id="benefits-heading" className="text-3xl sm:text-4xl font-bold tracking-tight max-w-2xl" style={{ textWrap: "balance" } as React.CSSProperties}>
+            Moins de tableurs, moins de relances, plus de temps pour la fête
+          </h2>
+          <div className="mt-16 space-y-20 sm:space-y-28">
+            {BENEFITS.map((b, i) => (
+              <div key={b.title} className="grid gap-8 lg:grid-cols-12 lg:gap-12 lg:items-center">
+                <div className={`lg:col-span-5 ${i % 2 === 1 ? "lg:order-2 lg:col-start-8" : ""}`}>
+                  <h3 className="text-2xl font-bold tracking-tight" style={{ textWrap: "balance" } as React.CSSProperties}>{b.title}</h3>
+                  <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed" style={{ textWrap: "pretty" } as React.CSSProperties}>{b.text}</p>
+                </div>
+                <div className={`lg:col-span-7 ${i % 2 === 1 ? "lg:order-1 lg:col-start-1" : ""}`}>
+                  <Image
+                    src={b.image}
+                    width={1280}
+                    height={800}
+                    alt={b.alt}
+                    sizes="(min-width: 1024px) 640px, 100vw"
+                    className="w-full h-auto rounded-xl border border-gray-200 shadow-lg bg-white"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="mt-20 text-center">
+            <Link href="/fonctionnalites" className={`text-lg font-semibold text-blue-700 underline underline-offset-4 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
+              Voir toutes les fonctionnalités<span aria-hidden="true"> →</span>
+            </Link>
           </p>
-          <div className="mt-10 flex flex-wrap gap-4 items-center">
-            <a
-              href="mailto:contact@benevol.app"
-              className="inline-flex items-center gap-2 bg-white text-blue-900 text-sm font-bold px-6 py-3 rounded-full hover:bg-blue-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white"
-            >
-              Tester le projet<span aria-hidden="true"> →</span>
-            </a>
-            <a
-              href="https://github.com/pvollenweider/benevoles"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-white text-sm font-medium hover:text-blue-200 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-white underline-offset-4 hover:underline"
-            >
-              <GitHubMark className="w-5 h-5" />
-              Voir sur GitHub
-              <span className="sr-only">(ouvre dans un nouvel onglet)</span>
-            </a>
-          </div>
         </div>
       </section>
 
-      {/* ── Différenciateur principal ─────────────────────────────────────── */}
-      <section
-        aria-labelledby="features-heading"
-        className="max-w-5xl mx-auto px-6 py-20"
-      >
-        <h2 id="features-heading" className="sr-only">Fonctionnalités</h2>
-
-        {/* Primary feature — 2-col on desktop */}
-        <div className="bg-blue-50 rounded-2xl p-8 sm:p-10 mb-16 sm:grid sm:grid-cols-2 sm:gap-10 sm:items-center">
-          <div>
-            <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight" style={{ textWrap: "balance" } as React.CSSProperties}>
-              Inscription sans friction
-            </h3>
-            <p className="mt-4 text-base text-gray-600 leading-relaxed">
-              Pas de compte, pas de mot de passe. Vous publiez l'événement,
-              vous envoyez un lien. Les bénévoles choisissent leur créneau
-              sur la timeline, confirment en 30 secondes — depuis leur téléphone.
-            </p>
-            <p className="mt-3 text-sm text-gray-500">
-              Un lien unique leur permet de modifier ou d'annuler à tout moment.
-            </p>
-          </div>
-          <GanttMockup />
+      {/* ── Confiance ────────────────────────────────────────────────────── */}
+      <section aria-labelledby="trust-heading" className="px-4 sm:px-6 py-20 sm:py-24">
+        <div className="max-w-6xl mx-auto">
+          <h2 id="trust-heading" className="text-3xl sm:text-4xl font-bold tracking-tight" style={{ textWrap: "balance" } as React.CSSProperties}>
+            Un outil sur lequel compter
+          </h2>
+          <dl className="mt-12 grid gap-x-12 gap-y-10 sm:grid-cols-2">
+            <div>
+              <dt className="text-lg font-semibold">Gratuit et open source</dt>
+              <dd className="mt-2 text-base text-gray-600 leading-relaxed">
+                Pas d&apos;abonnement ni de version payante. Le code est public, sous licence AGPL-3.0,
+                et l&apos;outil grandit avec les retours des associations qui l&apos;utilisent.
+              </dd>
+            </div>
+            <div>
+              <dt className="text-lg font-semibold">Hébergé en France, sans pistage</dt>
+              <dd className="mt-2 text-base text-gray-600 leading-relaxed">
+                L&apos;application et sa base de données sont chez OVH, en France. Aucun cookie de
+                pistage, analytique ou publicitaire.{" "}
+                <Link href="/legal/privacy" className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
+                  Politique de confidentialité
+                </Link>
+              </dd>
+            </div>
+            <div>
+              <dt className="text-lg font-semibold">Vos données restent les vôtres</dt>
+              <dd className="mt-2 text-base text-gray-600 leading-relaxed">
+                Chaque organisation ne voit que ses événements et ses bénévoles. Membres, journal
+                d&apos;activité, archive complète d&apos;un événement : tout s&apos;exporte, à tout moment.
+              </dd>
+            </div>
+            <div>
+              <dt className="text-lg font-semibold">Pensé pour tout le monde</dt>
+              <dd className="mt-2 text-base text-gray-600 leading-relaxed">
+                Inscription et administration conçues pour le clavier et les lecteurs d&apos;écran,
+                vérifiées à chaque modification.{" "}
+                <Link href="/accessibilite" className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
+                  Déclaration d&apos;accessibilité
+                </Link>
+              </dd>
+            </div>
+          </dl>
         </div>
-
-        {/* Secondary features */}
-        <ul className="grid sm:grid-cols-3 gap-8" role="list">
-          <li>
-            <h3 className="text-base font-semibold text-gray-900">Planning par créneaux</h3>
-            <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-              Timeline Gantt par jour, réordonnement des postes, couverture visible d'un coup d'œil.
-            </p>
-          </li>
-          <li>
-            <h3 className="text-base font-semibold text-gray-900">Suivi et export PDF</h3>
-            <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-              Inscriptions en temps réel, export PDF pour la coordination sur le terrain.
-            </p>
-          </li>
-          <li>
-            <h3 className="text-base font-semibold text-gray-900">Communications automatiques</h3>
-            <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-              Confirmations, rappels J-2/J-1/Jour J, notifications de modification — sans intervention manuelle.
-            </p>
-          </li>
-        </ul>
-        <p className="mt-10 text-center">
-          <Link href="/fonctionnalites" className="text-base font-semibold text-blue-700 underline underline-offset-4 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700">
-            Voir toutes les fonctionnalités<span aria-hidden="true"> →</span>
-          </Link>
-        </p>
       </section>
 
-      {/* ── Signal communauté ─────────────────────────────────────────────── */}
-      <section className="bg-gray-50 border-t border-gray-200 px-6 py-14">
-        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-start gap-8">
-          <div className="flex-1">
-            <h2 className="text-lg font-bold text-gray-900">Construit par des organisateurs</h2>
-            <p className="mt-2 text-sm text-gray-600 leading-relaxed max-w-md">
-              Benevol est un projet open source, en développement actif, utilisé pour de vrais
-              événements. Le code est sur GitHub. Les retours et contributions sont bienvenus.
-            </p>
-          </div>
-          <div className="flex-shrink-0">
-            <a
-              href="https://github.com/pvollenweider/benevoles"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 border border-gray-300 rounded-full px-4 py-2 text-sm font-medium text-gray-700 hover:border-gray-400 hover:bg-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-            >
-              <GitHubMark className="w-4 h-4" />
-              pvollenweider/benevoles
-              <span className="sr-only">(ouvre dans un nouvel onglet)</span>
-            </a>
+      {/* ── FAQ (same text as the FAQPage structured data) ───────────────── */}
+      <section aria-labelledby="faq-heading" className="bg-gray-50 border-t border-gray-200 px-4 sm:px-6 py-20 sm:py-24">
+        <div className="max-w-3xl mx-auto">
+          <h2 id="faq-heading" className="text-3xl sm:text-4xl font-bold tracking-tight">Questions fréquentes</h2>
+          <div className="mt-10 divide-y divide-gray-200 border-y border-gray-200">
+            {LANDING_FAQ.map((f) => (
+              <details key={f.question} className="group">
+                <summary className={`flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-lg font-semibold rounded [&::-webkit-details-marker]:hidden ${focusRing} focus-visible:outline-blue-700`}>
+                  {f.question}
+                  <span aria-hidden="true" className="text-2xl font-normal text-blue-700 transition-transform group-open:rotate-45 motion-reduce:transition-none">+</span>
+                </summary>
+                <div className="pb-6 pr-8 text-base text-gray-600 leading-relaxed">
+                  <p>{f.answer}</p>
+                  {f.link && (
+                    <p className="mt-2">
+                      {f.link.href.startsWith("http") ? (
+                        <a href={f.link.href} target="_blank" rel="noopener noreferrer" className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
+                          {f.link.label}
+                          <span className="sr-only"> (ouvre dans un nouvel onglet)</span>
+                        </a>
+                      ) : (
+                        <Link href={f.link.href} className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
+                          {f.link.label}
+                        </Link>
+                      )}
+                    </p>
+                  )}
+                </div>
+              </details>
+            ))}
           </div>
         </div>
       </section>
 
       {/* ── CTA bas ──────────────────────────────────────────────────────── */}
-      <section className="px-6 py-14">
-        <div className="max-w-xl mx-auto text-center">
-          <h2 className="text-xl font-bold text-gray-900">On vous crée un espace</h2>
-          <p className="mt-3 text-sm text-gray-500 max-w-sm mx-auto leading-relaxed">
-            Le projet est ouvert aux testeurs. Écrivez-nous, on configure une organisation pour vous.
+      <section aria-labelledby="cta-heading" className="bg-blue-900 px-4 sm:px-6 py-20">
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 id="cta-heading" className="text-3xl sm:text-4xl font-bold text-white tracking-tight" style={{ textWrap: "balance" } as React.CSSProperties}>
+            Votre prochain événement commence ici
+          </h2>
+          <p className="mt-4 text-lg text-blue-100 leading-relaxed">
+            Écrivez-nous : on vous crée un espace à l&apos;adresse de votre association, et une liste
+            de premiers pas vous guide jusqu&apos;à la publication.
           </p>
           <a
-            href="mailto:contact@benevol.app"
-            className="mt-6 inline-flex items-center gap-2 border border-blue-600 text-blue-600 text-sm font-semibold px-6 py-3 rounded-full hover:bg-blue-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            href={`mailto:${CONTACT_EMAIL}`}
+            className={`mt-8 inline-flex items-center gap-2 bg-white text-blue-900 text-base font-bold px-7 py-3.5 rounded-full hover:bg-blue-50 transition-colors ${focusRing} focus-visible:outline-white`}
           >
-            contact@benevol.app
+            {CONTACT_EMAIL}
           </a>
         </div>
       </section>
