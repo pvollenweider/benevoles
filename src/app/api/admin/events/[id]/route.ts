@@ -157,7 +157,7 @@ const deleteSchema = z.object({ confirmTitle: z.string() })
  * Archiving goes through PATCH { publicStatus: "archived" }.
  */
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const guard = await requireOrgSession()
+  const guard = await requireOrgSession("owner")
   if (guard instanceof NextResponse) return guard
   const { db } = guard
 

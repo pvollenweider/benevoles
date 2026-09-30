@@ -20,7 +20,7 @@ export async function GET() {
 
 /** Partial update: only the switches or the address sent change; logged in the organization's activity. */
 export async function PATCH(req: Request) {
-  const guard = await requireOrgSession()
+  const guard = await requireOrgSession("owner")
   if (guard instanceof NextResponse) return guard
   const { organizationId, session } = guard
 

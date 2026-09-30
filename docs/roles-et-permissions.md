@@ -44,7 +44,14 @@ Un admin peut désigner un ou plusieurs bénévoles responsables d'un poste (`Sh
 
 ## Admin d'organisation
 
-Crée et gère les événements, créneaux, inscriptions, membres, invitations et réglages de sa propre organisation (nom, titre de la page publique, slug, charte). Il peut archiver un événement, puis le supprimer définitivement : la suppression est refusée (409) tant que l'événement n'est pas archivé, et exige la saisie du titre.
+Deux niveaux, pas davantage :
+
+- **Propriétaire** (rôle stocké `admin`, celui de tous les admins d'avant cette distinction) : tous les droits de l'organisation.
+- **Organisateur** (`organizer`) : les événements, postes, créneaux, inscriptions, présences, membres et leurs invitations, les messages, les exports et les journaux. Il ne gère pas l'équipe d'administration, ne change pas les réglages de l'organisation (nom, titre public, adresse, fuseau horaire, charte, réglages des emails) et ne supprime pas définitivement un événement.
+
+La matrice route × méthode × niveau est `PERMISSIONS` dans `src/lib/permissions.ts`. Chaque route la respecte côté serveur (`requireOrgSession("owner")` pour les routes réservées aux propriétaires, 403 sinon), pas seulement en masquant l'interface. Un test vérifie que chaque route admin et chaque méthode y figurent, avec le bon appel. Un autre vérifie qu'un organisateur reçoit 403 sur chaque route réservée, sans qu'aucune donnée ne soit lue. Un changement de rôle s'applique aux sessions ouvertes dès leur requête suivante, car la session relit le rôle à chaque appel.
+
+Un admin crée et gère les événements de sa propre organisation. Il peut archiver un événement ; un propriétaire peut ensuite le supprimer définitivement : la suppression est refusée (409) tant que l'événement n'est pas archivé, et exige la saisie du titre.
 
 Isolation entre organisations :
 
@@ -57,6 +64,8 @@ Toute nouvelle route admin doit ajouter son test d'isolation (voir [CONTRIBUTING
 
 Règles sur l'équipe :
 
+- Seul un propriétaire invite, retire ou change le rôle d'un admin. Une invitation crée un organisateur, sauf si le rôle Propriétaire est choisi.
+- L'organisation garde toujours au moins un propriétaire actif : le dernier ne peut être ni rétrogradé ni retiré.
 - Un admin ne peut pas se retirer lui-même, ni retirer le dernier admin actif.
 - L'invitation d'un admin envoie un lien d'activation valable 7 jours.
 
@@ -72,7 +81,7 @@ Règles sur l'équipe :
 | Couche | Fichier | Règle |
 |--------|---------|-------|
 | Pages | `src/proxy.ts` | `/admin/*` exige une session, sauf `login`, `accept-invite`, `forgot-password`, `reset-password`. `/super-admin/*` exige le rôle `super_admin`, sinon redirection vers `/admin` |
-| API admin | `requireOrgSession()` | 401 sans session, 403 sans organisation ou organisation désactivée |
+| API admin | `requireOrgSession(level)` | 401 sans session, 403 sans organisation, organisation désactivée, ou niveau insuffisant (routes réservées aux propriétaires, voir `PERMISSIONS`) |
 | API super admin | `requireSuperAdmin()` | 401 sans session, 403 si le rôle n'est pas `super_admin` |
 | API cron | `isAuthorized()` | `Authorization: Bearer $CRON_SECRET` |
 | API publique | jeton dans l'URL ou le corps | pas de session |

@@ -13,10 +13,13 @@ import { z } from "zod"
 import { hashToken } from "@/lib/token-hash"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
+import { ORG_ROLES, ORGANIZER_ROLE } from "@/lib/permissions"
 
 const postSchema = z.object({
   email: z.string().trim().toLowerCase().email(),
   name: z.string().min(1).max(100),
+  /** Level of the new admin (#469); organiser unless an owner is chosen explicitly. */
+  role: z.enum(ORG_ROLES).default(ORGANIZER_ROLE),
 })
 
 function generateToken(): string {
@@ -51,14 +54,14 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const guard = await requireOrgSession()
+  const guard = await requireOrgSession("owner")
   if (guard instanceof NextResponse) return guard
   const { db, organizationId } = guard
 
   const body = await req.json()
   const parsed = postSchema.safeParse(body)
   if (!parsed.success) return validationError(parsed.error)
-  const { email, name } = parsed.data
+  const { email, name, role } = parsed.data
 
   const existing = await prisma.adminUser.findUnique({ where: { email } })
   if (existing) return NextResponse.json({ error: "Cet email est déjà utilisé." }, { status: 409 })
@@ -81,7 +84,7 @@ export async function POST(req: Request) {
         email,
         name,
         passwordHash: dummyHash,
-        role: "admin",
+        role,
         isActive: false,
         setupTokenHash: hashToken(setupToken),
         setupTokenExpiresAt,
@@ -103,6 +106,7 @@ export async function POST(req: Request) {
     action: "adminuser.invited",
     entityType: "AdminUser",
     entityId: admin.id,
+    changes: { role: { from: null, to: role } },
   })
 
   deliverAfterResponse(outboxIds)

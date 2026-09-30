@@ -9,6 +9,7 @@ import OrgSlugForm from "@/components/admin/OrgSlugForm"
 import OrgTimeZoneForm from "@/components/admin/OrgTimeZoneForm"
 import { APP_TIME_ZONE, timeZoneChoices } from "@/lib/time-zone"
 import OrgCharterForm from "@/components/admin/OrgCharterForm"
+import { hasLevel } from "@/lib/permissions"
 
 export const dynamic = "force-dynamic"
 
@@ -47,6 +48,8 @@ export default async function AdminsSettingsPage() {
   ])
 
   const currentEmail = session.user?.email ?? ""
+  // Organisers see these settings but can't change them (#469); the routes refuse it too.
+  const isOwner = hasLevel(session.user?.role, "owner")
 
   return (
     <div className="space-y-5">
@@ -66,11 +69,25 @@ export default async function AdminsSettingsPage() {
         </div>
       </div>
 
-      {org && <OrgNameForm initialName={org.name} />}
+      {org && !isOwner && (
+        <section aria-labelledby="org-readonly-heading" className="bg-white rounded-2xl border border-gray-200 p-4 space-y-2">
+          <h2 id="org-readonly-heading" className="text-sm font-semibold text-gray-800">Organisation</h2>
+          <p className="text-sm text-gray-700">Votre rôle : organisateur. Ces réglages sont réservés aux propriétaires de l&apos;organisation.</p>
+          <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
+            <dt className="text-gray-600">Nom</dt><dd className="text-gray-900">{org.name}</dd>
+            <dt className="text-gray-600">Titre public</dt><dd className="text-gray-900">{org.publicTitle || "aucun"}</dd>
+            <dt className="text-gray-600">Adresse</dt><dd className="text-gray-900 break-all">{org.slug}.{baseDomain}</dd>
+            <dt className="text-gray-600">Fuseau horaire</dt><dd className="text-gray-900">{org.timeZone || APP_TIME_ZONE}</dd>
+            <dt className="text-gray-600">Charte des bénévoles</dt><dd className="text-gray-900">{org.volunteerCharter ? "définie" : "aucune"}</dd>
+          </dl>
+        </section>
+      )}
 
-      {org && <OrgPublicTitleForm initialTitle={org.publicTitle ?? ""} />}
+      {org && isOwner && <OrgNameForm initialName={org.name} />}
 
-      {org && (
+      {org && isOwner && <OrgPublicTitleForm initialTitle={org.publicTitle ?? ""} />}
+
+      {org && isOwner && (
         <OrgSlugForm
           initialSlug={org.slug}
           initialHistory={slugHistory.map((e) => ({ slug: e.slug, createdAt: e.createdAt.toISOString() }))}
@@ -79,7 +96,7 @@ export default async function AdminsSettingsPage() {
         />
       )}
 
-      {org && (
+      {org && isOwner && (
         <OrgTimeZoneForm
           initialTimeZone={org.timeZone ?? ""}
           defaultTimeZone={APP_TIME_ZONE}
@@ -87,7 +104,7 @@ export default async function AdminsSettingsPage() {
         />
       )}
 
-      {org && (
+      {org && isOwner && (
         <OrgCharterForm
           initialCharter={org.volunteerCharter ?? null}
           initialHasOrgInsurance={org.hasOrgInsurance}
@@ -105,6 +122,7 @@ export default async function AdminsSettingsPage() {
           pending: !a.isActive && a.setupTokenExpiresAt != null,
         }))}
         currentEmail={currentEmail}
+        canManage={isOwner}
       />
     </div>
   )

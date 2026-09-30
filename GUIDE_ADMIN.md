@@ -489,9 +489,17 @@ Depuis la page de l'événement → **QR code**, télécharger le QR code de la 
 
 **`/admin/settings/admins`**
 
-- **Liste** des administrateurs de votre organisation (actifs et invitations en attente)
-- **Inviter** un nouvel admin : saisir son nom et email → un email d'invitation avec lien d'activation est envoyé (lien valable 7 jours)
-- **Retrait** d'un admin (impossible de se retirer soi-même ou de retirer le dernier admin actif)
+Deux rôles :
+
+- **Propriétaire** : tous les droits, dont l'équipe d'administration et les réglages de l'organisation (nom, titre public, adresse, fuseau horaire, charte, réglages des emails), et la suppression définitive d'un événement archivé.
+- **Organisateur** : événements, postes, créneaux, inscriptions, présences, membres et invitations, messages aux bénévoles, exports et journaux. Il voit l'équipe et les réglages, sans pouvoir les changer ; la page le dit.
+
+Sur cette page, un propriétaire peut :
+
+- voir la **liste** des administrateurs de votre organisation (actifs et invitations en attente) ;
+- **inviter** un nouvel admin : saisir son nom et son email, et choisir son rôle (Organisateur par défaut). Un email d'invitation avec un lien d'activation est envoyé (lien valable 7 jours) ;
+- **changer le rôle** d'un admin dans sa ligne ; le changement s'applique aussitôt, y compris à ses sessions ouvertes ;
+- **retirer** un admin. Il est impossible de se retirer soi-même ou de retirer le dernier admin actif, et l'organisation garde toujours au moins un propriétaire actif.
 
 ---
 

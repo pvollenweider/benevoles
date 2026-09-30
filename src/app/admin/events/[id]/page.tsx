@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
+import { hasLevel } from "@/lib/permissions"
 import { formatShortDate } from "@/lib/utils"
 import { staffingHeadline, staffingSummary } from "@/lib/staffing"
 import { eventPublicUrl } from "@/lib/urls"
@@ -237,7 +238,10 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
 
       <div className="border-t border-gray-200 pt-4">
         <h2 className="text-sm font-semibold text-gray-700 mb-3">Suppression définitive</h2>
-        {isArchived ? (
+        {!hasLevel(ctx.session.user?.role, "owner") ? (
+          // Permanent deletion is for owners (#469); the route refuses it too.
+          <p className="text-sm text-gray-600">Seul un propriétaire de l&apos;organisation peut supprimer définitivement cet événement.</p>
+        ) : isArchived ? (
           <DeleteEventSection
             eventId={event.id}
             title={event.title}
