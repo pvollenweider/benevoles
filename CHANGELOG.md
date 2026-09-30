@@ -122,6 +122,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 #### Emails, invitations et horaires
 
+- **Fichier calendrier (.ics)** : un point-virgule dans le lieu, la consigne ou le contact d'un créneau est désormais échappé comme le veut le format, au lieu d'être laissé tel quel.
 - **Heures des rappels et des emails** : les heures des créneaux étaient traitées comme des heures UTC, ce qui décalait de 1 h (hiver) ou 2 h (été) les rappels « jour J » et l'heure d'expiration affichée dans l'email d'offre de liste d'attente ; même décalage dans les heures du journal de l'événement et de l'export PDF. Elles sont désormais calculées dans le fuseau des événements (`APP_TIME_ZONE`, Europe/Zurich par défaut) ; une valeur invalide empêche l'application de démarrer, avec un message explicite.
 - **Lien d'invitation d'une organisation** : cliquer sur **Envoyer l'invitation par email** renouvelle le lien (l'ancien cesse de fonctionner) ; l'écran affiche désormais le nouveau lien au lieu de l'ancien, et la fiche d'une organisation permet de **Renvoyer l'invitation** à un administrateur en attente en montrant le lien généré.
 

@@ -11,7 +11,9 @@ const unfold = (ics: string) => ics.replace(/\r\n /g, "")
 
 describe("icsEscape and icsFold", () => {
   it("escapes RFC 5545 text", () => {
-    expect(icsEscape("a, b; c\\d\nligne")).toBe("a\\, b\; c\\\\d\\nligne")
+    expect(icsEscape("a, b; c\\d\nligne")).toBe("a\\, b\\; c\\\\d\\nligne")
+    // Regression (CodeQL js/identity-replacement): "\;" in a JS string is ";", so semicolons were left bare.
+    expect(icsEscape("Parking; entrée nord")).toBe("Parking\\; entrée nord")
   })
 
   it("folds at 75 octets without cutting a multi-byte character", () => {
@@ -49,7 +51,7 @@ describe("buildIcs", () => {
     expect(flat).toContain("SUMMARY:Fête — Bar · Bar soir")
     expect(flat).toContain("LOCATION:Salle\\, 1er étage")
     expect(flat).toContain("GEO:46.200000;6.100000")
-    expect(flat).toContain("Contact : Léa\; 079 1")
+    expect(flat).toContain("Contact : Léa\\; 079 1")
     expect(flat).toContain("URL:https://org.benevol.app/my/tok")
     expect(ics.split("BEGIN:VEVENT")).toHaveLength(2)
   })
