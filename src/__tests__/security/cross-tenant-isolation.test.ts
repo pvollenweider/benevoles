@@ -56,6 +56,9 @@ const prismaMock = {
       event: { title: "Event B", organization: { slug: "org-b" } },
     }),
   },
+  organization: {
+    findUnique: vi.fn().mockResolvedValue({ name: "Org A", timeZone: null }), // header data of exports (#384)
+  },
   adminUser: {
     findUnique: vi.fn().mockResolvedValue(null),
     create: vi.fn().mockResolvedValue({ id: "adm-new" }),
@@ -426,6 +429,22 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(res.status).toBe(404)
     // The organization filter is in the update itself: an org-B row can never flip.
     expect(prismaMock.notificationOutbox.updateMany).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "out-b", organizationId: ORG_A, status: "failed" } }))
+  })
+
+  it("GET /api/admin/events/[id]/export/archive returns 404 for an org-B event (#384)", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/export/archive/route")
+    setupGuard() // event.findFirst → null
+    const res = await GET(makeRequest("/api/admin/events/evt-b/export/archive"), params("evt-b"))
+    expect(res.status).toBe(404)
+  })
+
+  it("GET /api/admin/members/export reads members through the scoped client only (#384)", async () => {
+    const { GET } = await import("@/app/api/admin/members/export/route")
+    const db = setupGuard({ volunteer: { findMany: vi.fn().mockResolvedValue([]) } })
+    const res = await GET()
+    expect(res.status).toBe(200)
+    expect(db.volunteer.findMany).toHaveBeenCalledOnce()
+    expect(prismaMock.volunteer.findFirst).not.toHaveBeenCalled()
   })
 
   it("POST /api/admin/shifts/[id]/duplicate returns 404 for org-B shift, creating nothing", async () => {
