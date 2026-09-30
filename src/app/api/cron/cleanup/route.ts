@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { countsToFreeze, MESSAGE_RETENTION_DAYS } from "@/lib/message-history"
 import { NextResponse } from "next/server"
 import { recordJobRun } from "@/lib/job-runs"
 import { env } from "@/lib/env"
@@ -73,13 +74,26 @@ async function run(req: Request) {
   // --- 5. Notification outbox (#293) ---
   // Rows hold recipient + template data (PII): delete them once sent, and failed ones after
   // 30 days (kept that long only to investigate why they failed).
-  const deletedOutbox = await prisma.notificationOutbox.deleteMany({
-    where: {
-      OR: [
-        { status: "sent" },
-        { status: "failed", createdAt: { lt: cutoff30d } },
-      ],
-    },
+  // A targeted message keeps the count of its rows deleted here (#467), in the same transaction,
+  // so its delivery summary stays right after the purge.
+  const outboxToDelete = { OR: [{ status: "sent" }, { status: "failed", createdAt: { lt: cutoff30d } }] }
+  const deletedOutbox = await prisma.$transaction(async (tx) => {
+    // Exactly the rows counted are deleted: one that turns « sent » meanwhile waits for tomorrow.
+    const linked = await tx.notificationOutbox.findMany({
+      where: { AND: [outboxToDelete, { targetedMessageId: { not: null } }] },
+      select: { id: true, targetedMessageId: true, status: true },
+    })
+    for (const [id, c] of countsToFreeze(linked)) {
+      await tx.targetedMessage.update({ where: { id }, data: { sentCount: { increment: c.sent }, failedCount: { increment: c.failed } } })
+    }
+    const linkedDeleted = await tx.notificationOutbox.deleteMany({ where: { id: { in: linked.map((r) => r.id) } } })
+    const otherDeleted = await tx.notificationOutbox.deleteMany({ where: { AND: [outboxToDelete, { targetedMessageId: null }] } })
+    return { count: linkedDeleted.count + otherDeleted.count }
+  })
+
+  // Targeted messages are kept 12 months (#467): their content may hold personal information.
+  const deletedMessages = await prisma.targetedMessage.deleteMany({
+    where: { createdAt: { lt: new Date(now.getTime() - MESSAGE_RETENTION_DAYS * 24 * 60 * 60 * 1000) } },
   })
 
   // --- 6. Expired rate limit windows (#322) ---
@@ -97,6 +111,7 @@ async function run(req: Request) {
     tokenEncryption,
     deleted: {
       notificationOutbox: deletedOutbox.count,
+      targetedMessages: deletedMessages.count,
       rateLimits: deletedRateLimits.count,
       organizations: deletedOrgs.count,
       volunteers: deletedVolunteers.count,

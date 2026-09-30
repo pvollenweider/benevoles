@@ -36,6 +36,7 @@ model Organization {
   admins      AdminUser[]
   slugHistory OrgSlugHistory[]
   logs        OrgLog[]
+  targetedMessages TargetedMessage[]
 }
 
 model OrgSlugHistory {
@@ -92,6 +93,7 @@ model Event {
   pages         EventPage[]
   sectorLeaders SectorLeader[]
   milestones    EventMilestone[]
+  targetedMessages TargetedMessage[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -409,9 +411,41 @@ model NotificationOutbox {
   // The organization the notification belongs to (#382), for the admin delivery page. Nullable:
   // rows enqueued before the column existed, and the rare system-level ones.
   organizationId String?
+  // The targeted message this email belongs to (#467), for its delivery summary.
+  targetedMessageId String?
+  targetedMessage   TargetedMessage? @relation(fields: [targetedMessageId], references: [id], onDelete: SetNull)
 
   @@index([status, nextAttemptAt])
+  @@index([targetedMessageId])
   @@index([organizationId, createdAt])
+}
+
+// One row per targeted message sent to volunteers (#467): who wrote what, when, to whom, and how
+// it was delivered. The outbox rows are purged (sent every night, failed after 30 days), so the
+// cleanup adds what it deletes to sentCount / failedCount first: the summary is those counters
+// plus the rows still in the outbox. Kept 12 months (the content may hold personal information),
+// then deleted by the cleanup; deleted with the event too.
+model TargetedMessage {
+  id             String   @id @default(cuid())
+  organizationId String
+  eventId        String
+  // AdminUser.id, and the name at the time: the account may be removed later.
+  authorId       String?
+  authorName     String
+  subject        String
+  message        String
+  audienceLabel  String
+  recipientCount Int
+  sentCount      Int      @default(0)
+  failedCount    Int      @default(0)
+  createdAt      DateTime @default(now())
+
+  organization Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  event        Event                @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  outbox       NotificationOutbox[]
+
+  @@index([eventId, createdAt])
+  @@index([createdAt])
 }
 
 // Rate limit counters (#322), shared by every app replica: one fixed window per "<route>:<key>",

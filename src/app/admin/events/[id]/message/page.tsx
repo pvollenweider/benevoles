@@ -8,6 +8,9 @@ import { getOrgContext } from "@/lib/auth-guard"
 import { fmtRange } from "@/lib/gantt-utils"
 import { audienceFromQuery } from "@/lib/targeted-message"
 import TargetedMessageForm from "@/components/admin/TargetedMessageForm"
+import MessageHistory from "@/components/admin/messages/MessageHistory"
+import { loadMessageHistory } from "@/lib/message-history-data"
+import { orgTimeZone } from "@/lib/time-zone"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Écrire aux bénévoles" }
@@ -25,6 +28,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
     where: { id },
     select: {
       id: true, title: true,
+      organization: { select: { timeZone: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
@@ -33,6 +37,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
     },
   })
   if (!event) notFound()
+  const history = await loadMessageHistory(ctx.db, ctx.organizationId, event.id)
 
   const roles = Array.from(new Set(event.shifts.map((s) => s.roleName)))
   const shifts = event.shifts.map((s) => ({
@@ -63,6 +68,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
         Pour relancer les membres invités qui n&apos;ont pas encore répondu, utilisez « Relancer les non-inscrits » dans{" "}
         <Link href={`/admin/events/${event.id}/invitations`} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900">les invitations</Link>.
       </p>
+      <MessageHistory eventId={event.id} items={history} timeZone={orgTimeZone(event.organization)} />
     </div>
   )
 }

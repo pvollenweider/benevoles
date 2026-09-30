@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useEffect, useId, useRef, useState } from "react"
+import { useRouter } from "next/navigation"
 import ModalShell from "./ModalShell"
 import { MESSAGE_BODY_MAX, MESSAGE_SUBJECT_MAX, type Audience } from "@/lib/targeted-message"
 
@@ -21,6 +22,7 @@ type DryRun = { recipients: number; audience: string; preview: { subject: string
  * number of people written to (#396). Sending goes through the outbox on the server.
  */
 export default function TargetedMessageForm({ eventId, roles, shifts, initialAudience }: Props) {
+  const router = useRouter()
   const id = useId()
   const [kind, setKind] = useState<Audience["kind"]>(initialAudience.kind)
   const [roleName, setRoleName] = useState(initialAudience.kind === "role" ? initialAudience.roleName : roles[0] ?? "")
@@ -99,6 +101,8 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
     setConfirming(false)
     if (!res.ok) { setError(typeof d?.error === "string" ? d.error : "Erreur lors de l'envoi."); return }
     setSent(d)
+    // The « Messages envoyés » list below (#467) shows the new message; client state is kept.
+    router.refresh()
   }
 
   const recipients = dry?.recipients ?? 0
