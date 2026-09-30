@@ -103,6 +103,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+#### Navigation et affichage
+
+- **Barre de l'administration** : les libellés (« Tableau de bord »…) ne passent plus sur deux lignes sur une tablette ou en super admin ; la barre resserre ses espacements et le nom de l'organisation se tronque à la place.
+
 #### Inscriptions et liste d'attente
 
 - **Dates vérifiées par l'API** : une date de naissance invalide, inexistante ou future est refusée (elle permettait de contourner l'âge minimum d'un créneau) ; les dates d'événement, de programme et de créneau doivent être des jours réels au format AAAA-MM-JJ, et la fin d'un événement ne peut plus précéder son début, y compris lors d'une modification ; un créneau (seul ou en série) doit tomber pendant son événement, et la date de départ d'une duplication ou d'un modèle doit être un jour réel.

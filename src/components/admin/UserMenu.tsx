@@ -75,8 +75,9 @@ export default function UserMenu({ userName, isSuperAdmin }: { userName: string;
         }}
         className="text-xs text-gray-700 hover:text-gray-900 flex items-center gap-1 rounded px-1.5 py-1 min-h-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
       >
-        {/* Truncated on narrow screens (#361); the accessible name keeps the full text. */}
-        <span className="truncate max-w-32 sm:max-w-none">{userName}</span>
+        {/* Truncated on narrow screens (#361), and next to the links on a tablet (#495); the
+            accessible name keeps the full text. */}
+        <span className="truncate max-w-32 sm:max-w-48 md:max-w-32 lg:max-w-64">{userName}</span>
         <span aria-hidden="true" className={`transition-transform ${open ? "rotate-180" : ""}`}>▾</span>
       </button>
 

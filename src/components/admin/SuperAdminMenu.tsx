@@ -75,7 +75,7 @@ export default function SuperAdminMenu() {
         onKeyDown={(e) => {
           if (e.key === "ArrowDown" && !open) { e.preventDefault(); setOpen(true) }
         }}
-        className={`text-xs px-2 py-0.5 rounded-full font-medium flex items-center gap-1 ${
+        className={`text-xs whitespace-nowrap px-2 py-0.5 rounded-full font-medium flex items-center gap-1 ${
           isActive ? "bg-purple-600 text-white" : "bg-purple-100 text-purple-700 hover:bg-purple-200"
         }`}
       >

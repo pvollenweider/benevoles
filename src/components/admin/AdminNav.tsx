@@ -83,9 +83,10 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
   }, [mobileOpen])
 
   const focusRing = "rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-  // Active link: color plus an underline, not color alone.
+  // Active link: color plus an underline, not color alone. Never on two lines (#495): the bar
+  // tightens its gaps, then the organization name gives way (truncated), not the labels.
   const linkClass = (active: boolean) =>
-    `text-sm ${focusRing} ${active ? "text-blue-600 font-medium underline underline-offset-4 decoration-2" : "text-gray-500 hover:text-gray-800"}`
+    `text-sm whitespace-nowrap ${focusRing} ${active ? "text-blue-600 font-medium underline underline-offset-4 decoration-2" : "text-gray-500 hover:text-gray-800"}`
   const mobileLinkClass = (active: boolean) =>
     `flex items-center min-h-11 px-4 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600 ${active ? "text-blue-700 font-medium bg-blue-50" : "text-gray-700 hover:bg-gray-50"}`
   // Following a link closes the panel. For the current page nothing navigates, so focus would be
@@ -98,11 +99,11 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
   return (
     <nav aria-label="Navigation de l'administration" className="bg-white border-b border-gray-200 px-4">
       <div className="max-w-5xl mx-auto flex items-center justify-between gap-3 h-14">
-        <div className="flex items-center gap-6 min-w-0">
+        <div className="flex items-center gap-4 lg:gap-6 min-w-0">
           <Link href="/admin/events" className={`font-semibold text-gray-900 text-sm truncate ${focusRing}`}>
             {orgName ?? "Admin"}
           </Link>
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-4 lg:gap-6 shrink-0">
             {LINKS.map((l) => {
               const active = pathname.startsWith(l.match)
               return (
@@ -113,8 +114,8 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
             })}
           </div>
         </div>
-        <div className="flex items-center gap-4 shrink-0">
-          <div className="hidden md:flex items-center gap-4">
+        <div className="flex items-center gap-3 lg:gap-4 shrink-0">
+          <div className="hidden md:flex items-center gap-3 lg:gap-4">
             {!onSearchPage && (
               <form role="search" aria-label="Recherche globale" action="/admin/search" className="flex">
                 <label htmlFor="admin-search" className="sr-only">Rechercher un bénévole, un événement ou un poste</label>
@@ -142,7 +143,7 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
               </form>
             )}
             {isSuperAdmin && <SuperAdminMenu />}
-            <Link href="/doc/admin" target="_blank" className="text-xs text-gray-500 hover:text-gray-800 underline underline-offset-2">
+            <Link href="/doc/admin" target="_blank" className="text-xs whitespace-nowrap text-gray-500 hover:text-gray-800 underline underline-offset-2">
               Aide
               <span className="sr-only"> (ouvre dans un nouvel onglet)</span>
             </Link>
