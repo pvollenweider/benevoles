@@ -15,7 +15,7 @@ type Props = {
   initialAudience: Audience
 }
 
-type DryRun = { recipients: number; pushDevices?: number; audience: string; preview: { subject: string; html: string } | null }
+type DryRun = { recipients: number; pushDevices?: number; waitlistOnly?: number; audience: string; preview: { subject: string; html: string } | null }
 
 /**
  * Subject, message, audience; a live recipient count; a preview; then a confirmation naming the
@@ -146,6 +146,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
           ["role", "Les bénévoles d'un poste"],
           ["shift", "Les bénévoles d'un créneau"],
           ["waitlist", "Les personnes en liste d'attente"],
+          ["invited_without_shift", "Les invités sans créneau confirmé"],
         ] as const).map(([k, label]) => (
           <div key={k} className="flex items-center gap-2 min-h-8">
             <input id={`${id}-kind-${k}`} type="radio" name={`${id}-kind`} value={k} checked={kind === k} onChange={() => setKind(k)} disabled={(k === "role" && roles.length === 0) || (k === "shift" && shifts.length === 0)} className="h-4 w-4 text-blue-600 focus:ring-2 focus:ring-blue-500" />
@@ -172,7 +173,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
           </div>
         )}
         <p id={`${id}-count`} aria-live="polite" aria-atomic="true" className="text-sm text-gray-700 pt-1">
-          {!counting && dry ? (recipients === 0 ? "Personne à qui écrire dans cette sélection." : `${plural(recipients)} recevr${recipients > 1 ? "ont" : "a"} ce message.`) : ""}
+          {!counting && dry ? (recipients === 0 ? "Personne à qui écrire dans cette sélection." : `${plural(recipients)} recevr${recipients > 1 ? "ont" : "a"} ce message${kind === "invited_without_shift" && (dry.waitlistOnly ?? 0) > 0 ? `, dont ${dry.waitlistOnly} en liste d'attente` : ""}.`) : ""}
         </p>
         {counting && <p aria-hidden="true" className="text-sm text-gray-600">Comptage…</p>}
       </fieldset>

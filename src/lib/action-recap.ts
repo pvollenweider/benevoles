@@ -55,7 +55,7 @@ export function bulkResendRecap(i: { people: number }): ActionRecap {
 
 export function remindInvitedRecap(i: { people: number }): ActionRecap {
   return {
-    title: `Relancer ${n(i.people, "membre invité", "membres invités")} sans réponse ?`,
+    title: `Relancer ${n(i.people, "membre invité", "membres invités")} sans créneau confirmé ?`,
     lines: [`${n(i.people, "email de relance envoyé", "emails de relance envoyés")}.`, "Les membres déjà inscrits ne reçoivent rien.", LOGGED],
     confirmLabel: "Relancer",
     danger: false,

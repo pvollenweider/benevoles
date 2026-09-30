@@ -46,7 +46,7 @@ En haut, **Ce qui demande votre attention** liste, du plus urgent au moins urgen
 - créneaux des 7 prochains jours pas encore complets (urgent à moins de 2 jours) ;
 - places proposées en liste d'attente qui expirent dans les 12 heures sans réponse ;
 - jalons en retard ;
-- invitations envoyées il y a plus de 3 jours et pas encore utilisées ;
+- personnes invitées il y a plus de 3 jours qui n'ont encore aucun créneau confirmé (avec un lien pour leur écrire) ;
 - postes sans responsable de secteur, quand l'événement en a déjà d'autres ;
 - bénévoles avec une charge élevée (plus de 8 h dans la journée, ou plus de 6 h d'affilée sans vraie pause) ;
 - événement qui commence dans la semaine ;
@@ -412,9 +412,9 @@ Le tableau affiche pour chaque membre invité :
 
 Les compteurs en haut récapitulent : invités · inscrits · sans réponse.
 
-### Relancer les non-inscrits
+### Relancer les invités sans créneau
 
-Le bouton **Relancer les N sans réponse** (visible s'il reste au moins un membre sans réponse) envoie un rappel à tous les membres invités qui ne se sont pas encore inscrits — sans message personnalisé, contrairement à l'invitation initiale.
+Le compteur **Sans créneau confirmé** compte les membres invités qui n'ont encore aucune inscription confirmée à l'événement (ceux qui ne sont qu'en liste d'attente en font partie). Le bouton **Relancer les N sans créneau** leur renvoie un rappel, sans message personnalisé, contrairement à l'invitation initiale. **Leur écrire un message** ouvre « Écrire aux bénévoles » avec ce public déjà choisi, pour un texte libre.
 
 ---
 
@@ -429,9 +429,10 @@ Un email simple, à qui c'est utile :
 - **tous les bénévoles inscrits** de l'événement ;
 - **les bénévoles d'un poste** ;
 - **les bénévoles d'un créneau** ;
-- **les personnes en liste d'attente** (en attente ou à qui une place est proposée).
+- **les personnes en liste d'attente** (en attente ou à qui une place est proposée) ;
+- **les invités sans créneau confirmé** : les membres invités à l'événement qui n'ont encore aucune inscription confirmée, y compris ceux qui ne sont qu'en liste d'attente (le compteur le précise). Leur email contient leur lien d'invitation, **Choisir mes créneaux**. Le public est recalculé au moment de l'envoi.
 
-Vous saisissez un objet et un message texte (les retours à la ligne sont conservés). Pour une information urgente, cochez **Envoyer aussi une notification (téléphone ou ordinateur)** : les destinataires qui ont activé les notifications la reçoivent en plus de l'email, qui part à tous dans tous les cas. Le formulaire indique combien d'appareils sont abonnés parmi les destinataires, et l'aperçu comme la confirmation le rappellent. La notification montre l'objet et la première ligne du message, et ouvre la page personnelle du bénévole (la page de l'événement pour la liste d'attente). Son résultat s'affiche à part de celui des emails dans les messages envoyés ; un appareil qui n'existe plus est retiré. Le nombre de destinataires s'affiche dès le choix ; **Voir l'aperçu et envoyer** montre l'email tel qu'il sera reçu, puis demande une confirmation avec le nombre de personnes. Chaque personne reçoit un seul email, avec ses créneaux concernés et le lien vers ses inscriptions ; l'envoi est noté dans le journal de l'événement. Pas d'éditeur HTML, de segments enregistrés ni de programmation : pour relancer les membres invités sans réponse, voir « Relancer les non-inscrits » dans les invitations.
+Vous saisissez un objet et un message texte (les retours à la ligne sont conservés). Pour une information urgente, cochez **Envoyer aussi une notification (téléphone ou ordinateur)** : les destinataires qui ont activé les notifications la reçoivent en plus de l'email, qui part à tous dans tous les cas. Le formulaire indique combien d'appareils sont abonnés parmi les destinataires, et l'aperçu comme la confirmation le rappellent. La notification montre l'objet et la première ligne du message, et ouvre la page personnelle du bénévole (la page de l'événement pour la liste d'attente). Son résultat s'affiche à part de celui des emails dans les messages envoyés ; un appareil qui n'existe plus est retiré. Le nombre de destinataires s'affiche dès le choix ; **Voir l'aperçu et envoyer** montre l'email tel qu'il sera reçu, puis demande une confirmation avec le nombre de personnes. Chaque personne reçoit un seul email, avec ses créneaux concernés et le lien vers ses inscriptions ; l'envoi est noté dans le journal de l'événement. Pas d'éditeur HTML, de segments enregistrés ni de programmation : pour relancer les membres invités sans réponse, voir « Relancer les … sans créneau » dans les invitations.
 
 **Messages envoyés** : sous le formulaire, chaque message déjà envoyé pour l'événement, du plus récent au plus ancien, avec la date et l'heure, qui l'a écrit, l'objet, le public choisi, le nombre de destinataires et la remise en toutes lettres (envoyés, en échec, en attente). **Voir le texte envoyé** affiche le message. Quand des emails ont échoué, **Renvoyer les emails en échec** les remet en file d'envoi, eux seuls ; un second clic n'en renvoie pas d'autres. Les destinataires ne sont pas listés, seulement leur nombre. Les emails automatiques (confirmations, rappels) n'y figurent pas. Les messages sont conservés 12 mois, puis supprimés ; ils le sont aussi avec l'événement.
 

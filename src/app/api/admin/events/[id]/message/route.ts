@@ -11,7 +11,9 @@ import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/
 import type { NotificationPayload } from "@/lib/notifications/types"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { fmtRange } from "@/lib/gantt-utils"
-import { audienceLabel, messagePushPayload, messageSchema, selectRecipients, MESSAGE_RATE_LIMIT } from "@/lib/targeted-message"
+import { audienceLabel, messagePushPayload, messageSchema, selectInvitedWithoutShift, selectRecipients, MESSAGE_RATE_LIMIT } from "@/lib/targeted-message"
+import { linkToken } from "@/lib/token-vault"
+import { eventPublicUrl } from "@/lib/urls"
 import { pushDeviceCount, sendTargetedPush } from "@/lib/push"
 import { after } from "next/server"
 
@@ -49,39 +51,66 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     include: { volunteer: true, shift: true },
     orderBy: [{ shift: { date: "asc" } }, { shift: { startTime: "asc" } }],
   })
-  const recipients = selectRecipients(regs, audience)
-
-  const shiftName = audience.kind === "shift"
-    ? (() => { const s = regs.find((r) => r.shiftId === audience.shiftId)?.shift; return s ? `${s.label} (${fmtDate(s.date)}, ${fmtRange(s.startTime, s.endTime)})` : undefined })()
-    : undefined
-  const label = audienceLabel(audience, shiftName)
-
-  const payloadFor = (r: (typeof recipients)[number], batchId: string): NotificationPayload => ({
-    kind: "targeted_message",
-    dedupeKey: `message:${batchId}:${r.volunteerId}`,
-    recipient: { email: r.volunteer.email, name: r.volunteer.firstName },
-    data: {
-      volunteerName: r.volunteer.firstName,
-      organizationName: event.organization.name,
-      orgSlug: event.organization.slug,
-      eventTitle: event.title,
-      subject,
-      message,
+  // One entry per person to write to, whatever the audience: their shifts in it, and the link the
+  // email carries (personal page, or the invitation link for invited people without a shift, #481).
+  type Target = { volunteerId: string; firstName: string; email: string | null; shifts: { label: string; date: string; startTime: string; endTime: string }[]; editToken?: string; signupUrl?: string; waitlistOnly?: boolean }
+  let targets: Target[]
+  if (audience.kind === "invited_without_shift") {
+    const invites = await db.memberInvite.findMany({
+      where: { eventId: id },
+      select: { volunteerId: true, sentAt: true, tokenEnc: true, tokenLegacy: true, volunteer: { select: { firstName: true, email: true } } },
+    })
+    targets = selectInvitedWithoutShift(invites, regs).map(({ volunteerId, invite, waitlistOnly }) => {
+      const url = new URL(eventPublicUrl(event.organization.slug, event.slug))
+      const link = linkToken.reveal(invite)
+      if (link) url.searchParams.set("token", link)
+      return { volunteerId, firstName: invite.volunteer.firstName, email: invite.volunteer.email, shifts: [], signupUrl: url.toString(), waitlistOnly }
+    })
+  } else {
+    targets = selectRecipients(regs, audience).map((r) => ({
+      volunteerId: r.volunteerId,
+      firstName: r.volunteer.firstName,
+      email: r.volunteer.email,
       shifts: audience.kind === "waitlist" ? [] : r.registrations.map((x) => ({
         label: x.shift.label, date: fmtDate(x.shift.date), startTime: x.shift.startTime, endTime: x.shift.endTime,
       })),
       // The personal page only opens live confirmed registrations: a waitlist entry's link
       // would land on « introuvable », so the waitlist gets no link at all.
       editToken: audience.kind === "waitlist" ? undefined : registrationToken.reveal(r.registrations[0]),
+    }))
+  }
+  const recipients = targets
+
+  const shiftName = audience.kind === "shift"
+    ? (() => { const s = regs.find((r) => r.shiftId === audience.shiftId)?.shift; return s ? `${s.label} (${fmtDate(s.date)}, ${fmtRange(s.startTime, s.endTime)})` : undefined })()
+    : undefined
+  const label = audienceLabel(audience, shiftName)
+
+  const payloadFor = (r: Target, batchId: string): NotificationPayload => ({
+    kind: "targeted_message",
+    dedupeKey: `message:${batchId}:${r.volunteerId}`,
+    recipient: { email: r.email, name: r.firstName },
+    data: {
+      volunteerName: r.firstName,
+      organizationName: event.organization.name,
+      orgSlug: event.organization.slug,
+      eventTitle: event.title,
+      subject,
+      message,
+      shifts: r.shifts,
+      editToken: r.editToken,
+      signupUrl: r.signupUrl,
     },
   })
 
   if (dryRun) {
     const preview = recipients[0]
-      ? render({ ...payloadFor(recipients[0], "preview"), data: { ...payloadFor(recipients[0], "preview").data, editToken: audience.kind === "waitlist" ? undefined : "apercu" } })
+      ? render({ ...payloadFor(recipients[0], "preview"), data: { ...payloadFor(recipients[0], "preview").data, editToken: recipients[0].editToken ? "apercu" : undefined, signupUrl: recipients[0].signupUrl ? eventPublicUrl(event.organization.slug, event.slug) : undefined } })
       : null
     return NextResponse.json({
       recipients: recipients.length,
+      // Invited without a shift (#481): how many are only on the waitlist, to adapt the text.
+      ...(audience.kind === "invited_without_shift" ? { waitlistOnly: recipients.filter((r) => r.waitlistOnly).length } : {}),
       // Devices of these recipients that would get the push (#468); counted whatever the option.
       pushDevices: await pushDeviceCount(recipients.map((r) => r.volunteerId)),
       audience: label,
@@ -127,7 +156,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const messageId = historyId
     const targets = recipients.map((r) => ({
       volunteerId: r.volunteerId,
-      url: audience.kind === "waitlist" ? `/${event.slug}` : `/my/${registrationToken.reveal(r.registrations[0])}`,
+      url: r.editToken ? `/my/${r.editToken}` : r.signupUrl ? (() => { const u = new URL(r.signupUrl!); return u.pathname + u.search })() : `/${event.slug}`,
     }))
     after(() => sendTargetedPush(messageId, targets, { ...messagePushPayload(subject, message), tag: `message-${messageId}` }).then(() => undefined))
   }

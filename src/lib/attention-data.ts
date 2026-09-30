@@ -5,6 +5,7 @@ import type { OrgScopedPrisma } from "./prisma-org"
 import { attentionItems, INVITE_NUDGE_DAYS, type AttentionItem } from "./attention"
 import { orgTimeZone } from "./time-zone"
 import { workloadByVolunteer } from "./workload"
+import { selectInvitedWithoutShift } from "./targeted-message"
 
 /** Facts for « Ce qui demande votre attention » (#372), read with the organization-scoped client. */
 export async function loadAttention(db: OrgScopedPrisma, now: Date = new Date()): Promise<AttentionItem[]> {
@@ -20,7 +21,8 @@ export async function loadAttention(db: OrgScopedPrisma, now: Date = new Date())
         },
         sectorLeaders: { select: { roleName: true } },
         milestones: { where: { done: false, dueDate: { lt: now } }, select: { id: true } },
-        memberInvites: { where: { usedAt: null, sentAt: { lt: inviteCutoff } }, select: { id: true } },
+        // Invited more than INVITE_NUDGE_DAYS ago; those with a confirmed shift are left out below (#481).
+        memberInvites: { where: { sentAt: { lt: inviteCutoff } }, select: { volunteerId: true, sentAt: true, volunteer: { select: { email: true } } } },
         // Firm places only: waitlist entries and offers may never become shifts (#465).
         registrations: {
           where: { status: "active", shift: { status: { not: "cancelled" } } },
@@ -42,7 +44,7 @@ export async function loadAttention(db: OrgScopedPrisma, now: Date = new Date())
       shifts: e.shifts.map((s) => ({ date: s.date, capacity: s.capacity, roleName: s.roleName, active: s._count.registrations })),
       leaderRoles: e.sectorLeaders.map((l) => l.roleName),
       overdueMilestones: e.milestones.length,
-      unansweredInvites: e.memberInvites.length,
+      unansweredInvites: selectInvitedWithoutShift(e.memberInvites, e.registrations).length,
       overloadedVolunteers: workloadByVolunteer(e.registrations, orgTimeZone(e.organization)).size,
     })),
     offers: offers.map((o) => ({ eventId: o.eventId, expiresAt: o.waitingExpiresAt })),

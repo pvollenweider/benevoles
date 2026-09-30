@@ -438,6 +438,8 @@ function renderTargetedMessage(p: NotificationPayload): RenderedEmail {
     /** Absent for the waitlist: the personal page only opens confirmed registrations. */
     editToken?: string
     orgSlug?: string
+    /** Invited without a shift (#481): their invitation link, to choose shifts. */
+    signupUrl?: string
   }
   const editUrl = d.editToken ? myPageUrl(d.orgSlug, d.editToken) : null
   const firstName = d.volunteerName.split(" ")[0]
@@ -452,6 +454,7 @@ function renderTargetedMessage(p: NotificationPayload): RenderedEmail {
       ? [`Tes créneaux concernés pour ${d.eventTitle} :`, ...d.shifts.map((s) => `  • ${s.date} · ${s.label} · ${s.startTime}–${s.endTime}`), ``]
       : []),
     ...(editUrl ? [`Gérer tes inscriptions : ${editUrl}`, ``] : []),
+    ...(d.signupUrl ? [`Choisir tes créneaux : ${d.signupUrl}`, ``] : []),
     `À très vite !`,
     d.organizationName,
   ].join("\n")
@@ -471,6 +474,7 @@ function renderTargetedMessage(p: NotificationPayload): RenderedEmail {
         </div>`).join("")}
     </div>` : ""}
     ${editUrl ? `<p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>` : ""}
+    ${d.signupUrl ? `<p style="margin-top:1.5em">${btn(d.signupUrl, "Choisir mes créneaux")}</p>` : ""}
     <p style="color:#888;font-size:0.85em;margin-top:2em">À très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, preheader)
 
