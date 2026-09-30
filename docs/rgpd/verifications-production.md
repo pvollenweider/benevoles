@@ -15,7 +15,7 @@ Ce que le dépôt ne permet pas d'établir. Pour chaque point : la preuve à con
 
 ## Dropbox (copie hors site)
 
-- [ ] **Offre du compte utilisé par rclone** : décisive, le DPA de Dropbox ne couvre que les offres équipe (voir « Points d'attention » dans [sous-traitants.md](sous-traitants.md)).
+- [x] **Offre du compte utilisé par rclone** : individuelle (confirmée le 2026-09-30), donc sans DPA ; conservée pour l'instant, migration prévue vers Infomaniak Swiss Backup (#524). Voir « Points d'attention » dans [sous-traitants.md](sous-traitants.md).
 - [ ] Région de stockage effective du compte, accès possibles hors de Suisse et de l'UE.
 - [ ] DPA et mécanisme de transfert applicable.
 - [ ] Conservation des fichiers supprimés et des versions (la suppression par rclone au-delà de la durée de la matrice ne dit rien de la corbeille côté Dropbox).
