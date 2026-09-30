@@ -25,7 +25,7 @@ import { prisma } from "./prisma"
 /** Models carrying organizationId themselves. */
 const DIRECT = ["event", "volunteer", "orgLog", "orgSlugHistory", "targetedMessage", "messageTemplate"] as const
 /** Models owned through their event (eventId → Event.organizationId). */
-const EVENT_OWNED = ["shift", "registration", "memberInvite", "eventPage", "sectorLeader", "eventMilestone", "eventLog"] as const
+const EVENT_OWNED = ["shift", "registration", "memberInvite", "eventPage", "sectorLeader", "eventMilestone", "eventLog", "eventQuestion", "questionAnswer"] as const
 
 type DirectModel = (typeof DIRECT)[number]
 type EventOwnedModel = (typeof EVENT_OWNED)[number]

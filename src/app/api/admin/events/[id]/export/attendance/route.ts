@@ -7,6 +7,7 @@ import { attendanceCsv } from "@/lib/attendance"
 import { contactPhone } from "@/lib/contact-phone"
 import { orgTimeZone } from "@/lib/time-zone"
 import { slugify } from "@/lib/utils"
+import { answerText } from "@/lib/event-questions"
 
 /** GET /api/admin/events/[id]/export/attendance (#399): the attendance sheet as CSV. */
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -19,11 +20,13 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     select: {
       id: true, title: true, slug: true,
       organization: { select: { timeZone: true } },
+      // Custom questions (#483), archived ones included: their answers stay until the event goes.
+      questions: { orderBy: [{ archivedAt: "asc" }, { position: "asc" }], select: { id: true, label: true, archivedAt: true, answers: { select: { volunteerId: true, values: true } } } },
       registrations: {
         where: { status: "active" },
         orderBy: [{ shift: { date: "asc" } }, { shift: { startTime: "asc" } }, { volunteer: { lastName: "asc" } }],
         select: {
-          phone: true, checkedInAt: true,
+          phone: true, checkedInAt: true, volunteerId: true,
           volunteer: { select: { firstName: true, lastName: true, email: true, phone: true } },
           shift: { select: { roleName: true, label: true, date: true, startTime: true, endTime: true } },
         },
@@ -32,6 +35,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
+  const questions = (event.questions ?? []).filter((q) => !q.archivedAt || q.answers.length > 0)
   const csv = attendanceCsv(
     event.registrations.map((r) => ({
       firstName: r.volunteer.firstName,
@@ -44,8 +48,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       startTime: r.shift.startTime,
       endTime: r.shift.endTime,
       checkedInAt: r.checkedInAt,
+      answers: questions.map((q) => answerText(q.answers.find((a) => a.volunteerId === r.volunteerId)?.values)),
     })),
     orgTimeZone(event.organization),
+    questions.map((q) => (q.archivedAt ? `${q.label} (question retirée)` : q.label)),
   )
 
   return new NextResponse(csv, {

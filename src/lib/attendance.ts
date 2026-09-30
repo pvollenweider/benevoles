@@ -50,11 +50,13 @@ export function formatCheckIn(d: Date | null, timeZone: string): string {
  * The attendance sheet as CSV: semicolon-separated (what Excel expects in French locales), with
  * a BOM so accents open correctly. One line per registration, present ones marked.
  */
-export function attendanceCsv(rows: AttendanceRow[], timeZone: string): string {
-  const header = ["Prénom", "Nom", "Email", "Téléphone", "Poste", "Créneau", "Date", "Début", "Fin", "Présent", "Pointé le"]
+export function attendanceCsv(rows: (AttendanceRow & { answers?: string[] })[], timeZone: string, questionLabels: string[] = []): string {
+  // One column per custom question of the event (#483), after the fixed ones.
+  const header = ["Prénom", "Nom", "Email", "Téléphone", "Poste", "Créneau", "Date", "Début", "Fin", "Présent", "Pointé le", ...questionLabels]
   const lines = rows.map((r) => [
     r.firstName, r.lastName, r.email, r.phone, r.roleName, r.label !== r.roleName ? r.label : "", r.date, r.startTime, r.endTime,
     r.checkedInAt ? "oui" : "non", formatCheckIn(r.checkedInAt, timeZone),
+    ...questionLabels.map((_, i) => r.answers?.[i] ?? ""),
   ].map(csvCell).join(";"))
   return "﻿" + [header.join(";"), ...lines].join("\r\n") + "\r\n"
 }

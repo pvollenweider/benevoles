@@ -1,0 +1,113 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
+/**
+ * Custom questions of an event's sign-up form (#483): text, yes/no, single or multiple choice,
+ * required or not, a few per event. The server validates the answers (the page only helps);
+ * a question with answers is archived rather than deleted, and its type or used options can't
+ * change under existing answers. Pure.
+ */
+import { z } from "zod"
+
+export const QUESTION_LIMIT = 5
+export const QUESTION_TYPES = ["text", "yesno", "single", "multiple"] as const
+export type QuestionType = (typeof QUESTION_TYPES)[number]
+export const QUESTION_TYPE_LABEL: Record<QuestionType, string> = {
+  text: "Texte court",
+  yesno: "Oui / non",
+  single: "Choix unique",
+  multiple: "Choix multiple",
+}
+export const TEXT_ANSWER_MAX = 200
+export const YES = "Oui"
+export const NO = "Non"
+
+export type Question = { id: string; label: string; type: string; options: string[]; required: boolean }
+
+/** Options without case-insensitive duplicates, the first spelling kept. */
+function firstSpellings(options: string[]): string[] {
+  const seen = new Set<string>()
+  return options.filter((o) => {
+    const k = o.toLocaleLowerCase("fr")
+    if (seen.has(k)) return false
+    seen.add(k)
+    return true
+  })
+}
+
+export const questionSchema = z
+  .object({
+    label: z.string().trim().min(1, "La question est obligatoire.").max(120),
+    type: z.enum(QUESTION_TYPES),
+    options: z.array(z.string().trim().min(1).max(60)).max(12).default([]),
+    required: z.boolean().default(false),
+  })
+  .transform((q) => ({ ...q, options: q.type === "single" || q.type === "multiple" ? firstSpellings(q.options) : [] }))
+  .refine((q) => !(q.type === "single" || q.type === "multiple") || q.options.length >= 2, { message: "Donnez au moins deux choix.", path: ["options"] })
+export type QuestionInput = z.infer<typeof questionSchema>
+
+/** Raw answers as posted: text, "Oui"/"Non", one option, or a list of options. */
+export type RawAnswers = Record<string, unknown>
+
+export type AnswerCheck = { ok: true; values: Map<string, string[]> } | { ok: false; errors: { questionId: string; message: string }[] }
+
+/** The answers the server stores, or what is wrong with them. Unknown question ids are ignored. */
+export function checkAnswers(questions: Question[], raw: RawAnswers | undefined): AnswerCheck {
+  const values = new Map<string, string[]>()
+  const errors: { questionId: string; message: string }[] = []
+  for (const q of questions) {
+    const v = raw?.[q.id]
+    let vals: string[] = []
+    if (q.type === "text") {
+      const t = typeof v === "string" ? v.trim() : ""
+      if (t.length > TEXT_ANSWER_MAX) { errors.push({ questionId: q.id, message: `« ${q.label} » : ${TEXT_ANSWER_MAX} caractères au plus.` }); continue }
+      vals = t ? [t] : []
+    } else if (q.type === "yesno") {
+      if (v === YES || v === true) vals = [YES]
+      else if (v === NO || v === false) vals = [NO]
+      else if (v !== undefined && v !== null && v !== "") { errors.push({ questionId: q.id, message: `« ${q.label} » : répondez oui ou non.` }); continue }
+    } else if (q.type === "single") {
+      if (typeof v === "string" && v !== "") {
+        if (!q.options.includes(v)) { errors.push({ questionId: q.id, message: `« ${q.label} » : choix inconnu.` }); continue }
+        vals = [v]
+      }
+    } else if (q.type === "multiple") {
+      const list = Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : []
+      if (list.some((x) => !q.options.includes(x))) { errors.push({ questionId: q.id, message: `« ${q.label} » : choix inconnu.` }); continue }
+      vals = q.options.filter((o) => list.includes(o))
+    }
+    if (q.required && vals.length === 0) { errors.push({ questionId: q.id, message: `« ${q.label} » est obligatoire.` }); continue }
+    if (vals.length > 0) values.set(q.id, vals)
+  }
+  return errors.length > 0 ? { ok: false, errors } : { ok: true, values }
+}
+
+/** Each volunteer's answers, « label : answer », for the registrations list. */
+export function answersByVolunteer(questions: { label: string; archivedAt: Date | null; answers: { volunteerId: string; values: string[] }[] }[]): Record<string, { label: string; text: string }[]> {
+  const out: Record<string, { label: string; text: string }[]> = {}
+  for (const q of questions) {
+    for (const a of q.answers) {
+      const text = answerText(a.values)
+      if (!text) continue
+      ;(out[a.volunteerId] ??= []).push({ label: q.archivedAt ? `${q.label} (question retirée)` : q.label, text })
+    }
+  }
+  return out
+}
+
+/** An answer for people: « M », « Oui », « Voiture, Vélo »; empty when not answered. */
+export function answerText(values: string[] | undefined): string {
+  return (values ?? []).join(", ")
+}
+
+/**
+ * Why an edit of a question can't be saved while it has answers: its type can't change, and an
+ * option somebody chose can't disappear. Null when the edit is safe.
+ */
+export function questionChangeProblem(before: { type: string; options: string[] }, after: { type: string; options: string[] }, usedOptions: string[], answerCount: number): string | null {
+  if (answerCount === 0) return null
+  if (before.type !== after.type) return "Cette question a déjà des réponses : son type ne peut plus changer. Créez-en une nouvelle."
+  const removed = usedOptions.filter((o) => !after.options.includes(o))
+  if (removed.length > 0) return `Des bénévoles ont choisi ${removed.map((o) => `« ${o} »`).join(", ")} : ces choix ne peuvent pas être retirés.`
+  return null
+}

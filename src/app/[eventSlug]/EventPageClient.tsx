@@ -27,6 +27,8 @@ import {
 import {  } from "@/lib/gantt-utils"
 import { roleLimitBreaches, roleLimitSelectionMessage, roleLimits } from "@/lib/role-limit"
 import { announce } from "@/lib/announce"
+import SignupQuestions, { type Answers } from "@/components/public/SignupQuestions"
+import { checkAnswers, type Question } from "@/lib/event-questions"
 import DayTimeline, { fmt } from "@/components/DayTimeline"
 import PublicFooter from "@/components/PublicFooter"
 import { DEFAULT_VOLUNTEER_CHARTER } from "@/lib/volunteer-charter"
@@ -61,6 +63,8 @@ type Shift = {
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
 type EventData = {
+  /** Custom sign-up questions (#483). */
+  questions?: Question[]
   id: string
   slug: string
   title: string
@@ -111,6 +115,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   const [loading, setLoading] = useState(true)
   const [selectedShifts, setSelectedShifts] = useState<Set<string>>(new Set())
   const [limitNotice, setLimitNotice] = useState("")
+  const [answers, setAnswers] = useState<Answers>({})
+  const [questionErrors, setQuestionErrors] = useState<Map<string, string>>(new Map())
   // Reserved roles (#470) the visitor's invitation opens; none without an invitation.
   const [allowedReserved, setAllowedReserved] = useState<Set<string>>(new Set())
   // The day of the refused shift: the visible note sits under that day's schedule, where the click was.
@@ -279,7 +285,18 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
       requirePhone: event?.requirePhone ?? false,
       ageGatedShifts: ageGatedSelectedShifts,
     })
-    if (invalid) { setFailure(null); setError(invalid); return }
+    if (invalid) { setFailure(null); setQuestionErrors(new Map()); setError(invalid); return }
+    // Custom questions (#483): the same check as the server, the first refused field focused.
+    const answerCheck = checkAnswers(event?.questions ?? [], answers)
+    if (!answerCheck.ok) {
+      setFailure(null)
+      setQuestionErrors(new Map(answerCheck.errors.map((e) => [e.questionId, e.message])))
+      setError(answerCheck.errors.map((e) => e.message).join(" "))
+      const first = answerCheck.errors[0].questionId
+      requestAnimationFrame(() => (document.getElementById(`q-${first}`) ?? document.getElementById(`q-${first}-0`))?.focus())
+      return
+    }
+    setQuestionErrors(new Map())
     if (submitting) return
 
     setSubmitting(true)
@@ -314,6 +331,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
           eventId: event!.id,
           shiftIds: Array.from(selectedShifts).filter((id) => !myShiftIds.has(id)),
           ...form,
+          answers,
           inviteToken: inviteToken ?? undefined,
         }),
       })
@@ -337,6 +355,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
     setSubmitting(false)
 
     if (!res.ok) {
+      // A refused answer (#483) marks its field, like the page's own check.
+      const refused = (data as unknown as { questionErrors?: unknown }).questionErrors
+      if (Array.isArray(refused)) setQuestionErrors(new Map(refused.filter((x): x is { questionId: string; message: string } => typeof x?.questionId === "string" && typeof x?.message === "string").map((x) => [x.questionId, x.message])))
       // Errors never carry a management token (#285): the owner gets it by email instead.
       setFailure(describeSignupFailure({ status: res.status, body: data }))
       requestAnimationFrame(() => failureRef.current?.focus())
@@ -659,6 +680,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                   requirePhone={event.requirePhone}
                   phoneGiven={form.phone.trim().length > 0}
                   commentGiven={form.comment.trim().length > 0}
+                  answeredQuestions={(event.questions ?? []).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
                   heldShifts={heldShifts}
                   timeZone={event.timeZone}
                   variant="sidebar"
@@ -684,6 +706,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                   requirePhone={event.requirePhone}
                   phoneGiven={form.phone.trim().length > 0}
                   commentGiven={form.comment.trim().length > 0}
+                  answeredQuestions={(event.questions ?? []).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
                   heldShifts={heldShifts}
                   timeZone={event.timeZone}
                   variant="card"
@@ -691,6 +714,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
+                <p className="text-xs text-gray-600">Les champs marqués d&apos;un astérisque (*) sont obligatoires.</p>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label htmlFor="reg-firstname" className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
@@ -763,6 +787,16 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                     </p>
                   </div>
                 )}
+                <SignupQuestions
+                  questions={event.questions ?? []}
+                  answers={answers}
+                  onChange={(qid, value) => {
+                    setAnswers((a) => ({ ...a, [qid]: value }))
+                    // A corrected field no longer says it is invalid.
+                    setQuestionErrors((m) => { if (!m.has(qid)) return m; const n = new Map(m); n.delete(qid); return n })
+                  }}
+                  errors={questionErrors}
+                />
                 <div>
                   <label htmlFor="reg-comment" className="block text-sm font-medium text-gray-700 mb-1">Commentaire <span className="text-gray-500 font-normal">(facultatif)</span></label>
                   <textarea
@@ -807,7 +841,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                 </label>
 
                 {error && (
-                  <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">
+                  <div id="signup-error" role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">
                     {error}
                   </div>
                 )}

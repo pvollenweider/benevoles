@@ -94,4 +94,11 @@ describe("duplicateSummary", () => {
     expect(lines).toContain("1 responsable de secteur repris : chacun reçoit un email avec son lien pour la copie.")
     expect(lines).toContain("Messages et réglages d'inscription remis à zéro.")
   })
+
+  it("copies the active custom questions with the settings, never their answers (#483)", () => {
+    const q = { label: "Taille", type: "single", options: ["S", "M"], required: true, position: 0 }
+    const withQ = { ...source, questions: [q] }
+    expect(duplicatePlan(withQ, {}).questions).toEqual([q])
+    expect(duplicatePlan(withQ, { copy: { settings: false } }).questions).toEqual([])
+  })
 })

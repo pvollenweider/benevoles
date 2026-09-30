@@ -57,6 +57,8 @@ type Props = {
   initialSearch?: string
   /** Organisation time zone, for the workload warnings (#465). */
   timeZone: string
+  /** Answers to the event's custom questions (#483), by volunteer. */
+  answersByVolunteer?: Record<string, { label: string; text: string }[]>
 }
 
 const sourceLabels: Record<string, string> = {
@@ -65,7 +67,7 @@ const sourceLabels: Record<string, string> = {
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, timeZone }: Props) {
+export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, timeZone, answersByVolunteer = {} }: Props) {
   const [registrations, setRegistrations] = useState<Registration[]>(initialRegistrations)
   // Non-blocking workload warnings per volunteer (#465), from the active registrations shown here.
   const workload = useMemo(
@@ -729,6 +731,11 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                       )}
                     </p>
                     <p className="text-xs text-gray-500">{reg.volunteer.email}</p>
+                    {(answersByVolunteer[reg.volunteer.id] ?? []).length > 0 && (
+                      <ul role="list" className="text-xs text-gray-700 mt-0.5">
+                        {answersByVolunteer[reg.volunteer.id].map((a) => <li key={a.label}><span className="text-gray-600">{a.label} :</span> {a.text}</li>)}
+                      </ul>
+                    )}
                     {reg.status === "active" && (workload.get(reg.volunteer.id) ?? []).filter((w) => w.shiftIds.includes(reg.shift.id)).map((w) => (
                       <p key={`${w.kind}-${w.day}`} className="text-xs text-amber-900 mt-0.5"><span className="font-semibold">Charge élevée :</span> {workloadMessage(w)}</p>
                     ))}

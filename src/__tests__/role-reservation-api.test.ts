@@ -10,6 +10,7 @@ const m = vi.hoisted(() => ({
 }))
 vi.mock("@/lib/prisma", () => ({
   prisma: {
+    eventQuestion: { findMany: vi.fn().mockResolvedValue([]) }, // no custom question (#483)
     event: { findFirst: m.eventFindFirst },
     shift: { findMany: m.shiftFindMany },
     volunteer: { findFirst: vi.fn().mockResolvedValue(null) },

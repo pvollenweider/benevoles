@@ -4,6 +4,7 @@ const eventFindFirst = vi.hoisted(() => vi.fn())
 const shiftFindMany = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({
   prisma: {
+    eventQuestion: { findMany: vi.fn().mockResolvedValue([]) }, // no custom question (#483)
     event: { findFirst: eventFindFirst },
     shift: { findMany: shiftFindMany },
     volunteer: { findFirst: vi.fn(), create: vi.fn().mockResolvedValue({ id: "vol-1" }), update: vi.fn() },
@@ -151,5 +152,21 @@ describe("POST /api/public/registrations — minimum age (#192)", () => {
       const res = await POST(post({ ...baseBody, birthDate: "2008-10-11" }))
       expect(res.status).toBe(403)
     })
+  })
+
+  it("refuses a missing required custom answer and stores valid ones in the transaction (#483)", async () => {
+    const { prisma } = await import("@/lib/prisma")
+    const qm = (prisma as unknown as { eventQuestion: { findMany: ReturnType<typeof vi.fn> } }).eventQuestion.findMany
+    qm.mockResolvedValue([{ id: "q1", label: "Taille", type: "single", options: ["S", "M"], required: true }])
+    shiftFindMany.mockResolvedValue([
+      { id: "shift-1", label: "Bar", capacity: 5, minAge: null, waitlistEnabled: false, registrations: [], date: new Date("2026-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
+    ])
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const missing = await POST(post(baseBody))
+    expect(missing.status).toBe(400)
+    expect(await missing.json()).toMatchObject({ error: "« Taille » est obligatoire.", questionIds: ["q1"] })
+    const bad = await POST(post({ ...baseBody, answers: { q1: "XXL" } }))
+    expect(bad.status).toBe(400)
+    qm.mockResolvedValue([])
   })
 })

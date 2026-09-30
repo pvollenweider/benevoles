@@ -19,6 +19,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       shifts: { orderBy: [{ date: "asc" }, { startTime: "asc" }] },
       registrations: { include: { volunteer: true }, orderBy: { createdAt: "asc" } },
       pages: { orderBy: { displayOrder: "asc" } },
+      questions: { orderBy: { position: "asc" }, include: { answers: { select: { volunteerId: true, values: true, updatedAt: true } } } },
       sectorLeaders: { select: { roleName: true, name: true, email: true, createdAt: true }, orderBy: [{ roleName: "asc" }, { createdAt: "asc" }] },
       milestones: { orderBy: { dueDate: "asc" } },
       logs: { orderBy: { createdAt: "asc" } },
@@ -26,9 +27,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const { organization, shifts, registrations, pages, sectorLeaders, milestones, logs, ...rest } = event
+  const { organization, shifts, registrations, pages, questions, sectorLeaders, milestones, logs, ...rest } = event
   const now = new Date()
-  const archive = eventArchive({ organization, event: rest, shifts, registrations, pages, sectorLeaders, milestones, logs, exportedAt: now })
+  const archive = eventArchive({ organization, event: rest, shifts, registrations, pages, questions, sectorLeaders, milestones, logs, exportedAt: now })
   return new NextResponse(JSON.stringify(archive, null, 2), {
     headers: {
       "Content-Type": "application/json; charset=utf-8",

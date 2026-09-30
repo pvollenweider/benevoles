@@ -5,6 +5,7 @@ import RegistrationsManager from "@/components/admin/RegistrationsManager"
 import { leaderKeySet, isSectorLeader } from "@/lib/sector-leaders"
 import { SEARCH_MAX_LENGTH } from "@/lib/admin-search"
 import { orgTimeZone } from "@/lib/time-zone"
+import { answersByVolunteer } from "@/lib/event-questions"
 
 export const dynamic = "force-dynamic"
 
@@ -37,6 +38,8 @@ export default async function RegistrationsPage({
       },
       sectorLeaders: true,
       organization: { select: { timeZone: true } },
+      // Answers to the custom questions (#483), shown on each registration row.
+      questions: { orderBy: [{ archivedAt: "asc" }, { position: "asc" }], select: { label: true, archivedAt: true, answers: { select: { volunteerId: true, values: true } } } },
     },
   })
 
@@ -76,6 +79,7 @@ export default async function RegistrationsPage({
       <RegistrationsManager
         eventId={id}
         timeZone={orgTimeZone(event.organization)}
+        answersByVolunteer={answersByVolunteer(event.questions)}
         initialShiftFilter={initialShiftFilter}
         initialSearch={initialSearch}
         initialRegistrations={event.registrations.map((r) => ({

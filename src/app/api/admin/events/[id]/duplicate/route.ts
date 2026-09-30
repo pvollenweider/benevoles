@@ -34,6 +34,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       // admin had already removed from the source event (#216).
       shifts: { where: { status: { not: "cancelled" } } },
       pages: { orderBy: { displayOrder: "asc" } },
+      questions: { where: { archivedAt: null }, orderBy: { position: "asc" } },
       sectorLeaders: { select: { roleName: true, name: true, email: true } },
       organization: { select: { slug: true } },
     },
@@ -57,6 +58,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       isListed: true,
       shifts: { create: plan.shifts },
       pages: { create: plan.pages },
+      questions: { create: plan.questions },
     },
   })
 
