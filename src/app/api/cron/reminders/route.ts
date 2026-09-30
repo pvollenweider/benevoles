@@ -8,7 +8,7 @@ import { recordJobRun } from "@/lib/job-runs"
 import { env } from "@/lib/env"
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
-import { promoteNextInWaitlist } from "@/lib/waitlist"
+import { promoteNextInWaitlist, reconcileWaitlists } from "@/lib/waitlist"
 import { sendPushToVolunteer } from "@/lib/push"
 import { reportError } from "@/lib/report-error"
 import { deliverOutbox, outboxHealth } from "@/lib/notifications/outbox"
@@ -162,6 +162,12 @@ async function run(req: Request) {
     await promoteNextInWaitlist(reg.shiftId).catch(reportError("waitlist.promote"))
   }
 
+  // Catch up on promotions that failed after a cancellation: a free spot with people waiting.
+  const waitlist = await reconcileWaitlists(now).catch((e) => {
+    reportError("waitlist.reconcile")(e)
+    return null
+  })
+
   // Retry notifications whose immediate delivery failed (outbox, #293).
   const outbox = await deliverOutbox().catch((e) => {
     reportError("outbox.cron_deliver")(e)
@@ -180,6 +186,7 @@ async function run(req: Request) {
     runAt: now.toISOString(),
     totals,
     expiredOffers: expiredOffers.length,
+    waitlist,
     outbox,
     outboxStatus,
   })
