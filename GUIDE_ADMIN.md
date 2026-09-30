@@ -457,6 +457,10 @@ Sauf l'export complet, ces documents sont conçus pour le noir et blanc. Les heu
 
 ---
 
+### Badges
+
+Depuis **Rapports**, la section **Badges** imprime un badge d'identification par bénévole inscrit : prénom en grand, nom (optionnel), poste(s) et créneaux (optionnels), avec un bandeau à la couleur du poste (à défaut celle de l'événement, ou noir et blanc). Dix badges par feuille A4, à découper sur les pointillés. Filtre par poste, et champ « Un seul bénévole » pour réimprimer un badge perdu. Pas de photo ni de code QR : un badge peut être photographié ou perdu, il ne porte donc aucun lien vers les données du bénévole.
+
 ## QR code
 
 Depuis la page de l'événement → **QR code**, télécharger le QR code de la page publique de l'événement (formats PNG ou SVG). Pratique pour l'affichage en salle ou sur une affiche.
