@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
+# Traefik as shipped by k3s, configured through a HelmChartConfig (the chart itself belongs to k3s).
+#
+# externalTrafficPolicy: Local keeps the visitor's real address. With the default (Cluster), the
+# k3s service load balancer rewrites every connection's source to the node's pod gateway
+# (10.42.0.1): Traefik then forwards X-Forwarded-For: 10.42.0.1 for everyone, and every rate
+# limit of the app (src/lib/rate-limit.ts, getClientIp) becomes a single bucket shared by all
+# visitors — one busy hour on the invite check locked every invite link. On this single-node
+# cluster, Local has no downside: the only node runs Traefik.
+#
+# This Traefik also serves other sites of the cluster (gallerypack.app, deck.altsessions.ch): they
+# get the real client address too. Applying it recreates the svclb pod, a few seconds of reconnects.
+#
+#   kubectl apply -f k8s/traefik-config.yaml
+#   kubectl -n kube-system get svc traefik -o jsonpath='{.spec.externalTrafficPolicy}'   # → Local
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    logs:
+      access:
+        enabled: true
+    additionalArguments:
+      - "--entryPoints.web.transport.respondingTimeouts.readTimeout=30m"
+      - "--entryPoints.web.transport.respondingTimeouts.writeTimeout=30m"
+      - "--entryPoints.websecure.transport.respondingTimeouts.readTimeout=30m"
+      - "--entryPoints.websecure.transport.respondingTimeouts.writeTimeout=30m"
+    service:
+      spec:
+        externalTrafficPolicy: Local

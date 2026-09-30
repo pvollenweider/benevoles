@@ -48,6 +48,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `job-migrate.yaml` | Job de migration (`prisma migrate deploy` avec l'image déployée), exécuté avant la mise à jour de l'application |
 | `deployment.yaml` | Application : 1 réplica, mise à jour progressive sans indisponibilité, secret injecté avec `envFrom`, limites 500m CPU et 512 Mi |
 | `service.yaml`, `ingress.yaml` | Exposition via Traefik pour `*.benevol.app`, `benevol.app` et `www.benevol.app`, TLS |
+| `traefik-config.yaml` | Réglage du Traefik fourni par k3s (`HelmChartConfig`) : `externalTrafficPolicy: Local` pour conserver l'adresse réelle des visiteurs (voir ci-dessous) |
 | `certificate-wildcard.yaml` | Certificat wildcard (cert-manager, `ClusterIssuer` `letsencrypt-prod`) |
 | `gandi-webhook.yaml` | Webhook DNS Gandi pour la validation DNS-01 du certificat wildcard |
 | `cronjob-reminders.yaml` | Rappels, toutes les heures |
@@ -55,6 +56,18 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `cronjob-backup.yaml` | `pg_dump` chiffré (AES-256) vers un volume, 01:00 UTC, rétention 30 jours |
 | `cronjob-backup-offsite.yaml` | Copie des fichiers déjà chiffrés vers Dropbox (`rclone`), 01:30 UTC, rétention 90 jours côté Dropbox |
 | `log-rotation.md` | Rétention des logs sur 90 jours |
+
+### Adresse des visiteurs et limites de débit
+
+Les limites de débit (inscription, lien personnel, invitation, mot de passe oublié…) comptent les requêtes par adresse de visiteur, lue dans `X-Forwarded-For` (`TRUSTED_PROXY_HOPS`, 1 par défaut). Avec le réglage par défaut de k3s (`externalTrafficPolicy: Cluster`), le répartiteur de charge interne remplace l'adresse de chaque visiteur par celle du nœud (`10.42.0.1`) : toutes les limites deviennent alors un seul compteur partagé par tout le monde, et une heure chargée bloque tous les visiteurs. `traefik-config.yaml` règle `externalTrafficPolicy: Local` ; sur ce cluster à un seul nœud, cela n'a pas d'inconvénient. Ce Traefik sert aussi les autres sites du cluster.
+
+Vérifier après application :
+
+```bash
+kubectl -n kube-system get svc traefik -o jsonpath='{.spec.externalTrafficPolicy}'   # Local
+```
+
+Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publiques, plus `10.42.0.1`.
 
 ### Ordre de déploiement
 
