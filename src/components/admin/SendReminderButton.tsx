@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useRef, useState, useTransition } from "react"
+import { flushSync } from "react-dom"
+import { requestJson } from "@/lib/use-submit"
 import { useRouter } from "next/navigation"
 import ModalShell from "./ModalShell"
 
@@ -31,7 +33,7 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
-  const [result, setResult] = useState<string | null>(null)
+  const [result, setResult] = useState<{ kind: "ok" | "error"; text: string } | null>(null)
   const [, startTransition] = useTransition()
   // Confirmation of a send-to-many action: focus the safe choice first.
   const cancelRef = useRef<HTMLButtonElement>(null)
@@ -39,17 +41,19 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
   const disabled = volunteerCount === 0
 
   async function send() {
+    if (submitting) return
     setSubmitting(true)
     setResult(null)
-    const res = await fetch(`/api/admin/events/${eventId}/send-reminder`, { method: "POST" })
+    const outcome = await requestJson<{ sent: number; failed?: number }>(() => fetch(`/api/admin/events/${eventId}/send-reminder`, { method: "POST" }), "Le rappel n'a pas pu être envoyé.")
     setSubmitting(false)
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      setResult(typeof data?.error === "string" ? data.error : "Erreur lors de l'envoi")
+    if (!outcome.ok) {
+      setResult({ kind: "error", text: outcome.error })
       return
     }
-    const data = await res.json()
-    setResult(`${data.sent} rappel${data.sent > 1 ? "s" : ""} envoyé${data.sent > 1 ? "s" : ""}${data.failed ? ` · ${data.failed} échec${data.failed > 1 ? "s" : ""}` : ""}`)
+    const data = outcome.data
+    // « Envoyer » disappears with the success: commit first, then park the focus on « Fermer ».
+    flushSync(() => setResult({ kind: "ok", text: `${data.sent} rappel${data.sent > 1 ? "s" : ""} envoyé${data.sent > 1 ? "s" : ""}${data.failed ? ` · ${data.failed} échec${data.failed > 1 ? "s" : ""}` : ""}` }))
+    cancelRef.current?.focus()
     startTransition(() => router.refresh())
   }
 
@@ -81,7 +85,7 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
         </p>
         <button
           type="button"
-          onClick={() => setOpen(true)}
+          onClick={() => { setResult(null); setOpen(true) }}
           disabled={disabled}
           className="self-start bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
@@ -95,7 +99,7 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
       {open && (
         <ModalShell
           title="Envoyer le rappel ?"
-          onClose={() => setOpen(false)}
+          onClose={() => { if (!submitting) setOpen(false) }}
           panelClassName="max-w-md"
           initialFocusRef={cancelRef}
           describedBy="send-reminder-description"
@@ -113,28 +117,30 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
               <a href={`/admin/events/${eventId}/edit`} className="underline">Ajouter un message</a>
             </div>
           )}
-          {result && (
-            <div role="status" className="bg-gray-50 rounded-lg p-3 text-sm text-gray-700 mb-4">{result}</div>
-          )}
+          <div role="status" className={result?.kind === "ok" ? "bg-gray-50 rounded-lg p-3 text-sm text-gray-700 mb-4" : "sr-only"}>{result?.kind === "ok" ? result.text : ""}</div>
+          <div role="alert" className={result?.kind === "error" ? "bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-800 mb-4" : "sr-only"}>{result?.kind === "error" ? result.text : ""}</div>
           <div className="flex justify-end gap-2">
             <button
               ref={cancelRef}
               type="button"
-              onClick={() => setOpen(false)}
+              onClick={() => { if (!submitting) setOpen(false) }}
+              aria-disabled={submitting || undefined}
               className="text-sm px-4 py-2 text-gray-600 hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
             >
-              {result ? "Fermer" : "Annuler"}
+              {result?.kind === "ok" ? "Fermer" : "Annuler"}
             </button>
-            {!result && (
+            {result?.kind !== "ok" && (
               <button
                 type="button"
                 onClick={send}
-                disabled={submitting}
-                className="bg-blue-600 text-white text-sm px-4 py-2 rounded-full font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+                aria-disabled={submitting || undefined}
+                className="bg-blue-600 text-white text-sm px-4 py-2 rounded-full font-medium hover:bg-blue-700 aria-disabled:cursor-wait transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
               >
-                {submitting ? "Envoi…" : "Envoyer"}
+                {submitting ? "Envoi…" : result ? "Réessayer" : "Envoyer"}
               </button>
             )}
+            {/* The label change of the focused button isn't reliably voiced: say it once, politely. */}
+            <span role="status" className="sr-only">{submitting ? "Envoi en cours…" : ""}</span>
           </div>
         </ModalShell>
       )}

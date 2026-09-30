@@ -3,7 +3,9 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useMemo, useRef, useState, useTransition } from "react"
+import { useId, useMemo, useRef, useState, useTransition } from "react"
+import { flushSync } from "react-dom"
+import { requestJson } from "@/lib/use-submit"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { remindInvitedRecap } from "@/lib/action-recap"
 import { useRouter } from "next/navigation"
@@ -43,9 +45,14 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
   const [reminding, setReminding] = useState(false)
   const [remindResult, setRemindResult] = useState<string | null>(null)
   const [confirmingRemind, setConfirmingRemind] = useState(false)
+  const [remindError, setRemindError] = useState<string | null>(null)
+  // The address itself is wrong (field error) or the sending failed (send error): not the same thing for the field.
+  const [testFieldError, setTestFieldError] = useState<string | null>(null)
+  const [testError, setTestError] = useState<string | null>(null)
   const [testEmail, setTestEmail] = useState("")
   const [testState, setTestState] = useState<"idle" | "sending" | "sent" | "error">("idle")
   const [showTest, setShowTest] = useState(false)
+  const testId = useId()
 
   const total = invites.length
   const registered = invites.filter((i) => i.registered).length
@@ -53,6 +60,26 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
 
   function refresh() {
     startTransition(() => router.refresh())
+  }
+
+  async function sendTestEmail() {
+    if (testState === "sending") return
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(testEmail.trim())) {
+      // Committed before the focus moves, so the field already carries its description.
+      flushSync(() => { setTestFieldError("Indiquez une adresse email complète."); setTestError(null); setTestState("error") })
+      document.getElementById(`${testId}-email`)?.focus()
+      return
+    }
+    setTestState("sending")
+    setTestError(null)
+    setTestFieldError(null)
+    const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/invitations/test-email`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: testEmail.trim() }),
+    }), "L'email de test n'a pas pu être envoyé.")
+    if (!outcome.ok) setTestError(outcome.error)
+    setTestState(outcome.ok ? "sent" : "error")
   }
 
   function remindNonRegistered() {
@@ -63,14 +90,12 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
   async function runRemind() {
     setReminding(true)
     setRemindResult(null)
-    const res = await fetch(`/api/admin/events/${eventId}/invitations/remind`, { method: "POST" })
+    setRemindError(null)
+    const outcome = await requestJson<{ sent: number }>(() => fetch(`/api/admin/events/${eventId}/invitations/remind`, { method: "POST" }), "Les relances n'ont pas pu être envoyées.")
     setReminding(false)
-    if (!res.ok) {
-      setConfirmingRemind(false)
-      setRemindResult("Erreur lors de l'envoi des relances")
-      return
-    }
-    const data = await res.json()
+    // A failure stays in the dialog, where « Réessayer » is at hand.
+    if (!outcome.ok) { setRemindError(outcome.error); return }
+    const data = outcome.data
     setConfirmingRemind(false)
     setRemindResult(`${data.sent} relance${data.sent > 1 ? "s" : ""} envoyée${data.sent > 1 ? "s" : ""}`)
     refresh()
@@ -79,7 +104,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
   return (
     <div className="space-y-5">
       {confirmingRemind && (
-        <ConfirmActionModal recap={remindInvitedRecap({ people: noAnswer })} busy={reminding} onConfirm={() => void runRemind()} onCancel={() => setConfirmingRemind(false)} />
+        <ConfirmActionModal recap={remindInvitedRecap({ people: noAnswer })} busy={reminding} error={remindError} onConfirm={() => void runRemind()} onCancel={() => setConfirmingRemind(false)} />
       )}
       <div className="grid grid-cols-3 gap-3">
         <StatCard label="Invités" value={total} />
@@ -96,14 +121,14 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
         </button>
         {noAnswer > 0 && (
           <button
+            type="button"
             onClick={remindNonRegistered}
-            disabled={reminding}
-            className="text-sm border border-gray-200 px-3 py-2 rounded-xl hover:bg-gray-50 disabled:opacity-50"
+            className="text-sm border border-gray-300 px-3 py-2 rounded-xl hover:bg-gray-50"
           >
-            {reminding ? "Envoi…" : `Relancer les ${noAnswer} sans réponse`}
+            {`Relancer les ${noAnswer} sans réponse`}
           </button>
         )}
-        <span role={remindResult?.startsWith("Erreur") ? "alert" : "status"} className={`text-sm self-center ${remindResult?.startsWith("Erreur") ? "text-red-700" : "text-gray-600"}`}>{remindResult ?? ""}</span>
+        <span role="status" className="text-sm self-center text-gray-600">{remindResult ?? ""}</span>
         <button
           onClick={() => setShowTest((v) => !v)}
           className="text-xs text-gray-500 hover:text-gray-700 ml-auto self-center"
@@ -113,37 +138,38 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
       </div>
 
       {showTest && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col sm:flex-row gap-3 items-start sm:items-end">
+        <form
+          noValidate
+          onSubmit={(e) => { e.preventDefault(); void sendTestEmail() }}
+          className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col sm:flex-row gap-3 items-start sm:items-end"
+        >
           <div className="flex-1">
-            <label className="block text-xs font-medium text-amber-900 mb-1">
+            <label htmlFor={`${testId}-email`} className="block text-xs font-medium text-amber-900 mb-1">
               Envoyer un exemple d&apos;email d&apos;invitation à :
             </label>
             <input
+              id={`${testId}-email`}
               type="email"
               value={testEmail}
-              onChange={(e) => { setTestEmail(e.target.value); setTestState("idle") }}
+              aria-invalid={testFieldError ? true : undefined}
+              aria-describedby={testFieldError ? `${testId}-error` : undefined}
+              onChange={(e) => { setTestEmail(e.target.value); setTestState("idle"); setTestFieldError(null) }}
               placeholder="votre@email.com"
               className="w-full border border-amber-300 rounded-lg px-3 py-1.5 text-sm bg-white"
             />
           </div>
           <button
-            disabled={!testEmail || testState === "sending"}
-            onClick={async () => {
-              setTestState("sending")
-              const res = await fetch(`/api/admin/events/${eventId}/invitations/test-email`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: testEmail }),
-              })
-              setTestState(res.ok ? "sent" : "error")
-            }}
-            className="text-sm bg-amber-600 text-white px-4 py-1.5 rounded-lg hover:bg-amber-700 disabled:opacity-50 shrink-0"
+            type="submit"
+            aria-disabled={testState === "sending" || undefined}
+            className="text-sm bg-amber-700 text-white px-4 py-1.5 rounded-lg hover:bg-amber-800 aria-disabled:cursor-wait shrink-0"
           >
             {testState === "sending" ? "Envoi…" : "Envoyer le test"}
           </button>
-          {testState === "sent" && <span className="text-sm text-green-700 self-center">✓ Envoyé !</span>}
-          {testState === "error" && <span className="text-sm text-red-600 self-center">Échec de l&apos;envoi.</span>}
-        </div>
+          <span role="status" className={`text-sm text-green-800 self-center ${testState === "sent" ? "" : "sr-only"}`}>
+            {testState === "sent" ? "Envoyé." : testState === "sending" ? "Envoi en cours…" : ""}
+          </span>
+          <span id={`${testId}-error`} role="alert" className={`text-sm text-red-700 self-center ${testState === "error" ? "" : "sr-only"}`}>{testState === "error" ? (testFieldError ?? testError ?? "Échec de l'envoi.") : ""}</span>
+        </form>
       )}
 
       {invites.length === 0 ? (
@@ -242,7 +268,7 @@ function InviteModal({
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [message, setMessage] = useState("")
   const [submitting, setSubmitting] = useState(false)
-  const [result, setResult] = useState<string | null>(null)
+  const [result, setResult] = useState<{ kind: "ok" | "error"; text: string } | null>(null)
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -280,30 +306,30 @@ function InviteModal({
   }
 
   async function submit() {
-    if (selected.size === 0) return
+    if (selected.size === 0 || submitting) return
     setSubmitting(true)
     setResult(null)
-    const res = await fetch(`/api/admin/events/${eventId}/invitations`, {
+    const outcome = await requestJson<{ invitedNew?: number; skippedExisting?: number; emailsSent?: number; membersWithoutEmail?: number }>(() => fetch(`/api/admin/events/${eventId}/invitations`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         volunteerIds: Array.from(selected),
         message: message.trim() || undefined,
       }),
-    })
+    }), "Les invitations n'ont pas pu être envoyées.")
     setSubmitting(false)
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      setResult(typeof data?.error === "string" ? data.error : "Erreur lors de l'envoi")
+    if (!outcome.ok) {
+      // The selection stays: « Envoyer » again retries with the same people.
+      setResult({ kind: "error", text: `${outcome.error} Votre sélection est conservée.` })
       return
     }
-    const data = await res.json()
+    const data = outcome.data
     const parts: string[] = []
     if (data.invitedNew) parts.push(`${data.invitedNew} invités`)
     if (data.skippedExisting) parts.push(`${data.skippedExisting} déjà invités`)
     if (data.emailsSent) parts.push(`${data.emailsSent} emails envoyés`)
     if (data.membersWithoutEmail) parts.push(`${data.membersWithoutEmail} sans email`)
-    setResult(parts.join(" · "))
+    setResult({ kind: "ok", text: parts.join(" · ") })
     setTimeout(onDone, 1500)
   }
 
@@ -389,19 +415,23 @@ function InviteModal({
             />
           </div>
 
-          {result && <div role="status" className="text-sm text-gray-700 bg-gray-50 px-3 py-2 rounded-lg">{result}</div>}
+          <div role="status" className={result?.kind === "ok" ? "text-sm text-gray-700 bg-gray-50 px-3 py-2 rounded-lg" : "sr-only"}>{result?.kind === "ok" ? result.text : ""}</div>
+          <div role="alert" className={result?.kind === "error" ? "text-sm text-red-800 bg-red-50 border border-red-200 px-3 py-2 rounded-lg" : "sr-only"}>{result?.kind === "error" ? result.text : ""}</div>
 
           <div className="flex justify-end gap-2">
             <button type="button" onClick={onClose} className="text-sm px-4 py-2 text-gray-600 hover:text-gray-900">
               Annuler
             </button>
             <button
+              type="button"
               onClick={submit}
-              disabled={selected.size === 0 || submitting}
-              className="bg-blue-600 text-white text-sm px-4 py-2 rounded-xl font-medium hover:bg-blue-700 disabled:opacity-50"
+              disabled={selected.size === 0}
+              aria-disabled={submitting || undefined}
+              className="bg-blue-600 text-white text-sm px-4 py-2 rounded-xl font-medium hover:bg-blue-700 disabled:opacity-50 aria-disabled:cursor-wait"
             >
               {submitting ? "Envoi…" : `Envoyer ${selected.size} invitation${selected.size > 1 ? "s" : ""}`}
             </button>
+            <span role="status" className="sr-only">{submitting ? "Envoi en cours…" : ""}</span>
           </div>
         </div>
     </ModalShell>
