@@ -3,6 +3,7 @@
 
 import { esc, volunteersOf, type SheetShift } from "./print-sheets"
 import type { ColorKey } from "./roles"
+import { clockTime } from "@/lib/gantt-utils"
 
 /**
  * Printable identification badges (#190, V1): one badge per active volunteer of an event,
@@ -86,7 +87,7 @@ export function badgesOf(d: BadgeData, o: BadgeOptions = DEFAULT_BADGE_OPTIONS):
         firstName: volunteer.firstName,
         lastName: volunteer.lastName,
         roles,
-        shifts: own.map((s) => `${fmtDayShort(s.date)} ${s.startTime}–${s.endTime}${s.label && s.label !== s.roleName ? ` · ${s.label}` : ""}`),
+        shifts: own.map((s) => `${fmtDayShort(s.date)} ${clockTime(s.startTime)}–${clockTime(s.endTime)}${s.label && s.label !== s.roleName ? ` · ${s.label}` : ""}`),
         color,
       }
     })

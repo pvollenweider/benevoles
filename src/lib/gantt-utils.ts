@@ -55,13 +55,20 @@ export function hourLabel(h: number): string {
   return `${String(((h % 24) + 24) % 24).padStart(2, "0")}h`
 }
 
+// A stored time as a wall clock "HH:MM". Legacy data may hold hours past midnight written as
+// 24:00, 25:30 or 26:00 (on the shift's date): they are read modulo 24, so 25:30 shows as 01:30.
+// The stored value keeps its meaning for the minute arithmetic (toMin/toMinEnd).
+export function clockTime(t: string): string {
+  const [h, m = "00"] = t.split(":")
+  const hour = parseInt(h, 10)
+  if (Number.isNaN(hour)) return t
+  return `${String(((hour % 24) + 24) % 24).padStart(2, "0")}:${m}`
+}
+
 // "HH:MM–HH:MM" for lists, with the clock read modulo 24 and a note when the shift
 // runs past midnight ("22:00–02:00 (jusqu'au lendemain)").
 export function fmtRange(start: string, end: string): string {
-  const clock = (t: string) => {
-    const [h, m] = t.split(":")
-    return `${String(((parseInt(h, 10) % 24) + 24) % 24).padStart(2, "0")}:${m}`
-  }
+  const clock = clockTime
   const range = `${clock(start)}–${clock(end)}`
   return crossesMidnight(start, end) ? `${range} (jusqu'au lendemain)` : range
 }
