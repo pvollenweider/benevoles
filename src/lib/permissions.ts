@@ -78,6 +78,7 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "registrations": { POST: "organizer" },
   "registrations/[id]": { PATCH: "organizer", DELETE: "organizer" },
   "registrations/[id]/resend-link": { POST: "organizer" },
+  "registrations/[id]/decision": { POST: "organizer" },
   "settings/activity": { GET: "organizer" },
   "settings/activity/export": { GET: "organizer" },
   "settings/admins": { GET: "organizer", POST: "owner" },

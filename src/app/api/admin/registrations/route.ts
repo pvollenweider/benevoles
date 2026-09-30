@@ -10,6 +10,7 @@ import { isUniqueViolation } from "@/lib/registration-capacity"
 import { registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
 import { roleLimitAdminMessage, roleLimitBreaches, roleLimits } from "@/lib/role-limit"
+import { LIVE_STATUSES } from "@/lib/registration-capacity"
 
 const schema = z.object({
   eventId: z.string(),
@@ -54,7 +55,7 @@ export async function POST(req: Request) {
     }))
     if (limits.size > 0) {
       const held = await db.registration.findMany({
-        where: { volunteerId: volunteer.id, eventId, status: { in: ["active", "waiting", "offered"] }, shift: { roleName: shift.roleName } },
+        where: { volunteerId: volunteer.id, eventId, status: { in: [...LIVE_STATUSES] }, shift: { roleName: shift.roleName } },
         select: { id: true },
       })
       const [breach] = roleLimitBreaches([shift], held.map(() => ({ roleName: shift.roleName })), limits)

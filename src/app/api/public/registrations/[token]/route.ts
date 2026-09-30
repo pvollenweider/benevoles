@@ -12,6 +12,7 @@ import { reportError } from "@/lib/report-error"
 import { contactPhone } from "@/lib/contact-phone"
 import { registrationToken } from "@/lib/token-vault"
 import { pickShiftInfo } from "@/lib/shift-info"
+import { COMMITTED_STATUSES, LIVE_STATUSES } from "@/lib/registration-capacity"
 
 export async function GET(req: Request, { params }: { params: Promise<{ token: string }> }) {
   const rl = await rateLimit(getClientIp(req), "reg-token-read", 10, 60 * 60 * 1000)
@@ -20,7 +21,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
   const { token } = await params
 
   // Waiting and offered registrations open the page too (#374): the volunteer sees where they stand.
-  const LIVE = ["active", "waiting", "offered"]
+  const LIVE = [...LIVE_STATUSES]
   const registration = await prisma.registration.findFirst({
     where: { ...registrationToken.where(token), status: { in: LIVE } },
     include: {
@@ -93,8 +94,9 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
 
   const { token } = await params
 
+  // A pending request (#484) can be withdrawn the same way: it frees the spot it holds.
   const registration = await prisma.registration.findFirst({
-    where: { ...registrationToken.where(token), status: "active" },
+    where: { ...registrationToken.where(token), status: { in: [...COMMITTED_STATUSES] } },
   })
 
   if (!registration) {
@@ -102,9 +104,10 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
   }
 
   // Conditional on still being active (#264): a double click would otherwise cancel twice, log
-  // twice and trigger two waitlist promotions for a single freed spot.
+  // twice and trigger two waitlist promotions for a single freed spot. Same for a request the
+  // organizer is deciding on right now: whichever runs first wins, the other finds it settled.
   const { count } = await prisma.registration.updateMany({
-    where: { id: registration.id, status: "active" },
+    where: { id: registration.id, status: registration.status },
     data: { status: "cancelled" },
   })
   if (count === 0) {
@@ -119,7 +122,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
     entityId: registration.id,
     // shiftId unchanged: recorded so the narrative can still name the shift — see
     // describeChanges's shiftId filter in event-log-narrative.ts.
-    changes: { status: { from: "active", to: "cancelled" }, shiftId: { from: registration.shiftId, to: registration.shiftId } },
+    changes: { status: { from: registration.status, to: "cancelled" }, shiftId: { from: registration.shiftId, to: registration.shiftId } },
   })
 
   await promoteNextInWaitlist(registration.shiftId, cancelLogId ?? undefined).catch(reportError("waitlist.promote"))

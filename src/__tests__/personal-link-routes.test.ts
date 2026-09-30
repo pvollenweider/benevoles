@@ -31,9 +31,9 @@ describe("POST /api/public/registrations/[token]/resend-link", () => {
     const { POST } = await import("@/app/api/public/registrations/[token]/resend-link/route")
     const res = await POST(new Request("http://localhost/x", { method: "POST" }), { params: Promise.resolve({ token: "t" }) })
     expect(res.status).toBe(200)
-    expect(m.findFirst.mock.calls[0][0].where).toMatchObject({ editTokenHash: "h:t", status: { in: ["active", "waiting", "offered"] } })
+    expect(m.findFirst.mock.calls[0][0].where).toMatchObject({ editTokenHash: "h:t", status: { in: ["active", "waiting", "offered", "requested"] } })
     expect(m.enqueue).toHaveBeenCalledWith([expect.objectContaining({ kind: "registration_link_resend", organizationId: "org-a", recipient: { email: "a@x.ch", name: "A B" } })])
-    expect(m.updateMany).toHaveBeenCalledWith({ where: { volunteerId: "v1", eventId: "e1", status: { in: ["active", "waiting", "offered"] } }, data: { linkEmailedAt: expect.any(Date) } })
+    expect(m.updateMany).toHaveBeenCalledWith({ where: { volunteerId: "v1", eventId: "e1", status: { in: ["active", "waiting", "offered", "requested"] } }, data: { linkEmailedAt: expect.any(Date) } })
     expect(m.deliver).toHaveBeenCalledWith(["n1"])
   })
 

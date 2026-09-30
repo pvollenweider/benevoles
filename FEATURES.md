@@ -20,6 +20,7 @@ C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles
 - **Plusieurs créneaux en une fois.** Les chevauchements sont signalés avant l'envoi et les places restantes sont affichées.
 - **Un récapitulatif clair avant de confirmer.** Les créneaux dans l'ordre, les pauses entre eux et les informations transmises à l'organisation. Une journée trop longue ou des créneaux enchaînés sans vraie pause sont signalés, sans bloquer.
 - **Une liste d'attente.** Quand un créneau est complet, on peut s'inscrire en attente. Si une place se libère, la personne suivante la reçoit par email et a 24 heures pour la prendre.
+- **Sur validation, pour les postes sensibles.** Conduite, caisse, sécurité : l'inscription devient une demande qui garde sa place, et vous acceptez ou refusez. Le bénévole est prévenu par email dans les deux cas.
 - **Vos règles.** Un âge minimum par créneau, un téléphone obligatoire si vous devez pouvoir appeler vos bénévoles, un nombre maximum de créneaux par personne sur un poste très demandé, quelques questions à vous (taille de t-shirt, permis, régime), un poste réservé aux membres qui portent une étiquette (ils s'inscrivent avec leur lien d'invitation).
 - **Ouvrir quand vous êtes prêt.** Le planning peut être publié avant l'ouverture des inscriptions. Ouvrez et fermez-les d'un clic, ou programmez une date d'ouverture et de fermeture ; la page indique aux bénévoles quand revenir.
 - **Visible ou discret.** Un événement peut apparaître sur votre page publique ou rester accessible seulement à ceux qui ont le lien.

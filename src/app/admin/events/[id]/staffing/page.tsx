@@ -7,6 +7,7 @@ import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import { fmtRange } from "@/lib/gantt-utils"
 import { fillPercent, staffingHeadline, staffingSummary, type StaffingShiftLine } from "@/lib/staffing"
+import { LIVE_STATUSES } from "@/lib/registration-capacity"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Où manque-t-il du monde ?" }
@@ -84,7 +85,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
         where: { status: { not: "cancelled" } },
         select: {
           id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, status: true,
-          registrations: { where: { status: { in: ["active", "waiting", "offered"] } }, select: { status: true } },
+          registrations: { where: { status: { in: [...LIVE_STATUSES] } }, select: { status: true } },
         },
       },
       sectorLeaders: { select: { roleName: true } },
@@ -97,7 +98,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
       id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10),
       startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, closed: s.status === "closed",
       active: s.registrations.filter((r) => r.status === "active").length,
-      waiting: s.registrations.filter((r) => r.status !== "active").length,
+      waiting: s.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length,
     })),
     event.sectorLeaders.map((l) => l.roleName),
   )

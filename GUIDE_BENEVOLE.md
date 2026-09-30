@@ -144,6 +144,9 @@ Vérifiez vos courriers indésirables. Si vous tentez de vous réinscrire à un 
 **J'ai eu une erreur en confirmant mon inscription.**
 Tout ce que vous avez saisi reste en place. Le message dit de quoi il s'agit : un champ à corriger, un créneau qui n'est plus disponible (revenez au planning pour ajuster votre choix), une connexion interrompue ou une erreur du serveur. Dans ces deux derniers cas, cliquez sur **Réessayer** : si votre inscription était passée malgré tout, vous recevrez simplement votre lien personnel par email au lieu d'une deuxième inscription.
 
+**Le créneau indique « Sur validation ».**
+L'organisation choisit elle-même qui tient ce poste (conduite, caisse, sécurité…). Vous vous inscrivez normalement, mais votre inscription est une **demande**, pas encore une place confirmée : le récapitulatif et la page après l'envoi le disent. La place vous est réservée le temps que l'organisation réponde. Vous recevez un email « Demande reçue » avec votre lien personnel, où vous suivez la demande et pouvez la retirer. Si elle est acceptée, vous recevez l'email de confirmation habituel ; sinon, un email vous le dit. Les rappels ne concernent que les créneaux confirmés.
+
 **Je veux changer de créneau.**
 Annulez le créneau concerné via votre lien personnel, puis retournez sur la page de l'événement pour en choisir un autre.
 

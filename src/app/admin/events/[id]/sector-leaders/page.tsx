@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import SectorLeadersManager from "@/components/admin/SectorLeadersManager"
+import { LIVE_STATUSES } from "@/lib/registration-capacity"
 
 export const dynamic = "force-dynamic"
 
@@ -22,7 +23,7 @@ export default async function SectorLeadersPage({ params }: { params: Promise<{ 
     }),
     db.shift.findMany({ where: { eventId: id }, select: { roleName: true }, distinct: ["roleName"] }),
     db.registration.findMany({
-      where: { eventId: id, status: { in: ["active", "waiting", "offered"] } },
+      where: { eventId: id, status: { in: [...LIVE_STATUSES] } },
       select: { volunteer: { select: { id: true, firstName: true, lastName: true, email: true } }, shift: { select: { roleName: true } } },
     }),
   ])

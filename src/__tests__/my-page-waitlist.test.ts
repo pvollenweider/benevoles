@@ -35,8 +35,8 @@ describe("GET /api/public/registrations/[token] — waitlist", () => {
     expect(res.status).toBe(200)
     const body = await res.json()
 
-    expect(findFirst.mock.calls[0][0].where.status).toEqual({ in: ["active", "waiting", "offered"] })
-    expect(findMany.mock.calls[0][0].where.status).toEqual({ in: ["active", "waiting", "offered"] })
+    expect(findFirst.mock.calls[0][0].where.status).toEqual({ in: ["active", "waiting", "offered", "requested"] })
+    expect(findMany.mock.calls[0][0].where.status).toEqual({ in: ["active", "waiting", "offered", "requested"] })
     expect(body.timeZone).toBe("Europe/Zurich")
     expect(body.registrations.map((r: { status: string; waitingPosition: number | null }) => [r.status, r.waitingPosition])).toEqual([["waiting", 2], ["offered", 1]])
     expect(body.registrations[1].waitingExpiresAt).toBe(expires.toISOString())

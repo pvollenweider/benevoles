@@ -54,7 +54,7 @@ describe("raw matches (#390)", () => {
 
   it("registrations: live statuses of the matched volunteers", () => {
     expect(registrationWhere(["v1", "v2"])).toEqual({
-      status: { in: ["active", "waiting", "offered"] },
+      status: { in: ["active", "waiting", "offered", "requested"] },
       volunteerId: { in: ["v1", "v2"] },
     })
   })

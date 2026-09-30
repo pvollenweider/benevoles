@@ -9,6 +9,7 @@ import { orgTimeZone } from "@/lib/time-zone"
 import { orgBaseUrl } from "@/lib/urls"
 import { pickShiftInfo, shiftInfoText } from "@/lib/shift-info"
 import { buildIcs } from "@/lib/ics"
+import { LIVE_STATUSES } from "@/lib/registration-capacity"
 
 /**
  * GET /api/public/registrations/[token]/calendar (#480): the volunteer's confirmed shifts of the
@@ -29,7 +30,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
   const only = new URL(req.url).searchParams.get("registration")
 
   const registration = await prisma.registration.findFirst({
-    where: { ...registrationToken.where(token), status: { in: ["active", "waiting", "offered"] } },
+    where: { ...registrationToken.where(token), status: { in: [...LIVE_STATUSES] } },
     include: { event: { select: { id: true, title: true, location: true, latitude: true, longitude: true, organization: { select: { slug: true, timeZone: true } } } } },
   })
   if (!registration) return errorPage("Inscription introuvable ou déjà annulée.", 404)

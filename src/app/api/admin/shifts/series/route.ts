@@ -31,6 +31,7 @@ const schema = z.object({
   instructions: z.string().max(SHIFT_INSTRUCTIONS_MAX).optional().nullable(),
   displayOrder: z.number().int().optional(),
   waitlistEnabled: z.boolean().optional(),
+  requiresApproval: z.boolean().optional(),
   minAge: z.number().int().min(0).max(120).nullable().optional(),
 }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
 

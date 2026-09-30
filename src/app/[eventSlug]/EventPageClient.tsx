@@ -52,6 +52,7 @@ type Shift = {
   longitude?: number | null
   displayOrder: number
   waitlistEnabled: boolean
+  requiresApproval?: boolean
   minAge: number | null
   colorKey: string | null
   /** Shifts per volunteer for this role (#466). */
@@ -372,6 +373,10 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
       params.set("token", data.editToken)
     }
     if (data.onWaitlist) params.set("waitlist", "1")
+    if (Number(data.requestedShifts) > 0) {
+      params.set("requested", String(data.requestedShifts))
+      params.set("active", String(data.activeShifts ?? 0))
+    }
     const query = params.toString()
     router.push(`/${eventSlug}/success${query ? `?${query}` : ""}`)
   }
@@ -406,6 +411,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
           )}
           {isWaitlistPending && (
             <p className="text-[11px] text-gray-500 mt-0.5">Complet · liste d&apos;attente si place libérée</p>
+          )}
+          {!isReg && !isWaitlistPending && s.requiresApproval && (
+            <p className="text-xs text-amber-800 mt-0.5 font-medium">Sur validation · demande à accepter par l&apos;organisation</p>
           )}
         </div>
         {isReg ? (

@@ -44,6 +44,7 @@ Les étapes se cochent d'elles-mêmes au fur et à mesure. La liste disparaît q
 En haut, **Ce qui demande votre attention** liste, du plus urgent au moins urgent, les situations de vos événements publiés sur lesquelles agir, chacune avec un lien vers l'endroit où la régler :
 
 - créneaux des 7 prochains jours pas encore complets (urgent à moins de 2 jours) ;
+- demandes d'inscription à accepter ou refuser, sur les créneaux sur validation (urgent) ;
 - places proposées en liste d'attente qui expirent dans les 12 heures sans réponse ;
 - jalons en retard ;
 - personnes invitées il y a plus de 3 jours qui n'ont encore aucun créneau confirmé (avec un lien pour leur écrire) ;
@@ -180,6 +181,21 @@ Un clic sur une barre du planning ouvre une petite fenêtre pour agir sans quitt
 Cochez **Activer la liste d'attente** dans le formulaire du créneau (ou dans le popover de la timeline admin). Quand le créneau est complet, les bénévoles peuvent s'y inscrire ; une place libérée déclenche automatiquement l'envoi d'un email à la première personne en attente, avec un lien de confirmation valable **24 heures**. Passé ce délai sans réponse, la place est proposée à la personne suivante.
 
 La vue des inscriptions (`/admin/events/[id]/registrations`) affiche les bénévoles en attente (`En attente`) et ceux à qui une place a été proposée (`Offerte`).
+
+### Inscriptions sur validation
+
+Pour un poste sensible (conduite, caisse, sécurité, une qualification), cochez **Sur validation** dans le formulaire du créneau (ou dans la série de créneaux). Une inscription sur ce créneau devient alors une **demande** :
+
+- le bénévole voit le créneau marqué « Sur validation » sur la page publique et dans le récapitulatif, puis « Demande envoyée » après l'envoi. Il reçoit un email « Demande reçue » avec son lien personnel, où il suit sa demande et peut la retirer ;
+- la demande **garde sa place** jusqu'à votre décision : quand les demandes remplissent le créneau, les suivants vont en liste d'attente (ou le créneau est complet) ;
+- dans les inscriptions de l'événement, chaque demande porte les boutons **Accepter** et **Refuser**, et la case **Demandes à traiter** n'affiche qu'elles. Un récapitulatif dit ce qui va se passer avant de confirmer ;
+- **Accepter** fait de la demande une inscription confirmée : le bénévole reçoit l'email de confirmation habituel, et les responsables du poste sont prévenus ;
+- **Refuser** libère la place, proposée ensuite à la liste d'attente. Le bénévole reçoit un email poli, sans raison, sauf si vous écrivez un message (facultatif) ;
+- chaque décision est inscrite dans le journal de l'événement (le texte du message n'y figure pas).
+
+Les demandes ne reçoivent pas les rappels, ne figurent pas sur les feuilles de présence et les exports, et ne font pas partie de « tous les inscrits » dans les messages ciblés. Une demande compte comme une inscription pour les doublons, les chevauchements et la limite de créneaux par personne. Tant qu'elle n'est pas acceptée, elle ne compte pas comme une place pourvue dans « Où manque-t-il du monde ? ». Une place proposée depuis la liste d'attente sur un créneau sur validation devient, elle aussi, une demande. Si le créneau est annulé, les demandes le sont aussi, avec le même email que les inscrits.
+
+Une personne ajoutée à la main est inscrite directement, sans demande. Cocher **Sur validation** ne change rien aux inscriptions déjà confirmées ; le décocher laisse les demandes en cours à traiter. Les demandes en attente apparaissent dans **Ce qui demande votre attention**.
 
 ### Gérer les postes
 

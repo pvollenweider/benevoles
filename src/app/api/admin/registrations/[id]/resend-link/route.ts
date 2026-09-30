@@ -5,6 +5,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { sendNotification } from "@/lib/notifications"
 import { registrationToken } from "@/lib/token-vault"
+import { LIVE_STATUSES } from "@/lib/registration-capacity"
 
 // Lets an admin resend a volunteer their own personal management link (/my/[token]) — e.g. when
 // they accidentally deleted the confirmation email that carried it. Any of a volunteer's active
@@ -48,7 +49,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   })
 
   if (!result.ok) return NextResponse.json({ error: "Échec de l'envoi de l'email." }, { status: 502 })
-  await db.registration.updateMany({ where: { volunteerId: registration.volunteerId, eventId: registration.eventId, status: { in: ["active", "waiting", "offered"] } }, data: { linkEmailedAt: new Date() } })
+  await db.registration.updateMany({ where: { volunteerId: registration.volunteerId, eventId: registration.eventId, status: { in: [...LIVE_STATUSES] } }, data: { linkEmailedAt: new Date() } })
 
   return NextResponse.json({ success: true })
 }

@@ -4,6 +4,7 @@
 import type { Prisma } from "@/generated/prisma/client"
 import { orgTimeZone } from "@/lib/time-zone"
 import { coordinatesOf } from "@/lib/map-link"
+import { OCCUPYING_STATUSES } from "@/lib/registration-capacity"
 
 /**
  * What volunteers see of an event on its public page. Shared by the public API and the admin
@@ -13,7 +14,9 @@ export const publicEventInclude = {
   organization: { select: { name: true, slug: true, volunteerCharter: true, timeZone: true } },
   shifts: {
     where: { status: { not: "cancelled" } },
-    include: { registrations: { where: { status: "active" } } },
+    // Every spot taken counts, a pending request or a waitlist offer included (#484): the page
+    // agrees with the placement the server will make.
+    include: { registrations: { where: { status: { in: [...OCCUPYING_STATUSES] } } } },
     orderBy: [{ date: "asc" }, { displayOrder: "asc" }, { startTime: "asc" }],
   },
   pages: {
@@ -55,6 +58,7 @@ export function toPublicEvent(event: PublicEventRow) {
     longitude: point?.longitude ?? null,
     displayOrder: shift.displayOrder,
     waitlistEnabled: shift.waitlistEnabled,
+    requiresApproval: shift.requiresApproval,
     minAge: shift.minAge,
     colorKey: shift.colorKey,
     maxPerVolunteer: shift.maxPerVolunteer,

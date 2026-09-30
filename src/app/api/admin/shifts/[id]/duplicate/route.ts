@@ -41,6 +41,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       displayOrder: source.displayOrder,
       internalNotes: source.internalNotes,
       waitlistEnabled: source.waitlistEnabled,
+      requiresApproval: source.requiresApproval,
       minAge: source.minAge,
       colorKey: source.colorKey,
       maxPerVolunteer: source.maxPerVolunteer,

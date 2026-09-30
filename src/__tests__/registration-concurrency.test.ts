@@ -168,4 +168,20 @@ describe("conditional transitions", () => {
     expect(res.status).toBe(404)
     expect(enqueueAndDeliver).not.toHaveBeenCalled()
   })
+
+  it("waitlist confirm on a « Sur validation » shift: the offered spot becomes a request (#484)", async () => {
+    m.regFindFirst.mockResolvedValue({
+      id: "r1", eventId: "evt-1", volunteerId: "v1", editTokenLegacy: "tok", editTokenEnc: null, waitingExpiresAt: new Date(Date.now() + 3600_000),
+      volunteer: { email: "a@x.com", firstName: "A" }, shift: { label: "Navette", date: new Date(), startTime: "10:00", endTime: "12:00", requiresApproval: true },
+      event: { title: "F", organizationId: "org-a", organization: { slug: "a" } },
+    })
+    m.regUpdateMany.mockResolvedValue({ count: 1 })
+    m.eventLogFindFirst.mockResolvedValue(null)
+    enqueueNotifications.mockClear()
+    const { POST } = await import("@/app/api/public/waitlist/[token]/confirm/route")
+    const res = await POST(new Request("http://localhost/x", { method: "POST", headers: ip() }), { params: Promise.resolve({ token: "tok" }) })
+    expect(await res.json()).toMatchObject({ success: true, requested: true })
+    expect(m.regUpdateMany.mock.calls[0][0].data.status).toBe("requested")
+    expect(enqueueNotifications.mock.calls[0][0][0].kind).toBe("registration_requested")
+  })
 })

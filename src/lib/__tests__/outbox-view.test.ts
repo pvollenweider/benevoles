@@ -7,7 +7,7 @@ const row = { id: "o1", status: "pending", attempts: 0, nextAttemptAt: new Date(
 // Email delivery page (#382).
 describe("outbox view", () => {
   it("labels every notification kind, and falls back to the raw kind", () => {
-    expect(Object.keys(KIND_LABELS)).toHaveLength(20)
+    expect(Object.keys(KIND_LABELS)).toHaveLength(22)
     expect(kindLabel("member_invite")).toBe("Invitation d'un membre")
     expect(kindLabel("waitlist_offered")).toBe("Liste d'attente : place proposée")
     expect(kindLabel("something_new")).toBe("something_new")

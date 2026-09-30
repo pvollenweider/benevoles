@@ -33,6 +33,7 @@ const FIELD_LABELS: Record<string, string> = {
   roleName: "poste",
   label: "libellé",
   waitlistEnabled: "liste d'attente",
+  requiresApproval: "sur validation",
   shiftId: "créneau",
   source: "origine",
   comment: "commentaire",

@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useId, useRef, useState } from "react"
+import { useId, useRef, useState, type ReactNode } from "react"
 import { flushSync } from "react-dom"
 import ModalShell from "@/components/admin/ModalShell"
 import type { ActionRecap } from "@/lib/action-recap"
@@ -18,13 +18,15 @@ type Props = {
   error?: string | null
   /** Text the person must type before an irreversible action goes through (e.g. the slug). */
   challenge?: Challenge
+  /** Extra fields under the recap (e.g. an optional message), inside the same form. */
+  children?: ReactNode
 }
 
 /**
  * Confirmation of a sensitive action (#379): the recap of what is about to happen (people,
  * emails, consequences, logging), Cancel focused first, Confirm styled by the stakes.
  */
-export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, error, challenge }: Props) {
+export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, error, challenge, children }: Props) {
   const id = useId()
   const cancelRef = useRef<HTMLButtonElement>(null)
   const challengeRef = useRef<HTMLInputElement>(null)
@@ -51,6 +53,7 @@ export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, e
       <ul id={`${id}-recap`} className="list-disc pl-5 space-y-1 text-sm text-gray-800">
         {recap.lines.map((l) => <li key={l}>{l}</li>)}
       </ul>
+      {children}
       {challenge && (
         <div className="mt-4">
           <label id={`${id}-challenge-label`} htmlFor={`${id}-challenge`} className="block text-sm text-gray-800 mb-1">{challenge.label}</label>

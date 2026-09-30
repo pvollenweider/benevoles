@@ -30,6 +30,8 @@ export type AttentionEvent = {
   unansweredInvites: number
   /** Volunteers with a workload warning on this event (#465). */
   overloadedVolunteers?: number
+  /** Sign-up requests waiting for a decision on « Sur validation » shifts (#484). */
+  pendingRequests?: number
 }
 export type AttentionInput = {
   now: Date
@@ -90,6 +92,15 @@ export function attentionItems({ now, events, offers }: AttentionInput): Attenti
         id: `offers:${e.id}`, severity: "medium", eventTitle: e.title,
         message: `${expiring.length} ${plural(expiring.length, "place proposée", "places proposées")} en liste d'attente ${plural(expiring.length, "expire", "expirent")} dans les ${OFFER_WARNING_HOURS} prochaines heures sans réponse.`,
         action: "Voir les inscriptions", href: `${base}/registrations`,
+      })
+    }
+
+    const requests = e.pendingRequests ?? 0
+    if (requests > 0) {
+      items.push({
+        id: `requests:${e.id}`, severity: "high", eventTitle: e.title,
+        message: `${requests} ${plural(requests, "demande d'inscription attend", "demandes d'inscription attendent")} votre décision sur des créneaux sur validation.`,
+        action: "Les traiter", href: `${base}/registrations?demandes=1`,
       })
     }
 

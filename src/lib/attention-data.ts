@@ -29,6 +29,7 @@ export async function loadAttention(db: OrgScopedPrisma, now: Date = new Date())
           select: { volunteerId: true, status: true, shift: { select: { id: true, date: true, startTime: true, endTime: true } } },
         },
         organization: { select: { timeZone: true } },
+        _count: { select: { registrations: { where: { status: "requested", shift: { status: { not: "cancelled" } } } } } },
       },
     }),
     db.registration.findMany({
@@ -46,6 +47,7 @@ export async function loadAttention(db: OrgScopedPrisma, now: Date = new Date())
       overdueMilestones: e.milestones.length,
       unansweredInvites: selectInvitedWithoutShift(e.memberInvites, e.registrations).length,
       overloadedVolunteers: workloadByVolunteer(e.registrations, orgTimeZone(e.organization)).size,
+      pendingRequests: e._count.registrations,
     })),
     offers: offers.map((o) => ({ eventId: o.eventId, expiresAt: o.waitingExpiresAt })),
   })

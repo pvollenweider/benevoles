@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation"
 import { WAITLIST_STEPS } from "@/lib/waitlist-copy"
+import { outcomeHeading, readOutcome, requestNotice } from "@/lib/signup-outcome"
 import Link from "next/link"
 import { Suspense, useEffect, useState } from "react"
 import PublicFooter from "@/components/PublicFooter"
@@ -17,7 +18,11 @@ type RegistrationData = {
 function SuccessContent() {
   const params = useSearchParams()
   const token = params.get("token")
-  const isWaitlist = params.get("waitlist") === "1"
+  const outcome = readOutcome(params)
+  const isWaitlist = outcome.waitlist
+  // Only requests, no place yet (#484): no celebration, no confirmation message.
+  const onlyRequests = outcome.requested > 0 && outcome.active === 0
+  const notice = requestNotice(outcome)
 
   const [regData, setRegData] = useState<RegistrationData | null>(null)
   const [fetching, setFetching] = useState(!!token)
@@ -52,10 +57,11 @@ function SuccessContent() {
           aria-live="polite"
           className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-8 text-center"
         >
-          <span aria-hidden="true" className="text-5xl block mb-4">{isWaitlist ? "🕐" : "🎉"}</span>
-          <h1 className="text-xl font-bold text-gray-900 mb-2">
-            {isWaitlist ? "Tu es sur la liste d'attente !" : "Inscription confirmée !"}
-          </h1>
+          <span aria-hidden="true" className="text-5xl block mb-4">{isWaitlist || onlyRequests ? "🕐" : "🎉"}</span>
+          <h1 className="text-xl font-bold text-gray-900 mb-2">{outcomeHeading(outcome)}</h1>
+          {notice && (
+            <p className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900 text-left mb-4">{notice}</p>
+          )}
 
           {isWaitlist ? (
             <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-sm text-amber-900 text-left mb-6">
@@ -65,7 +71,8 @@ function SuccessContent() {
               </ol>
             </div>
           ) : fetching ? (
-            <div role="status" aria-label="Chargement des détails" className="flex justify-center py-4">
+            <div className="flex justify-center py-4">
+              <span className="sr-only">Chargement des détails</span>
               <svg
                 aria-hidden="true"
                 className="h-5 w-5 text-blue-400 motion-safe:animate-spin"
@@ -77,7 +84,7 @@ function SuccessContent() {
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
               </svg>
             </div>
-          ) : confirmationHtml ? (
+          ) : onlyRequests ? null : confirmationHtml ? (
             <div
               className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-900 text-left mb-6"
               dangerouslySetInnerHTML={{ __html: confirmationHtml }}
@@ -99,7 +106,7 @@ function SuccessContent() {
                   Accéder à mon inscription
                 </Link>
               </div>
-              {regData && !isWaitlist && (
+              {regData && !isWaitlist && !onlyRequests && (
                 <PushSubscribeButton editToken={token} />
               )}
             </div>
