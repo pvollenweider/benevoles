@@ -3,10 +3,10 @@ import { headers } from "next/headers"
 import { notFound, redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { resolveOrgSlug } from "@/lib/resolve-org"
-import { robotsFor } from "@/lib/event-visibility"
+import { eventPageMetadata } from "@/lib/event-visibility"
 import EventPageClient from "./EventPageClient"
 
-// An unlisted event (#414) is reachable by its link but not indexed: robots noindex/nofollow.
+// Only a published event gives its title; unlisted (#414), draft and archived events are noindex.
 export async function generateMetadata({ params }: { params: Promise<{ eventSlug: string }> }): Promise<Metadata> {
   const { eventSlug } = await params
   const rawOrgSlug = (await headers()).get("x-org-slug")
@@ -17,8 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ eventSlug
     where: { slug: eventSlug, organizationId: resolved.org.id },
     select: { title: true, publicStatus: true, isListed: true },
   })
-  const robots = robotsFor(event)
-  return { ...(event ? { title: event.title } : {}), ...(robots ? { robots } : {}) }
+  return eventPageMetadata(event)
 }
 
 export default async function EventPage({ params }: { params: Promise<{ eventSlug: string }> }) {
