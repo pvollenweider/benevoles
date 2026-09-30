@@ -147,7 +147,7 @@ describe("promoteNextInWaitlist under contention", () => {
 
 describe("conditional transitions", () => {
   it("public cancel: a second concurrent cancel gets 404 and doesn't promote again", async () => {
-    m.regFindFirst.mockResolvedValue({ id: "r1", eventId: "evt-1", shiftId: "shift-1", volunteerId: "v1" })
+    m.regFindFirst.mockResolvedValue({ id: "r1", eventId: "evt-1", shiftId: "shift-1", volunteerId: "v1", status: "active" })
     m.regUpdateMany.mockResolvedValue({ count: 0 })
     const { DELETE } = await import("@/app/api/public/registrations/[token]/route")
     const res = await DELETE(new Request("http://localhost/x", { method: "DELETE", headers: ip() }), { params: Promise.resolve({ token: "tok" }) })
