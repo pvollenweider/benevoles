@@ -40,7 +40,21 @@ export function listingChangeLabel(v: unknown): string {
   return v === true ? "répertorié" : v === false ? "non répertorié" : String(v)
 }
 
-/** Robots metadata for a public event page: unlisted events aren't indexed. */
+/**
+ * Robots metadata for a public event page: only published and listed events are indexed. An
+ * unlisted one opens by its link but stays out of search engines; a draft or an archived one is
+ * not public at all, so its URL is never indexed either.
+ */
 export function robotsFor(e: Visibility | null): { index: boolean; follow: boolean } | undefined {
-  return e && isUnlistedPublic(e) ? { index: false, follow: false } : undefined
+  if (!e) return undefined
+  return e.publicStatus === "published" && e.isListed ? undefined : { index: false, follow: false }
+}
+
+/**
+ * Metadata of a public event page. The title is only given away when the event is published:
+ * someone who guesses the slug of a draft or an archived event learns nothing from the <title>.
+ */
+export function eventPageMetadata(e: (Visibility & { title: string }) | null): { title?: string; robots?: { index: boolean; follow: boolean } } {
+  const robots = robotsFor(e)
+  return { ...(e && e.publicStatus === "published" ? { title: e.title } : {}), ...(robots ? { robots } : {}) }
 }
