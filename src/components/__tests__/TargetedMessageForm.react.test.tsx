@@ -85,7 +85,7 @@ describe("TargetedMessageForm", () => {
     expect(done).toHaveFocus()
     const sends = fetchMock.mock.calls.filter(([, init]) => !JSON.parse(init.body).dryRun)
     expect(sends).toHaveLength(1)
-    expect(JSON.parse(sends[0][1].body)).toEqual({ audience: { kind: "role", roleName: "Bar" }, subject: "Parking", message: "Entrée par la rue Basse." })
+    expect(JSON.parse(sends[0][1].body)).toEqual({ audience: { kind: "role", roleName: "Bar" }, subject: "Parking", message: "Entrée par la rue Basse.", push: false })
   })
 
   it("shows the server's refusal", async () => {

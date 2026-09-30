@@ -28,7 +28,23 @@ export const messageSchema = z.object({
   message: z.string().trim().min(1, "Le message est obligatoire.").max(MESSAGE_BODY_MAX),
   /** Count and preview only, nothing sent. */
   dryRun: z.boolean().optional(),
+  /** Also a push notification to the recipients' subscribed devices (#468); the email always goes. */
+  push: z.boolean().optional(),
 })
+
+export const PUSH_TITLE_MAX = 60
+export const PUSH_BODY_MAX = 120
+
+const clip = (s: string, max: number) => (s.length > max ? `${s.slice(0, max - 1).trimEnd()}…` : s)
+
+/**
+ * The push of a targeted message (#468): the subject as title, the first non-empty line of the
+ * message as body, both short; the full text stays in the email.
+ */
+export function messagePushPayload(subject: string, message: string): { title: string; body: string } {
+  const firstLine = message.split(/\r?\n/).map((l) => l.trim()).find(Boolean) ?? ""
+  return { title: clip(subject.trim(), PUSH_TITLE_MAX), body: clip(firstLine, PUSH_BODY_MAX) }
+}
 export type MessageInput = z.infer<typeof messageSchema>
 
 export type RecipientRegistration = {

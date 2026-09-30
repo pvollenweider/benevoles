@@ -47,3 +47,21 @@ export function countsToFreeze(rows: { targetedMessageId: string | null; status:
   }
   return out
 }
+
+export type PushResult = { pushRequested: boolean; pushDevices: number; pushSent: number; pushFailed: number }
+
+/**
+ * The push outcome of a message (#468), in words and apart from the emails; null when no push was
+ * asked. Devices not yet answered are « en cours ».
+ */
+export function pushLabel(p: PushResult): string | null {
+  if (!p.pushRequested) return null
+  if (p.pushDevices === 0) return "Notification demandée, mais aucun appareil abonné."
+  const pending = Math.max(0, p.pushDevices - p.pushSent - p.pushFailed)
+  const parts = [
+    `${p.pushSent} envoyée${p.pushSent > 1 ? "s" : ""}`,
+    p.pushFailed > 0 ? `${p.pushFailed} en échec` : null,
+    pending > 0 ? `${pending} en cours` : null,
+  ].filter(Boolean)
+  return `${p.pushDevices} appareil${p.pushDevices > 1 ? "s" : ""} : notification ${parts.join(", ")}`
+}

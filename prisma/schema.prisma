@@ -438,6 +438,11 @@ model TargetedMessage {
   recipientCount Int
   sentCount      Int      @default(0)
   failedCount    Int      @default(0)
+  // Push sent with the message (#468): devices targeted, and outcomes, apart from the emails.
+  pushRequested  Boolean  @default(false)
+  pushDevices    Int      @default(0)
+  pushSent       Int      @default(0)
+  pushFailed     Int      @default(0)
   createdAt      DateTime @default(now())
 
   organization Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)

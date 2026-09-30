@@ -26,15 +26,20 @@ function ensureConfigured() {
   configured = true
 }
 
+export type PushOutcome = { sent: number; failed: number; removed: number }
+
+/** Sends to every device of the volunteer; gone subscriptions (404/410) are removed. */
 export async function sendPushToVolunteer(
   volunteerId: string,
   payload: { title: string; body: string; url?: string; tag?: string }
-): Promise<void> {
+): Promise<PushOutcome> {
   ensureConfigured()
-  if (!configured) return
+  if (!configured) return { sent: 0, failed: 0, removed: 0 }
 
   const subs = await prisma.pushSubscription.findMany({ where: { volunteerId } })
   const dead: string[] = []
+  let sent = 0
+  let failed = 0
 
   await Promise.allSettled(
     subs.map(async (sub) => {
@@ -44,7 +49,9 @@ export async function sendPushToVolunteer(
           JSON.stringify(payload),
           { TTL: 3 * 24 * 3600 }
         )
+        sent++
       } catch (err: unknown) {
+        failed++
         const status = (err as { statusCode?: number }).statusCode
         if (status === 404 || status === 410) dead.push(sub.id)
       }
@@ -54,4 +61,40 @@ export async function sendPushToVolunteer(
   if (dead.length > 0) {
     await prisma.pushSubscription.deleteMany({ where: { id: { in: dead } } }).catch(reportError("push.cleanup_dead_subscriptions"))
   }
+  return { sent, failed, removed: dead.length }
+}
+
+/** Whether push is set up on this server (VAPID keys). */
+export function pushConfigured(): boolean {
+  ensureConfigured()
+  return configured
+}
+
+/** Devices subscribed by these volunteers: the push count of a targeted message (#468). */
+export async function pushDeviceCount(volunteerIds: string[]): Promise<number> {
+  if (volunteerIds.length === 0 || !pushConfigured()) return 0
+  return prisma.pushSubscription.count({ where: { volunteerId: { in: volunteerIds } } })
+}
+
+/**
+ * The push of a targeted message (#468), after the response: one notification per device of each
+ * recipient, outcomes added to the message's history row, separately from the emails.
+ */
+export async function sendTargetedPush(
+  targetedMessageId: string,
+  targets: { volunteerId: string; url: string }[],
+  payload: { title: string; body: string; tag: string },
+): Promise<PushOutcome> {
+  const total: PushOutcome = { sent: 0, failed: 0, removed: 0 }
+  for (const t of targets) {
+    const o = await sendPushToVolunteer(t.volunteerId, { ...payload, url: t.url }).catch((e) => { reportError("push.targeted")(e); return { sent: 0, failed: 0, removed: 0 } })
+    total.sent += o.sent
+    total.failed += o.failed
+    total.removed += o.removed
+  }
+  await prisma.targetedMessage.update({
+    where: { id: targetedMessageId },
+    data: { pushSent: { increment: total.sent }, pushFailed: { increment: total.failed } },
+  }).catch(reportError("push.targeted_counts"))
+  return total
 }

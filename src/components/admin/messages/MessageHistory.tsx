@@ -42,6 +42,12 @@ export default function MessageHistory({ eventId, items, timeZone }: { eventId: 
                       </span>
                     )}
                   </dd>
+                  {m.push && (
+                    <>
+                      <dt className="text-gray-600">Notification</dt>
+                      <dd className="text-gray-900">{m.push}</dd>
+                    </>
+                  )}
                 </dl>
                 <details className="mt-2">
                   <summary className="cursor-pointer text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
