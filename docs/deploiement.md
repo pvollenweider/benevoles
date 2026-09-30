@@ -17,8 +17,8 @@ Le `Dockerfile` est multi-étapes (`node:26-alpine`) :
 
 1. `deps` : `npm ci`
 2. `prisma-cli` : installe la CLI Prisma pour les migrations à l'exécution
-3. `builder` : `prisma generate` puis `npm run build`. `DATABASE_URL` et `AUTH_SECRET` reçoivent des valeurs factices pendant le build. `NEXT_PUBLIC_SENTRY_DSN` est un argument de build et `SENTRY_AUTH_TOKEN` un secret de build (`sentry_auth_token`)
-4. `runner` : sortie `standalone` de Next.js, utilisateur non root, port 3000
+3. `builder` : `prisma generate` puis `npm run build`. `DATABASE_URL` et `AUTH_SECRET` reçoivent des valeurs factices pendant le build. `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` (affiché sur la page Santé du service) sont des arguments de build, `SENTRY_AUTH_TOKEN` un secret de build (`sentry_auth_token`)
+4. `runner` : sortie `standalone` de Next.js, utilisateur non root, port 3000. Copie aussi `prisma/`, `prisma.config.ts` et les sources des pages de contenu (`GUIDE_ADMIN.md`, `GUIDE_BENEVOLE.md`, `FEATURES.md`, `ACCESSIBILITE.md`), lues à la requête : toute nouvelle page de contenu s'ajoute au `Dockerfile`
 
 Au démarrage, `docker-entrypoint.sh` attend PostgreSQL, exécute `prisma migrate deploy` sauf si `MIGRATE_ON_START=false`, puis lance `node server.js`. Avec Docker Compose, les migrations s'appliquent donc au démarrage de l'application. Sur Kubernetes, les pods de l'application ont `MIGRATE_ON_START=false` : c'est le Job de migration qui les applique, une seule fois par déploiement (voir ci-dessous).
 
@@ -32,32 +32,39 @@ docker compose up -d
 
 `docker-compose.yml` lance PostgreSQL 16 et l'application (`build: .`) sur le port 3000. Ce qu'il ne fait pas :
 
-- Il ne transmet pas `AUTH_URL`, `AUTH_TRUST_HOST`, `CRON_SECRET`, `EMAIL_REPLY_TO` ni les variables VAPID et Sentry : à ajouter dans la section `environment` si nécessaire.
-- Il n'inclut aucun planificateur. Sans `CRON_SECRET`, les endpoints `/api/cron/*` refusent toute requête en production : ajouter ce secret et appeler les endpoints depuis un cron de l'hôte (voir le README).
-- Il n'exécute pas le seed : lancer `npm run db:seed` avec les variables `ADMIN_*` pour créer le premier super admin.
-- Les identifiants PostgreSQL du fichier sont ceux du développement : les changer.
+- Il ne transmet pas `AUTH_URL`, `AUTH_TRUST_HOST`, `CRON_SECRET`, `EMAIL_REPLY_TO`, `APP_TIME_ZONE`, `TRUSTED_PROXY_HOPS`, `TOKEN_ENCRYPTION_KEY_ID`, `TOKEN_ENCRYPTION_PREVIOUS_KEYS` ni les variables VAPID et Sentry : à ajouter dans la section `environment` si nécessaire.
+- Sans `AUTH_SECRET` exporté, il démarre sans erreur avec la valeur connue `change-me-in-production-32chars` : toujours l'exporter.
+- Il n'inclut aucun planificateur. Sans `CRON_SECRET`, les endpoints `/api/cron/*` refusent toute requête en production : ajouter ce secret et appeler les endpoints depuis un cron de l'hôte (voir [Tâches planifiées](../README.md#tâches-planifiées-cron) dans le README).
+- Il n'exécute pas le seed, et l'image ne contient pas `tsx` : lancer le seed depuis un checkout, sur l'hôte, avec les variables `ADMIN_*` et `ORG_ADMIN_*` pour créer les premiers comptes :
+
+  ```bash
+  DATABASE_URL=postgresql://benevoles:benevoles@localhost:5432/benevoles \
+  ADMIN_EMAIL=… ADMIN_PASSWORD=… ORG_ADMIN_EMAIL=… ORG_ADMIN_PASSWORD=… npm run db:seed
+  ```
+
+- Les identifiants PostgreSQL du fichier sont ceux du développement : les changer. PostgreSQL est publié sur le port 5432 de l'hôte, comme la stack de développement : les deux ne tournent pas ensemble, et le port est exposé.
 
 ## Kubernetes
 
 Manifestes dans `k8s/`, namespace `benevoles` :
 
-| Fichier | Contenu |
-|---------|---------|
-| `namespace.yaml` | Namespace |
-| `secret.yaml` | Modèle du secret `benevoles-secret` (toutes les valeurs à remplacer) |
-| `postgres.yaml` | PostgreSQL |
-| `job-migrate.yaml` | Job de migration (`prisma migrate deploy` avec l'image déployée), exécuté avant la mise à jour de l'application |
-| `deployment.yaml` | Application : 1 réplica, mise à jour progressive sans indisponibilité, secret injecté avec `envFrom`, limites 500m CPU et 512 Mi |
-| `service.yaml`, `ingress.yaml` | Exposition via Traefik pour `*.benevol.app`, `benevol.app` et `www.benevol.app`, TLS |
-| `ingressroute-tokens.yaml` | Routeur prioritaire, **sans journal d'accès**, pour les requêtes qui portent un jeton personnel (chemins `/my/`, `/leader/`… et requêtes `token`, `t`) et la recherche admin, en HTTPS et en HTTP (redirigé). Un jeton ne doit jamais être journalisé ; limité à benevol.app, le Traefik partagé n'est pas modifié. Toute nouvelle route à jeton s'y ajoute (vérifié par `no-tokens-in-access-logs.test.ts`) |
-| `traefik-config.yaml` | Réglage du Traefik fourni par k3s (`HelmChartConfig`) : `externalTrafficPolicy: Local` pour conserver l'adresse réelle des visiteurs (voir ci-dessous) |
-| `certificate-wildcard.yaml` | Certificat wildcard (cert-manager, `ClusterIssuer` `letsencrypt-prod`) |
-| `gandi-webhook.yaml` | Webhook DNS Gandi pour la validation DNS-01 du certificat wildcard |
-| `cronjob-reminders.yaml` | Rappels, toutes les heures |
-| `cronjob-cleanup.yaml` | Purge RGPD, 02:00 UTC |
-| `cronjob-backup.yaml` | `pg_dump` chiffré (AES-256) vers un volume, 01:00 UTC, rétention 30 jours |
-| `cronjob-backup-offsite.yaml` | Copie des fichiers déjà chiffrés vers Dropbox (`rclone`), 01:30 UTC, rétention 90 jours côté Dropbox |
-| `log-rotation.md` | Rotation des journaux du nœud : procédure manuelle, la durée de 90 jours n'est pas encore garantie |
+| Fichier | Objets | Appliqué par `deploy.yml` | Contenu |
+|---------|--------|---------------------------|---------|
+| `namespace.yaml` | Namespace `benevoles` | oui | |
+| `secret.yaml` | Secret `benevoles-secret` | non | Modèle incomplet ; le secret réel est régénéré par le workflow (voir [configuration.md](configuration.md#secrets-kubernetes)) |
+| `postgres.yaml` | PVC `postgres-pvc` (5 Gi), Deployment et Service `postgres` | oui | PostgreSQL 16 |
+| `job-migrate.yaml` | Job `benevoles-migrate` | oui, avant l'application | `prisma migrate deploy` avec l'image déployée ; `backoffLimit: 0`, 300 s au plus |
+| `deployment.yaml` | Deployment `benevoles-app` | oui, en dernier | 1 réplica, mise à jour progressive sans indisponibilité, secret injecté avec `envFrom`, limites 500m CPU et 512 Mi, sondes sur `/api/health` |
+| `service.yaml`, `ingress.yaml` | Service et Ingress `benevoles-app` | oui | Exposition via Traefik pour `*.benevol.app`, `benevol.app` et `www.benevol.app`, TLS `benevol-app-wildcard-tls` |
+| `ingressroute-tokens.yaml` | IngressRoute `benevoles-app-tokens` et `benevoles-app-tokens-http`, Middleware `benevoles-https-redirect` | oui | Routeur prioritaire, **sans journal d'accès**, pour les requêtes qui portent un jeton personnel (chemins `/my/`, `/leader/`… et requêtes `token`, `t`) et la recherche admin, en HTTPS et en HTTP (redirigé). Un jeton ne doit jamais être journalisé ; limité à benevol.app, le Traefik partagé n'est pas modifié. Toute nouvelle route à jeton s'y ajoute (vérifié par `no-tokens-in-access-logs.test.ts`) |
+| `traefik-config.yaml` | HelmChartConfig `traefik` (`kube-system`) | non | Réglage du Traefik fourni par k3s : `externalTrafficPolicy: Local` pour conserver l'adresse réelle des visiteurs (voir ci-dessous), journaux d'accès activés, délais de lecture et d'écriture de 30 min sur `web` et `websecure` |
+| `certificate-wildcard.yaml` | Certificate `benevol-app-wildcard` | non | Certificat wildcard (cert-manager, `ClusterIssuer` `letsencrypt-prod`, hors dépôt) |
+| `gandi-webhook.yaml` | Deployment `cert-manager-webhook-gandi`, APIService `v1alpha1.acme.bwolf.me`… (`cert-manager`) | non | Webhook DNS Gandi pour la validation DNS-01 du certificat wildcard ; lit le secret `gandi-api-key` |
+| `cronjob-reminders.yaml` | CronJob `app-reminders` | oui | Rappels, toutes les heures |
+| `cronjob-cleanup.yaml` | CronJob `app-cleanup` | oui | Purge RGPD, 02:00 UTC |
+| `cronjob-backup.yaml` | PVC `backup-pvc` (5 Gi), CronJob `postgres-backup` | oui | `pg_dump` chiffré (AES-256), 01:00 UTC, rétention 30 jours |
+| `cronjob-backup-offsite.yaml` | CronJob `backup-offsite-dropbox` | oui | Copie des fichiers déjà chiffrés vers Dropbox (`rclone`), 01:30 UTC, rétention 90 jours côté Dropbox ; demande le secret `rclone-config` |
+| `log-rotation.md` | | | Rotation des journaux du nœud : procédure manuelle, la durée de 90 jours n'est pas encore garantie |
 
 ### Adresse des visiteurs et limites de débit
 
@@ -73,24 +80,43 @@ Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publi
 
 ### Ordre de déploiement
 
-À chaque push sur `main`, `deploy.yml` applique les migrations **avant** de mettre à jour l'application :
+À chaque push sur `main`, `deploy.yml` enchaîne trois jobs et applique les migrations **avant** de mettre à jour l'application :
 
-1. supprime le Job de migration précédent, puis applique `k8s/job-migrate.yaml` avec la nouvelle image ;
-2. attend sa réussite ; en cas d'échec, le déploiement s'arrête et la version en cours continue de servir (journaux du Job affichés dans le workflow) ;
-3. seulement ensuite, applique `k8s/deployment.yaml` : Kubernetes remplace l'ancien pod progressivement.
+1. **check** : type-check, lint, tests unitaires ;
+2. **build-push** : image `ghcr.io/<dépôt>:sha-<7 premiers caractères du commit>` (et `:latest`), avec `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` en arguments de build et `sentry_auth_token` en secret de build ;
+3. **deploy** (environnement GitHub `production`) :
+   1. applique `k8s/namespace.yaml` et régénère le secret de tirage `ghcr-secret` ;
+   2. s'arrête, avant de toucher au reste, si le secret GitHub `TOKEN_ENCRYPTION_KEY` est vide ;
+   3. régénère `benevoles-secret` (« Sync k8s secret ») ;
+   4. applique `k8s/postgres.yaml` et attend PostgreSQL (120 s au plus) ;
+   5. supprime le Job de migration précédent, applique `k8s/job-migrate.yaml` avec la nouvelle image et attend sa réussite (300 s au plus). En cas d'échec, le déploiement s'arrête, la version en cours continue de servir, et les journaux du Job s'affichent dans le workflow ;
+   6. applique `service.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml` et les quatre CronJobs ;
+   7. seulement ensuite, applique `k8s/deployment.yaml` et attend la fin du remplacement (300 s au plus). Le nouveau pod démarre avant l'arrêt de l'ancien (`maxSurge: 1`, `maxUnavailable: 0`).
 
-Entre l'étape 1 et la fin du remplacement, l'ancienne version du code tourne sur le nouveau schéma : chaque migration doit rester compatible avec la version précédente (règles *expand/contract* dans [CONTRIBUTING.md](../CONTRIBUTING.md), vérifiées par la CI).
+Le workflow n'applique pas `secret.yaml` (modèle), `traefik-config.yaml`, `certificate-wildcard.yaml` ni `gandi-webhook.yaml`.
+
+Entre la migration et la fin du remplacement, l'ancienne version du code tourne sur le nouveau schéma : chaque migration doit rester compatible avec la version précédente (règles *expand/contract* dans [CONTRIBUTING.md](../CONTRIBUTING.md), vérifiées par la CI).
 
 ### Mise en place manuelle
 
 Même ordre que `deploy.yml`, sans quoi une nouvelle version pourrait démarrer sur un schéma pas encore migré :
 
 ```bash
-IMAGE=ghcr.io/<org>/benevoles:<tag>
+IMAGE=ghcr.io/pvollenweider/benevoles:sha-<7 premiers caractères du commit>
 
-# 1. Namespace et secrets (secret.yaml est un modèle : remplacer les valeurs ; secret de tirage : ghcr-secret)
+# 0. Prérequis hors dépôt : k3s avec Traefik 3.1 ou plus récent, cert-manager, ClusterIssuer
+#    letsencrypt-prod qui utilise le webhook Gandi (k8s/gandi-webhook.yaml, secret gandi-api-key
+#    dans cert-manager). Une fois par cluster, voir « Mise à jour depuis 1.x », étape 5 :
+kubectl apply -f k8s/traefik-config.yaml
+
+# 1. Namespace et secrets (secret.yaml est un modèle incomplet : remplacer les valeurs et ajouter
+#    les clés qui manquent, voir configuration.md « Secrets Kubernetes »)
 kubectl apply -f k8s/namespace.yaml
 kubectl apply -f k8s/secret.yaml
+kubectl -n benevoles create secret docker-registry ghcr-secret \
+  --docker-server=ghcr.io --docker-username=<utilisateur> --docker-password=<jeton read:packages>
+kubectl -n benevoles create secret generic rclone-config \
+  --from-file=rclone.conf=$HOME/.config/rclone/rclone.conf
 
 # 2. PostgreSQL, puis attendre qu'il soit prêt
 kubectl apply -f k8s/postgres.yaml
@@ -102,21 +128,21 @@ APP_IMAGE=$IMAGE envsubst < k8s/job-migrate.yaml | kubectl apply -f -
 kubectl -n benevoles wait --for=condition=complete job/benevoles-migrate --timeout=300s
 kubectl -n benevoles logs job/benevoles-migrate
 
-# 4. Seulement ensuite, l'application
-APP_IMAGE=$IMAGE envsubst < k8s/deployment.yaml | kubectl apply -f -
-kubectl -n benevoles rollout status deploy/benevoles-app
-
-# 5. Exposition et tâches planifiées
+# 4. Exposition et tâches planifiées
 kubectl apply -f k8s/service.yaml -f k8s/ingress.yaml -f k8s/ingressroute-tokens.yaml -f k8s/certificate-wildcard.yaml
 kubectl apply -f k8s/cronjob-reminders.yaml -f k8s/cronjob-cleanup.yaml -f k8s/cronjob-backup.yaml -f k8s/cronjob-backup-offsite.yaml
+
+# 5. Seulement ensuite, l'application
+APP_IMAGE=$IMAGE envsubst < k8s/deployment.yaml | kubectl apply -f -
+kubectl -n benevoles rollout status deploy/benevoles-app
 ```
 
-Si l'étape 3 échoue (`kubectl wait` en erreur), ne pas passer à l'étape 4 : lire les journaux du Job, corriger, relancer.
+Si l'étape 3 échoue, ne pas passer à la suite : lire les journaux du Job, corriger, relancer. Un Job en échec ne remplit jamais la condition `complete` : `kubectl wait` ne rend la main qu'à l'expiration du délai (300 s, comme `activeDeadlineSeconds`), et `kubectl -n benevoles logs job/benevoles-migrate` peut être lu sans attendre.
 
 Points d'attention :
 
-- Le secret `benevoles-secret` réel n'est pas appliqué depuis `k8s/secret.yaml` (simple modèle) : l'étape « Sync k8s secret » de `deploy.yml` le régénère à chaque déploiement à partir des secrets GitHub, avec `AUTH_URL`, `AUTH_TRUST_HOST`, `VAPID_*` et `SENTRY_DSN` (secret GitHub `SENTRY_DSN`, à défaut `NEXT_PUBLIC_SENTRY_DSN`). Le DSN navigateur, lui, est injecté au build.
-- Les sondes `readiness` et `liveness` interrogent `/api/health` (requête `SELECT 1`, délais de 3 et 5 s). Elles interrogeaient auparavant `/api/public/events`, plus lourd ; des événements Kubernetes « Readiness probe failed (Client.Timeout exceeded) » ont été observés sur plusieurs pods lors des déploiements du 20 septembre 2026.
+- Le secret `benevoles-secret` réel n'est pas appliqué depuis `k8s/secret.yaml` (simple modèle) : l'étape « Sync k8s secret » de `deploy.yml` le régénère à chaque déploiement à partir des secrets GitHub (clés et origines : [configuration.md](configuration.md#secrets-kubernetes)). Une clé qu'il gère, modifiée à la main, est écrasée ; une clé qu'il ne gère pas, comme `BACKUP_PASSPHRASE`, est conservée. Le DSN navigateur, lui, est injecté au build.
+- Les sondes `readiness` et `liveness` interrogent `/api/health` (une requête `SELECT 1`), avec des délais de 3 et 5 s.
 - Les cron jobs de rappels et de purge lisent `NEXT_PUBLIC_APP_URL` et `CRON_SECRET` dans `benevoles-secret`.
 
 ## Mise à jour depuis 1.x
@@ -165,11 +191,11 @@ La recherche sans accents demande l'extension PostgreSQL `unaccent` (`CREATE EXT
 openssl rand -base64 32
 ```
 
-La ranger **d'abord** dans un gestionnaire de mots de passe, hors du serveur et hors du dépôt. Perdue, elle ne casse pas les liens déjà envoyés (ils sont reconnus par leur empreinte), mais l'application ne peut plus les renvoyer : rappels, « renvoyer le lien », notifications aux responsables. Pour la changer plus tard, suivre « Rotation de la clé de chiffrement » dans le README. `TOKEN_ENCRYPTION_KEY_ID` et `TOKEN_ENCRYPTION_PREVIOUS_KEYS` ne servent qu'aux rotations : les laisser vides.
+La ranger **d'abord** dans un gestionnaire de mots de passe, hors du serveur et hors du dépôt. Perdue, elle ne casse pas les liens déjà envoyés (ils sont reconnus par leur empreinte), mais l'application ne peut plus les renvoyer : rappels, « renvoyer le lien », notifications aux responsables. Pour la changer plus tard, suivre [Rotation de la clé de chiffrement](configuration.md#rotation-de-la-clé-de-chiffrement). `TOKEN_ENCRYPTION_KEY_ID` et `TOKEN_ENCRYPTION_PREVIOUS_KEYS` ne servent qu'aux rotations : les laisser vides.
 
 ### 4. Installer la clé
 
-- **Avec `deploy.yml`** : `gh secret set TOKEN_ENCRYPTION_KEY`. Le workflow s'arrête avant de toucher au cluster si ce secret manque, et il régénère `benevoles-secret` à chaque déploiement : une modification manuelle du secret serait écrasée.
+- **Avec `deploy.yml`** : `gh secret set TOKEN_ENCRYPTION_KEY`. Le workflow s'arrête avant de toucher au cluster si ce secret manque, et il régénère `benevoles-secret` à chaque déploiement : une modification manuelle d'une clé qu'il gère serait écrasée (liste des clés : [configuration.md](configuration.md#secrets-kubernetes)).
 - **Kubernetes à la main** : ajouter `TOKEN_ENCRYPTION_KEY` dans `benevoles-secret` (modèle : `k8s/secret.yaml`). Vérifier aussi que ce secret contient `CRON_SECRET` et `NEXT_PUBLIC_APP_URL` : les CronJobs de sauvegarde les lisent, et sans eux leur pod ne démarre pas.
 - **Docker Compose** : `TOKEN_ENCRYPTION_KEY` dans le fichier `.env` à côté de `docker-compose.yml`, et `CRON_SECRET` dans la section `environment` : sans lui, la tâche de nettoyage est refusée et les anciens liens ne sont jamais chiffrés.
 
@@ -177,7 +203,7 @@ La ranger **d'abord** dans un gestionnaire de mots de passe, hors du serveur et 
 
 Avec `deploy.yml`, un push sur `main` applique tout dans le bon ordre. À la main, suivre [Mise en place manuelle](#mise-en-place-manuelle) : migrations d'abord, et ne pas continuer si le Job échoue (`backoffLimit: 0`).
 
-`k8s/traefik-config.yaml` n'est **pas** appliqué par `deploy.yml` : il règle le Traefik de k3s partagé par tous les sites du cluster (`kube-system`). Un `HelmChartConfig` `traefik` existant serait remplacé : fusionner d'abord ses réglages. À appliquer une fois :
+`k8s/traefik-config.yaml` n'est **pas** appliqué par `deploy.yml` : il règle le Traefik de k3s partagé par tous les sites du cluster (`kube-system`) : adresse réelle des visiteurs, journaux d'accès, délais de lecture et d'écriture de 30 min. Un `HelmChartConfig` `traefik` existant serait remplacé : fusionner d'abord ses réglages. À appliquer une fois :
 
 ```bash
 kubectl apply -f k8s/traefik-config.yaml
@@ -247,17 +273,17 @@ Retour arrière : `set image` avec l'empreinte de l'image précédente (`kubectl
 
 | Workflow | Déclencheur | Étapes |
 |----------|-------------|--------|
-| `ci.yml` | pull request vers `main` | type-check, lint, tests Vitest ; tests E2E Playwright (base migrée et seedée) |
+| `ci.yml` | pull request vers `main` | type-check, lint, tests Vitest avec couverture, `check-security-md.mjs`, `check-migrations.mjs` (migrations compatibles avec la version précédente) ; job E2E : base migrée et seedée, tests d'intégration (`npm run test:integration`), tests Playwright |
 | `deploy.yml` | push sur `main` | type-check, lint, tests ; construction et publication de l'image sur GHCR ; Job de migration, puis déploiement Kubernetes (voir « Ordre de déploiement ») |
 | `gandi-webhook.yml` | pull request ou push sur `main` touchant `gandi-webhook/` | construction de l'image du webhook ; publication sur GHCR seulement sur push |
 
 L'analyse CodeQL (JavaScript/TypeScript, Go, Actions) ne figure pas dans `.github/workflows/` : elle est configurée côté GitHub (paramètres de sécurité du dépôt).
 
-Chaque push sur `main` déploie donc en production. Les versions sont marquées par un commit `chore: release X.Y.Z` (mise à jour de `CHANGELOG.md` et de la version de `package.json`), un tag `vX.Y.Z` et une release GitHub.
+Chaque push sur `main` déploie donc en production. Les versions sont marquées par un commit `release: vX.Y.Z` (checklist dans [CONTRIBUTING.md](../CONTRIBUTING.md#publier-une-nouvelle-version)), un tag `vX.Y.Z` et une release GitHub.
 
 ## Corriger d'anciens horaires hors plage
 
-Avant la version qui borne les horaires à `00:00`–`23:59`, l'application a pu enregistrer des heures comme `24:00`, `26:00` ou `25:30` (créneaux de nuit saisis en prolongeant la journée, ou créés en faisant glisser une barre sur le planning administrateur), et même des heures négatives (`-2:-15`). L'affichage les lit modulo 24, mais il est préférable de les convertir.
+L'application borne les horaires à `00:00`–`23:59`. Une base créée avant la version 1.13.0 peut contenir des heures comme `24:00`, `26:00` ou `25:30` (créneaux de nuit saisis en prolongeant la journée, ou créés en faisant glisser une barre sur le planning administrateur), et même des heures négatives (`-2:-15`). L'affichage les lit modulo 24, mais il est préférable de les convertir.
 
 La requête ci-dessous, testée sur une base locale, fait deux choses : un créneau qui commence à `24:00` ou plus passe au **jour suivant** avec l'horloge remise à zéro (vendredi `24:00`–`26:00` devient samedi `00:00`–`02:00`), et un créneau qui commence avant minuit et finit à `24:00` ou plus garde sa date avec une fin qui repart à zéro (`23:00`–`25:00` devient `23:00`–`01:00`). L'instant réel du créneau ne change pas, donc les rappels non plus. Les valeurs qui restent invalides (heures négatives) sont listées pour être corrigées à la main, ou supprimées si le créneau est annulé.
 
@@ -294,7 +320,7 @@ Ne la lancer qu'après avoir listé les lignes concernées avec le `SELECT` fina
 
 `cronjob-backup.yaml` produit chaque nuit, à 01:00 UTC, un `pg_dump` chiffré avec `BACKUP_PASSPHRASE`, sur le volume `backup-pvc`, conservé 30 jours. Les fichiers s'appellent `/backups/benevoles_YYYY-MM-DD_HH-MM.sql.gz.enc`.
 
-> **Incident (corrigé le 2026-09-22)** : de la création du CronJob (début mai 2026) jusqu'à cette date, chaque exécution a échoué silencieusement. L'image `postgres:16-alpine` ne fournit pas de CLI `openssl` ; l'ancien script (`pg_dump | gzip | openssl enc > fichier`) ne vérifiait que le code retour de la dernière commande du pipe, et la redirection `>` crée le fichier de sortie avant même que le pipe échoue. Résultat : 144 jours de fichiers `.sql.gz.enc` de 0 octet, sans qu'aucune alerte ne se déclenche. **Aucun fichier antérieur au 22/09/2026 n'est restaurable — ignorer les backups datés d'avant cette correction.** Le script installe maintenant `openssl` au démarrage, écrit chaque étape dans un fichier (plus de pipe qui masque un échec), vérifie que le dump dépasse 1 Ko, et re-déchiffre le fichier produit pour confirmer qu'il redonne la même taille avant de le garder ; toute anomalie fait échouer le job au lieu de produire un fichier silencieusement vide.
+> **Les fichiers antérieurs au 22/09/2026 sont vides (0 octet) et ne sont pas restaurables : les ignorer.** Le script installe `openssl` au démarrage, écrit chaque étape dans un fichier, vérifie que le dump dépasse 1 Ko et re-déchiffre le fichier produit avant de le garder ; toute anomalie fait échouer le job.
 
 Déchiffrement (commande donnée en en-tête du manifeste) :
 
@@ -343,9 +369,9 @@ Restauration depuis Dropbox : télécharger le fichier voulu (`rclone copy dropb
 
 Le volume de sauvegarde local est sur le même cluster que la base : une panne de cluster emporte les deux, d'où la copie Dropbox ci-dessus.
 
-**Surveillance.** Chaque CronJob de sauvegarde envoie un signal de vie (`/api/cron/heartbeat`) quand il réussit. La page `/super-admin/health` affiche le dernier succès de la sauvegarde chiffrée et de la copie hors site, et les passe en erreur au-delà de 26 heures sans succès : un échec silencieux comme celui du 22/09/2026 y apparaît le lendemain, sans consulter `kubectl`.
+**Surveillance.** Chaque CronJob de sauvegarde envoie un signal de vie (`/api/cron/heartbeat`) quand il réussit. La page `/super-admin/health` affiche le dernier succès de chaque tâche : rappels (signalés au-delà de 2 h sans passage), nettoyage, sauvegarde chiffrée et copie hors site (au-delà de 26 h), test de restauration (avertissement après 45 jours, erreur après 90). Une sauvegarde qui échoue sans bruit y apparaît donc le lendemain, sans consulter `kubectl`.
 
-**Encore manuel.** Aucune alerte n'est envoyée d'elle-même (ni email ni notification) : il faut ouvrir la page de santé. Le test de restauration complète se fait à la main (voir la checklist ci-dessous) ; il envoie son propre signal de vie, et la page de santé le signale s'il date de plus de 90 jours.
+**Encore manuel.** Aucune alerte n'est envoyée d'elle-même (ni email ni notification) : il faut ouvrir la page de santé. Le test de restauration complète se fait à la main (voir la checklist ci-dessous) ; il envoie son propre signal de vie, que la page de santé réclame après 45 jours et passe en erreur après 90.
 
 ## Checklist opérationnelle
 
@@ -356,7 +382,7 @@ Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut don
 - [ ] `TOKEN_ENCRYPTION_KEY` et `BACKUP_PASSPHRASE` notées dans un gestionnaire de mots de passe, hors du cluster et hors de ce dépôt ;
 - [ ] secret `rclone-config` créé, et une première copie Dropbox constatée le lendemain ;
 - [ ] le Job de migration a réussi (`kubectl -n benevoles logs job/benevoles-migrate`) ;
-- [ ] `/super-admin/health` (connecté en super admin) est tout vert : base, file d'emails, rappels, nettoyage, sauvegarde, copie hors site, migrations, configuration ;
+- [ ] `/super-admin/health` (connecté en super admin) est tout vert : base, file d'emails, rappels, nettoyage, sauvegarde, copie hors site, migrations, configuration (sur un cluster neuf, le nettoyage et les sauvegardes restent « Jamais exécuté » jusqu'à leur première nuit, et le test de restauration en avertissement jusqu'au premier test) ;
 - [ ] `/api/health` répond `200` ;
 - [ ] un appel manuel de `/api/cron/reminders` et `/api/cron/cleanup` avec `CRON_SECRET` répond `200`.
 
@@ -365,7 +391,7 @@ Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut don
 - [ ] les derniers CronJobs de sauvegarde ont réussi : `kubectl -n benevoles get jobs` (dump et copie hors site) ;
 - [ ] le dernier fichier sur `backup-pvc` et sur Dropbox a une taille plausible (pas 0 octet) ;
 - [ ] **test de restauration** : télécharger un dump, le déchiffrer et le charger dans une base PostgreSQL jetable (`psql -f dump.sql`), puis vérifier quelques comptages (organisations, événements, inscriptions) ;
-  puis le signaler à la page de santé (elle réclame ce test tous les 45 jours) :
+  puis le signaler à la page de santé (avertissement après 45 jours sans test, erreur après 90) :
 
   ```bash
   curl -s -X POST -H "Authorization: Bearer $CRON_SECRET" -H "Content-Type: application/json" \
@@ -379,8 +405,8 @@ Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut don
 
 ## Supprimer une organisation
 
-Il n'y a pas de suppression immédiate : le super admin **désactive** l'organisation (`/super-admin/organizations`), ce qui coupe l'accès admin et public tout de suite, et `/api/cron/cleanup` l'efface définitivement (événements, créneaux, inscriptions, membres, invitations en cascade ; comptes admin détachés puis effacés) **30 jours après la désactivation**. Avant de désactiver, rappeler à l'organisation d'exporter ce qu'elle veut garder (GUIDE_ADMIN, « Exporter et conserver ses données »). Une réactivation dans les 30 jours annule la suppression. Les sauvegardes chiffrées contenant ces données expirent selon leur propre rétention (30 jours sur le serveur, 90 jours hors site).
+Il n'y a pas de suppression immédiate : le super admin **désactive** l'organisation (`/super-admin/organizations`), ce qui coupe l'accès admin et public tout de suite, et `/api/cron/cleanup` l'efface définitivement (événements, créneaux, inscriptions, membres, invitations en cascade ; comptes admin de l'organisation effacés avec elle) **30 jours après la désactivation**. Avant de désactiver, rappeler à l'organisation d'exporter ce qu'elle veut garder (GUIDE_ADMIN, « Exporter et conserver ses données »). Une réactivation dans les 30 jours annule la suppression. Les sauvegardes chiffrées contenant ces données expirent selon leur propre rétention (30 jours sur le serveur, 90 jours hors site).
 
 ## Journaux
 
-`k8s/log-rotation.md` décrit trois options pour limiter la rétention des journaux à 90 jours (kubelet, logrotate, Loki).
+[`k8s/log-rotation.md`](../k8s/log-rotation.md) décrit comment limiter la rétention des journaux à 90 jours sur le nœud k3s (kubelet, logrotate ; Loki s'il est installé).

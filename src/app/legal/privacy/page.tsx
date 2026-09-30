@@ -45,7 +45,7 @@ export default function PrivacyPage() {
             <td>Nom, adresse e-mail</td>
             <td>Création et gestion du compte</td>
             <td>Exécution du contrat</td>
-            <td>Durée du compte + {RETENTION_DAYS.deactivatedAdmin} jours</td>
+            <td>Durée du compte ; effacé avec l&apos;Organisation {RETENTION_DAYS.deactivatedOrganization} jours après sa désactivation</td>
           </tr>
           <tr>
             <td>Mot de passe (hashé bcrypt)</td>
@@ -185,12 +185,14 @@ export default function PrivacyPage() {
       <h2>7. Conservation des données</h2>
       <p>
         Les données des bénévoles sont conservées tant que l&apos;Organisation maintient son compte
-        sur la plateforme. Elles sont supprimées dans un délai de {RETENTION_DAYS.deactivatedOrganization} jours suivant la clôture du
+        sur la plateforme. Elles sont supprimées dans un délai de {RETENTION_DAYS.deactivatedOrganization} jours suivant la désactivation du
         compte de l&apos;Organisation.
       </p>
       <p>
-        Les données des administrateurs sont supprimées dans un délai de {RETENTION_DAYS.deactivatedAdmin} jours suivant la
-        désactivation ou la suppression du compte.
+        Le compte d&apos;un administrateur retiré de l&apos;équipe est supprimé immédiatement. Les comptes des
+        administrateurs d&apos;une Organisation sont supprimés avec elle, {RETENTION_DAYS.deactivatedOrganization} jours
+        après sa désactivation. Une invitation d&apos;administrateur non acceptée est supprimée{" "}
+        {RETENTION_DAYS.deactivatedAdmin} jours après son dernier envoi.
       </p>
       <p>Plus précisément :</p>
       <ul>

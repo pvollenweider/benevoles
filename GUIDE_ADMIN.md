@@ -623,11 +623,14 @@ Les fichiers CSV s'ouvrent tels quels dans Excel ou LibreOffice (UTF-8, point-vi
 <!-- retention:start (généré depuis src/lib/retention.ts, npm run retention:docs) -->
 | Données | Conservation |
 |---|---|
-| Membres, événements, créneaux, inscriptions, pages, journaux d'activité | tant que l'organisation est active ; effacés 30 jours après sa désactivation |
-| Événement supprimé par un administrateur | effacé immédiatement, avec ses créneaux, inscriptions et invitations |
-| Emails en file d'envoi (destinataire et contenu) | effacés chaque nuit une fois partis ; ceux en échec après 30 jours |
+| Membres, événements, créneaux, inscriptions, pages, journaux d'activité, comptes administrateurs de l'organisation | tant que l'organisation est active, événements passés compris ; effacés 30 jours après sa désactivation (délai compté depuis la dernière modification de l'organisation désactivée) |
+| Événement supprimé par un administrateur | effacé immédiatement, avec ses créneaux, inscriptions, invitations, réponses aux questions, responsables, pages, jalons, messages ciblés et son journal |
+| Organisation supprimée par l'opérateur de benevol.app | effacée immédiatement, avec ses membres et ses administrateurs |
+| Membres retirés, inscriptions annulées ou refusées, questions archivées | tant que l'organisation existe (tant que leur événement existe pour les inscriptions et les questions) : pas d'effacement individuel |
+| Emails en file d'envoi (destinataire et contenu) | effacés chaque nuit une fois partis ; ceux en échec 30 jours après leur mise en file |
 | Messages ciblés (objet, texte, public, nombres) | 365 jours, ou avec l'événement |
-| Comptes administrateurs désactivés | effacés après 30 jours |
+| Invitations d'administrateur non acceptées | effacées 30 jours après leur dernier envoi |
+| Administrateur retiré de l'équipe | effacé immédiatement |
 | Bénévoles sans organisation ni inscription | effacés au nettoyage suivant |
 | Sauvegardes chiffrées de la base | 30 jours sur le serveur, 90 jours en copie hors site |
 <!-- retention:end -->
