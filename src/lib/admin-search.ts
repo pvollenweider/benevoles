@@ -2,15 +2,22 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 /**
- * Admin global search (#377): what a query matches, as Prisma `where` clauses. Every word must
- * match (AND), each in any of the searched fields (OR), case-insensitively. Accents aren't folded
- * yet: « Zoe » doesn't find « Zoé ».
+ * Admin global search (#377): what a query matches. Every word must match (AND), each in any of
+ * the searched fields (OR), regardless of case and accents (#390): « zoe » finds « Zoé ».
+ *
+ * Accent folding needs Postgres `unaccent`, which Prisma's `contains` can't express, so the
+ * matching runs as raw SQL that selects ids (admin-search-sql.ts, server only: this module is
+ * also imported by client components), with the organization filter written explicitly. The
+ * rows themselves are then read by the organization-scoped client, which applies the same
+ * filter a second time.
  */
 
 export const SEARCH_MAX_LENGTH = 100
 export const SEARCH_MAX_TERMS = 5
 /** Results shown per group; one more is read to know whether there are others. */
 export const SEARCH_GROUP_LIMIT = 20
+/** Ids read by the raw match before the scoped read orders and caps them. */
+export const SEARCH_ID_LIMIT = 500
 
 /** Words of a query: trimmed, capped in length and count, duplicates removed. */
 export function searchTerms(query: string | null | undefined): string[] {
@@ -27,37 +34,14 @@ export function searchTerms(query: string | null | undefined): string[] {
   return terms
 }
 
-type Contains = { contains: string; mode: "insensitive" }
-const contains = (term: string): Contains => ({ contains: term, mode: "insensitive" })
-
-/** AND over terms of an OR over fields. */
-function everyTermInSomeField(terms: string[], fields: string[]) {
-  return { AND: terms.map((t) => ({ OR: fields.map((f) => ({ [f]: contains(t) })) })) }
+/** `%term%` with LIKE's own wildcards escaped (the queries use `ESCAPE '\'`). */
+export function likePattern(term: string): string {
+  return `%${term.replace(/[\\%_]/g, (c) => `\\${c}`)}%`
 }
 
-export const VOLUNTEER_FIELDS = ["firstName", "lastName", "email", "phone"]
-export const EVENT_FIELDS = ["title", "location", "slug"]
-export const SHIFT_FIELDS = ["roleName", "label"]
-
-export function volunteerWhere(terms: string[]) {
-  return everyTermInSomeField(terms, VOLUNTEER_FIELDS)
-}
-
-export function eventWhere(terms: string[]) {
-  return everyTermInSomeField(terms, EVENT_FIELDS)
-}
-
-/** Shifts of a non-cancelled status; a word may also match the event title (« Fête bar »). */
-export function shiftWhere(terms: string[]) {
-  return {
-    status: { not: "cancelled" },
-    AND: terms.map((t) => ({ OR: [...SHIFT_FIELDS.map((f) => ({ [f]: contains(t) })), { event: { title: contains(t) } }] })),
-  }
-}
-
-/** Live registrations (active, waitlist, offered) of the volunteers matching the query. */
-export function registrationWhere(terms: string[]) {
-  return { status: { in: ["active", "waiting", "offered"] }, volunteer: volunteerWhere(terms) }
+/** Live registrations (active, waitlist, offered) of the matched volunteers. */
+export function registrationWhere(volunteerIds: string[]) {
+  return { status: { in: ["active", "waiting", "offered"] }, volunteerId: { in: volunteerIds } }
 }
 
 /** Value for the members page `?q=` that singles out this volunteer. */

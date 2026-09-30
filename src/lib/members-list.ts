@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { fold } from "./text-fold"
+
 /**
  * Pure logic of the admin members page (MembersManager, #291): filtering, the three-state column
  * sort and its screen reader announcement, tag input parsing. Kept out of the component so it can
@@ -50,17 +52,18 @@ export function filterMembers<M extends MemberRow>(
   members: M[],
   { search, tag, showInactive }: { search: string; tag: string; showInactive: boolean },
 ): M[] {
-  const q = search.trim().toLowerCase()
+  const q = fold(search.trim())
   return members.filter((m) => {
     if (!showInactive && !m.active) return false
     if (tag && !m.tags.includes(tag)) return false
     if (!q) return true
+    // Accents and case aside (#390): « zoe » finds Zoé.
     return (
-      m.firstName.toLowerCase().includes(q) ||
-      m.lastName.toLowerCase().includes(q) ||
-      `${m.firstName} ${m.lastName}`.toLowerCase().includes(q) ||
-      (m.email ?? "").toLowerCase().includes(q) ||
-      (m.phone ?? "").toLowerCase().includes(q)
+      fold(m.firstName).includes(q) ||
+      fold(m.lastName).includes(q) ||
+      fold(`${m.firstName} ${m.lastName}`).includes(q) ||
+      fold(m.email).includes(q) ||
+      fold(m.phone).includes(q)
     )
   })
 }

@@ -13,6 +13,12 @@ const members = [
 const all = { search: "", tag: "", showInactive: false }
 
 describe("filterMembers", () => {
+  it("ignores accents and case (#390)", () => {
+    const zoe = { ...members[0], id: "z", firstName: "Zoé", lastName: "Roy" }
+    expect(filterMembers([zoe], { ...all, search: "zoe" }).map((x) => x.id)).toEqual(["z"])
+    expect(filterMembers([zoe], { ...all, search: "ROY" }).map((x) => x.id)).toEqual(["z"])
+  })
+
   it("hides inactive members unless asked", () => {
     expect(filterMembers(members, all).map((x) => x.id)).toEqual(["a", "b"])
     expect(filterMembers(members, { ...all, showInactive: true })).toHaveLength(3)

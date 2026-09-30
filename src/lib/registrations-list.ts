@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { fold } from "./text-fold"
+
 import { shiftsOverlap } from "./utils"
 
 /**
@@ -35,9 +37,10 @@ export function filterRegistrations<R extends ListRegistration>(
   registrations: R[],
   filters: { search: string; role: string; shiftId: string },
 ): R[] {
-  const q = filters.search.toLowerCase()
+  const q = fold(filters.search)
   return registrations.filter((r) => {
-    const matchSearch = !q || `${r.volunteer.firstName} ${r.volunteer.lastName} ${r.volunteer.email ?? ""}`.toLowerCase().includes(q)
+    // Accents and case aside (#390): « zoe » finds Zoé.
+    const matchSearch = !q || fold(`${r.volunteer.firstName} ${r.volunteer.lastName} ${r.volunteer.email ?? ""}`).includes(q)
     const matchRole = !filters.role || r.shift.roleName === filters.role
     const matchShift = !filters.shiftId || r.shift.id === filters.shiftId
     return matchSearch && matchRole && matchShift

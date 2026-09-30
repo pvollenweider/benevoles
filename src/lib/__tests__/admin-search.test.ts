@@ -1,12 +1,11 @@
 import { describe, it, expect, vi } from "vitest"
 import {
-  capped, eventWhere, membersHref, registrationWhere, registrationsHref, searchTerms, shiftHref, shiftWhere, volunteerWhere,
-  SEARCH_GROUP_LIMIT, SEARCH_MAX_LENGTH, SEARCH_MAX_TERMS,
+  capped, likePattern, membersHref, registrationWhere, registrationsHref, searchTerms, shiftHref,
+  SEARCH_GROUP_LIMIT, SEARCH_ID_LIMIT, SEARCH_MAX_LENGTH, SEARCH_MAX_TERMS,
 } from "../admin-search"
+import { eventIdsSql, shiftIdsSql, volunteerIdsSql } from "../admin-search-sql"
 import { loadSearch } from "../admin-search-data"
 import type { OrgScopedPrisma } from "../prisma-org"
-
-const ci = (t: string) => ({ contains: t, mode: "insensitive" })
 
 describe("searchTerms", () => {
   it("splits on whitespace, trims, drops empty words", () => {
@@ -27,31 +26,36 @@ describe("searchTerms", () => {
   })
 })
 
-describe("where clauses", () => {
-  it("volunteers: every word in some of name, email, phone", () => {
-    expect(volunteerWhere(["alice", "079"])).toEqual({
-      AND: [
-        { OR: [{ firstName: ci("alice") }, { lastName: ci("alice") }, { email: ci("alice") }, { phone: ci("alice") }] },
-        { OR: [{ firstName: ci("079") }, { lastName: ci("079") }, { email: ci("079") }, { phone: ci("079") }] },
-      ],
-    })
+describe("raw matches (#390)", () => {
+  it("escapes LIKE wildcards in a term", () => {
+    expect(likePattern("zoe")).toBe("%zoe%")
+    expect(likePattern("100%_a\\b")).toBe("%100\\%\\_a\\\\b%")
   })
 
-  it("events: title, location, slug", () => {
-    expect(eventWhere(["fete"])).toEqual({ AND: [{ OR: [{ title: ci("fete") }, { location: ci("fete") }, { slug: ci("fete") }] }] })
+  it("volunteers: every word against name, email, phone, folded on both sides, within the organization", () => {
+    const sql = volunteerIdsSql("org-a", ["Zoé", "079"])
+    const text = sql.text
+    expect(text).toContain('FROM "Volunteer" v WHERE v."organizationId" = $1')
+    expect(text.match(/unaccent\(lower\(concat_ws/g)).toHaveLength(2)
+    expect(text).toContain("LIKE unaccent(lower($2)) ESCAPE")
+    expect(text).toContain("LIKE unaccent(lower($3)) ESCAPE")
+    expect(sql.values).toEqual(["org-a", "%Zoé%", "%079%", SEARCH_ID_LIMIT])
   })
 
-  it("shifts: role, label or event title, cancelled shifts excluded", () => {
-    expect(shiftWhere(["bar"])).toEqual({
-      status: { not: "cancelled" },
-      AND: [{ OR: [{ roleName: ci("bar") }, { label: ci("bar") }, { event: { title: ci("bar") } }] }],
-    })
+  it("events and shifts: organization filter first, cancelled shifts excluded", () => {
+    const ev = eventIdsSql("org-a", ["fete"])
+    expect(ev.text).toContain('FROM "Event" e WHERE e."organizationId" = $1')
+    expect(ev.values[0]).toBe("org-a")
+    const sh = shiftIdsSql("org-a", ["bar"])
+    expect(sh.text).toContain('JOIN "Event" e ON e."id" = s."eventId" WHERE e."organizationId" = $1 AND s."status" <> \'cancelled\'')
+    expect(sh.text).toContain('e."title"')
+    expect(sh.values[0]).toBe("org-a")
   })
 
-  it("registrations: live statuses of matching volunteers", () => {
-    expect(registrationWhere(["alice"])).toEqual({
+  it("registrations: live statuses of the matched volunteers", () => {
+    expect(registrationWhere(["v1", "v2"])).toEqual({
       status: { in: ["active", "waiting", "offered"] },
-      volunteer: volunteerWhere(["alice"]),
+      volunteerId: { in: ["v1", "v2"] },
     })
   })
 })
@@ -77,20 +81,23 @@ describe("capped", () => {
 })
 
 describe("loadSearch", () => {
-  it("queries the four groups through the given (org-scoped) client, one row past the limit", async () => {
+  it("matches ids with the organization's raw queries, then reads the rows through the scoped client, one past the limit", async () => {
     const many = Array.from({ length: SEARCH_GROUP_LIMIT + 1 }, (_, i) => ({ id: String(i) }))
     const db = {
+      $queryRaw: vi.fn().mockResolvedValue([{ id: "v1" }, { id: "v2" }]),
       volunteer: { findMany: vi.fn().mockResolvedValue(many) },
       registration: { findMany: vi.fn().mockResolvedValue([{ id: "r" }]) },
       event: { findMany: vi.fn().mockResolvedValue([]) },
       shift: { findMany: vi.fn().mockResolvedValue([{ id: "s" }]) },
     }
-    const res = await loadSearch(db as unknown as OrgScopedPrisma, ["bar"])
+    const res = await loadSearch(db as unknown as OrgScopedPrisma, "org-a", ["bar"])
 
-    expect(db.volunteer.findMany.mock.calls[0][0]).toMatchObject({ where: volunteerWhere(["bar"]), take: SEARCH_GROUP_LIMIT + 1 })
-    expect(db.registration.findMany.mock.calls[0][0]).toMatchObject({ where: registrationWhere(["bar"]), take: SEARCH_GROUP_LIMIT + 1 })
-    expect(db.event.findMany.mock.calls[0][0]).toMatchObject({ where: eventWhere(["bar"]), take: SEARCH_GROUP_LIMIT + 1 })
-    expect(db.shift.findMany.mock.calls[0][0]).toMatchObject({ where: shiftWhere(["bar"]), take: SEARCH_GROUP_LIMIT + 1 })
+    expect(db.$queryRaw).toHaveBeenCalledTimes(3)
+    for (const call of db.$queryRaw.mock.calls) expect(call[0].values[0]).toBe("org-a")
+    expect(db.volunteer.findMany.mock.calls[0][0]).toMatchObject({ where: { id: { in: ["v1", "v2"] } }, take: SEARCH_GROUP_LIMIT + 1 })
+    expect(db.registration.findMany.mock.calls[0][0]).toMatchObject({ where: registrationWhere(["v1", "v2"]), take: SEARCH_GROUP_LIMIT + 1 })
+    expect(db.event.findMany.mock.calls[0][0]).toMatchObject({ where: { id: { in: ["v1", "v2"] } }, take: SEARCH_GROUP_LIMIT + 1 })
+    expect(db.shift.findMany.mock.calls[0][0]).toMatchObject({ where: { id: { in: ["v1", "v2"] } }, take: SEARCH_GROUP_LIMIT + 1 })
     expect(res.volunteers.more).toBe(true)
     expect(res.volunteers.items).toHaveLength(SEARCH_GROUP_LIMIT)
     expect(res.registrations).toEqual({ items: [{ id: "r" }], more: false })
