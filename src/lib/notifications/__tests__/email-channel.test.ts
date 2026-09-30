@@ -4,6 +4,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 // body, personal links included, and reported a success, so the outbox marked the email as sent.
 
 vi.mock("../../prisma", () => ({ prisma: { organization: { findUnique: vi.fn().mockResolvedValue(null) } } }))
+// env.ts validates the whole environment on import and exits when it is incomplete (as in CI).
+vi.mock("@/lib/env", () => ({ env: {} }))
 
 import { emailChannel, missingSmtpOutcome } from "../channels/email"
 import type { NotificationPayload } from "../types"
@@ -12,7 +14,7 @@ const payload = {
   kind: "registration_link_resend",
   organizationId: null,
   recipient: { email: "alice@example.org", name: "Alice" },
-  data: { firstName: "Alice", organizationName: "Org", links: [{ eventTitle: "Fête", url: "https://org.benevol.app/my/secret-token-value" }] },
+  data: { volunteerName: "Alice Martin", eventTitle: "Fête", orgSlug: "org", editToken: "secret-token-value" },
 } as unknown as NotificationPayload
 
 describe("missingSmtpOutcome", () => {
