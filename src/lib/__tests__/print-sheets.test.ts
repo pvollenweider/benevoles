@@ -100,3 +100,16 @@ describe("print sheets", () => {
     expect(renderSheet("day", { ...data, shifts: [] })).toContain("Aucun créneau.")
   })
 })
+
+describe("print sheets use little ink", () => {
+  it("draws shift bars as outlined white cells and table headers as bold text, never as ink bands", () => {
+    const html = renderSheet("day", data)
+    const css = html.split("<style>")[1].split("</style>")[0]
+    const rule = (selector: string) => css.split(selector)[1].split("}")[0]
+    expect(rule(".gantt-table .shift-cell {")).toContain("background: #fff")
+    expect(rule(".gantt-table .shift-cell {")).toContain("border: 2px solid var(--ink)")
+    expect(rule(".detail th, .attendance th {")).toContain("background: #fff")
+    expect(rule(".gantt-table .th-role, .gantt-table .th-label {")).toContain("background: #fff")
+    expect(css).not.toMatch(/(th|shift-cell)[^{]*\{[^}]*background: var\(--ink\)/)
+  })
+})
