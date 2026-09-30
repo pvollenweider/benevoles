@@ -61,6 +61,14 @@ describe("AdminNav — mobile menu", () => {
     expect(toggle()).toHaveAttribute("aria-expanded", "false")
   })
 
+  it("ignores a synthetic keydown without a key (password managers, autofill)", () => {
+    render(<AdminNav userName="Alice" role="admin" />)
+    // A KeyboardEvent built without `key` has key === "", but some extensions set it undefined.
+    const evt = new KeyboardEvent("keydown", { bubbles: true, ctrlKey: true })
+    Object.defineProperty(evt, "key", { value: undefined })
+    expect(() => document.dispatchEvent(evt)).not.toThrow()
+  })
+
   it("keeps the user menu reachable next to it", () => {
     render(<AdminNav userName="Alice" role="admin" />)
     expect(screen.getByRole("button", { name: /Alice/ })).toBeInTheDocument()

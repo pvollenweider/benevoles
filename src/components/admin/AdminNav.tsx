@@ -39,7 +39,8 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
   // menu panel: open it, then focus once it's shown. On the search page, its own field.
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key.toLowerCase() !== "k" || !(e.ctrlKey || e.metaKey) || e.altKey || e.shiftKey) return
+      // Password managers and autofill dispatch synthetic keydowns without a key (Sentry: TypeError on /admin/login).
+      if ((e.key ?? "").toLowerCase() !== "k" || !(e.ctrlKey || e.metaKey) || e.altKey || e.shiftKey) return
       const t = e.target as HTMLElement | null
       // Rich-text editors use Ctrl+K for links.
       if (t?.isContentEditable) return
