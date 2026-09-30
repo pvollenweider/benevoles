@@ -48,6 +48,7 @@ export type DuplicableShift = {
   waitlistEnabled: boolean
   colorKey: string | null
   maxPerVolunteer?: number | null
+  reservedTags?: string[]
 }
 
 export type DuplicableEvent = {
@@ -93,6 +94,7 @@ export function copiedShift(s: DuplicableShift) {
     waitlistEnabled: s.waitlistEnabled,
     colorKey: s.colorKey,
     maxPerVolunteer: s.maxPerVolunteer ?? null,
+    reservedTags: s.reservedTags ?? [],
   }
 }
 

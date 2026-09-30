@@ -8,6 +8,7 @@ import { adminActor, logEvent } from "@/lib/event-log"
 import { cancelShift } from "@/lib/shift-cancel"
 import { COLOR_OPTIONS } from "@/lib/roles"
 import { capacityPlan } from "@/lib/shift-quick-edit"
+import { parseTagList } from "@/lib/role-reservation"
 
 // A "role" only exists implicitly, as the roleName shared by a group of shifts on one event —
 // there's no separate Role table. Renaming, recoloring or deleting one therefore means updating
@@ -22,7 +23,9 @@ const updateSchema = z.object({
   capacity: z.number().int().min(1).optional(),
   /** Shifts per volunteer on this role (#466); null removes the limit. */
   maxPerVolunteer: z.number().int().min(1).max(100).nullable().optional(),
-}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.maxPerVolunteer !== undefined, { message: "Rien à modifier." })
+  /** Tags one of which a member needs for this role (#470); [] opens it to everyone. */
+  reservedTags: z.array(z.string().trim().min(1).max(40)).max(10).optional(),
+}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined, { message: "Rien à modifier." })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string; roleName: string }> }) {
   const guard = await requireOrgSession()
@@ -38,6 +41,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     return NextResponse.json({ error: "Données invalides." }, { status: 400 })
   }
   const { name: newName, colorKey, capacity, maxPerVolunteer } = parsed.data
+  const reservedTags = parsed.data.reservedTags === undefined ? undefined : parseTagList(parsed.data.reservedTags.join(","))
 
   const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
@@ -46,7 +50,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // on top of that, matching reorder-roles/route.ts's own pattern for the same raw-prisma calls.
   const shifts = await db.shift.findMany({
     where: { eventId: id, roleName: decodedRole, event: { organizationId } },
-    select: { id: true, colorKey: true, capacity: true, status: true, maxPerVolunteer: true, _count: { select: { registrations: { where: { status: "active" } } } } },
+    select: { id: true, colorKey: true, capacity: true, status: true, maxPerVolunteer: true, reservedTags: true, _count: { select: { registrations: { where: { status: "active" } } } } },
   })
   if (shifts.length === 0) return NextResponse.json({ error: "Poste introuvable" }, { status: 404 })
 
@@ -101,6 +105,20 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       await logEvent({
         eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
         changes: { maxPerVolunteer: { from: s.maxPerVolunteer, to: maxPerVolunteer } },
+      })
+    }
+  }
+
+  if (reservedTags !== undefined) {
+    // Every shift of the role, so it keeps one value (#470). Registrations already made stay.
+    await db.shift.updateMany({
+      where: { eventId: id, roleName: newName ?? decodedRole, event: { organizationId } },
+      data: { reservedTags },
+    })
+    for (const s of shifts.filter((sh) => sh.reservedTags.join("|") !== reservedTags.join("|"))) {
+      await logEvent({
+        eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
+        changes: { reservedTags: { from: s.reservedTags, to: reservedTags } },
       })
     }
   }

@@ -44,6 +44,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       minAge: source.minAge,
       colorKey: source.colorKey,
       maxPerVolunteer: source.maxPerVolunteer,
+      reservedTags: source.reservedTags,
     },
   })
 

@@ -26,6 +26,8 @@ import {
 import { z } from "zod"
 import { linkToken, registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
+import { memberMayTake, reservationRefusal, reservedRoles } from "@/lib/role-reservation"
+import { normalizeEmail } from "@/lib/email-address"
 import { RoleLimitError, roleLimitBreaches, roleLimitMessage, roleLimits } from "@/lib/role-limit"
 
 const schema = z.object({
@@ -105,6 +107,30 @@ export async function POST(req: Request) {
         return NextResponse.json({
           error: `Les créneaux "${shifts[i].label}" et "${shifts[j].label}" se chevauchent.`,
         }, { status: 400 })
+      }
+    }
+  }
+
+  // Roles reserved to members with a tag (#470). The only proof of who signs up is a valid member
+  // invitation of this event, for this very email; the member's tags are read now, so a tag removed
+  // after the invitation was sent no longer opens the role. All the role's shifts count, so a shift
+  // created without the tags can't open a way around them.
+  const reserved = reservedRoles(await prisma.shift.findMany({
+    where: { eventId, roleName: { in: [...new Set(shifts.map((s) => s.roleName))] }, status: { not: "cancelled" } },
+    select: { roleName: true, reservedTags: true },
+  }))
+  const reservedAsked = [...new Set(shifts.map((s) => s.roleName))].filter((r) => reserved.has(r))
+  if (reservedAsked.length > 0) {
+    const invite = inviteToken
+      ? await prisma.memberInvite.findFirst({
+          where: { ...linkToken.where(inviteToken), eventId },
+          select: { volunteer: { select: { email: true, tags: true, active: true } } },
+        })
+      : null
+    const proven = !!invite && invite.volunteer.active && normalizeEmail(invite.volunteer.email ?? "") === email
+    for (const role of reservedAsked) {
+      if (!proven || !memberMayTake(invite!.volunteer.tags, reserved.get(role)!)) {
+        return NextResponse.json({ error: reservationRefusal(role, proven), reservedRole: role }, { status: 403 })
       }
     }
   }

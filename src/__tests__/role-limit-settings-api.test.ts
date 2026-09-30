@@ -8,8 +8,8 @@ const { updateMany, logEvent, db } = vi.hoisted(() => {
   event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-1" }) },
   shift: {
     findMany: vi.fn().mockResolvedValue([
-      { id: "s1", colorKey: null, capacity: 5, status: "open", maxPerVolunteer: null, _count: { registrations: 0 } },
-      { id: "s2", colorKey: null, capacity: 5, status: "open", maxPerVolunteer: null, _count: { registrations: 0 } },
+      { id: "s1", colorKey: null, capacity: 5, status: "open", maxPerVolunteer: null, reservedTags: [], _count: { registrations: 0 } },
+      { id: "s2", colorKey: null, capacity: 5, status: "open", maxPerVolunteer: null, reservedTags: [], _count: { registrations: 0 } },
     ]),
     updateMany,
   },
@@ -40,5 +40,14 @@ describe("PATCH /api/admin/events/[id]/roles/[roleName] — maxPerVolunteer", ()
     expect(updateMany).toHaveBeenLastCalledWith(expect.objectContaining({ data: { maxPerVolunteer: null } }))
     expect((await PATCH(patch({ maxPerVolunteer: 0 }), params)).status).toBe(400)
     expect((await PATCH(patch({ maxPerVolunteer: 1.5 }), params)).status).toBe(400)
+  })
+
+  it("reserves the role to members with a tag (#470), cleaning the list, and reopens it with []", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    expect((await PATCH(patch({ reservedTags: [" sécurité", "Sécurité", "secouriste"] }), params)).status).toBe(200)
+    expect(updateMany).toHaveBeenLastCalledWith({ where: { eventId: "evt-1", roleName: "Loge", event: { organizationId: "org-a" } }, data: { reservedTags: ["sécurité", "secouriste"] } })
+    expect((await PATCH(patch({ reservedTags: [] }), params)).status).toBe(200)
+    expect(updateMany).toHaveBeenLastCalledWith(expect.objectContaining({ data: { reservedTags: [] } }))
+    expect((await PATCH(patch({ reservedTags: ["x".repeat(41)] }), params)).status).toBe(400)
   })
 })

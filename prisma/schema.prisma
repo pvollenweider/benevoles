@@ -279,6 +279,9 @@ model Shift {
   // offered, waitlist) of one volunteer on the role's shifts of the event. Shared per role, set
   // uniformly across its shifts like colorKey. Null = no limit.
   maxPerVolunteer Int?
+  // Role reserved to members with one of these tags (#470), checked from the member invitation at
+  // sign-up. Shared per role like colorKey. Empty = open to everyone.
+  reservedTags    String[] @default([])
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 

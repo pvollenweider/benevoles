@@ -14,6 +14,7 @@ import { KNOWN_ROLES, COLOR_OPTIONS, getRoleAccent } from "@/lib/roles"
 import { fmtRange, resolveNewShiftDisplayOrder, isCompleteTime, addMinutes } from "@/lib/gantt-utils"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
 import { roleLimits } from "@/lib/role-limit"
+import { parseTagList, reservedRoles } from "@/lib/role-reservation"
 import ShiftSeriesForm from "./ShiftSeriesForm"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import {
@@ -44,6 +45,8 @@ type RawShift = AdminShift & {
   latitude?: number | null; longitude?: number | null
   /** Shifts per volunteer for the role (#466), shared by the role's shifts. */
   maxPerVolunteer?: number | null
+  /** Tags reserving the role (#470), shared by the role's shifts. */
+  reservedTags?: string[]
 }
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
@@ -84,6 +87,10 @@ export default function ShiftsManager({
   const [limitRole, setLimitRole] = useState<string | null>(null)
   const [limitValue, setLimitValue] = useState("")
   const [limitError, setLimitError] = useState<string | null>(null)
+  // Reserved roles (#470): the inline editor, like the limit's.
+  const [reserveRole, setReserveRole] = useState<string | null>(null)
+  const [reserveValue, setReserveValue] = useState("")
+  const reserveBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   // « Limite » buttons per role: focus returns there when the inline form closes (#466).
   const limitBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   const limitInputRef = useRef<HTMLInputElement>(null)
@@ -245,6 +252,7 @@ export default function ShiftsManager({
   function startRenameRole(role: string) {
     setRoleActionError(null)
     setLimitRole(null)
+    setReserveRole(null)
     setRenamingRole(role)
     setRenameValue(role)
   }
@@ -331,8 +339,49 @@ export default function ShiftsManager({
     setLimitError(null)
     setColorPickerRole(null)
     setRenamingRole(null)
+    setReserveRole(null)
     setLimitRole(limitRole === role ? null : role)
     setLimitValue(String(roleLimitOf(role) ?? ""))
+  }
+
+  function reservedTagsOf(role: string): string[] {
+    return reservedRoles(shifts.filter((s) => s.roleName === role)).get(role) ?? []
+  }
+
+  function startReserve(role: string) {
+    setRoleActionError(null)
+    setColorPickerRole(null)
+    setRenamingRole(null)
+    setLimitRole(null)
+    setReserveRole(reserveRole === role ? null : role)
+    setReserveValue(reservedTagsOf(role).join(", "))
+  }
+
+  function closeReserve(role: string) {
+    setReserveRole(null)
+    setRoleActionError(null)
+    requestAnimationFrame(() => reserveBtnRefs.current.get(role)?.focus())
+  }
+
+  async function saveReserve(role: string, tags: string[]) {
+    if (roleActionBusy) return
+    setRoleActionError(null)
+    setRoleActionBusy(role)
+    const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(role)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reservedTags: tags }),
+    }), "Erreur lors de l'enregistrement.")
+    setRoleActionBusy(null)
+    if (!outcome.ok) {
+      setRoleActionError(outcome.error)
+      return
+    }
+    setShifts(prev => prev.map(s => s.roleName === role ? { ...s, reservedTags: tags } : s))
+    closeReserve(role)
+    const typed = reserveValue.split(/[,;]/).map((t) => t.trim()).filter(Boolean).length
+    const dropped = Math.max(0, typed - tags.length)
+    announce(setRoleAnnouncement, (tags.length === 0 ? `Poste « ${role} » : ouvert à tous.` : `Poste « ${role} » : réservé aux membres avec l'étiquette ${tags.join(" ou ")}.`) + (dropped > 0 && tags.length > 0 ? ` ${dropped} étiquette${dropped > 1 ? "s" : ""} ignorée${dropped > 1 ? "s" : ""} (doublons, ou 10 au maximum).` : ""))
   }
 
   function closeRoleLimit(role: string) {
@@ -456,7 +505,7 @@ export default function ShiftsManager({
         <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
           <div>
             <h3 className="font-semibold text-gray-800">Gérer les postes</h3>
-            <p className="text-xs text-gray-500 mt-0.5">Glissez-déposez pour réordonner, renommez, limitez le nombre de créneaux par personne ou supprimez un poste (tous ses créneaux).</p>
+            <p className="text-xs text-gray-500 mt-0.5">Glissez-déposez pour réordonner, renommez, limitez le nombre de créneaux par personne, réservez un poste à certains membres ou supprimez un poste (tous ses créneaux).</p>
           </div>
           {roleActionError && (
             <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{roleActionError}</p>
@@ -467,6 +516,7 @@ export default function ShiftsManager({
               const isBusy = roleActionBusy === role
               const isPickingColor = colorPickerRole === role
               const limit = roleLimitOf(role)
+              const reservedTags = reservedTagsOf(role)
               return (
               <div key={role}>
                 <div
@@ -484,7 +534,7 @@ export default function ShiftsManager({
                     <circle cx="11" cy="4" r="1.2"/><circle cx="11" cy="8" r="1.2"/><circle cx="11" cy="12" r="1.2"/>
                   </svg>
                   <button
-                    onClick={() => { setLimitRole(null); setColorPickerRole(isPickingColor ? null : role) }}
+                    onClick={() => { setLimitRole(null); setReserveRole(null); setColorPickerRole(isPickingColor ? null : role) }}
                     disabled={isBusy || isRenaming}
                     aria-label={`Changer la couleur du poste ${role}`}
                     aria-expanded={isPickingColor}
@@ -532,6 +582,17 @@ export default function ShiftsManager({
                         {limit === null ? "Limite" : `Limite : ${limit}`}
                       </button>
                       <button
+                        ref={(el) => { if (el) reserveBtnRefs.current.set(role, el); else reserveBtnRefs.current.delete(role) }}
+                        onClick={() => startReserve(role)}
+                        disabled={isBusy}
+                        aria-expanded={reserveRole === role}
+                        aria-controls={`reserve-form-${i}`}
+                        aria-label={reservedTags.length === 0 ? `Accès : tous, poste « ${role} »` : `Accès : ${reservedTags.join(", ")}, poste « ${role} » réservé`}
+                        className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 flex-shrink-0"
+                      >
+                        <span className="inline-block max-w-[10rem] truncate align-bottom">{reservedTags.length === 0 ? "Accès : tous" : `Accès : ${reservedTags.join(", ")}`}</span>
+                      </button>
+                      <button
                         onClick={() => startRenameRole(role)}
                         disabled={isBusy}
                         aria-label={`Renommer le poste ${role}`}
@@ -543,13 +604,49 @@ export default function ShiftsManager({
                         onClick={() => handleDeleteRole(role)}
                         disabled={isBusy}
                         aria-label={`Supprimer le poste ${role}`}
-                        className="text-xs text-red-400 hover:text-red-600 disabled:opacity-50 flex-shrink-0"
+                        className="text-xs text-red-700 hover:text-red-900 disabled:opacity-50 flex-shrink-0"
                       >
                         {isBusy ? "…" : "Supprimer"}
                       </button>
                     </>
                   )}
                 </div>
+                {reserveRole === role && (
+                  <form
+                    id={`reserve-form-${i}`}
+                    noValidate
+                    onSubmit={(e) => { e.preventDefault(); saveReserve(role, parseTagList(reserveValue)) }}
+                    onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); closeReserve(role) } }}
+                    className="flex flex-wrap items-end gap-2 px-3 py-2.5 mt-1 rounded-xl border border-blue-100 bg-blue-50/50"
+                  >
+                    <div className="flex-1 min-w-48">
+                      <label htmlFor={`reserve-${i}`} className="block text-xs font-medium text-gray-700 mb-1">Étiquettes donnant accès au poste « {role} »</label>
+                      <input
+                        id={`reserve-${i}`}
+                        type="text"
+                        value={reserveValue}
+                        autoFocus
+                        onChange={(e) => setReserveValue(e.target.value)}
+                        aria-describedby={`reserve-help-${i}`}
+                        placeholder="ex. sécurité, secouriste"
+                        className="input w-full py-1"
+                      />
+                    </div>
+                    <button type="submit" aria-disabled={isBusy || undefined} className={`text-xs text-blue-700 font-medium hover:text-blue-900 py-1.5 ${isBusy ? "opacity-60 cursor-wait" : ""}`}>
+                      {isBusy ? "Enregistrement…" : "Enregistrer"}
+                    </button>
+                    {reservedTags.length > 0 && (
+                      <button type="button" onClick={() => saveReserve(role, [])} aria-disabled={isBusy || undefined} className={`text-xs text-gray-700 hover:text-gray-900 py-1.5 ${isBusy ? "opacity-60 cursor-wait" : ""}`}>
+                        Ouvrir à tous
+                      </button>
+                    )}
+                    <button type="button" onClick={() => closeReserve(role)} className="text-xs text-gray-600 hover:text-gray-900 py-1.5">Annuler</button>
+                    <p id={`reserve-help-${i}`} className="basis-full text-xs text-gray-600">Séparées par des virgules, 10 au plus. Laissez vide pour ouvrir le poste à tous.</p>
+                    <p className="basis-full text-xs text-gray-600">
+                      Seuls les membres portant l&apos;une de ces étiquettes peuvent le prendre, et seulement avec le lien d&apos;invitation reçu par email : sans ce lien, la page publique affiche le poste comme « Réservé ». Les étiquettes ne sont jamais montrées aux bénévoles. Vous pouvez toujours ajouter quelqu&apos;un à la main.
+                    </p>
+                  </form>
+                )}
                 {limitRole === role && (
                   <form
                     id={`limit-form-${i}`}

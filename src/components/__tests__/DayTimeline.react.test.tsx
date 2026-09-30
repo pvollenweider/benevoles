@@ -53,4 +53,12 @@ describe("DayTimeline", () => {
     expect(loge).toBeEnabled()
     expect(screen.getByRole("button", { name: /^Sélectionner — Bar/ }).getAttribute("aria-label")).not.toMatch(/limite/)
   })
+
+  it("shows a reserved role's bars in words and doesn't offer them (#470)", () => {
+    render(<DayTimeline shifts={[shift("a", { roleName: "Sécurité", label: "Sécurité" })]} shows={[]} selected={new Set()} onToggle={() => {}} reservedShiftIds={new Set(["a"])} />)
+    const bar = screen.getByRole("button", { name: "Sécurité 18h–20h, réservé à certains membres" })
+    expect(bar).toBeDisabled()
+    expect(bar).not.toHaveAttribute("aria-pressed")
+    expect(screen.getByText("Réservé")).toBeInTheDocument()
+  })
 })
