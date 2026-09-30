@@ -32,6 +32,16 @@ describe("AdminNav — mobile menu", () => {
     expect(links).toEqual(["Tableau de bord", "Événements", "Membres", "Paramètres", "Aide (ouvre dans un nouvel onglet)"])
   })
 
+  it("keeps each bar label on one line (#495), super admin included", () => {
+    render(<AdminNav userName="Alice" role="super_admin" orgName="Festival" />)
+    const bar = screen.getByRole("navigation", { name: "Navigation de l'administration" })
+    for (const name of ["Tableau de bord", "Événements", "Membres", "Paramètres"]) {
+      const onBar = within(bar).getAllByRole("link", { name }).find((a) => !panel().contains(a))!
+      expect(onBar.className).toContain("whitespace-nowrap")
+    }
+    expect(screen.getByRole("button", { name: /Super Admin/ }).className).toContain("whitespace-nowrap")
+  })
+
   it("marks the current page", () => {
     render(<AdminNav userName="Alice" role="admin" />)
     fireEvent.click(toggle())
