@@ -32,6 +32,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
         <footer className="mt-16 pt-6 border-t border-gray-100 flex gap-6 text-xs text-gray-500">
           <Link href="/legal/terms" className="hover:text-gray-600 transition-colors">CGU</Link>
           <Link href="/legal/privacy" className="hover:text-gray-600 transition-colors">Confidentialité</Link>
+          <Link href="/accessibilite" className="hover:text-gray-600 transition-colors">Accessibilité</Link>
           <a href="mailto:contact@benevol.app" className="hover:text-gray-600 transition-colors">Contact</a>
         </footer>
       </main>

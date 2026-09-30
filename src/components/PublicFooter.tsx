@@ -29,6 +29,8 @@ export default function PublicFooter({ showSupport = false }: { showSupport?: bo
         <span aria-hidden="true" className="select-none py-1">·</span>
         <Link href="/legal/privacy" className={linkClass}>Confidentialité</Link>
         <span aria-hidden="true" className="select-none py-1">·</span>
+        <Link href="/accessibilite" className={linkClass}>Accessibilité</Link>
+        <span aria-hidden="true" className="select-none py-1">·</span>
         <Link href="/admin/login" className={linkClass}>Espace organisateur</Link>
         {showSupport && (
           <>
