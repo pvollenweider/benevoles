@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, deleteMilestoneRecap, deletePageRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap } from "../action-recap"
+import { bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, broadcastRecap, deleteMilestoneRecap, deleteOrgRecap, deletePageRecap, toggleOrgRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap } from "../action-recap"
 
 // Confirmation before sensitive actions (#379).
 describe("action recaps", () => {
@@ -31,6 +31,13 @@ describe("action recaps", () => {
   it("milestone and page deletion", () => {
     expect(deleteMilestoneRecap("Fermer les inscriptions")).toMatchObject({ title: "Supprimer le jalon « Fermer les inscriptions » ?", danger: true })
     expect(deletePageRecap("Accès").title).toBe("Supprimer la page « Accès » ?")
+  })
+
+  it("organisation toggle, deletion and broadcast", () => {
+    expect(toggleOrgRecap("Asso", true)).toMatchObject({ confirmLabel: "Désactiver", danger: true })
+    expect(toggleOrgRecap("Asso", false)).toMatchObject({ confirmLabel: "Réactiver", danger: false })
+    expect(deleteOrgRecap({ name: "Asso", events: 2, volunteers: 1, admins: 3 }).lines[0]).toBe("Toutes ses données sont effacées : 2 événements, 1 membre, 3 administrateurs, inscriptions et journaux.")
+    expect(broadcastRecap(1).title).toBe("Envoyer cette communication à 1 administrateur ?")
   })
 
   it("formats the moment of a shift", () => {

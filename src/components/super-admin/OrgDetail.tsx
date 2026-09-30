@@ -4,6 +4,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useState, useTransition } from "react"
+import { announce } from "@/lib/announce"
+import { requestJson } from "@/lib/use-submit"
+import { deleteOrgRecap, toggleOrgRecap } from "@/lib/action-recap"
+import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
@@ -39,6 +43,9 @@ export default function OrgDetail({ org }: { org: Org }) {
   const [toggling, setToggling] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [deleteError, setDeleteError] = useState<string | null>(null)
+  const [confirming, setConfirming] = useState<"toggle" | "delete" | null>(null)
+  const [toggleError, setToggleError] = useState<string | null>(null)
+  const [outcome, setOutcome] = useState("")
   const [name, setName] = useState(org.name)
   const [slug, setSlug] = useState(org.slug)
   const [savingName, setSavingName] = useState(false)
@@ -60,41 +67,38 @@ export default function OrgDetail({ org }: { org: Org }) {
     })
   }
 
-  async function toggleActive() {
-    const label = org.active ? "Désactiver" : "Réactiver"
-    if (!confirm(`${label} l'organisation « ${org.name} » ?`)) return
-    setToggling(true)
-    const res = await patch({ active: !org.active })
-    setToggling(false)
-    if (res.ok) refresh()
+  function toggleActive() {
+    setToggleError(null)
+    setConfirming("toggle")
   }
 
-  async function deleteOrg() {
+  async function runToggle() {
+    setToggling(true)
+    setToggleError(null)
+    const result = await requestJson(() => patch({ active: !org.active }), "La modification n'a pas été enregistrée.")
+    setToggling(false)
+    if (!result.ok) { setToggleError(result.error); return }
+    setConfirming(null)
+    announce(setOutcome, org.active ? "Organisation désactivée." : "Organisation réactivée.")
+    refresh()
+  }
+
+  function deleteOrg() {
     setDeleteError(null)
-    const typed = prompt(
-      `Cette action supprime définitivement « ${org.name} » et toutes ses données ` +
-      `(${org._count.events} événement${org._count.events > 1 ? "s" : ""}, ` +
-      `${org._count.volunteers} membre${org._count.volunteers > 1 ? "s" : ""}, ` +
-      `${org._count.admins} administrateur${org._count.admins > 1 ? "s" : ""}). ` +
-      `Cette action est irréversible.\n\nTapez le slug « ${org.slug} » pour confirmer :`
-    )
-    if (typed === null) return
-    if (typed.trim() !== org.slug) {
-      setDeleteError("Slug incorrect — suppression annulée.")
-      return
-    }
+    setConfirming("delete")
+  }
+
+  // The dialog only lets this run once the slug has been typed; the server checks it again.
+  async function runDelete() {
     setDeleting(true)
-    const res = await fetch(`/api/super-admin/organizations/${org.id}`, {
+    setDeleteError(null)
+    const result = await requestJson(() => fetch(`/api/super-admin/organizations/${org.id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ confirmSlug: typed.trim() }),
-    })
+      body: JSON.stringify({ confirmSlug: org.slug }),
+    }), "Erreur lors de la suppression.")
     setDeleting(false)
-    if (!res.ok) {
-      const d = await res.json().catch(() => ({}))
-      setDeleteError(typeof d.error === "string" ? d.error : "Erreur lors de la suppression.")
-      return
-    }
+    if (!result.ok) { setDeleteError(result.error); return }
     router.push("/super-admin/organizations")
   }
 
@@ -172,27 +176,38 @@ export default function OrgDetail({ org }: { org: Org }) {
             Gérer →
           </a>
           <button
+            type="button"
             onClick={toggleActive}
-            disabled={toggling}
-            className={`text-sm px-4 py-2 rounded-xl font-medium disabled:opacity-50 ${
-              org.active ? "bg-red-600 text-white hover:bg-red-700" : "bg-green-600 text-white hover:bg-green-700"
+            className={`text-sm px-4 py-2 rounded-xl font-medium ${
+              org.active ? "bg-red-700 text-white hover:bg-red-800" : "bg-green-700 text-white hover:bg-green-800"
             }`}
           >
-            {toggling ? "…" : org.active ? "Désactiver" : "Réactiver"}
+            {org.active ? "Désactiver" : "Réactiver"}
           </button>
           {!org.active && (
             <button
+              type="button"
               onClick={deleteOrg}
-              disabled={deleting}
-              className="text-sm px-4 py-2 rounded-xl font-medium border border-red-300 text-red-700 hover:bg-red-50 disabled:opacity-50"
+              className="text-sm px-4 py-2 rounded-xl font-medium border border-red-300 text-red-700 hover:bg-red-50"
             >
-              {deleting ? "…" : "Supprimer définitivement"}
+              Supprimer définitivement
             </button>
           )}
         </div>
       </div>
-      {deleteError && (
-        <p role="alert" className="text-sm text-red-600 -mt-2">{deleteError}</p>
+      <p role="status" className={outcome ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2" : "sr-only"}>{outcome}</p>
+      {confirming === "toggle" && (
+        <ConfirmActionModal recap={toggleOrgRecap(org.name, org.active)} busy={toggling} error={toggleError} onConfirm={() => void runToggle()} onCancel={() => setConfirming(null)} />
+      )}
+      {confirming === "delete" && (
+        <ConfirmActionModal
+          recap={deleteOrgRecap({ name: org.name, events: org._count.events, volunteers: org._count.volunteers, admins: org._count.admins })}
+          challenge={{ label: `Pour confirmer, tapez l'identifiant « ${org.slug} »`, expected: org.slug }}
+          busy={deleting}
+          error={deleteError}
+          onConfirm={() => void runDelete()}
+          onCancel={() => setConfirming(null)}
+        />
       )}
 
       {/* Stats */}
