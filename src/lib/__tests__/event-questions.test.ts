@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { answerText, checkAnswers, questionChangeProblem, questionSchema } from "../event-questions"
+import { answerText, checkAnswers, questionChangeProblem, questionSchema, planAnswerWrites } from "../event-questions"
 
 // Custom sign-up questions (#483).
 const qs = [
@@ -65,5 +65,15 @@ describe("exports and lists (#483)", () => {
       { label: "Régime", archivedAt: new Date(), answers: [{ volunteerId: "v1", values: ["Végétarien", "Sans gluten"] }, { volunteerId: "v2", values: [] }] },
     ])
     expect(map).toEqual({ v1: [{ label: "Taille", text: "M" }, { label: "Régime (question retirée)", text: "Végétarien, Sans gluten" }] })
+  })
+})
+
+describe("planAnswerWrites", () => {
+  const values = new Map([["size", ["M"]]])
+  it("with proof of the address: replaces the answers and clears optional ones left empty", () => {
+    expect(planAnswerWrites(["size", "diet"], values, true)).toEqual({ replace: [["size", ["M"]]], addMissing: [], clear: ["diet"] })
+  })
+  it("without proof: only adds what's missing, never replaces or clears", () => {
+    expect(planAnswerWrites(["size", "diet"], values, false)).toEqual({ replace: [], addMissing: [["size", ["M"]]], clear: [] })
   })
 })

@@ -82,6 +82,22 @@ export function checkAnswers(questions: Question[], raw: RawAnswers | undefined)
   return errors.length > 0 ? { ok: false, errors } : { ok: true, values }
 }
 
+/**
+ * What a sign-up may write to a volunteer's answers (#483). The public form proves nothing about
+ * who typed the email (#285): someone knowing a member's address must not be able to replace
+ * their answers, as the profile itself is protected. So:
+ * - with proof (the volunteer was created by this sign-up, or a valid invitation): the answers
+ *   replace the previous ones, and an optional question left empty clears its old answer;
+ * - without: only answers the volunteer doesn't have yet are added, nothing is replaced or cleared.
+ */
+export type AnswerWrites = { replace: [string, string[]][]; addMissing: [string, string[]][]; clear: string[] }
+
+export function planAnswerWrites(questionIds: string[], values: Map<string, string[]>, ownershipProven: boolean): AnswerWrites {
+  const answered = [...values.entries()]
+  if (!ownershipProven) return { replace: [], addMissing: answered, clear: [] }
+  return { replace: answered, addMissing: [], clear: questionIds.filter((id) => !values.has(id)) }
+}
+
 /** Each volunteer's answers, « label : answer », for the registrations list. */
 export function answersByVolunteer(questions: { label: string; archivedAt: Date | null; answers: { volunteerId: string; values: string[] }[] }[]): Record<string, { label: string; text: string }[]> {
   const out: Record<string, { label: string; text: string }[]> = {}

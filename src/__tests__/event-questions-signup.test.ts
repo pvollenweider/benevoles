@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
-// Reserved roles (#470): enforced at sign-up from the member invitation only.
+// Custom questions (#483) at sign-up: answers stored in the registration transaction, replaced
+// only with proof the submitter owns the address.
 const m = vi.hoisted(() => ({
   eventFindFirst: vi.fn(),
   shiftFindMany: vi.fn(),
@@ -8,6 +9,9 @@ const m = vi.hoisted(() => ({
   inviteFindUnique: vi.fn(),
   txCreate: vi.fn(),
   upsert: vi.fn(),
+  createMany: vi.fn(),
+  deleteMany: vi.fn(),
+  volunteerFindFirst: vi.fn(),
   questions: vi.fn(),
 }))
 vi.mock("@/lib/prisma", () => ({
@@ -15,7 +19,7 @@ vi.mock("@/lib/prisma", () => ({
     eventQuestion: { findMany: m.questions },
     event: { findFirst: m.eventFindFirst },
     shift: { findMany: m.shiftFindMany },
-    volunteer: { findFirst: vi.fn().mockResolvedValue(null) },
+    volunteer: { findFirst: m.volunteerFindFirst, update: vi.fn() },
     registration: { findMany: vi.fn().mockResolvedValue([]) },
     memberInvite: { findFirst: m.inviteFindFirst, findUnique: m.inviteFindUnique, updateMany: vi.fn().mockResolvedValue({ count: 1 }) },
     $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn({
@@ -23,7 +27,7 @@ vi.mock("@/lib/prisma", () => ({
       shift: { findMany: vi.fn().mockResolvedValue([]) },
       volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },
       registration: { findMany: vi.fn().mockResolvedValue([]), count: vi.fn().mockResolvedValue(0), aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }), create: m.txCreate },
-      questionAnswer: { upsert: m.upsert },
+      questionAnswer: { upsert: m.upsert, createMany: m.createMany, deleteMany: m.deleteMany },
     })),
   },
 }))
@@ -47,6 +51,7 @@ describe("public sign-up with custom questions", () => {
     vi.clearAllMocks()
     m.eventFindFirst.mockResolvedValue({ id: "evt-1", organizationId: "org-a", title: "Fête", organization: { slug: "a", timeZone: null }, confirmationMessage: null })
     m.shiftFindMany.mockResolvedValue([bar])
+    m.volunteerFindFirst.mockResolvedValue(null)
     m.txCreate.mockResolvedValue({ id: "reg-1", shiftId: "s1", status: "active", waitingPosition: null })
     m.questions.mockResolvedValue([
       { id: "size", label: "Taille", type: "single", options: ["S", "M"], required: true },
@@ -54,12 +59,34 @@ describe("public sign-up with custom questions", () => {
     ])
   })
 
-  it("upserts each answered question for the volunteer, and nothing for unanswered optional ones", async () => {
+  it("a new volunteer: upserts each answered question, clears the optional ones left empty", async () => {
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post({ answers: { size: "M" } }))
     expect(res.status).toBeLessThan(300)
     expect(m.upsert).toHaveBeenCalledTimes(1)
     expect(m.upsert.mock.calls[0][0]).toMatchObject({ where: { questionId_volunteerId: { questionId: "size", volunteerId: "vol-1" } }, create: { questionId: "size", eventId: "evt-1", volunteerId: "vol-1", values: ["M"] }, update: { values: ["M"] } })
+    expect(m.deleteMany).toHaveBeenCalledWith({ where: { volunteerId: "vol-1", questionId: { in: ["diet"] } } })
+  })
+
+  it("an existing volunteer without proof of the address: adds missing answers only, never replaces or clears", async () => {
+    m.volunteerFindFirst.mockResolvedValue({ id: "vol-9" })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post({ answers: { size: "S" } }))
+    expect(res.status).toBeLessThan(300)
+    expect(m.upsert).not.toHaveBeenCalled()
+    expect(m.deleteMany).not.toHaveBeenCalled()
+    expect(m.createMany).toHaveBeenCalledWith({ data: [{ questionId: "size", eventId: "evt-1", volunteerId: "vol-9", values: ["S"] }], skipDuplicates: true })
+  })
+
+  it("an existing volunteer with a valid invitation: answers replaced as for a new one", async () => {
+    m.volunteerFindFirst.mockResolvedValue({ id: "vol-9" })
+    m.inviteFindFirst.mockResolvedValue({ id: "inv-1" })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post({ answers: { size: "S" }, inviteToken: "tok-inv" }))
+    expect(res.status).toBeLessThan(300)
+    expect(m.upsert.mock.calls[0][0]).toMatchObject({ where: { questionId_volunteerId: { questionId: "size", volunteerId: "vol-9" } }, update: { values: ["S"] } })
+    expect(m.deleteMany).toHaveBeenCalledWith({ where: { volunteerId: "vol-9", questionId: { in: ["diet"] } } })
+    expect(m.createMany).not.toHaveBeenCalled()
   })
 
   it("writes nothing when an answer is refused", async () => {
