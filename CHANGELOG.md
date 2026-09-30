@@ -7,6 +7,14 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+---
+
+## [2.0.0] — 2026-09-30
+
+### Mise à jour depuis 1.x
+
+Version majeure : une installation 1.x ne se met pas à jour sans préparation. `TOKEN_ENCRYPTION_KEY` est obligatoire en production (le serveur refuse de démarrer sans elle), les migrations passent par le Job `k8s/job-migrate.yaml` avant la mise à jour de l'application, et deux manifestes s'ajoutent (`k8s/ingressroute-tokens.yaml`, `k8s/traefik-config.yaml`). Pas de retour à 1.x sans restaurer une sauvegarde. Étapes complètes : [Mise à jour depuis 1.x](docs/deploiement.md#mise-à-jour-depuis-1x).
+
 ### Ajouté
 
 #### Mise en route
@@ -105,7 +113,6 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Politique de conservation vérifiable** : les durées de conservation ont une source unique ; le nettoyage quotidien les lit, et un test vérifie que le guide administrateur, la politique de confidentialité, la nouvelle page technique `docs/retention.md` et la rotation des sauvegardes disent la même chose. Les journaux techniques (90 jours) sont signalés comme une procédure manuelle sur le serveur.
 - **Emails plus fiables** : les emails liés à une action (inscription, notification aux administrateurs et aux responsables, liste d'attente, créneau modifié ou annulé, invitation d'un responsable de secteur, invitation et bienvenue d'un administrateur, mot de passe oublié) passent par une file d'envoi enregistrée en même temps que l'action. L'action n'attend plus l'envoi, un arrêt du serveur au mauvais moment ne peut plus laisser une action faite sans son email, et un email en échec est renvoyé automatiquement.
 - **Limitation des tentatives** (connexion, inscription, liens de gestion, mot de passe oublié) : les compteurs sont stockés dans la base de données. Ils ne sont plus remis à zéro à chaque redéploiement et restent justes si l'application tourne sur plusieurs instances.
-- **Interne** : le fichier `src/middleware.ts` devient `src/proxy.ts`, la convention Next.js 16 ; comportement identique (protection des pages admin, en-tête `x-org-slug`).
 
 ### Corrigé
 
@@ -134,6 +141,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 #### Données et exploitation
 
+- **Modifier l'email d'un membre** : une adresse déjà utilisée par un autre membre de l'organisation provoquait une erreur serveur ; le formulaire affiche maintenant le message à côté du champ Email.
 - **Adresse avec une double barre oblique** : une adresse comme `benevol.app//events` faisait planter la page dans le navigateur. Elle redirige désormais vers l'adresse propre (`/events`), paramètres conservés.
 - **Adresses email** : les majuscules et espaces ne sont plus pris en compte ; `Alice@Exemple.ch` et `alice@exemple.ch` désignent le même bénévole ou le même admin (connexion comprise), au lieu de créer deux fiches, et la base de données refuse deux fiches (bénévoles d'une même organisation, admins, responsables d'un même secteur) dont l'adresse ne diffère que par la casse ou des espaces. Les adresses existantes sont converties en minuscules, sauf les rares doublons qui ne diffèrent que par la casse, laissés tels quels pour un traitement manuel.
 - **Statuts en base** : les contraintes sur les valeurs de statut s'appliquent aussi aux lignes existantes (vérifiées au préalable en production), et non plus seulement aux nouvelles.
@@ -156,8 +164,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 #### Liens des bénévoles
 
 - **Lien de gestion après inscription** : il n'est plus affiché sur la page de succès pour une adresse email nouvelle, seulement envoyé par email : n'importe qui pouvait inscrire une autre personne avec une adresse encore inconnue de l'organisation et obtenir son lien. Il reste affiché pour une inscription depuis un lien d'invitation membre.
-- **Liens personnels des bénévoles, responsables de secteur et invitations** : ne sont plus lisibles dans une copie de la base une fois la clé `TOKEN_ENCRYPTION_KEY` configurée. La base ne garde qu'une empreinte (pour reconnaître un lien) et une copie chiffrée (pour renvoyer le lien par email) ; les liens existants sont chiffrés automatiquement par la tâche de nettoyage quotidienne et restent valables.
+- **Liens personnels des bénévoles, responsables de secteur et invitations** : ne sont plus lisibles dans une copie de la base. La base ne garde qu'une empreinte (pour reconnaître un lien) et une copie chiffrée avec la clé `TOKEN_ENCRYPTION_KEY` (pour renvoyer le lien par email) ; les liens existants sont chiffrés automatiquement par la tâche de nettoyage quotidienne et restent valables. **La clé est obligatoire en production** : sans elle, le serveur refuse de démarrer (voir [Mise à jour depuis 1.x](docs/deploiement.md#mise-à-jour-depuis-1x)).
 - **Désinscription des notifications push** : elle exige le lien personnel du bénévole, comme l'inscription, ne retire que son abonnement et est limitée en fréquence ; une adresse d'abonnement seule ne suffit plus.
+
+---
 
 ## [1.15.0] — 2026-09-28
 

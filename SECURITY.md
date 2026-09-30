@@ -6,8 +6,8 @@ Seule la dernière version publiée reçoit des correctifs de sécurité.
 
 | Version | Supportée |
 |---------|-----------|
-| 1.15.x  | ✅ |
-| < 1.15  | ❌ |
+| 2.0.x   | ✅ |
+| < 2.0   | ❌ |
 
 ## Signaler une vulnérabilité
 
