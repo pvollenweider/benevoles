@@ -3,8 +3,9 @@ import { hashToken } from "@/lib/token-hash"
 
 const findFirst = vi.hoisted(() => vi.fn())
 const upsert = vi.hoisted(() => vi.fn())
+const deleteMany = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({
-  prisma: { registration: { findFirst }, pushSubscription: { upsert } },
+  prisma: { registration: { findFirst }, pushSubscription: { upsert, deleteMany } },
 }))
 vi.mock("@/lib/env", () => ({ env: {} }))
 vi.mock("@/lib/rate-limit", () => ({
@@ -63,5 +64,33 @@ describe("POST /api/public/push", () => {
     const { POST } = await import("@/app/api/public/push/route")
     await POST(post({ editToken: "tok", volunteerId: "vol-other", ...sub }))
     expect(upsert.mock.calls[0][0].create.volunteerId).toBe("vol-1")
+  })
+})
+
+describe("DELETE /api/public/push", () => {
+  beforeEach(() => { vi.clearAllMocks(); deleteMany.mockResolvedValue({ count: 1 }) })
+  const del = (body: unknown) =>
+    new Request("http://localhost/api/public/push", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+
+  // Regression (audit): an endpoint alone used to delete every subscription on it.
+  it("refuses an endpoint without the personal link, and deletes nothing", async () => {
+    const { DELETE } = await import("@/app/api/public/push/route")
+    expect((await DELETE(del({ endpoint: sub.endpoint }))).status).toBe(400)
+    expect(deleteMany).not.toHaveBeenCalled()
+  })
+
+  it("404s for an unknown link", async () => {
+    findFirst.mockResolvedValue(null)
+    const { DELETE } = await import("@/app/api/public/push/route")
+    expect((await DELETE(del({ editToken: "nope", endpoint: sub.endpoint }))).status).toBe(404)
+    expect(deleteMany).not.toHaveBeenCalled()
+  })
+
+  it("removes only the link's volunteer's subscription on that endpoint, also after a cancellation", async () => {
+    findFirst.mockResolvedValue({ volunteerId: "vol-1" })
+    const { DELETE } = await import("@/app/api/public/push/route")
+    expect((await DELETE(del({ editToken: "tok", endpoint: sub.endpoint }))).status).toBe(200)
+    expect(findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { editTokenHash: hashToken("tok") } }))
+    expect(deleteMany).toHaveBeenCalledWith({ where: { endpoint: sub.endpoint, volunteerId: "vol-1" } })
   })
 })
