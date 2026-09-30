@@ -63,7 +63,7 @@ Vue d'ensemble de votre organisation : nombre d'événements (publiés et à ven
 
 **`/admin/search`**
 
-Le champ **Rechercher** de la barre du haut (dans le **Menu** sur un petit écran) retrouve en une fois, dans toute votre organisation :
+La loupe **Rechercher** de la barre du haut ouvre le champ de recherche (**Ctrl + K**, ou **⌘ + K** sur Mac, l'ouvre aussi ; **Échap** le referme). Sur un petit écran, le champ est dans le **Menu**. Il retrouve en une fois, dans toute votre organisation :
 
 - les **bénévoles** dont le prénom, le nom, l'email ou le téléphone correspond : le lien ouvre la page Membres filtrée sur cette personne, membres désactivés compris ;
 - leurs **inscriptions** (confirmées, en liste d'attente ou place proposée), avec l'événement et le créneau : le lien ouvre les inscriptions de l'événement filtrées sur cette personne ;
