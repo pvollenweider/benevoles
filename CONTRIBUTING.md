@@ -157,8 +157,9 @@ Checklist à suivre à chaque bump de version (créée après coup — `SECURITY
 3. **`SECURITY.md`** : mettre à jour la ligne `x.y.x` de la table « Versions supportées ». **Vérifié automatiquement en CI** (`scripts/check-security-md.mjs`, job « Type-check, lint & tests ») — le build échoue si ce fichier n'a pas suivi le bump de `package.json`.
 4. **`FONCTIONNALITES.md`** : vérifier que les fonctionnalités ajoutées/retirées depuis la dernière relecture y figurent. Pas de vérification automatique — audit manuel périodique.
 5. **`GUIDE_ADMIN.md` / `GUIDE_BENEVOLE.md`** : décrivent uniquement l'état actuel du produit, jamais de langage « depuis la version x, … ». Ce sont aussi les pages publiques `/doc/admin` et `/doc/benevole` (même source).
-6. **Tag + release GitHub** : `git tag -a vX.Y.Z -m "vX.Y.Z"`, `git push origin vX.Y.Z`, puis `gh release create vX.Y.Z --notes-file <extrait du CHANGELOG>`. Le numéro affiché dans le pied de page public (`v{version}`) vient directement de `package.json` — rien à modifier à la main de ce côté.
-7. Vérifier le déploiement (`gh run watch` sur le workflow *Build & Deploy* déclenché par le push sur `main`).
+6. **Captures de la documentation** (`public/doc-img/`, utilisées par les guides et le README) : si des écrans ont changé, les régénérer sur une base jetable avec l'événement de démonstration (`scripts/seed-demo.ts` puis `npm run screenshots`, procédure en tête de `scripts/screenshots.mjs`), et relire les textes alternatifs.
+7. **Tag + release GitHub** : `git tag -a vX.Y.Z -m "vX.Y.Z"`, `git push origin vX.Y.Z`, puis `gh release create vX.Y.Z --notes-file <extrait du CHANGELOG>`. Le numéro affiché dans le pied de page public (`v{version}`) vient directement de `package.json` — rien à modifier à la main de ce côté.
+8. Vérifier le déploiement (`gh run watch` sur le workflow *Build & Deploy* déclenché par le push sur `main`).
 
 ## Signaler un bug de sécurité
 

@@ -22,7 +22,7 @@ Selon l'événement, des liens vers des pages complémentaires (règlement, FAQ,
 
 La page affiche un **planning par jour**. Chaque ligne correspond à un poste (accueil, photos, buvette…) et chaque barre colorée représente un créneau disponible.
 
-![Planning public d'un événement sur plusieurs jours, avec les postes en lignes, les créneaux en barres colorées, et les liens vers les pages personnalisées (règlement, accès)](/doc-img/public-timeline.png)
+![Planning public d'un événement sur plusieurs jours, avec les postes en lignes, les créneaux en barres colorées, et les liens vers les pages personnalisées (accès et parking, questions fréquentes)](/doc-img/public-timeline.png)
 
 Si les inscriptions ne sont pas encore ouvertes, ou déjà fermées, un encadré en haut de la page le dit, avec la date d'ouverture quand elle est prévue. Le planning reste consultable, mais on ne peut pas choisir de créneau.
 
@@ -51,6 +51,8 @@ Certains postes affichent un petit repère (ex. « 18+ ») : ils demandent un â
 
 Cliquez (ou tapez) sur une barre disponible. Le créneau s'ajoute à votre sélection, visible dans la liste en bas de page. Pour le retirer, cliquez sur le **✕** à droite de son nom dans cette liste.
 
+![Planning public avec deux créneaux sélectionnés (Accueil de 9 h à 12 h et Chauffeur navette de 14 h à 18 h) ; la colonne de droite les liste, le second marqué « Sur validation · demande à accepter par l'organisation », et le bouton « Continuer (2 nouveaux créneaux) »](/doc-img/public-selection.png)
+
 Certains postes sont **réservés** à des membres de l'association : ils sont marqués « Réservé » et on s'y inscrit avec le lien personnel reçu par email dans l'invitation.
 
 Certains postes limitent le nombre de créneaux par personne. Si vous en avez déjà pris le maximum, un message en haut de la page le dit et le créneau n'est pas ajouté.
@@ -78,7 +80,7 @@ Si vos créneaux font plus de 8 h dans une journée, ou plus de 6 h d'affilée s
 
 Cliquez sur **Confirmer mon inscription**.
 
-![Formulaire d'inscription pour un poste avec âge minimum (« Navette gare ↔ backstage »), montrant le champ Date de naissance et son message « Requis : 21 ans min. »](/doc-img/public-registration-birthdate.png)
+![Formulaire d'inscription avec, à droite, le récapitulatif des créneaux choisis : Accueil (place disponible) et Chauffeur navette (sur validation, 21 ans minimum). Le champ Date de naissance porte le message « Requis : Chauffeur navette (21 ans min.) »](/doc-img/public-registration-birthdate.png)
 
 ---
 
@@ -95,6 +97,8 @@ Ce lien vous est envoyé uniquement par email, jamais affiché à l'écran, pour
 ## Gérer son inscription
 
 Depuis votre **lien personnel** (reçu par email) :
+
+![Page personnelle « Mes inscriptions » : ajout du planning au calendrier, chaque créneau avec sa date et le bouton Annuler (dont un en liste d'attente, position 1), puis le bloc « Ton lien personnel »](/doc-img/public-my-page.png)
 
 ```
 https://[organisation].benevol.app/my/[token]
