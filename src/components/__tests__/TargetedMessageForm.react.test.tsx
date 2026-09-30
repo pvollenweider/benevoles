@@ -5,6 +5,8 @@ import { describe, it, expect, vi, afterEach, beforeEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, fireEvent, cleanup, waitFor } from "@testing-library/react"
 
+vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn(), push: vi.fn() }) }))
+
 import TargetedMessageForm from "../admin/TargetedMessageForm"
 
 // « Écrire aux bénévoles » (#396): audience, live count, preview, confirmation, one send.

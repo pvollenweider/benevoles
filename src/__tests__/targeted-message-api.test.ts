@@ -26,6 +26,7 @@ const regs = [
 ]
 
 let db: Record<string, unknown>
+const historyCreate = vi.fn()
 
 const post = (body: unknown) =>
   new Request("http://localhost/api/admin/events/evt-a/message", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
@@ -41,8 +42,11 @@ describe("POST /api/admin/events/[id]/message", () => {
       event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "Fête", organizationId: "org-a", organization: { name: "Org", slug: "org" } }) },
       shift: { findFirst: vi.fn().mockResolvedValue({ id: "bar1" }) },
       registration: { findMany: vi.fn().mockResolvedValue(regs) },
+      // History row and emails in one transaction (#467).
+      $transaction: async (fn: (tx: unknown) => unknown) => fn({ targetedMessage: { create: historyCreate } }),
     }
-    requireOrgSessionMock.mockResolvedValue({ db, organizationId: "org-a", session: {} })
+    historyCreate.mockResolvedValue({ id: "msg-1" })
+    requireOrgSessionMock.mockResolvedValue({ db, organizationId: "org-a", session: { user: { id: "adm-1", name: "Léa Admin" } } })
   })
 
   it("dry run: counts the recipients and previews the email without sending", async () => {
@@ -71,6 +75,14 @@ describe("POST /api/admin/events/[id]/message", () => {
     expect(payloads[0].dedupeKey).toMatch(/^message:.+:alice$/)
     expect(deliverAfterResponse).toHaveBeenCalledWith(["row-1", "row-2"])
     expect(logEvent.mock.calls[0][0]).toMatchObject({ action: "message.sent", entityType: "Event", changes: { recipients: { to: 1 } } })
+    // Exactly one history row (#467), with the author, the text, the audience and the count, and
+    // the emails linked to it.
+    expect(historyCreate).toHaveBeenCalledOnce()
+    expect(historyCreate.mock.calls[0][0].data).toEqual({
+      organizationId: "org-a", eventId: "evt-a", authorId: "adm-1", authorName: "Léa Admin",
+      subject: base.subject, message: base.message, audienceLabel: "les bénévoles du poste « Bar »", recipientCount: 1,
+    })
+    expect(enqueueNotifications.mock.calls[0][2]).toEqual({ organizationId: "org-a", targetedMessageId: "msg-1" })
   })
 
   it("waitlist audience: waiting people, no shift list in the email", async () => {

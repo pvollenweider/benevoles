@@ -458,6 +458,15 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(prismaMock.volunteer.create).not.toHaveBeenCalled()
   })
 
+  it("POST /api/admin/events/[id]/messages/[messageId]/resend-failed returns 404 for an org-B message (#467)", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/messages/[messageId]/resend-failed/route")
+    const db = { ...mockScopedDb(), targetedMessage: { findFirst: vi.fn().mockResolvedValue(null) } }
+    requireOrgSessionMock.mockResolvedValue({ db, organizationId: ORG_A, session: SESSION_A })
+    const res = await POST(makeRequest("/api/admin/events/evt-b/messages/msg-b/resend-failed", "POST"), { params: Promise.resolve({ id: "evt-b", messageId: "msg-b" }) })
+    expect(res.status).toBe(404)
+    expect(prismaMock.notificationOutbox.updateMany).not.toHaveBeenCalled()
+  })
+
   it("GET /api/admin/members/export reads members through the scoped client only (#384)", async () => {
     const { GET } = await import("@/app/api/admin/members/export/route")
     const db = setupGuard({ volunteer: { findMany: vi.fn().mockResolvedValue([]) } })

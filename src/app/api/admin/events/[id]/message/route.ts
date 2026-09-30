@@ -88,7 +88,23 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (!rl.ok) return NextResponse.json({ error: "Trop de messages envoyés cette heure. Réessayez plus tard." }, { status: 429 })
 
   const batchId = crypto.randomUUID()
-  const outboxIds = await enqueueNotifications(recipients.map((r) => payloadFor(r, batchId)), undefined, { organizationId })
+  // The history row (#467) and its emails are stored together: no message without its trace.
+  const outboxIds = await db.$transaction(async (tx) => {
+    const history = await tx.targetedMessage.create({
+      data: {
+        organizationId,
+        eventId: id,
+        authorId: guard.session.user?.id ?? null,
+        authorName: guard.session.user?.name || guard.session.user?.email || "Administrateur",
+        subject,
+        message,
+        audienceLabel: label,
+        recipientCount: recipients.length,
+      },
+      select: { id: true },
+    })
+    return enqueueNotifications(recipients.map((r) => payloadFor(r, batchId)), tx, { organizationId, targetedMessageId: history.id })
+  })
   deliverAfterResponse(outboxIds)
 
   await logEvent({

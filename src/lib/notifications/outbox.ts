@@ -37,9 +37,9 @@ const STALE_CLAIM_MS = 15 * 60 * 1000
  */
 export type OutboxDb = {
   notificationOutbox: {
-    createMany(args: { data: { payload: Prisma.InputJsonValue; dedupeKey: string; organizationId?: string | null }[]; skipDuplicates: boolean }): Promise<{ count: number }>
+    createMany(args: { data: { payload: Prisma.InputJsonValue; dedupeKey: string; organizationId?: string | null; targetedMessageId?: string | null }[]; skipDuplicates: boolean }): Promise<{ count: number }>
     findUniqueOrThrow(args: { where: { dedupeKey: string }; select: { id: true } }): Promise<{ id: string }>
-    create(args: { data: { payload: Prisma.InputJsonValue; organizationId?: string | null }; select: { id: true } }): Promise<{ id: string }>
+    create(args: { data: { payload: Prisma.InputJsonValue; organizationId?: string | null; targetedMessageId?: string | null }; select: { id: true } }): Promise<{ id: string }>
   }
 }
 
@@ -81,15 +81,17 @@ export function openPayload(stored: unknown): NotificationPayload {
 export async function enqueueNotifications(
   payloads: NotificationPayload[],
   db: OutboxDb = prisma,
-  opts: { organizationId?: string | null } = {},
+  /** `targetedMessageId`: the history row of a targeted message (#467) these emails belong to. */
+  opts: { organizationId?: string | null; targetedMessageId?: string } = {},
 ): Promise<string[]> {
+  const link = opts.targetedMessageId ? { targetedMessageId: opts.targetedMessageId } : {}
   const ids: string[] = []
   for (const { dedupeKey, ...payload } of payloads) {
     // Stored in clear on the row (#382): the page filters on it, the payload stays sealed.
     const organizationId = payload.organizationId ?? opts.organizationId ?? null
     if (dedupeKey) {
       const { count } = await db.notificationOutbox.createMany({
-        data: [{ payload: sealPayload(payload), dedupeKey, organizationId }],
+        data: [{ payload: sealPayload(payload), dedupeKey, organizationId, ...link }],
         skipDuplicates: true,
       })
       if (count === 0) continue
@@ -97,7 +99,7 @@ export async function enqueueNotifications(
       ids.push(row.id)
       continue
     }
-    const row = await db.notificationOutbox.create({ data: { payload: sealPayload(payload), organizationId }, select: { id: true } })
+    const row = await db.notificationOutbox.create({ data: { payload: sealPayload(payload), organizationId, ...link }, select: { id: true } })
     ids.push(row.id)
   }
   return ids
