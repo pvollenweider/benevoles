@@ -3,7 +3,7 @@
 
 import type { OrgScopedPrisma } from "./prisma-org"
 import { prisma } from "./prisma"
-import { deliveryOf, type Delivery } from "./message-history"
+import { deliveryOf, pushLabel, type Delivery } from "./message-history"
 
 export type MessageHistoryItem = {
   id: string
@@ -14,6 +14,8 @@ export type MessageHistoryItem = {
   audienceLabel: string
   recipientCount: number
   delivery: Delivery
+  /** Push outcome (#468), null when none was asked. */
+  push: string | null
   /** Failed emails still in the outbox, so resendable (the cleanup removes them after 30 days). */
   retryable: number
 }
@@ -26,15 +28,16 @@ export async function loadMessageHistory(db: OrgScopedPrisma, organizationId: st
   const messages = await db.targetedMessage.findMany({
     where: { eventId },
     orderBy: { createdAt: "desc" },
-    select: { id: true, createdAt: true, authorName: true, subject: true, message: true, audienceLabel: true, recipientCount: true, sentCount: true, failedCount: true },
+    select: { id: true, createdAt: true, authorName: true, subject: true, message: true, audienceLabel: true, recipientCount: true, sentCount: true, failedCount: true, pushRequested: true, pushDevices: true, pushSent: true, pushFailed: true },
   })
   if (messages.length === 0) return []
   const rows = await prisma.notificationOutbox.findMany({
     where: { organizationId, targetedMessageId: { in: messages.map((m) => m.id) } },
     select: { targetedMessageId: true, status: true },
   })
-  return messages.map(({ sentCount, failedCount, ...m }) => ({
+  return messages.map(({ sentCount, failedCount, pushRequested, pushDevices, pushSent, pushFailed, ...m }) => ({
     ...m,
+    push: pushLabel({ pushRequested, pushDevices, pushSent, pushFailed }),
     delivery: deliveryOf({ sentCount, failedCount }, rows.filter((r) => r.targetedMessageId === m.id)),
     retryable: rows.filter((r) => r.targetedMessageId === m.id && r.status === "failed").length,
   }))

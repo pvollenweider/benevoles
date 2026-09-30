@@ -15,7 +15,7 @@ type Props = {
   initialAudience: Audience
 }
 
-type DryRun = { recipients: number; audience: string; preview: { subject: string; html: string } | null }
+type DryRun = { recipients: number; pushDevices?: number; audience: string; preview: { subject: string; html: string } | null }
 
 /**
  * Subject, message, audience; a live recipient count; a preview; then a confirmation naming the
@@ -35,7 +35,9 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
   const [confirming, setConfirming] = useState(false)
   const [sending, setSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [sent, setSent] = useState<{ sent: number; audience: string } | null>(null)
+  const [sent, setSent] = useState<{ sent: number; audience: string; pushDevices?: number; pushRequested?: boolean } | null>(null)
+  // Also a push notification (#468); the email always goes.
+  const [push, setPush] = useState(false)
   const [attempted, setAttempted] = useState(false)
   const cancelRef = useRef<HTMLButtonElement>(null)
   const resultRef = useRef<HTMLHeadingElement>(null)
@@ -94,19 +96,23 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
     const res = await fetch(`/api/admin/events/${eventId}/message`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ audience, subject, message }),
+      body: JSON.stringify({ audience, subject, message, push }),
     })
     const d = await res.json()
     setSending(false)
     setConfirming(false)
     if (!res.ok) { setError(typeof d?.error === "string" ? d.error : "Erreur lors de l'envoi."); return }
-    setSent(d)
+    setSent({ ...d, pushRequested: push })
     // The « Messages envoyés » list below (#467) shows the new message; client state is kept.
     router.refresh()
   }
 
   const recipients = dry?.recipients ?? 0
+  const pushDevices = dry?.pushDevices ?? 0
   const plural = (n: number) => `${n} personne${n > 1 ? "s" : ""}`
+  const devices = (n: number) => `${n} appareil${n > 1 ? "s" : ""}`
+  // What goes out, in one phrase for the preview and the confirmation.
+  const pushPart = push ? (pushDevices > 0 ? ` ; une notification part aussi sur ${devices(pushDevices)}` : " ; aucune notification (aucun destinataire ne les a activées)") : ""
   const inputClass = (bad: boolean) => `input ${attempted && bad ? "!border-red-600" : ""}`
 
   if (sent) {
@@ -116,9 +122,12 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
           Message envoyé à {plural(sent.sent)}
         </h2>
         <p className="text-sm text-gray-700">Destinataires : {sent.audience}. L&apos;envoi se fait dans la minute ; un email qui échoue est renvoyé automatiquement.</p>
+        {sent.pushRequested && ((sent.pushDevices ?? 0) > 0
+          ? <p className="text-sm text-gray-700">Notification envoyée sur {devices(sent.pushDevices!)}. Le résultat s&apos;affiche dans les messages envoyés.</p>
+          : <p className="text-sm text-gray-700">Aucune notification envoyée : aucun de ces destinataires n&apos;a activé les notifications.</p>)}
         <button
           type="button"
-          onClick={() => { setSent(null); setSubject(""); setMessage(""); setAttempted(false); setRestartCount((n) => n + 1) }}
+          onClick={() => { setSent(null); setSubject(""); setMessage(""); setPush(false); setAttempted(false); setRestartCount((n) => n + 1) }}
           className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         >
           Écrire un autre message
@@ -180,6 +189,17 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
         <p id={`${id}-message-hint`} className="text-xs text-gray-600 mt-1">Texte simple, les retours à la ligne sont conservés. {message.length}/{MESSAGE_BODY_MAX} caractères.</p>
       </div>
 
+      <div className="flex items-start gap-2">
+        <input id={`${id}-push`} type="checkbox" checked={push} onChange={(e) => setPush(e.target.checked)} aria-describedby={`${id}-push-hint`} className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500" />
+        <div>
+          <label htmlFor={`${id}-push`} className="text-sm font-medium text-gray-800">Envoyer aussi une notification (téléphone ou ordinateur)</label>
+          <p id={`${id}-push-hint`} className="text-xs text-gray-600 mt-0.5">
+            Pour une information urgente. Seuls les bénévoles qui ont activé les notifications la reçoivent ; l&apos;email part à tous. La notification montre l&apos;objet et la première ligne du message.
+            {!counting && dry ? (pushDevices > 0 ? ` Ces destinataires ont ${devices(pushDevices)} abonné${pushDevices > 1 ? "s" : ""} aux notifications.` : " Aucun de ces destinataires n'a activé les notifications.") : ""}
+          </p>
+        </div>
+      </div>
+
       {attempted && (subjectMissing || messageMissing) && (
         <p role="alert" className="text-sm text-red-700">Champs obligatoires manquants : {[subjectMissing && "objet", messageMissing && "message"].filter(Boolean).join(", ")}.</p>
       )}
@@ -202,7 +222,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
             <p className="text-sm text-gray-700">Tel que le recevra la première personne de la liste ; chacun voit ses propres créneaux.</p>
             <p className="text-sm"><span className="font-medium">Objet :</span> {dry.preview.subject}</p>
             <iframe title="Contenu de l'email" sandbox="" srcDoc={dry.preview.html} className="w-full h-[50vh] max-h-[28rem] border border-gray-200 rounded-lg bg-white" />
-            <p className="text-sm text-gray-800">Envoyer à <strong>{plural(recipients)}</strong> ({dry.audience}) ?</p>
+            <p className="text-sm text-gray-800">Envoyer l&apos;email à <strong>{plural(recipients)}</strong> ({dry.audience}){pushPart} ?</p>
             <div className="flex gap-3 justify-end">
               <button ref={cancelRef} type="button" onClick={() => setShowPreview(false)} className="text-sm text-gray-700 px-3 py-2 rounded hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Retour au message</button>
               <button
@@ -221,7 +241,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
         <ModalShell title="Confirmer l'envoi" onClose={() => { if (!sending) setConfirming(false) }} initialFocusRef={cancelRef} describedBy={`${id}-confirm-text`} closeOnBackdrop={false}>
           <div className="space-y-4" aria-busy={sending}>
             <p id={`${id}-confirm-text`} className="text-sm text-gray-800">
-              « {subject} » va partir à <strong>{plural(recipients)}</strong> ({dry?.audience}). Cet envoi ne peut pas être annulé.
+              « {subject} » va partir à <strong>{plural(recipients)}</strong> ({dry?.audience}){pushPart}. Cet envoi ne peut pas être annulé.
             </p>
             <div className="flex gap-3 justify-end">
               <button ref={cancelRef} type="button" aria-disabled={sending} onClick={() => { if (!sending) setConfirming(false) }} className="text-sm text-gray-700 px-3 py-2 rounded hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Annuler</button>

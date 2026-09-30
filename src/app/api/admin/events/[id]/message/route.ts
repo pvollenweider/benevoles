@@ -11,7 +11,9 @@ import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/
 import type { NotificationPayload } from "@/lib/notifications/types"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { fmtRange } from "@/lib/gantt-utils"
-import { audienceLabel, messageSchema, selectRecipients, MESSAGE_RATE_LIMIT } from "@/lib/targeted-message"
+import { audienceLabel, messagePushPayload, messageSchema, selectRecipients, MESSAGE_RATE_LIMIT } from "@/lib/targeted-message"
+import { pushDeviceCount, sendTargetedPush } from "@/lib/push"
+import { after } from "next/server"
 
 const fmtDate = (d: Date) => d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
 
@@ -29,11 +31,11 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const parsed = messageSchema.safeParse(await req.json().catch(() => ({})))
   if (!parsed.success) return validationError(parsed.error, { useIssueMessage: true })
-  const { audience, subject, message, dryRun } = parsed.data
+  const { audience, subject, message, dryRun, push } = parsed.data
 
   const event = await db.event.findFirst({
     where: { id },
-    select: { id: true, title: true, organizationId: true, organization: { select: { name: true, slug: true } } },
+    select: { id: true, title: true, slug: true, organizationId: true, organization: { select: { name: true, slug: true } } },
   })
   if (!event) return NextResponse.json({ error: "Événement non trouvé" }, { status: 404 })
 
@@ -78,7 +80,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const preview = recipients[0]
       ? render({ ...payloadFor(recipients[0], "preview"), data: { ...payloadFor(recipients[0], "preview").data, editToken: audience.kind === "waitlist" ? undefined : "apercu" } })
       : null
-    return NextResponse.json({ recipients: recipients.length, audience: label, preview: preview && { subject: preview.subject, html: preview.html } })
+    return NextResponse.json({
+      recipients: recipients.length,
+      // Devices of these recipients that would get the push (#468); counted whatever the option.
+      pushDevices: await pushDeviceCount(recipients.map((r) => r.volunteerId)),
+      audience: label,
+      preview: preview && { subject: preview.subject, html: preview.html },
+    })
   }
 
   if (recipients.length === 0) return NextResponse.json({ error: "Personne à qui écrire dans cette sélection." }, { status: 400 })
@@ -88,7 +96,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (!rl.ok) return NextResponse.json({ error: "Trop de messages envoyés cette heure. Réessayez plus tard." }, { status: 429 })
 
   const batchId = crypto.randomUUID()
+  const pushDevices = push ? await pushDeviceCount(recipients.map((r) => r.volunteerId)) : 0
   // The history row (#467) and its emails are stored together: no message without its trace.
+  let historyId: string | null = null
   const outboxIds = await db.$transaction(async (tx) => {
     const history = await tx.targetedMessage.create({
       data: {
@@ -100,12 +110,27 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         message,
         audienceLabel: label,
         recipientCount: recipients.length,
+        pushRequested: !!push,
+        pushDevices,
       },
       select: { id: true },
     })
+    historyId = history.id
     return enqueueNotifications(recipients.map((r) => payloadFor(r, batchId)), tx, { organizationId, targetedMessageId: history.id })
   })
   deliverAfterResponse(outboxIds)
+
+  // The push only complements the email (#468): sent after the response, to each recipient's own
+  // devices, opening their personal page (the waitlist has none: the event page). A push failure
+  // never touches the emails; its outcome is counted on the history row.
+  if (push && pushDevices > 0 && historyId) {
+    const messageId = historyId
+    const targets = recipients.map((r) => ({
+      volunteerId: r.volunteerId,
+      url: audience.kind === "waitlist" ? `/${event.slug}` : `/my/${registrationToken.reveal(r.registrations[0])}`,
+    }))
+    after(() => sendTargetedPush(messageId, targets, { ...messagePushPayload(subject, message), tag: `message-${messageId}` }).then(() => undefined))
+  }
 
   await logEvent({
     eventId: id,
@@ -120,5 +145,5 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     },
   })
 
-  return NextResponse.json({ sent: recipients.length, audience: label })
+  return NextResponse.json({ sent: recipients.length, audience: label, pushDevices })
 }

@@ -117,7 +117,7 @@ Ce lien donne accès à vos inscriptions et permet de les annuler : **ne le part
 
 ### Recevoir les rappels sur votre téléphone
 
-Sur votre page personnelle, vous pouvez activer les **notifications du navigateur** (aussi sur la page de confirmation si vous vous êtes inscrit·e depuis un lien d'invitation). Vous recevez alors, en plus de l'email, un rappel 2 jours avant, la veille et le jour de votre créneau. Votre navigateur vous demande d'abord votre autorisation ; vous pouvez la retirer à tout moment dans ses réglages. Le bouton n'apparaît pas si votre navigateur ne gère pas les notifications ou si le site ne les propose pas.
+Sur votre page personnelle, vous pouvez activer les **notifications du navigateur** (aussi sur la page de confirmation si vous vous êtes inscrit·e depuis un lien d'invitation). Vous recevez alors, en plus de l'email, un rappel 2 jours avant, la veille et le jour de votre créneau, et les messages urgents de l'organisation quand elle choisit de vous prévenir aussi par notification (le message complet arrive toujours par email). Votre navigateur vous demande d'abord votre autorisation ; vous pouvez la retirer à tout moment dans ses réglages. Le bouton n'apparaît pas si votre navigateur ne gère pas les notifications ou si le site ne les propose pas.
 
 Pour vous inscrire à de nouveaux créneaux, retournez sur la page de l'événement. Si vous utilisez le même navigateur, vos inscriptions existantes sont automatiquement reconnues et affichées en vert.
 

@@ -13,6 +13,10 @@ vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications, deliverAfte
 const rateLimit = vi.hoisted(() => vi.fn().mockResolvedValue({ ok: true, remaining: 1, retryAfter: 0 }))
 vi.mock("@/lib/rate-limit", () => ({ rateLimit }))
 vi.mock("@/lib/token-vault", () => ({ registrationToken: { reveal: (r: { id: string }) => `tok-${r.id}` } }))
+const push = vi.hoisted(() => ({ pushDeviceCount: vi.fn().mockResolvedValue(0), sendTargetedPush: vi.fn().mockResolvedValue({ sent: 0, failed: 0, removed: 0 }) }))
+vi.mock("@/lib/push", () => push)
+const afterCallbacks = vi.hoisted(() => [] as (() => unknown)[])
+vi.mock("next/server", async (orig) => ({ ...(await orig<typeof import("next/server")>()), after: (fn: () => unknown) => { afterCallbacks.push(fn) } }))
 vi.mock("@/lib/prisma", () => ({ prisma: {} }))
 
 const shift = (id: string, roleName: string, over: Partial<{ label: string; startTime: string }> = {}) => ({
@@ -67,7 +71,7 @@ describe("POST /api/admin/events/[id]/message", () => {
     const { POST } = await import("@/app/api/admin/events/[id]/message/route")
     const res = await POST(post({ ...base, audience: { kind: "role", roleName: "Bar" } }), params)
     expect(res.status).toBe(200)
-    expect(await res.json()).toEqual({ sent: 1, audience: "les bénévoles du poste « Bar »" })
+    expect(await res.json()).toEqual({ sent: 1, audience: "les bénévoles du poste « Bar »", pushDevices: 0 })
     const payloads = enqueueNotifications.mock.calls[0][0]
     expect(payloads).toHaveLength(1)
     expect(payloads[0]).toMatchObject({ kind: "targeted_message", recipient: { email: "alice@x.ch" }, data: { subject: base.subject, message: base.message, editToken: "tok-r1" } })
@@ -81,6 +85,7 @@ describe("POST /api/admin/events/[id]/message", () => {
     expect(historyCreate.mock.calls[0][0].data).toEqual({
       organizationId: "org-a", eventId: "evt-a", authorId: "adm-1", authorName: "Léa Admin",
       subject: base.subject, message: base.message, audienceLabel: "les bénévoles du poste « Bar »", recipientCount: 1,
+      pushRequested: false, pushDevices: 0,
     })
     expect(enqueueNotifications.mock.calls[0][2]).toEqual({ organizationId: "org-a", targetedMessageId: "msg-1" })
   })
@@ -105,5 +110,29 @@ describe("POST /api/admin/events/[id]/message", () => {
     rateLimit.mockResolvedValue({ ok: false, remaining: 0, retryAfter: 60 })
     expect((await POST(post({ ...base, audience: { kind: "event" } }), params)).status).toBe(429)
     expect(enqueueNotifications).not.toHaveBeenCalled()
+  })
+
+  it("adds a push to the recipients' devices when asked, after the response, apart from the emails (#468)", async () => {
+    push.pushDeviceCount.mockResolvedValue(2)
+    afterCallbacks.length = 0
+    const { POST } = await import("@/app/api/admin/events/[id]/message/route")
+    const dry = await POST(post({ ...base, audience: { kind: "role", roleName: "Bar" }, dryRun: true }), params)
+    expect(await dry.json()).toMatchObject({ recipients: 1, pushDevices: 2 })
+    const res = await POST(post({ ...base, message: "Parking nord.\nDétails ci-dessous.", audience: { kind: "role", roleName: "Bar" }, push: true }), params)
+    expect(await res.json()).toMatchObject({ sent: 1, pushDevices: 2 })
+    expect(historyCreate.mock.calls[0][0].data).toMatchObject({ pushRequested: true, pushDevices: 2 })
+    expect(enqueueNotifications).toHaveBeenCalledOnce() // the email goes anyway
+    expect(push.sendTargetedPush).not.toHaveBeenCalled()
+    for (const fn of afterCallbacks) await fn()
+    expect(push.sendTargetedPush).toHaveBeenCalledWith("msg-1", [{ volunteerId: "alice", url: "/my/tok-r1" }], { title: base.subject, body: "Parking nord.", tag: "message-msg-1" })
+  })
+
+  it("sends no push without the option", async () => {
+    push.pushDeviceCount.mockResolvedValue(0)
+    afterCallbacks.length = 0
+    const { POST } = await import("@/app/api/admin/events/[id]/message/route")
+    await POST(post({ ...base, audience: { kind: "event" } }), params)
+    for (const fn of afterCallbacks) await fn()
+    expect(push.sendTargetedPush).not.toHaveBeenCalled()
   })
 })

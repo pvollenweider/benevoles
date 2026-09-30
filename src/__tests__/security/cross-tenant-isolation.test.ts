@@ -77,6 +77,7 @@ const prismaMock = {
   },
   async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
 }
+vi.mock("@/lib/push", () => ({ pushDeviceCount: vi.fn().mockResolvedValue(0), sendTargetedPush: vi.fn() }))
 vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }))
 
 vi.mock("@/lib/notifications", () => ({
