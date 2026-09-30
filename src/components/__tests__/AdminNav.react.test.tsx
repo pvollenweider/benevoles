@@ -113,6 +113,7 @@ describe("AdminNav — search", () => {
 
   it("submits q to the search page", () => {
     render(<AdminNav userName="Alice" role="admin" />)
+    fireEvent.click(screen.getByRole("button", { name: "Rechercher" }))
     expect(fields()).toHaveLength(2)
     for (const input of fields()) {
       expect(input).toHaveAttribute("name", "q")
@@ -122,16 +123,44 @@ describe("AdminNav — search", () => {
     expect(screen.getAllByRole("button", { name: "Rechercher", hidden: true })).toHaveLength(2)
   })
 
-  it("Ctrl+K and ⌘K focus the bar's field when it's shown", () => {
+  // jsdom has no layout: offsetParent is null for every element unless faked.
+  const shown = (el: HTMLElement) => Object.defineProperty(el, "offsetParent", { get: () => document.body })
+  const barToggle = () => screen.getByRole("button", { name: "Rechercher" })
+
+  it("the bar shows a search button, not a field (#496); clicking it opens the field, focused", () => {
     render(<AdminNav userName="Alice" role="admin" />)
-    const desktop = document.getElementById("admin-search")!
-    // jsdom has no layout: offsetParent is null for every element unless faked.
-    Object.defineProperty(desktop, "offsetParent", { get: () => document.body })
+    expect(document.getElementById("admin-search")).toBeNull()
+    expect(barToggle()).toHaveAttribute("aria-keyshortcuts", "Control+K Meta+K")
+    fireEvent.click(barToggle())
+    expect(document.getElementById("admin-search")).toHaveFocus()
+  })
+
+  it("Ctrl+K and ⌘K open the bar's field and focus it; Escape closes it, back on the button", () => {
+    render(<AdminNav userName="Alice" role="admin" />)
+    shown(barToggle())
     fireEvent.keyDown(document.body, { key: "k", ctrlKey: true })
-    expect(desktop).toHaveFocus()
-    desktop.blur()
+    const field = document.getElementById("admin-search")!
+    expect(field).toHaveFocus()
+    fireEvent.keyDown(field, { key: "Escape" })
+    expect(document.getElementById("admin-search")).toBeNull()
+    expect(barToggle()).toHaveFocus()
+    // The menu panel didn't open on the way.
+    expect(screen.getByRole("button", { name: "Menu" })).toHaveAttribute("aria-expanded", "false")
+    shown(barToggle())
     fireEvent.keyDown(document.body, { key: "k", metaKey: true })
-    expect(desktop).toHaveFocus()
+    expect(document.getElementById("admin-search")).toHaveFocus()
+  })
+
+  it("leaving the field empty closes it; a typed query stays", () => {
+    render(<AdminNav userName="Alice" role="admin" />)
+    fireEvent.click(barToggle())
+    const field = document.getElementById("admin-search") as HTMLInputElement
+    fireEvent.change(field, { target: { value: "zoé" } })
+    fireEvent.blur(field)
+    expect(document.getElementById("admin-search")).not.toBeNull()
+    fireEvent.change(field, { target: { value: "" } })
+    fireEvent.blur(field)
+    expect(document.getElementById("admin-search")).toBeNull()
   })
 
   it("Ctrl+K opens the menu and focuses its field on a small screen", () => {

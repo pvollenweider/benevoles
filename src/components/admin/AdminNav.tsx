@@ -28,6 +28,13 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
   const panelRef = useRef<HTMLDivElement>(null)
   const panelId = useId()
   const searchRef = useRef<HTMLInputElement>(null)
+  // The bar shows a search button; the field opens in its place, focused, on click or with the
+  // shortcut (#496). Escape closes it and puts focus back on the button.
+  const [searchOpen, setSearchOpen] = useState(false)
+  const searchToggleRef = useRef<HTMLButtonElement>(null)
+  const searchFormRef = useRef<HTMLFormElement>(null)
+  const focusSearch = useRef(false)
+  const refocusToggle = useRef(false)
   const mobileSearchRef = useRef<HTMLInputElement>(null)
   const focusMobileSearch = useRef(false)
 
@@ -35,8 +42,9 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
   const onSearchPage = pathname === "/admin/search"
 
   // Ctrl+K / ⌘K focuses the search field (#377). A modifier shortcut, not a single character key,
-  // so it can't fire while someone types or dictates (WCAG 2.1.4). Below `md` the field is in the
-  // menu panel: open it, then focus once it's shown. On the search page, its own field.
+  // so it can't fire while someone types or dictates (WCAG 2.1.4). In the bar it opens the field
+  // first (#496). Below `md` the field is in the menu panel: open it, then focus once it's shown.
+  // On the search page, its own field.
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       // Password managers and autofill dispatch synthetic keydowns without a key (Sentry: TypeError on /admin/login).
@@ -52,6 +60,9 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
         pageField.focus()
       } else if (searchRef.current && searchRef.current.offsetParent !== null) {
         searchRef.current.focus()
+      } else if (searchToggleRef.current && searchToggleRef.current.offsetParent !== null) {
+        focusSearch.current = true
+        setSearchOpen(true)
       } else {
         focusMobileSearch.current = true
         setMobileOpen(true)
@@ -60,6 +71,22 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
     document.addEventListener("keydown", onKeyDown)
     return () => document.removeEventListener("keydown", onKeyDown)
   }, [])
+
+  // Focus follows the field: into it when it opens, back on the button when Escape closes it.
+  useEffect(() => {
+    if (searchOpen && focusSearch.current) {
+      focusSearch.current = false
+      searchRef.current?.focus()
+    } else if (!searchOpen && refocusToggle.current) {
+      refocusToggle.current = false
+      searchToggleRef.current?.focus()
+    }
+  }, [searchOpen])
+
+  function openSearch() {
+    focusSearch.current = true
+    setSearchOpen(true)
+  }
 
   useEffect(() => {
     if (mobileOpen && focusMobileSearch.current) {
@@ -116,8 +143,46 @@ export default function AdminNav({ userName, role, orgName }: { userName: string
         </div>
         <div className="flex items-center gap-3 lg:gap-4 shrink-0">
           <div className="hidden md:flex items-center gap-3 lg:gap-4">
-            {!onSearchPage && (
-              <form role="search" aria-label="Recherche globale" action="/admin/search" className="flex">
+            {!onSearchPage && !searchOpen && (
+              // Still a search landmark while closed, so it's found by landmark navigation.
+              <div role="search" aria-label="Recherche globale">
+              <button
+                ref={searchToggleRef}
+                type="button"
+                onClick={openSearch}
+                aria-keyshortcuts="Control+K Meta+K"
+                title="Ctrl+K ou ⌘K"
+                className="inline-flex items-center justify-center w-8 h-8 text-gray-700 rounded-lg hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600"
+              >
+                <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
+                  <circle cx="8.5" cy="8.5" r="5.5" />
+                  <path d="m13 13 4 4" strokeLinecap="round" />
+                </svg>
+                <span className="sr-only">Rechercher</span>
+              </button>
+              </div>
+            )}
+            {!onSearchPage && searchOpen && (
+              <form
+                ref={searchFormRef}
+                role="search"
+                aria-label="Recherche globale"
+                action="/admin/search"
+                className="flex"
+                onKeyDown={(e) => {
+                  if (e.key !== "Escape") return
+                  e.stopPropagation()
+                  refocusToggle.current = true
+                  setSearchOpen(false)
+                }}
+                onBlur={(e) => {
+                  // Switching window or app blurs too: the field waits for the person to come back.
+                  if (!document.hasFocus()) return
+                  // Leaving an empty field closes it; a typed query stays until Escape or submit.
+                  if (searchFormRef.current?.contains(e.relatedTarget as Node | null)) return
+                  if (!searchRef.current?.value) setSearchOpen(false)
+                }}
+              >
                 <label htmlFor="admin-search" className="sr-only">Rechercher un bénévole, un événement ou un poste</label>
                 <input
                   ref={searchRef}
