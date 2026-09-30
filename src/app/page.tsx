@@ -6,17 +6,27 @@ import { prisma } from "@/lib/prisma"
 import { formatShortDate } from "@/lib/utils"
 import { resolveOrgSlug } from "@/lib/resolve-org"
 import PublicFooter from "@/components/PublicFooter"
+import { apexBaseUrl } from "@/lib/urls"
 import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
 
 export const dynamic = "force-dynamic"
 
 const DEFAULT_TITLE = "Bénévoles"
 
+// The marketing home of the apex host: its own title and description, canonical on the apex.
+const APEX_DESCRIPTION = "Planifiez vos bénévoles par postes et créneaux, partagez un lien d'inscription sans compte et gardez une vue claire du planning. Pour associations et événements."
+const APEX_METADATA: Metadata = {
+  title: "benevol.app — le planning des bénévoles pour associations et événements",
+  description: APEX_DESCRIPTION,
+  alternates: { canonical: `${apexBaseUrl()}/` },
+  openGraph: { type: "website", siteName: "benevol.app", locale: "fr_CH", url: `${apexBaseUrl()}/`, title: "benevol.app", description: APEX_DESCRIPTION },
+}
+
 // Document title = the organization's public title (h1), default "Bénévoles".
 // resolveOrgSlug is cached per request, so this adds no extra query.
 export async function generateMetadata(): Promise<Metadata> {
   const rawOrgSlug = (await headers()).get("x-org-slug")
-  if (!rawOrgSlug) return {}
+  if (!rawOrgSlug) return APEX_METADATA
   const resolved = await resolveOrgSlug(rawOrgSlug)
   if (!resolved || resolved.redirectUrl) return {}
   return { title: resolved.org.publicTitle?.trim() || DEFAULT_TITLE }
@@ -364,6 +374,11 @@ function LandingPage() {
             </p>
           </li>
         </ul>
+        <p className="mt-10 text-center">
+          <Link href="/fonctionnalites" className="text-base font-semibold text-blue-700 underline underline-offset-4 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700">
+            Voir toutes les fonctionnalités<span aria-hidden="true"> →</span>
+          </Link>
+        </p>
       </section>
 
       {/* ── Signal communauté ─────────────────────────────────────────────── */}

@@ -20,7 +20,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
           prose-h3:text-sm prose-h3:mt-6 prose-h3:mb-2 prose-h3:text-gray-700
           prose-p:text-sm prose-p:text-gray-600 prose-p:leading-relaxed
           prose-li:text-sm prose-li:text-gray-600
-          prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+          prose-a:text-blue-600 prose-a:underline prose-a:underline-offset-2 hover:prose-a:decoration-2
           prose-strong:text-gray-800 prose-strong:font-semibold
           prose-code:text-xs prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-gray-700 prose-code:before:content-none prose-code:after:content-none
           prose-table:text-sm prose-th:text-xs prose-th:uppercase prose-th:tracking-wider prose-th:text-gray-500 prose-th:font-medium

@@ -23,6 +23,7 @@ describe("sitemap on the apex host", () => {
     const entries = await sitemap()
     expect(entries.map((e) => e.url)).toEqual([
       "https://www.benevol.app/",
+      "https://www.benevol.app/fonctionnalites",
       "https://www.benevol.app/doc",
       "https://www.benevol.app/doc/admin",
       "https://www.benevol.app/doc/benevole",
@@ -37,5 +38,22 @@ describe("sitemap on the apex host", () => {
     expect(await sitemap()).toEqual([])
     withHeaders({ host: "evil-benevol.app" })
     expect(await sitemap()).toEqual([])
+  })
+})
+
+describe("sitemap on an organisation host", () => {
+  beforeEach(() => {
+    vi.resetModules()
+    vi.stubEnv("NEXT_PUBLIC_APP_URL", "https://www.benevol.app")
+  })
+  afterEach(() => vi.unstubAllEnvs())
+
+  it("never lists the features page or the documentation", async () => {
+    const { resolveOrgSlug } = await import("@/lib/resolve-org")
+    vi.mocked(resolveOrgSlug).mockResolvedValue({ org: { id: "o", slug: "asso" } } as never)
+    withHeaders({ host: "asso.benevol.app", "x-org-slug": "asso" })
+    const sitemap = (await import("../app/sitemap")).default
+    const urls = (await sitemap()).map((e) => e.url)
+    expect(urls.some((u) => u.includes("/fonctionnalites") || u.includes("/doc"))).toBe(false)
   })
 })

@@ -1,32 +1,51 @@
 "use client"
 
-import { useState, useSyncExternalStore } from "react"
+import { useEffect, useState, useSyncExternalStore } from "react"
 
-// Both icons always render; which one is visible is driven purely by the `dark` class already on
-// <html> (set by the inline script in layout.tsx before hydration, or by toggle() below) — never
-// by React state directly. isDark below only drives aria-pressed/the announcement wording.
+// The `dark` class lives on the content shell's own root ([data-theme-scope], see
+// src/components/public/ContentShell.tsx), never on <html>: leaving the features page or the
+// documentation for the home page must not carry the dark theme along. Both icons always render;
+// which one shows is driven by that class. isDark only drives aria-pressed and the announcement.
 
-// Nothing outside toggle() ever mutates the class, so there's no real external event to
-// subscribe to — toggle()'s own setAnnouncement call already triggers the re-render that picks
-// up the new getSnapshot() value. useSyncExternalStore (not useState+useEffect) is what lets
-// getServerSnapshot supply a definite value during SSR/hydration without a lint-flagged
-// setState-in-effect correction afterward.
-function subscribe() {
-  return () => {}
+const EVENT = "doc-theme-change"
+const scope = () => document.querySelector<HTMLElement>("[data-theme-scope]")
+
+function subscribe(onChange: () => void) {
+  window.addEventListener(EVENT, onChange)
+  return () => window.removeEventListener(EVENT, onChange)
 }
 function getSnapshot() {
-  return document.documentElement.classList.contains("dark")
+  return scope()?.classList.contains("dark") ?? false
 }
 function getServerSnapshot() {
   return false
+}
+
+/** The saved choice, else the OS/browser preference. */
+function preferredDark(): boolean {
+  try {
+    const stored = localStorage.getItem("doc-theme")
+    if (stored) return stored === "dark"
+  } catch {
+    // Storage disabled: fall back to the system preference.
+  }
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
 }
 
 export default function DocThemeToggle() {
   const isDark = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
   const [announcement, setAnnouncement] = useState("")
 
+  // The inline script only runs on a full page load; arriving by client navigation (from the home
+  // page's « Voir toutes les fonctionnalités »), apply the preference here.
+  useEffect(() => {
+    scope()?.classList.toggle("dark", preferredDark())
+    window.dispatchEvent(new Event(EVENT))
+  }, [])
+
   function toggle() {
-    const root = document.documentElement
+    const root = scope()
+    if (!root) return
     const next = !root.classList.contains("dark")
     root.classList.toggle("dark", next)
     try {
@@ -34,6 +53,7 @@ export default function DocThemeToggle() {
     } catch {
       // Private browsing / storage disabled — the choice just won't survive a reload.
     }
+    window.dispatchEvent(new Event(EVENT))
     setAnnouncement(next ? "Thème sombre activé." : "Thème clair activé.")
   }
 
@@ -43,9 +63,9 @@ export default function DocThemeToggle() {
       <button
         type="button"
         onClick={toggle}
-        aria-label="Changer de thème (clair / sombre)"
+        aria-label="Thème sombre"
         aria-pressed={isDark}
-        className="p-2 -m-2 rounded-full text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800 transition-colors"
+        className="p-2 -m-2 rounded-full text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-800 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
       >
         <svg aria-hidden="true" className="w-4 h-4 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="4" />

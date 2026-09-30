@@ -3,7 +3,7 @@ import "./globals.css"
 
 export const metadata: Metadata = {
   title: "Bénévoles",
-  description: "Inscriptions bénévoles",
+  description: "Planning et inscriptions des bénévoles pour associations et événements.",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

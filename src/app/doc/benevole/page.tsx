@@ -1,20 +1,18 @@
-import fs from "fs"
-import path from "path"
-import { renderEventPageMarkdown } from "@/lib/event-page-markdown"
+import type { Metadata } from "next"
+import { publicPageMetadata } from "@/lib/doc-pages"
+import { renderPublicSource } from "@/lib/public-content"
+import { apexBaseUrl } from "@/lib/urls"
 
-export const metadata = { title: "Guide bénévole — benevol.app" }
+export function generateMetadata(): Metadata {
+  return publicPageMetadata("/doc/benevole", apexBaseUrl())
+}
 
-// Rendered from the repo's own GUIDE_BENEVOLE.md — see src/app/doc/admin/page.tsx for why the
-// Dockerfile needs an explicit COPY for this file under output: "standalone".
+// Rendered from the repo's own GUIDE_BENEVOLE.md (source of truth, also readable on GitHub).
 export default function DocBenevolePage() {
-  const raw = fs.readFileSync(path.join(process.cwd(), "GUIDE_BENEVOLE.md"), "utf-8")
-  // shiftHeadings: false — see src/app/doc/admin/page.tsx.
-  const body = raw.replace(/^# .+\n/, "")
-  const html = renderEventPageMarkdown(body, { shiftHeadings: false })
-
+  const { title, html } = renderPublicSource("GUIDE_BENEVOLE.md", "Guide bénévole")
   return (
     <>
-      <h1>Guide bénévole</h1>
+      <h1>{title}</h1>
       <div dangerouslySetInnerHTML={{ __html: html }} />
     </>
   )
