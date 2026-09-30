@@ -445,7 +445,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
               {hours.map(h => (
                 <div
                   key={h}
-                  className="absolute top-1 text-[10px] text-gray-500 leading-none"
+                  className="absolute top-1 text-[10px] text-gray-700 leading-none"
                   style={{
                     left: LABEL_W + (h * 60 - dayStart) * PX_PER_MIN,
                     transform: "translateX(-50%)",
