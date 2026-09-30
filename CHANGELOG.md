@@ -35,6 +35,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Rapports imprimables** : moins d'encre. Dans les plannings, chaque créneau est une case blanche à bordure épaisse au lieu d'un bloc noir ; les en-têtes de tableaux (feuille de présence, liste avec téléphones, détails) sont en gras sur un trait plutôt que sur un bandeau noir.
 - **Formulaires des membres** (fiche membre, import, désactivation, responsables de secteur) : même comportement que les formulaires de connexion : erreurs à côté du champ, message conservé, pas de double envoi, panne de réseau expliquée ; la désactivation d'un membre et le retrait d'un responsable demandent une confirmation qui dit ce qui va se passer.
 - **Formulaires des créneaux** (création d'un créneau ou d'une série, renommage, couleur et ordre des postes, modifications depuis le planning) : une erreur ou une panne de réseau est expliquée au lieu d'échouer en silence, sans double envoi ; supprimer un créneau ou un poste demande une confirmation qui dit combien de bénévoles sont inscrits et qu'ils seront prévenus.
 - **Formulaires de l'événement** (jalons, pages d'information, invitations, relances, rappel manuel) : une erreur ou une panne de réseau est expliquée, la sélection ou la saisie est conservée et **Réessayer** est proposé ; supprimer un jalon ou une page demande une confirmation.

@@ -236,7 +236,7 @@ const BUILDERS: Record<SheetView, (d: SheetData) => string> = {
 
 /**
  * The whole printable page for one view. Monochrome by design: one ink, one light grey band;
- * the Gantt bars are solid black with white first names, as in the full export.
+ * the Gantt bars are white with a 2px ink outline and the light grey band is the only fill.
  */
 export function renderSheet(view: SheetView, d: SheetData): string {
   const meta = SHEET_VIEWS.find((s) => s.id === view)!
@@ -276,9 +276,9 @@ export function renderSheet(view: SheetView, d: SheetData): string {
     .muted { font-style: italic; color: var(--ink-2); }
     .notice { border: 2px solid var(--ink); padding: 6px 10px; font-weight: 700; font-size: 13px; margin-bottom: 12px; }
 
-    /* ── Detail tables: horizontal rules only, solid header band ─────────── */
+    /* ── Detail tables: horizontal rules only; the header is bold text over a rule, no ink band ── */
     table.detail, table.attendance { border-collapse: collapse; width: 100%; margin: 6px 0 4px; }
-    .detail th, .attendance th { background: var(--ink); color: #fff; font-weight: 600; font-size: 11px; text-align: left; padding: 4px 8px; letter-spacing: 0.01em; }
+    .detail th, .attendance th { background: #fff; color: var(--ink); font-weight: 700; font-size: 11px; text-align: left; padding: 4px 8px; letter-spacing: 0.01em; border-bottom: 2px solid var(--ink); }
     .detail td, .attendance td { padding: 5px 8px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; text-align: left; font-size: 12px; }
     .detail tbody tr:nth-child(even) td { background: var(--band); }
     .detail tr, .attendance tr { page-break-inside: avoid; break-inside: avoid; }
@@ -303,16 +303,20 @@ export function renderSheet(view: SheetView, d: SheetData): string {
     .card-title { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
     .card p { font-size: 12px; }
 
-    /* ── Gantt (shared markup with the full export), monochrome ─────────── */
+    /* ── Gantt (shared markup with the full export), monochrome and ink-sparing: white bars with a
+          thick outline instead of solid fills, bold header text instead of a band ─────────── */
     .gantt-table { border-collapse: collapse; table-layout: auto; width: 100%; margin: 4px 0 8px; }
     .gantt-table th, .gantt-table td { border: 1px solid var(--rule-soft); padding: 2px 4px; vertical-align: middle; }
-    .gantt-table .th-role, .gantt-table .th-label { min-width: 90px; text-align: left; font-size: 11px; background: var(--ink); color: #fff; }
+    .gantt-table .th-role, .gantt-table .th-label { min-width: 90px; text-align: left; font-size: 11px; font-weight: 700; background: #fff; color: var(--ink); border-bottom: 2px solid var(--ink); }
     .gantt-table .slot-th { min-width: 14px; font-size: 11px; color: var(--ink-2); text-align: left; padding: 1px 2px; border-left: 1px solid var(--rule-soft); border-right: 0; background: #fff; }
+    .gantt-table thead th { border-bottom: 2px solid var(--ink); }
     .gantt-table .hour-th { border-left: 2px solid var(--ink) !important; font-weight: 700; color: var(--ink); }
     .gantt-table .hour-mark { border-left: 2px solid var(--rule) !important; }
     .gantt-table .role-cell { text-align: left; font-weight: 700; font-size: 11px; white-space: normal; border-right: 2px solid var(--ink); border-top: 2px solid var(--ink); }
     .gantt-table .label-cell { font-size: 11px; color: var(--ink-2); white-space: normal; border-right: 2px solid var(--ink); }
-    .gantt-table .shift-cell { background: var(--ink); color: #fff; font-size: 11px; font-weight: 600; text-align: left; vertical-align: top; white-space: normal; line-height: 1.3; padding: 3px 5px; border-left: 2px solid #fff !important; border-right: 2px solid #fff !important; }
+    .gantt-table .shift-cell { background: #fff; color: var(--ink); font-size: 11px; font-weight: 600; text-align: left; vertical-align: top; white-space: normal; line-height: 1.3; padding: 3px 5px; border: 2px solid var(--ink) !important; }
+    /* Two bars back to back: a double rule so the boundary reads as two boxes, not one split box. */
+    .gantt-table .shift-cell + .shift-cell { border-left: 5px double var(--ink) !important; }
     .gantt-table .empty-cell { background: #fff; border-left: 1px solid var(--rule-soft); border-right: 0; }
     .gantt-table tr.role-last td, .gantt-table tr.role-last th { border-bottom: 2px solid var(--ink); }
 
@@ -327,7 +331,7 @@ export function renderSheet(view: SheetView, d: SheetData): string {
       .stats { white-space: nowrap; }
       .gantt-table .slot-th { font-size: 9px; }
       .gantt-table .label-cell, .gantt-table .shift-cell { font-size: 10px; }
-      th, .shift-cell, .detail tbody tr:nth-child(even) td { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .detail tbody tr:nth-child(even) td { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     }
     @media (prefers-reduced-motion: no-preference) { .print-btn { transition: background-color 150ms ease-out; } }
   </style>
