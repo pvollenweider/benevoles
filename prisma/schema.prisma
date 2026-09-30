@@ -273,6 +273,10 @@ model Shift {
   // default. Shared per role, set uniformly across its shifts — see displayOrder above and
   // issue #219.
   colorKey        String?
+  // Optional limit of shifts per volunteer for this role (#466): live registrations (confirmed,
+  // offered, waitlist) of one volunteer on the role's shifts of the event. Shared per role, set
+  // uniformly across its shifts like colorKey. Null = no limit.
+  maxPerVolunteer Int?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 

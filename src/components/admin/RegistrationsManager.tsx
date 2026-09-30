@@ -77,6 +77,8 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   const [roleFilter, setRoleFilter] = useState(initialShift?.roleName ?? "")
   const [shiftFilter, setShiftFilter] = useState(initialShiftFilter ?? "")
   const [showAddForm, setShowAddForm] = useState(false)
+  // The request the role-limit warning is about: the override only applies to that exact form.
+  const [overLimitFor, setOverLimitFor] = useState<string | null>(null)
   const [addForm, setAddForm] = useState({ firstName: "", lastName: "", email: "", phone: "", shiftId: "", comment: "" })
   // Manual addition: what this shift would add to the workload of a volunteer already registered.
   const addWarnings = useMemo(() => {
@@ -88,6 +90,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     const before = new Set(workloadWarnings(held.map((r) => r.shift), timeZone).map(workloadMessage))
     return workloadWarnings([...held.map((r) => r.shift), shift], timeZone).map(workloadMessage).filter((m) => !before.has(m))
   }, [addForm.email, addForm.shiftId, shifts, registrations, timeZone])
+  const overLimit = overLimitFor === JSON.stringify(addForm)
   const [adding, setAdding] = useState(false)
   const [addError, setAddError] = useState<string | null>(null)
   const [leaderTarget, setLeaderTarget] = useState<{
@@ -369,22 +372,28 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     setLeaderAnnouncement(resendAnnouncement(succeeded, failed))
   }
 
-  async function handleAdd(e: React.FormEvent) {
-    e.preventDefault()
+  async function handleAdd(e: React.FormEvent | null, allowOverLimit = false) {
+    e?.preventDefault()
+    if (adding) return
     if (!addForm.shiftId) { setAddError("Sélectionnez un créneau."); return }
     setAdding(true)
-    setAddError(null)
+    // Forcing past the role limit: the alert and its button stay until the answer, so focus stays put.
+    if (!allowOverLimit) { setAddError(null); setOverLimitFor(null) }
 
     const res = await fetch("/api/admin/registrations", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ eventId, ...addForm }),
+      body: JSON.stringify({ eventId, ...addForm, ...(allowOverLimit ? { allowOverLimit: true } : {}) }),
     })
 
     const data = await res.json()
     setAdding(false)
 
+    // The role's limit per person (#466): the organiser may go over it, after reading why.
+    if (res.status === 409 && data.code === "role_limit") { setAddError(data.error); setOverLimitFor(JSON.stringify(addForm)); return }
+    setOverLimitFor(null)
     if (!res.ok) { setAddError(data.error ?? "Erreur."); return }
+    setAddError(null)
 
     const shiftRef = shifts.find(s => s.id === addForm.shiftId)
     const newReg: Registration = {
@@ -581,10 +590,20 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
               </div>
             )}
           </div>
-          {addError && <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{addError}</div>}
+          {addError && (
+            <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">
+              <p id="add-error">{addError}</p>
+              {overLimitFor !== null && !overLimit && <p className="mt-1">Le formulaire a changé : validez à nouveau.</p>}
+              {overLimit && (
+                <button type="button" onClick={() => { if (!adding) handleAdd(null, true) }} aria-disabled={adding || undefined} aria-describedby="add-error" className={`mt-2 text-sm font-medium text-red-800 underline underline-offset-2 hover:text-red-950 ${adding ? "opacity-60 cursor-wait" : ""}`}>
+                  {adding ? "Ajout en cours…" : "Ajouter quand même"}
+                </button>
+              )}
+            </div>
+          )}
 
           <div className="flex gap-3">
-            <button type="submit" disabled={adding} aria-describedby={addWarnings.length > 0 ? "add-workload" : undefined} className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 disabled:opacity-50">
+            <button type="submit" aria-disabled={adding || undefined} aria-describedby={addWarnings.length > 0 ? "add-workload" : undefined} className={`bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 ${adding ? "opacity-60 cursor-wait" : ""}`}>
               {adding ? "…" : "Ajouter"}
             </button>
             <button type="button" onClick={() => setShowAddForm(false)} className="text-gray-500 px-3 py-2 text-sm hover:text-gray-800">Annuler</button>

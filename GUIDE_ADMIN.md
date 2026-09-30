@@ -183,12 +183,13 @@ La vue des inscriptions (`/admin/events/[id]/registrations`) affiche les bénév
 
 ### Gérer les postes
 
-Le bouton **Gérer les postes** ouvre un panneau qui regroupe trois actions, poste par poste :
+Le bouton **Gérer les postes** ouvre un panneau qui regroupe ces actions, poste par poste :
 
 - **Réordonner** : glissez-déposez une ligne. L'ordre défini ici s'applique à la timeline admin **et** à la page publique.
 - **Renommer** : clique sur « Renommer », tape le nouveau nom, valide. Tous les créneaux de ce poste sont renommés d'un coup — impossible de renommer vers un nom déjà utilisé par un autre poste (pour ne pas fusionner deux postes par erreur).
 - **Supprimer** : annule tous les créneaux de ce poste (comme une suppression de créneau individuelle) — une confirmation indique le nombre de créneaux et de bénévoles concernés ; ces derniers sont prévenus par email.
 - **Couleur** : le point coloré à gauche du nom ouvre un choix parmi 16 couleurs prédéfinies (ou « Automatique » pour revenir à la couleur assignée par défaut). S'applique à la timeline admin et à la page publique.
+- **Limite par personne** : le bouton « Limite » fixe le nombre maximum de créneaux de ce poste qu'une même personne peut prendre (par exemple 2 pour la loge des artistes, pour que plus de monde y participe). Laissez vide pour ne pas limiter. Comptent toutes les inscriptions de la personne sur ce poste, confirmées ou en liste d'attente ; les annulées ne comptent pas. La page publique empêche de sélectionner un créneau de trop et dit pourquoi ; le serveur refuse aussi toute inscription au-delà, même envoyée en même temps qu'une autre. Les inscriptions déjà au-delà d'une nouvelle limite restent. En ajoutant quelqu'un à la main, l'administration prévient et propose **Ajouter quand même**. La limite est copiée avec l'événement.
 
 ### Âge minimum sur un poste
 

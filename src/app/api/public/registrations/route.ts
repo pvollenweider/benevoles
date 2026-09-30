@@ -26,6 +26,7 @@ import {
 import { z } from "zod"
 import { linkToken, registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
+import { RoleLimitError, roleLimitBreaches, roleLimitMessage, roleLimits } from "@/lib/role-limit"
 
 const schema = z.object({
   eventId: z.string(),
@@ -291,6 +292,21 @@ export async function POST(req: Request) {
       })
       const clashNow = findOverlap(liveNow, shifts)
       if (clashNow) throw new OverlapError(clashNow.label)
+
+      // Shifts per volunteer for a role (#466), under the same volunteer lock, so two concurrent
+      // sign-ups of one person can't both pass. Every live registration counts, waitlist included.
+      const limits = roleLimits(await tx.shift.findMany({
+        where: { eventId, roleName: { in: [...new Set(shifts.map((s) => s.roleName))] }, maxPerVolunteer: { not: null } },
+        select: { roleName: true, maxPerVolunteer: true },
+      }))
+      if (limits.size > 0) {
+        const held = await tx.registration.findMany({
+          where: { volunteerId, eventId, status: { in: [...LIVE_STATUSES] }, shift: { roleName: { in: [...limits.keys()] } } },
+          select: { shift: { select: { roleName: true } } },
+        })
+        const [breach] = roleLimitBreaches(shifts, held.map((h) => h.shift), limits)
+        if (breach) throw new RoleLimitError(breach)
+      }
       const created = []
       for (const shift of shifts) {
         const occupied = await tx.registration.count({
@@ -333,6 +349,9 @@ export async function POST(req: Request) {
         error: `Le créneau "${e.label}" est complet. Veuillez recharger la page.`,
         fullShiftId: e.shiftId,
       }, { status: 409 })
+    }
+    if (e instanceof RoleLimitError) {
+      return NextResponse.json({ error: roleLimitMessage(e.breach), roleLimit: e.breach.roleName }, { status: 409 })
     }
     if (e instanceof OverlapError) {
       return NextResponse.json({

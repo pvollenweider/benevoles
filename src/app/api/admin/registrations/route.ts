@@ -9,6 +9,7 @@ import { adminActor, logEvent } from "@/lib/event-log"
 import { isUniqueViolation } from "@/lib/registration-capacity"
 import { registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
+import { roleLimitAdminMessage, roleLimitBreaches, roleLimits } from "@/lib/role-limit"
 
 const schema = z.object({
   eventId: z.string(),
@@ -18,6 +19,8 @@ const schema = z.object({
   email: z.string().trim().toLowerCase().email().optional().or(z.literal("")),
   phone: z.string().optional(),
   comment: z.string().optional(),
+  /** The admin saw the role-limit warning and adds anyway (#466). */
+  allowOverLimit: z.boolean().optional(),
 })
 
 export async function POST(req: Request) {
@@ -29,7 +32,7 @@ export async function POST(req: Request) {
   const parsed = schema.safeParse(body)
   if (!parsed.success) return validationError(parsed.error)
 
-  const { eventId, shiftId, firstName, lastName, email, phone, comment } = parsed.data
+  const { eventId, shiftId, firstName, lastName, email, phone, comment, allowOverLimit } = parsed.data
 
   const shift = await db.shift.findFirst({
     where: { id: shiftId, eventId },
@@ -42,6 +45,24 @@ export async function POST(req: Request) {
   let volunteer = usedEmail
     ? await db.volunteer.findFirst({ where: { email: usedEmail, organizationId } })
     : null
+
+  // Shifts per volunteer for the role (#466): the organiser may go over it, but knowingly.
+  if (volunteer && !allowOverLimit) {
+    const limits = roleLimits(await db.shift.findMany({
+      where: { eventId, roleName: shift.roleName, maxPerVolunteer: { not: null } },
+      select: { roleName: true, maxPerVolunteer: true },
+    }))
+    if (limits.size > 0) {
+      const held = await db.registration.findMany({
+        where: { volunteerId: volunteer.id, eventId, status: { in: ["active", "waiting", "offered"] }, shift: { roleName: shift.roleName } },
+        select: { id: true },
+      })
+      const [breach] = roleLimitBreaches([shift], held.map(() => ({ roleName: shift.roleName })), limits)
+      if (breach) {
+        return NextResponse.json({ error: roleLimitAdminMessage(breach, `${volunteer.firstName} ${volunteer.lastName}`), code: "role_limit" }, { status: 409 })
+      }
+    }
+  }
 
   if (!volunteer) {
     volunteer = await db.volunteer.create({
@@ -79,7 +100,7 @@ export async function POST(req: Request) {
     action: "registration.created",
     entityType: "Registration",
     entityId: registration.id,
-    changes: { shiftId: { from: null, to: shiftId }, source: { from: null, to: "admin_manual" } },
+    changes: { shiftId: { from: null, to: shiftId }, source: { from: null, to: "admin_manual" }, ...(allowOverLimit ? { overRoleLimit: { from: null, to: true } } : {}) },
   })
 
   return NextResponse.json(registration, { status: 201 })

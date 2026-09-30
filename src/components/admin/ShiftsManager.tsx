@@ -13,6 +13,7 @@ import { flushSync } from "react-dom"
 import { KNOWN_ROLES, COLOR_OPTIONS, getRoleAccent } from "@/lib/roles"
 import { fmtRange, resolveNewShiftDisplayOrder, isCompleteTime, addMinutes } from "@/lib/gantt-utils"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
+import { roleLimits } from "@/lib/role-limit"
 import ShiftSeriesForm from "./ShiftSeriesForm"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import {
@@ -41,6 +42,8 @@ type RawShift = AdminShift & {
   description?: string | null; internalNotes?: string | null; locationDetails?: string | null
   contactName?: string | null; contactPhone?: string | null; instructions?: string | null
   latitude?: number | null; longitude?: number | null
+  /** Shifts per volunteer for the role (#466), shared by the role's shifts. */
+  maxPerVolunteer?: number | null
 }
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
@@ -78,6 +81,12 @@ export default function ShiftsManager({
   const [roleActionBusy, setRoleActionBusy]   = useState<string | null>(null)
   const [roleAnnouncement, setRoleAnnouncement] = useState("")
   const [colorPickerRole, setColorPickerRole] = useState<string | null>(null)
+  const [limitRole, setLimitRole] = useState<string | null>(null)
+  const [limitValue, setLimitValue] = useState("")
+  const [limitError, setLimitError] = useState<string | null>(null)
+  // « Limite » buttons per role: focus returns there when the inline form closes (#466).
+  const limitBtnRefs = useRef(new Map<string, HTMLButtonElement>())
+  const limitInputRef = useRef<HTMLInputElement>(null)
   // A deletion waits for its confirmation (#379): the recap of what it does, then run.
   const [pendingDelete, setPendingDelete] = useState<{ recap: ActionRecap; run: () => Promise<void> } | null>(null)
   const [deleting, setDeleting] = useState(false)
@@ -235,6 +244,7 @@ export default function ShiftsManager({
 
   function startRenameRole(role: string) {
     setRoleActionError(null)
+    setLimitRole(null)
     setRenamingRole(role)
     setRenameValue(role)
   }
@@ -310,6 +320,52 @@ export default function ShiftsManager({
     setShifts(prev => prev.map(s => s.roleName === role ? { ...s, colorKey } : s))
     const label = COLOR_OPTIONS.find(c => c.key === colorKey)?.label ?? "automatique"
     announce(setRoleAnnouncement, `Couleur du poste « ${role} » : ${label}.`)
+  }
+
+  function roleLimitOf(role: string): number | null {
+    return roleLimits(shifts.filter((s) => s.roleName === role)).get(role) ?? null
+  }
+
+  function startRoleLimit(role: string) {
+    setRoleActionError(null)
+    setLimitError(null)
+    setColorPickerRole(null)
+    setRenamingRole(null)
+    setLimitRole(limitRole === role ? null : role)
+    setLimitValue(String(roleLimitOf(role) ?? ""))
+  }
+
+  function closeRoleLimit(role: string) {
+    setLimitRole(null)
+    setLimitError(null)
+    setRoleActionError(null)
+    requestAnimationFrame(() => limitBtnRefs.current.get(role)?.focus())
+  }
+
+  async function saveRoleLimit(role: string, value: number | null) {
+    if (roleActionBusy) return
+    if (value !== null && (!Number.isInteger(value) || value < 1 || value > 100)) {
+      flushSync(() => setLimitError(null))
+      setLimitError("Entrez un nombre entier de 1 à 100, ou laissez vide pour ne pas limiter.")
+      limitInputRef.current?.focus()
+      return
+    }
+    setLimitError(null)
+    setRoleActionError(null)
+    setRoleActionBusy(role)
+    const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(role)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ maxPerVolunteer: value }),
+    }), "Erreur lors de l'enregistrement de la limite.")
+    setRoleActionBusy(null)
+    if (!outcome.ok) {
+      setRoleActionError(outcome.error)
+      return
+    }
+    setShifts(prev => prev.map(s => s.roleName === role ? { ...s, maxPerVolunteer: value } : s))
+    closeRoleLimit(role)
+    announce(setRoleAnnouncement, value === null ? `Poste « ${role} » : plus de limite par personne.` : `Poste « ${role} » : au plus ${value} créneau${value > 1 ? "x" : ""} par personne.`)
   }
 
   // Group by day (all dates, not just those with shifts)
@@ -400,7 +456,7 @@ export default function ShiftsManager({
         <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
           <div>
             <h3 className="font-semibold text-gray-800">Gérer les postes</h3>
-            <p className="text-xs text-gray-500 mt-0.5">Glissez-déposez pour réordonner, renommez ou supprimez un poste (tous ses créneaux).</p>
+            <p className="text-xs text-gray-500 mt-0.5">Glissez-déposez pour réordonner, renommez, limitez le nombre de créneaux par personne ou supprimez un poste (tous ses créneaux).</p>
           </div>
           {roleActionError && (
             <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{roleActionError}</p>
@@ -410,6 +466,7 @@ export default function ShiftsManager({
               const isRenaming = renamingRole === role
               const isBusy = roleActionBusy === role
               const isPickingColor = colorPickerRole === role
+              const limit = roleLimitOf(role)
               return (
               <div key={role}>
                 <div
@@ -427,7 +484,7 @@ export default function ShiftsManager({
                     <circle cx="11" cy="4" r="1.2"/><circle cx="11" cy="8" r="1.2"/><circle cx="11" cy="12" r="1.2"/>
                   </svg>
                   <button
-                    onClick={() => setColorPickerRole(isPickingColor ? null : role)}
+                    onClick={() => { setLimitRole(null); setColorPickerRole(isPickingColor ? null : role) }}
                     disabled={isBusy || isRenaming}
                     aria-label={`Changer la couleur du poste ${role}`}
                     aria-expanded={isPickingColor}
@@ -463,6 +520,18 @@ export default function ShiftsManager({
                     <>
                       <span className="text-sm font-medium text-gray-700 flex-1 truncate">{role}</span>
                       <button
+                        ref={(el) => { if (el) limitBtnRefs.current.set(role, el); else limitBtnRefs.current.delete(role) }}
+                        onClick={() => startRoleLimit(role)}
+                        disabled={isBusy}
+                        aria-expanded={limitRole === role}
+                        aria-controls={`limit-form-${i}`}
+                        // Starts with the visible text (2.5.3), then says what it is about.
+                        aria-label={limit === null ? `Limite : aucune, poste « ${role} »` : `Limite : ${limit} créneau${limit > 1 ? "x" : ""} par personne, poste « ${role} »`}
+                        className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 flex-shrink-0"
+                      >
+                        {limit === null ? "Limite" : `Limite : ${limit}`}
+                      </button>
+                      <button
                         onClick={() => startRenameRole(role)}
                         disabled={isBusy}
                         aria-label={`Renommer le poste ${role}`}
@@ -481,6 +550,46 @@ export default function ShiftsManager({
                     </>
                   )}
                 </div>
+                {limitRole === role && (
+                  <form
+                    id={`limit-form-${i}`}
+                    noValidate
+                    onSubmit={(e) => { e.preventDefault(); saveRoleLimit(role, limitValue.trim() === "" ? null : Number(limitValue)) }}
+                    onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); closeRoleLimit(role) } }}
+                    className="flex flex-wrap items-end gap-2 px-3 py-2.5 mt-1 rounded-xl border border-blue-100 bg-blue-50/50"
+                  >
+                    <div>
+                      <label htmlFor={`limit-${i}`} className="block text-xs font-medium text-gray-700 mb-1">Nombre maximal de créneaux « {role} » par personne</label>
+                      <input
+                        ref={limitInputRef}
+                        id={`limit-${i}`}
+                        type="number"
+                        inputMode="numeric"
+                        min={1}
+                        max={100}
+                        value={limitValue}
+                        autoFocus
+                        onChange={(e) => setLimitValue(e.target.value)}
+                        aria-invalid={limitError ? true : undefined}
+                        aria-describedby={`limit-help-${i}${limitError ? ` limit-error-${i}` : ""}`}
+                        className="input w-24 py-1"
+                      />
+                    </div>
+                    <button type="submit" aria-disabled={isBusy || undefined} className={`text-xs text-blue-700 font-medium hover:text-blue-900 py-1.5 ${isBusy ? "opacity-60 cursor-wait" : ""}`}>
+                      {isBusy ? "Enregistrement…" : "Enregistrer"}
+                    </button>
+                    {limit !== null && (
+                      <button type="button" onClick={() => saveRoleLimit(role, null)} aria-disabled={isBusy || undefined} className={`text-xs text-gray-700 hover:text-gray-900 py-1.5 ${isBusy ? "opacity-60 cursor-wait" : ""}`}>
+                        Retirer la limite
+                      </button>
+                    )}
+                    <button type="button" onClick={() => closeRoleLimit(role)} className="text-xs text-gray-600 hover:text-gray-900 py-1.5">Annuler</button>
+                    {limitError && <p id={`limit-error-${i}`} className="basis-full text-xs text-red-700">{limitError}</p>}
+                    <p id={`limit-help-${i}`} className="basis-full text-xs text-gray-600">
+                      Laissez vide pour ne pas limiter. Comptent les inscriptions confirmées, proposées et en liste d&apos;attente d&apos;une même personne sur ce poste. Les inscriptions existantes au-delà de la limite sont conservées ; vous pouvez dépasser la limite en ajoutant quelqu&apos;un à la main.
+                    </p>
+                  </form>
+                )}
                 {isPickingColor && (
                   <div className="flex flex-wrap items-center gap-2 px-3 py-2.5 mt-1 rounded-xl border border-blue-100 bg-blue-50/50">
                     <button
