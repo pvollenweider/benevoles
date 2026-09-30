@@ -10,6 +10,10 @@
 # visitors — one busy hour on the invite check locked every invite link. On this single-node
 # cluster, Local has no downside: the only node runs Traefik.
 #
+# Access logs stay on for supervision, but never for a request carrying a personal token: those
+# are routed by k8s/ingressroute-tokens.yaml with access logs off (benevol.app only; the global
+# settings here are unchanged for the other sites). Headers are dropped by the k3s defaults.
+#
 # This Traefik also serves other sites of the cluster (gallerypack.app, deck.altsessions.ch): they
 # get the real client address too. Applying it recreates the svclb pod, a few seconds of reconnects.
 #

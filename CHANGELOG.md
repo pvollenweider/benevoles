@@ -138,6 +138,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Sécurité
 
+#### Journaux et rapports d'erreurs
+
+- **Liens personnels jamais journalisés** : les requêtes qui portent un lien personnel (page personnelle, liste d'attente, responsable, invitation) ne sont plus écrites dans les journaux d'accès du serveur, et les pages n'envoient plus leur adresse complète dans l'en-tête `Referer`. Le lien d'un responsable de secteur est aussi masqué dans les rapports d'erreurs, comme les autres liens personnels.
+
 #### Comptes administrateurs
 
 - **Sessions admin après un changement de mot de passe** : changer ou réinitialiser son mot de passe déconnecte toutes les autres sessions ouvertes auparavant (autres navigateurs, appareils, ou session volée). La session depuis laquelle le mot de passe est changé reste ouverte.

@@ -1,0 +1,91 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
+# No access log for the requests that carry a personal token (#485).
+#
+# A personal link (/my/<token>, /leader/<token>, an invitation ?token=…) opens a volunteer's
+# registrations or a leader's list without an account: it is an authentication secret and must
+# never be written to the proxy's access log, which records the full request path and query.
+#
+# The shared Traefik (it also serves other sites of the cluster) keeps its global access-log
+# settings untouched. This IngressRoute takes, for benevol.app only, the request families that
+# carry a token and turns access logs off for them (router observability, Traefik >= 3.1). Every
+# other benevol.app request still goes through the Ingress in ingress.yaml (priority 100) and is
+# logged as before: date, router, method, status, duration, size, client address.
+#
+# The families follow src/lib/sentry-scrub.ts (same secrets, scrubbed there from error reports):
+#   path  /my/…  /waitlist/…  /leader/…  /api/public/registrations/…  /api/public/member-invite/…
+#         /api/public/leader/…  /api/public/waitlist/…
+#   query token=…  t=…   (invitations on event pages, admin invitations, password reset,
+#                          product-update unsubscribe)
+#   and the admin search (/admin/search, /api/admin/search), whose ?q= is often a person's name.
+# The Referer header, which can hold such a URL, is not logged (headers are dropped globally) and
+# the app sends no path in it anyway (Referrer-Policy: strict-origin, src/lib/security-headers.ts).
+#
+# If this rule failed to load, the requests would fall back to the Ingress above: still served,
+# but logged again. Check after any change (docs/rgpd/verifications-production.md, « Journaux
+# du proxy »).
+#
+#   kubectl apply -f k8s/ingressroute-tokens.yaml      (also applied by the deploy workflow)
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: benevoles-https-redirect
+  namespace: benevoles
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: benevoles-app-tokens
+  namespace: benevoles
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      priority: 200
+      match: >-
+        (Host(`benevol.app`) || Host(`www.benevol.app`) || HostRegexp(`^[a-z0-9-]+\.benevol\.app$`))
+        && (PathPrefix(`/my/`) || PathPrefix(`/waitlist/`) || PathPrefix(`/leader/`)
+        || PathPrefix(`/api/public/registrations/`) || PathPrefix(`/api/public/member-invite/`)
+        || PathPrefix(`/api/public/leader/`) || PathPrefix(`/api/public/waitlist/`)
+        || Path(`/admin/search`) || Path(`/api/admin/search`)
+        || QueryRegexp(`token`, `.+`) || QueryRegexp(`t`, `.+`))
+      observability:
+        accessLogs: false
+      services:
+        - name: benevoles-app
+          port: 80
+  tls:
+    secretName: benevol-app-wildcard-tls
+---
+# The same requests over plain HTTP (a link typed or copied without https): redirected, not logged.
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: benevoles-app-tokens-http
+  namespace: benevoles
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      priority: 200
+      match: >-
+        (Host(`benevol.app`) || Host(`www.benevol.app`) || HostRegexp(`^[a-z0-9-]+\.benevol\.app$`))
+        && (PathPrefix(`/my/`) || PathPrefix(`/waitlist/`) || PathPrefix(`/leader/`)
+        || PathPrefix(`/api/public/registrations/`) || PathPrefix(`/api/public/member-invite/`)
+        || PathPrefix(`/api/public/leader/`) || PathPrefix(`/api/public/waitlist/`)
+        || Path(`/admin/search`) || Path(`/api/admin/search`)
+        || QueryRegexp(`token`, `.+`) || QueryRegexp(`t`, `.+`))
+      observability:
+        accessLogs: false
+      middlewares:
+        - name: benevoles-https-redirect
+      services:
+        - name: benevoles-app
+          port: 80
