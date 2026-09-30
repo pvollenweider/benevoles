@@ -57,6 +57,7 @@ export type DuplicableEvent = {
   reminderMessage: string | null
   remindersEnabled: boolean
   requirePhone: boolean
+  accentColorKey: string | null
   showSchedule: unknown
   shifts: DuplicableShift[]
   pages: { slug: string; title: string; content: string; displayOrder: number }[]
@@ -130,6 +131,7 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       reminderMessage: copy.settings ? source.reminderMessage : null,
       remindersEnabled: copy.settings ? source.remindersEnabled : true,
       requirePhone: copy.settings ? source.requirePhone : false,
+      accentColorKey: copy.settings ? source.accentColorKey : null,
       showSchedule: copy.settings ? shows.map((s) => ({ ...s, date: shiftIsoDate(s.date, offsetDays) })) : [],
     },
     shifts: copy.shifts ? source.shifts.map((s) => ({ ...copiedShift(s), date: shiftDate(s.date, offsetDays) })) : [],

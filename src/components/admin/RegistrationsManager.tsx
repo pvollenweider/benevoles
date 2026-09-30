@@ -4,12 +4,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import Link from "next/link"
-import { announce } from "@/lib/announce"
-import { UNDO_MS, useDelayedAction } from "@/lib/use-delayed-action"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, logLinkFor, type ActionRecap } from "@/lib/action-recap"
 import { describeBulkFailure } from "@/lib/form-errors"
-import { useId, useState, useMemo, useRef } from "react"
+import { useState, useMemo, useRef } from "react"
 import StatusBadge from "./StatusBadge"
 import ShiftSelect from "./registrations/ShiftSelect"
 import MakeLeaderModal from "./registrations/MakeLeaderModal"
@@ -18,8 +16,6 @@ import { availabilityLabel, hasAvailability } from "@/lib/availability"
 import {
   addConflictMessage,
   cancelAnnouncement,
-  heldAnnouncement,
-  undoneAnnouncement,
   filterRegistrations,
   fmtHour,
   fmtShortDate,
@@ -87,18 +83,6 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   const [pending, setPending] = useState<{ recap: ActionRecap; run: () => Promise<void> } | null>(null)
   // Where the last action's entries are in the event log.
   const [lastLogLink, setLastLogLink] = useState<string | null>(null)
-  // A bulk removal is committed after an undo window (#379): the rows leave the list at once,
-  // the request is sent when the window closes, « Annuler » puts them back.
-  const undo = useDelayedAction()
-  const [held, setHeld] = useState<Registration[]>([])
-  const undoRef = useRef<HTMLButtonElement>(null)
-  const undoBarRef = useRef<HTMLDivElement>(null)
-  const undoTextId = useId()
-  const orderRef = useRef(new Map(initialRegistrations.map((r, i) => [r.id, i])))
-  // The countdown waits while the focus or the pointer is on the bar (WCAG 2.2.1).
-  const holdReasons = useRef(new Set<"focus" | "pointer">())
-  function holdWindow(reason: "focus" | "pointer") { holdReasons.current.add(reason); undo.pause() }
-  function releaseWindow(reason: "focus" | "pointer") { holdReasons.current.delete(reason); if (holdReasons.current.size === 0) undo.resume() }
 
   const uniqueRoles = [...new Set(shifts.map(s => s.roleName))]
   const visibleShifts = roleFilter ? shifts.filter(s => s.roleName === roleFilter) : shifts
@@ -182,8 +166,6 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action, registrationIds: ids }),
-        // A removal committed while leaving the page must still reach the server.
-        keepalive: true,
       })
     } catch {
       const f = describeBulkFailure({ network: true }, BULK_LABELS[action])
@@ -238,61 +220,27 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     const waitlisted = registrations.filter((r) => r.status !== "active" && shiftIds.has(r.shift.id)).length
     setPending({
       recap: bulkCancelRecap({ people: selectedActiveRegs.length, withEmail: selectedActiveRegs.filter((r) => r.volunteer.email).length, waitlisted: Math.min(waitlisted, selectedActiveRegs.length) }),
-      run: holdBulkCancel,
+      run: runBulkCancel,
     })
   }
 
-  /** Puts rows back where they were in the list. */
-  function restore(rows: Registration[]) {
-    const order = orderRef.current
-    setRegistrations((prev) => [...prev, ...rows].sort((a, b) => (order.get(a.id) ?? Infinity) - (order.get(b.id) ?? Infinity)))
-  }
-
-  // Step 1 of a removal: the rows leave the list, nothing is sent yet. A removal confirmed while
-  // one is already waiting joins it: one window for all of them, restarted, so no batch is
-  // committed behind the person's back.
-  async function holdBulkCancel() {
-    const rows = selectedActiveRegs
-    const ids = new Set(rows.map((r) => r.id))
-    const all = [...held, ...rows]
-    setPending(null)
-    setRegistrations((prev) => prev.filter((r) => !ids.has(r.id)))
-    setSelectedIds(new Set())
-    setHeld(all)
-    setBulkError(null)
-    holdReasons.current.clear()
-    undo.start(() => void commitBulkCancel(all), { replace: true })
-    announce(setLeaderAnnouncement, heldAnnouncement(all.length, UNDO_MS / 1000))
-    // The toolbar is gone with the selection: the focus lands on « Annuler le retrait ».
-    requestAnimationFrame(() => undoRef.current?.focus())
-  }
-
-  function undoBulkCancel() {
-    if (!undo.cancel()) return
-    const rows = held
-    setHeld([])
-    restore(rows)
-    announce(setLeaderAnnouncement, undoneAnnouncement(rows.length))
-    afterBulkRef.current?.focus()
-  }
-
-  // Step 2, once the window has closed: the request. A failure puts the rows back with « Réessayer ».
-  async function commitBulkCancel(rows: Registration[]) {
+  async function runBulkCancel() {
     const startedAt = new Date()
-    const ids = new Set(rows.map((r) => r.id))
-    // The bar (and the focused button in it) goes away: park the focus first.
-    afterBulkRef.current?.focus()
-    setHeld((prev) => prev.filter((r) => !ids.has(r.id)))
     setBulkBusy(true)
-    announce(setLeaderAnnouncement, "Retrait en cours…")
-    const result = await runBulk("cancel", rows.map((r) => r.id), () => { setRegistrations((prev) => prev.filter((r) => !ids.has(r.id))); void commitBulkCancel(rows) })
-    setBulkBusy(false)
-    if (!result) { setLeaderAnnouncement(""); restore(rows); return }
+    const result = await runBulk("cancel", selectedActiveRegs.map((r) => r.id), () => runBulkCancel())
+    if (!result) { setBulkBusy(false); setPending(null); return }
     const cancelledIds = new Set(result.cancelledIds ?? [])
-    const kept = rows.filter((r) => !cancelledIds.has(r.id))
-    if (kept.length > 0) restore(kept)
+    setRegistrations((prev) => prev.filter((r) => !cancelledIds.has(r.id)))
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      cancelledIds.forEach((id) => next.delete(id))
+      return next
+    })
+    setBulkBusy(false)
+    setPending(null)
     setLastLogLink(logLinkFor(eventId, startedAt))
-    announce(setLeaderAnnouncement, cancelAnnouncement(cancelledIds.size, kept.length))
+    const failed = selectedActiveRegs.length - cancelledIds.size
+    setLeaderAnnouncement(cancelAnnouncement(cancelledIds.size, failed))
   }
 
   function handleBulkMakeLeader() {
@@ -410,38 +358,6 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           <Link href={lastLogLink} className="font-medium text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Voir cette action dans le journal</Link>
         )}
       </p>
-      {held.length > 0 && undo.secondsLeft !== null && (
-        <div
-          ref={undoBarRef}
-          onFocus={() => holdWindow("focus")}
-          onBlur={(e) => { if (!undoBarRef.current?.contains(e.relatedTarget as Node | null)) releaseWindow("focus") }}
-          onPointerEnter={() => holdWindow("pointer")}
-          onPointerLeave={() => releaseWindow("pointer")}
-          className="text-sm text-gray-900 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-1"
-        >
-          <span id={undoTextId}>
-            {held.length} {held.length > 1 ? "bénévoles seront retirés" : "bénévole sera retiré"} de {held.length > 1 ? "leur" : "son"} créneau
-            {" "}<span role="timer">dans {undo.secondsLeft} s</span>. Le compte à rebours attend tant que vous êtes sur cette barre.
-          </span>
-          <button
-            ref={undoRef}
-            type="button"
-            onClick={undoBulkCancel}
-            aria-describedby={undoTextId}
-            className="font-medium text-blue-800 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-          >
-            Annuler le retrait
-          </button>
-          <button
-            type="button"
-            onClick={() => undo.flush()}
-            aria-describedby={undoTextId}
-            className="text-gray-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-          >
-            Retirer maintenant
-          </button>
-        </div>
-      )}
       {bulkError && (
         <div role="alert" aria-busy={bulkBusy || undefined} className="text-sm text-red-800 bg-red-50 border border-red-200 rounded-xl px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-1">
           <span>{bulkError}</span>

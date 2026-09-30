@@ -10,6 +10,7 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - Liste des événements publiés avec titre, dates et lieu
 - Accès direct à la page d'inscription de chaque événement
+- Page d'inscription aux couleurs de l'événement : l'organisateur choisit une couleur de la palette pour l'en-tête (contraste vérifié), ou garde l'en-tête blanc
 
 ### Page d'inscription (`/{orgSlug}/{eventSlug}`)
 

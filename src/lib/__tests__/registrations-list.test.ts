@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import {
   addConflictMessage,
-  cancelAnnouncement, heldAnnouncement, undoneAnnouncement,
+  cancelAnnouncement,
   filterRegistrations,
   fmtHour,
   leaderAnnouncement,
@@ -83,14 +83,5 @@ describe("leaders and announcements", () => {
     expect(leaderAnnouncement(0, 3, 0)).toBe("3 échecs.")
     expect(resendAnnouncement(1, 0)).toBe("Lien renvoyé à 1 bénévole.")
     expect(resendAnnouncement(3, 2)).toBe("Lien renvoyé à 3 bénévoles, 2 échecs.")
-  })
-})
-
-describe("undo window wording (#379)", () => {
-  it("says how long is left and what cancelling keeps", () => {
-    expect(heldAnnouncement(3, 10)).toBe("3 bénévoles seront retirés dans 10 secondes. « Annuler le retrait » pour les garder.")
-    expect(heldAnnouncement(1, 4)).toBe("1 bénévole sera retiré dans 4 secondes. « Annuler le retrait » pour le garder.")
-    expect(undoneAnnouncement(2)).toBe("Retrait annulé : les 2 bénévoles restent inscrits, aucun email envoyé.")
-    expect(undoneAnnouncement(1)).toBe("Retrait annulé : le bénévole reste inscrit, aucun email envoyé.")
   })
 })

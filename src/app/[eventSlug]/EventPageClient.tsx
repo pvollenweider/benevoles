@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useEffect, useRef, useState, useMemo } from "react"
+import { eventAccent } from "@/lib/event-accent"
 import { describeSignupFailure, type Failure } from "@/lib/form-errors"
 import SignupRecap from "@/components/public/SignupRecap"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -61,6 +62,7 @@ type EventData = {
   publicInstructions: string | null
   confirmationMessage: string | null
   requirePhone: boolean
+  accentColorKey: string | null
   showSchedule: Show[]
   volunteerCharter: string | null
   shifts: Shift[]
@@ -100,6 +102,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   // A structured failure of the sign-up itself (#375): kind, what to do, whether to retry.
   const [failure, setFailure] = useState<Failure | null>(null)
   const failureRef = useRef<HTMLDivElement>(null)
+  // « Quitter la session » removes itself: the focus lands on the title instead of the body.
+  const titleRef = useRef<HTMLHeadingElement>(null)
   const [charterAccepted, setCharterAccepted] = useState(false)
   const [showCharter, setShowCharter] = useState(false)
   const charterTriggerRef = useRef<HTMLButtonElement>(null)
@@ -291,6 +295,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
     setMyRegistrations([])
     setSelectedShifts(new Set())
     setForm(EMPTY_SIGNUP_FORM)
+    requestAnimationFrame(() => titleRef.current?.focus())
   }
 
   // orgSlug is received as prop but only used in the storageKey (already included via eventSlug)
@@ -338,6 +343,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   const newShiftIds = new Set(allSelectedShifts.map((s) => s.id).filter((id) => !myShiftIds.has(id)))
 
   const Root = previewEventId ? "div" : "main"
+  // The organiser's colour (#300): a band behind the title, neutral header otherwise.
+  const accent = eventAccent(event.accentColorKey)
 
   return (
     <Root className="min-h-screen bg-gray-50">
@@ -352,27 +359,33 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
           </div>
         </div>
       )}
-      <header className="bg-white border-b border-gray-200 px-4 py-4">
+      <header className={`px-4 py-4 ${accent ? accent.band : "bg-white border-b border-gray-200"}`}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between">
-            <Link href={preview ? preview.adminEventUrl : "/"} className="text-blue-600 text-sm">← Retour</Link>
+            <Link
+              href={preview ? preview.adminEventUrl : "/"}
+              className={`text-sm rounded focus-visible:outline-2 focus-visible:outline-offset-2 ${accent ? `underline underline-offset-2 ${accent.focus}` : "text-blue-600 focus-visible:outline-blue-600"}`}
+            >
+              <span aria-hidden="true">← </span>Retour
+            </Link>
             {myRegistrations.length > 0 && (
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600 font-medium">
-                  {form.firstName} {form.lastName}
+                <span className={`text-sm font-medium ${accent ? "" : "text-gray-600"}`}>
+                  <span className="sr-only">Inscrit·e en tant que </span>{form.firstName} {form.lastName}
                 </span>
                 <button
+                  type="button"
                   onClick={quitSession}
-                  className="text-xs text-gray-500 hover:text-red-500 transition-colors border border-gray-200 rounded-lg px-2 py-1"
+                  className={`text-xs transition-colors border rounded-lg px-2 py-1 focus-visible:outline-2 focus-visible:outline-offset-2 ${accent ? `border-white/70 hover:bg-white/15 ${accent.focus}` : "text-gray-500 hover:text-red-500 border-gray-200 focus-visible:outline-blue-600"}`}
                 >
                   Quitter la session
                 </button>
               </div>
             )}
           </div>
-          <p className="text-xs text-gray-500 font-medium mt-2">{event.organizationName}</p>
-          <h1 className="text-xl font-bold text-gray-900">{event.title}</h1>
-          {event.location && <p className="text-sm text-gray-500"><span aria-hidden="true">📍 </span>{event.location}</p>}
+          <p className={`text-xs font-medium mt-2 ${accent ? accent.soft : "text-gray-500"}`}>{event.organizationName}</p>
+          <h1 ref={titleRef} tabIndex={-1} className={`text-xl font-bold focus:outline-none ${accent ? "" : "text-gray-900"}`}>{event.title}</h1>
+          {event.location && <p className={`text-sm ${accent ? accent.soft : "text-gray-500"}`}><span aria-hidden="true">📍 </span>{event.location}</p>}
         </div>
       </header>
 

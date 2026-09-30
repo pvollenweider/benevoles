@@ -12,7 +12,7 @@ const shift: DuplicableShift & { id: string; eventId: string; status: string } =
 }
 const source: DuplicableEvent = {
   title: "Fête", description: "d", location: "Salle", startDate: new Date("2026-07-04T00:00:00Z"), endDate: new Date("2026-07-05T00:00:00Z"),
-  publicInstructions: "pi", confirmationMessage: "cm", reminderMessage: "rm", remindersEnabled: false, requirePhone: true,
+  publicInstructions: "pi", confirmationMessage: "cm", reminderMessage: "rm", remindersEnabled: false, requirePhone: true, accentColorKey: "teal",
   showSchedule: [{ name: "Concert", date: "2026-07-04", startTime: "20:00", endTime: "22:00" }],
   shifts: [shift, { ...shift, date: new Date("2026-07-05T00:00:00Z") }],
   pages: [{ slug: "faq", title: "FAQ", content: "x", displayOrder: 0 }],

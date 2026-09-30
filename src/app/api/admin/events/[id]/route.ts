@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { ACCENT_KEYS } from "@/lib/event-accent"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { titlesMatch } from "@/lib/confirm-title"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
@@ -32,6 +33,8 @@ const schema = z.object({
   reminderMessage: z.string().max(2000).optional().nullable(),
   remindersEnabled: z.boolean().optional(),
   requirePhone: z.boolean().optional(),
+  /** Accent colour of the public page (#300): a palette key, or null for the neutral header. */
+  accentColorKey: z.enum(ACCENT_KEYS).optional().nullable(),
 })
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {

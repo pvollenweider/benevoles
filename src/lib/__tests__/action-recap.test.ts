@@ -11,7 +11,6 @@ describe("action recaps", () => {
       "2 emails d'annulation envoyés aux personnes concernées.",
       "1 place libérée sera proposée à la liste d'attente.",
       "L'action est journalisée : vous la retrouverez dans le journal de l'événement.",
-      "Vous aurez 10 secondes pour annuler : rien n'est envoyé ni enregistré avant. Quitter la page valide le retrait.",
     ])
     expect(r.danger).toBe(true)
     expect(bulkCancelRecap({ people: 1, withEmail: 0, waitlisted: 0 }).lines[1]).toBe("Aucun email : personne n'a d'adresse.")
@@ -51,10 +50,6 @@ describe("action recaps", () => {
     expect(s.lines[1]).toBe("2 bénévoles inscrits : leurs inscriptions sont annulées et ils sont prévenus par email.")
     expect(deleteShiftRecap({ name: "Bar", when: "x", registered: 0 }).lines[1]).toBe("Personne n'est inscrit : aucun email.")
     expect(deleteRoleRecap({ role: "Bar", shifts: 3, registered: 1 }).lines[1]).toBe("1 bénévole inscrit : son inscription est annulée et il est prévenu par email.")
-  })
-
-  it("announces the undo window on a bulk removal", () => {
-    expect(bulkCancelRecap({ people: 2, withEmail: 2, waitlisted: 0 }).lines.at(-1)).toMatch(/10 secondes pour annuler/)
   })
 
   it("links the log filtered from the action's day", () => {

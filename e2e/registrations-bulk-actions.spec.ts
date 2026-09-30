@@ -56,37 +56,10 @@ test("selecting all visible rows and bulk-cancelling removes them all", async ({
   await page.getByRole("button", { name: /^Retirer de leur créneau \(3\)$/ }).click()
   await page.getByRole("alertdialog").getByRole("button", { name: "Retirer" }).click()
 
-  // The rows leave the list at once, the request waits for the undo window (#379).
-  await expect(page.getByText("Aucune inscription.")).toBeVisible()
-  await expect(page.getByRole("button", { name: "Annuler le retrait" })).toBeFocused()
-  let detail = await (await page.request.get(`/api/admin/events/${eventId}`)).json()
-  expect(detail.shifts[0].registrations).toHaveLength(3)
-
-  await page.getByRole("button", { name: "Retirer maintenant" }).click()
-  await expect(page.getByRole("status").filter({ hasText: "3 bénévoles retirés." })).toBeVisible()
-  detail = await (await page.request.get(`/api/admin/events/${eventId}`)).json()
-  expect(detail.shifts[0].registrations).toHaveLength(0)
-})
-
-test("undoing a bulk removal within the window keeps everyone registered", async ({ page }) => {
-  await login(page)
-  const stamp = Date.now()
-  const { eventId } = await setUpEventWithRegistrations(page, stamp, 2)
-
-  await page.goto(`/admin/events/${eventId}/registrations`)
-  await page.getByLabel("Sélectionner toutes les inscriptions visibles").check()
-  await page.getByRole("button", { name: /^Retirer de leur créneau \(2\)$/ }).click()
-  await page.getByRole("alertdialog").getByRole("button", { name: "Retirer" }).click()
   await expect(page.getByText("Aucune inscription.")).toBeVisible()
 
-  await expect(page.getByRole("button", { name: "Annuler le retrait" })).toBeFocused()
-  await page.getByRole("button", { name: "Annuler le retrait" }).click()
-  await expect(page.locator("tbody tr")).toHaveCount(2)
-  await expect(page.getByRole("status").filter({ hasText: "Retrait annulé" })).toBeVisible()
-  // Well past the window: nothing was sent.
-  await page.waitForTimeout(11_000)
   const detail = await (await page.request.get(`/api/admin/events/${eventId}`)).json()
-  expect(detail.shifts[0].registrations).toHaveLength(2)
+  expect(detail.shifts[0].registrations).toHaveLength(0)
 })
 
 test("selecting a subset only cancels those rows", async ({ page }) => {
@@ -106,8 +79,6 @@ test("selecting a subset only cancels those rows", async ({ page }) => {
   await page.getByRole("alertdialog").getByRole("button", { name: "Retirer" }).click()
 
   await expect(rows).toHaveCount(1)
-  await page.getByRole("button", { name: "Retirer maintenant" }).click()
-  await expect(page.getByRole("status").filter({ hasText: "2 bénévoles retirés." })).toBeVisible()
 })
 
 test("bulk 'rendre responsable' makes every selected volunteer a leader of their own shift's role", async ({ page }) => {
@@ -175,28 +146,4 @@ test("bulk 'renvoyer le lien' resends the management link to every selected volu
   await page.getByRole("dialog").getByRole("button", { name: "Renvoyer" }).click()
 
   await expect(page.getByText(/Lien renvoyé à \d+ bénévoles?\./)).toBeAttached({ timeout: 20_000 })
-})
-
-test("the countdown waits while the focus stays on the bar, and runs once it leaves", async ({ page }) => {
-  await login(page)
-  const stamp = Date.now()
-  const { eventId } = await setUpEventWithRegistrations(page, stamp, 1)
-
-  await page.goto(`/admin/events/${eventId}/registrations`)
-  await page.getByLabel("Sélectionner toutes les inscriptions visibles").check()
-  await page.getByRole("button", { name: /^Retirer de leur créneau \(1\)$/ }).click()
-  await page.getByRole("alertdialog").getByRole("button", { name: "Retirer" }).click()
-  await expect(page.getByRole("button", { name: "Annuler le retrait" })).toBeFocused()
-
-  // Focus on the bar: well past the window, still waiting.
-  await page.waitForTimeout(11_000)
-  await expect(page.getByRole("button", { name: "Annuler le retrait" })).toBeVisible()
-  let detail = await (await page.request.get(`/api/admin/events/${eventId}`)).json()
-  expect(detail.shifts[0].registrations).toHaveLength(1)
-
-  // Focus elsewhere: the window runs out and the removal is committed.
-  await page.locator("#reg-search").focus()
-  await expect(page.getByRole("status").filter({ hasText: "1 bénévole retiré." })).toBeVisible({ timeout: 15_000 })
-  detail = await (await page.request.get(`/api/admin/events/${eventId}`)).json()
-  expect(detail.shifts[0].registrations).toHaveLength(0)
 })
