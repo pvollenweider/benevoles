@@ -20,6 +20,6 @@ describe("PublicFooter", () => {
     expect(mark).toHaveAttribute("aria-hidden", "true")
     expect(mark).toHaveAttribute("focusable", "false")
     // No separate version text left beside it.
-    expect(screen.getAllByText(new RegExp(`v${pkg.version.replace(/\./g, "\\.")}`))).toHaveLength(1)
+    expect(document.body.textContent!.split(`v${pkg.version}`)).toHaveLength(2)
   })
 })
