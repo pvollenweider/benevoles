@@ -13,18 +13,18 @@ test.describe("public pages", () => {
     test(`${path} has no serious violation`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
-      expect(await seriousViolations(page)).toEqual([])
+      expect.soft(await seriousViolations(page)).toEqual([])
     })
   }
 
   test("event page, then the sign-up form, have no serious violation", async ({ page }) => {
     await page.goto("/spectacle-cirque-2026?org=default")
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
-    expect(await seriousViolations(page)).toEqual([])
+    expect.soft(await seriousViolations(page)).toEqual([])
     await page.getByRole("button", { name: /Sélectionner.*Billetterie/ }).first().click()
     await page.getByRole("button", { name: /^Continuer/ }).click()
     await expect(page.getByLabel("Prénom *", { exact: true })).toBeVisible()
-    expect(await seriousViolations(page)).toEqual([])
+    expect.soft(await seriousViolations(page)).toEqual([])
   })
 })
 
@@ -34,7 +34,7 @@ test.describe("content pages on a phone, in dark mode", () => {
     test(`${path} has no serious violation at 320 px, dark`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
-      expect(await seriousViolations(page)).toEqual([])
+      expect.soft(await seriousViolations(page)).toEqual([])
     })
   }
 })
@@ -43,21 +43,21 @@ test.describe("admin", () => {
   test("login, events, an event and its main pages have no serious violation", async ({ page }) => {
     test.setTimeout(120_000)
     await page.goto("/admin/login")
-    expect(await seriousViolations(page)).toEqual([])
+    expect.soft(await seriousViolations(page)).toEqual([])
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
     await expect(page).toHaveURL(/\/admin\/events/)
-    expect(await seriousViolations(page)).toEqual([])
+    expect.soft(await seriousViolations(page)).toEqual([])
 
     await page.getByRole("link", { name: /Spectacle/ }).first().click()
     await expect(page).toHaveURL(/\/admin\/events\/[^/]+$/)
     const base = page.url()
-    expect(await seriousViolations(page)).toEqual([])
+    expect.soft(await seriousViolations(page)).toEqual([])
     for (const sub of ["/shifts", "/registrations", "/message", "/invitations"]) {
       await page.goto(base + sub)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
-      expect(await seriousViolations(page), sub).toEqual([])
+      expect.soft(await seriousViolations(page), sub).toEqual([])
     }
   })
 })

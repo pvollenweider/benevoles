@@ -94,7 +94,7 @@ export default async function DashboardPage() {
               const countColor =
                 pct >= 75 ? "text-green-700" :
                 pct >= 50 ? "text-yellow-700" :
-                pct >= 25 ? "text-orange-600" :
+                pct >= 25 ? "text-orange-800" :
                 "text-red-600"
               return (
                 <div key={event.id} className="bg-white border border-gray-200 rounded-xl p-4">
