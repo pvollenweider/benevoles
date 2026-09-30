@@ -210,6 +210,22 @@ function attendanceView(d: SheetData): string {
     </section>`).join("")
 }
 
+/** A volunteer's shifts grouped by day, chronological: the day is written once, then each time range. */
+export function shiftsByDay(shifts: SheetShift[]): { date: string; day: string; items: { time: string; name: string }[] }[] {
+  const days: { date: string; day: string; items: { time: string; name: string }[] }[] = []
+  for (const s of [...shifts].sort(byDateTime)) {
+    let entry = days.find((e) => e.date === s.date)
+    if (!entry) { entry = { date: s.date, day: fmtDayShort(s.date), items: [] }; days.push(entry) }
+    entry.items.push({ time: fmtRange(s.startTime, s.endTime), name: shiftName(s) })
+  }
+  return days
+}
+
+/** The « Créneaux » cell: one line per day, the hours and the shift name after it. */
+function shiftsCell(shifts: SheetShift[]): string {
+  return `<ul class="days" role="list">${shiftsByDay(shifts).map((e) => `<li><span class="day">${esc(e.day)}</span> ${e.items.map((i) => `<span class="shift"><span class="mono nowrap">${esc(i.time)}</span> ${esc(i.name)}</span>`).join(' <span class="sep" aria-hidden="true">·</span> ')}</li>`).join("")}</ul>`
+}
+
 function phonesView(d: SheetData): string {
   const rows = volunteersOf(d.shifts)
   return `
@@ -223,7 +239,7 @@ function phonesView(d: SheetData): string {
           <td>${esc(v.firstName)}</td>
           <td class="nowrap mono">${esc(v.phone)}</td>
           <td class="email">${esc(v.email)}</td>
-          <td>${shifts.map((s) => `<span class="nowrap mono">${esc(fmtDayShort(s.date))} ${esc(fmtRange(s.startTime, s.endTime))}</span> ${esc(shiftName(s))}`).join("<br>")}</td>
+          <td>${shiftsCell(shifts)}</td>
         </tr>`).join("")}
       </tbody>
     </table>
@@ -288,6 +304,12 @@ export function renderSheet(view: SheetView, d: SheetData): string {
     .w-time { width: 7em; }
     .w-role { width: 14em; }
     .w-phone { width: 9em; }
+    /* Shifts cell: the day once, then the hours of each shift; lines wrap at the separators. */
+    .days { list-style: none; margin: 0; padding: 0; }
+    .days li { margin: 0 0 2px; overflow-wrap: anywhere; }
+    .days li:last-child { margin-bottom: 0; }
+    .days .day { font-weight: 700; margin-right: 4px; }
+    .days .sep { color: var(--ink-2); }
 
     /* ── Attendance: caption as a band, boxes with room to tick ──────────── */
     .attendance { margin-top: 12px; table-layout: fixed; }

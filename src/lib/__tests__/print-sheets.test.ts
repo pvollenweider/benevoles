@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { ATTENDANCE_SPARE_LINES, ganttOf, isSheetView, renderSheet, SHEET_VIEWS, staffingLine, volunteersOf, type SheetData, type SheetShift } from "../print-sheets"
+import { ATTENDANCE_SPARE_LINES, ganttOf, isSheetView, renderSheet, SHEET_VIEWS, shiftsByDay, staffingLine, volunteersOf, type SheetData, type SheetShift } from "../print-sheets"
 
 const alice = { firstName: "Alice", lastName: "Martin", email: "alice@x.ch", phone: "079 1", comment: null, checkedIn: true }
 const bob = { firstName: "Bob <B>", lastName: "Durand", email: null, phone: null, comment: "vient tard", checkedIn: false }
@@ -75,6 +75,22 @@ describe("print sheets", () => {
     expect(html).toContain("2 bénévoles.")
     expect(html).toContain("size: A4 portrait")
     expect(html).not.toContain('class="gantt-table"')
+  })
+
+  it("phones: the shifts cell writes each day once, then the hours of every shift of that day", () => {
+    const one = data.shifts[0].registrations.slice(0, 1)
+    const shifts = [
+      { ...data.shifts[0], id: "a", date: "2026-07-05", startTime: "18:00", endTime: "20:00", label: "Bar soir", registrations: one },
+      { ...data.shifts[0], id: "b", date: "2026-07-04", startTime: "14:00", endTime: "16:00", registrations: one },
+      { ...data.shifts[0], id: "c", date: "2026-07-04", startTime: "10:00", endTime: "12:00", registrations: one },
+    ]
+    const days = shiftsByDay(shifts)
+    expect(days.map((d) => d.day)).toEqual(["sam. 4 juil.", "dim. 5 juil."])
+    expect(days[0].items.map((i) => i.time)).toEqual(["10:00–12:00", "14:00–16:00"])
+    expect(days[1].items[0]).toEqual({ time: "18:00–20:00", name: "Bar · Bar soir" })
+    const html = renderSheet("phones", { ...data, shifts })
+    expect(html.match(/sam\. 4 juil\./g)).toHaveLength(1)
+    expect(html).toContain('<span class="day">sam. 4 juil.</span>')
   })
 
   it("attendance: a checkbox per person, already-present people ticked, spare blank lines", () => {
