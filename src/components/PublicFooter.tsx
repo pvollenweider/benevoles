@@ -5,7 +5,7 @@ import Link from "next/link"
 import pkg from "../../package.json"
 
 const linkClass =
-  "py-1 underline underline-offset-2 hover:text-gray-700 dark:hover:text-gray-300 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+  "py-1 underline underline-offset-2 hover:text-gray-700 dark:hover:text-gray-300 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800 dark:focus-visible:outline-blue-400"
 
 export default function PublicFooter({ showSupport = false }: { showSupport?: boolean }) {
   return (
@@ -39,7 +39,7 @@ export default function PublicFooter({ showSupport = false }: { showSupport?: bo
               rel="noopener noreferrer"
               className={linkClass}
             >
-              ☕ Soutenir le projet
+              <span aria-hidden="true">☕ </span>Soutenir le projet
               <span className="sr-only"> (ouvre dans un nouvel onglet)</span>
             </a>
           </>

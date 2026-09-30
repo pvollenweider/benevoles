@@ -55,7 +55,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Recherche globale** : un champ **Rechercher** dans la barre du haut de l'administration (**Ctrl + K**, ou **⌘ + K** sur Mac, pour y aller) retrouve un bénévole, ses inscriptions, un événement ou un créneau dans toute l'organisation, sans tenir compte des accents, avec un lien vers la page Membres ou les inscriptions déjà filtrées sur le résultat.
 - **Fuseau horaire par organisation** : dans les paramètres, une organisation peut choisir le fuseau de ses événements (Europe/Zurich par défaut). Il sert aux rappels, à l'heure limite des places proposées en liste d'attente, au journal de l'événement et à l'export PDF.
 - **Santé du service** (super admin) : une page qui rassemble l'état de la base, de la file d'emails, des tâches planifiées (rappels, nettoyage), des sauvegardes (dump, copie hors site, dernier test de restauration), des migrations appliquées, de la version déployée et de la configuration (SMTP, push, secrets). Les tâches enregistrent leur dernier passage ; les sauvegardes le signalent par un battement de cœur.
-- **Sitemap du site principal** : `www.benevol.app/sitemap.xml` liste la page d'accueil et les pages de documentation, avec la date de dernière modification des guides, et `robots.txt` le référence.
+- **Page Fonctionnalités** : `www.benevol.app/fonctionnalites` présente ce que fait benevol.app, besoin par besoin ; la page d'accueil et la documentation y renvoient. La page d'accueil et chaque page de documentation ont leur propre titre, leur description et leur adresse canonique.
+- **Sitemap du site principal** : `www.benevol.app/sitemap.xml` liste la page d'accueil, la page Fonctionnalités et les pages de documentation, avec la date de dernière modification de leur contenu, et `robots.txt` le référence.
 
 ### Modifié
 
@@ -76,7 +77,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Barre du haut de l'administration sur mobile** : sur un petit écran, les liens sont regroupés sous un bouton **Menu** au lieu de déborder de l'écran ; le menu du compte reste accessible. La page en cours est aussi soulignée, en plus d'être en couleur.
 - **Menu du compte** : dans la barre du haut, votre nom ouvre un menu avec **Mon compte** et **Se déconnecter**. Le changement de mot de passe quitte la page Paramètres pour une page **Mon compte** dédiée, avec des libellés et messages d'erreur en français.
 - **Filtres sans accents** : les filtres des pages Membres et Inscriptions ignorent les accents : « zoe » trouve Zoé, « francois » trouve François.
-- **Accessibilité** : un lien « Aller au contenu », visible dès qu'on le tabule, ouvre chaque page de l'administration et saute la barre du haut.
+- **Accessibilité** : un lien « Aller au contenu », visible dès qu'on le tabule, ouvre chaque page de l'administration, de la documentation et de la page Fonctionnalités et saute la barre du haut. Dans la documentation et les pages légales, les liens sont soulignés, et le thème sombre de la documentation ne déborde plus sur la page d'accueil.
 
 #### Fiabilité et technique
 

@@ -68,6 +68,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.
 # automatique de `output: "standalone"`, donc copiés explicitement comme prisma/ ci-dessus.
 COPY --from=builder --chown=nextjs:nodejs /app/GUIDE_ADMIN.md ./GUIDE_ADMIN.md
 COPY --from=builder --chown=nextjs:nodejs /app/GUIDE_BENEVOLE.md ./GUIDE_BENEVOLE.md
+COPY --from=builder --chown=nextjs:nodejs /app/FEATURES.md ./FEATURES.md
 
 # Merge prisma CLI (+ toutes ses deps) dans node_modules
 # Appeler index.js directement préserve __dirname = node_modules/prisma/build/
