@@ -1,10 +1,18 @@
-# Écarts entre la politique de confidentialité et l'inventaire
+# Écarts entre la politique de confidentialité publiée et l'inventaire
 
-À corriger dans `src/app/legal/privacy/page.tsx` après relecture par une personne qualifiée.
+À corriger dans `src/app/legal/privacy/page.tsx` **seulement après** vérification des faits de production ([verifications-production.md](verifications-production.md)) et relecture par une personne qualifiée.
 
-1. **Dropbox manque** dans la liste des sous-traitants (section 4), alors que les sauvegardes chiffrées y sont copiées 90 jours. Si le stockage est hors UE, la section « Transferts » doit le dire, avec les garanties.
-2. **« Chaque sous-traitant est lié par un accord de traitement »** : le dépôt ne permet pas de le vérifier. À confirmer pour chacun, ou à reformuler.
-3. **Notifications du navigateur** : non mentionnées. Elles transitent par le service de notification du navigateur du bénévole (titre et première ligne d'un message).
-4. **Fournisseur SMTP** : la page cite Gandi ; le dépôt ne fixe pas le fournisseur. À confirmer.
-5. **Logs de connexion, 90 jours** : la rotation n'est pas automatisée dans le dépôt (procédure manuelle, `k8s/log-rotation.md`). À vérifier sur le serveur, comme l'indique [../retention.md](../retention.md).
-6. **Procédure de violation de données** : absente. À écrire (voir l'inventaire).
+| # | Écart | Constat (dépôt) | Action |
+|---|---|---|---|
+| 1 | Dropbox absent de la liste des sous-traitants | les sauvegardes chiffrées y sont copiées chaque nuit (`k8s/cronjob-backup-offsite.yaml`) | l'ajouter ; section transferts selon la région et le contrat vérifiés |
+| 2 | « Chaque sous-traitant est lié par un accord de traitement » | aucun DPA vérifié | vérifier fournisseur par fournisseur, ou reformuler |
+| 3 | Localisation des fournisseurs affirmée | aucune région vérifiée (hébergeur, SMTP, Sentry, Dropbox) | vérifier, dater, sinon ne pas l'affirmer |
+| 4 | Fournisseur SMTP cité (Gandi) | le dépôt ne fixe pas le fournisseur | vérifier la configuration de production |
+| 5 | Notifications du navigateur non décrites | abonnement stocké (endpoint, clés), message chiffré transmis au service push du navigateur | décrire : facultatif, contenu, désabonnement, conservation |
+| 6 | Réponses aux questions de l'événement absentes | `QuestionAnswer`, champs libres possibles | les ajouter aux catégories de données |
+| 7 | Journaux d'activité cités seulement comme export, pas parmi les données traitées | ils conservent les identifiants d'acteur et d'entité (données pseudonymisées) | les ajouter aux catégories, avec leur durée |
+| 8 | Effacement individuel | l'administration ne peut que désactiver un membre ; effacement à la main par l'opérateur (#516) | ne pas promettre de suppression depuis l'administration |
+| 9 | Rôles pour les données des administrateurs | répartition non tranchée ([inventaire.md](inventaire.md)) | clarifier après validation juridique |
+| 10 | Durées chez les fournisseurs absentes | Sentry, SMTP, corbeille Dropbox, services push : non documentées | les ajouter une fois vérifiées |
+| 11 | Journaux de connexion, 90 jours | rotation décrite mais pas installée par le dépôt (`k8s/log-rotation.md`) | vérifier sur le serveur avant de l'annoncer |
+| 12 | Procédure de violation | projet interne seulement ([procedure-violation.md](procedure-violation.md)) | valider, puis mentionner l'engagement d'information |
