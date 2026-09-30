@@ -6,7 +6,7 @@ export default function PrivacyPage() {
   return (
     <>
       <h1>Politique de confidentialité</h1>
-      <p className="text-gray-500 text-sm">Dernière mise à jour : 30 avril 2026</p>
+      <p className="text-gray-500 text-sm">Dernière mise à jour : 30 septembre 2026</p>
 
       <p>
         La présente politique décrit comment <strong>benevol.app</strong>, éditée par{" "}
@@ -108,8 +108,8 @@ export default function PrivacyPage() {
       <h2>4. Transferts et sous-traitants</h2>
       <p>
         Les données sont hébergées sur des serveurs situés en{" "}
-        <strong>Union européenne (France)</strong>. Nous faisons appel aux sous-traitants techniques
-        suivants :
+        <strong>Union européenne (France)</strong>, à l&apos;exception de la copie de sauvegarde hors
+        site décrite ci-dessous. Nous faisons appel aux sous-traitants techniques suivants :
       </p>
       <ul>
         <li>
@@ -126,10 +126,19 @@ export default function PrivacyPage() {
           la navigation dont les textes et les médias sont masqués. Aucun cookie ni en-tête de requête
           n&apos;est transmis.
         </li>
+        <li>
+          <strong>Copie de sauvegarde hors site</strong> : Dropbox (stockage aux États-Unis) — reçoit
+          chaque nuit une copie de la base de données, chiffrée sur notre serveur avant l&apos;envoi, avec
+          une clé que Dropbox ne détient pas. Solution provisoire : nous cherchons un stockage en Europe
+          pour la remplacer.
+        </li>
       </ul>
       <p>
-        Chaque sous-traitant est lié par un accord de traitement de données conforme aux exigences
-        du RGPD.
+        L&apos;hébergeur, le service e-mail et le suivi des erreurs sont liés par un accord de traitement
+        de données conforme aux exigences du RGPD. La copie de sauvegarde sur Dropbox relève
+        d&apos;une offre individuelle, sans accord de traitement spécifique ; les transferts vers les
+        États-Unis reposent sur les garanties que Dropbox déclare appliquer (clauses contractuelles
+        types, Data Privacy Framework).
       </p>
 
       <h2>5. Sécurité</h2>

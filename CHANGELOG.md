@@ -74,6 +74,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+#### Politique de confidentialité
+
+- **Copie de sauvegarde hors site** : la politique de confidentialité nomme désormais Dropbox, qui reçoit chaque nuit une copie chiffrée de la base (stockage aux États-Unis, offre sans accord de traitement spécifique), en précisant que c'est provisoire. Elle ne dit plus que chaque prestataire est lié par un accord de traitement.
+
 #### Formulaires et actions de l'administration
 
 - **Formulaires de l'administration** (connexion, mot de passe oublié, nouveau mot de passe, activation d'un compte, invitation d'un administrateur, membres et import, responsables de secteur, créneaux, séries et postes, jalons, pages d'information, invitations et relances, rappel manuel, super-admin) : les erreurs s'affichent à côté du champ concerné et sont annoncées, la saisie est conservée, un double clic n'envoie rien deux fois, une panne de réseau est expliquée avec **Réessayer** au lieu d'un écran figé, et le remplissage automatique convient aux gestionnaires de mots de passe. Supprimer ou désactiver (membre, responsable de secteur, créneau, poste, jalon, page, organisation) demande une confirmation qui dit ce qui va se passer, par exemple combien de bénévoles inscrits seront prévenus ; supprimer une organisation demande de taper son identifiant dans la fenêtre.

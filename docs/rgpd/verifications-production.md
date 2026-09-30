@@ -6,12 +6,12 @@ Ce que le dépôt ne permet pas d'établir. Pour chaque point : la preuve à con
 
 - [x] Fournisseur et entité : OVH SAS, Roubaix, éditeur de Kimsufi (adresse du serveur, whois ; mentions légales Kimsufi). Vérifié le 2026-09-30. Reste : entité du contrat dans l'espace client.
 - [x] Centre de données : **RBX3**, Roubaix (France), lu dans l'espace client le 2026-09-30. Accès à distance possible de filiales hors UE sous clauses types (DPA § 6.2) : noté dans [sous-traitants.md](sous-traitants.md).
-- [x] DPA : « Annexe traitement de données à caractère personnel » acceptée le 2026-04-02 (espace client, liste des contrats), avec les conditions Serveurs dédiés. Version du 3 octobre 2025 (clauses résumées dans [sous-traitants.md](sous-traitants.md)). Restent : courrier d'instructions écrites (§ 8.1), sort des disques remplacés, examen de la clause d'hébergeur LCEN.
+- [x] DPA : « Annexe traitement de données à caractère personnel » acceptée le 2026-04-02 (espace client, liste des contrats), avec les conditions Serveurs dédiés. Version du 3 octobre 2025 (clauses résumées dans [sous-traitants.md](sous-traitants.md)). Courrier d'instructions écrites (§ 8.1) : pas prévu (décision du 2026-09-30, voir [README.md](README.md)). Restent notés : sort des disques remplacés, clause d'hébergeur LCEN.
 
 ## Envoi des emails (SMTP)
 
 - [x] Fournisseur : **Gandi Mail**, seul expéditeur autorisé du domaine (SPF, DKIM `gm1`–`gm3`, MX, DMARC strict), observé le 2026-09-30. Confirmation formelle : valeur de `SMTP_HOST` dans le secret de production.
-- [ ] DPA v2023.0 et localisation (France, sans transfert) documentés ; **durée des journaux SMTP et des files à demander** à Gandi (support ou dpo@gandi.net).
+- [ ] DPA v2023.0 et localisation (France, sans transfert) documentés ; durée des journaux SMTP et des files : non documentée, pas de demande prévue (décision du 2026-09-30).
 
 ## Dropbox (copie hors site)
 
