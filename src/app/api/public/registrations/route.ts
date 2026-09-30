@@ -27,7 +27,7 @@ import {
 import { z } from "zod"
 import { linkToken, registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
-import { checkAnswers } from "@/lib/event-questions"
+import { checkAnswers, planAnswerWrites } from "@/lib/event-questions"
 import { memberMayTake, reservationRefusal, reservedRoles } from "@/lib/role-reservation"
 import { normalizeEmail } from "@/lib/email-address"
 import { RoleLimitError, roleLimitBreaches, roleLimitMessage, roleLimits } from "@/lib/role-limit"
@@ -399,13 +399,24 @@ export async function POST(req: Request) {
         )
       }
       const outboxIds = await enqueueNotifications(await buildNotifications(created), tx, { organizationId: event.organizationId })
-      // Answers of this sign-up replace the volunteer's previous ones for these questions (#483).
-      for (const [questionId, values] of answerCheck.values) {
+      // Answers (#483): replaced only with proof the submitter owns the address, as for the
+      // profile below; otherwise only missing answers are added (see planAnswerWrites).
+      const writes = planAnswerWrites(questions.map((q) => q.id), answerCheck.values, createdNow || ownsEmail)
+      for (const [questionId, values] of writes.replace) {
         await tx.questionAnswer.upsert({
           where: { questionId_volunteerId: { questionId, volunteerId } },
           create: { questionId, eventId, volunteerId, values },
           update: { values },
         })
+      }
+      if (writes.addMissing.length > 0) {
+        await tx.questionAnswer.createMany({
+          data: writes.addMissing.map(([questionId, values]) => ({ questionId, eventId, volunteerId, values })),
+          skipDuplicates: true,
+        })
+      }
+      if (writes.clear.length > 0) {
+        await tx.questionAnswer.deleteMany({ where: { volunteerId, questionId: { in: writes.clear } } })
       }
       return { registrations: created, volunteerId, createdNow, outboxIds }
     })
