@@ -47,6 +47,17 @@ spec:
           containers:
             - name: offsite-sync
               image: rclone/rclone:1.68
+              env:
+                - name: APP_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: benevoles-secret
+                      key: NEXT_PUBLIC_APP_URL
+                - name: CRON_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: benevoles-secret
+                      key: CRON_SECRET
               volumeMounts:
                 - name: backup-storage
                   mountPath: /backups
@@ -71,3 +82,7 @@ spec:
 
                   echo "==> Inventaire Dropbox :"
                   rclone lsl dropbox:/benevol-backups --config /config/rclone/rclone.conf
+                  # Heartbeat for the super-admin health page (#383); a failure to report must not fail the job.
+                  wget -q -O - --post-data='{"job":"backup-offsite","ok":true}' \
+                    --header="Authorization: Bearer ${CRON_SECRET}" --header="Content-Type: application/json" \
+                    "${APP_URL}/api/cron/heartbeat" || echo "heartbeat non envoyé"

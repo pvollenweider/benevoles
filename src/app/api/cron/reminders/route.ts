@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { recordJobRun } from "@/lib/job-runs"
 import { env } from "@/lib/env"
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
@@ -56,6 +57,8 @@ async function run(req: Request) {
   if (!isAuthorized(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
+
+  return recordJobRun("reminders", async () => {
 
   const now = new Date()
   const totals: Record<string, { eligible: number; sent: number; failed: number }> = {}
@@ -175,5 +178,6 @@ async function run(req: Request) {
     expiredOffers: expiredOffers.length,
     outbox,
     outboxStatus,
+  })
   })
 }

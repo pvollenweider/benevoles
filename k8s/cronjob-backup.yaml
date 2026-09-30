@@ -46,6 +46,16 @@ spec:
                 - name: backup-storage
                   mountPath: /backups
               env:
+                - name: APP_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: benevoles-secret
+                      key: NEXT_PUBLIC_APP_URL
+                - name: CRON_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: benevoles-secret
+                      key: CRON_SECRET
                 - name: PGHOST
                   value: postgres
                 - name: PGPORT
@@ -125,3 +135,7 @@ spec:
                   # Inventaire final
                   echo "==> Backups conservés :"
                   ls -lh /backups/benevoles_*.sql.gz.enc 2>/dev/null || echo "(aucun)"
+                  # Heartbeat for the super-admin health page (#383); a failure to report must not fail the job.
+                  wget -q -O - --post-data='{"job":"backup","ok":true}' \
+                    --header="Authorization: Bearer ${CRON_SECRET}" --header="Content-Type: application/json" \
+                    "${APP_URL}/api/cron/heartbeat" || echo "heartbeat non envoyé"

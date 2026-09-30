@@ -12,6 +12,8 @@ const schema = z.object({
   AUTH_SECRET: z.string().min(32, "AUTH_SECRET doit faire au moins 32 caractères"),
   NEXT_PUBLIC_APP_URL: z.string().url("NEXT_PUBLIC_APP_URL doit être une URL valide").optional(),
   CRON_SECRET: z.string().optional(),
+  /** Commit deployed, set by the image build (#383). */
+  GIT_SHA: z.string().optional(),
   EMAIL_FROM: z.string().optional(),
   EMAIL_REPLY_TO: z.string().optional(),
   ADMIN_NOTIFICATION_EMAIL: z.string().optional(),
