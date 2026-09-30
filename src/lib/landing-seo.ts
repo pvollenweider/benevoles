@@ -50,7 +50,7 @@ export const LANDING_FAQ: readonly FaqEntry[] = [
   {
     question: "Où sont les données ?",
     answer:
-      "L'application et sa base de données sont hébergées en France, chez OVH. Chaque organisation ne voit que ses événements et ses bénévoles, et peut tout exporter à tout moment. Aucun cookie de pistage, analytique ou publicitaire.",
+      "L'application et sa base de données sont hébergées en France, chez OVH. Une copie des sauvegardes, chiffrée avec une clé que le prestataire ne détient pas, est conservée hors site chez Dropbox, aux États-Unis. Chaque organisation ne voit que ses événements et ses bénévoles, et peut tout exporter à tout moment. Aucun cookie de pistage, analytique ou publicitaire.",
     link: { href: "/legal/privacy", label: "Politique de confidentialité" },
   },
   {

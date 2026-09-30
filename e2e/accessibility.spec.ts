@@ -17,6 +17,13 @@ test.describe("public pages", () => {
     })
   }
 
+  // The FAQ answers are inside closed <details> during the scan above: open them all.
+  test("/ FAQ answers have no serious violation", async ({ page }) => {
+    await page.goto("/")
+    await page.locator("details").evaluateAll((els) => els.forEach((d) => d.setAttribute("open", "")))
+    expect.soft(await seriousViolations(page)).toEqual([])
+  })
+
   test("event page, then the sign-up form, have no serious violation", async ({ page }) => {
     await page.goto("/spectacle-cirque-2026?org=default")
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible()

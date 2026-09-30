@@ -185,6 +185,7 @@ const BENEFITS = [
 
 function LandingPage() {
   return (
+    <>
     <main className="min-h-screen bg-white text-gray-900">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(landingJsonLd(apexBaseUrl())) }} />
 
@@ -211,7 +212,7 @@ function LandingPage() {
                 href={`mailto:${CONTACT_EMAIL}`}
                 className={`inline-flex items-center gap-2 bg-white text-blue-900 text-base font-bold px-7 py-3.5 rounded-full hover:bg-blue-50 transition-colors ${focusRing} focus-visible:outline-white`}
               >
-                Demander un espace<span aria-hidden="true"> →</span>
+                Demander un espace<span className="sr-only"> par email ({CONTACT_EMAIL})</span><span aria-hidden="true"> →</span>
               </a>
               <a
                 href={REPOSITORY_URL}
@@ -221,7 +222,7 @@ function LandingPage() {
               >
                 <GitHubMark className="w-5 h-5" />
                 Voir le code
-                <span className="sr-only">(ouvre dans un nouvel onglet)</span>
+                <span className="sr-only"> (ouvre dans un nouvel onglet)</span>
               </a>
             </div>
             <p className="mt-8 text-sm text-blue-200">
@@ -406,7 +407,8 @@ function LandingPage() {
           org-subdomain events list above, or any volunteer/admin-facing page: those are seen by
           someone else's audience, registering for or running someone else's event, not
           benevol.app's own. */}
-      <PublicFooter showSupport />
     </main>
+      <PublicFooter showSupport />
+    </>
   )
 }
