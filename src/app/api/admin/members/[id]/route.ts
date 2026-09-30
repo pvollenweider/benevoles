@@ -7,6 +7,9 @@ import { adminActor, diffFields, logOrgEvent } from "@/lib/org-log"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
 import { availabilitySchema } from "@/lib/availability"
+import { isUniqueViolation } from "@/lib/registration-capacity"
+
+const EMAIL_TAKEN = "Un autre membre de l'organisation utilise déjà cette adresse email."
 
 const patchSchema = z.object({
   firstName: z.string().min(1).optional(),
@@ -45,7 +48,22 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (data.availabilityPeriods !== undefined) updateData.availabilityPeriods = data.availabilityPeriods
   if (data.availabilityNote !== undefined) updateData.availabilityNote = data.availabilityNote
 
-  const volunteer = await db.volunteer.update({ where: { id }, data: updateData })
+  // Emails are unique per organisation (Volunteer_organizationId_email_key): answer a clean 409,
+  // as member creation does, instead of letting the constraint surface as a 500. The check covers
+  // the usual case; the catch covers a concurrent write taking the address in between.
+  const newEmail = updateData.email as string | null | undefined
+  if (newEmail && newEmail !== before.email) {
+    const taken = await db.volunteer.findFirst({ where: { email: newEmail, NOT: { id } } })
+    if (taken) return NextResponse.json({ error: EMAIL_TAKEN }, { status: 409 })
+  }
+
+  let volunteer
+  try {
+    volunteer = await db.volunteer.update({ where: { id }, data: updateData })
+  } catch (e) {
+    if (isUniqueViolation(e)) return NextResponse.json({ error: EMAIL_TAKEN }, { status: 409 })
+    throw e
+  }
 
   // Deactivation is its own action (matches DELETE's "soft delete"), distinct from a plain field
   // edit — logged separately so the activity list reads naturally either way. `tags` excluded:
