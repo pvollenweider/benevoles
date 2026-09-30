@@ -29,7 +29,7 @@ describe("robots (production domain: benevol.app)", () => {
     expect(result.rules).toEqual({ userAgent: "*", disallow: "/" })
   })
 
-  it("allows the apex marketing domain, with the standard disallow list and no sitemap", async () => {
+  it("allows the apex marketing domain, with the standard disallow list and the apex sitemap", async () => {
     withHost("benevol.app")
     const robots = (await import("../app/robots")).default
     const result = await robots()
@@ -38,7 +38,7 @@ describe("robots (production domain: benevol.app)", () => {
       allow: "/",
       disallow: ["/admin", "/api/", "/my/", "/waitlist/", "/leader/"],
     })
-    expect(result.sitemap).toBeUndefined()
+    expect(result.sitemap).toBe("https://benevol.app/sitemap.xml")
   })
 
   it("allows an org subdomain and points to its own sitemap", async () => {
@@ -57,11 +57,11 @@ describe("robots (dev: localhost)", () => {
   })
   afterEach(() => vi.unstubAllEnvs())
 
-  it("allows localhost (known host, no org subdomain, no sitemap)", async () => {
+  it("allows localhost (known host, no org subdomain, the apex sitemap)", async () => {
     withHost("localhost:3000")
     const robots = (await import("../app/robots")).default
     const result = await robots()
     expect(result.rules).toMatchObject({ userAgent: "*", allow: "/" })
-    expect(result.sitemap).toBeUndefined()
+    expect(result.sitemap).toBe("http://localhost:3000/sitemap.xml")
   })
 })

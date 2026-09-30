@@ -3,6 +3,11 @@
 
 const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
 
+/** The apex (marketing and documentation) base URL, e.g. https://www.benevol.app. */
+export function apexBaseUrl(): string {
+  return APP_URL
+}
+
 // Returns the base URL for a given org subdomain.
 // Production: https://lausanne-rocks.benevol.app
 // Dev (localhost): http://localhost:3000  (subdomains not available locally)
