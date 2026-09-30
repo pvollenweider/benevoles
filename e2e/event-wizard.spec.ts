@@ -33,7 +33,7 @@ test("an admin creates and publishes an event through the three steps", async ({
   await page.getByLabel("Début *").fill("10:00")
   await page.getByLabel("Fin *").fill("14:00")
   await page.getByRole("button", { name: /^Créer 2 créneaux$/ }).click()
-  await expect(page.getByRole("status")).toHaveText(/2 créneaux créés/)
+  await expect(page.getByRole("status").filter({ hasText: /2 créneaux créés/ })).toBeVisible()
 
   // Step 3: review, then publish.
   await page.getByRole("link", { name: /Continuer : vérification et publication/ }).click()
