@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next"
 import { headers } from "next/headers"
 import { NON_ORG_SUBDOMAINS } from "@/lib/org-subdomain"
-import { orgBaseUrl, isKnownHost } from "@/lib/urls"
+import { apexBaseUrl, orgBaseUrl, isKnownHost } from "@/lib/urls"
 
 // Token-bearing and admin/API surfaces: never worth indexing, and some carry secrets in the URL
 // (/my/[token], /waitlist/[token]/confirm, /leader/[token] (#186), /admin/accept-invite?token=...).
@@ -23,6 +23,7 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
 
   return {
     rules: { userAgent: "*", allow: "/", disallow: DISALLOW },
-    ...(orgSlug ? { sitemap: `${orgBaseUrl(orgSlug)}/sitemap.xml` } : {}),
+    // An org host lists its events; the apex host lists the home and the documentation.
+    sitemap: orgSlug ? `${orgBaseUrl(orgSlug)}/sitemap.xml` : `${apexBaseUrl()}/sitemap.xml`,
   }
 }

@@ -2,76 +2,40 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
 const getMock = vi.hoisted(() => vi.fn())
 vi.mock("next/headers", () => ({ headers: () => Promise.resolve({ get: getMock }) }))
+vi.mock("@/lib/prisma", () => ({ prisma: { event: { findMany: vi.fn().mockResolvedValue([]) } } }))
+vi.mock("@/lib/resolve-org", () => ({ resolveOrgSlug: vi.fn().mockResolvedValue(null) }))
 
-const findUnique = vi.hoisted(() => vi.fn())
-const findUniqueHistory = vi.hoisted(() => vi.fn())
-const findMany = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/prisma", () => ({
-  prisma: {
-    organization: { findUnique },
-    orgSlugHistory: { findUnique: findUniqueHistory },
-    event: { findMany },
-  },
-}))
-
-function withOrgSlug(slug: string | null) {
-  getMock.mockImplementation((name: string) => (name === "x-org-slug" ? slug : null))
+function withHeaders(values: Record<string, string | null>) {
+  getMock.mockImplementation((name: string) => values[name] ?? null)
 }
 
-describe("sitemap", () => {
+// The apex host's sitemap lists the home and the documentation (SEO); other hosts keep their rules.
+describe("sitemap on the apex host", () => {
   beforeEach(() => {
     vi.resetModules()
-    vi.clearAllMocks()
-    vi.stubEnv("NEXT_PUBLIC_APP_URL", "https://benevol.app")
+    vi.stubEnv("NEXT_PUBLIC_APP_URL", "https://www.benevol.app")
   })
   afterEach(() => vi.unstubAllEnvs())
 
-  it("returns an empty sitemap when there's no org context (apex/marketing host)", async () => {
-    withOrgSlug(null)
-    const sitemap = (await import("../app/sitemap")).default
-    expect(await sitemap()).toEqual([])
-    expect(findUnique).not.toHaveBeenCalled()
-  })
-
-  it("returns an empty sitemap for an unknown org slug", async () => {
-    withOrgSlug("nope")
-    findUnique.mockResolvedValue(null)
-    findUniqueHistory.mockResolvedValue(null)
-    const sitemap = (await import("../app/sitemap")).default
-    expect(await sitemap()).toEqual([])
-  })
-
-  it("returns an empty sitemap for a historical (redirecting) slug", async () => {
-    withOrgSlug("old-slug")
-    findUnique.mockResolvedValue(null)
-    findUniqueHistory.mockResolvedValue({
-      slug: "old-slug",
-      organization: { id: "org-1", slug: "new-slug", name: "Org", publicTitle: null, active: true },
-    })
-    const sitemap = (await import("../app/sitemap")).default
-    expect(await sitemap()).toEqual([])
-  })
-
-  it("lists the org's published events and their custom pages", async () => {
-    withOrgSlug("lausanne-rocks")
-    findUnique.mockResolvedValue({ id: "org-1", slug: "lausanne-rocks", name: "Lausanne Rocks", publicTitle: null })
-    findMany.mockResolvedValue([
-      {
-        slug: "festival-2026",
-        updatedAt: new Date("2026-01-01"),
-        pages: [{ slug: "faq", updatedAt: new Date("2026-01-02") }],
-      },
-    ])
+  it("lists the home and every documentation page on www", async () => {
+    withHeaders({ host: "www.benevol.app" })
     const sitemap = (await import("../app/sitemap")).default
     const entries = await sitemap()
-
-    expect(findMany).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { organizationId: "org-1", publicStatus: "published", isListed: true } }),
-    )
-    expect(entries).toEqual([
-      { url: "https://lausanne-rocks.benevol.app", changeFrequency: "daily" },
-      { url: "https://lausanne-rocks.benevol.app/festival-2026", lastModified: new Date("2026-01-01"), changeFrequency: "daily" },
-      { url: "https://lausanne-rocks.benevol.app/festival-2026/faq", lastModified: new Date("2026-01-02"), changeFrequency: "monthly" },
+    expect(entries.map((e) => e.url)).toEqual([
+      "https://www.benevol.app/",
+      "https://www.benevol.app/doc",
+      "https://www.benevol.app/doc/admin",
+      "https://www.benevol.app/doc/benevole",
     ])
+    // The guides are real files in the repo: their date is known.
+    expect(entries.find((e) => e.url.endsWith("/doc/admin"))?.lastModified).toBeInstanceOf(Date)
+  })
+
+  it("stays empty on staging and on unknown hosts", async () => {
+    const sitemap = (await import("../app/sitemap")).default
+    withHeaders({ host: "staging.benevol.app" })
+    expect(await sitemap()).toEqual([])
+    withHeaders({ host: "evil-benevol.app" })
+    expect(await sitemap()).toEqual([])
   })
 })

@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { DOC_GUIDES } from "@/lib/doc-pages"
 import PublicFooter from "@/components/PublicFooter"
 import DocThemeToggle from "./DocThemeToggle"
 
@@ -33,8 +34,9 @@ export default function DocLayout({ children }: { children: React.ReactNode }) {
           </Link>
           <div className="flex items-center gap-1">
             <nav aria-label="Guides" className="flex gap-4 -my-3 text-sm">
-              <Link href="/doc/admin" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors py-3 flex items-center">Guide administrateur</Link>
-              <Link href="/doc/benevole" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors py-3 flex items-center">Guide bénévole</Link>
+              {DOC_GUIDES.map((g) => (
+                <Link key={g.path} href={g.path} className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors py-3 flex items-center">{g.title}</Link>
+              ))}
             </nav>
             <DocThemeToggle />
           </div>
