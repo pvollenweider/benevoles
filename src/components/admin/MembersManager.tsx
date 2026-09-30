@@ -65,10 +65,17 @@ export default function MembersManager({ initialMembers, allTags, initialSearch 
           <h1 className="text-xl font-bold text-gray-900">Membres</h1>
           <p className="text-sm text-gray-500">{members.length} membre{members.length > 1 ? "s" : ""}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
+          <a
+            href="/api/admin/members/export"
+            download
+            className="text-sm border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Exporter les membres (CSV)<span className="sr-only"> (télécharge un fichier)</span>
+          </a>
           <button
             onClick={() => setShowImport(true)}
-            className="text-sm border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50"
+            className="text-sm border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
             Importer CSV/Excel
           </button>

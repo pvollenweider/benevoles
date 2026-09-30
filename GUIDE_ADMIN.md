@@ -480,6 +480,30 @@ Depuis la page de l'événement → **QR code**, télécharger le QR code de la 
 
 Les emails envoyés sont effacés chaque nuit (ils contiennent des données personnelles) ; ceux en échec restent 30 jours. Les 200 plus récents sont affichés.
 
+## Exporter et conserver ses données
+
+Vos données vous appartiennent et sortent de l'application à tout moment, sans demande :
+
+| Export | Où | Format |
+|---|---|---|
+| Un événement complet (réglages, créneaux, inscriptions avec les bénévoles, pages, responsables, jalons, journal) | page de l'événement → **Rapports** → **Archive de l'événement (JSON)** | JSON |
+| Tous les membres (étiquettes, disponibilités, notes, nombre d'inscriptions, membres désactivés compris) | **Membres** → **Exporter les membres (CSV)** | CSV |
+| Le journal d'activité de l'organisation | **Paramètres** → **Journal d'activité** → **Exporter tout le journal (CSV)** | CSV |
+| Une feuille de présence, le planning, la liste des bénévoles | **Rapports** de l'événement | CSV, PDF, HTML |
+
+Les fichiers CSV s'ouvrent tels quels dans Excel ou LibreOffice (UTF-8, point-virgule). Les archives ne contiennent jamais de lien personnel ni de jeton d'accès.
+
+**Durées de conservation** :
+
+| Données | Conservation |
+|---|---|
+| Membres, événements, créneaux, inscriptions, pages, journaux | tant que l'organisation est active ; effacés 30 jours après sa désactivation |
+| Emails envoyés (file d'envoi) | effacés chaque nuit une fois partis ; ceux en échec après 30 jours |
+| Comptes administrateurs désactivés | effacés après 30 jours |
+| Sauvegardes chiffrées de la base | 30 jours sur le serveur, 90 jours en copie hors site |
+
+**Supprimer une organisation** : exportez d'abord ce que vous voulez garder, puis demandez la désactivation à l'administrateur de la plateforme (adresse de contact en bas de page). L'organisation devient inaccessible immédiatement ; ses données sont effacées définitivement par le nettoyage automatique 30 jours plus tard, sauvegardes comprises à l'issue de leur propre délai. Pendant ces 30 jours, une réactivation reste possible.
+
 ## Journal d'activité de l'organisation
 
 **`/admin/settings/activity`**

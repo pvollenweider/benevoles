@@ -254,6 +254,10 @@ Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut don
 - [ ] certificat wildcard valide (`kubectl -n benevoles get certificate benevol-app-wildcard`) ;
 - [ ] pas d'alerte en attente dans Sentry, en particulier sur la file d'envoi des emails.
 
+## Supprimer une organisation
+
+Il n'y a pas de suppression immédiate : le super admin **désactive** l'organisation (`/super-admin/organizations`), ce qui coupe l'accès admin et public tout de suite, et `/api/cron/cleanup` l'efface définitivement (événements, créneaux, inscriptions, membres, invitations en cascade ; comptes admin détachés puis effacés) **30 jours après la désactivation**. Avant de désactiver, rappeler à l'organisation d'exporter ce qu'elle veut garder (GUIDE_ADMIN, « Exporter et conserver ses données »). Une réactivation dans les 30 jours annule la suppression. Les sauvegardes chiffrées contenant ces données expirent selon leur propre rétention (30 jours sur le serveur, 90 jours hors site).
+
 ## Journaux
 
 `k8s/log-rotation.md` décrit trois options pour limiter la rétention des journaux à 90 jours (kubelet, logrotate, Loki).

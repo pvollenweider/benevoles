@@ -181,6 +181,17 @@ export default function PrivacyPage() {
         Les données des administrateurs sont supprimées dans un délai de 30 jours suivant la
         désactivation ou la suppression du compte.
       </p>
+      <p>Plus précisément :</p>
+      <ul>
+        <li>membres, événements, créneaux, inscriptions, pages et journaux : conservés tant que l&apos;Organisation est active, effacés 30 jours après sa désactivation ;</li>
+        <li>emails envoyés (file d&apos;envoi) : effacés chaque nuit une fois partis, ceux en échec après 30 jours ;</li>
+        <li>sauvegardes chiffrées de la base : 30 jours sur le serveur, 90 jours en copie hors site ;</li>
+        <li>bénévoles sans organisation ni inscription : effacés à chaque nettoyage nocturne.</li>
+      </ul>
+      <p>
+        Une Organisation peut à tout moment exporter ses données (archive JSON d&apos;un événement, membres
+        et journal d&apos;activité en CSV) depuis son espace d&apos;administration, sans demande préalable.
+      </p>
 
       <h2>8. Modifications</h2>
       <p>
