@@ -31,6 +31,8 @@ export default async function EditEventPage({ params, searchParams }: { params: 
     publicStatus: event.publicStatus as "draft" | "published" | "archived",
     isListed: event.isListed,
     accentColorKey: event.accentColorKey,
+    latitude: event.latitude,
+    longitude: event.longitude,
     showSchedule: (event.showSchedule ?? []) as Array<{ name: string; date: string; startTime: string; endTime: string }>,
   }
 

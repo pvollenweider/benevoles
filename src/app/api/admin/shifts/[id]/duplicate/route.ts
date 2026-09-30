@@ -33,6 +33,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       capacity: source.capacity,
       status: "open",
       locationDetails: source.locationDetails,
+      latitude: source.latitude,
+      longitude: source.longitude,
       contactName: source.contactName,
       contactPhone: source.contactPhone,
       instructions: source.instructions,

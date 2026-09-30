@@ -22,6 +22,8 @@ const schema = z.object({
   breakMinutes: z.number().int().optional(),
   capacity: z.number().int().min(1),
   locationDetails: z.string().optional(),
+  latitude: z.number().min(-90).max(90).nullable().optional(),
+  longitude: z.number().min(-180).max(180).nullable().optional(),
   contactName: z.string().max(SHIFT_CONTACT_NAME_MAX).optional().nullable(),
   contactPhone: z.string().max(SHIFT_CONTACT_PHONE_MAX).optional().nullable(),
   instructions: z.string().max(SHIFT_INSTRUCTIONS_MAX).optional().nullable(),

@@ -5,6 +5,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { ACCENT_KEYS, eventAccent } from "@/lib/event-accent"
+import CoordinatesField from "@/components/admin/CoordinatesField"
 import { useRouter } from "next/navigation"
 import { isCompleteTime, addMinutes } from "@/lib/gantt-utils"
 import { LISTED_FIELD_HELP, LISTED_FIELD_LABEL, UNLISTED_HINT, visibilityLabel } from "@/lib/event-visibility"
@@ -26,6 +27,9 @@ type EventFormData = {
   isListed: boolean
   /** Accent colour of the public page (#300): a palette key, or null for the neutral header. */
   accentColorKey: string | null
+  /** Coordinates of the place (#191), or null. */
+  latitude: number | null
+  longitude: number | null
 }
 
 type Props = {
@@ -48,6 +52,8 @@ const defaultData: EventFormData = {
   requirePhone: false,
   isListed: true,
   accentColorKey: null,
+  latitude: null,
+  longitude: null,
 }
 
 const emptyShow: Show = { name: "", date: "", startTime: "", endTime: "" }
@@ -225,6 +231,13 @@ export default function EventForm({ initialData, createdHref }: Props) {
           <label htmlFor="event-location" className="block text-sm font-medium text-gray-700 mb-1">Lieu</label>
           <input id="event-location" type="text" value={form.location} onChange={(e) => set("location", e.target.value)} className={inputCls} />
         </div>
+
+        <CoordinatesField
+          id="event-coordinates"
+          value={{ latitude: form.latitude, longitude: form.longitude }}
+          onChange={(c) => setForm((f) => ({ ...f, latitude: c?.latitude ?? null, longitude: c?.longitude ?? null }))}
+          hint="Les bénévoles auront un lien « Voir sur la carte » (OpenStreetMap) sur la page d'inscription, dans les emails et sur leur page personnelle ; les créneaux sans lieu propre l'utilisent aussi."
+        />
 
         <div className="grid grid-cols-2 gap-4">
           <div>

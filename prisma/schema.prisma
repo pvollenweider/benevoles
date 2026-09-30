@@ -72,6 +72,9 @@ model Event {
   // Accent colour of the public page (#300, part 1): a key of the curated palette
   // (src/lib/event-accent.ts), never a free value, so the header stays readable.
   accentColorKey      String?
+  // Coordinates of the place (#191): typed once, shown as a map link; default for the shifts.
+  latitude            Float?
+  longitude           Float?
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 
@@ -249,6 +252,9 @@ model Shift {
   contactName     String?
   contactPhone    String?
   instructions    String?
+  // Coordinates of the meeting point (#191); null = the event's.
+  latitude        Float?
+  longitude       Float?
   // Minimum age to self-register, in years — see issue #192. Enforced server-side at
   // registration (Volunteer.birthDate, collected on the public form only when at least one
   // selected shift requires it). Not proactively greyed out on the public timeline: we don't

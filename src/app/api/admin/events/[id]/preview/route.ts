@@ -67,7 +67,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           date: s.date.toLocaleDateString("fr-FR"),
           startTime: s.startTime,
           endTime: s.endTime,
-          ...pickShiftInfo(s),
+          ...pickShiftInfo(s, event),
         })),
       editToken: "apercu",
       orgSlug: event.organization.slug,

@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useId, useState, useRef } from "react"
+import CoordinatesField from "@/components/admin/CoordinatesField"
 import { announce } from "@/lib/announce"
 import { deleteRoleRecap, deleteShiftRecap, shiftWhen, type ActionRecap } from "@/lib/action-recap"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
@@ -30,7 +31,7 @@ const UNPUBLISHED_NOTICE = "C'était le dernier créneau : l'événement est rep
 
 const emptyShift = {
   roleName: "", label: "", description: "", date: "", startTime: "", endTime: "",
-  capacity: 2, locationDetails: "", displayOrder: 0, internalNotes: "", waitlistEnabled: false,
+  capacity: 2, locationDetails: "", latitude: null as number | null, longitude: null as number | null, displayOrder: 0, internalNotes: "", waitlistEnabled: false,
   minAge: "" as number | string,
   contactName: "", contactPhone: "", instructions: "",
 }
@@ -39,6 +40,7 @@ const emptyShift = {
 type RawShift = AdminShift & {
   description?: string | null; internalNotes?: string | null; locationDetails?: string | null
   contactName?: string | null; contactPhone?: string | null; instructions?: string | null
+  latitude?: number | null; longitude?: number | null
 }
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
@@ -605,6 +607,15 @@ export default function ShiftsManager({
                 <label htmlFor={`locationDetails-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Lieu de rendez-vous</label>
                 <input id={`locationDetails-${editingId ?? "new"}`} type="text" value={form.locationDetails} onChange={e => setField("locationDetails", e.target.value)} placeholder="ex. Entrée B, côté parking" className="input" />
               </div>
+              <div className="sm:col-span-3">
+                <CoordinatesField
+                  id={`coordinates-${editingId ?? "new"}`}
+                  small
+                  value={{ latitude: form.latitude, longitude: form.longitude }}
+                  onChange={(c) => setForm((f) => ({ ...f, latitude: c?.latitude ?? null, longitude: c?.longitude ?? null }))}
+                  hint="Vide : le lieu de l'événement est utilisé pour le lien « Voir sur la carte »."
+                />
+              </div>
               <div>
                 <label htmlFor={`contactName-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Personne de contact</label>
                 <input id={`contactName-${editingId ?? "new"}`} type="text" maxLength={SHIFT_CONTACT_NAME_MAX} value={form.contactName} onChange={e => setField("contactName", e.target.value)} placeholder="ex. Léa (responsable bar)" className="input" />
@@ -753,6 +764,8 @@ export default function ShiftsManager({
                         waitlistEnabled: s.waitlistEnabled ?? false,
                         minAge: s.minAge ?? "",
                         locationDetails: s.locationDetails ?? "",
+                        latitude: s.latitude ?? null,
+                        longitude: s.longitude ?? null,
                         contactName: s.contactName ?? "",
                         contactPhone: s.contactPhone ?? "",
                         instructions: s.instructions ?? "",
