@@ -27,6 +27,8 @@ Comptes créés par le seed :
 
 Mailpit (capture emails) accessible sur http://localhost:8025.
 
+`npm install` installe aussi un hook pre-commit (husky) : il lance `eslint --fix` sur les fichiers `*.ts` et `*.tsx` indexés (lint-staged), puis `tsc --noEmit`.
+
 ## Workflow
 
 1. Ouvrir ou choisir une issue
@@ -34,7 +36,21 @@ Mailpit (capture emails) accessible sur http://localhost:8025.
 3. Développer et commiter (voir conventions ci-dessous)
 4. Ouvrir une Pull Request vers `main`
 
-Les PRs doivent passer le CI avant d'être mergées : type-check (`tsc --noEmit`), lint, tests Vitest et tests E2E Playwright. Les mêmes contrôles se lancent en local avec `make typecheck` (ou `npm run typecheck`, qui régénère le client Prisma avant `tsc` : après un changement de schéma ou de branche, un client obsolète produit de faux échecs), `make lint`, `make test` et `npm run test:e2e`.
+Les PRs doivent passer la CI avant d'être fusionnées. Contrôles de `ci.yml` et leur équivalent local :
+
+| Job CI | Contrôle | En local |
+|--------|----------|----------|
+| Type-check, lint & tests | `tsc --noEmit` | `make typecheck` |
+| | ESLint | `make lint` |
+| | Vitest et seuils de couverture | `npm run test:coverage` |
+| | `SECURITY.md` suit la version de `package.json` | `node scripts/check-security-md.mjs` |
+| | Migrations compatibles avec la version précédente | `node scripts/check-migrations.mjs origin/main` |
+| E2E (Playwright) | Tests d'intégration sur un vrai PostgreSQL | `npm run test:integration` (avec `DATABASE_URL`) |
+| | Tests Playwright, dont l'accessibilité (axe-core) | `make e2e` |
+
+`make typecheck` (ou `npm run typecheck`) régénère le client Prisma avant `tsc` : après un changement de schéma ou de branche, un client obsolète produit de faux échecs.
+
+Tests E2E : `make e2e-up && make e2e-setup && make e2e` la première fois, puis `make e2e`. Ils tournent sur une base et une boîte mail dédiées (`docker-compose.e2e.yml`, ports 5433, 1026 et 8026), avec `.env.e2e` créé depuis `e2e/e2e.env.example`, jamais sur la base de développement. `npm run test:e2e` seul lance `next dev`, qui lit `.env`, donc la base de développement.
 
 TypeScript est installé en deux versions côte à côte, selon la procédure officielle de TypeScript 7 : `@typescript/native` (TypeScript 7) fournit la commande `tsc` utilisée pour le type-check, et le paquet `typescript` pointe vers `@typescript/typescript6`, dont l'API reste nécessaire à typescript-eslint et au build Next.js. `tsc6` lance la vérification avec TypeScript 6 si besoin de comparer.
 
@@ -54,6 +70,7 @@ Format : `type(scope): description courte`
 | `ci` | CI/CD, GitHub Actions |
 | `ops` | Infrastructure, Docker, K8s |
 | `chore` | Tâches diverses (dépendances, config) |
+| `release` | Commit de version (`release: vX.Y.Z` : CHANGELOG, package.json, SECURITY.md…) |
 
 Exemples : `feat(admin): multi-page PDF export`, `fix(timeline): broken mobile scroll`
 
@@ -62,52 +79,52 @@ Exemples : `feat(admin): multi-page PDF export`, `fix(timeline): broken mobile s
 ```
 src/
   app/
-    [orgSlug]/[eventSlug]/  # Page publique d'un événement
-    my/                     # Gestion inscription bénévole (/my/[token])
-    admin/                  # Interface admin (protégée, scopée par org)
-      dashboard/            # Tableau de bord
-      events/               # CRUD événements, créneaux, inscriptions, invitations
-      members/              # Pool de bénévoles de l'organisation
-      settings/admins/      # Équipe admin, slug, charte du bénévole
-    super-admin/            # Interface super admin (rôle super_admin requis)
-      organizations/        # CRUD organisations
+    [eventSlug]/            # Page publique d'un événement (organisation lue dans le sous-domaine, ?org= en dev)
+      [pageSlug]/           # Pages personnalisées de l'événement
+      success/              # Confirmation d'inscription
+    my/[token]/             # Page personnelle du bénévole
+    leader/[token]/         # Page du responsable de secteur
     waitlist/[token]/       # Confirmation d'une place de liste d'attente
-    legal/                  # Politique de confidentialité, conditions d'utilisation
+    doc/ fonctionnalites/ accessibilite/   # Pages publiques rendues depuis les .md (src/lib/doc-pages.ts)
+    legal/                  # Confidentialité, conditions d'utilisation
+    product-updates/        # Désabonnement des nouveautés produit
+    admin/                  # Interface admin (protégée, scopée par org)
+      dashboard/ events/ members/ search/ account/
+      settings/             # admins (équipe, nom, slug, fuseau, charte), notifications, message-templates, activity
+    super-admin/            # organizations, product-updates, health, profile (rôle super_admin)
     api/
-      public/               # API publique (événements, inscriptions, push)
-      admin/                # API admin scopée par organisation
-      super-admin/          # API super admin
-      cron/                 # reminders (rappels) et cleanup (purge RGPD)
-  components/
-    admin/                  # Composants interface admin
-    super-admin/            # Composants super admin
-  lib/
-    notifications/          # Couche email (sendNotification, templates, types)
+      public/ admin/ super-admin/
+      cron/                 # reminders, cleanup (purge RGPD), heartbeat (sauvegardes)
+      health/               # Sonde Kubernetes
+  components/               # admin/, super-admin/, public/, __tests__/ (*.react.test.tsx, jsdom)
+  lib/                      # Logique métier pure et testée (__tests__/), notifications/
     prisma-org.ts           # Client Prisma scopé par organisation (getOrgClient)
-    auth-guard.ts           # Guards d'authentification (requireOrgSession)
+    auth-guard.ts           # requireOrgSession(level), requireSuperAdmin, getOrgContext
+    permissions.ts          # Matrice PERMISSIONS (Organisateur / Propriétaire)
     env.ts                  # Validation des variables d'environnement
-  middleware.ts             # Auth /admin et /super-admin, routage par sous-domaine
-  __tests__/security/       # Tests d'isolation cross-tenant (Vitest)
+  proxy.ts                  # Auth /admin et /super-admin, en-tête x-org-slug (convention Proxy de Next 16)
+  __tests__/                # Tests de routes ; security/ : isolation cross-tenant
+  __integration__/          # Tests contre un vrai Postgres (*.int.test.ts)
   generated/prisma/         # Client Prisma (généré, ne pas éditer)
-prisma/
-  schema.prisma             # Schéma de base de données
-  migrations/               # Historique des migrations Prisma
+prisma/                     # schema.prisma, migrations/, seed.ts
+e2e/                        # Specs Playwright (dont accessibility.spec.ts), helpers/
+scripts/                    # check-*.mjs (CI), seed-demo.ts, screenshots.mjs, retention-docs.ts
 k8s/                        # Manifestes Kubernetes
 gandi-webhook/              # Webhook DNS Gandi pour cert-manager (Go)
 ```
 
 ## Base de données
 
-Les migrations sont gérées par Prisma. Pour modifier le schéma :
+Les migrations sont gérées par Prisma. La CLI Prisma (configurée par `prisma.config.ts`) ne charge pas `.env` : lui passer avec `node --env-file`. Pour modifier le schéma :
 
 ```bash
 # 1. Modifier prisma/schema.prisma
 # 2. Créer la migration
-npx prisma migrate dev --name ma-migration
+node --env-file=.env node_modules/.bin/prisma migrate dev --name ma-migration
 # 3. Commiter schema.prisma ET le dossier migrations/
 ```
 
-Ne jamais modifier les fichiers dans `src/generated/prisma/` — ils sont régénérés automatiquement.
+Ne jamais modifier les fichiers dans `src/generated/prisma/` : ils sont régénérés automatiquement.
 
 Ne jamais modifier une migration déjà appliquée en production : Prisma enregistre une somme de contrôle de chaque migration appliquée, et le déploiement suivant échouerait.
 
@@ -133,7 +150,9 @@ Toutes les routes répondent en erreur avec `{ error: string, details?: … }` :
 
 ## Tests
 
-Les tests d'intégration (`src/__integration__`, `npm run test:integration`) tournent contre un vrai Postgres (`DATABASE_URL`) : application des migrations sur une base contenant déjà des données, file d'envoi sous concurrence et validée ou annulée avec la transaction métier. Ils sont ignorés sans `DATABASE_URL` et lancés par le job E2E de la CI. Toute migration qui transforme des données existantes doit y avoir son scénario.
+Toute correction de bug a son test Vitest de régression, toute fonctionnalité plusieurs cas. La logique testable va dans une fonction pure d'un module `src/lib/*.ts` plutôt que de rester dans une route ou un composant (voir `gantt-utils.ts`, `pdf-export-gantt.ts`, `sector-leaders.ts`). Les tests de composants sont dans `src/components/__tests__/*.react.test.tsx`, avec `@vitest-environment jsdom` en tête de fichier.
+
+Les tests d'intégration (`src/__integration__`, `npm run test:integration`) tournent contre un vrai Postgres (`DATABASE_URL`) : application des migrations sur une base contenant déjà des données, file d'envoi sous concurrence et validée ou annulée avec la transaction métier, limites de débit partagées entre répliques. Ils sont ignorés sans `DATABASE_URL` et lancés par le job E2E de la CI. Toute migration qui transforme des données existantes doit y avoir son scénario.
 
 La CI des PR lance les tests avec la couverture (`npm run test:coverage`) et échoue si elle passe sous les seuils de `vitest.config.mts`. Ces seuils suivent la couverture mesurée : les relever quand elle progresse, ne jamais les baisser pour faire passer une PR.
 
@@ -141,26 +160,44 @@ La CI des PR lance les tests avec la couverture (`npm run test:coverage`) et éc
 make test        # lance la suite Vitest
 make typecheck   # vérifie les types TypeScript
 make lint        # ESLint
-npm run test:e2e # tests end-to-end Playwright (demandent une base migrée et seedée)
+make e2e         # tests end-to-end Playwright sur la stack E2E isolée (voir « Workflow »)
 ```
 
 Toute nouvelle route API admin doit être accompagnée d'un test d'isolation cross-tenant dans `src/__tests__/security/cross-tenant-isolation.test.ts`. Ces tests vérifient que la route utilise le client Prisma scopé (`db` de `requireOrgSession`) et non le client brut (`prisma`). L'import de `@/lib/prisma` est d'ailleurs refusé par ESLint dans le code admin ; si une route en a réellement besoin (modèle non rattaché à une organisation comme `Organization` ou `AdminUser`, vérification volontairement inter-organisations), désactiver la règle sur la ligne d'import avec la raison en commentaire.
 
 Elle doit aussi figurer dans `PERMISSIONS` (`src/lib/permissions.ts`) avec son niveau, Organisateur ou Propriétaire ; `src/lib/__tests__/permissions.test.ts` échoue sinon. Une route réservée aux propriétaires appelle `requireOrgSession("owner")`.
 
+## Documentation du dépôt
+
+| Fichier | Rôle |
+|---------|------|
+| `FEATURES.md`, `GUIDE_ADMIN.md`, `GUIDE_BENEVOLE.md`, `ACCESSIBILITE.md` | Sources des pages publiques (`/fonctionnalites`, `/doc/admin`, `/doc/benevole`, `/accessibilite`), déclarées dans `src/lib/doc-pages.ts` et copiées dans l'image par le `Dockerfile` |
+| `FONCTIONNALITES.md` | Inventaire détaillé pour l'équipe |
+| `DESIGN.md`, `PRODUCT.md` | Système visuel et contexte produit, à relire avant tout changement d'interface |
+| `docs/accessibilite.md` | Vérifications d'accessibilité, à dater |
+| `docs/retention.md` | Durées de conservation ; tableaux générés par `npm run retention:docs` depuis `src/lib/retention.ts` |
+| `docs/configuration.md`, `docs/deploiement.md` | Variables d'environnement, déploiement et exploitation |
+| `docs/architecture.md`, `docs/api.md`, `docs/roles-et-permissions.md` | Code, routes HTTP, rôles |
+| `docs/rgpd/` | Dossier RGPD interne (non publié) |
+
+Les guides et les pages publiques décrivent l'état actuel du produit, jamais « depuis la version X » : l'historique va dans `CHANGELOG.md`.
+
 ## Publier une nouvelle version
 
-Checklist à suivre à chaque bump de version (créée après coup — `SECURITY.md` et deux entrées de `CHANGELOG.md` étaient restées désynchronisées pendant plusieurs versions sans que rien ne le signale) :
+Checklist à suivre à chaque changement de version :
 
-1. **`CHANGELOG.md`** : backfiller `[Unreleased]` avec tout ce qui a été mergé depuis la dernière version, puis le renommer `[x.y.z] — AAAA-MM-JJ`. Omettre les chores purement internes (bump de dépendance, CI) sans impact utilisateur.
-2. **`package.json` et `package-lock.json`** : bump du champ `"version"` (les deux fichiers — `package-lock.json` a sa propre copie du numéro à la racine et dans `packages[""]`).
-3. **`SECURITY.md`** : mettre à jour la ligne `x.y.x` de la table « Versions supportées ». **Vérifié automatiquement en CI** (`scripts/check-security-md.mjs`, job « Type-check, lint & tests ») — le build échoue si ce fichier n'a pas suivi le bump de `package.json`.
-4. **`FONCTIONNALITES.md`** : vérifier que les fonctionnalités ajoutées/retirées depuis la dernière relecture y figurent. Pas de vérification automatique — audit manuel périodique.
-5. **`GUIDE_ADMIN.md` / `GUIDE_BENEVOLE.md`** : décrivent uniquement l'état actuel du produit, jamais de langage « depuis la version x, … ». Ce sont aussi les pages publiques `/doc/admin` et `/doc/benevole` (même source).
-6. **Captures de la documentation** (`public/doc-img/`, utilisées par les guides et le README) : si des écrans ont changé, les régénérer sur une base jetable avec l'événement de démonstration (`scripts/seed-demo.ts` puis `npm run screenshots`, procédure en tête de `scripts/screenshots.mjs`), et relire les textes alternatifs.
-7. **Tag + release GitHub** : `git tag -a vX.Y.Z -m "vX.Y.Z"`, `git push origin vX.Y.Z`, puis `gh release create vX.Y.Z --notes-file <extrait du CHANGELOG>`. Le numéro affiché dans le pied de page public (`v{version}`) vient directement de `package.json` — rien à modifier à la main de ce côté.
-8. Vérifier le déploiement (`gh run watch` sur le workflow *Build & Deploy* déclenché par le push sur `main`).
+1. **`CHANGELOG.md`** : `[Unreleased]` est complété à chaque PR fusionnée qui a un impact utilisateur ; à la release, vérifier qu'il ne manque rien puis le renommer `[x.y.z] — AAAA-MM-JJ`. Omettre les chores purement internes (bump de dépendance, CI) sans impact utilisateur. Pour une version majeure, ouvrir la section par « Mise à jour depuis x » (voir 2.0.0).
+2. **`package.json` et `package-lock.json`** : bump du champ `"version"` (les deux fichiers : `package-lock.json` a sa propre copie du numéro à la racine et dans `packages[""]`).
+3. **`SECURITY.md`** : dans le même commit que le bump de `package.json`, mettre à jour la première ligne `X.Y.x` de la table « Versions supportées » à chaque changement de version mineure ou majeure (un correctif ne la change pas). **Vérifié en CI** (`scripts/check-security-md.mjs`, job « Type-check, lint & tests ») : la CI échoue si cette ligne ne correspond pas à la version majeure et mineure de `package.json`.
+4. **`FONCTIONNALITES.md`** : vérifier que les fonctionnalités ajoutées ou retirées depuis la dernière relecture y figurent. Pas de vérification automatique : audit manuel périodique.
+5. **`FEATURES.md`** (page publique `/fonctionnalites`) : chaque fonctionnalité livrée y figure, aucune fonctionnalité non livrée n'y est annoncée (règle d'`AGENTS.md`).
+6. **`GUIDE_ADMIN.md` / `GUIDE_BENEVOLE.md`** : décrivent uniquement l'état actuel du produit, jamais de langage « depuis la version x, … ». Ce sont aussi les pages publiques `/doc/admin` et `/doc/benevole` (même source).
+7. **Changement incompatible** (variable obligatoire, manifeste, migration par Job) : section « Mise à jour depuis x » dans `docs/deploiement.md`, lien dans le README et en tête de la section du CHANGELOG.
+8. **Nouvelle variable d'environnement** : `src/lib/env.ts` si elle doit être validée au démarrage, `docs/configuration.md`, `.env.example`, l'étape « Sync k8s secret » de `.github/workflows/deploy.yml` et le secret GitHub correspondant.
+9. **Captures de la documentation** (`public/doc-img/`, utilisées par les guides et le README) : si des écrans ont changé, les régénérer sur une base jetable avec l'événement de démonstration (`scripts/seed-demo.ts` puis `npm run screenshots`, procédure en tête de `scripts/screenshots.mjs`), et relire les textes alternatifs.
+10. **Tag et release GitHub** : après fusion de la PR de release sur `main`, sur ce commit : `git tag -a vX.Y.Z -m "vX.Y.Z"`, `git push origin vX.Y.Z`, puis `gh release create vX.Y.Z --notes-file <extrait du CHANGELOG>`. Le déploiement part du push sur `main`, pas du tag. Le numéro affiché dans le pied de page public (`v{version}`) vient directement de `package.json` : rien à modifier à la main de ce côté.
+11. Vérifier le déploiement (`gh run watch` sur le workflow *Build & Deploy* déclenché par le push sur `main`).
 
 ## Signaler un bug de sécurité
 
-Voir [SECURITY.md](SECURITY.md) — ne pas ouvrir d'issue publique.
+Voir [SECURITY.md](SECURITY.md) : ne pas ouvrir d'issue publique.

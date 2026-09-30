@@ -13,4 +13,9 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - `FEATURES.md` est la source de vérité de la page publique `/fonctionnalites`, qui le rend directement : ne jamais dupliquer cette liste dans la page React ou ailleurs.
 - Toute modification qui ajoute, supprime, renomme ou change substantiellement une fonctionnalité visible par les organisateurs ou les bénévoles vérifie et, si nécessaire, met à jour `FEATURES.md` dans le même changement. Une fonctionnalité non livrée n'y est jamais annoncée comme disponible ; un changement purement interne ne demande pas de mise à jour.
 - `FONCTIONNALITES.md` reste l'inventaire détaillé pour l'équipe ; `FEATURES.md` en est la présentation publique, par besoins.
-- Toute nouvelle page publique de contenu se déclare dans `src/lib/doc-pages.ts` (métadonnées propres, sitemap, navigation) et son fichier source est copié dans l'image (`Dockerfile`).
+- Toute nouvelle page publique de contenu se déclare dans `src/lib/doc-pages.ts` (métadonnées propres, sitemap, navigation) et son fichier source est copié dans l'image (`Dockerfile`) ; `src/lib/__tests__/docker-public-sources.test.ts` et `doc-pages.test.ts` échouent sinon.
+
+## Interface et accessibilité
+
+- Tout changement d'interface relit `DESIGN.md` et `PRODUCT.md`.
+- Si une limite d'accessibilité apparaît ou disparaît, mettre à jour dans le même changement les « Limites connues » et la date de `ACCESSIBILITE.md` (page publique `/accessibilite`, sans chemin de fichier ni code), et les « Écarts connus » de `docs/accessibilite.md`.

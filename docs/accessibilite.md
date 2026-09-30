@@ -4,7 +4,21 @@ Ce que recouvre la déclaration publique (`ACCESSIBILITE.md`, page `/accessibili
 
 ## Tests automatiques (CI)
 
-`e2e/accessibility.spec.ts` analyse avec axe-core (règles WCAG 2.0 à 2.2, niveaux A et AA) les pages publiques de contenu, la page d'un événement puis le formulaire d'inscription, la connexion à l'administration, la liste des événements, la page d'un événement et ses pages Créneaux, Inscriptions, Écrire aux bénévoles et Invitations. Le test échoue sur toute violation grave ou critique ; les violations modérées ou mineures et les points « à vérifier » sont joints au rapport sans le faire échouer. Les pages de contenu sont aussi analysées à 320 px de large et en thème sombre. Chromium seulement. Les outils automatiques ne détectent qu'une partie des problèmes, surtout ceux du code (noms, rôles, contraste) ; beaucoup de critères demandent une vérification humaine.
+`e2e/accessibility.spec.ts` analyse avec axe-core (tags `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa`) :
+
+- les pages de contenu `/fonctionnalites`, `/doc`, `/doc/benevole`, `/accessibilite` et `/legal/privacy` ;
+- la page d'un événement (`/spectacle-cirque-2026?org=default`), puis son formulaire d'inscription après la sélection d'un créneau ;
+- dans l'administration : `/admin/login`, `/admin/events`, la page d'un événement et ses sous-pages `/shifts`, `/registrations`, `/message` et `/invitations`.
+
+`/accessibilite` et `/doc` sont aussi analysées à 320 px de large en thème sombre. Un seul projet Playwright : Chromium en affichage ordinateur (`Desktop Chrome`).
+
+Seuil dans `e2e/helpers/axe.ts` (`seriousViolations`) : le test échoue sur les impacts `serious` et `critical` ; le reste, y compris les résultats `incomplete` (« à vérifier »), est ajouté en annotation au rapport Playwright sans le faire échouer. Les outils automatiques ne détectent qu'une partie des problèmes, surtout ceux du code (noms, rôles, contraste) ; beaucoup de critères demandent une vérification humaine.
+
+En local : `make e2e` sur la stack E2E (voir [CONTRIBUTING.md](../CONTRIBUTING.md#workflow)), ou ce seul fichier :
+
+```bash
+node --env-file=.env.e2e node_modules/.bin/playwright test e2e/accessibility.spec.ts
+```
 
 ## Vérifications clavier (manuelles)
 
@@ -14,11 +28,20 @@ Pour chaque parcours : tout se fait avec Tab, Maj+Tab, Entrée, Espace, flèches
 
 | Parcours | Points à vérifier |
 |---|---|
-| Choisir ses créneaux | chaque créneau atteignable et nommé (poste, heures, places) ; sélection annoncée ; « Continuer » atteignable |
+| Choisir ses créneaux | chaque créneau atteignable et nommé (poste, heures, places) ; sélection annoncée ; un créneau déjà pris est signalé visuellement et dans son nom ; « Continuer » atteignable |
 | S'inscrire | erreurs liées aux champs et annoncées ; récapitulatif lu avant « Confirmer » |
-| Page personnelle | annuler un créneau avec confirmation ; lien calendrier |
+| Page personnelle | annuler un créneau, quitter la liste d'attente, retirer une demande : le focus va dans la confirmation, Échap la ferme, le focus revient au déclencheur ou à la carte suivante, le résultat est annoncé ; lien calendrier |
 | Liste d'attente | accepter une place proposée |
 | Administration | lien d'évitement ; menus ; fenêtres de confirmation (focus piégé, retour du focus) ; formulaires de créneau et de poste |
+
+## Écarts connus
+
+Suivis dans l'issue #534 et repris dans les « Limites connues » de la déclaration, qui se mettent à jour ensemble :
+
+- page personnelle : confirmation d'annulation sans focus ni Échap, focus perdu à la fermeture et après l'annulation, erreur qui remplace toute la page, contraste des boutons d'annulation (`red-500`) ;
+- planning public : créneau déjà pris non distingué (style par défaut, nom accessible « Sélectionner — … »).
+
+Hors #534, aussi dans la déclaration : contraste des dates et compteurs du journal d'un événement (`text-gray-400`) et du message d'enregistrement d'un événement (blanc sur `green-500` ou `red-500`). Voir « Écarts connus du code » dans [DESIGN.md](../DESIGN.md#7-écarts-connus-du-code).
 
 ## Lecteurs d'écran
 

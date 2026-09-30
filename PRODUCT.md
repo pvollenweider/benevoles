@@ -8,7 +8,11 @@ product
 
 **Organisateurs** (admins) — responsables associatifs ou coordinateurs festival. Contexte : bureau, parfois mobile, sous pression avant et pendant l'événement. Tâche principale : créer les créneaux, inviter les membres du pool, suivre les inscriptions, exporter pour le terrain. Ils connaissent Excel et sont à l'aise avec les outils web, mais n'ont pas de temps à perdre à apprendre.
 
-**Bénévoles** (public) — profils très variés, dont des seniors. Contexte : téléphone, souvent en déplacement ou sur place. Tâche unique : choisir un créneau, s'inscrire, gérer son inscription. Ils arrivent par un lien email et ne créent pas de compte. L'expérience doit fonctionner sans effort.
+**Bénévoles** (public) — profils très variés, dont des seniors. Contexte : téléphone, souvent en déplacement ou sur place. Tâche unique : choisir un créneau, s'inscrire, gérer son inscription. Ils arrivent par un lien (email, page de l'organisation ou QR code) et ne créent pas de compte. L'expérience doit fonctionner sans effort.
+
+**Responsables de secteur** — bénévoles désignés pour un poste, sans compte. Un lien personnel leur montre les inscrits de leur poste, pour les coordonner sur place.
+
+**Super admin** — l'opérateur de la plateforme : organisations, nouveautés produit envoyées aux admins, santé du service.
 
 ## Product Purpose
 
@@ -20,7 +24,7 @@ Ce n'est pas un produit SaaS commercial — c'est un outil que des organisations
 
 **Simple · Humain · Fiable**
 
-La voix est directe, bienveillante, légèrement chaleureuse — mais jamais familière au point d'être condescendante. On tutoie les bénévoles dans les emails. On ne vend pas, on organise. L'interface s'efface pour laisser l'information devant.
+La voix est directe, bienveillante, légèrement chaleureuse — mais jamais familière au point d'être condescendante. On tutoie les bénévoles, dans les emails et sur leur page personnelle ; on vouvoie les organisateurs et les responsables de secteur. On ne vend pas, on organise. L'interface s'efface pour laisser l'information devant.
 
 Référence d'élégance : Notion / Linear — sobre, structuré, dense sans être oppressant. Le chrome disparaît, le contenu prime.
 
@@ -44,4 +48,4 @@ Référence d'élégance : Notion / Linear — sobre, structuré, dense sans êt
 
 ## Accessibility & Inclusion
 
-WCAG 2.2 AA sur toutes les surfaces. Déjà partiellement implémenté (aria-sort, live regions, scope="col", labels sr-only). Continuer sur cette trajectoire sans régression. Reduced motion respecté partout. Attention particulière sur la timeline Gantt publique (seniors, mobile, contraste des barres de rôle).
+Cible WCAG 2.2 AA sur toutes les surfaces ; état réel et limites connues dans `ACCESSIBILITE.md` (page `/accessibilite`), vérifications dans `docs/accessibilite.md`. Aucune régression acceptée. Pas d'animation de mouvement hors `motion-safe:` ; deux écarts restent à corriger dans le code (défilement doux dans la gestion des créneaux, effet d'échelle au clic sur le formulaire public, voir `DESIGN.md`). Attention particulière sur la timeline Gantt publique (seniors, mobile, contraste des barres de postes).
