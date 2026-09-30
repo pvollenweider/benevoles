@@ -37,7 +37,7 @@ C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles
 - **Ce qui demande votre attention.** Le tableau de bord commence par ce qui presse : créneaux encore vides, places de liste d'attente qui expirent, jalons en retard.
 - **Les inscriptions en main.** Ajouter quelqu'un à la main, retirer, désigner un responsable, renvoyer un lien, avec une confirmation avant chaque action et quelques secondes pour annuler un retrait.
 - **Deux rôles pour l'équipe.** Les propriétaires gèrent l'équipe et les réglages de l'organisation ; les organisateurs préparent les événements, gèrent les inscriptions et écrivent aux bénévoles.
-- **Vos membres.** Fiches avec étiquettes, notes et disponibilités, invitations et relances, import depuis un fichier CSV ou Excel, avec un aperçu de ce qui sera créé ou mis à jour avant de confirmer.
+- **Vos membres.** Fiches avec étiquettes, notes et disponibilités, invitations et relances, import depuis un fichier CSV ou Excel, avec un aperçu de ce qui sera créé ou mis à jour avant de confirmer. L'activité de chaque membre, événement par événement : invitations, inscriptions, présences, sans score.
 - **Les présences.** Le jour J, cochez qui est venu.
 - **Tout est noté.** Un journal d'activité par événement retrace qui a fait quoi, et quand.
 

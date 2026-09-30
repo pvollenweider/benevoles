@@ -3,6 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import Link from "next/link"
 import { useEffect, useMemo, useRef, useState, useTransition } from "react"
 import { deactivateMemberRecap } from "@/lib/action-recap"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
@@ -205,10 +206,10 @@ export default function MembersManager({ initialMembers, allTags, initialSearch 
             </thead>
             <tbody>
               {filtered.map((m) => (
-                <tr key={m.id} className={`border-t border-gray-100 ${!m.active ? "opacity-50" : ""}`}>
+                <tr key={m.id} className={`border-t border-gray-100 ${!m.active ? "bg-gray-50" : ""}`}>
                   <td className="px-4 py-3">
                     <div className="font-medium text-gray-900">{m.firstName}</div>
-                    {!m.active && <div className="text-xs text-gray-500">inactif</div>}
+                    {!m.active && <div className="text-xs text-gray-600">inactif</div>}
                   </td>
                   <td className="px-4 py-3 font-medium text-gray-900">{m.lastName}</td>
                   <td className="px-4 py-3 text-gray-600">
@@ -230,6 +231,12 @@ export default function MembersManager({ initialMembers, allTags, initialSearch 
                     {m.hoursTotal > 0 ? fmtHours(m.hoursTotal) : <span className="text-gray-500">—</span>}
                   </td>
                   <td className="px-4 py-3 text-right space-x-3">
+                    <Link
+                      href={`/admin/members/${m.id}`}
+                      className="text-xs text-gray-700 hover:text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                    >
+                      Activité{" "}<span className="sr-only">de {m.firstName} {m.lastName}</span>
+                    </Link>
                     <button
                       onClick={() => setEditingMember(m)}
                       aria-label={`Éditer ${m.firstName} ${m.lastName}`}
