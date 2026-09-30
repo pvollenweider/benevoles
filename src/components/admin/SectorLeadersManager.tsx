@@ -4,6 +4,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useState, useId, useRef, useEffect } from "react"
+import { removeLeaderRecap } from "@/lib/action-recap"
+import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
+import FormStatus from "@/components/FormStatus"
+import { useSubmit } from "@/lib/use-submit"
 import { slugify } from "@/lib/utils"
 
 export type SectorLeaderRow = {
@@ -39,8 +43,13 @@ export default function SectorLeadersManager({
   const [roleName, setRoleName] = useState("")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const { submit, busy: saving, error, fail, isInvalid, reset } = useSubmit()
+  const [pendingRemove, setPendingRemove] = useState<SectorLeaderRow | null>(null)
+  const [removing, setRemoving] = useState(false)
+  // Outcome of a removal: shown in the status or alert region, and the focus parks on it.
+  const [outcome, setOutcome] = useState<{ kind: "ok" | "error"; text: string } | null>(null)
+  const outcomeRef = useRef<HTMLParagraphElement>(null)
+  const errorId = useId()
 
   const roleInputRef = useRef<HTMLInputElement>(null)
   const addButtonRef = useRef<HTMLButtonElement>(null)
@@ -64,7 +73,7 @@ export default function SectorLeadersManager({
 
   function closeForm() {
     setShowForm(false)
-    setError(null)
+    reset()
   }
 
   function pickRegisteredVolunteer(volunteerId: string) {
@@ -79,20 +88,20 @@ export default function SectorLeadersManager({
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault()
-    setSaving(true)
-    setError(null)
-    const res = await fetch(`/api/admin/events/${eventId}/sector-leaders`, {
+    if (!roleName.trim()) { fail("Indiquez le poste.", "role", roleInputRef.current); return }
+    if (!name.trim()) { fail("Indiquez le nom.", "name", document.getElementById(nameId)); return }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { fail("Indiquez une adresse email complète.", "email", document.getElementById(emailId)); return }
+    const outcome = await submit<SectorLeaderRow>(() => fetch(`/api/admin/events/${eventId}/sector-leaders`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ roleName, name, email }),
-    })
-    setSaving(false)
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      setError(typeof data?.error === "string" ? data.error : "Une erreur est survenue.")
+      body: JSON.stringify({ roleName: roleName.trim(), name: name.trim(), email: email.trim() }),
+    }), { silent: true })
+    if (!outcome.ok) {
+      const onEmail = outcome.status === 400 || outcome.status === 409
+      fail(outcome.error, onEmail ? "email" : undefined, onEmail ? document.getElementById(emailId) : null)
       return
     }
-    const leader = await res.json()
+    const leader = outcome.data
     setLeaders((prev) => [...prev, leader])
     setAnnouncement(`${leader.name} ajouté·e comme responsable de « ${leader.roleName} », invitation envoyée par email.`)
     setRoleName("")
@@ -101,14 +110,33 @@ export default function SectorLeadersManager({
     closeForm()
   }
 
-  async function handleRemove(leader: SectorLeaderRow) {
-    if (!confirm(`Retirer ${leader.name} comme responsable de « ${leader.roleName} » ?`)) return
-    const res = await fetch(`/api/admin/events/${eventId}/sector-leaders/${leader.id}`, { method: "DELETE" })
-    if (res.ok) {
+  function handleRemove(leader: SectorLeaderRow) {
+    setPendingRemove(leader)
+  }
+
+  async function runRemove(leader: SectorLeaderRow) {
+    setRemoving(true)
+    try {
+      const res = await fetch(`/api/admin/events/${eventId}/sector-leaders/${leader.id}`, { method: "DELETE" })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setOutcome({ kind: "error", text: typeof data?.error === "string" ? data.error : "Le retrait n'a pas abouti. Réessayez." })
+        return
+      }
       setLeaders((prev) => prev.filter((l) => l.id !== leader.id))
-      setAnnouncement(`${leader.name} retiré·e des responsables de « ${leader.roleName} ».`)
+      setOutcome({ kind: "ok", text: `${leader.name} retiré·e des responsables de « ${leader.roleName} ».` })
+    } catch {
+      setOutcome({ kind: "error", text: "Connexion impossible : le retrait n'a pas été fait. Réessayez." })
+    } finally {
+      setRemoving(false)
+      setPendingRemove(null)
     }
   }
+
+  // The « Retirer » button that opened the modal is gone with its row: park the focus on the outcome.
+  useEffect(() => {
+    if (!pendingRemove && outcome) outcomeRef.current?.focus()
+  }, [pendingRemove, outcome])
 
   const grouped = leaders.reduce<Record<string, SectorLeaderRow[]>>((acc, l) => {
     (acc[l.roleName] ??= []).push(l)
@@ -118,6 +146,17 @@ export default function SectorLeadersManager({
   return (
     <div className="space-y-4">
       <div role="status" aria-live="polite" className="sr-only">{announcement}</div>
+      {pendingRemove && (
+        <ConfirmActionModal recap={removeLeaderRecap(pendingRemove.name, pendingRemove.roleName)} busy={removing} onConfirm={() => void runRemove(pendingRemove)} onCancel={() => setPendingRemove(null)} />
+      )}
+      <p
+        ref={outcomeRef}
+        tabIndex={-1}
+        role={outcome?.kind === "error" ? "alert" : "status"}
+        className={outcome ? `text-sm rounded-xl px-3 py-2 border focus:outline-none ${outcome.kind === "error" ? "text-red-800 bg-red-50 border-red-200" : "text-gray-800 bg-green-50 border-green-200"}` : "sr-only"}
+      >
+        {outcome?.text ?? ""}
+      </p>
 
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-500">
@@ -135,7 +174,7 @@ export default function SectorLeadersManager({
       </div>
 
       {showForm && (
-        <form onSubmit={handleAdd} className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+        <form onSubmit={handleAdd} noValidate className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
           {registeredVolunteers.length > 0 && (
             <div>
               <label htmlFor={pickId} className="block text-sm text-gray-700 mb-1">Depuis les inscrits (optionnel)</label>
@@ -153,7 +192,7 @@ export default function SectorLeadersManager({
                   <option key={v.id} value={v.id}>{v.name} · {v.roleNames.join(", ")}</option>
                 ))}
               </select>
-              <p className="text-xs text-gray-400 mt-1">Remplit le nom, l&apos;email et le poste ci-dessous — modifiable avant l&apos;ajout.</p>
+              <p className="text-xs text-gray-600 mt-1">Remplit le nom, l&apos;email et le poste ci-dessous — modifiable avant l&apos;ajout.</p>
             </div>
           )}
           <div>
@@ -161,6 +200,8 @@ export default function SectorLeadersManager({
             <input
               ref={roleInputRef}
               id={roleId}
+              aria-invalid={isInvalid("role")}
+              aria-describedby={isInvalid("role") ? errorId : undefined}
               type="text"
               list={`${roleId}-options`}
               value={roleName}
@@ -178,6 +219,8 @@ export default function SectorLeadersManager({
             <label htmlFor={nameId} className="block text-sm text-gray-700 mb-1">Nom *</label>
             <input
               id={nameId}
+              aria-invalid={isInvalid("name")}
+              aria-describedby={isInvalid("name") ? errorId : undefined}
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -190,6 +233,8 @@ export default function SectorLeadersManager({
             <label htmlFor={emailId} className="block text-sm text-gray-700 mb-1">Email *</label>
             <input
               id={emailId}
+              aria-invalid={isInvalid("email")}
+              aria-describedby={isInvalid("email") ? errorId : undefined}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -197,17 +242,15 @@ export default function SectorLeadersManager({
               className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
             />
           </div>
-          {error && (
-            <p role="alert" className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>
-          )}
+          <FormStatus error={error} errorId={errorId} />
           <div className="flex justify-end gap-2 pt-1">
             <button type="button" onClick={closeForm} className="text-sm text-gray-600 px-4 py-2 rounded-full hover:bg-gray-50 transition-colors">
               Annuler
             </button>
             <button
               type="submit"
-              disabled={saving}
-              className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              aria-disabled={saving || undefined}
+              className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 aria-disabled:opacity-80 aria-disabled:cursor-wait transition-colors"
             >
               {saving ? "Envoi…" : "Ajouter et envoyer le lien"}
             </button>

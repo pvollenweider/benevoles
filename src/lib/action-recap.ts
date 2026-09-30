@@ -11,6 +11,7 @@ export type ActionRecap = { title: string; lines: string[]; confirmLabel: string
 
 const n = (count: number, one: string, many: string) => `${count} ${count > 1 ? many : one}`
 const LOGGED = "L'action est journalisée : vous la retrouverez dans le journal de l'événement."
+const LOGGED_ORG = "L'action est journalisée : vous la retrouverez dans le journal d'activité de l'organisation."
 
 export function bulkCancelRecap(i: { people: number; withEmail: number; waitlisted: number }): ActionRecap {
   return {
@@ -55,6 +56,24 @@ export function remindInvitedRecap(i: { people: number }): ActionRecap {
     lines: [`${n(i.people, "email de relance envoyé", "emails de relance envoyés")}.`, "Les membres déjà inscrits ne reçoivent rien.", LOGGED],
     confirmLabel: "Relancer",
     danger: false,
+  }
+}
+
+export function deactivateMemberRecap(name: string): ActionRecap {
+  return {
+    title: `Désactiver ${name} ?`,
+    lines: ["La personne disparaît de la liste des membres actifs et des filtres ; ses inscriptions passées restent.", "Aucun email n'est envoyé. Un membre désactivé peut être réactivé depuis sa fiche (cochez « Inclure inactifs » pour la retrouver).", LOGGED_ORG],
+    confirmLabel: "Désactiver",
+    danger: true,
+  }
+}
+
+export function removeLeaderRecap(name: string, roleName: string): ActionRecap {
+  return {
+    title: `Retirer ${name} des responsables de « ${roleName} » ?`,
+    lines: ["Son lien de responsable cesse de fonctionner tout de suite.", "Aucun email n'est envoyé. Si la personne n'est plus responsable d'aucun poste, son tag « responsable » lui est retiré.", LOGGED],
+    confirmLabel: "Retirer",
+    danger: true,
   }
 }
 
