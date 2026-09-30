@@ -33,7 +33,8 @@ const schema = z.object({
   email: z.string().trim().toLowerCase().email(),
   phone: z.string().optional(),
   // A real, past day (audit): an invalid string became an Invalid Date that passed every age check.
-  birthDate: birthDateSchema.optional(),
+  // The form sends "" when no shift needs it: that is no birth date, not an invalid one.
+  birthDate: z.preprocess((v) => (v === "" ? undefined : v), birthDateSchema.optional()),
   comment: z.string().optional(),
   consent: z.literal(true),
   inviteToken: z.string().optional(),

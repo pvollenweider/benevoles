@@ -88,6 +88,15 @@ describe("POST /api/public/registrations — minimum age (#192)", () => {
     }
   })
 
+  it("treats an empty birth date as none: no 400 when no shift needs one", async () => {
+    shiftFindMany.mockResolvedValue([
+      { id: "shift-1", label: "Bar", capacity: 5, minAge: null, waitlistEnabled: false, registrations: [], date: new Date("2026-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
+    ])
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post({ ...baseBody, birthDate: "" }))
+    expect(res.status).not.toBe(400)
+  })
+
   it("does not gate a shift with no minAge — request fails elsewhere, not on the age check", async () => {
     // Deliberately mismatched (shiftFindMany returns none for the requested shiftIds) so the
     // request 409s at the existing "invalid/closed shift" check, a well-defined stopping point

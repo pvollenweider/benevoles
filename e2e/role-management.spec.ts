@@ -152,6 +152,11 @@ test.describe("role management", () => {
     await page.getByPlaceholder("ex. Billetterie").fill("Infirmerie")
     await page.getByPlaceholder("HH:MM").first().fill("14:00")
     await page.getByRole("button", { name: "Ajouter", exact: true }).click()
+    // Wait for the save: reading the list right after the click raced the request.
+    await expect.poll(async () => {
+      const d = await (await page.request.get(`/api/admin/events/${event.id}`)).json()
+      return d.shifts.some((s: { roleName: string }) => s.roleName === "Infirmerie")
+    }).toBe(true)
 
     const detail = await (await page.request.get(`/api/admin/events/${event.id}`)).json()
     const orderOf = (role: string) => detail.shifts.find((s: { roleName: string; displayOrder: number }) => s.roleName === role).displayOrder

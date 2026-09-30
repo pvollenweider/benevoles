@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { birthDateSchema, civilDateSchema, isCivilDate, isOrderedPeriod, isPlausibleBirthDate } from "../civil-date"
+import { birthDateSchema, civilDateSchema, isCivilDate, isDayInPeriod, isOrderedPeriod, isPlausibleBirthDate } from "../civil-date"
 
 // Calendar dates as the API accepts them (audit: invalid birth dates bypassed the minimum age).
 describe("civil dates", () => {
@@ -35,5 +35,16 @@ describe("civil dates", () => {
     expect(isOrderedPeriod("2026-07-04", "2026-07-05")).toBe(true)
     expect(isOrderedPeriod("2026-07-04", "2026-07-04")).toBe(true)
     expect(isOrderedPeriod("2026-07-05", "2026-07-04")).toBe(false)
+  })
+})
+
+describe("isDayInPeriod", () => {
+  it("keeps a shift's day within its event, both ends included", () => {
+    const start = new Date("2026-07-04T00:00:00Z"), end = new Date("2026-07-05T00:00:00Z")
+    expect(isDayInPeriod("2026-07-04", start, end)).toBe(true)
+    expect(isDayInPeriod("2026-07-05", start, end)).toBe(true)
+    expect(isDayInPeriod("2026-07-03", start, end)).toBe(false)
+    expect(isDayInPeriod("2026-07-06", start, end)).toBe(false)
+    expect(isDayInPeriod("2026-07-06", null, end)).toBe(true)
   })
 })

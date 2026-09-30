@@ -34,6 +34,14 @@ export const birthDateSchema = z.string().trim().refine((s) => isPlausibleBirthD
 
 export const DATE_ORDER_ERROR = "La date de fin ne peut pas précéder la date de début."
 
+export const SHIFT_OUTSIDE_EVENT_ERROR = "Le créneau doit tomber pendant l'événement, entre sa date de début et sa date de fin."
+
+/** Whether a day (YYYY-MM-DD) falls within an event's stored period; true when the period is unknown. */
+export function isDayInPeriod(day: string, start?: Date | null, end?: Date | null): boolean {
+  if (!start || !end) return true
+  return day >= start.toISOString().slice(0, 10) && day <= end.toISOString().slice(0, 10)
+}
+
 /** A period is in order when it ends on or after its start (civil dates compare as strings). */
 export function isOrderedPeriod(start: string, end: string): boolean {
   return end >= start

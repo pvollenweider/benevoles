@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
-import { civilDateSchema } from "@/lib/civil-date"
+import { civilDateSchema, isDayInPeriod, SHIFT_OUTSIDE_EVENT_ERROR } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
@@ -45,8 +45,9 @@ export async function POST(req: Request) {
 
   const data = parsed.data
 
-  const owned = await db.event.findFirst({ where: { id: data.eventId }, select: { id: true } })
+  const owned = await db.event.findFirst({ where: { id: data.eventId }, select: { id: true, startDate: true, endDate: true } })
   if (!owned) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
+  if (!isDayInPeriod(data.date, owned.startDate, owned.endDate)) return NextResponse.json({ error: SHIFT_OUTSIDE_EVENT_ERROR }, { status: 400 })
 
   const shift = await db.shift.create({
     data: { ...data, date: new Date(data.date), status: "open" },
