@@ -58,7 +58,7 @@ describe("BulkActionsBar", () => {
     undo.focus()
     rerender(<BulkActionsBar {...base} {...handlers} toUndoCount={1} busy />)
     expect(undo).toHaveFocus()
-    const inert = [undo, screen.getByRole("button", { name: "Rendre responsable" }), ...screen.getAllByRole("button", { name: "…" })]
+    const inert = [undo, screen.getByRole("button", { name: "Rendre responsable" }), screen.getByRole("button", { name: "Renvoyer le lien" }), screen.getByRole("button", { name: /^Retirer de leur créneau/ })]
     expect(inert).toHaveLength(4)
     for (const b of inert) {
       expect(b).toBeEnabled()

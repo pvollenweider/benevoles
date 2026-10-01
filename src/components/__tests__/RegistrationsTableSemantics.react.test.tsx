@@ -24,12 +24,11 @@ const renderManager = () => render(
 describe("RegistrationsManager — table and shift filter semantics", () => {
   afterEach(cleanup)
 
-  it("captions the table and heads each row with the volunteer", () => {
+  it("captions the table, with column headers only", () => {
     renderManager()
     const table = screen.getByRole("table", { name: "Inscriptions" })
-    expect(within(table).getAllByRole("rowheader").map((h) => h.textContent)).toEqual([
-      expect.stringContaining("Alice Martin"), expect.stringContaining("Bob Martin"),
-    ])
+    expect(within(table).getAllByRole("columnheader").length).toBeGreaterThan(0)
+    expect(within(table).queryAllByRole("rowheader")).toEqual([])
   })
 
   it("names the shift filter and filters with the keyboard", () => {

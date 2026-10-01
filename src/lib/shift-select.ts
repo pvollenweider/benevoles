@@ -37,11 +37,17 @@ export function shiftTypeaheadText(s: ShiftRef): string {
  * character (« bb ») looks for that character alone, so pressing a letter again cycles through
  * the options that start with it.
  */
+/** Whether the typed letters are one letter repeated, case and accents aside (« e », « eÉ »). */
+export function isRepeatedLetter(query: string): boolean {
+  const folded = fold(query)
+  return folded !== "" && [...folded].every((ch) => ch === folded[0])
+}
+
 export function typeaheadIndex(labels: string[], query: string, start: number): number {
   const count = labels.length
   if (count === 0 || query === "") return -1
   const folded = fold(query)
-  const needle = [...folded].every((ch) => ch === folded[0]) ? folded[0] : folded
+  const needle = isRepeatedLetter(query) ? folded[0] : folded
   const from = ((start % count) + count) % count
   for (let k = 0; k < count; k++) {
     const i = (from + k) % count

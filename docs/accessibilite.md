@@ -46,6 +46,8 @@ Hors #534, aussi dans la déclaration : contraste des dates et compteurs du jour
 
 Choix d'un créneau sur la page Inscriptions de l'administration (#555) : couvert par des tests unitaires (rôles, noms, clavier), pas encore vérifié à la main. Aucun essai avec un lecteur d'écran n'a été mené : VoiceOver (macOS + Safari) et NVDA (Windows + Firefox) restent des vérifications manuelles. Le zoom à 200 % et la largeur d'un téléphone ne sont pas vérifiés par les tests automatiques.
 
+Sélecteur de créneau, petits écrans : la liste peut dépasser à droite de l'écran, et à 320 px de large l'étiquette de remplissage et les avertissements « Déjà inscrit » / « ⚠ conflit » peuvent être coupés (1.4.10). Suivi dans une issue dédiée.
+
 ## Lecteurs d'écran
 
 À faire et à dater : NVDA + Firefox, JAWS ou NVDA + Chrome, VoiceOver + Safari (macOS et iOS), sur les parcours ci-dessus. Tant que ce n'est pas fait, la déclaration le dit.

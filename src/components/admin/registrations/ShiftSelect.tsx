@@ -5,7 +5,7 @@
 
 import { useState, useRef, useEffect, useMemo, useId, type KeyboardEvent } from "react"
 import { fmtHour, fmtShortDate, overlappingShiftIds, type ShiftRef } from "@/lib/registrations-list"
-import { moveActive, shiftOptionLabel, shiftTypeaheadText, typeaheadIndex, type MoveKey } from "@/lib/shift-select"
+import { isRepeatedLetter, moveActive, shiftOptionLabel, shiftTypeaheadText, typeaheadIndex, type MoveKey } from "@/lib/shift-select"
 
 // ── Status pill ───────────────────────────────────────────────────────────────
 function StatusPill({ s }: { s: ShiftRef }) {
@@ -118,7 +118,7 @@ export default function ShiftSelect({
     if (typedTimer.current) clearTimeout(typedTimer.current)
     typedTimer.current = setTimeout(() => { typed.current = "" }, TYPEAHEAD_RESET_MS)
     // One letter (or the same letter again) looks past the current option; more letters refine it.
-    const repeat = [...buffer].every(c => c === buffer[0])
+    const repeat = isRepeatedLetter(buffer)
     const found = typeaheadIndex(options.map(o => o.typeahead), buffer, repeat ? base + 1 : Math.max(base, 0))
     if (found >= 0) setActiveIndex(found)
   }
@@ -167,7 +167,7 @@ export default function ShiftSelect({
         </span>
         <svg
           aria-hidden="true"
-          className={`w-4 h-4 text-gray-500 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
+          className={`w-4 h-4 text-gray-500 shrink-0 motion-safe:transition-transform ${open ? "rotate-180" : ""}`}
           fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -230,14 +230,14 @@ export default function ShiftSelect({
                   ${activeIndex === index ? "outline outline-2 -outline-offset-2 outline-blue-600" : ""}`}
               >
                 {isSelected && <Check className="left-0" />}
-                <span className="shrink-0 w-28 text-xs text-gray-500">{fmtShortDate(s.date)}</span>
+                <span className="shrink-0 w-28 text-xs text-gray-600">{fmtShortDate(s.date)}</span>
                 <span className="shrink-0 w-20 text-xs text-gray-600 tabular-nums">
                   {fmtHour(s.startTime)}–{fmtHour(s.endTime)}
                 </span>
                 <span className={`flex-1 text-sm font-medium min-w-0 ${alreadyReg ? "text-orange-800" : isConflict ? "text-amber-800" : "text-gray-800"}`}>
                   {s.roleName}
                   {s.label !== s.roleName && (
-                    <span className="font-normal text-gray-500"> · {s.label}</span>
+                    <span className="font-normal text-gray-600"> · {s.label}</span>
                   )}
                 </span>
                 {alreadyReg && (

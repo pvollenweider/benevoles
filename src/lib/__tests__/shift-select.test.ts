@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { moveActive, shiftOptionLabel, shiftTypeaheadText, typeaheadIndex } from "../shift-select"
+import { isRepeatedLetter, moveActive, shiftOptionLabel, shiftTypeaheadText, typeaheadIndex } from "../shift-select"
 import { fmtShortDate, type ShiftRef } from "../registrations-list"
 
 // The shift picker's spoken names and keyboard arithmetic (#555).
@@ -103,5 +103,15 @@ describe("moveActive", () => {
 
   it("has no active option in an empty list", () => {
     expect(moveActive("ArrowDown", 0, 0)).toBe(-1)
+  })
+})
+
+describe("isRepeatedLetter", () => {
+  it("treats a letter repeated with another case or accent as the same letter", () => {
+    expect(isRepeatedLetter("e")).toBe(true)
+    expect(isRepeatedLetter("eÉ")).toBe(true)
+    expect(isRepeatedLetter("bB")).toBe(true)
+    expect(isRepeatedLetter("ba")).toBe(false)
+    expect(isRepeatedLetter("")).toBe(false)
   })
 })

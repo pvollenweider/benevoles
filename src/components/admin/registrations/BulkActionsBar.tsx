@@ -73,7 +73,7 @@ export default function BulkActionsBar({
         aria-disabled={noResend}
         className={`text-xs text-blue-700 border border-blue-300 bg-white px-3 py-1.5 rounded-full hover:bg-blue-50 transition-colors ${noResend ? "opacity-50 cursor-not-allowed" : ""}`}
       >
-        {busy ? "…" : "Renvoyer le lien"}
+        Renvoyer le lien
       </button>
       <button
         type="button"
@@ -81,7 +81,7 @@ export default function BulkActionsBar({
         aria-disabled={noCancel}
         className={`text-xs text-red-600 border border-red-300 bg-white px-3 py-1.5 rounded-full hover:bg-red-50 transition-colors ${noCancel ? "opacity-50 cursor-not-allowed" : ""}`}
       >
-        {busy ? "…" : `Retirer de leur créneau (${activeCount})`}
+        {`Retirer de leur créneau (${activeCount})`}
       </button>
       <button
         type="button"
