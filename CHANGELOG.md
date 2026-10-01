@@ -7,18 +7,22 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
-### Documentation
+---
 
-- **Documentation relue contre le code.** API (routes manquantes, niveau propriétaire, limites de requêtes), architecture (couches, flux d'inscription, file d'envoi, observabilité), rôles et permissions (qui peut quoi), configuration (secrets Kubernetes, vérifications au démarrage), déploiement (ordre réel de `deploy.yml`, manifestes, seuils de la page Santé), rotation des journaux sur k3s, dossier RGPD et guide de contribution. Les durées de conservation des comptes administrateurs, dans le guide organisateur et la politique de confidentialité, décrivent ce que fait le nettoyage. La déclaration d'accessibilité liste exactement ce que les tests analysent et les limites connues de la page personnelle et du planning public.
-
-### Modifié
-
-- **Page d'accueil de benevol.app.** Elle dit ce que l'outil change pour une association : la page d'inscription sur téléphone, les trois étapes de la mise en place, trois captures (où il manque du monde, les messages, les feuilles du jour J), ce sur quoi compter (gratuit, open source, hébergé en France, sans pistage, accessible) et une foire aux questions. Pour les moteurs de recherche et les partages : titre et description réécrits, image de partage, données structurées (site, application, code source, questions fréquentes) et une icône propre au site à la place de l'icône par défaut.
+## [2.0.1] — 2026-10-01
 
 ### Sécurité
 
 - **Emails sans serveur SMTP configuré** : en production, un envoi sans `SMTP_HOST` était compté comme réussi alors que rien ne partait, et le destinataire comme le contenu de l'email (liens personnels compris) étaient écrits dans les journaux du conteneur. L'envoi échoue désormais avec une raison sans donnée personnelle : la file d'envoi le retente puis alerte, et les envois directs le signalent à l'écran. En développement, les emails restent affichés dans la console. Les journaux d'un échec d'envoi ne contiennent plus l'adresse du destinataire.
 - **Comptes d'une organisation supprimée** : le nettoyage nocturne effaçait une organisation désactivée depuis 30 jours sans effacer ses administrateurs actifs, qui restaient en base sans organisation (email et mot de passe haché conservés sans limite) et pouvaient encore se connecter, sans rien pouvoir administrer. Ils sont maintenant effacés avec l'organisation, comme lors d'une suppression par le super admin ; les comptes laissés sans organisation par un nettoyage précédent sont effacés au nettoyage suivant, et un compte d'organisation sans organisation ne peut plus se connecter.
+
+### Modifié
+
+- **Page d'accueil de benevol.app.** Elle dit ce que l'outil change pour une association : la page d'inscription sur téléphone, les trois étapes de la mise en place, trois captures (où il manque du monde, les messages, les feuilles du jour J), ce sur quoi compter (gratuit, open source, hébergé en France, sans pistage, accessible) et une foire aux questions. Pour les moteurs de recherche et les partages : titre et description réécrits, image de partage, données structurées (site, application, code source, questions fréquentes) et une icône propre au site à la place de l'icône par défaut.
+
+### Documentation
+
+- **Documentation relue contre le code.** API (routes manquantes, niveau propriétaire, limites de requêtes), architecture (couches, flux d'inscription, file d'envoi, observabilité), rôles et permissions (qui peut quoi), configuration (secrets Kubernetes, vérifications au démarrage), déploiement (ordre réel de `deploy.yml`, manifestes, seuils de la page Santé), rotation des journaux sur k3s, dossier RGPD et guide de contribution. Les durées de conservation des comptes administrateurs, dans le guide organisateur et la politique de confidentialité, décrivent ce que fait le nettoyage. La déclaration d'accessibilité liste exactement ce que les tests analysent et les limites connues de la page personnelle et du planning public.
 
 ---
 
