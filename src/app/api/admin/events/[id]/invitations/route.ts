@@ -3,7 +3,7 @@
 
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { sendMemberInvite } from "@/lib/email"
+import { sendMemberInvite } from "@/lib/notification-helpers"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { randomBytes } from "crypto"

@@ -5,7 +5,7 @@ import { clearMailbox, waitForMessage, getMessageText } from "./helpers/mailpit"
  * Covers the public registration flow end-to-end, including the regression
  * this suite exists to catch: the admin notification email must go to the
  * *organization's* admin(s), never to the global ADMIN_NOTIFICATION_EMAIL
- * fallback (see src/lib/email.ts#sendAdminNotification). The e2e env sets
+ * fallback (see src/lib/notification-helpers.ts#sendAdminNotification). The e2e env sets
  * ADMIN_NOTIFICATION_EMAIL to an address distinct from the seeded org admin
  * specifically so this test fails loudly if that regresses.
  */

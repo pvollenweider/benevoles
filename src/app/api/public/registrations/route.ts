@@ -7,7 +7,7 @@ import { acceptsRegistrations, refusalMessage, registrationState } from "@/lib/r
 import { birthDateSchema } from "@/lib/civil-date"
 import { prisma } from "@/lib/prisma"
 import { generateToken, shiftsOverlap, shiftsTooYoungFor } from "@/lib/utils"
-import { sendConfirmationEmail, sendAdminNotification } from "@/lib/email"
+import { sendConfirmationEmail, sendAdminNotification } from "@/lib/notification-helpers"
 import { pickShiftInfo } from "@/lib/shift-info"
 import { sendNotification } from "@/lib/notifications"
 import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"

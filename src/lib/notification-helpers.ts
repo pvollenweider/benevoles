@@ -2,9 +2,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 /**
- * Thin wrappers kept for backwards compatibility with existing call
- * sites. New code should call `sendNotification` from `./notifications`
- * directly.
+ * Notifications shared by several routes, built in one place so each route sends the same email:
+ * the member invitation (invite, reminder, test email), the sign-up confirmation, and the admin
+ * notification of a new sign-up, which also applies the organization's email settings and falls
+ * back to ADMIN_NOTIFICATION_EMAIL when the organization has no active admin.
+ * The sign-up ones take a `send` (sendNotification or an outbox collector, #293) so the public sign-up
+ * can queue them in its transaction; the invitation is sent directly, its route reports the outcome.
  */
 
 import { env } from "./env"

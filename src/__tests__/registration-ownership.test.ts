@@ -55,7 +55,7 @@ vi.mock("@/lib/prisma", () => {
     },
   }
 })
-vi.mock("@/lib/email", () => ({ sendConfirmationEmail: m.sendConfirmationEmail, sendAdminNotification: vi.fn() }))
+vi.mock("@/lib/notification-helpers", () => ({ sendConfirmationEmail: m.sendConfirmationEmail, sendAdminNotification: vi.fn() }))
 vi.mock("@/lib/notifications/outbox", () => ({
   collectNotifications: () => {
     const payloads: unknown[] = []
