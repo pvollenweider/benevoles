@@ -75,7 +75,7 @@ node -e "const wp=require('web-push'); console.log(JSON.stringify(wp.generateVAP
 | `NEXT_PUBLIC_SENTRY_DSN` | DSN navigateur (`instrumentation-client.ts`). Argument de build Docker |
 | `SENTRY_AUTH_TOKEN` | Upload des source maps au build. Secret de build Docker (`sentry_auth_token`) |
 
-Le client Sentry ignore les erreurs des scripts injectés par les navigateurs et les extensions (`__firefox__` des navigateurs iOS, `DarkReader`, `window.ethereum`, `MetaMask`) et celles des URLs `app://` et `inpage.js`. Côté serveur, il ignore « The destination stream closed early » (client déconnecté pendant un flux).
+Le client Sentry ignore les erreurs des scripts injectés par les navigateurs et les extensions (`__firefox__` des navigateurs iOS, `DarkReader`, `window.ethereum`, `MetaMask`), le rejet « Object Not Found Matching Id:…, MethodName:…, ParamCount:… » des analyseurs de liens de Microsoft (Outlook Safe Links, Defender), qui ouvrent les liens personnels des emails, et les erreurs des URLs `app://` et `inpage.js`. La liste est `BROWSER_NOISE_ERRORS` (`src/lib/sentry-scrub.ts`). Côté serveur, il ignore « The destination stream closed early » (client déconnecté pendant un flux).
 
 Données envoyées à Sentry (navigateur, serveur et edge) :
 

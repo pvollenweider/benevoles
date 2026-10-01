@@ -88,3 +88,21 @@ export const NO_PII_DATA_COLLECTION: NonNullable<InitOptions["dataCollection"]> 
   queues: false,
   stackFrameVariables: false,
 }
+
+/**
+ * Browser errors that are not this app's code, dropped before they reach Sentry (client only).
+ * - iOS browsers (Firefox, Brave) inject scripts into WKWebView (app:/// origin) that throw on
+ *   missing globals (__firefox__, DarkReader, window.ethereum).
+ * - MetaMask and other wallet extensions auto-connect on every page and throw when their own
+ *   backend is unreachable; the site has no Web3 code.
+ * - Microsoft's link scanners (Outlook Safe Links / Defender) open the personal links of our
+ *   emails in an embedded CefSharp browser, which rejects a promise of its own with « Object Not
+ *   Found Matching Id:N, MethodName:update, ParamCount:N » (seen on /my/[token], no real user).
+ */
+export const BROWSER_NOISE_ERRORS: RegExp[] = [
+  /__firefox__/,
+  /DarkReader/,
+  /window\.ethereum/,
+  /MetaMask/,
+  /Object Not Found Matching Id:\d+, MethodName:\w+, ParamCount:\d+/,
+]

@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/nextjs"
-import { NO_PII_DATA_COLLECTION, scrubBreadcrumb, scrubEvent, scrubSpan } from "./src/lib/sentry-scrub"
+import { BROWSER_NOISE_ERRORS, NO_PII_DATA_COLLECTION, scrubBreadcrumb, scrubEvent, scrubSpan } from "./src/lib/sentry-scrub"
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
@@ -15,12 +15,8 @@ Sentry.init({
   tracesSampleRate: 0.1,
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
-  // iOS browsers (Firefox, Brave) inject scripts into WKWebView (app:/// origin)
-  // that throw on missing globals (__firefox__, DarkReader, window.ethereum). Not app code.
-  // MetaMask (and other wallet extensions' inpage.js) likewise auto-connects on every page
-  // load and throws when its own extension backend isn't reachable — nothing to do with this
-  // site, which has no Web3/crypto code at all.
-  ignoreErrors: [/__firefox__/, /DarkReader/, /window\.ethereum/, /MetaMask/],
+  // Errors from browser extensions, injected scripts and email link scanners (see the list).
+  ignoreErrors: BROWSER_NOISE_ERRORS,
   denyUrls: [/^app:\/\//, /inpage\.js/],
   integrations: [
     Sentry.replayIntegration({ maskAllText: true, blockAllMedia: true }),

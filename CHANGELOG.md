@@ -9,6 +9,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Erreurs Sentry des analyseurs de liens** : quand Outlook (Safe Links, Defender) analyse le lien personnel d'un email, son navigateur intégré rejette une promesse (« Object Not Found Matching Id… ») qui remontait comme une erreur de la page personnelle. Elle est ignorée, comme celles des extensions de navigateur.
 - **Focus clavier en contraste élevé** (#579, suite de #574) : avec un thème de contraste Windows (couleurs forcées), la plupart des champs, les listes déroulantes, l'interrupteur de la charte et les zones à défilement de l'import n'affichaient aucun repère au focus clavier, car leur anneau de focus est une ombre que ce mode supprime. Ils affichent maintenant un contour dans la couleur système : formulaire d'inscription public, champs de l'administration, recherche et filtres de la page Inscriptions, choix du créneau, import de membres. En couleurs forcées, l'interrupteur de la charte montre aussi son état (activé ou non), et la coche du créneau choisi prend la couleur système. L'interrupteur est aussi annoncé avec son nom (« Assurance RC fournie par l'organisation »). Seules les cibles focalisées par le code (`tabIndex={-1}`) gardent `outline-none` ; exception : une cible focalisée par le code qui affiche un anneau `focus-visible:ring-*` en affichage normal (paragraphes de résultat de l'import) prend aussi `focus-visible:outline-hidden`, pour garder un repère en couleurs forcées. L'affichage normal ne change pas.
 
 ---
