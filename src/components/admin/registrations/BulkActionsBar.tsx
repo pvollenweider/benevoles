@@ -30,8 +30,14 @@ export default function BulkActionsBar({
   selectedCount, toCheckInCount, toUndoCount, activeCount, noneWithEmail, noActiveWithEmail, busy,
   onPresence, onMakeResponsible, onResendLink, onCancelRegistrations, onClearSelection,
 }: Props) {
+  // Inert buttons stay focusable (aria-disabled, not disabled): a request starting under the
+  // focus does not drop it to the page.
+  const noUndo = busy
+  const noLeader = busy || noneWithEmail
+  const noResend = busy || noActiveWithEmail
+  const noCancel = busy || activeCount === 0
   return (
-    <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-2.5 flex-wrap">
+    <div role="group" aria-label="Actions sur la sélection" className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-2.5 flex-wrap">
       <span className="text-sm text-blue-900 font-medium">
         {selectedCount} sélectionnée{selectedCount > 1 ? "s" : ""}
       </span>
@@ -46,34 +52,34 @@ export default function BulkActionsBar({
       {toUndoCount > 0 && (
         <button
           type="button"
-          onClick={() => onPresence(false)}
-          disabled={busy}
-          className="text-xs text-gray-700 border border-gray-300 bg-white px-3 py-1.5 rounded-full hover:bg-gray-50 disabled:opacity-50 transition-colors"
+          onClick={() => { if (!noUndo) onPresence(false) }}
+          aria-disabled={noUndo}
+          className={`text-xs text-gray-700 border border-gray-300 bg-white px-3 py-1.5 rounded-full hover:bg-gray-50 transition-colors ${noUndo ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           {`Annuler la présence (${toUndoCount})`}
         </button>
       )}
       <button
         type="button"
-        onClick={onMakeResponsible}
-        disabled={busy || noneWithEmail}
-        className="text-xs text-blue-700 border border-blue-300 bg-white px-3 py-1.5 rounded-full hover:bg-blue-50 disabled:opacity-50 transition-colors"
+        onClick={() => { if (!noLeader) onMakeResponsible() }}
+        aria-disabled={noLeader}
+        className={`text-xs text-blue-700 border border-blue-300 bg-white px-3 py-1.5 rounded-full hover:bg-blue-50 transition-colors ${noLeader ? "opacity-50 cursor-not-allowed" : ""}`}
       >
         Rendre responsable
       </button>
       <button
         type="button"
-        onClick={onResendLink}
-        disabled={busy || noActiveWithEmail}
-        className="text-xs text-blue-700 border border-blue-300 bg-white px-3 py-1.5 rounded-full hover:bg-blue-50 disabled:opacity-50 transition-colors"
+        onClick={() => { if (!noResend) onResendLink() }}
+        aria-disabled={noResend}
+        className={`text-xs text-blue-700 border border-blue-300 bg-white px-3 py-1.5 rounded-full hover:bg-blue-50 transition-colors ${noResend ? "opacity-50 cursor-not-allowed" : ""}`}
       >
         {busy ? "…" : "Renvoyer le lien"}
       </button>
       <button
         type="button"
-        onClick={onCancelRegistrations}
-        disabled={busy || activeCount === 0}
-        className="text-xs text-red-600 border border-red-300 bg-white px-3 py-1.5 rounded-full hover:bg-red-50 disabled:opacity-50 transition-colors"
+        onClick={() => { if (!noCancel) onCancelRegistrations() }}
+        aria-disabled={noCancel}
+        className={`text-xs text-red-600 border border-red-300 bg-white px-3 py-1.5 rounded-full hover:bg-red-50 transition-colors ${noCancel ? "opacity-50 cursor-not-allowed" : ""}`}
       >
         {busy ? "…" : `Retirer de leur créneau (${activeCount})`}
       </button>

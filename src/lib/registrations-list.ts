@@ -103,6 +103,12 @@ export function leaderAnnouncement(succeeded: number, failed: number, withoutEma
   ].filter(Boolean).join(" ")
 }
 
+/** A registration the organizer just added by hand, e.g. « Chloé Roy ajouté·e au créneau Bar du sam. 4 juil., de 10h à 12h. » */
+export function manualAddAnnouncement(person: string, shift: Pick<ShiftRef, "roleName" | "label" | "date" | "startTime" | "endTime">): string {
+  const name = shift.label !== shift.roleName ? `${shift.roleName} · ${shift.label}` : shift.label
+  return `${person} ajouté·e au créneau ${name} du ${fmtShortDate(shift.date)}, de ${fmtHour(shift.startTime)} à ${fmtHour(shift.endTime)}.`
+}
+
 export function resendAnnouncement(succeeded: number, failed: number): string {
   const base = `Lien renvoyé à ${succeeded} ${plural(succeeded, "bénévole")}`
   return failed > 0 ? `${base}, ${failed} ${plural(failed, "échec")}.` : `${base}.`

@@ -9,7 +9,7 @@ import { UNDO_MS, useDelayedAction } from "@/lib/use-delayed-action"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, logLinkFor, type ActionRecap } from "@/lib/action-recap"
 import { describeBulkFailure } from "@/lib/form-errors"
-import { useState, useMemo, useRef } from "react"
+import { useState, useMemo, useRef, useId } from "react"
 import ShiftSelect from "./registrations/ShiftSelect"
 import MakeLeaderModal from "./registrations/MakeLeaderModal"
 import ManualAddForm from "./registrations/ManualAddForm"
@@ -26,6 +26,7 @@ import {
   filterRegistrations,
   leaderAnnouncement as leaderAddedAnnouncement,
   leaderRoleOptions,
+  manualAddAnnouncement,
   resendAnnouncement,
   type ShiftRef,
 } from "@/lib/registrations-list"
@@ -66,6 +67,9 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   const [addForm, setAddForm] = useState<AddFormValues>(EMPTY_ADD_FORM)
   // Each click on « + Ajouter manuellement » starts the form afresh (no error left from before).
   const [addFormOpenings, setAddFormOpenings] = useState(0)
+  // The form unmounts on « Annuler » or after an add: the focus goes back to its open button.
+  const addButtonRef = useRef<HTMLButtonElement>(null)
+  const shiftFilterLabelId = useId()
   const [leaderTarget, setLeaderTarget] = useState<{
     volunteerId: string; volunteerName: string; volunteerEmail: string | null; roleOptions: string[]; defaultRole: string
   } | null>(null)
@@ -344,6 +348,15 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     setRegistrations((prev) => [newReg, ...prev])
     setAddForm(EMPTY_ADD_FORM)
     setShowAddForm(false)
+    addButtonRef.current?.focus()
+    // No journal link: the one left from an earlier action would not be about this addition.
+    setLastLogLink(null)
+    announce(setLeaderAnnouncement, manualAddAnnouncement(personName(newReg), newReg.shift))
+  }
+
+  function handleAddCancel() {
+    setShowAddForm(false)
+    addButtonRef.current?.focus()
   }
 
   return (
@@ -429,8 +442,10 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
         )}
         {/* The list changes under the filters without a page load: say how many rows are left. */}
         <p role="status" className="sr-only">{filtered.length} inscription{filtered.length > 1 ? "s" : ""} affichée{filtered.length > 1 ? "s" : ""}</p>
+        <span id={shiftFilterLabelId} className="sr-only">Filtrer par créneau</span>
         <div className="min-w-64">
           <ShiftSelect
+            labelledBy={shiftFilterLabelId}
             shifts={visibleShifts}
             value={shiftFilter}
             onChange={setShiftFilter}
@@ -445,6 +460,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           {shiftFilter ? "Écrire à ce créneau" : roleFilter ? "Écrire à ce poste" : "Écrire aux bénévoles"}
         </Link>
         <button
+          ref={addButtonRef}
           onClick={() => { setShowAddForm(true); if (!showAddForm) setAddFormOpenings((n) => n + 1); setAddForm((f) => ({ ...f, shiftId: shiftFilter || f.shiftId })) }}
           className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"
         >
@@ -462,7 +478,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           form={addForm}
           onFormChange={setAddForm}
           onAdded={handleAdded}
-          onCancel={() => setShowAddForm(false)}
+          onCancel={handleAddCancel}
         />
       )}
 
@@ -490,6 +506,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       ) : (
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <table className="w-full text-sm">
+            <caption className="sr-only">Inscriptions</caption>
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
                 <th scope="col" className="px-4 py-2.5 w-8">

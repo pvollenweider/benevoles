@@ -44,13 +44,43 @@ describe("BulkActionsBar", () => {
     expect(screen.queryByRole("button", { name: /Annuler la présence/ })).toBeNull()
   })
 
-  it("disables the actions while a request runs or when nobody qualifies", () => {
-    const { rerender } = render(<BulkActionsBar {...base} busy />)
-    expect(screen.getByRole("button", { name: "Rendre responsable" })).toBeDisabled()
-    expect(screen.getAllByRole("button", { name: "…" })).toHaveLength(2)
-    rerender(<BulkActionsBar {...base} activeCount={0} noneWithEmail noActiveWithEmail />)
-    expect(screen.getByRole("button", { name: "Rendre responsable" })).toBeDisabled()
-    expect(screen.getByRole("button", { name: "Renvoyer le lien" })).toBeDisabled()
-    expect(screen.getByRole("button", { name: "Retirer de leur créneau (0)" })).toBeDisabled()
+  it("is a group named for the selection", () => {
+    render(<BulkActionsBar {...base} />)
+    expect(screen.getByRole("group", { name: "Actions sur la sélection" })).toContainElement(screen.getByRole("button", { name: "Désélectionner" }))
+  })
+
+  // #555: a disabled button under the focus dropped it to the page; they stay focusable and inert.
+  it("keeps the actions focusable but inert while a request runs", () => {
+    const onPresence = vi.fn(), onMakeResponsible = vi.fn(), onResendLink = vi.fn(), onCancelRegistrations = vi.fn()
+    const handlers = { onPresence, onMakeResponsible, onResendLink, onCancelRegistrations }
+    const { rerender } = render(<BulkActionsBar {...base} {...handlers} toUndoCount={1} />)
+    const undo = screen.getByRole("button", { name: "Annuler la présence (1)" })
+    undo.focus()
+    rerender(<BulkActionsBar {...base} {...handlers} toUndoCount={1} busy />)
+    expect(undo).toHaveFocus()
+    const inert = [undo, screen.getByRole("button", { name: "Rendre responsable" }), ...screen.getAllByRole("button", { name: "…" })]
+    expect(inert).toHaveLength(4)
+    for (const b of inert) {
+      expect(b).toBeEnabled()
+      expect(b).toHaveAttribute("aria-disabled", "true")
+      fireEvent.click(b)
+    }
+    expect(onPresence).not.toHaveBeenCalled()
+    expect(onMakeResponsible).not.toHaveBeenCalled()
+    expect(onResendLink).not.toHaveBeenCalled()
+    expect(onCancelRegistrations).not.toHaveBeenCalled()
+  })
+
+  it("keeps the actions inert when nobody qualifies", () => {
+    const onMakeResponsible = vi.fn(), onResendLink = vi.fn(), onCancelRegistrations = vi.fn()
+    render(<BulkActionsBar {...base} activeCount={0} noneWithEmail noActiveWithEmail onMakeResponsible={onMakeResponsible} onResendLink={onResendLink} onCancelRegistrations={onCancelRegistrations} />)
+    for (const name of ["Rendre responsable", "Renvoyer le lien", "Retirer de leur créneau (0)"]) {
+      const b = screen.getByRole("button", { name })
+      expect(b).toHaveAttribute("aria-disabled", "true")
+      fireEvent.click(b)
+    }
+    expect(onMakeResponsible).not.toHaveBeenCalled()
+    expect(onResendLink).not.toHaveBeenCalled()
+    expect(onCancelRegistrations).not.toHaveBeenCalled()
   })
 })

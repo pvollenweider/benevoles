@@ -33,6 +33,15 @@ describe("RegistrationRow", () => {
     expect(onToggleSelected).toHaveBeenCalledTimes(1)
   })
 
+  // #555: the volunteer cell heads its row.
+  it("makes the volunteer cell the row header", () => {
+    renderRow()
+    const header = screen.getByRole("rowheader", { name: /^Alice Martin/ })
+    expect(header.tagName).toBe("TH")
+    expect(header).toHaveAttribute("scope", "row")
+    expect(header).toHaveClass("text-left", "font-normal")
+  })
+
   it("offers the decision on a request, named for screen readers", () => {
     const onDecision = vi.fn()
     renderRow({ onDecision, reg: reg({ status: "requested" }) })

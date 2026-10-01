@@ -43,7 +43,7 @@ export default function RegistrationRow({ reg, selected, onToggleSelected, onDec
           className="rounded border-gray-300"
         />
       </td>
-      <td className="px-4 py-3">
+      <th scope="row" className="px-4 py-3 text-left font-normal">
         <p className="font-medium text-gray-900 flex items-center gap-1.5">
           {reg.volunteer.firstName} {reg.volunteer.lastName}
           {reg.isLeader && (
@@ -92,7 +92,7 @@ export default function RegistrationRow({ reg, selected, onToggleSelected, onDec
         {contactPhone(reg) && <p className="text-xs text-gray-500">{contactPhone(reg)}</p>}
         {hasAvailability(reg.volunteer) && <p className="text-xs text-gray-700"><span className="sr-only">Disponible : </span><span aria-hidden="true">🕒 </span>{availabilityLabel(reg.volunteer)}</p>}
         {reg.comment && <p className="text-xs text-gray-500 italic mt-0.5">"{reg.comment}"</p>}
-      </td>
+      </th>
       <td className="px-4 py-3 hidden sm:table-cell">
         <p className="text-gray-700">
           {reg.shift.label !== reg.shift.roleName
