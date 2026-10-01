@@ -153,6 +153,8 @@ SMTP_PASSWORD="..."
 EMAIL_FROM="Bénévoles <notifications@votre-domaine.com>"
 ```
 
+Toutes les variables, leurs défauts et leurs effets, ainsi que la rotation de la clé de chiffrement : [docs/configuration.md](docs/configuration.md).
+
 ## Scripts
 
 | Commande | Description |
