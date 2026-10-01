@@ -198,7 +198,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch 
                 <SortTh col="lastName"  label="Nom"    sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <th scope="col" className="text-left px-4 py-2 font-medium">Contact</th>
                 <th scope="col" className="text-left px-4 py-2 font-medium">Tags</th>
-                <SortTh col="hoursTotal" label="Heures cumulées" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
+                <SortTh col="hoursTotal" label="Heures planifiées" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <th scope="col" className="text-right px-4 py-2 font-medium">
                   <span className="sr-only">Actions</span>
                 </th>

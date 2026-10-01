@@ -13,6 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Heures planifiées des membres** (#571) : la colonne « Heures cumulées » de la page Membres s'appelle « Heures planifiées », car elle additionne la durée prévue des créneaux confirmés, créneaux à venir et absences comprises, et non le temps passé. Un créneau pendant un changement d'heure y était compté une heure de trop ou de moins ; il compte maintenant sa durée réelle dans le fuseau de l'organisation.
 - **Désinscription depuis la page d'un événement** : quand on fermait la confirmation de désinscription d'un créneau déjà pris, le focus clavier se perdait au lieu de revenir sur le bouton du créneau. Il y revient.
 
 ---

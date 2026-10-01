@@ -439,15 +439,15 @@ Le contenu des pages personnalisées et les coordonnées des bénévoles n'appar
 
 Le répertoire des membres est le pool de bénévoles connus de votre organisation.
 
-![Répertoire des membres : export, import et ajout, recherche et filtre par étiquette, puis pour chaque membre ses coordonnées, ses étiquettes, ses heures cumulées et les liens Activité, Éditer et Désactiver](/doc-img/admin-members.png)
+![Répertoire des membres : export, import et ajout, recherche et filtre par étiquette, puis pour chaque membre ses coordonnées, ses étiquettes, ses heures planifiées et les liens Activité, Éditer et Désactiver](/doc-img/admin-members.png)
 
 - **Ajouter** un membre : prénom, nom, email, téléphone, tags, notes internes, et ses **disponibilités** en général (matin, après-midi, soir, plus une remarque comme « pas le dimanche »), facultatives. Le bénévole peut les renseigner lui-même depuis sa page personnelle. Elles s'affichent dans la liste des membres et sous chaque nom dans les inscriptions, et quand vous ajoutez quelqu'un à la main dès que son email correspond à une personne déjà inscrite à l'événement. C'est une information pour vous : rien n'est filtré ni attribué automatiquement.
 - **Modifier** ou désactiver un membre existant
 - **Importer** des membres en masse : bouton **Importer CSV/Excel** (fichiers `.csv` ou `.xlsx`, 2 Mo et 5000 lignes au plus). Les colonnes sont reconnues par leur intitulé (prénom, nom, email, téléphone, tags ; par exemple `prenom`, `courriel`, `mobile`, `groupes`). Plusieurs tags dans une cellule se séparent par `,`, `;` ou `|`. L'import se fait en deux temps. **Analyser le fichier** montre d'abord, sans rien enregistrer, les membres à créer, à mettre à jour ou ignorés (selon le choix « Si un email existe déjà »), les lignes en erreur avec leur numéro et la raison (nom manquant, email invalide, email en double dans le fichier), et les tags ajoutés ou réutilisés. **Importer** applique ensuite exactement cette analyse. Si des membres ont changé entre-temps, rien n'est enregistré et l'analyse à jour s'affiche, à vérifier avant de confirmer. Les emails sont comparés sans tenir compte des majuscules. Le fichier n'est pas conservé. L'import apparaît une fois dans le journal d'activité de l'organisation, avec les nombres de membres créés et mis à jour. Par organisation, 30 analyses et 10 imports par heure au plus.
 - **Rechercher** par texte libre (prénom, nom, email, téléphone) ou filtrer par tag
-- **Trier** par prénom, nom ou heures cumulées : cliquer sur l'en-tête de colonne (croissant → décroissant → reset)
+- **Trier** par prénom, nom ou heures planifiées : cliquer sur l'en-tête de colonne (croissant → décroissant → reset)
 - **Activité** : le lien **Activité** d'une ligne ouvre la chronologie du membre, du plus récent au plus ancien : invitations envoyées et utilisées, inscriptions, liste d'attente, annulations, présences, responsabilités de secteur et modifications de la fiche, chacune avec sa date et un lien vers l'événement. Une phrase résume le tout (nombre d'événements, de créneaux, de présences). Ce sont des faits, sans note ni score ; ils disparaissent avec les événements et la fiche.
-- **Heures cumulées** : total du temps passé sur des créneaux actifs, tous événements confondus — utile pour identifier vos bénévoles les plus investis. Cette colonne n'apparaît que dans cette page ; elle n'est jamais incluse dans les **Rapports**, potentiellement partagés avec les bénévoles.
+- **Heures planifiées** : durée totale des créneaux sur lesquels le membre est inscrit (inscriptions confirmées), tous événements confondus, y compris les créneaux à venir et ceux où il n'est pas venu. C'est du temps prévu, pas du temps passé. Un créneau pendant le changement d'heure compte sa durée réelle (une heure de moins au printemps, une de plus en automne). Utile pour repérer vos bénévoles les plus investis. Cette colonne n'apparaît que dans cette page ; elle n'est jamais incluse dans les **Rapports**, potentiellement partagés avec les bénévoles.
 
 ![Page « Activité de Camille Rochat » : un résumé en une phrase, puis la chronologie datée, du plus récent au plus ancien, de ses inscriptions, de sa place en liste d'attente et de son invitation, chacune reliée à l'événement](/doc-img/admin-member-activity.png)
 
@@ -546,7 +546,7 @@ Ces rappels sont envoyés sans intervention de votre part pour les événements 
 | Feuille de présence | par créneau, une case à cocher par bénévole (déjà cochée si la présence a été marquée dans l'application), heure d'arrivée, remarque, et des lignes vides pour les arrivées imprévues | organisateurs |
 | Liste avec téléphones | tous les bénévoles par ordre alphabétique, téléphone, email et créneaux | organisateurs seulement |
 
-Sauf l'export complet, ces documents sont conçus pour le noir et blanc. La feuille de présence en CSV se télécharge depuis les inscriptions (voir « Présences le jour J »). Les heures cumulées des membres n'y figurent jamais ; les documents avec téléphones portent la mention « ne pas afficher ni distribuer ».
+Sauf l'export complet, ces documents sont conçus pour le noir et blanc. La feuille de présence en CSV se télécharge depuis les inscriptions (voir « Présences le jour J »). Les heures planifiées des membres n'y figurent jamais ; les documents avec téléphones portent la mention « ne pas afficher ni distribuer ».
 
 ---
 
