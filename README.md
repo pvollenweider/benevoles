@@ -153,8 +153,6 @@ SMTP_PASSWORD="..."
 EMAIL_FROM="Bénévoles <notifications@votre-domaine.com>"
 ```
 
-`.env.example` ne contient pas `TOKEN_ENCRYPTION_KEY` : l'ajouter. Toutes les variables, leurs défauts et leurs effets, ainsi que la rotation de la clé de chiffrement : [docs/configuration.md](docs/configuration.md).
-
 ## Scripts
 
 | Commande | Description |
