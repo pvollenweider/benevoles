@@ -7,8 +7,21 @@
  * event. Pure: the routes read through the org-scoped client and call these.
  */
 
+/**
+ * A text cell that a spreadsheet would read as a formula (#567): it starts with = + - @, possibly
+ * after whitespace (spreadsheets skip it), or with a tab or carriage return. Names, comments,
+ * answers and phone numbers come from the public sign-up form, so any of them can.
+ */
+const FORMULA_START = /^(?:[\t\r]|\s*[=+\-@])/
+
+/**
+ * One CSV cell: text that could run as a formula is prefixed with an apostrophe (shown as text,
+ * the value stays readable), then quoted when it holds a separator, a quote or a line break.
+ * Numbers are written as they are: they can't hold a formula.
+ */
 export function csvCell(v: unknown): string {
-  const s = v === null || v === undefined ? "" : String(v)
+  const raw = v === null || v === undefined ? "" : String(v)
+  const s = typeof v !== "number" && FORMULA_START.test(raw) ? `'${raw}` : raw
   return /[";\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
 }
 
