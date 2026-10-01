@@ -75,3 +75,13 @@ export function moveActive(key: MoveKey, current: number, count: number): number
     case "PageUp": return clamp(current - PAGE)
   }
 }
+
+/**
+ * Pixels to move the open list left so that it ends `margin` px inside the viewport, never past
+ * the left margin (WCAG 1.4.10): 0 when it already fits.
+ */
+export function panelShift(triggerLeft: number, panelWidth: number, viewportWidth: number, margin = 8): number {
+  const overflow = triggerLeft + panelWidth - (viewportWidth - margin)
+  if (overflow <= 0) return 0
+  return Math.min(overflow, Math.max(triggerLeft - margin, 0))
+}

@@ -201,6 +201,30 @@ describe("ShiftSelect", () => {
     expect(combo()).toHaveAttribute("aria-expanded", "false")
   })
 
+  // #574: near the right edge, the open list moves left to stay on screen, and follows a resize.
+  it("moves the open list left when it would overflow the viewport, and again on resize", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ left: 700 } as DOMRect)
+    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(500)
+    const clientWidth = vi.spyOn(document.documentElement, "clientWidth", "get").mockReturnValue(1024)
+    render(<Harness />)
+    fireEvent.click(combo())
+    const list = screen.getByRole("listbox")
+    expect(list.style.left).toBe("-184px")
+
+    clientWidth.mockReturnValue(1300)
+    fireEvent(window, new Event("resize"))
+    expect(list.style.left).toBe("")
+    clientWidth.mockReturnValue(1100)
+    fireEvent(window, new Event("resize"))
+    expect(list.style.left).toBe("-108px")
+  })
+
+  it("leaves the list in place when it fits", () => {
+    render(<Harness />)
+    fireEvent.click(combo())
+    expect(screen.getByRole("listbox").style.left).toBe("")
+  })
+
   it("scrolls the active option into view", () => {
     const scrollIntoView = vi.fn()
     Element.prototype.scrollIntoView = scrollIntoView
