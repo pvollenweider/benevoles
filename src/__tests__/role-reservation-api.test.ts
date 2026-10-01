@@ -29,6 +29,8 @@ vi.mock("@/lib/notifications", () => ({ sendNotification: vi.fn() }))
 vi.mock("@/lib/notifications/outbox", () => ({ collectNotifications: () => ({ send: vi.fn(), payloads: [] }), enqueueNotifications: vi.fn().mockResolvedValue([]), deliverAfterResponse: vi.fn() }))
 vi.mock("@/lib/sector-leaders", () => ({ notifySectorLeadersOfSignup: vi.fn() }))
 vi.mock("@/lib/event-log", () => ({ logEvent: vi.fn() }))
+// No organization header, as on localhost: the member-invite route then relies on the slug check.
+vi.mock("next/headers", () => ({ headers: async () => new Headers() }))
 
 const security = { id: "s1", label: "Sécurité", roleName: "Sécurité", capacity: 5, minAge: null, waitlistEnabled: false, registrations: [], reservedTags: ["sécurité"], date: new Date("2030-06-01T00:00:00Z"), startTime: "10:00", endTime: "12:00" }
 const post = (extra: Record<string, unknown> = {}) => new Request("http://localhost/api/public/registrations", {

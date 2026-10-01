@@ -10,6 +10,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Sécurité
 
 - **Organisation choisie par l'en-tête de la requête** (#541) : sur le domaine principal, sans `?org=`, un en-tête `x-org-slug` envoyé par le navigateur était transmis tel quel aux pages et routes publiques, qui s'en servent pour choisir l'organisation. Il est désormais toujours supprimé avant que le proxy n'ajoute la sienne. Seules des données publiques étaient concernées.
+- **Lecture d'une invitation de membre** (#541) : l'adresse qui pré-remplit le formulaire d'inscription à partir d'une invitation (nom, email, téléphone du membre) n'avait aucune limite de requêtes. Elle est limitée à 30 lectures par heure et par adresse IP, vérifiée avant toute lecture, et refuse une invitation qui n'appartient pas à l'organisation du site, avec la même réponse que pour un lien inconnu.
 - **Formules dans les exports CSV** (#567) : un nom, un commentaire, une réponse ou un numéro saisi dans le formulaire public pouvait commencer par `=`, `+`, `-` ou `@` et s'exécuter comme une formule à l'ouverture de l'export dans Excel ou LibreOffice. Dans les exports des membres, du journal d'activité et des présences, ces valeurs sont précédées d'une apostrophe et s'affichent comme du texte ; les autres valeurs sont inchangées.
 
 ### Corrigé
