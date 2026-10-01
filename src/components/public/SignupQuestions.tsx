@@ -33,7 +33,7 @@ export default function SignupQuestions({ questions, answers, onChange, errors }
           return (
             <div key={q.id}>
               <label htmlFor={fieldId} className="block text-sm font-medium text-gray-700 mb-1">{q.label}{star(q)}{optional(q)}</label>
-              <input id={fieldId} type="text" maxLength={TEXT_ANSWER_MAX} required={q.required} value={(answers[q.id] as string) ?? ""} onChange={(e) => onChange(q.id, e.target.value)} {...aria} className={`w-full border rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${bad ? "border-red-600" : "border-gray-300"}`} />
+              <input id={fieldId} type="text" maxLength={TEXT_ANSWER_MAX} required={q.required} value={(answers[q.id] as string) ?? ""} onChange={(e) => onChange(q.id, e.target.value)} {...aria} className={`w-full border rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${bad ? "border-red-600" : "border-gray-300"}`} />
               {errorLine}
             </div>
           )

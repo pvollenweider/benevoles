@@ -85,7 +85,7 @@ export default function ProfileForm({ currentEmail }: { currentEmail: string }) 
     }
   }
 
-  const inputClass = "w-full border border-gray-500 rounded-lg px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  const inputClass = "w-full border border-gray-500 rounded-lg px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
   const errorProps = (field: ErrorField) =>
     error?.field === field ? { "aria-invalid": true as const, "aria-describedby": errorId } : {}
 

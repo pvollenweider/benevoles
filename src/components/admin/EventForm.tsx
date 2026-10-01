@@ -67,7 +67,7 @@ const defaultData: EventFormData = {
 }
 
 const emptyShow: Show = { name: "", date: "", startTime: "", endTime: "" }
-const inputCls = "w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+const inputCls = "w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
 
 export default function EventForm({ initialData, createdHref, timeZone = "Europe/Zurich" }: Props) {
   const router = useRouter()

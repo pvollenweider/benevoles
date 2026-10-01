@@ -699,7 +699,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                       autoComplete="given-name"
                       value={form.firstName}
                       onChange={(e) => setForm((f) => ({ ...f, firstName: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div>
@@ -711,7 +711,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                       autoComplete="family-name"
                       value={form.lastName}
                       onChange={(e) => setForm((f) => ({ ...f, lastName: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 </div>
@@ -724,7 +724,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                     autoComplete="email"
                     value={form.email}
                     onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -740,7 +740,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                     autoComplete="tel"
                     value={form.phone}
                     onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 {ageGatedSelectedShifts.length > 0 && (
@@ -754,7 +754,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                       aria-describedby="reg-birthdate-hint"
                       value={form.birthDate}
                       onChange={(e) => setForm((f) => ({ ...f, birthDate: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     />
                     <p id="reg-birthdate-hint" className="text-xs text-gray-500 mt-1">
                       Requis : {ageGatedSelectedShifts.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}
@@ -778,7 +778,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                     rows={2}
                     value={form.comment}
                     onChange={(e) => setForm((f) => ({ ...f, comment: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 resize-none"
                   />
                 </div>
                 <label className="flex items-start gap-3 cursor-pointer">

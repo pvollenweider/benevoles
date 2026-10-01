@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useState } from "react"
+import { useId, useState } from "react"
 import { buildVolunteerCharter } from "@/lib/volunteer-charter"
 
 export default function OrgCharterForm({
@@ -13,6 +13,7 @@ export default function OrgCharterForm({
   initialCharter: string | null
   initialHasOrgInsurance: boolean
 }) {
+  const insuranceLabelId = useId()
   const [hasOrgInsurance, setHasOrgInsurance] = useState(initialHasOrgInsurance)
   const [text, setText] = useState(initialCharter ?? buildVolunteerCharter({ hasOrgInsurance }))
   const [saving, setSaving] = useState(false)
@@ -53,7 +54,7 @@ export default function OrgCharterForm({
 
       <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3">
         <div>
-          <p className="text-sm font-medium text-gray-800">Assurance RC fournie par l'organisation</p>
+          <p id={insuranceLabelId} className="text-sm font-medium text-gray-800">Assurance RC fournie par l'organisation</p>
           <p className="text-xs text-gray-500 mt-0.5">
             {hasOrgInsurance
               ? "La charte indique que les bénévoles sont couverts par votre RC."
@@ -64,13 +65,16 @@ export default function OrgCharterForm({
           type="button"
           role="switch"
           aria-checked={hasOrgInsurance}
+          aria-labelledby={insuranceLabelId}
           onClick={() => handleToggle(!hasOrgInsurance)}
-          className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+          className={`group relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 forced-colors:border-[CanvasText] forced-colors:aria-checked:bg-[Highlight] ${
             hasOrgInsurance ? "bg-blue-600" : "bg-gray-300"
           }`}
         >
+          {/* Forced colours paint both backgrounds in Canvas: system colours keep the knob and the
+              « on » track apart there (WCAG 1.4.11). Normal display is unchanged. */}
           <span
-            className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition duration-200 ${
+            className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition duration-200 forced-colors:bg-[CanvasText] forced-colors:group-aria-checked:bg-[HighlightText] ${
               hasOrgInsurance ? "translate-x-5" : "translate-x-0"
             }`}
           />
@@ -81,7 +85,7 @@ export default function OrgCharterForm({
         value={text}
         onChange={(e) => { setText(e.target.value); setSuccess(false) }}
         rows={14}
-        className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 font-mono leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"
+        className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 font-mono leading-relaxed focus:outline-hidden focus:ring-2 focus:ring-blue-500 resize-y"
       />
 
       <div className="flex items-center justify-between gap-3">

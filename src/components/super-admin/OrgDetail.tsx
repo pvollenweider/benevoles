@@ -250,7 +250,7 @@ export default function OrgDetail({ org }: { org: Org }) {
               minLength={2}
               maxLength={100}
               required
-              className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             />
             <button
               type="submit"
@@ -275,7 +275,7 @@ export default function OrgDetail({ org }: { org: Org }) {
               maxLength={40}
               pattern="^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"
               required
-              className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             />
             <button
               type="submit"

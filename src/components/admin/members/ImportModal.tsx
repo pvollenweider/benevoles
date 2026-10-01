@@ -105,7 +105,7 @@ export default function ImportModal({ onClose, onImported }: { onClose: () => vo
     <ModalShell title="Importer des membres" onClose={close} closeOnBackdrop={!analysis} panelClassName={analysis && !result ? "max-w-3xl" : "max-w-lg"}>
       {result ? (
         <div className="space-y-4">
-          <p ref={resultRef} tabIndex={-1} className="bg-green-50 border border-green-200 rounded-xl p-3 text-sm text-green-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-600">
+          <p ref={resultRef} tabIndex={-1} className="bg-green-50 border border-green-200 rounded-xl p-3 text-sm text-green-800 focus:outline-none focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-green-600">
             Import terminé : <strong>{result.created}</strong> créés, <strong>{result.updated}</strong> mis à jour, <strong>{result.skipped}</strong> ignorés ({result.totalParsed} lignes lues).
           </p>
           {result.errors.length > 0 && <ErrorsTable errors={result.errors} caption={`${result.errors.length} ligne${result.errors.length > 1 ? "s" : ""} non importée${result.errors.length > 1 ? "s" : ""}`} />}
@@ -121,7 +121,7 @@ export default function ImportModal({ onClose, onImported }: { onClose: () => vo
         </div>
       ) : analysis ? (
         <div className="space-y-4">
-          <p ref={summaryRef} tabIndex={-1} className="text-sm text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">
+          <p ref={summaryRef} tabIndex={-1} className="text-sm text-gray-900 focus:outline-none focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-600 rounded">
             {notice && <span className="block font-medium text-red-700 mb-1">{notice}</span>}
             <strong>Analyse du fichier, rien n&apos;est encore enregistré.</strong> {planSummary(analysis.plan.counts)}
           </p>
@@ -141,7 +141,7 @@ export default function ImportModal({ onClose, onImported }: { onClose: () => vo
           </dl>
           {analysis.plan.errors.length > 0 && <ErrorsTable errors={analysis.plan.errors} caption={`Lignes en erreur, non importées (${analysis.plan.errors.length})`} />}
           {analysis.plan.lines.length > 0 && (
-            <div role="region" aria-labelledby={`${id}-lines-caption`} tabIndex={0} className="max-h-64 overflow-auto rounded-xl border border-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600">
+            <div role="region" aria-labelledby={`${id}-lines-caption`} tabIndex={0} className="max-h-64 overflow-auto rounded-xl border border-gray-200 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-600">
               <table className="w-full text-sm">
                 <caption id={`${id}-lines-caption`} className="text-left font-medium text-gray-900 px-3 py-2">Membres du fichier ({analysis.plan.lines.length})</caption>
                 <thead className="bg-gray-50 text-gray-700 sticky top-0">
@@ -242,7 +242,7 @@ export default function ImportModal({ onClose, onImported }: { onClose: () => vo
 function ErrorsTable({ errors, caption }: { errors: { line: number; reason: string }[]; caption: string }) {
   const id = useId()
   return (
-    <div role="region" aria-labelledby={`${id}-caption`} tabIndex={0} className="max-h-48 overflow-auto rounded-xl border border-orange-200 bg-orange-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-600">
+    <div role="region" aria-labelledby={`${id}-caption`} tabIndex={0} className="max-h-48 overflow-auto rounded-xl border border-orange-200 bg-orange-50 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-orange-600">
       <table className="w-full text-sm text-orange-950">
         <caption id={`${id}-caption`} className="text-left font-medium px-3 py-2">{caption}</caption>
         <thead>

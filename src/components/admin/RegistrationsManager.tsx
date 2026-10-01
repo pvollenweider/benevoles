@@ -416,7 +416,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           placeholder="Rechercher (nom, email…)"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 min-w-48 border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 min-w-48 border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
         />
         <label htmlFor="role-filter" className="sr-only">Filtrer par poste</label>
         <select
@@ -429,7 +429,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
               if (s && e.target.value && s.roleName !== e.target.value) setShiftFilter("")
             }
           }}
-          className="border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
         >
           <option value="">Tous les postes</option>
           {uniqueRoles.map(r => <option key={r} value={r}>{r}</option>)}

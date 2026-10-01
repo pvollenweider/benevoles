@@ -41,6 +41,16 @@ body {
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 1);
 }
 
+/* Forced colours (Windows Contrast themes) drop box-shadow and force border colours, so the
+   focus above disappears. A transparent outline is repainted in the system colour, like
+   Tailwind's `outline-hidden`; outside forced colours nothing changes. */
+@media (forced-colors: active) {
+  .input:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+}
+
 /* In @layer base so that a `focus-visible:outline-*` utility can override it (an unlayered rule
    would beat every utility, whatever its specificity) — needed on coloured headers (#300). */
 @layer base {

@@ -68,7 +68,7 @@ export default function LinkRequestForm() {
           onBlur={() => setTouched(true)}
           aria-invalid={showError ? true : undefined}
           aria-describedby={showError ? `${id}-error` : undefined}
-          className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
         />
         {showError && <p id={`${id}-error`} className="text-sm text-red-700">{errorText}</p>}
         <button

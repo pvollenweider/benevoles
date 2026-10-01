@@ -25,7 +25,7 @@ function StatusPill({ s }: { s: ShiftRef }) {
 // The selected option is marked by a check, not by its background colour alone.
 function Check({ className }: { className: string }) {
   return (
-    <svg aria-hidden="true" className={`absolute top-1/2 -translate-y-1/2 w-3 h-3 shrink-0 text-blue-700 ${className}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+    <svg aria-hidden="true" className={`absolute top-1/2 -translate-y-1/2 w-3 h-3 shrink-0 text-blue-700 forced-colors:text-[CanvasText] ${className}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
     </svg>
   )
@@ -158,7 +158,7 @@ export default function ShiftSelect({
         aria-controls={open ? listboxId : undefined}
         aria-activedescendant={activeDomId}
         aria-labelledby={labelledBy}
-        className="flex items-center justify-between gap-2 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[38px]"
+        className="flex items-center justify-between gap-2 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 min-h-[38px]"
       >
         <span className={`truncate text-left ${selected ? "text-gray-800" : "text-gray-500"}`}>
           {selected
