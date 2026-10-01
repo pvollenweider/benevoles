@@ -9,7 +9,7 @@ import { UNDO_MS, useDelayedAction } from "@/lib/use-delayed-action"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, logLinkFor, type ActionRecap } from "@/lib/action-recap"
 import { describeBulkFailure } from "@/lib/form-errors"
-import { useState, useMemo, useRef, useId } from "react"
+import { useState, useMemo, useRef, useId, useEffect } from "react"
 import ShiftSelect from "./registrations/ShiftSelect"
 import MakeLeaderModal from "./registrations/MakeLeaderModal"
 import ManualAddForm from "./registrations/ManualAddForm"
@@ -25,11 +25,16 @@ import {
   undoneAnnouncement,
   filterRegistrations,
   leaderAnnouncement as leaderAddedAnnouncement,
+  leaderDesignatedAnnouncement,
   leaderRoleOptions,
+  listCountAnnouncement,
   manualAddAnnouncement,
   resendAnnouncement,
   type ShiftRef,
 } from "@/lib/registrations-list"
+
+/** Typing in the search box: its count is announced once typing has paused this long. */
+const SEARCH_ANNOUNCE_MS = 500
 
 type Props = {
   eventId: string
@@ -74,6 +79,13 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     volunteerId: string; volunteerName: string; volunteerEmail: string | null; roleOptions: string[]; defaultRole: string
   } | null>(null)
   const [leaderAnnouncement, setLeaderAnnouncement] = useState("")
+  // The count left by a filter change, spoken by the same region as the outcomes (#574).
+  const [countAnnouncement, setCountAnnouncement] = useState("")
+  // An action's outcome replaces any count spoken before it: the region says only the result.
+  function setActionStatus(text: string) {
+    setCountAnnouncement("")
+    setLeaderAnnouncement(text)
+  }
   const [bulkError, setBulkError] = useState<string | null>(null)
   // After a bulk action the toolbar unmounts with the selection: focus lands here instead of body.
   const afterBulkRef = useRef<HTMLParagraphElement>(null)
@@ -102,6 +114,24 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   const filtered = filterRegistrations(registrations, { search, role: roleFilter, shiftId: shiftFilter, requestsOnly })
   const requestCount = registrations.filter((r) => r.status === "requested").length
 
+  // A filter change is answered with the number of rows left, in the outcome region; an addition or
+  // a removal changes the list without a filter change, so it only says its own result (#574).
+  // Selects and the checkbox speak at once; the search waits until typing pauses.
+  const filteredCount = filtered.length
+  const otherFiltersKey = JSON.stringify([roleFilter, shiftFilter, requestsOnly])
+  const filtersKey = JSON.stringify([search, otherFiltersKey])
+  const announcedFilters = useRef({ all: filtersKey, others: otherFiltersKey })
+  useEffect(() => {
+    if (announcedFilters.current.all === filtersKey) return
+    const say = () => {
+      announcedFilters.current = { all: filtersKey, others: otherFiltersKey }
+      announce(setCountAnnouncement, listCountAnnouncement(filteredCount))
+    }
+    if (announcedFilters.current.others !== otherFiltersKey) { say(); return }
+    const timer = setTimeout(say, SEARCH_ANNOUNCE_MS)
+    return () => clearTimeout(timer)
+  }, [filtersKey, otherFiltersKey, filteredCount])
+
   function openDecision(reg: Registration, kind: "accept" | "refuse") {
     setDecision({ reg, kind })
   }
@@ -112,7 +142,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     // A refused request leaves the list (it no longer holds a spot); an accepted one stays, confirmed.
     setRegistrations((prev) => kind === "accept" ? prev.map((r) => (r.id === reg.id ? { ...r, status: "active" } : r)) : prev.filter((r) => r.id !== reg.id))
     setLastLogLink(logLinkFor(eventId, startedAt))
-    announce(setLeaderAnnouncement, kind === "accept"
+    announce(setActionStatus, kind === "accept"
       ? `Demande de ${personName(reg)} acceptée${reg.volunteer.email ? " : email de confirmation envoyé" : ""}.`
       : `Demande de ${personName(reg)} refusée${reg.volunteer.email ? " : email envoyé" : ""}.`)
     // The row's buttons are gone with the decision: on to the next request, else back to the filters.
@@ -216,9 +246,9 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     setRegistrations((prev) => prev.map((r) => (changed.has(r.id) ? { ...r, checkedInAt: present ? at : null } : r)))
     setSelectedIds(new Set())
     // Cleared first so the same sentence twice in a row is announced again.
-    setLeaderAnnouncement("")
+    setActionStatus("")
     requestAnimationFrame(() => {
-      setLeaderAnnouncement(present
+      setActionStatus(present
         ? `${changed.size} personne${changed.size > 1 ? "s" : ""} marquée${changed.size > 1 ? "s" : ""} présente${changed.size > 1 ? "s" : ""}.`
         : `Présence annulée pour ${changed.size} personne${changed.size > 1 ? "s" : ""}.`)
       afterBulkRef.current?.focus()
@@ -255,7 +285,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     setBulkError(null)
     holdReasons.current.clear()
     undo.start(() => void commitBulkCancel(all), { replace: true })
-    announce(setLeaderAnnouncement, heldAnnouncement(all.length, UNDO_MS / 1000))
+    announce(setActionStatus, heldAnnouncement(all.length, UNDO_MS / 1000))
     // The toolbar is gone with the selection: the focus lands on « Annuler le retrait ».
     requestAnimationFrame(() => undoRef.current?.focus())
   }
@@ -265,7 +295,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     const rows = held
     setHeld([])
     restore(rows)
-    announce(setLeaderAnnouncement, undoneAnnouncement(rows.length))
+    announce(setActionStatus, undoneAnnouncement(rows.length))
     afterBulkRef.current?.focus()
   }
 
@@ -277,15 +307,15 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     afterBulkRef.current?.focus()
     setHeld((prev) => prev.filter((r) => !ids.has(r.id)))
     setBulkBusy(true)
-    announce(setLeaderAnnouncement, "Retrait en cours…")
+    announce(setActionStatus, "Retrait en cours…")
     const result = await runBulk("cancel", rows.map((r) => r.id), () => { setRegistrations((prev) => prev.filter((r) => !ids.has(r.id))); void commitBulkCancel(rows) })
     setBulkBusy(false)
-    if (!result) { setLeaderAnnouncement(""); restore(rows); return }
+    if (!result) { setActionStatus(""); restore(rows); return }
     const cancelledIds = new Set(result.cancelledIds ?? [])
     const kept = rows.filter((r) => !cancelledIds.has(r.id))
     if (kept.length > 0) restore(kept)
     setLastLogLink(logLinkFor(eventId, startedAt))
-    announce(setLeaderAnnouncement, cancelAnnouncement(cancelledIds.size, kept.length))
+    announce(setActionStatus, cancelAnnouncement(cancelledIds.size, kept.length))
   }
 
   function handleBulkMakeLeader() {
@@ -309,7 +339,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     setSelectedIds(new Set())
     setPending(null)
     setLastLogLink(logLinkFor(eventId, startedAt))
-    setLeaderAnnouncement(leaderAddedAnnouncement(succeeded, failed, withoutEmail))
+    setActionStatus(leaderAddedAnnouncement(succeeded, failed, withoutEmail))
   }
 
   // A single selected row opens the modal (lets the admin pick among several roles if the
@@ -341,7 +371,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     setSelectedIds(new Set())
     setPending(null)
     setLastLogLink(logLinkFor(eventId, startedAt))
-    setLeaderAnnouncement(resendAnnouncement(succeeded, failed))
+    setActionStatus(resendAnnouncement(succeeded, failed))
   }
 
   function handleAdded(newReg: Registration) {
@@ -351,7 +381,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     addButtonRef.current?.focus()
     // No journal link: the one left from an earlier action would not be about this addition.
     setLastLogLink(null)
-    announce(setLeaderAnnouncement, manualAddAnnouncement(personName(newReg), newReg.shift))
+    announce(setActionStatus, manualAddAnnouncement(personName(newReg), newReg.shift))
   }
 
   function handleAddCancel() {
@@ -374,12 +404,14 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           onDecided={(startedAt) => handleDecided(decision.reg, decision.kind, startedAt)}
         />
       )}
-      {/* The one live region for outcomes: visible when there is something to say, empty otherwise. */}
+      {/* The one live region of the page: outcomes (visible when there is something to say) and the
+          count after a filter change (screen readers only). */}
       <p role="status" aria-live="polite" className={leaderAnnouncement ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-1" : "sr-only"}>
         {leaderAnnouncement && <span>{leaderAnnouncement}</span>}
         {leaderAnnouncement && lastLogLink && (
           <Link href={lastLogLink} className="font-medium text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Voir cette action dans le journal</Link>
         )}
+        {countAnnouncement && <span className="sr-only">{countAnnouncement}</span>}
       </p>
       {held.length > 0 && undo.secondsLeft !== null && (
         <UndoRemovalBar
@@ -440,8 +472,9 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
             Demandes à traiter ({requestCount})
           </label>
         )}
-        {/* The list changes under the filters without a page load: say how many rows are left. */}
-        <p role="status" className="sr-only">{filtered.length} inscription{filtered.length > 1 ? "s" : ""} affichée{filtered.length > 1 ? "s" : ""}</p>
+        {/* How many rows are on the list, always up to date for reading; not a live region: a
+            filter change says it through the outcome region above, an addition does not. */}
+        <p className="sr-only">{listCountAnnouncement(filtered.length)}</p>
         <span id={shiftFilterLabelId} className="sr-only">Filtrer par créneau</span>
         <div className="min-w-64">
           <ShiftSelect
@@ -554,7 +587,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           defaultRole={leaderTarget.defaultRole}
           onClose={() => setLeaderTarget(null)}
           onDone={(roleName) => {
-            setLeaderAnnouncement(`${leaderTarget.volunteerName} ajouté·e comme responsable de « ${roleName} », invitation envoyée par email.`)
+            setActionStatus(leaderDesignatedAnnouncement(leaderTarget.volunteerName, roleName))
             setLeaderTarget(null)
           }}
         />

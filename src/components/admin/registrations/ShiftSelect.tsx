@@ -5,7 +5,7 @@
 
 import { useState, useRef, useEffect, useLayoutEffect, useMemo, useId, type KeyboardEvent } from "react"
 import { fmtHour, fmtShortDate, overlappingShiftIds, type ShiftRef } from "@/lib/registrations-list"
-import { isRepeatedLetter, moveActive, panelShift, shiftOptionLabel, shiftTypeaheadText, typeaheadIndex, type MoveKey } from "@/lib/shift-select"
+import { isRepeatedLetter, moveActive, panelShift, shiftOptionLabel, shiftTypeaheadText, shiftValueText, typeaheadIndex, type MoveKey } from "@/lib/shift-select"
 
 // ── Status pill ───────────────────────────────────────────────────────────────
 function StatusPill({ s }: { s: ShiftRef }) {
@@ -190,11 +190,17 @@ export default function ShiftSelect({
         aria-describedby={describedBy}
         className={`flex items-center justify-between gap-2 w-full border ${invalid ? "border-red-600" : "border-gray-300"} rounded-xl px-3 py-2 text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 min-h-[38px]`}
       >
-        <span className={`text-left min-w-0 wrap-break-word sm:truncate ${selected ? "text-gray-800" : "text-gray-500"}`}>
-          {selected
-            ? `${fmtShortDate(selected.date)} · ${fmtHour(selected.startTime)}–${fmtHour(selected.endTime)} · ${selected.roleName}${selected.label !== selected.roleName ? ` · ${selected.label}` : ""}`
-            : placeholder}
-        </span>
+        {selected ? (
+          <span className="text-left min-w-0 wrap-break-word sm:truncate text-gray-800">
+            {/* Shown short; spoken in words, without the « · » and dash read aloud. */}
+            <span aria-hidden="true">
+              {`${fmtShortDate(selected.date)} · ${fmtHour(selected.startTime)}–${fmtHour(selected.endTime)} · ${selected.roleName}${selected.label !== selected.roleName ? ` · ${selected.label}` : ""}`}
+            </span>
+            <span className="sr-only">{shiftValueText(selected)}</span>
+          </span>
+        ) : (
+          <span className="text-left min-w-0 wrap-break-word sm:truncate text-gray-500">{placeholder}</span>
+        )}
         <svg
           aria-hidden="true"
           className={`w-4 h-4 text-gray-500 shrink-0 motion-safe:transition-transform ${open ? "rotate-180" : ""}`}

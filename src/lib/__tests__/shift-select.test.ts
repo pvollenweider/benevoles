@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { isRepeatedLetter, moveActive, panelShift, shiftOptionLabel, shiftTypeaheadText, typeaheadIndex } from "../shift-select"
+import { isRepeatedLetter, moveActive, panelShift, shiftOptionLabel, shiftTypeaheadText, shiftValueText, typeaheadIndex } from "../shift-select"
 import { fmtShortDate, type ShiftRef } from "../registrations-list"
 
 // The shift picker's spoken names and keyboard arithmetic (#555).
@@ -135,5 +135,20 @@ describe("panelShift", () => {
 
   it("does not move a list that ends exactly at the margin", () => {
     expect(panelShift(516, 500, 1024)).toBe(0)
+  })
+})
+
+// #574: the chosen shift as the trigger speaks it, in words.
+describe("shiftValueText", () => {
+  it("reads date, hours and role, without dot or dash", () => {
+    const text = shiftValueText(shift())
+    expect(text).toBe(`${date}, de 10h à 12h, Bar`)
+    expect(text).not.toMatch(/[·–]/)
+  })
+
+  it("adds the label when it differs from the role", () => {
+    const text = shiftValueText(shift({ label: "Soir", startTime: "18:30", endTime: "20:00" }))
+    expect(text).toBe(`${date}, de 18h30 à 20h, Bar, Soir`)
+    expect(text).not.toMatch(/[·–]/)
   })
 })

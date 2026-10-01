@@ -9,6 +9,7 @@ import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import FormStatus from "@/components/FormStatus"
 import { useSubmit } from "@/lib/use-submit"
 import { slugify } from "@/lib/utils"
+import { leaderDesignatedAnnouncement } from "@/lib/registrations-list"
 
 export type SectorLeaderRow = {
   id: string
@@ -103,7 +104,7 @@ export default function SectorLeadersManager({
     }
     const leader = outcome.data
     setLeaders((prev) => [...prev, leader])
-    setAnnouncement(`${leader.name} ajouté·e comme responsable de « ${leader.roleName} », invitation envoyée par email.`)
+    setAnnouncement(leaderDesignatedAnnouncement(leader.name, leader.roleName))
     setRoleName("")
     setName("")
     setEmail("")

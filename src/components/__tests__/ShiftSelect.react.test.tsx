@@ -201,6 +201,16 @@ describe("ShiftSelect", () => {
     expect(combo()).toHaveAttribute("aria-expanded", "false")
   })
 
+  // #574: the chosen value is shown short and spoken in words.
+  it("speaks the chosen value in words, the short visible text hidden from screen readers", () => {
+    render(<Harness initial="s3" />)
+    const visible = screen.getByText(`${date} · 18h–20h · Bar · Soir`)
+    expect(visible).toHaveAttribute("aria-hidden", "true")
+    const spoken = screen.getByText(`${date}, de 18h à 20h, Bar, Soir`)
+    expect(spoken).toHaveClass("sr-only")
+    expect(combo()).toContainElement(spoken)
+  })
+
   // #574: in a form, the field's id, required and invalid states, and its descriptions.
   it("sets no required, invalid or description by default", () => {
     render(<Harness />)

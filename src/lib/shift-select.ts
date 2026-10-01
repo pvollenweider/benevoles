@@ -26,6 +26,14 @@ export function shiftOptionLabel(s: ShiftRef, f: { alreadyRegistered: boolean; c
     + `${f.alreadyRegistered ? ", déjà inscrit" : ""}${f.conflict ? ", conflit d'horaire" : ""}`
 }
 
+/**
+ * The chosen shift as the trigger speaks it, e.g. « sam. 4 juil., de 10h à 12h, Bar, Soir »: the
+ * visible « · » and en dash are read aloud by screen readers (#574).
+ */
+export function shiftValueText(s: ShiftRef): string {
+  return `${fmtShortDate(s.date)}, de ${fmtHour(s.startTime)} à ${fmtHour(s.endTime)}, ${s.roleName}${s.label !== s.roleName ? `, ${s.label}` : ""}`
+}
+
 /** Text an option is found by when typing its first letters: role name, then label. */
 export function shiftTypeaheadText(s: ShiftRef): string {
   return s.label !== s.roleName ? `${s.roleName} ${s.label}` : s.roleName

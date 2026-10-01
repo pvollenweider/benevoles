@@ -204,7 +204,13 @@ describe("RegistrationsManager — focus and announcement around the manual add"
     await waitFor(() => expect(screen.queryByRole("heading", { name: "Inscription manuelle" })).toBeNull())
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({ shiftId: "s1" })
     expect(open).toHaveFocus()
-    await waitFor(() => expect(screen.getByText("Chloé Roy ajouté·e au créneau Bar du sam. 4 juil., de 10h à 12h.")).toBeInTheDocument())
-    expect(screen.getByText("Chloé Roy ajouté·e au créneau Bar du sam. 4 juil., de 10h à 12h.").closest("[role=status]")).toHaveAttribute("aria-live", "polite")
+    const result = "Inscription de Chloé Roy ajoutée : Bar, sam. 4 juil., de 10h à 12h."
+    await waitFor(() => expect(screen.getByText(result)).toBeInTheDocument())
+    const region = screen.getByText(result).closest("[role=status]")
+    expect(region).toHaveAttribute("aria-live", "polite")
+    // #574: only the result is spoken, not the new count; the hidden count still follows the list.
+    expect(region?.textContent).toBe(result)
+    expect(screen.getByText("1 inscription affichée")).not.toHaveAttribute("role")
+    expect(document.querySelectorAll("[role=status], [aria-live]")).toHaveLength(1)
   })
 })

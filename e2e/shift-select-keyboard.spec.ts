@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test"
+import { test, expect, type Locator, type Page } from "@playwright/test"
 import { seriousViolations } from "./helpers/axe"
 
 /**
@@ -59,7 +59,7 @@ test("a shift is chosen with the keyboard in the manual add form", async ({ page
 
   await page.getByRole("button", { name: "Ajouter", exact: true }).click()
   await expect(open).toBeFocused()
-  await expect(page.getByRole("status").filter({ hasText: `E2E Clavier${stamp} ajouté·e au créneau Bar` })).toBeVisible()
+  await expect(page.getByRole("status").filter({ hasText: `Inscription de E2E Clavier${stamp} ajoutée : Bar` })).toBeVisible()
 
   const detail = await (await page.request.get(`/api/admin/events/${eventId}`)).json()
   const shift = detail.shifts.find((s: { id: string }) => s.id === barId)
@@ -71,7 +71,9 @@ test("the shift filter is named and works with the keyboard", async ({ page }) =
   const stamp = Date.now()
   const { eventId } = await setUpEvent(page, stamp)
   await page.goto(`/admin/events/${eventId}/registrations`)
-  await expect(page.getByRole("status").filter({ hasText: "1 inscription affichée" })).toBeAttached()
+  // The count is on the page for reading, not in a live region: it is spoken after a filter change.
+  await expect(page.getByText("1 inscription affichée", { exact: true })).toBeAttached()
+  await expect(page.getByRole("status").filter({ hasText: "inscription" })).toHaveCount(0)
 
   const filter = page.getByRole("combobox", { name: "Filtrer par créneau" })
   await filter.focus()
@@ -88,4 +90,57 @@ test("the shift filter is named and works with the keyboard", async ({ page }) =
   await page.keyboard.press("Enter")
   await expect(filter).toContainText("Tous les créneaux")
   await expect(page.getByRole("status").filter({ hasText: "1 inscription affichée" })).toBeAttached()
+})
+
+/** The open list fits the 320 px screen: no page scroll sideways, no option cut, axe clean. */
+async function expectListFits(page: Page, list: Locator) {
+  await expect(list).toBeVisible()
+  const box = await list.boundingBox()
+  expect(box).not.toBeNull()
+  expect(box!.x).toBeGreaterThanOrEqual(0)
+  expect(box!.x + box!.width).toBeLessThanOrEqual(320)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
+  const cut = await list.getByRole("option").evaluateAll((options) => options.filter((o) => o.scrollWidth > o.clientWidth).map((o) => o.getAttribute("aria-label") ?? o.textContent))
+  expect(cut).toEqual([])
+  expect.soft(await seriousViolations(page)).toEqual([])
+}
+
+// #574: at 320 px (400% zoom of a 1280 px window), both pickers reflow (WCAG 1.4.10).
+test("both shift pickers fit a 320 px wide screen", async ({ page }) => {
+  await login(page)
+  const stamp = Date.now()
+  const { eventId } = await setUpEvent(page, stamp)
+  await page.setViewportSize({ width: 320, height: 640 })
+  await page.goto(`/admin/events/${eventId}/registrations`)
+
+  const filter = page.getByRole("combobox", { name: "Filtrer par créneau" })
+  await filter.focus()
+  await page.keyboard.press("ArrowDown")
+  const filterList = page.getByRole("listbox", { name: "Filtrer par créneau" })
+  await expectListFits(page, filterList)
+  const pill = filterList.getByText("1/3", { exact: true })
+  await pill.scrollIntoViewIfNeeded()
+  await expect(pill).toBeInViewport()
+  await page.keyboard.press("Escape")
+
+  await page.getByRole("button", { name: "+ Ajouter manuellement" }).click()
+  // The person already holds the Accueil shift: its option says « Déjà inscrit ».
+  await page.getByLabel("Email", { exact: true }).fill(`e2e-shift-select-${stamp}@example.com`)
+  const combo = page.getByRole("combobox", { name: "Créneau *" })
+  await combo.focus()
+  await page.keyboard.press("ArrowDown")
+  const list = page.getByRole("listbox", { name: "Créneau *" })
+  await expectListFits(page, list)
+  const already = list.getByText("Déjà inscrit", { exact: true })
+  await already.scrollIntoViewIfNeeded()
+  await expect(already).toBeInViewport()
+
+  // The chosen value wraps inside the trigger instead of being cut.
+  await page.keyboard.press("End")
+  await page.keyboard.press("Enter")
+  await expect(combo).toContainText("Accueil")
+  const trigger = await combo.boundingBox()
+  expect(trigger!.x + trigger!.width).toBeLessThanOrEqual(320)
+  expect(await combo.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
 })
