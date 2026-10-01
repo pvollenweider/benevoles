@@ -15,3 +15,20 @@ export function orgSlugFromHost(host: string): string | null {
   const [subdomain] = parts
   return NON_ORG_SUBDOMAINS.has(subdomain) ? null : subdomain
 }
+
+/** The request header carrying the current organization, set by the proxy only. */
+export const ORG_HEADER = "x-org-slug"
+
+/**
+ * The headers handed to pages and API routes (#541). Any x-org-slug the client sent is removed
+ * first (header names are case-insensitive, and every value goes), so the header only ever holds
+ * what the proxy resolved: the organization of the host, or else `?org=` (no org subdomain:
+ * the apex, localhost). Public routes scope their data with it and trust it as such.
+ */
+export function withOrgHeader(source: Headers, host: string, orgQuery: string | null): Headers {
+  const headers = new Headers(source)
+  headers.delete(ORG_HEADER)
+  const orgSlug = orgSlugFromHost(host) ?? (orgQuery || null)
+  if (orgSlug) headers.set(ORG_HEADER, orgSlug)
+  return headers
+}
