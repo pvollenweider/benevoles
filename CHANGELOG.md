@@ -7,6 +7,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+---
+
+## [2.0.2] — 2026-10-01
+
 ### Sécurité
 
 - **Organisation choisie par l'en-tête de la requête** (#541) : sur le domaine principal, sans `?org=`, un en-tête `x-org-slug` envoyé par le navigateur était transmis tel quel aux pages et routes publiques, qui s'en servent pour choisir l'organisation. Il est désormais toujours supprimé avant que le proxy n'ajoute la sienne. Seules des données publiques étaient concernées.
@@ -16,7 +20,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Corrigé
 
 - **Heures planifiées des membres** (#571) : la colonne « Heures cumulées » de la page Membres s'appelle « Heures planifiées », car elle additionne la durée prévue des créneaux confirmés, créneaux à venir et absences comprises, et non le temps passé. Un créneau pendant un changement d'heure y était compté une heure de trop ou de moins ; il compte maintenant sa durée réelle dans le fuseau de l'organisation.
-- **Choisir un créneau au clavier sur la page des inscriptions** (#555) : dans le formulaire d'ajout manuel et dans le filtre par créneau, la liste des créneaux ne s'utilisait qu'à la souris. Elle s'ouvre et se parcourt maintenant au clavier (flèches, Début, Fin, première lettre du poste), Entrée choisit et Échap ferme sans rien changer ; un lecteur d'écran lit chaque créneau en entier (date, heures, poste, remplissage, déjà inscrit, conflit d'horaire), et le filtre est nommé « Filtrer par créneau ». Le créneau choisi est coché, le créneau parcouru est entouré, et les mentions « Complet » et « ⚠ conflit » sont plus contrastées. Sur la même page : le tableau a un titre et chaque ligne est annoncée par le nom du bénévole ; la barre d'actions sur la sélection est nommée et ses boutons ne perdent plus le focus pendant une action ; après « Annuler » ou un ajout manuel, le focus revient sur « + Ajouter manuellement » et l'ajout est annoncé.
+- **Choisir un créneau au clavier sur la page des inscriptions** (#555) : dans le formulaire d'ajout manuel et dans le filtre par créneau, la liste des créneaux ne s'utilisait qu'à la souris. Elle s'ouvre et se parcourt maintenant au clavier (flèches, Début, Fin, première lettre du poste), Entrée choisit et Échap ferme sans rien changer ; chaque créneau a un nom complet pour les lecteurs d'écran (date, heures, poste, remplissage, déjà inscrit, conflit d'horaire), vérifié avec VoiceOver et Safari sur macOS ; NVDA, VoiceOver sur iOS, le zoom à 200 % et les petits écrans restent à vérifier (#574), et le filtre est nommé « Filtrer par créneau ». Le créneau choisi est coché, le créneau parcouru est entouré, et les mentions « Complet » et « ⚠ conflit » sont plus contrastées. Sur la même page : le tableau a un titre ; la barre d'actions sur la sélection est nommée et ses boutons ne perdent plus le focus pendant une action ; après « Annuler » ou un ajout manuel, le focus revient sur « + Ajouter manuellement » et l'ajout est annoncé.
 - **Désinscription depuis la page d'un événement** : quand on fermait la confirmation de désinscription d'un créneau déjà pris, le focus clavier se perdait au lieu de revenir sur le bouton du créneau. Il y revient.
 
 ---
