@@ -30,7 +30,7 @@ Les limites utilisent `rateLimit()` de `src/lib/rate-limit.ts` : fenêtre fixe, 
 | `/api/public/registrations/[token]/availability` | PATCH | public (jeton) | Le bénévole enregistre ses disponibilités générales (`availabilityPeriods`, `availabilityNote` ≤ 140) ; lien actif requis ; 10 requêtes par heure et par IP |
 | `/api/public/registrations/[token]/resend-link` | POST | public (jeton) | Renvoie par email le lien personnel depuis la page du bénévole (#376) ; 10 requêtes par heure et par IP, 3 envois par heure et par bénévole |
 | `/api/public/registrations/[token]/calendar` | GET | public (jeton) | Fichier `.ics` des créneaux confirmés de l'événement, ou d'un seul avec `?registration=<id>` (#480) ; liste d'attente, offres et demandes exclues ; 30 requêtes par heure et par IP |
-| `/api/public/member-invite/[token]` | GET | public (jeton) | Données de pré-remplissage d'une invitation |
+| `/api/public/member-invite/[token]` | GET | public (jeton) | Données de pré-remplissage d'une invitation (prénom, nom, email, téléphone, postes réservés ouverts) ; l'invitation doit appartenir à l'événement (`?slug=`) et à l'organisation de l'hôte ; même 404 « Lien invalide » pour tout refus ; 30 requêtes par heure et par IP |
 | `/api/public/waitlist/[token]/confirm` | GET, POST | public (jeton) | Consulter puis confirmer une place de liste d'attente ; 10 requêtes par heure et par IP |
 | `/api/public/leader/[token]` | GET | public (jeton) | Roster lecture seule d'un responsable de secteur : bénévoles inscrits ou en liste d'attente sur son poste (#186) ; 30 requêtes par heure et par IP |
 | `/api/public/push` | GET, POST, DELETE | public | Clé VAPID publique, abonnement et désabonnement push ; abonnement et désabonnement : 10 requêtes par heure et par IP |
