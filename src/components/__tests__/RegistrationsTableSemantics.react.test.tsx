@@ -110,4 +110,54 @@ describe("RegistrationsManager — count announcements", () => {
     expect(hiddenCount()).toHaveTextContent("1 inscription affichée")
     expect(screen.queryByText("Alice Martin")).toBeNull()
   })
+
+  // Review of #580: the region holds one message at a time, the count never sits next to a result.
+  it("replaces an action result and its journal link with the count after a filter change", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ done: 1, changedIds: ["r1"] }) }))
+    renderManager()
+    fireEvent.click(screen.getByLabelText("Sélectionner l'inscription de Alice Martin"))
+    fireEvent.click(screen.getByRole("button", { name: "Marquer présent (1)" }))
+    await waitFor(() => expect(outcome()).toHaveTextContent("1 personne marquée présente."))
+    expect(within(outcome()).getByRole("link", { name: "Voir cette action dans le journal" })).toBeInTheDocument()
+    expect(outcome()).not.toHaveClass("sr-only")
+
+    fireEvent.change(screen.getByLabelText("Filtrer par poste"), { target: { value: "Accueil" } })
+    await waitFor(() => expect(outcome().textContent).toBe("1 inscription affichée"))
+    expect(outcome()).toHaveClass("sr-only")
+    expect(within(outcome()).queryByRole("link")).toBeNull()
+    expect(document.querySelectorAll("[role=status], [aria-live]")).toHaveLength(1)
+  })
+
+  it("replaces the count with the result after an action, without repeating the count", async () => {
+    vi.stubGlobal("fetch", vi.fn(() => new Promise(() => {})))
+    renderManager()
+    fireEvent.change(screen.getByLabelText("Filtrer par poste"), { target: { value: "Bar" } })
+    await waitFor(() => expect(outcome().textContent).toBe("1 inscription affichée"))
+    fireEvent.click(screen.getByLabelText("Sélectionner l'inscription de Alice Martin"))
+    fireEvent.click(screen.getByRole("button", { name: "Retirer de leur créneau (1)" }))
+    fireEvent.click(screen.getByRole("button", { name: "Retirer" }))
+    await waitFor(() => expect(outcome().textContent).toBe(heldAnnouncement(1, UNDO_MS / 1000)))
+    expect(outcome().textContent).not.toMatch(/affichée/)
+    expect(hiddenCount()).toHaveTextContent("0 inscription affichée")
+  })
+
+  it("never lets a count written a frame late overwrite a newer action result", async () => {
+    // Frames run only when the test says so.
+    const frames: FrameRequestCallback[] = []
+    vi.stubGlobal("requestAnimationFrame", (cb: FrameRequestCallback) => { frames.push(cb); return frames.length })
+    const flushFrames = () => act(() => { frames.splice(0).forEach((cb) => cb(0)) })
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ done: 2, alreadyLeader: 0 }) }))
+    renderManager()
+    fireEvent.click(screen.getByLabelText("Sélectionner l'inscription de Alice Martin"))
+    fireEvent.click(screen.getByLabelText("Sélectionner l'inscription de Bob Martin"))
+    fireEvent.click(screen.getByRole("button", { name: "Rendre responsable" }))
+    // The filter changes: its count waits for the next frame.
+    fireEvent.change(screen.getByLabelText("Filtrer par poste"), { target: { value: "Bar" } })
+    fireEvent.click(screen.getByRole("button", { name: "Désigner" }))
+    // The result is written at once, before that frame.
+    const result = "2 responsables ajoutés.Voir cette action dans le journal"
+    await waitFor(() => expect(outcome().textContent).toBe(result))
+    flushFrames()
+    expect(outcome().textContent).toBe(result)
+  })
 })

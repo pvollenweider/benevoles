@@ -78,13 +78,17 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   const [leaderTarget, setLeaderTarget] = useState<{
     volunteerId: string; volunteerName: string; volunteerEmail: string | null; roleOptions: string[]; defaultRole: string
   } | null>(null)
-  const [leaderAnnouncement, setLeaderAnnouncement] = useState("")
-  // The count left by a filter change, spoken by the same region as the outcomes (#574).
-  const [countAnnouncement, setCountAnnouncement] = useState("")
-  // An action's outcome replaces any count spoken before it: the region says only the result.
+  // The one message of the status region (#574): an action's result, or the count after a filter
+  // change. Each replaces the other entirely, so neither is read again with the next one.
+  const [status, setStatus] = useState<{ text: string; count: boolean }>({ text: "", count: false })
+  // Bumped by every action result: a count announced a frame later never overwrites a newer result.
+  const statusSeq = useRef(0)
   function setActionStatus(text: string) {
-    setCountAnnouncement("")
-    setLeaderAnnouncement(text)
+    statusSeq.current += 1
+    setStatus({ text, count: false })
+  }
+  function setCountStatus(text: string) {
+    setStatus({ text, count: true })
   }
   const [bulkError, setBulkError] = useState<string | null>(null)
   // After a bulk action the toolbar unmounts with the selection: focus lands here instead of body.
@@ -125,7 +129,8 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     if (announcedFilters.current.all === filtersKey) return
     const say = () => {
       announcedFilters.current = { all: filtersKey, others: otherFiltersKey }
-      announce(setCountAnnouncement, listCountAnnouncement(filteredCount))
+      const seq = statusSeq.current
+      announce((text) => { if (text === "" || statusSeq.current === seq) setCountStatus(text) }, listCountAnnouncement(filteredCount))
     }
     if (announcedFilters.current.others !== otherFiltersKey) { say(); return }
     const timer = setTimeout(say, SEARCH_ANNOUNCE_MS)
@@ -404,14 +409,13 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           onDecided={(startedAt) => handleDecided(decision.reg, decision.kind, startedAt)}
         />
       )}
-      {/* The one live region of the page: outcomes (visible when there is something to say) and the
-          count after a filter change (screen readers only). */}
-      <p role="status" aria-live="polite" className={leaderAnnouncement ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-1" : "sr-only"}>
-        {leaderAnnouncement && <span>{leaderAnnouncement}</span>}
-        {leaderAnnouncement && lastLogLink && (
+      {/* The one live region of the page, one message at a time: an action's result (visible) or the
+          count after a filter change (screen readers only, the box hidden). */}
+      <p role="status" aria-live="polite" className={status.text && !status.count ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-1" : "sr-only"}>
+        {status.text && <span>{status.text}</span>}
+        {status.text && !status.count && lastLogLink && (
           <Link href={lastLogLink} className="font-medium text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Voir cette action dans le journal</Link>
         )}
-        {countAnnouncement && <span className="sr-only">{countAnnouncement}</span>}
       </p>
       {held.length > 0 && undo.secondsLeft !== null && (
         <UndoRemovalBar
