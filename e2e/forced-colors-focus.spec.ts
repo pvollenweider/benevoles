@@ -46,21 +46,23 @@ const VIEW_TOGGLE_EXCLUSIONS: Exclusion[] = [
  * for separate issues; each is matched precisely, recorded as an annotation, and must still occur
  * (a fixed one fails the test until its entry is removed), so the list cannot go stale.
  */
+// Defects found by this spec that predate #579, each with its own issue: an entry must still
+// reproduce (the test fails otherwise) and goes away in the PR that fixes its issue.
 const KNOWN_ISSUES: { test: string; match: RegExp; note: string }[] = [
   {
     test: "public event page: shift selection",
     match: /button « Sélectionner — Bar .*: outline left covered by positioned div « Bar Accueil Contrôle »/,
-    note: "DayTimeline: the sticky role-label column (z-10) covers the left edge of the outline of a bar that starts at the first hour",
+    note: "#583 — DayTimeline: the sticky role-label column (z-10) covers the left edge of the outline of a bar that starts at the first hour",
   },
   {
     test: "public cancel dialog",
     match: /cancel dialog: focus left the modal .* \(no focus trap\)/,
-    note: "EventPageClient cancel alertdialog (aria-modal) has no focus trap: Tab leaves it for the page behind",
+    note: "#584 — EventPageClient cancel alertdialog (aria-modal) has no focus trap: Tab leaves it for the page behind",
   },
   {
     test: "members page and import modal",
     match: /import modal, preview step: focus left the modal .* \(no focus trap\)/,
-    note: "ModalShell focus trap counts the hidden file form of ImportModal's preview step, so Tab escapes after the last visible button",
+    note: "#585 — ModalShell focus trap counts the hidden file form of ImportModal's preview step, so Tab escapes after the last visible button",
   },
 ]
 
