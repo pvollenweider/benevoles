@@ -6,6 +6,8 @@
  * export. Nothing else: no terminals, badges or access control.
  */
 
+import { csvDocument } from "./data-export"
+
 export type AttendanceRow = {
   firstName: string
   lastName: string
@@ -32,10 +34,8 @@ export function attendanceSummary(t: AttendanceTotals): string {
   return `${t.present} présent${t.present > 1 ? "s" : ""} sur ${t.registered}`
 }
 
-const csvCell = (v: string | null | undefined) => {
-  const s = (v ?? "").replace(/\r?\n/g, " ")
-  return /[";\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
-}
+// One line per registration: line breaks in a value (a comment, an answer) become spaces.
+const oneLine = (v: string | null | undefined) => (v ?? "").replace(/\r?\n/g, " ")
 
 /** Time of the check-in in the organization's time zone, "HH:MM", for the export. */
 export function formatCheckIn(d: Date | null, timeZone: string): string {
@@ -57,6 +57,7 @@ export function attendanceCsv(rows: (AttendanceRow & { answers?: string[] })[], 
     r.firstName, r.lastName, r.email, r.phone, r.roleName, r.label !== r.roleName ? r.label : "", r.date, r.startTime, r.endTime,
     r.checkedInAt ? "oui" : "non", formatCheckIn(r.checkedInAt, timeZone),
     ...questionLabels.map((_, i) => r.answers?.[i] ?? ""),
-  ].map(csvCell).join(";"))
-  return "﻿" + [header.join(";"), ...lines].join("\r\n") + "\r\n"
+  ].map(oneLine))
+  // The shared serializer escapes and neutralises formulas (#567), question labels included.
+  return csvDocument(header.map(oneLine), lines)
 }

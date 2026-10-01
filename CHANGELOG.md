@@ -7,6 +7,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Sécurité
+
+- **Formules dans les exports CSV** (#567) : un nom, un commentaire, une réponse ou un numéro saisi dans le formulaire public pouvait commencer par `=`, `+`, `-` ou `@` et s'exécuter comme une formule à l'ouverture de l'export dans Excel ou LibreOffice. Dans les exports des membres, du journal d'activité et des présences, ces valeurs sont précédées d'une apostrophe et s'affichent comme du texte ; les autres valeurs sont inchangées.
+
 ### Corrigé
 
 - **Désinscription depuis la page d'un événement** : quand on fermait la confirmation de désinscription d'un créneau déjà pris, le focus clavier se perdait au lieu de revenir sur le bouton du créneau. Il y revient.
