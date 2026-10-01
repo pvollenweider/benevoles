@@ -79,3 +79,40 @@ describe("ManualAddForm", () => {
     expect(onCancel).toHaveBeenCalled()
   })
 })
+
+// Regression (review of the RegistrationsManager split): the form remounted on every click of
+// « + Ajouter manuellement », even when already open, which dropped its in-flight guard and let a
+// second POST go out while the first was still running.
+describe("RegistrationsManager — manual add while a submission is running", () => {
+  const fetchMock = vi.fn()
+  beforeEach(() => {
+    fetchMock.mockReset()
+    vi.stubGlobal("fetch", fetchMock)
+  })
+  afterEach(() => {
+    cleanup()
+    vi.unstubAllGlobals()
+  })
+
+  it("keeps the form, and its guard, when the open button is clicked again", async () => {
+    vi.doMock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }) }))
+    const { default: RegistrationsManager } = await import("../admin/RegistrationsManager")
+    fetchMock.mockReturnValue(new Promise(() => {}))
+    render(<RegistrationsManager eventId="evt-1" timeZone="Europe/Zurich" shifts={[shift]} initialRegistrations={[]} />)
+    const open = screen.getByRole("button", { name: "+ Ajouter manuellement" })
+    fireEvent.click(open)
+    fireEvent.change(screen.getByLabelText("Prénom *"), { target: { value: "Chloé" } })
+    fireEvent.change(screen.getByLabelText("Nom *"), { target: { value: "Roy" } })
+    const form = screen.getByLabelText("Prénom *").closest("form")!
+    fireEvent.click(form.querySelector('[aria-labelledby^="add-shift-label"]')!)
+    // ShiftSelect rows are plain clickable divs: click the one of shift s1.
+    const row = [...form.querySelectorAll<HTMLElement>("div.cursor-pointer")].find((d) => d.textContent?.includes("Bar"))!
+    fireEvent.click(row)
+    fireEvent.submit(form)
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
+
+    fireEvent.click(open)
+    fireEvent.submit(screen.getByLabelText("Prénom *").closest("form")!)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+})
