@@ -50,7 +50,7 @@ vi.mock("@/lib/prisma", () => {
     },
   }
 })
-vi.mock("@/lib/email", () => ({ sendConfirmationEmail: vi.fn(), sendAdminNotification: vi.fn() }))
+vi.mock("@/lib/notification-helpers", () => ({ sendConfirmationEmail: vi.fn(), sendAdminNotification: vi.fn() }))
 vi.mock("@/lib/notifications", () => ({ sendNotification: vi.fn().mockResolvedValue({ ok: true }) }))
 const outboxMocks = vi.hoisted(() => ({
   enqueueAndDeliver: vi.fn().mockResolvedValue(undefined),

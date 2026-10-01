@@ -32,7 +32,7 @@ vi.mock("@/lib/prisma", () => ({
     })),
   },
 }))
-vi.mock("@/lib/email", () => ({ sendConfirmationEmail: m.confirmation, sendAdminNotification: vi.fn() }))
+vi.mock("@/lib/notification-helpers", () => ({ sendConfirmationEmail: m.confirmation, sendAdminNotification: vi.fn() }))
 vi.mock("@/lib/notifications", () => ({ sendNotification: vi.fn() }))
 vi.mock("@/lib/notifications/outbox", () => ({
   collectNotifications: () => ({ payloads: m.payloads, send: async (p: { kind: string; data: Record<string, unknown> }) => { m.payloads.push(p); return { ok: true } } }),

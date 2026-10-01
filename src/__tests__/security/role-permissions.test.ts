@@ -12,7 +12,7 @@ vi.mock("@/lib/prisma", () => ({
 }))
 
 vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications: vi.fn(), deliverAfterResponse: vi.fn() }))
-vi.mock("@/lib/email", () => ({}))
+vi.mock("@/lib/notification-helpers", () => ({}))
 
 import { PERMISSIONS } from "@/lib/permissions"
 

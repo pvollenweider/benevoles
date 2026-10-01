@@ -85,7 +85,7 @@ jobs:
       ORG_ADMIN_EMAIL: org-admin@localhost
       ORG_ADMIN_PASSWORD: ci-e2e-org-admin-password
       # Deliberately distinct from ORG_ADMIN_EMAIL — registration.spec.ts
-      # asserts admin notifications never land here (see src/lib/email.ts).
+      # asserts admin notifications never land here (see src/lib/notification-helpers.ts).
       ADMIN_NOTIFICATION_EMAIL: fallback-should-not-receive@localhost
       SMTP_HOST: localhost
       SMTP_PORT: "1025"

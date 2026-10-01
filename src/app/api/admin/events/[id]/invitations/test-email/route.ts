@@ -3,7 +3,7 @@
 
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { sendMemberInvite } from "@/lib/email"
+import { sendMemberInvite } from "@/lib/notification-helpers"
 import { z } from "zod"
 
 const schema = z.object({

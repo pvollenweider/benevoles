@@ -67,7 +67,7 @@ Les champs libres peuvent contenir n'importe quelle donnée, y compris des caté
 
   Ces mesures réduisent fortement ce qui part, sans garantir qu'aucune donnée personnelle ne puisse être transmise : un message d'erreur, une URL nettoyée, un identifiant interne ou la structure d'une page enregistrée peuvent en être.
 
-- **Adresse de secours de l'opérateur** : si une organisation n'a aucun administrateur actif, les notifications de nouvelle inscription (nom, email du bénévole, créneaux) sont envoyées à `ADMIN_NOTIFICATION_EMAIL` (`src/lib/email.ts`). **À confirmer en production** : cette variable est définie, et qui lit cette boîte.
+- **Adresse de secours de l'opérateur** : si une organisation n'a aucun administrateur actif, les notifications de nouvelle inscription (nom, email du bénévole, créneaux) sont envoyées à `ADMIN_NOTIFICATION_EMAIL` (`src/lib/notification-helpers.ts`). **À confirmer en production** : cette variable est définie, et qui lit cette boîte.
 
 ## Hébergement, envoi et sauvegardes
 

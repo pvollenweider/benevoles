@@ -83,7 +83,7 @@ vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }))
 vi.mock("@/lib/notifications", () => ({
   sendNotification: vi.fn().mockResolvedValue({ ok: true }),
 }))
-vi.mock("@/lib/email", () => ({
+vi.mock("@/lib/notification-helpers", () => ({
   sendMemberInvite: vi.fn().mockResolvedValue(undefined),
 }))
 vi.mock("bcryptjs", () => ({
