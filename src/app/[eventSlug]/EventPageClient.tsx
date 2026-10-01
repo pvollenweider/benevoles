@@ -25,7 +25,6 @@ import {
   type MyRegistration,
   type SignupForm,
 } from "@/lib/public-signup"
-import {  } from "@/lib/gantt-utils"
 import { roleLimitBreaches, roleLimitSelectionMessage, roleLimits } from "@/lib/role-limit"
 import { announce } from "@/lib/announce"
 import SignupQuestions, { type Answers } from "@/components/public/SignupQuestions"

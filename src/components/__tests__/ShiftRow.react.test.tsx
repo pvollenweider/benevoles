@@ -2,6 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect, vi, afterEach } from "vitest"
+import { useRef, useState } from "react"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, fireEvent, cleanup } from "@testing-library/react"
 
@@ -95,5 +96,30 @@ describe("ShiftRow", () => {
     const { row } = renderRow({ selected: false })
     expect(row).not.toHaveClass("bg-blue-50/60")
     expect(row).not.toHaveClass("bg-green-50")
+  })
+})
+
+// Regression: ShiftRow was declared inside EventPageClient, so each parent render made a new
+// component type and remounted every row. Opening the unregister confirmation re-renders the
+// parent: the button kept for focus return was detached, and closing the dialog lost focus.
+describe("ShiftRow focus return", () => {
+  function Harness() {
+    const trigger = useRef<HTMLButtonElement | null>(null)
+    const [open, setOpen] = useState(false)
+    return (
+      <>
+        <ShiftRow shift={shift()} registered selected={false} onCancel={(b) => { trigger.current = b; setOpen(true) }} onRemove={() => {}} />
+        {open && <button onClick={() => { setOpen(false); trigger.current?.focus() }}>Annuler</button>}
+      </>
+    )
+  }
+
+  it("keeps the same button across the parent re-render, so focus can come back to it", () => {
+    render(<Harness />)
+    const cancel = screen.getByRole("button", { name: /Annuler l'inscription à Bar/ })
+    fireEvent.click(cancel)
+    fireEvent.click(screen.getByRole("button", { name: "Annuler" }))
+    expect(cancel.isConnected).toBe(true)
+    expect(document.activeElement).toBe(cancel)
   })
 })
