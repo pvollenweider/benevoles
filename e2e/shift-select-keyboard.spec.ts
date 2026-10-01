@@ -16,8 +16,11 @@ async function login(page: Page) {
   await expect(page).toHaveURL(/\/admin\/events/)
 }
 
-/** An event with a « Bar » shift in the morning and an « Accueil » one in the afternoon, one person on Accueil. */
-async function setUpEvent(page: Page, stamp: number) {
+/**
+ * An event with a « Bar » shift in the morning and an « Accueil » one in the afternoon, one person
+ * on Accueil; with `overlap`, also a « Vestiaire » shift with a long label overlapping Accueil.
+ */
+async function setUpEvent(page: Page, stamp: number, { overlap = false } = {}) {
   const event: { id: string } = await (await page.request.post("/api/admin/events", {
     data: { title: `E2E Shift Select ${stamp}`, startDate: "2030-10-01", endDate: "2030-10-01", publicStatus: "draft" },
   })).json()
@@ -30,6 +33,12 @@ async function setUpEvent(page: Page, stamp: number) {
   await page.request.post("/api/admin/registrations", {
     data: { eventId: event.id, shiftId: accueil.id, firstName: "E2E", lastName: "Accueil", email: `e2e-shift-select-${stamp}@example.com` },
   })
+  if (overlap) {
+    const res = await page.request.post("/api/admin/shifts", {
+      data: { eventId: event.id, roleName: "Vestiaire", label: "Vestiaire des artistes, entrée nord", date: "2030-10-01", startTime: "15:00", endTime: "17:00", capacity: 3 },
+    })
+    expect(res.ok()).toBe(true)
+  }
   return { eventId: event.id, barId: bar.id }
 }
 
@@ -84,12 +93,13 @@ test("the shift filter is named and works with the keyboard", async ({ page }) =
 
   await expect(filter).toContainText("Bar")
   await expect(page.getByText("Aucun résultat.")).toBeVisible()
-  await expect(page.getByRole("status").filter({ hasText: "0 inscription affichée" })).toBeAttached()
+  // The region holds the count alone, nothing next to it.
+  await expect(page.getByRole("status")).toHaveText("0 inscription affichée")
 
   await page.keyboard.press("Home")
   await page.keyboard.press("Enter")
   await expect(filter).toContainText("Tous les créneaux")
-  await expect(page.getByRole("status").filter({ hasText: "1 inscription affichée" })).toBeAttached()
+  await expect(page.getByRole("status")).toHaveText("1 inscription affichée")
 })
 
 /** The open list fits the 320 px screen: no page scroll sideways, no option cut, axe clean. */
@@ -105,11 +115,28 @@ async function expectListFits(page: Page, list: Locator) {
   expect.soft(await seriousViolations(page)).toEqual([])
 }
 
+/** A warning badge of an option is whole: inside its option, inside the screen, not cut. */
+async function expectBadgeWhole(list: Locator, name: RegExp, text: string) {
+  const option = list.getByRole("option", { name })
+  await expect(option).toHaveCount(1)
+  const badge = option.getByText(text, { exact: true })
+  await badge.scrollIntoViewIfNeeded()
+  // IntersectionObserver: also catches a badge clipped by the list's overflow-hidden.
+  await expect(badge).toBeInViewport({ ratio: 1 })
+  const o = (await option.boundingBox())!
+  const b = (await badge.boundingBox())!
+  expect(b.x).toBeGreaterThanOrEqual(o.x)
+  expect(b.x + b.width).toBeLessThanOrEqual(Math.min(o.x + o.width, 320) + 0.5)
+  expect(await badge.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true)
+}
+
+const noPageScrollX = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)
+
 // #574: at 320 px (400% zoom of a 1280 px window), both pickers reflow (WCAG 1.4.10).
 test("both shift pickers fit a 320 px wide screen", async ({ page }) => {
   await login(page)
   const stamp = Date.now()
-  const { eventId } = await setUpEvent(page, stamp)
+  const { eventId } = await setUpEvent(page, stamp, { overlap: true })
   await page.setViewportSize({ width: 320, height: 640 })
   await page.goto(`/admin/events/${eventId}/registrations`)
 
@@ -120,27 +147,42 @@ test("both shift pickers fit a 320 px wide screen", async ({ page }) => {
   await expectListFits(page, filterList)
   const pill = filterList.getByText("1/3", { exact: true })
   await pill.scrollIntoViewIfNeeded()
-  await expect(pill).toBeInViewport()
+  await expect(pill).toBeInViewport({ ratio: 1 })
   await page.keyboard.press("Escape")
 
   await page.getByRole("button", { name: "+ Ajouter manuellement" }).click()
-  // The person already holds the Accueil shift: its option says « Déjà inscrit ».
+  // The person already holds Accueil (« Déjà inscrit »), which Vestiaire overlaps (« ⚠ conflit »).
   await page.getByLabel("Email", { exact: true }).fill(`e2e-shift-select-${stamp}@example.com`)
   const combo = page.getByRole("combobox", { name: "Créneau *" })
   await combo.focus()
   await page.keyboard.press("ArrowDown")
   const list = page.getByRole("listbox", { name: "Créneau *" })
   await expectListFits(page, list)
-  const already = list.getByText("Déjà inscrit", { exact: true })
-  await already.scrollIntoViewIfNeeded()
-  await expect(already).toBeInViewport()
+  await expectBadgeWhole(list, /conflit d'horaire/, "⚠ conflit")
+  await expectBadgeWhole(list, /déjà inscrit/, "Déjà inscrit")
+  await expect(list.getByText("Vestiaire des artistes, entrée nord", { exact: false })).toBeInViewport({ ratio: 1 })
 
-  // The chosen value wraps inside the trigger instead of being cut.
-  await page.keyboard.press("End")
+  // The conflicting shift: its warning fits, describes the field and does not make it invalid.
+  await page.keyboard.press("v")
+  await page.keyboard.press("Enter")
+  await expect(combo).toContainText("Vestiaire des artistes, entrée nord")
+  const warn = page.locator("#add-shift-conflict")
+  await expect(warn).toHaveText("Ce bénévole est déjà inscrit à un autre créneau pour cette plage horaire.")
+  await warn.scrollIntoViewIfNeeded()
+  await expect(warn).toBeInViewport({ ratio: 1 })
+  expect(await warn.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true)
+  await expect(combo).toHaveAttribute("aria-describedby", /add-shift-conflict/)
+  await expect(combo).not.toHaveAttribute("aria-invalid")
+  // The long chosen value wraps inside the trigger instead of being cut.
+  const trigger = (await combo.boundingBox())!
+  expect(trigger.x + trigger.width).toBeLessThanOrEqual(320)
+  expect(await combo.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true)
+  expect(await noPageScrollX(page)).toBe(true)
+
+  // Type-ahead to Accueil: the value still fits, with no page scroll sideways.
+  await page.keyboard.press("a")
   await page.keyboard.press("Enter")
   await expect(combo).toContainText("Accueil")
-  const trigger = await combo.boundingBox()
-  expect(trigger!.x + trigger!.width).toBeLessThanOrEqual(320)
   expect(await combo.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true)
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
+  expect(await noPageScrollX(page)).toBe(true)
 })
