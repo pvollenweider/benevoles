@@ -2,16 +2,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
-import { orgTimeZone } from "@/lib/time-zone"
-import { acceptsRegistrations, refusalMessage, registrationState } from "@/lib/registration-window"
 import { birthDateSchema } from "@/lib/civil-date"
 import { prisma } from "@/lib/prisma"
-import { generateToken, shiftsOverlap, shiftsTooYoungFor } from "@/lib/utils"
-import { sendConfirmationEmail, sendAdminNotification } from "@/lib/notification-helpers"
-import { pickShiftInfo } from "@/lib/shift-info"
+import { generateToken } from "@/lib/utils"
 import { sendNotification } from "@/lib/notifications"
-import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
-import { notifySectorLeadersOfSignup } from "@/lib/sector-leaders"
+import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { buildSignupNotifications, type CreatedRegistration } from "@/lib/signup-notifications"
 import { rateLimit, getClientIp, isRateLimited } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
 import { reportError } from "@/lib/report-error"
@@ -28,8 +24,21 @@ import { z } from "zod"
 import { linkToken, registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
 import { checkAnswers, planAnswerWrites } from "@/lib/event-questions"
-import { memberMayTake, reservationRefusal, reservedRoles } from "@/lib/role-reservation"
-import { normalizeEmail } from "@/lib/email-address"
+import { reservedRoles } from "@/lib/role-reservation"
+import {
+  answersRefusal,
+  existingOverlapRefusal,
+  findOverlap,
+  fullShift,
+  fullShiftRefusal,
+  minimumAgeRefusal,
+  overlapWithExisting,
+  registrationWindowRefusal,
+  requiredPhoneRefusal,
+  reservedRoleRefusal,
+  selectionOverlapRefusal,
+  type SignupRefusal,
+} from "@/lib/signup-eligibility"
 import { RoleLimitError, roleLimitBreaches, roleLimitMessage, roleLimits } from "@/lib/role-limit"
 
 const schema = z.object({
@@ -71,17 +80,13 @@ export async function POST(req: Request) {
     include: { organization: { select: { slug: true, timeZone: true } } },
   })
   if (!event) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
-  // Registration window (#463): the page may have been opened before registrations closed. The
-  // query above already requires a published event; what's left to check is the window.
-  const signupWindow = { ...event, publicStatus: "published" }
-  if (!acceptsRegistrations(signupWindow)) {
-    return NextResponse.json({ error: refusalMessage(registrationState(signupWindow), orgTimeZone(event.organization)) }, { status: 409 })
-  }
+  const refuse = (r: SignupRefusal) => NextResponse.json(r.body, { status: r.status })
 
-  // Authoritative check: the form marks the field required too, but only as a courtesy.
-  if (event.requirePhone && !phone?.trim()) {
-    return NextResponse.json({ error: "Le téléphone est obligatoire pour cet événement." }, { status: 400 })
-  }
+  const windowRefusal = registrationWindowRefusal(event)
+  if (windowRefusal) return refuse(windowRefusal)
+
+  const phoneRefusal = requiredPhoneRefusal(event.requirePhone, phone)
+  if (phoneRefusal) return refuse(phoneRefusal)
 
   const shifts = await prisma.shift.findMany({
     where: { id: { in: shiftIds }, eventId, status: { in: ["open"] } },
@@ -93,51 +98,30 @@ export async function POST(req: Request) {
   }
 
   // Early, unlocked check for a friendly error — the authoritative one runs under lock below.
-  for (const shift of shifts) {
-    if (shift.registrations.length >= shift.capacity) {
-      if (!shift.waitlistEnabled) {
-        return NextResponse.json({
-          error: `Le créneau "${shift.label}" est complet. Veuillez recharger la page.`,
-          fullShiftId: shift.id,
-        }, { status: 409 })
-      }
-      // Waitlist enabled — fall through; will be created with status "waiting" below
-    }
-  }
+  // A full shift with a waitlist goes on: its registration is created with status "waiting".
+  const fullRefusal = fullShiftRefusal(shifts)
+  if (fullRefusal) return refuse(fullRefusal)
 
-  for (let i = 0; i < shifts.length; i++) {
-    for (let j = i + 1; j < shifts.length; j++) {
-      if (shiftsOverlap(shifts[i], shifts[j])) {
-        return NextResponse.json({
-          error: `Les créneaux "${shifts[i].label}" et "${shifts[j].label}" se chevauchent.`,
-        }, { status: 400 })
-      }
-    }
-  }
+  const selectionRefusal = selectionOverlapRefusal(shifts)
+  if (selectionRefusal) return refuse(selectionRefusal)
 
-  // Roles reserved to members with a tag (#470). The only proof of who signs up is a valid member
-  // invitation of this event, for this very email; the member's tags are read now, so a tag removed
-  // after the invitation was sent no longer opens the role. All the role's shifts count, so a shift
-  // created without the tags can't open a way around them.
+  // Roles reserved to members with a tag (#470): all the role's shifts count, see reservedRoleRefusal.
   const reserved = reservedRoles(await prisma.shift.findMany({
     where: { eventId, roleName: { in: [...new Set(shifts.map((s) => s.roleName))] }, status: { not: "cancelled" } },
     select: { roleName: true, reservedTags: true },
   }))
-  const reservedAsked = [...new Set(shifts.map((s) => s.roleName))].filter((r) => reserved.has(r))
-  if (reservedAsked.length > 0) {
-    const invite = inviteToken
-      ? await prisma.memberInvite.findFirst({
+  const roleRefusal = await reservedRoleRefusal({
+    shifts,
+    reserved,
+    email,
+    loadInvite: async () => inviteToken
+      ? prisma.memberInvite.findFirst({
           where: { ...linkToken.where(inviteToken), eventId },
           select: { volunteer: { select: { email: true, tags: true, active: true } } },
         })
-      : null
-    const proven = !!invite && invite.volunteer.active && normalizeEmail(invite.volunteer.email ?? "") === email
-    for (const role of reservedAsked) {
-      if (!proven || !memberMayTake(invite!.volunteer.tags, reserved.get(role)!)) {
-        return NextResponse.json({ error: reservationRefusal(role, proven), reservedRole: role }, { status: 403 })
-      }
-    }
-  }
+      : null,
+  })
+  if (roleRefusal) return refuse(roleRefusal)
 
   // Custom questions (#483), checked here whatever the page did; stored with the registration.
   const questions = await prisma.eventQuestion.findMany({
@@ -145,27 +129,11 @@ export async function POST(req: Request) {
     select: { id: true, label: true, type: true, options: true, required: true },
   })
   const answerCheck = checkAnswers(questions, parsed.data.answers)
-  if (!answerCheck.ok) {
-    return NextResponse.json({ error: answerCheck.errors.map((e) => e.message).join(" "), questionIds: answerCheck.errors.map((e) => e.questionId), questionErrors: answerCheck.errors }, { status: 400 })
-  }
+  if (!answerCheck.ok) return refuse(answersRefusal(answerCheck)!)
 
-  // Minimum age (#192) — authoritative check, the client-side one in EventPageClient.tsx is
-  // only a courtesy. Never trust an age the client itself computed: birthDate is what's
-  // validated, not a client-supplied age.
-  const ageGated = shifts.filter((s) => s.minAge != null)
-  if (ageGated.length > 0) {
-    if (!birthDate) {
-      return NextResponse.json({
-        error: `Date de naissance requise pour : ${ageGated.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}.`,
-      }, { status: 400 })
-    }
-    const tooYoungFor = shiftsTooYoungFor(birthDate, ageGated)
-    if (tooYoungFor.length > 0) {
-      return NextResponse.json({
-        error: `Âge minimum non atteint pour : ${tooYoungFor.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}.`,
-      }, { status: 403 })
-    }
-  }
+  // Minimum age (#192), authoritative: see minimumAgeRefusal.
+  const ageRefusal = minimumAgeRefusal(shifts, birthDate)
+  if (ageRefusal) return refuse(ageRefusal)
 
   // Volunteer is org-scoped: each (organizationId, email) is a unique roster entry.
   //
@@ -202,12 +170,8 @@ export async function POST(req: Request) {
       where: { volunteerId: existing.id, eventId, status: { in: [...COMMITTED_STATUSES] } },
       include: { shift: true },
     })
-    const clash = findOverlap(allEventRegs, shifts)
-    if (clash) {
-      return NextResponse.json({
-        error: `Ce créneau chevauche une inscription existante (${clash.label}).`,
-      }, { status: 409 })
-    }
+    const clashRefusal = existingOverlapRefusal(allEventRegs, shifts)
+    if (clashRefusal) return refuse(clashRefusal)
   }
 
   // Chaque inscription reçoit son propre token unique.
@@ -225,99 +189,13 @@ export async function POST(req: Request) {
   // Built and stored inside the registration transaction (#352): the registrations and their
   // notifications commit together, then delivery runs after the response. The helpers only read
   // (admins, sector leaders), so the shift locks are held a few queries longer, no more.
-  const buildNotifications = async (registrations: { id: string; shiftId: string; status: string; waitingPosition: number | null }[]) => {
-    const editToken = tokens.get(registrations[0].shiftId)!
-    const waitlistRegs = registrations.filter((r) => r.status === "waiting")
-    const activeRegs = registrations.filter((r) => r.status === "active")
-    const requestedRegs = registrations.filter((r) => r.status === "requested")
-
-    const shiftData = (regs: typeof registrations) => shifts
-      .filter((s) => regs.some((r) => r.shiftId === s.id))
-      .map((s) => ({
-        label: s.label,
-        roleName: s.roleName,
-        date: s.date.toLocaleDateString("fr-FR"),
-        startTime: s.startTime,
-        endTime: s.endTime,
-        ...pickShiftInfo(s, event),
-      }))
-    const activeShiftData = shiftData(activeRegs)
-    const outbox = collectNotifications()
-    if (activeRegs.length > 0) {
-      await sendConfirmationEmail({
-        to: email,
-        volunteerName: `${firstName} ${lastName}`,
-        eventTitle: event.title,
-        shifts: activeShiftData,
-        editToken,
-        orgSlug: event.organization.slug,
-        confirmationMessage: event.confirmationMessage ?? undefined,
-      }, outbox.send)
-    }
-    // Sign-up approval (#484): a request is not a place, and the email says so.
-    if (requestedRegs.length > 0) {
-      await outbox.send({
-        kind: "registration_requested",
-        recipient: { email, name: `${firstName} ${lastName}` },
-        data: {
-          volunteerName: `${firstName} ${lastName}`,
-          eventTitle: event.title,
-          shifts: shiftData(requestedRegs).map(({ label, date, startTime, endTime }) => ({ label, date, startTime, endTime })),
-          editToken,
-          orgSlug: event.organization.slug,
-        },
-      })
-    }
-    await sendAdminNotification({
-      organizationId: event.organizationId,
-      eventTitle: event.title,
-      volunteerName: `${firstName} ${lastName}`,
-      volunteerEmail: email,
-      shifts: shifts.map((s) => ({
-        label: s.label,
-        roleName: s.roleName,
-        date: s.date.toLocaleDateString("fr-FR"),
-        startTime: s.startTime,
-        endTime: s.endTime,
-      })),
-    }, outbox.send)
-    // Sector leaders hear of a request once it is accepted (#484).
-    for (const shift of shifts.filter((s) => !requestedRegs.some((r) => r.shiftId === s.id))) {
-      await notifySectorLeadersOfSignup({
-        eventId,
-        eventTitle: event.title,
-        orgSlug: event.organization.slug,
-        volunteerName: `${firstName} ${lastName}`,
-        shift,
-      }, outbox.send)
-    }
-
-    // Waitlist confirmation for waiting registrations
-    for (const wr of waitlistRegs) {
-      const shift = shifts.find((s) => s.id === wr.shiftId)
-      if (!shift) continue
-      await outbox.send({
-        kind: "waitlist_confirmation",
-        recipient: { email, name: `${firstName} ${lastName}` },
-        data: {
-          volunteerName: `${firstName} ${lastName}`,
-          eventTitle: event.title,
-          shiftLabel: shift.label,
-          shiftDate: shift.date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
-          shiftStart: shift.startTime,
-          shiftEnd: shift.endTime,
-          waitingPosition: wr.waitingPosition ?? 1,
-          orgSlug: event.organization.slug,
-        },
-      })
-    }
-
-    // One key per notification of this sign-up (#315): a repeated enqueue stores it once.
-    return outbox.payloads.map((p) => ({
-      ...p,
-      dedupeKey: `${p.kind}:${registrations[0].id}:${p.recipient.email ?? ""}`,
-    }))
-  }
+  const buildNotifications = (registrations: CreatedRegistration[]) => buildSignupNotifications({
+    event,
+    shifts,
+    volunteer: { email, firstName, lastName },
+    registrations,
+    tokens,
+  })
 
   let outcome: { registrations: Awaited<ReturnType<typeof prisma.registration.create>>[]; volunteerId: string; createdNow: boolean; outboxIds: string[] }
   try {
@@ -421,20 +299,11 @@ export async function POST(req: Request) {
       return { registrations: created, volunteerId, createdNow, outboxIds }
     })
   } catch (e) {
-    if (e instanceof ShiftFullError) {
-      return NextResponse.json({
-        error: `Le créneau "${e.label}" est complet. Veuillez recharger la page.`,
-        fullShiftId: e.shiftId,
-      }, { status: 409 })
-    }
+    if (e instanceof ShiftFullError) return refuse(fullShift(e.shiftId, e.label))
     if (e instanceof RoleLimitError) {
       return NextResponse.json({ error: roleLimitMessage(e.breach), roleLimit: e.breach.roleName }, { status: 409 })
     }
-    if (e instanceof OverlapError) {
-      return NextResponse.json({
-        error: `Ce créneau chevauche une inscription existante (${e.label}).`,
-      }, { status: 409 })
-    }
+    if (e instanceof OverlapError) return refuse(overlapWithExisting(e.label))
     if (isUniqueViolation(e)) {
       // Our transaction rolled back; the duplicate belongs to a volunteer that exists
       // independently of it (created before, or by a concurrent sign-up).
@@ -511,18 +380,6 @@ class OverlapError extends Error {
   constructor(readonly label: string) {
     super(`Overlaps ${label}`)
   }
-}
-
-function findOverlap(
-  existing: { shift: Parameters<typeof shiftsOverlap>[0] & { label: string } }[],
-  shifts: Parameters<typeof shiftsOverlap>[1][],
-): { label: string } | null {
-  for (const reg of existing) {
-    for (const shift of shifts) {
-      if (shiftsOverlap(reg.shift, shift)) return { label: reg.shift.label }
-    }
-  }
-  return null
 }
 
 /**
