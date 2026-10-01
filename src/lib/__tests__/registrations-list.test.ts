@@ -6,6 +6,7 @@ import {
   fmtHour,
   leaderAnnouncement,
   leaderDesignatedAnnouncement,
+  leaderRemovedAnnouncement,
   leaderRoleOptions,
   listCountAnnouncement,
   manualAddAnnouncement,
@@ -100,6 +101,12 @@ describe("leaders and announcements", () => {
   it("sector leader designation, the same for everyone", () => {
     const text = leaderDesignatedAnnouncement("Chloé Roy", "Bar")
     expect(text).toBe("Chloé Roy est maintenant responsable de « Bar », invitation envoyée par email.")
+    expect(text).not.toMatch(/·/)
+  })
+
+  it("sector leader removal, without « ·e »", () => {
+    const text = leaderRemovedAnnouncement("Chloé Roy", "Bar")
+    expect(text).toBe("Chloé Roy n'est plus responsable de « Bar ».")
     expect(text).not.toMatch(/·/)
   })
 

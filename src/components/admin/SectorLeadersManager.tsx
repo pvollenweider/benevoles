@@ -9,7 +9,7 @@ import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import FormStatus from "@/components/FormStatus"
 import { useSubmit } from "@/lib/use-submit"
 import { slugify } from "@/lib/utils"
-import { leaderDesignatedAnnouncement } from "@/lib/registrations-list"
+import { leaderDesignatedAnnouncement, leaderRemovedAnnouncement } from "@/lib/registrations-list"
 
 export type SectorLeaderRow = {
   id: string
@@ -125,7 +125,7 @@ export default function SectorLeadersManager({
         return
       }
       setLeaders((prev) => prev.filter((l) => l.id !== leader.id))
-      setOutcome({ kind: "ok", text: `${leader.name} retiré·e des responsables de « ${leader.roleName} ».` })
+      setOutcome({ kind: "ok", text: leaderRemovedAnnouncement(leader.name, leader.roleName) })
     } catch {
       setOutcome({ kind: "error", text: "Connexion impossible : le retrait n'a pas été fait. Réessayez." })
     } finally {

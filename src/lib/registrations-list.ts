@@ -118,6 +118,11 @@ export function leaderDesignatedAnnouncement(name: string, role: string): string
   return `${name} est maintenant responsable de « ${role} », invitation envoyée par email.`
 }
 
+/** A sector leader just removed from a role, without « ·e ». */
+export function leaderRemovedAnnouncement(name: string, role: string): string {
+  return `${name} n'est plus responsable de « ${role} ».`
+}
+
 /** How many registrations the filters leave on the list, e.g. « 2 inscriptions affichées ». */
 export function listCountAnnouncement(count: number): string {
   return `${count} ${plural(count, "inscription")} ${plural(count, "affichée")}`
