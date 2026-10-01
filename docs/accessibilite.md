@@ -46,6 +46,8 @@ Hors #534, aussi dans la déclaration : contraste des dates et compteurs du jour
 
 Choix d'un créneau sur la page Inscriptions de l'administration (#555) : couvert par des tests unitaires et de bout en bout (rôles, noms, clavier, axe avec la liste ouverte). Vérifié à la main le 1er octobre 2026 avec VoiceOver et Safari sur macOS (champ « Créneau * » et filtre « Filtrer par créneau » : nom du champ, flèches, lettre répétée, Entrée, Échap, annonce de chaque option et de son état sélectionné). Restent à vérifier : NVDA avec Firefox sous Windows, VoiceOver sur iOS, les mentions « déjà inscrit » et « conflit » à l'écoute, le zoom à 200 % et les petits écrans (#574).
 
+Contraste élevé (forced colors) : focus visible sur les contrôles, non encore vérifié à la main (thème Windows / émulation DevTools). Les contrôles dont le focus est un anneau (`ring`) et les champs `.input` gardent un contour transparent que le système repeint ; les titres et zones focalisés par le code (`tabIndex={-1}`) n'en ont pas. Couvert par `src/__tests__/a11y/focus-outline-forced-colors.test.ts`.
+
 Sélecteur de créneau, petits écrans : la liste peut dépasser à droite de l'écran, et à 320 px de large l'étiquette de remplissage et les avertissements « Déjà inscrit » / « ⚠ conflit » peuvent être coupés (1.4.10). Suivi dans #574.
 
 ## Lecteurs d'écran

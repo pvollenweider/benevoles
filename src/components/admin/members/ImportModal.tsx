@@ -141,7 +141,7 @@ export default function ImportModal({ onClose, onImported }: { onClose: () => vo
           </dl>
           {analysis.plan.errors.length > 0 && <ErrorsTable errors={analysis.plan.errors} caption={`Lignes en erreur, non importées (${analysis.plan.errors.length})`} />}
           {analysis.plan.lines.length > 0 && (
-            <div role="region" aria-labelledby={`${id}-lines-caption`} tabIndex={0} className="max-h-64 overflow-auto rounded-xl border border-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600">
+            <div role="region" aria-labelledby={`${id}-lines-caption`} tabIndex={0} className="max-h-64 overflow-auto rounded-xl border border-gray-200 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-600">
               <table className="w-full text-sm">
                 <caption id={`${id}-lines-caption`} className="text-left font-medium text-gray-900 px-3 py-2">Membres du fichier ({analysis.plan.lines.length})</caption>
                 <thead className="bg-gray-50 text-gray-700 sticky top-0">
@@ -242,7 +242,7 @@ export default function ImportModal({ onClose, onImported }: { onClose: () => vo
 function ErrorsTable({ errors, caption }: { errors: { line: number; reason: string }[]; caption: string }) {
   const id = useId()
   return (
-    <div role="region" aria-labelledby={`${id}-caption`} tabIndex={0} className="max-h-48 overflow-auto rounded-xl border border-orange-200 bg-orange-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-600">
+    <div role="region" aria-labelledby={`${id}-caption`} tabIndex={0} className="max-h-48 overflow-auto rounded-xl border border-orange-200 bg-orange-50 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-orange-600">
       <table className="w-full text-sm text-orange-950">
         <caption id={`${id}-caption`} className="text-left font-medium px-3 py-2">{caption}</caption>
         <thead>

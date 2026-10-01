@@ -158,7 +158,7 @@ export default function ShiftSelect({
         aria-controls={open ? listboxId : undefined}
         aria-activedescendant={activeDomId}
         aria-labelledby={labelledBy}
-        className="flex items-center justify-between gap-2 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[38px]"
+        className="flex items-center justify-between gap-2 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 min-h-[38px]"
       >
         <span className={`truncate text-left ${selected ? "text-gray-800" : "text-gray-500"}`}>
           {selected

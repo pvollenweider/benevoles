@@ -65,7 +65,7 @@ export default function OrgCharterForm({
           role="switch"
           aria-checked={hasOrgInsurance}
           onClick={() => handleToggle(!hasOrgInsurance)}
-          className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+          className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
             hasOrgInsurance ? "bg-blue-600" : "bg-gray-300"
           }`}
         >
@@ -81,7 +81,7 @@ export default function OrgCharterForm({
         value={text}
         onChange={(e) => { setText(e.target.value); setSuccess(false) }}
         rows={14}
-        className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 font-mono leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"
+        className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 font-mono leading-relaxed focus:outline-hidden focus:ring-2 focus:ring-blue-500 resize-y"
       />
 
       <div className="flex items-center justify-between gap-3">

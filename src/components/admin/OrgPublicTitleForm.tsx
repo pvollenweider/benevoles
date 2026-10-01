@@ -85,7 +85,7 @@ export default function OrgPublicTitleForm({ initialTitle }: { initialTitle: str
           placeholder={DEFAULT_TITLE}
           aria-describedby={error ? `${helpId} ${errorId}` : helpId}
           aria-invalid={error ? true : undefined}
-          className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
         />
         <p id={helpId} className="mt-1 text-xs text-gray-600">
           Il remplace « {DEFAULT_TITLE} » sur la page publique de l&apos;organisation. Laissez vide pour utiliser « {DEFAULT_TITLE} ».

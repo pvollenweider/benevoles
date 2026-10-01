@@ -7,6 +7,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Corrigé
+
+- **Focus clavier en contraste élevé** (#574) : avec un thème de contraste Windows (couleurs forcées), la plupart des champs, listes et boutons interrupteurs n'affichaient aucun repère au focus clavier, car leur anneau de focus est une ombre que ce mode supprime. Ils affichent maintenant un contour dans la couleur système : formulaire d'inscription public, champs de l'administration, recherche et filtres de la page Inscriptions, choix du créneau. L'affichage normal ne change pas.
+
 ---
 
 ## [2.0.2] — 2026-10-01

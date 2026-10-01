@@ -186,7 +186,8 @@ Le système est plat. La profondeur est communiquée par la couleur de fond (bla
 Le focus n'est pas une ombre : c'est un contour opaque, d'au moins 3:1 contre le fond (WCAG 1.4.11).
 
 - **Contrôles** : `outline: 2px solid` décalé de 2px (`focus-visible:outline-2 outline-offset-2 outline-blue-600`, `#2563eb`) sur fond clair. Les boutons ont par défaut `#1d4ed8` (`globals.css`, dans `@layer base` pour qu'une classe `focus-visible:outline-*` puisse le remplacer). Sur un bandeau coloré, la couleur de focus de l'accent (`focus-visible:outline-white`).
-- **Champs `.input`** : `border-color: #3b82f6` et `box-shadow: 0 0 0 2px #3b82f6` (opaque), pas d'outline natif.
+- **Champs `.input`** : `border-color: #3b82f6` et `box-shadow: 0 0 0 2px #3b82f6` (opaque), pas d'outline natif. En couleurs forcées (`@media (forced-colors: active)`, thèmes de contraste Windows), `outline: 2px solid transparent; outline-offset: 2px` : l'ombre y est supprimée, le contour transparent est repeint dans la couleur système.
+- **Contraste élevé (couleurs forcées)** : une ombre (`ring-*`, `box-shadow`) n'y est pas affichée. Sur un contrôle (champ natif, bouton, `tabIndex` ≥ 0, `role="combobox"`) dont le focus est un anneau : `focus:outline-hidden`, jamais `focus:outline-none`. `outline-hidden` ne change rien en affichage normal et laisse en couleurs forcées un contour transparent que le système repeint. `focus:outline-none` reste réservé aux cibles focalisées par le code avec `tabIndex={-1}` (titre de page, `<main>`, paragraphe de résultat). Garde-fou : `src/__tests__/a11y/focus-outline-forced-colors.test.ts`.
 
 **La Règle Plat-par-Défaut.** Les surfaces sont plates au repos. Les ombres ne décrivent pas la hiérarchie ; elles décrivent l'interactivité. Si un élément n'est pas cliquable, il ne reçoit jamais d'ombre, quelle que soit son importance visuelle.
 

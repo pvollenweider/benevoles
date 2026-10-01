@@ -162,7 +162,7 @@ export default function OrgSlugForm({
             required
             aria-describedby={error ? `${helpId} ${errorId}` : helpId}
             aria-invalid={error ? true : undefined}
-            className="flex-1 min-w-0 border border-gray-300 rounded-xl px-3 py-2 text-sm font-mono placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 min-w-0 border border-gray-300 rounded-xl px-3 py-2 text-sm font-mono placeholder:text-gray-600 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
           />
           <button
             ref={submitRef}
