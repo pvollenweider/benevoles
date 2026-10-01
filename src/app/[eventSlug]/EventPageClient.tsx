@@ -9,6 +9,7 @@ import { eventAccent } from "@/lib/event-accent"
 import { coordinatesOf, MAP_LINK_LABEL, MAP_LINK_SR_SUFFIX, osmLink } from "@/lib/map-link"
 import { describeSignupFailure, type Failure } from "@/lib/form-errors"
 import SignupRecap from "@/components/public/SignupRecap"
+import ShiftRow from "@/components/public/ShiftRow"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { formatDate } from "@/lib/utils"
@@ -29,7 +30,7 @@ import { roleLimitBreaches, roleLimitSelectionMessage, roleLimits } from "@/lib/
 import { announce } from "@/lib/announce"
 import SignupQuestions, { type Answers } from "@/components/public/SignupQuestions"
 import { checkAnswers, type Question } from "@/lib/event-questions"
-import DayTimeline, { fmt } from "@/components/DayTimeline"
+import DayTimeline from "@/components/DayTimeline"
 import PublicFooter from "@/components/PublicFooter"
 import { DEFAULT_VOLUNTEER_CHARTER } from "@/lib/volunteer-charter"
 
@@ -392,45 +393,11 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   // orgSlug is received as prop but only used in the storageKey (already included via eventSlug)
   void orgSlug
 
-  // Shared shift row used in both the mobile summary card and the desktop sidebar
-  function ShiftRow({ s, compact = false }: { s: Shift; compact?: boolean }) {
-    const isReg = myShiftIds.has(s.id)
-    const reg = isReg ? myRegistrations.find((r) => r.shiftId === s.id) : null
-    const isWaitlistPending = !isReg && s.status === "full" && (s.waitlistEnabled ?? false)
-    const name = s.label && s.label !== s.roleName ? s.label : s.roleName
-    return (
-      <div className={`flex items-start gap-2 px-4 transition-colors duration-150 ${compact ? "py-2" : "py-2.5"} ${isReg ? "bg-green-50" : selectedShifts.has(s.id) ? "bg-blue-50/60" : ""}`}>
-        <svg aria-hidden="true" className={`w-3.5 h-3.5 flex-shrink-0 mt-0.5 ${isReg ? "text-green-400" : "text-blue-400"}`} fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-        </svg>
-        <div className="flex-1 min-w-0">
-          <p className={`text-xs font-medium leading-snug ${isReg ? "text-green-900" : "text-gray-900"}`}>{name}</p>
-          <p className="text-[11px] text-gray-500 mt-0.5 font-mono">{fmt(s.startTime)}–{fmt(s.endTime)}</p>
-          {s.minAge != null && (
-            <p className="text-[11px] text-amber-700 mt-0.5 font-medium">{s.minAge} ans minimum</p>
-          )}
-          {isWaitlistPending && (
-            <p className="text-[11px] text-gray-500 mt-0.5">Complet · liste d&apos;attente si place libérée</p>
-          )}
-          {!isReg && !isWaitlistPending && s.requiresApproval && (
-            <p className="text-xs text-amber-800 mt-0.5 font-medium">Sur validation · demande à accepter par l&apos;organisation</p>
-          )}
-        </div>
-        {isReg ? (
-          <button
-            onClick={(e) => { cancelTriggerRef.current = e.currentTarget as HTMLButtonElement; if (reg) setPendingCancel({ token: reg.token, shiftId: s.id, label: s.label || s.roleName }) }}
-            className="text-green-300 hover:text-red-400 text-xs flex-shrink-0 transition-colors mt-0.5"
-            aria-label={`Annuler l'inscription à ${name}`}
-          ><span aria-hidden="true">✕</span></button>
-        ) : (
-          <button
-            onClick={() => toggleShift(s.id)}
-            className="text-blue-300 hover:text-red-400 text-xs flex-shrink-0 transition-colors mt-0.5"
-            aria-label={`Retirer ${name} de la sélection`}
-          ><span aria-hidden="true">✕</span></button>
-        )}
-      </div>
-    )
+  // A held shift's ✕ in a ShiftRow: ask before cancelling, the focus returns to that button.
+  function requestCancel(s: Shift, trigger: HTMLButtonElement) {
+    cancelTriggerRef.current = trigger
+    const reg = myRegistrations.find((r) => r.shiftId === s.id)
+    if (reg) setPendingCancel({ token: reg.token, shiftId: s.id, label: s.label || s.roleName })
   }
 
   const allSelectedShifts = event.shifts.filter((s) => selectedShifts.has(s.id))
@@ -613,7 +580,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                 {/* Mobile: selected shifts summary card */}
                 {allSelectedShifts.length > 0 && (
                   <div className="lg:hidden rounded-xl border border-gray-200 bg-white overflow-hidden divide-y divide-gray-100">
-                    {allSelectedShifts.map((s) => <ShiftRow key={s.id} s={s} />)}
+                    {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} registered={myShiftIds.has(s.id)} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
                   </div>
                 )}
               </div>
@@ -644,7 +611,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                         Créneaux sélectionnés
                       </p>
                       <div className="divide-y divide-gray-100">
-                        {allSelectedShifts.map((s) => <ShiftRow key={s.id} s={s} compact />)}
+                        {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} compact registered={myShiftIds.has(s.id)} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
                       </div>
                       {newShiftIds.size > 0 && (
                         <div className="p-3 border-t border-gray-100">
