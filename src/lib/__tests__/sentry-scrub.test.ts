@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import type { ErrorEvent } from "@sentry/nextjs"
-import { scrubUrl, scrubBreadcrumb, scrubEvent, scrubSpan, NO_PII_DATA_COLLECTION } from "../sentry-scrub"
+import { scrubUrl, scrubBreadcrumb, scrubEvent, scrubSpan, NO_PII_DATA_COLLECTION, BROWSER_NOISE_ERRORS } from "../sentry-scrub"
 
 const TOKEN = "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4"
 
@@ -102,5 +102,27 @@ describe("NO_PII_DATA_COLLECTION", () => {
       queues: false,
       stackFrameVariables: false,
     })
+  })
+})
+
+describe("BROWSER_NOISE_ERRORS", () => {
+  const ignored = (message: string) => BROWSER_NOISE_ERRORS.some((r) => r.test(message))
+
+  // Regression: an Outlook Safe Links scan of a personal link raised this on /my/[token].
+  it("drops the rejection raised by Microsoft's link scanners", () => {
+    expect(ignored("Non-Error promise rejection captured with value: Object Not Found Matching Id:2, MethodName:update, ParamCount:4")).toBe(true)
+    expect(ignored("Object Not Found Matching Id:17, MethodName:simulateEvent, ParamCount:1")).toBe(true)
+  })
+
+  it("keeps the earlier extension filters", () => {
+    for (const m of ["ReferenceError: __firefox__ is not defined", "DarkReader is not defined", "window.ethereum.selectedAddress", "MetaMask - RPC Error"]) {
+      expect(ignored(m)).toBe(true)
+    }
+  })
+
+  it("keeps real application errors", () => {
+    for (const m of ["Object not found", "TypeError: Cannot read properties of undefined (reading 'update')", "Error: Not Found", "Lien invalide"]) {
+      expect(ignored(m)).toBe(false)
+    }
   })
 })
