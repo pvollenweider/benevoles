@@ -52,7 +52,7 @@ Modules `src/lib/` à connaître :
 | `job-runs.ts` | Dernière exécution de chaque tâche planifiée (`JobRun`), lue par `/super-admin/health` |
 | `sentry-scrub.ts` | Retire jetons, emails et données personnelles des événements Sentry (serveur, edge, navigateur) |
 | `time-zone.ts` | Fuseau de l'organisation (`APP_TIME_ZONE` par défaut), conversion des heures locales des créneaux |
-| `notifications/` | `sendNotification()`, gabarits, canal email |
+| `notifications/` | `sendNotification()`, gabarits (`templates/`, un fichier par famille, `render()` dans `templates/index.ts`), canal email |
 | `push.ts` | Envoi Web Push, purge des abonnements expirés |
 | `waitlist.ts` | Promotion du premier de la liste d'attente |
 | `rate-limit.ts` | Limiteur de requêtes, compteurs dans PostgreSQL (partagés entre instances) |

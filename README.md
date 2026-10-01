@@ -250,7 +250,7 @@ src/
 ├── lib/
 │   ├── auth-guard.ts, permissions.ts     # Gardes d'accès et rôles
 │   ├── prisma-org.ts                     # Client Prisma scopé par organisation (getOrgClient)
-│   ├── notifications/                    # sendNotification(), file d'envoi (outbox.ts), gabarits, canal email
+│   ├── notifications/                    # sendNotification(), file d'envoi (outbox.ts), gabarits (templates/), canal email
 │   ├── token-vault.ts                    # Empreinte et chiffrement des liens personnels
 │   ├── env.ts, production-guards.ts      # Validation des variables au démarrage
 │   ├── retention.ts                      # Durées de conservation (source unique)
