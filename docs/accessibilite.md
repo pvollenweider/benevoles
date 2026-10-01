@@ -44,7 +44,7 @@ Suivis dans l'issue #534 et repris dans les « Limites connues » de la déclara
 
 Hors #534, aussi dans la déclaration : contraste des dates et compteurs du journal d'un événement (`text-gray-400`) et du message d'enregistrement d'un événement (blanc sur `green-500` ou `red-500`). Voir « Écarts connus du code » dans [DESIGN.md](../DESIGN.md#7-écarts-connus-du-code).
 
-Choix d'un créneau sur la page Inscriptions de l'administration (#555) : couvert par des tests unitaires (rôles, noms, clavier), pas encore vérifié à la main. Aucun essai avec un lecteur d'écran n'a été mené : VoiceOver (macOS + Safari) et NVDA (Windows + Firefox) restent des vérifications manuelles. Le zoom à 200 % et la largeur d'un téléphone ne sont pas vérifiés par les tests automatiques.
+Choix d'un créneau sur la page Inscriptions de l'administration (#555) : couvert par des tests unitaires et de bout en bout (rôles, noms, clavier, axe avec la liste ouverte). Vérifié à la main le 1er octobre 2026 avec VoiceOver et Safari sur macOS (champ « Créneau * » et filtre « Filtrer par créneau » : nom du champ, flèches, lettre répétée, Entrée, Échap, annonce de chaque option et de son état sélectionné). Restent à vérifier : NVDA avec Firefox sous Windows, VoiceOver sur iOS, les mentions « déjà inscrit » et « conflit » à l'écoute, le zoom à 200 % et les petits écrans (#574).
 
 Sélecteur de créneau, petits écrans : la liste peut dépasser à droite de l'écran, et à 320 px de large l'étiquette de remplissage et les avertissements « Déjà inscrit » / « ⚠ conflit » peuvent être coupés (1.4.10). Suivi dans #574.
 
