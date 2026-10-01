@@ -4,13 +4,9 @@
 /**
  * Notifications layer.
  *
- * Goal: keep the rest of the app provider-agnostic. Code calls
- * `sendNotification(payload)` and never imports nodemailer / resend
- * / twilio directly. Adding a new channel (SMS, WhatsApp) becomes a
- * matter of adding one file under `channels/` without touching callers.
+ * Code calls `sendNotification(payload)` and never imports nodemailer directly: the email
+ * channel (`channels/email.ts`) is the only place that talks to the SMTP server.
  */
-
-export type NotificationChannel = "email" | "sms" | "whatsapp"
 
 export type NotificationKind =
   | "registration_confirmation"
@@ -65,8 +61,3 @@ export type NotificationPayload<K extends NotificationKind = NotificationKind> =
 
 /** How a helper delivers a notification: sendNotification, or an outbox collector (#293). */
 export type Send = (payload: NotificationPayload) => Promise<{ ok: true } | { ok: false; reason: string }>
-
-export interface NotificationChannelImpl {
-  readonly name: NotificationChannel
-  send(payload: NotificationPayload): Promise<{ ok: true } | { ok: false; reason: string }>
-}

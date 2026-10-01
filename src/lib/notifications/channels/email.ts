@@ -4,10 +4,7 @@
 import nodemailer from "nodemailer"
 import { prisma } from "../../prisma"
 import { env } from "@/lib/env"
-import type {
-  NotificationChannelImpl,
-  NotificationPayload,
-} from "../types"
+import type { NotificationPayload, Send } from "../types"
 import { render } from "../templates"
 
 /**
@@ -50,9 +47,7 @@ async function orgReplyTo(organizationId: string): Promise<string | null> {
   }
 }
 
-export const emailChannel: NotificationChannelImpl = {
-  name: "email",
-
+export const emailChannel: { send: Send } = {
   async send(payload: NotificationPayload) {
     const to = payload.recipient.email
     if (!to) {
