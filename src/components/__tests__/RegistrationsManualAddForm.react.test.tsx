@@ -11,10 +11,12 @@ import { EMPTY_ADD_FORM, type AddFormValues, type Registration } from "../admin/
 // Manual addition of a registration by the organizer, on its own (#402, #465, #466).
 const shift = { id: "s1", roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00", capacity: 3, registrationCount: 1 }
 
-function Harness({ initial = EMPTY_ADD_FORM, onAdded = () => {}, onCancel = () => {} }: { initial?: AddFormValues; onAdded?: (r: Registration) => void; onCancel?: () => void }) {
+function Harness({ initial = EMPTY_ADD_FORM, onAdded = () => {}, onCancel = () => {}, registrations = [] }: { initial?: AddFormValues; onAdded?: (r: Registration) => void; onCancel?: () => void; registrations?: Registration[] }) {
   const [form, setForm] = useState(initial)
-  return <ManualAddForm eventId="evt-1" shifts={[shift]} registrations={[]} timeZone="Europe/Zurich" form={form} onFormChange={setForm} onAdded={onAdded} onCancel={onCancel} />
+  return <ManualAddForm eventId="evt-1" shifts={[shift]} registrations={registrations} timeZone="Europe/Zurich" form={form} onFormChange={setForm} onAdded={onAdded} onCancel={onCancel} />
 }
+
+const combo = () => screen.getByRole("combobox", { name: "Créneau *" })
 
 describe("ManualAddForm", () => {
   const fetchMock = vi.fn()
@@ -52,11 +54,44 @@ describe("ManualAddForm", () => {
     expect(reg.shift).toMatchObject({ id: "s1", date: "2026-07-04", capacity: 3, registrationCount: 2 })
   })
 
-  it("asks for a shift before sending anything", () => {
+  // #574: the missing shift is an error of the field, read once with it, not an alert.
+  it("marks the shift field required, and invalid only after a submit without a shift", async () => {
+    render(<Harness />)
+    expect(combo()).toHaveAttribute("aria-required", "true")
+    expect(combo()).not.toHaveAttribute("aria-invalid")
+    expect(combo()).not.toHaveAttribute("aria-describedby")
+
+    fireEvent.submit(screen.getByRole("button", { name: "Ajouter" }).closest("form")!)
+    expect(fetchMock).not.toHaveBeenCalled()
+    expect(screen.queryByRole("alert")).toBeNull()
+    expect(combo()).toHaveAttribute("aria-invalid", "true")
+    const error = screen.getByText("Sélectionnez un créneau.")
+    expect(combo().getAttribute("aria-describedby")).toBe(error.id)
+    expect(combo()).toHaveAccessibleDescription("Sélectionnez un créneau.")
+    await waitFor(() => expect(combo()).toHaveFocus())
+  })
+
+  it("clears the error as soon as a shift is chosen", () => {
     render(<Harness />)
     fireEvent.submit(screen.getByRole("button", { name: "Ajouter" }).closest("form")!)
-    expect(screen.getByRole("alert")).toHaveTextContent("Sélectionnez un créneau.")
-    expect(fetchMock).not.toHaveBeenCalled()
+    expect(combo()).toHaveAttribute("aria-invalid", "true")
+    fireEvent.keyDown(combo(), { key: "ArrowDown" })
+    fireEvent.keyDown(combo(), { key: "Enter" })
+    expect(combo()).not.toHaveAttribute("aria-invalid")
+    expect(combo()).not.toHaveAttribute("aria-describedby")
+    expect(screen.queryByText("Sélectionnez un créneau.")).toBeNull()
+  })
+
+  it("describes the field with a conflict, without making it invalid", () => {
+    const held = {
+      id: "r1", status: "active", source: "public_form", comment: null, createdAt: "2026-06-01T00:00:00.000Z", waitingPosition: null, isLeader: false,
+      volunteer: { id: "v1", firstName: "Chloé", lastName: "Roy", email: "chloe@x.ch", phone: null },
+      shift,
+    } as Registration
+    render(<Harness registrations={[held]} initial={{ ...EMPTY_ADD_FORM, email: "chloe@x.ch", shiftId: "s1" }} />)
+    expect(combo().getAttribute("aria-describedby")).toBe("add-shift-conflict")
+    expect(combo()).toHaveAccessibleDescription("Ce bénévole est déjà inscrit à ce créneau.")
+    expect(combo()).not.toHaveAttribute("aria-invalid")
   })
 
   it("offers to go past the role limit, only for the form that was refused", async () => {
@@ -169,7 +204,13 @@ describe("RegistrationsManager — focus and announcement around the manual add"
     await waitFor(() => expect(screen.queryByRole("heading", { name: "Inscription manuelle" })).toBeNull())
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({ shiftId: "s1" })
     expect(open).toHaveFocus()
-    await waitFor(() => expect(screen.getByText("Chloé Roy ajouté·e au créneau Bar du sam. 4 juil., de 10h à 12h.")).toBeInTheDocument())
-    expect(screen.getByText("Chloé Roy ajouté·e au créneau Bar du sam. 4 juil., de 10h à 12h.").closest("[role=status]")).toHaveAttribute("aria-live", "polite")
+    const result = "Inscription de Chloé Roy ajoutée : Bar, sam. 4 juil., de 10h à 12h."
+    await waitFor(() => expect(screen.getByText(result)).toBeInTheDocument())
+    const region = screen.getByText(result).closest("[role=status]")
+    expect(region).toHaveAttribute("aria-live", "polite")
+    // #574: only the result is spoken, not the new count; the hidden count still follows the list.
+    expect(region?.textContent).toBe(result)
+    expect(screen.getByText("1 inscription affichée")).not.toHaveAttribute("role")
+    expect(document.querySelectorAll("[role=status], [aria-live]")).toHaveLength(1)
   })
 })

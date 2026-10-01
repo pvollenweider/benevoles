@@ -201,6 +201,64 @@ describe("ShiftSelect", () => {
     expect(combo()).toHaveAttribute("aria-expanded", "false")
   })
 
+  // #574: the chosen value is shown short and spoken in words.
+  it("speaks the chosen value in words, the short visible text hidden from screen readers", () => {
+    render(<Harness initial="s3" />)
+    const visible = screen.getByText(`${date} · 18h–20h · Bar · Soir`)
+    expect(visible).toHaveAttribute("aria-hidden", "true")
+    const spoken = screen.getByText(`${date}, de 18h à 20h, Bar, Soir`)
+    expect(spoken).toHaveClass("sr-only")
+    expect(combo()).toContainElement(spoken)
+  })
+
+  // #574: in a form, the field's id, required and invalid states, and its descriptions.
+  it("sets no required, invalid or description by default", () => {
+    render(<Harness />)
+    expect(combo()).not.toHaveAttribute("aria-required")
+    expect(combo()).not.toHaveAttribute("aria-invalid")
+    expect(combo()).not.toHaveAttribute("aria-describedby")
+    expect(combo()).not.toHaveAttribute("id")
+  })
+
+  it("puts the id, required, invalid and description on the combobox", () => {
+    render(
+      <>
+        <p id="lbl">Créneau *</p>
+        <p id="err">Sélectionnez un créneau.</p>
+        <ShiftSelect id="pick" labelledBy="lbl" required invalid describedBy="err" shifts={shifts} value="" onChange={() => {}} />
+      </>,
+    )
+    expect(combo()).toHaveAttribute("id", "pick")
+    expect(combo()).toHaveAttribute("aria-required", "true")
+    expect(combo()).toHaveAttribute("aria-invalid", "true")
+    expect(combo()).toHaveAccessibleDescription("Sélectionnez un créneau.")
+    expect(combo().className).toContain("border-red-600")
+  })
+
+  // #574: near the right edge, the open list moves left to stay on screen, and follows a resize.
+  it("moves the open list left when it would overflow the viewport, and again on resize", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({ left: 700 } as DOMRect)
+    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(500)
+    const clientWidth = vi.spyOn(document.documentElement, "clientWidth", "get").mockReturnValue(1024)
+    render(<Harness />)
+    fireEvent.click(combo())
+    const list = screen.getByRole("listbox")
+    expect(list.style.left).toBe("-184px")
+
+    clientWidth.mockReturnValue(1300)
+    fireEvent(window, new Event("resize"))
+    expect(list.style.left).toBe("")
+    clientWidth.mockReturnValue(1100)
+    fireEvent(window, new Event("resize"))
+    expect(list.style.left).toBe("-108px")
+  })
+
+  it("leaves the list in place when it fits", () => {
+    render(<Harness />)
+    fireEvent.click(combo())
+    expect(screen.getByRole("listbox").style.left).toBe("")
+  })
+
   it("scrolls the active option into view", () => {
     const scrollIntoView = vi.fn()
     Element.prototype.scrollIntoView = scrollIntoView

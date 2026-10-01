@@ -5,7 +5,10 @@ import {
   filterRegistrations,
   fmtHour,
   leaderAnnouncement,
+  leaderDesignatedAnnouncement,
+  leaderRemovedAnnouncement,
   leaderRoleOptions,
+  listCountAnnouncement,
   manualAddAnnouncement,
   overlappingShiftIds,
   resendAnnouncement,
@@ -86,11 +89,31 @@ describe("leaders and announcements", () => {
     expect(resendAnnouncement(3, 2)).toBe("Lien renvoyé à 3 bénévoles, 2 échecs.")
   })
 
-  // #555: a registration added by hand is announced, with its shift spelt out.
+  // #555, #574: a registration added by hand is announced, with its shift spelt out, without
+  // « ·e » or the middle dot that screen readers read aloud.
   it("manual addition, with or without a label distinct from the role", () => {
-    expect(manualAddAnnouncement("Chloé Roy", bar)).toBe("Chloé Roy ajouté·e au créneau Bar du sam. 1 juin, de 10h à 12h.")
-    expect(manualAddAnnouncement("Chloé Roy", shift("s", { label: "Soir", startTime: "18:30", endTime: "20:00" })))
-      .toBe("Chloé Roy ajouté·e au créneau Bar · Soir du sam. 1 juin, de 18h30 à 20h.")
+    expect(manualAddAnnouncement("Chloé Roy", bar)).toBe("Inscription de Chloé Roy ajoutée : Bar, sam. 1 juin, de 10h à 12h.")
+    const soir = manualAddAnnouncement("Chloé Roy", shift("s", { label: "Soir", startTime: "18:30", endTime: "20:00" }))
+    expect(soir).toBe("Inscription de Chloé Roy ajoutée : Bar, Soir, sam. 1 juin, de 18h30 à 20h.")
+    expect(soir).not.toMatch(/·/)
+  })
+
+  it("sector leader designation, the same for everyone", () => {
+    const text = leaderDesignatedAnnouncement("Chloé Roy", "Bar")
+    expect(text).toBe("Chloé Roy est maintenant responsable de « Bar », invitation envoyée par email.")
+    expect(text).not.toMatch(/·/)
+  })
+
+  it("sector leader removal, without « ·e »", () => {
+    const text = leaderRemovedAnnouncement("Chloé Roy", "Bar")
+    expect(text).toBe("Chloé Roy n'est plus responsable de « Bar ».")
+    expect(text).not.toMatch(/·/)
+  })
+
+  it("rows left by the filters, singular and plural", () => {
+    expect(listCountAnnouncement(0)).toBe("0 inscription affichée")
+    expect(listCountAnnouncement(1)).toBe("1 inscription affichée")
+    expect(listCountAnnouncement(2)).toBe("2 inscriptions affichées")
   })
 })
 

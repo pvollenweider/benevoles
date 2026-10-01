@@ -3,20 +3,20 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useState, useRef, useEffect, useMemo, useId, type KeyboardEvent } from "react"
+import { useState, useRef, useEffect, useLayoutEffect, useMemo, useId, type KeyboardEvent } from "react"
 import { fmtHour, fmtShortDate, overlappingShiftIds, type ShiftRef } from "@/lib/registrations-list"
-import { isRepeatedLetter, moveActive, shiftOptionLabel, shiftTypeaheadText, typeaheadIndex, type MoveKey } from "@/lib/shift-select"
+import { isRepeatedLetter, moveActive, panelShift, shiftOptionLabel, shiftTypeaheadText, shiftValueText, typeaheadIndex, type MoveKey } from "@/lib/shift-select"
 
 // ── Status pill ───────────────────────────────────────────────────────────────
 function StatusPill({ s }: { s: ShiftRef }) {
   if (s.registrationCount >= s.capacity) {
-    return <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-red-100 text-red-800 font-medium">Complet</span>
+    return <span className="shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded-full bg-red-100 text-red-800 font-medium">Complet</span>
   }
   if (s.registrationCount === 0) {
-    return <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium">0/{s.capacity}</span>
+    return <span className="shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium">0/{s.capacity}</span>
   }
   return (
-    <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-medium">
+    <span className="shrink-0 whitespace-nowrap text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-medium">
       {s.registrationCount}/{s.capacity}
     </span>
   )
@@ -38,7 +38,7 @@ const TYPEAHEAD_RESET_MS = 500
 // A select-only combobox (WAI-ARIA APG, #555): the focus stays on the trigger, the option being
 // pointed at is given by aria-activedescendant.
 export default function ShiftSelect({
-  shifts, value, onChange, placeholder = "Sélectionner…", nullable = false, existingShifts, labelledBy,
+  shifts, value, onChange, placeholder = "Sélectionner…", nullable = false, existingShifts, labelledBy, id, required, invalid, describedBy,
 }: {
   shifts: ShiftRef[]
   value: string
@@ -48,11 +48,22 @@ export default function ShiftSelect({
   existingShifts?: ShiftRef[]
   /** Id of the visible label naming the trigger and its list. */
   labelledBy?: string
+  /** Id of the trigger, so that a form can move the focus to it. */
+  id?: string
+  /** A choice is required (announced; the form checks it). */
+  required?: boolean
+  /** The form refused the current value: announced, and a red border. */
+  invalid?: boolean
+  /** Ids of the texts describing the field: its error, a warning. */
+  describedBy?: string
 }) {
   const listboxId = useId()
   const [open, setOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
   const ref = useRef<HTMLDivElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
+  // How far the open list moves left to stay on screen near the right edge (WCAG 1.4.10).
+  const [shift, setShift] = useState(0)
   const typed = useRef("")
   const typedTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -88,6 +99,21 @@ export default function ShiftSelect({
   ], [nullable, shifts, listboxId])
   const selectedIndex = options.findIndex(o => o.id === value)
   const activeDomId = open && activeIndex >= 0 ? options[activeIndex]?.domId : undefined
+
+  // Placed before paint, so the list never shows past the right edge; follows window resizes.
+  // A shift left from the last opening is replaced before the list is painted again.
+  useLayoutEffect(() => {
+    if (!open) return
+    function place() {
+      const trigger = ref.current
+      const panel = panelRef.current
+      if (!trigger || !panel) return
+      setShift(panelShift(trigger.getBoundingClientRect().left, panel.offsetWidth, document.documentElement.clientWidth))
+    }
+    place()
+    window.addEventListener("resize", place)
+    return () => window.removeEventListener("resize", place)
+  }, [open, options.length])
 
   // Keeps the active option in view while moving through a long list.
   useEffect(() => {
@@ -149,6 +175,7 @@ export default function ShiftSelect({
     <div ref={ref} className="relative">
       {/* Trigger */}
       <div
+        id={id}
         role="combobox"
         tabIndex={0}
         onClick={() => (open ? close() : openList(selectedIndex))}
@@ -158,13 +185,22 @@ export default function ShiftSelect({
         aria-controls={open ? listboxId : undefined}
         aria-activedescendant={activeDomId}
         aria-labelledby={labelledBy}
-        className="flex items-center justify-between gap-2 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 min-h-[38px]"
+        aria-required={required || undefined}
+        aria-invalid={invalid || undefined}
+        aria-describedby={describedBy}
+        className={`flex items-center justify-between gap-2 w-full border ${invalid ? "border-red-600" : "border-gray-300"} rounded-xl px-3 py-2 text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 min-h-[38px]`}
       >
-        <span className={`truncate text-left ${selected ? "text-gray-800" : "text-gray-500"}`}>
-          {selected
-            ? `${fmtShortDate(selected.date)} · ${fmtHour(selected.startTime)}–${fmtHour(selected.endTime)} · ${selected.roleName}${selected.label !== selected.roleName ? ` · ${selected.label}` : ""}`
-            : placeholder}
-        </span>
+        {selected ? (
+          <span className="text-left min-w-0 wrap-break-word sm:truncate text-gray-800">
+            {/* Shown short; spoken in words, without the « · » and dash read aloud. */}
+            <span aria-hidden="true">
+              {`${fmtShortDate(selected.date)} · ${fmtHour(selected.startTime)}–${fmtHour(selected.endTime)} · ${selected.roleName}${selected.label !== selected.roleName ? ` · ${selected.label}` : ""}`}
+            </span>
+            <span className="sr-only">{shiftValueText(selected)}</span>
+          </span>
+        ) : (
+          <span className="text-left min-w-0 wrap-break-word sm:truncate text-gray-500">{placeholder}</span>
+        )}
         <svg
           aria-hidden="true"
           className={`w-4 h-4 text-gray-500 shrink-0 motion-safe:transition-transform ${open ? "rotate-180" : ""}`}
@@ -177,13 +213,15 @@ export default function ShiftSelect({
       {/* Dropdown list */}
       {open && (
         <div
+          ref={panelRef}
           id={listboxId}
           role="listbox"
           aria-labelledby={labelledBy}
           // A click on an option leaves the focus on the trigger.
           onMouseDown={e => e.preventDefault()}
-          className="absolute top-full mt-1 left-0 z-50 bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden"
-          style={{ minWidth: "100%", width: "max-content", maxWidth: "90vw" }}
+          // As wide as the trigger on a small screen, as wide as its rows from `sm` on.
+          className="absolute top-full mt-1 left-0 z-50 w-full sm:w-max bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden"
+          style={{ minWidth: "100%", maxWidth: "90vw", left: shift ? -shift : undefined }}
         >
           {nullable && (
             <div
@@ -225,26 +263,26 @@ export default function ShiftSelect({
                 aria-label={shiftOptionLabel(s, { alreadyRegistered: alreadyReg, conflict: isConflict })}
                 onClick={() => commit(index)}
                 onMouseMove={() => setActiveIndex(index)}
-                className={`relative flex items-center gap-3 pl-3 pr-4 py-2 cursor-pointer border-l-2 transition-colors
+                className={`relative flex flex-wrap sm:flex-nowrap items-center gap-x-3 gap-y-1 pl-3 pr-4 py-2 cursor-pointer border-l-2 transition-colors
                   ${rowCls} ${isSelected ? "bg-blue-50" : alreadyReg ? "bg-orange-50/50" : isConflict ? "bg-amber-50/40" : ""}
                   ${activeIndex === index ? "outline outline-2 -outline-offset-2 outline-blue-600" : ""}`}
               >
                 {isSelected && <Check className="left-0" />}
-                <span className="shrink-0 w-28 text-xs text-gray-600">{fmtShortDate(s.date)}</span>
-                <span className="shrink-0 w-20 text-xs text-gray-600 tabular-nums">
+                <span className="shrink-0 sm:w-28 text-xs text-gray-600">{fmtShortDate(s.date)}</span>
+                <span className="shrink-0 sm:w-20 text-xs text-gray-600 tabular-nums">
                   {fmtHour(s.startTime)}–{fmtHour(s.endTime)}
                 </span>
-                <span className={`flex-1 text-sm font-medium min-w-0 ${alreadyReg ? "text-orange-800" : isConflict ? "text-amber-800" : "text-gray-800"}`}>
+                <span className={`flex-1 min-w-[8rem] sm:min-w-0 wrap-break-word text-sm font-medium ${alreadyReg ? "text-orange-800" : isConflict ? "text-amber-800" : "text-gray-800"}`}>
                   {s.roleName}
                   {s.label !== s.roleName && (
                     <span className="font-normal text-gray-600"> · {s.label}</span>
                   )}
                 </span>
                 {alreadyReg && (
-                  <span className="shrink-0 text-[10px] text-orange-800 font-medium">Déjà inscrit</span>
+                  <span className="shrink-0 whitespace-nowrap text-[10px] text-orange-800 font-medium">Déjà inscrit</span>
                 )}
                 {isConflict && (
-                  <span className="shrink-0 text-[10px] text-amber-800 font-medium">⚠ conflit</span>
+                  <span className="shrink-0 whitespace-nowrap text-[10px] text-amber-800 font-medium">⚠ conflit</span>
                 )}
                 <StatusPill s={s} />
               </div>

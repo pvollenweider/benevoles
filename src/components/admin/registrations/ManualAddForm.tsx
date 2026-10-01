@@ -42,6 +42,10 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
   const overLimit = overLimitFor === JSON.stringify(addForm)
   const [adding, setAdding] = useState(false)
   const [addError, setAddError] = useState<string | null>(null)
+  // A submit was tried without a shift: the field is invalid until one is chosen (derived, so
+  // choosing a shift clears it at once).
+  const [shiftTried, setShiftTried] = useState(false)
+  const shiftInvalid = shiftTried && !addForm.shiftId
 
   // Shifts already held by the volunteer identified by the email in the add form
   const volunteerShifts = useMemo<ShiftRef[] | undefined>(
@@ -69,7 +73,15 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
   async function handleAdd(e: React.FormEvent | null, allowOverLimit = false) {
     e?.preventDefault()
     if (adding) return
-    if (!addForm.shiftId) { setAddError("Sélectionnez un créneau."); return }
+    if (!addForm.shiftId) {
+      // The message is tied to the field, not an alert: focus moves there once the field says it
+      // is invalid, so the message is read once, with the field.
+      setShiftTried(true)
+      setAddError(null)
+      setOverLimitFor(null)
+      requestAnimationFrame(() => document.getElementById("add-shift")?.focus())
+      return
+    }
     setAdding(true)
     // Forcing past the role limit: the alert and its button stay until the answer, so focus stays put.
     if (!allowOverLimit) { setAddError(null); setOverLimitFor(null) }
@@ -147,15 +159,21 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
       <div>
         <p id="add-shift-label" className="block text-xs font-medium text-gray-600 mb-1">Créneau *</p>
         <ShiftSelect
+          id="add-shift"
           labelledBy="add-shift-label"
+          required
+          invalid={shiftInvalid}
+          // The conflict is a warning, not an error: it describes the field without making it invalid.
+          describedBy={[shiftInvalid && "add-shift-error", conflictMessage && "add-shift-conflict"].filter(Boolean).join(" ") || undefined}
           shifts={shifts}
           value={addForm.shiftId}
           onChange={(id) => setAddForm((f) => ({ ...f, shiftId: id }))}
           placeholder="Sélectionner un créneau…"
           existingShifts={volunteerShifts}
         />
+        {shiftInvalid && <p id="add-shift-error" className="text-xs text-red-700 mt-1">Sélectionnez un créneau.</p>}
         {conflictMessage && (
-          <p className="text-xs text-orange-800 mt-1 ml-0.5">{conflictMessage}</p>
+          <p id="add-shift-conflict" className="text-xs text-orange-800 mt-1 ml-0.5">{conflictMessage}</p>
         )}
       </div>
       <div>

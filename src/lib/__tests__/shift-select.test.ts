@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { isRepeatedLetter, moveActive, shiftOptionLabel, shiftTypeaheadText, typeaheadIndex } from "../shift-select"
+import { isRepeatedLetter, moveActive, panelShift, shiftOptionLabel, shiftTypeaheadText, shiftValueText, typeaheadIndex } from "../shift-select"
 import { fmtShortDate, type ShiftRef } from "../registrations-list"
 
 // The shift picker's spoken names and keyboard arithmetic (#555).
@@ -113,5 +113,42 @@ describe("isRepeatedLetter", () => {
     expect(isRepeatedLetter("bB")).toBe(true)
     expect(isRepeatedLetter("ba")).toBe(false)
     expect(isRepeatedLetter("")).toBe(false)
+  })
+})
+
+// #574: the open list stays inside the viewport near the right edge (WCAG 1.4.10).
+describe("panelShift", () => {
+  it("does not move a list that fits", () => {
+    expect(panelShift(100, 500, 1024)).toBe(0)
+  })
+
+  it("moves an overflowing list left so it ends 8 px inside the viewport", () => {
+    // 700 + 500 = 1200, the viewport ends at 1024 - 8 = 1016: 184 px too far.
+    expect(panelShift(700, 500, 1024)).toBe(184)
+  })
+
+  it("never moves the list past the left margin", () => {
+    // 1100 px too far, but the trigger starts 200 px from the edge: 192 px at most.
+    expect(panelShift(200, 2000, 1024)).toBe(192)
+    expect(panelShift(4, 400, 300)).toBe(0)
+  })
+
+  it("does not move a list that ends exactly at the margin", () => {
+    expect(panelShift(516, 500, 1024)).toBe(0)
+  })
+})
+
+// #574: the chosen shift as the trigger speaks it, in words.
+describe("shiftValueText", () => {
+  it("reads date, hours and role, without dot or dash", () => {
+    const text = shiftValueText(shift())
+    expect(text).toBe(`${date}, de 10h à 12h, Bar`)
+    expect(text).not.toMatch(/[·–]/)
+  })
+
+  it("adds the label when it differs from the role", () => {
+    const text = shiftValueText(shift({ label: "Soir", startTime: "18:30", endTime: "20:00" }))
+    expect(text).toBe(`${date}, de 18h30 à 20h, Bar, Soir`)
+    expect(text).not.toMatch(/[·–]/)
   })
 })

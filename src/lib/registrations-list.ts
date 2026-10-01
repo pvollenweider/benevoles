@@ -103,10 +103,29 @@ export function leaderAnnouncement(succeeded: number, failed: number, withoutEma
   ].filter(Boolean).join(" ")
 }
 
-/** A registration the organizer just added by hand, e.g. « Chloé Roy ajouté·e au créneau Bar du sam. 4 juil., de 10h à 12h. » */
+/**
+ * A registration the organizer just added by hand, e.g. « Inscription de Chloé Roy ajoutée : Bar,
+ * Soir, sam. 4 juil., de 18h30 à 20h. ». « ajoutée » agrees with « inscription », so the sentence
+ * needs no « ·e », and commas replace the middle dot, which screen readers read aloud (#574).
+ */
 export function manualAddAnnouncement(person: string, shift: Pick<ShiftRef, "roleName" | "label" | "date" | "startTime" | "endTime">): string {
-  const name = shift.label !== shift.roleName ? `${shift.roleName} · ${shift.label}` : shift.label
-  return `${person} ajouté·e au créneau ${name} du ${fmtShortDate(shift.date)}, de ${fmtHour(shift.startTime)} à ${fmtHour(shift.endTime)}.`
+  const name = shift.label !== shift.roleName ? `${shift.roleName}, ${shift.label}` : shift.roleName
+  return `Inscription de ${person} ajoutée : ${name}, ${fmtShortDate(shift.date)}, de ${fmtHour(shift.startTime)} à ${fmtHour(shift.endTime)}.`
+}
+
+/** A volunteer just made sector leader of a role (« responsable » is the same for everyone). */
+export function leaderDesignatedAnnouncement(name: string, role: string): string {
+  return `${name} est maintenant responsable de « ${role} », invitation envoyée par email.`
+}
+
+/** A sector leader just removed from a role, without « ·e ». */
+export function leaderRemovedAnnouncement(name: string, role: string): string {
+  return `${name} n'est plus responsable de « ${role} ».`
+}
+
+/** How many registrations the filters leave on the list, e.g. « 2 inscriptions affichées ». */
+export function listCountAnnouncement(count: number): string {
+  return `${count} ${plural(count, "inscription")} ${plural(count, "affichée")}`
 }
 
 export function resendAnnouncement(succeeded: number, failed: number): string {
