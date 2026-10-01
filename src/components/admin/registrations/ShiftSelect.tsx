@@ -38,7 +38,7 @@ const TYPEAHEAD_RESET_MS = 500
 // A select-only combobox (WAI-ARIA APG, #555): the focus stays on the trigger, the option being
 // pointed at is given by aria-activedescendant.
 export default function ShiftSelect({
-  shifts, value, onChange, placeholder = "Sélectionner…", nullable = false, existingShifts, labelledBy,
+  shifts, value, onChange, placeholder = "Sélectionner…", nullable = false, existingShifts, labelledBy, id, required, invalid, describedBy,
 }: {
   shifts: ShiftRef[]
   value: string
@@ -48,6 +48,14 @@ export default function ShiftSelect({
   existingShifts?: ShiftRef[]
   /** Id of the visible label naming the trigger and its list. */
   labelledBy?: string
+  /** Id of the trigger, so that a form can move the focus to it. */
+  id?: string
+  /** A choice is required (announced; the form checks it). */
+  required?: boolean
+  /** The form refused the current value: announced, and a red border. */
+  invalid?: boolean
+  /** Ids of the texts describing the field: its error, a warning. */
+  describedBy?: string
 }) {
   const listboxId = useId()
   const [open, setOpen] = useState(false)
@@ -167,6 +175,7 @@ export default function ShiftSelect({
     <div ref={ref} className="relative">
       {/* Trigger */}
       <div
+        id={id}
         role="combobox"
         tabIndex={0}
         onClick={() => (open ? close() : openList(selectedIndex))}
@@ -176,7 +185,10 @@ export default function ShiftSelect({
         aria-controls={open ? listboxId : undefined}
         aria-activedescendant={activeDomId}
         aria-labelledby={labelledBy}
-        className="flex items-center justify-between gap-2 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 min-h-[38px]"
+        aria-required={required || undefined}
+        aria-invalid={invalid || undefined}
+        aria-describedby={describedBy}
+        className={`flex items-center justify-between gap-2 w-full border ${invalid ? "border-red-600" : "border-gray-300"} rounded-xl px-3 py-2 text-sm bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 min-h-[38px]`}
       >
         <span className={`text-left min-w-0 wrap-break-word sm:truncate ${selected ? "text-gray-800" : "text-gray-500"}`}>
           {selected
