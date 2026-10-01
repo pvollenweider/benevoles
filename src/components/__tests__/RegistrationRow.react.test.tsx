@@ -33,6 +33,14 @@ describe("RegistrationRow", () => {
     expect(onToggleSelected).toHaveBeenCalledTimes(1)
   })
 
+  // Review of #555: the volunteer cell holds the email, decisions, answers and warnings; as a row
+  // header, screen readers re-read all of it on every vertical move. Column headers suffice.
+  it("keeps the volunteer cell a plain cell", () => {
+    renderRow()
+    expect(screen.queryByRole("rowheader")).toBeNull()
+    expect(screen.getAllByText(/Alice Martin/)[0].closest("td")).not.toBeNull()
+  })
+
   it("offers the decision on a request, named for screen readers", () => {
     const onDecision = vi.fn()
     renderRow({ onDecision, reg: reg({ status: "requested" }) })

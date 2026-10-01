@@ -6,6 +6,7 @@ import {
   fmtHour,
   leaderAnnouncement,
   leaderRoleOptions,
+  manualAddAnnouncement,
   overlappingShiftIds,
   resendAnnouncement,
   shiftsOfEmail,
@@ -83,6 +84,13 @@ describe("leaders and announcements", () => {
     expect(leaderAnnouncement(0, 3, 0)).toBe("3 échecs.")
     expect(resendAnnouncement(1, 0)).toBe("Lien renvoyé à 1 bénévole.")
     expect(resendAnnouncement(3, 2)).toBe("Lien renvoyé à 3 bénévoles, 2 échecs.")
+  })
+
+  // #555: a registration added by hand is announced, with its shift spelt out.
+  it("manual addition, with or without a label distinct from the role", () => {
+    expect(manualAddAnnouncement("Chloé Roy", bar)).toBe("Chloé Roy ajouté·e au créneau Bar du sam. 1 juin, de 10h à 12h.")
+    expect(manualAddAnnouncement("Chloé Roy", shift("s", { label: "Soir", startTime: "18:30", endTime: "20:00" })))
+      .toBe("Chloé Roy ajouté·e au créneau Bar · Soir du sam. 1 juin, de 18h30 à 20h.")
   })
 })
 

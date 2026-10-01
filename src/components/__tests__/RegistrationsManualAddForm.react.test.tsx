@@ -4,7 +4,7 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { useState } from "react"
-import { render, screen, fireEvent, cleanup, waitFor } from "@testing-library/react"
+import { render, screen, fireEvent, cleanup, waitFor, within } from "@testing-library/react"
 import ManualAddForm from "../admin/registrations/ManualAddForm"
 import { EMPTY_ADD_FORM, type AddFormValues, type Registration } from "../admin/registrations/types"
 
@@ -104,15 +104,72 @@ describe("RegistrationsManager — manual add while a submission is running", ()
     fireEvent.change(screen.getByLabelText("Prénom *"), { target: { value: "Chloé" } })
     fireEvent.change(screen.getByLabelText("Nom *"), { target: { value: "Roy" } })
     const form = screen.getByLabelText("Prénom *").closest("form")!
-    fireEvent.click(form.querySelector('[aria-labelledby^="add-shift-label"]')!)
-    // ShiftSelect rows are plain clickable divs: click the one of shift s1.
-    const row = [...form.querySelectorAll<HTMLElement>("div.cursor-pointer")].find((d) => d.textContent?.includes("Bar"))!
-    fireEvent.click(row)
+    const combo = within(form).getByRole("combobox", { name: "Créneau *" })
+    fireEvent.click(combo)
+    // within the form: the role filter is a native select with its own « Bar » option.
+    fireEvent.click(within(form).getByRole("option", { name: /Bar/ }))
     fireEvent.submit(form)
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
 
     fireEvent.click(open)
     fireEvent.submit(screen.getByLabelText("Prénom *").closest("form")!)
     expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+})
+
+// #555: the form unmounts on « Annuler » and after an add; the focus goes back to its open
+// button instead of the page, and the addition is announced.
+describe("RegistrationsManager — focus and announcement around the manual add", () => {
+  const fetchMock = vi.fn()
+  beforeEach(() => {
+    fetchMock.mockReset()
+    vi.stubGlobal("fetch", fetchMock)
+  })
+  afterEach(() => {
+    cleanup()
+    vi.unstubAllGlobals()
+  })
+
+  async function renderManager() {
+    vi.doMock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }) }))
+    const { default: RegistrationsManager } = await import("../admin/RegistrationsManager")
+    render(<RegistrationsManager eventId="evt-1" timeZone="Europe/Zurich" shifts={[shift]} initialRegistrations={[]} />)
+    return screen.getByRole("button", { name: "+ Ajouter manuellement" })
+  }
+
+  it("returns the focus to « + Ajouter manuellement » after « Annuler »", async () => {
+    const open = await renderManager()
+    fireEvent.click(open)
+    const cancel = screen.getByRole("button", { name: "Annuler" })
+    cancel.focus()
+    fireEvent.click(cancel)
+    expect(screen.queryByRole("heading", { name: "Inscription manuelle" })).toBeNull()
+    expect(open).toHaveFocus()
+  })
+
+  it("returns the focus and announces the registration after a successful add, chosen with the keyboard", async () => {
+    fetchMock.mockResolvedValue({
+      ok: true, status: 201,
+      json: async () => ({
+        id: "r9", status: "active", source: "admin_manual", comment: null, createdAt: "2026-06-01T00:00:00.000Z",
+        volunteer: { id: "v9", firstName: "Chloé", lastName: "Roy", email: null, phone: null },
+        shift: { ...shift, date: "2026-07-04T00:00:00.000Z" },
+      }),
+    })
+    const open = await renderManager()
+    fireEvent.click(open)
+    fireEvent.change(screen.getByLabelText("Prénom *"), { target: { value: "Chloé" } })
+    fireEvent.change(screen.getByLabelText("Nom *"), { target: { value: "Roy" } })
+    const combo = screen.getByRole("combobox", { name: "Créneau *" })
+    fireEvent.keyDown(combo, { key: "ArrowDown" })
+    fireEvent.keyDown(combo, { key: "Enter" })
+    expect(combo).toHaveTextContent("Bar")
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+
+    await waitFor(() => expect(screen.queryByRole("heading", { name: "Inscription manuelle" })).toBeNull())
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({ shiftId: "s1" })
+    expect(open).toHaveFocus()
+    await waitFor(() => expect(screen.getByText("Chloé Roy ajouté·e au créneau Bar du sam. 4 juil., de 10h à 12h.")).toBeInTheDocument())
+    expect(screen.getByText("Chloé Roy ajouté·e au créneau Bar du sam. 4 juil., de 10h à 12h.").closest("[role=status]")).toHaveAttribute("aria-live", "polite")
   })
 })

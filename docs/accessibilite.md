@@ -33,6 +33,7 @@ Pour chaque parcours : tout se fait avec Tab, Maj+Tab, Entrée, Espace, flèches
 | Page personnelle | annuler un créneau, quitter la liste d'attente, retirer une demande : le focus va dans la confirmation, Échap la ferme, le focus revient au déclencheur ou à la carte suivante, le résultat est annoncé ; lien calendrier |
 | Liste d'attente | accepter une place proposée |
 | Administration | lien d'évitement ; menus ; fenêtres de confirmation (focus piégé, retour du focus) ; formulaires de créneau et de poste |
+| Choisir un créneau au clavier (page Inscriptions de l'administration) | « Créneau * » (ajout manuel) et « Filtrer par créneau » : Tab atteint le champ, annoncé avec son nom ; flèches haut et bas, Début et Fin déplacent l'option active (contour bleu) sans faire quitter le champ ; une lettre va à l'option dont le poste commence par elle ; Entrée ou Espace choisit, Échap ferme sans changer le choix, Tab choisit et passe au champ suivant ; chaque option est lue en entier (date, heures, poste, remplissage, « déjà inscrit », « conflit d'horaire ») avec son état sélectionné ; après « Annuler » ou un ajout, le focus revient sur « + Ajouter manuellement » et l'ajout est annoncé |
 
 ## Écarts connus
 
@@ -42,6 +43,10 @@ Suivis dans l'issue #534 et repris dans les « Limites connues » de la déclara
 - planning public : créneau déjà pris non distingué (style par défaut, nom accessible « Sélectionner — … »).
 
 Hors #534, aussi dans la déclaration : contraste des dates et compteurs du journal d'un événement (`text-gray-400`) et du message d'enregistrement d'un événement (blanc sur `green-500` ou `red-500`). Voir « Écarts connus du code » dans [DESIGN.md](../DESIGN.md#7-écarts-connus-du-code).
+
+Choix d'un créneau sur la page Inscriptions de l'administration (#555) : couvert par des tests unitaires et de bout en bout (rôles, noms, clavier, axe avec la liste ouverte). Vérifié à la main le 1er octobre 2026 avec VoiceOver et Safari sur macOS (champ « Créneau * » et filtre « Filtrer par créneau » : nom du champ, flèches, lettre répétée, Entrée, Échap, annonce de chaque option et de son état sélectionné). Restent à vérifier : NVDA avec Firefox sous Windows, VoiceOver sur iOS, les mentions « déjà inscrit » et « conflit » à l'écoute, le zoom à 200 % et les petits écrans (#574).
+
+Sélecteur de créneau, petits écrans : la liste peut dépasser à droite de l'écran, et à 320 px de large l'étiquette de remplissage et les avertissements « Déjà inscrit » / « ⚠ conflit » peuvent être coupés (1.4.10). Suivi dans #574.
 
 ## Lecteurs d'écran
 
