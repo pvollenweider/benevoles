@@ -136,7 +136,7 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
           </button>
         </form>
       </section>
-      <p className="text-sm text-gray-600">Les heures cumulées des membres ne figurent dans aucun de ces documents.</p>
+      <p className="text-sm text-gray-600">Les heures planifiées des membres ne figurent dans aucun de ces documents.</p>
     </div>
   )
 }

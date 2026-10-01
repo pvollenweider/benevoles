@@ -53,7 +53,7 @@ describe("sorting", () => {
 
   it("announces the sort for screen readers", () => {
     expect(sortAnnouncement({ col: "firstName", dir: "asc" })).toBe("Trié par prénom, croissant")
-    expect(sortAnnouncement({ col: "hoursTotal", dir: "desc" })).toBe("Trié par heures cumulées, décroissant")
+    expect(sortAnnouncement({ col: "hoursTotal", dir: "desc" })).toBe("Trié par heures planifiées, décroissant")
     expect(sortAnnouncement({ col: null, dir: "asc" })).toBe("Tri réinitialisé")
   })
 

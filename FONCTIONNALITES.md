@@ -264,7 +264,7 @@ Pool de bénévoles connus de l'organisation (source de vérité partagée avec 
 - Création, édition et désactivation de membres
 - Champs : prénom, nom, email, téléphone, tags libres, notes internes, **disponibilités facultatives** (`availabilityPeriods` matin / après-midi / soir, `availabilityNote` ≤ 140) modifiables par l'admin et par le bénévole depuis `/my/[token]` (`PATCH …/availability`) ; affichées dans la liste des membres, les inscriptions et l'ajout manuel ; aucune correspondance automatique
 - **Colonnes Prénom et Nom séparées** ; tri par colonne au clic sur l'en-tête (croissant → décroissant → reset) ; changement annoncé aux lecteurs d'écran via live region
-- **Heures cumulées** : somme de la durée des créneaux actifs de chaque membre, tous événements de l'organisation confondus ; colonne triable. Figure admin uniquement — absente de l'export PDF (qui est, lui, potentiellement partagé avec les bénévoles).
+- **Heures planifiées** (#571) : somme de la durée des créneaux actifs de chaque membre, tous événements de l'organisation confondus, créneaux à venir et absences comprises (temps prévu, pas temps passé) ; durée réelle dans le fuseau de l'organisation, changement d'heure compris (`src/lib/planned-hours.ts`) ; colonne triable. Figure admin uniquement — absente de l'export PDF (qui est, lui, potentiellement partagé avec les bénévoles).
 - Recherche par texte et filtre par tag
 - Import CSV ou Excel (`.xlsx`) via le bouton « Importer CSV/Excel », en deux étapes (#464) : aperçu (`POST /api/admin/members/import/preview`) ligne par ligne de ce qui sera créé, mis à jour ou ignoré, lignes en erreur, étiquettes nouvelles ou réutilisées, choix pour les doublons (ignorer ou mettre à jour), puis confirmation (`POST /api/admin/members/import`) qui applique exactement le plan de l'aperçu (`src/lib/member-import-plan.ts`, empreinte du plan) ; colonnes reconnues par leur intitulé (français ou anglais) ; 2 Mo et 5000 lignes au plus ; 30 aperçus et 10 imports par heure et par organisation
 - **Activité d'un membre** (`/admin/members/[id]`, `src/lib/member-activity.ts`, #488) : chronologie factuelle, événement par événement (invitations et leur utilisation, inscriptions, liste d'attente, annulations, présences, désignations de responsable, modifications de la fiche), construite à partir des données existantes ; pas de score ni de note
@@ -322,7 +322,7 @@ Le même cron propose les places libres oubliées (`reconcileWaitlists`, `src/li
 #### Rapports (`/admin/events/[id]/print`)
 
 - L'export complet en premier, puis cinq feuilles HTML noir et blanc (`/api/admin/events/[id]/export/sheets/[view]`) : `day` (frise par jour avec les prénoms dans les créneaux + détail, paysage), `role` (une page par poste : frise, détail, responsable, paysage), `individual` (une page par bénévole : sa frise du jour, ses créneaux avec infos pratiques), `attendance` (feuille de présence : case par bénévole, cochée si `checkedInAt`, lignes vides = places libres + 2), `phones` (liste alphabétique avec téléphones, mention organisateurs)
-- La frise réutilise `buildDayParts` de l'export complet, restylée en monochrome ; rendu pur dans `src/lib/print-sheets.ts` ; téléphone de l'inscription avant celui du profil ; jamais les heures cumulées
+- La frise réutilise `buildDayParts` de l'export complet, restylée en monochrome ; rendu pur dans `src/lib/print-sheets.ts` ; téléphone de l'inscription avant celui du profil ; jamais les heures planifiées
 
 #### Badges (`/api/admin/events/[id]/export/badges`, depuis `/admin/events/[id]/print`)
 

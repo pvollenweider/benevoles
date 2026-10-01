@@ -39,7 +39,7 @@ export function nextSort(current: SortState, col: SortCol): SortState {
   return current.dir === "asc" ? { col, dir: "desc" } : { col: null, dir: "asc" }
 }
 
-const COL_LABELS: Record<SortCol, string> = { firstName: "prénom", lastName: "nom", hoursTotal: "heures cumulées" }
+const COL_LABELS: Record<SortCol, string> = { firstName: "prénom", lastName: "nom", hoursTotal: "heures planifiées" }
 
 /** Live region text after a sort change. */
 export function sortAnnouncement({ col, dir }: SortState): string {
