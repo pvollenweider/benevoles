@@ -229,7 +229,7 @@ Liste exhaustive des fonctionnalités de l'application.
 - Modification, suppression et changement de statut : ouvert → fermé → complet → annulé
 - **Liste d'attente par créneau** : case à cocher `Activer la liste d'attente` sur chaque créneau ; quand le créneau est complet, les bénévoles peuvent s'inscrire en liste d'attente ; une place libérée (annulation publique ou admin) déclenche automatiquement une offre à la première personne en attente (email + lien de confirmation, expiration 24 h)
 - **Gérer les postes** : panneau dédié pour, poste par poste :
-  - **Réordonner** par glisser-déposer, persisté via `displayOrder` et reflété dans toutes les timelines
+  - **Réordonner** par glisser-déposer ou avec les flèches Monter / Descendre (clavier), persisté via `displayOrder` et reflété dans toutes les timelines
   - **Renommer** d'un coup tous les créneaux d'un poste (refuse un nom déjà pris par un autre poste)
   - **Supprimer** un poste (annule tous ses créneaux — même confirmation et notification des bénévoles qu'une annulation individuelle)
   - **Couleur** : 16 couleurs prédéfinies ou automatique (hash du nom), appliquée à la timeline admin et à la page publique

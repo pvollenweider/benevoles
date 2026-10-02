@@ -18,8 +18,8 @@ async function login(page: Page) {
   await expect(page).toHaveURL(/\/admin\/events/)
 }
 
-/** A one-day event with a « Bar » and an « Accueil » shift, opened on its shifts page. */
-async function openShiftsPage(page: Page) {
+/** A one-day event with a « Bar » and an « Accueil » shift (plus `extraRoles`), opened on its shifts page. */
+async function openShiftsPage(page: Page, extraRoles: string[] = []) {
   await login(page)
   const stamp = Date.now()
   const post = async (url: string, data: unknown) => {
@@ -30,6 +30,9 @@ async function openShiftsPage(page: Page) {
   const event: { id: string } = await post("/api/admin/events", { title: `E2E Shifts Keyboard ${stamp}`, startDate: "2030-10-01", endDate: "2030-10-01", publicStatus: "draft" })
   await post("/api/admin/shifts", { eventId: event.id, roleName: "Bar", label: "Bar", date: "2030-10-01", startTime: "10:00", endTime: "12:00", capacity: 3 })
   await post("/api/admin/shifts", { eventId: event.id, roleName: "Accueil", label: "Accueil", date: "2030-10-01", startTime: "14:00", endTime: "16:00", capacity: 3 })
+  for (const role of extraRoles) {
+    await post("/api/admin/shifts", { eventId: event.id, roleName: role, label: role, date: "2030-10-01", startTime: "17:00", endTime: "18:00", capacity: 3 })
+  }
   await page.goto(`/admin/events/${event.id}/shifts`)
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
 }
@@ -216,4 +219,61 @@ test("roles panel, « Fermer »: focus is back on « Gérer les postes »; aria-
   const access = page.getByLabel("Étiquettes donnant accès au poste « Bar »")
   await expect(access).toBeVisible()
   await expect(access).not.toBeFocused()
+})
+
+/** The role names in the panel's list, top to bottom. */
+const panelOrder = (page: Page) =>
+  page.getByRole("list", { name: "Ordre des postes" }).getByRole("listitem")
+    .evaluateAll((items) => items.map((li) => li.querySelector("[aria-label^='Renommer le poste ']")?.getAttribute("aria-label")?.replace("Renommer le poste ", "")))
+
+test("roles panel, Monter / Descendre: focus stays on the pressed button, each move announced once, the order saved", async ({ page }) => {
+  await openShiftsPage(page, ["Cuisine"])
+  await openRolesPanel(page)
+  const start = await panelOrder(page)
+  expect(start).toHaveLength(3)
+  const [first] = start as string[]
+  const status = page.getByRole("status").filter({ hasText: /\S/ })
+
+  const down = page.getByRole("button", { name: `Descendre le poste ${first}` })
+  await down.focus()
+  await page.keyboard.press("Enter")
+  await expect(down).toBeFocused()
+  expect((await panelOrder(page))[1]).toBe(first)
+  await expect(status).toHaveCount(1)
+  await expect(status).toHaveText(`${first} déplacé en position 2 sur 3.`)
+
+  await page.keyboard.press("Enter")
+  await expect(down).toBeFocused()
+  await expect(down).toHaveAttribute("aria-disabled", "true")
+  await expect(status).toHaveText(`${first} déplacé en dernière position.`)
+  await page.keyboard.press("Enter")
+  await expect(down).toBeFocused()
+  await expect(status).toHaveText(`${first} est déjà en dernière position.`)
+  expect(await focusIsNotOnBody(page)).toBe(true)
+  const moved = await panelOrder(page)
+  expect(moved[2]).toBe(first)
+
+  const saved = page.waitForResponse((r) => r.url().includes("/reorder-roles") && r.request().method() === "POST")
+  await page.getByRole("button", { name: "Enregistrer l'ordre" }).click()
+  expect((await saved).ok()).toBe(true)
+  await page.reload()
+  await openRolesPanel(page)
+  expect(await panelOrder(page)).toEqual(moved)
+})
+
+test("roles panel at 320 px: rows wrap without horizontal scroll, move buttons at least 24 px and on screen", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 800 })
+  await openShiftsPage(page, ["Cuisine"])
+  await openRolesPanel(page)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
+  const buttons = page.getByRole("button", { name: /^(Monter|Descendre) le poste / })
+  await expect(buttons).toHaveCount(6)
+  for (const b of await buttons.all()) {
+    await b.scrollIntoViewIfNeeded()
+    const box = (await b.boundingBox())!
+    expect(box.width).toBeGreaterThanOrEqual(24)
+    expect(box.height).toBeGreaterThanOrEqual(24)
+    expect(box.x).toBeGreaterThanOrEqual(0)
+    expect(box.x + box.width).toBeLessThanOrEqual(320)
+  }
 })

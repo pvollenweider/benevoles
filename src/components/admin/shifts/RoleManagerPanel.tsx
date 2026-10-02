@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useState, useRef } from "react"
+import { useLayoutEffect, useState, useRef } from "react"
 import { flushSync } from "react-dom"
 import { deleteRoleRecap, type ActionRecap } from "@/lib/action-recap"
 import { requestJson } from "@/lib/use-submit"
@@ -11,7 +11,8 @@ import { getRoleAccent } from "@/lib/roles"
 import { roleLimits } from "@/lib/role-limit"
 import { reservedRoles } from "@/lib/role-reservation"
 import { applyRoleOrder, moveItem, renameRole } from "@/lib/shifts-admin"
-import { focusFirstAvailableNextFrame } from "@/lib/focus-return"
+import { focusFirstAvailable, type FocusCandidate } from "@/lib/focus-return"
+import { moveRole, roleMoveBoundaryMessage, roleMoveMessage, type MoveDirection } from "@/lib/role-order"
 import { RoleColorPicker, RoleLimitForm, RoleReserveForm } from "./RoleSettings"
 import type { RawShift } from "./types"
 
@@ -22,7 +23,7 @@ function setRoleButton(buttons: Map<string, HTMLButtonElement>, role: string, el
 }
 
 /**
- * « Gérer les postes » panel: reorder the roles by drag and drop, rename, delete (after the
+ * « Gérer les postes » panel: reorder the roles by drag and drop or with Monter / Descendre, rename, delete (after the
  * confirmation the parent shows), and open the inline editors of RoleSettings.
  *
  * Stays mounted while closed (renders nothing) so that, as before the split, an inline editor left
@@ -77,6 +78,8 @@ export default function RoleManagerPanel({
   // « Renommer » and colour buttons per role, and the heading, the fallback when the row is gone (#554).
   const renameBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   const colorBtnRefs = useRef(new Map<string, HTMLButtonElement>())
+  // Monter / Descendre buttons, keyed `up:<role>` and `down:<role>` (#554).
+  const moveBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   const headingRef = useRef<HTMLHeadingElement>(null)
   // An editor takes focus when its button opens it, not when the panel is reopened with it still
   // open: focus then stays on « Gérer les postes » (disclosure).
@@ -87,16 +90,47 @@ export default function RoleManagerPanel({
     if (open) setEditorAutoFocus(false)
   }
 
-  /** Returns the focus, on the next frame, to the role's button in `refs`, else to the heading. */
+  // Focus to give back, applied once React has committed the updates queued with the request. A
+  // request answered after `await` renders on a later task, which a next-frame focus can beat: the
+  // renamed row is not there yet, or the row's button is still disabled, and focus fell to the heading.
+  const [focusRequest, setFocusRequest] = useState<{ candidates: FocusCandidate[] } | null>(null)
+  // Only while focus is still in the panel, or was dropped to <body> by an unmounted editor: a request
+  // answered after the user went elsewhere on the page does not pull focus back.
+  useLayoutEffect(() => {
+    if (!focusRequest) return
+    const active = document.activeElement
+    const inPanel = active === null || active === document.body || !!document.getElementById(panelId)?.contains(active)
+    if (inPanel) focusFirstAvailable(focusRequest.candidates)
+  }, [focusRequest, panelId])
+
+  /** Returns the focus to the role's button in `refs`, else to the heading. */
   function focusRoleButton(refs: React.RefObject<Map<string, HTMLButtonElement>>, role: string) {
-    focusFirstAvailableNextFrame([() => refs.current.get(role), () => headingRef.current])
+    setFocusRequest({ candidates: [() => refs.current.get(role), () => headingRef.current] })
   }
+
 
   function handleRoleDragOver(e: React.DragEvent, toIdx: number) {
     e.preventDefault()
     if (dragRoleIdx === null || dragRoleIdx === toIdx) return
     setRoles(prev => moveItem(prev, dragRoleIdx, toIdx))
     setDragRoleIdx(toIdx)
+  }
+
+  /**
+   * Keyboard reorder (#554): one step, announced once. After « Descendre » React moves the focused
+   * row's node, which loses focus; the same button gets it back right after the commit.
+   */
+  function moveRoleBy(role: string, dir: MoveDirection) {
+    if (savingOrder || renamingRole === role) return
+    const moved = moveRole(roles, role, dir)
+    if (!moved) { onAnnounce(roleMoveBoundaryMessage(role, dir)); return }
+    setRoles(moved.roles)
+    setFocusRequest({ candidates: [
+      () => moveBtnRefs.current.get(`${dir}:${role}`),
+      () => moveBtnRefs.current.get(`${dir === "up" ? "down" : "up"}:${role}`),
+      () => headingRef.current,
+    ] })
+    onAnnounce(roleMoveMessage(role, moved.index, moved.roles.length))
   }
 
   async function saveRoleOrder() {
@@ -243,12 +277,13 @@ export default function RoleManagerPanel({
       <div>
         {/* Focused by code only, when the row whose button should get focus back is gone. */}
         <h3 ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">Gérer les postes</h3>
-        <p className="text-xs text-gray-500 mt-0.5">Glissez-déposez pour réordonner, renommez, limitez le nombre de créneaux par personne, réservez un poste à certains membres ou supprimez un poste (tous ses créneaux).</p>
+        <p className="text-xs text-gray-500 mt-0.5">Réordonnez avec les flèches Monter et Descendre ou par glisser-déposer, puis enregistrez l&apos;ordre. Vous pouvez aussi renommer un poste, limiter le nombre de créneaux par personne, réserver un poste à certains membres ou le supprimer (avec tous ses créneaux).</p>
       </div>
       {roleActionError && (
         <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{roleActionError}</p>
       )}
-      <div className="space-y-1.5">
+      {/* role="list": Safari drops the list role of an <ol> without bullets. */}
+      <ol role="list" aria-label="Ordre des postes" className="space-y-1.5">
         {roles.map((role, i) => {
           const isRenaming = renamingRole === role
           const isBusy = roleActionBusy === role
@@ -256,13 +291,13 @@ export default function RoleManagerPanel({
           const limit = roleLimitOf(role)
           const reservedTags = reservedTagsOf(role)
           return (
-          <div key={role}>
+          <li key={role}>
             <div
               draggable={!isRenaming}
               onDragStart={() => setDragRoleIdx(i)}
               onDragOver={e => handleRoleDragOver(e, i)}
               onDragEnd={() => setDragRoleIdx(null)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl border select-none transition-colors
+              className={`flex flex-wrap items-center gap-x-3 gap-y-1 px-3 py-2.5 rounded-xl border select-none transition-colors
                 ${dragRoleIdx === i
                   ? "opacity-40 border-blue-200 bg-blue-50"
                   : `border-gray-100 bg-gray-50 hover:bg-gray-100 ${isRenaming ? "" : "cursor-grab active:cursor-grabbing"}`}`}
@@ -271,6 +306,29 @@ export default function RoleManagerPanel({
                 <circle cx="5" cy="4" r="1.2"/><circle cx="5" cy="8" r="1.2"/><circle cx="5" cy="12" r="1.2"/>
                 <circle cx="11" cy="4" r="1.2"/><circle cx="11" cy="8" r="1.2"/><circle cx="11" cy="12" r="1.2"/>
               </svg>
+              {roles.length > 1 && (
+                <span className="flex gap-0.5 flex-shrink-0">
+                  {(["up", "down"] as const).map((dir) => {
+                    const atEnd = dir === "up" ? i === 0 : i === roles.length - 1
+                    return (
+                      // aria-disabled, not disabled: the button just pressed keeps focus at an end.
+                      <button
+                        key={dir}
+                        ref={(el) => setRoleButton(moveBtnRefs.current, `${dir}:${role}`, el)}
+                        type="button"
+                        onClick={() => moveRoleBy(role, dir)}
+                        aria-label={`${dir === "up" ? "Monter" : "Descendre"} le poste ${role}`}
+                        aria-disabled={atEnd || isRenaming || savingOrder || undefined}
+                        className="w-6 h-6 inline-flex items-center justify-center rounded-lg text-gray-600 hover:bg-white hover:text-gray-900 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:hover:bg-transparent aria-disabled:hover:text-gray-600 forced-colors:aria-disabled:text-[GrayText]"
+                      >
+                        <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d={dir === "up" ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} />
+                        </svg>
+                      </button>
+                    )
+                  })}
+                </span>
+              )}
               <button
                 ref={(el) => setRoleButton(colorBtnRefs.current, role, el)}
                 type="button"
@@ -314,7 +372,7 @@ export default function RoleManagerPanel({
                 </>
               ) : (
                 <>
-                  <span className="text-sm font-medium text-gray-700 flex-1 truncate">{role}</span>
+                  <span className="text-sm font-medium text-gray-700 flex-1 min-w-[8rem] truncate">{role}</span>
                   <button
                     ref={(el) => setRoleButton(limitBtnRefs.current, role, el)}
                     type="button"
@@ -415,10 +473,10 @@ export default function RoleManagerPanel({
                 onAnnounce={onAnnounce}
               />
             )}
-          </div>
+          </li>
           )
         })}
-      </div>
+      </ol>
       <div className="flex gap-3">
         <button type="button" onClick={saveRoleOrder} aria-disabled={savingOrder || undefined}
           className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:opacity-50">
