@@ -56,17 +56,6 @@ describe("UserMenu", () => {
     expect(trigger()).toHaveFocus()
   })
 
-  it("closes on a click outside and when focus leaves the menu", () => {
-    render(<><UserMenu userName="Alice" isSuperAdmin={false} /><button>ailleurs</button></>)
-    fireEvent.click(trigger())
-    fireEvent.pointerDown(document.body)
-    expect(screen.queryByRole("menu")).toBeNull()
-
-    fireEvent.click(trigger())
-    fireEvent.blur(screen.getByRole("menuitem", { name: "Se déconnecter" }), { relatedTarget: screen.getByRole("button", { name: "ailleurs" }) })
-    expect(screen.queryByRole("menu")).toBeNull()
-  })
-
   it("signs out back to the login page", () => {
     render(<UserMenu userName="Alice" isSuperAdmin={false} />)
     fireEvent.click(trigger())
@@ -95,6 +84,13 @@ describe("UserMenu", () => {
     const outside = screen.getByRole("button", { name: "Ailleurs" })
     fireEvent.blur(screen.getByRole("menuitem", { name: "Mon compte" }), { relatedTarget: outside })
     expect(screen.queryByRole("menu")).toBeNull()
+  })
+
+  it("stays open when Shift+Tab moves focus back to the trigger", () => {
+    render(<UserMenu userName="Alice" isSuperAdmin={false} />)
+    fireEvent.click(trigger())
+    fireEvent.blur(screen.getByRole("menuitem", { name: "Mon compte" }), { relatedTarget: trigger() })
+    expect(screen.getByRole("menu")).toBeInTheDocument()
   })
 
   it("closes on a tap outside", () => {
