@@ -34,6 +34,7 @@ import WithdrawDialog from "@/components/public/WithdrawDialog"
 import SignupQuestions, { type Answers } from "@/components/public/SignupQuestions"
 import { checkAnswers, type Question } from "@/lib/event-questions"
 import DayTimeline from "@/components/DayTimeline"
+import { heldKinds } from "@/lib/public-timeline"
 import PublicFooter from "@/components/PublicFooter"
 import { DEFAULT_VOLUNTEER_CHARTER } from "@/lib/volunteer-charter"
 
@@ -178,6 +179,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   const storageKey = `benevoles_token_${eventSlug}`
   const myShiftIds = useMemo(() => new Set(myRegistrations.map((r) => r.shiftId)), [myRegistrations])
   const myStatus = useMemo(() => new Map(myRegistrations.map((r) => [r.shiftId, r.status])), [myRegistrations])
+  // Held shifts by status, for the schedule: named and drawn as the visitor's own (#534).
+  const heldByShift = useMemo(() => heldKinds(myRegistrations), [myRegistrations])
   // Shifts of reserved roles (#470) this visitor can't take; the server checks it again at sign-up.
   const reservedShiftIds = useMemo(
     () => new Set((event?.shifts ?? []).filter((s) => s.reserved && !allowedReserved.has(s.roleName)).map((s) => s.id)),
@@ -642,13 +645,14 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                         shifts={dayShifts}
                         shows={dayShows}
                         selected={selectedShifts}
-                        registered={myShiftIds}
+                        held={heldByShift}
                         conflicts={conflictingShiftIds}
                         onToggle={toggleShift}
                         locked={!accepting}
                         describedBy={[!accepting && "registration-window-msg", reservedShiftIds.size > 0 && "reserved-roles-msg"].filter(Boolean).join(" ") || undefined}
                         limitReachedRoles={limitReachedRoles}
                         reservedShiftIds={reservedShiftIds}
+                        dayLabel={formatDate(day)}
                       />
                       {limitNotice && limitNoticeDay === day && (
                         <p className="mt-2 rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-950">{limitNotice}</p>

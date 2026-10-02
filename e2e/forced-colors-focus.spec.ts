@@ -39,11 +39,6 @@ const SUPER_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "e2e-admin-password"
 // reproduce (the test fails otherwise) and goes away in the PR that fixes its issue.
 const KNOWN_ISSUES: { test: string; match: RegExp; note: string }[] = [
   {
-    test: "public event page: shift selection",
-    match: /button « Sélectionner — Bar .*: outline left covered by positioned div « Bar Accueil Contrôle »/,
-    note: "#583 — DayTimeline: the sticky role-label column (z-10) covers the left edge of the outline of a bar that starts at the first hour",
-  },
-  {
     test: "members page and import modal",
     match: /import modal, preview step: focus left the modal .* \(no focus trap\)/,
     note: "#585 — ModalShell focus trap counts the hidden file form of ImportModal's preview step, so Tab escapes after the last visible button",
@@ -177,6 +172,19 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       const failures: string[] = []
       await page.goto(publicUrl())
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+      // #583: the forced background is Canvas, so each bar needs a border on all four sides.
+      const timeline = page.locator('[role=region][aria-label^="Planning"]').first()
+      const borders = await timeline.locator("button").evaluateAll((bs) => bs.map((b) => {
+        const s = getComputedStyle(b)
+        return { name: b.getAttribute("aria-label") ?? "", style: s.borderTopStyle, color: s.borderTopColor, width: s.borderTopWidth }
+      }))
+      expect(borders.length).toBeGreaterThan(0)
+      for (const b of borders) {
+        if (b.style === "none" || parseFloat(b.width) === 0 || /rgba\(\d+, \d+, \d+, 0\)|transparent/.test(b.color)) {
+          failures.push(`timeline bar « ${b.name} »: no visible top border in forced colours (${b.style} ${b.width} ${b.color})`)
+        }
+      }
+      await shot(page, timeline, name("event", "timeline", "idle"))
       failures.push(...(await sweep(page, "event page", { min: 5 })).failures)
       await page.getByRole("button", { name: /Sélectionner.*Bar/ }).first().click()
       await expect(page.getByRole("button", { name: /^Continuer/ }).first()).toBeVisible()
@@ -184,6 +192,7 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       await page.getByRole("button", { name: /Sélectionner.*Accueil/ }).first().click()
       failures.push(...(await sweep(page, "event page with a selection", { min: 6 })).failures)
       failures.push(...(await checkSelectedStates(page, "event page")))
+      await shot(page, timeline, name("event", "timeline", "selected"))
       settle(failures)
     })
 

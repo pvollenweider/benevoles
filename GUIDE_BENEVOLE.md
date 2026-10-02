@@ -32,7 +32,7 @@ Si les inscriptions ne sont pas encore ouvertes, ou déjà fermées, un encadré
 |----------------|---------------|
 | Barre colorée (bleue, verte, orange…) | Créneau ouvert — cliquez pour le sélectionner |
 | Barre avec ✓ et fond foncé | Créneau sélectionné |
-| Barre avec ✓ vert clair | Créneau où vous avez déjà une inscription |
+| Barre avec ✓ cerclé, et dessous la mention « Ton créneau » (ou « Demande envoyée », « En liste d'attente », « Place proposée ») | Créneau où vous êtes déjà inscrit, en attente de validation, en liste d'attente ou à qui une place est proposée |
 | Barre grisée « Complet » | Plus de place disponible |
 | Barre colorée rayée blanc, « Complet · file d'attente » | Complet, mais la liste d'attente est ouverte — cliquez pour la rejoindre |
 | Barre grisée « Fermé » | Inscriptions désactivées |

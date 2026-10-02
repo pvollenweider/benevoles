@@ -68,4 +68,72 @@ describe("DayTimeline", () => {
     expect(bar).not.toHaveAttribute("aria-pressed")
     expect(screen.getByText("Réservé")).toBeInTheDocument()
   })
+
+  // A shift the visitor already holds (#534): its own name and tag, not a selected toggle.
+  it("draws a held shift as theirs: disabled, no toggle state, named and tagged, no selection ring", () => {
+    render(<DayTimeline shifts={[shift("a")]} shows={[]} selected={new Set(["a"])} held={new Map([["a", "active"]])} onToggle={() => {}} />)
+    const bar = screen.getByRole("button", { name: "Bar 18h–20h : inscription confirmée" })
+    expect(bar).toBeDisabled()
+    expect(bar).not.toHaveAttribute("aria-pressed")
+    expect(bar).toHaveAttribute("data-shift-id", "a")
+    expect(bar.className).not.toMatch(/\bring-/)
+    expect(bar.style.outline).toBe("")
+    expect(bar.style.backgroundImage).toBe("")
+    expect(screen.getByText("Ton créneau")).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: /lectionner/ })).toBeNull()
+  })
+
+  it("says a held full shift is confirmed, not « Complet », without the full hatch", () => {
+    render(<DayTimeline shifts={[shift("a", { status: "full", registered: 5, spotsLeft: 0 })]} shows={[]} selected={new Set(["a"])} held={new Map([["a", "active"]])} onToggle={() => {}} />)
+    const bar = screen.getByRole("button", { name: "Bar 18h–20h : inscription confirmée" })
+    expect(bar.style.backgroundImage).toBe("")
+    expect(bar.style.outline).toBe("")
+    expect(screen.queryByText("Complet")).toBeNull()
+  })
+
+  it("tags each held status", () => {
+    render(
+      <DayTimeline
+        shifts={[shift("a"), shift("b", { startTime: "20:00", endTime: "22:00" }), shift("c", { startTime: "22:00", endTime: "23:00" }), shift("d", { startTime: "14:00", endTime: "16:00" })]}
+        shows={[]} selected={new Set()} onToggle={() => {}}
+        held={new Map([["a", "requested"], ["b", "waiting"], ["c", "offered"], ["d", "active"]])}
+        conflicts={new Set(["a"])} reservedShiftIds={new Set(["b"])}
+      />,
+    )
+    expect(screen.getByRole("button", { name: "Bar 18h–20h : demande envoyée, en attente de validation" })).toBeDisabled()
+    expect(screen.getByRole("button", { name: "Bar 20h–22h : en liste d'attente" })).toBeDisabled()
+    expect(screen.getByRole("button", { name: "Bar 22h–23h : place proposée, à accepter sur ta page personnelle" })).toBeDisabled()
+    for (const tag of ["Demande envoyée", "En liste d'attente", "Place proposée", "Ton créneau"]) expect(screen.getByText(tag)).toBeInTheDocument()
+    expect(screen.queryByText("Réservé")).toBeNull()
+  })
+
+  // #583: a focused bar's outline is not covered by the role labels (z-10) nor by the next bar.
+  it("raises the focused bar above the role labels and its neighbours", () => {
+    render(<DayTimeline shifts={[shift("a"), shift("b", { startTime: "20:00", endTime: "22:00" })]} shows={[]} selected={new Set()} onToggle={() => {}} />)
+    for (const bar of screen.getAllByRole("button")) expect(bar.parentElement).toHaveClass("focus-within:z-20")
+  })
+
+  // #583: in forced colours the background is dropped; a border on all four sides keeps the bar visible.
+  it("gives every bar a border on all sides and a forced-colours pressed state", () => {
+    render(<DayTimeline shifts={[shift("a"), shift("b", { startTime: "20:00", endTime: "22:00", status: "full" })]} shows={[]} selected={new Set(["a"])} onToggle={() => {}} />)
+    for (const bar of screen.getAllByRole("button")) {
+      expect(bar).toHaveClass("border", "border-transparent", "forced-colors:aria-pressed:bg-[Highlight]")
+      expect(bar.className).not.toMatch(/HighlightText/)
+    }
+  })
+
+  // Held and unavailable bars are both disabled (GrayText in forced colours): the held one keeps a
+  // system-text frame so it stays distinct there.
+  it("frames a held bar in forced colours, not an unavailable one", () => {
+    render(<DayTimeline shifts={[shift("a"), shift("b", { startTime: "20:00", endTime: "22:00", status: "full" })]} shows={[]} selected={new Set()} held={new Map([["a", "active"]])} onToggle={() => {}} />)
+    expect(screen.getByRole("button", { name: "Bar 18h–20h : inscription confirmée" })).toHaveClass("forced-colors:border-2", "forced-colors:border-[CanvasText]")
+    const full = document.querySelector('[data-shift-id="b"]')
+    expect(full).toBeDisabled()
+    expect(full).not.toHaveClass("forced-colors:border-[CanvasText]")
+  })
+
+  it("names each day's schedule after its day", () => {
+    render(<DayTimeline shifts={[shift("a")]} shows={[]} selected={new Set()} onToggle={() => {}} dayLabel="samedi 4 juillet" />)
+    expect(screen.getByRole("region", { name: "Planning du samedi 4 juillet" })).toBeInTheDocument()
+  })
 })
