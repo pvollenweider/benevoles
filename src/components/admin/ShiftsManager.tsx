@@ -190,7 +190,7 @@ export default function ShiftsManager({
               the 11px inner radius (12px minus the border) keeps the dark fill inside the rounded border.
               Forced colours: the pressed button is filled with Highlight. Its text keeps the forced
               CanvasText, because Chromium paints a Canvas plate behind text there, and HighlightText
-              (the same colour as Canvas) would make the label invisible. */}
+              (often the same as, or close to, Canvas) would make the label invisible. */}
           <div role="group" aria-label="Affichage des créneaux" className="flex rounded-xl border border-gray-200 text-sm">
             <button
               type="button"
