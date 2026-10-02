@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import ShiftInfoList from "@/components/ShiftInfoList"
-import { REQUEST_SHORT, WAITLIST_SHORT_VOUS } from "@/lib/waitlist-copy"
+import { REQUEST_SHORT, WAITLIST_SHORT } from "@/lib/waitlist-copy"
 import { gapAfter, gapLabel, hasOverlap, personalDataLines, recapShifts, totalLabel, type RecapShiftInput } from "@/lib/signup-recap"
 import type { ShiftInfo } from "@/lib/shift-info"
 import { workloadMessage, workloadWarnings, type WorkloadShift } from "@/lib/workload"
@@ -38,15 +38,15 @@ export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentG
 
   return (
     <div className={dense ? "" : "space-y-3"}>
-      {/* h2 in the sidebar (under the page h1), h3 in the card (under « Vos informations »). */}
+      {/* h2 in the sidebar (under the page h1), h3 in the card (under « Tes informations »). */}
       {dense ? (
-        <h2 className="px-4 pt-3 pb-1 text-xs font-semibold text-gray-600">Vos créneaux <span className="font-normal">· {totalLabel(rows)}</span></h2>
+        <h2 className="px-4 pt-3 pb-1 text-xs font-semibold text-gray-600">Tes créneaux <span className="font-normal">· {totalLabel(rows)}</span></h2>
       ) : (
-        <h3 className="text-xs font-semibold text-gray-600">Vos créneaux <span className="font-normal">· {totalLabel(rows)}</span></h3>
+        <h3 className="text-xs font-semibold text-gray-600">Tes créneaux <span className="font-normal">· {totalLabel(rows)}</span></h3>
       )}
       {overlap && (
         <p className={`${dense ? "mx-4 mb-2" : ""} rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-xs text-red-800`}>
-          <strong>Attention :</strong> deux de vos créneaux se chevauchent, retirez-en un avant de confirmer.
+          <strong>Attention :</strong> deux de tes créneaux se chevauchent, retires-en un avant de confirmer.
         </p>
       )}
       {workload.length > 0 && (
@@ -55,7 +55,7 @@ export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentG
           <ul role="list" className="mt-1 space-y-0.5">
             {workload.map((w) => <li key={`${w.kind}-${w.day}-${w.shiftIds.join()}`}>{workloadMessage(w)}</li>)}
           </ul>
-          <p className="mt-1">Ces créneaux restent possibles : vous pouvez confirmer.</p>
+          <p className="mt-1">Ces créneaux restent possibles : tu peux confirmer.</p>
         </div>
       )}
       {/* role="list": Safari/VoiceOver drops list semantics once Tailwind removes the markers. */}
@@ -89,7 +89,7 @@ export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentG
           )
         })}
       </ol>
-      {rows.some((r) => r.waitlist) && <p className={`${dense ? "px-4 pb-2" : ""} text-xs text-amber-900`}>{WAITLIST_SHORT_VOUS}</p>}
+      {rows.some((r) => r.waitlist) && <p className={`${dense ? "px-4 pb-2" : ""} text-xs text-amber-900`}>{WAITLIST_SHORT}</p>}
       {rows.some((r) => r.request) && <p className={`${dense ? "px-4 pb-2" : ""} text-xs text-amber-900`}>{REQUEST_SHORT}</p>}
       <div className={`${dense ? "px-4 py-3 border-t border-gray-100" : "rounded-lg bg-white border border-gray-200 px-3 py-2"}`}>
         <p className="text-xs font-semibold text-gray-600">Transmis à l&apos;organisation</p>

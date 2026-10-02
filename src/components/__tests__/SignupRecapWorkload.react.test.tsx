@@ -19,7 +19,7 @@ describe("SignupRecap — workload", () => {
   it("says it before confirming, counting shifts already held", () => {
     render(<SignupRecap {...props} shifts={[shift("a", "12:00", "16:00")]} heldShifts={[{ id: "h", date: "2026-07-04", startTime: "08:00", endTime: "11:50" }]} />)
     expect(screen.getByText("Journée chargée").parentElement).toHaveTextContent("8 h d'affilée, de 8 h à 16 h")
-    expect(screen.getByText(/vous pouvez confirmer/)).toBeInTheDocument()
+    expect(screen.getByText(/tu peux confirmer/)).toBeInTheDocument()
   })
 
   it("ignores a waitlist entry and stays silent under the limits", () => {

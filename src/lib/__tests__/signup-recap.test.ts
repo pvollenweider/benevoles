@@ -49,7 +49,7 @@ describe("signup recap", () => {
   it("lists the personal data that will be sent, and totals", () => {
     expect(personalDataLines({ requirePhone: false, phoneGiven: false, needsBirthDate: false, commentGiven: false })).toEqual(["prénom et nom", "adresse email"])
     expect(personalDataLines({ requirePhone: true, phoneGiven: false, needsBirthDate: true, commentGiven: true })).toEqual([
-      "prénom et nom", "adresse email", "numéro de téléphone", "date de naissance (créneau avec âge minimum)", "votre commentaire",
+      "prénom et nom", "adresse email", "numéro de téléphone", "date de naissance (créneau avec âge minimum)", "ton commentaire",
     ])
     expect(fmtDuration(45)).toBe("45 min")
     expect(fmtDuration(120)).toBe("2 h")

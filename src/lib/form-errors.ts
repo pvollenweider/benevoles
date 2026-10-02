@@ -37,24 +37,24 @@ export function describeSignupFailure(i: FailureInput): Failure {
   if (i.network || i.status === undefined) {
     return {
       kind: "network", title: "Connexion interrompue",
-      message: "Votre inscription n'a peut-être pas été reçue.",
-      hint: "Vérifiez votre réseau puis confirmez à nouveau : c'est sans risque, si l'inscription était passée vous recevrez simplement votre lien par email.",
+      message: "Ton inscription n'a peut-être pas été reçue.",
+      hint: "Vérifie ton réseau puis confirme à nouveau : c'est sans risque, si l'inscription était passée tu recevras simplement ton lien par email.",
       retryable: true, maybeRecorded: true,
     }
   }
   if (i.status === 400) {
-    return { kind: "validation", title: "Un champ est à corriger", message: msg ?? "Certaines informations sont invalides.", hint: "Corrigez l'information signalée ci-dessus ; vos autres réponses sont conservées.", retryable: false, maybeRecorded: false }
+    return { kind: "validation", title: "Un champ est à corriger", message: msg ?? "Certaines informations sont invalides.", hint: "Corrige l'information signalée ci-dessus ; tes autres réponses sont conservées.", retryable: false, maybeRecorded: false }
   }
   if (i.status === 409) {
-    return { kind: "conflict", title: "Votre sélection n'est plus disponible", message: msg ?? "Un créneau choisi n'est plus disponible.", hint: "Revenez au planning pour ajuster votre choix ; vos informations restent remplies.", retryable: false, maybeRecorded: false }
+    return { kind: "conflict", title: "Ta sélection n'est plus disponible", message: msg ?? "Un créneau choisi n'est plus disponible.", hint: "Reviens au planning pour ajuster ton choix ; tes informations restent remplies.", retryable: false, maybeRecorded: false }
   }
   if (i.status === 429) {
-    return { kind: "rate_limit", title: "Trop de tentatives", message: msg ?? "Trop de tentatives en peu de temps.", hint: "Patientez quelques minutes, puis confirmez à nouveau.", retryable: false, maybeRecorded: false }
+    return { kind: "rate_limit", title: "Trop de tentatives", message: msg ?? "Trop de tentatives en peu de temps.", hint: "Patiente quelques minutes, puis confirme à nouveau.", retryable: false, maybeRecorded: false }
   }
   return {
-    kind: "server", title: "Votre inscription n'a pas pu être enregistrée",
+    kind: "server", title: "Ton inscription n'a pas pu être enregistrée",
     message: msg ?? "Une erreur est survenue de notre côté.",
-    hint: "Confirmez à nouveau dans un instant : si l'inscription était passée malgré tout, vous recevrez votre lien par email au lieu d'un doublon.",
+    hint: "Confirme à nouveau dans un instant : si l'inscription était passée malgré tout, tu recevras ton lien par email au lieu d'un doublon.",
     retryable: true, maybeRecorded: i.status >= 500,
   }
 }

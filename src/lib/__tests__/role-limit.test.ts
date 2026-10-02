@@ -29,10 +29,10 @@ describe("roleLimitBreaches", () => {
 
 describe("messages", () => {
   it("explains the limit to the volunteer and to the organiser", () => {
-    expect(roleLimitMessage({ roleName: "Loge", max: 2, held: 2, asked: 1 })).toBe("Vous avez déjà 2 créneaux « Loge », le maximum pour ce poste.")
-    expect(roleLimitMessage({ roleName: "Loge", max: 2, held: 0, asked: 3 })).toBe("Au plus 2 créneaux « Loge » par personne : vous en avez choisi 3, retirez-en 1.")
-    expect(roleLimitMessage({ roleName: "Loge", max: 2, held: 1, asked: 2 })).toBe("Au plus 2 créneaux « Loge » par personne : vous en avez déjà 1, vous pouvez en ajouter 1.")
-    expect(roleLimitMessage({ roleName: "Loge", max: 1, held: 1, asked: 1 })).toBe("Vous avez déjà 1 créneau « Loge », le maximum pour ce poste.")
+    expect(roleLimitMessage({ roleName: "Loge", max: 2, held: 2, asked: 1 })).toBe("Tu as déjà 2 créneaux « Loge », le maximum pour ce poste.")
+    expect(roleLimitMessage({ roleName: "Loge", max: 2, held: 0, asked: 3 })).toBe("Au plus 2 créneaux « Loge » par personne : tu en as choisi 3, retires-en 1.")
+    expect(roleLimitMessage({ roleName: "Loge", max: 2, held: 1, asked: 2 })).toBe("Au plus 2 créneaux « Loge » par personne : tu en as déjà 1, tu peux en ajouter 1.")
+    expect(roleLimitMessage({ roleName: "Loge", max: 1, held: 1, asked: 1 })).toBe("Tu as déjà 1 créneau « Loge », le maximum pour ce poste.")
     expect(roleLimitSelectionMessage({ roleName: "Loge", max: 2, held: 2, asked: 1 })).toBe("Au plus 2 créneaux « Loge » par personne : ce créneau n'est pas ajouté.")
     expect(roleLimitAdminMessage({ roleName: "Loge", max: 2, held: 2, asked: 1 }, "Alice Martin")).toBe("Alice Martin a déjà 2 créneaux « Loge », pour un maximum de 2 par personne.")
   })

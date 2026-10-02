@@ -62,7 +62,7 @@ export async function POST(req: Request) {
   const rl = await rateLimit(getClientIp(req), "registrations", 20, 60 * 60 * 1000)
   if (!rl.ok) {
     return NextResponse.json(
-      { error: "Trop de tentatives. Réessayez dans quelques minutes." },
+      { error: "Trop de tentatives. Réessaie dans quelques minutes." },
       { status: 429, headers: { "Retry-After": String(rl.retryAfter) } },
     )
   }
@@ -94,7 +94,7 @@ export async function POST(req: Request) {
   })
 
   if (shifts.length !== shiftIds.length) {
-    return NextResponse.json({ error: "Un ou plusieurs créneaux sont invalides ou fermés. Veuillez recharger la page." }, { status: 409 })
+    return NextResponse.json({ error: "Un ou plusieurs créneaux sont invalides ou fermés. Recharge la page." }, { status: 409 })
   }
 
   // Early, unlocked check for a friendly error — the authoritative one runs under lock below.
@@ -309,7 +309,7 @@ export async function POST(req: Request) {
       // independently of it (created before, or by a concurrent sign-up).
       const owner = existing ?? await prisma.volunteer.findFirst({ where: { email: { equals: email, mode: "insensitive" }, organizationId }, select: { id: true } })
       if (owner) return alreadyRegistered(owner.id, eventId)
-      return NextResponse.json({ error: "Vous êtes déjà inscrit(e) à un de ces créneaux." }, { status: 409 })
+      return NextResponse.json({ error: "Tu as déjà une inscription pour l'un de ces créneaux." }, { status: 409 })
     }
     throw e
   }
@@ -401,7 +401,7 @@ async function alreadyRegistered(volunteerId: string, eventId: string) {
   })
   if (!reg) {
     return NextResponse.json({
-      error: "Vous êtes déjà sur la liste d'attente de ce créneau. Vous serez prévenu(e) par email si une place se libère.",
+      error: "Tu es déjà sur la liste d'attente de ce créneau. Tu recevras un email si une place se libère.",
     }, { status: 409 })
   }
 
@@ -430,7 +430,7 @@ async function alreadyRegistered(volunteerId: string, eventId: string) {
   }
   return NextResponse.json({
     error: linkSent
-      ? "Vous êtes déjà inscrit(e) à un de ces créneaux. Le lien pour gérer vos inscriptions a été envoyé à votre adresse email."
-      : "Vous êtes déjà inscrit(e) à un de ces créneaux. Utilisez le lien de votre email de confirmation pour gérer vos inscriptions.",
+      ? "Tu as déjà une inscription pour l'un de ces créneaux. Le lien pour gérer tes inscriptions a été envoyé à ton adresse email."
+      : "Tu as déjà une inscription pour l'un de ces créneaux. Utilise le lien de ton email de confirmation pour gérer tes inscriptions.",
   }, { status: 409 })
 }

@@ -64,7 +64,7 @@ describe("public sign-up and the role limit", () => {
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post(["s2"]))
     expect(res.status).toBe(409)
-    expect(await res.json()).toMatchObject({ error: "Vous avez déjà 2 créneaux « Loge », le maximum pour ce poste.", roleLimit: "Loge" })
+    expect(await res.json()).toMatchObject({ error: "Tu as déjà 2 créneaux « Loge », le maximum pour ce poste.", roleLimit: "Loge" })
     expect(m.txCreate).not.toHaveBeenCalled()
     expect(m.order.indexOf("lock:volunteer")).toBeLessThan(m.order.indexOf("limits"))
     expect(m.txRegFindMany.mock.calls[0][0].where.status.in).toEqual(["active", "waiting", "offered", "requested"])

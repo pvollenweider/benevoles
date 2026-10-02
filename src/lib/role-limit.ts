@@ -44,9 +44,9 @@ const shiftsWord = (n: number) => `${n} créneau${n > 1 ? "x" : ""}`
 
 /** What the volunteer reads; the same sentence from the page and from the server. */
 export function roleLimitMessage(b: RoleLimitBreach): string {
-  if (b.held >= b.max) return `Vous avez déjà ${shiftsWord(b.held)} « ${b.roleName} », le maximum pour ce poste.`
-  if (b.held === 0) return `Au plus ${shiftsWord(b.max)} « ${b.roleName} » par personne : vous en avez choisi ${b.asked}, retirez-en ${b.asked - b.max}.`
-  return `Au plus ${shiftsWord(b.max)} « ${b.roleName} » par personne : vous en avez déjà ${b.held}, vous pouvez en ajouter ${b.max - b.held}.`
+  if (b.held >= b.max) return `Tu as déjà ${shiftsWord(b.held)} « ${b.roleName} », le maximum pour ce poste.`
+  if (b.held === 0) return `Au plus ${shiftsWord(b.max)} « ${b.roleName} » par personne : tu en as choisi ${b.asked}, retires-en ${b.asked - b.max}.`
+  return `Au plus ${shiftsWord(b.max)} « ${b.roleName} » par personne : tu en as déjà ${b.held}, tu peux en ajouter ${b.max - b.held}.`
 }
 
 /** On the public page, when one more shift of the role is refused at selection. */

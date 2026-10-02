@@ -519,7 +519,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
             {myRegistrations.length > 0 && (
               <div className="flex items-center gap-2">
                 <span className={`text-sm font-medium ${accent ? "" : "text-gray-600"}`}>
-                  <span className="sr-only">Inscrit·e en tant que </span>{form.firstName} {form.lastName}
+                  <span className="sr-only">Session ouverte au nom de </span>{form.firstName} {form.lastName}
                 </span>
                 <button
                   type="button"
@@ -555,7 +555,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
         )}
         {windowUntilText && <p className="text-sm text-gray-700">{windowUntilText}</p>}
         {reservedShiftIds.size > 0 && (
-          <p id="reserved-roles-msg" className="text-sm text-gray-700">Les postes marqués « Réservé » sont réservés à certains membres. Si vous en faites partie, inscrivez-vous avec le lien personnel reçu par email.</p>
+          <p id="reserved-roles-msg" className="text-sm text-gray-700">Les postes marqués « Réservé » sont réservés à certains membres. Si tu en fais partie, inscris-toi avec le lien personnel reçu par email.</p>
         )}
         {event.publicInstructions && (
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800">
@@ -636,7 +636,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                         {formatDate(day)}
                       </h2>
                       <p className="sm:hidden text-[11px] text-gray-500 text-center mb-1.5">
-                        ← Faites défiler pour voir toutes les plages →
+                        <span aria-hidden="true">← </span>Fais défiler pour voir toutes les plages<span aria-hidden="true"> →</span>
                       </p>
                       <DayTimeline
                         shifts={dayShifts}
@@ -758,7 +758,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
             <div className="bg-white rounded-2xl border border-blue-200 p-5 lg:col-start-1 lg:row-start-1">
               <div className="flex items-center gap-2 mb-5">
                 <button onClick={() => setStep("select")} className="text-blue-600 text-sm"><span aria-hidden="true">← </span>Retour</button>
-                <h2 className="text-base font-semibold text-gray-800">Vos informations</h2>
+                <h2 className="text-base font-semibold text-gray-800">Tes informations</h2>
               </div>
 
               {/* Mobile: the recap inside the form card (#373); the desktop sidebar shows the same. */}

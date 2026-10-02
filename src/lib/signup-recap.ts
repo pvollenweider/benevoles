@@ -117,9 +117,9 @@ export function personalDataLines(opts: { requirePhone: boolean; phoneGiven: boo
   const lines = ["prénom et nom", "adresse email"]
   if (opts.requirePhone || opts.phoneGiven) lines.push("numéro de téléphone")
   if (opts.needsBirthDate) lines.push("date de naissance (créneau avec âge minimum)")
-  if (opts.commentGiven) lines.push("votre commentaire")
+  if (opts.commentGiven) lines.push("ton commentaire")
   // Custom questions answered (#483), by their label.
-  for (const q of opts.answeredQuestions ?? []) lines.push(`votre réponse à « ${q} »`)
+  for (const q of opts.answeredQuestions ?? []) lines.push(`ta réponse à « ${q} »`)
   return lines
 }
 

@@ -177,7 +177,7 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     m.regFindMany.mockResolvedValueOnce([{ id: "reg-existing" }])
     const { error } = await (await POST(post())).json()
     expect(m.sendNotification).toHaveBeenCalledTimes(3)
-    expect(error).toContain("envoyé à votre adresse email")
+    expect(error).toContain("envoyé à ton adresse email")
   })
 
   it("sign-up notifications go through the outbox, not sent inline (#293)", async () => {
@@ -250,7 +250,7 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     expect(res.status).toBe(409)
     const body = await res.json()
     expect(JSON.stringify(body)).not.toContain("victims-tok")
-    expect(body.error).toContain("envoyé à votre adresse email")
+    expect(body.error).toContain("envoyé à ton adresse email")
     expect(m.sendNotification).toHaveBeenCalledWith(expect.objectContaining({
       kind: "registration_link_resend",
       recipient: expect.objectContaining({ email: "owner@x.com" }),

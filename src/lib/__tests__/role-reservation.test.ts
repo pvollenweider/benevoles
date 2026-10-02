@@ -32,7 +32,7 @@ describe("parseTagList and messages", () => {
   })
 
   it("explains the refusal without naming tags", () => {
-    expect(reservationRefusal("Sécurité", false)).toBe("Le poste « Sécurité » est réservé aux membres invités : utilisez le lien personnel reçu par email.")
-    expect(reservationRefusal("Sécurité", true)).toMatch(/votre invitation n'y donne pas accès/)
+    expect(reservationRefusal("Sécurité", false)).toBe("Le poste « Sécurité » est réservé aux membres invités : utilise le lien personnel reçu par email.")
+    expect(reservationRefusal("Sécurité", true)).toMatch(/ton invitation n'y donne pas accès/)
   })
 })

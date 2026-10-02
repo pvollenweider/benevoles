@@ -88,8 +88,8 @@ export function validateSignup(input: {
   ageGatedShifts: SignupShift[]
 }): string | null {
   const { form } = input
-  if (!input.charterAccepted) return "Veuillez accepter la convention des bénévoles."
-  if (!form.consent) return "Veuillez accepter la politique de confidentialité."
+  if (!input.charterAccepted) return "Accepte la convention des bénévoles."
+  if (!form.consent) return "Accepte l'utilisation de tes données pour cet événement."
   if (!form.firstName || !form.lastName || !form.email) return "Prénom, nom et email sont obligatoires."
   // `required` already blocks an empty field; this catches a whitespace-only one.
   if (input.requirePhone && !form.phone.trim()) return "Le téléphone est obligatoire pour cet événement."
