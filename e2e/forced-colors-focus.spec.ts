@@ -313,7 +313,9 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       const failures: string[] = []
       await page.goto("/admin/login")
       failures.push(...(await sweep(page, "login", { min: 3 })).failures)
-      await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+      // An address with no account: a deliberate failure on the org admin's address would count
+      // against its login budget (10 failures per 15 min) and lock it out for the later specs (#592).
+      await page.getByLabel("Email").fill("no-account@example.com")
       await page.getByLabel("Mot de passe").fill("wrong-password")
       let posts = 0
       let release!: () => void
@@ -324,6 +326,8 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
         await route.continue()
       })
       const submit = page.getByRole("button", { name: /Se connecter|Connexion/ })
+      // Disabled until the page is hydrated (#592): focus and Enter before that would do nothing.
+      await expect(submit).toBeEnabled()
       await submit.focus()
       await page.keyboard.press("Enter")
       await expect(submit).toHaveAttribute("aria-disabled", "true")
