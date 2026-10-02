@@ -56,21 +56,47 @@ describe("UserMenu", () => {
     expect(trigger()).toHaveFocus()
   })
 
-  it("closes on a click outside and when focus leaves the menu", () => {
-    render(<><UserMenu userName="Alice" isSuperAdmin={false} /><button>ailleurs</button></>)
-    fireEvent.click(trigger())
-    fireEvent.mouseDown(document.body)
-    expect(screen.queryByRole("menu")).toBeNull()
-
-    fireEvent.click(trigger())
-    fireEvent.blur(screen.getByRole("menuitem", { name: "Se déconnecter" }), { relatedTarget: screen.getByRole("button", { name: "ailleurs" }) })
-    expect(screen.queryByRole("menu")).toBeNull()
-  })
-
   it("signs out back to the login page", () => {
     render(<UserMenu userName="Alice" isSuperAdmin={false} />)
     fireEvent.click(trigger())
     fireEvent.click(screen.getByRole("menuitem", { name: "Se déconnecter" }))
     expect(signOut).toHaveBeenCalledWith({ callbackUrl: "/admin/login" })
+  })
+
+  // Regression: on iOS Safari a tapped button does not take focus, so tapping « Se déconnecter »
+  // blurred « Mon compte » with no relatedTarget; the menu closed before the click and sign-out
+  // never ran (mobile only).
+  it("signs out when the item is tapped without taking focus (iOS)", () => {
+    render(<UserMenu userName="Alice" isSuperAdmin={false} />)
+    fireEvent.click(trigger())
+    const account = screen.getByRole("menuitem", { name: "Mon compte" })
+    const signOutItem = screen.getByRole("menuitem", { name: "Se déconnecter" })
+    fireEvent.pointerDown(signOutItem)
+    fireEvent.blur(account, { relatedTarget: null })
+    expect(screen.getByRole("menu")).toBeInTheDocument()
+    fireEvent.click(signOutItem)
+    expect(signOut).toHaveBeenCalledWith({ callbackUrl: "/admin/login" })
+  })
+
+  it("still closes when focus moves to an element outside the menu", () => {
+    render(<><UserMenu userName="Alice" isSuperAdmin={false} /><button>Ailleurs</button></>)
+    fireEvent.click(trigger())
+    const outside = screen.getByRole("button", { name: "Ailleurs" })
+    fireEvent.blur(screen.getByRole("menuitem", { name: "Mon compte" }), { relatedTarget: outside })
+    expect(screen.queryByRole("menu")).toBeNull()
+  })
+
+  it("stays open when Shift+Tab moves focus back to the trigger", () => {
+    render(<UserMenu userName="Alice" isSuperAdmin={false} />)
+    fireEvent.click(trigger())
+    fireEvent.blur(screen.getByRole("menuitem", { name: "Mon compte" }), { relatedTarget: trigger() })
+    expect(screen.getByRole("menu")).toBeInTheDocument()
+  })
+
+  it("closes on a tap outside", () => {
+    render(<UserMenu userName="Alice" isSuperAdmin={false} />)
+    fireEvent.click(trigger())
+    fireEvent.pointerDown(document.body)
+    expect(screen.queryByRole("menu")).toBeNull()
   })
 })
