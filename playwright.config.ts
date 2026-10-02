@@ -16,8 +16,16 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
 
+  // Two projects:
+  // - "chromium": the whole suite, desktop Chrome. It skips e2e/mobile/, whose specs use touch
+  //   (tap()) and need a touch-enabled mobile context.
+  // - "webkit-iphone": only e2e/mobile/, on Playwright's WebKit build with iPhone 15 emulation
+  //   (viewport, user agent, touch, isMobile). It catches Safari-engine behaviour that Chromium
+  //   does not have, e.g. a tapped button not taking focus (#589). Limited to its folder so the
+  //   suite does not run twice. Headless WebKit on Linux/macOS, not iOS Safari on a device.
   projects: [
-    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    { name: "chromium", use: { ...devices["Desktop Chrome"] }, testIgnore: "mobile/**" },
+    { name: "webkit-iphone", use: { ...devices["iPhone 15"] }, testMatch: "mobile/**/*.spec.ts" },
   ],
 
   // The e2e stack (postgres + mailpit) is started separately via

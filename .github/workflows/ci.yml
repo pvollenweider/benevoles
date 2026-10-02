@@ -122,9 +122,11 @@ jobs:
         run: npm run test:integration
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        # WebKit for the "webkit-iphone" project (e2e/mobile/, iPhone emulation).
+        run: npx playwright install --with-deps chromium webkit
 
       - name: Run e2e tests
+        # Both projects: "chromium" (whole suite) and "webkit-iphone" (e2e/mobile/ only).
         run: npx playwright test
 
       - name: Upload Playwright report

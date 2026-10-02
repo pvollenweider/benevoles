@@ -52,6 +52,8 @@ Les PRs doivent passer la CI avant d'être fusionnées. Contrôles de `ci.yml` e
 
 Tests E2E : `make e2e-up && make e2e-setup && make e2e` la première fois, puis `make e2e`. Ils tournent sur une base et une boîte mail dédiées (`docker-compose.e2e.yml`, ports 5433, 1026 et 8026), avec `.env.e2e` créé depuis `e2e/e2e.env.example`, jamais sur la base de développement. `npm run test:e2e` seul lance `next dev`, qui lit `.env`, donc la base de développement.
 
+Deux projets Playwright : `chromium` (toute la suite, sauf `e2e/mobile/`) et `webkit-iphone` (seulement `e2e/mobile/`, moteur WebKit avec émulation d'iPhone 15, pour les comportements propres à Safari comme un bouton touché qui ne prend pas le focus). `make e2e` lance les deux ; il faut avoir installé WebKit une fois avec `npx playwright install webkit`. Pour ne lancer que les parcours mobiles : `node --env-file=.env.e2e node_modules/.bin/playwright test --project=webkit-iphone`. Un test qui dépend du toucher (`tap()`) va dans `e2e/mobile/`.
+
 TypeScript est installé en deux versions côte à côte, selon la procédure officielle de TypeScript 7 : `@typescript/native` (TypeScript 7) fournit la commande `tsc` utilisée pour le type-check, et le paquet `typescript` pointe vers `@typescript/typescript6`, dont l'API reste nécessaire à typescript-eslint et au build Next.js. `tsc6` lance la vérification avec TypeScript 6 si besoin de comparer.
 
 Les messages de commit et les titres de PR sont rédigés en anglais.
