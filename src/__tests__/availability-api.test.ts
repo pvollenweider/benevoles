@@ -4,7 +4,8 @@ const findFirst = vi.hoisted(() => vi.fn())
 const update = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({ prisma: { registration: { findFirst }, volunteer: { update } } }))
 const rateLimit = vi.hoisted(() => vi.fn().mockResolvedValue({ ok: true, remaining: 1, retryAfter: 0 }))
-vi.mock("@/lib/rate-limit", () => ({ rateLimit, getClientIp: () => "1.2.3.4" }))
+const isRateLimited = vi.hoisted(() => vi.fn().mockResolvedValue(false))
+vi.mock("@/lib/rate-limit", () => ({ rateLimit, isRateLimited, getClientIp: () => "1.2.3.4" }))
 vi.mock("@/lib/token-vault", () => ({ registrationToken: { where: (t: string) => ({ editTokenHash: `h:${t}` }) } }))
 
 const requireOrgSessionMock = vi.hoisted(() => vi.fn())
@@ -20,6 +21,7 @@ describe("PATCH /api/public/registrations/[token]/availability", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     rateLimit.mockResolvedValue({ ok: true, remaining: 1, retryAfter: 0 })
+    isRateLimited.mockResolvedValue(false)
     findFirst.mockResolvedValue({ volunteerId: "v1" })
     update.mockResolvedValue({ availabilityPeriods: ["morning"], availabilityNote: null })
   })
@@ -37,7 +39,13 @@ describe("PATCH /api/public/registrations/[token]/availability", () => {
     expect((await PATCH(patch({ availabilityPeriods: ["night"], availabilityNote: null }), params)).status).toBe(400)
     findFirst.mockResolvedValue(null)
     expect((await PATCH(patch({ availabilityPeriods: [], availabilityNote: null }), params)).status).toBe(404)
+    // A valid link that used up its own limit (#609).
+    findFirst.mockResolvedValue({ volunteerId: "v1" })
     rateLimit.mockResolvedValue({ ok: false, remaining: 0, retryAfter: 60 })
+    expect((await PATCH(patch({ availabilityPeriods: [], availabilityNote: null }), params)).status).toBe(429)
+    // A connection that used up its failed lookups.
+    rateLimit.mockResolvedValue({ ok: true, remaining: 1, retryAfter: 0 })
+    isRateLimited.mockResolvedValue(true)
     expect((await PATCH(patch({ availabilityPeriods: [], availabilityNote: null }), params)).status).toBe(429)
     expect(update).not.toHaveBeenCalled()
   })

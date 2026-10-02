@@ -3,7 +3,7 @@
 
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { rateLimit, getClientIp } from "@/lib/rate-limit"
+import { recordTokenMiss, tokenLookupsBlocked, tokenUseAllowed } from "@/lib/token-rate-limit"
 import { registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
 import { availabilitySchema } from "@/lib/availability"
@@ -13,8 +13,8 @@ import { availabilitySchema } from "@/lib/availability"
  * personal link sets their general availability. Same token lookup as the personal page.
  */
 export async function PATCH(req: Request, { params }: { params: Promise<{ token: string }> }) {
-  const rl = await rateLimit(getClientIp(req), "reg-token-availability", 10, 60 * 60 * 1000)
-  if (!rl.ok) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
+  // Failed lookups count per IP, valid use per link (#609).
+  if (await tokenLookupsBlocked(req)) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
 
   const parsed = availabilitySchema.safeParse(await req.json().catch(() => ({})))
   if (!parsed.success) return validationError(parsed.error, { useIssueMessage: true })
@@ -24,7 +24,11 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ token:
     where: { ...registrationToken.where(token), status: "active" },
     select: { volunteerId: true },
   })
-  if (!registration) return NextResponse.json({ error: "Lien invalide ou inscription annulée." }, { status: 404 })
+  if (!registration) {
+    await recordTokenMiss(req)
+    return NextResponse.json({ error: "Lien invalide ou inscription annulée." }, { status: 404 })
+  }
+  if (!(await tokenUseAllowed(token, "availability"))) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
 
   const volunteer = await prisma.volunteer.update({
     where: { id: registration.volunteerId },
