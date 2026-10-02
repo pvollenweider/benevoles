@@ -231,5 +231,18 @@ describe("RoleSettings", () => {
       fireEvent.keyDown(screen.getByRole("button", { name: "Rose" }), { key: "Escape" })
       expect(cb.onClose).toHaveBeenCalledWith("Bar")
     })
+
+    it("Escape waits while a colour is being saved: the success then closes it once", async () => {
+      let resolve!: (v: unknown) => void
+      fetchMock.mockReturnValue(new Promise((r) => { resolve = r }))
+      const cb = setup()
+      const pink = screen.getByRole("button", { name: "Rose" })
+      fireEvent.click(pink)
+      fireEvent.keyDown(pink, { key: "Escape" })
+      expect(cb.onClose).not.toHaveBeenCalled()
+
+      await act(async () => resolve({ ok: true, json: async () => ({}) }))
+      await waitFor(() => expect(cb.onClose).toHaveBeenCalledOnce())
+    })
   })
 })

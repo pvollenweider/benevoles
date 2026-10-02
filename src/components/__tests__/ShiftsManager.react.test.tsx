@@ -3,7 +3,7 @@
  */
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { render, screen, fireEvent, cleanup, within, waitFor } from "@testing-library/react"
+import { render, screen, fireEvent, cleanup, within, waitFor, act } from "@testing-library/react"
 
 import ShiftsManager from "../admin/ShiftsManager"
 import type { RawShift } from "../admin/shifts/types"
@@ -204,6 +204,26 @@ describe("ShiftsManager roles panel disclosure and focus", () => {
     fireEvent.click(close)
     expect(panelHeading()).toBeNull()
     await waitFor(() => expect(manageRoles()).toHaveFocus())
+  })
+
+  it("reopening the panel with an editor still open keeps focus on « Gérer les postes »", async () => {
+    renderManager()
+    fireEvent.click(manageRoles())
+    fireEvent.click(screen.getByRole("button", { name: /^Limite : .*Bar/ }))
+    const toggle = manageRoles()
+    toggle.focus()
+    fireEvent.click(toggle)
+    expect(panelHeading()).toBeNull()
+    // Let the close's focus return (next frame) land first, so it cannot mask the reopen.
+    await waitFor(() => expect(toggle).toHaveFocus())
+    await act(async () => { await new Promise((r) => requestAnimationFrame(r)) })
+    fireEvent.click(toggle)
+
+    const limitInput = screen.getByLabelText("Nombre maximal de créneaux « Bar » par personne")
+    expect(limitInput).toBeVisible()
+    expect(toggle).toHaveFocus()
+    await act(async () => { await new Promise((r) => requestAnimationFrame(r)) })
+    expect(toggle).toHaveFocus()
   })
 
   it("« Enregistrer l'ordre » closes the panel, returns the focus to « Gérer les postes » and announces once", async () => {

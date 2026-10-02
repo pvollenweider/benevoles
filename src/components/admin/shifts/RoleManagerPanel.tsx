@@ -15,6 +15,12 @@ import { focusFirstAvailableNextFrame } from "@/lib/focus-return"
 import { RoleColorPicker, RoleLimitForm, RoleReserveForm } from "./RoleSettings"
 import type { RawShift } from "./types"
 
+/** Ref callback body: keeps `buttons` keyed by role while the button is mounted. */
+function setRoleButton(buttons: Map<string, HTMLButtonElement>, role: string, el: HTMLButtonElement | null) {
+  if (el) buttons.set(role, el)
+  else buttons.delete(role)
+}
+
 /**
  * « Gérer les postes » panel: reorder the roles by drag and drop, rename, delete (after the
  * confirmation the parent shows), and open the inline editors of RoleSettings.
@@ -25,11 +31,6 @@ import type { RawShift } from "./types"
  * Focus (#554): when an inline editor (rename, colour, limit, access) closes, focus goes back to the
  * row button that opened it, or to the panel's heading when that row is gone; never to <body>.
  */
-/** Ref callback body: keeps `buttons` keyed by role while the button is mounted. */
-function setRoleButton(buttons: Map<string, HTMLButtonElement>, role: string, el: HTMLButtonElement | null) {
-  if (el) buttons.set(role, el)
-  else buttons.delete(role)
-}
 
 export default function RoleManagerPanel({
   open, panelId, eventId, shifts, setShifts, roles, setRoles, onClose, onAnnounce,
@@ -77,12 +78,19 @@ export default function RoleManagerPanel({
   const renameBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   const colorBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   const headingRef = useRef<HTMLHeadingElement>(null)
+  // An editor takes focus when its button opens it, not when the panel is reopened with it still
+  // open: focus then stays on « Gérer les postes » (disclosure).
+  const [editorAutoFocus, setEditorAutoFocus] = useState(true)
+  const [wasOpen, setWasOpen] = useState(open)
+  if (open !== wasOpen) {
+    setWasOpen(open)
+    if (open) setEditorAutoFocus(false)
+  }
 
   /** Returns the focus, on the next frame, to the role's button in `refs`, else to the heading. */
   function focusRoleButton(refs: React.RefObject<Map<string, HTMLButtonElement>>, role: string) {
     focusFirstAvailableNextFrame([() => refs.current.get(role), () => headingRef.current])
   }
-
 
   function handleRoleDragOver(e: React.DragEvent, toIdx: number) {
     e.preventDefault()
@@ -108,6 +116,7 @@ export default function RoleManagerPanel({
   }
 
   function startRenameRole(role: string) {
+    setEditorAutoFocus(true)
     setRoleActionError(null)
     setLimitRole(null)
     setReserveRole(null)
@@ -185,6 +194,7 @@ export default function RoleManagerPanel({
   }
 
   function startRoleLimit(role: string) {
+    setEditorAutoFocus(true)
     setRoleActionError(null)
     setLimitError(null)
     setColorPickerRole(null)
@@ -199,6 +209,7 @@ export default function RoleManagerPanel({
   }
 
   function startReserve(role: string) {
+    setEditorAutoFocus(true)
     setRoleActionError(null)
     setColorPickerRole(null)
     setRenamingRole(null)
@@ -278,7 +289,7 @@ export default function RoleManagerPanel({
                     id={`rename-${i}`}
                     type="text"
                     value={renameValue}
-                    autoFocus
+                    autoFocus={editorAutoFocus}
                     onChange={e => { setRenameValue(e.target.value); setRenameError(null) }}
                     onKeyDown={e => {
                       if (e.key === "Enter") submitRenameRole(role)
@@ -295,7 +306,7 @@ export default function RoleManagerPanel({
                     aria-disabled={isBusy || undefined}
                     className="text-xs text-blue-600 font-medium hover:text-blue-800 aria-disabled:opacity-50 flex-shrink-0"
                   >
-                    {isBusy ? "…" : "Valider"}
+                    Valider
                   </button>
                   <button type="button" onClick={() => cancelRename(role)} className="text-xs text-gray-500 hover:text-gray-800 flex-shrink-0">
                     Annuler
@@ -346,7 +357,7 @@ export default function RoleManagerPanel({
                     aria-label={`Supprimer le poste ${role}`}
                     className="text-xs text-red-700 hover:text-red-900 disabled:opacity-50 flex-shrink-0"
                   >
-                    {isBusy ? "…" : "Supprimer"}
+                    Supprimer
                   </button>
                 </>
               )}
@@ -357,6 +368,7 @@ export default function RoleManagerPanel({
             {reserveRole === role && (
               <RoleReserveForm
                 eventId={eventId}
+                autoFocus={editorAutoFocus}
                 role={role}
                 index={i}
                 reservedTags={reservedTags}
@@ -373,6 +385,7 @@ export default function RoleManagerPanel({
             {limitRole === role && (
               <RoleLimitForm
                 eventId={eventId}
+                autoFocus={editorAutoFocus}
                 role={role}
                 index={i}
                 limit={limit}
@@ -409,7 +422,7 @@ export default function RoleManagerPanel({
       <div className="flex gap-3">
         <button type="button" onClick={saveRoleOrder} aria-disabled={savingOrder || undefined}
           className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:opacity-50">
-          {savingOrder ? "…" : "Enregistrer l'ordre"}
+          Enregistrer l'ordre
         </button>
         <button type="button" onClick={onClose}
           className="text-gray-500 px-3 py-2 text-sm hover:text-gray-800">

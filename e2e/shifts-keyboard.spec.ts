@@ -209,4 +209,11 @@ test("roles panel, « Fermer »: focus is back on « Gérer les postes »; aria-
   await expect(manage).toHaveAttribute("aria-expanded", "false")
   expect(await focusIsNotOnBody(page)).toBe(true)
   expect(await danglingAriaControls(page)).toEqual([])
+
+  // Reopened with « Accès » still open: the editor is back, but focus stays on the toggle.
+  await page.keyboard.press("Enter")
+  await expect(manage).toBeFocused()
+  const access = page.getByLabel("Étiquettes donnant accès au poste « Bar »")
+  await expect(access).toBeVisible()
+  await expect(access).not.toBeFocused()
 })

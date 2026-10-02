@@ -243,7 +243,9 @@ describe("RoleManagerPanel", () => {
     validate.focus()
     fireEvent.click(validate)
 
-    const busy = screen.getByRole("button", { name: "…" })
+    // Same name while busy: the focused button is never announced as « … ».
+    const busy = screen.getByRole("button", { name: "Valider" })
+    expect(busy).toBe(validate)
     expect(busy).toHaveAttribute("aria-disabled", "true")
     expect(busy).not.toBeDisabled()
     expect(busy).toHaveFocus()
@@ -253,6 +255,49 @@ describe("RoleManagerPanel", () => {
 
     await act(async () => resolve({ ok: true, json: async () => ({}) }))
     await waitFor(() => expect(renameButton("Buvette")).toHaveFocus())
+  })
+
+  it("« Enregistrer l'ordre » keeps its name and focus while sending, and sends once", async () => {
+    let resolve!: (v: unknown) => void
+    fetchMock.mockReturnValue(new Promise((r) => { resolve = r }))
+    const spies = makeSpies()
+    render(<Harness spies={spies} />)
+    const save = screen.getByRole("button", { name: "Enregistrer l'ordre" })
+    save.focus()
+    fireEvent.click(save)
+
+    expect(save).toHaveAttribute("aria-disabled", "true")
+    expect(save).not.toBeDisabled()
+    expect(save).toHaveFocus()
+    expect(save).toHaveAccessibleName("Enregistrer l'ordre")
+    fireEvent.click(save)
+    expect(fetchMock).toHaveBeenCalledOnce()
+
+    await act(async () => resolve({ ok: true, json: async () => ({}) }))
+    expect(spies.onClose).toHaveBeenCalledOnce()
+  })
+
+  it("an editor left open does not take focus when the panel is reopened, only when its button opens it", () => {
+    const spies = makeSpies()
+    for (const [open, label] of [
+      [() => fireEvent.click(renameButton("Bar")), "Nouveau nom du poste « Bar »"],
+      [() => fireEvent.click(screen.getByRole("button", { name: "Limite : aucune, poste « Bar »" })), "Nombre maximal de créneaux « Bar » par personne"],
+      [() => fireEvent.click(screen.getByRole("button", { name: "Accès : tous, poste « Bar »" })), "Étiquettes donnant accès au poste « Bar »"],
+    ] as const) {
+      const outside = document.createElement("button")
+      document.body.appendChild(outside)
+      const { rerender } = render(<Harness spies={spies} />)
+      open()
+      expect(screen.getByLabelText(label)).toHaveFocus()
+
+      rerender(<Harness open={false} spies={spies} />)
+      outside.focus()
+      rerender(<Harness spies={spies} />)
+      expect(screen.getByLabelText(label)).toBeVisible()
+      expect(outside).toHaveFocus()
+      cleanup()
+      outside.remove()
+    }
   })
 
   it("« aria-controls » is set only while the controlled editor is shown, and then resolves", () => {

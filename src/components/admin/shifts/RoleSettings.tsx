@@ -17,9 +17,11 @@ import type { RawShift } from "./types"
 type SetShifts = React.Dispatch<React.SetStateAction<RawShift[]>>
 
 export function RoleReserveForm({
-  eventId, role, index, reservedTags, value, onValueChange, busyRole, onBusyRoleChange, onActionError, onClose, setShifts, onAnnounce,
+  eventId, autoFocus = true, role, index, reservedTags, value, onValueChange, busyRole, onBusyRoleChange, onActionError, onClose, setShifts, onAnnounce,
 }: {
   eventId:          string
+  /** Focus the input on mount; false when the panel is reopened with this editor still open. */
+  autoFocus?:       boolean
   role:             string
   /** Position of the role in the panel, for the ids. */
   index:            number
@@ -73,7 +75,7 @@ export function RoleReserveForm({
           id={`reserve-${i}`}
           type="text"
           value={value}
-          autoFocus
+          autoFocus={autoFocus}
           onChange={(e) => onValueChange(e.target.value)}
           aria-describedby={`reserve-help-${i}`}
           placeholder="ex. sécurité, secouriste"
@@ -98,9 +100,11 @@ export function RoleReserveForm({
 }
 
 export function RoleLimitForm({
-  eventId, role, index, limit, value, onValueChange, error, onErrorChange, busyRole, onBusyRoleChange, onActionError, onClose, setShifts, onAnnounce,
+  eventId, autoFocus = true, role, index, limit, value, onValueChange, error, onErrorChange, busyRole, onBusyRoleChange, onActionError, onClose, setShifts, onAnnounce,
 }: {
   eventId:          string
+  /** Focus the input on mount; false when the panel is reopened with this editor still open. */
+  autoFocus?:       boolean
   role:             string
   /** Position of the role in the panel, for the ids. */
   index:            number
@@ -174,7 +178,7 @@ export function RoleLimitForm({
           min={1}
           max={100}
           value={value}
-          autoFocus
+          autoFocus={autoFocus}
           onChange={(e) => { onValueChange(e.target.value); setErrorLive(false) }}
           aria-invalid={error ? true : undefined}
           aria-describedby={`limit-help-${i}${error ? ` limit-error-${i}` : ""}`}
@@ -243,7 +247,8 @@ export function RoleColorPicker({
       id={`color-picker-${index}`}
       role="group"
       aria-label={`Couleur du poste « ${role} »`}
-      onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); onClose(role) } }}
+      // Escape waits for a running request, whose success closes the picker and moves focus itself.
+      onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); if (!busy) onClose(role) } }}
       className="flex flex-wrap items-center gap-2 px-3 py-2.5 mt-1 rounded-xl border border-blue-100 bg-blue-50/50"
     >
       <button
