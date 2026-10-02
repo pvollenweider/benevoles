@@ -202,6 +202,7 @@ Convention du code : les boutons ont des coins arrondis de 12px (`rounded-xl`), 
 - **Texte (danger):** `text #b91c1c`, pas de fond, pas de bord. Uniquement pour actions destructives dans des tableaux.
 - **Petit (inline):** `text-xs`, `px-3 py-1.5`. Utilisé dans les lignes de tableau et les popovers.
 - **Désactivé:** `disabled:opacity-50`, jamais la seule indication d'un état (le libellé ou un texte voisin dit pourquoi).
+- **Groupe de boutons accolés** (choix Timeline / Liste) : un groupe de boutons accolés n'a pas d'`overflow-hidden` (il couperait le contour de focus) : arrondir les boutons d'extrémité (`first:rounded-l-* last:rounded-r-*`). L'état d'un bouton bascule (`aria-pressed`) se marque en couleurs forcées par `forced-colors:aria-pressed:bg-[Highlight]`, sans `text-[HighlightText]` : Chromium y peint une plaque `Canvas` derrière le texte, et `HighlightText`, de la même couleur que `Canvas`, rendrait le libellé invisible ; le texte garde donc `CanvasText`.
 
 ### Badges / Status Chips
 Pills compactes avec radius full. Fond teinté + texte sombre dans la même teinte (voir les paires de couleurs sémantiques). `font-size: 0.75rem`, `font-weight: 500`, `padding: 2px 8px`.

@@ -106,7 +106,10 @@ function checkActiveElementInPage({ exclude }: InPageArgs) {
   const vw = document.documentElement.clientWidth
   const vh = document.documentElement.clientHeight
   if (r.width > 0 && r.height > 0) {
-    const radius = Math.max(parseFloat(cs.borderTopLeftRadius) || 0, 2)
+    // The largest corner radius: a point inset by less than a rounded corner's radius falls outside
+    // it and hits the parent (the last button of a group is rounded on the right only).
+    const radii = [cs.borderTopLeftRadius, cs.borderTopRightRadius, cs.borderBottomLeftRadius, cs.borderBottomRightRadius]
+    const radius = Math.max(...radii.map((v) => parseFloat(v) || 0), 2)
     const inset = Math.min(radius, r.width / 2, r.height / 2)
     const pts: [number, number, string][] = [
       [r.left + r.width / 2, r.top + r.height / 2, "centre"],
