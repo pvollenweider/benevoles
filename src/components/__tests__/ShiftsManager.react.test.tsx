@@ -3,7 +3,7 @@
  */
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { render, screen, fireEvent, cleanup, within, waitFor } from "@testing-library/react"
+import { render, screen, fireEvent, cleanup, within, waitFor, act } from "@testing-library/react"
 
 import ShiftsManager from "../admin/ShiftsManager"
 import type { RawShift } from "../admin/shifts/types"
@@ -149,5 +149,119 @@ describe("ShiftsManager shift editor focus and announcements", () => {
 
     await waitFor(() => expect(addButton()).toHaveFocus())
     expect(document.activeElement).not.toBe(document.body)
+  })
+})
+
+// « Gérer les postes » (#554): a disclosure for the roles panel; focus comes back to it when the
+// panel closes, and the panel's outcomes are announced once, by the outcome status.
+
+describe("ShiftsManager roles panel disclosure and focus", () => {
+  beforeEach(() => {
+    fetchMock.mockReset()
+    vi.stubGlobal("fetch", fetchMock)
+    Element.prototype.scrollIntoView = vi.fn()
+  })
+  afterEach(() => {
+    cleanup()
+    vi.unstubAllGlobals()
+  })
+
+  const manageRoles = () => screen.getByRole("button", { name: "Gérer les postes" })
+  const panelHeading = () => screen.queryByRole("heading", { name: "Gérer les postes" })
+  const everyControlsResolves = () => {
+    for (const el of document.querySelectorAll("[aria-controls]")) {
+      expect(document.getElementById(el.getAttribute("aria-controls")!), el.outerHTML).not.toBeNull()
+    }
+  }
+
+  it("« aria-expanded » and « aria-controls » follow the panel; a second click closes it and keeps focus", async () => {
+    renderManager()
+    const button = manageRoles()
+    expect(button).toHaveAttribute("type", "button")
+    expect(button).toHaveAttribute("aria-expanded", "false")
+    expect(button).not.toHaveAttribute("aria-controls")
+    everyControlsResolves()
+
+    button.focus()
+    fireEvent.click(button)
+    expect(button).toHaveAttribute("aria-expanded", "true")
+    expect(document.getElementById(button.getAttribute("aria-controls")!)).toContainElement(panelHeading())
+    everyControlsResolves()
+
+    fireEvent.click(button)
+    expect(panelHeading()).toBeNull()
+    expect(button).toHaveAttribute("aria-expanded", "false")
+    expect(button).not.toHaveAttribute("aria-controls")
+    await waitFor(() => expect(button).toHaveFocus())
+    everyControlsResolves()
+  })
+
+  it("« Fermer » returns the focus to « Gérer les postes »", async () => {
+    renderManager()
+    fireEvent.click(manageRoles())
+    const close = screen.getByRole("button", { name: "Fermer" })
+    close.focus()
+    fireEvent.click(close)
+    expect(panelHeading()).toBeNull()
+    await waitFor(() => expect(manageRoles()).toHaveFocus())
+  })
+
+  it("reopening the panel with an editor still open keeps focus on « Gérer les postes »", async () => {
+    renderManager()
+    fireEvent.click(manageRoles())
+    fireEvent.click(screen.getByRole("button", { name: /^Limite : .*Bar/ }))
+    const toggle = manageRoles()
+    toggle.focus()
+    fireEvent.click(toggle)
+    expect(panelHeading()).toBeNull()
+    // Let the close's focus return (next frame) land first, so it cannot mask the reopen.
+    await waitFor(() => expect(toggle).toHaveFocus())
+    await act(async () => { await new Promise((r) => requestAnimationFrame(r)) })
+    fireEvent.click(toggle)
+
+    const limitInput = screen.getByLabelText("Nombre maximal de créneaux « Bar » par personne")
+    expect(limitInput).toBeVisible()
+    expect(toggle).toHaveFocus()
+    await act(async () => { await new Promise((r) => requestAnimationFrame(r)) })
+    expect(toggle).toHaveFocus()
+  })
+
+  it("« Enregistrer l'ordre » closes the panel, returns the focus to « Gérer les postes » and announces once", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
+    renderManager()
+    fireEvent.click(manageRoles())
+    const save = screen.getByRole("button", { name: "Enregistrer l'ordre" })
+    save.focus()
+    fireEvent.click(save)
+
+    await waitFor(() => expect(manageRoles()).toHaveFocus())
+    expect(panelHeading()).toBeNull()
+    await waitFor(() => expect(spoken("status")).toHaveLength(1))
+    expect(spoken("status")[0]).toHaveTextContent("Ordre des postes enregistré.")
+    expect(spoken("alert")).toHaveLength(0)
+  })
+
+  it("a rename is announced once by the outcome status, in words", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
+    renderManager()
+    fireEvent.click(manageRoles())
+    fireEvent.click(screen.getByRole("button", { name: "Renommer le poste Bar" }))
+    const input = screen.getByLabelText("Nouveau nom du poste « Bar »")
+    fireEvent.change(input, { target: { value: "Buvette" } })
+    fireEvent.keyDown(input, { key: "Enter" })
+
+    await waitFor(() => expect(screen.getByRole("button", { name: "Renommer le poste Buvette" })).toHaveFocus())
+    await waitFor(() => expect(spoken("status")).toHaveLength(1))
+    expect(spoken("status")[0]).toHaveTextContent(/^Poste « Bar » renommé en « Buvette »\.$/)
+  })
+
+  it("« Créer une série » sets « aria-controls » only while its form is shown, and it resolves", () => {
+    renderManager()
+    const series = screen.getByRole("button", { name: "Créer une série" })
+    expect(series).not.toHaveAttribute("aria-controls")
+    fireEvent.click(series)
+    expect(series).toHaveAttribute("aria-expanded", "true")
+    expect(document.getElementById(series.getAttribute("aria-controls")!)).not.toBeNull()
+    everyControlsResolves()
   })
 })

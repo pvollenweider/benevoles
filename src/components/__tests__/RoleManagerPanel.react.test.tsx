@@ -32,13 +32,16 @@ type Spies = {
   onRoleDeleted: (role: string, unpublished: boolean | undefined) => void
 }
 
-/** Holds the shifts and the edited order like ShiftsManager does, and shows them for the assertions. */
-function Harness({ open = true, spies }: { open?: boolean; spies: Spies }) {
+/**
+ * Holds the shifts and the edited order like ShiftsManager does, and shows them for the assertions.
+ * `frozenRoles`: the order ignores updates, so a renamed role's row is never rendered under its new name.
+ */
+function Harness({ open = true, spies, frozenRoles = false }: { open?: boolean; spies: Spies; frozenRoles?: boolean }) {
   const [shifts, setShifts] = useState(initialShifts)
   const [roles, setRoles] = useState(["Bar", "Accueil"])
   return (
     <>
-      <RoleManagerPanel open={open} eventId="evt-1" shifts={shifts} setShifts={setShifts} roles={roles} setRoles={setRoles} {...spies} />
+      <RoleManagerPanel open={open} panelId="roles-panel" eventId="evt-1" shifts={shifts} setShifts={setShifts} roles={roles} setRoles={frozenRoles ? () => {} : setRoles} {...spies} />
       <output data-testid="roles">{roles.join(",")}</output>
       <output data-testid="shift-roles">{shifts.map(s => s.roleName).join(",")}</output>
     </>
@@ -64,7 +67,7 @@ describe("RoleManagerPanel", () => {
     expect(screen.queryByRole("heading", { name: "Gérer les postes" })).not.toBeInTheDocument()
   })
 
-  it("renames a role in the shifts and in the order, then announces it", async () => {
+  it("renames a role in the shifts and in the order, announces it in words and focuses its « Renommer »", async () => {
     fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
     const spies = makeSpies()
     render(<Harness spies={spies} />)
@@ -74,13 +77,15 @@ describe("RoleManagerPanel", () => {
     fireEvent.change(input, { target: { value: "Buvette" } })
     fireEvent.keyDown(input, { key: "Enter" })
 
-    await waitFor(() => expect(spies.onAnnounce).toHaveBeenCalledWith("Poste renommé « Bar » → « Buvette »."))
+    await waitFor(() => expect(spies.onAnnounce).toHaveBeenCalledWith("Poste « Bar » renommé en « Buvette »."))
+    expect(spies.onAnnounce).toHaveBeenCalledOnce()
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe("/api/admin/events/evt-1/roles/Bar")
     expect(JSON.parse(init.body)).toEqual({ name: "Buvette" })
     expect(screen.getByTestId("roles")).toHaveTextContent("Buvette,Accueil")
     expect(screen.getByTestId("shift-roles")).toHaveTextContent("Buvette,Accueil")
-    expect(screen.getByRole("button", { name: "Renommer le poste Buvette" })).toBeInTheDocument()
+    // The row remounted under its new key: focus is on its « Renommer », not on <body>.
+    await waitFor(() => expect(screen.getByRole("button", { name: "Renommer le poste Buvette" })).toHaveFocus())
   })
 
   it("asks for confirmation before deleting a role, then deletes it", async () => {
@@ -140,5 +145,229 @@ describe("RoleManagerPanel", () => {
     rerender(<Harness open={false} spies={spies} />)
     rerender(<Harness spies={spies} />)
     expect(screen.getByLabelText("Nombre maximal de créneaux « Bar » par personne")).toHaveValue(4)
+  })
+
+  // ── Focus and announcements (#554) ──────────────────────────────────────────
+
+  const renameButton = (role: string) => screen.getByRole("button", { name: `Renommer le poste ${role}` })
+  const renameInput = () => screen.getByLabelText("Nouveau nom du poste « Bar »")
+  const spokenAlerts = () => screen.queryAllByRole("alert").filter((e) => e.textContent?.trim())
+
+  it("« Annuler » returns the focus to « Renommer »", async () => {
+    render(<Harness spies={makeSpies()} />)
+    fireEvent.click(renameButton("Bar"))
+    const cancel = screen.getByRole("button", { name: "Annuler" })
+    expect(cancel).toHaveAttribute("type", "button")
+    cancel.focus()
+    fireEvent.click(cancel)
+    expect(screen.queryByLabelText("Nouveau nom du poste « Bar »")).not.toBeInTheDocument()
+    await waitFor(() => expect(renameButton("Bar")).toHaveFocus())
+  })
+
+  it("Escape in the input cancels and returns the focus to « Renommer »", async () => {
+    render(<Harness spies={makeSpies()} />)
+    fireEvent.click(renameButton("Bar"))
+    fireEvent.keyDown(renameInput(), { key: "Escape" })
+    expect(screen.queryByLabelText("Nouveau nom du poste « Bar »")).not.toBeInTheDocument()
+    await waitFor(() => expect(renameButton("Bar")).toHaveFocus())
+  })
+
+  it("an unchanged name sends nothing and returns the focus to « Renommer »", async () => {
+    const spies = makeSpies()
+    render(<Harness spies={spies} />)
+    fireEvent.click(renameButton("Bar"))
+    fireEvent.change(renameInput(), { target: { value: "  Bar " } })
+    fireEvent.keyDown(renameInput(), { key: "Enter" })
+    await waitFor(() => expect(renameButton("Bar")).toHaveFocus())
+    expect(fetchMock).not.toHaveBeenCalled()
+    expect(spies.onAnnounce).not.toHaveBeenCalled()
+  })
+
+  it("when the renamed row is not rendered, focus falls back to the panel's heading", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
+    render(<Harness spies={makeSpies()} frozenRoles />)
+    fireEvent.click(renameButton("Bar"))
+    fireEvent.change(renameInput(), { target: { value: "Buvette" } })
+    fireEvent.keyDown(renameInput(), { key: "Enter" })
+    await waitFor(() => expect(screen.getByRole("heading", { name: "Gérer les postes" })).toHaveFocus())
+    expect(document.activeElement).not.toBe(document.body)
+  })
+
+  it("a rename error after Enter is one alert under the input, which keeps focus", async () => {
+    fetchMock.mockResolvedValue({ ok: false, json: async () => ({ error: "Ce poste existe déjà." }) })
+    const spies = makeSpies()
+    render(<Harness spies={spies} />)
+    fireEvent.click(renameButton("Bar"))
+    expect(renameInput()).toHaveFocus()
+    fireEvent.change(renameInput(), { target: { value: "Accueil" } })
+    fireEvent.keyDown(renameInput(), { key: "Enter" })
+
+    await waitFor(() => expect(spokenAlerts()).toHaveLength(1))
+    expect(spokenAlerts()[0]).toHaveTextContent("Ce poste existe déjà.")
+    expect(renameInput()).toHaveFocus()
+    expect(renameInput()).toHaveAttribute("aria-invalid", "true")
+    expect(renameInput()).toHaveAccessibleDescription("Ce poste existe déjà.")
+    expect(spies.onAnnounce).not.toHaveBeenCalled()
+
+    // Typing clears it.
+    fireEvent.change(renameInput(), { target: { value: "Accueil 2" } })
+    expect(renameInput()).not.toHaveAttribute("aria-invalid")
+    expect(spokenAlerts()).toHaveLength(0)
+  })
+
+  it("a rename error after clicking « Valider » is not an alert: focus moves to the input, which it describes", async () => {
+    fetchMock.mockResolvedValue({ ok: false, json: async () => ({ error: "Ce poste existe déjà." }) })
+    const spies = makeSpies()
+    render(<Harness spies={spies} />)
+    fireEvent.click(renameButton("Bar"))
+    fireEvent.change(renameInput(), { target: { value: "Accueil" } })
+    const validate = screen.getByRole("button", { name: "Valider" })
+    validate.focus()
+    fireEvent.click(validate)
+
+    await waitFor(() => expect(renameInput()).toHaveFocus())
+    expect(renameInput()).toHaveAttribute("aria-invalid", "true")
+    expect(renameInput()).toHaveAccessibleDescription("Ce poste existe déjà.")
+    expect(screen.getByText("Ce poste existe déjà.")).not.toHaveAttribute("role")
+    expect(spokenAlerts()).toHaveLength(0)
+    expect(spies.onAnnounce).not.toHaveBeenCalled()
+  })
+
+  it("« Valider » keeps focus while the rename is sent (aria-disabled, not disabled) and sends it once", async () => {
+    let resolve!: (v: unknown) => void
+    fetchMock.mockReturnValue(new Promise((r) => { resolve = r }))
+    render(<Harness spies={makeSpies()} />)
+    fireEvent.click(renameButton("Bar"))
+    fireEvent.change(renameInput(), { target: { value: "Buvette" } })
+    const validate = screen.getByRole("button", { name: "Valider" })
+    validate.focus()
+    fireEvent.click(validate)
+
+    // Same name while busy: the focused button is never announced as « … ».
+    const busy = screen.getByRole("button", { name: "Valider" })
+    expect(busy).toBe(validate)
+    expect(busy).toHaveAttribute("aria-disabled", "true")
+    expect(busy).not.toBeDisabled()
+    expect(busy).toHaveFocus()
+    fireEvent.click(busy)
+    fireEvent.keyDown(renameInput(), { key: "Enter" })
+    expect(fetchMock).toHaveBeenCalledOnce()
+
+    await act(async () => resolve({ ok: true, json: async () => ({}) }))
+    await waitFor(() => expect(renameButton("Buvette")).toHaveFocus())
+  })
+
+  it("« Enregistrer l'ordre » keeps its name and focus while sending, and sends once", async () => {
+    let resolve!: (v: unknown) => void
+    fetchMock.mockReturnValue(new Promise((r) => { resolve = r }))
+    const spies = makeSpies()
+    render(<Harness spies={spies} />)
+    const save = screen.getByRole("button", { name: "Enregistrer l'ordre" })
+    save.focus()
+    fireEvent.click(save)
+
+    expect(save).toHaveAttribute("aria-disabled", "true")
+    expect(save).not.toBeDisabled()
+    expect(save).toHaveFocus()
+    expect(save).toHaveAccessibleName("Enregistrer l'ordre")
+    fireEvent.click(save)
+    expect(fetchMock).toHaveBeenCalledOnce()
+
+    await act(async () => resolve({ ok: true, json: async () => ({}) }))
+    expect(spies.onClose).toHaveBeenCalledOnce()
+  })
+
+  it("an editor left open does not take focus when the panel is reopened, only when its button opens it", () => {
+    const spies = makeSpies()
+    for (const [open, label] of [
+      [() => fireEvent.click(renameButton("Bar")), "Nouveau nom du poste « Bar »"],
+      [() => fireEvent.click(screen.getByRole("button", { name: "Limite : aucune, poste « Bar »" })), "Nombre maximal de créneaux « Bar » par personne"],
+      [() => fireEvent.click(screen.getByRole("button", { name: "Accès : tous, poste « Bar »" })), "Étiquettes donnant accès au poste « Bar »"],
+    ] as const) {
+      const outside = document.createElement("button")
+      document.body.appendChild(outside)
+      const { rerender } = render(<Harness spies={spies} />)
+      open()
+      expect(screen.getByLabelText(label)).toHaveFocus()
+
+      rerender(<Harness open={false} spies={spies} />)
+      outside.focus()
+      rerender(<Harness spies={spies} />)
+      expect(screen.getByLabelText(label)).toBeVisible()
+      expect(outside).toHaveFocus()
+      cleanup()
+      outside.remove()
+    }
+  })
+
+  it("« aria-controls » is set only while the controlled editor is shown, and then resolves", () => {
+    const { container } = render(<Harness spies={makeSpies()} />)
+    expect(container.querySelector("#roles-panel")).toContainElement(screen.getByRole("heading", { name: "Gérer les postes" }))
+    const color = screen.getByRole("button", { name: "Changer la couleur du poste Bar" })
+    const limit = screen.getByRole("button", { name: "Limite : aucune, poste « Bar »" })
+    const access = screen.getByRole("button", { name: "Accès : tous, poste « Bar »" })
+    for (const b of [color, limit, access]) expect(b).not.toHaveAttribute("aria-controls")
+
+    for (const [button, label] of [[color, "Couleur du poste « Bar »"], [limit, "Nombre maximal de créneaux « Bar » par personne"], [access, "Étiquettes donnant accès au poste « Bar »"]] as const) {
+      fireEvent.click(button)
+      expect(button).toHaveAttribute("aria-expanded", "true")
+      const controlled = document.getElementById(button.getAttribute("aria-controls") ?? "")
+      expect(controlled).not.toBeNull()
+      expect(controlled).toContainElement(button === color ? screen.getByRole("group", { name: label }) : screen.getByLabelText(label))
+    }
+    // Opening « Accès » closed the others: their aria-controls are gone.
+    expect(color).not.toHaveAttribute("aria-controls")
+    expect(limit).not.toHaveAttribute("aria-controls")
+    for (const el of container.querySelectorAll("[aria-controls]")) {
+      expect(document.getElementById(el.getAttribute("aria-controls")!)).not.toBeNull()
+    }
+  })
+
+  it("closing « Limite » with « Annuler » returns the focus to its button", async () => {
+    render(<Harness spies={makeSpies()} />)
+    fireEvent.click(screen.getByRole("button", { name: "Limite : aucune, poste « Bar »" }))
+    fireEvent.click(screen.getByRole("button", { name: "Annuler" }))
+    await waitFor(() => expect(screen.getByRole("button", { name: "Limite : aucune, poste « Bar »" })).toHaveFocus())
+  })
+
+  it("after a colour is picked, focus is back on the role's colour button and the colour is announced once", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
+    const spies = makeSpies()
+    render(<Harness spies={spies} />)
+    const color = screen.getByRole("button", { name: "Changer la couleur du poste Bar" })
+    fireEvent.click(color)
+    const pink = screen.getByRole("button", { name: "Rose" })
+    pink.focus()
+    fireEvent.click(pink)
+
+    await waitFor(() => expect(color).toHaveFocus())
+    expect(screen.queryByRole("group", { name: "Couleur du poste « Bar »" })).not.toBeInTheDocument()
+    expect(spies.onAnnounce).toHaveBeenCalledOnce()
+    expect(spies.onAnnounce).toHaveBeenCalledWith("Couleur du poste « Bar » : Rose.")
+  })
+
+  it("a failed colour keeps the picker open, focus on the swatch, and says the error once", async () => {
+    fetchMock.mockResolvedValue({ ok: false, json: async () => ({ error: "Poste introuvable" }) })
+    const spies = makeSpies()
+    render(<Harness spies={spies} />)
+    fireEvent.click(screen.getByRole("button", { name: "Changer la couleur du poste Bar" }))
+    const pink = screen.getByRole("button", { name: "Rose" })
+    pink.focus()
+    fireEvent.click(pink)
+
+    await waitFor(() => expect(spokenAlerts()).toHaveLength(1))
+    expect(spokenAlerts()[0]).toHaveTextContent("Poste introuvable")
+    expect(screen.getByRole("group", { name: "Couleur du poste « Bar »" })).toBeInTheDocument()
+    expect(pink).toHaveFocus()
+    expect(spies.onAnnounce).not.toHaveBeenCalled()
+  })
+
+  it("Escape in the colour picker closes it and returns the focus to the colour button", async () => {
+    render(<Harness spies={makeSpies()} />)
+    const color = screen.getByRole("button", { name: "Changer la couleur du poste Bar" })
+    fireEvent.click(color)
+    fireEvent.keyDown(screen.getByRole("button", { name: "Rose" }), { key: "Escape" })
+    expect(screen.queryByRole("group", { name: "Couleur du poste « Bar »" })).not.toBeInTheDocument()
+    await waitFor(() => expect(color).toHaveFocus())
   })
 })

@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { requestJson } from "@/lib/use-submit"
 import { COLOR_OPTIONS } from "@/lib/roles"
@@ -17,9 +17,11 @@ import type { RawShift } from "./types"
 type SetShifts = React.Dispatch<React.SetStateAction<RawShift[]>>
 
 export function RoleReserveForm({
-  eventId, role, index, reservedTags, value, onValueChange, busyRole, onBusyRoleChange, onActionError, onClose, setShifts, onAnnounce,
+  eventId, autoFocus = true, role, index, reservedTags, value, onValueChange, busyRole, onBusyRoleChange, onActionError, onClose, setShifts, onAnnounce,
 }: {
   eventId:          string
+  /** Focus the input on mount; false when the panel is reopened with this editor still open. */
+  autoFocus?:       boolean
   role:             string
   /** Position of the role in the panel, for the ids. */
   index:            number
@@ -73,7 +75,7 @@ export function RoleReserveForm({
           id={`reserve-${i}`}
           type="text"
           value={value}
-          autoFocus
+          autoFocus={autoFocus}
           onChange={(e) => onValueChange(e.target.value)}
           aria-describedby={`reserve-help-${i}`}
           placeholder="ex. sécurité, secouriste"
@@ -98,9 +100,11 @@ export function RoleReserveForm({
 }
 
 export function RoleLimitForm({
-  eventId, role, index, limit, value, onValueChange, error, onErrorChange, busyRole, onBusyRoleChange, onActionError, onClose, setShifts, onAnnounce,
+  eventId, autoFocus = true, role, index, limit, value, onValueChange, error, onErrorChange, busyRole, onBusyRoleChange, onActionError, onClose, setShifts, onAnnounce,
 }: {
   eventId:          string
+  /** Focus the input on mount; false when the panel is reopened with this editor still open. */
+  autoFocus?:       boolean
   role:             string
   /** Position of the role in the panel, for the ids. */
   index:            number
@@ -122,13 +126,20 @@ export function RoleLimitForm({
   const i = index
   const isBusy = busyRole === role
   const limitInputRef = useRef<HTMLInputElement>(null)
+  // The input already had focus (Enter): focusing it again says nothing, so the error is an alert.
+  // Otherwise focus moves to the input, which reads the error as its description (#554).
+  const [errorLive, setErrorLive] = useState(false)
 
   async function saveRoleLimit(role: string, value: number | null) {
     if (busyRole) return
     if (value !== null && (!Number.isInteger(value) || value < 1 || value > 100)) {
+      const live = document.activeElement !== null && document.activeElement === limitInputRef.current
       flushSync(() => onErrorChange(null))
-      onErrorChange("Entrez un nombre entier de 1 à 100, ou laissez vide pour ne pas limiter.")
-      limitInputRef.current?.focus()
+      flushSync(() => {
+        setErrorLive(live)
+        onErrorChange("Entrez un nombre entier de 1 à 100, ou laissez vide pour ne pas limiter.")
+      })
+      if (!live) limitInputRef.current?.focus()
       return
     }
     onErrorChange(null)
@@ -167,8 +178,8 @@ export function RoleLimitForm({
           min={1}
           max={100}
           value={value}
-          autoFocus
-          onChange={(e) => onValueChange(e.target.value)}
+          autoFocus={autoFocus}
+          onChange={(e) => { onValueChange(e.target.value); setErrorLive(false) }}
           aria-invalid={error ? true : undefined}
           aria-describedby={`limit-help-${i}${error ? ` limit-error-${i}` : ""}`}
           className="input w-24 py-1"
@@ -183,7 +194,7 @@ export function RoleLimitForm({
         </button>
       )}
       <button type="button" onClick={() => onClose(role)} className="text-xs text-gray-600 hover:text-gray-900 py-1.5">Annuler</button>
-      {error && <p id={`limit-error-${i}`} className="basis-full text-xs text-red-700">{error}</p>}
+      {error && <p id={`limit-error-${i}`} role={errorLive ? "alert" : undefined} className="basis-full text-xs text-red-700">{error}</p>}
       <p id={`limit-help-${i}`} className="basis-full text-xs text-gray-600">
         Laissez vide pour ne pas limiter. Comptent les inscriptions confirmées, proposées et en liste d&apos;attente d&apos;une même personne sur ce poste. Les inscriptions existantes au-delà de la limite sont conservées ; vous pouvez dépasser la limite en ajoutant quelqu&apos;un à la main.
       </p>
@@ -192,20 +203,27 @@ export function RoleLimitForm({
 }
 
 export function RoleColorPicker({
-  eventId, role, colorKey, onClose, onBusyRoleChange, onActionError, setShifts, onAnnounce,
+  eventId, role, index, colorKey, busy, onClose, onBusyRoleChange, onActionError, setShifts, onAnnounce,
 }: {
   eventId:          string
   role:             string
+  /** Position of the role in the panel, for the id its colour button controls. */
+  index:            number
   /** The role's current colour (null: automatic). */
   colorKey:         string | null
-  onClose:          () => void
+  /** An action is running on this role: a pick waits for it. */
+  busy:             boolean
+  /** Closes the picker and returns the focus to the role's colour button. */
+  onClose:          (role: string) => void
   onBusyRoleChange: (role: string | null) => void
   onActionError:    (error: string | null) => void
   setShifts:        SetShifts
   onAnnounce:       (text: string) => void
 }) {
+  // The picker stays open during the request, with focus on the picked swatch (aria-disabled, not
+  // disabled), and closes once it succeeds, so that focus can go back to the colour button (#554).
   async function setRoleColor(role: string, colorKey: string | null) {
-    onClose()
+    if (busy) return
     onActionError(null)
     onBusyRoleChange(role)
     const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(role)}`, {
@@ -219,26 +237,39 @@ export function RoleColorPicker({
       return
     }
     setShifts(prev => prev.map(s => s.roleName === role ? { ...s, colorKey } : s))
+    onClose(role)
     const label = COLOR_OPTIONS.find(c => c.key === colorKey)?.label ?? "automatique"
     onAnnounce(`Couleur du poste « ${role} » : ${label}.`)
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2 px-3 py-2.5 mt-1 rounded-xl border border-blue-100 bg-blue-50/50">
+    <div
+      id={`color-picker-${index}`}
+      role="group"
+      aria-label={`Couleur du poste « ${role} »`}
+      // Escape waits for a running request, whose success closes the picker and moves focus itself.
+      onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); if (!busy) onClose(role) } }}
+      className="flex flex-wrap items-center gap-2 px-3 py-2.5 mt-1 rounded-xl border border-blue-100 bg-blue-50/50"
+    >
       <button
+        type="button"
         onClick={() => setRoleColor(role, null)}
-        className={`text-xs px-2 py-1 rounded-full border ${colorKey === null ? "border-blue-400 bg-white font-medium" : "border-gray-200 text-gray-500 hover:bg-white"}`}
+        aria-pressed={colorKey === null}
+        aria-disabled={busy || undefined}
+        className={`text-xs px-2 py-1 rounded-full border aria-disabled:opacity-50 ${colorKey === null ? "border-blue-400 bg-white font-medium" : "border-gray-200 text-gray-500 hover:bg-white"}`}
       >
         Automatique
       </button>
       {COLOR_OPTIONS.map(c => (
         <button
           key={c.key}
+          type="button"
           onClick={() => setRoleColor(role, c.key)}
           aria-label={c.label}
           aria-pressed={colorKey === c.key}
+          aria-disabled={busy || undefined}
           title={c.label}
-          className={`w-6 h-6 rounded-full flex-shrink-0 ${c.swatch} ${colorKey === c.key ? "ring-2 ring-offset-1 ring-blue-500" : ""}`}
+          className={`w-6 h-6 rounded-full flex-shrink-0 aria-disabled:opacity-50 ${c.swatch} ${colorKey === c.key ? "ring-2 ring-offset-1 ring-blue-500" : ""}`}
         />
       ))}
     </div>
