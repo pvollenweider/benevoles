@@ -326,6 +326,8 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
         await route.continue()
       })
       const submit = page.getByRole("button", { name: /Se connecter|Connexion/ })
+      // Disabled until the page is hydrated (#592): focus and Enter before that would do nothing.
+      await expect(submit).toBeEnabled()
       await submit.focus()
       await page.keyboard.press("Enter")
       await expect(submit).toHaveAttribute("aria-disabled", "true")
