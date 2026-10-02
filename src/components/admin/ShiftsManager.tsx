@@ -55,6 +55,9 @@ export default function ShiftsManager({
   const [showReorder, setShowReorder]     = useState(false)
   const [reorderRoles, setReorderRoles]   = useState<string[]>([])
   const [roleAnnouncement, setRoleAnnouncement] = useState("")
+  // « Gérer les postes » is a disclosure for the roles panel; focus comes back to it when the panel closes (#554).
+  const manageRolesBtnRef = useRef<HTMLButtonElement>(null)
+  const rolesPanelId = useId()
   // A deletion waits for its confirmation (#379): the recap of what it does, then run.
   const [pendingDelete, setPendingDelete] = useState<{ recap: ActionRecap; run: () => Promise<void> } | null>(null)
   const [deleting, setDeleting] = useState(false)
@@ -170,6 +173,11 @@ export default function ShiftsManager({
     setShowReorder(true)
   }
 
+  function closeReorder() {
+    setShowReorder(false)
+    focusFirstAvailableNextFrame([() => manageRolesBtnRef.current, () => addBtnRef.current, () => outcomeRef.current])
+  }
+
   function requestRoleDelete(pending: { recap: ActionRecap; run: () => Promise<void> }) {
     setDeleteError(null)
     setPendingDelete(pending)
@@ -229,7 +237,11 @@ export default function ShiftsManager({
           </div>
           {uniqueRoles.length > 0 && (
             <button
-              onClick={openReorder}
+              ref={manageRolesBtnRef}
+              type="button"
+              onClick={showReorder ? closeReorder : openReorder}
+              aria-expanded={showReorder}
+              aria-controls={showReorder ? rolesPanelId : undefined}
               className="text-xs text-gray-500 border border-gray-200 rounded-xl px-3 py-1.5 hover:bg-gray-50 transition-colors flex items-center gap-1.5"
             >
               <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -245,7 +257,7 @@ export default function ShiftsManager({
             type="button"
             onClick={openSeries}
             aria-expanded={showSeries}
-            aria-controls={seriesPanelId}
+            aria-controls={showSeries ? seriesPanelId : undefined}
             className="border border-blue-600 text-blue-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
             Créer une série
@@ -280,12 +292,13 @@ export default function ShiftsManager({
       {/* Role management panel: reorder, rename, delete */}
       <RoleManagerPanel
         open={showReorder}
+        panelId={rolesPanelId}
         eventId={eventId}
         shifts={shifts}
         setShifts={setShifts}
         roles={reorderRoles}
         setRoles={setReorderRoles}
-        onClose={() => setShowReorder(false)}
+        onClose={closeReorder}
         onAnnounce={(text) => announce(setRoleAnnouncement, text)}
         onRequestDelete={requestRoleDelete}
         onDeletingChange={setDeleting}

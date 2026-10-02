@@ -4,12 +4,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useState, useRef } from "react"
+import { flushSync } from "react-dom"
 import { deleteRoleRecap, type ActionRecap } from "@/lib/action-recap"
 import { requestJson } from "@/lib/use-submit"
 import { getRoleAccent } from "@/lib/roles"
 import { roleLimits } from "@/lib/role-limit"
 import { reservedRoles } from "@/lib/role-reservation"
 import { applyRoleOrder, moveItem, renameRole } from "@/lib/shifts-admin"
+import { focusFirstAvailableNextFrame } from "@/lib/focus-return"
 import { RoleColorPicker, RoleLimitForm, RoleReserveForm } from "./RoleSettings"
 import type { RawShift } from "./types"
 
@@ -19,12 +21,23 @@ import type { RawShift } from "./types"
  *
  * Stays mounted while closed (renders nothing) so that, as before the split, an inline editor left
  * open, its typed value or the last error are still there when the panel is reopened.
+ *
+ * Focus (#554): when an inline editor (rename, colour, limit, access) closes, focus goes back to the
+ * row button that opened it, or to the panel's heading when that row is gone; never to <body>.
  */
+/** Ref callback body: keeps `buttons` keyed by role while the button is mounted. */
+function setRoleButton(buttons: Map<string, HTMLButtonElement>, role: string, el: HTMLButtonElement | null) {
+  if (el) buttons.set(role, el)
+  else buttons.delete(role)
+}
+
 export default function RoleManagerPanel({
-  open, eventId, shifts, setShifts, roles, setRoles, onClose, onAnnounce,
+  open, panelId, eventId, shifts, setShifts, roles, setRoles, onClose, onAnnounce,
   onRequestDelete, onDeletingChange, onDeleteError, onRoleDeleted,
 }: {
   open:             boolean
+  /** Id of the panel's root, which « Gérer les postes » controls (`aria-controls`). */
+  panelId:          string
   eventId:          string
   shifts:           RawShift[]
   setShifts:        React.Dispatch<React.SetStateAction<RawShift[]>>
@@ -44,6 +57,10 @@ export default function RoleManagerPanel({
   const [savingOrder, setSavingOrder]     = useState(false)
   const [renamingRole, setRenamingRole]   = useState<string | null>(null)
   const [renameValue, setRenameValue]     = useState("")
+  // A failed rename's error, under the input. `live`: the input had focus when it was sent (Enter),
+  // so the error is an alert; otherwise focus moves to the input, which reads it as its description.
+  const [renameError, setRenameError]     = useState<{ text: string; live: boolean } | null>(null)
+  const renameInputRef = useRef<HTMLInputElement>(null)
   const [roleActionError, setRoleActionError] = useState<string | null>(null)
   const [roleActionBusy, setRoleActionBusy]   = useState<string | null>(null)
   const [colorPickerRole, setColorPickerRole] = useState<string | null>(null)
@@ -56,6 +73,16 @@ export default function RoleManagerPanel({
   const reserveBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   // « Limite » buttons per role: focus returns there when the inline form closes (#466).
   const limitBtnRefs = useRef(new Map<string, HTMLButtonElement>())
+  // « Renommer » and colour buttons per role, and the heading, the fallback when the row is gone (#554).
+  const renameBtnRefs = useRef(new Map<string, HTMLButtonElement>())
+  const colorBtnRefs = useRef(new Map<string, HTMLButtonElement>())
+  const headingRef = useRef<HTMLHeadingElement>(null)
+
+  /** Returns the focus, on the next frame, to the role's button in `refs`, else to the heading. */
+  function focusRoleButton(refs: React.RefObject<Map<string, HTMLButtonElement>>, role: string) {
+    focusFirstAvailableNextFrame([() => refs.current.get(role), () => headingRef.current])
+  }
+
 
   function handleRoleDragOver(e: React.DragEvent, toIdx: number) {
     e.preventDefault()
@@ -84,29 +111,47 @@ export default function RoleManagerPanel({
     setRoleActionError(null)
     setLimitRole(null)
     setReserveRole(null)
+    setColorPickerRole(null)
+    setRenameError(null)
     setRenamingRole(role)
     setRenameValue(role)
   }
 
+  function cancelRename(role: string) {
+    setRenamingRole(null)
+    setRenameError(null)
+    focusRoleButton(renameBtnRefs, role)
+  }
+
   async function submitRenameRole(oldName: string) {
+    if (roleActionBusy) return
     const newName = renameValue.trim()
-    if (!newName || newName === oldName) { setRenamingRole(null); return }
+    if (!newName || newName === oldName) { cancelRename(oldName); return }
+    const live = document.activeElement !== null && document.activeElement === renameInputRef.current
     setRoleActionError(null)
+    setRenameError(null)
     setRoleActionBusy(oldName)
     const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(oldName)}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: newName }),
     }), "Erreur lors du renommage.")
-    setRoleActionBusy(null)
     if (!outcome.ok) {
-      setRoleActionError(outcome.error)
+      // One hearing of the error: an alert when the input has focus, else its description on focus.
+      flushSync(() => {
+        setRoleActionBusy(null)
+        setRenameError({ text: outcome.error, live })
+      })
+      if (!live) renameInputRef.current?.focus()
       return
     }
+    setRoleActionBusy(null)
     setShifts(prev => renameRole(prev, oldName, newName))
     setRoles(prev => prev.map(r => r === oldName ? newName : r))
     setRenamingRole(null)
-    onAnnounce(`Poste renommé « ${oldName} » → « ${newName} ».`)
+    // The row remounts under its new key: the getter finds its « Renommer » after the render.
+    focusRoleButton(renameBtnRefs, newName)
+    onAnnounce(`Poste « ${oldName} » renommé en « ${newName} ».`)
   }
 
   function handleDeleteRole(role: string) {
@@ -165,22 +210,28 @@ export default function RoleManagerPanel({
   function closeReserve(role: string) {
     setReserveRole(null)
     setRoleActionError(null)
-    requestAnimationFrame(() => reserveBtnRefs.current.get(role)?.focus())
+    focusRoleButton(reserveBtnRefs, role)
   }
 
   function closeRoleLimit(role: string) {
     setLimitRole(null)
     setLimitError(null)
     setRoleActionError(null)
-    requestAnimationFrame(() => limitBtnRefs.current.get(role)?.focus())
+    focusRoleButton(limitBtnRefs, role)
+  }
+
+  function closeColorPicker(role: string) {
+    setColorPickerRole(null)
+    focusRoleButton(colorBtnRefs, role)
   }
 
   if (!open) return null
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
+    <div id={panelId} className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
       <div>
-        <h3 className="font-semibold text-gray-800">Gérer les postes</h3>
+        {/* Focused by code only, when the row whose button should get focus back is gone. */}
+        <h3 ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">Gérer les postes</h3>
         <p className="text-xs text-gray-500 mt-0.5">Glissez-déposez pour réordonner, renommez, limitez le nombre de créneaux par personne, réservez un poste à certains membres ou supprimez un poste (tous ses créneaux).</p>
       </div>
       {roleActionError && (
@@ -210,35 +261,43 @@ export default function RoleManagerPanel({
                 <circle cx="11" cy="4" r="1.2"/><circle cx="11" cy="8" r="1.2"/><circle cx="11" cy="12" r="1.2"/>
               </svg>
               <button
+                ref={(el) => setRoleButton(colorBtnRefs.current, role, el)}
+                type="button"
                 onClick={() => { setLimitRole(null); setReserveRole(null); setColorPickerRole(isPickingColor ? null : role) }}
                 disabled={isBusy || isRenaming}
                 aria-label={`Changer la couleur du poste ${role}`}
                 aria-expanded={isPickingColor}
+                aria-controls={isPickingColor ? `color-picker-${i}` : undefined}
                 className={`w-4 h-4 rounded-full flex-shrink-0 disabled:opacity-50 ring-offset-1 ${isPickingColor ? "ring-2 ring-blue-400" : ""} ${getRoleAccent(role, roleColorOf(role))}`}
               />
               {isRenaming ? (
                 <>
                   <label className="sr-only" htmlFor={`rename-${i}`}>Nouveau nom du poste « {role} »</label>
                   <input
+                    ref={renameInputRef}
                     id={`rename-${i}`}
                     type="text"
                     value={renameValue}
                     autoFocus
-                    onChange={e => setRenameValue(e.target.value)}
+                    onChange={e => { setRenameValue(e.target.value); setRenameError(null) }}
                     onKeyDown={e => {
                       if (e.key === "Enter") submitRenameRole(role)
-                      if (e.key === "Escape") setRenamingRole(null)
+                      if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); cancelRename(role) }
                     }}
+                    aria-invalid={renameError ? true : undefined}
+                    aria-describedby={renameError ? `rename-error-${i}` : undefined}
                     className="input flex-1 py-1"
                   />
+                  {/* aria-disabled, not disabled: the button keeps focus during the request. */}
                   <button
+                    type="button"
                     onClick={() => submitRenameRole(role)}
-                    disabled={isBusy}
-                    className="text-xs text-blue-600 font-medium hover:text-blue-800 disabled:opacity-50 flex-shrink-0"
+                    aria-disabled={isBusy || undefined}
+                    className="text-xs text-blue-600 font-medium hover:text-blue-800 aria-disabled:opacity-50 flex-shrink-0"
                   >
                     {isBusy ? "…" : "Valider"}
                   </button>
-                  <button onClick={() => setRenamingRole(null)} className="text-xs text-gray-500 hover:text-gray-800 flex-shrink-0">
+                  <button type="button" onClick={() => cancelRename(role)} className="text-xs text-gray-500 hover:text-gray-800 flex-shrink-0">
                     Annuler
                   </button>
                 </>
@@ -246,11 +305,12 @@ export default function RoleManagerPanel({
                 <>
                   <span className="text-sm font-medium text-gray-700 flex-1 truncate">{role}</span>
                   <button
-                    ref={(el) => { if (el) limitBtnRefs.current.set(role, el); else limitBtnRefs.current.delete(role) }}
+                    ref={(el) => setRoleButton(limitBtnRefs.current, role, el)}
+                    type="button"
                     onClick={() => startRoleLimit(role)}
                     disabled={isBusy}
                     aria-expanded={limitRole === role}
-                    aria-controls={`limit-form-${i}`}
+                    aria-controls={limitRole === role ? `limit-form-${i}` : undefined}
                     // Starts with the visible text (2.5.3), then says what it is about.
                     aria-label={limit === null ? `Limite : aucune, poste « ${role} »` : `Limite : ${limit} créneau${limit > 1 ? "x" : ""} par personne, poste « ${role} »`}
                     className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 flex-shrink-0"
@@ -258,17 +318,20 @@ export default function RoleManagerPanel({
                     {limit === null ? "Limite" : `Limite : ${limit}`}
                   </button>
                   <button
-                    ref={(el) => { if (el) reserveBtnRefs.current.set(role, el); else reserveBtnRefs.current.delete(role) }}
+                    ref={(el) => setRoleButton(reserveBtnRefs.current, role, el)}
+                    type="button"
                     onClick={() => startReserve(role)}
                     disabled={isBusy}
                     aria-expanded={reserveRole === role}
-                    aria-controls={`reserve-form-${i}`}
+                    aria-controls={reserveRole === role ? `reserve-form-${i}` : undefined}
                     aria-label={reservedTags.length === 0 ? `Accès : tous, poste « ${role} »` : `Accès : ${reservedTags.join(", ")}, poste « ${role} » réservé`}
                     className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 flex-shrink-0"
                   >
                     <span className="inline-block max-w-[10rem] truncate align-bottom">{reservedTags.length === 0 ? "Accès : tous" : `Accès : ${reservedTags.join(", ")}`}</span>
                   </button>
                   <button
+                    ref={(el) => setRoleButton(renameBtnRefs.current, role, el)}
+                    type="button"
                     onClick={() => startRenameRole(role)}
                     disabled={isBusy}
                     aria-label={`Renommer le poste ${role}`}
@@ -277,6 +340,7 @@ export default function RoleManagerPanel({
                     Renommer
                   </button>
                   <button
+                    type="button"
                     onClick={() => handleDeleteRole(role)}
                     disabled={isBusy}
                     aria-label={`Supprimer le poste ${role}`}
@@ -287,6 +351,9 @@ export default function RoleManagerPanel({
                 </>
               )}
             </div>
+            {isRenaming && renameError && (
+              <p id={`rename-error-${i}`} role={renameError.live ? "alert" : undefined} className="mt-1 px-3 text-xs text-red-700">{renameError.text}</p>
+            )}
             {reserveRole === role && (
               <RoleReserveForm
                 eventId={eventId}
@@ -325,8 +392,10 @@ export default function RoleManagerPanel({
               <RoleColorPicker
                 eventId={eventId}
                 role={role}
+                index={i}
                 colorKey={roleColorOf(role)}
-                onClose={() => setColorPickerRole(null)}
+                busy={isBusy}
+                onClose={closeColorPicker}
                 onBusyRoleChange={setRoleActionBusy}
                 onActionError={setRoleActionError}
                 setShifts={setShifts}
@@ -338,11 +407,11 @@ export default function RoleManagerPanel({
         })}
       </div>
       <div className="flex gap-3">
-        <button onClick={saveRoleOrder} disabled={savingOrder}
-          className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 disabled:opacity-50">
+        <button type="button" onClick={saveRoleOrder} aria-disabled={savingOrder || undefined}
+          className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:opacity-50">
           {savingOrder ? "…" : "Enregistrer l'ordre"}
         </button>
-        <button onClick={onClose}
+        <button type="button" onClick={onClose}
           className="text-gray-500 px-3 py-2 text-sm hover:text-gray-800">
           Fermer
         </button>

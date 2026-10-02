@@ -4,6 +4,8 @@ import { test, expect, type Page } from "@playwright/test"
  * The shifts page with the keyboard alone (#554): the shift editor takes focus when it opens, a
  * missing field is reached by focus and says its error, and focus comes back to the opener (or to
  * « + Ajouter un créneau » when the opener is gone) after « Annuler » or a save, never to <body>.
+ * In « Gérer les postes », focus returns to the row button after a rename or a colour, and to
+ * « Gérer les postes » when the panel closes; every `aria-controls` points to an element that exists.
  */
 const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
 const ORG_ADMIN_PASSWORD = process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password"
@@ -114,4 +116,97 @@ test("when the opener is gone (list switched to timeline), focus falls back to �
   await expect(editor).toBeHidden()
   await expect(page.getByRole("button", { name: "+ Ajouter un créneau" })).toBeFocused()
   expect(await focusIsNotOnBody(page)).toBe(true)
+})
+
+// ── « Gérer les postes » (#554) ───────────────────────────────────────────────
+
+/** Ids named by `aria-controls` that no element of the page carries. */
+const danglingAriaControls = (page: Page) => page.evaluate(() =>
+  [...document.querySelectorAll("[aria-controls]")]
+    .flatMap((el) => (el.getAttribute("aria-controls") ?? "").split(/\s+/).filter(Boolean))
+    .filter((id) => !document.getElementById(id)))
+
+async function openRolesPanel(page: Page) {
+  const manage = page.getByRole("button", { name: "Gérer les postes" })
+  await expect(manage).toHaveAttribute("aria-expanded", "false")
+  await manage.focus()
+  await page.keyboard.press("Enter")
+  await expect(manage).toHaveAttribute("aria-expanded", "true")
+  await expect(page.getByRole("heading", { name: "Gérer les postes" })).toBeVisible()
+  return manage
+}
+
+test("roles panel, rename with the keyboard: Escape and Enter return the focus to « Renommer », the rename is announced once", async ({ page }) => {
+  await openShiftsPage(page)
+  await openRolesPanel(page)
+
+  await page.getByRole("button", { name: "Renommer le poste Bar" }).focus()
+  await page.keyboard.press("Enter")
+  const input = page.getByLabel("Nouveau nom du poste « Bar »")
+  await expect(input).toBeFocused()
+  await page.keyboard.press("Escape")
+  await expect(input).toBeHidden()
+  await expect(page.getByRole("button", { name: "Renommer le poste Bar" })).toBeFocused()
+  expect(await focusIsNotOnBody(page)).toBe(true)
+
+  await page.keyboard.press("Enter")
+  await expect(input).toBeFocused()
+  await input.fill("Buvette")
+  await page.keyboard.press("Enter")
+  await expect(page.getByRole("button", { name: "Renommer le poste Buvette" })).toBeFocused()
+  expect(await focusIsNotOnBody(page)).toBe(true)
+  await expect(page.getByRole("status").filter({ hasText: /\S/ })).toHaveCount(1)
+  await expect(page.getByRole("status").filter({ hasText: "renommé" })).toHaveText(/^Poste « Bar » renommé en « Buvette »\.$/)
+  await expect(page.getByRole("alert").filter({ hasText: /\S/ })).toHaveCount(0)
+})
+
+test("roles panel, a colour picked with the keyboard: focus is back on the role's colour button", async ({ page }) => {
+  await openShiftsPage(page)
+  await openRolesPanel(page)
+  const color = page.getByRole("button", { name: "Changer la couleur du poste Bar" })
+  await color.focus()
+  await page.keyboard.press("Enter")
+  const picker = page.getByRole("group", { name: "Couleur du poste « Bar »" })
+  await expect(picker).toBeVisible()
+  expect(await danglingAriaControls(page)).toEqual([])
+
+  await picker.getByRole("button", { name: "Émeraude" }).focus()
+  await page.keyboard.press("Enter")
+  await expect(picker).toBeHidden()
+  await expect(color).toBeFocused()
+  expect(await focusIsNotOnBody(page)).toBe(true)
+  await expect(page.getByRole("status").filter({ hasText: "Couleur du poste « Bar » : Émeraude." })).toHaveCount(1)
+})
+
+test("roles panel, « Fermer »: focus is back on « Gérer les postes »; aria-controls always resolves", async ({ page }) => {
+  await openShiftsPage(page)
+  expect(await danglingAriaControls(page)).toEqual([])
+  const manage = await openRolesPanel(page)
+  expect(await danglingAriaControls(page)).toEqual([])
+
+  // A disclosure: Enter on « Gérer les postes » again closes the panel, focus stays on the button.
+  await expect(manage).toBeFocused()
+  await page.keyboard.press("Enter")
+  await expect(page.getByRole("heading", { name: "Gérer les postes" })).toBeHidden()
+  await expect(manage).toBeFocused()
+  await expect(manage).toHaveAttribute("aria-expanded", "false")
+  expect(await danglingAriaControls(page)).toEqual([])
+  await page.keyboard.press("Enter")
+  await expect(page.getByRole("heading", { name: "Gérer les postes" })).toBeVisible()
+
+  for (const name of [/^Limite : .*Bar/, /^Accès : .*Bar/]) {
+    await page.getByRole("button", { name }).focus()
+    await page.keyboard.press("Enter")
+    expect(await danglingAriaControls(page)).toEqual([])
+  }
+  await page.getByRole("button", { name: "Créer une série" }).click()
+  expect(await danglingAriaControls(page)).toEqual([])
+
+  await page.getByRole("button", { name: "Fermer", exact: true }).focus()
+  await page.keyboard.press("Enter")
+  await expect(page.getByRole("heading", { name: "Gérer les postes" })).toBeHidden()
+  await expect(manage).toBeFocused()
+  await expect(manage).toHaveAttribute("aria-expanded", "false")
+  expect(await focusIsNotOnBody(page)).toBe(true)
+  expect(await danglingAriaControls(page)).toEqual([])
 })

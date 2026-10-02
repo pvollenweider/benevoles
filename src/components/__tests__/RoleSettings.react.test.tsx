@@ -3,7 +3,8 @@
  */
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { render, screen, fireEvent, cleanup, waitFor } from "@testing-library/react"
+import { render, screen, fireEvent, cleanup, waitFor, act } from "@testing-library/react"
+import { useState } from "react"
 
 import { RoleColorPicker, RoleLimitForm, RoleReserveForm } from "../admin/shifts/RoleSettings"
 import type { RawShift } from "../admin/shifts/types"
@@ -83,6 +84,36 @@ describe("RoleSettings", () => {
       fireEvent.keyDown(screen.getByLabelText("Nombre maximal de créneaux « Bar » par personne"), { key: "Escape" })
       expect(cb.onClose).toHaveBeenCalledWith("Bar")
     })
+
+    /** Holds the value and the error like RoleManagerPanel does. */
+    function LimitHarness({ initial }: { initial: string }) {
+      const [value, setValue] = useState(initial)
+      const [error, setError] = useState<string | null>(null)
+      return <RoleLimitForm eventId="evt-1" role="Bar" index={0} limit={null} value={value} onValueChange={setValue} error={error} onErrorChange={setError} busyRole={null} {...callbacks()} />
+    }
+    const limitInput = () => screen.getByLabelText("Nombre maximal de créneaux « Bar » par personne")
+    const spokenAlerts = () => screen.queryAllByRole("alert").filter((e) => e.textContent?.trim())
+
+    it("an invalid value sent with Enter from the focused input is one alert (focusing it again would say nothing)", () => {
+      render(<LimitHarness initial="0" />)
+      expect(limitInput()).toHaveFocus()
+      fireEvent.submit(limitInput().closest("form")!)
+      expect(spokenAlerts()).toHaveLength(1)
+      expect(spokenAlerts()[0]).toHaveTextContent("Entrez un nombre entier de 1 à 100")
+      expect(limitInput()).toHaveFocus()
+      expect(limitInput()).toHaveAttribute("aria-invalid", "true")
+      expect(fetchMock).not.toHaveBeenCalled()
+    })
+
+    it("an invalid value sent with « Enregistrer » is not an alert: focus moves to the input, which it describes", () => {
+      render(<LimitHarness initial="0" />)
+      const save = screen.getByRole("button", { name: "Enregistrer" })
+      save.focus()
+      fireEvent.click(save)
+      expect(spokenAlerts()).toHaveLength(0)
+      expect(limitInput()).toHaveFocus()
+      expect(limitInput()).toHaveAccessibleDescription(/Entrez un nombre entier de 1 à 100/)
+    })
   })
 
   describe("RoleReserveForm", () => {
@@ -121,30 +152,84 @@ describe("RoleSettings", () => {
   })
 
   describe("RoleColorPicker", () => {
+    /** Holds the busy role like RoleManagerPanel does, so that `busy` follows the request. */
+    function ColorHarness({ colorKey, cb }: { colorKey: string | null; cb: ReturnType<typeof callbacks> }) {
+      const [busyRole, setBusyRole] = useState<string | null>(null)
+      return (
+        <RoleColorPicker
+          eventId="evt-1" role="Bar" index={0} colorKey={colorKey} busy={busyRole === "Bar"}
+          onClose={cb.onClose}
+          onBusyRoleChange={(r) => { cb.onBusyRoleChange(r); setBusyRole(r) }}
+          onActionError={cb.onActionError} setShifts={cb.setShifts} onAnnounce={cb.onAnnounce}
+        />
+      )
+    }
     const setup = (colorKey: string | null = null) => {
       const cb = callbacks()
-      render(<RoleColorPicker eventId="evt-1" role="Bar" colorKey={colorKey} onClose={cb.onClose} onBusyRoleChange={cb.onBusyRoleChange} onActionError={cb.onActionError} setShifts={cb.setShifts} onAnnounce={cb.onAnnounce} />)
+      render(<ColorHarness colorKey={colorKey} cb={cb} />)
       return cb
     }
 
-    it("shows the current colour and sets another one", async () => {
-      fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
-      const cb = setup("blue")
-      expect(screen.getByRole("button", { name: "Bleu" })).toHaveAttribute("aria-pressed", "true")
-      fireEvent.click(screen.getByRole("button", { name: "Rose" }))
-      expect(cb.onClose).toHaveBeenCalledOnce()
+    it("is a group named after the role, with the id its colour button controls", () => {
+      setup()
+      expect(screen.getByRole("group", { name: "Couleur du poste « Bar »" })).toHaveAttribute("id", "color-picker-0")
+    })
 
-      await waitFor(() => expect(cb.onAnnounce).toHaveBeenCalledWith("Couleur du poste « Bar » : Rose."))
+    it("shows the current colour; « Automatique » is a toggle button too", () => {
+      setup("blue")
+      expect(screen.getByRole("button", { name: "Bleu" })).toHaveAttribute("aria-pressed", "true")
+      expect(screen.getByRole("button", { name: "Automatique" })).toHaveAttribute("aria-pressed", "false")
+      cleanup()
+      setup(null)
+      expect(screen.getByRole("button", { name: "Automatique" })).toHaveAttribute("aria-pressed", "true")
+    })
+
+    it("sets another colour, then closes with the role and announces once, after the request", async () => {
+      let resolve!: (v: unknown) => void
+      fetchMock.mockReturnValue(new Promise((r) => { resolve = r }))
+      const cb = setup("blue")
+      fireEvent.click(screen.getByRole("button", { name: "Rose" }))
+      // Still open during the request: the picked swatch keeps focus.
+      expect(cb.onClose).not.toHaveBeenCalled()
+
+      await act(async () => resolve({ ok: true, json: async () => ({}) }))
+      await waitFor(() => expect(cb.onClose).toHaveBeenCalledWith("Bar"))
+      expect(cb.onAnnounce).toHaveBeenCalledOnce()
+      expect(cb.onAnnounce).toHaveBeenCalledWith("Couleur du poste « Bar » : Rose.")
       expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ colorKey: "pink" })
       expect(applied(cb.setShifts, [shift({})])[0].colorKey).toBe("pink")
     })
 
-    it("reports the server's error", async () => {
+    it("reports the server's error and stays open", async () => {
       fetchMock.mockResolvedValue({ ok: false, json: async () => ({}) })
       const cb = setup()
       fireEvent.click(screen.getByRole("button", { name: "Automatique" }))
       await waitFor(() => expect(cb.onActionError).toHaveBeenLastCalledWith("Erreur lors du changement de couleur."))
       expect(cb.setShifts).not.toHaveBeenCalled()
+      expect(cb.onClose).not.toHaveBeenCalled()
+      expect(cb.onAnnounce).not.toHaveBeenCalled()
+    })
+
+    it("while a colour is being saved, the swatches are aria-disabled (not disabled) and a second pick sends nothing", async () => {
+      let resolve!: (v: unknown) => void
+      fetchMock.mockReturnValue(new Promise((r) => { resolve = r }))
+      setup()
+      const pink = screen.getByRole("button", { name: "Rose" })
+      pink.focus()
+      fireEvent.click(pink)
+      expect(pink).toHaveAttribute("aria-disabled", "true")
+      expect(pink).not.toBeDisabled()
+      expect(pink).toHaveFocus()
+      expect(screen.getByRole("button", { name: "Automatique" })).toHaveAttribute("aria-disabled", "true")
+      fireEvent.click(screen.getByRole("button", { name: "Bleu" }))
+      expect(fetchMock).toHaveBeenCalledOnce()
+      await act(async () => resolve({ ok: true, json: async () => ({}) }))
+    })
+
+    it("Escape closes it with the role", () => {
+      const cb = setup()
+      fireEvent.keyDown(screen.getByRole("button", { name: "Rose" }), { key: "Escape" })
+      expect(cb.onClose).toHaveBeenCalledWith("Bar")
     })
   })
 })
