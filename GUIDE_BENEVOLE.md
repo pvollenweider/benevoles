@@ -110,9 +110,11 @@ https://[organisation].benevol.app/my/[token]
 Vous pouvez :
 - Voir tous vos créneaux inscrits pour cet événement, avec leurs **infos pratiques** : lieu de rendez-vous (et **Voir sur la carte**), consigne, et la personne de contact avec son téléphone
 - **Annuler** un créneau individuellement : une confirmation vous est demandée (**Oui, annuler** ou **Non, garder**), puis la place est immédiatement libérée et proposée à la première personne en liste d'attente. Selon le cas, le bouton s'appelle autrement, toujours avec une confirmation :
-  - **Quitter la liste d'attente**, pour un créneau où vous êtes en liste d'attente : vous n'êtes plus prévenu(e) si une place se libère ;
+  - **Quitter la liste d'attente**, pour un créneau où vous êtes en liste d'attente : vous ne recevez plus de message si une place se libère ;
   - **Refuser la place**, pour une place qui vous est proposée : elle passe à la personne suivante ;
   - **Retirer ma demande**, pour une demande sur un créneau sur validation
+
+  Si l'annulation n'aboutit pas (connexion coupée, par exemple), un message sous le créneau dit ce qui s'est passé et le créneau reste affiché ; rechargez la page pour vérifier avant de réessayer.
 - **Ajouter vos créneaux à votre calendrier** (téléphone, Google, Outlook, Apple…) : avec plusieurs créneaux, « Ajouter tout mon planning à mon calendrier » télécharge un fichier `.ics` de vos créneaux confirmés, et « Ajouter à mon calendrier » sous un créneau le fait pour lui seul. Ouvrez le fichier pour l'importer. Il ne se met pas à jour tout seul : si un horaire change, vous recevez un email, téléchargez-le à nouveau (le créneau est alors remplacé, pas dupliqué, dans la plupart des calendriers).
 - Indiquer, si vous le souhaitez, **vos disponibilités** en général (matin, après-midi, soir, et une remarque comme « pas le dimanche »). C'est facultatif : cela aide l'organisation si elle doit vous proposer un autre créneau, mais vous choisissez toujours vos créneaux vous-même.
 
