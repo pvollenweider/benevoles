@@ -76,7 +76,7 @@ describe("validateSignup", () => {
 
   it("checks charter, consent and required fields, in that order", () => {
     expect(validateSignup({ ...base, charterAccepted: false })).toContain("convention")
-    expect(validateSignup({ ...base, form: { ...ok, consent: false } })).toContain("confidentialité")
+    expect(validateSignup({ ...base, form: { ...ok, consent: false } })).toBe("Accepte l'utilisation de tes données pour cet événement.")
     expect(validateSignup({ ...base, form: { ...ok, email: "" } })).toContain("obligatoires")
   })
 

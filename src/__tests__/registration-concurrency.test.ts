@@ -105,7 +105,7 @@ describe("POST /api/public/registrations under contention", () => {
     const res = await POST(post())
     expect(res.status).toBe(409)
     const data = await res.json()
-    expect(data.error).toContain("déjà inscrit")
+    expect(data.error).toContain("déjà une inscription")
     // Never the existing registration's token (#285): it goes to the owner by email instead.
     expect(JSON.stringify(data)).not.toContain("existing-tok")
   })

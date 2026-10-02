@@ -49,9 +49,9 @@ export function closedMessage(state: RegistrationState, timeZone: string): strin
     case "not_yet":
       return `Les inscriptions ouvrent le ${formatMoment(state.opensAt!, timeZone)}. Le planning est déjà consultable.`
     case "ended":
-      return "Les inscriptions sont terminées. Si vous êtes inscrit·e, votre lien personnel reste valable."
+      return "Les inscriptions sont terminées. Si tu as déjà des créneaux, ton lien personnel reste valable."
     case "closed":
-      return "Les inscriptions sont fermées pour le moment. Si vous êtes inscrit·e, votre lien personnel reste valable."
+      return "Les inscriptions sont fermées pour le moment. Si tu as déjà des créneaux, ton lien personnel reste valable."
     default:
       return "Cet événement n'accepte pas d'inscription."
   }

@@ -41,8 +41,8 @@ export const RESERVED_LABEL = "réservé à certains membres"
 
 export function reservationRefusal(roleName: string, withInvite: boolean): string {
   return withInvite
-    ? `Le poste « ${roleName} » est réservé à certains membres, et votre invitation n'y donne pas accès.`
-    : `Le poste « ${roleName} » est réservé aux membres invités : utilisez le lien personnel reçu par email.`
+    ? `Le poste « ${roleName} » est réservé à certains membres, et ton invitation n'y donne pas accès.`
+    : `Le poste « ${roleName} » est réservé aux membres invités : utilise le lien personnel reçu par email.`
 }
 
 /** Tags typed by the organiser (« sécurité, secouriste ») → a clean list, at most 10. */

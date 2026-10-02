@@ -65,9 +65,9 @@ describe("fullShiftRefusal", () => {
   it("refuses the first full shift without a waitlist with 409 and its id", () => {
     expect(fullShiftRefusal([s("a", 2, 1), s("b", 1, 1), s("c", 1, 2)])).toEqual({
       status: 409,
-      body: { error: `Le créneau "Créneau b" est complet. Veuillez recharger la page.`, fullShiftId: "b" },
+      body: { error: `Le créneau "Créneau b" est complet. Recharge la page.`, fullShiftId: "b" },
     })
-    expect(fullShift("x", "X")).toEqual({ status: 409, body: { error: `Le créneau "X" est complet. Veuillez recharger la page.`, fullShiftId: "x" } })
+    expect(fullShift("x", "X")).toEqual({ status: 409, body: { error: `Le créneau "X" est complet. Recharge la page.`, fullShiftId: "x" } })
   })
 })
 
@@ -125,7 +125,7 @@ describe("reservedRoleRefusal", () => {
 
   it("refuses with 403 an invited member without the tag", async () => {
     const r = await reservedRoleRefusal({ shifts: [{ roleName: "Sécurité" }], reserved, email: "ana@example.org", loadInvite: async () => member({ tags: ["cuisine"] }) })
-    expect(r).toEqual({ status: 403, body: { error: expect.stringContaining("votre invitation n'y donne pas accès"), reservedRole: "Sécurité" } })
+    expect(r).toEqual({ status: 403, body: { error: expect.stringContaining("ton invitation n'y donne pas accès"), reservedRole: "Sécurité" } })
   })
 })
 

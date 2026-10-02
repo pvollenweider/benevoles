@@ -61,7 +61,7 @@ describe("public sign-up to a reserved role", () => {
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post({ inviteToken: "tok" }))
     expect(res.status).toBe(403)
-    expect((await res.json()).error).toMatch(/votre invitation n'y donne pas accès/)
+    expect((await res.json()).error).toMatch(/ton invitation n'y donne pas accès/)
     expect(m.txCreate).not.toHaveBeenCalled()
   })
 

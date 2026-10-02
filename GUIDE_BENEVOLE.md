@@ -32,7 +32,7 @@ Si les inscriptions ne sont pas encore ouvertes, ou déjà fermées, un encadré
 |----------------|---------------|
 | Barre colorée (bleue, verte, orange…) | Créneau ouvert — cliquez pour le sélectionner |
 | Barre avec ✓ et fond foncé | Créneau sélectionné |
-| Barre avec ✓ vert clair | Créneau auquel vous êtes déjà inscrit(e) |
+| Barre avec ✓ vert clair | Créneau où vous avez déjà une inscription |
 | Barre grisée « Complet » | Plus de place disponible |
 | Barre colorée rayée blanc, « Complet · file d'attente » | Complet, mais la liste d'attente est ouverte — cliquez pour la rejoindre |
 | Barre grisée « Fermé » | Inscriptions désactivées |
@@ -55,7 +55,7 @@ Cliquez (ou tapez) sur une barre disponible. Le créneau s'ajoute à votre séle
 
 Certains postes sont **réservés** à des membres de l'association : ils sont marqués « Réservé » et on s'y inscrit avec le lien personnel reçu par email dans l'invitation.
 
-Certains postes limitent le nombre de créneaux par personne. Si vous en avez déjà pris le maximum, un message en haut de la page le dit et le créneau n'est pas ajouté.
+Certains postes limitent le nombre de créneaux par personne. Si vous en avez déjà pris le maximum, un message sous le planning du jour le dit et le créneau n'est pas ajouté.
 
 L'application empêche automatiquement de sélectionner deux créneaux qui se chevauchent.
 
@@ -79,7 +79,7 @@ Avant de confirmer, un **récapitulatif** (dans la colonne de droite sur ordinat
 
 ### Infos pratiques d'un créneau
 
-Quand l'organisation les a renseignées, le récapitulatif montre sous chaque créneau choisi ses **infos pratiques** : le **lieu de rendez-vous** et la **consigne** (« À savoir », par exemple « Venir 10 minutes avant, tenue noire »). Si un point de rendez-vous est indiqué sur une carte, un lien **Voir sur la carte** l'ouvre sur OpenStreetMap, dans un nouvel onglet ; rien n'est chargé depuis ce site tant que vous ne cliquez pas. La **personne de contact** et son téléphone ne sont jamais affichés sur la page publique : vous les recevez une fois inscrit(e), dans l'email de confirmation, les rappels et sur votre page personnelle.
+Quand l'organisation les a renseignées, le récapitulatif montre sous chaque créneau choisi ses **infos pratiques** : le **lieu de rendez-vous** et la **consigne** (« À savoir », par exemple « Venir 10 minutes avant, tenue noire »). Si un point de rendez-vous est indiqué sur une carte, un lien **Voir sur la carte** l'ouvre sur OpenStreetMap, dans un nouvel onglet ; rien n'est chargé depuis ce site tant que vous ne cliquez pas. La **personne de contact** et son téléphone ne sont jamais affichés sur la page publique : vous les recevez après votre inscription, dans l'email de confirmation, les rappels et sur votre page personnelle.
 
 Si vos créneaux font plus de 8 h dans une journée, ou plus de 6 h d'affilée sans pause d'au moins 30 minutes, le récapitulatif le signale sous **Journée chargée**, en comptant aussi les créneaux que vous avez déjà. C'est un conseil : vous pouvez confirmer quand même.
 
@@ -118,7 +118,7 @@ Vous pouvez :
 - **Ajouter vos créneaux à votre calendrier** (téléphone, Google, Outlook, Apple…) : avec plusieurs créneaux, « Ajouter tout mon planning à mon calendrier » télécharge un fichier `.ics` de vos créneaux confirmés, et « Ajouter à mon calendrier » sous un créneau le fait pour lui seul. Ouvrez le fichier pour l'importer. Il ne se met pas à jour tout seul : si un horaire change, vous recevez un email, téléchargez-le à nouveau (le créneau est alors remplacé, pas dupliqué, dans la plupart des calendriers).
 - Indiquer, si vous le souhaitez, **vos disponibilités** en général (matin, après-midi, soir, et une remarque comme « pas le dimanche »). C'est facultatif : cela aide l'organisation si elle doit vous proposer un autre créneau, mais vous choisissez toujours vos créneaux vous-même.
 
-Le lien « Retour à l'accueil » vous ramène directement sur la page de l'événement — vous y êtes automatiquement reconnu(e).
+Le lien « Retour à l'accueil » vous ramène directement sur la page de l'événement — elle vous reconnaît automatiquement.
 
 ### Votre lien personnel
 
@@ -130,7 +130,7 @@ Quand vous annulez votre dernier créneau depuis votre page personnelle, elle af
 
 ### Recevoir les rappels sur votre téléphone
 
-Sur votre page personnelle, le bouton **Recevoir des rappels push** active les **notifications du navigateur** (il figure aussi sur la page de confirmation si vous vous êtes inscrit·e depuis un lien d'invitation). Vous recevez alors, en plus de l'email, un rappel 2 jours avant, la veille et le jour de votre créneau, et les messages urgents de l'organisation quand elle choisit de vous prévenir aussi par notification (le message complet arrive toujours par email). Votre navigateur vous demande d'abord votre autorisation ; vous pouvez la retirer à tout moment dans ses réglages. Le bouton n'apparaît pas si votre navigateur ne gère pas les notifications ou si le site ne les propose pas.
+Sur votre page personnelle, le bouton **Recevoir des rappels push** active les **notifications du navigateur** (il figure aussi sur la page de confirmation si votre inscription vient d'un lien d'invitation). Vous recevez alors, en plus de l'email, un rappel 2 jours avant, la veille et le jour de votre créneau, et les messages urgents de l'organisation quand elle choisit de vous prévenir aussi par notification (le message complet arrive toujours par email). Votre navigateur vous demande d'abord votre autorisation ; vous pouvez la retirer à tout moment dans ses réglages. Le bouton n'apparaît pas si votre navigateur ne gère pas les notifications ou si le site ne les propose pas.
 
 Pour vous inscrire à de nouveaux créneaux, retournez sur la page de l'événement. Si vous utilisez le même navigateur, vos inscriptions existantes sont reconnues automatiquement : un créneau déjà pris ne peut pas être choisi une seconde fois.
 
@@ -147,10 +147,10 @@ Pour vous déconnecter de cette session (par exemple sur un appareil partagé), 
 ## Questions fréquentes
 
 **Je n'ai pas reçu l'email de confirmation.**
-Vérifiez vos courriers indésirables. Si vous tentez de vous réinscrire à un créneau où vous êtes déjà inscrit(e), le lien de gestion vous est renvoyé par email.
+Vérifiez vos courriers indésirables. Si vous tentez de vous réinscrire à un créneau où vous avez déjà une inscription, le lien de gestion vous est renvoyé par email.
 
 **J'ai eu une erreur en confirmant mon inscription.**
-Tout ce que vous avez saisi reste en place. Le message dit de quoi il s'agit : un champ à corriger, un créneau qui n'est plus disponible (revenez au planning pour ajuster votre choix), une connexion interrompue ou une erreur du serveur. Dans ces deux derniers cas, cliquez sur **Réessayer** : si votre inscription était passée malgré tout, vous recevrez simplement votre lien personnel par email au lieu d'une deuxième inscription.
+Tout ce que vous avez saisi reste en place. Le message dit de quoi il s'agit : un champ à corriger, un créneau qui n'est plus disponible (revenez au planning pour ajuster votre choix), une connexion interrompue ou une erreur du serveur. Dans ces deux derniers cas, cliquez à nouveau sur **Confirmer mon inscription** : si votre inscription était passée malgré tout, vous recevrez simplement votre lien personnel par email au lieu d'une deuxième inscription.
 
 **Le créneau indique « Sur validation ».**
 L'organisation choisit elle-même qui tient ce poste (conduite, caisse, sécurité…). Vous vous inscrivez normalement, mais votre inscription est une **demande**, pas encore une place confirmée : le récapitulatif et la page après l'envoi le disent. La place vous est réservée le temps que l'organisation réponde. Vous recevez un email « Demande reçue » avec votre lien personnel, où vous suivez la demande et pouvez la retirer. Si elle est acceptée, vous recevez l'email de confirmation habituel ; sinon, un email vous le dit. Les rappels ne concernent que les créneaux confirmés.
@@ -175,7 +175,7 @@ Si la liste d'attente n'est pas disponible, la barre est grisée et non cliquabl
 La politique de confidentialité et les conditions d'utilisation sont accessibles par les liens en bas de page du site.
 
 **J'ai un message « Ce créneau chevauche une inscription existante ».**
-Vous êtes déjà inscrit(e) à un créneau qui se passe en même temps. Les créneaux qui se chevauchent avec une de vos inscriptions ne peuvent pas être sélectionnés, et le récapitulatif signale un chevauchement avant l'envoi.
+Vous avez déjà une inscription sur un créneau qui se passe en même temps. Les créneaux qui se chevauchent avec une de vos inscriptions ne peuvent pas être sélectionnés, et le récapitulatif signale un chevauchement avant l'envoi.
 
 **Je veux m'inscrire à plusieurs créneaux différents (ex. accueil le vendredi, bar le samedi).**
 Sélectionnez-les tous avant de cliquer sur **Continuer** — un seul formulaire suffit pour valider plusieurs créneaux d'un coup. Vous pourrez les annuler individuellement plus tard depuis votre lien personnel.
@@ -183,7 +183,7 @@ Sélectionnez-les tous avant de cliquer sur **Continuer** — un seul formulaire
 **Le poste que je veux demande un âge minimum, mais je n'ai pas mon acte de naissance sur moi.**
 Pas besoin de justificatif à l'inscription : indiquez simplement votre date de naissance dans le formulaire. Si la condition n'est pas remplie, l'inscription est refusée avec un message clair ; sinon, elle passe normalement.
 
-**Je veux être sûr·e de ne pas oublier mon créneau le jour J.**
+**Je ne veux pas oublier mon créneau le jour J.**
 Activez les notifications du navigateur sur votre page personnelle (voir « Recevoir les rappels sur votre téléphone » plus haut) — en plus de l'email, vous recevrez un rappel 2 jours avant, la veille et le jour même.
 
 **Je n'ai plus le lien vers ma page personnelle.**

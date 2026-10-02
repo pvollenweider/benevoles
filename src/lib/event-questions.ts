@@ -65,7 +65,7 @@ export function checkAnswers(questions: Question[], raw: RawAnswers | undefined)
     } else if (q.type === "yesno") {
       if (v === YES || v === true) vals = [YES]
       else if (v === NO || v === false) vals = [NO]
-      else if (v !== undefined && v !== null && v !== "") { errors.push({ questionId: q.id, message: `« ${q.label} » : répondez oui ou non.` }); continue }
+      else if (v !== undefined && v !== null && v !== "") { errors.push({ questionId: q.id, message: `« ${q.label} » : réponds oui ou non.` }); continue }
     } else if (q.type === "single") {
       if (typeof v === "string" && v !== "") {
         if (!q.options.includes(v)) { errors.push({ questionId: q.id, message: `« ${q.label} » : choix inconnu.` }); continue }

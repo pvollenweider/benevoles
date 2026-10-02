@@ -53,7 +53,7 @@ export function fullShiftRefusal(
 }
 
 export function fullShift(shiftId: string, label: string): SignupRefusal {
-  return { status: 409, body: { error: `Le créneau "${label}" est complet. Veuillez recharger la page.`, fullShiftId: shiftId } }
+  return { status: 409, body: { error: `Le créneau "${label}" est complet. Recharge la page.`, fullShiftId: shiftId } }
 }
 
 /** Two of the asked shifts overlap each other. */
