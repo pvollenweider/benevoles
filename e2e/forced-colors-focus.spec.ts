@@ -665,6 +665,12 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       ] as const) {
         await page.goto(`/admin/events/${data.eventId}${sub}`)
         await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+        if (sub === "/message") {
+          // « Voir l'aperçu et envoyer » is aria-disabled while the recipients are counted: a sweep
+          // reaching it then saw the count arrive before checking the attribute (#592).
+          await expect(page.locator("p", { hasText: "Comptage…" })).toHaveCount(0)
+          await expect(page.locator("[id$='-count'][aria-live]")).not.toBeEmpty()
+        }
         failures.push(...(await sweep(page, label, { min })).failures)
         failures.push(...(await checkSelectedStates(page, label)))
       }
