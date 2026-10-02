@@ -231,7 +231,7 @@ Pas de cartes imbriquées. Si un contenu doit être distingué à l'intérieur d
 `ModalShell` (`src/components/admin/ModalShell.tsx`) : `role="dialog"` ou `alertdialog`, `aria-modal`, nommée par son titre, Échap ferme, focus piégé, placé dans la fenêtre à l'ouverture et rendu au déclencheur à la fermeture. `ConfirmActionModal` pour les confirmations.
 
 ### Lien d'évitement
-`SkipLink` (« Aller au contenu »), sur l'administration et les pages de contenu, vers `<main id="main">`. Pas encore sur les pages légales, la page publique d'un événement, la page personnelle ni l'espace super admin.
+`SkipLink` (« Aller au contenu »), sur l'administration et les pages de contenu, vers `<main id="main">`. Pas encore sur les pages légales, la page publique d'un événement ni l'espace super admin. La page personnelle n'en a pas : aucun en-tête ni menu ne précède son contenu (voir `docs/accessibilite.md`).
 
 ### Navigation (Admin)
 - **Structure:** `<nav>` `bg white`, `border-bottom: 1px solid #e5e7eb`, `px-4`, barre `h-14`, jamais sur deux lignes
