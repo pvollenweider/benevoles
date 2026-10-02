@@ -49,6 +49,11 @@ describe("focusFirstAvailable", () => {
     ])
     expect(got).toBe(target)
     expect(document.activeElement).toBe(target)
+    // canTakeFocus itself refuses the disconnected and disabled ones; the plain div passes it but
+    // does not take focus, which focusFirstAvailable checks after focusing.
+    expect(canTakeFocus(disconnected)).toBe(false)
+    expect(canTakeFocus(disabled)).toBe(false)
+    expect(canTakeFocus(plainDiv)).toBe(true)
   })
 
   it("skips the content of a closed <details>, but not its summary", () => {

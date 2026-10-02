@@ -104,7 +104,6 @@ export default function ShiftEditor({
       setError(outcome.error)
       return
     }
-    setForm(emptyShift)
     onSaved(outcome.data, editingId)
   }
 
@@ -143,7 +142,8 @@ export default function ShiftEditor({
       </div>
       <div className="grid grid-cols-3 gap-3">
         <div>
-          <label htmlFor={`date-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Date *</label>
+          {/* No asterisk on the read-only date of a one-day event: there is nothing to fill in. */}
+          <label htmlFor={`date-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Date{singleDay ? "" : " *"}</label>
           {singleDay ? (
             <input id={`date-${sfx}`} type="text" readOnly value={fmtDate(dates[0])} className="input bg-gray-50 text-gray-700" />
           ) : (

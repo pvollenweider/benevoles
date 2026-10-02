@@ -63,7 +63,8 @@ test("a shift is added with the keyboard: errors reached by focus, focus back on
   await expect(editor).toBeHidden()
   await expect(add).toBeFocused()
   await expect(page.getByRole("status").filter({ hasText: "Créneau ajouté" })).toHaveCount(1)
-  await expect(page.getByRole("status").filter({ hasText: "Créneau ajouté" })).toHaveText(/^Créneau ajouté : Buvette, \S+ 1 octobre, de 17h à 18h\.$/)
+  await expect(page.getByRole("status").filter({ hasText: /\S/ })).toHaveCount(1)
+  await expect(page.getByRole("status").filter({ hasText: "Créneau ajouté" })).toHaveText(/^Créneau ajouté : Buvette, mardi 1 octobre, de 17h à 18h\.$/)
   await expect(page.getByRole("alert").filter({ hasText: /\S/ })).toHaveCount(0)
 })
 
@@ -95,7 +96,8 @@ test("after editing a shift from the list, focus is back on that row's « Modifi
 
   await expect(editor).toBeHidden()
   await expect(barEdit()).toBeFocused()
-  await expect(page.getByRole("status").filter({ hasText: "Créneau modifié" })).toHaveText(/^Créneau modifié : Bar, \S+ 1 octobre, de 10h à 13h\.$/)
+  await expect(page.getByRole("status").filter({ hasText: "Créneau modifié" })).toHaveText(/^Créneau modifié : Bar, mardi 1 octobre, de 10h à 13h\.$/)
+  await expect(page.getByRole("status").filter({ hasText: /\S/ })).toHaveCount(1)
 })
 
 test("when the opener is gone (list switched to timeline), focus falls back to « + Ajouter un créneau »", async ({ page }) => {

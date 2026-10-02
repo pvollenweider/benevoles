@@ -124,6 +124,21 @@ describe("ShiftsManager shift editor focus and announcements", () => {
     expect(spoken("status")[0]).toHaveTextContent("Créneau modifié : Bar, samedi 4 juillet, de 10h à 13h.")
   })
 
+  it("after saving an edit whose « Modifier » is gone (list switched to timeline), focus falls back to the add button", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({ ...shift, date: "2026-07-04T00:00:00.000Z" }) })
+    renderManager()
+    fireEvent.click(screen.getByRole("button", { name: "Liste" }))
+    fireEvent.click(screen.getByRole("button", { name: "Modifier" }))
+    fireEvent.click(screen.getByRole("button", { name: "Timeline" }))
+    expect(screen.queryByRole("table")).toBeNull()
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+
+    await waitFor(() => expect(addButton()).toHaveFocus())
+    expect(document.activeElement).not.toBe(document.body)
+    await waitFor(() => expect(spoken("status")).toHaveLength(1))
+    expect(spoken("status")[0]).toHaveTextContent("Créneau modifié : Bar, samedi 4 juillet, de 10h à 12h.")
+  })
+
   it("when the opener is gone (list switched to timeline), focus falls back to the add button", async () => {
     renderManager()
     fireEvent.click(screen.getByRole("button", { name: "Liste" }))

@@ -556,6 +556,7 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       await expect(editor.getByLabel("Poste *")).toBeFocused()
       await expect(editor.getByLabel("Poste *")).toHaveAttribute("aria-invalid", "true")
       failures.push(...(await checkFocused(page, "shift editor, first invalid field")))
+      await shot(page, editor, name("shifts", "editor", "invalid"))
       settle(failures)
     })
 

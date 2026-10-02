@@ -75,6 +75,22 @@ describe("ShiftEditor", () => {
     expect(screen.queryByText(/en rouge/)).toBeNull()
   })
 
+  it("on a multi-day event, an unchosen date is the first invalid field and says so", async () => {
+    setup({ dates: ["2026-07-04", "2026-07-05"], initial: { roleName: "Bar", startTime: "10:00", endTime: "11:00" } })
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    expect(fetchMock).not.toHaveBeenCalled()
+    const date = screen.getByLabelText("Date *")
+    await waitFor(() => expect(date).toHaveFocus())
+    expect(date).toHaveAttribute("aria-invalid", "true")
+    expect(date).toHaveAccessibleDescription("Choisissez la date.")
+  })
+
+  it("has no asterisk on the read-only date of a one-day event", () => {
+    setup()
+    expect(screen.getByLabelText("Date")).toHaveAttribute("readonly")
+    expect(screen.queryByLabelText("Date *")).toBeNull()
+  })
+
   it("clears a field's error as soon as it is filled", () => {
     setup()
     fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
