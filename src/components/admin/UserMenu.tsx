@@ -42,16 +42,17 @@ export default function UserMenu({ userName, isSuperAdmin }: { userName: string;
         list[next]?.focus()
       }
     }
-    function onClickOutside(e: MouseEvent) {
+    function onPointerOutside(e: PointerEvent) {
       if (menuRef.current?.contains(e.target as Node) || buttonRef.current?.contains(e.target as Node)) return
       setOpen(false)
     }
     document.addEventListener("keydown", onKeyDown)
-    document.addEventListener("mousedown", onClickOutside)
+    // pointerdown covers mouse, touch and pen alike.
+    document.addEventListener("pointerdown", onPointerOutside)
     items()[0]?.focus()
     return () => {
       document.removeEventListener("keydown", onKeyDown)
-      document.removeEventListener("mousedown", onClickOutside)
+      document.removeEventListener("pointerdown", onPointerOutside)
     }
   }, [open])
 
@@ -59,8 +60,13 @@ export default function UserMenu({ userName, isSuperAdmin }: { userName: string;
     <div
       className="relative"
       onBlur={(e) => {
-        // Focus moved outside the trigger and the menu (e.g. Tab past the last item): close.
-        if (open && !e.currentTarget.contains(e.relatedTarget as Node | null)) setOpen(false)
+        // Focus moved to another element outside the menu (e.g. Tab past the last item): close.
+        // A blur without a new target is not that: iOS Safari does not focus a tapped button, so
+        // tapping « Se déconnecter » blurred « Mon compte » with relatedTarget null and closed the
+        // menu before the click reached the button (sign-out did nothing on mobile). Taps outside
+        // are handled by the pointerdown listener.
+        const next = e.relatedTarget as Node | null
+        if (open && next && !e.currentTarget.contains(next)) setOpen(false)
       }}
     >
       <button
