@@ -10,6 +10,7 @@ import { KNOWN_ROLES } from "@/lib/roles"
 import { resolveNewShiftDisplayOrder, isCompleteTime, addMinutes } from "@/lib/gantt-utils"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { fmtLongDate as fmtDate, normalizeTime } from "@/lib/shifts-admin"
+import { SHIFT_FIELD_ERRORS, missingFieldsSummary, missingShiftFields, type ShiftField } from "@/lib/shift-editor-form"
 import type { RawShift } from "./types"
 
 export const emptyShift = {
@@ -43,14 +44,43 @@ export default function ShiftEditor({
   const [saving, setSaving]       = useState(false)
   const [error, setError]         = useState<string | null>(null)
   const [attempted, setAttempted] = useState(false)
+  const sfx = editingId ?? "new"
+  // Derived, so filling a field clears its error at once (#554).
+  const missing = attempted ? missingShiftFields(form) : []
+  const invalid = new Set<ShiftField>(missing)
+
+  /** The attributes and the message of a required field, invalid or not. */
+  function fieldError(f: ShiftField) {
+    const errorId = `${f}-error-${sfx}`
+    return {
+      invalidProps: {
+        "aria-invalid": invalid.has(f) || undefined,
+        "aria-describedby": invalid.has(f) ? errorId : undefined,
+      },
+      border: invalid.has(f) ? "!border-red-600" : "",
+      message: invalid.has(f) ? <p id={errorId} className="text-xs text-red-700 mt-1">{SHIFT_FIELD_ERRORS[f]}</p> : null,
+    }
+  }
+  const roleField = fieldError("roleName")
+  const dateField = fieldError("date")
+  const startField = fieldError("startTime")
+  const endField = fieldError("endTime")
+  const capacityField = fieldError("capacity")
 
   function setField(k: string, v: string | number | boolean) {
     setForm(f => ({ ...f, [k]: v }))
   }
 
   async function handleSave() {
-    if (!form.roleName || !form.date || !form.startTime || !form.endTime) {
+    // aria-disabled, not disabled, while saving: a disabled button would drop focus to <body>.
+    if (saving) return
+    const missingNow = missingShiftFields(form)
+    if (missingNow.length > 0) {
+      // Each message is tied to its field, not an alert: focus moves to the first invalid field
+      // once it says it is invalid, so its message is read once, with the field.
       setAttempted(true)
+      setError(null)
+      requestAnimationFrame(() => document.getElementById(`${missingNow[0]}-${sfx}`)?.focus())
       return
     }
     setSaving(true)
@@ -79,27 +109,30 @@ export default function ShiftEditor({
   }
 
   return (
-    <div ref={ref} className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
-      <h3 className="font-semibold text-gray-800">{editingId ? "Modifier le créneau" : "Nouveau créneau"}</h3>
+    <div ref={ref} role="group" aria-labelledby={`shift-editor-title-${sfx}`} className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
+      <h3 id={`shift-editor-title-${sfx}`} className="font-semibold text-gray-800">{editingId ? "Modifier le créneau" : "Nouveau créneau"}</h3>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor={`roleName-${editingId ?? "new"}`} className={`block text-xs font-medium mb-1 ${attempted && !form.roleName ? "text-red-500" : "text-gray-600"}`}>Poste *</label>
+          <label htmlFor={`roleName-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Poste *</label>
+          {/* The editor remounts on every open (key): focus lands here each time. */}
           <input
-            id={`roleName-${editingId ?? "new"}`}
+            id={`roleName-${sfx}`}
             type="text" list="role-options"
+            autoFocus required {...roleField.invalidProps}
             value={form.roleName}
             onChange={e => setField("roleName", e.target.value)}
             placeholder="ex. Billetterie"
-            className={`input ${attempted && !form.roleName ? "!border-red-400" : ""}`}
+            className={`input ${roleField.border}`}
           />
+          {roleField.message}
           <datalist id="role-options">
             {KNOWN_ROLES.map(r => <option key={r} value={r} />)}
           </datalist>
         </div>
         <div>
-          <label htmlFor={`label-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Libellé</label>
+          <label htmlFor={`label-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Libellé</label>
           <input
-            id={`label-${editingId ?? "new"}`}
+            id={`label-${sfx}`}
             type="text"
             value={form.label}
             onChange={e => setField("label", e.target.value)}
@@ -110,22 +143,24 @@ export default function ShiftEditor({
       </div>
       <div className="grid grid-cols-3 gap-3">
         <div>
-          <label htmlFor={`date-${editingId ?? "new"}`} className={`block text-xs font-medium mb-1 ${attempted && !form.date ? "text-red-500" : "text-gray-600"}`}>Date *</label>
+          <label htmlFor={`date-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Date *</label>
           {singleDay ? (
-            <input id={`date-${editingId ?? "new"}`} type="text" readOnly value={fmtDate(dates[0])} className="input bg-gray-50 text-gray-700" />
+            <input id={`date-${sfx}`} type="text" readOnly value={fmtDate(dates[0])} className="input bg-gray-50 text-gray-700" />
           ) : (
-            <select id={`date-${editingId ?? "new"}`} value={form.date} onChange={e => setField("date", e.target.value)} className={`input ${attempted && !form.date ? "!border-red-400" : ""}`}>
+            <select id={`date-${sfx}`} required {...dateField.invalidProps} value={form.date} onChange={e => setField("date", e.target.value)} className={`input ${dateField.border}`}>
               <option value="">— choisir —</option>
               {dates.map(d => <option key={d} value={d}>{fmtDate(d)}</option>)}
             </select>
           )}
+          {dateField.message}
         </div>
         <div>
-          <label htmlFor={`startTime-${editingId ?? "new"}`} className={`block text-xs font-medium mb-1 ${attempted && !form.startTime ? "text-red-500" : "text-gray-600"}`}>Début *</label>
+          <label htmlFor={`startTime-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Début *</label>
           <input
-            id={`startTime-${editingId ?? "new"}`}
+            id={`startTime-${sfx}`}
             type="text" placeholder="HH:MM" value={form.startTime}
-            className={`input ${attempted && !form.startTime ? "!border-red-400" : ""}`}
+            required {...startField.invalidProps}
+            className={`input ${startField.border}`}
             onChange={e => {
               const start = e.target.value
               setForm(f => ({
@@ -136,39 +171,43 @@ export default function ShiftEditor({
             }}
             onBlur={e => setField("startTime", normalizeTime(e.target.value))}
           />
+          {startField.message}
         </div>
         <div>
-          <label htmlFor={`endTime-${editingId ?? "new"}`} className={`block text-xs font-medium mb-1 ${attempted && !form.endTime ? "text-red-500" : "text-gray-600"}`}>Fin *</label>
+          <label htmlFor={`endTime-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Fin *</label>
           <input
-            id={`endTime-${editingId ?? "new"}`}
+            id={`endTime-${sfx}`}
             type="text" placeholder="HH:MM" value={form.endTime}
-            className={`input ${attempted && !form.endTime ? "!border-red-400" : ""}`}
+            required {...endField.invalidProps}
+            className={`input ${endField.border}`}
             onChange={e => setField("endTime", e.target.value)}
             onBlur={e => setField("endTime", normalizeTime(e.target.value))}
           />
+          {endField.message}
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor={`capacity-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Capacité *</label>
-          <input id={`capacity-${editingId ?? "new"}`} type="number" min="1" value={form.capacity} onChange={e => setField("capacity", e.target.value)} className="input" />
+          <label htmlFor={`capacity-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Capacité *</label>
+          <input id={`capacity-${sfx}`} type="number" min="1" required {...capacityField.invalidProps} value={form.capacity} onChange={e => setField("capacity", e.target.value)} className={`input ${capacityField.border}`} />
+          {capacityField.message}
         </div>
         <div>
-          <label htmlFor={`description-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Description</label>
-          <input id={`description-${editingId ?? "new"}`} type="text" value={form.description} onChange={e => setField("description", e.target.value)} className="input" />
+          <label htmlFor={`description-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Description</label>
+          <input id={`description-${sfx}`} type="text" value={form.description} onChange={e => setField("description", e.target.value)} className="input" />
         </div>
       </div>
-      <fieldset aria-describedby={`shiftinfo-hint-${editingId ?? "new"}`} className="border border-gray-200 rounded-xl p-3 space-y-3">
+      <fieldset aria-describedby={`shiftinfo-hint-${sfx}`} className="border border-gray-200 rounded-xl p-3 space-y-3">
         <legend className="text-xs font-semibold text-gray-700 px-1">Infos pratiques pour les bénévoles</legend>
-        <p id={`shiftinfo-hint-${editingId ?? "new"}`} className="text-xs text-gray-600">Lieu et consigne sont visibles sur la page publique d&apos;inscription. La personne de contact et son téléphone ne sont envoyés qu&apos;aux inscrits : email de confirmation, rappels, page personnelle.</p>
+        <p id={`shiftinfo-hint-${sfx}`} className="text-xs text-gray-600">Lieu et consigne sont visibles sur la page publique d&apos;inscription. La personne de contact et son téléphone ne sont envoyés qu&apos;aux inscrits : email de confirmation, rappels, page personnelle.</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label htmlFor={`locationDetails-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Lieu de rendez-vous</label>
-            <input id={`locationDetails-${editingId ?? "new"}`} type="text" value={form.locationDetails} onChange={e => setField("locationDetails", e.target.value)} placeholder="ex. Entrée B, côté parking" className="input" />
+            <label htmlFor={`locationDetails-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Lieu de rendez-vous</label>
+            <input id={`locationDetails-${sfx}`} type="text" value={form.locationDetails} onChange={e => setField("locationDetails", e.target.value)} placeholder="ex. Entrée B, côté parking" className="input" />
           </div>
           <div className="sm:col-span-3">
             <CoordinatesField
-              id={`coordinates-${editingId ?? "new"}`}
+              id={`coordinates-${sfx}`}
               small
               value={{ latitude: form.latitude, longitude: form.longitude }}
               onChange={(c) => setForm((f) => ({ ...f, latitude: c?.latitude ?? null, longitude: c?.longitude ?? null }))}
@@ -176,47 +215,47 @@ export default function ShiftEditor({
             />
           </div>
           <div>
-            <label htmlFor={`contactName-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Personne de contact</label>
-            <input id={`contactName-${editingId ?? "new"}`} type="text" maxLength={SHIFT_CONTACT_NAME_MAX} value={form.contactName} onChange={e => setField("contactName", e.target.value)} placeholder="ex. Léa (responsable bar)" className="input" />
+            <label htmlFor={`contactName-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Personne de contact</label>
+            <input id={`contactName-${sfx}`} type="text" maxLength={SHIFT_CONTACT_NAME_MAX} value={form.contactName} onChange={e => setField("contactName", e.target.value)} placeholder="ex. Léa (responsable bar)" className="input" />
           </div>
           <div>
-            <label htmlFor={`contactPhone-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Téléphone du contact</label>
-            <input id={`contactPhone-${editingId ?? "new"}`} type="tel" maxLength={SHIFT_CONTACT_PHONE_MAX} value={form.contactPhone} onChange={e => setField("contactPhone", e.target.value)} placeholder="ex. 079 000 00 00" className="input" />
+            <label htmlFor={`contactPhone-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Téléphone du contact</label>
+            <input id={`contactPhone-${sfx}`} type="tel" maxLength={SHIFT_CONTACT_PHONE_MAX} value={form.contactPhone} onChange={e => setField("contactPhone", e.target.value)} placeholder="ex. 079 000 00 00" className="input" />
           </div>
         </div>
         <div>
-          <label htmlFor={`instructions-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Consigne pratique</label>
-          <textarea id={`instructions-${editingId ?? "new"}`} rows={2} maxLength={SHIFT_INSTRUCTIONS_MAX} aria-describedby={`instructions-hint-${editingId ?? "new"}`} value={form.instructions} onChange={e => setField("instructions", e.target.value)} placeholder="ex. Venir 10 min avant, tenue noire, gilet fourni sur place." className="input" />
-          <p id={`instructions-hint-${editingId ?? "new"}`} className="text-xs text-gray-600 mt-1">{form.instructions.length}/{SHIFT_INSTRUCTIONS_MAX} caractères</p>
+          <label htmlFor={`instructions-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Consigne pratique</label>
+          <textarea id={`instructions-${sfx}`} rows={2} maxLength={SHIFT_INSTRUCTIONS_MAX} aria-describedby={`instructions-hint-${sfx}`} value={form.instructions} onChange={e => setField("instructions", e.target.value)} placeholder="ex. Venir 10 min avant, tenue noire, gilet fourni sur place." className="input" />
+          <p id={`instructions-hint-${sfx}`} className="text-xs text-gray-600 mt-1">{form.instructions.length}/{SHIFT_INSTRUCTIONS_MAX} caractères</p>
         </div>
       </fieldset>
       <div>
-        <label htmlFor={`internalNotes-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Notes internes (jamais montrées aux bénévoles)</label>
-        <input id={`internalNotes-${editingId ?? "new"}`} type="text" value={form.internalNotes} onChange={e => setField("internalNotes", e.target.value)} className="input" />
+        <label htmlFor={`internalNotes-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Notes internes (jamais montrées aux bénévoles)</label>
+        <input id={`internalNotes-${sfx}`} type="text" value={form.internalNotes} onChange={e => setField("internalNotes", e.target.value)} className="input" />
       </div>
       <div>
-        <label htmlFor={`minAge-${editingId ?? "new"}`} className="block text-xs font-medium text-gray-600 mb-1">Âge minimum (optionnel)</label>
+        <label htmlFor={`minAge-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Âge minimum (optionnel)</label>
         <input
-          id={`minAge-${editingId ?? "new"}`}
+          id={`minAge-${sfx}`}
           type="number" min="0" max="120" placeholder="ex. 18"
           value={form.minAge}
           onChange={e => setField("minAge", e.target.value === "" ? "" : Number(e.target.value))}
-          aria-describedby={`minAge-hint-${editingId ?? "new"}`}
+          aria-describedby={`minAge-hint-${sfx}`}
           className="input"
         />
-        <p id={`minAge-hint-${editingId ?? "new"}`} className="text-[11px] text-gray-500 mt-1">
+        <p id={`minAge-hint-${sfx}`} className="text-[11px] text-gray-500 mt-1">
           Affiché en info sur le créneau public ; vérifié à l&apos;inscription (date de naissance demandée si besoin).
         </p>
       </div>
       <div className="flex items-center gap-2">
         <input
           type="checkbox"
-          id={`waitlistEnabled-${editingId ?? "new"}`}
+          id={`waitlistEnabled-${sfx}`}
           checked={Boolean(form.waitlistEnabled)}
           onChange={e => setField("waitlistEnabled", e.target.checked)}
           className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
         />
-        <label htmlFor={`waitlistEnabled-${editingId ?? "new"}`} className="text-xs font-medium text-gray-600 select-none cursor-pointer">
+        <label htmlFor={`waitlistEnabled-${sfx}`} className="text-xs font-medium text-gray-600 select-none cursor-pointer">
           Activer la liste d'attente (si complet, les bénévoles peuvent s'y inscrire)
         </label>
       </div>
@@ -224,32 +263,35 @@ export default function ShiftEditor({
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            id={`requiresApproval-${editingId ?? "new"}`}
+            id={`requiresApproval-${sfx}`}
             checked={Boolean(form.requiresApproval)}
             onChange={e => setField("requiresApproval", e.target.checked)}
-            aria-describedby={`requiresApproval-hint-${editingId ?? "new"}`}
+            aria-describedby={`requiresApproval-hint-${sfx}`}
             className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
           />
-          <label htmlFor={`requiresApproval-${editingId ?? "new"}`} className="text-xs font-medium text-gray-600 select-none cursor-pointer">
+          <label htmlFor={`requiresApproval-${sfx}`} className="text-xs font-medium text-gray-600 select-none cursor-pointer">
             Sur validation (chaque inscription est une demande à accepter ou refuser)
           </label>
         </div>
-        <p id={`requiresApproval-hint-${editingId ?? "new"}`} className="text-xs text-gray-600 mt-1 ml-6">
+        <p id={`requiresApproval-hint-${sfx}`} className="text-xs text-gray-600 mt-1 ml-6">
           Pour un poste sensible (conduite, caisse, sécurité). Une demande garde sa place jusqu&apos;à votre décision ; les inscriptions déjà confirmées ne changent pas.
         </p>
       </div>
 
-      {error && <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{error}</div>}
-      {attempted && (!form.roleName || !form.date || !form.startTime || !form.endTime) && (
-        <p className="text-xs text-red-500">Veuillez remplir les champs en rouge.</p>
+      {/* The server's error: focus stays on the submit button, so it is an alert. It is rendered only
+          when set, so the same error after a new attempt is announced again. */}
+      {error && <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{error}</div>}
+      {/* Visible reminder, not live: each field already says its error when focus reaches it. */}
+      {missing.length > 0 && (
+        <p className="text-xs text-red-700">{missingFieldsSummary(missing)}</p>
       )}
 
       <div className="flex gap-3">
-        <button onClick={handleSave} disabled={saving}
-          className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 disabled:opacity-50">
-          {saving ? "…" : editingId ? "Enregistrer" : "Ajouter"}
+        <button type="button" onClick={handleSave} aria-disabled={saving || undefined}
+          className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:opacity-50">
+          {saving ? (editingId ? "Enregistrement en cours…" : "Ajout en cours…") : editingId ? "Enregistrer" : "Ajouter"}
         </button>
-        <button onClick={onCancel}
+        <button type="button" onClick={onCancel}
           className="text-gray-500 px-3 py-2 text-sm hover:text-gray-800">
           Annuler
         </button>
