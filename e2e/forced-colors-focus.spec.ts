@@ -547,6 +547,16 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       // The list view, reached with the toggle, swept the same way (from the toggle, all around).
       await page.getByRole("button", { name: "Liste", exact: true }).click()
       failures.push(...(await sweep(page, "shifts, list view", { min: 8 })).failures)
+      // The shift editor (#554), submitted empty with the keyboard: focus on the first invalid field.
+      await page.getByRole("button", { name: "+ Ajouter un créneau" }).focus()
+      await page.keyboard.press("Enter")
+      const editor = page.getByRole("group", { name: "Nouveau créneau" })
+      await editor.getByRole("button", { name: "Ajouter", exact: true }).focus()
+      await page.keyboard.press("Enter")
+      await expect(editor.getByLabel("Poste *")).toBeFocused()
+      await expect(editor.getByLabel("Poste *")).toHaveAttribute("aria-invalid", "true")
+      failures.push(...(await checkFocused(page, "shift editor, first invalid field")))
+      await shot(page, editor, name("shifts", "editor", "invalid"))
       settle(failures)
     })
 

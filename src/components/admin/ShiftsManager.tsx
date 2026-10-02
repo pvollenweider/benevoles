@@ -10,6 +10,8 @@ import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { requestJson } from "@/lib/use-submit"
 import { flushSync } from "react-dom"
 import { fmtRange } from "@/lib/gantt-utils"
+import { focusFirstAvailableNextFrame, type FocusCandidate } from "@/lib/focus-return"
+import { shiftSavedMessage } from "@/lib/shift-editor-form"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
 import ShiftSeriesForm from "./ShiftSeriesForm"
 import ShiftEditor, { type ShiftFormValues } from "./shifts/ShiftEditor"
@@ -59,8 +61,15 @@ export default function ShiftsManager({
   const [deleteError, setDeleteError] = useState<string | null>(null)
   // The row whose « Supprimer » opened the modal is gone once the deletion is done: park the focus on the outcome.
   const outcomeRef = useRef<HTMLDivElement>(null)
+  // Focus return of the shift editor (#554): back to what opened it (« + Ajouter un créneau » or the
+  // row's « Modifier »), else to the add button, else to the outcome status. Never to <body>.
+  const addBtnRef = useRef<HTMLButtonElement>(null)
+  const editBtnRefs = useRef(new Map<string, HTMLButtonElement>())
+  const formOpenerRef = useRef<FocusCandidate>(null)
 
   function openForm(patch: Partial<ShiftFormValues>, editId: string | null) {
+    // A getter: the row's « Modifier » may be gone by the time the editor closes (view switched).
+    formOpenerRef.current = editId ? () => editBtnRefs.current.get(editId) : () => addBtnRef.current
     flushSync(() => {
       setShowSeries(false)
       setFormInitial(patch)
@@ -68,10 +77,19 @@ export default function ShiftsManager({
       setEditingId(editId)
       setShowForm(true)
     })
-    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+    const smooth = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: no-preference)").matches
+    formRef.current?.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" })
+  }
+
+  function closeForm() {
+    setShowForm(false)
+    setEditingId(null)
+    focusFirstAvailableNextFrame([formOpenerRef.current, () => addBtnRef.current, () => outcomeRef.current])
   }
 
   function handleShiftSaved(data: RawShift & { date?: string }, editingId: string | null) {
+    const before = editingId ? shifts.find(s => s.id === editingId) : undefined
+    const saved = { ...before, ...data, date: (data.date ?? before?.date ?? "").split("T")[0] }
     if (editingId) {
       setShifts(prev => prev.map(s =>
         s.id === editingId
@@ -81,8 +99,8 @@ export default function ShiftsManager({
     } else {
       setShifts(prev => [...prev, { ...data, date: data.date.split("T")[0], registrationCount: 0 }])
     }
-    setShowForm(false)
-    setEditingId(null)
+    closeForm()
+    announce(setRoleAnnouncement, shiftSavedMessage(editingId ? "edited" : "added", saved))
   }
 
   // ── Series of shifts (#393) ───────────────────────────────────────────────
@@ -233,6 +251,7 @@ export default function ShiftsManager({
             Créer une série
           </button>
           <button
+            ref={addBtnRef}
             type="button"
             onClick={() => openForm(singleDay ? { date: dates[0] } : {}, null)}
             className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -244,7 +263,7 @@ export default function ShiftsManager({
       {pendingDelete && (
         <ConfirmActionModal recap={pendingDelete.recap} busy={deleting} error={deleteError} onConfirm={() => void pendingDelete.run()} onCancel={() => setPendingDelete(null)} />
       )}
-      {/* Announces role actions and series creation, whether or not the roles panel is open. */}
+      {/* Announces shift saves, role actions and series creation, whether or not the roles panel is open. */}
       <div ref={outcomeRef} tabIndex={-1} role="status" className={roleAnnouncement.includes(UNPUBLISHED_NOTICE) ? "text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2 focus:outline-none" : "sr-only"}>{roleAnnouncement}</div>
 
       {showSeries && (
@@ -285,7 +304,7 @@ export default function ShiftsManager({
           initial={formInitial}
           existingShifts={shifts}
           onSaved={handleShiftSaved}
-          onCancel={() => { setShowForm(false); setEditingId(null) }}
+          onCancel={closeForm}
         />
       )}
 
@@ -356,6 +375,8 @@ export default function ShiftsManager({
                   </td>
                   <td className="px-4 py-3 text-right whitespace-nowrap">
                     <button
+                      type="button"
+                      ref={(el) => { if (el) editBtnRefs.current.set(s.id, el); else editBtnRefs.current.delete(s.id) }}
                       onClick={() => openForm({
                         roleName: s.roleName,
                         label: s.label === s.roleName ? "" : s.label,
