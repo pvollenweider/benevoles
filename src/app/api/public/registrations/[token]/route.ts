@@ -6,7 +6,7 @@ import { orgTimeZone } from "@/lib/time-zone"
 import { prisma } from "@/lib/prisma"
 import { orgBaseUrl } from "@/lib/urls"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
-import { rateLimit, getClientIp } from "@/lib/rate-limit"
+import { recordTokenMiss, tokenLookupsBlocked, tokenUseAllowed } from "@/lib/token-rate-limit"
 import { logEvent } from "@/lib/event-log"
 import { reportError } from "@/lib/report-error"
 import { contactPhone } from "@/lib/contact-phone"
@@ -15,9 +15,11 @@ import { pickShiftInfo } from "@/lib/shift-info"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw } from "@/lib/volunteer-withdraw"
 
+const tooManyAttempts = () => NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
+
 export async function GET(req: Request, { params }: { params: Promise<{ token: string }> }) {
-  const rl = await rateLimit(getClientIp(req), "reg-token-read", 10, 60 * 60 * 1000)
-  if (!rl.ok) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
+  // Failed lookups count per IP, valid use per link (#609).
+  if (await tokenLookupsBlocked(req)) return tooManyAttempts()
 
   const { token } = await params
 
@@ -32,8 +34,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
   })
 
   if (!registration) {
+    await recordTokenMiss(req)
     return NextResponse.json({ error: "Inscription introuvable ou déjà annulée." }, { status: 404 })
   }
+  if (!(await tokenUseAllowed(token, "read"))) return tooManyAttempts()
 
   // Toutes les inscriptions actives du même bénévole pour le même événement
   const allRegistrations = await prisma.registration.findMany({
@@ -90,8 +94,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
 }
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ token: string }> }) {
-  const rl = await rateLimit(getClientIp(req), "reg-token-delete", 5, 60 * 60 * 1000)
-  if (!rl.ok) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
+  if (await tokenLookupsBlocked(req)) return tooManyAttempts()
 
   const { token } = await params
 
@@ -103,8 +106,10 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
   const plan = registration && planVolunteerWithdraw(registration.status)
 
   if (!registration || !plan) {
+    await recordTokenMiss(req)
     return NextResponse.json({ error: "Inscription introuvable ou déjà annulée." }, { status: 404 })
   }
+  if (!(await tokenUseAllowed(token, "withdraw"))) return tooManyAttempts()
 
   // Conditional on still being in the status read above (#264): a double click would otherwise
   // cancel twice, log twice and trigger two waitlist promotions for a single freed spot. Same
