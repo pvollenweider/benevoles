@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test"
 import { clearMailbox, waitForMessage, searchMessages } from "./helpers/mailpit"
+import { waitForHydration } from "./helpers/hydration"
 
 /**
  * "Envoyer un test" on /super-admin/product-updates — defaults to the calling super admin's own
@@ -10,6 +11,8 @@ const SUPER_ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "admin@localhost"
 const SUPER_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "e2e-admin-password"
 
 test.beforeEach(async () => {
+  // Emails go through a busy dev server and Mailpit in CI: allow up to 90 s (#592).
+  test.slow()
   await clearMailbox()
 })
 
@@ -23,9 +26,13 @@ test("sending a test defaults to the super admin's own address", async ({ page }
 
   const stamp = Date.now()
   await page.goto("/super-admin/product-updates")
+  // Typed before hydration, the controlled fields would be emptied and the test never sent (#592).
+  await waitForHydration(page.getByLabel("Objet *"))
   await page.getByLabel("Objet *").fill(`E2E test email ${stamp}`)
   await page.locator("textarea").fill("Contenu de test.")
+  const sent = page.waitForResponse((r) => r.url().endsWith("/api/super-admin/product-updates/test") && r.request().method() === "POST")
   await page.getByRole("button", { name: "Envoyer un test" }).click()
+  expect((await sent).ok()).toBe(true)
 
   const msg = await waitForMessage(`subject:"[Test] E2E test email ${stamp}"`)
   expect(msg.To[0].Address.toLowerCase()).toBe(SUPER_ADMIN_EMAIL.toLowerCase())
@@ -42,10 +49,14 @@ test("sending a test to a custom address delivers it there instead", async ({ pa
   const stamp = Date.now()
   const customEmail = `e2e-custom-test-${stamp}@example.com`
   await page.goto("/super-admin/product-updates")
+  // Typed before hydration, the controlled fields would be emptied and the test never sent (#592).
+  await waitForHydration(page.getByLabel("Objet *"))
   await page.getByLabel("Objet *").fill(`E2E custom email ${stamp}`)
   await page.locator("textarea").fill("Contenu de test.")
   await page.getByLabel(/Adresse du test/).fill(customEmail)
+  const sent = page.waitForResponse((r) => r.url().endsWith("/api/super-admin/product-updates/test") && r.request().method() === "POST")
   await page.getByRole("button", { name: "Envoyer un test" }).click()
+  expect((await sent).ok()).toBe(true)
 
   const msg = await waitForMessage(`subject:"[Test] E2E custom email ${stamp}"`)
   expect(msg.To[0].Address.toLowerCase()).toBe(customEmail)

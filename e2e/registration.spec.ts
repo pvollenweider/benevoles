@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test"
 import { clearMailbox, waitForMessage, getMessageText } from "./helpers/mailpit"
+import { waitForHydration } from "./helpers/hydration"
 
 /**
  * Covers the public registration flow end-to-end, including the regression
@@ -14,6 +15,8 @@ const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
 const FALLBACK_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL ?? "fallback-should-not-receive@localhost"
 
 test.beforeEach(async () => {
+  // Emails go through a busy dev server and Mailpit in CI: allow up to 90 s (#592).
+  test.slow()
   await clearMailbox()
 })
 
@@ -22,7 +25,10 @@ test("volunteer registers for a shift, gets confirmation, org admin gets notifie
 
   await page.goto("/spectacle-cirque-2026?org=default")
 
-  await page.getByRole("button", { name: /Sélectionner.*Billetterie/ }).first().click()
+  // A click before hydration selects nothing (#592).
+  const select = page.getByRole("button", { name: /Sélectionner.*Billetterie/ }).first()
+  await waitForHydration(select)
+  await select.click()
   await page.getByRole("button", { name: /^Continuer/ }).click()
 
   await page.getByLabel("Prénom *", { exact: true }).fill("E2E")

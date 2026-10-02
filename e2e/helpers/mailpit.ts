@@ -29,8 +29,11 @@ export async function searchMessages(query: string): Promise<MailpitMessageSumma
   return data.messages
 }
 
-/** Polls Mailpit until at least one message matches `query`, or times out. */
-export async function waitForMessage(query: string, timeoutMs = 10_000): Promise<MailpitMessageSummary> {
+/**
+ * Polls Mailpit until at least one message matches `query`, or times out. Returns as soon as one
+ * arrives; the 20 s cap only matters on a slow CI dev server, where 10 s was too short (#592).
+ */
+export async function waitForMessage(query: string, timeoutMs = 20_000): Promise<MailpitMessageSummary> {
   const start = Date.now()
   while (Date.now() - start < timeoutMs) {
     const messages = await searchMessages(query)

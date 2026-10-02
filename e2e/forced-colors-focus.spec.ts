@@ -331,12 +331,14 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       await submit.focus()
       await page.keyboard.press("Enter")
       await expect(submit).toHaveAttribute("aria-disabled", "true")
+      // signIn fetches the CSRF token before it posts the credentials: on a busy server the post can
+      // come well after 300 ms, so wait for it rather than count too early (#592).
+      await expect.poll(() => posts, { message: "the sign-in request was not seen (route pattern)", timeout: 20_000 }).toBe(1)
       failures.push(...(await checkFocused(page, "login submit while signing in")))
       await page.keyboard.press("Enter")
       await page.keyboard.press("Space")
       await page.waitForTimeout(300)
       if (posts > 1) failures.push(`login submit while signing in: Enter/Space sent ${posts - 1} more request(s)`)
-      if (posts === 0) failures.push("login submit while signing in: the sign-in request was not seen (route pattern)")
       release()
       settle(failures)
     })
