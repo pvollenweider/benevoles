@@ -20,7 +20,16 @@ export type SignupShift = {
   minAge: number | null
 }
 
-export type MyRegistration = { shiftId: string; token: string; label: string; roleName: string; startTime: string; endTime: string }
+export type MyRegistration = {
+  shiftId: string
+  token: string
+  label: string
+  roleName: string
+  startTime: string
+  endTime: string
+  /** The registration's status (active, requested, waiting, offered): the withdrawal words depend on it. */
+  status: string
+}
 
 export type SignupForm = {
   firstName: string
@@ -96,6 +105,7 @@ export function validateSignup(input: {
 
 type ApiRegistration = {
   editToken: string
+  status: string
   shift: { id: string; label: string; roleName?: string; startTime: string; endTime: string }
 }
 
@@ -108,6 +118,7 @@ export function toMyRegistrations(registrations: ApiRegistration[]): MyRegistrat
     roleName: r.shift.roleName ?? "",
     startTime: r.shift.startTime,
     endTime: r.shift.endTime,
+    status: r.status,
   }))
 }
 

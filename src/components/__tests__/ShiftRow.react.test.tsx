@@ -68,10 +68,43 @@ describe("ShiftRow", () => {
     const { onCancel, onRemove, row } = renderRow({ registered: true })
     expect(row).toHaveClass("bg-green-50")
     expect(screen.queryByRole("button", { name: /de la sélection/ })).toBeNull()
-    const button = screen.getByRole("button", { name: "Annuler l'inscription à Bar" })
+    const button = screen.getByRole("button", { name: "Annuler le créneau Bar" })
+    expect(button).toHaveAttribute("data-withdraw-trigger", "s1")
     fireEvent.click(button)
     expect(onCancel).toHaveBeenCalledWith(button)
     expect(onRemove).not.toHaveBeenCalled()
+  })
+
+  it("names the cancel button after what it withdraws, by the registration's status (#584)", () => {
+    const names: Record<string, string> = {
+      active: "Annuler le créneau Bar",
+      waiting: "Quitter la liste d'attente du créneau Bar",
+      offered: "Refuser la place proposée sur le créneau Bar",
+      requested: "Retirer ma demande pour le créneau Bar",
+    }
+    for (const [status, name] of Object.entries(names)) {
+      const { unmount } = renderRow({ registered: true, status })
+      expect(screen.getByRole("button", { name })).toHaveAttribute("data-withdraw-trigger", "s1")
+      unmount()
+    }
+  })
+
+  it("only the cancel button of a held shift is a withdraw trigger", () => {
+    renderRow()
+    expect(screen.getByRole("button", { name: "Retirer Bar de la sélection" })).not.toHaveAttribute("data-withdraw-trigger")
+  })
+
+  // 2.5.8 and 1.4.11: the icon-only ✕ is at least 24 px and dark enough against its pale row.
+  it("gives both ✕ buttons a 24 px target and an icon colour that contrasts with the row", () => {
+    const { unmount } = renderRow({ registered: true })
+    const cancel = screen.getByRole("button", { name: "Annuler le créneau Bar" })
+    expect(cancel).toHaveClass("min-h-6", "min-w-6", "text-green-800")
+    expect(cancel.className).not.toMatch(/text-green-[1-4]00\b/)
+    unmount()
+    renderRow()
+    const remove = screen.getByRole("button", { name: "Retirer Bar de la sélection" })
+    expect(remove).toHaveClass("min-h-6", "min-w-6", "text-blue-700")
+    expect(remove.className).not.toMatch(/text-blue-[1-4]00\b/)
   })
 
   it("says a full shift goes to the waiting list", () => {
@@ -116,7 +149,7 @@ describe("ShiftRow focus return", () => {
 
   it("keeps the same button across the parent re-render, so focus can come back to it", () => {
     render(<Harness />)
-    const cancel = screen.getByRole("button", { name: /Annuler l'inscription à Bar/ })
+    const cancel = screen.getByRole("button", { name: "Annuler le créneau Bar" })
     fireEvent.click(cancel)
     fireEvent.click(screen.getByRole("button", { name: "Annuler" }))
     expect(cancel.isConnected).toBe(true)

@@ -96,8 +96,15 @@ describe("validateSignup", () => {
 
 describe("toMyRegistrations / prefillContact", () => {
   it("maps the API registrations", () => {
-    expect(toMyRegistrations([{ editToken: "t", shift: { id: "s", label: "Bar", startTime: "10:00", endTime: "12:00" } }]))
-      .toEqual([{ shiftId: "s", token: "t", label: "Bar", roleName: "", startTime: "10:00", endTime: "12:00" }])
+    expect(toMyRegistrations([{ editToken: "t", status: "active", shift: { id: "s", label: "Bar", startTime: "10:00", endTime: "12:00" } }]))
+      .toEqual([{ shiftId: "s", token: "t", label: "Bar", roleName: "", startTime: "10:00", endTime: "12:00", status: "active" }])
+  })
+
+  it("keeps each registration's status, for the withdrawal words", () => {
+    const regs = toMyRegistrations(["active", "requested", "waiting", "offered"].map((status, i) => (
+      { editToken: `t${i}`, status, shift: { id: `s${i}`, label: "Bar", startTime: "10:00", endTime: "12:00" } }
+    )))
+    expect(regs.map((r) => r.status)).toEqual(["active", "requested", "waiting", "offered"])
   })
 
   it("source wins when restoring the volunteer's own session", () => {

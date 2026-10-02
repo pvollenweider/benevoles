@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useEffect, useRef, useState, useMemo } from "react"
+import { useEffect, useLayoutEffect, useRef, useState, useMemo } from "react"
 import { closedMessage, openUntilMessage, registrationState } from "@/lib/registration-window"
 import { eventAccent } from "@/lib/event-accent"
 import { coordinatesOf, MAP_LINK_LABEL, MAP_LINK_SR_SUFFIX, osmLink } from "@/lib/map-link"
@@ -27,6 +27,10 @@ import {
 } from "@/lib/public-signup"
 import { roleLimitBreaches, roleLimitSelectionMessage, roleLimits } from "@/lib/role-limit"
 import { announce } from "@/lib/announce"
+import { focusFirstAvailable, type FocusCandidate } from "@/lib/focus-return"
+import { withdrawCopy, withdrawDoneMessage, withdrawFailureMessage } from "@/lib/volunteer-withdraw"
+import ModalShell from "@/components/admin/ModalShell"
+import WithdrawDialog from "@/components/public/WithdrawDialog"
 import SignupQuestions, { type Answers } from "@/components/public/SignupQuestions"
 import { checkAnswers, type Question } from "@/lib/event-questions"
 import DayTimeline from "@/components/DayTimeline"
@@ -123,7 +127,16 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   // The day of the refused shift: the visible note sits under that day's schedule, where the click was.
   const [limitNoticeDay, setLimitNoticeDay] = useState<string | null>(null)
   const [myRegistrations, setMyRegistrations] = useState<MyReg[]>([])
-  const [pendingCancel, setPendingCancel] = useState<{ token: string; shiftId: string; label: string } | null>(null)
+  // The withdrawal confirmation of a held shift (#584), its request and its failure.
+  const [pendingCancel, setPendingCancel] = useState<{ token: string; shiftId: string; label: string; status: string } | null>(null)
+  const [withdrawing, setWithdrawing] = useState(false)
+  const withdrawingRef = useRef(false)
+  const [withdrawError, setWithdrawError] = useState<string | null>(null)
+  const withdrawConfirmRef = useRef<HTMLButtonElement>(null)
+  // Where the withdrawal was asked from: the ✕, its list and its place there, for the focus after.
+  const withdrawFrom = useRef<{ trigger: HTMLButtonElement; list: Element | null; index: number } | null>(null)
+  // Result of an action outside the sign-up steps (a withdrawal), voiced once.
+  const [actionNotice, setActionNotice] = useState("")
   const [step, setStep] = useState<"select" | "form">("select")
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -135,13 +148,23 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   const [charterAccepted, setCharterAccepted] = useState(false)
   const [showCharter, setShowCharter] = useState(false)
   const charterTriggerRef = useRef<HTMLButtonElement>(null)
-  const cancelTriggerRef = useRef<HTMLButtonElement | null>(null)
   const [form, setForm] = useState<SignupForm>(EMPTY_SIGNUP_FORM)
   // Preview (#370): focus the result when it appears, and the submit button when going back to
   // the form (the result panel unmounts, focus would otherwise fall to <body>).
   const resultHeadingRef = useRef<HTMLHeadingElement>(null)
   const submitButtonRef = useRef<HTMLButtonElement>(null)
   const hadPreviewResult = useRef(false)
+
+  // Focus to move once React has committed the render it goes with (a dialog closed, a row removed),
+  // the RoleManagerPanel pattern. Only while focus is in a dialog or was dropped to <body> by an
+  // unmounted control: an answer that arrives after the user went elsewhere does not pull it back.
+  const [focusRequest, setFocusRequest] = useState<{ candidates: FocusCandidate[] } | null>(null)
+  useLayoutEffect(() => {
+    if (!focusRequest) return
+    const active = document.activeElement
+    const free = active === null || active === document.body || !!active.closest("[role=dialog],[role=alertdialog]")
+    if (free) focusFirstAvailable(focusRequest.candidates)
+  }, [focusRequest])
   useEffect(() => {
     if (previewResult) {
       hadPreviewResult.current = true
@@ -154,6 +177,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
 
   const storageKey = `benevoles_token_${eventSlug}`
   const myShiftIds = useMemo(() => new Set(myRegistrations.map((r) => r.shiftId)), [myRegistrations])
+  const myStatus = useMemo(() => new Map(myRegistrations.map((r) => [r.shiftId, r.status])), [myRegistrations])
   // Shifts of reserved roles (#470) this visitor can't take; the server checks it again at sign-up.
   const reservedShiftIds = useMemo(
     () => new Set((event?.shifts ?? []).filter((s) => s.reserved && !allowedReserved.has(s.roleName)).map((s) => s.id)),
@@ -232,12 +256,6 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
       })
       .catch(() => {})
   }, [storageKey, previewEventId])
-
-  async function cancelRegistration(regToken: string, shiftId: string) {
-    await fetch(`/api/public/registrations/${regToken}`, { method: "DELETE" })
-    setMyRegistrations((prev) => prev.filter((r) => r.token !== regToken))
-    setSelectedShifts((prev) => { const next = new Set(prev); next.delete(shiftId); return next })
-  }
 
   if (loading) return <div role="status" className="flex items-center justify-center min-h-screen text-gray-500">Chargement…</div>
   if (!event) return <div role="alert" className="flex items-center justify-center min-h-screen text-gray-500">Événement introuvable.</div>
@@ -389,14 +407,84 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
     requestAnimationFrame(() => titleRef.current?.focus())
   }
 
+  // The charter closes back to its link (ModalShell also restores its opener; WebKit never focused a tapped one).
+  function closeCharter() {
+    setShowCharter(false)
+    setFocusRequest({ candidates: [charterTriggerRef.current] })
+  }
+
   // orgSlug is received as prop but only used in the storageKey (already included via eventSlug)
   void orgSlug
 
-  // A held shift's ✕ in a ShiftRow: ask before cancelling, the focus returns to that button.
+  // A held shift's ✕ in a ShiftRow: ask before cancelling. The ✕, its list and its place there
+  // are kept for the focus once the dialog closes.
   function requestCancel(s: Shift, trigger: HTMLButtonElement) {
-    cancelTriggerRef.current = trigger
     const reg = myRegistrations.find((r) => r.shiftId === s.id)
-    if (reg) setPendingCancel({ token: reg.token, shiftId: s.id, label: s.label || s.roleName })
+    if (!reg) return
+    const list = trigger.closest("[data-shift-list]")
+    const index = list ? [...list.querySelectorAll("button")].indexOf(trigger) : -1
+    withdrawFrom.current = { trigger, list, index }
+    setWithdrawError(null)
+    setPendingCancel({ token: reg.token, shiftId: s.id, label: s.label || s.roleName, status: reg.status })
+  }
+
+  const shiftBar = (shiftId: string) => () => document.querySelector<HTMLElement>(`[data-shift-id="${CSS.escape(shiftId)}"]`)
+
+  /** « Non, garder », Escape or « Fermer »: back to the ✕ (WebKit never focused a tapped one), else its bar, else the title. */
+  function keepRegistration() {
+    if (withdrawingRef.current || !pendingCancel) return
+    const from = withdrawFrom.current
+    setPendingCancel(null)
+    setWithdrawError(null)
+    setFocusRequest({ candidates: [from?.trigger, shiftBar(pendingCancel.shiftId), titleRef.current] })
+  }
+
+  /**
+   * The withdrawal, with the dialog open until the server answers. A failure is said in the dialog
+   * and removes nothing; a success removes the shift, closes the dialog, announces the result once
+   * and moves focus to the row now at the ✕'s place (else the last one), else the shift's bar, else
+   * the title.
+   */
+  async function withdraw() {
+    const pending = pendingCancel
+    if (!pending || withdrawingRef.current) return
+    withdrawingRef.current = true
+    setWithdrawing(true)
+    setWithdrawError(null)
+    let failure: { status?: number; network?: boolean } | null = null
+    try {
+      const res = await fetch(`/api/public/registrations/${pending.token}`, { method: "DELETE" })
+      if (!res.ok) failure = { status: res.status }
+    } catch {
+      failure = { network: true }
+    }
+    withdrawingRef.current = false
+    setWithdrawing(false)
+
+    if (failure) {
+      setWithdrawError(withdrawFailureMessage(failure))
+      // Already there after a keyboard press; WebKit leaves a tapped button unfocused.
+      setFocusRequest({ candidates: [() => withdrawConfirmRef.current] })
+      return
+    }
+
+    const from = withdrawFrom.current
+    const shift = event?.shifts.find((s) => s.id === pending.shiftId)
+    setMyRegistrations((prev) => prev.filter((r) => r.token !== pending.token))
+    setSelectedShifts((prev) => { const next = new Set(prev); next.delete(pending.shiftId); return next })
+    setPendingCancel(null)
+    if (shift) announce(setActionNotice, withdrawDoneMessage(pending.status, { ...shift, label: pending.label }))
+    setFocusRequest({
+      candidates: [
+        () => {
+          if (!from?.list?.isConnected || from.index < 0) return null
+          const buttons = [...from.list.querySelectorAll<HTMLElement>("button")]
+          return buttons[from.index] ?? buttons[buttons.length - 1]
+        },
+        shiftBar(pending.shiftId),
+        titleRef.current,
+      ],
+    })
   }
 
   const allSelectedShifts = event.shifts.filter((s) => selectedShifts.has(s.id))
@@ -578,8 +666,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
 
                 {/* Mobile: selected shifts summary card */}
                 {allSelectedShifts.length > 0 && (
-                  <div className="lg:hidden rounded-xl border border-gray-200 bg-white overflow-hidden divide-y divide-gray-100">
-                    {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} registered={myShiftIds.has(s.id)} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
+                  <div data-shift-list className="lg:hidden rounded-xl border border-gray-200 bg-white overflow-hidden divide-y divide-gray-100">
+                    {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
                   </div>
                 )}
               </div>
@@ -609,14 +697,14 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                       <p className="px-4 pt-3 pb-2 text-xs font-semibold text-gray-500 border-b border-gray-100">
                         Créneaux sélectionnés
                       </p>
-                      <div className="divide-y divide-gray-100">
-                        {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} compact registered={myShiftIds.has(s.id)} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
+                      <div data-shift-list className="divide-y divide-gray-100">
+                        {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} compact registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
                       </div>
                       {newShiftIds.size > 0 && (
                         <div className="p-3 border-t border-gray-100">
                           <button
                             onClick={() => setStep("form")}
-                            className="w-full bg-blue-600 text-white rounded-xl py-3 text-sm font-semibold hover:bg-blue-700 active:scale-[0.98] transition-all"
+                            className="w-full bg-blue-600 text-white rounded-xl py-3 text-sm font-semibold hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all"
                           >
                             Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
                           </button>
@@ -634,7 +722,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                 <div className="max-w-2xl mx-auto px-4 pb-5 pt-10 bg-gradient-to-t from-gray-50 via-gray-50/90 to-transparent pointer-events-none">
                   <button
                     onClick={() => setStep("form")}
-                    className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold shadow-xl hover:bg-blue-700 active:scale-[0.98] transition-all pointer-events-auto"
+                    className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold shadow-xl hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all pointer-events-auto"
                   >
                     Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
                   </button>
@@ -837,7 +925,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                   ref={submitButtonRef}
                   type="submit"
                   aria-disabled={submitting || undefined}
-                  className={`w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold hover:bg-blue-700 active:scale-[0.98] transition-all ${submitting ? "opacity-50 cursor-not-allowed" : ""}`}
+                  className={`w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all ${submitting ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
                   {submitting ? "Envoi en cours…" : preview ? "Voir la confirmation (aperçu)" : "Confirmer mon inscription"}
                 </button>
@@ -849,79 +937,41 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
       </div>
 
       {showCharter && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="charter-dialog-title"
-          onKeyDown={(e) => { if (e.key === "Escape") { setShowCharter(false); charterTriggerRef.current?.focus() } }}
-          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+        <ModalShell
+          title="Convention des Bénévoles"
+          onClose={closeCharter}
+          closeOnBackdrop={false}
+          panelClassName="max-w-lg"
         >
-          <div
-            className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[80vh] flex flex-col"
-            ref={(el) => { if (el) { const first = el.querySelector<HTMLElement>("button,a,[tabindex]"); first?.focus() } }}
-          >
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-              <h2 id="charter-dialog-title" className="text-base font-semibold text-gray-900">Convention des Bénévoles</h2>
-              <button
-                onClick={() => { setShowCharter(false); charterTriggerRef.current?.focus() }}
-                aria-label="Fermer la convention des bénévoles"
-                className="text-gray-500 hover:text-gray-700 text-xl leading-none"
-              ><span aria-hidden="true">✕</span></button>
-            </div>
-            <div className="overflow-y-auto px-5 py-4 text-sm text-gray-700 whitespace-pre-wrap leading-relaxed flex-1">
-              {event.volunteerCharter ?? DEFAULT_VOLUNTEER_CHARTER}
-            </div>
-            <div className="px-5 py-4 border-t border-gray-100">
-              <button
-                onClick={() => { setCharterAccepted(true); setShowCharter(false); charterTriggerRef.current?.focus() }}
-                className="w-full bg-blue-600 text-white rounded-xl py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors"
-              >
-                J&apos;ai lu et j&apos;accepte
-              </button>
-            </div>
+          <div className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
+            {event.volunteerCharter ?? DEFAULT_VOLUNTEER_CHARTER}
           </div>
-        </div>
+          <div className="pt-4 mt-4 border-t border-gray-100">
+            <button
+              type="button"
+              onClick={() => { setCharterAccepted(true); closeCharter() }}
+              className="w-full bg-blue-600 text-white rounded-xl py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            >
+              J&apos;ai lu et j&apos;accepte
+            </button>
+          </div>
+        </ModalShell>
       )}
 
       {pendingCancel && (
-        <div
-          role="alertdialog"
-          aria-modal="true"
-          aria-labelledby="cancel-dialog-title"
-          aria-describedby="cancel-dialog-desc"
-          onKeyDown={(e) => { if (e.key === "Escape") { setPendingCancel(null); cancelTriggerRef.current?.focus() } }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
-        >
-          <div
-            className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full space-y-4"
-            ref={(el) => { if (el) { const first = el.querySelector<HTMLElement>("button"); first?.focus() } }}
-          >
-            <h2 id="cancel-dialog-title" className="text-base font-semibold text-gray-900">Se désinscrire ?</h2>
-            <p id="cancel-dialog-desc" className="text-sm text-gray-600">
-              Tu veux annuler ton inscription à&nbsp;
-              <span className="font-medium text-gray-900">« {pendingCancel.label} »</span>&nbsp;?
-            </p>
-            <div className="flex gap-3 pt-1">
-              <button
-                onClick={() => {
-                  cancelRegistration(pendingCancel.token, pendingCancel.shiftId)
-                  setPendingCancel(null)
-                  cancelTriggerRef.current?.focus()
-                }}
-                className="flex-1 bg-red-500 text-white rounded-xl py-2.5 text-sm font-medium hover:bg-red-600 transition-colors"
-              >
-                Me désinscrire
-              </button>
-              <button
-                onClick={() => { setPendingCancel(null); cancelTriggerRef.current?.focus() }}
-                className="flex-1 border border-gray-200 text-gray-700 rounded-xl py-2.5 text-sm font-medium hover:bg-gray-50 transition-colors"
-              >
-                Annuler
-              </button>
-            </div>
-          </div>
-        </div>
+        <WithdrawDialog
+          copy={withdrawCopy(pendingCancel.status, pendingCancel.label)}
+          label={pendingCancel.label}
+          busy={withdrawing}
+          error={withdrawError}
+          onConfirm={withdraw}
+          onKeep={keepRegistration}
+          confirmRef={withdrawConfirmRef}
+        />
       )}
+
+      {/* Always mounted, outside the steps: the result of a withdrawal. The role limit has its own. */}
+      <p id="action-notice" role="status" className="sr-only">{actionNotice}</p>
 
       <PublicFooter />
     </Root>

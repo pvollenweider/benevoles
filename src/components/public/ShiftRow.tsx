@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { fmt } from "@/lib/gantt-utils"
+import { withdrawCopy } from "@/lib/volunteer-withdraw"
 
 /** What a selected-shift row shows of a shift. */
 export type ShiftRowShift = {
@@ -24,9 +25,14 @@ type Props = {
   compact?: boolean
   /** Already held by the visitor (green row, the button cancels the registration). */
   registered: boolean
+  /**
+   * Status of the visitor's registration on a held shift (active, requested, waiting, offered):
+   * the cancel button is named after what it withdraws.
+   */
+  status?: string
   /** In the current selection (blue row). */
   selected: boolean
-  /** Held shift: asks to cancel; gets the button so the focus can return to it. */
+  /** Held shift: asks to cancel; gets the button, to find its list and give focus back to it. */
   onCancel: (trigger: HTMLButtonElement) => void
   /** Selected shift: takes it out of the selection. */
   onRemove: () => void
@@ -36,7 +42,7 @@ type Props = {
  * A selected or held shift on the public sign-up page, in the mobile summary card and the desktop
  * sidebar.
  */
-export default function ShiftRow({ shift: s, compact = false, registered: isReg, selected, onCancel, onRemove }: Props) {
+export default function ShiftRow({ shift: s, compact = false, registered: isReg, status = "active", selected, onCancel, onRemove }: Props) {
   const isWaitlistPending = !isReg && s.status === "full" && (s.waitlistEnabled ?? false)
   const name = s.label && s.label !== s.roleName ? s.label : s.roleName
   return (
@@ -57,16 +63,20 @@ export default function ShiftRow({ shift: s, compact = false, registered: isReg,
           <p className="text-xs text-amber-800 mt-0.5 font-medium">Sur validation · demande à accepter par l&apos;organisation</p>
         )}
       </div>
+      {/* Icon-only ✕: at least 24 × 24 px (2.5.8), the icon at least 3:1 against its row (1.4.11). */}
       {isReg ? (
         <button
+          type="button"
+          data-withdraw-trigger={s.id}
           onClick={(e) => onCancel(e.currentTarget as HTMLButtonElement)}
-          className="text-green-300 hover:text-red-400 text-xs flex-shrink-0 transition-colors mt-0.5"
-          aria-label={`Annuler l'inscription à ${name}`}
+          className="-mt-0.5 -mr-1 min-h-6 min-w-6 inline-flex items-center justify-center rounded-md text-sm leading-none flex-shrink-0 text-green-800 hover:text-red-700 hover:bg-green-100 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-700"
+          aria-label={withdrawCopy(status, name).ariaLabel}
         ><span aria-hidden="true">✕</span></button>
       ) : (
         <button
+          type="button"
           onClick={() => onRemove()}
-          className="text-blue-300 hover:text-red-400 text-xs flex-shrink-0 transition-colors mt-0.5"
+          className="-mt-0.5 -mr-1 min-h-6 min-w-6 inline-flex items-center justify-center rounded-md text-sm leading-none flex-shrink-0 text-blue-700 hover:text-red-700 hover:bg-blue-100 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-700"
           aria-label={`Retirer ${name} de la sélection`}
         ><span aria-hidden="true">✕</span></button>
       )}
