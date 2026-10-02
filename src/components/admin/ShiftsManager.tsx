@@ -186,17 +186,25 @@ export default function ShiftsManager({
       {/* Top bar */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap">
-          {/* View toggle */}
-          <div className="flex rounded-xl border border-gray-200 overflow-hidden text-sm">
+          {/* View toggle (#554): toggle buttons, no overflow-hidden (it clipped the focus outline);
+              the 11px inner radius (12px minus the border) keeps the dark fill inside the rounded border.
+              Forced colours: the pressed button is filled with Highlight. Its text keeps the forced
+              CanvasText, because Chromium paints a Canvas plate behind text there, and HighlightText
+              (often the same as, or close to, Canvas) would make the label invisible. */}
+          <div role="group" aria-label="Affichage des créneaux" className="flex rounded-xl border border-gray-200 text-sm">
             <button
+              type="button"
+              aria-pressed={view === "timeline"}
               onClick={() => setView("timeline")}
-              className={`px-3 py-1.5 font-medium transition-colors ${view === "timeline" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
+              className={`px-3 py-1.5 font-medium transition-colors first:rounded-l-[11px] last:rounded-r-[11px] forced-colors:aria-pressed:bg-[Highlight] ${view === "timeline" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
             >
               Timeline
             </button>
             <button
+              type="button"
+              aria-pressed={view === "list"}
               onClick={() => setView("list")}
-              className={`px-3 py-1.5 font-medium transition-colors ${view === "list" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
+              className={`px-3 py-1.5 font-medium transition-colors first:rounded-l-[11px] last:rounded-r-[11px] forced-colors:aria-pressed:bg-[Highlight] ${view === "list" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
             >
               Liste
             </button>

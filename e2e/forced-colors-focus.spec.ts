@@ -1,7 +1,7 @@
 import { test, expect, type Browser, type Page } from "@playwright/test"
 import {
   checkFocused, checkSelectedStates, emulateForcedColors, expectNoFailures, shot, stateSignature, sweep,
-  type Exclusion, type Scheme,
+  type Scheme,
 } from "./helpers/forced-colors"
 import { getMessageText, waitForMessage } from "./helpers/mailpit"
 
@@ -29,17 +29,6 @@ const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
 const ORG_ADMIN_PASSWORD = process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password"
 const SUPER_ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "admin@localhost"
 const SUPER_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "e2e-admin-password"
-
-// The Timeline / Liste toggle of the shifts page is a known failure owned by #554 (outline clipped
-// by its `overflow-hidden` wrapper, selected view shown only by colour, no aria-pressed). It is
-// left out of the generic sweep by this exact selector (the buttons named Timeline / Liste in the
-// overflow-hidden wrapper) and checked in its own test.fixme below. Once #554 removes the wrapper's
-// overflow-hidden, the exclusion stops matching and the generic sweep covers the toggle again.
-const VIEW_TOGGLE = "div.flex.rounded-xl.overflow-hidden > button"
-const VIEW_TOGGLE_EXCLUSIONS: Exclusion[] = [
-  { selector: VIEW_TOGGLE, text: "Timeline", reason: "#554 view toggle, own test" },
-  { selector: VIEW_TOGGLE, text: "Liste", reason: "#554 view toggle, own test" },
-]
 
 /**
  * Defects this spec found that existed before #579 and are outside its scope. They are reported
@@ -545,27 +534,26 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       settle(failures)
     })
 
-    test("shifts page (view toggle excluded, see the #554 test)", async ({ page }) => {
+    test("shifts page", async ({ page }) => {
       const failures: string[] = []
       await login(page)
       await page.goto(`/admin/events/${data.eventId}/shifts`)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
-      failures.push(...(await sweep(page, "shifts", { min: 8, exclude: VIEW_TOGGLE_EXCLUSIONS })).failures)
+      failures.push(...(await sweep(page, "shifts", { min: 8 })).failures)
       // The list view, reached with the toggle, swept the same way (from the toggle, all around).
-      await page.locator(VIEW_TOGGLE, { hasText: "Liste" }).click()
-      failures.push(...(await sweep(page, "shifts, list view", { min: 8, exclude: VIEW_TOGGLE_EXCLUSIONS })).failures)
+      await page.getByRole("button", { name: "Liste", exact: true }).click()
+      failures.push(...(await sweep(page, "shifts, list view", { min: 8 })).failures)
       settle(failures)
     })
 
     test("shifts page view toggle (Timeline / Liste)", async ({ page }) => {
-      // Known failure, owned by #554 (outline clipped by the overflow-hidden wrapper, selected view
-      // shown only by colour, no aria-pressed). Remove this fixme in the PR that fixes #554.
-      test.fixme(true, "#554: Timeline/Liste toggle, fixed by the PR that closes #554")
       const failures: string[] = []
       await login(page)
       await page.goto(`/admin/events/${data.eventId}/shifts`)
-      const timeline = page.getByRole("button", { name: "Timeline", exact: true })
-      const list = page.getByRole("button", { name: "Liste", exact: true })
+      const group = page.getByRole("group", { name: "Affichage des créneaux" })
+      await expect(group).toBeVisible()
+      const timeline = group.getByRole("button", { name: "Timeline", exact: true })
+      const list = group.getByRole("button", { name: "Liste", exact: true })
       for (const b of [timeline, list]) {
         await b.focus()
         await page.keyboard.press("Shift+Tab")
@@ -577,6 +565,31 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       await page.evaluate(() => (document.activeElement as HTMLElement).blur())
       const [a, b] = [await stateSignature(timeline), await stateSignature(list)]
       if (JSON.stringify(a) === JSON.stringify(b)) failures.push("view toggle: the selected view looks like the other one in forced colours")
+      // Switch with the keyboard: the pressed states flip and the focus stays on Liste, outline whole.
+      await list.focus()
+      await page.keyboard.press("Enter")
+      await expect(list).toHaveAttribute("aria-pressed", "true")
+      await expect(timeline).toHaveAttribute("aria-pressed", "false")
+      await expect(list).toBeFocused()
+      failures.push(...(await checkFocused(page, "view toggle after switching")))
+      // The colours transition (transition-colors): measure the selected state once it has settled.
+      await group.evaluate((g) => Promise.all(g.getAnimations({ subtree: true }).map((a) => a.finished)))
+      failures.push(...(await checkSelectedStates(page, "view toggle", { within: '[role="group"][aria-label="Affichage des créneaux"]' })))
+      // Chromium paints a Canvas plate behind text in forced colours: a label coloured like Canvas
+      // (HighlightText, say) is invisible on it, which the signature above cannot see.
+      const plate = await page.evaluate(() => {
+        const probe = document.createElement("div")
+        probe.style.color = "Canvas"
+        document.body.append(probe)
+        const c = getComputedStyle(probe).color
+        probe.remove()
+        return c
+      })
+      for (const b of [timeline, list]) {
+        const color = await b.evaluate((e) => getComputedStyle(e).color)
+        if (color === plate) failures.push(`view toggle: « ${await b.textContent()} » text is the Canvas colour (${color}), invisible on its plate`)
+      }
+      await shot(page, group, name("shifts", "view-toggle", "list-selected"))
       settle(failures)
     })
 
@@ -603,7 +616,7 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       await open.focus()
       await page.keyboard.press("Enter")
       await expect(open).toHaveAttribute("aria-expanded", "true")
-      failures.push(...(await sweep(page, "series form", { min: 12, exclude: VIEW_TOGGLE_EXCLUSIONS })).failures)
+      failures.push(...(await sweep(page, "series form", { min: 12 })).failures)
       settle(failures)
     })
 
@@ -617,7 +630,7 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
         await button.focus()
         await page.keyboard.press("Enter")
       }
-      failures.push(...(await sweep(page, "role settings", { min: 15, exclude: VIEW_TOGGLE_EXCLUSIONS })).failures)
+      failures.push(...(await sweep(page, "role settings", { min: 15 })).failures)
       failures.push(...(await checkSelectedStates(page, "role settings")))
       settle(failures)
     })
@@ -767,11 +780,12 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       await input.focus()
       await shot(page, input, name("registrations", "dot-input", "focused"))
       await page.goto(`/admin/events/${data.eventId}/shifts`)
-      await shot(page, page.locator(VIEW_TOGGLE).first().locator(".."), name("shifts", "view-toggle", "timeline-selected-idle"))
-      await page.locator(VIEW_TOGGLE, { hasText: "Liste" }).focus()
+      const toggle = page.getByRole("group", { name: "Affichage des créneaux" })
+      await shot(page, toggle, name("shifts", "view-toggle", "timeline-selected-idle"))
+      await toggle.getByRole("button", { name: "Liste", exact: true }).focus()
       await page.keyboard.press("Shift+Tab")
       await page.keyboard.press("Tab")
-      await shot(page, page.locator(VIEW_TOGGLE).first().locator(".."), name("shifts", "view-toggle", "liste-focused"))
+      await shot(page, toggle, name("shifts", "view-toggle", "liste-focused"))
     })
   })
 }
