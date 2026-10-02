@@ -248,6 +248,9 @@ La timeline Gantt (inscription bénévole + vue admin) est le composant le plus 
 - **Créneaux sélectionnés:** teinte plus foncée + `ring-2` de sélection.
 - **Créneaux indisponibles** (conflit, réservé, fermé) : teinte claire du poste (`bg-*-100`), texte `gray-700`, bouton désactivé.
 - **Complet sans liste d'attente:** fond blanc hachuré. **Complet avec liste d'attente:** hachures claires sur la couleur du poste.
+- **Créneaux déjà pris** (inscription confirmée, demande envoyée, liste d'attente, place proposée) : couleur par défaut du poste, sans effet de survol, sans anneau ni hachures, avec un ✓ cerclé (distinct du ✓ simple de la sélection) ; la ligne sous la barre commence par « Ton créneau », « Demande envoyée », « En liste d'attente » ou « Place proposée ». Bouton désactivé, sans `aria-pressed`, nommé « Bar 10h–12h : inscription confirmée » (ou « demande envoyée, en attente de validation », « en liste d'attente », « place proposée, à accepter sur ta page personnelle »). Un créneau déjà pris l'emporte sur sélectionné, complet, liste d'attente, conflit et réservé. Les textes des barres viennent de `src/lib/public-timeline.ts`.
+- **Couleurs forcées:** chaque barre porte `border border-transparent`, que le système repeint sur les quatre côtés quand il remplace le fond par `Canvas` ; la bordure gauche en style en ligne la remplace à gauche. La barre sélectionnée prend `forced-colors:aria-pressed:bg-[Highlight]`, sans `text-[HighlightText]` (même raison que pour les groupes de boutons accolés).
+- **Focus:** l'enveloppe de chaque barre porte `focus-within:z-20`, au-dessus de la colonne des postes (`z-10`) et des barres voisines, pour que leur contour de focus ne soit jamais masqué. Aucun élément entre la colonne des postes et les barres ne doit créer de contexte d'empilement (`transform`, `opacity`, `filter`, `z-index`), sinon la règle ne joue plus.
 
 ## 6. Do's and Don'ts
 

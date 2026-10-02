@@ -5,27 +5,10 @@
 
 import { getBarClasses } from "@/lib/roles"
 import { toMin, toMinEnd, fmt, assignLanes, crossesMidnight, hourLabel, type GanttShow } from "@/lib/gantt-utils"
-import { RESERVED_LABEL } from "@/lib/role-reservation"
+import { barText, type HeldKind, type TimelineShift } from "@/lib/public-timeline"
 
 export { fmt }
-
-export type TimelineShift = {
-  id: string
-  roleName: string
-  label: string
-  startTime: string
-  endTime: string
-  status: string
-  capacity: number
-  registered: number
-  spotsLeft: number
-  displayOrder?: number
-  waitlistEnabled?: boolean
-  /** « Sur validation » (#484): a sign-up is a request the organizer accepts or refuses. */
-  requiresApproval?: boolean
-  minAge?: number | null
-  colorKey?: string | null
-}
+export type { TimelineShift }
 
 type Show = GanttShow
 
@@ -49,18 +32,20 @@ export default function DayTimeline({
   shifts,
   shows,
   selected,
-  registered,
+  held,
   conflicts,
   onToggle,
   locked = false,
   describedBy,
   limitReachedRoles,
   reservedShiftIds,
+  dayLabel,
 }: {
   shifts: TimelineShift[]
   shows: Show[]
   selected: Set<string>
-  registered?: Set<string>
+  /** Shifts the visitor already holds, by status (#534): named and drawn as theirs, not offered. */
+  held?: Map<string, HeldKind>
   conflicts?: Set<string>
   onToggle: (id: string, status: string) => void
   /** Registrations closed (#463): the schedule stays readable, nothing new can be selected. */
@@ -71,6 +56,8 @@ export default function DayTimeline({
   limitReachedRoles?: Map<string, number>
   /** Shifts of roles reserved to members (#470) this visitor can't take: shown, not selectable. */
   reservedShiftIds?: Set<string>
+  /** The day in words (« samedi 4 juillet »): each day's schedule gets its own name. */
+  dayLabel?: string
 }) {
   const visible = shifts.filter((s) => s.status !== "cancelled")
   if (visible.length === 0) return null
@@ -123,7 +110,7 @@ export default function DayTimeline({
   return (
     <div
       role="region"
-      aria-label="Planning de la journée, à faire défiler horizontalement si besoin"
+      aria-label={dayLabel ? `Planning du ${dayLabel}` : "Planning de la journée"}
       aria-describedby={describedBy}
       className="mb-5 rounded-xl border border-gray-100 bg-white overflow-x-auto select-none"
     >
@@ -173,18 +160,23 @@ export default function DayTimeline({
                 style={{ top: roleTop[role], height: roleHeight[role] }}
               >
                 {byRole[role].map((shift) => {
-                  const isRegistered    = registered?.has(shift.id) ?? false
-                  const isConflict      = conflicts?.has(shift.id) ?? false
+                  const heldKind        = held?.get(shift.id)
+                  // Held wins over everything else: selected, full, waitlist, conflict, reserved.
+                  const isRegistered    = !!heldKind
+                  const isConflict      = !isRegistered && (conflicts?.has(shift.id) ?? false)
                   const isFull          = shift.status === "full"
                   const isClosed        = shift.status === "closed"
                   const isWaitlistable  = isFull && (shift.waitlistEnabled ?? false)
-                  const unavail         = (isFull && !isWaitlistable) || isClosed
-                  const isSelected      = selected.has(shift.id)
+                  const unavail         = !isRegistered && ((isFull && !isWaitlistable) || isClosed)
+                  const isSelected      = !isRegistered && selected.has(shift.id)
                   const isReserved      = !isSelected && !isRegistered && !!reservedShiftIds?.has(shift.id)
                   const state           = isSelected ? "selected" : (isConflict || unavail || isReserved) ? "unavailable" : "default"
-                  const barCls          = getBarClasses(shift.roleName, state, shift.colorKey)
+                  // A held bar does nothing: no hover darkening suggesting otherwise.
+                  const barCls          = isRegistered
+                    ? getBarClasses(shift.roleName, "default", shift.colorKey).replace(/\s*hover:\S+/g, "")
+                    : getBarClasses(shift.roleName, state, shift.colorKey)
                   const clickable       = !isRegistered && !isConflict && !unavail && !isReserved && (!locked || isSelected)
-                  const hasLabel        = shift.label !== shift.roleName
+                  const fullNoWaitlist  = !isRegistered && isFull && !isWaitlistable
                   const startMin        = toMin(shift.startTime)
                   const endMin          = toMinEnd(shift.endTime, shift.startTime)
                   const laneTop         = roleLane[role][shift.id] * (ROW_H + LANE_GAP)
@@ -197,44 +189,29 @@ export default function DayTimeline({
                   // threshold) — the start time alone, so the bar still says *something* useful
                   // instead of going blank. Never used for "En attente", which has no shorter form.
                   const timeShort       = fmt(shift.startTime)
-                  // The +1 mark is visual; the accessible name spells it out.
-                  const timeSpoken      = overnight ? `${timeRange}, jusqu'au lendemain` : timeRange
                   // Longer texts ("22h–02h +1", "En attente") need a wider bar to be shown whole.
                   const longText        = overnight || (isSelected && isWaitlistable)
-                  const roleLabel       = hasLabel ? `${shift.roleName} (${shift.label})` : shift.roleName
-                  // Informational only: we don't know a first-time visitor's age until the form,
-                  // so this never blocks selection here — real enforcement is server-side at
-                  // submit (see #192). Announced in the accessible name since the visual sub-label
-                  // below is aria-hidden.
-                  const hasMinAge       = shift.minAge != null
-                  const needsApproval   = shift.requiresApproval ?? false
-                  const minAgeSuffix    = (hasMinAge ? ` (${shift.minAge} ans minimum)` : "") + (needsApproval ? " (sur validation)" : "")
                   // Same "N/capacity" indicator as the admin timeline (#243), shown inside the bar
                   // itself the same way, so small groups can see at a glance whether a shift has
                   // enough room. Skipped once full (the "Complet" / waitlist wording already says
-                  // all that matters).
-                  const spotsText       = unavail ? null : `${shift.registered}/${shift.capacity}`
-                  const spotsSuffix     = spotsText ? ` (${shift.spotsLeft} place${shift.spotsLeft > 1 ? "s" : ""} libre${shift.spotsLeft > 1 ? "s" : ""} sur ${shift.capacity})` : ""
-                  const limitMax        = !isSelected && !isRegistered ? limitReachedRoles?.get(shift.roleName) : undefined
-                  const limitSuffix     = limitMax !== undefined ? ` (limite de ${limitMax} par personne atteinte)` : ""
-                  const ariaLabel       = isReserved ? `${roleLabel} ${timeSpoken}, ${RESERVED_LABEL}` : locked && !isSelected ? `${roleLabel} ${timeSpoken}${minAgeSuffix}${spotsSuffix}` : (isWaitlistable
-                    ? (isSelected
-                      ? `Retirer de la file d'attente — ${roleLabel} ${timeSpoken}`
-                      : `Rejoindre la file d'attente — ${roleLabel} ${timeSpoken}`)
-                    : (isSelected
-                      ? `Désélectionner — ${roleLabel} ${timeSpoken}`
-                      : `Sélectionner — ${roleLabel} ${timeSpoken}`)) + minAgeSuffix + spotsSuffix + limitSuffix
-                  const subLabelText    = isWaitlistable && !isSelected
-                    ? ["Complet · file d'attente", hasMinAge ? `${shift.minAge}+` : null, needsApproval ? "Sur validation" : null].filter(Boolean).join(" · ")
-                    : [hasLabel ? shift.label : null, hasMinAge ? `${shift.minAge}+` : null, needsApproval ? "Sur validation" : null].filter(Boolean).join(" · ")
-                  const showSubLabel    = hasLabel || (isWaitlistable && !isSelected) || hasMinAge || needsApproval
+                  // all that matters) and on a held bar (its name and tag say what matters).
+                  const spotsText       = unavail || isRegistered ? null : `${shift.registered}/${shift.capacity}`
+                  const { ariaLabel, tag, subLabel } = barText({
+                    shift,
+                    held: heldKind,
+                    selected: isSelected,
+                    reserved: isReserved,
+                    locked,
+                    limitReached: limitReachedRoles?.get(shift.roleName),
+                  })
+                  const showSubLabel    = !!tag || !!subLabel
 
                   return (
                     // @container: the text inside hides itself when the bar is too narrow for it
                     // (the button keeps its full accessible name).
                     <div
                       key={shift.id}
-                      className="absolute @container"
+                      className="absolute @container focus-within:z-20"
                       style={{
                         left: `${pct(startMin)}%`,
                         width: `${pctW(startMin, endMin)}%`,
@@ -249,17 +226,17 @@ export default function DayTimeline({
                         aria-pressed={clickable ? isSelected : undefined}
                         aria-label={ariaLabel}
                         onClick={() => onToggle(shift.id, shift.status)}
-                        className={`absolute inset-x-0 rounded flex items-center justify-center overflow-hidden transition-colors ${clickable ? "cursor-pointer" : "cursor-default"} ${barCls}`}
+                        className={`absolute inset-x-0 rounded border border-transparent forced-colors:aria-pressed:bg-[Highlight] ${isRegistered ? "forced-colors:border-2 forced-colors:border-[CanvasText]" : ""} flex items-center justify-center overflow-hidden transition-colors ${clickable ? "cursor-pointer" : "cursor-default"} ${barCls}`}
                         style={{
                           top: 0,
                           bottom: showSubLabel ? LABEL_H : 0,
-                          borderLeft: (isFull && !isWaitlistable) ? "3px solid rgba(0,0,0,0.08)" : "4px solid rgba(255,255,255,0.7)",
-                          ...((isFull && !isWaitlistable) ? {
+                          borderLeft: fullNoWaitlist ? "3px solid rgba(0,0,0,0.08)" : "4px solid rgba(255,255,255,0.7)",
+                          ...(fullNoWaitlist ? {
                             backgroundColor: "white",
                             backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 6px, rgba(0,0,0,0.06) 6px, rgba(0,0,0,0.06) 8px)",
                             outline: "1px solid rgba(0,0,0,0.07)",
                           } : {}),
-                          ...(isWaitlistable && !isSelected ? {
+                          ...(isWaitlistable && !isSelected && !isRegistered ? {
                             backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.35) 5px, rgba(255,255,255,0.35) 7px)",
                           } : {}),
                         }}
@@ -277,6 +254,12 @@ export default function DayTimeline({
                         ) : (
                           <div className="flex flex-col items-center justify-center gap-0.5 px-1.5 max-w-full overflow-hidden">
                             <div className="flex items-center gap-0.5 max-w-full overflow-hidden">
+                              {isRegistered && (
+                                // Held (#534): a check in a circle, unlike the plain check of a selection.
+                                <svg aria-hidden="true" className="w-3 h-3 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                </svg>
+                              )}
                               {isSelected && (
                                 <svg aria-hidden="true" className="w-2.5 h-2.5 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -333,7 +316,9 @@ export default function DayTimeline({
                           style={{ height: LABEL_H, lineHeight: `${LABEL_H}px` }}
                           aria-hidden="true"
                         >
-                          {subLabelText}
+                          {tag && <span className="font-semibold text-gray-800">{tag}</span>}
+                          {tag && subLabel && " · "}
+                          {subLabel}
                         </span>
                       )}
                     </div>

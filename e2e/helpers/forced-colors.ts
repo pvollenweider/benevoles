@@ -55,6 +55,26 @@ function checkActiveElementInPage({ exclude }: InPageArgs) {
     const type = e.getAttribute("type")
     return `${tag}${role ? `[role=${role}]` : ""}${type ? `[type=${type}]` : ""}${e.id && !/^_|«|:/.test(e.id) ? `#${e.id}` : ""} « ${text} »`
   }
+  // Whether `layer` paints above `target`: the z-index of the outermost z-indexed positioned
+  // ancestor of each, below their common ancestor. On a tie, a positioned chain (z-index auto
+  // or 0, e.g. a sticky header) paints above in-flow content whatever the DOM order (CSS 2.2
+  // Appendix E); otherwise the later one in the document wins.
+  const stackedAbove = (layer: Element, target: Element): boolean => {
+    let common: Element | null = layer.parentElement
+    while (common && !common.contains(target)) common = common.parentElement
+    const level = (e: Element): [number, boolean] => {
+      let z = 0, positioned = false
+      for (let a: Element | null = e; a && a !== common; a = a.parentElement) {
+        const s = getComputedStyle(a)
+        if (s.position !== "static") { positioned = true; if (s.zIndex !== "auto") z = parseInt(s.zIndex, 10) || 0 }
+      }
+      return [z, positioned]
+    }
+    const [lz, lp] = level(layer), [tz, tp] = level(target)
+    if (lz !== tz) return lz > tz
+    if (lp !== tp) return lp
+    return !!(target.compareDocumentPosition(layer) & Node.DOCUMENT_POSITION_FOLLOWING)
+  }
   if (!el || el === document.body || el === document.documentElement) return { kind: "none" as const }
   // Next.js dev overlay (dev server only): not part of the product.
   if (el.tagName === "NEXTJS-PORTAL" || el.closest("nextjs-portal")) return { kind: "skip" as const, reason: "dev overlay" }
@@ -147,6 +167,11 @@ function checkActiveElementInPage({ exclude }: InPageArgs) {
         const s = getComputedStyle(a)
         if (s.position === "fixed" || s.position === "sticky" || (s.position === "absolute" && s.zIndex !== "auto")) { layer = a; break }
       }
+      // The hit is what lies under the point, not what paints there: the outline is not hit-tested.
+      // A layer covers the outline only if it is stacked above the focused element, compared at
+      // their common ancestor (#583: a focused bar raised with `focus-within:z-20` above the z-10
+      // role labels).
+      if (layer && !stackedAbove(layer, t)) layer = null
       if (layer) { failures.push(`${where} covered by positioned ${describe(layer)}`); break }
     }
   }
