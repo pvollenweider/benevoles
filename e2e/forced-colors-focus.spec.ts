@@ -44,11 +44,6 @@ const KNOWN_ISSUES: { test: string; match: RegExp; note: string }[] = [
     note: "#583 — DayTimeline: the sticky role-label column (z-10) covers the left edge of the outline of a bar that starts at the first hour",
   },
   {
-    test: "public cancel dialog",
-    match: /cancel dialog: focus left the modal .* \(no focus trap\)/,
-    note: "#584 — EventPageClient cancel alertdialog (aria-modal) has no focus trap: Tab leaves it for the page behind",
-  },
-  {
     test: "members page and import modal",
     match: /import modal, preview step: focus left the modal .* \(no focus trap\)/,
     note: "#585 — ModalShell focus trap counts the hidden file form of ImportModal's preview step, so Tab escapes after the last visible button",
@@ -272,17 +267,18 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       await page.goto(publicUrl())
       await page.evaluate(([slug, token]) => localStorage.setItem(`benevoles_token_${slug}`, token), [data.slug, data.editToken])
       await page.goto(publicUrl())
-      const cancel = page.getByRole("button", { name: /^Annuler l'inscription à/ }).first()
+      const cancel = page.getByRole("button", { name: /^Annuler le créneau / }).first()
       await expect(cancel).toBeVisible()
       await cancel.focus()
       await page.keyboard.press("Enter")
       const dialog = page.getByRole("alertdialog")
       await expect(dialog).toBeVisible()
       failures.push(...(await sweep(page, "cancel dialog", { min: 2, within: "[role=alertdialog]", trap: true })).failures)
-      // Close with its own « Annuler »: without a trap the focus may be outside the dialog now.
-      await dialog.getByRole("button", { name: "Annuler" }).focus()
+      // Close with « Non, garder »: nothing is withdrawn, focus goes back to the ✕ (#584).
+      await dialog.getByRole("button", { name: "Non, garder" }).focus()
       await page.keyboard.press("Enter")
       await expect(dialog).toBeHidden()
+      await expect(cancel).toBeFocused()
       settle(failures)
     })
 

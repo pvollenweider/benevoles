@@ -244,6 +244,7 @@ export default function DayTimeline({
                       }}
                     >
                       <button
+                        data-shift-id={shift.id}
                         disabled={!clickable}
                         aria-pressed={clickable ? isSelected : undefined}
                         aria-label={ariaLabel}

@@ -25,6 +25,13 @@ describe("DayTimeline", () => {
     expect(onToggle).toHaveBeenCalledWith("a", "open")
   })
 
+  // The public page moves focus to a withdrawn shift's bar when its list row is gone (#584).
+  it("marks each bar with its shift id", () => {
+    render(<DayTimeline shifts={[shift("a"), shift("b", { startTime: "20:00", endTime: "22:00" })]} shows={[]} selected={new Set()} onToggle={() => {}} />)
+    expect(screen.getByRole("button", { name: /^Sélectionner — Bar 18h–20h/ })).toHaveAttribute("data-shift-id", "a")
+    expect(screen.getByRole("button", { name: /^Sélectionner — Bar 20h–22h/ })).toHaveAttribute("data-shift-id", "b")
+  })
+
   it("disables bars without an action verb when locked, and points the schedule at the reason", () => {
     render(
       <>
