@@ -10,7 +10,14 @@ Ce que recouvre la déclaration publique (`ACCESSIBILITE.md`, page `/accessibili
 - la page d'un événement (`/spectacle-cirque-2026?org=default`), puis son formulaire d'inscription après la sélection d'un créneau ;
 - dans l'administration : `/admin/login`, `/admin/events`, la page d'un événement et ses sous-pages `/shifts`, `/registrations`, `/message` et `/invitations`.
 
-`/accessibilite` et `/doc` sont aussi analysées à 320 px de large en thème sombre. Un seul projet Playwright : Chromium en affichage ordinateur (`Desktop Chrome`).
+`/accessibilite` et `/doc` sont aussi analysées à 320 px de large en thème sombre.
+
+Deux projets Playwright (`playwright.config.ts`) :
+
+- `chromium` : toute la suite, Chromium en affichage ordinateur (`Desktop Chrome`), sauf `e2e/mobile/` ;
+- `webkit-iphone` : seulement `e2e/mobile/`, sur le moteur WebKit de Playwright (celui de Safari) en mode headless, avec l'émulation d'un iPhone 15 (taille d'écran, user agent, tactile). Il sert aux comportements propres à Safari que Chromium n'a pas : par exemple, un bouton touché ne prend pas le focus (#589). Ce n'est pas un iPhone réel ni iOS Safari, et il ne remplace pas VoiceOver sur iOS.
+
+Parcours mobiles couverts (`e2e/mobile/account-menu.spec.ts`), au toucher (`tap()`) : menu du compte de l'administration, « Se déconnecter » ramène à la page de connexion, « Mon compte » ouvre la page du compte, un toucher en dehors referme le menu. Sur l'ancien `UserMenu.tsx` (avant #589), les deux premiers échouent sous WebKit et passent sous Chromium avec émulation mobile.
 
 Seuil dans `e2e/helpers/axe.ts` (`seriousViolations`) : le test échoue sur les impacts `serious` et `critical` ; le reste, y compris les résultats `incomplete` (« à vérifier »), est ajouté en annotation au rapport Playwright sans le faire échouer. Les outils automatiques ne détectent qu'une partie des problèmes, surtout ceux du code (noms, rôles, contraste) ; beaucoup de critères demandent une vérification humaine.
 
@@ -18,6 +25,12 @@ En local : `make e2e` sur la stack E2E (voir [CONTRIBUTING.md](../CONTRIBUTING.m
 
 ```bash
 node --env-file=.env.e2e node_modules/.bin/playwright test e2e/accessibility.spec.ts
+```
+
+Les parcours mobiles (une fois `npx playwright install webkit` fait) :
+
+```bash
+node --env-file=.env.e2e node_modules/.bin/playwright test --project=webkit-iphone
 ```
 
 ## Vérifications clavier (manuelles)
