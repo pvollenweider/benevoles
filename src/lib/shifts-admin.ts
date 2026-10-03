@@ -7,6 +7,9 @@
  * component so it can be tested on its own.
  */
 
+import { deleteShiftRecap, shiftWhen, type ActionRecap } from "./action-recap"
+import { spokenShiftName, spokenTimeRange } from "./spoken-time"
+
 type ShiftLike = {
   id: string
   roleName: string
@@ -111,4 +114,28 @@ export function sortShifts<S extends ShiftLike>(shifts: S[]): S[] {
   return [...active(shifts)].sort((a, b) =>
     a.date.localeCompare(b.date) || (a.displayOrder ?? 0) - (b.displayOrder ?? 0) || a.startTime.localeCompare(b.startTime),
   )
+}
+
+type ShiftWords = { roleName: string; label?: string | null; date: string; startTime: string; endTime: string }
+
+/** « 3 inscrits sur 5 », « 1 inscrit sur 2 »: a shift's places in words, for « 3/5 » read « 3 barre 5 » (#587). */
+export function spokenPlaces(registered: number, capacity: number): string {
+  return `${registered} inscrit${registered > 1 ? "s" : ""} sur ${capacity}`
+}
+
+/**
+ * The accessible name of a shift's bar on the admin timeline (#587): « Bar, Soir, de 10h30 à 12h,
+ * 3 inscrits sur 5, complet, modifier ». It starts with the role, as the bar shows it.
+ */
+export function timelineBarName(s: ShiftWords & { registrationCount: number; capacity: number }, full: boolean): string {
+  return `${spokenShiftName(s)}, ${spokenTimeRange(s.startTime, s.endTime)}, ${spokenPlaces(s.registrationCount, s.capacity)}${full ? ", complet" : ""}, modifier`
+}
+
+/**
+ * What deleting one shift does, before the confirmation (#379), for the list and the timeline
+ * alike (#587): « Bar, Soir » and « Samedi 4 juillet, de 10h30 à 12h15 », from the stored times
+ * (the timeline used to pass « 10h30 », whose minutes were lost).
+ */
+export function deleteShiftRecapFor(s: ShiftWords & { registrationCount: number }): ActionRecap {
+  return deleteShiftRecap({ name: spokenShiftName(s), when: shiftWhen(s.date, s.startTime, s.endTime), registered: s.registrationCount })
 }

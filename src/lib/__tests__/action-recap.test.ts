@@ -41,13 +41,18 @@ describe("action recaps", () => {
     expect(broadcastRecap(1).title).toBe("Envoyer cette communication à 1 administrateur ?")
   })
 
-  it("formats the moment of a shift", () => {
-    expect(shiftWhen("2026-07-04", "18:00", "23:00")).toBe("Samedi 4 juillet, 18:00–23:00")
+  // #587: in words, without the en dash read « tiret »; minutes and past midnight kept.
+  it("formats the moment of a shift in words", () => {
+    expect(shiftWhen("2026-07-04", "18:00", "23:00")).toBe("Samedi 4 juillet, de 18h à 23h")
+    expect(shiftWhen("2026-07-04", "10:30", "12:15")).toBe("Samedi 4 juillet, de 10h30 à 12h15")
+    expect(shiftWhen("2026-07-04", "22:00", "02:00")).toBe("Samedi 4 juillet, de 22h à 2h, jusqu'au lendemain")
+    expect(shiftWhen("2026-07-04", "18:00", "23:00")).not.toMatch(/[–·]/)
   })
 
   it("shift and role deletion", () => {
-    const s = deleteShiftRecap({ name: "Bar · Bar soir", when: "Samedi 4 juillet, 18:00–23:00", registered: 2 })
-    expect(s.title).toBe("Supprimer le créneau « Bar · Bar soir » ?")
+    const s = deleteShiftRecap({ name: "Bar, Bar soir", when: "Samedi 4 juillet, de 18h à 23h", registered: 2 })
+    expect(s.title).toBe("Supprimer le créneau « Bar, Bar soir » ?")
+    expect(s.lines[0]).toBe("Samedi 4 juillet, de 18h à 23h.")
     expect(s.lines[1]).toBe("2 bénévoles inscrits : leurs inscriptions sont annulées et ils sont prévenus par email.")
     expect(deleteShiftRecap({ name: "Bar", when: "x", registered: 0 }).lines[1]).toBe("Personne n'est inscrit : aucun email.")
     expect(deleteRoleRecap({ role: "Bar", shifts: 3, registered: 1 }).lines[1]).toBe("1 bénévole inscrit : son inscription est annulée et il est prévenu par email.")

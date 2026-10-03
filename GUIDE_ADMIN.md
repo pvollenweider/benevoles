@@ -126,7 +126,7 @@ Une fois créé, chaque événement a sa propre page de pilotage : statistiques 
 
 Un créneau correspond à un poste de bénévolat sur une plage horaire précise.
 
-![Timeline des créneaux d'un événement, un bloc par jour, avec les postes en lignes et les créneaux en barres colorées par poste](/doc-img/admin-shifts.png)
+![Frise des créneaux d'un événement, un bloc par jour, avec les postes en lignes et les créneaux en barres colorées par poste](/doc-img/admin-shifts.png)
 
 ### Ajouter un créneau
 
@@ -179,7 +179,7 @@ Un clic sur une barre du planning ouvre une petite fenêtre pour agir sans quitt
 - **Horaires** : changez le début ou la fin puis **Décaler** ; les bénévoles inscrits reçoivent un email si les horaires changent ;
 - **Inscriptions** : **Ouvertes**, **Complet**, **Fermées** (le créneau reste visible, personne ne peut plus s'y inscrire) ou **Créneau annulé** ;
 - **Dupliquer** : crée une copie juste après, de même durée, avec tous les réglages du créneau (places, liste d'attente, âge minimum, infos pratiques) et sans inscriptions ; déplacez-la ensuite si besoin ;
-- **Inscriptions** (lien) et **Supprimer le créneau**.
+- **Voir les inscriptions** (lien vers les inscriptions du créneau) et **Supprimer le créneau**.
 
 ### Activer la liste d'attente
 
@@ -213,7 +213,7 @@ Le bouton **Gérer les postes** ouvre un panneau qui regroupe ces actions, poste
 - **Réordonner** : glissez-déposez une ligne, ou utilisez ses flèches Monter et Descendre (aussi au clavier), puis **Enregistrer l'ordre**. L'ordre défini ici s'applique à la timeline admin **et** à la page publique.
 - **Renommer** : clique sur « Renommer », tape le nouveau nom, valide. Tous les créneaux de ce poste sont renommés d'un coup — impossible de renommer vers un nom déjà utilisé par un autre poste (pour ne pas fusionner deux postes par erreur).
 - **Supprimer** : annule tous les créneaux de ce poste (comme une suppression de créneau individuelle) — une confirmation indique le nombre de créneaux et de bénévoles concernés ; ces derniers sont prévenus par email.
-- **Couleur** : le point coloré à gauche du nom ouvre un choix parmi 16 couleurs prédéfinies (ou « Automatique » pour revenir à la couleur assignée par défaut). S'applique à la timeline admin et à la page publique.
+- **Couleur** : le point coloré à gauche du nom ouvre un choix parmi 16 couleurs prédéfinies (ou « Automatique » pour revenir à la couleur assignée par défaut) ; la couleur choisie est cochée. S'applique à la timeline admin et à la page publique.
 - **Limite par personne** : le bouton « Limite » fixe le nombre maximum de créneaux de ce poste qu'une même personne peut prendre (par exemple 2 pour la loge des artistes, pour que plus de monde y participe). Laissez vide pour ne pas limiter. Comptent toutes les inscriptions de la personne sur ce poste, confirmées ou en liste d'attente ; les annulées ne comptent pas. La page publique empêche de sélectionner un créneau de trop et dit pourquoi ; le serveur refuse aussi toute inscription au-delà, même envoyée en même temps qu'une autre. Les inscriptions déjà au-delà d'une nouvelle limite restent. En ajoutant quelqu'un à la main, l'administration prévient et propose **Ajouter quand même**. La limite est copiée avec l'événement.
 - **Accès réservé** : le bouton « Accès » réserve le poste aux membres portant l'une des étiquettes indiquées (par exemple `sécurité` pour la sécurité). Ces membres s'y inscrivent avec le lien personnel de leur invitation (dans **Invitations**, filtrez les membres par étiquette pour les inviter). Sans ce lien, la page publique affiche le poste comme « Réservé » et le serveur refuse toute inscription ; les étiquettes ne sont jamais montrées aux bénévoles. L'étiquette est lue au moment de l'inscription : si vous la retirez à un membre, son invitation ne lui ouvre plus le poste. Les inscriptions déjà faites restent. Vous pouvez toujours ajouter quelqu'un à la main. Le réglage est copié avec l'événement.
 

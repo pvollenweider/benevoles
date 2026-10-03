@@ -19,7 +19,7 @@ async function login(page: Page) {
 }
 
 /** A one-day event with a « Bar » and an « Accueil » shift (plus `extraRoles`), opened on its shifts page. */
-async function openShiftsPage(page: Page, extraRoles: string[] = []) {
+async function openShiftsPage(page: Page, extraRoles: string[] = [], reserved: Record<string, string[]> = {}) {
   await login(page)
   const stamp = Date.now()
   const post = async (url: string, data: unknown) => {
@@ -32,6 +32,10 @@ async function openShiftsPage(page: Page, extraRoles: string[] = []) {
   await post("/api/admin/shifts", { eventId: event.id, roleName: "Accueil", label: "Accueil", date: "2030-10-01", startTime: "14:00", endTime: "16:00", capacity: 3 })
   for (const role of extraRoles) {
     await post("/api/admin/shifts", { eventId: event.id, roleName: role, label: role, date: "2030-10-01", startTime: "17:00", endTime: "18:00", capacity: 3 })
+  }
+  for (const [role, reservedTags] of Object.entries(reserved)) {
+    const res = await page.request.patch(`/api/admin/events/${event.id}/roles/${encodeURIComponent(role)}`, { data: { reservedTags } })
+    expect(res.ok(), `reserve ${role}: ${res.status()} ${await res.text()}`).toBeTruthy()
   }
   await page.goto(`/admin/events/${event.id}/shifts`)
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
@@ -47,7 +51,7 @@ test("a shift is added with the keyboard: errors reached by focus, focus back on
 
   const editor = page.getByRole("group", { name: "Nouveau créneau" })
   await expect(editor).toBeVisible()
-  const role = editor.getByLabel("Poste *")
+  const role = editor.getByRole("combobox", { name: "Poste", exact: true })
   await expect(role).toBeFocused()
 
   // Empty submit: focus lands on the first invalid field, which says its error; no alert.
@@ -60,8 +64,8 @@ test("a shift is added with the keyboard: errors reached by focus, focus back on
 
   await role.fill("Buvette")
   await expect(role).not.toHaveAttribute("aria-invalid")
-  await editor.getByLabel("Début *").fill("17:00")
-  await expect(editor.getByLabel("Fin *")).toHaveValue("18:00")
+  await editor.getByRole("textbox", { name: "Début", exact: true }).fill("17:00")
+  await expect(editor.getByRole("textbox", { name: "Fin", exact: true })).toHaveValue("18:00")
   await editor.getByRole("button", { name: "Ajouter", exact: true }).focus()
   await page.keyboard.press("Enter")
 
@@ -79,7 +83,7 @@ test("« Annuler » returns focus to « + Ajouter un créneau »", async ({ page
   await add.focus()
   await page.keyboard.press("Enter")
   const editor = page.getByRole("group", { name: "Nouveau créneau" })
-  await expect(editor.getByLabel("Poste *")).toBeFocused()
+  await expect(editor.getByRole("combobox", { name: "Poste", exact: true })).toBeFocused()
   await editor.getByRole("button", { name: "Annuler" }).focus()
   await page.keyboard.press("Enter")
   await expect(editor).toBeHidden()
@@ -89,13 +93,14 @@ test("« Annuler » returns focus to « + Ajouter un créneau »", async ({ page
 test("after editing a shift from the list, focus is back on that row's « Modifier »", async ({ page }) => {
   await openShiftsPage(page)
   await page.getByRole("button", { name: "Liste", exact: true }).click()
-  const barEdit = () => page.getByRole("row", { name: /Bar/ }).getByRole("button", { name: "Modifier" })
+  // Named with its shift (#587), starting with the visible « Modifier ».
+  const barEdit = () => page.getByRole("button", { name: /^Modifier le créneau Bar, mardi 1 octobre, de 10h à/ })
   await barEdit().focus()
   await page.keyboard.press("Enter")
 
   const editor = page.getByRole("group", { name: "Modifier le créneau" })
-  await expect(editor.getByLabel("Poste *")).toBeFocused()
-  await editor.getByLabel("Fin *").fill("13:00")
+  await expect(editor.getByRole("combobox", { name: "Poste", exact: true })).toBeFocused()
+  await editor.getByRole("textbox", { name: "Fin", exact: true }).fill("13:00")
   await editor.getByRole("button", { name: "Enregistrer", exact: true }).focus()
   await page.keyboard.press("Enter")
 
@@ -108,10 +113,10 @@ test("after editing a shift from the list, focus is back on that row's « Modifi
 test("when the opener is gone (list switched to timeline), focus falls back to « + Ajouter un créneau »", async ({ page }) => {
   await openShiftsPage(page)
   await page.getByRole("button", { name: "Liste", exact: true }).click()
-  await page.getByRole("row", { name: /Bar/ }).getByRole("button", { name: "Modifier" }).click()
+  await page.getByRole("button", { name: /^Modifier le créneau Bar/ }).click()
   const editor = page.getByRole("group", { name: "Modifier le créneau" })
   await expect(editor).toBeVisible()
-  await page.getByRole("button", { name: "Timeline", exact: true }).click()
+  await page.getByRole("button", { name: "Frise", exact: true }).click()
   await expect(page.getByRole("table")).toHaveCount(0)
   await editor.getByRole("button", { name: "Annuler" }).focus()
   await page.keyboard.press("Enter")
@@ -276,4 +281,39 @@ test("roles panel at 320 px: rows wrap without horizontal scroll, move buttons a
     expect(box.x).toBeGreaterThanOrEqual(0)
     expect(box.x + box.width).toBeLessThanOrEqual(320)
   }
+})
+
+// #606: a long role name and a long « Accès : … » list are shown whole: they wrap, at 1280 and 320 px.
+const LONG_ROLE = "Accueil des artistes et des invités de la soirée de clôture"
+const LONG_TAGS = ["sécurité", "secouriste", "logistique"]
+
+for (const width of [1280, 320]) {
+  test(`roles panel at ${width} px: a long role name and its « Accès » text are whole, no horizontal scroll`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 800 })
+    await openShiftsPage(page, [LONG_ROLE], { [LONG_ROLE]: LONG_TAGS })
+    await openRolesPanel(page)
+    const list = page.getByRole("list", { name: "Ordre des postes" })
+    const name = list.getByText(LONG_ROLE, { exact: true })
+    await expect(name).toBeVisible()
+    const access = list.getByRole("button", { name: `Accès : ${LONG_TAGS.join(", ")}, poste « ${LONG_ROLE} » réservé` })
+    await expect(access).toHaveText(`Accès : ${LONG_TAGS.join(", ")}`)
+    for (const [label, el] of [["role name", name], ["Accès", access]] as const) {
+      const fit = await el.evaluate((e) => ({ scroll: e.scrollWidth, client: e.clientWidth, overflow: getComputedStyle(e).textOverflow }))
+      expect(fit.scroll, `${label}: cut (${JSON.stringify(fit)})`).toBeLessThanOrEqual(fit.client)
+      expect(fit.overflow, label).not.toBe("ellipsis")
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+  })
+}
+
+test("list view: « Modifier » and « Supprimer » are named with their shift, times in words", async ({ page }) => {
+  await openShiftsPage(page)
+  await page.getByRole("button", { name: "Liste", exact: true }).click()
+  await expect(page.getByRole("button", { name: /^Modifier le créneau / })).toHaveCount(2)
+  await expect(page.getByRole("button", { name: "Supprimer le créneau Accueil, mardi 1 octobre, de 14h à 16h", exact: true })).toBeVisible()
+  await expect(page.getByRole("columnheader", { name: "Date et horaire" })).toBeVisible()
+  await page.getByRole("button", { name: "Supprimer le créneau Bar, mardi 1 octobre, de 10h à 12h", exact: true }).click()
+  const confirm = page.getByRole("alertdialog", { name: "Supprimer le créneau « Bar » ?" })
+  await expect(confirm).toContainText("Mardi 1 octobre, de 10h à 12h.")
+  await confirm.getByRole("button", { name: "Annuler" }).click()
 })

@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest"
 import {
   activeShiftsByDay,
   applyRoleOrder,
+  deleteShiftRecapFor,
   eventDates,
   moveItem,
   normalizeTime,
@@ -9,6 +10,8 @@ import {
   roleDeletionWarning,
   roleOrder,
   sortShifts,
+  spokenPlaces,
+  timelineBarName,
 } from "../shifts-admin"
 
 const s = (id: string, over: Partial<{ roleName: string; label: string; date: string; startTime: string; status: string; displayOrder: number; registrationCount: number }> = {}) => ({
@@ -88,5 +91,34 @@ describe("grouping and sorting", () => {
 
   it("sorts by day, then role order, then start time", () => {
     expect(sortShifts(shifts).map((x) => x.id)).toEqual(["early-a", "early-b", "late"])
+  })
+})
+
+// #587: the shift's name, time and places in words, the same from the list and the timeline.
+describe("spoken shift wording", () => {
+  const shift = { roleName: "Bar", label: "Soir", date: "2026-07-04", startTime: "10:30", endTime: "12:15", registrationCount: 3, capacity: 5 }
+
+  it("deleteShiftRecapFor keeps the minutes (regression: the timeline's recap said 10:00) and says « Bar, Soir »", () => {
+    const recap = deleteShiftRecapFor(shift)
+    expect(recap.title).toBe("Supprimer le créneau « Bar, Soir » ?")
+    expect(recap.lines[0]).toBe("Samedi 4 juillet, de 10h30 à 12h15.")
+    expect(recap.lines[1]).toBe("3 bénévoles inscrits : leurs inscriptions sont annulées et ils sont prévenus par email.")
+    expect(JSON.stringify(recap)).not.toMatch(/[–·]/)
+  })
+
+  it("deleteShiftRecapFor names the role alone when the label is the role", () => {
+    expect(deleteShiftRecapFor({ ...shift, label: "Bar", registrationCount: 0 }).title).toBe("Supprimer le créneau « Bar » ?")
+  })
+
+  it("spokenPlaces says the registered and the places, singular or plural", () => {
+    expect(spokenPlaces(3, 5)).toBe("3 inscrits sur 5")
+    expect(spokenPlaces(1, 2)).toBe("1 inscrit sur 2")
+    expect(spokenPlaces(0, 2)).toBe("0 inscrit sur 2")
+  })
+
+  it("timelineBarName starts with the role, then the time and places in words, and says when it is full", () => {
+    expect(timelineBarName(shift, false)).toBe("Bar, Soir, de 10h30 à 12h15, 3 inscrits sur 5, modifier")
+    expect(timelineBarName({ ...shift, label: "Bar", registrationCount: 5 }, true)).toBe("Bar, de 10h30 à 12h15, 5 inscrits sur 5, complet, modifier")
+    expect(timelineBarName({ ...shift, startTime: "22:00", endTime: "02:00" }, false)).toBe("Bar, Soir, de 22h à 2h, jusqu'au lendemain, 3 inscrits sur 5, modifier")
   })
 })

@@ -10,6 +10,7 @@ import { fmt, clamp } from "@/lib/gantt-utils"
 import { ROW_H } from "@/lib/day-timeline"
 import { moveProblem } from "@/lib/shift-quick-edit"
 import { normalizeTime } from "@/lib/shifts-admin"
+import { spokenTimeRange } from "@/lib/spoken-time"
 import type { AdminShift } from "../AdminDayTimeline"
 
 /**
@@ -125,13 +126,14 @@ export default function ShiftPopover({
       onMouseDown={e => e.stopPropagation()}
     >
       <div className="flex items-start justify-between gap-2">
+        {/* The whole role name wraps rather than being cut (#606); the times are read in words (#587). */}
         <h3 id={`${id}-title`} ref={headingRef} tabIndex={-1} className="flex items-center gap-1.5 min-w-0 focus:outline-none">
           <span aria-hidden="true" className={`w-2 h-2 rounded-full flex-shrink-0 ${getRoleAccent(shift.roleName, shift.colorKey)}`} />
-          <span className="text-sm font-semibold text-gray-800 truncate">{shift.roleName}</span>
-          <span className="sr-only">, </span>
-          <span className="text-xs text-gray-600 flex-shrink-0">{fmt(shift.startTime)}–{fmt(shift.endTime)}</span>
+          <span className="text-sm font-semibold text-gray-800 min-w-0 [overflow-wrap:anywhere]">{shift.roleName}</span>
+          <span className="sr-only">, {spokenTimeRange(shift.startTime, shift.endTime)}</span>
+          <span aria-hidden="true" className="text-xs text-gray-600 flex-shrink-0">{fmt(shift.startTime)}–{fmt(shift.endTime)}</span>
         </h3>
-        <button type="button" onClick={closeAndSave} aria-label="Fermer et enregistrer" title="Échap ou ✕ : ferme et enregistre" className="text-gray-600 hover:text-gray-900 flex-shrink-0 rounded p-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600">
+        <button type="button" onClick={closeAndSave} aria-label="Fermer et enregistrer" className="text-gray-600 hover:text-gray-900 flex-shrink-0 rounded p-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600">
           <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
@@ -143,7 +145,7 @@ export default function ShiftPopover({
       <div>
         <label htmlFor={`${id}-label`} className="block text-xs font-medium text-gray-700 mb-1">Libellé</label>
         <input id={`${id}-label`} type="text" value={label} onChange={e => setLabel(e.target.value)} placeholder={shift.roleName} aria-describedby={`${id}-label-hint`} className={field} />
-        <p id={`${id}-label-hint`} className="text-xs text-gray-600 mt-0.5">Laisser vide si identique au poste. Libellé et places sont enregistrés à la fermeture (Échap ou ✕).</p>
+        <p id={`${id}-label-hint`} className="text-xs text-gray-600 mt-0.5">Laisser vide si identique au poste. Libellé et places sont enregistrés à la fermeture (Échap ou « Fermer et enregistrer »).</p>
       </div>
 
       <div className="flex items-end gap-2">
@@ -173,7 +175,7 @@ export default function ShiftPopover({
             <input id={`${id}-end`} type="text" inputMode="numeric" value={endTime} onChange={e => setEndTime(e.target.value)} onBlur={e => setEndTime(normalizeTime(e.target.value))} aria-invalid={moveError ? true : undefined} aria-describedby={`${id}-move-hint`} className={field} />
           </div>
           <button type="button" onClick={saveMove} aria-disabled={!moved || !!moveError || busy !== null} aria-describedby={`${id}-move-hint`} className={`${action} text-blue-700 hover:bg-blue-50 ${!moved || moveError || busy ? "opacity-50" : ""}`}>
-            {busy === "move" ? "…" : "Décaler"}
+            {busy === "move" ? "Décalage…" : "Décaler"}
           </button>
         </div>
         <p id={`${id}-move-hint`} className={`text-xs mt-1 ${moveError ? "text-red-700" : "text-gray-600"}`}>
@@ -208,14 +210,14 @@ export default function ShiftPopover({
 
       <div className="grid grid-cols-2 gap-1 pt-1 border-t border-gray-100">
         <button type="button" onClick={duplicate} aria-disabled={busy !== null} className={`${action} text-gray-800 hover:bg-gray-50 ${busy ? "opacity-50" : ""}`}>
-          {busy === "duplicate" ? "…" : "Dupliquer"}
+          {busy === "duplicate" ? "Duplication…" : "Dupliquer"}
         </button>
         <Link
           href={`/admin/events/${eventId}/registrations?shift=${shift.id}`}
           className={`${action} text-center text-blue-700 hover:bg-blue-50`}
           onClick={onClose}
         >
-          Inscriptions
+          Voir les inscriptions
         </Link>
         <button
           type="button"

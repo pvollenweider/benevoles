@@ -91,6 +91,19 @@ describe("ShiftEditor", () => {
     expect(screen.queryByLabelText("Date *")).toBeNull()
   })
 
+  // DESIGN.md « Champ obligatoire » (#587): the asterisk is shown, not read « étoile »; the field
+  // itself says « obligatoire » (required).
+  it("names the required fields without their asterisk, which stays visible", () => {
+    setup({ dates: ["2026-07-04", "2026-07-05"], initial: {} })
+    for (const [role, name] of [["combobox", "Poste"], ["combobox", "Date"], ["textbox", "Début"], ["textbox", "Fin"], ["spinbutton", "Capacité"]] as const) {
+      const field = screen.getByRole(role, { name })
+      expect(field).toBeRequired()
+      const label = document.querySelector(`label[for="${field.id}"]`)!
+      expect(label).toHaveTextContent(`${name} *`)
+      expect(label.querySelector('[aria-hidden="true"]')).toHaveTextContent("*")
+    }
+  })
+
   it("clears a field's error as soon as it is filled", () => {
     setup()
     fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))

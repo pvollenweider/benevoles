@@ -29,9 +29,9 @@ describe("ShiftSeriesForm", () => {
   }
 
   const fill = () => {
-    fireEvent.change(screen.getByLabelText("Poste *"), { target: { value: "Buvette" } })
-    fireEvent.change(screen.getByLabelText("Début *"), { target: { value: "10:00" } })
-    fireEvent.change(screen.getByLabelText("Fin *"), { target: { value: "22:00" } })
+    fireEvent.change(screen.getByRole("combobox", { name: "Poste" }), { target: { value: "Buvette" } })
+    fireEvent.change(screen.getByRole("textbox", { name: "Début" }), { target: { value: "10:00" } })
+    fireEvent.change(screen.getByRole("textbox", { name: "Fin" }), { target: { value: "22:00" } })
   }
 
   it("focuses its heading when opened and previews the series as fields are filled", () => {
@@ -50,7 +50,7 @@ describe("ShiftSeriesForm", () => {
   it("normalizes typed times on blur and flags an impossible series", () => {
     setup()
     fill()
-    const start = screen.getByLabelText("Début *")
+    const start = screen.getByRole("textbox", { name: "Début" })
     fireEvent.change(start, { target: { value: "9" } })
     fireEvent.blur(start)
     expect(start).toHaveValue("09:00")
@@ -60,12 +60,55 @@ describe("ShiftSeriesForm", () => {
     expect(screen.getByRole("button", { name: "Créer les créneaux" })).toBeInTheDocument()
   })
 
-  it("refuses to submit with missing fields and marks them", () => {
+  // #587: like the shift editor, a missing field says its error itself and gets focus; no alert.
+  it("refuses to submit with missing fields: each says its error, focus on the first, no alert", () => {
     setup()
-    fireEvent.click(screen.getByRole("button", { name: "Créer les créneaux" }))
+    const create = screen.getByRole("button", { name: "Créer les créneaux" })
+    create.focus()
+    fireEvent.click(create)
     expect(fetchMock).not.toHaveBeenCalled()
-    expect(screen.getByLabelText("Poste *")).toHaveAttribute("aria-invalid", "true")
-    expect(screen.getByRole("alert")).toHaveTextContent("Champs obligatoires manquants : poste, début, fin.")
+    const role = screen.getByRole("combobox", { name: "Poste" })
+    expect(role).toHaveFocus()
+    expect(role).toHaveAttribute("aria-invalid", "true")
+    expect(role).toHaveAccessibleDescription("Indiquez le poste.")
+    expect(screen.getByRole("textbox", { name: "Début" })).toHaveAccessibleDescription("Indiquez l'heure de début.")
+    expect(screen.getByRole("textbox", { name: "Fin" })).toHaveAccessibleDescription(/Une fin plus petite que le début passe minuit.*Indiquez l'heure de fin\./)
+    expect(screen.queryAllByRole("alert").filter((a) => a.textContent?.trim())).toHaveLength(0)
+    expect(screen.getByText("À remplir : le poste, l'heure de début et l'heure de fin.")).toBeInTheDocument()
+
+    fireEvent.change(role, { target: { value: "Buvette" } })
+    expect(role).not.toHaveAttribute("aria-invalid")
+    expect(role).not.toHaveAccessibleDescription()
+  })
+
+  it("on a multi-day event, an unchosen date is invalid and says so", () => {
+    setup(["2026-07-04", "2026-07-05"])
+    fireEvent.change(screen.getByRole("combobox", { name: "Poste" }), { target: { value: "Buvette" } })
+    fireEvent.click(screen.getByRole("button", { name: "Créer les créneaux" }))
+    const date = screen.getByRole("combobox", { name: "Date" })
+    expect(date).toHaveFocus()
+    expect(date).toHaveAccessibleDescription("Choisissez la date.")
+  })
+
+  it("names the required fields without their asterisk, which stays visible; none on a one-day date", () => {
+    setup(["2026-07-04", "2026-07-05"])
+    for (const [role, name] of [["combobox", "Poste"], ["combobox", "Date"], ["textbox", "Début"], ["textbox", "Fin"], ["combobox", "Durée d'un créneau"], ["spinbutton", "Personnes par créneau"]] as const) {
+      const field = screen.getByRole(role, { name })
+      expect(field).toBeRequired()
+      expect(document.querySelector(`label[for="${field.id}"] [aria-hidden="true"]`)).toHaveTextContent("*")
+    }
+    cleanup()
+    setup()
+    expect(screen.getByRole("textbox", { name: "Date" })).toHaveAttribute("readonly")
+    expect(document.querySelector(`label[for="${screen.getByRole("textbox", { name: "Date" }).id}"]`)).not.toHaveTextContent("*")
+  })
+
+  it("reads the previewed times in words", () => {
+    setup()
+    fill()
+    const first = within(screen.getByRole("list", { name: "Créneaux qui seront créés" })).getAllByRole("listitem")[0]
+    expect(within(first).getByText("10:00–12:00")).toHaveAttribute("aria-hidden", "true")
+    expect(within(first).getByText("de 10h à 12h")).toHaveClass("sr-only")
   })
 
   it("posts the series and hands the created shifts back", async () => {
@@ -73,7 +116,7 @@ describe("ShiftSeriesForm", () => {
     fetchMock.mockResolvedValue({ ok: true, json: async () => created })
     const { onCreated } = setup()
     fill()
-    fireEvent.change(screen.getByLabelText("Personnes par créneau *"), { target: { value: "3" } })
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Personnes par créneau" }), { target: { value: "3" } })
     fireEvent.click(screen.getByRole("checkbox", { name: "Activer la liste d'attente" }))
     fireEvent.click(screen.getByRole("button", { name: "Créer 6 créneaux" }))
 

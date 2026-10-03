@@ -97,4 +97,46 @@ describe("ShiftPopover", () => {
     expect(p.onPatch).toHaveBeenLastCalledWith("s1", { label: "Bar soir", capacity: 3 })
     expect(p.onClose).toHaveBeenCalled()
   })
+
+  // #587: the heading's time in words, no title-only help, busy buttons with a name, a link that
+  // says where it goes.
+  it("names the dialog with the role and the time in words, without a title attribute", () => {
+    setup({ startTime: "10:30", endTime: "12:00" })
+    expect(screen.getByRole("dialog", { name: "Bar, de 10h30 à 12h" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Bar, de 10h30 à 12h" })).toBeInTheDocument()
+    expect(screen.getByText("10h30–12h")).toHaveAttribute("aria-hidden", "true")
+    expect(document.querySelector("[title]")).toBeNull()
+    expect(screen.getByRole("textbox", { name: "Libellé" })).toHaveAccessibleDescription(
+      "Laisser vide si identique au poste. Libellé et places sont enregistrés à la fermeture (Échap ou « Fermer et enregistrer »).",
+    )
+  })
+
+  it("shows a long role name whole in its heading (#606)", () => {
+    const long = "Accueil des artistes et des invités de la soirée de clôture"
+    setup({ roleName: long, label: long })
+    const name = screen.getByText(long)
+    expect(name).not.toHaveClass("truncate")
+    expect(name.className).toContain("[overflow-wrap:anywhere]")
+  })
+
+  it("busy « Décaler » and « Dupliquer » keep a name a screen reader can say", async () => {
+    const p = setup()
+    p.onPatch.mockReturnValue(new Promise(() => {}))
+    p.onDuplicate.mockReturnValue(new Promise(() => {}))
+    fireEvent.change(screen.getByLabelText("Fin"), { target: { value: "13:00" } })
+    fireEvent.click(screen.getByRole("button", { name: "Décaler" }))
+    expect(await screen.findByRole("button", { name: "Décalage…" })).toHaveAttribute("aria-disabled", "true")
+    cleanup()
+
+    const q = setup()
+    q.onDuplicate.mockReturnValue(new Promise(() => {}))
+    fireEvent.click(screen.getByRole("button", { name: "Dupliquer" }))
+    expect(await screen.findByRole("button", { name: "Duplication…" })).toHaveAttribute("aria-disabled", "true")
+    expect(screen.queryByRole("button", { name: "…" })).toBeNull()
+  })
+
+  it("links to the shift's registrations as « Voir les inscriptions »", () => {
+    setup()
+    expect(screen.getByRole("link", { name: "Voir les inscriptions" })).toHaveAttribute("href", "/admin/events/evt-1/registrations?shift=s1")
+  })
 })
