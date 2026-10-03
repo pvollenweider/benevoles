@@ -45,8 +45,10 @@ export default async function EventCustomPage({
   const page = event.pages.find((p) => p.slug === pageSlug)
   if (!page) notFound()
 
+  // Only a back link precedes the content: a <main> landmark, no skip link (it would add a Tab stop
+  // to skip a single one).
   return (
-    <div className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50">
       <div className="max-w-2xl mx-auto px-4 py-8">
         <Link href={`/${eventSlug}`} className="text-sm text-blue-600 hover:underline">← {event.title}</Link>
 
@@ -62,6 +64,6 @@ export default async function EventCustomPage({
           <div dangerouslySetInnerHTML={{ __html: renderEventPageMarkdown(page.content) }} />
         </article>
       </div>
-    </div>
+    </main>
   )
 }

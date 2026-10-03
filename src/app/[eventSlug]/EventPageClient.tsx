@@ -36,6 +36,7 @@ import { checkAnswers, type Question } from "@/lib/event-questions"
 import DayTimeline from "@/components/DayTimeline"
 import { heldKinds } from "@/lib/public-timeline"
 import PublicFooter from "@/components/PublicFooter"
+import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import { DEFAULT_VOLUNTEER_CHARTER } from "@/lib/volunteer-charter"
 
 
@@ -163,7 +164,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   useLayoutEffect(() => {
     if (!focusRequest) return
     const active = document.activeElement
-    const free = active === null || active === document.body || !!active.closest("[role=dialog],[role=alertdialog]")
+    // <main> counts as dropped too: WebKit focuses it (tabIndex={-1}, the skip link's target) when a
+    // tapped control inside it doesn't take focus.
+    const free = active === null || active === document.body || active.id === MAIN_CONTENT_ID || !!active.closest("[role=dialog],[role=alertdialog]")
     if (free) focusFirstAvailable(focusRequest.candidates)
   }, [focusRequest])
   useEffect(() => {
@@ -427,6 +430,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
     const list = trigger.closest("[data-shift-list]")
     const index = list ? [...list.querySelectorAll("button")].indexOf(trigger) : -1
     withdrawFrom.current = { trigger, list, index }
+    // WebKit does not focus a tapped button: it focuses the nearest focusable ancestor, the
+    // <main tabIndex={-1}>, which ModalShell would then restore on close. Focus the ✕ itself.
+    trigger.focus()
     setWithdrawError(null)
     setPendingCancel({ token: reg.token, shiftId: s.id, label: s.label || s.roleName, status: reg.status })
   }
@@ -493,12 +499,13 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   const allSelectedShifts = event.shifts.filter((s) => selectedShifts.has(s.id))
   const newShiftIds = new Set(allSelectedShifts.map((s) => s.id).filter((id) => !myShiftIds.has(id)))
 
-  const Root = previewEventId ? "div" : "main"
   // The organiser's colour (#300): a band behind the title, neutral header otherwise.
   const accent = eventAccent(event.accentColorKey)
 
   return (
-    <Root className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
+      {/* The preview sits inside the admin layout, which already has its own skip link and main. */}
+      {!preview && <SkipLink />}
       {preview && (
         <div className="bg-amber-50 border-b border-amber-300 px-4 py-3 text-sm text-amber-950">
           <div className="max-w-6xl mx-auto flex items-center justify-between gap-3 flex-wrap">
@@ -535,7 +542,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
             )}
           </div>
           <p className={`text-xs font-medium mt-2 ${accent ? accent.soft : "text-gray-500"}`}>{event.organizationName}</p>
-          <h1 ref={titleRef} tabIndex={-1} className={`text-xl font-bold focus:outline-none ${accent ? "" : "text-gray-900"}`}>{event.title}</h1>
+          <h1 id="event-title" ref={titleRef} tabIndex={-1} className={`text-xl font-bold focus:outline-none ${accent ? "" : "text-gray-900"}`}>{event.title}</h1>
           {(event.location || coordinatesOf(event)) && (
             <p className={`text-sm ${accent ? accent.soft : "text-gray-500"}`}>
               <span aria-hidden="true">📍 </span>{event.location || "Point de rendez-vous"}
@@ -552,7 +559,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-4 py-6 pb-28 lg:pb-10 space-y-4">
+      <ContentLandmark preview={!!preview} className="max-w-6xl mx-auto px-4 py-6 pb-28 lg:pb-10 space-y-4">
         {windowClosedText && (
           <p id="registration-window-msg" className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-950">{windowClosedText}</p>
         )}
@@ -885,7 +892,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                     <button
                       ref={charterTriggerRef}
                       type="button"
-                      onClick={() => setShowCharter(true)}
+                      // Same WebKit fallback to <main> as for the ✕: ModalShell restores its opener.
+                      onClick={(e) => { e.currentTarget.focus(); setShowCharter(true) }}
                       className="text-blue-600 underline underline-offset-2 hover:text-blue-800"
                     >
                       convention des bénévoles
@@ -938,7 +946,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
 
           </div>
         )}
-      </div>
+      </ContentLandmark>
 
       {showCharter && (
         <ModalShell
@@ -978,6 +986,21 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
       <p id="action-notice" role="status" className="sr-only">{actionNotice}</p>
 
       <PublicFooter />
-    </Root>
+    </div>
+  )
+}
+
+/**
+ * The page content after the header: the skip link's target on the public page. In the admin
+ * preview it is a plain <div>, the admin layout's <main id="main"> already wrapping the page.
+ * The header (title, session) stays a banner outside it, the dialogs and the footer after it.
+ */
+function ContentLandmark({ preview, className, children }: { preview: boolean; className: string; children: React.ReactNode }) {
+  if (preview) return <div className={className}>{children}</div>
+  return (
+    // Named by the event title (in the banner above): « Aller au contenu » lands on « <title>, main ».
+    <main id={MAIN_CONTENT_ID} tabIndex={-1} aria-labelledby="event-title" className={`${className} focus:outline-none`}>
+      {children}
+    </main>
   )
 }

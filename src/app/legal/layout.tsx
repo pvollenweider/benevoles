@@ -1,8 +1,10 @@
 import Link from "next/link"
+import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 
 export default function LegalLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-white">
+      <SkipLink />
       <header className="border-b border-gray-100">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="text-sm font-semibold text-gray-900 hover:text-gray-600 transition-colors">
@@ -12,7 +14,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-6 py-12">
+      <main id={MAIN_CONTENT_ID} tabIndex={-1} className="max-w-3xl mx-auto px-6 py-12 focus:outline-none">
         <article className="prose prose-gray max-w-none
           prose-headings:font-semibold prose-headings:tracking-tight
           prose-h1:text-2xl prose-h1:mb-2 prose-h1:pb-4 prose-h1:border-b prose-h1:border-gray-200

@@ -2,6 +2,7 @@ import { cookies } from "next/headers"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import AdminNav from "@/components/admin/AdminNav"
+import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 
 export default async function SuperAdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
@@ -20,8 +21,9 @@ export default async function SuperAdminLayout({ children }: { children: React.R
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SkipLink />
       <AdminNav userName={session.user?.name ?? "Super Admin"} role={session.user?.role} orgName={orgName} />
-      <main className="max-w-5xl mx-auto px-4 py-6">{children}</main>
+      <main id={MAIN_CONTENT_ID} tabIndex={-1} className="max-w-5xl mx-auto px-4 py-6 focus:outline-none">{children}</main>
     </div>
   )
 }

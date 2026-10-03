@@ -129,6 +129,22 @@ describe("EventPageClient — withdrawing a held shift", () => {
     expect(deletes()).toHaveLength(0)
   })
 
+  it("a tap as WebKit does it (focus left on <main>) still gives focus back to the ✕ (#534)", async () => {
+    await renderPage()
+    // WebKit doesn't focus a tapped button but its nearest focusable ancestor: the skip link's
+    // <main tabIndex={-1}>. ModalShell must not record that as the opener and restore it.
+    const main = document.querySelector("main")!
+    act(() => main.focus())
+    fireEvent.click(barX())
+    expect(keep()).toHaveFocus()
+    // Real WebKit drops focus to <body> here (the dialog is outside <main>); <main> is the harder
+    // case for the guard, which treats both as dropped focus.
+    act(() => main.focus())
+    fireEvent.click(keep())
+    expect(screen.queryByRole("alertdialog")).toBeNull()
+    expect(barX()).toHaveFocus()
+  })
+
   it("a backdrop click does not close it", async () => {
     await renderPage()
     const dialog = open(barX())
@@ -235,6 +251,24 @@ describe("EventPageClient — charter dialog", () => {
     // Escape with focus outside the dialog (a click on the backdrop's empty area) still closes it.
     act(() => (document.activeElement as HTMLElement).blur())
     fireEvent.keyDown(document.body, { key: "Escape" })
+    expect(screen.queryByRole("dialog")).toBeNull()
+    expect(link).toHaveFocus()
+  })
+
+  it("a tap as WebKit does it (focus left on <main>) still gives focus back to its link (#534)", async () => {
+    stubFetch(() => Promise.resolve(json({})))
+    render(<EventPageClient orgSlug="org" eventSlug="fete" />)
+    fireEvent.click((await screen.findAllByRole("button", { name: /^Sélectionner — Bar/ }))[0])
+    fireEvent.click(screen.getAllByRole("button", { name: /^Continuer/ })[0])
+    const link = screen.getByRole("button", { name: "convention des bénévoles" })
+    const main = document.querySelector("main")!
+    act(() => main.focus())
+    fireEvent.click(link)
+    const close = screen.getByRole("button", { name: "Fermer" })
+    expect(close).toHaveFocus()
+    // As above: <main> rather than <body>, the harder case for the guard.
+    act(() => main.focus())
+    fireEvent.click(close)
     expect(screen.queryByRole("dialog")).toBeNull()
     expect(link).toHaveFocus()
   })
