@@ -7,6 +7,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Modifié
+
+- **Page Rapports d'un événement réorganisée** : l'export complet, qui liste les téléphones et emails des bénévoles, est rangé dans « Pour les organisateurs seulement » ; l'archive de l'événement (JSON) passe en fin de page, après les badges.
+
 ### Corrigé
 
 - **Fenêtres de l'administration** (#585) : la touche Tab ne sort plus de la fenêtre d'import des membres à l'étape d'aperçu pour aller sur la page derrière, et un focus resté hors d'une fenêtre y revient au premier Tab. Sur Safari (iPhone, iPad, Mac), qui ne donne pas le focus à un bouton touché ou cliqué, le focus revient à la fermeture d'une fenêtre sur le bouton qui l'a ouverte, et non plus au début du contenu de la page ; de même dans « Gérer les postes », sur « Renommer » après un renommage validé ou annulé. Pendant un enregistrement, le bouton « Fermer » d'une fenêtre reste atteignable et est annoncé comme indisponible.
