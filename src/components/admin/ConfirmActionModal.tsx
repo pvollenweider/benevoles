@@ -47,7 +47,7 @@ export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, e
     onConfirm()
   }
   return (
-    <ModalShell title={recap.title} onClose={() => { if (!busy) onCancel() }} initialFocusRef={cancelRef} describedBy={challenge ? `${id}-recap ${id}-challenge-label` : `${id}-recap`} closeOnBackdrop={false} role={recap.danger ? "alertdialog" : "dialog"}>
+    <ModalShell title={recap.title} busy={busy} onClose={() => { if (!busy) onCancel() }} initialFocusRef={cancelRef} describedBy={challenge ? `${id}-recap ${id}-challenge-label` : `${id}-recap`} closeOnBackdrop={false} role={recap.danger ? "alertdialog" : "dialog"}>
       {/* A form so that Enter in the challenge field confirms; Cancel stays a plain button. */}
       <form onSubmit={(e) => { e.preventDefault(); confirm() }} noValidate>
       <ul id={`${id}-recap`} className="list-disc pl-5 space-y-1 text-sm text-gray-800">

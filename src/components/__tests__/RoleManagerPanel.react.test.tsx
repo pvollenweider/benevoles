@@ -164,6 +164,17 @@ describe("RoleManagerPanel", () => {
     await waitFor(() => expect(renameButton("Bar")).toHaveFocus())
   })
 
+  it("a WebKit tap on « Annuler » (focus left on <main>) still returns the focus to « Renommer » (#585)", async () => {
+    render(<main id="main" tabIndex={-1}><Harness spies={makeSpies()} /></main>)
+    fireEvent.click(renameButton("Bar"))
+    const cancel = screen.getByRole("button", { name: "Annuler" })
+    // WebKit does not focus a tapped button: its nearest focusable ancestor, <main>, gets focus.
+    act(() => document.querySelector<HTMLElement>("main")!.focus())
+    fireEvent.click(cancel)
+    expect(screen.queryByLabelText("Nouveau nom du poste « Bar »")).not.toBeInTheDocument()
+    await waitFor(() => expect(renameButton("Bar")).toHaveFocus())
+  })
+
   it("Escape in the input cancels and returns the focus to « Renommer »", async () => {
     render(<Harness spies={makeSpies()} />)
     fireEvent.click(renameButton("Bar"))

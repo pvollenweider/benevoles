@@ -50,3 +50,12 @@ export function focusFirstAvailableNextFrame(candidates: FocusCandidate[], optio
   if (typeof requestAnimationFrame === "function") requestAnimationFrame(() => { focusFirstAvailable(candidates, options) })
   else focusFirstAvailable(candidates, options)
 }
+
+/**
+ * Focus that nobody owns: none, `<body>`, or a `<main>`. WebKit (Safari on macOS and iOS) does not
+ * focus a tapped or clicked button: focus goes to its nearest focusable ancestor, which is the
+ * skip link's `<main tabIndex={-1}>`. Code that gives focus back after a change treats these alike.
+ */
+export function isFocusDropped(el: Element | null | undefined): boolean {
+  return !el || el === el.ownerDocument?.body || el.matches("main, [role=main]")
+}

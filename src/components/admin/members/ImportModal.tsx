@@ -102,7 +102,7 @@ export default function ImportModal({ onClose, onImported }: { onClose: () => vo
   const toWrite = analysis ? analysis.plan.counts.create + analysis.plan.counts.update : 0
 
   return (
-    <ModalShell title="Importer des membres" onClose={close} closeOnBackdrop={!analysis} panelClassName={analysis && !result ? "max-w-3xl" : "max-w-lg"}>
+    <ModalShell title="Importer des membres" busy={busy} onClose={close} closeOnBackdrop={!analysis} panelClassName={analysis && !result ? "max-w-3xl" : "max-w-lg"}>
       {result ? (
         <div className="space-y-4">
           <p ref={resultRef} tabIndex={-1} className="bg-green-50 border border-green-200 rounded-xl p-3 text-sm text-green-800 focus:outline-none focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-green-600">
