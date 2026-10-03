@@ -532,19 +532,19 @@ Ces rappels sont envoyés sans intervention de votre part pour les événements 
 
 ### Rapports
 
-**`/admin/events/[id]/print`**, depuis la page de l'événement (**Rapports**). Des documents à imprimer ou enregistrer en PDF depuis le navigateur, chacun ouvert dans un nouvel onglet :
+**`/admin/events/[id]/print`**, depuis la page de l'événement (**Rapports**). Des documents à imprimer ou enregistrer en PDF depuis le navigateur, chacun ouvert dans un nouvel onglet ; l'archive de l'événement se télécharge :
 
-![Page « Rapports » d'un événement : export complet et archive JSON, puis les plannings à remettre aux bénévoles (par jour, par poste, individuel), et le début de la section réservée aux organisateurs](/doc-img/admin-print.png)
+![Page « Rapports » d'un événement : les plannings à remettre aux bénévoles (par jour, par poste, individuel), puis la section réservée aux organisateurs, qui commence par l'export complet](/doc-img/admin-print.png)
 
 | Document | Contenu | Pour qui |
 |---|---|---|
-| Export complet | le planning en frise par jour, le récapitulatif par poste et la liste des bénévoles (en couleur) | l'équipe d'organisation |
-| Archive de l'événement (JSON) | un fichier téléchargé avec toutes les données de l'événement : réglages, créneaux, inscriptions, pages, responsables, jalons et journal | vos archives, ou pour changer d'outil |
 | Planning par jour | pour chaque jour, la frise des postes avec les prénoms dans les créneaux, puis le détail avec les places libres | affichage, bénévoles |
 | Planning par poste | une page par poste : sa frise, ses créneaux, ses bénévoles, son responsable de secteur | chaque responsable |
 | Planning individuel | une page par bénévole : sa journée en frise, puis chaque créneau avec lieu de rendez-vous, contact et consignes | à remettre à l'arrivée |
+| Export complet | le planning en frise par jour, le récapitulatif par poste et la liste des bénévoles avec leurs coordonnées (en couleur) | organisateurs seulement (téléphones et emails) |
 | Feuille de présence | par créneau, une case à cocher par bénévole (déjà cochée si la présence a été marquée dans l'application), heure d'arrivée, remarque, et des lignes vides pour les arrivées imprévues | organisateurs |
 | Liste avec téléphones | tous les bénévoles par ordre alphabétique, téléphone, email et créneaux | organisateurs seulement |
+| Archive de l'événement (JSON) | un fichier téléchargé avec toutes les données de l'événement : réglages, créneaux, inscriptions, pages, responsables, jalons et journal | vos archives, ou pour changer d'outil |
 
 Sauf l'export complet, ces documents sont conçus pour le noir et blanc. La feuille de présence en CSV se télécharge depuis les inscriptions (voir « Présences le jour J »). Les heures planifiées des membres n'y figurent jamais ; les documents avec téléphones portent la mention « ne pas afficher ni distribuer ».
 
