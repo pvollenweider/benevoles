@@ -27,7 +27,7 @@ import {
 } from "@/lib/public-signup"
 import { roleLimitBreaches, roleLimitSelectionMessage, roleLimits } from "@/lib/role-limit"
 import { announce } from "@/lib/announce"
-import { focusFirstAvailable, type FocusCandidate } from "@/lib/focus-return"
+import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
 import { withdrawCopy, withdrawDoneMessage, withdrawFailureMessage } from "@/lib/volunteer-withdraw"
 import ModalShell from "@/components/admin/ModalShell"
 import WithdrawDialog from "@/components/public/WithdrawDialog"
@@ -164,9 +164,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   useLayoutEffect(() => {
     if (!focusRequest) return
     const active = document.activeElement
-    // <main> counts as dropped too: WebKit focuses it (tabIndex={-1}, the skip link's target) when a
-    // tapped control inside it doesn't take focus.
-    const free = active === null || active === document.body || active.id === MAIN_CONTENT_ID || !!active.closest("[role=dialog],[role=alertdialog]")
+    // Dropped focus includes <main>: WebKit focuses it (tabIndex={-1}, the skip link's target) when a
+    // tapped control inside it doesn't take focus, e.g. after a withdrawal removed the ✕.
+    const free = isFocusDropped(active) || !!active?.closest("[role=dialog],[role=alertdialog]")
     if (free) focusFirstAvailable(focusRequest.candidates)
   }, [focusRequest])
   useEffect(() => {
@@ -430,9 +430,6 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
     const list = trigger.closest("[data-shift-list]")
     const index = list ? [...list.querySelectorAll("button")].indexOf(trigger) : -1
     withdrawFrom.current = { trigger, list, index }
-    // WebKit does not focus a tapped button: it focuses the nearest focusable ancestor, the
-    // <main tabIndex={-1}>, which ModalShell would then restore on close. Focus the ✕ itself.
-    trigger.focus()
     setWithdrawError(null)
     setPendingCancel({ token: reg.token, shiftId: s.id, label: s.label || s.roleName, status: reg.status })
   }
@@ -893,7 +890,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                       ref={charterTriggerRef}
                       type="button"
                       // Same WebKit fallback to <main> as for the ✕: ModalShell restores its opener.
-                      onClick={(e) => { e.currentTarget.focus(); setShowCharter(true) }}
+                      onClick={() => setShowCharter(true)}
                       className="text-blue-600 underline underline-offset-2 hover:text-blue-800"
                     >
                       convention des bénévoles

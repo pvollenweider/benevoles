@@ -14,7 +14,7 @@ import ShiftInfoList from "@/components/ShiftInfoList"
 import AvailabilityForm from "@/components/AvailabilityForm"
 import { withdrawCopy, withdrawDoneMessage, withdrawFailureMessage } from "@/lib/volunteer-withdraw"
 import { announce } from "@/lib/announce"
-import { focusFirstAvailable, type FocusCandidate } from "@/lib/focus-return"
+import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
 
 type ShiftRef = {
   label: string
@@ -85,7 +85,7 @@ export default function MyRegistrationPage() {
   useLayoutEffect(() => {
     if (!focusRequest) return
     const active = document.activeElement
-    const inRegion = active === null || active === document.body || !!document.getElementById(focusRequest.regionId)?.contains(active)
+    const inRegion = isFocusDropped(active) || !!document.getElementById(focusRequest.regionId)?.contains(active)
     if (inRegion) focusFirstAvailable(focusRequest.candidates)
     focusRequest.after?.()
   }, [focusRequest])
