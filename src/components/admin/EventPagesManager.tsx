@@ -215,7 +215,7 @@ function PageFormModal({
   }
 
   return (
-    <ModalShell title={page ? "Modifier la page" : "Nouvelle page"} onClose={() => { if (!saving) onClose() }} panelClassName="max-w-2xl">
+    <ModalShell title={page ? "Modifier la page" : "Nouvelle page"} busy={saving} onClose={() => { if (!saving) onClose() }} panelClassName="max-w-2xl">
       <form onSubmit={submit} noValidate className="space-y-4">
         <div>
           <label htmlFor={titleId} className="block text-sm text-gray-700 mb-1">Titre *</label>

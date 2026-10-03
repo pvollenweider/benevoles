@@ -11,7 +11,7 @@ import { getRoleAccent } from "@/lib/roles"
 import { roleLimits } from "@/lib/role-limit"
 import { reservedRoles } from "@/lib/role-reservation"
 import { applyRoleOrder, moveItem, renameRole } from "@/lib/shifts-admin"
-import { focusFirstAvailable, type FocusCandidate } from "@/lib/focus-return"
+import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
 import { moveRole, roleMoveBoundaryMessage, roleMoveMessage, type MoveDirection } from "@/lib/role-order"
 import { RoleColorPicker, RoleLimitForm, RoleReserveForm } from "./RoleSettings"
 import type { RawShift } from "./types"
@@ -94,12 +94,13 @@ export default function RoleManagerPanel({
   // request answered after `await` renders on a later task, which a next-frame focus can beat: the
   // renamed row is not there yet, or the row's button is still disabled, and focus fell to the heading.
   const [focusRequest, setFocusRequest] = useState<{ candidates: FocusCandidate[] } | null>(null)
-  // Only while focus is still in the panel, or was dropped to <body> by an unmounted editor: a request
-  // answered after the user went elsewhere on the page does not pull focus back.
+  // Only while focus is still in the panel, or was dropped by an unmounted editor (to <body>, or to
+  // <main> under WebKit, which does not focus a tapped button, #585): a request answered after the
+  // user went elsewhere on the page does not pull focus back.
   useLayoutEffect(() => {
     if (!focusRequest) return
     const active = document.activeElement
-    const inPanel = active === null || active === document.body || !!document.getElementById(panelId)?.contains(active)
+    const inPanel = isFocusDropped(active) || !!document.getElementById(panelId)?.contains(active)
     if (inPanel) focusFirstAvailable(focusRequest.candidates)
   }, [focusRequest, panelId])
 

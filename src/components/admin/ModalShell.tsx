@@ -4,6 +4,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useEffect, useId, useRef } from "react"
+import { canTakeFocus, focusFirstAvailable, isFocusDropped } from "@/lib/focus-return"
+import { tabbables, trapTarget } from "@/lib/focus-trap"
+import { resolveOpener, trackPointerOpener } from "@/lib/modal-opener"
+
+/** Open dialogs, innermost last: only the topmost one traps Tab and handles Escape. */
+const openDialogs: HTMLElement[] = []
 
 type Props = {
   title: string
@@ -19,16 +25,27 @@ type Props = {
   describedBy?: string
   /** "alertdialog" for a confirmation that interrupts the task (its description is read on open). */
   role?: "dialog" | "alertdialog"
+  /**
+   * A request runs: « Fermer », Escape and the backdrop do nothing. « Fermer » stays focusable
+   * (`aria-disabled`), so focus is not lost while it waits.
+   */
+  busy?: boolean
 }
 
-const FOCUSABLE =
-  'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+// Installed when the module loads, before any tap that opens a dialog: under WebKit the opener is
+// the last control pressed with a pointer (see modal-opener.ts).
+trackPointerOpener()
 
 /**
  * Accessible modal dialog: role="dialog" + aria-modal, labelled by its title,
  * Escape to close, focus trap, focus moved in on open and restored to the
  * opener on close, body scroll locked while open.
  * Nested modals are not supported.
+ *
+ * Focus (#585): the trap skips hidden, inert and disabled elements and brings focus back in when it
+ * is outside the dialog. The opener is the focused element, or the control last pressed with a
+ * pointer when WebKit left focus on `<body>` or `<main>`. On close, focus goes back to the opener
+ * only if nobody else moved it: a parent that focuses something when the dialog closes wins.
  */
 export default function ModalShell({
   title,
@@ -39,23 +56,37 @@ export default function ModalShell({
   role = "dialog",
   closeOnBackdrop = true,
   describedBy,
+  busy = false,
 }: Props) {
   const titleId = useId()
   const dialogRef = useRef<HTMLDivElement>(null)
   const onCloseRef = useRef(onClose)
+  const busyRef = useRef(busy)
 
   useEffect(() => {
     onCloseRef.current = onClose
+    busyRef.current = busy
   })
 
+  const requestClose = () => { if (!busy) onClose() }
+
   // Return focus to the opener on close, and lock body scroll while open.
+  // Declared before the focus effect below: effects run in order, so the opener is read before
+  // focus moves into the dialog.
   useEffect(() => {
-    const opener = document.activeElement as HTMLElement | null
+    const opener = resolveOpener(document.activeElement)
+    const dialog = dialogRef.current
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = "hidden"
     return () => {
       document.body.style.overflow = previousOverflow
-      if (opener?.isConnected) opener.focus()
+      // Only if focus was dropped (the dialog is gone, or WebKit left it on <main>): a parent that
+      // moved it on close in a layout effect, or with flushSync then focus, has already run and
+      // wins (a passive effect or next-frame focus would run after this, with a brief flash). The
+      // dialog.contains clause only matters for StrictMode's simulated unmount in dev. A removed
+      // or hidden opener is skipped; the parent owns any fallback.
+      const active = document.activeElement
+      if (opener && (isFocusDropped(active) || !!dialog?.contains(active))) focusFirstAvailable([opener])
     }
   }, [])
 
@@ -65,43 +96,43 @@ export default function ModalShell({
     const el = dialogRef.current
     if (!el) return
 
-    const getFocusable = () => [...el.querySelectorAll<HTMLElement>(FOCUSABLE)]
-
-    const target = initialFocusRef?.current ?? getFocusable()[0]
+    const preferred = initialFocusRef?.current
+    const target = canTakeFocus(preferred) ? preferred : tabbables(el)[0]
     target?.focus()
 
+    openDialogs.push(el)
+
     function onKeyDown(e: KeyboardEvent) {
+      // Only the topmost dialog handles keys: two open dialogs would otherwise fight over focus
+      // and one Escape would close both.
+      if (openDialogs[openDialogs.length - 1] !== el) return
       if (e.key === "Escape") {
-        onCloseRef.current()
+        if (!busyRef.current) onCloseRef.current()
         return
       }
-      if (e.key !== "Tab") return
+      if (e.key !== "Tab" || !el) return
 
-      const els = getFocusable()
-      if (!els.length) return
-      const first = els[0]
-      const last = els[els.length - 1]
-
-      if (e.shiftKey) {
-        if (document.activeElement === first) {
-          e.preventDefault()
-          last.focus()
-        }
-      } else if (document.activeElement === last) {
-        e.preventDefault()
-        first.focus()
-      }
+      // Wrap at either end, and bring back in a focus left outside the dialog (WebKit tap, a click
+      // on the dialog's text). With nothing to reach, Tab does nothing.
+      const items = tabbables(el)
+      const next = trapTarget(el, items, document.activeElement, e.shiftKey)
+      if (next || items.length === 0) e.preventDefault()
+      next?.focus()
     }
 
     document.addEventListener("keydown", onKeyDown)
-    return () => document.removeEventListener("keydown", onKeyDown)
+    return () => {
+      document.removeEventListener("keydown", onKeyDown)
+      const i = openDialogs.lastIndexOf(el)
+      if (i !== -1) openDialogs.splice(i, 1)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <div
       className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
-      onClick={closeOnBackdrop ? () => onCloseRef.current() : undefined}
+      onClick={closeOnBackdrop ? requestClose : undefined}
     >
       <div
         ref={dialogRef}
@@ -116,9 +147,10 @@ export default function ModalShell({
           <h2 id={titleId} className="text-lg font-semibold text-gray-900">{title}</h2>
           <button
             type="button"
-            onClick={onClose}
+            onClick={requestClose}
             aria-label="Fermer"
-            className="min-h-11 min-w-11 -mr-2 inline-flex items-center justify-center rounded-full text-gray-600 hover:text-gray-900 text-xl leading-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+            aria-disabled={busy || undefined}
+            className="min-h-11 min-w-11 -mr-2 inline-flex items-center justify-center rounded-full text-gray-600 hover:text-gray-900 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed text-xl leading-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
           >
             <span aria-hidden="true">×</span>
           </button>

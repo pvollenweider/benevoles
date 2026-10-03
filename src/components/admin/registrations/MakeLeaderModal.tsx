@@ -39,7 +39,7 @@ export default function MakeLeaderModal({
   }
 
   return (
-    <ModalShell title={`Rendre ${volunteerName} responsable`} onClose={() => { if (!saving) onClose() }}>
+    <ModalShell title={`Rendre ${volunteerName} responsable`} busy={saving} onClose={() => { if (!saving) onClose() }}>
       <form onSubmit={submit} noValidate className="space-y-4">
         <div>
           <label htmlFor={roleId} className="block text-sm text-gray-700 mb-1">Poste</label>

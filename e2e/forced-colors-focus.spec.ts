@@ -37,13 +37,7 @@ const SUPER_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "e2e-admin-password"
  */
 // Defects found by this spec that predate #579, each with its own issue: an entry must still
 // reproduce (the test fails otherwise) and goes away in the PR that fixes its issue.
-const KNOWN_ISSUES: { test: string; match: RegExp; note: string }[] = [
-  {
-    test: "members page and import modal",
-    match: /import modal, preview step: focus left the modal .* \(no focus trap\)/,
-    note: "#585 — ModalShell focus trap counts the hidden file form of ImportModal's preview step, so Tab escapes after the last visible button",
-  },
-]
+const KNOWN_ISSUES: { test: string; match: RegExp; note: string }[] = []
 
 function settle(failures: string[]) {
   const title = test.info().title

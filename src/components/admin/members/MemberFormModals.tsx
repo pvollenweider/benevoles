@@ -70,7 +70,7 @@ export function EditMemberModal({ member, onClose, onSaved }: { member: Member; 
   }
 
   return (
-    <ModalShell title="Modifier le membre" onClose={() => { if (!busy) onClose() }}>
+    <ModalShell title="Modifier le membre" busy={busy} onClose={() => { if (!busy) onClose() }}>
       <form onSubmit={handleSubmit} noValidate className="space-y-3">
         <p className="text-xs text-gray-600">* champ obligatoire</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -131,7 +131,7 @@ export function AddMemberModal({ onClose, onCreated }: { onClose: () => void; on
   }
 
   return (
-    <ModalShell title="Nouveau membre" onClose={() => { if (!busy) onClose() }}>
+    <ModalShell title="Nouveau membre" busy={busy} onClose={() => { if (!busy) onClose() }}>
       <form onSubmit={handleSubmit} noValidate className="space-y-3">
         <p className="text-xs text-gray-600">* champ obligatoire</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
