@@ -6,7 +6,7 @@
 import { useState } from "react"
 import ConfirmActionModal from "../ConfirmActionModal"
 import { acceptRequestRecap, refuseRequestRecap } from "@/lib/action-recap"
-import { personName, shiftName, type Registration } from "./types"
+import { personName, shiftSpoken, type Registration } from "./types"
 
 type Props = {
   /** The request being accepted or refused. */
@@ -51,10 +51,10 @@ export default function RequestDecisionModal({ reg, kind, waitlist, onCancel, on
   return (
     <ConfirmActionModal
       recap={kind === "accept"
-        ? acceptRequestRecap({ name: personName(reg), shift: shiftName(reg), hasEmail: !!reg.volunteer.email })
+        ? acceptRequestRecap({ name: personName(reg), shift: shiftSpoken(reg), hasEmail: !!reg.volunteer.email })
         : refuseRequestRecap({
           name: personName(reg),
-          shift: shiftName(reg),
+          shift: shiftSpoken(reg),
           hasEmail: !!reg.volunteer.email,
           waitlist,
         })}

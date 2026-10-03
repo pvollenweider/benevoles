@@ -48,7 +48,10 @@ test("selecting all visible rows and bulk-cancelling removes them all", async ({
   const { eventId } = await setUpEventWithRegistrations(page, stamp, 3)
 
   await page.goto(`/admin/events/${eventId}/registrations`)
-  await expect(page.getByText("3 inscription(s) active(s)")).toBeVisible()
+  // #582: real plurals, and each checkbox names the shift and its time in words.
+  await expect(page.getByText("3 inscriptions actives", { exact: true })).toBeVisible()
+  await expect(page.getByRole("checkbox", { name: /^Sélectionner l'inscription de .+, de \d+h(\d+)? à \d+h/ }).first()).toBeVisible()
+  await expect(page.getByRole("checkbox", { name: "Sélectionner l'inscription de E2E Bulk0, Bar, mardi 1 octobre, de 10h à 18h", exact: true })).toBeVisible()
 
   await page.getByLabel("Sélectionner toutes les inscriptions visibles").check()
   await expect(page.getByText("3 sélectionnées")).toBeVisible()

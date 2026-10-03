@@ -185,7 +185,7 @@ Un clic sur une barre du planning ouvre une petite fenêtre pour agir sans quitt
 
 Cochez **Activer la liste d'attente** dans le formulaire du créneau (ou dans celui d'une série de créneaux). Quand le créneau est complet, les bénévoles peuvent s'y inscrire ; une place libérée déclenche automatiquement l'envoi d'un email à la première personne en attente, avec un lien de confirmation valable **24 heures**. Passé ce délai sans réponse, la place est proposée à la personne suivante.
 
-La vue des inscriptions (`/admin/events/[id]/registrations`) affiche les bénévoles en attente (**Liste d'attente**, avec leur rang dans la file, par exemple `#2`) et ceux à qui une place a été proposée (**Place proposée**).
+La vue des inscriptions (`/admin/events/[id]/registrations`) affiche les bénévoles en attente (**Liste d'attente**, avec leur rang dans la file, par exemple « position 2 ») et ceux à qui une place a été proposée (**Place proposée**).
 
 ### Inscriptions sur validation
 
@@ -272,12 +272,12 @@ Désignez un ou plusieurs bénévoles responsables d'un poste (ex. « Bar »). C
 
 ![Liste des responsables de secteur d'un événement, avec le poste, le nom et l'action retirer](/doc-img/admin-sector-leaders.png)
 
-- **Ajouter** un·e responsable : poste (autocomplété depuis les postes existants), nom, email — ou **Depuis les inscrits** pour choisir directement un bénévole déjà inscrit à l'événement, qui pré-remplit ces champs
+- **+ Ajouter un responsable** : poste (autocomplété depuis les postes existants), nom, email — ou **Depuis les inscrits** pour choisir directement un bénévole déjà inscrit à l'événement, qui pré-remplit ces champs
 - Depuis la page des inscriptions, sélectionner une seule ligne puis **Rendre responsable** propose directement le poste de ce créneau
 
   ![Fenêtre « Rendre Camille Rochat responsable » : choix du poste parmi ceux où la personne est inscrite, et email pré-rempli](/doc-img/admin-make-leader-modal.png)
 - Un email est automatiquement envoyé au responsable avec son lien personnel ; il est aussi prévenu à chaque nouvelle inscription sur son poste
-- **Retirer** un·e responsable à tout moment (confirmation demandée)
+- **Retirer** un responsable à tout moment (confirmation demandée)
 - La fiche du bénévole concerné (`/admin/members`) reçoit automatiquement le tag « responsable »
 
 ![Page personnelle de la responsable du poste Buvette : chaque créneau avec ses bénévoles inscrits, leur email et leur téléphone, et les personnes en liste d'attente](/doc-img/leader-page.png)
@@ -362,7 +362,7 @@ Vue tabulaire des inscriptions, en quatre colonnes :
 - **Bénévole** : nom, puis sous le nom l'email, le téléphone, les réponses aux questions, les disponibilités, le commentaire et, s'il y a lieu, l'alerte **Charge élevée** ;
 - **Créneau** : poste, libellé, jour et horaires ;
 - **Source** : **Formulaire** (inscription depuis la page publique) ou **Manuel** (ajout depuis l'administration) ;
-- **Statut** : **Liste d'attente** (avec le rang dans la file, par exemple `#2`), **Place proposée** ou **Demande à traiter** ; rien pour une inscription confirmée.
+- **Statut** : **Liste d'attente** (avec le rang dans la file, par exemple « position 2 »), **Place proposée** ou **Demande à traiter** ; rien pour une inscription confirmée.
 
 ![Page des inscriptions d'un événement : compteurs (actives, liste d'attente, demandes à traiter), recherche et filtres, puis le tableau avec bénévole et coordonnées, créneau et source](/doc-img/admin-registrations.png)
 

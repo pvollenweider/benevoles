@@ -103,7 +103,7 @@ describe("RegistrationsManager — count announcements", () => {
   it("says only the removal after a bulk removal, the hidden count following the list", async () => {
     vi.stubGlobal("fetch", vi.fn(() => new Promise(() => {})))
     renderManager()
-    fireEvent.click(screen.getByLabelText("Sélectionner l'inscription de Alice Martin"))
+    fireEvent.click(screen.getByLabelText(/^Sélectionner l'inscription de Alice Martin, /))
     fireEvent.click(screen.getByRole("button", { name: "Retirer de leur créneau (1)" }))
     fireEvent.click(screen.getByRole("button", { name: "Retirer" }))
     await waitFor(() => expect(outcome().textContent).toBe(heldAnnouncement(1, UNDO_MS / 1000)))
@@ -115,7 +115,7 @@ describe("RegistrationsManager — count announcements", () => {
   it("replaces an action result and its journal link with the count after a filter change", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ done: 1, changedIds: ["r1"] }) }))
     renderManager()
-    fireEvent.click(screen.getByLabelText("Sélectionner l'inscription de Alice Martin"))
+    fireEvent.click(screen.getByLabelText(/^Sélectionner l'inscription de Alice Martin, /))
     fireEvent.click(screen.getByRole("button", { name: "Marquer présent (1)" }))
     await waitFor(() => expect(outcome()).toHaveTextContent("1 personne marquée présente."))
     expect(within(outcome()).getByRole("link", { name: "Voir cette action dans le journal" })).toBeInTheDocument()
@@ -133,7 +133,7 @@ describe("RegistrationsManager — count announcements", () => {
     renderManager()
     fireEvent.change(screen.getByLabelText("Filtrer par poste"), { target: { value: "Bar" } })
     await waitFor(() => expect(outcome().textContent).toBe("1 inscription affichée"))
-    fireEvent.click(screen.getByLabelText("Sélectionner l'inscription de Alice Martin"))
+    fireEvent.click(screen.getByLabelText(/^Sélectionner l'inscription de Alice Martin, /))
     fireEvent.click(screen.getByRole("button", { name: "Retirer de leur créneau (1)" }))
     fireEvent.click(screen.getByRole("button", { name: "Retirer" }))
     await waitFor(() => expect(outcome().textContent).toBe(heldAnnouncement(1, UNDO_MS / 1000)))
@@ -148,8 +148,8 @@ describe("RegistrationsManager — count announcements", () => {
     const flushFrames = () => act(() => { frames.splice(0).forEach((cb) => cb(0)) })
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ done: 2, alreadyLeader: 0 }) }))
     renderManager()
-    fireEvent.click(screen.getByLabelText("Sélectionner l'inscription de Alice Martin"))
-    fireEvent.click(screen.getByLabelText("Sélectionner l'inscription de Bob Martin"))
+    fireEvent.click(screen.getByLabelText(/^Sélectionner l'inscription de Alice Martin, /))
+    fireEvent.click(screen.getByLabelText(/^Sélectionner l'inscription de Bob Martin, /))
     fireEvent.click(screen.getByRole("button", { name: "Rendre responsable" }))
     // The filter changes: its count waits for the next frame.
     fireEvent.change(screen.getByLabelText("Filtrer par poste"), { target: { value: "Bar" } })

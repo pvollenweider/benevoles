@@ -41,6 +41,7 @@ export default function SectorLeadersManager({
   const nameId = useId()
   const emailId = useId()
   const pickId = useId()
+  const pickHintId = `${pickId}-hint`
   const [roleName, setRoleName] = useState("")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -169,7 +170,7 @@ export default function SectorLeadersManager({
             onClick={() => setShowForm(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition-colors"
           >
-            + Ajouter un·e responsable
+            + Ajouter un responsable
           </button>
         )}
       </div>
@@ -181,6 +182,7 @@ export default function SectorLeadersManager({
               <label htmlFor={pickId} className="block text-sm text-gray-700 mb-1">Depuis les inscrits (optionnel)</label>
               <select
                 id={pickId}
+                aria-describedby={pickHintId}
                 defaultValue=""
                 onChange={(e) => {
                   if (e.target.value) pickRegisteredVolunteer(e.target.value)
@@ -188,16 +190,16 @@ export default function SectorLeadersManager({
                 }}
                 className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white"
               >
-                <option value="">Sélectionner un·e bénévole déjà inscrit·e…</option>
+                <option value="">Choisir parmi les bénévoles inscrits…</option>
                 {registeredVolunteers.map((v) => (
-                  <option key={v.id} value={v.id}>{v.name} · {v.roleNames.join(", ")}</option>
+                  <option key={v.id} value={v.id}>{v.name} ({v.roleNames.join(", ")})</option>
                 ))}
               </select>
-              <p className="text-xs text-gray-600 mt-1">Remplit le nom, l&apos;email et le poste ci-dessous — modifiable avant l&apos;ajout.</p>
+              <p id={pickHintId} className="text-xs text-gray-600 mt-1">Remplit le nom, l&apos;email et le poste ci-dessous ; vous pouvez les modifier avant l&apos;ajout.</p>
             </div>
           )}
           <div>
-            <label htmlFor={roleId} className="block text-sm text-gray-700 mb-1">Poste *</label>
+            <label htmlFor={roleId} className="block text-sm text-gray-700 mb-1">Poste <span aria-hidden="true">*</span></label>
             <input
               ref={roleInputRef}
               id={roleId}
@@ -217,7 +219,7 @@ export default function SectorLeadersManager({
             </datalist>
           </div>
           <div>
-            <label htmlFor={nameId} className="block text-sm text-gray-700 mb-1">Nom *</label>
+            <label htmlFor={nameId} className="block text-sm text-gray-700 mb-1">Nom <span aria-hidden="true">*</span></label>
             <input
               id={nameId}
               aria-invalid={isInvalid("name")}
@@ -231,7 +233,7 @@ export default function SectorLeadersManager({
             />
           </div>
           <div>
-            <label htmlFor={emailId} className="block text-sm text-gray-700 mb-1">Email *</label>
+            <label htmlFor={emailId} className="block text-sm text-gray-700 mb-1">Email <span aria-hidden="true">*</span></label>
             <input
               id={emailId}
               aria-invalid={isInvalid("email")}

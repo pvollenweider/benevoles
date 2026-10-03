@@ -134,11 +134,11 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
       <h3 className="font-semibold text-gray-800">Inscription manuelle</h3>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor="add-firstname" className="block text-xs font-medium text-gray-600 mb-1">Prénom *</label>
+          <label htmlFor="add-firstname" className="block text-xs font-medium text-gray-600 mb-1">Prénom <span aria-hidden="true">*</span></label>
           <input id="add-firstname" type="text" required value={addForm.firstName} onChange={(e) => setAddForm((f) => ({ ...f, firstName: e.target.value }))} className="input" />
         </div>
         <div>
-          <label htmlFor="add-lastname" className="block text-xs font-medium text-gray-600 mb-1">Nom *</label>
+          <label htmlFor="add-lastname" className="block text-xs font-medium text-gray-600 mb-1">Nom <span aria-hidden="true">*</span></label>
           <input id="add-lastname" type="text" required value={addForm.lastName} onChange={(e) => setAddForm((f) => ({ ...f, lastName: e.target.value }))} className="input" />
         </div>
       </div>
@@ -157,7 +157,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
         </div>
       </div>
       <div>
-        <p id="add-shift-label" className="block text-xs font-medium text-gray-600 mb-1">Créneau *</p>
+        <p id="add-shift-label" className="block text-xs font-medium text-gray-600 mb-1">Créneau <span aria-hidden="true">*</span></p>
         <ShiftSelect
           id="add-shift"
           labelledBy="add-shift-label"
@@ -205,7 +205,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
 
       <div className="flex gap-3">
         <button type="submit" aria-disabled={adding || undefined} aria-describedby={addWarnings.length > 0 ? "add-workload" : undefined} className={`bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 ${adding ? "opacity-60 cursor-wait" : ""}`}>
-          {adding ? "…" : "Ajouter"}
+          {adding ? "Ajout en cours…" : "Ajouter"}
         </button>
         <button type="button" onClick={onCancel} className="text-gray-500 px-3 py-2 text-sm hover:text-gray-800">Annuler</button>
       </div>

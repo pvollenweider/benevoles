@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { clockTime } from "./gantt-utils"
+import { dayLabel } from "./spoken-time"
 
 /**
  * What a sensitive action is about to do, in plain words, before the admin confirms (#379): how
@@ -79,11 +80,8 @@ export function shiftWhen(date: string, startTime: string, endTime: string): str
   return `${dayLabel(date)}, ${clockTime(startTime)}–${clockTime(endTime)}`
 }
 
-/** "Samedi 4 juillet" from an ISO date. */
-export function dayLabel(date: string): string {
-  const day = new Date(`${date}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" })
-  return `${day.charAt(0).toUpperCase()}${day.slice(1)}`
-}
+// Kept exported from here for existing callers; it lives in spoken-time.ts.
+export { dayLabel }
 
 export function deleteShiftRecap(i: { name: string; when: string; registered: number }): ActionRecap {
   return {
@@ -190,7 +188,7 @@ export function acceptRequestRecap(i: { name: string; shift: string; hasEmail: b
   return {
     title: `Accepter la demande de ${i.name} ?`,
     lines: [
-      `${i.name} est inscrit·e sur « ${i.shift} » : la place gardée par la demande devient une inscription confirmée.`,
+      `La demande de ${i.name} sur « ${i.shift} » devient une inscription confirmée.`,
       i.hasEmail ? "Un email de confirmation lui est envoyé, avec son lien personnel." : "Aucun email : cette personne n'a pas d'adresse.",
       LOGGED,
     ],

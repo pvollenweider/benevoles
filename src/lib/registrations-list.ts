@@ -123,6 +123,20 @@ export function leaderRemovedAnnouncement(name: string, role: string): string {
   return `${name} n'est plus responsable de « ${role} ».`
 }
 
+/**
+ * The counts under the heading of the registrations page, e.g. « 3 inscriptions actives, 2 en
+ * liste d'attente, 1 demande à traiter » (#582): commas, not the « · » read « point », and real
+ * plurals instead of « inscription(s) », « Aucune » for zero. The waiting list and the requests only
+ * when there are any.
+ */
+export function registrationsSummary(c: { active: number; waiting: number; requested: number }): string {
+  return [
+    c.active === 0 ? "Aucune inscription active" : `${c.active} ${plural(c.active, "inscription")} ${plural(c.active, "active")}`,
+    c.waiting > 0 ? `${c.waiting} en liste d'attente` : null,
+    c.requested > 0 ? `${c.requested} ${plural(c.requested, "demande")} à traiter` : null,
+  ].filter(Boolean).join(", ")
+}
+
 /** How many registrations the filters leave on the list, e.g. « 2 inscriptions affichées ». */
 export function listCountAnnouncement(count: number): string {
   return `${count} ${plural(count, "inscription")} ${plural(count, "affichée")}`

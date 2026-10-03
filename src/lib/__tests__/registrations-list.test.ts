@@ -11,6 +11,7 @@ import {
   listCountAnnouncement,
   manualAddAnnouncement,
   overlappingShiftIds,
+  registrationsSummary,
   resendAnnouncement,
   shiftsOfEmail,
   type ShiftRef,
@@ -123,5 +124,24 @@ describe("undo window wording (#379)", () => {
     expect(heldAnnouncement(1, 4)).toBe("1 bénévole sera retiré dans 4 secondes. « Annuler le retrait » pour le garder.")
     expect(undoneAnnouncement(2)).toBe("Retrait annulé : les 2 bénévoles restent inscrits, aucun email envoyé.")
     expect(undoneAnnouncement(1)).toBe("Retrait annulé : le bénévole reste inscrit, aucun email envoyé.")
+  })
+})
+
+// #582: the counts under the page heading, with real plurals and commas (no « (s) », no « · »).
+describe("registrationsSummary", () => {
+  it("active registrations alone, singular, plural and zero", () => {
+    expect(registrationsSummary({ active: 0, waiting: 0, requested: 0 })).toBe("Aucune inscription active")
+    expect(registrationsSummary({ active: 1, waiting: 0, requested: 0 })).toBe("1 inscription active")
+    expect(registrationsSummary({ active: 3, waiting: 0, requested: 0 })).toBe("3 inscriptions actives")
+  })
+
+  it("adds the waiting list and the requests only when there are any", () => {
+    expect(registrationsSummary({ active: 3, waiting: 2, requested: 1 })).toBe("3 inscriptions actives, 2 en liste d'attente, 1 demande à traiter")
+    expect(registrationsSummary({ active: 1, waiting: 0, requested: 2 })).toBe("1 inscription active, 2 demandes à traiter")
+    expect(registrationsSummary({ active: 0, waiting: 1, requested: 0 })).toBe("Aucune inscription active, 1 en liste d'attente")
+  })
+
+  it("has no middle dot nor bracketed plural", () => {
+    expect(registrationsSummary({ active: 2, waiting: 2, requested: 2 })).not.toMatch(/[·()]/)
   })
 })

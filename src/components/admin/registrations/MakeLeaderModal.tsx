@@ -22,6 +22,9 @@ export default function MakeLeaderModal({
 }) {
   const roleId = useId()
   const emailId = useId()
+  const roleHintId = `${roleId}-hint`
+  const emailHintId = `${emailId}-hint`
+  const emailErrorId = `${emailId}-error`
   const [roleName, setRoleName] = useState(defaultRole)
   const [email, setEmail] = useState(volunteerEmail ?? "")
   const { submit: run, busy: saving, error, fail, isInvalid } = useSubmit()
@@ -48,6 +51,7 @@ export default function MakeLeaderModal({
               id={roleId}
               value={roleName}
               onChange={(e) => setRoleName(e.target.value)}
+              aria-describedby={roleHintId}
               className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white"
             >
               {roleOptions.map((r) => <option key={r} value={r}>{r}</option>)}
@@ -56,26 +60,28 @@ export default function MakeLeaderModal({
             <input id={roleId} type="text" value={roleName} readOnly className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-gray-50 text-gray-700" />
           )}
           {roleOptions.length > 1 && (
-            <p className="text-xs text-gray-600 mt-1">{volunteerName} est inscrit·e sur plusieurs postes — choisissez lequel.</p>
+            <p id={roleHintId} className="text-xs text-gray-600 mt-1">{volunteerName} a des inscriptions sur plusieurs postes : choisissez celui dont cette personne sera responsable.</p>
           )}
         </div>
         <div>
-          <label htmlFor={emailId} className="block text-sm text-gray-700 mb-1">Email *</label>
+          <label htmlFor={emailId} className="block text-sm text-gray-700 mb-1">Email <span aria-hidden="true">*</span></label>
           <input
             id={emailId}
             type="email"
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             aria-invalid={isInvalid("email")}
-            aria-describedby={isInvalid("email") ? `${emailId}-error` : undefined}
+            // The missing-email hint describes the field too, not only the text below it (#582).
+            aria-describedby={[!volunteerEmail && emailHintId, isInvalid("email") && emailErrorId].filter(Boolean).join(" ") || undefined}
             autoComplete="off"
             className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           />
           {!volunteerEmail && (
-            <p className="text-xs text-amber-800 mt-1">Aucun email enregistré pour ce bénévole — le lien responsable en a besoin.</p>
+            <p id={emailHintId} className="text-xs text-amber-800 mt-1">Aucun email enregistré pour cette personne : il en faut un pour lui envoyer son lien de responsable.</p>
           )}
         </div>
-        <FormStatus error={error} errorId={`${emailId}-error`} />
+        <FormStatus error={error} errorId={emailErrorId} />
         <div className="flex justify-end gap-2">
           <button type="button" onClick={() => { if (!saving) onClose() }} aria-disabled={saving || undefined} className="text-sm text-gray-600 px-4 py-2 rounded-full hover:bg-gray-50 transition-colors">
             Annuler
