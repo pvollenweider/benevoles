@@ -67,4 +67,27 @@ test.describe("admin", () => {
       expect.soft(await seriousViolations(page), sub).toEqual([])
     }
   })
+
+  // #587: the shifts page in list view, then with « Gérer les postes » and a colour picker open.
+  test("shifts page: list view, roles panel and colour picker have no serious violation", async ({ page }) => {
+    test.setTimeout(120_000)
+    await page.goto("/admin/login")
+    await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+    await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+    await page.getByRole("button", { name: "Se connecter" }).click()
+    await expect(page).toHaveURL(/\/admin\/events/)
+    await page.getByRole("link", { name: /Spectacle/ }).first().click()
+    await expect(page).toHaveURL(/\/admin\/events\/[^/]+$/)
+    await page.goto(page.url() + "/shifts")
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+    await page.getByRole("button", { name: "Liste", exact: true }).click()
+    await expect(page.getByRole("table")).toBeVisible()
+    // The view toggle's colours transition (transition-colors): scan once they have settled.
+    await page.getByRole("group", { name: "Affichage des créneaux" }).evaluate((g) => Promise.all(g.getAnimations({ subtree: true }).map((a) => a.finished)))
+    expect.soft(await seriousViolations(page), "list view").toEqual([])
+    await page.getByRole("button", { name: "Gérer les postes" }).click()
+    await page.getByRole("button", { name: /^Changer la couleur du poste / }).first().click()
+    await expect(page.getByRole("group", { name: /^Couleur du poste / })).toBeVisible()
+    expect.soft(await seriousViolations(page), "roles panel and colour picker").toEqual([])
+  })
 })

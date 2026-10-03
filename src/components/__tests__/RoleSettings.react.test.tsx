@@ -226,6 +226,46 @@ describe("RoleSettings", () => {
       await act(async () => resolve({ ok: true, json: async () => ({}) }))
     })
 
+    // #587: a ring (box-shadow) was the only mark of the chosen colour, and forced colours drop it.
+    it("marks the chosen swatch with a check and a border, the others with neither; no title", () => {
+      setup("teal")
+      const chosen = screen.getByRole("button", { name: "Sarcelle" })
+      expect(chosen.querySelectorAll("svg")).toHaveLength(1)
+      expect(chosen.querySelector("svg")).toHaveAttribute("aria-hidden", "true")
+      expect(chosen).toHaveClass("border-2", "border-gray-900")
+      expect(chosen.className).not.toMatch(/\bring-/)
+      for (const other of ["Bleu", "Rose", "Jaune"]) {
+        const b = screen.getByRole("button", { name: other })
+        expect(b.querySelector("svg")).toBeNull()
+        expect(b).toHaveClass("border-0")
+      }
+      expect(document.querySelector("[title]")).toBeNull()
+    })
+
+    it("keeps the swatch colours in forced colours on the inner, non-focusable children only", () => {
+      setup("teal")
+      for (const b of screen.getAllByRole("button")) expect(b.className).not.toContain("forced-color-adjust-none")
+      const chosen = screen.getByRole("button", { name: "Sarcelle" })
+      expect(chosen.querySelector("span")).toHaveClass("forced-color-adjust-none", "bg-teal-700")
+      expect(chosen.querySelector("span")).toHaveAttribute("aria-hidden", "true")
+      // At least 24 px (2.5.8): the button is 32 px.
+      expect(chosen).toHaveClass("w-8", "h-8")
+    })
+
+    it("« Automatique » pressed shows « ✓ », hidden from screen readers, and a border; not pressed, readable text", () => {
+      setup(null)
+      const auto = screen.getByRole("button", { name: "Automatique" })
+      expect(auto).toHaveTextContent("✓ Automatique")
+      expect(screen.getByText("✓")).toHaveAttribute("aria-hidden", "true")
+      expect(auto).toHaveClass("border-2")
+      cleanup()
+      setup("blue")
+      const off = screen.getByRole("button", { name: "Automatique" })
+      expect(off).not.toHaveTextContent("✓")
+      expect(off).toHaveClass("text-gray-700")
+      expect(off).not.toHaveClass("text-gray-500")
+    })
+
     it("Escape closes it with the role", () => {
       const cb = setup()
       fireEvent.keyDown(screen.getByRole("button", { name: "Rose" }), { key: "Escape" })

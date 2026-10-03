@@ -6,7 +6,8 @@
 import { useState, useRef, useCallback, useEffect } from "react"
 import { announce } from "@/lib/announce"
 import { flushSync } from "react-dom"
-import { dayLabel, deleteShiftRecap, shiftWhen } from "@/lib/action-recap"
+import { dayLabel } from "@/lib/spoken-time"
+import { deleteShiftRecapFor, timelineBarName } from "@/lib/shifts-admin"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { requestJson } from "@/lib/use-submit"
 import { getBarClasses } from "@/lib/roles"
@@ -371,7 +372,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
                         tabIndex={0}
                         aria-haspopup="dialog"
                         aria-expanded={isSelected}
-                        aria-label={`${shift.roleName}${hasLabel ? ` ${shift.label}` : ""}, ${fmt(shift.startTime)}–${fmt(shift.endTime)}, ${shift.registrationCount} sur ${shift.capacity}, modifier`}
+                        aria-label={timelineBarName(shift, isFull)}
                         onMouseDown={e => e.stopPropagation()}
                         onClick={e => { e.stopPropagation(); openPopover(shift.id) }}
                         onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openPopover(shift.id) } }}
@@ -494,7 +495,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, shows = [], ro
 
       {pendingDelete && (
         <ConfirmActionModal
-          recap={deleteShiftRecap({ name: pendingDelete.label && pendingDelete.label !== pendingDelete.roleName ? `${pendingDelete.roleName} · ${pendingDelete.label}` : pendingDelete.roleName, when: shiftWhen(date, fmt(pendingDelete.startTime), fmt(pendingDelete.endTime)), registered: pendingDelete.registrationCount })}
+          recap={deleteShiftRecapFor({ ...pendingDelete, date })}
           busy={deleting}
           error={deleteError}
           onConfirm={() => void runDelete(pendingDelete)}

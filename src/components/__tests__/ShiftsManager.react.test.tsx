@@ -11,7 +11,7 @@ import type { RawShift } from "../admin/shifts/types"
 // The timeline is a heavy drag-and-drop component that the view toggle does not depend on.
 vi.mock("../admin/AdminDayTimeline", () => ({ default: () => null }))
 
-// « Timeline / Liste » view toggle (#554): two toggle buttons in a named group.
+// « Frise / Liste » view toggle (#554): two toggle buttons in a named group.
 
 const shift: RawShift = {
   id: "s1", roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00",
@@ -27,10 +27,10 @@ function renderManager() {
 describe("ShiftsManager view toggle", () => {
   afterEach(cleanup)
 
-  it("groups Timeline and Liste as toggle buttons, Timeline pressed by default", () => {
+  it("groups Frise and Liste as toggle buttons, Frise pressed by default", () => {
     renderManager()
     const group = screen.getByRole("group", { name: "Affichage des créneaux" })
-    const timeline = within(group).getByRole("button", { name: "Timeline" })
+    const timeline = within(group).getByRole("button", { name: "Frise" })
     const list = within(group).getByRole("button", { name: "Liste" })
     expect(timeline).toHaveAttribute("aria-pressed", "true")
     expect(list).toHaveAttribute("aria-pressed", "false")
@@ -40,7 +40,7 @@ describe("ShiftsManager view toggle", () => {
 
   it("switches to the list: pressed states flip, Liste keeps focus, the table is shown", () => {
     renderManager()
-    const timeline = screen.getByRole("button", { name: "Timeline" })
+    const timeline = screen.getByRole("button", { name: "Frise" })
     const list = screen.getByRole("button", { name: "Liste" })
     expect(screen.queryByRole("table")).not.toBeInTheDocument()
 
@@ -112,14 +112,14 @@ describe("ShiftsManager shift editor focus and announcements", () => {
     render(<ShiftsManager eventId="evt-1" eventStartDate="2026-07-04" eventEndDate="2026-07-04" initialShifts={[shift, other]} />)
     fireEvent.click(screen.getByRole("button", { name: "Liste" }))
     const barRow = screen.getByRole("row", { name: /Bar/ })
-    const edit = within(barRow).getByRole("button", { name: "Modifier" })
+    const edit = within(barRow).getByRole("button", { name: /^Modifier le créneau Bar/ })
     edit.focus()
     fireEvent.click(edit)
     expect(screen.getByRole("group", { name: "Modifier le créneau" })).toBeInTheDocument()
     expect(screen.getByLabelText("Poste *")).toHaveFocus()
     fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
 
-    await waitFor(() => expect(within(screen.getByRole("row", { name: /Bar/ })).getByRole("button", { name: "Modifier" })).toHaveFocus())
+    await waitFor(() => expect(within(screen.getByRole("row", { name: /Bar/ })).getByRole("button", { name: /^Modifier le créneau Bar/ })).toHaveFocus())
     await waitFor(() => expect(spoken("status")).toHaveLength(1))
     expect(spoken("status")[0]).toHaveTextContent("Créneau modifié : Bar, samedi 4 juillet, de 10h à 13h.")
   })
@@ -128,8 +128,8 @@ describe("ShiftsManager shift editor focus and announcements", () => {
     fetchMock.mockResolvedValue({ ok: true, json: async () => ({ ...shift, date: "2026-07-04T00:00:00.000Z" }) })
     renderManager()
     fireEvent.click(screen.getByRole("button", { name: "Liste" }))
-    fireEvent.click(screen.getByRole("button", { name: "Modifier" }))
-    fireEvent.click(screen.getByRole("button", { name: "Timeline" }))
+    fireEvent.click(screen.getByRole("button", { name: /^Modifier le créneau / }))
+    fireEvent.click(screen.getByRole("button", { name: "Frise" }))
     expect(screen.queryByRole("table")).toBeNull()
     fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
 
@@ -142,8 +142,8 @@ describe("ShiftsManager shift editor focus and announcements", () => {
   it("when the opener is gone (list switched to timeline), focus falls back to the add button", async () => {
     renderManager()
     fireEvent.click(screen.getByRole("button", { name: "Liste" }))
-    fireEvent.click(screen.getByRole("button", { name: "Modifier" }))
-    fireEvent.click(screen.getByRole("button", { name: "Timeline" }))
+    fireEvent.click(screen.getByRole("button", { name: /^Modifier le créneau / }))
+    fireEvent.click(screen.getByRole("button", { name: "Frise" }))
     expect(screen.queryByRole("table")).toBeNull()
     fireEvent.click(screen.getByRole("button", { name: "Annuler" }))
 
@@ -263,5 +263,86 @@ describe("ShiftsManager roles panel disclosure and focus", () => {
     expect(series).toHaveAttribute("aria-expanded", "true")
     expect(document.getElementById(series.getAttribute("aria-controls")!)).not.toBeNull()
     everyControlsResolves()
+  })
+})
+
+// List view (#587): readable contrast, actions named with their shift, cells read in words, and a
+// deletion recap in words.
+
+describe("ShiftsManager list view", () => {
+  beforeEach(() => {
+    fetchMock.mockReset()
+    vi.stubGlobal("fetch", fetchMock)
+    Element.prototype.scrollIntoView = vi.fn()
+  })
+  afterEach(() => {
+    cleanup()
+    vi.unstubAllGlobals()
+  })
+
+  const rows: RawShift[] = [
+    { ...shift, id: "a", capacity: 5, registrationCount: 3, minAge: 18 },
+    { ...shift, id: "b", label: "Soir", startTime: "18:30", endTime: "23:00", capacity: 2, registrationCount: 2, status: "full" },
+    { ...shift, id: "c", roleName: "Accueil", label: "Accueil", startTime: "14:00", endTime: "16:00", capacity: 3, registrationCount: 1, status: "closed" },
+  ]
+  const renderList = () => {
+    const view = render(<ShiftsManager eventId="evt-1" eventStartDate="2026-07-04" eventEndDate="2026-07-04" initialShifts={rows} />)
+    fireEvent.click(screen.getByRole("button", { name: "Liste" }))
+    return view
+  }
+
+  it("names « Modifier » and « Supprimer » with the shift, starting with the visible word", () => {
+    renderList()
+    for (const verb of ["Modifier", "Supprimer"]) {
+      expect(screen.getByRole("button", { name: `${verb} le créneau Bar, samedi 4 juillet, de 10h à 12h` })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: `${verb} le créneau Bar, Soir, samedi 4 juillet, de 18h30 à 23h` })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: `${verb} le créneau Accueil, samedi 4 juillet, de 14h à 16h` })).toBeInTheDocument()
+    }
+    for (const b of screen.getAllByRole("button", { name: /^(Modifier|Supprimer) le créneau / })) expect(b).toHaveAttribute("type", "button")
+  })
+
+  it("reads the time and places in words, with « Date et horaire » and « ans minimum »", () => {
+    renderList()
+    expect(screen.getByRole("columnheader", { name: "Date et horaire" })).toBeInTheDocument()
+    const row = screen.getByRole("row", { name: /Modifier le créneau Bar, samedi 4 juillet, de 10h à 12h/ })
+    expect(within(row).getByText("de 10h à 12h")).toHaveClass("sr-only")
+    expect(within(row).getByText("10:00–12:00")).toHaveAttribute("aria-hidden", "true")
+    expect(within(row).getByText("3 inscrits sur 5")).toHaveClass("sr-only")
+    expect(within(row).getByText("3/5")).toHaveAttribute("aria-hidden", "true")
+    expect(within(row).getByText("18 ans minimum")).toBeInTheDocument()
+    expect(document.body.textContent).not.toContain("Date · Horaire")
+    expect(document.body.textContent).not.toContain("ans min.")
+  })
+
+  it("uses no text colour under 4.5:1 on white or on its row (regression)", () => {
+    const { container } = renderList()
+    for (const cls of ["text-blue-500", "text-red-400", "text-orange-500", "text-emerald-600"]) {
+      expect(container.querySelector(`.${cls}`), cls).toBeNull()
+    }
+    // gray-500 on the gray-100 of the « Fermé » badge is 4.4:1.
+    expect(within(screen.getByRole("row", { name: /Accueil/ })).getByText("Fermé")).toHaveClass("text-gray-700")
+    const fullRow = screen.getByRole("row", { name: /Modifier le créneau Bar, Soir/ })
+    expect(within(fullRow).getByText("Complet", { selector: "p" })).toHaveClass("text-orange-800")
+    expect(screen.getAllByText("2 libres")[0]).toHaveClass("text-green-800")
+  })
+
+  it("the deletion recap from the list says the shift in words", () => {
+    renderList()
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer le créneau Bar, Soir, samedi 4 juillet, de 18h30 à 23h" }))
+    const dialog = screen.getByRole("alertdialog", { name: "Supprimer le créneau « Bar, Soir » ?" })
+    expect(dialog).toHaveTextContent("Samedi 4 juillet, de 18h30 à 23h.")
+    expect(dialog.textContent).not.toMatch(/[–·]/)
+  })
+})
+
+describe("ShiftsManager timeline hint", () => {
+  afterEach(cleanup)
+
+  it("says how to add and resize with the mouse and with the keyboard, in sentences, readable", () => {
+    renderManager()
+    const hint = screen.getByText(/^À la souris, faites glisser sur la ligne d'un poste/)
+    expect(hint).toHaveTextContent("Au clavier, utilisez « + Ajouter un créneau » ou ouvrez un créneau pour le modifier.")
+    expect(hint).toHaveClass("text-xs", "text-gray-600")
+    expect(hint.textContent).not.toContain("·")
   })
 })

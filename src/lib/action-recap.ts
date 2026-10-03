@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { clockTime } from "./gantt-utils"
-import { dayLabel } from "./spoken-time"
+import { dayLabel, spokenTimeRange } from "./spoken-time"
 
 /**
  * What a sensitive action is about to do, in plain words, before the admin confirms (#379): how
@@ -75,9 +74,12 @@ export function deactivateMemberRecap(name: string): ActionRecap {
   }
 }
 
-/** "Samedi 4 juillet, 18:00–23:00": the moment of a shift, for a recap. */
+/**
+ * "Samedi 4 juillet, de 18h à 23h": the moment of a shift, for a recap shown on screen, in words
+ * (#587; an en dash between two hours is read « tiret »). Times are stored "HH:MM".
+ */
 export function shiftWhen(date: string, startTime: string, endTime: string): string {
-  return `${dayLabel(date)}, ${clockTime(startTime)}–${clockTime(endTime)}`
+  return `${dayLabel(date)}, ${spokenTimeRange(startTime, endTime)}`
 }
 
 // Kept exported from here for existing callers; it lives in spoken-time.ts.

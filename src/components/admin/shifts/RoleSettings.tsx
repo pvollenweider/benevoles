@@ -251,27 +251,42 @@ export function RoleColorPicker({
       onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); if (!busy) onClose(role) } }}
       className="flex flex-wrap items-center gap-2 px-3 py-2.5 mt-1 rounded-xl border border-blue-100 bg-blue-50/50"
     >
+      {/* The pressed choice is marked by a border and a check, not only by a ring (box-shadow),
+          which forced colours drop (#587). « Automatique » shows « ✓ » when pressed. */}
       <button
         type="button"
         onClick={() => setRoleColor(role, null)}
         aria-pressed={colorKey === null}
         aria-disabled={busy || undefined}
-        className={`text-xs px-2 py-1 rounded-full border aria-disabled:opacity-50 ${colorKey === null ? "border-blue-400 bg-white font-medium" : "border-gray-200 text-gray-500 hover:bg-white"}`}
+        className={`min-h-6 text-xs px-2 py-1 rounded-full aria-disabled:opacity-50 ${colorKey === null ? "border-2 border-blue-700 bg-white font-medium text-gray-900" : "border border-gray-200 text-gray-700 hover:bg-white"}`}
       >
+        {colorKey === null && <span aria-hidden="true">✓ </span>}
         Automatique
       </button>
-      {COLOR_OPTIONS.map(c => (
-        <button
-          key={c.key}
-          type="button"
-          onClick={() => setRoleColor(role, c.key)}
-          aria-label={c.label}
-          aria-pressed={colorKey === c.key}
-          aria-disabled={busy || undefined}
-          title={c.label}
-          className={`w-6 h-6 rounded-full flex-shrink-0 aria-disabled:opacity-50 ${c.swatch} ${colorKey === c.key ? "ring-2 ring-offset-1 ring-blue-500" : ""}`}
-        />
-      ))}
+      {COLOR_OPTIONS.map(c => {
+        const selected = colorKey === c.key
+        return (
+          // The swatch keeps its colour in forced colours (forced-color-adjust-none on the inner,
+          // non-focusable children only): the colour is the choice. The selected one adds a border,
+          // repainted by the system, and a white check.
+          <button
+            key={c.key}
+            type="button"
+            onClick={() => setRoleColor(role, c.key)}
+            aria-label={c.label}
+            aria-pressed={selected}
+            aria-disabled={busy || undefined}
+            className={`relative w-8 h-8 inline-flex items-center justify-center rounded-full flex-shrink-0 aria-disabled:opacity-50 ${selected ? "border-2 border-gray-900" : "border-0"}`}
+          >
+            <span aria-hidden="true" className={`w-6 h-6 rounded-full forced-color-adjust-none ${c.swatch}`} />
+            {selected && (
+              <svg aria-hidden="true" className="absolute w-4 h-4 text-white forced-color-adjust-none" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M7.5 13.5 4 10l1.4-1.4 2.1 2.1 5.1-5.1L14 7z" />
+              </svg>
+            )}
+          </button>
+        )
+      })}
     </div>
   )
 }

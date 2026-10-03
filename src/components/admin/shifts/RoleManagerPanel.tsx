@@ -330,6 +330,8 @@ export default function RoleManagerPanel({
                   })}
                 </span>
               )}
+              {/* A 24 px target around the 16 px dot, with its own focus outline (#587). The dot keeps
+                  its colour in forced colours: the colour is what the button shows. */}
               <button
                 ref={(el) => setRoleButton(colorBtnRefs.current, role, el)}
                 type="button"
@@ -338,8 +340,10 @@ export default function RoleManagerPanel({
                 aria-label={`Changer la couleur du poste ${role}`}
                 aria-expanded={isPickingColor}
                 aria-controls={isPickingColor ? `color-picker-${i}` : undefined}
-                className={`w-4 h-4 rounded-full flex-shrink-0 disabled:opacity-50 ring-offset-1 ${isPickingColor ? "ring-2 ring-blue-400" : ""} ${getRoleAccent(role, roleColorOf(role))}`}
-              />
+                className="w-6 h-6 inline-flex items-center justify-center rounded-full flex-shrink-0 disabled:opacity-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              >
+                <span aria-hidden="true" className={`w-4 h-4 rounded-full forced-color-adjust-none ring-offset-1 ${isPickingColor ? "ring-2 ring-blue-600" : ""} ${getRoleAccent(role, roleColorOf(role))}`} />
+              </button>
               {isRenaming ? (
                 <>
                   <label className="sr-only" htmlFor={`rename-${i}`}>Nouveau nom du poste « {role} »</label>
@@ -367,13 +371,14 @@ export default function RoleManagerPanel({
                   >
                     Valider
                   </button>
-                  <button type="button" onClick={() => cancelRename(role)} className="text-xs text-gray-500 hover:text-gray-800 flex-shrink-0">
+                  <button type="button" onClick={() => cancelRename(role)} className="text-xs text-gray-600 hover:text-gray-800 flex-shrink-0">
                     Annuler
                   </button>
                 </>
               ) : (
                 <>
-                  <span className="text-sm font-medium text-gray-700 flex-1 min-w-[8rem] truncate">{role}</span>
+                  {/* The whole name wraps onto several lines rather than being cut (#606). */}
+                  <span className="text-sm font-medium text-gray-700 flex-1 min-w-[8rem] [overflow-wrap:anywhere]">{role}</span>
                   <button
                     ref={(el) => setRoleButton(limitBtnRefs.current, role, el)}
                     type="button"
@@ -395,9 +400,10 @@ export default function RoleManagerPanel({
                     aria-expanded={reserveRole === role}
                     aria-controls={reserveRole === role ? `reserve-form-${i}` : undefined}
                     aria-label={reservedTags.length === 0 ? `Accès : tous, poste « ${role} »` : `Accès : ${reservedTags.join(", ")}, poste « ${role} » réservé`}
-                    className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 flex-shrink-0"
+                    className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 text-left min-w-0 [overflow-wrap:anywhere]"
                   >
-                    <span className="inline-block max-w-[10rem] truncate align-bottom">{reservedTags.length === 0 ? "Accès : tous" : `Accès : ${reservedTags.join(", ")}`}</span>
+                    {/* A long list of tags wraps, whole (#606). */}
+                    {reservedTags.length === 0 ? "Accès : tous" : `Accès : ${reservedTags.join(", ")}`}
                   </button>
                   <button
                     ref={(el) => setRoleButton(renameBtnRefs.current, role, el)}
@@ -405,7 +411,7 @@ export default function RoleManagerPanel({
                     onClick={() => startRenameRole(role)}
                     disabled={isBusy}
                     aria-label={`Renommer le poste ${role}`}
-                    className="text-xs text-gray-500 hover:text-blue-600 disabled:opacity-50 flex-shrink-0"
+                    className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 flex-shrink-0"
                   >
                     Renommer
                   </button>

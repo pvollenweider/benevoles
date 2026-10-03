@@ -5,11 +5,12 @@
 
 import { useId, useState, useRef } from "react"
 import { announce } from "@/lib/announce"
-import { deleteShiftRecap, shiftWhen, type ActionRecap } from "@/lib/action-recap"
+import type { ActionRecap } from "@/lib/action-recap"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { requestJson } from "@/lib/use-submit"
 import { flushSync } from "react-dom"
 import { fmtRange } from "@/lib/gantt-utils"
+import { spokenShift, spokenTimeRange } from "@/lib/spoken-time"
 import { focusFirstAvailableNextFrame, type FocusCandidate } from "@/lib/focus-return"
 import { shiftSavedMessage } from "@/lib/shift-editor-form"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
@@ -19,10 +20,12 @@ import RoleManagerPanel from "./shifts/RoleManagerPanel"
 import type { RawShift } from "./shifts/types"
 import {
   activeShiftsByDay,
+  deleteShiftRecapFor,
   eventDates,
   fmtLongDate as fmtDate,
   roleOrder,
   sortShifts,
+  spokenPlaces,
 } from "@/lib/shifts-admin"
 
 const UNPUBLISHED_NOTICE = "C'était le dernier créneau : l'événement est repassé en brouillon, sa page publique n'est plus accessible."
@@ -146,10 +149,9 @@ export default function ShiftsManager({
   function handleDeleteShift(id: string) {
     const shift = shifts.find((s) => s.id === id)
     if (!shift) return
-    const name = shift.label && shift.label !== shift.roleName ? `${shift.roleName} · ${shift.label}` : shift.roleName
     setDeleteError(null)
     setPendingDelete({
-      recap: deleteShiftRecap({ name, when: shiftWhen(shift.date, shift.startTime, shift.endTime), registered: shift.registrationCount }),
+      recap: deleteShiftRecapFor(shift),
       run: () => runDeleteShift(id),
     })
   }
@@ -203,7 +205,7 @@ export default function ShiftsManager({
   const statusCls: Record<string, string> = {
     open:   "bg-green-100 text-green-700",
     full:   "bg-orange-100 text-orange-700",
-    closed: "bg-gray-100 text-gray-500",
+    closed: "bg-gray-100 text-gray-700",
   }
   const statusLabel: Record<string, string> = { open: "Ouvert", full: "Complet", closed: "Fermé" }
 
@@ -224,7 +226,7 @@ export default function ShiftsManager({
               onClick={() => setView("timeline")}
               className={`px-3 py-1.5 font-medium transition-colors first:rounded-l-[11px] last:rounded-r-[11px] forced-colors:aria-pressed:bg-[Highlight] ${view === "timeline" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
             >
-              Timeline
+              Frise
             </button>
             <button
               type="button"
@@ -327,7 +329,7 @@ export default function ShiftsManager({
         </div>
       )}
 
-      {/* ── Timeline view ───────────────────────────────────────────────────── */}
+      {/* ── Frise (timeline) view ───────────────────────────────────────────────────── */}
       {view === "timeline" && daysWithShifts.map(day => (
         <div key={day} className="space-y-2">
           <h2 className="text-xs font-semibold text-gray-600">
@@ -343,8 +345,8 @@ export default function ShiftsManager({
             onUpdated={handleUpdated}
             onDeleted={handleDeleted}
           />
-          <p className="text-[10px] text-gray-500 pl-1">
-            Cliquer + glisser sur un poste pour ajouter un créneau · Glisser les bords pour redimensionner
+          <p className="text-xs text-gray-600 pl-1">
+            À la souris, faites glisser sur la ligne d&apos;un poste pour ajouter un créneau, ou les bords d&apos;un créneau pour changer ses horaires. Au clavier, utilisez « + Ajouter un créneau » ou ouvrez un créneau pour le modifier.
           </p>
         </div>
       ))}
@@ -355,7 +357,7 @@ export default function ShiftsManager({
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Date · Horaire</th>
+                <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Date et horaire</th>
                 <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Poste</th>
                 <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden sm:table-cell">Places</th>
                 <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden md:table-cell">Statut</th>
@@ -367,22 +369,29 @@ export default function ShiftsManager({
                 <tr key={s.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
                     <p>{fmtDate(s.date)}</p>
-                    <p className="font-medium text-gray-700">{fmtRange(s.startTime, s.endTime)}</p>
+                    {/* « 10:00–12:00 » is read « tiret »: the screen reader gets it in words (#587). */}
+                    <p className="font-medium text-gray-700">
+                      <span aria-hidden="true">{fmtRange(s.startTime, s.endTime)}</span>
+                      <span className="sr-only">{spokenTimeRange(s.startTime, s.endTime)}</span>
+                    </p>
                   </td>
                   <td className="px-4 py-3">
                     <p className="font-medium text-gray-800">{s.roleName}</p>
                     {s.label !== s.roleName && <p className="text-xs text-gray-500">{s.label}</p>}
-                    {s.minAge != null && <p className="text-[11px] text-gray-500">{s.minAge} ans min.</p>}
+                    {s.minAge != null && <p className="text-[11px] text-gray-500">{s.minAge} ans minimum</p>}
                   </td>
                   <td className="px-4 py-3 hidden sm:table-cell tabular-nums">
-                    <p className="text-gray-700 font-medium">{s.registrationCount}/{s.capacity}</p>
+                    <p className="text-gray-700 font-medium">
+                      <span aria-hidden="true">{s.registrationCount}/{s.capacity}</span>
+                      <span className="sr-only">{spokenPlaces(s.registrationCount, s.capacity)}</span>
+                    </p>
                     {s.registrationCount >= s.capacity
-                      ? <p className="text-[11px] text-orange-500">Complet</p>
-                      : <p className="text-[11px] text-emerald-600">{s.capacity - s.registrationCount} libre{s.capacity - s.registrationCount > 1 ? "s" : ""}</p>
+                      ? <p className="text-[11px] text-orange-800">Complet</p>
+                      : <p className="text-[11px] text-green-800">{s.capacity - s.registrationCount} libre{s.capacity - s.registrationCount > 1 ? "s" : ""}</p>
                     }
                   </td>
                   <td className="px-4 py-3 hidden md:table-cell">
-                    <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${statusCls[s.status] ?? "bg-gray-100 text-gray-500"}`}>
+                    <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${statusCls[s.status] ?? "bg-gray-100 text-gray-700"}`}>
                       {statusLabel[s.status] ?? s.status}
                     </span>
                   </td>
@@ -414,15 +423,17 @@ export default function ShiftsManager({
                         contactPhone: s.contactPhone ?? "",
                         instructions: s.instructions ?? "",
                       }, s.id)}
-                      className="text-xs text-blue-500 hover:text-blue-700 mr-3"
+                      className="text-xs text-blue-700 hover:text-blue-900 mr-3"
                     >
-                      Modifier
+                      {/* Named with the shift (#587): every row has a « Modifier » and a « Supprimer ». */}
+                      Modifier{" "}<span className="sr-only">le créneau {spokenShift(s)}</span>
                     </button>
                     <button
+                      type="button"
                       onClick={() => handleDeleteShift(s.id)}
-                      className="text-xs text-red-400 hover:text-red-600"
+                      className="text-xs text-red-700 hover:text-red-900"
                     >
-                      Supprimer
+                      Supprimer{" "}<span className="sr-only">le créneau {spokenShift(s)}</span>
                     </button>
                   </td>
                 </tr>

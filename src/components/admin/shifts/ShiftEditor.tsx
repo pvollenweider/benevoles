@@ -112,7 +112,7 @@ export default function ShiftEditor({
       <h3 id={`shift-editor-title-${sfx}`} className="font-semibold text-gray-800">{editingId ? "Modifier le créneau" : "Nouveau créneau"}</h3>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor={`roleName-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Poste *</label>
+          <label htmlFor={`roleName-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Poste <span aria-hidden="true">*</span></label>
           {/* The editor remounts on every open (key): focus lands here each time. */}
           <input
             id={`roleName-${sfx}`}
@@ -143,7 +143,7 @@ export default function ShiftEditor({
       <div className="grid grid-cols-3 gap-3">
         <div>
           {/* No asterisk on the read-only date of a one-day event: there is nothing to fill in. */}
-          <label htmlFor={`date-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Date{singleDay ? "" : " *"}</label>
+          <label htmlFor={`date-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Date{singleDay ? "" : <> <span aria-hidden="true">*</span></>}</label>
           {singleDay ? (
             <input id={`date-${sfx}`} type="text" readOnly value={fmtDate(dates[0])} className="input bg-gray-50 text-gray-700" />
           ) : (
@@ -155,7 +155,7 @@ export default function ShiftEditor({
           {dateField.message}
         </div>
         <div>
-          <label htmlFor={`startTime-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Début *</label>
+          <label htmlFor={`startTime-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Début <span aria-hidden="true">*</span></label>
           <input
             id={`startTime-${sfx}`}
             type="text" placeholder="HH:MM" value={form.startTime}
@@ -174,7 +174,7 @@ export default function ShiftEditor({
           {startField.message}
         </div>
         <div>
-          <label htmlFor={`endTime-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Fin *</label>
+          <label htmlFor={`endTime-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Fin <span aria-hidden="true">*</span></label>
           <input
             id={`endTime-${sfx}`}
             type="text" placeholder="HH:MM" value={form.endTime}
@@ -188,7 +188,7 @@ export default function ShiftEditor({
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor={`capacity-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Capacité *</label>
+          <label htmlFor={`capacity-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Capacité <span aria-hidden="true">*</span></label>
           <input id={`capacity-${sfx}`} type="number" min="1" required {...capacityField.invalidProps} value={form.capacity} onChange={e => setField("capacity", e.target.value)} className={`input ${capacityField.border}`} />
           {capacityField.message}
         </div>

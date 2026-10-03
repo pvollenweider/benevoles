@@ -554,20 +554,21 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       const editor = page.getByRole("group", { name: "Nouveau créneau" })
       await editor.getByRole("button", { name: "Ajouter", exact: true }).focus()
       await page.keyboard.press("Enter")
-      await expect(editor.getByLabel("Poste *")).toBeFocused()
-      await expect(editor.getByLabel("Poste *")).toHaveAttribute("aria-invalid", "true")
+      const roleField = editor.getByRole("combobox", { name: "Poste", exact: true })
+      await expect(roleField).toBeFocused()
+      await expect(roleField).toHaveAttribute("aria-invalid", "true")
       failures.push(...(await checkFocused(page, "shift editor, first invalid field")))
       await shot(page, editor, name("shifts", "editor", "invalid"))
       settle(failures)
     })
 
-    test("shifts page view toggle (Timeline / Liste)", async ({ page }) => {
+    test("shifts page view toggle (Frise / Liste)", async ({ page }) => {
       const failures: string[] = []
       await login(page)
       await page.goto(`/admin/events/${data.eventId}/shifts`)
       const group = page.getByRole("group", { name: "Affichage des créneaux" })
       await expect(group).toBeVisible()
-      const timeline = group.getByRole("button", { name: "Timeline", exact: true })
+      const timeline = group.getByRole("button", { name: "Frise", exact: true })
       const list = group.getByRole("button", { name: "Liste", exact: true })
       for (const b of [timeline, list]) {
         await b.focus()
@@ -575,7 +576,7 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
         await page.keyboard.press("Tab")
         failures.push(...(await checkFocused(page, "view toggle")))
       }
-      if ((await timeline.getAttribute("aria-pressed")) !== "true") failures.push("view toggle: Timeline (current view) has no aria-pressed=\"true\"")
+      if ((await timeline.getAttribute("aria-pressed")) !== "true") failures.push("view toggle: Frise (current view) has no aria-pressed=\"true\"")
       if ((await list.getAttribute("aria-pressed")) !== "false") failures.push("view toggle: Liste has no aria-pressed=\"false\"")
       await page.evaluate(() => (document.activeElement as HTMLElement).blur())
       const [a, b] = [await stateSignature(timeline), await stateSignature(list)]
@@ -640,6 +641,30 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       await login(page)
       await page.goto(`/admin/events/${data.eventId}/shifts`)
       await page.getByRole("button", { name: "Gérer les postes" }).click()
+      // The chosen colour (#587): a ring alone vanished in forced colours. The seed roles have no
+      // colour, so pick one: the same swatch must look different chosen and not chosen, with a check.
+      const colorButton = page.getByRole("button", { name: "Changer la couleur du poste Accueil" })
+      const picker = page.getByRole("group", { name: "Couleur du poste « Accueil »" })
+      const pick = async (name: string) => {
+        await colorButton.click()
+        await picker.getByRole("button", { name, exact: true }).click()
+        await expect(picker).toBeHidden()
+        await colorButton.click()
+        await expect(picker.getByRole("button", { name, exact: true })).toHaveAttribute("aria-pressed", "true")
+      }
+      const emerald = picker.getByRole("button", { name: "Émeraude", exact: true })
+      await pick("Bleu")
+      const before = await stateSignature(emerald)
+      await picker.getByRole("button", { name: "Bleu", exact: true }).click()
+      await expect(picker).toBeHidden()
+      await pick("Émeraude")
+      const after = await stateSignature(emerald)
+      if (JSON.stringify(before) === JSON.stringify(after)) failures.push("role colour: the chosen swatch looks like the others in forced colours")
+      if (after.icons < 1) failures.push("role colour: the chosen swatch has no check mark")
+      failures.push(...(await checkSelectedStates(page, "role colour picker", { within: '[role="group"][aria-label="Couleur du poste « Accueil »"]' })))
+      // Back to « Automatique », for the other palette's run.
+      await picker.getByRole("button", { name: "Automatique" }).click()
+      await expect(picker).toBeHidden()
       for (const control of [/^Changer la couleur du poste Bar/, /^Limite : .*Bar/, /^Accès : .*Bar/]) {
         const button = page.getByRole("button", { name: control }).first()
         await button.focus()

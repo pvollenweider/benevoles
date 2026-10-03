@@ -534,3 +534,55 @@ describe("RoleManagerPanel, Monter / Descendre (#554)", () => {
     expect(screen.queryByRole("button", { name: /^(Monter|Descendre) le poste/ })).not.toBeInTheDocument()
   })
 })
+
+// #606: a long role name, and a long « Accès : … » list, are shown whole (they wrap), not cut.
+// #587: the row's colour button is a 24 px target with its own focus outline; readable « Renommer ».
+describe("RoleManagerPanel long names and row controls", () => {
+  afterEach(cleanup)
+
+  const LONG = "Accueil des artistes et des invités de la soirée de clôture"
+  const TAGS = ["sécurité", "secouriste", "logistique"]
+  const renderLong = () => render(
+    <RoleManagerPanel
+      open panelId="roles-panel" eventId="evt-1"
+      shifts={[shift({ id: "l1", roleName: LONG, label: LONG, reservedTags: TAGS }), shift({ id: "b1", roleName: "Bar", displayOrder: 1 })]}
+      setShifts={() => {}} roles={[LONG, "Bar"]} setRoles={() => {}} {...makeSpies()}
+    />,
+  )
+
+  it("renders the full role name, with no truncation", () => {
+    expect(LONG.length).toBeGreaterThan(50)
+    renderLong()
+    const name = within(screen.getByRole("list", { name: "Ordre des postes" })).getByText(LONG)
+    expect(name).not.toHaveClass("truncate")
+    expect(name.className).toContain("[overflow-wrap:anywhere]")
+    expect(screen.getByRole("list", { name: "Ordre des postes" }).querySelector(".truncate")).toBeNull()
+  })
+
+  it("shows the whole « Accès : … » text in its button, which wraps", () => {
+    renderLong()
+    const access = screen.getByRole("button", { name: `Accès : ${TAGS.join(", ")}, poste « ${LONG} » réservé` })
+    expect(access).toHaveTextContent(`Accès : ${TAGS.join(", ")}`, { normalizeWhitespace: true })
+    expect(access.className).toContain("[overflow-wrap:anywhere]")
+    expect(access).not.toHaveClass("flex-shrink-0")
+    expect(access.querySelector(".truncate, [class*='max-w-']")).toBeNull()
+  })
+
+  it("the colour button is 24 px around a 16 px dot, with an explicit focus outline", () => {
+    renderLong()
+    const color = screen.getByRole("button", { name: `Changer la couleur du poste ${LONG}` })
+    expect(color).toHaveClass("w-6", "h-6", "focus-visible:outline-2", "focus-visible:outline-blue-600")
+    const dot = color.querySelector("span")!
+    expect(dot).toHaveAttribute("aria-hidden", "true")
+    expect(dot).toHaveClass("w-4", "h-4", "forced-color-adjust-none")
+    expect(color.className).not.toContain("forced-color-adjust-none")
+  })
+
+  it("« Renommer » and the rename « Annuler » are readable on the hovered row (not gray-500)", () => {
+    renderLong()
+    const rename = screen.getByRole("button", { name: "Renommer le poste Bar" })
+    expect(rename).toHaveClass("text-gray-600")
+    fireEvent.click(rename)
+    expect(screen.getByRole("button", { name: "Annuler" })).toHaveClass("text-gray-600")
+  })
+})
