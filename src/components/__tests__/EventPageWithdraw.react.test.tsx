@@ -132,13 +132,15 @@ describe("EventPageClient — withdrawing a held shift", () => {
   it("a tap as WebKit does it (focus left on <main>) still gives focus back to the ✕ (#534)", async () => {
     await renderPage()
     // WebKit doesn't focus a tapped button but its nearest focusable ancestor: the skip link's
-    // <main tabIndex={-1}>. ModalShell must not record that as the opener and restore it.
+    // <main tabIndex={-1}>. ModalShell takes the opener from the pointer press (#585).
     const main = document.querySelector("main")!
+    fireEvent.pointerDown(barX())
     act(() => main.focus())
     fireEvent.click(barX())
     expect(keep()).toHaveFocus()
     // Real WebKit drops focus to <body> here (the dialog is outside <main>); <main> is the harder
     // case for the guard, which treats both as dropped focus.
+    fireEvent.pointerDown(keep())
     act(() => main.focus())
     fireEvent.click(keep())
     expect(screen.queryByRole("alertdialog")).toBeNull()
@@ -262,11 +264,13 @@ describe("EventPageClient — charter dialog", () => {
     fireEvent.click(screen.getAllByRole("button", { name: /^Continuer/ })[0])
     const link = screen.getByRole("button", { name: "convention des bénévoles" })
     const main = document.querySelector("main")!
+    fireEvent.pointerDown(link)
     act(() => main.focus())
     fireEvent.click(link)
     const close = screen.getByRole("button", { name: "Fermer" })
     expect(close).toHaveFocus()
     // As above: <main> rather than <body>, the harder case for the guard.
+    fireEvent.pointerDown(close)
     act(() => main.focus())
     fireEvent.click(close)
     expect(screen.queryByRole("dialog")).toBeNull()
