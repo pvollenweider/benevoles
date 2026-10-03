@@ -18,13 +18,10 @@ import path from "node:path"
 const SRC = path.resolve(import.meta.dirname, "../..")
 
 /**
- * Known exceptions, by file and class, each with its reason. They are admin-only and outside the
- * scope of the public-page fix (#534); a fixed one must be removed from here (the test checks).
+ * Known exceptions, by file and class, each with its reason. Empty since the admin menu chevrons
+ * were gated (#590); a fixed one must be removed from here (the test checks).
  */
-const ALLOWED: { file: string; token: string; note: string }[] = [
-  { file: "components/admin/UserMenu.tsx", token: "transition-transform", note: "admin account menu chevron rotation, to gate in an admin issue" },
-  { file: "components/admin/SuperAdminMenu.tsx", token: "transition-transform", note: "super admin menu chevron rotation, to gate in an admin issue" },
-]
+const ALLOWED: { file: string; token: string; note: string }[] = []
 
 /** Class-like tokens of a line: split on spaces, quotes, backticks and template braces. */
 function tokens(line: string): string[] {

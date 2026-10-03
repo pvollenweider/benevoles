@@ -12,7 +12,8 @@ import { usePathname } from "next/navigation"
 // (reported directly: a screenshot of the admin nav wrapping). A native disclosure pattern
 // (button + role="menu") rather than <details>/<summary> so we control focus movement into the
 // first item on open and back to the trigger on close/Escape, matching the rest of this app's
-// interactive-menu conventions.
+// interactive-menu conventions. Closes like UserMenu (#589, #590): on a pointerdown outside (a tap
+// on a tablet fires no mousedown on non-clickable content) and when focus moves out of the menu.
 export const SUPER_ADMIN_ITEMS = [
   { href: "/super-admin/organizations", label: "Organisations" },
   { href: "/super-admin/health", label: "Santé du service" },
@@ -29,6 +30,7 @@ export default function SuperAdminMenu() {
 
   useEffect(() => {
     if (!open) return
+    const items = () => Array.from(menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? [])
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
         setOpen(false)
@@ -38,49 +40,59 @@ export default function SuperAdminMenu() {
       // role="menu" carries an Up/Down-between-items contract (ARIA APG) — plain Tab order
       // alone isn't enough once we claim that role.
       if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-        const items = Array.from(menuRef.current?.querySelectorAll<HTMLAnchorElement>("a") ?? [])
-        if (items.length === 0) return
+        const list = items()
+        if (list.length === 0) return
         e.preventDefault()
-        const currentIndex = items.indexOf(document.activeElement as HTMLAnchorElement)
-        const nextIndex = e.key === "ArrowDown"
-          ? (currentIndex + 1) % items.length
-          : (currentIndex - 1 + items.length) % items.length
-        items[nextIndex]?.focus()
+        const current = list.indexOf(document.activeElement as HTMLElement)
+        const next = e.key === "ArrowDown"
+          ? (current + 1) % list.length
+          : (current - 1 + list.length) % list.length
+        list[next]?.focus()
       }
     }
-    function onClickOutside(e: MouseEvent) {
+    function onPointerOutside(e: PointerEvent) {
       if (menuRef.current?.contains(e.target as Node) || buttonRef.current?.contains(e.target as Node)) return
       setOpen(false)
     }
     document.addEventListener("keydown", onKeyDown)
-    document.addEventListener("mousedown", onClickOutside)
+    // pointerdown covers mouse, touch and pen alike.
+    document.addEventListener("pointerdown", onPointerOutside)
     // Move focus to the first item when the menu opens, like any native menu.
-    const first = menuRef.current?.querySelector<HTMLAnchorElement>("a")
-    first?.focus()
+    items()[0]?.focus()
     return () => {
       document.removeEventListener("keydown", onKeyDown)
-      document.removeEventListener("mousedown", onClickOutside)
+      document.removeEventListener("pointerdown", onPointerOutside)
     }
   }, [open])
 
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      onBlur={(e) => {
+        // Focus moved to another element outside the menu (e.g. Tab past the last item): close.
+        // A blur without a new target is not that: Safari does not focus a tapped link, so a tap
+        // on an item blurs the focused one with relatedTarget null, and closing then would drop
+        // the tap. Taps outside are handled by the pointerdown listener.
+        const next = e.relatedTarget as Node | null
+        if (open && next && !e.currentTarget.contains(next)) setOpen(false)
+      }}
+    >
       <button
         ref={buttonRef}
         type="button"
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-controls={menuId}
+        aria-controls={open ? menuId : undefined}
         onClick={() => setOpen((v) => !v)}
         onKeyDown={(e) => {
           if (e.key === "ArrowDown" && !open) { e.preventDefault(); setOpen(true) }
         }}
-        className={`text-xs whitespace-nowrap px-2 py-0.5 rounded-full font-medium flex items-center gap-1 ${
+        className={`text-xs whitespace-nowrap px-2 py-0.5 min-h-6 rounded-full font-medium flex items-center gap-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${
           isActive ? "bg-purple-600 text-white" : "bg-purple-100 text-purple-700 hover:bg-purple-200"
         }`}
       >
         Super Admin
-        <span aria-hidden="true" className={`transition-transform ${open ? "rotate-180" : ""}`}>▾</span>
+        <span aria-hidden="true" className={`motion-safe:transition-transform ${open ? "rotate-180" : ""}`}>▾</span>
       </button>
 
       {open && (
@@ -91,21 +103,23 @@ export default function SuperAdminMenu() {
           aria-label="Menu super admin"
           className="absolute right-0 mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg py-1 z-50"
         >
-          {SUPER_ADMIN_ITEMS.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              role="menuitem"
-              onClick={() => setOpen(false)}
-              className={`block px-3 py-2 text-sm ${
-                pathname.startsWith(item.href)
-                  ? "text-purple-700 font-medium bg-purple-50"
-                  : "text-gray-700 hover:bg-gray-50"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {SUPER_ADMIN_ITEMS.map((item) => {
+            const current = pathname.startsWith(item.href)
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                role="menuitem"
+                aria-current={current ? "page" : undefined}
+                onClick={() => setOpen(false)}
+                className={`block px-3 py-2 text-sm focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600 focus-visible:bg-gray-100 ${
+                  current ? "text-purple-700 font-medium bg-purple-50" : "text-gray-700 hover:bg-gray-50"
+                }`}
+              >
+                {item.label}
+              </Link>
+            )
+          })}
         </div>
       )}
     </div>

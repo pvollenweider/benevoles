@@ -84,7 +84,7 @@ export default function UserMenu({ userName, isSuperAdmin }: { userName: string;
         {/* Truncated on narrow screens (#361), and next to the links on a tablet (#495); the
             accessible name keeps the full text. */}
         <span className="truncate max-w-32 sm:max-w-48 md:max-w-32 lg:max-w-64">{userName}</span>
-        <span aria-hidden="true" className={`transition-transform ${open ? "rotate-180" : ""}`}>▾</span>
+        <span aria-hidden="true" className={`motion-safe:transition-transform ${open ? "rotate-180" : ""}`}>▾</span>
       </button>
 
       {open && (

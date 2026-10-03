@@ -284,4 +284,4 @@ Ces règles restent la cible ; le code s'en écarte encore aux endroits suivants
 - **Ombres au repos** : CTA collant de la page publique en `shadow-xl` (`EventPageClient.tsx`), toasts et menus déroulants en `shadow-lg`.
 - **Forme des boutons** : une douzaine de boutons primaires en `rounded-full` et quelques-uns en `rounded-lg`, hors convention `rounded-xl`.
 - **Champs en erreur** : `!border-red-400` dans la gestion des créneaux (`ShiftsManager.tsx`) au lieu de `red-600`.
-- **Mouvement non gardé** : rotation du chevron des menus de compte de l'administration (`UserMenu.tsx`, `SuperAdminMenu.tsx`), `transition-transform` sans `motion-safe` ; glissement du bouton de l'interrupteur de la charte (`OrgCharterForm.tsx`, `transition` avec `translate-x-5`), que le garde-fou ne détecte pas encore. Garde-fou : `src/__tests__/a11y/motion-safe.test.ts`, qui les tolère nommément.
+- **Mouvement non gardé** : glissement du bouton de l'interrupteur de la charte (`OrgCharterForm.tsx`, `transition` avec `translate-x-5`), que le garde-fou `src/__tests__/a11y/motion-safe.test.ts` ne détecte pas encore.
