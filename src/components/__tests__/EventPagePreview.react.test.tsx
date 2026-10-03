@@ -41,8 +41,10 @@ describe("EventPageClient — preview mode", () => {
     const urls = fetchMock.mock.calls.map((c) => String(c[0]))
     expect(urls).toEqual(["/api/admin/events/evt-1/preview"])
     expect(getItem).not.toHaveBeenCalled()
-    // Not a <main> inside the admin layout's <main>.
+    // Not a <main> inside the admin layout's <main>, nor a second skip link (#534): the admin
+    // layout has its own.
     expect(document.querySelector("main")).toBeNull()
+    expect(screen.queryByRole("link", { name: "Aller au contenu" })).toBeNull()
   })
 
   it("the public page itself is unchanged: public API, no banner", async () => {
@@ -53,5 +55,25 @@ describe("EventPageClient — preview mode", () => {
     expect(String(fetchMock.mock.calls[0][0])).toBe("/api/public/fete?org=org")
     expect(screen.queryByText(/Aperçu/)).toBeNull()
     expect(document.querySelector("main")).not.toBeNull()
+  })
+
+  it("the public page starts with a skip link to its main content, the header outside main (#534)", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ...event, publicStatus: undefined }) }))
+    render(<EventPageClient orgSlug="org" eventSlug="fete" />)
+    await screen.findByRole("heading", { level: 1 })
+    const link = screen.getByRole("link", { name: "Aller au contenu" })
+    expect(link).toHaveAttribute("href", "#main")
+    // First focusable element of the page.
+    expect(document.querySelector("a[href], button, input, select, textarea")).toBe(link)
+    const main = document.querySelector("main")!
+    expect(main).toHaveAttribute("id", "main")
+    expect(main).toHaveAttribute("tabindex", "-1")
+    expect(document.querySelectorAll("main")).toHaveLength(1)
+    // The header is a banner (not inside main), the footer and the action status after main.
+    expect(screen.getByRole("banner")).toContainElement(screen.getByRole("heading", { level: 1 }))
+    expect(main.contains(screen.getByRole("banner"))).toBe(false)
+    expect(main.contains(document.getElementById("action-notice"))).toBe(false)
+    expect(main.contains(screen.getByRole("contentinfo"))).toBe(false)
+    expect(main).toContainElement(screen.getByRole("region", { name: /^Planning/ }))
   })
 })
