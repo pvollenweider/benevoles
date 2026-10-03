@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { ShiftRef } from "@/lib/registrations-list"
+import { spokenShift, spokenShiftName } from "@/lib/spoken-time"
 
 export type Volunteer = {
   id: string; firstName: string; lastName: string; email: string | null; phone: string | null
@@ -25,5 +26,8 @@ export type AddFormValues = { firstName: string; lastName: string; email: string
 
 export const EMPTY_ADD_FORM: AddFormValues = { firstName: "", lastName: "", email: "", phone: "", shiftId: "", comment: "" }
 
-export const shiftName = (r: Registration) => (r.shift.label !== r.shift.roleName ? `${r.shift.roleName} · ${r.shift.label}` : r.shift.label)
+/** « Bar, Soir »: commas, not the « · » screen readers read « point » (#582). */
+export const shiftName = (r: Registration) => spokenShiftName(r.shift)
+/** « Bar, Soir, samedi 4 juillet, de 10h à 12h »: tells apart two rows of the same person. */
+export const shiftSpoken = (r: Registration) => spokenShift(r.shift)
 export const personName = (r: Registration) => `${r.volunteer.firstName} ${r.volunteer.lastName}`

@@ -7,6 +7,7 @@ import { SEARCH_MAX_LENGTH } from "@/lib/admin-search"
 import { orgTimeZone } from "@/lib/time-zone"
 import { answersByVolunteer } from "@/lib/event-questions"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
+import { registrationsSummary } from "@/lib/registrations-list"
 
 export const dynamic = "force-dynamic"
 
@@ -70,13 +71,11 @@ export default async function RegistrationsPage({
           </a>
         </div>
         <p className="text-sm text-gray-500">
-          {event.registrations.filter(r => r.status === "active").length} inscription(s) active(s)
-          {event.registrations.some(r => r.status === "waiting" || r.status === "offered") && (
-            <> · {event.registrations.filter(r => r.status === "waiting" || r.status === "offered").length} en liste d'attente</>
-          )}
-          {event.registrations.some(r => r.status === "requested") && (
-            <> · {event.registrations.filter(r => r.status === "requested").length} demande(s) à traiter</>
-          )}
+          {registrationsSummary({
+            active: event.registrations.filter(r => r.status === "active").length,
+            waiting: event.registrations.filter(r => r.status === "waiting" || r.status === "offered").length,
+            requested: event.registrations.filter(r => r.status === "requested").length,
+          })}
         </p>
       </div>
 

@@ -7,8 +7,8 @@ import StatusBadge from "../StatusBadge"
 import { contactPhone } from "@/lib/contact-phone"
 import { workloadMessage, type WorkloadWarning } from "@/lib/workload"
 import { availabilityLabel, hasAvailability } from "@/lib/availability"
-import { fmtHour, fmtShortDate } from "@/lib/registrations-list"
-import { personName, shiftName, type Registration } from "./types"
+import { spokenShortWhen } from "@/lib/spoken-time"
+import { personName, shiftName, shiftSpoken, type Registration } from "./types"
 
 const sourceLabels: Record<string, string> = {
   public_form: "Formulaire",
@@ -33,7 +33,8 @@ export default function RegistrationRow({ reg, selected, onToggleSelected, onDec
     <tr className={`hover:bg-gray-50 ${selected ? "bg-blue-50/60" : ""}`}>
       <td className="px-4 py-3">
         <label className="sr-only" htmlFor={`reg-select-${reg.id}`}>
-          Sélectionner l&apos;inscription de {reg.volunteer.firstName} {reg.volunteer.lastName}
+          {/* The shift and time tell apart two rows of the same person (#582). */}
+          Sélectionner l&apos;inscription de {personName(reg)}, {shiftSpoken(reg)}
         </label>
         <input
           id={`reg-select-${reg.id}`}
@@ -47,11 +48,9 @@ export default function RegistrationRow({ reg, selected, onToggleSelected, onDec
         <p className="font-medium text-gray-900 flex items-center gap-1.5">
           {reg.volunteer.firstName} {reg.volunteer.lastName}
           {reg.isLeader && (
-            <span
-              className="inline-flex items-center rounded-full bg-amber-50 px-1.5 py-0.5 text-[10px] font-semibold text-amber-800"
-              title={`Responsable de ${reg.shift.roleName}`}
-            >
-              Responsable
+            <span className="inline-flex items-center rounded-full bg-amber-50 px-1.5 py-0.5 text-[10px] font-semibold text-amber-800">
+              {/* The role in words, not in a title only a mouse can show (#582). */}
+              Responsable<span className="sr-only"> du poste {reg.shift.roleName}</span>
             </span>
           )}
           {reg.checkedInAt && reg.status === "active" && (
@@ -70,14 +69,14 @@ export default function RegistrationRow({ reg, selected, onToggleSelected, onDec
               onClick={() => onDecision("accept")}
               className="text-xs font-medium text-white bg-green-700 hover:bg-green-800 rounded-full px-3 py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700"
             >
-              Accepter{" "}<span className="sr-only">la demande de {personName(reg)} pour {shiftName(reg)}</span>
+              Accepter{" "}<span className="sr-only">la demande de {personName(reg)} pour {shiftSpoken(reg)}</span>
             </button>
             <button
               type="button"
               onClick={() => onDecision("refuse")}
               className="text-xs font-medium text-red-800 border border-red-300 bg-white hover:bg-red-50 rounded-full px-3 py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
             >
-              Refuser{" "}<span className="sr-only">la demande de {personName(reg)} pour {shiftName(reg)}</span>
+              Refuser{" "}<span className="sr-only">la demande de {personName(reg)} pour {shiftSpoken(reg)}</span>
             </button>
           </div>
         )}
@@ -94,12 +93,9 @@ export default function RegistrationRow({ reg, selected, onToggleSelected, onDec
         {reg.comment && <p className="text-xs text-gray-500 italic mt-0.5">"{reg.comment}"</p>}
       </td>
       <td className="px-4 py-3 hidden sm:table-cell">
-        <p className="text-gray-700">
-          {reg.shift.label !== reg.shift.roleName
-            ? <>{reg.shift.roleName} <span className="text-gray-500 font-normal">·</span> {reg.shift.label}</>
-            : reg.shift.label}
-        </p>
-        <p className="text-xs text-gray-500">{fmtShortDate(reg.shift.date)} · {fmtHour(reg.shift.startTime)}–{fmtHour(reg.shift.endTime)}</p>
+        {/* In words, as read aloud: no « · » nor en dash (#582). */}
+        <p className="text-gray-700">{shiftName(reg)}</p>
+        <p className="text-xs text-gray-500">{spokenShortWhen(reg.shift)}</p>
       </td>
       <td className="px-4 py-3 hidden md:table-cell">
         <span className="text-xs text-gray-500">{sourceLabels[reg.source] ?? reg.source}</span>
@@ -109,7 +105,7 @@ export default function RegistrationRow({ reg, selected, onToggleSelected, onDec
           ? <span className="text-xs text-amber-900">Demande à traiter</span>
           : reg.status !== "active" && <StatusBadge status={reg.status} />}
         {reg.status === "waiting" && reg.waitingPosition != null && (
-          <span className="ml-1 text-xs text-gray-500">#{reg.waitingPosition}</span>
+          <span className="ml-1 text-xs text-gray-500">position {reg.waitingPosition}</span>
         )}
       </td>
     </tr>

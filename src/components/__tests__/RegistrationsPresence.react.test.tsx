@@ -34,18 +34,18 @@ describe("RegistrationsManager — presence", () => {
     const aliceRow = screen.getByText("Alice Martin").closest("tr")!
     expect(within(aliceRow).getByText(/Présent/)).toBeInTheDocument()
 
-    fireEvent.click(screen.getByLabelText("Sélectionner l'inscription de Bob Durand"))
+    fireEvent.click(screen.getByLabelText(/^Sélectionner l'inscription de Bob Durand, /))
     expect(screen.getByRole("button", { name: "Marquer présent (1)" })).toHaveAttribute("aria-disabled", "false")
     expect(screen.queryByRole("button", { name: /Annuler la présence/ })).toBeNull()
 
-    fireEvent.click(screen.getByLabelText("Sélectionner l'inscription de Alice Martin"))
+    fireEvent.click(screen.getByLabelText(/^Sélectionner l'inscription de Alice Martin, /))
     expect(screen.getByRole("button", { name: "Annuler la présence (1)" })).toBeInTheDocument()
   })
 
   it("marks the selection present through the bulk route and updates the rows", async () => {
     fetchMock.mockResolvedValue({ ok: true, json: async () => ({ done: 1, changedIds: ["r2"], skipped: 0 }) })
     render(<RegistrationsManager eventId="evt-1" timeZone="Europe/Zurich" shifts={[shift]} initialRegistrations={[reg("r1"), reg("r2")]} />)
-    fireEvent.click(screen.getByLabelText("Sélectionner l'inscription de Bob Durand"))
+    fireEvent.click(screen.getByLabelText(/^Sélectionner l'inscription de Bob Durand, /))
     fireEvent.click(screen.getByRole("button", { name: "Marquer présent (1)" }))
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())

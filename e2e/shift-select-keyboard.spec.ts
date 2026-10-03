@@ -50,14 +50,14 @@ test("a shift is chosen with the keyboard in the manual add form", async ({ page
 
   const open = page.getByRole("button", { name: "+ Ajouter manuellement" })
   await open.click()
-  await page.getByLabel("Prénom *", { exact: true }).fill("E2E")
-  await page.getByLabel("Nom *", { exact: true }).fill(`Clavier${stamp}`)
+  await page.getByRole("textbox", { name: "Prénom", exact: true }).fill("E2E")
+  await page.getByRole("textbox", { name: "Nom", exact: true }).fill(`Clavier${stamp}`)
 
-  const combo = page.getByRole("combobox", { name: "Créneau *" })
+  const combo = page.getByRole("combobox", { name: "Créneau", exact: true })
   await combo.focus()
   await page.keyboard.press("ArrowDown")
   await expect(combo).toHaveAttribute("aria-expanded", "true")
-  await expect(page.getByRole("listbox", { name: "Créneau *" })).toBeVisible()
+  await expect(page.getByRole("listbox", { name: "Créneau", exact: true })).toBeVisible()
   // axe with the list open: the listbox, its options and the active descendant.
   expect.soft(await seriousViolations(page)).toEqual([])
 
@@ -153,10 +153,10 @@ test("both shift pickers fit a 320 px wide screen", async ({ page }) => {
   await page.getByRole("button", { name: "+ Ajouter manuellement" }).click()
   // The person already holds Accueil (« Déjà inscrit »), which Vestiaire overlaps (« ⚠ conflit »).
   await page.getByLabel("Email", { exact: true }).fill(`e2e-shift-select-${stamp}@example.com`)
-  const combo = page.getByRole("combobox", { name: "Créneau *" })
+  const combo = page.getByRole("combobox", { name: "Créneau", exact: true })
   await combo.focus()
   await page.keyboard.press("ArrowDown")
-  const list = page.getByRole("listbox", { name: "Créneau *" })
+  const list = page.getByRole("listbox", { name: "Créneau", exact: true })
   await expectListFits(page, list)
   await expectBadgeWhole(list, /conflit d'horaire/, "⚠ conflit")
   await expectBadgeWhole(list, /déjà inscrit/, "Déjà inscrit")

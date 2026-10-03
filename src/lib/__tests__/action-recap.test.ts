@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, broadcastRecap, deleteMilestoneRecap, deleteOrgRecap, deletePageRecap, toggleOrgRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap } from "../action-recap"
+import { acceptRequestRecap, bulkCancelRecap, dayLabel, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, broadcastRecap, deleteMilestoneRecap, deleteOrgRecap, deletePageRecap, toggleOrgRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap } from "../action-recap"
 
 // Confirmation before sensitive actions (#379).
 describe("action recaps", () => {
@@ -60,5 +60,16 @@ describe("action recaps", () => {
   it("links the log filtered from the action's day", () => {
     expect(logLinkFor("e1", new Date("2026-07-04T23:30:00Z"), "Europe/Zurich")).toBe("/admin/events/e1/log?since=2026-07-05")
     expect(logLinkFor("e1", new Date("2026-07-04T10:00:00Z"), "UTC")).toBe("/admin/events/e1/log?since=2026-07-04")
+  })
+
+  it("still exports dayLabel for its callers", () => {
+    expect(dayLabel("2026-07-04")).toBe("Samedi 4 juillet")
+  })
+
+  // #582: no « inscrit·e », read « inscrit point e » by screen readers.
+  it("accepting a request, without « ·e »", () => {
+    const r = acceptRequestRecap({ name: "Chloé Roy", shift: "Bar, Soir", hasEmail: true })
+    expect(r.lines[0]).toBe("La demande de Chloé Roy sur « Bar, Soir » devient une inscription confirmée.")
+    expect(r.lines.join(" ")).not.toMatch(/·/)
   })
 })

@@ -42,6 +42,16 @@ describe("RequestDecisionModal", () => {
     expect(JSON.parse(init.body)).toEqual({ decision: "refuse", note: "Complet, désolé." })
   })
 
+  // #582: the dialog says which shift, with its day and hours, in words.
+  it("names the shift with its day and hours in both dialogs", () => {
+    const { unmount } = render(<RequestDecisionModal reg={reg} kind="accept" waitlist={false} onCancel={() => {}} onDecided={() => {}} />)
+    expect(screen.getByText("La demande de Alice Martin sur « Bar, Soir, samedi 4 juillet, de 18h à 20h » devient une inscription confirmée.")).toBeInTheDocument()
+    expect(screen.getByRole("dialog").textContent).not.toMatch(/[·–—]/)
+    unmount()
+    render(<RequestDecisionModal reg={reg} kind="refuse" waitlist={false} onCancel={() => {}} onDecided={() => {}} />)
+    expect(screen.getByText("La demande sur « Bar, Soir, samedi 4 juillet, de 18h à 20h » est refusée et la place est libérée.")).toBeInTheDocument()
+  })
+
   it("accepts without a message field", async () => {
     fetchMock.mockResolvedValue({ ok: true, json: async () => ({ ok: true }) })
     const onDecided = vi.fn()

@@ -16,7 +16,7 @@ function Harness({ initial = EMPTY_ADD_FORM, onAdded = () => {}, onCancel = () =
   return <ManualAddForm eventId="evt-1" shifts={[shift]} registrations={registrations} timeZone="Europe/Zurich" form={form} onFormChange={setForm} onAdded={onAdded} onCancel={onCancel} />
 }
 
-const combo = () => screen.getByRole("combobox", { name: "Créneau *" })
+const combo = () => screen.getByRole("combobox", { name: "Créneau" })
 
 describe("ManualAddForm", () => {
   const fetchMock = vi.fn()
@@ -41,8 +41,8 @@ describe("ManualAddForm", () => {
     const onAdded = vi.fn()
     render(<Harness initial={{ ...EMPTY_ADD_FORM, shiftId: "s1" }} onAdded={onAdded} />)
     expect(screen.getByRole("heading", { name: "Inscription manuelle" })).toBeInTheDocument()
-    fireEvent.change(screen.getByLabelText("Prénom *"), { target: { value: "Chloé" } })
-    fireEvent.change(screen.getByLabelText("Nom *"), { target: { value: "Roy" } })
+    fireEvent.change(screen.getByRole("textbox", { name: "Prénom" }), { target: { value: "Chloé" } })
+    fireEvent.change(screen.getByRole("textbox", { name: "Nom" }), { target: { value: "Roy" } })
     fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
 
     await waitFor(() => expect(onAdded).toHaveBeenCalled())
@@ -52,6 +52,27 @@ describe("ManualAddForm", () => {
     const reg = onAdded.mock.calls[0][0] as Registration
     expect(reg).toMatchObject({ id: "r9", isLeader: false, waitingPosition: null })
     expect(reg.shift).toMatchObject({ id: "s1", date: "2026-07-04", capacity: 3, registrationCount: 2 })
+  })
+
+  // #582: the asterisk is shown, not read (« étoile »); the fields say « obligatoire » themselves.
+  it("names the required fields without their asterisk", () => {
+    render(<Harness />)
+    for (const label of ["Prénom", "Nom"]) {
+      const field = screen.getByRole("textbox", { name: label })
+      expect(field).toBeRequired()
+      expect(document.querySelector(`label[for="${field.id}"]`)).toHaveTextContent(`${label} *`)
+    }
+    expect(combo()).toHaveAttribute("aria-required", "true")
+    expect(document.getElementById("add-shift-label")).toHaveTextContent("Créneau *")
+  })
+
+  // #582: the busy submit keeps a name a screen reader can say, not « … ».
+  it("names the submit button « Ajout en cours… » while adding", async () => {
+    fetchMock.mockReturnValue(new Promise(() => {}))
+    render(<Harness initial={{ ...EMPTY_ADD_FORM, firstName: "Chloé", lastName: "Roy", shiftId: "s1" }} />)
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    const busy = await screen.findByRole("button", { name: "Ajout en cours…" })
+    expect(busy).toHaveAttribute("aria-disabled", "true")
   })
 
   // #574: the missing shift is an error of the field, read once with it, not an alert.
@@ -102,7 +123,7 @@ describe("ManualAddForm", () => {
     expect(screen.getByRole("alert")).toHaveTextContent("Limite atteinte pour ce poste.")
     expect(force).toHaveAccessibleDescription("Limite atteinte pour ce poste.")
 
-    fireEvent.change(screen.getByLabelText("Nom *"), { target: { value: "C" } })
+    fireEvent.change(screen.getByRole("textbox", { name: "Nom" }), { target: { value: "C" } })
     expect(screen.queryByRole("button", { name: "Ajouter quand même" })).toBeNull()
     expect(screen.getByRole("alert")).toHaveTextContent("Le formulaire a changé : validez à nouveau.")
   })
@@ -136,10 +157,10 @@ describe("RegistrationsManager — manual add while a submission is running", ()
     render(<RegistrationsManager eventId="evt-1" timeZone="Europe/Zurich" shifts={[shift]} initialRegistrations={[]} />)
     const open = screen.getByRole("button", { name: "+ Ajouter manuellement" })
     fireEvent.click(open)
-    fireEvent.change(screen.getByLabelText("Prénom *"), { target: { value: "Chloé" } })
-    fireEvent.change(screen.getByLabelText("Nom *"), { target: { value: "Roy" } })
-    const form = screen.getByLabelText("Prénom *").closest("form")!
-    const combo = within(form).getByRole("combobox", { name: "Créneau *" })
+    fireEvent.change(screen.getByRole("textbox", { name: "Prénom" }), { target: { value: "Chloé" } })
+    fireEvent.change(screen.getByRole("textbox", { name: "Nom" }), { target: { value: "Roy" } })
+    const form = screen.getByRole("textbox", { name: "Prénom" }).closest("form")!
+    const combo = within(form).getByRole("combobox", { name: "Créneau" })
     fireEvent.click(combo)
     // within the form: the role filter is a native select with its own « Bar » option.
     fireEvent.click(within(form).getByRole("option", { name: /Bar/ }))
@@ -147,7 +168,7 @@ describe("RegistrationsManager — manual add while a submission is running", ()
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
 
     fireEvent.click(open)
-    fireEvent.submit(screen.getByLabelText("Prénom *").closest("form")!)
+    fireEvent.submit(screen.getByRole("textbox", { name: "Prénom" }).closest("form")!)
     expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 })
@@ -193,9 +214,9 @@ describe("RegistrationsManager — focus and announcement around the manual add"
     })
     const open = await renderManager()
     fireEvent.click(open)
-    fireEvent.change(screen.getByLabelText("Prénom *"), { target: { value: "Chloé" } })
-    fireEvent.change(screen.getByLabelText("Nom *"), { target: { value: "Roy" } })
-    const combo = screen.getByRole("combobox", { name: "Créneau *" })
+    fireEvent.change(screen.getByRole("textbox", { name: "Prénom" }), { target: { value: "Chloé" } })
+    fireEvent.change(screen.getByRole("textbox", { name: "Nom" }), { target: { value: "Roy" } })
+    const combo = screen.getByRole("combobox", { name: "Créneau" })
     fireEvent.keyDown(combo, { key: "ArrowDown" })
     fireEvent.keyDown(combo, { key: "Enter" })
     expect(combo).toHaveTextContent("Bar")
