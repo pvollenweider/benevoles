@@ -15,7 +15,7 @@ import { renderMemberInvite, renderAdminInvite } from "./invitations"
 import { renderReminderJ2, renderReminderJ1, renderReminderDd, renderManualReminder, renderTargetedMessage } from "./reminders"
 import { renderWaitlistConfirmation, renderWaitlistOffered } from "./waitlist"
 import { renderSectorLeaderInvite, renderSectorLeaderNewSignup, renderSectorLeaderWithdrawal } from "./sector-leaders"
-import { renderAdminNotification, renderWithdrawalAdminNotice, renderPasswordReset, renderAdminWelcome, renderProductUpdate } from "./administration"
+import { renderAdminNotification, renderWithdrawalAdminNotice, renderPasswordReset, renderAdminWelcome, renderProductUpdate, renderReleaseAvailable } from "./administration"
 
 export type { RenderedEmail } from "./shared"
 
@@ -67,5 +67,7 @@ export function render(payload: NotificationPayload): RenderedEmail {
       return renderRegistrationRequested(payload)
     case "registration_refused":
       return renderRegistrationRefused(payload)
+    case "release_available":
+      return renderReleaseAvailable(payload)
   }
 }

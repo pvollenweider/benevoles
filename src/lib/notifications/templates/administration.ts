@@ -187,3 +187,34 @@ export function renderProductUpdate(p: NotificationPayload): RenderedEmail {
 
   return { subject, html, text }
 }
+
+// ── Nouvelle version disponible (#612), instances auto-hébergées, super admin ────────────────
+
+export function renderReleaseAvailable(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    version: string
+    currentVersion: string
+    releaseUrl: string
+    upgradeDocsUrl: string
+  }
+  const subject = `Nouvelle version disponible : ${d.version}`
+
+  const text = [
+    `Une nouvelle version de Bénévoles est disponible : ${d.version} (vous utilisez ${d.currentVersion}).`,
+    ``,
+    `Notes de version :`,
+    d.releaseUrl,
+    ``,
+    `Documentation de mise à jour :`,
+    d.upgradeDocsUrl,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.5em">Nouvelle version disponible</h2>
+    <p>Une nouvelle version de Bénévoles est disponible : <strong>${escapeHtml(d.version)}</strong> (vous utilisez ${escapeHtml(d.currentVersion)}).</p>
+    <p style="margin-top:1.5em">${btn(d.releaseUrl, "Voir les notes de version")}</p>
+    <p style="margin-top:0.75em"><a href="${d.upgradeDocsUrl}" style="color:#2563eb">Documentation de mise à jour</a></p>
+  `, `${d.version} est disponible, vous utilisez ${d.currentVersion}.`)
+
+  return { subject, html, text }
+}

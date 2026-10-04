@@ -11,10 +11,10 @@ export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Santé du service" }
 
 const LEVEL_STYLE: Record<HealthLevel, string> = {
-  ok: "bg-green-100 text-green-900",
-  warn: "bg-amber-100 text-amber-900",
-  error: "bg-red-100 text-red-900",
-  unknown: "bg-gray-100 text-gray-800",
+  ok: "bg-green-100 text-green-900 border border-transparent",
+  warn: "bg-amber-100 text-amber-900 border border-transparent",
+  error: "bg-red-100 text-red-900 border border-transparent",
+  unknown: "bg-gray-100 text-gray-800 border border-transparent",
 }
 
 /** Super-admin health page (#383): database, outbox, scheduled jobs, backups, migrations, configuration. */
@@ -26,7 +26,7 @@ export default async function HealthPage() {
   const { items, version, gitSha, checkedAt } = await loadHealth()
   const worst = worstLevel(items)
   const groups: { key: string; title: string; ids: (id: string) => boolean }[] = [
-    { key: "service", title: "Service", ids: (id) => id === "database" || id === "outbox" || id === "migrations" },
+    { key: "service", title: "Service", ids: (id) => id === "database" || id === "outbox" || id === "migrations" || id === "release" },
     { key: "jobs", title: "Tâches planifiées et sauvegardes", ids: (id) => id.startsWith("job:") },
     { key: "config", title: "Configuration", ids: (id) => id.startsWith("config:") },
   ]
@@ -41,7 +41,7 @@ export default async function HealthPage() {
           {healthHeadline(items)}
         </p>
         <p className="text-sm text-gray-600 mt-1">
-          Version {version}{gitSha ? ` (${gitSha.slice(0, 7)})` : ""} · vérifié le <time dateTime={checkedAt.toISOString()}>{checkedAt.toLocaleString("fr-FR", { timeZone: "Europe/Zurich", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</time>. Recharger la page relance les contrôles.
+          Version {version}{gitSha ? ` (${gitSha.slice(0, 7)})` : ""}, vérifiée le <time dateTime={checkedAt.toISOString()}>{checkedAt.toLocaleString("fr-FR", { timeZone: "Europe/Zurich", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</time>. Recharger la page relance les contrôles.
         </p>
       </div>
 

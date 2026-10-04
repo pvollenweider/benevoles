@@ -66,4 +66,30 @@ describe("env validation", () => {
 
     expect(exitSpy).not.toHaveBeenCalled()
   })
+
+  describe("releaseCheckEnabled (#612)", () => {
+    it("on by default (RELEASE_CHECK unset)", async () => {
+      vi.stubEnv("DATABASE_URL", VALID_ENV.DATABASE_URL)
+      vi.stubEnv("AUTH_SECRET", VALID_ENV.AUTH_SECRET)
+      vi.stubEnv("RELEASE_CHECK", "")
+      const { releaseCheckEnabled } = await import("../env")
+      expect(releaseCheckEnabled()).toBe(true)
+    })
+
+    it("off disables it, case-insensitively", async () => {
+      vi.stubEnv("DATABASE_URL", VALID_ENV.DATABASE_URL)
+      vi.stubEnv("AUTH_SECRET", VALID_ENV.AUTH_SECRET)
+      vi.stubEnv("RELEASE_CHECK", "OFF")
+      const { releaseCheckEnabled } = await import("../env")
+      expect(releaseCheckEnabled()).toBe(false)
+    })
+
+    it("any other value keeps it on", async () => {
+      vi.stubEnv("DATABASE_URL", VALID_ENV.DATABASE_URL)
+      vi.stubEnv("AUTH_SECRET", VALID_ENV.AUTH_SECRET)
+      vi.stubEnv("RELEASE_CHECK", "on")
+      const { releaseCheckEnabled } = await import("../env")
+      expect(releaseCheckEnabled()).toBe(true)
+    })
+  })
 })

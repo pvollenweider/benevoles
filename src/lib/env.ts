@@ -12,6 +12,10 @@ const schema = z.object({
   AUTH_SECRET: z.string().min(32, "AUTH_SECRET doit faire au moins 32 caractères"),
   NEXT_PUBLIC_APP_URL: z.string().url("NEXT_PUBLIC_APP_URL doit être une URL valide").optional(),
   CRON_SECRET: z.string().optional(),
+  // Daily check against GitHub releases (#612), self-hosted instances only. Default on; "off"
+  // disables it completely (no outbound request at all). benevol.app keeps the default — it's
+  // deployed from main, so its version is never behind the latest release.
+  RELEASE_CHECK: z.string().optional(),
   /** Commit deployed, set by the image build (#383). */
   GIT_SHA: z.string().optional(),
   EMAIL_FROM: z.string().optional(),
@@ -39,3 +43,8 @@ function parseEnv() {
 }
 
 export const env = parseEnv()
+
+/** `RELEASE_CHECK=off` (case-insensitive) disables the self-hosted release check (#612) completely; anything else, or unset, keeps it on. */
+export function releaseCheckEnabled(): boolean {
+  return env.RELEASE_CHECK?.trim().toLowerCase() !== "off"
+}

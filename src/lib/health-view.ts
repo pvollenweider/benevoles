@@ -88,6 +88,19 @@ export function assessConfig(c: ConfigFacts): HealthItem[] {
   ]
 }
 
+export type ReleaseCheckFacts = { enabled: boolean; latestVersion: string | null; lastCheckedAt: Date | null; isNewer: boolean }
+
+/** Self-hosted release check (#612): latest known release, when it was last checked, or that it's off. */
+export function assessReleaseCheck(f: ReleaseCheckFacts, currentVersion: string, now: Date): HealthItem {
+  const id = "release"
+  const label = "Nouvelle version"
+  if (!f.enabled) return { id, label, level: "unknown", detail: "Vérification désactivée (RELEASE_CHECK=off)." }
+  if (!f.lastCheckedAt) return { id, label, level: "unknown", detail: "Jamais vérifié." }
+  if (!f.latestVersion) return { id, label, level: "unknown", detail: `Vérifié ${ago(f.lastCheckedAt, now)}, aucune version publiée trouvée.` }
+  if (f.isNewer) return { id, label, level: "warn", detail: `${f.latestVersion} disponible (vous utilisez ${currentVersion}) ; vérifié ${ago(f.lastCheckedAt, now)}.` }
+  return { id, label, level: "ok", detail: `À jour (${f.latestVersion}) ; vérifié ${ago(f.lastCheckedAt, now)}.` }
+}
+
 export type MigrationFacts = { applied: number; lastName: string | null; lastAt: Date | null; pending: number }
 
 export function assessMigrations(m: MigrationFacts): HealthItem {

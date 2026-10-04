@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test"
+import { execFileSync } from "node:child_process"
 import { seriousViolations } from "./helpers/axe"
 
 /**
@@ -7,6 +8,8 @@ import { seriousViolations } from "./helpers/axe"
  */
 const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
 const ORG_ADMIN_PASSWORD = process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password"
+const SUPER_ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "admin@localhost"
+const SUPER_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "e2e-admin-password"
 
 test.describe("public pages", () => {
   for (const path of ["/", "/fonctionnalites", "/doc", "/doc/benevole", "/accessibilite", "/legal/privacy"]) {
@@ -89,5 +92,37 @@ test.describe("admin", () => {
     await page.getByRole("button", { name: /^Changer la couleur du poste / }).first().click()
     await expect(page.getByRole("group", { name: /^Couleur du poste / })).toBeVisible()
     expect.soft(await seriousViolations(page), "roles panel and colour picker").toEqual([])
+  })
+})
+
+test.describe("super admin", () => {
+  // Seeds a known-newer release so the banner (#612) is on screen during the scan — cheap via
+  // the same script as e2e/release-banner.spec.ts, no network call.
+  const LATEST_VERSION = "v999.0.0"
+  test.beforeAll(() => {
+    execFileSync("npx", ["tsx", "scripts/e2e-seed-release-check.ts", "seed", LATEST_VERSION, `https://github.com/pvollenweider/benevoles/releases/tag/${LATEST_VERSION}`], { stdio: "inherit" })
+    // A previous run (or e2e/release-banner.spec.ts) may have left this version dismissed for the
+    // super admin: reset it so the banner is actually on screen for this scan.
+    execFileSync("npx", ["tsx", "scripts/e2e-seed-release-check.ts", "reset-dismissed", SUPER_ADMIN_EMAIL], { stdio: "inherit" })
+  })
+  test.afterAll(() => {
+    execFileSync("npx", ["tsx", "scripts/e2e-seed-release-check.ts", "clear"], { stdio: "inherit" })
+  })
+
+  test("organizations and health pages, with the release banner shown, have no serious violation", async ({ page }) => {
+    await page.goto("/admin/login")
+    await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
+    await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
+    await page.getByRole("button", { name: "Se connecter" }).click()
+    await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+
+    await page.goto("/super-admin/organizations")
+    await expect(page.getByRole("region", { name: "Nouvelle version disponible" })).toBeVisible()
+    expect.soft(await seriousViolations(page), "organizations").toEqual([])
+
+    await page.goto("/super-admin/health")
+    await expect(page.getByRole("region", { name: "Nouvelle version disponible" })).toBeVisible()
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+    expect.soft(await seriousViolations(page), "health").toEqual([])
   })
 })

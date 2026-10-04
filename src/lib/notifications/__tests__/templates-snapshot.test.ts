@@ -351,6 +351,16 @@ const cases: [string, NotificationPayload][] = [
     recipient,
     data: { volunteerName: "Julie Martin", eventTitle: "Festival du Rhône", shiftLabel: "Accueil", note: null, orgSlug: "rhone", eventSlug: "festival-2026" },
   }],
+  ["release_available", {
+    kind: "release_available",
+    recipient,
+    data: {
+      version: "2.1.0",
+      currentVersion: "2.0.2",
+      releaseUrl: "https://github.com/pvollenweider/benevoles/releases/tag/v2.1.0",
+      upgradeDocsUrl: "https://github.com/pvollenweider/benevoles/blob/main/docs/deploiement.md",
+    },
+  }],
 ]
 
 describe("render — snapshot of every notification kind", () => {
@@ -387,6 +397,7 @@ describe("render — snapshot of every notification kind", () => {
       targeted_message: true,
       registration_requested: true,
       registration_refused: true,
+      release_available: true,
     }
     const covered = new Set(cases.map(([, p]) => p.kind))
     expect([...covered].sort()).toEqual(Object.keys(all).sort())
