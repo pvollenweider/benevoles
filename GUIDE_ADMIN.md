@@ -255,7 +255,7 @@ En complément du champ unique « instructions publiques », ajoutez autant de p
 
 - **Ajouter** une page : titre + contenu rédigé en Markdown (gras, listes, titres, liens, tableaux)
 - L'adresse de la page (slug) est générée automatiquement depuis le titre
-- **Réordonner** les pages avec les boutons monter/descendre
+- **Réordonner** les pages avec leurs flèches Monter et Descendre (aussi au clavier) : l'ordre est enregistré à chaque déplacement ; si l'enregistrement échoue, un message le dit et l'ordre enregistré est rétabli
 - **Supprimer** une page (confirmation demandée)
 
 Les pages apparaissent sous forme de liens juste après les instructions publiques, sur la page de l'événement.
