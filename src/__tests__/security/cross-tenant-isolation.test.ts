@@ -84,7 +84,7 @@ vi.mock("@/lib/notifications", () => ({
   sendNotification: vi.fn().mockResolvedValue({ ok: true }),
 }))
 vi.mock("@/lib/notification-helpers", () => ({
-  sendMemberInvite: vi.fn().mockResolvedValue(undefined),
+  sendMemberInvite: vi.fn().mockResolvedValue({ ok: true }),
 }))
 vi.mock("bcryptjs", () => ({
   default: { hash: vi.fn().mockResolvedValue("$hashed") },

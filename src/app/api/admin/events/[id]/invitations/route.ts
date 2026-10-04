@@ -151,7 +151,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       const invite = existingByVolunteer.get(volunteer.id) ?? created.find((c) => c.volunteerId === volunteer.id)
       if (!invite) return { ok: false }
       try {
-        await sendMemberInvite({
+        const result = await sendMemberInvite({
           to: volunteer.email!,
           memberName: volunteer.firstName,
           organizationName: event.organization.name,
@@ -163,7 +163,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           message: parsed.data.message ?? null,
           token: invite.token,
         })
-        return { ok: true }
+        return { ok: result.ok }
       } catch (err) {
         console.error("Member invite email error:", err)
         return { ok: false }

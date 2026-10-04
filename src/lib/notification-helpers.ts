@@ -55,7 +55,7 @@ type MemberInviteEmailData = {
 }
 
 export async function sendMemberInvite(data: MemberInviteEmailData) {
-  await sendNotification({
+  return sendNotification({
     kind: "member_invite",
     recipient: { email: data.to, name: data.memberName },
     data: {

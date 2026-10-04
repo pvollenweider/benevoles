@@ -3,6 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { inviteResultText, remindResultText } from "@/lib/invitation-summary"
 import { useId, useMemo, useRef, useState, useTransition } from "react"
 import { flushSync } from "react-dom"
 import { requestJson } from "@/lib/use-submit"
@@ -92,13 +93,13 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
     setReminding(true)
     setRemindResult(null)
     setRemindError(null)
-    const outcome = await requestJson<{ sent: number }>(() => fetch(`/api/admin/events/${eventId}/invitations/remind`, { method: "POST" }), "Les relances n'ont pas pu être envoyées.")
+    const outcome = await requestJson<{ sent: number; failed?: number }>(() => fetch(`/api/admin/events/${eventId}/invitations/remind`, { method: "POST" }), "Les relances n'ont pas pu être envoyées.")
     setReminding(false)
     // A failure stays in the dialog, where « Réessayer » is at hand.
     if (!outcome.ok) { setRemindError(outcome.error); return }
     const data = outcome.data
     setConfirmingRemind(false)
-    setRemindResult(`${data.sent} relance${data.sent > 1 ? "s" : ""} envoyée${data.sent > 1 ? "s" : ""}`)
+    setRemindResult(remindResultText(data))
     refresh()
   }
 
@@ -319,7 +320,7 @@ function InviteModal({
     if (selected.size === 0 || submitting) return
     setSubmitting(true)
     setResult(null)
-    const outcome = await requestJson<{ invitedNew?: number; skippedExisting?: number; emailsSent?: number; membersWithoutEmail?: number }>(() => fetch(`/api/admin/events/${eventId}/invitations`, {
+    const outcome = await requestJson<{ invitedNew?: number; skippedExisting?: number; emailsSent?: number; emailsFailed?: number; membersWithoutEmail?: number }>(() => fetch(`/api/admin/events/${eventId}/invitations`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -334,12 +335,7 @@ function InviteModal({
       return
     }
     const data = outcome.data
-    const parts: string[] = []
-    if (data.invitedNew) parts.push(`${data.invitedNew} invités`)
-    if (data.skippedExisting) parts.push(`${data.skippedExisting} déjà invités`)
-    if (data.emailsSent) parts.push(`${data.emailsSent} emails envoyés`)
-    if (data.membersWithoutEmail) parts.push(`${data.membersWithoutEmail} sans email`)
-    setResult({ kind: "ok", text: parts.join(" · ") })
+    setResult({ kind: "ok", text: inviteResultText(data) })
     setTimeout(onDone, 1500)
   }
 

@@ -63,7 +63,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     if (!v.email || !v.active) continue
     if (registeredEmails.has(v.email)) continue
     try {
-      await sendMemberInvite({
+      const result = await sendMemberInvite({
         to: v.email,
         memberName: v.firstName,
         organizationName: event.organization.name,
@@ -75,7 +75,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         message: parsed.data.message ?? null,
         token: linkToken.reveal(invite),
       })
-      sent++
+      if (result.ok) sent++
+      else failed++
     } catch (err) {
       console.error("Reminder email error:", err)
       failed++

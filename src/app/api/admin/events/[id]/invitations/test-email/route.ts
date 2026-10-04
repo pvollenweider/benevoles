@@ -27,7 +27,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   })
   if (!event) return NextResponse.json({ error: "Événement introuvable." }, { status: 404 })
 
-  await sendMemberInvite({
+  const result = await sendMemberInvite({
     to: parsed.data.email,
     memberName: "Prénom Nom",
     organizationName: event.organization.name,
@@ -40,5 +40,6 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     token: "test-token-preview",
   })
 
+  if (!result.ok) return NextResponse.json({ error: "Échec de l'envoi de l'email." }, { status: 502 })
   return NextResponse.json({ ok: true })
 }
