@@ -59,6 +59,35 @@ export function membersCsv(rows: MemberExportRow[], timeZone: string): string {
   )
 }
 
+export type MemberHoursExportRow = {
+  firstName: string
+  lastName: string
+  eventsCount: number
+  shiftsCount: number
+  /** Decimal hours, already split by volunteer-hours.ts's splitMinutes (planned ≠ attested, never overlapping). */
+  plannedHours: number
+  attestedHours: number
+}
+
+/**
+ * Hours by volunteer for a period (#557): one line per member with at least one confirmed shift in
+ * the period (or every member, when the caller asked to include those without one — `rows` already
+ * reflects that choice), plus a total line for the organization.
+ */
+export function memberHoursCsv(rows: MemberHoursExportRow[]): string {
+  const total = rows.reduce(
+    (acc, r) => ({ shiftsCount: acc.shiftsCount + r.shiftsCount, plannedHours: acc.plannedHours + r.plannedHours, attestedHours: acc.attestedHours + r.attestedHours }),
+    { shiftsCount: 0, plannedHours: 0, attestedHours: 0 },
+  )
+  return csvDocument(
+    ["Prénom", "Nom", "Événements", "Créneaux", "Heures planifiées", "Heures attestées"],
+    [
+      ...rows.map((r) => [r.firstName, r.lastName, r.eventsCount, r.shiftsCount, r.plannedHours, r.attestedHours]),
+      ["Total", "", "", total.shiftsCount, total.plannedHours, total.attestedHours],
+    ],
+  )
+}
+
 export type ActivityExportRow = {
   createdAt: Date | string
   actorType: string

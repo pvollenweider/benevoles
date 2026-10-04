@@ -24,7 +24,7 @@ export default function SortTh({
         className="flex items-center gap-1 text-xs text-gray-500 font-medium hover:text-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 rounded"
       >
         {label}
-        <span aria-hidden="true" className={active ? "text-blue-600" : "text-gray-300"}>{icon}</span>
+        <span aria-hidden="true" className={active ? "text-blue-600" : "text-gray-500"}>{icon}</span>
       </button>
     </th>
   )

@@ -45,6 +45,8 @@ C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles
 - **Vos membres.** Fiches avec étiquettes, notes et disponibilités, invitations et relances, import depuis un fichier CSV ou Excel, avec un aperçu de ce qui sera créé ou mis à jour avant de confirmer. L'activité de chaque membre, événement par événement : invitations, inscriptions, présences, sans score. Un membre invité peut répondre qu'il n'est pas disponible cette fois : vous le voyez dans la liste des invitations et il n'est ni relancé ni compté dans « sans réponse ».
 - **Les présences.** Le jour J, cochez qui est venu.
 - **Attestation de bénévolat.** Pour un membre et une période, un document imprimable avec les événements, les postes tenus et les heures attestées par une présence enregistrée ; les heures planifiées sans présence peuvent être ajoutées à part, clairement distinguées.
+- **Le bilan d'un événement.** Bénévoles distincts, nouveaux et de retour, présences saisies sur le total de créneaux confirmés, heures planifiées et, parmi elles, heures attestées, taux de remplissage global et par poste, créneaux restés incomplets : un résumé imprimable, avec le détail de chaque chiffre.
+- **Les heures par bénévole, pour une période.** Un fichier CSV avec une ligne par membre (événements, créneaux, heures planifiées et heures attestées parmi elles) et un total pour l'organisation, pour le rapport annuel.
 - **Tout est noté.** Un journal d'activité par événement retrace qui a fait quoi, et quand.
 
 ## Préparer le jour J

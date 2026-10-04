@@ -2,7 +2,22 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect } from "vitest"
-import { defaultPeriod, eventHourSummaries, registrationCounts, volunteerHourEntries, withinPeriod, totalMinutes, type HourRegistration } from "../volunteer-hours"
+import {
+  defaultPeriod,
+  eventHourSummaries,
+  lastParticipation,
+  localToday,
+  memberHourTotals,
+  pastEntries,
+  registrationCounts,
+  returningVolunteerIds,
+  splitMinutes,
+  volunteerHourEntries,
+  withinPeriod,
+  totalMinutes,
+  type HourEntry,
+  type HourRegistration,
+} from "../volunteer-hours"
 
 const TZ = "Europe/Zurich"
 
@@ -101,7 +116,7 @@ describe("eventHourSummaries", () => {
     expect(summary.shiftsCount).toBe(2)
     expect(summary.roles.sort()).toEqual(["Bar", "Caisse"])
     expect(summary.attestedMinutes).toBe(240)
-    expect(summary.plannedMinutes).toBe(240)
+    expect(summary.plannedWithoutPresenceMinutes).toBe(240)
     expect(summary.noCheckIn).toBe(false)
   })
 
@@ -138,5 +153,113 @@ describe("defaultPeriod", () => {
     const period = defaultPeriod(now, TZ)
     expect(period.to).toBe("2026-06-16")
     expect(period.from).toBe("2025-06-16")
+  })
+})
+
+describe("localToday", () => {
+  it("matches defaultPeriod's own notion of today", () => {
+    const now = new Date("2026-06-15T22:30:00Z")
+    expect(localToday(now, TZ)).toBe("2026-06-16")
+    expect(defaultPeriod(now, TZ).to).toBe(localToday(now, TZ))
+  })
+})
+
+describe("pastEntries (#557)", () => {
+  it("keeps entries on or before today and drops later ones", () => {
+    const entries = volunteerHourEntries(
+      [
+        reg({ id: "reg-past", shift: { id: "s-past", date: "2026-05-01" } }),
+        reg({ id: "reg-today", shift: { id: "s-today", date: "2026-05-02" } }),
+        reg({ id: "reg-future", shift: { id: "s-future", date: "2026-05-03" } }),
+      ],
+      TZ,
+    )
+    const past = pastEntries(entries, "2026-05-02")
+    expect(past.map((e) => e.registrationId).sort()).toEqual(["reg-past", "reg-today"])
+  })
+})
+
+describe("splitMinutes (#557)", () => {
+  it("planned is the total of every counted entry, attested entries included (owner decision)", () => {
+    const attested = reg()
+    const planned = reg({ id: "reg-2", checkedInAt: null, shift: { id: "s2" } })
+    const entries = volunteerHourEntries([attested, planned], TZ)
+    const { plannedMinutes, attestedMinutes } = splitMinutes(entries)
+    expect(attestedMinutes).toBe(240)
+    expect(plannedMinutes).toBe(480)
+    expect(plannedMinutes).toBe(totalMinutes(entries, false))
+  })
+
+  it("attested equals planned when every counted shift has a recorded presence — never 0 h planned", () => {
+    const r1 = reg()
+    const r2 = reg({ id: "reg-2", shift: { id: "s2" } })
+    const entries = volunteerHourEntries([r1, r2], TZ)
+    const { plannedMinutes, attestedMinutes } = splitMinutes(entries)
+    expect(attestedMinutes).toBe(480)
+    expect(plannedMinutes).toBe(480)
+    expect(attestedMinutes).toBeLessThanOrEqual(plannedMinutes)
+  })
+
+  it("is all zero without entries", () => {
+    expect(splitMinutes([])).toEqual({ plannedMinutes: 0, attestedMinutes: 0 })
+  })
+})
+
+describe("lastParticipation (#557)", () => {
+  it("is the most recent shift date and the most recent presence date", () => {
+    const old = reg({ id: "reg-old", checkedInAt: null, shift: { id: "s-old", date: "2026-01-10" } })
+    const recentPresence = reg({ id: "reg-recent", shift: { id: "s-recent", date: "2026-05-02" } })
+    const recentNoPresence = reg({ id: "reg-later", checkedInAt: null, shift: { id: "s-later", date: "2026-06-01" } })
+    const entries = volunteerHourEntries([old, recentPresence, recentNoPresence], TZ)
+    expect(lastParticipation(entries)).toEqual({ lastShiftDate: "2026-06-01", lastPresenceDate: "2026-05-02" })
+  })
+
+  it("is null for both without entries, and null for presence when none was recorded", () => {
+    expect(lastParticipation([])).toEqual({ lastShiftDate: null, lastPresenceDate: null })
+    const r = reg({ checkedInAt: null })
+    expect(lastParticipation(volunteerHourEntries([r], TZ))).toEqual({ lastShiftDate: "2026-05-02", lastPresenceDate: null })
+  })
+})
+
+describe("memberHourTotals (#557)", () => {
+  it("groups entries per volunteer with distinct event count, shift count and the planned/attested split", () => {
+    const entries: HourEntry[] = [
+      ...volunteerHourEntries([reg({ volunteerId: "vol-1" })], TZ),
+      ...volunteerHourEntries([reg({ id: "reg-2", volunteerId: "vol-1", checkedInAt: null, event: { id: "event-2", title: "Marché de Noël" }, shift: { id: "s2" } })], TZ),
+      ...volunteerHourEntries([reg({ id: "reg-3", volunteerId: "vol-2", shift: { id: "s3" } })], TZ),
+    ]
+    const totals = memberHourTotals(entries)
+    expect(totals.find((t) => t.volunteerId === "vol-1")).toEqual({ volunteerId: "vol-1", eventsCount: 2, shiftsCount: 2, plannedMinutes: 480, attestedMinutes: 240 })
+    expect(totals.find((t) => t.volunteerId === "vol-2")).toEqual({ volunteerId: "vol-2", eventsCount: 1, shiftsCount: 1, plannedMinutes: 240, attestedMinutes: 240 })
+  })
+
+  it("skips entries without a volunteerId", () => {
+    const entries = volunteerHourEntries([reg()], TZ)
+    expect(memberHourTotals(entries)).toEqual([])
+  })
+})
+
+describe("returningVolunteerIds (#557)", () => {
+  it("is returning when an active registration exists on another, earlier-starting event", () => {
+    const records = [
+      { volunteerId: "vol-1", eventId: "event-prev", eventStart: new Date("2026-01-01T00:00:00Z") },
+      { volunteerId: "vol-2", eventId: "event-2", eventStart: new Date("2026-05-01T00:00:00Z") },
+    ]
+    const ids = returningVolunteerIds(records, "event-this", new Date("2026-06-01T00:00:00Z"))
+    expect(ids.has("vol-1")).toBe(true)
+  })
+
+  it("is first-time when the only other registration is on a later or the same event", () => {
+    const records = [
+      { volunteerId: "vol-1", eventId: "event-later", eventStart: new Date("2026-07-01T00:00:00Z") },
+      { volunteerId: "vol-2", eventId: "event-this", eventStart: new Date("2026-06-01T00:00:00Z") },
+    ]
+    const ids = returningVolunteerIds(records, "event-this", new Date("2026-06-01T00:00:00Z"))
+    expect(ids.has("vol-1")).toBe(false)
+    expect(ids.has("vol-2")).toBe(false)
+  })
+
+  it("is first-time with no other activity at all", () => {
+    expect(returningVolunteerIds([], "event-this", new Date("2026-06-01T00:00:00Z")).size).toBe(0)
   })
 })

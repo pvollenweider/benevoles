@@ -7,12 +7,20 @@ import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import { SHEET_VIEWS } from "@/lib/print-sheets"
 import { reprintOptions } from "@/lib/print-badges"
+import { LIVE_STATUSES } from "@/lib/registration-capacity"
+import { eventSummary, type EventSummaryRegistration } from "@/lib/event-summary"
+import { returningVolunteerIds } from "@/lib/volunteer-hours"
+import { fmtDuration } from "@/lib/signup-recap"
+import { orgTimeZone } from "@/lib/time-zone"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Rapports" }
 
 const linkClass =
   "font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+
+// Shift.date is a UTC midnight for the calendar day.
+const day = (d: Date) => d.toLocaleDateString("fr-FR", { timeZone: "UTC", weekday: "short", day: "numeric", month: "short" })
 
 /**
  * Reports of an event (#400): sheets for volunteers, then organizer-only documents (the full export
@@ -22,24 +30,74 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { id } = await params
-  const event = await ctx.db.event.findFirst({
-    where: { id },
-    select: {
-      id: true, title: true,
-      shifts: {
-        where: { status: { not: "cancelled" } },
-        orderBy: { displayOrder: "asc" },
-        select: { roleName: true, registrations: { where: { status: "active" }, select: { volunteer: { select: { id: true, firstName: true, lastName: true, email: true } } } } },
+  const [event, org] = await Promise.all([
+    ctx.db.event.findFirst({
+      where: { id },
+      select: {
+        id: true, title: true, startDate: true, endDate: true,
+        shifts: {
+          where: { status: { not: "cancelled" } },
+          orderBy: { displayOrder: "asc" },
+          select: {
+            id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, status: true,
+            registrations: {
+              where: { status: { in: [...LIVE_STATUSES] } },
+              select: { status: true, checkedInAt: true, volunteerId: true, volunteer: { select: { id: true, firstName: true, lastName: true, email: true } } },
+            },
+          },
+        },
+        sectorLeaders: { select: { roleName: true } },
       },
-    },
-  })
+    }),
+    ctx.db.organization.findUnique({ where: { id: ctx.organizationId }, select: { timeZone: true } }),
+  ])
   if (!event) notFound()
   const roles = [...new Set(event.shifts.map((s) => s.roleName))]
   // For the badge reprint: one option per volunteer id; two homonyms are told apart by their email.
-  const volunteers = reprintOptions(event.shifts.flatMap((s) => s.registrations.map((r) => ({ ...r.volunteer, post: s.roleName }))))
+  const volunteers = reprintOptions(
+    event.shifts.flatMap((s) => s.registrations.filter((r) => r.status === "active").map((r) => ({ ...r.volunteer, post: s.roleName }))),
+  )
   const base = `/api/admin/events/${event.id}/export`
   const forVolunteers = SHEET_VIEWS.filter((v) => v.audience === "volunteers")
   const forOrganizers = SHEET_VIEWS.filter((v) => v.audience === "organizers")
+
+  // Post-event summary (#557): same counting rules as the certificate (#556), reusing staffing.ts
+  // for the fill rate and the underfilled list instead of re-deriving them.
+  const timeZone = orgTimeZone(org)
+  const staffingShifts = event.shifts.map((s) => ({
+    id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10),
+    startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, closed: s.status === "closed",
+    active: s.registrations.filter((r) => r.status === "active").length,
+    waiting: s.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length,
+    requested: s.registrations.filter((r) => r.status === "requested").length,
+  }))
+  const summaryRegistrations: EventSummaryRegistration[] = event.shifts.flatMap((s) =>
+    s.registrations
+      .filter((r) => r.status === "active")
+      .map((r, i) => ({
+        id: `${s.id}-${i}`,
+        volunteerId: r.volunteerId,
+        status: r.status,
+        checkedInAt: r.checkedInAt,
+        shift: { id: s.id, roleName: s.roleName, label: s.label, date: s.date, startTime: s.startTime, endTime: s.endTime, status: s.status },
+        event: { id: event.id, title: event.title },
+      })),
+  )
+  // Every other event's counted registrations, org-wide, for the first-time/returning split — a
+  // volunteer is "returning" for this event when at least one of those starts earlier (#557).
+  const otherRegistrations = await ctx.db.registration.findMany({
+    where: { status: "active", shift: { status: { not: "cancelled" } }, eventId: { not: event.id } },
+    select: { volunteerId: true, eventId: true, event: { select: { startDate: true } } },
+  })
+  const returning = returningVolunteerIds(
+    otherRegistrations.map((r) => ({ volunteerId: r.volunteerId, eventId: r.eventId, eventStart: r.event.startDate })),
+    event.id,
+    event.startDate,
+  )
+  const summary = eventSummary(summaryRegistrations, returning, staffingShifts, event.sectorLeaders.map((l) => l.roleName), timeZone)
+  // Provisional until the event is over (#557): the organizer can still look, but shifts, check-ins
+  // and registrations may still change until then.
+  const provisional = event.endDate.getTime() > new Date().getTime()
 
   // A report opens in a new tab and is printed from there; a download saves a file (#384).
   const row = (href: string, name: string, description: string, describedBy?: string, kind: "tab" | "download" = "tab") => {
@@ -132,6 +190,83 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
           </button>
         </form>
       </section>
+      <section aria-labelledby="reports-summary" className="space-y-3">
+        <h2 id="reports-summary" className="text-base font-semibold text-gray-900">Résumé de l&apos;événement</h2>
+        {provisional && (
+          // Plain <p>, not role="status": this is static server-rendered content, present from the
+          // first paint, not a live region update — nothing changes after the page loads (#557 a11y review).
+          <p className="text-sm text-amber-900 bg-amber-50 border border-amber-300 rounded-xl px-3 py-2">
+            Résumé provisoire : l&apos;événement n&apos;est pas encore terminé ({day(event.endDate)}). Les chiffres peuvent encore changer.
+          </p>
+        )}
+        <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-4">
+          <div>
+            <h3 className="text-sm font-semibold text-gray-900">Bénévoles</h3>
+            <p className="text-sm text-gray-800 mt-1">
+              <strong className="tabular-nums">{summary.distinctVolunteers}</strong> bénévole{summary.distinctVolunteers > 1 ? "s" : ""} distinct{summary.distinctVolunteers > 1 ? "s" : ""} avec un créneau confirmé,
+              dont <strong className="tabular-nums">{summary.firstTimeCount}</strong> pour la première fois et <strong className="tabular-nums">{summary.returningCount}</strong> de retour.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold text-gray-900">Présences</h3>
+            <p className="text-sm text-gray-800 mt-1">
+              Présences saisies pour <strong className="tabular-nums">{summary.shiftsWithPresence}</strong> sur <strong className="tabular-nums">{summary.shiftsConfirmed}</strong> créneau{summary.shiftsConfirmed > 1 ? "x" : ""} confirmé{summary.shiftsConfirmed > 1 ? "s" : ""}.
+              {summary.checkInUsage === "none" && " Aucune présence n'a été saisie pour cet événement : les présences ci-dessous ne sont pas des absences, l'enregistrement n'a simplement pas été fait."}
+              {summary.checkInUsage === "partial" && ` ${summary.shiftsWithoutPresence} créneau${summary.shiftsWithoutPresence > 1 ? "x" : ""} confirmé${summary.shiftsWithoutPresence > 1 ? "s" : ""} reste${summary.shiftsWithoutPresence > 1 ? "nt" : ""} sans présence enregistrée : l'usage du pointage a été partiel.`}
+              {summary.checkInUsage === "full" && " La présence a été saisie pour chaque créneau confirmé."}
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold text-gray-900">Heures</h3>
+            <p className="text-sm text-gray-800 mt-1">
+              <strong>{fmtDuration(summary.plannedMinutes)}</strong> planifiées, dont <strong>{fmtDuration(summary.attestedMinutes)}</strong> attestées (présence enregistrée).
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold text-gray-900">Taux de remplissage</h3>
+            <p className="text-sm text-gray-800 mt-1">
+              <strong className="tabular-nums">{summary.fillOverall.filled}</strong> place{summary.fillOverall.filled > 1 ? "s" : ""} occupée{summary.fillOverall.filled > 1 ? "s" : ""} sur <strong className="tabular-nums">{summary.fillOverall.capacity}</strong>, tous postes confondus.
+            </p>
+            {summary.fillByRole.length > 0 && (
+              <table className="w-full text-sm border-collapse mt-2">
+                <caption className="text-left text-sm font-semibold text-gray-900 mb-1">Remplissage par poste</caption>
+                <thead>
+                  <tr className="border-b-2 border-gray-400">
+                    <th scope="col" className="text-left py-1 pr-2">Poste</th>
+                    <th scope="col" className="text-left py-1">Places occupées</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {summary.fillByRole.map((r) => (
+                    <tr key={r.roleName} className="border-b border-gray-200">
+                      <th scope="row" className="text-left font-normal py-1 pr-2">{r.roleName}</th>
+                      <td className="py-1 tabular-nums">{r.filled} sur {r.capacity}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+
+          {summary.underfilled.length > 0 && (
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900">Créneaux restés incomplets ({summary.underfilled.length})</h3>
+              {/* role="list": Safari/VoiceOver drops list semantics once Tailwind removes the bullets. */}
+              <ul role="list" className="text-sm text-gray-800 mt-1 space-y-0.5 list-disc list-inside">
+                {summary.underfilled.map((s) => (
+                  <li key={s.id}>
+                    {s.label !== s.roleName ? `${s.roleName} (${s.label})` : s.roleName}, {day(new Date(s.date))} : <span className="tabular-nums">{s.active} sur {s.capacity}</span>, manque {s.missing}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </section>
+
       <section aria-labelledby="reports-archive" className="space-y-2">
         <h2 id="reports-archive" className="text-base font-semibold text-gray-900">Archive</h2>
         <ul role="list" className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">

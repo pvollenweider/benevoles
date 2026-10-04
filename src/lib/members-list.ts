@@ -16,10 +16,17 @@ export type MemberRow = {
   phone: string | null
   tags: string[]
   active: boolean
-  // Sum of every active registration's shift duration, across all of this org's events —
-  // computed server-side (page.tsx). Admin-only recognition figure, deliberately not on the
-  // volunteer-facing PDF export (see that computation's own comment for why).
+  // Past confirmed shifts only, real local instants, no presence recorded (#557) — computed
+  // server-side (page.tsx, volunteer-hours.ts). Admin-only recognition figure, deliberately not on
+  // the volunteer-facing PDF export (see that computation's own comment for why).
   hoursTotal: number
+  // Past confirmed shifts with a recorded presence (#557), same scope as hoursTotal: the two never
+  // overlap and add up to every hour the member actually gave, as far as check-in was used.
+  hoursAttested: number
+  // Local date ("YYYY-MM-DD") of the most recent past shift with an active registration, and of the
+  // most recent recorded presence — null when there is none of either (#557).
+  lastShiftDate: string | null
+  lastPresenceDate: string | null
 }
 
 export type Member = MemberRow & {
@@ -29,7 +36,7 @@ export type Member = MemberRow & {
   availabilityNote?: string | null
 }
 
-export type SortCol = "firstName" | "lastName" | "hoursTotal"
+export type SortCol = "firstName" | "lastName" | "hoursTotal" | "hoursAttested" | "lastShiftDate"
 export type SortDir = "asc" | "desc"
 export type SortState = { col: SortCol | null; dir: SortDir }
 
@@ -39,7 +46,22 @@ export function nextSort(current: SortState, col: SortCol): SortState {
   return current.dir === "asc" ? { col, dir: "desc" } : { col: null, dir: "asc" }
 }
 
-const COL_LABELS: Record<SortCol, string> = { firstName: "prénom", lastName: "nom", hoursTotal: "heures planifiées" }
+const COL_LABELS: Record<SortCol, string> = {
+  firstName: "prénom",
+  lastName: "nom",
+  hoursTotal: "heures planifiées",
+  hoursAttested: "heures attestées",
+  lastShiftDate: "dernière participation",
+}
+
+const NUMERIC_COLS = new Set<SortCol>(["hoursTotal", "hoursAttested"])
+/** Null sorts first ascending (never participated), last descending — never silently mixed with a real date. */
+const compareNullableDate = (a: string | null, b: string | null): number => {
+  if (a === b) return 0
+  if (a === null) return -1
+  if (b === null) return 1
+  return a.localeCompare(b)
+}
 
 /** Live region text after a sort change. */
 export function sortAnnouncement({ col, dir }: SortState): string {
@@ -72,9 +94,11 @@ export function filterMembers<M extends MemberRow>(
 export function sortMembers<M extends MemberRow>(members: M[], { col, dir }: SortState): M[] {
   if (!col) return members
   return [...members].sort((a, b) => {
-    const cmp = col === "hoursTotal"
-      ? a.hoursTotal - b.hoursTotal
-      : a[col].toLowerCase().localeCompare(b[col].toLowerCase(), "fr")
+    const cmp = NUMERIC_COLS.has(col)
+      ? a[col as "hoursTotal" | "hoursAttested"] - b[col as "hoursTotal" | "hoursAttested"]
+      : col === "lastShiftDate"
+        ? compareNullableDate(a.lastShiftDate, b.lastShiftDate)
+        : a[col as "firstName" | "lastName"].toLowerCase().localeCompare(b[col as "firstName" | "lastName"].toLowerCase(), "fr")
     return dir === "asc" ? cmp : -cmp
   })
 }
