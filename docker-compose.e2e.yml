@@ -16,18 +16,20 @@
 # reconcilie ces noms de service contre les containers dev déjà en place et les recrée avec la
 # définition e2e (vécu : ça a coupé puis recréé benevoles-postgres-1 et benevoles_mailpit_dev).
 # Les volumes nommés ont survécu (tmpfs ici, volume nommé en dev), mais ça n'aurait pas dû arriver.
-name: benevoles-e2e
+# Plusieurs piles en parallèle (#581) : E2E_SLOT=N (Makefile) décale tous les ports de 10 × N et
+# suffixe le projet et les containers ; sans E2E_SLOT, ce sont les valeurs historiques ci-dessous.
+name: benevoles-e2e${E2E_SUFFIX:-}
 
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: benevoles_postgres_e2e
+    container_name: benevoles_postgres_e2e${E2E_SUFFIX:-}
     environment:
       POSTGRES_DB: benevoles_e2e
       POSTGRES_USER: benevoles
       POSTGRES_PASSWORD: benevoles
     ports:
-      - "5433:5432"
+      - "${E2E_PG_PORT:-5433}:5432"
     tmpfs:
       - /var/lib/postgresql/data
     healthcheck:
@@ -38,10 +40,10 @@ services:
 
   mailpit:
     image: axllent/mailpit:latest
-    container_name: benevoles_mailpit_e2e
+    container_name: benevoles_mailpit_e2e${E2E_SUFFIX:-}
     ports:
-      - "1026:1025"   # SMTP
-      - "8026:8025"   # UI web + API → http://localhost:8026
+      - "${E2E_SMTP_PORT:-1026}:1025"   # SMTP
+      - "${E2E_MAILPIT_PORT:-8026}:8025"   # UI web + API → http://localhost:8026 (slot 0)
     environment:
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
