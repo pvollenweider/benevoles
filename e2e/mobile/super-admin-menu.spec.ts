@@ -40,7 +40,11 @@ async function openSuperAdminMenu(page: Page) {
 test.beforeEach(async ({ page }) => {
   test.setTimeout(90_000) // dev server compiles each page on first visit
   await logIn(page)
-  await page.goto("/super-admin/organizations")
+  // The post-login redirect may still be navigating: a goto now would be « interrupted by another
+  // navigation » (flaky in CI, #592). Let it settle, and only navigate if it landed elsewhere.
+  await page.waitForLoadState("networkidle")
+  if (!new URL(page.url()).pathname.startsWith("/super-admin/organizations")) await page.goto("/super-admin/organizations")
+  await expect(page).toHaveURL(/\/super-admin\/organizations/)
 })
 
 test("tapping an item opens its page", async ({ page }) => {
