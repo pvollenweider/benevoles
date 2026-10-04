@@ -43,6 +43,11 @@ export default async function MemberActivityPage({ params }: { params: Promise<{
         <p className="text-xs text-gray-600 mt-2">
           Les faits enregistrés par l&apos;application (invitations, inscriptions, présences, responsabilités, modifications de la fiche), sans appréciation. Les notes internes sont sur la fiche du membre. Ces données disparaissent avec les événements et la fiche.
         </p>
+        <p className="mt-3">
+          <Link href={`/admin/members/${member.id}/certificate`} className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            Attestation de bénévolat
+          </Link>
+        </p>
       </div>
       <h2 id="chronologie" className="sr-only">Chronologie</h2>
       {facts.length === 0 ? (

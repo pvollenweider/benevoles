@@ -191,7 +191,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: false,
   },
   {
-    data: "Exports (CSV, JSON, PDF, calendrier)",
+    data: "Exports (CSV, JSON, PDF, calendrier, attestation de bénévolat)",
     purpose: "Sortir ses données",
     duration: "rien n'est conservé : générés à la demande",
     trigger: "—",

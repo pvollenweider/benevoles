@@ -453,6 +453,10 @@ Le répertoire des membres est le pool de bénévoles connus de votre organisati
 
 ![Page « Activité de Camille Rochat » : un résumé en une phrase, puis la chronologie datée, du plus récent au plus ancien, de ses inscriptions, de sa place en liste d'attente et de son invitation, chacune reliée à l'événement](/doc-img/admin-member-activity.png)
 
+### Attestation de bénévolat
+
+Depuis la page **Activité** d'un membre, le lien **Attestation de bénévolat** ouvre un document imprimable à remettre sur demande : nom de l'organisation, nom du bénévole, période choisie (douze derniers mois par défaut), le détail par événement (postes tenus, nombre de créneaux, heures attestées) et une zone de signature. Seules les présences enregistrées (pointage à l'arrivée) comptent comme heures attestées ; un créneau confirmé sans présence enregistrée n'y figure que si vous cochez **Inclure les heures planifiées sans présence saisie**, et apparaît alors séparément, sous l'intitulé « planifiées ». Un avertissement à l'écran (absent de l'impression) liste les créneaux confirmés sans présence enregistrée sur la période choisie. Un texte libre facultatif (par exemple le rôle tenu) peut être ajouté. Un créneau annulé après coup ne compte jamais, même si une présence y avait été enregistrée. Rien n'est conservé : le document est régénéré à chaque demande.
+
 ---
 
 ## Inviter des membres à un événement

@@ -23,5 +23,5 @@ Une durée annoncée est reliée à un traitement automatique, ou à une procéd
 | Abonnements aux notifications du navigateur | Envoyer les rappels et messages sur l'appareil | jusqu'au désabonnement, ou dès que le service de notification signale l'appareil disparu | désabonnement ou réponse 404/410 du service | suppression à l'envoi | oui, jusqu'à 30 jours sur le serveur et 90 jours hors site |
 | Sauvegardes chiffrées de la base | Restaurer après un incident | 30 jours sur le serveur, 90 jours en copie hors site | création de la sauvegarde | rotation par les CronJobs de sauvegarde (k8s/cronjob-backup*.yaml) | — |
 | Journaux techniques des conteneurs | Sécurité et débogage | 90 jours | écriture du journal | procédure manuelle : rotation sur les nœuds (k8s/log-rotation.md), à vérifier sur le serveur | non |
-| Exports (CSV, JSON, PDF, calendrier) | Sortir ses données | rien n'est conservé : générés à la demande | — | — | non |
+| Exports (CSV, JSON, PDF, calendrier, attestation de bénévolat) | Sortir ses données | rien n'est conservé : générés à la demande | — | — | non |
 <!-- retention:end -->
