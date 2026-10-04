@@ -67,6 +67,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     const result = await sendNotification({
       kind: "manual_reminder",
       recipient: { email: bundle.volunteer.email, name: bundle.volunteer.firstName },
+      volunteerId: bundle.volunteer.id,
+      organizationId: event.organizationId,
       data: {
         volunteerName: bundle.volunteer.firstName,
         organizationName: event.organization.name,

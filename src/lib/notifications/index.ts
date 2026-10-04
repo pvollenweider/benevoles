@@ -14,7 +14,7 @@ import type { NotificationKind, NotificationPayload } from "./types"
 
 export async function sendNotification(
   payload: NotificationPayload,
-): Promise<{ ok: true } | { ok: false; reason: string }> {
+): Promise<{ ok: true } | { ok: false; reason: string; permanent?: boolean }> {
   return emailChannel.send(payload)
 }
 

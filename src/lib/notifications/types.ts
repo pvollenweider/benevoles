@@ -57,9 +57,21 @@ export type NotificationPayload<K extends NotificationKind = NotificationKind> =
   messageId?: string
   /** Organization the notification belongs to (#382); stored on the outbox row for the admin delivery page. */
   organizationId?: string | null
+  /**
+   * The member this notification is for (#598), when the recipient is one: nullable, since
+   * admins, sector leaders and test emails have none. Used only to link a DeliveryOutcome row to
+   * the member — never stored in the outbox payload's own PII beyond what it already carries.
+   */
+  volunteerId?: string | null
+  /** The outbox row this send belongs to (#598), set by deliverOutbox; absent for synchronous sends. */
+  outboxId?: string | null
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: Record<string, any>
 }
 
-/** How a helper delivers a notification: sendNotification, or an outbox collector (#293). */
-export type Send = (payload: NotificationPayload) => Promise<{ ok: true } | { ok: false; reason: string }>
+/**
+ * How a helper delivers a notification: sendNotification, or an outbox collector (#293).
+ * `permanent` (#598): true when the failure is a permanent SMTP rejection — the outbox stops
+ * retrying at once instead of spending ~2.5h on a backoff that can't succeed.
+ */
+export type Send = (payload: NotificationPayload) => Promise<{ ok: true } | { ok: false; reason: string; permanent?: boolean }>

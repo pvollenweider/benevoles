@@ -76,7 +76,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     }
     case "resend_link": {
       const active = regs.filter((r) => r.status === "active")
-      const result = await resendManagementLinks(active.map((r) => ({ editToken: registrationToken.reveal(r), volunteer: r.volunteer, event })))
+      const result = await resendManagementLinks(active.map((r) => ({ editToken: registrationToken.reveal(r), volunteer: r.volunteer, event, organizationId })))
       return NextResponse.json({ done: result.sent, failed: result.failed, skipped: result.skipped + (regs.length - active.length) })
     }
   }

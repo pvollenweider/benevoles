@@ -46,7 +46,7 @@ const shift = (id: string, roleName: string, extra: object = {}) => ({
   longitude: null,
   ...extra,
 })
-const volunteer = { email: "ana@example.org", firstName: "Ana", lastName: "Rossi" }
+const volunteer = { id: "vol-1", email: "ana@example.org", firstName: "Ana", lastName: "Rossi" }
 const reg = (id: string, shiftId: string, status: string, waitingPosition: number | null = null) => ({ id, shiftId, status, waitingPosition })
 
 function input(over: Partial<SignupNotificationInput> = {}): SignupNotificationInput {

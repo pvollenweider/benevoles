@@ -19,7 +19,19 @@ describe("csv", () => {
       birthDate: new Date("2000-05-06T00:00:00Z"), availabilityPeriods: ["matin"], availabilityNote: null, createdAt: new Date("2026-07-04T08:00:00Z"), registrationCount: 3,
     }], "Europe/Zurich")
     const line = csv.split("\r\n")[1]
-    expect(line).toBe("Zoé;Roy;z@x.ch;;bar, cuisine;non;2000-05-06;matin;;aime le matin;3;04/07/2026 10:00")
+    expect(line).toBe("Zoé;Roy;z@x.ch;;bar, cuisine;non;2000-05-06;matin;;aime le matin;3;04/07/2026 10:00;")
+  })
+
+  // #598: a member's own delivery outcomes are their own data, included in the export used to
+  // answer an access request — in French words, never the raw SMTP reply or the address.
+  it("members: delivery outcomes are listed in French words, without any raw SMTP detail", () => {
+    const csv = membersCsv([{
+      firstName: "Zoé", lastName: "Roy", email: "z@x.ch", phone: null, tags: [], active: true, notes: null,
+      birthDate: null, availabilityPeriods: [], availabilityNote: null, createdAt: new Date("2026-07-04T08:00:00Z"), registrationCount: 0,
+      deliveryOutcomes: [{ date: new Date("2026-07-05T08:00:00Z"), kind: "Confirmation d'inscription", outcome: "refus définitif", reason: "boîte aux lettres introuvable" }],
+    }], "Europe/Zurich")
+    const line = csv.split("\r\n")[1]
+    expect(line).toContain("05/07/2026 10:00 Confirmation d'inscription : refus définitif (boîte aux lettres introuvable)")
   })
 
   it("hours by volunteer: one row per member, a total line, and neutralised formula-like names (#557, #567)", () => {

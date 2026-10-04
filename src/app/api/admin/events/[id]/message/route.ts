@@ -102,6 +102,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     kind: "targeted_message",
     dedupeKey: `message:${batchId}:${r.volunteerId}`,
     recipient: { email: r.email, name: r.firstName },
+    volunteerId: r.volunteerId,
+    organizationId: event.organizationId,
     data: {
       volunteerName: r.firstName,
       organizationName: event.organization.name,

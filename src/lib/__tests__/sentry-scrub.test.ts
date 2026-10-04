@@ -26,6 +26,12 @@ describe("scrubUrl", () => {
       expect(scrubUrl(url)).toBe(url)
     }
   })
+
+  // #598: a defensive scrub so an email address can never reach Sentry, whatever string it's in.
+  it("masks an email address wherever it appears", () => {
+    expect(scrubUrl("delivery failed for jane.doe@example.com")).toBe("delivery failed for [email]")
+    expect(scrubUrl("no email here")).toBe("no email here")
+  })
 })
 
 describe("scrubBreadcrumb", () => {

@@ -75,6 +75,9 @@ const prismaMock = {
     createMany: vi.fn().mockResolvedValue({ count: 1 }),
     findUniqueOrThrow: vi.fn().mockResolvedValue({ id: "row-1" }),
   },
+  deliveryOutcome: {
+    findMany: vi.fn().mockResolvedValue([]), // #598
+  },
   async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
 }
 vi.mock("@/lib/push", () => ({ pushDeviceCount: vi.fn().mockResolvedValue(0), sendTargetedPush: vi.fn() }))
@@ -391,6 +394,20 @@ describe("Members — cross-tenant isolation", () => {
 
     const res = await POST(makeRequest("/api/admin/members/mem-b/certificate", "POST"), params("mem-b"))
     expect(res.status).toBe(404)
+  })
+})
+
+// ── Delivery outcomes (#598) ──────────────────────────────────────────────────
+
+describe("Delivery outcomes — cross-tenant isolation", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("loadDeliveryOutcomesForVolunteer always filters by organizationId, never by volunteerId alone", async () => {
+    const { loadDeliveryOutcomesForVolunteer } = await import("@/lib/delivery-outcomes-data")
+    await loadDeliveryOutcomesForVolunteer("org-a", "vol-shared-with-org-b")
+    expect(prismaMock.deliveryOutcome.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { organizationId: "org-a", volunteerId: "vol-shared-with-org-b" } }),
+    )
   })
 })
 

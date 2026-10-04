@@ -156,9 +156,9 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
 
     const claimed = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
     const outcome = await Promise.resolve()
-      .then(() => sendNotification({ ...openPayload(claimed.payload), messageId: outboxMessageId(row.id) }))
+      .then(() => sendNotification({ ...openPayload(claimed.payload), messageId: outboxMessageId(row.id), outboxId: row.id }))
       .catch(
-      (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e) }),
+      (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e), permanent: undefined as true | undefined }),
     )
 
     if (outcome.ok) {
@@ -168,7 +168,9 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     }
 
     const attempts = claimed.attempts + 1
-    const giveUp = attempts >= MAX_ATTEMPTS
+    // A permanent SMTP rejection (#598) stops the retries at once: a 5xx can't be fixed by
+    // waiting, unlike a 4xx or a connection issue, which keep the normal backoff.
+    const giveUp = attempts >= MAX_ATTEMPTS || outcome.permanent === true
     await prisma.notificationOutbox.update({
       where: { id: row.id },
       data: {

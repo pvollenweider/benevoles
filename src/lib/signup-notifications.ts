@@ -40,7 +40,7 @@ export type SignupNotificationInput = {
   event: SignupEvent
   /** The shifts asked for, in the order of the sign-up. */
   shifts: SignupShift[]
-  volunteer: { email: string; firstName: string; lastName: string }
+  volunteer: { id: string; email: string; firstName: string; lastName: string }
   /** The registrations just created, in the order of `shifts`. */
   registrations: CreatedRegistration[]
   /** Clear registration token per shift id (#290); the first registration's opens the management page. */
@@ -55,7 +55,7 @@ export async function buildSignupNotifications(
   input: SignupNotificationInput,
 ): Promise<(NotificationPayload & { dedupeKey: string })[]> {
   const { event, shifts, registrations, tokens } = input
-  const { email, firstName, lastName } = input.volunteer
+  const { id: volunteerId, email, firstName, lastName } = input.volunteer
   const editToken = tokens.get(registrations[0].shiftId)!
   const waitlistRegs = registrations.filter((r) => r.status === "waiting")
   const activeRegs = registrations.filter((r) => r.status === "active")
@@ -82,6 +82,8 @@ export async function buildSignupNotifications(
       editToken,
       orgSlug: event.organization.slug,
       confirmationMessage: event.confirmationMessage ?? undefined,
+      volunteerId,
+      organizationId: event.organizationId,
     }, outbox.send)
   }
   // Sign-up approval (#484): a request is not a place, and the email says so.
@@ -89,6 +91,8 @@ export async function buildSignupNotifications(
     await outbox.send({
       kind: "registration_requested",
       recipient: { email, name: `${firstName} ${lastName}` },
+      volunteerId,
+      organizationId: event.organizationId,
       data: {
         volunteerName: `${firstName} ${lastName}`,
         eventTitle: event.title,
@@ -129,6 +133,8 @@ export async function buildSignupNotifications(
     await outbox.send({
       kind: "waitlist_confirmation",
       recipient: { email, name: `${firstName} ${lastName}` },
+      volunteerId,
+      organizationId: event.organizationId,
       data: {
         volunteerName: `${firstName} ${lastName}`,
         eventTitle: event.title,

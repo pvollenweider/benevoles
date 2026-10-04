@@ -60,6 +60,8 @@ export async function decideRequest(db: OrgScopedPrisma, actor: LogActor, id: st
       await outbox.send({
         kind: "registration_confirmation",
         recipient: { email: reg.volunteer.email, name },
+        volunteerId: reg.volunteerId,
+        organizationId: reg.event.organizationId,
         dedupeKey: `registration_accepted:${id}`,
         data: {
           volunteerName: name,
@@ -87,6 +89,8 @@ export async function decideRequest(db: OrgScopedPrisma, actor: LogActor, id: st
       await outbox.send({
         kind: "registration_refused",
         recipient: { email: reg.volunteer.email, name },
+        volunteerId: reg.volunteerId,
+        organizationId: reg.event.organizationId,
         dedupeKey: `registration_refused:${id}`,
         data: {
           volunteerName: name,

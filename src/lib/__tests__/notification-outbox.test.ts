@@ -114,6 +114,17 @@ describe("deliverOutbox", () => {
     })
   })
 
+  // #598: a permanent SMTP rejection (5xx) can't be fixed by waiting — stop at once instead of
+  // spending ~2.5h of backoff (MAX_ATTEMPTS) on a retry that can't succeed.
+  it("stops retrying at once on a permanent rejection, even on the first attempt", async () => {
+    m.sendNotification.mockResolvedValue({ ok: false, reason: "smtp:rejected_permanent:mailbox_unknown:550:5.1.1", permanent: true })
+    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 0, failed: 1 })
+    expect(m.update).toHaveBeenCalledWith({
+      where: { id: "n1" },
+      data: expect.objectContaining({ status: "failed", attempts: 1, lastError: "smtp:rejected_permanent:mailbox_unknown:550:5.1.1" }),
+    })
+  })
+
   it("treats a thrown error as a failed attempt", async () => {
     m.sendNotification.mockRejectedValue(new Error("boom"))
     expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 1, failed: 0 })
@@ -169,7 +180,7 @@ describe("outbox payload at rest (#290)", () => {
     m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, payload: sealPayload(payload) })
     m.sendNotification.mockResolvedValue({ ok: true })
     await deliverOutbox({ now })
-    expect(m.sendNotification).toHaveBeenCalledWith({ ...payload, messageId: outboxMessageId("n1") })
+    expect(m.sendNotification).toHaveBeenCalledWith({ ...payload, messageId: outboxMessageId("n1"), outboxId: "n1" })
   })
 })
 

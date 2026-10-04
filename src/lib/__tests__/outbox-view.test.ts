@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { kindLabel, KIND_LABELS, outboxCounts, outboxHeadline, outboxRowView, outboxState, recipientLabel } from "../outbox-view"
+import { encodeOutcomeReason, kindLabel, KIND_LABELS, outboxCounts, outboxErrorSentence, outboxHeadline, outboxRowView, outboxState, recipientLabel } from "../outbox-view"
 import { MAX_ATTEMPTS } from "../notifications/types"
 
 const row = { id: "o1", status: "pending", attempts: 0, nextAttemptAt: new Date("2026-07-01T10:00:00Z"), lastError: null, sentAt: null, createdAt: new Date("2026-07-01T09:55:00Z") }
@@ -29,8 +29,10 @@ describe("outbox view", () => {
   })
 
   it("builds a row: retry count while retrying, next attempt while waiting, retry only after giving up", () => {
+    // #598: an old, raw lastError (pre-dating the structured code) is never shown as is — a
+    // neutral sentence replaces it on the delivery page.
     const retrying = outboxRowView({ ...row, attempts: 1, lastError: "SMTP 451" }, { kind: "reminder_j1", recipient: { email: "a@x.ch" } })
-    expect(retrying).toMatchObject({ state: "retrying", stateLabel: "Nouvel essai prévu", kindLabel: "Rappel J-1", attemptsLabel: `essai 2 sur ${MAX_ATTEMPTS}`, lastError: "SMTP 451", canRetry: false })
+    expect(retrying).toMatchObject({ state: "retrying", stateLabel: "Nouvel essai prévu", kindLabel: "Rappel J-1", attemptsLabel: `essai 2 sur ${MAX_ATTEMPTS}`, lastError: "Échec technique de l'envoi (détail non disponible).", canRetry: false })
     expect(retrying.nextAttemptAt).toEqual(row.nextAttemptAt)
 
     const failed = outboxRowView({ ...row, status: "failed", attempts: 6, lastError: "Mailbox full" }, { kind: "targeted_message", recipient: { name: "Bob", email: "b@x.ch" } })
@@ -40,6 +42,40 @@ describe("outbox view", () => {
     expect(sent).toMatchObject({ state: "sent", nextAttemptAt: null, canRetry: false })
 
     expect(outboxRowView(row, null)).toMatchObject({ kind: "?", kindLabel: "Contenu illisible", recipient: "—" })
+  })
+
+  // #598: the delivery page's wording — states only what's proven, never "délivré", and a
+  // permanent rejection reads differently from a temporary incident.
+  describe("outboxErrorSentence / encodeOutcomeReason", () => {
+    it("is null when there is no error", () => {
+      expect(outboxErrorSentence(null)).toBeNull()
+    })
+
+    it("never shows the raw text of a pre-#598 lastError", () => {
+      expect(outboxErrorSentence("550 5.1.1 jane.doe@example.org: no such user")).toBe("Échec technique de l'envoi (détail non disponible).")
+    })
+
+    it("a permanent rejection names the reason and says the address needs checking", () => {
+      const code = encodeOutcomeReason({ outcome: "rejected_permanent", reason: "mailbox_unknown", responseCode: 550, enhancedStatus: "5.1.1" })
+      const sentence = outboxErrorSentence(code)
+      expect(sentence).toContain("Refus définitif du serveur d'envoi (motif indiqué : boîte aux lettres introuvable)")
+      expect(sentence).toContain("boîte aux lettres introuvable")
+      expect(sentence).toContain("Adresse à vérifier")
+      expect(sentence).not.toContain("délivré")
+    })
+
+    it("a temporary failure reads as an incident, not a verdict on the address", () => {
+      const code = encodeOutcomeReason({ outcome: "failed_temporary", reason: "timeout", responseCode: null, enhancedStatus: null })
+      const sentence = outboxErrorSentence(code)
+      expect(sentence).toContain("Incident temporaire")
+      expect(sentence).toContain("nouvel essai prévu")
+      expect(sentence).not.toContain("Adresse à vérifier")
+    })
+
+    it("never states more than proven: accepted is never called délivré", () => {
+      const code = encodeOutcomeReason({ outcome: "accepted_by_relay", reason: null, responseCode: null, enhancedStatus: null })
+      expect(outboxErrorSentence(code)).not.toContain("délivré")
+    })
   })
 
   it("counts and summarizes", () => {

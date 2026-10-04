@@ -23,7 +23,7 @@ vi.mock("@/lib/prisma", () => {
   return {
     prisma: {
       ...tx,
-      volunteer: zero, adminUser: zero, rateLimit: zero,
+      volunteer: zero, adminUser: zero, rateLimit: zero, deliveryOutcome: zero,
       $transaction: async (fn: (t: typeof tx) => unknown) => fn(tx),
     },
   }

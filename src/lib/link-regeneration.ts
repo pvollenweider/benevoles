@@ -55,7 +55,7 @@ type RegistrationRow = {
   eventId: string
   status: string
   volunteer: { firstName: string; lastName: string; email: string | null }
-  event: { title: string; organization: { slug: string } }
+  event: { title: string; organizationId: string; organization: { slug: string } }
 }
 
 type LeaderRow = {
@@ -68,12 +68,14 @@ type LeaderRow = {
 
 type InviteRow = {
   id: string
+  volunteerId: string
   volunteer: { firstName: string; email: string | null; active: boolean }
   event: {
     title: string
     slug: string
     startDate: Date
     location: string | null
+    organizationId: string
     organization: { name: string; slug: string }
   }
 }
@@ -84,7 +86,7 @@ const registrationSelect = {
   eventId: true,
   status: true,
   volunteer: { select: { firstName: true, lastName: true, email: true } },
-  event: { select: { title: true, organization: { select: { slug: true } } } },
+  event: { select: { title: true, organizationId: true, organization: { select: { slug: true } } } },
 } as const
 
 const leaderSelect = {
@@ -97,6 +99,7 @@ const leaderSelect = {
 
 const inviteSelect = {
   id: true,
+  volunteerId: true,
   volunteer: { select: { firstName: true, email: true, active: true } },
   event: {
     select: {
@@ -104,6 +107,7 @@ const inviteSelect = {
       slug: true,
       startDate: true,
       location: true,
+      organizationId: true,
       organization: { select: { name: true, slug: true } },
     },
   },
@@ -240,6 +244,8 @@ async function resendRegistrationLinks(rows: RegistrationRow[], newTokenById: Ma
       const result = await sendNotification({
         kind: "registration_link_resend",
         recipient: { email: r.volunteer.email, name },
+        volunteerId: r.volunteerId,
+        organizationId: r.event.organizationId,
         data: { volunteerName: name, eventTitle: r.event.title, orgSlug: r.event.organization.slug, editToken: newTokenById.get(r.id)! },
       })
       if (result.ok) sent++; else failed++
@@ -286,6 +292,8 @@ async function resendInviteLinks(rows: InviteRow[], newTokenById: Map<string, st
         eventSlug: i.event.slug,
         message: null,
         token: newTokenById.get(i.id)!,
+        volunteerId: i.volunteerId,
+        organizationId: i.event.organizationId,
       })
       if (result.ok) sent++; else failed++
     } catch {

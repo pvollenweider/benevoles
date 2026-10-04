@@ -100,6 +100,8 @@ async function run(req: Request) {
       const result = await sendNotification({
         kind: win.kind,
         recipient: { email: r.volunteer.email, name: r.volunteer.firstName },
+        volunteerId: r.volunteerId,
+        organizationId: r.event.organizationId,
         data: {
           volunteerName: r.volunteer.firstName,
           eventTitle: r.event.title,

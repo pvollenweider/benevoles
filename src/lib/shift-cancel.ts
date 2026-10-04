@@ -27,6 +27,7 @@ export type CancellableShift = {
   event: { id: string; title: string; slug: string; organizationId: string; organization: { slug: string } }
   registrations: {
     id: string
+    volunteerId: string
     volunteer: { email: string | null; firstName: string }
   }[]
 }
@@ -39,6 +40,8 @@ export async function cancelShift(shift: CancellableShift, actor: LogActor): Pro
       kind: "shift_cancelled",
       dedupeKey: `shift_cancelled:${reg.id}`,
       recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
+      volunteerId: reg.volunteerId,
+      organizationId: shift.event.organizationId,
       data: {
         volunteerName: reg.volunteer.firstName,
         eventTitle: shift.event.title,

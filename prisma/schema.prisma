@@ -321,6 +321,7 @@ model Volunteer {
   invites           MemberInvite[]
   pushSubscriptions PushSubscription[]
   questionAnswers   QuestionAnswer[]
+  deliveryOutcomes  DeliveryOutcome[]
 
   // Also unique case-insensitively: "Volunteer_organizationId_email_ci_key" on lower(trim(email)), created by migration
   // 20260930110000_email_case_insensitive_unique (#342). Expression indexes can't be declared here;
@@ -432,6 +433,36 @@ model NotificationOutbox {
   @@index([status, nextAttemptAt])
   @@index([targetedMessageId])
   @@index([organizationId, createdAt])
+}
+
+// Per-recipient SMTP outcome of a send (#598): "accepted by our relay" is the only thing a
+// submission relay proves (see src/lib/notifications/smtp-outcome.ts); it is not "delivered" and
+// still less "read". No raw SMTP reply, no address, no content, no token — only a hash of the
+// normalized address, so a later success to the same address is still recognizable (#599).
+// `organizationId` is denormalized like NotificationOutbox.organizationId (not a FK): it must
+// survive the volunteer or the outbox row being cleaned up so the retention window keeps working
+// and cross-tenant reads (src/lib/delivery-outcomes-data.ts) can filter on it directly.
+model DeliveryOutcome {
+  id             String   @id @default(cuid())
+  organizationId String?
+  // The member concerned, when the recipient is one (nullable: admins, sector leaders and test
+  // emails have none). Erasing a volunteer (#516, cascade) erases their outcomes with it.
+  volunteerId    String?
+  // The outbox row this send went through, when there was one (nullable: synchronous sends).
+  outboxId       String?
+  kind           String
+  outcome        String // "accepted_by_relay" | "rejected_permanent" | "failed_temporary" | "unknown"
+  reason         String? // normalized reason, see SmtpReason in src/lib/notifications/smtp-outcome.ts
+  responseCode   Int?
+  enhancedStatus String? // e.g. "5.1.1"
+  addressHash    String? // HMAC-SHA256 of the normalized address, keyed with AUTH_SECRET
+  createdAt      DateTime @default(now())
+
+  volunteer Volunteer? @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, createdAt])
+  @@index([volunteerId, createdAt])
+  @@index([addressHash, createdAt])
 }
 
 // Reusable targeted-message templates of an organisation (#482): a name, a subject and a plain

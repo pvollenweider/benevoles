@@ -63,6 +63,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
       return enqueueNotifications([{
         kind: "registration_requested",
         organizationId: reg.event.organizationId,
+        volunteerId: reg.volunteerId,
         dedupeKey: `waitlist_requested:${reg.id}`,
         recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
         data: { volunteerName: reg.volunteer.firstName, eventTitle: reg.event.title, shifts: [shift], editToken: token, orgSlug: reg.event.organization.slug },
@@ -71,6 +72,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
     return enqueueNotifications([{
       kind: "registration_confirmation",
       organizationId: reg.event.organizationId,
+      volunteerId: reg.volunteerId,
       dedupeKey: `waitlist_confirmed:${reg.id}`,
       recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
       data: {

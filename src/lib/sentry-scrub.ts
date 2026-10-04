@@ -21,9 +21,13 @@ type StreamedSpan = Parameters<NonNullable<InitOptions["beforeSendSpan"]>>[0]
 const TOKEN_PATH = /(\/(?:my|waitlist|member-invite|registrations|leader)\/)[^/?#\s"']+/g
 // Also matches a bare query string, as stored in request.query_string.
 const TOKEN_QUERY = /((?:^|[?&])(?:token|t)=)[^&#\s"']*/gi
+// Defensive scrub (#598): an email address is personal data and must never reach Sentry, whatever
+// string it ends up in — an SMTP error message that slipped past a classifier, a log line, a
+// stack frame. Cheap (one regex pass over every string already going through scrubUrl).
+const EMAIL_RE = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g
 
 export function scrubUrl(value: string): string {
-  return value.replace(TOKEN_PATH, "$1[token]").replace(TOKEN_QUERY, "$1[token]")
+  return value.replace(TOKEN_PATH, "$1[token]").replace(TOKEN_QUERY, "$1[token]").replace(EMAIL_RE, "[email]")
 }
 
 function scrubDeep<T>(value: T, depth = 0): T {
