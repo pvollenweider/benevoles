@@ -28,7 +28,12 @@
 4. **Confiner** : changer les secrets concernés (`k8s/secret.yaml`), bloquer l'accès, corriger ou désactiver la fonction en cause.
    - `AUTH_SECRET` : invalide toutes les sessions d'administration et les liens de désabonnement des nouveautés produit.
    - `CRON_SECRET`, `POSTGRES_PASSWORD` et `DATABASE_URL`, `SMTP_PASSWORD`, `BACKUP_PASSPHRASE`, jeton rclone, clés VAPID.
-   - `TOKEN_ENCRYPTION_KEY` : rotation par `TOKEN_ENCRYPTION_KEY_ID` et `TOKEN_ENCRYPTION_PREVIOUS_KEYS`. **Changer la clé n'invalide pas les liens déjà envoyés** : la recherche se fait par l'empreinte SHA-256 (`src/lib/token-vault.ts`), un lien reste valable tant que sa ligne existe. Aucune fonction ne régénère les liens des bénévoles : les invalider demande une intervention en base.
+   - `TOKEN_ENCRYPTION_KEY` : rotation par `TOKEN_ENCRYPTION_KEY_ID` et `TOKEN_ENCRYPTION_PREVIOUS_KEYS`. **Changer la clé n'invalide pas les liens déjà envoyés** : la recherche se fait par l'empreinte SHA-256 (`src/lib/token-vault.ts`), un lien reste valable tant que sa ligne existe. Pour invalider en masse les liens des bénévoles, responsables et invitations d'une organisation ou d'un événement (#542), utiliser `scripts/regenerate-links.ts` : chaque ligne concernée reçoit un nouveau jeton (l'ancien lien cesse aussitôt de fonctionner), avec renvoi optionnel du nouveau lien aux personnes concernées. Toujours commencer par une simulation (sans `--yes`, qui n'écrit rien et affiche les effectifs), puis appliquer :
+     ```
+     DATABASE_URL=… npx tsx scripts/regenerate-links.ts --org <slug>                  # simulation
+     DATABASE_URL=… TOKEN_ENCRYPTION_KEY=… npx tsx scripts/regenerate-links.ts --org <slug> --yes --resend
+     ```
+     (`--event <id>` à la place de `--org <slug>` pour limiter à un seul événement). L'action est journalisée (`OrgLog`/`EventLog`, effectifs seulement : jamais de jeton ni d'adresse).
    - La session d'un seul administrateur se coupe en réinitialisant son mot de passe (`sessionVersion`). Retirer un responsable de secteur supprime son lien ; une invitation de membre ne cesse de fonctionner qu'en désactivant le membre.
 5. **Évaluer** :
    - organisations touchées et personnes concernées (bénévoles, administrateurs, responsables de secteur) ; outils : export des membres (`/api/admin/members/export`), archive JSON de l'événement (`/api/admin/events/[id]/export/archive`, sans les jetons : `src/lib/data-export.ts`), journal d'activité ;

@@ -17,6 +17,11 @@ import { hashToken } from "./token-hash"
  *
  * Losing the key makes every encrypted token unrecoverable for re-sending (links already in
  * inboxes still work: lookups only need the hash). Keep it with the other production secrets.
+ *
+ * Rotating the key does NOT revoke a link: a lookup only needs the row's hash to still match, and
+ * rotation re-encrypts the `…Enc` column without touching it. After a leak, bulk-invalidate
+ * instead with `regenerateLinks` (src/lib/link-regeneration.ts, #542), which gives every targeted
+ * row a brand new token.
  */
 
 /**

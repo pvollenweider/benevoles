@@ -7,6 +7,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Ajouté
+
+- **Invalidation en masse des liens bénévoles après une fuite** (#542) : `scripts/regenerate-links.ts`, un outil opérateur qui régénère le jeton de chaque inscription, responsable de secteur et invitation d'une organisation ou d'un événement (changer `TOKEN_ENCRYPTION_KEY` ne suffisait pas : les liens déjà envoyés restaient valables). Simulation par défaut, `--yes` pour appliquer, `--resend` pour renvoyer les nouveaux liens ; voir `docs/rgpd/procedure-violation.md`.
+
 ### Modifié
 
 - **Page Rapports d'un événement réorganisée** : l'export complet, qui liste les téléphones et emails des bénévoles, est rangé dans « Pour les organisateurs seulement » ; l'archive de l'événement (JSON) passe en fin de page, après les badges.
