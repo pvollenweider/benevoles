@@ -44,6 +44,7 @@ C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles
 - **Deux rôles pour l'équipe.** Les propriétaires gèrent l'équipe, les réglages de l'organisation et la suppression définitive d'un événement ; les organisateurs préparent les événements, gèrent les inscriptions et les membres, et écrivent aux bénévoles.
 - **Vos membres.** Fiches avec étiquettes, notes et disponibilités, invitations et relances, import depuis un fichier CSV ou Excel, avec un aperçu de ce qui sera créé ou mis à jour avant de confirmer. L'activité de chaque membre, événement par événement : invitations, inscriptions, présences, sans score. Un membre invité peut répondre qu'il n'est pas disponible cette fois : vous le voyez dans la liste des invitations et il n'est ni relancé ni compté dans « sans réponse ».
 - **Les présences.** Le jour J, cochez qui est venu.
+- **Attestation de bénévolat.** Pour un membre et une période, un document imprimable avec les événements, les postes tenus et les heures attestées par une présence enregistrée ; les heures planifiées sans présence peuvent être ajoutées à part, clairement distinguées.
 - **Tout est noté.** Un journal d'activité par événement retrace qui a fait quoi, et quand.
 
 ## Préparer le jour J

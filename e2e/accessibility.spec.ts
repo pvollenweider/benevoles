@@ -71,6 +71,28 @@ test.describe("admin", () => {
     }
   })
 
+  // #556: a member's activity page, then the volunteer certificate (form and printable document).
+  test("member activity and volunteer certificate have no serious violation", async ({ page }) => {
+    await page.goto("/admin/login")
+    await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+    await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+    await page.getByRole("button", { name: "Se connecter" }).click()
+    await expect(page).toHaveURL(/\/admin\/events/)
+
+    const res = await page.request.post("/api/admin/members", { data: { firstName: "E2E", lastName: `A11y${Date.now()}` } })
+    expect(res.ok(), await res.text()).toBeTruthy()
+    const member = await res.json()
+
+    await page.goto(`/admin/members/${member.id}`)
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+    expect.soft(await seriousViolations(page), "member activity").toEqual([])
+
+    await page.getByRole("link", { name: "Attestation de bénévolat" }).click()
+    await expect(page).toHaveURL(/\/certificate$/)
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+    expect.soft(await seriousViolations(page), "volunteer certificate").toEqual([])
+  })
+
   // #587: the shifts page in list view, then with « Gérer les postes » and a colour picker open.
   test("shifts page: list view, roles panel and colour picker have no serious violation", async ({ page }) => {
     test.setTimeout(120_000)

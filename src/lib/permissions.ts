@@ -72,6 +72,7 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "events/from-template": { POST: "organizer" },
   "members": { GET: "organizer", POST: "organizer" },
   "members/[id]": { PATCH: "organizer", DELETE: "organizer" },
+  "members/[id]/certificate": { POST: "organizer" },
   "members/export": { GET: "organizer" },
   "members/import": { POST: "organizer" },
   "members/import/preview": { POST: "organizer" },

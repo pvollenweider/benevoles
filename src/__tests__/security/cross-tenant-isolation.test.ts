@@ -384,6 +384,14 @@ describe("Members — cross-tenant isolation", () => {
     expect(res.status).toBe(404)
     expect(prismaMock.volunteer.update).not.toHaveBeenCalled()
   })
+
+  it("POST /api/admin/members/[id]/certificate returns 404 for an org-B volunteer (#556)", async () => {
+    const { POST } = await import("@/app/api/admin/members/[id]/certificate/route")
+    setupGuard() // scoped db → null
+
+    const res = await POST(makeRequest("/api/admin/members/mem-b/certificate", "POST"), params("mem-b"))
+    expect(res.status).toBe(404)
+  })
 })
 
 // ── Shifts ────────────────────────────────────────────────────────────────────
