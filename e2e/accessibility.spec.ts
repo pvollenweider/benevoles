@@ -181,6 +181,30 @@ test.describe("admin", () => {
     await expect(page.getByRole("alertdialog", { name: "Confirmer la fusion" })).toBeVisible()
     expect.soft(await seriousViolations(page), "merge: confirm dialog").toEqual([])
   })
+
+  // #601: the possible-duplicates list, with a pair of homonyms to show.
+  test("possible duplicates page has no serious violation", async ({ page }) => {
+    await page.goto("/admin/login")
+    await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+    await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+    await page.getByRole("button", { name: "Se connecter" }).click()
+    await expect(page).toHaveURL(/\/admin\/events/)
+
+    const post = async (url: string, body: unknown) => {
+      const res = await page.request.post(url, { data: body })
+      expect(res.ok(), `${url}: ${res.status()} ${await res.text()}`).toBeTruthy()
+      return res.json()
+    }
+    const suffix = Date.now()
+    const lastName = `A11yDup${suffix}`
+    await post("/api/admin/members", { firstName: "Alix", lastName, email: `alix-a11y-a-${suffix}@example.com` })
+    await post("/api/admin/members", { firstName: "Alix", lastName, email: `alix-a11y-b-${suffix}@example.com` })
+
+    await page.goto("/admin/members/duplicates")
+    await expect(page.getByRole("heading", { name: "Doublons possibles" })).toBeVisible()
+    await expect(page.getByText(new RegExp(`Alix ${lastName} et Alix ${lastName}`)).first()).toBeVisible()
+    expect.soft(await seriousViolations(page), "possible duplicates").toEqual([])
+  })
 })
 
 test.describe("super admin", () => {

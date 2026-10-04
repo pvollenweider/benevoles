@@ -77,6 +77,9 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   // duplicates (#599, the members list) but not merge them.
   "members/[id]/merge-preview": { POST: "owner" },
   "members/[id]/merge": { POST: "owner" },
+  // Possible duplicates (#601) are only suggestions, visible and dismissible at organizer level —
+  // the merge link they point to stays owner-only (members/[id]/merge above).
+  "members/duplicates/dismiss": { POST: "organizer" },
   "members/export": { GET: "organizer" },
   "members/export-hours": { GET: "organizer" },
   "members/import": { POST: "organizer" },

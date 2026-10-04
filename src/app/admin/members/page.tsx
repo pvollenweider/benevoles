@@ -8,6 +8,7 @@ import { loadAddressStatuses } from "@/lib/delivery-outcomes-data"
 import { serializeAddressStatus } from "@/lib/address-status"
 import { addressHash } from "@/lib/notifications/smtp-outcome"
 import { env } from "@/lib/env"
+import { countDuplicatePairs } from "@/lib/member-duplicates-data"
 
 export const dynamic = "force-dynamic"
 
@@ -55,6 +56,9 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
     ctx.organizationId,
     volunteers.map((v) => ({ id: v.id, addressHash: v.email ? addressHash(v.email, env.AUTH_SECRET) : null })),
   )
+  // « Doublons possibles » (#601): count only, for the header link — the full pairs are loaded by
+  // /admin/members/duplicates itself.
+  const duplicatesCount = await countDuplicatePairs(db, ctx.organizationId)
 
   return (
     <MembersManager
@@ -90,6 +94,7 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
       initialAddressToVerify={initialAddressToVerify}
       initialEditId={initialEditId}
       defaultHoursPeriod={defaultPeriod(new Date(), timeZone)}
+      duplicatesCount={duplicatesCount}
     />
   )
 }

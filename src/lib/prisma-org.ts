@@ -23,7 +23,7 @@ import { prisma } from "./prisma"
  */
 
 /** Models carrying organizationId themselves. */
-const DIRECT = ["event", "volunteer", "orgLog", "orgSlugHistory", "targetedMessage", "messageTemplate"] as const
+const DIRECT = ["event", "volunteer", "orgLog", "orgSlugHistory", "targetedMessage", "messageTemplate", "duplicateDismissal"] as const
 /** Models owned through their event (eventId → Event.organizationId). */
 const EVENT_OWNED = ["shift", "registration", "memberInvite", "eventPage", "sectorLeader", "eventMilestone", "eventLog", "eventQuestion", "questionAnswer"] as const
 

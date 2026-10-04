@@ -38,6 +38,7 @@ model Organization {
   logs        OrgLog[]
   targetedMessages TargetedMessage[]
   messageTemplates MessageTemplate[]
+  duplicateDismissals DuplicateDismissal[]
 }
 
 model OrgSlugHistory {
@@ -228,6 +229,34 @@ model OrgLog {
   @@index([organizationId, createdAt])
 }
 
+// A possible-duplicate pair (#601) dismissed by an organizer so it stops being suggested — until a
+// new kind of signal appears for that pair (a new one of SignalKind in member-duplicates.ts), at
+// which point the stored `signalsFingerprint` no longer matches and the pair resurfaces. Never
+// stores a value computed from personal data — only ids and the sorted signal kinds — so a row
+// here reveals nothing beyond "these two ids were once flagged together for these reasons".
+// Cascade-deleted with either member or with the organization: no retention of its own, see
+// RETENTION in src/lib/retention.ts and docs/rgpd/inventaire.md.
+model DuplicateDismissal {
+  id                 String   @id @default(cuid())
+  organizationId     String
+  // Ordered (volunteerIdA < volunteerIdB) so a pair is found regardless of which side it's
+  // rebuilt from later.
+  volunteerIdA       String
+  volunteerIdB       String
+  signalsFingerprint String
+  dismissedAt        DateTime @default(now())
+  dismissedBy        String? // AdminUser.id; kept even if that admin is later removed (no FK)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  volunteerA   Volunteer    @relation("DuplicateDismissalA", fields: [volunteerIdA], references: [id], onDelete: Cascade)
+  volunteerB   Volunteer    @relation("DuplicateDismissalB", fields: [volunteerIdB], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, volunteerIdA, volunteerIdB, signalsFingerprint])
+  @@index([organizationId])
+  @@index([volunteerIdA])
+  @@index([volunteerIdB])
+}
+
 // One row per manual product-update broadcast to the beta-tester (AdminUser) pool — see
 // issue #200. Not a queue/job table: sending is synchronous within the request (a handful of
 // recipients, admin-triggered by hand, not periodic) — this is a history/log of what was sent,
@@ -332,6 +361,9 @@ model Volunteer {
   deliveryOutcomes  DeliveryOutcome[]
   mergedInto        Volunteer?     @relation("VolunteerMerge", fields: [mergedIntoId], references: [id], onDelete: SetNull)
   mergedFrom        Volunteer[]    @relation("VolunteerMerge")
+  // Possible-duplicate dismissals (#601) naming this record as either side of the pair.
+  duplicateDismissalsAsA DuplicateDismissal[] @relation("DuplicateDismissalA")
+  duplicateDismissalsAsB DuplicateDismissal[] @relation("DuplicateDismissalB")
 
   // Also unique case-insensitively: "Volunteer_organizationId_email_ci_key" on lower(trim(email)), created by migration
   // 20260930110000_email_case_insensitive_unique (#342). Expression indexes can't be declared here;
