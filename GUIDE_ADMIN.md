@@ -106,6 +106,8 @@ En haut de la page, **Comment commencer ?** propose une page blanche ou un modè
 
 L'événement est créé en **brouillon** (`draft`) — il n'est pas visible du public tant qu'il n'est pas publié.
 
+En modification (**`/admin/events/[id]/edit`**), chaque changement est enregistré automatiquement ; l'heure du dernier enregistrement s'affiche en haut du formulaire. Si un enregistrement échoue, un message le dit et **Réessayer** renvoie vos modifications.
+
 **Repartir d'un événement existant** (édition suivante d'un festival, même organisation d'une année sur l'autre) : **Dupliquer**, depuis la liste des événements ou la page de l'événement, ouvre une page de choix :
 
 - le **titre** de la copie (« (copie) » par défaut) ;

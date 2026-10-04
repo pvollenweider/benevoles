@@ -68,9 +68,9 @@ export default function ReplayView({
 
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 min-h-[88px]">
         <div className="flex items-center gap-2 mb-1">
-          <p className="text-xs text-gray-400">{fmtDateTime(entry.createdAt)}</p>
+          <p className="text-xs text-gray-600">{fmtDateTime(entry.createdAt)}</p>
           {isBaseline(entry.action) && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
               Généré, pas une action réelle
             </span>
           )}

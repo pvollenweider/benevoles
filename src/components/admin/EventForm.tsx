@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation"
 import { WINDOW_ORDER_ERROR, localWindowOrderInvalid } from "@/lib/registration-window"
 import { isCompleteTime, addMinutes } from "@/lib/gantt-utils"
 import { LISTED_FIELD_HELP, LISTED_FIELD_LABEL, UNLISTED_HINT, visibilityLabel } from "@/lib/event-visibility"
+import { announce } from "@/lib/announce"
+import { type SaveState, formatSavedAt, saveErrorText, shouldAnnounceSaved, visibleSaveText } from "@/lib/event-autosave"
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
@@ -82,16 +84,70 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
   const [editShow, setEditShow]     = useState<Show>(emptyShow)
   const [saving, setSaving]   = useState(false)
   const [error, setError]     = useState<string | null>(null)
-  const [toast, setToast]     = useState<{ msg: string; ok: boolean } | null>(null)
+  // Autosave status in edit mode (#616): visible text, announced text and the failure alert.
+  const [save, setSave] = useState<SaveState>({ kind: "idle" })
+  const [savedAnnouncement, setSavedAnnouncement] = useState("")
+  // The alert's text, kept across a retry (while `save.kind` is transiently "saving" again) and
+  // cleared only by the next successful save — separate from `save` so the alert and its
+  // « Réessayer » button don't disappear the moment a retry starts.
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   const mounted = useRef(false)
   // The last status the server confirmed (each PATCH answers with the saved event), so a
   // refused publication restores what's really stored, not what the page loaded with.
   const savedStatusRef = useRef<EventFormData["publicStatus"]>(initialData?.publicStatus ?? "draft")
+  // Latest state read by saveNow() so a retry sends what's on screen now, not what failed earlier.
+  const formRef = useRef(form)
+  const showsRef = useRef(shows)
+  const saveRef = useRef(save)
+  // Whether a save has ever been announced (D11): the first one after load, and the first after
+  // an error; later saves only update the visible time, silently.
+  const announcedOnceRef = useRef(false)
 
-  function showToast(msg: string, ok = true) {
-    setToast({ msg, ok })
-    setTimeout(() => setToast(null), 2500)
+  useEffect(() => {
+    formRef.current = form
+    showsRef.current = shows
+    saveRef.current = save
+  })
+
+  async function saveNow() {
+    if (!initialData?.id) return
+    const previousKind = saveRef.current.kind
+    setSave({ kind: "saving" })
+    try {
+      const res = await fetch(`/api/admin/events/${initialData.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formRef.current, showSchedule: showsRef.current }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (res.ok) {
+        if (data?.publicStatus) savedStatusRef.current = data.publicStatus
+        setError(null)
+        setSaveError(null)
+        setSave({ kind: "saved", at: formatSavedAt(new Date()) })
+        if (shouldAnnounceSaved(previousKind, announcedOnceRef.current)) {
+          announcedOnceRef.current = true
+          announce(setSavedAnnouncement, "Modifications enregistrées.")
+        }
+        return
+      }
+      // A refused publication (no shift yet) is a rule, not a glitch: say it and go back to
+      // the last status the server confirmed.
+      if (res.status === 409) {
+        const previous = savedStatusRef.current
+        setForm((f) => ({ ...f, publicStatus: previous }))
+        setError(`${typeof data?.error === "string" ? data.error : "Modification refusée."} Le statut a été remis sur « ${previous === "archived" ? "Archivé" : previous === "published" ? "Publié" : "Brouillon"} ».`)
+        setSave({ kind: "idle" })
+        return
+      }
+      console.error("Save error:", res.status)
+      setSave({ kind: "error", reason: "server" })
+      setSaveError(saveErrorText("server"))
+    } catch {
+      setSave({ kind: "error", reason: "network" })
+      setSaveError(saveErrorText("network"))
+    }
   }
 
   // Auto-save in edit mode with 800ms debounce
@@ -99,37 +155,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
     if (!mounted.current) { mounted.current = true; return }
     if (!isEdit || !form.title) return
 
-    const timer = setTimeout(async () => {
-      setSaving(true)
-      try {
-        const res = await fetch(`/api/admin/events/${initialData!.id}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...form, showSchedule: shows }),
-        })
-        const data = await res.json().catch(() => ({}))
-        if (res.ok) {
-          if (data?.publicStatus) savedStatusRef.current = data.publicStatus
-          setError(null)
-          showToast("Enregistré ✓")
-          return
-        }
-        // A refused publication (no shift yet) is a rule, not a glitch: say it and go back to
-        // the last status the server confirmed.
-        if (res.status === 409) {
-          const previous = savedStatusRef.current
-          setForm((f) => ({ ...f, publicStatus: previous }))
-          setError(`${typeof data?.error === "string" ? data.error : "Modification refusée."} Le statut a été remis sur « ${previous === "archived" ? "Archivé" : previous === "published" ? "Publié" : "Brouillon"} ».`)
-          return
-        }
-        console.error("Save error:", res.status)
-        showToast("Erreur lors de la sauvegarde", false)
-      } catch {
-        showToast("Erreur réseau, modification non enregistrée", false)
-      } finally {
-        setSaving(false)
-      }
-    }, 800)
+    const timer = setTimeout(() => { void saveNow() }, 800)
 
     return () => clearTimeout(timer)
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -210,21 +236,31 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
 
   return (
     <>
-      {/* Toast */}
-      {toast && (
-        <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl shadow-lg text-sm font-medium text-white transition-all ${toast.ok ? "bg-green-500" : "bg-red-500"}`}>
-          {toast.msg}
-        </div>
-      )}
-
       <form onSubmit={isEdit ? (e) => e.preventDefault() : handleCreate} className="bg-white rounded-2xl border border-gray-200 p-6 space-y-5">
 
-        {/* Saving indicator (edit mode) */}
+        {/* Autosave status (edit mode, #616): visible time at the top of the form, announced once
+            per D11, and a failure alert that stays until the next successful save. */}
         {isEdit && (
-          <div className="flex justify-end -mb-3">
-            <span className={`text-xs transition-opacity ${saving ? "text-gray-500 opacity-100" : "opacity-0"}`}>
-              Sauvegarde…
-            </span>
+          <div className="flex flex-col items-end gap-1 -mb-3">
+            <p className={`text-xs ${save.kind === "error" ? "text-red-800" : save.kind === "saved" ? "text-green-800" : "text-gray-700"}`}>
+              {visibleSaveText(save)}
+            </p>
+            <p role="status" className="sr-only">{savedAnnouncement}</p>
+            <div role="alert" className={saveError ? "text-sm text-red-800 bg-red-50 border border-red-200 rounded-xl px-3 py-2 flex items-center gap-3" : "sr-only"}>
+              {saveError && (
+                <>
+                  <span>{saveError}</span>
+                  <button
+                    type="button"
+                    onClick={() => { if (save.kind !== "saving") void saveNow() }}
+                    aria-disabled={save.kind === "saving" || undefined}
+                    className="font-medium underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+                  >
+                    Réessayer
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         )}
 
@@ -265,7 +301,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         {form.startDate && form.endDate && (
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-sm font-medium text-gray-700">Spectacles</label>
+            <h3 className="text-sm font-medium text-gray-700">Spectacles</h3>
             {!addingShow && (
               <button type="button" onClick={() => { setNewShow({ ...emptyShow, date: form.startDate }); setAddingShow(true) }} className="text-xs text-blue-600 hover:underline">
                 + Ajouter
@@ -278,7 +314,9 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
               {shows.map((show, i) =>
                 editingIdx === i ? (
                   <div key={i} className="border border-blue-200 rounded-xl p-3 space-y-2.5 bg-blue-50/40">
+                    <label htmlFor="edit-show-name" className="sr-only">Nom du spectacle</label>
                     <input
+                      id="edit-show-name"
                       type="text"
                       placeholder="Nom du spectacle"
                       value={editShow.name}
@@ -287,16 +325,16 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
                     />
                     <div className="grid grid-cols-3 gap-2">
                       <div>
-                        <label className="block text-xs text-gray-500 mb-1">Date</label>
-                        <input type="date" value={editShow.date} min={form.startDate} max={form.endDate} onChange={(e) => setEditShow((s) => ({ ...s, date: e.target.value }))} className={inputCls} />
+                        <label htmlFor="edit-show-date" className="block text-xs text-gray-600 mb-1">Date</label>
+                        <input id="edit-show-date" type="date" value={editShow.date} min={form.startDate} max={form.endDate} onChange={(e) => setEditShow((s) => ({ ...s, date: e.target.value }))} className={inputCls} />
                       </div>
                       <div>
-                        <label className="block text-xs text-gray-500 mb-1">Début</label>
-                        <input type="time" value={editShow.startTime} onChange={(e) => setEditShow((s) => ({ ...s, startTime: e.target.value }))} className={inputCls} />
+                        <label htmlFor="edit-show-start" className="block text-xs text-gray-600 mb-1">Début</label>
+                        <input id="edit-show-start" type="time" value={editShow.startTime} onChange={(e) => setEditShow((s) => ({ ...s, startTime: e.target.value }))} className={inputCls} />
                       </div>
                       <div>
-                        <label className="block text-xs text-gray-500 mb-1">Fin</label>
-                        <input type="time" value={editShow.endTime} onChange={(e) => setEditShow((s) => ({ ...s, endTime: e.target.value }))} className={inputCls} />
+                        <label htmlFor="edit-show-end" className="block text-xs text-gray-600 mb-1">Fin</label>
+                        <input id="edit-show-end" type="time" value={editShow.endTime} onChange={(e) => setEditShow((s) => ({ ...s, endTime: e.target.value }))} className={inputCls} />
                       </div>
                     </div>
                     <div className="flex gap-2">
@@ -316,8 +354,8 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
                       {show.date} · {show.startTime}–{show.endTime}
                     </span>
                     <span className="flex-1 text-sm text-indigo-800 truncate">{show.name}</span>
-                    <button type="button" onClick={() => startEditShow(i)} className="text-indigo-300 hover:text-indigo-600 flex-shrink-0 text-xs">✎</button>
-                    <button type="button" onClick={() => removeShow(i)} className="text-indigo-300 hover:text-red-400 flex-shrink-0 text-xs">✕</button>
+                    <button type="button" onClick={() => startEditShow(i)} aria-label={`Modifier le spectacle ${show.name}`} className="min-w-6 min-h-6 text-indigo-700 hover:text-indigo-900 flex-shrink-0 text-xs"><span aria-hidden="true">✎</span></button>
+                    <button type="button" onClick={() => removeShow(i)} aria-label={`Supprimer le spectacle ${show.name}`} className="min-w-6 min-h-6 text-indigo-700 hover:text-red-700 flex-shrink-0 text-xs"><span aria-hidden="true">✕</span></button>
                   </div>
                 )
               )}
@@ -331,7 +369,9 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
 
           {addingShow && (
             <div className="border border-blue-200 rounded-xl p-3 space-y-2.5 bg-blue-50/40">
+              <label htmlFor="new-show-name" className="sr-only">Nom du spectacle</label>
               <input
+                id="new-show-name"
                 type="text"
                 placeholder="Nom du spectacle"
                 value={newShow.name}
@@ -340,16 +380,16 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
               />
               <div className="grid grid-cols-3 gap-2">
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">Date</label>
-                  <input type="date" value={newShow.date} min={form.startDate} max={form.endDate} onChange={(e) => setShow("date", e.target.value)} className={inputCls} />
+                  <label htmlFor="new-show-date" className="block text-xs text-gray-600 mb-1">Date</label>
+                  <input id="new-show-date" type="date" value={newShow.date} min={form.startDate} max={form.endDate} onChange={(e) => setShow("date", e.target.value)} className={inputCls} />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">Début</label>
-                  <input type="time" value={newShow.startTime} onChange={(e) => setShow("startTime", e.target.value)} className={inputCls} />
+                  <label htmlFor="new-show-start" className="block text-xs text-gray-600 mb-1">Début</label>
+                  <input id="new-show-start" type="time" value={newShow.startTime} onChange={(e) => setShow("startTime", e.target.value)} className={inputCls} />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">Fin</label>
-                  <input type="time" value={newShow.endTime} onChange={(e) => setShow("endTime", e.target.value)} className={inputCls} />
+                  <label htmlFor="new-show-end" className="block text-xs text-gray-600 mb-1">Fin</label>
+                  <input id="new-show-end" type="time" value={newShow.endTime} onChange={(e) => setShow("endTime", e.target.value)} className={inputCls} />
                 </div>
               </div>
               <div className="flex gap-2">
@@ -368,8 +408,8 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         )}
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Instructions publiques</label>
-          <textarea rows={2} value={form.publicInstructions} onChange={(e) => set("publicInstructions", e.target.value)}
+          <label htmlFor="event-public-instructions" className="block text-sm font-medium text-gray-700 mb-1">Instructions publiques</label>
+          <textarea id="event-public-instructions" rows={2} value={form.publicInstructions} onChange={(e) => set("publicInstructions", e.target.value)}
             placeholder="Texte affiché aux bénévoles en haut de la page"
             className={`${inputCls} resize-none`} />
         </div>
@@ -394,17 +434,17 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Message de confirmation</label>
-          <textarea rows={2} value={form.confirmationMessage} onChange={(e) => set("confirmationMessage", e.target.value)}
+          <label htmlFor="event-confirmation-message" className="block text-sm font-medium text-gray-700 mb-1">Message de confirmation</label>
+          <textarea id="event-confirmation-message" aria-describedby="event-confirmation-message-hint" rows={2} value={form.confirmationMessage} onChange={(e) => set("confirmationMessage", e.target.value)}
             className={`${inputCls} resize-none`} />
-          <p className="text-xs text-gray-500 mt-1">{"Supporte le **gras**, les listes (- item) et les liens [texte](url). Variables : {{prenom}}, {{créneau}}, {{date}}."}</p>
+          <p id="event-confirmation-message-hint" className="text-xs text-gray-500 mt-1">{"Supporte le **gras**, les listes (- item) et les liens [texte](url). Variables : {{prenom}}, {{créneau}}, {{date}}."}</p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="event-reminder-message" className="block text-sm font-medium text-gray-700 mb-1">
             Message de rappel <span className="text-gray-500 font-normal">(envoyé manuellement avant l&apos;événement)</span>
           </label>
-          <textarea rows={3} value={form.reminderMessage} onChange={(e) => set("reminderMessage", e.target.value)}
+          <textarea id="event-reminder-message" rows={3} value={form.reminderMessage} onChange={(e) => set("reminderMessage", e.target.value)}
             placeholder="Consignes vestimentaires, point de RDV, accès, parking…"
             className={`${inputCls} resize-none`} />
         </div>
@@ -515,7 +555,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
             </button>
           )}
           <button type="button" onClick={() => router.back()} className="text-gray-500 px-4 py-2.5 text-sm hover:text-gray-800">
-            ← Retour
+            <span aria-hidden="true">← </span>Retour
           </button>
         </div>
 
