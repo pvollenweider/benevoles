@@ -13,6 +13,7 @@ import PushSubscribeButton from "@/components/PushSubscribeButton"
 import ShiftInfoList from "@/components/ShiftInfoList"
 import AvailabilityForm from "@/components/AvailabilityForm"
 import { withdrawCopy, withdrawDoneMessage, withdrawFailureMessage } from "@/lib/volunteer-withdraw"
+import WithdrawMessageField from "@/components/public/WithdrawMessageField"
 import { announce } from "@/lib/announce"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
 
@@ -74,6 +75,8 @@ export default function MyRegistrationPage() {
   const [pendingCancel, setPendingCancel] = useState<{ editToken: string } | null>(null)
   // A failed withdrawal's message, per registration id: shown under its card, the page stays.
   const [withdrawErrors, setWithdrawErrors] = useState<Record<string, string>>({})
+  // The optional « Un mot pour l'organisation ? » (#559), reset whenever a confirmation opens.
+  const [withdrawMessage, setWithdrawMessage] = useState("")
   // Page status: the result of a withdrawal, voiced once.
   const [statusText, setStatusText] = useState("")
 
@@ -123,6 +126,7 @@ export default function MyRegistrationPage() {
   function openConfirm(reg: RegistrationItem) {
     if (cancelling) return
     setWithdrawError(reg.id, null)
+    setWithdrawMessage("")
     setPendingCancel({ editToken: reg.editToken })
     setFocusRequest({
       candidates: [byId(`cancel-keep-${reg.id}`), byId(triggerId(reg.editToken))],
@@ -149,7 +153,11 @@ export default function MyRegistrationPage() {
     // The page-level error is for the initial load only: a failed withdrawal keeps the page.
     let failure: { status?: number; network?: boolean } | null = null
     try {
-      const res = await fetch(`/api/public/registrations/${reg.editToken}`, { method: "DELETE" })
+      const res = await fetch(`/api/public/registrations/${reg.editToken}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: withdrawMessage }),
+      })
       if (!res.ok) failure = { status: res.status }
     } catch {
       failure = { network: true }
@@ -324,6 +332,7 @@ export default function MyRegistrationPage() {
                     <p id={`cancel-desc-${reg.id}`} className="text-xs text-red-800">
                       {copy.confirmBefore}<strong>{reg.shift.label}</strong>{copy.confirmAfter}
                     </p>
+                    <WithdrawMessageField id={`cancel-message-${reg.id}`} value={withdrawMessage} onChange={setWithdrawMessage} disabled={busy} />
                     <div className="flex gap-2 pt-1">
                       <button
                         type="button"

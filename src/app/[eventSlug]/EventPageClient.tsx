@@ -134,6 +134,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   const [withdrawing, setWithdrawing] = useState(false)
   const withdrawingRef = useRef(false)
   const [withdrawError, setWithdrawError] = useState<string | null>(null)
+  // The optional « Un mot pour l'organisation ? » (#559), reset whenever a new confirmation opens.
+  const [withdrawMessage, setWithdrawMessage] = useState("")
   const withdrawConfirmRef = useRef<HTMLButtonElement>(null)
   // Where the withdrawal was asked from: the ✕, its list and its place there, for the focus after.
   const withdrawFrom = useRef<{ trigger: HTMLButtonElement; list: Element | null; index: number } | null>(null)
@@ -431,6 +433,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
     const index = list ? [...list.querySelectorAll("button")].indexOf(trigger) : -1
     withdrawFrom.current = { trigger, list, index }
     setWithdrawError(null)
+    setWithdrawMessage("")
     setPendingCancel({ token: reg.token, shiftId: s.id, label: s.label || s.roleName, status: reg.status })
   }
 
@@ -459,7 +462,11 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
     setWithdrawError(null)
     let failure: { status?: number; network?: boolean } | null = null
     try {
-      const res = await fetch(`/api/public/registrations/${pending.token}`, { method: "DELETE" })
+      const res = await fetch(`/api/public/registrations/${pending.token}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: withdrawMessage }),
+      })
       if (!res.ok) failure = { status: res.status }
     } catch {
       failure = { network: true }
@@ -973,6 +980,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
           label={pendingCancel.label}
           busy={withdrawing}
           error={withdrawError}
+          message={withdrawMessage}
+          onMessageChange={setWithdrawMessage}
           onConfirm={withdraw}
           onKeep={keepRegistration}
           confirmRef={withdrawConfirmRef}

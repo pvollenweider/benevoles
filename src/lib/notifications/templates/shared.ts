@@ -22,6 +22,15 @@ export function leaderPageUrl(orgSlug: string | undefined, token: string): strin
   return `${base}/leader/${token}`
 }
 
+/** Admin login lives on the app's own domain, not an org subdomain (#559). */
+export function adminShiftUrl(eventId: string, shiftId: string): string {
+  return `${BASE_URL}/admin/events/${eventId}/registrations?shift=${shiftId}`
+}
+
+export function adminStaffingUrl(eventId: string): string {
+  return `${BASE_URL}/admin/events/${eventId}/staffing`
+}
+
 export function escapeHtml(s: string): string {
   return s
     .replace(/&/g, "&amp;")

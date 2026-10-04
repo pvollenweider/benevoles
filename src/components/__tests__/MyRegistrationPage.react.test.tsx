@@ -112,6 +112,26 @@ describe("MyRegistrationPage — withdrawal", () => {
     expect(barTrigger()).toHaveFocus()
   })
 
+  it("has a labelled, described message field, reachable by Tab, that does not move the initial focus", async () => {
+    await renderPage([bar, accueil])
+    openBar()
+    expect(screen.getByRole("button", { name: "Non, garder" })).toHaveFocus()
+    const field = screen.getByLabelText("Un mot pour l'organisation ? (facultatif)")
+    expect(field).toHaveAccessibleDescription(/santé/)
+    expect(field).toHaveAttribute("maxlength", "300")
+    field.focus()
+    expect(field).toHaveFocus()
+  })
+
+  it("sends the message typed in the field with the DELETE", async () => {
+    const { deletes } = await renderPage([bar, accueil])
+    openBar()
+    fireEvent.change(screen.getByLabelText("Un mot pour l'organisation ? (facultatif)"), { target: { value: "Paul peut me remplacer" } })
+    confirmBar()
+    const [, init] = deletes()[0]
+    expect(JSON.parse((init as RequestInit).body as string)).toEqual({ message: "Paul peut me remplacer" })
+  })
+
   it("sends one DELETE and keeps the confirmation, aria-disabled, while it runs", async () => {
     const held = deferred<unknown>()
     const { deletes } = await renderPage([bar, accueil], () => held.promise)

@@ -5,6 +5,7 @@
 
 import { useId, useRef } from "react"
 import ModalShell from "@/components/admin/ModalShell"
+import WithdrawMessageField from "./WithdrawMessageField"
 import type { WithdrawCopy } from "@/lib/volunteer-withdraw"
 
 type Props = {
@@ -16,6 +17,9 @@ type Props = {
   busy: boolean
   /** Why the last attempt failed (nothing was withdrawn), or null. */
   error: string | null
+  /** The optional « Un mot pour l'organisation ? » (#559), sent with the DELETE on confirm. */
+  message: string
+  onMessageChange: (value: string) => void
   onConfirm: () => void
   /** « Non, garder », Escape or « Fermer »: closes without withdrawing. */
   onKeep: () => void
@@ -31,8 +35,9 @@ type Props = {
  * Not ConfirmActionModal: it voices « Action en cours… » (a second announcement for one action,
  * the page announces the result) and its « Annuler » would be ambiguous next to a cancellation.
  */
-export default function WithdrawDialog({ copy, label, busy, error, onConfirm, onKeep, confirmRef }: Props) {
+export default function WithdrawDialog({ copy, label, busy, error, message, onMessageChange, onConfirm, onKeep, confirmRef }: Props) {
   const descId = useId()
+  const messageId = useId()
   const keepRef = useRef<HTMLButtonElement>(null)
 
   return (
@@ -52,6 +57,7 @@ export default function WithdrawDialog({ copy, label, busy, error, onConfirm, on
       <p role="alert" className={error ? "mt-3 text-sm text-red-800 bg-red-50 border border-red-200 rounded-xl px-3 py-2" : "sr-only"}>
         {error ?? ""}
       </p>
+      <WithdrawMessageField id={messageId} value={message} onChange={onMessageChange} disabled={busy} />
       <div className="flex flex-wrap gap-3 pt-4">
         <button
           ref={keepRef}

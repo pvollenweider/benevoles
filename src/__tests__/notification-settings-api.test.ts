@@ -22,7 +22,7 @@ describe("notification settings API", () => {
     m.findUnique.mockResolvedValue({ replyToEmail: null, notificationSettings: null })
     const { GET } = await import("@/app/api/admin/settings/notifications/route")
     const body = await (await GET()).json()
-    expect(body).toEqual({ replyToEmail: null, settings: { reminders: { j2: true, j1: true, dd: true }, signupAdminEmail: true } })
+    expect(body).toEqual({ replyToEmail: null, settings: { reminders: { j2: true, j1: true, dd: true }, signupAdminEmail: true, withdrawalAdminEmail: true } })
   })
 
   it("PATCH merges a partial change on the session's organization and logs it", async () => {
@@ -33,7 +33,7 @@ describe("notification settings API", () => {
     expect(res.status).toBe(200)
     const call = m.update.mock.calls[0][0]
     expect(call.where).toEqual({ id: "org-a" })
-    expect(call.data).toEqual({ replyToEmail: "contact@org.ch", notificationSettings: { reminders: { j2: false, j1: true, dd: false }, signupAdminEmail: true } })
+    expect(call.data).toEqual({ replyToEmail: "contact@org.ch", notificationSettings: { reminders: { j2: false, j1: true, dd: false }, signupAdminEmail: true, withdrawalAdminEmail: true } })
     expect(m.logOrgEvent).toHaveBeenCalledWith(expect.objectContaining({ organizationId: "org-a", action: "organization.notifications_updated", entityType: "Organization" }))
     expect((await res.json()).settings.reminders).toEqual({ j2: false, j1: true, dd: false })
   })

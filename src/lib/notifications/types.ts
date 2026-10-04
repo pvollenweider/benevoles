@@ -26,6 +26,7 @@ export type NotificationKind =
   | "waitlist_offered"
   | "sector_leader_invite"
   | "sector_leader_new_signup"
+  | "sector_leader_withdrawal"
   | "product_update"
   | "registration_link_resend"
   | "targeted_message"

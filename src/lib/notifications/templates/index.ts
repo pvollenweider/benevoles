@@ -10,12 +10,12 @@
 
 import type { NotificationPayload } from "../types"
 import type { RenderedEmail } from "./shared"
-import { renderConfirmation, renderRegistrationRequested, renderRegistrationRefused, renderRegistrationCancelled, renderShiftModified, renderShiftCancelled, renderRegistrationLinkResend } from "./registration"
+import { renderConfirmation, renderRegistrationRequested, renderRegistrationRefused, renderShiftModified, renderShiftCancelled, renderRegistrationLinkResend } from "./registration"
 import { renderMemberInvite, renderAdminInvite } from "./invitations"
 import { renderReminderJ2, renderReminderJ1, renderReminderDd, renderManualReminder, renderTargetedMessage } from "./reminders"
 import { renderWaitlistConfirmation, renderWaitlistOffered } from "./waitlist"
-import { renderSectorLeaderInvite, renderSectorLeaderNewSignup } from "./sector-leaders"
-import { renderAdminNotification, renderPasswordReset, renderAdminWelcome, renderProductUpdate } from "./administration"
+import { renderSectorLeaderInvite, renderSectorLeaderNewSignup, renderSectorLeaderWithdrawal } from "./sector-leaders"
+import { renderAdminNotification, renderWithdrawalAdminNotice, renderPasswordReset, renderAdminWelcome, renderProductUpdate } from "./administration"
 
 export type { RenderedEmail } from "./shared"
 
@@ -38,7 +38,7 @@ export function render(payload: NotificationPayload): RenderedEmail {
     case "shift_cancelled":
       return renderShiftCancelled(payload)
     case "registration_cancelled":
-      return renderRegistrationCancelled(payload)
+      return renderWithdrawalAdminNotice(payload)
     case "admin_notification":
       return renderAdminNotification(payload)
     case "admin_invite":
@@ -55,6 +55,8 @@ export function render(payload: NotificationPayload): RenderedEmail {
       return renderSectorLeaderInvite(payload)
     case "sector_leader_new_signup":
       return renderSectorLeaderNewSignup(payload)
+    case "sector_leader_withdrawal":
+      return renderSectorLeaderWithdrawal(payload)
     case "product_update":
       return renderProductUpdate(payload)
     case "registration_link_resend":

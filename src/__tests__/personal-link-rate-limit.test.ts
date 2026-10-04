@@ -6,13 +6,16 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 const findFirst = vi.hoisted(() => vi.fn())
 const findMany = vi.hoisted(() => vi.fn())
 const updateMany = vi.hoisted(() => vi.fn())
+const count = vi.hoisted(() => vi.fn().mockResolvedValue(0))
 const volunteerUpdate = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({
-  prisma: { registration: { findFirst, findMany, updateMany }, volunteer: { update: volunteerUpdate } },
+  prisma: { registration: { findFirst, findMany, updateMany, count }, volunteer: { update: volunteerUpdate } },
 }))
 vi.mock("@/lib/waitlist", () => ({ promoteNextInWaitlist: vi.fn().mockResolvedValue(true) }))
 vi.mock("@/lib/event-log", () => ({ logEvent: vi.fn().mockResolvedValue("log-1") }))
 vi.mock("@/lib/report-error", () => ({ reportError: () => () => {} }))
+vi.mock("@/lib/withdrawal-notifications", () => ({ buildWithdrawalNotifications: vi.fn().mockResolvedValue([]) }))
+vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications: vi.fn().mockResolvedValue([]), deliverAfterResponse: vi.fn() }))
 
 const valid = { id: "r1", eventId: "e1", shiftId: "s1", volunteerId: "v1", status: "active" }
 const page = {

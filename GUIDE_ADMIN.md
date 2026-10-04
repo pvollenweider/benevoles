@@ -278,7 +278,7 @@ Désignez un ou plusieurs bénévoles responsables d'un poste (ex. « Bar »). C
 - Depuis la page des inscriptions, sélectionner une seule ligne puis **Rendre responsable** propose directement le poste de ce créneau
 
   ![Fenêtre « Rendre Camille Rochat responsable » : choix du poste parmi ceux où la personne est inscrite, et email pré-rempli](/doc-img/admin-make-leader-modal.png)
-- Un email est automatiquement envoyé au responsable avec son lien personnel ; il est aussi prévenu à chaque nouvelle inscription sur son poste
+- Un email est automatiquement envoyé au responsable avec son lien personnel ; il est aussi prévenu à chaque nouvelle inscription sur son poste, et à chaque désistement d'une place confirmée ou d'une demande (réglage **Prévenir en cas de désistement**, voir « Réglages des emails »)
 - **Retirer** un responsable à tout moment (confirmation demandée)
 - La fiche du bénévole concerné (`/admin/members`) reçoit automatiquement le tag « responsable »
 
@@ -590,6 +590,7 @@ Sur cette page, un propriétaire peut :
 
 - **Rappels automatiques** : cochez ou décochez le rappel J-2, le rappel J-1 et le rappel du jour pour toute l'organisation.
 - **Prévenir les administrateurs à chaque inscription** : l'email envoyé à chaque administrateur actif quand un bénévole s'inscrit depuis la page publique.
+- **Prévenir en cas de désistement** : réglage séparé du précédent, coché par défaut. Quand un bénévole annule une place confirmée ou une demande, un email part aux administrateurs actifs et aux responsables du poste concerné : qui se désiste, de quel créneau, combien de places manquent désormais, si la liste d'attente a repris la place, et le mot laissé par le bénévole le cas échéant (300 caractères maximum, jamais conservé une fois l'email envoyé). Quitter la liste d'attente ou refuser une place proposée ne prévient personne : rien à décider dans ces cas. Décoché, ni les administrateurs ni les responsables ne reçoivent cet email.
 - **Adresse de réponse** : quand un bénévole répond à un email de l'application, sa réponse arrive à cette adresse (vide : l'adresse par défaut de la plateforme). Elle figure aussi sur la page personnelle des bénévoles (« Écrire à l'organisation »).
 - **M'envoyer un email de test** : un email à votre propre adresse, avec les réglages enregistrés, pour vérifier l'expéditeur, l'adresse de réponse et le rendu (cinq par heure au plus).
 

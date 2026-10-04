@@ -11,6 +11,8 @@ vi.mock("@/lib/urls", () => ({ orgBaseUrl: (slug: string) => `https://${slug}.ex
 vi.mock("@/lib/waitlist", () => ({ promoteNextInWaitlist: vi.fn() }))
 vi.mock("@/lib/event-log", () => ({ logEvent: vi.fn() }))
 vi.mock("@/lib/report-error", () => ({ reportError: () => () => {} }))
+vi.mock("@/lib/withdrawal-notifications", () => ({ buildWithdrawalNotifications: vi.fn() }))
+vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications: vi.fn(), deliverAfterResponse: vi.fn() }))
 
 const get = (token: string) =>
   new Request(`http://localhost/api/public/registrations/${token}`, { headers: { "x-forwarded-for": `t-${Math.random()}` } })
