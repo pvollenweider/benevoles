@@ -102,7 +102,7 @@ En haut de la page, **Comment commencer ?** propose une page blanche ou un modè
 | Description | Texte libre, affiché publiquement dans l'encadré de l'événement sur la page d'inscription (colonne de droite, sur ordinateur) |
 | Instructions publiques | Message visible en haut de la page d'inscription |
 | Téléphone obligatoire à l'inscription | Si coché, le formulaire public exige un numéro de téléphone (désactivé par défaut). Ne s'applique pas aux bénévoles que vous ajoutez vous-même depuis l'administration. Le numéro saisi est enregistré avec l'inscription : c'est lui qui s'affiche dans la liste des inscriptions, les **Rapports** et la page du responsable de secteur (à défaut, celui de la fiche du membre) |
-| Message de confirmation | Texte affiché sur la page de succès après inscription |
+| Message de confirmation | Texte affiché sur la page de succès après inscription, sur la page personnelle du bénévole et dans l'email de confirmation. Mise en forme simple (gras, listes, liens). Variables : {prénom}, et pour le premier créneau de la personne : {créneau}, {date}, {heure} |
 | Couleur de la page publique | Une couleur de la palette (la même que celle des postes) derrière le titre de la page d'inscription, avec un aperçu dans le formulaire. Le texte reste blanc sur un fond foncé, donc lisible ; sans couleur, l'en-tête reste blanc. La couleur est copiée avec les réglages lors d'une duplication |
 
 L'événement est créé en **brouillon** (`draft`) — il n'est pas visible du public tant qu'il n'est pas publié.
