@@ -30,6 +30,7 @@ test("sections in order: volunteers, organizers only (with the full export), bad
     "À afficher ou à remettre aux bénévoles",
     "Pour les organisateurs seulement",
     "Badges",
+    "Résumé de l'événement",
     "Archive",
   ])
 

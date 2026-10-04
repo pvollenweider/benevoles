@@ -10,7 +10,7 @@ Ce que recouvre la déclaration publique (`ACCESSIBILITE.md`, page `/accessibili
 - la page d'un événement (`/spectacle-cirque-2026?org=default`), puis son formulaire d'inscription après la sélection d'un créneau ;
 - la page personnelle `/my/[token]`, demande de confirmation fermée puis ouverte (`e2e/personal-page.spec.ts`, avec un événement et une inscription créés par `e2e/helpers/public-signup.ts`) ;
 - la page d'un événement avec une session, fenêtre d'annulation d'un créneau ouverte (`e2e/public-unregister.spec.ts`) ;
-- dans l'administration : `/admin/login`, `/admin/events`, la page d'un événement et ses sous-pages `/shifts`, `/registrations`, `/message` et `/invitations` ;
+- dans l'administration : `/admin/login`, `/admin/events`, la page d'un événement et ses sous-pages `/shifts`, `/registrations`, `/message`, `/invitations` et `/print` (« Rapports », avec le résumé de l'événement, #557) ; la liste des membres `/admin/members`, formulaire « Heures par bénévole » ouvert (#557), la page d'activité d'un membre et son attestation de bénévolat `/admin/members/[id]/certificate` (#556) ;
 - dans l'espace super admin : `/super-admin/organizations` et `/super-admin/health`, avec la bannière « Une nouvelle version est disponible » affichée (#612, version connue placée directement en base par `scripts/e2e-seed-release-check.ts`, sans appel réseau).
 
 `/accessibilite` et `/doc` sont aussi analysées à 320 px de large en thème sombre.

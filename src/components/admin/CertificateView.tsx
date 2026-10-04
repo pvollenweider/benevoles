@@ -52,7 +52,7 @@ export default function CertificateView({ memberId, memberName, organizationName
   const unattested = useMemo(() => filtered.filter((e) => !e.attested), [filtered])
 
   const totalAttested = summaries.reduce((n, s) => n + s.attestedMinutes, 0)
-  const totalPlanned = summaries.reduce((n, s) => n + s.plannedMinutes, 0)
+  const totalPlanned = summaries.reduce((n, s) => n + s.plannedWithoutPresenceMinutes, 0)
   const totalShifts = summaries.reduce((n, s) => n + s.shiftsCount, 0)
 
   // Announced after the period or the planned-hours checkbox changes, never on first render
@@ -225,7 +225,7 @@ export default function CertificateView({ memberId, memberName, organizationName
                   <td className="py-1 pr-2 text-right">
                     {s.noCheckIn ? "présences non saisies pour cet événement" : fmtDuration(s.attestedMinutes)}
                   </td>
-                  {includePlanned && <td className="py-1 text-right">{fmtDuration(s.plannedMinutes)}</td>}
+                  {includePlanned && <td className="py-1 text-right">{fmtDuration(s.plannedWithoutPresenceMinutes)}</td>}
                 </tr>
               ))}
             </tbody>

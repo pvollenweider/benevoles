@@ -1,8 +1,15 @@
 import { describe, it, expect } from "vitest"
 import { filterMembers, nextSort, parseTags, sortAnnouncement, sortMembers } from "../members-list"
 
-const m = (id: string, over: Partial<{ firstName: string; lastName: string; email: string | null; phone: string | null; tags: string[]; active: boolean; hoursTotal: number }> = {}) => ({
-  id, firstName: "Alice", lastName: "Martin", email: null, phone: null, tags: [], active: true, hoursTotal: 0, ...over,
+const m = (
+  id: string,
+  over: Partial<{
+    firstName: string; lastName: string; email: string | null; phone: string | null; tags: string[]; active: boolean
+    hoursTotal: number; hoursAttested: number; lastShiftDate: string | null; lastPresenceDate: string | null
+  }> = {},
+) => ({
+  id, firstName: "Alice", lastName: "Martin", email: null, phone: null, tags: [], active: true,
+  hoursTotal: 0, hoursAttested: 0, lastShiftDate: null, lastPresenceDate: null, ...over,
 })
 
 const members = [
@@ -61,6 +68,17 @@ describe("sorting", () => {
     expect(sortMembers(members, { col: "firstName", dir: "asc" }).map((x) => x.id)).toEqual(["b", "c", "a"])
     expect(sortMembers(members, { col: "lastName", dir: "desc" }).map((x) => x.id)).toEqual(["a", "b", "c"])
     expect(sortMembers(members, { col: "hoursTotal", dir: "asc" }).map((x) => x.id)).toEqual(["b", "c", "a"])
+  })
+
+  it("sorts attested hours numerically and last participation by date, nulls first ascending (#557)", () => {
+    const withDates = [
+      m("x", { lastShiftDate: "2026-05-01", hoursAttested: 2 }),
+      m("y", { lastShiftDate: null, hoursAttested: 9 }),
+      m("z", { lastShiftDate: "2026-01-10", hoursAttested: 1 }),
+    ]
+    expect(sortMembers(withDates, { col: "hoursAttested", dir: "desc" }).map((x) => x.id)).toEqual(["y", "x", "z"])
+    expect(sortMembers(withDates, { col: "lastShiftDate", dir: "asc" }).map((x) => x.id)).toEqual(["y", "z", "x"])
+    expect(sortMembers(withDates, { col: "lastShiftDate", dir: "desc" }).map((x) => x.id)).toEqual(["x", "z", "y"])
   })
 
   it("keeps the order without a sort, and never mutates the input", () => {

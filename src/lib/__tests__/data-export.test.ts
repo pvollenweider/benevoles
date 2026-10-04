@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { activityCsv, csvCell, csvDocument, eventArchive, exportFileName, membersCsv, stripSecrets } from "../data-export"
+import { activityCsv, csvCell, csvDocument, eventArchive, exportFileName, memberHoursCsv, membersCsv, stripSecrets } from "../data-export"
 
 // Data export and portability (#384).
 describe("csv", () => {
@@ -20,6 +20,18 @@ describe("csv", () => {
     }], "Europe/Zurich")
     const line = csv.split("\r\n")[1]
     expect(line).toBe("Zoé;Roy;z@x.ch;;bar, cuisine;non;2000-05-06;matin;;aime le matin;3;04/07/2026 10:00")
+  })
+
+  it("hours by volunteer: one row per member, a total line, and neutralised formula-like names (#557, #567)", () => {
+    const csv = memberHoursCsv([
+      { firstName: "Zoé", lastName: "Roy", eventsCount: 2, shiftsCount: 3, plannedHours: 4.5, attestedHours: 2 },
+      { firstName: "=cmd", lastName: "Dupont", eventsCount: 1, shiftsCount: 1, plannedHours: 0, attestedHours: 2 },
+    ])
+    const lines = csv.split("\r\n")
+    expect(lines[0]).toBe("﻿Prénom;Nom;Événements;Créneaux;Heures planifiées;Heures attestées")
+    expect(lines[1]).toBe("Zoé;Roy;2;3;4.5;2")
+    expect(lines[2]).toBe("'=cmd;Dupont;1;1;0;2")
+    expect(lines[3]).toBe("Total;;;4;4.5;4")
   })
 
   it("activity: changes serialized as JSON", () => {

@@ -93,6 +93,30 @@ test.describe("admin", () => {
     expect.soft(await seriousViolations(page), "volunteer certificate").toEqual([])
   })
 
+  // #557: the members list (new "Heures attestées" / "Dernière participation" columns and the
+  // hours-export form), then an event's Rapports page with its post-event summary section.
+  test("members list and an event's Rapports page (with the post-event summary) have no serious violation", async ({ page }) => {
+    await page.goto("/admin/login")
+    await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+    await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+    await page.getByRole("button", { name: "Se connecter" }).click()
+    await expect(page).toHaveURL(/\/admin\/events/)
+
+    await page.goto("/admin/members")
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+    expect.soft(await seriousViolations(page), "members list").toEqual([])
+    await page.getByText("Heures par bénévole, pour une période (CSV)").click()
+    expect.soft(await seriousViolations(page), "members list, hours export open").toEqual([])
+
+    await page.goto("/admin/events")
+    await page.getByRole("link", { name: /Spectacle/ }).first().click()
+    await expect(page).toHaveURL(/\/admin\/events\/[^/]+$/)
+    await page.goto(page.url() + "/print")
+    await expect(page.getByRole("heading", { level: 1, name: "Rapports" })).toBeVisible()
+    await expect(page.getByRole("heading", { level: 2, name: "Résumé de l'événement" })).toBeVisible()
+    expect.soft(await seriousViolations(page), "reports page with summary").toEqual([])
+  })
+
   // #587: the shifts page in list view, then with « Gérer les postes » and a colour picker open.
   test("shifts page: list view, roles panel and colour picker have no serious violation", async ({ page }) => {
     test.setTimeout(120_000)

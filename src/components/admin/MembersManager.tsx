@@ -20,9 +20,14 @@ type Props = {
   allTags: string[]
   /** `?q=` from the global search (#377): pre-filled, inactive members included. */
   initialSearch?: string
+  /** Default "from"/"to" for the "Heures par bénévole" export form (#557), from volunteer-hours.ts's defaultPeriod. */
+  defaultHoursPeriod: { from: string; to: string }
 }
 
-export default function MembersManager({ initialMembers, allTags, initialSearch }: Props) {
+/** "2026-05-02" → "2 mai 2026", for the last-participation column (#557). */
+const fmtDay = (iso: string) => new Date(`${iso}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", day: "numeric", month: "long", year: "numeric" })
+
+export default function MembersManager({ initialMembers, allTags, initialSearch, defaultHoursPeriod }: Props) {
   const router = useRouter()
   const members = initialMembers
   const [search, setSearch] = useState(initialSearch ?? "")
@@ -35,6 +40,9 @@ export default function MembersManager({ initialMembers, allTags, initialSearch 
   const [sortDir, setSortDir] = useState<SortDir>("asc")
   const [sortAnnouncement, setSortAnnouncement] = useState("")
   const [, startTransition] = useTransition()
+  const [hoursFrom, setHoursFrom] = useState(defaultHoursPeriod.from)
+  const [hoursTo, setHoursTo] = useState(defaultHoursPeriod.to)
+  const hoursRangeValid = hoursFrom <= hoursTo
 
   function toggleSort(col: SortCol) {
     const next = nextSort({ col: sortCol, dir: sortDir }, col)
@@ -129,6 +137,62 @@ export default function MembersManager({ initialMembers, allTags, initialSearch 
         </div>
       </div>
 
+      <details className="bg-white border border-gray-200 rounded-xl p-3">
+        <summary className="text-sm font-medium text-gray-800 cursor-pointer select-none">Heures par bénévole, pour une période (CSV)</summary>
+        {/* A GET form: the period and the option travel in the link, the browser downloads the file
+            (#557, same pattern as the badges form on Rapports). `min` on "Au" and the submit guard
+            below catch an invalid range (end before start) before the request leaves — the route
+            itself also refuses one (400), this is just the earlier, friendlier error. */}
+        <form
+          action="/api/admin/members/export-hours"
+          method="get"
+          className="mt-3 flex flex-wrap items-end gap-3"
+          onSubmit={(e) => {
+            if (!hoursRangeValid) e.preventDefault()
+          }}
+        >
+          <div>
+            <label htmlFor="hours-from" className="block text-xs font-medium text-gray-700 mb-1">Du</label>
+            <input
+              id="hours-from"
+              name="from"
+              type="date"
+              value={hoursFrom}
+              onChange={(e) => setHoursFrom(e.target.value)}
+              aria-invalid={!hoursRangeValid}
+              aria-describedby={!hoursRangeValid ? "hours-period-error" : undefined}
+              className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            />
+          </div>
+          <div>
+            <label htmlFor="hours-to" className="block text-xs font-medium text-gray-700 mb-1">Au</label>
+            <input
+              id="hours-to"
+              name="to"
+              type="date"
+              min={hoursFrom}
+              value={hoursTo}
+              onChange={(e) => setHoursTo(e.target.value)}
+              aria-invalid={!hoursRangeValid}
+              aria-describedby={!hoursRangeValid ? "hours-period-error" : undefined}
+              className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            />
+          </div>
+          <label className="text-sm text-gray-700 flex items-center gap-1.5 pb-1.5">
+            <input type="checkbox" name="includeAll" value="1" className="h-4 w-4 rounded border-gray-300" />
+            Inclure les membres sans créneau confirmé sur la période
+          </label>
+          <button type="submit" className="text-sm border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            Télécharger (CSV)<span className="sr-only"> (télécharge un fichier)</span>
+          </button>
+          {!hoursRangeValid && (
+            <p id="hours-period-error" role="alert" className="text-sm text-red-700 basis-full">
+              La date de fin précède la date de début : corrigez la période avant de télécharger.
+            </p>
+          )}
+        </form>
+      </details>
+
       <div className="bg-white border border-gray-200 rounded-xl p-3 flex flex-wrap items-center gap-3">
         <input
           type="search"
@@ -137,16 +201,20 @@ export default function MembersManager({ initialMembers, allTags, initialSearch 
           placeholder="Rechercher (nom, email, téléphone)…"
           className="flex-1 min-w-[200px] border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
         />
-        <select
-          value={tagFilter}
-          onChange={(e) => setTagFilter(e.target.value)}
-          className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
-        >
-          <option value="">Tous les tags</option>
-          {allTags.map((t) => (
-            <option key={t} value={t}>{t}</option>
-          ))}
-        </select>
+        <label htmlFor="members-tag-filter" className="text-sm text-gray-600">
+          Étiquette
+          <select
+            id="members-tag-filter"
+            value={tagFilter}
+            onChange={(e) => setTagFilter(e.target.value)}
+            className="ml-1.5 border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+          >
+            <option value="">Tous les tags</option>
+            {allTags.map((t) => (
+              <option key={t} value={t}>{t}</option>
+            ))}
+          </select>
+        </label>
         <label className="text-sm text-gray-600 flex items-center gap-1.5">
           <input type="checkbox" checked={showInactive} onChange={(e) => setShowInactive(e.target.checked)} />
           Inclure inactifs
@@ -190,8 +258,13 @@ export default function MembersManager({ initialMembers, allTags, initialSearch 
       ) : (
         <>
         <div role="status" aria-live="polite" className="sr-only">{sortAnnouncement}</div>
-        <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-          <table aria-label="Liste des membres" className="w-full text-sm">
+        {/* overflow-x-auto, not overflow-hidden (#557): two more columns made the table wider than
+            some viewports; scrolling keeps every control on one line instead of squeezing them
+            into wrapped, overlapping hit areas. tabIndex/role/aria-label: the scroll region itself
+            is reachable and named for keyboard and screen-reader users (same pattern as the
+            outbox table, settings/notifications). */}
+        <div role="region" aria-label="Liste des membres" tabIndex={0} className="bg-white border border-gray-200 rounded-xl overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+          <table aria-label="Liste des membres" className="w-full text-sm min-w-[64rem]">
             <thead className="bg-gray-50 text-xs text-gray-500">
               <tr>
                 <SortTh col="firstName" label="Prénom" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
@@ -199,6 +272,8 @@ export default function MembersManager({ initialMembers, allTags, initialSearch 
                 <th scope="col" className="text-left px-4 py-2 font-medium">Contact</th>
                 <th scope="col" className="text-left px-4 py-2 font-medium">Tags</th>
                 <SortTh col="hoursTotal" label="Heures planifiées" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
+                <SortTh col="hoursAttested" label="Heures attestées" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
+                <SortTh col="lastShiftDate" label="Dernière participation" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <th scope="col" className="text-right px-4 py-2 font-medium">
                   <span className="sr-only">Actions</span>
                 </th>
@@ -230,17 +305,33 @@ export default function MembersManager({ initialMembers, allTags, initialSearch 
                   <td className="px-4 py-3 text-gray-600">
                     {m.hoursTotal > 0 ? fmtHours(m.hoursTotal) : <span className="text-gray-500">—</span>}
                   </td>
-                  <td className="px-4 py-3 text-right space-x-3">
+                  <td className="px-4 py-3 text-gray-600">
+                    {m.hoursAttested > 0 ? fmtHours(m.hoursAttested) : <span className="text-gray-500">—</span>}
+                  </td>
+                  <td className="px-4 py-3 text-gray-600">
+                    {m.lastShiftDate ? (
+                      <>
+                        <div>{fmtDay(m.lastShiftDate)}</div>
+                        <div className="text-xs text-gray-500">
+                          {m.lastPresenceDate ? `Présence le ${fmtDay(m.lastPresenceDate)}` : "Aucune présence saisie"}
+                        </div>
+                      </>
+                    ) : (
+                      <span className="text-gray-500">—</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-right space-x-1 whitespace-nowrap">
+                    {/* min-h-6 (24px, #557 axe target-size): the hit area meets the minimum regardless of the small label text. whitespace-nowrap on the cell (the table now scrolls, see above) keeps the three controls on one line instead of wrapping into overlapping hit areas. */}
                     <Link
                       href={`/admin/members/${m.id}`}
-                      className="text-xs text-gray-700 hover:text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                      className="inline-flex items-center justify-center min-h-6 px-1.5 text-xs text-gray-700 hover:text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                     >
                       Activité{" "}<span className="sr-only">de {m.firstName} {m.lastName}</span>
                     </Link>
                     <button
                       onClick={() => setEditingMember(m)}
                       aria-label={`Éditer ${m.firstName} ${m.lastName}`}
-                      className="text-xs text-gray-500 hover:text-blue-600"
+                      className="inline-flex items-center justify-center min-h-6 px-1.5 text-xs text-gray-500 hover:text-blue-600"
                     >
                       Éditer
                     </button>
@@ -248,7 +339,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch 
                       <button
                         onClick={() => deactivate(m.id, `${m.firstName} ${m.lastName}`)}
                         aria-label={`Désactiver ${m.firstName} ${m.lastName}`}
-                        className="text-xs text-gray-500 hover:text-red-600"
+                        className="inline-flex items-center justify-center min-h-6 px-1.5 text-xs text-gray-500 hover:text-red-600"
                       >
                         Désactiver
                       </button>

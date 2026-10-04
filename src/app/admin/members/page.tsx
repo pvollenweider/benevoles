@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import MembersManager from "@/components/admin/MembersManager"
-import { plannedHours } from "@/lib/planned-hours"
+import { defaultPeriod, lastParticipation, localToday, pastEntries, splitMinutes, volunteerHourEntries } from "@/lib/volunteer-hours"
 import { orgTimeZone } from "@/lib/time-zone"
 import { SEARCH_MAX_LENGTH } from "@/lib/admin-search"
 
@@ -18,13 +18,20 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
     db.volunteer.findMany({
       orderBy: [{ active: "desc" }, { lastName: "asc" }, { firstName: "asc" }],
       include: {
-        // Active registrations only: a cancelled or still-pending (waiting/offered/requested)
-        // shift isn't planned. Planned time, not time worked (#571): future shifts and no-shows
-        // count. Across every event of the org, not one at a time: this is an
-        // admin-only recognition figure ("who's given the org the most time"), deliberately kept
-        // off the volunteer-facing PDF export where a per-event ranking would read as a
-        // competition between people who showed up to help.
-        registrations: { where: { status: "active" }, select: { status: true, shift: { select: { date: true, startTime: true, endTime: true } } } },
+        // Active registrations on a shift that was never cancelled only (#557, same rule as the
+        // certificate, #556) — one query for every member, then pure aggregation below, so this
+        // page stays one round trip regardless of how many registrations an org has. Across every
+        // event of the org, not one at a time: this is an admin-only recognition figure ("who's
+        // given the org the most time"), deliberately kept off the volunteer-facing PDF export
+        // where a per-event ranking would read as a competition between people who showed up to help.
+        registrations: {
+          where: { status: "active" },
+          select: {
+            id: true, status: true, checkedInAt: true,
+            shift: { select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, status: true } },
+            event: { select: { id: true, title: true } },
+          },
+        },
       },
     }),
     db.volunteer.findMany({ select: { tags: true } }).then((rows) => {
@@ -35,24 +42,39 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
     db.organization.findUnique({ where: { id: ctx.organizationId }, select: { timeZone: true } }),
   ])
   const timeZone = orgTimeZone(org)
+  const today = localToday(new Date(), timeZone)
 
   return (
     <MembersManager
-      initialMembers={volunteers.map((v) => ({
-        id: v.id,
-        firstName: v.firstName,
-        lastName: v.lastName,
-        email: v.email,
-        phone: v.phone,
-        tags: v.tags,
-        active: v.active,
-        notes: v.notes,
-        availabilityPeriods: v.availabilityPeriods,
-        availabilityNote: v.availabilityNote,
-        hoursTotal: plannedHours(v.registrations, timeZone),
-      }))}
+      initialMembers={volunteers.map((v) => {
+        const entries = volunteerHourEntries(v.registrations, timeZone)
+        const past = pastEntries(entries, today)
+        // « Heures planifiées » (#557): past confirmed shifts only, real local instants — distinct
+        // from « Heures attestées » (a recorded presence among those same past shifts); the two
+        // never overlap. A future confirmed shift isn't "planned hours given" yet, it just hasn't
+        // happened (the bug tracked separately as #571, fixed here by scoping to the past).
+        const { plannedMinutes, attestedMinutes } = splitMinutes(past)
+        const { lastShiftDate, lastPresenceDate } = lastParticipation(past)
+        return {
+          id: v.id,
+          firstName: v.firstName,
+          lastName: v.lastName,
+          email: v.email,
+          phone: v.phone,
+          tags: v.tags,
+          active: v.active,
+          notes: v.notes,
+          availabilityPeriods: v.availabilityPeriods,
+          availabilityNote: v.availabilityNote,
+          hoursTotal: plannedMinutes / 60,
+          hoursAttested: attestedMinutes / 60,
+          lastShiftDate,
+          lastPresenceDate,
+        }
+      })}
       allTags={allTags}
       initialSearch={initialSearch}
+      defaultHoursPeriod={defaultPeriod(new Date(), timeZone)}
     />
   )
 }

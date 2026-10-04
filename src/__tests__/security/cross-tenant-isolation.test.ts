@@ -512,6 +512,15 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(prismaMock.volunteer.findFirst).not.toHaveBeenCalled()
   })
 
+  it("GET /api/admin/members/export-hours reads members through the scoped client only (#557)", async () => {
+    const { GET } = await import("@/app/api/admin/members/export-hours/route")
+    const db = setupGuard({ volunteer: { findMany: vi.fn().mockResolvedValue([]) } })
+    const res = await GET(makeRequest("/api/admin/members/export-hours"))
+    expect(res.status).toBe(200)
+    expect(db.volunteer.findMany).toHaveBeenCalledOnce()
+    expect(prismaMock.volunteer.findFirst).not.toHaveBeenCalled()
+  })
+
   it("POST /api/admin/shifts/[id]/duplicate returns 404 for org-B shift, creating nothing", async () => {
     const { POST } = await import("@/app/api/admin/shifts/[id]/duplicate/route")
     const db = setupGuard() // shift.findFirst → null

@@ -74,6 +74,7 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "members/[id]": { PATCH: "organizer", DELETE: "organizer" },
   "members/[id]/certificate": { POST: "organizer" },
   "members/export": { GET: "organizer" },
+  "members/export-hours": { GET: "organizer" },
   "members/import": { POST: "organizer" },
   "members/import/preview": { POST: "organizer" },
   "registrations": { POST: "organizer" },
