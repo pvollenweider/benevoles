@@ -151,6 +151,11 @@ function mockScopedDb(overrides: DbOverrides = {}) {
       findUnique: vi.fn().mockResolvedValue({ id: ORG_A, name: "Org A" }),
       findFirst: vi.fn().mockResolvedValue({ id: ORG_A, name: "Org A" }),
     },
+    duplicateDismissal: {
+      findMany: vi.fn().mockResolvedValue([]),
+      upsert: vi.fn().mockResolvedValue({ id: "dismissal-a" }),
+      ...((overrides.duplicateDismissal as object) ?? {}),
+    },
   }
 }
 
@@ -422,6 +427,51 @@ describe("Members — cross-tenant isolation", () => {
 
     const res = await POST(makeRequest("/api/admin/members/mem-a/merge", "POST", { otherId: "mem-b" }), params("mem-a"))
     expect(res.status).toBe(404)
+  })
+
+  it("POST /api/admin/members/duplicates/dismiss returns 404 when either member belongs to another organization (#601)", async () => {
+    const { POST } = await import("@/app/api/admin/members/duplicates/dismiss/route")
+    setupGuard({
+      volunteer: { findFirst: vi.fn().mockResolvedValueOnce({ id: "mem-a" }).mockResolvedValueOnce(null) }, // mem-b: org-B
+      duplicateDismissal: { upsert: vi.fn() },
+    })
+
+    const res = await POST(
+      makeRequest("/api/admin/members/duplicates/dismiss", "POST", { volunteerIdA: "mem-a", volunteerIdB: "mem-b", signals: ["name"] }),
+    )
+    expect(res.status).toBe(404)
+  })
+
+  it("POST /api/admin/members/duplicates/dismiss stores the dismissal through the org-scoped db for two org-A members", async () => {
+    const { POST } = await import("@/app/api/admin/members/duplicates/dismiss/route")
+    const db = setupGuard({
+      volunteer: { findFirst: vi.fn().mockResolvedValue({ id: "mem-a" }) },
+      duplicateDismissal: { upsert: vi.fn().mockResolvedValue({ id: "dismissal-1" }) },
+    })
+
+    const res = await POST(
+      makeRequest("/api/admin/members/duplicates/dismiss", "POST", { volunteerIdA: "mem-a", volunteerIdB: "mem-b", signals: ["name"] }),
+    )
+    expect(res.status).toBe(200)
+    expect(db.duplicateDismissal.upsert).toHaveBeenCalledOnce()
+  })
+
+  it("loadDuplicatePairs (#601) reads only through the org-scoped volunteer/duplicateDismissal delegates", async () => {
+    const { loadDuplicatePairs } = await import("@/lib/member-duplicates-data")
+    const db = setupGuard({
+      volunteer: {
+        findMany: vi.fn().mockResolvedValue([
+          { id: "mem-a", firstName: "Jean", lastName: "Dupont", email: null, phone: null, birthDate: null, active: true, mergedIntoId: null },
+          { id: "mem-b", firstName: "Jean", lastName: "Dupont", email: null, phone: null, birthDate: null, active: true, mergedIntoId: null },
+        ]),
+      },
+      duplicateDismissal: { findMany: vi.fn().mockResolvedValue([]) },
+    })
+
+    const pairs = await loadDuplicatePairs(db, ORG_A)
+    expect(pairs).toHaveLength(1)
+    expect(db.volunteer.findMany).toHaveBeenCalledOnce()
+    expect(db.duplicateDismissal.findMany).toHaveBeenCalledOnce()
   })
 })
 

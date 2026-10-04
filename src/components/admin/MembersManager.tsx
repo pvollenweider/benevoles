@@ -28,13 +28,15 @@ type Props = {
   initialEditId?: string
   /** Default "from"/"to" for the "Heures par bénévole" export form (#557), from volunteer-hours.ts's defaultPeriod. */
   defaultHoursPeriod: { from: string; to: string }
+  /** Possible-duplicate pairs still suggested (#601), computed server-side (member-duplicates-data.ts). */
+  duplicatesCount?: number
 }
 
 /** "2026-05-02" → "2 mai 2026", for the last-participation column (#557) and the address status date (#599). */
 const fmtDay = (iso: string) => new Date(`${iso}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", day: "numeric", month: "long", year: "numeric" })
 const fmtDate = (d: Date) => d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
 
-export default function MembersManager({ initialMembers, allTags, initialSearch, initialAddressToVerify, initialEditId, defaultHoursPeriod }: Props) {
+export default function MembersManager({ initialMembers, allTags, initialSearch, initialAddressToVerify, initialEditId, defaultHoursPeriod, duplicatesCount = 0 }: Props) {
   const router = useRouter()
   const members = initialMembers
   const [search, setSearch] = useState(initialSearch ?? "")
@@ -149,11 +151,10 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
     setPendingDeactivate({ id, name })
   }
 
-  // « Chercher un doublon » (#599): no automatic detection yet (#601), just a manual search
-  // prefilled with the member's name, in the same list — nothing to fetch, nothing to navigate to.
-  function searchForDuplicate(name: string) {
-    setAddressToVerify(false)
-    setSearch(name)
+  // « Doublon ? » (#599): opens the « Doublons possibles » view (#601) prefiltered to this
+  // member's own pairs, rather than the plain name search it used to fall back to before #601.
+  function searchForDuplicate(memberId: string) {
+    router.push(`/admin/members/duplicates?member=${memberId}`)
   }
 
   function startEditing(m: Member) {
@@ -208,6 +209,14 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
           <p className="text-sm text-gray-500">{members.length} membre{members.length > 1 ? "s" : ""}</p>
         </div>
         <div className="flex gap-2 flex-wrap">
+          {duplicatesCount > 0 && (
+            <Link
+              href="/admin/members/duplicates"
+              className="text-sm border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            >
+              Doublons possibles ({duplicatesCount})
+            </Link>
+          )}
           <a
             href="/api/admin/members/export"
             download
@@ -452,8 +461,8 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                     </button>
                     {m.addressStatus.kind === "to_verify" && (
                       <button
-                        onClick={() => searchForDuplicate(`${m.firstName} ${m.lastName}`)}
-                        aria-label={`Doublon ? Chercher un doublon pour ${m.firstName} ${m.lastName}`}
+                        onClick={() => searchForDuplicate(m.id)}
+                        aria-label={`Doublon ? Voir les doublons possibles de ${m.firstName} ${m.lastName}`}
                         className="inline-flex items-center justify-center min-h-6 px-1.5 text-xs text-gray-500 hover:text-blue-600"
                       >
                         Doublon ?

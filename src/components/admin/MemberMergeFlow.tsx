@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useLayoutEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import Link from "next/link"
 import ModalShell from "./ModalShell"
 import { announce } from "@/lib/announce"
@@ -85,7 +85,7 @@ function resultsSentence(count: number): string {
 
 const RADIO_ROW = "flex items-center gap-2 min-h-6 py-1 text-sm text-gray-800"
 
-export default function MemberMergeFlow({ member }: { member: MemberLite }) {
+export default function MemberMergeFlow({ member, initialOther }: { member: MemberLite; initialOther?: MemberLite }) {
   const [step, setStep] = useState<"pick" | "preview" | "result">("pick")
   const [query, setQuery] = useState("")
   const [results, setResults] = useState<SearchRow[] | null>(null)
@@ -128,11 +128,27 @@ export default function MemberMergeFlow({ member }: { member: MemberLite }) {
     }
   }
 
-  async function pick(candidate: SearchRow) {
+  async function pick(candidate: MemberLite) {
     setOther(candidate)
     setChoices(emptyChoices())
     await loadPreview(candidate, emptyChoices(), { initial: true })
   }
+
+  // `?with=<otherId>` (#601, from a « Doublons possibles » pair): the server page already
+  // validated the candidate (same organization, not a tombstone, not `member` itself) before
+  // passing it in, so this starts the flow exactly where picking it by hand would have — same
+  // preview-heading focus and single announcement, see `pick`/`loadPreview` above. Runs once.
+  const initialOtherHandledRef = useRef(false)
+  useEffect(() => {
+    if (initialOther && !initialOtherHandledRef.current) {
+      initialOtherHandledRef.current = true
+      void pick(initialOther)
+    }
+    // Runs once on mount (guarded by the ref above) for the `initialOther` this render started
+    // with; `pick` itself is intentionally not a dependency, it would re-run the effect every
+    // render otherwise since it's redefined each time.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialOther?.id])
 
   async function loadPreview(otherMember: MemberLite, c: Choices, opts: { initial?: boolean } = {}) {
     setLoading(true)

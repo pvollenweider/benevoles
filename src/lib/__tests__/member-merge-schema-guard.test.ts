@@ -23,6 +23,7 @@ const HANDLED_BY_MERGE_PLAN = new Set(["Registration", "MemberInvite", "Question
  * "References without a foreign key" table). */
 const OUT_OF_SCOPE: Record<string, string> = {
   SectorLeader: "matched by email (case-insensitive), not volunteerId — reported in the preview, not moved",
+  DuplicateDismissal: "pair-specific (#601): cascade-deleted with either member, never reassigned by a merge; a merged record is excluded from duplicate suggestions entirely (mergedIntoId), so its dismissals simply stop mattering",
 }
 
 describe("member merge — schema guard (#600)", () => {

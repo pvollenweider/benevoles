@@ -18,13 +18,27 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return { title: m ? `Fusionner ${m.firstName} ${m.lastName}` : "Fusionner un membre" }
 }
 
-/** Entry point for a member merge (#600): owner only, irreversible. */
-export default async function MemberMergePage({ params }: { params: Promise<{ id: string }> }) {
+/** Entry point for a member merge (#600): owner only, irreversible. `?with=<otherId>` (#601, from
+ * a « Doublons possibles » pair) preselects the second record so the flow starts at the preview —
+ * validated here (same organization via the org-scoped `db`, not a tombstone, not `member` itself)
+ * rather than trusted from the URL; an invalid or missing value just falls back to the picker. */
+export default async function MemberMergePage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ with?: string | string[] }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { id } = await params
   const member = await ctx.db.volunteer.findFirst({ where: { id }, select: { id: true, firstName: true, lastName: true, email: true } })
   if (!member) notFound()
+
+  const { with: withParam } = await searchParams
+  const otherId = (Array.isArray(withParam) ? withParam[0] : withParam) || undefined
+  let initialOther: { id: string; firstName: string; lastName: string; email: string | null } | undefined
+  if (otherId && otherId !== member.id) {
+    const candidate = await ctx.db.volunteer.findFirst({
+      where: { id: otherId, mergedIntoId: null },
+      select: { id: true, firstName: true, lastName: true, email: true },
+    })
+    if (candidate) initialOther = candidate
+  }
 
   if (!hasLevel(ctx.session.user?.role, "owner")) {
     return (
@@ -44,7 +58,7 @@ export default async function MemberMergePage({ params }: { params: Promise<{ id
         <span aria-hidden="true">← </span>Retour à la fiche
       </Link>
       <h1 className="text-2xl font-bold text-gray-900">Fusionner {member.firstName} {member.lastName}</h1>
-      <MemberMergeFlow member={member} />
+      <MemberMergeFlow member={member} initialOther={initialOther} />
     </div>
   )
 }

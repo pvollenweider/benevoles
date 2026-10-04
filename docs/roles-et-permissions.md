@@ -86,6 +86,8 @@ Routes réservées aux propriétaires (le reste de `PERMISSIONS` est ouvert aux 
 
 Fusionner deux fiches membre (#600) est irréversible et touche potentiellement tout l'historique de l'organisation : réservé aux propriétaires, comme la suppression définitive d'un événement. Un organisateur voit `members/[id]/merge-preview` et `members/[id]/merge` répondre 403 (`src/__tests__/security/role-permissions.test.ts`) et la page `/admin/members/[id]/merge` affiche un message au lieu du formulaire.
 
+Les doublons possibles (#601, `members/duplicates/dismiss`) ne sont que des suggestions : voir la liste et ignorer une paire restent ouverts aux organisateurs, avec `requireOrgSession()` (niveau organisateur) comme le reste de la page Membres. Seul le lien **Comparer et fusionner** qu'une paire propose redirige vers la fusion elle-même (`members/[id]/merge`), réservée aux propriétaires comme ci-dessus.
+
 Tests : `src/lib/__tests__/permissions.test.ts` (chaque route et méthode classée, avec `requireOrgSession("owner")` ou `requireOrgSession()` selon le niveau) et `src/__tests__/security/role-permissions.test.ts` (403 à un organisateur, aucune lecture en base). `accept-invite` est hors matrice (`PUBLIC_ADMIN_ROUTES`).
 
 Un admin crée et gère les événements de sa propre organisation. Il peut archiver un événement ; un propriétaire peut ensuite le supprimer définitivement : la suppression est refusée (409) tant que l'événement n'est pas archivé, et exige la saisie du titre.

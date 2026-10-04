@@ -88,6 +88,17 @@ describe("MemberMergeFlow", () => {
     await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Aperçu de la fusion avec Jean Dupont."))
   })
 
+  it("starts directly at the preview when an initialOther is passed (#601, from a Doublons possibles pair), same focus and a single announcement", async () => {
+    mockFetch()
+    render(<MemberMergeFlow member={KEEP} initialOther={{ id: ABSORB.id, firstName: ABSORB.firstName, lastName: ABSORB.lastName, email: ABSORB.email }} />)
+
+    // No manual search/pick: the preview step is reached straight away.
+    const heading = await screen.findByRole("heading", { name: "Aperçu de la fusion avec Jean Dupont" })
+    expect(screen.queryByRole("heading", { name: "Choisir la fiche à absorber" })).not.toBeInTheDocument()
+    await waitFor(() => expect(heading).toHaveFocus())
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Aperçu de la fusion avec Jean Dupont."))
+  })
+
   it("announces zero results distinctly", async () => {
     const fetchMock = vi.fn(async (url: string) => {
       if (url.startsWith("/api/admin/members?q=")) return jsonResponse([])
