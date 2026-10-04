@@ -33,15 +33,15 @@ export default function ExploreList({
           <div className="flex items-start justify-between gap-3 flex-wrap">
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap mb-1">
-                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${baseline ? "bg-gray-100 text-gray-500" : entityBadgeClass(entry.entityType)}`}>
+                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${baseline ? "bg-gray-100 text-gray-700" : entityBadgeClass(entry.entityType)}`}>
                   {ENTITY_LABELS[entry.entityType] ?? entry.entityType}
                 </span>
                 {baseline && (
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
                     Généré, pas une action réelle
                   </span>
                 )}
-                <span className="text-xs text-gray-400">{fmtDateTime(entry.createdAt)}</span>
+                <span className="text-xs text-gray-600">{fmtDateTime(entry.createdAt)}</span>
               </div>
               <p className={`text-sm ${baseline ? "text-gray-500 italic" : "text-gray-800"}`}>{describeEntry(entry, shiftLabels)}</p>
               {entry.changes && (

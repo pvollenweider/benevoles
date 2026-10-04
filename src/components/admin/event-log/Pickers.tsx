@@ -45,7 +45,7 @@ export function ReplayPicker({ eventId, onPick }: { eventId: string; onPick: (c:
           className="w-full text-left bg-white border border-gray-200 rounded-xl p-3 hover:border-blue-200 hover:bg-blue-50/50 transition-colors flex items-center justify-between gap-3"
         >
           <span className="text-sm text-gray-800">{c.label}</span>
-          <span className="text-xs text-gray-400 flex-shrink-0">{c.count} entrées</span>
+          <span className="text-xs text-gray-600 flex-shrink-0">{c.count} entrées</span>
         </button>
       ))}
     </div>

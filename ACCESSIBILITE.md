@@ -2,7 +2,7 @@
 
 benevol.app vise le niveau **AA des WCAG 2.2**. Cette page dit ce qui a été vérifié, comment, et ce qui ne l'est pas encore.
 
-Déclaration établie le 3 octobre 2026, sur la base d'une auto-évaluation à la même date.
+Déclaration établie le 4 octobre 2026, sur la base d'une auto-évaluation à la même date.
 
 ## Périmètre
 
@@ -32,7 +32,6 @@ Parcours concernés : découvrir un événement ; choisir ses créneaux ; rempli
 
 ## Limites connues
 
-- Dans l'**administration**, les dates et les compteurs du journal d'un événement ont un contraste insuffisant. Le message qui confirme l'enregistrement d'un événement, ou qui signale un échec, a lui aussi un contraste insuffisant, disparaît au bout de deux secondes et demie et n'est pas annoncé par les lecteurs d'écran : une personne qui ne voit pas l'écran ne sait pas si sa modification a été enregistrée (critères 1.4.3 et 4.1.3).
 - Le **planning** d'une journée est une chronologie horizontale : sur un petit écran, il faut la faire défiler latéralement. Chaque créneau reste un bouton nommé en toutes lettres (poste, heures, et selon le cas places, conditions ou état de l'inscription).
 - Le **planning**, les **feuilles** et les **badges** à imprimer sont des pages HTML, pas encore analysées par les tests automatiques. Un PDF enregistré depuis le navigateur n'est balisé pour les lecteurs d'écran que si le navigateur le fait. Les présences s'exportent aussi en CSV.
 - Le lien **Voir sur la carte** ouvre OpenStreetMap, un service externe dont nous ne maîtrisons pas l'accessibilité.
