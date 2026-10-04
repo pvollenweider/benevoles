@@ -93,35 +93,48 @@ db-studio: ## Ouvre Prisma Studio (http://localhost:5555)
 #   make e2e                                    # relances suivantes (stack déjà up)
 #   make e2e-down                                # arrête tout (état perdu, pas de volume)
 
-e2e-up: ## Démarre postgres + mailpit e2e (docker-compose.e2e.yml)
-	docker compose -f docker-compose.e2e.yml up -d
-	@echo "→ Attente de PostgreSQL (e2e)…"
-	@until docker exec benevoles_postgres_e2e pg_isready -U benevoles >/dev/null 2>&1; do sleep 0.5; done
+# Pile e2e isolée par dossier de travail (#581) : E2E_SLOT=N (0 à 9) donne ses propres ports
+# (3100+10N, 5433+10N, 1026+10N, 8026+10N), son projet compose et ses containers. Sans E2E_SLOT :
+# la pile historique (slot 0), celle de la CI.
+E2E_SLOT ?= 0
+E2E_VARS := $(shell node scripts/e2e-slot.mjs $(E2E_SLOT))
+$(foreach v,$(E2E_VARS),$(eval export $(v)))
+E2E_ENV_FILE := $(if $(filter 0,$(E2E_SLOT)),.env.e2e,.env.e2e.$(E2E_SLOT))
 
-e2e-down: ## Stoppe la stack e2e
+e2e-up: ## Démarre postgres + mailpit e2e (docker-compose.e2e.yml ; E2E_SLOT=N pour une pile isolée)
+	docker compose -f docker-compose.e2e.yml up -d
+	@echo "→ Attente de PostgreSQL (e2e, slot $(E2E_SLOT))…"
+	@until docker exec $(E2E_PG_CONTAINER) pg_isready -U benevoles >/dev/null 2>&1; do sleep 0.5; done
+
+e2e-down: ## Stoppe la stack e2e (celle du slot E2E_SLOT)
 	docker compose -f docker-compose.e2e.yml down
 
-e2e-setup: ## Crée .env.e2e si absent, migre + seed la DB e2e
-	@if [ ! -f .env.e2e ]; then \
-		echo "→ Copie e2e/e2e.env.example → .env.e2e"; \
-		cp e2e/e2e.env.example .env.e2e; \
+e2e-setup: ## Crée .env.e2e (ou .env.e2e.N) si absent, migre + seed la DB e2e
+	@if [ ! -f $(E2E_ENV_FILE) ]; then \
+		echo "→ Copie e2e/e2e.env.example → $(E2E_ENV_FILE)"; \
+		cp e2e/e2e.env.example $(E2E_ENV_FILE); \
+		node scripts/e2e-slot.mjs $(E2E_SLOT) --env | while IFS='=' read -r k v; do \
+			grep -v "^$$k=" $(E2E_ENV_FILE) > $(E2E_ENV_FILE).tmp; mv $(E2E_ENV_FILE).tmp $(E2E_ENV_FILE); \
+			echo "$$k=\"$$v\"" >> $(E2E_ENV_FILE); \
+		done; \
 	fi
-	@if ! grep -q '^AUTH_SECRET=".\+"' .env.e2e; then \
+	@if ! grep -q '^AUTH_SECRET=".\+"' $(E2E_ENV_FILE); then \
 		SECRET=$$(openssl rand -base64 48 | tr -d '\n='); \
 		if [ "$$(uname)" = "Darwin" ]; then \
-			sed -i '' "s|^AUTH_SECRET=.*|AUTH_SECRET=\"$$SECRET\"|" .env.e2e; \
+			sed -i '' "s|^AUTH_SECRET=.*|AUTH_SECRET=\"$$SECRET\"|" $(E2E_ENV_FILE); \
 		else \
-			sed -i "s|^AUTH_SECRET=.*|AUTH_SECRET=\"$$SECRET\"|" .env.e2e; \
+			sed -i "s|^AUTH_SECRET=.*|AUTH_SECRET=\"$$SECRET\"|" $(E2E_ENV_FILE); \
 		fi; \
 		echo "→ AUTH_SECRET (e2e) généré"; \
 	fi
-	node --env-file=.env.e2e node_modules/.bin/prisma generate
-	node --env-file=.env.e2e node_modules/.bin/prisma migrate deploy
-	node --env-file=.env.e2e node_modules/.bin/prisma db seed
+	node --env-file=$(E2E_ENV_FILE) node_modules/.bin/prisma generate
+	node --env-file=$(E2E_ENV_FILE) node_modules/.bin/prisma migrate deploy
+	node --env-file=$(E2E_ENV_FILE) node_modules/.bin/prisma db seed
 	npx playwright install --with-deps chromium
 
-e2e: ## Lance les tests Playwright (stack e2e déjà up + seedée)
-	node --env-file=.env.e2e node_modules/.bin/playwright test
+e2e: ## Lance les tests Playwright (stack e2e déjà up + seedée ; ne réutilise pas le serveur d'un autre dossier)
+	node scripts/e2e-port-guard.mjs $(E2E_PORT)
+	node --env-file=$(E2E_ENV_FILE) node_modules/.bin/playwright test
 
 # ── Qualité ──────────────────────────────────────────────────────────────────
 
