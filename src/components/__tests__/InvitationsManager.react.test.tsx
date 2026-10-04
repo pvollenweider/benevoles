@@ -53,6 +53,14 @@ describe("InvitationsManager — filter by state (#558)", () => {
     expect(screen.getByRole("button", { name: "Sans réponse : 1" })).toBeInTheDocument()
   })
 
+  it("the chosen filter stays distinct in forced colours, where the ring vanishes", () => {
+    render(<InvitationsManager eventId="evt-1" members={[]} allTags={[]} invites={invites} />)
+    expect(screen.getByRole("button", { name: "Invités : 3" })).toHaveClass(
+      "forced-colors:aria-pressed:bg-[Highlight]",
+      "forced-colors:aria-pressed:text-[HighlightText]",
+    )
+  })
+
   it("clicking a card filters the table and announces the result, not on first render", () => {
     render(<InvitationsManager eventId="evt-1" members={[]} allTags={[]} invites={invites} />)
     const status = document.getElementById("invitations-filter-status")!

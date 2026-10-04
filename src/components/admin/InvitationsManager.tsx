@@ -511,7 +511,7 @@ function StatCard({ label, value, positive, warning, muted, active, onClick }: {
       // visual stack (count first, label below it): the visible text alone stays label-in-name
       // only incidentally, so the name is set explicitly and the visible text hidden from AT.
       aria-label={`${label} : ${value}`}
-      className={`rounded-xl border p-4 text-center transition-colors motion-safe:duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${color} ${active ? "ring-2 ring-blue-600 ring-offset-1" : ""}`}
+      className={`rounded-xl border p-4 text-center transition-colors motion-safe:duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:aria-pressed:bg-[Highlight] forced-colors:aria-pressed:text-[HighlightText] ${color} ${active ? "ring-2 ring-blue-600 ring-offset-1" : ""}`}
     >
       <p aria-hidden="true" className="text-2xl font-bold">{value}</p>
       <p aria-hidden="true" className="text-xs mt-1 opacity-70">{label}</p>

@@ -87,6 +87,12 @@ test("declines an invitation in two steps, then shows up as « Pas disponible »
   await page.goto(`/admin/events/${event.id}/invitations`)
   await expect(page.locator("table").getByText("Pas disponible", { exact: true })).toBeVisible()
 
-  await page.getByRole("button", { name: /Sans réponse/ }).click()
-  await expect(page.getByText("Aucun invité dans ce filtre.")).toBeVisible()
+  // The filter is client state: a click before hydration would be lost.
+  const noAnswer = page.getByRole("button", { name: /Sans réponse/ })
+  await waitForHydration(noAnswer)
+  await noAnswer.click()
+  await expect(noAnswer).toHaveAttribute("aria-pressed", "true")
+  await expect(page.getByText(/^Aucun invité dans ce filtre\. Voir tout le monde/)).toBeVisible()
+  // The same result is voiced through the status region.
+  await expect(page.getByRole("status").filter({ hasText: "Aucun invité dans ce filtre." })).toHaveText("Aucun invité dans ce filtre.")
 })
