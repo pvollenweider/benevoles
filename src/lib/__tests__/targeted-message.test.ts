@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { audienceFromQuery, audienceLabel, messageSchema, selectRecipients, type RecipientRegistration } from "../targeted-message"
+import { audienceFromQuery, audienceLabel, countDeclinedExcluded, messageSchema, selectInvitedWithoutShift, selectRecipients, type RecipientRegistration } from "../targeted-message"
 
 const reg = (id: string, over: Partial<RecipientRegistration> & { volunteerId: string; shiftId: string }): RecipientRegistration => ({
   status: "active",
@@ -43,6 +43,41 @@ describe("messageSchema", () => {
     expect(messageSchema.safeParse({ audience: { kind: "shift" }, subject: "Info", message: "x" }).success).toBe(false)
     const ok = messageSchema.safeParse({ audience: { kind: "role", roleName: "Bar" }, subject: " Info ", message: " Venez tôt ", dryRun: true })
     expect(ok.success && ok.data.subject).toBe("Info")
+  })
+})
+
+describe("selectInvitedWithoutShift — declines excluded (#558)", () => {
+  const invite = (volunteerId: string, over: Partial<{ sentAt: Date; declinedAt: Date | null; volunteer: { email: string | null } }> = {}) => ({
+    volunteerId,
+    sentAt: new Date("2026-01-01"),
+    declinedAt: null,
+    volunteer: { email: `${volunteerId}@x.ch` },
+    ...over,
+  })
+
+  it("leaves out people who declined, keeps the others without a confirmed shift", () => {
+    const invites = [
+      invite("alice"),
+      invite("bob", { declinedAt: new Date("2026-01-02") }),
+      invite("carla"),
+    ]
+    const result = selectInvitedWithoutShift(invites, [])
+    expect(result.map((r) => r.volunteerId)).toEqual(["alice", "carla"])
+  })
+
+  it("a declined invite with a later active registration (change of mind by an admin) is still excluded by the decline alone, but registered people are excluded first regardless", () => {
+    const invites = [invite("bob", { declinedAt: new Date("2026-01-02") })]
+    const result = selectInvitedWithoutShift(invites, [{ volunteerId: "bob", status: "active" }])
+    expect(result).toHaveLength(0)
+  })
+
+  it("countDeclinedExcluded counts only declined people without an active registration", () => {
+    const invites = [
+      invite("alice"),
+      invite("bob", { declinedAt: new Date("2026-01-02") }),
+      invite("dan", { declinedAt: new Date("2026-01-02") }),
+    ]
+    expect(countDeclinedExcluded(invites, [{ volunteerId: "dan", status: "active" }])).toBe(1)
   })
 })
 

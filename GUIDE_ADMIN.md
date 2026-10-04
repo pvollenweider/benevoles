@@ -51,7 +51,7 @@ En haut, **Ce qui demande votre attention** liste, du plus urgent au moins urgen
 - demandes d'inscription à accepter ou refuser, sur les créneaux sur validation (urgent) ;
 - places proposées en liste d'attente qui expirent dans les 12 heures sans réponse ;
 - jalons en retard ;
-- personnes invitées il y a plus de 3 jours qui n'ont encore aucun créneau confirmé (avec un lien pour leur écrire) ;
+- personnes invitées il y a plus de 3 jours qui n'ont encore aucun créneau confirmé ni répondu ne pas être disponibles (avec un lien pour leur écrire) ;
 - postes sans responsable de secteur, quand l'événement en a déjà d'autres ;
 - bénévoles avec une charge élevée (plus de 8 h dans la journée, ou plus de 6 h d'affilée sans vraie pause) ;
 - événement qui commence dans la semaine ;
@@ -472,17 +472,22 @@ Chaque membre reçoit un email avec un lien unique qui pré-remplit son prénom,
 
 ### Suivre l'état des invitations
 
-Le tableau affiche pour chaque membre invité :
+Le tableau affiche pour chaque membre invité l'un de trois statuts :
 - **✓ Participation confirmée**
-- **Sans créneau confirmé**
+- **Pas disponible** : la personne a répondu depuis son lien d'invitation qu'elle ne pouvait pas venir cette fois (voir ci-dessous)
+- **Sans réponse** : ni inscription confirmée, ni réponse
 
-Les compteurs en haut récapitulent : **Invités** · **Inscrits** · **Sans créneau confirmé**.
+Les compteurs en haut récapitulent : **Invités**, **Inscrits**, **Pas disponible** et **Sans réponse** — ils s'additionnent toujours au nombre d'invités. Cliquer sur un compteur filtre le tableau sur cet état ; cliquer sur **Invités** l'efface.
 
 **Tester l'envoi d'email** envoie un exemple de l'email d'invitation à l'adresse de votre choix, pour vérifier le rendu avant d'inviter.
 
-### Relancer les invités sans créneau
+### Pas disponible
 
-Le compteur **Sans créneau confirmé** compte les membres invités qui n'ont encore aucune inscription confirmée à l'événement (ceux qui ne sont qu'en liste d'attente en font partie). Le bouton **Relancer les N sans créneau** leur renvoie un rappel, sans message personnalisé, contrairement à l'invitation initiale ; une confirmation récapitule l'envoi avant qu'il parte. **Écrire un message aux N sans créneau** ouvre « Écrire aux bénévoles » avec ce public déjà choisi, pour un texte libre.
+L'email d'invitation et la page de l'événement ouverte depuis le lien personnel proposent un second lien, **Je ne suis pas disponible pour cet événement**, qui ouvre une étape de confirmation avant d'enregistrer quoi que ce soit (un simple aperçu du lien dans la messagerie ne répond jamais à la place de la personne). Aucune raison n'est demandée. La personne peut changer d'avis à tout moment : s'inscrire depuis ce même lien efface le statut « Pas disponible » ; se désinscrire ensuite de tous ses créneaux ne le remet pas.
+
+### Relancer les invités sans réponse
+
+Le compteur **Sans réponse** compte les membres invités qui n'ont encore ni inscription confirmée ni réponse à l'événement (ceux qui ne sont qu'en liste d'attente en font partie). Le bouton **Relancer les N sans créneau** leur renvoie un rappel, sans message personnalisé, contrairement à l'invitation initiale ; une confirmation récapitule l'envoi avant qu'il parte et précise combien de personnes ayant indiqué ne pas être disponibles ne sont pas relancées. **Écrire un message aux N sans créneau** ouvre « Écrire aux bénévoles » avec ce public déjà choisi, pour un texte libre ; la même exclusion s'applique, et l'aperçu comme la confirmation disent combien de personnes en ont été exclues.
 
 ---
 
@@ -500,7 +505,7 @@ Un email simple, à qui c'est utile :
 - **les bénévoles d'un poste** ;
 - **les bénévoles d'un créneau** ;
 - **les personnes en liste d'attente** (en attente ou à qui une place est proposée) ;
-- **les invités sans créneau confirmé** : les membres invités à l'événement qui n'ont encore aucune inscription confirmée, y compris ceux qui ne sont qu'en liste d'attente (le compteur le précise). Leur email contient leur lien d'invitation, **Choisir mes créneaux**. Le public est recalculé au moment de l'envoi.
+- **les invités sans créneau confirmé** : les membres invités à l'événement qui n'ont encore aucune inscription confirmée, y compris ceux qui ne sont qu'en liste d'attente (le compteur le précise), à l'exclusion des personnes ayant indiqué ne pas être disponibles (leur nombre est aussi précisé). Leur email contient leur lien d'invitation, **Choisir mes créneaux**. Le public est recalculé au moment de l'envoi.
 
 Vous saisissez un objet et un message texte (les retours à la ligne sont conservés). Pour une information urgente, cochez **Envoyer aussi une notification (téléphone ou ordinateur)** : les destinataires qui ont activé les notifications la reçoivent en plus de l'email, qui part à tous dans tous les cas. Le formulaire indique combien d'appareils sont abonnés parmi les destinataires, et l'aperçu comme la confirmation le rappellent. La notification montre l'objet et la première ligne du message, et ouvre la page personnelle du bénévole (la page de l'événement pour la liste d'attente). Son résultat s'affiche à part de celui des emails dans les messages envoyés ; un appareil qui n'existe plus est retiré. Le nombre de destinataires s'affiche dès le choix ; **Voir l'aperçu et envoyer** montre l'email tel qu'il sera reçu, puis demande une confirmation avec le nombre de personnes. Chaque personne reçoit un seul email, avec ses créneaux concernés et le lien vers ses inscriptions ; l'envoi est noté dans le journal de l'événement. Pas d'éditeur HTML, de segments enregistrés ni de programmation : pour relancer les membres invités sans réponse, voir « Relancer les … sans créneau » dans les invitations.
 

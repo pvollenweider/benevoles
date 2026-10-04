@@ -19,4 +19,9 @@ describe("remindResultText", () => {
     expect(remindResultText({ sent: 2, failed: 1 })).toBe("2 relances envoyées, 1 échec d'envoi")
     expect(remindResultText({ sent: 0, failed: 2 })).toBe("0 relance envoyée, 2 échecs d'envoi")
   })
+
+  it("counts people who declined and were not relaunched (#558), apart from sent and failed", () => {
+    expect(remindResultText({ sent: 2, declinedSkipped: 1 })).toBe("2 relances envoyées, 1 personne pas disponible non relancée")
+    expect(remindResultText({ sent: 1, failed: 1, declinedSkipped: 2 })).toBe("1 relance envoyée, 1 échec d'envoi, 2 personnes pas disponibles non relancées")
+  })
 })

@@ -98,6 +98,7 @@ const ACTION_VERB: Record<string, (actor: string) => string> = {
   "event.archived": (a) => `${a} a archivé l'événement`,
   "event.updated": (a) => `${a} a modifié les paramètres de l'événement`,
   "memberinvite.sent": (a) => `${a} a envoyé une invitation`,
+  "memberinvite.declined": (a) => `${a} a indiqué ne pas être disponible pour cet événement`,
   "eventpage.created": (a) => `${a} a créé une page`,
   "eventpage.updated": (a) => `${a} a modifié une page`,
   "eventpage.deleted": (a) => `${a} a supprimé une page`,

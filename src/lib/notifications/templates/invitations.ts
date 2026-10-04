@@ -33,7 +33,18 @@ export function renderMemberInvite(p: NotificationPayload): RenderedEmail {
     message: string | null
     token: string
   }
-  const inviteUrl = `${eventPublicUrl(orgSlug, eventSlug)}?token=${token}`
+  // Built with URL/searchParams, not string concatenation (#558): eventPublicUrl already carries
+  // a query string in local dev (`?org=`, no subdomains), and `${url}?token=` there produced a
+  // second `?`, which URLSearchParams reads as part of the first param's value — the token was
+  // silently never found. searchParams.set merges into whichever query string is already there.
+  const inviteUrlObj = new URL(eventPublicUrl(orgSlug, eventSlug))
+  inviteUrlObj.searchParams.set("token", token)
+  const inviteUrl = inviteUrlObj.toString()
+  // Second explicit action (#558): opens the same event page, where a confirmation step asks
+  // again before anything is recorded — a mail client scanning this link never answers by itself.
+  const declineUrlObj = new URL(inviteUrl)
+  declineUrlObj.searchParams.set("decline", "1")
+  const declineUrl = declineUrlObj.toString()
   const firstName = memberName.split(" ")[0]
   const subject = `[${organizationName}] On a besoin de toi — ${eventTitle} 🙌`
 
@@ -48,6 +59,9 @@ export function renderMemberInvite(p: NotificationPayload): RenderedEmail {
     `Consulte les missions disponibles et inscris-toi ici :`,
     inviteUrl,
     ``,
+    `Tu ne peux pas participer cette fois ? Indiquer que je ne suis pas disponible :`,
+    declineUrl,
+    ``,
     `Un grand merci d'avance, une grosse bise et à très vite !`,
     `L'équipe ${organizationName}`,
   ].filter(Boolean).join("\n")
@@ -60,7 +74,7 @@ export function renderMemberInvite(p: NotificationPayload): RenderedEmail {
     <p style="color:#555">📅 ${escapeHtml(eventDate)}${eventLocation ? `<br>📍 ${escapeHtml(eventLocation)}` : ""}</p>
     <p style="margin-top:1.5em">${btn(inviteUrl, "Voir les missions et m'inscrire")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Un grand merci d'avance, une grosse bise et à très vite !<br><strong>${escapeHtml(organizationName)}</strong></p>
-    <p style="color:#bbb;font-size:0.8em">Si tu ne peux pas participer, ignore cet email.</p>
+    <p style="color:#bbb;font-size:0.8em">Tu ne peux pas participer cette fois ? <a href="${declineUrl}" style="color:#2563eb">Indiquer que je ne suis pas disponible</a>.</p>
   `, preheader)
 
   return { subject, html, text }

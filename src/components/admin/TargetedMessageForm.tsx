@@ -19,7 +19,7 @@ type Props = {
   templates?: { id: string; name: string; subject: string; body: string }[]
 }
 
-type DryRun = { recipients: number; pushDevices?: number; waitlistOnly?: number; audience: string; preview: { subject: string; html: string } | null }
+type DryRun = { recipients: number; pushDevices?: number; waitlistOnly?: number; declinedExcluded?: number; audience: string; preview: { subject: string; html: string } | null }
 
 /**
  * Subject, message, audience; a live recipient count; a preview; then a confirmation naming the
@@ -39,7 +39,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
   const [confirming, setConfirming] = useState(false)
   const [sending, setSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [sent, setSent] = useState<{ sent: number; audience: string; pushDevices?: number; pushRequested?: boolean } | null>(null)
+  const [sent, setSent] = useState<{ sent: number; audience: string; pushDevices?: number; pushRequested?: boolean; declinedExcluded?: number } | null>(null)
   // Also a push notification (#468); the email always goes.
   const [push, setPush] = useState(false)
   const [templateNotice, setTemplateNotice] = useState("")
@@ -128,6 +128,9 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
   const devices = (n: number) => `${n} appareil${n > 1 ? "s" : ""}`
   // What goes out, in one phrase for the preview and the confirmation.
   const pushPart = push ? (pushDevices > 0 ? ` ; une notification part aussi sur ${devices(pushDevices)}` : " ; aucune notification (aucun destinataire ne les a activées)") : ""
+  // Invités sans créneau (#558) : les personnes pas disponibles ne sont pas dans le compte ci-dessus.
+  const declinedExcluded = kind === "invited_without_shift" ? (dry?.declinedExcluded ?? 0) : 0
+  const declinedPart = declinedExcluded > 0 ? ` (${declinedExcluded} ${declinedExcluded > 1 ? "personnes pas disponibles non incluses" : "personne pas disponible non incluse"})` : ""
   const inputClass = (missing: boolean, hasProblems = false) => `input ${(attempted && missing) || hasProblems ? "!border-red-600" : ""}`
 
   if (sent) {
@@ -137,6 +140,9 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
           Message envoyé à {plural(sent.sent)}
         </h2>
         <p className="text-sm text-gray-700">Destinataires : {sent.audience}. L&apos;envoi se fait dans la minute ; un email qui échoue est renvoyé automatiquement.</p>
+        {(sent.declinedExcluded ?? 0) > 0 && (
+          <p className="text-sm text-gray-700">{sent.declinedExcluded} {sent.declinedExcluded! > 1 ? "personnes pas disponibles n'ont" : "personne pas disponible n'a"} rien reçu.</p>
+        )}
         {sent.pushRequested && ((sent.pushDevices ?? 0) > 0
           ? <p className="text-sm text-gray-700">Notification envoyée sur {devices(sent.pushDevices!)}. Le résultat s&apos;affiche dans les messages envoyés.</p>
           : <p className="text-sm text-gray-700">Aucune notification envoyée : aucun de ces destinataires n&apos;a activé les notifications.</p>)}
@@ -189,6 +195,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
         )}
         <p id={`${id}-count`} aria-live="polite" aria-atomic="true" className="text-sm text-gray-700 pt-1">
           {!counting && dry ? (recipients === 0 ? "Personne à qui écrire dans cette sélection." : `${plural(recipients)} recevr${recipients > 1 ? "ont" : "a"} ce message${kind === "invited_without_shift" && (dry.waitlistOnly ?? 0) > 0 ? `, dont ${dry.waitlistOnly} en liste d'attente` : ""}.`) : ""}
+          {!counting && dry && kind === "invited_without_shift" && (dry.declinedExcluded ?? 0) > 0 ? ` ${dry.declinedExcluded} personne${dry.declinedExcluded! > 1 ? "s ont" : " a"} indiqué ne pas être disponible${dry.declinedExcluded! > 1 ? "s" : ""} et ne reçoi${dry.declinedExcluded! > 1 ? "vent" : "t"} rien.` : ""}
         </p>
         {counting && <p aria-hidden="true" className="text-sm text-gray-600">Comptage…</p>}
       </fieldset>
@@ -288,7 +295,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
             <p className="text-sm text-gray-700">Tel que le recevra la première personne de la liste ; chacun voit ses propres créneaux.</p>
             <p className="text-sm"><span className="font-medium">Objet :</span> {dry.preview.subject}</p>
             <iframe title="Contenu de l'email" sandbox="" srcDoc={dry.preview.html} className="w-full h-[50vh] max-h-[28rem] border border-gray-200 rounded-lg bg-white" />
-            <p className="text-sm text-gray-800">Envoyer l&apos;email à <strong>{plural(recipients)}</strong> ({dry.audience}){pushPart} ?</p>
+            <p className="text-sm text-gray-800">Envoyer l&apos;email à <strong>{plural(recipients)}</strong> ({dry.audience}){declinedPart}{pushPart} ?</p>
             <div className="flex gap-3 justify-end">
               <button ref={cancelRef} type="button" onClick={() => setShowPreview(false)} className="text-sm text-gray-700 px-3 py-2 rounded hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Retour au message</button>
               <button
@@ -307,7 +314,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
         <ModalShell title="Confirmer l'envoi" onClose={() => { if (!sending) setConfirming(false) }} initialFocusRef={cancelRef} describedBy={`${id}-confirm-text`} closeOnBackdrop={false}>
           <div className="space-y-4" aria-busy={sending}>
             <p id={`${id}-confirm-text`} className="text-sm text-gray-800">
-              « {subject} » va partir à <strong>{plural(recipients)}</strong> ({dry?.audience}){pushPart}. Cet envoi ne peut pas être annulé.
+              « {subject} » va partir à <strong>{plural(recipients)}</strong> ({dry?.audience}){declinedPart}{pushPart}. Cet envoi ne peut pas être annulé.
             </p>
             <div className="flex gap-3 justify-end">
               <button ref={cancelRef} type="button" aria-disabled={sending} onClick={() => { if (!sending) setConfirming(false) }} className="text-sm text-gray-700 px-3 py-2 rounded hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Annuler</button>

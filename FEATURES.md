@@ -30,19 +30,19 @@ C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles
 
 - **Une confirmation par email** avec le récapitulatif des créneaux et un lien personnel pour les retrouver, les modifier ou les annuler, et les ajouter à son calendrier.
 - **Des rappels automatiques** deux jours avant, la veille et le jour même, et des notifications sur le téléphone pour ceux qui les activent. Chaque organisation choisit les rappels envoyés et l'adresse qui reçoit les réponses des bénévoles.
-- **Des messages ciblés** à tous les inscrits, à un poste, à un créneau, à la liste d'attente ou aux invités qui n'ont pas encore de créneau, avec un aperçu avant l'envoi, une notification sur le téléphone en plus de l'email pour l'urgent, des modèles réutilisables avec le prénom de chacun, et l'historique de ce qui a été envoyé, par qui et avec quel résultat.
+- **Des messages ciblés** à tous les inscrits, à un poste, à un créneau, à la liste d'attente ou aux invités qui n'ont pas encore de créneau (ceux qui ont dit ne pas être disponibles sont exclus), avec un aperçu avant l'envoi, une notification sur le téléphone en plus de l'email pour l'urgent, des modèles réutilisables avec le prénom de chacun, et l'historique de ce qui a été envoyé, par qui et avec quel résultat.
 - **Prévenus des changements.** Si un créneau change d'horaire ou est annulé, les inscrits reçoivent un email.
 
 ## Suivre l'organisation au quotidien
 
 - **Où manque-t-il du monde ?** Une page par événement liste les postes sans personne et les créneaux à compléter, du plus dégarni au plus proche du complet.
-- **Ce qui demande votre attention.** Le tableau de bord commence par ce qui presse : créneaux des prochains jours pas encore complets, demandes à valider, places de liste d'attente qui expirent, jalons en retard, bénévoles aux journées trop chargées, invités sans créneau.
+- **Ce qui demande votre attention.** Le tableau de bord commence par ce qui presse : créneaux des prochains jours pas encore complets, demandes à valider, places de liste d'attente qui expirent, jalons en retard, bénévoles aux journées trop chargées, invités sans réponse.
 - **Où en est l'événement ?** Une barre d'étapes, du brouillon à l'archivage, montre où il en est et ce qu'il reste à faire.
 - **Tout retrouver.** Une recherche globale (Ctrl + K, ou Cmd + K sur Mac) trouve un bénévole, une inscription, un événement ou un créneau, sans se soucier des accents.
 - **Les inscriptions en main.** Ajouter quelqu'un à la main, retirer, désigner un responsable, renvoyer un lien, avec une confirmation avant chaque action et quelques secondes pour annuler un retrait.
 - **Prévenus d'un désistement.** Quand un bénévole annule une place confirmée ou une demande, vous et les responsables du poste recevez un email avec le mot qu'il a laissé le cas échéant ; ce réglage se coupe indépendamment de celui des nouvelles inscriptions.
 - **Deux rôles pour l'équipe.** Les propriétaires gèrent l'équipe, les réglages de l'organisation et la suppression définitive d'un événement ; les organisateurs préparent les événements, gèrent les inscriptions et les membres, et écrivent aux bénévoles.
-- **Vos membres.** Fiches avec étiquettes, notes et disponibilités, invitations et relances, import depuis un fichier CSV ou Excel, avec un aperçu de ce qui sera créé ou mis à jour avant de confirmer. L'activité de chaque membre, événement par événement : invitations, inscriptions, présences, sans score.
+- **Vos membres.** Fiches avec étiquettes, notes et disponibilités, invitations et relances, import depuis un fichier CSV ou Excel, avec un aperçu de ce qui sera créé ou mis à jour avant de confirmer. L'activité de chaque membre, événement par événement : invitations, inscriptions, présences, sans score. Un membre invité peut répondre qu'il n'est pas disponible cette fois : vous le voyez dans la liste des invitations et il n'est ni relancé ni compté dans « sans réponse ».
 - **Les présences.** Le jour J, cochez qui est venu.
 - **Tout est noté.** Un journal d'activité par événement retrace qui a fait quoi, et quand.
 

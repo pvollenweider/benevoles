@@ -11,7 +11,7 @@ import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/
 import type { NotificationPayload } from "@/lib/notifications/types"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { fmtRange } from "@/lib/gantt-utils"
-import { audienceLabel, messagePushPayload, messageSchema, selectInvitedWithoutShift, selectRecipients, MESSAGE_RATE_LIMIT } from "@/lib/targeted-message"
+import { audienceLabel, countDeclinedExcluded, messagePushPayload, messageSchema, selectInvitedWithoutShift, selectRecipients, MESSAGE_RATE_LIMIT } from "@/lib/targeted-message"
 import { linkToken } from "@/lib/token-vault"
 import { renderVariables, templateProblems } from "@/lib/message-template"
 import { eventPublicUrl } from "@/lib/urls"
@@ -57,11 +57,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   // email carries (personal page, or the invitation link for invited people without a shift, #481).
   type Target = { volunteerId: string; firstName: string; email: string | null; shifts: { label: string; date: string; startTime: string; endTime: string }[]; editToken?: string; signupUrl?: string; waitlistOnly?: boolean }
   let targets: Target[]
+  let declinedExcluded = 0
   if (audience.kind === "invited_without_shift") {
     const invites = await db.memberInvite.findMany({
       where: { eventId: id },
-      select: { volunteerId: true, sentAt: true, tokenEnc: true, tokenLegacy: true, volunteer: { select: { firstName: true, email: true } } },
+      select: { volunteerId: true, sentAt: true, declinedAt: true, tokenEnc: true, tokenLegacy: true, volunteer: { select: { firstName: true, email: true } } },
     })
+    // Left out because they answered « pas disponible » (#558); said in the preview and the confirmation.
+    declinedExcluded = countDeclinedExcluded(invites, regs)
     targets = selectInvitedWithoutShift(invites, regs).map(({ volunteerId, invite, waitlistOnly }) => {
       const url = new URL(eventPublicUrl(event.organization.slug, event.slug))
       const link = linkToken.reveal(invite)
@@ -118,8 +121,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       : null
     return NextResponse.json({
       recipients: recipients.length,
-      // Invited without a shift (#481): how many are only on the waitlist, to adapt the text.
-      ...(audience.kind === "invited_without_shift" ? { waitlistOnly: recipients.filter((r) => r.waitlistOnly).length } : {}),
+      // Invited without a shift (#481): how many are only on the waitlist, to adapt the text,
+      // and how many were left out because they declined (#558).
+      ...(audience.kind === "invited_without_shift" ? { waitlistOnly: recipients.filter((r) => r.waitlistOnly).length, declinedExcluded } : {}),
       // Devices of these recipients that would get the push (#468); counted whatever the option.
       pushDevices: await pushDeviceCount(recipients.map((r) => r.volunteerId)),
       audience: label,
@@ -184,5 +188,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     },
   })
 
-  return NextResponse.json({ sent: recipients.length, audience: label, pushDevices })
+  return NextResponse.json({
+    sent: recipients.length,
+    audience: label,
+    pushDevices,
+    ...(audience.kind === "invited_without_shift" ? { declinedExcluded } : {}),
+  })
 }

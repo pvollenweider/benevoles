@@ -24,6 +24,12 @@ describe("action recaps", () => {
     expect(remindInvitedRecap({ people: 1 }).lines[0]).toBe("1 email de relance envoyé.")
   })
 
+  it("remind: mentions declined members left out when there are any (#558)", () => {
+    expect(remindInvitedRecap({ people: 2 }).lines).toHaveLength(3)
+    expect(remindInvitedRecap({ people: 2, declined: 1 }).lines).toContain("1 membre ayant indiqué ne pas être disponible ne reçoit rien non plus.")
+    expect(remindInvitedRecap({ people: 2, declined: 2 }).lines).toContain("2 membres ayant indiqué ne pas être disponibles ne reçoivent rien non plus.")
+  })
+
   it("member deactivation and leader removal", () => {
     expect(deactivateMemberRecap("Zoé Roy")).toMatchObject({ title: "Désactiver Zoé Roy ?", danger: true, confirmLabel: "Désactiver" })
     expect(removeLeaderRecap("Léa", "Bar").title).toBe("Retirer Léa des responsables de « Bar » ?")

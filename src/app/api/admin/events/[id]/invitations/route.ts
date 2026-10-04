@@ -9,6 +9,7 @@ import { z } from "zod"
 import { randomBytes } from "crypto"
 import { linkToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
+import { inviteState, inviteStateCounts } from "@/lib/invite-state"
 
 const postSchema = z.object({
   volunteerIds: z.array(z.string()).min(1).max(500),
@@ -64,16 +65,17 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     regsByEmail.get(key)!.push(r)
   }
 
-  const total = invites.length
-  const registered = invites.filter((i) => i.volunteer.email && (regsByEmail.get(i.volunteer.email)?.length ?? 0) > 0).length
-  const noAnswer = total - registered
+  const hasActiveRegistration = (i: (typeof invites)[number]) => !!i.volunteer.email && (regsByEmail.get(i.volunteer.email)?.length ?? 0) > 0
+  const summary = inviteStateCounts(invites.map((i) => ({ declinedAt: i.declinedAt, hasActiveRegistration: hasActiveRegistration(i) })))
 
   return NextResponse.json({
-    summary: { total, registered, noAnswer },
+    summary,
     invites: invites.map((i) => ({
       id: i.id,
       sentAt: i.sentAt,
       usedAt: i.usedAt,
+      declinedAt: i.declinedAt,
+      state: inviteState({ declinedAt: i.declinedAt, hasActiveRegistration: hasActiveRegistration(i) }),
       volunteer: i.volunteer,
       registrations:
         i.volunteer.email

@@ -4,11 +4,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { inviteResultText, remindResultText } from "@/lib/invitation-summary"
-import { useId, useMemo, useRef, useState, useTransition } from "react"
+import { inviteState, inviteStateCounts, type InviteState } from "@/lib/invite-state"
+import { useEffect, useId, useMemo, useRef, useState, useTransition } from "react"
 import { flushSync } from "react-dom"
 import { requestJson } from "@/lib/use-submit"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { remindInvitedRecap } from "@/lib/action-recap"
+import { announce } from "@/lib/announce"
 import { useRouter } from "next/navigation"
 import ModalShell from "./ModalShell"
 import Link from "next/link"
@@ -25,6 +27,7 @@ type Invite = {
   id: string
   sentAt: string
   usedAt: string | null
+  declinedAt: string | null
   volunteerId: string
   firstName: string
   lastName: string
@@ -38,6 +41,16 @@ type Props = {
   members: Member[]
   allTags: string[]
   invites: Invite[]
+}
+
+type Filter = "all" | InviteState
+
+/** « Tous », « Inscrits »… the filter's own name, for its announcement and its accessible name. */
+const FILTER_LABELS: Record<Filter, string> = {
+  all: "Invités",
+  registered: "Inscrits",
+  not_available: "Pas disponible",
+  no_answer: "Sans réponse",
 }
 
 export default function InvitationsManager({ eventId, members, allTags, invites }: Props) {
@@ -54,11 +67,31 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
   const [testEmail, setTestEmail] = useState("")
   const [testState, setTestState] = useState<"idle" | "sending" | "sent" | "error">("idle")
   const [showTest, setShowTest] = useState(false)
+  const [filter, setFilter] = useState<Filter>("all")
+  const [filterAnnouncement, setFilterAnnouncement] = useState("")
   const testId = useId()
 
-  const total = invites.length
-  const registered = invites.filter((i) => i.registered).length
-  const noAnswer = total - registered
+  const states = useMemo(() => invites.map((i) => inviteState({ declinedAt: i.declinedAt, hasActiveRegistration: i.registered })), [invites])
+  const counts = useMemo(() => inviteStateCounts(invites.map((i) => ({ declinedAt: i.declinedAt, hasActiveRegistration: i.registered }))), [invites])
+  const { total, registered, notAvailable, noAnswer } = counts
+  const visibleInvites = useMemo(
+    () => (filter === "all" ? invites : invites.filter((i, idx) => states[idx] === filter)),
+    [invites, states, filter],
+  )
+
+  // Announces the result of a filter change (#558), not the first render: a stat card is also a
+  // filter toggle, and clicking one changes the table's content without a page navigation.
+  const firstFilterRender = useRef(true)
+  useEffect(() => {
+    if (firstFilterRender.current) { firstFilterRender.current = false; return }
+    const count = visibleInvites.length
+    const text = count === 0
+      ? "Aucun invité dans ce filtre."
+      : `${FILTER_LABELS[filter]} : ${count} ${count > 1 ? "invités affichés" : "invité affiché"}.`
+    announce(setFilterAnnouncement, text)
+    // Only the filter itself triggers an announcement, not every change to the invite list.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter])
 
   function refresh() {
     startTransition(() => router.refresh())
@@ -93,7 +126,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
     setReminding(true)
     setRemindResult(null)
     setRemindError(null)
-    const outcome = await requestJson<{ sent: number; failed?: number }>(() => fetch(`/api/admin/events/${eventId}/invitations/remind`, { method: "POST" }), "Les relances n'ont pas pu être envoyées.")
+    const outcome = await requestJson<{ sent: number; failed?: number; declinedSkipped?: number }>(() => fetch(`/api/admin/events/${eventId}/invitations/remind`, { method: "POST" }), "Les relances n'ont pas pu être envoyées.")
     setReminding(false)
     // A failure stays in the dialog, where « Réessayer » is at hand.
     if (!outcome.ok) { setRemindError(outcome.error); return }
@@ -106,13 +139,16 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
   return (
     <div className="space-y-5">
       {confirmingRemind && (
-        <ConfirmActionModal recap={remindInvitedRecap({ people: noAnswer })} busy={reminding} error={remindError} onConfirm={() => void runRemind()} onCancel={() => setConfirmingRemind(false)} />
+        <ConfirmActionModal recap={remindInvitedRecap({ people: noAnswer, declined: notAvailable })} busy={reminding} error={remindError} onConfirm={() => void runRemind()} onCancel={() => setConfirmingRemind(false)} />
       )}
-      <div className="grid grid-cols-3 gap-3">
-        <StatCard label="Invités" value={total} />
-        <StatCard label="Inscrits" value={registered} positive={registered > 0} />
-        <StatCard label="Sans créneau confirmé" value={noAnswer} warning={noAnswer > 0} />
+      <div role="group" aria-label="Filtrer les invités par statut" className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <StatCard label="Invités" value={total} active={filter === "all"} onClick={() => setFilter("all")} />
+        <StatCard label="Inscrits" value={registered} positive={registered > 0} active={filter === "registered"} onClick={() => setFilter("registered")} />
+        <StatCard label="Pas disponible" value={notAvailable} muted={notAvailable > 0} active={filter === "not_available"} onClick={() => setFilter("not_available")} />
+        <StatCard label="Sans réponse" value={noAnswer} warning={noAnswer > 0} active={filter === "no_answer"} onClick={() => setFilter("no_answer")} />
       </div>
+      {/* Always mounted, so the filter's result is voiced even when the same text repeats. */}
+      <p id="invitations-filter-status" role="status" className="sr-only">{filterAnnouncement}</p>
 
       <div className="flex gap-2 flex-wrap">
         <button
@@ -187,6 +223,10 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
         <div className="bg-white border border-gray-200 rounded-xl p-10 text-center text-gray-500">
           Aucune invitation envoyée pour cet événement.
         </div>
+      ) : visibleInvites.length === 0 ? (
+        <div className="bg-white border border-gray-200 rounded-xl p-10 text-center text-gray-500">
+          Aucun invité dans ce filtre. <button type="button" onClick={() => setFilter("all")} className="text-blue-600 underline underline-offset-2">Voir tout le monde</button>.
+        </div>
       ) : (
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
           <table className="w-full text-sm">
@@ -199,8 +239,9 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
               </tr>
             </thead>
             <tbody>
-              {invites.map((i) => {
+              {visibleInvites.map((i) => {
                 const date = new Date(i.sentAt).toLocaleDateString("fr-FR")
+                const state = inviteState({ declinedAt: i.declinedAt, hasActiveRegistration: i.registered })
                 return (
                   <tr key={i.id} className="border-t border-gray-100">
                     <td className="px-4 py-3">
@@ -222,13 +263,17 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
                     </td>
                     <td className="px-4 py-3 text-gray-500 text-xs">{date}</td>
                     <td className="px-4 py-3">
-                      {i.registered ? (
+                      {state === "registered" ? (
                         <span className="text-xs font-medium text-green-700 bg-green-50 px-2 py-1 rounded-full">
-                          ✓ Participation confirmée
+                          <span aria-hidden="true">✓ </span>Participation confirmée
+                        </span>
+                      ) : state === "not_available" ? (
+                        <span className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded-full">
+                          Pas disponible
                         </span>
                       ) : (
                         <span className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-full">
-                          Sans créneau confirmé
+                          Sans réponse
                         </span>
                       )}
                     </td>
@@ -444,16 +489,32 @@ function InviteModal({
   )
 }
 
-function StatCard({ label, value, positive, warning }: { label: string; value: number; positive?: boolean; warning?: boolean }) {
+/**
+ * Also the « Sans réponse » (and other states) filter (#558): each card is a toggle button, its
+ * ring showing which filter is active; clicking the active one again would do nothing new (the
+ * parent just keeps that filter), so there's no need for an "off" state.
+ */
+function StatCard({ label, value, positive, warning, muted, active, onClick }: { label: string; value: number; positive?: boolean; warning?: boolean; muted?: boolean; active?: boolean; onClick?: () => void }) {
   const color = positive
     ? "bg-green-50 border-green-200 text-green-700"
     : warning
       ? "bg-orange-50 border-orange-200 text-orange-700"
-      : "bg-white border-gray-200 text-gray-900"
+      : muted
+        ? "bg-gray-50 border-gray-300 text-gray-700"
+        : "bg-white border-gray-200 text-gray-900"
   return (
-    <div className={`rounded-xl border p-4 text-center ${color}`}>
-      <p className="text-2xl font-bold">{value}</p>
-      <p className="text-xs mt-1 opacity-70">{label}</p>
-    </div>
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={!!active}
+      // Accessible name reads the label before the count ("Sans réponse : 3"), the reverse of the
+      // visual stack (count first, label below it): the visible text alone stays label-in-name
+      // only incidentally, so the name is set explicitly and the visible text hidden from AT.
+      aria-label={`${label} : ${value}`}
+      className={`rounded-xl border p-4 text-center transition-colors motion-safe:duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:aria-pressed:bg-[Highlight] forced-colors:aria-pressed:text-[HighlightText] ${color} ${active ? "ring-2 ring-blue-600 ring-offset-1" : ""}`}
+    >
+      <p aria-hidden="true" className="text-2xl font-bold">{value}</p>
+      <p aria-hidden="true" className="text-xs mt-1 opacity-70">{label}</p>
+    </button>
   )
 }

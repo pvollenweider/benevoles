@@ -51,6 +51,12 @@ describe("describeEntry", () => {
     expect(describeEntry(entry({ action: "unknown.action", actorLabel: "Alice" }))).toBe("Alice : unknown.action")
   })
 
+  it("describes a member declining an invitation (#558)", () => {
+    expect(describeEntry(entry({ action: "memberinvite.declined", entityType: "MemberInvite", actorType: "volunteer", actorLabel: "Alain Dupont" }))).toBe(
+      "Alain Dupont a indiqué ne pas être disponible pour cet événement",
+    )
+  })
+
   it("names which shift a registration is for, when a label is available", () => {
     const e = entry({
       action: "registration.created",

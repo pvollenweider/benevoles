@@ -709,6 +709,14 @@ describe("Invitations — cross-tenant isolation", () => {
     const res = await GET(makeRequest("/api/admin/events/evt-b/invitations"), params("evt-b"))
     expect(res.status).toBe(404)
   })
+
+  it("POST /api/admin/events/[id]/invitations/remind returns 404 for org-B event (#558)", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/invitations/remind/route")
+    setupGuard() // event.findFirst → null
+
+    const res = await POST(makeRequest("/api/admin/events/evt-b/invitations/remind", "POST", {}), params("evt-b"))
+    expect(res.status).toBe(404)
+  })
 })
 
 // ── Sector leaders (#186) ────────────────────────────────────────────────────

@@ -69,6 +69,9 @@ export async function GET(
     eventSlug: invite.event.slug,
     // The reserved roles (#470) this invitation opens; the member's tags themselves stay private.
     reservedRolesAllowed: allowedReservedRoles(reservedRoles(invite.event.shifts), invite.volunteer.tags),
+    // Whether this link already answered « pas disponible » (#558): the page shows that instead
+    // of the decline button, without a second request.
+    declined: !!invite.declinedAt,
     member: {
       firstName: invite.volunteer.firstName,
       lastName: invite.volunteer.lastName,

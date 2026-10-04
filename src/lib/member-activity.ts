@@ -10,14 +10,14 @@
 
 export type ActivityFact = {
   at: Date
-  kind: "invited" | "invite_used" | "registered" | "waitlisted" | "cancelled" | "present" | "leader" | "profile"
+  kind: "invited" | "invite_used" | "invite_declined" | "registered" | "waitlisted" | "cancelled" | "present" | "leader" | "profile"
   text: string
   eventId?: string
   eventTitle?: string
 }
 
 export type ActivitySources = {
-  invites: { sentAt: Date; usedAt: Date | null; event: { id: string; title: string } }[]
+  invites: { sentAt: Date; usedAt: Date | null; declinedAt: Date | null; event: { id: string; title: string } }[]
   registrations: {
     createdAt: Date
     updatedAt: Date
@@ -46,6 +46,9 @@ export function memberTimeline(s: ActivitySources): ActivityFact[] {
   for (const i of s.invites) {
     facts.push({ at: i.sentAt, kind: "invited", text: "Invité", eventId: i.event.id, eventTitle: i.event.title })
     if (i.usedAt) facts.push({ at: i.usedAt, kind: "invite_used", text: "A ouvert son invitation", eventId: i.event.id, eventTitle: i.event.title })
+    // #558: not shown again if the person later registers from the same link (declinedAt is
+    // cleared then) — this only ever reflects the current state, like the admin invitations list.
+    if (i.declinedAt) facts.push({ at: i.declinedAt, kind: "invite_declined", text: "A indiqué ne pas être disponible", eventId: i.event.id, eventTitle: i.event.title })
   }
   for (const r of s.registrations) {
     const base = { eventId: r.event.id, eventTitle: r.event.title }

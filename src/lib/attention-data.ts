@@ -21,8 +21,9 @@ export async function loadAttention(db: OrgScopedPrisma, now: Date = new Date())
         },
         sectorLeaders: { select: { roleName: true } },
         milestones: { where: { done: false, dueDate: { lt: now } }, select: { id: true } },
-        // Invited more than INVITE_NUDGE_DAYS ago; those with a confirmed shift are left out below (#481).
-        memberInvites: { where: { sentAt: { lt: inviteCutoff } }, select: { volunteerId: true, sentAt: true, volunteer: { select: { email: true } } } },
+        // Invited more than INVITE_NUDGE_DAYS ago; those with a confirmed shift or who declined
+        // are left out below (#481, #558).
+        memberInvites: { where: { sentAt: { lt: inviteCutoff } }, select: { volunteerId: true, sentAt: true, declinedAt: true, volunteer: { select: { email: true } } } },
         // Firm places only: waitlist entries and offers may never become shifts (#465).
         registrations: {
           where: { status: "active", shift: { status: { not: "cancelled" } } },
