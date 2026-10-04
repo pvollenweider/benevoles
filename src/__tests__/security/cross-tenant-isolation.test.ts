@@ -398,6 +398,31 @@ describe("Members — cross-tenant isolation", () => {
     const res = await POST(makeRequest("/api/admin/members/mem-b/certificate", "POST"), params("mem-b"))
     expect(res.status).toBe(404)
   })
+
+  it("POST /api/admin/members/[id]/merge-preview returns 404 when the other record is org-B's (#600)", async () => {
+    const { POST } = await import("@/app/api/admin/members/[id]/merge-preview/route")
+    setupGuard({ volunteer: { findFirst: vi.fn().mockResolvedValueOnce({ id: "mem-a", organizationId: ORG_A, firstName: "A", lastName: "A", email: null, phone: null, tags: [], notes: null, birthDate: null, availabilityPeriods: [], availabilityNote: null, active: true, createdAt: new Date(), mergedIntoId: null }).mockResolvedValueOnce(null) } })
+
+    const res = await POST(makeRequest("/api/admin/members/mem-a/merge-preview", "POST", { otherId: "mem-b" }), params("mem-a"))
+    expect(res.status).toBe(404)
+  })
+
+  it("POST /api/admin/members/[id]/merge returns 404 and writes nothing when the other record is org-B's (#600)", async () => {
+    const { POST } = await import("@/app/api/admin/members/[id]/merge/route")
+    const $transaction = vi.fn(async (fn: (tx: unknown) => unknown) => fn({
+      volunteer: {
+        findFirst: vi.fn()
+          .mockResolvedValueOnce({ id: "mem-a", organizationId: ORG_A, firstName: "A", lastName: "A", email: null, phone: null, tags: [], notes: null, birthDate: null, availabilityPeriods: [], availabilityNote: null, active: true, createdAt: new Date(), mergedIntoId: null })
+          .mockResolvedValueOnce(null),
+      },
+      $queryRaw: vi.fn(),
+    }))
+    // The merge route goes through db.$transaction directly (member-merge-transaction.ts).
+    requireOrgSessionMock.mockResolvedValue({ db: { $transaction }, organizationId: ORG_A, session: SESSION_A })
+
+    const res = await POST(makeRequest("/api/admin/members/mem-a/merge", "POST", { otherId: "mem-b" }), params("mem-a"))
+    expect(res.status).toBe(404)
+  })
 })
 
 // ── Delivery outcomes (#598) ──────────────────────────────────────────────────
@@ -481,7 +506,7 @@ describe("Shifts — cross-tenant isolation", () => {
     const res = await POST(makeRequest("/api/admin/settings/notifications/out-b/retry", "POST"), params("out-b"))
     expect(res.status).toBe(404)
     // The organization filter is in the update itself: an org-B row can never flip.
-    expect(prismaMock.notificationOutbox.updateMany).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "out-b", organizationId: ORG_A, status: "failed" } }))
+    expect(prismaMock.notificationOutbox.updateMany).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ id: "out-b", organizationId: ORG_A, status: "failed" }) }))
   })
 
   it("GET /api/admin/events/[id]/export/archive returns 404 for an org-B event (#384)", async () => {

@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test"
 import { execFileSync } from "node:child_process"
 import { seriousViolations } from "./helpers/axe"
+import { waitForHydration } from "./helpers/hydration"
 
 /**
  * Automated accessibility checks on the critical paths (#487), as listed on /accessibilite:
@@ -143,6 +144,42 @@ test.describe("admin", () => {
     await page.getByRole("button", { name: /^Changer la couleur du poste / }).first().click()
     await expect(page.getByRole("group", { name: /^Couleur du poste / })).toBeVisible()
     expect.soft(await seriousViolations(page), "roles panel and colour picker").toEqual([])
+  })
+
+  // #600: the merge page (member picker, then the preview with its field-choice and conflict
+  // fieldsets), and the confirmation dialog.
+  test("member merge page, preview and confirm dialog have no serious violation", async ({ page }) => {
+    await page.goto("/admin/login")
+    await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+    await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+    await page.getByRole("button", { name: "Se connecter" }).click()
+    await expect(page).toHaveURL(/\/admin\/events/)
+
+    const post = async (url: string, body: unknown) => {
+      const res = await page.request.post(url, { data: body })
+      expect(res.ok(), `${url}: ${res.status()} ${await res.text()}`).toBeTruthy()
+      return res.json()
+    }
+    const suffix = Date.now()
+    const lastName = `A11yMerge${suffix}`
+    const keep = await post("/api/admin/members", { firstName: "Jean", lastName, email: `jean-a11y-keep-${suffix}@example.com` })
+    await post("/api/admin/members", { firstName: "Jean", lastName, email: `jean-a11y-absorb-${suffix}@example.com`, notes: "Allergie noix" })
+
+    await page.goto(`/admin/members/${keep.id}/merge`)
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+    expect.soft(await seriousViolations(page), "merge: picker").toEqual([])
+
+    const searchBox = page.getByLabel("Rechercher un membre par nom ou email")
+    await waitForHydration(searchBox)
+    await searchBox.fill(lastName)
+    await page.getByRole("button", { name: "Chercher", exact: true }).click()
+    await page.getByRole("button", { name: new RegExp(`Fusionner avec cette fiche.*Jean ${lastName}`) }).click()
+    await expect(page.getByRole("heading", { name: /^Aperçu de la fusion/ })).toBeVisible()
+    expect.soft(await seriousViolations(page), "merge: preview").toEqual([])
+
+    await page.getByRole("button", { name: "Fusionner les deux fiches" }).click()
+    await expect(page.getByRole("alertdialog", { name: "Confirmer la fusion" })).toBeVisible()
+    expect.soft(await seriousViolations(page), "merge: confirm dialog").toEqual([])
   })
 })
 

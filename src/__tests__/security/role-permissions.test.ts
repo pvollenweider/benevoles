@@ -13,6 +13,10 @@ vi.mock("@/lib/prisma", () => ({
 
 vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications: vi.fn(), deliverAfterResponse: vi.fn() }))
 vi.mock("@/lib/notification-helpers", () => ({}))
+// The member-merge routes (#600) import @/lib/env transitively (address hashing); every owner-
+// only route here is only exercised up to its 403, but the module still has to import cleanly.
+vi.mock("@/lib/env", () => ({ env: { AUTH_SECRET: "a".repeat(32) } }))
+vi.mock("@/lib/notifications", () => ({ sendNotification: vi.fn() }))
 
 import { PERMISSIONS } from "@/lib/permissions"
 

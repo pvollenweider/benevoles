@@ -224,3 +224,27 @@ describe("listStoryCandidates", () => {
     expect(candidates[0].label).toContain("Alain Dupont")
   })
 })
+
+describe("actor label — merged volunteer (#600)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    adminFindMany.mockResolvedValue([])
+    shiftFindMany.mockResolvedValue([])
+  })
+
+  it("resolves a merged (tombstoned) volunteer's actor label through mergedIntoId", async () => {
+    findMany.mockResolvedValue([row({ actorType: "volunteer", actorId: "vol-absorbed" })])
+    volunteerFindMany
+      .mockResolvedValueOnce([{ id: "vol-absorbed", firstName: "", lastName: "", mergedIntoId: "vol-kept" }])
+      .mockResolvedValueOnce([{ id: "vol-kept", firstName: "Alain", lastName: "Dupont", mergedIntoId: null }])
+    const { entries } = await listEventLogs("evt-1", {})
+    expect(entries[0].actorLabel).toBe("Alain Dupont")
+  })
+
+  it("falls back to the generic label when the merge chain doesn't resolve (data inconsistency)", async () => {
+    findMany.mockResolvedValue([row({ actorType: "volunteer", actorId: "vol-absorbed" })])
+    volunteerFindMany.mockResolvedValueOnce([{ id: "vol-absorbed", firstName: "", lastName: "", mergedIntoId: "vol-gone" }]).mockResolvedValueOnce([])
+    const { entries } = await listEventLogs("evt-1", {})
+    expect(entries[0].actorLabel).toBe("Bénévole (compte supprimé)")
+  })
+})

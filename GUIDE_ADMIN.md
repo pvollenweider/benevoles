@@ -467,6 +467,17 @@ Le bandeau **Heures par bénévole, pour une période (CSV)**, au-dessus de la l
 
 Depuis la page **Activité** d'un membre, le lien **Attestation de bénévolat** ouvre un document imprimable à remettre sur demande : nom de l'organisation, nom du bénévole, période choisie (douze derniers mois par défaut), le détail par événement (postes tenus, nombre de créneaux, heures attestées) et une zone de signature. Seules les présences enregistrées (pointage à l'arrivée) comptent comme heures attestées ; un créneau confirmé sans présence enregistrée n'y figure que si vous cochez **Inclure les heures planifiées sans présence saisie**, et apparaît alors séparément, sous l'intitulé « planifiées ». Un avertissement à l'écran (absent de l'impression) liste les créneaux confirmés sans présence enregistrée sur la période choisie. Un texte libre facultatif (par exemple le rôle tenu) peut être ajouté. Un créneau annulé après coup ne compte jamais, même si une présence y avait été enregistrée. Rien n'est conservé : le document est régénéré à chaque demande.
 
+### Fusionner deux fiches en double
+
+Quand deux fiches du répertoire désignent en fait la même personne (une adresse email saisie de travers, un doublon de saisie), le lien **Fusionner avec un autre membre** de la page **Activité** d'un membre ouvre la fusion. Réservée aux propriétaires de l'organisation (les organisateurs peuvent repérer un doublon avec **Doublon ?** mais pas fusionner).
+
+1. **Choisir la fiche à absorber** : recherchez par nom ou email la seconde fiche, celle qui disparaîtra.
+2. **Aperçu** : pour chaque champ où les deux fiches diffèrent (prénom, nom, email, téléphone, date de naissance, note de disponibilité), choisissez la valeur à garder ; pour les notes internes, gardez celles d'une fiche, prenez celles de l'autre, ou mettez les deux à la suite. Les étiquettes et les disponibilités des deux fiches sont toujours réunies, sans choix à faire. Un tableau indique ce qui va être déplacé : inscriptions (par statut), invitations, réponses aux questions, et ce qui ne l'est pas (les abonnements aux notifications du navigateur, jamais déplacés).
+3. **Points à vérifier** : si les deux fiches étaient inscrites au même créneau, l'inscription la plus avancée est gardée et l'autre annulée (avec une trace dans le journal de l'événement) ; les autres points (chevauchement de créneaux, limite de postes, âge minimum, poste réservé) sont seulement signalés, pas bloqués, puisque vous avez déjà placé ces personnes en connaissance de cause. Une réponse différente à une même question, ou une invitation au même événement des deux côtés quand ce n'est pas déjà tranché par « déjà utilisée en premier », demande un choix explicite avant de pouvoir confirmer.
+4. **Confirmer** : la fusion est **irréversible**. La fiche absorbée est désactivée et vidée de ses informations personnelles (nom, email, téléphone, notes, date de naissance, étiquettes). Les liens personnels (inscriptions, invitations) déplacés depuis la fiche absorbée sont régénérés : une case à cocher permet d'envoyer aussi les nouveaux liens à l'adresse conservée. Les anciens liens affichent la page « lien plus valide » habituelle.
+
+L'historique (journal de l'événement, journal de l'organisation) n'est jamais réécrit ; la page **Activité** de la fiche conservée continue à montrer les faits enregistrés sous l'ancienne fiche. Les responsables de secteur (#186) sont repérés par email, pas déplacés automatiquement : s'ils correspondent à l'adresse abandonnée, mettez-les à jour à la main.
+
 ---
 
 ## Inviter des membres à un événement
@@ -659,6 +670,7 @@ Les fichiers CSV s'ouvrent tels quels dans Excel ou LibreOffice (UTF-8, point-vi
 | Membres, événements, créneaux, inscriptions, pages, journaux d'activité, comptes administrateurs de l'organisation | tant que l'organisation est active, événements passés compris ; effacés 30 jours après sa désactivation (délai compté depuis la dernière modification de l'organisation désactivée) |
 | Événement supprimé par un administrateur | effacé immédiatement, avec ses créneaux, inscriptions, invitations, réponses aux questions, responsables, pages, jalons, messages ciblés et son journal |
 | Organisation supprimée par l'opérateur de benevol.app | effacée immédiatement, avec ses membres et ses administrateurs |
+| Fiche absorbée par une fusion de membres (#600) : fiche inactive sans donnée personnelle (« mergedIntoId »), le temps que les anciens identifiants restent résolus | 30 jours après la fusion |
 | Membres retirés, inscriptions annulées ou refusées, questions archivées | tant que l'organisation existe (tant que leur événement existe pour les inscriptions et les questions) : pas d'effacement individuel |
 | Emails en file d'envoi (destinataire et contenu) | effacés chaque nuit une fois partis ; ceux en échec 30 jours après leur mise en file |
 | Résultats d'envoi par destinataire (#598) : statut accepté/rejeté/échec, motif normalisé, codes, empreinte de l'adresse | 30 jours |

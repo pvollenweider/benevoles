@@ -73,6 +73,10 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "members": { GET: "organizer", POST: "organizer" },
   "members/[id]": { PATCH: "organizer", DELETE: "organizer" },
   "members/[id]/certificate": { POST: "organizer" },
+  // Merge (#600) is irreversible and touches every event: owner only. Organizers can see
+  // duplicates (#599, the members list) but not merge them.
+  "members/[id]/merge-preview": { POST: "owner" },
+  "members/[id]/merge": { POST: "owner" },
   "members/export": { GET: "organizer" },
   "members/export-hours": { GET: "organizer" },
   "members/import": { POST: "organizer" },
