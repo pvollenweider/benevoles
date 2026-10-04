@@ -155,3 +155,15 @@ describe("EventForm autosave status (#616)", () => {
     await act(async () => { resolveSecond({ ok: true, json: async () => ({ publicStatus: "draft" }) }) })
   })
 })
+
+// Every field of the form has a label (axe « label » found three textareas without one, #616).
+describe("EventForm labels", () => {
+  it("names the message textareas and the show fields", () => {
+    render(<EventForm initialData={{ ...initialData, startDate: "2031-06-01", endDate: "2031-06-02" }} />)
+    expect(screen.getByLabelText("Instructions publiques")).toBeInstanceOf(HTMLTextAreaElement)
+    expect(screen.getByLabelText("Message de confirmation")).toHaveAccessibleDescription(/Supporte le \*\*gras\*\*/)
+    expect(screen.getByLabelText(/^Message de rappel/)).toBeInstanceOf(HTMLTextAreaElement)
+    fireEvent.click(screen.getByRole("button", { name: "+ Ajouter" }))
+    for (const name of ["Nom du spectacle", "Date", "Début", "Fin"]) expect(screen.getByLabelText(name)).toBeInTheDocument()
+  })
+})

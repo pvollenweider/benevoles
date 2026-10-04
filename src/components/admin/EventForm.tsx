@@ -301,7 +301,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         {form.startDate && form.endDate && (
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-sm font-medium text-gray-700">Spectacles</label>
+            <h3 className="text-sm font-medium text-gray-700">Spectacles</h3>
             {!addingShow && (
               <button type="button" onClick={() => { setNewShow({ ...emptyShow, date: form.startDate }); setAddingShow(true) }} className="text-xs text-blue-600 hover:underline">
                 + Ajouter
@@ -314,7 +314,9 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
               {shows.map((show, i) =>
                 editingIdx === i ? (
                   <div key={i} className="border border-blue-200 rounded-xl p-3 space-y-2.5 bg-blue-50/40">
+                    <label htmlFor="edit-show-name" className="sr-only">Nom du spectacle</label>
                     <input
+                      id="edit-show-name"
                       type="text"
                       placeholder="Nom du spectacle"
                       value={editShow.name}
@@ -323,16 +325,16 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
                     />
                     <div className="grid grid-cols-3 gap-2">
                       <div>
-                        <label className="block text-xs text-gray-500 mb-1">Date</label>
-                        <input type="date" value={editShow.date} min={form.startDate} max={form.endDate} onChange={(e) => setEditShow((s) => ({ ...s, date: e.target.value }))} className={inputCls} />
+                        <label htmlFor="edit-show-date" className="block text-xs text-gray-600 mb-1">Date</label>
+                        <input id="edit-show-date" type="date" value={editShow.date} min={form.startDate} max={form.endDate} onChange={(e) => setEditShow((s) => ({ ...s, date: e.target.value }))} className={inputCls} />
                       </div>
                       <div>
-                        <label className="block text-xs text-gray-500 mb-1">Début</label>
-                        <input type="time" value={editShow.startTime} onChange={(e) => setEditShow((s) => ({ ...s, startTime: e.target.value }))} className={inputCls} />
+                        <label htmlFor="edit-show-start" className="block text-xs text-gray-600 mb-1">Début</label>
+                        <input id="edit-show-start" type="time" value={editShow.startTime} onChange={(e) => setEditShow((s) => ({ ...s, startTime: e.target.value }))} className={inputCls} />
                       </div>
                       <div>
-                        <label className="block text-xs text-gray-500 mb-1">Fin</label>
-                        <input type="time" value={editShow.endTime} onChange={(e) => setEditShow((s) => ({ ...s, endTime: e.target.value }))} className={inputCls} />
+                        <label htmlFor="edit-show-end" className="block text-xs text-gray-600 mb-1">Fin</label>
+                        <input id="edit-show-end" type="time" value={editShow.endTime} onChange={(e) => setEditShow((s) => ({ ...s, endTime: e.target.value }))} className={inputCls} />
                       </div>
                     </div>
                     <div className="flex gap-2">
@@ -352,8 +354,8 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
                       {show.date} · {show.startTime}–{show.endTime}
                     </span>
                     <span className="flex-1 text-sm text-indigo-800 truncate">{show.name}</span>
-                    <button type="button" onClick={() => startEditShow(i)} className="text-indigo-300 hover:text-indigo-600 flex-shrink-0 text-xs">✎</button>
-                    <button type="button" onClick={() => removeShow(i)} className="text-indigo-300 hover:text-red-400 flex-shrink-0 text-xs">✕</button>
+                    <button type="button" onClick={() => startEditShow(i)} aria-label={`Modifier le spectacle ${show.name}`} className="min-w-6 min-h-6 text-indigo-700 hover:text-indigo-900 flex-shrink-0 text-xs"><span aria-hidden="true">✎</span></button>
+                    <button type="button" onClick={() => removeShow(i)} aria-label={`Supprimer le spectacle ${show.name}`} className="min-w-6 min-h-6 text-indigo-700 hover:text-red-700 flex-shrink-0 text-xs"><span aria-hidden="true">✕</span></button>
                   </div>
                 )
               )}
@@ -367,7 +369,9 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
 
           {addingShow && (
             <div className="border border-blue-200 rounded-xl p-3 space-y-2.5 bg-blue-50/40">
+              <label htmlFor="new-show-name" className="sr-only">Nom du spectacle</label>
               <input
+                id="new-show-name"
                 type="text"
                 placeholder="Nom du spectacle"
                 value={newShow.name}
@@ -376,16 +380,16 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
               />
               <div className="grid grid-cols-3 gap-2">
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">Date</label>
-                  <input type="date" value={newShow.date} min={form.startDate} max={form.endDate} onChange={(e) => setShow("date", e.target.value)} className={inputCls} />
+                  <label htmlFor="new-show-date" className="block text-xs text-gray-600 mb-1">Date</label>
+                  <input id="new-show-date" type="date" value={newShow.date} min={form.startDate} max={form.endDate} onChange={(e) => setShow("date", e.target.value)} className={inputCls} />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">Début</label>
-                  <input type="time" value={newShow.startTime} onChange={(e) => setShow("startTime", e.target.value)} className={inputCls} />
+                  <label htmlFor="new-show-start" className="block text-xs text-gray-600 mb-1">Début</label>
+                  <input id="new-show-start" type="time" value={newShow.startTime} onChange={(e) => setShow("startTime", e.target.value)} className={inputCls} />
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1">Fin</label>
-                  <input type="time" value={newShow.endTime} onChange={(e) => setShow("endTime", e.target.value)} className={inputCls} />
+                  <label htmlFor="new-show-end" className="block text-xs text-gray-600 mb-1">Fin</label>
+                  <input id="new-show-end" type="time" value={newShow.endTime} onChange={(e) => setShow("endTime", e.target.value)} className={inputCls} />
                 </div>
               </div>
               <div className="flex gap-2">
@@ -404,8 +408,8 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         )}
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Instructions publiques</label>
-          <textarea rows={2} value={form.publicInstructions} onChange={(e) => set("publicInstructions", e.target.value)}
+          <label htmlFor="event-public-instructions" className="block text-sm font-medium text-gray-700 mb-1">Instructions publiques</label>
+          <textarea id="event-public-instructions" rows={2} value={form.publicInstructions} onChange={(e) => set("publicInstructions", e.target.value)}
             placeholder="Texte affiché aux bénévoles en haut de la page"
             className={`${inputCls} resize-none`} />
         </div>
@@ -430,17 +434,17 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Message de confirmation</label>
-          <textarea rows={2} value={form.confirmationMessage} onChange={(e) => set("confirmationMessage", e.target.value)}
+          <label htmlFor="event-confirmation-message" className="block text-sm font-medium text-gray-700 mb-1">Message de confirmation</label>
+          <textarea id="event-confirmation-message" aria-describedby="event-confirmation-message-hint" rows={2} value={form.confirmationMessage} onChange={(e) => set("confirmationMessage", e.target.value)}
             className={`${inputCls} resize-none`} />
-          <p className="text-xs text-gray-500 mt-1">{"Supporte le **gras**, les listes (- item) et les liens [texte](url). Variables : {{prenom}}, {{créneau}}, {{date}}."}</p>
+          <p id="event-confirmation-message-hint" className="text-xs text-gray-500 mt-1">{"Supporte le **gras**, les listes (- item) et les liens [texte](url). Variables : {{prenom}}, {{créneau}}, {{date}}."}</p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="event-reminder-message" className="block text-sm font-medium text-gray-700 mb-1">
             Message de rappel <span className="text-gray-500 font-normal">(envoyé manuellement avant l&apos;événement)</span>
           </label>
-          <textarea rows={3} value={form.reminderMessage} onChange={(e) => set("reminderMessage", e.target.value)}
+          <textarea id="event-reminder-message" rows={3} value={form.reminderMessage} onChange={(e) => set("reminderMessage", e.target.value)}
             placeholder="Consignes vestimentaires, point de RDV, accès, parking…"
             className={`${inputCls} resize-none`} />
         </div>
