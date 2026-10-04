@@ -7,11 +7,13 @@ import Link from "next/link"
 import { Suspense, useEffect, useState } from "react"
 import PublicFooter from "@/components/PublicFooter"
 import { renderMarkdown, interpolate } from "@/lib/markdown"
+import { confirmationVariables } from "@/lib/message-variables"
+import { dayLabel } from "@/lib/spoken-time"
 import PushSubscribeButton from "@/components/PushSubscribeButton"
 
 type RegistrationData = {
   volunteer: { firstName: string; email: string }
-  registrations: { shift: { label: string } }[]
+  registrations: { shift: { label: string; date?: string; startTime?: string } }[]
   confirmationMessage: string | null
 }
 
@@ -40,12 +42,12 @@ function SuccessContent() {
 
   const confirmationHtml: string | null = (() => {
     if (!regData?.confirmationMessage) return null
-    const vars: Record<string, string> = {
-      prenom: regData.volunteer.firstName,
-      "créneau": regData.registrations[0]?.shift.label ?? "",
-      date: "",
-      heure: "",
-    }
+    const first = regData.registrations[0]?.shift
+    const vars = confirmationVariables(regData.volunteer.firstName, first && {
+      label: first.label,
+      day: first.date ? dayLabel(first.date.slice(0, 10)).toLocaleLowerCase("fr") : undefined,
+      startTime: first.startTime,
+    })
     return renderMarkdown(interpolate(regData.confirmationMessage, vars))
   })()
 

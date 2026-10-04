@@ -137,4 +137,8 @@ describe("interpolate", () => {
   it("leaves unknown keys untouched", () => {
     expect(interpolate("{{inconnu}}", {})).toBe("{{inconnu}}")
   })
+
+  it("also fills the single-brace spelling of the message templates (regression: {prenom} shown raw on the personal page)", () => {
+    expect(interpolate("Merci {prenom} !", { prenom: "Alex" })).toBe("Merci Alex !")
+  })
 })

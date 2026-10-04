@@ -437,7 +437,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
           <label htmlFor="event-confirmation-message" className="block text-sm font-medium text-gray-700 mb-1">Message de confirmation</label>
           <textarea id="event-confirmation-message" aria-describedby="event-confirmation-message-hint" rows={2} value={form.confirmationMessage} onChange={(e) => set("confirmationMessage", e.target.value)}
             className={`${inputCls} resize-none`} />
-          <p id="event-confirmation-message-hint" className="text-xs text-gray-500 mt-1">{"Supporte le **gras**, les listes (- item) et les liens [texte](url). Variables : {{prenom}}, {{créneau}}, {{date}}."}</p>
+          <p id="event-confirmation-message-hint" className="text-xs text-gray-500 mt-1">{"Supporte le **gras**, les listes (- item) et les liens [texte](url). Variables : {prénom}, et pour le premier créneau de la personne : {créneau}, {date}, {heure}."}</p>
         </div>
 
         <div>

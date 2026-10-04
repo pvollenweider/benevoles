@@ -9,6 +9,8 @@ import { useParams } from "next/navigation"
 import Link from "next/link"
 import PublicFooter from "@/components/PublicFooter"
 import { renderMarkdown, interpolate } from "@/lib/markdown"
+import { confirmationVariables } from "@/lib/message-variables"
+import { dayLabel } from "@/lib/spoken-time"
 import PushSubscribeButton from "@/components/PushSubscribeButton"
 import ShiftInfoList from "@/components/ShiftInfoList"
 import AvailabilityForm from "@/components/AvailabilityForm"
@@ -381,7 +383,11 @@ export default function MyRegistrationPage() {
         )}
 
         {data.confirmationMessage && data.confirmationMessage.trim() && (() => {
-          const html = renderMarkdown(interpolate(data.confirmationMessage, { prenom: data.volunteer.firstName, "créneau": data.registrations[0]?.shift.label ?? "", date: "", heure: "" }))
+          const html = renderMarkdown(interpolate(data.confirmationMessage, confirmationVariables(data.volunteer.firstName, data.registrations[0] && {
+            label: data.registrations[0].shift.label,
+            day: dayLabel(data.registrations[0].shift.date.slice(0, 10)).toLocaleLowerCase("fr"),
+            startTime: data.registrations[0].shift.startTime,
+          })))
           return (
             <div>
               <h2 className="text-xs font-semibold text-gray-600 mb-2">Informations pratiques</h2>

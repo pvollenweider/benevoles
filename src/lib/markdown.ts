@@ -23,6 +23,7 @@
  * constructs (expression(), javascript: urls, etc.) from any style attribute an admin typed
  * directly, the same way it already does for href.
  */
+import { fillVariables } from "./message-variables"
 import { marked, Renderer, type Tokens } from "marked"
 import DOMPurify from "isomorphic-dompurify"
 
@@ -152,11 +153,9 @@ export function renderMarkdown(text: string): string {
 }
 
 /**
- * Replaces {{prenom}}, {{créneau}}, {{date}}, {{heure}} in text with provided values.
- * Unknown keys are left as-is.
+ * Replaces {prénom}, {{prenom}}, {créneau}, {date}, {heure}… in text with provided values (see
+ * fillVariables in message-variables.ts). Unknown keys are left as-is.
  */
 export function interpolate(text: string, vars: Record<string, string>): string {
-  return text.replace(/\{\{([^}]+)\}\}/g, (match, key: string) => {
-    return Object.prototype.hasOwnProperty.call(vars, key) ? vars[key] : match
-  })
+  return fillVariables(text, vars)
 }

@@ -6,11 +6,22 @@
  * cancellation, change or cancellation of a shift, personal link resent.
  */
 
+import { confirmationVariables, fillVariables } from "../../message-variables"
+import { renderMarkdown } from "../../markdown"
+import { dayLabel } from "../../spoken-time"
 import type { NotificationPayload } from "../types"
 import { eventPublicUrl } from "@/lib/urls"
 import { clockTime } from "../../gantt-utils"
 import { shiftInfoText, type ShiftInfo } from "../../shift-info"
 import { myPageUrl, escapeHtml, shiftInfoHtml, btn, wrap, type RenderedEmail } from "./shared"
+
+/** « samedi 10 octobre » from the « 10/10/2026 » the senders format, for {date} mid-sentence; as given otherwise. */
+function spokenDay(date: string): string {
+  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(date)
+  if (!m) return date
+  const iso = `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}`
+  return dayLabel(iso).toLocaleLowerCase("fr")
+}
 
 // ── Inscription confirmée ────────────────────────────────────────────────────
 
@@ -25,6 +36,11 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
   }
   const editUrl = myPageUrl(orgSlug, editToken)
   const firstName = volunteerName.split(" ")[0]
+  // The organizer's message may use {prénom}, {créneau}, {date}, {heure}: filled here as on the
+  // confirmation page and the personal page, never sent raw.
+  const message = confirmationMessage
+    ? fillVariables(confirmationMessage, confirmationVariables(firstName, shifts[0] && { label: shifts[0].label, day: spokenDay(shifts[0].date), startTime: shifts[0].startTime }))
+    : undefined
   const subject = `Inscription confirmée — ${eventTitle} 🎉`
 
   const text = [
@@ -35,7 +51,7 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
     `Tes créneaux :`,
     ...shifts.flatMap((s) => [`  • ${s.label} · ${s.date} · ${clockTime(s.startTime)}–${clockTime(s.endTime)}`, ...shiftInfoText(s).map((l) => `      ${l}`)]),
     ``,
-    ...(confirmationMessage ? [confirmationMessage, ``] : []),
+    ...(message ? [message, ``] : []),
     `Un empêchement ? Tu peux gérer tes inscriptions ici :`,
     editUrl,
     ``,
@@ -54,7 +70,7 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
           ${shiftInfoHtml(s)}
         </div>`).join("")}
     </div>
-    ${confirmationMessage ? `<div style="background:#eff6ff;border-radius:8px;padding:14px 16px;margin-top:1em;font-size:0.9em;color:#1e40af;white-space:pre-wrap">${escapeHtml(confirmationMessage)}</div>` : ""}
+    ${message ? `<div style="background:#eff6ff;border-radius:8px;padding:14px 16px;margin-top:1em;font-size:0.9em;color:#1e40af;">${renderMarkdown(message)}</div>` : ""}
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Un grand M E R C I et à très vite ! 🙌</p>
   `, preheader)

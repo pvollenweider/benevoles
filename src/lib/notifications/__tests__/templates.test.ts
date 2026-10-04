@@ -40,3 +40,44 @@ describe("render — registration_link_resend", () => {
     expect(html).toContain("Julie")
   })
 })
+
+describe("render — registration_confirmation message variables", () => {
+  it("fills {prénom}, {créneau}, {date} and {heure} in the organizer's message instead of sending them raw (regression)", () => {
+    const payload: NotificationPayload = {
+      kind: "registration_confirmation",
+      recipient: { email: "julie@example.org", name: "Julie Martin" },
+      data: {
+        volunteerName: "Julie Martin",
+        eventTitle: "Festival",
+        shifts: [{ label: "Accueil", date: "10/10/2026", startTime: "08:00", endTime: "12:00" }],
+        editToken: "edit-tok",
+        confirmationMessage: "Merci {prenom} ! {{créneau}} le {date} à {heure}. <b>",
+      },
+    }
+    const { text, html } = render(payload)
+    expect(text).toContain("Merci Julie ! Accueil le samedi 10 octobre à 08:00.")
+    expect(html).toContain("Merci Julie ! Accueil le samedi 10 octobre à 08:00.")
+    expect(html).not.toContain("<b>")
+    expect(text).not.toContain("{prenom}")
+  })
+})
+
+describe("render — registration_confirmation message formatting", () => {
+  it("renders the organizer's Markdown in the HTML part, as the hint promises (regression: literal ** in the email)", () => {
+    const payload: NotificationPayload = {
+      kind: "registration_confirmation",
+      recipient: { email: "julie@example.org", name: "Julie Martin" },
+      data: {
+        volunteerName: "Julie Martin",
+        eventTitle: "Festival",
+        shifts: [{ label: "Accueil", date: "10/10/2026", startTime: "08:00", endTime: "12:00" }],
+        editToken: "edit-tok",
+        confirmationMessage: "**Gilet** fourni\n\n- eau\n- casquette",
+      },
+    }
+    const { html } = render(payload)
+    expect(html).toMatch(/<strong[^>]*>Gilet<\/strong>/)
+    expect(html).toMatch(/<li[^>]*>eau<\/li>/)
+    expect(html).not.toContain("**Gilet**")
+  })
+})
