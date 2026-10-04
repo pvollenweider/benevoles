@@ -114,6 +114,8 @@ Vous pouvez :
   - **Refuser la place**, pour une place qui vous est proposée : elle passe à la personne suivante ;
   - **Retirer ma demande**, pour une demande sur un créneau sur validation
 
+  Pour une place confirmée ou une demande, la confirmation propose un champ facultatif « Un mot pour l'organisation ? » (300 caractères maximum) : un message comme « Paul peut me remplacer » est transmis par email à l'organisation et aux responsables du poste, mais n'est pas conservé une fois l'email envoyé. N'y écrivez pas d'informations de santé ni d'autres détails sensibles.
+
   Si l'annulation n'aboutit pas (connexion coupée, par exemple), un message sous le créneau dit ce qui s'est passé et le créneau reste affiché ; rechargez la page pour vérifier avant de réessayer.
 - **Ajouter vos créneaux à votre calendrier** (téléphone, Google, Outlook, Apple…) : avec plusieurs créneaux, « Ajouter tout mon planning à mon calendrier » télécharge un fichier `.ics` de vos créneaux confirmés, et « Ajouter à mon calendrier » sous un créneau le fait pour lui seul. Ouvrez le fichier pour l'importer. Il ne se met pas à jour tout seul : si un horaire change, vous recevez un email, téléchargez-le à nouveau (le créneau est alors remplacé, pas dupliqué, dans la plupart des calendriers).
 - Indiquer, si vous le souhaitez, **vos disponibilités** en général (matin, après-midi, soir, et une remarque comme « pas le dimanche »). C'est facultatif : cela aide l'organisation si elle doit vous proposer un autre créneau, mais vous choisissez toujours vos créneaux vous-même.

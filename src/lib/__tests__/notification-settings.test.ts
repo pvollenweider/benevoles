@@ -7,9 +7,15 @@ import {
 describe("notification settings", () => {
   it("defaults when nothing, something partial or garbage is stored", () => {
     expect(parseNotificationSettings(null)).toEqual(DEFAULT_NOTIFICATION_SETTINGS)
-    expect(parseNotificationSettings({ reminders: { j2: false } })).toEqual({ reminders: { j2: false, j1: true, dd: true }, signupAdminEmail: true })
+    expect(parseNotificationSettings({ reminders: { j2: false } })).toEqual({ reminders: { j2: false, j1: true, dd: true }, signupAdminEmail: true, withdrawalAdminEmail: true })
     expect(parseNotificationSettings("nope")).toEqual(DEFAULT_NOTIFICATION_SETTINGS)
     expect(parseNotificationSettings({ signupAdminEmail: "yes" })).toEqual(DEFAULT_NOTIFICATION_SETTINGS)
+  })
+
+  it("defaults the withdrawal switch on (#559), separate from the sign-up one", () => {
+    expect(DEFAULT_NOTIFICATION_SETTINGS.withdrawalAdminEmail).toBe(true)
+    expect(parseNotificationSettings({ signupAdminEmail: false }).withdrawalAdminEmail).toBe(true)
+    expect(parseNotificationSettings({ withdrawalAdminEmail: false }).signupAdminEmail).toBe(true)
   })
 
   it("maps the cron's kinds to the switches", () => {
@@ -24,13 +30,14 @@ describe("notification settings", () => {
     expect(notificationSettingsPatchSchema.safeParse({ replyToEmail: "nope" }).success).toBe(false)
     expect(notificationSettingsPatchSchema.safeParse({ settings: { reminders: { j1: false } } }).data?.settings).toEqual({ reminders: { j1: false } })
     const merged = mergeNotificationSettings(DEFAULT_NOTIFICATION_SETTINGS, { reminders: { j1: false } })
-    expect(merged).toEqual({ reminders: { j2: true, j1: false, dd: true }, signupAdminEmail: true })
-    expect(mergeNotificationSettings(merged, { signupAdminEmail: false })).toEqual({ reminders: { j2: true, j1: false, dd: true }, signupAdminEmail: false })
+    expect(merged).toEqual({ reminders: { j2: true, j1: false, dd: true }, signupAdminEmail: true, withdrawalAdminEmail: true })
+    expect(mergeNotificationSettings(merged, { signupAdminEmail: false })).toEqual({ reminders: { j2: true, j1: false, dd: true }, signupAdminEmail: false, withdrawalAdminEmail: true })
+    expect(mergeNotificationSettings(merged, { withdrawalAdminEmail: false })).toEqual({ reminders: { j2: true, j1: false, dd: true }, signupAdminEmail: true, withdrawalAdminEmail: false })
   })
 
   it("summarizes in one sentence", () => {
-    expect(notificationSummary(DEFAULT_NOTIFICATION_SETTINGS, null)).toBe("Les trois rappels sont envoyés. Les admins reçoivent un email à chaque inscription. Les réponses des bénévoles arrivent à l'adresse par défaut de la plateforme.")
-    expect(notificationSummary({ reminders: { j2: false, j1: true, dd: false }, signupAdminEmail: false }, "c@o.ch")).toBe("Rappels envoyés : Rappel J-1. Pas d'email aux admins à l'inscription. Les réponses des bénévoles arrivent à c@o.ch.")
-    expect(notificationSummary({ reminders: { j2: false, j1: false, dd: false }, signupAdminEmail: true }, null)).toMatch(/^Aucun rappel automatique\./)
+    expect(notificationSummary(DEFAULT_NOTIFICATION_SETTINGS, null)).toBe("Les trois rappels sont envoyés. Les admins reçoivent un email à chaque inscription. Les admins et les responsables de poste reçoivent un email à chaque désistement. Les réponses des bénévoles arrivent à l'adresse par défaut de la plateforme.")
+    expect(notificationSummary({ reminders: { j2: false, j1: true, dd: false }, signupAdminEmail: false, withdrawalAdminEmail: false }, "c@o.ch")).toBe("Rappels envoyés : Rappel J-1. Pas d'email aux admins à l'inscription. Pas d'email aux admins ni aux responsables de poste en cas de désistement. Les réponses des bénévoles arrivent à c@o.ch.")
+    expect(notificationSummary({ reminders: { j2: false, j1: false, dd: false }, signupAdminEmail: true, withdrawalAdminEmail: true }, null)).toMatch(/^Aucun rappel automatique\./)
   })
 })

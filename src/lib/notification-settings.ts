@@ -18,11 +18,18 @@ export const notificationSettingsSchema = z.object({
   }).default({ j2: true, j1: true, dd: true }),
   /** Email to every admin of the organization at each public sign-up. */
   signupAdminEmail: z.boolean().default(true),
+  /**
+   * Email to the organization's admins and the role's sector leaders when a volunteer withdraws
+   * a confirmed place or a pending request (#559). Separate from `signupAdminEmail`: a
+   * withdrawal is more operational than a sign-up (owner decision, 2026-10-01). On by default,
+   * and also gates the sector leaders' copy — one switch for the whole feature.
+   */
+  withdrawalAdminEmail: z.boolean().default(true),
 })
 
 export type NotificationSettings = z.infer<typeof notificationSettingsSchema>
 
-export const DEFAULT_NOTIFICATION_SETTINGS: NotificationSettings = { reminders: { j2: true, j1: true, dd: true }, signupAdminEmail: true }
+export const DEFAULT_NOTIFICATION_SETTINGS: NotificationSettings = { reminders: { j2: true, j1: true, dd: true }, signupAdminEmail: true, withdrawalAdminEmail: true }
 
 /** Whatever is stored (null, partial, garbage) becomes a complete settings object. */
 export function parseNotificationSettings(stored: unknown): NotificationSettings {
@@ -52,6 +59,7 @@ export const notificationSettingsPatchSchema = z.object({
   settings: z.object({
     reminders: z.object({ j2: z.boolean().optional(), j1: z.boolean().optional(), dd: z.boolean().optional() }).optional(),
     signupAdminEmail: z.boolean().optional(),
+    withdrawalAdminEmail: z.boolean().optional(),
   }).optional(),
 })
 
@@ -64,6 +72,7 @@ export function mergeNotificationSettings(current: NotificationSettings, patch: 
   return {
     reminders: { j2: r.j2 ?? current.reminders.j2, j1: r.j1 ?? current.reminders.j1, dd: r.dd ?? current.reminders.dd },
     signupAdminEmail: patch.signupAdminEmail ?? current.signupAdminEmail,
+    withdrawalAdminEmail: patch.withdrawalAdminEmail ?? current.withdrawalAdminEmail,
   }
 }
 
@@ -73,6 +82,7 @@ export function notificationSummary(s: NotificationSettings, replyToEmail: strin
   const parts = [
     on.length === 0 ? "Aucun rappel automatique." : on.length === 3 ? "Les trois rappels sont envoyés." : `Rappels envoyés : ${on.join(", ")}.`,
     s.signupAdminEmail ? "Les admins reçoivent un email à chaque inscription." : "Pas d'email aux admins à l'inscription.",
+    s.withdrawalAdminEmail ? "Les admins et les responsables de poste reçoivent un email à chaque désistement." : "Pas d'email aux admins ni aux responsables de poste en cas de désistement.",
     replyToEmail ? `Les réponses des bénévoles arrivent à ${replyToEmail}.` : "Les réponses des bénévoles arrivent à l'adresse par défaut de la plateforme.",
   ]
   return parts.join(" ")

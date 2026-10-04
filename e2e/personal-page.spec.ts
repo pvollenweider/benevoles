@@ -2,6 +2,9 @@ import { test, expect, type Page } from "@playwright/test"
 import { seriousViolations } from "./helpers/axe"
 import { waitForHydration } from "./helpers/hydration"
 import { createPublicEvent, publicSignUp, randomIp, type PublicEvent } from "./helpers/public-signup"
+import { clearMailbox, waitForMessage, getMessageText } from "./helpers/mailpit"
+
+const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
 
 /**
  * Withdrawing from the personal page (/my) with the keyboard (#534): the confirmation takes focus,
@@ -85,6 +88,23 @@ test("withdrawing with the keyboard: focus in the confirmation, back on the trig
   await page.keyboard.press("Enter")
   await expect(page.getByRole("heading", { level: 1, name: "Toutes tes inscriptions ont été annulées" })).toBeFocused()
   await expect(pageStatus(page)).toHaveText(/^Créneau annulé : Accueil, /)
+})
+
+test("a message left on withdrawal reaches the organizer's email (#559)", async ({ page }) => {
+  await clearMailbox()
+  await openMyPage(page)
+  const bar = trigger(page, "Bar")
+  await bar.click()
+  await expect(keep(page)).toBeFocused()
+
+  const message = `Je suis malade, Paul peut me remplacer ${Date.now()}`
+  await page.getByLabel("Un mot pour l'organisation ? (facultatif)").fill(message)
+  await page.getByRole("button", { name: "Oui, annuler" }).click()
+  await expect(bar).toHaveCount(0)
+
+  const mail = await waitForMessage(`to:"${ORG_ADMIN_EMAIL}" subject:"Désistement"`)
+  const text = await getMessageText(mail.ID)
+  expect(text).toContain(message)
 })
 
 test("a failed withdrawal keeps the page, says so under the card and gives focus back to the trigger", async ({ page }) => {

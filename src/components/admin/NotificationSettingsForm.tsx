@@ -107,6 +107,16 @@ export default function NotificationSettingsForm({ initialSettings, initialReply
         </div>
       </div>
 
+      <div className="flex items-start gap-3">
+        <input id={`${id}-withdrawal`} type="checkbox" checked={settings.withdrawalAdminEmail} onChange={(e) => setSettings((s) => ({ ...s, withdrawalAdminEmail: e.target.checked }))} aria-describedby={`${id}-withdrawal-help`} className={checkboxClass} />
+        <div>
+          <label htmlFor={`${id}-withdrawal`} className="text-sm font-medium text-gray-800">Prévenir en cas de désistement</label>
+          <p id={`${id}-withdrawal-help`} className="text-xs text-gray-600">
+            Un email aux administrateurs actifs et aux responsables du poste concerné quand un bénévole annule une place confirmée ou une demande, avec le message qu&apos;il a laissé le cas échéant. Réglage séparé de l&apos;inscription, coupe aussi l&apos;email aux responsables.
+          </p>
+        </div>
+      </div>
+
       <div>
         <label htmlFor={`${id}-replyto`} className="block text-sm text-gray-800 mb-1">Adresse de réponse</label>
         <input

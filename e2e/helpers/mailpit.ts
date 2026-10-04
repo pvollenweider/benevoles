@@ -49,3 +49,10 @@ export async function getMessageText(id: string): Promise<string> {
   const data = (await res.json()) as { Text: string }
   return data.Text
 }
+
+export async function getMessageHtml(id: string): Promise<string> {
+  const res = await fetch(`${MAILPIT_URL}/api/v1/message/${id}`)
+  if (!res.ok) throw new Error(`Mailpit message fetch failed: ${res.status}`)
+  const data = (await res.json()) as { HTML: string }
+  return data.HTML
+}

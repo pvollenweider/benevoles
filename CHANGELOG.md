@@ -9,6 +9,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Les organisateurs sont prévenus d'un désistement** (#559) : quand un bénévole annule une place confirmée ou une demande depuis sa page personnelle ou la page publique de l'événement, un email part aux administrateurs actifs et aux responsables du poste concerné (qui se désiste, de quel créneau, combien de places manquent désormais, si la liste d'attente a repris la place), avec le mot facultatif que le bénévole peut laisser à l'organisation (« Un mot pour l'organisation ? », 300 caractères maximum, jamais conservé une fois l'email envoyé). Quitter la liste d'attente ou refuser une place proposée ne prévient personne. Réglage séparé de celui des nouvelles inscriptions, coché par défaut, dans **Paramètres → Emails**.
 - **Invalidation en masse des liens bénévoles après une fuite** (#542) : `scripts/regenerate-links.ts`, un outil opérateur qui régénère le jeton de chaque inscription, responsable de secteur et invitation d'une organisation ou d'un événement (changer `TOKEN_ENCRYPTION_KEY` ne suffisait pas : les liens déjà envoyés restaient valables). Simulation par défaut, `--yes` pour appliquer, `--resend` pour renvoyer les nouveaux liens ; voir `docs/rgpd/procedure-violation.md`.
 
 ### Modifié

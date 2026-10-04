@@ -40,6 +40,7 @@ C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles
 - **Où en est l'événement ?** Une barre d'étapes, du brouillon à l'archivage, montre où il en est et ce qu'il reste à faire.
 - **Tout retrouver.** Une recherche globale (Ctrl + K, ou Cmd + K sur Mac) trouve un bénévole, une inscription, un événement ou un créneau, sans se soucier des accents.
 - **Les inscriptions en main.** Ajouter quelqu'un à la main, retirer, désigner un responsable, renvoyer un lien, avec une confirmation avant chaque action et quelques secondes pour annuler un retrait.
+- **Prévenus d'un désistement.** Quand un bénévole annule une place confirmée ou une demande, vous et les responsables du poste recevez un email avec le mot qu'il a laissé le cas échéant ; ce réglage se coupe indépendamment de celui des nouvelles inscriptions.
 - **Deux rôles pour l'équipe.** Les propriétaires gèrent l'équipe, les réglages de l'organisation et la suppression définitive d'un événement ; les organisateurs préparent les événements, gèrent les inscriptions et les membres, et écrivent aux bénévoles.
 - **Vos membres.** Fiches avec étiquettes, notes et disponibilités, invitations et relances, import depuis un fichier CSV ou Excel, avec un aperçu de ce qui sera créé ou mis à jour avant de confirmer. L'activité de chaque membre, événement par événement : invitations, inscriptions, présences, sans score.
 - **Les présences.** Le jour J, cochez qui est venu.

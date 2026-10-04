@@ -12,8 +12,10 @@ import { reportError } from "@/lib/report-error"
 import { contactPhone } from "@/lib/contact-phone"
 import { registrationToken } from "@/lib/token-vault"
 import { pickShiftInfo } from "@/lib/shift-info"
-import { LIVE_STATUSES } from "@/lib/registration-capacity"
-import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw } from "@/lib/volunteer-withdraw"
+import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
+import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw, withdrawRequestSchema } from "@/lib/volunteer-withdraw"
+import { buildWithdrawalNotifications } from "@/lib/withdrawal-notifications"
+import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 
 const tooManyAttempts = () => NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
 
@@ -98,10 +100,22 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
 
   const { token } = await params
 
+  // The optional « Un mot pour l'organisation ? » (#559): validated before touching the
+  // database. Never stored on the registration nor in the event log — only in the outbox row
+  // built below, until it is sent (src/lib/retention.ts).
+  const parsedBody = withdrawRequestSchema.safeParse(await req.json().catch(() => ({})))
+  if (!parsedBody.success) return NextResponse.json({ error: "Message trop long." }, { status: 400 })
+  const message = parsedBody.data.message?.trim() || null
+
   // Every live registration the personal page shows can be withdrawn: a place, a pending
   // request (#484), a waitlist entry or a spot offered from the waitlist.
   const registration = await prisma.registration.findFirst({
     where: { ...registrationToken.where(token), status: { in: [...WITHDRAWABLE_STATUSES] } },
+    include: {
+      volunteer: { select: { firstName: true, lastName: true } },
+      shift: { select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true } },
+      event: { select: { id: true, title: true, organizationId: true, organization: { select: { slug: true } } } },
+    },
   })
   const plan = registration && planVolunteerWithdraw(registration.status)
 
@@ -131,14 +145,38 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
     entityType: "Registration",
     entityId: registration.id,
     // shiftId unchanged: recorded so the narrative can still name the shift — see
-    // describeChanges's shiftId filter in event-log-narrative.ts.
+    // describeChanges's shiftId filter in event-log-narrative.ts. The optional message never
+    // goes in `changes`: it must not end up in the event log (#559).
     changes: { status: { from: registration.status, to: "cancelled" }, shiftId: { from: registration.shiftId, to: registration.shiftId } },
   })
 
   // Only a withdrawal that held a spot (place, request, offered spot) hands it to the next
   // person on the waitlist. Leaving the waitlist frees nothing: the entries behind move up.
+  let waitlistTookSpot = false
   if (plan.releasesSpot) {
-    await promoteNextInWaitlist(registration.shiftId, cancelLogId ?? undefined).catch(reportError("waitlist.promote"))
+    waitlistTookSpot = await promoteNextInWaitlist(registration.shiftId, cancelLogId ?? undefined).catch((e) => { reportError("waitlist.promote")(e); return false })
+  }
+
+  // Tells the organization's admins and the role's sector leaders (#559): only for a confirmed
+  // place or a pending request. Best-effort: a failure here must not undo the withdrawal just
+  // recorded, already answered to the volunteer as settled.
+  if (plan.notifiesOrganizers) {
+    try {
+      const occupied = await prisma.registration.count({ where: { shiftId: registration.shiftId, status: { in: [...OCCUPYING_STATUSES] } } })
+      const payloads = await buildWithdrawalNotifications({
+        registrationId: registration.id,
+        event: registration.event,
+        shift: registration.shift,
+        volunteerName: `${registration.volunteer.firstName} ${registration.volunteer.lastName}`,
+        message,
+        waitlistTookSpot,
+        placesMissing: Math.max(registration.shift.capacity - occupied, 0),
+      })
+      const outboxIds = await enqueueNotifications(payloads, prisma, { organizationId: registration.event.organizationId })
+      deliverAfterResponse(outboxIds)
+    } catch (e) {
+      reportError("withdrawal.notify")(e)
+    }
   }
 
   return NextResponse.json({ success: true })

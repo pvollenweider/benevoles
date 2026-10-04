@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { LIVE_STATUSES, OCCUPYING_STATUSES } from "./registration-capacity"
+import { z } from "zod"
+import { LIVE_STATUSES, OCCUPYING_STATUSES, COMMITTED_STATUSES } from "./registration-capacity"
 import { dayLabel } from "./action-recap"
 import { fmtHour } from "./registrations-list"
 
@@ -24,13 +25,41 @@ export type WithdrawPlan = {
    * A plain waitlist entry holds none: leaving frees nothing, later entries just move up.
    */
   releasesSpot: boolean
+  /**
+   * Whether this withdrawal tells the organization's admins and the role's sector leaders
+   * (#559): only a confirmed place or a pending request, since those are what the organizer
+   * was relying on. Leaving the waitlist or declining an offer needs no one told.
+   */
+  notifiesOrganizers: boolean
 }
 
 /** The plan for withdrawing a registration in this status, or null if it can't be withdrawn. */
 export function planVolunteerWithdraw(status: string): WithdrawPlan | null {
   if (!(WITHDRAWABLE_STATUSES as readonly string[]).includes(status)) return null
-  return { releasesSpot: (OCCUPYING_STATUSES as readonly string[]).includes(status) }
+  return {
+    releasesSpot: (OCCUPYING_STATUSES as readonly string[]).includes(status),
+    notifiesOrganizers: (COMMITTED_STATUSES as readonly string[]).includes(status),
+  }
 }
+
+/**
+ * The optional « Un mot pour l'organisation ? » left with a withdrawal (#559): delivered through
+ * the outbox, never stored on the registration, the event log, exports or the archive — see
+ * src/lib/retention.ts, "Emails en file d'envoi".
+ */
+export const WITHDRAWAL_MESSAGE_MAX = 300
+
+export const WITHDRAWAL_MESSAGE_LABEL = "Un mot pour l'organisation ? (facultatif)"
+
+/** Visible, not a live region (follows TargetedMessageForm's pattern): announced only if read. */
+export function withdrawalMessageHint(length: number): string {
+  return `Vu par l'organisation et les responsables du poste. N'écris pas d'informations de santé ni d'autres détails sensibles. ${length}/${WITHDRAWAL_MESSAGE_MAX} caractères.`
+}
+
+/** Body of the DELETE request: the optional message, trimmed and length-checked (301 → 400). */
+export const withdrawRequestSchema = z.object({
+  message: z.string().trim().max(WITHDRAWAL_MESSAGE_MAX).optional(),
+})
 
 export type WithdrawCopy = {
   /** Visible button label. */

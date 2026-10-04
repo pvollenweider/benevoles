@@ -146,41 +146,6 @@ export function renderRegistrationRefused(p: NotificationPayload): RenderedEmail
   return { subject, html, text }
 }
 
-// ── Inscription annulée (suite à #46 cancel public) ──────────────────────────
-
-export function renderRegistrationCancelled(p: NotificationPayload): RenderedEmail {
-  const d = p.data as {
-    volunteerName: string
-    eventTitle: string
-    orgSlug: string
-    eventSlug: string
-    shiftLabel: string
-  }
-  const eventUrl = eventPublicUrl(d.orgSlug, d.eventSlug)
-  const firstName = d.volunteerName.split(" ")[0]
-  const subject = `Désinscription confirmée — ${d.eventTitle}`
-
-  const text = [
-    `Hello ${firstName} !`,
-    ``,
-    `Ta désinscription du créneau "${d.shiftLabel}" pour ${d.eventTitle} est bien prise en compte.`,
-    ``,
-    `Si tu changes d'avis, les créneaux disponibles sont par ici :`,
-    eventUrl,
-    ``,
-    `On espère te revoir bientôt !`,
-  ].join("\n")
-
-  const html = wrap(`
-    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} !</h2>
-    <p style="color:#555">Ta désinscription du créneau <strong>${escapeHtml(d.shiftLabel)}</strong> pour <strong>${escapeHtml(d.eventTitle)}</strong> est bien prise en compte.</p>
-    <p style="color:#555">Si tu changes d'avis, les créneaux disponibles sont par ici :</p>
-    <p style="margin-top:1.5em">${btn(eventUrl, "Voir les créneaux disponibles")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">On espère te revoir bientôt ! 🙏</p>
-  `, `Ta désinscription est confirmée — on espère te revoir à une prochaine occasion.`)
-
-  return { subject, html, text }
-}
 
 // ── Notif modification d'un shift ────────────────────────────────────────────
 

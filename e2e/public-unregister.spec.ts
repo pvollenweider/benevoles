@@ -2,6 +2,9 @@ import { test, expect, type Page } from "@playwright/test"
 import { seriousViolations } from "./helpers/axe"
 import { waitForHydration } from "./helpers/hydration"
 import { createPublicEvent, publicSignUp, randomIp, type PublicEvent } from "./helpers/public-signup"
+import { clearMailbox, waitForMessage, getMessageText, getMessageHtml } from "./helpers/mailpit"
+
+const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
 
 /**
  * Withdrawing a held shift from the public event page with the keyboard (#584, #534): the
@@ -88,6 +91,29 @@ test("withdrawing with the keyboard: trapped dialog, Escape back to the ✕, the
   expect(focused.body).toBe(false)
   expect(focused.shiftId).toBe(event.shifts.find((s) => s.label === "Accueil")!.id)
   expect(focused.name).toMatch(/^Sélectionner — Accueil/)
+})
+
+test("a message left on withdrawal reaches the organizer's email, escaped (#559)", async ({ page }) => {
+  await clearMailbox()
+  await openWithSession(page)
+  const bar = cancelX(page, "Bar")
+  await bar.click()
+  await expect(dialog(page)).toBeVisible()
+
+  const message = `Paul peut me remplacer <b>&</b> "merci" ${Date.now()}`
+  await page.getByLabel("Un mot pour l'organisation ? (facultatif)").fill(message)
+  await page.getByRole("button", { name: "Oui, annuler" }).click()
+  await expect(dialog(page)).toBeHidden()
+
+  const mail = await waitForMessage(`to:"${ORG_ADMIN_EMAIL}" subject:"Désistement"`)
+  const text = await getMessageText(mail.ID)
+  expect(text).toContain(message)
+
+  // Escaped in the HTML version: no raw <b> tag, the angle brackets and quote are entities.
+  const html = await getMessageHtml(mail.ID)
+  expect(html).not.toContain("<b>&amp;</b>")
+  expect(html).toContain("&lt;b&gt;&amp;&lt;/b&gt;")
+  expect(html).toContain("&quot;merci&quot;")
 })
 
 test("a failed withdrawal stays in the dialog, says why and removes nothing", async ({ page }) => {

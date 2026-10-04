@@ -8,7 +8,7 @@
 import type { NotificationPayload } from "../types"
 import { renderMarkdown } from "@/lib/markdown"
 import { clockTime } from "../../gantt-utils"
-import { escapeHtml, btn, wrap, type RenderedEmail } from "./shared"
+import { escapeHtml, btn, wrap, adminShiftUrl, adminStaffingUrl, type RenderedEmail } from "./shared"
 
 // ── Notif admin (interne) ────────────────────────────────────────────────────
 
@@ -43,6 +43,62 @@ export function renderAdminNotification(p: NotificationPayload): RenderedEmail {
       }).join("")}
     </ul>
   `, `${d.volunteerName} · ${d.shifts.length} créneau${d.shifts.length > 1 ? "x" : ""}`)
+
+  return { subject, html, text }
+}
+
+// ── Désistement (#559) : admins de l'organisation, place confirmée ou demande ─
+//
+// Reprend le kind `registration_cancelled`, qui existait sans jamais être envoyé : son contenu
+// d'origine (confirmation de désinscription au bénévole lui-même) ne correspond pas à ce dont
+// cette notification a besoin (l'équipe prévenue d'un désistement), donc remplacé plutôt que
+// doublé avec un nouveau kind.
+export function renderWithdrawalAdminNotice(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    eventId: string
+    eventTitle: string
+    volunteerName: string
+    shiftId: string
+    shiftLabel: string
+    roleName: string
+    shiftDate: string
+    startTime: string
+    endTime: string
+    placesMissing: number
+    waitlistTookSpot: boolean
+    message?: string | null
+  }
+  const shiftName = d.shiftLabel && d.shiftLabel !== d.roleName ? `${d.roleName} · ${d.shiftLabel}` : d.roleName
+  const subject = `Désistement — ${d.eventTitle}`
+  const shiftUrl = adminShiftUrl(d.eventId, d.shiftId)
+  const staffingUrl = adminStaffingUrl(d.eventId)
+
+  const spotLine = d.waitlistTookSpot
+    ? "La place a été reprise automatiquement par la personne suivante sur la liste d'attente."
+    : d.placesMissing > 0
+      ? `Il manque maintenant ${d.placesMissing} place${d.placesMissing > 1 ? "s" : ""} sur ce créneau.`
+      : "Ce créneau n'a pas de place manquante."
+
+  const text = [
+    `${d.volunteerName} se désiste de ${shiftName} (${d.shiftDate} · ${clockTime(d.startTime)}–${clockTime(d.endTime)}) pour ${d.eventTitle}.`,
+    ``,
+    spotLine,
+    ...(d.message ? [``, `Message laissé :`, `« ${d.message} »`] : []),
+    ``,
+    `Voir l'inscription :`,
+    shiftUrl,
+    ``,
+    `Suivi des effectifs :`,
+    staffingUrl,
+  ].join("\n")
+
+  const html = wrap(`
+    <p><strong>${escapeHtml(d.volunteerName)}</strong> se désiste de <strong>${escapeHtml(shiftName)}</strong> (${escapeHtml(d.shiftDate)} · ${escapeHtml(clockTime(d.startTime))}–${escapeHtml(clockTime(d.endTime))}) pour <strong>${escapeHtml(d.eventTitle)}</strong>.</p>
+    <p style="color:#555">${escapeHtml(spotLine)}</p>
+    ${d.message ? `<p style="color:#444;background:#f3f4f6;border-radius:8px;padding:10px 14px;white-space:pre-wrap">${escapeHtml(d.message)}</p>` : ""}
+    <p style="margin-top:1.25em">${btn(shiftUrl, "Voir l'inscription")}</p>
+    <p style="margin-top:0.75em"><a href="${staffingUrl}" style="color:#2563eb">Suivi des effectifs</a></p>
+  `, `${d.volunteerName} se désiste de ${shiftName}.`)
 
   return { subject, html, text }
 }

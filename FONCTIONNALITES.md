@@ -65,6 +65,7 @@ Liste exhaustive des fonctionnalités de l'application.
 - **Message de confirmation personnalisable** par l'admin, rédigé en Markdown (titres, gras, italique, listes, citations, code, tableaux, texte barré, liens automatiques), affiché sur la page de succès, sur `/my/[token]` et dans l'email
 - Page de gestion : liste de toutes les inscriptions actives du bénévole pour l'événement
 - Annulation individuelle d'un créneau depuis la page de gestion
+- **Désistement avec mot facultatif** (#559) : la confirmation d'annulation (page personnelle et page publique, `src/components/public/WithdrawMessageField.tsx`) propose un champ « Un mot pour l'organisation ? » (`textarea`, 300 caractères maximum, compteur visible, pas de région live), validé côté serveur (`src/lib/volunteer-withdraw.ts`, zod, 301 → 400) et transmis par `DELETE /api/public/registrations/[token]` ; jamais stocké sur l'inscription ni dans le journal d'activité, uniquement dans la ligne de la file d'envoi jusqu'à l'envoi de l'email. Pour une place confirmée ou une demande (pas la liste d'attente, pas une place refusée), un email part aux admins et aux responsables du poste (voir « Réglages des emails ») avec qui se désiste, le créneau, le nombre de places manquantes, si la liste d'attente a repris la place, et ce mot, échappé dans l'email ; clé de déduplication par inscription (#315)
 - **Formulaires unifiés** (#380) : hook `useSubmit` (`src/lib/use-submit.ts` : garde synchrone contre les doubles envois, try/catch/finally, `{ error }` → phrase française, `fail(message, champ)` qui annonce et met le focus) et `FormStatus` (`role="status"` + `role="alert"` toujours montés) ; utilisés par la connexion, le mot de passe oublié, la réinitialisation, l'activation d'un compte, l'équipe admin (`AdminsManager`), l'ajout et la fiche d'un membre, l'import de membres, les responsables de secteur (page dédiée et « Rendre responsable » depuis les inscriptions), les jalons, les pages personnalisées, les questions, les modèles de message, le renvoi des emails en échec d'un message et la création d'une organisation (super admin). Les formulaires de créneau (`ShiftsManager`), de série (`ShiftSeriesForm`), d'invitation (`InvitationsManager`) et de rappel manuel (`SendReminderButton`) n'utilisent ni le hook ni `FormStatus` : ils passent par `requestJson` du même module (même phrase française pour `{ error }` et pour une erreur réseau), avec leur propre indicateur d'envoi (bouton désactivé ou envoi ignoré tant que la requête est en cours, sans garde synchrone) et leurs propres zones `role="status"` / `role="alert"`
 - **Récupération après erreur** (`src/lib/form-errors.ts`, #375) : `describeSignupFailure` / `describeBulkFailure` classent la réponse (400 validation, 409 conflit, 429, réseau, 5xx) en titre, message du serveur, consigne, `retryable`, `maybeRecorded` ; le formulaire public garde la saisie, propose Réessayer ou Revenir au planning ; les actions groupées gardent la sélection et proposent Réessayer
 - **Récapitulatif avant confirmation** (`src/lib/signup-recap.ts`, #373) : créneaux triés avec jour et heures, « fin le lendemain » (`crossesMidnight`), écart entre créneaux consécutifs (chevauchement avec la même règle que le serveur, enchaîné, pause, autre jour), ferme, liste d'attente ou demande sur validation, âge minimum, données transmises (téléphone si obligatoire ou saisi, date de naissance si âge minimum, commentaire si saisi, réponses aux questions)
@@ -136,8 +137,8 @@ Liste exhaustive des fonctionnalités de l'application.
 ### Réglages des emails (`/admin/settings/notifications`, #381)
 
 - `Organization.replyToEmail` et `Organization.notificationSettings` (JSON validé par `src/lib/notification-settings.ts`, défauts quand absent) ; `GET` (propriétaires et organisateurs) / `PATCH /api/admin/settings/notifications` (propriétaires seulement ; patch partiel, journalisé `organization.notifications_updated`) ; `POST …/notifications/test` (email `targeted_message` à l'admin connecté, 5 par heure et par organisation)
-- Réglages : rappels J-2, J-1 et du jour activables un par un, email aux admins à chaque inscription, adresse de réponse (`replyToEmail`) ; l'interrupteur par événement (`Event.remindersEnabled`) reste en place
-- Effets : le cron des rappels ignore les fenêtres décochées ; `sendAdminNotification` se tait si l'email d'inscription est décoché ; le canal email met le reply-to de l'organisation quand la notification porte son `organizationId` ; la page personnelle affiche cette adresse comme contact
+- Réglages : rappels J-2, J-1 et du jour activables un par un, email aux admins à chaque inscription, email aux admins et aux responsables de secteur à chaque désistement (`withdrawalAdminEmail`, #559, coché par défaut, interrupteur séparé de l'inscription ; décoché, ni les admins ni les responsables ne reçoivent cet email), adresse de réponse (`replyToEmail`) ; l'interrupteur par événement (`Event.remindersEnabled`) reste en place
+- Effets : le cron des rappels ignore les fenêtres décochées ; `sendAdminNotification` se tait si l'email d'inscription est décoché ; `buildWithdrawalNotifications` (`src/lib/withdrawal-notifications.ts`) se tait de même si `withdrawalAdminEmail` est décoché ; le canal email met le reply-to de l'organisation quand la notification porte son `organizationId` ; la page personnelle affiche cette adresse comme contact
 
 ### Emails envoyés (`/admin/settings/notifications`)
 
@@ -399,7 +400,7 @@ Toutes les notifications passent par la couche `src/lib/notifications` — aucun
 | `reminder_dd` | Rappel automatique Jour J (cron) |
 | `shift_modified` | Modification des horaires d'un créneau |
 | `shift_cancelled` | Annulation d'un créneau |
-| `registration_cancelled` | Annulation d'une inscription publique |
+| `registration_cancelled` | Désistement (place confirmée ou demande) : alerte aux admins (#559, optionnel) |
 | `admin_notification` | Alerte admin à chaque nouvelle inscription (optionnel) |
 | `waitlist_confirmation` | Inscription en liste d'attente |
 | `waitlist_offered` | Place disponible — offre avec lien de confirmation (24 h) |
@@ -412,6 +413,7 @@ Toutes les notifications passent par la couche `src/lib/notifications` — aucun
 | `targeted_message` | Message ciblé « Écrire aux bénévoles », et email de test des réglages |
 | `sector_leader_invite` | Désignation comme responsable de secteur, avec le lien personnel |
 | `sector_leader_new_signup` | Nouvelle inscription sur le poste d'un responsable de secteur |
+| `sector_leader_withdrawal` | Désistement sur le poste d'un responsable de secteur (#559, optionnel) |
 | `product_update` | Nouveautés produit envoyées par le super admin |
 
 Tous les templates bénévoles utilisent un ton chaleureux et personnel (tutoiement, `Hello [Prénom] !`, signature chaleureuse).

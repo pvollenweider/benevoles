@@ -154,6 +154,26 @@ describe("EventPageClient — withdrawing a held shift", () => {
     expect(screen.getByRole("alertdialog")).toBeInTheDocument()
   })
 
+  it("has a labelled, described message field, reachable by Tab, that does not move the initial focus", async () => {
+    await renderPage()
+    open(barX())
+    expect(keep()).toHaveFocus()
+    const field = screen.getByLabelText("Un mot pour l'organisation ? (facultatif)")
+    expect(field).toHaveAccessibleDescription(/santé/)
+    expect(field).toHaveAttribute("maxlength", "300")
+    field.focus()
+    expect(field).toHaveFocus()
+  })
+
+  it("sends the message typed in the field with the DELETE", async () => {
+    const { deletes } = await renderPage()
+    open(barX())
+    fireEvent.change(screen.getByLabelText("Un mot pour l'organisation ? (facultatif)"), { target: { value: "Paul peut me remplacer" } })
+    confirm()
+    const [, init] = deletes()[0]
+    expect(JSON.parse((init as RequestInit).body as string)).toEqual({ message: "Paul peut me remplacer" })
+  })
+
   it("confirming sends one DELETE; the button is aria-disabled while it runs and a second press sends nothing", async () => {
     const pending = deferred<unknown>()
     const { deletes } = await renderPage(() => pending.promise)

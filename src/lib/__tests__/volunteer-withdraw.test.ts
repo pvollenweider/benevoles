@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest"
 import {
-  WITHDRAWABLE_STATUSES, planVolunteerWithdraw, withdrawCopy, withdrawDoneMessage, withdrawFailureMessage,
+  WITHDRAWABLE_STATUSES, WITHDRAWAL_MESSAGE_MAX, planVolunteerWithdraw, withdrawCopy, withdrawDoneMessage,
+  withdrawFailureMessage, withdrawRequestSchema, withdrawalMessageHint,
 } from "../volunteer-withdraw"
 
 describe("planVolunteerWithdraw", () => {
@@ -10,13 +11,20 @@ describe("planVolunteerWithdraw", () => {
   })
 
   it("releases a spot for a place, a request and an offered spot", () => {
-    expect(planVolunteerWithdraw("active")).toEqual({ releasesSpot: true })
-    expect(planVolunteerWithdraw("requested")).toEqual({ releasesSpot: true })
-    expect(planVolunteerWithdraw("offered")).toEqual({ releasesSpot: true })
+    expect(planVolunteerWithdraw("active")).toEqual({ releasesSpot: true, notifiesOrganizers: true })
+    expect(planVolunteerWithdraw("requested")).toEqual({ releasesSpot: true, notifiesOrganizers: true })
+    expect(planVolunteerWithdraw("offered")).toEqual({ releasesSpot: true, notifiesOrganizers: false })
   })
 
   it("releases nothing when leaving the waitlist", () => {
-    expect(planVolunteerWithdraw("waiting")).toEqual({ releasesSpot: false })
+    expect(planVolunteerWithdraw("waiting")).toEqual({ releasesSpot: false, notifiesOrganizers: false })
+  })
+
+  it("notifies organizers only for a confirmed place or a pending request (#559)", () => {
+    expect(planVolunteerWithdraw("active")!.notifiesOrganizers).toBe(true)
+    expect(planVolunteerWithdraw("requested")!.notifiesOrganizers).toBe(true)
+    expect(planVolunteerWithdraw("waiting")!.notifiesOrganizers).toBe(false)
+    expect(planVolunteerWithdraw("offered")!.notifiesOrganizers).toBe(false)
   })
 
   it("refuses statuses that are no longer live", () => {
@@ -93,6 +101,29 @@ describe("withdrawFailureMessage", () => {
 
   it("says nothing was cancelled on a server error", () => {
     expect(withdrawFailureMessage({ status: 500 })).toBe("L'annulation n'a pas abouti : rien n'a été annulé. Réessaie dans un moment.")
+  })
+})
+
+describe("withdrawRequestSchema", () => {
+  it("accepts no message, an empty one, or one within the limit, trimmed", () => {
+    expect(withdrawRequestSchema.safeParse({}).success).toBe(true)
+    expect(withdrawRequestSchema.safeParse({ message: "" }).success).toBe(true)
+    const parsed = withdrawRequestSchema.safeParse({ message: "  Paul peut me remplacer  " })
+    expect(parsed.success).toBe(true)
+    if (parsed.success) expect(parsed.data.message).toBe("Paul peut me remplacer")
+  })
+
+  it(`refuses a message over ${WITHDRAWAL_MESSAGE_MAX} characters`, () => {
+    expect(withdrawRequestSchema.safeParse({ message: "a".repeat(WITHDRAWAL_MESSAGE_MAX) }).success).toBe(true)
+    expect(withdrawRequestSchema.safeParse({ message: "a".repeat(WITHDRAWAL_MESSAGE_MAX + 1) }).success).toBe(false)
+  })
+})
+
+describe("withdrawalMessageHint", () => {
+  it("counts down from the limit and warns against sensitive details", () => {
+    expect(withdrawalMessageHint(0)).toContain(`0/${WITHDRAWAL_MESSAGE_MAX}`)
+    expect(withdrawalMessageHint(12)).toContain(`12/${WITHDRAWAL_MESSAGE_MAX}`)
+    expect(withdrawalMessageHint(0)).toMatch(/santé/)
   })
 })
 
