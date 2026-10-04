@@ -38,6 +38,7 @@ async function run(req: Request) {
   const orgCutoff = daysAgo(now, RETENTION_DAYS.deactivatedOrganization)
   const adminCutoff = daysAgo(now, RETENTION_DAYS.deactivatedAdmin)
   const failedCutoff = daysAgo(now, RETENTION_DAYS.failedNotification)
+  const deliveryOutcomeCutoff = daysAgo(now, RETENTION_DAYS.deliveryOutcome)
 
   // --- 1. Inactive organizations ---
   // Cascades to: Event → Shift → Registration, Member, MemberInvite.
@@ -119,6 +120,11 @@ async function run(req: Request) {
   // --- 6. Expired rate limit windows (#322) ---
   const deletedRateLimits = await prisma.rateLimit.deleteMany({ where: { resetAt: { lt: now } } })
 
+  // --- 6b. Delivery outcomes older than their retention window (#598) ---
+  const deletedDeliveryOutcomes = await prisma.deliveryOutcome.deleteMany({
+    where: { createdAt: { lt: deliveryOutcomeCutoff } },
+  })
+
   // --- 7. Encrypt volunteer-facing tokens still stored in clear (#290) ---
   // No-op until TOKEN_ENCRYPTION_KEY is set; then drains the legacy columns.
   const tokenEncryption = await encryptLegacyTokens().catch((e) => {
@@ -133,6 +139,7 @@ async function run(req: Request) {
       notificationOutbox: deletedOutbox.count,
       targetedMessages: deletedMessages.count,
       rateLimits: deletedRateLimits.count,
+      deliveryOutcomes: deletedDeliveryOutcomes.count,
       organizations: deletedOrgs.count,
       volunteers: deletedVolunteers.count,
       adminUsers: deletedOrgAdmins.count + deletedAdmins.count,

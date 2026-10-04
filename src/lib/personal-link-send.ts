@@ -40,6 +40,7 @@ export async function sendPersonalLink(reg: LinkTarget): Promise<"sent" | "throt
   const ids = await enqueueNotifications([{
     kind: "registration_link_resend",
     organizationId: reg.event.organizationId,
+    volunteerId: reg.volunteerId,
     recipient: { email: reg.volunteer.email, name },
     data: { volunteerName: name, eventTitle: reg.event.title, orgSlug: reg.event.organization.slug, editToken: registrationToken.reveal(reg) },
   }])

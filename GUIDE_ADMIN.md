@@ -622,11 +622,13 @@ Les textes personnalisables restent par événement : instructions publiques, me
 La même page liste les emails de l'organisation des plus récents aux plus anciens : date, type (confirmation, rappel, message aux bénévoles…), destinataire et état :
 
 - **En attente d'envoi** : mis en file, part dans la minute ;
-- **Nouvel essai prévu** : le premier envoi a échoué, l'application réessaie toute seule (jusqu'à six fois, à intervalles croissants), la raison du dernier échec est affichée ;
+- **Nouvel essai prévu** : le premier envoi a échoué pour une cause temporaire (incident chez notre serveur d'envoi, boîte pleine, délai dépassé…), l'application réessaie toute seule (jusqu'à six fois, à intervalles croissants) ;
 - **Envoyé** : parti, avec l'heure ;
-- **Échec définitif** : six échecs ; la raison est affichée et le bouton **Renvoyer** remet l'email en file.
+- **Échec définitif** : soit six essais temporaires épuisés, soit un rejet permanent du serveur destinataire (boîte inexistante, adresse refusée) qui arrête les essais tout de suite : ça ne sert à rien de réessayer une adresse qui n'existe pas. Dans les deux cas, une phrase en français explique la cause et le bouton **Renvoyer** remet l'email en file.
 
-Les emails envoyés sont effacés chaque nuit (ils contiennent des données personnelles) ; ceux en échec restent 30 jours. Les 200 plus récents sont affichés.
+**Ce que « accepté par le serveur d'envoi » veut dire, et ce que ça ne veut pas dire** : quand un envoi réussit, la seule chose prouvée est que notre propre serveur d'envoi (le relais SMTP) a accepté le message. Ce n'est ni une preuve de remise dans la boîte du destinataire, ni, à plus forte raison, une preuve de lecture : un relais de messagerie accepte en général toute adresse externe à la première étape, et n'apprend que plus tard, par un rebond invisible pour l'application, qu'une boîte n'existe pas. Un **rejet permanent** affiché ici reste donc la source la plus fiable aujourd'hui pour repérer une adresse à corriger, mais il ne couvre pas tous les cas : si un message a été accepté, l'application ne peut pas dire s'il a réellement atteint la bonne personne.
+
+Les emails envoyés sont effacés chaque nuit (ils contiennent des données personnelles) ; ceux en échec restent 30 jours, comme le résultat détaillé de chaque envoi (destinataire concerné, type de message, résultat, raison), conservé pour la même durée. Les 200 plus récents sont affichés.
 
 ## Exporter et conserver ses données
 
@@ -652,6 +654,7 @@ Les fichiers CSV s'ouvrent tels quels dans Excel ou LibreOffice (UTF-8, point-vi
 | Organisation supprimée par l'opérateur de benevol.app | effacée immédiatement, avec ses membres et ses administrateurs |
 | Membres retirés, inscriptions annulées ou refusées, questions archivées | tant que l'organisation existe (tant que leur événement existe pour les inscriptions et les questions) : pas d'effacement individuel |
 | Emails en file d'envoi (destinataire et contenu) | effacés chaque nuit une fois partis ; ceux en échec 30 jours après leur mise en file |
+| Résultats d'envoi par destinataire (#598) : statut accepté/rejeté/échec, motif normalisé, codes, empreinte de l'adresse | 30 jours |
 | Messages ciblés (objet, texte, public, nombres) | 365 jours, ou avec l'événement |
 | Invitations d'administrateur non acceptées | effacées 30 jours après leur dernier envoi |
 | Administrateur retiré de l'équipe | effacé immédiatement |

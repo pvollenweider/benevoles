@@ -46,15 +46,22 @@ export type MemberExportRow = {
   availabilityNote: string | null
   createdAt: Date | string
   registrationCount: number
+  /**
+   * The member's own delivery outcomes (#598): this is their own data, so the export used to
+   * answer an access request includes it. Already in French words and a normalized reason — the
+   * route never puts the raw SMTP reply or the address here (none of that is kept anywhere).
+   */
+  deliveryOutcomes?: { date: Date | string; kind: string; outcome: string; reason: string | null }[]
 }
 
 /** Every member of the organization, one row each; the notes are the admins' own, exported too. */
 export function membersCsv(rows: MemberExportRow[], timeZone: string): string {
   return csvDocument(
-    ["Prénom", "Nom", "Email", "Téléphone", "Étiquettes", "Actif", "Date de naissance", "Disponibilités", "Remarque de disponibilité", "Notes", "Inscriptions", "Membre depuis"],
+    ["Prénom", "Nom", "Email", "Téléphone", "Étiquettes", "Actif", "Date de naissance", "Disponibilités", "Remarque de disponibilité", "Notes", "Inscriptions", "Membre depuis", "Derniers envois (résultat)"],
     rows.map((r) => [
       r.firstName, r.lastName, r.email, r.phone, r.tags.join(", "), r.active ? "oui" : "non", day(r.birthDate),
       r.availabilityPeriods.join(", "), r.availabilityNote, r.notes, r.registrationCount, when(r.createdAt, timeZone),
+      (r.deliveryOutcomes ?? []).map((o) => `${when(o.date, timeZone)} ${o.kind} : ${o.outcome}${o.reason ? ` (${o.reason})` : ""}`).join(" ; "),
     ]),
   )
 }

@@ -2,11 +2,107 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { MAX_ATTEMPTS, type NotificationKind, type NotificationPayload } from "./notifications/types"
+import type { SmtpOutcome, SmtpReason } from "./notifications/smtp-outcome"
 
 /**
  * The email delivery page of an organization (#382): how an outbox row reads for an admin.
  * Pure; the loader decrypts the payload and passes only what's shown (recipient, kind, dates).
  */
+
+/**
+ * `NotificationOutbox.lastError` (#598): a compact, structured code — never the raw SMTP reply,
+ * which can carry the recipient address and internal host names (see classifySmtpOutcome).
+ * `encodeOutcomeReason` is what `deliverOutbox` stores; `outboxErrorSentence` is what the
+ * delivery page shows, for both a freshly stored code and a row written before this change (an
+ * old raw `lastError` isn't recognized as the structured format and falls through to a neutral
+ * sentence — never displayed as is).
+ */
+const OUTCOME_REASON_PREFIX = "smtp"
+
+export type OutcomeReasonCode = { outcome: SmtpOutcome; reason: SmtpReason | null; responseCode: number | null; enhancedStatus: string | null }
+
+export function encodeOutcomeReason(c: OutcomeReasonCode): string {
+  return [OUTCOME_REASON_PREFIX, c.outcome, c.reason ?? "-", c.responseCode ?? "-", c.enhancedStatus ?? "-"].join(":")
+}
+
+function decodeOutcomeReason(stored: string): OutcomeReasonCode | null {
+  const parts = stored.split(":")
+  if (parts.length !== 5 || parts[0] !== OUTCOME_REASON_PREFIX) return null
+  const [, outcome, reason, responseCode, enhancedStatus] = parts
+  return {
+    outcome: outcome as SmtpOutcome,
+    reason: reason === "-" ? null : (reason as SmtpReason),
+    responseCode: responseCode === "-" ? null : Number(responseCode),
+    enhancedStatus: enhancedStatus === "-" ? null : enhancedStatus,
+  }
+}
+
+/** Plain French sentence for a permanent reason — states only what is proven, never "délivré". */
+const PERMANENT_REASON_TEXT: Partial<Record<SmtpReason, string>> = {
+  mailbox_unknown: "boîte aux lettres introuvable",
+  mailbox_disabled: "boîte aux lettres désactivée",
+  mailbox_full: "boîte aux lettres pleine",
+  domain_not_found: "domaine introuvable",
+  policy_rejected: "rejeté par la politique du serveur destinataire",
+}
+
+const TEMPORARY_REASON_TEXT: Partial<Record<SmtpReason, string>> = {
+  timeout: "délai dépassé",
+  relay_error: "rejeté par notre propre serveur d'envoi",
+  mailbox_full: "boîte aux lettres pleine",
+}
+
+function sentenceFor(c: OutcomeReasonCode): string {
+  if (c.outcome === "rejected_permanent") {
+    const detail = c.reason ? PERMANENT_REASON_TEXT[c.reason] : undefined
+    return detail
+      ? `Refus définitif du serveur d'envoi (motif indiqué : ${detail}). Adresse à vérifier.`
+      : "Refus définitif du serveur d'envoi. Adresse à vérifier."
+  }
+  if (c.outcome === "failed_temporary") {
+    const detail = c.reason ? TEMPORARY_REASON_TEXT[c.reason] : undefined
+    return detail
+      ? `Incident temporaire (${detail}) : nouvel essai prévu.`
+      : "Incident temporaire côté serveur d'envoi : nouvel essai prévu."
+  }
+  if (c.outcome === "accepted_by_relay") return "Accepté par le serveur d'envoi."
+  return "Échec non classé par le serveur d'envoi."
+}
+
+/**
+ * Short French label of an outcome, lowercase, used wherever a member's own delivery history is
+ * shown (the data export, #598) — never "délivré", only what is proven.
+ */
+export const OUTCOME_LABEL_FR: Record<SmtpOutcome, string> = {
+  accepted_by_relay: "accepté par le serveur d'envoi",
+  rejected_permanent: "refus définitif",
+  failed_temporary: "échec temporaire",
+  unknown: "non classé",
+}
+
+/** Short French label of a reason, for the same uses as OUTCOME_LABEL_FR. */
+export const REASON_LABEL_FR: Record<SmtpReason, string> = {
+  mailbox_unknown: "boîte aux lettres introuvable",
+  mailbox_disabled: "boîte aux lettres désactivée",
+  mailbox_full: "boîte aux lettres pleine",
+  domain_not_found: "domaine introuvable",
+  policy_rejected: "rejeté par la politique du serveur destinataire",
+  relay_error: "rejeté par notre propre serveur d'envoi",
+  timeout: "délai dépassé",
+  other: "cause non précisée",
+}
+
+/**
+ * The sentence shown on the delivery page for a row's `lastError`: null when there is none,
+ * the normalized sentence for a structured code, and a neutral sentence — never the raw text —
+ * for anything else (rows written before #598).
+ */
+export function outboxErrorSentence(lastError: string | null): string | null {
+  if (!lastError) return null
+  const decoded = decodeOutcomeReason(lastError)
+  if (decoded) return sentenceFor(decoded)
+  return "Échec technique de l'envoi (détail non disponible)."
+}
 
 export const KIND_LABELS: Record<NotificationKind, string> = {
   registration_confirmation: "Confirmation d'inscription",
@@ -99,7 +195,7 @@ export function outboxRowView(row: OutboxRow, payload: Pick<NotificationPayload,
     kindLabel: payload ? kindLabel(payload.kind) : "Contenu illisible",
     recipient: recipientLabel(payload?.recipient),
     attemptsLabel: state === "retrying" ? `essai ${row.attempts + 1} sur ${MAX_ATTEMPTS}` : "",
-    lastError: row.lastError,
+    lastError: outboxErrorSentence(row.lastError),
     createdAt: row.createdAt,
     sentAt: row.sentAt,
     nextAttemptAt: state === "pending" || state === "retrying" ? row.nextAttemptAt : null,

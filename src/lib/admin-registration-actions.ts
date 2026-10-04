@@ -151,6 +151,7 @@ type ResendTarget = {
   editToken: string
   volunteer: { id: string; firstName: string; lastName: string; email: string | null }
   event: { title: string; organization: { slug: string } }
+  organizationId?: string
 }
 
 /**
@@ -172,6 +173,8 @@ export async function resendManagementLinks(targets: ResendTarget[]): Promise<{ 
     const result = await sendNotification({
       kind: "registration_link_resend",
       recipient: { email: t.volunteer.email, name },
+      volunteerId: t.volunteer.id,
+      organizationId: t.organizationId,
       data: { volunteerName: name, eventTitle: t.event.title, orgSlug: t.event.organization.slug, editToken: t.editToken },
     }).catch((e) => {
       reportError("notification.registration_link_resend")(e)

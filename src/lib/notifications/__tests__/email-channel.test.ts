@@ -3,12 +3,20 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 // Regression (review of 2.0.0): without SMTP_HOST the channel logged the recipient and the full
 // body, personal links included, and reported a success, so the outbox marked the email as sent.
 
-vi.mock("../../prisma", () => ({ prisma: { organization: { findUnique: vi.fn().mockResolvedValue(null) } } }))
+const m = vi.hoisted(() => ({ deliveryOutcomeCreate: vi.fn().mockResolvedValue({ id: "do-1" }) }))
+vi.mock("../../prisma", () => ({
+  prisma: {
+    organization: { findUnique: vi.fn().mockResolvedValue(null) },
+    deliveryOutcome: { create: m.deliveryOutcomeCreate },
+  },
+}))
 // env.ts validates the whole environment on import and exits when it is incomplete (as in CI).
-vi.mock("@/lib/env", () => ({ env: {} }))
+vi.mock("@/lib/env", () => ({ env: { AUTH_SECRET: "a".repeat(32) } }))
 
 import { emailChannel, missingSmtpOutcome } from "../channels/email"
 import type { NotificationPayload } from "../types"
+
+const deliveryOutcomeCreate = m.deliveryOutcomeCreate
 
 const payload = {
   kind: "registration_link_resend",
@@ -63,5 +71,90 @@ describe("emailChannel without SMTP_HOST", () => {
     const outcome = await emailChannel.send(payload)
     expect(outcome.ok).toBe(true)
     expect(log).toHaveBeenCalled()
+  })
+})
+
+// #598: per-recipient SMTP outcome, recorded and classified without ever persisting or logging
+// the address, the raw server reply or a token.
+describe("emailChannel with SMTP_HOST: records the outcome, never a raw reply or the address", () => {
+  const RAW_REPLY = "550 5.1.1 The email account that you tried to reach (alice@example.org) does not exist"
+  const saved = { host: process.env.SMTP_HOST }
+  let error: ReturnType<typeof vi.spyOn>
+
+  beforeEach(() => {
+    // The plain top-level `import { emailChannel } from "../channels/email"` already cached the
+    // module (with the real nodemailer) before any test ran: reset first, so each test's dynamic
+    // re-import below picks up its own `vi.doMock("nodemailer", …)` instead of that stale module.
+    vi.resetModules()
+    process.env.SMTP_HOST = "smtp.example.org"
+    deliveryOutcomeCreate.mockClear()
+    error = vi.spyOn(console, "error").mockImplementation(() => {})
+  })
+  afterEach(() => {
+    process.env.SMTP_HOST = saved.host
+    error.mockRestore()
+    vi.doUnmock("nodemailer")
+    vi.resetModules()
+  })
+
+  it("permanent rejection (EENVELOPE, 550, 5.1.1): permanent: true, no PII anywhere", async () => {
+    vi.doMock("nodemailer", () => ({
+      default: {
+        createTransport: () => ({
+          sendMail: vi.fn().mockRejectedValue(Object.assign(new Error("rejected"), {
+            code: "EENVELOPE",
+            responseCode: 550,
+            response: RAW_REPLY,
+            recipient: "alice@example.org",
+          })),
+        }),
+      },
+    }))
+    const { emailChannel: freshChannel } = await import("../channels/email")
+    const outcome = await freshChannel.send(payload)
+    expect(outcome.ok).toBe(false)
+    if (!outcome.ok) {
+      expect(outcome.permanent).toBe(true)
+      expect(outcome.reason).not.toContain("alice@example.org")
+      expect(outcome.reason).not.toContain("does not exist")
+      expect(outcome.reason).not.toContain("secret-token-value")
+    }
+    const logged = JSON.stringify(error.mock.calls)
+    expect(logged).not.toContain("alice@example.org")
+    expect(logged).not.toContain("does not exist")
+    expect(deliveryOutcomeCreate).toHaveBeenCalledOnce()
+    const data = JSON.stringify(deliveryOutcomeCreate.mock.calls[0][0].data)
+    expect(data).not.toContain("alice@example.org")
+    expect(data).not.toContain("does not exist")
+    expect(deliveryOutcomeCreate.mock.calls[0][0].data.outcome).toBe("rejected_permanent")
+  })
+
+  it("temporary failure (ETIMEDOUT): permanent is not true, so the outbox keeps retrying", async () => {
+    vi.doMock("nodemailer", () => ({
+      default: {
+        createTransport: () => ({
+          sendMail: vi.fn().mockRejectedValue(Object.assign(new Error("timeout"), { code: "ETIMEDOUT" })),
+        }),
+      },
+    }))
+    const { emailChannel: freshChannel } = await import("../channels/email")
+    const outcome = await freshChannel.send(payload)
+    expect(outcome.ok).toBe(false)
+    if (!outcome.ok) expect(outcome.permanent).not.toBe(true)
+    expect(deliveryOutcomeCreate.mock.calls[0][0].data.outcome).toBe("failed_temporary")
+  })
+
+  it("acceptance: records accepted_by_relay", async () => {
+    vi.doMock("nodemailer", () => ({
+      default: {
+        createTransport: () => ({
+          sendMail: vi.fn().mockResolvedValue({ accepted: ["alice@example.org"], rejected: [], response: "250 2.0.0 Ok: queued" }),
+        }),
+      },
+    }))
+    const { emailChannel: freshChannel } = await import("../channels/email")
+    const outcome = await freshChannel.send(payload)
+    expect(outcome.ok).toBe(true)
+    expect(deliveryOutcomeCreate.mock.calls[0][0].data.outcome).toBe("accepted_by_relay")
   })
 })

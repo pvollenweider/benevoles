@@ -17,6 +17,10 @@ export const RETENTION_DAYS = {
   deactivatedAdmin: 30,
   /** A notification that failed for good, kept to investigate. */
   failedNotification: 30,
+  /** Per-recipient SMTP outcome (#598): same window as a failed notification, for both failures
+   * and the accepted outcomes kept alongside them (needed so #599 can tell a later send to the
+   * same address succeeded). */
+  deliveryOutcome: 30,
   /** Targeted message (subject, text, audience, counts), #467. */
   targetedMessage: 365,
   /** Encrypted database dump on the server. */
@@ -88,6 +92,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     duration: `effacés chaque nuit une fois partis ; ceux en échec ${d.failedNotification} jours après leur mise en file`,
     trigger: "envoi, ou échec définitif",
     mechanism: "nettoyage quotidien (cron cleanup)",
+    backups: inBackups,
+    public: true,
+  },
+  {
+    data: "Résultats d'envoi par destinataire (#598) : statut accepté/rejeté/échec, motif normalisé, codes, empreinte de l'adresse",
+    purpose: "Fournir l'email à l'organisation, et permettre de corriger une adresse en échec",
+    duration: `${d.deliveryOutcome} jours`,
+    trigger: "envoi",
+    mechanism: "nettoyage quotidien (cron cleanup) ; effacés aussi si le membre est effacé (#516)",
     backups: inBackups,
     public: true,
   },

@@ -189,10 +189,10 @@ export async function POST(req: Request) {
   // Built and stored inside the registration transaction (#352): the registrations and their
   // notifications commit together, then delivery runs after the response. The helpers only read
   // (admins, sector leaders), so the shift locks are held a few queries longer, no more.
-  const buildNotifications = (registrations: CreatedRegistration[]) => buildSignupNotifications({
+  const buildNotifications = (registrations: CreatedRegistration[], volunteerId: string) => buildSignupNotifications({
     event,
     shifts,
-    volunteer: { email, firstName, lastName },
+    volunteer: { id: volunteerId, email, firstName, lastName },
     registrations,
     tokens,
   })
@@ -276,7 +276,7 @@ export async function POST(req: Request) {
           })
         )
       }
-      const outboxIds = await enqueueNotifications(await buildNotifications(created), tx, { organizationId: event.organizationId })
+      const outboxIds = await enqueueNotifications(await buildNotifications(created, volunteerId), tx, { organizationId: event.organizationId })
       // Answers (#483): replaced only with proof the submitter owns the address, as for the
       // profile below; otherwise only missing answers are added (see planAnswerWrites).
       const writes = planAnswerWrites(questions.map((q) => q.id), answerCheck.values, createdNow || ownsEmail)
@@ -405,7 +405,7 @@ async function alreadyRegistered(volunteerId: string, eventId: string) {
     where: { volunteerId, eventId, status: { in: [...COMMITTED_STATUSES] } },
     include: {
       volunteer: { select: { firstName: true, lastName: true, email: true } },
-      event: { select: { title: true, organization: { select: { slug: true } } } },
+      event: { select: { title: true, organizationId: true, organization: { select: { slug: true } } } },
     },
   })
   if (!reg) {
@@ -421,6 +421,8 @@ async function alreadyRegistered(volunteerId: string, eventId: string) {
       const result = await sendNotification({
         kind: "registration_link_resend",
         recipient: { email: reg.volunteer.email, name },
+        volunteerId,
+        organizationId: reg.event.organizationId,
         data: { volunteerName: name, eventTitle: reg.event.title, orgSlug: reg.event.organization.slug, editToken: registrationToken.reveal(reg) },
       }).catch((e) => {
         reportError("notification.registration_link_resend")(e)

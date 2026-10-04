@@ -24,12 +24,17 @@ type RegistrationEmailData = {
   editToken: string
   orgSlug?: string
   confirmationMessage?: string
+  /** For the SMTP delivery outcome (#598); nullable, same as the payload field. */
+  volunteerId?: string | null
+  organizationId?: string | null
 }
 
 export async function sendConfirmationEmail(data: RegistrationEmailData, send: Send = sendNotification) {
   await send({
     kind: "registration_confirmation",
     recipient: { email: data.to, name: data.volunteerName },
+    volunteerId: data.volunteerId,
+    organizationId: data.organizationId,
     data: {
       volunteerName: data.volunteerName,
       eventTitle: data.eventTitle,
@@ -52,12 +57,17 @@ type MemberInviteEmailData = {
   eventSlug: string
   message: string | null
   token: string
+  /** For the SMTP delivery outcome (#598); nullable (the invitations test email has none). */
+  volunteerId?: string | null
+  organizationId?: string | null
 }
 
 export async function sendMemberInvite(data: MemberInviteEmailData) {
   return sendNotification({
     kind: "member_invite",
     recipient: { email: data.to, name: data.memberName },
+    volunteerId: data.volunteerId,
+    organizationId: data.organizationId,
     data: {
       memberName: data.memberName,
       organizationName: data.organizationName,

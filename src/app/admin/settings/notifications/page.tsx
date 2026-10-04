@@ -120,9 +120,9 @@ function Row({ r, when }: { r: OutboxRowView; when: (d: Date) => string }) {
         {r.attemptsLabel && <span className="block text-xs text-gray-600 mt-0.5">{r.attemptsLabel}</span>}
       </td>
       <td className="px-4 py-2 text-gray-700 align-top">
-        {r.state === "sent" && r.sentAt && <span>Parti à {when(r.sentAt)}</span>}
-        {r.nextAttemptAt && <span>Prochain essai {when(r.nextAttemptAt)}</span>}
-        {r.lastError && <span className="block text-xs text-red-800 mt-0.5 break-words">{r.lastError}</span>}
+        {r.state === "sent" && r.sentAt && <span className="block">Parti à {when(r.sentAt)}</span>}
+        {r.nextAttemptAt && <span className="block">Prochain essai {when(r.nextAttemptAt)}</span>}
+        {r.lastError && <span className="block text-xs text-red-800 mt-0.5 break-words">Erreur : {r.lastError}</span>}
         <span className="block mt-1"><OutboxRetryButton id={r.id} recipient={r.recipient} canRetry={r.canRetry} /></span>
       </td>
     </tr>

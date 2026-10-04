@@ -77,6 +77,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         eventSlug: event.slug,
         message: parsed.data.message ?? null,
         token: linkToken.reveal(invite),
+        volunteerId: v.id,
+        organizationId: event.organizationId,
       })
       if (result.ok) sent++
       else failed++

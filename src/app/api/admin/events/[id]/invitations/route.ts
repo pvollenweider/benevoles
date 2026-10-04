@@ -164,6 +164,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           eventSlug: event.slug,
           message: parsed.data.message ?? null,
           token: invite.token,
+          volunteerId: volunteer.id,
+          organizationId: event.organizationId,
         })
         return { ok: result.ok }
       } catch (err) {

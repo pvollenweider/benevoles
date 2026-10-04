@@ -32,7 +32,7 @@ const orgB = "org-b"
 function regRow(overrides: Partial<{
   id: string; volunteerId: string; eventId: string; status: string
   editTokenHash: string; volunteer: { firstName: string; lastName: string; email: string | null }
-  event: { title: string; organization: { slug: string } }
+  event: { title: string; organizationId: string; organization: { slug: string } }
 }> = {}) {
   return {
     id: "reg-1",
@@ -41,7 +41,7 @@ function regRow(overrides: Partial<{
     status: "active",
     editTokenHash: hashToken("old-reg-token"),
     volunteer: { firstName: "Alice", lastName: "A", email: "alice@x.ch" },
-    event: { title: "Fête", organization: { slug: "orga" } },
+    event: { title: "Fête", organizationId: orgA, organization: { slug: "orga" } },
     ...overrides,
   }
 }
@@ -59,15 +59,16 @@ function leaderRow(overrides: Partial<{ id: string; roleName: string; name: stri
 }
 
 function inviteRow(overrides: Partial<{
-  id: string; tokenHash: string
+  id: string; volunteerId: string; tokenHash: string
   volunteer: { firstName: string; email: string | null; active: boolean }
-  event: { title: string; slug: string; startDate: Date; location: string | null; organization: { name: string; slug: string } }
+  event: { title: string; slug: string; startDate: Date; location: string | null; organizationId: string; organization: { name: string; slug: string } }
 }> = {}) {
   return {
     id: "inv-1",
+    volunteerId: "vol-1",
     tokenHash: hashToken("old-invite-token"),
     volunteer: { firstName: "Cathy", email: "cathy@x.ch", active: true },
-    event: { title: "Fête", slug: "fete", startDate: new Date("2026-06-01"), location: "Lausanne", organization: { name: "Orga", slug: "orga" } },
+    event: { title: "Fête", slug: "fete", startDate: new Date("2026-06-01"), location: "Lausanne", organizationId: orgA, organization: { name: "Orga", slug: "orga" } },
     ...overrides,
   }
 }

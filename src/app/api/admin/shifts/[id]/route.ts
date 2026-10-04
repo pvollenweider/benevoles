@@ -93,6 +93,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
           kind: "shift_modified",
           dedupeKey: `shift_modified:${reg.id}:${after.updatedAt.toISOString()}`,
           recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
+          volunteerId: reg.volunteerId,
+          organizationId: before.event.organizationId,
           data: {
             volunteerName: reg.volunteer.firstName,
             eventTitle: before.event.title,
