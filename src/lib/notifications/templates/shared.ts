@@ -31,6 +31,12 @@ export function adminStaffingUrl(eventId: string): string {
   return `${BASE_URL}/admin/events/${eventId}/staffing`
 }
 
+/** The members list, filtered on « Adresses à vérifier » (#599): same admin-domain rule as the
+ * other admin links above. */
+export function adminMembersToVerifyUrl(): string {
+  return `${BASE_URL}/admin/members?verify=1`
+}
+
 export function escapeHtml(s: string): string {
   return s
     .replace(/&/g, "&amp;")

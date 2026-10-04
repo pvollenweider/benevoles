@@ -4,12 +4,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import Link from "next/link"
-import { useEffect, useMemo, useRef, useState, useTransition } from "react"
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, useTransition } from "react"
 import { deactivateMemberRecap } from "@/lib/action-recap"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useRouter } from "next/navigation"
 import { fmtHours } from "@/lib/gantt-utils"
-import { filterMembers, nextSort, sortAnnouncement as announceSort, sortMembers, type Member, type SortCol, type SortDir } from "@/lib/members-list"
+import { addressesToVerifyCount, filterMembers, nextSort, sortAnnouncement as announceSort, sortMembers, type Member, type SortCol, type SortDir } from "@/lib/members-list"
+import { addressStatusSentence } from "@/lib/address-status"
+import { announce } from "@/lib/announce"
 import { AddMemberModal, EditMemberModal } from "./members/MemberFormModals"
 import ImportModal from "./members/ImportModal"
 import SortTh from "./members/SortTh"
@@ -20,22 +22,30 @@ type Props = {
   allTags: string[]
   /** `?q=` from the global search (#377): pre-filled, inactive members included. */
   initialSearch?: string
+  /** `?verify=1` from the dashboard's attention item (#599): the filter starts on. */
+  initialAddressToVerify?: boolean
+  /** `?edit=<id>` from the member activity page's status action (#599): opens the edit form at once. */
+  initialEditId?: string
   /** Default "from"/"to" for the "Heures par bénévole" export form (#557), from volunteer-hours.ts's defaultPeriod. */
   defaultHoursPeriod: { from: string; to: string }
 }
 
-/** "2026-05-02" → "2 mai 2026", for the last-participation column (#557). */
+/** "2026-05-02" → "2 mai 2026", for the last-participation column (#557) and the address status date (#599). */
 const fmtDay = (iso: string) => new Date(`${iso}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", day: "numeric", month: "long", year: "numeric" })
+const fmtDate = (d: Date) => d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
 
-export default function MembersManager({ initialMembers, allTags, initialSearch, defaultHoursPeriod }: Props) {
+export default function MembersManager({ initialMembers, allTags, initialSearch, initialAddressToVerify, initialEditId, defaultHoursPeriod }: Props) {
   const router = useRouter()
   const members = initialMembers
   const [search, setSearch] = useState(initialSearch ?? "")
   const [tagFilter, setTagFilter] = useState<string>("")
   const [showInactive, setShowInactive] = useState(Boolean(initialSearch))
+  const [addressToVerify, setAddressToVerify] = useState(Boolean(initialAddressToVerify))
   const [showAdd, setShowAdd] = useState(false)
   const [showImport, setShowImport] = useState(false)
-  const [editingMember, setEditingMember] = useState<Member | null>(null)
+  const [editingMember, setEditingMember] = useState<Member | null>(
+    initialEditId ? initialMembers.find((m) => m.id === initialEditId) ?? null : null,
+  )
   const [sortCol, setSortCol] = useState<SortCol | null>(null)
   const [sortDir, setSortDir] = useState<SortDir>("asc")
   const [sortAnnouncement, setSortAnnouncement] = useState("")
@@ -43,6 +53,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   const [hoursFrom, setHoursFrom] = useState(defaultHoursPeriod.from)
   const [hoursTo, setHoursTo] = useState(defaultHoursPeriod.to)
   const hoursRangeValid = hoursFrom <= hoursTo
+  const toVerifyCount = useMemo(() => addressesToVerifyCount(members), [members])
 
   function toggleSort(col: SortCol) {
     const next = nextSort({ col: sortCol, dir: sortDir }, col)
@@ -53,11 +64,26 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
 
   const filtered = useMemo(
     () => sortMembers(
-      filterMembers(members, { search, tag: tagFilter, showInactive }),
+      filterMembers(members, { search, tag: tagFilter, showInactive, addressToVerify }),
       { col: sortCol, dir: sortDir },
     ),
-    [members, search, tagFilter, showInactive, sortCol, sortDir],
+    [members, search, tagFilter, showInactive, addressToVerify, sortCol, sortDir],
   )
+
+  const [resultAnnouncement, setResultAnnouncement] = useState("")
+  // Skips the very first run (mount): nothing changed yet, nothing to announce.
+  const filtersEverChangedRef = useRef(false)
+  useEffect(() => {
+    if (!filtersEverChangedRef.current) { filtersEverChangedRef.current = true; return }
+    // Debounced (#599): `search` changes on every keystroke, and re-announcing the count on each
+    // one would bury the person typing in noise. The other filters are discrete clicks, so the
+    // same short delay just reads as a brief, acceptable pause before the result is announced.
+    const t = setTimeout(() => {
+      const n = filtered.length
+      announce(setResultAnnouncement, n === 0 ? "Aucun membre ne correspond." : `${n} membre${n > 1 ? "s" : ""} affiché${n > 1 ? "s" : ""}.`)
+    }, 400)
+    return () => clearTimeout(t)
+  }, [search, tagFilter, showInactive, addressToVerify, filtered.length])
 
   function refresh() {
     startTransition(() => router.refresh())
@@ -67,14 +93,81 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   const [deactivating, setDeactivating] = useState(false)
   const [actionMessage, setActionMessage] = useState<{ kind: "ok" | "error"; text: string } | null>(null)
   const actionRef = useRef<HTMLParagraphElement>(null)
+  // The page heading, a fallback focus target (#599): see headingRef's use below.
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  // Set when an edit is saved (#599), read back once the refreshed list carries the edited member
+  // — never before. A ref, not state: setting it must NOT by itself re-run the effect below (it
+  // would, with `members` still the pre-save list — refresh() is async and lands later), only the
+  // `members` prop actually changing through router.refresh() may.
+  const pendingEditCheckRef = useRef<{ id: string; name: string; wasToVerify: boolean } | null>(null)
+  // Bumped on every saved edit (#599): a trigger for the layout effect below, distinct from the
+  // ref above so React actually schedules it.
+  const [editSaveTick, setEditSaveTick] = useState(0)
+
+  /** Replaces the status line's text via announce() so identical consecutive messages (e.g.
+   * désactiver the same way twice) still re-announce, same pattern as the sort announcement. */
+  function announceAction(kind: "ok" | "error", text: string) {
+    announce((t) => setActionMessage(t ? { kind, text: t } : null), text)
+  }
 
   // The row's « Désactiver » button is gone after a refresh: park the focus on the outcome line.
   useEffect(() => {
     if (!pendingDeactivate && actionMessage) actionRef.current?.focus()
   }, [pendingDeactivate, actionMessage])
 
+  // Saving an edit (#599): focus the status line at once, synchronously (a layout effect, like
+  // ModalShell's own documented "a parent that moves focus when the dialog closes wins" escape
+  // hatch) — it would otherwise be a losing race against ModalShell's own "return focus to the
+  // opener" (the row's « Éditer » button), landing focus there first and then, moments later once
+  // router.refresh() resolves, somewhere else again: two hops to two different places. Parking on
+  // the status line first, predictably, means only one hop whatever happens next: either nothing
+  // (an unrelated action happens) or the live region's own text updates in place, read without
+  // moving focus again — not the row, which the save can filter out of view by changing the
+  // member's address status.
+  useLayoutEffect(() => {
+    if (editSaveTick > 0) actionRef.current?.focus()
+  }, [editSaveTick])
+
+  // Once the refreshed list carries the edited member, decide whether to mention the address flag
+  // (#599): one announcement, not two — this replaces any announcement the save itself would make.
+  useEffect(() => {
+    const pending = pendingEditCheckRef.current
+    if (!pending) return
+    const m = members.find((x) => x.id === pending.id)
+    if (!m) return
+    const cleared = pending.wasToVerify && m.addressStatus.kind !== "to_verify"
+    announceAction(
+      "ok",
+      cleared
+        ? `Fiche de ${pending.name} enregistrée. Statut « Adresse à vérifier » levé.`
+        : `Fiche de ${pending.name} enregistrée.`,
+    )
+    pendingEditCheckRef.current = null
+  }, [members])
+
   function deactivate(id: string, name: string) {
     setPendingDeactivate({ id, name })
+  }
+
+  // « Chercher un doublon » (#599): no automatic detection yet (#601), just a manual search
+  // prefilled with the member's name, in the same list — nothing to fetch, nothing to navigate to.
+  function searchForDuplicate(name: string) {
+    setAddressToVerify(false)
+    setSearch(name)
+  }
+
+  function startEditing(m: Member) {
+    setEditingMember(m)
+  }
+
+  function handleEditSaved(target: Member) {
+    pendingEditCheckRef.current = { id: target.id, name: `${target.firstName} ${target.lastName}`, wasToVerify: target.addressStatus.kind === "to_verify" }
+    // Cleared now, not left stale: the status line is about to take focus (see the layout effect
+    // above) before router.refresh() has anything new to say.
+    setActionMessage(null)
+    setEditingMember(null)
+    setEditSaveTick((n) => n + 1)
+    refresh()
   }
 
   async function runDeactivate(target: { id: string; name: string }) {
@@ -83,13 +176,13 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
       const res = await fetch(`/api/admin/members/${target.id}`, { method: "DELETE" })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
-        setActionMessage({ kind: "error", text: typeof data?.error === "string" ? data.error : "La désactivation n'a pas abouti. Réessayez." })
+        announceAction("error", typeof data?.error === "string" ? data.error : "La désactivation n'a pas abouti. Réessayez.")
         return
       }
-      setActionMessage({ kind: "ok", text: `${target.name} désactivé·e.` })
+      announceAction("ok", `${target.name} désactivé·e.`)
       refresh()
     } catch {
-      setActionMessage({ kind: "error", text: "Connexion impossible : rien n'a changé. Réessayez." })
+      announceAction("error", "Connexion impossible : rien n'a changé. Réessayez.")
     } finally {
       setDeactivating(false)
       setPendingDeactivate(null)
@@ -111,7 +204,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
       </p>
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Membres</h1>
+          <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Membres</h1>
           <p className="text-sm text-gray-500">{members.length} membre{members.length > 1 ? "s" : ""}</p>
         </div>
         <div className="flex gap-2 flex-wrap">
@@ -219,7 +312,16 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
           <input type="checkbox" checked={showInactive} onChange={(e) => setShowInactive(e.target.checked)} />
           Inclure inactifs
         </label>
+        <label className="text-sm text-gray-600 flex items-center gap-1.5">
+          <input type="checkbox" checked={addressToVerify} onChange={(e) => setAddressToVerify(e.target.checked)} />
+          Adresses à vérifier{toVerifyCount > 0 ? ` (${toVerifyCount})` : ""}
+        </label>
       </div>
+
+      {/* One result-count announcement for every filter (search, tag, inactif, adresses à
+          vérifier), debounced above; always rendered, not only with the table (#599), since it
+          must announce the zero-results case too. */}
+      <div role="status" aria-live="polite" className="sr-only">{resultAnnouncement}</div>
 
       {filtered.length === 0 ? (
         members.length === 0 ? (
@@ -292,6 +394,18 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                     {m.phone && <div className="text-xs text-gray-500">{m.phone}</div>}
                     {!m.email && !m.phone && <span className="text-xs text-gray-500">—</span>}
                     {hasAvailability(m) && <div className="text-xs text-gray-700 mt-0.5"><span className="sr-only">Disponible : </span><span aria-hidden="true">🕒 </span>{availabilityLabel(m)}</div>}
+                    {m.addressStatus.kind !== "ok" && (
+                      <div
+                        className={`inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-xs font-medium border forced-colors:border-[CanvasText] ${
+                          m.addressStatus.kind === "to_verify"
+                            ? "bg-amber-50 text-amber-900 border-amber-600"
+                            : "bg-gray-100 text-gray-800 border-gray-500"
+                        }`}
+                      >
+                        <span aria-hidden="true">⚠</span>
+                        {addressStatusSentence(m.addressStatus, fmtDate)}
+                      </div>
+                    )}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-1">
@@ -329,12 +443,22 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                       Activité{" "}<span className="sr-only">de {m.firstName} {m.lastName}</span>
                     </Link>
                     <button
-                      onClick={() => setEditingMember(m)}
+                      data-edit-trigger={m.id}
+                      onClick={() => startEditing(m)}
                       aria-label={`Éditer ${m.firstName} ${m.lastName}`}
                       className="inline-flex items-center justify-center min-h-6 px-1.5 text-xs text-gray-500 hover:text-blue-600"
                     >
                       Éditer
                     </button>
+                    {m.addressStatus.kind === "to_verify" && (
+                      <button
+                        onClick={() => searchForDuplicate(`${m.firstName} ${m.lastName}`)}
+                        aria-label={`Doublon ? Chercher un doublon pour ${m.firstName} ${m.lastName}`}
+                        className="inline-flex items-center justify-center min-h-6 px-1.5 text-xs text-gray-500 hover:text-blue-600"
+                      >
+                        Doublon ?
+                      </button>
+                    )}
                     {m.active && (
                       <button
                         onClick={() => deactivate(m.id, `${m.firstName} ${m.lastName}`)}
@@ -359,7 +483,11 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
         <EditMemberModal
           member={editingMember}
           onClose={() => setEditingMember(null)}
-          onSaved={() => { setEditingMember(null); refresh() }}
+          onSaved={() => handleEditSaved(editingMember)}
+          // Deep-linked (?edit=id, #599): nothing was clicked to open it, so ModalShell has no
+          // opener to restore focus to on cancel/Escape. Its row's « Éditer » button if the row is
+          // still there (it normally is: cancelling changes nothing), else the page heading.
+          fallbackFocusOnClose={() => document.querySelector<HTMLElement>(`[data-edit-trigger="${editingMember.id}"]`) ?? headingRef.current}
         />
       )}
     </div>

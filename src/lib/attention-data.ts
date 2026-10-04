@@ -6,11 +6,15 @@ import { attentionItems, INVITE_NUDGE_DAYS, type AttentionItem } from "./attenti
 import { orgTimeZone } from "./time-zone"
 import { workloadByVolunteer } from "./workload"
 import { selectInvitedWithoutShift } from "./targeted-message"
+import { loadOrganizationsWithNewAddressesToVerify } from "./delivery-summary-data"
+import { daysAgo, RETENTION_DAYS } from "./retention"
 
-/** Facts for « Ce qui demande votre attention » (#372), read with the organization-scoped client. */
-export async function loadAttention(db: OrgScopedPrisma, now: Date = new Date()): Promise<AttentionItem[]> {
+/** Facts for « Ce qui demande votre attention » (#372), read with the organization-scoped client.
+ * `organizationId` is also needed as such (not just through `db`): DeliveryOutcome isn't a tenant
+ * model of the org-scoped client (#598), so its own loader takes the id explicitly (#599). */
+export async function loadAttention(db: OrgScopedPrisma, organizationId: string, now: Date = new Date()): Promise<AttentionItem[]> {
   const inviteCutoff = new Date(now.getTime() - INVITE_NUDGE_DAYS * 24 * 60 * 60 * 1000)
-  const [events, offers] = await Promise.all([
+  const [events, offers, addressSummary] = await Promise.all([
     db.event.findMany({
       where: { publicStatus: "published" },
       select: {
@@ -37,6 +41,9 @@ export async function loadAttention(db: OrgScopedPrisma, now: Date = new Date())
       where: { status: "offered", event: { publicStatus: "published" } },
       select: { eventId: true, waitingExpiresAt: true },
     }),
+    // Full retention window, not just the last 24h (the daily summary email's own window, #599):
+    // the dashboard shows every address still "to verify", however long ago it was flagged.
+    loadOrganizationsWithNewAddressesToVerify(daysAgo(now, RETENTION_DAYS.deliveryOutcome), now, organizationId),
   ])
 
   return attentionItems({
@@ -51,5 +58,6 @@ export async function loadAttention(db: OrgScopedPrisma, now: Date = new Date())
       pendingRequests: e._count.registrations,
     })),
     offers: offers.map((o) => ({ eventId: o.eventId, expiresAt: o.waitingExpiresAt })),
+    addressesToVerifyCount: addressSummary[0]?.members.length ?? 0,
   })
 }

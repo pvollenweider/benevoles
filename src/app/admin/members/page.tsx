@@ -4,15 +4,23 @@ import MembersManager from "@/components/admin/MembersManager"
 import { defaultPeriod, lastParticipation, localToday, pastEntries, splitMinutes, volunteerHourEntries } from "@/lib/volunteer-hours"
 import { orgTimeZone } from "@/lib/time-zone"
 import { SEARCH_MAX_LENGTH } from "@/lib/admin-search"
+import { loadAddressStatuses } from "@/lib/delivery-outcomes-data"
+import { serializeAddressStatus } from "@/lib/address-status"
+import { addressHash } from "@/lib/notifications/smtp-outcome"
+import { env } from "@/lib/env"
 
 export const dynamic = "force-dynamic"
 
-export default async function MembersPage({ searchParams }: { searchParams: Promise<{ q?: string | string[] }> }) {
+export default async function MembersPage({ searchParams }: { searchParams: Promise<{ q?: string | string[]; verify?: string | string[]; edit?: string | string[] }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { db } = ctx
-  const { q } = await searchParams
+  const { q, verify, edit } = await searchParams
   const initialSearch = (Array.isArray(q) ? q[0] : q)?.slice(0, SEARCH_MAX_LENGTH).trim() || undefined
+  // From the dashboard's attention item (#599): land on the members list with the filter already on.
+  const initialAddressToVerify = (Array.isArray(verify) ? verify[0] : verify) === "1"
+  // From the member activity page's « Modifier l'adresse » action (#599): open the edit form at once.
+  const initialEditId = (Array.isArray(edit) ? edit[0] : edit) || undefined
 
   const [volunteers, allTags, org] = await Promise.all([
     db.volunteer.findMany({
@@ -43,6 +51,10 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
   ])
   const timeZone = orgTimeZone(org)
   const today = localToday(new Date(), timeZone)
+  const addressStatuses = await loadAddressStatuses(
+    ctx.organizationId,
+    volunteers.map((v) => ({ id: v.id, addressHash: v.email ? addressHash(v.email, env.AUTH_SECRET) : null })),
+  )
 
   return (
     <MembersManager
@@ -70,10 +82,13 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
           hoursAttested: attestedMinutes / 60,
           lastShiftDate,
           lastPresenceDate,
+          addressStatus: serializeAddressStatus(addressStatuses.get(v.id) ?? { kind: "ok" }),
         }
       })}
       allTags={allTags}
       initialSearch={initialSearch}
+      initialAddressToVerify={initialAddressToVerify}
+      initialEditId={initialEditId}
       defaultHoursPeriod={defaultPeriod(new Date(), timeZone)}
     />
   )

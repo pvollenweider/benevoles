@@ -95,12 +95,17 @@ test.describe("admin", () => {
 
   // #557: the members list (new "Heures attestées" / "Dernière participation" columns and the
   // hours-export form), then an event's Rapports page with its post-event summary section.
+  // #599: the dashboard, with its « Ce qui demande votre attention » section.
   test("members list and an event's Rapports page (with the post-event summary) have no serious violation", async ({ page }) => {
     await page.goto("/admin/login")
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
     await expect(page).toHaveURL(/\/admin\/events/)
+
+    await page.goto("/admin/dashboard")
+    await expect(page.getByRole("heading", { name: "Ce qui demande votre attention" })).toBeVisible()
+    expect.soft(await seriousViolations(page), "dashboard").toEqual([])
 
     await page.goto("/admin/members")
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible()

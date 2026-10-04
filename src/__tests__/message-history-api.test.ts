@@ -17,9 +17,9 @@ vi.mock("@/lib/prisma", () => {
   const tx = {
     notificationOutbox: { findMany: m.outboxFindMany, deleteMany: m.outboxDeleteMany, updateMany: m.outboxUpdateMany },
     targetedMessage: { update: m.messageUpdate, deleteMany: m.messageDeleteMany },
-    organization: { findMany: vi.fn().mockResolvedValue([]) },
+    organization: { findMany: vi.fn().mockResolvedValue([]), findUnique: vi.fn().mockResolvedValue(null) },
   }
-  const zero = { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), updateMany: vi.fn().mockResolvedValue({ count: 0 }) }
+  const zero = { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), updateMany: vi.fn().mockResolvedValue({ count: 0 }), findMany: vi.fn().mockResolvedValue([]) }
   return {
     prisma: {
       ...tx,
@@ -28,7 +28,7 @@ vi.mock("@/lib/prisma", () => {
     },
   }
 })
-vi.mock("@/lib/env", () => ({ env: { CRON_SECRET: "s" } }))
+vi.mock("@/lib/env", () => ({ env: { CRON_SECRET: "s", AUTH_SECRET: "a".repeat(32), ADMIN_NOTIFICATION_EMAIL: undefined } }))
 vi.mock("@/lib/job-runs", () => ({ recordJobRun: (_: string, fn: () => unknown) => fn() }))
 vi.mock("@/lib/token-encryption-job", () => ({ encryptLegacyTokens: vi.fn().mockResolvedValue(null) }))
 vi.mock("@/lib/notifications/outbox", () => ({ deliverAfterResponse: m.deliver }))

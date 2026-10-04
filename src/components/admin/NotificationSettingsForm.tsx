@@ -117,6 +117,16 @@ export default function NotificationSettingsForm({ initialSettings, initialReply
         </div>
       </div>
 
+      <div className="flex items-start gap-3">
+        <input id={`${id}-addresses`} type="checkbox" checked={settings.addressesToVerifyAdminEmail} onChange={(e) => setSettings((s) => ({ ...s, addressesToVerifyAdminEmail: e.target.checked }))} aria-describedby={`${id}-addresses-help`} className={checkboxClass} />
+        <div>
+          <label htmlFor={`${id}-addresses`} className="text-sm font-medium text-gray-800">Résumé quotidien des adresses à vérifier</label>
+          <p id={`${id}-addresses-help`} className="text-xs text-gray-600">
+            Un email par jour aux administrateurs actifs, seulement quand une confirmation, une proposition de liste d&apos;attente ou un rappel a échoué définitivement depuis la veille.
+          </p>
+        </div>
+      </div>
+
       <div>
         <label htmlFor={`${id}-replyto`} className="block text-sm text-gray-800 mb-1">Adresse de réponse</label>
         <input

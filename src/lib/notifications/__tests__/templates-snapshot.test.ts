@@ -361,6 +361,15 @@ const cases: [string, NotificationPayload][] = [
       upgradeDocsUrl: "https://github.com/pvollenweider/benevoles/blob/main/docs/deploiement.md",
     },
   }],
+  ["addresses_to_verify_summary", {
+    kind: "addresses_to_verify_summary",
+    recipient,
+    data: {
+      count: 2,
+      members: [{ name: "Julie Martin" }, { name: "Marc Dupont" }],
+      membersUrl: "https://rhone.benevol.app/admin/members?verify=1",
+    },
+  }],
 ]
 
 describe("render — snapshot of every notification kind", () => {
@@ -398,6 +407,7 @@ describe("render — snapshot of every notification kind", () => {
       registration_requested: true,
       registration_refused: true,
       release_available: true,
+      addresses_to_verify_summary: true,
     }
     const covered = new Set(cases.map(([, p]) => p.kind))
     expect([...covered].sort()).toEqual(Object.keys(all).sort())

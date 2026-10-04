@@ -1,5 +1,52 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`render — snapshot of every notification kind > addresses_to_verify_summary 1`] = `
+{
+  "html": [
+    "<!DOCTYPE html>",
+    "<html lang="fr">",
+    "<head>",
+    "<meta charset="UTF-8">",
+    "<meta name="viewport" content="width=device-width,initial-scale=1">",
+    "<meta http-equiv="X-UA-Compatible" content="IE=edge">",
+    "</head>",
+    "<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">",
+    "<div style="display:none;font-size:1px;color:#f5f5f5;max-height:0;overflow:hidden;opacity:0;">2 adresses à vérifier.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>",
+    "<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;">",
+    "<tr><td align="center" style="padding:32px 16px 24px;">",
+    "<!-- align="center" above only centers this table CELL on the page; text-align is inherited CSS,",
+    "     so without an explicit override here every unstyled heading/paragraph inside would inherit",
+    "     "center" too instead of reading left-aligned like normal body text. -->",
+    "<div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">",
+    "",
+    "    <p>2 membres ont un message important (confirmation, proposition de liste d'attente ou rappel) qui n'est pas arrivé dans les dernières 24 heures : le serveur destinataire a refusé l'adresse de façon définitive.</p>",
+    "    <ul style="padding-left:1.2em;line-height:1.8">",
+    "      <li>Julie Martin</li><li>Marc Dupont</li>",
+    "    </ul>",
+    "    <p style="margin-top:1.25em"><a href="https://rhone.benevol.app/admin/members?verify=1" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">Voir les adresses à vérifier</a></p>",
+    "  ",
+    "<div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#aaaaaa;text-align:center;">",
+    "  <a href="https://benevol.app" style="color:#aaaaaa;text-decoration:none;">benevol.app</a>",
+    "</div>",
+    "</div>",
+    "</td></tr>",
+    "</table>",
+    "</body>",
+    "</html>",
+  ],
+  "subject": "2 adresses à vérifier",
+  "text": [
+    "2 membres ont un message important (confirmation, proposition de liste d'attente ou rappel) qui n'est pas arrivé dans les dernières 24 heures : le serveur destinataire a refusé l'adresse de façon définitive.",
+    "",
+    "  • Julie Martin",
+    "  • Marc Dupont",
+    "",
+    "Voir les adresses à vérifier :",
+    "https://rhone.benevol.app/admin/members?verify=1",
+  ],
+}
+`;
+
 exports[`render — snapshot of every notification kind > admin_invite 1`] = `
 {
   "html": [

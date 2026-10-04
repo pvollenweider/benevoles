@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { fold } from "./text-fold"
+import type { AddressStatusView } from "./address-status"
 
 /**
  * Pure logic of the admin members page (MembersManager, #291): filtering, the three-state column
@@ -27,6 +28,9 @@ export type MemberRow = {
   // most recent recorded presence — null when there is none of either (#557).
   lastShiftDate: string | null
   lastPresenceDate: string | null
+  // Whether the member's current address needs checking (#599), computed server-side (one extra
+  // query for the whole list, delivery-outcomes-data.ts's loadAddressStatuses).
+  addressStatus: AddressStatusView
 }
 
 export type Member = MemberRow & {
@@ -72,12 +76,13 @@ export function sortAnnouncement({ col, dir }: SortState): string {
 /** Members matching the search (name, email, phone), the tag and the inactive toggle. */
 export function filterMembers<M extends MemberRow>(
   members: M[],
-  { search, tag, showInactive }: { search: string; tag: string; showInactive: boolean },
+  { search, tag, showInactive, addressToVerify = false }: { search: string; tag: string; showInactive: boolean; addressToVerify?: boolean },
 ): M[] {
   const q = fold(search.trim())
   return members.filter((m) => {
     if (!showInactive && !m.active) return false
     if (tag && !m.tags.includes(tag)) return false
+    if (addressToVerify && m.addressStatus.kind !== "to_verify") return false
     if (!q) return true
     // Accents and case aside (#390): « zoe » finds Zoé.
     return (
@@ -101,6 +106,12 @@ export function sortMembers<M extends MemberRow>(members: M[], { col, dir }: Sor
         : a[col as "firstName" | "lastName"].toLowerCase().localeCompare(b[col as "firstName" | "lastName"].toLowerCase(), "fr")
     return dir === "asc" ? cmp : -cmp
   })
+}
+
+/** How many members have an address to verify, whatever the other filters (#599): the honest
+ * count for the filter's own label, computed once from the same list the page already has. */
+export function addressesToVerifyCount<M extends MemberRow>(members: M[]): number {
+  return members.filter((m) => m.addressStatus.kind === "to_verify").length
 }
 
 /** "bénévole, bar, " → ["bénévole", "bar"]. */

@@ -1,15 +1,18 @@
 import { describe, it, expect } from "vitest"
-import { filterMembers, nextSort, parseTags, sortAnnouncement, sortMembers } from "../members-list"
+import { addressesToVerifyCount, filterMembers, nextSort, parseTags, sortAnnouncement, sortMembers } from "../members-list"
+import type { AddressStatusView } from "../address-status"
 
 const m = (
   id: string,
   over: Partial<{
     firstName: string; lastName: string; email: string | null; phone: string | null; tags: string[]; active: boolean
     hoursTotal: number; hoursAttested: number; lastShiftDate: string | null; lastPresenceDate: string | null
+    addressStatus: AddressStatusView
   }> = {},
 ) => ({
   id, firstName: "Alice", lastName: "Martin", email: null, phone: null, tags: [], active: true,
-  hoursTotal: 0, hoursAttested: 0, lastShiftDate: null, lastPresenceDate: null, ...over,
+  hoursTotal: 0, hoursAttested: 0, lastShiftDate: null, lastPresenceDate: null,
+  addressStatus: { kind: "ok" as const }, ...over,
 })
 
 const members = [
@@ -45,6 +48,28 @@ describe("filterMembers", () => {
   it("filters by tag, combined with the inactive toggle", () => {
     expect(filterMembers(members, { ...all, tag: "bar" }).map((x) => x.id)).toEqual(["a"])
     expect(filterMembers(members, { ...all, tag: "bar", showInactive: true }).map((x) => x.id)).toEqual(["a", "c"])
+  })
+
+  it("filters to members whose address needs checking (#599)", () => {
+    const withStatus = [
+      m("a", { addressStatus: { kind: "to_verify", since: "2026-01-01T00:00:00.000Z" } }),
+      m("b", { addressStatus: { kind: "temporary_incident", since: "2026-01-01T00:00:00.000Z" } }),
+      m("c", { addressStatus: { kind: "ok" } }),
+    ]
+    expect(filterMembers(withStatus, { ...all, addressToVerify: true }).map((x) => x.id)).toEqual(["a"])
+    expect(filterMembers(withStatus, { ...all, addressToVerify: false }).map((x) => x.id)).toEqual(["a", "b", "c"])
+  })
+})
+
+describe("addressesToVerifyCount", () => {
+  it("counts only members whose latest status is « to verify »", () => {
+    const withStatus = [
+      m("a", { addressStatus: { kind: "to_verify", since: "2026-01-01T00:00:00.000Z" } }),
+      m("b", { addressStatus: { kind: "temporary_incident", since: "2026-01-01T00:00:00.000Z" } }),
+      m("c", { addressStatus: { kind: "to_verify", since: "2026-01-02T00:00:00.000Z" } }),
+    ]
+    expect(addressesToVerifyCount(withStatus)).toBe(2)
+    expect(addressesToVerifyCount(members)).toBe(0)
   })
 })
 

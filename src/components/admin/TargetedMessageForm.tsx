@@ -19,7 +19,7 @@ type Props = {
   templates?: { id: string; name: string; subject: string; body: string }[]
 }
 
-type DryRun = { recipients: number; pushDevices?: number; waitlistOnly?: number; declinedExcluded?: number; audience: string; preview: { subject: string; html: string } | null }
+type DryRun = { recipients: number; pushDevices?: number; waitlistOnly?: number; declinedExcluded?: number; audience: string; preview: { subject: string; html: string } | null; addressesToVerify?: number }
 
 /**
  * Subject, message, audience; a live recipient count; a preview; then a confirmation naming the
@@ -131,6 +131,12 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
   // Invités sans créneau (#558) : les personnes pas disponibles ne sont pas dans le compte ci-dessus.
   const declinedExcluded = kind === "invited_without_shift" ? (dry?.declinedExcluded ?? 0) : 0
   const declinedPart = declinedExcluded > 0 ? ` (${declinedExcluded} ${declinedExcluded > 1 ? "personnes pas disponibles non incluses" : "personne pas disponible non incluse"})` : ""
+  // Adresses à vérifier (#599) : avertit seulement, n'empêche jamais l'envoi — l'adresse peut avoir
+  // été corrigée côté destinataire depuis le dernier refus.
+  const addressesToVerify = dry?.addressesToVerify ?? 0
+  const addressesToVerifyWarning = addressesToVerify > 0
+    ? `${addressesToVerify} ${addressesToVerify > 1 ? "destinataires ont une adresse à vérifier (un précédent message leur a été définitivement refusé)" : "destinataire a une adresse à vérifier (un précédent message lui a été définitivement refusé)"}.`
+    : null
   const inputClass = (missing: boolean, hasProblems = false) => `input ${(attempted && missing) || hasProblems ? "!border-red-600" : ""}`
 
   if (sent) {
@@ -290,12 +296,17 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
       </div>
 
       {showPreview && dry?.preview && (
-        <ModalShell title="Aperçu de l'email" onClose={() => setShowPreview(false)} panelClassName="max-w-2xl" closeOnBackdrop={false} initialFocusRef={cancelRef}>
+        <ModalShell title="Aperçu de l'email" onClose={() => setShowPreview(false)} panelClassName="max-w-2xl" closeOnBackdrop={false} initialFocusRef={cancelRef} describedBy={addressesToVerifyWarning ? `${id}-preview-warning` : undefined}>
           <div className="space-y-3">
             <p className="text-sm text-gray-700">Tel que le recevra la première personne de la liste ; chacun voit ses propres créneaux.</p>
             <p className="text-sm"><span className="font-medium">Objet :</span> {dry.preview.subject}</p>
             <iframe title="Contenu de l'email" sandbox="" srcDoc={dry.preview.html} className="w-full h-[50vh] max-h-[28rem] border border-gray-200 rounded-lg bg-white" />
             <p className="text-sm text-gray-800">Envoyer l&apos;email à <strong>{plural(recipients)}</strong> ({dry.audience}){declinedPart}{pushPart} ?</p>
+            {addressesToVerifyWarning && (
+              <p id={`${id}-preview-warning`} className="text-sm text-amber-900 bg-amber-50 border border-amber-300 rounded-lg px-3 py-2 forced-colors:border-[CanvasText]">
+                <span aria-hidden="true">⚠ </span>{addressesToVerifyWarning} L&apos;envoi reste possible.
+              </p>
+            )}
             <div className="flex gap-3 justify-end">
               <button ref={cancelRef} type="button" onClick={() => setShowPreview(false)} className="text-sm text-gray-700 px-3 py-2 rounded hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Retour au message</button>
               <button
@@ -311,11 +322,22 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
       )}
 
       {confirming && (
-        <ModalShell title="Confirmer l'envoi" onClose={() => { if (!sending) setConfirming(false) }} initialFocusRef={cancelRef} describedBy={`${id}-confirm-text`} closeOnBackdrop={false}>
+        <ModalShell
+          title="Confirmer l'envoi"
+          onClose={() => { if (!sending) setConfirming(false) }}
+          initialFocusRef={cancelRef}
+          describedBy={addressesToVerifyWarning ? `${id}-confirm-text ${id}-confirm-warning` : `${id}-confirm-text`}
+          closeOnBackdrop={false}
+        >
           <div className="space-y-4" aria-busy={sending}>
             <p id={`${id}-confirm-text`} className="text-sm text-gray-800">
               « {subject} » va partir à <strong>{plural(recipients)}</strong> ({dry?.audience}){declinedPart}{pushPart}. Cet envoi ne peut pas être annulé.
             </p>
+            {addressesToVerifyWarning && (
+              <p id={`${id}-confirm-warning`} className="text-sm text-amber-900 bg-amber-50 border border-amber-300 rounded-lg px-3 py-2 forced-colors:border-[CanvasText]">
+                <span aria-hidden="true">⚠ </span>{addressesToVerifyWarning} L&apos;envoi reste possible.
+              </p>
+            )}
             <div className="flex gap-3 justify-end">
               <button ref={cancelRef} type="button" aria-disabled={sending} onClick={() => { if (!sending) setConfirming(false) }} className="text-sm text-gray-700 px-3 py-2 rounded hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Annuler</button>
               <button type="button" aria-disabled={sending} onClick={send} className={`bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${sending ? "opacity-50" : ""}`}>

@@ -18,6 +18,9 @@ import { eventPublicUrl } from "@/lib/urls"
 import { pushDeviceCount, sendTargetedPush } from "@/lib/push"
 import { after } from "next/server"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
+import { loadAddressStatuses } from "@/lib/delivery-outcomes-data"
+import { addressHash } from "@/lib/notifications/smtp-outcome"
+import { env } from "@/lib/env"
 
 const fmtDate = (d: Date) => d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
 
@@ -121,6 +124,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const preview = recipients[0]
       ? render({ ...payloadFor(recipients[0], "preview"), data: { ...payloadFor(recipients[0], "preview").data, editToken: recipients[0].editToken ? "apercu" : undefined, signupUrl: recipients[0].signupUrl ? eventPublicUrl(event.organization.slug, event.slug) : undefined } })
       : null
+    // Warn only, never block (#599, owner decision 2026-10-04): how many of these recipients have
+    // an address to verify, so the confirmation step can say so before sending anyway.
+    const addressStatuses = await loadAddressStatuses(
+      event.organizationId,
+      recipients.map((r) => ({ id: r.volunteerId, addressHash: r.email ? addressHash(r.email, env.AUTH_SECRET) : null })),
+    )
+    const addressesToVerify = recipients.filter((r) => addressStatuses.get(r.volunteerId)?.kind === "to_verify").length
     return NextResponse.json({
       recipients: recipients.length,
       // Invited without a shift (#481): how many are only on the waitlist, to adapt the text,
@@ -130,6 +140,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       pushDevices: await pushDeviceCount(recipients.map((r) => r.volunteerId)),
       audience: label,
       preview: preview && { subject: preview.subject, html: preview.html },
+      addressesToVerify,
     })
   }
 

@@ -82,6 +82,9 @@ const prismaMock = {
 }
 vi.mock("@/lib/push", () => ({ pushDeviceCount: vi.fn().mockResolvedValue(0), sendTargetedPush: vi.fn() }))
 vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }))
+// The targeted-message route hashes addresses for the "adresses à vérifier" warning (#599), which
+// needs AUTH_SECRET: mocked here like every other test that imports a module reaching @/lib/env.
+vi.mock("@/lib/env", () => ({ env: { AUTH_SECRET: "a".repeat(32), ADMIN_NOTIFICATION_EMAIL: undefined } }))
 
 vi.mock("@/lib/notifications", () => ({
   sendNotification: vi.fn().mockResolvedValue({ ok: true }),
@@ -408,6 +411,23 @@ describe("Delivery outcomes — cross-tenant isolation", () => {
     expect(prismaMock.deliveryOutcome.findMany).toHaveBeenCalledWith(
       expect.objectContaining({ where: { organizationId: "org-a", volunteerId: "vol-shared-with-org-b" } }),
     )
+  })
+
+  it("loadDeliveryOutcomesForVolunteers (#599, members list and dashboard) always filters by organizationId too", async () => {
+    const { loadDeliveryOutcomesForVolunteers } = await import("@/lib/delivery-outcomes-data")
+    await loadDeliveryOutcomesForVolunteers("org-a", ["vol-shared-with-org-b"])
+    const call = prismaMock.deliveryOutcome.findMany.mock.calls.at(-1)?.[0]
+    expect(call.where.organizationId).toBe("org-a")
+    expect(call.where.volunteerId).toEqual({ in: ["vol-shared-with-org-b"] })
+  })
+
+  it("loadAddressStatuses never leaks an org-B outcome into an org-A member's status", async () => {
+    const { loadAddressStatuses } = await import("@/lib/delivery-outcomes-data")
+    const statuses = await loadAddressStatuses("org-a", [{ id: "vol-shared-with-org-b", addressHash: "hash-x" }])
+    expect(prismaMock.deliveryOutcome.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ where: expect.objectContaining({ organizationId: "org-a" }) }),
+    )
+    expect(statuses.get("vol-shared-with-org-b")).toEqual({ kind: "ok" })
   })
 })
 

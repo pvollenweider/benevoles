@@ -39,6 +39,10 @@ export type AttentionInput = {
   events: AttentionEvent[]
   /** Waitlist offers (status "offered") of the organization, with their expiry. */
   offers: { eventId: string; expiresAt: Date | null }[]
+  /** Members whose current address needs checking because an important kind (confirmation,
+   * waitlist offer, reminder) failed permanently (#599, owner decision 2026-10-04) — never for a
+   * temporary incident alone. Org-wide, not tied to one event. */
+  addressesToVerifyCount?: number
 }
 
 export type AttentionItem = {
@@ -53,9 +57,17 @@ export type AttentionItem = {
 const startOfUtcDay = (d: Date) => Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())
 const plural = (n: number, one: string, many: string) => (n > 1 ? many : one)
 
-export function attentionItems({ now, events, offers }: AttentionInput): AttentionItem[] {
+export function attentionItems({ now, events, offers, addressesToVerifyCount = 0 }: AttentionInput): AttentionItem[] {
   const today = startOfUtcDay(now)
   const items: AttentionItem[] = []
+
+  if (addressesToVerifyCount > 0) {
+    items.push({
+      id: "addresses-to-verify", severity: "medium", eventTitle: "Membres",
+      message: `${addressesToVerifyCount} ${plural(addressesToVerifyCount, "membre a", "membres ont")} une adresse à vérifier : un message important (confirmation, proposition de liste d'attente ou rappel) a été refusé définitivement par le serveur destinataire.`,
+      action: "Voir les membres concernés", href: "/admin/members?verify=1",
+    })
+  }
 
   for (const e of events) {
     const base = `/admin/events/${e.id}`
