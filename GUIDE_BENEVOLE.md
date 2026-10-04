@@ -16,6 +16,12 @@ Ouvrez ce lien depuis n'importe quel navigateur, sur téléphone ou ordinateur.
 
 Selon l'événement, des liens vers des pages complémentaires (règlement, FAQ, accès, ce qu'il faut apporter…) peuvent apparaître juste sous les instructions de l'organisateur.
 
+### Invité(e) personnellement par l'organisation
+
+Si l'organisation vous a invité(e) par email, le lien de cet email ouvre la page d'inscription avec votre prénom, nom, email et téléphone déjà pré-remplis.
+
+Vous ne pouvez pas venir cette fois ? L'email et la page proposent **Je ne suis pas disponible pour cet événement** : un clic, puis une confirmation, et c'est tout, sans raison à donner ; l'organisation ne vous relance plus pour cet événement. Vous pouvez changer d'avis à tout moment : vous inscrire depuis ce même lien annule ce choix.
+
 ---
 
 ## Choisir ses créneaux

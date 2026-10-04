@@ -17,8 +17,10 @@ export function inviteResultText(r: { invitedNew?: number; skippedExisting?: num
   return parts.join(", ")
 }
 
-/** « 2 relances envoyées, 1 échec d'envoi ». */
-export function remindResultText(r: { sent: number; failed?: number }): string {
-  const sent = n(r.sent, "relance envoyée", "relances envoyées")
-  return r.failed ? `${sent}, ${n(r.failed, "échec d'envoi", "échecs d'envoi")}` : sent
+/** « 2 relances envoyées, 1 échec d'envoi, 1 personne pas disponible non relancée ». */
+export function remindResultText(r: { sent: number; failed?: number; declinedSkipped?: number }): string {
+  const parts = [n(r.sent, "relance envoyée", "relances envoyées")]
+  if (r.failed) parts.push(n(r.failed, "échec d'envoi", "échecs d'envoi"))
+  if (r.declinedSkipped) parts.push(`${n(r.declinedSkipped, "personne pas disponible non relancée", "personnes pas disponibles non relancées")}`)
+  return parts.join(", ")
 }

@@ -79,6 +79,7 @@ export default async function EventInvitationsPage({
           id: i.id,
           sentAt: i.sentAt.toISOString(),
           usedAt: i.usedAt?.toISOString() ?? null,
+          declinedAt: i.declinedAt?.toISOString() ?? null,
           volunteerId: i.volunteer.id,
           firstName: i.volunteer.firstName,
           lastName: i.volunteer.lastName,

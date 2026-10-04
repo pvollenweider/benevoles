@@ -104,7 +104,7 @@ describe("POST /api/admin/events/[id]/invitations/remind", () => {
     const res = await POST(postReq("http://localhost/api/admin/events/evt-1/invitations/remind", {}), params())
     expect(res.status).toBe(200)
     const data = await res.json()
-    expect(data).toEqual({ sent: 1, failed: 1 })
+    expect(data).toEqual({ sent: 1, failed: 1, declinedSkipped: 0 })
   })
 })
 

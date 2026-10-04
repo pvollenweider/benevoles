@@ -392,6 +392,10 @@ model MemberInvite {
   tokenEnc    String?
   sentAt      DateTime  @default(now())
   usedAt      DateTime?
+  // Set when the member answers « Je ne suis pas disponible » from the invite link (#558); never
+  // from the admin side. Cleared when they register from the same link (change of mind), but a
+  // later withdrawal of all their shifts does not set it back (product decision, #558).
+  declinedAt  DateTime?
 
   event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)

@@ -34,6 +34,7 @@ Liste exhaustive des fonctionnalités de l'application.
 #### Pré-remplissage via invitation
 
 - Si l'URL contient un `?token=` (lien d'invitation membre), le formulaire est pré-rempli avec les informations du membre (prénom, nom, email, téléphone)
+- **« Je ne suis pas disponible » (#558)** : tant qu'aucune inscription active n'existe sur l'événement, un bandeau propose de répondre ne pas être disponible ; une étape de confirmation (`POST /api/public/member-invite/[token]/decline`) enregistre `MemberInvite.declinedAt`, jamais le GET qui charge la page. `?decline=1` (second lien de l'email) ouvre directement cette confirmation. S'inscrire ensuite depuis le même lien efface `declinedAt`
 
 #### Session persistante
 
@@ -130,7 +131,7 @@ Liste exhaustive des fonctionnalités de l'application.
 ### Tableau de bord (`/admin/dashboard`)
 
 - **Premiers pas** (aussi en haut de `/admin/events`) : checklist de mise en place d'une nouvelle organisation, dans l'ordre (page publique et charte, fuseau horaire, premier événement, créneaux, publication, inscription de test), cochée automatiquement d'après les données ; disparaît une fois les étapes obligatoires faites, ou masquée pour toute l'organisation
-- **Ce qui demande votre attention** : situations à traiter sur les événements publiés, de la plus urgente à la moins urgente, avec un lien vers chacune (créneaux des 7 prochains jours pas complets, demandes sur validation à traiter, places de liste d'attente qui expirent dans les 12 h, jalons en retard, bénévoles à la charge élevée selon `src/lib/workload.ts`, personnes invitées depuis plus de 3 jours toujours sans créneau confirmé, postes sans responsable quand l'événement en a déjà, événement qui commence dans la semaine, événement terminé à archiver)
+- **Ce qui demande votre attention** : situations à traiter sur les événements publiés, de la plus urgente à la moins urgente, avec un lien vers chacune (créneaux des 7 prochains jours pas complets, demandes sur validation à traiter, places de liste d'attente qui expirent dans les 12 h, jalons en retard, bénévoles à la charge élevée selon `src/lib/workload.ts`, personnes invitées depuis plus de 3 jours toujours sans créneau confirmé ni réponse (les « pas disponible » exclus, #558), postes sans responsable quand l'événement en a déjà, événement qui commence dans la semaine, événement terminé à archiver)
 - Compteurs : événements (publiés, à venir), bénévoles inscrits (et bénévoles uniques), taux de remplissage global
 - Répartition des membres : total, avec email, sans email (ne peuvent pas recevoir d'invitations)
 
@@ -268,22 +269,24 @@ Pool de bénévoles connus de l'organisation (source de vérité partagée avec 
 - **Heures planifiées** (#571) : somme de la durée des créneaux actifs de chaque membre, tous événements de l'organisation confondus, créneaux à venir et absences comprises (temps prévu, pas temps passé) ; durée réelle dans le fuseau de l'organisation, changement d'heure compris (`src/lib/planned-hours.ts`) ; colonne triable. Figure admin uniquement — absente de l'export PDF (qui est, lui, potentiellement partagé avec les bénévoles).
 - Recherche par texte et filtre par tag
 - Import CSV ou Excel (`.xlsx`) via le bouton « Importer CSV/Excel », en deux étapes (#464) : aperçu (`POST /api/admin/members/import/preview`) ligne par ligne de ce qui sera créé, mis à jour ou ignoré, lignes en erreur, étiquettes nouvelles ou réutilisées, choix pour les doublons (ignorer ou mettre à jour), puis confirmation (`POST /api/admin/members/import`) qui applique exactement le plan de l'aperçu (`src/lib/member-import-plan.ts`, empreinte du plan) ; colonnes reconnues par leur intitulé (français ou anglais) ; 2 Mo et 5000 lignes au plus ; 30 aperçus et 10 imports par heure et par organisation
-- **Activité d'un membre** (`/admin/members/[id]`, `src/lib/member-activity.ts`, #488) : chronologie factuelle, événement par événement (invitations et leur utilisation, inscriptions, liste d'attente, annulations, présences, désignations de responsable, modifications de la fiche), construite à partir des données existantes ; pas de score ni de note
+- **Activité d'un membre** (`/admin/members/[id]`, `src/lib/member-activity.ts`, #488) : chronologie factuelle, événement par événement (invitations et leur utilisation, ou la réponse « pas disponible », #558, inscriptions, liste d'attente, annulations, présences, désignations de responsable, modifications de la fiche), construite à partir des données existantes ; pas de score ni de note
 
 ### Invitations membres (`/admin/events/[id]/invitations`)
 
 - **Envoi batch** : sélectionner des membres par nom ou tag, envoyer des invitations en une fois
 - Chaque invitation génère un **token unique** lié au membre et à l'événement ; l'URL pré-remplit le formulaire
 - Le même token est réutilisé si le membre est ré-invité (pas de doublons)
-- Vue d'état : invité le, ✅ inscrit (avec détail des créneaux) / ⏳ pas encore répondu
-- Compteurs : total invités · inscrits · sans réponse
-- **Relance ciblée** : bouton pour renvoyer un email à tous les non-inscrits, avec message optionnel personnalisable
+- **« Pas disponible » (`MemberInvite.declinedAt`, #558)** : second lien dans l'email d'invitation et sur la page de l'événement ouverte depuis ce lien, « Je ne suis pas disponible pour cet événement », avec une étape de confirmation (jamais sur un simple GET) ; aucune raison demandée. S'inscrire depuis le même lien efface `declinedAt` (changement d'avis) ; se désinscrire ensuite ne le remet pas. Enregistré dans le journal (`memberinvite.declined`, acteur bénévole, sans donnée personnelle dans `changes`)
+- Vue d'état (`src/lib/invite-state.ts`) : `registered` (inscription active) / `not_available` (`declinedAt` posé, sans inscription active) / `no_answer` (ni l'un ni l'autre) ; filtre « Sans réponse » sur le tableau
+- Compteurs : total invités, inscrits, pas disponible, sans réponse — toujours égaux au total
+- **Relance ciblée** : bouton pour renvoyer un email à tous les sans réponse (les « pas disponible » exclus, leur nombre précisé), avec message optionnel personnalisable
+- Le dashboard « invités sans créneau » (#372, #481) et l'audience « invités sans créneau confirmé » (#481, ci-dessous) excluent de même les membres pas disponibles
 
 ### Communications (`/admin/events/[id]`)
 
 #### Écrire aux bénévoles (`/admin/events/[id]/message`)
 
-- Destinataires : tous les inscrits, un poste, un créneau, la liste d'attente (statuts `waiting` et `offered`), ou les membres invités à l'événement sans créneau confirmé (personnes seulement en liste d'attente comprises, #481 ; lien du tableau de bord `?audience=invited`)
+- Destinataires : tous les inscrits, un poste, un créneau, la liste d'attente (statuts `waiting` et `offered`), ou les membres invités à l'événement sans créneau confirmé (personnes seulement en liste d'attente comprises, #481 ; membres pas disponibles exclus, #558 ; lien du tableau de bord `?audience=invited`)
 - Objet (≤ 120) et message texte (≤ 2000) ; compteur de destinataires en direct, aperçu de l'email (rendu réel, lien factice), confirmation avec le nombre de personnes
 - Un email par personne (`targeted_message`), avec ses créneaux concernés, via la file d'envoi ; envoi noté dans le journal (`message.sent`) ; limite de 30 envois par heure et par organisation
 - **Notification sur le téléphone** en option (#468) : en plus de l'email, un push aux appareils abonnés des destinataires (objet en titre ≤ 60, première ligne du message ≤ 120)

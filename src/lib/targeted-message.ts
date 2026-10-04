@@ -112,9 +112,11 @@ export type InvitedWithoutShift<I> = {
 /**
  * « Invités sans créneau confirmé » (#481): members invited to the event (any invitation, used or
  * not) with an email and no active registration on it, one entry per person (their latest
- * invitation). Recomputed at send time, like every audience.
+ * invitation). People who answered « pas disponible » are left out (#558): they already said no,
+ * relaunching or writing to them again would be exactly what the feature exists to avoid.
+ * Recomputed at send time, like every audience.
  */
-export function selectInvitedWithoutShift<I extends { volunteerId: string; sentAt: Date; volunteer: { email: string | null } }>(
+export function selectInvitedWithoutShift<I extends { volunteerId: string; sentAt: Date; declinedAt?: Date | null; volunteer: { email: string | null } }>(
   invites: I[],
   registrations: { volunteerId: string; status: string }[],
 ): InvitedWithoutShift<I>[] {
@@ -122,11 +124,20 @@ export function selectInvitedWithoutShift<I extends { volunteerId: string; sentA
   const waiting = new Set(registrations.filter((r) => r.status === "waiting" || r.status === "offered").map((r) => r.volunteerId))
   const latest = new Map<string, I>()
   for (const i of invites) {
-    if (!i.volunteer.email || active.has(i.volunteerId)) continue
+    if (!i.volunteer.email || active.has(i.volunteerId) || i.declinedAt) continue
     const prev = latest.get(i.volunteerId)
     if (!prev || i.sentAt > prev.sentAt) latest.set(i.volunteerId, i)
   }
   return [...latest.values()].map((invite) => ({ volunteerId: invite.volunteerId, invite, waitlistOnly: waiting.has(invite.volunteerId) }))
+}
+
+/** People left out of `selectInvitedWithoutShift` only because they declined (#558), for the preview/confirmation. */
+export function countDeclinedExcluded<I extends { volunteerId: string; declinedAt?: Date | null }>(
+  invites: I[],
+  registrations: { volunteerId: string; status: string }[],
+): number {
+  const active = new Set(registrations.filter((r) => r.status === "active").map((r) => r.volunteerId))
+  return new Set(invites.filter((i) => i.declinedAt && !active.has(i.volunteerId)).map((i) => i.volunteerId)).size
 }
 
 /** Audience from the query string of the message page (`?shift=`, `?role=`, `?audience=waitlist`). */

@@ -55,10 +55,15 @@ export function bulkResendRecap(i: { people: number }): ActionRecap {
   }
 }
 
-export function remindInvitedRecap(i: { people: number }): ActionRecap {
+export function remindInvitedRecap(i: { people: number; declined?: number }): ActionRecap {
   return {
     title: `Relancer ${n(i.people, "membre invité", "membres invités")} sans créneau confirmé ?`,
-    lines: [`${n(i.people, "email de relance envoyé", "emails de relance envoyés")}.`, "Les membres déjà inscrits ne reçoivent rien.", LOGGED],
+    lines: [
+      `${n(i.people, "email de relance envoyé", "emails de relance envoyés")}.`,
+      "Les membres déjà inscrits ne reçoivent rien.",
+      ...(i.declined ? [`${n(i.declined, "membre ayant indiqué ne pas être disponible ne reçoit", "membres ayant indiqué ne pas être disponibles ne reçoivent")} rien non plus.`] : []),
+      LOGGED,
+    ],
     confirmLabel: "Relancer",
     danger: false,
   }

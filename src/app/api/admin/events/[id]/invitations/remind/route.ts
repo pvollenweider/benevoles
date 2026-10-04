@@ -58,10 +58,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   let sent = 0
   let failed = 0
+  // Left out because they answered « pas disponible » (#558), counted apart from the result.
+  let declinedSkipped = 0
   for (const invite of invites) {
     const v = invite.volunteer
     if (!v.email || !v.active) continue
     if (registeredEmails.has(v.email)) continue
+    if (invite.declinedAt) { declinedSkipped++; continue }
     try {
       const result = await sendMemberInvite({
         to: v.email,
@@ -83,5 +86,5 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     }
   }
 
-  return NextResponse.json({ sent, failed })
+  return NextResponse.json({ sent, failed, declinedSkipped })
 }

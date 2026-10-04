@@ -14,7 +14,7 @@ export async function loadMemberActivity(db: OrgScopedPrisma, volunteerId: strin
   if (!member) return null
   const event = { select: { id: true, title: true } }
   const [invites, registrations, leaders, orgLog] = await Promise.all([
-    db.memberInvite.findMany({ where: { volunteerId }, select: { sentAt: true, usedAt: true, event } }),
+    db.memberInvite.findMany({ where: { volunteerId }, select: { sentAt: true, usedAt: true, declinedAt: true, event } }),
     db.registration.findMany({ where: { volunteerId }, select: { createdAt: true, updatedAt: true, status: true, checkedInAt: true, shift: { select: { roleName: true, label: true, date: true } }, event } }),
     member.email
       ? db.sectorLeader.findMany({ where: { email: { equals: member.email, mode: "insensitive" } }, select: { createdAt: true, roleName: true, event } })

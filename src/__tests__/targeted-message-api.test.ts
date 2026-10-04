@@ -149,7 +149,7 @@ describe("POST /api/admin/events/[id]/message", () => {
     const { POST } = await import("@/app/api/admin/events/[id]/message/route")
     const dry = await (await POST(post({ ...base, audience: { kind: "invited_without_shift" }, dryRun: true }), params)).json()
     // Alice has confirmed shifts; Dan has nothing; Carla is only on the waitlist.
-    expect(dry).toMatchObject({ recipients: 2, waitlistOnly: 1, audience: "les invités sans créneau confirmé" })
+    expect(dry).toMatchObject({ recipients: 2, waitlistOnly: 1, declinedExcluded: 0, audience: "les invités sans créneau confirmé" })
     enqueueNotifications.mockClear()
     await POST(post({ ...base, audience: { kind: "invited_without_shift" } }), params)
     const payloads = enqueueNotifications.mock.calls[0][0]
@@ -159,6 +159,25 @@ describe("POST /api/admin/events/[id]/message", () => {
       expect(p.data.editToken).toBeUndefined()
       expect(new URL(p.data.signupUrl).searchParams.get("token")).toMatch(/^inv-/)
     }
+  })
+
+  it("leaves out people who declined (#558), and says how many", async () => {
+    Object.assign(db, {
+      memberInvite: {
+        findMany: vi.fn().mockResolvedValue([
+          { volunteerId: "dan", sentAt: new Date("2026-06-01"), declinedAt: null, tokenEnc: null, tokenLegacy: "inv-dan", volunteer: { firstName: "Dan", email: "dan@x.ch" } },
+          { volunteerId: "fred", sentAt: new Date("2026-06-01"), declinedAt: new Date("2026-06-02"), tokenEnc: null, tokenLegacy: "inv-fred", volunteer: { firstName: "Fred", email: "fred@x.ch" } },
+        ]),
+      },
+    })
+    const { POST } = await import("@/app/api/admin/events/[id]/message/route")
+    const dry = await (await POST(post({ ...base, audience: { kind: "invited_without_shift" }, dryRun: true }), params)).json()
+    expect(dry).toMatchObject({ recipients: 1, declinedExcluded: 1 })
+    enqueueNotifications.mockClear()
+    const res = await (await POST(post({ ...base, audience: { kind: "invited_without_shift" } }), params)).json()
+    expect(res).toMatchObject({ sent: 1, declinedExcluded: 1 })
+    const payloads = enqueueNotifications.mock.calls[0][0]
+    expect(payloads.map((p: { recipient: { email: string } }) => p.recipient.email)).toEqual(["dan@x.ch"])
   })
 
   it("replaces template variables per recipient and refuses unknown or misplaced ones (#482)", async () => {

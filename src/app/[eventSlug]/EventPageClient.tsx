@@ -31,6 +31,7 @@ import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/
 import { withdrawCopy, withdrawDoneMessage, withdrawFailureMessage } from "@/lib/volunteer-withdraw"
 import ModalShell from "@/components/admin/ModalShell"
 import WithdrawDialog from "@/components/public/WithdrawDialog"
+import DeclineInvite from "@/components/public/DeclineInvite"
 import SignupQuestions, { type Answers } from "@/components/public/SignupQuestions"
 import { checkAnswers, type Question } from "@/lib/event-questions"
 import DayTimeline from "@/components/DayTimeline"
@@ -115,6 +116,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   const router = useRouter()
   const searchParams = useSearchParams()
   const inviteToken = searchParams.get("token")
+  // The email's second link (#558): opens the decline confirmation step right away.
+  const autoOpenDecline = searchParams.get("decline") === "1"
 
   type MyReg = MyRegistration
 
@@ -126,6 +129,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   const [questionErrors, setQuestionErrors] = useState<Map<string, string>>(new Map())
   // Reserved roles (#470) the visitor's invitation opens; none without an invitation.
   const [allowedReserved, setAllowedReserved] = useState<Set<string>>(new Set())
+  // Whether this invitation already answered « pas disponible » (#558), from the member-invite GET.
+  const [declined, setDeclined] = useState(false)
   // The day of the refused shift: the visible note sits under that day's schedule, where the click was.
   const [limitNoticeDay, setLimitNoticeDay] = useState<string | null>(null)
   const [myRegistrations, setMyRegistrations] = useState<MyReg[]>([])
@@ -241,6 +246,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
         if (!data?.member) return
         setForm((f) => prefillContact(f, data.member, "form"))
         setAllowedReserved(new Set<string>(data.reservedRolesAllowed ?? []))
+        setDeclined(!!data.declined)
       })
       .catch(() => {})
   }, [inviteToken, eventSlug, previewEventId])
@@ -575,6 +581,13 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm text-blue-800">
             {event.publicInstructions}
           </div>
+        )}
+
+        {/* « Je ne suis pas disponible » (#558): only from an invitation link, only before any
+            registration on this event — the open question answers "no" to offering it again once
+            every shift has been withdrawn, and this page only ever sees the current session. */}
+        {inviteToken && !preview && myRegistrations.length === 0 && !previewResult && (
+          <DeclineInvite token={inviteToken} eventSlug={eventSlug} initialDeclined={declined} autoOpen={autoOpenDecline} />
         )}
 
         {event.pages.length > 0 && (

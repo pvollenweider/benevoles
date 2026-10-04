@@ -350,6 +350,15 @@ export async function POST(req: Request) {
         data: { usedAt: new Date() },
       })
       .catch(reportError("member_invite.mark_used"))
+    // Change of mind (#558): registering from the same invite link clears a previous « pas
+    // disponible », whether this is the first use or a later one. A later withdrawal of all
+    // shifts does not set it back (product decision) — nothing here reacts to a cancellation.
+    await prisma.memberInvite
+      .updateMany({
+        where: { ...linkToken.where(inviteToken), eventId, declinedAt: { not: null } },
+        data: { declinedAt: null },
+      })
+      .catch(reportError("member_invite.clear_declined"))
   }
 
   const waitlistRegs = registrations.filter((r) => r.status === "waiting")
