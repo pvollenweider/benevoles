@@ -4,12 +4,13 @@
 import { readdirSync } from "node:fs"
 import { join } from "node:path"
 import { prisma } from "./prisma"
-import { env } from "./env"
+import { env, releaseCheckEnabled } from "./env"
 import { outboxHealth } from "./notifications/outbox"
 import { JOBS, loadJobRuns, type JobName } from "./job-runs"
 import {
-  assessConfig, assessDatabase, assessJob, assessMigrations, assessOutbox, assessRestoreTest, type HealthItem, type MigrationFacts,
+  assessConfig, assessDatabase, assessJob, assessMigrations, assessOutbox, assessReleaseCheck, assessRestoreTest, type HealthItem, type MigrationFacts,
 } from "./health-view"
+import { isNewerVersion } from "./release-check"
 import pkg from "../../package.json"
 
 /**
@@ -19,18 +20,34 @@ import pkg from "../../package.json"
 export async function loadHealth(now: Date = new Date()) {
   const database = await probeDatabase()
   const none: Awaited<ReturnType<typeof loadJobRuns>> = {}
-  const [outbox, runs, migrations] = database === null
-    ? [null, none, null]
-    : await Promise.all([outboxHealth(now).catch(() => null), loadJobRuns().catch(() => none), probeMigrations().catch(() => null)])
+  const [outbox, runs, migrations, releaseState] = database === null
+    ? [null, none, null, null]
+    : await Promise.all([
+        outboxHealth(now).catch(() => null),
+        loadJobRuns().catch(() => none),
+        probeMigrations().catch(() => null),
+        prisma.releaseCheckState.findUnique({ where: { id: "singleton" } }).catch(() => null),
+      ])
 
   const jobs: HealthItem[] = (Object.keys(JOBS) as JobName[])
     .filter((j) => j !== "restore-test")
     .map((j) => assessJob(JOBS[j].label, runs[j] ?? null, now, JOBS[j].maxAgeHours))
   jobs.push(assessRestoreTest(runs["restore-test"] ?? null, now))
 
+  const version = pkg.version as string
   const items: HealthItem[] = [
     assessDatabase(database),
     outbox ? assessOutbox(outbox) : { id: "outbox", label: "File d'envoi des emails", level: "unknown", detail: "Non lue." },
+    assessReleaseCheck(
+      {
+        enabled: releaseCheckEnabled(),
+        latestVersion: releaseState?.latestVersion ?? null,
+        lastCheckedAt: releaseState?.lastCheckedAt ?? null,
+        isNewer: isNewerVersion(releaseState?.latestVersion ?? null, version),
+      },
+      version,
+      now,
+    ),
     ...jobs,
     migrations ? assessMigrations(migrations) : { id: "migrations", label: "Migrations de la base", level: "unknown", detail: "Non lues." },
     ...assessConfig({
@@ -41,7 +58,7 @@ export async function loadHealth(now: Date = new Date()) {
       sentry: !!process.env.NEXT_PUBLIC_SENTRY_DSN,
     }),
   ]
-  return { items, version: pkg.version as string, gitSha: env.GIT_SHA ?? null, migrations, checkedAt: now }
+  return { items, version, gitSha: env.GIT_SHA ?? null, migrations, checkedAt: now }
 }
 
 async function probeDatabase(): Promise<number | null> {

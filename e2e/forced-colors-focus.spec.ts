@@ -1,4 +1,5 @@
 import { test, expect, type Browser, type Page } from "@playwright/test"
+import { execFileSync } from "node:child_process"
 import {
   checkFocused, checkSelectedStates, emulateForcedColors, expectNoFailures, shot, stateSignature, sweep,
   type Scheme,
@@ -814,6 +815,27 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
         failures.push(...(await sweep(page, label, { min })).failures)
       }
       settle(failures)
+    })
+
+    // #612: the release banner's own border (not only its background) must still mark its
+    // boundary once forced colours replaces the tinted background with the page's Canvas, and
+    // its link + dismiss button must be reachable and show a distinct outline like everything
+    // else. No network call: the ReleaseCheckState row is seeded directly in the database.
+    test("super-admin pages with the release banner", async ({ page }) => {
+      const LATEST_VERSION = "v999.0.0"
+      execFileSync("npx", ["tsx", "scripts/e2e-seed-release-check.ts", "seed", LATEST_VERSION, `https://github.com/pvollenweider/benevoles/releases/tag/${LATEST_VERSION}`], { stdio: "inherit" })
+      execFileSync("npx", ["tsx", "scripts/e2e-seed-release-check.ts", "reset-dismissed", SUPER_ADMIN_EMAIL], { stdio: "inherit" })
+      try {
+        const failures: string[] = []
+        await login(page, SUPER_ADMIN_EMAIL, SUPER_ADMIN_PASSWORD)
+        await page.goto("/super-admin/organizations")
+        const banner = page.getByRole("region", { name: "Nouvelle version disponible" })
+        await expect(banner).toBeVisible()
+        failures.push(...(await sweep(page, "super-admin organisations with release banner", { min: 6 })).failures)
+        settle(failures)
+      } finally {
+        execFileSync("npx", ["tsx", "scripts/e2e-seed-release-check.ts", "clear"], { stdio: "inherit" })
+      }
     })
 
     test(".input field, focused and not (screenshots)", async ({ page }) => {

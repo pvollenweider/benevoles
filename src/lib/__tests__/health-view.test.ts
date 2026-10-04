@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { ago, assessConfig, assessDatabase, assessJob, assessMigrations, assessOutbox, assessRestoreTest, healthHeadline, worstLevel } from "../health-view"
+import { ago, assessConfig, assessDatabase, assessJob, assessMigrations, assessOutbox, assessReleaseCheck, assessRestoreTest, healthHeadline, worstLevel } from "../health-view"
 
 const now = new Date("2026-07-10T12:00:00Z")
 const at = (iso: string) => new Date(iso)
@@ -41,6 +41,17 @@ describe("health view", () => {
     expect(assessMigrations({ applied: 80, lastName: "x", lastAt: now, pending: 2 })).toMatchObject({ level: "error", detail: "2 migrations du code pas encore appliquées (80 appliquées)." })
     const cfg = assessConfig({ smtp: false, push: false, cronSecret: true, tokenEncryption: true, sentry: false })
     expect(cfg.map((c) => c.level)).toEqual(["error", "warn", "ok", "ok", "warn"])
+  })
+
+  it("release check: off, never checked, up to date, newer available", () => {
+    expect(assessReleaseCheck({ enabled: false, latestVersion: null, lastCheckedAt: null, isNewer: false }, "2.0.2", now))
+      .toMatchObject({ level: "unknown", detail: "Vérification désactivée (RELEASE_CHECK=off)." })
+    expect(assessReleaseCheck({ enabled: true, latestVersion: null, lastCheckedAt: null, isNewer: false }, "2.0.2", now))
+      .toMatchObject({ level: "unknown", detail: "Jamais vérifié." })
+    expect(assessReleaseCheck({ enabled: true, latestVersion: "2.0.2", lastCheckedAt: at("2026-07-10T11:50:00Z"), isNewer: false }, "2.0.2", now))
+      .toMatchObject({ level: "ok", detail: "À jour (2.0.2) ; vérifié il y a 10 min." })
+    expect(assessReleaseCheck({ enabled: true, latestVersion: "2.1.0", lastCheckedAt: at("2026-07-10T11:50:00Z"), isNewer: true }, "2.0.2", now))
+      .toMatchObject({ level: "warn", detail: "2.1.0 disponible (vous utilisez 2.0.2) ; vérifié il y a 10 min." })
   })
 
   it("headline and worst level", () => {

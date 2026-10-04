@@ -578,6 +578,9 @@ model AdminUser {
   // a signed link in the email itself, no login required.
   receiveProductUpdates       Boolean   @default(true)
   productUpdatesUnsubscribedAt DateTime?
+  // Release banner (#612): the version this super admin dismissed. A newer version makes the
+  // banner reappear even though this field is unchanged — the comparison, not a reset, does it.
+  releaseBannerDismissedVersion String?
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
 
@@ -598,4 +601,17 @@ model JobRun {
   error      String?
   summary    Json?
   updatedAt  DateTime  @updatedAt
+}
+
+// Latest known GitHub release of pvollenweider/benevoles (#612), checked once a day by
+// /api/cron/release-check (self-hosted instances; off by RELEASE_CHECK=off). Single row, id fixed
+// to "singleton". lastNotifiedVersion keeps the super admin email from going out twice for the
+// same version.
+model ReleaseCheckState {
+  id                  String    @id @default("singleton")
+  latestVersion       String?
+  releaseUrl          String?
+  lastCheckedAt       DateTime?
+  lastNotifiedVersion String?
+  updatedAt           DateTime  @updatedAt
 }

@@ -154,6 +154,14 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - Base (latence `SELECT 1`), file d'emails (`outboxHealth`), tâches planifiées et sauvegardes (table `JobRun`, #383 : `recordJobRun` autour des routes cron rappels et nettoyage ; `POST /api/cron/heartbeat` avec `CRON_SECRET` pour `backup`, `backup-offsite` et le `restore-test` manuel, appelé par les CronJobs k8s), migrations appliquées (`_prisma_migrations`) et en attente (dossier `prisma/migrations` de l'image), version (`package.json`) et commit (`GIT_SHA`, build arg), configuration (SMTP, VAPID, CRON_SECRET, TOKEN_ENCRYPTION_KEY, Sentry)
 - Seuils dans `src/lib/health-view.ts` : rappels 2 h, nettoyage et sauvegardes 26 h, test de restauration 45 jours (à surveiller) / 90 jours (problème)
+- Dernière version connue et date de la dernière vérification (#612, `ReleaseCheckState`), ou « Vérification désactivée » si `RELEASE_CHECK=off`
+
+### Nouvelle version disponible (#612, instances auto-hébergées, super admin)
+
+- `GET /api/repos/pvollenweider/benevoles/releases/latest` interrogée une fois par jour par `POST /api/cron/release-check` (`CRON_SECRET`), sans jeton, prereleases et brouillons ignorés, comparaison semver tolérante à un `v` initial ; échec (réseau, GitHub indisponible, limite de débit) silencieux, jamais de nouvelle tentative en boucle
+- Désactivable entièrement avec `RELEASE_CHECK=off` dans `.env` (aucune requête sortante) ; `benevol.app` garde le défaut actif, sans effet puisque déployé depuis `main`
+- Email aux super admins actifs, une fois par nouvelle version (`ReleaseCheckState.lastNotifiedVersion`, clé de dédoublonnage `release_available:<version>:<email>`), avec la version, le lien des notes de version et la documentation de mise à jour
+- Bannière dans l'espace super admin (pas les organisateurs ni les bénévoles) : « Une nouvelle version est disponible : X (vous utilisez Y). », lien vers les notes de version, masquable pour cette version (réapparaît à la version suivante)
 
 ### Recherche globale (`/admin/search`)
 

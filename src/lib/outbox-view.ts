@@ -32,6 +32,7 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   targeted_message: "Message aux bénévoles",
   registration_requested: "Demande d'inscription reçue",
   registration_refused: "Demande d'inscription refusée",
+  release_available: "Nouvelle version disponible",
 }
 
 export function kindLabel(kind: string): string {

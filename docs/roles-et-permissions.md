@@ -109,6 +109,7 @@ Règles sur l'équipe :
 - N'est rattaché à aucune organisation (`organizationId` nul). Le bouton « Gérer » enregistre l'organisation choisie dans le cookie `sa-org-id`. Sans ce cookie (ou s'il désigne une organisation qui n'existe plus), aucune organisation n'est choisie à sa place : les pages de `/admin` redirigent vers la liste des organisations (`/super-admin/organizations`) pour en sélectionner une, et les routes de l'API admin répondent 409 (« Aucune organisation sélectionnée »).
 - Dans l'organisation choisie, il a tous les droits d'un propriétaire, y compris si elle est désactivée.
 - Envoie les nouveautés produit aux admins abonnés (`/api/super-admin/product-updates`, historique `ProductUpdateSend`) et gère son propre profil (email, mot de passe).
+- Voit, sur les pages de son espace, une bannière « Une nouvelle version est disponible » quand l'instance est en retard sur la dernière release GitHub publique (#612, instances auto-hébergées, `RELEASE_CHECK`) ; peut la masquer pour cette version (`AdminUser.releaseBannerDismissedVersion`), elle réapparaît à la version suivante. La page **Santé du service** affiche la dernière version connue et la date de la dernière vérification.
 - Protégé par `requireSuperAdmin()` côté API et par le proxy côté pages.
 
 ## Où les droits sont appliqués
