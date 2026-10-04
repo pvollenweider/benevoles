@@ -3,7 +3,7 @@ import { loadMemberActivity } from "@/lib/member-activity-data"
 
 // Member activity (#488): read through the organisation-scoped client only.
 const db = (member: object | null) => ({
-  volunteer: { findFirst: vi.fn().mockResolvedValue(member) },
+  volunteer: { findFirst: vi.fn().mockResolvedValue(member), findMany: vi.fn().mockResolvedValue([]) },
   memberInvite: { findMany: vi.fn().mockResolvedValue([]) },
   registration: { findMany: vi.fn().mockResolvedValue([]) },
   sectorLeader: { findMany: vi.fn().mockResolvedValue([]) },
@@ -25,7 +25,7 @@ describe("loadMemberActivity", () => {
     expect(d.registration.findMany.mock.calls[0][0].where).toEqual({ volunteerId: "vol-a" })
     expect(d.memberInvite.findMany.mock.calls[0][0].where).toEqual({ volunteerId: "vol-a" })
     expect(d.sectorLeader.findMany.mock.calls[0][0].where).toEqual({ email: { equals: "julie@x.ch", mode: "insensitive" } })
-    expect(d.orgLog.findMany.mock.calls[0][0].where).toEqual({ entityType: "Member", entityId: "vol-a" })
+    expect(d.orgLog.findMany.mock.calls[0][0].where).toEqual({ entityType: "Member", entityId: { in: ["vol-a"] } })
   })
 
   it("skips sector leaders for a member without email", async () => {

@@ -313,6 +313,14 @@ model Volunteer {
   // automatically, and not asked on the public form.
   availabilityPeriods String[] @default([])
   availabilityNote    String?
+  // Member merge (#600): set once this record was absorbed into another one, confirmed by an
+  // organizer as the same person. `mergedIntoId` is the mapping old ids resolve through
+  // (event-log-read.ts, member-activity-data.ts); `mergedAt` drives the tombstone's own retention
+  // (src/lib/retention.ts) — purged by the cleanup cron like the rest of the merge data. A merged
+  // record is always `active: false` and has every personal field cleared (names emptied, email
+  // null, phone/notes/birthDate/tags/availability cleared) — see src/lib/member-merge-transaction.ts.
+  mergedIntoId   String?
+  mergedAt       DateTime?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -322,6 +330,8 @@ model Volunteer {
   pushSubscriptions PushSubscription[]
   questionAnswers   QuestionAnswer[]
   deliveryOutcomes  DeliveryOutcome[]
+  mergedInto        Volunteer?     @relation("VolunteerMerge", fields: [mergedIntoId], references: [id], onDelete: SetNull)
+  mergedFrom        Volunteer[]    @relation("VolunteerMerge")
 
   // Also unique case-insensitively: "Volunteer_organizationId_email_ci_key" on lower(trim(email)), created by migration
   // 20260930110000_email_case_insensitive_unique (#342). Expression indexes can't be declared here;
@@ -329,6 +339,7 @@ model Volunteer {
   @@unique([organizationId, email])
   @@index([email])
   @@index([organizationId])
+  @@index([mergedIntoId])
 }
 
 model Registration {

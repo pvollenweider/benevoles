@@ -44,6 +44,7 @@ async function run(req: Request) {
   const adminCutoff = daysAgo(now, RETENTION_DAYS.deactivatedAdmin)
   const failedCutoff = daysAgo(now, RETENTION_DAYS.failedNotification)
   const deliveryOutcomeCutoff = daysAgo(now, RETENTION_DAYS.deliveryOutcome)
+  const mergedTombstoneCutoff = daysAgo(now, RETENTION_DAYS.mergedMemberTombstone)
 
   // --- 1. Inactive organizations ---
   // Cascades to: Event → Shift → Registration, Member, MemberInvite.
@@ -69,6 +70,13 @@ async function run(req: Request) {
   // org-scoped volunteers (organizationId set) are roster members and must be kept.
   const deletedVolunteers = await prisma.volunteer.deleteMany({
     where: { organizationId: null, registrations: { none: {} } },
+  })
+
+  // --- 2b. Merged member tombstones (#600): the absorbed record of a merge, past its retention
+  // window. Deleting it cascade-deletes whatever DeliveryOutcome rows the merge deliberately left
+  // behind (the ones that didn't match the kept member's address hash).
+  const deletedMergedTombstones = await prisma.volunteer.deleteMany({
+    where: { mergedIntoId: { not: null }, mergedAt: { lt: mergedTombstoneCutoff } },
   })
 
   // --- 3. Admin invitations never accepted (isActive stays false until then), and org accounts
@@ -178,6 +186,7 @@ async function run(req: Request) {
       deliveryOutcomes: deletedDeliveryOutcomes.count,
       organizations: deletedOrgs.count,
       volunteers: deletedVolunteers.count,
+      mergedMemberTombstones: deletedMergedTombstones.count,
       adminUsers: deletedOrgAdmins.count + deletedAdmins.count,
     },
     tokensCleaned: {

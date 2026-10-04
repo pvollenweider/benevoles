@@ -270,22 +270,56 @@ export async function listStoryCandidates(eventId: string, timeZone: string = AP
     }))
 }
 
+/**
+ * A volunteer merged into another one (#600) is an inactive tombstone with its name emptied:
+ * follow `mergedIntoId` (capped, in case of a chain of merges) to the record that actually holds
+ * the name now, instead of showing a blank actor.
+ */
+async function resolveMergedVolunteerNames(ids: string[]): Promise<Map<string, string>> {
+  const names = new Map<string, string>()
+  const pointsTo = new Map<string, string>() // original id -> mergedIntoId, for ids not yet resolved
+  let frontier = [...new Set(ids)]
+  let hops = 0
+  while (frontier.length > 0 && hops < 5) {
+    hops++
+    const rows = await prisma.volunteer.findMany({ where: { id: { in: frontier } }, select: { id: true, firstName: true, lastName: true, mergedIntoId: true } })
+    const nextFrontier: string[] = []
+    for (const r of rows) {
+      if (r.mergedIntoId) {
+        pointsTo.set(r.id, r.mergedIntoId)
+        nextFrontier.push(r.mergedIntoId)
+      } else {
+        names.set(r.id, `${r.firstName} ${r.lastName}`)
+      }
+    }
+    frontier = nextFrontier
+  }
+  // Walk every chain back from the names we did resolve to every id that pointed into it.
+  for (const [id, target] of pointsTo) {
+    let current = target
+    const seen = new Set([id])
+    while (!names.has(current) && pointsTo.has(current) && !seen.has(current)) {
+      seen.add(current)
+      current = pointsTo.get(current)!
+    }
+    if (names.has(current)) names.set(id, names.get(current)!)
+  }
+  return names
+}
+
 /** Resolves each row's actorType/actorId to a display label, keyed by the row's own id. */
 async function buildActorLabelMap(rows: { id: string; actorType: string; actorId: string | null }[]): Promise<Map<string, string>> {
   const adminIds = [...new Set(rows.filter((r) => r.actorType === "admin" && r.actorId).map((r) => r.actorId!))]
   const volunteerIds = [...new Set(rows.filter((r) => r.actorType === "volunteer" && r.actorId).map((r) => r.actorId!))]
 
-  const [admins, volunteers] = await Promise.all([
+  const [admins, volunteerNames] = await Promise.all([
     adminIds.length
       ? prisma.adminUser.findMany({ where: { id: { in: adminIds } }, select: { id: true, name: true } })
       : Promise.resolve([]),
-    volunteerIds.length
-      ? prisma.volunteer.findMany({ where: { id: { in: volunteerIds } }, select: { id: true, firstName: true, lastName: true } })
-      : Promise.resolve([]),
+    volunteerIds.length ? resolveMergedVolunteerNames(volunteerIds) : Promise.resolve(new Map<string, string>()),
   ])
 
   const adminNames = new Map(admins.map((a) => [a.id, a.name]))
-  const volunteerNames = new Map(volunteers.map((v) => [v.id, `${v.firstName} ${v.lastName}`]))
 
   return new Map(
     rows.map((row) => {
