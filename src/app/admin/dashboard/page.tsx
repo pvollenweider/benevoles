@@ -12,7 +12,7 @@ export default async function DashboardPage() {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { db, organizationId } = ctx
-  const [onboarding, attention] = await Promise.all([loadOnboarding(db, organizationId), loadAttention(db)])
+  const [onboarding, attention] = await Promise.all([loadOnboarding(db, organizationId), loadAttention(db, organizationId)])
 
   const now = new Date()
 

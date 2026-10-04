@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useEffect, useId, useRef } from "react"
-import { canTakeFocus, focusFirstAvailable, isFocusDropped } from "@/lib/focus-return"
+import { canTakeFocus, focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
 import { tabbables, trapTarget } from "@/lib/focus-trap"
 import { resolveOpener, trackPointerOpener } from "@/lib/modal-opener"
 
@@ -30,6 +30,13 @@ type Props = {
    * (`aria-disabled`), so focus is not lost while it waits.
    */
   busy?: boolean
+  /**
+   * Used on close instead of the opener, when none was recorded at all (#599): a dialog opened
+   * from a deep link or a query param, with nothing pressed to open it — `document.activeElement`
+   * was already `<body>` at mount, so there is no opener to resolve. Never overrides a real
+   * opener, and never used when a parent already moved focus itself (same rule as the opener).
+   */
+  fallbackFocusOnClose?: FocusCandidate
 }
 
 // Installed when the module loads, before any tap that opens a dialog: under WebKit the opener is
@@ -57,15 +64,18 @@ export default function ModalShell({
   closeOnBackdrop = true,
   describedBy,
   busy = false,
+  fallbackFocusOnClose,
 }: Props) {
   const titleId = useId()
   const dialogRef = useRef<HTMLDivElement>(null)
   const onCloseRef = useRef(onClose)
   const busyRef = useRef(busy)
+  const fallbackFocusOnCloseRef = useRef(fallbackFocusOnClose)
 
   useEffect(() => {
     onCloseRef.current = onClose
     busyRef.current = busy
+    fallbackFocusOnCloseRef.current = fallbackFocusOnClose
   })
 
   const requestClose = () => { if (!busy) onClose() }
@@ -83,10 +93,17 @@ export default function ModalShell({
       // Only if focus was dropped (the dialog is gone, or WebKit left it on <main>): a parent that
       // moved it on close in a layout effect, or with flushSync then focus, has already run and
       // wins (a passive effect or next-frame focus would run after this, with a brief flash). The
-      // dialog.contains clause only matters for StrictMode's simulated unmount in dev. A removed
-      // or hidden opener is skipped; the parent owns any fallback.
+      // dialog.contains clause only matters for StrictMode's simulated unmount in dev.
       const active = document.activeElement
-      if (opener && (isFocusDropped(active) || !!dialog?.contains(active))) focusFirstAvailable([opener])
+      if (!isFocusDropped(active) && !dialog?.contains(active)) return
+      // The opener first when there is one, the caller's fallback otherwise, or when the opener
+      // turns out unusable: removed meanwhile (silently skipped, as before), or — #599 — a stale
+      // record from a pointer press that opened an entirely different page before a client-side
+      // navigation (modal-opener.ts's tracking is document-wide and survives the navigation; the
+      // dialog that opens afterwards, e.g. from a deep-linked query param, has no real opener of
+      // its own on this page). `focusFirstAvailable` already skips a candidate that can't take
+      // focus, so this is exactly "prefer the opener, fall back" in one call.
+      focusFirstAvailable(opener ? [opener, fallbackFocusOnCloseRef.current] : [fallbackFocusOnCloseRef.current])
     }
   }, [])
 

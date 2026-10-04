@@ -9,6 +9,11 @@ import { env } from "@/lib/env"
 import { prisma } from "@/lib/prisma"
 import { encryptLegacyTokens } from "@/lib/token-encryption-job"
 import { reportError } from "@/lib/report-error"
+import { loadOrganizationsWithNewAddressesToVerify, loadSummaryRecipients } from "@/lib/delivery-summary-data"
+import { SUMMARY_WINDOW_HOURS, summaryDayKey } from "@/lib/delivery-summary"
+import { parseNotificationSettings } from "@/lib/notification-settings"
+import { adminMembersToVerifyUrl } from "@/lib/notifications/templates/shared"
+import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 
 export const dynamic = "force-dynamic"
 
@@ -132,6 +137,37 @@ async function run(req: Request) {
     return null
   })
 
+  // --- 8. Daily summary of addresses to verify (#599) ---
+  // Only organizations with at least one member whose CURRENT address is still "to verify"
+  // because of an important kind (confirmation, waitlist offer, reminder) that failed
+  // permanently since the previous run; idempotent through the outbox's own dedupeKey (one
+  // summary per organization per admin per day), never through a separate "already sent" table.
+  const summarySince = new Date(now.getTime() - SUMMARY_WINDOW_HOURS * 60 * 60 * 1000)
+  const addressSummaries = await loadOrganizationsWithNewAddressesToVerify(summarySince, now)
+  let addressSummariesSent = 0
+  for (const summary of addressSummaries) {
+    const org = await prisma.organization.findUnique({ where: { id: summary.organizationId }, select: { notificationSettings: true } })
+    if (!parseNotificationSettings(org?.notificationSettings).addressesToVerifyAdminEmail) continue
+    const recipients = await loadSummaryRecipients(summary.organizationId)
+    if (recipients.length === 0) continue
+    const dayKey = summaryDayKey(now)
+    const ids = await enqueueNotifications(
+      recipients.map((r) => ({
+        kind: "addresses_to_verify_summary",
+        recipient: { email: r.email, name: r.name },
+        organizationId: summary.organizationId,
+        dedupeKey: `addresses_to_verify_summary:${summary.organizationId}:${dayKey}:${r.email}`,
+        data: {
+          count: summary.members.length,
+          members: summary.members.map((m) => ({ name: m.name })),
+          membersUrl: adminMembersToVerifyUrl(),
+        },
+      })),
+    )
+    addressSummariesSent += ids.length
+    deliverAfterResponse(ids)
+  }
+
   return NextResponse.json({
     runAt: now.toISOString(),
     tokenEncryption,
@@ -147,6 +183,7 @@ async function run(req: Request) {
     tokensCleaned: {
       passwordReset: clearedResetTokens.count,
     },
+    addressSummariesSent,
   })
   })
 }

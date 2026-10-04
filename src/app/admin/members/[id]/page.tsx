@@ -8,6 +8,10 @@ import { getOrgContext } from "@/lib/auth-guard"
 import { loadMemberActivity } from "@/lib/member-activity-data"
 import { activitySummary, memberTimeline } from "@/lib/member-activity"
 import { orgTimeZone } from "@/lib/time-zone"
+import { loadAddressStatuses } from "@/lib/delivery-outcomes-data"
+import { addressHash } from "@/lib/notifications/smtp-outcome"
+import { addressStatusSentence } from "@/lib/address-status"
+import { env } from "@/lib/env"
 
 export const dynamic = "force-dynamic"
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -29,7 +33,15 @@ export default async function MemberActivityPage({ params }: { params: Promise<{
   const timeZone = orgTimeZone(org)
   const facts = memberTimeline(data.sources)
   const when = (d: Date) => d.toLocaleString("fr-FR", { timeZone, day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })
+  const fmtDay = (d: Date) => d.toLocaleDateString("fr-FR", { timeZone, day: "numeric", month: "long", year: "numeric" })
   const { member } = data
+
+  // Whether the member's current address needs checking (#599), same rule as the members list.
+  const statuses = await loadAddressStatuses(ctx.organizationId, [
+    { id: member.id, addressHash: member.email ? addressHash(member.email, env.AUTH_SECRET) : null },
+  ])
+  const status = statuses.get(member.id) ?? { kind: "ok" as const }
+  const statusSentence = addressStatusSentence(status, fmtDay)
 
   return (
     <div className="space-y-6 max-w-2xl">
@@ -40,6 +52,28 @@ export default async function MemberActivityPage({ params }: { params: Promise<{
         <h1 className="text-2xl font-bold text-gray-900 mt-1">Activité de {member.firstName} {member.lastName}</h1>
         <p className="text-sm text-gray-700 mt-1">{member.email ?? "Sans email"}{member.active ? "" : " · fiche désactivée"}</p>
         <p className="text-sm text-gray-700 mt-2">{activitySummary(data.sources)}</p>
+        {statusSentence && (
+          // Not role="status": this block is part of the page's own initial content, read in
+          // document order like the rest — role="status" is for a region whose content changes
+          // after the page has already loaded, which this never does.
+          <div
+            className={`mt-3 rounded-xl border px-4 py-3 text-sm forced-colors:border-[CanvasText] ${
+              status.kind === "to_verify" ? "bg-amber-50 border-amber-300 text-amber-900" : "bg-gray-50 border-gray-300 text-gray-800"
+            }`}
+          >
+            <p className="font-medium"><span aria-hidden="true">⚠ </span>{statusSentence}</p>
+            {status.kind === "to_verify" && (
+              <p className="mt-2 space-x-3">
+                <Link href={`/admin/members?edit=${member.id}`} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                  Modifier l&apos;adresse<span className="sr-only"> de {member.firstName} {member.lastName}</span>
+                </Link>
+                <Link href={`/admin/members?q=${encodeURIComponent(`${member.firstName} ${member.lastName}`)}`} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                  Chercher un doublon<span className="sr-only"> pour {member.firstName} {member.lastName}</span>
+                </Link>
+              </p>
+            )}
+          </div>
+        )}
         <p className="text-xs text-gray-600 mt-2">
           Les faits enregistrés par l&apos;application (invitations, inscriptions, présences, responsabilités, modifications de la fiche), sans appréciation. Les notes internes sont sur la fiche du membre. Ces données disparaissent avec les événements et la fiche.
         </p>

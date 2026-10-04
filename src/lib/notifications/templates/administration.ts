@@ -188,6 +188,34 @@ export function renderProductUpdate(p: NotificationPayload): RenderedEmail {
   return { subject, html, text }
 }
 
+// ── Résumé quotidien des adresses à vérifier (#599), propriétaires et admins de l'organisation ──
+
+export function renderAddressesToVerifySummary(p: NotificationPayload): RenderedEmail {
+  const d = p.data as { count: number; members: { name: string }[]; membersUrl: string }
+  const plural = d.count > 1
+  const subject = `${d.count} adresse${plural ? "s" : ""} à vérifier`
+  const intro = `${d.count} membre${plural ? "s ont" : " a"} un message important (confirmation, proposition de liste d'attente ou rappel) qui n'est pas arrivé dans les dernières 24 heures : le serveur destinataire a refusé l'adresse de façon définitive.`
+
+  const text = [
+    intro,
+    ``,
+    ...d.members.map((m) => `  • ${m.name}`),
+    ``,
+    `Voir les adresses à vérifier :`,
+    d.membersUrl,
+  ].join("\n")
+
+  const html = wrap(`
+    <p>${escapeHtml(intro)}</p>
+    <ul style="padding-left:1.2em;line-height:1.8">
+      ${d.members.map((m) => `<li>${escapeHtml(m.name)}</li>`).join("")}
+    </ul>
+    <p style="margin-top:1.25em">${btn(d.membersUrl, "Voir les adresses à vérifier")}</p>
+  `, `${d.count} adresse${plural ? "s" : ""} à vérifier.`)
+
+  return { subject, html, text }
+}
+
 // ── Nouvelle version disponible (#612), instances auto-hébergées, super admin ────────────────
 
 export function renderReleaseAvailable(p: NotificationPayload): RenderedEmail {

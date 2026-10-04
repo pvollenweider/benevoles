@@ -90,6 +90,29 @@ describe("TargetedMessageForm", () => {
     expect(JSON.parse(sends[0][1].body)).toEqual({ audience: { kind: "role", roleName: "Bar" }, subject: "Parking", message: "Entrée par la rue Basse.", push: false })
   })
 
+  it("warns, but never blocks, when some recipients have an address to verify (#599)", async () => {
+    fetchMock.mockImplementation(async (_url: string, init: RequestInit) => {
+      const body = JSON.parse(init.body as string)
+      if (body.dryRun) return json({ recipients: 3, audience: "aud:role", preview: { subject: `${body.subject} — Fête`, html: "<p>hi</p>" }, addressesToVerify: 2 })
+      return json({ sent: 3, audience: "aud:role" })
+    })
+    setup({ kind: "role", roleName: "Bar" })
+    await screen.findByText("3 personnes recevront ce message.")
+    fireEvent.change(screen.getByLabelText("Objet *"), { target: { value: "Parking" } })
+    fireEvent.change(screen.getByLabelText("Message *"), { target: { value: "Entrée par la rue Basse." } })
+    fireEvent.click(screen.getByRole("button", { name: "Voir l'aperçu et envoyer" }))
+
+    const preview = await screen.findByRole("dialog", { name: "Aperçu de l'email" })
+    expect(preview).toHaveTextContent("2 destinataires ont une adresse à vérifier")
+    const sendButton = screen.getByRole("button", { name: "Envoyer à 3 personnes" })
+    expect(sendButton).not.toHaveAttribute("aria-disabled", "true")
+    fireEvent.click(sendButton)
+
+    const confirm = await screen.findByRole("dialog", { name: "Confirmer l'envoi" })
+    expect(confirm).toHaveTextContent("2 destinataires ont une adresse à vérifier")
+    expect(screen.getByRole("button", { name: "Confirmer l'envoi" })).not.toHaveAttribute("aria-disabled", "true")
+  })
+
   it("shows the server's refusal", async () => {
     setup()
     await screen.findByText(/12 personnes/)

@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+import { addressHash } from "@/lib/notifications/smtp-outcome"
 
 const requireOrgSessionMock = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: requireOrgSessionMock }))
@@ -17,7 +18,9 @@ const push = vi.hoisted(() => ({ pushDeviceCount: vi.fn().mockResolvedValue(0), 
 vi.mock("@/lib/push", () => push)
 const afterCallbacks = vi.hoisted(() => [] as (() => unknown)[])
 vi.mock("next/server", async (orig) => ({ ...(await orig<typeof import("next/server")>()), after: (fn: () => unknown) => { afterCallbacks.push(fn) } }))
-vi.mock("@/lib/prisma", () => ({ prisma: {} }))
+const deliveryOutcomeFindMany = vi.hoisted(() => vi.fn().mockResolvedValue([]))
+vi.mock("@/lib/prisma", () => ({ prisma: { deliveryOutcome: { findMany: deliveryOutcomeFindMany } } }))
+vi.mock("@/lib/env", () => ({ env: { AUTH_SECRET: "a".repeat(32) } }))
 
 const shift = (id: string, roleName: string, over: Partial<{ label: string; startTime: string }> = {}) => ({
   id, roleName, label: over.label ?? roleName, date: new Date("2026-07-04T00:00:00Z"), startTime: over.startTime ?? "10:00", endTime: "12:00",
@@ -63,8 +66,20 @@ describe("POST /api/admin/events/[id]/message", () => {
     expect(body.preview.subject).toBe("Info de dernière minute — Fête")
     expect(body.preview.html).toContain("Venez 10 min avant.")
     expect(body.preview.html).toContain("/my/apercu")
+    expect(body.addressesToVerify).toBe(0)
     expect(enqueueNotifications).not.toHaveBeenCalled()
     expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("dry run: counts how many recipients have an address to verify, warning only (#599)", async () => {
+    // Alice's current address was permanently rejected; Bob's and Carla's are fine.
+    deliveryOutcomeFindMany.mockResolvedValue([
+      { volunteerId: "alice", addressHash: addressHash("alice@x.ch", "a".repeat(32)), outcome: "rejected_permanent", createdAt: new Date() },
+    ])
+    const { POST } = await import("@/app/api/admin/events/[id]/message/route")
+    const res = await POST(post({ ...base, audience: { kind: "event" }, dryRun: true }), params)
+    const body = await res.json()
+    expect(body.addressesToVerify).toBe(1)
   })
 
   it("sends one email per person through the outbox, with their shifts in the audience, and logs it", async () => {

@@ -12,9 +12,9 @@ const m = vi.hoisted(() => ({
 }))
 
 vi.mock("@/lib/prisma", () => {
-  const zero = { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), updateMany: vi.fn().mockResolvedValue({ count: 0 }) }
+  const zero = { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), updateMany: vi.fn().mockResolvedValue({ count: 0 }), findMany: vi.fn().mockResolvedValue([]) }
   const tx = {
-    organization: { findMany: m.orgFindMany, deleteMany: m.orgDeleteMany },
+    organization: { findMany: m.orgFindMany, deleteMany: m.orgDeleteMany, findUnique: vi.fn().mockResolvedValue(null) },
     adminUser: { findMany: m.adminFindMany, deleteMany: m.adminDeleteMany, updateMany: vi.fn().mockResolvedValue({ count: 0 }) },
     notificationOutbox: { findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
     targetedMessage: { update: vi.fn(), deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
@@ -27,7 +27,7 @@ vi.mock("@/lib/prisma", () => {
     },
   }
 })
-vi.mock("@/lib/env", () => ({ env: { CRON_SECRET: "s" } }))
+vi.mock("@/lib/env", () => ({ env: { CRON_SECRET: "s", AUTH_SECRET: "a".repeat(32), ADMIN_NOTIFICATION_EMAIL: undefined } }))
 vi.mock("@/lib/job-runs", () => ({ recordJobRun: (_: string, fn: () => unknown) => fn() }))
 vi.mock("@/lib/token-encryption-job", () => ({ encryptLegacyTokens: vi.fn().mockResolvedValue(null) }))
 

@@ -10,6 +10,7 @@ import FormStatus from "@/components/FormStatus"
 import { useSubmit } from "@/lib/use-submit"
 import { parseTags, type Member } from "@/lib/members-list"
 import type { AvailabilityPeriod } from "@/lib/availability"
+import type { FocusCandidate } from "@/lib/focus-return"
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -26,7 +27,7 @@ function memberProblem(v: { firstName: string; lastName: string; email: string }
 /** The API's 400/409 talk about the address (duplicate, invalid); mark it. */
 const fieldForStatus = (status: number | null): FieldKey | undefined => (status === 400 || status === 409 ? "email" : undefined)
 
-export function EditMemberModal({ member, onClose, onSaved }: { member: Member; onClose: () => void; onSaved: () => void }) {
+export function EditMemberModal({ member, onClose, onSaved, fallbackFocusOnClose }: { member: Member; onClose: () => void; onSaved: () => void; fallbackFocusOnClose?: FocusCandidate }) {
   const [firstName, setFirstName] = useState(member.firstName)
   const [lastName, setLastName] = useState(member.lastName)
   const [email, setEmail] = useState(member.email ?? "")
@@ -70,7 +71,7 @@ export function EditMemberModal({ member, onClose, onSaved }: { member: Member; 
   }
 
   return (
-    <ModalShell title="Modifier le membre" busy={busy} onClose={() => { if (!busy) onClose() }}>
+    <ModalShell title="Modifier le membre" busy={busy} onClose={() => { if (!busy) onClose() }} fallbackFocusOnClose={fallbackFocusOnClose}>
       <form onSubmit={handleSubmit} noValidate className="space-y-3">
         <p className="text-xs text-gray-600">* champ obligatoire</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

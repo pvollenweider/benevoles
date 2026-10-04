@@ -92,4 +92,18 @@ describe("attentionItems", () => {
     expect(item?.message).toBe("2 bénévoles ont une charge élevée : plus de 8 h dans la journée, ou plus de 6 h d'affilée sans vraie pause.")
     expect(ids(attentionItems({ now, events: [ev({ overloadedVolunteers: 0 })], offers: [] }))).not.toContain("workload:e1")
   })
+
+  it("flags addresses to verify, org-wide, linking to the filtered members list (#599)", () => {
+    const items = attentionItems({ now, events: [], offers: [], addressesToVerifyCount: 1 })
+    expect(items).toEqual([{
+      id: "addresses-to-verify", severity: "medium", eventTitle: "Membres",
+      message: "1 membre a une adresse à vérifier : un message important (confirmation, proposition de liste d'attente ou rappel) a été refusé définitivement par le serveur destinataire.",
+      action: "Voir les membres concernés", href: "/admin/members?verify=1",
+    }])
+  })
+
+  it("says nothing about addresses when the count is zero or absent", () => {
+    expect(ids(attentionItems({ now, events: [], offers: [], addressesToVerifyCount: 0 }))).not.toContain("addresses-to-verify")
+    expect(ids(attentionItems({ now, events: [], offers: [] }))).not.toContain("addresses-to-verify")
+  })
 })

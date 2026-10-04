@@ -33,6 +33,7 @@ export type NotificationKind =
   | "registration_requested"
   | "registration_refused"
   | "release_available"
+  | "addresses_to_verify_summary"
 
 /** Delivery attempts before the outbox gives up (5 min, 10, 20, 40, 80 between them). */
 export const MAX_ATTEMPTS = 6
