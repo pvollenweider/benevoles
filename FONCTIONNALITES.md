@@ -183,7 +183,7 @@ Liste exhaustive des fonctionnalités de l'application.
 - Liste ordonnée de pages statiques par événement, en plus du champ unique « instructions publiques » (ex. Règlement, FAQ, Accès et lieu, Ce qu'il faut apporter)
 - Création et édition : titre + contenu en Markdown (zone de texte simple) — pas d'éditeur riche, pas de variables à injecter, le contenu est identique pour tous les bénévoles
 - Slug généré automatiquement depuis le titre, dédoublonné (`faq`, `faq-2`…)
-- **Réordonnancement** : boutons monter/descendre (accessibles au clavier), persisté via `displayOrder`
+- **Réordonnancement** : flèches Monter / Descendre (clavier : focus gardé, position annoncée, extrémités signalées ; enregistrements en série, ordre rétabli en cas d'échec), persisté via `displayOrder`
 - Suppression avec confirmation
 - Chaque création, modification et suppression est tracée dans le journal d'événement ; le contenu de la page n'est jamais stocké dans le journal (seuls le titre et le slug le sont, le contenu est noté « (modifié) »)
 

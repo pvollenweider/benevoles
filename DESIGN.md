@@ -282,7 +282,7 @@ La timeline Gantt (inscription bénévole + vue admin) est le composant le plus 
 
 Ces règles restent la cible ; le code s'en écarte encore aux endroits suivants, à corriger :
 
-- **Encre Fantôme porteuse d'information** : `text-gray-400` sur les dates du journal d'un événement (`event-log/ReplayView.tsx`, `event-log/ExploreList.tsx`), le nombre d'entrées (`event-log/Pickers.tsx`) et l'adresse des pages d'événement (`EventPagesManager.tsx`).
+- **Encre Fantôme porteuse d'information** : `text-gray-400` sur les dates du journal d'un événement (`event-log/ReplayView.tsx`, `event-log/ExploreList.tsx`), et le nombre d'entrées (`event-log/Pickers.tsx`).
 - **Contraste du message d'enregistrement d'un événement** : texte blanc sur `bg-green-500` (2,28:1) ou `bg-red-500` (3,76:1) dans `EventForm.tsx`.
 - **Règle No-Caps** : `prose-th:uppercase prose-th:tracking-wider` sur les en-têtes de tableaux des pages de contenu (`ContentShell.tsx`) et des pages légales (`legal/layout.tsx`).
 - **Ombres au repos** : CTA collant de la page publique en `shadow-xl` (`EventPageClient.tsx`), toasts et menus déroulants en `shadow-lg`.
