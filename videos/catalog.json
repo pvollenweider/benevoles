@@ -1,0 +1,229 @@
+{
+  "defaultLanguage": "fr-CH",
+  "videos": [
+    {
+      "id": "ADMIN_NAVIGATION",
+      "manifest": "admin-navigation",
+      "category": "getting-started",
+      "tags": ["administration", "navigation", "mobile", "recherche", "accessibilité"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "GLOBAL_SEARCH",
+      "manifest": "global-search",
+      "category": "getting-started",
+      "tags": ["recherche", "membres", "inscriptions", "événements", "créneaux"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "ORG_PUBLIC_IDENTITY",
+      "manifest": "org-public-identity",
+      "category": "organization-settings",
+      "tags": ["organisation", "titre-public", "slug", "sous-domaine", "page-publique"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "ORG_TIMEZONE_CHARTER",
+      "manifest": "org-timezone-charter",
+      "category": "organization-settings",
+      "tags": ["fuseau-horaire", "charte", "convention", "rappels", "heures"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "ORG_TEAM_PERMISSIONS",
+      "manifest": "org-team-permissions",
+      "category": "organization-settings",
+      "tags": ["équipe", "propriétaire", "organisateur", "permissions", "invitation"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "ORG_EMAIL_SETTINGS",
+      "manifest": "org-email-settings",
+      "category": "organization-settings",
+      "tags": ["emails", "rappels", "reply-to", "notifications", "test"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "EVENT_CREATE_BLANK",
+      "manifest": "event-create-blank",
+      "category": "event-lifecycle",
+      "tags": ["événement", "page-blanche", "dates", "lieu", "carte", "brouillon"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "EVENT_CREATE_TEMPLATE",
+      "manifest": "event-create-template",
+      "category": "event-lifecycle",
+      "tags": ["événement", "modèle", "festival", "buvette", "sport", "brouillon"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "EVENT_REVIEW_PUBLISH",
+      "manifest": "event-review-publish",
+      "category": "event-lifecycle",
+      "tags": ["vérification", "aperçu", "publication", "brouillon", "parcours-bénévole"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "EVENT_VISIBILITY_REGISTRATION_WINDOW",
+      "manifest": "event-visibility-registration-window",
+      "category": "event-lifecycle",
+      "tags": ["visibilité", "non-répertorié", "inscriptions", "programmation", "archivage"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "EVENT_DUPLICATE",
+      "manifest": "event-duplicate",
+      "category": "event-lifecycle",
+      "tags": ["duplication", "dates", "créneaux", "pages", "responsables", "brouillon"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "EVENT_PROGRAM_PAGES_QR",
+      "manifest": "event-program-pages-qr",
+      "category": "event-lifecycle",
+      "tags": ["programme", "pages", "markdown", "qr-code", "impression"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "EVENT_MILESTONES",
+      "manifest": "event-milestones",
+      "category": "event-lifecycle",
+      "tags": ["jalons", "préparation", "échéances", "suivi", "tableau-de-bord"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "EVENT_ARCHIVE_DELETE",
+      "manifest": "event-archive-delete",
+      "category": "event-lifecycle",
+      "tags": ["archivage", "suppression", "export", "propriétaire", "irréversible"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "SHIFTS_ROLES_VIEWS",
+      "manifest": "shifts-roles-views",
+      "category": "planning",
+      "tags": ["postes", "créneaux", "timeline", "liste", "couleurs", "ordre"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "SHIFT_CREATE_EDIT_DETAIL",
+      "manifest": "shift-create-edit-detail",
+      "category": "planning",
+      "tags": ["créneau", "capacité", "lieu", "carte", "consigne", "annulation"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "SHIFT_CREATE_SERIES",
+      "manifest": "shift-create-series",
+      "category": "planning",
+      "tags": ["série", "créneaux", "durée", "capacité", "aperçu", "répétition"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
+      "manifest": "shift-timeline-quick-actions",
+      "category": "planning",
+      "tags": ["timeline", "dessiner", "redimensionner", "copier", "raccourci"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "SHIFT_NIGHT_DST",
+      "manifest": "shift-night-dst",
+      "category": "planning",
+      "tags": ["nuit", "minuit", "heure-été", "heure-hiver", "fuseau-horaire", "durée"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "SHIFT_WAITLIST_OFFER",
+      "manifest": "shift-waitlist-offer",
+      "category": "planning",
+      "tags": ["capacité", "liste-attente", "offre", "expiration", "promotion"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "SHIFT_APPROVAL",
+      "manifest": "shift-approval",
+      "category": "planning",
+      "tags": ["validation", "demande", "candidature", "poste-sensible", "email"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "SHIFT_ELIGIBILITY_RULES",
+      "manifest": "shift-eligibility-rules",
+      "category": "planning",
+      "tags": ["âge", "quota", "tags", "réservé", "invitation", "téléphone"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "VOLUNTEER_DISCOVER_EVENT",
+      "manifest": "volunteer-discover-event",
+      "category": "volunteer-journey",
+      "tags": ["page-publique", "lien", "qr-code", "invitation", "carte", "mobile", "planning"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "VOLUNTEER_REGISTER",
+      "manifest": "volunteer-register-mobile",
+      "category": "volunteer-journey",
+      "tags": ["inscription", "mobile", "qr-code", "notifications"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
+      "manifest": "organizer-create-publish",
+      "category": "event-lifecycle",
+      "tags": ["événement", "créneaux", "publication", "invitations"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "ADMIN_FEATURES_OVERVIEW",
+      "manifest": "admin-features-tour",
+      "category": "getting-started",
+      "tags": ["administration", "fonctionnalités", "visite-guidée"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "REGISTRATION_MONITOR_FOLLOWUP",
+      "manifest": "organizer-monitor-followup",
+      "category": "registrations-communication",
+      "tags": ["inscriptions", "relances", "jour-j"],
+      "published": false,
+      "seedScenario": "demo"
+    },
+    {
+      "id": "ORG_FIRST_STEPS",
+      "manifest": "masterclass-03-first-steps",
+      "category": "getting-started",
+      "tags": ["organisation", "checklist", "premier-événement", "inscription-test"],
+      "published": false,
+      "seedScenario": "fresh-organization"
+    }
+  ]
+}

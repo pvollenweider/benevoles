@@ -1,0 +1,22 @@
+{
+  "id": "VOLUNTEER_DISCOVER_EVENT",
+  "slug": "volunteer-discover-event",
+  "title": "Trouver et lire la page d’inscription",
+  "description": "Ouvrir un événement par lien, QR code ou invitation, puis comprendre son planning sur ordinateur et téléphone.",
+  "language": "fr-CH",
+  "voice": "Puck",
+  "continuousNarration": true,
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult male voice, like a helpful volunteer welcoming someone to a village event. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "segments": [
+    { "id": "welcome", "transcript": "Avant de choisir un créneau, prends une minute pour lire la page de l’événement. Elle rassemble le lieu, les consignes, le programme et l’état réel des missions. Tu sais ainsi où tu vas, ce qu’on attend de toi et quelles places sont encore disponibles.", "fallbackDurationMs": 23000 },
+    { "id": "access", "transcript": "L’organisateur peut partager cette page de trois façons. Le lien direct s’ouvre dans n’importe quel navigateur. Le QR code mène exactement au même endroit depuis l’appareil photo du téléphone. Et une invitation personnelle préremplit ton identité ; elle peut aussi ouvrir un poste réservé à ton équipe. Un lien personnel ne se transfère donc pas à quelqu’un d’autre.", "fallbackDurationMs": 31000 },
+    { "id": "identity", "transcript": "En haut, vérifie le nom de l’association et celui de l’événement. Le lieu est accompagné d’un lien vers OpenStreetMap, puis les consignes publiques rappellent ici de passer à l’accueil quinze minutes avant le créneau. Sur ordinateur, la fiche à droite résume aussi la description et les dates.", "fallbackDurationMs": 30000 },
+    { "id": "pages", "transcript": "Les boutons juste sous les consignes ouvrent des pages complémentaires. Accès et parking explique les transports, le stationnement et la navette. Questions fréquentes précise l’assurance et la tenue. Tu peux revenir au planning sans perdre le contexte ; ces pages servent justement à éviter les informations éparpillées dans plusieurs messages.", "fallbackDurationMs": 30000 },
+    { "id": "desktop", "transcript": "Le planning se lit par journée et par poste. L’axe horizontal donne l’heure, chaque barre correspond à un créneau, et le nombre dans la barre indique les inscriptions par rapport à la capacité. Les bandes violettes placent les spectacles dans la même chronologie : on voit par exemple le concert, le bal et le brunch sans les confondre avec une mission bénévole.", "fallbackDurationMs": 32000 },
+    { "id": "states", "transcript": "Les états sont écrits directement sur les créneaux. Complet avec file d’attente permet encore de rejoindre la liste. Sur validation signifie que l’organisateur devra accepter la demande. Dix-huit plus annonce un âge minimum. Réservé reste visible mais demande le lien personnel reçu par email. Les places libres, les couleurs et les libellés complètent cette lecture ; la couleur seule n’est jamais l’unique indice.", "fallbackDurationMs": 34000 },
+    { "id": "mobile", "transcript": "Sur téléphone, la page garde les mêmes informations. Le planning est volontairement plus large que l’écran : le message avec les flèches indique qu’on peut le faire défiler horizontalement. Glisse doucement pour parcourir la journée, puis verticalement pour passer au dimanche. Tu retrouves les heures, les capacités, les spectacles et les états sans version simplifiée cachant des détails.", "fallbackDurationMs": 32000 },
+    { "id": "invitation", "transcript": "Avec une invitation personnelle, la page reste la même, mais elle te reconnaît. Ici, Julien fait partie de l’équipe sécurité : le créneau de nuit, auparavant marqué réservé, devient sélectionnable. L’invitation ne t’inscrit pas toute seule ; elle autorise seulement le bon parcours et préremplira ensuite les informations déjà connues.", "fallbackDurationMs": 29000 },
+    { "id": "result", "transcript": "Tu peux maintenant lire l’événement avant de t’engager : contrôler le lieu et la carte, ouvrir les informations pratiques, comparer les horaires et comprendre chaque état. En cas de doute sur une mission réservée ou une consigne, contacte l’association plutôt que de partager un lien personnel.", "fallbackDurationMs": 24000 }
+  ]
+}

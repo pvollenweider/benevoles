@@ -1,0 +1,99 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
+import { readFile } from "node:fs/promises"
+import path from "node:path"
+
+export type VideoSegment = {
+  id: string
+  transcript: string
+  style?: string
+  fallbackDurationMs: number
+}
+
+export type VideoManifest = {
+  id: string
+  slug: string
+  title: string
+  description: string
+  language: string
+  voice: string
+  voiceStyle: string
+  continuousNarration?: boolean
+  viewport: { width: number; height: number; deviceScaleFactor: number }
+  segments: VideoSegment[]
+}
+
+export type VideoCatalogEntry = {
+  id: string
+  manifest: string
+  category: string
+  tags: string[]
+  published: boolean
+  seedScenario?: string
+}
+
+type VideoCatalog = {
+  defaultLanguage: string
+  videos: VideoCatalogEntry[]
+}
+
+export type AudioMetadata = {
+  model: string
+  voice: string
+  generatedAt: string
+  segments: Record<string, { file: string; durationMs: number; generationSha256: string }>
+}
+
+export type Timeline = {
+  slug: string
+  recordedAt: string
+  video: string
+  cues: { id: string; startMs: number; endMs: number }[]
+}
+
+export const videosRoot = path.resolve(process.cwd(), "videos")
+export const outputRoot = path.join(videosRoot, "output")
+
+export async function loadCatalog(): Promise<VideoCatalog> {
+  const file = path.join(videosRoot, "catalog.json")
+  const catalog = JSON.parse(await readFile(file, "utf8")) as VideoCatalog
+  const ids = new Set<string>()
+  const manifests = new Set<string>()
+  for (const entry of catalog.videos) {
+    if (!/^[A-Z][A-Z0-9_]+$/.test(entry.id)) throw new Error(`${file}: invalid semantic id "${entry.id}"`)
+    if (!/^[a-z0-9-]+$/.test(entry.manifest)) throw new Error(`${file}: invalid manifest slug "${entry.manifest}"`)
+    if (ids.has(entry.id)) throw new Error(`${file}: duplicate id "${entry.id}"`)
+    if (manifests.has(entry.manifest)) throw new Error(`${file}: duplicate manifest "${entry.manifest}"`)
+    ids.add(entry.id)
+    manifests.add(entry.manifest)
+  }
+  return catalog
+}
+
+export async function catalogEntry(reference: string): Promise<VideoCatalogEntry> {
+  const catalog = await loadCatalog()
+  const entry = catalog.videos.find((video) => video.id === reference || video.manifest === reference)
+  if (!entry) throw new Error(`Unknown video id or manifest: ${reference}`)
+  return entry
+}
+
+export async function loadManifest(reference: string): Promise<VideoManifest> {
+  const entry = await catalogEntry(reference)
+  const file = path.join(videosRoot, "manifests", `${entry.manifest}.json`)
+  const manifest = JSON.parse(await readFile(file, "utf8")) as VideoManifest
+  if (manifest.id !== entry.id) throw new Error(`${file}: id must be "${entry.id}"`)
+  if (manifest.slug !== entry.manifest) throw new Error(`${file}: slug must be "${entry.manifest}"`)
+  if (!manifest.segments.length) throw new Error(`${file}: at least one segment is required`)
+  const ids = new Set<string>()
+  for (const segment of manifest.segments) {
+    if (!segment.id || ids.has(segment.id)) throw new Error(`${file}: segment ids must be non-empty and unique`)
+    if (!segment.transcript.trim()) throw new Error(`${file}: ${segment.id} has no transcript`)
+    if (segment.fallbackDurationMs < 1_000) throw new Error(`${file}: ${segment.id} fallbackDurationMs is too short`)
+    ids.add(segment.id)
+  }
+  return manifest
+}
+
+export const videoDir = (slug: string) => path.join(outputRoot, slug)
+export const audioDir = (slug: string) => path.join(videoDir(slug), "audio")

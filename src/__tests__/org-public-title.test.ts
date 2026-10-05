@@ -67,3 +67,18 @@ describe("PATCH /api/admin/settings/organization — publicTitle", () => {
     expect((await PATCH(patch({ publicTitle: "x".repeat(100) }))).status).toBe(200)
   })
 })
+
+describe("PATCH /api/admin/settings/organization — reserved slug", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    requireOrgSessionMock.mockResolvedValue({ organizationId: "org-a", db: {}, session: {} })
+  })
+
+  it("refuses a slug that is one of benevol.app's own subdomains (medias serves the videos)", async () => {
+    const { PATCH } = await import("@/app/api/admin/settings/organization/route")
+    const res = await PATCH(patch({ slug: "medias" }))
+    expect(res.status).toBe(400)
+    expect((await res.json()).error).toContain("réservée")
+    expect(update).not.toHaveBeenCalled()
+  })
+})

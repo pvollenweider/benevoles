@@ -15,6 +15,7 @@
 /playwright-report
 /test-results
 /blob-report
+/videos/output
 
 # next.js
 /.next/
@@ -39,6 +40,7 @@ yarn-error.log*
 .env.*.local
 .env.e2e
 .env.e2e.*
+.env.video.e2e
 
 # vercel
 .vercel

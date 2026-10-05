@@ -250,6 +250,23 @@ Ce passage fait aussi la purge habituelle des données arrivées en fin de duré
 
 Revenir à une image 1.x sur une base migrée ne fonctionne pas : le code 1.x ne peut plus créer d'inscription, et il ne retrouve pas les liens chiffrés. Le seul retour arrière est la restauration de la sauvegarde de l'étape 1, en perdant ce qui a été saisi depuis.
 
+## Serveur de médias (vidéos)
+
+`k8s/media.yaml` sert les tutoriels vidéo sur `https://medias.benevol.app` : un nginx, un volume
+`local-path` de 2 Go, un Service et un Ingress de priorité Traefik 200, au-dessus de la règle joker
+de `k8s/ingress.yaml` (100) pour que ce sous-domaine n'atteigne jamais l'application. Le TLS vient du
+certificat joker existant. Il n'est pas appliqué par le workflow de déploiement :
+
+```bash
+kubectl apply -f k8s/media.yaml
+kubectl -n benevoles rollout status deploy/benevoles-media
+```
+
+Les fichiers s'envoient depuis un poste qui a les rendus (`videos/output`) avec
+`make video-publish KUBE_CONTEXT=<contexte> APPLY=1` (voir `videos/README.md`). Le volume ne contient
+aucune donnée personnelle et n'est pas sauvegardé : les vidéos se régénèrent depuis les sources.
+`medias` est réservé et ne peut pas devenir le slug d'une organisation.
+
 ## Webhook DNS Gandi
 
 `gandi-webhook/` est un programme Go (`main.go`, `gandiclient.go`) construit par son propre `Dockerfile`. Il implémente le webhook cert-manager qui crée les enregistrements DNS-01 chez Gandi, nécessaire au certificat wildcard.

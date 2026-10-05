@@ -4,7 +4,7 @@
 # Bénévoles — tâches de développement.
 # Usage : `make` (équivalent à `make help`).
 
-.PHONY: help dev dev-up dev-down dev-logs dev-reset dev-setup db-generate db-migrate db-seed db-studio test lint typecheck install e2e e2e-up e2e-down e2e-setup
+.PHONY: help dev dev-up dev-down dev-logs dev-reset dev-setup db-generate db-migrate db-seed db-studio test lint typecheck install e2e e2e-up e2e-down e2e-setup video-up video-down video-setup video-seed video-server video videos video-publish
 
 DEFAULT_GOAL := help
 
@@ -135,6 +135,56 @@ e2e-setup: ## Crée .env.e2e (ou .env.e2e.N) si absent, migre + seed la DB e2e
 e2e: ## Lance les tests Playwright (stack e2e déjà up + seedée ; ne réutilise pas le serveur d'un autre dossier)
 	node scripts/e2e-port-guard.mjs $(E2E_PORT)
 	node --env-file=$(E2E_ENV_FILE) node_modules/.bin/playwright test
+
+# ── captures vidéo ───────────────────────────────────────────────────────────
+# Stack indépendante : app 43100, postgres 45433, SMTP 41026, Mailpit 48026.
+
+video-up: ## Démarre postgres + mailpit dédiés aux captures vidéo
+	docker compose -f docker-compose.video.yml up -d
+	@echo "→ Attente de PostgreSQL (vidéo)…"
+	@until docker exec benevoles_postgres_video pg_isready -U benevoles >/dev/null 2>&1; do sleep 0.5; done
+
+video-down: ## Stoppe et supprime la stack vidéo jetable
+	docker compose -f docker-compose.video.yml down
+
+video-setup: ## Initialise la base vidéo avec les données fictives
+	@if [ ! -f .env.video.e2e ]; then \
+		echo "→ Copie videos/video.env.example → .env.video.e2e"; \
+		cp videos/video.env.example .env.video.e2e; \
+	fi
+	@if ! grep -q '^AUTH_SECRET=".\+"' .env.video.e2e; then \
+		SECRET=$$(openssl rand -base64 48 | tr -d '\n='); \
+		if [ "$$(uname)" = "Darwin" ]; then \
+			sed -i '' "s|^AUTH_SECRET=.*|AUTH_SECRET=\"$$SECRET\"|" .env.video.e2e; \
+		else \
+			sed -i "s|^AUTH_SECRET=.*|AUTH_SECRET=\"$$SECRET\"|" .env.video.e2e; \
+		fi; \
+		echo "→ AUTH_SECRET (vidéo) généré"; \
+	fi
+	node --env-file=.env.video.e2e node_modules/.bin/prisma generate
+	node --env-file=.env.video.e2e node_modules/.bin/prisma migrate deploy
+	node --env-file=.env.video.e2e node_modules/.bin/prisma db seed
+	node --env-file=.env.video.e2e node_modules/.bin/tsx scripts/seed-demo.ts
+
+video-seed: ## Charge un scénario masterclass (SCENARIO=fresh-organization)
+	@test -n "$(SCENARIO)" || (echo "SCENARIO est obligatoire"; exit 1)
+	node --env-file=.env.video.e2e node_modules/.bin/tsx scripts/seed-video-scenario.ts "$(SCENARIO)"
+
+video-server: ## Lance l'application vidéo sur http://localhost:43100
+	@set -a; . ./.env.video.e2e; set +a; npm run dev -- -p 43100
+
+video: ## Régénère une vidéo par identifiant stable (ID=ORG_FIRST_STEPS)
+	@test -n "$(ID)" || (echo "ID est obligatoire"; exit 1)
+	npm run video:build -- "$(ID)"
+
+videos: ## Régénère une liste (IDS="ORG_FIRST_STEPS VOLUNTEER_REGISTER") ou tout le catalogue
+	npm run video:build -- $(IDS)
+
+# Envoie vers https://medias.benevol.app (k8s/media.yaml) les rendus nouveaux ou modifiés, comparés
+# par SHA-256 ; sans APPLY=1, affiche seulement ce qui partirait. Rien n'est jamais supprimé.
+video-publish: ## Publie les vidéos nouvelles ou modifiées (KUBE_CONTEXT=… [ID=… | IDS="…"] [APPLY=1])
+	@test -n "$(KUBE_CONTEXT)" || (echo "KUBE_CONTEXT=<contexte kubectl de production> est obligatoire (kubectl config get-contexts)"; exit 1)
+	npm run video:publish -- --context "$(KUBE_CONTEXT)" $(if $(APPLY),--apply) $(ID) $(IDS)
 
 # ── Qualité ──────────────────────────────────────────────────────────────────
 

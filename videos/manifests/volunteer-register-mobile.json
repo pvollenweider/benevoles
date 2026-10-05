@@ -1,0 +1,59 @@
+{
+  "id": "VOLUNTEER_REGISTER",
+  "slug": "volunteer-register-mobile",
+  "title": "S’inscrire comme bénévole depuis son téléphone",
+  "description": "Choisir un créneau, compléter ses informations et retrouver son accès personnel.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "voiceStyle": "Speak with an audible smile throughout every sentence. Sound warm, upbeat, relaxed and genuinely happy to welcome someone, like a friendly member of a local association helping another volunteer. Keep the smile present even in practical explanations, with bright but natural intonation, clear articulation and a medium conversational pace. Never sound corporate, salesy, theatrical or childish.",
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "deviceScaleFactor": 2
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Envie de donner un coup de main ? Ouvre le lien reçu, ou scanne le QR code affiché par l’association. Tu peux choisir ton créneau directement depuis ton téléphone.",
+      "style": "Keep a clearly audible smile from beginning to end. Give the opening a warm, cheerful invitation, as if genuinely pleased that the listener wants to help. Use natural conversational French at a medium pace, briefly emphasize ‘lien’ and ‘QR code’, then end with friendly reassurance.",
+      "fallbackDurationMs": 8200
+    },
+    {
+      "id": "discover",
+      "transcript": "Sur la page de l’événement, tu retrouves les horaires, les postes et le nombre de places encore disponibles.",
+      "style": "Explain this with an audible, friendly smile and relaxed enthusiasm. Use an easy list rhythm for the three pieces of information. Stay bright and welcoming without sounding instructional, formal or commercial.",
+      "fallbackDurationMs": 7200
+    },
+    {
+      "id": "choose",
+      "transcript": "Choisis simplement le créneau qui te convient. Ici, on rejoint l’équipe d’accueil de quinze heures à dix-huit heures.",
+      "style": "Sound friendly and confident with a clearly audible smile. Make the choice feel effortless, then give the example with a playful little lift in energy, as if inviting the listener to join the team.",
+      "fallbackDurationMs": 8300
+    },
+    {
+      "id": "details",
+      "transcript": "Ajoute ensuite tes coordonnées. Elles servent uniquement à l’organisation de l’événement et à l’envoi des informations utiles.",
+      "style": "Keep a soft audible smile while sounding reassuring and trustworthy. Speak slightly slower than in the other segments, gently emphasize ‘uniquement’, and make the privacy explanation feel calm, sincere and human rather than legalistic.",
+      "fallbackDurationMs": 9000
+    },
+    {
+      "id": "preferences",
+      "transcript": "Réponds aux quelques questions pratiques, puis accepte la convention et l’utilisation de tes données pour cet événement.",
+      "style": "Keep an audible smile and a friendly, easygoing tone. Use a clear two-step cadence. Make this feel quick and straightforward, never legal, solemn or mechanical.",
+      "fallbackDurationMs": 8700
+    },
+    {
+      "id": "confirm",
+      "transcript": "Un dernier coup d’œil au récapitulatif, et c’est parti : confirme ton inscription.",
+      "style": "Smile audibly and create light, playful anticipation. Add a short natural pause after ‘récapitulatif’, build cheerful momentum through ‘c’est parti’, and land clearly and encouragingly on the final action.",
+      "fallbackDurationMs": 6200
+    },
+    {
+      "id": "success",
+      "transcript": "Et voilà, tu fais partie de l’équipe ! Un e-mail de confirmation arrive dans ta boîte. Il contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
+      "style": "Use a broad, clearly audible smile and genuine celebratory warmth, as if welcoming a new teammate. Keep that smile in the practical sentences that follow, while becoming calmly reassuring and clear about the confirmation email and personal link. Energetic but never exaggerated.",
+      "fallbackDurationMs": 10500
+    }
+  ]
+}

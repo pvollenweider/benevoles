@@ -16,3 +16,5 @@ docker-compose*.yml
 !GUIDE_BENEVOLE.md
 .DS_Store
 coverage
+# Video sources and renders (#636): never part of the app image.
+videos

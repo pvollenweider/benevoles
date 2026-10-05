@@ -8,6 +8,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { isValidTimeZone } from "@/lib/time-zone"
 import { orgBaseUrl } from "@/lib/urls"
+import { isReservedOrgSlug, RESERVED_SLUG_ERROR } from "@/lib/org-subdomain"
 
 const SLUG_RE = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/
 
@@ -36,6 +37,7 @@ export async function PATCH(req: Request) {
         { status: 400 },
       )
     }
+    if (isReservedOrgSlug(slug)) return NextResponse.json({ error: RESERVED_SLUG_ERROR }, { status: 400 })
 
     const current = await prisma.organization.findUnique({
       where: { id: organizationId },

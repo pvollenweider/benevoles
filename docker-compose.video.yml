@@ -1,0 +1,31 @@
+# Stack jetable réservée aux captures vidéo. Elle ne partage ni projet Compose,
+# ni conteneur, ni port, ni base avec les environnements dev et E2E.
+name: benevoles-video
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: benevoles_postgres_video
+    environment:
+      POSTGRES_DB: benevoles_video
+      POSTGRES_USER: benevoles
+      POSTGRES_PASSWORD: benevoles
+    ports:
+      - "45433:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U benevoles"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: benevoles_mailpit_video
+    ports:
+      - "41026:1025"
+      - "48026:8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
