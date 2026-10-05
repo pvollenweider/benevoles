@@ -1,0 +1,21 @@
+{
+  "id": "ORG_TIMEZONE_CHARTER",
+  "slug": "org-timezone-charter",
+  "title": "Régler le fuseau horaire et la Convention des Bénévoles",
+  "description": "Configurer les heures de référence et le texte que chaque bénévole accepte avant son inscription.",
+  "language": "fr-CH",
+  "voice": "Charon",
+  "continuousNarration": true,
+  "voiceStyle": "Speak with a clearly audible smile. Use a warm, calm adult male voice, kind and practical, like a volunteer coordinator helping a colleague. Natural conversational French, medium pace, precise but never formal. Preserve exactly the same identity, smile, pitch, pace and energy throughout. Never sound commercial, theatrical or patronizing.",
+  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "segments": [
+    { "id": "welcome", "transcript": "Deux réglages communs évitent beaucoup de malentendus : le fuseau horaire donne la bonne référence aux calculs automatiques, et la Convention des Bénévoles explique clairement le cadre accepté avant chaque inscription.", "fallbackDurationMs": 15000 },
+    { "id": "timezone", "transcript": "Dans Paramètres, choisis le fuseau du lieu où se déroulent habituellement les événements. Europe Zurich applique automatiquement l’heure d’hiver et l’heure d’été. Il sert aux rappels, aux offres de liste d’attente, au journal et aux documents produits par le serveur.", "fallbackDurationMs": 20000 },
+    { "id": "timezone-result", "transcript": "Enregistrer le fuseau ne décale pas les heures saisies dans le planning : un créneau prévu à neuf heures reste affiché à neuf heures. Le réglage permet au système de convertir correctement cette heure locale en instant réel, y compris le dimanche d’un changement d’heure.", "fallbackDurationMs": 21000 },
+    { "id": "charter", "transcript": "La Convention des Bénévoles décrit maintenant les engagements concrets : arriver à l’heure, prévenir en cas d’empêchement et suivre les consignes de sécurité. Enregistre un texte compréhensible et adapté à l’association. Le bouton de rétablissement permet de revenir au texte proposé par défaut.", "fallbackDurationMs": 22000 },
+    { "id": "public-setup", "transcript": "Vérifions le résultat comme le ferait un bénévole. Ouvre l’événement public, sélectionne un créneau, puis continue vers le formulaire. Cette étape ne crée encore aucune inscription : elle permet simplement d’atteindre les informations et les consentements avant la confirmation.", "fallbackDurationMs": 19000 },
+    { "id": "public-result", "transcript": "La convention apparaît avant la confirmation. Ouvre-la pour afficher le texte qui vient d’être enregistré. Le bénévole peut le lire dans son intégralité, puis choisir J’ai lu et j’accepte. Ce n’est donc pas une note interne : le destinataire voit réellement le cadre auquel il consent.", "fallbackDurationMs": 21000 },
+    { "id": "attention", "transcript": "L’acceptation revient dans le formulaire et reste cochée. Une modification ultérieure de la convention s’appliquera aux nouvelles inscriptions, mais n’enverra pas d’information urgente aux personnes déjà inscrites. Avant de changer le fuseau d’une organisation active, vérifie aussi les prochains rappels et les créneaux de nuit.", "fallbackDurationMs": 23000 },
+    { "id": "result", "transcript": "Le résultat est prévisible : les automatismes utilisent le bon temps local et chaque nouvelle inscription accepte le même cadre. Ces deux réglages sont communs à l’organisation, tandis que les horaires et consignes détaillées restent configurés dans chaque événement et chaque créneau.", "fallbackDurationMs": 20000 }
+  ]
+}

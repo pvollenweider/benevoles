@@ -1,0 +1,19 @@
+{
+  "id": "EVENT_CREATE_TEMPLATE",
+  "slug": "event-create-template",
+  "title": "Démarrer un événement avec un modèle",
+  "description": "Comparer les modèles, prévisualiser les postes créés puis adapter le brouillon obtenu.",
+  "language": "fr-CH",
+  "voice": "Puck",
+  "continuousNarration": true,
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult male voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "segments": [
+    { "id": "welcome", "transcript": "Un modèle fait gagner du temps quand l’événement ressemble à un cas courant. Il crée un brouillon avec des postes, des créneaux, des horaires et des capacités déjà cohérents. Rien n’est publié automatiquement, et tout reste modifiable.", "fallbackDurationMs": 19000 },
+    { "id": "compare", "transcript": "Cinq points de départ sont proposés. Festival couvre plusieurs soirées ; Buvette organise le bar et la caisse sur une journée ; Manifestation sportive prépare dossards, parcours et ravitaillement ; Fête de village s’étale sur deux jours ; Montage, exploitation, démontage sépare clairement les trois phases. La page blanche reste préférable pour un format très particulier.", "fallbackDurationMs": 30000 },
+    { "id": "preview", "transcript": "Choisissons Fête de village. L’aperçu résume exactement les postes, le nombre de créneaux et les places qui seront créées. Avant de continuer, donne un titre propre à cette édition et indique son premier jour ; le deuxième est calculé automatiquement par le modèle.", "fallbackDurationMs": 24000 },
+    { "id": "create", "transcript": "Créer le brouillon génère ici dix créneaux et ouvre l’étape du planning. Le statut reste Brouillon. Le modèle n’envoie aucun email et n’ouvre aucune inscription : il fournit seulement une base de travail plus rapide à corriger qu’une page vide.", "fallbackDurationMs": 22000 },
+    { "id": "adapt", "transcript": "Dans le planning obtenu, chaque ligne est ordinaire. On peut renommer un poste, modifier son libellé, ses horaires, sa capacité, ses conditions ou sa couleur ; on peut aussi supprimer un créneau inutile et en ajouter d’autres. Ajustons par exemple la capacité de la première Buvette pour coller à la taille réelle de l’équipe.", "fallbackDurationMs": 27000 },
+    { "id": "result", "transcript": "Le bon réflexe est donc simple : choisis le modèle le plus proche, vérifie chaque poste au lieu de lui faire confiance aveuglément, puis poursuis avec l’aperçu bénévole et la publication. Le modèle accélère le départ ; l’organisateur reste responsable du planning final.", "fallbackDurationMs": 21000 }
+  ]
+}

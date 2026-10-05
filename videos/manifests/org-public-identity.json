@@ -1,0 +1,19 @@
+{
+  "id": "ORG_PUBLIC_IDENTITY",
+  "slug": "org-public-identity",
+  "title": "Configurer l’identité publique de l’organisation",
+  "description": "Choisir le nom interne, le titre visible et l’adresse publique de l’organisation, puis vérifier le résultat.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "segments": [
+    { "id": "welcome", "transcript": "L’identité de l’organisation donne un point d’entrée commun à tous ses événements. Elle sert à présenter clairement l’association, à fournir une adresse facile à partager et à éviter que les bénévoles confondent un nom technique avec le titre qu’ils voient.", "fallbackDurationMs": 16000 },
+    { "id": "names", "transcript": "Dans Paramètres, le nom de l’organisation identifie le tenant dans l’administration. Le titre de la page publique peut être plus accueillant. Remplaçons-le par Les bénévoles des Fêtes de Montvert, puis enregistrons. Ce changement touche la page publique de l’organisation, pas le titre de chaque événement.", "fallbackDurationMs": 22000 },
+    { "id": "slug", "transcript": "L’identifiant public, aussi appelé slug, forme une adresse comme fetes-de-montvert point benevol point app. Il doit rester court et reconnaissable. Le changer peut rendre les anciens favoris ou QR codes obsolètes : choisis-le avant de diffuser largement les liens, et ne le modifie pas simplement pour corriger une majuscule dans le titre.", "fallbackDurationMs": 23000 },
+    { "id": "public-page", "transcript": "Ouvrons maintenant la page publique. Le nouveau titre apparaît au-dessus des événements disponibles. Seuls les événements publiés et répertoriés sont affichés ici. Un événement non répertorié reste accessible avec son lien direct, mais n’est pas annoncé dans cette liste.", "fallbackDurationMs": 21000 },
+    { "id": "event-result", "transcript": "En ouvrant la Fête du village, on retrouve l’identité de l’organisation avec les informations propres à cet événement. Le nom de l’événement, son lieu et son planning restent indépendants. On peut donc réutiliser la même page d’organisation pour plusieurs manifestations au fil de l’année.", "fallbackDurationMs": 20000 },
+    { "id": "result", "transcript": "Le résultat est une identité cohérente : un nom interne pour l’équipe, un titre public lisible et une adresse stable à communiquer. Pour corriger le texte visible, modifie le titre public. Pour déplacer réellement l’adresse, change le slug seulement après avoir mesuré l’impact sur les liens déjà distribués.", "fallbackDurationMs": 21000 }
+  ]
+}

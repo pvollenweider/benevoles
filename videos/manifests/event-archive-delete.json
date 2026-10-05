@@ -1,0 +1,20 @@
+{
+  "id": "EVENT_ARCHIVE_DELETE",
+  "slug": "event-archive-delete",
+  "title": "Archiver puis supprimer définitivement",
+  "description": "Fermer proprement un ancien événement, sauvegarder ce qui compte et comprendre une suppression irréversible.",
+  "language": "fr-CH",
+  "voice": "Puck",
+  "continuousNarration": true,
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult male voice, like a careful association coordinator. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Be reassuring but explicit when an action is irreversible. Never sound corporate, theatrical, childish or rushed.",
+  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "segments": [
+    { "id": "welcome", "transcript": "Fermer les inscriptions, archiver et supprimer répondent à trois besoins différents. Fermer bloque seulement les nouvelles inscriptions. Archiver retire l’événement du public tout en gardant ses données consultables. Supprimer efface définitivement l’édition.", "fallbackDurationMs": 22000 },
+    { "id": "prepare", "transcript": "Pour cette démonstration, nous travaillons sur une copie jetable de l’ancienne édition. Dans la vraie vie, vérifie d’abord les inscriptions, les invitations, le journal et les rapports. Si des bénévoles doivent être prévenus, annule les créneaux avant l’archivage.", "fallbackDurationMs": 24000 },
+    { "id": "archive", "transcript": "Le bouton Archiver demande une confirmation claire. Après validation, la page publique disparaît, mais l’équipe garde accès au planning, aux inscriptions, aux rapports et au journal. On peut donc conserver l’historique sans laisser croire que l’événement accepte encore du monde.", "fallbackDurationMs": 25000 },
+    { "id": "delete-open", "transcript": "La suppression définitive n’apparaît qu’après archivage et seulement pour un propriétaire de l’organisation. Le récapitulatif indique précisément combien de créneaux, d’inscriptions et d’invitations vont disparaître. Les membres du pool, eux, sont conservés.", "fallbackDurationMs": 24000 },
+    { "id": "backup", "transcript": "Avant d’aller plus loin, ouvre l’export PDF. Il contient le planning, le récapitulatif par poste et la liste des bénévoles. Enregistre-le si l’association doit garder une archive opérationnelle ou répondre plus tard à une question sur cette édition.", "fallbackDurationMs": 22000 },
+    { "id": "confirm", "transcript": "La confirmation renforcée demande de saisir le titre de l’événement. Tant qu’il ne correspond pas, le bouton reste indisponible. Une fois la suppression lancée, les liens personnels cessent de fonctionner et les données rattachées ne sont pas récupérables depuis l’application.", "fallbackDurationMs": 24000 },
+    { "id": "result", "transcript": "L’événement disparaît de la liste après validation. Utilise donc l’archivage comme état normal de fin de vie, et réserve la suppression aux éditions de test, aux erreurs de création ou aux cas où la conservation n’a plus de raison d’être.", "fallbackDurationMs": 20000 }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "ORG_FIRST_STEPS",
+  "slug": "masterclass-03-first-steps",
+  "title": "Bien démarrer avec une nouvelle organisation",
+  "description": "Suivre la checklist de première mise en place, configurer l’organisation et vérifier le parcours par une inscription de test.",
+  "language": "fr-CH",
+  "voice": "Charon",
+  "continuousNarration": true,
+  "voiceStyle": "Speak with a clearly audible smile. Use a warm, calm male voice, kind and encouraging, like an experienced volunteer welcoming a new association organizer. Natural conversational French, medium pace, precise but never formal. Preserve exactly the same identity, smile, pitch, pace and energy throughout. Never sound commercial, theatrical or patronizing.",
+  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "segments": [
+    { "id": "welcome", "transcript": "Quand une association découvre benevol point app, la liste Premiers pas lui donne un ordre simple. Elle ne fait rien à ta place : elle indique ce qui est déjà prêt, la prochaine action utile, et le résultat à vérifier avant d’inviter de vrais bénévoles.", "fallbackDurationMs": 15000 },
+    { "id": "checklist", "transcript": "Les quatre étapes obligatoires sont de créer l’événement, définir ses créneaux, le publier, puis faire une inscription de test. Le titre public, la charte et le fuseau horaire sont facultatifs, car des valeurs par défaut existent. Les coches sont calculées à partir des données : pas besoin de les remplir manuellement.", "fallbackDurationMs": 18000 },
+    { "id": "identity", "transcript": "Commençons par ce que verront les bénévoles. Dans les paramètres, donne à la page publique un titre accueillant, puis adapte la Convention des Bénévoles. Ce texte explique le cadre de l’engagement et devra être accepté dans le formulaire. Après l’enregistrement, le nouveau contenu est utilisé sur les pages publiques ; tu peux toujours revenir au texte par défaut.", "fallbackDurationMs": 22000 },
+    { "id": "timezone", "transcript": "Vérifie ensuite le fuseau horaire. Il sert à calculer les rappels, l’expiration des offres de liste d’attente, le journal et les documents. Ici, l’association travaille en Europe Zurich. Changer ce réglage adapte les instants d’envoi sans déplacer les heures affichées sur les créneaux.", "fallbackDurationMs": 18000 },
+    { "id": "event", "transcript": "De retour aux Premiers pas, les réglages facultatifs sont maintenant cochés. Créons la Fête du parc depuis une page blanche. Saisis un titre clair, le lieu, puis les dates de début et de fin. À la validation, l’événement naît en brouillon : les informations sont enregistrées, mais personne ne peut encore voir la page publiquement.", "fallbackDurationMs": 22000 },
+    { "id": "shift", "transcript": "La prochaine étape consiste à rendre le planning concret. Ajoute un créneau, choisis le poste Accueil, puis indique neuf heures, midi et trois places. Après validation, le créneau apparaît réellement dans le planning, regroupé sous son poste. Tu peux encore le modifier ou l’annuler avant toute publication.", "fallbackDurationMs": 19000 },
+    { "id": "publish", "transcript": "La page de vérification rappelle ce qui est obligatoire et ce qui pourrait encore être amélioré. Un événement sans créneau ne peut pas être publié. Ici, le minimum est prêt : on publie. La page d’inscription devient accessible, mais aucun email collectif ne part automatiquement.", "fallbackDurationMs": 18000 },
+    { "id": "test", "transcript": "Dernière étape : vivre le parcours comme un bénévole. Sélectionne Accueil, complète les coordonnées fictives, accepte la convention et confirme. Cette vraie inscription vérifie en même temps le formulaire, le message de succès et l’email contenant le lien personnel. Dans un événement réel, tu annulerais ensuite cette inscription de test pour libérer la place.", "fallbackDurationMs": 23000 },
+    { "id": "result", "transcript": "En revenant dans l’administration, les étapes obligatoires sont terminées et la checklist disparaît. L’association possède maintenant une identité publique, le bon fuseau, un événement publié et un parcours testé de bout en bout. Si tu préfères retirer la liste plus tôt, un propriétaire peut la masquer pour toute l’équipe, sans pour autant réaliser les étapes manquantes.", "fallbackDurationMs": 21000 }
+  ]
+}

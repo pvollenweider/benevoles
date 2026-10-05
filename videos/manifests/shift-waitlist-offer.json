@@ -1,0 +1,20 @@
+{
+  "id": "SHIFT_WAITLIST_OFFER",
+  "slug": "shift-waitlist-offer",
+  "title": "Capacités, listes d’attente et offre de place",
+  "description": "Suivre un créneau complet, libérer une place et comprendre la promotion ordonnée de la liste d’attente.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "segments": [
+    { "id": "welcome", "transcript": "Une capacité protège l’organisation contre le sureffectif, mais un créneau complet ne doit pas faire perdre les personnes encore disponibles. La liste d’attente conserve leur intérêt dans un ordre clair et automatise la proposition lorsqu’une place se libère.", "fallbackDurationMs": 24000 },
+    { "id": "setup", "transcript": "La liste d’attente s’active sur le créneau. Tant que la capacité n’est pas atteinte, les inscriptions sont confirmées normalement. Une fois le créneau complet, le prochain bénévole rejoint l’attente et voit sa position au lieu de recevoir une fausse confirmation.", "fallbackDurationMs": 25000 },
+    { "id": "admin", "transcript": "Dans l’administration, les inscriptions confirmées et les personnes en attente restent distinctes. L’ordre dépend du moment d’inscription. On peut ainsi répondre à une question sans déplacer manuellement les lignes ni perdre l’historique.", "fallbackDurationMs": 22000 },
+    { "id": "release", "transcript": "Quand une personne confirmée se désinscrit, la place n’est pas attribuée silencieusement. Une offre est envoyée à la première personne en attente. Elle dispose de vingt-quatre heures pour accepter depuis son lien personnel.", "fallbackDurationMs": 24000 },
+    { "id": "volunteer", "transcript": "Sur sa page, la personne voit l’offre, son expiration et les actions Accepter ou Refuser. Accepter confirme immédiatement le créneau. Refuser conserve une réponse explicite et permet de contacter la personne suivante.", "fallbackDurationMs": 23000 },
+    { "id": "expiry", "transcript": "Si l’offre expire sans réponse, elle ne bloque pas la place indéfiniment : la promotion passe à la personne suivante. L’administration montre alors l’offre active et la nouvelle position des autres personnes en attente.", "fallbackDurationMs": 23000 },
+    { "id": "result", "transcript": "La liste d’attente est utile pour les missions demandées, mais elle doit rester compréhensible. Vérifie la capacité, l’ordre, l’offre en cours et les délais avant de promettre une place à quelqu’un par un autre canal.", "fallbackDurationMs": 21000 }
+  ]
+}
