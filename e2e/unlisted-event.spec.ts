@@ -33,7 +33,7 @@ test("an unlisted event stays off the public page but works by direct link", asy
 
   // Admin shows the state.
   await page.goto(`/admin/events/${unlisted.id}`)
-  await expect(page.getByText("Publié — non répertorié.")).toBeVisible()
+  await expect(page.getByText("Publié, non répertorié.")).toBeVisible()
 
   // Public home page: only the listed one.
   await page.goto("/?org=default")

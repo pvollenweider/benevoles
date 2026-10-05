@@ -13,6 +13,7 @@ import SendReminderButton from "@/components/admin/SendReminderButton"
 import MilestonesSection from "@/components/admin/MilestonesSection"
 import { isUnlistedPublic, UNLISTED_HINT } from "@/lib/event-visibility"
 import EventLifecycleBar from "@/components/admin/EventLifecycleBar"
+import EventShareLink from "@/components/admin/EventShareLink"
 import { orgTimeZone } from "@/lib/time-zone"
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
 
@@ -125,7 +126,8 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
               target="_blank"
               className="text-sm text-blue-600 border border-blue-200 px-3 py-1.5 rounded-full hover:bg-blue-50 transition-colors"
             >
-              Vue publique ↗
+              Vue publique <span aria-hidden="true">↗</span>
+              <span className="sr-only"> (ouvre dans un nouvel onglet)</span>
             </Link>
           )}
         </div>
@@ -147,8 +149,15 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
 
       {isUnlistedPublic(event) && (
         <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2">
-          <strong>Publié — non répertorié.</strong> {UNLISTED_HINT} L&apos;événement n&apos;apparaît pas sur la page publique de l&apos;organisation ; partagez son lien ou son QR code.
+          <strong>Publié, non répertorié.</strong> {UNLISTED_HINT} L&apos;événement n&apos;apparaît pas sur la page publique de l&apos;organisation ; partagez son lien ou son QR code.
         </p>
+      )}
+
+      {event.publicStatus === "published" && (
+        <section aria-labelledby="event-share-heading" className="bg-white border border-gray-200 rounded-xl p-4 space-y-2">
+          <h2 id="event-share-heading" className="text-sm font-semibold text-gray-700">Partager l&apos;événement</h2>
+          <EventShareLink url={eventPublicUrl(event.organization.slug, event.slug)} />
+        </section>
       )}
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

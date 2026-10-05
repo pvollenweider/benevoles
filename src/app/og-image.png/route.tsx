@@ -3,9 +3,10 @@
 
 import { ImageResponse } from "next/og"
 
-// The social card of the apex home (Open Graph and Twitter, see src/lib/landing-seo.ts). A route
-// handler rather than the opengraph-image file convention: that one would apply to every page
-// below the root, organisation event pages included, which must not carry benevol.app's card.
+// The platform's social card (Open Graph and Twitter): the apex home's (src/lib/landing-seo.ts),
+// and the default of a published event's link preview (src/lib/event-share.ts, #564), always by
+// its absolute URL on the apex host. A route handler rather than the opengraph-image file
+// convention: that one would apply to every page below the root, a draft event's included.
 // The path ends in .png, which no event slug can contain, so it never shadows an event.
 export const dynamic = "force-static"
 

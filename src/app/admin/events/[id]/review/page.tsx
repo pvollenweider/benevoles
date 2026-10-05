@@ -9,6 +9,7 @@ import { canPublish, reviewChecks } from "@/lib/event-wizard"
 import { eventPublicUrl } from "@/lib/urls"
 import WizardSteps from "@/components/admin/WizardSteps"
 import PublishToggle from "@/components/admin/PublishToggle"
+import EventShareLink from "@/components/admin/EventShareLink"
 
 export const dynamic = "force-dynamic"
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -99,9 +100,7 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
         <h2 id="review-publish" className="text-base font-semibold text-gray-900">Publication</h2>
         {published ? (
           <>
-            <p className="text-sm text-gray-700">
-              Lien à partager : <a href={publicUrl} target="_blank" rel="noopener" className={`${linkClass} break-all`}>{publicUrl}<span className="sr-only"> (ouvre dans un nouvel onglet)</span></a>
-            </p>
+            <EventShareLink url={publicUrl} />
             <div className="flex flex-wrap gap-3 items-center">
               <Link href={`/admin/events/${event.id}/qr`} className={linkClass}>QR code</Link>
               <Link href={`/admin/events/${event.id}/invitations`} className={linkClass}>Inviter des membres</Link>
