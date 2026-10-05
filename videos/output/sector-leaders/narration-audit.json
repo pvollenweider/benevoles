@@ -1,0 +1,95 @@
+{
+  "model": "gemini-3.8-flash",
+  "auditedAt": "2026-10-05T10:37:25.407Z",
+  "note": "ASR evidence, not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "859aeaec3e49ef31dcef935c49a18ec6bc16c2af32a58fc7830f44c84ff1aa89",
+      "recognized": "Le jour de la fête, tu n'as pas besoin de tout coordonner seul. Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles. Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter. Aucun accès à toute l'administration n'est nécessaire.",
+      "expected": "Le jour de la fête, tu n'as pas besoin de tout coordonner seul. Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles. Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter. Aucun accès à toute l'administration n'est nécessaire.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "nominate",
+      "audioSha256": "e981ff257b10740f5be253c788b8c306c97bbb8f9a3851425948d74236290b50",
+      "recognized": "Dans l'événement, ouvre les responsables et ajoute une personne. Choisis le poste, puis renseigne son nom et son e-mail. Vérifie bien cette adresse, c'est là que son lien sera envoyé. Tu peux désigner quelqu'un qui n'est pas lui-même inscrit à un créneau. Ajouter et envoyer le lien enregistre la nomination et prépare son e-mail.",
+      "expected": "Dans l'événement, ouvre les responsables et ajoute une personne. Choisis le poste, puis renseigne son nom et son email. Vérifie bien cette adresse : c'est là que son lien sera envoyé. Tu peux désigner quelqu'un qui n'est pas lui-même inscrit à un créneau. Ajouter et envoyer le lien enregistre la nomination et prépare son email.",
+      "wordErrorRate": 0.06779661016949153,
+      "needsReview": false
+    },
+    {
+      "id": "registered",
+      "audioSha256": "facf332c16b787bd3f867a22aada58d5b8ec2a6ae0228e404f921edb1bcdb9f9",
+      "recognized": "Si la personne participe déjà, la liste des inscrits permet de reprendre ses coordonnées sans tout ressaisir. Vérifiez le poste proposé avant de confirmer. Être responsable d'un poste et être bénévole sur un créneau sont deux choses différentes. La nomination ne remplace pas une inscription et ne crée pas un nouvel engagement dans le planning.",
+      "expected": "Si la personne participe déjà, la liste des inscrits permet de reprendre ses coordonnées sans tout ressaisir. Vérifie le poste proposé avant de confirmer. Être responsable d'un poste et être bénévole sur un créneau sont deux choses différentes : la nomination ne remplace pas une inscription et ne crée pas un nouvel engagement dans le planning.",
+      "wordErrorRate": 0.017857142857142856,
+      "needsReview": false
+    },
+    {
+      "id": "email",
+      "audioSha256": "6ed3ac53ff3afd4e58a69a3dfd25dab444fd856fbb729bf9b19b63ef28698014",
+      "recognized": "Voici l'e-mail reçu. Le responsable ouvre son lien personnel directement sans créer de compte ni choisir de mot de passe. Ce lien est confidentiel. Il donne accès aux coordonnées de l'équipe. On le garde pour soi et on ne l'affiche jamais sur une page publique ou sur le QR code de recrutement.",
+      "expected": "Voici l'email reçu. Le responsable ouvre son lien personnel directement, sans créer de compte ni choisir de mot de passe. Ce lien est confidentiel : il donne accès aux coordonnées de l'équipe. On le garde pour soi, et on ne l'affiche jamais sur une page publique ou sur le QR code de recrutement.",
+      "wordErrorRate": 0.03636363636363636,
+      "needsReview": false
+    },
+    {
+      "id": "roster",
+      "audioSha256": "ff432b6f5d83ed7af006ed8cf372ca4b3c5e7dcdf034dee73c95d041063612b5",
+      "recognized": "Sur ce lien, la responsable de la buvette retrouve uniquement les inscriptions de son poste. Les personnes sont regroupées par créneau avec la date et les horaires. Chaque ligne donne le nom, l'email, le téléphone lorsqu'il est renseigné et le commentaire éventuel. La mention « liste d'attente » distingue les personnes qui n'ont pas encore une place confirmée.",
+      "expected": "Sur ce lien, la responsable de la Buvette retrouve uniquement les inscriptions de son poste. Les personnes sont regroupées par créneau, avec la date et les horaires. Chaque ligne donne le nom, l'email, le téléphone lorsqu'il est renseigné et le commentaire éventuel. La mention Liste d'attente distingue les personnes qui n'ont pas encore une place confirmée.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "mobile",
+      "audioSha256": "3fdf135b0e0febab98eecfc917228b97c508edfe93f138963706f81b267e9faf",
+      "recognized": "Sur téléphone, la même page accompagne le responsable sur le terrain. Les liens e-mail et téléphone permettent de préparer un message ou un appel avec les applications du téléphone. On peut ainsi retrouver l'équipe du prochain créneau et vérifier les horaires. Les coordonnées servent à l'organisation de la mission, pas à constituer une liste de diffusion personnelle.",
+      "expected": "Sur téléphone, la même page accompagne le responsable sur le terrain. Les liens email et téléphone permettent de préparer un message ou un appel avec les applications du téléphone. On peut ainsi retrouver l'équipe du prochain créneau et vérifier les horaires. Les coordonnées servent à l'organisation de la mission, pas à constituer une liste de diffusion personnelle.",
+      "wordErrorRate": 0.03389830508474576,
+      "needsReview": false
+    },
+    {
+      "id": "scope",
+      "audioSha256": "e362c52f216381cd7ac4cd6c7cd8f0abdba9f0d631eb66f636bf15622ca78f59",
+      "recognized": "Cet espace est en lecture seule. Le responsable ne modifie pas les créneaux et ne retire pas les inscriptions. Il ne voit pas les équipes des autres postes. Pour une modification du planning ou une décision d'inscription, il se coordonne avec l'organisateur.",
+      "expected": "Cet espace est en lecture seule : le responsable ne modifie pas les créneaux et ne retire pas les inscriptions. Il ne voit pas les équipes des autres postes. Pour une modification du planning ou une décision d'inscription, il se coordonne avec l'organisateur.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "new-signup",
+      "audioSha256": "bfcf6eed123d66e963c2d449848b2043d19c498c85a8620f0ee16117d924ab33",
+      "recognized": "Pour voir comment une équipe évolue, inscrivons une nouvelle personne à la buvette du dimanche. Nora choisit ce créneau, puis continue vers le formulaire. Elle renseigne son prénom et son nom, son adresse e-mail et son téléphone. La taille du t-shirt est obligatoire pour cet événement. Elle choisit une taille, accepte la convention et l'utilisation de ses données pour organiser sa participation. Avant de confirmer, elle vérifie ses coordonnées et le créneau choisi. Nous confirmons maintenant. La page indique que son inscription est enregistrée.",
+      "expected": "Pour voir comment une équipe évolue, inscrivons une nouvelle personne à la Buvette du dimanche. Nora choisit ce créneau, puis continue vers le formulaire. Elle renseigne son prénom et son nom, son adresse email et son téléphone. La taille du t-shirt est obligatoire pour cet événement. Elle choisit une taille, accepte la convention et l'utilisation de ses données pour organiser sa participation. Avant de confirmer, elle vérifie ses coordonnées et le créneau choisi. Nous confirmons maintenant : la page indique que son inscription est enregistrée.",
+      "wordErrorRate": 0.023255813953488372,
+      "needsReview": false
+    },
+    {
+      "id": "notification",
+      "audioSha256": "74fce8eb229a4c352107eda16287999415cf8d5f36d70179d5321979cc91be54",
+      "recognized": "Côté responsable, voici l'e-mail réellement reçu à la suite de cette inscription. Il indique le nom de Nora et le créneau de la buvette du dimanche. Le lien permet de retrouver l'équipe complète. En rouvrant la page, Nora apparaît maintenant dans le bon créneau avec ses coordonnées. La responsable peut ainsi suivre les changements sans accéder à toute l'administration.",
+      "expected": "Côté responsable, voici l'email réellement reçu à la suite de cette inscription. Il indique le nom de Nora et le créneau de la Buvette du dimanche. Le lien permet de retrouver l'équipe complète. En rouvrant la page, Nora apparaît maintenant dans le bon créneau, avec ses coordonnées. La responsable peut ainsi suivre les changements sans accéder à toute l'administration.",
+      "wordErrorRate": 0.03225806451612903,
+      "needsReview": false
+    },
+    {
+      "id": "contact",
+      "audioSha256": "a9481e6f421f98dbf6d361fa177f49694812e51c60b779d37dc2960a278fde5c",
+      "recognized": "Attention à une autre distinction. Le contact opérationnel indiqué sur un créneau est la personne que les bénévoles doivent joindre sur place. Désigner un responsable ne publie pas automatiquement ses coordonnées comme contact. L'organisateur renseigne ce contact séparément dans le créneau si c'est bien la personne à appeler. Quand la responsabilité change",
+      "expected": "Attention à une autre distinction : le contact opérationnel indiqué sur un créneau est la personne que les bénévoles doivent joindre sur place. Désigner un responsable ne publie pas automatiquement ses coordonnées comme contact. L'organisateur renseigne ce contact séparément dans le créneau, si c'est bien la personne à appeler.",
+      "wordErrorRate": 0.08,
+      "needsReview": false
+    },
+    {
+      "id": "remove",
+      "audioSha256": "cd30ccdc86ffba8c309439dcb71b568504b5790f258a9bc8550ae4feef36bd03",
+      "recognized": "Retire la personne de ce poste et confirme. Son ancien lien ne donne alors plus accès à cette équipe. Cette action retire la responsabilité, pas ses éventuelles inscriptions comme bénévole. Tu peux ensuite désigner la nouvelle personne et lui envoyer son propre lien. Chacun dispose du bon accès au bon moment.",
+      "expected": "Quand la responsabilité change, retire la personne de ce poste et confirme. Son ancien lien ne donne alors plus accès à cette équipe. Cette action retire la responsabilité, pas ses éventuelles inscriptions comme bénévole. Tu peux ensuite désigner la nouvelle personne et lui envoyer son propre lien : chacun dispose du bon accès, au bon moment.",
+      "wordErrorRate": 0.07272727272727272,
+      "needsReview": false
+    }
+  ]
+}

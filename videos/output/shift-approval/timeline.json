@@ -1,0 +1,42 @@
+{
+  "slug": "shift-approval",
+  "recordedAt": "2026-10-04T17:43:21.299Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1140,
+      "endMs": 17356
+    },
+    {
+      "id": "setup",
+      "startMs": 17807,
+      "endMs": 33240
+    },
+    {
+      "id": "request",
+      "startMs": 33693,
+      "endMs": 48001
+    },
+    {
+      "id": "admin",
+      "startMs": 50165,
+      "endMs": 64253
+    },
+    {
+      "id": "decision",
+      "startMs": 64709,
+      "endMs": 80621
+    },
+    {
+      "id": "volunteer",
+      "startMs": 81074,
+      "endMs": 95255
+    },
+    {
+      "id": "result",
+      "startMs": 95707,
+      "endMs": 109865
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Après avoir ouvert ta page personnelle, le navigateur peut te reconnaître",
+  "windowStart": 5.350999999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 15.2,
+    "wordsHeard": "Après avoir ouvert ta page personnelle, le navigateur peut te reconnaître"
+  },
+  "onset": 20.551,
+  "proposedCut": 20.350896,
+  "note": "Proposal only; recut then independently audit before capture"
+}

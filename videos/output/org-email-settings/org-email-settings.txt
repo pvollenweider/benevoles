@@ -1,0 +1,15 @@
+Régler les emails de l’organisation
+
+Les réglages d’email permettent d’informer au bon moment sans envoyer chaque message à la main. Ils sont communs à l’organisation : on choisit les rappels utiles, les alertes destinées à l’équipe et l’adresse à laquelle arrivent les réponses.
+
+Les trois rappels automatiques correspondent à deux jours avant, un jour avant et le jour du créneau. Active seulement ceux qui apportent une vraie aide. Ils concernent les bénévoles inscrits ; un événement peut ensuite désactiver tous ses rappels dans ses propres réglages.
+
+L’option Prévenir les administrateurs à chaque inscription envoie un email à chaque administrateur actif lorsqu’une personne s’inscrit depuis la page publique. Elle facilite le suivi d’un petit événement, mais peut devenir bruyante lorsque les inscriptions sont nombreuses.
+
+L’adresse de réponse indique où arrive un message lorsqu’un bénévole répond à un email de la plateforme. Saisissons benevoles arobase example point org. Si le champ reste vide, l’adresse par défaut est utilisée. Cette adresse apparaît aussi sur la page personnelle des bénévoles.
+
+Enregistre les réglages avant de les tester. Le message Réglages enregistrés confirme que les choix sont persistés. Modifier les cases sans enregistrer ne change pas les prochains envois, et l’envoi de test utilise toujours la dernière configuration enregistrée.
+
+Le bouton M’envoyer un email de test adresse un exemple à ton propre compte administrateur. Il vérifie le transport, l’expéditeur et l’adresse de réponse sans contacter les bénévoles. Dans cette démonstration isolée, le message apparaît dans la boîte Mailpit au lieu de partir sur Internet.
+
+Le résultat est un réglage vérifié avant le prochain événement. Les rappels partiront selon le fuseau de l’organisation, les réponses reviendront à l’adresse choisie et l’équipe ne recevra les alertes d’inscription que si l’option reste active. Pour une communication ponctuelle, utilise plutôt un message ciblé.

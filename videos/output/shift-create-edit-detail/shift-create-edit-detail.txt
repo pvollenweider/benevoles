@@ -1,0 +1,15 @@
+Ajouter et modifier un créneau dans le détail
+
+Un créneau transforme un poste en besoin concret. Il dit quelle mission doit être assurée, quand, par combien de personnes et avec quelles informations pratiques. Prenons le temps de parcourir chaque champ et son résultat côté bénévole.
+
+Choisis d’abord le poste et, si nécessaire, un libellé plus précis. La date, l’heure de début et l’heure de fin placent la barre dans le planning. La capacité indique combien de personnes peuvent être confirmées sur cette plage.
+
+Deux options complètent le fonctionnement du créneau. La liste d’attente recueille les volontaires quand toutes les places sont prises. Le mode Sur validation transforme chaque inscription en demande que l’organisateur devra accepter ou refuser.
+
+Les informations pratiques peuvent préciser un point de rendez-vous, une consigne, un contact opérationnel et une position sur la carte. Si le créneau n’a pas de lieu propre, il reprend celui de l’événement. Ces détails deviennent visibles aux personnes inscrites.
+
+Enregistrons le créneau et vérifions sa place dans le planning. Le libellé complète le nom du poste sans le remplacer, la capacité apparaît dans les indicateurs et la fiche détaillée rassemble les consignes utiles au jour J.
+
+Dans la liste, le statut indique si les inscriptions sont ouvertes, fermées ou si le créneau est annulé. Rouvrir l’éditeur permet de corriger l’horaire et les informations pratiques. Pour un créneau déjà occupé, relis toujours le nouveau jour, les heures et le rendez-vous avant de confirmer et de prévenir les bénévoles.
+
+Un bon créneau reste court à lire mais complet pour agir : mission, horaire, capacité, lieu et consigne. Plus ces informations sont fiables, moins l’équipe doit répondre aux mêmes questions par email ou par téléphone.

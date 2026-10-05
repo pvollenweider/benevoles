@@ -272,11 +272,11 @@ async function main() {
       }
     }
 
-    if (slug === "sector-leaders") {
+    if (slug === "sector-leaders" || slug === "volunteer-personal-registrations" || slug === "volunteer-session-availability") {
       const href = await page.getByRole("link", { name: "Fête du village de Montvert" }).first().getAttribute("href")
       if (!href) throw new Error("Seed event link not found")
       featureEventId = href.split("/").filter(Boolean).at(-1)!
-      await page.goto(`${baseUrl}/admin/events/${featureEventId}/sector-leaders`); await settle(page)
+      await page.goto(slug === "sector-leaders" ? `${baseUrl}/admin/events/${featureEventId}/sector-leaders` : `${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
     }
 
     // Recorder-owned demo data must be cleaned before capture starts. These scenarios are often
@@ -1497,6 +1497,160 @@ async function main() {
         await at(0.64)
         await page.getByRole("button", { name: "Confirmer mon inscription" }).scrollIntoViewIfNeeded()
       })
+    } else if (slug === "volunteer-personal-registrations") {
+      const initial = await page.evaluate(async () => (await fetch("/api/public/registrations/demo-volunteer-camille-0001")).json())
+      for (const status of ["active", "waiting", "offered", "requested"]) {
+        if (!initial.registrations.some((r: { status: string }) => r.status === status)) throw new Error(`Personal demo missing ${status}`)
+      }
+      await scene("welcome", async () => {
+        await page.screencast.showChapter(manifest.title, { description: "Ton planning et tes choix, depuis ton lien personnel", duration: 2_300 })
+        await page.getByRole("heading", { name: "Mes inscriptions" }).waitFor()
+      })
+      await scene("practical", async (at) => {
+        await page.getByText("Arrive 15 minutes avant, au stand bleu.", { exact: true }).scrollIntoViewIfNeeded()
+        await at(0.40)
+        await page.getByRole("link", { name: /Voir sur la carte/ }).first().scrollIntoViewIfNeeded()
+        await at(0.65)
+        await page.getByText(/Manon Aebi/).first().scrollIntoViewIfNeeded()
+      })
+      await scene("states", async (at) => {
+        await page.getByRole("button", { name: "Quitter la liste d'attente du créneau Buvette", exact: true }).scrollIntoViewIfNeeded()
+        await at(0.30)
+        await page.getByRole("link", { name: "Prendre la place : Buvette", exact: true }).scrollIntoViewIfNeeded()
+        await at(0.65)
+        await page.getByText(/Créneau sur validation/).scrollIntoViewIfNeeded()
+      })
+      await scene("cancel", async (at) => {
+        const button = page.getByRole("button", { name: "Annuler le créneau Accueil", exact: true })
+        await tap(page, button)
+        await at(0.22)
+        await tap(page, page.getByRole("alertdialog").getByRole("button", { name: "Non, garder", exact: true }))
+        await page.getByRole("alertdialog").waitFor({ state: "hidden" })
+        await at(0.45)
+        await tap(page, button)
+        await at(0.62)
+        await tap(page, page.getByRole("alertdialog").getByRole("button", { name: "Oui, annuler", exact: true }))
+        await button.waitFor({ state: "hidden" })
+      })
+      const withdraw = async (at: (fraction: number) => Promise<void>, buttonName: string, confirmName: string) => {
+        const button = page.getByRole("button", { name: buttonName, exact: true })
+        await tap(page, button)
+        await at(0.50)
+        await tap(page, page.getByRole("alertdialog").getByRole("button", { name: confirmName, exact: true }))
+        await button.waitFor({ state: "hidden" })
+      }
+      await scene("waiting", async at => withdraw(at, "Quitter la liste d'attente du créneau Buvette", "Oui, quitter"))
+      await scene("offer", async at => withdraw(at, "Refuser la place proposée sur le créneau Buvette", "Oui, refuser"))
+      await scene("request", async at => {
+        await withdraw(at, "Retirer ma demande pour le créneau Navette du dimanche", "Oui, retirer")
+        await page.getByRole("heading", { name: "Toutes tes inscriptions ont été annulées" }).waitFor()
+        if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Refusing personal state verification outside video DB")
+        const { PrismaClient } = await import("../../src/generated/prisma/client")
+        const { PrismaPg } = await import("@prisma/adapter-pg")
+        const verificationDb = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+        try {
+          const remaining = await verificationDb.registration.count({ where: {
+            eventId: featureEventId, volunteer: { email: "camille.rochat@example.org" },
+            status: { in: ["active", "waiting", "offered", "requested"] },
+          } })
+          if (remaining) throw new Error("Server still has live personal registrations after withdrawal")
+        } finally {
+          await verificationDb.$disconnect()
+        }
+      })
+      await scene("return", async at => {
+        // On localhost tenant selection uses ?org=; production links resolve the tenant from
+        // its domain. Supply that local routing context without changing application code.
+        await page.route(`${baseUrl}/${eventSlug}**`, async route => {
+          const target = new URL(route.request().url())
+          target.searchParams.set("org", org)
+          await route.continue({ url: target.toString() })
+        })
+        await tap(page, page.getByRole("link", { name: "Retour à l'accueil", exact: true }))
+        await settle(page)
+        await page.getByRole("heading", { name: "Fête du village de Montvert", exact: true }).waitFor()
+        await at(0.48)
+        await page.getByRole("button", { name: /Sélectionner —/ }).first().scrollIntoViewIfNeeded()
+      })
+    } else if (slug === "volunteer-session-availability") {
+      const personalUrl = `${baseUrl}/my/demo-volunteer-camille-0001`
+      const eventUrl = `${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`
+      const invalidUrl = `${baseUrl}/my/demo-invalid-video-link?org=${encodeURIComponent(org)}`
+      const section = () => page.locator("form").filter({ has: page.getByRole("heading", { name: "Mes disponibilités", exact: true }) })
+      await scene("welcome", async at => {
+        await page.screencast.showChapter(manifest.title, { description: "Un lien privé et des informations utiles à l'équipe", duration: 2_300 })
+        await at(0.45)
+        await page.getByRole("heading", { name: "Ton lien personnel", exact: true }).scrollIntoViewIfNeeded()
+      })
+      await scene("session", async at => {
+        await page.goto(eventUrl); await settle(page)
+        await page.getByRole("button", { name: "Quitter la session", exact: true }).waitFor()
+        await at(0.60)
+        await tap(page, page.getByRole("button", { name: "Quitter la session", exact: true }))
+        await page.getByRole("button", { name: "Quitter la session", exact: true }).waitFor({ state: "hidden" })
+      })
+      await scene("resend", async at => {
+        await page.goto(personalUrl); await settle(page)
+        await tap(page, page.getByRole("button", { name: "Recevoir ce lien par email", exact: true }))
+        await page.getByText("Un nouvel email avec ton lien vient de partir.", { exact: true }).waitFor()
+        await at(0.60)
+        await page.goto("http://localhost:48026"); await settle(page)
+        await tap(page, page.getByText(/Ton lien pour gérer ton inscription/).first())
+        await page.frameLocator("iframe").locator('a[href*="/my/"]').first().waitFor()
+      })
+      await scene("recover", async at => {
+        await page.goto(invalidUrl); await settle(page)
+        await typeNaturally(page, page.getByLabel(/Adresse email utilisée/), "camille.rochat@example.org")
+        await tap(page, page.getByRole("button", { name: "Recevoir un nouveau lien", exact: true }))
+        const answer = page.getByText(/Si une inscription existe à cette adresse/)
+        await answer.waitFor()
+        const knownAnswer = await answer.textContent()
+        await at(0.60)
+        await fillVisibly(page, page.getByLabel(/Adresse email utilisée/), "personne.inconnue@example.org")
+        await tap(page, page.getByRole("button", { name: "Recevoir un nouveau lien", exact: true }))
+        if (await answer.textContent() !== knownAnswer) throw new Error("Link recovery exposes different answers")
+      })
+      await scene("limit", async at => {
+        await page.goto(personalUrl); await settle(page)
+        // Use real resend requests, not an intercepted or fabricated error response.
+        for (let attempt = 0; attempt < 3; attempt++) {
+          await tap(page, page.getByRole("button", { name: "Recevoir ce lien par email", exact: true }))
+          await page.getByRole("button", { name: "Recevoir ce lien par email", exact: true }).waitFor()
+        }
+        await page.getByText(/Un email avec ton lien est déjà parti il y a peu/).waitFor()
+        await at(0.70)
+        await page.getByRole("link", { name: "Écrire à l'organisation" }).scrollIntoViewIfNeeded()
+      })
+      await scene("availability", async at => {
+        await section().scrollIntoViewIfNeeded()
+        await tap(page, section().getByLabel("Matin", { exact: true }))
+        await tap(page, section().getByLabel("Soir", { exact: true }))
+        await typeNaturally(page, section().getByLabel(/Sauf/), "Pas le dimanche matin")
+        await at(0.57)
+        await tap(page, section().getByRole("button", { name: "Enregistrer mes disponibilités", exact: true }))
+        await page.getByText(/Disponibilités enregistrées/).waitFor()
+        await at(0.80)
+        await page.reload(); await settle(page)
+        await section().scrollIntoViewIfNeeded()
+        if (!await section().getByLabel("Matin", { exact: true }).isChecked() || !await section().getByLabel("Soir", { exact: true }).isChecked()) throw new Error("Availability did not persist")
+        if (await section().getByLabel(/Sauf/).inputValue() !== "Pas le dimanche matin") throw new Error("Availability note did not persist")
+      })
+      await scene("organizer", async at => {
+        await page.goto(`${baseUrl}/admin/members`); await settle(page)
+        await page.getByText(/Pas le dimanche matin/).first().scrollIntoViewIfNeeded()
+        await at(0.65)
+        await page.goto(personalUrl); await settle(page)
+        await section().scrollIntoViewIfNeeded()
+      })
+      await scene("result", async at => {
+        await tap(page, section().getByLabel("Matin", { exact: true }))
+        await tap(page, section().getByLabel("Soir", { exact: true }))
+        await fillVisibly(page, section().getByLabel(/Sauf/), "")
+        await tap(page, section().getByRole("button", { name: "Enregistrer mes disponibilités", exact: true }))
+        await page.getByText("Disponibilités effacées.", { exact: true }).waitFor()
+        await at(0.55)
+        await page.getByRole("heading", { name: "Ton lien personnel", exact: true }).scrollIntoViewIfNeeded()
+      })
     } else if (slug === "sector-leaders") {
       const leadersUrl = `${baseUrl}/admin/events/${featureEventId}/sector-leaders`
       const rosterUrl = `${baseUrl}/leader/demo-leader-buvette-0001`
@@ -1564,12 +1718,13 @@ async function main() {
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
         await tap(page, page.getByRole("button", { name: /Sélectionner — Buvette 10h–14h/ }).last())
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
+        await at(0.24)
         await typeNaturally(page, page.getByLabel("Prénom *", { exact: true }), "Nora")
         await typeNaturally(page, page.getByLabel("Nom *", { exact: true }), "Perrin")
-        await at(0.24)
+        await at(0.35)
         await typeNaturally(page, page.getByLabel("Email *", { exact: true }), "nora.team@example.org")
         await typeNaturally(page, page.getByLabel("Téléphone *", { exact: true }), "079 000 00 12")
-        await at(0.43)
+        await at(0.50)
         await tap(page, page.getByRole("radio", { name: "M", exact: true }))
         await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
         await tap(page, page.locator("label").filter({ hasText: "J'accepte que mes données" }).getByRole("checkbox"))

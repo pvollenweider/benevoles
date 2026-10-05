@@ -1,0 +1,42 @@
+{
+  "slug": "shift-eligibility-rules",
+  "recordedAt": "2026-10-04T17:58:45.052Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1148,
+      "endMs": 15390
+    },
+    {
+      "id": "settings",
+      "startMs": 15840,
+      "endMs": 39184
+    },
+    {
+      "id": "age",
+      "startMs": 39638,
+      "endMs": 48515
+    },
+    {
+      "id": "quota",
+      "startMs": 50682,
+      "endMs": 62894
+    },
+    {
+      "id": "reserved",
+      "startMs": 63349,
+      "endMs": 83229
+    },
+    {
+      "id": "eligible",
+      "startMs": 83681,
+      "endMs": 99040
+    },
+    {
+      "id": "result",
+      "startMs": 99492,
+      "endMs": 115395
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "ORG_TEAM_PERMISSIONS",
+  "slug": "org-team-permissions",
+  "validatedAt": "2026-10-04T14:34:08.515Z",
+  "continuousNarration": true,
+  "voice": "Puck",
+  "captureMs": 121920,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 15197,
+      "audioMs": 15194,
+      "driftMs": 3
+    },
+    {
+      "id": "roles",
+      "visualMs": 20719,
+      "audioMs": 20717,
+      "driftMs": 2
+    },
+    {
+      "id": "invite",
+      "visualMs": 7896,
+      "audioMs": 7895,
+      "driftMs": 1
+    },
+    {
+      "id": "invite-result",
+      "visualMs": 6808,
+      "audioMs": 6806,
+      "driftMs": 2
+    },
+    {
+      "id": "change-role",
+      "visualMs": 22632,
+      "audioMs": 22631,
+      "driftMs": 1
+    },
+    {
+      "id": "organizer-view",
+      "visualMs": 13998,
+      "audioMs": 13997,
+      "driftMs": 1
+    },
+    {
+      "id": "limits",
+      "visualMs": 16972,
+      "audioMs": 16971,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 9510,
+      "audioMs": 9509,
+      "driftMs": 1
+    }
+  ],
+  "issues": []
+}

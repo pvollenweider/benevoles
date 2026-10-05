@@ -1,0 +1,47 @@
+{
+  "id": "GLOBAL_SEARCH",
+  "slug": "global-search",
+  "validatedAt": "2026-10-04T11:23:10.274Z",
+  "continuousNarration": true,
+  "voice": "Charon",
+  "captureMs": 90320,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 13619,
+      "audioMs": 13619,
+      "driftMs": 0
+    },
+    {
+      "id": "open",
+      "visualMs": 12939,
+      "audioMs": 12937,
+      "driftMs": 2
+    },
+    {
+      "id": "person",
+      "visualMs": 19674,
+      "audioMs": 19673,
+      "driftMs": 1
+    },
+    {
+      "id": "shift",
+      "visualMs": 10253,
+      "audioMs": 10250,
+      "driftMs": 3
+    },
+    {
+      "id": "limits",
+      "visualMs": 12927,
+      "audioMs": 12923,
+      "driftMs": 4
+    },
+    {
+      "id": "result",
+      "visualMs": 12641,
+      "audioMs": 12638,
+      "driftMs": 3
+    }
+  ],
+  "issues": []
+}

@@ -1,0 +1,42 @@
+{
+  "slug": "event-visibility-registration-window",
+  "recordedAt": "2026-10-05T11:11:36.359Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1552,
+      "endMs": 16789
+    },
+    {
+      "id": "statuses",
+      "startMs": 17241,
+      "endMs": 33277
+    },
+    {
+      "id": "unlisted",
+      "startMs": 35444,
+      "endMs": 54651
+    },
+    {
+      "id": "window",
+      "startMs": 56819,
+      "endMs": 74145
+    },
+    {
+      "id": "public-result",
+      "startMs": 75855,
+      "endMs": 90434
+    },
+    {
+      "id": "archive",
+      "startMs": 90891,
+      "endMs": 104605
+    },
+    {
+      "id": "result",
+      "startMs": 105056,
+      "endMs": 124373
+    }
+  ]
+}

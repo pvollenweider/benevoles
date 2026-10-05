@@ -1,0 +1,42 @@
+{
+  "slug": "event-duplicate",
+  "recordedAt": "2026-10-04T15:59:32.984Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1146,
+      "endMs": 12378
+    },
+    {
+      "id": "identity",
+      "startMs": 12830,
+      "endMs": 25133
+    },
+    {
+      "id": "choices",
+      "startMs": 25585,
+      "endMs": 42348
+    },
+    {
+      "id": "leaders",
+      "startMs": 42804,
+      "endMs": 56641
+    },
+    {
+      "id": "summary",
+      "startMs": 57093,
+      "endMs": 70728
+    },
+    {
+      "id": "create",
+      "startMs": 71182,
+      "endMs": 86220
+    },
+    {
+      "id": "result",
+      "startMs": 86673,
+      "endMs": 99556
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "id": "VOLUNTEER_CALENDAR",
+  "slug": "volunteer-calendar",
+  "title": "Ajouter ses créneaux à son calendrier",
+  "description": "Télécharger son planning confirmé, l'importer dans son agenda et comprendre les mises à jour.",
+  "language": "fr-CH",
+  "voice": "Puck",
+  "continuousNarration": true,
+  "voiceStyle": "French, warm and friendly with an audible smile. Patient conversational delivery, clear articulation and natural pauses.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Tes créneaux confirmés peuvent rejoindre l'agenda que tu utilises déjà. Depuis ton lien personnel, tu télécharges un fichier calendrier, puis tu l'importes dans ton agenda. Ici, Camille a trois créneaux confirmés, dont un de nuit, et une inscription en attente. Nous allons voir ce qui est ajouté et comment reprendre un horaire après une modification.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "one",
+      "transcript": "Sous le créneau Accueil, Ajouter à mon calendrier télécharge uniquement ce créneau. Le fichier porte l'extension point i c s : c'est un format que les applications de calendrier peuvent lire. Ce téléchargement ne crée pas une nouvelle inscription dans Benevol. Il prépare simplement un événement à ajouter à ton propre agenda.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "all",
+      "transcript": "Avec plusieurs créneaux confirmés, le bouton Ajouter tout mon planning à mon calendrier permet de récupérer un seul fichier pour l'ensemble. Le planning de Camille contient l'Accueil, le Rangement de nuit et la Buvette du dimanche. L'inscription en liste d'attente n'y figure pas : elle n'est pas encore confirmée. Les offres et les demandes en cours de validation sont également exclues.",
+      "fallbackDurationMs": 35000
+    },
+    {
+      "id": "import",
+      "transcript": "Ouvre le fichier téléchargé dans ton application de calendrier et choisis le calendrier où tu veux l'ajouter. Selon l'application, il peut s'agir d'une fenêtre d'import ou d'une proposition d'ajout. Sur Google Agenda depuis un ordinateur, l'import se trouve dans les paramètres. Avant de confirmer, vérifie le calendrier choisi et les horaires présentés.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "details",
+      "transcript": "Dans l'événement importé, tu retrouves le nom de la fête et le poste. Le lieu et les consignes pratiques accompagnent le créneau, avec le contact lorsqu'il est renseigné. Un lien permet de revenir à tes inscriptions. Comme le fichier contient ce lien personnel, garde-le pour toi : ce n'est pas un planning collectif à publier ou à distribuer.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "night",
+      "transcript": "Le Rangement commence samedi à vingt-deux heures et se termine dimanche à deux heures. L'agenda doit donc montrer la fin le lendemain, pas une mission qui se termine avant de commencer. Les horaires sont calculés avec le fuseau de l'organisation. Si tu voyages, ton agenda peut les afficher dans le fuseau de ton appareil : vérifie ce réglage.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "change",
+      "transcript": "Ce fichier n'est pas un abonnement au planning. L'organisateur décale maintenant le début du Rangement à vingt-trois heures. L'ancien fichier conserve vingt-deux heures : il ne se met pas à jour tout seul. Si ton créneau change, l'organisation te prévient par email. Reviens sur ton lien personnel pour voir les informations actuelles et télécharger la nouvelle version.",
+      "fallbackDurationMs": 32000
+    },
+    {
+      "id": "reimport",
+      "transcript": "Télécharge à nouveau le planning, puis importe cette nouvelle version. L'identifiant du créneau reste le même, ce qui permet à la plupart des calendriers de remplacer l'événement plutôt que de le dupliquer. Le résultat dépend de ton application et de la méthode d'import : vérifie l'horaire et l'absence de doublon avant de te fier à ton agenda.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "result",
+      "transcript": "Ton agenda aide à te rappeler les horaires, mais la page personnelle reste la référence pour tes inscriptions. Elle affiche aussi l'attente, les offres et les demandes, qui n'ont pas leur place dans le fichier des créneaux confirmés. Après une modification, consulte cette page, récupère le nouveau fichier et vérifie le résultat dans ton calendrier.",
+      "fallbackDurationMs": 30000
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, tu ajoutes tes créneaux confirmés à ton agenda et tu vois comment reprendre un horaire après une modification.",
+    "steps": [
+      "Depuis ton lien personnel, clique sur « Ajouter à mon calendrier » sous un créneau, ou sur « Ajouter tout mon planning à mon calendrier ».",
+      "Ouvre le fichier .ics téléchargé dans ton application de calendrier et choisis le calendrier de destination.",
+      "Vérifie les horaires présentés, notamment la fin le lendemain pour un créneau de nuit.",
+      "Si un créneau change, reviens sur ton lien personnel et télécharge la nouvelle version.",
+      "Importe-la, puis vérifie l'horaire et l'absence de doublon dans ton agenda."
+    ],
+    "remember": [
+      "Seuls les créneaux confirmés vont dans le fichier : pas l'attente, les offres ni les demandes.",
+      "Le fichier ne se met pas à jour tout seul : l'organisation te prévient par email en cas de changement.",
+      "Le fichier contient ton lien personnel : garde-le pour toi.",
+      "Ta page personnelle reste la référence pour tes inscriptions."
+    ]
+  }
+}

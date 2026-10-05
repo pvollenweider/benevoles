@@ -1,0 +1,74 @@
+{
+  "id": "VOLUNTEER_PERSONAL_REGISTRATIONS",
+  "slug": "volunteer-personal-registrations",
+  "title": "Retrouver et gérer ses inscriptions",
+  "description": "Lire son planning et retirer un engagement, une attente, une offre ou une demande depuis son lien personnel.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "voiceStyle": "French, warm and friendly, with an audible smile. Reassuring, patient delivery and clear articulation, around 130 words per minute.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Ton lien personnel permet de retrouver les inscriptions d'un événement sans créer de compte. Ici, Camille a une place confirmée, une inscription en attente, une place proposée et une demande à valider. Nous allons lire les informations utiles, puis montrer comment retirer chacun de ces engagements. Ce lien reste confidentiel : il permet d'agir sur tes inscriptions.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "practical",
+      "transcript": "Commençons par l'Accueil confirmé. La carte indique le jour et les horaires. Le rendez-vous et les consignes expliquent où aller et comment se préparer. Le lien carte aide à retrouver le lieu. La personne de contact et son téléphone sont réservés aux inscrits : garde ces informations pour prévenir l'équipe ou demander de l'aide sur place.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "states",
+      "transcript": "Les autres cartes ne signifient pas la même chose. Liste d'attente indique ta position, sans place confirmée. Une place proposée affiche une échéance et un lien pour la prendre : tant que tu n'as pas accepté, ne la considère pas comme acquise. Une demande sur validation attend la décision de l'organisation, qui te prévient par email. Lis toujours le statut avant de préparer ton planning.",
+      "fallbackDurationMs": 35000
+    },
+    {
+      "id": "cancel",
+      "transcript": "Pour l'Accueil, Annuler ouvre une confirmation. Tu peux encore choisir Non, garder : rien n'est retiré. Reprenons et confirmons cette fois. La carte disparaît de la page personnelle. Si tu changes de disponibilité près du début de la mission, préviens aussi le contact sur place : cela aide l'équipe à réorganiser la relève.",
+      "fallbackDurationMs": 32000
+    },
+    {
+      "id": "waiting",
+      "transcript": "Si tu n'es plus disponible pour la Buvette en attente, choisis Quitter la liste d'attente. La confirmation explique que tu ne seras plus prévenu si une place se libère pour ce créneau. Confirme uniquement si c'est ce que tu souhaites. La carte disparaît : tu n'es plus dans cette file, mais tes autres inscriptions restent présentes.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "offer",
+      "transcript": "Pour une place proposée, le bouton est Refuser la place. Lis les conséquences : la place passe à la personne suivante et tu quittes la liste d'attente. Après confirmation, cette offre disparaît. Si tu voulais participer, il fallait au contraire utiliser Prendre la place et suivre la confirmation d'acceptation avant l'échéance indiquée.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "request",
+      "transcript": "Il reste la demande pour la Navette du dimanche. Retirer ma demande ouvre sa confirmation : la place qui t'était réservée est libérée. En confirmant, tu retires cette candidature sans attendre une réponse de l'organisateur. C'est ici le dernier engagement de Camille. La page indique maintenant que toutes ses inscriptions ont été annulées.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "return",
+      "transcript": "Le lien Retour à l'accueil ramène à la page de l'événement. Tu peux regarder les places disponibles et choisir un autre créneau si ta disponibilité a changé. Retirer une inscription ne supprime pas automatiquement ton profil de membre de l'association. Pour une question sur tes données ou une difficulté avec ton lien, contacte l'organisation.",
+      "fallbackDurationMs": 30000
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, tu retrouves tes inscriptions depuis ton lien personnel et tu apprends à retirer une place, une attente, une offre ou une demande.",
+    "steps": [
+      "Ouvre ton lien personnel : il affiche tes inscriptions sans créer de compte.",
+      "Lis chaque carte : horaires, rendez-vous, consignes, carte et contact sur place.",
+      "Repère le statut de chaque carte : place confirmée, liste d'attente, place proposée ou demande à valider.",
+      "Pour annuler une place, clique sur « Annuler », puis confirme.",
+      "Quitte une liste d'attente, refuse une place proposée ou retire une demande avec le bouton de sa carte.",
+      "Reviens à l'accueil de l'événement pour choisir un autre créneau si tes disponibilités changent."
+    ],
+    "remember": [
+      "Ton lien personnel est confidentiel : il permet d'agir sur tes inscriptions.",
+      "Une place proposée n'est acquise qu'après « Prendre la place », avant l'échéance indiquée.",
+      "Si tu annules près du début de la mission, préviens aussi le contact sur place.",
+      "Retirer une inscription ne supprime pas ton profil de membre de l'association."
+    ]
+  }
+}

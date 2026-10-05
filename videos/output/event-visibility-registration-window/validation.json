@@ -1,0 +1,54 @@
+{
+  "id": "EVENT_VISIBILITY_REGISTRATION_WINDOW",
+  "slug": "event-visibility-registration-window",
+  "validatedAt": "2026-10-05T11:11:43.941Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 125240,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 15237,
+      "audioMs": 15236,
+      "driftMs": 1
+    },
+    {
+      "id": "statuses",
+      "visualMs": 16036,
+      "audioMs": 16030,
+      "driftMs": 6
+    },
+    {
+      "id": "unlisted",
+      "visualMs": 19207,
+      "audioMs": 19205,
+      "driftMs": 2
+    },
+    {
+      "id": "window",
+      "visualMs": 17326,
+      "audioMs": 17324,
+      "driftMs": 2
+    },
+    {
+      "id": "public-result",
+      "visualMs": 14579,
+      "audioMs": 14577,
+      "driftMs": 2
+    },
+    {
+      "id": "archive",
+      "visualMs": 13714,
+      "audioMs": 13712,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 19317,
+      "audioMs": 19316,
+      "driftMs": 1
+    }
+  ],
+  "issues": []
+}

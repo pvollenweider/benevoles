@@ -1,0 +1,87 @@
+{
+  "slug": "admin-features-tour",
+  "recordedAt": "2026-10-03T10:37:18.014Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "intro",
+      "startMs": 0,
+      "endMs": 11868
+    },
+    {
+      "id": "organization",
+      "startMs": 15281,
+      "endMs": 31268
+    },
+    {
+      "id": "team",
+      "startMs": 31719,
+      "endMs": 48772
+    },
+    {
+      "id": "lifecycle",
+      "startMs": 52119,
+      "endMs": 68534
+    },
+    {
+      "id": "appearance",
+      "startMs": 68986,
+      "endMs": 82397
+    },
+    {
+      "id": "duplicate",
+      "startMs": 84002,
+      "endMs": 101747
+    },
+    {
+      "id": "shift-methods",
+      "startMs": 105091,
+      "endMs": 127412
+    },
+    {
+      "id": "shift-fields",
+      "startMs": 127866,
+      "endMs": 138117
+    },
+    {
+      "id": "registrations",
+      "startMs": 141518,
+      "endMs": 160835
+    },
+    {
+      "id": "members",
+      "startMs": 162481,
+      "endMs": 173655
+    },
+    {
+      "id": "questions",
+      "startMs": 175311,
+      "endMs": 194063
+    },
+    {
+      "id": "pages",
+      "startMs": 195668,
+      "endMs": 205858
+    },
+    {
+      "id": "messages",
+      "startMs": 209319,
+      "endMs": 228846
+    },
+    {
+      "id": "reminders",
+      "startMs": 230436,
+      "endMs": 243541
+    },
+    {
+      "id": "reports",
+      "startMs": 246907,
+      "endMs": 264623
+    },
+    {
+      "id": "activity",
+      "startMs": 268116,
+      "endMs": 282978
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "slug": "org-email-settings",
+  "recordedAt": "2026-10-04T13:59:43.087Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1860,
+      "endMs": 15947
+    },
+    {
+      "id": "reminders",
+      "startMs": 18107,
+      "endMs": 33978
+    },
+    {
+      "id": "admin-alert",
+      "startMs": 34431,
+      "endMs": 49452
+    },
+    {
+      "id": "reply-to",
+      "startMs": 51617,
+      "endMs": 68392
+    },
+    {
+      "id": "save",
+      "startMs": 68844,
+      "endMs": 83956
+    },
+    {
+      "id": "test",
+      "startMs": 86114,
+      "endMs": 103618
+    },
+    {
+      "id": "result",
+      "startMs": 104070,
+      "endMs": 122513
+    }
+  ]
+}

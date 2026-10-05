@@ -526,7 +526,7 @@ partageront le même identifiant.
 - bouton depuis la confirmation ou la page personnelle ;
 - permission du navigateur ;
 - J-2, J-1, jour J et message urgent ;
-- email toujours envoyé ;
+- emails indépendants du push, selon les rappels activés par l'organisation ;
 - retirer l’autorisation ;
 - navigateurs ou installations sans push.
 
@@ -896,8 +896,8 @@ Cette matrice doit devenir un contrôle automatisé simple : chaque titre de sec
 | 09 — Régler les emails de l’organisation | Prévisualisation générée | `demo` | Contrôle technique et planche complète validés ; Mailpit vérifié ; visionnage final en attente |
 | 10 — Créer depuis une page blanche | Prévisualisation générée | `demo` | Contrôle technique et planche complète validés ; visionnage final en attente |
 | 11 — Démarrer avec un modèle | Prévisualisation générée | `demo` | Contrôle technique et planche complète validés ; 10 créneaux vérifiés ; visionnage final en attente |
-| 12 — Vérifier, prévisualiser et publier | Prévisualisation à corriger | `demo` | Audit indépendant du 5 octobre : paroles déplacées entre accueil/vérifications et aperçu/publication ; vérifier aussi les mots manquants. Durées correctes mais synchronisation éditoriale non validée |
-| 13 — Visibilité et période d’inscription | Prévisualisation générée | `demo` | Contrôle technique et planche complète validés ; visionnage final en attente |
+| 12 — Vérifier, prévisualiser et publier | Prévisualisation régénérée | `demo` | Nouvelle prise Kore complète : sept paragraphes contrôlés indépendamment, nouvelle capture et planche vérifiées ; visionnage audiovisuel final encore requis |
+| 13 — Visibilité et période d’inscription | Prévisualisation régénérée | `demo` | Frontières corrigées, sept paragraphes contrôlés indépendamment ; capture, assemblage et planche vérifiés. Visionnage audiovisuel intégral restant |
 | 14 — Dupliquer l’événement précédent | Prévisualisation générée | `demo` | Contrôle technique et planche complète validés ; visionnage final en attente |
 | 15 — Programme, pages et QR code | Prévisualisation générée | `demo` | Contrôle technique et planche complète validés ; visionnage final en attente |
 | 16 — Jalons et pilotage | Prévisualisation générée | `demo` | Contrôle technique et planche complète validés ; visionnage final en attente |
@@ -914,8 +914,12 @@ Cette matrice doit devenir un contrôle automatisé simple : chaque titre de sec
 | 27 — Choisir un ou plusieurs créneaux | Prévisualisation générée | `demo` | Ajouts/retraits, capacités, attente, validation, réservé, chevauchement, session existante et quota montrés ; 9 scènes synchronisées et planche contrôlée |
 | 28 — Formulaire et récapitulatif | Prévisualisation générée | `demo` | Coordonnées, naissance, questions, convention, consentement, nuit, pauses, carte, charge et correction réellement montrés ; 8 scènes synchronisées et planche contrôlée |
 | 29 — Confirmation et erreurs | Prévisualisation générée, couverture à compléter | `demo` | Validation, capacité devenue insuffisante, coupure/reprise, succès sans lien public et email contrôlés ; 8 scènes synchronisées. Restent la preuve visuelle de non-duplication après réponse perdue, le conflit serveur d’horaire et la comparaison du succès via invitation |
-| 38 — Responsables de secteur | Prévisualisation générée, contrôle final en cours | `demo` | Deux nominations, email avec ouverture du lien, équipe remplie, mobile, notification réelle de Nora et révocation ; dix paragraphes contrôlés indépendamment après correction de deux frontières audio |
-| 02, 04, 30–37, 39–53 | Planifiées | À créer selon le tableau « Jeux de données vidéo » | Non commencées |
+| 38 — Responsables de secteur | Prévisualisation générée, contrôle final en cours | `demo` | Deux nominations, email avec ouverture du lien, équipe remplie, mobile recentré, notification réelle de Nora et révocation ; onze paragraphes contrôlés indépendamment ; saisie/notification séparées et email visible dès le début du chapitre |
+| 30 — Gérer ses inscriptions depuis son lien | Prévisualisation générée | `personal-withdrawals` | Quatre statuts pour Camille, huit paragraphes contrôlés ; capture, assemblage et planche vérifiés, état vide et retour à l'événement montrés. Visionnage audiovisuel intégral restant ; limite du lien lié à une inscription retirée consignée dans le script |
+| 31 — Ajouter son planning au calendrier | Narration contrôlée, capture à préparer | `personal-calendar` | Neuf paragraphes contrôlés indépendamment après correction des frontières et retrait d'une conclusion répétée ; trois créneaux confirmés dont une nuit, attente exclue. Téléchargements réels et import dans un agenda restent à filmer |
+| 32 — Retrouver son lien et ses disponibilités | Capture en cours | `personal-session` | Huit paragraphes contrôlés indépendamment après correction des frontières ; scénario enregistré pour session, renvoi réel, récupération, limitation et disponibilités. Capture et contrôle audiovisuel encore en cours |
+| 33 — Activer les notifications | Scénario détaillé préparé | À créer | Activation, refus, réception réelle et retrait d'autorisation à filmer ; capture native requise pour les interfaces système. Les emails dépendent des réglages de l'organisation |
+| 02, 04, 34–37, 39–53 | Planifiées | À créer selon le tableau « Jeux de données vidéo » | Non commencées |
 
 Une vidéo ne passe à « terminée » qu’après validation du contrat de couverture, visionnage complet
 et vérification de sa synchronisation. La génération d’un MP4 ne suffit pas.

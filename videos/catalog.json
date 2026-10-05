@@ -646,6 +646,78 @@
       "level": "essentiel"
     },
     {
+      "id": "VOLUNTEER_PERSONAL_REGISTRATIONS",
+      "manifest": "volunteer-personal-registrations",
+      "category": "volunteer-experience",
+      "tags": [
+        "lien-personnel",
+        "inscriptions",
+        "annulation",
+        "attente",
+        "offre",
+        "validation"
+      ],
+      "seedScenario": "personal-withdrawals",
+      "feature": "Page personnelle du bénévole",
+      "level": "essentiel",
+      "published": false,
+      "audience": [
+        "benevole"
+      ],
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "themes": [
+        "parcours-benevole"
+      ]
+    },
+    {
+      "id": "VOLUNTEER_CALENDAR",
+      "manifest": "volunteer-calendar",
+      "category": "volunteer-experience",
+      "tags": [
+        "calendrier",
+        "ics",
+        "planning",
+        "nuit",
+        "mise-à-jour"
+      ],
+      "seedScenario": "personal-calendar",
+      "feature": "Export calendrier des créneaux",
+      "level": "essentiel",
+      "published": false,
+      "audience": [
+        "benevole"
+      ],
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "themes": [
+        "parcours-benevole"
+      ]
+    },
+    {
+      "id": "VOLUNTEER_SESSION_AVAILABILITY",
+      "manifest": "volunteer-session-availability",
+      "category": "volunteer-experience",
+      "tags": [
+        "session",
+        "lien-personnel",
+        "récupération",
+        "disponibilités"
+      ],
+      "seedScenario": "personal-session",
+      "feature": "Lien personnel et disponibilités",
+      "level": "essentiel",
+      "published": false,
+      "audience": [
+        "benevole"
+      ],
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "themes": [
+        "parcours-benevole"
+      ]
+    },
+    {
       "id": "VOLUNTEER_REGISTER",
       "manifest": "volunteer-register-mobile",
       "category": "volunteer-journey",
@@ -781,6 +853,30 @@
         "organisateur"
       ],
       "feature": "Responsables de secteur",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "manifest": "members-management",
+      "category": "members-invitations",
+      "tags": [
+        "membres",
+        "coordonnées",
+        "tags",
+        "disponibilités",
+        "activité"
+      ],
+      "published": false,
+      "seedScenario": "members-management",
+      "themes": [
+        "membres-invitations"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Liste des membres",
       "updatedAt": "2026-10-05",
       "revision": 1,
       "level": "essentiel"

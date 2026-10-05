@@ -14,10 +14,11 @@ async function main() {
   const metadata = JSON.parse(await readFile(file, "utf8")) as AudioMetadata
   const cuts = [0]
   for (const segment of manifest.segments) cuts.push(cuts.at(-1)! + metadata.segments[segment.id].durationMs / 1000)
+  const previousEnd = cuts.at(-1)!
   for (const arg of process.argv.slice(3)) {
     const [id, seconds] = arg.split("=")
-    const index = manifest.segments.findIndex(s => s.id === id)
-    if (index < 1 || !Number.isFinite(Number(seconds))) throw new Error(`Invalid boundary: ${arg}`)
+    const index = id === "end" ? manifest.segments.length : manifest.segments.findIndex(s => s.id === id)
+    if (index < 1 || !Number.isFinite(Number(seconds)) || Number(seconds) > previousEnd) throw new Error(`Invalid boundary: ${arg}`)
     cuts[index] = Number(seconds)
   }
   if (cuts.some((c, i) => i > 0 && c <= cuts[i - 1])) throw new Error("Cuts must increase")

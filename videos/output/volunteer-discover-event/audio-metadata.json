@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Puck",
+  "generatedAt": "2026-10-04T18:03:04.278Z",
+  "segments": {
+    "welcome": {
+      "file": "audio/welcome.wav",
+      "durationMs": 12669,
+      "generationSha256": "f48361149ced66c0377f5fc58524a7943911599d3e1e75f291a35cdbf731f174"
+    },
+    "access": {
+      "file": "audio/access.wav",
+      "durationMs": 18485,
+      "generationSha256": "f48361149ced66c0377f5fc58524a7943911599d3e1e75f291a35cdbf731f174"
+    },
+    "identity": {
+      "file": "audio/identity.wav",
+      "durationMs": 20589,
+      "generationSha256": "f48361149ced66c0377f5fc58524a7943911599d3e1e75f291a35cdbf731f174"
+    },
+    "pages": {
+      "file": "audio/pages.wav",
+      "durationMs": 18430,
+      "generationSha256": "f48361149ced66c0377f5fc58524a7943911599d3e1e75f291a35cdbf731f174"
+    },
+    "desktop": {
+      "file": "audio/desktop.wav",
+      "durationMs": 12922,
+      "generationSha256": "f48361149ced66c0377f5fc58524a7943911599d3e1e75f291a35cdbf731f174"
+    },
+    "states": {
+      "file": "audio/states.wav",
+      "durationMs": 20692,
+      "generationSha256": "f48361149ced66c0377f5fc58524a7943911599d3e1e75f291a35cdbf731f174"
+    },
+    "mobile": {
+      "file": "audio/mobile.wav",
+      "durationMs": 20629,
+      "generationSha256": "f48361149ced66c0377f5fc58524a7943911599d3e1e75f291a35cdbf731f174"
+    },
+    "invitation": {
+      "file": "audio/invitation.wav",
+      "durationMs": 15010,
+      "generationSha256": "f48361149ced66c0377f5fc58524a7943911599d3e1e75f291a35cdbf731f174"
+    },
+    "result": {
+      "file": "audio/result.wav",
+      "durationMs": 14974,
+      "generationSha256": "f48361149ced66c0377f5fc58524a7943911599d3e1e75f291a35cdbf731f174"
+    }
+  }
+}

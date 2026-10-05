@@ -29,7 +29,7 @@ Liste des responsables mise à jour, vrais emails de démonstration, vue personn
 - La vue actuelle contient les inscriptions actives et en attente, pas les demandes en cours de validation ni les offres de place.
 - Consultation uniquement : aucune modification du planning, des inscriptions ou des autres postes.
 - Aucun bouton de renvoi du lien n'est promis sans vérification dans l'interface filmée.
-- Prévisualisation étendue à dix scènes : nouvelle inscription réelle de Nora Perrin et email à la responsable, puis Nora présente dans l'équipe ; téléphone recentré sur un fond clair, sans zone grise.
-- Audit indépendant des paroles : deux frontières initiales incorrectes ont été corrigées. Les dix paragraphes passent désormais la comparaison de transcription (différences mineures de graphie comprises). Une nouvelle capture utilise ces durées corrigées.
+- Prévisualisation étendue à onze scènes : saisie de Nora et lecture de sa notification dans deux chapitres distincts ; téléphone recentré sur un fond clair, sans zone grise.
+- Audit indépendant des paroles : une frontière de la nouvelle prise a été corrigée. Les onze paragraphes passent la comparaison de transcription (différences mineures de graphie comprises) ; nouvelle capture faite avec ces durées.
 - Avant livraison : vérifier la concordance de chaque phrase avec les actions et l'intonation. Le contrôle de transcription ne remplace pas ce visionnage audiovisuel.
-- Contrôle ciblé à 139 s : le formulaire de Nora est encore affiché alors que le chapitre aborde déjà l'email à la responsable. Séparer la création de l'inscription et la lecture de la notification en deux scènes, avec une narration dédiée à la saisie ; ne pas livrer cette version comme synchronisée éditorialement.
+- Ancien décalage inscription/notification corrigé : la scène de notification commence à 162,322 s sur l'email déjà ouvert ; image contrôlée à 164 s, destinataire Élodie Rochat, Nora Perrin et Buvette dimanche 10–14 visibles.

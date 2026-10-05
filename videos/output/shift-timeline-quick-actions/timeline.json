@@ -1,0 +1,42 @@
+{
+  "slug": "shift-timeline-quick-actions",
+  "recordedAt": "2026-10-04T16:56:06.596Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1130,
+      "endMs": 15325
+    },
+    {
+      "id": "draw",
+      "startMs": 15779,
+      "endMs": 29872
+    },
+    {
+      "id": "resize",
+      "startMs": 30325,
+      "endMs": 43590
+    },
+    {
+      "id": "popover",
+      "startMs": 44045,
+      "endMs": 56189
+    },
+    {
+      "id": "copy",
+      "startMs": 56641,
+      "endMs": 71616
+    },
+    {
+      "id": "detail",
+      "startMs": 72067,
+      "endMs": 86387
+    },
+    {
+      "id": "result",
+      "startMs": 86841,
+      "endMs": 97464
+    }
+  ]
+}

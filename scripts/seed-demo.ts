@@ -131,7 +131,7 @@ async function main() {
       requirePhone: true,
       accentColorKey: "emerald",
       publicInstructions: "Merci de votre aide ! Présentez-vous au stand d'accueil 15 minutes avant votre créneau : on vous remettra votre t-shirt.",
-      confirmationMessage: "Merci {prenom} ! Rendez-vous au stand d'accueil 15 minutes avant ton créneau.",
+      confirmationMessage: "Merci pour ton inscription ! Rendez-vous au stand d'accueil 15 minutes avant ton créneau.",
       showSchedule: [
         { name: "Concert de la fanfare", date: iso(SAT), startTime: "17:00", endTime: "18:30" },
         { name: "Bal populaire", date: iso(SAT), startTime: "21:00", endTime: "01:00" },

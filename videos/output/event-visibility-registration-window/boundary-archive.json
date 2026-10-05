@@ -1,0 +1,12 @@
+{
+  "anchor": "Après l’événement, Archivé retire la page du parcours courant et garde",
+  "windowStart": 71.392,
+  "result": {
+    "found": true,
+    "startSeconds": 11.1,
+    "wordsHeard": "Après"
+  },
+  "onset": 82.49199999999999,
+  "proposedCut": 82.371625,
+  "note": "Proposal only; recut then independently audit before capture"
+}

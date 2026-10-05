@@ -1,0 +1,23 @@
+WEBVTT
+
+00:00:01.860 --> 00:00:15.947
+Les réglages d’email permettent d’informer au bon moment sans envoyer chaque message à la main. Ils sont communs à l’organisation : on choisit les rappels utiles, les alertes destinées à l’équipe et l’adresse à laquelle arrivent les réponses.
+
+00:00:18.107 --> 00:00:33.978
+Les trois rappels automatiques correspondent à deux jours avant, un jour avant et le jour du créneau. Active seulement ceux qui apportent une vraie aide. Ils concernent les bénévoles inscrits ; un événement peut ensuite désactiver tous ses rappels dans ses propres réglages.
+
+00:00:34.431 --> 00:00:49.452
+L’option Prévenir les administrateurs à chaque inscription envoie un email à chaque administrateur actif lorsqu’une personne s’inscrit depuis la page publique. Elle facilite le suivi d’un petit événement, mais peut devenir bruyante lorsque les inscriptions sont nombreuses.
+
+00:00:51.617 --> 00:01:08.392
+L’adresse de réponse indique où arrive un message lorsqu’un bénévole répond à un email de la plateforme. Saisissons benevoles arobase example point org. Si le champ reste vide, l’adresse par défaut est utilisée. Cette adresse apparaît aussi sur la page personnelle des bénévoles.
+
+00:01:08.844 --> 00:01:23.956
+Enregistre les réglages avant de les tester. Le message Réglages enregistrés confirme que les choix sont persistés. Modifier les cases sans enregistrer ne change pas les prochains envois, et l’envoi de test utilise toujours la dernière configuration enregistrée.
+
+00:01:26.114 --> 00:01:43.618
+Le bouton M’envoyer un email de test adresse un exemple à ton propre compte administrateur. Il vérifie le transport, l’expéditeur et l’adresse de réponse sans contacter les bénévoles. Dans cette démonstration isolée, le message apparaît dans la boîte Mailpit au lieu de partir sur Internet.
+
+00:01:44.070 --> 00:02:02.513
+Le résultat est un réglage vérifié avant le prochain événement. Les rappels partiront selon le fuseau de l’organisation, les réponses reviendront à l’adresse choisie et l’équipe ne recevra les alertes d’inscription que si l’option reste active. Pour une communication ponctuelle, utilise plutôt un message ciblé.
+

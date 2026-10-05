@@ -1,0 +1,12 @@
+{
+  "anchor": "Sur ta page personnelle, la rubrique Ton lien personnel rappelle à",
+  "windowStart": 34.632999999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 8.4,
+    "wordsHeard": "Sur ta page personnelle"
+  },
+  "onset": 43.032999999999994,
+  "proposedCut": 42.9822915,
+  "note": "Proposal only; recut then independently audit before capture"
+}

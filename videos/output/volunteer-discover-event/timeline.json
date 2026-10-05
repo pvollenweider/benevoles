@@ -1,0 +1,52 @@
+{
+  "slug": "volunteer-discover-event",
+  "recordedAt": "2026-10-04T18:15:06.854Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1168,
+      "endMs": 13841
+    },
+    {
+      "id": "access",
+      "startMs": 16007,
+      "endMs": 34495
+    },
+    {
+      "id": "identity",
+      "startMs": 34949,
+      "endMs": 55541
+    },
+    {
+      "id": "pages",
+      "startMs": 57718,
+      "endMs": 76150
+    },
+    {
+      "id": "desktop",
+      "startMs": 79534,
+      "endMs": 92460
+    },
+    {
+      "id": "states",
+      "startMs": 92911,
+      "endMs": 113605
+    },
+    {
+      "id": "mobile",
+      "startMs": 115773,
+      "endMs": 136407
+    },
+    {
+      "id": "invitation",
+      "startMs": 138580,
+      "endMs": 153593
+    },
+    {
+      "id": "result",
+      "startMs": 154049,
+      "endMs": 169025
+    }
+  ]
+}

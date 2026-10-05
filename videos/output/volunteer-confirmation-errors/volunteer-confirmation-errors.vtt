@@ -1,0 +1,26 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:21.319
+Une inscription doit rester compréhensible même quand quelque chose se passe mal. Nous allons corriger une réponse manquante, voir une place devenue indisponible et simuler une coupure réseau. Les exemples utilisent un événement de démonstration : tu verras les vrais messages du formulaire, puis une confirmation réelle.
+
+00:00:21.772 --> 00:00:36.155
+Choisis Accueil et continue. Nous remplissons le prénom, le nom, l’email et le téléphone, puis acceptons la convention et l’utilisation des données. Avant d’envoyer, relis toujours l’adresse email : une faute peut empêcher le message d’arriver même si l’inscription est enregistrée correctement.
+
+00:00:36.609 --> 00:00:57.146
+La taille du t-shirt n’a pas été renseignée. Confirmer affiche la question à corriger et conserve toutes les autres réponses. Le champ obligatoire est signalé ; choisis une taille, puis tu peux reprendre. Une adresse email au mauvais format est également refusée par le navigateur, mais il ne sait pas vérifier qu’une boîte existe vraiment.
+
+00:00:57.598 --> 00:01:13.123
+Une place peut être prise pendant que tu remplis le formulaire. Nous rendons ici le créneau complet dans la base de démonstration : la confirmation répond Votre sélection n’est plus disponible. Reviens au planning pour ajuster ton choix ; les informations saisies restent conservées. Le serveur revérifie aussi les chevauchements à cet instant.
+
+00:01:13.575 --> 00:01:36.599
+Nous rétablissons maintenant la place, puis coupons volontairement la requête d’envoi pour montrer une interruption réseau. Le message dit que l’inscription n’a peut-être pas été reçue. Tes champs sont toujours là. Après retour de la connexion, clique à nouveau sur Confirmer mon inscription : le système évite de créer deux engagements identiques.
+
+00:01:37.049 --> 00:01:55.466
+La connexion est rétablie et l’inscription réussit. La page confirme le résultat et indique l’envoi de l’email. Avec un formulaire public ordinaire, le lien de gestion reste dans cet email : il n’est pas affiché simplement parce qu’une adresse a été saisie. Garde le message pour retrouver ton planning ou annuler plus tard.
+
+00:01:55.918 --> 00:02:16.304
+Voici le message réellement reçu dans la boîte de démonstration. Il contient le créneau et le lien personnel. Si tu ne le trouves pas, regarde les indésirables et vérifie l’adresse donnée. Une page de succès ne prouve pas qu’un fournisseur email a accepté le message ; contacte l’association si la boîte n’existe pas ou si tu as fait une faute.
+
+00:02:16.756 --> 00:02:36.702
+Une erreur de champ se corrige sur place. Une sélection indisponible se revoit dans le planning. Une interruption réseau se retente après vérification de la connexion. Dans tous les cas, les indications expliquent quoi faire, et la confirmation réussie donne un résultat clair. Ton email personnel reste la clé pour retrouver tes inscriptions.
+

@@ -1,0 +1,77 @@
+{
+  "slug": "organizer-create-publish",
+  "recordedAt": "2026-10-02T14:42:48.230Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "overview",
+      "startMs": 0,
+      "endMs": 12206
+    },
+    {
+      "id": "basics",
+      "startMs": 12658,
+      "endMs": 30336
+    },
+    {
+      "id": "series",
+      "startMs": 30788,
+      "endMs": 45583
+    },
+    {
+      "id": "delivery",
+      "startMs": 46035,
+      "endMs": 60381
+    },
+    {
+      "id": "cash",
+      "startMs": 60833,
+      "endMs": 71955
+    },
+    {
+      "id": "registration",
+      "startMs": 72407,
+      "endMs": 83604
+    },
+    {
+      "id": "review",
+      "startMs": 84056,
+      "endMs": 93534
+    },
+    {
+      "id": "preview",
+      "startMs": 93988,
+      "endMs": 113211
+    },
+    {
+      "id": "preview-result",
+      "startMs": 113665,
+      "endMs": 123729
+    },
+    {
+      "id": "publish",
+      "startMs": 124185,
+      "endMs": 136523
+    },
+    {
+      "id": "qr",
+      "startMs": 136975,
+      "endMs": 146875
+    },
+    {
+      "id": "import",
+      "startMs": 147326,
+      "endMs": 163968
+    },
+    {
+      "id": "invite",
+      "startMs": 164420,
+      "endMs": 179508
+    },
+    {
+      "id": "public",
+      "startMs": 179962,
+      "endMs": 190032
+    }
+  ]
+}

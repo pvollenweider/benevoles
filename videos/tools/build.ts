@@ -16,6 +16,11 @@ async function run(command: string, args: string[]) {
 
 async function seed(scenario?: string) {
   if (!scenario) return
+  if (scenario === "personal-withdrawals" || scenario === "personal-calendar" || scenario === "personal-session" || scenario === "members-management") {
+    await seed("demo")
+    await run("node", ["--env-file=.env.video.e2e", "node_modules/.bin/tsx", "scripts/seed-video-scenario.ts", scenario])
+    return
+  }
   const script = scenario === "demo" ? "scripts/seed-demo.ts" : "scripts/seed-video-scenario.ts"
   const args = ["--env-file=.env.video.e2e", "node_modules/.bin/tsx", script]
   if (scenario !== "demo") args.push(scenario)
@@ -28,8 +33,9 @@ async function main() {
   for (const id of ids) {
     const entry = await catalogEntry(id)
     console.log(`\n▶ ${entry.id} (${entry.manifest})`)
-    await seed(entry.seedScenario)
     await run("npm", ["run", "video:tts", "--", entry.id])
+    await run("node", ["--env-file-if-exists=.env.video.local", "--import", "tsx", "videos/tools/audit-narration.ts", entry.id])
+    await seed(entry.seedScenario)
     await run("npm", ["run", "video:record", "--", entry.id])
     await run("npm", ["run", "video:assemble", "--", entry.id])
     await run("npm", ["run", "video:validate", "--", entry.id])

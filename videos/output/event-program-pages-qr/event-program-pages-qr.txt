@@ -1,0 +1,13 @@
+Programme, pages d’information et QR code
+
+Une bonne page d’inscription ne montre pas seulement des créneaux. Le programme, les informations pratiques et un QR code simple à afficher donnent aux bénévoles le contexte dont ils ont besoin, sans alourdir le formulaire.
+
+Le programme se règle avec les dates de l’événement. Chaque spectacle reçoit un nom, une date, une heure de début et une heure de fin. Une fin après minuit reste possible : elle sera présentée correctement dans le planning et servira de repère visuel aux équipes.
+
+Les pages complètent les instructions courtes. On peut créer par exemple Accès, Foire aux questions ou Règlement. Le contenu accepte le Markdown pour structurer des titres, des listes, du gras et des liens. Chaque page peut ensuite être modifiée, supprimée ou déplacée dans l’ordre d’affichage.
+
+Sur la page publique, le programme apparaît au bon moment et les pages sont accessibles comme des informations complémentaires. Le bénévole peut ainsi préparer son arrivée sans chercher un ancien email ou appeler l’organisation.
+
+Le QR code pointe directement vers cette page publique. Télécharge-le en PNG pour les réseaux ou un document, en SVG pour une impression nette à toute taille, ou imprime directement la fiche prête à poser sur un stand.
+
+Avant de diffuser, scanne le code avec un vrai téléphone et relis les pages publiques. Le résultat doit être immédiat : une personne découvre l’événement, comprend où venir, consulte le programme et peut commencer son inscription.

@@ -1,0 +1,47 @@
+{
+  "id": "SHIFTS_ROLES_VIEWS",
+  "slug": "shifts-roles-views",
+  "validatedAt": "2026-10-04T17:22:41.284Z",
+  "continuousNarration": true,
+  "voice": "Kore",
+  "captureMs": 86040,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 14905,
+      "audioMs": 14901,
+      "driftMs": 4
+    },
+    {
+      "id": "timeline",
+      "visualMs": 14013,
+      "audioMs": 14009,
+      "driftMs": 4
+    },
+    {
+      "id": "list",
+      "visualMs": 12405,
+      "audioMs": 12402,
+      "driftMs": 3
+    },
+    {
+      "id": "roles",
+      "visualMs": 15186,
+      "audioMs": 15184,
+      "driftMs": 2
+    },
+    {
+      "id": "colors",
+      "visualMs": 13403,
+      "audioMs": 13401,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 12267,
+      "audioMs": 12263,
+      "driftMs": 4
+    }
+  ],
+  "issues": []
+}

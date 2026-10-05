@@ -1,0 +1,47 @@
+{
+  "slug": "org-team-permissions",
+  "recordedAt": "2026-10-04T14:34:03.042Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1157,
+      "endMs": 16354
+    },
+    {
+      "id": "roles",
+      "startMs": 18517,
+      "endMs": 39236
+    },
+    {
+      "id": "invite",
+      "startMs": 39688,
+      "endMs": 47584
+    },
+    {
+      "id": "invite-result",
+      "startMs": 48036,
+      "endMs": 54844
+    },
+    {
+      "id": "change-role",
+      "startMs": 57002,
+      "endMs": 79634
+    },
+    {
+      "id": "organizer-view",
+      "startMs": 80087,
+      "endMs": 94085
+    },
+    {
+      "id": "limits",
+      "startMs": 94538,
+      "endMs": 111510
+    },
+    {
+      "id": "result",
+      "startMs": 111963,
+      "endMs": 121473
+    }
+  ]
+}

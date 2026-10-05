@@ -1,0 +1,53 @@
+{
+  "id": "SHIFT_ELIGIBILITY_RULES",
+  "slug": "shift-eligibility-rules",
+  "validatedAt": "2026-10-04T17:58:50.591Z",
+  "continuousNarration": true,
+  "voice": "Kore",
+  "captureMs": 118080,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 14242,
+      "audioMs": 14239,
+      "driftMs": 3
+    },
+    {
+      "id": "settings",
+      "visualMs": 23344,
+      "audioMs": 23341,
+      "driftMs": 3
+    },
+    {
+      "id": "age",
+      "visualMs": 8877,
+      "audioMs": 8875,
+      "driftMs": 2
+    },
+    {
+      "id": "quota",
+      "visualMs": 12212,
+      "audioMs": 12210,
+      "driftMs": 2
+    },
+    {
+      "id": "reserved",
+      "visualMs": 19880,
+      "audioMs": 19880,
+      "driftMs": 0
+    },
+    {
+      "id": "eligible",
+      "visualMs": 15359,
+      "audioMs": 15355,
+      "driftMs": 4
+    },
+    {
+      "id": "result",
+      "visualMs": 15903,
+      "audioMs": 15900,
+      "driftMs": 3
+    }
+  ],
+  "issues": []
+}

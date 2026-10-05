@@ -1,0 +1,42 @@
+{
+  "slug": "event-review-publish",
+  "recordedAt": "2026-10-05T10:44:22.976Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1568,
+      "endMs": 11919
+    },
+    {
+      "id": "checks",
+      "startMs": 12370,
+      "endMs": 33916
+    },
+    {
+      "id": "preview-start",
+      "startMs": 36079,
+      "endMs": 53810
+    },
+    {
+      "id": "preview-form",
+      "startMs": 54262,
+      "endMs": 67756
+    },
+    {
+      "id": "preview-result",
+      "startMs": 68208,
+      "endMs": 84372
+    },
+    {
+      "id": "publish",
+      "startMs": 84823,
+      "endMs": 102310
+    },
+    {
+      "id": "result",
+      "startMs": 102761,
+      "endMs": 116956
+    }
+  ]
+}

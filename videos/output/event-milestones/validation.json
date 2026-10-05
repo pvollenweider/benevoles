@@ -1,0 +1,47 @@
+{
+  "id": "EVENT_MILESTONES",
+  "slug": "event-milestones",
+  "validatedAt": "2026-10-04T17:16:00.528Z",
+  "continuousNarration": true,
+  "voice": "Puck",
+  "captureMs": 78000,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 11008,
+      "audioMs": 11006,
+      "driftMs": 2
+    },
+    {
+      "id": "create",
+      "visualMs": 12222,
+      "audioMs": 12222,
+      "driftMs": 0
+    },
+    {
+      "id": "states",
+      "visualMs": 16088,
+      "audioMs": 16087,
+      "driftMs": 1
+    },
+    {
+      "id": "toggle",
+      "visualMs": 10449,
+      "audioMs": 10449,
+      "driftMs": 0
+    },
+    {
+      "id": "dashboard",
+      "visualMs": 12386,
+      "audioMs": 12384,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 11614,
+      "audioMs": 11612,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}

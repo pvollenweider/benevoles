@@ -1,0 +1,37 @@
+{
+  "slug": "global-search",
+  "recordedAt": "2026-10-04T11:22:58.056Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 13619
+    },
+    {
+      "id": "open",
+      "startMs": 14073,
+      "endMs": 27012
+    },
+    {
+      "id": "person",
+      "startMs": 29173,
+      "endMs": 48847
+    },
+    {
+      "id": "shift",
+      "startMs": 49306,
+      "endMs": 59559
+    },
+    {
+      "id": "limits",
+      "startMs": 60012,
+      "endMs": 72939
+    },
+    {
+      "id": "result",
+      "startMs": 73394,
+      "endMs": 86035
+    }
+  ]
+}

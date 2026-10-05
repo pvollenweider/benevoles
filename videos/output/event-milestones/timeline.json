@@ -1,0 +1,37 @@
+{
+  "slug": "event-milestones",
+  "recordedAt": "2026-10-04T17:15:51.437Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1130,
+      "endMs": 12138
+    },
+    {
+      "id": "create",
+      "startMs": 12590,
+      "endMs": 24812
+    },
+    {
+      "id": "states",
+      "startMs": 25264,
+      "endMs": 41352
+    },
+    {
+      "id": "toggle",
+      "startMs": 41804,
+      "endMs": 52253
+    },
+    {
+      "id": "dashboard",
+      "startMs": 52713,
+      "endMs": 65099
+    },
+    {
+      "id": "result",
+      "startMs": 65552,
+      "endMs": 77166
+    }
+  ]
+}

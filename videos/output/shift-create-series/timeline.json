@@ -1,0 +1,42 @@
+{
+  "slug": "shift-create-series",
+  "recordedAt": "2026-10-04T16:46:43.917Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1141,
+      "endMs": 9052
+    },
+    {
+      "id": "range",
+      "startMs": 9507,
+      "endMs": 22927
+    },
+    {
+      "id": "duration",
+      "startMs": 23380,
+      "endMs": 36588
+    },
+    {
+      "id": "preview",
+      "startMs": 37041,
+      "endMs": 52371
+    },
+    {
+      "id": "create",
+      "startMs": 52824,
+      "endMs": 67121
+    },
+    {
+      "id": "adjust",
+      "startMs": 67575,
+      "endMs": 79978
+    },
+    {
+      "id": "result",
+      "startMs": 80431,
+      "endMs": 90757
+    }
+  ]
+}

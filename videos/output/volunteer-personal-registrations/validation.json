@@ -1,0 +1,60 @@
+{
+  "id": "VOLUNTEER_PERSONAL_REGISTRATIONS",
+  "slug": "volunteer-personal-registrations",
+  "validatedAt": "2026-10-05T11:05:45.979Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 182320,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 21513,
+      "audioMs": 21513,
+      "driftMs": 0
+    },
+    {
+      "id": "practical",
+      "visualMs": 22275,
+      "audioMs": 22276,
+      "driftMs": -1
+    },
+    {
+      "id": "states",
+      "visualMs": 25276,
+      "audioMs": 25275,
+      "driftMs": 1
+    },
+    {
+      "id": "cancel",
+      "visualMs": 22192,
+      "audioMs": 22189,
+      "driftMs": 3
+    },
+    {
+      "id": "waiting",
+      "visualMs": 19816,
+      "audioMs": 19814,
+      "driftMs": 2
+    },
+    {
+      "id": "offer",
+      "visualMs": 24305,
+      "audioMs": 24301,
+      "driftMs": 4
+    },
+    {
+      "id": "request",
+      "visualMs": 22399,
+      "audioMs": 22398,
+      "driftMs": 1
+    },
+    {
+      "id": "return",
+      "visualMs": 20874,
+      "audioMs": 20874,
+      "driftMs": 0
+    }
+  ],
+  "issues": []
+}

@@ -1,0 +1,53 @@
+{
+  "id": "SHIFT_APPROVAL",
+  "slug": "shift-approval",
+  "validatedAt": "2026-10-04T17:43:26.328Z",
+  "continuousNarration": true,
+  "voice": "Puck",
+  "captureMs": 110760,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 16216,
+      "audioMs": 16214,
+      "driftMs": 2
+    },
+    {
+      "id": "setup",
+      "visualMs": 15433,
+      "audioMs": 15430,
+      "driftMs": 3
+    },
+    {
+      "id": "request",
+      "visualMs": 14308,
+      "audioMs": 14307,
+      "driftMs": 1
+    },
+    {
+      "id": "admin",
+      "visualMs": 14088,
+      "audioMs": 14085,
+      "driftMs": 3
+    },
+    {
+      "id": "decision",
+      "visualMs": 15912,
+      "audioMs": 15910,
+      "driftMs": 2
+    },
+    {
+      "id": "volunteer",
+      "visualMs": 14181,
+      "audioMs": 14179,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 14158,
+      "audioMs": 14155,
+      "driftMs": 3
+    }
+  ],
+  "issues": []
+}

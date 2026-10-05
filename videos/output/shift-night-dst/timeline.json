@@ -1,0 +1,42 @@
+{
+  "slug": "shift-night-dst",
+  "recordedAt": "2026-10-04T17:04:25.733Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1293,
+      "endMs": 9595
+    },
+    {
+      "id": "ordinary",
+      "startMs": 10048,
+      "endMs": 30425
+    },
+    {
+      "id": "spring",
+      "startMs": 30877,
+      "endMs": 46440
+    },
+    {
+      "id": "autumn",
+      "startMs": 46891,
+      "endMs": 66177
+    },
+    {
+      "id": "timezone",
+      "startMs": 66629,
+      "endMs": 75136
+    },
+    {
+      "id": "calendar",
+      "startMs": 75589,
+      "endMs": 89032
+    },
+    {
+      "id": "result",
+      "startMs": 89484,
+      "endMs": 101539
+    }
+  ]
+}

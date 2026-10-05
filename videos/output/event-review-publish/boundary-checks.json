@@ -1,0 +1,12 @@
+{
+  "anchor": "Les lignes marquées comme faites couvrent le titre, les dates et",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 5.5,
+    "wordsHeard": "Les lignes marquées comme faites couvrent le titre, les dates et"
+  },
+  "onset": 5.5,
+  "proposedCut": 5.3194165,
+  "note": "Proposal only; recut then independently audit before capture"
+}

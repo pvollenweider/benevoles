@@ -1,0 +1,47 @@
+{
+  "slug": "event-create-blank",
+  "recordedAt": "2026-10-04T14:21:52.610Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 12151
+    },
+    {
+      "id": "identity-dates",
+      "startMs": 14313,
+      "endMs": 30821
+    },
+    {
+      "id": "location",
+      "startMs": 31273,
+      "endMs": 53941
+    },
+    {
+      "id": "public-content",
+      "startMs": 56105,
+      "endMs": 69039
+    },
+    {
+      "id": "phone-color",
+      "startMs": 69493,
+      "endMs": 87605
+    },
+    {
+      "id": "create",
+      "startMs": 88059,
+      "endMs": 104992
+    },
+    {
+      "id": "autosave",
+      "startMs": 105445,
+      "endMs": 121949
+    },
+    {
+      "id": "result",
+      "startMs": 122402,
+      "endMs": 136290
+    }
+  ]
+}

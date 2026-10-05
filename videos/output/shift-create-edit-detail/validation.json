@@ -1,0 +1,53 @@
+{
+  "id": "SHIFT_CREATE_EDIT_DETAIL",
+  "slug": "shift-create-edit-detail",
+  "validatedAt": "2026-10-04T16:41:33.945Z",
+  "continuousNarration": true,
+  "voice": "Kore",
+  "captureMs": 111320,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 13945,
+      "audioMs": 13944,
+      "driftMs": 1
+    },
+    {
+      "id": "identity",
+      "visualMs": 15716,
+      "audioMs": 15713,
+      "driftMs": 3
+    },
+    {
+      "id": "availability",
+      "visualMs": 14690,
+      "audioMs": 14689,
+      "driftMs": 1
+    },
+    {
+      "id": "practical",
+      "visualMs": 15293,
+      "audioMs": 15293,
+      "driftMs": 0
+    },
+    {
+      "id": "save",
+      "visualMs": 14420,
+      "audioMs": 14414,
+      "driftMs": 6
+    },
+    {
+      "id": "change",
+      "visualMs": 18723,
+      "audioMs": 18721,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 13150,
+      "audioMs": 13146,
+      "driftMs": 4
+    }
+  ],
+  "issues": []
+}

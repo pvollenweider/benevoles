@@ -129,7 +129,7 @@ async function main() {
     const master = path.join(dir, "continuous-narration.wav")
     const transcript = manifest.segments.map((segment) => segment.transcript).join("\n\n<short pause>\n\n")
     const generationSha256 = createHash("sha256")
-      .update(JSON.stringify({ transcript, style: manifest.voiceStyle, model, voice }))
+      .update(JSON.stringify({ transcript, style: manifest.voiceStyle, model, voice, promptVersion: 2 }))
       .digest("hex")
     const files = manifest.segments.map((segment) => path.join(dir, `${segment.id}.wav`))
     const cached = !force && manifest.segments.every((segment, index) =>
@@ -151,7 +151,9 @@ async function main() {
               text: transcript,
               annotations: [{
                 type: "speech_metadata",
-                style: `${manifest.voiceStyle} Deliver this as one continuous take. Preserve exactly the same vocal identity, smile, pitch, pace and energy across all paragraphs. Make a clear, natural pause of about one second wherever <short pause> appears.`,
+                // Gemini 3.8 anchors identity on the selected voice; long identity directives
+                // can increase drift. Keep the requested delivery in metadata, not the text.
+                style: manifest.voiceStyle,
               }],
             }],
           }],
@@ -164,6 +166,11 @@ async function main() {
         const detail = JSON.stringify(body)?.slice(0, 500) ?? response.statusText
         throw new Error(`Gemini TTS rejected the continuous narration (${response.status}): ${detail}`)
       }
+      const responseShape = body as { status?: string; usage?: unknown; steps?: { type?: string; content?: { type?: string; data?: string }[] }[] }
+      await writeFile(path.join(videoDir(manifest.slug), "tts-response-summary.json"), JSON.stringify({
+        receivedAt: new Date().toISOString(), status: responseShape.status, usage: responseShape.usage,
+        steps: responseShape.steps?.map(s => ({ type: s.type, content: s.content?.map(c => ({ type: c.type, encodedLength: c.data?.length })) })),
+      }, null, 2))
       const data = audioData(body)
       if (!data) throw new Error("Gemini TTS returned no audio for the continuous narration")
       const temp = `${master}.tmp`
