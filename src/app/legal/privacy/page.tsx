@@ -6,7 +6,7 @@ export default function PrivacyPage() {
   return (
     <>
       <h1>Politique de confidentialité</h1>
-      <p className="text-gray-500 text-sm">Dernière mise à jour : 30 septembre 2026</p>
+      <p className="text-gray-500 text-sm">Dernière mise à jour : 5 octobre 2026</p>
 
       <p>
         La présente politique décrit comment <strong>benevol.app</strong>, éditée par{" "}
@@ -127,16 +127,19 @@ export default function PrivacyPage() {
           n&apos;est transmis.
         </li>
         <li>
-          <strong>Copie de sauvegarde hors site</strong> : Dropbox (stockage aux États-Unis) — reçoit
-          chaque nuit une copie de la base de données, chiffrée sur notre serveur avant l&apos;envoi, avec
-          une clé que Dropbox ne détient pas. Solution provisoire : nous cherchons un stockage en Europe
-          pour la remplacer.
+          <strong>Copie de sauvegarde hors site</strong> : Infomaniak (offre Swiss Backup, stockage en
+          Suisse) reçoit chaque nuit une copie de la base de données. Cette copie est chiffrée sur notre
+          serveur avant l&apos;envoi. Infomaniak n&apos;a pas la clé. Jusqu&apos;au 5 octobre 2026, cette
+          copie allait chez Dropbox (stockage aux États-Unis), chiffrée de la même façon. Nous
+          supprimerons ces anciennes copies dès que plusieurs nuits de sauvegarde chez Infomaniak
+          auront réussi.
         </li>
       </ul>
       <p>
         L&apos;hébergeur, le service e-mail et le suivi des erreurs sont liés par un accord de traitement
-        de données conforme aux exigences du RGPD. La copie de sauvegarde sur Dropbox relève
-        d&apos;une offre individuelle, sans accord de traitement spécifique ; les transferts vers les
+        de données conforme aux exigences du RGPD. L&apos;accord de traitement d&apos;Infomaniak pour
+        Swiss Backup est en cours de vérification. Les anciennes copies sur Dropbox relèvent
+        d&apos;un compte personnel, sans accord de traitement spécifique ; les transferts vers les
         États-Unis reposent sur les garanties que Dropbox déclare appliquer (clauses contractuelles
         types, Data Privacy Framework).
       </p>

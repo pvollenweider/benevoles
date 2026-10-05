@@ -202,7 +202,7 @@ Si `CRON_SECRET` est vide, les endpoints refusent toutes les requêtes en produc
 0 3 * * * curl -fsS -X POST -H "Authorization: Bearer $CRON_SECRET" https://votre-domaine.com/api/cron/release-check
 ```
 
-Sur Kubernetes, `k8s/` fournit les CronJobs `app-reminders` (toutes les heures), `app-cleanup` (02:00 UTC), `app-release-check` (03:00 UTC), `postgres-backup` (`pg_dump` chiffré à 01:00 UTC, rétention 30 jours) et `backup-offsite-dropbox` (copie des fichiers chiffrés vers Dropbox à 01:30 UTC, rétention 90 jours).
+Sur Kubernetes, `k8s/` fournit les CronJobs `app-reminders` (toutes les heures), `app-cleanup` (02:00 UTC), `app-release-check` (03:00 UTC), `postgres-backup` (`pg_dump` chiffré à 01:00 UTC, rétention 30 jours) et `backup-offsite` (copie des fichiers chiffrés vers Infomaniak Swiss Backup à 01:30 UTC, rétention 90 jours).
 
 ## Déploiement
 
