@@ -16,6 +16,7 @@ import EventLifecycleBar from "@/components/admin/EventLifecycleBar"
 import EventShareLink from "@/components/admin/EventShareLink"
 import { orgTimeZone } from "@/lib/time-zone"
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
+import { isEventDay } from "@/lib/day-of"
 
 export const dynamic = "force-dynamic"
 
@@ -82,6 +83,13 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
     event.sectorLeaders.map((l) => l.roleName),
   )
 
+  // « Jour J » (#561): offered on the event's days, in the organization's time zone.
+  const eventDay = isEventDay(
+    { startDate: event.startDate.toISOString(), endDate: event.endDate.toISOString() },
+    new Date(),
+    orgTimeZone(event.organization),
+  )
+
   // Unique volunteers across all shifts (one reminder email per person)
   const uniqueVolunteerIds = new Set<string>()
   for (const sh of event.shifts)
@@ -146,6 +154,21 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
           remindersEnabled: event.remindersEnabled,
         }}
       />
+
+      {eventDay && (
+        <section aria-labelledby="event-day-of-heading" className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+          <div>
+            <h2 id="event-day-of-heading" className="text-sm font-semibold text-gray-900">C&apos;est le jour J</h2>
+            <p className="text-sm text-gray-800">Créneaux en cours et à venir, arrivées et présences, sur votre téléphone.</p>
+          </div>
+          <Link
+            href={`/admin/events/${event.id}/day-of`}
+            className="inline-flex items-center min-h-11 bg-blue-600 text-white rounded-xl px-4 text-sm font-semibold hover:bg-blue-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Ouvrir le jour J
+          </Link>
+        </section>
+      )}
 
       {isUnlistedPublic(event) && (
         <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2">
