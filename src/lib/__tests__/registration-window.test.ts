@@ -34,14 +34,14 @@ describe("registrationState", () => {
 
 describe("messages", () => {
   it("speaks in the organisation's time zone, across a DST change", () => {
-    expect(formatMoment(new Date("2026-06-01T16:00:00Z"), TZ)).toBe("lundi 1 juin à 18 h 00")
-    expect(formatMoment(new Date("2026-12-01T17:00:00Z"), TZ)).toBe("mardi 1 décembre à 18 h 00")
+    expect(formatMoment(new Date("2026-06-01T16:00:00Z"), TZ)).toBe("lundi 1 juin à 18h")
+    expect(formatMoment(new Date("2026-12-01T17:00:00Z"), TZ)).toBe("mardi 1 décembre à 18h")
   })
 
   it("explains each closed state, and nothing when open", () => {
     const opensAt = new Date("2026-06-01T16:00:00Z")
     expect(closedMessage(registrationState({ ...published, registrationOpensAt: opensAt }, new Date("2026-05-01T00:00:00Z")), TZ))
-      .toBe("Les inscriptions ouvrent le lundi 1 juin à 18 h 00. Le planning est déjà consultable.")
+      .toBe("Les inscriptions ouvrent le lundi 1 juin à 18h. Le planning est déjà consultable.")
     expect(closedMessage(registrationState({ ...published, registrationsOpen: false }), TZ)).toContain("fermées pour le moment")
     expect(closedMessage(registrationState({ ...published, registrationClosesAt: opensAt }, new Date("2026-07-01T00:00:00Z")), TZ)).toContain("terminées")
     expect(closedMessage(registrationState(published), TZ)).toBeNull()
@@ -50,7 +50,7 @@ describe("messages", () => {
   it("says until when while open with a closing time", () => {
     const closesAt = new Date("2026-06-30T21:59:00Z")
     expect(openUntilMessage(registrationState({ ...published, registrationClosesAt: closesAt }, new Date("2026-06-10T00:00:00Z")), TZ))
-      .toBe("Inscriptions ouvertes jusqu'au mardi 30 juin à 23 h 59.")
+      .toBe("Inscriptions ouvertes jusqu'au mardi 30 juin à 23h59.")
     expect(openUntilMessage(registrationState(published), TZ)).toBeNull()
   })
 })

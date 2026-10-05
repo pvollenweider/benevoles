@@ -7,6 +7,12 @@
  * assistant at any point just means using the full interface. Pure helpers, used by the pages.
  */
 
+import { coordinatesOf } from "./map-link"
+import { REMINDER_LABELS, type NotificationSettings, type ReminderKey } from "./notification-settings"
+import { formatMoment, registrationState } from "./registration-window"
+import type { StaffingSummary } from "./staffing"
+import { localDateTimeToUtc } from "./time-zone"
+
 export const WIZARD_STEPS = [
   { n: 1, label: "Informations" },
   { n: 2, label: "Postes et créneaux" },
@@ -38,14 +44,147 @@ export type ReviewFacts = {
   roleCount: number
   capacity: number
   leaderCount: number
+  /** Practical info of the shifts (#397), from `practicalInfoGaps`. Absent: no item. */
+  practicalInfo?: PracticalInfoGaps
+  /** Registration window (#463), read at `now` in the organization's time zone. Absent: no item. */
+  registration?: { registrationsOpen: boolean; opensAt: Date | null; closesAt: Date | null; timeZone: string; now: Date }
+  /** Automatic reminders (#381); only worth an item when a shift is still to come. Absent: no item. */
+  reminders?: { eventEnabled: boolean; organization: NotificationSettings["reminders"]; upcomingShifts: boolean }
+  /** Coverage of the shifts (#394), shown once the event is published. Absent: no item. */
+  coverage?: Pick<StaffingSummary, "totals" | "underfilled">
 }
 
-export type ReviewCheck = { id: string; label: string; ok: boolean; required: boolean; href: string; hint?: string }
+/**
+ * One line of the review. `href` is where it is fixed (no link when nothing in the interface
+ * changes it); `action` names the link when « Modifier / Compléter / Ajouter » would not fit;
+ * `warn` marks a non-blocking point worth checking (« À vérifier »), as opposed to an optional
+ * field left empty (« Facultatif »).
+ */
+export type ReviewCheck = { id: string; label: string; ok: boolean; required: boolean; warn?: boolean; href?: string; action?: string; hint?: string }
+
+export type PracticalInfoGaps = {
+  shifts: number
+  /** Shifts with neither a meeting point of their own nor an event place to fall back on. */
+  noPlace: number
+  /** Shifts without a contact person (name or phone): the event has none to fall back on. */
+  noContact: number
+  /** Shifts missing both. */
+  noPlaceNorContact: number
+  /** Shifts missing at least one. */
+  incomplete: number
+}
+
+type PracticalShift = { locationDetails?: string | null; contactName?: string | null; contactPhone?: string | null; latitude?: number | null; longitude?: number | null }
+type PracticalEvent = { location?: string | null; latitude?: number | null; longitude?: number | null }
+
+const filled = (v: string | null | undefined) => !!v?.trim()
+
+/**
+ * Which shifts lack what volunteers need on the day (#397, #565). The event's place (text or
+ * coordinates) counts as every shift's place; nothing stands in for a missing contact.
+ */
+export function practicalInfoGaps(shifts: PracticalShift[], event: PracticalEvent): PracticalInfoGaps {
+  const eventPlace = filled(event.location) || !!coordinatesOf(event)
+  const gaps = { shifts: shifts.length, noPlace: 0, noContact: 0, noPlaceNorContact: 0, incomplete: 0 }
+  for (const s of shifts) {
+    const place = eventPlace || filled(s.locationDetails) || !!coordinatesOf(s)
+    const contact = filled(s.contactName) || filled(s.contactPhone)
+    if (!place) gaps.noPlace++
+    if (!contact) gaps.noContact++
+    if (!place && !contact) gaps.noPlaceNorContact++
+    if (!place || !contact) gaps.incomplete++
+  }
+  return gaps
+}
+
+/** Whether any shift starts after `now` (local date and start time in the organization's zone). */
+export function hasUpcomingShift(shifts: { date: string; startTime: string }[], now: Date, timeZone: string): boolean {
+  return shifts.some((s) => localDateTimeToUtc(new Date(`${s.date}T00:00:00Z`), s.startTime, timeZone).getTime() > now.getTime())
+}
+
+const shiftsWord = (n: number) => `${n} créneau${n > 1 ? "x" : ""}`
+
+function practicalInfoCheck(g: PracticalInfoGaps, base: string): ReviewCheck {
+  const href = `${base}/shifts`
+  if (g.incomplete === 0) return { id: "practical-info", label: "Lieu et contact indiqués pour chaque créneau", ok: true, required: false, href }
+  const missing =
+    g.noPlaceNorContact === g.incomplete ? "sans lieu ni contact"
+    : g.noPlace === 0 ? "sans contact"
+    : g.noContact === 0 ? "sans lieu de rendez-vous"
+    : "sans lieu ou sans contact"
+  return {
+    id: "practical-info", label: `${shiftsWord(g.incomplete)} ${missing}`, ok: false, required: false, warn: true, href,
+    hint: "Le lieu et la personne à contacter figurent dans l'email de confirmation, les rappels et la page personnelle des bénévoles.",
+  }
+}
+
+function registrationCheck(r: NonNullable<ReviewFacts["registration"]>, published: boolean, base: string): ReviewCheck {
+  // A draft is read as if it were published: what volunteers will meet once it is.
+  const state = registrationState({ publicStatus: "published", registrationsOpen: r.registrationsOpen, registrationOpensAt: r.opensAt, registrationClosesAt: r.closesAt }, r.now)
+  const common = { id: "registration", required: false, href: `${base}/edit#event-registrations-open`, action: "Modifier" }
+  if (state.open) {
+    const until = state.closesAt ? ` jusqu'au ${formatMoment(state.closesAt, r.timeZone)}` : ""
+    return { ...common, label: `${published ? "Inscriptions ouvertes" : "Inscriptions ouvertes dès la publication"}${until}`, ok: true }
+  }
+  switch (state.reason) {
+    case "not_yet":
+      return { ...common, label: `Ouverture des inscriptions le ${formatMoment(state.opensAt!, r.timeZone)}`, ok: true }
+    case "ended":
+      return {
+        ...common, label: `Inscriptions fermées depuis le ${formatMoment(state.closesAt!, r.timeZone)}`, ok: false, warn: true,
+        hint: "La fermeture programmée est passée : plus personne ne peut s'inscrire.",
+      }
+    default:
+      return {
+        ...common, label: "Inscriptions fermées, sans date d'ouverture", ok: false, warn: true,
+        hint: state.opensAt && state.opensAt.getTime() > r.now.getTime()
+          ? `L'ouverture programmée du ${formatMoment(state.opensAt, r.timeZone)} ne prend effet que si la case « Inscriptions ouvertes » est cochée.`
+          : published
+            ? "Les bénévoles voient le planning mais ne peuvent pas s'inscrire."
+            : "Une fois l'événement publié, les bénévoles verront le planning sans pouvoir s'inscrire.",
+      }
+  }
+}
+
+function remindersCheck(r: NonNullable<ReviewFacts["reminders"]>): ReviewCheck {
+  const settings = { href: "/admin/settings/notifications", action: "Réglages des emails" }
+  if (!r.eventEnabled) {
+    // Event.remindersEnabled has no box in the event form: nothing to link to.
+    return {
+      id: "reminders", label: "Rappels automatiques coupés pour cet événement", ok: false, required: false, warn: true,
+      hint: "Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les réglages de l'organisation. Ce réglage ne se change pas encore depuis l'interface : le formulaire de l'événement n'a pas de case pour lui.",
+    }
+  }
+  const on = (Object.keys(REMINDER_LABELS) as ReminderKey[]).filter((k) => r.organization[k])
+  if (on.length === 3) return { id: "reminders", label: "Rappels automatiques J-2, J-1 et du jour activés", ok: true, required: false, ...settings }
+  if (on.length === 0) {
+    return {
+      id: "reminders", label: "Aucun rappel automatique : désactivés pour l'organisation", ok: false, required: false, warn: true, ...settings,
+      hint: "Les bénévoles ne reçoivent aucun rappel avant leurs créneaux.",
+    }
+  }
+  return {
+    id: "reminders", label: "Rappels automatiques en partie désactivés pour l'organisation", ok: false, required: false, warn: true, ...settings,
+    hint: `Seuls partent : ${on.map((k) => REMINDER_LABELS[k].label).join(", ")}.`,
+  }
+}
+
+function coverageCheck(c: NonNullable<ReviewFacts["coverage"]>, base: string): ReviewCheck {
+  const { active, capacity } = c.totals
+  const incomplete = c.underfilled.length
+  const places = `${active} place${active > 1 ? "s" : ""} occupée${active > 1 ? "s" : ""} sur ${capacity}`
+  return {
+    id: "coverage", ok: incomplete === 0, required: false, warn: incomplete > 0, href: `${base}/staffing`, action: "Voir les créneaux incomplets",
+    label: incomplete === 0 ? `${places}, aucun créneau incomplet` : `${places}, ${shiftsWord(incomplete)} incomplet${incomplete > 1 ? "s" : ""}`,
+  }
+}
 
 /** What to look at before publishing, required first. */
 export function reviewChecks(f: ReviewFacts): ReviewCheck[] {
   const base = `/admin/events/${f.id}`
   const days = Math.round((Date.parse(f.endDate) - Date.parse(f.startDate)) / 86_400_000) + 1
+  const published = f.publicStatus === "published"
+  const archived = f.publicStatus === "archived"
   return [
     {
       id: "dates", label: `Dates : ${days > 1 ? `${days} jours` : "1 jour"} à partir du ${new Date(`${f.startDate}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", day: "numeric", month: "long", year: "numeric" })}`,
@@ -73,6 +212,11 @@ export function reviewChecks(f: ReviewFacts): ReviewCheck[] {
       id: "leaders", label: f.leaderCount > 0 ? `${f.leaderCount} responsable${f.leaderCount > 1 ? "s" : ""} de secteur` : "Pas de responsable de secteur",
       ok: f.leaderCount > 0, required: false, href: `${base}/sector-leaders`, hint: "Une personne par poste qui reçoit les inscriptions de son équipe.",
     },
+    // Non-blocking items (#565), each only when what it checks applies to the event.
+    ...(f.practicalInfo && f.practicalInfo.shifts > 0 ? [practicalInfoCheck(f.practicalInfo, base)] : []),
+    ...(f.registration && !archived ? [registrationCheck(f.registration, published, base)] : []),
+    ...(f.reminders && f.reminders.upcomingShifts && !archived ? [remindersCheck(f.reminders)] : []),
+    ...(f.coverage && published && f.coverage.totals.shifts > 0 ? [coverageCheck(f.coverage, base)] : []),
   ]
 }
 

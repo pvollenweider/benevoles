@@ -19,6 +19,8 @@ export type RegistrationState =
   | { open: true; closesAt: Date | null }
   | { open: false; reason: "not_published" | "closed" | "not_yet" | "ended"; opensAt: Date | null; closesAt: Date | null }
 
+import { fmtHour } from "./registrations-list"
+
 const toDate = (d: Date | string | null | undefined) => (d == null ? null : d instanceof Date ? d : new Date(d))
 
 export function registrationState(e: RegistrationWindow, now: Date = new Date()): RegistrationState {
@@ -35,11 +37,12 @@ export function acceptsRegistrations(e: RegistrationWindow, now: Date = new Date
   return registrationState(e, now).open
 }
 
-/** « samedi 1 juin à 18 h 00 » in the organisation's time zone. */
+/** « samedi 1 juin à 18h » (« à 23h59 ») in the organisation's time zone, hours written as elsewhere in the app. */
 export function formatMoment(d: Date, timeZone: string): string {
   const day = d.toLocaleDateString("fr-FR", { timeZone, weekday: "long", day: "numeric", month: "long" })
-  const time = d.toLocaleTimeString("fr-FR", { timeZone, hour: "2-digit", minute: "2-digit" }).replace(":", " h ")
-  return `${day} à ${time}`
+  const parts = new Intl.DateTimeFormat("en-GB", { timeZone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(d)
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "00"
+  return `${day} à ${fmtHour(`${get("hour")}:${get("minute")}`)}`
 }
 
 /** What the public page says instead of the sign-up form; null when registrations are open. */
@@ -62,7 +65,7 @@ export function refusalMessage(state: RegistrationState, timeZone: string): stri
   return closedMessage(state, timeZone) ?? "Les inscriptions sont fermées."
 }
 
-/** « jusqu'au samedi 30 juin à 23 h 59 », shown while open with a closing time. */
+/** « jusqu'au samedi 30 juin à 23h59 », shown while open with a closing time. */
 export function openUntilMessage(state: RegistrationState, timeZone: string): string | null {
   return state.open && state.closesAt ? `Inscriptions ouvertes jusqu'au ${formatMoment(state.closesAt, timeZone)}.` : null
 }

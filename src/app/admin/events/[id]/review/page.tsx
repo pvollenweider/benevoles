@@ -5,7 +5,12 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
-import { canPublish, reviewChecks } from "@/lib/event-wizard"
+import { canPublish, hasUpcomingShift, practicalInfoGaps, reviewChecks } from "@/lib/event-wizard"
+import { parseNotificationSettings } from "@/lib/notification-settings"
+import { LIVE_STATUSES } from "@/lib/registration-capacity"
+import { acceptsRegistrations } from "@/lib/registration-window"
+import { staffingSummary } from "@/lib/staffing"
+import { orgTimeZone } from "@/lib/time-zone"
 import { eventPublicUrl } from "@/lib/urls"
 import WizardSteps from "@/components/admin/WizardSteps"
 import PublishToggle from "@/components/admin/PublishToggle"
@@ -32,13 +37,30 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
     where: { id },
     select: {
       id: true, title: true, slug: true, startDate: true, endDate: true, location: true, confirmationMessage: true, publicInstructions: true, publicStatus: true,
-      organization: { select: { slug: true } },
-      shifts: { where: { status: { not: "cancelled" } }, select: { roleName: true, capacity: true } },
+      latitude: true, longitude: true, remindersEnabled: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true,
+      organization: { select: { slug: true, timeZone: true, notificationSettings: true } },
+      shifts: {
+        where: { status: { not: "cancelled" } },
+        select: {
+          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, status: true,
+          locationDetails: true, contactName: true, contactPhone: true, latitude: true, longitude: true,
+          registrations: { where: { status: { in: [...LIVE_STATUSES] } }, select: { status: true } },
+        },
+      },
       _count: { select: { sectorLeaders: true } },
     },
   })
   if (!event) notFound()
 
+  const now = new Date()
+  const timeZone = orgTimeZone(event.organization)
+  const shifts = event.shifts.map((s) => ({
+    id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10),
+    startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, closed: s.status === "closed",
+    active: s.registrations.filter((r) => r.status === "active").length,
+    waiting: s.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length,
+    requested: s.registrations.filter((r) => r.status === "requested").length,
+  }))
   const checks = reviewChecks({
     id: event.id, title: event.title,
     startDate: event.startDate.toISOString().slice(0, 10), endDate: event.endDate.toISOString().slice(0, 10),
@@ -48,6 +70,15 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
     roleCount: new Set(event.shifts.map((s) => s.roleName)).size,
     capacity: event.shifts.reduce((n, s) => n + s.capacity, 0),
     leaderCount: event._count.sectorLeaders,
+    practicalInfo: practicalInfoGaps(event.shifts, event),
+    registration: { registrationsOpen: event.registrationsOpen, opensAt: event.registrationOpensAt, closesAt: event.registrationClosesAt, timeZone, now },
+    reminders: {
+      eventEnabled: event.remindersEnabled,
+      organization: parseNotificationSettings(event.organization.notificationSettings).reminders,
+      upcomingShifts: hasUpcomingShift(shifts, now, timeZone),
+    },
+    // Leaders don't matter to the coverage line: only the totals and the incomplete shifts are read.
+    coverage: staffingSummary(shifts, []),
   })
   const ready = canPublish(checks)
   const published = event.publicStatus === "published"
@@ -60,7 +91,9 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">{event.title}</h1>
         <p role="status" className="text-sm text-gray-700 mt-1">
           {published
-            ? "L'événement est publié : les bénévoles peuvent s'inscrire."
+            ? acceptsRegistrations(event, now)
+              ? "L'événement est publié : les bénévoles peuvent s'inscrire."
+              : "L'événement est publié, mais les inscriptions ne sont pas ouvertes : voir la vérification ci-dessous."
             : "Dernier coup d'œil avant d'ouvrir les inscriptions. Tout reste modifiable après la publication."}
         </p>
       </div>
@@ -73,16 +106,18 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
             <li key={c.id} className="px-4 py-3 text-sm flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
               <div className="min-w-0">
                 <p className="text-gray-900">
-                  <span className="sr-only">{c.ok ? "Fait : " : c.required ? "À faire : " : "Facultatif : "}</span>
-                  <span aria-hidden="true" className={`inline-block w-5 ${c.ok ? "text-green-800" : c.required ? "text-red-700" : "text-gray-500"}`}>{c.ok ? "✓" : c.required ? "!" : "–"}</span>
+                  <span className="sr-only">{c.ok ? "Fait : " : c.required ? "À faire : " : c.warn ? "À vérifier : " : "Facultatif : "}</span>
+                  <span aria-hidden="true" className={`inline-block w-5 ${c.ok ? "text-green-800" : c.required ? "text-red-700" : c.warn ? "text-amber-800" : "text-gray-500"}`}>{c.ok ? "✓" : c.required ? "!" : c.warn ? "?" : "–"}</span>
                   {c.label}
                 </p>
-                {!c.ok && c.hint && <p className="text-xs text-gray-600 pl-5">{c.hint}</p>}
+                {!c.ok && c.hint && <p id={`${c.id}-hint`} className="text-xs text-gray-600 pl-5">{c.hint}</p>}
               </div>
-              <Link href={c.href} className={linkClass}>
-                {c.ok ? "Modifier" : c.required ? "Compléter" : "Ajouter"}
-                <span className="sr-only"> : {c.label}</span>
-              </Link>
+              {c.href && (
+                <Link href={c.href} aria-describedby={!c.ok && c.hint ? `${c.id}-hint` : undefined} className={linkClass}>
+                  {c.action ?? (c.ok ? "Modifier" : c.required ? "Compléter" : "Ajouter")}
+                  <span className="sr-only"> : {c.label}</span>
+                </Link>
+              )}
             </li>
           ))}
         </ul>
@@ -112,7 +147,7 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
             <p className="text-sm text-gray-700">
               {ready
                 ? "Publier rend la page d'inscription accessible à qui a le lien. Rien n'est envoyé aux membres tant que vous ne les invitez pas."
-                : "Complétez les points marqués « À faire » avant de publier."}
+                : "Complétez les points marqués d'un ! (« À faire ») avant de publier."}
             </p>
             <div className="flex flex-wrap items-center gap-3">
               {ready ? <PublishToggle eventId={event.id} currentStatus={event.publicStatus} /> : null}
