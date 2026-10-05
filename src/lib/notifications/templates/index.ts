@@ -15,6 +15,7 @@ import { renderMemberInvite, renderAdminInvite } from "./invitations"
 import { renderReminderJ2, renderReminderJ1, renderReminderDd, renderManualReminder, renderTargetedMessage } from "./reminders"
 import { renderWaitlistConfirmation, renderWaitlistOffered } from "./waitlist"
 import { renderSectorLeaderInvite, renderSectorLeaderNewSignup, renderSectorLeaderWithdrawal } from "./sector-leaders"
+import { renderOpenShifts } from "./open-shifts"
 import { renderAdminNotification, renderWithdrawalAdminNotice, renderPasswordReset, renderAdminWelcome, renderProductUpdate, renderReleaseAvailable, renderAddressesToVerifySummary } from "./administration"
 
 export type { RenderedEmail } from "./shared"
@@ -71,5 +72,7 @@ export function render(payload: NotificationPayload): RenderedEmail {
       return renderReleaseAvailable(payload)
     case "addresses_to_verify_summary":
       return renderAddressesToVerifySummary(payload)
+    case "open_shifts":
+      return renderOpenShifts(payload)
   }
 }

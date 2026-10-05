@@ -442,6 +442,68 @@ exports[`render — snapshot of every notification kind > member_invite 1`] = `
 }
 `;
 
+exports[`render — snapshot of every notification kind > open_shifts 1`] = `
+{
+  "html": [
+    "<!DOCTYPE html>",
+    "<html lang="fr">",
+    "<head>",
+    "<meta charset="UTF-8">",
+    "<meta name="viewport" content="width=device-width,initial-scale=1">",
+    "<meta http-equiv="X-UA-Compatible" content="IE=edge">",
+    "</head>",
+    "<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">",
+    "<div style="display:none;font-size:1px;color:#f5f5f5;max-height:0;overflow:hidden;opacity:0;">Bar (Bar soir) : samedi 11 juillet, de 22:00 à 02:00 le lendemain, 2 places libres&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>",
+    "<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;">",
+    "<tr><td align="center" style="padding:32px 16px 24px;">",
+    "<!-- align="center" above only centers this table CELL on the page; text-align is inherited CSS,",
+    "     so without an explicit override here every unstyled heading/paragraph inside would inherit",
+    "     "center" too instead of reading left-aligned like normal body text. -->",
+    "<div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">",
+    "",
+    "    <h1 style="margin:0 0 0.25em;font-size:1.5em">Hello Julie !</h1>",
+    "    <p style="margin:0 0 1em;color:#333">Il reste des places sur quelques créneaux de Festival du Rhône, et Fête &lt;Rhône&gt; &amp; &quot;Lac&quot; a pensé à toi. Si l'un d'eux te convient, inscris-toi avec le lien ci-dessous.</p>",
+    "    <div style="background:#f3f4f6;padding:14px;border-radius:10px;white-space:pre-wrap;margin-bottom:1em">On compte sur toi &lt;3</div>",
+    "    <p style="color:#555;margin-bottom:0.5em">Les créneaux à compléter :</p>",
+    "    <ul style="background:#f9fafb;border-radius:10px;padding:12px 16px 12px 32px;margin:0">",
+    "      <li style="padding:4px 0">Bar (Bar soir) : samedi 11 juillet, de 22:00 à 02:00 le lendemain, 2 places libres</li><li style="padding:4px 0">Accueil : dimanche 12 juillet, de 09:00 à 12:30, 1 place libre</li>",
+    "    </ul>",
+    "    <p style="margin-top:1.5em"><a href="https://rhone.benevol.app/festival-2026?token=tok-1" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">Choisir mon créneau</a></p>",
+    "    ",
+    "    <p style="color:#666;font-size:0.85em;margin-top:2em">Merci d'avance !<br><strong>Fête &lt;Rhône&gt; &amp; &quot;Lac&quot;</strong></p>",
+    "    <p style="color:#666;font-size:0.8em">Pas disponible cette fois ? <a href="https://rhone.benevol.app/festival-2026?token=tok-1&amp;decline=1" style="color:#2563eb">Indiquer que je ne suis pas disponible</a>.</p>",
+    "  ",
+    "<div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#666;text-align:center;">",
+    "  <a href="https://benevol.app" style="color:#666;text-decoration:none;">benevol.app</a>",
+    "</div>",
+    "</div>",
+    "</td></tr>",
+    "</table>",
+    "</body>",
+    "</html>",
+  ],
+  "subject": "Festival du Rhône : on cherche encore du monde",
+  "text": [
+    "Hello Julie !",
+    "",
+    "Il reste des places sur quelques créneaux de Festival du Rhône, et Fête <Rhône> & "Lac" a pensé à toi. Si l'un d'eux te convient, inscris-toi avec le lien ci-dessous.",
+    "",
+    "On compte sur toi <3",
+    "",
+    "Les créneaux à compléter :",
+    "- Bar (Bar soir) : samedi 11 juillet, de 22:00 à 02:00 le lendemain, 2 places libres",
+    "- Accueil : dimanche 12 juillet, de 09:00 à 12:30, 1 place libre",
+    "",
+    "T'inscrire : https://rhone.benevol.app/festival-2026?token=tok-1",
+    "",
+    "Pas disponible cette fois ? Tu peux le dire ici : https://rhone.benevol.app/festival-2026?token=tok-1&decline=1",
+    "",
+    "Merci d'avance !",
+    "Fête <Rhône> & "Lac"",
+  ],
+}
+`;
+
 exports[`render — snapshot of every notification kind > password_reset 1`] = `
 {
   "html": [

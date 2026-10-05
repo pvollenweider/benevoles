@@ -8,6 +8,7 @@ import { getOrgContext } from "@/lib/auth-guard"
 import { fmtRange } from "@/lib/gantt-utils"
 import { fillPercent, staffingHeadline, staffingSummary, type StaffingShiftLine } from "@/lib/staffing"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
+import { shiftDay, shiftHours, shiftName } from "@/lib/open-shifts"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Où manque-t-il du monde ?" }
@@ -51,7 +52,7 @@ function Group({ id, title, count, hint, children }: { id: string; title: string
   )
 }
 
-function ShiftLine({ eventId, group, s, detail }: { eventId: string; group: string; s: StaffingShiftLine; detail: React.ReactNode }) {
+function ShiftLine({ eventId, group, s, detail, action }: { eventId: string; group: string; s: StaffingShiftLine; detail: React.ReactNode; action?: React.ReactNode }) {
   const name = s.label !== s.roleName ? `${s.roleName} · ${s.label}` : s.roleName
   const detailId = `${group}-${s.id}-detail`
   return (
@@ -62,6 +63,7 @@ function ShiftLine({ eventId, group, s, detail }: { eventId: string; group: stri
           {name}
           <span className="block sm:inline font-normal text-gray-600 sm:ml-2">{day(s.date)} · {fmtRange(s.startTime, s.endTime)}</span>
         </Link>
+        {action}
       </div>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 sm:justify-end">
         <Meter active={s.active} capacity={s.capacity} className="w-full sm:w-24 shrink-0" />
@@ -163,11 +165,29 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
           )}
 
           {summary.underfilled.length > 0 && (
+            <div className="space-y-2">
             <Group id="staffing-underfilled" title="Créneaux à compléter" count={summary.underfilled.length} hint="Du plus dégarni au plus proche du complet. Les créneaux fermés aux inscriptions ne sont pas comptés.">
               {summary.underfilled.map((s) => (
-                <ShiftLine key={s.id} eventId={event.id} group="underfilled" s={s} detail={<><strong><Ratio active={s.active} capacity={s.capacity} /></strong>{s.requested ? ` · ${plural(s.requested, "demande")} à traiter` : ""} · manque {s.missing}</>} />
+                <ShiftLine
+                  key={s.id}
+                  eventId={event.id}
+                  group="underfilled"
+                  s={s}
+                  detail={<><strong><Ratio active={s.active} capacity={s.capacity} /></strong>{s.requested ? ` · ${plural(s.requested, "demande")} à traiter` : ""} · manque {s.missing}</>}
+                  action={
+                    <Link href={`${base}/staffing/search?shift=${encodeURIComponent(s.id)}`} className={`mt-1 inline-block text-sm ${linkClass}`}>
+                      Chercher des bénévoles
+                      <span className="sr-only"> pour {shiftName(s)}, {shiftDay(s.date)}, {shiftHours(s)}</span>
+                    </Link>
+                  }
+                />
               ))}
             </Group>
+            {/* « Chercher des bénévoles » (#566): one shift from its line, several from here. */}
+            <p className="text-sm">
+              <Link href={`${base}/staffing/search`} className={linkClass}>Chercher des bénévoles pour plusieurs créneaux</Link>
+            </p>
+            </div>
           )}
 
           {summary.waitlisted.length > 0 && (
