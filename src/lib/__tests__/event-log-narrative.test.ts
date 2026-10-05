@@ -37,7 +37,7 @@ describe("describeChanges", () => {
 describe("describeEntry", () => {
   it("describes a volunteer self-service registration", () => {
     expect(describeEntry(entry({ action: "registration.created", actorType: "volunteer", actorLabel: "Alain Dupont" }))).toBe(
-      "Alain Dupont s'est inscrit·e",
+      "Alain Dupont a enregistré une inscription",
     )
   })
 
@@ -66,7 +66,7 @@ describe("describeEntry", () => {
     })
     const shiftLabels = { "shift-bar": { compact: "Bar · 25/06 18:15–19:00", prose: "Bar du 25/06, 18:15–19:00" } }
     expect(describeEntry(e, shiftLabels)).toBe(
-      "Eloïse Marilou Vollenweider s'est inscrit·e pour le créneau Bar du 25/06, 18:15–19:00",
+      "Eloïse Marilou Vollenweider a enregistré une inscription pour le créneau Bar du 25/06, 18:15–19:00",
     )
   })
 
@@ -76,7 +76,7 @@ describe("describeEntry", () => {
       actorLabel: "Alain",
       changes: { shiftId: { from: null, to: "shift-bar" } },
     })
-    expect(describeEntry(e)).toBe("Alain s'est inscrit·e")
+    expect(describeEntry(e)).toBe("Alain a enregistré une inscription")
   })
 
   it("does not append a shift phrase to actions that aren't about a specific shift", () => {
@@ -122,7 +122,7 @@ describe("narrateChain", () => {
 
     const text = narrateChain([cancel, offer, confirm])
 
-    expect(text).toContain("Alain Dupont s'est désinscrit")
+    expect(text).toContain("Alain Dupont a annulé une inscription")
     expect(text).toContain("libéré une place, proposée")
     expect(text).toContain("Chloé Martin")
     expect(text).toMatch(/confirm/i)

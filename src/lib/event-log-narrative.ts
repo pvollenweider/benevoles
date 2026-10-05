@@ -45,6 +45,10 @@ const FIELD_LABELS: Record<string, string> = {
   remindersEnabled: "rappels automatiques",
   requirePhone: "téléphone obligatoire",
   isListed: "visibilité",
+  audience: "destinataires",
+  recipients: "nombre de destinataires",
+  subject: "objet",
+  resent: "envois relancés",
 }
 
 /**
@@ -81,29 +85,42 @@ function shiftPhrase(entry: Pick<EventLogEntry, "changes">, shiftLabels?: Record
   return prose ? ` pour le créneau ${prose}` : ""
 }
 
-const ACTION_VERB: Record<string, (actor: string) => string> = {
+/**
+ * One sentence per action written to EventLog. Every code logged anywhere must have one:
+ * src/lib/__tests__/log-action-labels.test.ts scans the source and fails on a missing entry (#704).
+ */
+export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "shift.created": (a) => `${a} a créé ce créneau`,
   "shift.updated": (a) => `${a} a modifié ce créneau`,
   "shift.cancelled": (a) => `${a} a annulé ce créneau`,
-  "registration.created": (a) => `${a} s'est inscrit·e`,
+  "registration.created": (a) => `${a} a enregistré une inscription`,
   "registration.updated": (a) => `${a} a modifié l'inscription`,
-  "registration.cancelled": (a) => `${a} s'est désinscrit·e`,
-  "registration.waitlist_joined": (a) => `${a} s'est mis·e en liste d'attente`,
+  "registration.cancelled": (a) => `${a} a annulé une inscription`,
+  "registration.waitlist_joined": (a) => `${a} a rejoint la liste d'attente`,
   "registration.waitlist_offered": () => "une place s'est libérée et a été proposée",
   "registration.waitlist_confirmed": (a) => `${a} a confirmé sa place`,
   "registration.checked_in": (a) => `${a} a marqué la personne présente`,
   "registration.check_in_undone": (a) => `${a} a annulé la présence`,
+  "registration.requested": (a) => `${a} a demandé une inscription`,
+  "registration.accepted": (a) => `${a} a accepté la demande d'inscription`,
+  "registration.refused": (a) => `${a} a refusé la demande d'inscription`,
   "event.published": (a) => `${a} a publié l'événement`,
   "event.unpublished": () => "l'événement est repassé en brouillon, son dernier créneau ayant été annulé",
   "event.archived": (a) => `${a} a archivé l'événement`,
   "event.updated": (a) => `${a} a modifié les paramètres de l'événement`,
+  "event.links_regenerated": (a) => `${a} a régénéré les liens personnels de l'événement`,
+  "message.sent": (a) => `${a} a envoyé un message`,
+  "message.resent": (a) => `${a} a relancé les emails non distribués d'un message`,
+  "question.created": (a) => `${a} a ajouté une question`,
+  "question.updated": (a) => `${a} a modifié une question`,
+  "question.removed": (a) => `${a} a retiré une question`,
   "memberinvite.sent": (a) => `${a} a envoyé une invitation`,
   "memberinvite.declined": (a) => `${a} a indiqué ne pas être disponible pour cet événement`,
   "eventpage.created": (a) => `${a} a créé une page`,
   "eventpage.updated": (a) => `${a} a modifié une page`,
   "eventpage.deleted": (a) => `${a} a supprimé une page`,
-  "sectorleader.added": (a) => `${a} a désigné un·e responsable de secteur`,
-  "sectorleader.removed": (a) => `${a} a retiré un·e responsable de secteur`,
+  "sectorleader.added": (a) => `${a} a désigné une personne responsable de secteur`,
+  "sectorleader.removed": (a) => `${a} a retiré une personne responsable de secteur`,
   "eventmilestone.created": (a) => `${a} a ajouté un jalon`,
   "eventmilestone.updated": (a) => `${a} a modifié un jalon`,
   "eventmilestone.deleted": (a) => `${a} a supprimé un jalon`,
@@ -120,6 +137,7 @@ const SHIFT_AWARE_ACTIONS = new Set([
   "registration.created", "registration.cancelled", "registration.waitlist_joined",
   "registration.waitlist_offered", "registration.waitlist_confirmed", "registration.baseline",
   "registration.checked_in", "registration.check_in_undone",
+  "registration.requested", "registration.accepted", "registration.refused",
 ])
 
 function buildSentence(entry: Pick<EventLogEntry, "action" | "actorLabel" | "changes">, shiftLabels?: Record<string, ShiftLabel>): string {
