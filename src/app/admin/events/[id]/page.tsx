@@ -17,6 +17,10 @@ import EventShareLink from "@/components/admin/EventShareLink"
 import { orgTimeZone } from "@/lib/time-zone"
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
 import { isEventDay } from "@/lib/day-of"
+import { hasUpcomingShift } from "@/lib/event-wizard"
+import { parseNotificationSettings } from "@/lib/notification-settings"
+import { remindersSummary } from "@/lib/automatic-reminders"
+import AutomaticRemindersBox from "@/components/admin/AutomaticRemindersBox"
 
 export const dynamic = "force-dynamic"
 
@@ -30,7 +34,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
   const event = await db.event.findFirst({
     where: { id },
     include: {
-      organization: { select: { slug: true, timeZone: true } },
+      organization: { select: { slug: true, timeZone: true, notificationSettings: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
         include: {
@@ -89,6 +93,19 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
     new Date(),
     orgTimeZone(event.organization),
   )
+
+  // What the reminders cron will actually send for this event (#705), as on the review page (#565).
+  const reminders = remindersSummary({
+    eventId: event.id,
+    published: event.publicStatus === "published",
+    eventEnabled: event.remindersEnabled,
+    organization: parseNotificationSettings(event.organization.notificationSettings).reminders,
+    upcomingShifts: hasUpcomingShift(
+      event.shifts.map((sh) => ({ date: sh.date.toISOString().slice(0, 10), startTime: sh.startTime })),
+      new Date(),
+      orgTimeZone(event.organization),
+    ),
+  })
 
   // Unique volunteers across all shifts (one reminder email per person)
   const uniqueVolunteerIds = new Set<string>()
@@ -259,6 +276,9 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
             Écrire aux bénévoles
           </Link>
           <p className="text-xs text-gray-600 mt-1">Un email à tous les inscrits, à un poste, à un créneau ou à la liste d&apos;attente, avec objet, aperçu et nombre de destinataires.</p>
+        </div>
+        <div className="mb-4">
+          <AutomaticRemindersBox summary={reminders} />
         </div>
         <SendReminderButton
           eventId={event.id}

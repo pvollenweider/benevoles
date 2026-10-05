@@ -16,6 +16,7 @@ import * as Sentry from "@sentry/nextjs"
 import { registrationToken } from "@/lib/token-vault"
 import { orgTimeZone } from "@/lib/time-zone"
 import { remindersDue, type GroupableRegistration } from "@/lib/reminder-groups"
+import { REMINDER_WINDOW_HOURS } from "@/lib/automatic-reminders"
 
 export const dynamic = "force-dynamic"
 
@@ -33,10 +34,11 @@ function isAuthorized(req: Request): boolean {
 
 type Window = { kind: "reminder_j2" | "reminder_j1" | "reminder_dd"; field: "reminderJ2Sent" | "reminderJ1Sent" | "reminderDdSent"; minHours: number; maxHours: number }
 
+// The hours are shared with the reminders box of the admin event page (#705).
 const WINDOWS: Window[] = [
-  { kind: "reminder_j2", field: "reminderJ2Sent", minHours: 47, maxHours: 49 },
-  { kind: "reminder_j1", field: "reminderJ1Sent", minHours: 23, maxHours: 25 },
-  { kind: "reminder_dd", field: "reminderDdSent", minHours: 2,  maxHours: 4 },
+  { kind: "reminder_j2", field: "reminderJ2Sent", ...REMINDER_WINDOW_HOURS.j2 },
+  { kind: "reminder_j1", field: "reminderJ1Sent", ...REMINDER_WINDOW_HOURS.j1 },
+  { kind: "reminder_dd", field: "reminderDdSent", ...REMINDER_WINDOW_HOURS.dd },
 ]
 
 export async function GET(req: Request) {

@@ -8,7 +8,8 @@
  */
 
 import { coordinatesOf } from "./map-link"
-import { REMINDER_LABELS, type NotificationSettings, type ReminderKey } from "./notification-settings"
+import { EMAIL_SETTINGS_HREF, remindersState, type RemindersFacts } from "./automatic-reminders"
+import { REMINDER_LABELS } from "./notification-settings"
 import { formatMoment, registrationState } from "./registration-window"
 import type { StaffingSummary } from "./staffing"
 import { localDateTimeToUtc } from "./time-zone"
@@ -49,7 +50,7 @@ export type ReviewFacts = {
   /** Registration window (#463), read at `now` in the organization's time zone. Absent: no item. */
   registration?: { registrationsOpen: boolean; opensAt: Date | null; closesAt: Date | null; timeZone: string; now: Date }
   /** Automatic reminders (#381); only worth an item when a shift is still to come. Absent: no item. */
-  reminders?: { eventEnabled: boolean; organization: NotificationSettings["reminders"]; upcomingShifts: boolean }
+  reminders?: RemindersFacts
   /** Coverage of the shifts (#394), shown once the event is published. Absent: no item. */
   coverage?: Pick<StaffingSummary, "totals" | "underfilled">
 }
@@ -150,25 +151,28 @@ function registrationCheck(r: NonNullable<ReviewFacts["registration"]>, publishe
 }
 
 function remindersCheck(r: NonNullable<ReviewFacts["reminders"]>, base: string): ReviewCheck {
-  const settings = { href: "/admin/settings/notifications", action: "Réglages des emails" }
-  if (!r.eventEnabled) {
-    return {
-      id: "reminders", label: "Rappels automatiques coupés pour cet événement", ok: false, required: false, warn: true,
-      href: `${base}/edit#event-reminders`, action: "Modifier",
-      hint: "Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les réglages de l'organisation.",
-    }
-  }
-  const on = (Object.keys(REMINDER_LABELS) as ReminderKey[]).filter((k) => r.organization[k])
-  if (on.length === 3) return { id: "reminders", label: "Rappels automatiques J-2, J-1 et du jour activés", ok: true, required: false, ...settings }
-  if (on.length === 0) {
-    return {
-      id: "reminders", label: "Aucun rappel automatique : désactivés pour l'organisation", ok: false, required: false, warn: true, ...settings,
-      hint: "Les bénévoles ne reçoivent aucun rappel avant leurs créneaux.",
-    }
-  }
-  return {
-    id: "reminders", label: "Rappels automatiques en partie désactivés pour l'organisation", ok: false, required: false, warn: true, ...settings,
-    hint: `Seuls partent : ${on.map((k) => REMINDER_LABELS[k].label).join(", ")}.`,
+  const settings = { href: EMAIL_SETTINGS_HREF, action: "Réglages des emails" }
+  const state = remindersState(r)
+  switch (state.kind) {
+    case "no-upcoming-shift": // never reached: the item is only listed while a shift is to come
+    case "event-off":
+      return {
+        id: "reminders", label: "Rappels automatiques coupés pour cet événement", ok: false, required: false, warn: true,
+        href: `${base}/edit#event-reminders`, action: "Modifier",
+        hint: "Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les réglages de l'organisation.",
+      }
+    case "on":
+      return { id: "reminders", label: "Rappels automatiques J-2, J-1 et du jour activés", ok: true, required: false, ...settings }
+    case "org-off":
+      return {
+        id: "reminders", label: "Aucun rappel automatique : désactivés pour l'organisation", ok: false, required: false, warn: true, ...settings,
+        hint: "Les bénévoles ne reçoivent aucun rappel avant leurs créneaux.",
+      }
+    case "partly-off":
+      return {
+        id: "reminders", label: "Rappels automatiques en partie désactivés pour l'organisation", ok: false, required: false, warn: true, ...settings,
+        hint: `Seuls partent : ${state.on.map((k) => REMINDER_LABELS[k].label).join(", ")}.`,
+      }
   }
 }
 

@@ -59,20 +59,6 @@ export default function SendReminderButton({ eventId, hasMessage, volunteerCount
 
   return (
     <div className="space-y-4">
-      {/* Automatic reminders — informational */}
-      <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 space-y-1">
-        <p className="text-xs font-semibold text-gray-700">Rappels automatiques ✓ actifs</p>
-        <p className="text-xs text-gray-500 leading-relaxed">
-          Chaque bénévole inscrit reçoit automatiquement un email avec le récapitulatif de son créneau :
-        </p>
-        <ul className="text-xs text-gray-500 space-y-0.5 pl-3">
-          <li>• <strong>J-2</strong> — 48 h avant le début du créneau</li>
-          <li>• <strong>J-1</strong> — 24 h avant le début du créneau</li>
-          <li>• <strong>Jour J</strong> — 3 h avant le début du créneau</li>
-        </ul>
-        <p className="text-xs text-gray-500">Ces emails partent sans action de votre part.</p>
-      </div>
-
       {/* Manual reminder */}
       <div className="flex flex-col gap-2">
         <p className="text-xs font-semibold text-gray-700">Rappel ponctuel manuel</p>
