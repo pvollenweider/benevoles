@@ -31,10 +31,15 @@ export default defineConfig({
   // The e2e stack (postgres + mailpit) is started separately via
   // `make e2e-up` / `docker-compose.e2e.yml` — migrated and seeded via
   // `make e2e-setup`. This only owns the Next.js server itself.
+  // E2E_SERVER=production runs the suite against `next build` + `next start` (#592), as in
+  // production: no on-demand compilation under load, and build-time behaviour (prerendering,
+  // static params) is exercised. CI sets it; locally `next dev` stays the default.
   webServer: {
-    command: `npm run dev -- -p ${PORT}`,
+    command: process.env.E2E_SERVER === "production"
+      ? `npm run build && npm run start -- -p ${PORT}`
+      : `npm run dev -- -p ${PORT}`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
+    timeout: process.env.E2E_SERVER === "production" ? 600_000 : 120_000,
   },
 })

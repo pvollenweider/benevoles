@@ -98,6 +98,9 @@ jobs:
       AUTH_URL: http://localhost:3100
       AUTH_TRUST_HOST: "true"
       E2E_PORT: "3100"
+      # Run the suite against `next build` + `next start` (#592), as in production: no on-demand
+      # compilation under load, and build-time behaviour (prerendering) is exercised.
+      E2E_SERVER: production
 
     steps:
       - uses: actions/checkout@v7
