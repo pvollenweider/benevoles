@@ -20,10 +20,10 @@ export function isUnlistedPublic(e: Visibility): boolean {
   return e.publicStatus === "published" && !e.isListed
 }
 
-/** « Publié — non répertorié » where the plain status badge isn't enough. */
+/** « Publié, non répertorié » where the plain status badge isn't enough. */
 export function visibilityLabel(e: Visibility): string {
   switch (e.publicStatus) {
-    case "published": return e.isListed ? "Publié" : "Publié — non répertorié"
+    case "published": return e.isListed ? "Publié" : "Publié, non répertorié"
     case "archived": return "Archivé"
     default: return "Brouillon"
   }

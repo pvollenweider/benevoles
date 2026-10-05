@@ -91,7 +91,7 @@ La vérification signale aussi, sans jamais bloquer la publication, des points *
 
 - **Infos pratiques des créneaux** : le nombre de créneaux sans lieu de rendez-vous ou sans personne de contact (« 3 créneaux sans lieu ni contact »), ce que les bénévoles retrouvent dans l'email de confirmation, les rappels et leur page personnelle. Le lieu de l'événement vaut pour tous ses créneaux ; un contact, lui, se renseigne créneau par créneau. Lien vers les créneaux.
 - **Inscriptions** : ouvertes dès la publication (avec l'heure de fermeture si elle est programmée), ouverture programmée à une date donnée, ou fermées sans date d'ouverture, dans le fuseau de l'organisation. Une ouverture programmée ne compte que si la case **Inscriptions ouvertes** est cochée, et la vérification le rappelle. Lien vers les réglages de l'événement.
-- **Rappels automatiques**, seulement s'il reste un créneau à venir : tous envoyés, en partie ou entièrement désactivés pour l'organisation (lien vers **Paramètres → Emails**), ou coupés pour cet événement (ce dernier réglage ne se change pas encore depuis l'interface, le point n'a donc pas de lien).
+- **Rappels automatiques**, seulement s'il reste un créneau à venir : tous envoyés, en partie ou entièrement désactivés pour l'organisation (lien vers **Paramètres → Emails**), ou coupés pour cet événement (lien **Modifier** vers la case **Rappels automatiques** du formulaire de l'événement).
 - **Couverture**, une fois l'événement publié : places occupées et créneaux incomplets (« 46 places occupées sur 52, 3 créneaux incomplets »), avec le lien **Voir les créneaux incomplets** vers la page **Où manque-t-il du monde ?**.
 
 ### Partir d'un modèle
@@ -115,6 +115,8 @@ En haut de la page, **Comment commencer ?** propose une page blanche ou un modè
 L'événement est créé en **brouillon** (`draft`) — il n'est pas visible du public tant qu'il n'est pas publié.
 
 En modification (**`/admin/events/[id]/edit`**), chaque changement est enregistré automatiquement ; l'heure du dernier enregistrement s'affiche en haut du formulaire. Si un enregistrement échoue, un message le dit et **Réessayer** renvoie vos modifications.
+
+Le formulaire de modification propose aussi la case **Rappels automatiques** (cochée par défaut) : décochée, aucun rappel J-2, J-1 ni du jour ne part pour cet événement (voir « Rappels automatiques »).
 
 **Repartir d'un événement existant** (édition suivante d'un festival, même organisation d'une année sur l'autre) : **Dupliquer**, depuis la liste des événements ou la page de l'événement, ouvre une page de choix :
 
@@ -327,7 +329,7 @@ Une checklist simple de dates clés pour l'événement (ex. « Fermer les inscri
 
 **Où en est l'événement ?** En haut de sa page, une barre d'étapes le situe : **Brouillon → Prêt à publier → Publié → Terminé → Archivé**. « Prêt à publier » est un brouillon qui a au moins un créneau ; « Terminé » un événement publié dont le dernier jour est passé. Sous la barre, **À faire** dit ce qui manque encore (par exemple « aucun créneau ») et **Concrètement** ce que l'étape signifie : visible ou non pour les bénévoles, rappels envoyés ou non, suppression possible seulement une fois archivé.
 
-**Non répertorié** sert à séparer des publics : par exemple un planning réservé aux organisateurs, avec les mêmes postes que celui des bénévoles, que l'on ne veut pas voir sur la page d'accueil. Dans le formulaire d'édition, décochez **Afficher cet événement sur la page publique de l'organisation**, puis partagez le lien ou le QR code aux personnes concernées. L'administration affiche alors « Publié — non répertorié ».
+**Non répertorié** sert à séparer des publics : par exemple un planning réservé aux organisateurs, avec les mêmes postes que celui des bénévoles, que l'on ne veut pas voir sur la page d'accueil. Dans le formulaire d'édition, décochez **Afficher cet événement sur la page publique de l'organisation**, puis partagez le lien ou le QR code aux personnes concernées. L'administration affiche alors « Publié, non répertorié ».
 
 Ce n'est pas une protection : toute personne qui a le lien, ou qui le devine, peut ouvrir l'événement et s'y inscrire, et l'application ne propose pas de mot de passe. Pour réserver un poste à certains membres, utilisez l'**Accès réservé** (voir « Gérer les postes »). Une copie ou un événement créé depuis un modèle est toujours répertorié : le choix se refait pour chaque événement.
 
@@ -603,7 +605,7 @@ L'application envoie automatiquement des rappels :
 
 Un bénévole inscrit sur plusieurs créneaux le même jour pour un même événement ne reçoit qu'un seul email par rappel (un seul J-2, un seul J-1, un seul rappel du jour), listant tous ses créneaux de ce jour-là dans l'ordre des horaires, plutôt qu'un email par créneau. S'il est aussi inscrit le même jour sur un autre événement, il reçoit un email séparé pour cet événement. Un créneau de nuit (qui se termine après minuit) compte sur son jour de début. Une inscription faite après l'envoi du rappel du jour (inscription tardive) reçoit son propre rappel, sans jamais en manquer ni en dupliquer un.
 
-Ces rappels sont envoyés sans intervention de votre part pour les événements publiés, sauf ceux décochés pour toute l'organisation dans **Paramètres → Emails** (voir « Réglages des emails »).
+Ces rappels sont envoyés sans intervention de votre part pour les événements publiés, sauf ceux décochés pour toute l'organisation dans **Paramètres → Emails** (voir « Réglages des emails »). Pour couper tous les rappels d'un seul événement, décochez **Rappels automatiques** dans son formulaire de modification ; cochée, la case laisse s'appliquer les réglages de l'organisation.
 
 ### Notifications de modification
 

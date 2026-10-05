@@ -1,7 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, vi, afterEach } from "vitest"
+import { describe, it, expect, vi, afterEach, beforeEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, fireEvent, cleanup, act } from "@testing-library/react"
 
@@ -165,5 +165,64 @@ describe("EventForm labels", () => {
     expect(screen.getByLabelText(/^Message de rappel/)).toBeInstanceOf(HTMLTextAreaElement)
     fireEvent.click(screen.getByRole("button", { name: "+ Ajouter" }))
     for (const name of ["Nom du spectacle", "Date", "Début", "Fin"]) expect(screen.getByLabelText(name)).toBeInTheDocument()
+  })
+})
+
+// Event-level automatic reminders (Event.remindersEnabled): a box in the edit form, autosaved.
+describe("EventForm automatic reminders box", () => {
+  // The labels test above leaves its form mounted (no cleanup there).
+  beforeEach(() => cleanup())
+  afterEach(() => {
+    cleanup()
+    vi.useRealTimers()
+    vi.unstubAllGlobals()
+    announceMock.mockClear()
+  })
+
+  it("is checked by default, inside the #event-reminders anchor, and describes the organization settings", () => {
+    const { container } = renderForm()
+    const box = screen.getByRole("checkbox", { name: "Rappels automatiques" })
+    expect(box).toBeChecked()
+    expect(container.querySelector("#event-reminders")).toContainElement(box)
+    expect(box).toHaveAccessibleDescription("Les bénévoles reçoivent les rappels J-2, J-1 et du jour avant leurs créneaux. Les rappels désactivés dans « Réglages des emails » ne partent pas.")
+  })
+
+  it("takes focus when the page is opened on #event-reminders (the review's « Modifier » link)", () => {
+    window.history.replaceState(null, "", "/admin/events/evt-1/edit#event-reminders")
+    try {
+      renderForm()
+      expect(screen.getByRole("checkbox", { name: "Rappels automatiques" })).toHaveFocus()
+    } finally {
+      window.history.replaceState(null, "", "/")
+    }
+  })
+
+  it("does not take focus without the anchor", () => {
+    renderForm()
+    expect(screen.getByRole("checkbox", { name: "Rappels automatiques" })).not.toHaveFocus()
+  })
+
+  it("reflects a stored false", () => {
+    render(<EventForm initialData={{ ...initialData, remindersEnabled: false }} />)
+    expect(screen.getByRole("checkbox", { name: "Rappels automatiques" })).not.toBeChecked()
+  })
+
+  it("unchecking it autosaves remindersEnabled: false", async () => {
+    vi.useFakeTimers()
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ publicStatus: "draft" }) })
+    vi.stubGlobal("fetch", fetchMock)
+    renderForm()
+
+    fireEvent.click(screen.getByRole("checkbox", { name: "Rappels automatiques" }))
+    await debounce()
+
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({ remindersEnabled: false })
+    expect(announceMock).toHaveBeenCalledWith(expect.any(Function), "Modifications enregistrées.")
+  })
+
+  it("is not shown in create mode (new events always start with reminders on)", () => {
+    render(<EventForm />)
+    expect(screen.queryByRole("checkbox", { name: "Rappels automatiques" })).toBeNull()
   })
 })

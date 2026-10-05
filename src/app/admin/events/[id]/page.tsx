@@ -11,7 +11,7 @@ import ArchiveButton from "@/components/admin/ArchiveButton"
 import DeleteEventSection from "@/components/admin/DeleteEventSection"
 import SendReminderButton from "@/components/admin/SendReminderButton"
 import MilestonesSection from "@/components/admin/MilestonesSection"
-import { isUnlistedPublic, UNLISTED_HINT } from "@/lib/event-visibility"
+import { isUnlistedPublic, UNLISTED_HINT, visibilityLabel } from "@/lib/event-visibility"
 import EventLifecycleBar from "@/components/admin/EventLifecycleBar"
 import EventShareLink from "@/components/admin/EventShareLink"
 import { orgTimeZone } from "@/lib/time-zone"
@@ -149,7 +149,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
 
       {isUnlistedPublic(event) && (
         <p className="text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2">
-          <strong>Publié, non répertorié.</strong> {UNLISTED_HINT} L&apos;événement n&apos;apparaît pas sur la page publique de l&apos;organisation ; partagez son lien ou son QR code.
+          <strong>{visibilityLabel(event)}.</strong> {UNLISTED_HINT} L&apos;événement n&apos;apparaît pas sur la page publique de l&apos;organisation ; partagez son lien ou son QR code.
         </p>
       )}
 

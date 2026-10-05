@@ -11,7 +11,7 @@ describe("event visibility", () => {
   it("labels the four combinations", () => {
     expect(visibilityLabel({ publicStatus: "draft", isListed: false })).toBe("Brouillon")
     expect(visibilityLabel({ publicStatus: "published", isListed: true })).toBe("Publié")
-    expect(visibilityLabel({ publicStatus: "published", isListed: false })).toBe("Publié — non répertorié")
+    expect(visibilityLabel({ publicStatus: "published", isListed: false })).toBe("Publié, non répertorié")
     expect(visibilityLabel({ publicStatus: "archived", isListed: false })).toBe("Archivé")
     expect(isUnlistedPublic({ publicStatus: "draft", isListed: false })).toBe(false)
     expect(isUnlistedPublic({ publicStatus: "published", isListed: false })).toBe(true)
