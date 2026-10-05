@@ -83,7 +83,7 @@ export function renderWaitlistOffered(p: NotificationPayload): RenderedEmail {
       <div>🕐 ${escapeHtml(clockTime(d.shiftStart))}–${escapeHtml(clockTime(d.shiftEnd))}</div>
     </div>
     <p style="margin-top:1.5em">${btn(d.confirmUrl, "Confirmer ma participation")}</p>
-    <p style="color:#e55;font-size:0.85em;margin-top:1em">⏱ Ce lien expire le <strong>${escapeHtml(d.expiresAt)}</strong>. Passé ce délai, la place sera proposée à quelqu'un d'autre.</p>
+    <p style="color:#b91c1c;font-size:0.85em;margin-top:1em">⏱ Ce lien expire le <strong>${escapeHtml(d.expiresAt)}</strong>. Passé ce délai, la place sera proposée à quelqu'un d'autre.</p>
   `, `Une place s'est libérée ! Confirme avant le ${d.expiresAt}.`)
   return { subject, html, text }
 }

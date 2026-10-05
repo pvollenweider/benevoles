@@ -72,7 +72,7 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
     </div>
     ${message ? `<div style="background:#eff6ff;border-radius:8px;padding:14px 16px;margin-top:1em;font-size:0.9em;color:#1e40af;">${renderMarkdown(message)}</div>` : ""}
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">Un grand M E R C I et à très vite ! 🙌</p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">Un grand M E R C I et à très vite ! 🙌</p>
   `, preheader)
 
   return { subject, html, text }
@@ -156,7 +156,7 @@ export function renderRegistrationRefused(p: NotificationPayload): RenderedEmail
     ${note ? `<div style="background:#f9fafb;border-radius:8px;padding:14px 16px;margin-top:1em;font-size:0.9em;color:#333;white-space:pre-wrap"><strong>Message de l'organisation :</strong><br>${escapeHtml(note)}</div>` : ""}
     <p style="color:#555;margin-top:1em">D'autres créneaux sont peut-être ouverts :</p>
     <p style="margin-top:1.5em">${btn(eventUrl, "Voir les créneaux")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">Merci pour ton envie de donner un coup de main !</p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">Merci pour ton envie de donner un coup de main !</p>
   `, `L'organisation ne peut pas retenir ta demande cette fois-ci.`)
 
   return { subject, html, text }
@@ -199,7 +199,7 @@ export function renderShiftModified(p: NotificationPayload): RenderedEmail {
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} !</h2>
     <p style="color:#555">Petite info : le créneau <strong>${escapeHtml(d.shiftLabel)}</strong> pour <strong>${escapeHtml(d.eventTitle)}</strong> a changé d'horaire.</p>
     <div style="background:#f9fafb;border-radius:10px;padding:14px 16px;margin:1em 0">
-      <div style="color:#999;text-decoration:line-through;font-size:0.9em">${escapeHtml(d.oldDate)} · ${escapeHtml(d.oldStart)}–${escapeHtml(d.oldEnd)}</div>
+      <div style="color:#666;text-decoration:line-through;font-size:0.9em">${escapeHtml(d.oldDate)} · ${escapeHtml(d.oldStart)}–${escapeHtml(d.oldEnd)}</div>
       <div style="font-weight:600;margin-top:4px">→ ${escapeHtml(d.newDate)} · ${escapeHtml(d.newStart)}–${escapeHtml(d.newEnd)}</div>
     </div>
     <p style="color:#555;font-size:0.9em">Si ces nouveaux horaires ne te conviennent pas, tu peux gérer ton inscription ci-dessous.</p>
@@ -240,7 +240,7 @@ export function renderShiftCancelled(p: NotificationPayload): RenderedEmail {
     <p style="color:#555">Le créneau <strong>${escapeHtml(d.shiftLabel)}</strong> du ${escapeHtml(d.shiftDate)} pour <strong>${escapeHtml(d.eventTitle)}</strong> a malheureusement été annulé.</p>
     <p style="color:#555">D'autres créneaux sont peut-être disponibles, jette un œil ici :</p>
     <p style="margin-top:1.5em">${btn(eventUrl, "Voir les créneaux disponibles")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">Merci pour ta compréhension et toutes nos excuses pour la gêne occasionnée !</p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">Merci pour ta compréhension et toutes nos excuses pour la gêne occasionnée !</p>
   `, `Toutes nos excuses — d'autres créneaux restent peut-être disponibles.`)
 
   return { subject, html, text }
@@ -272,7 +272,7 @@ export function renderRegistrationLinkResend(p: NotificationPayload): RenderedEm
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 👋</h2>
     <p style="color:#555;margin:0 0 1.25em">Voici ton lien personnel pour voir ou modifier ton inscription à <strong>${escapeHtml(eventTitle)}</strong>.</p>
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mon inscription")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">À très vite !</p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">À très vite !</p>
   `, `Ton lien pour ${escapeHtml(eventTitle)}`)
 
   return { subject, html, text }

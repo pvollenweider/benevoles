@@ -32,6 +32,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Contraste des emails** : le bas de chaque email (mot de la fin, petites mentions, lien « benevol.app », désabonnement des nouveautés), la ligne « Tu ne peux pas participer cette fois ? » de l'invitation, les créneaux barrés et l'échéance d'une place proposée en liste d'attente étaient trop pâles (de 1,9:1 à 3,6:1) ; ils atteignent maintenant 4,5:1 au moins.
 - **Adresses réservées** : les variantes des sous-domaines techniques de benevol.app (pluriel ou singulier, tirets, accents : « media », « w-w-w », « apis »…) sont aussi refusées comme adresse d'une organisation, à la création comme au renommage.
 - **Adresse d'une organisation** : le slug d'une organisation pouvait prendre un sous-domaine technique de benevol.app (`www`, `api`, `admin`…), qui ne mène alors jamais à sa page ; ces adresses sont maintenant refusées, `medias` compris (réservé aux vidéos), et une organisation créée sous un tel nom reçoit un suffixe.
 - **Fusion de deux fiches** : garder l'adresse email de la fiche absorbée faisait échouer la fusion (l'adresse était encore prise par cette fiche au moment de l'enregistrement) ; rien n'était modifié, mais l'écran annonçait à tort une connexion interrompue. La fusion libère maintenant l'adresse d'abord, et une erreur du serveur est présentée comme telle, en disant si rien n'a été modifié.

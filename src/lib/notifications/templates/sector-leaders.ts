@@ -38,7 +38,7 @@ export function renderSectorLeaderInvite(p: NotificationPayload): RenderedEmail 
     <h2 style="margin:0 0 0.5em">Bonjour ${escapeHtml(firstName)},</h2>
     <p style="color:#555">Vous avez été désigné·e responsable du poste <strong>${escapeHtml(d.roleName)}</strong> pour <strong>${escapeHtml(d.eventTitle)}</strong>.</p>
     <p style="margin-top:1.25em">${btn(leaderUrl, "Voir qui est inscrit")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:1.5em">Ce lien reste valable pour toute la durée de l'événement.</p>
+    <p style="color:#666;font-size:0.85em;margin-top:1.5em">Ce lien reste valable pour toute la durée de l'événement.</p>
   `, `Consultez la liste des bénévoles inscrits sur « ${d.roleName} ».`)
 
   return { subject, html, text }
