@@ -19,6 +19,11 @@ export type Registration = {
   isLeader: boolean
   /** Lightweight check-in (#399): when the organizer marked this person present. */
   checkedInAt?: string | null
+  /** Proof of acceptance of the volunteer charter (#569): null for an "admin_manual" registration
+   * (no volunteer consent was given there), see src/lib/charter-hash.ts. */
+  /** Proof of charter acceptance (#569), already worded by charterAcceptanceLabel; null for a
+   * registration added by an organizer or made before the proof was stored. */
+  charterAcceptance?: string | null
 }
 
 /** The fields of the manual addition form. */

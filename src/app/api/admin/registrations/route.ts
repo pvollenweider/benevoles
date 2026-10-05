@@ -80,6 +80,8 @@ export async function POST(req: Request) {
         volunteerId: volunteer.id,
         source: "admin_manual",
         comment,
+        // No charterAcceptedHash/At (#569): an admin adds this registration by hand, so no
+        // volunteer consent to the charter was ever given here.
         ...registrationToken.data(generateToken()),
       },
       include: { volunteer: true, shift: true },

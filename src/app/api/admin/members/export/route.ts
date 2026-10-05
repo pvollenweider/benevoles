@@ -42,6 +42,20 @@ export async function GET() {
     if (!outcomesByVolunteer.has(o.volunteerId)) outcomesByVolunteer.set(o.volunteerId, [])
     outcomesByVolunteer.get(o.volunteerId)!.push(o)
   }
+  // Last time each member accepted the volunteer charter (#569), across every registration they
+  // have (several possible per person); null for a member whose registrations were all added by
+  // an admin by hand. Ordered newest first, so the first row kept per volunteer is the latest.
+  const acceptances = await db.registration.findMany({
+    where: { volunteerId: { in: members.map((m) => m.id) }, charterAcceptedAt: { not: null } },
+    orderBy: { charterAcceptedAt: "desc" },
+    select: { volunteerId: true, charterAcceptedAt: true },
+  })
+  const latestCharterAcceptanceByVolunteer = new Map<string, Date>()
+  for (const a of acceptances) {
+    if (!latestCharterAcceptanceByVolunteer.has(a.volunteerId) && a.charterAcceptedAt) {
+      latestCharterAcceptanceByVolunteer.set(a.volunteerId, a.charterAcceptedAt)
+    }
+  }
   const now = new Date()
   const csv = membersCsv(members.map(({ _count, id, ...m }) => ({
     ...m,
@@ -52,6 +66,7 @@ export async function GET() {
       outcome: OUTCOME_LABEL_FR[o.outcome as SmtpOutcome] ?? o.outcome,
       reason: o.reason ? (REASON_LABEL_FR[o.reason as SmtpReason] ?? o.reason) : null,
     })),
+    charterAcceptedAt: latestCharterAcceptanceByVolunteer.get(id) ?? null,
   })), orgTimeZone(org))
   return new NextResponse(csv, {
     headers: {

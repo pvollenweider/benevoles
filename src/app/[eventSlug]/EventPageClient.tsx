@@ -38,7 +38,7 @@ import DayTimeline from "@/components/DayTimeline"
 import { heldKinds } from "@/lib/public-timeline"
 import PublicFooter from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
-import { DEFAULT_VOLUNTEER_CHARTER } from "@/lib/volunteer-charter"
+import { resolveCharterText } from "@/lib/volunteer-charter"
 
 
 type Shift = {
@@ -155,6 +155,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   // « Quitter la session » removes itself: the focus lands on the title instead of the body.
   const titleRef = useRef<HTMLHeadingElement>(null)
   const [charterAccepted, setCharterAccepted] = useState(false)
+  // Which consent checkbox the last refusal was about (#569): marked invalid and focused.
+  const [invalidCheckbox, setInvalidCheckbox] = useState<"charter" | "consent" | null>(null)
   const [showCharter, setShowCharter] = useState(false)
   const charterTriggerRef = useRef<HTMLButtonElement>(null)
   const [form, setForm] = useState<SignupForm>(EMPTY_SIGNUP_FORM)
@@ -318,7 +320,14 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
       requirePhone: event?.requirePhone ?? false,
       ageGatedShifts: ageGatedSelectedShifts,
     })
-    if (invalid) { setFailure(null); setQuestionErrors(new Map()); setError(invalid); return }
+    if (invalid) {
+      setFailure(null); setQuestionErrors(new Map()); setError(invalid)
+      const box = !charterAccepted ? "charter" : !form.consent ? "consent" : null
+      setInvalidCheckbox(box)
+      if (box) requestAnimationFrame(() => document.getElementById(`reg-${box}`)?.focus())
+      return
+    }
+    setInvalidCheckbox(null)
     // Custom questions (#483): the same check as the server, the first refused field focused.
     const answerCheck = checkAnswers(event?.questions ?? [], answers)
     if (!answerCheck.ok) {
@@ -364,6 +373,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
           eventId: event!.id,
           shiftIds: Array.from(selectedShifts).filter((id) => !myShiftIds.has(id)),
           ...form,
+          // Proof of acceptance (#569): validateSignup already refused to get here without it.
+          charterAccepted,
           answers,
           inviteToken: inviteToken ?? undefined,
         }),
@@ -393,6 +404,13 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
       if (Array.isArray(refused)) setQuestionErrors(new Map(refused.filter((x): x is { questionId: string; message: string } => typeof x?.questionId === "string" && typeof x?.message === "string").map((x) => [x.questionId, x.message])))
       // Errors never carry a management token (#285): the owner gets it by email instead.
       setFailure(describeSignupFailure({ status: res.status, body: data }))
+      // The server refused the charter (#569): back to the checkbox, the alert is still announced.
+      if (data.field === "charterAccepted") {
+        setCharterAccepted(false)
+        setInvalidCheckbox("charter")
+        requestAnimationFrame(() => document.getElementById("reg-charter")?.focus())
+        return
+      }
       requestAnimationFrame(() => failureRef.current?.focus())
       return
     }
@@ -899,9 +917,12 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                 </div>
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
+                    id="reg-charter"
                     type="checkbox"
                     checked={charterAccepted}
-                    onChange={(e) => setCharterAccepted(e.target.checked)}
+                    aria-invalid={invalidCheckbox === "charter" || undefined}
+                    aria-describedby={invalidCheckbox === "charter" ? (failure ? "signup-failure" : "signup-error") : undefined}
+                    onChange={(e) => { setCharterAccepted(e.target.checked); if (e.target.checked && invalidCheckbox === "charter") setInvalidCheckbox(null) }}
                     className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
                   />
                   <span className="text-sm text-gray-600">
@@ -921,9 +942,12 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
 
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
+                    id="reg-consent"
                     type="checkbox"
                     checked={form.consent}
-                    onChange={(e) => setForm((f) => ({ ...f, consent: e.target.checked }))}
+                    aria-invalid={invalidCheckbox === "consent" || undefined}
+                    aria-describedby={invalidCheckbox === "consent" ? "signup-error" : undefined}
+                    onChange={(e) => { const checked = e.target.checked; setForm((f) => ({ ...f, consent: checked })); if (checked && invalidCheckbox === "consent") setInvalidCheckbox(null) }}
                     className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
                   />
                   <span className="text-sm text-gray-600">
@@ -938,7 +962,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                 )}
                 {failure && (
                   // Focused when it appears: the submit button lost the focus while the request ran.
-                  <div ref={failureRef} tabIndex={-1} role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-800 space-y-1 focus:outline-none">
+                  <div id="signup-failure" ref={failureRef} tabIndex={-1} role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-800 space-y-1 focus:outline-none">
                     <p className="font-semibold">{failure.title}</p>
                     <p>{failure.message}</p>
                     <p className="text-red-700">{failure.hint}</p>
@@ -973,7 +997,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
           panelClassName="max-w-lg"
         >
           <div className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
-            {event.volunteerCharter ?? DEFAULT_VOLUNTEER_CHARTER}
+            {resolveCharterText(event.volunteerCharter)}
           </div>
           <div className="pt-4 mt-4 border-t border-gray-100">
             <button

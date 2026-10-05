@@ -23,6 +23,7 @@ vi.mock("@/lib/prisma", () => ({
       $queryRaw: vi.fn(async (strings: TemplateStringsArray) => { m.order.push(strings.join("?").includes("Volunteer") ? "lock:volunteer" : "lock:shifts") }),
       shift: { findMany: vi.fn(async (args: unknown) => { m.order.push("limits"); return m.txShiftFindMany(args) }) },
       volunteer: { createMany: vi.fn(), findFirstOrThrow: vi.fn() },
+      charterVersion: { upsert: vi.fn() },
       registration: {
         findMany: vi.fn(async (args: { where: { shift?: unknown } }) => (args.where.shift ? m.txRegFindMany(args) : [])),
         count: vi.fn().mockResolvedValue(0),
@@ -45,7 +46,7 @@ function post(shiftIds: string[]) {
   return new Request("http://localhost/api/public/registrations", {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-forwarded-for": `test-${Math.random()}` },
-    body: JSON.stringify({ eventId: "evt-1", shiftIds, firstName: "Alice", lastName: "Martin", email: "a@x.com", consent: true }),
+    body: JSON.stringify({ eventId: "evt-1", shiftIds, firstName: "Alice", lastName: "Martin", email: "a@x.com", consent: true, charterAccepted: true }),
   })
 }
 

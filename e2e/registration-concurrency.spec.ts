@@ -39,7 +39,7 @@ function register(request: APIRequestContext, eventId: string, shiftId: string, 
   return request.post("/api/public/registrations", {
     // Distinct client IPs so the per-IP rate limit on this route doesn't interfere.
     headers: { "x-forwarded-for": `10.64.${i}.${Math.floor(Math.random() * 250)}` },
-    data: { eventId, shiftIds: [shiftId], firstName: "E2E", lastName: `Race${i}`, email, consent: true },
+    data: { eventId, shiftIds: [shiftId], firstName: "E2E", lastName: `Race${i}`, email, consent: true, charterAccepted: true },
   })
 }
 

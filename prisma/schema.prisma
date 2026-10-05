@@ -39,6 +39,7 @@ model Organization {
   targetedMessages TargetedMessage[]
   messageTemplates MessageTemplate[]
   duplicateDismissals DuplicateDismissal[]
+  charterVersions CharterVersion[]
 }
 
 model OrgSlugHistory {
@@ -257,6 +258,27 @@ model DuplicateDismissal {
   @@index([volunteerIdB])
 }
 
+// Proof of acceptance of the volunteer charter (#569): the sign-up route hashes the exact text
+// shown (src/lib/charter-hash.ts, resolveCharterText) and stores the hash plus acceptance date on
+// each Registration it creates (Registration.charterAcceptedHash/At) — the simplest place to
+// answer "which text, when", since one sign-up may create several registrations and each already
+// carries its own creation date. This table resolves a hash back to its text later: one row per
+// distinct text an organization has shown, upserted (never overwritten) the first time it's seen.
+// Lives with the organization (no retention of its own): see RETENTION in src/lib/retention.ts and
+// docs/rgpd/inventaire.md.
+model CharterVersion {
+  id             String   @id @default(cuid())
+  organizationId String
+  hash           String
+  text           String
+  firstSeenAt    DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, hash])
+  @@index([organizationId])
+}
+
 // One row per manual product-update broadcast to the beta-tester (AdminUser) pool — see
 // issue #200. Not a queue/job table: sending is synchronous within the request (a handful of
 // recipients, admin-triggered by hand, not periodic) — this is a history/log of what was sent,
@@ -405,6 +427,12 @@ model Registration {
   checkedInAt      DateTime?
   // Last email carrying the personal link (confirmation or re-send), for the personal page (#376).
   linkEmailedAt    DateTime?
+  // Proof of acceptance of the volunteer charter at public sign-up (#569): SHA-256 of the exact
+  // text shown (src/lib/charter-hash.ts; resolved back to its text via CharterVersion) and when.
+  // Null for a registration added by an admin (source "admin_manual"): no volunteer consent was
+  // given there, so nothing is recorded.
+  charterAcceptedHash String?
+  charterAcceptedAt   DateTime?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 

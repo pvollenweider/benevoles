@@ -22,7 +22,7 @@ La personne bénévole s'engage librement pour mener une activité non salariée
 - De respecter les consignes de sécurité en vigueur,
 - D'être garante de l'image de l'organisation,
 - De considérer son engagement avec tout le sérieux nécessaire au bon déroulement des activités,
-- De prévenir la responsable bénévole au moins 48 heures à l'avance en cas de désistement ou de changement de disponibilité, afin de ne pas compromettre l'organisation générale de l'équipe.
+- De prévenir la responsable bénévole dès que possible en cas de désistement ou de changement de disponibilité, afin de ne pas compromettre l'organisation générale de l'équipe.
 
 3. L'organisation s'engage envers la personne bénévole
 
@@ -34,3 +34,12 @@ ${insuranceClause}`
 }
 
 export const DEFAULT_VOLUNTEER_CHARTER = buildVolunteerCharter()
+
+/**
+ * The exact charter text shown to a volunteer at public sign-up (#569): the organization's own
+ * custom text when it set one, the default otherwise. Shared by the public page (EventPageClient)
+ * and the sign-up route, which hashes this same text as proof of what was accepted.
+ */
+export function resolveCharterText(organizationCharter: string | null | undefined): string {
+  return organizationCharter ?? DEFAULT_VOLUNTEER_CHARTER
+}

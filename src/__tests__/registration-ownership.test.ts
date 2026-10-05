@@ -28,6 +28,7 @@ vi.mock("@/lib/prisma", () => {
     shift: { findMany: vi.fn().mockResolvedValue([]) }, // no role limit (#466)
     // A new volunteer is created inside the registration transaction (#309).
     volunteer: { createMany: m.txVolCreateMany, findFirstOrThrow: m.txVolFindFirstOrThrow },
+    charterVersion: { upsert: vi.fn() },
     registration: {
       findMany: m.txRegFindMany,
       count: vi.fn().mockResolvedValue(0),
@@ -85,7 +86,7 @@ function post(extra: Record<string, unknown> = {}) {
     headers: { "Content-Type": "application/json", "x-forwarded-for": `t-${Math.random()}` },
     body: JSON.stringify({
       eventId: "evt-1", shiftIds: ["shift-2"], firstName: "Mallory", lastName: "X", email: "owner@x.com",
-      phone: "0791111111", consent: true, ...extra,
+      phone: "0791111111", consent: true, charterAccepted: true, ...extra,
     }),
   })
 }
