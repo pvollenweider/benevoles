@@ -1,0 +1,65 @@
+{
+  "id": "VOLUNTEER_DISCOVER_EVENT",
+  "slug": "volunteer-discover-event",
+  "validatedAt": "2026-10-05T06:50:11.654Z",
+  "continuousNarration": true,
+  "voice": "Puck",
+  "captureMs": 175520,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 12673,
+      "audioMs": 12669,
+      "driftMs": 4
+    },
+    {
+      "id": "access",
+      "visualMs": 18488,
+      "audioMs": 18485,
+      "driftMs": 3
+    },
+    {
+      "id": "identity",
+      "visualMs": 20592,
+      "audioMs": 20589,
+      "driftMs": 3
+    },
+    {
+      "id": "pages",
+      "visualMs": 18432,
+      "audioMs": 18430,
+      "driftMs": 2
+    },
+    {
+      "id": "desktop",
+      "visualMs": 12926,
+      "audioMs": 12922,
+      "driftMs": 4
+    },
+    {
+      "id": "states",
+      "visualMs": 20694,
+      "audioMs": 20692,
+      "driftMs": 2
+    },
+    {
+      "id": "mobile",
+      "visualMs": 20634,
+      "audioMs": 20629,
+      "driftMs": 5
+    },
+    {
+      "id": "invitation",
+      "visualMs": 15013,
+      "audioMs": 15010,
+      "driftMs": 3
+    },
+    {
+      "id": "result",
+      "visualMs": 14976,
+      "audioMs": 14974,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}

@@ -8,7 +8,8 @@ Les commandes, les logs, la documentation et les futures traductions doivent ré
 identifiant, jamais un numéro d'ordre. Les slugs ci-dessous ne sont que les noms actuels des
 manifestes et des fichiers de sortie.
 
-Cinq vidéos sont disponibles ou en prévisualisation :
+Le catalogue complet et les statuts de production se trouvent dans `catalog.json` et
+`MASTERCLASS_PLAN.md`. Parmi les premières vidéos de présentation :
 
 - `volunteer-register-mobile` : inscription d’un bénévole depuis un téléphone ;
 - `organizer-create-publish` : création d’un événement, préparation des créneaux et publication.
@@ -31,7 +32,7 @@ Cinq vidéos sont disponibles ou en prévisualisation :
 - FFmpeg et FFprobe ;
 - une pile locale avec PostgreSQL, Mailpit et l’application ;
 - la base initialisée avec le seed principal puis `scripts/seed-demo.ts` ;
-- une clé Gemini uniquement pour générer la narration.
+- une clé Gemini pour générer la narration et contrôler les paroles des extraits générés.
 
 Les captures utilisent une pile qui leur est propre afin de ne pas prendre les ports du
 développement ni ceux des tests E2E :
@@ -80,7 +81,32 @@ Variables facultatives :
 - `GEMINI_TTS_VOICE`, par défaut la voix du manifeste ;
 - option `--force` pour régénérer les WAV existants.
 
-Par défaut, chaque phrase est générée séparément. Un manifeste peut activer `continuousNarration` : Gemini produit alors toute la narration en une seule prise afin de conserver exactement la même interprétation. Le pipeline repère les pauses demandées et découpe ensuite cette prise en segments pour conserver une synchronisation précise avec les manipulations. La durée réelle de chaque segment est mesurée par FFprobe et enregistrée dans `audio-metadata.json`.
+Les vidéos de la masterclass utilisent `continuousNarration` : Gemini produit la narration en
+une seule prise, avec la voix choisie dans le manifeste. Les consignes de livraison doivent
+rester courtes (sourire, rythme, articulation), sans longues instructions d'identité vocale.
+Le repérage des pauses ne fournit qu'un premier découpage : il peut déplacer des phrases entre
+chapitres. La durée de chaque extrait est mesurée par FFprobe dans `audio-metadata.json`.
+
+### Contrôler les paroles avant la capture
+
+```bash
+node --env-file=.env.video.local --import tsx videos/tools/audit-narration.ts SECTOR_LEADERS
+```
+
+Ce contrôle envoie uniquement les extraits de narration fictive à Gemini pour une transcription
+indépendante, sans fournir le texte attendu dans la demande. `narration-audit.json` garde la
+comparaison et l'empreinte de chaque WAV. Une différence importante arrête le pipeline.
+Le contrôle ne prouve pas la qualité du sourire ni la concordance phrase/manipulation : la
+passe audiovisuelle reste obligatoire, y compris lorsque le taux de différence est faible.
+
+Pour une frontière incorrecte, `locate-narration-boundary.ts VIDEO_ID segment-id` propose un
+repère à partir d'une courte fenêtre sonore et d'un silence réel. Les timestamps suggérés par
+un modèle ne sont jamais acceptés comme preuve. Après diagnostic, appliquer un repère avec
+`recut-narration.ts VIDEO_ID segment-id=secondes`, refaire l'audit puis refaire la capture.
+Si des paroles manquent réellement à la prise, régénérer la narration complète.
+
+`video:build` contrôle les paroles après le TTS et avant le seed/capture. `video:validate`
+refuse un rapport en échec ou dont les empreintes ne correspondent plus aux WAV actuels.
 
 ## 3. Enregistrer les manipulations
 

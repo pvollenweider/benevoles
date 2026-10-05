@@ -1,0 +1,15 @@
+{
+  "model": "gemini-3.8-flash",
+  "auditedAt": "2026-10-05T10:23:27.446Z",
+  "note": "ASR evidence, not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "nominate",
+      "audioSha256": "98f2d8b30fe4077e896cd592663a03443119d6db85e6b78cbec1b7c6c4ecb526",
+      "recognized": "Aucun accès à toute l'administration n'est nécessaire. Dans l'événement, ouvre les responsables et ajoute une personne. Choisis le poste, puis renseigne son nom et son e-mail. Vérifie bien cette adresse, c'est là que son lien sera envoyé.",
+      "expected": "Dans l'événement, ouvre les responsables et ajoute une personne. Choisis le poste, puis renseigne son nom et son email. Vérifie bien cette adresse : c'est là que son lien sera envoyé. Tu peux désigner quelqu'un qui n'est pas lui-même inscrit à un créneau. Ajouter et envoyer le lien enregistre la nomination et prépare son email.",
+      "wordErrorRate": 0.6440677966101694,
+      "needsReview": true
+    }
+  ]
+}

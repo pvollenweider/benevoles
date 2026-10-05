@@ -1,0 +1,53 @@
+{
+  "id": "SHIFT_WAITLIST_OFFER",
+  "slug": "shift-waitlist-offer",
+  "validatedAt": "2026-10-04T17:33:44.907Z",
+  "continuousNarration": true,
+  "voice": "Kore",
+  "captureMs": 106360,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 15568,
+      "audioMs": 15568,
+      "driftMs": 0
+    },
+    {
+      "id": "setup",
+      "visualMs": 15894,
+      "audioMs": 15893,
+      "driftMs": 1
+    },
+    {
+      "id": "admin",
+      "visualMs": 14143,
+      "audioMs": 14142,
+      "driftMs": 1
+    },
+    {
+      "id": "release",
+      "visualMs": 13324,
+      "audioMs": 13321,
+      "driftMs": 3
+    },
+    {
+      "id": "volunteer",
+      "visualMs": 14900,
+      "audioMs": 14899,
+      "driftMs": 1
+    },
+    {
+      "id": "expiry",
+      "visualMs": 13400,
+      "audioMs": 13400,
+      "driftMs": 0
+    },
+    {
+      "id": "result",
+      "visualMs": 12619,
+      "audioMs": 12617,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}

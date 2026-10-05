@@ -1,0 +1,29 @@
+Préparer, publier et partager un planning bénévole
+
+Voici comment préparer et partager un planning bénévole. Pour démarrer, tu peux choisir un modèle déjà prêt, avec ses postes et ses horaires, ou partir d’une page blanche. Ici, on va tout créer depuis le début.
+
+Donne-lui un nom clair, ajoute une courte description, le lieu et les dates. L’événement reste en brouillon : rien n’est visible tant que tu n’as pas terminé ton planning.
+
+Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement. Quand les horaires se répètent, la création en série va plus vite : pour l’accueil, indique la plage horaire, la durée et la capacité, et les créneaux sont préparés automatiquement.
+
+Ajoute ensuite manuellement un poste Livraison. Il faut avoir au moins dix-huit ans et posséder un permis B valide. Ces conditions sont visibles par les bénévoles, avec la consigne précisant que le véhicule est fourni.
+
+Pour un poste sensible comme la Caisse, active l’inscription sur validation. Chaque personne peut proposer son aide, mais l’organisateur accepte ou refuse la demande avant de la confirmer.
+
+Tu peux aussi décider quand les inscriptions commenceront et quand elles se termineront, dans le fuseau horaire de ton organisation. Si tu ne programmes pas de date d’ouverture, elles seront disponibles dès la publication.
+
+L’écran de vérification résume maintenant les trois postes, les quatre créneaux et toutes les places. Tu peux encore revenir corriger un horaire, un effectif ou une consigne.
+
+Avant de publier, ouvre l’aperçu bénévole et simule une vraie inscription. Choisis un créneau, renseigne les coordonnées du bénévole et confirme ses choix. Tu peux ainsi vérifier tout le parcours qu’il verra, sans créer de véritable inscription.
+
+L’aperçu montre aussi le message affiché après l’inscription et l’email automatique qui serait envoyé, avec son objet, son contenu et son lien personnel. Rien n’est réellement enregistré ni expédié pendant ce test.
+
+Quand tout est prêt, publie le planning. La page d’inscription devient accessible, mais aucun message n’est envoyé automatiquement : tu gardes la main sur sa diffusion.
+
+Pour une affiche, un comptoir ou les réseaux sociaux, ouvre le QR code. Tu peux le télécharger en PNG ou en SVG, ou imprimer directement cette fiche prête à être scannée.
+
+Si c’est la première fois que tu utilises l’application, l’import permet de constituer rapidement ta liste de membres depuis un CSV ou un fichier Excel. L’application analyse les colonnes, les tags et les doublons, puis montre exactement ce qui sera créé avant confirmation.
+
+Retourne ensuite dans les invitations de l’événement. Filtre les membres par tag et sélectionne les personnes concernées. Tu peux envoyer les invitations par lot, ou inviter une seule personne individuellement si tu le souhaites, avec un petit mot personnalisé.
+
+Et voilà le résultat côté bénévoles : plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation. Le planning est prêt à circuler par lien, QR code ou invitation !

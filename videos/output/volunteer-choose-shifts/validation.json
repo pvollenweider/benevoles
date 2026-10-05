@@ -1,0 +1,65 @@
+{
+  "id": "VOLUNTEER_CHOOSE_SHIFTS",
+  "slug": "volunteer-choose-shifts",
+  "validatedAt": "2026-10-05T07:21:35.501Z",
+  "continuousNarration": true,
+  "voice": "Kore",
+  "captureMs": 163520,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 14383,
+      "audioMs": 14381,
+      "driftMs": 2
+    },
+    {
+      "id": "select",
+      "visualMs": 17720,
+      "audioMs": 17719,
+      "driftMs": 1
+    },
+    {
+      "id": "capacity",
+      "visualMs": 16091,
+      "audioMs": 16082,
+      "driftMs": 9
+    },
+    {
+      "id": "waitlist",
+      "visualMs": 16618,
+      "audioMs": 16618,
+      "driftMs": 0
+    },
+    {
+      "id": "approval-reserved",
+      "visualMs": 18356,
+      "audioMs": 18353,
+      "driftMs": 3
+    },
+    {
+      "id": "conflict",
+      "visualMs": 15418,
+      "audioMs": 15418,
+      "driftMs": 0
+    },
+    {
+      "id": "known",
+      "visualMs": 21161,
+      "audioMs": 21160,
+      "driftMs": 1
+    },
+    {
+      "id": "limit",
+      "visualMs": 16318,
+      "audioMs": 16317,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 15473,
+      "audioMs": 15472,
+      "driftMs": 1
+    }
+  ],
+  "issues": []
+}

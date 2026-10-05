@@ -1,0 +1,12 @@
+{
+  "anchor": "Choisis donc chaque état selon l’intention : brouillon pendant la préparation,",
+  "windowStart": 86.77799999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 9.7,
+    "wordsHeard": "Choisis donc chaque état selon l’intention"
+  },
+  "onset": 96.478,
+  "proposedCut": 96.083875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

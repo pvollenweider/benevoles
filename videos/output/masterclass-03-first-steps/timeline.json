@@ -1,0 +1,52 @@
+{
+  "slug": "masterclass-03-first-steps",
+  "recordedAt": "2026-10-04T09:06:07.484Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1152,
+      "endMs": 14895
+    },
+    {
+      "id": "checklist",
+      "startMs": 15347,
+      "endMs": 37325
+    },
+    {
+      "id": "identity",
+      "startMs": 38952,
+      "endMs": 56311
+    },
+    {
+      "id": "timezone",
+      "startMs": 56763,
+      "endMs": 73454
+    },
+    {
+      "id": "event",
+      "startMs": 75091,
+      "endMs": 98280
+    },
+    {
+      "id": "shift",
+      "startMs": 98732,
+      "endMs": 114252
+    },
+    {
+      "id": "publish",
+      "startMs": 114720,
+      "endMs": 132818
+    },
+    {
+      "id": "test",
+      "startMs": 134491,
+      "endMs": 157018
+    },
+    {
+      "id": "result",
+      "startMs": 158639,
+      "endMs": 178671
+    }
+  ]
+}

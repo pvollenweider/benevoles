@@ -1,0 +1,71 @@
+{
+  "model": "gemini-3.8-flash",
+  "auditedAt": "2026-10-05T11:02:29.493Z",
+  "note": "ASR evidence, not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "c859494057257cda68b17c80c9275062b6dd2e89aa7cea3376a2e3eca490c23b",
+      "recognized": "Ton lien personnel permet de retrouver les inscriptions d'un événement sans créer de compte. Ici, Camille a une place confirmée, une inscription en attente, une place proposée et une demande à valider. Nous allons lire les informations utiles, puis montrer comment retirer chacun de ses engagements. Ce lien reste confidentiel, il permet d'agir sur tes inscriptions.",
+      "expected": "Ton lien personnel permet de retrouver les inscriptions d'un événement sans créer de compte. Ici, Camille a une place confirmée, une inscription en attente, une place proposée et une demande à valider. Nous allons lire les informations utiles, puis montrer comment retirer chacun de ces engagements. Ce lien reste confidentiel : il permet d'agir sur tes inscriptions.",
+      "wordErrorRate": 0.017241379310344827,
+      "needsReview": false
+    },
+    {
+      "id": "practical",
+      "audioSha256": "ba2810838484beb9927efb7222b5d731b825e1aba3808263e775c5ec584a35e9",
+      "recognized": "Commençons par l'accueil confirmé. La carte indique le jour et les horaires. Le rendez-vous et les consignes expliquent où aller et comment se préparer. Le lien carte aide à retrouver le lieu. La personne de contact et son téléphone sont réservés aux inscrits. Garde ces informations pour prévenir l'équipe ou demander de l'aide sur place.",
+      "expected": "Commençons par l'Accueil confirmé. La carte indique le jour et les horaires. Le rendez-vous et les consignes expliquent où aller et comment se préparer. Le lien carte aide à retrouver le lieu. La personne de contact et son téléphone sont réservés aux inscrits : garde ces informations pour prévenir l'équipe ou demander de l'aide sur place.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "states",
+      "audioSha256": "60781259aec12d9de1042b117214dc7de3dde15347580e72a322b0d00daa2f94",
+      "recognized": "Les autres cartes ne signifient pas la même chose. Liste d'attente indique ta position sans place confirmée. Une place proposée affiche une échéance et un lien pour la prendre. Tant que tu n'as pas accepté, ne la considère pas comme acquise. Une demande sur validation attend la décision de l'organisation qui te prévient par e-mail. Lis toujours le statut avant de préparer ton planning.",
+      "expected": "Les autres cartes ne signifient pas la même chose. Liste d'attente indique ta position, sans place confirmée. Une place proposée affiche une échéance et un lien pour la prendre : tant que tu n'as pas accepté, ne la considère pas comme acquise. Une demande sur validation attend la décision de l'organisation, qui te prévient par email. Lis toujours le statut avant de préparer ton planning.",
+      "wordErrorRate": 0.029850746268656716,
+      "needsReview": false
+    },
+    {
+      "id": "cancel",
+      "audioSha256": "a87fed0189d0ac617db4c8d1ffc9c1a80ce2a329354f5445da795656c850e8c7",
+      "recognized": "Pour l'accueil, annuler ouvre une confirmation. Tu peux encore choisir « Non, garder », rien n'est retiré. Reprenons et confirmons cette fois : la carte disparaît de la page personnelle. Si tu changes de disponibilité près du début de la mission, préviens aussi le contact sur place. Cela aide l'équipe à réorganiser la relève.",
+      "expected": "Pour l'Accueil, Annuler ouvre une confirmation. Tu peux encore choisir Non, garder : rien n'est retiré. Reprenons et confirmons cette fois. La carte disparaît de la page personnelle. Si tu changes de disponibilité près du début de la mission, préviens aussi le contact sur place : cela aide l'équipe à réorganiser la relève.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "waiting",
+      "audioSha256": "645fd45538cd5990c862d1043d71ef43312dd0255ce0ed8cfe45a436af1a6817",
+      "recognized": "Si tu n'es plus disponible pour la buvette en attente, choisis quitter la liste d'attente. La confirmation explique que tu ne seras plus prévenu si une place se libère pour ce créneau. Confirme uniquement si c'est ce que tu souhaites. La carte disparaît, tu n'es plus dans cette file, mais tes autres inscriptions restent présentes.",
+      "expected": "Si tu n'es plus disponible pour la Buvette en attente, choisis Quitter la liste d'attente. La confirmation explique que tu ne seras plus prévenu si une place se libère pour ce créneau. Confirme uniquement si c'est ce que tu souhaites. La carte disparaît : tu n'es plus dans cette file, mais tes autres inscriptions restent présentes.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "offer",
+      "audioSha256": "c24d9d4dce6ebc5a7de4a7df4c873f5bbfc7dea145e9135f4d6c5ff41352695c",
+      "recognized": "Pour une place proposée, le bouton est Refuser la place. Lis les conséquences : la place passe à la personne suivante et tu quittes la liste d'attente. Après confirmation, cette offre disparaît. Si tu voulais participer, il fallait au contraire utiliser Prendre la place et suivre la confirmation d'acceptation avant l'échéance indiquée.",
+      "expected": "Pour une place proposée, le bouton est Refuser la place. Lis les conséquences : la place passe à la personne suivante et tu quittes la liste d'attente. Après confirmation, cette offre disparaît. Si tu voulais participer, il fallait au contraire utiliser Prendre la place et suivre la confirmation d'acceptation avant l'échéance indiquée.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "request",
+      "audioSha256": "6134d5ce1d2561dc6799bfbc0c4df55b1b1670ebf35f7ef51653b9301e1a5f2f",
+      "recognized": "Il reste la demande pour la navette du dimanche. Retirer ma demande ouvre sa confirmation. La place qui t'était réservée est libérée. En confirmant, tu retires cette candidature sans attendre une réponse de l'organisateur. C'est ici le dernier engagement de Camille. La page indique maintenant que toutes ses inscriptions ont été annulées.",
+      "expected": "Il reste la demande pour la Navette du dimanche. Retirer ma demande ouvre sa confirmation : la place qui t'était réservée est libérée. En confirmant, tu retires cette candidature sans attendre une réponse de l'organisateur. C'est ici le dernier engagement de Camille. La page indique maintenant que toutes ses inscriptions ont été annulées.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "return",
+      "audioSha256": "3528dfe206789a2b092f3b168b80e124aefc0f208acffb85b1f36a7bf6ca1b11",
+      "recognized": "Le lien retour à l'accueil ramène à la page de l'événement. Tu peux regarder les places disponibles et choisir un autre créneau si ta disponibilité a changé. Retirer une inscription ne supprime pas automatiquement ton profil de membre de l'association. Pour une question sur tes données ou une difficulté avec ton lien, contacte l'organisation.",
+      "expected": "Le lien Retour à l'accueil ramène à la page de l'événement. Tu peux regarder les places disponibles et choisir un autre créneau si ta disponibilité a changé. Retirer une inscription ne supprime pas automatiquement ton profil de membre de l'association. Pour une question sur tes données ou une difficulté avec ton lien, contacte l'organisation.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    }
+  ]
+}

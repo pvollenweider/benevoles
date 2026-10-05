@@ -1,0 +1,42 @@
+{
+  "slug": "volunteer-register-mobile",
+  "recordedAt": "2026-10-02T11:59:20.402Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 9081
+    },
+    {
+      "id": "discover",
+      "startMs": 9534,
+      "endMs": 15819
+    },
+    {
+      "id": "choose",
+      "startMs": 16273,
+      "endMs": 22954
+    },
+    {
+      "id": "details",
+      "startMs": 23409,
+      "endMs": 31450
+    },
+    {
+      "id": "preferences",
+      "startMs": 31901,
+      "endMs": 37704
+    },
+    {
+      "id": "confirm",
+      "startMs": 38158,
+      "endMs": 44359
+    },
+    {
+      "id": "success",
+      "startMs": 44812,
+      "endMs": 56054
+    }
+  ]
+}

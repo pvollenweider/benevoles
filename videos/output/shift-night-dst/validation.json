@@ -1,0 +1,53 @@
+{
+  "id": "SHIFT_NIGHT_DST",
+  "slug": "shift-night-dst",
+  "validatedAt": "2026-10-04T17:04:30.710Z",
+  "continuousNarration": true,
+  "voice": "Puck",
+  "captureMs": 102000,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 8302,
+      "audioMs": 8297,
+      "driftMs": 5
+    },
+    {
+      "id": "ordinary",
+      "visualMs": 20377,
+      "audioMs": 20376,
+      "driftMs": 1
+    },
+    {
+      "id": "spring",
+      "visualMs": 15563,
+      "audioMs": 15561,
+      "driftMs": 2
+    },
+    {
+      "id": "autumn",
+      "visualMs": 19286,
+      "audioMs": 19285,
+      "driftMs": 1
+    },
+    {
+      "id": "timezone",
+      "visualMs": 8507,
+      "audioMs": 8506,
+      "driftMs": 1
+    },
+    {
+      "id": "calendar",
+      "visualMs": 13443,
+      "audioMs": 13442,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 12055,
+      "audioMs": 12053,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}

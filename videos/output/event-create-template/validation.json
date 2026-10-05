@@ -1,0 +1,47 @@
+{
+  "id": "EVENT_CREATE_TEMPLATE",
+  "slug": "event-create-template",
+  "validatedAt": "2026-10-04T14:30:33.044Z",
+  "continuousNarration": true,
+  "voice": "Puck",
+  "captureMs": 97080,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 12471,
+      "audioMs": 12469,
+      "driftMs": 2
+    },
+    {
+      "id": "compare",
+      "visualMs": 21601,
+      "audioMs": 21600,
+      "driftMs": 1
+    },
+    {
+      "id": "preview",
+      "visualMs": 14044,
+      "audioMs": 14043,
+      "driftMs": 1
+    },
+    {
+      "id": "create",
+      "visualMs": 12382,
+      "audioMs": 12382,
+      "driftMs": 0
+    },
+    {
+      "id": "adapt",
+      "visualMs": 16802,
+      "audioMs": 16800,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 13667,
+      "audioMs": 13666,
+      "driftMs": 1
+    }
+  ],
+  "issues": []
+}

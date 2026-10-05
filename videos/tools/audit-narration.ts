@@ -11,7 +11,8 @@ import { loadManifest, videoDir } from "../lib/manifest"
 const reference = process.argv[2]
 if (!reference) throw new Error("Usage: audit-narration.ts VIDEO_ID [segment-id]")
 const model = process.env.VIDEO_AUDIT_MODEL ?? "gemini-3.8-flash"
-const words = (text: string) => text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().match(/[a-z0-9]+/g) ?? []
+// ASR may write « e-mail » where the reference uses « email »: same spoken word.
+const words = (text: string) => text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().replace(/\be-mail\b/g, "email").match(/[a-z0-9]+/g) ?? []
 function distance(a: string[], b: string[]) {
   let row = Array.from({ length: b.length + 1 }, (_, i) => i)
   for (let i = 1; i <= a.length; i++) {

@@ -1,0 +1,12 @@
+{
+  "anchor": "La rubrique Mes disponibilités permet d'indiquer les moments où tu es",
+  "windowStart": 94.756,
+  "result": {
+    "found": true,
+    "startSeconds": 8.58,
+    "wordsHeard": "La"
+  },
+  "onset": 103.336,
+  "proposedCut": 103.435375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans l'événement importé, tu retrouves le nom de la fête et",
+  "windowStart": 71.283,
+  "result": {
+    "found": true,
+    "startSeconds": 15,
+    "wordsHeard": "Dans l'événement importé tu retrouves le nom de la fête et"
+  },
+  "onset": 86.283,
+  "proposedCut": 86.283,
+  "note": "Proposal only; recut then independently audit before capture"
+}

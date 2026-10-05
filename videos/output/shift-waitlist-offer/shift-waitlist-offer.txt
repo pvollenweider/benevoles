@@ -1,0 +1,15 @@
+Capacités, listes d’attente et offre de place
+
+Une capacité protège l’organisation contre le sureffectif, mais un créneau complet ne doit pas faire perdre les personnes encore disponibles. La liste d’attente conserve leur intérêt dans un ordre clair et automatise la proposition lorsqu’une place se libère.
+
+La liste d’attente s’active sur le créneau. Tant que la capacité n’est pas atteinte, les inscriptions sont confirmées normalement. Une fois le créneau complet, le prochain bénévole rejoint l’attente et voit sa position au lieu de recevoir une fausse confirmation.
+
+Dans l’administration, les inscriptions confirmées et les personnes en attente restent distinctes. L’ordre dépend du moment d’inscription. On peut ainsi répondre à une question sans déplacer manuellement les lignes ni perdre l’historique.
+
+Quand une personne confirmée se désinscrit, la place n’est pas attribuée silencieusement. Une offre est envoyée à la première personne en attente. Elle dispose de vingt-quatre heures pour accepter depuis son lien personnel.
+
+Sur sa page, la personne voit l’offre, son expiration et les actions Accepter ou Refuser. Accepter confirme immédiatement le créneau. Refuser conserve une réponse explicite et permet de contacter la personne suivante.
+
+Si l’offre expire sans réponse, elle ne bloque pas la place indéfiniment : la promotion passe à la personne suivante. L’administration montre alors l’offre active et la nouvelle position des autres personnes en attente.
+
+La liste d’attente est utile pour les missions demandées, mais elle doit rester compréhensible. Vérifie la capacité, l’ordre, l’offre en cours et les délais avant de promettre une place à quelqu’un par un autre canal.

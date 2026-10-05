@@ -15,7 +15,13 @@
 /playwright-report
 /test-results
 /blob-report
-/videos/output
+# Video renders (#636): the heavy files stay out of Git (MP4 and WAV are regenerated or kept
+# locally; captures too), the small files that let a video be reassembled are committed.
+/videos/output/**
+!/videos/output/**/
+!/videos/output/**/*.json
+!/videos/output/**/*.vtt
+!/videos/output/**/*.txt
 
 # next.js
 /.next/
@@ -39,7 +45,6 @@ yarn-error.log*
 .env.local
 .env.*.local
 .env.e2e
-.env.e2e.*
 .env.video.e2e
 
 # vercel

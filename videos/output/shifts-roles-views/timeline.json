@@ -1,0 +1,37 @@
+{
+  "slug": "shifts-roles-views",
+  "recordedAt": "2026-10-04T17:22:24.755Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1157,
+      "endMs": 16062
+    },
+    {
+      "id": "timeline",
+      "startMs": 16516,
+      "endMs": 30529
+    },
+    {
+      "id": "list",
+      "startMs": 30982,
+      "endMs": 43387
+    },
+    {
+      "id": "roles",
+      "startMs": 43844,
+      "endMs": 59030
+    },
+    {
+      "id": "colors",
+      "startMs": 59482,
+      "endMs": 72885
+    },
+    {
+      "id": "result",
+      "startMs": 73339,
+      "endMs": 85606
+    }
+  ]
+}

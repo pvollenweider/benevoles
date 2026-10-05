@@ -1,0 +1,37 @@
+{
+  "slug": "event-create-template",
+  "recordedAt": "2026-10-04T14:30:28.160Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 12471
+    },
+    {
+      "id": "compare",
+      "startMs": 14634,
+      "endMs": 36235
+    },
+    {
+      "id": "preview",
+      "startMs": 36689,
+      "endMs": 50733
+    },
+    {
+      "id": "create",
+      "startMs": 51185,
+      "endMs": 63567
+    },
+    {
+      "id": "adapt",
+      "startMs": 65727,
+      "endMs": 82529
+    },
+    {
+      "id": "result",
+      "startMs": 82981,
+      "endMs": 96648
+    }
+  ]
+}

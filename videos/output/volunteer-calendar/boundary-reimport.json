@@ -1,0 +1,12 @@
+{
+  "anchor": "Télécharge à nouveau le planning, puis importe cette nouvelle version. L'identifiant",
+  "windowStart": 142.778,
+  "result": {
+    "found": true,
+    "startSeconds": 4.98,
+    "wordsHeard": "Télécharge à nouveau le planning puis importe cette nouvelle version L'identifiant"
+  },
+  "onset": 147.75799999999998,
+  "proposedCut": 147.562,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,37 @@
+{
+  "slug": "org-public-identity",
+  "recordedAt": "2026-10-04T12:14:07.754Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1143,
+      "endMs": 15171
+    },
+    {
+      "id": "names",
+      "startMs": 15627,
+      "endMs": 33237
+    },
+    {
+      "id": "slug",
+      "startMs": 33690,
+      "endMs": 54458
+    },
+    {
+      "id": "public-page",
+      "startMs": 56071,
+      "endMs": 65380
+    },
+    {
+      "id": "event-result",
+      "startMs": 65831,
+      "endMs": 86976
+    },
+    {
+      "id": "result",
+      "startMs": 87427,
+      "endMs": 105220
+    }
+  ]
+}

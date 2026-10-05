@@ -1,0 +1,42 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Kore",
+  "generatedAt": "2026-10-04T10:30:36.296Z",
+  "segments": {
+    "welcome": {
+      "file": "audio/welcome.wav",
+      "durationMs": 14920,
+      "generationSha256": "0ef0d93fc90e33632283b26b2fabe3d6d7ae0c179d029f2c36c760e027f116d4"
+    },
+    "organization-navigation": {
+      "file": "audio/organization-navigation.wav",
+      "durationMs": 22267,
+      "generationSha256": "0ef0d93fc90e33632283b26b2fabe3d6d7ae0c179d029f2c36c760e027f116d4"
+    },
+    "event-navigation": {
+      "file": "audio/event-navigation.wav",
+      "durationMs": 20585,
+      "generationSha256": "0ef0d93fc90e33632283b26b2fabe3d6d7ae0c179d029f2c36c760e027f116d4"
+    },
+    "search": {
+      "file": "audio/search.wav",
+      "durationMs": 20033,
+      "generationSha256": "0ef0d93fc90e33632283b26b2fabe3d6d7ae0c179d029f2c36c760e027f116d4"
+    },
+    "account-help": {
+      "file": "audio/account-help.wav",
+      "durationMs": 15338,
+      "generationSha256": "0ef0d93fc90e33632283b26b2fabe3d6d7ae0c179d029f2c36c760e027f116d4"
+    },
+    "mobile-keyboard": {
+      "file": "audio/mobile-keyboard.wav",
+      "durationMs": 17820,
+      "generationSha256": "0ef0d93fc90e33632283b26b2fabe3d6d7ae0c179d029f2c36c760e027f116d4"
+    },
+    "result": {
+      "file": "audio/result.wav",
+      "durationMs": 17117,
+      "generationSha256": "0ef0d93fc90e33632283b26b2fabe3d6d7ae0c179d029f2c36c760e027f116d4"
+    }
+  }
+}

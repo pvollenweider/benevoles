@@ -1,0 +1,12 @@
+{
+  "anchor": "Le Rangement commence samedi à vingt-deux heures et se termine dimanche",
+  "windowStart": 98.259,
+  "result": {
+    "found": true,
+    "startSeconds": 6.88,
+    "wordsHeard": "Le"
+  },
+  "onset": 105.139,
+  "proposedCut": 105.032479,
+  "note": "Proposal only; recut then independently audit before capture"
+}

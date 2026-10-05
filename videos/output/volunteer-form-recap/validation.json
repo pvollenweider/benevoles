@@ -1,0 +1,59 @@
+{
+  "id": "VOLUNTEER_FORM_RECAP",
+  "slug": "volunteer-form-recap",
+  "validatedAt": "2026-10-05T09:48:33.047Z",
+  "continuousNarration": true,
+  "voice": "Puck",
+  "captureMs": 165160,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 18018,
+      "audioMs": 18015,
+      "driftMs": 3
+    },
+    {
+      "id": "selection",
+      "visualMs": 20509,
+      "audioMs": 20509,
+      "driftMs": 0
+    },
+    {
+      "id": "identity",
+      "visualMs": 21097,
+      "audioMs": 21096,
+      "driftMs": 1
+    },
+    {
+      "id": "questions",
+      "visualMs": 17030,
+      "audioMs": 17028,
+      "driftMs": 2
+    },
+    {
+      "id": "agreement",
+      "visualMs": 16520,
+      "audioMs": 16518,
+      "driftMs": 2
+    },
+    {
+      "id": "recap",
+      "visualMs": 22286,
+      "audioMs": 22283,
+      "driftMs": 3
+    },
+    {
+      "id": "workload",
+      "visualMs": 21540,
+      "audioMs": 21538,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 17776,
+      "audioMs": 17773,
+      "driftMs": 3
+    }
+  ],
+  "issues": []
+}

@@ -1,0 +1,71 @@
+{
+  "model": "gemini-3.8-flash",
+  "auditedAt": "2026-10-05T11:23:10.675Z",
+  "note": "ASR evidence, not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "31edd025efb0872dee05c4219398db1e3ee0e77d33672ae7891364e4ec5df654",
+      "recognized": "Pour retrouver tes inscriptions, tu n'as pas besoin de créer un compte. Ton email contient un lien personnel qui ouvre directement ta page. Ce lien donne accès à tes informations et permet d'annuler tes créneaux. Garde-le pour toi. Nous allons aussi voir comment indiquer tes disponibilités et utiliser le site sur un appareil partagé.",
+      "expected": "Pour retrouver tes inscriptions, tu n'as pas besoin de créer un compte. Ton email contient un lien personnel qui ouvre directement ta page. Ce lien donne accès à tes informations et permet d'annuler tes créneaux : garde-le pour toi. Nous allons aussi voir comment indiquer tes disponibilités et utiliser le site sur un appareil partagé.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "session",
+      "audioSha256": "b7d203a77e0e88010864875a104d0bb13aaa0b08ff55b32c02caa02afcfe4bf3",
+      "recognized": "Après avoir ouvert ta page personnelle, le navigateur peut te reconnaître quand tu reviens sur l'événement. Ici, Camille retrouve son nom et ses inscriptions. Cela aide à choisir un autre créneau sans repartir de zéro. Sur un ordinateur ou un téléphone partagé, pense à cliquer sur Quitter la session quand tu as terminé. La page redevient anonyme, mais tes inscriptions ne sont pas annulées.",
+      "expected": "Après avoir ouvert ta page personnelle, le navigateur peut te reconnaître quand tu reviens sur l'événement. Ici, Camille retrouve son nom et ses inscriptions. Cela aide à choisir un autre créneau sans repartir de zéro. Sur un ordinateur ou un téléphone partagé, pense à cliquer sur Quitter la session quand tu as terminé. La page redevient anonyme, mais tes inscriptions ne sont pas annulées.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "resend",
+      "audioSha256": "2c55e44ab451cb3d080f3313effdc084bdf6c12916e65d7452e8036953b7f916",
+      "recognized": "Sur ta page personnelle, la rubrique ton lien personnel rappelle à quoi il sert et quand il a été envoyé. Avec recevoir ce lien par e-mail, tu peux le retrouver dans ta boîte. Attendons le résultat, puis ouvrons le message réellement reçu. Pense aussi à vérifier les courriers indésirables et l'adresse utilisée lors de ton inscription.",
+      "expected": "Sur ta page personnelle, la rubrique Ton lien personnel rappelle à quoi il sert et quand il a été envoyé. Avec Recevoir ce lien par email, tu peux le retrouver dans ta boîte. Attendons le résultat, puis ouvrons le message réellement reçu. Pense aussi à vérifier les courriers indésirables et l'adresse utilisée lors de ton inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "recover",
+      "audioSha256": "b640ddbb5a0d587deeee26aa52bfaba063a24c3ca2745cac1989af5566cb7d10",
+      "recognized": "Si un ancien lien ne fonctionne plus, la page propose recevoir un nouveau lien. Saisis l'adresse e-mail utilisée pour t'inscrire. La réponse reste volontairement la même, que cette adresse soit connue ou non. Elle ne révèle pas les inscriptions d'une autre personne. Si des inscriptions peuvent être retrouvées pour cette adresse, tu recevras leur lien par e-mail.",
+      "expected": "Si un ancien lien ne fonctionne plus, la page propose Recevoir un nouveau lien. Saisis l'adresse email utilisée pour t'inscrire. La réponse reste volontairement la même, que cette adresse soit connue ou non : elle ne révèle pas les inscriptions d'une autre personne. Si des inscriptions peuvent être retrouvées pour cette adresse, tu recevras leur lien par email.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "limit",
+      "audioSha256": "2961ed2136f06f81535631f786559a6a47f2048cdbd6f1d14f06e8d9059693cb",
+      "recognized": "Les demandes de renvoi sont limitées pour éviter les abus. Si tu demandes plusieurs liens trop vite, un message t'invite à patienter. Inutile de multiplier les clics. Vérifie ta boîte e-mail, puis réessaie plus tard si nécessaire. Si ton adresse est erronée ou que tu ne retrouves toujours rien, contacte l'organisation pour qu'elle vérifie avec toi.",
+      "expected": "Les demandes de renvoi sont limitées pour éviter les abus. Si tu demandes plusieurs liens trop vite, un message t'invite à patienter. Inutile de multiplier les clics. Vérifie ta boîte email, puis réessaie plus tard si nécessaire. Si ton adresse est erronée ou que tu ne retrouves toujours rien, contacte l'organisation pour qu'elle vérifie avec toi.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "availability",
+      "audioSha256": "31c2105f9b55f63d5dff4ce86d996d25b3086e5f28c58520a2ff0cb71255b945",
+      "recognized": "La rubrique « Mes disponibilités » permet d'indiquer les moments où tu es généralement disponible. Camille coche « Matin » et « Soir », puis ajoute une exception : pas le dimanche matin. Ces informations sont facultatives. Après « Enregistrer mes disponibilités », le message confirme le résultat. Rechargeons la page, les choix et la note sont bien conservés.",
+      "expected": "La rubrique Mes disponibilités permet d'indiquer les moments où tu es généralement disponible. Camille coche Matin et Soir, puis ajoute une exception : pas le dimanche matin. Ces informations sont facultatives. Après Enregistrer mes disponibilités, le message confirme le résultat. Rechargeons la page : les choix et la note sont bien conservés.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "organizer",
+      "audioSha256": "1bca7c5fc7b885bb381f4895bf95f71df3fd3ee012a2d8ff951cbd6c86bfd088",
+      "recognized": "L'organisation retrouve cette indication dans ta fiche. Elle peut s'en servir si elle doit te proposer un autre créneau. Ce n'est ni une inscription automatique, ni un filtre qui masque les autres horaires. Tu choisis toujours tes créneaux toi-même. Une disponibilité générale ne garantit pas non plus qu'une place sera libre sur le poste qui t'intéresse. Tes habitudes changent ?",
+      "expected": "L'organisation retrouve cette indication dans ta fiche. Elle peut s'en servir si elle doit te proposer un autre créneau. Ce n'est ni une inscription automatique, ni un filtre qui masque les autres horaires. Tu choisis toujours tes créneaux toi-même. Une disponibilité générale ne garantit pas non plus qu'une place sera libre sur le poste qui t'intéresse.",
+      "wordErrorRate": 0.04838709677419355,
+      "needsReview": false
+    },
+    {
+      "id": "result",
+      "audioSha256": "74ed75587a83e28402a17c26150496161faf59802a53e2d5806c3b6d305739b0",
+      "recognized": "Reviens sur ta page personnelle pour modifier la note ou décocher les périodes. Enregistre à nouveau et vérifie le message. Effacer tes disponibilités ne retire aucune inscription. Le lien personnel reste ton point d'entrée. L'e-mail t'aide à le retrouver et quitter la session protège ton accès quand tu utilises un appareil partagé.",
+      "expected": "Tes habitudes changent ? Reviens sur ta page personnelle pour modifier la note ou décocher les périodes. Enregistre à nouveau et vérifie le message. Effacer tes disponibilités ne retire aucune inscription. Le lien personnel reste ton point d'entrée, l'email t'aide à le retrouver, et Quitter la session protège ton accès quand tu utilises un appareil partagé.",
+      "wordErrorRate": 0.05172413793103448,
+      "needsReview": false
+    }
+  ]
+}

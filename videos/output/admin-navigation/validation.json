@@ -1,0 +1,53 @@
+{
+  "id": "ADMIN_NAVIGATION",
+  "slug": "admin-navigation",
+  "validatedAt": "2026-10-04T11:14:26.221Z",
+  "continuousNarration": true,
+  "voice": "Kore",
+  "captureMs": 139720,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 14920,
+      "audioMs": 14920,
+      "driftMs": 0
+    },
+    {
+      "id": "organization-navigation",
+      "visualMs": 22268,
+      "audioMs": 22267,
+      "driftMs": 1
+    },
+    {
+      "id": "event-navigation",
+      "visualMs": 20587,
+      "audioMs": 20585,
+      "driftMs": 2
+    },
+    {
+      "id": "search",
+      "visualMs": 20035,
+      "audioMs": 20033,
+      "driftMs": 2
+    },
+    {
+      "id": "account-help",
+      "visualMs": 15339,
+      "audioMs": 15338,
+      "driftMs": 1
+    },
+    {
+      "id": "mobile-keyboard",
+      "visualMs": 17820,
+      "audioMs": 17820,
+      "driftMs": 0
+    },
+    {
+      "id": "result",
+      "visualMs": 17118,
+      "audioMs": 17117,
+      "driftMs": 1
+    }
+  ],
+  "issues": []
+}

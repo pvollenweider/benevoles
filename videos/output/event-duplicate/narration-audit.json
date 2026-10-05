@@ -1,0 +1,63 @@
+{
+  "model": "gemini-3.8-flash",
+  "auditedAt": "2026-10-05T11:00:55.134Z",
+  "note": "ASR evidence, not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "dd81d9a81eb498ee4b74c42d733ae090f6625d413073924a8d675a7ec31bf678",
+      "recognized": "Dupliquer évite de reconstruire chaque année un événement qui garde la même organisation. La copie reste un nouveau brouillon. On gagne la structure sans mélanger les bénévoles ni l'historique de deux éditions.",
+      "expected": "Dupliquer évite de reconstruire chaque année un événement qui garde la même organisation. La copie reste un nouveau brouillon : on gagne la structure sans mélanger les bénévoles ni l’historique de deux éditions.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "identity",
+      "audioSha256": "a59024a46f886ce37e642ecab365bbd8060893aab82e05bb58f5fcdfc81da482",
+      "recognized": "Commence par donner le titre de la nouvelle édition et son premier jour. Toutes les dates suivent le même décalage. Fin de l'événement, créneaux et programmes. Le résumé indique immédiatement de combien de jours elles seront déplacées.",
+      "expected": "Commence par donner le titre de la nouvelle édition et son premier jour. Toutes les dates suivent le même décalage : fin de l’événement, créneaux et programme. Le résumé indique immédiatement de combien de jours elles seront déplacées.",
+      "wordErrorRate": 0.02631578947368421,
+      "needsReview": false
+    },
+    {
+      "id": "choices",
+      "audioSha256": "e52acb4f426c3e9847d6ea7cf39247e1356761160caea6f5e12df4eceed96147",
+      "recognized": "Choisis ensuite ce qui doit suivre. Les créneaux conservent postes, horaires, capacités et consignes, mais reviennent ouverts et sans inscription. Les réglages reprennent les messages, questions, téléphones et programmes. Les pages personnalisées peuvent aussi être copiées.",
+      "expected": "Choisis ensuite ce qui doit suivre. Les créneaux conservent postes, horaires, capacités et consignes, mais reviennent ouverts et sans inscription. Les réglages reprennent les messages, questions, téléphone et programme. Les pages personnalisées peuvent aussi être copiées.",
+      "wordErrorRate": 0.05555555555555555,
+      "needsReview": false
+    },
+    {
+      "id": "leaders",
+      "audioSha256": "d5e031c767138d9b987649b4067b5dc6786a14c089a7284592be4de5fdb87fcb",
+      "recognized": "Les responsables de secteur sont volontairement décochés au départ, car les reprendre déclenche immédiatement un email avec un nouveau lien personnel. Active cette option seulement après avoir vérifié que ces personnes gardent leur responsabilité pour la nouvelle édition.",
+      "expected": "Les responsables de secteur sont volontairement décochés au départ, car les reprendre déclenche immédiatement un email avec un nouveau lien personnel. Active cette option seulement après avoir vérifié que ces personnes gardent leur responsabilité pour la nouvelle édition.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "summary",
+      "audioSha256": "ae95601fee4f2f704ccae378282320b45e2bdf9baeebf53334e84357f4a81ab7",
+      "recognized": "Le récapitulatif est la dernière vérification. Il rappelle les éléments copiés et ceux qui ne le sont jamais, les inscriptions et les jalons. On ne transporte donc ni des engagements obsolètes, ni des tâches déjà terminées.",
+      "expected": "Le récapitulatif est la dernière vérification. Il rappelle les éléments copiés et ceux qui ne le sont jamais : les inscriptions et les jalons. On ne transporte donc ni des engagements obsolètes, ni des tâches déjà terminées.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "create",
+      "audioSha256": "a0e673e6e56eb654c53737e22336416ee387ccd98fbed98eb277c763c3c9d3c2",
+      "recognized": "Créons la copie. Elle s'ouvre dans l'administration avec le statut brouillon et les inscriptions fermées. Les dates ont été décalées, les créneaux sont vides, les pages sont présentes et les responsables choisis ont reçu leur invitation dans la boîte de démonstration.",
+      "expected": "Créons la copie. Elle s’ouvre dans l’administration avec le statut Brouillon et les inscriptions fermées. Les dates ont été décalées, les créneaux sont vides, les pages sont présentes et les responsables choisis ont reçu leur invitation dans la boîte de démonstration.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    },
+    {
+      "id": "result",
+      "audioSha256": "e8fbdfb075fd25cdbe8c3b84375867d41baf537ff32d987c9a87bcfab620af61",
+      "recognized": "Avant toute publication, relis les horaires, adapte les capacités et les consignes, puis teste le parcours bénévole. La duplication accélère la préparation, mais elle ne suppose jamais que la nouvelle édition est identique à l'ancienne.",
+      "expected": "Avant toute publication, relis les horaires, adapte les capacités et les consignes, puis teste le parcours bénévole. La duplication accélère la préparation, mais elle ne suppose jamais que la nouvelle édition est identique à l’ancienne.",
+      "wordErrorRate": 0,
+      "needsReview": false
+    }
+  ]
+}

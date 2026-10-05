@@ -1,0 +1,56 @@
+{
+  "model": "gemini-3.8-flash",
+  "masterSha256": "2e6d363ba47fa0cc72fcb29a89200b5b5b59c13a5b21eeb656d8d7b41c3ded6f",
+  "segments": [
+    {
+      "id": "welcome",
+      "startSeconds": 0.32,
+      "firstWordsHeard": "Le jour de la fête"
+    },
+    {
+      "id": "nominate",
+      "startSeconds": 18.1,
+      "firstWordsHeard": "Dans l'événement"
+    },
+    {
+      "id": "registered",
+      "startSeconds": 37.04,
+      "firstWordsHeard": "Si la personne participe déjà"
+    },
+    {
+      "id": "email",
+      "startSeconds": 54.6,
+      "firstWordsHeard": "Voici l'email reçu"
+    },
+    {
+      "id": "roster",
+      "startSeconds": 110.2,
+      "firstWordsHeard": "Sur ce lien"
+    },
+    {
+      "id": "mobile",
+      "startSeconds": 129.35,
+      "firstWordsHeard": "Sur téléphone"
+    },
+    {
+      "id": "scope",
+      "startSeconds": 147.5,
+      "firstWordsHeard": "Cet espace est en lecture seule"
+    },
+    {
+      "id": "notification",
+      "startSeconds": 202.16,
+      "firstWordsHeard": "Une nouvelle bénévole"
+    },
+    {
+      "id": "contact",
+      "startSeconds": 222,
+      "firstWordsHeard": "Attention à une autre distinction"
+    },
+    {
+      "id": "remove",
+      "startSeconds": 238.9,
+      "firstWordsHeard": "Quand la responsabilité change"
+    }
+  ]
+}

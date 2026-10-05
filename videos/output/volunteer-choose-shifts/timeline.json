@@ -1,0 +1,52 @@
+{
+  "slug": "volunteer-choose-shifts",
+  "recordedAt": "2026-10-05T07:21:10.869Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1192,
+      "endMs": 15575
+    },
+    {
+      "id": "select",
+      "startMs": 17740,
+      "endMs": 35460
+    },
+    {
+      "id": "capacity",
+      "startMs": 35912,
+      "endMs": 52003
+    },
+    {
+      "id": "waitlist",
+      "startMs": 52454,
+      "endMs": 69072
+    },
+    {
+      "id": "approval-reserved",
+      "startMs": 69525,
+      "endMs": 87881
+    },
+    {
+      "id": "conflict",
+      "startMs": 90041,
+      "endMs": 105459
+    },
+    {
+      "id": "known",
+      "startMs": 105911,
+      "endMs": 127072
+    },
+    {
+      "id": "limit",
+      "startMs": 127524,
+      "endMs": 143842
+    },
+    {
+      "id": "result",
+      "startMs": 144295,
+      "endMs": 159768
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Les demandes de renvoi sont limitées pour éviter les abus. Si",
+  "windowStart": 68.446,
+  "result": {
+    "found": true,
+    "startSeconds": 14.94,
+    "wordsHeard": "Les demandes de renvoi sont limitées pour éviter les abus. Si"
+  },
+  "onset": 83.386,
+  "proposedCut": 83.4457085,
+  "note": "Proposal only; recut then independently audit before capture"
+}

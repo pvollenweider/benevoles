@@ -1,0 +1,27 @@
+Suivre les inscriptions et relancer au bon moment
+
+Une fois le planning publié, voici comment suivre les inscriptions et relancer au bon moment. Depuis l’événement, tu retrouves tout de suite son état, les prochaines étapes et les accès utiles pour garder une vue claire.
+
+Commence par regarder la couverture du planning. Les capacités et les inscriptions montrent les créneaux déjà bien remplis, ceux où il reste des places, et les personnes placées en liste d’attente. Tu sais ainsi où concentrer tes efforts.
+
+Dans les inscriptions, chaque ligne rassemble la personne, son créneau, son statut et les informations utiles. Les réponses aux questions, comme la taille du t-shirt ou le régime alimentaire, restent liées au bénévole et peuvent être consultées sans ouvrir plusieurs fichiers.
+
+Les postes sur validation sont clairement signalés. Ouvre une demande pour vérifier la personne, le créneau et ses réponses, puis accepte-la ou refuse-la. Ici, on referme simplement la fenêtre : aucune décision n’est prise pendant la démonstration.
+
+Quand la liste grandit, filtre par poste, par créneau ou par statut, puis utilise la recherche pour retrouver un nom ou une adresse. En quelques secondes, tu isoles exactement le groupe qui t’intéresse.
+
+Tu peux agir sur une inscription, par exemple renvoyer son lien personnel, ou sélectionner plusieurs lignes pour appliquer une action groupée. Les liens restent individuels : le bénévole peut consulter ou modifier ses choix sans créer de compte.
+
+Pour une relance, choisis précisément les destinataires : tous les inscrits, un poste, un créneau, la liste d’attente, ou les invités qui n’ont encore aucun créneau confirmé. Le nombre de personnes est recalculé avant l’envoi.
+
+Tu peux partir d’un modèle, adapter l’objet et le texte, puis utiliser des variables comme le prénom ou les créneaux. Avant d’envoyer quoi que ce soit, ouvre l’aperçu : tu contrôles le rendu exact et le nombre de destinataires.
+
+L’email part à toutes les personnes ciblées. Pour une information urgente, tu peux ajouter une notification sur téléphone ou ordinateur ; elle ne touche que les bénévoles qui l’ont activée. La confirmation finale évite les envois involontaires.
+
+Les rappels automatiques prennent ensuite le relais avant les créneaux. Tu choisis lesquels sont actifs, et l’application utilise les horaires locaux de l’organisation pour envoyer les bonnes informations au bon moment.
+
+À l’approche du jour J, les rapports préparent les listes à afficher sur les stands, les plannings individuels, les réponses aux questions et les badges. Tu génères seulement les documents dont ton équipe a besoin.
+
+Enfin, le journal d’activité permet de comprendre ce qui a changé : publication, nouvelle inscription, désinscription, modification d’un créneau ou ajout manuel. Chaque action est datée, avec son origine. Tu gardes ainsi le fil, même à plusieurs organisateurs.
+
+Le résultat, c’est un suivi simple : voir les manques, contacter les bonnes personnes, préparer le terrain et retrouver l’historique sans jongler entre plusieurs outils. Ton planning reste lisible jusqu’au jour de l’événement.

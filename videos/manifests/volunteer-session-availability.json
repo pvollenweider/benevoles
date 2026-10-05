@@ -1,0 +1,72 @@
+{
+  "id": "VOLUNTEER_SESSION_AVAILABILITY",
+  "slug": "volunteer-session-availability",
+  "title": "Retrouver son lien et indiquer ses disponibilités",
+  "description": "Retrouver ses inscriptions, quitter une session partagée et transmettre ses disponibilités à l'organisation.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "voiceStyle": "French, warm and friendly with an audible smile. Patient conversational delivery, clear articulation and natural pauses.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Pour retrouver tes inscriptions, tu n'as pas besoin de créer un compte. Ton email contient un lien personnel qui ouvre directement ta page. Ce lien donne accès à tes informations et permet d'annuler tes créneaux : garde-le pour toi. Nous allons aussi voir comment indiquer tes disponibilités et utiliser le site sur un appareil partagé.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "session",
+      "transcript": "Après avoir ouvert ta page personnelle, le navigateur peut te reconnaître quand tu reviens sur l'événement. Ici, Camille retrouve son nom et ses inscriptions. Cela aide à choisir un autre créneau sans repartir de zéro. Sur un ordinateur ou un téléphone partagé, pense à cliquer sur Quitter la session quand tu as terminé. La page redevient anonyme, mais tes inscriptions ne sont pas annulées.",
+      "fallbackDurationMs": 35000
+    },
+    {
+      "id": "resend",
+      "transcript": "Sur ta page personnelle, la rubrique Ton lien personnel rappelle à quoi il sert et quand il a été envoyé. Avec Recevoir ce lien par email, tu peux le retrouver dans ta boîte. Attendons le résultat, puis ouvrons le message réellement reçu. Pense aussi à vérifier les courriers indésirables et l'adresse utilisée lors de ton inscription.",
+      "fallbackDurationMs": 32000
+    },
+    {
+      "id": "recover",
+      "transcript": "Si un ancien lien ne fonctionne plus, la page propose Recevoir un nouveau lien. Saisis l'adresse email utilisée pour t'inscrire. La réponse reste volontairement la même, que cette adresse soit connue ou non : elle ne révèle pas les inscriptions d'une autre personne. Si des inscriptions peuvent être retrouvées pour cette adresse, tu recevras leur lien par email.",
+      "fallbackDurationMs": 35000
+    },
+    {
+      "id": "limit",
+      "transcript": "Les demandes de renvoi sont limitées pour éviter les abus. Si tu demandes plusieurs liens trop vite, un message t'invite à patienter. Inutile de multiplier les clics. Vérifie ta boîte email, puis réessaie plus tard si nécessaire. Si ton adresse est erronée ou que tu ne retrouves toujours rien, contacte l'organisation pour qu'elle vérifie avec toi.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "availability",
+      "transcript": "La rubrique Mes disponibilités permet d'indiquer les moments où tu es généralement disponible. Camille coche Matin et Soir, puis ajoute une exception : pas le dimanche matin. Ces informations sont facultatives. Après Enregistrer mes disponibilités, le message confirme le résultat. Rechargeons la page : les choix et la note sont bien conservés.",
+      "fallbackDurationMs": 35000
+    },
+    {
+      "id": "organizer",
+      "transcript": "L'organisation retrouve cette indication dans ta fiche. Elle peut s'en servir si elle doit te proposer un autre créneau. Ce n'est ni une inscription automatique, ni un filtre qui masque les autres horaires. Tu choisis toujours tes créneaux toi-même. Une disponibilité générale ne garantit pas non plus qu'une place sera libre sur le poste qui t'intéresse.",
+      "fallbackDurationMs": 32000
+    },
+    {
+      "id": "result",
+      "transcript": "Tes habitudes changent ? Reviens sur ta page personnelle pour modifier la note ou décocher les périodes. Enregistre à nouveau et vérifie le message. Effacer tes disponibilités ne retire aucune inscription. Le lien personnel reste ton point d'entrée, l'email t'aide à le retrouver, et Quitter la session protège ton accès quand tu utilises un appareil partagé.",
+      "fallbackDurationMs": 32000
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, tu retrouves ton lien personnel, tu quittes une session sur un appareil partagé et tu indiques tes disponibilités à l'organisation.",
+    "steps": [
+      "Ouvre ta page personnelle avec le lien reçu par email.",
+      "Sur un appareil partagé, clique sur « Quitter la session » quand tu as terminé.",
+      "Avec « Recevoir ce lien par email », retrouve ton lien dans ta boîte, en regardant aussi les indésirables.",
+      "Si un ancien lien ne marche plus, demande « Recevoir un nouveau lien » avec l'adresse utilisée pour t'inscrire.",
+      "Dans « Mes disponibilités », coche tes moments habituels, ajoute une note, puis enregistre."
+    ],
+    "remember": [
+      "Quitter la session ne retire aucune inscription.",
+      "Les demandes de nouveau lien sont limitées : patiente avant de réessayer.",
+      "Tes disponibilités aident l'organisation, mais ne t'inscrivent sur aucun créneau."
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "slug": "event-program-pages-qr",
+  "recordedAt": "2026-10-04T17:14:11.826Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1222,
+      "endMs": 13807
+    },
+    {
+      "id": "program",
+      "startMs": 14258,
+      "endMs": 28757
+    },
+    {
+      "id": "pages",
+      "startMs": 29210,
+      "endMs": 41210
+    },
+    {
+      "id": "public",
+      "startMs": 41663,
+      "endMs": 57899
+    },
+    {
+      "id": "qr",
+      "startMs": 58409,
+      "endMs": 70446
+    },
+    {
+      "id": "result",
+      "startMs": 70898,
+      "endMs": 83587
+    }
+  ]
+}

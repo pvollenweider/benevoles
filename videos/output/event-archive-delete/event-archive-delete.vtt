@@ -1,0 +1,23 @@
+WEBVTT
+
+00:00:01.142 --> 00:00:14.840
+Fermer les inscriptions, archiver et supprimer répondent à trois besoins différents. Fermer bloque seulement les nouvelles inscriptions. Archiver retire l’événement du public tout en gardant ses données consultables. Supprimer efface définitivement l’édition.
+
+00:00:15.294 --> 00:00:28.706
+Pour cette démonstration, nous travaillons sur une copie jetable de l’ancienne édition. Dans la vraie vie, vérifie d’abord les inscriptions, les invitations, le journal et les rapports. Si des bénévoles doivent être prévenus, annule les créneaux avant l’archivage.
+
+00:00:29.158 --> 00:00:42.960
+Le bouton Archiver demande une confirmation claire. Après validation, la page publique disparaît, mais l’équipe garde accès au planning, aux inscriptions, aux rapports et au journal. On peut donc conserver l’historique sans laisser croire que l’événement accepte encore du monde.
+
+00:00:43.413 --> 00:00:56.461
+La suppression définitive n’apparaît qu’après archivage et seulement pour un propriétaire de l’organisation. Le récapitulatif indique précisément combien de créneaux, d’inscriptions et d’invitations vont disparaître. Les membres du pool, eux, sont conservés.
+
+00:00:56.912 --> 00:01:09.437
+Avant d’aller plus loin, ouvre l’export PDF. Il contient le planning, le récapitulatif par poste et la liste des bénévoles. Enregistre-le si l’association doit garder une archive opérationnelle ou répondre plus tard à une question sur cette édition.
+
+00:01:09.891 --> 00:01:25.270
+La confirmation renforcée demande de saisir le titre de l’événement. Tant qu’il ne correspond pas, le bouton reste indisponible. Une fois la suppression lancée, les liens personnels cessent de fonctionner et les données rattachées ne sont pas récupérables depuis l’application.
+
+00:01:25.723 --> 00:01:37.552
+L’événement disparaît de la liste après validation. Utilise donc l’archivage comme état normal de fin de vie, et réserve la suppression aux éditions de test, aux erreurs de création ou aux cas où la conservation n’a plus de raison d’être.
+

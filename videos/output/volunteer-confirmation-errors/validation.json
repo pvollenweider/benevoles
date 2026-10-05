@@ -1,0 +1,59 @@
+{
+  "id": "VOLUNTEER_CONFIRMATION_ERRORS",
+  "slug": "volunteer-confirmation-errors",
+  "validatedAt": "2026-10-05T10:05:42.444Z",
+  "continuousNarration": true,
+  "voice": "Kore",
+  "captureMs": 157600,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 21319,
+      "audioMs": 21314,
+      "driftMs": 5
+    },
+    {
+      "id": "form",
+      "visualMs": 14383,
+      "audioMs": 14382,
+      "driftMs": 1
+    },
+    {
+      "id": "validation",
+      "visualMs": 20537,
+      "audioMs": 20536,
+      "driftMs": 1
+    },
+    {
+      "id": "capacity",
+      "visualMs": 15525,
+      "audioMs": 15522,
+      "driftMs": 3
+    },
+    {
+      "id": "network",
+      "visualMs": 23024,
+      "audioMs": 23022,
+      "driftMs": 2
+    },
+    {
+      "id": "success",
+      "visualMs": 18417,
+      "audioMs": 18415,
+      "driftMs": 2
+    },
+    {
+      "id": "email",
+      "visualMs": 20386,
+      "audioMs": 20384,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 19946,
+      "audioMs": 19945,
+      "driftMs": 1
+    }
+  ],
+  "issues": []
+}

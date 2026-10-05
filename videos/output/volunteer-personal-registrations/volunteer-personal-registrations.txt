@@ -1,0 +1,17 @@
+Retrouver et gérer ses inscriptions
+
+Ton lien personnel permet de retrouver les inscriptions d'un événement sans créer de compte. Ici, Camille a une place confirmée, une inscription en attente, une place proposée et une demande à valider. Nous allons lire les informations utiles, puis montrer comment retirer chacun de ces engagements. Ce lien reste confidentiel : il permet d'agir sur tes inscriptions.
+
+Commençons par l'Accueil confirmé. La carte indique le jour et les horaires. Le rendez-vous et les consignes expliquent où aller et comment se préparer. Le lien carte aide à retrouver le lieu. La personne de contact et son téléphone sont réservés aux inscrits : garde ces informations pour prévenir l'équipe ou demander de l'aide sur place.
+
+Les autres cartes ne signifient pas la même chose. Liste d'attente indique ta position, sans place confirmée. Une place proposée affiche une échéance et un lien pour la prendre : tant que tu n'as pas accepté, ne la considère pas comme acquise. Une demande sur validation attend la décision de l'organisation, qui te prévient par email. Lis toujours le statut avant de préparer ton planning.
+
+Pour l'Accueil, Annuler ouvre une confirmation. Tu peux encore choisir Non, garder : rien n'est retiré. Reprenons et confirmons cette fois. La carte disparaît de la page personnelle. Si tu changes de disponibilité près du début de la mission, préviens aussi le contact sur place : cela aide l'équipe à réorganiser la relève.
+
+Si tu n'es plus disponible pour la Buvette en attente, choisis Quitter la liste d'attente. La confirmation explique que tu ne seras plus prévenu si une place se libère pour ce créneau. Confirme uniquement si c'est ce que tu souhaites. La carte disparaît : tu n'es plus dans cette file, mais tes autres inscriptions restent présentes.
+
+Pour une place proposée, le bouton est Refuser la place. Lis les conséquences : la place passe à la personne suivante et tu quittes la liste d'attente. Après confirmation, cette offre disparaît. Si tu voulais participer, il fallait au contraire utiliser Prendre la place et suivre la confirmation d'acceptation avant l'échéance indiquée.
+
+Il reste la demande pour la Navette du dimanche. Retirer ma demande ouvre sa confirmation : la place qui t'était réservée est libérée. En confirmant, tu retires cette candidature sans attendre une réponse de l'organisateur. C'est ici le dernier engagement de Camille. La page indique maintenant que toutes ses inscriptions ont été annulées.
+
+Le lien Retour à l'accueil ramène à la page de l'événement. Tu peux regarder les places disponibles et choisir un autre créneau si ta disponibilité a changé. Retirer une inscription ne supprime pas automatiquement ton profil de membre de l'association. Pour une question sur tes données ou une difficulté avec ton lien, contacte l'organisation.
