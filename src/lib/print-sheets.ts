@@ -187,7 +187,7 @@ function individualView(d: SheetData): string {
       ${ganttOf(dayShifts)}
       ${dayShifts.map((s) => `
       <div class="card">
-        <h4 class="card-title"><span class="mono">${esc(fmtRange(s.startTime, s.endTime))}</span> — ${esc(shiftName(s))}</h4>
+        <h4 class="card-title"><span class="mono">${esc(fmtRange(s.startTime, s.endTime))}</span> : ${esc(shiftName(s))}</h4>
         ${shiftInfoText(s).map((l) => `<p>${esc(l)}</p>`).join("")}
         ${s === noteFor ? `<p class="note">${esc(EMERGENCY_NOTE)}</p>` : ""}
       </div>`).join("")}`).join("")}
