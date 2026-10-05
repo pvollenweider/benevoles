@@ -71,12 +71,14 @@ Les champs libres peuvent contenir n'importe quelle donnée, y compris des caté
   Ces mesures réduisent fortement ce qui part, sans garantir qu'aucune donnée personnelle ne puisse être transmise : un message d'erreur, une URL nettoyée, un identifiant interne ou la structure d'une page enregistrée peuvent en être.
 
 - **Adresse de secours de l'opérateur** : si une organisation n'a aucun administrateur actif, les notifications de nouvelle inscription (nom, email du bénévole, créneaux) sont envoyées à `ADMIN_NOTIFICATION_EMAIL` (`src/lib/notification-helpers.ts`). **À confirmer en production** : cette variable est définie, et qui lit cette boîte.
+- **Vérification de nouvelle version (#612)** : une tâche planifiée quotidienne (`k8s/cronjob-release-check.yaml`, 03:00 UTC) interroge `https://api.github.com/repos/pvollenweider/benevoles/releases/latest` (`src/lib/release-check-fetch.ts`) sans jeton d'authentification, pour comparer la version déployée à la dernière publiée et, le cas échéant, prévenir les super admins par email. **Aucune donnée personnelle envoyée** : seule l'adresse IP du serveur est visible de GitHub (traitement technique, hors liste des sous-traitants, voir [sous-traitants.md](sous-traitants.md)) ; sans effet si `RELEASE_CHECK=off`.
 
 ## Hébergement, envoi et sauvegardes
 
 | Élément | Implémenté (dépôt) | À confirmer |
 |---|---|---|
 | Application et base PostgreSQL | cluster k3s sur un serveur (`k8s/`) | établi dans [sous-traitants.md](sous-traitants.md) : OVH SAS, Kimsufi KS-LE-1, datacenter RBX3 (Roubaix), DPA accepté le 2026-04-02 |
+| Vidéos tutorielles (`medias.benevol.app`, #632) | serveur nginx interne au cluster (`k8s/media.yaml`), sur un volume local non sauvegardé (régénérable depuis `videos/`) ; sert uniquement des fichiers `.mp4`/`.vtt`/`.txt` déposés à la main (`make video-publish`), jamais de contenu généré depuis la base de production | aucune : pas de sous-traitant, pas de donnée personnelle — le volume ne contient que les rendus publiés des tutoriels |
 | Sauvegardes locales | `pg_dump` chiffré (`openssl enc -aes-256-cbc -pbkdf2`, phrase de passe dans un secret Kubernetes), sur le volume du serveur (`k8s/cronjob-backup.yaml`) | qui détient la phrase de passe, où elle est conservée hors du serveur |
 | Copie hors site | les fichiers déjà chiffrés sont copiés chaque nuit vers Dropbox par rclone, puis supprimés au-delà de la durée de [../retention.md](../retention.md) (`k8s/cronjob-backup-offsite.yaml`) | offre individuelle confirmée le 2026-09-30 : stockage aux États-Unis, pas de DPA (voir [sous-traitants.md](sous-traitants.md)) ; remplacement prévu (#524) |
 | Envoi des emails | serveur SMTP défini par les secrets (`SMTP_HOST`…), vides dans le dépôt | Gandi observé par le DNS (SPF, DKIM, voir [sous-traitants.md](sous-traitants.md)) ; valeur de `SMTP_HOST` en production et durée des journaux SMTP à confirmer |
@@ -84,6 +86,16 @@ Les champs libres peuvent contenir n'importe quelle donnée, y compris des caté
 | DNS et certificats | Gandi (DNS, webhook cert-manager), Let's Encrypt (`k8s/gandi-webhook.yaml`, `k8s/certificate-wildcard.yaml`) | inventaire technique seulement : pas de données des bénévoles, a priori pas des sous-traitants au sens contractuel |
 
 La sauvegarde chiffrée réduit le risque d'une copie chez Dropbox, mais ne fait pas disparaître les obligations liées aux données personnelles et aux transferts : l'opérateur détient la clé.
+
+### Génération des vidéos tutorielles (outillage, pas de donnée de production)
+
+La narration des vidéos publiées sur `medias.benevol.app` est produite hors ligne avec l'API Gemini Text-to-Speech (`GEMINI_API_KEY`, `GEMINI_TTS_MODEL`, voir `videos/README.md` et `scripts/seed-video-scenario.ts`). Faits observés dans le dépôt :
+
+- la base utilisée pour les captures doit avoir `benevoles_video` dans son URL (`scripts/seed-video-scenario.ts` refuse sinon) ; c'est une base locale jetable, jamais la base de production ;
+- les identités du jeu de données sont fictives, sous le domaine `example.org` (`videos/README.md`, « la capture ne doit contenir aucune donnée réelle ») ;
+- seul le texte de narration (rédigé à l'avance, fictif) est envoyé à l'API Gemini pour synthèse vocale ; `GEMINI_API_KEY` n'est jamais écrit dans les fichiers de sortie.
+
+**Conclusion factuelle** : aucune donnée personnelle d'un bénévole, d'un responsable de secteur ou d'un administrateur réel ne transite par Gemini — seulement un texte éditorial fictif. Google (Gemini) n'est donc pas un sous-traitant au sens de l'article 28 pour les traitements du service lui-même ; c'est un outil de fabrication du contenu de démonstration, à mentionner pour la transparence mais hors de la liste des sous-traitants ([sous-traitants.md](sous-traitants.md)). Cette conclusion dépend entièrement de la discipline du jeu de données fictif : **à revoir si le pipeline vidéo change** (par exemple s'il venait à lire des données réelles).
 
 ### Notifications du navigateur (implémenté, qualification à valider)
 

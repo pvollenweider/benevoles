@@ -1,6 +1,6 @@
 # Sous-traitants ultérieurs (projet)
 
-Liste destinée à l'annexe III de l'accord ([projet-accord-traitement.md](projet-accord-traitement.md)). Les faits ci-dessous viennent de **pages officielles des fournisseurs** (consultées le 2026-09-30) ou d'une **observation technique** (DNS public, code du site). Ce qui ne peut être établi que dans le compte du fournisseur ou par contrat reste marqué « à confirmer » ; le détail est dans [verifications-production.md](verifications-production.md). Ce document n'est pas un avis juridique.
+Liste destinée à l'annexe III de l'accord ([accord-sous-traitance-brouillon.md](accord-sous-traitance-brouillon.md)). Les faits ci-dessous viennent de **pages officielles des fournisseurs** (consultées le 2026-09-30) ou d'une **observation technique** (DNS public, code du site). Ce qui ne peut être établi que dans le compte du fournisseur ou par contrat reste marqué « à confirmer » ; le détail est dans [verifications-production.md](verifications-production.md). Ce document n'est pas un avis juridique.
 
 | Prestataire | Service et finalité | Données concernées | Rôle probable | Localisation et accès | Contrat, DPA, transferts | Conservation chez lui | Vérifié le |
 |---|---|---|---|---|---|---|---|
@@ -19,6 +19,8 @@ Ces services ne traitent pas de données des bénévoles et ne sont a priori pas
 | Gandi (DNS) | zone DNS du domaine, validation des certificats (webhook cert-manager) | enregistrements techniques, pas de données des bénévoles. Gandi figure dans la liste ci-dessus au titre de l'envoi des emails. |
 | Let's Encrypt | certificats TLS | noms de domaine publics seulement |
 | OpenStreetMap | lien « voir sur la carte » (`src/lib/map-link.ts`) | simple lien : l'application n'envoie rien ; le navigateur du visiteur qui clique transmet les coordonnées du lieu et son adresse IP |
+| GitHub (`api.github.com`) | vérification quotidienne de nouvelle version (#612, `k8s/cronjob-release-check.yaml`, `src/lib/release-check-fetch.ts`) | requête anonyme (pas de jeton), aucune donnée des bénévoles ni des administrateurs envoyée ; seule l'adresse IP du serveur est visible de GitHub |
+| Google (Gemini, génération de narration des tutoriels vidéo) | outillage de développement (`videos/`), **hors production** : scénarios et identités fictives (`example.org`), base PostgreSQL jetable distincte (`benevoles_video`, refusée si son URL ne contient pas ce nom) ; `GEMINI_API_KEY` lu depuis l'environnement local, jamais écrit dans les fichiers de sortie | aucune donnée de production, aucun bénévole ni organisation réels : hors du champ de l'inventaire des traitements de données personnelles |
 
 ## Ce que le code envoie à chaque prestataire
 
