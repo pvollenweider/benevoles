@@ -37,7 +37,7 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
     where: { id },
     select: {
       id: true, title: true, slug: true, startDate: true, endDate: true, location: true, confirmationMessage: true, publicInstructions: true, publicStatus: true,
-      latitude: true, longitude: true, remindersEnabled: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true,
+      latitude: true, longitude: true, dayContactName: true, dayContactPhone: true, remindersEnabled: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true,
       organization: { select: { slug: true, timeZone: true, notificationSettings: true } },
       shifts: {
         where: { status: { not: "cancelled" } },

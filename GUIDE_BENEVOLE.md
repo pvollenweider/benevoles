@@ -85,7 +85,7 @@ Avant de confirmer, un **récapitulatif** (dans la colonne de droite sur ordinat
 
 ### Infos pratiques d'un créneau
 
-Quand l'organisation les a renseignées, le récapitulatif montre sous chaque créneau choisi ses **infos pratiques** : le **lieu de rendez-vous** et la **consigne** (« À savoir », par exemple « Venir 10 minutes avant, tenue noire »). Si un point de rendez-vous est indiqué sur une carte, un lien **Voir sur la carte** l'ouvre sur OpenStreetMap, dans un nouvel onglet ; rien n'est chargé depuis ce site tant que vous ne cliquez pas. La **personne de contact** et son téléphone ne sont jamais affichés sur la page publique : vous les recevez après votre inscription, dans l'email de confirmation, les rappels et sur votre page personnelle.
+Quand l'organisation les a renseignées, le récapitulatif montre sous chaque créneau choisi ses **infos pratiques** : le **lieu de rendez-vous** et la **consigne** (« À savoir », par exemple « Venir 10 minutes avant, tenue noire »). Si un point de rendez-vous est indiqué sur une carte, un lien **Voir sur la carte** l'ouvre sur OpenStreetMap, dans un nouvel onglet ; rien n'est chargé depuis ce site tant que vous ne cliquez pas. La **personne de contact** et son téléphone ne sont jamais affichés sur la page publique : vous les recevez après votre inscription, dans l'email de confirmation, les rappels et sur votre page personnelle, sous **Contact pour ce créneau**. Si le créneau n'a pas de contact et que l'organisation a indiqué un **Contact le jour J** pour l'événement, c'est lui qui apparaît dans les rappels, sur votre page personnelle et sur le planning individuel imprimé, pour vos places confirmées, avec un rappel : en cas d'urgence, appelez les numéros d'urgence officiels, ce contact ne les remplace pas.
 
 Si vos créneaux font plus de 8 h dans une journée, ou plus de 6 h d'affilée sans pause d'au moins 30 minutes, le récapitulatif le signale sous **Journée chargée**, en comptant aussi les créneaux que vous avez déjà. C'est un conseil : vous pouvez confirmer quand même.
 
@@ -113,8 +113,18 @@ Depuis votre **lien personnel** (reçu par email) :
 https://[organisation].benevol.app/my/[token]
 ```
 
+En haut de la page, l'encadré **Avant ta mission** reprend votre prochain créneau confirmé, dans l'ordre :
+- le jour et l'heure ;
+- le lieu, avec **Voir sur la carte** : celui du créneau, sinon celui de l'événement ;
+- qui contacter sur place : **Contact pour ce créneau**, sinon le **Contact le jour J** de l'événement, avec son téléphone (touchez le numéro pour appeler) et le rappel sur les numéros d'urgence officiels ;
+- le nom du **responsable du poste**, quand l'organisation en a désigné un (son nom seulement, ses coordonnées ne sont pas affichées) ;
+- la consigne (« À savoir ») : celle du créneau, sinon les instructions de l'événement ;
+- les **pages d'information** de l'événement (accès, FAQ, règlement…) et **Écrire à l'organisation**, quand l'organisation les a prévues.
+
+Un créneau en liste d'attente ou sur validation n'y figure pas tant qu'il n'est pas confirmé. Quand votre créneau est passé, l'encadré passe au suivant. Vos créneaux sont ensuite listés sous **Tous mes créneaux** ; celui de l'encadré y renvoie par un lien. Le nom du responsable du poste figure aussi dans les rappels et sur le planning individuel imprimé, pour vos places confirmées.
+
 Vous pouvez :
-- Voir tous vos créneaux inscrits pour cet événement, avec leurs **infos pratiques** : lieu de rendez-vous (et **Voir sur la carte**), consigne, et la personne de contact avec son téléphone
+- Voir tous vos créneaux inscrits pour cet événement, avec leurs **infos pratiques** : lieu de rendez-vous (et **Voir sur la carte**), consigne, et la personne de contact avec son téléphone (pour le créneau repris dans **Avant ta mission**, elles sont dans l'encadré)
 - **Annuler** un créneau individuellement : une confirmation vous est demandée (**Oui, annuler** ou **Non, garder**), puis la place est immédiatement libérée et proposée à la première personne en liste d'attente. Selon le cas, le bouton s'appelle autrement, toujours avec une confirmation :
   - **Quitter la liste d'attente**, pour un créneau où vous êtes en liste d'attente : vous ne recevez plus de message si une place se libère ;
   - **Refuser la place**, pour une place qui vous est proposée : elle passe à la personne suivante ;

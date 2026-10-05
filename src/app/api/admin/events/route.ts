@@ -9,6 +9,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { slugify } from "@/lib/utils"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
+import { dayContactSchema } from "@/lib/day-contact"
 
 const showSchema = z.object({
   name: z.string(),
@@ -31,6 +32,8 @@ const schema = z.object({
   accentColorKey: z.enum(ACCENT_KEYS).optional().nullable(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
+  /** Day-of contact (#560), for registered volunteers only. */
+  ...dayContactSchema,
 }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] }).refine((d) => isOrderedPeriod(d.startDate, d.endDate), { message: DATE_ORDER_ERROR, path: ["endDate"] })
 
 export async function GET() {

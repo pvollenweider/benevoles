@@ -11,7 +11,7 @@ import { logEvent } from "@/lib/event-log"
 import { reportError } from "@/lib/report-error"
 import { contactPhone } from "@/lib/contact-phone"
 import { registrationToken } from "@/lib/token-vault"
-import { pickShiftInfo } from "@/lib/shift-info"
+import { pickShiftInfo, withDayContact, withSectorLeaders } from "@/lib/shift-info"
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
 import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw, withdrawRequestSchema } from "@/lib/volunteer-withdraw"
 import { buildWithdrawalNotifications } from "@/lib/withdrawal-notifications"
@@ -31,7 +31,17 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     where: { ...registrationToken.where(token), status: { in: LIVE } },
     include: {
       volunteer: true,
-      event: { select: { id: true, title: true, slug: true, confirmationMessage: true, latitude: true, longitude: true, organization: { select: { slug: true, timeZone: true, replyToEmail: true } } } },
+      event: {
+        select: {
+          id: true, title: true, slug: true, confirmationMessage: true, publicStatus: true,
+          location: true, latitude: true, longitude: true, publicInstructions: true,
+          dayContactName: true, dayContactPhone: true,
+          pages: { select: { slug: true, title: true }, orderBy: { displayOrder: "asc" } },
+          // The sector leaders' names only (#560): never their email nor their link.
+          sectorLeaders: { select: { roleName: true, name: true } },
+          organization: { select: { slug: true, timeZone: true, replyToEmail: true } },
+        },
+      },
     },
   })
 
@@ -54,11 +64,24 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
 
   const orgSlug = registration.event.organization.slug
   const baseUrl = orgBaseUrl(orgSlug)
+  const eventUrl = `${baseUrl}/${registration.event.slug}`
+  const { event } = registration
   return NextResponse.json({
-    event: { id: registration.event.id, title: registration.event.title, slug: registration.event.slug },
+    // What the « Avant ta mission » block falls back on (#560). The information pages only
+    // open once the event is published: no link to a page that would answer 404.
+    event: {
+      id: event.id,
+      title: event.title,
+      slug: event.slug,
+      location: event.location,
+      latitude: event.latitude,
+      longitude: event.longitude,
+      publicInstructions: event.publicInstructions,
+      pages: event.publicStatus === "published" ? event.pages.map((p) => ({ title: p.title, url: `${eventUrl}/${p.slug}` })) : [],
+    },
     confirmationMessage: registration.event.confirmationMessage ?? null,
     orgHomeUrl: baseUrl,
-    eventUrl: `${baseUrl}/${registration.event.slug}`,
+    eventUrl,
     timeZone: orgTimeZone(registration.event.organization),
     // The newest email carrying the link, across the volunteer's registrations on this event (#376).
     linkEmailedAt: allRegistrations.reduce<Date | null>((m, r) => (r.linkEmailedAt && (!m || r.linkEmailedAt > m) ? r.linkEmailedAt : m), null),
@@ -89,7 +112,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
         date: r.shift.date,
         startTime: r.shift.startTime,
         endTime: r.shift.endTime,
-        ...pickShiftInfo(r.shift, registration.event),
+        // The event's day-of contact (#560) stands in for a shift without a contact, and the role's
+        // sector leaders are named, for a confirmed place only: never shown to someone on a
+        // waitlist or awaiting approval.
+        ...(r.status === "active"
+          ? withSectorLeaders(withDayContact(pickShiftInfo(r.shift, event), event), r.shift.roleName, event.sectorLeaders)
+          : pickShiftInfo(r.shift, event)),
       },
     })),
   })

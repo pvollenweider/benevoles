@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { render } from "../notifications/templates"
+import { EMERGENCY_NOTE } from "../shift-info"
 
 describe("notification templates — render()", () => {
   it("renders a registration confirmation with editToken in the link", () => {
@@ -186,9 +187,9 @@ describe("notification templates — shift practical info", () => {
       data: { volunteerName: "Alice", eventTitle: "Fête", editToken: "tok", shifts: [{ label: "Bar", date: "samedi", startTime: "10:00", endTime: "12:00", ...info }] },
     })
     expect(out.text).toContain("Lieu : Entrée B")
-    expect(out.text).toContain("Contact : Léa · 079 000 00 00")
+    expect(out.text).toContain("Contact pour ce créneau : Léa, 079 000 00 00")
     expect(out.text).toContain("À savoir : Venir 10 min <avant>.")
-    expect(out.html).toContain("Contact : Léa · 079 000 00 00")
+    expect(out.html).toContain('Contact pour ce créneau : Léa, <a href="tel:0790000000">079 000 00 00</a>')
     expect(out.html).toContain("Venir 10 min &lt;avant&gt;.")
     expect(out.html).not.toContain("<avant>")
   })
@@ -200,7 +201,7 @@ describe("notification templates — shift practical info", () => {
       data: { volunteerName: "Alice", eventTitle: "Fête", editToken: "tok", shifts: [{ label: "Bar", date: "samedi", startTime: "10:00", endTime: "12:00" }] },
     })
     expect(out.text).not.toContain("Lieu :")
-    expect(out.html).not.toContain("Contact :")
+    expect(out.html).not.toContain("Contact")
   })
 
   it.each(["reminder_j2", "reminder_j1", "reminder_dd"] as const)("%s carries the contact and instructions", (kind) => {
@@ -216,9 +217,42 @@ describe("notification templates — shift practical info", () => {
         editToken: "tok", hoursUntil: 3,
       },
     })
-    expect(out.text).toContain("Contact : Léa · 079 000 00 00")
+    expect(out.text).toContain("Contact pour ce créneau : Léa, 079 000 00 00")
     expect(out.text).toContain("À savoir : Gilet fourni")
     expect(out.html).toContain("À savoir : Gilet fourni")
+    expect(out.text).not.toContain("urgence")
+  })
+
+  // Day-of contact (#560): the fallback of a shift without a contact, with the emergency note once.
+  it.each(["reminder_j2", "reminder_j1", "reminder_dd"] as const)("%s names the sector leaders (#560)", (kind) => {
+    const out = render({
+      kind,
+      recipient: { email: "a@x.ch", name: "Alice" },
+      data: {
+        volunteerName: "Alice", eventTitle: "Fête", organizationName: "Org", editToken: "tok", hoursUntil: 3,
+        shifts: [{ label: "Bar", roleName: "Bar", date: "samedi 4 juillet", startTime: "10:00", endTime: "12:00", sectorLeaderNames: ["Paul Martin"] }],
+      },
+    })
+    expect(out.text).toContain("Responsable du poste : Paul Martin")
+    expect(out.html).toContain("Responsable du poste : Paul Martin")
+  })
+
+  it.each(["reminder_j2", "reminder_j1", "reminder_dd"] as const)("%s shows the day-of contact and the emergency note once", (kind) => {
+    const shift = (startTime: string, endTime: string) => ({
+      label: "Bar", roleName: "Bar", date: "samedi 4 juillet", startTime, endTime, dayContactName: "Coordination", dayContactPhone: "079 111 11 11",
+    })
+    for (const shifts of [[shift("10:00", "12:00")], [shift("10:00", "12:00"), shift("14:00", "16:00")]]) {
+      const out = render({
+        kind,
+        recipient: { email: "a@x.ch", name: "Alice" },
+        data: { volunteerName: "Alice", eventTitle: "Fête", organizationName: "Org", shifts, editToken: "tok", hoursUntil: 3 },
+      })
+      expect(out.text).toContain("Contact le jour J : Coordination, 079 111 11 11")
+      expect(out.html).toContain('Contact le jour J : Coordination, <a href="tel:0791111111">079 111 11 11</a>')
+      expect(out.text.split(EMERGENCY_NOTE).length - 1).toBe(1)
+      expect(out.html.split(EMERGENCY_NOTE).length - 1).toBe(1)
+      expect(out.html).toContain("font-weight:600")
+    }
   })
 })
 

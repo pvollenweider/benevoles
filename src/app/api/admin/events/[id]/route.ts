@@ -14,6 +14,7 @@ import { z } from "zod"
 import { validationError } from "@/lib/api-error"
 import { EVENT_PUBLIC_STATUSES } from "@/lib/statuses"
 import { isPublishing, publishBlocker } from "@/lib/event-publish"
+import { dayContactSchema } from "@/lib/day-contact"
 
 const showSchema = z.object({
   name: z.string(),
@@ -45,6 +46,8 @@ const schema = z.object({
   accentColorKey: z.enum(ACCENT_KEYS).optional().nullable(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
+  /** Day-of contact (#560), for registered volunteers only. Not in the event log: a phone number. */
+  ...dayContactSchema,
 }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {

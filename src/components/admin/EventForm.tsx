@@ -12,6 +12,7 @@ import { isCompleteTime, addMinutes } from "@/lib/gantt-utils"
 import { LISTED_FIELD_HELP, LISTED_FIELD_LABEL, UNLISTED_HINT, visibilityLabel } from "@/lib/event-visibility"
 import { announce } from "@/lib/announce"
 import { type SaveState, formatSavedAt, saveErrorText, shouldAnnounceSaved, visibleSaveText } from "@/lib/event-autosave"
+import { DAY_CONTACT_NAME_MAX, DAY_CONTACT_PHONE_MAX } from "@/lib/day-contact"
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
@@ -39,6 +40,9 @@ type EventFormData = {
   /** Coordinates of the place (#191), or null. */
   latitude: number | null
   longitude: number | null
+  /** Day-of contact (#560): shown only to registered volunteers, never on the public page. */
+  dayContactName: string
+  dayContactPhone: string
 }
 
 type Props = {
@@ -69,6 +73,8 @@ const defaultData: EventFormData = {
   registrationsOpen: true,
   registrationOpensAt: "",
   registrationClosesAt: "",
+  dayContactName: "",
+  dayContactPhone: "",
 }
 
 const emptyShow: Show = { name: "", date: "", startTime: "", endTime: "" }
@@ -422,6 +428,24 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
             placeholder="Texte affiché aux bénévoles en haut de la page"
             className={`${inputCls} resize-none`} />
         </div>
+
+        {/* Day-of contact (#560): the fallback of a shift without a contact, for registered volunteers only. */}
+        <fieldset id="event-day-contact" aria-describedby="event-day-contact-hint">
+          <legend className="text-sm font-medium text-gray-700 mb-1">Contact le jour J</legend>
+          <p id="event-day-contact-hint" className="text-xs text-gray-600 mb-2">
+            Facultatif. La personne que les bénévoles appellent sur place quand leur créneau n&apos;a pas de contact. Visible uniquement par les bénévoles confirmés (page personnelle, rappels, planning individuel imprimé), jamais sur la page publique. Le contact d&apos;un créneau, s&apos;il est renseigné, passe avant.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label htmlFor="event-day-contact-name" className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+              <input id="event-day-contact-name" type="text" maxLength={DAY_CONTACT_NAME_MAX} autoComplete="off" value={form.dayContactName} onChange={(e) => set("dayContactName", e.target.value)} placeholder="ex. Léa (coordination)" className={inputCls} />
+            </div>
+            <div>
+              <label htmlFor="event-day-contact-phone" className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+              <input id="event-day-contact-phone" type="tel" aria-describedby="event-day-contact-hint" maxLength={DAY_CONTACT_PHONE_MAX} autoComplete="off" value={form.dayContactPhone} onChange={(e) => set("dayContactPhone", e.target.value)} placeholder="ex. 079 000 00 00" className={inputCls} />
+            </div>
+          </div>
+        </fieldset>
 
         <div className="flex items-start gap-3">
           <input

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
-import { pickShiftInfo } from "@/lib/shift-info"
+import { pickShiftInfo, withDayContact, withSectorLeaders } from "@/lib/shift-info"
 import { parseNotificationSettings, reminderEnabled } from "@/lib/notification-settings"
 import { recordJobRun } from "@/lib/job-runs"
 import { env } from "@/lib/env"
@@ -75,7 +75,7 @@ async function run(req: Request) {
       include: {
         volunteer: true,
         shift: true,
-        event: { include: { organization: { select: { name: true, slug: true, timeZone: true, notificationSettings: true } } } },
+        event: { include: { organization: { select: { name: true, slug: true, timeZone: true, notificationSettings: true } }, sectorLeaders: { select: { roleName: true, name: true } } } },
       },
     })
 
@@ -98,7 +98,9 @@ async function run(req: Request) {
         date: r.shift.date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
         startTime: r.shift.startTime,
         endTime: r.shift.endTime,
-        ...pickShiftInfo(r.shift, r.event),
+        // The event's day-of contact (#560) when the shift has none, and the role's sector leaders
+        // by name: reminders go to confirmed volunteers only.
+        ...withSectorLeaders(withDayContact(pickShiftInfo(r.shift, r.event), r.event), r.shift.roleName, r.event.sectorLeaders),
       }))
       const result = await sendNotification({
         kind: win.kind,

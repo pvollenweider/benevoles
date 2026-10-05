@@ -7,7 +7,7 @@
  */
 
 import { orgBaseUrl } from "@/lib/urls"
-import { shiftInfoLines, type ShiftInfo } from "../../shift-info"
+import { onSiteContact, shiftInfoLines, telHref, type ShiftInfo, type ShiftInfoLine } from "../../shift-info"
 import { MAP_LINK_EMAIL_LABEL } from "../../map-link"
 
 export const BASE_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
@@ -45,11 +45,20 @@ export function escapeHtml(s: string): string {
     .replace(/"/g, "&quot;")
 }
 
+/** The value of one line: the contact's number as a tappable `tel:` link (#560), the place with its map link. */
+function lineHtml(l: ShiftInfoLine, info: ShiftInfo): string {
+  const contact = l.kind === "contact" || l.kind === "dayContact" ? onSiteContact(info) : null
+  if (contact?.phone) {
+    return `${contact.name ? `${escapeHtml(contact.name)}, ` : ""}<a href="${escapeHtml(telHref(contact.phone))}">${escapeHtml(contact.phone)}</a>`
+  }
+  return `${escapeHtml(l.text)}${l.href ? ` : <a href="${escapeHtml(l.href)}">${MAP_LINK_EMAIL_LABEL}</a>` : ""}`
+}
+
 /** Place, contact and instructions of a shift as small lines under it (#397). */
 export function shiftInfoHtml(info: ShiftInfo): string {
   const lines = shiftInfoLines(info)
   if (lines.length === 0) return ""
-  return `<div style="color:#444;font-size:0.85em;margin-top:4px">${lines.map((l) => `<div>${escapeHtml(l.label)} : ${escapeHtml(l.text)}${l.href ? ` — <a href="${escapeHtml(l.href)}">${MAP_LINK_EMAIL_LABEL}</a>` : ""}</div>`).join("")}</div>`
+  return `<div style="color:#444;font-size:0.85em;margin-top:4px">${lines.map((l) => `<div>${escapeHtml(l.label)} : ${lineHtml(l, info)}</div>`).join("")}</div>`
 }
 
 export function btn(href: string, label: string): string {

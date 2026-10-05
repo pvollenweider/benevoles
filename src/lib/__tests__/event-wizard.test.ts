@@ -61,6 +61,13 @@ describe("practicalInfoGaps", () => {
     expect(practicalInfoGaps([bare], { location: null, latitude: 46.5, longitude: 6.6 })).toMatchObject({ noPlace: 0, noContact: 1 })
   })
 
+  // Day-of contact (#560): the event's contact stands for every shift's contact.
+  it("lets the event's day-of contact, name or phone, stand for every shift's contact", () => {
+    expect(practicalInfoGaps([bare, withPlace], { location: null, dayContactName: "Coordination" })).toMatchObject({ noContact: 0, noPlace: 1, incomplete: 1 })
+    expect(practicalInfoGaps([bare], { location: "Salle", dayContactPhone: "079 111 11 11" })).toMatchObject({ noContact: 0, incomplete: 0 })
+    expect(practicalInfoGaps([bare], { location: "Salle", dayContactName: " ", dayContactPhone: null })).toMatchObject({ noContact: 1 })
+  })
+
   it("takes a shift's own coordinates as its place", () => {
     expect(practicalInfoGaps([{ ...bare, latitude: 46.5, longitude: 6.6 }], { location: null })).toMatchObject({ noPlace: 0, noPlaceNorContact: 0 })
   })

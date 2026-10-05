@@ -13,6 +13,7 @@ const shift: DuplicableShift & { id: string; eventId: string; status: string } =
 const source: DuplicableEvent = {
   title: "Fête", description: "d", location: "Salle", latitude: 46.2, longitude: 6.1, startDate: new Date("2026-07-04T00:00:00Z"), endDate: new Date("2026-07-05T00:00:00Z"),
   publicInstructions: "pi", confirmationMessage: "cm", reminderMessage: "rm", remindersEnabled: false, requirePhone: true, accentColorKey: "teal",
+  dayContactName: "Coordination", dayContactPhone: "079 111 11 11",
   showSchedule: [{ name: "Concert", date: "2026-07-04", startTime: "20:00", endTime: "22:00" }],
   shifts: [shift, { ...shift, date: new Date("2026-07-05T00:00:00Z") }],
   pages: [{ slug: "faq", title: "FAQ", content: "x", displayOrder: 0 }],
@@ -37,6 +38,8 @@ describe("duplicatePlan", () => {
     expect(plan.offsetDays).toBe(0)
     expect(plan.event).toMatchObject({ registrationsOpen: false, registrationOpensAt: null, registrationClosesAt: null })
     expect(plan.event).toMatchObject({ title: "Fête (copie)", startDate: source.startDate, endDate: source.endDate, requirePhone: true, remindersEnabled: false, confirmationMessage: "cm" })
+    // The day-of contact (#560) follows with the settings.
+    expect(plan.event).toMatchObject({ dayContactName: "Coordination", dayContactPhone: "079 111 11 11" })
     expect(plan.shifts).toHaveLength(2)
     expect(plan.pages).toEqual(source.pages)
     expect(plan.leaders).toEqual([])
@@ -53,7 +56,7 @@ describe("duplicatePlan", () => {
 
   it("honours each choice; settings off resets messages and registration settings", () => {
     const plan = duplicatePlan(source, { title: "Édition 2027", copy: { shifts: false, pages: false, leaders: true, settings: false } })
-    expect(plan.event).toMatchObject({ title: "Édition 2027", publicInstructions: null, confirmationMessage: null, reminderMessage: null, remindersEnabled: true, requirePhone: false, showSchedule: [] })
+    expect(plan.event).toMatchObject({ title: "Édition 2027", publicInstructions: null, confirmationMessage: null, reminderMessage: null, remindersEnabled: true, requirePhone: false, showSchedule: [], dayContactName: null, dayContactPhone: null })
     expect(plan.event.description).toBe("d") // description and location always follow
     expect(plan.shifts).toEqual([])
     expect(plan.pages).toEqual([])

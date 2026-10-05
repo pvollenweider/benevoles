@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { hasShiftInfo, pickShiftInfo, shiftInfoLines, shiftInfoText } from "../shift-info"
+import { EMERGENCY_NOTE, emergencyNoteFor, hasShiftInfo, onSiteContact, pickShiftInfo, shiftInfoLines, shiftInfoText, telHref, withDayContact, withSectorLeaders } from "../shift-info"
 
 describe("shiftInfoLines", () => {
   it("returns nothing for a shift without info, blanks included", () => {
@@ -11,7 +11,7 @@ describe("shiftInfoLines", () => {
   it("lists place, contact and instructions in reading order", () => {
     expect(shiftInfoLines({ instructions: "Venir 10 min avant.", contactName: "Léa", contactPhone: "079 000 00 00", locationDetails: "Entrée B" })).toEqual([
       { kind: "place", label: "Lieu", text: "Entrée B" },
-      { kind: "contact", label: "Contact", text: "Léa · 079 000 00 00" },
+      { kind: "contact", label: "Contact pour ce créneau", text: "Léa, 079 000 00 00" },
       { kind: "instructions", label: "À savoir", text: "Venir 10 min avant." },
     ])
   })
@@ -37,5 +37,57 @@ describe("shiftInfoLines", () => {
     expect(pickShiftInfo({ latitude: null, longitude: null }, { latitude: 46.2, longitude: 6.1 })).toMatchObject({ latitude: 46.2, longitude: 6.1 })
     expect(pickShiftInfo({ latitude: 46.18, longitude: 6.12 }, { latitude: 46.2, longitude: 6.1 })).toMatchObject({ latitude: 46.18, longitude: 6.12 })
     expect(hasShiftInfo({ latitude: 46.18, longitude: null })).toBe(false)
+  })
+})
+
+// Day-of contact (#560): the shift's contact first, the event's as the fallback, never mixed.
+describe("onSiteContact and withDayContact", () => {
+  const event = { dayContactName: " Coordination ", dayContactPhone: "079 111 11 11" }
+
+  it("prefers the shift's contact, whole, over the day-of contact", () => {
+    expect(onSiteContact({ contactName: "Léa", dayContactName: "Coordination", dayContactPhone: "079 111 11 11" })).toEqual({ kind: "shift", label: "Contact pour ce créneau", name: "Léa", phone: "" })
+    expect(onSiteContact({ contactPhone: "079 000 00 00", dayContactName: "Coordination" })).toMatchObject({ kind: "shift", name: "", phone: "079 000 00 00" })
+  })
+
+  it("falls back on the day-of contact, then on nothing", () => {
+    expect(onSiteContact({ contactName: " ", dayContactName: "Coordination", dayContactPhone: "079 111 11 11" })).toEqual({ kind: "day", label: "Contact le jour J", name: "Coordination", phone: "079 111 11 11" })
+    expect(onSiteContact({ dayContactPhone: "079 111 11 11" })).toMatchObject({ kind: "day", name: "", phone: "079 111 11 11" })
+    expect(onSiteContact({ contactName: "", dayContactName: "  " })).toBeNull()
+  })
+
+  it("attaches the day-of contact only to a shift without a contact of its own", () => {
+    expect(withDayContact({ locationDetails: "Entrée B" }, event)).toEqual({ locationDetails: "Entrée B", dayContactName: "Coordination", dayContactPhone: "079 111 11 11" })
+    expect(withDayContact({ dayContactName: undefined, contactName: "Léa" }, event)).toEqual({ dayContactName: undefined, contactName: "Léa" })
+    expect(withDayContact({ contactPhone: "079 000 00 00" }, event)).not.toHaveProperty("dayContactPhone")
+    expect(withDayContact({ locationDetails: "Entrée B" }, { dayContactName: " ", dayContactPhone: null })).toEqual({ locationDetails: "Entrée B" })
+    expect(withDayContact({ locationDetails: "Entrée B" }, null)).toEqual({ locationDetails: "Entrée B" })
+    expect(withDayContact({}, { dayContactName: "Coordination" })).toEqual({ dayContactName: "Coordination", dayContactPhone: null })
+  })
+
+  it("labels the line and adds the emergency note once, only for the day-of contact", () => {
+    expect(shiftInfoText(withDayContact({ instructions: "Gilet fourni" }, event))).toEqual(["Contact le jour J : Coordination, 079 111 11 11", "À savoir : Gilet fourni"])
+    const dayShift = withDayContact({}, event)
+    expect(emergencyNoteFor([{ contactName: "Léa" }, dayShift, dayShift])).toBe(EMERGENCY_NOTE)
+    expect(emergencyNoteFor([{ contactName: "Léa", dayContactName: "Coordination" }])).toBeNull()
+    expect(emergencyNoteFor([])).toBeNull()
+  })
+
+  // Sector leaders (#560): their names only, for the shift's role.
+  it("attaches the role's leaders by name, nothing else", () => {
+    const leaders = [
+      { roleName: "Bar", name: " Paul Martin ", email: "paul@x.ch" },
+      { roleName: "Bar", name: "Paul Martin", email: "paul2@x.ch" },
+      { roleName: "Accueil", name: "Zoé Roux", email: "zoe@x.ch" },
+    ]
+    const info = withSectorLeaders({ locationDetails: "Entrée B" }, "Bar", leaders)
+    expect(info).toEqual({ locationDetails: "Entrée B", sectorLeaderNames: ["Paul Martin"] })
+    expect(JSON.stringify(info)).not.toContain("@")
+    expect(withSectorLeaders({}, "Montage", leaders)).toEqual({})
+    expect(shiftInfoText(withSectorLeaders({ contactName: "Léa" }, "Bar", leaders))).toEqual(["Contact pour ce créneau : Léa", "Responsable du poste : Paul Martin"])
+    expect(shiftInfoText({ sectorLeaderNames: ["A", "B"] })).toEqual(["Responsables du poste : A, B"])
+  })
+
+  it("keeps only digits and a plus sign in the tel: link", () => {
+    expect(telHref("+41 (0)79 111-11-11")).toBe("tel:+410791111111")
   })
 })

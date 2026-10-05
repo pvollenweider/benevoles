@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { shiftInfoText, type ShiftInfo } from "./shift-info"
+import { EMERGENCY_NOTE, emergencyNoteFor, shiftInfoText, type ShiftInfo } from "./shift-info"
 import { buildDayParts, type ShiftRow } from "./pdf-export-gantt"
 import { confirmedLine, MULTIPLE_NOTE, rowLabel, waitingLine, type AnswerSummary } from "./question-answer-summary"
 
@@ -175,7 +175,11 @@ function roleView(d: SheetData): string {
 function individualView(d: SheetData): string {
   const rows = volunteersOf(d.shifts)
   if (rows.length === 0) return `<p class="meta">Aucun bénévole inscrit.</p>`
-  return rows.map(({ volunteer: v, shifts }, i) => `
+  return rows.map(({ volunteer: v, shifts }, i) => {
+    // The emergency note (#560) once per volunteer, inside the first card showing the day-of
+    // contact: a card is never split across pages, so the note stays with the contact.
+    const noteFor = shifts.find((s) => emergencyNoteFor([s]))
+    return `
     <section class="block page${i > 0 ? " page-before" : ""}">
       ${sectionHead(esc(fullName(v)), `${plural(shifts.length, "créneau")} · ${esc(d.eventTitle)}`)}
       ${groupBy(shifts, (s) => s.date).map(([date, dayShifts]) => `
@@ -185,8 +189,10 @@ function individualView(d: SheetData): string {
       <div class="card">
         <h4 class="card-title"><span class="mono">${esc(fmtRange(s.startTime, s.endTime))}</span> — ${esc(shiftName(s))}</h4>
         ${shiftInfoText(s).map((l) => `<p>${esc(l)}</p>`).join("")}
+        ${s === noteFor ? `<p class="note">${esc(EMERGENCY_NOTE)}</p>` : ""}
       </div>`).join("")}`).join("")}
-    </section>`).join("")
+    </section>`
+  }).join("")
 }
 
 /** Blank lines under each shift for people who turn up unannounced. */
@@ -361,6 +367,7 @@ export function renderSheet(view: SheetView, d: SheetData): string {
     .card { border: 1px solid var(--rule); padding: 6px 10px; margin: 6px 0; page-break-inside: avoid; break-inside: avoid; }
     .card-title { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
     .card p { font-size: 12px; }
+    .card .note { font-weight: 700; border-left: 3px solid var(--ink); padding-left: 6px; margin-top: 4px; }
 
     /* ── Gantt (shared markup with the full export), monochrome and ink-sparing: white bars with a
           thick outline instead of solid fills, bold header text instead of a band ─────────── */

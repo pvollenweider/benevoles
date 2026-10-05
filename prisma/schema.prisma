@@ -85,6 +85,11 @@ model Event {
   // Coordinates of the place (#191): typed once, shown as a map link; default for the shifts.
   latitude            Float?
   longitude           Float?
+  // Day-of contact (#560): whom registered volunteers call on site when their shift has no
+  // contact of its own. Shown only to registered volunteers (personal page, reminders,
+  // individual printed sheet), never on the public page, the public API or metadata.
+  dayContactName      String?
+  dayContactPhone     String?
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
 
