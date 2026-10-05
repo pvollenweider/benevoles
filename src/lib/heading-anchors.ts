@@ -9,9 +9,19 @@ import { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
  * keeps its wording. Plain ASCII (accents dropped, « œ » spelled out) so the URL reads the same
  * everywhere it is pasted. Pure, shared by the renderer and the tests.
  */
+/** Removes markup until none is left, so a nested or split tag can't survive one pass. */
+function stripTags(text: string): string {
+  let previous: string
+  let current = text
+  do {
+    previous = current
+    current = current.replace(/<[^>]*>/g, "")
+  } while (current !== previous)
+  return current.replace(/[<>]/g, "")
+}
+
 export function slugifyHeading(text: string): string {
-  return text
-    .replace(/<[^>]*>/g, "")
+  return stripTags(text)
     .replace(/&[a-z]+;|&#\d+;/gi, " ")
     .replace(/œ/g, "oe").replace(/Œ/g, "oe").replace(/æ/g, "ae").replace(/Æ/g, "ae")
     .normalize("NFD")

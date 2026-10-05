@@ -13,8 +13,17 @@ import { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 const root = path.join(__dirname, "..", "..", "..")
 const { html } = renderPublicSource("GUIDE_ADMIN.md", "Guide administrateur")
 
-const decode = (s: string) =>
-  s.replace(/<[^>]*>/g, "").replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&")
+// Heading text as written in the guide: inline markup removed (until none is left), then the few
+// entities the renderer emits for headings. Headings never contain « < » or « > ».
+const decode = (s: string) => {
+  let previous: string
+  let current = s
+  do {
+    previous = current
+    current = current.replace(/<[^>]*>/g, "")
+  } while (current !== previous)
+  return current.replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&")
+}
 
 const headings = [...html.matchAll(/<h([2-6])(?: id="([^"]*)")?>([\s\S]*?)<\/h\1>/g)].map((m) => ({ id: m[2], text: decode(m[3]) }))
 const textById = new Map(headings.map((h) => [h.id, h.text]))

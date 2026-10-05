@@ -6,6 +6,13 @@ import { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 
 // #568: stable heading anchors for the public guides.
 describe("slugifyHeading", () => {
+  it("removes nested or split markup completely, never leaving a tag behind", () => {
+    for (const tricky of ["<scr<script>ipt>Titre</scr<b>ipt>", "a <<b>em>b", "<<script>script>x"]) {
+      expect(slugifyHeading(tricky)).toMatch(/^[a-z0-9-]+$/)
+    }
+    expect(slugifyHeading("<em>Créer</em> un <strong>événement</strong>")).toBe("creer-un-evenement")
+  })
+
   it("lowercases, drops accents and joins words with hyphens", () => {
     expect(slugifyHeading("Configurer les créneaux")).toBe("configurer-les-creneaux")
     expect(slugifyHeading("Inviter des membres à un événement")).toBe("inviter-des-membres-a-un-evenement")
