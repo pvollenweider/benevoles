@@ -160,11 +160,12 @@ describe("review: reminders item", () => {
       .toMatchObject({ ok: false, warn: true, label: "Aucun rappel automatique : désactivés pour l'organisation", href: "/admin/settings/notifications" })
   })
 
-  it("says when they are off for this event, which wins, without a link (no setting in the form)", () => {
+  it("says when they are off for this event, which wins, with a link to the box in the event form", () => {
     const off = check({ reminders: rem({ eventEnabled: false, organization: { j2: false, j1: true, dd: true } }) }, "reminders")!
     expect(off).toMatchObject({ ok: false, warn: true, label: "Rappels automatiques coupés pour cet événement" })
-    expect(off.href).toBeUndefined()
-    expect(off.hint).toMatch(/ne se change pas encore depuis l'interface/)
+    expect(off).toMatchObject({ href: "/admin/events/evt-1/edit#event-reminders", action: "Modifier" })
+    expect(off.hint).toBe("Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les réglages de l'organisation.")
+    expect(off.hint).not.toMatch(/interface/)
   })
 })
 

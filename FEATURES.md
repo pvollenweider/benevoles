@@ -30,7 +30,7 @@ C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles
 ## Garder les bénévoles informés
 
 - **Une confirmation par email** avec le récapitulatif des créneaux et un lien personnel pour les retrouver, les modifier ou les annuler, et les ajouter à son calendrier.
-- **Des rappels automatiques** deux jours avant, la veille et le jour même, et des notifications sur le téléphone pour ceux qui les activent. Plusieurs créneaux le même jour pour le même événement : un seul rappel les regroupe tous, plutôt qu'un par créneau. Chaque organisation choisit les rappels envoyés et l'adresse qui reçoit les réponses des bénévoles.
+- **Des rappels automatiques** deux jours avant, la veille et le jour même, et des notifications sur le téléphone pour ceux qui les activent. Plusieurs créneaux le même jour pour le même événement : un seul rappel les regroupe tous, plutôt qu'un par créneau. Chaque organisation choisit les rappels envoyés et l'adresse qui reçoit les réponses des bénévoles, et peut couper tous les rappels d'un événement.
 - **Des messages ciblés** à tous les inscrits, à un poste, à un créneau, à la liste d'attente ou aux invités qui n'ont pas encore de créneau (ceux qui ont dit ne pas être disponibles sont exclus), avec un aperçu avant l'envoi, une notification sur le téléphone en plus de l'email pour l'urgent, des modèles réutilisables avec le prénom de chacun, et l'historique de ce qui a été envoyé, par qui et avec quel résultat.
 - **Prévenus des changements.** Si un créneau change d'horaire ou est annulé, les inscrits reçoivent un email.
 

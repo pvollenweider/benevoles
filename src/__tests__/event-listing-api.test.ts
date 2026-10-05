@@ -42,6 +42,17 @@ describe("PATCH /api/admin/events/[id] — isListed", () => {
     expect((await PATCH(patch({ isListed: 1 }), params)).status).toBe(400)
     expect(update).not.toHaveBeenCalled()
   })
+
+  // The « Rappels automatiques » box of the event form saves through the same PATCH.
+  it("saves and logs remindersEnabled from the event form, refusing a non-boolean", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/route")
+    expect((await PATCH(patch({ remindersEnabled: "no" }), params)).status).toBe(400)
+    expect(update).not.toHaveBeenCalled()
+    const res = await PATCH(patch({ remindersEnabled: false }), params)
+    expect(res.status).toBe(200)
+    expect(update.mock.calls[0][0].data).toEqual({ remindersEnabled: false })
+    expect(logEvent.mock.calls[0][0]).toMatchObject({ action: "event.updated", changes: { remindersEnabled: { from: true, to: false } } })
+  })
 })
 
 describe("GET /api/public/events — listed events of one organization", () => {

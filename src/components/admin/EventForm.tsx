@@ -26,6 +26,8 @@ type EventFormData = {
   reminderMessage: string
   publicStatus: "draft" | "published" | "archived"
   requirePhone: boolean
+  /** Automatic reminders of this event (J-2, J-1, day-of); the organization's settings still apply. */
+  remindersEnabled: boolean
   /** Unlisted events (#414): false = reachable by link only. */
   isListed: boolean
   /** Accent colour of the public page (#300): a palette key, or null for the neutral header. */
@@ -59,6 +61,7 @@ const defaultData: EventFormData = {
   reminderMessage: "",
   publicStatus: "draft",
   requirePhone: false,
+  remindersEnabled: true,
   isListed: true,
   accentColorKey: null,
   latitude: null,
@@ -149,6 +152,12 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
       setSaveError(saveErrorText("network"))
     }
   }
+
+  // Arriving from the review's « Modifier » link (client navigation to #event-reminders) only
+  // scrolls: move focus to the box so keyboard and screen-reader users land on it too.
+  useEffect(() => {
+    if (isEdit && window.location.hash === "#event-reminders") document.getElementById("event-reminders-enabled")?.focus()
+  }, [isEdit])
 
   // Auto-save in edit mode with 800ms debounce
   useEffect(() => {
@@ -448,6 +457,25 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
             placeholder="Consignes vestimentaires, point de RDV, accès, parking…"
             className={`${inputCls} resize-none`} />
         </div>
+
+        {isEdit && (
+          <div id="event-reminders" className="flex items-start gap-2">
+            <input
+              id="event-reminders-enabled"
+              type="checkbox"
+              aria-describedby="event-reminders-hint"
+              checked={form.remindersEnabled}
+              onChange={(e) => setForm((f) => ({ ...f, remindersEnabled: e.target.checked }))}
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            />
+            <div>
+              <label htmlFor="event-reminders-enabled" className="text-sm font-medium text-gray-700">Rappels automatiques</label>
+              <p id="event-reminders-hint" className="text-xs text-gray-600 mt-0.5">
+                Les bénévoles reçoivent les rappels J-2, J-1 et du jour avant leurs créneaux. Les rappels désactivés dans « Réglages des emails » ne partent pas.
+              </p>
+            </div>
+          </div>
+        )}
 
         {isEdit ? (
           <fieldset>

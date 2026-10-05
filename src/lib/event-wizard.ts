@@ -146,13 +146,13 @@ function registrationCheck(r: NonNullable<ReviewFacts["registration"]>, publishe
   }
 }
 
-function remindersCheck(r: NonNullable<ReviewFacts["reminders"]>): ReviewCheck {
+function remindersCheck(r: NonNullable<ReviewFacts["reminders"]>, base: string): ReviewCheck {
   const settings = { href: "/admin/settings/notifications", action: "Réglages des emails" }
   if (!r.eventEnabled) {
-    // Event.remindersEnabled has no box in the event form: nothing to link to.
     return {
       id: "reminders", label: "Rappels automatiques coupés pour cet événement", ok: false, required: false, warn: true,
-      hint: "Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les réglages de l'organisation. Ce réglage ne se change pas encore depuis l'interface : le formulaire de l'événement n'a pas de case pour lui.",
+      href: `${base}/edit#event-reminders`, action: "Modifier",
+      hint: "Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les réglages de l'organisation.",
     }
   }
   const on = (Object.keys(REMINDER_LABELS) as ReminderKey[]).filter((k) => r.organization[k])
@@ -215,7 +215,7 @@ export function reviewChecks(f: ReviewFacts): ReviewCheck[] {
     // Non-blocking items (#565), each only when what it checks applies to the event.
     ...(f.practicalInfo && f.practicalInfo.shifts > 0 ? [practicalInfoCheck(f.practicalInfo, base)] : []),
     ...(f.registration && !archived ? [registrationCheck(f.registration, published, base)] : []),
-    ...(f.reminders && f.reminders.upcomingShifts && !archived ? [remindersCheck(f.reminders)] : []),
+    ...(f.reminders && f.reminders.upcomingShifts && !archived ? [remindersCheck(f.reminders, base)] : []),
     ...(f.coverage && published && f.coverage.totals.shifts > 0 ? [coverageCheck(f.coverage, base)] : []),
   ]
 }

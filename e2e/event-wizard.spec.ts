@@ -53,4 +53,14 @@ test("an admin creates and publishes an event through the three steps", async ({
   // Once published, the coverage line and its link to the staffing page.
   await expect(review.getByRole("link", { name: "Voir les créneaux incomplets : 0 place occupée sur 4, 2 créneaux incomplets" })).toHaveAttribute("href", /\/staffing$/)
   await expect(page.getByRole("link", { name: /Ouvrir la page de l'événement/ })).toBeVisible()
+
+  // Reminders switched off for this event: the review links to the box, which takes focus.
+  const reviewUrl = page.url()
+  await page.goto(reviewUrl.replace(/\/review$/, "/edit"))
+  await page.getByRole("checkbox", { name: "Rappels automatiques" }).uncheck()
+  await expect(page.getByText(/Modifications enregistrées à/)).toBeVisible()
+  await page.goto(reviewUrl)
+  await review.getByRole("link", { name: /Rappels automatiques coupés pour cet événement/ }).click()
+  await expect(page).toHaveURL(/\/edit#event-reminders$/)
+  await expect(page.getByRole("checkbox", { name: "Rappels automatiques" })).toBeFocused()
 })
