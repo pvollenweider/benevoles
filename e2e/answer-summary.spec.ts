@@ -46,7 +46,7 @@ test("counts confirmed volunteers once, pending apart, and exports the summary",
   await page.goto(`/admin/events/${event.id}/questions`)
   const summary = page.getByRole("region", { name: "Synthèse des réponses" })
   await expect(summary).toBeVisible()
-  await expect(summary.getByText(/^État au \d{1,2} \S+ \d{4} à \d{2}:\d{2}$/)).toBeVisible()
+  await expect(summary.getByText(/^État au \d{1,2} \S+ \d{4} à \d{1,2}h(\d{2})?$/)).toBeVisible()
   await expect(summary.getByText(/2 bénévoles confirmés/)).toBeVisible()
 
   const sizes = summary.getByRole("table", { name: "Taille de t-shirt" })
