@@ -647,13 +647,15 @@ Avant d'envoyer, rédiger un message dans la section « Message de rappel » (pa
 ### Rappels automatiques
 
 L'application envoie automatiquement des rappels :
-- **J-2** (48 h avant le premier créneau du jour) : rappel avec détails des créneaux
-- **J-1** (24 h avant le premier créneau du jour) : rappel court
+- **J-2** (environ 48 h avant le premier créneau du jour) : rappel avec détails des créneaux
+- **J-1** (environ 24 h avant le premier créneau du jour) : rappel court
 - **Jour J** (2–4 h avant le premier créneau du jour) : rappel de dernière minute
 
 Un bénévole inscrit sur plusieurs créneaux le même jour pour un même événement ne reçoit qu'un seul email par rappel (un seul J-2, un seul J-1, un seul rappel du jour), listant tous ses créneaux de ce jour-là dans l'ordre des horaires, plutôt qu'un email par créneau. S'il est aussi inscrit le même jour sur un autre événement, il reçoit un email séparé pour cet événement. Un créneau de nuit (qui se termine après minuit) compte sur son jour de début. Une inscription faite après l'envoi du rappel du jour (inscription tardive) reçoit son propre rappel, sans jamais en manquer ni en dupliquer un.
 
 Ces rappels sont envoyés sans intervention de votre part pour les événements publiés, sauf ceux décochés pour toute l'organisation dans **Paramètres → Emails** (voir « Réglages des emails »). Pour couper tous les rappels d'un seul événement, décochez **Rappels automatiques** dans son formulaire de modification ; cochée, la case laisse s'appliquer les réglages de l'organisation.
+
+La section **Communications** de la page de l'événement indique ce qui partira vraiment pour cet événement : les rappels envoyés avec leur délai, ceux désactivés pour l'organisation, ou l'absence de rappel (désactivés pour l'organisation, coupés pour cet événement, ou plus aucun créneau à venir). Pour un brouillon, elle précise que les rappels ne partent qu'une fois l'événement publié. Ses liens mènent à la case **Rappels automatiques** de l'événement et aux réglages des emails de l'organisation.
 
 ### Notifications de modification
 
