@@ -40,6 +40,8 @@ import {
   type SignupRefusal,
 } from "@/lib/signup-eligibility"
 import { RoleLimitError, roleLimitBreaches, roleLimitMessage, roleLimits } from "@/lib/role-limit"
+import { resolveCharterText } from "@/lib/volunteer-charter"
+import { hashCharterText } from "@/lib/charter-hash"
 
 const schema = z.object({
   eventId: z.string(),
@@ -53,6 +55,12 @@ const schema = z.object({
   birthDate: z.preprocess((v) => (v === "" ? undefined : v), birthDateSchema.optional()),
   comment: z.string().optional(),
   consent: z.literal(true),
+  // The volunteer ticked "J'ai lu et j'accepte la convention des bénévoles" (#569): the page
+  // already refuses to submit without it (validateSignup). An explicit false is refused below
+  // with a readable message. A missing field comes from a page loaded before #569 shipped, which
+  // showed the checkbox but did not send it: accepted without a proof of acceptance rather than
+  // losing that sign-up (owner decision 2026-10-05; to be made required later).
+  charterAccepted: z.literal(true).optional(),
   inviteToken: z.string().optional(),
   /** Answers to the event's custom questions (#483), by question id. */
   answers: z.record(z.string(), z.unknown()).optional(),
@@ -68,6 +76,12 @@ export async function POST(req: Request) {
   }
 
   const body = await req.json()
+  if (body?.charterAccepted === false) {
+    return NextResponse.json(
+      { error: "Coche « J'ai lu et j'accepte la convention des bénévoles », puis confirme à nouveau.", field: "charterAccepted" },
+      { status: 400 },
+    )
+  }
   const parsed = schema.safeParse(body)
   if (!parsed.success) {
     return validationError(parsed.error)
@@ -77,7 +91,7 @@ export async function POST(req: Request) {
 
   const event = await prisma.event.findFirst({
     where: { id: eventId, publicStatus: "published", organization: { active: true } },
-    include: { organization: { select: { slug: true, timeZone: true } } },
+    include: { organization: { select: { slug: true, timeZone: true, volunteerCharter: true } } },
   })
   if (!event) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
   const refuse = (r: SignupRefusal) => NextResponse.json(r.body, { status: r.status })
@@ -185,6 +199,14 @@ export async function POST(req: Request) {
   // the response need it, the DB only stores its hash and encrypted copy (#290).
   const tokens = new Map(shiftIds.map((id) => [id, generateToken()]))
 
+  // Proof of acceptance (#569): the exact text shown to this volunteer, hashed. CharterVersion
+  // resolves the hash back to its text later; upserted once per distinct text an organization has
+  // shown (never overwritten: "create" wins a race, "update" is a no-op on an existing row).
+  const charterText = resolveCharterText(event.organization.volunteerCharter)
+  const charterHash = hashCharterText(charterText)
+  const charterAccepted = parsed.data.charterAccepted === true
+  const charterAcceptedAt = new Date()
+
   // Notifications of this sign-up, built by the usual helpers into an outbox collector (#293).
   // Built and stored inside the registration transaction (#352): the registrations and their
   // notifications commit together, then delivery runs after the response. The helpers only read
@@ -201,6 +223,15 @@ export async function POST(req: Request) {
   try {
     outcome = await prisma.$transaction(async (tx) => {
       await lockShifts(tx, shiftIds)
+
+      // Resolve the hash back to its text later (#569): upserted once per distinct text, never
+      // overwritten once seen (the "update" below only exists so a race between two sign-ups
+      // doesn't throw on a duplicate key — it changes nothing).
+      if (charterAccepted) await tx.charterVersion.upsert({
+        where: { organizationId_hash: { organizationId, hash: charterHash } },
+        create: { organizationId, hash: charterHash, text: charterText },
+        update: {},
+      })
 
       // A new volunteer is created in the same transaction as their registrations (#309): if the
       // registration fails (shift full, overlap, duplicate), no member record is left behind.
@@ -272,6 +303,10 @@ export async function POST(req: Request) {
               ...registrationToken.data(tokens.get(shift.id)!),
               status: placement.status,
               waitingPosition: placement.status === "waiting" ? placement.waitingPosition : null,
+              // Proof of acceptance (#569): same hash and instant for every registration this
+              // sign-up creates.
+              charterAcceptedHash: charterAccepted ? charterHash : null,
+              charterAcceptedAt: charterAccepted ? charterAcceptedAt : null,
             },
           })
         )

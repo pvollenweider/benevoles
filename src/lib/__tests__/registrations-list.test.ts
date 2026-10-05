@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest"
 import {
   addConflictMessage,
+  charterAcceptanceLabel,
   cancelAnnouncement, heldAnnouncement, undoneAnnouncement,
   filterRegistrations,
   fmtHour,
@@ -143,5 +144,29 @@ describe("registrationsSummary", () => {
 
   it("has no middle dot nor bracketed plural", () => {
     expect(registrationsSummary({ active: 2, waiting: 2, requested: 2 })).not.toMatch(/[·()]/)
+  })
+})
+
+describe("charterAcceptanceLabel (#569)", () => {
+  const acceptedAt = new Date("2026-10-05T12:32:00Z")
+
+  it("words the date and hour in the organization's time zone, and says the text is current", () => {
+    expect(charterAcceptanceLabel({ acceptedAt, hash: "abc", currentHash: "abc", timeZone: "Europe/Zurich" }))
+      .toBe("Convention acceptée le 5 octobre 2026 à 14h32 (version en vigueur)")
+  })
+
+  it("does not depend on the viewer's zone: the same instant reads differently in another organization's zone", () => {
+    expect(charterAcceptanceLabel({ acceptedAt, hash: "abc", currentHash: "abc", timeZone: "America/New_York" }))
+      .toBe("Convention acceptée le 5 octobre 2026 à 8h32 (version en vigueur)")
+  })
+
+  it("tells an older text apart by the start of its hash", () => {
+    expect(charterAcceptanceLabel({ acceptedAt, hash: "3fa9c1e2deadbeef", currentHash: "abc", timeZone: "Europe/Zurich" }))
+      .toBe("Convention acceptée le 5 octobre 2026 à 14h32 (version précédente, empreinte 3fa9c1e2)")
+  })
+
+  it("crosses midnight with the zone, not the server", () => {
+    expect(charterAcceptanceLabel({ acceptedAt: new Date("2026-10-05T22:30:00Z"), hash: null, currentHash: "abc", timeZone: "Europe/Zurich" }))
+      .toBe("Convention acceptée le 6 octobre 2026 à 0h30")
   })
 })

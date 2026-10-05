@@ -7,7 +7,9 @@ import { SEARCH_MAX_LENGTH } from "@/lib/admin-search"
 import { orgTimeZone } from "@/lib/time-zone"
 import { answersByVolunteer } from "@/lib/event-questions"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
-import { registrationsSummary } from "@/lib/registrations-list"
+import { registrationsSummary, charterAcceptanceLabel } from "@/lib/registrations-list"
+import { resolveCharterText } from "@/lib/volunteer-charter"
+import { hashCharterText } from "@/lib/charter-hash"
 
 export const dynamic = "force-dynamic"
 
@@ -39,13 +41,15 @@ export default async function RegistrationsPage({
         orderBy: [{ status: "asc" }, { createdAt: "desc" }],
       },
       sectorLeaders: true,
-      organization: { select: { timeZone: true } },
+      organization: { select: { timeZone: true, volunteerCharter: true } },
       // Answers to the custom questions (#483), shown on each registration row.
       questions: { orderBy: [{ archivedAt: "asc" }, { position: "asc" }], select: { label: true, archivedAt: true, answers: { select: { volunteerId: true, values: true } } } },
     },
   })
 
   if (!event) notFound()
+  // The text a volunteer signing up now would accept (#569), to tell it apart from an older one.
+  const currentCharterHash = hashCharterText(resolveCharterText(event.organization.volunteerCharter))
 
   // Count active registrations per shift from the already-loaded list
   const regCountByShift = event.registrations.reduce<Record<string, number>>((acc, r) => {
@@ -95,6 +99,9 @@ export default async function RegistrationsPage({
           createdAt: r.createdAt.toISOString(),
           waitingPosition: r.waitingPosition,
           checkedInAt: r.checkedInAt?.toISOString() ?? null,
+          charterAcceptance: r.charterAcceptedAt
+            ? charterAcceptanceLabel({ acceptedAt: r.charterAcceptedAt, hash: r.charterAcceptedHash, currentHash: currentCharterHash, timeZone: orgTimeZone(event.organization) })
+            : null,
           volunteer: r.volunteer,
           isLeader: isSectorLeader(leaderKeys, r.shift.roleName, r.volunteer.email),
           shift: {

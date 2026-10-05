@@ -20,7 +20,7 @@ function post(extra: Record<string, unknown> = {}) {
   return new Request("http://localhost/api/public/registrations", {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-forwarded-for": `t-${Math.random()}` },
-    body: JSON.stringify({ eventId: "evt-1", shiftIds: ["s1"], firstName: "A", lastName: "B", email: "a@x.com", consent: true, ...extra }),
+    body: JSON.stringify({ eventId: "evt-1", shiftIds: ["s1"], firstName: "A", lastName: "B", email: "a@x.com", consent: true, charterAccepted: true, ...extra }),
   })
 }
 

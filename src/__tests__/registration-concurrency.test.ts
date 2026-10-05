@@ -36,6 +36,7 @@ vi.mock("@/lib/prisma", () => {
     registration,
     shift: { findUnique: m.shiftFindUnique, findMany: vi.fn().mockResolvedValue([]) },
     volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },
+    charterVersion: { upsert: vi.fn() },
   }
   m.transaction.mockImplementation(async (fn: (t: typeof tx) => unknown) => fn(tx))
   return {
@@ -69,7 +70,7 @@ beforeEach(() => {
 })
 
 describe("POST /api/public/registrations under contention", () => {
-  const body = { eventId: "evt-1", shiftIds: ["shift-1"], firstName: "A", lastName: "B", email: "a@x.com", consent: true }
+  const body = { eventId: "evt-1", shiftIds: ["shift-1"], firstName: "A", lastName: "B", email: "a@x.com", consent: true, charterAccepted: true }
   const post = () => new Request("http://localhost/api/public/registrations", {
     method: "POST", headers: { "Content-Type": "application/json", ...ip() }, body: JSON.stringify(body),
   })

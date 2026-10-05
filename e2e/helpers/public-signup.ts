@@ -61,7 +61,7 @@ export async function publicSignUp(page: Page, event: PublicEvent, shiftIds: str
   const email = `e2e-my-${stamp}@example.com`
   const res = await page.request.post("/api/public/registrations", {
     headers: { "x-forwarded-for": randomIp() },
-    data: { eventId: event.eventId, shiftIds, firstName: "E2E", lastName: `Perso${stamp}`, email, consent: true },
+    data: { eventId: event.eventId, shiftIds, firstName: "E2E", lastName: `Perso${stamp}`, email, consent: true, charterAccepted: true },
   })
   expect(res.ok(), `sign-up: ${res.status()} ${await res.text()}`).toBeTruthy()
   const mail = await waitForMessage(`to:"${email}"`)

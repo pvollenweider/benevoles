@@ -28,6 +28,19 @@ export function fmtShortDate(iso: string): string {
   return new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })
 }
 
+/** Proof of charter acceptance (#569) as shown under a registration in the admin list, e.g.
+ * "Convention acceptée le 5 octobre 2026 à 14h32 (version en vigueur)". Built on the server, in the
+ * organization's time zone, so the hour does not depend on the viewer. An older text is told apart
+ * by the start of its hash, which the charter version table resolves back to the text. */
+export function charterAcceptanceLabel(input: { acceptedAt: Date; hash: string | null; currentHash: string; timeZone: string }): string {
+  const { acceptedAt, hash, currentHash, timeZone } = input
+  const day = acceptedAt.toLocaleDateString("fr-FR", { timeZone, day: "numeric", month: "long", year: "numeric" })
+  const parts = new Intl.DateTimeFormat("fr-FR", { timeZone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(acceptedAt)
+  const hour = fmtHour(`${parts.find((p) => p.type === "hour")?.value}:${parts.find((p) => p.type === "minute")?.value}`)
+  const version = !hash ? "" : hash === currentHash ? " (version en vigueur)" : ` (version précédente, empreinte ${hash.slice(0, 8)})`
+  return `Convention acceptée le ${day} à ${hour}${version}`
+}
+
 /** "10:00" → "10h", "10:30" → "10h30"; legacy "25:30" → "1h30" (modulo 24). */
 export function fmtHour(t: string): string {
   const [h, m] = clockTime(t).split(":")

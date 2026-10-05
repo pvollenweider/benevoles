@@ -19,6 +19,7 @@ vi.mock("@/lib/prisma", () => ({
       $queryRaw: vi.fn(),
       shift: { findMany: vi.fn().mockResolvedValue([]) },
       volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },
+      charterVersion: { upsert: vi.fn() },
       registration: { findMany: vi.fn().mockResolvedValue([]), count: vi.fn().mockResolvedValue(0), aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }), create: m.txCreate },
     })),
   },
@@ -34,7 +35,7 @@ const bar = { id: "s1", label: "Bar", roleName: "Bar", capacity: 5, minAge: null
 const post = (extra: Record<string, unknown> = {}) => new Request("http://localhost/api/public/registrations", {
   method: "POST",
   headers: { "Content-Type": "application/json", "x-forwarded-for": `t-${Math.random()}` },
-  body: JSON.stringify({ eventId: "evt-1", shiftIds: ["s1"], firstName: "Léa", lastName: "M", email: "lea@x.ch", consent: true, ...extra }),
+  body: JSON.stringify({ eventId: "evt-1", shiftIds: ["s1"], firstName: "Léa", lastName: "M", email: "lea@x.ch", consent: true, charterAccepted: true, ...extra }),
 })
 
 describe("POST /api/public/registrations — clears a previous decline (#558)", () => {

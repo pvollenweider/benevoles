@@ -91,6 +91,7 @@ export default function RegistrationRow({ reg, selected, onToggleSelected, onDec
         {contactPhone(reg) && <p className="text-xs text-gray-500">{contactPhone(reg)}</p>}
         {hasAvailability(reg.volunteer) && <p className="text-xs text-gray-700"><span className="sr-only">Disponible : </span><span aria-hidden="true">🕒 </span>{availabilityLabel(reg.volunteer)}</p>}
         {reg.comment && <p className="text-xs text-gray-500 italic mt-0.5">"{reg.comment}"</p>}
+        {reg.charterAcceptance && <p className="text-xs text-gray-500 mt-0.5">{reg.charterAcceptance}</p>}
       </td>
       <td className="px-4 py-3 hidden sm:table-cell">
         {/* In words, as read aloud: no « · » nor en dash (#582). */}

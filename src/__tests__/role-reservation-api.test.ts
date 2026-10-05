@@ -20,6 +20,7 @@ vi.mock("@/lib/prisma", () => ({
       $queryRaw: vi.fn(),
       shift: { findMany: vi.fn().mockResolvedValue([]) },
       volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },
+      charterVersion: { upsert: vi.fn() },
       registration: { findMany: vi.fn().mockResolvedValue([]), count: vi.fn().mockResolvedValue(0), aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }), create: m.txCreate },
     })),
   },
@@ -36,7 +37,7 @@ const security = { id: "s1", label: "Sécurité", roleName: "Sécurité", capaci
 const post = (extra: Record<string, unknown> = {}) => new Request("http://localhost/api/public/registrations", {
   method: "POST",
   headers: { "Content-Type": "application/json", "x-forwarded-for": `t-${Math.random()}` },
-  body: JSON.stringify({ eventId: "evt-1", shiftIds: ["s1"], firstName: "Léa", lastName: "M", email: "lea@x.ch", consent: true, ...extra }),
+  body: JSON.stringify({ eventId: "evt-1", shiftIds: ["s1"], firstName: "Léa", lastName: "M", email: "lea@x.ch", consent: true, charterAccepted: true, ...extra }),
 })
 const invite = (tags: string[], email = "Lea@x.ch", active = true) => ({ volunteer: { email, tags, active } })
 

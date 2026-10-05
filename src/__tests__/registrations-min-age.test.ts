@@ -14,6 +14,7 @@ vi.mock("@/lib/prisma", () => ({
       $queryRaw: vi.fn(),
       shift: { findMany: vi.fn().mockResolvedValue([]) }, // no role limit (#466)
       volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },
+      charterVersion: { upsert: vi.fn() },
       registration: {
         findMany: vi.fn().mockResolvedValue([]),
         count: vi.fn().mockResolvedValue(0),
@@ -43,7 +44,7 @@ const baseBody = {
   firstName: "Alice",
   lastName: "L",
   email: "a@x.com",
-  consent: true,
+  consent: true, charterAccepted: true,
 }
 
 describe("POST /api/public/registrations — minimum age (#192)", () => {

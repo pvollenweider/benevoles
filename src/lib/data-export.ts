@@ -52,16 +52,23 @@ export type MemberExportRow = {
    * route never puts the raw SMTP reply or the address here (none of that is kept anywhere).
    */
   deliveryOutcomes?: { date: Date | string; kind: string; outcome: string; reason: string | null }[]
+  /**
+   * Last time this member accepted the volunteer charter at a public sign-up (#569), across all
+   * their registrations; null if every one of their registrations was added by an admin by hand
+   * (no volunteer consent was given there) or they have none.
+   */
+  charterAcceptedAt?: Date | string | null
 }
 
 /** Every member of the organization, one row each; the notes are the admins' own, exported too. */
 export function membersCsv(rows: MemberExportRow[], timeZone: string): string {
   return csvDocument(
-    ["Prénom", "Nom", "Email", "Téléphone", "Étiquettes", "Actif", "Date de naissance", "Disponibilités", "Remarque de disponibilité", "Notes", "Inscriptions", "Membre depuis", "Derniers envois (résultat)"],
+    ["Prénom", "Nom", "Email", "Téléphone", "Étiquettes", "Actif", "Date de naissance", "Disponibilités", "Remarque de disponibilité", "Notes", "Inscriptions", "Membre depuis", "Derniers envois (résultat)", "Convention acceptée (dernière fois)"],
     rows.map((r) => [
       r.firstName, r.lastName, r.email, r.phone, r.tags.join(", "), r.active ? "oui" : "non", day(r.birthDate),
       r.availabilityPeriods.join(", "), r.availabilityNote, r.notes, r.registrationCount, when(r.createdAt, timeZone),
       (r.deliveryOutcomes ?? []).map((o) => `${when(o.date, timeZone)} ${o.kind} : ${o.outcome}${o.reason ? ` (${o.reason})` : ""}`).join(" ; "),
+      when(r.charterAcceptedAt, timeZone),
     ]),
   )
 }

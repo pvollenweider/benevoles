@@ -100,7 +100,7 @@ async function setUp(browser: Browser): Promise<Data> {
   // sign-up is rate limited per IP, and a retried worker runs this set-up again.
   const signup = (shiftId: string, who: string) => page.request.post("/api/public/registrations", {
     headers: { "x-forwarded-for": `10.79.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}` },
-    data: { eventId: event.id, shiftIds: [shiftId], firstName: "E2E", lastName: `${who}${stamp}`, email: `e2e-fc-${who.toLowerCase()}-${stamp}@example.com`, consent: true, answers: { [question.id]: "M" } },
+    data: { eventId: event.id, shiftIds: [shiftId], firstName: "E2E", lastName: `${who}${stamp}`, email: `e2e-fc-${who.toLowerCase()}-${stamp}@example.com`, consent: true, charterAccepted: true, answers: { [question.id]: "M" } },
   })
   const pending = await signup(approval.id, "Demande")
   expect(pending.ok(), await pending.text()).toBeTruthy()

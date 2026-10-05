@@ -683,7 +683,7 @@ Les fichiers CSV s'ouvrent tels quels dans Excel ou LibreOffice (UTF-8, point-vi
 <!-- retention:start (généré depuis src/lib/retention.ts, npm run retention:docs) -->
 | Données | Conservation |
 |---|---|
-| Membres, événements, créneaux, inscriptions, pages, journaux d'activité, comptes administrateurs, doublons possibles ignorés (#601) de l'organisation | tant que l'organisation est active, événements passés compris ; effacés 30 jours après sa désactivation (délai compté depuis la dernière modification de l'organisation désactivée) |
+| Membres, événements, créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date, #569), versions de la convention déjà montrées à des bénévoles (texte par empreinte, #569), pages, journaux d'activité, comptes administrateurs, doublons possibles ignorés (#601) de l'organisation | tant que l'organisation est active, événements passés compris ; effacés 30 jours après sa désactivation (délai compté depuis la dernière modification de l'organisation désactivée) |
 | Événement supprimé par un administrateur | effacé immédiatement, avec ses créneaux, inscriptions, invitations, réponses aux questions, responsables, pages, jalons, messages ciblés et son journal |
 | Organisation supprimée par l'opérateur de benevol.app | effacée immédiatement, avec ses membres et ses administrateurs |
 | Fiche absorbée par une fusion de membres (#600) : fiche inactive sans donnée personnelle (« mergedIntoId »), le temps que les anciens identifiants restent résolus | 30 jours après la fusion |
@@ -756,6 +756,8 @@ La charte est le texte que les bénévoles doivent lire et accepter avant de fin
 - Cliquer sur **Réinitialiser la convention par défaut** pour revenir au texte standard
 
 Dans le formulaire d'inscription, les bénévoles cochent la case « J'ai lu et j'accepte la convention des bénévoles ». Le lien « convention des bénévoles » ouvre une fenêtre « Convention des Bénévoles » avec le texte complet et un bouton « J'ai lu et j'accepte », qui coche la case.
+
+Chaque inscription faite par ce formulaire garde la preuve que la personne a accepté la convention : quel texte exactement (le vôtre, ou le texte par défaut dans sa variante d'assurance) et à quelle date. Elle apparaît sous l'inscription, dans la liste **Inscriptions** de l'événement : « Convention acceptée le 5 octobre 2026 à 14h32 (version en vigueur) », à l'heure de votre organisation. Si vous avez modifié la convention depuis, la ligne dit « version précédente » avec le début de l'empreinte de l'ancien texte. Une inscription ajoutée à la main par un administrateur n'en a pas : personne n'a accepté quoi que ce soit dans ce cas. Les inscriptions plus anciennes que cette preuve n'en ont pas non plus.
 
 ---
 

@@ -19,7 +19,24 @@ describe("csv", () => {
       birthDate: new Date("2000-05-06T00:00:00Z"), availabilityPeriods: ["matin"], availabilityNote: null, createdAt: new Date("2026-07-04T08:00:00Z"), registrationCount: 3,
     }], "Europe/Zurich")
     const line = csv.split("\r\n")[1]
-    expect(line).toBe("Zoé;Roy;z@x.ch;;bar, cuisine;non;2000-05-06;matin;;aime le matin;3;04/07/2026 10:00;")
+    expect(line).toBe("Zoé;Roy;z@x.ch;;bar, cuisine;non;2000-05-06;matin;;aime le matin;3;04/07/2026 10:00;;")
+  })
+
+  // #569: proof of acceptance of the volunteer charter is the member's own data too.
+  it("members: last charter acceptance date, empty when every registration was added manually", () => {
+    const withAcceptance = membersCsv([{
+      firstName: "Zoé", lastName: "Roy", email: "z@x.ch", phone: null, tags: [], active: true, notes: null,
+      birthDate: null, availabilityPeriods: [], availabilityNote: null, createdAt: new Date("2026-07-04T08:00:00Z"), registrationCount: 1,
+      charterAcceptedAt: new Date("2026-07-04T08:00:00Z"),
+    }], "Europe/Zurich")
+    expect(withAcceptance.split("\r\n")[1]).toContain("04/07/2026 10:00")
+
+    const withoutAcceptance = membersCsv([{
+      firstName: "Zoé", lastName: "Roy", email: "z@x.ch", phone: null, tags: [], active: true, notes: null,
+      birthDate: null, availabilityPeriods: [], availabilityNote: null, createdAt: new Date("2026-07-04T08:00:00Z"), registrationCount: 1,
+      charterAcceptedAt: null,
+    }], "Europe/Zurich")
+    expect(withoutAcceptance.split("\r\n")[1].endsWith(";")).toBe(true)
   })
 
   // #598: a member's own delivery outcomes are their own data, included in the export used to
