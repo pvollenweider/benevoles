@@ -1,6 +1,6 @@
 # Procédure en cas de violation de données (projet interne)
 
-> **PROJET**, à valider (délais, personnes, canaux) avec une personne qualifiée. Document interne de l'opérateur, pas un engagement contractuel : l'accord de traitement ([projet-accord-traitement.md](projet-accord-traitement.md), article 11) fixe ce qui est dû aux organisations.
+> **PROJET**, à valider (délais, personnes, canaux) avec une personne qualifiée. Document interne de l'opérateur, pas un engagement contractuel : l'accord de traitement ([accord-sous-traitance-brouillon.md](accord-sous-traitance-brouillon.md), article 11) fixe ce qui est dû aux organisations.
 
 ## Cadre
 

@@ -6,21 +6,29 @@ Travail de l'issue #485. **Rien ici n'est publié, n'a de valeur contractuelle n
 |---|---|
 | [inventaire.md](inventaire.md) | données traitées, rôles, journaux, hébergement, droits des personnes, établis depuis le code avec leur source |
 | [sous-traitants.md](sous-traitants.md) | sous-traitants ultérieurs et ce qu'il reste à prouver pour chacun ; services techniques hors liste |
-| [projet-accord-traitement.md](projet-accord-traitement.md) | trame d'accord art. 28 (sur la base recommandée des clauses types de la Commission), annexes versionnées |
+| [accord-sous-traitance-brouillon.md](accord-sous-traitance-brouillon.md) | trame d'accord art. 28 / art. 9 nLPD (sur la base recommandée des clauses types de la Commission), annexes versionnées — **brouillon à relire** |
+| [sous-traitants-page-publique-brouillon.md](sous-traitants-page-publique-brouillon.md) | brouillon de la liste publique des sous-traitants (texte prêt pour une future page, aucune page câblée) |
+| [convention-benevoles-variantes-brouillon.md](convention-benevoles-variantes-brouillon.md) | brouillon des variantes par pays de la convention de bénévolat (#569) — **brouillon à relire** |
+| [prompt-relecture-juridique.md](prompt-relecture-juridique.md) | prompt de relecture juridique combiné (#485 et #569), pour une personne qualifiée ou une IA juridique spécialisée |
 | [procedure-violation.md](procedure-violation.md) | procédure interne en cas de violation, registre des incidents |
 | [verifications-production.md](verifications-production.md) | checklist des vérifications de production et des contrats |
 | [ecarts.md](ecarts.md) | écarts avec la politique de confidentialité publiée |
 
 Les durées de conservation viennent de [../retention.md](../retention.md), généré depuis `src/lib/retention.ts` et vérifié par les tests (#486).
 
+## Décision de l'opérateur (2026-10-05)
+
+L'inventaire factuel et les brouillons (accord art. 28, liste publique des sous-traitants, variantes de la convention) sont préparés maintenant et marqués « à relire » ; la relecture juridique est **unique et combinée** pour #485 et #569, menée via le [prompt de relecture juridique](prompt-relecture-juridique.md) remis à une personne qualifiée (ou, en première passe, à des agents spécialisés). Pour la convention, une version générique par défaut pour la Suisse, la France et la Belgique, plus une version « autre pays », suffit à ce stade.
+
 ## Évolutions du produit nécessaires
 
-- **Effacement ou anonymisation individuelle d'un bénévole** : #516. Aujourd'hui, « supprimer » un membre le désactive seulement.
+- **Effacement ou anonymisation individuelle d'un bénévole malgré un historique** : #516 (ouvert). Le cas sans historique est traité depuis #667 (voir [inventaire.md](inventaire.md)).
 - Sans ticket pour l'instant, à décider :
   - procédure écrite d'une demande d'effacement exécutée à la main, et registre des demandes ;
   - rejeu des effacements après une restauration de sauvegarde ;
   - installation de la rotation des journaux dans le dépôt plutôt qu'une procédure manuelle ;
   - durée de vie des liens personnels en clair dans les emails en file d'envoi (`NotificationOutbox`).
+- **Convention de bénévolat (#569)**, décidé le 2026-10-05, à faire **avant** toute nouvelle rédaction du texte par défaut : remplacer « au moins 48 heures à l'avance » par « dès que possible » dans `src/lib/volunteer-charter.ts` (le produit permet un retrait à tout moment et prévient déjà les organisateurs, #559) ; conserver une preuve de l'acceptation de la convention (quel texte, par version ou empreinte, et quand). Ce sont des changements de code, **hors du périmètre de ce dossier documentaire** : à faire dans une PR séparée.
 
 ## Conclusion
 

@@ -53,7 +53,7 @@ Décision : un jeton personnel n'est jamais écrit dans un journal d'accès (`k8
 
 ## Documents
 
-- [ ] Relecture juridique de [projet-accord-traitement.md](projet-accord-traitement.md) sur la base des clauses types de la Commission.
+- [ ] Relecture juridique de [accord-sous-traitance-brouillon.md](accord-sous-traitance-brouillon.md) sur la base des clauses types de la Commission.
 - [ ] Validation de la répartition des rôles ([inventaire.md](inventaire.md)).
 - [ ] Validation de [procedure-violation.md](procedure-violation.md) : personnes, délais, canal de signalement.
 - [x] Politique publique alignée sur l'état réel, Dropbox compris (#528, 2026-09-30). À revoir après la relecture juridique et le remplacement de Dropbox (#524).
