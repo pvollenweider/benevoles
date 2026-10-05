@@ -45,6 +45,7 @@ yarn-error.log*
 .env.local
 .env.*.local
 .env.e2e
+.env.e2e.*
 .env.video.e2e
 
 # vercel
