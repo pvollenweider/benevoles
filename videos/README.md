@@ -271,3 +271,13 @@ make videos IDS="ORG_FIRST_STEPS VOLUNTEER_REGISTER"
 
 `make videos` sans `IDS` reconstruit tout le catalogue. Le Makefile ne contient que
 l'orchestration ; le seed, la voix, la capture et l'assemblage restent dans les outils dédiés.
+
+**`make videos-changed` (reporté, #639).** Reconstruire seulement les vidéos dont les sources ont
+changé demanderait une empreinte par vidéo de tout ce qui influence son rendu : son manifeste, son
+script, le scénario de `tools/record.ts` qui la concerne, les outils communs et, surtout, l'interface
+de l'application qu'elle filme. Les trois premiers se hachent facilement (SHA-256 des fichiers,
+empreinte notée dans `videos/output/<slug>/` après un rendu réussi). Le dernier non : une vidéo
+devient obsolète quand l'écran qu'elle montre change, ce qu'aucun fichier de `videos/` ne révèle.
+Une commande qui ne regarderait que les sources donnerait donc une fausse assurance. En attendant,
+on régénère par identifiant (`make video ID=…`) quand un changement d'interface touche un écran
+filmé, puis on publie (`make video-publish`), qui ne renvoie que les fichiers réellement modifiés.

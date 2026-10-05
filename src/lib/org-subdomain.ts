@@ -7,9 +7,21 @@
 // "medias" serves the video tutorials (k8s/media.yaml) from its own host.
 export const NON_ORG_SUBDOMAINS = new Set(["www", "app", "admin", "api", "staging", "medias"])
 
-/** A slug that would collide with one of benevol.app's own subdomains: never an organization's. */
+/**
+ * The comparison key of a name against the reserved list (#642): case, accents, hyphens and one
+ * trailing « s » removed, so « Medias », « média », « w-w-w » or « apis » are caught as variants.
+ * Routing keeps the exact list (DNS names are exact); only organization creation and renaming
+ * refuse the variants.
+ */
+function reservedKey(slug: string): string {
+  return slug.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/-/g, "").replace(/s$/, "")
+}
+
+const RESERVED_KEYS = new Set([...NON_ORG_SUBDOMAINS].map(reservedKey))
+
+/** A slug that would collide with (a variant of) one of benevol.app's own subdomains: never an organization's. */
 export function isReservedOrgSlug(slug: string): boolean {
-  return NON_ORG_SUBDOMAINS.has(slug.trim().toLowerCase())
+  return RESERVED_KEYS.has(reservedKey(slug))
 }
 
 /** The refusal shown when an organization slug is one of the reserved subdomains. */
