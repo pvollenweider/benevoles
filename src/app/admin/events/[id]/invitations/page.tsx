@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import InvitationsManager from "@/components/admin/InvitationsManager"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 
@@ -63,6 +64,7 @@ export default async function EventInvitationsPage({
       <div>
         <Link href={`/admin/events/${id}`} className="text-sm text-blue-600">← {event.title}</Link>
         <h1 className="text-xl font-bold text-gray-900 mt-1">Invitations</h1>
+        <HelpLink route="/admin/events/[id]/invitations" />
       </div>
 
       <InvitationsManager

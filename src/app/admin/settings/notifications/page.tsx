@@ -15,6 +15,7 @@ import { parseNotificationSettings } from "@/lib/notification-settings"
 // Reads the Organization row for its time zone, not a tenant-scoped model.
 // eslint-disable-next-line no-restricted-imports
 import { prisma } from "@/lib/prisma"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Emails" }
@@ -46,6 +47,7 @@ export default async function NotificationsPage() {
       <div>
         <Link href="/admin/settings/admins" className={`text-sm ${linkClass}`}><span aria-hidden="true">← </span>Paramètres</Link>
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 mt-1 focus:outline-none">Emails</h1>
+        <HelpLink route="/admin/settings/notifications" />
       </div>
 
       {hasLevel(ctx.session.user?.role, "owner") ? (

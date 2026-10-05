@@ -9,6 +9,7 @@ import { fmtRange } from "@/lib/gantt-utils"
 import { fillPercent, staffingHeadline, staffingSummary, type StaffingShiftLine } from "@/lib/staffing"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { shiftDay, shiftHours, shiftName } from "@/lib/open-shifts"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Où manque-t-il du monde ?" }
@@ -114,6 +115,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
       <div>
         <Link href={base} className={`text-sm ${linkClass}`}><span aria-hidden="true">← </span>Retour à {event.title}</Link>
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 mt-1 focus:outline-none">Où manque-t-il du monde ?</h1>
+        <HelpLink route="/admin/events/[id]/staffing" />
       </div>
 
       {t.shifts === 0 ? (

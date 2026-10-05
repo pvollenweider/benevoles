@@ -11,6 +11,7 @@ import TargetedMessageForm from "@/components/admin/TargetedMessageForm"
 import MessageHistory from "@/components/admin/messages/MessageHistory"
 import { loadMessageHistory } from "@/lib/message-history-data"
 import { orgTimeZone } from "@/lib/time-zone"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Écrire aux bénévoles" }
@@ -60,6 +61,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
           <span aria-hidden="true">← </span>Retour à {event.title}
         </Link>
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 mt-1 focus:outline-none">Écrire aux bénévoles</h1>
+        <HelpLink route="/admin/events/[id]/message" />
         <p className="text-sm text-gray-700 mt-1">
           Un email, à qui c&apos;est utile : tous les inscrits, un poste, un créneau, la liste d&apos;attente, ou les membres invités qui n&apos;ont pas encore de créneau confirmé (ils reçoivent leur lien d&apos;invitation). Chaque personne le reçoit une fois, avec ses créneaux concernés et le lien vers ses inscriptions.
         </p>

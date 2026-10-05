@@ -5,6 +5,7 @@ import { getOrgContext } from "@/lib/auth-guard"
 import EventForm from "@/components/admin/EventForm"
 import Link from "next/link"
 import WizardSteps from "@/components/admin/WizardSteps"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 
@@ -52,6 +53,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
         <div>
           <Link href={`/admin/events/${id}`} className="text-sm text-blue-600">← Retour</Link>
           <h1 className="text-xl font-bold text-gray-900 mt-2">Modifier l&apos;événement</h1>
+          <HelpLink route="/admin/events/[id]/edit" />
         </div>
         {wizard && (
           <Link

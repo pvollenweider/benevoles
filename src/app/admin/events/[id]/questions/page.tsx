@@ -10,6 +10,7 @@ import AnswerSummary from "@/components/admin/AnswerSummary"
 import { QUESTION_LIMIT } from "@/lib/event-questions"
 import { answerSummary, answerSummarySelect, stateAt } from "@/lib/question-answer-summary"
 import { orgTimeZone } from "@/lib/time-zone"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Questions aux bénévoles" }
@@ -44,6 +45,7 @@ export default async function EventQuestionsPage({ params }: { params: Promise<{
           <span aria-hidden="true">← </span>{event.title}
         </Link>
         <h1 className="text-2xl font-bold text-gray-900 mt-1">Questions aux bénévoles</h1>
+        <HelpLink route="/admin/events/[id]/questions" />
         <p className="text-sm text-gray-700 mt-1">
           Jusqu&apos;à {QUESTION_LIMIT} questions ajoutées au formulaire d&apos;inscription (taille de t-shirt, permis, régime…). Chaque bénévole y répond une fois pour l&apos;événement ; les réponses apparaissent dans les inscriptions et les exports.
         </p>

@@ -20,6 +20,7 @@
  */
 import { marked, Renderer } from "marked"
 import DOMPurify from "isomorphic-dompurify"
+import { createHeadingSlugger } from "@/lib/heading-anchors"
 
 // Page title is already rendered as the page's own <h1> (see [eventSlug]/[pageSlug]/page.tsx).
 // Shift every Markdown heading down one level so admin content can't produce a second/duplicate
@@ -28,12 +29,19 @@ import DOMPurify from "isomorphic-dompurify"
 // line themselves (see src/app/doc/*/page.tsx, whose *remaining* headings already start at ##
 // and should render at their literal depth) must pass shiftHeadings: false, or every section
 // loses a level (## → h3, ### → h4, ...) with no h2 ever appearing.
-function makeRenderer(shiftHeadings: boolean): Renderer {
+//
+// headingIds (#568) gives each heading a stable id, the slug of its text (src/lib/heading-anchors.ts),
+// so a link can point to a section: /doc/admin#configurer-les-creneaux. Only the public content
+// pages rendered from the repo's own Markdown ask for it; admin-authored event pages don't get ids
+// (nothing links into them, and their ids could collide with the page's own).
+function makeRenderer(shiftHeadings: boolean, headingIds: boolean): Renderer {
   const renderer = new Renderer()
+  const slug = createHeadingSlugger()
   renderer.heading = function ({ tokens, depth }) {
     const level = Math.min(shiftHeadings ? depth + 1 : depth, 6)
     const text = this.parser.parseInline(tokens)
-    return `<h${level}>${text}</h${level}>\n`
+    const id = headingIds ? ` id="${slug(this.parser.parseInline(tokens, this.parser.textRenderer))}"` : ""
+    return `<h${level}${id}>${text}</h${level}>\n`
   }
   return renderer
 }
@@ -50,8 +58,8 @@ const ALLOWED_TAGS = [
 // supply one syntactically, but DOMPurify still needs "alt" allowlisted for it to survive.
 const ALLOWED_ATTR = ["href", "title", "src", "alt", "width", "height"]
 
-export function renderEventPageMarkdown(content: string, options: { shiftHeadings?: boolean } = {}): string {
-  const { shiftHeadings = true } = options
-  const html = marked.parse(content, { async: false, gfm: true, breaks: true, renderer: makeRenderer(shiftHeadings) })
-  return DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR })
+export function renderEventPageMarkdown(content: string, options: { shiftHeadings?: boolean; headingIds?: boolean } = {}): string {
+  const { shiftHeadings = true, headingIds = false } = options
+  const html = marked.parse(content, { async: false, gfm: true, breaks: true, renderer: makeRenderer(shiftHeadings, headingIds) })
+  return DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR: headingIds ? [...ALLOWED_ATTR, "id"] : ALLOWED_ATTR })
 }

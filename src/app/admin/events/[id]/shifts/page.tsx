@@ -3,6 +3,7 @@ import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import ShiftsManager from "@/components/admin/ShiftsManager"
 import WizardSteps from "@/components/admin/WizardSteps"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 
@@ -38,6 +39,7 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
         <div>
           <Link href={`/admin/events/${id}`} className="text-sm text-blue-600">← {event.title}</Link>
           <h1 className="text-xl font-bold text-gray-900 mt-1">Créneaux</h1>
+          <HelpLink route="/admin/events/[id]/shifts" />
         </div>
         {wizard && (
           <div className="text-right">
