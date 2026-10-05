@@ -15,6 +15,8 @@ describe("signup recap", () => {
     expect(rows.map((r) => r.id)).toEqual(["early", "late"])
     expect(rows[0]).toMatchObject({ name: "Accueil", dayLabel: "Samedi 4 juillet", timeLabel: "09:00–11:00", endsNextDay: false, waitlist: true, minAge: null })
     expect(rows[1]).toMatchObject({ name: "Bar · Bar nuit", endsNextDay: true, waitlist: false, minAge: 18 })
+    // The time label already says the shift ends the next day: the recap must not add it again.
+    expect(rows[1].timeLabel.match(/lendemain/g)).toHaveLength(1)
     expect(rows[1].endAbs - rows[1].startAbs).toBe(240)
   })
 
