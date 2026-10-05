@@ -157,4 +157,25 @@ describe("emailChannel with SMTP_HOST: records the outcome, never a raw reply or
     expect(outcome.ok).toBe(true)
     expect(deliveryOutcomeCreate.mock.calls[0][0].data.outcome).toBe("accepted_by_relay")
   })
+
+  // #300: the organization's logo at the top of the email, hosted on its own address, with its
+  // name as the alternative text; an inactive organization's logo is left out.
+  it("adds the organization's logo and its reply-to when the email belongs to an organization", async () => {
+    const sendMail = vi.fn().mockResolvedValue({ accepted: ["alice@example.org"], rejected: [], response: "250 2.0.0 Ok: queued" })
+    vi.doMock("nodemailer", () => ({ default: { createTransport: () => ({ sendMail }) } }))
+    const { prisma } = await import("../../prisma")
+    const findUnique = prisma.organization.findUnique as unknown as ReturnType<typeof vi.fn>
+    const org = { name: "Club du Rhône", slug: "club", active: true, replyToEmail: "contact@club.ch", logo: { hash: "ab".repeat(32), width: 400, height: 100 } }
+    findUnique.mockResolvedValueOnce(org)
+    const { emailChannel: freshChannel } = await import("../channels/email")
+    expect((await freshChannel.send({ ...payload, organizationId: "org-1" })).ok).toBe(true)
+    const mail = sendMail.mock.calls[0][0]
+    expect(mail.html).toContain(`/api/public/organizations/org-1/logo?v=${"ab".repeat(8)}" alt="Club du Rhône"`)
+    expect(mail.text).not.toContain("logo")
+    expect(mail.replyTo).toBe("contact@club.ch")
+
+    findUnique.mockResolvedValueOnce({ ...org, active: false })
+    await freshChannel.send({ ...payload, organizationId: "org-1" })
+    expect(sendMail.mock.calls[1][0].html).not.toContain("<img")
+  })
 })

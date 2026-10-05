@@ -28,6 +28,8 @@ const ACTION_LABEL: Record<string, string> = {
   "adminuser.invited": "a invité un admin",
   "notification.retried": "a renvoyé un email",
   "organization.notifications_updated": "a modifié les réglages de notification",
+  "organization.logo_updated": "a changé le logo de l'organisation",
+  "organization.logo_removed": "a retiré le logo de l'organisation",
   "adminuser.removed": "a retiré un admin",
   "adminuser.role_changed": "a changé le rôle d'un admin",
 }

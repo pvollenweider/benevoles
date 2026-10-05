@@ -5,7 +5,9 @@ import nodemailer from "nodemailer"
 import { prisma } from "../../prisma"
 import { env } from "@/lib/env"
 import type { NotificationPayload, Send } from "../types"
-import { render } from "../templates"
+import { render, type EmailBrand } from "../templates"
+import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
+import { orgBaseUrl } from "@/lib/urls"
 import { classifySmtpOutcome, type SmtpErrorLike, type SmtpInfoLike } from "../smtp-outcome"
 import { recordDeliveryOutcomes } from "../delivery-outcomes"
 import { encodeOutcomeReason } from "@/lib/outbox-view"
@@ -42,13 +44,24 @@ function createTransport() {
   })
 }
 
-/** Reply-to of an organization, looked up per send; the outbox worker sends a handful per run. */
-async function orgReplyTo(organizationId: string): Promise<string | null> {
+/**
+ * Reply-to and logo (#300) of an organization, looked up per send; the outbox worker sends a
+ * handful per run. The logo's metadata only, never its bytes: the email links to its image.
+ */
+async function orgEmailContext(organizationId: string): Promise<{ replyTo: string | null; brand: EmailBrand | null }> {
   try {
-    const org = await prisma.organization.findUnique({ where: { id: organizationId }, select: { replyToEmail: true } })
-    return org?.replyToEmail?.trim() || null
+    const org = await prisma.organization.findUnique({
+      where: { id: organizationId },
+      select: { name: true, slug: true, active: true, replyToEmail: true, logo: ORG_LOGO_SELECT },
+    })
+    if (!org) return { replyTo: null, brand: null }
+    const logo = org.active ? orgLogoOf(organizationId, org.logo) : null
+    return {
+      replyTo: org.replyToEmail?.trim() || null,
+      brand: logo ? { organizationName: org.name, logo, baseUrl: orgBaseUrl(org.slug) } : null,
+    }
   } catch {
-    return null
+    return { replyTo: null, brand: null }
   }
 }
 
@@ -59,10 +72,11 @@ export const emailChannel: { send: Send } = {
       return { ok: false as const, reason: "recipient has no email" }
     }
 
-    const { subject, html, text } = render(payload)
+    const org = payload.organizationId ? await orgEmailContext(payload.organizationId) : null
+    const { subject, html, text } = render(payload, org?.brand)
     const from = env.EMAIL_FROM ?? "Bénévoles <notifications@benevol.app>"
     // The organization's own reply-to when it set one (#381), else the platform's.
-    const replyTo = (payload.organizationId ? await orgReplyTo(payload.organizationId) : null) ?? env.EMAIL_REPLY_TO ?? undefined
+    const replyTo = org?.replyTo ?? env.EMAIL_REPLY_TO ?? undefined
     const transport = createTransport()
 
     const recordCtx = { kind: payload.kind, organizationId: payload.organizationId, volunteerId: payload.volunteerId, outboxId: payload.outboxId }

@@ -78,6 +78,9 @@ const prismaMock = {
   deliveryOutcome: {
     findMany: vi.fn().mockResolvedValue([]), // #598
   },
+  orgLog: {
+    create: vi.fn().mockResolvedValue({ id: "log-1" }), // org activity log entries (#300 logo)
+  },
   async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
 }
 vi.mock("@/lib/push", () => ({ pushDeviceCount: vi.fn().mockResolvedValue(0), sendTargetedPush: vi.fn() }))
@@ -1032,5 +1035,42 @@ describe("Milestones — cross-tenant isolation", () => {
       { params: Promise.resolve({ id: "evt-b", milestoneId: "m-1" }) },
     )
     expect(res.status).toBe(404)
+  })
+})
+
+// ── Organization logo (#300) ─────────────────────────────────────────────────
+
+describe("Organization logo — cross-tenant isolation", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  const logoDb = () => ({
+    organizationLogo: {
+      upsert: vi.fn().mockResolvedValue({ hash: "f".repeat(64), width: 64, height: 64 }),
+      deleteMany: vi.fn().mockResolvedValue({ count: 1 }),
+    },
+  })
+
+  it("PUT /api/admin/settings/organization/logo writes the session org's logo through the scoped db only", async () => {
+    const { PUT } = await import("@/app/api/admin/settings/organization/logo/route")
+    const db = { ...mockScopedDb(), ...logoDb() }
+    requireOrgSessionMock.mockResolvedValue({ db, organizationId: ORG_A, session: SESSION_A })
+    const sharp = (await import("sharp")).default
+    const png = await sharp({ create: { width: 64, height: 64, channels: 3, background: "#000" } }).png().toBuffer()
+
+    // An org-B id in the URL or the body has nowhere to go: the route has no id, only the session's org.
+    const res = await PUT(new Request("http://localhost:3000/api/admin/settings/organization/logo?organizationId=org-b", { method: "PUT", body: new Uint8Array(png) }))
+    expect(res.status).toBe(200)
+    expect(db.organizationLogo.upsert).toHaveBeenCalledWith(expect.objectContaining({ where: { organizationId: ORG_A }, create: expect.objectContaining({ organizationId: ORG_A }) }))
+    expect((await res.json()).logo.src).toContain(`/organizations/${ORG_A}/logo`)
+  })
+
+  it("DELETE /api/admin/settings/organization/logo removes only the session org's logo", async () => {
+    const { DELETE } = await import("@/app/api/admin/settings/organization/logo/route")
+    const db = { ...mockScopedDb(), ...logoDb() }
+    requireOrgSessionMock.mockResolvedValue({ db, organizationId: ORG_A, session: SESSION_A })
+
+    const res = await DELETE()
+    expect(res.status).toBe(200)
+    expect(db.organizationLogo.deleteMany).toHaveBeenCalledWith({ where: { organizationId: ORG_A } })
   })
 })

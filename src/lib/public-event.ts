@@ -5,13 +5,15 @@ import type { Prisma } from "@/generated/prisma/client"
 import { orgTimeZone } from "@/lib/time-zone"
 import { coordinatesOf } from "@/lib/map-link"
 import { OCCUPYING_STATUSES } from "@/lib/registration-capacity"
+import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
 
 /**
  * What volunteers see of an event on its public page. Shared by the public API and the admin
  * preview (#370), so the preview shows exactly what will be published.
  */
 export const publicEventInclude = {
-  organization: { select: { name: true, slug: true, volunteerCharter: true, timeZone: true } },
+  // The logo's metadata only (#300): the page loads the image from its own URL.
+  organization: { select: { name: true, slug: true, volunteerCharter: true, timeZone: true, logo: ORG_LOGO_SELECT } },
   shifts: {
     where: { status: { not: "cancelled" } },
     // Every spot taken counts, a pending request or a waitlist offer included (#484): the page
@@ -73,6 +75,7 @@ export function toPublicEvent(event: PublicEventRow) {
     slug: event.slug,
     title: event.title,
     organizationName: event.organization.name,
+    organizationLogo: orgLogoOf(event.organizationId, event.organization.logo),
     description: event.description,
     location: event.location,
     latitude: eventPoint?.latitude ?? null,

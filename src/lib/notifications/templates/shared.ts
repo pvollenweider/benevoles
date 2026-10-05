@@ -65,6 +65,21 @@ export function btn(href: string, label: string): string {
   return `<a href="${href}" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">${label}</a>`
 }
 
+/** Opening tag of the white card of every email: the organization's logo goes right after it. */
+export const EMAIL_CARD_OPEN = `<div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">`
+
+/**
+ * Puts the organization's logo (#300) at the top of a wrapped email's card. The text version is
+ * left as is: the logo carries no information of its own.
+ */
+export function withOrgLogo(html: string, logoHtml: string | null): string {
+  if (!logoHtml) return html
+  const at = html.indexOf(EMAIL_CARD_OPEN)
+  if (at < 0) return html
+  const end = at + EMAIL_CARD_OPEN.length
+  return `${html.slice(0, end)}\n${logoHtml}${html.slice(end)}`
+}
+
 // preheader = invisible text shown in inbox preview after the subject line
 export function wrap(inner: string, preheader?: string): string {
   const ph = preheader
@@ -84,7 +99,7 @@ ${ph}
 <!-- align="center" above only centers this table CELL on the page; text-align is inherited CSS,
      so without an explicit override here every unstyled heading/paragraph inside would inherit
      "center" too instead of reading left-aligned like normal body text. -->
-<div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
+${EMAIL_CARD_OPEN}
 ${inner}
 <div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#666;text-align:center;">
   <a href="https://benevol.app" style="color:#666;text-decoration:none;">benevol.app</a>

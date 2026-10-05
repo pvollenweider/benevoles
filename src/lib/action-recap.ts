@@ -234,3 +234,18 @@ export function refuseRequestRecap(i: { name: string; shift: string; hasEmail: b
     danger: true,
   }
 }
+
+/** Removing the organization's logo (#300): where it disappears, and that a new one can be sent. */
+export function removeLogoRecap(): ActionRecap {
+  return {
+    title: "Retirer le logo de l'organisation ?",
+    lines: [
+      "Le logo disparaît des pages publiques, des documents imprimés, des badges, des attestations et des prochains emails. Le nom de l'organisation reste affiché partout.",
+      "Les emails déjà envoyés afficheront le nom de l'organisation à la place du logo.",
+      "Vous pourrez envoyer un nouveau logo à tout moment.",
+      LOGGED_ORG,
+    ],
+    confirmLabel: "Retirer le logo",
+    danger: true,
+  }
+}

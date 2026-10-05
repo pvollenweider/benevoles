@@ -8,6 +8,8 @@ import { resolveOrgSlug } from "@/lib/resolve-org"
 import Image from "next/image"
 import GitHubMark from "@/components/GitHubMark"
 import PublicFooter from "@/components/PublicFooter"
+import OrgLogoImage from "@/components/OrgLogoImage"
+import { ORG_LOGO_SELECT, orgLogoOf, type OrgLogo } from "@/lib/org-logo"
 import { apexBaseUrl } from "@/lib/urls"
 import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
 import { CONTACT_EMAIL, LANDING_FAQ, REPOSITORY_URL, jsonLdScript, landingJsonLd, landingMetadata } from "@/lib/landing-seo"
@@ -43,6 +45,7 @@ export default async function HomePage() {
   let orgSlug = rawOrgSlug
   let orgName: string | null = null
   let orgTitle = DEFAULT_TITLE
+  let orgLogo: OrgLogo | null = null
   if (rawOrgSlug) {
     const resolved = await resolveOrgSlug(rawOrgSlug)
     if (!resolved) orgSlug = null
@@ -51,6 +54,9 @@ export default async function HomePage() {
       orgSlug = resolved.org.slug
       orgName = resolved.org.name
       orgTitle = resolved.org.publicTitle?.trim() || DEFAULT_TITLE
+      // The organization's logo (#300): its metadata only, the image comes from its own URL.
+      const logo = await prisma.organizationLogo.findUnique({ where: { organizationId: resolved.org.id }, ...ORG_LOGO_SELECT })
+      orgLogo = orgLogoOf(resolved.org.id, logo)
     }
   }
 
@@ -86,10 +92,16 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200 px-4 py-5">
-        <div className="max-w-2xl mx-auto">
-          {orgName && orgName !== orgTitle && <p className="text-sm text-gray-600 break-words">{orgName}</p>}
-          <h1 className="text-2xl font-bold text-gray-900 break-words">{orgTitle}</h1>
-          <p className="text-gray-500 text-sm mt-1">Inscrivez-vous pour aider lors de nos événements</p>
+        <div className="max-w-2xl mx-auto flex flex-wrap items-center gap-x-4 gap-y-3">
+          {/* Decorative when the name is written beside it (above the title, or as the title itself). */}
+          {orgLogo && orgName && (
+            <OrgLogoImage logo={orgLogo} organizationName={orgName} nameShownBeside maxWidth={128} maxHeight={56} />
+          )}
+          <div className="min-w-0 basis-60 grow">
+            {orgName && orgName !== orgTitle && <p className="text-sm text-gray-600 break-words">{orgName}</p>}
+            <h1 className="text-2xl font-bold text-gray-900 break-words">{orgTitle}</h1>
+            <p className="text-gray-500 text-sm mt-1">Inscrivez-vous pour aider lors de nos événements</p>
+          </div>
         </div>
       </header>
 

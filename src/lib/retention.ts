@@ -54,7 +54,7 @@ const inBackups = `oui, jusqu'à ${d.localBackup} jours sur le serveur et ${d.of
 
 export const RETENTION: readonly RetentionEntry[] = [
   {
-    data: "Membres, événements (dont le contact le jour J, nom et téléphone, #560), créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date, #569), versions de la convention déjà montrées à des bénévoles (texte par empreinte, #569), pages, journaux d'activité, comptes administrateurs, doublons possibles ignorés (#601) de l'organisation",
+    data: "Membres, événements (dont le contact le jour J, nom et téléphone, #560), créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date, #569), versions de la convention déjà montrées à des bénévoles (texte par empreinte, #569), pages, journaux d'activité, comptes administrateurs, doublons possibles ignorés (#601), logo (#300) de l'organisation",
     purpose: "Organiser les événements de l'organisation",
     duration: `tant que l'organisation est active, événements passés compris ; effacés ${d.deactivatedOrganization} jours après sa désactivation (délai compté depuis la dernière modification de l'organisation désactivée)`,
     trigger: "désactivation de l'organisation",

@@ -64,9 +64,14 @@ describe("FEATURES.md, the source of /fonctionnalites", () => {
   })
 
   it("announces nothing that isn't built yet (audit of the open tickets)", () => {
-    for (const future of [/logo/i, /recherche d'adresse/i, /QR/i, /photo/i, /ouverture programm/i, /aperçu avant import/i, /rôle organisateur/i]) {
+    // The organization logo shipped with #300 and left this list.
+    for (const future of [/recherche d'adresse/i, /QR/i, /photo/i, /ouverture programm/i, /aperçu avant import/i, /rôle organisateur/i]) {
       expect(md, String(future)).not.toMatch(future)
     }
+  })
+
+  it("announces the organization logo now that it is built (#300)", () => {
+    expect(md).toMatch(/\*\*Votre logo\*\*/)
   })
 
   it("is copied into the runtime image, like the guides", () => {
