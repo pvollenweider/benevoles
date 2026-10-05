@@ -50,11 +50,3 @@ export function robotsFor(e: Visibility | null): { index: boolean; follow: boole
   return e.publicStatus === "published" && e.isListed ? undefined : { index: false, follow: false }
 }
 
-/**
- * Metadata of a public event page. The title is only given away when the event is published:
- * someone who guesses the slug of a draft or an archived event learns nothing from the <title>.
- */
-export function eventPageMetadata(e: (Visibility & { title: string }) | null): { title?: string; robots?: { index: boolean; follow: boolean } } {
-  const robots = robotsFor(e)
-  return { ...(e && e.publicStatus === "published" ? { title: e.title } : {}), ...(robots ? { robots } : {}) }
-}

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { eventPageMetadata, isUnlistedPublic, listingChangeLabel, PUBLIC_ACCESS_WHERE, PUBLIC_LIST_WHERE, robotsFor, visibilityLabel } from "../event-visibility"
+import { isUnlistedPublic, listingChangeLabel, PUBLIC_ACCESS_WHERE, PUBLIC_LIST_WHERE, robotsFor, visibilityLabel } from "../event-visibility"
 
 // Unlisted events (#414): listing is a second axis, never a bypass of the lifecycle.
 describe("event visibility", () => {
@@ -23,14 +23,6 @@ describe("event visibility", () => {
     expect(robotsFor({ publicStatus: "draft", isListed: true })).toEqual({ index: false, follow: false })
     expect(robotsFor({ publicStatus: "archived", isListed: true })).toEqual({ index: false, follow: false })
     expect(robotsFor(null)).toBeUndefined()
-  })
-
-  it("gives the title of a published event only", () => {
-    expect(eventPageMetadata({ title: "Fête", publicStatus: "published", isListed: true })).toEqual({ title: "Fête" })
-    expect(eventPageMetadata({ title: "Fête", publicStatus: "published", isListed: false })).toEqual({ title: "Fête", robots: { index: false, follow: false } })
-    expect(eventPageMetadata({ title: "Secret", publicStatus: "draft", isListed: true })).toEqual({ robots: { index: false, follow: false } })
-    expect(eventPageMetadata({ title: "Vieux", publicStatus: "archived", isListed: true })).toEqual({ robots: { index: false, follow: false } })
-    expect(eventPageMetadata(null)).toEqual({})
   })
 
   it("words the log entry", () => {
