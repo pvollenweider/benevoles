@@ -40,6 +40,7 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "events": { GET: "organizer", POST: "organizer" },
   "events/[id]": { GET: "organizer", PATCH: "organizer", DELETE: "owner" },
   "events/[id]/duplicate": { POST: "organizer" },
+  "events/[id]/export/answers": { GET: "organizer" },
   "events/[id]/export/archive": { GET: "organizer" },
   "events/[id]/export/attendance": { GET: "organizer" },
   "events/[id]/export/badges": { GET: "organizer" },

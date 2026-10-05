@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest"
+import { answerSummary } from "../question-answer-summary"
 import { ATTENDANCE_SPARE_LINES, ganttOf, isSheetView, renderSheet, SHEET_VIEWS, shiftsByDay, staffingLine, volunteersOf, type SheetData, type SheetShift } from "../print-sheets"
 
 const alice = { firstName: "Alice", lastName: "Martin", email: "alice@x.ch", phone: "079 1", comment: null, checkedIn: true }
@@ -19,8 +20,8 @@ const data: SheetData = {
 }
 
 describe("print sheets", () => {
-  it("knows its five views, volunteers' first", () => {
-    expect(SHEET_VIEWS.map((v) => v.id)).toEqual(["day", "role", "individual", "attendance", "phones"])
+  it("knows its six views, volunteers' first", () => {
+    expect(SHEET_VIEWS.map((v) => v.id)).toEqual(["day", "role", "individual", "attendance", "phones", "answers"])
     expect(isSheetView("day")).toBe(true)
     expect(isSheetView("badge")).toBe(false)
   })
@@ -114,6 +115,32 @@ describe("print sheets", () => {
 
   it("says so when the event has no shift", () => {
     expect(renderSheet("day", { ...data, shifts: [] })).toContain("Aucun créneau.")
+  })
+
+  it("answers (#686): one captioned table per question, counts only, waitlist column when needed", () => {
+    const answers = answerSummary(
+      [
+        { id: "q1", label: "Taille <t-shirt>", type: "single", options: ["S", "M"], answers: [{ volunteerId: "a", values: ["M"] }, { volunteerId: "w", values: ["S"] }] },
+        { id: "q2", label: "Transport", type: "multiple", options: ["Vélo", "Train"], answers: [{ volunteerId: "a", values: ["Vélo", "Train"] }] },
+      ],
+      [{ volunteerId: "a", status: "active" }, { volunteerId: "b", status: "active" }, { volunteerId: "w", status: "waiting" }],
+    )
+    const html = renderSheet("answers", { ...data, shifts: [], answers })
+    expect(html).not.toContain("Aucun créneau.")
+    expect(html).toContain("<strong>2 bénévoles confirmés</strong>, et 1 en attente")
+    expect(html).toContain("<caption>Taille &lt;t-shirt&gt;</caption>")
+    expect(html).toContain('<th scope="col" class="num">En attente</th>')
+    expect(html).toMatch(/<th scope="row">M<\/th>\s*<td class="num mono">1<\/td><td class="num mono">0<\/td>/)
+    expect(html).toContain("Plusieurs choix possibles : le total peut dépasser le nombre de bénévoles.")
+    expect(html).not.toContain("Alice")
+    const noWaitlist = renderSheet("answers", { ...data, answers: { ...answers, waitingCount: 0 } })
+    expect(noWaitlist).not.toContain("En attente")
+  })
+
+  it("answers: says so when there is no question or no confirmed volunteer", () => {
+    expect(renderSheet("answers", { ...data, answers: { confirmedCount: 0, waitingCount: 0, questions: [] } })).toContain("Aucune question posée aux bénévoles")
+    const q = { id: "q", label: "Q", type: "text", rows: [] }
+    expect(renderSheet("answers", { ...data, answers: { confirmedCount: 0, waitingCount: 2, questions: [q] } })).toContain("Aucun bénévole confirmé pour l'instant. 2 en attente")
   })
 })
 

@@ -6,28 +6,36 @@ import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import QuestionsEditor from "@/components/admin/QuestionsEditor"
+import AnswerSummary from "@/components/admin/AnswerSummary"
 import { QUESTION_LIMIT } from "@/lib/event-questions"
+import { answerSummary, answerSummarySelect, stateAt } from "@/lib/question-answer-summary"
+import { orgTimeZone } from "@/lib/time-zone"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Questions aux bénévoles" }
 
-/** The custom questions of an event's sign-up form (#483). */
+/** The custom questions of an event's sign-up form (#483), and the summary of their answers (#686). */
 export default async function EventQuestionsPage({ params }: { params: Promise<{ id: string }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { id } = await params
-  const event = await ctx.db.event.findFirst({
-    where: { id },
-    select: {
-      id: true,
-      title: true,
-      questions: {
-        where: { archivedAt: null },
-        orderBy: { position: "asc" },
-        select: { id: true, label: true, type: true, options: true, required: true, _count: { select: { answers: true } } },
+  const [event, org] = await Promise.all([
+    ctx.db.event.findFirst({
+      where: { id },
+      select: {
+        id: true,
+        title: true,
+        // Active questions in order, with what the editor shows and what the answers summary (#686)
+        // counts; who counts comes from the registrations, not from the stored answers.
+        questions: {
+          ...answerSummarySelect.questions,
+          select: { ...answerSummarySelect.questions.select, required: true, _count: { select: { answers: true } } },
+        },
+        registrations: answerSummarySelect.registrations,
       },
-    },
-  })
+    }),
+    ctx.db.organization.findUnique({ where: { id: ctx.organizationId }, select: { timeZone: true } }),
+  ])
   if (!event) notFound()
   return (
     <div className="space-y-6 max-w-2xl">
@@ -45,7 +53,12 @@ export default async function EventQuestionsPage({ params }: { params: Promise<{
       </div>
       <QuestionsEditor
         eventId={id}
-        initialQuestions={event.questions.map(({ _count, ...q }) => ({ ...q, answers: _count.answers }))}
+        initialQuestions={event.questions.map(({ _count, id, label, type, options, required }) => ({ id, label, type, options, required, answers: _count.answers }))}
+      />
+      <AnswerSummary
+        eventId={id}
+        summary={answerSummary(event.questions, event.registrations)}
+        stamp={stateAt(new Date(), orgTimeZone(org))}
       />
     </div>
   )

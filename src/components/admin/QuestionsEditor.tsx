@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useId, useRef, useState } from "react"
+import { useRouter } from "next/navigation"
 import FormStatus from "@/components/FormStatus"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useSubmit } from "@/lib/use-submit"
@@ -27,6 +28,8 @@ export default function QuestionsEditor({ eventId, initialQuestions }: { eventId
   const addRef = useRef<HTMLButtonElement>(null)
   const triggerRef = useRef<HTMLElement | null>(null)
   const base = `/api/admin/events/${eventId}/questions`
+  // The answers summary below (#686) is server-rendered: refreshed after each change of the list.
+  const router = useRouter()
 
   function open(q: Q | null, trigger: HTMLElement) {
     triggerRef.current = trigger
@@ -59,6 +62,7 @@ export default function QuestionsEditor({ eventId, initialQuestions }: { eventId
     setQuestions((prev) => (isNew ? [...prev, saved] : prev.map((q) => (q.id === saved.id ? saved : q))))
     list.setStatus(isNew ? `Question « ${saved.label} » ajoutée.` : `Question « ${saved.label} » enregistrée.`)
     close()
+    router.refresh()
   }
 
   async function move(index: number, delta: -1 | 1, trigger: HTMLElement) {
@@ -69,6 +73,7 @@ export default function QuestionsEditor({ eventId, initialQuestions }: { eventId
     const outcome = await list.submit(() => fetch(`${base}/reorder`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ids: next.map((q) => q.id) }) }), { fallback: "Impossible de changer l'ordre." })
     if (!outcome.ok) return
     setQuestions(next)
+    router.refresh()
     list.setStatus(`« ${questions[index].label} » est maintenant en position ${target + 1} sur ${next.length}.`)
     // The button moved with its row: keep the focus on the same action of the same question.
     const kind = trigger.dataset.move
@@ -83,6 +88,7 @@ export default function QuestionsEditor({ eventId, initialQuestions }: { eventId
     setQuestions((prev) => prev.filter((x) => x.id !== q.id))
     list.setStatus(outcome.data.archived ? `Question « ${q.label} » retirée du formulaire ; ses réponses restent dans les exports.` : `Question « ${q.label} » supprimée.`)
     headingRef.current?.focus()
+    router.refresh()
   }
 
   const full = questions.length >= QUESTION_LIMIT
