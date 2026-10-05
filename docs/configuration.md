@@ -133,7 +133,7 @@ Avec `.env.development.example`, le super admin est `admin@local` / `admin`.
 | `AUTH_TRUST_HOST` | écrit en dur : `true` |
 | `VIDEO_MEDIA_BASE_URL` | écrit en dur : `https://medias.benevol.app` (#644) |
 | `BACKUP_PASSPHRASE` | non géré par le workflow : ajouté à la main dans le cluster, voir [deploiement.md](deploiement.md#backup_passphrase-est-un-point-unique-de-défaillance) |
-| `OFFSITE_BUCKET` | secret GitHub du même nom (#524) : bucket Swiss Backup restreint par la clé dédiée, vide tant que `OFFSITE_PROVIDER` reste `dropbox` ; voir [deploiement.md](deploiement.md#copie-hors-site) |
+| `OFFSITE_BUCKET` | secret GitHub du même nom (#524) : container Swiss Backup des copies hors site, vide tant que `OFFSITE_PROVIDER` reste `dropbox` ; voir [deploiement.md](deploiement.md#copie-hors-site) |
 
 `APP_TIME_ZONE`, `TRUSTED_PROXY_HOPS` et `VAPID_EMAIL` ne sont pas transmis : leurs valeurs par défaut s'appliquent. Le workflow lit aussi `KUBECONFIG_BASE64` (accès au cluster), `GHCR_PULL_TOKEN` (secret de tirage `ghcr-secret`), `NEXT_PUBLIC_SENTRY_DSN` (argument de build) et `SENTRY_AUTH_TOKEN` (secret de build).
 

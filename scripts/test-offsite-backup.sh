@@ -113,7 +113,8 @@ pass "DRY_RUN=true passes --dry-run to rclone copy and delete"
 
 # ---- restore-test-offsite.sh, against a real encrypted fixture ----------------------------
 PASSPHRASE="test-passphrase-524"
-printf -- '-- PostgreSQL database dump\nSELECT 1;\n' > "$WORK/dump.sql"
+# Same first lines as a real pg_dump: the banner is on line 2, not line 1.
+printf -- '--\n-- PostgreSQL database dump\n--\nSELECT 1;\n' > "$WORK/dump.sql"
 gzip -c "$WORK/dump.sql" > "$WORK/dump.sql.gz"
 openssl enc -aes-256-cbc -pbkdf2 -iter 100000 -pass "pass:${PASSPHRASE}" \
   -in "$WORK/dump.sql.gz" -out "$WORK/fixture.enc"

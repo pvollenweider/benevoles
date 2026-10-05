@@ -76,7 +76,8 @@ gunzip -t "${TMPDIR}/dump.sql.gz"
 
 echo "==> Vérification du contenu (en-tête pg_dump)"
 gunzip -c "${TMPDIR}/dump.sql.gz" > "${TMPDIR}/dump.sql"
-HEADER=$(head -n1 "${TMPDIR}/dump.sql")
+# pg_dump starts with a "--" line; the "PostgreSQL database dump" banner is on the next one.
+HEADER=$(head -n 5 "${TMPDIR}/dump.sql" | tr '\n' ' ')
 case "$HEADER" in
   *"PostgreSQL database dump"*)
     ;;
