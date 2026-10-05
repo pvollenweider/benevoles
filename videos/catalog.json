@@ -5,225 +5,685 @@
       "id": "ADMIN_NAVIGATION",
       "manifest": "admin-navigation",
       "category": "getting-started",
-      "tags": ["administration", "navigation", "mobile", "recherche", "accessibilité"],
+      "tags": [
+        "administration",
+        "navigation",
+        "mobile",
+        "recherche",
+        "accessibilité"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "decouvrir-administration"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Navigation de l'administration",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "decouverte"
     },
     {
       "id": "GLOBAL_SEARCH",
       "manifest": "global-search",
       "category": "getting-started",
-      "tags": ["recherche", "membres", "inscriptions", "événements", "créneaux"],
+      "tags": [
+        "recherche",
+        "membres",
+        "inscriptions",
+        "événements",
+        "créneaux"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "decouvrir-administration"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Recherche globale",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "decouverte"
     },
     {
       "id": "ORG_PUBLIC_IDENTITY",
       "manifest": "org-public-identity",
       "category": "organization-settings",
-      "tags": ["organisation", "titre-public", "slug", "sous-domaine", "page-publique"],
+      "tags": [
+        "organisation",
+        "titre-public",
+        "slug",
+        "sous-domaine",
+        "page-publique"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "organisation-equipe"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Identité publique de l'organisation",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "decouverte"
     },
     {
       "id": "ORG_TIMEZONE_CHARTER",
       "manifest": "org-timezone-charter",
       "category": "organization-settings",
-      "tags": ["fuseau-horaire", "charte", "convention", "rappels", "heures"],
+      "tags": [
+        "fuseau-horaire",
+        "charte",
+        "convention",
+        "rappels",
+        "heures"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "organisation-equipe"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Fuseau horaire et charte des bénévoles",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "avance"
     },
     {
       "id": "ORG_TEAM_PERMISSIONS",
       "manifest": "org-team-permissions",
       "category": "organization-settings",
-      "tags": ["équipe", "propriétaire", "organisateur", "permissions", "invitation"],
+      "tags": [
+        "équipe",
+        "propriétaire",
+        "organisateur",
+        "permissions",
+        "invitation"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "organisation-equipe"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Équipe et permissions",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
     },
     {
       "id": "ORG_EMAIL_SETTINGS",
       "manifest": "org-email-settings",
       "category": "organization-settings",
-      "tags": ["emails", "rappels", "reply-to", "notifications", "test"],
+      "tags": [
+        "emails",
+        "rappels",
+        "reply-to",
+        "notifications",
+        "test"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "organisation-equipe",
+        "inscriptions-communication"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Réglages des emails",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
     },
     {
       "id": "EVENT_CREATE_BLANK",
       "manifest": "event-create-blank",
       "category": "event-lifecycle",
-      "tags": ["événement", "page-blanche", "dates", "lieu", "carte", "brouillon"],
+      "tags": [
+        "événement",
+        "page-blanche",
+        "dates",
+        "lieu",
+        "carte",
+        "brouillon"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "evenement-cycle-de-vie"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Création d'un événement",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
     },
     {
       "id": "EVENT_CREATE_TEMPLATE",
       "manifest": "event-create-template",
       "category": "event-lifecycle",
-      "tags": ["événement", "modèle", "festival", "buvette", "sport", "brouillon"],
+      "tags": [
+        "événement",
+        "modèle",
+        "festival",
+        "buvette",
+        "sport",
+        "brouillon"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "evenement-cycle-de-vie"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Modèles d'événement",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
     },
     {
       "id": "EVENT_REVIEW_PUBLISH",
       "manifest": "event-review-publish",
       "category": "event-lifecycle",
-      "tags": ["vérification", "aperçu", "publication", "brouillon", "parcours-bénévole"],
+      "tags": [
+        "vérification",
+        "aperçu",
+        "publication",
+        "brouillon",
+        "parcours-bénévole"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "evenement-cycle-de-vie"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Publication d'un événement",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
     },
     {
       "id": "EVENT_VISIBILITY_REGISTRATION_WINDOW",
       "manifest": "event-visibility-registration-window",
       "category": "event-lifecycle",
-      "tags": ["visibilité", "non-répertorié", "inscriptions", "programmation", "archivage"],
+      "tags": [
+        "visibilité",
+        "non-répertorié",
+        "inscriptions",
+        "programmation",
+        "archivage"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "evenement-cycle-de-vie"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Visibilité et période d'inscription",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
     },
     {
       "id": "EVENT_DUPLICATE",
       "manifest": "event-duplicate",
       "category": "event-lifecycle",
-      "tags": ["duplication", "dates", "créneaux", "pages", "responsables", "brouillon"],
+      "tags": [
+        "duplication",
+        "dates",
+        "créneaux",
+        "pages",
+        "responsables",
+        "brouillon"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "evenement-cycle-de-vie"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Duplication d'événement",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
     },
     {
       "id": "EVENT_PROGRAM_PAGES_QR",
       "manifest": "event-program-pages-qr",
       "category": "event-lifecycle",
-      "tags": ["programme", "pages", "markdown", "qr-code", "impression"],
+      "tags": [
+        "programme",
+        "pages",
+        "markdown",
+        "qr-code",
+        "impression"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "evenement-cycle-de-vie",
+        "parcours-benevole"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Pages d'information et QR code",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
     },
     {
       "id": "EVENT_MILESTONES",
       "manifest": "event-milestones",
       "category": "event-lifecycle",
-      "tags": ["jalons", "préparation", "échéances", "suivi", "tableau-de-bord"],
+      "tags": [
+        "jalons",
+        "préparation",
+        "échéances",
+        "suivi",
+        "tableau-de-bord"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "evenement-cycle-de-vie"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Jalons de préparation",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "avance"
     },
     {
       "id": "EVENT_ARCHIVE_DELETE",
       "manifest": "event-archive-delete",
       "category": "event-lifecycle",
-      "tags": ["archivage", "suppression", "export", "propriétaire", "irréversible"],
+      "tags": [
+        "archivage",
+        "suppression",
+        "export",
+        "propriétaire",
+        "irréversible"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "evenement-cycle-de-vie"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Archivage et suppression",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "avance"
     },
     {
       "id": "SHIFTS_ROLES_VIEWS",
       "manifest": "shifts-roles-views",
       "category": "planning",
-      "tags": ["postes", "créneaux", "timeline", "liste", "couleurs", "ordre"],
+      "tags": [
+        "postes",
+        "créneaux",
+        "timeline",
+        "liste",
+        "couleurs",
+        "ordre"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "planning-creneaux"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Postes et vues du planning",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "decouverte"
     },
     {
       "id": "SHIFT_CREATE_EDIT_DETAIL",
       "manifest": "shift-create-edit-detail",
       "category": "planning",
-      "tags": ["créneau", "capacité", "lieu", "carte", "consigne", "annulation"],
+      "tags": [
+        "créneau",
+        "capacité",
+        "lieu",
+        "carte",
+        "consigne",
+        "annulation"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "planning-creneaux"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Créneaux : création et détail",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
     },
     {
       "id": "SHIFT_CREATE_SERIES",
       "manifest": "shift-create-series",
       "category": "planning",
-      "tags": ["série", "créneaux", "durée", "capacité", "aperçu", "répétition"],
+      "tags": [
+        "série",
+        "créneaux",
+        "durée",
+        "capacité",
+        "aperçu",
+        "répétition"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "planning-creneaux"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Séries de créneaux",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
     },
     {
       "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
       "manifest": "shift-timeline-quick-actions",
       "category": "planning",
-      "tags": ["timeline", "dessiner", "redimensionner", "copier", "raccourci"],
+      "tags": [
+        "timeline",
+        "dessiner",
+        "redimensionner",
+        "copier",
+        "raccourci"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "planning-creneaux"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Timeline du planning",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "avance"
     },
     {
       "id": "SHIFT_NIGHT_DST",
       "manifest": "shift-night-dst",
       "category": "planning",
-      "tags": ["nuit", "minuit", "heure-été", "heure-hiver", "fuseau-horaire", "durée"],
+      "tags": [
+        "nuit",
+        "minuit",
+        "heure-été",
+        "heure-hiver",
+        "fuseau-horaire",
+        "durée"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "planning-creneaux"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Créneaux de nuit et changement d'heure",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "avance"
     },
     {
       "id": "SHIFT_WAITLIST_OFFER",
       "manifest": "shift-waitlist-offer",
       "category": "planning",
-      "tags": ["capacité", "liste-attente", "offre", "expiration", "promotion"],
+      "tags": [
+        "capacité",
+        "liste-attente",
+        "offre",
+        "expiration",
+        "promotion"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "planning-creneaux",
+        "parcours-benevole",
+        "inscriptions-communication"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Liste d'attente et offres de place",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
     },
     {
       "id": "SHIFT_APPROVAL",
       "manifest": "shift-approval",
       "category": "planning",
-      "tags": ["validation", "demande", "candidature", "poste-sensible", "email"],
+      "tags": [
+        "validation",
+        "demande",
+        "candidature",
+        "poste-sensible",
+        "email"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "planning-creneaux",
+        "inscriptions-communication"
+      ],
+      "audience": [
+        "organisateur",
+        "benevole"
+      ],
+      "feature": "Postes sur validation",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
     },
     {
       "id": "SHIFT_ELIGIBILITY_RULES",
       "manifest": "shift-eligibility-rules",
       "category": "planning",
-      "tags": ["âge", "quota", "tags", "réservé", "invitation", "téléphone"],
+      "tags": [
+        "âge",
+        "quota",
+        "tags",
+        "réservé",
+        "invitation",
+        "téléphone"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "planning-creneaux",
+        "membres-invitations"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Règles d'éligibilité des postes",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "avance"
     },
     {
       "id": "VOLUNTEER_DISCOVER_EVENT",
       "manifest": "volunteer-discover-event",
       "category": "volunteer-journey",
-      "tags": ["page-publique", "lien", "qr-code", "invitation", "carte", "mobile", "planning"],
+      "tags": [
+        "page-publique",
+        "lien",
+        "qr-code",
+        "invitation",
+        "carte",
+        "mobile",
+        "planning"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "parcours-benevole"
+      ],
+      "audience": [
+        "benevole"
+      ],
+      "feature": "Page publique de l'événement",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "decouverte"
     },
     {
       "id": "VOLUNTEER_REGISTER",
       "manifest": "volunteer-register-mobile",
       "category": "volunteer-journey",
-      "tags": ["inscription", "mobile", "qr-code", "notifications"],
+      "tags": [
+        "inscription",
+        "mobile",
+        "qr-code",
+        "notifications"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "parcours-benevole"
+      ],
+      "audience": [
+        "benevole"
+      ],
+      "feature": "Inscription bénévole",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "decouverte"
     },
     {
       "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
       "manifest": "organizer-create-publish",
       "category": "event-lifecycle",
-      "tags": ["événement", "créneaux", "publication", "invitations"],
+      "tags": [
+        "événement",
+        "créneaux",
+        "publication",
+        "invitations"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "evenement-cycle-de-vie",
+        "planning-creneaux"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Créer et publier un planning",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "decouverte"
     },
     {
       "id": "ADMIN_FEATURES_OVERVIEW",
       "manifest": "admin-features-tour",
       "category": "getting-started",
-      "tags": ["administration", "fonctionnalités", "visite-guidée"],
+      "tags": [
+        "administration",
+        "fonctionnalités",
+        "visite-guidée"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "decouvrir-administration"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Vue d'ensemble de l'administration",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "decouverte"
     },
     {
       "id": "REGISTRATION_MONITOR_FOLLOWUP",
       "manifest": "organizer-monitor-followup",
       "category": "registrations-communication",
-      "tags": ["inscriptions", "relances", "jour-j"],
+      "tags": [
+        "inscriptions",
+        "relances",
+        "jour-j"
+      ],
       "published": false,
-      "seedScenario": "demo"
+      "seedScenario": "demo",
+      "themes": [
+        "inscriptions-communication",
+        "jour-j"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Suivi des inscriptions et relances",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
     },
     {
       "id": "ORG_FIRST_STEPS",
       "manifest": "masterclass-03-first-steps",
       "category": "getting-started",
-      "tags": ["organisation", "checklist", "premier-événement", "inscription-test"],
+      "tags": [
+        "organisation",
+        "checklist",
+        "premier-événement",
+        "inscription-test"
+      ],
       "published": false,
-      "seedScenario": "fresh-organization"
+      "seedScenario": "fresh-organization",
+      "themes": [
+        "decouvrir-administration"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Premiers pas d'une organisation",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "decouverte"
     }
   ]
 }

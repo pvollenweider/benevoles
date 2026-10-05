@@ -68,6 +68,16 @@ Générer une paire de clés :
 node -e "const wp=require('web-push'); console.log(JSON.stringify(wp.generateVAPIDKeys()))"
 ```
 
+## Bibliothèque vidéo (optionnel)
+
+`/videos` et `/videos/[id]` (#644) ne sont référencés nulle part (pas de navigation, pas de sitemap, `robots: noindex,nofollow`) : une bibliothèque interne pour l'instant, pas une page publique. Le catalogue (`videos/catalog.json`, les manifestes et les scripts éditoriaux) est toujours dans l'image et la page s'affiche sans `VIDEO_MEDIA_BASE_URL` ; seule la lecture change.
+
+| Variable | Requis | Description |
+|----------|--------|-------------|
+| `VIDEO_MEDIA_BASE_URL` | non | Base des fichiers rendus : `<base>/<slug>/<slug>.mp4`, `.vtt`, `.txt`. Production (`benevol.app`) : `https://medias.benevol.app` (`k8s/media.yaml`, rendus publiés par `make video-publish`), un domaine séparé réservé par `src/lib/org-subdomain.ts` (`NON_ORG_SUBDOMAINS`, `isReservedOrgSlug`) pour qu'aucune organisation ne puisse jamais prendre ce slug ; écrite en dur par l'étape « Sync k8s secret » de `.github/workflows/deploy.yml` (comme `NEXT_PUBLIC_APP_URL`), qui régénère `benevoles-secret` à chaque déploiement — un `kubectl` manuel sur le secret serait donc écrasé. Sans la variable, ou si le rendu d'une vidéo précise n'existe pas, la page affiche « Vidéo bientôt disponible » sans jamais sonder le réseau côté serveur — voir `videos/README.md` |
+
+Le lecteur (`<video crossOrigin="anonymous">`) charge la vidéo et ses sous-titres (`<track>`) depuis `medias.benevol.app`, une autre origine que `www.benevol.app` : ce domaine doit répondre avec `Access-Control-Allow-Origin: https://www.benevol.app` (et les sous-domaines d'organisation si la page y est un jour servie), et les bons `Content-Type` (`video/mp4`, `text/vtt`). `make video-media-serve` envoie les mêmes en-têtes en local. L'application n'a pas de Content-Security-Policy aujourd'hui : rien à y ajouter pour ce domaine.
+
 ## Sentry (optionnel)
 
 | Variable | Description |
@@ -121,6 +131,7 @@ Avec `.env.development.example`, le super admin est `admin@local` / `admin`.
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | secrets GitHub du même nom ; lus seulement par le seed |
 | `NEXT_PUBLIC_APP_URL`, `AUTH_URL` | écrits en dur : `https://www.benevol.app` |
 | `AUTH_TRUST_HOST` | écrit en dur : `true` |
+| `VIDEO_MEDIA_BASE_URL` | écrit en dur : `https://medias.benevol.app` (#644) |
 | `BACKUP_PASSPHRASE` | non géré par le workflow : ajouté à la main dans le cluster, voir [deploiement.md](deploiement.md#backup_passphrase-est-un-point-unique-de-défaillance) |
 
 `APP_TIME_ZONE`, `TRUSTED_PROXY_HOPS` et `VAPID_EMAIL` ne sont pas transmis : leurs valeurs par défaut s'appliquent. Le workflow lit aussi `KUBECONFIG_BASE64` (accès au cluster), `GHCR_PULL_TOKEN` (secret de tirage `ghcr-secret`), `NEXT_PUBLIC_SENTRY_DSN` (argument de build) et `SENTRY_AUTH_TOKEN` (secret de build).

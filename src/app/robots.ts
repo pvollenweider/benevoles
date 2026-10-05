@@ -5,7 +5,9 @@ import { apexBaseUrl, orgBaseUrl, isKnownHost } from "@/lib/urls"
 
 // Token-bearing and admin/API surfaces: never worth indexing, and some carry secrets in the URL
 // (/my/[token], /waitlist/[token]/confirm, /leader/[token] (#186), /admin/accept-invite?token=...).
-const DISALLOW = ["/admin", "/api/", "/my/", "/waitlist/", "/leader/"]
+// /videos (#644): unlisted video library, not linked from anywhere; each page also sets its own
+// `robots: noindex,nofollow` metadata, but a crawler still shouldn't walk the gallery at all.
+const DISALLOW = ["/admin", "/api/", "/my/", "/waitlist/", "/leader/", "/videos"]
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const host = (await headers()).get("host") ?? ""

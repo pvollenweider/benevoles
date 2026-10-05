@@ -30,6 +30,10 @@ const schema = z.object({
     .string()
     .optional()
     .refine((v) => !v?.trim() || Buffer.from(v.trim(), "base64").length === 32, "TOKEN_ENCRYPTION_KEY doit faire 32 octets encodés en base64"),
+  // Base URL serving the rendered video files (#644): https://medias.benevol.app in production,
+  // http://localhost:<port> with `make video-media-serve` locally. Without it, /videos/[id] shows
+  // "Vidéo bientôt disponible" instead of a player (src/lib/video-catalog.ts `videoMediaUrls`).
+  VIDEO_MEDIA_BASE_URL: z.string().url("VIDEO_MEDIA_BASE_URL doit être une URL valide").optional(),
 })
 
 function parseEnv() {
