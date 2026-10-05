@@ -49,7 +49,7 @@ export default function ContentShell({ children }: { children: React.ReactNode }
 
       <main id={MAIN_CONTENT_ID} tabIndex={-1} className="max-w-3xl mx-auto px-6 py-12 focus:outline-none">
         <article className="prose prose-gray dark:prose-invert max-w-none
-          prose-headings:font-semibold prose-headings:tracking-tight
+          prose-headings:font-semibold prose-headings:tracking-tight prose-headings:scroll-mt-4
           prose-h1:text-2xl prose-h1:mb-2 prose-h1:pb-4 prose-h1:border-b prose-h1:border-gray-200 dark:prose-h1:border-gray-800
           prose-h2:text-base prose-h2:mt-10 prose-h2:mb-3
           prose-h3:text-sm prose-h3:mt-6 prose-h3:mb-2 prose-h3:text-gray-700 dark:prose-h3:text-gray-300

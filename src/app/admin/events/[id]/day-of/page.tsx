@@ -11,6 +11,7 @@ import { formatShortDate } from "@/lib/utils"
 import { fmtHour } from "@/lib/registrations-list"
 import { dayOfBoard, dayOfDateRange, isEventDay, localDay, type DayOfShift } from "@/lib/day-of"
 import DayOfBoard from "@/components/admin/DayOfBoard"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 
@@ -86,6 +87,7 @@ export default async function DayOfPage({ params }: { params: Promise<{ id: stri
         <Link href={base} className={`inline-flex min-h-11 items-center text-sm ${linkClass}`}><span aria-hidden="true">← </span>Retour à {event.title}</Link>
         <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Jour J</h1>
         <p className="text-sm text-gray-700">{event.title}</p>
+        <HelpLink route="/admin/events/[id]/day-of" />
       </div>
 
       {!eventDay && (

@@ -4,6 +4,8 @@ Bienvenue ! Ce guide couvre tout ce qu'il faut pour faire tourner un événement
 
 Rien de sorcier : chaque section ci-dessous correspond à un écran de l'admin, dans l'ordre où vous les rencontrerez en montant un événement. Une question sans réponse ici ? La FAQ tout en bas couvre les cas un peu moins courants.
 
+Un problème, une idée d'amélioration ? Voir [Signaler un problème ou proposer une amélioration](#signaler-un-probleme-ou-proposer-une-amelioration).
+
 ---
 
 ## Se connecter
@@ -83,7 +85,7 @@ Au clavier, la première pression sur **Tab** en haut d'une page fait apparaîtr
 
 ## Créer un événement
 
-**`/admin/events/new`**
+**`/admin/events/new`**, et **`/admin/events/[id]/edit`** pour modifier un événement existant : c'est le même formulaire, décrit ci-dessous (voir aussi l'enregistrement automatique en modification, plus bas dans cette section).
 
 La création se fait en trois étapes, indiquées en haut de page : **1. Informations**, **2. Postes et créneaux**, **3. Vérification et publication**. Après l'étape 1, vous arrivez sur les créneaux avec un bouton **Continuer** ; l'étape 3 (`/admin/events/[id]/review`) récapitule ce qui est prêt et ce qui manque (dates, créneaux, lieu, message de confirmation, instructions, responsables, puis les points décrits ci-dessous), propose l'aperçu bénévole, puis **Publier** ou **Rester en brouillon**. On peut publier sans les points facultatifs, mais pas sans créneau : cette règle vaut partout (page de l'événement, formulaire d'édition), pas seulement dans l'assistant, et un événement est toujours créé en brouillon. Dans l'autre sens, si le dernier créneau d'un événement publié est annulé (ou son dernier poste supprimé), l'événement repasse en brouillon, avec une entrée dans le journal. **Quitter l'assistant** ramène à tout moment à la page de l'événement : rien n'est perdu, chaque étape est une page normale de l'administration.
 
@@ -831,6 +833,31 @@ Chaque inscription faite par ce formulaire garde la preuve que la personne a acc
 ## Vue publique
 
 Le lien **Vue publique ↗** (visible uniquement si l'événement est publié) ouvre la page telle qu'un bénévole la voit, dans un nouvel onglet. Pratique pour vérifier l'affichage avant de partager.
+
+---
+
+## Aide et retours
+
+### Aide depuis chaque écran
+
+Le lien **Aide** de la barre du haut ouvre ce guide. Les principaux écrans d'un événement (création, vérification et publication, créneaux, questions, inscriptions, invitations, écrire aux bénévoles, « Où manque-t-il du monde ? », jour J) et les paramètres (équipe admin, emails) ont en plus, sous leur titre, un lien **Aide : …** qui ouvre directement la section du guide consacrée à cet écran. Le guide s'ouvre dans un nouvel onglet : la page sur laquelle vous travailliez reste telle quelle, formulaire en cours compris.
+
+### Signaler un problème ou proposer une amélioration
+
+Écrivez à [contact@benevol.app](mailto:contact@benevol.app). C'est le moyen le plus simple, aucun compte n'est nécessaire.
+
+Pour qu'on puisse vous aider vite, indiquez si possible :
+
+- la page concernée (son adresse, ou le chemin pour y arriver, par exemple « Événements, puis l'événement, puis Créneaux ») ;
+- ce que vous vouliez faire, et ce qui s'est passé à la place ;
+- le message d'erreur exact s'il y en a un, ou une capture d'écran ;
+- l'appareil et le navigateur utilisés (par exemple « téléphone Android, Chrome »).
+
+N'envoyez pas de données personnelles de bénévoles (noms, emails, téléphones) qui ne sont pas utiles pour comprendre le problème.
+
+Si votre organisation utilise sa propre installation de benevol.app, adressez-vous d'abord à la personne qui l'administre : elle seule peut agir sur vos données et ses réglages.
+
+**Suivre une demande en public (facultatif).** Les demandes et les corrections en cours figurent aussi dans [le suivi public sur GitHub](https://github.com/pvollenweider/benevoles/issues) (en anglais). Si vous avez un compte GitHub, vous pouvez y suivre une demande existante, la commenter ou en ouvrir une. Ce n'est jamais obligatoire : un email suffit.
 
 ---
 

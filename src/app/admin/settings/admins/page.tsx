@@ -10,6 +10,7 @@ import OrgTimeZoneForm from "@/components/admin/OrgTimeZoneForm"
 import { APP_TIME_ZONE, timeZoneChoices } from "@/lib/time-zone"
 import OrgCharterForm from "@/components/admin/OrgCharterForm"
 import { hasLevel } from "@/lib/permissions"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 
@@ -58,6 +59,7 @@ export default async function AdminsSettingsPage() {
           <Link href="/admin/events" className="text-sm text-blue-600">← Événements</Link>
           <h1 className="text-xl font-bold text-gray-900 mt-1">Paramètres</h1>
           {org && <p className="text-sm text-gray-500">{org.name}</p>}
+          <HelpLink route="/admin/settings/admins" />
         </div>
         <div className="flex items-center gap-4">
           <Link href="/admin/settings/notifications" className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">

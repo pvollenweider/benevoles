@@ -109,6 +109,9 @@ Liste exhaustive des fonctionnalités de l'application.
 - Adaptées au mobile (pas de débordement horizontal, zones de clic agrandies)
 - Thème clair/sombre indépendant des préférences système, mémorisé d'une visite à l'autre
 - Liées depuis le pied de page public et depuis la barre de navigation admin (« Aide »)
+- Chaque titre a une ancre stable, le slug de son texte (`/doc/admin#configurer-les-creneaux`), pour lier directement une section
+- **Aide contextuelle** : sous le titre des principaux écrans d'administration (création, modification, vérification et publication d'un événement, créneaux, questions, inscriptions, invitations, écrire aux bénévoles, « Où manque-t-il du monde ? », jour J, équipe admin, emails), un lien « Aide : <section> » ouvre le guide administrateur à la section correspondante, dans un nouvel onglet (indiqué par ↗ et annoncé aux lecteurs d'écran) ; correspondance écran → section dans `src/lib/help-links.ts`, vérifiée par un test contre les titres de `GUIDE_ADMIN.md`
+- Section « Signaler un problème ou proposer une amélioration » du guide administrateur, liée depuis son introduction : l'adresse contact@benevol.app comme moyen simple, ce qu'il est utile d'indiquer, et GitHub seulement comme canal public facultatif pour suivre ou discuter une demande
 - Lien « Soutenir le projet » dans le pied de page du site benevol.app et de la documentation uniquement (jamais sur les pages d'une organisation, de ses bénévoles ou de l'admin)
 
 ---

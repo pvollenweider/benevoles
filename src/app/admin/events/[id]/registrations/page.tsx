@@ -10,6 +10,7 @@ import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { registrationsSummary, charterAcceptanceLabel } from "@/lib/registrations-list"
 import { resolveCharterText } from "@/lib/volunteer-charter"
 import { hashCharterText } from "@/lib/charter-hash"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 
@@ -74,6 +75,7 @@ export default async function RegistrationsPage({
             Exporter les présences (CSV)
           </a>
         </div>
+        <HelpLink route="/admin/events/[id]/registrations" />
         <p className="text-sm text-gray-500">
           {registrationsSummary({
             active: event.registrations.filter(r => r.status === "active").length,

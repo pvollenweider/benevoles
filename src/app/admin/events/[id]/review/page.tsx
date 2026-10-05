@@ -15,6 +15,7 @@ import { eventPublicUrl } from "@/lib/urls"
 import WizardSteps from "@/components/admin/WizardSteps"
 import PublishToggle from "@/components/admin/PublishToggle"
 import EventShareLink from "@/components/admin/EventShareLink"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -89,6 +90,7 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
       <WizardSteps current={3} eventId={event.id} />
       <div>
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">{event.title}</h1>
+        <HelpLink route="/admin/events/[id]/review" />
         <p role="status" className="text-sm text-gray-700 mt-1">
           {published
             ? acceptsRegistrations(event, now)

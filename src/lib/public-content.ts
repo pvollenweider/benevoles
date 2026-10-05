@@ -9,11 +9,12 @@ import { linkSourcesToRoutes, splitTitle } from "@/lib/doc-pages"
 /**
  * A public content page's HTML from its Markdown source at the repo root (server only). The file's
  * own "# " title becomes the page's single <h1>; the remaining headings (##, ###...) keep their
- * depth. Links to other source files become site links. The Dockerfile copies every source into
+ * depth, each with a stable id, the slug of its text (#568), so links can open a given section.
+ * Links to other source files become site links. The Dockerfile copies every source into
  * the runtime image: `output: "standalone"` only traces files Next itself detects.
  */
 export function renderPublicSource(source: string, fallbackTitle: string): { title: string; html: string } {
   const raw = fs.readFileSync(path.join(process.cwd(), source), "utf-8")
   const { title, body } = splitTitle(raw)
-  return { title: title ?? fallbackTitle, html: renderEventPageMarkdown(linkSourcesToRoutes(body), { shiftHeadings: false }) }
+  return { title: title ?? fallbackTitle, html: renderEventPageMarkdown(linkSourcesToRoutes(body), { shiftHeadings: false, headingIds: true }) }
 }

@@ -186,6 +186,8 @@ Elle doit aussi figurer dans `PERMISSIONS` (`src/lib/permissions.ts`) avec son n
 
 Les guides et les pages publiques décrivent l'état actuel du produit, jamais « depuis la version X » : l'historique va dans `CHANGELOG.md`.
 
+Les titres des pages publiques ont une ancre stable, le slug de leur texte (`/doc/admin#configurer-les-creneaux`, `src/lib/heading-anchors.ts`). Les liens « Aide : … » des pages d'administration ouvrent une section de `GUIDE_ADMIN.md` listée dans `src/lib/help-links.ts` : renommer ou supprimer un de ces titres demande de mettre ce fichier à jour dans le même changement (`src/lib/__tests__/help-links.test.ts` échoue sinon). Il en va de même pour les liens internes du guide (`](#...)`).
+
 ## Publier une nouvelle version
 
 Checklist à suivre à chaque changement de version :

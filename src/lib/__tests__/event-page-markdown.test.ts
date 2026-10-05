@@ -59,4 +59,28 @@ describe("renderEventPageMarkdown", () => {
     expect(html).toContain("<table>")
     expect(html).toContain("<td>1</td>")
   })
+
+  // #568: the public guides' headings carry their anchor; admin-authored event pages don't.
+  it("gives headings no id by default (admin-authored event pages)", () => {
+    const html = renderEventPageMarkdown("## Plan d'accès")
+    expect(html).not.toContain("id=")
+  })
+
+  it("gives each heading the slug of its text as id with headingIds, unique within the page", () => {
+    const html = renderEventPageMarkdown("## Configurer les créneaux\n\n### Activer la liste d'attente\n\n## Archiver\n\n## Archiver", { shiftHeadings: false, headingIds: true })
+    expect(html).toContain('<h2 id="configurer-les-creneaux">Configurer les créneaux</h2>')
+    expect(html).toContain('<h3 id="activer-la-liste-d-attente">')
+    expect(html).toContain('<h2 id="archiver">Archiver</h2>')
+    expect(html).toContain('<h2 id="archiver-2">Archiver</h2>')
+  })
+
+  it("builds the id from the heading's text, not its markup", () => {
+    const html = renderEventPageMarkdown("## Le champ `slug` et **Vue publique**", { shiftHeadings: false, headingIds: true })
+    expect(html).toContain('<h2 id="le-champ-slug-et-vue-publique">Le champ <code>slug</code> et <strong>Vue publique</strong></h2>')
+  })
+
+  it("still strips an id written by hand in inline HTML when headingIds is off", () => {
+    const html = renderEventPageMarkdown('<p id="main">x</p>')
+    expect(html).not.toContain('id="main"')
+  })
 })
