@@ -381,6 +381,35 @@ const cases: [string, NotificationPayload][] = [
     recipient,
     data: { volunteerName: "Julie Martin", eventTitle: "Festival du Rhône", shiftLabel: "Accueil", note: null, orgSlug: "rhone", eventSlug: "festival-2026" },
   }],
+  // #703: removed by the organization; one shift, other shifts still live (personal link).
+  ["registration_removed", {
+    kind: "registration_removed",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      eventSlug: "festival-2026",
+      shifts: [{ roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" }],
+      editToken: "edit-tok",
+    },
+  }],
+  // Two shifts at once, nothing left on the event: the link goes to the event page.
+  ["registration_removed (several shifts, none left)", {
+    kind: "registration_removed",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: "Festival du Rhône",
+      orgSlug: "rhone",
+      eventSlug: "festival-2026",
+      shifts: [
+        { roleName: "Accueil", label: "Matin", date: "2026-07-11", startTime: "09:00", endTime: "12:30" },
+        { roleName: "Bar", label: "Bar", date: "2026-07-11", startTime: "22:00", endTime: "02:00" },
+      ],
+      editToken: null,
+    },
+  }],
   ["release_available", {
     kind: "release_available",
     recipient,
@@ -453,6 +482,7 @@ describe("render — snapshot of every notification kind", () => {
       targeted_message: true,
       registration_requested: true,
       registration_refused: true,
+      registration_removed: true,
       release_available: true,
       addresses_to_verify_summary: true,
       open_shifts: true,

@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test"
+import { getMessageText, searchMessages, waitForMessage } from "./helpers/mailpit"
 
 /**
  * Bulk actions on the registrations list (#220): select several rows and cancel or "rendre
@@ -57,6 +58,8 @@ test("selecting all visible rows and bulk-cancelling removes them all", async ({
   await expect(page.getByText("3 sélectionnées")).toBeVisible()
 
   await page.getByRole("button", { name: /^Retirer de leur créneau \(3\)$/ }).click()
+  // #703: the recap announces one email per person, and the removal sends exactly those.
+  await expect(page.getByRole("alertdialog")).toContainText("3 emails d'annulation envoyés, un par personne")
   await page.getByRole("alertdialog").getByRole("button", { name: "Retirer" }).click()
 
   // The rows leave the list at once, the request waits for the undo window (#379).
@@ -69,6 +72,13 @@ test("selecting all visible rows and bulk-cancelling removes them all", async ({
   await expect(page.getByRole("status").filter({ hasText: "3 bénévoles retirés." })).toBeVisible()
   detail = await (await page.request.get(`/api/admin/events/${eventId}`)).json()
   expect(detail.shifts[0].registrations).toHaveLength(0)
+
+  for (let i = 0; i < 3; i++) {
+    const query = `to:e2e-bulk-${stamp}-${i}@example.com subject:"Inscription annulée"`
+    const mail = await waitForMessage(query)
+    expect(await getMessageText(mail.ID)).toContain("a annulé ton inscription à ce créneau")
+    expect(await searchMessages(query)).toHaveLength(1)
+  }
 })
 
 test("undoing a bulk removal within the window keeps everyone registered", async ({ page }) => {

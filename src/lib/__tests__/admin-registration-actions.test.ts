@@ -12,6 +12,10 @@ vi.mock("../notifications/outbox", () => ({
   // Stored with the transaction (#352); what matters is the payload queued.
   enqueueNotifications: async (payloads: unknown[]) => { payloads.forEach((p) => m.sendNotification(p)); return payloads.map((_, i) => `row-${i}`) },
   deliverAfterResponse: () => {},
+  collectNotifications: () => {
+    const payloads: unknown[] = []
+    return { payloads, send: async (p: unknown) => { payloads.push(p); return { ok: true } } }
+  },
 }))
 vi.mock("../waitlist", () => ({ promoteNextInWaitlist: m.promoteNextInWaitlist }))
 vi.mock("../sector-leaders", () => ({ tagVolunteerAsResponsable: m.tagVolunteerAsResponsable }))
@@ -38,8 +42,9 @@ describe("cancelRegistrations", () => {
       .mockResolvedValueOnce({ count: 1 })
     const shiftUpdateMany = vi.fn()
     const db = {
-      registration: { updateMany, count: vi.fn().mockResolvedValue(3) },
+      registration: { updateMany, count: vi.fn().mockResolvedValue(3), findMany: vi.fn().mockResolvedValue([]), findFirst: vi.fn() },
       shift: { findFirst: vi.fn().mockResolvedValue({ capacity: 5, status: "full" }), updateMany: shiftUpdateMany },
+      async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
     } as unknown as OrgScopedPrisma
     const t = (id: string) => ({ id, eventId: "e1", shiftId: "s1", status: "active" })
 

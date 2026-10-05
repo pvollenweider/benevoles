@@ -32,6 +32,7 @@ export type NotificationKind =
   | "targeted_message"
   | "registration_requested"
   | "registration_refused"
+  | "registration_removed"
   | "release_available"
   | "addresses_to_verify_summary"
   | "open_shifts"

@@ -11,7 +11,7 @@
 import type { NotificationPayload } from "../types"
 import { withOrgLogo, type RenderedEmail } from "./shared"
 import { emailLogoHtml, type OrgLogo } from "../../org-logo"
-import { renderConfirmation, renderRegistrationRequested, renderRegistrationRefused, renderShiftModified, renderShiftCancelled, renderRegistrationLinkResend } from "./registration"
+import { renderConfirmation, renderRegistrationRequested, renderRegistrationRefused, renderShiftModified, renderShiftCancelled, renderRegistrationLinkResend, renderRegistrationRemoved } from "./registration"
 import { renderMemberInvite, renderAdminInvite } from "./invitations"
 import { renderReminderJ2, renderReminderJ1, renderReminderDd, renderManualReminder, renderTargetedMessage } from "./reminders"
 import { renderWaitlistConfirmation, renderWaitlistOffered } from "./waitlist"
@@ -78,6 +78,8 @@ function renderKind(payload: NotificationPayload): RenderedEmail {
       return renderRegistrationRequested(payload)
     case "registration_refused":
       return renderRegistrationRefused(payload)
+    case "registration_removed":
+      return renderRegistrationRemoved(payload)
     case "release_available":
       return renderReleaseAvailable(payload)
     case "addresses_to_verify_summary":

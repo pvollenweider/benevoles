@@ -8,8 +8,10 @@ import { promoteNextInWaitlist } from "./waitlist"
 import { tagVolunteerAsResponsable } from "./sector-leaders"
 import { reportError } from "./report-error"
 import { generateToken } from "./utils"
-import { linkToken } from "./token-vault"
-import { deliverAfterResponse, enqueueNotifications } from "./notifications/outbox"
+import { linkToken, registrationToken } from "./token-vault"
+import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "./notifications/outbox"
+import type { Send } from "./notifications/types"
+import { LIVE_STATUSES } from "./registration-capacity"
 
 /**
  * Admin actions on registrations, shared by the single-row routes and the bulk route (#292), so
@@ -22,19 +24,29 @@ type CancelTarget = { id: string; eventId: string; shiftId: string; status: stri
 
 /**
  * Cancels the given registrations. Conditional on each still being live, so a row cancelled
- * meanwhile (or selected twice) isn't cancelled, logged and promoted from twice. Then, per
- * shift: reopen it if it was "full", and offer the freed spots to the waitlist one after the
- * other (promoteNextInWaitlist is capacity-aware and locks the shift, so sequential calls give
- * one offer per freed spot).
+ * meanwhile (or selected twice) isn't cancelled, logged, emailed and promoted from twice. Each
+ * person removed gets one email (#703), queued in the same transaction as the cancellations
+ * (#352). Then, per shift: reopen it if it was "full", and offer the freed spots to the waitlist
+ * one after the other (promoteNextInWaitlist is capacity-aware and locks the shift, so
+ * sequential calls give one offer per freed spot).
  */
 export async function cancelRegistrations(db: OrgScopedPrisma, actor: LogActor, targets: CancelTarget[]): Promise<string[]> {
+  const { done, outboxIds } = await db.$transaction(async (tx) => {
+    const done: CancelTarget[] = []
+    for (const reg of targets) {
+      const { count } = await tx.registration.updateMany({
+        where: { id: reg.id, status: { not: "cancelled" } },
+        data: { status: "cancelled" },
+      })
+      if (count > 0) done.push(reg)
+    }
+    const outbox = collectNotifications()
+    await queueRemovalEmails(tx, done.map((r) => r.id), outbox.send)
+    return { done, outboxIds: await enqueueNotifications(outbox.payloads, tx) }
+  })
+
   const cancelled: { reg: CancelTarget; logId: string | null }[] = []
-  for (const reg of targets) {
-    const { count } = await db.registration.updateMany({
-      where: { id: reg.id, status: { not: "cancelled" } },
-      data: { status: "cancelled" },
-    })
-    if (count === 0) continue
+  for (const reg of done) {
     const logId = await logEvent({
       eventId: reg.eventId,
       actor,
@@ -47,6 +59,7 @@ export async function cancelRegistrations(db: OrgScopedPrisma, actor: LogActor, 
     })
     cancelled.push({ reg, logId })
   }
+  deliverAfterResponse(outboxIds)
 
   const byShift = new Map<string, (string | null)[]>()
   for (const { reg, logId } of cancelled) byShift.set(reg.shiftId, [...(byShift.get(reg.shiftId) ?? []), logId])
@@ -63,6 +76,68 @@ export async function cancelRegistrations(db: OrgScopedPrisma, actor: LogActor, 
   }
 
   return cancelled.map((c) => c.reg.id)
+}
+
+type CancelTx = Parameters<Parameters<OrgScopedPrisma["$transaction"]>[0]>[0]
+
+/**
+ * One « registration_removed » email per person and event (#703), listing every shift just
+ * removed, whatever its former status. A person without an email address gets nothing. The link is
+ * that of a registration still live on the event, the cancelled ones no longer opening the
+ * personal page; with none left, the email points to the event page. Dedupe key on the first
+ * registration id: each one is cancelled only once, so a retried request never emails twice.
+ * No organization setting switches it off: like a cancelled shift or a refused request, the
+ * person must know they no longer have the place.
+ */
+async function queueRemovalEmails(tx: CancelTx, ids: string[], send: Send): Promise<void> {
+  if (ids.length === 0) return
+  const rows = await tx.registration.findMany({
+    where: { id: { in: ids } },
+    select: {
+      id: true,
+      volunteerId: true,
+      eventId: true,
+      volunteer: { select: { firstName: true, lastName: true, email: true } },
+      shift: { select: { roleName: true, label: true, date: true, startTime: true, endTime: true } },
+      event: { select: { title: true, slug: true, organizationId: true, organization: { select: { slug: true } } } },
+    },
+    orderBy: [{ shift: { date: "asc" } }, { shift: { startTime: "asc" } }],
+  })
+  const byPerson = new Map<string, typeof rows>()
+  for (const r of rows) {
+    if (!r.volunteer.email) continue
+    const key = `${r.volunteerId}\u0000${r.eventId}`
+    byPerson.set(key, [...(byPerson.get(key) ?? []), r])
+  }
+  for (const group of byPerson.values()) {
+    const { volunteerId, eventId, volunteer, event } = group[0]
+    const name = `${volunteer.firstName} ${volunteer.lastName}`
+    const remaining = await tx.registration.findFirst({
+      where: { volunteerId, eventId, status: { in: [...LIVE_STATUSES] } },
+      select: registrationToken.select,
+    })
+    await send({
+      kind: "registration_removed",
+      dedupeKey: `registration_removed:${group.map((r) => r.id).sort()[0]}`,
+      recipient: { email: volunteer.email, name },
+      volunteerId,
+      organizationId: event.organizationId,
+      data: {
+        volunteerName: name,
+        eventTitle: event.title,
+        orgSlug: event.organization.slug,
+        eventSlug: event.slug,
+        shifts: group.map((r) => ({
+          roleName: r.shift.roleName,
+          label: r.shift.label,
+          date: r.shift.date.toISOString().slice(0, 10),
+          startTime: r.shift.startTime,
+          endTime: r.shift.endTime,
+        })),
+        editToken: remaining ? registrationToken.reveal(remaining) : null,
+      },
+    })
+  }
 }
 
 export type PresenceTarget = { id: string; eventId: string; shiftId: string; status: string }

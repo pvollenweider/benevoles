@@ -32,12 +32,29 @@ const LOGGED_ORG = "L'action est journalisée : vous la retrouverez dans le jour
 
 const UNDO_LINE = "Vous aurez 10 secondes pour annuler : rien n'est envoyé ni enregistré avant. Quitter la page valide le retrait."
 
-export function bulkCancelRecap(i: { people: number; withEmail: number; waitlisted: number }): ActionRecap {
+/**
+ * What « Retirer de leur créneau » does with a selection (#703): only confirmed registrations are
+ * cancelled (the bulk route skips the others), and each person removed with an email address gets
+ * one email, however many of their rows are selected. Counted from the rows on screen.
+ */
+export function bulkCancelCounts(selected: { status: string; volunteer: { id: string; email: string | null } }[]) {
+  const active = selected.filter((r) => r.status === "active")
+  const people = new Set(active.map((r) => r.volunteer.id))
+  const withEmail = new Set(active.filter((r) => r.volunteer.email).map((r) => r.volunteer.id))
+  return { registrations: active.length, people: people.size, withEmail: withEmail.size, notConfirmed: selected.length - active.length }
+}
+
+export function bulkCancelRecap(i: { registrations: number; people: number; withEmail: number; notConfirmed?: number; waitlisted: number }): ActionRecap {
+  const withoutEmail = i.people - i.withEmail
   return {
     title: `Retirer ${n(i.people, "bénévole", "bénévoles")} de leur créneau ?`,
     lines: [
-      `${n(i.people, "inscription annulée", "inscriptions annulées")}. Les places sont libérées immédiatement.`,
-      i.withEmail > 0 ? `${n(i.withEmail, "email d'annulation envoyé", "emails d'annulation envoyés")} aux personnes concernées.` : "Aucun email : personne n'a d'adresse.",
+      `${n(i.registrations, "inscription annulée", "inscriptions annulées")}. Les places sont libérées immédiatement.`,
+      i.withEmail > 0
+        ? `${n(i.withEmail, "email d'annulation envoyé", "emails d'annulation envoyés")}, un par personne, avec le lien vers ses autres créneaux s'il lui en reste.`
+        : "Aucun email : personne n'a d'adresse.",
+      ...(i.withEmail > 0 && withoutEmail > 0 ? [`${n(withoutEmail, "personne sans adresse ne reçoit", "personnes sans adresse ne reçoivent")} rien.`] : []),
+      ...(i.notConfirmed ? [`${n(i.notConfirmed, "inscription sélectionnée est", "inscriptions sélectionnées sont")} en liste d'attente, avec une place proposée ou en demande : ${i.notConfirmed > 1 ? "elles restent telles quelles" : "elle reste telle quelle"}, sans email.`] : []),
       i.waitlisted > 0 ? `${n(i.waitlisted, "place libérée sera proposée", "places libérées seront proposées")} à la liste d'attente.` : "Pas de liste d'attente sur ces créneaux.",
       LOGGED,
       UNDO_LINE,

@@ -3,12 +3,13 @@
 
 /**
  * Volunteer registration lifecycle: confirmation, request on approval and its refusal,
- * cancellation, change or cancellation of a shift, personal link resent.
+ * cancellation, removal from a shift by the organization, change or cancellation of a shift,
+ * personal link resent.
  */
 
 import { confirmationVariables, fillVariables } from "../../message-variables"
 import { renderMarkdown } from "../../markdown"
-import { dayLabel } from "../../spoken-time"
+import { dayLabel, spokenShift } from "../../spoken-time"
 import type { NotificationPayload } from "../types"
 import { eventPublicUrl } from "@/lib/urls"
 import { clockTime } from "../../gantt-utils"
@@ -162,6 +163,57 @@ export function renderRegistrationRefused(p: NotificationPayload): RenderedEmail
   return { subject, html, text }
 }
 
+
+// ── Retrait par l'organisation ───────────────────────────────────────────────
+
+/**
+ * The organization removed the volunteer from one or more shifts (« Retirer de leur créneau »,
+ * #703): one email per person, listing every shift removed at once. `editToken` is the link of a
+ * registration still live on the event, if any: the cancelled one no longer opens the personal
+ * page, so without another one the email points to the event's public page instead.
+ */
+export function renderRegistrationRemoved(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    volunteerName: string
+    eventTitle: string
+    orgSlug: string
+    eventSlug: string
+    shifts: { roleName: string; label?: string | null; date: string; startTime: string; endTime: string }[]
+    editToken?: string | null
+  }
+  const firstName = d.volunteerName.split(" ")[0]
+  const lines = d.shifts.map((s) => spokenShift(s))
+  const several = lines.length > 1
+  const intro = `L'organisation de ${d.eventTitle} a annulé ton inscription ${several ? "à ces créneaux" : "à ce créneau"} :`
+  const linkUrl = d.editToken ? myPageUrl(d.orgSlug, d.editToken) : eventPublicUrl(d.orgSlug, d.eventSlug)
+  const next = d.editToken
+    ? "Tes autres inscriptions sont toujours là. Ton lien personnel pour les voir ou les gérer :"
+    : "D'autres créneaux sont peut-être encore ouverts :"
+  const subject = `Inscription annulée : ${d.eventTitle}`
+
+  const text = [
+    `Hello ${firstName},`,
+    ``,
+    intro,
+    ...lines.map((l) => `- ${l}`),
+    ``,
+    next,
+    linkUrl,
+    ``,
+    `Merci pour ton engagement !`,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)},</h2>
+    <p style="color:#555">L'organisation de <strong>${escapeHtml(d.eventTitle)}</strong> a annulé ton inscription ${several ? "à ces créneaux" : "à ce créneau"} :</p>
+    <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em">${lines.map((l) => `<li>${escapeHtml(l)}</li>`).join("")}</ul>
+    <p style="color:#555">${escapeHtml(next)}</p>
+    <p style="margin-top:1.5em">${btn(linkUrl, d.editToken ? "Voir mes créneaux" : "Voir les créneaux")}</p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">Merci pour ton engagement !</p>
+  `, several ? `${lines.length} créneaux annulés pour ${d.eventTitle}.` : `Créneau annulé : ${lines[0] ?? d.eventTitle}.`)
+
+  return { subject, html, text }
+}
 
 // ── Notif modification d'un shift ────────────────────────────────────────────
 

@@ -7,7 +7,7 @@ import Link from "next/link"
 import { announce } from "@/lib/announce"
 import { UNDO_MS, useDelayedAction } from "@/lib/use-delayed-action"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
-import { bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, logLinkFor, type ActionRecap } from "@/lib/action-recap"
+import { bulkCancelCounts, bulkCancelRecap, bulkLeaderRecap, bulkResendRecap, logLinkFor, type ActionRecap } from "@/lib/action-recap"
 import { describeBulkFailure } from "@/lib/form-errors"
 import { useState, useMemo, useRef, useId, useEffect } from "react"
 import ShiftSelect from "./registrations/ShiftSelect"
@@ -265,7 +265,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     const shiftIds = new Set(selectedActiveRegs.map((r) => r.shift.id))
     const waitlisted = registrations.filter((r) => r.status !== "active" && shiftIds.has(r.shift.id)).length
     setPending({
-      recap: bulkCancelRecap({ people: selectedActiveRegs.length, withEmail: selectedActiveRegs.filter((r) => r.volunteer.email).length, waitlisted: Math.min(waitlisted, selectedActiveRegs.length) }),
+      recap: bulkCancelRecap({ ...bulkCancelCounts(selectedRegs), waitlisted: Math.min(waitlisted, selectedActiveRegs.length) }),
       run: holdBulkCancel,
     })
   }
