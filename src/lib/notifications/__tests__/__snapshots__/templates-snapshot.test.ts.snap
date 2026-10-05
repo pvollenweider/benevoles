@@ -982,6 +982,107 @@ exports[`render — snapshot of every notification kind > registration_refused 1
 }
 `;
 
+exports[`render — snapshot of every notification kind > registration_removed (several shifts, none left) 1`] = `
+{
+  "html": [
+    "<!DOCTYPE html>",
+    "<html lang="fr">",
+    "<head>",
+    "<meta charset="UTF-8">",
+    "<meta name="viewport" content="width=device-width,initial-scale=1">",
+    "<meta http-equiv="X-UA-Compatible" content="IE=edge">",
+    "</head>",
+    "<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">",
+    "<div style="display:none;font-size:1px;color:#f5f5f5;max-height:0;overflow:hidden;opacity:0;">2 créneaux annulés pour Festival du Rhône.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>",
+    "<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;">",
+    "<tr><td align="center" style="padding:32px 16px 24px;">",
+    "<!-- align="center" above only centers this table CELL on the page; text-align is inherited CSS,",
+    "     so without an explicit override here every unstyled heading/paragraph inside would inherit",
+    "     "center" too instead of reading left-aligned like normal body text. -->",
+    "<div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">",
+    "",
+    "    <h2 style="margin:0 0 0.25em">Hello Julie,</h2>",
+    "    <p style="color:#555">L'organisation de <strong>Festival du Rhône</strong> a annulé ton inscription à ces créneaux :</p>",
+    "    <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em"><li>Accueil, Matin, samedi 11 juillet, de 9h à 12h30</li><li>Bar, samedi 11 juillet, de 22h à 2h, jusqu'au lendemain</li></ul>",
+    "    <p style="color:#555">D'autres créneaux sont peut-être encore ouverts :</p>",
+    "    <p style="margin-top:1.5em"><a href="https://rhone.benevol.app/festival-2026" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">Voir les créneaux</a></p>",
+    "    <p style="color:#666;font-size:0.85em;margin-top:2em">Merci pour ton engagement !</p>",
+    "  ",
+    "<div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#666;text-align:center;">",
+    "  <a href="https://benevol.app" style="color:#666;text-decoration:none;">benevol.app</a>",
+    "</div>",
+    "</div>",
+    "</td></tr>",
+    "</table>",
+    "</body>",
+    "</html>",
+  ],
+  "subject": "Inscription annulée : Festival du Rhône",
+  "text": [
+    "Hello Julie,",
+    "",
+    "L'organisation de Festival du Rhône a annulé ton inscription à ces créneaux :",
+    "- Accueil, Matin, samedi 11 juillet, de 9h à 12h30",
+    "- Bar, samedi 11 juillet, de 22h à 2h, jusqu'au lendemain",
+    "",
+    "D'autres créneaux sont peut-être encore ouverts :",
+    "https://rhone.benevol.app/festival-2026",
+    "",
+    "Merci pour ton engagement !",
+  ],
+}
+`;
+
+exports[`render — snapshot of every notification kind > registration_removed 1`] = `
+{
+  "html": [
+    "<!DOCTYPE html>",
+    "<html lang="fr">",
+    "<head>",
+    "<meta charset="UTF-8">",
+    "<meta name="viewport" content="width=device-width,initial-scale=1">",
+    "<meta http-equiv="X-UA-Compatible" content="IE=edge">",
+    "</head>",
+    "<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">",
+    "<div style="display:none;font-size:1px;color:#f5f5f5;max-height:0;overflow:hidden;opacity:0;">Créneau annulé : Accueil, samedi 11 juillet, de 9h à 12h30.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>",
+    "<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;">",
+    "<tr><td align="center" style="padding:32px 16px 24px;">",
+    "<!-- align="center" above only centers this table CELL on the page; text-align is inherited CSS,",
+    "     so without an explicit override here every unstyled heading/paragraph inside would inherit",
+    "     "center" too instead of reading left-aligned like normal body text. -->",
+    "<div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">",
+    "",
+    "    <h2 style="margin:0 0 0.25em">Hello Julie,</h2>",
+    "    <p style="color:#555">L'organisation de <strong>Fête &lt;Rhône&gt; &amp; &quot;Lac&quot;</strong> a annulé ton inscription à ce créneau :</p>",
+    "    <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em"><li>Accueil, samedi 11 juillet, de 9h à 12h30</li></ul>",
+    "    <p style="color:#555">Tes autres inscriptions sont toujours là. Ton lien personnel pour les voir ou les gérer :</p>",
+    "    <p style="margin-top:1.5em"><a href="https://rhone.benevol.app/my/edit-tok" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">Voir mes créneaux</a></p>",
+    "    <p style="color:#666;font-size:0.85em;margin-top:2em">Merci pour ton engagement !</p>",
+    "  ",
+    "<div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#666;text-align:center;">",
+    "  <a href="https://benevol.app" style="color:#666;text-decoration:none;">benevol.app</a>",
+    "</div>",
+    "</div>",
+    "</td></tr>",
+    "</table>",
+    "</body>",
+    "</html>",
+  ],
+  "subject": "Inscription annulée : Fête <Rhône> & "Lac"",
+  "text": [
+    "Hello Julie,",
+    "",
+    "L'organisation de Fête <Rhône> & "Lac" a annulé ton inscription à ce créneau :",
+    "- Accueil, samedi 11 juillet, de 9h à 12h30",
+    "",
+    "Tes autres inscriptions sont toujours là. Ton lien personnel pour les voir ou les gérer :",
+    "https://rhone.benevol.app/my/edit-tok",
+    "",
+    "Merci pour ton engagement !",
+  ],
+}
+`;
+
 exports[`render — snapshot of every notification kind > registration_requested (one shift) 1`] = `
 {
   "html": [
