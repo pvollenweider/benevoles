@@ -3,6 +3,7 @@
 
 import { fold } from "./text-fold"
 import type { AddressStatusView } from "./address-status"
+import type { MemberDeletionEligibility } from "./member-deletion"
 
 /**
  * Pure logic of the admin members page (MembersManager, #291): filtering, the three-state column
@@ -38,6 +39,11 @@ export type Member = MemberRow & {
   notes: string | null
   availabilityPeriods?: string[]
   availabilityNote?: string | null
+  // Whether this record can be permanently deleted (#667), computed server-side (one extra
+  // query for the whole list, member-deletion-data.ts's loadMemberDeletionEligibilities) from the
+  // pure rule in member-deletion.ts. Drives the row's « Supprimer » action: shown only when
+  // eligible, never a dead button.
+  deletion: MemberDeletionEligibility
 }
 
 export type SortCol = "firstName" | "lastName" | "hoursTotal" | "hoursAttested" | "lastShiftDate"

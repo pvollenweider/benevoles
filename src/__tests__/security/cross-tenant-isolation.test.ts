@@ -404,6 +404,74 @@ describe("Members — cross-tenant isolation", () => {
     expect(res.status).toBe(404)
   })
 
+  // ── Permanent deletion (#667) ────────────────────────────────────────────
+
+  function deleteTx(overrides: { volunteer?: Record<string, unknown>; registration?: Record<string, unknown> } = {}) {
+    const volunteerDelete = vi.fn().mockResolvedValue({ id: "mem-a" })
+    const orgLogCreate = vi.fn().mockResolvedValue({ id: "log-1" })
+    const tx = {
+      $queryRaw: vi.fn().mockResolvedValue([{ id: "x" }]),
+      volunteer: { findFirst: vi.fn().mockResolvedValue({ id: "mem-a", email: null, active: false, mergedIntoId: null }), delete: volunteerDelete, ...overrides.volunteer },
+      registration: { count: vi.fn().mockResolvedValue(0), ...overrides.registration },
+      notificationOutbox: { findMany: vi.fn().mockResolvedValue([]), updateMany: vi.fn() },
+      orgLog: { create: orgLogCreate },
+    }
+    return { tx, volunteerDelete, orgLogCreate }
+  }
+
+  it("POST /api/admin/members/[id]/delete returns 404 for an org-B volunteer, deleting nothing (#667)", async () => {
+    const { POST } = await import("@/app/api/admin/members/[id]/delete/route")
+    const { tx, volunteerDelete } = deleteTx({ volunteer: { findFirst: vi.fn().mockResolvedValue(null) } })
+    const $transaction = vi.fn(async (fn: (tx: unknown) => unknown) => fn(tx))
+    requireOrgSessionMock.mockResolvedValue({ db: { $transaction }, organizationId: ORG_A, session: SESSION_A })
+
+    const res = await POST(makeRequest("/api/admin/members/mem-b/delete", "POST"), params("mem-b"))
+    expect(res.status).toBe(404)
+    expect(volunteerDelete).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/members/[id]/delete deletes an eligible org-A volunteer and logs member.deleted with the id only (#667)", async () => {
+    const { POST } = await import("@/app/api/admin/members/[id]/delete/route")
+    const { tx, volunteerDelete, orgLogCreate } = deleteTx()
+    const $transaction = vi.fn(async (fn: (tx: unknown) => unknown) => fn(tx))
+    requireOrgSessionMock.mockResolvedValue({ db: { $transaction }, organizationId: ORG_A, session: SESSION_A })
+
+    const res = await POST(makeRequest("/api/admin/members/mem-a/delete", "POST"), params("mem-a"))
+    expect(res.status).toBe(200)
+    expect(volunteerDelete).toHaveBeenCalledWith({ where: { id: "mem-a" } })
+    expect(orgLogCreate).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ action: "member.deleted", entityType: "Member", entityId: "mem-a", organizationId: ORG_A }),
+    }))
+    const loggedData = orgLogCreate.mock.calls[0][0].data
+    expect(loggedData.changes).toBeUndefined() // id only, no personal data
+  })
+
+  it("POST /api/admin/members/[id]/delete returns 409 with a plain message for an active member, deleting nothing (#667)", async () => {
+    const { POST } = await import("@/app/api/admin/members/[id]/delete/route")
+    const { tx, volunteerDelete } = deleteTx({ volunteer: { findFirst: vi.fn().mockResolvedValue({ id: "mem-a", email: null, active: true, mergedIntoId: null }) } })
+    const $transaction = vi.fn(async (fn: (tx: unknown) => unknown) => fn(tx))
+    requireOrgSessionMock.mockResolvedValue({ db: { $transaction }, organizationId: ORG_A, session: SESSION_A })
+
+    const res = await POST(makeRequest("/api/admin/members/mem-a/delete", "POST"), params("mem-a"))
+    expect(res.status).toBe(409)
+    const body = await res.json()
+    expect(body.error).toMatch(/encore active/)
+    expect(volunteerDelete).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/members/[id]/delete returns 409 for a member with a registration, deleting nothing (#667)", async () => {
+    const { POST } = await import("@/app/api/admin/members/[id]/delete/route")
+    const { tx, volunteerDelete } = deleteTx({ registration: { count: vi.fn().mockResolvedValue(1) } })
+    const $transaction = vi.fn(async (fn: (tx: unknown) => unknown) => fn(tx))
+    requireOrgSessionMock.mockResolvedValue({ db: { $transaction }, organizationId: ORG_A, session: SESSION_A })
+
+    const res = await POST(makeRequest("/api/admin/members/mem-a/delete", "POST"), params("mem-a"))
+    expect(res.status).toBe(409)
+    const body = await res.json()
+    expect(body.error).toMatch(/inscriptions/)
+    expect(volunteerDelete).not.toHaveBeenCalled()
+  })
+
   it("POST /api/admin/members/[id]/merge-preview returns 404 when the other record is org-B's (#600)", async () => {
     const { POST } = await import("@/app/api/admin/members/[id]/merge-preview/route")
     setupGuard({ volunteer: { findFirst: vi.fn().mockResolvedValueOnce({ id: "mem-a", organizationId: ORG_A, firstName: "A", lastName: "A", email: null, phone: null, tags: [], notes: null, birthDate: null, availabilityPeriods: [], availabilityNote: null, active: true, createdAt: new Date(), mergedIntoId: null }).mockResolvedValueOnce(null) } })

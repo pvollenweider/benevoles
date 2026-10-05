@@ -16,8 +16,18 @@ describe("ConfirmActionModal", () => {
   it("is an alert dialog for a dangerous action, described by its recap, with Cancel focused first", () => {
     render(<ConfirmActionModal recap={recap} busy={false} onConfirm={() => {}} onCancel={() => {}} />)
     const dialog = screen.getByRole("alertdialog", { name: "Supprimer « Asso » ?" })
-    expect(dialog).toHaveAccessibleDescription("Tout est effacé.")
+    // The (empty) error paragraph is always part of the description (see below), hence the
+    // trailing space after the recap's own text.
+    expect(dialog).toHaveAccessibleDescription("Tout est effacé. ")
     expect(screen.getByRole("button", { name: "Annuler" })).toHaveFocus()
+  })
+
+  it("the error paragraph is always part of the dialog's description, so a failure already there when it (re)opens is read too", () => {
+    const { rerender } = render(<ConfirmActionModal recap={recap} busy={false} onConfirm={() => {}} onCancel={() => {}} />)
+    const dialog = screen.getByRole("alertdialog", { name: "Supprimer « Asso » ?" })
+    expect(dialog).toHaveAccessibleDescription(/Tout est effacé\./)
+    rerender(<ConfirmActionModal recap={recap} busy={false} error="Connexion impossible." onConfirm={() => {}} onCancel={() => {}} />)
+    expect(dialog).toHaveAccessibleDescription(/Connexion impossible\./)
   })
 
   it("keeps a failure inside the dialog and offers to retry", () => {

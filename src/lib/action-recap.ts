@@ -79,6 +79,22 @@ export function deactivateMemberRecap(name: string): ActionRecap {
   }
 }
 
+/** Permanent deletion (#667, owner decision): only ever offered for an inactive member with no
+ * registration at all, so there is nothing to cancel or notify, only what cascades with it. */
+export function deleteMemberRecap(name: string): ActionRecap {
+  return {
+    title: `Supprimer ${name} ?`,
+    lines: [
+      "Cette action est irréversible : la fiche ne peut pas être récupérée ensuite.",
+      "Disparaissent avec elle : ses invitations, ses réponses aux questions des événements, ses abonnements aux notifications, les suivis d'envoi d'email et les doublons possibles écartés la concernant.",
+      "Aucun email n'est envoyé.",
+      LOGGED_ORG,
+    ],
+    confirmLabel: "Supprimer",
+    danger: true,
+  }
+}
+
 /**
  * "Samedi 4 juillet, de 18h à 23h": the moment of a shift, for a recap shown on screen, in words
  * (#587; an en dash between two hours is read « tiret »). Times are stored "HH:MM".

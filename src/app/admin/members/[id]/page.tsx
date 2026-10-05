@@ -12,6 +12,8 @@ import { loadAddressStatuses } from "@/lib/delivery-outcomes-data"
 import { addressHash } from "@/lib/notifications/smtp-outcome"
 import { addressStatusSentence } from "@/lib/address-status"
 import { env } from "@/lib/env"
+import { loadMemberDeletionEligibility } from "@/lib/member-deletion-data"
+import MemberDeleteAction from "@/components/admin/members/MemberDeleteAction"
 
 export const dynamic = "force-dynamic"
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -42,6 +44,7 @@ export default async function MemberActivityPage({ params }: { params: Promise<{
   ])
   const status = statuses.get(member.id) ?? { kind: "ok" as const }
   const statusSentence = addressStatusSentence(status, fmtDay)
+  const deletion = (await loadMemberDeletionEligibility(ctx.db, member.id)) ?? { eligible: false as const, reason: "Non trouvé." }
 
   return (
     <div className="space-y-6 max-w-2xl">
@@ -85,6 +88,11 @@ export default async function MemberActivityPage({ params }: { params: Promise<{
             Fusionner avec un autre membre<span className="sr-only"> (doublon confirmé)</span>
           </Link>
         </p>
+        {/* Permanent deletion (#667): a button only when eligible, a plain-words explanation
+            otherwise — never a dead button. */}
+        <div className="mt-3">
+          <MemberDeleteAction memberId={member.id} memberName={`${member.firstName} ${member.lastName}`} deletion={deletion} />
+        </div>
       </div>
       <h2 id="chronologie" className="sr-only">Chronologie</h2>
       {facts.length === 0 ? (
