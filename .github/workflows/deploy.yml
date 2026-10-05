@@ -167,6 +167,7 @@ jobs:
             --from-literal=AUTH_URL="https://www.benevol.app" \
             --from-literal=AUTH_TRUST_HOST="true" \
             --from-literal=VIDEO_MEDIA_BASE_URL="https://medias.benevol.app" \
+            --from-literal=OFFSITE_BUCKET="${{ secrets.OFFSITE_BUCKET }}" \
             --save-config --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Deploy PostgreSQL

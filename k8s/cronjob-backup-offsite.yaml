@@ -2,15 +2,24 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 # Copie chaque nuit à 01h30 UTC (30 min après le dump, cronjob-backup.yaml) les fichiers
-# chiffrés du volume backup-pvc vers Dropbox, via rclone. Les fichiers sont déjà chiffrés
+# chiffrés du volume backup-pvc hors site, via rclone. Les fichiers sont déjà chiffrés
 # AES-256 avant d'arriver ici : rclone ne voit et n'envoie que du contenu déjà illisible sans
 # BACKUP_PASSPHRASE.
 #
-# Utilise "copy" (upload uniquement, ne touche jamais aux fichiers déjà présents côté Dropbox)
-# puis "delete --min-age" pour purger côté Dropbox les fichiers de plus de 90 jours. Ce n'est
+# Deux fournisseurs possibles derrière OFFSITE_PROVIDER (#524) :
+#   - "dropbox" (défaut actuel) : plan individuel, pas de DPA, stockage aux États-Unis
+#     (voir docs/rgpd/sous-traitants.md). Conservé tant que la bascule n'a pas eu lieu.
+#   - "swissbackup" : Infomaniak Swiss Backup, S3 compatible, stockage en Suisse. Cible de
+#     la bascule ; voir docs/deploiement.md « Copie hors site » pour la procédure complète.
+# La bascule se fait en changeant la valeur de OFFSITE_PROVIDER ci-dessous puis en déployant :
+# aucun autre changement de ce fichier n'est nécessaire. Dropbox reste utilisable après la
+# bascule tant que son remote existe dans rclone-config (rien ne le supprime automatiquement).
+#
+# Utilise "copy" (upload uniquement, ne touche jamais aux fichiers déjà présents côté
+# fournisseur) puis "delete --min-age" pour purger les fichiers de plus de 90 jours. Ce n'est
 # volontairement pas "sync" : la rotation locale du PVC est à 30 jours, donc un sync effacerait
-# côté Dropbox tout fichier que le PVC a déjà purgé, rendant la copie hors site inutile en cas
-# de perte du cluster (le PVC et son historique auraient disparu en même temps).
+# côté fournisseur tout fichier que le PVC a déjà purgé, rendant la copie hors site inutile en
+# cas de perte du cluster (le PVC et son historique auraient disparu en même temps).
 #
 # Mise en place du remote Dropbox (à faire une fois, en local, jamais dans ce dépôt) :
 #   1. rclone config  →  nouveau remote nommé "dropbox", type "dropbox", autoriser dans le
@@ -19,6 +28,23 @@
 #        --from-file=rclone.conf=$HOME/.config/rclone/rclone.conf
 #      (à refaire si le jeton est révoqué ou expire ; Dropbox ne fait pas expirer les jetons
 #      rclone par défaut, mais une révocation manuelle côté Dropbox le ferait.)
+#
+# Mise en place du remote Swiss Backup (à faire une fois, en local, jamais dans ce dépôt) :
+#   0. Dans le Manager Infomaniak, créer un emplacement S3 sur Swiss Backup et une clé
+#      restreinte à ce seul bucket (voir la FAQ ; les valeurs exactes d'endpoint et de région
+#      sont données par le Manager au moment de la création, pas par la FAQ elle-même) :
+#      https://www.infomaniak.com/fr/support/faq/2546/creer-un-emplacement-s3-sur-swiss-backup
+#   1. rclone config  →  nouveau remote nommé "swissbackup", type "s3", provider "Other"
+#      (S3 générique, pas un des fournisseurs listés par rclone), renseigner access_key_id et
+#      secret_access_key (la clé restreinte créée ci-dessus), endpoint et region (valeurs
+#      PLACEHOLDER tant qu'elles n'ont pas été lues dans le Manager — à remplacer, ne pas
+#      deviner), env_auth "false".
+#   2. Ajouter ce remote au même fichier rclone.conf que Dropbox (les deux coexistent), puis
+#      recréer le secret comme pour Dropbox ci-dessus (même commande, le fichier a maintenant
+#      deux sections [dropbox] et [swissbackup]).
+#   3. Ajouter le secret GitHub OFFSITE_BUCKET (nom du bucket restreint par la clé) : repris
+#      dans benevoles-secret au déploiement suivant (.github/workflows/deploy.yml).
+#   4. Tester avec scripts/restore-test-offsite.sh avant de basculer OFFSITE_PROVIDER.
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -48,6 +74,21 @@ spec:
             - name: offsite-sync
               image: rclone/rclone:1.68
               env:
+                # Bascule du fournisseur (#524) : "dropbox" ou "swissbackup". Seule valeur à
+                # changer pour basculer ; voir le commentaire d'en-tête et docs/deploiement.md.
+                - name: OFFSITE_PROVIDER
+                  value: "dropbox"
+                # Nom du bucket Swiss Backup restreint par la clé dédiée ; ignoré pour dropbox.
+                - name: OFFSITE_BUCKET
+                  valueFrom:
+                    secretKeyRef:
+                      name: benevoles-secret
+                      key: OFFSITE_BUCKET
+                      optional: true
+                # "true" fait passer --dry-run à rclone copy/delete (rien n'est envoyé ni
+                # supprimé) : pour un test manuel avant de faire confiance à un nouveau remote.
+                - name: DRY_RUN
+                  value: "false"
                 - name: APP_URL
                   valueFrom:
                     secretKeyRef:
@@ -70,19 +111,48 @@ spec:
                 - -c
                 - |
                   set -e
-                  echo "==> Envoi vers Dropbox"
-                  rclone copy /backups dropbox:/benevol-backups \
-                    --config /config/rclone/rclone.conf \
-                    --checksum -v
 
-                  echo "==> Purge des fichiers Dropbox de plus de 90 jours"
-                  rclone delete dropbox:/benevol-backups \
-                    --config /config/rclone/rclone.conf \
-                    --min-age 90d -v
+                  # >>> OFFSITE_SCRIPT_START (kept in sync with scripts/test-offsite-backup.sh)
+                  case "$OFFSITE_PROVIDER" in
+                    dropbox)
+                      REMOTE="dropbox:/benevol-backups"
+                      ;;
+                    swissbackup)
+                      if [ -z "$OFFSITE_BUCKET" ]; then
+                        echo "ERREUR : OFFSITE_BUCKET n'est pas défini (requis pour swissbackup)." >&2
+                        exit 1
+                      fi
+                      REMOTE="swissbackup:${OFFSITE_BUCKET}/benevol-backups"
+                      ;;
+                    *)
+                      echo "ERREUR : OFFSITE_PROVIDER inconnu (\"${OFFSITE_PROVIDER}\"), attendu \"dropbox\" ou \"swissbackup\"." >&2
+                      exit 1
+                      ;;
+                  esac
 
-                  echo "==> Inventaire Dropbox :"
-                  rclone lsl dropbox:/benevol-backups --config /config/rclone/rclone.conf
+                  DRY_RUN_FLAG=""
+                  if [ "${DRY_RUN:-false}" = "true" ]; then
+                    DRY_RUN_FLAG="--dry-run"
+                    echo "==> DRY_RUN=true : rien ne sera envoyé ni supprimé côté ${OFFSITE_PROVIDER}"
+                  fi
+
+                  echo "==> Envoi vers ${OFFSITE_PROVIDER} (${REMOTE})"
+                  rclone copy /backups "$REMOTE" \
+                    --config /config/rclone/rclone.conf \
+                    --checksum -v $DRY_RUN_FLAG
+
+                  echo "==> Purge des fichiers ${OFFSITE_PROVIDER} de plus de 90 jours"
+                  rclone delete "$REMOTE" \
+                    --config /config/rclone/rclone.conf \
+                    --min-age 90d -v $DRY_RUN_FLAG
+
+                  echo "==> Inventaire ${OFFSITE_PROVIDER} :"
+                  rclone lsl "$REMOTE" --config /config/rclone/rclone.conf
+                  # <<< OFFSITE_SCRIPT_END
+
                   # Heartbeat for the super-admin health page (#383); a failure to report must not fail the job.
+                  # A dry run copies nothing, so it must not report a successful off-site copy.
+                  [ "${DRY_RUN:-false}" = "true" ] && exit 0
                   wget -q -O - --post-data='{"job":"backup-offsite","ok":true}' \
                     --header="Authorization: Bearer ${CRON_SECRET}" --header="Content-Type: application/json" \
                     "${APP_URL}/api/cron/heartbeat" || echo "heartbeat non envoyé"
