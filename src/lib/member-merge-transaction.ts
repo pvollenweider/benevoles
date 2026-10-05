@@ -171,7 +171,23 @@ export async function runMemberMerge(
     // through the absorbed record's wrong-address link may belong to someone else.
     if (plan.pushSubscriptionIdsToDelete.length) await tx.pushSubscription.deleteMany({ where: { id: { in: plan.pushSubscriptionIdsToDelete } } })
 
-    // 4. Apply the resolved field values to the kept record.
+    // 4. Turn the absorbed record into an inactive tombstone: no personal data left, mapped to
+    // the kept record so old ids keep resolving (event-log-read.ts, member-activity-data.ts).
+    // Done BEFORE the kept record takes its new values: when the organizer keeps the absorbed
+    // record's address, it must be released first, or the unique (organizationId, email) index
+    // refuses the kept record's update and the whole merge fails (seen in production).
+    await tx.volunteer.update({
+      where: { id: absorbId },
+      data: {
+        firstName: "", lastName: "", email: null, phone: null, notes: null, birthDate: null,
+        tags: [], availabilityPeriods: [], availabilityNote: null,
+        active: false,
+        mergedIntoId: keepId,
+        mergedAt: new Date(),
+      },
+    })
+
+    // 5. Apply the resolved field values to the kept record.
     await tx.volunteer.update({
       where: { id: keepId },
       data: {
@@ -187,7 +203,7 @@ export async function runMemberMerge(
       },
     })
 
-    // 5. Regenerate the tokens of every row just moved (#542 mechanism): a moved registration or
+    // 6. Regenerate the tokens of every row just moved (#542 mechanism): a moved registration or
     // invite link may have been delivered to whoever actually holds the absorbed record's wrong
     // address. Old links then hit the existing "lien plus valide" page.
     for (const id of plan.tokenRegeneration.registrationIds) {
@@ -197,24 +213,11 @@ export async function runMemberMerge(
       await tx.memberInvite.update({ where: { id }, data: linkToken.data(generateToken()) })
     }
 
-    // 6. Turn the absorbed record into an inactive tombstone: no personal data left, mapped to
-    // the kept record so old ids keep resolving (event-log-read.ts, member-activity-data.ts).
-    await tx.volunteer.update({
-      where: { id: absorbId },
-      data: {
-        firstName: "", lastName: "", email: null, phone: null, notes: null, birthDate: null,
-        tags: [], availabilityPeriods: [], availabilityNote: null,
-        active: false,
-        mergedIntoId: keepId,
-        mergedAt: new Date(),
-      },
-    })
-
     // 6b. Cancel pending outbox rows addressed to the absorbed record's (pre-merge) address —
     // owner decision, #600. NotificationOutbox has no FK to Volunteer (only the sealed payload
     // knows the recipient), so it can't be "reassigned" like the rest of the inventory; cancelling
     // is what stops an email still queued for the address the organizer just confirmed was wrong.
-    // Uses `loaded.absorb`, captured before the tombstone update above cleared its email.
+    // Uses `loaded.absorb`, captured before the tombstone update (step 4) cleared its email.
     const cancelledOutboxIds = await cancelOutboxForMergedMember(tx, organizationId, { volunteerId: absorbId, email: loaded.absorb.email })
 
     // 7. Invariant: no relation may remain on the absorbed record, except the DeliveryOutcome

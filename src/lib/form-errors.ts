@@ -80,3 +80,10 @@ export function partialOutcome(done: number, failed: number, noun = "inscription
   const n = (k: number) => `${k} ${noun}${k > 1 ? "s" : ""}`
   return `${n(done)} traitée${done > 1 ? "s" : ""}, ${n(failed)} en échec : rechargez la liste et réessayez sur celles qui restent.`
 }
+
+/** What a failed merge answer means for the organizer: refused, not applied, or unknown. */
+export function mergeFailureMessage(status: number, body: { error?: string; notApplied?: boolean } | null): string {
+  if (body?.notApplied) return body.error ?? "La fusion n'a pas pu être faite. Rien n'a été modifié."
+  if (!body) return "Fusion : erreur du serveur. Rechargez la fiche pour vérifier si la fusion a eu lieu avant de réessayer."
+  return describeBulkFailure({ status, body }, "Fusion").message
+}

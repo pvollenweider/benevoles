@@ -112,6 +112,18 @@ describe.skipIf(!url)("member merge transaction (#600)", () => {
     expect(cancelLog).toBeTruthy()
   })
 
+  it("keeps the absorbed record's address on the kept member (regression: unique email index refused the merge in production)", async () => {
+    const keep = await makeVolunteer("keep-wrong", `${tag}-typo@x.ch`)
+    const absorb = await makeVolunteer("absorb-right", `${tag}-right@x.ch`)
+
+    const db = getOrgClient(orgId)
+    await runMemberMerge(db, orgId, ADMIN_ACTOR, keep.id, absorb.id, { fields: { email: "absorb" } })
+
+    expect((await prisma.volunteer.findUniqueOrThrow({ where: { id: keep.id } })).email).toBe(`${tag}-right@x.ch`)
+    const tombstone = await prisma.volunteer.findUniqueOrThrow({ where: { id: absorb.id } })
+    expect(tombstone).toMatchObject({ email: null, mergedIntoId: keep.id })
+  })
+
   it("reassigns a DeliveryOutcome only when its addressHash matches the kept member's final address, leaving the rest on the tombstone", async () => {
     const keep = await makeVolunteer("keep2", `${tag}-keep2@x.ch`)
     const absorb = await makeVolunteer("absorb2", `${tag}-wrong2@x.ch`)
