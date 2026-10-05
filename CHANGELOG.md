@@ -39,6 +39,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Case de consentement de l'inscription, formulation exacte** (#706) : elle dit désormais « J'accepte que l'association qui organise cet événement utilise mes données pour gérer ses bénévoles, pour cet événement et les suivants. », au lieu de limiter l'usage à cet événement : les coordonnées rejoignent la liste des membres de l'organisation, qui peut les inviter ensuite. Un lien juste en dessous ouvre dans un nouvel onglet, sans perdre le formulaire, les droits et la durée de conservation de la politique de confidentialité. La case reste obligatoire, comme avant.
 - **Page personnelle et rappels plus lisibles** (#560) : les créneaux sont regroupés sous un titre « Tous mes créneaux » ; un numéro de téléphone est un lien à toucher pour appeler, aussi dans les rappels ; le lien « Voir sur la carte » montre une flèche (nouvel onglet) et nomme le lieu pour les lecteurs d'écran.
 - **Libellés des contacts** (#560) : le contact d'un créneau s'appelle désormais « Contact pour ce créneau » partout où les bénévoles le lisent (email de confirmation, rappels, page personnelle, planning individuel imprimé), et son nom est séparé du téléphone par une virgule ; « Écrire à l'organisation » ouvre un email dont l'objet est « Question sur mon inscription : {événement} ».
 - **Libellé « Publié, non répertorié »** : le formulaire d'un événement écrit désormais « Publié, non répertorié », comme le bandeau de sa page d'administration.

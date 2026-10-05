@@ -208,7 +208,7 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       await page.getByLabel("Email *", { exact: true }).fill(`e2e-fc-error-${Date.now()}@example.com`)
       await page.getByRole("button", { name: "convention des bénévoles" }).click()
       await page.getByRole("button", { name: "J'ai lu et j'accepte" }).click()
-      await page.getByLabel(/J.accepte que mes données/).check()
+      await page.getByLabel(/J.accepte que l.association/).check()
       const question = page.getByLabel(new RegExp(data.questionLabel))
       await question.fill(" ")
       await page.getByRole("button", { name: "Confirmer mon inscription" }).focus()
@@ -232,7 +232,7 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       await page.getByLabel(new RegExp(data.questionLabel)).fill("M")
       await page.getByRole("button", { name: "convention des bénévoles" }).click()
       await page.getByRole("button", { name: "J'ai lu et j'accepte" }).click()
-      await page.getByLabel(/J.accepte que mes données/).check()
+      await page.getByLabel(/J.accepte que l.association/).check()
       // Hold the request so the submit stays in its aria-disabled state, then answer 500.
       let posts = 0
       let release!: () => void

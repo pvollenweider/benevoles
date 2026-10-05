@@ -159,7 +159,8 @@ export default function PrivacyPage() {
         sécurité n&apos;est infaillible.
       </p>
 
-      <h2>6. Droits des personnes concernées</h2>
+      {/* Linked from the sign-up consent (#706): rights, then retention just below. */}
+      <h2 id="droits">6. Droits des personnes concernées</h2>
       <p>
         Conformément à la loi fédérale suisse sur la protection des données (nLPD) et, le cas
         échéant, au RGPD, vous disposez des droits suivants :

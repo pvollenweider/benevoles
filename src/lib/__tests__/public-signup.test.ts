@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest"
+import { readFileSync } from "node:fs"
+import { join } from "node:path"
 import {
+  CONSENT_PRIVACY_HREF,
   EMPTY_SIGNUP_FORM,
   conflictingShiftIds,
   hasAvailableShift,
@@ -76,7 +79,7 @@ describe("validateSignup", () => {
 
   it("checks charter, consent and required fields, in that order", () => {
     expect(validateSignup({ ...base, charterAccepted: false })).toContain("convention")
-    expect(validateSignup({ ...base, form: { ...ok, consent: false } })).toBe("Accepte l'utilisation de tes données pour cet événement.")
+    expect(validateSignup({ ...base, form: { ...ok, consent: false } })).toBe("Coche la case d'accord sur tes données pour t'inscrire.")
     expect(validateSignup({ ...base, form: { ...ok, email: "" } })).toContain("obligatoires")
   })
 
@@ -115,5 +118,20 @@ describe("toMyRegistrations / prefillContact", () => {
   it("form wins for an invite pre-fill: only empty fields are filled", () => {
     const form = { ...EMPTY_SIGNUP_FORM, firstName: "Typed" }
     expect(prefillContact(form, { firstName: "Member", lastName: "M", phone: null }, "form")).toMatchObject({ firstName: "Typed", lastName: "M", phone: "" })
+  })
+})
+
+describe("sign-up consent (#706)", () => {
+  const read = (p: string) => readFileSync(join(process.cwd(), p), "utf8")
+
+  it("says the organising association keeps using the data for later events", () => {
+    expect(read("src/app/[eventSlug]/EventPageClient.tsx")).toContain("J&apos;accepte que l&apos;association qui organise cet événement utilise mes données pour gérer ses bénévoles, pour cet événement et les suivants.")
+  })
+
+  it("links to a section that exists on the privacy policy", () => {
+    const [path, anchor] = CONSENT_PRIVACY_HREF.split("#")
+    expect(path).toBe("/legal/privacy")
+    expect(read("src/app/legal/privacy/page.tsx")).toContain(`id="${anchor}"`)
+    expect(read("src/app/[eventSlug]/EventPageClient.tsx")).toContain("href={CONSENT_PRIVACY_HREF}")
   })
 })

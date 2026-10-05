@@ -16,6 +16,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { formatDate } from "@/lib/utils"
 import {
+  CONSENT_PRIVACY_HREF,
   EMPTY_SIGNUP_FORM,
   conflictingShiftIds as computeConflictingShiftIds,
   hasAvailableShift as anyShiftAvailable,
@@ -962,9 +963,15 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                     className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
                   />
                   <span className="text-sm text-gray-600">
-                    J&apos;accepte que mes données soient utilisées pour la gestion des bénévoles de cet événement.
+                    J&apos;accepte que l&apos;association qui organise cet événement utilise mes données pour gérer ses bénévoles, pour cet événement et les suivants.
                   </span>
                 </label>
+                {/* Outside the label, so the checkbox name stays the sentence; a new tab, so the form is kept (#706). */}
+                <p className="pl-7 -mt-2 text-sm">
+                  <Link href={CONSENT_PRIVACY_HREF} target="_blank" className="text-blue-600 underline underline-offset-2 hover:text-blue-800 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                    Mes droits et combien de temps mes données sont gardées<span className="sr-only"> (ouvre dans un nouvel onglet)</span>
+                  </Link>
+                </p>
 
                 {error && (
                   <div id="signup-error" role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">

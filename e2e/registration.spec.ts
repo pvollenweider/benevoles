@@ -37,7 +37,11 @@ test("volunteer registers for a shift, gets confirmation, org admin gets notifie
 
   await page.getByRole("button", { name: "convention des bénévoles" }).click()
   await page.getByRole("button", { name: "J'ai lu et j'accepte" }).click()
-  await page.getByLabel(/J.accepte que mes données/).check()
+  await page.getByLabel(/J.accepte que l.association/).check()
+  // The consent says where retention and rights are explained, in a new tab so the form stays (#706).
+  const privacy = page.getByRole("link", { name: /Mes droits et combien de temps mes données sont gardées/ })
+  await expect(privacy).toHaveAttribute("href", "/legal/privacy#droits")
+  await expect(privacy).toHaveAttribute("target", "_blank")
 
   await page.getByRole("button", { name: "Confirmer mon inscription" }).click()
 

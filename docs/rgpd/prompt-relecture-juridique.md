@@ -128,7 +128,19 @@ dans [inventaire.md](inventaire.md) et [sous-traitants.md](sous-traitants.md). E
     l'organisation fait déjà (le contact est saisi par l'organisation, qui reste responsable du
     traitement) ? Faut-il un texte d'aide dans le formulaire, ou une mention dans l'accord de
     traitement ou la politique de confidentialité ?
-14. Y a-t-il un risque à traiter en priorité, avant tout le reste de cette liste ?
+14. **Information à la collecte, case de consentement de l'inscription (#706)** : le formulaire
+    public d'inscription demande de cocher « J'accepte que l'association qui organise cet
+    événement utilise mes données pour gérer ses bénévoles, pour cet événement et les suivants. »,
+    avec juste en dessous un lien vers les droits et la durée de conservation de la politique de
+    confidentialité (`/legal/privacy#droits`). Les coordonnées créent en effet une fiche membre de
+    l'organisation, réutilisée pour ses événements suivants, ses invitations, la recherche de
+    bénévoles pour un créneau à compléter et l'export des membres, et conservée tant que
+    l'organisation est active. Cette formulation et ce lien informent-ils suffisamment la personne
+    au moment de la collecte (art. 13 RGPD, art. 19 nLPD) ? Le mot « association » convient-il
+    quand l'organisation n'en est pas une ? Une case cochée est-elle la bonne forme, alors que la
+    base légale de ce traitement n'est peut-être pas le consentement mais l'intérêt légitime de
+    l'organisation ou l'exécution de l'engagement bénévole ?
+15. Y a-t-il un risque à traiter en priorité, avant tout le reste de cette liste ?
 
 Merci de répondre point par point, avec, pour chaque réponse, la référence précise au texte ou à la
 source officielle sur laquelle elle s'appuie.
