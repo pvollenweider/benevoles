@@ -17,7 +17,12 @@ export type OrgLogEntry = {
   createdAt: string
 }
 
-const ACTION_LABEL: Record<string, string> = {
+/**
+ * One French label per action written to OrgLog, read as "<actor> <label>". Every code logged
+ * anywhere must have one: src/lib/__tests__/log-action-labels.test.ts scans the source and fails
+ * on a missing label, so a new action never shows up as a raw code (#704).
+ */
+export const ACTION_LABEL: Record<string, string> = {
   "member.created": "a créé un membre",
   "member.imported": "a importé des membres",
   "template.created": "a créé un modèle de message",
@@ -34,6 +39,11 @@ const ACTION_LABEL: Record<string, string> = {
   "organization.logo_removed": "a retiré le logo de l'organisation",
   "adminuser.removed": "a retiré un admin",
   "adminuser.role_changed": "a changé le rôle d'un admin",
+  "member.merged": "a fusionné deux membres",
+  "member.deleted": "a supprimé un membre",
+  "member.duplicate_dismissed": "a ignoré un doublon possible",
+  "volunteer.certificate_generated": "a généré une attestation de bénévolat",
+  "organization.links_regenerated": "a régénéré les liens personnels de tous les membres",
 }
 
 const ENTITY_FILTERS = [
