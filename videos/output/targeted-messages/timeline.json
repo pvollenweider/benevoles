@@ -1,0 +1,68 @@
+{
+  "slug": "targeted-messages",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-05T18:35:24.315Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 235,
+      "endMs": 21970
+    },
+    {
+      "id": "audiences",
+      "startMs": 22424,
+      "endMs": 47843
+    },
+    {
+      "id": "count",
+      "startMs": 48298,
+      "endMs": 71025
+    },
+    {
+      "id": "template-create",
+      "startMs": 71477,
+      "endMs": 108647
+    },
+    {
+      "id": "variables",
+      "startMs": 109102,
+      "endMs": 135101
+    },
+    {
+      "id": "apply",
+      "startMs": 135553,
+      "endMs": 157378
+    },
+    {
+      "id": "context",
+      "startMs": 157831,
+      "endMs": 179808
+    },
+    {
+      "id": "preview",
+      "startMs": 180261,
+      "endMs": 200934
+    },
+    {
+      "id": "push",
+      "startMs": 201390,
+      "endMs": 224175
+    },
+    {
+      "id": "confirm",
+      "startMs": 224628,
+      "endMs": 248722
+    },
+    {
+      "id": "result",
+      "startMs": 249175,
+      "endMs": 273407
+    },
+    {
+      "id": "maintain",
+      "startMs": 273862,
+      "endMs": 301488
+    }
+  ]
+}

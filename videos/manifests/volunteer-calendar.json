@@ -30,12 +30,12 @@
     },
     {
       "id": "import",
-      "transcript": "Ouvre le fichier téléchargé dans ton application de calendrier et choisis le calendrier où tu veux l'ajouter. Selon l'application, il peut s'agir d'une fenêtre d'import ou d'une proposition d'ajout. Sur Google Agenda depuis un ordinateur, l'import se trouve dans les paramètres. Avant de confirmer, vérifie le calendrier choisi et les horaires présentés.",
+      "transcript": "Le fichier est prêt à être ouvert dans ton application de calendrier. L'import n'est pas réalisé dans cette démonstration : il dépend de ton application. Selon celle-ci, tu verras une fenêtre d'import ou une proposition d'ajout. Sur Google Agenda depuis un ordinateur, l'import se trouve dans les paramètres. Vérifie le calendrier choisi et les horaires avant de confirmer.",
       "fallbackDurationMs": 30000
     },
     {
       "id": "details",
-      "transcript": "Dans l'événement importé, tu retrouves le nom de la fête et le poste. Le lieu et les consignes pratiques accompagnent le créneau, avec le contact lorsqu'il est renseigné. Un lien permet de revenir à tes inscriptions. Comme le fichier contient ce lien personnel, garde-le pour toi : ce n'est pas un planning collectif à publier ou à distribuer.",
+      "transcript": "Le fichier contient le nom de la fête et le poste, ainsi que les informations pratiques que nous voyons ici dans Benevol : le lieu, les consignes et le contact lorsqu'il est renseigné. Un lien permet de revenir à tes inscriptions. Garde ce fichier pour toi : il contient ton lien personnel, ce n'est pas un planning collectif à publier.",
       "fallbackDurationMs": 30000
     },
     {
@@ -50,7 +50,7 @@
     },
     {
       "id": "reimport",
-      "transcript": "Télécharge à nouveau le planning, puis importe cette nouvelle version. L'identifiant du créneau reste le même, ce qui permet à la plupart des calendriers de remplacer l'événement plutôt que de le dupliquer. Le résultat dépend de ton application et de la méthode d'import : vérifie l'horaire et l'absence de doublon avant de te fier à ton agenda.",
+      "transcript": "Télécharge à nouveau le planning pour récupérer l'horaire actuel. Le fichier conserve le même identifiant pour chaque inscription. Lorsque tu l'importes dans ton agenda, le remplacement ou l'ajout dépend de ton application et de la méthode utilisée. Cette étape n'est pas filmée ici : vérifie le nouvel horaire et l'absence de doublon dans ton agenda avant de t'y fier.",
       "fallbackDurationMs": 30000
     },
     {

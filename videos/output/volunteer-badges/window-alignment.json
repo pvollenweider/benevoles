@@ -1,0 +1,41 @@
+{
+  "locatedAt": "2026-10-05T18:33:15.574Z",
+  "masterSha256": "5e1b093cbc3bbcd73ee044c1b0980129922a1801e6f50ef750ff9b4c676d3466",
+  "totalSeconds": 210.24,
+  "cuts": [
+    {
+      "id": "all",
+      "seconds": 20.8152915
+    },
+    {
+      "id": "role",
+      "seconds": 45.2096875
+    },
+    {
+      "id": "individual",
+      "seconds": 67.2963545
+    },
+    {
+      "id": "empty",
+      "seconds": 91.25354200000001
+    },
+    {
+      "id": "colors",
+      "seconds": 111.16779199999999
+    },
+    {
+      "id": "fields",
+      "seconds": 131.903729
+    },
+    {
+      "id": "print",
+      "seconds": 154.72645799999998
+    },
+    {
+      "id": "result",
+      "seconds": 186.77016700000001
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

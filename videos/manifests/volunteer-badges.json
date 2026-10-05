@@ -1,0 +1,90 @@
+{
+  "id": "VOLUNTEER_BADGES",
+  "slug": "volunteer-badges",
+  "title": "Des badges lisibles pour accueillir son équipe",
+  "description": "Générer une série de badges, filtrer un poste et réimprimer une personne, puis vérifier les feuilles avant découpe.",
+  "language": "fr-CH",
+  "voice": "Puck",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "French, warm and friendly with an audible smile. Patient conversational delivery, clear articulation and natural pauses. Keep one consistent voice throughout.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "chapterTitles": {
+    "all": "Une série pour les inscrits",
+    "role": "Les badges d'un poste",
+    "individual": "Réimprimer la bonne personne",
+    "empty": "Corriger une sélection vide",
+    "colors": "Choisir le bandeau",
+    "fields": "Alléger le badge",
+    "print": "Vérifier les feuilles",
+    "result": "Un badge n'est pas un droit d'accès"
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Un prénom visible et le bon poste : un badge peut suffire à rendre l'accueil plus chaleureux et plus simple. Depuis Rapports, ouvrons les options des badges. Nous allons préparer une série, réimprimer une seule personne et vérifier les feuilles avant de les découper. Ce badge identifie un membre de l'équipe ; il n'est ni un contrôle d'accès, ni une preuve de présence.",
+      "fallbackDurationMs": 33000
+    },
+    {
+      "id": "all",
+      "transcript": "Gardons Tous les postes et Tous les bénévoles, puis ouvrons les badges. La série comporte un badge par personne confirmée, pas un badge par inscription. Léa est sur plusieurs horaires : elle n'a qu'un badge. Regardons la première feuille puis la suivante. Le format prévoit dix badges par page A4, en deux colonnes et cinq rangées. Les personnes seulement en demande ou en attente ne sont pas présentées comme des bénévoles confirmés.",
+      "fallbackDurationMs": 42000
+    },
+    {
+      "id": "role",
+      "transcript": "Pour préparer seulement la buvette, revenons au formulaire et choisissons ce poste. Les personnes retenues ont une inscription confirmée à la buvette. Comparons le badge de Léa avec sa version complète : ses autres postes ne figurent plus dans cette version filtrée. Le filtre change le contenu généré, pas ses inscriptions. Si tu veux son badge pour toute la fête, reviens à Tous les postes avant de le refaire.",
+      "fallbackDurationMs": 40000
+    },
+    {
+      "id": "individual",
+      "transcript": "Un badge perdu ? Choisis une personne dans Bénévole, réimpression. Nous avons deux Camille Berger : l'adresse affichée dans la sélection permet de les distinguer. Elle n'est pas imprimée sur le badge. Attention au filtre de poste encore actif : une réimpression individuelle garde cette restriction. Sélectionnons la bonne Camille, puis générons sa feuille. Vérifier l'identité avant de cliquer évite de remettre le planning de l'autre personne.",
+      "fallbackDurationMs": 43000
+    },
+    {
+      "id": "empty",
+      "transcript": "Si tu combines un poste et une personne qui n'y est pas inscrite, la sélection ne donne aucun badge. Voici le vrai message de l'application. Ce n'est pas un problème d'imprimante à contourner. Revenons aux filtres et choisissons Tous les postes, puis ouvrons à nouveau le document. Le résultat doit correspondre à la personne choisie et à ses confirmations, pas simplement à un nom ressemblant.",
+      "fallbackDurationMs": 38000
+    },
+    {
+      "id": "colors",
+      "transcript": "Le bandeau peut prendre la couleur du poste, celle de l'événement ou rester noir et blanc. Générons les trois versions pour les comparer. Avec plusieurs postes, le bandeau ne devient pas multicolore : une couleur de poste est retenue, avec la couleur d'événement comme solution de repli. Pour une impression simple, le noir et blanc est pratique. Dans tous les cas, le prénom et le poste doivent rester faciles à lire.",
+      "fallbackDurationMs": 43000
+    },
+    {
+      "id": "fields",
+      "transcript": "Tu peux alléger le badge en retirant le nom de famille ou les créneaux. Décochons les deux cases, générons et regardons ce qui disparaît : le prénom reste. Remettons-les ensuite. Léa a cinq créneaux : le badge montre au plus quatre lignes puis indique les autres créneaux. Il ne remplace donc pas son planning individuel. Pour le détail de tous ses horaires et de ses consignes, utilise le planning plutôt que d'essayer de tout faire tenir ici.",
+      "fallbackDurationMs": 44000
+    },
+    {
+      "id": "print",
+      "transcript": "Avant d'imprimer en quantité, regarde la première feuille et la dernière. Voici le document imprimable : deux colonnes, cinq rangées et les repères de découpe. Vérifions aussi Jean-Baptiste et Marie-Charlotte, dont les noms sont plus longs. La boîte d'impression du navigateur n'est pas filmée ici. Quand tu l'ouvres, choisis un format A4 et vérifie l'échelle ; tu peux aussi enregistrer en PDF. Regardons le vrai PDF obtenu, avec sa première puis sa dernière page. Cet aperçu sert à contrôler le fichier, ce n'est pas une boîte d'impression simulée. Une première feuille d'essai coûte moins cher qu'une série à refaire.",
+      "fallbackDurationMs": 57000
+    },
+    {
+      "id": "result",
+      "transcript": "Le badge choisi est prêt pour l'accueil. Il n'a ni photo, ni QR code personnel, ni lien qui ouvre les données du bénévole. Quelqu'un peut perdre ou faire photographier son badge : ne le traite pas comme une autorisation d'accès automatique. Son rôle est plus simple : reconnaître la personne, retrouver son équipe et l'accueillir avec le sourire. Pour les décisions d'accès ou les présences, l'organisateur garde la main.",
+      "fallbackDurationMs": 37000
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, vous générez depuis Rapports une série de badges pour l'équipe, filtrez un poste, réimprimez le badge d'une personne et contrôlez les feuilles avant de les découper.",
+    "steps": [
+      "Dans Rapports, ouvrez les options des badges et générez la série pour tous les postes et tous les bénévoles.",
+      "Choisissez un poste pour ne préparer que les badges de cette équipe.",
+      "Pour un badge perdu, choisissez la personne à réimprimer, en vous aidant de l'adresse affichée pour distinguer les homonymes.",
+      "Choisissez la couleur du bandeau : celle du poste, celle de l'événement, ou noir et blanc.",
+      "Retirez si besoin le nom de famille ou les créneaux du badge.",
+      "Contrôlez la première et la dernière feuille, puis imprimez en A4 ou enregistrez en PDF."
+    ],
+    "remember": [
+      "Un badge par personne confirmée, pas par inscription : les demandes et les attentes n'en ont pas.",
+      "Le filtre de poste reste actif pour une réimpression individuelle : revenez à « Tous les postes » si nécessaire.",
+      "Le badge affiche au plus quatre créneaux et ne remplace pas le planning individuel.",
+      "Sans photo ni QR code, le badge n'est pas une autorisation d'accès."
+    ]
+  }
+}

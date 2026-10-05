@@ -62,6 +62,31 @@ Après la capture, `make video-down` supprime cette base et cette boîte email j
 
 ## 1. Relire le transcript sans appeler Gemini
 
+Contrôler explicitement les outils vidéo et leurs imports, même si le contrôle de types de
+l'application ne les inclut pas :
+
+```bash
+node --import tsx videos/tools/check-types.ts
+```
+
+Le build exécute ce contrôle avant tout appel de génération.
+
+### Répéter le parcours sans narration
+
+Après préparation du seed approprié, une répétition permet de vérifier les manipulations
+locales sans appeler Gemini :
+
+```bash
+npm run video:record -- TARGETED_MESSAGES --rehearse
+```
+
+Cette prise utilise les durées provisoires du manifeste. Elle produit un fichier de travail
+`capture.webm` et un timeline marqué `capturePurpose: rehearsal`, pas une vidéo synchronisée.
+L'assembleur refuse cette prise : il faut refaire une capture avec les durées de la narration
+vérifiée avant de monter le MP4. Les clics et emails du parcours sont réels dans la pile vidéo
+isolée ; remettre les données à zéro avant la prise finale. Ne pas utiliser la répétition pour
+écraser une capture finale déjà validée.
+
 ```bash
 npm run video:tts -- VOLUNTEER_REGISTER --dry-run
 ```
@@ -94,6 +119,10 @@ une seule prise, avec la voix choisie dans le manifeste. Les consignes de livrai
 rester courtes (sourire, rythme, articulation), sans longues instructions d'identité vocale.
 Le repérage des pauses ne fournit qu'un premier découpage : il peut déplacer des phrases entre
 chapitres. La durée de chaque extrait est mesurée par FFprobe dans `audio-metadata.json`.
+Si une prise prononce une consigne de pause, `continuousPauseTags: false` dans son manifeste
+retire les balises et conserve une seule prise avec des paragraphes naturels. Il faut ensuite
+recaler les frontières et refaire le contrôle indépendant ; un faible taux d'erreur n'autorise
+pas à garder des mots ajoutés ou une première phrase déplacée dans le chapitre précédent.
 
 ### Contrôler les paroles avant la capture
 
@@ -104,6 +133,10 @@ node --env-file=.env.video.local --import tsx videos/tools/audit-narration.ts SE
 Ce contrôle envoie uniquement les extraits de narration fictive à Gemini pour une transcription
 indépendante, sans fournir le texte attendu dans la demande. `narration-audit.json` garde la
 comparaison et l'empreinte de chaque WAV. Une différence importante arrête le pipeline.
+Un rapport indépendant déjà réussi est réutilisé seulement si le modèle, le texte attendu
+et l'empreinte SHA-256 du WAV sont inchangés ; son score est recalculé. La date de reconnaissance
+est conservée et la date de revalidation est distincte. `--force` demande une nouvelle
+reconnaissance. Cela évite de facturer à nouveau les mêmes extraits lors d'une reprise de capture.
 Le contrôle ne prouve pas la qualité du sourire ni la concordance phrase/manipulation : la
 passe audiovisuelle reste obligatoire, y compris lorsque le taux de différence est faible.
 
@@ -115,6 +148,11 @@ Si des paroles manquent réellement à la prise, régénérer la narration compl
 
 `video:build` contrôle les paroles après le TTS et avant le seed/capture. `video:validate`
 refuse un rapport en échec ou dont les empreintes ne correspondent plus aux WAV actuels.
+
+Si Gemini refuse un appel faute de crédits, conserver les sources et les narrations existantes.
+Ne jamais marquer un nouvel audio comme contrôlé sans reconnaissance indépendante. Les captures
+et montages utilisant une narration déjà vérifiée peuvent continuer ; aucun achat ni changement
+de facturation n'est effectué par ces scripts.
 
 ## 3. Enregistrer les manipulations
 
@@ -134,6 +172,54 @@ Variables facultatives :
 - `VIDEO_EVENT_SLUG`, par défaut `fete-du-village`.
 
 Le scénario utilise les durées réelles des WAV lorsqu’elles existent, sinon les estimations du manifeste. Playwright produit `capture.webm` et `timeline.json`. Le pointeur, les clics et le titre de chapitre font partie du screencast.
+
+Pour extraire quatre images réelles du MP4 par chapitre, dont le début de l'intertitre :
+
+```bash
+node --import tsx videos/tools/review-frames.ts MEMBERS_INVITATIONS
+```
+
+Le dossier `review-frames/` contient les images, leur index temporel et une planche de contrôle.
+Cette planche aide à repérer un écran erroné ou vide ; elle ne remplace pas le visionnage intégral
+avec la narration, ni un contrôle de la voix.
+
+### Contrôle audiovisuel assisté sur les données fictives
+
+```bash
+node --env-file=.env.video.e2e --env-file=.env.video.local --import tsx videos/tools/audit-audiovisual.ts EVENT_REPORTS
+```
+
+Cet outil examine des extraits du MP4 final avec leur son : phrases entendues, actions et
+résultats visibles, horaires relatifs et défauts de synchronisation. Les rapports gardent
+l'empreinte du MP4 et du prompt ; une capture remplacée exige une nouvelle revue. Le contrôle
+est une aide automatisée, pas une validation humaine, et ses observations doivent être
+confrontées aux images et au parcours réel. Un résultat signalé ne doit pas être ignoré au
+motif que `video:validate` passe.
+
+L'envoi visuel est pour l'instant limité à `EVENT_REPORTS`, `VOLUNTEER_BADGES`,
+`ATTENDANCE_CHECK_IN` et `REMINDERS_CHANGES`, dans la base locale `benevoles_video`.
+Un garde-fou vérifie le jeu explicitement fictif (dont les trois événements des rappels) et les identifiants,
+adresses `example.org` et téléphones de démonstration (ou leur absence pour le pointage) de chaque inscription. Aucune autre
+vidéo, capture de production ou donnée réelle n'est acceptée. L'API utilisée pour ces extraits
+est distincte de celle du TTS ; le modèle de narration reste `gemini-3.8-flash-tts`.
+
+Le contrôle de narration signale aussi les consignes de pause ajoutées à tort, même si
+leur petit nombre laisse passer le seuil global d'erreur de mots. Le validateur recalcule
+ce garde-fou sur les transcriptions enregistrées. Une transcription qui répète un
+paragraphe doit être contre-vérifiée sur le son avant de conclure à une répétition du TTS.
+
+Pour vérifier les paroles réellement présentes après montage (découpe, mixage et fin de
+fichier compris), utiliser également l'audio extrait du MP4 final :
+
+```bash
+node --env-file=.env.video.local --import tsx videos/tools/audit-narration.ts TARGETED_MESSAGES --from-video
+node --env-file=.env.video.local --import tsx videos/tools/audit-narration.ts VOLUNTEER_BADGES result --from-video
+```
+
+Ce mode écrit `narration-audit-video*.json` séparément des contrôles des WAV source,
+conserve l'empreinte du MP4 et refuse un film modifié pendant le contrôle. Il ne prouve
+pas la qualité du timbre, une syllabe bien articulée ou la synchronisation des clics :
+ces points restent dans la revue audiovisuelle. Ne jamais l'exécuter pendant le montage.
 
 ## 4. Assembler le MP4 et les sous-titres
 
@@ -226,7 +312,7 @@ et `seedScenario` (#637, #638) :
 - `updatedAt` (`AAAA-MM-JJ`) et `revision` (entier ≥ 1) : préparés pour le retour « utile ? »
   lié à une révision précise (#646, PREPARE seulement — aucune UI).
 
-`published` reste `false` sur les 28 vidéos aujourd'hui ; la galerie les affiche quand même, avec
+`published` reste `false` sur les 49 vidéos aujourd'hui ; la galerie les affiche quand même, avec
 leur état (« À venir »). `filterPublishedVideos(videos, VIDEO_LIBRARY_PUBLIC_ONLY)` filtre déjà sur
 `published` : passer la constante `VIDEO_LIBRARY_PUBLIC_ONLY` (dans `video-catalog.ts`) à `true`
 est le seul changement nécessaire pour ne montrer que les vidéos publiées, le jour venu.

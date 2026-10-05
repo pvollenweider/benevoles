@@ -1,0 +1,72 @@
+{
+  "id": "MEMBERS_INVITATIONS",
+  "slug": "members-invitations",
+  "validatedAt": "2026-10-05T14:34:38.009Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 224440,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 23921,
+      "audioMs": 23918,
+      "driftMs": 3
+    },
+    {
+      "id": "test",
+      "visualMs": 19598,
+      "audioMs": 19599,
+      "driftMs": -1
+    },
+    {
+      "id": "individual",
+      "visualMs": 23465,
+      "audioMs": 23463,
+      "driftMs": 2
+    },
+    {
+      "id": "group",
+      "visualMs": 23462,
+      "audioMs": 23461,
+      "driftMs": 1
+    },
+    {
+      "id": "send",
+      "visualMs": 21652,
+      "audioMs": 21640,
+      "driftMs": 12
+    },
+    {
+      "id": "personal-link",
+      "visualMs": 20919,
+      "audioMs": 20912,
+      "driftMs": 7
+    },
+    {
+      "id": "reserved",
+      "visualMs": 23256,
+      "audioMs": 23255,
+      "driftMs": 1
+    },
+    {
+      "id": "status",
+      "visualMs": 19373,
+      "audioMs": 19372,
+      "driftMs": 1
+    },
+    {
+      "id": "existing",
+      "visualMs": 21018,
+      "audioMs": 21019,
+      "driftMs": -1
+    },
+    {
+      "id": "no-email",
+      "visualMs": 22202,
+      "audioMs": 22201,
+      "driftMs": 1
+    }
+  ],
+  "issues": []
+}

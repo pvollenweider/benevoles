@@ -1,0 +1,57 @@
+{
+  "slug": "members-management",
+  "recordedAt": "2026-10-05T13:06:37.177Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 21039
+    },
+    {
+      "id": "create",
+      "startMs": 21491,
+      "endMs": 43203
+    },
+    {
+      "id": "edit",
+      "startMs": 43655,
+      "endMs": 64973
+    },
+    {
+      "id": "availability",
+      "startMs": 65425,
+      "endMs": 87118
+    },
+    {
+      "id": "no-email",
+      "startMs": 87570,
+      "endMs": 105229
+    },
+    {
+      "id": "search",
+      "startMs": 105680,
+      "endMs": 127981
+    },
+    {
+      "id": "filter",
+      "startMs": 128434,
+      "endMs": 150494
+    },
+    {
+      "id": "deactivate",
+      "startMs": 150947,
+      "endMs": 173302
+    },
+    {
+      "id": "activity",
+      "startMs": 173755,
+      "endMs": 194603
+    },
+    {
+      "id": "result",
+      "startMs": 195056,
+      "endMs": 217811
+    }
+  ]
+}

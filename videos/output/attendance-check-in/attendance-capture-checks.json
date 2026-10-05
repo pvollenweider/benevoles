@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-05T18:03:40.213Z",
+  "audiovisualValidation": false,
+  "activeRows": 5,
+  "people": 4,
+  "presentRows": 3,
+  "absentRows": 2,
+  "cancellation": {
+    "registrationId": "cmuvk1gkc0008c0a5ldwrpxpt",
+    "retainedCheckIn": "2026-10-05T18:02:46.186Z",
+    "excludedFromActiveExport": true
+  },
+  "noWorkedHoursCalculated": true
+}

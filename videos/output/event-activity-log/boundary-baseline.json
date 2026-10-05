@@ -1,0 +1,12 @@
+{
+  "anchor": "Un ancien événement peut avoir des créneaux et des inscriptions sans",
+  "windowStart": 140.911,
+  "result": {
+    "found": true,
+    "startSeconds": 15.02,
+    "wordsHeard": "Un ancien événement peut avoir des créneaux et des inscriptions sans"
+  },
+  "onset": 155.931,
+  "proposedCut": 155.911229,
+  "note": "Proposal only; recut then independently audit before capture"
+}

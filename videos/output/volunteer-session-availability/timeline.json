@@ -1,0 +1,47 @@
+{
+  "slug": "volunteer-session-availability",
+  "recordedAt": "2026-10-05T11:32:57.594Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 20353
+    },
+    {
+      "id": "session",
+      "startMs": 20805,
+      "endMs": 43437
+    },
+    {
+      "id": "resend",
+      "startMs": 43889,
+      "endMs": 64883
+    },
+    {
+      "id": "recover",
+      "startMs": 65333,
+      "endMs": 84805
+    },
+    {
+      "id": "limit",
+      "startMs": 85256,
+      "endMs": 105247
+    },
+    {
+      "id": "availability",
+      "startMs": 105701,
+      "endMs": 132692
+    },
+    {
+      "id": "organizer",
+      "startMs": 133144,
+      "endMs": 155656
+    },
+    {
+      "id": "result",
+      "startMs": 156122,
+      "endMs": 177667
+    }
+  ]
+}

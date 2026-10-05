@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-05T19:02:20.867Z",
+  "initialEntries": 50,
+  "actualFiltersVerified": true,
+  "pagination": {
+    "countBefore": 50,
+    "countAfter": 64,
+    "emptyPeriodVerified": true
+  },
+  "replayReadOnlyVerified": true,
+  "causalChainEntries": 2,
+  "baseline": {
+    "entries": 3,
+    "actualCreationDatesVerified": true,
+    "secondRequestCreated": 0
+  },
+  "pageContentNotCopied": true
+}

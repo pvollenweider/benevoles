@@ -30,8 +30,8 @@ async function main() {
     ] }], generationConfig: { responseMimeType: "application/json" } }),
   })
   if (!response.ok) throw new Error(`Alignment HTTP ${response.status}`)
-  const body = await response.json() as { candidates?: { content?: { parts?: { text?: string }[] } }[] }
-  const text = body.candidates?.[0]?.content?.parts?.map(p => p.text ?? "").join("")
+  const body = await response.json() as { candidates?: { content?: { parts?: { text?: string; thought?: boolean }[] } }[] }
+  const text = body.candidates?.[0]?.content?.parts?.filter(p => !p.thought).map(p => p.text ?? "").join("")
   if (!text) throw new Error("No alignment returned")
   const alignment = JSON.parse(text) as { segments: { id: string; startSeconds: number | null; firstWordsHeard: string }[] }
   await writeFile(path.join(dir, "narration-alignment.json"), JSON.stringify({ model, masterSha256: createHash("sha256").update(bytes).digest("hex"), ...alignment }, null, 2))

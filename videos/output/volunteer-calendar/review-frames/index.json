@@ -1,0 +1,169 @@
+{
+  "video": "volunteer-calendar",
+  "extractedAt": "2026-10-05T14:26:46.199Z",
+  "note": "Three actual MP4 frames per scene, not a full audiovisual verification",
+  "frames": [
+    {
+      "scene": "welcome",
+      "fraction": 0.25,
+      "seconds": 4.85775,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/welcome-25.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.6,
+      "seconds": 11.6558,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/welcome-60.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.85,
+      "seconds": 16.51155,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/welcome-85.png"
+    },
+    {
+      "scene": "one",
+      "fraction": 0.25,
+      "seconds": 24.30025,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/one-25.png"
+    },
+    {
+      "scene": "one",
+      "fraction": 0.6,
+      "seconds": 30.491400000000002,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/one-60.png"
+    },
+    {
+      "scene": "one",
+      "fraction": 0.85,
+      "seconds": 34.913650000000004,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/one-85.png"
+    },
+    {
+      "scene": "all",
+      "fraction": 0.25,
+      "seconds": 42.75375,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/all-25.png"
+    },
+    {
+      "scene": "all",
+      "fraction": 0.6,
+      "seconds": 49.381,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/all-60.png"
+    },
+    {
+      "scene": "all",
+      "fraction": 0.85,
+      "seconds": 54.11475,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/all-85.png"
+    },
+    {
+      "scene": "import",
+      "fraction": 0.25,
+      "seconds": 62.179,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/import-25.png"
+    },
+    {
+      "scene": "import",
+      "fraction": 0.6,
+      "seconds": 68.85839999999999,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/import-60.png"
+    },
+    {
+      "scene": "import",
+      "fraction": 0.85,
+      "seconds": 73.62939999999999,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/import-85.png"
+    },
+    {
+      "scene": "details",
+      "fraction": 0.25,
+      "seconds": 81.2985,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/details-25.png"
+    },
+    {
+      "scene": "details",
+      "fraction": 0.6,
+      "seconds": 87.3934,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/details-60.png"
+    },
+    {
+      "scene": "details",
+      "fraction": 0.85,
+      "seconds": 91.7469,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/details-85.png"
+    },
+    {
+      "scene": "night",
+      "fraction": 0.25,
+      "seconds": 99.2965,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/night-25.png"
+    },
+    {
+      "scene": "night",
+      "fraction": 0.6,
+      "seconds": 105.5692,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/night-60.png"
+    },
+    {
+      "scene": "night",
+      "fraction": 0.85,
+      "seconds": 110.0497,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/night-85.png"
+    },
+    {
+      "scene": "change",
+      "fraction": 0.25,
+      "seconds": 118.319,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/change-25.png"
+    },
+    {
+      "scene": "change",
+      "fraction": 0.6,
+      "seconds": 125.49260000000001,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/change-60.png"
+    },
+    {
+      "scene": "change",
+      "fraction": 0.85,
+      "seconds": 130.6166,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/change-85.png"
+    },
+    {
+      "scene": "reimport",
+      "fraction": 0.25,
+      "seconds": 138.827,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/reimport-25.png"
+    },
+    {
+      "scene": "reimport",
+      "fraction": 0.6,
+      "seconds": 145.38320000000002,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/reimport-60.png"
+    },
+    {
+      "scene": "reimport",
+      "fraction": 0.85,
+      "seconds": 150.0662,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/reimport-85.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.25,
+      "seconds": 158.052,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/result-25.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.6,
+      "seconds": 164.66420000000002,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/result-60.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.85,
+      "seconds": 169.3872,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-calendar/review-frames/result-85.png"
+    }
+  ]
+}

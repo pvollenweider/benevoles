@@ -1,0 +1,58 @@
+{
+  "slug": "event-reports",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-05T18:04:50.383Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1286,
+      "endMs": 22342
+    },
+    {
+      "id": "complete",
+      "startMs": 22797,
+      "endMs": 50294
+    },
+    {
+      "id": "day",
+      "startMs": 50747,
+      "endMs": 77097
+    },
+    {
+      "id": "role",
+      "startMs": 77550,
+      "endMs": 102461
+    },
+    {
+      "id": "individual",
+      "startMs": 106322,
+      "endMs": 134630
+    },
+    {
+      "id": "attendance",
+      "startMs": 138466,
+      "endMs": 165730
+    },
+    {
+      "id": "contacts",
+      "startMs": 166182,
+      "endMs": 192884
+    },
+    {
+      "id": "answers",
+      "startMs": 193336,
+      "endMs": 227201
+    },
+    {
+      "id": "print",
+      "startMs": 227652,
+      "endMs": 256949
+    },
+    {
+      "id": "result",
+      "startMs": 258617,
+      "endMs": 285991
+    }
+  ]
+}

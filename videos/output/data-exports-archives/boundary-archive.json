@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour un événement complet, passons par Rapports, puis Archive de l'événement,",
+  "windowStart": 135.178,
+  "result": {
+    "found": true,
+    "startSeconds": 20.8,
+    "wordsHeard": "Pour un événement complet, passons par Rapports, puis Archive de l'événement"
+  },
+  "onset": 155.978,
+  "proposedCut": 156.23789549999998,
+  "note": "Proposal only; recut then independently audit before capture"
+}

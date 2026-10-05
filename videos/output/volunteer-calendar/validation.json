@@ -1,0 +1,66 @@
+{
+  "id": "VOLUNTEER_CALENDAR",
+  "slug": "volunteer-calendar",
+  "validatedAt": "2026-10-05T13:14:43.472Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 172680,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 19423,
+      "audioMs": 19421,
+      "driftMs": 2
+    },
+    {
+      "id": "one",
+      "visualMs": 17689,
+      "audioMs": 17686,
+      "driftMs": 3
+    },
+    {
+      "id": "all",
+      "visualMs": 18935,
+      "audioMs": 18934,
+      "driftMs": 1
+    },
+    {
+      "id": "import",
+      "visualMs": 19084,
+      "audioMs": 19082,
+      "driftMs": 2
+    },
+    {
+      "id": "details",
+      "visualMs": 17414,
+      "audioMs": 17403,
+      "driftMs": 11
+    },
+    {
+      "id": "night",
+      "visualMs": 17922,
+      "audioMs": 17920,
+      "driftMs": 2
+    },
+    {
+      "id": "change",
+      "visualMs": 20496,
+      "audioMs": 20494,
+      "driftMs": 2
+    },
+    {
+      "id": "reimport",
+      "visualMs": 18732,
+      "audioMs": 18731,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 18892,
+      "audioMs": 18889,
+      "driftMs": 3
+    }
+  ],
+  "issues": []
+}

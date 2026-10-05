@@ -1,0 +1,12 @@
+{
+  "anchor": "Avec plusieurs créneaux confirmés, le bouton Ajouter tout mon planning à",
+  "windowStart": 15.415999999999997,
+  "result": {
+    "found": true,
+    "startSeconds": 21.8,
+    "wordsHeard": "Avec plusieurs créneaux confirmés, le bouton Ajouter tout mon planning à"
+  },
+  "onset": 37.215999999999994,
+  "proposedCut": 37.107187499999995,
+  "note": "Proposal only; recut then independently audit before capture"
+}

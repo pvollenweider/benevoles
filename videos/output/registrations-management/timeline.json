@@ -1,0 +1,77 @@
+{
+  "slug": "registrations-management",
+  "recordedAt": "2026-10-05T14:27:16.992Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 153,
+      "endMs": 22078
+    },
+    {
+      "id": "columns",
+      "startMs": 22530,
+      "endMs": 46209
+    },
+    {
+      "id": "filters",
+      "startMs": 46661,
+      "endMs": 67657
+    },
+    {
+      "id": "requests",
+      "startMs": 68108,
+      "endMs": 89259
+    },
+    {
+      "id": "manual-identity",
+      "startMs": 89710,
+      "endMs": 111426
+    },
+    {
+      "id": "manual-check",
+      "startMs": 111878,
+      "endMs": 135687
+    },
+    {
+      "id": "manual-result",
+      "startMs": 136138,
+      "endMs": 156821
+    },
+    {
+      "id": "selection",
+      "startMs": 157274,
+      "endMs": 179258
+    },
+    {
+      "id": "resend",
+      "startMs": 179709,
+      "endMs": 199687
+    },
+    {
+      "id": "leader",
+      "startMs": 200138,
+      "endMs": 222553
+    },
+    {
+      "id": "undo",
+      "startMs": 223004,
+      "endMs": 249544
+    },
+    {
+      "id": "remove",
+      "startMs": 250000,
+      "endMs": 276465
+    },
+    {
+      "id": "workload",
+      "startMs": 276920,
+      "endMs": 302644
+    },
+    {
+      "id": "result",
+      "startMs": 303097,
+      "endMs": 323251
+    }
+  ]
+}

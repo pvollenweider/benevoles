@@ -1,0 +1,12 @@
+{
+  "anchor": "De retour dans le message, voici une première version écrite à",
+  "windowStart": 118.03999999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 15,
+    "wordsHeard": "De retour dans le message, voici une première version écrite à"
+  },
+  "onset": 133.04,
+  "proposedCut": 133.0399165,
+  "note": "Proposal only; recut then independently audit before capture"
+}

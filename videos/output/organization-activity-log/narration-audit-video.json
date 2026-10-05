@@ -1,0 +1,100 @@
+{
+  "model": "gemini-3.8-flash",
+  "auditedAt": "2026-10-05T19:16:47.367Z",
+  "revalidatedAt": "2026-10-05T19:16:47.368Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "932bf50387f6accb30455da6b5916952e0e0981ec276d55e722342e9d4cc4489",
+  "note": "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "8769823522d7d1b514debd4498800bca4a113cf733e9f3269e740ad493b9cd88",
+      "recognized": "Quand plusieurs personnes préparent une fête, on peut facilement se demander qui a changé une fiche ou un réglage. Le journal de l'organisation aide à retrouver ses actions transversales. Ouvrons journal d'activité depuis les paramètres. Les noms de notre équipe et les données sont fictifs. Nous allons lire les actions, filtrer la liste et ouvrir le fichier exporté. Ce journal ne remplace pas celui d'un événement. Les horaires et les inscriptions se consultent dans leur propre historique.",
+      "expected": "Quand plusieurs personnes préparent une fête, on peut facilement se demander qui a changé une fiche ou un réglage. Le journal de l'organisation aide à retrouver ces actions transversales. Ouvrons Journal d'activité depuis les paramètres. Les noms de notre équipe et les données sont fictifs. Nous allons lire les actions, filtrer la liste et ouvrir le fichier exporté. Ce journal ne remplace pas celui d'un événement : les horaires et les inscriptions se consultent dans leur propre historique.",
+      "wordErrorRate": 0.0125,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "read",
+      "audioSha256": "666e2441d8e2fc97ea9fc7c387e48f846cb8aa0a4a5f1cc925f8ca417d2781fc",
+      "recognized": "Chaque ligne indique un auteur, une action et une date. Disons deux actions réalisées par des personnes différentes. Cela permet de demander à la bonne personne pourquoi elle a fait un changement. Le nom affiché vient du compte encore présent. Si ce compte n'existe plus, une indication générique peut le remplacer. Le journal n'est donc pas une signature de contrat, ni une preuve que quelqu'un a lu les consignes. C'est un repère pour travailler ensemble.",
+      "expected": "Chaque ligne indique un auteur, une action et une date. Lisons deux actions réalisées par des personnes différentes. Cela permet de demander à la bonne personne pourquoi elle a fait un changement. Le nom affiché vient du compte encore présent ; si ce compte n'existe plus, une indication générique peut le remplacer. Le journal n'est donc pas une signature de contrat, ni une preuve que quelqu'un a lu les consignes. C'est un repère pour travailler ensemble.",
+      "wordErrorRate": 0.012658227848101266,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "members",
+      "audioSha256": "bb955065b796ff56634f772057ad39614e0283e6bbae0f19050860899a6780e3",
+      "recognized": "Voici une création de membre, puis une modification et une désactivation. Ce sont des actions sur la fiche de l'organisation, pas la liste de tous les créneaux de cette personne. Pour comprendre ces inscriptions, ouvrons sa fiche et son activité. Nous pouvons ensuite revenir au journal général. Cette distinction évite de prendre une modification de coordonnées pour une désinscription. Lire une entrée ne modifie pas la fiche et ne réactive pas un membre.",
+      "expected": "Voici une création de membre, puis une modification et une désactivation. Ce sont des actions sur la fiche de l'organisation, pas la liste de tous les créneaux de cette personne. Pour comprendre ses inscriptions, ouvrons sa fiche et son activité. Nous pouvons ensuite revenir au journal général. Cette distinction évite de prendre une modification de coordonnées pour une désinscription. Lire une entrée ne modifie pas la fiche et ne réactive pas un membre.",
+      "wordErrorRate": 0.013513513513513514,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "team",
+      "audioSha256": "f5c74a2a8ef538306df3f7f128b7508216512b22df16a8ed49234cbd53e27097",
+      "recognized": "Les invitations de compte admin, les changements de rôle et les retraits de l'équipe ont aussi leur place ici. Retrouvons une invitation, puis un changement de rôle. Le journal décrit ce qui a été fait, il n'accorde pas le droit de refaire cette action, les permissions du compte connecté restent applicables. On peut aussi retrouver un changement des réglages de notification. Un e-mail renvoyé apparaît comme une action d'envoi, pas comme la preuve qu'il a été lu.",
+      "expected": "Les invitations de comptes admin, les changements de rôle et les retraits de l'équipe ont aussi leur place ici. Retrouvons une invitation puis un changement de rôle. Le journal décrit ce qui a été fait ; il n'accorde pas le droit de refaire cette action. Les permissions du compte connecté restent applicables. On peut aussi retrouver un changement des réglages de notification. Un email renvoyé apparaît comme une action d'envoi, pas comme la preuve qu'il a été lu.",
+      "wordErrorRate": 0.012345679012345678,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "filters",
+      "audioSha256": "a22db31b28639df028aafc089e51a7c7b87a5011213b08fc2d73f00ab10abcc7",
+      "recognized": "Filtrer par type permet de se concentrer sur les membres, les comptes admin, les e-mails ou l'organisation. Choisissons membre, puis compte admin, et regardons les lignes changer. Revenons ensuite à tous les types. Le filtre ne supprime rien, il limite la liste affichée. Cet écran n'a pas les mêmes filtres ni les modes rejouer et récit que le journal d'un événement. Inutile de chercher une commande qui n'est pas proposée ici.",
+      "expected": "Filtrer par type permet de se concentrer sur les membres, les comptes admin, les emails ou l'organisation. Choisissons Membres, puis Comptes admin, et regardons les lignes changer. Revenons ensuite à Tous les types. Le filtre ne supprime rien ; il limite la liste affichée. Cet écran n'a pas les mêmes filtres ni les modes Rejouer et Récit que le journal d'un événement. Inutile de chercher une commande qui n'est pas proposée ici.",
+      "wordErrorRate": 0.05333333333333334,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "pages",
+      "audioSha256": "6b666501d549ef1cc472c16179951f409c0262b3cedb7ff4c092864ae68159e4",
+      "recognized": "Si l'historique dépasse la première page, charger plus affiche la suite. Descendons, utilisons le bouton et retrouvons les nouvelles lignes. Le nombre d'entrées déjà chargées ne représente pas forcément la totalité de l'activité. Si une sélection ne donne aucune ligne, essayons tous les types avant de conclure qu'il n'y a aucun historique. La liste sert à lire. Pour corriger une fiche ou un rôle, il faut retourner dans la page qui permet réellement cette modification",
+      "expected": "Si l'historique dépasse la première page, Charger plus affiche la suite. Descendons, utilisons le bouton et retrouvons les nouvelles lignes. Le nombre d'entrées déjà chargées ne représente pas forcément la totalité de l'activité. Si une sélection ne donne aucune ligne, essayons Tous les types avant de conclure qu'il n'y a aucun historique. La liste sert à lire ; pour corriger une fiche ou un rôle, il faut retourner dans la page qui permet réellement cette modification.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "export",
+      "audioSha256": "81c16c6cfadd8dee0d3dcac9610740fc72d172d2328729c7b628ca5b87d4e939",
+      "recognized": "Exporter tout le journal télécharge un fichier CSV. Le mot tout est important. Même si l'écran est filtré, ce fichier contient l'historique de l'organisation, pas seulement les lignes visibles. Ouvrons le vrai fichier téléchargé. Il contient la date, l'acteur, son type, l'action, l'entité, son identifiant et les changements enregistrés. Les entrées vont des plus anciennes aux plus récentes, à l'inverse de la liste à l'écran. Ce fichier est une copie à cet instant, il ne se mettra pas à jour tout seul.",
+      "expected": "Exporter tout le journal télécharge un fichier CSV. Le mot tout est important : même si l'écran est filtré, ce fichier contient l'historique de l'organisation, pas seulement les lignes visibles. Ouvrons le vrai fichier téléchargé. Il contient la date, l'acteur, son type, l'action, l'entité, son identifiant et les changements enregistrés. Les entrées vont des plus anciennes aux plus récentes, à l'inverse de la liste à l'écran. Ce fichier est une copie à cet instant ; il ne se mettra pas à jour tout seul.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "limits",
+      "audioSha256": "40a75c413127d855f6d1b6ae8d4fd83b298fc85e8af2667abca7ed7d15c1b4de",
+      "recognized": "Le journal ne doit pas devenir une collection de captures envoyées partout. Même quand les coordonnées ne sont pas recopiées dans les changements, des noms d'auteurs peuvent rester visibles. Gardons le fichier pour les personnes qui en ont besoin et pour le temps utile. Le CSV n'est pas une sauvegarde complète de l'organisation et il ne sert pas à restaurer un état passé. Pour un incident, recoupons les informations et les résultats réels, plutôt que d'accuser quelqu'un à partir d'une seule ligne.",
+      "expected": "Le journal ne doit pas devenir une collection de captures envoyées partout. Même quand les coordonnées ne sont pas recopiées dans les changements, des noms d'auteurs peuvent rester visibles. Gardons le fichier pour les personnes qui en ont besoin et pour le temps utile. Le CSV n'est pas une sauvegarde complète de l'organisation, et il ne sert pas à restaurer un état passé. Pour un incident, recoupons les informations et les résultats réels plutôt que d'accuser quelqu'un à partir d'une seule ligne.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "230ddc56dc8d1f62e31b469b1d05eb8109f303326e5523c96f19529e729afd1c",
+      "recognized": "Nous avons retrouvé les actions sur les membres et l'équipe, lu la suite de la liste et ouvert l'export complet. Pour avancer, le plus utile est souvent une question simple : j'ai vu ce changement, peux-tu m'expliquer ? Le journal facilite cette conversation. Il donne des repères quand plusieurs personnes organisent ensemble, sans remplacer leurs échanges ni leurs droits. Une fois le point compris, revenons à la fiche ou aux paramètres concernés pour faire la bonne correction, tranquillement.",
+      "expected": "Nous avons retrouvé les actions sur les membres et l'équipe, lu la suite de la liste et ouvert l'export complet. Pour avancer, le plus utile est souvent une question simple : j'ai vu ce changement, peux-tu m'expliquer ? Le journal facilite cette conversation. Il donne des repères quand plusieurs personnes organisent ensemble, sans remplacer leurs échanges ni leurs droits. Une fois le point compris, revenons à la fiche ou aux paramètres concernés pour faire la bonne correction, tranquillement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

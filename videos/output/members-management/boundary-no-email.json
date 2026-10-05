@@ -1,0 +1,12 @@
+{
+  "anchor": "Une personne peut avoir une fiche sans adresse email. Nous créons",
+  "windowStart": 66.30900000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 19.38,
+    "wordsHeard": "Une personne peut avoir une fiche sans adresse e-mail. Nous créons"
+  },
+  "onset": 85.68900000000001,
+  "proposedCut": 85.752375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

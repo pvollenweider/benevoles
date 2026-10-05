@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:09:51.246Z",
+  "videoSha256": "e1d04c9dfb88e51be35835c764597a3a9ef877a6424916753f079011043c1217",
+  "promptSha256": "dc4a8b6ee1de36de567054e52d3cbe079598fc80a75df854772ad5ee31753c9a",
+  "clipSha256": "d618d01e456b29d8b51bb7d691c391c84974afc1e42049b7c477e54f81be122e",
+  "scene": "contacts",
+  "review": {
+    "heardOpening": "La liste avec téléphones",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "La liste avec téléphones est réservée à l'organisation",
+        "visibleSeconds": 4.5,
+        "visible": "Ouverture du document Liste avec téléphones",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "retrouver une personne, son email, son téléphone et ses créneaux",
+        "visibleSeconds": 5,
+        "visible": "Affichage des colonnes Nom, Prénom, Téléphone, Email et Créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "regardons celui retenu dans le document",
+        "visibleSeconds": 13,
+        "visible": "Mise en évidence du numéro de téléphone sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et débit régulier, bien accordé aux repères visuels."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

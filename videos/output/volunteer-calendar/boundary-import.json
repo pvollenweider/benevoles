@@ -1,0 +1,12 @@
+{
+  "anchor": "Le fichier est prêt à être ouvert dans ton application de",
+  "windowStart": 41.041,
+  "result": {
+    "found": true,
+    "startSeconds": 14.98,
+    "wordsHeard": "Le fichier est prêt à être ouvert dans ton application de"
+  },
+  "onset": 56.021,
+  "proposedCut": 56.0414795,
+  "note": "Proposal only; recut then independently audit before capture"
+}

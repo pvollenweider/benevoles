@@ -1,0 +1,12 @@
+{
+  "anchor": "Une proposition utile donne le poste, l'horaire et la manière de",
+  "windowStart": 132.614,
+  "result": {
+    "found": true,
+    "startSeconds": 16.1,
+    "wordsHeard": "Une proposition utile donne le poste, l'horaire et la manière de"
+  },
+  "onset": 148.714,
+  "proposedCut": 148.515833,
+  "note": "Proposal only; recut then independently audit before capture"
+}

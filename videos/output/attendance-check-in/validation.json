@@ -1,0 +1,60 @@
+{
+  "id": "ATTENDANCE_CHECK_IN",
+  "slug": "attendance-check-in",
+  "validatedAt": "2026-10-05T18:07:27.280Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 235000,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 24082,
+      "audioMs": 24076,
+      "driftMs": 6
+    },
+    {
+      "id": "one",
+      "visualMs": 24946,
+      "audioMs": 24938,
+      "driftMs": 8
+    },
+    {
+      "id": "group",
+      "visualMs": 25394,
+      "audioMs": 25392,
+      "driftMs": 2
+    },
+    {
+      "id": "correction",
+      "visualMs": 22992,
+      "audioMs": 22992,
+      "driftMs": 0
+    },
+    {
+      "id": "multiple",
+      "visualMs": 28189,
+      "audioMs": 28186,
+      "driftMs": 3
+    },
+    {
+      "id": "limits",
+      "visualMs": 26797,
+      "audioMs": 26796,
+      "driftMs": 1
+    },
+    {
+      "id": "cancelled",
+      "visualMs": 39746,
+      "audioMs": 39744,
+      "driftMs": 2
+    },
+    {
+      "id": "export",
+      "visualMs": 27877,
+      "audioMs": 27875,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}

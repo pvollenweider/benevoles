@@ -1,0 +1,18 @@
+{
+  "rowsPerFile": 40,
+  "fictionalData": true,
+  "errors": {
+    "missingFirstName": 6,
+    "invalidEmail": 7,
+    "repeatedEmail": 9
+  },
+  "formulaLookingTextLine": 10,
+  "columns": [
+    "Prénom",
+    "Nom",
+    "Email",
+    "Téléphone",
+    "Tags"
+  ],
+  "availabilityImportSupported": false
+}

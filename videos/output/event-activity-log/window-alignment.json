@@ -1,0 +1,41 @@
+{
+  "locatedAt": "2026-10-05T18:41:19.910Z",
+  "masterSha256": "cbd2c75cda75a21bc4cdd1c6f46169cb46ca0e426e8c8cc9c226869c520f9ace",
+  "totalSeconds": 237.04,
+  "cuts": [
+    {
+      "id": "read",
+      "seconds": 25.652771
+    },
+    {
+      "id": "filters",
+      "seconds": 51.363375
+    },
+    {
+      "id": "period",
+      "seconds": 76.4571045
+    },
+    {
+      "id": "replay",
+      "seconds": 99.603521
+    },
+    {
+      "id": "story",
+      "seconds": 130.1312295
+    },
+    {
+      "id": "baseline",
+      "seconds": 155.911229
+    },
+    {
+      "id": "privacy",
+      "seconds": 182.272354
+    },
+    {
+      "id": "result",
+      "seconds": 206.44818750000002
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

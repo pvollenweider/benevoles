@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour comprendre l'imprévu après coup, ouvrons le journal de l'événement. Retrouvons",
+  "windowStart": 229.36599999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 12.6,
+    "wordsHeard": "Pour"
+  },
+  "onset": 241.96599999999998,
+  "proposedCut": 241.602104,
+  "note": "Proposal only; recut then independently audit before capture"
+}

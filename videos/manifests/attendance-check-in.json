@@ -1,0 +1,84 @@
+{
+  "id": "ATTENDANCE_CHECK_IN",
+  "slug": "attendance-check-in",
+  "title": "Accueillir les bénévoles et corriger une présence",
+  "description": "Pointer la bonne inscription, corriger une erreur et lire le bilan sans confondre présence et heures travaillées.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "French, warm and friendly with an audible smile. Patient conversational delivery, clear articulation and natural pauses. Keep one consistent voice throughout.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "chapterTitles": {
+    "one": "Pointer la bonne arrivée",
+    "group": "Plusieurs arrivées ensemble",
+    "correction": "Corriger sans désinscrire",
+    "multiple": "Un pointage par créneau",
+    "limits": "Présence, pas chronomètre",
+    "cancelled": "Un créneau annulé après pointage",
+    "export": "Relire le bilan"
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Le jour J, savoir qui est arrivé aide à accueillir l'équipe et à repérer les absences. Ouvrons les inscriptions et choisissons l'accueil du matin avec les filtres. Chaque ligne correspond à une inscription sur un créneau. Être inscrit, c'est ce qui était prévu. Être marqué présent, c'est une autre information. Nous allons pointer une arrivée, corriger une erreur et regarder le bilan réel.",
+      "fallbackDurationMs": 42000
+    },
+    {
+      "id": "one",
+      "transcript": "Aline vient d'arriver. Sélectionnons uniquement sa ligne, puis lisons le nombre indiqué avant de marquer sa présence. La marque apparaît sur son inscription. Rechargeons la page : elle est toujours là. Ce contrôle évite de confondre une sélection à l'écran avec une donnée réellement enregistrée. Le nombre d'inscriptions affichées décrit la liste filtrée, pas le nombre de personnes présentes.",
+      "fallbackDurationMs": 44000
+    },
+    {
+      "id": "group",
+      "transcript": "Nicolas et Léa arrivent ensemble. Sélectionnons leurs deux lignes et vérifions le nombre avant de cliquer sur Marquer présents. Voici les deux marques, tandis qu'une personne pas encore arrivée reste sans marque. Une demande en attente de validation n'est pas une inscription confirmée à pointer. Ne la transforme pas en présence simplement pour compléter ton bilan : traite d'abord sa demande selon les règles de l'événement.",
+      "fallbackDurationMs": 46000
+    },
+    {
+      "id": "correction",
+      "transcript": "Tu as pointé Léa par erreur ? Sélectionnons sa ligne et annulons la présence. La marque disparaît, mais son inscription et sa place restent. Ce n'est pas la même action que retirer quelqu'un de son créneau. Quand la bonne personne arrive, tu peux enregistrer sa présence à nouveau. Relis le nom et l'horaire avant chaque correction : c'est plus simple que de reconstruire une inscription supprimée par mégarde.",
+      "fallbackDurationMs": 46000
+    },
+    {
+      "id": "multiple",
+      "transcript": "Une personne peut aider sur plusieurs horaires. Recherchons Léa pour retrouver ses deux inscriptions. Elle aide le matin, puis à la buvette. Le pointage concerne la ligne sélectionnée, pas toute sa journée. Sa présence au premier créneau ne prouve pas qu'elle est arrivée au second. Regardons les deux lignes côte à côte : l'une est pointée et l'autre ne l'est pas. Tu gardes ainsi une information utile pour chaque équipe, sans généraliser une seule arrivée à tous les postes.",
+      "fallbackDurationMs": 48000
+    },
+    {
+      "id": "limits",
+      "transcript": "Le pointage enregistre une arrivée. Il ne mesure pas l'heure de départ ni la durée réellement travaillée. Dans la fiche membre, les heures planifiées restent les heures prévues par les créneaux. Ne les présente pas comme des heures attestées. De la même façon, une arrivée plus tardive n'est pas un calcul automatique du retard. Le site conserve une marque de présence ; le suivi du temps réellement effectué demande autre chose.",
+      "fallbackDurationMs": 44000
+    },
+    {
+      "id": "cancelled",
+      "transcript": "Un cas à regarder de près : Sarah est arrivée, mais son créneau doit finalement être annulé. Enregistrons d'abord sa présence, puis ouvrons son créneau dans la liste. Lisons le récapitulatif et confirmons la suppression. Revenons aux inscriptions : sa ligne a disparu. Téléchargeons le fichier pour vérifier le bilan. Sarah n'y figure pas, car cet export ne retient que les inscriptions actives. Pourtant, le pointage enregistré avant l'annulation est conservé. Ce fichier n'est donc pas un relevé complet de tout ce qui s'est passé. Avant d'annuler un créneau déjà commencé, vérifie avec l'organisation comment garder une trace utile.",
+      "fallbackDurationMs": 65000
+    },
+    {
+      "id": "export",
+      "transcript": "Téléchargeons maintenant le véritable export des présences. Comparons une ligne pointée et une ligne non pointée, leurs créneaux et les colonnes Présent et Pointé le. Ce fichier ne calcule pas des heures réellement travaillées. Il peut aussi contenir des coordonnées et des réponses aux questions : partage seulement ce qui est nécessaire. Pour un bilan fiable, pointe la bonne ligne, corrige sans désinscrire et relis le fichier avant de le transmettre.",
+      "fallbackDurationMs": 49000
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, vous enregistrez l'arrivée des bénévoles inscription par inscription, corrigez une erreur de pointage et vérifiez le bilan dans l'export des présences.",
+    "steps": [
+      "Dans les inscriptions, filtrez sur le créneau concerné, par exemple l'accueil du matin.",
+      "Sélectionnez la ligne de la personne arrivée, vérifiez le nombre sélectionné, puis cliquez sur « Marquer présents ».",
+      "Pour un groupe, cochez plusieurs lignes avant de marquer leur présence en une fois.",
+      "En cas d'erreur, sélectionnez la ligne et annulez sa présence : l'inscription et la place restent.",
+      "Pour une personne inscrite sur plusieurs horaires, pointez chaque créneau séparément.",
+      "Téléchargez l'export des présences et relisez les colonnes Présent et Pointé le avant de le transmettre."
+    ],
+    "remember": [
+      "Être inscrit et être marqué présent sont deux informations différentes.",
+      "Le pointage enregistre une arrivée, pas une heure de départ ni une durée travaillée.",
+      "L'export ne retient que les inscriptions actives : une inscription annulée après pointage n'y figure plus.",
+      "Une demande en attente de validation se traite d'abord comme une demande, pas comme une présence."
+    ]
+  }
+}

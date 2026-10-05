@@ -1,0 +1,48 @@
+{
+  "slug": "attendance-check-in",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-05T18:03:51.603Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 215,
+      "endMs": 24297
+    },
+    {
+      "id": "one",
+      "startMs": 24850,
+      "endMs": 49796
+    },
+    {
+      "id": "group",
+      "startMs": 50249,
+      "endMs": 75643
+    },
+    {
+      "id": "correction",
+      "startMs": 76096,
+      "endMs": 99088
+    },
+    {
+      "id": "multiple",
+      "startMs": 99540,
+      "endMs": 127729
+    },
+    {
+      "id": "limits",
+      "startMs": 128186,
+      "endMs": 154983
+    },
+    {
+      "id": "cancelled",
+      "startMs": 155434,
+      "endMs": 195180
+    },
+    {
+      "id": "export",
+      "startMs": 196785,
+      "endMs": 224662
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Ta liste est prête à être utilisée pour les prochaines invitations.",
+  "windowStart": 178.47299999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 17.96,
+    "wordsHeard": "Ta liste est prête à être utilisée pour les prochaines invitations."
+  },
+  "onset": 196.433,
+  "proposedCut": 196.3718335,
+  "note": "Proposal only; recut then independently audit before capture"
+}

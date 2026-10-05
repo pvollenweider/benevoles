@@ -1,0 +1,74 @@
+{
+  "id": "MEMBERS_REMINDERS",
+  "slug": "members-reminders",
+  "title": "Relancer les invités sans créneau confirmé",
+  "description": "Comprendre les statuts, renvoyer une invitation et écrire un message adapté sans confondre relance et inscription.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "voiceStyle": "French, warm and friendly with an audible smile. Patient conversational delivery, clear articulation and natural pauses.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Quelques membres ont été invités, mais n'ont pas encore de créneau confirmé. Une relance peut les aider à retrouver leur lien, sans leur mettre la pression. Dans Invitations, regarde d'abord la date d'envoi et les statuts. Une ancienne invitation ne prouve pas que la personne a oublié de répondre. Peut-être attend-elle simplement de connaître ses disponibilités.",
+      "fallbackDurationMs": 33000
+    },
+    {
+      "id": "statuses",
+      "transcript": "Sans créneau confirmé ne signifie pas forcément aucune démarche. Dans les inscriptions, une personne peut être en liste d'attente, recevoir une offre ou attendre la validation de l'organisateur. Une autre a déjà une participation confirmée. Vérifie ces situations avant de relancer. Un message adapté sera plus utile qu'une demande générale de s'inscrire adressée à quelqu'un qui l'a déjà fait.",
+      "fallbackDurationMs": 37000
+    },
+    {
+      "id": "confirm",
+      "transcript": "Le bouton Relancer les personnes sans créneau ouvre un récapitulatif. Tu peux encore annuler. Pour cette démonstration, nous confirmons l'envoi réel. Les membres déjà inscrits ne sont pas relancés. Les fiches inactives et celles sans email ne reçoivent pas ce message non plus. Le résultat indique le nombre effectivement envoyé : lis-le, plutôt que de te fier seulement au compteur initial.",
+      "fallbackDurationMs": 39000
+    },
+    {
+      "id": "link",
+      "transcript": "Ouvrons l'email reçu dans la boîte de démonstration. Il propose à nouveau le lien d'invitation. Ce lien est conservé : la relance ne crée pas une deuxième invitation ni une inscription automatique. Une personne en attente peut aussi être dans ce groupe si elle n'a aucun créneau confirmé. C'est pourquoi il est important de comprendre les statuts avant d'envoyer.",
+      "fallbackDurationMs": 35000
+    },
+    {
+      "id": "message",
+      "transcript": "Pour expliquer davantage, utilise Écrire un message aux personnes sans créneau. Le groupe est déjà choisi dans la page de message. Nous saisissons un objet clair et quelques mots bienveillants : tu peux encore choisir un horaire si tu le souhaites. Avant d'envoyer, prévisualise les destinataires et le contenu. L'aperçu permet de vérifier à qui tu écris réellement.",
+      "fallbackDurationMs": 39000
+    },
+    {
+      "id": "waitlist",
+      "transcript": "Dans cet aperçu, regarde aussi les personnes qui sont seulement en liste d'attente. Leur situation mérite une formulation différente. Tu peux rappeler qu'elles n'ont pas à refaire leur demande et qu'une place leur sera proposée selon le fonctionnement de la liste d'attente. La relance simple, elle, n'attend pas automatiquement trois jours : c'est toi qui choisis le bon moment.",
+      "fallbackDurationMs": 35000
+    },
+    {
+      "id": "send",
+      "transcript": "Une fois le groupe et le texte vérifiés, confirme l'envoi. Nous ouvrons le vrai message reçu, puis l'historique disponible dans l'administration. Un email remis au serveur n'est pas une preuve de lecture par la personne. L'historique aide à savoir ce qui a été envoyé, sans transformer le suivi des bénévoles en surveillance.",
+      "fallbackDurationMs": 34000
+    },
+    {
+      "id": "result",
+      "transcript": "De retour dans Invitations, les participations n'ont pas changé simplement parce qu'un message est parti. La prochaine étape appartient aux bénévoles. Une relance courte, au bon moment, avec un lien facile à retrouver : c'est souvent suffisant. Et si tu sais qu'une personne ne peut pas venir, respecte sa réponse plutôt que de multiplier les messages.",
+      "fallbackDurationMs": 33000
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, vous relancez les membres invités qui n'ont pas encore de créneau confirmé, avec un simple renvoi d'invitation ou un message adapté.",
+    "steps": [
+      "Dans Invitations, regardez la date d'envoi et le statut de chaque personne.",
+      "Vérifiez dans les inscriptions qui est en liste d'attente, a reçu une offre ou attend une validation.",
+      "Cliquez sur le bouton de relance des personnes sans créneau, lisez le récapitulatif, puis confirmez.",
+      "Pour un texte plus personnel, suivez le lien « Écrire un message » aux personnes sans créneau.",
+      "Ouvrez l'aperçu pour vérifier le contenu et le nombre de destinataires, adaptez la formulation pour les personnes en liste d'attente, puis envoyez.",
+      "Consultez le résultat de l'envoi et l'historique des messages."
+    ],
+    "remember": [
+      "La relance renvoie le même lien d'invitation : elle ne crée ni nouvelle invitation ni inscription.",
+      "Les membres déjà inscrits, les fiches inactives et celles sans email ne sont pas relancés.",
+      "Un email envoyé n'est pas une preuve de lecture.",
+      "Si une personne vous a dit qu'elle ne peut pas venir, respectez sa réponse."
+    ]
+  }
+}

@@ -1,12 +1,12 @@
 {
   "anchor": "Ce fichier n'est pas un abonnement au planning. L'organisateur décale maintenant",
-  "windowStart": 118.945,
+  "windowStart": 98.274,
   "result": {
     "found": true,
-    "startSeconds": 7.95,
+    "startSeconds": 12.2,
     "wordsHeard": "Ce fichier n'est pas un abonnement au planning. L'organisateur décale maintenant"
   },
-  "onset": 126.895,
-  "proposedCut": 126.85816650000001,
+  "onset": 110.474,
+  "proposedCut": 110.445729,
   "note": "Proposal only; recut then independently audit before capture"
 }

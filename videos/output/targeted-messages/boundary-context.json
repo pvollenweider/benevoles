@@ -1,0 +1,12 @@
+{
+  "anchor": "Un modèle contenant créneau ne convient pas à toute l'équipe :",
+  "windowStart": 139.863,
+  "result": {
+    "found": true,
+    "startSeconds": 15.18,
+    "wordsHeard": "Un modèle contenant créneau ne convient pas à toute l'équipe"
+  },
+  "onset": 155.043,
+  "proposedCut": 154.863021,
+  "note": "Proposal only; recut then independently audit before capture"
+}

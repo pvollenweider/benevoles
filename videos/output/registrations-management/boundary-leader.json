@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour désigner un responsable depuis une inscription, sélectionne la personne puis",
+  "windowStart": 188.751,
+  "result": {
+    "found": true,
+    "startSeconds": 7.02,
+    "wordsHeard": "Pour désigner un responsable depuis une inscription, sélectionne la personne puis"
+  },
+  "onset": 195.77100000000002,
+  "proposedCut": 195.9065415,
+  "note": "Proposal only; recut then independently audit before capture"
+}

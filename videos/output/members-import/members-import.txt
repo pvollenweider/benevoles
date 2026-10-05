@@ -1,0 +1,19 @@
+Importer ses membres sans repartir de zéro
+
+Tu utilises Benevol pour la première fois et tu as déjà une liste de bénévoles ? L'import évite de ressaisir chaque personne. Il peut aussi compléter une liste existante. Nous allons utiliser quarante fiches fictives, vérifier les erreurs, puis confirmer seulement quand tout est clair. Bien sûr, tu peux toujours créer les membres manuellement avec Nouveau membre.
+
+Le fichier peut être un CSV ou un Excel. La première ligne contient les noms des colonnes : prénom, nom, email, téléphone et tags. Le prénom et le nom sont nécessaires. Une fiche sans email reste possible, mais elle ne recevra pas de messages par email. Les tags se séparent par des virgules. Les disponibilités, elles, se renseignent ensuite dans la fiche : elles ne sont pas importées.
+
+Ouvre Importer des membres et choisis le fichier à vérifier. Si un email existe déjà, l'option Ignorer conserve la fiche actuelle. Clique sur Analyser le fichier. Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur. Les colonnes reconnues et les tags sont également indiqués. Rien n'est encore enregistré : tu peux prendre le temps de vérifier.
+
+Ici, la ligne six n'a pas de prénom, et la ligne sept contient une adresse email invalide. La ligne neuf reprend l'email de la ligne huit : ce doublon dans le fichier est également signalé. Ces lignes ne seront pas importées. Corrige le fichier d'origine plutôt que de laisser une erreur de contact. Deux personnes portant le même nom ne sont pas automatiquement fusionnées : la comparaison utilise l'email.
+
+Avec Retour, tu peux changer l'option puis refaire l'analyse. Mettre à jour remplace le prénom, le nom, le téléphone et les tags de la fiche portant le même email. Cela réactive aussi une fiche inactive. Les tags ne sont donc pas simplement ajoutés aux anciens : vérifie bien les valeurs du fichier. Ici, Camille et Julien passent de Ignorer à Mettre à jour, sans créer de nouvelles fiches pour ces adresses.
+
+Nous choisissons maintenant le fichier Excel corrigé et relançons l'analyse. Les erreurs ont disparu. Les quarante lignes sont reconnues, dont les deux adresses déjà présentes. René n'a pas d'email : sa fiche peut être créée avec son téléphone. Vérifie une dernière fois les noms, les catégories et le récapitulatif. Le fichier est limité à deux mégaoctets et cinq mille lignes par import.
+
+Quand l'aperçu te convient, confirme l'import. Cette fois, les fiches sont enregistrées. Le résultat indique combien ont été créées, mises à jour ou ignorées, et signale les éventuelles lignes non importées. Ferme la fenêtre et recherche Maya : elle est maintenant dans la liste. Ouvre sa fiche pour vérifier son téléphone et ses tags. Importer une personne ne l'inscrit à aucun créneau.
+
+Si tu analyses de nouveau ce fichier avec Ignorer, les emails déjà présents sont reconnus. Mais attention aux fiches sans email : le système ne peut pas les rapprocher par leur adresse, et le même nom ne suffit pas. Ne confirme donc pas une seconde fois machinalement. Regarde toujours le nombre de créations prévues, puis annule si tu ne souhaites rien ajouter.
+
+Ta liste est prête à être utilisée pour les prochaines invitations. Garde un fichier simple, vérifie les coordonnées et lis l'aperçu avant chaque confirmation. Si quelques personnes manquent, ajoute-les manuellement. Et si leurs disponibilités changent, complète leur fiche séparément. L'import fait gagner du temps, tout en te laissant le dernier mot sur ce qui sera enregistré.

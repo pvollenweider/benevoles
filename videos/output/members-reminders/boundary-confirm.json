@@ -1,0 +1,12 @@
+{
+  "anchor": "Le bouton Relancer les personnes sans créneau ouvre un récapitulatif. Tu",
+  "windowStart": 33.926,
+  "result": {
+    "found": true,
+    "startSeconds": 15.06,
+    "wordsHeard": "Le"
+  },
+  "onset": 48.986000000000004,
+  "proposedCut": 48.9255625,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -34,6 +34,7 @@ async function main() {
   const manifest = await loadManifest(reference!)
   const dir = videoDir(manifest.slug)
   const timeline = await json<Timeline>(path.join(dir, "timeline.json"))
+  if (timeline.capturePurpose === "rehearsal") throw new Error("Refusing to assemble a rehearsal as a narrated video; record again against the verified narration first")
   const audio = await json<AudioMetadata>(path.join(dir, "audio-metadata.json"))
   const capture = path.join(dir, timeline.video)
   const output = path.join(dir, `${manifest.slug}.mp4`)

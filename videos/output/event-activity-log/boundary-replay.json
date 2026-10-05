@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour comprendre l'évolution d'un même créneau, ouvrons Rejouer. Choisissons un élément",
+  "windowStart": 84.604,
+  "result": {
+    "found": true,
+    "startSeconds": 14.9,
+    "wordsHeard": "Pour comprendre l'évolution d'un même créneau, ouvrons Rejouer. Choisissons un élément"
+  },
+  "onset": 99.504,
+  "proposedCut": 99.603521,
+  "note": "Proposal only; recut then independently audit before capture"
+}

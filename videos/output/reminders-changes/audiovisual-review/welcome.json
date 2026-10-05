@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:42:16.297Z",
+  "videoSha256": "35c2c209bcf69614d4a31c035d42e8f425aec8d211722ce9864b8daa6096a067",
+  "promptSha256": "4cf917000bf355848913ec73dfc98a05895248fba4e4abe1e9b218c82fbb40a3",
+  "clipSha256": "d3a099af6b51529671d4dc580926981a0df4cc13a28df4e49b0db881cab10ccc",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un petit rappel aide les bénévoles à retrouver leur rendez-vous",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Rappeler le rendez-vous et prévenir quand le planning change",
+        "visibleSeconds": 0,
+        "visible": "Encadré de titre affiché au centre de l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "retrouver leur rendez-vous",
+        "visibleSeconds": 2.5,
+        "visible": "Affichage de la page de gestion de l'événement Atelier des rappels",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "Nous utiliserons un événement de démonstration",
+        "visibleSeconds": 15.5,
+        "visible": "Fiche événement Atelier des rappels visible à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et conforme au script audio."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

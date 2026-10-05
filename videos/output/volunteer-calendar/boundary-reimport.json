@@ -1,12 +1,12 @@
 {
-  "anchor": "Télécharge à nouveau le planning, puis importe cette nouvelle version. L'identifiant",
-  "windowStart": 142.778,
+  "anchor": "Télécharge à nouveau le planning pour récupérer l'horaire actuel. Le fichier",
+  "windowStart": 115.94,
   "result": {
     "found": true,
-    "startSeconds": 4.98,
-    "wordsHeard": "Télécharge à nouveau le planning puis importe cette nouvelle version L'identifiant"
+    "startSeconds": 15.08,
+    "wordsHeard": "Télécharge à nouveau le planning pour récupérer l'horaire actuel. Le fichier"
   },
-  "onset": 147.75799999999998,
-  "proposedCut": 147.562,
+  "onset": 131.02,
+  "proposedCut": 130.93991649999998,
   "note": "Proposal only; recut then independently audit before capture"
 }

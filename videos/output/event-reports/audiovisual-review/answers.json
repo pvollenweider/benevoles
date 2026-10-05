@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:09:58.169Z",
+  "videoSha256": "e1d04c9dfb88e51be35835c764597a3a9ef877a6424916753f079011043c1217",
+  "promptSha256": "751f8c069c073792819f68e85c9340f568c051ebc0ac7de1617e409b5a0da927",
+  "clipSha256": "0d286b36a8db105c651be5fdc6ca7aa451afc08f0ab3e28ac979fe7ea9f985c2",
+  "scene": "answers",
+  "review": {
+    "heardOpening": "Les réponses aux questions se retrouvent",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Voici une taille de t-shirt et un régime alimentaire réellement renseignés.",
+        "visibleSeconds": 2.5,
+        "visible": "Fiche de Léa Giroud affichant la taille de t-shirt S et le régime alimentaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.2,
+        "spoken": "Téléchargeons l'export des présences",
+        "visibleSeconds": 10.3,
+        "visible": "Transition vers la page de visualisation du CSV téléchargé.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "Léa a cinq créneaux, donc sa réponse apparaît cinq fois.",
+        "visibleSeconds": 21,
+        "visible": "Filtre appliqué sur Léa Giroud affichant 5 lignes répétées.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée et claire, débit régulier sans rupture."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

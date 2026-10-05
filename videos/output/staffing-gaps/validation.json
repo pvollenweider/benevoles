@@ -1,0 +1,66 @@
+{
+  "id": "STAFFING_GAPS",
+  "slug": "staffing-gaps",
+  "validatedAt": "2026-10-05T18:17:22.799Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 221040,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 24406,
+      "audioMs": 24404,
+      "driftMs": 2
+    },
+    {
+      "id": "overview",
+      "visualMs": 22624,
+      "audioMs": 22621,
+      "driftMs": 3
+    },
+    {
+      "id": "empty",
+      "visualMs": 20793,
+      "audioMs": 20790,
+      "driftMs": 3
+    },
+    {
+      "id": "needs",
+      "visualMs": 25373,
+      "audioMs": 25370,
+      "driftMs": 3
+    },
+    {
+      "id": "requests",
+      "visualMs": 24663,
+      "audioMs": 24660,
+      "driftMs": 3
+    },
+    {
+      "id": "waiting",
+      "visualMs": 24255,
+      "audioMs": 24253,
+      "driftMs": 2
+    },
+    {
+      "id": "leaders",
+      "visualMs": 24353,
+      "audioMs": 24351,
+      "driftMs": 2
+    },
+    {
+      "id": "full",
+      "visualMs": 24297,
+      "audioMs": 24293,
+      "driftMs": 4
+    },
+    {
+      "id": "action",
+      "visualMs": 25579,
+      "audioMs": 25578,
+      "driftMs": 1
+    }
+  ],
+  "issues": []
+}

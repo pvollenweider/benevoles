@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:42:52.439Z",
+  "videoSha256": "35c2c209bcf69614d4a31c035d42e8f425aec8d211722ce9864b8daa6096a067",
+  "promptSha256": "493c8bcb9657dea50780113d8e4dce725919369d52e07416962b1fb4667d0390",
+  "clipSha256": "684b779fc99b6fa729208550a51c5669d9f9f9695524d4224bde35ffaec357f0",
+  "scene": "event-switch",
+  "review": {
+    "heardOpening": "Les trois cases que nous venons de voir",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Les trois cases que nous venons de voir concernent toute l'organisation.",
+        "visibleSeconds": 0.5,
+        "visible": "Page Réglages des emails avec les cases à cocher sous l'encart d'introduction.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "le formulaire de l'événement ne propose pas de bouton pour couper seulement ses rappels.",
+        "visibleSeconds": 2,
+        "visible": "Formulaire de modification de l'événement affiché à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Regardons maintenant notre événement en brouillon.",
+        "visibleSeconds": 16.5,
+        "visible": "Affichage de la fiche de l'événement Atelier en brouillon.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Il ne reçoit pas les rappels automatiques réservés aux événements publiés.",
+        "visibleSeconds": 17,
+        "visible": "Indication 'Aucun rappel n'est envoyé' visible sous le statut brouillon.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, bonne intelligibilité d'ensemble."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

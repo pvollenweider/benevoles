@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:42:33.385Z",
+  "videoSha256": "35c2c209bcf69614d4a31c035d42e8f425aec8d211722ce9864b8daa6096a067",
+  "promptSha256": "ab794bc9e7aad9ec59489f70cf9824d117eb089aa4c3bd60dd069da32b53a27f",
+  "clipSha256": "7823a02d4547948afc3b258a0cebfce37a713298237edda9f3c3c5e38e331804",
+  "scene": "manual-send",
+  "review": {
+    "heardOpening": "Depuis la page de l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Envoyer le rappel demande une confirmation",
+        "visibleSeconds": 3.8,
+        "visible": "Affichage de la boîte de dialogue de confirmation d'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Nous annulons une première fois, puis reprenons",
+        "visibleSeconds": 8,
+        "visible": "L'annulation n'est pas montrée, confirmation directe",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Ouvrons l'email de Léa",
+        "visibleSeconds": 11.5,
+        "visible": "Ouverture du message de Léa dans le client de messagerie",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "ses deux créneaux sont regroupés dans un seul message",
+        "visibleSeconds": 13.5,
+        "visible": "Affichage des deux créneaux et de la consigne dans le message",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:05 : L'annulation préalable promise par la voix n'est pas réalisée à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et naturelle, bon niveau sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

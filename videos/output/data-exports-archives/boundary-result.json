@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour travailler sur les fiches, prends le CSV des membres. Pour",
+  "windowStart": 230.923,
+  "result": {
+    "found": true,
+    "startSeconds": 13.12,
+    "wordsHeard": "Pour"
+  },
+  "onset": 244.043,
+  "proposedCut": 243.9797915,
+  "note": "Proposal only; recut then independently audit before capture"
+}

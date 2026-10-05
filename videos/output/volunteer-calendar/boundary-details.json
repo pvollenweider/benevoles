@@ -1,12 +1,12 @@
 {
-  "anchor": "Dans l'événement importé, tu retrouves le nom de la fête et",
-  "windowStart": 71.283,
+  "anchor": "Le fichier contient le nom de la fête et le poste,",
+  "windowStart": 66.15599999999999,
   "result": {
     "found": true,
-    "startSeconds": 15,
-    "wordsHeard": "Dans l'événement importé tu retrouves le nom de la fête et"
+    "startSeconds": 9.14,
+    "wordsHeard": "Le"
   },
-  "onset": 86.283,
-  "proposedCut": 86.283,
+  "onset": 75.29599999999999,
+  "proposedCut": 75.1230415,
   "note": "Proposal only; recut then independently audit before capture"
 }

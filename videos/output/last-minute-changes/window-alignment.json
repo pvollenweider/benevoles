@@ -1,0 +1,45 @@
+{
+  "locatedAt": "2026-10-05T19:23:40.807Z",
+  "masterSha256": "8e569db5a5b1d6d6c90a00ba674e9f755180ed1671565f1ea9dc7904d3404cb5",
+  "totalSeconds": 301.44,
+  "cuts": [
+    {
+      "id": "withdrawal",
+      "seconds": 30.545979
+    },
+    {
+      "id": "offer",
+      "seconds": 60.3448545
+    },
+    {
+      "id": "coverage",
+      "seconds": 86.910167
+    },
+    {
+      "id": "availability",
+      "seconds": 117.28475
+    },
+    {
+      "id": "message",
+      "seconds": 148.515833
+    },
+    {
+      "id": "schedule",
+      "seconds": 180.759979
+    },
+    {
+      "id": "cancel",
+      "seconds": 209.83362499999998
+    },
+    {
+      "id": "journal",
+      "seconds": 241.602104
+    },
+    {
+      "id": "result",
+      "seconds": 271.965604
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

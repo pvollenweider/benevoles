@@ -1,0 +1,53 @@
+{
+  "locatedAt": "2026-10-05T18:24:38.466Z",
+  "masterSha256": "0ef34fbcf7d535b01b6d4348878aef6f582e46868fe66765aad612ab12ba0fd7",
+  "totalSeconds": 296.24,
+  "cuts": [
+    {
+      "id": "audiences",
+      "seconds": 21.734250000000003
+    },
+    {
+      "id": "count",
+      "seconds": 47.1519165
+    },
+    {
+      "id": "template-create",
+      "seconds": 69.876375
+    },
+    {
+      "id": "variables",
+      "seconds": 107.0429375
+    },
+    {
+      "id": "apply",
+      "seconds": 133.0399165
+    },
+    {
+      "id": "context",
+      "seconds": 154.863021
+    },
+    {
+      "id": "preview",
+      "seconds": 176.838396
+    },
+    {
+      "id": "push",
+      "seconds": 197.5092915
+    },
+    {
+      "id": "confirm",
+      "seconds": 220.29372949999998
+    },
+    {
+      "id": "result",
+      "seconds": 244.38622900000001
+    },
+    {
+      "id": "maintain",
+      "seconds": 268.6163125
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

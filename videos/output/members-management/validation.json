@@ -1,0 +1,72 @@
+{
+  "id": "MEMBERS_MANAGEMENT",
+  "slug": "members-management",
+  "validatedAt": "2026-10-05T13:06:46.676Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 218680,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 21039,
+      "audioMs": 21038,
+      "driftMs": 1
+    },
+    {
+      "id": "create",
+      "visualMs": 21712,
+      "audioMs": 21706,
+      "driftMs": 6
+    },
+    {
+      "id": "edit",
+      "visualMs": 21318,
+      "audioMs": 21317,
+      "driftMs": 1
+    },
+    {
+      "id": "availability",
+      "visualMs": 21693,
+      "audioMs": 21691,
+      "driftMs": 2
+    },
+    {
+      "id": "no-email",
+      "visualMs": 17659,
+      "audioMs": 17658,
+      "driftMs": 1
+    },
+    {
+      "id": "search",
+      "visualMs": 22301,
+      "audioMs": 22299,
+      "driftMs": 2
+    },
+    {
+      "id": "filter",
+      "visualMs": 22060,
+      "audioMs": 22058,
+      "driftMs": 2
+    },
+    {
+      "id": "deactivate",
+      "visualMs": 22355,
+      "audioMs": 22353,
+      "driftMs": 2
+    },
+    {
+      "id": "activity",
+      "visualMs": 20848,
+      "audioMs": 20847,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 22755,
+      "audioMs": 22752,
+      "driftMs": 3
+    }
+  ],
+  "issues": []
+}

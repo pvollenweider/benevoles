@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-10-05T16:03:25.396Z",
+  "scope": "actual report links, live HTML and generated PDFs; PDF pagination and visual review still required",
+  "pdfVisualReview": false,
+  "activePeople": 80,
+  "individualShiftsForLea": 5,
+  "existingAttendanceMarks": 6,
+  "results": [
+    {
+      "report": "complete",
+      "privateContacts": true,
+      "pdf": "videos/output/event-reports/documents/complete.pdf"
+    },
+    {
+      "report": "day",
+      "privateContacts": false,
+      "pdf": "videos/output/event-reports/documents/day.pdf"
+    },
+    {
+      "report": "role",
+      "privateContacts": false,
+      "pdf": "videos/output/event-reports/documents/role.pdf"
+    },
+    {
+      "report": "individual",
+      "privateContacts": false,
+      "pdf": "videos/output/event-reports/documents/individual.pdf"
+    },
+    {
+      "report": "attendance",
+      "privateContacts": true,
+      "pdf": "videos/output/event-reports/documents/attendance.pdf"
+    },
+    {
+      "report": "phones",
+      "privateContacts": true,
+      "pdf": "videos/output/event-reports/documents/phones.pdf"
+    }
+  ]
+}

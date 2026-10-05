@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour préparer seulement la buvette, revenons au formulaire et choisissons ce",
+  "windowStart": 30.21,
+  "result": {
+    "found": true,
+    "startSeconds": 15,
+    "wordsHeard": "Pour"
+  },
+  "onset": 45.21,
+  "proposedCut": 45.2096875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -880,6 +880,328 @@
       "updatedAt": "2026-10-05",
       "revision": 1,
       "level": "essentiel"
+    },
+    {
+      "id": "DATA_EXPORTS_ARCHIVES",
+      "manifest": "data-exports-archives",
+      "category": "registrations-followup",
+      "tags": [
+        "exports",
+        "csv",
+        "archive",
+        "journal",
+        "données"
+      ],
+      "published": false,
+      "captureReady": true,
+      "seedScenario": "data-exports-archives",
+      "themes": [
+        "tracabilite-donnees"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Exports et archive d'un événement",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "avance"
+    },
+    {
+      "id": "ORGANIZATION_ACTIVITY_LOG",
+      "manifest": "organization-activity-log",
+      "category": "registrations-followup",
+      "tags": [
+        "journal",
+        "historique",
+        "équipe",
+        "membres",
+        "export"
+      ],
+      "published": false,
+      "captureReady": true,
+      "seedScenario": "organization-activity-log",
+      "themes": [
+        "tracabilite-donnees",
+        "organisation-equipe"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Journal d'activité de l'organisation",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "avance"
+    },
+    {
+      "id": "EVENT_ACTIVITY_LOG",
+      "manifest": "event-activity-log",
+      "category": "registrations-followup",
+      "tags": [
+        "journal",
+        "historique",
+        "filtres",
+        "rejouer",
+        "récit"
+      ],
+      "published": false,
+      "captureReady": true,
+      "seedScenario": "event-activity-log",
+      "themes": [
+        "tracabilite-donnees"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Journal de l'événement",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "avance"
+    },
+    {
+      "id": "ATTENDANCE_CHECK_IN",
+      "manifest": "attendance-check-in",
+      "category": "registrations-followup",
+      "tags": [
+        "présences",
+        "pointage",
+        "correction",
+        "export",
+        "jour-j"
+      ],
+      "published": false,
+      "seedScenario": "attendance-check-in",
+      "themes": [
+        "jour-j"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Pointage des présences",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
+      "id": "EVENT_REPORTS",
+      "manifest": "event-reports",
+      "category": "registrations-followup",
+      "tags": [
+        "rapports",
+        "PDF",
+        "présences",
+        "CSV",
+        "impression"
+      ],
+      "published": false,
+      "seedScenario": "event-reports",
+      "themes": [
+        "jour-j"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Rapports imprimables",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
+      "id": "VOLUNTEER_BADGES",
+      "manifest": "volunteer-badges",
+      "category": "registrations-followup",
+      "tags": [
+        "badges",
+        "impression",
+        "terrain",
+        "réimpression"
+      ],
+      "published": false,
+      "seedScenario": "volunteer-badges",
+      "themes": [
+        "jour-j"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Badges des bénévoles",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
+      "id": "REMINDERS_CHANGES",
+      "manifest": "reminders-changes",
+      "category": "registrations-followup",
+      "tags": [
+        "rappels",
+        "email",
+        "horaires",
+        "annulation",
+        "notifications"
+      ],
+      "published": false,
+      "seedScenario": "reminders-changes",
+      "themes": [
+        "inscriptions-communication",
+        "jour-j"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Rappels et messages de changement",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
+      "id": "TARGETED_MESSAGES",
+      "manifest": "targeted-messages",
+      "category": "registrations-followup",
+      "tags": [
+        "messages",
+        "audiences",
+        "modèles",
+        "variables",
+        "email",
+        "notifications"
+      ],
+      "published": false,
+      "seedScenario": "targeted-messages",
+      "themes": [
+        "inscriptions-communication"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Messages ciblés et modèles",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
+      "id": "STAFFING_GAPS",
+      "manifest": "staffing-gaps",
+      "category": "registrations-followup",
+      "tags": [
+        "besoins",
+        "remplissage",
+        "planning",
+        "attente",
+        "validation",
+        "responsables"
+      ],
+      "published": false,
+      "seedScenario": "staffing-gaps",
+      "themes": [
+        "inscriptions-communication",
+        "planning-creneaux"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Où manque-t-il du monde ?",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
+      "id": "REGISTRATIONS_MANAGEMENT",
+      "manifest": "registrations-management",
+      "category": "registrations-followup",
+      "tags": [
+        "inscriptions",
+        "filtres",
+        "ajout-manuel",
+        "conflits",
+        "charge",
+        "actions-groupées"
+      ],
+      "published": false,
+      "seedScenario": "registrations-management",
+      "themes": [
+        "inscriptions-communication"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Liste des inscriptions",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
+      "id": "MEMBERS_REMINDERS",
+      "manifest": "members-reminders",
+      "category": "members-invitations",
+      "tags": [
+        "relances",
+        "invitations",
+        "attente",
+        "messages",
+        "email"
+      ],
+      "published": false,
+      "seedScenario": "members-reminders",
+      "themes": [
+        "membres-invitations",
+        "inscriptions-communication"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Relance des invités",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
+      "id": "MEMBERS_INVITATIONS",
+      "manifest": "members-invitations",
+      "category": "members-invitations",
+      "tags": [
+        "invitations",
+        "membres",
+        "email",
+        "tags",
+        "poste-réservé"
+      ],
+      "published": false,
+      "seedScenario": "members-invitations",
+      "themes": [
+        "membres-invitations"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Invitations des membres",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
+      "id": "MEMBERS_IMPORT",
+      "manifest": "members-import",
+      "category": "members-invitations",
+      "tags": [
+        "membres",
+        "import",
+        "csv",
+        "excel",
+        "doublons",
+        "tags"
+      ],
+      "published": false,
+      "seedScenario": "demo",
+      "themes": [
+        "membres-invitations"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Import des membres",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
     }
   ]
 }

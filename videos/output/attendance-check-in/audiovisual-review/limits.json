@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:08:22.200Z",
+  "videoSha256": "58705cd0468ab625a8108945bd9244cff798768e56f4403e42e7c79dbda4612a",
+  "promptSha256": "2da50f2b21d875a54d047bea1bb2d692202583111bf0fcdccafb8edb8a3aa956",
+  "clipSha256": "58e2c60f33a6804e204bfd1167e95a7b859b64d6e2b6df793e25dd8f4740a609",
+  "scene": "limits",
+  "review": {
+    "heardOpening": "Le pointage enregistre une arrivée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Le pointage enregistre une arrivée",
+        "visibleSeconds": 1,
+        "visible": "Page Inscriptions avec liste de pointage affichant le statut Présent",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Dans la fiche membre, les heures planifiées",
+        "visibleSeconds": 3.5,
+        "visible": "Tableau Membres affichant la colonne Heures planifiées à 4h",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "une arrivée plus tardive n'est pas un calcul automatique",
+        "visibleSeconds": 14.5,
+        "visible": "Ouverture de la page Activité de Léa Exemple listant l'historique",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton pédagogique constant."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

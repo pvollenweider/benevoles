@@ -16,7 +16,7 @@ async function run(command: string, args: string[]) {
 
 async function seed(scenario?: string) {
   if (!scenario) return
-  if (scenario === "personal-withdrawals" || scenario === "personal-calendar" || scenario === "personal-session" || scenario === "members-management") {
+  if (scenario === "attendance-check-in" || scenario === "volunteer-badges" || scenario === "event-reports" || scenario === "reminders-changes" || scenario === "targeted-messages" || scenario === "personal-withdrawals" || scenario === "personal-calendar" || scenario === "personal-session" || scenario === "members-management" || scenario === "members-invitations" || scenario === "members-reminders" || scenario === "registrations-management" || scenario === "staffing-gaps") {
     await seed("demo")
     await run("node", ["--env-file=.env.video.e2e", "node_modules/.bin/tsx", "scripts/seed-video-scenario.ts", scenario])
     return
@@ -28,6 +28,7 @@ async function seed(scenario?: string) {
 }
 
 async function main() {
+  await run("node", ["--import", "tsx", "videos/tools/check-types.ts"])
   const catalog = await loadCatalog()
   const ids = requested.length > 0 ? requested : catalog.videos.map((video) => video.id)
   for (const id of ids) {
@@ -36,6 +37,10 @@ async function main() {
     await run("npm", ["run", "video:tts", "--", entry.id])
     await run("node", ["--env-file-if-exists=.env.video.local", "--import", "tsx", "videos/tools/audit-narration.ts", entry.id])
     await seed(entry.seedScenario)
+    if (entry.manifest === "event-reports") {
+      await run("node", ["--env-file=.env.video.e2e", "--import", "tsx", "videos/tools/verify-reports.ts"])
+      await run("node", ["--import", "tsx", "videos/tools/review-pdfs.ts", "videos/output/event-reports/documents"])
+    }
     await run("npm", ["run", "video:record", "--", entry.id])
     await run("npm", ["run", "video:assemble", "--", entry.id])
     await run("npm", ["run", "video:validate", "--", entry.id])

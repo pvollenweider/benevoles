@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:08:58.539Z",
+  "videoSha256": "e1d04c9dfb88e51be35835c764597a3a9ef877a6424916753f079011043c1217",
+  "promptSha256": "06f996a8687a07c7b20a69d7c6129dfbcbb43fcaf1ff520dcc21813124b82c32",
+  "clipSha256": "090132c200c37063446dca1ad2e749e145dc38d41d9b472d9c79fac2a587c317",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Au stand d'accueil",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Au stand d'accueil, un document clair fait gagner du temps",
+        "visibleSeconds": 0,
+        "visible": "Page d'accueil de l'événement avec bandeau d'introduction",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.3,
+        "spoken": "Ouvrons Rapports",
+        "visibleSeconds": 9.5,
+        "visible": "Ouverture de la section Rapports",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "choisissons les documents selon leur usage",
+        "visibleSeconds": 10,
+        "visible": "Affichage des catégories de documents à imprimer ou exporter",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire, fluide et posée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

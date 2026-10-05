@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:07:38.769Z",
+  "videoSha256": "58705cd0468ab625a8108945bd9244cff798768e56f4403e42e7c79dbda4612a",
+  "promptSha256": "f123435ea6b79855bc163344ddb37b4238c39a1b5fe90cf42326e164011c3e43",
+  "clipSha256": "1eccea7e5d498999152fb4519824206c936158d093d72a3d63b171bceaceba53",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Le jour J, savoir qui est arrivé",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "choisissons l'accueil du matin avec les filtres",
+        "visibleSeconds": 4.8,
+        "visible": "Sélection du filtre Poste sur Accueil puis sélection du créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Chaque ligne correspond à une inscription sur un créneau",
+        "visibleSeconds": 11.2,
+        "visible": "Affichage de la liste filtrée des inscriptions par créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.3,
+        "spoken": "Nous allons pointer une arrivée, corriger une erreur et regarder le bilan réel",
+        "visibleSeconds": 21,
+        "visible": "Tableau statique affiché, annonce introductive des actions suivantes",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction posée et claire, niveau sonore équilibré."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

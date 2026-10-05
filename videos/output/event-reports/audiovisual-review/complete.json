@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:09:08.282Z",
+  "videoSha256": "e1d04c9dfb88e51be35835c764597a3a9ef877a6424916753f079011043c1217",
+  "promptSha256": "f296133ef590e958d4e26dc03c29f03bc4637c7f3ef79dfb4429856e03a1f67d",
+  "clipSha256": "af7cbd9cdba85f51b1fcc42671a9394774f9c4b6920cd5cd866578f96c4b7030",
+  "scene": "complete",
+  "review": {
+    "heardOpening": "Le document complet rassemble une vue d'ensemble",
+    "checkpoints": [
+      {
+        "spokenSeconds": 7,
+        "spoken": "Il s'ouvre dans un nouvel onglet.",
+        "visibleSeconds": 6,
+        "visible": "Ouverture de la page du planning complet dans un onglet dédié.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Lisons une journée : les horaires permettent de suivre la succession des postes",
+        "visibleSeconds": 9,
+        "visible": "Affichage de la frise chronologique des créneaux et des postes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Ce document décrit le planning enregistré au moment de son ouverture.",
+        "visibleSeconds": 18,
+        "visible": "Affichage du tableau détaillé de la journée et de la liste des bénévoles.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et bien synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

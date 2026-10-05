@@ -1,0 +1,12 @@
+{
+  "anchor": "Aline ne peut plus venir à l'accueil. Depuis son lien personnel,",
+  "windowStart": 14.611999999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 16.04,
+    "wordsHeard": "Aline"
+  },
+  "onset": 30.651999999999997,
+  "proposedCut": 30.545979,
+  "note": "Proposal only; recut then independently audit before capture"
+}

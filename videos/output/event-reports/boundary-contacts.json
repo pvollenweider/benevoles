@@ -1,0 +1,12 @@
+{
+  "anchor": "La liste avec téléphones est réservée à l'organisation. Elle permet de",
+  "windowStart": 144.10699999999997,
+  "result": {
+    "found": true,
+    "startSeconds": 11.2,
+    "wordsHeard": "La liste avec téléphones est réservée à l'organisation. Elle permet de"
+  },
+  "onset": 155.30699999999996,
+  "proposedCut": 155.3707915,
+  "note": "Proposal only; recut then independently audit before capture"
+}

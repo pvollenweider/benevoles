@@ -1,0 +1,466 @@
+{
+  "format": "benevol-event-archive",
+  "version": 1,
+  "exportedAt": "2026-10-05T19:16:51.543Z",
+  "organization": {
+    "name": "Formation — données et archives",
+    "slug": "formation-exports"
+  },
+  "event": {
+    "id": "video-data-exports-event",
+    "organizationId": "video-data-exports",
+    "slug": "fete-des-archives",
+    "title": "Fête des archives — démonstration",
+    "description": null,
+    "location": "Parc de démonstration",
+    "publicStatus": "draft",
+    "isListed": true,
+    "startDate": "2026-10-17T00:00:00.000Z",
+    "endDate": "2026-10-17T00:00:00.000Z",
+    "publicInstructions": null,
+    "confirmationMessage": null,
+    "showSchedule": [],
+    "reminderMessage": null,
+    "reminderSentAt": null,
+    "remindersEnabled": false,
+    "requirePhone": false,
+    "accentColorKey": null,
+    "registrationsOpen": true,
+    "registrationOpensAt": null,
+    "registrationClosesAt": null,
+    "latitude": 46.2,
+    "longitude": 6.14,
+    "createdAt": "2026-10-05T19:13:39.387Z",
+    "updatedAt": "2026-10-05T19:13:39.387Z"
+  },
+  "shifts": [
+    {
+      "id": "cmuvmocox000076a51wfakmep",
+      "eventId": "video-data-exports-event",
+      "roleName": "Accueil",
+      "label": "Accueil — archives",
+      "description": null,
+      "date": "2026-10-17T00:00:00.000Z",
+      "startTime": "10:00",
+      "endTime": "12:00",
+      "capacity": 4,
+      "status": "open",
+      "locationDetails": null,
+      "displayOrder": 0,
+      "internalNotes": "Note de préparation fictive, réservée à l'équipe.",
+      "waitlistEnabled": false,
+      "requiresApproval": false,
+      "contactName": null,
+      "contactPhone": null,
+      "instructions": "Passer au stand quinze minutes avant.",
+      "latitude": null,
+      "longitude": null,
+      "minAge": null,
+      "colorKey": null,
+      "maxPerVolunteer": null,
+      "reservedTags": [],
+      "createdAt": "2026-10-05T19:13:39.393Z",
+      "updatedAt": "2026-10-05T19:13:39.393Z"
+    },
+    {
+      "id": "cmuvmocp2000176a59hbywtor",
+      "eventId": "video-data-exports-event",
+      "roleName": "Logistique",
+      "label": "Logistique — archives",
+      "description": null,
+      "date": "2026-10-17T00:00:00.000Z",
+      "startTime": "12:00",
+      "endTime": "14:00",
+      "capacity": 4,
+      "status": "open",
+      "locationDetails": null,
+      "displayOrder": 0,
+      "internalNotes": "Note de préparation fictive, réservée à l'équipe.",
+      "waitlistEnabled": false,
+      "requiresApproval": false,
+      "contactName": null,
+      "contactPhone": null,
+      "instructions": "Passer au stand quinze minutes avant.",
+      "latitude": null,
+      "longitude": null,
+      "minAge": null,
+      "colorKey": null,
+      "maxPerVolunteer": null,
+      "reservedTags": [],
+      "createdAt": "2026-10-05T19:13:39.398Z",
+      "updatedAt": "2026-10-05T19:13:39.398Z"
+    }
+  ],
+  "registrations": [
+    {
+      "id": "cmuvmocp7000276a5xs9sow7f",
+      "eventId": "video-data-exports-event",
+      "shiftId": "cmuvmocox000076a51wfakmep",
+      "volunteerId": "video-data-exports-member-0",
+      "status": "active",
+      "source": "admin_manual",
+      "comment": null,
+      "phone": null,
+      "reminderJ2Sent": null,
+      "reminderJ1Sent": null,
+      "reminderDdSent": null,
+      "waitingPosition": null,
+      "waitingOfferedAt": null,
+      "waitingExpiresAt": null,
+      "checkedInAt": null,
+      "linkEmailedAt": null,
+      "createdAt": "2026-10-05T19:13:39.403Z",
+      "updatedAt": "2026-10-05T19:13:39.403Z",
+      "volunteer": {
+        "id": "video-data-exports-member-0",
+        "organizationId": "video-data-exports",
+        "firstName": "Léa",
+        "lastName": "Exemple",
+        "email": "video.exports.member.0@example.org",
+        "phone": "+41 79 000 9900",
+        "tags": [
+          "Accueil",
+          "Équipe fidèle"
+        ],
+        "active": true,
+        "notes": "=1+1",
+        "birthDate": "2000-06-15T00:00:00.000Z",
+        "availabilityPeriods": [
+          "morning"
+        ],
+        "availabilityNote": "Disponible le matin ; retour à midi.",
+        "createdAt": "2026-10-05T19:13:39.365Z",
+        "updatedAt": "2026-10-05T19:15:16.802Z"
+      }
+    },
+    {
+      "id": "cmuvmocpi000376a5u61g458x",
+      "eventId": "video-data-exports-event",
+      "shiftId": "cmuvmocox000076a51wfakmep",
+      "volunteerId": "video-data-exports-member-2",
+      "status": "active",
+      "source": "admin_manual",
+      "comment": null,
+      "phone": null,
+      "reminderJ2Sent": null,
+      "reminderJ1Sent": null,
+      "reminderDdSent": null,
+      "waitingPosition": null,
+      "waitingOfferedAt": null,
+      "waitingExpiresAt": null,
+      "checkedInAt": null,
+      "linkEmailedAt": null,
+      "createdAt": "2026-10-05T19:13:39.414Z",
+      "updatedAt": "2026-10-05T19:13:39.414Z",
+      "volunteer": {
+        "id": "video-data-exports-member-2",
+        "organizationId": "video-data-exports",
+        "firstName": "Zoé",
+        "lastName": "Exemple",
+        "email": "video.exports.member.2@example.org",
+        "phone": "+41 79 000 0002",
+        "tags": [
+          "Accueil"
+        ],
+        "active": true,
+        "notes": "Prévenir à l'arrivée.",
+        "birthDate": null,
+        "availabilityPeriods": [
+          "afternoon"
+        ],
+        "availabilityNote": "Après le repas.",
+        "createdAt": "2026-10-05T19:13:39.376Z",
+        "updatedAt": "2026-10-05T19:13:39.376Z"
+      }
+    },
+    {
+      "id": "cmuvmocpk000476a52sq3y1kh",
+      "eventId": "video-data-exports-event",
+      "shiftId": "cmuvmocp2000176a59hbywtor",
+      "volunteerId": "video-data-exports-member-3",
+      "status": "active",
+      "source": "admin_manual",
+      "comment": null,
+      "phone": null,
+      "reminderJ2Sent": null,
+      "reminderJ1Sent": null,
+      "reminderDdSent": null,
+      "waitingPosition": null,
+      "waitingOfferedAt": null,
+      "waitingExpiresAt": null,
+      "checkedInAt": null,
+      "linkEmailedAt": null,
+      "createdAt": "2026-10-05T19:13:39.416Z",
+      "updatedAt": "2026-10-05T19:13:39.416Z",
+      "volunteer": {
+        "id": "video-data-exports-member-3",
+        "organizationId": "video-data-exports",
+        "firstName": "Camille",
+        "lastName": "Exemple",
+        "email": "video.exports.member.3@example.org",
+        "phone": "+41 79 000 0003",
+        "tags": [],
+        "active": true,
+        "notes": "@exemple",
+        "birthDate": null,
+        "availabilityPeriods": [],
+        "availabilityNote": "",
+        "createdAt": "2026-10-05T19:13:39.380Z",
+        "updatedAt": "2026-10-05T19:13:39.380Z"
+      }
+    }
+  ],
+  "pages": [
+    {
+      "id": "cmuvmocpn000576a5xxptnyxh",
+      "eventId": "video-data-exports-event",
+      "slug": "bienvenue",
+      "title": "Bienvenue au stand",
+      "content": "Informations fictives pour la fête des archives.",
+      "displayOrder": 0,
+      "createdAt": "2026-10-05T19:13:39.419Z",
+      "updatedAt": "2026-10-05T19:13:39.419Z"
+    }
+  ],
+  "questions": [
+    {
+      "id": "cmuvmocq0000876a52bs7mifz",
+      "eventId": "video-data-exports-event",
+      "position": 0,
+      "label": "Taille du t-shirt",
+      "type": "single",
+      "options": [
+        "S",
+        "M",
+        "L"
+      ],
+      "required": false,
+      "archivedAt": null,
+      "createdAt": "2026-10-05T19:13:39.432Z",
+      "answers": [
+        {
+          "volunteerId": "video-data-exports-member-0",
+          "values": [
+            "M"
+          ],
+          "updatedAt": "2026-10-05T19:13:39.436Z"
+        }
+      ]
+    }
+  ],
+  "sectorLeaders": [
+    {
+      "roleName": "Accueil",
+      "name": "Nicolas Exemple",
+      "email": "video.exports.leader@example.org",
+      "createdAt": "2026-10-05T19:13:39.423Z"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "cmuvmocpw000776a5slbp3331",
+      "eventId": "video-data-exports-event",
+      "title": "Préparer les panneaux",
+      "dueDate": "2026-10-15T12:00:00.000Z",
+      "done": true,
+      "createdAt": "2026-10-05T19:13:39.428Z",
+      "updatedAt": "2026-10-05T19:13:39.428Z"
+    }
+  ],
+  "log": [
+    {
+      "id": "cmuvmqg1y00kumna5zl3h8o6x",
+      "eventId": "video-data-exports-event",
+      "actorType": "system",
+      "actorId": null,
+      "action": "event.baseline",
+      "entityType": "Event",
+      "entityId": "video-data-exports-event",
+      "changes": {
+        "title": {
+          "to": "Fête des archives — démonstration",
+          "from": null
+        },
+        "endDate": {
+          "to": "2026-10-17T00:00:00.000Z",
+          "from": null
+        },
+        "startDate": {
+          "to": "2026-10-17T00:00:00.000Z",
+          "from": null
+        },
+        "publicStatus": {
+          "to": "draft",
+          "from": null
+        }
+      },
+      "causedByLogId": null,
+      "createdAt": "2026-10-05T19:13:39.387Z"
+    },
+    {
+      "id": "cmuvmqg2300kvmna5ll44lyr0",
+      "eventId": "video-data-exports-event",
+      "actorType": "system",
+      "actorId": null,
+      "action": "shift.baseline",
+      "entityType": "Shift",
+      "entityId": "cmuvmocox000076a51wfakmep",
+      "changes": {
+        "date": {
+          "to": "2026-10-17T00:00:00.000Z",
+          "from": null
+        },
+        "label": {
+          "to": "Accueil — archives",
+          "from": null
+        },
+        "status": {
+          "to": "open",
+          "from": null
+        },
+        "endTime": {
+          "to": "12:00",
+          "from": null
+        },
+        "capacity": {
+          "to": 4,
+          "from": null
+        },
+        "roleName": {
+          "to": "Accueil",
+          "from": null
+        },
+        "startTime": {
+          "to": "10:00",
+          "from": null
+        }
+      },
+      "causedByLogId": null,
+      "createdAt": "2026-10-05T19:13:39.393Z"
+    },
+    {
+      "id": "cmuvmqg2900kwmna5wv4uxrx6",
+      "eventId": "video-data-exports-event",
+      "actorType": "system",
+      "actorId": null,
+      "action": "shift.baseline",
+      "entityType": "Shift",
+      "entityId": "cmuvmocp2000176a59hbywtor",
+      "changes": {
+        "date": {
+          "to": "2026-10-17T00:00:00.000Z",
+          "from": null
+        },
+        "label": {
+          "to": "Logistique — archives",
+          "from": null
+        },
+        "status": {
+          "to": "open",
+          "from": null
+        },
+        "endTime": {
+          "to": "14:00",
+          "from": null
+        },
+        "capacity": {
+          "to": 4,
+          "from": null
+        },
+        "roleName": {
+          "to": "Logistique",
+          "from": null
+        },
+        "startTime": {
+          "to": "12:00",
+          "from": null
+        }
+      },
+      "causedByLogId": null,
+      "createdAt": "2026-10-05T19:13:39.398Z"
+    },
+    {
+      "id": "cmuvmqg2c00kxmna5gvd2onc9",
+      "eventId": "video-data-exports-event",
+      "actorType": "system",
+      "actorId": null,
+      "action": "registration.baseline",
+      "entityType": "Registration",
+      "entityId": "cmuvmocp7000276a5xs9sow7f",
+      "changes": {
+        "source": {
+          "to": "admin_manual",
+          "from": null
+        },
+        "status": {
+          "to": "active",
+          "from": null
+        },
+        "shiftId": {
+          "to": "cmuvmocox000076a51wfakmep",
+          "from": null
+        }
+      },
+      "causedByLogId": null,
+      "createdAt": "2026-10-05T19:13:39.403Z"
+    },
+    {
+      "id": "cmuvmqg2e00kymna5bt4bpx1v",
+      "eventId": "video-data-exports-event",
+      "actorType": "system",
+      "actorId": null,
+      "action": "registration.baseline",
+      "entityType": "Registration",
+      "entityId": "cmuvmocpi000376a5u61g458x",
+      "changes": {
+        "source": {
+          "to": "admin_manual",
+          "from": null
+        },
+        "status": {
+          "to": "active",
+          "from": null
+        },
+        "shiftId": {
+          "to": "cmuvmocox000076a51wfakmep",
+          "from": null
+        }
+      },
+      "causedByLogId": null,
+      "createdAt": "2026-10-05T19:13:39.414Z"
+    },
+    {
+      "id": "cmuvmqg2j00kzmna5hj8ayzi2",
+      "eventId": "video-data-exports-event",
+      "actorType": "system",
+      "actorId": null,
+      "action": "registration.baseline",
+      "entityType": "Registration",
+      "entityId": "cmuvmocpk000476a52sq3y1kh",
+      "changes": {
+        "source": {
+          "to": "admin_manual",
+          "from": null
+        },
+        "status": {
+          "to": "active",
+          "from": null
+        },
+        "shiftId": {
+          "to": "cmuvmocp2000176a59hbywtor",
+          "from": null
+        }
+      },
+      "causedByLogId": null,
+      "createdAt": "2026-10-05T19:13:39.416Z"
+    }
+  ],
+  "counts": {
+    "shifts": 2,
+    "registrations": 3,
+    "pages": 1,
+    "sectorLeaders": 1,
+    "milestones": 1,
+    "log": 6
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Commence par le public. Tous les bénévoles inscrits vise les inscriptions",
+  "windowStart": 6.734000000000002,
+  "result": {
+    "found": true,
+    "startSeconds": 14.98,
+    "wordsHeard": "Commence par le public. Tous les bénévoles inscrits vise les inscriptions"
+  },
+  "onset": 21.714000000000002,
+  "proposedCut": 21.734250000000003,
+  "note": "Proposal only; recut then independently audit before capture"
+}

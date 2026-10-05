@@ -1,0 +1,26 @@
+WEBVTT
+
+00:00:00.215 --> 00:00:24.297
+Le jour J, savoir qui est arrivé aide à accueillir l'équipe et à repérer les absences. Ouvrons les inscriptions et choisissons l'accueil du matin avec les filtres. Chaque ligne correspond à une inscription sur un créneau. Être inscrit, c'est ce qui était prévu. Être marqué présent, c'est une autre information. Nous allons pointer une arrivée, corriger une erreur et regarder le bilan réel.
+
+00:00:24.850 --> 00:00:49.796
+Aline vient d'arriver. Sélectionnons uniquement sa ligne, puis lisons le nombre indiqué avant de marquer sa présence. La marque apparaît sur son inscription. Rechargeons la page : elle est toujours là. Ce contrôle évite de confondre une sélection à l'écran avec une donnée réellement enregistrée. Le nombre d'inscriptions affichées décrit la liste filtrée, pas le nombre de personnes présentes.
+
+00:00:50.249 --> 00:01:15.643
+Nicolas et Léa arrivent ensemble. Sélectionnons leurs deux lignes et vérifions le nombre avant de cliquer sur Marquer présents. Voici les deux marques, tandis qu'une personne pas encore arrivée reste sans marque. Une demande en attente de validation n'est pas une inscription confirmée à pointer. Ne la transforme pas en présence simplement pour compléter ton bilan : traite d'abord sa demande selon les règles de l'événement.
+
+00:01:16.096 --> 00:01:39.088
+Tu as pointé Léa par erreur ? Sélectionnons sa ligne et annulons la présence. La marque disparaît, mais son inscription et sa place restent. Ce n'est pas la même action que retirer quelqu'un de son créneau. Quand la bonne personne arrive, tu peux enregistrer sa présence à nouveau. Relis le nom et l'horaire avant chaque correction : c'est plus simple que de reconstruire une inscription supprimée par mégarde.
+
+00:01:39.540 --> 00:02:07.729
+Une personne peut aider sur plusieurs horaires. Recherchons Léa pour retrouver ses deux inscriptions. Elle aide le matin, puis à la buvette. Le pointage concerne la ligne sélectionnée, pas toute sa journée. Sa présence au premier créneau ne prouve pas qu'elle est arrivée au second. Regardons les deux lignes côte à côte : l'une est pointée et l'autre ne l'est pas. Tu gardes ainsi une information utile pour chaque équipe, sans généraliser une seule arrivée à tous les postes.
+
+00:02:08.186 --> 00:02:34.983
+Le pointage enregistre une arrivée. Il ne mesure pas l'heure de départ ni la durée réellement travaillée. Dans la fiche membre, les heures planifiées restent les heures prévues par les créneaux. Ne les présente pas comme des heures attestées. De la même façon, une arrivée plus tardive n'est pas un calcul automatique du retard. Le site conserve une marque de présence ; le suivi du temps réellement effectué demande autre chose.
+
+00:02:35.434 --> 00:03:15.180
+Un cas à regarder de près : Sarah est arrivée, mais son créneau doit finalement être annulé. Enregistrons d'abord sa présence, puis ouvrons son créneau dans la liste. Lisons le récapitulatif et confirmons la suppression. Revenons aux inscriptions : sa ligne a disparu. Téléchargeons le fichier pour vérifier le bilan. Sarah n'y figure pas, car cet export ne retient que les inscriptions actives. Pourtant, le pointage enregistré avant l'annulation est conservé. Ce fichier n'est donc pas un relevé complet de tout ce qui s'est passé. Avant d'annuler un créneau déjà commencé, vérifie avec l'organisation comment garder une trace utile.
+
+00:03:16.785 --> 00:03:44.662
+Téléchargeons maintenant le véritable export des présences. Comparons une ligne pointée et une ligne non pointée, leurs créneaux et les colonnes Présent et Pointé le. Ce fichier ne calcule pas des heures réellement travaillées. Il peut aussi contenir des coordonnées et des réponses aux questions : partage seulement ce qui est nécessaire. Pour un bilan fiable, pointe la bonne ligne, corrige sans désinscrire et relis le fichier avant de le transmettre.
+
