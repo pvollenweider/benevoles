@@ -71,6 +71,14 @@ COPY --from=builder --chown=nextjs:nodejs /app/GUIDE_BENEVOLE.md ./GUIDE_BENEVOL
 COPY --from=builder --chown=nextjs:nodejs /app/FEATURES.md ./FEATURES.md
 COPY --from=builder --chown=nextjs:nodejs /app/ACCESSIBILITE.md ./ACCESSIBILITE.md
 
+# Catalogue vidéo (#644) : src/lib/video-catalog.ts lit ces fichiers avec fs, hors du tracing de
+# `output: "standalone"`, comme les guides ci-dessus. Le reste de videos/ (tools, assets, output)
+# est exclu de l'image par .dockerignore.
+COPY --from=builder --chown=nextjs:nodejs /app/videos/catalog.json ./videos/catalog.json
+COPY --from=builder --chown=nextjs:nodejs /app/videos/manifests ./videos/manifests
+COPY --from=builder --chown=nextjs:nodejs /app/videos/scripts ./videos/scripts
+COPY --from=builder --chown=nextjs:nodejs /app/videos/MASTERCLASS_PLAN.md ./videos/MASTERCLASS_PLAN.md
+
 # Merge prisma CLI (+ toutes ses deps) dans node_modules
 # Appeler index.js directement préserve __dirname = node_modules/prisma/build/
 # ce qui permet de trouver prisma_schema_build_bg.wasm et tous les modules

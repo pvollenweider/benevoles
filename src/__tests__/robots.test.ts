@@ -36,7 +36,7 @@ describe("robots (production domain: benevol.app)", () => {
     expect(result.rules).toEqual({
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin", "/api/", "/my/", "/waitlist/", "/leader/"],
+      disallow: ["/admin", "/api/", "/my/", "/waitlist/", "/leader/", "/videos"],
     })
     expect(result.sitemap).toBe("https://benevol.app/sitemap.xml")
   })

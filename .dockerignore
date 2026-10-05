@@ -16,5 +16,15 @@ docker-compose*.yml
 !GUIDE_BENEVOLE.md
 .DS_Store
 coverage
-# Video sources and renders (#636): never part of the app image.
-videos
+# Video sources and renders (#636, #644): the generation tools, their library and any rendered
+# output never belong in the app image — only the catalogue, manifests and scripts do, read by
+# src/lib/video-catalog.ts at build and at runtime, the same way the guides above are. `*.md`
+# above already excludes every .md file including the scripts and the plan: re-included below,
+# like FEATURES.md. Checked by src/lib/__tests__/video-docker-sources.test.ts.
+videos/assets
+videos/lib
+videos/tools
+videos/output
+videos/video.env.example
+!videos/MASTERCLASS_PLAN.md
+!videos/scripts/*.md

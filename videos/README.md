@@ -169,6 +169,79 @@ chargés depuis un autre domaine), sert les types `video/mp4` et `text/vtt`, acc
 partielles (avancer dans la vidéo) et ne liste pas les dossiers. Son volume n'est pas sauvegardé :
 tout se régénère depuis les sources de ce dossier ; gardez votre copie de `videos/output`.
 
+## Bibliothèque vidéo interne (`/videos`, #644)
+
+`src/lib/video-catalog.ts` lit `catalog.json`, les manifestes et les scripts (server-only, au
+build et à la requête) pour alimenter `/videos` (galerie) et `/videos/[id]` (détail, l'identifiant
+stable ; le slug du manifeste redirige vers l'identifiant). Cette page n'est référencée nulle part
+(pas de navigation, pas de sitemap, `robots: noindex,nofollow`, et `robots.ts` l'exclut aussi) :
+c'est un outil interne pour revoir le catalogue, pas encore la bibliothèque publique.
+
+Champs du catalogue ajoutés par #644, en plus de `id`, `manifest`, `category`, `tags`, `published`
+et `seedScenario` (#637, #638) :
+
+- `themes` (tableau d'identifiants, non vide) : un ou plusieurs des neuf thèmes du carrousel
+  (`videos/MASTERCLASS_PLAN.md`, « Organisation du carrousel » ; registre complet dans
+  `src/lib/video-catalog.ts`, `THEMES`). Une vidéo peut appartenir à plusieurs thèmes sans être
+  dupliquée dans le catalogue (principe « un seul catalogue », #645).
+- `audience` (tableau non vide parmi `organisateur`, `benevole`, `super-admin`).
+- `level` (optionnel parmi `decouverte`, `intermediaire`, `avance`) : aucune vidéo n'en a
+  aujourd'hui, le plan ne donnant pas encore de niveau par module.
+- `feature` : le nom de la fonctionnalité Benevol illustrée (texte simple aujourd'hui, pas encore
+  un lien vérifié vers une ancre de `FEATURES.md` ou `GUIDE_ADMIN.md`).
+- `updatedAt` (`AAAA-MM-JJ`) et `revision` (entier ≥ 1) : préparés pour le retour « utile ? »
+  lié à une révision précise (#646, PREPARE seulement — aucune UI).
+
+`published` reste `false` sur les 28 vidéos aujourd'hui ; la galerie les affiche quand même, avec
+leur état (« À venir »). `filterPublishedVideos(videos, VIDEO_LIBRARY_PUBLIC_ONLY)` filtre déjà sur
+`published` : passer la constante `VIDEO_LIBRARY_PUBLIC_ONLY` (dans `video-catalog.ts`) à `true`
+est le seul changement nécessaire pour ne montrer que les vidéos publiées, le jour venu.
+
+La durée affichée vient de la somme des `fallbackDurationMs` des segments du manifeste, sauf si
+`videos/output/<slug>/audio-metadata.json` existe déjà (rendu réel) : dans ce cas la durée mesurée
+par FFprobe est utilisée.
+
+### Lecture des médias (`VIDEO_MEDIA_BASE_URL`)
+
+Les fichiers rendus ne sont jamais dans Git ni dans l'image : la page construit leurs URLs à partir
+de `VIDEO_MEDIA_BASE_URL` (`src/lib/env.ts`, voir `docs/configuration.md`) —
+`<base>/<slug>/<slug>.mp4`, `.vtt`, `.txt`. Sans la variable, ou si le rendu d'une vidéo précise
+n'existe pas encore sur le serveur de médias, la page affiche « Vidéo bientôt disponible » :
+jamais de sonde réseau côté serveur (build ou requête) ; côté navigateur, l'échec de chargement de
+la balise `<video>` (`onError`) retombe sur le même message.
+
+Le lecteur (`<video crossOrigin="anonymous">`) charge la vidéo et ses sous-titres (`<track>`)
+depuis un autre domaine que `www.benevol.app` : `medias.benevol.app` doit répondre avec
+`Access-Control-Allow-Origin` (voir « 5. Publier sur medias.benevol.app » ci-dessus, et
+`k8s/media.yaml`) et les bons `Content-Type` (`video/mp4`, `text/vtt`). Les sous-titres sont
+disponibles mais désactivés par défaut (décision du propriétaire) : la piste `<track>` reste
+sélectionnable depuis le menu natif du lecteur, et le transcript est toujours affiché en texte
+sous le lecteur, donc WCAG 1.2.2 reste respecté sans sous-titres activés d'office. En local, deux
+options équivalentes :
+
+- `make video-media-serve` (`scripts/serve-video-media.mjs`, sans dépendance) sert `videos/output`
+  sur `http://localhost:4870` avec les mêmes en-têtes CORS et `Content-Type` que `k8s/media.yaml` ;
+- ou pointer `VIDEO_MEDIA_BASE_URL` vers une copie locale du nginx de `k8s/media.yaml`.
+
+```dotenv
+VIDEO_MEDIA_BASE_URL="http://localhost:4870"
+```
+
+Aucune Content-Security-Policy n'existe aujourd'hui dans l'application : rien à y ajouter pour ce
+domaine séparé.
+
+### Lecture automatique
+
+La vidéo démarre seule, avec le son, uniquement en arrivant sur sa page de détail depuis une
+carte de la galerie ou un lien « Vidéos liées » de la même session — jamais sur une URL tapée, un
+lien externe ou un rechargement — et jamais avec `prefers-reduced-motion: reduce` (décision du
+propriétaire, `src/lib/video-autoplay.ts`). Pas de paramètre dans l'URL (qui la rendrait
+partageable avec lecture automatique) : `AutoplayLink.tsx` pose un indicateur dans
+`sessionStorage` juste avant la navigation, que le lecteur lit puis efface une seule fois au
+montage (`consumeAutoplayIntent`), et appelle `video.play()` sans l'attribut `autoplay` ; un refus
+du navigateur (politique de lecture automatique) est simplement ignoré, la vidéo reste en pause,
+prête pour « Lecture ».
+
 ## Ajouter une vidéo
 
 1. Choisir un identifiant sémantique stable, par exemple `EVENT_CREATE`, sans langue ni numéro.

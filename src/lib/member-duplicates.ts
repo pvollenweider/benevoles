@@ -170,10 +170,16 @@ function addSignal(map: Map<string, Set<SignalKind>>, idA: string, idB: string, 
   map.set(key, set)
 }
 
-function addBlockPairs(map: Map<string, Set<SignalKind>>, ids: string[], kind: SignalKind) {
+/** Counts the pairs actually compared, so a test can check the blocking without timing it. */
+export type DuplicateSearchStats = { comparisons: number }
+
+function addBlockPairs(map: Map<string, Set<SignalKind>>, ids: string[], kind: SignalKind, stats?: DuplicateSearchStats) {
   if (ids.length < 2) return
   for (let i = 0; i < ids.length; i++) {
-    for (let j = i + 1; j < ids.length; j++) addSignal(map, ids[i], ids[j], kind)
+    for (let j = i + 1; j < ids.length; j++) {
+      if (stats) stats.comparisons++
+      addSignal(map, ids[i], ids[j], kind)
+    }
   }
 }
 
@@ -230,7 +236,7 @@ function reasonsFor(signals: SignalKind[]): string[] {
  * (`mergedIntoId` set) are filtered out up front — they must never be suggested, whichever side
  * of a pair they'd be on.
  */
-export function findDuplicatePairs(members: DuplicateMemberInput[]): DuplicatePair[] {
+export function findDuplicatePairs(members: DuplicateMemberInput[], stats?: DuplicateSearchStats): DuplicatePair[] {
   const active = members.filter((m) => !m.mergedIntoId)
   const byId = new Map(active.map((m) => [m.id, m]))
   const pairSignals = new Map<string, Set<SignalKind>>()
@@ -243,7 +249,7 @@ export function findDuplicatePairs(members: DuplicateMemberInput[]): DuplicatePa
     list.push(m.id)
     nameBlocks.set(key, list)
   }
-  for (const ids of nameBlocks.values()) addBlockPairs(pairSignals, ids, "name")
+  for (const ids of nameBlocks.values()) addBlockPairs(pairSignals, ids, "name", stats)
 
   const phoneBlocks = new Map<string, string[]>()
   for (const m of active) {
@@ -253,7 +259,7 @@ export function findDuplicatePairs(members: DuplicateMemberInput[]): DuplicatePa
     list.push(m.id)
     phoneBlocks.set(key, list)
   }
-  for (const ids of phoneBlocks.values()) addBlockPairs(pairSignals, ids, "phone")
+  for (const ids of phoneBlocks.values()) addBlockPairs(pairSignals, ids, "phone", stats)
 
   const emailBlocks = new Map<string, string[]>()
   for (const m of active) {
@@ -270,6 +276,7 @@ export function findDuplicatePairs(members: DuplicateMemberInput[]): DuplicatePa
       for (let j = i + 1; j < ids.length; j++) {
         const a = byId.get(ids[i])!
         const b = byId.get(ids[j])!
+        if (stats) stats.comparisons++
         if (emailsAreClose(a.email, b.email)) addSignal(pairSignals, ids[i], ids[j], "email")
       }
     }

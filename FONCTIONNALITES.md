@@ -463,3 +463,4 @@ Fallback console si SMTP non configuré (développement).
 - Certificat wildcard via cert-manager et le webhook DNS Gandi (`gandi-webhook/`)
 - Suivi des erreurs avec Sentry (serveur, edge et navigateur)
 - CI/CD GitHub Actions : build, push image GHCR, déploiement automatique sur push `main`
+- **Bibliothèque vidéo interne** (`/videos`, `/videos/[id]`, #644) : lit `videos/catalog.json`, les manifestes et les scripts éditoriaux (`src/lib/video-catalog.ts`) pour une galerie filtrable (thème, public, étiquette, recherche) et une page de détail (lecteur, script, transcript, vidéos liées). Page interne, non référencée (ni navigation, ni sitemap, `robots: noindex,nofollow`, exclue de `robots.ts`) : aucune vidéo n'est aujourd'hui `published`, la galerie les affiche quand même avec leur état « À venir ». Fichiers rendus servis depuis `VIDEO_MEDIA_BASE_URL` (`medias.benevol.app`, `k8s/media.yaml`), jamais dans Git ni dans l'image — voir `videos/README.md`
