@@ -2,7 +2,7 @@
 
 benevol.app vise le niveau **AA des WCAG 2.2**. Cette page dit ce qui a été vérifié, comment, et ce qui ne l'est pas encore.
 
-Déclaration établie le 4 octobre 2026, sur la base d'une auto-évaluation à la même date.
+Déclaration établie le 5 octobre 2026, sur la base d'une auto-évaluation à la même date.
 
 ## Périmètre
 
@@ -17,7 +17,8 @@ Technologies utilisées : HTML, CSS, JavaScript, WAI-ARIA.
 ## Ce qui est vérifié, et comment
 
 - **Tests automatiques** : l'outil axe-core (règles WCAG 2.0 à 2.2, niveaux A et AA) analyse la page d'accueil de benevol.app, réponses de la foire aux questions dépliées comprises, les pages de contenu (présentation des fonctionnalités, index de la documentation, guide du bénévole, cette page, politique de confidentialité), la page d'un événement et son formulaire d'inscription, la page personnelle des bénévoles (demande de confirmation d'une annulation ouverte comprise), la connexion à l'administration, la liste des événements, la page d'un événement dans l'administration et ses pages Créneaux, Inscriptions, Écrire aux bénévoles et Invitations. Ils tournent sur Chromium en affichage ordinateur ; cette page et l'index de la documentation sont aussi analysés à 320 pixels de large, en thème sombre. Chaque modification du code est testée ainsi, et le test échoue si l'outil signale un défaut grave ou critique. Ils ne voient qu'une partie des problèmes possibles.
-- **Toucher sur téléphone** : le menu du compte de l'administration (ouvrir le menu, « Mon compte », « Se déconnecter », refermer en touchant ailleurs) et l'annulation d'un créneau sur la page personnelle sont aussi testés automatiquement au toucher, avec le moteur de Safari et l'affichage d'un iPhone simulé ; ce n'est pas un essai sur un vrai téléphone ni avec VoiceOver.
+- **Rôles, noms et états** : pour le choix des créneaux sur la page d'un événement, le menu du compte de l'administration, le choix entre frise et liste des créneaux, et l'ajout manuel d'une inscription avec son message d'erreur, les tests automatiques vérifient aussi ce qui est transmis aux technologies d'assistance : le rôle et le nom de chaque élément, et ses états (sélectionné, ouvert, en erreur, désactivé). C'est une vérification du code, pas un essai avec un lecteur d'écran.
+- **Toucher sur téléphone** : le menu du compte de l'administration (ouvrir le menu, « Mon compte », « Se déconnecter », refermer en touchant ailleurs), le choix d'un créneau sur la page d'un événement et l'annulation d'un créneau sur la page personnelle sont aussi testés automatiquement au toucher, avec le moteur de Safari et l'affichage d'un iPhone simulé ; ce n'est pas un essai sur un vrai téléphone ni avec VoiceOver.
 - **Revue de chaque changement d'interface** : chaque modification des écrans passe par une revue d'accessibilité dédiée (structure, noms accessibles, clavier, focus, annonces, contraste, libellés) ; ses remarques bloquantes sont corrigées avant publication.
 - **Clavier** : les parcours ci-dessous sont conçus pour être utilisés au clavier seul, avec un lien d'évitement (« Aller au contenu ») sur la page d'un événement, les documents légaux, les pages de la documentation et celles de l'administration, et un focus visible. Une vérification manuelle complète et datée de ces parcours reste à faire.
 
