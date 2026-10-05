@@ -66,7 +66,7 @@ export type PracticalInfoGaps = {
   shifts: number
   /** Shifts with neither a meeting point of their own nor an event place to fall back on. */
   noPlace: number
-  /** Shifts without a contact person (name or phone): the event has none to fall back on. */
+  /** Shifts without a contact person (name or phone) while the event has no day-of contact (#560) to fall back on. */
   noContact: number
   /** Shifts missing both. */
   noPlaceNorContact: number
@@ -75,20 +75,21 @@ export type PracticalInfoGaps = {
 }
 
 type PracticalShift = { locationDetails?: string | null; contactName?: string | null; contactPhone?: string | null; latitude?: number | null; longitude?: number | null }
-type PracticalEvent = { location?: string | null; latitude?: number | null; longitude?: number | null }
+type PracticalEvent = { location?: string | null; latitude?: number | null; longitude?: number | null; dayContactName?: string | null; dayContactPhone?: string | null }
 
 const filled = (v: string | null | undefined) => !!v?.trim()
 
 /**
  * Which shifts lack what volunteers need on the day (#397, #565). The event's place (text or
- * coordinates) counts as every shift's place; nothing stands in for a missing contact.
+ * coordinates) counts as every shift's place, its day-of contact (#560) as every shift's contact.
  */
 export function practicalInfoGaps(shifts: PracticalShift[], event: PracticalEvent): PracticalInfoGaps {
   const eventPlace = filled(event.location) || !!coordinatesOf(event)
+  const eventContact = filled(event.dayContactName) || filled(event.dayContactPhone)
   const gaps = { shifts: shifts.length, noPlace: 0, noContact: 0, noPlaceNorContact: 0, incomplete: 0 }
   for (const s of shifts) {
     const place = eventPlace || filled(s.locationDetails) || !!coordinatesOf(s)
-    const contact = filled(s.contactName) || filled(s.contactPhone)
+    const contact = eventContact || filled(s.contactName) || filled(s.contactPhone)
     if (!place) gaps.noPlace++
     if (!contact) gaps.noContact++
     if (!place && !contact) gaps.noPlaceNorContact++
@@ -114,7 +115,9 @@ function practicalInfoCheck(g: PracticalInfoGaps, base: string): ReviewCheck {
     : "sans lieu ou sans contact"
   return {
     id: "practical-info", label: `${shiftsWord(g.incomplete)} ${missing}`, ok: false, required: false, warn: true, href,
-    hint: "Le lieu et la personne à contacter figurent dans l'email de confirmation, les rappels et la page personnelle des bénévoles.",
+    hint: g.noContact > 0
+      ? "Le lieu et la personne à contacter figurent dans l'email de confirmation, les rappels et la page personnelle des bénévoles. Un contact le jour J, dans les réglages de l'événement, vaut pour tous les créneaux sans contact."
+      : "Le lieu et la personne à contacter figurent dans l'email de confirmation, les rappels et la page personnelle des bénévoles.",
   }
 }
 

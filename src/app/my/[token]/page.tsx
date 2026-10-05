@@ -18,6 +18,8 @@ import { withdrawCopy, withdrawDoneMessage, withdrawFailureMessage } from "@/lib
 import WithdrawMessageField from "@/components/public/WithdrawMessageField"
 import { announce } from "@/lib/announce"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
+import MissionBriefCard from "@/components/public/MissionBriefCard"
+import { MISSION_BRIEF_ID, MISSION_BRIEF_TITLE, nextConfirmedRegistration, type BriefEvent } from "@/lib/mission-brief"
 
 type ShiftRef = {
   label: string
@@ -30,6 +32,11 @@ type ShiftRef = {
   instructions?: string | null
   latitude?: number | null
   longitude?: number | null
+  /** The event's day-of contact (#560), only on a confirmed shift without a contact of its own. */
+  dayContactName?: string | null
+  dayContactPhone?: string | null
+  /** The role's sector leaders by name (#560), only on a confirmed shift. */
+  sectorLeaderNames?: string[] | null
 }
 
 type RegistrationItem = {
@@ -42,7 +49,7 @@ type RegistrationItem = {
 }
 
 type PageData = {
-  event: { id: string; title: string; slug: string }
+  event: { id: string; title: string; slug: string } & BriefEvent
   volunteer: { firstName: string; lastName: string; email: string; availabilityPeriods?: string[]; availabilityNote?: string | null }
   registrations: RegistrationItem[]
   orgHomeUrl: string
@@ -206,6 +213,9 @@ export default function MyRegistrationPage() {
     )
   }
 
+  // « Avant ta mission » (#560): the next confirmed shift not over yet, read on the visitor's clock.
+  const next = nextConfirmedRegistration(data.registrations, new Date(), data.timeZone ?? "Europe/Zurich")
+
   // The status region is the fragment's first child in both views below, so React keeps the same
   // node when the last withdrawal switches to the empty view, and the result is still voiced.
   const status = <p id="withdraw-status" role="status" className="sr-only">{statusText}</p>
@@ -238,6 +248,10 @@ export default function MyRegistrationPage() {
           </p>
         </div>
 
+        {next && (
+          <MissionBriefCard shift={next.shift} event={data.event} eventTitle={data.event.title} contactEmail={data.contactEmail ?? null} />
+        )}
+
         {/* Calendar file of the confirmed shifts (#480): a one-off download, not a subscription. */}
         {data.registrations.filter((r) => r.status === "active").length > 1 && (
           <div className="bg-white rounded-xl border border-gray-200 p-4">
@@ -258,7 +272,8 @@ export default function MyRegistrationPage() {
         {/* The caveat of the one-shift calendar links (the card above only shows with several shifts). */}
         <p id="calendar-hint-shift" className="sr-only">Fichier pour l&apos;agenda de ton téléphone ou ordinateur. Il ne se met pas à jour : si un horaire change, tu recevras un email.</p>
 
-        <div className="space-y-3">
+        <section aria-labelledby="shifts-title" className="space-y-3">
+          <h2 id="shifts-title" className="text-sm font-semibold text-gray-900">Tous mes créneaux</h2>
           {data.registrations.map((reg) => {
             // Shift dates are calendar days at midnight UTC: read them in UTC, whatever the visitor's zone.
             const date = new Date(reg.shift.date).toLocaleDateString("fr-FR", {
@@ -287,7 +302,10 @@ export default function MyRegistrationPage() {
                     {reg.status === "requested" && (
                       <p className="text-xs text-amber-900 mt-1">Créneau sur validation : l&apos;organisation va accepter ou refuser ta demande, et te prévient par email. La place t&apos;est réservée d&apos;ici là.</p>
                     )}
-                    <ShiftInfoList info={reg.shift} className="mt-2 text-xs text-gray-700" />
+                    {/* The next shift's practical info is in « Avant ta mission »: not twice. */}
+                    {reg.id === next?.id
+                      ? <p className="mt-2 text-xs text-gray-700">Infos pratiques : <a href={`#${MISSION_BRIEF_ID}`} className="text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">voir « {MISSION_BRIEF_TITLE} »</a>.</p>
+                      : <ShiftInfoList info={reg.shift} className="mt-2 text-xs text-gray-700" />}
                     {reg.status === "active" && (
                       <a
                         href={`/api/public/registrations/${token}/calendar?registration=${reg.id}`}
@@ -363,7 +381,7 @@ export default function MyRegistrationPage() {
               </div>
             )
           })}
-        </div>
+        </section>
 
         <PersonalLinkPanel
           token={token}

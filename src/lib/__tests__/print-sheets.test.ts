@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { answerSummary } from "../question-answer-summary"
+import { EMERGENCY_NOTE } from "../shift-info"
 import { ATTENDANCE_SPARE_LINES, ganttOf, isSheetView, renderSheet, SHEET_VIEWS, shiftsByDay, staffingLine, volunteersOf, type SheetData, type SheetShift } from "../print-sheets"
 
 const alice = { firstName: "Alice", lastName: "Martin", email: "alice@x.ch", phone: "079 1", comment: null, checkedIn: true }
@@ -107,10 +108,40 @@ describe("print sheets", () => {
     expect(html).toContain("<h2>Alice Martin</h2>")
     expect(html).toContain("2 créneaux")
     expect(html).toContain("Lieu : Entrée B")
-    expect(html).toContain("Contact : Léa")
+    expect(html).toContain("Contact pour ce créneau : Léa")
     expect(html).toContain("À savoir : Gilet fourni")
     expect(html).toContain("<h2>Bob &lt;B&gt; Durand</h2>")
     expect((html.match(/class="gantt-table"/g) ?? []).length).toBe(2) // one day each
+  })
+
+  // Day-of contact (#560): on the individual sheet for a shift without a contact, the emergency note once per volunteer.
+  it("individual: the day-of contact for a shift without contact, with the emergency note once", () => {
+    const day = { dayContactName: "Coordination", dayContactPhone: "079 111 11 11" }
+    const html = renderSheet("individual", {
+      ...data,
+      shifts: [
+        shift({ id: "a", registrations: [alice], contactName: "Léa" }),
+        shift({ id: "b", startTime: "14:00", endTime: "16:00", registrations: [alice], ...day }),
+        shift({ id: "c", startTime: "17:00", endTime: "18:00", registrations: [alice], ...day }),
+        shift({ id: "d", registrations: [bob], contactName: "Léa" }),
+      ],
+    })
+    // Pages in alphabetical order of last names: Durand (Bob), then Martin (Alice).
+    const [, bobPage, alicePage] = html.split("<h2>")
+    expect(alicePage).toContain("Alice Martin")
+    expect(alicePage).toContain("Contact pour ce créneau : Léa")
+    expect(alicePage).toContain("Contact le jour J : Coordination, 079 111 11 11")
+    expect(alicePage.split(EMERGENCY_NOTE).length - 1).toBe(1)
+    // Inside the first card with the day-of contact, so it is printed with it.
+    const firstDayCard = alicePage.split('<div class="card">').find((c) => c.includes("Contact le jour J"))!
+    expect(firstDayCard).toContain(`<p class="note">${EMERGENCY_NOTE}</p>`)
+    expect(bobPage).not.toContain("urgence")
+  })
+
+  it("individual: names the role's sector leaders, without their email (#560)", () => {
+    const html = renderSheet("individual", { ...data, shifts: [shift({ id: "a", registrations: [alice], sectorLeaderNames: ["Léa"] })] })
+    expect(html).toContain("Responsable du poste : Léa")
+    expect(html).not.toContain("lea@x.ch")
   })
 
   it("says so when the event has no shift", () => {

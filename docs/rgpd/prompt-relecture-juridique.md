@@ -116,7 +116,17 @@ dans [inventaire.md](inventaire.md) et [sous-traitants.md](sous-traitants.md). E
 12. **Que montrer sur la page de confidentialité publique** (`src/app/legal/privacy/page.tsx`) une
     fois cette relecture faite : quels points de l'accord de traitement, de la liste des
     sous-traitants et de la convention doivent s'y refléter, et avec quelle formulation ?
-13. Y a-t-il un risque à traiter en priorité, avant tout le reste de cette liste ?
+13. **Coordonnées de l'équipe montrées aux bénévoles (#560)** : l'organisation peut saisir un
+    « Contact le jour J » (nom et téléphone d'un organisateur ou d'un membre de l'équipe), montré
+    aux seuls bénévoles confirmés (page personnelle, rappels, planning individuel imprimé), jamais
+    publiquement, comme le contact d'un créneau déjà existant. Le produit montre aussi aux
+    bénévoles confirmés d'un poste le **nom** de son ou ses responsables de secteur (jamais leur
+    email ni leur téléphone, sauf s'ils sont aussi saisis comme contact). Ces deux affichages
+    demandent-ils une information ou un consentement de la personne concernée en plus de ce que
+    l'organisation fait déjà (le contact est saisi par l'organisation, qui reste responsable du
+    traitement) ? Faut-il un texte d'aide dans le formulaire, ou une mention dans l'accord de
+    traitement ou la politique de confidentialité ?
+14. Y a-t-il un risque à traiter en priorité, avant tout le reste de cette liste ?
 
 Merci de répondre point par point, avec, pour chaque réponse, la référence précise au texte ou à la
 source officielle sur laquelle elle s'appuie.

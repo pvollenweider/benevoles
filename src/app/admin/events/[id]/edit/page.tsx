@@ -40,6 +40,8 @@ export default async function EditEventPage({ params, searchParams }: { params: 
     accentColorKey: event.accentColorKey,
     latitude: event.latitude,
     longitude: event.longitude,
+    dayContactName: event.dayContactName ?? "",
+    dayContactPhone: event.dayContactPhone ?? "",
     showSchedule: (event.showSchedule ?? []) as Array<{ name: string; date: string; startTime: string; endTime: string }>,
   }
 

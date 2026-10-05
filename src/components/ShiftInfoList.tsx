@@ -1,39 +1,44 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { shiftInfoLines, type ShiftInfo } from "@/lib/shift-info"
-import { MAP_LINK_LABEL, MAP_LINK_SR_SUFFIX } from "@/lib/map-link"
+import { onSiteContact, shiftInfoLines, showsDayContact, type ShiftInfo } from "@/lib/shift-info"
+import PhoneLink from "@/components/PhoneLink"
+import MapLink from "@/components/MapLink"
+import EmergencyNote from "@/components/EmergencyNote"
 
 /**
  * Place, contact and instructions of a shift (#397), as a description list. Renders nothing
- * when the shift has no practical info. A phone number is a link, so it can be tapped.
+ * when the shift has no practical info. A phone number is a link, so it can be tapped. The
+ * event's day-of contact (#560) stands in for a shift without a contact, with the emergency
+ * note; the role's sector leaders are named, never with their contact details.
  */
 export default function ShiftInfoList({ info, className = "" }: { info: ShiftInfo; className?: string }) {
   const lines = shiftInfoLines(info)
   if (lines.length === 0) return null
-  const phone = (info.contactPhone ?? "").trim()
+  const contact = onSiteContact(info)
   return (
-    <dl className={`space-y-0.5 ${className}`}>
-      {lines.map((l) => (
-        <div key={l.kind} className="flex gap-1">
-          <dt className="font-medium shrink-0">{l.label} :</dt>
-          <dd className="min-w-0 break-words">
-            {l.kind === "contact" && phone ? (
-              <>
-                {(info.contactName ?? "").trim() && <>{(info.contactName ?? "").trim()} · </>}
-                <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} aria-label={`Appeler ${(info.contactName ?? "").trim() ? `${(info.contactName ?? "").trim()} au ` : ""}${phone}`} className="underline underline-offset-2">{phone}</a>
-              </>
-            ) : l.href ? (
-              <>
-                {l.text}{" "}
-                <a href={l.href} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 whitespace-nowrap rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                  {MAP_LINK_LABEL}<span className="sr-only">{MAP_LINK_SR_SUFFIX}</span>
-                </a>
-              </>
-            ) : l.text}
-          </dd>
-        </div>
-      ))}
-    </dl>
+    <div className={className}>
+      <dl className="space-y-0.5">
+        {lines.map((l) => (
+          <div key={l.kind} className="flex flex-wrap gap-x-1">
+            <dt className="font-medium">{l.label} :</dt>
+            <dd className="min-w-0 break-words">
+              {(l.kind === "contact" || l.kind === "dayContact") && contact?.phone ? (
+                <>
+                  {contact.name && <>{contact.name}, </>}
+                  <PhoneLink name={contact.name} phone={contact.phone} />
+                </>
+              ) : l.href ? (
+                <>
+                  {l.text}{" "}
+                  <MapLink href={l.href} place={l.text} />
+                </>
+              ) : l.text}
+            </dd>
+          </div>
+        ))}
+      </dl>
+      {showsDayContact(lines) && <EmergencyNote className="mt-1" />}
+    </div>
   )
 }

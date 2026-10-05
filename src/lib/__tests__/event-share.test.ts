@@ -15,6 +15,16 @@ const base: EventForMetadata = {
 const NOINDEX = { index: false, follow: false }
 
 describe("eventPageMetadata", () => {
+  // Day-of contact (#560): even handed a full event row, the preview never carries it.
+  it("never puts the day-of contact in the metadata", () => {
+    const row = { ...base, description: "Fête au village", dayContactName: "Coordination Marc", dayContactPhone: "079 111 11 11" } as EventForMetadata
+    for (const isListed of [true, false]) {
+      const json = JSON.stringify(eventPageMetadata({ ...row, isListed }, links))
+      expect(json).not.toContain("079 111 11 11")
+      expect(json).not.toContain("Coordination Marc")
+    }
+  })
+
   it("a published listed event: full preview, canonical, indexable", () => {
     const m = eventPageMetadata(base, links)
     expect(m.title).toBe("Fête du village")

@@ -17,7 +17,7 @@ type Props = {
 
 const CHOICES: { key: keyof CopyChoices; label: string; hint: (c: DuplicateCounts) => string }[] = [
   { key: "shifts", label: "Les créneaux", hint: (c) => `${c.shifts} créneau${c.shifts > 1 ? "x" : ""}, avec leurs postes, horaires, places, listes d'attente et infos pratiques. Rouverts, sans inscriptions.` },
-  { key: "settings", label: "Les messages et réglages d'inscription", hint: () => "Instructions publiques, message de confirmation, rappels, téléphone obligatoire, programme des spectacles." },
+  { key: "settings", label: "Les messages et réglages d'inscription", hint: () => "Instructions publiques, message de confirmation, rappels, téléphone obligatoire, contact le jour J, programme des spectacles." },
   { key: "pages", label: "Les pages personnalisées", hint: (c) => (c.pages ? `${c.pages} page${c.pages > 1 ? "s" : ""}.` : "Aucune page sur l'événement d'origine.") },
   { key: "leaders", label: "Les responsables de secteur", hint: (c) => (c.leaders ? `${c.leaders} responsable${c.leaders > 1 ? "s" : ""} : chacun reçoit tout de suite un email avec son lien pour la copie.` : "Aucun responsable sur l'événement d'origine.") },
 ]

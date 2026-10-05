@@ -66,6 +66,9 @@ export type DuplicableEvent = {
   remindersEnabled: boolean
   requirePhone: boolean
   accentColorKey: string | null
+  /** Day-of contact (#560): copied with the settings, like the other messages. */
+  dayContactName?: string | null
+  dayContactPhone?: string | null
   showSchedule: unknown
   shifts: DuplicableShift[]
   pages: { slug: string; title: string; content: string; displayOrder: number }[]
@@ -153,6 +156,8 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       remindersEnabled: copy.settings ? source.remindersEnabled : true,
       requirePhone: copy.settings ? source.requirePhone : false,
       accentColorKey: copy.settings ? source.accentColorKey : null,
+      dayContactName: copy.settings ? source.dayContactName ?? null : null,
+      dayContactPhone: copy.settings ? source.dayContactPhone ?? null : null,
       showSchedule: copy.settings ? shows.map((s) => ({ ...s, date: shiftIsoDate(s.date, offsetDays) })) : [],
     },
     shifts: copy.shifts ? source.shifts.map((s) => ({ ...copiedShift(s), date: shiftDate(s.date, offsetDays) })) : [],

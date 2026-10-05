@@ -5,6 +5,8 @@
 
 import { useState } from "react"
 import { lastLinkEmailLabel, PERSONAL_LINK_NOTICE } from "@/lib/personal-link"
+import { orgContactHref } from "@/lib/mission-brief"
+import { ORG_CONTACT_LABEL } from "@/lib/shift-info"
 
 type Props = {
   token: string
@@ -59,10 +61,10 @@ export default function PersonalLinkPanel({ token, linkEmailedAt, timeZone, cont
         </button>
         {contactEmail && (
           <a
-            href={`mailto:${contactEmail}?subject=${encodeURIComponent(`Question sur mon inscription — ${eventTitle}`)}`}
+            href={orgContactHref(contactEmail, eventTitle)}
             className="text-sm text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
-            Écrire à l&apos;organisation
+            {ORG_CONTACT_LABEL}
           </a>
         )}
       </div>

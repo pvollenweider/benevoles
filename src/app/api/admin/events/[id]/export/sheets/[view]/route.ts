@@ -7,6 +7,7 @@ import { contactPhone } from "@/lib/contact-phone"
 import { orgTimeZone } from "@/lib/time-zone"
 import { isSheetView, renderSheet } from "@/lib/print-sheets"
 import { answerSummary, answerSummarySelect } from "@/lib/question-answer-summary"
+import { withDayContact, withSectorLeaders } from "@/lib/shift-info"
 
 /** GET /api/admin/events/[id]/export/sheets/[view] (#400): one printable sheet of the event. */
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string; view: string }> }) {
@@ -19,6 +20,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     where: { id },
     select: {
       title: true,
+      // Day-of contact (#560): on the individual sheet, handed to the volunteers, for a shift without a contact.
+      dayContactName: true,
+      dayContactPhone: true,
       organization: { select: { name: true, timeZone: true } },
       sectorLeaders: { select: { roleName: true, name: true, email: true } },
       shifts: {
@@ -47,7 +51,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     printedAt: new Date().toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short", timeZone }),
     leaders: event.sectorLeaders,
     answers: forAnswers ? answerSummary(forAnswers.questions, forAnswers.registrations) : undefined,
-    shifts: event.shifts.map((s) => ({
+    // The role's sector leaders by name (#560) on the individual sheet, handed to the volunteers.
+    shifts: event.shifts.map((s) => withSectorLeaders(withDayContact({
       id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10),
       startTime: s.startTime, endTime: s.endTime, capacity: s.capacity,
       locationDetails: s.locationDetails, contactName: s.contactName, contactPhone: s.contactPhone, instructions: s.instructions,
@@ -55,7 +60,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
         id: r.volunteer.id, firstName: r.volunteer.firstName, lastName: r.volunteer.lastName, email: r.volunteer.email,
         phone: contactPhone({ phone: r.phone, volunteer: r.volunteer }), comment: r.comment, checkedIn: !!r.checkedInAt,
       })),
-    })),
+    }, event), s.roleName, event.sectorLeaders)),
   })
 
   return new NextResponse(html, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } })

@@ -22,6 +22,28 @@ describe("toPublicEvent", () => {
     expect(shift).not.toHaveProperty("contactPhone")
     expect(JSON.stringify(toPublicEvent(row))).not.toContain("079 000 00 00")
   })
+
+  // Day-of contact (#560): registered volunteers only, never in the public payload.
+  it("never publishes the event's day-of contact", () => {
+    const row = {
+      id: "e", slug: "fete", title: "Fête", description: null, location: null, startDate: new Date(), endDate: new Date(),
+      publicInstructions: null, confirmationMessage: null, requirePhone: false, showSchedule: [],
+      dayContactName: "Coordination Marc", dayContactPhone: "079 111 11 11",
+      organization: { name: "Org", slug: "org", volunteerCharter: null },
+      pages: [],
+      shifts: [{
+        id: "s1", roleName: "Bar", label: "Bar", description: null, date: new Date(), startTime: "10:00", endTime: "12:00", capacity: 2, status: "open",
+        locationDetails: null, contactName: null, contactPhone: null, instructions: null,
+        displayOrder: 0, waitlistEnabled: false, minAge: null, colorKey: null, registrations: [],
+      }],
+    } as unknown as PublicEventRow
+    const out = toPublicEvent(row)
+    expect(out).not.toHaveProperty("dayContactName")
+    expect(out).not.toHaveProperty("dayContactPhone")
+    const json = JSON.stringify(out)
+    expect(json).not.toContain("079 111 11 11")
+    expect(json).not.toContain("Coordination Marc")
+  })
 })
 
 // A shift's meeting point is a whole pair (#191 audit): never its latitude with the event's longitude.
