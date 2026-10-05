@@ -325,11 +325,18 @@ Déclenchés par le cron `/api/cron/reminders` (toutes les heures) :
 
 | Rappel | Fenêtre |
 |--------|---------|
-| J-2 | 47–49 h avant le début du créneau |
+| J-2 | 47–49 h avant le début du premier créneau du jour |
 | J-1 | 23–25 h avant |
 | Jour J | 2–4 h avant |
 
-Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscription (`reminderJ2Sent`, `reminderJ1Sent`, `reminderDdSent`). Chaque rappel se désactive pour toute l'organisation dans les réglages des emails, et `Event.remindersEnabled` coupe tous ceux d'un événement (champ accepté par `PATCH /api/admin/events/[id]`, sans case dans le formulaire d'édition).
+**Regroupement par bénévole, événement et jour local (#672)** : un seul email (et une seule notification push) par fenêtre, par bénévole, par événement et par jour civil local des créneaux (fuseau de l'organisation), au lieu d'un par inscription. Logique pure dans `src/lib/reminder-groups.ts` (`groupRemindersByDay`, `groupsInWindow`) :
+- Clé de regroupement : `volunteerId`, `eventId`, jour local (`Shift.date`, déjà le jour de calendrier voulu — un créneau de nuit compte sur son jour de début, cohérent avec `shiftInstants` dans `src/lib/ics.ts`).
+- Déclenchement : quand le **premier** créneau du groupe (le plus tôt) entre dans la fenêtre ; les créneaux suivants du même jour sont inclus même si leur propre horaire entrerait dans la fenêtre plus tard.
+- Le groupe ne contient que les inscriptions actives qui n'ont pas encore reçu ce rappel ; un créneau déjà annulé ou déjà marqué n'y figure jamais et ne bloque pas les autres.
+- Une inscription tardive (après l'envoi du groupe du jour) forme son propre groupe au prochain passage : aucun créneau n'est jamais privé de rappel, et aucun n'en reçoit deux pour la même fenêtre.
+- Template : `renderReminderJ2`/`J1`/`Dd` (`src/lib/notifications/templates/reminders.ts`) acceptent une liste `shifts` triée par horaire ; un seul créneau garde une formulation simple, plusieurs créneaux sont listés avec heure, poste, lieu, contact et consignes de chacun. Le lien personnel est celui de n'importe quelle inscription du groupe (toutes ouvrent la même page `/my/[token]`, qui liste toutes les inscriptions actives du bénévole pour cet événement).
+
+Idempotents : un rappel donné ne peut être envoyé qu'une seule fois par inscription (`reminderJ2Sent`, `reminderJ1Sent`, `reminderDdSent`), posé sur chaque inscription du groupe dans le même passage qu'un envoi réussi ; un envoi en échec ne marque aucune inscription du groupe, qui est donc retenté en entier au passage suivant. Chaque rappel se désactive pour toute l'organisation dans les réglages des emails, et `Event.remindersEnabled` coupe tous ceux d'un événement (champ accepté par `PATCH /api/admin/events/[id]`, sans case dans le formulaire d'édition).
 
 Le même cron propose les places libres oubliées (`reconcileWaitlists`, `src/lib/waitlist.ts`) : si la promotion qui suit une annulation a échoué, chaque créneau à venir avec des personnes en attente reçoit ses offres au passage suivant (50 au plus par créneau et par passage), sans effet quand tout s'est bien passé ; il expire aussi les offres échues et envoie la file d'emails (`deliverOutbox`).
 

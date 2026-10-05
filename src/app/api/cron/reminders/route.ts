@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
-import { coordinatesOf, osmLink } from "@/lib/map-link"
+import { pickShiftInfo } from "@/lib/shift-info"
 import { parseNotificationSettings, reminderEnabled } from "@/lib/notification-settings"
 import { recordJobRun } from "@/lib/job-runs"
 import { env } from "@/lib/env"
@@ -14,7 +14,8 @@ import { reportError } from "@/lib/report-error"
 import { deliverOutbox, outboxHealth } from "@/lib/notifications/outbox"
 import * as Sentry from "@sentry/nextjs"
 import { registrationToken } from "@/lib/token-vault"
-import { localDateTimeToUtc, orgTimeZone } from "@/lib/time-zone"
+import { orgTimeZone } from "@/lib/time-zone"
+import { remindersDue, type GroupableRegistration } from "@/lib/reminder-groups"
 
 export const dynamic = "force-dynamic"
 
@@ -38,14 +39,6 @@ const WINDOWS: Window[] = [
   { kind: "reminder_dd", field: "reminderDdSent", minHours: 2,  maxHours: 4 },
 ]
 
-/**
- * Real start instant of a shift: its calendar day at its local startTime, in its organization's
- * time zone (#308, #344). Treating the local "HH:MM" as UTC put every window 1-2 h off in Switzerland.
- */
-function shiftStartAt(date: Date, startTime: string, timeZone: string): Date {
-  return localDateTimeToUtc(date, startTime, timeZone)
-}
-
 export async function GET(req: Request) {
   return run(req)
 }
@@ -62,16 +55,16 @@ async function run(req: Request) {
   return recordJobRun("reminders", async () => {
 
   const now = new Date()
-  const totals: Record<string, { eligible: number; sent: number; failed: number }> = {}
+  const totals: Record<string, { eligible: number; groups: number; sent: number; failed: number }> = {}
 
   for (const win of WINDOWS) {
     const lower = new Date(now.getTime() + win.minHours * 3600 * 1000)
     const upper = new Date(now.getTime() + win.maxHours * 3600 * 1000)
 
-    // Pull every active registration that has not received this reminder
-    // yet AND whose shift starts inside the [lower, upper] window. The
-    // window is computed on the candidate set in JS (cheap with index +
-    // status filter).
+    // Pull every active registration that has not received this reminder yet. The window is
+    // computed on the candidate set in JS (cheap with index + status filter), per *group*
+    // (#672): several shifts of the same volunteer, event and local day are sent as one email,
+    // triggered once the earliest of them enters the window — see groupRemindersByDay.
     const candidates = await prisma.registration.findMany({
       where: {
         status: "active",
@@ -86,55 +79,63 @@ async function run(req: Request) {
       },
     })
 
-    const inWindow = candidates.filter((r) => {
-      // The organization may have switched this reminder off (#381).
-      if (!reminderEnabled(parseNotificationSettings(r.event.organization.notificationSettings), win.kind)) return false
-      const start = shiftStartAt(r.shift.date, r.shift.startTime, orgTimeZone(r.event.organization))
-      return start >= lower && start <= upper
-    })
+    // The organization may have switched this reminder off (#381), per registration's own event.
+    const eligible = candidates.filter((r) =>
+      reminderEnabled(parseNotificationSettings(r.event.organization.notificationSettings), win.kind),
+    )
 
+    const triggered = remindersDue(eligible as (typeof eligible[number] & GroupableRegistration)[], (r) => orgTimeZone(r.event.organization), lower, upper)
+
+    let eligibleShifts = 0
     let sent = 0
     let failed = 0
-    for (const r of inWindow) {
-      const start = shiftStartAt(r.shift.date, r.shift.startTime, orgTimeZone(r.event.organization))
+    for (const group of triggered) {
+      eligibleShifts += group.registrations.length
+      const [first] = group.registrations
+      const shifts = group.registrations.map((r) => ({
+        label: r.shift.label,
+        roleName: r.shift.roleName,
+        date: r.shift.date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
+        startTime: r.shift.startTime,
+        endTime: r.shift.endTime,
+        ...pickShiftInfo(r.shift, r.event),
+      }))
       const result = await sendNotification({
         kind: win.kind,
-        recipient: { email: r.volunteer.email, name: r.volunteer.firstName },
-        volunteerId: r.volunteerId,
-        organizationId: r.event.organizationId,
+        recipient: { email: first.volunteer.email, name: first.volunteer.firstName },
+        volunteerId: first.volunteerId,
+        organizationId: first.event.organizationId,
         data: {
-          volunteerName: r.volunteer.firstName,
-          eventTitle: r.event.title,
-          organizationName: r.event.organization.name,
-          orgSlug: r.event.organization.slug,
-          shiftLabel: r.shift.label,
-          shiftRoleName: r.shift.roleName,
-          shiftDate: r.shift.date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
-          shiftStart: r.shift.startTime,
-          shiftEnd: r.shift.endTime,
-          shiftLocation: r.shift.locationDetails,
-          shiftMapUrl: (() => { const c = coordinatesOf(r.shift) ?? coordinatesOf(r.event); return c ? osmLink(c) : null })(),
-          shiftContactName: r.shift.contactName,
-          shiftContactPhone: r.shift.contactPhone,
-          shiftInstructions: r.shift.instructions,
-          editToken: registrationToken.reveal(r),
-          hoursUntil: Math.max(0, Math.round((start.getTime() - now.getTime()) / (3600 * 1000))),
+          volunteerName: first.volunteer.firstName,
+          eventTitle: first.event.title,
+          organizationName: first.event.organization.name,
+          orgSlug: first.event.organization.slug,
+          shifts,
+          // Any registration's token of this volunteer+event opens the same personal page,
+          // listing every one of their shifts for the event (src/app/api/public/registrations).
+          editToken: registrationToken.reveal(first),
+          hoursUntil: Math.max(0, Math.round((group.earliestStart.getTime() - now.getTime()) / (3600 * 1000))),
         },
       })
       if (result.ok) {
-        await prisma.registration.update({
-          where: { id: r.id },
+        // Every shift of the group is marked in the same pass: a later run never re-sends any of
+        // them, and a send that failed (below) leaves all of them unmarked, so the whole group is
+        // retried together next time (#672).
+        await prisma.registration.updateMany({
+          where: { id: { in: group.registrations.map((r) => r.id) } },
           data: { [win.field]: now },
         })
-        // Also fire a push notification if the volunteer has subscribed
         const hoursLabel =
           win.kind === "reminder_j2" ? "dans 2 jours" :
           win.kind === "reminder_j1" ? "demain" : "aujourd'hui"
-        sendPushToVolunteer(r.volunteerId, {
-          title: r.event.title,
-          body: `Rappel : votre créneau "${r.shift.label}" commence ${hoursLabel}.`,
-          url: `/my/${registrationToken.reveal(r)}`,
-          tag: `reminder-${r.id}-${win.kind}`,
+        const body = group.registrations.length === 1
+          ? `Rappel : votre créneau "${first.shift.label}" commence ${hoursLabel}.`
+          : `Rappel : vos ${group.registrations.length} créneaux commencent ${hoursLabel}.`
+        sendPushToVolunteer(first.volunteerId, {
+          title: first.event.title,
+          body,
+          url: `/my/${registrationToken.reveal(first)}`,
+          tag: `reminder-group-${first.volunteerId}-${first.eventId}-${group.localDay}-${win.kind}`,
         }).catch(reportError("push.reminder"))
         sent++
       } else {
@@ -142,7 +143,7 @@ async function run(req: Request) {
       }
     }
 
-    totals[win.kind] = { eligible: inWindow.length, sent, failed }
+    totals[win.kind] = { eligible: eligibleShifts, groups: triggered.length, sent, failed }
   }
 
   // Expire offered waitlist spots and promote next in line

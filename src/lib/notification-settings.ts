@@ -49,9 +49,9 @@ export function parseNotificationSettings(stored: unknown): NotificationSettings
 }
 
 export const REMINDER_LABELS = {
-  j2: { label: "Rappel J-2", help: "Deux jours avant le créneau." },
-  j1: { label: "Rappel J-1", help: "La veille du créneau." },
-  dd: { label: "Rappel du jour", help: "Deux à quatre heures avant le créneau." },
+  j2: { label: "Rappel J-2", help: "Deux jours avant le premier créneau du jour." },
+  j1: { label: "Rappel J-1", help: "La veille du premier créneau du jour." },
+  dd: { label: "Rappel du jour", help: "Deux à quatre heures avant le premier créneau du jour." },
 } as const
 
 export type ReminderKey = keyof NotificationSettings["reminders"]
