@@ -33,6 +33,10 @@ Instantanés ARIA (`e2e/aria-snapshots.spec.ts`, #591) : `toMatchAriaSnapshot` d
 
 Ce que ces instantanés ne disent pas : c'est l'arbre que Playwright calcule à partir du DOM et des attributs ARIA, pas ce qu'annonce un lecteur d'écran. Il ne contient ni la description accessible, ni `aria-required`, ni le focus (`[active]` n'est pas comparé) : ces points sont vérifiés à côté, avec `toHaveAccessibleDescription`, `toHaveAttribute` et `toBeFocused`. Les annonces des zones de statut (moment, nombre de lectures) n'y figurent pas.
 
+Analyse par `@axe-core/playwright` (`AxeBuilder`, #591), derrière `seriousViolations` dans `e2e/helpers/axe.ts`, avec les mêmes tags (`AXE_TAGS`). axe-core est injecté par l'`evaluate` de Playwright, sans balise `<script>` ajoutée à la page, dans chaque cadre : le contenu des `<iframe>` est analysé avec la page. Exception : les `<iframe>` `sandbox` sans `allow-scripts` (aperçus d'email de « Prévisualiser comme un bénévole » et d'un message ciblé aux bénévoles), où aucun script ne peut s'exécuter ; seul l'élément `<iframe>` (son titre) y est vérifié, pas l'email qu'il affiche. `seriousViolations(page, { include, exclude })` peut limiter l'analyse à des zones ou en retirer (sélecteurs CSS) ; aucun appel ne s'en sert aujourd'hui, toute la page est analysée.
+
+Règles désactivées (`DISABLED_RULES`, avec leur raison) : aucune. Une règle n'y entre que pour un faux positif vérifié à la main, avec sa raison ici et dans le code ; un vrai défaut se corrige.
+
 Seuil dans `e2e/helpers/axe.ts` (`seriousViolations`) : le test échoue sur les impacts `serious` et `critical` ; le reste, y compris les résultats `incomplete` (« à vérifier »), est ajouté en annotation au rapport Playwright sans le faire échouer. Les outils automatiques ne détectent qu'une partie des problèmes, surtout ceux du code (noms, rôles, contraste) ; beaucoup de critères demandent une vérification humaine.
 
 En local : `make e2e` sur la stack E2E (voir [CONTRIBUTING.md](../CONTRIBUTING.md#workflow)), ou ce seul fichier :
