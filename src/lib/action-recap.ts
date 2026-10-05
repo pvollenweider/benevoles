@@ -9,7 +9,22 @@ import { dayLabel, spokenTimeRange } from "./spoken-time"
  * the confirmation modal renders the lines and the log link is built from the action's start.
  */
 
-export type ActionRecap = { title: string; lines: string[]; confirmLabel: string; danger: boolean }
+export type ActionRecap = {
+  title: string
+  /** The recap's bullet list (after the groups, when there are any). */
+  lines: string[]
+  confirmLabel: string
+  danger: boolean
+  /**
+   * Optional, for a longer recap (#516): the one sentence that matters most (e.g. irreversible),
+   * shown first, then a warning shown in a box with a visible « Attention : », then headed lists
+   * (« Effacé : », « Conservé : »), one item each. When `lead` or `warning` is set, they alone
+   * describe the dialog (aria-describedby), not the whole recap.
+   */
+  lead?: string
+  warning?: string
+  groups?: { heading: string; items: string[] }[]
+}
 
 const n = (count: number, one: string, many: string) => `${count} ${count > 1 ? many : one}`
 const LOGGED = "L'action est journalisée : vous la retrouverez dans le journal de l'événement."

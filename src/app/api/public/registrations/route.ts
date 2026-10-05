@@ -42,6 +42,7 @@ import {
 import { RoleLimitError, roleLimitBreaches, roleLimitMessage, roleLimits } from "@/lib/role-limit"
 import { resolveCharterText } from "@/lib/volunteer-charter"
 import { hashCharterText } from "@/lib/charter-hash"
+import { lockSignupVolunteer } from "@/lib/signup-volunteer"
 
 const schema = z.object({
   eventId: z.string(),
@@ -219,7 +220,7 @@ export async function POST(req: Request) {
     tokens,
   })
 
-  let outcome: { registrations: Awaited<ReturnType<typeof prisma.registration.create>>[]; volunteerId: string; createdNow: boolean; outboxIds: string[] }
+  let outcome: { registrations: Awaited<ReturnType<typeof prisma.registration.create>>[]; volunteerId: string; createdNow: boolean; matchErased: boolean; outboxIds: string[] }
   try {
     outcome = await prisma.$transaction(async (tx) => {
       await lockShifts(tx, shiftIds)
@@ -235,23 +236,18 @@ export async function POST(req: Request) {
 
       // A new volunteer is created in the same transaction as their registrations (#309): if the
       // registration fails (shift full, overlap, duplicate), no member record is left behind.
-      // ON CONFLICT DO NOTHING (skipDuplicates) so a concurrent first sign-up with the same
-      // address doesn't abort this transaction; whoever inserted it "created" it.
-      let volunteerId = existing?.id
-      let createdNow = false
-      if (!volunteerId) {
-        const { count } = await tx.volunteer.createMany({
-          data: [{ firstName, lastName, email, phone, birthDate: birthDateValue, organizationId }],
-          skipDuplicates: true,
-        })
-        createdNow = count === 1
-        volunteerId = (await tx.volunteer.findFirstOrThrow({ where: { email, organizationId }, select: { id: true } })).id
-      }
-
-      // Then the volunteer (#285): two concurrent sign-ups of the same person to two different,
-      // overlapping shifts lock different shift rows, so the overlap check has to be redone under
-      // a per-volunteer lock too. Always shifts first, then volunteer: same order everywhere.
-      await tx.$queryRaw`SELECT id FROM "Volunteer" WHERE id = ${volunteerId} FOR UPDATE`
+      // Then the volunteer is locked (#285): two concurrent sign-ups of the same person to two
+      // different, overlapping shifts lock different shift rows, so the overlap check has to be
+      // redone under a per-volunteer lock too. Always shifts first, then volunteer: same order
+      // everywhere. A match erased since the lookup above (#516) counts as no match: a new record
+      // is created, nothing of this submission lands on the erased one (src/lib/signup-volunteer.ts).
+      const resolved = await lockSignupVolunteer(tx, {
+        existingId: existing?.id ?? null,
+        organizationId,
+        email,
+        create: { firstName, lastName, phone, birthDate: birthDateValue },
+      })
+      const { volunteerId, createdNow, matchErased } = resolved
       const liveNow = await tx.registration.findMany({
         where: { volunteerId, eventId, status: { in: [...COMMITTED_STATUSES] } },
         include: { shift: true },
@@ -314,7 +310,8 @@ export async function POST(req: Request) {
       const outboxIds = await enqueueNotifications(await buildNotifications(created, volunteerId), tx, { organizationId: event.organizationId })
       // Answers (#483): replaced only with proof the submitter owns the address, as for the
       // profile below; otherwise only missing answers are added (see planAnswerWrites).
-      const writes = planAnswerWrites(questions.map((q) => q.id), answerCheck.values, createdNow || ownsEmail)
+      // An invite of an erased record proves nothing about the new one (#516).
+      const writes = planAnswerWrites(questions.map((q) => q.id), answerCheck.values, createdNow || (ownsEmail && !matchErased))
       for (const [questionId, values] of writes.replace) {
         await tx.questionAnswer.upsert({
           where: { questionId_volunteerId: { questionId, volunteerId } },
@@ -331,7 +328,7 @@ export async function POST(req: Request) {
       if (writes.clear.length > 0) {
         await tx.questionAnswer.deleteMany({ where: { volunteerId, questionId: { in: writes.clear } } })
       }
-      return { registrations: created, volunteerId, createdNow, outboxIds }
+      return { registrations: created, volunteerId, createdNow, matchErased, outboxIds }
     })
   } catch (e) {
     if (e instanceof ShiftFullError) return refuse(fullShift(e.shiftId, e.label))
@@ -342,14 +339,15 @@ export async function POST(req: Request) {
     if (isUniqueViolation(e)) {
       // Our transaction rolled back; the duplicate belongs to a volunteer that exists
       // independently of it (created before, or by a concurrent sign-up).
-      const owner = existing ?? await prisma.volunteer.findFirst({ where: { email: { equals: email, mode: "insensitive" }, organizationId }, select: { id: true } })
+      const owner = await prisma.volunteer.findFirst({ where: { email: { equals: email, mode: "insensitive" }, organizationId }, select: { id: true } })
       if (owner) return alreadyRegistered(owner.id, eventId)
       return NextResponse.json({ error: "Tu as déjà une inscription pour l'un de ces créneaux." }, { status: 409 })
     }
     throw e
   }
 
-  const { registrations, volunteerId, createdNow, outboxIds } = outcome
+  const { registrations, volunteerId, createdNow, matchErased, outboxIds } = outcome
+  if (matchErased) ownsEmail = false
 
   // Only once the registration went through, and only with proof of ownership (see above):
   // an anonymous submission must not rewrite an existing volunteer's name, phone or birth date.

@@ -20,7 +20,7 @@ vi.mock("@/lib/prisma", () => ({
     registration: { findMany: m.regFindMany },
     memberInvite: { findFirst: vi.fn() },
     $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn({
-      $queryRaw: vi.fn(),
+      $queryRaw: vi.fn().mockResolvedValue([{ id: "locked", erasedAt: null }]), // #516: a locked match, not erased
       shift: { findMany: vi.fn().mockResolvedValue([]) },
       volunteer: { createMany: vi.fn(), findFirstOrThrow: vi.fn() },
       charterVersion: { upsert: vi.fn() },

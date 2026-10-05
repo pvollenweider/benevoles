@@ -8,6 +8,7 @@ import { z } from "zod"
 import { validationError } from "@/lib/api-error"
 import { availabilitySchema } from "@/lib/availability"
 import { isUniqueViolation } from "@/lib/registration-capacity"
+import { MEMBER_ERASURE_REASON } from "@/lib/member-erasure"
 
 const EMAIL_TAKEN = "Un autre membre de l'organisation utilise déjà cette adresse email."
 
@@ -35,6 +36,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   const before = await db.volunteer.findFirst({ where: { id } })
   if (!before) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
+  // An erased record (#516) stays empty: personal data can't be typed back into it.
+  if (before.erasedAt) return NextResponse.json({ error: MEMBER_ERASURE_REASON.erased }, { status: 409 })
 
   const data = parsed.data
   const updateData: Record<string, unknown> = {}

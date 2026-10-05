@@ -34,7 +34,7 @@ export default async function MemberMergePage({ params, searchParams }: { params
   let initialOther: { id: string; firstName: string; lastName: string; email: string | null } | undefined
   if (otherId && otherId !== member.id) {
     const candidate = await ctx.db.volunteer.findFirst({
-      where: { id: otherId, mergedIntoId: null },
+      where: { id: otherId, mergedIntoId: null, erasedAt: null },
       select: { id: true, firstName: true, lastName: true, email: true },
     })
     if (candidate) initialOther = candidate

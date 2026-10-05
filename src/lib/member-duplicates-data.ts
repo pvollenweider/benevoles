@@ -39,7 +39,8 @@ export async function loadDuplicatePairs(db: OrgScopedDb, organizationId: string
     active: boolean
     mergedIntoId: string | null
   }[] = await db.volunteer.findMany({
-    where: { mergedIntoId: null },
+    // Merged tombstones (#600) and erased records (#516, all named « Bénévole effacé ») are never suggested.
+    where: { mergedIntoId: null, erasedAt: null },
     select: { id: true, firstName: true, lastName: true, email: true, phone: true, birthDate: true, active: true, mergedIntoId: true },
   })
   if (volunteers.length < 2) return []

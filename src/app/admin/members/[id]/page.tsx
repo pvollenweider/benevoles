@@ -14,6 +14,8 @@ import { addressStatusSentence } from "@/lib/address-status"
 import { env } from "@/lib/env"
 import { loadMemberDeletionEligibility } from "@/lib/member-deletion-data"
 import MemberDeleteAction from "@/components/admin/members/MemberDeleteAction"
+import MemberEraseAction, { type MemberErasureState } from "@/components/admin/members/MemberEraseAction"
+import { loadMemberErasurePreview } from "@/lib/member-erasure-transaction"
 
 export const dynamic = "force-dynamic"
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -45,6 +47,15 @@ export default async function MemberActivityPage({ params }: { params: Promise<{
   const status = statuses.get(member.id) ?? { kind: "ok" as const }
   const statusSentence = addressStatusSentence(status, fmtDay)
   const deletion = (await loadMemberDeletionEligibility(ctx.db, member.id)) ?? { eligible: false as const, reason: "Non trouvé." }
+  // Erasure of personal data (#516): the counts of the confirmation's recap, or why it can't apply.
+  const erasurePreview = await loadMemberErasurePreview(ctx.db, member.id)
+  const erasedRow = await ctx.db.volunteer.findFirst({ where: { id: member.id }, select: { erasedAt: true } })
+  const erased = !!erasedRow?.erasedAt
+  const erasure: MemberErasureState = erased
+    ? { kind: "erased", erasedAt: erasedRow!.erasedAt!.toISOString() }
+    : erasurePreview?.eligible
+      ? { kind: "eligible", counts: erasurePreview.counts }
+      : { kind: "refused", reason: erasurePreview && !erasurePreview.eligible ? erasurePreview.reason : "Non trouvé." }
 
   return (
     <div className="space-y-6 max-w-2xl">
@@ -80,18 +91,23 @@ export default async function MemberActivityPage({ params }: { params: Promise<{
         <p className="text-xs text-gray-600 mt-2">
           Les faits enregistrés par l&apos;application (invitations, inscriptions, présences, responsabilités, modifications de la fiche), sans appréciation. Les notes internes sont sur la fiche du membre. Ces données disparaissent avec les événements et la fiche.
         </p>
-        <p className="mt-3 space-x-4">
+        {!erased && <p className="mt-3 space-x-4">
           <Link href={`/admin/members/${member.id}/certificate`} className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
             Attestation de bénévolat
           </Link>
           <Link href={`/admin/members/${member.id}/merge`} className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
             Fusionner avec un autre membre<span className="sr-only"> (doublon confirmé)</span>
           </Link>
-        </p>
+        </p>}
         {/* Permanent deletion (#667): a button only when eligible, a plain-words explanation
             otherwise — never a dead button. */}
-        <div className="mt-3">
+        {!erased && <div className="mt-3">
           <MemberDeleteAction memberId={member.id} memberName={`${member.firstName} ${member.lastName}`} deletion={deletion} />
+        </div>}
+        {/* Erasure of personal data (#516): always in this same slot, so the notice that replaces
+            the button after an erasure keeps the focus across the page refresh. */}
+        <div className="mt-3">
+          <MemberEraseAction memberId={member.id} memberName={`${member.firstName} ${member.lastName}`} erasure={erasure} timeZone={timeZone} />
         </div>
       </div>
       <h2 id="chronologie" className="sr-only">Chronologie</h2>

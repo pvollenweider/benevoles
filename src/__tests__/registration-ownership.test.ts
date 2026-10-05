@@ -16,6 +16,7 @@ const m = vi.hoisted(() => ({
   regFindFirst: vi.fn(),
   txRegFindMany: vi.fn(),
   txCreate: vi.fn(),
+  txQueryRaw: vi.fn(),
   sendNotification: vi.fn(),
   enqueueNotifications: vi.fn(),
   deliverAfterResponse: vi.fn(),
@@ -24,7 +25,7 @@ const m = vi.hoisted(() => ({
 
 vi.mock("@/lib/prisma", () => {
   const tx = {
-    $queryRaw: vi.fn(),
+    $queryRaw: (...args: unknown[]) => m.txQueryRaw(...args),
     shift: { findMany: vi.fn().mockResolvedValue([]) }, // no role limit (#466)
     // A new volunteer is created inside the registration transaction (#309).
     volunteer: { createMany: m.txVolCreateMany, findFirstOrThrow: m.txVolFindFirstOrThrow },
@@ -98,6 +99,7 @@ beforeEach(() => {
   m.txRegFindMany.mockResolvedValue([])
   m.txCreate.mockResolvedValue({ id: "reg-new", shiftId: "shift-2", status: "active", waitingPosition: null })
   m.sendNotification.mockResolvedValue({ ok: true })
+  m.txQueryRaw.mockResolvedValue([{ id: "locked", erasedAt: null }]) // #516: a locked match, not erased
 })
 
 describe("POST /api/public/registrations — ownership of the email (#285)", () => {
@@ -309,5 +311,21 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     expect(res.status).toBe(409)
     expect((await res.json()).error).toContain("chevauche")
     expect(m.txCreate).not.toHaveBeenCalled()
+  })
+
+  it("a match erased between the lookup and the lock (#516) counts as no match: a new record, nothing written on the erased one", async () => {
+    m.volFindFirst.mockResolvedValue(victim)
+    m.inviteFindFirst.mockResolvedValue({ id: "inv-1" }) // even a valid invite of the erased record proves nothing now
+    m.txQueryRaw.mockImplementation(async (strings: TemplateStringsArray, ...values: unknown[]) =>
+      strings.join("?").includes("erasedAt") && values[0] === "vol-victim" ? [{ id: "vol-victim", erasedAt: new Date() }] : [])
+    m.txVolCreateMany.mockResolvedValue({ count: 1 })
+    m.txVolFindFirstOrThrow.mockResolvedValue({ id: "vol-new" })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post({ inviteToken: "inv-tok", comment: "mon mot" }))
+    expect(res.status).toBe(201)
+    expect(m.txVolCreateMany).toHaveBeenCalled()
+    expect(m.txCreate).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ volunteerId: "vol-new", comment: "mon mot" }) }))
+    expect(m.txCreate).not.toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ volunteerId: "vol-victim" }) }))
+    expect(m.volUpdate).not.toHaveBeenCalled()
   })
 })

@@ -4,6 +4,7 @@
 import { describe, it, expect } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
+import { modelsWith } from "../member-inventory"
 
 /**
  * Re-derives the #667 deletion inventory from prisma/schema.prisma itself, the same technique as
@@ -16,11 +17,15 @@ import path from "node:path"
  * silently find out about it only from a failed delete in production.
  */
 
-const CASCADES = new Set(["MemberInvite", "QuestionAnswer", "PushSubscription", "DeliveryOutcome", "DuplicateDismissal"])
+// Shared with member merge (#600) and erasure (#516): src/lib/member-inventory.ts.
+const CASCADES = new Set(modelsWith("deletion", "cascade"))
 /** No onDelete clause on their Volunteer relation: the database refuses to delete a Volunteer row
  * that still has one. member-deletion.ts's eligibility rule is what guarantees there are none left
  * by the time member-deletion-transaction.ts calls volunteer.delete(). */
-const BLOCKS = new Set(["Registration"])
+const BLOCKS = new Set(modelsWith("deletion", "blocks"))
+/** A `volunteerId` column with no relation at all (the erasure register, #516): untouched by a
+ * deletion, on purpose — it must outlive the record. */
+const NO_FK = new Set(modelsWith("deletion", "no_fk"))
 
 describe("member deletion — schema guard (#667)", () => {
   const schema = fs.readFileSync(path.join(__dirname, "..", "..", "..", "prisma", "schema.prisma"), "utf-8")
@@ -36,7 +41,7 @@ describe("member deletion — schema guard (#667)", () => {
       if (name === "Volunteer") continue // the self-relation (mergedInto/mergedFrom) isn't an external reference
       const referencesVolunteer = /\bVolunteer[?\s]/.test(body) || /\bvolunteerId\b/.test(body)
       if (!referencesVolunteer) continue
-      if (CASCADES.has(name) || BLOCKS.has(name)) continue
+      if (CASCADES.has(name) || BLOCKS.has(name) || NO_FK.has(name)) continue
       unhandled.push(name)
     }
     expect(unhandled, `model(s) referencing Volunteer not classified for member deletion: ${unhandled.join(", ")}`).toEqual([])
@@ -51,6 +56,16 @@ describe("member deletion — schema guard (#667)", () => {
       const relationLine = body!.split("\n").find((l) => /\bVolunteer[?\s]/.test(l))
       expect(relationLine, `model ${name} (CASCADES) no longer has a Volunteer relation line`).toBeDefined()
       expect(relationLine, `model ${name} is listed as CASCADES but its Volunteer relation has no onDelete: Cascade`).toMatch(/onDelete:\s*Cascade/)
+    }
+  })
+
+  it("every NO_FK model still has a volunteerId column but no relation to Volunteer", () => {
+    const byName = new Map(modelBlocks.map((m) => [m.name, m.body]))
+    for (const name of NO_FK) {
+      const body = byName.get(name)
+      expect(body, `model ${name} (NO_FK) no longer exists in the schema`).toBeDefined()
+      expect(body!, `model ${name} (NO_FK) no longer has a volunteerId column`).toMatch(/\bvolunteerId\b/)
+      expect(/\bVolunteer[?\s]/.test(body!), `model ${name} is listed as NO_FK but now has a Volunteer relation`).toBe(false)
     }
   })
 

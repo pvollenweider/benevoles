@@ -133,6 +133,33 @@ test.describe("admin", () => {
     expect.soft(await seriousViolations(page), "member page, delete confirmation open").toEqual([])
   })
 
+  // #516: the « Effacer les données personnelles » confirmation (recap and typed word), then the
+  // erased record's page with the notice that replaces the action.
+  test("member page's erasure confirmation and the erased record have no serious violation", async ({ page }) => {
+    await page.goto("/admin/login")
+    await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+    await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+    await page.getByRole("button", { name: "Se connecter" }).click()
+    await expect(page).toHaveURL(/\/admin\/events/)
+
+    const res = await page.request.post("/api/admin/members", { data: { firstName: "E2E", lastName: `Erase${Date.now()}` } })
+    expect(res.ok(), await res.text()).toBeTruthy()
+    const member = await res.json()
+
+    await page.goto(`/admin/members/${member.id}`)
+    const eraseButton = page.getByRole("button", { name: /^Effacer les données personnelles/ })
+    await waitForHydration(eraseButton)
+    await eraseButton.click()
+    const dialog = page.getByRole("alertdialog", { name: /^Effacer les données personnelles/ })
+    await expect(dialog).toBeVisible()
+    expect.soft(await seriousViolations(page), "member page, erasure confirmation open").toEqual([])
+
+    await dialog.getByLabel("Pour confirmer, saisissez « effacer »").fill("effacer")
+    await dialog.getByRole("button", { name: "Effacer les données", exact: true }).click()
+    await expect(page.getByRole("heading", { level: 1, name: "Activité de Bénévole effacé" })).toBeVisible()
+    expect.soft(await seriousViolations(page), "erased member page").toEqual([])
+  })
+
   // #557: the members list (new "Heures attestées" / "Dernière participation" columns and the
   // hours-export form), then an event's Rapports page with its post-event summary section.
   // #599: the dashboard, with its « Ce qui demande votre attention » section.
