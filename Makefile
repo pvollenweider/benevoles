@@ -4,7 +4,7 @@
 # Bénévoles — tâches de développement.
 # Usage : `make` (équivalent à `make help`).
 
-.PHONY: help dev dev-up dev-down dev-logs dev-reset dev-setup db-generate db-migrate db-seed db-studio test lint typecheck install e2e e2e-up e2e-down e2e-setup video-up video-down video-setup video-seed video-server video videos video-publish video-media-serve
+.PHONY: help dev dev-up dev-down dev-logs dev-reset dev-setup db-generate db-migrate db-seed db-studio test lint typecheck install e2e e2e-up e2e-down e2e-setup video-up video-down video-setup video-seed video-server video videos video-publish video-media-serve test-offsite-backup restore-test-offsite
 
 DEFAULT_GOAL := help
 
@@ -188,6 +188,17 @@ video-publish: ## Publie les vidéos nouvelles ou modifiées (KUBE_CONTEXT=… [
 
 video-media-serve: ## Sert videos/output en local pour VIDEO_MEDIA_BASE_URL (PORT=4870 par défaut, mêmes en-têtes CORS/Content-Type que k8s/media.yaml)
 	node scripts/serve-video-media.mjs
+
+# ── Copie hors site (#524) ─────────────────────────────────────────────────────
+
+test-offsite-backup: ## Test hors ligne (faux rclone/wget) du choix de fournisseur et du script de restauration
+	sh scripts/test-offsite-backup.sh
+
+restore-test-offsite: ## Test de restauration réel (OFFSITE_PROVIDER=dropbox|swissbackup, BACKUP_PASSPHRASE=…, [OFFSITE_BUCKET=…])
+	@test -n "$(BACKUP_PASSPHRASE)" || (echo "BACKUP_PASSPHRASE est obligatoire"; exit 1)
+	OFFSITE_PROVIDER=$(or $(OFFSITE_PROVIDER),dropbox) OFFSITE_BUCKET="$(OFFSITE_BUCKET)" BACKUP_PASSPHRASE="$(BACKUP_PASSPHRASE)" \
+		RCLONE_CONFIG="$(or $(RCLONE_CONFIG),$(HOME)/.config/rclone/rclone.conf)" \
+		sh scripts/restore-test-offsite.sh
 
 # ── Qualité ──────────────────────────────────────────────────────────────────
 
