@@ -41,6 +41,10 @@ export type SignupForm = {
   consent: boolean
 }
 
+/** Privacy policy section linked under the sign-up consent (#706): the volunteers' rights,
+ *  followed by the retention section. The id lives in src/app/legal/privacy/page.tsx. */
+export const CONSENT_PRIVACY_HREF = "/legal/privacy#droits"
+
 export const EMPTY_SIGNUP_FORM: SignupForm = {
   firstName: "", lastName: "", email: "", phone: "", birthDate: "", comment: "", consent: false,
 }
@@ -89,7 +93,7 @@ export function validateSignup(input: {
 }): string | null {
   const { form } = input
   if (!input.charterAccepted) return "Accepte la convention des bénévoles."
-  if (!form.consent) return "Accepte l'utilisation de tes données pour cet événement."
+  if (!form.consent) return "Coche la case d'accord sur tes données pour t'inscrire."
   if (!form.firstName || !form.lastName || !form.email) return "Prénom, nom et email sont obligatoires."
   // `required` already blocks an empty field; this catches a whitespace-only one.
   if (input.requirePhone && !form.phone.trim()) return "Le téléphone est obligatoire pour cet événement."
