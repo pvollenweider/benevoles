@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { describeBulkFailure, describeSignupFailure, partialOutcome } from "../form-errors"
+import { describeBulkFailure, describeSignupFailure, mergeFailureMessage, partialOutcome } from "../form-errors"
 
 // Error recovery on important forms (#375).
 describe("describeSignupFailure", () => {
@@ -30,5 +30,21 @@ describe("describeBulkFailure / partialOutcome", () => {
     expect(describeBulkFailure({ status: 500 }, "Retrait").retryable).toBe(true)
     expect(partialOutcome(3, 0)).toBeNull()
     expect(partialOutcome(3, 1)).toBe("3 inscriptions traitées, 1 inscription en échec : rechargez la liste et réessayez sur celles qui restent.")
+  })
+})
+
+describe("mergeFailureMessage", () => {
+  it("says nothing was changed when the server rolled the merge back", () => {
+    expect(mergeFailureMessage(500, { error: "La fusion n'a pas pu être faite. Rien n'a été modifié.", notApplied: true })).toBe("La fusion n'a pas pu être faite. Rien n'a été modifié.")
+  })
+
+  it("reads a non-JSON error page as a server error, not a cut connection (regression)", () => {
+    const message = mergeFailureMessage(502, null)
+    expect(message).toContain("erreur du serveur")
+    expect(message).not.toContain("Connexion interrompue")
+  })
+
+  it("keeps the server's refusal for a 409", () => {
+    expect(mergeFailureMessage(409, { error: "Une des deux fiches a déjà été fusionnée." })).toBe("Une des deux fiches a déjà été fusionnée.")
   })
 })

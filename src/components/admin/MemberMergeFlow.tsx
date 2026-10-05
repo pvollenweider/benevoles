@@ -8,7 +8,7 @@ import Link from "next/link"
 import ModalShell from "./ModalShell"
 import { announce } from "@/lib/announce"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
-import { describeBulkFailure } from "@/lib/form-errors"
+import { mergeFailureMessage } from "@/lib/form-errors"
 
 type MergeableField = "firstName" | "lastName" | "email" | "phone" | "birthDate" | "availabilityNote"
 
@@ -199,10 +199,10 @@ export default function MemberMergeFlow({ member, initialOther }: { member: Memb
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ otherId: other.id, choices }),
       })
-      const body = await res.json()
-      if (!res.ok) {
-        const f = describeBulkFailure({ status: res.status, body }, "Fusion")
-        setError(f.message)
+      // A server error page is not JSON: read it as a server error, never as a cut connection.
+      const body = await res.json().catch(() => null)
+      if (!res.ok || !body) {
+        setError(mergeFailureMessage(res.status, body))
         setConfirmOpen(false)
         return
       }

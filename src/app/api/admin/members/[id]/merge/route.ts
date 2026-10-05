@@ -11,6 +11,7 @@ import { UnresolvedConflictsError } from "@/lib/member-merge"
 import { registrationToken, linkToken } from "@/lib/token-vault"
 import { sendNotification } from "@/lib/notifications"
 import { sendMemberInvite } from "@/lib/notification-helpers"
+import { reportError } from "@/lib/report-error"
 
 /**
  * Executes a member merge (#600): one transaction (src/lib/member-merge-transaction.ts), then —
@@ -37,7 +38,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     if (e instanceof UnresolvedConflictsError) {
       return NextResponse.json({ error: "Des conflits doivent être résolus avant de confirmer la fusion.", conflicts: e.conflicts }, { status: 400 })
     }
-    throw e
+    // Anything else thrown here comes from inside the transaction, which rolled back: say so in
+    // words (the client otherwise read the HTML error page as a cut connection) and report it.
+    reportError("member.merge")(e)
+    return NextResponse.json({ error: "La fusion n'a pas pu être faite. Rien n'a été modifié.", notApplied: true }, { status: 500 })
   }
 
   let resend: { sent: number; failed: number } | null = null
