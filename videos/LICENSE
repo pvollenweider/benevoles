@@ -1,0 +1,27 @@
+Benevol video tutorials: editorial content
+
+Copyright 2026 Philippe Vollenweider
+
+The editorial content of this folder is licensed under the Creative Commons
+Attribution-ShareAlike 4.0 International licence (CC BY-SA 4.0):
+https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+It covers:
+- the scripts (videos/scripts/*.md) and the Masterclass plan (videos/MASTERCLASS_PLAN.md);
+- the narration, viewer texts and editorial metadata of the manifests and the
+  catalogue (videos/manifests/*.json, videos/catalog.json);
+- the rendered videos, captions and transcripts published on
+  https://medias.benevol.app (MP4, VTT, TXT).
+
+Attribution: « Benevol (benevol.app), CC BY-SA 4.0 », with a link to
+https://www.benevol.app/videos or to the video used.
+
+Not covered:
+- the name « Benevol » and its logo, which are not licensed for reuse;
+- the generation tools (videos/tools, videos/lib) and the rest of the
+  repository, which are free software under the GNU AGPL v3 (see the LICENSE
+  file at the root of the repository);
+- the demonstration data shown in the videos is fictional (example.org).
+
+The narration voice is generated with Google's Gemini text-to-speech; Google's
+Gemini API terms state that Google does not claim ownership of generated content.
