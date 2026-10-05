@@ -22,7 +22,7 @@ Technologies utilisées : HTML, CSS, JavaScript, WAI-ARIA.
 - **Revue de chaque changement d'interface** : chaque modification des écrans passe par une revue d'accessibilité dédiée (structure, noms accessibles, clavier, focus, annonces, contraste, libellés) ; ses remarques bloquantes sont corrigées avant publication.
 - **Clavier** : les parcours ci-dessous sont conçus pour être utilisés au clavier seul, avec un lien d'évitement (« Aller au contenu ») sur la page d'un événement, les documents légaux, les pages de la documentation et celles de l'administration, et un focus visible. Une vérification manuelle complète et datée de ces parcours reste à faire.
 
-Parcours concernés : découvrir un événement ; choisir ses créneaux ; remplir et envoyer l'inscription ; ouvrir sa page personnelle, annuler un créneau, quitter une liste d'attente ou retirer une demande ; accepter une place de liste d'attente ; se connecter à l'administration ; créer un événement, ajouter des créneaux, suivre les inscriptions et écrire aux bénévoles.
+Parcours concernés : découvrir un événement ; choisir ses créneaux ; remplir et envoyer l'inscription ; ouvrir sa page personnelle, annuler un créneau, quitter une liste d'attente ou retirer une demande ; accepter une place de liste d'attente ; se connecter à l'administration ; créer un événement, ajouter des créneaux, suivre les inscriptions, pointer les arrivées le jour J et écrire aux bénévoles.
 
 ## Pas encore vérifié
 
