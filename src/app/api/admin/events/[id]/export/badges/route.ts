@@ -4,6 +4,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { badgeOptionsFrom, renderBadges } from "@/lib/print-badges"
+import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
 
 /** GET /api/admin/events/[id]/export/badges (#190): printable badges of the event's active volunteers. */
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -16,7 +17,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     select: {
       title: true,
       accentColorKey: true,
-      organization: { select: { name: true } },
+      organization: { select: { name: true, logo: ORG_LOGO_SELECT } },
       shifts: {
         where: { status: { not: "cancelled" } },
         orderBy: [{ date: "asc" }, { startTime: "asc" }, { displayOrder: "asc" }],
@@ -35,6 +36,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const html = renderBadges({
     eventTitle: event.title,
     organizationName: event.organization.name,
+    logo: orgLogoOf(guard.organizationId, event.organization.logo),
     accentColorKey: event.accentColorKey,
     shifts: event.shifts.map((s) => ({
       id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10),

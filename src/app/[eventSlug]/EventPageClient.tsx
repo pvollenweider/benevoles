@@ -6,6 +6,8 @@
 import { useEffect, useLayoutEffect, useRef, useState, useMemo } from "react"
 import { closedMessage, openUntilMessage, registrationState } from "@/lib/registration-window"
 import { eventAccent } from "@/lib/event-accent"
+import type { OrgLogo } from "@/lib/org-logo"
+import OrgLogoImage from "@/components/OrgLogoImage"
 import { coordinatesOf, MAP_LINK_LABEL, MAP_LINK_SR_SUFFIX, osmLink } from "@/lib/map-link"
 import { describeSignupFailure, type Failure } from "@/lib/form-errors"
 import SignupRecap from "@/components/public/SignupRecap"
@@ -77,6 +79,8 @@ type EventData = {
   slug: string
   title: string
   organizationName: string
+  /** The organization's logo (#300), shown next to its name in the header. */
+  organizationLogo?: OrgLogo | null
   description: string | null
   location: string | null
   latitude?: number | null
@@ -569,7 +573,14 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
               </div>
             )}
           </div>
-          <p className={`text-xs font-medium mt-2 ${accent ? accent.soft : "text-gray-500"}`}>{event.organizationName}</p>
+          {event.organizationLogo ? (
+            <div className="flex items-center gap-2 mt-2">
+              <OrgLogoImage logo={event.organizationLogo} organizationName={event.organizationName} nameShownBeside maxWidth={120} maxHeight={40} />
+              <p className={`min-w-0 break-words text-xs font-medium ${accent ? accent.soft : "text-gray-500"}`}>{event.organizationName}</p>
+            </div>
+          ) : (
+            <p className={`text-xs font-medium mt-2 ${accent ? accent.soft : "text-gray-500"}`}>{event.organizationName}</p>
+          )}
           <h1 id="event-title" ref={titleRef} tabIndex={-1} className={`text-xl font-bold focus:outline-none ${accent ? "" : "text-gray-900"}`}>{event.title}</h1>
           {(event.location || coordinatesOf(event)) && (
             <p className={`text-sm ${accent ? accent.soft : "text-gray-500"}`}>

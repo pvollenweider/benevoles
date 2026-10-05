@@ -8,6 +8,8 @@ import { eventHourSummaries, withinPeriod, type HourEntry } from "@/lib/voluntee
 import { fmtDuration } from "@/lib/signup-recap"
 import { announce } from "@/lib/announce"
 import { focusFirstAvailableNextFrame, isFocusDropped } from "@/lib/focus-return"
+import type { OrgLogo } from "@/lib/org-logo"
+import OrgLogoImage from "@/components/OrgLogoImage"
 
 export const CERTIFICATE_NOTE_MAX = 300
 
@@ -15,6 +17,8 @@ type Props = {
   memberId: string
   memberName: string
   organizationName: string
+  /** The organization's logo (#300), above the title; its name stays written under it. */
+  logo?: OrgLogo | null
   /** Every counted registration, unfiltered: the period is applied on the client, without a round trip. */
   entries: HourEntry[]
   defaultPeriod: { from: string; to: string }
@@ -30,7 +34,7 @@ const fmtDay = (iso: string) => new Date(`${iso}T00:00:00Z`).toLocaleDateString(
  * state, no server round trip — so generation is logged once, on an explicit click, not on every
  * keystroke or re-render.
  */
-export default function CertificateView({ memberId, memberName, organizationName, entries, defaultPeriod, generatedAt }: Props) {
+export default function CertificateView({ memberId, memberName, organizationName, logo, entries, defaultPeriod, generatedAt }: Props) {
   const id = useId()
   const [from, setFrom] = useState(defaultPeriod.from)
   const [to, setTo] = useState(defaultPeriod.to)
@@ -197,6 +201,8 @@ export default function CertificateView({ memberId, memberName, organizationName
             .certificate thead { display: table-header-group; }
           }
         `}</style>
+        {/* Grey when printed: the certificate is meant for black and white. */}
+        {logo && <OrgLogoImage logo={logo} organizationName={organizationName} nameShownBeside maxWidth={180} maxHeight={64} tile={false} className="block mb-3 print:grayscale" />}
         <h1 id={`${id}-title`} className="text-2xl font-bold text-gray-900">Attestation de bénévolat</h1>
         <p className="text-sm text-gray-800 mt-2">{organizationName}</p>
         <p className="text-sm text-gray-800">Bénévole : <strong>{memberName}</strong></p>

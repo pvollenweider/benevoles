@@ -4,6 +4,8 @@ import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import AdminsManager from "@/components/admin/AdminsManager"
 import OrgNameForm from "@/components/admin/OrgNameForm"
+import OrgLogoForm from "@/components/admin/OrgLogoForm"
+import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
 import OrgPublicTitleForm from "@/components/admin/OrgPublicTitleForm"
 import OrgSlugForm from "@/components/admin/OrgSlugForm"
 import OrgTimeZoneForm from "@/components/admin/OrgTimeZoneForm"
@@ -39,7 +41,7 @@ export default async function AdminsSettingsPage() {
       },
       orderBy: { createdAt: "asc" },
     }),
-    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, publicTitle: true, timeZone: true } }),
+    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, publicTitle: true, timeZone: true, logo: ORG_LOGO_SELECT } }),
     db.orgSlugHistory.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
@@ -51,6 +53,7 @@ export default async function AdminsSettingsPage() {
   const currentEmail = session.user?.email ?? ""
   // Organisers see these settings but can't change them (#469); the routes refuse it too.
   const isOwner = hasLevel(session.user?.role, "owner")
+  const logo = org ? orgLogoOf(organizationId, org.logo) : null
 
   return (
     <div className="space-y-5">
@@ -80,6 +83,7 @@ export default async function AdminsSettingsPage() {
           <p className="text-sm text-gray-700">Votre rôle : organisateur. Ces réglages sont réservés aux propriétaires de l&apos;organisation.</p>
           <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
             <dt className="text-gray-600">Nom</dt><dd className="text-gray-900">{org.name}</dd>
+            <dt className="text-gray-600">Logo</dt><dd className="text-gray-900">{logo ? "défini" : "aucun"}</dd>
             <dt className="text-gray-600">Titre public</dt><dd className="text-gray-900">{org.publicTitle || "aucun"}</dd>
             <dt className="text-gray-600">Adresse</dt><dd className="text-gray-900 break-all">{org.slug}.{baseDomain}</dd>
             <dt className="text-gray-600">Fuseau horaire</dt><dd className="text-gray-900">{org.timeZone || APP_TIME_ZONE}</dd>
@@ -89,6 +93,8 @@ export default async function AdminsSettingsPage() {
       )}
 
       {org && isOwner && <OrgNameForm initialName={org.name} />}
+
+      {org && isOwner && <OrgLogoForm initialLogo={logo} organizationName={org.name} />}
 
       {org && isOwner && <OrgPublicTitleForm initialTitle={org.publicTitle ?? ""} />}
 

@@ -4,6 +4,7 @@
 import { esc, volunteersOf, type SheetShift } from "./print-sheets"
 import type { ColorKey } from "./roles"
 import { clockTime } from "@/lib/gantt-utils"
+import { printLogoHtml, type OrgLogo } from "./org-logo"
 
 /**
  * Printable identification badges (#190, V1): one badge per active volunteer of an event,
@@ -43,6 +44,8 @@ export function badgeOptionsFrom(params: URLSearchParams): BadgeOptions {
 export type BadgeData = {
   eventTitle: string
   organizationName: string
+  /** The organization's logo (#300), in a corner of each badge; its name stays on the band. */
+  logo?: OrgLogo | null
   /** Event accent colour key (#300), if any. */
   accentColorKey?: string | null
   shifts: (SheetShift & { colorKey?: string | null })[]
@@ -96,8 +99,9 @@ export function badgesOf(d: BadgeData, o: BadgeOptions = DEFAULT_BADGE_OPTIONS):
 /** One badge: DOM order = visual order (event line over the band, then the name as a heading). */
 function badgeHtml(b: Badge, o: BadgeOptions, d: BadgeData): string {
   const band = b.color ? ` style="background:${b.color};color:#fff"` : ""
-  return `<li class="badge">
+  return `<li class="badge${d.logo ? " has-logo" : ""}">
   <div class="band"${band}><p class="org">${esc(d.organizationName)} · ${esc(d.eventTitle)}</p></div>
+  ${printLogoHtml(d.logo, "logo", { maxWidth: 76, maxHeight: 45 })}
   <h2 class="who">
     <span class="first">${esc(b.firstName)}</span>
     ${o.lastName && b.lastName ? `<span class="last">${esc(b.lastName)}</span>` : ""}
@@ -157,6 +161,10 @@ export function renderBadges(d: BadgeData, o: BadgeOptions = DEFAULT_BADGE_OPTIO
     .badge .last { display: block; font-size: 13pt; font-weight: 600; font-variant-caps: all-small-caps; letter-spacing: 0.03em; margin-top: 1mm; }
     .badge .role { font-size: 11pt; font-weight: 700; margin-top: auto; color: var(--ink); }
     .badge .shifts { list-style: none; font-size: 8.5pt; color: var(--ink-2); line-height: 1.3; margin-top: 1mm; }
+    /* The logo (#300) in the top right corner under the band, on the white of the badge; the name keeps clear of it. */
+    .badge .logo { position: absolute; top: 10.5mm; right: 5mm; max-width: 20mm; max-height: 12mm; width: auto; height: auto; object-fit: contain; }
+    .badge.has-logo .who { padding-right: 22mm; }
+    .mono .badge .logo { filter: grayscale(1); }
     .sheet-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
     @page { size: A4 portrait; margin: 10mm 15mm; }
@@ -178,7 +186,7 @@ export function renderBadges(d: BadgeData, o: BadgeOptions = DEFAULT_BADGE_OPTIO
     </div>
     <button type="button" class="print-btn" onclick="window.print()">Imprimer</button>
   </header>
-  <main>
+  <main${o.color === "none" ? ` class="mono"` : ""}>
     ${badges.length === 0
       ? `<p class="empty">${emptyMessage(o, chosenName)}</p>`
       : chunk(badges, BADGES_PER_SHEET).map((group, i, all) => `<ul class="sheet" role="list" aria-label="Feuille ${i + 1} sur ${all.length}">${group.map((b) => badgeHtml(b, o, d)).join("")}</ul>`).join("")}

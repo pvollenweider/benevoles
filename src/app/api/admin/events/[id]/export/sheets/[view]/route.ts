@@ -8,6 +8,7 @@ import { orgTimeZone } from "@/lib/time-zone"
 import { isSheetView, renderSheet } from "@/lib/print-sheets"
 import { answerSummary, answerSummarySelect } from "@/lib/question-answer-summary"
 import { withDayContact, withSectorLeaders } from "@/lib/shift-info"
+import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
 
 /** GET /api/admin/events/[id]/export/sheets/[view] (#400): one printable sheet of the event. */
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string; view: string }> }) {
@@ -23,7 +24,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       // Day-of contact (#560): on the individual sheet, handed to the volunteers, for a shift without a contact.
       dayContactName: true,
       dayContactPhone: true,
-      organization: { select: { name: true, timeZone: true } },
+      organization: { select: { name: true, timeZone: true, logo: ORG_LOGO_SELECT } },
       sectorLeaders: { select: { roleName: true, name: true, email: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
@@ -48,6 +49,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const html = renderSheet(view, {
     eventTitle: event.title,
     organizationName: event.organization.name,
+    logo: orgLogoOf(guard.organizationId, event.organization.logo),
     printedAt: new Date().toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short", timeZone }),
     leaders: event.sectorLeaders,
     answers: forAnswers ? answerSummary(forAnswers.questions, forAnswers.registrations) : undefined,

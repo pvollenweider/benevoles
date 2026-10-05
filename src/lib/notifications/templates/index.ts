@@ -9,7 +9,8 @@
  */
 
 import type { NotificationPayload } from "../types"
-import type { RenderedEmail } from "./shared"
+import { withOrgLogo, type RenderedEmail } from "./shared"
+import { emailLogoHtml, type OrgLogo } from "../../org-logo"
 import { renderConfirmation, renderRegistrationRequested, renderRegistrationRefused, renderShiftModified, renderShiftCancelled, renderRegistrationLinkResend } from "./registration"
 import { renderMemberInvite, renderAdminInvite } from "./invitations"
 import { renderReminderJ2, renderReminderJ1, renderReminderDd, renderManualReminder, renderTargetedMessage } from "./reminders"
@@ -20,7 +21,16 @@ import { renderAdminNotification, renderWithdrawalAdminNotice, renderPasswordRes
 
 export type { RenderedEmail } from "./shared"
 
-export function render(payload: NotificationPayload): RenderedEmail {
+/** The organization an email is sent for (#300): its logo at the top of the email, if it has one. */
+export type EmailBrand = { organizationName: string; logo: OrgLogo | null; baseUrl: string }
+
+export function render(payload: NotificationPayload, brand?: EmailBrand | null): RenderedEmail {
+  const email = renderKind(payload)
+  if (!brand?.logo) return email
+  return { ...email, html: withOrgLogo(email.html, emailLogoHtml(brand.logo, brand.baseUrl, brand.organizationName)) }
+}
+
+function renderKind(payload: NotificationPayload): RenderedEmail {
   switch (payload.kind) {
     case "registration_confirmation":
       return renderConfirmation(payload)

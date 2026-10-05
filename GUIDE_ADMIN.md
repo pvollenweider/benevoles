@@ -531,7 +531,7 @@ Le bandeau **Heures par bénévole, pour une période (CSV)**, au-dessus de la l
 
 ### Attestation de bénévolat
 
-Depuis la page **Activité** d'un membre, le lien **Attestation de bénévolat** ouvre un document imprimable à remettre sur demande : nom de l'organisation, nom du bénévole, période choisie (douze derniers mois par défaut), le détail par événement (postes tenus, nombre de créneaux, heures attestées) et une zone de signature. Seules les présences enregistrées (pointage à l'arrivée) comptent comme heures attestées ; un créneau confirmé sans présence enregistrée n'y figure que si vous cochez **Inclure les heures planifiées sans présence saisie**, et apparaît alors séparément, sous l'intitulé « planifiées ». Un avertissement à l'écran (absent de l'impression) liste les créneaux confirmés sans présence enregistrée sur la période choisie. Un texte libre facultatif (par exemple le rôle tenu) peut être ajouté. Un créneau annulé après coup ne compte jamais, même si une présence y avait été enregistrée. Rien n'est conservé : le document est régénéré à chaque demande.
+Depuis la page **Activité** d'un membre, le lien **Attestation de bénévolat** ouvre un document imprimable à remettre sur demande : logo (s'il y en a un, en gris à l'impression) et nom de l'organisation, nom du bénévole, période choisie (douze derniers mois par défaut), le détail par événement (postes tenus, nombre de créneaux, heures attestées) et une zone de signature. Seules les présences enregistrées (pointage à l'arrivée) comptent comme heures attestées ; un créneau confirmé sans présence enregistrée n'y figure que si vous cochez **Inclure les heures planifiées sans présence saisie**, et apparaît alors séparément, sous l'intitulé « planifiées ». Un avertissement à l'écran (absent de l'impression) liste les créneaux confirmés sans présence enregistrée sur la période choisie. Un texte libre facultatif (par exemple le rôle tenu) peut être ajouté. Un créneau annulé après coup ne compte jamais, même si une présence y avait été enregistrée. Rien n'est conservé : le document est régénéré à chaque demande.
 
 ### Doublons possibles
 
@@ -665,13 +665,13 @@ Ces rappels sont envoyés sans intervention de votre part pour les événements 
 | Synthèse des réponses | par question posée aux bénévoles, le nombre de réponses des confirmés et des personnes en attente, sans nom ni coordonnées (voir « Synthèse des réponses ») | organisateurs, ou pour passer commande |
 | Archive de l'événement (JSON) | un fichier téléchargé avec toutes les données de l'événement : réglages, créneaux, inscriptions, pages, responsables, jalons et journal | vos archives, ou pour changer d'outil |
 
-Sauf l'export complet, ces documents sont conçus pour le noir et blanc. La feuille de présence en CSV se télécharge depuis les inscriptions (voir « Présences le jour J »). Les heures planifiées des membres n'y figurent jamais ; les documents avec téléphones portent la mention « ne pas afficher ni distribuer ».
+Sauf l'export complet, ces documents sont conçus pour le noir et blanc ; le logo de l'organisation, s'il y en a un, figure en gris à côté du titre. La feuille de présence en CSV se télécharge depuis les inscriptions (voir « Présences le jour J »). Les heures planifiées des membres n'y figurent jamais ; les documents avec téléphones portent la mention « ne pas afficher ni distribuer ».
 
 ---
 
 ### Badges
 
-Depuis **Rapports**, la section **Badges** imprime un badge d'identification par bénévole inscrit : prénom en grand et poste(s), toujours imprimés ; nom de famille et créneaux, cochés par défaut, peuvent être retirés. **Couleur du bandeau** : celle du poste (à défaut celle de l'événement), celle de l'événement, ou noir et blanc. Dix badges par feuille A4, à découper sur les pointillés. Filtre par **Poste**, et liste **Bénévole (réimpression)** pour réimprimer un badge perdu (deux homonymes y sont distingués par leur email) ; avec un poste choisi, seuls ses créneaux sur ce poste figurent sur le badge. Pas de photo ni de code QR : un badge peut être photographié ou perdu, il ne porte donc aucun lien vers les données du bénévole.
+Depuis **Rapports**, la section **Badges** imprime un badge d'identification par bénévole inscrit : prénom en grand et poste(s), toujours imprimés ; nom de famille et créneaux, cochés par défaut, peuvent être retirés. **Couleur du bandeau** : celle du poste (à défaut celle de l'événement), celle de l'événement, ou noir et blanc. Le logo de l'organisation, s'il y en a un, figure dans un coin de chaque badge (en gris avec le bandeau noir et blanc). Dix badges par feuille A4, à découper sur les pointillés. Filtre par **Poste**, et liste **Bénévole (réimpression)** pour réimprimer un badge perdu (deux homonymes y sont distingués par leur email) ; avec un poste choisi, seuls ses créneaux sur ce poste figurent sur le badge. Pas de photo ni de code QR : un badge peut être photographié ou perdu, il ne porte donc aucun lien vers les données du bénévole.
 
 ### Résumé de l'événement
 
@@ -752,7 +752,7 @@ Les fichiers CSV s'ouvrent tels quels dans Excel ou LibreOffice (UTF-8, point-vi
 <!-- retention:start (généré depuis src/lib/retention.ts, npm run retention:docs) -->
 | Données | Conservation |
 |---|---|
-| Membres, événements (dont le contact le jour J, nom et téléphone, #560), créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date, #569), versions de la convention déjà montrées à des bénévoles (texte par empreinte, #569), pages, journaux d'activité, comptes administrateurs, doublons possibles ignorés (#601) de l'organisation | tant que l'organisation est active, événements passés compris ; effacés 30 jours après sa désactivation (délai compté depuis la dernière modification de l'organisation désactivée) |
+| Membres, événements (dont le contact le jour J, nom et téléphone, #560), créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date, #569), versions de la convention déjà montrées à des bénévoles (texte par empreinte, #569), pages, journaux d'activité, comptes administrateurs, doublons possibles ignorés (#601), logo (#300) de l'organisation | tant que l'organisation est active, événements passés compris ; effacés 30 jours après sa désactivation (délai compté depuis la dernière modification de l'organisation désactivée) |
 | Événement supprimé par un administrateur | effacé immédiatement, avec ses créneaux, inscriptions, invitations, réponses aux questions, responsables, pages, jalons, messages ciblés et son journal |
 | Organisation supprimée par l'opérateur de benevol.app | effacée immédiatement, avec ses membres et ses administrateurs |
 | Fiche absorbée par une fusion de membres (#600) : fiche inactive sans donnée personnelle (« mergedIntoId »), le temps que les anciens identifiants restent résolus | 30 jours après la fusion |
@@ -779,7 +779,7 @@ Liste chronologique de ce qui concerne l'organisation plutôt qu'un événement 
 - les **membres** : création, modification, désactivation, import ;
 - les **comptes admin** : invitation, changement de rôle, retrait ;
 - les **emails** : un email en échec remis en file d'envoi ;
-- l'**organisation** : modification des réglages des emails ;
+- l'**organisation** : modification des réglages des emails, logo changé ou retiré ;
 - les **modèles de messages** créés, modifiés ou supprimés.
 
 **Filtrer par type** restreint la liste aux **Membres**, **Comptes admin**, **Emails** ou **Organisation** ; les modèles de messages n'apparaissent qu'avec **Tous les types**. **Exporter tout le journal (CSV)** télécharge le journal complet. Indépendant du journal par événement.
@@ -793,6 +793,22 @@ Liste chronologique de ce qui concerne l'organisation plutôt qu'un événement 
 - **Nom de l'organisation** : 2 à 100 caractères. Affiché dans l'administration, dans les emails et au-dessus du titre de la page publique.
 - **Identifiant public** : l'adresse de votre espace (`identifiant.benevol.app`), 2 à 40 caractères : lettres minuscules, chiffres et tirets, sans tiret au début ni à la fin. Si des événements sont publiés, une confirmation est demandée avant le changement. Après l'enregistrement, vous êtes redirigé(e) vers la nouvelle adresse.
 - **Anciens identifiants** : ils continuent de rediriger vers l'adresse actuelle, pour que les liens déjà partagés fonctionnent. **Supprimer** un ancien identifiant arrête cette redirection : les liens qui l'utilisent ne fonctionnent plus.
+
+---
+
+## Logo de l'organisation
+
+**`/admin/settings/admins`** → section **Logo de l'organisation** (réservé aux propriétaires)
+
+Le logo apparaît en haut de la page publique de l'organisation et de chaque événement, sur les feuilles à imprimer des **Rapports**, sur les badges, sur les attestations de bénévolat et en haut des emails envoyés au nom de l'organisation. Le nom de l'organisation reste toujours écrit à côté : le logo ne le remplace jamais.
+
+- **Choisir une image** : un fichier PNG ou JPEG de 2 Mo au plus (pas de SVG). Un aperçu s'affiche avant l'envoi ; cliquez sur **Enregistrer le logo**. L'image est réduite à 512 pixels de côté au plus et ses métadonnées (date, appareil, position) sont retirées.
+- Le logo est affiché sur fond blanc et souvent imprimé en noir et blanc (feuilles, badges en noir et blanc, attestations) : préférez une version foncée sur fond clair ou transparent. Un logo blanc sur fond transparent ne se verrait pas.
+- **Remplacer** : choisissez une autre image et enregistrez-la ; elle remplace la précédente partout.
+- **Retirer le logo** : après confirmation, il disparaît des pages, documents et prochains emails. Les emails déjà envoyés affichent alors le nom de l'organisation à la place de l'image.
+- Dans les emails, le logo est une image chargée depuis benevol.app. Si la messagerie du destinataire bloque les images, elle affiche le nom de l'organisation à la place.
+
+Les changements de logo apparaissent dans le **Journal d'activité** (type **Organisation**). Le logo est effacé avec l'organisation.
 
 ---
 

@@ -14,6 +14,8 @@ export default function OrgCharterForm({
   initialHasOrgInsurance: boolean
 }) {
   const insuranceLabelId = useId()
+  // The text field is named by the section heading (found unlabelled by the axe scan added with #300).
+  const titleId = useId()
   const [hasOrgInsurance, setHasOrgInsurance] = useState(initialHasOrgInsurance)
   const [text, setText] = useState(initialCharter ?? buildVolunteerCharter({ hasOrgInsurance }))
   const [saving, setSaving] = useState(false)
@@ -46,7 +48,7 @@ export default function OrgCharterForm({
   return (
     <div className="bg-white border border-gray-200 rounded-2xl p-5 space-y-4">
       <div>
-        <h2 className="text-sm font-semibold text-gray-800">Convention des Bénévoles</h2>
+        <h2 id={titleId} className="text-sm font-semibold text-gray-800">Convention des Bénévoles</h2>
         <p className="text-xs text-gray-500 mt-0.5">
           Ce texte est présenté aux bénévoles lors de l'inscription.
         </p>
@@ -82,6 +84,7 @@ export default function OrgCharterForm({
       </div>
 
       <textarea
+        aria-labelledby={titleId}
         value={text}
         onChange={(e) => { setText(e.target.value); setSuccess(false) }}
         rows={14}

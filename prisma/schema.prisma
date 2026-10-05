@@ -40,6 +40,22 @@ model Organization {
   messageTemplates MessageTemplate[]
   duplicateDismissals DuplicateDismissal[]
   charterVersions CharterVersion[]
+  logo        OrganizationLogo?
+}
+
+// The organization's logo (#300), processed server-side (PNG or JPEG, at most 512 px on its longest
+// side, about 200 KB) and served by /api/public/organizations/[id]/logo. A table of its own so that
+// normal organization queries never load the image bytes; deleted with the organization (cascade).
+// `hash` (SHA-256 of `data`) versions the URL and is the ETag.
+model OrganizationLogo {
+  organizationId String       @id
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  data           Bytes
+  mimeType       String
+  width          Int
+  height         Int
+  hash           String
+  updatedAt      DateTime     @updatedAt
 }
 
 model OrgSlugHistory {

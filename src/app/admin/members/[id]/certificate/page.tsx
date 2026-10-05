@@ -9,6 +9,7 @@ import { loadVolunteerHourData } from "@/lib/volunteer-certificate-data"
 import { defaultPeriod, volunteerHourEntries } from "@/lib/volunteer-hours"
 import { orgTimeZone } from "@/lib/time-zone"
 import CertificateView from "@/components/admin/CertificateView"
+import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
 
 export const dynamic = "force-dynamic"
 
@@ -33,7 +34,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ id
   const data = await loadVolunteerHourData(ctx.db, id)
   if (!data) notFound()
 
-  const org = await ctx.db.organization.findUnique({ where: { id: ctx.organizationId }, select: { name: true, timeZone: true } })
+  const org = await ctx.db.organization.findUnique({ where: { id: ctx.organizationId }, select: { name: true, timeZone: true, logo: ORG_LOGO_SELECT } })
   const timeZone = orgTimeZone(org)
   const now = new Date()
   const entries = volunteerHourEntries(data.registrations, timeZone)
@@ -51,6 +52,7 @@ export default async function CertificatePage({ params }: { params: Promise<{ id
         memberId={id}
         memberName={`${data.member.firstName} ${data.member.lastName}`}
         organizationName={org?.name ?? ""}
+        logo={org ? orgLogoOf(ctx.organizationId, org.logo) : null}
         entries={entries}
         defaultPeriod={period}
         generatedAt={generatedAt}

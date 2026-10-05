@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { printLogoHtml, type OrgLogo } from "./org-logo"
 import { EMERGENCY_NOTE, emergencyNoteFor, shiftInfoText, type ShiftInfo } from "./shift-info"
 import { buildDayParts, type ShiftRow } from "./pdf-export-gantt"
 import { confirmedLine, MULTIPLE_NOTE, rowLabel, waitingLine, type AnswerSummary } from "./question-answer-summary"
@@ -45,6 +46,8 @@ export type SheetShift = ShiftInfo & {
 export type SheetData = {
   eventTitle: string
   organizationName: string
+  /** The organization's logo (#300), beside the title; its name stays written in the header. */
+  logo?: OrgLogo | null
   /** Already formatted, in the organization's time zone. */
   printedAt: string
   shifts: SheetShift[]
@@ -310,6 +313,9 @@ export function renderSheet(view: SheetView, d: SheetData): string {
     .doc-head h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; text-wrap: balance; }
     .doc-head .kind { font-size: 13px; color: var(--ink-2); margin-top: 3px; }
     .doc-head .kind strong { color: var(--ink); }
+    .doc-id { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    /* The logo in grey like the rest of the page: it must read once printed in black and white. */
+    .org-logo { display: block; flex-shrink: 0; object-fit: contain; filter: grayscale(1); }
     .print-btn { background: var(--ink); color: #fff; border: 2px solid var(--ink); border-radius: 6px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
     .print-btn:hover { background: #333; }
     .print-btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
@@ -404,9 +410,12 @@ export function renderSheet(view: SheetView, d: SheetData): string {
 </head>
 <body>
   <header class="doc-head">
-    <div>
-      <h1>${esc(d.eventTitle)}</h1>
-      <p class="kind"><strong>${esc(meta.name)}</strong> · ${esc(d.organizationName)} · imprimé le ${esc(d.printedAt)}</p>
+    <div class="doc-id">
+      ${printLogoHtml(d.logo, "org-logo", { maxWidth: 160, maxHeight: 56 })}
+      <div>
+        <h1>${esc(d.eventTitle)}</h1>
+        <p class="kind"><strong>${esc(meta.name)}</strong> · ${esc(d.organizationName)} · imprimé le ${esc(d.printedAt)}</p>
+      </div>
     </div>
     <button type="button" class="print-btn" onclick="window.print()">Imprimer</button>
   </header>

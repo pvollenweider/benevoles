@@ -67,7 +67,7 @@ Un admin peut désigner un ou plusieurs bénévoles responsables d'un poste (`Sh
 Deux niveaux, pas davantage :
 
 - **Propriétaire** (rôle stocké `admin`) : tous les droits de l'organisation.
-- **Organisateur** (`organizer`) : les événements, postes, créneaux, inscriptions, présences, membres et leurs invitations, les messages, les exports et les journaux. Il voit la liste de l'équipe mais ne la gère pas, ne change pas les réglages de l'organisation (nom, adresse publique (slug) et anciennes adresses, titre public, fuseau horaire, charte, assurance, réglages des emails, masquage de la liste « Premiers pas ») et ne supprime pas définitivement un événement.
+- **Organisateur** (`organizer`) : les événements, postes, créneaux, inscriptions, présences, membres et leurs invitations, les messages, les exports et les journaux. Il voit la liste de l'équipe mais ne la gère pas, ne change pas les réglages de l'organisation (nom, adresse publique (slug) et anciennes adresses, logo, titre public, fuseau horaire, charte, assurance, réglages des emails, masquage de la liste « Premiers pas ») et ne supprime pas définitivement un événement.
 
 La matrice route × méthode × niveau est `PERMISSIONS` dans `src/lib/permissions.ts`. Chaque route la respecte côté serveur (`requireOrgSession("owner")` pour les routes réservées aux propriétaires, 403 sinon), pas seulement en masquant l'interface. Un test vérifie que chaque route admin et chaque méthode y figurent, avec le bon appel. Un autre vérifie qu'un organisateur reçoit 403 sur chaque route réservée, sans qu'aucune donnée ne soit lue. Un changement de rôle s'applique aux sessions ouvertes dès leur requête suivante, car la session relit le rôle à chaque appel.
 
@@ -81,6 +81,7 @@ Routes réservées aux propriétaires (le reste de `PERMISSIONS` est ouvert aux 
 | `settings/notifications` | PATCH |
 | `settings/organization` | PATCH |
 | `settings/organization/slugs` | DELETE |
+| `settings/organization/logo` | PUT, DELETE |
 | `members/[id]/merge-preview` | POST |
 | `members/[id]/merge` | POST |
 
@@ -95,7 +96,7 @@ Un admin crée et gère les événements de sa propre organisation. Il peut arch
 Isolation entre organisations :
 
 1. `requireOrgSession()` (`src/lib/auth-guard.ts`) vérifie la session, résout l'organisation et refuse l'accès (403) si l'organisation d'un propriétaire ou d'un organisateur est désactivée. La vérification a lieu à chaque requête, pas seulement à la connexion.
-2. Le client `db` renvoyé par le guard est un client Prisma étendu (`getOrgClient`, `src/lib/prisma-org.ts`) qui limite toutes les opérations à l'organisation, sur tous les modèles qui lui appartiennent (`Event`, `Volunteer`, `OrgLog`, `OrgSlugHistory`, `TargetedMessage`, `MessageTemplate` directement ; `Shift`, `Registration`, `MemberInvite`, `EventPage`, `SectorLeader`, `EventMilestone`, `EventLog`, `EventQuestion`, `QuestionAnswer` via leur événement). `Organization`, `AdminUser`, `NotificationOutbox` et `PushSubscription` n'y sont pas : les routes qui les lisent filtrent explicitement par organisation. Les requêtes multi-lignes reçoivent le filtre ; les opérations par clé unique (`update`, `delete`, `findUnique`, `upsert`) vérifient d'abord à quelle organisation appartient la ligne ; les créations sont rattachées d'office à l'organisation ou refusées si l'événement visé n'en fait pas partie.
+2. Le client `db` renvoyé par le guard est un client Prisma étendu (`getOrgClient`, `src/lib/prisma-org.ts`) qui limite toutes les opérations à l'organisation, sur tous les modèles qui lui appartiennent (`Event`, `Volunteer`, `OrgLog`, `OrgSlugHistory`, `TargetedMessage`, `MessageTemplate`, `DuplicateDismissal`, `OrganizationLogo` directement ; `Shift`, `Registration`, `MemberInvite`, `EventPage`, `SectorLeader`, `EventMilestone`, `EventLog`, `EventQuestion`, `QuestionAnswer` via leur événement). `Organization`, `AdminUser`, `NotificationOutbox` et `PushSubscription` n'y sont pas : les routes qui les lisent filtrent explicitement par organisation. Les requêtes multi-lignes reçoivent le filtre ; les opérations par clé unique (`update`, `delete`, `findUnique`, `upsert`) vérifient d'abord à quelle organisation appartient la ligne ; les créations sont rattachées d'office à l'organisation ou refusées si l'événement visé n'en fait pas partie.
 3. Le code admin ne peut pas importer le client brut `prisma` (règle ESLint `no-restricted-imports` sur `src/app/api/admin/**` et `src/app/admin/**`) ; les rares exceptions (`Organization`, `AdminUser`, contrôle volontairement inter-organisations d'un slug) sont annotées avec leur justification.
 4. Les tests `src/__tests__/security/cross-tenant-isolation.test.ts` et `src/lib/__tests__/prisma-org.test.ts` vérifient l'isolation route par route et opération par opération.
 

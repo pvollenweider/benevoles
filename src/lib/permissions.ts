@@ -104,6 +104,8 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "settings/notifications/[id]/retry": { POST: "organizer" },
   "settings/notifications/test": { POST: "organizer" },
   "settings/organization": { PATCH: "owner" },
+  // The organization's logo (#300): one of its settings, like its name and address.
+  "settings/organization/logo": { PUT: "owner", DELETE: "owner" },
   "settings/organization/slugs": { GET: "organizer", DELETE: "owner" },
   "settings/password": { POST: "organizer" },
   "shifts": { POST: "organizer" },

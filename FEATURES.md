@@ -67,6 +67,7 @@ C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles
 - **Votre charte du bénévole**, à accepter avant de s'inscrire.
 - **Des pages d'information** pour chaque événement : accès, FAQ, règlement.
 - **Une couleur** pour l'en-tête de la page d'inscription, choisie dans une palette qui reste lisible.
+- **Votre logo** à côté de votre nom : sur vos pages publiques, vos feuilles imprimées, les badges, les attestations et les emails.
 - **Votre fuseau horaire**, pour que rappels et horaires tombent juste.
 
 ## Fiabilité et respect des données

@@ -99,6 +99,19 @@ test.describe("admin", () => {
     expect.soft(await seriousViolations(page), "volunteer certificate").toEqual([])
   })
 
+  // #300: the organization settings, with the logo form (upload, preview and removal states are
+  // scanned in e2e/org-logo.spec.ts).
+  test("organization settings page (with the logo form) has no serious violation", async ({ page }) => {
+    await page.goto("/admin/login")
+    await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+    await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+    await page.getByRole("button", { name: "Se connecter" }).click()
+    await expect(page).toHaveURL(/\/admin\/events/)
+    await page.goto("/admin/settings/admins")
+    await expect(page.getByRole("region", { name: "Logo de l'organisation" })).toBeVisible()
+    expect.soft(await seriousViolations(page), "organization settings").toEqual([])
+  })
+
   // #667: an eligible member's own page (inactive, no registration) shows the « Supprimer »
   // action, and its confirmation dialog — a new dialog state worth scanning on its own.
   test("member page's « Supprimer » confirmation dialog has no serious violation", async ({ page }) => {

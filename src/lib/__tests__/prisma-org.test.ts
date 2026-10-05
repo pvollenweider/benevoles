@@ -8,6 +8,7 @@ const m = vi.hoisted(() => ({
   eventCount: vi.fn(),
   shiftFindUnique: vi.fn(),
   volunteerFindUnique: vi.fn(),
+  logoFindUnique: vi.fn(),
 }))
 
 vi.mock("../prisma", () => ({
@@ -19,6 +20,7 @@ vi.mock("../prisma", () => ({
     event: { findUnique: m.eventFindUnique, count: m.eventCount },
     shift: { findUnique: m.shiftFindUnique },
     volunteer: { findUnique: m.volunteerFindUnique },
+    organizationLogo: { findUnique: m.logoFindUnique },
   },
 }))
 
@@ -155,6 +157,28 @@ describe("getOrgClient", () => {
       m.eventCount.mockResolvedValue(1) // only one of the two distinct events is in the org
       const { promise } = run("org-A", "MemberInvite", "createMany", { data: [{ eventId: "e1" }, { eventId: "e2" }] })
       await expect(promise).rejects.toBeInstanceOf(TenantAccessError)
+    })
+  })
+
+  describe("organization logo (#300), a direct model", () => {
+    it("upsert of a missing logo creates it for the org, whatever the caller sent", async () => {
+      m.logoFindUnique.mockResolvedValue(null)
+      const { promise, query } = run("org-A", "OrganizationLogo", "upsert", { where: { organizationId: "org-A" }, create: { organizationId: "ATTACKER", hash: "h" }, update: { hash: "h" } }, {})
+      await promise
+      expect(query).toHaveBeenCalledWith(expect.objectContaining({ create: { organizationId: "org-A", hash: "h" } }))
+    })
+
+    it("refuses to replace another org's logo", async () => {
+      m.logoFindUnique.mockResolvedValue({ organizationId: "org-B" })
+      const { promise, query } = run("org-A", "OrganizationLogo", "upsert", { where: { organizationId: "org-B" }, create: { hash: "h" }, update: { hash: "h" } })
+      await expect(promise).rejects.toBeInstanceOf(TenantAccessError)
+      expect(query).not.toHaveBeenCalled()
+    })
+
+    it("deleteMany only reaches the org's logo", async () => {
+      const { promise, query } = run("org-A", "OrganizationLogo", "deleteMany", { where: { organizationId: "org-B" } }, { count: 0 })
+      await promise
+      expect(query).toHaveBeenCalledWith({ where: { AND: [{ organizationId: "org-B" }, { organizationId: "org-A" }] } })
     })
   })
 
