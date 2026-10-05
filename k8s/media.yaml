@@ -1,0 +1,152 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
+# Media server for the video tutorials (#632): https://medias.benevol.app serves the rendered
+# files (<slug>/<slug>.mp4, .vtt, .txt) from a volume. They are never in Git nor in the app image:
+# `make video-publish` sends new or changed files (see videos/README.md). Nothing here holds
+# personal data; the volume is not backed up because every file can be rendered again from the
+# sources in videos/.
+#
+# Not applied by the deploy workflow: apply it by hand once (kubectl apply -f k8s/media.yaml).
+# TLS comes from the existing wildcard certificate (*.benevol.app); this Ingress has a higher
+# Traefik priority than the wildcard rule of k8s/ingress.yaml, so the exact host wins.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: benevoles-media
+  namespace: benevoles
+spec:
+  accessModes: [ReadWriteOnce]
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: benevoles-media-nginx
+  namespace: benevoles
+data:
+  default.conf: |
+    # Captions (<track>) loaded from another origin need CORS: allowed for benevol.app and its
+    # subdomains only, echoed back so the browser accepts it.
+    map $http_origin $media_cors_origin {
+      default "";
+      "~^https://([a-z0-9-]+\.)?benevol\.app$" $http_origin;
+    }
+    server {
+      listen 8080;
+      root /usr/share/nginx/html;
+      charset utf-8;
+      autoindex off;
+      # Range requests (seeking in a video) are served by nginx's static module by default.
+      location / {
+        # Only these files are published; exact types so browsers play and parse them.
+        types {
+          video/mp4 mp4;
+          text/vtt vtt;
+          text/plain txt;
+        }
+        default_type application/octet-stream;
+        add_header Access-Control-Allow-Origin $media_cors_origin always;
+        add_header Vary Origin always;
+        add_header X-Content-Type-Options nosniff always;
+        # File names do not change when a video is rendered again: revalidate each day.
+        add_header Cache-Control "public, max-age=86400" always;
+        try_files $uri =404;
+      }
+      location = /healthz {
+        access_log off;
+        return 200 "ok";
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: benevoles-media
+  namespace: benevoles
+  labels:
+    app: benevoles-media
+spec:
+  replicas: 1
+  # One pod at a time: the local-path volume is ReadWriteOnce.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: benevoles-media
+  template:
+    metadata:
+      labels:
+        app: benevoles-media
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27-alpine
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: media
+              mountPath: /usr/share/nginx/html
+            - name: config
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              memory: 64Mi
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: benevoles-media
+        - name: config
+          configMap:
+            name: benevoles-media-nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: benevoles-media
+  namespace: benevoles
+spec:
+  selector:
+    app: benevoles-media
+  ports:
+    - port: 80
+      targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: benevoles-media
+  namespace: benevoles
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    # Above the wildcard rule of k8s/ingress.yaml (100), so medias.benevol.app never reaches the app.
+    traefik.ingress.kubernetes.io/router.priority: "200"
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - "medias.benevol.app"
+      secretName: benevol-app-wildcard-tls
+  rules:
+    - host: medias.benevol.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: benevoles-media
+                port:
+                  number: 80

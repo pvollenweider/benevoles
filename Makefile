@@ -4,7 +4,7 @@
 # Bénévoles — tâches de développement.
 # Usage : `make` (équivalent à `make help`).
 
-.PHONY: help dev dev-up dev-down dev-logs dev-reset dev-setup db-generate db-migrate db-seed db-studio test lint typecheck install e2e e2e-up e2e-down e2e-setup video-up video-down video-setup video-seed video-server video videos
+.PHONY: help dev dev-up dev-down dev-logs dev-reset dev-setup db-generate db-migrate db-seed db-studio test lint typecheck install e2e e2e-up e2e-down e2e-setup video-up video-down video-setup video-seed video-server video videos video-publish
 
 DEFAULT_GOAL := help
 
@@ -179,6 +179,12 @@ video: ## Régénère une vidéo par identifiant stable (ID=ORG_FIRST_STEPS)
 
 videos: ## Régénère une liste (IDS="ORG_FIRST_STEPS VOLUNTEER_REGISTER") ou tout le catalogue
 	npm run video:build -- $(IDS)
+
+# Envoie vers https://medias.benevol.app (k8s/media.yaml) les rendus nouveaux ou modifiés, comparés
+# par SHA-256 ; sans APPLY=1, affiche seulement ce qui partirait. Rien n'est jamais supprimé.
+video-publish: ## Publie les vidéos nouvelles ou modifiées (KUBE_CONTEXT=… [ID=… | IDS="…"] [APPLY=1])
+	@test -n "$(KUBE_CONTEXT)" || (echo "KUBE_CONTEXT=<contexte kubectl de production> est obligatoire (kubectl config get-contexts)"; exit 1)
+	npm run video:publish -- --context "$(KUBE_CONTEXT)" $(if $(APPLY),--apply) $(ID) $(IDS)
 
 # ── Qualité ──────────────────────────────────────────────────────────────────
 

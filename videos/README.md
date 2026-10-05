@@ -146,6 +146,29 @@ Pour le suivi des inscriptions et les relances :
 npm run video:followup
 ```
 
+## 5. Publier sur medias.benevol.app
+
+Les rendus ne vont jamais dans Git ni dans l'image de l'application : ils sont servis par
+`https://medias.benevol.app` (`k8s/media.yaml`, un nginx et son volume). Après avoir créé ou
+régénéré une vidéo :
+
+```bash
+make video-publish KUBE_CONTEXT=<contexte> ID=EVENT_CREATE_BLANK          # aperçu
+make video-publish KUBE_CONTEXT=<contexte> ID=EVENT_CREATE_BLANK APPLY=1  # envoi
+```
+
+Sans `ID` ni `IDS`, tout le catalogue est comparé. Seuls les fichiers nouveaux ou modifiés partent
+(`<slug>/<slug>.mp4`, `.vtt`, `.txt`, comparés par SHA-256 avec ceux du serveur) ; rien n'est jamais
+supprimé sur le serveur, et une vidéo pas encore rendue en local est simplement signalée.
+`KUBE_CONTEXT` est obligatoire : la commande écrit sur le cluster de production. Si `kubectl` ne
+joint pas le serveur de médias (mauvais contexte, `k8s/media.yaml` pas encore appliqué), elle
+s'arrête sans rien envoyer.
+
+Le serveur n'autorise que `benevol.app` et ses sous-domaines en CORS (nécessaire aux sous-titres
+chargés depuis un autre domaine), sert les types `video/mp4` et `text/vtt`, accepte les requêtes
+partielles (avancer dans la vidéo) et ne liste pas les dossiers. Son volume n'est pas sauvegardé :
+tout se régénère depuis les sources de ce dossier ; gardez votre copie de `videos/output`.
+
 ## Ajouter une vidéo
 
 1. Choisir un identifiant sémantique stable, par exemple `EVENT_CREATE`, sans langue ni numéro.

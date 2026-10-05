@@ -10,7 +10,7 @@ export default defineConfig({
       provider: "v8",
       // Routes and components too, not just src/lib: the API routes carry most of the
       // security-sensitive logic (tenant scoping, tokens, capacity).
-      include: ["src/lib/**", "src/app/api/**", "src/components/**"],
+      include: ["src/lib/**", "src/app/api/**", "src/components/**", "videos/lib/**"],
       exclude: ["**/__tests__/**"],
       reporter: ["text", "lcov"],
       // Floors just under the measured baseline (2026-09-29: 36.4 / 29.2 / 29.6 / 37.7), so a

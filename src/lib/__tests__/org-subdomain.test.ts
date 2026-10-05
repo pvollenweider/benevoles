@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { orgSlugFromHost, NON_ORG_SUBDOMAINS, withOrgHeader } from "../org-subdomain"
+import { orgSlugFromHost, NON_ORG_SUBDOMAINS, withOrgHeader, isReservedOrgSlug } from "../org-subdomain"
 
 describe("orgSlugFromHost", () => {
   it("extracts the org slug from a 3-part subdomain host", () => {
@@ -65,5 +65,16 @@ describe("withOrgHeader", () => {
     const h = withOrgHeader(original, "benevol.app", null)
     expect(h.get("accept-language")).toBe("fr")
     expect(original.get("x-org-slug")).toBe("other-org")
+  })
+})
+
+describe("isReservedOrgSlug", () => {
+  it("reserves the media host and the other technical subdomains, whatever the case", () => {
+    expect(orgSlugFromHost("medias.benevol.app")).toBeNull()
+    for (const slug of ["medias", "Medias", " www ", "api", "admin", "app", "staging"]) expect(isReservedOrgSlug(slug)).toBe(true)
+  })
+
+  it("leaves ordinary organization slugs alone", () => {
+    for (const slug of ["lameadouet", "media", "medias-club", "festival-medias"]) expect(isReservedOrgSlug(slug)).toBe(false)
   })
 })

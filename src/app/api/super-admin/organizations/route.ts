@@ -9,6 +9,7 @@ import { randomBytes } from "crypto"
 import { z } from "zod"
 import { hashToken } from "@/lib/token-hash"
 import { validationError } from "@/lib/api-error"
+import { isReservedOrgSlug } from "@/lib/org-subdomain"
 
 const createOrgSchema = z.object({
   name: z.string().min(1).max(100),
@@ -72,7 +73,8 @@ export async function POST(req: Request) {
   const baseSlug = slugify(name)
   let slug = baseSlug
   let suffix = 1
-  while (await db.organization.findUnique({ where: { slug } })) {
+  // A name like « Medias » must not take a reserved subdomain: suffixed like a taken slug.
+  while (isReservedOrgSlug(slug) || (await db.organization.findUnique({ where: { slug } }))) {
     slug = `${baseSlug}-${suffix++}`
   }
 

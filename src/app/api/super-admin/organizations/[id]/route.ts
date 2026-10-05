@@ -6,6 +6,7 @@ import { requireSuperAdmin } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
+import { isReservedOrgSlug, RESERVED_SLUG_ERROR } from "@/lib/org-subdomain"
 
 const SLUG_RE = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/
 
@@ -121,6 +122,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         { status: 400 },
       )
     }
+    if (isReservedOrgSlug(slug)) return NextResponse.json({ error: RESERVED_SLUG_ERROR }, { status: 400 })
     if (slug !== existing.slug) {
       const taken = await prisma.organization.findFirst({ where: { slug, id: { not: id } } })
       if (taken) return NextResponse.json({ error: "Ce slug est déjà utilisé." }, { status: 409 })

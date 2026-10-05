@@ -4,7 +4,16 @@
 // Subdomains that never identify an organization (system/infra hostnames),
 // shared between the proxy (org-slug injection) and robots.ts (crawl rules) so the
 // two never drift apart.
-export const NON_ORG_SUBDOMAINS = new Set(["www", "app", "admin", "api", "staging"])
+// "medias" serves the video tutorials (k8s/media.yaml) from its own host.
+export const NON_ORG_SUBDOMAINS = new Set(["www", "app", "admin", "api", "staging", "medias"])
+
+/** A slug that would collide with one of benevol.app's own subdomains: never an organization's. */
+export function isReservedOrgSlug(slug: string): boolean {
+  return NON_ORG_SUBDOMAINS.has(slug.trim().toLowerCase())
+}
+
+/** The refusal shown when an organization slug is one of the reserved subdomains. */
+export const RESERVED_SLUG_ERROR = "Cette adresse est réservée par benevol.app. Choisissez-en une autre."
 
 // Extracts an org slug from a `[orgSlug].benevol.app` host, or null when the host doesn't
 // carry one (apex domain, a system subdomain, or a bare hostname like localhost).

@@ -29,6 +29,7 @@
     "video:record": "node --env-file-if-exists=.env.video.e2e --env-file-if-exists=.env.video.local --import tsx videos/tools/record.ts",
     "video:assemble": "node --env-file-if-exists=.env.video.local --import tsx videos/tools/assemble.ts",
     "video:validate": "node --import tsx videos/tools/validate.ts",
+    "video:publish": "node --import tsx videos/tools/publish.ts",
     "video:build": "node --env-file-if-exists=.env.video.e2e --env-file-if-exists=.env.video.local --import tsx videos/tools/build.ts",
     "video:pilot": "npm run video:record -- volunteer-register-mobile && npm run video:assemble -- volunteer-register-mobile",
     "video:organizer": "npm run video:record -- organizer-create-publish && npm run video:assemble -- organizer-create-publish",
