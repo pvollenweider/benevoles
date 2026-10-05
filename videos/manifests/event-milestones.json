@@ -3,17 +3,59 @@
   "slug": "event-milestones",
   "title": "Jalons et pilotage de la préparation",
   "description": "Transformer les étapes importantes de l’événement en échéances simples, visibles et réouvrables.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous utilisez les jalons pour garder sous les yeux les échéances importantes de votre événement.",
+    "steps": [
+      "Ajoutez un jalon avec une date d'échéance et une description vérifiable, par exemple « Fermer les inscriptions ».",
+      "Consultez la liste triée par date : une échéance dépassée est signalée, une étape faite reste visible mais barrée.",
+      "Cochez une étape quand elle est terminée, et décochez-la si la situation change.",
+      "Suivez les échéances proches ou en retard depuis le pilotage général."
+    ],
+    "remember": [
+      "Les jalons ne remplacent pas un outil de gestion de projet.",
+      "Gardez la liste courte : quelques jalons fiables valent mieux qu'une longue liste jamais relue.",
+      "Décocher un jalon ne perd aucune information."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Puck",
   "continuousNarration": true,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult male voice, like a helpful association coordinator. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "welcome", "transcript": "Les jalons servent à garder sous les yeux les quelques échéances qui font avancer l’événement. Ils ne remplacent pas un outil de gestion de projet : ils donnent à l’équipe un rappel commun, directement à côté des inscriptions et du planning.", "fallbackDurationMs": 21000 },
-    { "id": "create", "transcript": "Ajoutons Fermer les inscriptions avec une date d’échéance. Un bon jalon décrit un résultat vérifiable : valider le plan de sécurité, envoyer les consignes, imprimer les badges ou remercier les bénévoles. Évite les formulations vagues comme penser à la communication.", "fallbackDurationMs": 24000 },
-    { "id": "states", "transcript": "La liste est triée par date. Une échéance passée et non terminée est signalée comme dépassée ; une étape faite est barrée mais reste visible. On comprend donc en un regard ce qui est en retard, ce qui arrive et ce qui a déjà été sécurisé.", "fallbackDurationMs": 23000 },
-    { "id": "toggle", "transcript": "Quand une étape est terminée, coche-la. Si la situation change, décoche-la simplement pour la remettre à faire : aucune information n’est perdue et toute l’équipe retrouve le même état lors du prochain passage.", "fallbackDurationMs": 20000 },
-    { "id": "dashboard", "transcript": "Les échéances proches ou en retard remontent aussi dans le pilotage général. Avant l’événement, elles structurent la préparation ; pendant, elles rappellent les contrôles opérationnels ; après, elles aident à fermer proprement les dernières tâches.", "fallbackDurationMs": 22000 },
-    { "id": "result", "transcript": "Garde cette liste courte et utile. Quelques jalons datés, avec un état fiable, sont plus efficaces qu’une longue liste jamais relue. Le résultat attendu est simple : chacun sait quelle est la prochaine étape importante.", "fallbackDurationMs": 19000 }
+    {
+      "id": "welcome",
+      "transcript": "Les jalons servent à garder sous les yeux les quelques échéances qui font avancer l’événement. Ils ne remplacent pas un outil de gestion de projet : ils donnent à l’équipe un rappel commun, directement à côté des inscriptions et du planning.",
+      "fallbackDurationMs": 21000
+    },
+    {
+      "id": "create",
+      "transcript": "Ajoutons Fermer les inscriptions avec une date d’échéance. Un bon jalon décrit un résultat vérifiable : valider le plan de sécurité, envoyer les consignes, imprimer les badges ou remercier les bénévoles. Évite les formulations vagues comme penser à la communication.",
+      "fallbackDurationMs": 24000
+    },
+    {
+      "id": "states",
+      "transcript": "La liste est triée par date. Une échéance passée et non terminée est signalée comme dépassée ; une étape faite est barrée mais reste visible. On comprend donc en un regard ce qui est en retard, ce qui arrive et ce qui a déjà été sécurisé.",
+      "fallbackDurationMs": 23000
+    },
+    {
+      "id": "toggle",
+      "transcript": "Quand une étape est terminée, coche-la. Si la situation change, décoche-la simplement pour la remettre à faire : aucune information n’est perdue et toute l’équipe retrouve le même état lors du prochain passage.",
+      "fallbackDurationMs": 20000
+    },
+    {
+      "id": "dashboard",
+      "transcript": "Les échéances proches ou en retard remontent aussi dans le pilotage général. Avant l’événement, elles structurent la préparation ; pendant, elles rappellent les contrôles opérationnels ; après, elles aident à fermer proprement les dernières tâches.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "result",
+      "transcript": "Garde cette liste courte et utile. Quelques jalons datés, avec un état fiable, sont plus efficaces qu’une longue liste jamais relue. Le résultat attendu est simple : chacun sait quelle est la prochaine étape importante.",
+      "fallbackDurationMs": 19000
+    }
   ]
 }

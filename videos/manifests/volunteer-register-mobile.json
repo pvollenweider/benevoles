@@ -3,6 +3,21 @@
   "slug": "volunteer-register-mobile",
   "title": "S’inscrire comme bénévole depuis son téléphone",
   "description": "Choisir un créneau, compléter ses informations et retrouver son accès personnel.",
+  "viewer": {
+    "summary": "Dans cette vidéo, tu t'inscris comme bénévole depuis ton téléphone, du choix du créneau à la confirmation.",
+    "steps": [
+      "Ouvre le lien reçu ou scanne le QR code affiché par l'association.",
+      "Consulte les horaires, les postes et les places encore disponibles.",
+      "Choisis le créneau qui te convient.",
+      "Ajoute tes coordonnées.",
+      "Réponds aux questions pratiques, puis accepte la convention.",
+      "Vérifie le récapitulatif et confirme ton inscription."
+    ],
+    "remember": [
+      "Tes coordonnées servent à l'association qui organise l'événement.",
+      "Un email de confirmation contient ton lien personnel pour retrouver, modifier ou annuler ton inscription."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,

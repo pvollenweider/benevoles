@@ -3,25 +3,102 @@
   "slug": "organizer-create-publish",
   "title": "Préparer, publier et partager un planning bénévole",
   "description": "Créer un événement depuis un modèle ou une page blanche, préparer ses postes, programmer les inscriptions, prévisualiser, publier et inviter ses membres.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous préparez un planning complet, de la création de l'événement jusqu'à l'invitation de vos bénévoles.",
+    "steps": [
+      "Créez l'événement avec un titre, une description, un lieu et des dates.",
+      "Ajoutez des créneaux manuellement ou en série pour les horaires qui se répètent.",
+      "Activez l'inscription sur validation pour un poste sensible.",
+      "Vérifiez le récapitulatif, puis prévisualisez le parcours bénévole avant de publier.",
+      "Publiez le planning : la page devient accessible, sans envoi automatique.",
+      "Téléchargez le QR code et importez vos membres depuis un fichier CSV ou Excel.",
+      "Invitez les membres concernés, par lot ou individuellement."
+    ],
+    "remember": [
+      "Publier n'envoie aucun message automatiquement : vous gardez la main sur la diffusion.",
+      "L'aperçu bénévole ne crée ni inscription ni envoi réel.",
+      "L'import de membres montre ce qui sera créé avant toute confirmation."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
   "voiceStyle": "Speak with an audible smile throughout. Sound warm, capable and relaxed, like an experienced association organizer showing a colleague a pleasantly simple workflow. Use natural conversational French, clear articulation and a medium pace. Preserve exactly the same vocal identity, smile, pitch and energy across the whole narration. Never sound corporate, salesy, theatrical or childish.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "overview", "transcript": "Voici comment préparer et partager un planning bénévole. Pour démarrer, tu peux choisir un modèle déjà prêt, avec ses postes et ses horaires, ou partir d’une page blanche. Ici, on va tout créer depuis le début.", "fallbackDurationMs": 12500 },
-    { "id": "basics", "transcript": "Donne-lui un nom clair, ajoute une courte description, le lieu et les dates. L’événement reste en brouillon : rien n’est visible tant que tu n’as pas terminé ton planning.", "fallbackDurationMs": 10500 },
-    { "id": "series", "transcript": "Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement. Quand les horaires se répètent, la création en série va plus vite : pour l’accueil, indique la plage horaire, la durée et la capacité, et les créneaux sont préparés automatiquement.", "fallbackDurationMs": 14500 },
-    { "id": "delivery", "transcript": "Ajoute ensuite manuellement un poste Livraison. Il faut avoir au moins dix-huit ans et posséder un permis B valide. Ces conditions sont visibles par les bénévoles, avec la consigne précisant que le véhicule est fourni.", "fallbackDurationMs": 13000 },
-    { "id": "cash", "transcript": "Pour un poste sensible comme la Caisse, active l’inscription sur validation. Chaque personne peut proposer son aide, mais l’organisateur accepte ou refuse la demande avant de la confirmer.", "fallbackDurationMs": 11500 },
-    { "id": "registration", "transcript": "Tu peux aussi décider quand les inscriptions commenceront et quand elles se termineront, dans le fuseau horaire de ton organisation. Si tu ne programmes pas de date d’ouverture, elles seront disponibles dès la publication.", "fallbackDurationMs": 13000 },
-    { "id": "review", "transcript": "L’écran de vérification résume maintenant les trois postes, les quatre créneaux et toutes les places. Tu peux encore revenir corriger un horaire, un effectif ou une consigne.", "fallbackDurationMs": 10500 },
-    { "id": "preview", "transcript": "Avant de publier, ouvre l’aperçu bénévole et simule une vraie inscription. Choisis un créneau, renseigne les coordonnées du bénévole et confirme ses choix. Tu peux ainsi vérifier tout le parcours qu’il verra, sans créer de véritable inscription.", "fallbackDurationMs": 17000 },
-    { "id": "preview-result", "transcript": "L’aperçu montre aussi le message affiché après l’inscription et l’email automatique qui serait envoyé, avec son objet, son contenu et son lien personnel. Rien n’est réellement enregistré ni expédié pendant ce test.", "fallbackDurationMs": 13000 },
-    { "id": "publish", "transcript": "Quand tout est prêt, publie le planning. La page d’inscription devient accessible, mais aucun message n’est envoyé automatiquement : tu gardes la main sur sa diffusion.", "fallbackDurationMs": 10000 },
-    { "id": "qr", "transcript": "Pour une affiche, un comptoir ou les réseaux sociaux, ouvre le QR code. Tu peux le télécharger en PNG ou en SVG, ou imprimer directement cette fiche prête à être scannée.", "fallbackDurationMs": 11000 },
-    { "id": "import", "transcript": "Si c’est la première fois que tu utilises l’application, l’import permet de constituer rapidement ta liste de membres depuis un CSV ou un fichier Excel. L’application analyse les colonnes, les tags et les doublons, puis montre exactement ce qui sera créé avant confirmation.", "fallbackDurationMs": 15500 },
-    { "id": "invite", "transcript": "Retourne ensuite dans les invitations de l’événement. Filtre les membres par tag et sélectionne les personnes concernées. Tu peux envoyer les invitations par lot, ou inviter une seule personne individuellement si tu le souhaites, avec un petit mot personnalisé.", "fallbackDurationMs": 14500 },
-    { "id": "public", "transcript": "Et voilà le résultat côté bénévoles : plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation. Le planning est prêt à circuler par lien, QR code ou invitation !", "fallbackDurationMs": 11500 }
+    {
+      "id": "overview",
+      "transcript": "Voici comment préparer et partager un planning bénévole. Pour démarrer, tu peux choisir un modèle déjà prêt, avec ses postes et ses horaires, ou partir d’une page blanche. Ici, on va tout créer depuis le début.",
+      "fallbackDurationMs": 12500
+    },
+    {
+      "id": "basics",
+      "transcript": "Donne-lui un nom clair, ajoute une courte description, le lieu et les dates. L’événement reste en brouillon : rien n’est visible tant que tu n’as pas terminé ton planning.",
+      "fallbackDurationMs": 10500
+    },
+    {
+      "id": "series",
+      "transcript": "Les postes et leurs créneaux peuvent être ajoutés un par un, manuellement. Quand les horaires se répètent, la création en série va plus vite : pour l’accueil, indique la plage horaire, la durée et la capacité, et les créneaux sont préparés automatiquement.",
+      "fallbackDurationMs": 14500
+    },
+    {
+      "id": "delivery",
+      "transcript": "Ajoute ensuite manuellement un poste Livraison. Il faut avoir au moins dix-huit ans et posséder un permis B valide. Ces conditions sont visibles par les bénévoles, avec la consigne précisant que le véhicule est fourni.",
+      "fallbackDurationMs": 13000
+    },
+    {
+      "id": "cash",
+      "transcript": "Pour un poste sensible comme la Caisse, active l’inscription sur validation. Chaque personne peut proposer son aide, mais l’organisateur accepte ou refuse la demande avant de la confirmer.",
+      "fallbackDurationMs": 11500
+    },
+    {
+      "id": "registration",
+      "transcript": "Tu peux aussi décider quand les inscriptions commenceront et quand elles se termineront, dans le fuseau horaire de ton organisation. Si tu ne programmes pas de date d’ouverture, elles seront disponibles dès la publication.",
+      "fallbackDurationMs": 13000
+    },
+    {
+      "id": "review",
+      "transcript": "L’écran de vérification résume maintenant les trois postes, les quatre créneaux et toutes les places. Tu peux encore revenir corriger un horaire, un effectif ou une consigne.",
+      "fallbackDurationMs": 10500
+    },
+    {
+      "id": "preview",
+      "transcript": "Avant de publier, ouvre l’aperçu bénévole et simule une vraie inscription. Choisis un créneau, renseigne les coordonnées du bénévole et confirme ses choix. Tu peux ainsi vérifier tout le parcours qu’il verra, sans créer de véritable inscription.",
+      "fallbackDurationMs": 17000
+    },
+    {
+      "id": "preview-result",
+      "transcript": "L’aperçu montre aussi le message affiché après l’inscription et l’email automatique qui serait envoyé, avec son objet, son contenu et son lien personnel. Rien n’est réellement enregistré ni expédié pendant ce test.",
+      "fallbackDurationMs": 13000
+    },
+    {
+      "id": "publish",
+      "transcript": "Quand tout est prêt, publie le planning. La page d’inscription devient accessible, mais aucun message n’est envoyé automatiquement : tu gardes la main sur sa diffusion.",
+      "fallbackDurationMs": 10000
+    },
+    {
+      "id": "qr",
+      "transcript": "Pour une affiche, un comptoir ou les réseaux sociaux, ouvre le QR code. Tu peux le télécharger en PNG ou en SVG, ou imprimer directement cette fiche prête à être scannée.",
+      "fallbackDurationMs": 11000
+    },
+    {
+      "id": "import",
+      "transcript": "Si c’est la première fois que tu utilises l’application, l’import permet de constituer rapidement ta liste de membres depuis un CSV ou un fichier Excel. L’application analyse les colonnes, les tags et les doublons, puis montre exactement ce qui sera créé avant confirmation.",
+      "fallbackDurationMs": 15500
+    },
+    {
+      "id": "invite",
+      "transcript": "Retourne ensuite dans les invitations de l’événement. Filtre les membres par tag et sélectionne les personnes concernées. Tu peux envoyer les invitations par lot, ou inviter une seule personne individuellement si tu le souhaites, avec un petit mot personnalisé.",
+      "fallbackDurationMs": 14500
+    },
+    {
+      "id": "public",
+      "transcript": "Et voilà le résultat côté bénévoles : plusieurs postes bien expliqués, les contraintes importantes et les demandes soumises à validation. Le planning est prêt à circuler par lien, QR code ou invitation !",
+      "fallbackDurationMs": 11500
+    }
   ]
 }

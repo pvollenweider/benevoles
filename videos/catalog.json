@@ -571,6 +571,81 @@
       "level": "decouverte"
     },
     {
+      "id": "VOLUNTEER_CHOOSE_SHIFTS",
+      "manifest": "volunteer-choose-shifts",
+      "category": "volunteer-journey",
+      "tags": [
+        "sélection",
+        "capacité",
+        "liste-attente",
+        "validation",
+        "réservé",
+        "conflit",
+        "quota"
+      ],
+      "published": false,
+      "seedScenario": "demo",
+      "themes": [
+        "parcours-benevole"
+      ],
+      "audience": [
+        "benevole"
+      ],
+      "feature": "Choix des créneaux sur la page publique",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
+      "id": "VOLUNTEER_FORM_RECAP",
+      "manifest": "volunteer-form-recap",
+      "category": "volunteer-journey",
+      "tags": [
+        "formulaire",
+        "questions",
+        "convention",
+        "récapitulatif",
+        "nuit",
+        "charge"
+      ],
+      "published": false,
+      "seedScenario": "demo",
+      "themes": [
+        "parcours-benevole"
+      ],
+      "audience": [
+        "benevole"
+      ],
+      "feature": "Formulaire d'inscription et récapitulatif",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
+      "id": "VOLUNTEER_CONFIRMATION_ERRORS",
+      "manifest": "volunteer-confirmation-errors",
+      "category": "volunteer-journey",
+      "tags": [
+        "confirmation",
+        "erreur",
+        "réseau",
+        "email",
+        "capacité"
+      ],
+      "published": false,
+      "seedScenario": "demo",
+      "themes": [
+        "parcours-benevole"
+      ],
+      "audience": [
+        "benevole"
+      ],
+      "feature": "Confirmation de l'inscription",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
       "id": "VOLUNTEER_REGISTER",
       "manifest": "volunteer-register-mobile",
       "category": "volunteer-journey",
@@ -684,6 +759,31 @@
       "updatedAt": "2026-10-05",
       "revision": 1,
       "level": "decouverte"
+    },
+    {
+      "id": "SECTOR_LEADERS",
+      "manifest": "sector-leaders",
+      "category": "members-invitations",
+      "tags": [
+        "responsables",
+        "équipe",
+        "lien-personnel",
+        "coordonnées",
+        "poste"
+      ],
+      "published": false,
+      "seedScenario": "demo",
+      "themes": [
+        "membres-invitations",
+        "jour-j"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Responsables de secteur",
+      "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
     }
   ]
 }

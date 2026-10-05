@@ -591,14 +591,20 @@ partageront le même identifiant.
 
 **Public :** organisateur et responsable. **Durée :** 7 min.
 
-- nommer manuellement ou depuis une inscription ;
-- contact opérationnel versus responsable ;
-- invitation et lien personnel sans compte ;
-- vue limitée au poste ;
-- coordonnées et planning de l’équipe ;
-- renvoyer ou retirer l’accès.
+- expliquer l'utilité : une personne référente suit l'équipe d'un poste sans recevoir un accès à toute l'administration ;
+- nommer un responsable manuellement ou depuis une inscription, puis montrer le résultat côté organisateur ;
+- distinguer le responsable du contact opérationnel indiqué aux bénévoles : la nomination ne rend pas automatiquement ses coordonnées publiques ;
+- montrer l'email de nomination et ouvrir réellement son lien personnel, sans compte ni mot de passe ;
+- parcourir sa vue avec une équipe déjà inscrite : créneaux, noms, coordonnées, commentaires et liste d'attente ;
+- montrer la consultation sur téléphone et expliquer comment retrouver et contacter les personnes de son équipe ;
+- expliquer les limites : vue du poste concerné, en lecture seule, sans modification du planning ni gestion des inscriptions ;
+- illustrer la notification d'une nouvelle inscription au poste ;
+- rappeler que le lien donne accès à des coordonnées personnelles et ne doit pas être partagé publiquement ;
+- retirer un responsable et vérifier que son ancien lien ne donne plus accès à l'équipe.
 
-**Jeu de données :** responsables Accueil et Buvette, plus un poste sans responsable.
+**Jeu de données :** responsables Accueil et Buvette, plus un poste sans responsable ; plusieurs créneaux et bénévoles avec coordonnées fictives, commentaires et liste d'attente. Une nomination et une nouvelle inscription doivent produire de vrais emails dans la boîte de démonstration.
+
+**Format :** vidéo autonome, avec explication du besoin, manipulation, résultat côté organisateur puis côté responsable. Ne pas annoncer un bouton de renvoi du lien sans vérifier qu'il existe dans la version filmée.
 
 ---
 
@@ -890,7 +896,7 @@ Cette matrice doit devenir un contrôle automatisé simple : chaque titre de sec
 | 09 — Régler les emails de l’organisation | Prévisualisation générée | `demo` | Contrôle technique et planche complète validés ; Mailpit vérifié ; visionnage final en attente |
 | 10 — Créer depuis une page blanche | Prévisualisation générée | `demo` | Contrôle technique et planche complète validés ; visionnage final en attente |
 | 11 — Démarrer avec un modèle | Prévisualisation générée | `demo` | Contrôle technique et planche complète validés ; 10 créneaux vérifiés ; visionnage final en attente |
-| 12 — Vérifier, prévisualiser et publier | Prévisualisation générée | `demo` | Contrôle technique et planche complète validés ; visionnage final en attente |
+| 12 — Vérifier, prévisualiser et publier | Prévisualisation à corriger | `demo` | Audit indépendant du 5 octobre : paroles déplacées entre accueil/vérifications et aperçu/publication ; vérifier aussi les mots manquants. Durées correctes mais synchronisation éditoriale non validée |
 | 13 — Visibilité et période d’inscription | Prévisualisation générée | `demo` | Contrôle technique et planche complète validés ; visionnage final en attente |
 | 14 — Dupliquer l’événement précédent | Prévisualisation générée | `demo` | Contrôle technique et planche complète validés ; visionnage final en attente |
 | 15 — Programme, pages et QR code | Prévisualisation générée | `demo` | Contrôle technique et planche complète validés ; visionnage final en attente |
@@ -904,7 +910,12 @@ Cette matrice doit devenir un contrôle automatisé simple : chaque titre de sec
 | 23 — Capacités, listes d’attente et offre de place | Prévisualisation générée | `demo` | Trois positions, désinscription réelle, offre de 24 h et vues bénévole/admin vérifiées ; contrôle technique et planche validés |
 | 24 — Postes soumis à validation | Prévisualisation générée | `demo` | Critères, demande, message de refus, acceptation réelle et résultat bénévole/admin vérifiés ; contrôle technique et planche validés |
 | 25 — Âge, quotas et postes réservés | Prévisualisation générée | `demo` | Âge 18+, limite atteinte, poste réservé anonyme et accès par invitation autorisée vérifiés ; contrôle technique et planche validés |
-| 02, 04, 26–53 | Planifiées | À créer selon le tableau « Jeux de données vidéo » | Non commencées |
+| 26 — Trouver et lire la page d’inscription | Prévisualisation générée | `demo` | Lien, QR, pages, carte, programme, états, défilement mobile et invitation autorisée réellement montrés ; 9 scènes synchronisées et planche validée |
+| 27 — Choisir un ou plusieurs créneaux | Prévisualisation générée | `demo` | Ajouts/retraits, capacités, attente, validation, réservé, chevauchement, session existante et quota montrés ; 9 scènes synchronisées et planche contrôlée |
+| 28 — Formulaire et récapitulatif | Prévisualisation générée | `demo` | Coordonnées, naissance, questions, convention, consentement, nuit, pauses, carte, charge et correction réellement montrés ; 8 scènes synchronisées et planche contrôlée |
+| 29 — Confirmation et erreurs | Prévisualisation générée, couverture à compléter | `demo` | Validation, capacité devenue insuffisante, coupure/reprise, succès sans lien public et email contrôlés ; 8 scènes synchronisées. Restent la preuve visuelle de non-duplication après réponse perdue, le conflit serveur d’horaire et la comparaison du succès via invitation |
+| 38 — Responsables de secteur | Prévisualisation générée, contrôle final en cours | `demo` | Deux nominations, email avec ouverture du lien, équipe remplie, mobile, notification réelle de Nora et révocation ; dix paragraphes contrôlés indépendamment après correction de deux frontières audio |
+| 02, 04, 30–37, 39–53 | Planifiées | À créer selon le tableau « Jeux de données vidéo » | Non commencées |
 
 Une vidéo ne passe à « terminée » qu’après validation du contrat de couverture, visionnage complet
 et vérification de sa synchronisation. La génération d’un MP4 ne suffit pas.
@@ -926,6 +937,15 @@ L’agent qui produit une vidéo effectue lui-même ces vérifications avant de 
 
 Le statut « synchronisation automatique validée » ne vaut donc plus validation éditoriale. Une
 vidéo ne peut être annoncée comme prête qu’après la passe visuelle et sonore réalisée par l’agent.
+
+**Contrôle des frontières vocales ajouté le 5 octobre 2026 :** transcrire indépendamment chaque
+extrait généré avec `videos/tools/audit-narration.ts`. Comparer les paroles réellement reconnues
+au paragraphe prévu ; une phrase du chapitre voisin ou une fin manquante impose un nouveau
+découpage de la prise continue, puis une nouvelle capture avec les durées corrigées. Le test
+de durée seul ne détecte pas ce défaut. Les timestamps proposés par un modèle sont des pistes,
+jamais une validation : ils doivent être dans la durée réelle du fichier et être confirmés par
+la transcription de chaque extrait. Ce contrôle est également à appliquer aux prévisualisations
+déjà générées avant leur validation finale. Il ne remplace pas la vérification phrase/action.
 
 ### Lot 1 — Fondations et parcours les plus demandés
 

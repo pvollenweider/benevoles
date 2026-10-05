@@ -3,18 +3,65 @@
   "slug": "event-visibility-registration-window",
   "title": "Gérer la visibilité et la période d’inscription",
   "description": "Distinguer brouillon, publication, événement non répertorié, inscriptions programmées et archivage.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous réglez séparément la visibilité de votre événement et la période d'ouverture des inscriptions.",
+    "steps": [
+      "Choisissez le statut de l'événement : brouillon, publié ou archivé.",
+      "Décochez « Afficher dans la liste publique » pour un événement publié mais partagé seulement par lien.",
+      "Programmez une ouverture et une fermeture des inscriptions dans le fuseau de votre organisation.",
+      "Vérifiez que la page affiche la date prévue tant que les inscriptions ne sont pas ouvertes.",
+      "Fermez les inscriptions pour une pause temporaire, ou archivez une fois l'événement terminé."
+    ],
+    "remember": [
+      "Un événement non répertorié reste accessible à toute personne qui a le lien : ce n'est pas une protection par mot de passe.",
+      "L'événement ne peut passer à Publié que s'il a au moins un créneau actif.",
+      "Archiver conserve l'historique et les rapports dans l'administration."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Puck",
   "continuousNarration": true,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult male voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "welcome", "transcript": "La visibilité de l’événement et l’ouverture des inscriptions sont deux réglages différents. Les séparer permet de montrer une page d’information avant les inscriptions, de partager un événement seulement aux personnes concernées, puis de le ranger proprement après sa fin.", "fallbackDurationMs": 21000 },
-    { "id": "statuses", "transcript": "Brouillon signifie invisible au public. Publié rend la page accessible. Archivé conserve les données et les rapports dans l’administration mais ferme le cycle de vie. Un événement ne peut passer à Publié que s’il possède au moins un créneau actif.", "fallbackDurationMs": 22000 },
-    { "id": "unlisted", "transcript": "L’option Afficher dans la liste publique agit indépendamment. Décochée sur un événement publié, elle le retire de la page d’accueil de l’organisation et du référencement, tout en gardant son lien direct et son QR code fonctionnels. Ce n’est donc pas une protection par mot de passe : toute personne qui possède le lien peut l’ouvrir.", "fallbackDurationMs": 27000 },
-    { "id": "window", "transcript": "Les inscriptions peuvent être fermées immédiatement ou programmées. Indiquons une ouverture et une fermeture dans le fuseau de l’organisation. La page reste visible pendant toute la période, mais le formulaire n’accepte des choix que lorsque la case Inscriptions ouvertes est cochée et que la fenêtre est active.", "fallbackDurationMs": 26000 },
-    { "id": "public-result", "transcript": "Côté bénévole, la page explique clairement que les inscriptions ne sont pas encore ouvertes et affiche la date prévue. Les informations de l’événement restent consultables. Une fois la fenêtre ouverte, le même lien présente automatiquement le planning sans nouvelle publication.", "fallbackDurationMs": 23000 },
-    { "id": "archive", "transcript": "Après l’événement, Archivé retire la page du parcours courant et garde l’historique, les inscriptions et les exports disponibles dans l’administration. Fermer les inscriptions suffit pour une pause temporaire ; archiver signifie que l’événement est terminé.", "fallbackDurationMs": 22000 },
-    { "id": "result", "transcript": "Choisis donc chaque état selon l’intention : brouillon pendant la préparation, publié répertorié pour recruter largement, publié non répertorié pour un partage par lien, fenêtre programmée pour maîtriser le calendrier, puis archive pour conserver sans encombrer.", "fallbackDurationMs": 21000 }
+    {
+      "id": "welcome",
+      "transcript": "La visibilité de l’événement et l’ouverture des inscriptions sont deux réglages différents. Les séparer permet de montrer une page d’information avant les inscriptions, de partager un événement seulement aux personnes concernées, puis de le ranger proprement après sa fin.",
+      "fallbackDurationMs": 21000
+    },
+    {
+      "id": "statuses",
+      "transcript": "Brouillon signifie invisible au public. Publié rend la page accessible. Archivé conserve les données et les rapports dans l’administration mais ferme le cycle de vie. Un événement ne peut passer à Publié que s’il possède au moins un créneau actif.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "unlisted",
+      "transcript": "L’option Afficher dans la liste publique agit indépendamment. Décochée sur un événement publié, elle le retire de la page d’accueil de l’organisation et du référencement, tout en gardant son lien direct et son QR code fonctionnels. Ce n’est donc pas une protection par mot de passe : toute personne qui possède le lien peut l’ouvrir.",
+      "fallbackDurationMs": 27000
+    },
+    {
+      "id": "window",
+      "transcript": "Les inscriptions peuvent être fermées immédiatement ou programmées. Indiquons une ouverture et une fermeture dans le fuseau de l’organisation. La page reste visible pendant toute la période, mais le formulaire n’accepte des choix que lorsque la case Inscriptions ouvertes est cochée et que la fenêtre est active.",
+      "fallbackDurationMs": 26000
+    },
+    {
+      "id": "public-result",
+      "transcript": "Côté bénévole, la page explique clairement que les inscriptions ne sont pas encore ouvertes et affiche la date prévue. Les informations de l’événement restent consultables. Une fois la fenêtre ouverte, le même lien présente automatiquement le planning sans nouvelle publication.",
+      "fallbackDurationMs": 23000
+    },
+    {
+      "id": "archive",
+      "transcript": "Après l’événement, Archivé retire la page du parcours courant et garde l’historique, les inscriptions et les exports disponibles dans l’administration. Fermer les inscriptions suffit pour une pause temporaire ; archiver signifie que l’événement est terminé.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "result",
+      "transcript": "Choisis donc chaque état selon l’intention : brouillon pendant la préparation, publié répertorié pour recruter largement, publié non répertorié pour un partage par lien, fenêtre programmée pour maîtriser le calendrier, puis archive pour conserver sans encombrer.",
+      "fallbackDurationMs": 21000
+    }
   ]
 }

@@ -13,6 +13,7 @@ const manifest = (id: string, slug: string) => ({
   id, slug, title: "x", description: "x", language: "fr-CH", voice: "Kore", voiceStyle: "x",
   viewport: { width: 1280, height: 800, deviceScaleFactor: 1 },
   segments: [{ id: "s1", transcript: "t", fallbackDurationMs: 1000 }],
+  viewer: { summary: "Dans cette vidéo, vous faites x.", steps: ["Ouvrez x.", "Choisissez y.", "Confirmez z."], remember: ["Rien n'est enregistré avant la confirmation."] },
 })
 
 const videos = [

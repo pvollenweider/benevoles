@@ -3,17 +3,60 @@
   "slug": "global-search",
   "title": "Tout retrouver avec la recherche globale",
   "description": "Rechercher une personne, une inscription, un événement ou un créneau dans toute l’organisation.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous utilisez la recherche globale pour retrouver rapidement une personne, un événement ou un poste.",
+    "steps": [
+      "Ouvrez la recherche avec la loupe ou Ctrl+K (Cmd+K sur Mac).",
+      "Tapez un nom pour retrouver la fiche d'un membre et ses inscriptions.",
+      "Tapez le nom d'un poste pour retrouver tous les créneaux correspondants.",
+      "Ajoutez un second mot si la liste de résultats dépasse vingt éléments.",
+      "Cliquez sur un résultat pour ouvrir directement la bonne fiche ou le bon planning."
+    ],
+    "remember": [
+      "Les accents et la casse ne bloquent pas la recherche.",
+      "Une recherche ne modifie et n'envoie jamais rien.",
+      "Utilisez plutôt les listes et leurs filtres pour un travail sur un ensemble complet."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Charon",
   "continuousNarration": true,
   "voiceStyle": "Speak with a clearly audible smile. Use a warm, calm adult male voice, kind and practical, like a volunteer coordinator helping a colleague. Natural conversational French, medium pace, precise but never formal. Preserve exactly the same identity, smile, pitch, pace and energy throughout. Never sound commercial, theatrical or patronizing.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "welcome", "transcript": "Quand une association compte plusieurs événements et beaucoup de bénévoles, ouvrir chaque planning prend vite du temps. La recherche globale sert à retrouver une personne, son inscription, un événement ou un poste depuis n’importe quel écran de l’administration.", "fallbackDurationMs": 16000 },
-    { "id": "open", "transcript": "Ouvre la loupe dans la barre du haut. Tu peux aussi utiliser Contrôle K, ou Commande K sur Mac : le champ s’ouvre et reçoit immédiatement le curseur. Échap le referme sans lancer de recherche et rend le focus au bouton.", "fallbackDurationMs": 17000 },
-    { "id": "person", "transcript": "Cherchons Camille Rochat. Les résultats distinguent sa fiche de membre et ses inscriptions. Le lien du membre ouvre sa fiche et ses activités dans l’organisation ; le lien d’inscription arrive sur l’événement concerné avec la personne déjà filtrée. Rien n’est modifié par une recherche.", "fallbackDurationMs": 21000 },
-    { "id": "shift", "transcript": "Avec Buvette, la même page retrouve tous les créneaux qui portent ce nom. Chaque résultat rappelle l’événement, la date et l’horaire, puis ouvre directement le bon contexte. Une recherche avec plusieurs mots réduit les ambiguïtés entre des postes ou des personnes aux noms proches.", "fallbackDurationMs": 20000 },
-    { "id": "limits", "transcript": "La recherche ne montre que les vingt premiers résultats de chaque catégorie. Si ce plafond apparaît, précise le prénom, le nom, l’événement ou le poste. Les accents et la casse ne bloquent pas la recherche : Zoé peut être retrouvée en écrivant zoe.", "fallbackDurationMs": 19000 },
-    { "id": "result", "transcript": "Le résultat est un raccourci sûr vers la bonne fiche ou le bon planning, sans action cachée et sans envoi de message. Utilise la recherche pour un besoin précis ; garde les listes et leurs filtres pour examiner un ensemble complet ou effectuer des actions groupées.", "fallbackDurationMs": 19000 }
+    {
+      "id": "welcome",
+      "transcript": "Quand une association compte plusieurs événements et beaucoup de bénévoles, ouvrir chaque planning prend vite du temps. La recherche globale sert à retrouver une personne, son inscription, un événement ou un poste depuis n’importe quel écran de l’administration.",
+      "fallbackDurationMs": 16000
+    },
+    {
+      "id": "open",
+      "transcript": "Ouvre la loupe dans la barre du haut. Tu peux aussi utiliser Contrôle K, ou Commande K sur Mac : le champ s’ouvre et reçoit immédiatement le curseur. Échap le referme sans lancer de recherche et rend le focus au bouton.",
+      "fallbackDurationMs": 17000
+    },
+    {
+      "id": "person",
+      "transcript": "Cherchons Camille Rochat. Les résultats distinguent sa fiche de membre et ses inscriptions. Le lien du membre ouvre sa fiche et ses activités dans l’organisation ; le lien d’inscription arrive sur l’événement concerné avec la personne déjà filtrée. Rien n’est modifié par une recherche.",
+      "fallbackDurationMs": 21000
+    },
+    {
+      "id": "shift",
+      "transcript": "Avec Buvette, la même page retrouve tous les créneaux qui portent ce nom. Chaque résultat rappelle l’événement, la date et l’horaire, puis ouvre directement le bon contexte. Une recherche avec plusieurs mots réduit les ambiguïtés entre des postes ou des personnes aux noms proches.",
+      "fallbackDurationMs": 20000
+    },
+    {
+      "id": "limits",
+      "transcript": "La recherche ne montre que les vingt premiers résultats de chaque catégorie. Si ce plafond apparaît, précise le prénom, le nom, l’événement ou le poste. Les accents et la casse ne bloquent pas la recherche : Zoé peut être retrouvée en écrivant zoe.",
+      "fallbackDurationMs": 19000
+    },
+    {
+      "id": "result",
+      "transcript": "Le résultat est un raccourci sûr vers la bonne fiche ou le bon planning, sans action cachée et sans envoi de message. Utilise la recherche pour un besoin précis ; garde les listes et leurs filtres pour examiner un ensemble complet ou effectuer des actions groupées.",
+      "fallbackDurationMs": 19000
+    }
   ]
 }

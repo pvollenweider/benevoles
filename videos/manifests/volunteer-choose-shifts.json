@@ -1,0 +1,79 @@
+{
+  "id": "VOLUNTEER_CHOOSE_SHIFTS",
+  "slug": "volunteer-choose-shifts",
+  "title": "Choisir un ou plusieurs créneaux",
+  "description": "Composer son planning, comprendre les places disponibles et les contraintes avant de poursuivre l’inscription.",
+  "viewer": {
+    "summary": "Dans cette vidéo, tu composes ton planning en choisissant un ou plusieurs créneaux avant de poursuivre ton inscription.",
+    "steps": [
+      "Clique sur une mission disponible pour la sélectionner : elle rejoint le récapitulatif.",
+      "Ajoute plusieurs créneaux, même sur deux journées, et retire un choix en recliquant dessus ou avec la croix du récapitulatif.",
+      "Vérifie la capacité affichée sur chaque barre : un créneau complet sans liste d'attente ne peut plus être choisi.",
+      "Rejoins la liste d'attente d'un créneau complet si elle est activée : ton choix apparaît « En attente ».",
+      "Repère les missions « Sur validation » ou réservées à certains membres, qui suivent des règles différentes.",
+      "Si deux créneaux se chevauchent, retire celui qui te convient le moins.",
+      "Relis le récapitulatif avant de cliquer sur Continuer pour passer au formulaire."
+    ],
+    "remember": [
+      "Aucune place n'est réservée tant que tu n'as pas validé le formulaire et sa confirmation.",
+      "Un poste limité à un nombre de créneaux par personne refuse les choix au-delà de cette limite.",
+      "Si une mission t'importe mais semble indisponible, contacte l'association plutôt que de partager un lien personnel."
+    ]
+  },
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping a new volunteer choose a comfortable schedule. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Choisir ses créneaux, c’est construire un engagement réaliste avant de donner ses coordonnées. Tu peux essayer plusieurs combinaisons, retirer un choix et lire les contraintes sans rien enregistrer. L’inscription ne partira qu’après le formulaire et sa confirmation.",
+      "fallbackDurationMs": 23000
+    },
+    {
+      "id": "select",
+      "transcript": "Clique sur une mission disponible pour la sélectionner. Elle change d’état et rejoint le récapitulatif à droite. Tu peux en ajouter plusieurs, même sur deux journées. Pour retirer un choix avant de continuer, reclique sur sa barre ou utilise la croix du récapitulatif : aucune place n’a encore été réservée.",
+      "fallbackDurationMs": 29000
+    },
+    {
+      "id": "capacity",
+      "transcript": "Chaque barre indique les inscriptions sur la capacité totale. Deux sur trois signifie qu’il reste une place. Un créneau complet sans liste d’attente ne peut plus être choisi. S’il reste important pour toi, contacte l’association plutôt que de remplacer quelqu’un ou de partager une invitation.",
+      "fallbackDurationMs": 27000
+    },
+    {
+      "id": "waitlist",
+      "transcript": "Quand l’organisateur a activé une liste d’attente, un créneau complet reste cliquable. Le choix devient En attente et le récapitulatif le distingue d’une place confirmable. Reclique pour le retirer. La position et une éventuelle offre de place n’existeront qu’après l’envoi du formulaire.",
+      "fallbackDurationMs": 28000
+    },
+    {
+      "id": "approval-reserved",
+      "transcript": "D’autres missions ont une règle particulière. Chauffeur navette affiche Sur validation : tu peux la demander, puis l’organisateur décidera. Sécurité est réservée à certains membres et reste bloquée sans leur invitation personnelle. Ces deux états ne veulent donc pas dire complet, et ils ne produisent pas le même suivi.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "conflict",
+      "transcript": "Dès qu’un créneau est choisi, les missions qui chevauchent le même horaire deviennent indisponibles. Ici, Accueil de neuf à midi empêche la Navette de huit à midi. Retire le premier choix si la seconde mission te convient mieux. Le serveur vérifiera encore ce conflit au moment de confirmer.",
+      "fallbackDurationMs": 28000
+    },
+    {
+      "id": "known",
+      "transcript": "Depuis son lien personnel, Camille retrouve automatiquement les créneaux qu’elle possède déjà. Ils apparaissent dans son récapitulatif et ne seront pas créés une deuxième fois. Elle peut ajouter une autre mission, mais l’annulation d’un engagement existant demande une confirmation séparée pour éviter un clic accidentel.",
+      "fallbackDurationMs": 29000
+    },
+    {
+      "id": "limit",
+      "transcript": "La Buvette est limitée à deux créneaux par personne. Camille a déjà atteint ce maximum : les autres plages restent visibles, mais annoncent la limite et ne peuvent pas être ajoutées. Elle doit d’abord annuler une Buvette existante, ou demander à l’organisateur de corriger son planning.",
+      "fallbackDurationMs": 27000
+    },
+    {
+      "id": "result",
+      "transcript": "Avant de continuer, relis le récapitulatif : jours, heures, missions, attente ou demande sur validation. Tu peux encore tout ajuster sans envoyer de données. Une fois la combinaison réaliste, le bouton Continuer ouvre le formulaire ; il ne confirme toujours rien tant que tu n’as pas validé la dernière étape.",
+      "fallbackDurationMs": 27000
+    }
+  ]
+}

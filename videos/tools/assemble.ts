@@ -48,6 +48,17 @@ async function main() {
   const labels: string[] = []
   const vtt: string[] = ["WEBVTT", ""]
   const transcript: string[] = [manifest.title, ""]
+  let videoMap = "0:v:0"
+  if (manifest.slug === "sector-leaders") {
+    const phone = cues.get("mobile")
+    if (!phone) throw new Error("Missing phone framing cue")
+    const start = ((phone.startMs + 500) / 1000).toFixed(3)
+    const end = (phone.endMs / 1000).toFixed(3)
+    filters.push("[0:v]split=2[desktop][phoneSource]")
+    filters.push("[phoneSource]crop=390:800:0:0,pad=1280:800:445:0:color=0xf8fafc[phoneFrame]")
+    filters.push(`[desktop][phoneFrame]overlay=0:0:enable='between(t,${start},${end})'[framedVideo]`)
+    videoMap = "[framedVideo]"
+  }
 
   manifest.segments.forEach((segment, index) => {
     const cue = cues.get(segment.id)
@@ -75,7 +86,7 @@ async function main() {
     "-y",
     ...inputs,
     "-filter_complex", filters.join(";"),
-    "-map", "0:v:0",
+    "-map", videoMap,
     "-map", "[final]",
     "-c:v", "libx264",
     "-preset", "medium",

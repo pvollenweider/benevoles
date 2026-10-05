@@ -191,19 +191,40 @@ async function main() {
 
   try {
     let featureEventId = ""
+    if (slug === "volunteer-form-recap" || slug === "volunteer-confirmation-errors") {
+      await page.goto(`${baseUrl}/admin/login`)
+      await page.getByLabel("Email").fill(process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost")
+      await page.getByLabel("Mot de passe").fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
+      await page.getByRole("button", { name: "Se connecter" }).click()
+      await page.waitForURL(/\/admin\/events/)
+      const href = await page.getByRole("link", { name: "Fête du village de Montvert" }).first().getAttribute("href")
+      featureEventId = href!.split("/").at(-1)!
+      await page.evaluate(async (eventId) => {
+        const event = await (await fetch(`/api/admin/events/${eventId}`)).json()
+        const date = event.startDate.slice(0, 10)
+        for (const shift of [
+          { roleName: "Logistique", label: "Logistique", startTime: "12:00", endTime: "18:00", minAge: null },
+          { roleName: "Rangement", label: "Rangement de nuit", startTime: "22:00", endTime: "02:00", minAge: 18 },
+        ]) {
+          const response = await fetch("/api/admin/shifts", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ eventId, date, capacity: 4, instructions: "Prévoir des chaussures fermées et passer au stand d’accueil.", ...shift }) })
+          if (!response.ok) throw new Error(await response.text())
+        }
+      }, featureEventId)
+      await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
+    }
     if (slug === "volunteer-register-mobile") {
       await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`)
       await settle(page)
       const heading = page.getByRole("heading", { level: 1, name: "Fête du village de Montvert" })
       if (!(await heading.isVisible())) throw new Error("Demo event not found; run scripts/seed-demo.ts on the local database first")
-    } else {
+    } else if (slug !== "volunteer-form-recap" && slug !== "volunteer-confirmation-errors") {
       await page.goto(`${baseUrl}/admin/login`)
       await page.getByLabel("Email").fill(process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost")
       await page.getByLabel("Mot de passe").fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
       await page.getByRole("button", { name: "Se connecter" }).click()
       await page.waitForURL(/\/admin\/events/)
       await settle(page)
-      if (slug === "admin-features-tour" || slug === "organizer-monitor-followup" || slug === "admin-navigation" || slug === "global-search" || slug === "org-public-identity" || slug === "org-timezone-charter" || slug === "event-review-publish" || slug === "event-visibility-registration-window" || slug === "event-duplicate" || slug === "event-program-pages-qr" || slug === "event-milestones" || slug === "event-archive-delete" || slug === "shifts-roles-views" || slug === "shift-create-edit-detail" || slug === "shift-create-series" || slug === "shift-timeline-quick-actions" || slug === "shift-night-dst" || slug === "shift-waitlist-offer" || slug === "shift-approval" || slug === "shift-eligibility-rules" || slug === "volunteer-discover-event") {
+      if (slug === "admin-features-tour" || slug === "organizer-monitor-followup" || slug === "admin-navigation" || slug === "global-search" || slug === "org-public-identity" || slug === "org-timezone-charter" || slug === "event-review-publish" || slug === "event-visibility-registration-window" || slug === "event-duplicate" || slug === "event-program-pages-qr" || slug === "event-milestones" || slug === "event-archive-delete" || slug === "shifts-roles-views" || slug === "shift-create-edit-detail" || slug === "shift-create-series" || slug === "shift-timeline-quick-actions" || slug === "shift-night-dst" || slug === "shift-waitlist-offer" || slug === "shift-approval" || slug === "shift-eligibility-rules" || slug === "volunteer-discover-event" || slug === "volunteer-choose-shifts") {
         const href = await page.getByRole("link", { name: "Fête du village de Montvert" }).first().getAttribute("href")
         if (!href) throw new Error("Seed event link not found")
         featureEventId = href.split("/").filter(Boolean).at(-1) ?? ""
@@ -224,7 +245,7 @@ async function main() {
           `/admin/events/${featureEventId}/print`,
           `/admin/events/${featureEventId}/log`,
           "/admin/search?q=buvette",
-        ] : slug === "admin-navigation" || slug === "global-search" || slug === "org-public-identity" || slug === "org-timezone-charter" || slug === "event-review-publish" || slug === "event-visibility-registration-window" || slug === "event-duplicate" || slug === "event-program-pages-qr" || slug === "event-milestones" || slug === "event-archive-delete" || slug === "shifts-roles-views" || slug === "shift-create-edit-detail" || slug === "shift-create-series" || slug === "shift-timeline-quick-actions" || slug === "shift-night-dst" || slug === "shift-waitlist-offer" || slug === "shift-approval" || slug === "shift-eligibility-rules" || slug === "volunteer-discover-event" ? [
+        ] : slug === "admin-navigation" || slug === "global-search" || slug === "org-public-identity" || slug === "org-timezone-charter" || slug === "event-review-publish" || slug === "event-visibility-registration-window" || slug === "event-duplicate" || slug === "event-program-pages-qr" || slug === "event-milestones" || slug === "event-archive-delete" || slug === "shifts-roles-views" || slug === "shift-create-edit-detail" || slug === "shift-create-series" || slug === "shift-timeline-quick-actions" || slug === "shift-night-dst" || slug === "shift-waitlist-offer" || slug === "shift-approval" || slug === "shift-eligibility-rules" || slug === "volunteer-discover-event" || slug === "volunteer-choose-shifts" ? [
           "/admin/events",
           "/admin/members",
           "/admin/settings/admins",
@@ -249,6 +270,13 @@ async function main() {
         await page.goto(`${baseUrl}/admin/events`)
         await settle(page)
       }
+    }
+
+    if (slug === "sector-leaders") {
+      const href = await page.getByRole("link", { name: "Fête du village de Montvert" }).first().getAttribute("href")
+      if (!href) throw new Error("Seed event link not found")
+      featureEventId = href.split("/").filter(Boolean).at(-1)!
+      await page.goto(`${baseUrl}/admin/events/${featureEventId}/sector-leaders`); await settle(page)
     }
 
     // Recorder-owned demo data must be cleaned before capture starts. These scenarios are often
@@ -1240,6 +1268,345 @@ async function main() {
         await page.getByRole("link", { name: /Voir sur la carte/ }).first().scrollIntoViewIfNeeded()
         await at(0.60)
         await page.getByRole("link", { name: "Accès et parking" }).scrollIntoViewIfNeeded()
+      })
+    } else if (slug === "volunteer-choose-shifts") {
+      await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
+      await scene("welcome", async () => {
+        await page.screencast.showChapter(manifest.title, { description: "Essayer, comprendre, puis confirmer", duration: 2_300 })
+        await page.getByRole("heading", { name: "Fête du village de Montvert" }).waitFor()
+      })
+
+      await page.screencast.showChapter("Composer son planning", { description: "Ajouter et retirer avant tout envoi", duration: 1_400 })
+      await scene("select", async (at) => {
+        const accueil = page.getByRole("button", { name: /Sélectionner — Accueil 15h–18h/ })
+        await accueil.scrollIntoViewIfNeeded()
+        await tap(page, accueil)
+        await at(0.28)
+        const demontage = page.getByRole("button", { name: /Sélectionner — Démontage 15h–18h/ })
+        await demontage.scrollIntoViewIfNeeded()
+        await tap(page, demontage)
+        await at(0.55)
+        await page.getByText("Créneaux sélectionnés").scrollIntoViewIfNeeded()
+        await at(0.72)
+        await tap(page, page.getByRole("button", { name: "Retirer Démontage de la sélection" }))
+      })
+
+      await scene("capacity", async (at) => {
+        const available = page.getByRole("button", { name: /Accueil 15h–18h.*2 places libres sur 3/ })
+        await available.scrollIntoViewIfNeeded()
+        await available.focus()
+        await at(0.34)
+        const full = page.getByRole("button", { name: /Accueil 12h–15h/ })
+        await full.scrollIntoViewIfNeeded()
+        await full.focus()
+        await at(0.68)
+      })
+
+      await scene("waitlist", async (at) => {
+        const waiting = page.getByRole("button", { name: /Rejoindre la file d'attente — Buvette 10h–14h/ })
+        await waiting.scrollIntoViewIfNeeded()
+        await tap(page, waiting)
+        await at(0.40)
+        await page.getByText(/Complet · liste d'attente si place libérée/).filter({ visible: true }).first().scrollIntoViewIfNeeded()
+        await at(0.68)
+        await tap(page, page.getByRole("button", { name: "Retirer Buvette de la sélection" }))
+      })
+
+      await scene("approval-reserved", async (at) => {
+        const approval = page.getByRole("button", { name: /Sélectionner — Navette.*sur validation/ }).first()
+        await approval.scrollIntoViewIfNeeded()
+        await approval.focus()
+        await at(0.38)
+        const reserved = page.getByRole("button", { name: /Sécurité.*réservé à certains membres/ }).first()
+        await reserved.scrollIntoViewIfNeeded()
+        await reserved.focus()
+        await at(0.70)
+      })
+
+      await page.screencast.showChapter("Éviter les incompatibilités", { description: "Chevauchements et engagements existants", duration: 1_400 })
+      await scene("conflict", async (at) => {
+        const current = page.getByRole("button", { name: /Désélectionner — Accueil 15h–18h/ })
+        if (await current.count()) await tap(page, current)
+        const morning = page.getByRole("button", { name: /Sélectionner — Accueil 09h–12h/ })
+        await morning.scrollIntoViewIfNeeded()
+        await tap(page, morning)
+        await at(0.40)
+        const overlapping = page.getByRole("button", { name: /Navette.*08h–12h/ }).first()
+        await overlapping.scrollIntoViewIfNeeded()
+        await overlapping.focus()
+        await at(0.72)
+        await tap(page, page.getByRole("button", { name: /Désélectionner — Accueil 09h–12h/ }))
+      })
+
+      await scene("known", async (at) => {
+        await page.goto(`${baseUrl}/my/demo-waitlist-camille-0001`); await settle(page)
+        await page.getByRole("heading", { name: /Mes inscriptions/ }).waitFor()
+        await at(0.22)
+        await page.getByText(/Camille Rochat/).first().scrollIntoViewIfNeeded()
+        await at(0.44)
+        await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
+        await page.getByText(/Camille Rochat/).first().waitFor()
+        await at(0.70)
+        await page.getByText("Créneaux sélectionnés").scrollIntoViewIfNeeded()
+      })
+
+      await scene("limit", async (at) => {
+        const limited = page.getByRole("button", { name: /Buvette.*limite de 2 par personne atteinte/ }).first()
+        await limited.scrollIntoViewIfNeeded()
+        await at(0.30)
+        await limited.focus()
+        await at(0.62)
+        const cancel = page.getByRole("button", { name: /Annuler l'inscription à Buvette/ }).first()
+        await cancel.scrollIntoViewIfNeeded()
+        await cancel.focus()
+      })
+
+      await scene("result", async (at) => {
+        const extra = page.getByRole("button", { name: /Sélectionner — Montage 07h–09h/ })
+        await extra.scrollIntoViewIfNeeded()
+        await tap(page, extra)
+        await page.getByText("Créneaux sélectionnés").scrollIntoViewIfNeeded()
+        await at(0.28)
+        const continueButton = page.getByRole("button", { name: /^Continuer/ })
+        await continueButton.scrollIntoViewIfNeeded()
+        await at(0.64)
+        await continueButton.focus()
+      })
+    } else if (slug === "volunteer-confirmation-errors") {
+      let shiftId = ""
+      await scene("welcome", async () => {
+        await page.screencast.showChapter(manifest.title, { description: "Comprendre le message et reprendre sereinement", duration: 2_300 })
+      })
+      await scene("form", async () => {
+        const data = await page.evaluate(async () => (await fetch(`/api/public/${location.pathname.split('/')[1]}?org=default`)).json())
+        shiftId = data.shifts.find((s: { roleName: string; startTime: string }) => s.roleName === "Accueil" && s.startTime === "09:00").id
+        await tap(page, page.getByRole("button", { name: /Sélectionner — Accueil 09h–12h/ }))
+        await tap(page, page.getByRole("button", { name: /^Continuer/ }))
+        await typeNaturally(page, page.getByLabel("Prénom *", { exact: true }), "Alex")
+        await typeNaturally(page, page.getByLabel("Nom *", { exact: true }), "Martin")
+        await typeNaturally(page, page.getByLabel("Email *", { exact: true }), "alex.errors@example.org")
+        await typeNaturally(page, page.getByLabel("Téléphone *", { exact: true }), "079 000 12 34")
+        await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
+        await tap(page, page.locator("label").filter({ hasText: "J'accepte que mes données" }).getByRole("checkbox"))
+      })
+      const submit = page.getByRole("button", { name: "Confirmer mon inscription" })
+      await scene("validation", async (at) => {
+        await tap(page, submit)
+        await page.locator('[role="alert"]').first().waitFor()
+        await at(0.48)
+        await tap(page, page.getByRole("radio", { name: "M", exact: true }))
+      })
+      const capacity = async (value: number) => page.evaluate(async ({ id, value }) => {
+        const response = await fetch(`/api/admin/shifts/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ capacity: value }) })
+        if (!response.ok) throw new Error(await response.text())
+      }, { id: shiftId, value })
+      await scene("capacity", async (at) => {
+        await capacity(2)
+        await tap(page, submit)
+        await page.getByText("Votre sélection n'est plus disponible").waitFor()
+        await at(0.60)
+        await page.getByLabel("Email *", { exact: true }).scrollIntoViewIfNeeded()
+      })
+      await scene("network", async (at) => {
+        await capacity(3)
+        await page.route("**/api/public/registrations", (route) => route.abort("internetdisconnected"))
+        await tap(page, submit)
+        await page.getByText("Connexion interrompue", { exact: true }).waitFor()
+        await at(0.52)
+        await submit.scrollIntoViewIfNeeded()
+        await at(0.78)
+        await page.unroute("**/api/public/registrations")
+      })
+      await scene("success", async (at) => {
+        await tap(page, submit)
+        await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+        await at(0.45)
+        if (await page.getByRole("link", { name: "Accéder à mon inscription" }).count()) throw new Error("Public confirmation must not expose a personal link")
+      })
+      await scene("email", async (at) => {
+        await page.goto("http://localhost:48026"); await settle(page)
+        const mail = page.getByText(/Inscription confirmée/).first()
+        await mail.waitFor()
+        await at(0.20)
+        await tap(page, mail)
+        await at(0.64)
+      })
+      await scene("result", async () => {
+        await page.goto(`${baseUrl}/${eventSlug}/success?org=${encodeURIComponent(org)}`); await settle(page)
+        await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+      })
+    } else if (slug === "volunteer-form-recap") {
+      await scene("welcome", async () => {
+        await page.screencast.showChapter(manifest.title, { description: "Les bonnes informations et un engagement réaliste", duration: 2_300 })
+      })
+      await scene("selection", async (at) => {
+        for (const name of [/Sélectionner — Accueil 09h–12h/, /Sélectionner — Logistique/, /Sélectionner — Rangement/, /Sélectionner — Buvette 10h–14h/]) {
+          const button = page.getByRole("button", { name }).last()
+          await tap(page, button)
+          await page.waitForTimeout(800)
+        }
+        await at(0.64)
+        await tap(page, page.getByRole("button", { name: /^Continuer/ }))
+        await page.getByRole("heading", { name: "Vos informations" }).waitFor()
+      })
+      await scene("identity", async (at) => {
+        await typeNaturally(page, page.getByLabel("Prénom *", { exact: true }), "Alex")
+        await typeNaturally(page, page.getByLabel("Nom *", { exact: true }), "Martin")
+        await typeNaturally(page, page.getByLabel("Email *", { exact: true }), "alex.martin@example.org")
+        await typeNaturally(page, page.getByLabel("Téléphone *", { exact: true }), "079 000 12 34")
+        await at(0.72)
+        await fillVisibly(page, page.getByLabel("Date de naissance *"), "1994-06-12")
+      })
+      await scene("questions", async (at) => {
+        await tap(page, page.getByRole("radio", { name: "M", exact: true }))
+        await at(0.24)
+        await typeNaturally(page, page.getByLabel(/Régime alimentaire/), "Végétarien")
+        await at(0.48)
+        await typeNaturally(page, page.getByLabel("Permis de conduire"), "Permis B")
+        await at(0.68)
+        await typeNaturally(page, page.getByLabel(/Commentaire/), "Je prévois une pause avant la nuit.")
+      })
+      await scene("agreement", async (at) => {
+        await tap(page, page.getByRole("button", { name: "convention des bénévoles" }))
+        await page.getByRole("dialog", { name: "Convention des Bénévoles" }).waitFor()
+        await at(0.44)
+        await tap(page, page.getByRole("button", { name: "J'ai lu et j'accepte" }))
+        await at(0.70)
+        await tap(page, page.locator("label").filter({ hasText: "J'accepte que mes données" }).getByRole("checkbox"))
+      })
+      const recap = page.locator(".lg\\:col-start-2").filter({ hasText: "Vos créneaux" }).first()
+      await scene("recap", async (at) => {
+        await recap.getByText(/fin le lendemain/).scrollIntoViewIfNeeded()
+        await at(0.34)
+        await recap.getByRole("link", { name: /Voir sur la carte/ }).first().scrollIntoViewIfNeeded()
+        await at(0.68)
+        await recap.getByText("Transmis à l'organisation").scrollIntoViewIfNeeded()
+      })
+      await scene("workload", async (at) => {
+        await recap.getByText("Journée chargée").scrollIntoViewIfNeeded()
+        await at(0.50)
+        await tap(page, page.getByRole("button", { name: "Retour", exact: true }))
+        await at(0.70)
+        await tap(page, page.getByRole("button", { name: /Désélectionner — Logistique/ }))
+        await tap(page, page.getByRole("button", { name: /^Continuer/ }))
+      })
+      await scene("result", async (at) => {
+        await page.getByRole("heading", { name: "Vos informations" }).scrollIntoViewIfNeeded()
+        await at(0.30)
+        await page.getByLabel("Email *", { exact: true }).scrollIntoViewIfNeeded()
+        await at(0.64)
+        await page.getByRole("button", { name: "Confirmer mon inscription" }).scrollIntoViewIfNeeded()
+      })
+    } else if (slug === "sector-leaders") {
+      const leadersUrl = `${baseUrl}/admin/events/${featureEventId}/sector-leaders`
+      const rosterUrl = `${baseUrl}/leader/demo-leader-buvette-0001`
+      await scene("welcome", async () => {
+        await page.screencast.showChapter(manifest.title, { description: "Un accès simple pour accompagner son équipe", duration: 2_300 })
+      })
+      await scene("nominate", async (at) => {
+        await tap(page, page.getByRole("button", { name: "+ Ajouter un·e responsable" }))
+        await typeNaturally(page, page.getByLabel("Poste *", { exact: true }), "Montage")
+        await typeNaturally(page, page.getByLabel("Nom *", { exact: true }), "Samira Perrin")
+        await typeNaturally(page, page.getByLabel("Email *", { exact: true }), "samira.perrin@example.org")
+        await at(0.72)
+        await tap(page, page.getByRole("button", { name: "Ajouter et envoyer le lien" }))
+        await page.getByText("Samira Perrin", { exact: true }).waitFor()
+      })
+      await scene("registered", async (at) => {
+        await tap(page, page.getByRole("button", { name: "+ Ajouter un·e responsable" }))
+        const picker = page.getByLabel("Depuis les inscrits (optionnel)")
+        const option = picker.locator("option").filter({ hasText: "Camille" }).first()
+        const value = await option.getAttribute("value")
+        if (!value) throw new Error("Registered Camille missing")
+        await tap(page, picker); await picker.selectOption(value)
+        await at(0.40)
+        await fillVisibly(page, page.getByLabel("Poste *", { exact: true }), "Démontage")
+        await at(0.72)
+        await tap(page, page.getByRole("button", { name: "Ajouter et envoyer le lien" }))
+        await page.getByRole("heading", { name: "Démontage", exact: true }).waitFor()
+      })
+      await scene("email", async (at) => {
+        await page.goto("http://localhost:48026"); await settle(page)
+        const mail = page.getByText(/responsable/i).first()
+        await mail.waitFor(); await tap(page, mail)
+        await at(0.55)
+        const link = page.frameLocator("iframe").locator('a[href*="/leader/"]').first()
+        const href = await link.getAttribute("href")
+        if (!href) throw new Error("Nomination email has no personal leader link")
+        const personal = new URL(href)
+        await page.goto(`${baseUrl}${personal.pathname}`); await settle(page)
+        await page.getByRole("heading", { name: /^Responsable ·/ }).waitFor()
+      })
+      await scene("roster", async (at) => {
+        await page.goto(rosterUrl); await settle(page)
+        await page.getByRole("heading", { name: "Responsable · Buvette", exact: true }).waitFor()
+        await at(0.42)
+        await page.getByText("Liste d'attente", { exact: true }).first().scrollIntoViewIfNeeded()
+        await at(0.72)
+        await page.locator("section").last().scrollIntoViewIfNeeded()
+      })
+      await scene("mobile", async (at) => {
+        await page.setViewportSize({ width: 390, height: 800 })
+        await page.evaluate(() => window.scrollTo(0, 0))
+        await at(0.45)
+        await page.locator('a[href^="tel:"]').first().scrollIntoViewIfNeeded()
+        await at(0.75)
+        await page.locator("section").last().scrollIntoViewIfNeeded()
+      })
+      await scene("scope", async (at) => {
+        await page.setViewportSize({ width: 1280, height: 800 })
+        await page.evaluate(() => window.scrollTo(0, 0))
+        if (await page.getByRole("button", { name: /Modifier|Retirer|Ajouter/ }).count()) throw new Error("Leader view unexpectedly has mutation controls")
+        await at(0.60)
+        await page.locator("section").last().scrollIntoViewIfNeeded()
+      })
+      await scene("new-signup", async (at) => {
+        await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
+        await tap(page, page.getByRole("button", { name: /Sélectionner — Buvette 10h–14h/ }).last())
+        await tap(page, page.getByRole("button", { name: /^Continuer/ }))
+        await typeNaturally(page, page.getByLabel("Prénom *", { exact: true }), "Nora")
+        await typeNaturally(page, page.getByLabel("Nom *", { exact: true }), "Perrin")
+        await at(0.24)
+        await typeNaturally(page, page.getByLabel("Email *", { exact: true }), "nora.team@example.org")
+        await typeNaturally(page, page.getByLabel("Téléphone *", { exact: true }), "079 000 00 12")
+        await at(0.43)
+        await tap(page, page.getByRole("radio", { name: "M", exact: true }))
+        await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
+        await tap(page, page.locator("label").filter({ hasText: "J'accepte que mes données" }).getByRole("checkbox"))
+        await at(0.74)
+        await page.getByRole("button", { name: "Confirmer mon inscription" }).scrollIntoViewIfNeeded()
+        await at(0.87)
+        await tap(page, page.getByRole("button", { name: "Confirmer mon inscription" }))
+        await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+      })
+      await page.goto("http://localhost:48026"); await settle(page)
+      const notificationMail = page.getByText(/Nouvelle inscription.*Buvette/i).first()
+      await notificationMail.waitFor(); await tap(page, notificationMail)
+      await scene("notification", async (at) => {
+        await at(0.55)
+        await page.goto(rosterUrl); await settle(page)
+        await page.getByText("Nora Perrin", { exact: true }).scrollIntoViewIfNeeded()
+      })
+      await scene("contact", async (at) => {
+        await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
+        await tap(page, page.getByRole("button", { name: "+ Ajouter un créneau" }))
+        const editor = page.getByRole("group", { name: "Nouveau créneau" })
+        await editor.getByLabel("Personne de contact", { exact: true }).scrollIntoViewIfNeeded()
+        await typeNaturally(page, editor.getByLabel("Personne de contact", { exact: true }), "Élodie Rochat")
+        await typeNaturally(page, editor.getByLabel("Téléphone du contact", { exact: true }), "079 000 00 01")
+        await at(0.60)
+      })
+      await scene("remove", async (at) => {
+        await page.goto(leadersUrl); await settle(page)
+        await tap(page, page.getByRole("button", { name: "Retirer Élodie Rochat des responsables de Buvette", exact: true }))
+        const dialog = page.getByRole("alertdialog")
+        await dialog.waitFor()
+        await at(0.28)
+        await tap(page, dialog.getByRole("button", { name: "Retirer", exact: true }))
+        await dialog.waitFor({ state: "hidden" })
+        await at(0.60)
+        await page.goto(rosterUrl); await settle(page)
+        await page.getByRole("heading", { name: "Lien introuvable", exact: true }).waitFor()
       })
     } else if (slug === "event-archive-delete") {
       const disposableTitle = "Ancienne fête de Montvert — copie de démonstration"

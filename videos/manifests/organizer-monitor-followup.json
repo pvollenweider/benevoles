@@ -3,24 +3,96 @@
   "slug": "organizer-monitor-followup",
   "title": "Suivre les inscriptions et relancer au bon moment",
   "description": "Contrôler la couverture du planning, traiter les demandes, cibler les relances et préparer le jour J.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous suivez les inscriptions d'un événement publié et relancez les bonnes personnes au bon moment.",
+    "steps": [
+      "Vérifiez la couverture du planning : créneaux remplis, places restantes, liste d'attente.",
+      "Consultez les inscriptions, avec les réponses aux questions liées à chaque bénévole.",
+      "Traitez les demandes sur validation en acceptant ou refusant chaque candidature.",
+      "Filtrez par poste, créneau ou statut pour isoler un groupe précis.",
+      "Choisissez les destinataires d'une relance, adaptez le message, puis vérifiez l'aperçu avant l'envoi.",
+      "Consultez le journal d'activité pour comprendre ce qui a changé et par qui."
+    ],
+    "remember": [
+      "Les rappels automatiques utilisent les horaires locaux de votre organisation.",
+      "Un aperçu du message est toujours disponible avant l'envoi.",
+      "Les liens personnels restent individuels : chaque bénévole gère son inscription sans créer de compte."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
   "voiceStyle": "Speak with an audible smile throughout. Sound warm, practical and reassuring, like an experienced association organizer helping a colleague keep an event under control. Use natural conversational French, clear articulation and a medium pace. Preserve exactly the same vocal identity, smile, pitch, pace and energy across the whole narration. Never sound corporate, salesy, theatrical or childish.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "overview", "transcript": "Une fois le planning publié, voici comment suivre les inscriptions et relancer au bon moment. Depuis l’événement, tu retrouves tout de suite son état, les prochaines étapes et les accès utiles pour garder une vue claire.", "fallbackDurationMs": 12500 },
-    { "id": "coverage", "transcript": "Commence par regarder la couverture du planning. Les capacités et les inscriptions montrent les créneaux déjà bien remplis, ceux où il reste des places, et les personnes placées en liste d’attente. Tu sais ainsi où concentrer tes efforts.", "fallbackDurationMs": 14500 },
-    { "id": "registrations", "transcript": "Dans les inscriptions, chaque ligne rassemble la personne, son créneau, son statut et les informations utiles. Les réponses aux questions, comme la taille du t-shirt ou le régime alimentaire, restent liées au bénévole et peuvent être consultées sans ouvrir plusieurs fichiers.", "fallbackDurationMs": 15500 },
-    { "id": "requests", "transcript": "Les postes sur validation sont clairement signalés. Ouvre une demande pour vérifier la personne, le créneau et ses réponses, puis accepte-la ou refuse-la. Ici, on referme simplement la fenêtre : aucune décision n’est prise pendant la démonstration.", "fallbackDurationMs": 14500 },
-    { "id": "filters", "transcript": "Quand la liste grandit, filtre par poste, par créneau ou par statut, puis utilise la recherche pour retrouver un nom ou une adresse. En quelques secondes, tu isoles exactement le groupe qui t’intéresse.", "fallbackDurationMs": 13000 },
-    { "id": "actions", "transcript": "Tu peux agir sur une inscription, par exemple renvoyer son lien personnel, ou sélectionner plusieurs lignes pour appliquer une action groupée. Les liens restent individuels : le bénévole peut consulter ou modifier ses choix sans créer de compte.", "fallbackDurationMs": 14500 },
-    { "id": "audience", "transcript": "Pour une relance, choisis précisément les destinataires : tous les inscrits, un poste, un créneau, la liste d’attente, ou les invités qui n’ont encore aucun créneau confirmé. Le nombre de personnes est recalculé avant l’envoi.", "fallbackDurationMs": 15500 },
-    { "id": "message", "transcript": "Tu peux partir d’un modèle, adapter l’objet et le texte, puis utiliser des variables comme le prénom ou les créneaux. Avant d’envoyer quoi que ce soit, ouvre l’aperçu : tu contrôles le rendu exact et le nombre de destinataires.", "fallbackDurationMs": 15000 },
-    { "id": "channels", "transcript": "L’email part à toutes les personnes ciblées. Pour une information urgente, tu peux ajouter une notification sur téléphone ou ordinateur ; elle ne touche que les bénévoles qui l’ont activée. La confirmation finale évite les envois involontaires.", "fallbackDurationMs": 14500 },
-    { "id": "reminders", "transcript": "Les rappels automatiques prennent ensuite le relais avant les créneaux. Tu choisis lesquels sont actifs, et l’application utilise les horaires locaux de l’organisation pour envoyer les bonnes informations au bon moment.", "fallbackDurationMs": 12500 },
-    { "id": "reports", "transcript": "À l’approche du jour J, les rapports préparent les listes à afficher sur les stands, les plannings individuels, les réponses aux questions et les badges. Tu génères seulement les documents dont ton équipe a besoin.", "fallbackDurationMs": 14000 },
-    { "id": "history", "transcript": "Enfin, le journal d’activité permet de comprendre ce qui a changé : publication, nouvelle inscription, désinscription, modification d’un créneau ou ajout manuel. Chaque action est datée, avec son origine. Tu gardes ainsi le fil, même à plusieurs organisateurs.", "fallbackDurationMs": 15000 },
-    { "id": "done", "transcript": "Le résultat, c’est un suivi simple : voir les manques, contacter les bonnes personnes, préparer le terrain et retrouver l’historique sans jongler entre plusieurs outils. Ton planning reste lisible jusqu’au jour de l’événement.", "fallbackDurationMs": 12500 }
+    {
+      "id": "overview",
+      "transcript": "Une fois le planning publié, voici comment suivre les inscriptions et relancer au bon moment. Depuis l’événement, tu retrouves tout de suite son état, les prochaines étapes et les accès utiles pour garder une vue claire.",
+      "fallbackDurationMs": 12500
+    },
+    {
+      "id": "coverage",
+      "transcript": "Commence par regarder la couverture du planning. Les capacités et les inscriptions montrent les créneaux déjà bien remplis, ceux où il reste des places, et les personnes placées en liste d’attente. Tu sais ainsi où concentrer tes efforts.",
+      "fallbackDurationMs": 14500
+    },
+    {
+      "id": "registrations",
+      "transcript": "Dans les inscriptions, chaque ligne rassemble la personne, son créneau, son statut et les informations utiles. Les réponses aux questions, comme la taille du t-shirt ou le régime alimentaire, restent liées au bénévole et peuvent être consultées sans ouvrir plusieurs fichiers.",
+      "fallbackDurationMs": 15500
+    },
+    {
+      "id": "requests",
+      "transcript": "Les postes sur validation sont clairement signalés. Ouvre une demande pour vérifier la personne, le créneau et ses réponses, puis accepte-la ou refuse-la. Ici, on referme simplement la fenêtre : aucune décision n’est prise pendant la démonstration.",
+      "fallbackDurationMs": 14500
+    },
+    {
+      "id": "filters",
+      "transcript": "Quand la liste grandit, filtre par poste, par créneau ou par statut, puis utilise la recherche pour retrouver un nom ou une adresse. En quelques secondes, tu isoles exactement le groupe qui t’intéresse.",
+      "fallbackDurationMs": 13000
+    },
+    {
+      "id": "actions",
+      "transcript": "Tu peux agir sur une inscription, par exemple renvoyer son lien personnel, ou sélectionner plusieurs lignes pour appliquer une action groupée. Les liens restent individuels : le bénévole peut consulter ou modifier ses choix sans créer de compte.",
+      "fallbackDurationMs": 14500
+    },
+    {
+      "id": "audience",
+      "transcript": "Pour une relance, choisis précisément les destinataires : tous les inscrits, un poste, un créneau, la liste d’attente, ou les invités qui n’ont encore aucun créneau confirmé. Le nombre de personnes est recalculé avant l’envoi.",
+      "fallbackDurationMs": 15500
+    },
+    {
+      "id": "message",
+      "transcript": "Tu peux partir d’un modèle, adapter l’objet et le texte, puis utiliser des variables comme le prénom ou les créneaux. Avant d’envoyer quoi que ce soit, ouvre l’aperçu : tu contrôles le rendu exact et le nombre de destinataires.",
+      "fallbackDurationMs": 15000
+    },
+    {
+      "id": "channels",
+      "transcript": "L’email part à toutes les personnes ciblées. Pour une information urgente, tu peux ajouter une notification sur téléphone ou ordinateur ; elle ne touche que les bénévoles qui l’ont activée. La confirmation finale évite les envois involontaires.",
+      "fallbackDurationMs": 14500
+    },
+    {
+      "id": "reminders",
+      "transcript": "Les rappels automatiques prennent ensuite le relais avant les créneaux. Tu choisis lesquels sont actifs, et l’application utilise les horaires locaux de l’organisation pour envoyer les bonnes informations au bon moment.",
+      "fallbackDurationMs": 12500
+    },
+    {
+      "id": "reports",
+      "transcript": "À l’approche du jour J, les rapports préparent les listes à afficher sur les stands, les plannings individuels, les réponses aux questions et les badges. Tu génères seulement les documents dont ton équipe a besoin.",
+      "fallbackDurationMs": 14000
+    },
+    {
+      "id": "history",
+      "transcript": "Enfin, le journal d’activité permet de comprendre ce qui a changé : publication, nouvelle inscription, désinscription, modification d’un créneau ou ajout manuel. Chaque action est datée, avec son origine. Tu gardes ainsi le fil, même à plusieurs organisateurs.",
+      "fallbackDurationMs": 15000
+    },
+    {
+      "id": "done",
+      "transcript": "Le résultat, c’est un suivi simple : voir les manques, contacter les bonnes personnes, préparer le terrain et retrouver l’historique sans jongler entre plusieurs outils. Ton planning reste lisible jusqu’au jour de l’événement.",
+      "fallbackDurationMs": 12500
+    }
   ]
 }

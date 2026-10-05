@@ -3,18 +3,65 @@
   "slug": "shift-eligibility-rules",
   "title": "Âge, quotas et postes réservés",
   "description": "Configurer des règles d’accès simples et montrer leurs effets avant l’inscription.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous configurez un âge minimum, une limite de créneaux ou un accès réservé à une équipe.",
+    "steps": [
+      "Réglez l'âge minimum sur le créneau concerné.",
+      "Réglez la limite de créneaux par personne et les tags réservés sur le poste entier.",
+      "Vérifiez que le planning public annonce clairement l'âge minimum avant la sélection.",
+      "Vérifiez qu'une personne ayant atteint sa limite voit les créneaux restants marqués comme indisponibles pour elle.",
+      "Vérifiez qu'un poste réservé affiche un message neutre et demande le lien personnel reçu par email."
+    ],
+    "remember": [
+      "L'âge minimum est vérifié par le serveur : il ne peut pas être contourné en modifiant le navigateur.",
+      "Les tags internes réservés ne sont jamais révélés dans le message affiché au bénévole.",
+      "Indiquez toujours les critères dans la description et prévoyez une façon de corriger un profil ou une affectation."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "welcome", "transcript": "Certaines missions demandent une règle simple : un âge minimum, un nombre maximum de créneaux, ou l’appartenance à une équipe déjà formée. Ces contrôles évitent les affectations impossibles tout en expliquant clairement la situation avant l’inscription.", "fallbackDurationMs": 24000 },
-    { "id": "settings", "transcript": "Les règles se configurent au bon niveau. L’âge minimum appartient au créneau. La limite et les tags réservés appartiennent au poste entier, pour rester cohérents sur toutes ses plages horaires. Ici, Buvette est limitée à deux créneaux et Sécurité exige le tag sécurité.", "fallbackDurationMs": 27000 },
-    { "id": "age", "transcript": "Sur le planning public, la Buvette du soir annonce dix-huit ans minimum avant toute sélection. La date de naissance demandée dans le formulaire permet au serveur de vérifier la règle ; modifier le navigateur ou masquer le texte ne permet donc pas de la contourner.", "fallbackDurationMs": 25000 },
-    { "id": "quota", "transcript": "Camille possède déjà deux engagements de Buvette. En revenant au planning depuis son lien personnel, sa session reconnaît ces inscriptions : les autres créneaux restent visibles, mais indiquent que la limite de deux est atteinte. Elle peut d’abord retirer un engagement si elle souhaite en choisir un autre.", "fallbackDurationMs": 27000 },
-    { "id": "reserved", "transcript": "Sans invitation, le poste Sécurité reste visible mais marqué réservé à certains membres. Le message ne révèle pas les tags internes : il demande simplement d’utiliser le lien personnel reçu par email. Une invitation sans le bon tag ne donne pas davantage accès.", "fallbackDurationMs": 26000 },
-    { "id": "eligible", "transcript": "Julien possède le tag sécurité. En ouvrant son invitation, la même mission devient sélectionnable : le lien prouve quel membre a été invité et le serveur contrôle ses tags au moment de l’inscription. Il n’y a donc ni compte à créer, ni code à recopier.", "fallbackDurationMs": 24000 },
-    { "id": "result", "transcript": "Ces règles doivent rester rares et compréhensibles. Indique les critères dans la description, garde les tags internes confidentiels, vérifie le téléphone obligatoire si l’équipe doit appeler le jour J, et prévois toujours une manière de corriger un profil ou une affectation.", "fallbackDurationMs": 25000 }
+    {
+      "id": "welcome",
+      "transcript": "Certaines missions demandent une règle simple : un âge minimum, un nombre maximum de créneaux, ou l’appartenance à une équipe déjà formée. Ces contrôles évitent les affectations impossibles tout en expliquant clairement la situation avant l’inscription.",
+      "fallbackDurationMs": 24000
+    },
+    {
+      "id": "settings",
+      "transcript": "Les règles se configurent au bon niveau. L’âge minimum appartient au créneau. La limite et les tags réservés appartiennent au poste entier, pour rester cohérents sur toutes ses plages horaires. Ici, Buvette est limitée à deux créneaux et Sécurité exige le tag sécurité.",
+      "fallbackDurationMs": 27000
+    },
+    {
+      "id": "age",
+      "transcript": "Sur le planning public, la Buvette du soir annonce dix-huit ans minimum avant toute sélection. La date de naissance demandée dans le formulaire permet au serveur de vérifier la règle ; modifier le navigateur ou masquer le texte ne permet donc pas de la contourner.",
+      "fallbackDurationMs": 25000
+    },
+    {
+      "id": "quota",
+      "transcript": "Camille possède déjà deux engagements de Buvette. En revenant au planning depuis son lien personnel, sa session reconnaît ces inscriptions : les autres créneaux restent visibles, mais indiquent que la limite de deux est atteinte. Elle peut d’abord retirer un engagement si elle souhaite en choisir un autre.",
+      "fallbackDurationMs": 27000
+    },
+    {
+      "id": "reserved",
+      "transcript": "Sans invitation, le poste Sécurité reste visible mais marqué réservé à certains membres. Le message ne révèle pas les tags internes : il demande simplement d’utiliser le lien personnel reçu par email. Une invitation sans le bon tag ne donne pas davantage accès.",
+      "fallbackDurationMs": 26000
+    },
+    {
+      "id": "eligible",
+      "transcript": "Julien possède le tag sécurité. En ouvrant son invitation, la même mission devient sélectionnable : le lien prouve quel membre a été invité et le serveur contrôle ses tags au moment de l’inscription. Il n’y a donc ni compte à créer, ni code à recopier.",
+      "fallbackDurationMs": 24000
+    },
+    {
+      "id": "result",
+      "transcript": "Ces règles doivent rester rares et compréhensibles. Indique les critères dans la description, garde les tags internes confidentiels, vérifie le téléphone obligatoire si l’équipe doit appeler le jour J, et prévois toujours une manière de corriger un profil ou une affectation.",
+      "fallbackDurationMs": 25000
+    }
   ]
 }

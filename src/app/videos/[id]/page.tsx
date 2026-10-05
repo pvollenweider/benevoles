@@ -58,15 +58,7 @@ export default async function VideoDetailPage({ params }: { params: Promise<Para
   const related = relatedVideos(video, catalog)
   const updatedAtLabel = new Date(`${video.updatedAt}T00:00:00Z`).toLocaleDateString("fr-CH", { timeZone: "UTC", day: "numeric", month: "long", year: "numeric" })
 
-  const canonicalSections = [
-    { heading: "Utilité", body: video.script.utilite },
-    { heading: "Démonstration", body: video.script.demonstration },
-    { heading: "Résultat visible", body: video.script.resultatVisible },
-    { heading: "Points d'attention", body: video.script.pointsAttention },
-  ].filter((s): s is { heading: string; body: string } => Boolean(s.body))
-  // Five scripts predate the four-part recipe (src/lib/video-catalog.ts parseScript): fall back to
-  // whatever sections the script actually has, rather than showing nothing.
-  const sections = canonicalSections.length > 0 ? canonicalSections : video.script.sections
+  const viewer = video.manifest.viewer
 
   return (
     <div className="space-y-10">
@@ -116,29 +108,54 @@ export default async function VideoDetailPage({ params }: { params: Promise<Para
         )}
       </div>
 
-      <section aria-labelledby="video-script-heading" className="space-y-6">
-        <h2 id="video-script-heading" className="text-sm font-semibold text-gray-800">Script</h2>
-        {sections.map((s) => (
-          <div key={s.heading}>
-            <h3 className="text-sm font-semibold text-gray-700 mb-1">{s.heading}</h3>
-            <div className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{s.body}</div>
-          </div>
-        ))}
+      {/* Viewer-facing content (#644 owner feedback): what the video explains, written from its
+          narration — never the internal editorial script (Utilité/Démonstration/Résultat
+          visible/Points d'attention), which is production material and isn't shown here. */}
+      <section aria-labelledby="video-summary-heading" className="space-y-2">
+        <h2 id="video-summary-heading" className="text-sm font-semibold text-gray-900">Dans cette vidéo</h2>
+        <p className="text-sm text-gray-600 leading-relaxed">{viewer.summary}</p>
       </section>
 
-      <section aria-labelledby="video-transcript-heading" className="space-y-2">
-        <h2 id="video-transcript-heading" className="text-sm font-semibold text-gray-800">Transcript</h2>
-        {/* From the manifest's segments, committed to the repo — never fetched at build/ISR. */}
-        <div className="text-sm text-gray-600 leading-relaxed space-y-3">
-          {video.manifest.segments.map((segment) => (
-            <p key={segment.id}>{segment.transcript}</p>
+      <section aria-labelledby="video-steps-heading" className="space-y-2">
+        <h2 id="video-steps-heading" className="text-sm font-semibold text-gray-900">Les étapes</h2>
+        <ol className="list-decimal list-inside space-y-1.5 text-sm text-gray-600 leading-relaxed">
+          {viewer.steps.map((step) => (
+            <li key={step}>{step}</li>
           ))}
-        </div>
+        </ol>
+      </section>
+
+      <section aria-labelledby="video-remember-heading" className="space-y-2">
+        <h2 id="video-remember-heading" className="text-sm font-semibold text-gray-900">À retenir</h2>
+        <ul className="list-disc list-inside space-y-1.5 text-sm text-gray-600 leading-relaxed">
+          {viewer.remember.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </section>
+
+      {/* No separate « Transcription » heading: the summary below already names it, and two
+          near-identical labels in a row were read one after the other. */}
+      <section aria-label="Transcription complète">
+        {/* Closed by default (#644 accessibility review): still in the DOM, reachable by keyboard
+            and screen reader. From the manifest's segments, committed to the repo — never fetched
+            at build/ISR. */}
+        <details className="group">
+          <summary className="cursor-pointer list-none text-sm font-semibold text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            <span aria-hidden="true" className="inline-block transition-transform group-open:rotate-90 motion-reduce:transition-none mr-1">▸</span>
+            Transcription complète
+          </summary>
+          <div className="mt-3 text-sm text-gray-600 leading-relaxed space-y-3">
+            {video.manifest.segments.map((segment) => (
+              <p key={segment.id}>{segment.transcript}</p>
+            ))}
+          </div>
+        </details>
       </section>
 
       {related.length > 0 && (
         <section aria-labelledby="video-related-heading">
-          <h2 id="video-related-heading" className="text-sm font-semibold text-gray-800 mb-3">Vidéos liées</h2>
+          <h2 id="video-related-heading" className="text-sm font-semibold text-gray-900 mb-3">Vidéos liées</h2>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {related.map((r) => (
               <li key={r.id}>

@@ -3,18 +3,64 @@
   "slug": "shift-approval",
   "title": "Gérer un poste soumis à validation",
   "description": "Configurer une mission sensible, examiner une demande et montrer le résultat à la personne bénévole.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous activez l'inscription sur validation pour une mission sensible.",
+    "steps": [
+      "Activez « Sur validation » dans le créneau et ajoutez les critères utiles dans la consigne.",
+      "Laissez le bénévole envoyer sa demande : sa page personnelle affiche « Demande envoyée, en attente de réponse ».",
+      "Ouvrez le filtre « Demandes à traiter » pour voir le nom, les coordonnées et les réponses de la personne.",
+      "Acceptez ou refusez la demande, avec un message facultatif."
+    ],
+    "remember": [
+      "Une demande réserve déjà une place pendant son examen.",
+      "Refuser une demande libère la place et prévient la personne.",
+      "Avant la décision, le bénévole peut retirer sa demande lui-même."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Puck",
   "continuousNarration": true,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, reassuring adult male voice, like an experienced association organizer helping a colleague. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "welcome", "transcript": "Pour une mission sensible, comme conduire une navette, tenir une caisse ou gérer un accès, l’inscription immédiate n’est pas toujours adaptée. Le mode sur validation permet de recueillir une candidature, de réserver la place, puis de décider avec les bonnes informations.", "fallbackDurationMs": 25000 },
-    { "id": "setup", "transcript": "Dans le créneau, active Sur validation. Ajoute aussi les critères utiles : ici, vingt et un ans minimum et un permis B depuis trois ans dans la consigne. La capacité reste réelle : une demande occupe déjà une place pendant que l’organisation l’examine.", "fallbackDurationMs": 26000 },
-    { "id": "request", "transcript": "Côté bénévole, le créneau annonce clairement qu’il est soumis à validation avant même l’inscription. Une fois le formulaire envoyé, la page personnelle affiche Demande envoyée, en attente de réponse : ce n’est pas présenté comme une confirmation définitive.", "fallbackDurationMs": 25000 },
-    { "id": "admin", "transcript": "Dans les inscriptions, le filtre Demandes à traiter isole les candidatures. L’organisateur voit le nom, les coordonnées, les réponses au formulaire, les disponibilités et les éventuels avertissements de charge avant de prendre sa décision.", "fallbackDurationMs": 24000 },
-    { "id": "decision", "transcript": "Accepter confirme le créneau et envoie un email. Refuser libère la place et prévient aussi la personne ; ce parcours permet d’ajouter un message facultatif, sans exposer de notes internes. Après avoir vérifié cette possibilité, nous acceptons la demande de Lucas.", "fallbackDurationMs": 26000 },
-    { "id": "volunteer", "transcript": "Sur sa page personnelle, Lucas voit maintenant le créneau comme confirmé, avec les informations pratiques et son lien calendrier. Avant la décision, il pouvait retirer sa demande lui-même. Après un refus, la mission disparaît de ses engagements actifs.", "fallbackDurationMs": 24000 },
-    { "id": "result", "transcript": "Le mode sur validation évite donc une affectation risquée sans transformer l’inscription en boîte noire. Les critères sont annoncés avant la demande, la place est réservée pendant l’examen, la décision est traçable et la personne reçoit une réponse claire.", "fallbackDurationMs": 23000 }
+    {
+      "id": "welcome",
+      "transcript": "Pour une mission sensible, comme conduire une navette, tenir une caisse ou gérer un accès, l’inscription immédiate n’est pas toujours adaptée. Le mode sur validation permet de recueillir une candidature, de réserver la place, puis de décider avec les bonnes informations.",
+      "fallbackDurationMs": 25000
+    },
+    {
+      "id": "setup",
+      "transcript": "Dans le créneau, active Sur validation. Ajoute aussi les critères utiles : ici, vingt et un ans minimum et un permis B depuis trois ans dans la consigne. La capacité reste réelle : une demande occupe déjà une place pendant que l’organisation l’examine.",
+      "fallbackDurationMs": 26000
+    },
+    {
+      "id": "request",
+      "transcript": "Côté bénévole, le créneau annonce clairement qu’il est soumis à validation avant même l’inscription. Une fois le formulaire envoyé, la page personnelle affiche Demande envoyée, en attente de réponse : ce n’est pas présenté comme une confirmation définitive.",
+      "fallbackDurationMs": 25000
+    },
+    {
+      "id": "admin",
+      "transcript": "Dans les inscriptions, le filtre Demandes à traiter isole les candidatures. L’organisateur voit le nom, les coordonnées, les réponses au formulaire, les disponibilités et les éventuels avertissements de charge avant de prendre sa décision.",
+      "fallbackDurationMs": 24000
+    },
+    {
+      "id": "decision",
+      "transcript": "Accepter confirme le créneau et envoie un email. Refuser libère la place et prévient aussi la personne ; ce parcours permet d’ajouter un message facultatif, sans exposer de notes internes. Après avoir vérifié cette possibilité, nous acceptons la demande de Lucas.",
+      "fallbackDurationMs": 26000
+    },
+    {
+      "id": "volunteer",
+      "transcript": "Sur sa page personnelle, Lucas voit maintenant le créneau comme confirmé, avec les informations pratiques et son lien calendrier. Avant la décision, il pouvait retirer sa demande lui-même. Après un refus, la mission disparaît de ses engagements actifs.",
+      "fallbackDurationMs": 24000
+    },
+    {
+      "id": "result",
+      "transcript": "Le mode sur validation évite donc une affectation risquée sans transformer l’inscription en boîte noire. Les critères sont annoncés avant la demande, la place est réservée pendant l’examen, la décision est traçable et la personne reçoit une réponse claire.",
+      "fallbackDurationMs": 23000
+    }
   ]
 }

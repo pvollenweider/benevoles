@@ -3,19 +3,71 @@
   "slug": "event-create-blank",
   "title": "Créer un événement depuis une page blanche",
   "description": "Créer un brouillon complet avec ses dates, son lieu, sa carte et les informations présentées aux bénévoles.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous créez un événement complet depuis une page blanche, prêt à être complété avant publication.",
+    "steps": [
+      "Choisissez « Page blanche » et saisissez un titre, une description et les dates réelles de l'événement.",
+      "Indiquez le lieu, puis collez des coordonnées ou un lien pour obtenir un lien « Voir sur la carte ».",
+      "Rédigez les instructions publiques et le message de confirmation affiché après l'inscription.",
+      "Rendez le téléphone obligatoire si besoin et choisissez une couleur d'accent pour la page publique.",
+      "Cliquez sur « Créer l'événement » : il est enregistré comme brouillon et vous passez à l'étape des créneaux.",
+      "Revenez modifier les réglages à tout moment : ils sont sauvegardés automatiquement."
+    ],
+    "remember": [
+      "L'événement reste un brouillon privé tant que vous ne le publiez pas.",
+      "La publication est impossible tant qu'aucun créneau actif n'existe.",
+      "Le téléphone obligatoire et la couleur d'accent restent modifiables plus tard."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "welcome", "transcript": "Quand aucun modèle ne correspond vraiment, pars d’une page blanche. L’événement est d’abord créé comme brouillon : tu peux donc préparer tranquillement les informations et le planning avant de montrer quoi que ce soit aux bénévoles.", "fallbackDurationMs": 18000 },
-    { "id": "identity-dates", "transcript": "Commençons par un titre parlant, une courte description, puis les dates réelles de la manifestation. La date de fin se cale d’abord sur la date de début ; pour cette fête sur deux jours, nous la faisons terminer le dimanche. Ces dates encadrent ensuite les créneaux et les éventuels spectacles.", "fallbackDurationMs": 25000 },
-    { "id": "location", "transcript": "Le lieu reste lisible comme une adresse normale. Juste dessous, colle une paire de coordonnées ou un lien OpenStreetMap ou Google Maps. L’application extrait le point et prépare un lien Voir sur la carte, sans charger de carte ni appeler un service externe sur la page publique.", "fallbackDurationMs": 24000 },
-    { "id": "public-content", "transcript": "Les instructions publiques apparaissent avant l’inscription : indique ici l’entrée à utiliser et le moment d’arrivée. Le message de confirmation est affiché juste après l’inscription et accepte du texte mis en forme ainsi que des variables. Il doit rassurer et donner la prochaine étape, sans remplacer les consignes propres à chaque créneau.", "fallbackDurationMs": 27000 },
-    { "id": "phone-color", "transcript": "Rends le téléphone obligatoire seulement si l’équipe doit réellement joindre les bénévoles le jour même. La couleur d’accent personnalise la page publique avec une palette contrôlée pour garder un contraste lisible. Ces deux choix pourront être modifiés plus tard.", "fallbackDurationMs": 21000 },
-    { "id": "create", "transcript": "Le bouton Créer l’événement enregistre maintenant un brouillon, puis ouvre directement l’étape des créneaux. Rien n’est encore publié. Le bandeau de progression montre clairement qu’il reste à construire le planning, vérifier le parcours bénévole et décider du moment de publication.", "fallbackDurationMs": 23000 },
-    { "id": "autosave", "transcript": "Une fois le brouillon créé, les réglages sont sauvegardés automatiquement après une courte pause. On peut donc quitter cette page, revenir depuis la liste des événements et reprendre la préparation. Le témoin Enregistré confirme que la dernière modification est bien conservée.", "fallbackDurationMs": 22000 },
-    { "id": "result", "transcript": "Le résultat est un événement structuré mais encore privé : identité, dates, adresse, position GPS et messages sont prêts. L’étape suivante consiste à créer au moins un créneau ; la publication restera impossible tant que le planning ne contient aucune place active.", "fallbackDurationMs": 20000 }
+    {
+      "id": "welcome",
+      "transcript": "Quand aucun modèle ne correspond vraiment, pars d’une page blanche. L’événement est d’abord créé comme brouillon : tu peux donc préparer tranquillement les informations et le planning avant de montrer quoi que ce soit aux bénévoles.",
+      "fallbackDurationMs": 18000
+    },
+    {
+      "id": "identity-dates",
+      "transcript": "Commençons par un titre parlant, une courte description, puis les dates réelles de la manifestation. La date de fin se cale d’abord sur la date de début ; pour cette fête sur deux jours, nous la faisons terminer le dimanche. Ces dates encadrent ensuite les créneaux et les éventuels spectacles.",
+      "fallbackDurationMs": 25000
+    },
+    {
+      "id": "location",
+      "transcript": "Le lieu reste lisible comme une adresse normale. Juste dessous, colle une paire de coordonnées ou un lien OpenStreetMap ou Google Maps. L’application extrait le point et prépare un lien Voir sur la carte, sans charger de carte ni appeler un service externe sur la page publique.",
+      "fallbackDurationMs": 24000
+    },
+    {
+      "id": "public-content",
+      "transcript": "Les instructions publiques apparaissent avant l’inscription : indique ici l’entrée à utiliser et le moment d’arrivée. Le message de confirmation est affiché juste après l’inscription et accepte du texte mis en forme ainsi que des variables. Il doit rassurer et donner la prochaine étape, sans remplacer les consignes propres à chaque créneau.",
+      "fallbackDurationMs": 27000
+    },
+    {
+      "id": "phone-color",
+      "transcript": "Rends le téléphone obligatoire seulement si l’équipe doit réellement joindre les bénévoles le jour même. La couleur d’accent personnalise la page publique avec une palette contrôlée pour garder un contraste lisible. Ces deux choix pourront être modifiés plus tard.",
+      "fallbackDurationMs": 21000
+    },
+    {
+      "id": "create",
+      "transcript": "Le bouton Créer l’événement enregistre maintenant un brouillon, puis ouvre directement l’étape des créneaux. Rien n’est encore publié. Le bandeau de progression montre clairement qu’il reste à construire le planning, vérifier le parcours bénévole et décider du moment de publication.",
+      "fallbackDurationMs": 23000
+    },
+    {
+      "id": "autosave",
+      "transcript": "Une fois le brouillon créé, les réglages sont sauvegardés automatiquement après une courte pause. On peut donc quitter cette page, revenir depuis la liste des événements et reprendre la préparation. Le témoin Enregistré confirme que la dernière modification est bien conservée.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "result",
+      "transcript": "Le résultat est un événement structuré mais encore privé : identité, dates, adresse, position GPS et messages sont prêts. L’étape suivante consiste à créer au moins un créneau ; la publication restera impossible tant que le planning ne contient aucune place active.",
+      "fallbackDurationMs": 20000
+    }
   ]
 }

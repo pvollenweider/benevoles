@@ -3,17 +3,61 @@
   "slug": "event-program-pages-qr",
   "title": "Programme, pages d’information et QR code",
   "description": "Enrichir la page publique avec un programme, des pages pratiques et des supports QR prêts à partager.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous complétez votre page d'inscription avec un programme, des pages d'information et un QR code à diffuser.",
+    "steps": [
+      "Ajoutez chaque spectacle au programme avec son nom, sa date et ses horaires (une fin après minuit reste possible).",
+      "Créez des pages comme Accès, Foire aux questions ou Règlement, en Markdown.",
+      "Organisez l'ordre d'affichage des pages.",
+      "Vérifiez que le programme et les pages apparaissent correctement sur la page publique.",
+      "Téléchargez le QR code en PNG ou en SVG, ou imprimez la fiche prête à poser.",
+      "Scannez le code avec un vrai téléphone avant de le diffuser."
+    ],
+    "remember": [
+      "Le QR code pointe directement vers la page publique de l'événement.",
+      "Les pages d'information évitent d'alourdir le formulaire d'inscription.",
+      "Relisez toujours les pages publiques avant de diffuser le code."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "welcome", "transcript": "Une bonne page d’inscription ne montre pas seulement des créneaux. Le programme, les informations pratiques et un QR code simple à afficher donnent aux bénévoles le contexte dont ils ont besoin, sans alourdir le formulaire.", "fallbackDurationMs": 19000 },
-    { "id": "program", "transcript": "Le programme se règle avec les dates de l’événement. Chaque spectacle reçoit un nom, une date, une heure de début et une heure de fin. Une fin après minuit reste possible : elle sera présentée correctement dans le planning et servira de repère visuel aux équipes.", "fallbackDurationMs": 24000 },
-    { "id": "pages", "transcript": "Les pages complètent les instructions courtes. On peut créer par exemple Accès, Foire aux questions ou Règlement. Le contenu accepte le Markdown pour structurer des titres, des listes, du gras et des liens. Chaque page peut ensuite être modifiée, supprimée ou déplacée dans l’ordre d’affichage.", "fallbackDurationMs": 26000 },
-    { "id": "public", "transcript": "Sur la page publique, le programme apparaît au bon moment et les pages sont accessibles comme des informations complémentaires. Le bénévole peut ainsi préparer son arrivée sans chercher un ancien email ou appeler l’organisation.", "fallbackDurationMs": 20000 },
-    { "id": "qr", "transcript": "Le QR code pointe directement vers cette page publique. Télécharge-le en PNG pour les réseaux ou un document, en SVG pour une impression nette à toute taille, ou imprime directement la fiche prête à poser sur un stand.", "fallbackDurationMs": 22000 },
-    { "id": "result", "transcript": "Avant de diffuser, scanne le code avec un vrai téléphone et relis les pages publiques. Le résultat doit être immédiat : une personne découvre l’événement, comprend où venir, consulte le programme et peut commencer son inscription.", "fallbackDurationMs": 19000 }
+    {
+      "id": "welcome",
+      "transcript": "Une bonne page d’inscription ne montre pas seulement des créneaux. Le programme, les informations pratiques et un QR code simple à afficher donnent aux bénévoles le contexte dont ils ont besoin, sans alourdir le formulaire.",
+      "fallbackDurationMs": 19000
+    },
+    {
+      "id": "program",
+      "transcript": "Le programme se règle avec les dates de l’événement. Chaque spectacle reçoit un nom, une date, une heure de début et une heure de fin. Une fin après minuit reste possible : elle sera présentée correctement dans le planning et servira de repère visuel aux équipes.",
+      "fallbackDurationMs": 24000
+    },
+    {
+      "id": "pages",
+      "transcript": "Les pages complètent les instructions courtes. On peut créer par exemple Accès, Foire aux questions ou Règlement. Le contenu accepte le Markdown pour structurer des titres, des listes, du gras et des liens. Chaque page peut ensuite être modifiée, supprimée ou déplacée dans l’ordre d’affichage.",
+      "fallbackDurationMs": 26000
+    },
+    {
+      "id": "public",
+      "transcript": "Sur la page publique, le programme apparaît au bon moment et les pages sont accessibles comme des informations complémentaires. Le bénévole peut ainsi préparer son arrivée sans chercher un ancien email ou appeler l’organisation.",
+      "fallbackDurationMs": 20000
+    },
+    {
+      "id": "qr",
+      "transcript": "Le QR code pointe directement vers cette page publique. Télécharge-le en PNG pour les réseaux ou un document, en SVG pour une impression nette à toute taille, ou imprime directement la fiche prête à poser sur un stand.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "result",
+      "transcript": "Avant de diffuser, scanne le code avec un vrai téléphone et relis les pages publiques. Le résultat doit être immédiat : une personne découvre l’événement, comprend où venir, consulte le programme et peut commencer son inscription.",
+      "fallbackDurationMs": 19000
+    }
   ]
 }
