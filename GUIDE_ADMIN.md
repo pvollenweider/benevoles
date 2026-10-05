@@ -765,6 +765,15 @@ Le lien **Vue publique ↗** (visible uniquement si l'événement est publié) o
 
 ## Questions fréquentes
 
+**Un bénévole inscrit sur plusieurs créneaux le même jour reçoit beaucoup de rappels.**
+Chaque créneau a ses propres rappels : J-2, J-1 et le jour même (voir « Rappels automatiques »). Une personne inscrite sur trois créneaux d'une même journée reçoit donc un rappel par créneau à chaque étape. Pour en envoyer moins, décochez les rappels qui ne vous servent pas dans **Paramètres → Emails** (voir « Réglages des emails ») : le réglage vaut pour toute l'organisation.
+
+**Une personne s'est inscrite avec une adresse email mal saisie et a maintenant deux fiches.**
+Quand un email lui est définitivement refusé, sa fiche porte l'étiquette **Adresse à vérifier** : corrigez l'adresse depuis sa fiche. Si une seconde fiche a été créée, la page **Doublons possibles** la propose à côté de la première, avec les raisons du rapprochement ; le propriétaire de l'organisation peut alors **fusionner** les deux fiches, avec un aperçu de tout ce qui sera déplacé avant de confirmer (voir « Doublons possibles » et « Fusionner deux fiches en double »).
+
+**Les bénévoles aimeraient savoir qui est déjà inscrit sur un créneau.**
+La page publique d'un événement n'affiche aucun nom : elle montre les places libres, jamais les personnes inscrites. Pour qu'une personne suive l'équipe d'un poste, faites-en un·e responsable de secteur (voir « Responsables de secteur ») : son lien personnel affiche qui est inscrit sur son poste.
+
 **J'organise un événement sur plusieurs jours avec des postes différents chaque jour — comment je structure ça ?**
 Un seul événement, un seul planning : la timeline des créneaux affiche chaque jour de l'événement l'un sous l'autre. Créez un poste par type de mission (« Sécurité », « Bar »…) une seule fois — il regroupe automatiquement tous ses créneaux, même sur des jours différents et avec des horaires ou des capacités qui changent d'un jour à l'autre.
 
