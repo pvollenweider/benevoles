@@ -7,78 +7,112 @@
  */
 
 import type { NotificationPayload } from "../types"
-import { clockTime } from "../../gantt-utils"
-import { MAP_LINK_EMAIL_LABEL } from "../../map-link"
-import { shiftInfoLines } from "../../shift-info"
-import { myPageUrl, escapeHtml, btn, wrap, type RenderedEmail } from "./shared"
+import { clockTime, fmtRange } from "../../gantt-utils"
+import { shiftInfoText, type ShiftInfo } from "../../shift-info"
+import { myPageUrl, escapeHtml, shiftInfoHtml, btn, wrap, type RenderedEmail } from "./shared"
 
-// ── Rappels auto ─────────────────────────────────────────────────────────────
+// ── Rappels auto (#672 : un email par bénévole, événement et jour) ──────────
+
+/** One shift of a reminder group, in time order. */
+export type ReminderShift = { label: string; roleName: string; date: string; startTime: string; endTime: string } & ShiftInfo
 
 type ReminderData = {
   volunteerName: string
   eventTitle: string
   organizationName: string
-  shiftLabel: string
-  shiftRoleName: string
-  shiftDate: string
-  shiftStart: string
-  shiftEnd: string
-  shiftLocation: string | null
-  /** Map link of the meeting point (#191). */
-  shiftMapUrl?: string | null
-  shiftContactName?: string | null
-  shiftContactPhone?: string | null
-  shiftInstructions?: string | null
+  /** Every active shift of this volunteer, event and local day still due this window (#672), sorted by start. */
+  shifts: ReminderShift[]
   editToken: string
+  /** Hours until the group's earliest shift (reminder_dd only). */
   hoursUntil?: number
   orgSlug?: string
 }
 
-/** Contact and instructions of the reminded shift (the place is already in each template). */
-function reminderExtras(d: ReminderData) {
-  return shiftInfoLines({ contactName: d.shiftContactName, contactPhone: d.shiftContactPhone, instructions: d.shiftInstructions })
+// Role and label joined like the rest of the emails (administration.ts, signup-recap.ts): no
+// em-dash, "·" between role and variant only — never between a time and a role (below).
+const roleLine = (s: ReminderShift) => (s.label && s.label !== s.roleName ? `${s.roleName} · ${s.label}` : s.roleName)
+
+/** Plain-text block for one shift of a group, indented so it reads as a sub-item. */
+function shiftBlockText(s: ReminderShift): string[] {
+  return [
+    `  • ${fmtRange(s.startTime, s.endTime)} : ${roleLine(s)}`,
+    ...shiftInfoText(s).map((l) => `      ${l}`),
+  ]
 }
-const extrasText = (d: ReminderData) => [d.shiftMapUrl ? `Voir sur la carte : ${d.shiftMapUrl}` : "", ...reminderExtras(d).map((l) => `${l.label} : ${l.text}`)].filter(Boolean)
-const extrasHtml = (d: ReminderData) => [d.shiftMapUrl ? `<div><a href="${escapeHtml(d.shiftMapUrl)}">${MAP_LINK_EMAIL_LABEL}</a></div>` : "", ...reminderExtras(d).map((l) => `<div>${escapeHtml(l.label)} : ${escapeHtml(l.text)}</div>`)].join("")
+
+/** One shift of a group as a list item (screen readers announce the list and its items, #672). */
+function shiftBlockHtml(s: ReminderShift): string {
+  return `
+    <li style="list-style:none;padding:6px 0;border-bottom:1px solid #e5e7eb">
+      <strong>${escapeHtml(fmtRange(s.startTime, s.endTime))}</strong>
+      <span style="color:#666;font-size:0.9em"> : ${escapeHtml(roleLine(s))}</span>
+      ${shiftInfoHtml(s)}
+    </li>`
+}
 
 export function renderReminderJ2(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
   const editUrl = myPageUrl(d.orgSlug, d.editToken)
   const firstName = d.volunteerName.split(" ")[0]
+  const first = d.shifts[0]
   const subject = `J-2 — On se retrouve bientôt ! ${d.eventTitle}`
 
-  const text = [
-    `Hello ${firstName} !`,
-    ``,
-    `Plus que 2 jours avant ${d.eventTitle}, on se réjouit de te retrouver !`,
-    ``,
-    `Ton créneau :`,
-    `📅 ${d.shiftDate}`,
-    `🕐 ${clockTime(d.shiftStart)}–${clockTime(d.shiftEnd)}`,
-    d.shiftLocation ? `📍 ${d.shiftLocation}` : ``,
-    `Mission : ${d.shiftRoleName}`,
-    ...extrasText(d),
-    ``,
-    `Un empêchement ? Préviens-nous le plus vite possible :`,
-    editUrl,
-    ``,
-    `Une grosse bise et à très vite !`,
-    d.organizationName,
-  ].filter(Boolean).join("\n")
+  const text = d.shifts.length === 1
+    ? [
+        `Hello ${firstName} !`,
+        ``,
+        `Plus que 2 jours avant ${d.eventTitle}, on se réjouit de te retrouver !`,
+        ``,
+        `Ton créneau :`,
+        `📅 ${first.date}`,
+        `🕐 ${fmtRange(first.startTime, first.endTime)}`,
+        `Mission : ${roleLine(first)}`,
+        ...shiftInfoText(first),
+        ``,
+        `Un empêchement ? Préviens-nous le plus vite possible :`,
+        editUrl,
+        ``,
+        `Une grosse bise et à très vite !`,
+        d.organizationName,
+      ].filter(Boolean).join("\n")
+    : [
+        `Hello ${firstName} !`,
+        ``,
+        `Plus que 2 jours avant ${d.eventTitle}, on se réjouit de te retrouver !`,
+        ``,
+        `Tes créneaux du ${first.date} :`,
+        ...d.shifts.flatMap(shiftBlockText),
+        ``,
+        `Un empêchement ? Préviens-nous le plus vite possible :`,
+        editUrl,
+        ``,
+        `Une grosse bise et à très vite !`,
+        d.organizationName,
+      ].join("\n")
 
-  const html = wrap(`
+  const html = d.shifts.length === 1
+    ? wrap(`
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 👋</h2>
     <p style="color:#555;margin:0 0 1.25em">Plus que 2 jours avant <strong>${escapeHtml(d.eventTitle)}</strong>, on se réjouit de te retrouver !</p>
     <div style="background:#f9fafb;border-radius:10px;padding:14px 16px;line-height:2">
-      <div>📅 ${escapeHtml(d.shiftDate)}</div>
-      <div>🕐 ${escapeHtml(clockTime(d.shiftStart))}–${escapeHtml(clockTime(d.shiftEnd))}</div>
-      ${d.shiftLocation ? `<div>📍 ${escapeHtml(d.shiftLocation)}</div>` : ""}
-      <div>Mission : <strong>${escapeHtml(d.shiftRoleName)}</strong></div>
-      ${extrasHtml(d)}
+      <div>📅 ${escapeHtml(first.date)}</div>
+      <div>🕐 ${escapeHtml(fmtRange(first.startTime, first.endTime))}</div>
+      <div>Mission : <strong>${escapeHtml(roleLine(first))}</strong></div>
+      ${shiftInfoHtml(first)}
     </div>
     <p style="margin-top:1.5em">${btn(editUrl, "Annuler si je ne peux plus venir")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">Une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
-  `, `${escapeHtml(d.shiftRoleName)} · ${escapeHtml(d.shiftDate)} · ${escapeHtml(clockTime(d.shiftStart))}–${escapeHtml(clockTime(d.shiftEnd))}`)
+  `, `${escapeHtml(roleLine(first))} · ${escapeHtml(first.date)} · ${escapeHtml(fmtRange(first.startTime, first.endTime))}`)
+    : wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 👋</h2>
+    <p style="color:#555;margin:0 0 1.25em">Plus que 2 jours avant <strong>${escapeHtml(d.eventTitle)}</strong>, on se réjouit de te retrouver !</p>
+    <p style="color:#555;margin:0 0 0.5em">Tes créneaux du <strong>${escapeHtml(first.date)}</strong> :</p>
+    <ul style="list-style:none;margin:0;padding:14px 16px;background:#f9fafb;border-radius:10px">
+      ${d.shifts.map(shiftBlockHtml).join("")}
+    </ul>
+    <p style="margin-top:1.5em">${btn(editUrl, "Annuler un créneau si je ne peux plus venir")}</p>
+    <p style="color:#888;font-size:0.85em;margin-top:2em">Une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
+  `, `${d.shifts.length} créneaux le ${escapeHtml(first.date)}`)
 
   return { subject, html, text }
 }
@@ -87,30 +121,54 @@ export function renderReminderJ1(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
   const editUrl = myPageUrl(d.orgSlug, d.editToken)
   const firstName = d.volunteerName.split(" ")[0]
+  const first = d.shifts[0]
   const subject = `Demain c'est le jour J — ${d.eventTitle} !`
 
-  const text = [
-    `Hello ${firstName} !`,
-    ``,
-    `C'est demain ! ${d.eventTitle} à ${clockTime(d.shiftStart)}${d.shiftLocation ? `, à ${d.shiftLocation}` : ""}.`,
-    `Tu fais : ${d.shiftRoleName}`,
-    ...extrasText(d),
-    ``,
-    `Un empêchement de dernière minute ? Préviens-nous vite :`,
-    editUrl,
-    ``,
-    `On se réjouit de te retrouver !`,
-    d.organizationName,
-  ].join("\n")
+  const text = d.shifts.length === 1
+    ? [
+        `Hello ${firstName} !`,
+        ``,
+        `C'est demain ! ${d.eventTitle} à ${clockTime(first.startTime)}${first.locationDetails ? `, à ${first.locationDetails}` : ""}.`,
+        `Tu fais : ${roleLine(first)}`,
+        ...shiftInfoText(first),
+        ``,
+        `Un empêchement de dernière minute ? Préviens-nous vite :`,
+        editUrl,
+        ``,
+        `On se réjouit de te retrouver !`,
+        d.organizationName,
+      ].join("\n")
+    : [
+        `Hello ${firstName} !`,
+        ``,
+        `C'est demain ! Tes créneaux du ${first.date} pour ${d.eventTitle} :`,
+        ...d.shifts.flatMap(shiftBlockText),
+        ``,
+        `Un empêchement de dernière minute ? Préviens-nous vite :`,
+        editUrl,
+        ``,
+        `On se réjouit de te retrouver !`,
+        d.organizationName,
+      ].join("\n")
 
-  const html = wrap(`
+  const html = d.shifts.length === 1
+    ? wrap(`
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! C'est demain ! 🙌</h2>
-    <p style="color:#555;margin:0 0 1.25em"><strong>${escapeHtml(d.eventTitle)}</strong> demain à ${escapeHtml(clockTime(d.shiftStart))}${d.shiftLocation ? `, à ${escapeHtml(d.shiftLocation)}` : ""}.</p>
-    <p>Tu fais : <strong>${escapeHtml(d.shiftRoleName)}</strong></p>
-    ${reminderExtras(d).length ? `<div style="background:#f9fafb;border-radius:10px;padding:14px 16px;line-height:2">${extrasHtml(d)}</div>` : ""}
+    <p style="color:#555;margin:0 0 1.25em"><strong>${escapeHtml(d.eventTitle)}</strong> demain à ${escapeHtml(clockTime(first.startTime))}${first.locationDetails ? `, à ${escapeHtml(first.locationDetails)}` : ""}.</p>
+    <p>Tu fais : <strong>${escapeHtml(roleLine(first))}</strong></p>
+    ${shiftInfoHtml(first)}
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mon inscription")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
-  `, `RDV demain à ${clockTime(d.shiftStart)}${d.shiftLocation ? ` · ${d.shiftLocation}` : ""} — mission : ${d.shiftRoleName}`)
+  `, `RDV demain à ${clockTime(first.startTime)}${first.locationDetails ? ` · ${first.locationDetails}` : ""} — mission : ${roleLine(first)}`)
+    : wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! C'est demain ! 🙌</h2>
+    <p style="color:#555;margin:0 0 0.5em"><strong>${escapeHtml(d.eventTitle)}</strong> demain : tes créneaux du <strong>${escapeHtml(first.date)}</strong> :</p>
+    <ul style="list-style:none;margin:0;padding:14px 16px;background:#f9fafb;border-radius:10px">
+      ${d.shifts.map(shiftBlockHtml).join("")}
+    </ul>
+    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
+    <p style="color:#888;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
+  `, `${d.shifts.length} créneaux demain`)
 
   return { subject, html, text }
 }
@@ -119,36 +177,57 @@ export function renderReminderDd(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
   const editUrl = myPageUrl(d.orgSlug, d.editToken)
   const firstName = d.volunteerName.split(" ")[0]
+  const first = d.shifts[0]
   const hoursLabel = d.hoursUntil && d.hoursUntil > 0 ? `dans ${d.hoursUntil}h` : "très bientôt"
   const subject = `C'est aujourd'hui — RDV ${hoursLabel} ! ${d.eventTitle}`
 
-  const text = [
-    `Hello ${firstName} !`,
-    ``,
-    `C'est aujourd'hui ! RDV ${hoursLabel} pour ${d.eventTitle}.`,
-    d.shiftLocation ? `📍 ${d.shiftLocation}` : ``,
-    `🕐 ${clockTime(d.shiftStart)}`,
-    `Mission : ${d.shiftRoleName}`,
-    ...extrasText(d),
-    ``,
-    editUrl,
-    ``,
-    `On se réjouit de te retrouver !`,
-    d.organizationName,
-  ].filter(Boolean).join("\n")
+  const text = d.shifts.length === 1
+    ? [
+        `Hello ${firstName} !`,
+        ``,
+        `C'est aujourd'hui ! RDV ${hoursLabel} pour ${d.eventTitle}.`,
+        `🕐 ${clockTime(first.startTime)}`,
+        `Mission : ${roleLine(first)}`,
+        ...shiftInfoText(first),
+        ``,
+        editUrl,
+        ``,
+        `On se réjouit de te retrouver !`,
+        d.organizationName,
+      ].filter(Boolean).join("\n")
+    : [
+        `Hello ${firstName} !`,
+        ``,
+        `C'est aujourd'hui ! RDV ${hoursLabel} pour le premier de tes ${d.shifts.length} créneaux de ${d.eventTitle} :`,
+        ...d.shifts.flatMap(shiftBlockText),
+        ``,
+        editUrl,
+        ``,
+        `On se réjouit de te retrouver !`,
+        d.organizationName,
+      ].join("\n")
 
-  const html = wrap(`
+  const html = d.shifts.length === 1
+    ? wrap(`
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! C'est aujourd'hui 🎉</h2>
     <p style="color:#555;margin:0 0 1.25em">RDV <strong>${hoursLabel}</strong> pour <strong>${escapeHtml(d.eventTitle)}</strong> !</p>
     <div style="background:#f9fafb;border-radius:10px;padding:14px 16px;line-height:2">
-      ${d.shiftLocation ? `<div>📍 ${escapeHtml(d.shiftLocation)}</div>` : ""}
-      <div>🕐 ${escapeHtml(clockTime(d.shiftStart))}</div>
-      <div>Mission : <strong>${escapeHtml(d.shiftRoleName)}</strong></div>
-      ${extrasHtml(d)}
+      <div>🕐 ${escapeHtml(clockTime(first.startTime))}</div>
+      <div>Mission : <strong>${escapeHtml(roleLine(first))}</strong></div>
+      ${shiftInfoHtml(first)}
     </div>
     <p style="margin-top:1.5em">${btn(editUrl, "Voir mon inscription")}</p>
     <p style="color:#888;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
-  `, `${d.shiftRoleName} · RDV ${hoursLabel}${d.shiftLocation ? ` à ${d.shiftLocation}` : ""}`)
+  `, `${roleLine(first)} · RDV ${hoursLabel}${first.locationDetails ? ` à ${first.locationDetails}` : ""}`)
+    : wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! C'est aujourd'hui 🎉</h2>
+    <p style="color:#555;margin:0 0 0.5em">RDV <strong>${hoursLabel}</strong> pour le premier de tes <strong>${d.shifts.length} créneaux</strong> de <strong>${escapeHtml(d.eventTitle)}</strong> :</p>
+    <ul style="list-style:none;margin:0;padding:14px 16px;background:#f9fafb;border-radius:10px">
+      ${d.shifts.map(shiftBlockHtml).join("")}
+    </ul>
+    <p style="margin-top:1.5em">${btn(editUrl, "Voir mes inscriptions")}</p>
+    <p style="color:#888;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
+  `, `${d.shifts.length} créneaux aujourd'hui, RDV ${hoursLabel}`)
 
   return { subject, html, text }
 }

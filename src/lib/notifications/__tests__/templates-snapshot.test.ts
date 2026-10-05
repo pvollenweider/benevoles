@@ -24,23 +24,47 @@ const tricky = `Fête <Rhône> & "Lac"`
 
 const shift = { label: "Accueil", date: "samedi 12 juillet", startTime: "09:00", endTime: "12:30" }
 
+const reminderShift = {
+  label: "Accueil matin",
+  roleName: "Accueil",
+  date: "samedi 12 juillet",
+  startTime: "09:00",
+  endTime: "12:30",
+  locationDetails: "Place du Marché",
+  latitude: 46.5,
+  longitude: 6.6,
+  contactName: "Marc",
+  contactPhone: "079 123 45 67",
+  instructions: "Gilet orange fourni",
+}
+
 const reminder = {
   volunteerName: "Julie Martin",
   eventTitle: "Festival du Rhône",
   organizationName: "Rhône Rocks",
-  shiftLabel: "Accueil matin",
-  shiftRoleName: "Accueil",
-  shiftDate: "samedi 12 juillet",
-  shiftStart: "09:00",
-  shiftEnd: "12:30",
-  shiftLocation: "Place du Marché",
-  shiftMapUrl: "https://www.openstreetmap.org/?mlat=46.5&mlon=6.6",
-  shiftContactName: "Marc",
-  shiftContactPhone: "079 123 45 67",
-  shiftInstructions: "Gilet orange fourni",
+  shifts: [reminderShift],
   editToken: "edit-tok",
   hoursUntil: 3,
   orgSlug: "rhone",
+}
+
+// Three shifts of the same day (#672): grouped, time-sorted, each with its own place/contact.
+const reminderGroup3 = {
+  ...reminder,
+  shifts: [
+    reminderShift,
+    { ...reminderShift, label: "Bar midi", roleName: "Bar", startTime: "12:30", endTime: "15:00", contactName: null, contactPhone: null, instructions: null },
+    { ...reminderShift, label: "Rangement", roleName: "Logistique", startTime: "18:00", endTime: "20:00", locationDetails: null, latitude: null, longitude: null },
+  ],
+}
+
+// A night shift inside a group (#672): fmtRange adds « (jusqu'au lendemain) » for it, and only it.
+const reminderGroupNight = {
+  ...reminder,
+  shifts: [
+    reminderShift,
+    { ...reminderShift, label: "Fermeture", roleName: "Sécurité", startTime: "22:00", endTime: "02:00", contactName: null, contactPhone: null, instructions: null },
+  ],
 }
 
 const cases: [string, NotificationPayload][] = [
@@ -98,16 +122,22 @@ const cases: [string, NotificationPayload][] = [
   ["reminder_j2 (no location, no extras)", {
     kind: "reminder_j2",
     recipient,
-    data: { ...reminder, shiftLocation: null, shiftMapUrl: null, shiftContactName: null, shiftContactPhone: null, shiftInstructions: null, orgSlug: undefined },
+    data: { ...reminder, shifts: [{ ...reminderShift, locationDetails: null, latitude: null, longitude: null, contactName: null, contactPhone: null, instructions: null }], orgSlug: undefined },
   }],
+  ["reminder_j2 (group of 3, same day)", { kind: "reminder_j2", recipient, data: reminderGroup3 }],
+  ["reminder_j2 (group with a night shift)", { kind: "reminder_j2", recipient, data: reminderGroupNight }],
   ["reminder_j1", { kind: "reminder_j1", recipient, data: reminder }],
   ["reminder_j1 (no location, no extras)", {
     kind: "reminder_j1",
     recipient,
-    data: { ...reminder, shiftLocation: null, shiftMapUrl: null, shiftContactName: null, shiftContactPhone: null, shiftInstructions: null },
+    data: { ...reminder, shifts: [{ ...reminderShift, locationDetails: null, latitude: null, longitude: null, contactName: null, contactPhone: null, instructions: null }] },
   }],
+  ["reminder_j1 (group of 3, same day)", { kind: "reminder_j1", recipient, data: reminderGroup3 }],
+  ["reminder_j1 (group with a night shift)", { kind: "reminder_j1", recipient, data: reminderGroupNight }],
   ["reminder_dd", { kind: "reminder_dd", recipient, data: reminder }],
-  ["reminder_dd (very soon)", { kind: "reminder_dd", recipient, data: { ...reminder, hoursUntil: 0, shiftLocation: null } }],
+  ["reminder_dd (very soon)", { kind: "reminder_dd", recipient, data: { ...reminder, hoursUntil: 0, shifts: [{ ...reminderShift, locationDetails: null, latitude: null, longitude: null }] } }],
+  ["reminder_dd (group of 3, same day)", { kind: "reminder_dd", recipient, data: reminderGroup3 }],
+  ["reminder_dd (group with a night shift)", { kind: "reminder_dd", recipient, data: reminderGroupNight }],
   ["manual_reminder", {
     kind: "manual_reminder",
     recipient,

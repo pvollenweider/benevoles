@@ -62,12 +62,7 @@ describe("notification templates — render()", () => {
         volunteerName: "Alice",
         eventTitle: "Concert",
         organizationName: "Asso",
-        shiftLabel: "Buvette",
-        shiftRoleName: "Bar",
-        shiftDate: "samedi 14 juin",
-        shiftStart: "14:00",
-        shiftEnd: "18:00",
-        shiftLocation: "Salle des fêtes",
+        shifts: [{ label: "Buvette", roleName: "Bar", date: "samedi 14 juin", startTime: "14:00", endTime: "18:00", locationDetails: "Salle des fêtes" }],
         editToken: "tok",
       },
     })
@@ -75,6 +70,29 @@ describe("notification templates — render()", () => {
     expect(out.text).toContain("Salle des fêtes")
     expect(out.text).toContain("14:00")
     expect(out.text).toContain("/my/tok")
+  })
+
+  it("renders reminder J-2 for several shifts of the same day, in time order (#672)", () => {
+    const out = render({
+      kind: "reminder_j2",
+      recipient: { email: "a@x.com" },
+      data: {
+        volunteerName: "Alice",
+        eventTitle: "Concert",
+        organizationName: "Asso",
+        shifts: [
+          { label: "Buvette", roleName: "Bar", date: "samedi 14 juin", startTime: "09:00", endTime: "12:00" },
+          { label: "Montage", roleName: "Logistique", date: "samedi 14 juin", startTime: "14:00", endTime: "18:00" },
+        ],
+        editToken: "tok",
+      },
+    })
+    expect(out.subject).toContain("J-2")
+    expect(out.text).toContain("09:00")
+    expect(out.text).toContain("14:00")
+    expect(out.text.indexOf("09:00")).toBeLessThan(out.text.indexOf("14:00"))
+    expect(out.text).toContain("Bar")
+    expect(out.text).toContain("Logistique")
   })
 
   it("renders reminder day-of with hoursUntil", () => {
@@ -85,12 +103,7 @@ describe("notification templates — render()", () => {
         volunteerName: "Alice",
         eventTitle: "Concert",
         organizationName: "Asso",
-        shiftLabel: "Buvette",
-        shiftRoleName: "Bar",
-        shiftDate: "samedi 14 juin",
-        shiftStart: "14:00",
-        shiftEnd: "18:00",
-        shiftLocation: null,
+        shifts: [{ label: "Buvette", roleName: "Bar", date: "samedi 14 juin", startTime: "14:00", endTime: "18:00", locationDetails: null }],
         editToken: "tok",
         hoursUntil: 3,
       },
@@ -195,9 +208,12 @@ describe("notification templates — shift practical info", () => {
       kind,
       recipient: { email: "a@x.ch", name: "Alice" },
       data: {
-        volunteerName: "Alice", eventTitle: "Fête", organizationName: "Org", shiftLabel: "Bar", shiftRoleName: "Bar",
-        shiftDate: "samedi 4 juillet", shiftStart: "10:00", shiftEnd: "12:00", shiftLocation: "Entrée B",
-        shiftContactName: "Léa", shiftContactPhone: "079 000 00 00", shiftInstructions: "Gilet fourni", editToken: "tok", hoursUntil: 3,
+        volunteerName: "Alice", eventTitle: "Fête", organizationName: "Org",
+        shifts: [{
+          label: "Bar", roleName: "Bar", date: "samedi 4 juillet", startTime: "10:00", endTime: "12:00", locationDetails: "Entrée B",
+          contactName: "Léa", contactPhone: "079 000 00 00", instructions: "Gilet fourni",
+        }],
+        editToken: "tok", hoursUntil: 3,
       },
     })
     expect(out.text).toContain("Contact : Léa · 079 000 00 00")

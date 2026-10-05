@@ -563,9 +563,11 @@ Avant d'envoyer, rédiger un message dans la section « Message de rappel » (pa
 ### Rappels automatiques
 
 L'application envoie automatiquement des rappels :
-- **J-2** (48 h avant le shift) : rappel avec détails du créneau
-- **J-1** (24 h avant) : rappel court
-- **Jour J** (2–4 h avant) : rappel de dernière minute
+- **J-2** (48 h avant le premier créneau du jour) : rappel avec détails des créneaux
+- **J-1** (24 h avant le premier créneau du jour) : rappel court
+- **Jour J** (2–4 h avant le premier créneau du jour) : rappel de dernière minute
+
+Un bénévole inscrit sur plusieurs créneaux le même jour pour un même événement ne reçoit qu'un seul email par rappel (un seul J-2, un seul J-1, un seul rappel du jour), listant tous ses créneaux de ce jour-là dans l'ordre des horaires, plutôt qu'un email par créneau. S'il est aussi inscrit le même jour sur un autre événement, il reçoit un email séparé pour cet événement. Un créneau de nuit (qui se termine après minuit) compte sur son jour de début. Une inscription faite après l'envoi du rappel du jour (inscription tardive) reçoit son propre rappel, sans jamais en manquer ni en dupliquer un.
 
 Ces rappels sont envoyés sans intervention de votre part pour les événements publiés, sauf ceux décochés pour toute l'organisation dans **Paramètres → Emails** (voir « Réglages des emails »).
 
@@ -766,7 +768,7 @@ Le lien **Vue publique ↗** (visible uniquement si l'événement est publié) o
 ## Questions fréquentes
 
 **Un bénévole inscrit sur plusieurs créneaux le même jour reçoit beaucoup de rappels.**
-Chaque créneau a ses propres rappels : J-2, J-1 et le jour même (voir « Rappels automatiques »). Une personne inscrite sur trois créneaux d'une même journée reçoit donc un rappel par créneau à chaque étape. Pour en envoyer moins, décochez les rappels qui ne vous servent pas dans **Paramètres → Emails** (voir « Réglages des emails ») : le réglage vaut pour toute l'organisation.
+Ce n'est plus le cas : les rappels sont regroupés par bénévole, par événement et par jour (voir « Rappels automatiques »). Une personne inscrite sur trois créneaux d'une même journée reçoit un seul email à J-2, un seul à J-1 et un seul le jour même, listant ses trois créneaux. Si elle est aussi inscrite le même jour sur un autre événement, elle reçoit un email séparé pour celui-ci. Pour envoyer moins de rappels encore, décochez ceux qui ne vous servent pas dans **Paramètres → Emails** (voir « Réglages des emails ») : le réglage vaut pour toute l'organisation.
 
 **Une personne s'est inscrite avec une adresse email mal saisie et a maintenant deux fiches.**
 Quand un email lui est définitivement refusé, sa fiche porte l'étiquette **Adresse à vérifier** : corrigez l'adresse depuis sa fiche. Si une seconde fiche a été créée, la page **Doublons possibles** la propose à côté de la première, avec les raisons du rapprochement ; le propriétaire de l'organisation peut alors **fusionner** les deux fiches, avec un aperçu de tout ce qui sera déplacé avant de confirmer (voir « Doublons possibles » et « Fusionner deux fiches en double »).
