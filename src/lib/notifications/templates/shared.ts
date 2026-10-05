@@ -77,8 +77,8 @@ ${ph}
      "center" too instead of reading left-aligned like normal body text. -->
 <div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
 ${inner}
-<div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#aaaaaa;text-align:center;">
-  <a href="https://benevol.app" style="color:#aaaaaa;text-decoration:none;">benevol.app</a>
+<div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#666;text-align:center;">
+  <a href="https://benevol.app" style="color:#666;text-decoration:none;">benevol.app</a>
 </div>
 </div>
 </td></tr>

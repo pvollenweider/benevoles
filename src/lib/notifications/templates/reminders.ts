@@ -101,7 +101,7 @@ export function renderReminderJ2(p: NotificationPayload): RenderedEmail {
       ${shiftInfoHtml(first)}
     </div>
     <p style="margin-top:1.5em">${btn(editUrl, "Annuler si je ne peux plus venir")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">Une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">Une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `${escapeHtml(roleLine(first))} · ${escapeHtml(first.date)} · ${escapeHtml(fmtRange(first.startTime, first.endTime))}`)
     : wrap(`
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 👋</h2>
@@ -111,7 +111,7 @@ export function renderReminderJ2(p: NotificationPayload): RenderedEmail {
       ${d.shifts.map(shiftBlockHtml).join("")}
     </ul>
     <p style="margin-top:1.5em">${btn(editUrl, "Annuler un créneau si je ne peux plus venir")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">Une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">Une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `${d.shifts.length} créneaux le ${escapeHtml(first.date)}`)
 
   return { subject, html, text }
@@ -158,7 +158,7 @@ export function renderReminderJ1(p: NotificationPayload): RenderedEmail {
     <p>Tu fais : <strong>${escapeHtml(roleLine(first))}</strong></p>
     ${shiftInfoHtml(first)}
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mon inscription")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `RDV demain à ${clockTime(first.startTime)}${first.locationDetails ? ` · ${first.locationDetails}` : ""} — mission : ${roleLine(first)}`)
     : wrap(`
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! C'est demain ! 🙌</h2>
@@ -167,7 +167,7 @@ export function renderReminderJ1(p: NotificationPayload): RenderedEmail {
       ${d.shifts.map(shiftBlockHtml).join("")}
     </ul>
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `${d.shifts.length} créneaux demain`)
 
   return { subject, html, text }
@@ -217,7 +217,7 @@ export function renderReminderDd(p: NotificationPayload): RenderedEmail {
       ${shiftInfoHtml(first)}
     </div>
     <p style="margin-top:1.5em">${btn(editUrl, "Voir mon inscription")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `${roleLine(first)} · RDV ${hoursLabel}${first.locationDetails ? ` à ${first.locationDetails}` : ""}`)
     : wrap(`
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! C'est aujourd'hui 🎉</h2>
@@ -226,7 +226,7 @@ export function renderReminderDd(p: NotificationPayload): RenderedEmail {
       ${d.shifts.map(shiftBlockHtml).join("")}
     </ul>
     <p style="margin-top:1.5em">${btn(editUrl, "Voir mes inscriptions")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `${d.shifts.length} créneaux aujourd'hui, RDV ${hoursLabel}`)
 
   return { subject, html, text }
@@ -277,7 +277,7 @@ export function renderManualReminder(p: NotificationPayload): RenderedEmail {
         </div>`).join("")}
     </div>
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">Un grand M E R C I, une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">Un grand M E R C I, une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, preheader)
 
   return { subject, html, text }
@@ -334,7 +334,7 @@ export function renderTargetedMessage(p: NotificationPayload): RenderedEmail {
     </div>` : ""}
     ${editUrl ? `<p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>` : ""}
     ${d.signupUrl ? `<p style="margin-top:1.5em">${btn(d.signupUrl, "Choisir mes créneaux")}</p>` : ""}
-    <p style="color:#888;font-size:0.85em;margin-top:2em">À très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">À très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, preheader)
 
   return { subject, html, text }

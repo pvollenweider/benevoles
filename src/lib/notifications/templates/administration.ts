@@ -123,7 +123,7 @@ export function renderPasswordReset(p: NotificationPayload): RenderedEmail {
     <p>Bonjour ${escapeHtml(d.adminName)},</p>
     <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
     <p style="margin-top:1.5em">${btn(d.resetUrl, "Réinitialiser mon mot de passe")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">Ce lien est valable 1 heure. Si vous n'avez pas fait cette demande, ignorez cet email.</p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">Ce lien est valable 1 heure. Si vous n'avez pas fait cette demande, ignorez cet email.</p>
   `, `Cliquez dans l'heure qui suit — si ce n'est pas vous, ignorez cet email.`)
 
   return { subject, html, text }
@@ -155,7 +155,7 @@ export function renderAdminWelcome(p: NotificationPayload): RenderedEmail {
     <h2 style="margin:0 0 0.5em">Bienvenue, ${escapeHtml(d.adminName)} !</h2>
     <p>Votre compte administrateur pour <strong>${escapeHtml(d.organizationName)}</strong> est maintenant actif.</p>
     <p style="margin-top:1.5em">${btn(d.adminUrl, "Accéder à mon espace admin")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">Vous pouvez utiliser ce lien à tout moment pour gérer vos événements et vos bénévoles.</p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">Vous pouvez utiliser ce lien à tout moment pour gérer vos événements et vos bénévoles.</p>
   `, `Votre espace admin est prêt — gérez vos événements et bénévoles dès maintenant.`)
 
   return { subject, html, text }
@@ -179,9 +179,9 @@ export function renderProductUpdate(p: NotificationPayload): RenderedEmail {
 
   const html = wrap(`
     <div style="line-height:1.6">${renderMarkdown(content)}</div>
-    <p style="color:#aaaaaa;font-size:0.8em;margin-top:2em;padding-top:1em;border-top:1px solid #f0f0f0">
+    <p style="color:#666;font-size:0.8em;margin-top:2em;padding-top:1em;border-top:1px solid #f0f0f0">
       Vous recevez cet email en tant qu'administrateur benevol.app.
-      <a href="${unsubscribeUrl}" style="color:#aaaaaa">Se désabonner</a> de ces communications.
+      <a href="${unsubscribeUrl}" style="color:#666">Se désabonner</a> de ces communications.
     </p>
   `, subject)
 

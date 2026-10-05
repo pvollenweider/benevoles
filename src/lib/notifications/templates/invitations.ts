@@ -73,8 +73,8 @@ export function renderMemberInvite(p: NotificationPayload): RenderedEmail {
     ${message ? `<div style="background:#f3f4f6;padding:14px;border-radius:10px;white-space:pre-wrap;margin-bottom:1em">${escapeHtml(message)}</div>` : ""}
     <p style="color:#555">📅 ${escapeHtml(eventDate)}${eventLocation ? `<br>📍 ${escapeHtml(eventLocation)}` : ""}</p>
     <p style="margin-top:1.5em">${btn(inviteUrl, "Voir les missions et m'inscrire")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">Un grand merci d'avance, une grosse bise et à très vite !<br><strong>${escapeHtml(organizationName)}</strong></p>
-    <p style="color:#bbb;font-size:0.8em">Tu ne peux pas participer cette fois ? <a href="${declineUrl}" style="color:#2563eb">Indiquer que je ne suis pas disponible</a>.</p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">Un grand merci d'avance, une grosse bise et à très vite !<br><strong>${escapeHtml(organizationName)}</strong></p>
+    <p style="color:#666;font-size:0.8em">Tu ne peux pas participer cette fois ? <a href="${declineUrl}" style="color:#2563eb">Indiquer que je ne suis pas disponible</a>.</p>
   `, preheader)
 
   return { subject, html, text }
@@ -103,7 +103,7 @@ export function renderAdminInvite(p: NotificationPayload): RenderedEmail {
     <h2 style="margin:0 0 0.5em">Bonjour ${escapeHtml(d.adminName)},</h2>
     <p>Nous vous invitons à rejoindre <strong>${escapeHtml(d.organizationName)}</strong> en tant qu'administratrice ou administrateur sur Bénévoles.</p>
     <p style="margin-top:1.5em">${btn(d.inviteUrl, "Créer mon compte")}</p>
-    <p style="color:#888;font-size:0.85em;margin-top:2em">Ce lien est valable 7 jours. Si vous n'attendiez pas cette invitation, ignorez cet email.</p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">Ce lien est valable 7 jours. Si vous n'attendiez pas cette invitation, ignorez cet email.</p>
   `, `Créez votre compte en un clic — lien valable 7 jours.`)
 
   return { subject, html, text }
