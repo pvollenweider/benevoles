@@ -33,7 +33,10 @@ describe("shiftInfoLines", () => {
     expect(withMap[0]).toEqual({ kind: "place", label: "Lieu", text: "Entrée B", href: "https://www.openstreetmap.org/?mlat=46.18&mlon=6.12#map=17/46.18/6.12" })
     expect(shiftInfoLines({ latitude: 46.18, longitude: 6.12 })[0].text).toBe("Point de rendez-vous")
     expect(shiftInfoLines({ locationDetails: "", latitude: 46.18, longitude: 6.12 })[0]).toMatchObject({ text: "Point de rendez-vous", href: expect.stringContaining("openstreetmap") })
-    expect(shiftInfoText({ locationDetails: "Entrée B", latitude: 46.18, longitude: 6.12 })[0]).toBe("Lieu : Entrée B — Voir sur la carte : https://www.openstreetmap.org/?mlat=46.18&mlon=6.12#map=17/46.18/6.12")
+    expect(shiftInfoText({ locationDetails: "Entrée B", latitude: 46.18, longitude: 6.12 })[0]).toBe("Lieu : Entrée B. Voir sur la carte : https://www.openstreetmap.org/?mlat=46.18&mlon=6.12#map=17/46.18/6.12")
+    // No doubled punctuation when the place already ends a sentence.
+    expect(shiftInfoText({ locationDetails: "Entrée B.", latitude: 46.18, longitude: 6.12 })[0]).toMatch(/^Lieu : Entrée B\. Voir sur la carte : /)
+    expect(shiftInfoText({ locationDetails: "Où ça ?", latitude: 46.18, longitude: 6.12 })[0]).toMatch(/^Lieu : Où ça \? Voir sur la carte : /)
     expect(pickShiftInfo({ latitude: null, longitude: null }, { latitude: 46.2, longitude: 6.1 })).toMatchObject({ latitude: 46.2, longitude: 6.1 })
     expect(pickShiftInfo({ latitude: 46.18, longitude: 6.12 }, { latitude: 46.2, longitude: 6.1 })).toMatchObject({ latitude: 46.18, longitude: 6.12 })
     expect(hasShiftInfo({ latitude: 46.18, longitude: null })).toBe(false)

@@ -127,9 +127,12 @@ export function hasShiftInfo(info: ShiftInfo): boolean {
   return shiftInfoLines(info).length > 0
 }
 
-/** Plain-text lines for emails: « Lieu : Entrée B — Voir sur la carte : https://… ». */
+/** Plain-text lines for emails: « Lieu : Entrée B. Voir sur la carte : https://… ». */
 export function shiftInfoText(info: ShiftInfo): string[] {
-  return shiftInfoLines(info).map((l) => `${l.label} : ${l.text}${l.href ? ` — ${MAP_LINK_LABEL} : ${l.href}` : ""}`)
+  // A place already ending with . ! or ? keeps its own punctuation instead of getting « .. ».
+  return shiftInfoLines(info).map((l) => l.href
+    ? `${l.label} : ${l.text.replace(/[.!?…]+$/, "")}${/[!?…]$/.test(l.text) ? l.text.slice(-1) : "."} ${MAP_LINK_LABEL} : ${l.href}`
+    : `${l.label} : ${l.text}`)
 }
 
 /**
