@@ -15,7 +15,7 @@ describe("printed sheets and badges", () => {
 
   it("puts the logo in the sheet header, decorative and grey, the name still written", () => {
     const html = renderSheet("phones", { ...sheet, logo })
-    expect(html).toContain(`<img class="org-logo" src="${logo.src.replace("&", "&amp;")}" alt="" width="112" height="56">`)
+    expect(html).toContain(`<img class="org-logo" src="${logo.src.replaceAll("&", "&amp;")}" alt="" width="112" height="56">`)
     expect(html).toContain("filter: grayscale(1)")
     expect(html).toContain("Club du Rhône")
     expect(renderSheet("phones", sheet)).not.toContain("<img")
