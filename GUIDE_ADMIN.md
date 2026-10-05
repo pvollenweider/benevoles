@@ -466,6 +466,20 @@ La question que se pose l'organisateur avant l'événement, en une page, du plus
 
 Chaque ligne mène là où on agit : les inscriptions filtrées sur le créneau, les créneaux du poste, ou les responsables de secteur.
 
+#### Chercher des bénévoles
+
+**`/admin/events/[id]/staffing/search`**
+
+Sous chaque créneau à compléter, **Chercher des bénévoles** ouvre une page pour proposer ce créneau à des membres choisis ; **Chercher des bénévoles pour plusieurs créneaux**, sous la liste, permet d'en proposer plusieurs à la fois. Sur cette page :
+
+1. Cochez les créneaux à proposer, parmi ceux qui manquent de monde (places libres indiquées).
+2. La liste des membres apparaît, par ordre alphabétique, sans classement ni score. Pour chaque membre, les raisons de sa présence sont écrites : ses tags, sa disponibilité générale (indicative : elle ne confirme rien pour ces créneaux) et si elle correspond aux horaires choisis, s'il est déjà inscrit à l'événement, s'il est déjà invité ou s'il recevra une invitation. Filtrez par tag ou cherchez un nom si besoin.
+3. Un membre dont une inscription chevauche un créneau choisi, même de quelques minutes, est affiché avec la mention **Chevauchement** et la durée en commun : ce créneau ne lui est pas proposé. S'il n'a plus rien à recevoir, sa case n'est pas cochable.
+4. Personne n'est coché d'avance : cochez vous-même chaque personne. Les membres inactifs, sans email, déjà inscrits sur tous les créneaux choisis ou sans le tag d'un poste réservé ne sont pas listés ; une phrase dit combien ont été laissés de côté et pourquoi. Les membres qui ont répondu « pas disponible » à leur invitation sont aussi laissés de côté, sauf si vous cochez **Afficher aussi les membres qui ont répondu « pas disponible »**.
+5. Ajoutez si vous le souhaitez un mot pour accompagner l'email, puis **Voir l'aperçu et envoyer** : l'aperçu montre l'email reçu par la première personne et rappelle le nombre de destinataires avant l'envoi.
+
+Chaque personne reçoit un seul email avec les créneaux qu'elle peut prendre (date, horaires, places libres) et son lien pour s'inscrire : son lien d'invitation si elle est déjà invitée ; une invitation est créée pour les membres pas encore invités (elle apparaît ensuite dans les invitations de l'événement) ; un membre déjà inscrit sans invitation reçoit le lien de l'événement et celui de ses inscriptions. Personne ne voit les autres destinataires. L'envoi passe par la file d'envoi, compte dans la même limite horaire que « Écrire aux bénévoles », et figure dans les **Messages envoyés** de l'événement. Les inscriptions doivent être ouvertes : sinon l'envoi est refusé.
+
 ---
 
 ## Journal de l'événement
@@ -557,6 +571,8 @@ Les invitations permettent d'envoyer des emails personnalisés aux membres de vo
 
 Chaque membre reçoit un email avec un lien unique qui pré-remplit son prénom, nom, email et téléphone sur la page d'inscription.
 
+Pour proposer des créneaux précis qui manquent de monde à des membres choisis, utilisez plutôt **Chercher des bénévoles** depuis « Où manque-t-il du monde ? » : les membres pas encore invités y reçoivent leur invitation avec la liste des créneaux concernés.
+
 ### Suivre l'état des invitations
 
 Le tableau affiche pour chaque membre invité l'un de trois statuts :
@@ -600,7 +616,7 @@ Vous saisissez un objet et un message texte (les retours à la ligne sont conser
 
 **Modèles de messages** (**Paramètres** → **Modèles de messages**) : enregistrez les messages que vous envoyez souvent (infos pratiques, convocation, remerciements), jusqu'à 20 par organisation, avec un nom, un objet et un texte. Dans « Écrire aux bénévoles », **Partir d'un modèle** remplit l'objet et le message, que vous modifiez librement avant l'envoi. Variables, remplacées pour chaque destinataire : `{prénom}`, `{événement}`, `{poste}` (public « un poste » ou « un créneau ») et `{créneau}` (public « un créneau ») ; pour écrire une accolade, doublez-la (`{{`). Une variable inconnue ou hors de son public est signalée et bloque l'envoi, elle n'est jamais envoyée telle quelle. Les modèles appartiennent à l'organisation (tous ses événements) et figurent dans le journal d'activité.
 
-**Messages envoyés** : sous le formulaire, chaque message déjà envoyé pour l'événement, du plus récent au plus ancien, avec la date et l'heure, qui l'a écrit, l'objet, le public choisi, le nombre de destinataires et la remise en toutes lettres (envoyés, en échec, en attente). **Voir le texte envoyé** affiche le message. Quand des emails ont échoué, **Renvoyer les emails en échec** les remet en file d'envoi, eux seuls ; un second clic n'en renvoie pas d'autres. Les destinataires ne sont pas listés, seulement leur nombre. Les emails automatiques (confirmations, rappels) n'y figurent pas. Les messages sont conservés 12 mois, puis supprimés ; ils le sont aussi avec l'événement.
+**Messages envoyés** : sous le formulaire, chaque message déjà envoyé pour l'événement (y compris les créneaux proposés depuis « Chercher des bénévoles »), du plus récent au plus ancien, avec la date et l'heure, qui l'a écrit, l'objet, le public choisi, le nombre de destinataires et la remise en toutes lettres (envoyés, en échec, en attente). **Voir le texte envoyé** affiche le message. Quand des emails ont échoué, **Renvoyer les emails en échec** les remet en file d'envoi, eux seuls ; un second clic n'en renvoie pas d'autres. Les destinataires ne sont pas listés, seulement leur nombre. Les emails automatiques (confirmations, rappels) n'y figurent pas. Les messages sont conservés 12 mois, puis supprimés ; ils le sont aussi avec l'événement.
 
 ### Rappel manuel
 

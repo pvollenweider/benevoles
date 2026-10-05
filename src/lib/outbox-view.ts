@@ -132,6 +132,7 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   registration_refused: "Demande d'inscription refusée",
   release_available: "Nouvelle version disponible",
   addresses_to_verify_summary: "Résumé quotidien des adresses à vérifier",
+  open_shifts: "Créneaux à compléter proposés à des membres",
 }
 
 export function kindLabel(kind: string): string {

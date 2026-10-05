@@ -67,9 +67,10 @@ test.describe("admin", () => {
     await expect(page).toHaveURL(/\/admin\/events\/[^/]+$/)
     const base = page.url()
     expect.soft(await seriousViolations(page)).toEqual([])
-    // « /questions » carries the answers summary (#686), with its tables or its empty state; « /review » the share link (#564) and the review checks (#565).
+    // « /questions » carries the answers summary (#686), with its tables or its empty state; « /review » the share link (#564) and the review checks (#565);
+    // « /staffing/search » the shift picker of « Chercher des bénévoles » (#566).
     // « /day-of » (#561): its empty state here, outside the event's dates; with content in e2e/day-of.spec.ts.
-    for (const sub of ["/shifts", "/registrations", "/message", "/invitations", "/questions", "/review", "/day-of"]) {
+    for (const sub of ["/shifts", "/registrations", "/message", "/invitations", "/questions", "/review", "/staffing", "/staffing/search", "/day-of"]) {
       await page.goto(base + sub)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
       expect.soft(await seriousViolations(page), sub).toEqual([])

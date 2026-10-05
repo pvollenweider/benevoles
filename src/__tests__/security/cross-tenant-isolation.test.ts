@@ -619,6 +619,26 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(prismaMock.notificationOutbox.createMany).not.toHaveBeenCalled()
   })
 
+  it("POST /api/admin/events/[id]/open-shifts returns 404 for an org-B event, creating and sending nothing (#566)", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/open-shifts/route")
+    const db = setupGuard() // event.findFirst → null
+    const $transaction = vi.fn()
+    Object.assign(db, { $transaction })
+
+    const res = await POST(
+      makeRequest("/api/admin/events/evt-b/open-shifts", "POST", { shiftIds: ["shift-b"], volunteerIds: ["mem-b"] }),
+      params("evt-b"),
+    )
+    expect(res.status).toBe(404)
+    // The event is read through the scoped client only, and nothing else is touched.
+    expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-b" } }))
+    expect(prismaMock.event.findFirst).not.toHaveBeenCalled()
+    expect(db.volunteer.findMany).not.toHaveBeenCalled()
+    expect($transaction).not.toHaveBeenCalled()
+    expect(prismaMock.memberInvite.create).not.toHaveBeenCalled()
+    expect(prismaMock.notificationOutbox.createMany).not.toHaveBeenCalled()
+  })
+
   it("POST /api/admin/shifts/series returns 404 for an org-B event, creating nothing", async () => {
     const { POST } = await import("@/app/api/admin/shifts/series/route")
     const db = setupGuard() // event.findFirst → null

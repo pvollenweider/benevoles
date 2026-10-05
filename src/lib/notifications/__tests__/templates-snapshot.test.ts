@@ -400,6 +400,23 @@ const cases: [string, NotificationPayload][] = [
       membersUrl: "https://rhone.benevol.app/admin/members?verify=1",
     },
   }],
+  ["open_shifts", {
+    kind: "open_shifts",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      organizationName: tricky,
+      eventTitle: "Festival du Rhône",
+      note: "On compte sur toi <3",
+      shifts: [
+        { id: "s1", roleName: "Bar", label: "Bar soir", date: "2026-07-11", startTime: "22:00", endTime: "02:00", placesLeft: 2 },
+        { id: "s2", roleName: "Accueil", label: "Accueil", date: "2026-07-12", startTime: "09:00", endTime: "12:30", placesLeft: 1 },
+      ],
+      signupUrl: "https://rhone.benevol.app/festival-2026?token=tok-1",
+      declineUrl: "https://rhone.benevol.app/festival-2026?token=tok-1&decline=1",
+      orgSlug: "rhone",
+    },
+  }],
 ]
 
 describe("render — snapshot of every notification kind", () => {
@@ -438,6 +455,7 @@ describe("render — snapshot of every notification kind", () => {
       registration_refused: true,
       release_available: true,
       addresses_to_verify_summary: true,
+      open_shifts: true,
     }
     const covered = new Set(cases.map(([, p]) => p.kind))
     expect([...covered].sort()).toEqual(Object.keys(all).sort())

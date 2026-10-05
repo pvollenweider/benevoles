@@ -36,7 +36,7 @@ C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles
 
 ## Suivre l'organisation au quotidien
 
-- **Où manque-t-il du monde ?** Une page par événement liste les postes sans personne et les créneaux à compléter, du plus dégarni au plus proche du complet.
+- **Où manque-t-il du monde ?** Une page par événement liste les postes sans personne et les créneaux à compléter, du plus dégarni au plus proche du complet. Depuis un ou plusieurs créneaux à compléter, **Chercher des bénévoles** liste vos membres avec ce qui peut vous aider à choisir (tags, disponibilité générale indicative, déjà inscrits à l'événement, chevauchement avec un autre de leurs créneaux), sans classement ni présélection : vous cochez qui vous voulez, et chacun reçoit un email avec les créneaux qu'il peut prendre, les places libres et son lien pour s'inscrire.
 - **Ce qui demande votre attention.** Le tableau de bord commence par ce qui presse : créneaux des prochains jours pas encore complets, demandes à valider, places de liste d'attente qui expirent, jalons en retard, bénévoles aux journées trop chargées, invités sans réponse, membres avec une adresse à vérifier.
 - **Où en est l'événement ?** Une barre d'étapes, du brouillon à l'archivage, montre où il en est et ce qu'il reste à faire.
 - **Tout retrouver.** Une recherche globale (Ctrl + K, ou Cmd + K sur Mac) trouve un bénévole, une inscription, un événement ou un créneau, sans se soucier des accents.
