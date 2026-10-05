@@ -3,13 +3,14 @@ import { readFileSync } from "fs"
 import { join } from "path"
 
 // The public privacy policy names every provider that receives data (#485), and claims a data
-// processing agreement only where one exists: the off-site backup copy is on an individual
-// Dropbox plan, stored in the US, without one.
+// processing agreement only where one exists. The off-site copy moved to Infomaniak Swiss Backup
+// (#524); copies already sent to the former individual Dropbox plan (US, no agreement) stay
+// listed until they are deleted.
 const page = readFileSync(join(process.cwd(), "src/app/legal/privacy/page.tsx"), "utf8")
 
 describe("privacy policy sub-processors", () => {
   it("lists the hosting, email, error tracking and the off-site backup copy", () => {
-    for (const name of ["OVH", "Gandi", "Sentry", "Dropbox"]) expect(page, name).toContain(name)
+    for (const name of ["OVH", "Gandi", "Sentry", "Infomaniak", "Dropbox"]) expect(page, name).toContain(name)
     expect(page).toContain("États-Unis")
   })
 

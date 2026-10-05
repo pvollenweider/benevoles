@@ -64,7 +64,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `cronjob-cleanup.yaml` | CronJob `app-cleanup` | oui | Purge RGPD, 02:00 UTC |
 | `cronjob-release-check.yaml` | CronJob `app-release-check` | oui | Vérification de nouvelle version GitHub (#612), 03:00 UTC ; sans effet ici, `benevol.app` est déployé depuis `main` |
 | `cronjob-backup.yaml` | PVC `backup-pvc` (5 Gi), CronJob `postgres-backup` | oui | `pg_dump` chiffré (AES-256), 01:00 UTC, rétention 30 jours |
-| `cronjob-backup-offsite.yaml` | CronJob `backup-offsite-dropbox` | oui | Copie des fichiers déjà chiffrés hors site (`rclone`), 01:30 UTC, rétention 90 jours chez le fournisseur ; fournisseur choisi par `OFFSITE_PROVIDER` (`dropbox` par défaut, `swissbackup` cible, #524) ; demande le secret `rclone-config` |
+| `cronjob-backup-offsite.yaml` | CronJob `backup-offsite` | oui | Copie des fichiers déjà chiffrés hors site (`rclone`), 01:30 UTC, rétention 90 jours chez le fournisseur ; fournisseur choisi par `OFFSITE_PROVIDER` (`dropbox` par défaut, `swissbackup` cible, #524) ; demande le secret `rclone-config` |
 | `log-rotation.md` | | | Rotation des journaux du nœud : procédure manuelle, la durée de 90 jours n'est pas encore garantie |
 
 ### Adresse des visiteurs et limites de débit
@@ -368,10 +368,10 @@ kubectl -n benevoles get secret benevoles-secret -o jsonpath='{.data.BACKUP_PASS
 
 **Fournisseur (#524).** La variable d'environnement `OFFSITE_PROVIDER` du CronJob (`k8s/cronjob-backup-offsite.yaml`) choisit le remote rclone :
 
-- `dropbox` (valeur actuelle) : plan Dropbox individuel — pas de DPA, stockage aux États-Unis par défaut (voir [sous-traitants.md](rgpd/sous-traitants.md)). Conservé le temps de préparer la bascule.
-- `swissbackup` : Infomaniak Swiss Backup, stockage OpenStack Swift en Suisse. Cible de la bascule.
+- `swissbackup` (valeur actuelle depuis le 2026-10-05) : Infomaniak Swiss Backup, stockage OpenStack Swift en Suisse, container `benevol-backups`.
+- `dropbox` (ancien fournisseur) : plan Dropbox individuel, pas de DPA, stockage aux États-Unis par défaut (voir [sous-traitants.md](rgpd/sous-traitants.md)). Gardé comme retour arrière quelques nuits, puis retiré.
 
-Les deux remotes (`dropbox` et `swissbackup`) peuvent coexister dans le même secret `rclone-config` : la bascule se fait en changeant uniquement la valeur de `OFFSITE_PROVIDER` et en redéployant, Dropbox restant utilisable (mais plus utilisé) tant que son remote n'est pas retiré du fichier.
+Les deux remotes (`dropbox` et `swissbackup`) coexistent dans le même secret `rclone-config` : revenir en arrière consiste à remettre `OFFSITE_PROVIDER` à `dropbox` et redéployer, tant que le remote Dropbox n'est pas retiré du fichier.
 
 **Mise en place du remote Dropbox** (à faire une fois, en local — jamais dans ce dépôt, le jeton produit est un secret) :
 
@@ -397,7 +397,7 @@ kubectl create secret generic rclone-config -n benevoles \
 
 À refaire si le jeton Dropbox est révoqué (Dropbox ne fait pas expirer les jetons rclone par défaut) ou si la clé Swiss Backup est régénérée. Tant que ce secret n'existe pas, le CronJob échoue simplement (pod bloqué faute de volume) ; ça n'affecte pas le dump local (`cronjob-backup.yaml`), qui est un job séparé.
 
-**`DRY_RUN`** (variable d'environnement du CronJob, `"false"` par défaut) : à `"true"`, `rclone copy` et `rclone delete` reçoivent `--dry-run` (rien n'est envoyé ni supprimé, seul l'inventaire est réel), et le job ne signale pas de réussite à la page santé. Utile pour un test manuel du nouveau remote avant de lui faire confiance (`kubectl create job --from=cronjob/backup-offsite-dropbox ... ` avec la variable modifiée dans le Job généré).
+**`DRY_RUN`** (variable d'environnement du CronJob, `"false"` par défaut) : à `"true"`, `rclone copy` et `rclone delete` reçoivent `--dry-run` (rien n'est envoyé ni supprimé, seul l'inventaire est réel), et le job ne signale pas de réussite à la page santé. Utile pour un test manuel du nouveau remote avant de lui faire confiance (`kubectl create job --from=cronjob/backup-offsite ... ` avec la variable modifiée dans le Job généré).
 
 **Restauration / test.** `scripts/restore-test-offsite.sh` liste le remote, télécharge le dernier fichier, le déchiffre avec `BACKUP_PASSPHRASE` et vérifie qu'il redonne un `pg_dump` gzippé valide — sans jamais rien modifier côté distant (uniquement `lsf`/`lsl`/`copy` en lecture) ni restaurer dans une base :
 
@@ -424,14 +424,14 @@ Le script affiche à la fin la commande `curl` à lancer pour enregistrer le tes
 2. Ajouter ce remote à `rclone.conf`, créer le container, recréer le secret `rclone-config`.
 3. Ajouter le secret GitHub `OFFSITE_BUCKET` (nom du container) ; vérifier qu'il arrive dans `benevoles-secret` au déploiement suivant.
 4. Lancer `scripts/restore-test-offsite.sh` avec `OFFSITE_PROVIDER=swissbackup` pour confirmer qu'un envoi réel est lisible et déchiffrable (après un premier passage du CronJob, ou un Job manuel `DRY_RUN=false`).
-5. Changer `OFFSITE_PROVIDER` en `"swissbackup"` dans `k8s/cronjob-backup-offsite.yaml`, committer, pousser sur `main` (`deploy.yml` applique le changement).
+5. Changer `OFFSITE_PROVIDER` en `"swissbackup"` dans `k8s/cronjob-backup-offsite.yaml`, committer, pousser sur `main` (`deploy.yml` applique le changement). Fait le 2026-10-05, avec le renommage du CronJob `backup-offsite-dropbox` en `backup-offsite` (l'ancien CronJob est supprimé à la main : `kubectl delete cronjob backup-offsite-dropbox -n benevoles`).
 6. Après quelques jours de copies Swiss Backup réussies (page de santé), supprimer les copies sur Dropbox, attendre sa corbeille de 30 jours (plan individuel), puis retirer Dropbox de [sous-traitants.md](rgpd/sous-traitants.md) et de la politique de confidentialité publique (une fois l'analyse juridique de #485 favorable).
 
 Restauration depuis le remote actuel : `rclone lsf <remote>:<chemin>` pour lister, `rclone copy <remote>:<chemin>/<fichier> .` pour télécharger, puis déchiffrer comme ci-dessus (ou utiliser `scripts/restore-test-offsite.sh` qui fait tout cela et vérifie le résultat).
 
 ### Limites actuelles
 
-Le volume de sauvegarde local est sur le même cluster que la base : une panne de cluster emporte les deux, d'où la copie Dropbox ci-dessus.
+Le volume de sauvegarde local est sur le même cluster que la base : une panne de cluster emporte les deux, d'où la copie hors site ci-dessus.
 
 **Surveillance.** Chaque CronJob de sauvegarde envoie un signal de vie (`/api/cron/heartbeat`) quand il réussit. La page `/super-admin/health` affiche le dernier succès de chaque tâche : rappels (signalés au-delà de 2 h sans passage), nettoyage, sauvegarde chiffrée et copie hors site (au-delà de 26 h), test de restauration (avertissement après 45 jours, erreur après 90). Une sauvegarde qui échoue sans bruit y apparaît donc le lendemain, sans consulter `kubectl`.
 
