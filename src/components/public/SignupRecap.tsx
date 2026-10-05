@@ -69,7 +69,6 @@ export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentG
               <p className={`${text} font-medium text-gray-900`}>{r.name}</p>
               <p className="text-xs text-gray-700 mt-0.5">
                 {r.dayLabel} · <span className="font-mono">{r.timeLabel}</span>
-                {r.endsNextDay && <span className="ml-1 text-gray-800">(fin le lendemain)</span>}
               </p>
               <p className="flex flex-wrap gap-1.5 mt-1">
                 <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${r.waitlist || r.request ? "bg-amber-100 text-amber-900" : "bg-green-100 text-green-900"}`}>
