@@ -3,18 +3,65 @@
   "slug": "org-email-settings",
   "title": "Régler les emails de l’organisation",
   "description": "Choisir les rappels, les alertes d’inscription et l’adresse de réponse, puis envoyer un email de test.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous réglez les emails automatiques et de test de votre organisation.",
+    "steps": [
+      "Activez les rappels utiles parmi deux jours avant, la veille et le jour même.",
+      "Activez « Prévenir les administrateurs à chaque inscription » si votre événement reste de petite taille.",
+      "Renseignez l'adresse de réponse où arriveront les messages des bénévoles.",
+      "Enregistrez vos réglages.",
+      "Envoyez-vous un email de test pour vérifier l'expéditeur et l'adresse de réponse."
+    ],
+    "remember": [
+      "Un événement peut désactiver tous ses rappels dans ses propres réglages.",
+      "L'alerte à chaque inscription peut devenir bruyante si les inscriptions sont nombreuses.",
+      "Pour une communication ponctuelle, utilisez plutôt un message ciblé."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "welcome", "transcript": "Les réglages d’email permettent d’informer au bon moment sans envoyer chaque message à la main. Ils sont communs à l’organisation : on choisit les rappels utiles, les alertes destinées à l’équipe et l’adresse à laquelle arrivent les réponses.", "fallbackDurationMs": 16000 },
-    { "id": "reminders", "transcript": "Les trois rappels automatiques correspondent à deux jours avant, un jour avant et le jour du créneau. Active seulement ceux qui apportent une vraie aide. Ils concernent les bénévoles inscrits ; un événement peut ensuite désactiver tous ses rappels dans ses propres réglages.", "fallbackDurationMs": 21000 },
-    { "id": "admin-alert", "transcript": "L’option Prévenir les administrateurs à chaque inscription envoie un email à chaque administrateur actif lorsqu’une personne s’inscrit depuis la page publique. Elle facilite le suivi d’un petit événement, mais peut devenir bruyante lorsque les inscriptions sont nombreuses.", "fallbackDurationMs": 20000 },
-    { "id": "reply-to", "transcript": "L’adresse de réponse indique où arrive un message lorsqu’un bénévole répond à un email de la plateforme. Saisissons benevoles arobase example point org. Si le champ reste vide, l’adresse par défaut est utilisée. Cette adresse apparaît aussi sur la page personnelle des bénévoles.", "fallbackDurationMs": 22000 },
-    { "id": "save", "transcript": "Enregistre les réglages avant de les tester. Le message Réglages enregistrés confirme que les choix sont persistés. Modifier les cases sans enregistrer ne change pas les prochains envois, et l’envoi de test utilise toujours la dernière configuration enregistrée.", "fallbackDurationMs": 19000 },
-    { "id": "test", "transcript": "Le bouton M’envoyer un email de test adresse un exemple à ton propre compte administrateur. Il vérifie le transport, l’expéditeur et l’adresse de réponse sans contacter les bénévoles. Dans cette démonstration isolée, le message apparaît dans la boîte Mailpit au lieu de partir sur Internet.", "fallbackDurationMs": 22000 },
-    { "id": "result", "transcript": "Le résultat est un réglage vérifié avant le prochain événement. Les rappels partiront selon le fuseau de l’organisation, les réponses reviendront à l’adresse choisie et l’équipe ne recevra les alertes d’inscription que si l’option reste active. Pour une communication ponctuelle, utilise plutôt un message ciblé.", "fallbackDurationMs": 22000 }
+    {
+      "id": "welcome",
+      "transcript": "Les réglages d’email permettent d’informer au bon moment sans envoyer chaque message à la main. Ils sont communs à l’organisation : on choisit les rappels utiles, les alertes destinées à l’équipe et l’adresse à laquelle arrivent les réponses.",
+      "fallbackDurationMs": 16000
+    },
+    {
+      "id": "reminders",
+      "transcript": "Les trois rappels automatiques correspondent à deux jours avant, un jour avant et le jour du créneau. Active seulement ceux qui apportent une vraie aide. Ils concernent les bénévoles inscrits ; un événement peut ensuite désactiver tous ses rappels dans ses propres réglages.",
+      "fallbackDurationMs": 21000
+    },
+    {
+      "id": "admin-alert",
+      "transcript": "L’option Prévenir les administrateurs à chaque inscription envoie un email à chaque administrateur actif lorsqu’une personne s’inscrit depuis la page publique. Elle facilite le suivi d’un petit événement, mais peut devenir bruyante lorsque les inscriptions sont nombreuses.",
+      "fallbackDurationMs": 20000
+    },
+    {
+      "id": "reply-to",
+      "transcript": "L’adresse de réponse indique où arrive un message lorsqu’un bénévole répond à un email de la plateforme. Saisissons benevoles arobase example point org. Si le champ reste vide, l’adresse par défaut est utilisée. Cette adresse apparaît aussi sur la page personnelle des bénévoles.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "save",
+      "transcript": "Enregistre les réglages avant de les tester. Le message Réglages enregistrés confirme que les choix sont persistés. Modifier les cases sans enregistrer ne change pas les prochains envois, et l’envoi de test utilise toujours la dernière configuration enregistrée.",
+      "fallbackDurationMs": 19000
+    },
+    {
+      "id": "test",
+      "transcript": "Le bouton M’envoyer un email de test adresse un exemple à ton propre compte administrateur. Il vérifie le transport, l’expéditeur et l’adresse de réponse sans contacter les bénévoles. Dans cette démonstration isolée, le message apparaît dans la boîte Mailpit au lieu de partir sur Internet.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "result",
+      "transcript": "Le résultat est un réglage vérifié avant le prochain événement. Les rappels partiront selon le fuseau de l’organisation, les réponses reviendront à l’adresse choisie et l’équipe ne recevra les alertes d’inscription que si l’option reste active. Pour une communication ponctuelle, utilise plutôt un message ciblé.",
+      "fallbackDurationMs": 22000
+    }
   ]
 }

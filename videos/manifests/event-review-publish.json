@@ -3,18 +3,66 @@
   "slug": "event-review-publish",
   "title": "Vérifier, prévisualiser et publier",
   "description": "Contrôler les points obligatoires, tester tout le parcours bénévole puis publier sans envoyer de message.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous vérifiez votre événement puis le publiez en toute confiance.",
+    "steps": [
+      "Consultez l'écran de vérification : titre, dates et planning cochés, lieu et instructions facultatifs.",
+      "Cliquez sur « Prévisualiser comme un bénévole » pour ouvrir la vraie page d'inscription sans conséquence.",
+      "Sélectionnez un créneau et avancez jusqu'au formulaire pour relire les questions et la convention.",
+      "Simulez l'inscription pour voir la confirmation et l'email automatique avec des valeurs de test.",
+      "Revenez à la vérification et cliquez sur Publier.",
+      "Partagez le lien, le QR code ou une invitation pour prévenir vos bénévoles : rien n'est envoyé automatiquement."
+    ],
+    "remember": [
+      "Le bouton Publier reste bloqué tant qu'aucun créneau actif n'existe.",
+      "Aucun email n'est envoyé automatiquement à la publication.",
+      "Pensez à vérifier régulièrement les inscriptions et les besoins de personnel après publication."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "welcome", "transcript": "Avant de publier, l’écran de vérification rassemble ce qui compte vraiment. Il évite d’ouvrir une page vide ou incohérente et rappelle que tout restera modifiable après la publication.", "fallbackDurationMs": 16000 },
-    { "id": "checks", "transcript": "Les lignes marquées comme faites couvrent le titre, les dates et le planning. Un point obligatoire manquant bloque le bouton Publier, notamment l’absence totale de créneau actif. Les lignes facultatives, comme le lieu, les instructions ou un responsable de secteur, améliorent le parcours mais n’empêchent pas l’ouverture.", "fallbackDurationMs": 27000 },
-    { "id": "preview-start", "transcript": "Prévisualiser comme un bénévole ouvre la vraie page d’inscription dans un mode sans conséquence. On vérifie d’abord l’en-tête, le lieu, les instructions, le programme et les créneaux, exactement comme ils seront présentés sur téléphone ou ordinateur.", "fallbackDurationMs": 23000 },
-    { "id": "preview-form", "transcript": "Sélectionnons un créneau et poursuivons jusqu’au formulaire. Ce test permet de relire les questions, la Convention des Bénévoles, les consentements et les informations demandées sans créer d’inscription réelle.", "fallbackDurationMs": 21000 },
-    { "id": "preview-result", "transcript": "Le bouton de simulation affiche ensuite la confirmation et l’email automatique avec les valeurs de test. C’est ici qu’on repère un message trop vague, une consigne manquante ou une variable mal placée, avant qu’un vrai bénévole ne les reçoive.", "fallbackDurationMs": 23000 },
-    { "id": "publish", "transcript": "Revenons à la vérification et publions. La page devient accessible à toute personne qui possède le lien, mais aucun email n’est envoyé automatiquement aux membres. Pour les prévenir, il faudra partager le QR code, envoyer des invitations ou utiliser un message ciblé.", "fallbackDurationMs": 25000 },
-    { "id": "result", "transcript": "Le résultat est un événement publié avec son lien public, son QR code et ses outils d’invitation. Publier ouvre l’accès ; cela ne remplace ni la communication, ni la vérification régulière des inscriptions et des besoins de personnel.", "fallbackDurationMs": 19000 }
+    {
+      "id": "welcome",
+      "transcript": "Avant de publier, l’écran de vérification rassemble ce qui compte vraiment. Il évite d’ouvrir une page vide ou incohérente et rappelle que tout restera modifiable après la publication.",
+      "fallbackDurationMs": 16000
+    },
+    {
+      "id": "checks",
+      "transcript": "Les lignes marquées comme faites couvrent le titre, les dates et le planning. Un point obligatoire manquant bloque le bouton Publier, notamment l’absence totale de créneau actif. Les lignes facultatives, comme le lieu, les instructions ou un responsable de secteur, améliorent le parcours mais n’empêchent pas l’ouverture.",
+      "fallbackDurationMs": 27000
+    },
+    {
+      "id": "preview-start",
+      "transcript": "Prévisualiser comme un bénévole ouvre la vraie page d’inscription dans un mode sans conséquence. On vérifie d’abord l’en-tête, le lieu, les instructions, le programme et les créneaux, exactement comme ils seront présentés sur téléphone ou ordinateur.",
+      "fallbackDurationMs": 23000
+    },
+    {
+      "id": "preview-form",
+      "transcript": "Sélectionnons un créneau et poursuivons jusqu’au formulaire. Ce test permet de relire les questions, la Convention des Bénévoles, les consentements et les informations demandées sans créer d’inscription réelle.",
+      "fallbackDurationMs": 21000
+    },
+    {
+      "id": "preview-result",
+      "transcript": "Le bouton de simulation affiche ensuite la confirmation et l’email automatique avec les valeurs de test. C’est ici qu’on repère un message trop vague, une consigne manquante ou une variable mal placée, avant qu’un vrai bénévole ne les reçoive.",
+      "fallbackDurationMs": 23000
+    },
+    {
+      "id": "publish",
+      "transcript": "Revenons à la vérification et publions. La page devient accessible à toute personne qui possède le lien, mais aucun email n’est envoyé automatiquement aux membres. Pour les prévenir, il faudra partager le QR code, envoyer des invitations ou utiliser un message ciblé.",
+      "fallbackDurationMs": 25000
+    },
+    {
+      "id": "result",
+      "transcript": "Le résultat est un événement publié avec son lien public, son QR code et ses outils d’invitation. Publier ouvre l’accès ; cela ne remplace ni la communication, ni la vérification régulière des inscriptions et des besoins de personnel.",
+      "fallbackDurationMs": 19000
+    }
   ]
 }

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { execFile } from "node:child_process"
+import { createHash } from "node:crypto"
 import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { promisify } from "node:util"
@@ -35,6 +36,22 @@ async function main() {
   }
 
   const issues: string[] = []
+  let narrationContentChecked = false
+  try {
+    const audit = await readJson<{ segments: { id: string; audioSha256: string; expected: string; needsReview: boolean }[] }>(path.join(dir, "narration-audit.json"))
+    narrationContentChecked = true
+    for (const segment of manifest.segments) {
+      const checked = audit.segments.find(s => s.id === segment.id)
+      if (!checked || checked.expected !== segment.transcript || checked.needsReview) {
+        issues.push(`${segment.id}: independent narration audit missing, outdated or failed`)
+        continue
+      }
+      const bytes = await readFile(path.join(dir, audio.segments[segment.id].file))
+      if (createHash("sha256").update(bytes).digest("hex") !== checked.audioSha256) issues.push(`${segment.id}: narration audio changed since content audit`)
+    }
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
+  }
   const scenes = manifest.segments.map((segment, index) => {
     const cue = timeline.cues[index]
     const generated = audio.segments[segment.id]
@@ -58,6 +75,7 @@ async function main() {
     slug: manifest.slug,
     validatedAt: new Date().toISOString(),
     continuousNarration: true,
+    narrationContentChecked,
     voice: manifest.voice,
     captureMs,
     scenes,
@@ -65,7 +83,7 @@ async function main() {
   }
   await writeFile(path.join(dir, "validation.json"), `${JSON.stringify(report, null, 2)}\n`)
   if (issues.length > 0) throw new Error(`${manifest.id} synchronization failed:\n- ${issues.join("\n- ")}`)
-  console.log(`✓ ${manifest.id}: ${scenes.length} scenes synchronized, one continuous ${manifest.voice} voice`)
+  console.log(`✓ ${manifest.id}: ${scenes.length} scene durations aligned, one continuous ${manifest.voice} voice; narration content ${narrationContentChecked ? "checked" : "NOT CHECKED"}`)
 }
 
 main().catch((error) => {

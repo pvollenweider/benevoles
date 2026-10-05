@@ -1,0 +1,74 @@
+{
+  "id": "VOLUNTEER_FORM_RECAP",
+  "slug": "volunteer-form-recap",
+  "title": "Remplir le formulaire et relire son planning",
+  "description": "Comprendre les coordonnées, questions, consentements et avertissements avant de confirmer.",
+  "language": "fr-CH",
+  "voice": "Puck",
+  "continuousNarration": true,
+  "voiceStyle": "Warm smiling adult male voice. Friendly patient conversational French, clear articulation and calm pace. Keep the same voice identity, pitch and energy throughout. Sound like a helpful volunteer, never theatrical or rushed.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Le formulaire sert à transmettre les bonnes informations à l’association et à vérifier ton engagement avant de confirmer. Nous allons remplir un exemple complet, lire les questions et la convention, puis corriger un planning volontairement trop chargé. Prends ton temps : aucune inscription ne part pendant la saisie.",
+      "fallbackDurationMs": 27000
+    },
+    {
+      "id": "selection",
+      "transcript": "Voici quatre missions : Accueil le matin, Logistique juste après, Rangement en soirée jusqu’à deux heures du matin, puis Buvette le dimanche. Le bouton Continuer ouvre le formulaire avec ce choix. Le récapitulatif les classe dans l’ordre chronologique, même si tu les as sélectionnées autrement.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "identity",
+      "transcript": "Indique ton prénom et ton nom, puis vérifie soigneusement l’adresse email : la confirmation et le lien personnel arriveront là. Le téléphone est obligatoire pour cet événement. La date de naissance apparaît parce que le Rangement demande dix-huit ans minimum ; elle permet de vérifier l’âge à la date de la mission.",
+      "fallbackDurationMs": 44000
+    },
+    {
+      "id": "questions",
+      "transcript": "L’association a ajouté ses questions. La taille de t-shirt est obligatoire, tandis que le régime alimentaire et le permis sont facultatifs. Réponds seulement avec des informations utiles à l’organisation. Le commentaire permet de préciser un point pratique, par exemple un besoin de pause ; il ne remplace pas une discussion urgente avec l’équipe.",
+      "fallbackDurationMs": 36000
+    },
+    {
+      "id": "agreement",
+      "transcript": "Ouvre la Convention des Bénévoles pour lire le cadre de l’engagement, puis accepte-la si elle te convient. Le consentement sur les données est une case distincte : il concerne leur utilisation pour cet événement. Lire puis cocher ces deux éléments évite de confirmer un cadre qu’on n’a pas compris.",
+      "fallbackDurationMs": 29000
+    },
+    {
+      "id": "recap",
+      "transcript": "Relis maintenant les jours et les heures. Le créneau de nuit dit explicitement fin le lendemain. Les intervalles montrent où se trouvent les pauses. Les lieux, consignes et liens de carte restent accessibles, mais les coordonnées personnelles du contact ne sont fournies qu’après inscription. En bas, Transmis à l’organisation énumère les données et les questions auxquelles tu as répondu.",
+      "fallbackDurationMs": 35000
+    },
+    {
+      "id": "workload",
+      "transcript": "Ce planning affiche Journée chargée : Accueil et Logistique font neuf heures d’affilée, sans une pause de trente minutes, et la nuit ajoute encore quatre heures. L’avertissement conseille de revoir l’engagement, mais ne bloque pas la confirmation. Pour alléger, reviens au planning et retire Logistique : les horaires sont recalculés immédiatement.",
+      "fallbackDurationMs": 33000
+    },
+    {
+      "id": "result",
+      "transcript": "Le nouveau récapitulatif garde trois missions et une vraie pause entre le matin et la nuit. Les informations saisies sont conservées. Vérifie une dernière fois ton email, tes réponses et les horaires avant Confirmer mon inscription. Dans cette démonstration, nous restons juste avant ce bouton : rien n’a été envoyé.",
+      "fallbackDurationMs": 29000
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, tu remplis le formulaire d'inscription et relis ton planning avant de confirmer.",
+    "steps": [
+      "Choisis tes créneaux, puis clique sur « Continuer ».",
+      "Indique ton prénom, ton nom et ton téléphone, et vérifie soigneusement ton adresse email.",
+      "Réponds aux questions de l'association, obligatoires ou facultatives.",
+      "Lis la convention, puis accepte-la ainsi que l'utilisation de tes données pour cet événement.",
+      "Relis les jours, les heures, les pauses et ce qui est transmis à l'organisation.",
+      "Si l'avertissement « Journée chargée » s'affiche, reviens au planning et retire un créneau.",
+      "Vérifie une dernière fois avant « Confirmer mon inscription »."
+    ],
+    "remember": [
+      "Rien n'est envoyé tant que tu n'as pas confirmé.",
+      "La date de naissance n'est demandée que si un créneau a un âge minimum.",
+      "L'avertissement de journée chargée conseille, il ne bloque pas la confirmation."
+    ]
+  }
+}

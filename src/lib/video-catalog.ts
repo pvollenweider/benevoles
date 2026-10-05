@@ -88,6 +88,24 @@ const segmentSchema = z.object({
   fallbackDurationMs: z.number().int().min(1000),
 })
 
+/**
+ * Viewer-facing content for the detail page (#644 owner feedback): what the video explains to the
+ * viewer, written from the narration segments above — never the internal editorial script (the
+ * four-part Utilité/Démonstration/Résultat visible/Points d'attention recipe is production
+ * material, not shown to viewers any more). `videos/lib/manifest.ts` keeps this field optional at
+ * the type level (the generation tools never read or write it); here it's required, every one of
+ * the 29 manifests has one.
+ */
+export const viewerContentSchema = z.object({
+  /** 1–2 sentences, "Dans cette vidéo, vous …". */
+  summary: z.string().min(1),
+  /** 3–7 short imperative steps, in the order shown in the video. */
+  steps: z.array(z.string().min(1)).min(3).max(7),
+  /** 1–4 key points: limits, what happens next, good practice. */
+  remember: z.array(z.string().min(1)).min(1).max(4),
+})
+export type ViewerContent = z.infer<typeof viewerContentSchema>
+
 export const manifestSchema = z.object({
   id: z.string().min(1),
   slug: z.string().min(1),
@@ -99,6 +117,7 @@ export const manifestSchema = z.object({
   continuousNarration: z.boolean().optional(),
   viewport: z.object({ width: z.number(), height: z.number(), deviceScaleFactor: z.number() }),
   segments: z.array(segmentSchema).min(1),
+  viewer: viewerContentSchema,
 })
 export type VideoManifest = z.infer<typeof manifestSchema>
 
@@ -207,13 +226,17 @@ function normalizeSearch(text: string): string {
     .toLowerCase()
 }
 
-/** Free-text search over title, description, tags and the script's full text (#644 gallery search). */
+/**
+ * Free-text search over title, description, tags, and the viewer-facing summary and steps (#644).
+ * Dropped the internal editorial script from the index when it stopped being shown on the detail
+ * page: it was never meant for viewers, so it shouldn't surface them into search results either.
+ */
 export function searchVideos(videos: Video[], query: string): Video[] {
   const q = normalizeSearch(query.trim())
   if (!q) return videos
   return videos.filter((v) => {
-    const scriptText = v.script.sections.map((s) => `${s.heading} ${s.body}`).join(" ")
-    const haystack = normalizeSearch([v.title, v.description, v.feature, ...v.tags, scriptText].join(" "))
+    const viewerText = [v.manifest.viewer.summary, ...v.manifest.viewer.steps].join(" ")
+    const haystack = normalizeSearch([v.title, v.description, v.feature, ...v.tags, viewerText].join(" "))
     return haystack.includes(q)
   })
 }

@@ -3,18 +3,66 @@
   "slug": "shift-timeline-quick-actions",
   "title": "Créer, copier et redimensionner depuis la Timeline",
   "description": "Utiliser les gestes rapides du planning puis revenir à l’éditeur détaillé quand la précision l’exige.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous construisez et ajustez un planning directement depuis la Timeline.",
+    "steps": [
+      "Cliquez et faites glisser dans une zone vide pour dessiner un nouveau créneau.",
+      "Complétez le poste, le libellé et la capacité, puis enregistrez.",
+      "Attrapez le bord droit d'un créneau pour ajuster sa durée.",
+      "Cliquez sur une barre pour ouvrir ses actions rapides.",
+      "Utilisez Copier pour dupliquer un créneau à un autre horaire.",
+      "Ouvrez l'éditeur détaillé pour le lieu, le contact ou les règles d'inscription."
+    ],
+    "remember": [
+      "Vérifiez toujours les heures affichées après un redimensionnement.",
+      "Une copie de créneau est indépendante et peut recevoir un autre libellé.",
+      "Relisez la vue Liste pour contrôler les valeurs après un travail visuel sur la Timeline."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "welcome", "transcript": "La Timeline n’est pas seulement une vue de lecture. Elle permet aussi de construire rapidement un planning visuel : dessiner une plage libre, ajuster sa durée, copier une relève et ouvrir le détail sans quitter le contexte de la journée.", "fallbackDurationMs": 23000 },
-    { "id": "draw", "transcript": "Dans une zone vide, clique puis fais glisser jusqu’à l’heure de fin souhaitée. Le formulaire s’ouvre avec la date et les heures déjà calculées. Il reste à choisir le poste, le libellé et la capacité avant d’enregistrer.", "fallbackDurationMs": 22000 },
-    { "id": "resize", "transcript": "Pour corriger une durée, attrape le bord droit du créneau et déplace-le. La grille aide à rester sur des horaires cohérents. Une modification rapide doit rester lisible : vérifie toujours les heures affichées après le geste.", "fallbackDurationMs": 22000 },
-    { "id": "popover", "transcript": "Un clic sur la barre ouvre ses actions rapides. On y retrouve les heures, l’état des inscriptions et les commandes utiles. C’est le bon endroit pour une petite correction, sans parcourir tout le formulaire.", "fallbackDurationMs": 21000 },
-    { "id": "copy", "transcript": "Copier reprend le poste, la durée, la capacité et les informations du créneau, puis place la nouvelle plage à l’horaire choisi. La copie est indépendante : elle peut ensuite recevoir un autre libellé ou d’autres consignes.", "fallbackDurationMs": 23000 },
-    { "id": "detail", "transcript": "Dès qu’une modification concerne le lieu, le contact, l’âge minimum ou les règles d’inscription, ouvre l’éditeur détaillé. Les gestes de Timeline accélèrent la construction ; l’éditeur reste la source complète avant publication.", "fallbackDurationMs": 23000 },
-    { "id": "result", "transcript": "Travaille d’abord visuellement, puis relis la Liste pour contrôler les valeurs. Cette combinaison est rapide, mais elle garde un résultat précis et compréhensible pour les bénévoles.", "fallbackDurationMs": 19000 }
+    {
+      "id": "welcome",
+      "transcript": "La Timeline n’est pas seulement une vue de lecture. Elle permet aussi de construire rapidement un planning visuel : dessiner une plage libre, ajuster sa durée, copier une relève et ouvrir le détail sans quitter le contexte de la journée.",
+      "fallbackDurationMs": 23000
+    },
+    {
+      "id": "draw",
+      "transcript": "Dans une zone vide, clique puis fais glisser jusqu’à l’heure de fin souhaitée. Le formulaire s’ouvre avec la date et les heures déjà calculées. Il reste à choisir le poste, le libellé et la capacité avant d’enregistrer.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "resize",
+      "transcript": "Pour corriger une durée, attrape le bord droit du créneau et déplace-le. La grille aide à rester sur des horaires cohérents. Une modification rapide doit rester lisible : vérifie toujours les heures affichées après le geste.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "popover",
+      "transcript": "Un clic sur la barre ouvre ses actions rapides. On y retrouve les heures, l’état des inscriptions et les commandes utiles. C’est le bon endroit pour une petite correction, sans parcourir tout le formulaire.",
+      "fallbackDurationMs": 21000
+    },
+    {
+      "id": "copy",
+      "transcript": "Copier reprend le poste, la durée, la capacité et les informations du créneau, puis place la nouvelle plage à l’horaire choisi. La copie est indépendante : elle peut ensuite recevoir un autre libellé ou d’autres consignes.",
+      "fallbackDurationMs": 23000
+    },
+    {
+      "id": "detail",
+      "transcript": "Dès qu’une modification concerne le lieu, le contact, l’âge minimum ou les règles d’inscription, ouvre l’éditeur détaillé. Les gestes de Timeline accélèrent la construction ; l’éditeur reste la source complète avant publication.",
+      "fallbackDurationMs": 23000
+    },
+    {
+      "id": "result",
+      "transcript": "Travaille d’abord visuellement, puis relis la Liste pour contrôler les valeurs. Cette combinaison est rapide, mais elle garde un résultat précis et compréhensible pour les bénévoles.",
+      "fallbackDurationMs": 19000
+    }
   ]
 }

@@ -43,3 +43,22 @@ test("shows « Vidéo bientôt disponible » without VIDEO_MEDIA_BASE_URL", asyn
   await expect(page.getByText("Vidéo bientôt disponible.")).toBeVisible()
   await expect(page.locator("video")).toHaveCount(0)
 })
+
+// #644 owner feedback: the detail page shows what the video explains to the viewer, never the
+// internal editorial script (Utilité/Démonstration/Résultat visible/Points d'attention).
+test("detail page shows the viewer content, not the internal script, and the transcript is collapsed by default", async ({ page }) => {
+  await page.goto("/videos/EVENT_CREATE_BLANK")
+  const main = page.getByRole("main")
+
+  await expect(main.getByRole("heading", { level: 2, name: "Dans cette vidéo" })).toBeVisible()
+  await expect(main.getByRole("heading", { level: 2, name: "Les étapes" })).toBeVisible()
+  await expect(main.getByRole("heading", { level: 2, name: "À retenir" })).toBeVisible()
+  await expect(main.getByRole("heading", { level: 2, name: "Script", exact: true })).toHaveCount(0)
+  await expect(main.getByText("Utilité", { exact: true })).toHaveCount(0)
+  await expect(main.getByText("Démonstration", { exact: true })).toHaveCount(0)
+
+  const transcript = main.getByText("Quand aucun modèle ne correspond vraiment").first()
+  await expect(transcript).toBeHidden()
+  await main.locator("summary", { hasText: "Transcription complète" }).click()
+  await expect(transcript).toBeVisible()
+})

@@ -1,0 +1,88 @@
+{
+  "id": "SECTOR_LEADERS",
+  "slug": "sector-leaders",
+  "title": "Responsable de poste : accompagner son équipe",
+  "description": "Désigner un responsable et découvrir son planning d'équipe depuis son lien personnel.",
+  "language": "fr-CH",
+  "voice": "Puck",
+  "continuousNarration": true,
+  "voiceStyle": "Warm smiling adult male voice. Friendly, reassuring conversational French. Patient clear articulation with a smile audible throughout. Keep the exact same voice identity and energy for the whole recording. Never rushed or theatrical.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Le jour de la fête, tu n'as pas besoin de tout coordonner seul. Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles. Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter. Aucun accès à toute l'administration n'est nécessaire.",
+      "fallbackDurationMs": 29000
+    },
+    {
+      "id": "nominate",
+      "transcript": "Dans l'événement, ouvre les responsables et ajoute une personne. Choisis le poste, puis renseigne son nom et son email. Vérifie bien cette adresse : c'est là que son lien sera envoyé. Tu peux désigner quelqu'un qui n'est pas lui-même inscrit à un créneau. Ajouter et envoyer le lien enregistre la nomination et prépare son email.",
+      "fallbackDurationMs": 42000
+    },
+    {
+      "id": "registered",
+      "transcript": "Si la personne participe déjà, la liste des inscrits permet de reprendre ses coordonnées sans tout ressaisir. Vérifie le poste proposé avant de confirmer. Être responsable d'un poste et être bénévole sur un créneau sont deux choses différentes : la nomination ne remplace pas une inscription et ne crée pas un nouvel engagement dans le planning.",
+      "fallbackDurationMs": 34000
+    },
+    {
+      "id": "email",
+      "transcript": "Voici l'email reçu. Le responsable ouvre son lien personnel directement, sans créer de compte ni choisir de mot de passe. Ce lien est confidentiel : il donne accès aux coordonnées de l'équipe. On le garde pour soi, et on ne l'affiche jamais sur une page publique ou sur le QR code de recrutement.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "roster",
+      "transcript": "Sur ce lien, la responsable de la Buvette retrouve uniquement les inscriptions de son poste. Les personnes sont regroupées par créneau, avec la date et les horaires. Chaque ligne donne le nom, l'email, le téléphone lorsqu'il est renseigné et le commentaire éventuel. La mention Liste d'attente distingue les personnes qui n'ont pas encore une place confirmée.",
+      "fallbackDurationMs": 37000
+    },
+    {
+      "id": "mobile",
+      "transcript": "Sur téléphone, la même page accompagne le responsable sur le terrain. Les liens email et téléphone permettent de préparer un message ou un appel avec les applications du téléphone. On peut ainsi retrouver l'équipe du prochain créneau et vérifier les horaires. Les coordonnées servent à l'organisation de la mission, pas à constituer une liste de diffusion personnelle.",
+      "fallbackDurationMs": 33000
+    },
+    {
+      "id": "scope",
+      "transcript": "Cet espace est en lecture seule : le responsable ne modifie pas les créneaux et ne retire pas les inscriptions. Il ne voit pas les équipes des autres postes. Pour une modification du planning ou une décision d'inscription, il se coordonne avec l'organisateur.",
+      "fallbackDurationMs": 26000
+    },
+    {
+      "id": "new-signup",
+      "transcript": "Pour voir comment une équipe évolue, inscrivons une nouvelle personne à la Buvette du dimanche. Nora choisit ce créneau, puis continue vers le formulaire. Elle renseigne son prénom et son nom, son adresse email et son téléphone. La taille du t-shirt est obligatoire pour cet événement. Elle choisit une taille, accepte la convention et l'utilisation de ses données pour organiser sa participation. Avant de confirmer, elle vérifie ses coordonnées et le créneau choisi. Nous confirmons maintenant : la page indique que son inscription est enregistrée.",
+      "fallbackDurationMs": 45000
+    },
+    {
+      "id": "notification",
+      "transcript": "Côté responsable, voici l'email réellement reçu à la suite de cette inscription. Il indique le nom de Nora et le créneau de la Buvette du dimanche. Le lien permet de retrouver l'équipe complète. En rouvrant la page, Nora apparaît maintenant dans le bon créneau, avec ses coordonnées. La responsable peut ainsi suivre les changements sans accéder à toute l'administration.",
+      "fallbackDurationMs": 31000
+    },
+    {
+      "id": "contact",
+      "transcript": "Attention à une autre distinction : le contact opérationnel indiqué sur un créneau est la personne que les bénévoles doivent joindre sur place. Désigner un responsable ne publie pas automatiquement ses coordonnées comme contact. L'organisateur renseigne ce contact séparément dans le créneau, si c'est bien la personne à appeler.",
+      "fallbackDurationMs": 32000
+    },
+    {
+      "id": "remove",
+      "transcript": "Quand la responsabilité change, retire la personne de ce poste et confirme. Son ancien lien ne donne alors plus accès à cette équipe. Cette action retire la responsabilité, pas ses éventuelles inscriptions comme bénévole. Tu peux ensuite désigner la nouvelle personne et lui envoyer son propre lien : chacun dispose du bon accès, au bon moment.",
+      "fallbackDurationMs": 35000
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, vous désignez un responsable de poste et découvrez ce qu'il voit de son équipe depuis son lien personnel.",
+    "steps": [
+      "Dans l'événement, ouvrez les responsables et ajoutez une personne.",
+      "Choisissez le poste, puis indiquez son nom et son email, en vérifiant bien l'adresse.",
+      "Si elle est déjà inscrite, reprenez ses coordonnées depuis la liste des inscrits.",
+      "Envoyez-lui son lien personnel : elle l'ouvre sans compte ni mot de passe.",
+      "Sur ce lien, elle retrouve les inscrits de son poste, créneau par créneau, avec leurs coordonnées.",
+      "Quand la responsabilité change, retirez la personne du poste et désignez la suivante."
+    ],
+    "remember": [
+      "Le lien d'un responsable est confidentiel : il donne accès aux coordonnées de l'équipe et ne s'affiche jamais sur une page publique.",
+      "L'espace du responsable est en lecture seule et ne montre que son poste.",
+      "Être responsable ne remplace pas une inscription et ne publie pas ses coordonnées comme contact du créneau."
+    ]
+  }
+}

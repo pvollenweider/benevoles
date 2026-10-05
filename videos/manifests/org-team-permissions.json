@@ -3,19 +3,70 @@
   "slug": "org-team-permissions",
   "title": "Gérer l’équipe et les permissions",
   "description": "Inviter une personne, choisir son rôle et vérifier concrètement ce qu’un organisateur peut faire.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous gérez les membres de votre équipe d'administration et leurs rôles.",
+    "steps": [
+      "Distinguez les rôles : le propriétaire gère tout, l'organisateur prépare les événements sans toucher à l'équipe ni aux réglages sensibles.",
+      "Invitez une personne avec son nom, son adresse et son rôle.",
+      "Suivez son statut « En attente » jusqu'à la création de son mot de passe.",
+      "Changez un rôle en le sélectionnant puis en confirmant avec Appliquer.",
+      "Retirez une personne pour couper son accès sans supprimer l'historique de ses actions."
+    ],
+    "remember": [
+      "Gardez au moins deux propriétaires actifs pour ne jamais dépendre d'une seule personne.",
+      "Un organisateur ne voit pas les commandes d'invitation, de retrait ou de changement de rôle.",
+      "Utilisez toujours un compte nominatif par personne."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Puck",
   "continuousNarration": true,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult male voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "welcome", "transcript": "Une équipe bien réglée évite de partager un seul mot de passe et donne à chacun exactement les droits dont il a besoin. Ici, trois personnes sont déjà actives : deux propriétaires et une organisatrice. Le badge Vous repère le compte actuellement connecté.", "fallbackDurationMs": 19000 },
-    { "id": "roles", "transcript": "Le propriétaire gère tout, y compris l’équipe, l’identité et les réglages sensibles de l’organisation. L’organisateur prépare les événements, les créneaux, les inscriptions, les membres et les messages, mais ne modifie ni l’équipe ni les réglages de l’organisation. Garde donc au moins deux propriétaires actifs pour ne jamais dépendre d’une seule personne.", "fallbackDurationMs": 26000 },
-    { "id": "invite", "transcript": "Pour inviter Léa, ouvre le formulaire, saisis son nom et une adresse valide, puis choisis son rôle avant l’envoi. Prenons Organisateur : c’est le bon niveau pour aider sur les plannings et les bénévoles sans accéder aux paramètres les plus sensibles.", "fallbackDurationMs": 23000 },
-    { "id": "invite-result", "transcript": "Après l’envoi, Léa apparaît avec le statut En attente. Un email contient son lien personnel, valable sept jours ; on peut aussi copier ce lien pour le lui transmettre autrement. Son accès ne devient actif qu’après la création de son mot de passe.", "fallbackDurationMs": 22000 },
-    { "id": "change-role", "transcript": "Le rôle peut évoluer. On choisit d’abord Propriétaire dans la liste, puis on confirme avec Appliquer : parcourir simplement la liste au clavier ne change donc jamais les droits par accident. La confirmation indique le nouveau rôle. Retirer une personne coupe son accès, mais ne supprime pas l’historique des actions déjà réalisées.", "fallbackDurationMs": 27000 },
-    { "id": "organizer-view", "transcript": "Vérifions maintenant avec le compte de Samira, qui est organisatrice. Elle retrouve les événements et les outils opérationnels. Sur la page de l’équipe, la liste reste visible pour comprendre qui administre l’espace, mais les commandes d’invitation, de retrait et de changement de rôle ont disparu.", "fallbackDurationMs": 24000 },
-    { "id": "limits", "transcript": "La suppression définitive d’un événement et les réglages de l’organisation restent réservés aux propriétaires, car leurs conséquences dépassent le travail quotidien. Attribue les droits selon la responsabilité réelle, retire rapidement les accès devenus inutiles et utilise toujours un compte nominatif par personne.", "fallbackDurationMs": 23000 },
-    { "id": "result", "transcript": "Le résultat est une équipe autonome sans donner les pleins pouvoirs à tout le monde : les propriétaires protègent le cadre, les organisateurs font vivre les événements, et chaque action reste liée à la bonne personne.", "fallbackDurationMs": 15000 }
+    {
+      "id": "welcome",
+      "transcript": "Une équipe bien réglée évite de partager un seul mot de passe et donne à chacun exactement les droits dont il a besoin. Ici, trois personnes sont déjà actives : deux propriétaires et une organisatrice. Le badge Vous repère le compte actuellement connecté.",
+      "fallbackDurationMs": 19000
+    },
+    {
+      "id": "roles",
+      "transcript": "Le propriétaire gère tout, y compris l’équipe, l’identité et les réglages sensibles de l’organisation. L’organisateur prépare les événements, les créneaux, les inscriptions, les membres et les messages, mais ne modifie ni l’équipe ni les réglages de l’organisation. Garde donc au moins deux propriétaires actifs pour ne jamais dépendre d’une seule personne.",
+      "fallbackDurationMs": 26000
+    },
+    {
+      "id": "invite",
+      "transcript": "Pour inviter Léa, ouvre le formulaire, saisis son nom et une adresse valide, puis choisis son rôle avant l’envoi. Prenons Organisateur : c’est le bon niveau pour aider sur les plannings et les bénévoles sans accéder aux paramètres les plus sensibles.",
+      "fallbackDurationMs": 23000
+    },
+    {
+      "id": "invite-result",
+      "transcript": "Après l’envoi, Léa apparaît avec le statut En attente. Un email contient son lien personnel, valable sept jours ; on peut aussi copier ce lien pour le lui transmettre autrement. Son accès ne devient actif qu’après la création de son mot de passe.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "change-role",
+      "transcript": "Le rôle peut évoluer. On choisit d’abord Propriétaire dans la liste, puis on confirme avec Appliquer : parcourir simplement la liste au clavier ne change donc jamais les droits par accident. La confirmation indique le nouveau rôle. Retirer une personne coupe son accès, mais ne supprime pas l’historique des actions déjà réalisées.",
+      "fallbackDurationMs": 27000
+    },
+    {
+      "id": "organizer-view",
+      "transcript": "Vérifions maintenant avec le compte de Samira, qui est organisatrice. Elle retrouve les événements et les outils opérationnels. Sur la page de l’équipe, la liste reste visible pour comprendre qui administre l’espace, mais les commandes d’invitation, de retrait et de changement de rôle ont disparu.",
+      "fallbackDurationMs": 24000
+    },
+    {
+      "id": "limits",
+      "transcript": "La suppression définitive d’un événement et les réglages de l’organisation restent réservés aux propriétaires, car leurs conséquences dépassent le travail quotidien. Attribue les droits selon la responsabilité réelle, retire rapidement les accès devenus inutiles et utilise toujours un compte nominatif par personne.",
+      "fallbackDurationMs": 23000
+    },
+    {
+      "id": "result",
+      "transcript": "Le résultat est une équipe autonome sans donner les pleins pouvoirs à tout le monde : les propriétaires protègent le cadre, les organisateurs font vivre les événements, et chaque action reste liée à la bonne personne.",
+      "fallbackDurationMs": 15000
+    }
   ]
 }

@@ -3,18 +3,66 @@
   "slug": "shift-create-edit-detail",
   "title": "Ajouter et modifier un créneau dans le détail",
   "description": "Configurer précisément une plage de bénévolat, ses informations pratiques et les conséquences d’une modification.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous créez et modifiez un créneau en détail, champ par champ.",
+    "steps": [
+      "Choisissez le poste et, si besoin, un libellé plus précis.",
+      "Réglez la date, l'heure de début, l'heure de fin et la capacité.",
+      "Activez la liste d'attente ou le mode sur validation si nécessaire.",
+      "Ajoutez un point de rendez-vous, une consigne, un contact et une position sur la carte.",
+      "Enregistrez le créneau et vérifiez sa place dans le planning.",
+      "Rouvrez l'éditeur pour corriger un horaire ou une information, en prévenant les bénévoles déjà inscrits."
+    ],
+    "remember": [
+      "Un créneau sans lieu propre reprend celui de l'événement.",
+      "Plus les informations sont fiables, moins votre équipe répond aux mêmes questions.",
+      "Pour un créneau déjà occupé, vérifiez le nouveau jour et les heures avant de confirmer."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "welcome", "transcript": "Un créneau transforme un poste en besoin concret. Il dit quelle mission doit être assurée, quand, par combien de personnes et avec quelles informations pratiques. Prenons le temps de parcourir chaque champ et son résultat côté bénévole.", "fallbackDurationMs": 22000 },
-    { "id": "identity", "transcript": "Choisis d’abord le poste et, si nécessaire, un libellé plus précis. La date, l’heure de début et l’heure de fin placent la barre dans le planning. La capacité indique combien de personnes peuvent être confirmées sur cette plage.", "fallbackDurationMs": 22000 },
-    { "id": "availability", "transcript": "Deux options complètent le fonctionnement du créneau. La liste d’attente recueille les volontaires quand toutes les places sont prises. Le mode Sur validation transforme chaque inscription en demande que l’organisateur devra accepter ou refuser.", "fallbackDurationMs": 22000 },
-    { "id": "practical", "transcript": "Les informations pratiques peuvent préciser un point de rendez-vous, une consigne, un contact opérationnel et une position sur la carte. Si le créneau n’a pas de lieu propre, il reprend celui de l’événement. Ces détails deviennent visibles aux personnes inscrites.", "fallbackDurationMs": 25000 },
-    { "id": "save", "transcript": "Enregistrons le créneau et vérifions sa place dans le planning. Le libellé complète le nom du poste sans le remplacer, la capacité apparaît dans les indicateurs et la fiche détaillée rassemble les consignes utiles au jour J.", "fallbackDurationMs": 23000 },
-    { "id": "change", "transcript": "Dans la liste, le statut indique si les inscriptions sont ouvertes, fermées ou si le créneau est annulé. Rouvrir l’éditeur permet de corriger l’horaire et les informations pratiques. Pour un créneau déjà occupé, relis toujours le nouveau jour, les heures et le rendez-vous avant de confirmer et de prévenir les bénévoles.", "fallbackDurationMs": 27000 },
-    { "id": "result", "transcript": "Un bon créneau reste court à lire mais complet pour agir : mission, horaire, capacité, lieu et consigne. Plus ces informations sont fiables, moins l’équipe doit répondre aux mêmes questions par email ou par téléphone.", "fallbackDurationMs": 20000 }
+    {
+      "id": "welcome",
+      "transcript": "Un créneau transforme un poste en besoin concret. Il dit quelle mission doit être assurée, quand, par combien de personnes et avec quelles informations pratiques. Prenons le temps de parcourir chaque champ et son résultat côté bénévole.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "identity",
+      "transcript": "Choisis d’abord le poste et, si nécessaire, un libellé plus précis. La date, l’heure de début et l’heure de fin placent la barre dans le planning. La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "availability",
+      "transcript": "Deux options complètent le fonctionnement du créneau. La liste d’attente recueille les volontaires quand toutes les places sont prises. Le mode Sur validation transforme chaque inscription en demande que l’organisateur devra accepter ou refuser.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "practical",
+      "transcript": "Les informations pratiques peuvent préciser un point de rendez-vous, une consigne, un contact opérationnel et une position sur la carte. Si le créneau n’a pas de lieu propre, il reprend celui de l’événement. Ces détails deviennent visibles aux personnes inscrites.",
+      "fallbackDurationMs": 25000
+    },
+    {
+      "id": "save",
+      "transcript": "Enregistrons le créneau et vérifions sa place dans le planning. Le libellé complète le nom du poste sans le remplacer, la capacité apparaît dans les indicateurs et la fiche détaillée rassemble les consignes utiles au jour J.",
+      "fallbackDurationMs": 23000
+    },
+    {
+      "id": "change",
+      "transcript": "Dans la liste, le statut indique si les inscriptions sont ouvertes, fermées ou si le créneau est annulé. Rouvrir l’éditeur permet de corriger l’horaire et les informations pratiques. Pour un créneau déjà occupé, relis toujours le nouveau jour, les heures et le rendez-vous avant de confirmer et de prévenir les bénévoles.",
+      "fallbackDurationMs": 27000
+    },
+    {
+      "id": "result",
+      "transcript": "Un bon créneau reste court à lire mais complet pour agir : mission, horaire, capacité, lieu et consigne. Plus ces informations sont fiables, moins l’équipe doit répondre aux mêmes questions par email ou par téléphone.",
+      "fallbackDurationMs": 20000
+    }
   ]
 }

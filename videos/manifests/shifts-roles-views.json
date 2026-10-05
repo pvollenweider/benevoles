@@ -3,17 +3,60 @@
   "slug": "shifts-roles-views",
   "title": "Comprendre postes, créneaux et vues du planning",
   "description": "Lire la structure du planning, passer de la Timeline à la Liste et organiser les postes.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous découvrez les postes, les créneaux et les deux vues du planning.",
+    "steps": [
+      "Distinguez un poste (une mission) d'un créneau (une plage précise de ce poste).",
+      "Utilisez la vue Timeline pour voir qui travaille quand, avec les chevauchements et les trous.",
+      "Utilisez la vue Liste pour relire les libellés, les capacités et les statuts.",
+      "Ouvrez « Gérer les postes » pour réordonner les postes avec Monter et Descendre.",
+      "Choisissez une couleur pour chaque poste dans la palette prévue."
+    ],
+    "remember": [
+      "Le même poste peut contenir plusieurs créneaux, sur un ou plusieurs jours.",
+      "La couleur aide à se repérer, mais le nom du poste reste l'information principale.",
+      "Des noms courts et un ordre logique gardent le planning compréhensible sur plusieurs jours."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "welcome", "transcript": "Un poste décrit une mission, par exemple Accueil ou Buvette. Un créneau est une plage précise de ce poste, avec une date, des heures et un nombre de places. Le même poste peut donc contenir plusieurs créneaux, sur un ou plusieurs jours.", "fallbackDurationMs": 23000 },
-    { "id": "timeline", "transcript": "La vue Timeline répond d’abord à une question visuelle : qui travaille quand ? Chaque couleur correspond à un poste, les barres montrent les horaires et leur longueur révèle immédiatement les chevauchements, les trous et les périodes chargées.", "fallbackDurationMs": 22000 },
-    { "id": "list", "transcript": "La vue Liste présente les mêmes données sous une forme plus compacte. Elle est pratique pour relire les libellés, les capacités et les statuts, ou pour parcourir rapidement un grand nombre de créneaux sans suivre l’axe horaire.", "fallbackDurationMs": 21000 },
-    { "id": "roles", "transcript": "Dans Gérer les postes, l’ordre choisi devient l’ordre du planning. Les flèches Monter et Descendre offrent une alternative claire au glisser-déposer et gardent le focus sur le poste déplacé. C’est aussi ici qu’on renomme un poste et qu’on ouvre ses règles.", "fallbackDurationMs": 25000 },
-    { "id": "colors", "transcript": "La couleur sert à reconnaître une mission d’un coup d’œil. Choisis-la dans la palette prévue : elle reste cohérente dans les vues et lisible pour les bénévoles. La couleur aide à se repérer, mais le nom du poste reste toujours l’information principale.", "fallbackDurationMs": 22000 },
-    { "id": "result", "transcript": "Utilise la Timeline pour construire et équilibrer la journée, puis la Liste pour contrôler le détail. Avec des noms courts, un ordre logique et des couleurs stables, le planning reste compréhensible même lorsqu’il couvre plusieurs jours.", "fallbackDurationMs": 20000 }
+    {
+      "id": "welcome",
+      "transcript": "Un poste décrit une mission, par exemple Accueil ou Buvette. Un créneau est une plage précise de ce poste, avec une date, des heures et un nombre de places. Le même poste peut donc contenir plusieurs créneaux, sur un ou plusieurs jours.",
+      "fallbackDurationMs": 23000
+    },
+    {
+      "id": "timeline",
+      "transcript": "La vue Timeline répond d’abord à une question visuelle : qui travaille quand ? Chaque couleur correspond à un poste, les barres montrent les horaires et leur longueur révèle immédiatement les chevauchements, les trous et les périodes chargées.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "list",
+      "transcript": "La vue Liste présente les mêmes données sous une forme plus compacte. Elle est pratique pour relire les libellés, les capacités et les statuts, ou pour parcourir rapidement un grand nombre de créneaux sans suivre l’axe horaire.",
+      "fallbackDurationMs": 21000
+    },
+    {
+      "id": "roles",
+      "transcript": "Dans Gérer les postes, l’ordre choisi devient l’ordre du planning. Les flèches Monter et Descendre offrent une alternative claire au glisser-déposer et gardent le focus sur le poste déplacé. C’est aussi ici qu’on renomme un poste et qu’on ouvre ses règles.",
+      "fallbackDurationMs": 25000
+    },
+    {
+      "id": "colors",
+      "transcript": "La couleur sert à reconnaître une mission d’un coup d’œil. Choisis-la dans la palette prévue : elle reste cohérente dans les vues et lisible pour les bénévoles. La couleur aide à se repérer, mais le nom du poste reste toujours l’information principale.",
+      "fallbackDurationMs": 22000
+    },
+    {
+      "id": "result",
+      "transcript": "Utilise la Timeline pour construire et équilibrer la journée, puis la Liste pour contrôler le détail. Avec des noms courts, un ordre logique et des couleurs stables, le planning reste compréhensible même lorsqu’il couvre plusieurs jours.",
+      "fallbackDurationMs": 20000
+    }
   ]
 }

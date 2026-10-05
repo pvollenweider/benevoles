@@ -11,6 +11,16 @@ export type VideoSegment = {
   fallbackDurationMs: number
 }
 
+/** Viewer-facing content for the video library's detail page (#644): what the video explains to
+ * the viewer, never the internal editorial script. Optional here so existing generation tooling
+ * (which never reads or writes it) keeps working untouched; src/lib/video-catalog.ts validates it
+ * more strictly for the app. */
+export type ManifestViewerContent = {
+  summary: string
+  steps: string[]
+  remember: string[]
+}
+
 export type VideoManifest = {
   id: string
   slug: string
@@ -22,6 +32,7 @@ export type VideoManifest = {
   continuousNarration?: boolean
   viewport: { width: number; height: number; deviceScaleFactor: number }
   segments: VideoSegment[]
+  viewer?: ManifestViewerContent
 }
 
 export type VideoCatalogEntry = {

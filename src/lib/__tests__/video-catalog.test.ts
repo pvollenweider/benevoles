@@ -117,6 +117,41 @@ describe("loadVideoCatalog", () => {
     }
   })
 
+  it("every video has a viewer block: non-empty summary, 3–7 steps, 1–4 remember items", () => {
+    for (const video of catalog) {
+      const viewer = video.manifest.viewer
+      expect(viewer, video.id).toBeDefined()
+      expect(viewer.summary.trim().length, video.id).toBeGreaterThan(0)
+      expect(viewer.steps.length, video.id).toBeGreaterThanOrEqual(3)
+      expect(viewer.steps.length, video.id).toBeLessThanOrEqual(7)
+      for (const step of viewer.steps) expect(step.trim().length, video.id).toBeGreaterThan(0)
+      expect(viewer.remember.length, video.id).toBeGreaterThanOrEqual(1)
+      expect(viewer.remember.length, video.id).toBeLessThanOrEqual(4)
+      for (const item of viewer.remember) expect(item.trim().length, video.id).toBeGreaterThan(0)
+    }
+  })
+
+  // #644 owner feedback: the detail page shows what the video explains to the viewer, never
+  // internal editorial or engineering vocabulary — this never slipped in from a script section,
+  // an issue number or a file path while drafting the viewer text.
+  it("viewer text has no internal jargon, issue reference, file path or placeholder", () => {
+    const INTERNAL_WORDS = /\b(seed|manifest|manifeste)\b|#\d+|\.ts\b|\.json\b|TODO/i
+    for (const video of catalog) {
+      const viewer = video.manifest.viewer
+      const text = [viewer.summary, ...viewer.steps, ...viewer.remember].join("\n")
+      expect(text, video.id).not.toMatch(INTERNAL_WORDS)
+    }
+  })
+
+  it("viewer text has no em dash and no « · » separator", () => {
+    for (const video of catalog) {
+      const viewer = video.manifest.viewer
+      const text = [viewer.summary, ...viewer.steps, ...viewer.remember].join("\n")
+      expect(text, video.id).not.toContain("—")
+      expect(text, video.id).not.toContain("·")
+    }
+  })
+
   it("throws when an entry references a manifest that doesn't exist", () => {
     // loadVideoCatalog re-reads from disk each call; we can't easily corrupt the fixture here,
     // so this documents the behaviour via a focused unit test of the failure path instead.
@@ -220,6 +255,7 @@ function makeVideo(overrides: Partial<Video>): Video {
       voiceStyle: "x",
       viewport: { width: 1280, height: 800, deviceScaleFactor: 1 },
       segments: [{ id: "s1", transcript: "t", fallbackDurationMs: 300_000 }],
+      viewer: { summary: "Dans cette vidéo, vous faites x.", steps: ["Ouvrez x.", "Choisissez y.", "Confirmez z."], remember: ["Rien n'est enregistré avant la confirmation."] },
     },
     script: { title: "Titre", stableId: "ID", sections: [], utilite: null, demonstration: null, resultatVisible: null, pointsAttention: null },
     ...overrides,
@@ -253,9 +289,21 @@ describe("searchVideos", () => {
     expect(searchVideos(videos, "RECHERCHE").map((v) => v.id)).toEqual(["B"])
   })
 
-  it("matches tags and the script text", () => {
-    const withScript = [makeVideo({ id: "C", title: "X", description: "", script: { title: "X", stableId: null, sections: [{ heading: "Démonstration", body: "QR code imprimable" }], utilite: null, demonstration: "QR code imprimable", resultatVisible: null, pointsAttention: null } })]
-    expect(searchVideos(withScript, "QR code")).toHaveLength(1)
+  it("matches the viewer summary and steps, not the internal script", () => {
+    const withViewer = [makeVideo({
+      id: "C",
+      title: "X",
+      description: "",
+      manifest: {
+        id: "C", slug: "c", title: "X", description: "", language: "fr-CH", voice: "Kore", voiceStyle: "x",
+        viewport: { width: 1280, height: 800, deviceScaleFactor: 1 },
+        segments: [{ id: "s1", transcript: "t", fallbackDurationMs: 1000 }],
+        viewer: { summary: "Dans cette vidéo, vous téléchargez un QR code imprimable.", steps: ["Ouvrez le QR code.", "Téléchargez-le.", "Imprimez-le."], remember: ["Scannez-le avant de le diffuser."] },
+      },
+      script: { title: "X", stableId: null, sections: [{ heading: "Démonstration", body: "Ce texte interne ne doit jamais remonter dans la recherche." }], utilite: null, demonstration: "Ce texte interne ne doit jamais remonter dans la recherche.", resultatVisible: null, pointsAttention: null },
+    })]
+    expect(searchVideos(withViewer, "QR code")).toHaveLength(1)
+    expect(searchVideos(withViewer, "texte interne")).toHaveLength(0)
   })
 })
 

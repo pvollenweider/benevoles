@@ -3,6 +3,23 @@
   "slug": "admin-features-tour",
   "title": "Organiser ses bénévoles, du premier réglage au jour J",
   "description": "Visite complète de l’administration.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous découvrez un tour d'ensemble de l'administration, de la création de votre organisation jusqu'à la préparation du jour J.",
+    "steps": [
+      "Configurez l'identité de votre organisation : nom, adresse publique, fuseau horaire et convention des bénévoles.",
+      "Invitez votre équipe et attribuez les bons rôles : propriétaire, organisateur, responsable de secteur.",
+      "Créez un événement et faites-le passer de brouillon à publié, puis archivé en fin de vie.",
+      "Construisez le planning : ajoutez des créneaux un par un, copiez-les ou créez-les en série.",
+      "Gérez vos membres et leurs inscriptions, et posez des questions utiles dans le formulaire.",
+      "Communiquez par messages ciblés et rappels automatiques.",
+      "Préparez le jour J avec les rapports, les badges et le journal d'activité."
+    ],
+    "remember": [
+      "Un organisateur ne voit pas les réglages réservés au propriétaire.",
+      "Un événement publié peut rester non répertorié et accessible seulement par son lien.",
+      "La recherche globale permet de retrouver rapidement une information."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
