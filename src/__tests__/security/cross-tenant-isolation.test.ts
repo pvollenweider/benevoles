@@ -229,6 +229,22 @@ describe("Events — cross-tenant isolation", () => {
     expect(res.status).toBe(404)
   })
 
+  it("GET /api/admin/events/[id]/export/answers returns 404 for an org-B event, reading only the scoped client (#686)", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/export/answers/route")
+    const db = setupGuard() // event.findFirst → null
+    const res = await GET(makeRequest("/api/admin/events/evt-b/export/answers"), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-b" } }))
+    expect(prismaMock.event.findFirst).not.toHaveBeenCalled()
+  })
+
+  it("GET /api/admin/events/[id]/export/sheets/answers returns 404 for an org-B event (#686)", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/export/sheets/[view]/route")
+    setupGuard() // event.findFirst → null
+    const res = await GET(makeRequest("/api/admin/events/evt-b/export/sheets/answers"), { params: Promise.resolve({ id: "evt-b", view: "answers" }) })
+    expect(res.status).toBe(404)
+  })
+
   it("GET /api/admin/events/[id] returns 200 for an org-A event", async () => {
     const { GET } = await import("@/app/api/admin/events/[id]/route")
     setupGuard({

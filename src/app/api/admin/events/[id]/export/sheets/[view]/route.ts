@@ -6,6 +6,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { contactPhone } from "@/lib/contact-phone"
 import { orgTimeZone } from "@/lib/time-zone"
 import { isSheetView, renderSheet } from "@/lib/print-sheets"
+import { answerSummary, answerSummarySelect } from "@/lib/question-answer-summary"
 
 /** GET /api/admin/events/[id]/export/sheets/[view] (#400): one printable sheet of the event. */
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string; view: string }> }) {
@@ -36,12 +37,16 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
+  // The answers summary (#686) counts every live registration, not only the confirmed ones above.
+  const forAnswers = view === "answers" ? await guard.db.event.findFirst({ where: { id }, select: answerSummarySelect }) : null
+
   const timeZone = orgTimeZone(event.organization)
   const html = renderSheet(view, {
     eventTitle: event.title,
     organizationName: event.organization.name,
     printedAt: new Date().toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short", timeZone }),
     leaders: event.sectorLeaders,
+    answers: forAnswers ? answerSummary(forAnswers.questions, forAnswers.registrations) : undefined,
     shifts: event.shifts.map((s) => ({
       id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10),
       startTime: s.startTime, endTime: s.endTime, capacity: s.capacity,

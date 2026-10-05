@@ -141,10 +141,11 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
 
       <section aria-labelledby="reports-organizers" className="space-y-2">
         <h2 id="reports-organizers" className="text-base font-semibold text-gray-900">Pour les organisateurs seulement</h2>
-        <p id="reports-organizers-note" className="text-sm text-gray-600">Contiennent des numéros de téléphone : à ne pas afficher ni distribuer.</p>
+        <p id="reports-organizers-note" className="text-sm text-gray-600">Ces documents, sauf la synthèse des réponses, contiennent des numéros de téléphone : à ne pas afficher ni distribuer.</p>
         <ul role="list" className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
           {row(`${base}/pdf`, "Export complet", "Le planning en frise par jour, le récapitulatif par poste et la liste des bénévoles avec leurs coordonnées, en couleur.", "reports-organizers-note")}
-          {forOrganizers.map((v) => row(`${base}/sheets/${v.id}`, v.name, v.description, "reports-organizers-note"))}
+          {/* The answers summary (#686) has counts only, no phone number: not described by the note. */}
+          {forOrganizers.map((v) => row(`${base}/sheets/${v.id}`, v.name, v.description, v.id === "answers" ? undefined : "reports-organizers-note"))}
         </ul>
       </section>
       <section aria-labelledby="reports-badges" className="space-y-2">

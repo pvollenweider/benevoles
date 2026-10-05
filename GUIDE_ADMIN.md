@@ -248,6 +248,18 @@ Chaque bénévole répond une fois pour l'événement. S'il se réinscrit depuis
 
 Une question qui a déjà des réponses garde son type, et les choix déjà retenus ne peuvent pas être retirés (créez une nouvelle question si besoin). **Retirer** une question qui a des réponses la sort du formulaire, mais ses réponses restent dans les inscriptions et les exports jusqu'à la suppression de l'événement ; sans réponse, elle est simplement supprimée. Une copie de l'événement reprend les questions (sans les réponses) avec les réglages.
 
+### Synthèse des réponses
+
+Sous la liste des questions, **Synthèse des réponses** compte les réponses, par exemple pour savoir combien de t-shirts de chaque taille commander. Un tableau par question :
+
+- **choix unique** et **choix multiple** : le nombre de bénévoles par choix, dans l'ordre de la question, puis **Sans réponse**. Pour un choix multiple, chacun peut cocher plusieurs choix : le total peut dépasser le nombre de bénévoles ;
+- **oui / non** : les deux totaux, puis **Sans réponse** ;
+- **texte court** : les réponses regroupées sans tenir compte des majuscules, des accents ni des espaces autour (« Végétarien » et « vegetarien » comptent ensemble, sous l'orthographe la plus saisie), la plus fréquente en premier, puis **Sans réponse**.
+
+Qui est compté : chaque bénévole qui a au moins un créneau confirmé sur l'événement, une seule fois quel que soit son nombre de créneaux. Les bénévoles sans créneau confirmé mais en liste d'attente, avec une place proposée ou une demande à valider sont comptés à part, dans la colonne **En attente** : une marge pour la commande. Les inscriptions annulées ou refusées ne comptent pas, même si la réponse reste enregistrée. Un choix retiré de la question après avoir été retenu reste compté, après les choix actuels, avec la mention « (choix retiré) ». Les questions retirées n'apparaissent pas.
+
+La ligne **État au** donne la date et l'heure du calcul, dans le fuseau de l'organisation : les inscriptions bougent jusqu'à la commande. **Télécharger la synthèse (CSV)** donne un fichier (question, réponse, confirmés, en attente) à envoyer tel quel à un fournisseur, sans nom ni coordonnées ; **Imprimer la synthèse** ouvre la même synthèse en noir et blanc, aussi disponible dans **Rapports**.
+
 Ne demandez que ce qui est nécessaire à l'organisation, et pas d'information sensible (santé, religion, opinions…) : les réponses sont des données personnelles.
 
 ## Pages personnalisées de l'événement
@@ -594,6 +606,7 @@ Ces rappels sont envoyés sans intervention de votre part pour les événements 
 | Export complet | le planning en frise par jour, le récapitulatif par poste et la liste des bénévoles avec leurs coordonnées (en couleur) | organisateurs seulement (téléphones et emails) |
 | Feuille de présence | par créneau, une case à cocher par bénévole (déjà cochée si la présence a été marquée dans l'application), heure d'arrivée, remarque, et des lignes vides pour les arrivées imprévues | organisateurs |
 | Liste avec téléphones | tous les bénévoles par ordre alphabétique, téléphone, email et créneaux | organisateurs seulement |
+| Synthèse des réponses | par question posée aux bénévoles, le nombre de réponses des confirmés et des personnes en attente, sans nom ni coordonnées (voir « Synthèse des réponses ») | organisateurs, ou pour passer commande |
 | Archive de l'événement (JSON) | un fichier téléchargé avec toutes les données de l'événement : réglages, créneaux, inscriptions, pages, responsables, jalons et journal | vos archives, ou pour changer d'outil |
 
 Sauf l'export complet, ces documents sont conçus pour le noir et blanc. La feuille de présence en CSV se télécharge depuis les inscriptions (voir « Présences le jour J »). Les heures planifiées des membres n'y figurent jamais ; les documents avec téléphones portent la mention « ne pas afficher ni distribuer ».

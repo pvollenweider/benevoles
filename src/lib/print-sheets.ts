@@ -3,11 +3,13 @@
 
 import { shiftInfoText, type ShiftInfo } from "./shift-info"
 import { buildDayParts, type ShiftRow } from "./pdf-export-gantt"
+import { confirmedLine, MULTIPLE_NOTE, rowLabel, waitingLine, type AnswerSummary } from "./question-answer-summary"
 
 /**
- * Printable sheets (#400): paper still matters on site. Five views of one event, each a plain
+ * Printable sheets (#400): paper still matters on site. Six views of one event, each a plain
  * HTML page designed for black-and-white printing: schedule per day, schedule per role, individual
- * schedule per volunteer, attendance sheet, list with phone numbers. The two schedules and the
+ * schedule per volunteer, attendance sheet, list with phone numbers, summary of the answers to the
+ * custom questions (#686). The two schedules and the
  * individual sheet reuse the Gantt of the full export (the product's signature), restyled in
  * monochrome. Pure: the route only loads the data and calls renderSheet.
  */
@@ -18,6 +20,7 @@ export const SHEET_VIEWS = [
   { id: "individual", name: "Planning individuel", description: "Une page par bénévole : sa journée en frise, puis ses créneaux avec lieu, contact et consignes. À remettre à l'arrivée.", audience: "volunteers" },
   { id: "attendance", name: "Feuille de présence", description: "Par créneau, une case à cocher par bénévole et des lignes vides pour les arrivées imprévues.", audience: "organizers" },
   { id: "phones", name: "Liste avec téléphones", description: "Tous les bénévoles par ordre alphabétique, avec téléphone, email et créneaux.", audience: "organizers" },
+  { id: "answers", name: "Synthèse des réponses", description: "Par question posée aux bénévoles, le nombre de réponses des confirmés et des personnes en attente, sans nom ni coordonnées. Pour passer commande (t-shirts, repas).", audience: "organizers" },
 ] as const
 
 export type SheetView = (typeof SHEET_VIEWS)[number]["id"]
@@ -46,6 +49,8 @@ export type SheetData = {
   printedAt: string
   shifts: SheetShift[]
   leaders: { roleName: string; name: string; email?: string | null }[]
+  /** The answers to the custom questions (#686), only loaded for the « answers » view. */
+  answers?: AnswerSummary
 }
 
 export const esc = (s: string | null | undefined) =>
@@ -246,8 +251,31 @@ function phonesView(d: SheetData): string {
     <p class="meta">${plural(rows.length, "bénévole")}.</p>`
 }
 
+/** The answers to the custom questions (#686): one table per question, counts only, no names. */
+function answersView(d: SheetData): string {
+  const a = d.answers
+  if (!a || a.questions.length === 0) return `<p class="meta">Aucune question posée aux bénévoles pour cet événement.</p>`
+  if (a.confirmedCount === 0) return `<p class="meta">Aucun bénévole confirmé pour l'instant.${a.waitingCount ? ` ${esc(waitingLine(a.waitingCount))}.` : ""}</p>`
+  const waiting = a.waitingCount > 0
+  return `
+    <p class="meta">Chaque bénévole compte une fois, quel que soit son nombre de créneaux : <strong>${esc(confirmedLine(a.confirmedCount))}</strong>${waiting ? `, et ${esc(waitingLine(a.waitingCount))}` : ""}. Les inscriptions annulées ne comptent pas, ni les questions retirées.</p>
+    ${a.questions.map((q) => `
+    <section class="block">
+      <table class="detail answers">
+        <caption>${esc(q.label)}${q.type === "multiple" ? `<span class="caption-note">${esc(MULTIPLE_NOTE)}</span>` : ""}</caption>
+        <thead><tr><th scope="col">Réponse</th><th scope="col" class="num">Confirmés</th>${waiting ? `<th scope="col" class="num">En attente</th>` : ""}</tr></thead>
+        <tbody>
+          ${q.rows.map((r) => `<tr>
+            <th scope="row"${r.kind === "none" || r.kind === "removed" ? ` class="muted"` : ""}>${esc(rowLabel(r))}</th>
+            <td class="num mono">${r.confirmed}</td>${waiting ? `<td class="num mono">${r.waiting}</td>` : ""}
+          </tr>`).join("")}
+        </tbody>
+      </table>
+    </section>`).join("")}`
+}
+
 const BUILDERS: Record<SheetView, (d: SheetData) => string> = {
-  day: dayView, role: roleView, individual: individualView, attendance: attendanceView, phones: phonesView,
+  day: dayView, role: roleView, individual: individualView, attendance: attendanceView, phones: phonesView, answers: answersView,
 }
 
 /**
@@ -320,6 +348,15 @@ export function renderSheet(view: SheetView, d: SheetData): string {
     .box { width: 60px; text-align: center; }
     .checkbox { font-size: 20px; line-height: 1; }
 
+    /* ── Answers summary: one narrow table per question, its label as the caption ── */
+    table.answers { width: auto; min-width: 22em; max-width: 100%; }
+    .answers caption { text-align: left; font-weight: 700; font-size: 13px; padding: 4px 0; caption-side: top; }
+    .answers tbody th { font-weight: 400; font-size: 12px; text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--rule-soft); background: inherit; letter-spacing: 0; }
+    .answers tbody tr:nth-child(even) th { background: var(--band); }
+    .answers .num { width: 7em; }
+    .answers thead th.num { text-align: right; }
+    .answers .caption-note { display: block; font-weight: 400; font-size: 12px; color: var(--ink-2); }
+
     /* ── Cards (individual sheet) ────────────────────────────────────────── */
     .card { border: 1px solid var(--rule); padding: 6px 10px; margin: 6px 0; page-break-inside: avoid; break-inside: avoid; }
     .card-title { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
@@ -353,7 +390,7 @@ export function renderSheet(view: SheetView, d: SheetData): string {
       .stats { white-space: nowrap; }
       .gantt-table .slot-th { font-size: 9px; }
       .gantt-table .label-cell, .gantt-table .shift-cell { font-size: 10px; }
-      .detail tbody tr:nth-child(even) td { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .detail tbody tr:nth-child(even) td, .answers tbody tr:nth-child(even) th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     }
     @media (prefers-reduced-motion: no-preference) { .print-btn { transition: background-color 150ms ease-out; } }
   </style>
@@ -367,7 +404,7 @@ export function renderSheet(view: SheetView, d: SheetData): string {
     <button type="button" class="print-btn" onclick="window.print()">Imprimer</button>
   </header>
   <main>
-    ${d.shifts.length === 0 ? `<p class="meta">Aucun créneau.</p>` : BUILDERS[view](d)}
+    ${d.shifts.length === 0 && view !== "answers" ? `<p class="meta">Aucun créneau.</p>` : BUILDERS[view](d)}
   </main>
 </body>
 </html>`
