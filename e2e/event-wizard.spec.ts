@@ -40,7 +40,17 @@ test("an admin creates and publishes an event through the three steps", async ({
   await expect(page).toHaveURL(/\/review$/)
   await expect(steps.getByRole("listitem").nth(2)).toHaveAttribute("aria-current", "step")
   await expect(page.getByText("2 créneaux, 1 poste, 4 places").first()).toBeVisible()
+  // Non-blocking items (#565): practical info, registration window, reminders, each with its link.
+  const review = page.getByRole("region", { name: "Vérification" })
+  const practical = review.getByRole("listitem").filter({ hasText: "2 créneaux sans lieu ni contact" })
+  await expect(practical).toBeVisible()
+  await expect(practical).toContainText("À vérifier :")
+  await expect(review.getByRole("link", { name: "Ajouter : 2 créneaux sans lieu ni contact" })).toHaveAttribute("href", /\/shifts$/)
+  await expect(review.getByText("Inscriptions ouvertes dès la publication").first()).toBeVisible()
+  await expect(review.getByText(/Rappels automatiques|Aucun rappel automatique/).first()).toBeVisible()
   await page.getByRole("button", { name: "Publier" }).click()
   await expect(page.getByText("L'événement est publié : les bénévoles peuvent s'inscrire.")).toBeVisible()
+  // Once published, the coverage line and its link to the staffing page.
+  await expect(review.getByRole("link", { name: "Voir les créneaux incomplets : 0 place occupée sur 4, 2 créneaux incomplets" })).toHaveAttribute("href", /\/staffing$/)
   await expect(page.getByRole("link", { name: /Ouvrir la page de l'événement/ })).toBeVisible()
 })
