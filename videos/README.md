@@ -17,6 +17,14 @@ Le catalogue complet et les statuts de production se trouvent dans `catalog.json
 - `organizer-monitor-followup` : suivi des inscriptions, relances ciblées et préparation du jour J.
 - `masterclass-03-first-steps` (`ORG_FIRST_STEPS`) : première mise en place d'une organisation.
 
+## Licence
+
+Le contenu éditorial (scripts, plan, narration, textes des fiches, catalogue, vidéos rendues,
+sous-titres et transcriptions) est sous licence **CC BY-SA 4.0** : réutilisation et adaptation
+libres, avec attribution « Benevol (benevol.app), CC BY-SA 4.0 » et partage dans les mêmes
+conditions. Le nom et le logo Benevol n'en font pas partie. Les outils de génération restent sous
+AGPL v3 comme le reste du dépôt. Détails dans `videos/LICENSE`.
+
 ## Sécurité
 
 - Le recorder refuse tout hôte autre que `localhost`, `127.0.0.1` ou `::1`.
