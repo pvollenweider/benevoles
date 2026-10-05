@@ -47,7 +47,19 @@ export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, e
     onConfirm()
   }
   return (
-    <ModalShell title={recap.title} busy={busy} onClose={() => { if (!busy) onCancel() }} initialFocusRef={cancelRef} describedBy={challenge ? `${id}-recap ${id}-challenge-label` : `${id}-recap`} closeOnBackdrop={false} role={recap.danger ? "alertdialog" : "dialog"}>
+    <ModalShell
+      title={recap.title}
+      busy={busy}
+      onClose={() => { if (!busy) onCancel() }}
+      initialFocusRef={cancelRef}
+      // The error paragraph is always part of the dialog's description, not only once shown: a
+      // screen reader then reads it on reopening a dialog that failed before (the failure's own
+      // announcement, role="alert" on that paragraph, only fires on change — this covers the case
+      // where it was already there when the dialog (re)opens, e.g. a retry attempt's own failure).
+      describedBy={[`${id}-recap`, challenge ? `${id}-challenge-label` : null, `${id}-error`].filter(Boolean).join(" ")}
+      closeOnBackdrop={false}
+      role={recap.danger ? "alertdialog" : "dialog"}
+    >
       {/* A form so that Enter in the challenge field confirms; Cancel stays a plain button. */}
       <form onSubmit={(e) => { e.preventDefault(); confirm() }} noValidate>
       <ul id={`${id}-recap`} className="list-disc pl-5 space-y-1 text-sm text-gray-800">

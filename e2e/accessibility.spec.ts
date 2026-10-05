@@ -94,6 +94,27 @@ test.describe("admin", () => {
     expect.soft(await seriousViolations(page), "volunteer certificate").toEqual([])
   })
 
+  // #667: an eligible member's own page (inactive, no registration) shows the « Supprimer »
+  // action, and its confirmation dialog — a new dialog state worth scanning on its own.
+  test("member page's « Supprimer » confirmation dialog has no serious violation", async ({ page }) => {
+    await page.goto("/admin/login")
+    await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+    await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+    await page.getByRole("button", { name: "Se connecter" }).click()
+    await expect(page).toHaveURL(/\/admin\/events/)
+
+    const res = await page.request.post("/api/admin/members", { data: { firstName: "E2E", lastName: `Del${Date.now()}`, active: false } })
+    expect(res.ok(), await res.text()).toBeTruthy()
+    const member = await res.json()
+
+    await page.goto(`/admin/members/${member.id}`)
+    const deleteButton = page.getByRole("button", { name: /^Supprimer/ })
+    await waitForHydration(deleteButton)
+    await deleteButton.click()
+    await expect(page.getByRole("alertdialog", { name: /^Supprimer/ })).toBeVisible()
+    expect.soft(await seriousViolations(page), "member page, delete confirmation open").toEqual([])
+  })
+
   // #557: the members list (new "Heures attestées" / "Dernière participation" columns and the
   // hours-export form), then an event's Rapports page with its post-event summary section.
   // #599: the dashboard, with its « Ce qui demande votre attention » section.

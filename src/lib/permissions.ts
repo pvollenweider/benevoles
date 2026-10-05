@@ -73,6 +73,10 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "members": { GET: "organizer", POST: "organizer" },
   "members/[id]": { PATCH: "organizer", DELETE: "organizer" },
   "members/[id]/certificate": { POST: "organizer" },
+  // Permanent deletion (#667) is organizer level like the rest of the members routes: unlike
+  // merge below, it only ever applies to a record that was already inactive with no registration
+  // at all, so it's a much smaller, local action — not owner-only.
+  "members/[id]/delete": { POST: "organizer" },
   // Merge (#600) is irreversible and touches every event: owner only. Organizers can see
   // duplicates (#599, the members list) but not merge them.
   "members/[id]/merge-preview": { POST: "owner" },

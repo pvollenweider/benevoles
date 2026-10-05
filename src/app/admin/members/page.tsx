@@ -9,19 +9,25 @@ import { serializeAddressStatus } from "@/lib/address-status"
 import { addressHash } from "@/lib/notifications/smtp-outcome"
 import { env } from "@/lib/env"
 import { countDuplicatePairs } from "@/lib/member-duplicates-data"
+import { loadMemberDeletionEligibilities } from "@/lib/member-deletion-data"
+import { MEMBER_DELETION_REASON } from "@/lib/member-deletion"
 
 export const dynamic = "force-dynamic"
 
-export default async function MembersPage({ searchParams }: { searchParams: Promise<{ q?: string | string[]; verify?: string | string[]; edit?: string | string[] }> }) {
+export default async function MembersPage({ searchParams }: { searchParams: Promise<{ q?: string | string[]; verify?: string | string[]; edit?: string | string[]; deleted?: string | string[] }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { db } = ctx
-  const { q, verify, edit } = await searchParams
+  const { q, verify, edit, deleted } = await searchParams
   const initialSearch = (Array.isArray(q) ? q[0] : q)?.slice(0, SEARCH_MAX_LENGTH).trim() || undefined
   // From the dashboard's attention item (#599): land on the members list with the filter already on.
   const initialAddressToVerify = (Array.isArray(verify) ? verify[0] : verify) === "1"
   // From the member activity page's « Modifier l'adresse » action (#599): open the edit form at once.
   const initialEditId = (Array.isArray(edit) ? edit[0] : edit) || undefined
+  // From the member page's own « Supprimer » action (#667): that page navigates here once the
+  // record is gone — there is nothing left on it to announce from — carrying the deleted person's
+  // name so this page can announce the outcome instead.
+  const initialDeletedName = (Array.isArray(deleted) ? deleted[0] : deleted)?.slice(0, 200) || undefined
 
   const [volunteers, allTags, org] = await Promise.all([
     db.volunteer.findMany({
@@ -59,6 +65,11 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
   // « Doublons possibles » (#601): count only, for the header link — the full pairs are loaded by
   // /admin/members/duplicates itself.
   const duplicatesCount = await countDuplicatePairs(db, ctx.organizationId)
+  // Whether each member can be permanently deleted (#667): one extra query for the whole list.
+  const deletionEligibilities = await loadMemberDeletionEligibilities(
+    db,
+    volunteers.map((v) => ({ id: v.id, active: v.active, mergedIntoId: v.mergedIntoId })),
+  )
 
   return (
     <MembersManager
@@ -87,12 +98,14 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
           lastShiftDate,
           lastPresenceDate,
           addressStatus: serializeAddressStatus(addressStatuses.get(v.id) ?? { kind: "ok" }),
+          deletion: deletionEligibilities.get(v.id) ?? { eligible: false, reason: MEMBER_DELETION_REASON.active },
         }
       })}
       allTags={allTags}
       initialSearch={initialSearch}
       initialAddressToVerify={initialAddressToVerify}
       initialEditId={initialEditId}
+      initialDeletedName={initialDeletedName}
       defaultHoursPeriod={defaultPeriod(new Date(), timeZone)}
       duplicatesCount={duplicatesCount}
     />

@@ -5,13 +5,14 @@
 
 import Link from "next/link"
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, useTransition } from "react"
-import { deactivateMemberRecap } from "@/lib/action-recap"
+import { deactivateMemberRecap, deleteMemberRecap } from "@/lib/action-recap"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useRouter } from "next/navigation"
 import { fmtHours } from "@/lib/gantt-utils"
 import { addressesToVerifyCount, filterMembers, nextSort, sortAnnouncement as announceSort, sortMembers, type Member, type SortCol, type SortDir } from "@/lib/members-list"
 import { addressStatusSentence } from "@/lib/address-status"
 import { announce } from "@/lib/announce"
+import { focusFirstAvailable } from "@/lib/focus-return"
 import { AddMemberModal, EditMemberModal } from "./members/MemberFormModals"
 import ImportModal from "./members/ImportModal"
 import SortTh from "./members/SortTh"
@@ -26,6 +27,10 @@ type Props = {
   initialAddressToVerify?: boolean
   /** `?edit=<id>` from the member activity page's status action (#599): opens the edit form at once. */
   initialEditId?: string
+  /** `?deleted=<name>` (#667): the member page just deleted this person and sent us here — nothing
+   * left on that page to announce the outcome from. Announced once, on mount, then the URL is
+   * cleaned up so a refresh doesn't repeat it. */
+  initialDeletedName?: string
   /** Default "from"/"to" for the "Heures par bénévole" export form (#557), from volunteer-hours.ts's defaultPeriod. */
   defaultHoursPeriod: { from: string; to: string }
   /** Possible-duplicate pairs still suggested (#601), computed server-side (member-duplicates-data.ts). */
@@ -36,7 +41,7 @@ type Props = {
 const fmtDay = (iso: string) => new Date(`${iso}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", day: "numeric", month: "long", year: "numeric" })
 const fmtDate = (d: Date) => d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
 
-export default function MembersManager({ initialMembers, allTags, initialSearch, initialAddressToVerify, initialEditId, defaultHoursPeriod, duplicatesCount = 0 }: Props) {
+export default function MembersManager({ initialMembers, allTags, initialSearch, initialAddressToVerify, initialEditId, initialDeletedName, defaultHoursPeriod, duplicatesCount = 0 }: Props) {
   const router = useRouter()
   const members = initialMembers
   const [search, setSearch] = useState(initialSearch ?? "")
@@ -93,10 +98,27 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
 
   const [pendingDeactivate, setPendingDeactivate] = useState<{ id: string; name: string } | null>(null)
   const [deactivating, setDeactivating] = useState(false)
+  const [deactivateError, setDeactivateError] = useState<string | null>(null)
+  const [pendingDelete, setPendingDelete] = useState<{ id: string; name: string } | null>(null)
+  const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
+  // Bumped whenever a confirm attempt (deactivate or delete) fails and the dialog stays open
+  // (#667 accessibility review): a layout effect, same tick pattern as editSaveTick/
+  // deleteConfirmTick below, refocuses the dialog's own submit button deterministically instead of
+  // trusting that the click which triggered the request left it focused (not guaranteed, e.g.
+  // Safari does not focus a clicked button) — no flash on the row's action, the dialog never closes.
+  const [confirmErrorTick, setConfirmErrorTick] = useState(0)
+  useLayoutEffect(() => {
+    if (confirmErrorTick > 0) document.querySelector<HTMLElement>('[role="alertdialog"] button[type="submit"]')?.focus()
+  }, [confirmErrorTick])
   const [actionMessage, setActionMessage] = useState<{ kind: "ok" | "error"; text: string } | null>(null)
   const actionRef = useRef<HTMLParagraphElement>(null)
   // The page heading, a fallback focus target (#599): see headingRef's use below.
   const headingRef = useRef<HTMLHeadingElement>(null)
+  // The ordered row ids at the moment « Supprimer » was confirmed (#667): read back once the
+  // refreshed list no longer carries the deleted member, to find the next row's action (or the
+  // previous one, or the heading) — see the layout effect below.
+  const pendingDeleteFocusRef = useRef<{ id: string; orderedIds: string[] } | null>(null)
   // Set when an edit is saved (#599), read back once the refreshed list carries the edited member
   // — never before. A ref, not state: setting it must NOT by itself re-run the effect below (it
   // would, with `members` still the pre-save list — refresh() is async and lands later), only the
@@ -105,6 +127,14 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   // Bumped on every saved edit (#599): a trigger for the layout effect below, distinct from the
   // ref above so React actually schedules it.
   const [editSaveTick, setEditSaveTick] = useState(0)
+  // Bumped on every successful deletion (#667): parks focus on the status line at once (same
+  // "win the race against ModalShell's own opener-restore" reasoning as editSaveTick below), as a
+  // stable first stop before the members-effect above moves it again, once refresh() lands, to
+  // the real final target (the next row, or the heading) — the row that was the opener is gone.
+  const [deleteConfirmTick, setDeleteConfirmTick] = useState(0)
+  useLayoutEffect(() => {
+    if (deleteConfirmTick > 0) actionRef.current?.focus()
+  }, [deleteConfirmTick])
 
   /** Replaces the status line's text via announce() so identical consecutive messages (e.g.
    * désactiver the same way twice) still re-announce, same pattern as the sort announcement. */
@@ -113,9 +143,34 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   }
 
   // The row's « Désactiver » button is gone after a refresh: park the focus on the outcome line.
+  // Skipped while a successful deletion's focus hand-off is still pending (pendingDeleteFocusRef):
+  // that one moves focus itself (the layout effect below), to the next row's action rather than
+  // the status line, since the row itself is gone from the DOM — one hop, not two. Also skipped
+  // once, consuming suppressStatusFocusRef, for the ?deleted= mount announcement (#667): that one
+  // already placed focus on the heading itself and must not have it stolen back when the live
+  // region's text actually lands a frame later (announce() clears, then sets, the message).
+  const suppressStatusFocusRef = useRef(false)
   useEffect(() => {
-    if (!pendingDeactivate && actionMessage) actionRef.current?.focus()
-  }, [pendingDeactivate, actionMessage])
+    if (pendingDeactivate || pendingDelete || !actionMessage || pendingDeleteFocusRef.current) return
+    if (suppressStatusFocusRef.current) { suppressStatusFocusRef.current = false; return }
+    actionRef.current?.focus()
+  }, [pendingDeactivate, pendingDelete, actionMessage])
+
+  // Once the refreshed list no longer carries the deleted member (#667), move focus to the next
+  // row's action, the previous row's if it was last, or the page heading if none remain — never
+  // left on a removed row. A layout effect, synchronous before paint, same reasoning as the saved-
+  // edit one above: it must win the race against anything else that could claim focus meanwhile.
+  useLayoutEffect(() => {
+    const pending = pendingDeleteFocusRef.current
+    if (!pending) return
+    if (members.some((m) => m.id === pending.id)) return // refresh() hasn't landed yet
+    const idx = pending.orderedIds.indexOf(pending.id)
+    const remaining = new Set(members.map((m) => m.id))
+    const candidateIds = [...pending.orderedIds.slice(idx + 1), ...pending.orderedIds.slice(0, idx).reverse()].filter((id) => remaining.has(id))
+    const candidates = candidateIds.map((id) => () => document.querySelector<HTMLElement>(`[data-edit-trigger="${id}"]`))
+    focusFirstAvailable([...candidates, headingRef.current])
+    pendingDeleteFocusRef.current = null
+  }, [members])
 
   // Saving an edit (#599): focus the status line at once, synchronously (a layout effect, like
   // ModalShell's own documented "a parent that moves focus when the dialog closes wins" escape
@@ -147,8 +202,28 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
     pendingEditCheckRef.current = null
   }, [members])
 
+  // The member page just deleted someone and sent us here (#667): announce it once, on mount, and
+  // clean the query string so a refresh doesn't repeat it.
+  const announcedDeletionRef = useRef(false)
+  useEffect(() => {
+    if (!initialDeletedName || announcedDeletionRef.current) return
+    announcedDeletionRef.current = true
+    suppressStatusFocusRef.current = true
+    announceAction("ok", `${initialDeletedName} supprimé·e.`)
+    headingRef.current?.focus()
+    router.replace("/admin/members")
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   function deactivate(id: string, name: string) {
+    setDeactivateError(null)
     setPendingDeactivate({ id, name })
+  }
+
+  function askDelete(id: string, name: string) {
+    setDeleteError(null)
+    pendingDeleteFocusRef.current = { id, orderedIds: filtered.map((m) => m.id) }
+    setPendingDelete({ id, name })
   }
 
   // « Doublon ? » (#599): opens the « Doublons possibles » view (#601) prefiltered to this
@@ -171,29 +246,74 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
     refresh()
   }
 
+  // On failure the dialog stays open (#667 accessibility review): ConfirmActionModal shows the
+  // error itself (role="alert", offers « Réessayer »), same as MemberDeleteAction.tsx. It only
+  // closes on success — no outer announcement either on failure, to avoid saying the same thing
+  // twice (once in the dialog, once on the status line).
   async function runDeactivate(target: { id: string; name: string }) {
     setDeactivating(true)
+    setDeactivateError(null)
     try {
       const res = await fetch(`/api/admin/members/${target.id}`, { method: "DELETE" })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
-        announceAction("error", typeof data?.error === "string" ? data.error : "La désactivation n'a pas abouti. Réessayez.")
+        setDeactivateError(typeof data?.error === "string" ? data.error : "La désactivation n'a pas abouti. Réessayez.")
+        setConfirmErrorTick((n) => n + 1)
         return
       }
       announceAction("ok", `${target.name} désactivé·e.`)
+      setPendingDeactivate(null)
       refresh()
     } catch {
-      announceAction("error", "Connexion impossible : rien n'a changé. Réessayez.")
+      setDeactivateError("Connexion impossible : rien n'a changé. Réessayez.")
+      setConfirmErrorTick((n) => n + 1)
     } finally {
       setDeactivating(false)
-      setPendingDeactivate(null)
+    }
+  }
+
+  async function runDelete(target: { id: string; name: string }) {
+    setDeleting(true)
+    setDeleteError(null)
+    try {
+      const res = await fetch(`/api/admin/members/${target.id}/delete`, { method: "POST" })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setDeleteError(typeof data?.error === "string" ? data.error : "La suppression n'a pas abouti. Réessayez.")
+        setConfirmErrorTick((n) => n + 1)
+        return
+      }
+      announceAction("ok", `${target.name} supprimé·e.`)
+      setDeleteConfirmTick((n) => n + 1)
+      setPendingDelete(null)
+      refresh()
+    } catch {
+      setDeleteError("Connexion impossible : rien n'a changé. Réessayez.")
+      setConfirmErrorTick((n) => n + 1)
+    } finally {
+      setDeleting(false)
     }
   }
 
   return (
     <div className="space-y-5">
       {pendingDeactivate && (
-        <ConfirmActionModal recap={deactivateMemberRecap(pendingDeactivate.name)} busy={deactivating} onConfirm={() => void runDeactivate(pendingDeactivate)} onCancel={() => setPendingDeactivate(null)} />
+        <ConfirmActionModal
+          recap={deactivateMemberRecap(pendingDeactivate.name)}
+          busy={deactivating}
+          error={deactivateError}
+          onConfirm={() => void runDeactivate(pendingDeactivate)}
+          onCancel={() => { setDeactivateError(null); setPendingDeactivate(null) }}
+        />
+      )}
+      {pendingDelete && (
+        <ConfirmActionModal
+          recap={deleteMemberRecap(pendingDelete.name)}
+          busy={deleting}
+          error={deleteError}
+          onConfirm={() => void runDelete(pendingDelete)}
+          onCancel={() => { pendingDeleteFocusRef.current = null; setDeleteError(null); setPendingDelete(null) }}
+        />
       )}
       <p
         ref={actionRef}
@@ -475,6 +595,19 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                         className="inline-flex items-center justify-center min-h-6 px-1.5 text-xs text-gray-500 hover:text-red-600"
                       >
                         Désactiver
+                      </button>
+                    )}
+                    {/* Only for an eligible record (#667): inactive, no registration at all, not a
+                        merged tombstone — never a dead button for the others. */}
+                    {m.deletion.eligible && (
+                      <button
+                        onClick={() => askDelete(m.id, `${m.firstName} ${m.lastName}`)}
+                        aria-label={`Supprimer ${m.firstName} ${m.lastName}`}
+                        // DESIGN.md « Texte (danger) » (#b91c1c, pas de fond, pas de bord) : cette
+                        // action est permanente, à la différence de « Désactiver » juste au-dessus.
+                        className="inline-flex items-center justify-center min-h-6 px-1.5 text-xs font-medium text-red-700 hover:text-red-900"
+                      >
+                        Supprimer
                       </button>
                     )}
                   </td>
