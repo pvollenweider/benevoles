@@ -42,11 +42,19 @@ export async function POST(req: Request) {
   }
   const { volunteerId } = registration
 
-  await prisma.pushSubscription.upsert({
-    where: { endpoint_volunteerId: { endpoint, volunteerId } },
-    update: { auth, p256dh },
-    create: { endpoint, auth, p256dh, volunteerId },
+  // Under the member's row lock (#516, the lock the erasure takes first): a record erased since
+  // the lookup above never gets a device attached to it.
+  const attached = await prisma.$transaction(async (tx) => {
+    const rows = await tx.$queryRaw<{ erasedAt: Date | null }[]>`SELECT "erasedAt" FROM "Volunteer" WHERE id = ${volunteerId} FOR UPDATE`
+    if (rows.length === 0 || rows[0].erasedAt) return false
+    await tx.pushSubscription.upsert({
+      where: { endpoint_volunteerId: { endpoint, volunteerId } },
+      update: { auth, p256dh },
+      create: { endpoint, auth, p256dh, volunteerId },
+    })
+    return true
   })
+  if (!attached) return NextResponse.json({ error: "Inscription introuvable" }, { status: 404 })
 
   return NextResponse.json({ ok: true })
 }

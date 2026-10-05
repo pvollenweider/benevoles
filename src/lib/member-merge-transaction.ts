@@ -40,6 +40,7 @@ function toLite(v: {
   id: string; firstName: string; lastName: string; email: string | null; phone: string | null
   tags: string[]; notes: string | null; birthDate: Date | null; availabilityPeriods: string[]
   availabilityNote: string | null; active: boolean; createdAt: Date; organizationId: string | null; mergedIntoId: string | null
+  erasedAt: Date | null
 }): VolunteerLite {
   return { ...v }
 }
@@ -47,7 +48,7 @@ function toLite(v: {
 const VOLUNTEER_SELECT = {
   id: true, firstName: true, lastName: true, email: true, phone: true, tags: true, notes: true,
   birthDate: true, availabilityPeriods: true, availabilityNote: true, active: true, createdAt: true,
-  organizationId: true, mergedIntoId: true,
+  organizationId: true, mergedIntoId: true, erasedAt: true,
 } as const
 
 const SHIFT_SELECT = { id: true, eventId: true, roleName: true, label: true, date: true, startTime: true, endTime: true, minAge: true, maxPerVolunteer: true, reservedTags: true } as const

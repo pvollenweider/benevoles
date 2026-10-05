@@ -41,6 +41,7 @@ model Organization {
   duplicateDismissals DuplicateDismissal[]
   charterVersions CharterVersion[]
   logo        OrganizationLogo?
+  erasureRecords  ErasureRecord[]
 }
 
 // The organization's logo (#300), processed server-side (PNG or JPEG, at most 512 px on its longest
@@ -393,6 +394,11 @@ model Volunteer {
   // null, phone/notes/birthDate/tags/availability cleared) — see src/lib/member-merge-transaction.ts.
   mergedIntoId   String?
   mergedAt       DateTime?
+  // Erasure of personal data (#516, owner decision 2026-10-05: anonymise, not delete): set once the
+  // record was emptied (names « Bénévole effacé », every other personal field cleared, inactive)
+  // while its registrations stay for counts, hours and history. Never cleared again; an erased
+  // record can't be edited, merged or erased twice. See src/lib/member-erasure-transaction.ts.
+  erasedAt       DateTime?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -496,6 +502,25 @@ model MemberInvite {
   @@unique([eventId, volunteerId])
 }
 
+// Erasure register (#516): one row per member whose personal data was erased, so the erasure can
+// be replayed after a database restore (scripts/erasure-register.ts, docs/rgpd/procedure-effacement.md).
+// No personal data: the member id (whose record is itself anonymised) and a keyed hash of the
+// normalized email (HMAC-SHA256 with AUTH_SECRET, bound to the organization, see
+// src/lib/member-erasure-register.ts) — never the address itself. `volunteerId` has no foreign key on
+// purpose: the entry must outlive the record (a later permanent deletion, #667) to stay replayable.
+// Deleted with the organization.
+model ErasureRecord {
+  id             String   @id @default(cuid())
+  organizationId String
+  volunteerId    String   @unique
+  emailHash      String?
+  erasedAt       DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, erasedAt])
+}
+
 // Outbox for notifications sent as a consequence of a request (#293), starting with public
 // sign-up: the request only writes rows here, delivery happens right after the response
 // (next/server `after`) and failed sends are retried by the hourly cron with backoff, instead of
@@ -538,7 +563,8 @@ model DeliveryOutcome {
   id             String   @id @default(cuid())
   organizationId String?
   // The member concerned, when the recipient is one (nullable: admins, sector leaders and test
-  // emails have none). Erasing a volunteer (#516, cascade) erases their outcomes with it.
+  // emails have none). Deleting a volunteer (#667, cascade) or erasing their personal data (#516,
+  // explicit delete in src/lib/member-erasure-transaction.ts) removes their outcomes with it.
   volunteerId    String?
   // The outbox row this send went through, when there was one (nullable: synchronous sends).
   outboxId       String?

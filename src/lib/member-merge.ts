@@ -42,6 +42,8 @@ export interface VolunteerLite {
   organizationId: string | null
   /** Set when this record was itself already absorbed into another one. */
   mergedIntoId: string | null
+  /** Set once its personal data was erased (#516): never merged. */
+  erasedAt?: Date | null
 }
 
 export interface ShiftMeta {
@@ -477,5 +479,6 @@ export function refuseMerge(input: { keep: VolunteerLite; absorb: VolunteerLite 
   if (input.keep.organizationId !== input.absorb.organizationId) return "Non trouvé"
   if (input.absorb.mergedIntoId) return "Cette fiche a déjà été fusionnée dans une autre."
   if (input.keep.mergedIntoId) return "Cette fiche a déjà été fusionnée dans une autre."
+  if (input.keep.erasedAt || input.absorb.erasedAt) return "Les données personnelles de cette fiche ont été effacées : elle ne peut pas être fusionnée."
   return null
 }

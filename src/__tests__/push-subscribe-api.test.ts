@@ -4,9 +4,16 @@ import { hashToken } from "@/lib/token-hash"
 const findFirst = vi.hoisted(() => vi.fn())
 const upsert = vi.hoisted(() => vi.fn())
 const deleteMany = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/prisma", () => ({
-  prisma: { registration: { findFirst }, pushSubscription: { upsert, deleteMany } },
-}))
+const lockRows = vi.hoisted(() => vi.fn())
+vi.mock("@/lib/prisma", () => {
+  const prisma = {
+    registration: { findFirst },
+    pushSubscription: { upsert, deleteMany },
+    $queryRaw: (...args: unknown[]) => lockRows(...args),
+    $transaction: async (fn: (tx: unknown) => unknown): Promise<unknown> => fn(prisma),
+  }
+  return { prisma }
+})
 vi.mock("@/lib/env", () => ({ env: {} }))
 vi.mock("@/lib/rate-limit", () => ({
   rateLimit: () => ({ ok: true, remaining: 1, retryAfter: 0 }),
@@ -24,7 +31,18 @@ function post(body: unknown) {
 }
 
 describe("POST /api/public/push", () => {
-  beforeEach(() => vi.clearAllMocks())
+  beforeEach(() => {
+    vi.clearAllMocks()
+    lockRows.mockResolvedValue([{ erasedAt: null }])
+  })
+
+  it("never attaches a device to a record erased since the link was resolved (#516)", async () => {
+    findFirst.mockResolvedValue({ volunteerId: "vol-1" })
+    lockRows.mockResolvedValue([{ erasedAt: new Date() }])
+    const { POST } = await import("@/app/api/public/push/route")
+    expect((await POST(post({ editToken: "tok", ...sub }))).status).toBe(404)
+    expect(upsert).not.toHaveBeenCalled()
+  })
 
   // Regression: subscribing used to take a bare email, so anyone could subscribe their own
   // browser to another volunteer's reminders and receive the /my/<editToken> link they carry.

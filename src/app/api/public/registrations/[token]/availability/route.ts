@@ -30,9 +30,13 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ token:
   }
   if (!(await tokenUseAllowed(token, "availability"))) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
 
-  const volunteer = await prisma.volunteer.update({
+  // Conditional write (#516): a record erased since the lookup above (its links are regenerated,
+  // but this request already resolved one) is never written to. Postgres re-checks the condition
+  // on the row once the erasure's lock is released, so the two can't interleave.
+  const { count } = await prisma.volunteer.updateMany({ where: { id: registration.volunteerId, erasedAt: null }, data: parsed.data })
+  if (count === 0) return NextResponse.json({ error: "Lien invalide ou inscription annulée." }, { status: 404 })
+  const volunteer = await prisma.volunteer.findUniqueOrThrow({
     where: { id: registration.volunteerId },
-    data: parsed.data,
     select: { availabilityPeriods: true, availabilityNote: true },
   })
   return NextResponse.json(volunteer)

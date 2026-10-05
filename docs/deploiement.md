@@ -347,6 +347,8 @@ openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -pass pass:<PASSPHRASE> \
   -in benevoles_<date>.sql.gz.enc -out dump.sql.gz && gunzip dump.sql.gz
 ```
 
+**Restaurer dans la base de production ramène les données des bénévoles effacés depuis la sauvegarde (#516).** Avant la restauration, exporter le registre des effacements de la base actuelle ; après, le rejouer. Procédure complète : [rgpd/procedure-effacement.md](rgpd/procedure-effacement.md).
+
 ### `BACKUP_PASSPHRASE` est un point unique de défaillance
 
 Elle n'existe qu'à un seul endroit : la clé `BACKUP_PASSPHRASE` du secret `benevoles-secret`, sur ce cluster. Elle n'est **pas** synchronisée depuis les secrets GitHub Actions (`deploy.yml` ne la gère pas, contrairement au reste de `benevoles-secret`) — elle a été ajoutée directement dans le cluster, à la main.

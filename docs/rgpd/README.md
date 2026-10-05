@@ -11,6 +11,7 @@ Travail de l'issue #485. **Rien ici n'est publié, n'a de valeur contractuelle n
 | [convention-benevoles-variantes-brouillon.md](convention-benevoles-variantes-brouillon.md) | brouillon des variantes par pays de la convention de bénévolat (#569) — **brouillon à relire** |
 | [prompt-relecture-juridique.md](prompt-relecture-juridique.md) | prompt de relecture juridique combiné (#485 et #569), pour une personne qualifiée ou une IA juridique spécialisée |
 | [procedure-violation.md](procedure-violation.md) | procédure interne en cas de violation, registre des incidents |
+| [procedure-effacement.md](procedure-effacement.md) | demande d'effacement d'un bénévole, registre des effacements et rejeu après une restauration |
 | [verifications-production.md](verifications-production.md) | checklist des vérifications de production et des contrats |
 | [ecarts.md](ecarts.md) | écarts avec la politique de confidentialité publiée |
 
@@ -22,10 +23,7 @@ L'inventaire factuel et les brouillons (accord art. 28, liste publique des sous-
 
 ## Évolutions du produit nécessaires
 
-- **Effacement ou anonymisation individuelle d'un bénévole malgré un historique** : #516 (ouvert). Le cas sans historique est traité depuis #667 (voir [inventaire.md](inventaire.md)).
 - Sans ticket pour l'instant, à décider :
-  - procédure écrite d'une demande d'effacement exécutée à la main, et registre des demandes ;
-  - rejeu des effacements après une restauration de sauvegarde ;
   - installation de la rotation des journaux dans le dépôt plutôt qu'une procédure manuelle ;
   - durée de vie des liens personnels en clair dans les emails en file d'envoi (`NotificationOutbox`).
 - **Convention de bénévolat (#569)**, décidé le 2026-10-05, à faire **avant** toute nouvelle rédaction du texte par défaut : remplacer « au moins 48 heures à l'avance » par « dès que possible » dans `src/lib/volunteer-charter.ts` (le produit permet un retrait à tout moment et prévient déjà les organisateurs, #559) ; conserver une preuve de l'acceptation de la convention (quel texte, par version ou empreinte, et quand). Ce sont des changements de code, **hors du périmètre de ce dossier documentaire** : à faire dans une PR séparée.
@@ -37,7 +35,7 @@ L'inventaire factuel et les brouillons (accord art. 28, liste publique des sous-
 | **Publiable** en l'état | rien de ce dossier ; seule la matrice de conservation ([../retention.md](../retention.md)) est déjà publique, pour les traitements internes |
 | **À valider juridiquement** | répartition des rôles, qualification des services push, accord de traitement et ses annexes, délai de notification des violations, procédure de violation, texte de la politique publique |
 | **À vérifier en production et dans les contrats** | tout [verifications-production.md](verifications-production.md) : hébergeur, SMTP, Dropbox, Sentry, rotation des journaux, clé des sauvegardes, accès |
-| **Évolution du produit** | effacement individuel (#516) et les points de la section précédente |
+| **Évolution du produit** | les points de la section précédente |
 
 ## Cadre retenu (décision de l'opérateur, 2026-09-30)
 

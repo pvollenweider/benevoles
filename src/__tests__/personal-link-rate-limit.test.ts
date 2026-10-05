@@ -9,7 +9,7 @@ const updateMany = vi.hoisted(() => vi.fn())
 const count = vi.hoisted(() => vi.fn().mockResolvedValue(0))
 const volunteerUpdate = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({
-  prisma: { registration: { findFirst, findMany, updateMany, count }, volunteer: { update: volunteerUpdate } },
+  prisma: { registration: { findFirst, findMany, updateMany, count }, volunteer: { updateMany: vi.fn().mockResolvedValue({ count: 1 }), findUniqueOrThrow: volunteerUpdate } },
 }))
 vi.mock("@/lib/waitlist", () => ({ promoteNextInWaitlist: vi.fn().mockResolvedValue(true) }))
 vi.mock("@/lib/event-log", () => ({ logEvent: vi.fn().mockResolvedValue("log-1") }))

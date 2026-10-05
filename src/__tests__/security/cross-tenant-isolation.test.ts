@@ -491,6 +491,85 @@ describe("Members — cross-tenant isolation", () => {
     expect(volunteerDelete).not.toHaveBeenCalled()
   })
 
+  // ── Erasure of personal data (#516) ──────────────────────────────────────
+
+  function eraseTx(member: Record<string, unknown> | null) {
+    const writes = {
+      volunteerUpdate: vi.fn().mockResolvedValue({}),
+      volunteerDeleteMany: vi.fn().mockResolvedValue({ count: 0 }),
+      registrationUpdateMany: vi.fn().mockResolvedValue({ count: 0 }),
+      outboxDeleteMany: vi.fn().mockResolvedValue({ count: 0 }),
+      outcomeDeleteMany: vi.fn().mockResolvedValue({ count: 0 }),
+      registerUpsert: vi.fn().mockResolvedValue({}),
+      orgLogCreate: vi.fn().mockResolvedValue({ id: "log-1" }),
+    }
+    const none = () => vi.fn().mockResolvedValue([])
+    const tx = {
+      $queryRaw: vi.fn().mockResolvedValue([{ id: "x" }]),
+      volunteer: { findFirst: vi.fn().mockResolvedValue(member), findMany: none(), update: writes.volunteerUpdate, deleteMany: writes.volunteerDeleteMany },
+      registration: { findMany: none(), updateMany: writes.registrationUpdateMany, update: vi.fn() },
+      memberInvite: { findMany: none(), deleteMany: vi.fn(), count: vi.fn().mockResolvedValue(0) },
+      questionAnswer: { findMany: none(), deleteMany: vi.fn(), count: vi.fn().mockResolvedValue(0) },
+      pushSubscription: { findMany: none(), deleteMany: vi.fn(), count: vi.fn().mockResolvedValue(0) },
+      sectorLeader: { findMany: none(), deleteMany: vi.fn() },
+      duplicateDismissal: { findMany: none(), deleteMany: vi.fn() },
+      notificationOutbox: { findMany: none(), deleteMany: writes.outboxDeleteMany },
+      deliveryOutcome: { deleteMany: writes.outcomeDeleteMany },
+      targetedMessage: { update: vi.fn() },
+      erasureRecord: { findUnique: vi.fn().mockResolvedValue(null), create: vi.fn(), upsert: writes.registerUpsert },
+      orgLog: { create: writes.orgLogCreate },
+    }
+    return { tx, writes }
+  }
+
+  it("POST /api/admin/members/[id]/erase returns 404 for an org-B volunteer and writes nothing (#516)", async () => {
+    const { POST } = await import("@/app/api/admin/members/[id]/erase/route")
+    const { tx, writes } = eraseTx(null) // the org-scoped client doesn't see org-B's record
+    const $transaction = vi.fn(async (fn: (tx: unknown) => unknown) => fn(tx))
+    requireOrgSessionMock.mockResolvedValue({ db: { $transaction }, organizationId: ORG_A, session: SESSION_A })
+
+    const res = await POST(makeRequest("/api/admin/members/mem-b/erase", "POST"), params("mem-b"))
+    expect(res.status).toBe(404)
+    for (const write of Object.values(writes)) expect(write).not.toHaveBeenCalled()
+    expect(prismaMock.volunteer.update).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/members/[id]/erase erases an org-A volunteer through the scoped client, outbox and outcomes filtered on org A, logged without saying who (#516)", async () => {
+    const { POST } = await import("@/app/api/admin/members/[id]/erase/route")
+    const { tx, writes } = eraseTx({ id: "mem-a", firstName: "Alice", lastName: "Martin", email: "alice@a.com", mergedIntoId: null, erasedAt: null })
+    const $transaction = vi.fn(async (fn: (tx: unknown) => unknown) => fn(tx))
+    requireOrgSessionMock.mockResolvedValue({ db: { $transaction }, organizationId: ORG_A, session: SESSION_A })
+    const info = vi.spyOn(console, "info").mockImplementation(() => {})
+
+    const res = await POST(makeRequest("/api/admin/members/mem-a/erase", "POST"), params("mem-a"))
+    expect(res.status).toBe(200)
+    expect(writes.volunteerUpdate).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "mem-a" } }))
+    expect(tx.notificationOutbox.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ organizationId: ORG_A }) }))
+    expect(writes.outcomeDeleteMany).toHaveBeenCalledWith({ where: expect.objectContaining({ organizationId: ORG_A }) })
+    expect(writes.registerUpsert).toHaveBeenCalledWith(expect.objectContaining({ create: expect.objectContaining({ organizationId: ORG_A, volunteerId: "mem-a" }) }))
+    const log = writes.orgLogCreate.mock.calls[0][0].data
+    expect(log).toMatchObject({ organizationId: ORG_A, action: "member.erased", entityType: "Organization", entityId: ORG_A })
+    expect(log.changes).toBeUndefined()
+    expect(JSON.stringify(log)).not.toMatch(/mem-a|Alice|Martin|alice@a\.com/)
+    // Neither the register nor its log line carries the address.
+    expect(JSON.stringify(writes.registerUpsert.mock.calls[0][0])).not.toContain("alice@a.com")
+    expect(info.mock.calls.flat().join(" ")).not.toContain("alice@a.com")
+    info.mockRestore()
+  })
+
+  it("POST /api/admin/members/[id]/erase on an already erased record changes nothing (#516, idempotent)", async () => {
+    const { POST } = await import("@/app/api/admin/members/[id]/erase/route")
+    const { tx, writes } = eraseTx({ id: "mem-a", firstName: "Bénévole", lastName: "effacé", email: null, mergedIntoId: null, erasedAt: new Date("2026-10-01T10:00:00Z") })
+    tx.erasureRecord.findUnique.mockResolvedValue({ id: "rec-1" })
+    const $transaction = vi.fn(async (fn: (tx: unknown) => unknown) => fn(tx))
+    requireOrgSessionMock.mockResolvedValue({ db: { $transaction }, organizationId: ORG_A, session: SESSION_A })
+
+    const res = await POST(makeRequest("/api/admin/members/mem-a/erase", "POST"), params("mem-a"))
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({ success: true, alreadyErased: true, erasedAt: "2026-10-01T10:00:00.000Z" })
+    for (const write of Object.values(writes)) expect(write).not.toHaveBeenCalled()
+  })
+
   it("POST /api/admin/members/[id]/merge-preview returns 404 when the other record is org-B's (#600)", async () => {
     const { POST } = await import("@/app/api/admin/members/[id]/merge-preview/route")
     setupGuard({ volunteer: { findFirst: vi.fn().mockResolvedValueOnce({ id: "mem-a", organizationId: ORG_A, firstName: "A", lastName: "A", email: null, phone: null, tags: [], notes: null, birthDate: null, availabilityPeriods: [], availabilityNote: null, active: true, createdAt: new Date(), mergedIntoId: null }).mockResolvedValueOnce(null) } })

@@ -12,7 +12,7 @@ Modèles de fichiers fournis :
 | Variable | Requis | Description |
 |----------|--------|-------------|
 | `DATABASE_URL` | oui | URL PostgreSQL (`postgresql://utilisateur:motdepasse@hôte:5432/benevoles?schema=public`) |
-| `AUTH_SECRET` | oui | Secret NextAuth, 32 caractères minimum (`openssl rand -base64 48`) |
+| `AUTH_SECRET` | oui | Secret NextAuth, 32 caractères minimum (`openssl rand -base64 48`). Il sert aussi de clé aux empreintes d'adresse du registre des effacements (#516) : avant de le changer, exporter ce registre (`scripts/erasure-register.ts export`), car les empreintes antérieures ne permettront plus de retrouver une fiche par son adresse ; le rejeu par identifiant fonctionne toujours. Voir [rgpd/procedure-effacement.md](rgpd/procedure-effacement.md). |
 | `AUTH_URL` | en production | URL publique, requise par NextAuth v5 derrière un reverse proxy |
 | `AUTH_TRUST_HOST` | en production | `true` derrière un reverse proxy |
 | `NEXT_PUBLIC_APP_URL` | en production | URL publique du site principal (`https://www.benevol.app`). Sert aux liens des emails et aux QR codes, et donne le domaine des organisations (`<slug>.benevol.app`, sans `www`). Défaut `http://localhost:3000` : en local, les liens d'organisation deviennent `?org=<slug>`. Doit être une URL valide. Les CronJobs Kubernetes l'utilisent comme adresse de l'application |

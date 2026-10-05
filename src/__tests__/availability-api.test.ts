@@ -2,7 +2,8 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const findFirst = vi.hoisted(() => vi.fn())
 const update = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/prisma", () => ({ prisma: { registration: { findFirst }, volunteer: { update } } }))
+const readBack = vi.hoisted(() => vi.fn())
+vi.mock("@/lib/prisma", () => ({ prisma: { registration: { findFirst }, volunteer: { updateMany: update, findUniqueOrThrow: readBack } } }))
 const rateLimit = vi.hoisted(() => vi.fn().mockResolvedValue({ ok: true, remaining: 1, retryAfter: 0 }))
 const isRateLimited = vi.hoisted(() => vi.fn().mockResolvedValue(false))
 vi.mock("@/lib/rate-limit", () => ({ rateLimit, isRateLimited, getClientIp: () => "1.2.3.4" }))
@@ -23,7 +24,8 @@ describe("PATCH /api/public/registrations/[token]/availability", () => {
     rateLimit.mockResolvedValue({ ok: true, remaining: 1, retryAfter: 0 })
     isRateLimited.mockResolvedValue(false)
     findFirst.mockResolvedValue({ volunteerId: "v1" })
-    update.mockResolvedValue({ availabilityPeriods: ["morning"], availabilityNote: null })
+    update.mockResolvedValue({ count: 1 })
+    readBack.mockResolvedValue({ availabilityPeriods: ["morning"], availabilityNote: null })
   })
 
   it("saves the volunteer's availability behind a live token", async () => {
@@ -31,7 +33,17 @@ describe("PATCH /api/public/registrations/[token]/availability", () => {
     const res = await PATCH(patch({ availabilityPeriods: ["morning"], availabilityNote: "  " }), params)
     expect(res.status).toBe(200)
     expect(findFirst.mock.calls[0][0].where).toEqual({ editTokenHash: "h:tok", status: "active" })
-    expect(update).toHaveBeenCalledWith({ where: { id: "v1" }, data: { availabilityPeriods: ["morning"], availabilityNote: null }, select: { availabilityPeriods: true, availabilityNote: true } })
+    // Conditional on the record not being erased (#516).
+    expect(update).toHaveBeenCalledWith({ where: { id: "v1", erasedAt: null }, data: { availabilityPeriods: ["morning"], availabilityNote: null } })
+    expect(await res.json()).toEqual({ availabilityPeriods: ["morning"], availabilityNote: null })
+  })
+
+  it("never writes onto a record erased since the link was resolved (#516)", async () => {
+    update.mockResolvedValue({ count: 0 })
+    const { PATCH } = await import("@/app/api/public/registrations/[token]/availability/route")
+    const res = await PATCH(patch({ availabilityPeriods: ["morning"], availabilityNote: "le soir" }), params)
+    expect(res.status).toBe(404)
+    expect(readBack).not.toHaveBeenCalled()
   })
 
   it("refuses an unknown period, an unknown or cancelled token, and too many attempts", async () => {

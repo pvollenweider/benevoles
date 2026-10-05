@@ -38,9 +38,11 @@ dans [inventaire.md](inventaire.md) et [sous-traitants.md](sous-traitants.md). E
   l'existence et des métadonnées du message, jamais son contenu ; rôle juridique de ces services
   **non qualifié**.
 - **Droits des personnes** : export (CSV/JSON) disponible pour l'organisation ; désactivation d'un
-  membre possible à tout moment ; **effacement individuel disponible seulement pour une fiche
-  inactive sans aucune inscription** (#667) ; l'effacement d'une fiche avec historique reste une
-  opération manuelle de l'opérateur (#516, ouvert).
+  membre possible à tout moment ; suppression d'une fiche inactive sans aucune inscription (#667) ;
+  **effacement des données personnelles** de toute fiche depuis l'administration, par anonymisation :
+  la fiche devient « Bénévole effacé », ses inscriptions restent sans identité pour l'historique
+  (#516) ; registre des effacements sans donnée personnelle en clair (empreinte HMAC de l'email),
+  rejoué après une restauration de sauvegarde ([procedure-effacement.md](procedure-effacement.md)).
 - **Violation de données** : procédure interne en projet, pas encore validée ([procedure-violation.md](procedure-violation.md)).
 
 ## Les brouillons à relire

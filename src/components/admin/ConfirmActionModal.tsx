@@ -56,15 +56,37 @@ export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, e
       // screen reader then reads it on reopening a dialog that failed before (the failure's own
       // announcement, role="alert" on that paragraph, only fires on change — this covers the case
       // where it was already there when the dialog (re)opens, e.g. a retry attempt's own failure).
-      describedBy={[`${id}-recap`, challenge ? `${id}-challenge-label` : null, `${id}-error`].filter(Boolean).join(" ")}
+      // A recap with a lead sentence or a warning (#516) is described by those only, the rest is
+      // read in the dialog's own order; a short recap by its list. Never by the challenge's label:
+      // the field's own label already says it.
+      describedBy={(recap.lead || recap.warning
+        ? [recap.lead ? `${id}-lead` : null, recap.warning ? `${id}-warning` : null, `${id}-error`]
+        : [recap.lines.length > 0 ? `${id}-recap` : null, `${id}-error`]
+      ).filter(Boolean).join(" ")}
       closeOnBackdrop={false}
       role={recap.danger ? "alertdialog" : "dialog"}
     >
       {/* A form so that Enter in the challenge field confirms; Cancel stays a plain button. */}
       <form onSubmit={(e) => { e.preventDefault(); confirm() }} noValidate>
-      <ul id={`${id}-recap`} className="list-disc pl-5 space-y-1 text-sm text-gray-800">
-        {recap.lines.map((l) => <li key={l}>{l}</li>)}
-      </ul>
+      {recap.lead && <p id={`${id}-lead`} className="text-sm font-medium text-gray-900">{recap.lead}</p>}
+      {recap.warning && (
+        <p id={`${id}-warning`} className="mt-3 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 forced-colors:border-[CanvasText]">
+          <strong className="font-semibold">Attention :</strong> {recap.warning}
+        </p>
+      )}
+      {recap.groups?.map((g) => (
+        <div key={g.heading} className="mt-3">
+          <p className="text-sm font-semibold text-gray-900">{g.heading}</p>
+          <ul className="mt-1 list-disc pl-5 space-y-1 text-sm text-gray-800">
+            {g.items.map((item) => <li key={item}>{item}</li>)}
+          </ul>
+        </div>
+      ))}
+      {recap.lines.length > 0 && (
+        <ul id={`${id}-recap`} className={`list-disc pl-5 space-y-1 text-sm text-gray-800${recap.lead || recap.warning || recap.groups ? " mt-3" : ""}`}>
+          {recap.lines.map((l) => <li key={l}>{l}</li>)}
+        </ul>
+      )}
       {children}
       {challenge && (
         <div className="mt-4">
