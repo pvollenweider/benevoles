@@ -9,7 +9,7 @@
 # Deux fournisseurs possibles derrière OFFSITE_PROVIDER (#524) :
 #   - "dropbox" (défaut actuel) : plan individuel, pas de DPA, stockage aux États-Unis
 #     (voir docs/rgpd/sous-traitants.md). Conservé tant que la bascule n'a pas eu lieu.
-#   - "swissbackup" : Infomaniak Swiss Backup, S3 compatible, stockage en Suisse. Cible de
+#   - "swissbackup" : Infomaniak Swiss Backup (OpenStack Swift), stockage en Suisse. Cible de
 #     la bascule ; voir docs/deploiement.md « Copie hors site » pour la procédure complète.
 # La bascule se fait en changeant la valeur de OFFSITE_PROVIDER ci-dessous puis en déployant :
 # aucun autre changement de ce fichier n'est nécessaire. Dropbox reste utilisable après la
@@ -30,20 +30,15 @@
 #      rclone par défaut, mais une révocation manuelle côté Dropbox le ferait.)
 #
 # Mise en place du remote Swiss Backup (à faire une fois, en local, jamais dans ce dépôt) :
-#   0. Dans le Manager Infomaniak, créer un emplacement S3 sur Swiss Backup et une clé
-#      restreinte à ce seul bucket (voir la FAQ ; les valeurs exactes d'endpoint et de région
-#      sont données par le Manager au moment de la création, pas par la FAQ elle-même) :
-#      https://www.infomaniak.com/fr/support/faq/2546/creer-un-emplacement-s3-sur-swiss-backup
-#   1. rclone config  →  nouveau remote nommé "swissbackup", type "s3", provider "Other"
-#      (S3 générique, pas un des fournisseurs listés par rclone), renseigner access_key_id et
-#      secret_access_key (la clé restreinte créée ci-dessus), endpoint et region (valeurs
-#      PLACEHOLDER tant qu'elles n'ont pas été lues dans le Manager — à remplacer, ne pas
-#      deviner), env_auth "false".
-#   2. Ajouter ce remote au même fichier rclone.conf que Dropbox (les deux coexistent), puis
-#      recréer le secret comme pour Dropbox ci-dessus (même commande, le fichier a maintenant
-#      deux sections [dropbox] et [swissbackup]).
-#   3. Ajouter le secret GitHub OFFSITE_BUCKET (nom du bucket restreint par la clé) : repris
-#      dans benevoles-secret au déploiement suivant (.github/workflows/deploy.yml).
+#   0. Dans le Manager Infomaniak, créer un appareil Swiss Backup « rclone » et lui donner un
+#      mot de passe. Le Manager fournit un bloc rclone.conf de type "swift" (user, auth
+#      https://swiss-backup02.infomaniak.com/identity/v3, tenant, region RegionOne...).
+#   1. Coller ce bloc dans le même rclone.conf que Dropbox, renommer sa section en
+#      [swissbackup] et remplacer key = [password] par le mot de passe de l'appareil.
+#   2. Créer le container : rclone mkdir swissbackup:<container>, puis recréer le secret
+#      comme pour Dropbox ci-dessus (le fichier a deux sections [dropbox] et [swissbackup]).
+#   3. Ajouter le secret GitHub OFFSITE_BUCKET (nom du container) : repris dans
+#      benevoles-secret au déploiement suivant (.github/workflows/deploy.yml).
 #   4. Tester avec scripts/restore-test-offsite.sh avant de basculer OFFSITE_PROVIDER.
 ---
 apiVersion: batch/v1
@@ -78,7 +73,7 @@ spec:
                 # changer pour basculer ; voir le commentaire d'en-tête et docs/deploiement.md.
                 - name: OFFSITE_PROVIDER
                   value: "dropbox"
-                # Nom du bucket Swiss Backup restreint par la clé dédiée ; ignoré pour dropbox.
+                # Nom du container Swiss Backup (OFFSITE_BUCKET) ; ignoré pour dropbox.
                 - name: OFFSITE_BUCKET
                   valueFrom:
                     secretKeyRef:

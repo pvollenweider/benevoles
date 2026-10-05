@@ -369,7 +369,7 @@ kubectl -n benevoles get secret benevoles-secret -o jsonpath='{.data.BACKUP_PASS
 **Fournisseur (#524).** La variable d'environnement `OFFSITE_PROVIDER` du CronJob (`k8s/cronjob-backup-offsite.yaml`) choisit le remote rclone :
 
 - `dropbox` (valeur actuelle) : plan Dropbox individuel — pas de DPA, stockage aux États-Unis par défaut (voir [sous-traitants.md](rgpd/sous-traitants.md)). Conservé le temps de préparer la bascule.
-- `swissbackup` : Infomaniak Swiss Backup, stockage S3 compatible en Suisse. Cible de la bascule.
+- `swissbackup` : Infomaniak Swiss Backup, stockage OpenStack Swift en Suisse. Cible de la bascule.
 
 Les deux remotes (`dropbox` et `swissbackup`) peuvent coexister dans le même secret `rclone-config` : la bascule se fait en changeant uniquement la valeur de `OFFSITE_PROVIDER` et en redéployant, Dropbox restant utilisable (mais plus utilisé) tant que son remote n'est pas retiré du fichier.
 
@@ -383,16 +383,9 @@ rclone config
 
 **Mise en place du remote Swiss Backup** (à faire une fois, en local — jamais dans ce dépôt) :
 
-1. Dans le Manager Infomaniak, créer un emplacement S3 sur Swiss Backup et une clé d'accès **restreinte à ce seul bucket** ([FAQ Infomaniak](https://www.infomaniak.com/fr/support/faq/2546/creer-un-emplacement-s3-sur-swiss-backup)). La FAQ décrit la marche à suivre mais ne publie pas les valeurs techniques exactes (endpoint, région) : le Manager les affiche au moment de la création de l'emplacement — **à relever à ce moment-là, ne pas deviner**.
-2. Ajouter ce remote au même fichier `rclone.conf` que Dropbox :
-
-   ```bash
-   rclone config
-   # Nouveau remote → nom "swissbackup" → type "s3" → provider "Other" (S3 générique, pas un
-   # des fournisseurs listés par rclone) → access_key_id et secret_access_key de la clé créée
-   # ci-dessus → endpoint et region : valeurs lues dans le Manager (étape 1) → env_auth "false"
-   ```
-3. Noter le nom du bucket : il devient le secret GitHub `OFFSITE_BUCKET` (repris dans `benevoles-secret` au déploiement suivant, voir [configuration.md](configuration.md#secrets-kubernetes)).
+1. Dans le Manager Infomaniak, créer un appareil Swiss Backup pour rclone et lui donner un mot de passe. Le Manager fournit un bloc `rclone.conf` de type `swift` (`user`, `auth = https://swiss-backup02.infomaniak.com/identity/v3`, `tenant`, `region = RegionOne`, `key = [password]`).
+2. Coller ce bloc à la fin du même fichier `rclone.conf` que Dropbox, renommer sa section en `[swissbackup]` (nom attendu par le CronJob) et remplacer `[password]` par le mot de passe de l'appareil (en clair : rclone ne le chiffre pas pour Swift). Vérifier : `rclone lsd swissbackup:`.
+3. Créer le container des sauvegardes : `rclone mkdir swissbackup:benevol-backups`. Son nom devient le secret GitHub `OFFSITE_BUCKET` (repris dans `benevoles-secret` au déploiement suivant, voir [configuration.md](configuration.md#secrets-kubernetes)).
 
 Dans les deux cas, une fois `rclone.conf` à jour (un ou deux remotes) :
 
@@ -427,9 +420,9 @@ Le script affiche à la fin la commande `curl` à lancer pour enregistrer le tes
 
 **Étapes restantes côté opérateur, dans l'ordre, pour terminer la bascule (#524)** :
 
-1. Créer l'emplacement S3 Swiss Backup et une clé restreinte à ce bucket (ci-dessus).
-2. Ajouter ce remote à `rclone.conf`, recréer le secret `rclone-config`.
-3. Ajouter le secret GitHub `OFFSITE_BUCKET` (nom du bucket) ; vérifier qu'il arrive dans `benevoles-secret` au déploiement suivant.
+1. Créer l'appareil Swiss Backup et son mot de passe (ci-dessus).
+2. Ajouter ce remote à `rclone.conf`, créer le container, recréer le secret `rclone-config`.
+3. Ajouter le secret GitHub `OFFSITE_BUCKET` (nom du container) ; vérifier qu'il arrive dans `benevoles-secret` au déploiement suivant.
 4. Lancer `scripts/restore-test-offsite.sh` avec `OFFSITE_PROVIDER=swissbackup` pour confirmer qu'un envoi réel est lisible et déchiffrable (après un premier passage du CronJob, ou un Job manuel `DRY_RUN=false`).
 5. Changer `OFFSITE_PROVIDER` en `"swissbackup"` dans `k8s/cronjob-backup-offsite.yaml`, committer, pousser sur `main` (`deploy.yml` applique le changement).
 6. Après quelques jours de copies Swiss Backup réussies (page de santé), supprimer les copies sur Dropbox, attendre sa corbeille de 30 jours (plan individuel), puis retirer Dropbox de [sous-traitants.md](rgpd/sous-traitants.md) et de la politique de confidentialité publique (une fois l'analyse juridique de #485 favorable).
