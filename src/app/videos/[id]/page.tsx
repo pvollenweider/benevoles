@@ -30,9 +30,11 @@ function findVideo(catalog: Video[], param: string): { video: Video | null; isSl
   return { video: bySlug ?? null, isSlug: true }
 }
 
-export function generateStaticParams(): Params[] {
-  return loadVideoCatalog().map((v) => ({ id: v.id }))
-}
+// Rendered per request, not at build time: the media base URL (VIDEO_MEDIA_BASE_URL) is only set in
+// the running container's environment, so a page prerendered during `next build` froze « Vidéo
+// bientôt disponible » for every video (seen in production). The catalogue itself is read from
+// disk and is cheap.
+export const dynamic = "force-dynamic"
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { id } = await params
