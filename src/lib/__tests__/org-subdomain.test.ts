@@ -74,7 +74,15 @@ describe("isReservedOrgSlug", () => {
     for (const slug of ["medias", "Medias", " www ", "api", "admin", "app", "staging"]) expect(isReservedOrgSlug(slug)).toBe(true)
   })
 
-  it("leaves ordinary organization slugs alone", () => {
-    for (const slug of ["lameadouet", "media", "medias-club", "festival-medias"]) expect(isReservedOrgSlug(slug)).toBe(false)
+  it("catches variants: accents, hyphens, a plural or a missing plural (#642)", () => {
+    for (const slug of ["media", "Médias", "w-w-w", "apis", "admins", "apps", "stagings", "me-dias"]) expect(isReservedOrgSlug(slug)).toBe(true)
+  })
+
+  it("leaves ordinary organization slugs alone, including ones that only contain a reserved word", () => {
+    for (const slug of ["lameadouet", "medias-club", "festival-medias", "apiculteurs", "administration", "happy"]) expect(isReservedOrgSlug(slug)).toBe(false)
+  })
+
+  it("routing still uses the exact list: a variant is an ordinary subdomain there", () => {
+    expect(orgSlugFromHost("media.benevol.app")).toBe("media")
   })
 })
