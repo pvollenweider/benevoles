@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, permanentRedirect } from "next/navigation"
-import { DOC_ROLE_INFO, docGroup, docUnitMetadata, loadDocUnits, relatedDocUnits, resolveDocSlug } from "@/lib/doc-units"
+import { DOC_ROLE_INFO, docGroup, docGroupHref, docUnitMetadata, loadDocUnits, relatedDocUnits, resolveDocSlug } from "@/lib/doc-units"
 import { renderDocUnit } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
 import { env } from "@/lib/env"
@@ -24,7 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const linkClass = "text-blue-600 dark:text-blue-400 underline underline-offset-2 hover:decoration-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
 
 // A documentation unit (#649), rendered from its own guide/<slug>.md (source of truth, also
-// readable on GitHub): breadcrumb, title, who it is for, content, then « Voir aussi ».
+// readable on GitHub): breadcrumb (its group links to the group on the /doc index), title, who it
+// is for, content, then « Voir aussi ».
 export default async function DocUnitPage({ params }: Props) {
   const { slug } = await params
   const units = loadDocUnits()
@@ -45,7 +46,7 @@ export default async function DocUnitPage({ params }: Props) {
           </li>
           <li className="flex items-center gap-x-2">
             <span aria-hidden="true">›</span>
-            <span>{group.title}</span>
+            <Link href={docGroupHref(group)} className={linkClass}>{group.title}</Link>
           </li>
           <li className="flex items-center gap-x-2">
             <span aria-hidden="true">›</span>

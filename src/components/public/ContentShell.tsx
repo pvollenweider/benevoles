@@ -27,7 +27,8 @@ const THEME_INIT_SCRIPT = `
 /**
  * Frame of the public content pages rendered from Markdown sources (features, documentation):
  * site header with the content navigation and the theme toggle, the prose recipe shared with
- * src/app/legal/layout.tsx, and the real PublicFooter.
+ * src/app/legal/layout.tsx, and the real PublicFooter. Links of the content (the Markdown, the
+ * indexes of /doc) get the same visible focus outline as the links a page draws itself.
  */
 export default function ContentShell({ children }: { children: React.ReactNode }) {
   return (
@@ -57,6 +58,7 @@ export default function ContentShell({ children }: { children: React.ReactNode }
           prose-p:text-sm prose-p:text-gray-600 dark:prose-p:text-gray-400 prose-p:leading-relaxed
           prose-li:text-sm prose-li:text-gray-600 dark:prose-li:text-gray-400
           prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:underline prose-a:underline-offset-2 hover:prose-a:decoration-2
+          prose-a:rounded prose-a:focus-visible:outline prose-a:focus-visible:outline-2 prose-a:focus-visible:outline-offset-2 prose-a:focus-visible:outline-blue-600 dark:prose-a:focus-visible:outline-blue-400
           prose-strong:text-gray-800 dark:prose-strong:text-gray-200 prose-strong:font-semibold
           prose-code:text-xs prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-gray-700 dark:prose-code:text-gray-300 prose-code:before:content-none prose-code:after:content-none
           prose-pre:whitespace-pre-wrap prose-pre:break-words prose-pre:bg-gray-50 dark:prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-gray-700

@@ -213,7 +213,7 @@ describe("video references in the public sources", () => {
       const route = read(path.join("src/app", page.path, "page.tsx"))
       expect(route, page.path).toMatch(/export const dynamic = "force-dynamic"/)
       expect(route, page.path).toContain(`renderPublicSource("${source}", `)
-      expect(route, page.path).toMatch(/env\.VIDEO_MEDIA_BASE_URL\)/)
+      expect(route, page.path).toMatch(/env\.VIDEO_MEDIA_BASE_URL[,)]/)
     }
   })
 

@@ -24,7 +24,7 @@ aliases: [ancien-nom]
 - `group` : un groupe de `DOC_GROUPS` dans `src/lib/doc-units.ts`.
 - `order` : la position dans le groupe.
 - `related` : les pages proposées sous « Voir aussi », par nom de fichier.
-- `legacy` : les ancres des anciens guides (`/doc/benevole#…`) que cette page remplace.
+- `legacy` : les ancres des anciens guides (`/doc/benevole#…`) que cette page remplace. Quand une section quitte un guide, la page qui la reprend déclare son ancre ici : un lien vers l'ancienne ancre ouvre alors cette page (avec la même ancre si la page a un titre du même nom). Un test vérifie que chacune des 86 ancres d'origine (`src/lib/__tests__/fixtures/legacy-doc-anchors.json`, figées) est encore dans son guide ou reprise par une page.
 - `aliases` : les anciens noms de la page, redirigés vers elle.
 
 Les pages pour les bénévoles tutoient ; une page pour les deux rôles explique une fois, puis « Côté organisation » (vouvoiement) et « Côté bénévole » (tutoiement). Une vidéo au plus par page, sur sa propre ligne : `<!-- video: ID -->`. Un lien vers une autre page s'écrit par son fichier, `[titre](autre-page.md#ancre)`, et fonctionne ainsi sur GitHub comme sur le site.

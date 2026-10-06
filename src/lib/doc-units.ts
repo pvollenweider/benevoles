@@ -175,7 +175,7 @@ export function parseDocUnit(fileName: string, source: string): DocUnit {
 /**
  * The problems of a set of units, as messages (empty when all is well): reserved or duplicate
  * slugs, aliases colliding with a slug, unknown related units, titles or summaries used twice,
- * more than one video per unit, forbidden separators in a title.
+ * more than one video per unit, forbidden separators in a title or a summary.
  */
 export function docUnitProblems(units: readonly DocUnit[], reserved: readonly string[] = RESERVED_DOC_SLUGS): string[] {
   const problems: string[] = []
@@ -203,6 +203,7 @@ export function docUnitProblems(units: readonly DocUnit[], reserved: readonly st
     if (summaryOwner) problems.push(`${unit.slug}: same summary as ${summaryOwner}`)
     seenSummaries.set(unit.summary, unit.slug)
     if (FORBIDDEN_SEPARATORS.test(unit.title)) problems.push(`${unit.slug}: no « · » or em dash in the title`)
+    if (FORBIDDEN_SEPARATORS.test(unit.summary)) problems.push(`${unit.slug}: no « · » or em dash in the summary`)
     if (findVideoReferences(unit.body).length > 1) problems.push(`${unit.slug}: one video at most per unit`)
   }
   const legacyOwners = new Map<string, string>()
@@ -255,12 +256,65 @@ export function resolveDocSlug(slug: string, units: readonly DocUnit[]): { unit:
 
 /**
  * Where an anchor of the old single-page guides now lives (`/doc/benevole#confirmation` →
- * `/doc/confirmation`), from the units' `legacy` lists; null when no unit claims it.
+ * `/doc/confirmation`), from the units' `legacy` lists; null when no unit claims it. When the unit
+ * has a heading with the same id (a subsection moved as is; `headingIds` gives a unit's heading
+ * ids), the fragment is kept: `/doc/confirmation#modifier`.
  */
-export function resolveLegacyAnchor(role: DocRole, anchor: string, units: readonly DocUnit[]): string | null {
+export function resolveLegacyAnchor(
+  role: DocRole,
+  anchor: string,
+  units: readonly DocUnit[],
+  headingIds: (unit: DocUnit) => readonly string[] = () => [],
+): string | null {
   const key = `${role}#${anchor}`
   const unit = units.find((u) => u.legacy.includes(key))
-  return unit ? `/doc/${unit.slug}` : null
+  if (!unit) return null
+  return headingIds(unit).includes(anchor) ? `/doc/${unit.slug}#${anchor}` : `/doc/${unit.slug}`
+}
+
+/**
+ * Every old anchor of a role's guide that a unit claims, with its target (resolveLegacyAnchor):
+ * the map the guide's page hands to its client-side redirect (src/app/doc/LegacyAnchorRedirect.tsx).
+ */
+export function legacyAnchorTargets(
+  role: DocRole,
+  units: readonly DocUnit[],
+  headingIds: (unit: DocUnit) => readonly string[] = () => [],
+): Record<string, string> {
+  const targets: Record<string, string> = {}
+  const prefix = `${role}#`
+  for (const unit of units) {
+    for (const key of unit.legacy) {
+      if (!key.startsWith(prefix)) continue
+      const anchor = key.slice(prefix.length)
+      targets[anchor] = resolveLegacyAnchor(role, anchor, units, headingIds)!
+    }
+  }
+  return targets
+}
+
+/**
+ * The units of a role (every unit without one), by group in DOC_GROUPS order and in reading order
+ * within a group; a group without any unit is left out. What the indexes of /doc show.
+ */
+export function docUnitsByGroup(units: readonly DocUnit[], role?: DocRole): { group: DocGroup; units: DocUnit[] }[] {
+  const sorted = sortDocUnits(role ? units.filter((u) => u.roles.includes(role)) : units)
+  return DOC_GROUPS.map((group) => ({ group, units: sorted.filter((u) => u.group === group.id) })).filter((g) => g.units.length > 0)
+}
+
+/** Whether a role's guide has units yet: its page then lists them above « Le guide complet ». */
+export function roleHasDocUnits(units: readonly DocUnit[], role: DocRole): boolean {
+  return units.some((u) => u.roles.includes(role))
+}
+
+/** « organisateurs, bénévoles »: who a unit is for, as the indexes write it. */
+export function docUnitAudience(unit: DocUnit): string {
+  return unit.roles.map((r) => DOC_ROLE_INFO[r].label).join(", ")
+}
+
+/** Where a group is listed on the documentation's index: the breadcrumb of a unit links there. */
+export function docGroupHref(group: DocGroup): string {
+  return `/doc#${group.id}`
 }
 
 export function docGroup(id: string): DocGroup {
@@ -300,7 +354,7 @@ export function docIndexMarkdown(units: readonly DocUnit[]): string {
   const sections = DOC_GROUPS.flatMap((group) => {
     const inGroup = sorted.filter((u) => u.group === group.id)
     if (inGroup.length === 0) return []
-    const items = inGroup.map((u) => `- [${u.title}](${u.slug}.md) : ${u.summary} Pour : ${u.roles.map((r) => DOC_ROLE_INFO[r].label).join(", ")}.`)
+    const items = inGroup.map((u) => `- [${u.title}](${u.slug}.md) : ${u.summary} Pour : ${docUnitAudience(u)}.`)
     return [`### ${group.title}\n\n${items.join("\n")}`]
   })
   return sections.length > 0 ? sections.join("\n\n") : "Aucune page pour l'instant."
