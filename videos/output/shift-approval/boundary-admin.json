@@ -1,12 +1,12 @@
 {
   "anchor": "Dans les inscriptions, le filtre Demandes à traiter isole les candidatures.",
-  "windowStart": 13.679000000000002,
+  "windowStart": 19.506,
   "result": {
     "found": true,
-    "startSeconds": 30.9,
-    "wordsHeard": "Dans"
+    "startSeconds": 25.17,
+    "wordsHeard": "Dans les inscriptions, le filtre Demandes à traiter isole les candidatures."
   },
-  "onset": 44.579,
-  "proposedCut": 44.331312499999996,
+  "onset": 44.676,
+  "proposedCut": 44.8883335,
   "note": "Proposal only; recut then independently audit before capture"
 }

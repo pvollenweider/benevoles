@@ -1,29 +1,185 @@
 WEBVTT
 
-00:00:00.000 --> 00:00:20.296
-Tu utilises Benevol pour la première fois et tu as déjà une liste de bénévoles ? L'import évite de ressaisir chaque personne. Il peut aussi compléter une liste existante. Nous allons utiliser quarante fiches fictives, vérifier les erreurs, puis confirmer seulement quand tout est clair. Bien sûr, tu peux toujours créer les membres manuellement avec Nouveau membre.
+00:00:00.000 --> 00:00:05.409
+Vous utilisez Benevol pour la première
+fois et vous avez déjà une liste de
 
-00:00:20.748 --> 00:00:46.958
-Le fichier peut être un CSV ou un Excel. La première ligne contient les noms des colonnes : prénom, nom, email, téléphone et tags. Le prénom et le nom sont nécessaires. Une fiche sans email reste possible, mais elle ne recevra pas de messages par email. Les tags se séparent par des virgules. Les disponibilités, elles, se renseignent ensuite dans la fiche : elles ne sont pas importées.
+00:00:05.409 --> 00:00:10.046
+bénévoles ? L'import évite de ressaisir
+chaque personne. Il peut aussi compléter
 
-00:00:47.410 --> 00:01:13.630
-Ouvre Importer des membres et choisis le fichier à vérifier. Si un email existe déjà, l'option Ignorer conserve la fiche actuelle. Clique sur Analyser le fichier. Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur. Les colonnes reconnues et les tags sont également indiqués. Rien n'est encore enregistré : tu peux prendre le temps de vérifier.
+00:00:10.046 --> 00:00:14.296
+une liste existante. Nous allons utiliser
+quarante fiches fictives, vérifier les
 
-00:01:14.082 --> 00:01:39.073
-Ici, la ligne six n'a pas de prénom, et la ligne sept contient une adresse email invalide. La ligne neuf reprend l'email de la ligne huit : ce doublon dans le fichier est également signalé. Ces lignes ne seront pas importées. Corrige le fichier d'origine plutôt que de laisser une erreur de contact. Deux personnes portant le même nom ne sont pas automatiquement fusionnées : la comparaison utilise l'email.
+00:00:14.296 --> 00:00:18.932
+erreurs, puis confirmer seulement quand
+tout est clair. Bien sûr, vous pouvez
 
-00:01:39.524 --> 00:02:06.277
-Avec Retour, tu peux changer l'option puis refaire l'analyse. Mettre à jour remplace le prénom, le nom, le téléphone et les tags de la fiche portant le même email. Cela réactive aussi une fiche inactive. Les tags ne sont donc pas simplement ajoutés aux anciens : vérifie bien les valeurs du fichier. Ici, Camille et Julien passent de Ignorer à Mettre à jour, sans créer de nouvelles fiches pour ces adresses.
+00:00:18.932 --> 00:00:22.023
+toujours créer les membres manuellement
+avec Nouveau membre.
 
-00:02:06.729 --> 00:02:33.374
-Nous choisissons maintenant le fichier Excel corrigé et relançons l'analyse. Les erreurs ont disparu. Les quarante lignes sont reconnues, dont les deux adresses déjà présentes. René n'a pas d'email : sa fiche peut être créée avec son téléphone. Vérifie une dernière fois les noms, les catégories et le récapitulatif. Le fichier est limité à deux mégaoctets et cinq mille lignes par import.
+00:00:22.479 --> 00:00:28.504
+Le fichier peut être un CSV ou un Excel.
+La première ligne contient les noms des
 
-00:02:33.827 --> 00:02:58.799
-Quand l'aperçu te convient, confirme l'import. Cette fois, les fiches sont enregistrées. Le résultat indique combien ont été créées, mises à jour ou ignorées, et signale les éventuelles lignes non importées. Ferme la fenêtre et recherche Maya : elle est maintenant dans la liste. Ouvre sa fiche pour vérifier son téléphone et ses tags. Importer une personne ne l'inscrit à aucun créneau.
+00:00:28.504 --> 00:00:33.776
+colonnes : prénom, nom, email, téléphone
+et tags. Le prénom et le nom sont
 
-00:02:59.252 --> 00:03:19.555
-Si tu analyses de nouveau ce fichier avec Ignorer, les emails déjà présents sont reconnus. Mais attention aux fiches sans email : le système ne peut pas les rapprocher par leur adresse, et le même nom ne suffit pas. Ne confirme donc pas une seconde fois machinalement. Regarde toujours le nombre de créations prévues, puis annule si tu ne souhaites rien ajouter.
+00:00:33.776 --> 00:00:38.671
+nécessaires. Une fiche sans email reste
+possible, mais elle ne recevra pas de
 
-00:03:20.010 --> 00:03:41.040
-Ta liste est prête à être utilisée pour les prochaines invitations. Garde un fichier simple, vérifie les coordonnées et lis l'aperçu avant chaque confirmation. Si quelques personnes manquent, ajoute-les manuellement. Et si leurs disponibilités changent, complète leur fiche séparément. L'import fait gagner du temps, tout en te laissant le dernier mot sur ce qui sera enregistré.
+00:00:38.671 --> 00:00:43.190
+messages par email. Les tags se séparent
+par des virgules. Les disponibilités,
+
+00:00:43.190 --> 00:00:48.085
+elles, se renseignent ensuite dans la
+fiche : elles ne sont pas importées.
+
+00:00:48.543 --> 00:00:54.330
+Ouvrez Importer des membres et choisissez
+le fichier à vérifier. Si un email existe
+
+00:00:54.330 --> 00:00:59.289
+déjà, l'option Ignorer conserve la fiche
+actuelle. Cliquez sur Analyser le fichier.
+
+00:00:59.289 --> 00:01:03.836
+Le récapitulatif montre les créations
+prévues, les personnes déjà présentes et
+
+00:01:03.836 --> 00:01:08.796
+les lignes en erreur. Les colonnes
+reconnues et les tags sont également
+
+00:01:08.796 --> 00:01:14.169
+indiqués. Rien n'est encore enregistré :
+vous pouvez prendre le temps de vérifier.
+
+00:01:14.623 --> 00:01:20.090
+Ici, la ligne six n'a pas de prénom, et la
+ligne sept contient une adresse email
+
+00:01:20.090 --> 00:01:25.557
+invalide. La ligne neuf reprend l'email de
+la ligne huit : ce doublon dans le fichier
+
+00:01:25.557 --> 00:01:29.657
+est également signalé. Ces lignes ne
+seront pas importées. Corrige le fichier
+
+00:01:29.657 --> 00:01:34.441
+d'origine plutôt que de laisser une erreur
+de contact. Deux personnes portant le même
+
+00:01:34.441 --> 00:01:38.199
+nom ne sont pas automatiquement fusionnées
+: la comparaison utilise l'email.
+
+00:01:38.652 --> 00:01:43.217
+Avec Retour, vous pouvez changer l'option
+puis refaire l'analyse. Mettre à jour
+
+00:01:43.217 --> 00:01:49.303
+remplace le prénom, le nom, le téléphone
+et les tags de la fiche portant le même
+
+00:01:49.303 --> 00:01:54.248
+email. Cela réactive aussi une fiche
+inactive. Les tags ne sont donc pas
+
+00:01:54.248 --> 00:01:59.193
+simplement ajoutés aux anciens : vérifiez
+bien les valeurs du fichier. Ici, Camille
+
+00:01:59.193 --> 00:02:04.898
+et Julien passent de Ignorer à Mettre à
+jour, sans créer de nouvelles fiches pour
+
+00:02:04.898 --> 00:02:05.659
+ces adresses.
+
+00:02:06.111 --> 00:02:10.683
+Nous choisissons maintenant le fichier
+Excel corrigé et relançons l'analyse. Les
+
+00:02:10.683 --> 00:02:15.672
+erreurs ont disparu. Les quarante lignes
+sont reconnues, dont les deux adresses
+
+00:02:15.672 --> 00:02:21.907
+déjà présentes. René n'a pas d'email : sa
+fiche peut être créée avec son téléphone.
+
+00:02:21.907 --> 00:02:27.311
+Vérifiez une dernière fois les noms, les
+catégories et le récapitulatif. Le fichier
+
+00:02:27.311 --> 00:02:31.883
+est limité à deux mégaoctets et cinq mille
+lignes par import.
+
+00:02:32.337 --> 00:02:36.671
+Quand l'aperçu te convient, confirme
+l'import. Cette fois, les fiches sont
+
+00:02:36.671 --> 00:02:41.792
+enregistrées. Le résultat indique combien
+ont été créées, mises à jour ou ignorées,
+
+00:02:41.792 --> 00:02:46.520
+et signale les éventuelles lignes non
+importées. Ferme la fenêtre et recherchez
+
+00:02:46.520 --> 00:02:52.035
+Maya : elle est maintenant dans la liste.
+Ouvrez sa fiche pour vérifier son
+
+00:02:52.035 --> 00:02:56.763
+téléphone et ses tags. Importer une
+personne ne l'inscrit à aucun créneau.
+
+00:02:57.216 --> 00:03:01.716
+Si vous analysez de nouveau ce fichier
+avec Ignorer, les emails déjà présents
+
+00:03:01.716 --> 00:03:06.909
+sont reconnus. Mais attention aux fiches
+sans email : le système ne peut pas les
+
+00:03:06.909 --> 00:03:12.101
+rapprocher par leur adresse, et le même
+nom ne suffit pas. Ne confirmez donc pas
+
+00:03:12.101 --> 00:03:15.909
+une seconde fois machinalement. Regardez
+toujours le nombre de créations prévues,
+
+00:03:15.909 --> 00:03:18.678
+puis annulez si vous ne souhaitez rien
+ajouter.
+
+00:03:19.134 --> 00:03:24.051
+Ta liste est prête à être utilisée pour
+les prochaines invitations. Garde un
+
+00:03:24.051 --> 00:03:28.212
+fichier simple, vérifiez les coordonnées
+et lis l'aperçu avant chaque confirmation.
+
+00:03:28.212 --> 00:03:31.995
+Si quelques personnes manquent, ajoute-les
+manuellement. Et si leurs disponibilités
+
+00:03:31.995 --> 00:03:36.913
+changent, complète leur fiche séparément.
+L'import fait gagner du temps, tout en te
+
+00:03:36.913 --> 00:03:40.317
+laissant le dernier mot sur ce qui sera
+enregistré.
 

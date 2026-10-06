@@ -19,7 +19,7 @@ export async function verifyProductBuild(baseUrl: string): Promise<ProductBuild>
   const url = new URL(baseUrl)
   if (!["localhost", "127.0.0.1", "[::1]"].includes(url.hostname)) throw new Error("Product capture proof is local-only")
   const port = Number(url.port)
-  if (!Number.isInteger(port) || port < 43100 || port > 43110) throw new Error("Dedicated video port required")
+  if (!Number.isInteger(port) || !((port >= 43100 && port <= 43110) || port === 43112 || port === 43114)) throw new Error("Dedicated video port required")
   const registry = JSON.parse(await readFile(path.resolve(`videos/output/product-server-${port}.json`), "utf8")) as ProductBuild & { pid: number; port: number }
   const { stdout: target } = await exec("git", ["rev-parse", "origin/main"])
   if (registry.commit !== target.trim()) throw new Error("Video server does not match target main; rebuild before recording")

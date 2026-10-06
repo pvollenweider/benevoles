@@ -1,0 +1,12 @@
+{
+  "anchor": "Voilà : tu sais où demander les rappels, ce que signifie",
+  "windowStart": 214.60600000000002,
+  "result": {
+    "found": true,
+    "startSeconds": 29.14,
+    "wordsHeard": "Voilà"
+  },
+  "onset": 243.74600000000004,
+  "proposedCut": 243.4271875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

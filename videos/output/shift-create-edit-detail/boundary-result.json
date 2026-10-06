@@ -1,12 +1,12 @@
 {
   "anchor": "Un bon créneau reste court à lire mais complet pour agir",
-  "windowStart": 71.266,
+  "windowStart": 75.453,
   "result": {
     "found": true,
-    "startSeconds": 26.65,
-    "wordsHeard": "Un bon créneau reste court à lire mais complet pour agir"
+    "startSeconds": 28.8,
+    "wordsHeard": "Un"
   },
-  "onset": 97.916,
-  "proposedCut": 97.6157085,
+  "onset": 104.253,
+  "proposedCut": 103.77516650000001,
   "note": "Proposal only; recut then independently audit before capture"
 }

@@ -1,12 +1,12 @@
 {
-  "anchor": "Après la création, ouvre un seul créneau pour adapter un libellé,",
-  "windowStart": 28.918999999999997,
+  "anchor": "Après la création, passons en Liste et ouvrons un seul créneau.",
+  "windowStart": 40.62400000000001,
   "result": {
     "found": true,
-    "startSeconds": 30.23,
-    "wordsHeard": "Après la création, ouvre un seul créneau pour adapter un libellé,"
+    "startSeconds": 25.86,
+    "wordsHeard": "Après la création"
   },
-  "onset": 59.149,
-  "proposedCut": 58.919375,
+  "onset": 66.48400000000001,
+  "proposedCut": 66.255854,
   "note": "Proposal only; recut then independently audit before capture"
 }

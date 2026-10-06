@@ -6,7 +6,7 @@ Commençons par un titre parlant, une courte description, puis les dates réelle
 
 Le lieu reste lisible comme une adresse. Juste dessous, collez une paire de coordonnées ou un lien de carte reconnu. L’application extrait le point et prépare un lien Vérifier sur la carte. Le bénévole trouvera Voir sur la carte sur la page publique. La carte externe ne s’ouvre que lorsqu’on suit ce lien.
 
-Les instructions publiques apparaissent avant l’inscription : indique ici l’entrée à utiliser et le moment d’arrivée. Le message de confirmation est affiché juste après l’inscription et accepte du texte mis en forme ainsi que des variables. Il doit rassurer et donner la prochaine étape, sans remplacer les consignes propres à chaque créneau.
+Les instructions publiques apparaissent avant l’inscription : indiquez ici l’entrée à utiliser et le moment d’arrivée. Le message de confirmation est affiché juste après l’inscription et accepte du texte mis en forme ainsi que des variables. Il doit rassurer et donner la prochaine étape, sans remplacer les consignes propres à chaque créneau.
 
 Rendez le téléphone obligatoire seulement si l’équipe doit joindre les bénévoles le jour même. La couleur personnalise l’en-tête public avec une palette prévue pour garder un texte lisible. Choisissons Émeraude et regardons l’aperçu. Ces deux réglages pourront être modifiés plus tard.
 

@@ -41,7 +41,7 @@
     },
     {
       "id": "period",
-      "transcript": "Tu sais quand le changement a eu lieu ? Renseigne Depuis et Jusqu'à pour limiter la période. Choisissons quelques jours de notre exemple, puis élargissons à nouveau la recherche. Une liste vide peut simplement venir des filtres : ce n'est pas la preuve qu'aucune action n'a jamais eu lieu. Quand il reste des entrées à lire, Charger plus complète la liste. Le nombre affiché décrit ce qui a été chargé, pas forcément tout l'historique de l'événement.",
+      "transcript": "Vous savez quand le changement a eu lieu ? Renseignez Depuis et Jusqu'à pour limiter la période. Choisissons quelques jours de notre exemple, puis élargissons à nouveau la recherche. Une liste vide peut simplement venir des filtres : ce n'est pas la preuve qu'aucune action n'a jamais eu lieu. Quand il reste des entrées à lire, Charger plus complète la liste. Le nombre affiché décrit ce qui a été chargé, pas forcément tout l'historique de l'événement.",
       "fallbackDurationMs": 51000
     },
     {
@@ -61,12 +61,12 @@
     },
     {
       "id": "privacy",
-      "transcript": "Le journal n'est pas un carnet d'adresses. Le contenu des pages personnalisées et les coordonnées des bénévoles n'y sont pas recopiés. Il montre les champs modifiés et résout le nom de l'auteur lorsque ce compte existe encore. Pour joindre une personne, retourne à la vue prévue pour les inscriptions ou les membres, avec les droits nécessaires. Une capture d'historique peut tout de même contenir des noms : partage-la seulement avec les personnes qui en ont besoin.",
+      "transcript": "Le journal n'est pas un carnet d'adresses. Le contenu des pages personnalisées et les coordonnées des bénévoles n'y sont pas recopiés. Il montre les champs modifiés et résout le nom de l'auteur lorsque ce compte existe encore. Pour joindre une personne, retournez à la vue prévue pour les inscriptions ou les membres, avec les droits nécessaires. Une capture d'historique peut tout de même contenir des noms : partagez-la seulement avec les personnes qui en ont besoin.",
       "fallbackDurationMs": 49000
     },
     {
       "id": "result",
-      "transcript": "Nous avons retrouvé une action, vu l'évolution d'un élément et lu un enchaînement sans modifier le planning. Pour agir, reviens ensuite aux inscriptions ou aux créneaux concernés. Le bon réflexe, c'est de vérifier le type, la période et l'origine avant de conclure. Le journal facilite la coordination quand plusieurs personnes organisent ensemble. Il aide à poser une question précise et à corriger le bon problème, calmement, plutôt qu'à recommencer tout le planning.",
+      "transcript": "Nous avons retrouvé une action, vu l'évolution d'un élément et lu un enchaînement sans modifier le planning. Pour agir, revenez ensuite aux inscriptions ou aux créneaux concernés. Le bon réflexe, c'est de vérifier le type, la période et l'origine avant de conclure. Le journal facilite la coordination quand plusieurs personnes organisent ensemble. Il aide à poser une question précise et à corriger le bon problème, calmement, plutôt qu'à recommencer tout le planning.",
       "fallbackDurationMs": 49000
     }
   ],

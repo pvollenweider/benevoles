@@ -1,0 +1,79 @@
+{
+  "id": "MEMBERS_DUPLICATES_MERGE",
+  "slug": "members-duplicates-merge",
+  "title": "Repérer les doublons et fusionner sans perdre le fil",
+  "description": "Comparer deux fiches fictives, choisir les informations à conserver, résoudre les conflits et vérifier les nouveaux liens personnels.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous repérez deux fiches qui désignent la même personne, comparez leurs informations et les fusionnez sans perdre ses inscriptions ni son historique.",
+    "steps": [
+      "Dans Membres, ouvrez « Doublons possibles » et lisez la raison de chaque rapprochement, ou cliquez sur « Ignorer » pour retirer une paire de la liste.",
+      "Ouvrez l'activité de la fiche à conserver, cherchez l'autre fiche puis choisissez « Fusionner avec cette fiche ».",
+      "Pour chaque information différente, choisissez la valeur à garder ; les notes peuvent être mises à la suite.",
+      "Lisez les points à vérifier et choisissez la réponse à garder quand deux réponses à la même question diffèrent.",
+      "Cochez ou non l'envoi des nouveaux liens personnels, relisez le résumé et confirmez la fusion.",
+      "Vérifiez le résultat sur la fiche conservée : inscriptions réunies, historique consultable et nouveau lien personnel."
+    ],
+    "remember": [
+      "Un nom identique ne suffit pas : deux personnes peuvent être homonymes.",
+      "La fusion est réservée au propriétaire de l'organisation et elle est irréversible.",
+      "Les anciens liens personnels de la fiche absorbée ne fonctionnent plus après la fusion.",
+      "Les notifications du navigateur ne sont pas déplacées : la personne doit les réactiver elle-même."
+    ]
+  },
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "Speak with an audible smile throughout, warmly and kindly, as one association organizer helping another. Use calm conversational French, a reassuring adult female voice and clear articulation. Keep exactly the same voice identity, pitch, energy and smile for the entire recording. Read only the transcript, never production directions or pause labels.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "chapterTitles": {
+    "duplicates": "Repérer sans décider à votre place",
+    "compare": "Choisir la fiche à conserver",
+    "fields": "Garder les bonnes informations",
+    "conflicts": "Résoudre les points à vérifier",
+    "confirm": "Une décision irréversible",
+    "result": "Contrôler la fiche réunie",
+    "links": "Vérifier les nouveaux liens"
+  },
+  "segments": [
+    {
+      "id": "duplicates",
+      "transcript": "Deux fiches pour une seule personne ? Dans Membres, ouvrez Doublons possibles. Les raisons du rapprochement sont expliquées, mais un nom identique ne suffit pas à décider : deux personnes peuvent être homonymes. Comparer et fusionner ouvre un aperçu, sans encore modifier les fiches. Revenons aux suggestions. Ignorer retire simplement la paire de cette liste. Les deux fiches existent toujours, et une nouvelle raison de rapprochement pourrait faire revenir la suggestion plus tard.",
+      "fallbackDurationMs": 44000
+    },
+    {
+      "id": "compare",
+      "transcript": "Si vous savez que ces deux fiches désignent bien la même personne, ouvrez l’activité de la fiche que vous voulez conserver. Fusionner avec un autre membre est réservé au propriétaire de l’organisation. Recherchez précisément l’adresse de la seconde fiche, puis choisissez Fusionner avec cette fiche. Celle-ci sera absorbée. L’aperçu permet maintenant de comparer les informations, sans lancer la fusion. Vérifiez bien quelle fiche vous gardez avant de continuer.",
+      "fallbackDurationMs": 42000
+    },
+    {
+      "id": "fields",
+      "transcript": "Pour chaque information différente, vous choisissez la valeur à garder. Ici, on conserve la bonne adresse email et on prend le téléphone de l’autre fiche. Les notes internes peuvent aussi être mises à la suite : pratique pour ne rien oublier. Les étiquettes et les disponibilités sont réunies automatiquement. Le tableau récapitule les inscriptions, les invitations et les réponses concernées. Attention : les abonnements aux notifications du navigateur ne sont jamais déplacés. La personne devra les réactiver elle-même.",
+      "fallbackDurationMs": 44000
+    },
+    {
+      "id": "conflicts",
+      "transcript": "Les points à vérifier évitent les surprises. Sur un même créneau, l’inscription la plus avancée est conservée ; l’autre sera annulée avec une trace dans le journal. Les chevauchements, limites, âges minimums et postes réservés sont signalés, mais ne bloquent pas la fusion. En revanche, deux réponses différentes à la même question demandent un choix. Ici, on garde la réponse de la fiche absorbée. On choisit aussi son invitation. Une fois ces choix résolus, la confirmation devient disponible.",
+      "fallbackDurationMs": 46000
+    },
+    {
+      "id": "confirm",
+      "transcript": "Cette case permet d’envoyer les nouveaux liens personnels à l’adresse conservée. Dans cette démonstration, on la décoche : aucun email ne sera envoyé. Lisez le résumé avant de confirmer. La fusion est irréversible : la fiche absorbée sera désactivée et vidée de ses informations personnelles. Ses liens déplacés seront régénérés, et les anciens ne fonctionneront plus. Fusionner les deux fiches ouvre une dernière confirmation. Quand vous êtes vraiment sûr de votre choix, confirmez la fusion.",
+      "fallbackDurationMs": 45000
+    },
+    {
+      "id": "result",
+      "transcript": "Fusion effectuée : le résultat indique ce qui a été déplacé. Retournez à la fiche conservée pour retrouver son activité et les inscriptions réunies. Dans la liste des membres actifs, il ne reste qu’une fiche pour cette personne. L’historique n’est pas réécrit : les faits enregistrés sous l’ancienne fiche restent consultables depuis la fiche conservée. Si un responsable de secteur utilisait l’adresse abandonnée, son adresse doit être vérifiée séparément.",
+      "fallbackDurationMs": 39000
+    },
+    {
+      "id": "links",
+      "transcript": "Vérifions enfin les liens. L’ancien lien personnel de la fiche absorbée ne fonctionne plus : c’est normal, il a été remplacé pour protéger la personne. Le nouveau lien ouvre bien ses inscriptions sous la fiche conservée. Une inscription annulée parce qu’elle faisait doublon ne redevient pas active. Si vous cochez l’envoi des liens lors d’une vraie fusion, la personne reçoit ses nouveaux accès à l’adresse choisie. Vous avez ainsi une seule fiche, des informations cohérentes, et des accès renouvelés.",
+      "fallbackDurationMs": 44000
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Répondons maintenant. Aline choisit M pour son t-shirt, puis Oui pour",
+  "windowStart": 176.30499999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 35.34,
+    "wordsHeard": "Répondons maintenant. Aline choisit M pour son t-shirt, puis oui pour"
+  },
+  "onset": 211.64499999999998,
+  "proposedCut": 211.6075415,
+  "note": "Proposal only; recut then independently audit before capture"
+}

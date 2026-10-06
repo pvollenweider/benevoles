@@ -321,7 +321,7 @@ partageront le même identifiant.
 **Public :** organisateur. **Durée :** 6 min.
 
 - poste versus créneau ;
-- vues Timeline et Liste ;
+- vues Frise et Liste ;
 - couleurs et ordre des postes ;
 - plusieurs jours et même poste avec horaires différents ;
 - navigation clavier et boutons Monter/Descendre.
@@ -355,7 +355,7 @@ partageront le même identifiant.
 
 **Jeu de données :** buvette de 10 h à 22 h par tranches de deux heures.
 
-### 21. Créer, copier et redimensionner depuis la Timeline
+### 21. Créer, copier et redimensionner depuis la frise
 
 **Identifiant :** `SHIFT_TIMELINE_QUICK_ACTIONS`.
 

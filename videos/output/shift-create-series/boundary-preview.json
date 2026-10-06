@@ -1,12 +1,12 @@
 {
   "anchor": "L’aperçu est la vérification essentielle : dix heures–midi, midi–quatorze heures, puis",
-  "windowStart": 5.176000000000002,
+  "windowStart": 11.123000000000005,
   "result": {
     "found": true,
-    "startSeconds": 30.08,
-    "wordsHeard": "L’aperçu est la vérification essentielle"
+    "startSeconds": 30.37,
+    "wordsHeard": "L'aperçu est la vérification essentielle : dix heures-midi, midi-quatorze heures, puis"
   },
-  "onset": 35.256,
-  "proposedCut": 35.176354,
+  "onset": 41.49300000000001,
+  "proposedCut": 41.1225205,
   "note": "Proposal only; recut then independently audit before capture"
 }

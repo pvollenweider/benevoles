@@ -1,0 +1,35 @@
+{
+  "batch": "a552cfdbd909da1bdb13",
+  "startedAt": "2026-10-06T17:30:48.322Z",
+  "updatedAt": "2026-10-06T17:43:10.917Z",
+  "state": "failed",
+  "pid": 53287,
+  "requested": [
+    "MEMBERS_MANAGEMENT",
+    "MEMBERS_INVITATIONS",
+    "MEMBERS_REMINDERS"
+  ],
+  "rehearsalPerformed": false,
+  "active": null,
+  "results": [
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "status": "needs-review",
+      "failedStage": "audiovisual-review",
+      "error": "Child exited 1"
+    },
+    {
+      "id": "MEMBERS_INVITATIONS",
+      "status": "needs-review",
+      "failedStage": "narrated-capture",
+      "error": "Child exited 1"
+    },
+    {
+      "id": "MEMBERS_REMINDERS",
+      "status": "needs-review",
+      "failedStage": "narrated-capture",
+      "error": "Child exited 1"
+    }
+  ],
+  "note": "Generated-for-review is not publication, human validation or proof of complete masterclass coverage. Direct capture omits only rehearsal; actual full capture, integrity checks and final media reviews remain required. Never run alongside another default-fixture capture."
+}

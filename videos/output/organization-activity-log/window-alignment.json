@@ -1,39 +1,39 @@
 {
-  "locatedAt": "2026-10-05T18:53:14.014Z",
-  "masterSha256": "0620f091f758394351516aab4563fc1de5f5bb1fb291448fbe95b9198cbb4988",
-  "totalSeconds": 262.84,
+  "locatedAt": "2026-10-06T17:24:34.422Z",
+  "masterSha256": "57215483c0950bd01b69e069a4779a12fcd6e0ca50ed387d324858bf95f2941d",
+  "totalSeconds": 261.72,
   "cuts": [
     {
       "id": "read",
-      "seconds": 29.925896
+      "seconds": 28.587083
     },
     {
       "id": "members",
-      "seconds": 56.6657085
+      "seconds": 56.2914795
     },
     {
       "id": "team",
-      "seconds": 83.0016875
+      "seconds": 84.48916700000001
     },
     {
       "id": "filters",
-      "seconds": 109.379958
+      "seconds": 112.3813955
     },
     {
       "id": "pages",
-      "seconds": 137.4556045
+      "seconds": 141.9899375
     },
     {
       "id": "export",
-      "seconds": 167.168167
+      "seconds": 171.9582915
     },
     {
       "id": "limits",
-      "seconds": 203.7108955
+      "seconds": 205.03243750000001
     },
     {
       "id": "result",
-      "seconds": 231.22302100000002
+      "seconds": 232.0028335
     }
   ],
   "applied": true,

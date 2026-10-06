@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour tes places confirmées, l'organisation peut prévoir les rappels deux jours",
+  "windowStart": 98.352,
+  "result": {
+    "found": true,
+    "startSeconds": 25.08,
+    "wordsHeard": "Pour tes places confirmées, l'organisation peut prévoir les rappels deux jours"
+  },
+  "onset": 123.432,
+  "proposedCut": 123.242021,
+  "note": "Proposal only; recut then independently audit before capture"
+}

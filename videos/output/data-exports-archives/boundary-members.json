@@ -1,12 +1,12 @@
 {
   "anchor": "Depuis Membres, Exporter les membres télécharge un fichier CSV. Il contient",
-  "windowStart": 18.250999999999998,
+  "windowStart": 0,
   "result": {
     "found": true,
-    "startSeconds": 10.22,
-    "wordsHeard": "Depuis membres exporter les membres télécharge un fichier CSV. Il contient"
+    "startSeconds": 25.4,
+    "wordsHeard": "Depuis"
   },
-  "onset": 28.470999999999997,
-  "proposedCut": 28.260167,
+  "onset": 25.4,
+  "proposedCut": 25.0221665,
   "note": "Proposal only; recut then independently audit before capture"
 }

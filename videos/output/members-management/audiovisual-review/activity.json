@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:38:02.574Z",
+  "videoSha256": "4f2463aa78f990278c1913f94a35e27170bbb7b98cd4fc848478da990a80a1cb",
+  "promptSha256": "95d3da6ee32c0191d5bd1ee2715160682f0e65b3796d2de57cf0d3f93c1019ca",
+  "clipSha256": "9b7731bcda70ef660d005aa14171cd978777b1dee17e4bf31dbd10c15d4225cf",
+  "scene": "activity",
+  "review": {
+    "heardOpening": "Le lien Activité ouvre l'historique factuel",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Le lien Activité ouvre l'historique factuel",
+        "visibleSeconds": 1.5,
+        "visible": "Clic sur le lien Activité et chargement de la fiche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Pour Camille, la page est déjà renseignée",
+        "visibleSeconds": 2.5,
+        "visible": "Page Activité de Camille Rochat affichant les faits et dates",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Cette vue rassemble notamment les inscriptions",
+        "visibleSeconds": 11.2,
+        "visible": "Historique détaillé listant inscriptions et statuts",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction posée et claire, ton régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

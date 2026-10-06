@@ -1,0 +1,12 @@
+{
+  "anchor": "Une adresse erronée demande une autre attention. Ouvrons les membres, puis",
+  "windowStart": 104.418,
+  "result": {
+    "found": true,
+    "startSeconds": 21,
+    "wordsHeard": "Une adresse erronée demande une autre attention. Ouvrons les membres, puis"
+  },
+  "onset": 125.418,
+  "proposedCut": 125.32733300000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

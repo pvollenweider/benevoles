@@ -1,0 +1,12 @@
+{
+  "anchor": "Camille possède déjà deux engagements de Buvette. En revenant au planning",
+  "windowStart": 13.474999999999994,
+  "result": {
+    "found": true,
+    "startSeconds": 30.7,
+    "wordsHeard": "Camille"
+  },
+  "onset": 44.175,
+  "proposedCut": 44.268771,
+  "note": "Proposal only; recut then independently audit before capture"
+}

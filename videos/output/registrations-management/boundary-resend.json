@@ -1,12 +1,12 @@
 {
   "anchor": "Sélectionnons deux inscriptions confirmées de Camille, puis Renvoyer le lien. Le",
-  "windowStart": 170.67000000000002,
+  "windowStart": 149.696,
   "result": {
     "found": true,
-    "startSeconds": 5.18,
-    "wordsHeard": "Sélectionnons deux inscriptions confirmées de Camille, puis Renvoyer le lien. Le"
+    "startSeconds": 26.96,
+    "wordsHeard": "Sélectionnons deux inscriptions confirmées de Camille, puis renvoyer le lien. Le"
   },
-  "onset": 175.85000000000002,
-  "proposedCut": 175.929542,
+  "onset": 176.656,
+  "proposedCut": 176.207083,
   "note": "Proposal only; recut then independently audit before capture"
 }

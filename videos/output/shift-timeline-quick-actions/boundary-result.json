@@ -1,0 +1,12 @@
+{
+  "anchor": "De retour en Liste, les deux créneaux sont bien présents après",
+  "windowStart": 72.403,
+  "result": {
+    "found": true,
+    "startSeconds": 30.8,
+    "wordsHeard": "De retour en liste, les deux créneaux sont bien présents après"
+  },
+  "onset": 103.203,
+  "proposedCut": 103.11485400000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

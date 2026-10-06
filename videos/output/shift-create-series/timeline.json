@@ -1,42 +1,117 @@
 {
   "slug": "shift-create-series",
-  "recordedAt": "2026-10-04T16:46:43.917Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T16:06:06.234Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "12928a8936f7b69d6ecf6ef91f6ecdbdffa09b60",
+    "sourceTree": "30dbb5aedc053cdb4c8279f2b678cc73eece207e",
+    "productSourceSha256": "c99792f1a68d4f9cd696d47c05d5c6a8d06aaa190f0a9cf15281957940612e03",
+    "buildId": "_3C5UypUJK5dyJUxNVbyG",
+    "snapshot": "/tmp/benevoles-video-production.fLrGxy",
+    "builtAt": "2026-10-06T16:02:24.130Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "SHIFT_CREATE_SERIES",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 7569
+    },
+    {
+      "kind": "click",
+      "atMs": 15086
+    },
+    {
+      "kind": "click",
+      "atMs": 17985
+    },
+    {
+      "kind": "click",
+      "atMs": 19069
+    },
+    {
+      "kind": "click",
+      "atMs": 25653
+    },
+    {
+      "kind": "click",
+      "atMs": 28902
+    },
+    {
+      "kind": "click",
+      "atMs": 33118
+    },
+    {
+      "kind": "click",
+      "atMs": 53367
+    },
+    {
+      "kind": "click",
+      "atMs": 65183
+    },
+    {
+      "kind": "click",
+      "atMs": 66350
+    },
+    {
+      "kind": "click",
+      "atMs": 71383
+    },
+    {
+      "kind": "click",
+      "atMs": 74183
+    },
+    {
+      "kind": "click",
+      "atMs": 83150
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1141,
-      "endMs": 9052
+      "startMs": 1138,
+      "endMs": 13519
     },
     {
       "id": "range",
-      "startMs": 9507,
-      "endMs": 22927
+      "startMs": 13971,
+      "endMs": 24731
     },
     {
       "id": "duration",
-      "startMs": 23380,
-      "endMs": 36588
+      "startMs": 25183,
+      "endMs": 40619
     },
     {
       "id": "preview",
-      "startMs": 37041,
-      "endMs": 52371
+      "startMs": 41070,
+      "endMs": 52223
     },
     {
       "id": "create",
-      "startMs": 52824,
-      "endMs": 67121
+      "startMs": 52674,
+      "endMs": 64255
     },
     {
       "id": "adjust",
-      "startMs": 67575,
-      "endMs": 79978
+      "startMs": 64712,
+      "endMs": 81061
     },
     {
       "id": "result",
-      "startMs": 80431,
-      "endMs": 90757
+      "startMs": 81516,
+      "endMs": 95544
     }
   ]
 }

@@ -25,7 +25,10 @@ async function main() {
     await page.getByLabel("Prénom *", { exact: true }).fill("Aline")
     await page.getByLabel("Nom *", { exact: true }).fill("Exemple")
     await page.getByLabel("Email", { exact: true }).fill("video.accessibility.0@example.org")
-    const picker = page.getByRole("combobox", { name: "Créneau *", exact: true })
+    // Main now hides the decorative asterisk from the accessible name;
+    // aria-required carries the actual required state instead.
+    const picker = page.getByRole("combobox", { name: "Créneau", exact: true })
+    assert.equal(await picker.getAttribute("aria-required"), "true")
     await page.getByRole("button", { name: "Ajouter", exact: true }).click()
     await page.screenshot({ path: path.join(directory, "picker-submit-observed.png") })
     await page.getByText("Sélectionnez un créneau.", { exact: true }).waitFor()

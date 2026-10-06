@@ -1,9 +1,14 @@
 {
-  "updatedAt": "2026-10-06T08:50:38.918Z",
+  "updatedAt": "2026-10-06T16:00:52.461Z",
   "note": "Generated-for-review is not human validation, complete coverage or publication. Every failed stage remains listed.",
   "results": [
     {
-      "id": "EVENT_DUPLICATE",
+      "id": "SHIFT_CREATE_SERIES",
+      "status": "needs-review",
+      "failedStage": "audiovisual-review"
+    },
+    {
+      "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
       "status": "needs-review",
       "failedStage": "audiovisual-review"
     }

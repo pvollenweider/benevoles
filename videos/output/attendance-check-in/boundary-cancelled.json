@@ -1,12 +1,12 @@
 {
   "anchor": "Un cas à regarder de près : Sarah est arrivée, mais",
-  "windowStart": 139.51099999999997,
+  "windowStart": 120.91,
   "result": {
     "found": true,
-    "startSeconds": 12.98,
+    "startSeconds": 24.7,
     "wordsHeard": "Un cas à regarder de près : Sarah est arrivée, mais"
   },
-  "onset": 152.49099999999996,
-  "proposedCut": 152.38077049999998,
+  "onset": 145.60999999999999,
+  "proposedCut": 145.453708,
   "note": "Proposal only; recut then independently audit before capture"
 }

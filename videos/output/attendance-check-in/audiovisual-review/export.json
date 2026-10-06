@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:08:41.838Z",
-  "videoSha256": "58705cd0468ab625a8108945bd9244cff798768e56f4403e42e7c79dbda4612a",
-  "promptSha256": "bd32a17d24edd36866d11b7037f00f8c46a2a81f059f94dba92aa790d714b084",
-  "clipSha256": "89f47173d0b3f95e57fc4722bc2675a5161d9b05811685c3fb9916fa836aeab5",
+  "reviewedAt": "2026-10-06T17:39:18.883Z",
+  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "promptSha256": "82fcfa717afa1f73e3b485b0b81fc6ca69fb360542dece21be61f9032968ba22",
+  "clipSha256": "655768753358b486f94bc3cd3d3dfa7171c9a43a9544b5015d1884bd5436c333",
   "scene": "export",
   "review": {
     "heardOpening": "Téléchargeons maintenant le véritable export des présences",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Téléchargeons maintenant le véritable export des présences",
-        "visibleSeconds": 1.8,
-        "visible": "Lien Exporter les présences (CSV) survolé puis transition vers le visualiseur",
+        "spokenSeconds": 1,
+        "spoken": "Téléchargeons maintenant le véritable export des présences.",
+        "visibleSeconds": 3.8,
+        "visible": "Passage direct à l'écran de visualisation du CSV téléchargé.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.1,
-        "spoken": "Comparons une ligne pointée et une ligne non pointée",
-        "visibleSeconds": 4.8,
-        "visible": "Affichage du tableau CSV avec lignes alternant présence confirmée et non pointée",
+        "spokenSeconds": 5,
+        "spoken": "Comparons une ligne pointée et une ligne non pointée, leurs créneaux et les colonnes Présent et Pointé le.",
+        "visibleSeconds": 4,
+        "visible": "Tableau affichant les colonnes Créneau, Présent et Pointé le avec différentes lignes.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
-        "spoken": "leurs créneaux et les colonnes Présent et Pointé le",
-        "visibleSeconds": 8,
-        "visible": "Colonnes Présent et Pointé le visibles à l'écran",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 17.5,
-        "spoken": "partage seulement ce qui est nécessaire",
-        "visibleSeconds": 17.8,
-        "visible": "Filtrage appliqué sur une personne spécifique (Léa Exemple)",
+        "spokenSeconds": 20,
+        "spoken": "Voyons maintenant un écran plus simple à utiliser sur le terrain, depuis son téléphone.",
+        "visibleSeconds": 19.5,
+        "visible": "Affichage de l'interface mobile Jour J adaptée au terrain.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier, intonation claire et naturelle."
+      "observation": "Voix posée, claire et fluide, en bonne adéquation avec les transitions visuelles."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

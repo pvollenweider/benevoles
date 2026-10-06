@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:12:35.516Z",
+  "videoSha256": "9711d32befbf3bd796f9846b4cc0eafc958f1fd41f9679745ebd4280c84c31e6",
+  "promptSha256": "dd363255ca61c078f7568e4984513bf8dc4517850e201f1d9ee31e711db378a2",
+  "clipSha256": "59034302e2dabe955dad21dc462e44ca81a0d8b140a873f3e3451b9af5967ff9",
+  "scene": "timezone",
+  "review": {
+    "heardOpening": "Ces calculs dépendent du fuseau horaire de l'organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Ces calculs dépendent du fuseau horaire",
+        "visibleSeconds": 1,
+        "visible": "Défilement vers la section Fuseau horaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "ici Europe Zurich",
+        "visibleSeconds": 1.2,
+        "visible": "Champ Fuseau horaire affichant Europe/Zurich",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Le serveur peut fonctionner en UTC sans décaler les rappels",
+        "visibleSeconds": 5,
+        "visible": "Écran fixe sur les paramètres de fuseau horaire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et conforme au texte."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

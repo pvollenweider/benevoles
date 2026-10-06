@@ -1,12 +1,12 @@
 {
-  "anchor": "Avec le filtre de tags, tu peux afficher seulement les personnes",
-  "windowStart": 110.71000000000001,
+  "anchor": "Avec le filtre de tags, vous pouvez afficher seulement les personnes",
+  "windowStart": 97.09700000000001,
   "result": {
     "found": true,
-    "startSeconds": 15.04,
-    "wordsHeard": "Avec le filtre de tags, tu peux afficher seulement les personnes"
+    "startSeconds": 30.1,
+    "wordsHeard": "Avec le filtre de tags, vous pouvez afficher seulement les personnes"
   },
-  "onset": 125.75,
-  "proposedCut": 125.7102915,
+  "onset": 127.197,
+  "proposedCut": 127.09741650000001,
   "note": "Proposal only; recut then independently audit before capture"
 }

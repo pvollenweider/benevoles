@@ -1,0 +1,134 @@
+{
+  "id": "EVENT_QUESTIONS",
+  "slug": "event-questions",
+  "title": "Poser les bonnes questions à ses bénévoles",
+  "description": "Créer les quatre types de questions, lire les réponses et les préserver quand le formulaire évolue.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous ajoutez des questions au formulaire d'inscription d'un événement, suivez les réponses d'un bénévole et faites évoluer le formulaire sans perdre les réponses déjà reçues.",
+    "steps": [
+      "Ouvrez « Questions aux bénévoles » et cliquez sur « Ajouter une question » : choix unique, oui ou non, choix multiple ou texte court.",
+      "Pour un choix, saisissez une possibilité par ligne, puis cochez « Réponse obligatoire » seulement si l'information est indispensable.",
+      "Réglez l'ordre des questions avec « Monter » et « Descendre ».",
+      "Retrouvez les réponses sous chaque inscription, puis dans la « Synthèse des réponses ».",
+      "Téléchargez la synthèse en CSV pour préparer une commande sans transmettre de noms ni de coordonnées.",
+      "Pour compléter une question déjà utilisée, ajoutez un nouveau choix plutôt que de modifier son type.",
+      "Cliquez sur « Retirer » quand une question n'est plus utile : elle disparaît du formulaire, ses réponses restent."
+    ],
+    "remember": [
+      "Demandez le moins possible, et jamais d'information sensible sur la santé, la religion ou les opinions.",
+      "Les réponses sont enregistrées une fois par bénévole et par événement, pas pour chaque créneau.",
+      "Depuis le simple formulaire public, une réponse existante n'est pas remplacée : le bénévole passe par son lien personnel ou son invitation pour la corriger.",
+      "Le type d'une question ayant des réponses est verrouillé, et un choix déjà retenu ne peut pas être retiré."
+    ]
+  },
+  "language": "fr-CH",
+  "voice": "Kore",
+  "voiceStyle": "French, genuinely warm, smiling, friendly and reassuring. Explain patiently like a welcoming organizer, never promotional. Keep exactly the same voice and energy throughout the video.",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "chapterTitles": {
+    "welcome": "Demander seulement ce qui est utile",
+    "create-single": "Un seul choix : la taille du t-shirt",
+    "create-yesno": "Une réponse oui ou non",
+    "create-multiple": "Plusieurs choix possibles",
+    "create-text": "Une réponse libre et facultative",
+    "order": "Organiser les questions",
+    "required-validation": "Une réponse obligatoire manquante",
+    "volunteer-form": "Répondre et vérifier avant l'envoi",
+    "email-proof": "L'email réellement reçu dans la boîte de test",
+    "admin-read": "Relire les réponses côté organisation",
+    "summary-export": "Une synthèse pour préparer le matériel",
+    "invited-update": "Se réinscrire depuis son invitation",
+    "unverified-update": "Une adresse seule ne prouve pas l'identité",
+    "answered-lock": "Protéger les choix déjà retenus",
+    "edit-choices": "Ajouter un choix sans perdre les réponses",
+    "retire": "Retirer une question en conservant ses réponses"
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Un t-shirt à prévoir, du matériel à organiser : quelques questions bien choisies peuvent vraiment aider. Ouvrons Questions aux bénévoles pour notre événement de formation. On peut ajouter jusqu'à cinq questions. Mais le bon réflexe, c'est d'en demander le moins possible, juste ce qui sert à l'organisation. Pas d'information sensible sur la santé, la religion ou les opinions. Ici, les personnes et leurs réponses sont entièrement fictives. Nous allons préparer quatre exemples, puis suivre ce que voit Aline et ce que retrouve l'organisation.",
+      "fallbackDurationMs": 43000
+    },
+    {
+      "id": "create-single",
+      "transcript": "Commençons par la taille du t-shirt. Cliquons sur Ajouter une question, puis saisissons son intitulé. Dans Type de réponse, choisissons Choix unique : la personne pourra sélectionner une seule taille. Les choix s'écrivent un par ligne. Voici S, M, L et XL. Il en faut au moins deux, et douze au maximum. Pour notre commande, cette information est nécessaire : cochons Réponse obligatoire. Enregistrons. La question est maintenant dans la liste, avec ses choix et son caractère obligatoire.",
+      "fallbackDurationMs": 42000
+    },
+    {
+      "id": "create-yesno",
+      "transcript": "Pour le permis de conduire, une réponse simple suffit. Ajoutons une nouvelle question, puis écrivons Permis de conduire. Choisissons Oui ou non dans le type de réponse. Pas de liste à saisir : les deux réponses sont proposées automatiquement. Dans cet exemple, rendons aussi la réponse obligatoire, puis enregistrons. Attention, demander le permis ici recueille une information : ce n'est pas, à lui seul, une règle qui réserve un poste ou vérifie le document.",
+      "fallbackDurationMs": 39000
+    },
+    {
+      "id": "create-multiple",
+      "transcript": "Passons au matériel de transport. Créons la question, puis choisissons Choix multiple. Saisissons Vélo, Remorque et Voiture, toujours un choix par ligne. Cette fois, plusieurs cases pourront être cochées : Aline peut disposer d'un vélo et d'une remorque. Laissons Réponse obligatoire décochée. Une personne sans matériel pourra ne rien renseigner. Enregistrons et vérifions les trois choix dans la liste. Le type choisi doit correspondre à ce que vous voulez réellement savoir.",
+      "fallbackDurationMs": 41000
+    },
+    {
+      "id": "create-text",
+      "transcript": "Pour une préférence de rendez-vous, laissons un peu de liberté. Ajoutons Point de rendez-vous préféré. Conservons Texte court : la personne écrira sa réponse plutôt que de choisir dans une liste. Cette question reste facultative. Elle peut donner une indication utile, mais ce n'est pas une consigne officielle de rendez-vous. Enregistrons. Nous avons maintenant nos quatre types de questions, avec deux réponses obligatoires et deux facultatives.",
+      "fallbackDurationMs": 38000
+    },
+    {
+      "id": "order",
+      "transcript": "L'ordre compte aussi pour rendre le formulaire agréable. Plaçons le permis avant la taille du t-shirt avec Monter, sur la ligne du permis. La question remonte d'une position. Descendre permet le mouvement inverse. Rechargeons la page : le nouvel ordre est conservé. Les bénévoles retrouveront cet ordre dans leur formulaire. Vous n'avez pas besoin de supprimer et recréer une question pour la déplacer.",
+      "fallbackDurationMs": 34000
+    },
+    {
+      "id": "required-validation",
+      "transcript": "Voyons maintenant le formulaire public avec Aline. Choisissons le premier créneau et continuons. Renseignons son identité et les consentements demandés. Essayons de confirmer sans répondre à nos deux questions obligatoires. Le formulaire indique ce qui manque et place le focus sur la première réponse attendue. Aucune inscription n'est créée. Les questions facultatives, elles, peuvent rester vides. Cette distinction évite de bloquer une personne pour une information qui n'est pas indispensable.",
+      "fallbackDurationMs": 47000
+    },
+    {
+      "id": "volunteer-form",
+      "transcript": "Répondons maintenant. Aline choisit M pour son t-shirt, puis Oui pour le permis. Pour le matériel, elle coche Vélo et Remorque : c'est bien un choix multiple. Dans le texte libre, écrivons Entrée nord. Avant l'envoi, le récapitulatif Transmis à l'organisation montre les informations qui seront partagées. Vérifions, puis confirmons réellement l'inscription. Ces réponses sont enregistrées une fois pour Aline sur cet événement, pas une nouvelle fois pour chaque créneau.",
+      "fallbackDurationMs": 44000
+    },
+    {
+      "id": "email-proof",
+      "transcript": "Aline existait déjà dans la liste des membres. Sur le formulaire public, taper son adresse ne suffit pas à prouver qui est devant l'écran. Son lien personnel n'est donc pas affiché directement : il lui est envoyé par email. Ouvrons le nouveau message réellement reçu pour cette adresse dans notre boîte locale de test. C'est une vraie notification produite par l'application, avec son lien personnel. La boîte de test prouve cette réception locale, pas la lecture par une personne, ni une livraison dans une boîte extérieure.",
+      "fallbackDurationMs": 42000
+    },
+    {
+      "id": "admin-read",
+      "transcript": "Revenons côté organisation, dans les inscriptions. Sous celle d'Aline, les réponses permettent de préparer son t-shirt et le matériel. Ouvrons ensuite Questions : la Synthèse des réponses compte les choix. Aline est comptée une seule fois parmi les bénévoles confirmés, même si elle prend plusieurs créneaux. Pour un choix multiple, elle apparaît dans plusieurs lignes : les totaux des choix peuvent donc dépasser le nombre de personnes. Les personnes en attente sont distinguées des confirmées.",
+      "fallbackDurationMs": 43000
+    },
+    {
+      "id": "summary-export",
+      "transcript": "Pour préparer une commande, téléchargeons la synthèse en CSV. Le fichier rassemble les questions, les réponses et leurs totaux, avec les confirmés et les personnes en attente. Il ne contient ni noms ni coordonnées : vous pouvez partager ces quantités avec un fournisseur sans lui transmettre la liste des bénévoles. La synthèse décrit l'état actuel ; les inscriptions peuvent encore évoluer. Gardez ce repère en tête avant de lancer une commande définitive.",
+      "fallbackDurationMs": 36000
+    },
+    {
+      "id": "invited-update",
+      "transcript": "Aline se réinscrit maintenant depuis son véritable lien d'invitation, pour un deuxième créneau. Cette invitation apporte la preuve nécessaire pour modifier ses réponses. Choisissons L au lieu de M. Conservons Oui pour le permis, puis laissons le matériel et le rendez-vous vides. Confirmons. La nouvelle taille remplace l'ancienne. Les deux réponses facultatives laissées vides sont effacées. Les réponses appartiennent toujours à Aline sur cet événement, indépendamment de ses deux créneaux.",
+      "fallbackDurationMs": 47000
+    },
+    {
+      "id": "unverified-update",
+      "transcript": "Comparons avec une inscription depuis le simple formulaire public, sans invitation. Saisissons la même adresse pour un troisième créneau, mais choisissons S. L'inscription peut être créée, pourtant la réponse déjà enregistrée ne sera pas remplacée. L'adresse seule ne prouve pas l'identité de la personne qui la saisit. La taille conservée reste donc L. Depuis ce formulaire, seules les réponses encore manquantes peuvent être ajoutées. Pour corriger une réponse existante, le bénévole doit utiliser le parcours qui prouve son accès.",
+      "fallbackDurationMs": 49000
+    },
+    {
+      "id": "answered-lock",
+      "transcript": "Le formulaire a maintenant des réponses : revenons modifier la taille du t-shirt. Le type est verrouillé. Changer un choix unique en texte libre rendrait les réponses existantes difficiles à interpréter. Essayons aussi de retirer L des choix proposés. L'application refuse, car cette taille a déjà été retenue. Annulons cette modification. La réponse d'Aline reste intacte. Si vous devez changer complètement la question, mieux vaut en créer une nouvelle plutôt que de réinterpréter les réponses passées.",
+      "fallbackDurationMs": 42000
+    },
+    {
+      "id": "edit-choices",
+      "transcript": "On peut cependant enrichir la liste sans perdre ce qui existe. Rouvrons la question et ajoutons XXL, tout en gardant S, M, L et XL. Enregistrons. Le nouveau choix apparaît dans la liste ; la taille L d'Aline reste conservée. Ajouter une possibilité et retirer un choix déjà utilisé ne sont pas la même opération. Prenez le temps de relire les choix avant d'enregistrer.",
+      "fallbackDurationMs": 34000
+    },
+    {
+      "id": "retire",
+      "transcript": "Nous n'avons plus besoin de demander la taille aux nouvelles inscriptions. Cliquons sur Retirer, puis lisons la confirmation : la question disparaît du formulaire, mais ses réponses restent dans les inscriptions et les exports. Confirmons. Dans l'inscription d'Aline, sa taille L est encore visible, avec la mention question retirée. Ouvrons enfin un autre créneau public : la question n'est plus proposée, les autres le sont toujours. Un formulaire simple, des réponses utiles et une évolution qui préserve l'historique : c'est le bon équilibre.",
+      "fallbackDurationMs": 52000
+    }
+  ]
+}

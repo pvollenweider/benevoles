@@ -1,12 +1,12 @@
 {
   "anchor": "Créons la série. Les nouvelles barres apparaissent dans la Frise avec",
-  "windowStart": 18.274,
+  "windowStart": 23.653000000000006,
   "result": {
     "found": true,
-    "startSeconds": 28.48,
-    "wordsHeard": "Créons"
+    "startSeconds": 30.04,
+    "wordsHeard": "Créons la série. Les nouvelles barres apparaissent dans la Frise avec"
   },
-  "onset": 46.754000000000005,
-  "proposedCut": 46.870625000000004,
+  "onset": 53.693000000000005,
+  "proposedCut": 53.652604499999995,
   "note": "Proposal only; recut then independently audit before capture"
 }

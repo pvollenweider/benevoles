@@ -20,12 +20,12 @@
     },
     {
       "id": "statuses",
-      "transcript": "Sans créneau confirmé ne signifie pas forcément aucune démarche. Dans les inscriptions, une personne peut être en liste d'attente, recevoir une offre ou attendre la validation de l'organisateur. Une autre a déjà une participation confirmée. Vérifie ces situations avant de relancer. Un message adapté sera plus utile qu'une demande générale de s'inscrire adressée à quelqu'un qui l'a déjà fait.",
+      "transcript": "Sans créneau confirmé ne signifie pas forcément aucune démarche. Dans les inscriptions, une personne peut être en liste d'attente, recevoir une offre ou attendre la validation de l'organisateur. Une autre a déjà une participation confirmée. Vérifiez ces situations avant de relancer. Un message adapté sera plus utile qu'une demande générale de s'inscrire adressée à quelqu'un qui l'a déjà fait.",
       "fallbackDurationMs": 37000
     },
     {
       "id": "confirm",
-      "transcript": "Le bouton Relancer les personnes sans créneau ouvre un récapitulatif. Tu peux encore annuler. Pour cette démonstration, nous confirmons l'envoi réel. Les membres déjà inscrits ne sont pas relancés. Les fiches inactives et celles sans email ne reçoivent pas ce message non plus. Le résultat indique le nombre effectivement envoyé : lis-le, plutôt que de te fier seulement au compteur initial.",
+      "transcript": "Le bouton Relancer les personnes sans créneau ouvre un récapitulatif. Vous pouvez encore annuler. Pour cette démonstration, nous confirmons l'envoi réel. Les membres déjà inscrits ne sont pas relancés. Les fiches inactives et celles sans email ne reçoivent pas ce message non plus. Le résultat indique le nombre effectivement envoyé : lisez-le, plutôt que de vous fier seulement au compteur initial.",
       "fallbackDurationMs": 39000
     },
     {
@@ -35,12 +35,12 @@
     },
     {
       "id": "message",
-      "transcript": "Pour expliquer davantage, utilise Écrire un message aux personnes sans créneau. Le groupe est déjà choisi dans la page de message. Nous saisissons un objet clair et quelques mots bienveillants : tu peux encore choisir un horaire si tu le souhaites. Avant d'envoyer, prévisualise les destinataires et le contenu. L'aperçu permet de vérifier à qui tu écris réellement.",
+      "transcript": "Pour expliquer davantage, utilisez Écrire un message aux personnes sans créneau. Le groupe est déjà choisi dans la page de message. Nous saisissons un objet clair et quelques mots bienveillants : vous pouvez encore choisir un horaire si vous le souhaitez. Avant d'envoyer, prévisualisez les destinataires et le contenu. L'aperçu permet de vérifier à qui vous écrivez réellement.",
       "fallbackDurationMs": 39000
     },
     {
       "id": "waitlist",
-      "transcript": "Dans cet aperçu, regarde aussi les personnes qui sont seulement en liste d'attente. Leur situation mérite une formulation différente. Tu peux rappeler qu'elles n'ont pas à refaire leur demande et qu'une place leur sera proposée selon le fonctionnement de la liste d'attente. La relance simple, elle, n'attend pas automatiquement trois jours : c'est toi qui choisis le bon moment.",
+      "transcript": "Dans cet aperçu, regardez aussi les personnes qui sont seulement en liste d'attente. Leur situation mérite une formulation différente. Vous pouvez rappeler qu'elles n'ont pas à refaire leur demande et qu'une place leur sera proposée selon le fonctionnement de la liste d'attente. La relance simple, elle, n'attend pas automatiquement trois jours : c'est vous qui choisissez le bon moment.",
       "fallbackDurationMs": 35000
     },
     {
@@ -50,7 +50,7 @@
     },
     {
       "id": "result",
-      "transcript": "De retour dans Invitations, les participations n'ont pas changé simplement parce qu'un message est parti. La prochaine étape appartient aux bénévoles. Une relance courte, au bon moment, avec un lien facile à retrouver : c'est souvent suffisant. Et si tu sais qu'une personne ne peut pas venir, respecte sa réponse plutôt que de multiplier les messages.",
+      "transcript": "De retour dans Invitations, les participations n'ont pas changé simplement parce qu'un message est parti. La prochaine étape appartient aux bénévoles. Une relance courte, au bon moment, avec un lien facile à retrouver : c'est souvent suffisant. Et si vous savez qu'une personne ne peut pas venir, respectez sa réponse plutôt que de multiplier les messages.",
       "fallbackDurationMs": 33000
     }
   ],

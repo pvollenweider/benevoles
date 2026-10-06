@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:37:00.129Z",
+  "videoSha256": "4f2463aa78f990278c1913f94a35e27170bbb7b98cd4fc848478da990a80a1cb",
+  "promptSha256": "f0747e17bc88f0ec179e90f82d7275f0d9d782037f306b953887da13304fb50b",
+  "clipSha256": "47be29f482c72fe9207e56f43a99476b62a43b6bb7df75d211e69c8c181b377f",
+  "scene": "no-email",
+  "review": {
+    "heardOpening": "Une personne peut avoir une fiche",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Une personne peut avoir une fiche sans adresse email",
+        "visibleSeconds": 0.8,
+        "visible": "Ouverture du formulaire modal 'Nouveau membre'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Nous créons René Aubert",
+        "visibleSeconds": 2.5,
+        "visible": "Saisie de 'René' dans Prénom et 'Aubert' dans Nom",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "avec son téléphone seulement",
+        "visibleSeconds": 5.2,
+        "visible": "Saisie du numéro de téléphone sans renseigner d'email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.2,
+        "spoken": "le système ne peut pas lui envoyer un email",
+        "visibleSeconds": 11.5,
+        "visible": "Clic sur Créer et ajout de René Aubert dans la liste des membres",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

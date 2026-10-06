@@ -1,0 +1,96 @@
+{
+  "id": "VOLUNTEER_PHONE_NOTIFICATIONS",
+  "slug": "volunteer-phone-notifications",
+  "title": "Recevoir ses rappels sur son téléphone",
+  "description": "Activer les notifications depuis son lien personnel, comprendre ce qui est envoyé et garder la main sur les autorisations de son appareil.",
+  "viewer": {
+    "summary": "Dans cette vidéo, tu actives des rappels sur ton téléphone ou ton navigateur depuis ton lien personnel, et tu vois comment les arrêter.",
+    "steps": [
+      "Ouvre ton lien personnel, reçu après ton inscription.",
+      "Clique sur « Recevoir des rappels push », puis lis le nom du site avant d'autoriser les notifications.",
+      "Vérifie que la page affiche « Rappels push activés ».",
+      "Quand tu ouvres une notification, vérifie les horaires et les consignes sur ta page personnelle.",
+      "Pour arrêter, retire l'autorisation de notifications du site dans les réglages de ton navigateur."
+    ],
+    "remember": [
+      "Les notifications complètent les emails : elles ne changent pas ton inscription.",
+      "Leur disponibilité dépend de ton appareil et de ton navigateur, sans application à installer.",
+      "Les rappels concernent tes places confirmées, pas les demandes en attente ni la liste d'attente.",
+      "Refuser ou retirer l'autorisation n'annule aucun créneau."
+    ]
+  },
+  "language": "fr-CH",
+  "voice": "Kore",
+  "voiceStyle": "French, genuinely warm, friendly and reassuring, with an audible smile. One consistent female narrator throughout. Patient conversational delivery, clear articulation, no exaggerated enthusiasm. Read only the French transcript, never production directions or pause labels.",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "chapterTitles": {
+    "welcome": "Un petit rappel, au bon moment",
+    "conditions": "Ton appareil et ton navigateur",
+    "personal-link": "Depuis ton lien personnel",
+    "permission": "C'est toi qui autorises",
+    "active": "Activé ne veut pas dire reçu",
+    "reminders": "Ce que l'organisation peut t'envoyer",
+    "delivery": "Reconnaître le message et son lien",
+    "blocked": "Si l'activation ne fonctionne pas",
+    "disable": "Garder la main sur les notifications",
+    "result": "Notifications et emails se complètent"
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Tu as trouvé ton créneau, et tu veux garder l'esprit tranquille jusqu'au jour de la fête ? Les notifications peuvent te donner un petit rappel sur l'appareil que tu utilises. Elles complètent les emails, sans changer ton inscription. Nous allons partir du lien personnel d'une bénévole fictive, activer les rappels avec son accord, puis voir comment garder la main sur ce choix.",
+      "fallbackDurationMs": 33000
+    },
+    {
+      "id": "conditions",
+      "transcript": "Ces rappels passent par le navigateur, pas par une application Benevol à installer. Leur disponibilité dépend de ton appareil, de ton navigateur et de la configuration du site. Sur certains téléphones, des étapes supplémentaires peuvent être nécessaires. Si le bouton n'apparaît pas, cela ne veut pas dire que ton inscription a disparu. Pour une démonstration locale, nous utilisons un environnement sécurisé compatible. Un écran d'ordinateur réduit à la taille d'un téléphone ne prouve pas que les notifications fonctionnent sur un vrai téléphone.",
+      "fallbackDurationMs": 43000
+    },
+    {
+      "id": "personal-link",
+      "transcript": "Ouvre ton lien personnel, celui que tu as reçu après ton inscription. Cette page reprend tes créneaux et les informations utiles pour ta mission. Repère le bouton Recevoir des rappels push. Push, c'est simplement le nom de ces notifications envoyées à ton navigateur. Le bouton peut aussi apparaître sur la page de confirmation d'une inscription faite depuis une invitation. Garde ton lien pour toi : il donne accès à tes inscriptions.",
+      "fallbackDurationMs": 37000
+    },
+    {
+      "id": "permission",
+      "transcript": "Tu choisis d'abord Recevoir des rappels push. Le navigateur peut alors te demander si tu autorises les notifications pour ce site. Prends le temps de lire le nom du site, puis choisis librement. Autoriser permet de poursuivre l'activation. Refuser reste tout à fait possible : tu n'annules aucun créneau. Si tu as déjà fait ce choix dans ce navigateur, la demande peut ne pas s'afficher à nouveau.",
+      "fallbackDurationMs": 36000
+    },
+    {
+      "id": "active",
+      "transcript": "Une activation réussie affiche Rappels push activés. Le site a alors accepté l'abonnement de ce navigateur pour cette bénévole. C'est une étape importante, mais ce texte ne prouve pas qu'un rappel est déjà arrivé sur l'appareil. L'autorisation du navigateur, l'abonnement enregistré et la notification effectivement reçue sont trois choses différentes. Sur un autre appareil ou un autre navigateur, il faut vérifier les réglages de ce nouvel environnement.",
+      "fallbackDurationMs": 37000
+    },
+    {
+      "id": "reminders",
+      "transcript": "Pour tes places confirmées, l'organisation peut prévoir les rappels deux jours avant, la veille et le jour de tes créneaux. Les rappels d'un même événement et d'une même journée regroupent tes créneaux : un rappel ne veut pas dire un message pour chaque poste. Les demandes encore sur validation et les places en liste d'attente ne sont pas des places confirmées. Les réglages de l'organisation et de l'événement restent prioritaires : activer les notifications ne rallume pas un rappel que l'organisation a désactivé.",
+      "fallbackDurationMs": 43000
+    },
+    {
+      "id": "delivery",
+      "transcript": "Un message urgent de l'organisation peut aussi être accompagné d'une notification, si elle choisit cette option. Le message complet est envoyé par email aux destinataires du message ciblé. Pour comprendre le résultat, distingue le court aperçu affiché par ton appareil et les informations complètes. Quand tu ouvres une notification de Benevol, son lien te ramène vers la page concernée. Vérifie les horaires et les consignes sur ta page personnelle, plutôt que de te fier uniquement à l'aperçu.",
+      "fallbackDurationMs": 41000
+    },
+    {
+      "id": "blocked",
+      "transcript": "Si tu refuses la demande, le site indique Notifications bloquées dans les paramètres du navigateur. Pour changer d'avis, il faudra passer par les réglages de ce navigateur. Si l'activation rencontre un problème, le message Les rappels n'ont pas pu être activés t'invite à réessayer dans un moment. Le site peut aussi ne pas proposer cette fonction. Ne multiplie pas les essais : vérifie d'abord ta connexion, les autorisations et l'appareil utilisé. Tu peux toujours consulter ton planning depuis ton lien personnel.",
+      "fallbackDurationMs": 43000
+    },
+    {
+      "id": "disable",
+      "transcript": "Tu veux arrêter ces notifications ? Ouvre les autorisations du site dans les réglages du navigateur et retire l'autorisation d'envoyer des notifications. Le chemin exact dépend de ton appareil ; ce qui est montré ici correspond au navigateur de la démonstration. Ce choix ne supprime pas tes inscriptions, et ne modifie pas les emails prévus par l'organisation. Ce n'est pas non plus un bouton pour se désinscrire d'un créneau. Si tu réactives plus tard, reviens sur ta page personnelle et vérifie le résultat de l'activation.",
+      "fallbackDurationMs": 44000
+    },
+    {
+      "id": "result",
+      "transcript": "Voilà : tu sais où demander les rappels, ce que signifie l'activation et comment retirer ton autorisation. Les notifications sont un complément pratique, pas une garantie de réception à chaque instant. Les emails restent un canal séparé, selon les réglages de l'organisation, et ton lien personnel reste la référence pour tes créneaux. Le plus important, c'est que tu puisses choisir ce qui te convient, et retrouver facilement les bonnes informations avant de venir donner un coup de main.",
+      "fallbackDurationMs": 39000
+    }
+  ]
+}

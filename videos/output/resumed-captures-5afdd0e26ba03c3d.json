@@ -1,0 +1,33 @@
+{
+  "updatedAt": "2026-10-06T16:00:32.721Z",
+  "requested": [
+    "SHIFT_NIGHT_DST",
+    "SHIFT_WAITLIST_OFFER",
+    "SHIFT_APPROVAL",
+    "SHIFT_ELIGIBILITY_RULES"
+  ],
+  "active": null,
+  "note": "Generated-for-review is not human validation, complete coverage or publication. Every failed stage remains listed.",
+  "results": [
+    {
+      "id": "SHIFT_NIGHT_DST",
+      "status": "needs-review",
+      "failedStage": "rehearsal"
+    },
+    {
+      "id": "SHIFT_WAITLIST_OFFER",
+      "status": "needs-review",
+      "failedStage": "rehearsal"
+    },
+    {
+      "id": "SHIFT_APPROVAL",
+      "status": "needs-review",
+      "failedStage": "rehearsal"
+    },
+    {
+      "id": "SHIFT_ELIGIBILITY_RULES",
+      "status": "needs-review",
+      "failedStage": "rehearsal"
+    }
+  ]
+}

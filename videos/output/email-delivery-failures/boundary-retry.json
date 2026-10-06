@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour Emma, le refus de notre serveur de test est maintenant",
+  "windowStart": 73.422,
+  "result": {
+    "found": true,
+    "startSeconds": 26.24,
+    "wordsHeard": "Pour Emma, le refus de notre serveur de test est maintenant"
+  },
+  "onset": 99.66199999999999,
+  "proposedCut": 99.841208,
+  "note": "Proposal only; recut then independently audit before capture"
+}

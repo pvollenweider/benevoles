@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:12:10.688Z",
+  "videoSha256": "9711d32befbf3bd796f9846b4cc0eafc958f1fd41f9679745ebd4280c84c31e6",
+  "promptSha256": "2c9ba74520d9323d02121ba56bdd87eac907313cc00164dd6ae0aecbfc9cf46c",
+  "clipSha256": "f92dd653004a04b3ba799695c0ee76e037d4c5531f924abfe37487cd7fcdd8b4",
+  "scene": "spring",
+  "review": {
+    "heardOpening": "Le dernier dimanche de mars",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le dernier dimanche de mars, la Suisse passe directement de deux heures à trois heures",
+        "visibleSeconds": 0,
+        "visible": "Page des créneaux affichant la date du dimanche 29 mars avec changement d'heure",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Un créneau affiché de une heure à cinq heures ne dure donc que trois heures réelles",
+        "visibleSeconds": 6.8,
+        "visible": "Ouverture du volet de modification du créneau affichant 01:00 à 05:00",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8.2,
+        "spoken": "Les emails et calendriers gardent les heures locales, tandis que les totaux utilisent la durée réellement écoulée",
+        "visibleSeconds": 8,
+        "visible": "Détails du créneau visibles avec les horaires locaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton neutre et régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

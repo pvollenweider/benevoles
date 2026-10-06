@@ -1,12 +1,12 @@
 {
-  "anchor": "La durée découpe ensuite la plage en équipes de deux heures.",
+  "anchor": "La durée découpe la plage en équipes de deux heures. Le",
   "windowStart": 0,
   "result": {
     "found": true,
-    "startSeconds": 25,
-    "wordsHeard": "La durée découpe ensuite la plage en équipes de deux heures."
+    "startSeconds": 24.56,
+    "wordsHeard": "La durée découpe la plage en équipes de deux heures. Le"
   },
-  "onset": 25,
-  "proposedCut": 24.678625,
+  "onset": 24.56,
+  "proposedCut": 24.342167,
   "note": "Proposal only; recut then independently audit before capture"
 }

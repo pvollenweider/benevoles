@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:08:22.200Z",
-  "videoSha256": "58705cd0468ab625a8108945bd9244cff798768e56f4403e42e7c79dbda4612a",
-  "promptSha256": "2da50f2b21d875a54d047bea1bb2d692202583111bf0fcdccafb8edb8a3aa956",
-  "clipSha256": "58e2c60f33a6804e204bfd1167e95a7b859b64d6e2b6df793e25dd8f4740a609",
+  "reviewedAt": "2026-10-06T17:38:48.689Z",
+  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "promptSha256": "40c9be96067dc2a358b6a2b44335791df315a7a451d5f82030c5c8a4f92b0da3",
+  "clipSha256": "043d5774b2945d86c30796bf753cf94d75a48cef27a66bf435774fb710fa94d8",
   "scene": "limits",
   "review": {
     "heardOpening": "Le pointage enregistre une arrivée",
     "checkpoints": [
       {
-        "spokenSeconds": 1,
+        "spokenSeconds": 0,
         "spoken": "Le pointage enregistre une arrivée",
-        "visibleSeconds": 1,
-        "visible": "Page Inscriptions avec liste de pointage affichant le statut Présent",
+        "visibleSeconds": 0,
+        "visible": "Page Inscriptions avec liste d'émargement affichée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7,
+        "spokenSeconds": 6.2,
         "spoken": "Dans la fiche membre, les heures planifiées",
-        "visibleSeconds": 3.5,
-        "visible": "Tableau Membres affichant la colonne Heures planifiées à 4h",
-        "sync": "early",
-        "severity": "minor"
+        "visibleSeconds": 3,
+        "visible": "Affichage de la liste des membres avec colonnes des heures planifiées et attestées",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 14.5,
-        "spoken": "une arrivée plus tardive n'est pas un calcul automatique",
-        "visibleSeconds": 14.5,
-        "visible": "Ouverture de la page Activité de Léa Exemple listant l'historique",
+        "spokenSeconds": 13,
+        "spoken": "les créneaux où une présence a été enregistrée",
+        "visibleSeconds": 14,
+        "visible": "Ouverture de la page Activité de Léa Exemple avec le détail des présences",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, ton pédagogique constant."
+      "observation": "Voix posée et claire, débit régulier."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,36 +1,36 @@
 {
-  "receivedAt": "2026-10-06T07:22:28.584Z",
+  "receivedAt": "2026-10-06T17:17:31.256Z",
   "status": "completed",
   "usage": {
-    "total_tokens": 6453,
-    "total_input_tokens": 1146,
+    "total_tokens": 6212,
+    "total_input_tokens": 1100,
     "input_tokens_by_modality": [
+      {
+        "modality": "text",
+        "tokens": 841
+      },
       {
         "modality": "audio",
         "tokens": 259
-      },
-      {
-        "modality": "text",
-        "tokens": 887
       }
     ],
     "total_cached_tokens": 0,
-    "total_output_tokens": 5307,
+    "total_output_tokens": 5112,
     "output_tokens_by_modality": [
       {
         "modality": "audio",
-        "tokens": 5307
+        "tokens": 5112
       }
     ],
     "total_tool_use_tokens": 0,
     "total_thought_tokens": 0,
-    "raw_prompt_token": 465,
+    "raw_prompt_token": 433,
     "model_invocation_token_counts": [
       {
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 144
+            "tokens": 128
           },
           {
             "modality": "audio",
@@ -40,7 +40,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 322
+            "tokens": 211
           }
         ]
       },
@@ -48,7 +48,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1065
+            "tokens": 954
           },
           {
             "modality": "audio",
@@ -58,7 +58,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2436
+            "tokens": 2427
           }
         ]
       },
@@ -66,7 +66,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1027
+            "tokens": 948
           },
           {
             "modality": "audio",
@@ -76,7 +76,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2555
+            "tokens": 2480
           }
         ]
       }
@@ -86,7 +86,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 144
+            "tokens": 128
           },
           {
             "modality": "audio",
@@ -96,7 +96,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 322
+            "tokens": 211
           }
         ]
       },
@@ -104,7 +104,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1065
+            "tokens": 954
           },
           {
             "modality": "audio",
@@ -114,7 +114,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2436
+            "tokens": 2427
           }
         ]
       },
@@ -122,7 +122,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1027
+            "tokens": 948
           },
           {
             "modality": "audio",
@@ -132,7 +132,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2555
+            "tokens": 2480
           }
         ]
       }
@@ -144,7 +144,7 @@
       "content": [
         {
           "type": "audio",
-          "encodedLength": 13594072
+          "encodedLength": 13094872
         }
       ]
     }

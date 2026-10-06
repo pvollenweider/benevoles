@@ -1,12 +1,12 @@
 {
   "anchor": "Pour chercher une personne, saisis son nom ou son email. Tu",
-  "windowStart": 26.796999999999997,
+  "windowStart": 12.438000000000002,
   "result": {
     "found": true,
-    "startSeconds": 19,
+    "startSeconds": 30.7,
     "wordsHeard": "Pour chercher une personne, saisis son nom ou son email. Tu"
   },
-  "onset": 45.797,
-  "proposedCut": 45.602479,
+  "onset": 43.138000000000005,
+  "proposedCut": 43.116979,
   "note": "Proposal only; recut then independently audit before capture"
 }

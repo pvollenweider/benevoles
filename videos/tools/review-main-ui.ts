@@ -13,7 +13,7 @@ async function main() {
   const browser = await chromium.launch({ headless: true, args: ["--lang=fr-FR"], env: { ...process.env, LANG: "fr_FR.UTF-8", LC_ALL: "fr_FR.UTF-8" } })
   const context = await browser.newContext({ locale: "fr-FR", timezoneId: "Europe/Zurich", viewport: { width: 1280, height: 800 }, reducedMotion: "reduce" })
   const page = await context.newPage()
-  const rows: { name: string; route: string; status: number; headings: string[]; screenshot: string; controls: string[] }[] = []
+  const rows: { name: string; route: string; status: number; headings: string[]; screenshot: string; screenshotCoverage: string; documentHeight: number; controls: string[] }[] = []
   try {
     await page.goto(`${base}/admin/login`)
     await page.getByLabel("Email").fill(process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost")
@@ -25,6 +25,7 @@ async function main() {
     if (!eventHref || !/^\/admin\/events\/[a-z0-9-]+$/i.test(eventHref)) throw new Error("Known synthetic event link required")
     const eventId = eventHref.split("/").at(-1)!
     const routes: [string, string][] = [["events", "/admin/events"], ["event", eventHref], ["shifts", `${eventHref}/shifts`], ["reports", `${eventHref}/print`], ["registrations", `${eventHref}/registrations`], ["questions", `${eventHref}/questions`], ["day-of", `${eventHref}/day-of`], ["review", `${eventHref}/review`], ["edit", `${eventHref}/edit`], ["pages", `${eventHref}/pages`], ["milestones-context", eventHref], ["invitations", `${eventHref}/invitations`], ["messages", `${eventHref}/message`], ["leaders", `${eventHref}/sector-leaders`], ["staffing", `${eventHref}/staffing`], ["open-shifts", `${eventHref}/staffing/search`], ["duplicate", `${eventHref}/duplicate`], ["event-log", `${eventHref}/log`], ["members", "/admin/members"], ["duplicates", "/admin/members/duplicates"], ["settings-team", "/admin/settings/admins"], ["settings-email", "/admin/settings/notifications"], ["settings-templates", "/admin/settings/message-templates"], ["org-log", "/admin/settings/activity"], ["search", "/admin/search?q=buvette"], ["account", "/admin/account"], ["public-event", "/fete-du-village?org=default"], ["documentation", "/doc/admin"]]
+    routes.push(["documentation-unit", "/doc/revenir-sur-la-page-d-inscription"])
     for (const [name, route] of routes) {
       const response = await page.goto(`${base}${route}`)
       await page.waitForLoadState("networkidle")
@@ -44,8 +45,12 @@ async function main() {
         await page.getByRole("heading", { name: "Pour les organisateurs seulement", exact: true }).scrollIntoViewIfNeeded()
       }
       const screenshot = `${directory}/${name}.png`
-      await page.screenshot({ path: screenshot, fullPage: true })
-      rows.push({ name, route, status, headings, screenshot, controls: controls.map(text => text.trim()).filter(Boolean) })
+      const documentHeight = await page.evaluate(() => document.documentElement.scrollHeight)
+      // Large synthetic duplicate lists can exceed Chromium's bitmap limits.
+      // Retain the actual viewport rather than claiming a complete full-page image.
+      const fullPage = documentHeight <= 12000
+      await page.screenshot({ path: screenshot, fullPage })
+      rows.push({ name, route, status, headings, screenshot, screenshotCoverage: fullPage ? "full-page" : "viewport-only", documentHeight, controls: controls.map(text => text.trim()).filter(Boolean) })
       await writeFile(`${directory}/review.json`, JSON.stringify({ product, eventId, note: "Real read-only main UI screenshots; no complete video, keyboard, voice or result validation implied", pages: rows }, null, 2))
       console.log(`${name}: main ${product.commit.slice(0, 8)}, HTTP ${status}`)
     }

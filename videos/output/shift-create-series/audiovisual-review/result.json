@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:08:23.521Z",
+  "videoSha256": "e629aacf38a33b92df65d6610d1684ff682c156b6adfceb2508cde7ee29b32f3",
+  "promptSha256": "4357c0b18435d61b52b8971818e734858e5ace0a2cbc4b11243737fbdffc047a",
+  "clipSha256": "89cccd5592d7dc282be7db970a4f6102e0b7a1b9b4bced81c6627f4c0d6609ea",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Le résultat est bien enregistré",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le résultat est bien enregistré",
+        "visibleSeconds": 1.5,
+        "visible": "Basculement de l'onglet Frise vers l'onglet Liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "quatre places pour la première relève, et toujours trois pour les suivantes",
+        "visibleSeconds": 3,
+        "visible": "Affichage des lignes Buvette série avec 4 places puis 3 places",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "vérifie les horaires, les éventuelles pauses et la fermeture",
+        "visibleSeconds": 7.5,
+        "visible": "Défilement vers le bas du tableau récapitulatif des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, synchronisée avec les éléments à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

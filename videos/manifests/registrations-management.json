@@ -20,12 +20,12 @@
     },
     {
       "id": "columns",
-      "transcript": "Regardons Camille. Tu retrouves son nom, son email, son téléphone, ses disponibilités et les réponses aux questions, ici la taille de t-shirt. À droite figurent le poste et ses horaires. La source distingue le formulaire public de l'ajout manuel. Une note, comme inscrit par téléphone, donne du contexte. Plusieurs lignes pour Camille sont normales : elle participe à plusieurs créneaux.",
+      "transcript": "Regardons Camille. Vous retrouvez son nom, son email, son téléphone, ses disponibilités et les réponses aux questions, ici la taille de t-shirt. À droite figurent le poste et ses horaires. La source distingue le formulaire public de l'ajout manuel. Une note, comme inscrit par téléphone, donne du contexte. Plusieurs lignes pour Camille sont normales : elle participe à plusieurs créneaux.",
       "fallbackDurationMs": 37000
     },
     {
       "id": "filters",
-      "transcript": "Pour chercher une personne, saisis son nom ou son email. Tu peux ensuite filtrer par poste, puis par créneau. Nous choisissons Accueil, et seulement l'horaire de l'après-midi : la liste se réduit aux inscriptions correspondantes. Le lien pour écrire s'adapte aussi au filtre. Pour retrouver toute la liste, remets tous les postes et tous les créneaux, puis efface la recherche.",
+      "transcript": "Pour chercher une personne, saisissez son nom ou son email. Vous pouvez ensuite filtrer par poste, puis par créneau. Nous choisissons Accueil, et seulement l'horaire de l'après-midi : la liste se réduit aux inscriptions correspondantes. Le lien pour écrire s'adapte aussi au filtre. Pour retrouver toute la liste, remettez tous les postes et tous les créneaux, puis effacez la recherche.",
       "fallbackDurationMs": 39000
     },
     {
@@ -45,7 +45,7 @@
     },
     {
       "id": "manual-result",
-      "transcript": "Nous choisissons l'accueil de quinze à dix-huit heures, puis Ajouter. La nouvelle ligne apparaît avec la source Manuel et notre note. Elle est maintenant inscrite sur cet horaire. L'ajout manuel ne déclenche pas ici un email de confirmation automatique. Si Camille a besoin de son récapitulatif, tu peux lui renvoyer son lien personnel depuis les actions de sélection.",
+      "transcript": "Nous choisissons l'accueil de quinze à dix-huit heures, puis Ajouter. La nouvelle ligne apparaît avec la source Manuel et notre note. Elle est maintenant inscrite sur cet horaire. L'ajout manuel ne déclenche pas ici un email de confirmation automatique. Si Camille a besoin de son récapitulatif, vous pouvez lui renvoyer son lien personnel depuis les actions de sélection.",
       "fallbackDurationMs": 34000
     },
     {
@@ -80,7 +80,7 @@
     },
     {
       "id": "result",
-      "transcript": "La liste sert à agir, le journal sert à comprendre ce qui s'est passé. Ouvrons l'action correspondant au retrait dans le journal de l'événement : tu retrouves qui a agi et quand. Avant de passer à autre chose, vérifie les filtres et vide la sélection. Tu repars avec un planning lisible, et des changements dont tu connais les conséquences.",
+      "transcript": "La liste sert à agir, le journal sert à comprendre ce qui s'est passé. Ouvrons l'action correspondant au retrait dans le journal de l'événement : vous retrouvez qui a agi et quand. Avant de passer à autre chose, vérifiez les filtres et videz la sélection. Vous repartez avec un planning lisible, et des changements dont vous connaissez les conséquences.",
       "fallbackDurationMs": 35000
     }
   ],

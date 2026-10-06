@@ -1,12 +1,12 @@
 {
   "anchor": "Téléchargeons maintenant le véritable export des présences. Comparons une ligne pointée",
-  "windowStart": 165.284,
+  "windowStart": 157.17,
   "result": {
     "found": true,
-    "startSeconds": 11.4,
-    "wordsHeard": "Téléchargeons"
+    "startSeconds": 26.7,
+    "wordsHeard": "Téléchargeons maintenant le véritable export des présences. Comparons une ligne pointée"
   },
-  "onset": 176.684,
-  "proposedCut": 176.611042,
+  "onset": 183.86999999999998,
+  "proposedCut": 183.36252100000002,
   "note": "Proposal only; recut then independently audit before capture"
 }

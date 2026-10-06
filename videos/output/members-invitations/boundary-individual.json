@@ -1,0 +1,12 @@
+{
+  "anchor": "Cliquez sur Inviter des membres. Pour une invitation individuelle, recherchez Aline,",
+  "windowStart": 9.755000000000003,
+  "result": {
+    "found": true,
+    "startSeconds": 35,
+    "wordsHeard": "Cliquez sur inviter des membres. Pour une invitation individuelle, recherchez Aline,"
+  },
+  "onset": 44.755,
+  "proposedCut": 44.766228999999996,
+  "note": "Proposal only; recut then independently audit before capture"
+}

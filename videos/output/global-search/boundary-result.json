@@ -1,12 +1,12 @@
 {
   "anchor": "Vous arrivez à la bonne fiche ou à la bonne liste,",
-  "windowStart": 65.158,
+  "windowStart": 43.078,
   "result": {
     "found": true,
-    "startSeconds": 14.88,
+    "startSeconds": 30.1,
     "wordsHeard": "Vous arrivez à la bonne fiche ou à la bonne liste"
   },
-  "onset": 80.038,
-  "proposedCut": 80.15810400000001,
+  "onset": 73.178,
+  "proposedCut": 73.077875,
   "note": "Proposal only; recut then independently audit before capture"
 }

@@ -1,0 +1,18 @@
+{
+  "preparedAt": "2026-10-06T17:30:53.128Z",
+  "organizationId": "video-member-merge",
+  "eventId": "video-member-merge-event",
+  "members": 2,
+  "registrations": 3,
+  "invitations": 2,
+  "answerConflict": true,
+  "invitationConflict": true,
+  "otherWarnings": [
+    "same_shift",
+    "overlap",
+    "role_limit",
+    "min_age",
+    "reserved_role"
+  ],
+  "emailsSent": false
+}

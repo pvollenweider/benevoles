@@ -1,12 +1,12 @@
 {
   "anchor": "Les cases permettent de sélectionner une inscription, ou plusieurs. La barre",
-  "windowStart": 144.513,
+  "windowStart": 126.07300000000001,
   "result": {
     "found": true,
-    "startSeconds": 9.16,
+    "startSeconds": 26.9,
     "wordsHeard": "Les cases permettent de sélectionner une inscription, ou plusieurs. La barre"
   },
-  "onset": 153.673,
-  "proposedCut": 153.946979,
+  "onset": 152.973,
+  "proposedCut": 152.528,
   "note": "Proposal only; recut then independently audit before capture"
 }

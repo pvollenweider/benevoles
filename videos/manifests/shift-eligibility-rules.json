@@ -21,6 +21,7 @@
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
+  "continuousPauseTags": false,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
   "viewport": {
     "width": 1280,
@@ -60,8 +61,8 @@
     },
     {
       "id": "result",
-      "transcript": "Ces règles doivent rester rares et compréhensibles. Indique les critères dans la description, garde les tags internes confidentiels, vérifie le téléphone obligatoire si l’équipe doit appeler le jour J, et prévois toujours une manière de corriger un profil ou une affectation.",
-      "fallbackDurationMs": 25000
+      "transcript": "Ces règles doivent rester compréhensibles. Dans les paramètres de l’événement, la description permet d’expliquer les critères. Vérifions aussi le téléphone obligatoire si l’équipe doit appeler le jour J. Pour corriger un profil, retrouvons Julien dans les membres, puis ouvrons Éditer : son tag sécurité est une information interne. Ici, nous vérifions la fiche sans la modifier, puis nous annulons.",
+      "fallbackDurationMs": 34000
     }
   ]
 }

@@ -1,12 +1,12 @@
 {
   "anchor": "Une autre vérification utile : la charge prévue. Noah a le",
-  "windowStart": 260.14799999999997,
+  "windowStart": 238.81399999999996,
   "result": {
     "found": true,
-    "startSeconds": 11.33,
-    "wordsHeard": "Une autre vérification utile la charge prévue Noah a le"
+    "startSeconds": 30.04,
+    "wordsHeard": "Une autre vérification utile"
   },
-  "onset": 271.47799999999995,
-  "proposedCut": 271.324458,
+  "onset": 268.854,
+  "proposedCut": 268.81395799999996,
   "note": "Proposal only; recut then independently audit before capture"
 }

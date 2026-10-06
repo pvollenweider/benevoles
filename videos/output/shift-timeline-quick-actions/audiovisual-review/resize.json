@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:00:01.231Z",
+  "videoSha256": "b51ff8665b7fdaf349ce5dae6fa7c6841618f18ca2d5978b0e1b15db2b124e14",
+  "promptSha256": "74b2fd70c460c7cc5ed1efb895866052262800f98c575fe5c5846f309e574a6a",
+  "clipSha256": "3dc8ce1c5740adab28cc022c0254cf11a1979ba1b45feeb064ba0d2340df436a",
+  "scene": "resize",
+  "review": {
+    "heardOpening": "Pour corriger une durée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "attrape le bord droit du créneau et déplace-le",
+        "visibleSeconds": 2.5,
+        "visible": "Image fixe de la frise ; aucune interaction ni curseur visible",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 4.6,
+        "spoken": "La grille aide à rester sur des horaires cohérents",
+        "visibleSeconds": 4.6,
+        "visible": "Graduations horaires de la frise visibles en arrière-plan",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "vérifie toujours les heures affichées après le geste",
+        "visibleSeconds": 9.5,
+        "visible": "Aucune modification ni survol d'horaires à l'écran",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:01 - 00:11 : L'action de saisie et de déplacement du bord du créneau n'est pas effectuée à l'écran (image figée)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et fluide, rythme stable."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

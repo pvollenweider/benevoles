@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour corriger une durée, attrape le bord droit du créneau et",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 30.34,
+    "wordsHeard": "Pour"
+  },
+  "onset": 30.34,
+  "proposedCut": 29.868521,
+  "note": "Proposal only; recut then independently audit before capture"
+}

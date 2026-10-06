@@ -1,0 +1,142 @@
+{
+  "scope": "Generated source WAV auditing and optional chapter recutting only. No new TTS, UI capture, database, product proof, final MP4 or completion certification.",
+  "ids": [
+    "MEMBERS_MANAGEMENT",
+    "MEMBERS_IMPORT",
+    "MEMBERS_INVITATIONS",
+    "MEMBERS_REMINDERS",
+    "REGISTRATIONS_MANAGEMENT",
+    "STAFFING_GAPS",
+    "TARGETED_MESSAGES",
+    "REMINDERS_CHANGES"
+  ],
+  "updatedAt": "2026-10-06T16:03:02.715Z",
+  "active": null,
+  "attempts": [
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "stage": "source-audit",
+      "startedAt": "2026-10-06T15:54:34.513Z",
+      "finishedAt": "2026-10-06T15:55:21.845Z",
+      "exitCode": 1,
+      "timedOut": false,
+      "signal": null
+    },
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "stage": "window-alignment",
+      "startedAt": "2026-10-06T15:55:21.846Z",
+      "finishedAt": "2026-10-06T15:55:40.784Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "signal": null
+    },
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "stage": "source-reaudit",
+      "startedAt": "2026-10-06T15:55:40.785Z",
+      "finishedAt": "2026-10-06T15:56:06.916Z",
+      "exitCode": 1,
+      "timedOut": false,
+      "signal": null
+    },
+    {
+      "id": "MEMBERS_IMPORT",
+      "stage": "source-audit",
+      "startedAt": "2026-10-06T15:56:06.918Z",
+      "finishedAt": "2026-10-06T15:57:06.134Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "signal": null
+    },
+    {
+      "id": "MEMBERS_INVITATIONS",
+      "stage": "source-audit",
+      "startedAt": "2026-10-06T15:57:06.136Z",
+      "finishedAt": "2026-10-06T15:58:01.858Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "signal": null
+    },
+    {
+      "id": "MEMBERS_REMINDERS",
+      "stage": "source-audit",
+      "startedAt": "2026-10-06T15:58:01.859Z",
+      "finishedAt": "2026-10-06T15:58:50.840Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "signal": null
+    },
+    {
+      "id": "REGISTRATIONS_MANAGEMENT",
+      "stage": "source-audit",
+      "startedAt": "2026-10-06T15:58:50.842Z",
+      "finishedAt": "2026-10-06T16:00:02.668Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "signal": null
+    },
+    {
+      "id": "STAFFING_GAPS",
+      "stage": "source-audit",
+      "startedAt": "2026-10-06T16:00:02.670Z",
+      "finishedAt": "2026-10-06T16:00:55.858Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "signal": null
+    },
+    {
+      "id": "TARGETED_MESSAGES",
+      "stage": "source-audit",
+      "startedAt": "2026-10-06T16:00:55.860Z",
+      "finishedAt": "2026-10-06T16:02:07.677Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "signal": null
+    },
+    {
+      "id": "REMINDERS_CHANGES",
+      "stage": "source-audit",
+      "startedAt": "2026-10-06T16:02:07.679Z",
+      "finishedAt": "2026-10-06T16:03:02.714Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "signal": null
+    }
+  ],
+  "results": [
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "status": "needs-review",
+      "failedStage": "source-reaudit"
+    },
+    {
+      "id": "MEMBERS_IMPORT",
+      "status": "source-audited"
+    },
+    {
+      "id": "MEMBERS_INVITATIONS",
+      "status": "source-audited"
+    },
+    {
+      "id": "MEMBERS_REMINDERS",
+      "status": "source-audited"
+    },
+    {
+      "id": "REGISTRATIONS_MANAGEMENT",
+      "status": "source-audited"
+    },
+    {
+      "id": "STAFFING_GAPS",
+      "status": "source-audited"
+    },
+    {
+      "id": "TARGETED_MESSAGES",
+      "status": "source-audited"
+    },
+    {
+      "id": "REMINDERS_CHANGES",
+      "status": "source-audited"
+    }
+  ]
+}

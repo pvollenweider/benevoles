@@ -1,0 +1,12 @@
+{
+  "anchor": "Un clic sur la barre ouvre ses actions rapides. On y",
+  "windowStart": 14.997999999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 30.4,
+    "wordsHeard": "Un clic sur la barre ouvre ses actions rapides. On y"
+  },
+  "onset": 45.397999999999996,
+  "proposedCut": 44.99825,
+  "note": "Proposal only; recut then independently audit before capture"
+}

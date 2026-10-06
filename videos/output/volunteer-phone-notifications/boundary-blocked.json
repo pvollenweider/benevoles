@@ -1,0 +1,12 @@
+{
+  "anchor": "Si tu refuses la demande, le site indique Notifications bloquées dans",
+  "windowStart": 157.084,
+  "result": {
+    "found": true,
+    "startSeconds": 24.1,
+    "wordsHeard": "Si tu refuses la demande, le site indique Notifications bloquées dans"
+  },
+  "onset": 181.184,
+  "proposedCut": 181.1648545,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,60 @@
+{
+  "id": "EMAIL_DELIVERY_FAILURES",
+  "slug": "email-delivery-failures",
+  "validatedAt": "2026-10-06T17:35:34.646Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 295200,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 37441,
+      "audioMs": 37440,
+      "driftMs": 1
+    },
+    {
+      "id": "states",
+      "visualMs": 36077,
+      "audioMs": 36076,
+      "driftMs": 1
+    },
+    {
+      "id": "reason",
+      "visualMs": 26328,
+      "audioMs": 26326,
+      "driftMs": 2
+    },
+    {
+      "id": "retry",
+      "visualMs": 25488,
+      "audioMs": 25486,
+      "driftMs": 2
+    },
+    {
+      "id": "address",
+      "visualMs": 54997,
+      "audioMs": 54996,
+      "driftMs": 1
+    },
+    {
+      "id": "campaign",
+      "visualMs": 42349,
+      "audioMs": 42348,
+      "driftMs": 1
+    },
+    {
+      "id": "retention",
+      "visualMs": 26936,
+      "audioMs": 26935,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 26595,
+      "audioMs": 26594,
+      "driftMs": 1
+    }
+  ],
+  "issues": []
+}

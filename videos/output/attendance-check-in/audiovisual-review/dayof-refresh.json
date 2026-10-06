@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:42:13.319Z",
+  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "promptSha256": "713dcb97b4e1a162be5f90f84a14930bbd22fb8aeb25ad778c0c73cafa636097",
+  "clipSha256": "04a421ca390dfea28145e68723009a901d3576cea66b5f7cc6577f6c482c39f9",
+  "scene": "dayof-refresh",
+  "review": {
+    "heardOpening": "Avec Actualiser, vous récupérez les informations",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "La page indique l'heure de sa mise à jour",
+        "visibleSeconds": 6,
+        "visible": "Mention 'Mis à jour à 19h34' visible en haut à gauche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.1,
+        "spoken": "nous actualisons réellement la page",
+        "visibleSeconds": 12.3,
+        "visible": "Clic sur le bouton Actualiser et passage de l'heure à 19h35",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.5,
+        "spoken": "Relisez les noms et les compteurs avant d'agir",
+        "visibleSeconds": 20.5,
+        "visible": "Liste des bénévoles et compteurs de présences affichés",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:16 : Changement soudain de voix narrative au milieu du paragraphe."
+    ],
+    "voice": {
+      "consistent": false,
+      "warm": true,
+      "observation": "Rupture de timbre et de voix détectée à 00:16."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

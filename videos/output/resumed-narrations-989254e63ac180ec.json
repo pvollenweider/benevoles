@@ -1,0 +1,39 @@
+{
+  "updatedAt": "2026-10-06T17:25:19.100Z",
+  "requested": [
+    "EVENT_REPORTS",
+    "SECTOR_LEADERS",
+    "DATA_EXPORTS_ARCHIVES",
+    "ORGANIZATION_ACTIVITY_LOG",
+    "EVENT_ACTIVITY_LOG",
+    "REMINDERS_CHANGES"
+  ],
+  "active": null,
+  "scope": "Narration only, not capture, MP4 synchronization or completion",
+  "results": [
+    {
+      "id": "EVENT_REPORTS",
+      "status": "source-audited"
+    },
+    {
+      "id": "SECTOR_LEADERS",
+      "status": "source-audited"
+    },
+    {
+      "id": "DATA_EXPORTS_ARCHIVES",
+      "status": "audit-required"
+    },
+    {
+      "id": "ORGANIZATION_ACTIVITY_LOG",
+      "status": "source-audited"
+    },
+    {
+      "id": "EVENT_ACTIVITY_LOG",
+      "status": "generation-failed"
+    },
+    {
+      "id": "REMINDERS_CHANGES",
+      "status": "generation-failed"
+    }
+  ]
+}

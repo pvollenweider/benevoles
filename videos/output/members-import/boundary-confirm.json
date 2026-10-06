@@ -1,12 +1,12 @@
 {
   "anchor": "Quand l'aperçu te convient, confirme l'import. Cette fois, les fiches sont",
-  "windowStart": 131.286,
+  "windowStart": 114.65799999999999,
   "result": {
     "found": true,
-    "startSeconds": 20.1,
-    "wordsHeard": "Quand l'aperçu te convient, confirme l'import. Cette fois, les fiches sont"
+    "startSeconds": 35.34,
+    "wordsHeard": "Quand"
   },
-  "onset": 151.386,
-  "proposedCut": 151.10164550000002,
+  "onset": 149.998,
+  "proposedCut": 149.60975000000002,
   "note": "Proposal only; recut then independently audit before capture"
 }

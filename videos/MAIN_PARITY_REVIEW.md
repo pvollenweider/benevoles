@@ -1,6 +1,6 @@
 # Revue de conformité des vidéos à main
 
-Référence cible vérifiée sur GitHub : `09380114c1f111feed1b610c7379682924c2c627`.
+Référence cible vérifiée sur GitHub : `36b214edd1d7b12ce76615a2d96279122f36551f`.
 
 Checkout de travail : `cf1e2956babd0447157c800d08bcd586969789b2` ; dernière compilation de capture connue : `23b2d604a597820a6bd9410e411761ebe71fbd5a`.
 
@@ -79,7 +79,7 @@ Vidéos : ADMIN_NAVIGATION, GLOBAL_SEARCH, ACCESSIBILITY_KEYBOARD_DISPLAY, VOLUN
 | ORGANIZATION_ACTIVITY_LOG | Inscriptions et suivi | oui | absent | unverified-product-version |
 | EVENT_ACTIVITY_LOG | Inscriptions et suivi | oui | absent | unverified-product-version |
 | ATTENDANCE_CHECK_IN | Inscriptions et suivi | oui | absent | unverified-product-version |
-| EVENT_REPORTS | Documents | oui | absent | unverified-product-version |
+| EVENT_REPORTS | Documents | oui | 09380114c1f111feed1b610c7379682924c2c627 | unverified-product-version |
 | VOLUNTEER_BADGES | Documents | oui | absent | unverified-product-version |
 | REMINDERS_CHANGES | Inscriptions et suivi | oui | absent | unverified-product-version |
 | TARGETED_MESSAGES | Inscriptions et suivi | oui | absent | unverified-product-version |

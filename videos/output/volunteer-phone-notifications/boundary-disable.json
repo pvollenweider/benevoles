@@ -1,0 +1,12 @@
+{
+  "anchor": "Tu veux arrêter ces notifications ? Ouvre les autorisations du site",
+  "windowStart": 183.12800000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 28,
+    "wordsHeard": "Tu veux arrêter ces notifications ? Ouvre les autorisations du site"
+  },
+  "onset": 211.12800000000001,
+  "proposedCut": 210.921354,
+  "note": "Proposal only; recut then independently audit before capture"
+}

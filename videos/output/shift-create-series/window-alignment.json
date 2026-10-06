@@ -1,31 +1,31 @@
 {
-  "locatedAt": "2026-10-06T07:38:41.793Z",
-  "masterSha256": "4139e8bb6ca6366ecf5b00d981351ebe201420f2a0bf016898a20db53506228b",
-  "totalSeconds": 81,
+  "locatedAt": "2026-10-06T17:22:39.507Z",
+  "masterSha256": "44509b90cb06f682a35f3a440d0b1dd1845a48e77e308e14d5d503a51ae51bf6",
+  "totalSeconds": 100.88,
   "cuts": [
     {
       "id": "range",
-      "seconds": 13.3393955
+      "seconds": 12.89625
     },
     {
       "id": "duration",
-      "seconds": 24.678625
+      "seconds": 24.342167
     },
     {
       "id": "preview",
-      "seconds": 35.176354
+      "seconds": 41.1225205
     },
     {
       "id": "create",
-      "seconds": 46.870625000000004
+      "seconds": 53.652604499999995
     },
     {
       "id": "adjust",
-      "seconds": 58.919375
+      "seconds": 66.255854
     },
     {
       "id": "result",
-      "seconds": 71.495875
+      "seconds": 85.5315
     }
   ],
   "applied": true,

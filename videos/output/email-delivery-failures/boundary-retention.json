@@ -1,0 +1,12 @@
+{
+  "anchor": "Le suivi de la file est volontairement récent : les emails",
+  "windowStart": 192.671,
+  "result": {
+    "found": true,
+    "startSeconds": 29.98,
+    "wordsHeard": "Le suivi de la file est volontairement récent : les emails"
+  },
+  "onset": 222.65099999999998,
+  "proposedCut": 222.6709375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

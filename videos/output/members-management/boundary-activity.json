@@ -1,0 +1,12 @@
+{
+  "anchor": "Le lien Activité ouvre l'historique factuel d'une personne. Pour Camille, la",
+  "windowStart": 142.96000000000004,
+  "result": {
+    "found": true,
+    "startSeconds": 30.2,
+    "wordsHeard": "Le lien Activité ouvre l'historique factuel d'une personne. Pour Camille, la"
+  },
+  "onset": 173.16000000000003,
+  "proposedCut": 172.959792,
+  "note": "Proposal only; recut then independently audit before capture"
+}

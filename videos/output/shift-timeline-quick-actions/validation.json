@@ -1,52 +1,53 @@
 {
   "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
   "slug": "shift-timeline-quick-actions",
-  "validatedAt": "2026-10-04T16:56:10.999Z",
+  "validatedAt": "2026-10-06T15:59:15.271Z",
   "continuousNarration": true,
+  "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 99080,
+  "captureMs": 89720,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 14195,
-      "audioMs": 14192,
-      "driftMs": 3
-    },
-    {
-      "id": "draw",
-      "visualMs": 14093,
-      "audioMs": 14093,
+      "visualMs": 12685,
+      "audioMs": 12685,
       "driftMs": 0
     },
     {
+      "id": "draw",
+      "visualMs": 13214,
+      "audioMs": 13213,
+      "driftMs": 1
+    },
+    {
       "id": "resize",
-      "visualMs": 13265,
-      "audioMs": 13262,
-      "driftMs": 3
+      "visualMs": 12266,
+      "audioMs": 12265,
+      "driftMs": 1
     },
     {
       "id": "popover",
-      "visualMs": 12144,
-      "audioMs": 12142,
+      "visualMs": 10680,
+      "audioMs": 10678,
       "driftMs": 2
     },
     {
       "id": "copy",
-      "visualMs": 14975,
-      "audioMs": 14973,
+      "visualMs": 13625,
+      "audioMs": 13623,
       "driftMs": 2
     },
     {
       "id": "detail",
-      "visualMs": 14320,
-      "audioMs": 14319,
-      "driftMs": 1
+      "visualMs": 12948,
+      "audioMs": 12948,
+      "driftMs": 0
     },
     {
       "id": "result",
-      "visualMs": 10623,
-      "audioMs": 10619,
-      "driftMs": 4
+      "visualMs": 8870,
+      "audioMs": 8867,
+      "driftMs": 3
     }
   ],
   "issues": []

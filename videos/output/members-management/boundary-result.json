@@ -1,0 +1,12 @@
+{
+  "anchor": "Une liste bien entretenue, ce sont les bonnes coordonnées, quelques catégories",
+  "windowStart": 163.65300000000005,
+  "result": {
+    "found": true,
+    "startSeconds": 30.2,
+    "wordsHeard": "Une"
+  },
+  "onset": 193.85300000000004,
+  "proposedCut": 193.65283349999999,
+  "note": "Proposal only; recut then independently audit before capture"
+}

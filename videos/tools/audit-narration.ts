@@ -74,14 +74,23 @@ async function main() {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-goog-api-key": key },
       signal: AbortSignal.timeout(120_000),
-      body: JSON.stringify({ contents: [{ parts: [
+      body: JSON.stringify({ generationConfig: {
+        temperature: 0,
+        responseMimeType: "application/json",
+        responseSchema: { type: "OBJECT", properties: { transcription: { type: "STRING" } }, required: ["transcription"] },
+      }, contents: [{ parts: [
         { text: "Transcris exactement TOUTES les paroles audibles dans cet extrait, quelle que soit leur langue, une seule fois et dans leur ordre. N'omets surtout pas les mots anglais ou les indications techniques prononcées, par exemple short pause : ils doivent figurer dans la transcription s'ils sont audibles. Écris les dates, années et heures en toutes lettres telles qu’elles sont prononcées, plutôt qu’en chiffres : cela évite de confondre une différence de notation avec un mot omis. Retranscris une répétition uniquement si elle est réellement audible. Ne donne pas deux versions de la transcription. Ne complète pas les phrases coupées. Ne résume pas. Retourne uniquement le texte prononcé, sans introduction ni commentaire." },
         { inlineData: { mimeType: "audio/wav", data: bytes.toString("base64") } },
       ] }] }),
     })
     if (!response.ok) throw new Error(`Narration audit HTTP ${response.status}`)
     const body = await response.json() as { candidates?: { content?: { parts?: { text?: string; thought?: boolean }[] } }[] }
-    const recognized = body.candidates?.[0]?.content?.parts?.filter(p => !p.thought).map(p => p.text ?? "").join("").trim()
+    const responseText = body.candidates?.[0]?.content?.parts?.filter(p => !p.thought).map(p => p.text ?? "").join("").trim()
+    if (!responseText) throw new Error(`Empty transcription response for ${segment.id}`)
+    // One structured field prevents alternative transcript versions being concatenated.
+    // Audible repetitions remain inside that field and are still scored in full.
+    const parsed = JSON.parse(responseText) as { transcription?: unknown }
+    const recognized = typeof parsed.transcription === "string" ? parsed.transcription.trim() : ""
     if (!recognized) throw new Error(`Empty transcription for ${segment.id}`)
     const expectedWords = words(segment.transcript)
     const wordErrorRate = distance(expectedWords, words(recognized)) / Math.max(1, expectedWords.length)

@@ -3,10 +3,10 @@
   "windowStart": 0,
   "result": {
     "found": true,
-    "startSeconds": 14.84,
-    "wordsHeard": "Commençons par un titre parlant"
+    "startSeconds": 14.2,
+    "wordsHeard": "Commençons par un titre parlant, une courte description, puis les dates"
   },
-  "onset": 14.84,
-  "proposedCut": 14.2879165,
+  "onset": 14.2,
+  "proposedCut": 14.275375,
   "note": "Proposal only; recut then independently audit before capture"
 }

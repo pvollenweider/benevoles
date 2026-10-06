@@ -1,0 +1,12 @@
+{
+  "anchor": "Ces règles doivent rester compréhensibles. Dans les paramètres de l’événement, la",
+  "windowStart": 59.97800000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 27.7,
+    "wordsHeard": "Ces règles doivent rester compréhensibles. Dans les paramètres de l’événement, la"
+  },
+  "onset": 87.67800000000001,
+  "proposedCut": 87.3342085,
+  "note": "Proposal only; recut then independently audit before capture"
+}

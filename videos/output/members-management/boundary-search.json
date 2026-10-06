@@ -1,12 +1,12 @@
 {
-  "anchor": "La recherche aide à retrouver une personne par son nom, son",
-  "windowStart": 93.76700000000001,
+  "anchor": "La recherchez aide à retrouver une personne par son nom, son",
+  "windowStart": 78.48100000000001,
   "result": {
     "found": true,
-    "startSeconds": 10,
+    "startSeconds": 27.1,
     "wordsHeard": "La recherche aide à retrouver une personne par son nom, son"
   },
-  "onset": 103.76700000000001,
-  "proposedCut": 103.41081249999999,
+  "onset": 105.58100000000002,
+  "proposedCut": 105.522354,
   "note": "Proposal only; recut then independently audit before capture"
 }

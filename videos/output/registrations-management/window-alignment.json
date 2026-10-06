@@ -1,0 +1,61 @@
+{
+  "locatedAt": "2026-10-06T16:16:52.293Z",
+  "masterSha256": "04ffa3bedc7a3c11b4303d26e07ab03f4637673064e89c683b80e16aa8e03964",
+  "totalSeconds": 309.56,
+  "cuts": [
+    {
+      "id": "columns",
+      "seconds": 20.4209165
+    },
+    {
+      "id": "filters",
+      "seconds": 43.116979
+    },
+    {
+      "id": "requests",
+      "seconds": 62.692146
+    },
+    {
+      "id": "manual-identity",
+      "seconds": 84.0413125
+    },
+    {
+      "id": "manual-check",
+      "seconds": 105.031979
+    },
+    {
+      "id": "manual-result",
+      "seconds": 130.360146
+    },
+    {
+      "id": "selection",
+      "seconds": 152.528
+    },
+    {
+      "id": "resend",
+      "seconds": 176.207083
+    },
+    {
+      "id": "leader",
+      "seconds": 197.476625
+    },
+    {
+      "id": "undo",
+      "seconds": 220.3566875
+    },
+    {
+      "id": "remove",
+      "seconds": 244.4775
+    },
+    {
+      "id": "workload",
+      "seconds": 268.81395799999996
+    },
+    {
+      "id": "result",
+      "seconds": 291.312354
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

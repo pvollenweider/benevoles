@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour ajouter une personne, cliquez sur Nouveau membre. Saisissez son prénom",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 22.8,
+    "wordsHeard": "Pour ajouter une personne, cliquez sur Nouveau membre. Saisissez son prénom"
+  },
+  "onset": 22.8,
+  "proposedCut": 22.623354,
+  "note": "Proposal only; recut then independently audit before capture"
+}

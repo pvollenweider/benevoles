@@ -1,0 +1,22 @@
+{
+  "updatedAt": "2026-10-06T12:08:34.892Z",
+  "product": {
+    "commit": "36b214edd1d7b12ce76615a2d96279122f36551f",
+    "sourceTree": "76543afc9b7352081b912d767f35dde30d9769a9",
+    "productSourceSha256": "cfae6189d9a950758737001a3529247f7b0e8758ea32ab81f43046ecbc52fe58",
+    "buildId": "E7XCR78PvXnVEl-wDQdJH",
+    "snapshot": "/tmp/benevoles-video-production.KNG0lt",
+    "builtAt": "2026-10-06T12:02:10.018Z"
+  },
+  "status": "blocked-main-advanced",
+  "latestTarget": "d304e9f7cbc002be4c5bbf53cdb41a90996999be",
+  "active": null,
+  "note": "No correction process active. Main advanced repeatedly during capture/build. Original capture provenance retained. Scripts and audited narration preserved; wait for a stable target or an explicit pinned-version decision. Nothing published or finally validated.",
+  "results": [
+    {
+      "id": "EVENT_REPORTS",
+      "status": "needs-correction",
+      "failedStage": "assemble"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Les trois cases que nous venons de voir concernent toute l'organisation.",
+  "windowStart": 66.551,
+  "result": {
+    "found": true,
+    "startSeconds": 30.84,
+    "wordsHeard": "Les"
+  },
+  "onset": 97.391,
+  "proposedCut": 97.25408300000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

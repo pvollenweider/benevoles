@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:45:33.765Z",
+  "videoSha256": "8fd119fcc7be2e7433955eb308377f0bafecf962c880a14c93f0b1b0c8f0ca78",
+  "promptSha256": "4fda116e4ce60ab724d98b8450372f9a230b374de4df35d6316892779e55101c",
+  "clipSha256": "4d0d3cc2b213f7aefd314a742da73ea91b31d992c24c9614a146819d86123f93",
+  "scene": "summary-export",
+  "review": {
+    "heardOpening": "Pour préparer une commande",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "téléchargeons la synthèse en CSV",
+        "visibleSeconds": 2.2,
+        "visible": "Lien 'Télécharger la synthèse (CSV)' présent à l'écran mais aucun clic ni téléchargement n'a lieu",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Le fichier rassemble les questions, les réponses et leurs totaux",
+        "visibleSeconds": 5.4,
+        "visible": "Section 'Synthèse des réponses' affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.3,
+        "spoken": "La synthèse décrit l'état actuel",
+        "visibleSeconds": 20.3,
+        "visible": "Page statique affichant le décompte actuel",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:02 - L'action annoncée 'téléchargeons la synthèse en CSV' n'est pas effectuée (aucun clic, écran statique)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction fluide et ton pédagogique régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

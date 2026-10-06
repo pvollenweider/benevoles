@@ -1,13 +1,13 @@
 {
-  "receivedAt": "2026-10-06T07:38:06.238Z",
+  "receivedAt": "2026-10-06T17:10:35.143Z",
   "status": "completed",
   "usage": {
-    "total_tokens": 3083,
-    "total_input_tokens": 702,
+    "total_tokens": 3201,
+    "total_input_tokens": 700,
     "input_tokens_by_modality": [
       {
         "modality": "text",
-        "tokens": 443
+        "tokens": 441
       },
       {
         "modality": "audio",
@@ -15,11 +15,11 @@
       }
     ],
     "total_cached_tokens": 0,
-    "total_output_tokens": 2381,
+    "total_output_tokens": 2501,
     "output_tokens_by_modality": [
       {
         "modality": "audio",
-        "tokens": 2381
+        "tokens": 2501
       }
     ],
     "total_tool_use_tokens": 0,
@@ -40,7 +40,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 206
+            "tokens": 194
           }
         ]
       },
@@ -48,7 +48,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1065
+            "tokens": 983
           },
           {
             "modality": "audio",
@@ -58,7 +58,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2179
+            "tokens": 2311
           }
         ]
       }
@@ -78,7 +78,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 206
+            "tokens": 194
           }
         ]
       },
@@ -86,7 +86,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1065
+            "tokens": 983
           },
           {
             "modality": "audio",
@@ -96,7 +96,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2179
+            "tokens": 2311
           }
         ]
       }
@@ -108,7 +108,7 @@
       "content": [
         {
           "type": "audio",
-          "encodedLength": 6103512
+          "encodedLength": 6410712
         }
       ]
     }

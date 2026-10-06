@@ -1,0 +1,12 @@
+{
+  "anchor": "Nous n'avons plus besoin de demander la taille aux nouvelles inscriptions.",
+  "windowStart": 420.38199999999995,
+  "result": {
+    "found": true,
+    "startSeconds": 30.66,
+    "wordsHeard": "Nous n'avons plus besoin de demander la taille aux nouvelles inscriptions."
+  },
+  "onset": 451.042,
+  "proposedCut": 450.38177099999996,
+  "note": "Proposal only; recut then independently audit before capture"
+}

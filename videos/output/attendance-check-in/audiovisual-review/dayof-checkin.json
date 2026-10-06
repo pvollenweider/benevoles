@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:40:10.924Z",
+  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "promptSha256": "eefd8d78a0b6b9b443f31947d6b7d3dc46b24fd221ec8688117155dd43c885c3",
+  "clipSha256": "c59c6bfe3baae586890832d02542dae206b2a77697cb1283f9b5e6ceadc1547d",
+  "scene": "dayof-checkin",
+  "review": {
+    "heardOpening": "Zoé arrive à l'accueil",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Marquer présent enregistre sa présence sur ce créneau, et le bouton devient Annuler la présence",
+        "visibleSeconds": 0.8,
+        "visible": "Clic sur Marquer présent et bascule en Annuler la présence",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8.3,
+        "spoken": "Rechargeons la page",
+        "visibleSeconds": 9.8,
+        "visible": "Actualisation de la page et réaffichage de la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "la marque est conservée",
+        "visibleSeconds": 11.2,
+        "visible": "Mention Présent et bouton Annuler la présence toujours visibles pour Zoé",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:01 : Le clic sur le bouton intervient légèrement avant l'explication vocale."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton neutre et régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

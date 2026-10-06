@@ -1,0 +1,16 @@
+{
+  "audioFirstPTS" : 683364.37083116604,
+  "audioPackets" : 2769,
+  "audioProcess" : "com.apple.VoiceOver",
+  "browser" : "Safari",
+  "durationRequested" : 55,
+  "finalVideo" : false,
+  "height" : 1306,
+  "microphone" : false,
+  "reader" : "VoiceOver",
+  "recordedAt" : "2026-10-06T13:32:55Z",
+  "videoFirstPTS" : 683364.527763083,
+  "videoPackets" : 1629,
+  "width" : 1456,
+  "windowTitle" : "Un planning accessible — démonstration"
+}

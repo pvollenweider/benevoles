@@ -1,201 +1,514 @@
 {
   "video": "attendance-check-in",
   "source": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/attendance-check-in.mp4",
+  "sourceSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
   "capturePurpose": "narration-timed",
-  "extractedAt": "2026-10-05T18:08:55.384Z",
-  "note": "Four actual MP4 frames per scene, including chapter start; not a full audiovisual verification",
+  "extractedAt": "2026-10-06T17:37:29.955Z",
+  "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
   "frames": [
     {
       "scene": "welcome",
-      "fraction": 0.02491487417988539,
-      "seconds": 0.815,
+      "fraction": 0.024604281144919218,
+      "seconds": 0.854,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/welcome-2.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.25,
-      "seconds": 6.2355,
+      "seconds": 6.3505,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/welcome-25.png"
     },
     {
       "scene": "welcome",
+      "fraction": 0.45,
+      "seconds": 11.2277,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/welcome-45.png"
+    },
+    {
+      "scene": "welcome",
       "fraction": 0.6,
-      "seconds": 14.6642,
+      "seconds": 14.8856,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/welcome-60.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.85,
-      "seconds": 20.6847,
+      "seconds": 20.9821,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/welcome-85.png"
     },
     {
+      "scene": "welcome",
+      "fraction": 0.9876978594275404,
+      "seconds": 24.34,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/welcome-end.png"
+    },
+    {
       "scene": "one",
-      "fraction": 0.024051952216788262,
-      "seconds": 25.45,
+      "fraction": 0.02432300956705043,
+      "seconds": 27.551,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/one-2.png"
     },
     {
       "scene": "one",
       "fraction": 0.25,
-      "seconds": 31.0865,
+      "seconds": 33.118,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/one-25.png"
     },
     {
       "scene": "one",
+      "fraction": 0.45,
+      "seconds": 38.0516,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/one-45.png"
+    },
+    {
+      "scene": "one",
       "fraction": 0.6,
-      "seconds": 39.8176,
+      "seconds": 41.7518,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/one-60.png"
     },
     {
       "scene": "one",
       "fraction": 0.85,
-      "seconds": 46.0541,
+      "seconds": 47.918800000000005,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/one-85.png"
     },
     {
+      "scene": "one",
+      "fraction": 0.9878384952164748,
+      "seconds": 51.319,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/one-end.png"
+    },
+    {
       "scene": "group",
-      "fraction": 0.02362762857367882,
-      "seconds": 50.849,
-      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/group-2.png"
+      "fraction": 0.025719062111535,
+      "seconds": 54.475,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/group-3.png"
     },
     {
       "scene": "group",
       "fraction": 0.25,
-      "seconds": 56.5975,
+      "seconds": 59.70725,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/group-25.png"
     },
     {
       "scene": "group",
+      "fraction": 0.45,
+      "seconds": 64.37305,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/group-45.png"
+    },
+    {
+      "scene": "group",
       "fraction": 0.6,
-      "seconds": 65.4854,
+      "seconds": 67.8724,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/group-60.png"
     },
     {
       "scene": "group",
       "fraction": 0.85,
-      "seconds": 71.8339,
+      "seconds": 73.70465,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/group-85.png"
     },
     {
+      "scene": "group",
+      "fraction": 0.9871404689442325,
+      "seconds": 76.904,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/group-end.png"
+    },
+    {
       "scene": "correction",
-      "fraction": 0.026096033402922755,
-      "seconds": 76.696,
+      "fraction": 0.026589851539995567,
+      "seconds": 80.065,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/correction-3.png"
     },
     {
       "scene": "correction",
       "fraction": 0.25,
-      "seconds": 81.844,
+      "seconds": 85.10625,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/correction-25.png"
     },
     {
       "scene": "correction",
+      "fraction": 0.45,
+      "seconds": 89.61925,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/correction-45.png"
+    },
+    {
+      "scene": "correction",
       "fraction": 0.6,
-      "seconds": 89.8912,
+      "seconds": 93.004,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/correction-60.png"
     },
     {
       "scene": "correction",
       "fraction": 0.85,
-      "seconds": 95.6392,
+      "seconds": 98.64525,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/correction-85.png"
     },
     {
+      "scene": "correction",
+      "fraction": 0.9867050742300022,
+      "seconds": 101.73,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/correction-end.png"
+    },
+    {
       "scene": "multiple",
-      "fraction": 0.02128489836461031,
-      "seconds": 100.14,
+      "fraction": 0.02296123378362864,
+      "seconds": 104.888,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/multiple-2.png"
     },
     {
       "scene": "multiple",
       "fraction": 0.25,
-      "seconds": 106.58725,
+      "seconds": 110.82075,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/multiple-25.png"
     },
     {
       "scene": "multiple",
+      "fraction": 0.45,
+      "seconds": 116.04695,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/multiple-45.png"
+    },
+    {
+      "scene": "multiple",
       "fraction": 0.6,
-      "seconds": 116.45339999999999,
+      "seconds": 119.9666,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/multiple-60.png"
     },
     {
       "scene": "multiple",
       "fraction": 0.85,
-      "seconds": 123.50065,
+      "seconds": 126.49935,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/multiple-85.png"
     },
     {
+      "scene": "multiple",
+      "fraction": 0.9885193831081857,
+      "seconds": 130.119,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/multiple-end.png"
+    },
+    {
       "scene": "limits",
-      "fraction": 0.022390566108146433,
-      "seconds": 128.786,
+      "fraction": 0.02461033634126333,
+      "seconds": 133.283,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/limits-2.png"
     },
     {
       "scene": "limits",
       "fraction": 0.25,
-      "seconds": 134.88525,
+      "seconds": 138.778,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/limits-25.png"
     },
     {
       "scene": "limits",
+      "fraction": 0.45,
+      "seconds": 143.654,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/limits-45.png"
+    },
+    {
+      "scene": "limits",
       "fraction": 0.6,
-      "seconds": 144.26420000000002,
+      "seconds": 147.311,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/limits-60.png"
     },
     {
       "scene": "limits",
       "fraction": 0.85,
-      "seconds": 150.96345000000002,
+      "seconds": 153.406,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/limits-85.png"
     },
     {
+      "scene": "limits",
+      "fraction": 0.9876948318293683,
+      "seconds": 156.763,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/limits-end.png"
+    },
+    {
       "scene": "cancelled",
-      "fraction": 0.015095858702762543,
-      "seconds": 156.034,
+      "fraction": 0.01582612365477949,
+      "seconds": 159.923,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/cancelled-2.png"
     },
     {
       "scene": "cancelled",
       "fraction": 0.25,
-      "seconds": 165.3705,
+      "seconds": 168.801,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/cancelled-25.png"
     },
     {
       "scene": "cancelled",
+      "fraction": 0.45,
+      "seconds": 176.3834,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/cancelled-45.png"
+    },
+    {
+      "scene": "cancelled",
       "fraction": 0.6,
-      "seconds": 179.2816,
+      "seconds": 182.0702,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/cancelled-60.png"
     },
     {
       "scene": "cancelled",
       "fraction": 0.85,
-      "seconds": 189.2181,
+      "seconds": 191.5482,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/cancelled-85.png"
     },
     {
+      "scene": "cancelled",
+      "fraction": 0.9920869381726103,
+      "seconds": 196.935,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/cancelled-end.png"
+    },
+    {
       "scene": "export",
-      "fraction": 0.0215231194174409,
-      "seconds": 197.385,
+      "fraction": 0.0249324745480989,
+      "seconds": 201.356,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/export-2.png"
     },
     {
       "scene": "export",
       "fraction": 0.25,
-      "seconds": 203.75425,
+      "seconds": 206.77225,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/export-25.png"
     },
     {
       "scene": "export",
+      "fraction": 0.45,
+      "seconds": 211.58525,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/export-45.png"
+    },
+    {
+      "scene": "export",
       "fraction": 0.6,
-      "seconds": 213.5112,
+      "seconds": 215.195,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/export-60.png"
     },
     {
       "scene": "export",
       "fraction": 0.85,
-      "seconds": 220.48045000000002,
+      "seconds": 221.21125,
       "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/export-85.png"
+    },
+    {
+      "scene": "export",
+      "fraction": 0.9875337627259505,
+      "seconds": 224.521,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/export-end.png"
+    },
+    {
+      "scene": "dayof-window",
+      "fraction": 0.020947526446252137,
+      "seconds": 228.833,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-window-2.png"
+    },
+    {
+      "scene": "dayof-window",
+      "fraction": 0.25,
+      "seconds": 235.39375,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-window-25.png"
+    },
+    {
+      "scene": "dayof-window",
+      "fraction": 0.45,
+      "seconds": 241.12235,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-window-45.png"
+    },
+    {
+      "scene": "dayof-window",
+      "fraction": 0.6,
+      "seconds": 245.41879999999998,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-window-60.png"
+    },
+    {
+      "scene": "dayof-window",
+      "fraction": 0.85,
+      "seconds": 252.57954999999998,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-window-85.png"
+    },
+    {
+      "scene": "dayof-window",
+      "fraction": 0.9895262367768739,
+      "seconds": 256.576,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-window-end.png"
+    },
+    {
+      "scene": "dayof-search",
+      "fraction": 0.02572567851477083,
+      "seconds": 260.877,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-search-3.png"
+    },
+    {
+      "scene": "dayof-search",
+      "fraction": 0.25,
+      "seconds": 266.10775,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-search-25.png"
+    },
+    {
+      "scene": "dayof-search",
+      "fraction": 0.45,
+      "seconds": 270.77234999999996,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-search-45.png"
+    },
+    {
+      "scene": "dayof-search",
+      "fraction": 0.6,
+      "seconds": 274.2708,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-search-60.png"
+    },
+    {
+      "scene": "dayof-search",
+      "fraction": 0.85,
+      "seconds": 280.10155,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-search-85.png"
+    },
+    {
+      "scene": "dayof-search",
+      "fraction": 0.9871371607426146,
+      "seconds": 283.3,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-search-end.png"
+    },
+    {
+      "scene": "dayof-phone",
+      "fraction": 0.02297266253158741,
+      "seconds": 286.46,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-phone-2.png"
+    },
+    {
+      "scene": "dayof-phone",
+      "fraction": 0.25,
+      "seconds": 292.3895,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-phone-25.png"
+    },
+    {
+      "scene": "dayof-phone",
+      "fraction": 0.45,
+      "seconds": 297.6131,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-phone-45.png"
+    },
+    {
+      "scene": "dayof-phone",
+      "fraction": 0.6,
+      "seconds": 301.5308,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-phone-60.png"
+    },
+    {
+      "scene": "dayof-phone",
+      "fraction": 0.85,
+      "seconds": 308.0603,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-phone-85.png"
+    },
+    {
+      "scene": "dayof-phone",
+      "fraction": 0.9885136687342063,
+      "seconds": 311.678,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-phone-end.png"
+    },
+    {
+      "scene": "dayof-checkin",
+      "fraction": 0.023952095808383235,
+      "seconds": 314.836,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-checkin-2.png"
+    },
+    {
+      "scene": "dayof-checkin",
+      "fraction": 0.25,
+      "seconds": 320.4985,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-checkin-25.png"
+    },
+    {
+      "scene": "dayof-checkin",
+      "fraction": 0.45,
+      "seconds": 325.5085,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-checkin-45.png"
+    },
+    {
+      "scene": "dayof-checkin",
+      "fraction": 0.6,
+      "seconds": 329.266,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-checkin-60.png"
+    },
+    {
+      "scene": "dayof-checkin",
+      "fraction": 0.85,
+      "seconds": 335.5285,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-checkin-85.png"
+    },
+    {
+      "scene": "dayof-checkin",
+      "fraction": 0.9880239520958084,
+      "seconds": 338.986,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-checkin-end.png"
+    },
+    {
+      "scene": "dayof-refresh",
+      "fraction": 0.023863500775563776,
+      "seconds": 342.144,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-refresh-2.png"
+    },
+    {
+      "scene": "dayof-refresh",
+      "fraction": 0.25,
+      "seconds": 347.82975,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-refresh-25.png"
+    },
+    {
+      "scene": "dayof-refresh",
+      "fraction": 0.45,
+      "seconds": 352.85835,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-refresh-45.png"
+    },
+    {
+      "scene": "dayof-refresh",
+      "fraction": 0.6,
+      "seconds": 356.6298,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-refresh-60.png"
+    },
+    {
+      "scene": "dayof-refresh",
+      "fraction": 0.85,
+      "seconds": 362.91555,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-refresh-85.png"
+    },
+    {
+      "scene": "dayof-refresh",
+      "fraction": 0.9880682496122181,
+      "seconds": 366.387,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-refresh-end.png"
+    },
+    {
+      "scene": "dayof-undo",
+      "fraction": 0.022268408551068885,
+      "seconds": 369.55,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-undo-2.png"
+    },
+    {
+      "scene": "dayof-undo",
+      "fraction": 0.25,
+      "seconds": 375.686,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-undo-25.png"
+    },
+    {
+      "scene": "dayof-undo",
+      "fraction": 0.45,
+      "seconds": 381.0748,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-undo-45.png"
+    },
+    {
+      "scene": "dayof-undo",
+      "fraction": 0.6,
+      "seconds": 385.1164,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-undo-60.png"
+    },
+    {
+      "scene": "dayof-undo",
+      "fraction": 0.85,
+      "seconds": 391.85240000000005,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-undo-85.png"
+    },
+    {
+      "scene": "dayof-undo",
+      "fraction": 0.9888657957244655,
+      "seconds": 395.594,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/attendance-check-in/review-frames/dayof-undo-end.png"
     }
   ]
 }

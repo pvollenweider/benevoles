@@ -1,0 +1,41 @@
+{
+  "locatedAt": "2026-10-06T17:04:31.922Z",
+  "masterSha256": "2f7c54cc4da59c2b42756a881c82f502eaffd4ac4cd98b17f6facc2b28007219",
+  "totalSeconds": 216.68,
+  "cuts": [
+    {
+      "id": "file",
+      "seconds": 22.0234795
+    },
+    {
+      "id": "preview",
+      "seconds": 47.629667
+    },
+    {
+      "id": "errors",
+      "seconds": 73.255604
+    },
+    {
+      "id": "update",
+      "seconds": 96.83152100000001
+    },
+    {
+      "id": "corrected",
+      "seconds": 123.83820800000001
+    },
+    {
+      "id": "confirm",
+      "seconds": 149.60975000000002
+    },
+    {
+      "id": "repeat",
+      "seconds": 174.0356455
+    },
+    {
+      "id": "result",
+      "seconds": 195.497479
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

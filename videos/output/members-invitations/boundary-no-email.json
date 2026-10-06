@@ -1,0 +1,12 @@
+{
+  "anchor": "Enfin, une fiche sans email peut être sélectionnée, mais aucun message",
+  "windowStart": 173.791,
+  "result": {
+    "found": true,
+    "startSeconds": 30.4,
+    "wordsHeard": "Enfin, une fiche sans email peut être sélectionnée, mais aucun message"
+  },
+  "onset": 204.191,
+  "proposedCut": 203.7906045,
+  "note": "Proposal only; recut then independently audit before capture"
+}

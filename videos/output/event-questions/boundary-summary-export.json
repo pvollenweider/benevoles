@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour préparer une commande, téléchargeons la synthèse en CSV. Le fichier",
+  "windowStart": 270.95599999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 34.3,
+    "wordsHeard": "Pour préparer une commande, téléchargeons la synthèse en CSV. Le fichier"
+  },
+  "onset": 305.256,
+  "proposedCut": 304.789,
+  "note": "Proposal only; recut then independently audit before capture"
+}

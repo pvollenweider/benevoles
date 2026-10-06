@@ -93,3 +93,38 @@ du système et du navigateur. De même, le chapitre zoom exige une vraie capture
 du zoom natif. Ne pas livrer ces passages accompagnés d'images fixes ou d'une
 voix de lecteur d'écran synthétique. Le catalogue reste bloqué pour le tournage
 complet tant que ces exigences ne sont pas réalisables.
+
+### Capture native du 6 octobre — après activation manuelle de VoiceOver
+
+La permission d'enregistrement d'écran est accordée. ScreenCaptureKit permet
+de capturer le véritable audio du processus `com.apple.VoiceOver` : aucune
+entrée microphone ni voix de remplacement n'est utilisée. Philippe a activé
+VoiceOver manuellement. Un essai audio, puis une prise de 55 secondes de la
+fenêtre Safari contenant le planning fictif ont été enregistrés.
+
+La copie locale a été reconstruite depuis le main `6dc553526e5aabf81be975f9185e0dcf8503262e`,
+sur le port dédié 43102. La prise native montre le focus sur Accueil du matin,
+la sélection avec Espace, puis le déplacement sur Accueil de l'après-midi et
+Caisse (sur validation). Les fichiers `native/reader-20261006b.{mp4,m4a,json}`
+conservent image, audio et timestamps communs ; `native/reader-preview.mp4`
+est un aperçu technique synchronisé, pas la vidéo de formation terminée.
+L'image a été inspectée et l'audio est non silencieux ; l'écoute qualitative
+et la vérification des annonces exactes restent à faire. Aucun parcours
+complet ni conformité VoiceOver n'est déclaré validé par cet essai.
+
+Le précontrôle du sélecteur passe sur cette copie actuelle après adaptation
+de son nom accessible : « Créneau » sans astérisque décoratif, avec
+`aria-required=true`. Erreur, focus restauré par l'application, avertissements,
+Entrée/Échap, liste à 320 px et émulation des couleurs forcées ont été contrôlés.
+Aucune inscription n'a été ajoutée par ce précontrôle.
+
+Safari ne propose que 300 % dans son menu : le vrai 400 % nécessite ici un
+autre navigateur. La tentative dans une fenêtre Brave distincte a été
+interrompue car le focus a quitté la fenêtre de formation ; ses fichiers ont
+été retirés du dossier de montage et ne doivent pas être utilisés. Pour la
+reprise, vérifier la fenêtre active avant chaque action native et interrompre
+la prise si elle change. Ne pas considérer des raccourcis envoyés comme la
+preuve que le zoom a effectivement atteint 200 % ou 400 %.
+
+Le montage complet, la capture de zoom, les autres scènes synchronisées et
+la narration continue restent à produire. `captureReady` reste faux.

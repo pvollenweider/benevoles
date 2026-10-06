@@ -1,12 +1,12 @@
 {
   "anchor": "La feuille de présence sert au pointage sur papier. Chaque personne",
-  "windowStart": 116.77599999999998,
+  "windowStart": 103.01400000000001,
   "result": {
     "found": true,
-    "startSeconds": 11.7,
+    "startSeconds": 27,
     "wordsHeard": "La feuille de présence sert au pointage sur papier. Chaque personne"
   },
-  "onset": 128.47599999999997,
-  "proposedCut": 128.108479,
+  "onset": 130.014,
+  "proposedCut": 129.53887500000002,
   "note": "Proposal only; recut then independently audit before capture"
 }

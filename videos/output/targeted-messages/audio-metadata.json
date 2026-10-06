@@ -1,7 +1,7 @@
 {
   "model": "gemini-3.8-flash-tts",
   "voice": "Puck",
-  "generatedAt": "2026-10-05T18:19:59.431Z",
+  "generatedAt": "2026-10-06T16:20:43.231Z",
   "segments": {
     "welcome": {
       "file": "audio/welcome.wav",
@@ -50,7 +50,7 @@
     },
     "confirm": {
       "file": "audio/confirm.wav",
-      "durationMs": 24092,
+      "durationMs": 24093,
       "generationSha256": "7543392e9638b4e3e2e4880c4219ce982046d782988b099f8e79ff788b2bea61"
     },
     "result": {

@@ -1,0 +1,69 @@
+{
+  "updatedAt": "2026-10-06T17:26:40.314Z",
+  "requested": [
+    "ADMIN_NAVIGATION",
+    "GLOBAL_SEARCH",
+    "ORG_PUBLIC_IDENTITY",
+    "ORG_TIMEZONE_CHARTER",
+    "ORG_TEAM_PERMISSIONS",
+    "ORG_EMAIL_SETTINGS",
+    "EVENT_CREATE_TEMPLATE",
+    "EVENT_REVIEW_PUBLISH",
+    "EVENT_VISIBILITY_REGISTRATION_WINDOW",
+    "EVENT_PROGRAM_PAGES_QR",
+    "EVENT_MILESTONES",
+    "SHIFTS_ROLES_VIEWS"
+  ],
+  "active": null,
+  "scope": "Narration only, not capture, MP4 synchronization or completion",
+  "results": [
+    {
+      "id": "ADMIN_NAVIGATION",
+      "status": "source-audited"
+    },
+    {
+      "id": "GLOBAL_SEARCH",
+      "status": "source-audited"
+    },
+    {
+      "id": "ORG_PUBLIC_IDENTITY",
+      "status": "generation-failed"
+    },
+    {
+      "id": "ORG_TIMEZONE_CHARTER",
+      "status": "generation-failed"
+    },
+    {
+      "id": "ORG_TEAM_PERMISSIONS",
+      "status": "generation-failed"
+    },
+    {
+      "id": "ORG_EMAIL_SETTINGS",
+      "status": "generation-failed"
+    },
+    {
+      "id": "EVENT_CREATE_TEMPLATE",
+      "status": "generation-failed"
+    },
+    {
+      "id": "EVENT_REVIEW_PUBLISH",
+      "status": "generation-failed"
+    },
+    {
+      "id": "EVENT_VISIBILITY_REGISTRATION_WINDOW",
+      "status": "generation-failed"
+    },
+    {
+      "id": "EVENT_PROGRAM_PAGES_QR",
+      "status": "generation-failed"
+    },
+    {
+      "id": "EVENT_MILESTONES",
+      "status": "generation-failed"
+    },
+    {
+      "id": "SHIFTS_ROLES_VIEWS",
+      "status": "source-audited"
+    }
+  ]
+}

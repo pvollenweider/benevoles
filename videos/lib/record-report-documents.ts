@@ -12,6 +12,8 @@ export async function recordReportDocuments(options: { page: Page; base: string;
   const { page, base, eventId, directory, scene, tap, settle } = options
   const open = async (label: string, suffix: string) => {
     await page.goto(`${base}/admin/events/${eventId}/print`); await settle(page)
+    await page.getByRole("link", { name: new RegExp(`^${label}`) }).scrollIntoViewIfNeeded()
+    await page.waitForTimeout(650)
     const ready = page.waitForEvent("popup")
     await tap(page, page.getByRole("link", { name: new RegExp(`^${label}`) }))
     const popup = await ready

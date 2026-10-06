@@ -1,42 +1,89 @@
 {
   "slug": "shift-night-dst",
-  "recordedAt": "2026-10-04T17:04:25.733Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T16:10:32.802Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "12928a8936f7b69d6ecf6ef91f6ecdbdffa09b60",
+    "sourceTree": "30dbb5aedc053cdb4c8279f2b678cc73eece207e",
+    "productSourceSha256": "c99792f1a68d4f9cd696d47c05d5c6a8d06aaa190f0a9cf15281957940612e03",
+    "buildId": "_3C5UypUJK5dyJUxNVbyG",
+    "snapshot": "/tmp/benevoles-video-production.fLrGxy",
+    "builtAt": "2026-10-06T16:02:24.130Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "SHIFT_NIGHT_DST",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 21842
+    },
+    {
+      "kind": "click",
+      "atMs": 31608
+    },
+    {
+      "kind": "click",
+      "atMs": 37841
+    },
+    {
+      "kind": "click",
+      "atMs": 45607
+    },
+    {
+      "kind": "click",
+      "atMs": 51407
+    },
+    {
+      "kind": "click",
+      "atMs": 71891
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1293,
-      "endMs": 9595
+      "startMs": 1266,
+      "endMs": 14181
     },
     {
       "id": "ordinary",
-      "startMs": 10048,
-      "endMs": 30425
+      "startMs": 14633,
+      "endMs": 30691
     },
     {
       "id": "spring",
-      "startMs": 30877,
-      "endMs": 46440
+      "startMs": 31143,
+      "endMs": 44686
     },
     {
       "id": "autumn",
-      "startMs": 46891,
-      "endMs": 66177
+      "startMs": 45140,
+      "endMs": 57733
     },
     {
       "id": "timezone",
-      "startMs": 66629,
-      "endMs": 75136
+      "startMs": 58185,
+      "endMs": 69751
     },
     {
       "id": "calendar",
-      "startMs": 75589,
-      "endMs": 89032
+      "startMs": 70202,
+      "endMs": 82073
     },
     {
       "id": "result",
-      "startMs": 89484,
-      "endMs": 101539
+      "startMs": 82524,
+      "endMs": 94469
     }
   ]
 }

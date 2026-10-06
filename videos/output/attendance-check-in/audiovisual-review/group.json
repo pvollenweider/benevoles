@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:07:55.481Z",
-  "videoSha256": "58705cd0468ab625a8108945bd9244cff798768e56f4403e42e7c79dbda4612a",
-  "promptSha256": "042b3ca0c8b6c5f9771679140eff23008fa8d20fc866997440182f49ea963868",
-  "clipSha256": "1090039b23694a1f8f31d4ff9f968dd3302e6374ecd03ecc6981d88d299daa1b",
+  "reviewedAt": "2026-10-06T17:38:09.596Z",
+  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "promptSha256": "1e51c240ed50598c78d73f43af506c473062e2f4a3b5602a03991aba476c7667",
+  "clipSha256": "cded710b0f5a02e076faecbf965cf70306934d583499ef5e5cd13cf8702096c8",
   "scene": "group",
   "review": {
     "heardOpening": "Nicolas et Léa arrivent ensemble",
     "checkpoints": [
       {
-        "spokenSeconds": 2.8,
+        "spokenSeconds": 2.5,
         "spoken": "Sélectionnons leurs deux lignes",
-        "visibleSeconds": 4.5,
-        "visible": "Sélection des cases à cocher pour Léa et Nicolas",
+        "visibleSeconds": 3.6,
+        "visible": "Cochage successif des cases pour Léa et Nicolas",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.5,
+        "spokenSeconds": 5.4,
         "spoken": "cliquer sur Marquer présents",
-        "visibleSeconds": 7.2,
+        "visibleSeconds": 6.1,
         "visible": "Clic sur le bouton Marquer présents (2)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.8,
+        "spokenSeconds": 7.3,
         "spoken": "Voici les deux marques",
-        "visibleSeconds": 9.5,
-        "visible": "Affichage de la mention Présent pour les deux bénévoles",
+        "visibleSeconds": 8,
+        "visible": "Statut Présent affiché en vert sur les deux lignes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.2,
+        "spoken": "Une demande en attente de validation",
+        "visibleSeconds": 15.2,
+        "visible": "Affichage de la ligne avec statut Demande à traiter",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée et claire, synchronisée avec les actions affichées."
+      "observation": "Débit régulier et articulation claire."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

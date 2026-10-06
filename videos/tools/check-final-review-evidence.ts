@@ -6,6 +6,7 @@ import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { execFileSync } from "node:child_process"
 import { loadCatalog, loadManifest, videoDir } from "../lib/manifest"
+import { assembledOnTarget } from "../lib/product-evidence"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped JSON reports read from disk
 async function json(file: string): Promise<any | null> {
@@ -21,6 +22,7 @@ async function main() {
     const manifest = await loadManifest(entry.id)
     const directory = videoDir(manifest.slug)
     const timeline = await json(path.join(directory, "timeline.json"))
+    const mix = await json(path.join(directory, "audio-mix.json"))
     const audio = await json(path.join(directory, "audio-metadata.json"))
     const narration = await json(path.join(directory, "narration-audit.json"))
     const generationIds = new Set<string>()
@@ -53,7 +55,8 @@ async function main() {
     }
     const cueIds = timeline?.cues?.map((cue: { id: string }) => cue.id) ?? []
     const timelineMatchesManifest = cueIds.length === manifest.segments.length && manifest.segments.every(segment => cueIds.filter((id: string) => id === segment.id).length === 1)
-    const currentProductBuildProven = timeline?.product?.commit === targetCommit && typeof timeline?.product?.buildId === "string" && !!timeline.product.buildId && /^[a-f0-9]{64}$/.test(timeline?.product?.productSourceSha256 ?? "")
+    const timelineSha256 = timeline ? createHash("sha256").update(await readFile(path.join(directory, "timeline.json"))).digest("hex") : null
+    const currentProductBuildProven = assembledOnTarget({ targetCommit: targetCommit, timeline, mix, videoSha256, timelineSha256 })
     rows.push({ id: entry.id, slug: manifest.slug, videoSha256, capturePurpose: timeline?.capturePurpose ?? null, timelineMatchesManifest, currentProductBuildProven, narrationChapters, generationCount: generationIds.size, sourceNarrationEvidenceCurrent, chapters, currentAutomatedAudiovisualReviewsComplete: currentProductBuildProven && !!videoSha256 && timeline?.capturePurpose === "narration-timed" && timelineMatchesManifest && chapters.every(chapter => chapter.sameVideo && chapter.structurallyComplete && !chapter.automatedReviewNeedsAttention), finalDeliveryValidated: false })
   }
   const report = { checkedAt: new Date().toISOString(), note: "All catalogue entries inspected locally. Matching video hashes are necessary, not sufficient: transcript/prompt freshness, audio, functional coverage and human review remain separate gates. No upload or API call.", videos: rows }

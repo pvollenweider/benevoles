@@ -1,0 +1,12 @@
+{
+  "anchor": "Un message urgent de l'organisation peut aussi être accompagné d'une notification,",
+  "windowStart": 129.044,
+  "result": {
+    "found": true,
+    "startSeconds": 24,
+    "wordsHeard": "Un message urgent de l'organisation peut aussi être accompagné d'une notification,"
+  },
+  "onset": 153.044,
+  "proposedCut": 152.851125,
+  "note": "Proposal only; recut then independently audit before capture"
+}

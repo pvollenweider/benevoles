@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:13:00.171Z",
+  "videoSha256": "9711d32befbf3bd796f9846b4cc0eafc958f1fd41f9679745ebd4280c84c31e6",
+  "promptSha256": "71b91cafb3213ca575e57f2817dda419ee6ef407c649fd5f8d1d6adca2c686e7",
+  "clipSha256": "4a2bee4c50c59b71be940aeb491e8046098876d6fe3766ee116b997878eda01b",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Pour une permanence de nuit",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "indique clairement le jour de départ, l’heure du lendemain",
+        "visibleSeconds": 1,
+        "visible": "Ligne affichant 'samedi 4 juillet 22:00–02:00 (jusqu'au lendemain)' visible dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "et les consignes d’arrivée",
+        "visibleSeconds": 4.1,
+        "visible": "Aucun champ ou texte de consignes d'arrivée n'apparaît sur le tableau statique",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "autour de minuit et des changements d’heure",
+        "visibleSeconds": 9.2,
+        "visible": "Liste montrant les créneaux 'Passage à l'heure d'été' et 'Passage à l'heure d'hiver'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:04 - Les consignes d'arrivée mentionnées ne sont pas visualisées sur la page."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée sur fond musical discret, sans artefact sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

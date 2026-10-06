@@ -1,12 +1,12 @@
 {
   "anchor": "Si l'historique dépasse la première page, Charger plus affiche la suite.",
-  "windowStart": 127.65,
+  "windowStart": 111.99000000000001,
   "result": {
     "found": true,
-    "startSeconds": 10.44,
+    "startSeconds": 30.34,
     "wordsHeard": "Si l'historique dépasse la première page"
   },
-  "onset": 138.09,
-  "proposedCut": 137.4556045,
+  "onset": 142.33,
+  "proposedCut": 141.9899375,
   "note": "Proposal only; recut then independently audit before capture"
 }

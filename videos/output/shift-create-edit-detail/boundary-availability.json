@@ -3,10 +3,10 @@
   "windowStart": 0,
   "result": {
     "found": true,
-    "startSeconds": 26.9,
+    "startSeconds": 30.56,
     "wordsHeard": "Deux options complètent le fonctionnement du créneau. La liste d’attente recueille"
   },
-  "onset": 26.9,
-  "proposedCut": 26.732229,
+  "onset": 30.56,
+  "proposedCut": 30.49525,
   "note": "Proposal only; recut then independently audit before capture"
 }

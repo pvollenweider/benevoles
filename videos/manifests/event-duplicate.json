@@ -37,17 +37,17 @@
     },
     {
       "id": "identity",
-      "transcript": "Commence par donner le titre de la nouvelle édition et son premier jour. Toutes les dates suivent le même décalage : fin de l’événement, créneaux et programme. Le résumé indique immédiatement de combien de jours elles seront déplacées.",
+      "transcript": "Commencez par donner le titre de la nouvelle édition et son premier jour. Toutes les dates suivent le même décalage : fin de l’événement, créneaux et programme. Le résumé indique immédiatement de combien de jours elles seront déplacées.",
       "fallbackDurationMs": 22000
     },
     {
       "id": "choices",
-      "transcript": "Choisis ensuite ce qui doit suivre. Les créneaux conservent postes, horaires, capacités et consignes, mais reviennent ouverts et sans inscription. Les réglages reprennent les messages, questions, téléphone et programme. Les pages personnalisées peuvent aussi être copiées.",
+      "transcript": "Choisissez ensuite ce qui doit suivre. Les créneaux conservent postes, horaires, capacités et consignes, mais reviennent ouverts et sans inscription. Les réglages reprennent les messages, questions, téléphone et programme. Les pages personnalisées peuvent aussi être copiées.",
       "fallbackDurationMs": 25000
     },
     {
       "id": "leaders",
-      "transcript": "Les responsables de secteur sont volontairement décochés au départ, car les reprendre déclenche immédiatement un email avec un nouveau lien personnel. Active cette option seulement après avoir vérifié que ces personnes gardent leur responsabilité pour la nouvelle édition.",
+      "transcript": "Les responsables de secteur sont volontairement décochés au départ, car les reprendre déclenche immédiatement un email avec un nouveau lien personnel. Activez cette option seulement après avoir vérifié que ces personnes gardent leur responsabilité pour la nouvelle édition.",
       "fallbackDurationMs": 23000
     },
     {
@@ -72,7 +72,7 @@
     },
     {
       "id": "result",
-      "transcript": "Avant toute publication, relis les horaires, adapte les capacités et les consignes, puis teste le parcours bénévole. La duplication accélère la préparation, mais elle ne suppose jamais que la nouvelle édition est identique à l’ancienne.",
+      "transcript": "Avant toute publication, relisez les horaires, adaptez les capacités et les consignes, puis testez le parcours bénévole. La duplication accélère la préparation, mais elle ne suppose jamais que la nouvelle édition est identique à l’ancienne.",
       "fallbackDurationMs": 19000
     }
   ]

@@ -1,23 +1,107 @@
 WEBVTT
 
-00:00:01.141 --> 00:00:09.052
-Créer une série est idéal lorsqu’un même poste doit être couvert toute la journée par équipes successives. Au lieu de saisir chaque plage séparément, on définit une règle commune, on contrôle l’aperçu, puis on crée tous les créneaux en une fois.
+00:00:01.138 --> 00:00:05.365
+Créer une série est idéal lorsqu’un même
+poste doit être couvert toute la journée
 
-00:00:09.507 --> 00:00:22.927
-Choisis le poste, la date et la plage globale à couvrir. Ici, la buvette fonctionne de dix heures à vingt-deux heures. Cette plage décrit le besoin complet ; elle ne signifie pas qu’une même personne doit rester douze heures.
+00:00:05.365 --> 00:00:09.291
+par équipes successives. Au lieu de saisir
+chaque plage séparément, on définit une
 
-00:00:23.380 --> 00:00:36.588
-La durée découpe ensuite la plage en équipes de deux heures. La capacité s’applique à chaque créneau créé. Avec trois places, chaque relève pourra accueillir trois bénévoles, indépendamment des autres horaires.
+00:00:09.291 --> 00:00:13.518
+règle commune, on contrôle l’aperçu, puis
+on crée tous les créneaux en une fois.
 
-00:00:37.041 --> 00:00:52.371
-L’aperçu est la vérification essentielle : dix heures–midi, midi–quatorze heures, puis les relèves suivantes jusqu’à vingt-deux heures. Si la plage ne se divise pas exactement, contrôle le dernier créneau avant de confirmer.
+00:00:13.971 --> 00:00:17.833
+Choisis le poste, la date et la plage
+globale à couvrir. Ici, la buvette
 
-00:00:52.824 --> 00:01:07.121
-Créons la série. Les nouvelles barres apparaissent dans la Timeline avec le même poste, la même capacité et des horaires consécutifs. Elles restent pourtant indépendantes : chacune possède son propre effectif et peut recevoir ses inscriptions.
+00:00:17.833 --> 00:00:21.144
+fonctionne de dix heures à vingt-deux
+heures. Cette plage décrit le besoin
 
-00:01:07.575 --> 00:01:19.978
-Après la création, ouvre un seul créneau pour adapter un libellé, une capacité ou une consigne particulière. Modifier cette plage ne change pas ses voisines. La série accélère le départ, sans enfermer le planning dans une règle rigide.
+00:00:21.144 --> 00:00:24.730
+complet ; elle ne signifie pas qu’une même
+personne doit rester douze heures.
 
-00:01:20.431 --> 00:01:30.757
-Avant de publier, vérifie les relèves, les pauses et les heures de fermeture. Une série bien découpée facilite le choix des bénévoles et évite les longues plages difficiles à remplir.
+00:00:25.183 --> 00:00:29.420
+La durée découpe la plage en équipes de
+deux heures. Le nombre de personnes
+
+00:00:29.420 --> 00:00:33.052
+s’applique à chaque créneau : avec trois
+places, chaque relève accueille trois
+
+00:00:33.052 --> 00:00:36.684
+bénévoles. La pause ajoute un intervalle
+entre deux relèves. Ici, choisissons zéro
+
+00:00:36.684 --> 00:00:40.316
+minute : les créneaux se suivent sans
+interruption, pour garder la buvette
+
+00:00:40.316 --> 00:00:40.619
+couverte.
+
+00:00:41.070 --> 00:00:44.555
+L’aperçu est la vérification essentielle :
+dix heures–midi, midi–quatorze heures,
+
+00:00:44.555 --> 00:00:48.737
+puis les relèves suivantes jusqu’à
+vingt-deux heures. Si la plage ne se
+
+00:00:48.737 --> 00:00:52.222
+divise pas exactement, contrôle le dernier
+créneau avant de confirmer.
+
+00:00:52.674 --> 00:00:56.856
+Créons la série. Les nouvelles barres
+apparaissent dans la Frise avec le même
+
+00:00:56.856 --> 00:01:00.394
+poste, la même capacité et des horaires
+consécutifs. Elles restent pourtant
+
+00:01:00.394 --> 00:01:03.932
+indépendantes : chacune possède son propre
+effectif et peut recevoir ses
+
+00:01:03.932 --> 00:01:04.254
+inscriptions.
+
+00:01:04.712 --> 00:01:08.799
+Après la création, passons en Liste et
+ouvrons un seul créneau. La première
+
+00:01:08.799 --> 00:01:13.199
+relève a besoin de renfort : faisons
+passer sa capacité de trois à quatre
+
+00:01:13.199 --> 00:01:15.400
+personnes. Enregistrons. Cette
+modification concerne seulement cette
+
+00:01:15.400 --> 00:01:19.486
+plage, pas ses voisines : la série
+accélère le départ, sans enfermer le
+
+00:01:19.486 --> 00:01:21.058
+planning dans une règle rigide.
+
+00:01:21.516 --> 00:01:25.396
+Le résultat est bien enregistré : quatre
+places pour la première relève, et
+
+00:01:25.396 --> 00:01:28.977
+toujours trois pour les suivantes. Avant
+de publier, vérifie les horaires, les
+
+00:01:28.977 --> 00:01:32.857
+éventuelles pauses et la fermeture. Une
+série bien découpée facilite le choix des
+
+00:01:32.857 --> 00:01:35.543
+bénévoles et évite les longues plages
+difficiles à remplir.
 

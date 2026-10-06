@@ -1,0 +1,12 @@
+{
+  "anchor": "On peut cependant enrichir la liste sans perdre ce qui existe.",
+  "windowStart": 395.49699999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 30.34,
+    "wordsHeard": "On"
+  },
+  "onset": 425.83699999999993,
+  "proposedCut": 425.4969585,
+  "note": "Proposal only; recut then independently audit before capture"
+}

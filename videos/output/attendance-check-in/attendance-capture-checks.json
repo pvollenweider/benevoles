@@ -1,13 +1,13 @@
 {
-  "checkedAt": "2026-10-05T18:03:40.213Z",
+  "checkedAt": "2026-10-06T17:33:05.363Z",
   "audiovisualValidation": false,
   "activeRows": 5,
   "people": 4,
   "presentRows": 3,
   "absentRows": 2,
   "cancellation": {
-    "registrationId": "cmuvk1gkc0008c0a5ldwrpxpt",
-    "retainedCheckIn": "2026-10-05T18:02:46.186Z",
+    "registrationId": "video-dayof-registration-old-4",
+    "retainedCheckIn": "2026-10-06T17:32:08.371Z",
     "excludedFromActiveExport": true
   },
   "noWorkedHoursCalculated": true

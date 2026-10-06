@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour l'accueil, le planning par jour est plus direct. Voici la",
+  "windowStart": 18.554000000000002,
+  "result": {
+    "found": true,
+    "startSeconds": 30.4,
+    "wordsHeard": "Pour l'accueil, le planning par jour est plus direct. Voici la"
+  },
+  "onset": 48.954,
+  "proposedCut": 48.5541875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

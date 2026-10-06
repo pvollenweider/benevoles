@@ -1,0 +1,12 @@
+{
+  "anchor": "Nous sélectionnons maintenant deux personnes et ajoutons un message commun. Envoyer",
+  "windowStart": 59.583,
+  "result": {
+    "found": true,
+    "startSeconds": 30.08,
+    "wordsHeard": "Nous sélectionnons maintenant deux personnes et ajoutons un message commun. Envoyer"
+  },
+  "onset": 89.663,
+  "proposedCut": 89.583375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

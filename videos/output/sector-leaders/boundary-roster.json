@@ -1,12 +1,12 @@
 {
   "anchor": "Sur ce lien, la responsable de la Buvette retrouve uniquement les",
-  "windowStart": 39.801,
+  "windowStart": 38.678,
   "result": {
     "found": true,
-    "startSeconds": 30.08,
-    "wordsHeard": "Sur ce lien"
+    "startSeconds": 30.8,
+    "wordsHeard": "Sur ce lien, la responsable de la Buvette retrouve uniquement les"
   },
-  "onset": 69.881,
-  "proposedCut": 69.8007085,
+  "onset": 69.478,
+  "proposedCut": 69.54595850000001,
   "note": "Proposal only; recut then independently audit before capture"
 }

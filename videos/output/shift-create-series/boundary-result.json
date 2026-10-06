@@ -1,12 +1,12 @@
 {
-  "anchor": "Avant de publier, vérifie les relèves, les pauses et les heures",
-  "windowStart": 42.73599999999999,
+  "anchor": "Le résultat est bien enregistré : quatre places pour la première",
+  "windowStart": 55.531000000000006,
   "result": {
     "found": true,
-    "startSeconds": 29,
-    "wordsHeard": "Avant de publier, vérifie les relèves, les pauses et les heures"
+    "startSeconds": 30.1,
+    "wordsHeard": "Le résultat est bien enregistré"
   },
-  "onset": 71.73599999999999,
-  "proposedCut": 71.495875,
+  "onset": 85.631,
+  "proposedCut": 85.5315,
   "note": "Proposal only; recut then independently audit before capture"
 }

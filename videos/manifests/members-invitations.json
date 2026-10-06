@@ -15,22 +15,22 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Ta fête est prête, et tu souhaites proposer des créneaux aux membres de ton association ? Dans Invitations, tu peux contacter une personne ou un groupe. Une invitation n'est pas une inscription : chacun choisit ensuite sa participation. Les compteurs distinguent les personnes invitées et celles qui ont un créneau confirmé. Voyons tout le parcours, de l'envoi au choix du bénévole.",
+      "transcript": "Votre fête est prête, et vous souhaitez proposer des créneaux aux membres de votre association ? Dans Invitations, vous pouvez contacter une personne ou un groupe. Une invitation n'est pas une inscription : chacun choisit ensuite sa participation. Les compteurs distinguent les personnes invitées et celles qui ont un créneau confirmé. Voyons tout le parcours, de l'envoi au choix du bénévole.",
       "fallbackDurationMs": 35000
     },
     {
       "id": "test",
-      "transcript": "Avant de contacter l'équipe, tu peux tester l'envoi d'email. Indique une adresse que tu utilises pour vérifier les messages, puis envoie le test. Nous ouvrons ici le message reçu dans notre boîte de démonstration. Cela permet de regarder la présentation. Un email de test n'inscrit personne et ne remplace pas une vraie invitation à un membre.",
+      "transcript": "Avant de contacter l'équipe, vous pouvez tester l'envoi d'email. Indiquez une adresse que vous utilisez pour vérifier les messages, puis envoyez le test. Nous ouvrons ici le message reçu dans notre boîte de démonstration. Cela permet de regarder la présentation. Un email de test n'inscrit personne et ne remplace pas une vraie invitation à un membre.",
       "fallbackDurationMs": 35000
     },
     {
       "id": "individual",
-      "transcript": "Clique sur Inviter des membres. Pour une invitation individuelle, recherche Aline, puis coche seulement sa fiche. Le compteur indique une personne sélectionnée. Tu peux ajouter un court mot d'accompagnement : Bonjour Aline, nous serions ravis de te retrouver à l'accueil. Vérifie le destinataire, puis envoie cette invitation. La personne apparaît ensuite dans le tableau de l'événement.",
+      "transcript": "Cliquez sur Inviter des membres. Pour une invitation individuelle, recherchez Aline, puis cochez seulement sa fiche. Le compteur indique une personne sélectionnée. Vous pouvez ajouter un court mot d'accompagnement : Bonjour Aline, nous serions ravis de te retrouver à l'accueil. Vérifiez le destinataire, puis envoyez cette invitation. La personne apparaît ensuite dans le tableau de l'événement.",
       "fallbackDurationMs": 39000
     },
     {
       "id": "group",
-      "transcript": "Pour un groupe, utilise le filtre de tags. Il permet par exemple de retrouver les personnes de l'accueil. Tout sélectionner ajoute les membres visibles à ta sélection. Attention : une personne déjà cochée peut rester sélectionnée après un changement de filtre. Le compteur reste ton repère. Avec Effacer, repars d'une sélection vide, puis choisis précisément les personnes que tu veux inviter.",
+      "transcript": "Pour un groupe, utilisez le filtre de tags. Il permet par exemple de retrouver les personnes de l'accueil. Tout sélectionner ajoute les membres visibles à votre sélection. Attention : une personne déjà cochée peut rester sélectionnée après un changement de filtre. Le compteur reste votre repère. Avec Effacer, repartez d'une sélection vide, puis choisissez précisément les personnes que vous voulez inviter.",
       "fallbackDurationMs": 37000
     },
     {
@@ -55,7 +55,7 @@
     },
     {
       "id": "existing",
-      "transcript": "La case Cacher déjà invités évite de sélectionner facilement les mêmes personnes à nouveau. Décoche-la si tu veux les retrouver. Un nouvel envoi à une personne déjà invitée réutilise son invitation pour cette fête, au lieu d'en créer une seconde. Prends néanmoins le temps de vérifier le groupe avant d'envoyer : recevoir plusieurs messages identiques peut vite devenir agaçant.",
+      "transcript": "La case Cacher déjà invités évite de sélectionner facilement les mêmes personnes à nouveau. Décochez-la si vous voulez les retrouver. Un nouvel envoi à une personne déjà invitée réutilise son invitation pour cette fête, au lieu d'en créer une seconde. Prenez néanmoins le temps de vérifier le groupe avant d'envoyer : recevoir plusieurs messages identiques peut vite devenir agaçant.",
       "fallbackDurationMs": 35000
     },
     {

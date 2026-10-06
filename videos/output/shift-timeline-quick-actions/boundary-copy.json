@@ -1,0 +1,12 @@
+{
+  "anchor": "Dupliquer reprend le poste, la durée, la capacité et les informations",
+  "windowStart": 32.658,
+  "result": {
+    "found": true,
+    "startSeconds": 24.58,
+    "wordsHeard": "Dupliquer"
+  },
+  "onset": 57.238,
+  "proposedCut": 57.3002915,
+  "note": "Proposal only; recut then independently audit before capture"
+}

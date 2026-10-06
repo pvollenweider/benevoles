@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:07:22.537Z",
+  "videoSha256": "e629aacf38a33b92df65d6610d1684ff682c156b6adfceb2508cde7ee29b32f3",
+  "promptSha256": "5e3d357d49b2a06b6dcd1bbdeffbdd7aaf8391013dcffb4d24db0134876ceebc",
+  "clipSha256": "ac5ef49af7d3b15f95dc4018a0bb69e491b3d804ec8b3df0fbdea88289c62a06",
+  "scene": "range",
+  "review": {
+    "heardOpening": "Choisis le poste, la date",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Choisis le poste",
+        "visibleSeconds": 0.5,
+        "visible": "Le poste 'Buvette série' est sélectionné dans le formulaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 1.4,
+        "spoken": "la date",
+        "visibleSeconds": 1.5,
+        "visible": "La date 'samedi 10 octobre' est renseignée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "de dix heures à vingt-deux heures",
+        "visibleSeconds": 4.5,
+        "visible": "Les champs Début (10:00) et Fin (22:00) sont remplis.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, parfaitement synchronisée avec la saisie."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

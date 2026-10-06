@@ -73,7 +73,9 @@ export async function recordDataExports(options: { page: Page; base: string; dir
   await go(`/admin/events/${prepared.eventId}`)
   await scene("archive", async at => {
     await at(0.10); await tap(page, page.getByRole("link", { name: "Rapports", exact: true })); await settle(page)
-    await at(0.15); archiveFile = await download(page.getByRole("link", { name: /^Archive de l'événement \(JSON\)/ }), "event-archive-capture.json")
+    await at(0.17); await page.getByRole("heading", { name: "Archive", exact: true }).scrollIntoViewIfNeeded()
+    await page.waitForTimeout(700)
+    await at(0.24); archiveFile = await download(page.getByRole("link", { name: /^Archive de l'événement \(JSON\)/ }), "event-archive-capture.json")
     await at(0.48); const json = await showArchiveJson(page, archiveFile)
     checks.archive = json
     await at(0.70); await tap(page, page.getByLabel("Partie du fichier :", { exact: true })); await page.getByLabel("Partie du fichier :", { exact: true }).selectOption("event")
@@ -113,6 +115,7 @@ export async function recordDataExports(options: { page: Page; base: string; dir
   await scene("result", async at => {
     await at(0.19); await go("/admin/settings/activity")
     await at(0.38); await go(`/admin/events/${prepared.eventId}/print`)
+    await page.getByRole("heading", { name: "Archive", exact: true }).scrollIntoViewIfNeeded()
   })
   const files = await Promise.all([membersFile, journalFile, archiveFile].map(async file => ({ file: path.basename(file), sha256: createHash("sha256").update(await readFile(file)).digest("hex") })))
   await writeFile(path.join(directory, "export-capture-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), scope: "actual local downloads, literal file views and frozen copy check; not full audiovisual or native spreadsheet validation", ...checks, files }, null, 2))

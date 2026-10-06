@@ -1,12 +1,12 @@
 {
   "anchor": "Filtrer par type permet de se concentrer sur les membres, les",
-  "windowStart": 105.191,
+  "windowStart": 82.381,
   "result": {
     "found": true,
-    "startSeconds": 3.96,
+    "startSeconds": 30.3,
     "wordsHeard": "Filtrer par type permet de se concentrer sur les membres, les"
   },
-  "onset": 109.151,
-  "proposedCut": 109.379958,
+  "onset": 112.681,
+  "proposedCut": 112.3813955,
   "note": "Proposal only; recut then independently audit before capture"
 }

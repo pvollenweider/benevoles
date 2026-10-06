@@ -1,0 +1,37 @@
+{
+  "locatedAt": "2026-10-06T16:12:57.621Z",
+  "masterSha256": "4d45c1604129d6415b56831b4247c0c1fce2ecfbede2e0ac5da64ae78f08f46e",
+  "totalSeconds": 181.92,
+  "cuts": [
+    {
+      "id": "statuses",
+      "seconds": 23.4433955
+    },
+    {
+      "id": "confirm",
+      "seconds": 48.992125
+    },
+    {
+      "id": "link",
+      "seconds": 75.2411045
+    },
+    {
+      "id": "message",
+      "seconds": 96.81704149999999
+    },
+    {
+      "id": "waitlist",
+      "seconds": 119.857958
+    },
+    {
+      "id": "send",
+      "seconds": 141.58045850000002
+    },
+    {
+      "id": "result",
+      "seconds": 161.423
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

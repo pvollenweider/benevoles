@@ -10,6 +10,8 @@ aliases: []
 
 # Doublons et fusion de fiches
 
+<!-- video: MEMBERS_DUPLICATES_MERGE -->
+
 ## Doublons possibles
 
 Le lien **Doublons possibles (N)**, dans l'en-tête de la page **Membres**, n'apparaît que s'il y a au moins une paire à regarder. Chaque paire montre les deux fiches et les raisons, en mots, pour lesquelles elles se ressemblent : même nom et prénom (après normalisation des majuscules, accents, espaces, traits d'union et apostrophes), même numéro de téléphone (après normalisation des formats suisses et français courants), adresses email très proches (faute de frappe probable sur le même domaine, ou domaine mal orthographié), l'une des deux fiches a une adresse à vérifier proche de l'autre, ou même date de naissance. Un nom identique seul reste présenté comme incertain (« un homonyme n'est pas forcément la même personne ») ; un numéro ou une adresse partagés seuls ne sont jamais présentés comme une probable même personne (une famille, un standard commun expliquent aussi bien un numéro partagé). **Rien n'est fusionné ni modifié depuis cette page** : ce ne sont que des suggestions.

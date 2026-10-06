@@ -1,0 +1,61 @@
+{
+  "locatedAt": "2026-10-06T17:03:11.936Z",
+  "masterSha256": "87b787f6cdc29101136f39ef8582feea8f9154662579befaf3b6cd5946b363a6",
+  "totalSeconds": 362.64,
+  "cuts": [
+    {
+      "id": "one",
+      "seconds": 24.3856665
+    },
+    {
+      "id": "group",
+      "seconds": 49.053021
+    },
+    {
+      "id": "correction",
+      "seconds": 72.380896
+    },
+    {
+      "id": "multiple",
+      "seconds": 94.94497899999999
+    },
+    {
+      "id": "limits",
+      "seconds": 121.0749165
+    },
+    {
+      "id": "cancelled",
+      "seconds": 145.453708
+    },
+    {
+      "id": "export",
+      "seconds": 183.36252100000002
+    },
+    {
+      "id": "dayof-window",
+      "seconds": 207.426375
+    },
+    {
+      "id": "dayof-search",
+      "seconds": 236.06825
+    },
+    {
+      "id": "dayof-phone",
+      "seconds": 259.38972950000004
+    },
+    {
+      "id": "dayof-checkin",
+      "seconds": 285.506729
+    },
+    {
+      "id": "dayof-refresh",
+      "seconds": 310.5542295
+    },
+    {
+      "id": "dayof-undo",
+      "seconds": 335.696229
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

@@ -1,12 +1,12 @@
 {
   "anchor": "Ouvrons les différentes parties du vrai fichier. On retrouve les réglages,",
-  "windowStart": 160.036,
+  "windowStart": 198.68200000000002,
   "result": {
     "found": true,
-    "startSeconds": 14.99,
+    "startSeconds": 56.88,
     "wordsHeard": "Ouvrons"
   },
-  "onset": 175.026,
-  "proposedCut": 175.03579200000001,
+  "onset": 255.562,
+  "proposedCut": 255.05539549999997,
   "note": "Proposal only; recut then independently audit before capture"
 }

@@ -1,0 +1,12 @@
+{
+  "anchor": "Aline vient d'arriver. Sélectionnons uniquement sa ligne, puis lisons le nombre",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 24.9,
+    "wordsHeard": "Aline vient d'arriver"
+  },
+  "onset": 24.9,
+  "proposedCut": 24.3856665,
+  "note": "Proposal only; recut then independently audit before capture"
+}

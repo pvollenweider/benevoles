@@ -1,0 +1,12 @@
+{
+  "anchor": "Une activation réussie affiche Rappels push activés. Le site a alors",
+  "windowStart": 64.76100000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 30.3,
+    "wordsHeard": "Une activation réussie affiche Rappels push activés. Le site a alors"
+  },
+  "onset": 95.061,
+  "proposedCut": 94.7611875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

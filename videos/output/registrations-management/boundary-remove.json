@@ -1,12 +1,12 @@
 {
   "anchor": "Cette fois, Camille nous a confirmé qu'elle ne peut pas assurer",
-  "windowStart": 234.766,
+  "windowStart": 214.47699999999998,
   "result": {
     "found": true,
-    "startSeconds": 10.38,
-    "wordsHeard": "Cette fois, Camille nous a confirmé qu'elle ne peut pas assurer"
+    "startSeconds": 30.04,
+    "wordsHeard": "Cette"
   },
-  "onset": 245.146,
-  "proposedCut": 244.8606455,
+  "onset": 244.51699999999997,
+  "proposedCut": 244.4775,
   "note": "Proposal only; recut then independently audit before capture"
 }

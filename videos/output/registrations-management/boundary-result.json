@@ -1,12 +1,12 @@
 {
   "anchor": "La liste sert à agir, le journal sert à comprendre ce",
-  "windowStart": 282.04699999999997,
+  "windowStart": 261.31199999999995,
   "result": {
     "found": true,
-    "startSeconds": 15.2,
+    "startSeconds": 30.27,
     "wordsHeard": "La liste sert à agir, le journal sert à comprendre ce"
   },
-  "onset": 297.24699999999996,
-  "proposedCut": 297.0474165,
+  "onset": 291.58199999999994,
+  "proposedCut": 291.312354,
   "note": "Proposal only; recut then independently audit before capture"
 }

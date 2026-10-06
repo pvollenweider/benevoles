@@ -1,45 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:08:14.876Z",
-  "videoSha256": "58705cd0468ab625a8108945bd9244cff798768e56f4403e42e7c79dbda4612a",
-  "promptSha256": "91400141f4d93e0c4f374c4d2ad0b1883c221679026c29643501ba8e77cff56f",
-  "clipSha256": "dfa883dcb5e1d72610a5d2663c26ca9a725ac507ed64e88f58d4abcf91751795",
+  "reviewedAt": "2026-10-06T17:38:35.381Z",
+  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "promptSha256": "5e20c59e9f1479ee96512d51811bc9b3c9a8ffbc22d6ea50564168cf53ccdc78",
+  "clipSha256": "99f2fafdf5ea0f268097d0e7d04cf8540fb98da86df35d6f44f31b400b6eb59f",
   "scene": "multiple",
   "review": {
-    "heardOpening": "Une personne peut aider sur plusieurs horaires",
+    "heardOpening": "Une personne peut aider sur plusieurs horaires.",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
-        "spoken": "Recherchons Léa pour retrouver ses deux inscriptions",
-        "visibleSeconds": 4,
-        "visible": "Saisie dans la barre de recherche et filtrage sur les deux créneaux de Léa Exemple",
+        "spokenSeconds": 2.2,
+        "spoken": "Recherchons Léa pour retrouver ses deux inscriptions.",
+        "visibleSeconds": 4.1,
+        "visible": "Filtre appliqué affichant les deux lignes de créneau de Léa.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6,
-        "spoken": "Elle aide le matin, puis à la buvette",
+        "spokenSeconds": 5.3,
+        "spoken": "Elle aide le matin, puis à la buvette.",
         "visibleSeconds": 5,
-        "visible": "Affichage des lignes Accueil du matin et Buvette de midi",
+        "visible": "Lignes du matin et de la buvette bien visibles à l'écran.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19,
-        "spoken": "l'une est pointée et l'autre ne l'est pas",
-        "visibleSeconds": 5,
-        "visible": "Statut Présent affiché sur le créneau du matin et case vide pour le midi",
+        "spokenSeconds": 16.8,
+        "spoken": "l'une est pointée et l'autre ne l'est pas.",
+        "visibleSeconds": 16.5,
+        "visible": "Statut Présent affiché uniquement sur la ligne du matin.",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "00:03 : Recherche effectuée avec une adresse email plutôt que le prénom Léa énoncé à l'oral"
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec l'interface"
+      "observation": "Élocution claire et rythme régulier."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

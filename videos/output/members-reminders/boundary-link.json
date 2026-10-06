@@ -1,12 +1,12 @@
 {
   "anchor": "Ouvrons l'email reçu dans la boîte de démonstration. Il propose à",
-  "windowStart": 51.456999999999994,
+  "windowStart": 45.241,
   "result": {
     "found": true,
-    "startSeconds": 21.9,
+    "startSeconds": 30.1,
     "wordsHeard": "Ouvrons l'email reçu dans la boîte de démonstration. Il propose à"
   },
-  "onset": 73.357,
-  "proposedCut": 73.2818125,
+  "onset": 75.34100000000001,
+  "proposedCut": 75.2411045,
   "note": "Proposal only; recut then independently audit before capture"
 }

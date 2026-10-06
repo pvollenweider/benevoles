@@ -1,0 +1,19 @@
+{
+  "batch": "e2a5e31ae52699446104",
+  "startedAt": "2026-10-06T17:45:17.630Z",
+  "updatedAt": "2026-10-06T17:45:19.907Z",
+  "state": "active",
+  "pid": 78703,
+  "requested": [
+    "MEMBERS_MANAGEMENT",
+    "MEMBERS_INVITATIONS",
+    "MEMBERS_REMINDERS"
+  ],
+  "rehearsalPerformed": false,
+  "active": {
+    "id": "MEMBERS_MANAGEMENT",
+    "stage": "narrated-capture"
+  },
+  "results": [],
+  "note": "Generated-for-review is not publication, human validation or proof of complete masterclass coverage. Direct capture omits only rehearsal; actual full capture, integrity checks and final media reviews remain required. Never run alongside another default-fixture capture."
+}

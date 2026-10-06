@@ -1,0 +1,25 @@
+{
+  "scope": "Generated source WAV auditing and optional chapter recutting only. No new TTS, UI capture, database, product proof, final MP4 or completion certification.",
+  "ids": [
+    "SHIFT_CREATE_SERIES"
+  ],
+  "updatedAt": "2026-10-06T16:01:31.183Z",
+  "active": null,
+  "attempts": [
+    {
+      "id": "SHIFT_CREATE_SERIES",
+      "stage": "source-audit",
+      "startedAt": "2026-10-06T16:00:48.783Z",
+      "finishedAt": "2026-10-06T16:01:31.182Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "signal": null
+    }
+  ],
+  "results": [
+    {
+      "id": "SHIFT_CREATE_SERIES",
+      "status": "source-audited"
+    }
+  ]
+}

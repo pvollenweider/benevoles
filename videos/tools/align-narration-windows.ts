@@ -25,7 +25,8 @@ async function main() {
   const cuts: { id: string; seconds: number }[] = []
   for (let offset = 0; offset < segments.length; offset += 3) {
     const located = await Promise.all(segments.slice(offset, offset + 3).map(async segment => {
-      const { stdout } = await exec(process.execPath, ["--import", "tsx", "videos/tools/locate-narration-boundary.ts", reference, segment.id, ...(process.argv.includes("--wide") ? ["--wide"] : [])], { timeout: 180_000, maxBuffer: 1024 * 1024 })
+      const windowFlag = process.argv.includes("--extra-wide") ? ["--extra-wide"] : process.argv.includes("--wide") ? ["--wide"] : []
+      const { stdout } = await exec(process.execPath, ["--import", "tsx", "videos/tools/locate-narration-boundary.ts", reference, segment.id, ...windowFlag], { timeout: 180_000, maxBuffer: 1024 * 1024 })
       console.log(stdout.trim())
       const boundary = JSON.parse(await readFile(path.join(directory, `boundary-${segment.id}.json`), "utf8")) as { proposedCut: number; result: { found: boolean } }
       if (!boundary.result.found || !Number.isFinite(boundary.proposedCut)) throw new Error(`${segment.id}: no reliable chapter boundary`)

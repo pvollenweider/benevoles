@@ -1,0 +1,19 @@
+{
+  "updatedAt": "2026-10-06T17:05:20.574Z",
+  "requested": [
+    "MEMBERS_DUPLICATES_MERGE",
+    "EMAIL_DELIVERY_FAILURES"
+  ],
+  "active": null,
+  "scope": "Narration only, not capture, MP4 synchronization or completion",
+  "results": [
+    {
+      "id": "MEMBERS_DUPLICATES_MERGE",
+      "status": "source-audited"
+    },
+    {
+      "id": "EMAIL_DELIVERY_FAILURES",
+      "status": "source-audited"
+    }
+  ]
+}

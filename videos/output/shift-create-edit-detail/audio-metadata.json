@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash-tts",
   "voice": "Kore",
-  "generatedAt": "2026-10-06T07:56:13.393Z",
+  "generatedAt": "2026-10-06T17:18:43.963Z",
   "segments": {
     "welcome": {
       "file": "audio/welcome.wav",
-      "durationMs": 13565,
-      "generationSha256": "7ffc15d5e8b9cf35f19da3a1344c9133e292ef7a1fb20603f7789022477153bc"
+      "durationMs": 15152,
+      "generationSha256": "28d54dba7c82f72d02519565686cafd957651a75ad0e674ad118d31570fc86fa"
     },
     "identity": {
       "file": "audio/identity.wav",
-      "durationMs": 13168,
-      "generationSha256": "7ffc15d5e8b9cf35f19da3a1344c9133e292ef7a1fb20603f7789022477153bc"
+      "durationMs": 15344,
+      "generationSha256": "28d54dba7c82f72d02519565686cafd957651a75ad0e674ad118d31570fc86fa"
     },
     "availability": {
       "file": "audio/availability.wav",
-      "durationMs": 13704,
-      "generationSha256": "7ffc15d5e8b9cf35f19da3a1344c9133e292ef7a1fb20603f7789022477153bc"
+      "durationMs": 14155,
+      "generationSha256": "28d54dba7c82f72d02519565686cafd957651a75ad0e674ad118d31570fc86fa"
     },
     "practical": {
       "file": "audio/practical.wav",
-      "durationMs": 26413,
-      "generationSha256": "7ffc15d5e8b9cf35f19da3a1344c9133e292ef7a1fb20603f7789022477153bc"
+      "durationMs": 27217,
+      "generationSha256": "28d54dba7c82f72d02519565686cafd957651a75ad0e674ad118d31570fc86fa"
     },
     "save": {
       "file": "audio/save.wav",
-      "durationMs": 13184,
-      "generationSha256": "7ffc15d5e8b9cf35f19da3a1344c9133e292ef7a1fb20603f7789022477153bc"
+      "durationMs": 13716,
+      "generationSha256": "28d54dba7c82f72d02519565686cafd957651a75ad0e674ad118d31570fc86fa"
     },
     "change": {
       "file": "audio/change.wav",
-      "durationMs": 17583,
-      "generationSha256": "7ffc15d5e8b9cf35f19da3a1344c9133e292ef7a1fb20603f7789022477153bc"
+      "durationMs": 18192,
+      "generationSha256": "28d54dba7c82f72d02519565686cafd957651a75ad0e674ad118d31570fc86fa"
     },
     "result": {
       "file": "audio/result.wav",
-      "durationMs": 13704,
-      "generationSha256": "7ffc15d5e8b9cf35f19da3a1344c9133e292ef7a1fb20603f7789022477153bc"
+      "durationMs": 15705,
+      "generationSha256": "28d54dba7c82f72d02519565686cafd957651a75ad0e674ad118d31570fc86fa"
     }
   }
 }

@@ -1,0 +1,29 @@
+{
+  "updatedAt": "2026-10-06T17:07:24.635Z",
+  "requested": [
+    "SHIFT_TIMELINE_QUICK_ACTIONS",
+    "SHIFT_WAITLIST_OFFER",
+    "SHIFT_APPROVAL",
+    "SHIFT_ELIGIBILITY_RULES"
+  ],
+  "active": null,
+  "scope": "Narration only, not capture, MP4 synchronization or completion",
+  "results": [
+    {
+      "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
+      "status": "source-audited"
+    },
+    {
+      "id": "SHIFT_WAITLIST_OFFER",
+      "status": "source-audited"
+    },
+    {
+      "id": "SHIFT_APPROVAL",
+      "status": "source-audited"
+    },
+    {
+      "id": "SHIFT_ELIGIBILITY_RULES",
+      "status": "source-audited"
+    }
+  ]
+}

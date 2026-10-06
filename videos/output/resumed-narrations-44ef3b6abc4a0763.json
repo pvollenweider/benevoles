@@ -1,0 +1,34 @@
+{
+  "updatedAt": "2026-10-06T17:13:14.101Z",
+  "requested": [
+    "MEMBERS_MANAGEMENT",
+    "MEMBERS_IMPORT",
+    "MEMBERS_INVITATIONS",
+    "MEMBERS_REMINDERS",
+    "SHIFT_NIGHT_DST"
+  ],
+  "active": null,
+  "scope": "Narration only, not capture, MP4 synchronization or completion",
+  "results": [
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "status": "audit-required"
+    },
+    {
+      "id": "MEMBERS_IMPORT",
+      "status": "source-audited"
+    },
+    {
+      "id": "MEMBERS_INVITATIONS",
+      "status": "source-audited"
+    },
+    {
+      "id": "MEMBERS_REMINDERS",
+      "status": "source-audited"
+    },
+    {
+      "id": "SHIFT_NIGHT_DST",
+      "status": "source-audited"
+    }
+  ]
+}

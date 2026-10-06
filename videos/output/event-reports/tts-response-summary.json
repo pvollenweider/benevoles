@@ -1,13 +1,13 @@
 {
-  "receivedAt": "2026-10-05T16:47:41.274Z",
+  "receivedAt": "2026-10-06T17:14:34.557Z",
   "status": "completed",
   "usage": {
-    "total_tokens": 8118,
-    "total_input_tokens": 1302,
+    "total_tokens": 8105,
+    "total_input_tokens": 1256,
     "input_tokens_by_modality": [
       {
         "modality": "text",
-        "tokens": 1101
+        "tokens": 1055
       },
       {
         "modality": "audio",
@@ -15,22 +15,22 @@
       }
     ],
     "total_cached_tokens": 0,
-    "total_output_tokens": 6816,
+    "total_output_tokens": 6849,
     "output_tokens_by_modality": [
       {
         "modality": "audio",
-        "tokens": 6816
+        "tokens": 6849
       }
     ],
     "total_tool_use_tokens": 0,
     "total_thought_tokens": 0,
-    "raw_prompt_token": 828,
+    "raw_prompt_token": 718,
     "model_invocation_token_counts": [
       {
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 363
+            "tokens": 294
           },
           {
             "modality": "audio",
@@ -40,7 +40,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1575
+            "tokens": 1324
           }
         ]
       },
@@ -48,7 +48,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1045
+            "tokens": 983
           },
           {
             "modality": "audio",
@@ -58,7 +58,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2611
+            "tokens": 2712
           }
         ]
       },
@@ -66,7 +66,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1000
+            "tokens": 963
           },
           {
             "modality": "audio",
@@ -76,7 +76,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2757
+            "tokens": 2819
           }
         ]
       }
@@ -86,7 +86,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 363
+            "tokens": 294
           },
           {
             "modality": "audio",
@@ -96,7 +96,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1575
+            "tokens": 1324
           }
         ]
       },
@@ -104,7 +104,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1045
+            "tokens": 983
           },
           {
             "modality": "audio",
@@ -114,7 +114,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2611
+            "tokens": 2712
           }
         ]
       },
@@ -122,7 +122,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 1000
+            "tokens": 963
           },
           {
             "modality": "audio",
@@ -132,7 +132,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2757
+            "tokens": 2819
           }
         ]
       }
@@ -144,7 +144,7 @@
       "content": [
         {
           "type": "audio",
-          "encodedLength": 17454556
+          "encodedLength": 17541592
         }
       ]
     }
