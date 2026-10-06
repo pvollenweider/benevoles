@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T20:51:34.032Z",
-  "videoSha256": "3e2b054ce139ced7f32f4059559c36ac89bc83cb334bbe34e341997d8f994942",
+  "reviewedAt": "2026-10-06T07:23:57.892Z",
+  "videoSha256": "581346aebe0397c4a562745c5eafe7ad692c94c626291ecc7f0013c2726e7b84",
   "promptSha256": "d164943b580685aff2e1c68d8a061ecf70ac2c1a585ab2c2e0e3cddd473421ea",
-  "clipSha256": "79e08d2e27ee9ba1145b8aaa5e582f3b23dd7ef3abeb2810e4ed5dd539e5a2b6",
+  "clipSha256": "35d833eebbd68cd174d7599a864efa5d72b7b8e06c173d73dec17207723d7311",
   "scene": "availability",
   "review": {
-    "heardOpening": "Pour chercher de l'aide, regardons les disponibilités",
+    "heardOpening": "Pour chercher de l'aide",
     "checkpoints": [
       {
         "spokenSeconds": 1.2,
         "spoken": "regardons les disponibilités générales dans les membres",
         "visibleSeconds": 2,
-        "visible": "Navigation vers l'onglet Membres affichant la liste",
+        "visible": "Navigation vers la page Membres avec la liste des membres",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.1,
+        "spokenSeconds": 5,
         "spoken": "Zoé a indiqué le matin avec une remarque",
-        "visibleSeconds": 4.8,
-        "visible": "Filtre sur Zoé montrant sa disponibilité matin et son commentaire",
+        "visibleSeconds": 4.5,
+        "visible": "Filtre sur le prénom Zoé affichant sa ligne et sa note",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.6,
-        "spoken": "Regardons aussi ses inscriptions pour éviter un chevauchement",
+        "spokenSeconds": 15.8,
+        "spoken": "Regardons aussi ses inscriptions",
         "visibleSeconds": 17.5,
-        "visible": "Ouverture de la page d'activité et inscriptions de Zoé",
+        "visible": "Ouverture de la page Activité de Zoé montrant ses inscriptions",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Diction fluide et ton calme adapté au tutoriel."
+      "observation": "Élocution claire et posée, ton neutre et explicatif."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

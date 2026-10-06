@@ -1,0 +1,33 @@
+{
+  "locatedAt": "2026-10-06T07:32:18.193Z",
+  "masterSha256": "c92384c59574280ed9af4ab912817552397a044f0f38aca73f66249df01454d8",
+  "totalSeconds": 99.76,
+  "cuts": [
+    {
+      "id": "prepare",
+      "seconds": 16.7881875
+    },
+    {
+      "id": "archive",
+      "seconds": 30.371417
+    },
+    {
+      "id": "delete-open",
+      "seconds": 44.8045205
+    },
+    {
+      "id": "backup",
+      "seconds": 59.151187500000006
+    },
+    {
+      "id": "confirm",
+      "seconds": 72.58491649999999
+    },
+    {
+      "id": "result",
+      "seconds": 86.074104
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

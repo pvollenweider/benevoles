@@ -1,5 +1,11 @@
 # Ajouter et modifier un créneau dans le détail
 
+Reprise du 6 octobre : les informations pratiques sont dictées et saisies
+dans le même ordre, avec une saisie lisible : rendez-vous, consigne, contact,
+téléphone fictif puis GPS. Après l'enregistrement, ouvrir réellement l'éditeur
+détaillé pour montrer les consignes, plutôt que laisser le planning seul.
+La narration continue doit être régénérée après ce changement de transcript.
+
 **Identifiant stable :** `SHIFT_CREATE_EDIT_DETAIL`
 
 ## Démonstration

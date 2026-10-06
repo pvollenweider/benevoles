@@ -1,0 +1,12 @@
+{
+  "anchor": "Quand l’organisateur a activé une liste d’attente, un créneau complet reste",
+  "windowStart": 18.903000000000006,
+  "result": {
+    "found": true,
+    "startSeconds": 30.04,
+    "wordsHeard": "Quand l’organisateur a activé une liste d’attente, un créneau complet reste"
+  },
+  "onset": 48.943000000000005,
+  "proposedCut": 48.903375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

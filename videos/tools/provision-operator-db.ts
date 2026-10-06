@@ -6,6 +6,9 @@ import { spawn } from "node:child_process"
 import path from "node:path"
 
 async function main() {
+  const copy = process.argv[2]
+  if (copy && !/^\/(?:private\/)?tmp\/benevoles-video-production\.[A-Za-z0-9]+$/.test(copy)) throw new Error("Only the disposable compiled video project is accepted")
+  const project = copy ? path.resolve(copy) : process.cwd()
   const source = new URL(process.env.DATABASE_URL ?? "")
   if (!["localhost", "127.0.0.1", "[::1]"].includes(source.hostname) || source.port !== "45433" || source.pathname !== "/benevoles_video") throw new Error("Dedicated local video PostgreSQL required")
   const target = new URL(source)
@@ -32,7 +35,7 @@ async function main() {
       if (ownership.rowCount !== 1 || ownership.rows[0].purpose !== "benevol-masterclass-53-synthetic-only") throw new Error("Operator fixture marker differs")
     }
     const code = await new Promise<number>((resolve, reject) => {
-      const child = spawn(process.execPath, [path.resolve("node_modules/prisma/build/index.js"), "migrate", "deploy"], { env: { ...process.env, DATABASE_URL: target.href }, stdio: "inherit" })
+      const child = spawn(process.execPath, [path.join(project, "node_modules/prisma/build/index.js"), "migrate", "deploy"], { cwd: project, env: { ...process.env, DATABASE_URL: target.href }, stdio: "inherit" })
       child.on("error", reject)
       child.on("exit", result => resolve(result ?? 1))
     })

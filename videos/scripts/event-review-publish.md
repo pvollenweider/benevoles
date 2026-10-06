@@ -1,5 +1,11 @@
 # Vérifier, prévisualiser et publier
 
+Reprise du 6 octobre : la saisie de l'identité fictive (Alex Martin, email et
+téléphone de démonstration), du t-shirt et des deux cases appartient au chapitre
+du formulaire. Le chapitre suivant commence sur le bouton de simulation puis
+montre aussitôt la confirmation et l'email. Ne pas annoncer leur résultat pendant
+la saisie. La voix continue est à régénérer après ce changement de transcript.
+
 **Identifiant stable :** `EVENT_REVIEW_PUBLISH`
 
 ## Utilité

@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T06:27:08.226Z",
+  "videoSha256": "820b278d07f2b830d9b9d838e31315878a3fdfe8836b4e1b04fa853ca4ce11ce",
+  "promptSha256": "c149f40e92f10695c0cfb77bdc6f25f8deb3f5fe1f6bd6130a74cac468311a46",
+  "clipSha256": "2c275c514e5ca12bc3adfbc088ca64d29467df0005065bf09eab847f9d503750",
+  "scene": "activate",
+  "review": {
+    "heardOpening": "La personne invitée ouvre son nouveau lien",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La personne invitée ouvre son nouveau lien dans sa propre session",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page de création de mot de passe",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "Elle choisit son mot de passe et termine l'activation",
+        "visibleSeconds": 4.5,
+        "visible": "Saisie du mot de passe puis confirmation et validation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Connectons-nous ensuite avec ce nouveau compte",
+        "visibleSeconds": 11.5,
+        "visible": "Formulaire d'authentification complété et validé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "nous arrivons dans son organisation, encore sans événement",
+        "visibleSeconds": 15.8,
+        "visible": "Affichage de la vue Événements de l'organisation",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "Revenons au détail côté opérateur pour vérifier que le compte apparaît actif",
+        "visibleSeconds": 17.5,
+        "visible": "Retour à la vue opérateur avec le statut actif affiché",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:13, l'arrivée dans l'organisation est annoncée alors que la connexion est encore en cours de saisie jusqu'à 00:16."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, conforme aux attentes."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

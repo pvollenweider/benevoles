@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:00:49.626Z",
+  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
+  "promptSha256": "05a82ed04ed9b86773ffd953217742a9454cf50c5afbd8827500819e76ed3bbc",
+  "clipSha256": "552b2b2c7de5c5e56018b63adcced02b163bb463ecee8240093305763f5d09f1",
+  "scene": "remove",
+  "review": {
+    "heardOpening": "Quand la responsabilité change",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "retire la personne de ce poste et confirme",
+        "visibleSeconds": 2.2,
+        "visible": "Clic sur 'Retirer' pour Élodie Rochat puis confirmation dans la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Son ancien lien ne donne alors plus accès à cette équipe",
+        "visibleSeconds": 8.7,
+        "visible": "Affichage de la page 'Lien introuvable'",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 13.2,
+        "spoken": "Tu peux ensuite désigner la nouvelle personne",
+        "visibleSeconds": 14,
+        "visible": "L'interface reste figée sur l'écran d'erreur 'Lien introuvable'",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "À partir de 00:13, l'ajout d'une nouvelle personne n'est pas illustré, l'écran restant bloqué sur 'Lien introuvable'."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

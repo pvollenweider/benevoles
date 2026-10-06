@@ -1,0 +1,12 @@
+{
+  "anchor": "Le planning se lit par journée et par poste. L’axe horizontal",
+  "windowStart": 40.476,
+  "result": {
+    "found": true,
+    "startSeconds": 30.7,
+    "wordsHeard": "Le planning se lit par journée et par poste. L’axe horizontal"
+  },
+  "onset": 71.176,
+  "proposedCut": 70.47562500000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

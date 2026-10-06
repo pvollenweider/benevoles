@@ -1,0 +1,12 @@
+{
+  "anchor": "L’association a ajouté ses questions. La taille de t-shirt est obligatoire,",
+  "windowStart": 25.238,
+  "result": {
+    "found": true,
+    "startSeconds": 30.4,
+    "wordsHeard": "L'association a ajouté ses questions"
+  },
+  "onset": 55.638,
+  "proposedCut": 55.2383125,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -127,9 +127,10 @@ async function main() {
 
   if (manifest.continuousNarration) {
     const master = path.join(dir, "continuous-narration.wav")
-    const transcript = manifest.segments.map((segment) => segment.transcript).join(manifest.continuousPauseTags === false ? "\n\n" : "\n\n<short pause>\n\n")
+    if (manifest.continuousPauseTags === true) throw new Error("Inline pause tags can be spoken aloud; use plain paragraph breaks")
+    const transcript = manifest.segments.map((segment) => segment.transcript).join("\n\n")
     const generationSha256 = createHash("sha256")
-      .update(JSON.stringify({ transcript, style: manifest.voiceStyle, model, voice, promptVersion: manifest.continuousPauseTags === false ? 3 : 2 }))
+      .update(JSON.stringify({ transcript, style: manifest.voiceStyle, model, voice, promptVersion: 3 }))
       .digest("hex")
     const files = manifest.segments.map((segment) => path.join(dir, `${segment.id}.wav`))
     const cached = !force && manifest.segments.every((segment, index) =>

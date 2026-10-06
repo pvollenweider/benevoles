@@ -1,51 +1,64 @@
 {
   "id": "EVENT_DUPLICATE",
   "slug": "event-duplicate",
-  "validatedAt": "2026-10-04T15:59:37.965Z",
+  "validatedAt": "2026-10-06T08:48:48.448Z",
   "continuousNarration": true,
+  "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 100440,
+  "captureMs": 161120,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 11232,
-      "audioMs": 11230,
+      "visualMs": 12074,
+      "audioMs": 12072,
       "driftMs": 2
     },
     {
       "id": "identity",
-      "visualMs": 12303,
-      "audioMs": 12301,
-      "driftMs": 2
+      "visualMs": 13160,
+      "audioMs": 13157,
+      "driftMs": 3
     },
     {
       "id": "choices",
-      "visualMs": 16763,
-      "audioMs": 16759,
-      "driftMs": 4
-    },
-    {
-      "id": "leaders",
-      "visualMs": 13837,
-      "audioMs": 13836,
-      "driftMs": 1
-    },
-    {
-      "id": "summary",
-      "visualMs": 13635,
-      "audioMs": 13634,
-      "driftMs": 1
-    },
-    {
-      "id": "create",
-      "visualMs": 15038,
-      "audioMs": 15038,
+      "visualMs": 16814,
+      "audioMs": 16814,
       "driftMs": 0
     },
     {
+      "id": "leaders",
+      "visualMs": 14142,
+      "audioMs": 14142,
+      "driftMs": 0
+    },
+    {
+      "id": "summary",
+      "visualMs": 12445,
+      "audioMs": 12443,
+      "driftMs": 2
+    },
+    {
+      "id": "create",
+      "visualMs": 15802,
+      "audioMs": 15802,
+      "driftMs": 0
+    },
+    {
+      "id": "copied-details",
+      "visualMs": 17684,
+      "audioMs": 17682,
+      "driftMs": 2
+    },
+    {
+      "id": "leader-emails",
+      "visualMs": 22552,
+      "audioMs": 22551,
+      "driftMs": 1
+    },
+    {
       "id": "result",
-      "visualMs": 12883,
-      "audioMs": 12882,
+      "visualMs": 15457,
+      "audioMs": 15456,
       "driftMs": 1
     }
   ],

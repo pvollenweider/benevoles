@@ -1,52 +1,53 @@
 {
   "id": "EVENT_ARCHIVE_DELETE",
   "slug": "event-archive-delete",
-  "validatedAt": "2026-10-04T16:30:20.629Z",
+  "validatedAt": "2026-10-06T07:48:39.582Z",
   "continuousNarration": true,
+  "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 98000,
+  "captureMs": 104040,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 13698,
-      "audioMs": 13694,
-      "driftMs": 4
+      "visualMs": 16789,
+      "audioMs": 16788,
+      "driftMs": 1
     },
     {
       "id": "prepare",
-      "visualMs": 13412,
-      "audioMs": 13409,
-      "driftMs": 3
+      "visualMs": 13594,
+      "audioMs": 13583,
+      "driftMs": 11
     },
     {
       "id": "archive",
-      "visualMs": 13802,
-      "audioMs": 13800,
-      "driftMs": 2
+      "visualMs": 14434,
+      "audioMs": 14433,
+      "driftMs": 1
     },
     {
       "id": "delete-open",
-      "visualMs": 13048,
-      "audioMs": 13048,
-      "driftMs": 0
+      "visualMs": 14348,
+      "audioMs": 14347,
+      "driftMs": 1
     },
     {
       "id": "backup",
-      "visualMs": 12525,
-      "audioMs": 12523,
-      "driftMs": 2
+      "visualMs": 13435,
+      "audioMs": 13434,
+      "driftMs": 1
     },
     {
       "id": "confirm",
-      "visualMs": 15379,
-      "audioMs": 15378,
+      "visualMs": 13490,
+      "audioMs": 13489,
       "driftMs": 1
     },
     {
       "id": "result",
-      "visualMs": 11829,
-      "audioMs": 11828,
-      "driftMs": 1
+      "visualMs": 13686,
+      "audioMs": 13686,
+      "driftMs": 0
     }
   ],
   "issues": []

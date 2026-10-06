@@ -1,0 +1,33 @@
+{
+  "locatedAt": "2026-10-06T07:38:41.793Z",
+  "masterSha256": "4139e8bb6ca6366ecf5b00d981351ebe201420f2a0bf016898a20db53506228b",
+  "totalSeconds": 81,
+  "cuts": [
+    {
+      "id": "range",
+      "seconds": 13.3393955
+    },
+    {
+      "id": "duration",
+      "seconds": 24.678625
+    },
+    {
+      "id": "preview",
+      "seconds": 35.176354
+    },
+    {
+      "id": "create",
+      "seconds": 46.870625000000004
+    },
+    {
+      "id": "adjust",
+      "seconds": 58.919375
+    },
+    {
+      "id": "result",
+      "seconds": 71.495875
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

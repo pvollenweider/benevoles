@@ -1,0 +1,12 @@
+{
+  "anchor": "Tu peux maintenant lire l’événement avant de t’engager : contrôler le",
+  "windowStart": 123.00199999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 30.36,
+    "wordsHeard": "Tu peux maintenant lire l'événement avant de t'engager : contrôler le"
+  },
+  "onset": 153.36199999999997,
+  "proposedCut": 153.0017915,
+  "note": "Proposal only; recut then independently audit before capture"
+}

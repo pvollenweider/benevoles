@@ -1,0 +1,12 @@
+{
+  "anchor": "Ce planning affiche Journée chargée : Accueil et Logistique font neuf",
+  "windowStart": 87.256,
+  "result": {
+    "found": true,
+    "startSeconds": 27.36,
+    "wordsHeard": "Ce planning affiche Journée chargée"
+  },
+  "onset": 114.616,
+  "proposedCut": 114.103875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

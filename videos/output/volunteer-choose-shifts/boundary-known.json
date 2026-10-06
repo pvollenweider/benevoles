@@ -1,0 +1,12 @@
+{
+  "anchor": "Depuis son lien personnel, Camille retrouve automatiquement les créneaux qu’elle possède",
+  "windowStart": 74.904,
+  "result": {
+    "found": true,
+    "startSeconds": 25.5,
+    "wordsHeard": "Depuis son lien personnel, Camille retrouve automatiquement les créneaux qu’elle possède"
+  },
+  "onset": 100.404,
+  "proposedCut": 100.059479,
+  "note": "Proposal only; recut then independently audit before capture"
+}

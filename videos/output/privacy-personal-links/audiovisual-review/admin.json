@@ -1,50 +1,59 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T21:44:00.062Z",
-  "videoSha256": "74ad8b7010a5231a83be946771cc9efc6fe7565c20bad30cecf13062260ad851",
+  "reviewedAt": "2026-10-06T07:23:28.677Z",
+  "videoSha256": "f58091c20cbe8c06f1bd189d798ea38b8369e6bc18aaba29f19086cafde497a1",
   "promptSha256": "75386a5c865ed48115ad357893fb5962ad4c840474d9747e73cb8f05ba434377",
-  "clipSha256": "9eee366cac7198d8410fc5755966436de52baedbb681f3a0095c75912d498312",
+  "clipSha256": "f0517defe8361e8c987018cd9eba2ee068b344b80d0e9710724fe3ac61ee558d",
   "scene": "admin",
   "review": {
     "heardOpening": "L'organisateur travaille dans son administration",
     "checkpoints": [
       {
-        "spokenSeconds": 5,
+        "spokenSeconds": 5.2,
         "spoken": "Dans les inscriptions, il retrouve les personnes",
-        "visibleSeconds": 2,
+        "visibleSeconds": 2.2,
+        "visible": "Onglet Inscriptions affiché avec la liste des bénévoles et réponses",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10,
+        "spokenSeconds": 10.3,
         "spoken": "Dans les membres, il peut consulter les disponibilités",
-        "visibleSeconds": 10,
+        "visibleSeconds": 10.5,
+        "visible": "Navigation vers l'onglet Membres affichant la liste des membres",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15,
+        "spokenSeconds": 15.1,
         "spoken": "Regardons la fiche de Léa",
-        "visibleSeconds": 11.5,
-        "sync": "early",
-        "severity": "minor"
+        "visibleSeconds": 14.8,
+        "visible": "Ouverture du volet d'édition de Léa avec ses notes internes",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 19.5,
+        "spokenSeconds": 19.8,
         "spoken": "Sa page personnelle ne montre pas les notes internes",
-        "visibleSeconds": 18.5,
+        "visibleSeconds": 19,
+        "visible": "Affichage de la page Mes inscriptions de Léa sans les notes internes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.5,
+        "spoken": "Le responsable reçoit les contacts de son équipe",
+        "visibleSeconds": 21.2,
+        "visible": "Affichage de la vue Responsable Accueil avec les coordonnées restreintes",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "00:11 : la modale de la fiche de Léa s'ouvre quelques secondes avant son annonce orale à 00:15.",
-      "00:22 : l'accès ou la vue spécifique au responsable d'équipe mentionnée n'est pas illustrée à l'écran."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide, posée et intelligible tout au long de l'extrait."
+      "observation": "Élocution claire et posée, ton didactique bien calibré."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

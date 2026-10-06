@@ -1,0 +1,12 @@
+{
+  "anchor": "Relis maintenant les jours et les heures. Le créneau de nuit",
+  "windowStart": 64.64699999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 27.2,
+    "wordsHeard": "Relis maintenant les jours et les heures. Le créneau de nuit"
+  },
+  "onset": 91.847,
+  "proposedCut": 91.9743125,
+  "note": "Proposal only; recut then independently audit before capture"
+}

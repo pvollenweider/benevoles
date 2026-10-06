@@ -1,12 +1,12 @@
 {
-  "checkedAt": "2026-10-05T22:01:20.350Z",
+  "checkedAt": "2026-10-06T06:25:30.979Z",
   "audiovisualValidated": false,
   "localDatabaseOnly": true,
   "isolatedSmtpOnly": true,
   "createdPendingOrganization": true,
   "actualInviteMails": [
-    "58xzl6UDN2nXHvLGwsCvQ5",
-    "2M4FAONei5k5gRw8y1hBF5"
+    "7eQuldf2Yojof4zi6xPGmS",
+    "6f1IdZFAGkLGEBWQIep5pa"
   ],
   "oldInviteRefused": true,
   "actualActivationAndLogin": true,
@@ -18,10 +18,10 @@
   "sessionRestoredAfterReactivation": true,
   "explicitContextSelection": true,
   "realHealthWithoutInventedJobs": true,
-  "actualTestEmail": "48swkEGu4jyk9Il6kfgm8g",
+  "actualTestEmail": "2XAiBF3fDdYgfThNYBwjNJ",
   "actualBroadcastEmails": [
-    "2o3zpbuBRIucFVv0c3SMwu",
-    "0dFVFMOuWji7cbvUaRtmJw"
+    "5dMawuWYiD2OB5wQWNqFdR",
+    "77jfBoOXNFmnM4IEVcprSf"
   ],
   "actualUnsubscribe": true,
   "exactDisposableDeletion": true,

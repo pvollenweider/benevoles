@@ -1,0 +1,12 @@
+{
+  "anchor": "D’autres missions ont une règle particulière. Chauffeur navette affiche Sur validation",
+  "windowStart": 35.72,
+  "result": {
+    "found": true,
+    "startSeconds": 30.2,
+    "wordsHeard": "D’autres missions ont une règle particulière. Chauffeur navette affiche sur validation"
+  },
+  "onset": 65.92,
+  "proposedCut": 65.7199375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

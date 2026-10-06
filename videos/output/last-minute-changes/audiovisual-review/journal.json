@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T20:52:12.532Z",
-  "videoSha256": "3e2b054ce139ced7f32f4059559c36ac89bc83cb334bbe34e341997d8f994942",
+  "reviewedAt": "2026-10-06T07:24:58.582Z",
+  "videoSha256": "581346aebe0397c4a562745c5eafe7ad692c94c626291ecc7f0013c2726e7b84",
   "promptSha256": "797e08f0dfd99a4d321948cf0f27f8632a19e7d5fddcfbbf3c8c36af7ad8e2a7",
-  "clipSha256": "01d1fd92981f0cda2f80ee24c5fe18c60a9eac6b03ef5f759e1a2940528f9e4a",
+  "clipSha256": "eca0f183b97d8939d2af8276a39a2e5961fe6a874c9f4f689b5a45eb27620da5",
   "scene": "journal",
   "review": {
     "heardOpening": "Pour comprendre l'imprévu après coup",
@@ -12,23 +12,23 @@
         "spokenSeconds": 2.5,
         "spoken": "ouvrons le journal de l'événement",
         "visibleSeconds": 2,
-        "visible": "Navigation vers la page du journal de l'événement",
+        "visible": "Affichage de la vue Journal sous l'onglet Événements",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
+        "spokenSeconds": 4.5,
         "spoken": "Retrouvons le retrait, l'offre et son acceptation",
-        "visibleSeconds": 6,
-        "visible": "Défilement de la liste des actions montrant l'offre et la confirmation",
+        "visibleSeconds": 5,
+        "visible": "Défilement de la liste des entrées d'historique",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.4,
+        "spokenSeconds": 11,
         "spoken": "Le mode Récit peut montrer les conséquences reliées à une action",
         "visibleSeconds": 12.5,
-        "visible": "Sélection de l'onglet Récit puis ouverture d'un enchaînement causal",
+        "visible": "Sélection de l'onglet Récit et ouverture d'un fil d'événements",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, ton pédagogique adapté."
+      "observation": "Élocution claire et posée, ton régulier adapté à la démonstration."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

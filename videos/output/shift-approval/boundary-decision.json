@@ -1,0 +1,12 @@
+{
+  "anchor": "Accepter confirme le créneau et envoie un email. Refuser libère la",
+  "windowStart": 27.056000000000004,
+  "result": {
+    "found": true,
+    "startSeconds": 30.5,
+    "wordsHeard": "Accepter confirme le créneau et envoie un email. Refuser libère la"
+  },
+  "onset": 57.556000000000004,
+  "proposedCut": 57.0564795,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,12 +1,12 @@
 {
   "anchor": "Envoyons maintenant l'invitation et ouvrons le vrai message reçu dans la",
-  "windowStart": 44.954,
+  "windowStart": 36.64500000000001,
   "result": {
     "found": true,
-    "startSeconds": 14.8,
+    "startSeconds": 22.5,
     "wordsHeard": "Envoyons"
   },
-  "onset": 59.754000000000005,
-  "proposedCut": 59.9536665,
+  "onset": 59.14500000000001,
+  "proposedCut": 59.176229000000006,
   "note": "Proposal only; recut then independently audit before capture"
 }

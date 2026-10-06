@@ -1,0 +1,12 @@
+{
+  "anchor": "Choisis Accueil et continue. Nous remplissons le prénom, le nom, l’email",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 18.14,
+    "wordsHeard": "Choisis Accueil et continue. Nous remplissons le prénom, le nom, l’email"
+  },
+  "onset": 18.14,
+  "proposedCut": 18.1865625,
+  "note": "Proposal only; recut then independently audit before capture"
+}

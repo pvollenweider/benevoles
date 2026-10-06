@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:14:23.069Z",
+  "videoSha256": "ad9e0295903b3a397ce87e15f61fada476799eb2fabd180a3d67e22fd5ad9e84",
+  "promptSha256": "3b156e5291f169ed0081bfbd990f1bec35337e52a4c01774a8848564f4f187bd",
+  "clipSha256": "7c318c8d1419e6ee37555ba08506dd8f25af6612f5f0b0c22b1c949953e7c1d9",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Le résultat est un événement publié",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le résultat est un événement publié avec son lien public",
+        "visibleSeconds": 0,
+        "visible": "Section Publication affichée avec l'URL à partager",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "son QR code",
+        "visibleSeconds": 0,
+        "visible": "Option QR code visible sous l'encadré Publication",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "ses outils d’invitation",
+        "visibleSeconds": 0,
+        "visible": "Lien Inviter des membres affiché",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et conforme au texte."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

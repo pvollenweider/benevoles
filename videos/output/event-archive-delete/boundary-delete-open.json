@@ -1,0 +1,12 @@
+{
+  "anchor": "La suppression définitive n’apparaît qu’après archivage et seulement pour un propriétaire",
+  "windowStart": 20.826,
+  "result": {
+    "found": true,
+    "startSeconds": 24,
+    "wordsHeard": "La suppression définitive n’apparaît qu’après archivage et seulement pour un propriétaire"
+  },
+  "onset": 44.826,
+  "proposedCut": 44.8045205,
+  "note": "Proposal only; recut then independently audit before capture"
+}

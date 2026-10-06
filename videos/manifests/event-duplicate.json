@@ -22,6 +22,7 @@
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
+  "continuousPauseTags": false,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
   "viewport": {
     "width": 1280,
@@ -56,8 +57,18 @@
     },
     {
       "id": "create",
-      "transcript": "Créons la copie. Elle s’ouvre dans l’administration avec le statut Brouillon et les inscriptions fermées. Les dates ont été décalées, les créneaux sont vides, les pages sont présentes et les responsables choisis ont reçu leur invitation dans la boîte de démonstration.",
+      "transcript": "Créons la copie. Elle s’ouvre dans l’administration avec le statut Brouillon. Vérifions ses réglages : les inscriptions sont fermées. La nouvelle édition n'est donc pas encore proposée aux bénévoles. Nous pouvons préparer et relire tranquillement cette copie avant de la publier.",
       "fallbackDurationMs": 25000
+    },
+    {
+      "id": "copied-details",
+      "transcript": "Ouvrons le planning de la nouvelle édition. Les dates ont été décalées et les créneaux repartent sans inscription. Nous retrouvons les postes et leurs horaires, mais aucun engagement de l'année précédente. Les pages personnalisées sont également reprises : ouvrons leur liste dans cette nouvelle édition pour vérifier leur présence.",
+      "fallbackDurationMs": 28000
+    },
+    {
+      "id": "leader-emails",
+      "transcript": "Les responsables que nous avons conservés ont chacun reçu une nouvelle invitation. Ouvrons le message réellement arrivé dans la boîte de formation. Il nomme la nouvelle édition et contient un nouveau lien personnel de responsable. Cette vérification permet de distinguer l'invitation de la copie et celle de l'événement d'origine.",
+      "fallbackDurationMs": 28000
     },
     {
       "id": "result",

@@ -1,42 +1,43 @@
 {
   "slug": "event-review-publish",
-  "recordedAt": "2026-10-05T10:44:22.976Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T08:12:16.141Z",
   "video": "capture.webm",
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1568,
-      "endMs": 11919
+      "startMs": 1150,
+      "endMs": 11693
     },
     {
       "id": "checks",
-      "startMs": 12370,
-      "endMs": 33916
+      "startMs": 12146,
+      "endMs": 30728
     },
     {
       "id": "preview-start",
-      "startMs": 36079,
-      "endMs": 53810
+      "startMs": 32888,
+      "endMs": 47493
     },
     {
       "id": "preview-form",
-      "startMs": 54262,
-      "endMs": 67756
+      "startMs": 47944,
+      "endMs": 79083
     },
     {
       "id": "preview-result",
-      "startMs": 68208,
-      "endMs": 84372
+      "startMs": 79536,
+      "endMs": 93784
     },
     {
       "id": "publish",
-      "startMs": 84823,
-      "endMs": 102310
+      "startMs": 94241,
+      "endMs": 109689
     },
     {
       "id": "result",
-      "startMs": 102761,
-      "endMs": 116956
+      "startMs": 110141,
+      "endMs": 124623
     }
   ]
 }

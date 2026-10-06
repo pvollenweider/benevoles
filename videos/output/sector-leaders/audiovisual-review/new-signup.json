@@ -1,0 +1,48 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:00:09.651Z",
+  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
+  "promptSha256": "d7a4785fdb221f19602eac61c2ed1d6ef5edad549346966c30b23d068d24809e",
+  "clipSha256": "e5cc114f5e67c4bb03d1b73b5079e4e456d970faaa3fb0512e637484710d558c",
+  "scene": "new-signup",
+  "review": {
+    "heardOpening": "Pour voir comment une équipe évolue",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Nora choisit ce créneau, puis continue vers le formulaire.",
+        "visibleSeconds": 5.8,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Elle renseigne son prénom et son nom, son adresse email et son téléphone.",
+        "visibleSeconds": 8.5,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.1,
+        "spoken": "Elle choisit une taille, accepte la convention",
+        "visibleSeconds": 16.8,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.5,
+        "spoken": "Nous confirmons maintenant : la page indique que son inscription est enregistrée.",
+        "visibleSeconds": 27.5,
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et élocution nette."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

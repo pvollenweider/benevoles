@@ -1,0 +1,16 @@
+{
+  "reviewedAt": "2026-10-06T05:54:46.211Z",
+  "model": "gemini-3.8-flash",
+  "source": "two generated WAV excerpts, audio only",
+  "openingSha256": "a9363a45e14aa125223ea1e595d1824aad2bdb2c9354942b4c84dd1165345dbe",
+  "chapterSha256": "a9363a45e14aa125223ea1e595d1824aad2bdb2c9354942b4c84dd1165345dbe",
+  "generationSha256": "bcf932c31be5df131bd807691b2e7f040cc28b9f19392a242a4d602ea7891d4a",
+  "review": {
+    "consistent": true,
+    "warm": true,
+    "observation": "Le second extrait est identique à l'extrait de référence. La voix féminine conserve un timbre constant, clair et chaleureux tout au long de la narration, sans aucune rupture ni changement de locuteur.",
+    "changes": [],
+    "uncertainty": "Aucune incertitude."
+  },
+  "note": "Automated listening observation; does not replace the original audiovisual report or prove human listening validation"
+}

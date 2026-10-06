@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T06:27:49.730Z",
+  "videoSha256": "820b278d07f2b830d9b9d838e31315878a3fdfe8836b4e1b04fa853ca4ce11ce",
+  "promptSha256": "52ee3458f347d741b5b7ffd5041d5004b3d5c360e6549eb750f1aa7bbe882b71",
+  "clipSha256": "0568be698a974f7eb4f17c1378f92793bdfc2da7c2f84a4229062b47d1b86b39",
+  "scene": "context",
+  "review": {
+    "heardOpening": "Pour travailler dans une organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Depuis son détail, utilisons Gérer",
+        "visibleSeconds": 10.2,
+        "visible": "Affichage de la page de détail puis clic sur le bouton Gérer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "avant d'ouvrir les événements",
+        "visibleSeconds": 12.5,
+        "visible": "Affichage de l'onglet Événements pour Formation Opérateur Parc",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "Nous retrouvons ici ceux du Parc",
+        "visibleSeconds": 13.5,
+        "visible": "L'événement Parc — Fête de formation est affiché dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

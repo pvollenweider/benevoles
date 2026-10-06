@@ -1,0 +1,12 @@
+{
+  "anchor": "Une coupure peut arriver après l'enregistrement. Nicolas choisit la logistique. Cette",
+  "windowStart": 145.209,
+  "result": {
+    "found": true,
+    "startSeconds": 25.18,
+    "wordsHeard": "Une coupure peut arriver après l'enregistrement. Nicolas choisit la logistique. Cette"
+  },
+  "onset": 170.389,
+  "proposedCut": 170.3603335,
+  "note": "Proposal only; recut then independently audit before capture"
+}

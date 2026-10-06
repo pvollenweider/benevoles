@@ -3,6 +3,7 @@
 
 import { readFile } from "node:fs/promises"
 import path from "node:path"
+import type { ProductBuild } from "./product-build"
 
 export type VideoSegment = {
   id: string
@@ -30,7 +31,7 @@ export type VideoManifest = {
   voice: string
   voiceStyle: string
   continuousNarration?: boolean
-  /** Disable inline pause tags if a voice reads a stage direction aloud. */
+  /** Legacy marker: new narration never uses inline pause tags; true is rejected. */
   continuousPauseTags?: boolean
   chapterTitles?: Record<string, string>
   viewport: { width: number; height: number; deviceScaleFactor: number }
@@ -66,6 +67,10 @@ export type Timeline = {
   capturePurpose?: "rehearsal" | "narration-timed"
   recordedAt: string
   video: string
+  product?: ProductBuild
+  captureEnvironment?: { locale: string; timeZone: string; organization: string; scenario: string; viewport: { width: number; height: number }; mobile: boolean }
+  inputAudioVersion?: 1
+  inputEvents?: { kind: "click" | "key"; atMs: number }[]
   cues: { id: string; startMs: number; endMs: number }[]
   portraitFrames?: { startMs: number; endMs: number; width: number; height: number }[]
   detailFrames?: { startMs: number; endMs: number; x: number; y: number; width: number; height: number }[]

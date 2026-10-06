@@ -1,0 +1,12 @@
+{
+  "anchor": "Ouvre la Convention des Bénévoles pour lire le cadre de l’engagement,",
+  "windowStart": 45.081999999999994,
+  "result": {
+    "found": true,
+    "startSeconds": 30.34,
+    "wordsHeard": "Ouvre"
+  },
+  "onset": 75.422,
+  "proposedCut": 75.082458,
+  "note": "Proposal only; recut then independently audit before capture"
+}

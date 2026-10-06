@@ -1,0 +1,12 @@
+{
+  "anchor": "Revenons côté organisation pour vérifier les inscriptions réellement présentes. Une erreur",
+  "windowStart": 225.98399999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 29.68,
+    "wordsHeard": "Revenons"
+  },
+  "onset": 255.664,
+  "proposedCut": 255.2816875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

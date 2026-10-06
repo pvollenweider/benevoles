@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans la liste, le statut indique si les inscriptions sont ouvertes,",
+  "windowStart": 50.033,
+  "result": {
+    "found": true,
+    "startSeconds": 30.36,
+    "wordsHeard": "Dans"
+  },
+  "onset": 80.393,
+  "proposedCut": 80.0328335,
+  "note": "Proposal only; recut then independently audit before capture"
+}

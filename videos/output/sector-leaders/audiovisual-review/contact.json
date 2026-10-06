@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:00:37.296Z",
+  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
+  "promptSha256": "c2a606cd70e6ecac41e2ecb00ed31520a001ad23289873286f75a50b1c3ccff7",
+  "clipSha256": "7a53d59d95c1217e902b463b5882a1cb81492b6372f9bf0e7bf4899b0cd7babc",
+  "scene": "contact",
+  "review": {
+    "heardOpening": "Attention à une autre distinction",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "le contact opérationnel indiqué sur un créneau",
+        "visibleSeconds": 2.2,
+        "visible": "Affichage du formulaire Nouveau créneau et saisie de la Personne de contact",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "doivent joindre sur place",
+        "visibleSeconds": 5,
+        "visible": "Saisie du numéro dans le champ Téléphone du contact",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "renseigne ce contact séparément dans le créneau",
+        "visibleSeconds": 11.5,
+        "visible": "Champs de contact opérationnel visibles et complétés dans les infos pratiques",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

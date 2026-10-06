@@ -1,0 +1,37 @@
+{
+  "locatedAt": "2026-10-06T07:54:38.632Z",
+  "masterSha256": "5ac9ebb0600bf428a1e11ddad28e86c914efebebd2534ce433486a354a38137c",
+  "totalSeconds": 156.36,
+  "cuts": [
+    {
+      "id": "selection",
+      "seconds": 18.123125
+    },
+    {
+      "id": "identity",
+      "seconds": 37.370875
+    },
+    {
+      "id": "questions",
+      "seconds": 55.2383125
+    },
+    {
+      "id": "agreement",
+      "seconds": 75.082458
+    },
+    {
+      "id": "recap",
+      "seconds": 91.9743125
+    },
+    {
+      "id": "workload",
+      "seconds": 114.103875
+    },
+    {
+      "id": "result",
+      "seconds": 137.2000415
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

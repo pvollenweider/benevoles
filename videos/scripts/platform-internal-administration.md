@@ -1,5 +1,45 @@
 # Administrer la plateforme, avec les bons garde-fous
 
+## Reprise du 6 octobre 2026
+
+La vidéo est reprise sur la copie locale compilée de la version actuelle
+`23b2d604a597820a6bd9410e411761ebe71fbd5a`, port 43104, avec la base séparée
+`benevoles_video_operator`. Ses neuf migrations additives manquantes ont été
+appliquées uniquement à cette base marquée de formation.
+
+Les douze chapitres de répétition fonctionnent sur cette version. Une nouvelle
+narration Kore a été produite d'un seul tenant avec Gemini 3.8 Flash TTS et
+les douze découpes ont une reconnaissance indépendante conforme au texte
+courant. Le chapitre du message décrit désormais sa saisie pour laisser le
+temps de la voir. Le message adressé aux administrateurs les vouvoie.
+
+Le MP4 de relecture est généré : `videos/output/platform-internal-administration/platform-internal-administration.mp4`,
+7 min 59 s (478,84 secondes), douze chapitres. Les titres de chapitre précèdent
+la séquence vocale. La page Santé montre un vrai rechargement ; les tâches
+locales inconnues ne sont pas transformées en succès. L'envoi de test, la
+diffusion et son historique sont visibles au moment des explications.
+
+La reconnaissance indépendante du son du MP4 final correspond aux douze
+textes (écart maximal 2,3 %). Les réponses de transcription répétées ou
+incohérentes ont été retentées, pas corrigées à la main. La prise continue
+préserve la même voix Kore d'un chapitre à l'autre.
+
+La vérification audiovisuelle finale reste **non validée** : elle signale quatre
+points. Deux raccords restent à affiner : l'arrivée dans l'organisation est
+annoncée environ trois secondes avant la fin de la connexion, et la conclusion
+parle du contexte opérateur environ quatre secondes avant le retour à sa liste.
+Les deux autres observations demandent une interprétation humaine : le détail
+reste le même écran après changement de slug, mais le recorder vérifie sa vraie
+nouvelle URL, recharge la page et montre le nouvel identifiant (image
+[`identity-85.png`](../evidence/platform-internal-administration/identity-85.png)) ; la phrase initiale de Santé énumère les sections avant leur
+parcours, elle ne demande pas de toutes les montrer simultanément.
+
+Cette livraison est une version de relecture, pas une affirmation de validation
+complète. Les rapports bruts restent conservés sans masquer leurs signalements.
+Aucune publication publique n'est autorisée par cette production interne.
+
+## Historique des préparations
+
 Répétition complète du 6 octobre : les douze chapitres passent avec la ressaisie
 réelle du message. Deux invitations reçues, refus de l'ancien lien, activation
 et connexion, collision et redirection réelle de l'ancien identifiant,
@@ -18,10 +58,11 @@ réellement vide après retour de Mailpit : le script et le recorder expliquent 
 montrent désormais la ressaisie du même message testé. La première narration
 contrôlée ne correspond donc plus au chapitre « broadcast » actuel.
 
-La régénération continue requise est refusée par Gemini : **plafond mensuel de
-dépenses du projet atteint**, HTTP 429, avec renvoi vers AI Studio /spend. Ce n'est
+Lors de la tentative du 5 octobre, la régénération continue était refusée par
+Gemini : **plafond mensuel de dépenses du projet atteint**, HTTP 429, avec renvoi
+vers AI Studio /spend. Ce n'était
 pas une simple temporisation de requêtes ; les crédits disponibles et ce plafond
-sont deux réglages différents. Les répétitions locales continuent. Le recorder
+sont deux réglages différents. Ce blocage est levé lors de la reprise du 6 octobre. Le recorder
 refuse une prise narrée tant que chaque WAV ne correspond pas au script et à sa
 reconnaissance indépendante. Aucune vidéo opérateur finale n'est encore validée.
 

@@ -1,12 +1,12 @@
 {
   "anchor": "Pour travailler dans une organisation, l'opérateur doit la choisir explicitement. Sans",
-  "windowStart": 182.005,
+  "windowStart": 171.865,
   "result": {
     "found": true,
-    "startSeconds": 7.12,
-    "wordsHeard": "Pour travailler dans une organisation, l'opérateur doit la choisir explicitement. Sans"
+    "startSeconds": 16.2,
+    "wordsHeard": "Pour"
   },
-  "onset": 189.125,
-  "proposedCut": 187.96837499999998,
+  "onset": 188.065,
+  "proposedCut": 188.00491649999998,
   "note": "Proposal only; recut then independently audit before capture"
 }

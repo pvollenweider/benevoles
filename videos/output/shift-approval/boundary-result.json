@@ -1,0 +1,12 @@
+{
+  "anchor": "Le mode sur validation évite donc une affectation risquée sans transformer",
+  "windowStart": 54.444,
+  "result": {
+    "found": true,
+    "startSeconds": 29.94,
+    "wordsHeard": "Le mode sur validation évite donc une affectation risquée sans transformer"
+  },
+  "onset": 84.384,
+  "proposedCut": 83.89487500000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

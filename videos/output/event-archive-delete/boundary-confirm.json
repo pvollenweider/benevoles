@@ -1,0 +1,12 @@
+{
+  "anchor": "La confirmation renforcée demande de saisir le titre de l’événement. Tant",
+  "windowStart": 42.584999999999994,
+  "result": {
+    "found": true,
+    "startSeconds": 30.26,
+    "wordsHeard": "La"
+  },
+  "onset": 72.845,
+  "proposedCut": 72.58491649999999,
+  "note": "Proposal only; recut then independently audit before capture"
+}

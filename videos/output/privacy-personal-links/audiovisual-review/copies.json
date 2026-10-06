@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T21:44:16.952Z",
-  "videoSha256": "74ad8b7010a5231a83be946771cc9efc6fe7565c20bad30cecf13062260ad851",
+  "reviewedAt": "2026-10-06T07:24:06.973Z",
+  "videoSha256": "f58091c20cbe8c06f1bd189d798ea38b8369e6bc18aaba29f19086cafde497a1",
   "promptSha256": "736815f4db31c827bb73ccca7eac50d36a26b6c2edccc8c13dd0fe4313fdfd87",
-  "clipSha256": "10fa0c692b9b4f49e582e70ff9715e6aac4e6f6b5144d3ac3c95207ba6174965",
+  "clipSha256": "f88ebd3cdee8c7447b1cf951aed21779500b67263efff8768a2bf8568d08c11e",
   "scene": "copies",
   "review": {
-    "heardOpening": "Sur le terrain, une liste bien choisie",
+    "heardOpening": "Sur le terrain,",
     "checkpoints": [
       {
-        "spokenSeconds": 3,
+        "spokenSeconds": 2.8,
         "spoken": "Ouvrons le rapport prévu pour le stand",
-        "visibleSeconds": 3.5,
-        "visible": "Clic sur le rapport Planning par jour puis affichage du document",
+        "visibleSeconds": 3.8,
+        "visible": "Clic sur Planning par jour et ouverture du rapport imprimable",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.2,
+        "spokenSeconds": 7.1,
         "spoken": "Comparons-le au CSV des membres",
-        "visibleSeconds": 8.5,
-        "visible": "Navigation vers la liste des membres et clic sur Exporter les membres",
+        "visibleSeconds": 8,
+        "visible": "Accès à la section Membres puis clic sur Exporter les membres (CSV)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.5,
+        "spokenSeconds": 10.6,
         "spoken": "ce fichier comporte notamment des coordonnées et des notes internes",
-        "visibleSeconds": 12,
-        "visible": "Tableau de visualisation du CSV montrant les coordonnées puis défilement vers les notes",
+        "visibleSeconds": 11.8,
+        "visible": "Affichage des données CSV avec défilement vers les colonnes de notes",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, claire et bien synchronisée avec les actions à l'écran."
+      "observation": "Débit régulier et intonation pédagogique adaptée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

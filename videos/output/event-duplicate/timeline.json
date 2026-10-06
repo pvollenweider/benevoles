@@ -1,42 +1,200 @@
 {
   "slug": "event-duplicate",
-  "recordedAt": "2026-10-04T15:59:32.984Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T08:47:50.644Z",
   "video": "capture.webm",
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "key",
+      "atMs": 16020
+    },
+    {
+      "kind": "click",
+      "atMs": 16546
+    },
+    {
+      "kind": "key",
+      "atMs": 16852
+    },
+    {
+      "kind": "key",
+      "atMs": 17049
+    },
+    {
+      "kind": "key",
+      "atMs": 17146
+    },
+    {
+      "kind": "key",
+      "atMs": 17245
+    },
+    {
+      "kind": "key",
+      "atMs": 17343
+    },
+    {
+      "kind": "key",
+      "atMs": 17440
+    },
+    {
+      "kind": "key",
+      "atMs": 17544
+    },
+    {
+      "kind": "key",
+      "atMs": 17640
+    },
+    {
+      "kind": "key",
+      "atMs": 17739
+    },
+    {
+      "kind": "key",
+      "atMs": 17838
+    },
+    {
+      "kind": "key",
+      "atMs": 17935
+    },
+    {
+      "kind": "key",
+      "atMs": 18033
+    },
+    {
+      "kind": "key",
+      "atMs": 18131
+    },
+    {
+      "kind": "key",
+      "atMs": 18229
+    },
+    {
+      "kind": "key",
+      "atMs": 18326
+    },
+    {
+      "kind": "key",
+      "atMs": 18424
+    },
+    {
+      "kind": "key",
+      "atMs": 18524
+    },
+    {
+      "kind": "key",
+      "atMs": 18624
+    },
+    {
+      "kind": "key",
+      "atMs": 18725
+    },
+    {
+      "kind": "key",
+      "atMs": 18823
+    },
+    {
+      "kind": "key",
+      "atMs": 18921
+    },
+    {
+      "kind": "key",
+      "atMs": 19020
+    },
+    {
+      "kind": "key",
+      "atMs": 19117
+    },
+    {
+      "kind": "key",
+      "atMs": 19215
+    },
+    {
+      "kind": "key",
+      "atMs": 19312
+    },
+    {
+      "kind": "key",
+      "atMs": 19410
+    },
+    {
+      "kind": "key",
+      "atMs": 19511
+    },
+    {
+      "kind": "key",
+      "atMs": 19615
+    },
+    {
+      "kind": "key",
+      "atMs": 19712
+    },
+    {
+      "kind": "key",
+      "atMs": 19811
+    },
+    {
+      "kind": "key",
+      "atMs": 19910
+    },
+    {
+      "kind": "click",
+      "atMs": 20696
+    },
+    {
+      "kind": "click",
+      "atMs": 50928
+    },
+    {
+      "kind": "click",
+      "atMs": 75011
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1146,
-      "endMs": 12378
+      "startMs": 1116,
+      "endMs": 13190
     },
     {
       "id": "identity",
-      "startMs": 12830,
-      "endMs": 25133
+      "startMs": 13640,
+      "endMs": 26800
     },
     {
       "id": "choices",
-      "startMs": 25585,
-      "endMs": 42348
+      "startMs": 27253,
+      "endMs": 44067
     },
     {
       "id": "leaders",
-      "startMs": 42804,
-      "endMs": 56641
+      "startMs": 44519,
+      "endMs": 58661
     },
     {
       "id": "summary",
-      "startMs": 57093,
-      "endMs": 70728
+      "startMs": 59113,
+      "endMs": 71558
     },
     {
       "id": "create",
-      "startMs": 71182,
-      "endMs": 86220
+      "startMs": 72011,
+      "endMs": 87813
+    },
+    {
+      "id": "copied-details",
+      "startMs": 88264,
+      "endMs": 105948
+    },
+    {
+      "id": "leader-emails",
+      "startMs": 106402,
+      "endMs": 128954
     },
     {
       "id": "result",
-      "startMs": 86673,
-      "endMs": 99556
+      "startMs": 129406,
+      "endMs": 144863
     }
   ]
 }

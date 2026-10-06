@@ -216,8 +216,8 @@
         "organisateur"
       ],
       "feature": "Publication d'un événement",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -265,8 +265,8 @@
         "organisateur"
       ],
       "feature": "Duplication d'événement",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -338,8 +338,8 @@
         "organisateur"
       ],
       "feature": "Archivage et suppression",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "avance"
     },
     {
@@ -388,8 +388,8 @@
         "organisateur"
       ],
       "feature": "Créneaux : création et détail",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -853,8 +853,8 @@
         "organisateur"
       ],
       "feature": "Responsables de secteur",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -1262,7 +1262,7 @@
         "santé",
         "communications"
       ],
-      "published": false,
+      "published": true,
       "captureReady": true,
       "themes": [
         "tracabilite-donnees"

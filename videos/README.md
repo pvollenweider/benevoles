@@ -325,7 +325,7 @@ FFmpeg place chaque phrase au repère enregistré, normalise la narration et pro
 - `volunteer-register-mobile.vtt` ;
 - `volunteer-register-mobile.txt`.
 
-Une musique facultative peut être ajoutée sans la copier dans le dépôt :
+Toutes les vidéos produites ou régénérées doivent inclure une musique discrète. Elle est configurée sans copier le morceau dans le dépôt :
 
 ```dotenv
 # .env.video.local
@@ -333,6 +333,10 @@ VIDEO_MUSIC_PATH=/chemin/vers/musique.mp3
 ```
 
 Elle est bouclée si nécessaire, placée à 7,5 % sous la voix, puis fondue au début et à la fin. Vérifier les droits de diffusion avant toute publication.
+
+Le morceau retenu est `mixkit-tech-house-vibes-130.mp3`. Chaque clic et chaque touche réellement enfoncée doivent également recevoir un son doux, calé sur l'interaction enregistrée, sans masquer la narration. Cette exigence fait partie du contrôle final ; elle ne signifie pas que les anciennes vidéos disposent déjà de ces effets. Sans repères d'interaction fiables, refaire la capture plutôt qu'estimer les timings.
+
+Le recorder enregistre désormais les événements `pointerdown` et `keydown` dans `timeline.json` (version `inputAudioVersion: 1`), sans valeurs de touches ni texte saisi. L'assemblage synthétise localement deux sons distincts dans `input-effects.wav`, les mélange à la voix et à la musique, et écrit les nombres d'interactions ainsi que les empreintes des fichiers dans `audio-mix.json`. Il refuse une capture sans repères ou une musique non configurée. Le contrôle unitaire se lance avec `node --import tsx videos/tools/check-input-audio.ts`.
 
 Une fois les WAV générés, les étapes 3 et 4 peuvent être lancées ensemble :
 
@@ -405,8 +409,8 @@ et `seedScenario` (#637, #638) :
   lequel portent les réponses « utile ? » (#646, voir plus bas). L'augmenter quand une vidéo est
   entièrement régénérée : ses réponses repartent de zéro.
 
-`published` vaut `true` pour une vidéo dont le film est en ligne sur `medias.benevol.app` : 51 des
-54 vidéos aujourd'hui. La galerie affiche aussi les trois autres, avec leur état (« À venir »). Elle
+`published` vaut `true` pour une vidéo dont le film est en ligne sur `medias.benevol.app` : 52 des
+54 vidéos aujourd'hui. La galerie affiche aussi les deux autres, avec leur état (« À venir »). Elle
 n'est pas dans la navigation du site, mais les guides publics renvoient aux vidéos publiées par leur
 identifiant (`<!-- video: ID -->`, #645, `src/lib/doc-video-references.ts`). `filterPublishedVideos(videos, VIDEO_LIBRARY_PUBLIC_ONLY)` filtre déjà sur
 `published` : passer la constante `VIDEO_LIBRARY_PUBLIC_ONLY` (dans `video-catalog.ts`) à `true`

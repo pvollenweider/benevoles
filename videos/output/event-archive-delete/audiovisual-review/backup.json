@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:51:01.746Z",
+  "videoSha256": "0a23771336fc9dded1bb36bcee845927d7ab55a082cb7c2c3e2873d18c009840",
+  "promptSha256": "0f583848789552dc7ef7e12482eeccef130ad8b95e9e728f42906cb00c6b99a4",
+  "clipSha256": "950333c057936726a0cd0a5f1eb8f265be555c61246123d4e49d34d7d49795e3",
+  "scene": "backup",
+  "review": {
+    "heardOpening": "Avant d'aller plus loin",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "ouvre l’export PDF",
+        "visibleSeconds": 1.2,
+        "visible": "Lien 'Ouvrir l'export PDF' affiché dans la modale mais non cliqué",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Il contient le planning, le récapitulatif par poste et la liste des bénévoles",
+        "visibleSeconds": 3,
+        "visible": "Texte explicatif visible dans la fenêtre modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Enregistre-le si l’association doit garder une archive opérationnelle",
+        "visibleSeconds": 7,
+        "visible": "Aucune action d'enregistrement ou ouverture de document à l'écran",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:01 - L'ouverture du PDF demandée n'est pas réalisée, l'écran reste statique sur la boîte de dialogue."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

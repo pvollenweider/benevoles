@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T06:28:15.177Z",
+  "videoSha256": "820b278d07f2b830d9b9d838e31315878a3fdfe8836b4e1b04fa853ca4ce11ce",
+  "promptSha256": "0c679998add40ea46109e053d14198369c18330fb5c4d7705070df30017c9bd5",
+  "clipSha256": "d1b0c2d6b144bfd14554c08b3cbb64e429807b495423241985cb7cd3dafc0683",
+  "scene": "preview",
+  "review": {
+    "heardOpening": "Préparons une communication destinée aux administrateurs abonnés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Donnons-lui un objet clair : Formation, préparer votre prochain événement.",
+        "visibleSeconds": 4.1,
+        "visible": "Saisie progressive de l'objet dans le formulaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "Le contenu commence par un titre, Bienvenue.",
+        "visibleSeconds": 10.3,
+        "visible": "Saisie du titre en Markdown et affichage instantané dans l'aperçu.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 36.6,
+        "spoken": "Utilisons Envoyer un test, uniquement vers notre adresse de formation.",
+        "visibleSeconds": 37.3,
+        "visible": "Clic sur le bouton Envoyer un test et apparition du message de confirmation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 41.8,
+        "spoken": "Ouvrons le vrai email pour contrôler l'objet et le contenu reçu.",
+        "visibleSeconds": 43.8,
+        "visible": "Affichage de la boîte de réception Mailpit avec l'e-mail ouvert.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction posée et claire, synchronisation fluide avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

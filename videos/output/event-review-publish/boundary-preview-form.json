@@ -1,0 +1,12 @@
+{
+  "anchor": "Sélectionnons un créneau et poursuivons jusqu’au formulaire. Pour ce test, renseignons",
+  "windowStart": 13.728000000000002,
+  "result": {
+    "found": true,
+    "startSeconds": 30.42,
+    "wordsHeard": "Sélectionnons"
+  },
+  "onset": 44.148,
+  "proposedCut": 43.7279165,
+  "note": "Proposal only; recut then independently audit before capture"
+}

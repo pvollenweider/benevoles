@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:00:24.770Z",
+  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
+  "promptSha256": "6dae353c49af63872c4afbef4f2537dc2bd4fafa16cd9934f32ac639759fa0e6",
+  "clipSha256": "23b8e03cb8502f997be97f55779fd39191efebdf44642a1dda138fa193b173ff",
+  "scene": "notification",
+  "review": {
+    "heardOpening": "Côté responsable, voici l'email",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "voici l'email réellement reçu à la suite de cette inscription",
+        "visibleSeconds": 0,
+        "visible": "Email affiché dans Mailpit avec la notification d'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Le lien permet de retrouver l'équipe complète",
+        "visibleSeconds": 8.8,
+        "visible": "Bouton bleu 'Voir la liste complète' visible dans le courriel",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.6,
+        "spoken": "En rouvrant la page, Nora apparaît maintenant dans le bon créneau",
+        "visibleSeconds": 11.5,
+        "visible": "Page de la liste affichée avec le créneau du dimanche",
+        "sync": "aligned",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:03 - 00:13 : Incohérence de nom entre le courriel (Nora Perrin) et le tableau récapitulatif (Nora Rossier)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,10 @@
+{
+  "updatedAt": "2026-10-06T08:44:31.171Z",
+  "scope": "Narration only, not capture, MP4 synchronization or completion",
+  "results": [
+    {
+      "id": "EVENT_DUPLICATE",
+      "status": "source-audited"
+    }
+  ]
+}

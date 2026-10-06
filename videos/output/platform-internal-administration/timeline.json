@@ -1,68 +1,68 @@
 {
   "slug": "platform-internal-administration",
-  "capturePurpose": "rehearsal",
-  "recordedAt": "2026-10-05T22:01:20.520Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T06:25:32.822Z",
   "video": "capture.webm",
   "cues": [
     {
       "id": "welcome",
-      "startMs": 5,
-      "endMs": 3998
+      "startMs": 3,
+      "endMs": 29810
     },
     {
       "id": "create",
-      "startMs": 4451,
-      "endMs": 19935
+      "startMs": 32075,
+      "endMs": 61446
     },
     {
       "id": "renew",
-      "startMs": 20388,
-      "endMs": 28541
+      "startMs": 63713,
+      "endMs": 93984
     },
     {
       "id": "activate",
-      "startMs": 28995,
-      "endMs": 51897
+      "startMs": 96246,
+      "endMs": 125999
     },
     {
       "id": "identity",
-      "startMs": 52350,
-      "endMs": 69757
+      "startMs": 128264,
+      "endMs": 165121
     },
     {
       "id": "availability",
-      "startMs": 70210,
-      "endMs": 78552
+      "startMs": 167392,
+      "endMs": 199343
     },
     {
       "id": "context",
-      "startMs": 79024,
-      "endMs": 84038
+      "startMs": 201619,
+      "endMs": 230664
     },
     {
       "id": "health",
-      "startMs": 84491,
-      "endMs": 87545
+      "startMs": 232928,
+      "endMs": 273157
     },
     {
       "id": "preview",
-      "startMs": 87998,
-      "endMs": 113035
+      "startMs": 275421,
+      "endMs": 331305
     },
     {
       "id": "broadcast",
-      "startMs": 113488,
-      "endMs": 140456
+      "startMs": 333569,
+      "endMs": 392805
     },
     {
       "id": "delete",
-      "startMs": 140908,
-      "endMs": 151978
+      "startMs": 395081,
+      "endMs": 432186
     },
     {
       "id": "result",
-      "startMs": 152431,
-      "endMs": 158900
+      "startMs": 434449,
+      "endMs": 471678
     }
   ]
 }

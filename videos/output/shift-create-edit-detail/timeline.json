@@ -1,42 +1,43 @@
 {
   "slug": "shift-create-edit-detail",
-  "recordedAt": "2026-10-04T16:41:29.089Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T07:50:56.088Z",
   "video": "capture.webm",
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1138,
-      "endMs": 15083
+      "startMs": 1103,
+      "endMs": 15128
     },
     {
       "id": "identity",
-      "startMs": 15535,
-      "endMs": 31251
+      "startMs": 15580,
+      "endMs": 29979
     },
     {
       "id": "availability",
-      "startMs": 31704,
-      "endMs": 46394
+      "startMs": 30431,
+      "endMs": 44887
     },
     {
       "id": "practical",
-      "startMs": 46849,
-      "endMs": 62142
+      "startMs": 45338,
+      "endMs": 60676
     },
     {
       "id": "save",
-      "startMs": 62596,
-      "endMs": 77016
+      "startMs": 61127,
+      "endMs": 75567
     },
     {
       "id": "change",
-      "startMs": 77472,
-      "endMs": 96195
+      "startMs": 76021,
+      "endMs": 93269
     },
     {
       "id": "result",
-      "startMs": 96649,
-      "endMs": 109799
+      "startMs": 93722,
+      "endMs": 107187
     }
   ]
 }

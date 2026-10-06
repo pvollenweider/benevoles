@@ -1,0 +1,49 @@
+{
+  "locatedAt": "2026-10-06T07:23:32.168Z",
+  "masterSha256": "7d393423e66f274ad37da4b29fc03e2dbefacbc573bb37e5c4f8bf5d4989ea54",
+  "totalSeconds": 212.28,
+  "cuts": [
+    {
+      "id": "nominate",
+      "seconds": 17.165750000000003
+    },
+    {
+      "id": "registered",
+      "seconds": 36.830875
+    },
+    {
+      "id": "email",
+      "seconds": 54.246271
+    },
+    {
+      "id": "roster",
+      "seconds": 69.8007085
+    },
+    {
+      "id": "mobile",
+      "seconds": 88.6991455
+    },
+    {
+      "id": "scope",
+      "seconds": 107.561396
+    },
+    {
+      "id": "new-signup",
+      "seconds": 122.89925
+    },
+    {
+      "id": "notification",
+      "seconds": 153.899771
+    },
+    {
+      "id": "contact",
+      "seconds": 174.905646
+    },
+    {
+      "id": "remove",
+      "seconds": 191.906646
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Ces calculs dépendent du fuseau horaire de l’organisation, ici Europe Zurich.",
+  "windowStart": 25.787,
+  "result": {
+    "found": true,
+    "startSeconds": 30.46,
+    "wordsHeard": "Ces"
+  },
+  "onset": 56.247,
+  "proposedCut": 55.786542,
+  "note": "Proposal only; recut then independently audit before capture"
+}

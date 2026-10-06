@@ -4,8 +4,9 @@
 /** Production-mode rendering of a disposable LOCAL copy, never a deployment. */
 import { spawn } from "node:child_process"
 import { createHash } from "node:crypto"
-import { access } from "node:fs/promises"
+import { access, readFile, writeFile, mkdir } from "node:fs/promises"
 import path from "node:path"
+import type { ProductBuild } from "../lib/product-build"
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
@@ -18,6 +19,7 @@ async function main() {
     TOKEN_ENCRYPTION_KEY_ID: "local-video-fixture", TOKEN_ENCRYPTION_PREVIOUS_KEYS: "" }
   let commandArgs: string[]
   let childWorkingDirectory: string | undefined
+  let serving: { proof: ProductBuild; port: number } | undefined
   if (mode === "build") {
     const copy = path.resolve(args[0] ?? "")
     if (!/^\/(?:private\/)?tmp\/benevoles-video-production\.[A-Za-z0-9]+$/.test(copy)) throw new Error("Only mktemp video copy accepted")
@@ -32,10 +34,13 @@ async function main() {
     const copy = path.resolve(args[0] ?? "")
     if (!/^\/(?:private\/)?tmp\/benevoles-video-production\.[A-Za-z0-9]+$/.test(copy)) throw new Error("Only mktemp video copy accepted")
     const server = path.join(copy, ".next/standalone/server.js")
+    const proof = JSON.parse(await readFile(path.join(copy, ".video-build.json"), "utf8")) as ProductBuild
+    if (proof.snapshot !== copy || !/^[a-f0-9]{40}$/.test(proof.commit) || !proof.buildId || !proof.productSourceSha256) throw new Error("Verified main build proof required before serving video UI")
     childWorkingDirectory = path.dirname(server)
     await access(server)
     Object.assign(env, { PORT: "43102", HOSTNAME: "127.0.0.1" })
     if (mode === "serve-delivery") Object.assign(env, { PORT: "43106", NEXTAUTH_URL: "http://localhost:43106", VIDEO_BASE_URL: "http://localhost:43106", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41028", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
+    serving = { proof, port: Number(env.PORT) }
     commandArgs = [server]
   } else if (mode === "run" || mode === "run-delivery") {
     const [script, ...rest] = args
@@ -48,6 +53,8 @@ async function main() {
     allowed.add("videos/tools/inspect-navigation.ts")
     allowed.add("videos/tools/prepare-search.ts")
     allowed.add("videos/tools/prepare-foundation.ts")
+    allowed.add("videos/tools/prepare-demo.ts")
+    allowed.add("videos/tools/review-main-ui.ts")
     allowed.add("videos/tools/inspect-foundation.ts")
     allowed.add("videos/tools/verify-accessibility-picker.ts")
     allowed.add("videos/tools/verify-registration-errors.ts")
@@ -59,13 +66,14 @@ async function main() {
       Object.assign(env, { NEXTAUTH_URL: "http://localhost:43106", VIDEO_BASE_URL: "http://localhost:43106", ORG_ADMIN_EMAIL: "video.delivery.owner@example.org", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41028", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     }
     if (script === "videos/tools/record.ts" || script === "videos/tools/audit-audiovisual.ts") {
-      const validTake = mode === "run-delivery" ? rest[0] === "EMAIL_DELIVERY_FAILURES" : ["LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_CONFIRMATION_ERRORS", "ADMIN_NAVIGATION", "ORG_TIMEZONE_CHARTER", "GLOBAL_SEARCH", "EVENT_MILESTONES", "ORG_PUBLIC_IDENTITY", "ORG_EMAIL_SETTINGS", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "EVENT_PROGRAM_PAGES_QR"].includes(rest[0])
+      const commonTake = ["EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP"].includes(rest[0])
+      const validTake = mode === "run-delivery" ? rest[0] === "EMAIL_DELIVERY_FAILURES" : ["LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_CONFIRMATION_ERRORS", "ADMIN_NAVIGATION", "ORG_TIMEZONE_CHARTER", "GLOBAL_SEARCH", "EVENT_MILESTONES", "ORG_PUBLIC_IDENTITY", "ORG_EMAIL_SETTINGS", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "EVENT_PROGRAM_PAGES_QR", "SECTOR_LEADERS", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH"].includes(rest[0])
       if (rest[0] === "ADMIN_NAVIGATION") Object.assign(env, { ORG_ADMIN_EMAIL: "video.navigation.owner@example.org", VIDEO_ORG: "formation-navigation", VIDEO_EVENT_SLUG: "rencontre-0" })
       if (rest[0] === "GLOBAL_SEARCH") Object.assign(env, { ORG_ADMIN_EMAIL: "video.search.owner@example.org", VIDEO_ORG: "formation-recherche", VIDEO_EVENT_SLUG: "rencontre-0" })
       const foundation = ({ ORG_TIMEZONE_CHARTER: "charter", ORG_PUBLIC_IDENTITY: "identity", ORG_EMAIL_SETTINGS: "email", ORG_TEAM_PERMISSIONS: "team", EVENT_CREATE_BLANK: "blank", EVENT_CREATE_TEMPLATE: "template", EVENT_MILESTONES: "milestones", EVENT_PROGRAM_PAGES_QR: "pages", SHIFTS_ROLES_VIEWS: "planning" } as Record<string, string>)[rest[0]]
       if (foundation) Object.assign(env, { ORG_ADMIN_EMAIL: `video.${foundation}.owner@example.org`, VIDEO_ORG: foundation === "identity" ? "fetes-de-montvert" : `formation-${foundation}`, VIDEO_EVENT_SLUG: "rencontre-0" })
       const validFlags = rest.length === 1 || (script === "videos/tools/record.ts" && rest.length === 3 && rest[1] === "--rehearse" && rest[2] === "--quick-rehearse")
-      if (!(validTake || rest[0] === "SHIFTS_ROLES_VIEWS") || !validFlags) throw new Error("Only explicit local video takes and rehearsal flags accepted")
+      if (!(validTake || commonTake || rest[0] === "SHIFTS_ROLES_VIEWS") || !validFlags) throw new Error("Only explicit local video takes and rehearsal flags accepted")
     } else if (script === "scripts/seed-video-scenario.ts") {
       if (rest.length !== 1 || !["last-minute-changes", "privacy-personal-links"].includes(rest[0])) throw new Error("Only explicit local video seeds accepted")
     } else if (script === "videos/tools/verify-registration-invitation-success.ts") {
@@ -76,6 +84,10 @@ async function main() {
     commandArgs = ["--import", "tsx", script, ...rest]
   } else throw new Error("Usage: local-production.ts serve TEMP_COPY | run VIDEO_TOOL [LAST_MINUTE_CHANGES]")
   const child = spawn(process.execPath, commandArgs, { env, stdio: "inherit", cwd: childWorkingDirectory })
+  if (serving && child.pid) {
+    await mkdir("videos/output", { recursive: true })
+    await writeFile(`videos/output/product-server-${serving.port}.json`, JSON.stringify({ ...serving.proof, pid: child.pid, port: serving.port }, null, 2))
+  }
   child.on("error", () => { console.error("Local video child failed to start"); process.exitCode = 1 })
   child.on("exit", code => { process.exitCode = code ?? 1 })
 }

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:59:07.393Z",
+  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
+  "promptSha256": "d0640de5be736575c7eadefc36219278aa09dd5f3a2921452ac38f16d8e9e4f8",
+  "clipSha256": "40741e55fb82f8c3b3528c5fee55b2eac3b4ce9410e02a45ab6e66f6f0e1dee4",
+  "scene": "registered",
+  "review": {
+    "heardOpening": "Si la personne participe déjà",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "la liste des inscrits permet de reprendre ses coordonnées",
+        "visibleSeconds": 2,
+        "visible": "Champs préremplis avec les informations du bénévole sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Vérifie le poste proposé avant de confirmer",
+        "visibleSeconds": 7.5,
+        "visible": "Modification du champ Poste vers Démontage",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "avant de confirmer",
+        "visibleSeconds": 12.2,
+        "visible": "Validation via le bouton Ajouter et affichage du responsable",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation pédagogique adaptée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

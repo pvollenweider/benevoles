@@ -1,0 +1,12 @@
+{
+  "anchor": "Indique ton prénom et ton nom, puis vérifie soigneusement l’adresse email",
+  "windowStart": 7.371000000000002,
+  "result": {
+    "found": true,
+    "startSeconds": 30.32,
+    "wordsHeard": "Indique ton prénom et ton nom"
+  },
+  "onset": 37.691,
+  "proposedCut": 37.370875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,12 +1,12 @@
 {
   "anchor": "Pour accueillir une nouvelle organisation, ouvrons le formulaire de création. Renseignons",
-  "windowStart": 19.723,
+  "windowStart": 0,
   "result": {
     "found": true,
-    "startSeconds": 10.74,
-    "wordsHeard": "Pour accueillir une nouvelle organisation, ouvrons le formulaire de création. Renseignons"
+    "startSeconds": 30.1,
+    "wordsHeard": "Pour"
   },
-  "onset": 30.463,
-  "proposedCut": 30.435291499999998,
+  "onset": 30.1,
+  "proposedCut": 29.805124999999997,
   "note": "Proposal only; recut then independently audit before capture"
 }

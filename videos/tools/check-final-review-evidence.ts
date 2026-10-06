@@ -4,6 +4,7 @@
 import { createHash } from "node:crypto"
 import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
+import { execFileSync } from "node:child_process"
 import { loadCatalog, loadManifest, videoDir } from "../lib/manifest"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- untyped JSON reports read from disk
@@ -14,6 +15,7 @@ async function json(file: string): Promise<any | null> {
   }
 }
 async function main() {
+  const targetCommit = execFileSync("git", ["rev-parse", "origin/main"], { encoding: "utf8" }).trim()
   const rows = []
   for (const entry of (await loadCatalog()).videos) {
     const manifest = await loadManifest(entry.id)
@@ -22,8 +24,8 @@ async function main() {
     const audio = await json(path.join(directory, "audio-metadata.json"))
     const narration = await json(path.join(directory, "narration-audit.json"))
     const generationIds = new Set<string>()
-    const continuousTranscript = manifest.segments.map(segment => segment.transcript).join(manifest.continuousPauseTags === false ? "\n\n" : "\n\n<short pause>\n\n")
-    const expectedGeneration = createHash("sha256").update(JSON.stringify({ transcript: continuousTranscript, style: manifest.voiceStyle, model: audio?.model, voice: audio?.voice, promptVersion: manifest.continuousPauseTags === false ? 3 : 2 })).digest("hex")
+    const continuousTranscript = manifest.segments.map(segment => segment.transcript).join("\n\n")
+    const expectedGeneration = createHash("sha256").update(JSON.stringify({ transcript: continuousTranscript, style: manifest.voiceStyle, model: audio?.model, voice: audio?.voice, promptVersion: 3 })).digest("hex")
     const narrationChapters = []
     for (const segment of manifest.segments) {
       const metadata = audio?.segments?.[segment.id]
@@ -36,7 +38,7 @@ async function main() {
       }
       narrationChapters.push({ id: segment.id, audioPresent: !!audioSha256, expectedTranscriptCurrent: audit?.expected === segment.transcript, auditMatchesAudio: !!audioSha256 && audit?.audioSha256 === audioSha256, auditPassed: audit?.needsReview === false, generationIdentified: !!metadata?.generationSha256 })
     }
-    const sourceNarrationEvidenceCurrent = audio?.model === "gemini-3.8-flash-tts" && audio?.voice === manifest.voice && manifest.continuousNarration === true && generationIds.size === 1 && generationIds.has(expectedGeneration) && narrationChapters.every(chapter => chapter.audioPresent && chapter.expectedTranscriptCurrent && chapter.auditMatchesAudio && chapter.auditPassed && chapter.generationIdentified)
+    const sourceNarrationEvidenceCurrent = manifest.continuousPauseTags !== true && narration?.promptVersion === 2 && audio?.model === "gemini-3.8-flash-tts" && audio?.voice === manifest.voice && manifest.continuousNarration === true && generationIds.size === 1 && generationIds.has(expectedGeneration) && narrationChapters.every(chapter => chapter.audioPresent && chapter.expectedTranscriptCurrent && chapter.auditMatchesAudio && chapter.auditPassed && chapter.generationIdentified)
     let videoSha256: string | null = null
     try { videoSha256 = createHash("sha256").update(await readFile(path.join(directory, `${manifest.slug}.mp4`))).digest("hex") }
     catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error }
@@ -51,7 +53,8 @@ async function main() {
     }
     const cueIds = timeline?.cues?.map((cue: { id: string }) => cue.id) ?? []
     const timelineMatchesManifest = cueIds.length === manifest.segments.length && manifest.segments.every(segment => cueIds.filter((id: string) => id === segment.id).length === 1)
-    rows.push({ id: entry.id, slug: manifest.slug, videoSha256, capturePurpose: timeline?.capturePurpose ?? null, timelineMatchesManifest, narrationChapters, generationCount: generationIds.size, sourceNarrationEvidenceCurrent, chapters, currentAutomatedAudiovisualReviewsComplete: !!videoSha256 && timeline?.capturePurpose === "narration-timed" && timelineMatchesManifest && chapters.every(chapter => chapter.sameVideo && chapter.structurallyComplete && !chapter.automatedReviewNeedsAttention), finalDeliveryValidated: false })
+    const currentProductBuildProven = timeline?.product?.commit === targetCommit && typeof timeline?.product?.buildId === "string" && !!timeline.product.buildId && /^[a-f0-9]{64}$/.test(timeline?.product?.productSourceSha256 ?? "")
+    rows.push({ id: entry.id, slug: manifest.slug, videoSha256, capturePurpose: timeline?.capturePurpose ?? null, timelineMatchesManifest, currentProductBuildProven, narrationChapters, generationCount: generationIds.size, sourceNarrationEvidenceCurrent, chapters, currentAutomatedAudiovisualReviewsComplete: currentProductBuildProven && !!videoSha256 && timeline?.capturePurpose === "narration-timed" && timelineMatchesManifest && chapters.every(chapter => chapter.sameVideo && chapter.structurallyComplete && !chapter.automatedReviewNeedsAttention), finalDeliveryValidated: false })
   }
   const report = { checkedAt: new Date().toISOString(), note: "All catalogue entries inspected locally. Matching video hashes are necessary, not sufficient: transcript/prompt freshness, audio, functional coverage and human review remain separate gates. No upload or API call.", videos: rows }
   await writeFile(path.resolve("videos/output/final-review-evidence.json"), JSON.stringify(report, null, 2))

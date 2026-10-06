@@ -3,9 +3,27 @@
   "slug": "volunteer-form-recap",
   "title": "Remplir le formulaire et relire son planning",
   "description": "Comprendre les coordonnées, questions, consentements et avertissements avant de confirmer.",
+  "viewer": {
+    "summary": "Dans cette vidéo, tu remplis le formulaire d'inscription et relis ton planning avant de confirmer.",
+    "steps": [
+      "Choisis tes créneaux, puis clique sur « Continuer ».",
+      "Indique ton prénom, ton nom et ton téléphone, et vérifie soigneusement ton adresse email.",
+      "Réponds aux questions de l'association, obligatoires ou facultatives.",
+      "Lis la convention, puis accepte-la ainsi que l'utilisation de tes données pour cet événement.",
+      "Relis les jours, les heures, les pauses et ce qui est transmis à l'organisation.",
+      "Si l'avertissement « Journée chargée » s'affiche, reviens au planning et retire un créneau.",
+      "Vérifie une dernière fois avant « Confirmer mon inscription »."
+    ],
+    "remember": [
+      "Rien n'est envoyé tant que tu n'as pas confirmé.",
+      "La date de naissance n'est demandée que si un créneau a un âge minimum.",
+      "L'avertissement de journée chargée conseille, il ne bloque pas la confirmation."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Puck",
   "continuousNarration": true,
+  "continuousPauseTags": false,
   "voiceStyle": "Warm smiling adult male voice. Friendly patient conversational French, clear articulation and calm pace. Keep the same voice identity, pitch and energy throughout. Sound like a helpful volunteer, never theatrical or rushed.",
   "viewport": {
     "width": 1280,
@@ -53,22 +71,5 @@
       "transcript": "Le nouveau récapitulatif garde trois missions et une vraie pause entre le matin et la nuit. Les informations saisies sont conservées. Vérifie une dernière fois ton email, tes réponses et les horaires avant Confirmer mon inscription. Dans cette démonstration, nous restons juste avant ce bouton : rien n’a été envoyé.",
       "fallbackDurationMs": 29000
     }
-  ],
-  "viewer": {
-    "summary": "Dans cette vidéo, tu remplis le formulaire d'inscription et relis ton planning avant de confirmer.",
-    "steps": [
-      "Choisis tes créneaux, puis clique sur « Continuer ».",
-      "Indique ton prénom, ton nom et ton téléphone, et vérifie soigneusement ton adresse email.",
-      "Réponds aux questions de l'association, obligatoires ou facultatives.",
-      "Lis la convention, puis accepte-la ainsi que l'utilisation de tes données pour cet événement.",
-      "Relis les jours, les heures, les pauses et ce qui est transmis à l'organisation.",
-      "Si l'avertissement « Journée chargée » s'affiche, reviens au planning et retire un créneau.",
-      "Vérifie une dernière fois avant « Confirmer mon inscription »."
-    ],
-    "remember": [
-      "Rien n'est envoyé tant que tu n'as pas confirmé.",
-      "La date de naissance n'est demandée que si un créneau a un âge minimum.",
-      "L'avertissement de journée chargée conseille, il ne bloque pas la confirmation."
-    ]
-  }
+  ]
 }

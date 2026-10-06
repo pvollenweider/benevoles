@@ -8,6 +8,7 @@ import path from "node:path"
 import { promisify } from "node:util"
 import { loadManifest, videoDir, type AudioMetadata, type Timeline } from "../lib/manifest"
 import { readableCaptions } from "../lib/captions"
+import { inputAudio } from "../lib/input-audio"
 
 const exec = promisify(execFile)
 const reference = process.argv.find((arg) => !arg.startsWith("-") && arg !== process.argv[0] && arg !== process.argv[1])
@@ -36,14 +37,18 @@ async function main() {
   const manifest = await loadManifest(reference!)
   const dir = videoDir(manifest.slug)
   const timeline = await json<Timeline>(path.join(dir, "timeline.json"))
+  const { stdout: targetMain } = await exec("git", ["rev-parse", "origin/main"])
+  if (timeline.product?.commit !== targetMain.trim() || !timeline.product?.buildId || !timeline.product?.productSourceSha256) throw new Error("Capture provenance missing or not on target main; recapture, never retroactively stamp an old video")
   if (timeline.capturePurpose === "rehearsal") throw new Error("Refusing to assemble a rehearsal as a narrated video; record again against the verified narration first")
   const audio = await json<AudioMetadata>(path.join(dir, "audio-metadata.json"))
-  const narrationAudit = await json<{ segments: { id: string; expected: string; audioSha256: string; needsReview: boolean }[] }>(path.join(dir, "narration-audit.json"))
+  const narrationAudit = await json<{ promptVersion?: number; segments: { id: string; expected: string; audioSha256: string; needsReview: boolean }[] }>(path.join(dir, "narration-audit.json"))
+  if (narrationAudit.promptVersion !== 2) throw new Error("Multilingual narration audit required: recheck for spoken stage directions before assembling")
   if (audio.model !== "gemini-3.8-flash-tts" || audio.voice !== manifest.voice) throw new Error("Current Gemini 3.8 narration and manifest voice required")
   if (manifest.continuousNarration && new Set(manifest.segments.map(segment => audio.segments[segment.id]?.generationSha256)).size !== 1) throw new Error("Continuous narration requires a single voice generation for the whole video")
   if (manifest.continuousNarration) {
-    const transcript = manifest.segments.map(segment => segment.transcript).join(manifest.continuousPauseTags === false ? "\n\n" : "\n\n<short pause>\n\n")
-    const expectedGeneration = createHash("sha256").update(JSON.stringify({ transcript, style: manifest.voiceStyle, model: audio.model, voice: audio.voice, promptVersion: manifest.continuousPauseTags === false ? 3 : 2 })).digest("hex")
+    if (manifest.continuousPauseTags === true) throw new Error("Inline pause tags are prohibited in new tutorial narration")
+    const transcript = manifest.segments.map(segment => segment.transcript).join("\n\n")
+    const expectedGeneration = createHash("sha256").update(JSON.stringify({ transcript, style: manifest.voiceStyle, model: audio.model, voice: audio.voice, promptVersion: 3 })).digest("hex")
     if (manifest.segments.some(segment => audio.segments[segment.id]?.generationSha256 !== expectedGeneration)) throw new Error("Narration instructions changed since generation; regenerate and audit before assembling")
   }
   for (const segment of manifest.segments) {
@@ -73,7 +78,11 @@ async function main() {
     if (timeline.cues[index]?.id !== segment.id) throw new Error(`Timeline order mismatch for ${segment.id}`)
   }
   const music = process.env.VIDEO_MUSIC_PATH
-  if (music) await access(music)
+  if (!music) throw new Error("VIDEO_MUSIC_PATH required for music-backed tutorials")
+  await access(music)
+  const effects = path.join(dir, "input-effects.wav")
+  if (!timeline.inputEvents?.length) throw new Error("No recorded interactions: check the input tracker before assembling a tutorial")
+  await writeFile(effects, inputAudio(timeline, captureDuration))
 
   const cues = new Map(timeline.cues.map((cue) => [cue.id, cue]))
   const inputs: string[] = ["-i", capture]
@@ -143,7 +152,9 @@ async function main() {
     const fadeOut = Math.max(0, captureDuration - 2)
     inputs.push("-stream_loop", "-1", "-i", music)
     filters.push(`[${musicInput}:a]atrim=duration=${captureDuration.toFixed(3)},volume=0.075,afade=t=in:st=0:d=1.5,afade=t=out:st=${fadeOut.toFixed(3)}:d=2,aresample=48000[music]`)
-    filters.push("[narration][music]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0,loudnorm=I=-16:LRA=11:TP=-1.5,aresample=48000,apad[final]")
+    inputs.push("-i", effects)
+    filters.push(`[${musicInput + 1}:a]aresample=48000[effects]`)
+    filters.push("[narration][music][effects]amix=inputs=3:duration=longest:dropout_transition=0:normalize=0,loudnorm=I=-16:LRA=11:TP=-1.5,aresample=48000,apad[final]")
   } else {
     filters.push("[narration]apad[final]")
   }
@@ -167,6 +178,7 @@ async function main() {
 
   await writeFile(path.join(dir, `${manifest.slug}.vtt`), `${vtt.join("\n")}\n`)
   await writeFile(path.join(dir, `${manifest.slug}.txt`), `${transcript.join("\n").trim()}\n`)
+  await writeFile(path.join(dir, "audio-mix.json"), JSON.stringify({ effectsPreset: "soft-input-v2", music: path.basename(music), clicks: timeline.inputEvents!.filter(event => event.kind === "click").length, keys: timeline.inputEvents!.filter(event => event.kind === "key").length, effectsSha256: createHash("sha256").update(await readFile(effects)).digest("hex"), timelineSha256: createHash("sha256").update(await readFile(path.join(dir, "timeline.json"))).digest("hex"), videoSha256: createHash("sha256").update(await readFile(output)).digest("hex") }, null, 2))
   console.log(`Video ready: ${output}`)
 }
 

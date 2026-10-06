@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour une permanence de nuit, indique clairement le jour de départ,",
+  "windowStart": 52.82900000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 28.24,
+    "wordsHeard": "Pour une permanence de nuit, indique clairement le jour de départ,"
+  },
+  "onset": 81.069,
+  "proposedCut": 81.220292,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:51:25.084Z",
+  "videoSha256": "0a23771336fc9dded1bb36bcee845927d7ab55a082cb7c2c3e2873d18c009840",
+  "promptSha256": "50ef78b0cda71e79c55e316458f973aa6f3c013440ab7fc846e3e32d7f6fc84a",
+  "clipSha256": "8c899b37b4b131eab69579b276c274a6eb4f4166e50d928a42b1e73a29b7d3f3",
+  "scene": "result",
+  "review": {
+    "heardOpening": "L’événement disparaît de la liste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "L’événement disparaît de la liste après validation",
+        "visibleSeconds": 0,
+        "visible": "Message « Événement supprimé » visible en haut, écran figé sur la liste",
+        "sync": "aligned",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Utilise donc l’archivage comme état normal de fin de vie",
+        "visibleSeconds": 3.2,
+        "visible": "Aucune action d'archivage montrée, interface statique",
+        "sync": "aligned",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "réserve la suppression aux éditions de test",
+        "visibleSeconds": 6.5,
+        "visible": "Écran statique sans manipulation des options de suppression",
+        "sync": "aligned",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:00 - 00:13 : Écran totalement statique pendant les explications conceptuelles."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée et claire, débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

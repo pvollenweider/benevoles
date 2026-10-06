@@ -11,7 +11,7 @@ import { PrismaPg } from "@prisma/adapter-pg"
 
 type Scene = (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => Promise<void>
 const subject = "Formation — préparer votre prochain événement"
-const content = "# Bienvenue !\n- Vérifie ton planning.\n- Partage ton lien public.\n[Lire le guide](http://video.invalid/guide-admin)"
+const content = "# Bienvenue !\n- Vérifiez votre planning.\n- Partagez votre lien public.\n[Lire le guide](http://video.invalid/guide-admin)"
 const ownerEmail = "video.operator.disposable.owner@example.org"
 const initialSlug = "formation-operateur-jetable"
 const finalSlug = "formation-operateur-jetable-renommee"
@@ -85,7 +85,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
     await page.context().clearCookies()
     if (cookies) await page.context().addCookies(cookies)
   }
-  const write = async (field: Locator, value: string) => { await tap(page, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(value, { delay: 110 }) }
+  const write = async (field: Locator, value: string, delay = 110) => { await tap(page, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(value, { delay }) }
   type Mail = { ID: string; To: { Address: string }[]; Subject: string }
   const inbox = async (): Promise<Mail[]> => (await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()).messages
   const ids = async () => new Set((await inbox()).map(mail => mail.ID))
@@ -111,7 +111,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
     await scene("welcome", async at => {
       await page.screencast.showChapter(title, { duration: 2800 })
       await at(.22); await page.getByRole("row").filter({ hasText: "Formation Opérateur Réserve" }).scrollIntoViewIfNeeded()
-      await at(.53); await tap(page, page.getByRole("link", { name: "Formation Opérateur Parc", exact: true }))
+      await at(.61); await tap(page, page.getByRole("link", { name: "Formation Opérateur Parc", exact: true }))
       await page.getByRole("heading", { name: "Formation Opérateur Parc", exact: true }).waitFor()
       await at(.78); await page.getByRole("heading", { name: "Administrateurs", exact: true }).scrollIntoViewIfNeeded()
     })
@@ -150,13 +150,13 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await write(page.getByLabel("Confirmer le mot de passe", { exact: true }), password)
       await at(.27); await tap(page, page.getByRole("button", { name: "Créer mon mot de passe", exact: true }))
       await page.getByRole("heading", { name: "Mot de passe créé", exact: true }).waitFor()
-      await at(.42); await tap(page, page.getByRole("link", { name: "Se connecter", exact: true }))
-      await write(page.getByLabel("Email", { exact: true }), ownerEmail)
-      await write(page.getByLabel("Mot de passe", { exact: true }), password)
+      await at(.30); await tap(page, page.getByRole("link", { name: "Se connecter", exact: true }))
+      await write(page.getByLabel("Email", { exact: true }), ownerEmail, 45)
+      await write(page.getByLabel("Mot de passe", { exact: true }), password, 45)
       await tap(page, page.getByRole("button", { name: "Se connecter", exact: true }))
       await page.waitForURL(/\/admin\/events/); ownerCookies = await page.context().cookies()
       assert.equal((await page.request.get(`${base}/api/admin/events`)).status(), 200)
-      await at(.70); await session(setup.platformCookies); await go(`/super-admin/organizations/${initialSlug}`)
+      await at(.62); await session(setup.platformCookies); await go(`/super-admin/organizations/${initialSlug}`)
       await page.getByRole("row").filter({ hasText: ownerEmail }).getByText("Actif", { exact: true }).waitFor()
       checks.actualActivationAndLogin = true
     })
@@ -172,6 +172,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await tap(page, slugForm.getByRole("button", { name: "OK", exact: true }))
       await page.waitForURL(new RegExp(`/super-admin/organizations/${finalSlug}$`))
       assert.equal(await db.orgSlugHistory.count({ where: { organizationId: orgId, slug: initialSlug } }), 1)
+      await page.reload(); await settle(page)
       await at(.67)
       const redirected = await page.request.get(`${base}/?org=${initialSlug}`, { maxRedirects: 0 })
       const location = redirected.headers().location
@@ -206,7 +207,11 @@ export async function recordOperator(options: { page: Page; base: string; direct
     await scene("health", async at => {
       await at(.03); await go("/super-admin/health")
       await page.getByRole("heading", { name: "Santé du service", exact: true }).waitFor()
-      for (const [fraction, name] of [[.12, "Service"], [.30, "Tâches planifiées et sauvegardes"], [.57, "Configuration"]] as const) { await at(fraction); await page.getByRole("heading", { name, exact: true }).scrollIntoViewIfNeeded() }
+      await at(.12); await page.getByRole("heading", { name: "Service", exact: true }).scrollIntoViewIfNeeded()
+      await at(.24); await page.getByText(/Version .*vérifiée le/).scrollIntoViewIfNeeded()
+      await at(.35); await page.reload(); await settle(page)
+      await at(.50); await page.getByRole("heading", { name: "Tâches planifiées et sauvegardes", exact: true }).scrollIntoViewIfNeeded()
+      await at(.84); await page.getByRole("heading", { name: "Configuration", exact: true }).scrollIntoViewIfNeeded()
       assert.equal(await db.jobRun.count(), 0)
       checks.realHealthWithoutInventedJobs = true
     })
@@ -214,10 +219,10 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await at(.03); await go("/super-admin/product-updates")
       await write(page.getByLabel("Objet *", { exact: true }), subject)
       await write(page.getByLabel(/^Contenu \(Markdown/), content)
-      await at(.37); await page.getByRole("heading", { name: "Aperçu", exact: true }).scrollIntoViewIfNeeded()
+      await at(.51); await page.getByRole("heading", { name: "Aperçu", exact: true }).scrollIntoViewIfNeeded()
       testBefore = await ids()
-      await at(.49); await tap(page, page.getByRole("button", { name: "Envoyer un test", exact: true }))
-      await at(.66); const mail = await openMail(testBefore, "video.operator.platform@example.org", "test")
+      await at(.66); await tap(page, page.getByRole("button", { name: "Envoyer un test", exact: true }))
+      await at(.78); const mail = await openMail(testBefore, "video.operator.platform@example.org", "test")
       assert.equal(await db.productUpdateSend.count(), 0)
       checks.actualTestEmail = mail.id
     })
@@ -231,10 +236,11 @@ export async function recordOperator(options: { page: Page; base: string; direct
       assert.deepEqual(recipients.map(row => row.email).sort(), ["video.operator.a.owner@example.org", ownerEmail].sort())
       broadcastBefore = await ids()
       await at(.45); await tap(page, page.getByRole("button", { name: "Envoyer (2)", exact: true }))
-      await at(.57); await tap(page, page.getByRole("dialog").getByRole("button", { name: "Envoyer", exact: true }))
+      await at(.62); await tap(page, page.getByRole("dialog").getByRole("button", { name: "Envoyer", exact: true }))
       await page.getByRole("status").filter({ hasText: "Communication envoyée à 2/2 destinataires." }).waitFor()
       assert.equal(await db.productUpdateSend.count({ where: { subject, successCount: 2, recipientCount: 2 } }), 1)
-      await at(.72); lastMail = await openMail(broadcastBefore, ownerEmail, "broadcast")
+      await at(.65); await page.getByRole("heading", { name: /Historique/ }).scrollIntoViewIfNeeded()
+      await at(.76); lastMail = await openMail(broadcastBefore, ownerEmail, "broadcast")
       const delivered = (await inbox()).filter(mail => !broadcastBefore.has(mail.ID) && mail.Subject === subject)
       assert.deepEqual(delivered.flatMap(mail => mail.To.map(to => to.Address)).sort(), recipients.map(row => row.email).sort())
       await at(.82)
@@ -247,7 +253,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
     })
     await scene("delete", async at => {
       await session(setup.platformCookies); await go(`/super-admin/organizations/${finalSlug}`)
-      await at(.12); await tap(page, page.getByRole("button", { name: "Désactiver", exact: true }))
+      await at(.25); await tap(page, page.getByRole("button", { name: "Désactiver", exact: true }))
       await tap(page, page.getByRole("alertdialog").getByRole("button", { name: /^Désactiver/ }))
       await at(.27); await tap(page, page.getByRole("button", { name: "Supprimer définitivement", exact: true }))
       const dialog = page.getByRole("alertdialog")

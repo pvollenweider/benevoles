@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash-tts",
   "voice": "Kore",
-  "generatedAt": "2026-10-04T16:54:20.246Z",
+  "generatedAt": "2026-10-06T07:36:24.477Z",
   "segments": {
     "welcome": {
       "file": "audio/welcome.wav",
-      "durationMs": 14192,
-      "generationSha256": "59a0f243408c61fd2887a437ce6173b95f82db4ec4f89e4bfdb03464ef2cdfef"
+      "durationMs": 13101,
+      "generationSha256": "bde5f2067301224ab22a0693b34acbbead046d0c37f40022af3dc805d2798aa9"
     },
     "draw": {
       "file": "audio/draw.wav",
-      "durationMs": 14093,
-      "generationSha256": "59a0f243408c61fd2887a437ce6173b95f82db4ec4f89e4bfdb03464ef2cdfef"
+      "durationMs": 13301,
+      "generationSha256": "bde5f2067301224ab22a0693b34acbbead046d0c37f40022af3dc805d2798aa9"
     },
     "resize": {
       "file": "audio/resize.wav",
-      "durationMs": 13262,
-      "generationSha256": "59a0f243408c61fd2887a437ce6173b95f82db4ec4f89e4bfdb03464ef2cdfef"
+      "durationMs": 13046,
+      "generationSha256": "bde5f2067301224ab22a0693b34acbbead046d0c37f40022af3dc805d2798aa9"
     },
     "popover": {
       "file": "audio/popover.wav",
-      "durationMs": 12142,
-      "generationSha256": "59a0f243408c61fd2887a437ce6173b95f82db4ec4f89e4bfdb03464ef2cdfef"
+      "durationMs": 11204,
+      "generationSha256": "bde5f2067301224ab22a0693b34acbbead046d0c37f40022af3dc805d2798aa9"
     },
     "copy": {
       "file": "audio/copy.wav",
-      "durationMs": 14973,
-      "generationSha256": "59a0f243408c61fd2887a437ce6173b95f82db4ec4f89e4bfdb03464ef2cdfef"
+      "durationMs": 14859,
+      "generationSha256": "bde5f2067301224ab22a0693b34acbbead046d0c37f40022af3dc805d2798aa9"
     },
     "detail": {
       "file": "audio/detail.wav",
-      "durationMs": 14319,
-      "generationSha256": "59a0f243408c61fd2887a437ce6173b95f82db4ec4f89e4bfdb03464ef2cdfef"
+      "durationMs": 13188,
+      "generationSha256": "bde5f2067301224ab22a0693b34acbbead046d0c37f40022af3dc805d2798aa9"
     },
     "result": {
       "file": "audio/result.wav",
-      "durationMs": 10619,
-      "generationSha256": "59a0f243408c61fd2887a437ce6173b95f82db4ec4f89e4bfdb03464ef2cdfef"
+      "durationMs": 10141,
+      "generationSha256": "bde5f2067301224ab22a0693b34acbbead046d0c37f40022af3dc805d2798aa9"
     }
   }
 }

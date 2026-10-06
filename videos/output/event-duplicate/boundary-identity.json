@@ -1,0 +1,12 @@
+{
+  "anchor": "Commence par donner le titre de la nouvelle édition et son",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 11.8,
+    "wordsHeard": "Commence"
+  },
+  "onset": 11.8,
+  "proposedCut": 12.0721455,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,12 +1,12 @@
 {
-  "anchor": "Avant la diffusion, vérifions le nombre de destinataires et lisons la",
-  "windowStart": 282.26,
+  "anchor": "Le test est bon ? Revenons au formulaire pour préparer la",
+  "windowStart": 291.782,
   "result": {
     "found": true,
-    "startSeconds": 5.96,
-    "wordsHeard": "Avant la diffusion vérifions le nombre de destinataires et lisons la"
+    "startSeconds": 21.34,
+    "wordsHeard": "Le test est bon ? Revenons au formulaire pour préparer la"
   },
-  "onset": 288.21999999999997,
-  "proposedCut": 288.082083,
+  "onset": 313.12199999999996,
+  "proposedCut": 313.1581875,
   "note": "Proposal only; recut then independently audit before capture"
 }

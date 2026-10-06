@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans un export calendrier, chaque créneau contient un instant précis avec",
+  "windowStart": 38.494,
+  "result": {
+    "found": true,
+    "startSeconds": 30.2,
+    "wordsHeard": "Dans un export calendrier, chaque créneau contient un instant précis avec"
+  },
+  "onset": 68.694,
+  "proposedCut": 68.4935835,
+  "note": "Proposal only; recut then independently audit before capture"
+}

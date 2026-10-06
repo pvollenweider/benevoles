@@ -1,63 +1,79 @@
 {
   "model": "gemini-3.8-flash",
-  "auditedAt": "2026-10-05T10:40:32.165Z",
-  "note": "ASR evidence, not a full audiovisual or voice-quality validation",
+  "auditedAt": "2026-10-06T07:44:44.301Z",
+  "revalidatedAt": "2026-10-06T08:09:22.727Z",
+  "source": "generated narration WAV",
+  "note": "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation",
   "segments": [
     {
       "id": "welcome",
-      "audioSha256": "ce24a3ec792ef438b208e6d07d4f3aeeadf25caf1e787f58847d742be8590519",
+      "audioSha256": "b4d5dea689f6c5ac898d787b5d561481b392874532c42d0d314ed954590d3908",
       "recognized": "Avant de publier, l'écran de vérification rassemble ce qui compte vraiment. Il évite d'ouvrir une page vide ou incohérente et rappelle que tout restera modifiable après la publication.",
       "expected": "Avant de publier, l’écran de vérification rassemble ce qui compte vraiment. Il évite d’ouvrir une page vide ou incohérente et rappelle que tout restera modifiable après la publication.",
       "wordErrorRate": 0,
-      "needsReview": false
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     },
     {
       "id": "checks",
-      "audioSha256": "2f2e03543bdd276529f7423c8eb3fe7e04c19b7ecff5beca25b38a2a1d895588",
-      "recognized": "Les lignes marquées comme faites couvrent le titre, les dates et le planning. Un point obligatoire manquant bloque le bouton publier, notamment l'absence totale de créneaux actifs. Les lignes facultatives comme le lieu, les instructions ou un responsable de secteur améliorent le parcours, mais n'empêchent pas l'ouverture.",
+      "audioSha256": "b61f4be1ca61f4909e8c77deafa77d9d51a607767fcb77a18231e4295d652adf",
+      "recognized": "Les lignes marquées comme faites couvrent le titre, les dates et le planning. Un point obligatoire manquant bloque le bouton publier, notamment l'absence totale de créneaux actifs. Les lignes facultatives comme le lieu, les instructions ou un responsable de secteur améliorent le parcours mais n'empêchent pas l'ouverture.",
       "expected": "Les lignes marquées comme faites couvrent le titre, les dates et le planning. Un point obligatoire manquant bloque le bouton Publier, notamment l’absence totale de créneau actif. Les lignes facultatives, comme le lieu, les instructions ou un responsable de secteur, améliorent le parcours mais n’empêchent pas l’ouverture.",
       "wordErrorRate": 0.04,
-      "needsReview": false
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     },
     {
       "id": "preview-start",
-      "audioSha256": "3bf6284a43b65e5ec90ada9f999b18ce719ad4124671e0c2552dea8f0eff565f",
+      "audioSha256": "da0e1a0e5ab0c050d9e9c0d49b84cec7a903f72549f3cb76dbe67e6114a1b2b8",
       "recognized": "Prévisualiser comme un bénévole ouvre la vraie page d'inscription dans un mode sans conséquence. On vérifie d'abord l'en-tête, le lieu, les instructions, le programme et les créneaux, exactement comme ils seront présentés sur téléphone ou ordinateur.",
       "expected": "Prévisualiser comme un bénévole ouvre la vraie page d’inscription dans un mode sans conséquence. On vérifie d’abord l’en-tête, le lieu, les instructions, le programme et les créneaux, exactement comme ils seront présentés sur téléphone ou ordinateur.",
       "wordErrorRate": 0,
-      "needsReview": false
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     },
     {
       "id": "preview-form",
-      "audioSha256": "8ac353d2899a7aa58d033904c9ebbeaa44ac4786d232abf2c61b2bd6089dd4d4",
-      "recognized": "Sélectionnons un créneau et poursuivons jusqu'au formulaire. Ce test permet de relire les questions, la convention des bénévoles, les consentements et les informations demandées sans créer d'inscription réelle.",
-      "expected": "Sélectionnons un créneau et poursuivons jusqu’au formulaire. Ce test permet de relire les questions, la Convention des Bénévoles, les consentements et les informations demandées sans créer d’inscription réelle.",
-      "wordErrorRate": 0,
-      "needsReview": false
+      "audioSha256": "204914356642c5d7486a101ee7ade111d685feda862b42d4f0f981f64a3e47e5",
+      "recognized": "Sélectionnons un créneau et poursuivons jusqu'au formulaire. Pour ce test, renseignons une identité fictive : Alex Martin. Ajoutons son adresse e-mail de démonstration et son téléphone fictif. Choisissons aussi une taille de tee-shirt. Cette question est obligatoire pour notre événement. Le formulaire permet de relire les informations demandées et la convention des bénévoles. Acceptons cette convention, puis l'utilisation des données par l'association pour gérer ses bénévoles. Nous testons le parcours sans créer d'inscription réelle.",
+      "expected": "Sélectionnons un créneau et poursuivons jusqu’au formulaire. Pour ce test, renseignons une identité fictive : Alex Martin. Ajoutons son adresse email de démonstration et son téléphone fictif. Choisissons aussi une taille de t-shirt : cette question est obligatoire pour notre événement. Le formulaire permet de relire les informations demandées et la Convention des Bénévoles. Acceptons cette convention, puis l’utilisation des données par l’association pour gérer ses bénévoles. Nous testons le parcours sans créer d’inscription réelle.",
+      "wordErrorRate": 0.01282051282051282,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     },
     {
       "id": "preview-result",
-      "audioSha256": "b8e42d9154d7621560e7217b87f5ef9ce6f8bfc41c17359c5afc73aec6663a6f",
-      "recognized": "Le bouton de simulation affiche ensuite la confirmation et l'e-mail automatique avec les valeurs de test. C'est ici qu'on repère un message trop vague, une consigne manquante ou une variable mal placée avant qu'un vrai bénévole ne les reçoive.",
+      "audioSha256": "97e811d84df834b9c31277ea7046f210e4a0b3af37df2073d78ffe9ba3c07933",
+      "recognized": "Le bouton de simulation affiche ensuite la confirmation et l'email automatique avec les valeurs de test. C'est ici qu'on repère un message trop vague, une consigne manquante ou une variable mal placée avant qu'un vrai bénévole ne les reçoive.",
       "expected": "Le bouton de simulation affiche ensuite la confirmation et l’email automatique avec les valeurs de test. C’est ici qu’on repère un message trop vague, une consigne manquante ou une variable mal placée, avant qu’un vrai bénévole ne les reçoive.",
-      "wordErrorRate": 0.046511627906976744,
-      "needsReview": false
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     },
     {
       "id": "publish",
-      "audioSha256": "ac1fd77cc56766979f1e98173856c166383f294ed3cea50eeeaf3391befc4ef5",
-      "recognized": "Revenons à la vérification et publions. La page devient accessible à toute personne qui possède le lien mais aucun email n'est envoyé automatiquement aux membres. Pour les prévenir, il faudra partager le QR code, envoyer des invitations ou utiliser un message ciblé.",
+      "audioSha256": "4b3fa2d7839d8fc01340c12e7a786a9faf0635255b3acf16814135c44145c484",
+      "recognized": "Revenons à la vérification et publions. La page devient accessible à toute personne qui possède le lien, mais aucun email n'est envoyé automatiquement aux membres. Pour les prévenir, il faudra partager le QR code, envoyer des invitations ou utiliser un message ciblé.",
       "expected": "Revenons à la vérification et publions. La page devient accessible à toute personne qui possède le lien, mais aucun email n’est envoyé automatiquement aux membres. Pour les prévenir, il faudra partager le QR code, envoyer des invitations ou utiliser un message ciblé.",
       "wordErrorRate": 0,
-      "needsReview": false
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     },
     {
       "id": "result",
-      "audioSha256": "1a99a2358b8f57bee5993abdd6b2fdf117d2b678907e22093e301e5e7e46bf01",
-      "recognized": "Le résultat est un événement publié avec son lien public, son QR code et ses outils d'invitation. Publier ouvre l'accès. Cela ne remplace ni la communication, ni la vérification régulière des inscriptions et des besoins de personnel.",
+      "audioSha256": "fc49c17dc3c5ae17fd74031ca61497c5be3e61902d7c99d59560ef4adec66868",
+      "recognized": "Le résultat est un événement publié avec son lien public, son QR code et ses outils d'invitation. Publier ouvre l'accès, cela ne remplace ni la communication, ni la vérification régulière des inscriptions et des besoins de personnel.",
       "expected": "Le résultat est un événement publié avec son lien public, son QR code et ses outils d’invitation. Publier ouvre l’accès ; cela ne remplace ni la communication, ni la vérification régulière des inscriptions et des besoins de personnel.",
       "wordErrorRate": 0,
-      "needsReview": false
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     }
   ]
 }

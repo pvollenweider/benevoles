@@ -1,23 +1,108 @@
 WEBVTT
 
-00:00:01.568 --> 00:00:11.919
-Avant de publier, l’écran de vérification rassemble ce qui compte vraiment. Il évite d’ouvrir une page vide ou incohérente et rappelle que tout restera modifiable après la publication.
+00:00:01.150 --> 00:00:06.044
+Avant de publier, l’écran de vérification
+rassemble ce qui compte vraiment. Il évite
 
-00:00:12.370 --> 00:00:33.916
-Les lignes marquées comme faites couvrent le titre, les dates et le planning. Un point obligatoire manquant bloque le bouton Publier, notamment l’absence totale de créneau actif. Les lignes facultatives, comme le lieu, les instructions ou un responsable de secteur, améliorent le parcours mais n’empêchent pas l’ouverture.
+00:00:06.044 --> 00:00:10.938
+d’ouvrir une page vide ou incohérente et
+rappelle que tout restera modifiable après
 
-00:00:36.079 --> 00:00:53.810
-Prévisualiser comme un bénévole ouvre la vraie page d’inscription dans un mode sans conséquence. On vérifie d’abord l’en-tête, le lieu, les instructions, le programme et les créneaux, exactement comme ils seront présentés sur téléphone ou ordinateur.
+00:00:10.938 --> 00:00:11.691
+la publication.
 
-00:00:54.262 --> 00:01:07.756
-Sélectionnons un créneau et poursuivons jusqu’au formulaire. Ce test permet de relire les questions, la Convention des Bénévoles, les consentements et les informations demandées sans créer d’inscription réelle.
+00:00:12.146 --> 00:00:17.681
+Les lignes marquées comme faites couvrent
+le titre, les dates et le planning. Un
 
-00:01:08.208 --> 00:01:24.372
-Le bouton de simulation affiche ensuite la confirmation et l’email automatique avec les valeurs de test. C’est ici qu’on repère un message trop vague, une consigne manquante ou une variable mal placée, avant qu’un vrai bénévole ne les reçoive.
+00:00:17.681 --> 00:00:21.635
+point obligatoire manquant bloque le
+bouton Publier, notamment l’absence totale
 
-00:01:24.823 --> 00:01:42.310
-Revenons à la vérification et publions. La page devient accessible à toute personne qui possède le lien, mais aucun email n’est envoyé automatiquement aux membres. Pour les prévenir, il faudra partager le QR code, envoyer des invitations ou utiliser un message ciblé.
+00:00:21.635 --> 00:00:26.774
+de créneau actif. Les lignes facultatives,
+comme le lieu, les instructions ou un
 
-00:01:42.761 --> 00:01:56.956
-Le résultat est un événement publié avec son lien public, son QR code et ses outils d’invitation. Publier ouvre l’accès ; cela ne remplace ni la communication, ni la vérification régulière des inscriptions et des besoins de personnel.
+00:00:26.774 --> 00:00:30.728
+responsable de secteur, améliorent le
+parcours mais n’empêchent pas l’ouverture.
+
+00:00:32.888 --> 00:00:38.162
+Prévisualiser comme un bénévole ouvre la
+vraie page d’inscription dans un mode sans
+
+00:00:38.162 --> 00:00:43.030
+conséquence. On vérifie d’abord l’en-tête,
+le lieu, les instructions, le programme et
+
+00:00:43.030 --> 00:00:47.492
+les créneaux, exactement comme ils seront
+présentés sur téléphone ou ordinateur.
+
+00:00:47.944 --> 00:00:52.096
+Sélectionnons un créneau et poursuivons
+jusqu’au formulaire. Pour ce test,
+
+00:00:52.096 --> 00:00:57.078
+renseignons une identité fictive : Alex
+Martin. Ajoutons son adresse email de
+
+00:00:57.078 --> 00:01:02.060
+démonstration et son téléphone fictif.
+Choisissons aussi une taille de t-shirt :
+
+00:01:02.060 --> 00:01:07.042
+cette question est obligatoire pour notre
+événement. Le formulaire permet de relire
+
+00:01:07.042 --> 00:01:11.194
+les informations demandées et la
+Convention des Bénévoles. Acceptons cette
+
+00:01:11.194 --> 00:01:15.345
+convention, puis l’utilisation des données
+par l’association pour gérer ses
+
+00:01:15.345 --> 00:01:19.082
+bénévoles. Nous testons le parcours sans
+créer d’inscription réelle.
+
+00:01:19.536 --> 00:01:23.919
+Le bouton de simulation affiche ensuite la
+confirmation et l’email automatique avec
+
+00:01:23.919 --> 00:01:29.033
+les valeurs de test. C’est ici qu’on
+repère un message trop vague, une consigne
+
+00:01:29.033 --> 00:01:33.782
+manquante ou une variable mal placée,
+avant qu’un vrai bénévole ne les reçoive.
+
+00:01:34.241 --> 00:01:39.023
+Revenons à la vérification et publions. La
+page devient accessible à toute personne
+
+00:01:39.023 --> 00:01:43.436
+qui possède le lien, mais aucun email
+n’est envoyé automatiquement aux membres.
+
+00:01:43.436 --> 00:01:48.218
+Pour les prévenir, il faudra partager le
+QR code, envoyer des invitations ou
+
+00:01:48.218 --> 00:01:49.689
+utiliser un message ciblé.
+
+00:01:50.141 --> 00:01:56.238
+Le résultat est un événement publié avec
+son lien public, son QR code et ses outils
+
+00:01:56.238 --> 00:02:01.192
+d’invitation. Publier ouvre l’accès ; cela
+ne remplace ni la communication, ni la
+
+00:02:01.192 --> 00:02:04.621
+vérification régulière des inscriptions et
+des besoins de personnel.
 

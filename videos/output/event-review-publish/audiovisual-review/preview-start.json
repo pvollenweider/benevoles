@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:13:30.583Z",
+  "videoSha256": "ad9e0295903b3a397ce87e15f61fada476799eb2fabd180a3d67e22fd5ad9e84",
+  "promptSha256": "d098d9013925898c741954589fad72fb3a8300c717edb6411a0a52e8d8c96f11",
+  "clipSha256": "81464c0799a5e208a33ca7405b6f9224d2643c172c99efa2350f6453b8a60c7a",
+  "scene": "preview-start",
+  "review": {
+    "heardOpening": "Prévisualiser comme un bénévole ouvre la vraie page",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Prévisualiser comme un bénévole ouvre la vraie page d’inscription",
+        "visibleSeconds": 0.7,
+        "visible": "Clic sur le lien de prévisualisation et chargement de la page d'aperçu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "On vérifie d’abord l’en-tête, le lieu",
+        "visibleSeconds": 1.2,
+        "visible": "Titre 'Fête du village de Montvert' et lieu affichés en en-tête",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "les instructions, le programme et les créneaux",
+        "visibleSeconds": 1.2,
+        "visible": "Instructions d'accueil et planning des créneaux visibles à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, bonne concordance globale."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

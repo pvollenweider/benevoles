@@ -1,43 +1,45 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T21:44:07.894Z",
-  "videoSha256": "74ad8b7010a5231a83be946771cc9efc6fe7565c20bad30cecf13062260ad851",
+  "reviewedAt": "2026-10-06T07:23:44.205Z",
+  "videoSha256": "f58091c20cbe8c06f1bd189d798ea38b8369e6bc18aaba29f19086cafde497a1",
   "promptSha256": "d7d4645805f521382f2c8f9d4507d46be1f803651e40694f6cb55c3bfcf47d66",
-  "clipSha256": "3673f818fed2c90b07edaf955eacf41a334cc3489bf77ac49b497974e039ca15",
+  "clipSha256": "71cf6101d4d8b08a506bf04bc8940c34896d216efb21bbdfeea978758c7740c7",
   "scene": "legal",
   "review": {
     "heardOpening": "Les informations publiques se trouvent aussi dans le pied de page.",
     "checkpoints": [
       {
-        "spokenSeconds": 3.2,
+        "spokenSeconds": 3.4,
         "spoken": "Ouvrons Confidentialité.",
-        "visibleSeconds": 2.2,
+        "visibleSeconds": 2,
         "visible": "Affichage de la page Politique de confidentialité.",
         "sync": "early",
         "severity": "minor"
       },
       {
         "spokenSeconds": 10.5,
-        "spoken": "Repérons aussi les indications de conservation et les moyens de contact.",
+        "spoken": "Repérons aussi les indications de conservation",
         "visibleSeconds": 11,
-        "visible": "Défilement vers les sections Droits des personnes et Conservation des données.",
+        "visible": "Défilement vers la section Conservation des données.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 21.8,
+        "spokenSeconds": 21.5,
         "spoken": "Ouvrons maintenant les conditions d'utilisation",
-        "visibleSeconds": 23,
-        "visible": "Ouverture de la page Conditions générales d'utilisation.",
+        "visibleSeconds": 22.5,
+        "visible": "Affichage des Conditions générales d'utilisation.",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [],
+    "issues": [
+      "00:02 : La page de confidentialité s'affiche brièvement avant son annonce orale."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et conforme au texte annoncé."
+      "observation": "Diction fluide et rythme posé tout au long de l'extrait."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

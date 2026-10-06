@@ -1,0 +1,12 @@
+{
+  "anchor": "Les états sont écrits directement sur les créneaux. Complet avec file",
+  "windowStart": 60.657,
+  "result": {
+    "found": true,
+    "startSeconds": 30.86,
+    "wordsHeard": "Les états sont écrits directement sur les créneaux. Complet avec file"
+  },
+  "onset": 91.517,
+  "proposedCut": 91.412354,
+  "note": "Proposal only; recut then independently audit before capture"
+}

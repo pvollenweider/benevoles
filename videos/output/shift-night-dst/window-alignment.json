@@ -1,0 +1,33 @@
+{
+  "locatedAt": "2026-10-06T07:39:05.238Z",
+  "masterSha256": "0a7e7ebe0a57497e5e3029ada69a4e2010ee8a300c80739619b6ffba0944a862",
+  "totalSeconds": 95.24,
+  "cuts": [
+    {
+      "id": "ordinary",
+      "seconds": 14.716875
+    },
+    {
+      "id": "spring",
+      "seconds": 28.5635
+    },
+    {
+      "id": "autumn",
+      "seconds": 43.0063335
+    },
+    {
+      "id": "timezone",
+      "seconds": 55.786542
+    },
+    {
+      "id": "calendar",
+      "seconds": 68.4935835
+    },
+    {
+      "id": "result",
+      "seconds": 81.220292
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

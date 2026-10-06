@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T20:51:17.414Z",
-  "videoSha256": "3e2b054ce139ced7f32f4059559c36ac89bc83cb334bbe34e341997d8f994942",
+  "reviewedAt": "2026-10-06T07:23:34.735Z",
+  "videoSha256": "581346aebe0397c4a562745c5eafe7ad692c94c626291ecc7f0013c2726e7b84",
   "promptSha256": "01490ac0cba104874dc1662aa6b3b921979306768febeb4d9eef0d6cbaf0e0c3",
-  "clipSha256": "899124fd0de93f79c807dcbc8f8a498ff0ec874f87746a449f05a9387e78fc85",
+  "clipSha256": "c1eb420b6d1b2b878adc56365386420b627859972bc1d9ddd550504f4647ccab",
   "scene": "offer",
   "review": {
-    "heardOpening": "Une place proposée n'est pas encore une personne confirmée",
+    "heardOpening": "Une place proposée n'est pas encore",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "Une place proposée n'est pas encore une personne confirmée",
+        "spokenSeconds": 1,
+        "spoken": "Une place proposée n'est pas encore une personne confirmée.",
         "visibleSeconds": 1.8,
-        "visible": "Page 'Mes inscriptions' affichant la mention 'Une place t'est proposée'",
+        "visible": "Page 'Mes inscriptions' affichant l'état 'Une place t'est proposée'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 7.1,
-        "spoken": "Ouvrons son lien et acceptons la place dans cet exemple",
-        "visibleSeconds": 7,
-        "visible": "Écran de confirmation avec le message 'Place confirmée !'",
+        "spoken": "Ouvrons son lien et acceptons la place dans cet exemple.",
+        "visibleSeconds": 6.8,
+        "visible": "Écran de confirmation affichant 'Place confirmée !'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 10.6,
-        "spoken": "Puis vérifions le statut dans les inscriptions",
-        "visibleSeconds": 11.5,
-        "visible": "Affichage de la liste des inscriptions de l'événement",
+        "spoken": "Puis vérifions le statut dans les inscriptions.",
+        "visibleSeconds": 11.2,
+        "visible": "Affichage de la page de gestion des inscriptions.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Maintenant seulement, sa participation est confirmée.",
+        "visibleSeconds": 14,
+        "visible": "Ligne de Nicolas Exemple visible dans la liste des inscrits.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire, posée et bien articulée tout au long de l'extrait."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les transitions."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
