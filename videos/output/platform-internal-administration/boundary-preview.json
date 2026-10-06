@@ -1,12 +1,12 @@
 {
-  "anchor": "Préparons une communication destinée aux administrateurs abonnés. Donnons-lui un objet clair,",
-  "windowStart": 250.003,
+  "anchor": "Préparons une communication destinée aux administrateurs abonnés. Donnons-lui un objet clair",
+  "windowStart": 241.05399999999997,
   "result": {
     "found": true,
-    "startSeconds": 6.8,
-    "wordsHeard": "Préparons"
+    "startSeconds": 17,
+    "wordsHeard": "Préparons une communication destinée aux administrateurs abonnés. Donnons-lui un objet clair"
   },
-  "onset": 256.803,
-  "proposedCut": 256.7634375,
+  "onset": 258.054,
+  "proposedCut": 257.276396,
   "note": "Proposal only; recut then independently audit before capture"
 }

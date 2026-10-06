@@ -181,6 +181,10 @@ async function main() {
     // a short lead-in. Overlap the silent tails at this transition so the next sentence follows
     // naturally without clipping or overlapping spoken words.
     const expected = audioDuration - (id === "lifecycle" ? 1_300 : 0)
+    // Chapter cards separate subjects; they must not cover the first narrated
+    // action or consume its timing budget.
+    const title = manifest.chapterTitles?.[id]
+    if (title) await page.screencast.showChapter(title, { duration: 1500 })
     const start = performance.now()
     cues.push({ id, startMs: Math.round(start - startedAt), endMs: 0 })
     const at = async (fraction: number) => {
@@ -189,8 +193,6 @@ async function main() {
       if (remaining > 0) await page.waitForTimeout(remaining)
     }
     try {
-      const title = manifest.chapterTitles?.[id]
-      if (title) await page.screencast.showChapter(title, { duration: 1500 })
       await action(at)
     } catch (error) {
       throw new Error(`Scene ${id} failed`, { cause: error })

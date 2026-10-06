@@ -18,24 +18,25 @@ async function main() {
   const dir = videoDir(manifest.slug)
   const metadata = JSON.parse(await readFile(path.join(dir, "audio-metadata.json"), "utf8")) as AudioMetadata
   const estimated = manifest.segments.slice(0, index).reduce((sum, s) => sum + metadata.segments[s.id].durationMs / 1000, 0)
-  const start = Math.max(0, estimated - 15)
+  const windowSeconds = process.argv.includes("--wide") ? 60 : 30
+  const start = Math.max(0, estimated - windowSeconds / 2)
   const temp = await mkdtemp(path.join(tmpdir(), "benevol-narration-window-"))
   const clip = path.join(temp, "window.wav")
   const master = path.join(dir, "audio", "continuous-narration.wav")
-  await exec("ffmpeg", ["-loglevel", "error", "-y", "-ss", String(start), "-i", master, "-t", "30", "-c:a", "pcm_s16le", clip])
+  await exec("ffmpeg", ["-loglevel", "error", "-y", "-ss", String(start), "-i", master, "-t", String(windowSeconds), "-c:a", "pcm_s16le", clip])
   const bytes = await readFile(clip)
   const anchor = manifest.segments[index].transcript.split(" ").slice(0, 11).join(" ")
   const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${process.env.VIDEO_AUDIT_MODEL ?? "gemini-3.8-flash"}:generateContent`, {
     method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": key }, signal: AbortSignal.timeout(120000),
     body: JSON.stringify({ contents: [{ parts: [
-      { text: `Listen to this short French audio clip. Locate the ACTUAL first word of this phrase: ${JSON.stringify(anchor)}. Return ONLY JSON {"found":true,"startSeconds":0.0,"wordsHeard":"..."}. Seconds are relative to THIS CLIP (0 to 30). If absent, return found:false. Do not estimate from text length.` },
+      { text: `Listen to this short French audio clip. Locate the ACTUAL first word of this phrase: ${JSON.stringify(anchor)}. Return ONLY JSON {"found":true,"startSeconds":0.0,"wordsHeard":"..."}. Seconds are relative to THIS CLIP (0 to ${windowSeconds}). If absent, return found:false. Do not estimate from text length.` },
       { inlineData: { mimeType: "audio/wav", data: bytes.toString("base64") } },
     ] }], generationConfig: { responseMimeType: "application/json" } }),
   })
   if (!response.ok) throw new Error(`Boundary location HTTP ${response.status}`)
   const body = await response.json() as { candidates?: { content?: { parts?: { text?: string; thought?: boolean }[] } }[] }
   const result = JSON.parse(body.candidates?.[0]?.content?.parts?.filter(p => !p.thought).map(p => p.text ?? "").join("") ?? "null") as { found: boolean; startSeconds: number; wordsHeard: string }
-  if (!result?.found || result.startSeconds < 0 || result.startSeconds > 30) throw new Error("Anchor not reliably located in window")
+  if (!result?.found || result.startSeconds < 0 || result.startSeconds > windowSeconds) throw new Error("Anchor not reliably located in window")
   const onset = start + result.startSeconds
   const { stderr } = await exec("ffmpeg", ["-i", master, "-af", "silencedetect=noise=-35dB:d=0.15", "-f", "null", "-"], { maxBuffer: 10 * 1024 * 1024 })
   const pauses: { start: number; end: number }[] = []

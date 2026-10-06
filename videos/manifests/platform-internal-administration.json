@@ -69,7 +69,7 @@
     },
     {
       "id": "preview",
-      "transcript": "Préparons une communication destinée aux administrateurs abonnés. Donnons-lui un objet clair, puis un contenu avec un titre, une liste et un lien. L'aperçu permet de vérifier la mise en forme Markdown avant l'envoi. Utilisons Envoyer un test, uniquement vers notre adresse de formation. Ouvrons le vrai email pour contrôler l'objet et le contenu reçu. Ce test n'est pas une diffusion générale et ne crée pas une entrée dans son historique. Corrigeons ce qui serait peu clair avant d'envoyer à plusieurs personnes.",
+      "transcript": "Préparons une communication destinée aux administrateurs abonnés. Donnons-lui un objet clair : Formation, préparer votre prochain événement. Le contenu commence par un titre, Bienvenue. Ajoutons deux conseils simples : vérifier son planning et partager son lien public. Un lien vers le guide termine le message. Prenons le temps de relire ces quelques lignes : elles doivent être utiles, faciles à comprendre et adaptées aux personnes qui les recevront. L'aperçu permet de vérifier la mise en forme Markdown avant l'envoi. Utilisons Envoyer un test, uniquement vers notre adresse de formation. Ouvrons le vrai email pour contrôler l'objet et le contenu reçu. Ce test n'est pas une diffusion générale et ne crée pas une entrée dans son historique. Corrigeons ce qui serait peu clair avant d'envoyer à plusieurs personnes.",
       "fallbackDurationMs": 62000
     },
     {

@@ -24,10 +24,12 @@ async function main() {
     EMAIL_FROM: "Bénévoles formation <video.operator.platform@example.org>", EMAIL_REPLY_TO: "video.operator.platform@example.org",
     TOKEN_ENCRYPTION_KEY: createHash("sha256").update("benevol-local-video-fixture-only-never-production").digest("base64"), TOKEN_ENCRYPTION_KEY_ID: "local-video-fixture", TOKEN_ENCRYPTION_PREVIOUS_KEYS: "" }
   let commandArgs: string[]
+  let childWorkingDirectory: string | undefined
   if (mode === "serve") {
     const copy = path.resolve(args[0] ?? "")
     if (args.length !== 1 || !/^\/(?:private\/)?tmp\/benevoles-video-production\.[A-Za-z0-9]+$/.test(copy)) throw new Error("Only existing disposable compiled video copy accepted")
     const server = path.join(copy, ".next/standalone/server.js")
+    childWorkingDirectory = path.dirname(server)
     await access(server)
     Object.assign(env, { PORT: "43104", HOSTNAME: "127.0.0.1" })
     commandArgs = [server]
@@ -38,7 +40,7 @@ async function main() {
   } else if (mode === "run" && args.length === 1 && ["videos/tools/prepare-operator.ts", "videos/tools/verify-operator-lifecycle.ts", "videos/tools/inspect-operator-sessions.ts"].includes(args[0])) {
     commandArgs = ["--import", "tsx", args[0]]
   } else throw new Error("Usage: operator-local.ts serve TEMP_COPY | run OPERATOR_PREFLIGHT_TOOL")
-  const child = spawn(process.execPath, commandArgs, { env, stdio: "inherit" })
+  const child = spawn(process.execPath, commandArgs, { env, stdio: "inherit", cwd: childWorkingDirectory })
   child.on("error", () => { console.error("Local operator child failed to start"); process.exitCode = 1 })
   child.on("exit", code => { process.exitCode = code ?? 1 })
 }

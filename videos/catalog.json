@@ -1262,7 +1262,7 @@
         "santé",
         "communications"
       ],
-      "published": false,
+      "published": true,
       "captureReady": true,
       "themes": [
         "tracabilite-donnees"

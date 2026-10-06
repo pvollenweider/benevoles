@@ -1,12 +1,12 @@
 {
   "anchor": "La personne invitée ouvre son nouveau lien dans sa propre session.",
-  "windowStart": 86.40700000000001,
+  "windowStart": 69.186,
   "result": {
     "found": true,
-    "startSeconds": 5.12,
-    "wordsHeard": "La"
+    "startSeconds": 20.32,
+    "wordsHeard": "La personne invitée ouvre son nouveau lien dans sa propre session."
   },
-  "onset": 91.52700000000002,
-  "proposedCut": 91.70697899999999,
+  "onset": 89.506,
+  "proposedCut": 89.444875,
   "note": "Proposal only; recut then independently audit before capture"
 }

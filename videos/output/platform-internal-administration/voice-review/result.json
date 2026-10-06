@@ -1,14 +1,14 @@
 {
-  "reviewedAt": "2026-10-06T05:54:59.312Z",
+  "reviewedAt": "2026-10-06T05:55:05.954Z",
   "model": "gemini-3.8-flash",
   "source": "two generated WAV excerpts, audio only",
   "openingSha256": "a9363a45e14aa125223ea1e595d1824aad2bdb2c9354942b4c84dd1165345dbe",
-  "chapterSha256": "fe79608d50d1a9cbe1024a1dd9cd2d08bf452bc37dc06c2e941fe8fc4223ed83",
+  "chapterSha256": "e6758fa1e67098aef79f59538c1ad6cff4031a9177d3645be5798b1605c64ab9",
   "generationSha256": "bcf932c31be5df131bd807691b2e7f040cc28b9f19392a242a4d602ea7891d4a",
   "review": {
     "consistent": true,
     "warm": true,
-    "observation": "La même narratrice est présente tout au long du second extrait, avec une identité vocale, un timbre et une articulation parfaitement identiques à l'extrait de référence. La diction demeure fluide, pédagogique et chaleureuse.",
+    "observation": "La voix dans le second extrait est identique à celle de l'extrait de référence. Le timbre, le débit posé, l'acoustique et l'intonation chaleureuse et pédagogique demeurent parfaitement constants d'un bout à l'autre.",
     "changes": [],
     "uncertainty": "aucune"
   },

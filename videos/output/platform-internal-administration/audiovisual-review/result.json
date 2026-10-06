@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T06:29:00.950Z",
+  "videoSha256": "820b278d07f2b830d9b9d838e31315878a3fdfe8836b4e1b04fa853ca4ce11ce",
+  "promptSha256": "08725078d3fd8fbedfcd03f431d0faa94d5b9c616d34d20ec7f9abe787c0781d",
+  "clipSha256": "c312f0e88f002bfff5e6089a97a439230d438f2e183f2426efb64908bae4a8d3",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Terminons en revenant au périmètre de chaque compte",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Un organisateur ordinaire ne peut pas ouvrir les routes de gestion de la plateforme.",
+        "visibleSeconds": 4.5,
+        "visible": "Affichage de la page de connexion organisateur puis de l'espace Événements sans menu Super Admin.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "L'opérateur, lui, choisit son organisation avant d'y travailler.",
+        "visibleSeconds": 13,
+        "visible": "Retour à la liste des organisations dans l'espace Super Admin.",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Créer un espace, activer un compte, désactiver et supprimer sont des actions différentes.",
+        "visibleSeconds": 13.2,
+        "visible": "Tableau listant les organisations avec options Détail, Désactiver et bouton Nouvelle organisation.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:09 - Léger décalage : la voix aborde le choix de l'organisation par l'opérateur alors que l'écran précédent reste affiché jusqu'à 00:13."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et bien articulée tout au long du segment."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
