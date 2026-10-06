@@ -53,7 +53,7 @@ Décision : un jeton personnel n'est jamais écrit dans un journal d'accès (`k8
 
 ## Documents
 
-- [ ] Relecture juridique de [accord-sous-traitance-brouillon.md](accord-sous-traitance-brouillon.md) sur la base des clauses types de la Commission.
+- [ ] Relecture juridique de [ACCORD-SOUS-TRAITANCE.md](../../ACCORD-SOUS-TRAITANCE.md) (publié le 2026-10-06) et de [SOUS-TRAITANTS.md](../../SOUS-TRAITANTS.md), sur la base des clauses types de la Commission.
 - [ ] Validation de la répartition des rôles ([inventaire.md](inventaire.md)).
 - [ ] Validation de [procedure-violation.md](procedure-violation.md) : personnes, délais, canal de signalement.
 - [x] Politique publique alignée sur l'état réel (#528, 2026-09-30), puis sur le remplacement de la copie hors site par Infomaniak Swiss Backup (#524, #697, 2026-10-06). À revoir après la relecture juridique.

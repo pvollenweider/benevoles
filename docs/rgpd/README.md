@@ -1,13 +1,13 @@
 # Dossier RGPD et nLPD (projet)
 
-Travail de l'issue #485. **Rien ici n'est publié, n'a de valeur contractuelle ni ne constitue un avis juridique ou une attestation de conformité.** Le dossier part du comportement réel du code et distingue ce qui est implémenté, configuré en production, garanti par contrat, ou à décider ; tout ce qui dépend de la production ou d'un contrat est marqué « à confirmer ».
+Travail de l'issue #485. **Les documents de ce dossier ne sont pas publiés, n'ont pas de valeur contractuelle et ne constituent ni un avis juridique ni une attestation de conformité.** Seuls l'accord de sous-traitance et la liste des sous-traitants sont publiés, depuis la racine du dépôt (décision du 2026-10-06 ci-dessous). Le dossier part du comportement réel du code et distingue ce qui est implémenté, configuré en production, garanti par contrat, ou à décider ; tout ce qui dépend de la production ou d'un contrat est marqué « à confirmer ».
 
 | Document | Contenu |
 |---|---|
 | [inventaire.md](inventaire.md) | données traitées, rôles, journaux, hébergement, droits des personnes, établis depuis le code avec leur source |
 | [sous-traitants.md](sous-traitants.md) | sous-traitants ultérieurs et ce qu'il reste à prouver pour chacun ; services techniques hors liste |
-| [accord-sous-traitance-brouillon.md](accord-sous-traitance-brouillon.md) | trame d'accord art. 28 / art. 9 nLPD (sur la base recommandée des clauses types de la Commission), annexes versionnées — **brouillon à relire** |
-| [sous-traitants-page-publique-brouillon.md](sous-traitants-page-publique-brouillon.md) | brouillon de la liste publique des sous-traitants (texte prêt pour une future page, aucune page câblée) |
+| [ACCORD-SOUS-TRAITANCE.md](../../ACCORD-SOUS-TRAITANCE.md) | accord de sous-traitance art. 28 RGPD / art. 9 nLPD et ses annexes, **publié** sur `/legal/sous-traitance` (version du 6 octobre 2026, révisable) |
+| [SOUS-TRAITANTS.md](../../SOUS-TRAITANTS.md) | liste publique des sous-traitants (annexe III de l'accord), **publiée** sur `/legal/sous-traitants` ; ses faits viennent de [sous-traitants.md](sous-traitants.md), vérifié par un test |
 | [convention-benevoles-variantes-brouillon.md](convention-benevoles-variantes-brouillon.md) | brouillon des variantes par pays de la convention de bénévolat (#569) — **brouillon à relire** |
 | [prompt-relecture-juridique.md](prompt-relecture-juridique.md) | prompt de relecture juridique combiné (#485 et #569), pour une personne qualifiée ou une IA juridique spécialisée |
 | [procedure-violation.md](procedure-violation.md) | procédure interne en cas de violation, registre des incidents |
@@ -16,6 +16,10 @@ Travail de l'issue #485. **Rien ici n'est publié, n'a de valeur contractuelle n
 | [ecarts.md](ecarts.md) | écarts avec la politique de confidentialité publiée |
 
 Les durées de conservation viennent de [../retention.md](../retention.md), généré depuis `src/lib/retention.ts` et vérifié par les tests (#486).
+
+## Décision de l'opérateur (2026-10-06)
+
+L'accord de sous-traitance et la liste des sous-traitants sont publiés sans attendre la relecture juridique (« on modifiera au besoin plus tard ») : sources [ACCORD-SOUS-TRAITANCE.md](../../ACCORD-SOUS-TRAITANCE.md) et [SOUS-TRAITANTS.md](../../SOUS-TRAITANTS.md), pages `/legal/sous-traitance` et `/legal/sous-traitants`. Les choix faits pour publier, à confirmer à la relecture : information 30 jours avant un changement de sous-traitant ; notification des violations « sans délai injustifié, aussi rapidement que possible », sans délai chiffré ; audit sur demande écrite, aux frais de l'organisation ; responsabilité et droit applicable renvoyés aux CGU. L'accord d'Infomaniak pour Swiss Backup reste présenté comme « en cours de vérification ».
 
 ## Décision de l'opérateur (2026-10-05)
 
@@ -32,7 +36,7 @@ L'inventaire factuel et les brouillons (accord art. 28, liste publique des sous-
 
 | Statut | Éléments |
 |---|---|
-| **Publiable** en l'état | rien de ce dossier ; seule la matrice de conservation ([../retention.md](../retention.md)) est déjà publique, pour les traitements internes |
+| **Publié** | l'accord de sous-traitance et la liste des sous-traitants (2026-10-06), et la matrice de conservation ([../retention.md](../retention.md)) |
 | **À valider juridiquement** | répartition des rôles, qualification des services push, accord de traitement et ses annexes, délai de notification des violations, procédure de violation, texte de la politique publique |
 | **À vérifier en production et dans les contrats** | tout [verifications-production.md](verifications-production.md) : hébergeur, SMTP, copie hors site (Infomaniak Swiss Backup), Sentry, rotation des journaux, clé des sauvegardes, accès |
 | **Évolution du produit** | les points de la section précédente |

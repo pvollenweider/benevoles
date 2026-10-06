@@ -4,8 +4,8 @@
 import type { Metadata, MetadataRoute } from "next"
 
 /**
- * The public content pages of the apex site, in one place: the features page and the
- * documentation. Their navigation, the doc index, their metadata and the apex sitemap all read
+ * The public content pages of the apex site, in one place: the features page, the documentation
+ * and the data processing documents (agreement and sub-processors, under /legal). Their navigation, the doc index, their metadata and the apex sitemap all read
  * this list, so a new page is declared here once and appears everywhere (SEO: the sitemap is what
  * search engines read first). Each page renders its Markdown source file directly: that file is
  * the only copy of the content, also readable on GitHub.
@@ -50,6 +50,26 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     metaDescription: "Déclaration d'accessibilité de benevol.app : niveau visé (WCAG 2.2 AA), méthode de vérification, limites connues et comment signaler un problème.",
     source: "ACCESSIBILITE.md",
     priority: 0.3,
+    guide: false,
+  },
+  {
+    path: "/legal/sous-traitance",
+    title: "Accord de sous-traitance",
+    summary: "L'accord qui encadre les données que benevol.app traite pour votre organisation (art. 28 RGPD, art. 9 nLPD).",
+    metaTitle: "Accord de sous-traitance (RGPD et nLPD)",
+    metaDescription: "Accord de sous-traitance de benevol.app (art. 28 RGPD, art. 9 nLPD) : instructions, sécurité, sous-traitants, violations de données et fin du traitement.",
+    source: "ACCORD-SOUS-TRAITANCE.md",
+    priority: 0.2,
+    guide: false,
+  },
+  {
+    path: "/legal/sous-traitants",
+    title: "Liste des sous-traitants",
+    summary: "Les prestataires qui traitent les données de votre organisation, où et avec quelles garanties.",
+    metaTitle: "Liste des sous-traitants",
+    metaDescription: "Les prestataires de benevol.app qui traitent les données de votre organisation : hébergement, emails, sauvegarde, erreurs, leur localisation et leurs garanties.",
+    source: "SOUS-TRAITANTS.md",
+    priority: 0.2,
     guide: false,
   },
   {
