@@ -7,6 +7,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Modifié
+
+- **Vidéos lues dans la documentation** : dans une fiche de documentation, « Voir la vidéo : titre (durée) » ouvre le lecteur sur place au lieu de quitter la documentation pour la bibliothèque. La vidéo ne se charge qu'à l'ouverture et ne démarre pas toute seule ; les sous-titres, la transcription et la question « utile ? » sont sous le lecteur, avec un lien pour l'ouvrir dans la bibliothèque. Sans JavaScript, le lien vers la bibliothèque reste.
+
 ## [2.1.0] — 2026-10-06
 
 ### En bref

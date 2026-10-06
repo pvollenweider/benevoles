@@ -52,12 +52,16 @@ export default function VideoFeedback({
   revision,
   audience,
   context,
+  heading = "h2",
 }: {
   videoId: string
   revision: number
   audience: readonly Audience[]
   context: FeedbackContext
+  /** "p" inside a documentation unit (DocVideoInline.tsx): the question must not open a section of the unit's outline. */
+  heading?: "h2" | "p"
 }) {
+  const Heading = heading
   const wording = feedbackWording(audience)
   const hydrated = useHydrated()
   const storageKey = feedbackStorageKey(videoId, revision)
@@ -108,16 +112,16 @@ export default function VideoFeedback({
 
   const busy = !hydrated || state === "sending"
   const buttonClass =
-    "rounded-xl border border-blue-600 bg-white px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors aria-disabled:opacity-50 aria-disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+    "rounded-xl border border-blue-600 dark:border-blue-400 bg-white dark:bg-gray-900 px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-800 transition-colors aria-disabled:opacity-50 aria-disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
 
   return (
-    <div role="group" aria-labelledby={headingId} aria-busy={state === "sending" || undefined} className="bg-white border border-gray-200 rounded-2xl px-5 py-4">
+    <div role="group" aria-labelledby={headingId} aria-busy={state === "sending" || undefined} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl px-5 py-4">
       <div role="status" aria-live="polite" className="sr-only">{statusText}</div>
-      <h2 id={headingId} className="text-sm font-semibold text-gray-900">{wording.question}</h2>
+      <Heading id={headingId} className="text-sm font-semibold text-gray-900 dark:text-gray-100">{wording.question}</Heading>
       {state === "thanks" ? (
-        <p ref={thanksRef} tabIndex={-1} className="mt-2 text-sm text-gray-700 focus:outline-none">{wording.thanks}</p>
+        <p ref={thanksRef} tabIndex={-1} className="mt-2 text-sm text-gray-700 dark:text-gray-300 focus:outline-none">{wording.thanks}</p>
       ) : alreadyAnswered ? (
-        <p className="mt-2 text-sm text-gray-700">{wording.alreadyAnswered}</p>
+        <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">{wording.alreadyAnswered}</p>
       ) : (
         <>
           <div className="mt-3 flex flex-wrap gap-3">
@@ -128,7 +132,7 @@ export default function VideoFeedback({
               Non
             </button>
           </div>
-          {error && <p id={errorId} className="mt-2 text-sm text-red-700">{error}</p>}
+          {error && <p id={errorId} className="mt-2 text-sm text-red-700 dark:text-red-400">{error}</p>}
         </>
       )}
     </div>

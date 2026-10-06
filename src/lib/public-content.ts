@@ -5,7 +5,7 @@ import fs from "fs"
 import path from "path"
 import { renderEventPageMarkdown } from "@/lib/event-page-markdown"
 import { linkSourcesToRoutes, splitTitle } from "@/lib/doc-pages"
-import { docVideoLink, findVideoReferences, renderDocVideoCard } from "@/lib/doc-video-references"
+import { docVideoLink, docVideoPlayer, findVideoReferences, renderDocVideoCard, renderDocVideoSlot, splitAtDocVideoSlots, type DocUnitPart, type DocVideoPlayer } from "@/lib/doc-video-references"
 import { videoMediaUrls, type Video } from "@/lib/video-catalog"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import type { DocUnit } from "@/lib/doc-units"
@@ -42,6 +42,24 @@ export function renderPublicSource(source: string, fallbackTitle: string, mediaB
  */
 export function renderDocUnit(unit: DocUnit, mediaBaseUrl?: string | null): string {
   return renderPublicMarkdown(unit.body, mediaBaseUrl)
+}
+
+/**
+ * A documentation unit as its page draws it (#649): the same HTML as `renderDocUnit`, cut where a
+ * video is referenced, the inline player's data in its place (src/lib/doc-video-references.ts,
+ * `splitAtDocVideoSlots`); nothing there when the video can't play.
+ */
+export function renderDocUnitParts(unit: DocUnit, mediaBaseUrl?: string | null): DocUnitPart[] {
+  const catalog = findVideoReferences(unit.body).length > 0 ? videoCatalog() : []
+  const players = new Map<string, DocVideoPlayer>()
+  const videoSlot = (id: string) => {
+    const player = docVideoPlayer(id, catalog, mediaBaseUrl)
+    if (!player) return ""
+    players.set(id, player)
+    return renderDocVideoSlot(id)
+  }
+  const html = renderEventPageMarkdown(linkSourcesToRoutes(unit.body), { shiftHeadings: false, headingIds: true, videoCard: videoSlot })
+  return splitAtDocVideoSlots(html, players)
 }
 
 /** The ids of the headings of a rendered page, in order (`<h2 id="…">`). */

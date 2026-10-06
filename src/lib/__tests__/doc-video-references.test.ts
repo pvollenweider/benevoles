@@ -1,9 +1,10 @@
 import { describe, it, expect } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
-import { docVideoDuration, docVideoLink, findVideoReferences, renderDocVideoCard, videoReferenceId } from "../doc-video-references"
+import { docVideoDuration, docVideoLink, docVideoPlayer, findVideoReferences, renderDocVideoCard, renderDocVideoSlot, splitAtDocVideoSlots, videoReferenceId, type DocVideoPlayer } from "../doc-video-references"
 import { renderEventPageMarkdown } from "../event-page-markdown"
-import { renderPublicSource } from "../public-content"
+import { renderDocUnit, renderDocUnitParts, renderPublicSource } from "../public-content"
+import { loadDocUnits } from "../doc-units"
 import { PUBLIC_PAGES } from "../doc-pages"
 import { loadVideoCatalog } from "../video-catalog-load"
 import type { Video } from "../video-catalog"
@@ -170,6 +171,113 @@ describe("renderEventPageMarkdown with videoCard", () => {
     const html = renderEventPageMarkdown(md("ORG_FIRST_STEPS"))
     expect(html).not.toContain("/videos/")
     expect(html).not.toContain("<!--")
+  })
+})
+
+// A documentation unit opens the player in place instead of linking to the library: the data of
+// that player, where it goes in the unit's HTML, and the unit's parts.
+describe("docVideoPlayer", () => {
+  const catalog = [
+    makeVideo({}),
+    makeVideo({ id: "DRAFT_VIDEO", published: false }),
+  ]
+  const base = "https://medias.example.org/"
+
+  it("gives a published video with a render its button label, library link, media and transcript", () => {
+    expect(docVideoPlayer("ORG_FIRST_STEPS", catalog, base)).toEqual({
+      id: "ORG_FIRST_STEPS",
+      title: "Bien démarrer avec une nouvelle organisation",
+      label: "Voir la vidéo\u00a0: Bien démarrer avec une nouvelle organisation (3 min)",
+      libraryHref: "/videos/ORG_FIRST_STEPS?from=doc",
+      revision: 1,
+      audience: ["organisateur"],
+      media: {
+        video: "https://medias.example.org/org-first-steps/org-first-steps.mp4",
+        captions: "https://medias.example.org/org-first-steps/org-first-steps.vtt",
+        transcript: "https://medias.example.org/org-first-steps/org-first-steps.txt",
+      },
+      aspectRatio: "1280 / 800",
+      transcript: ["t"],
+    })
+  })
+
+  it("is null for an unpublished video or an unknown id", () => {
+    expect(docVideoPlayer("DRAFT_VIDEO", catalog, base)).toBeNull()
+    expect(docVideoPlayer("NOT_A_VIDEO", catalog, base)).toBeNull()
+  })
+
+  it("is null without a media base (no render to play)", () => {
+    expect(docVideoPlayer("ORG_FIRST_STEPS", catalog, undefined)).toBeNull()
+    expect(docVideoPlayer("ORG_FIRST_STEPS", catalog, null)).toBeNull()
+    expect(docVideoPlayer("ORG_FIRST_STEPS", catalog, "  ")).toBeNull()
+  })
+
+  it("skips empty transcript segments and falls back to 16 / 9 without a viewport size", () => {
+    const video = makeVideo({})
+    const odd = makeVideo({
+      manifest: {
+        ...video.manifest,
+        viewport: { width: 0, height: 0, deviceScaleFactor: 1 },
+        segments: [
+          { id: "a", transcript: "Un.", fallbackDurationMs: 1 },
+          { id: "b", transcript: " ", fallbackDurationMs: 1 },
+          { id: "c", transcript: "Deux.", fallbackDurationMs: 1 },
+        ],
+      },
+    })
+    const player = docVideoPlayer("ORG_FIRST_STEPS", [odd], base)!
+    expect(player.aspectRatio).toBe("16 / 9")
+    expect(player.transcript).toEqual(["Un.", "Deux."])
+  })
+})
+
+describe("splitAtDocVideoSlots", () => {
+  const player = docVideoPlayer("ORG_FIRST_STEPS", [makeVideo({})], "https://m.example.org")!
+  const players = new Map<string, DocVideoPlayer>([["ORG_FIRST_STEPS", player]])
+
+  it("cuts the HTML at the slot and puts the player there", () => {
+    const html = `<h2 id="a">A</h2>\n${renderDocVideoSlot("ORG_FIRST_STEPS")}<p>Suite.</p>\n`
+    expect(splitAtDocVideoSlots(html, players)).toEqual([
+      { kind: "html", html: '<h2 id="a">A</h2>\n' },
+      { kind: "video", player },
+      { kind: "html", html: "<p>Suite.</p>\n" },
+    ])
+  })
+
+  it("leaves HTML without a slot whole", () => {
+    expect(splitAtDocVideoSlots("<p>x</p>", players)).toEqual([{ kind: "html", html: "<p>x</p>" }])
+  })
+
+  it("drops a slot with no player and empty chunks around a slot", () => {
+    expect(splitAtDocVideoSlots(renderDocVideoSlot("OTHER"), players)).toEqual([])
+    expect(splitAtDocVideoSlots(renderDocVideoSlot("ORG_FIRST_STEPS"), players)).toEqual([{ kind: "video", player }])
+  })
+
+  it("never treats the guides' link card as a slot", () => {
+    const card = renderDocVideoCard({ href: "/videos/ORG_FIRST_STEPS?from=doc", label: "Voir" })
+    expect(splitAtDocVideoSlots(card, players)).toEqual([{ kind: "html", html: card }])
+  })
+})
+
+describe("renderDocUnitParts", () => {
+  const unit = loadDocUnits().find((u) => u.slug === "premiers-pas")!
+  const refs = findVideoReferences(unit.body)
+  const published = refs.filter((r) => loadVideoCatalog().find((v) => v.id === r.id)?.published)
+
+  it("puts the player of each published reference in the unit, no link card and no slot left", () => {
+    expect(published.length).toBeGreaterThan(0)
+    const parts = renderDocUnitParts(unit, "https://medias.example.org")
+    const videos = parts.flatMap((p) => (p.kind === "video" ? [p.player] : []))
+    expect(videos.map((v) => v.id)).toEqual(published.map((r) => r.id))
+    const html = parts.flatMap((p) => (p.kind === "html" ? [p.html] : [])).join("")
+    expect(html).not.toContain("data-doc-video")
+    expect(html).not.toContain("<!--")
+  })
+
+  it("keeps the same HTML around the player as the unit's plain rendering, headings included", () => {
+    const parts = renderDocUnitParts(unit, null)
+    expect(parts.every((p) => p.kind === "html")).toBe(true)
+    expect(parts.map((p) => (p.kind === "html" ? p.html : "")).join("")).toBe(renderDocUnit(unit, null))
   })
 })
 
