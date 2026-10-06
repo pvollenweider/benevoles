@@ -52,3 +52,12 @@ describe("landing structured data", () => {
     expect(JSON.parse(out)).toEqual({ text: "</script><script>alert(1)</script>" })
   })
 })
+
+describe("landing FAQ", () => {
+  // #697: the off-site backup copy goes to Infomaniak Swiss Backup, no longer to Dropbox.
+  it("says where the off-site backup copy is kept", () => {
+    const data = LANDING_FAQ.find((e) => e.question === "Où sont les données ?")
+    expect(data?.answer).toContain("chez Infomaniak, en Suisse")
+    expect(data?.answer).not.toContain("Dropbox")
+  })
+})

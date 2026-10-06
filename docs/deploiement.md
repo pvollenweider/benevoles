@@ -64,7 +64,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `cronjob-cleanup.yaml` | CronJob `app-cleanup` | oui | Purge RGPD, 02:00 UTC |
 | `cronjob-release-check.yaml` | CronJob `app-release-check` | oui | Vérification de nouvelle version GitHub (#612), 03:00 UTC ; sans effet ici, `benevol.app` est déployé depuis `main` |
 | `cronjob-backup.yaml` | PVC `backup-pvc` (5 Gi), CronJob `postgres-backup` | oui | `pg_dump` chiffré (AES-256), 01:00 UTC, rétention 30 jours |
-| `cronjob-backup-offsite.yaml` | CronJob `backup-offsite` | oui | Copie des fichiers déjà chiffrés hors site (`rclone`), 01:30 UTC, rétention 90 jours chez le fournisseur ; fournisseur choisi par `OFFSITE_PROVIDER` (`dropbox` par défaut, `swissbackup` cible, #524) ; demande le secret `rclone-config` |
+| `cronjob-backup-offsite.yaml` | CronJob `backup-offsite` | oui | Copie des fichiers déjà chiffrés hors site (`rclone`), 01:30 UTC, rétention 90 jours chez le fournisseur ; vers Infomaniak Swiss Backup (#524) ; demande le secret `rclone-config` et la clé `OFFSITE_BUCKET` de `benevoles-secret` |
 | `log-rotation.md` | | | Rotation des journaux du nœud : procédure manuelle, la durée de 90 jours n'est pas encore garantie |
 
 ### Adresse des visiteurs et limites de débit
@@ -353,7 +353,7 @@ openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -pass pass:<PASSPHRASE> \
 
 Elle n'existe qu'à un seul endroit : la clé `BACKUP_PASSPHRASE` du secret `benevoles-secret`, sur ce cluster. Elle n'est **pas** synchronisée depuis les secrets GitHub Actions (`deploy.yml` ne la gère pas, contrairement au reste de `benevoles-secret`) — elle a été ajoutée directement dans le cluster, à la main.
 
-Conséquence : si le cluster est perdu **et** que personne n'a cette valeur ailleurs, la copie hors site sur Dropbox (voir ci-dessous) ne sert à rien — elle ne contient que du binaire chiffré, pour toujours illisible sans elle. La copie Dropbox protège contre « le fichier a disparu », pas contre « la clé a disparu » ; les deux protections sont indépendantes.
+Conséquence : si le cluster est perdu **et** que personne n'a cette valeur ailleurs, la copie hors site sur Swiss Backup (voir ci-dessous) ne sert à rien : elle ne contient que du binaire chiffré, pour toujours illisible sans elle. La copie hors site protège contre « le fichier a disparu », pas contre « la clé a disparu » ; les deux protections sont indépendantes.
 
 **À faire une fois, en dehors du cluster** : récupérer la valeur et la noter dans un gestionnaire de mots de passe (jamais dans ce dépôt, ni dans un fichier sur ce même serveur) :
 
@@ -368,28 +368,14 @@ kubectl -n benevoles get secret benevoles-secret -o jsonpath='{.data.BACKUP_PASS
 - Envoi avec `rclone copy` (upload seulement, ne touche jamais aux fichiers déjà présents chez le fournisseur) puis purge des fichiers de plus de **90 jours** avec `rclone delete --min-age`. Volontairement plus long que la rétention locale de 30 jours du PVC : le but est de pouvoir revenir à un état antérieur à une erreur découverte tard, indépendamment de ce que la rotation locale a déjà supprimé.
 - Ce n'est pas un `rclone sync` : un `sync` effacerait chez le fournisseur tout fichier que le PVC a déjà purgé, ce qui viderait la copie hors site en même temps que le volume local en cas de perte du cluster — exactement le scénario que la copie hors site est censée couvrir.
 
-**Fournisseur (#524).** La variable d'environnement `OFFSITE_PROVIDER` du CronJob (`k8s/cronjob-backup-offsite.yaml`) choisit le remote rclone :
+**Fournisseur : Infomaniak Swiss Backup** (#524), stockage OpenStack Swift en Suisse, remote rclone `swissbackup`, container donné par `OFFSITE_BUCKET`. Jusqu'au 2026-10-05, la copie partait vers un compte Dropbox individuel (États-Unis) ; ce fournisseur est retiré du CronJob et des scripts (#697), et ses copies sont en cours de suppression.
 
-- `swissbackup` (valeur actuelle depuis le 2026-10-05) : Infomaniak Swiss Backup, stockage OpenStack Swift en Suisse, container `benevol-backups`.
-- `dropbox` (ancien fournisseur) : plan Dropbox individuel, pas de DPA, stockage aux États-Unis par défaut (voir [sous-traitants.md](rgpd/sous-traitants.md)). Gardé comme retour arrière quelques nuits, puis retiré.
-
-Les deux remotes (`dropbox` et `swissbackup`) coexistent dans le même secret `rclone-config` : revenir en arrière consiste à remettre `OFFSITE_PROVIDER` à `dropbox` et redéployer, tant que le remote Dropbox n'est pas retiré du fichier.
-
-**Mise en place du remote Dropbox** (à faire une fois, en local — jamais dans ce dépôt, le jeton produit est un secret) :
-
-```bash
-rclone config
-# Nouveau remote → nom "dropbox" → type "dropbox" → autoriser dans le navigateur
-# Produit ~/.config/rclone/rclone.conf
-```
-
-**Mise en place du remote Swiss Backup** (à faire une fois, en local — jamais dans ce dépôt) :
+**Mise en place du remote Swiss Backup** (à faire une fois, en local, jamais dans ce dépôt) :
 
 1. Dans le Manager Infomaniak, créer un appareil Swiss Backup pour rclone et lui donner un mot de passe. Le Manager fournit un bloc `rclone.conf` de type `swift` (`user`, `auth = https://swiss-backup02.infomaniak.com/identity/v3`, `tenant`, `region = RegionOne`, `key = [password]`).
-2. Coller ce bloc à la fin du même fichier `rclone.conf` que Dropbox, renommer sa section en `[swissbackup]` (nom attendu par le CronJob) et remplacer `[password]` par le mot de passe de l'appareil (en clair : rclone ne le chiffre pas pour Swift). Vérifier : `rclone lsd swissbackup:`.
+2. Coller ce bloc dans un fichier `rclone.conf` local, renommer sa section en `[swissbackup]` (nom attendu par le CronJob) et remplacer `[password]` par le mot de passe de l'appareil (en clair : rclone ne le chiffre pas pour Swift). Vérifier : `rclone lsd swissbackup:`.
 3. Créer le container des sauvegardes : `rclone mkdir swissbackup:benevol-backups`. Son nom devient le secret GitHub `OFFSITE_BUCKET` (repris dans `benevoles-secret` au déploiement suivant, voir [configuration.md](configuration.md#secrets-kubernetes)).
-
-Dans les deux cas, une fois `rclone.conf` à jour (un ou deux remotes) :
+4. Créer ou mettre à jour le secret `rclone-config` :
 
 ```bash
 kubectl create secret generic rclone-config -n benevoles \
@@ -397,20 +383,14 @@ kubectl create secret generic rclone-config -n benevoles \
   --save-config --dry-run=client -o yaml | kubectl apply -f -
 ```
 
-À refaire si le jeton Dropbox est révoqué (Dropbox ne fait pas expirer les jetons rclone par défaut) ou si la clé Swiss Backup est régénérée. Tant que ce secret n'existe pas, le CronJob échoue simplement (pod bloqué faute de volume) ; ça n'affecte pas le dump local (`cronjob-backup.yaml`), qui est un job séparé.
+À refaire si le mot de passe de l'appareil Swiss Backup change. Tant que ce secret n'existe pas, le CronJob échoue simplement (pod bloqué faute de volume) ; ça n'affecte pas le dump local (`cronjob-backup.yaml`), qui est un job séparé. Sans `OFFSITE_BUCKET`, le job s'arrête avant d'appeler rclone.
 
 **`DRY_RUN`** (variable d'environnement du CronJob, `"false"` par défaut) : à `"true"`, `rclone copy` et `rclone delete` reçoivent `--dry-run` (rien n'est envoyé ni supprimé, seul l'inventaire est réel), et le job ne signale pas de réussite à la page santé. Utile pour un test manuel du nouveau remote avant de lui faire confiance (`kubectl create job --from=cronjob/backup-offsite ... ` avec la variable modifiée dans le Job généré).
 
 **Restauration / test.** `scripts/restore-test-offsite.sh` liste le remote, télécharge le dernier fichier, le déchiffre avec `BACKUP_PASSPHRASE` et vérifie qu'il redonne un `pg_dump` gzippé valide — sans jamais rien modifier côté distant (uniquement `lsf`/`lsl`/`copy` en lecture) ni restaurer dans une base :
 
 ```bash
-OFFSITE_PROVIDER=dropbox \
-RCLONE_CONFIG=$HOME/.config/rclone/rclone.conf \
-BACKUP_PASSPHRASE=<valeur du cluster> \
-./scripts/restore-test-offsite.sh
-
-# ou, pour Swiss Backup :
-OFFSITE_PROVIDER=swissbackup OFFSITE_BUCKET=<bucket> \
+OFFSITE_BUCKET=<container> \
 RCLONE_CONFIG=$HOME/.config/rclone/rclone.conf \
 BACKUP_PASSPHRASE=<valeur du cluster> \
 ./scripts/restore-test-offsite.sh
@@ -418,16 +398,13 @@ BACKUP_PASSPHRASE=<valeur du cluster> \
 
 Le script affiche à la fin la commande `curl` à lancer pour enregistrer le test sur la page de santé (voir « Checklist opérationnelle » ci-dessous) ; il ne l'envoie pas lui-même, pour qu'un essai local contre un `rclone.conf` personnel ne signale jamais un faux succès en production.
 
-`scripts/test-offsite-backup.sh` est le test de régression (hors ligne, faux `rclone`/`wget`) du choix de fournisseur et du script de restauration ; voir son en-tête.
+`scripts/test-offsite-backup.sh` est le test de régression (hors ligne, faux `rclone`/`wget`) du script du CronJob et du script de restauration ; voir son en-tête. `make test-offsite-backup` le lance, et `make restore-test-offsite OFFSITE_BUCKET=… BACKUP_PASSPHRASE=…` lance le test de restauration réel.
 
-**Étapes restantes côté opérateur, dans l'ordre, pour terminer la bascule (#524)** :
+**Retrait de Dropbox (#697), côté opérateur**, une fois ce changement déployé :
 
-1. Créer l'appareil Swiss Backup et son mot de passe (ci-dessus).
-2. Ajouter ce remote à `rclone.conf`, créer le container, recréer le secret `rclone-config`.
-3. Ajouter le secret GitHub `OFFSITE_BUCKET` (nom du container) ; vérifier qu'il arrive dans `benevoles-secret` au déploiement suivant.
-4. Lancer `scripts/restore-test-offsite.sh` avec `OFFSITE_PROVIDER=swissbackup` pour confirmer qu'un envoi réel est lisible et déchiffrable (après un premier passage du CronJob, ou un Job manuel `DRY_RUN=false`).
-5. Changer `OFFSITE_PROVIDER` en `"swissbackup"` dans `k8s/cronjob-backup-offsite.yaml`, committer, pousser sur `main` (`deploy.yml` applique le changement). Fait le 2026-10-05, avec le renommage du CronJob `backup-offsite-dropbox` en `backup-offsite` (l'ancien CronJob est supprimé à la main : `kubectl delete cronjob backup-offsite-dropbox -n benevoles`).
-6. Après quelques jours de copies Swiss Backup réussies (page de santé), supprimer les copies sur Dropbox, attendre sa corbeille de 30 jours (plan individuel), puis retirer Dropbox de [sous-traitants.md](rgpd/sous-traitants.md) et de la politique de confidentialité publique (une fois l'analyse juridique de #485 favorable).
+1. Supprimer les anciennes copies : `rclone purge dropbox:/benevol-backups`, puis vider la corbeille Dropbox et révoquer rclone dans les applications connectées du compte Dropbox.
+2. Retirer la section `[dropbox]` de `rclone.conf` et recréer le secret `rclone-config` (commande ci-dessus).
+3. Si ce n'est pas déjà fait, supprimer l'ancien CronJob : `kubectl delete cronjob backup-offsite-dropbox -n benevoles`.
 
 Restauration depuis le remote actuel : `rclone lsf <remote>:<chemin>` pour lister, `rclone copy <remote>:<chemin>/<fichier> .` pour télécharger, puis déchiffrer comme ci-dessus (ou utiliser `scripts/restore-test-offsite.sh` qui fait tout cela et vérifie le résultat).
 
@@ -446,7 +423,7 @@ Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut don
 **Avant une mise en production** (premier déploiement ou nouveau cluster) :
 
 - [ ] `TOKEN_ENCRYPTION_KEY` et `BACKUP_PASSPHRASE` notées dans un gestionnaire de mots de passe, hors du cluster et hors de ce dépôt ;
-- [ ] secret `rclone-config` créé, et une première copie Dropbox constatée le lendemain ;
+- [ ] secret `rclone-config` et clé `OFFSITE_BUCKET` créés, et une première copie Swiss Backup constatée le lendemain ;
 - [ ] le Job de migration a réussi (`kubectl -n benevoles logs job/benevoles-migrate`) ;
 - [ ] `/super-admin/health` (connecté en super admin) est tout vert : base, file d'emails, rappels, nettoyage, sauvegarde, copie hors site, migrations, configuration (sur un cluster neuf, le nettoyage et les sauvegardes restent « Jamais exécuté » jusqu'à leur première nuit, et le test de restauration en avertissement jusqu'au premier test) ;
 - [ ] `/api/health` répond `200` ;
@@ -455,7 +432,7 @@ Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut don
 **Chaque mois** :
 
 - [ ] les derniers CronJobs de sauvegarde ont réussi : `kubectl -n benevoles get jobs` (dump et copie hors site) ;
-- [ ] le dernier fichier sur `backup-pvc` et sur Dropbox a une taille plausible (pas 0 octet) ;
+- [ ] le dernier fichier sur `backup-pvc` et sur Swiss Backup a une taille plausible (pas 0 octet) ;
 - [ ] **test de restauration** : télécharger un dump, le déchiffrer et le charger dans une base PostgreSQL jetable (`psql -f dump.sql`), puis vérifier quelques comptages (organisations, événements, inscriptions) ;
   puis le signaler à la page de santé (avertissement après 45 jours sans test, erreur après 90) :
 

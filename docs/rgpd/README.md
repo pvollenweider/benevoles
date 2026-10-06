@@ -34,11 +34,11 @@ L'inventaire factuel et les brouillons (accord art. 28, liste publique des sous-
 |---|---|
 | **Publiable** en l'état | rien de ce dossier ; seule la matrice de conservation ([../retention.md](../retention.md)) est déjà publique, pour les traitements internes |
 | **À valider juridiquement** | répartition des rôles, qualification des services push, accord de traitement et ses annexes, délai de notification des violations, procédure de violation, texte de la politique publique |
-| **À vérifier en production et dans les contrats** | tout [verifications-production.md](verifications-production.md) : hébergeur, SMTP, Dropbox, Sentry, rotation des journaux, clé des sauvegardes, accès |
+| **À vérifier en production et dans les contrats** | tout [verifications-production.md](verifications-production.md) : hébergeur, SMTP, copie hors site (Infomaniak Swiss Backup), Sentry, rotation des journaux, clé des sauvegardes, accès |
 | **Évolution du produit** | les points de la section précédente |
 
 ## Cadre retenu (décision de l'opérateur, 2026-09-30)
 
 - **Référence : le droit français et le RGPD.** Le service est hébergé en France (OVH, Roubaix) et les contrats des prestataires relèvent du droit français. On s'en tient à ce qui est légal en France, sans démarche supplémentaire.
 - **Pas de courrier aux prestataires** : ni instructions écrites à OVH (DPA § 8.1), ni demande à Gandi sur la durée de ses journaux SMTP. Ces points restent notés, sans suite prévue.
-- **Seul écart ouvert : Dropbox.** La copie de sauvegarde hors site reste pour l'instant sur une offre Dropbox individuelle (États-Unis, sans accord de traitement spécifique), ce que dit la politique publique. Un autre hébergement est recherché (#524).
+- **Copie hors site : Infomaniak Swiss Backup (Suisse) depuis le 2026-10-05** (#524). L'écart Dropbox (offre individuelle, États-Unis, sans accord de traitement spécifique) est clos : plus rien n'y est envoyé et les anciennes copies sont en cours de suppression (#697). Reste à confirmer l'accord de traitement d'Infomaniak pour Swiss Backup.

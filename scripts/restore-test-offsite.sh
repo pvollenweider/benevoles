@@ -9,13 +9,12 @@
 # (only "lsf" and "copy FROM the remote", never "delete" or "sync").
 #
 # Usage:
-#   OFFSITE_PROVIDER=dropbox|swissbackup \
 #   RCLONE_CONFIG=$HOME/.config/rclone/rclone.conf \
-#   OFFSITE_BUCKET=<bucket>  \  # only for swissbackup
+#   OFFSITE_BUCKET=<bucket>  \
 #   BACKUP_PASSPHRASE=...    \
 #   ./scripts/restore-test-offsite.sh
 #
-# Same provider switch as k8s/cronjob-backup-offsite.yaml (kept in sync with
+# Same Swiss Backup remote as k8s/cronjob-backup-offsite.yaml (kept in sync with
 # scripts/test-offsite-backup.sh, which exercises both the CronJob's script and this one
 # against a fake rclone).
 #
@@ -25,32 +24,20 @@
 
 set -e
 
-OFFSITE_PROVIDER="${OFFSITE_PROVIDER:-dropbox}"
 RCLONE_CONFIG="${RCLONE_CONFIG:-$HOME/.config/rclone/rclone.conf}"
 
-case "$OFFSITE_PROVIDER" in
-  dropbox)
-    REMOTE="dropbox:/benevol-backups"
-    ;;
-  swissbackup)
-    if [ -z "$OFFSITE_BUCKET" ]; then
-      echo "ERREUR : OFFSITE_BUCKET n'est pas défini (requis pour swissbackup)." >&2
-      exit 1
-    fi
-    REMOTE="swissbackup:${OFFSITE_BUCKET}/benevol-backups"
-    ;;
-  *)
-    echo "ERREUR : OFFSITE_PROVIDER inconnu (\"${OFFSITE_PROVIDER}\"), attendu \"dropbox\" ou \"swissbackup\"." >&2
-    exit 1
-    ;;
-esac
+if [ -z "$OFFSITE_BUCKET" ]; then
+  echo "ERREUR : OFFSITE_BUCKET n'est pas défini (container Swiss Backup)." >&2
+  exit 1
+fi
+REMOTE="swissbackup:${OFFSITE_BUCKET}/benevol-backups"
 
 if [ -z "$BACKUP_PASSPHRASE" ]; then
   echo "ERREUR : BACKUP_PASSPHRASE n'est pas défini." >&2
   exit 1
 fi
 
-echo "==> Inventaire ${OFFSITE_PROVIDER} (${REMOTE}) :"
+echo "==> Inventaire Swiss Backup (${REMOTE}) :"
 rclone lsl "$REMOTE" --config "$RCLONE_CONFIG"
 
 LATEST=$(rclone lsf "$REMOTE" --config "$RCLONE_CONFIG" | grep '^benevoles_.*\.sql\.gz\.enc$' | sort | tail -n1)

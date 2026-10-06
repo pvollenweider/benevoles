@@ -13,13 +13,13 @@ Ce que le dépôt ne permet pas d'établir. Pour chaque point : la preuve à con
 - [x] Fournisseur : **Gandi Mail**, seul expéditeur autorisé du domaine (SPF, DKIM `gm1`–`gm3`, MX, DMARC strict), observé le 2026-09-30. Confirmation formelle : valeur de `SMTP_HOST` dans le secret de production.
 - [x] DPA v2023.0 et localisation (France, sans transfert) documentés ; durée des journaux SMTP et des files : non documentée, pas de demande prévue (décision du 2026-09-30).
 
-## Dropbox (copie hors site)
+## Copie hors site (Infomaniak Swiss Backup)
 
-- [x] **Offre du compte utilisé par rclone** : individuelle (confirmée le 2026-09-30), donc sans DPA ; conservée pour l'instant, migration prévue vers Infomaniak Swiss Backup (#524). Voir « Points d'attention » dans [sous-traitants.md](sous-traitants.md).
-- [x] Région de stockage : **États-Unis** (offre individuelle, pas de choix de région) ; accès hors de Suisse et de l'UE possibles par Dropbox et ses sous-traitants. Écart assumé, suivi dans #524.
-- [x] DPA : aucun pour l'offre individuelle ; transferts selon les garanties que Dropbox déclare (clauses contractuelles types, Data Privacy Framework). Écrit dans la politique publique (#528).
-- [x] Fichiers supprimés : rclone les supprime du Dropbox au-delà de la durée de la matrice, mais ils **restent restaurables** pendant la période de récupération des fichiers supprimés de Dropbox (opérateur, 2026-09-30) : 30 jours en Basic ou Plus, 180 jours en Professional, selon l'aide officielle citée dans [sous-traitants.md](sous-traitants.md). **Reste : relever le nom exact de l'offre individuelle.** Les copies sont chiffrées avant l'envoi, clé hors de Dropbox ; elles restent des données personnelles. La durée réelle de conservation hors site est donc celle de la matrice plus cette période.
-- [x] Accès au compte : **l'opérateur uniquement** ; jeton OAuth rclone stocké **seulement dans le secret Kubernetes** (opérateur, 2026-09-30).
+- [x] Fournisseur : **Infomaniak Swiss Backup** depuis le 2026-10-05 (#524) ; copie de test restaurée le 2026-10-05, copie nocturne du 2026-10-06 reçue (opérateur).
+- [ ] Accord de traitement (DPA) ou conditions de traitement propres à Swiss Backup, et liste des sous-traitants d'Infomaniak. Tant que ce n'est pas fait, la politique publique le dit « en cours de vérification ».
+- [ ] Localisation précise du centre de données et accès à distance éventuels (le fournisseur annonce un stockage en Suisse).
+- [ ] Suppression côté container (versionnement ou corbeille) : confirmer qu'elle rejoint la rétention de 90 jours appliquée par rclone.
+- [ ] Ancien fournisseur, **Dropbox** (jusqu'au 2026-10-05 ; offre individuelle, États-Unis, sans DPA) : anciennes copies supprimées (`rclone purge`), corbeille vidée, accès de rclone révoqué dans le compte, section `[dropbox]` retirée du secret `rclone-config` (#697). Voir « Anciens sous-traitants » dans [sous-traitants.md](sous-traitants.md).
 
 ## Sentry
 
@@ -56,4 +56,4 @@ Décision : un jeton personnel n'est jamais écrit dans un journal d'accès (`k8
 - [ ] Relecture juridique de [accord-sous-traitance-brouillon.md](accord-sous-traitance-brouillon.md) sur la base des clauses types de la Commission.
 - [ ] Validation de la répartition des rôles ([inventaire.md](inventaire.md)).
 - [ ] Validation de [procedure-violation.md](procedure-violation.md) : personnes, délais, canal de signalement.
-- [x] Politique publique alignée sur l'état réel, Dropbox compris (#528, 2026-09-30). À revoir après la relecture juridique et le remplacement de Dropbox (#524).
+- [x] Politique publique alignée sur l'état réel (#528, 2026-09-30), puis sur le remplacement de la copie hors site par Infomaniak Swiss Backup (#524, #697, 2026-10-06). À revoir après la relecture juridique.

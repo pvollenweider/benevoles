@@ -26,4 +26,16 @@ describe("off-site backup CronJob (#524)", () => {
     expect(guard).toBeGreaterThan(-1)
     expect(guard).toBeLessThan(heartbeat)
   })
+
+  // #697: Swiss Backup is the only provider; the former Dropbox remote and the provider switch
+  // are gone, so no script can send copies there again by mistake.
+  it("only targets the Swiss Backup remote", () => {
+    for (const file of ["k8s/cronjob-backup-offsite.yaml", "scripts/restore-test-offsite.sh", "Makefile"]) {
+      const text = readFileSync(path.join(root, file), "utf8")
+      expect(text, file).not.toMatch(/dropbox/i)
+      expect(text, file).not.toContain("OFFSITE_PROVIDER")
+    }
+    const cronjob = readFileSync(path.join(root, "k8s/cronjob-backup-offsite.yaml"), "utf8")
+    expect(cronjob).toContain('REMOTE="swissbackup:${OFFSITE_BUCKET}/benevol-backups"')
+  })
 })
