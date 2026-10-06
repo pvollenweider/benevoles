@@ -57,11 +57,9 @@ const schema = z.object({
   comment: z.string().optional(),
   consent: z.literal(true),
   // The volunteer ticked "J'ai lu et j'accepte la convention des bénévoles" (#569): the page
-  // already refuses to submit without it (validateSignup). An explicit false is refused below
-  // with a readable message. A missing field comes from a page loaded before #569 shipped, which
-  // showed the checkbox but did not send it: accepted without a proof of acceptance rather than
-  // losing that sign-up (owner decision 2026-10-05; to be made required later).
-  charterAccepted: z.literal(true).optional(),
+  // already refuses to submit without it (validateSignup). Required (#696): a false or missing
+  // value is refused below with a readable message, before any lookup.
+  charterAccepted: z.literal(true),
   inviteToken: z.string().optional(),
   /** Answers to the event's custom questions (#483), by question id. */
   answers: z.record(z.string(), z.unknown()).optional(),
@@ -77,9 +75,11 @@ export async function POST(req: Request) {
   }
 
   const body = await req.json()
-  if (body?.charterAccepted === false) {
+  if (body?.charterAccepted !== true) {
+    // A page opened before the checkbox was sent with the form doesn't send it at all: reloading
+    // the page brings the current form.
     return NextResponse.json(
-      { error: "Coche « J'ai lu et j'accepte la convention des bénévoles », puis confirme à nouveau.", field: "charterAccepted" },
+      { error: "Coche « J'ai lu et j'accepte la convention des bénévoles », puis confirme à nouveau. Si la case n'apparaît pas, recharge la page.", field: "charterAccepted" },
       { status: 400 },
     )
   }
@@ -205,7 +205,6 @@ export async function POST(req: Request) {
   // shown (never overwritten: "create" wins a race, "update" is a no-op on an existing row).
   const charterText = resolveCharterText(event.organization.volunteerCharter)
   const charterHash = hashCharterText(charterText)
-  const charterAccepted = parsed.data.charterAccepted === true
   const charterAcceptedAt = new Date()
 
   // Notifications of this sign-up, built by the usual helpers into an outbox collector (#293).
@@ -228,7 +227,7 @@ export async function POST(req: Request) {
       // Resolve the hash back to its text later (#569): upserted once per distinct text, never
       // overwritten once seen (the "update" below only exists so a race between two sign-ups
       // doesn't throw on a duplicate key — it changes nothing).
-      if (charterAccepted) await tx.charterVersion.upsert({
+      await tx.charterVersion.upsert({
         where: { organizationId_hash: { organizationId, hash: charterHash } },
         create: { organizationId, hash: charterHash, text: charterText },
         update: {},
@@ -301,8 +300,8 @@ export async function POST(req: Request) {
               waitingPosition: placement.status === "waiting" ? placement.waitingPosition : null,
               // Proof of acceptance (#569): same hash and instant for every registration this
               // sign-up creates.
-              charterAcceptedHash: charterAccepted ? charterHash : null,
-              charterAcceptedAt: charterAccepted ? charterAcceptedAt : null,
+              charterAcceptedHash: charterHash,
+              charterAcceptedAt,
             },
           })
         )

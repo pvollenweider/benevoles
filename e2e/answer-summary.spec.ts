@@ -35,7 +35,7 @@ test("counts confirmed volunteers once, pending apart, and exports the summary",
 
   const signUp = (who: string, shiftIds: string[], answers: Record<string, string>) =>
     post("/api/public/registrations", {
-      eventId: event.id, shiftIds, firstName: "E2E", lastName: `${who}${stamp}`, email: `e2e-sum-${who.toLowerCase()}-${stamp}@example.com`, consent: true, answers,
+      eventId: event.id, shiftIds, firstName: "E2E", lastName: `${who}${stamp}`, email: `e2e-sum-${who.toLowerCase()}-${stamp}@example.com`, consent: true, charterAccepted: true, answers,
     }, { "x-forwarded-for": randomIp() })
   // Two shifts, one t-shirt.
   await signUp("Alice", [bar.id, accueil.id], { [size.id]: "M", [diet.id]: "Végétarien" })
