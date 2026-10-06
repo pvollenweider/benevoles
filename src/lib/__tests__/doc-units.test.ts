@@ -316,13 +316,19 @@ describe("the units of guide/", () => {
     for (const u of units) expect(pageTitles.has(u.title), u.slug).toBe(false)
   })
 
-  it("speak to volunteers with « tu », and split a shared unit into « Côté organisation » and « Côté bénévole »", () => {
+  it("speak to volunteers with « tu », and split a shared unit into « Côté bénévole » then « Côté organisation »", () => {
     for (const u of units) {
       // « rendez-vous » (the meeting point of a shift) isn't a « vous ».
       if (u.roles.length === 1 && u.roles[0] === "benevole") expect(u.body, u.slug).not.toMatch(/(?<![\w-])(vous|votre|vos)\b/i)
       if (u.roles.length === 2) {
-        expect(u.body, u.slug).toMatch(/^## Côté organisation$/m)
-        expect(u.body, u.slug).toMatch(/^## Côté bénévole$/m)
+        // The volunteer half first, as the jump links under « Pour : … » offer it (DOC_SIDE_SECTIONS).
+        const volunteer = u.body.search(/^## Côté bénévole$/m)
+        const organiser = u.body.search(/^## Côté organisation$/m)
+        expect(volunteer, `${u.slug}: « ## Côté bénévole »`).toBeGreaterThan(-1)
+        expect(organiser, `${u.slug}: « ## Côté organisation »`).toBeGreaterThan(-1)
+        expect(volunteer, `${u.slug}: « Côté bénévole » before « Côté organisation »`).toBeLessThan(organiser)
+        // The introduction, shared by both audiences, says « vous » to no one.
+        expect(u.body.slice(0, volunteer), `${u.slug}: introduction`).not.toMatch(/(?<![\w-])(vous|votre|vos)\b/i)
       }
     }
   })

@@ -26,6 +26,6 @@ aliases: []
 
 ## Après l'inscription
 
-- [Je veux changer de créneau](ma-page-personnelle.md#je-veux-changer-de-creneau)
+- [Je veux changer de créneau](ma-page-personnelle.md#changer-de-creneau)
 - [Je n'ai plus le lien vers ma page personnelle](lien-personnel.md#je-n-ai-plus-le-lien-vers-ma-page-personnelle)
 - [Je ne veux pas oublier mon créneau le jour J](rappels.md#je-ne-veux-pas-oublier-mon-creneau-le-jour-j)

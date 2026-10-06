@@ -1,6 +1,19 @@
 import { describe, it, expect } from "vitest"
-import { docFilterStatus, docUnitQuestions, matchesDocQuery, normalizeForSearch, searchTerms } from "../doc-search"
+import {
+  DOC_HELP_UNIT_SLUG,
+  docFilterNextSteps,
+  docFilterStatus,
+  docUnitQuestionAnchors,
+  docUnitQuestions,
+  matchesDocQuery,
+  matchingDocQuestionLinks,
+  matchingDocQuestions,
+  normalizeForSearch,
+  searchTerms,
+} from "../doc-search"
 import { readDocUnits } from "../doc-units"
+import { renderDocUnit } from "../public-content"
+import { DOC_FAQ_HEADING_ID } from "../doc-faq"
 
 // The filter over the documentation's index (/doc, /doc/admin, /doc/benevole).
 
@@ -64,8 +77,113 @@ describe("docUnitQuestions", () => {
   })
 
   it("finds the volunteers' questions in the real units", () => {
-    const unit = readDocUnits().find((u) => u.slug === "ma-page-personnelle")!
-    expect(docUnitQuestions(unit.body)).toContain("Je veux changer de créneau")
+    const unit = readDocUnits().find((u) => u.slug === "rappels")!
+    expect(docUnitQuestions(unit.body)).toContain("Je ne veux pas oublier mon créneau le jour J")
+  })
+})
+
+describe("docUnitQuestionAnchors", () => {
+  it("gives each question the id of its heading, counting every heading as the page does", () => {
+    const md = ["## Questions", "### Questions", "### Où sont mes **données** ?", "```", "### pas un titre", "```", "### Où sont mes données ?"].join("\n")
+    expect(docUnitQuestionAnchors(md)).toEqual([
+      { text: "Questions", id: "questions-2" },
+      { text: "Où sont mes données ?", id: "ou-sont-mes-donnees" },
+      { text: "Où sont mes données ?", id: "ou-sont-mes-donnees-2" },
+    ])
+  })
+
+  // The filter links a question to its heading: the id must be the one the unit's page renders.
+  it("matches the ids of the « ### » headings each real unit renders", () => {
+    for (const unit of readDocUnits()) {
+      const rendered = [...renderDocUnit(unit).matchAll(/<h3 id="([^"]+)"/g)].map((m) => m[1])
+      expect(docUnitQuestionAnchors(unit.body).map((q) => q.id), unit.slug).toEqual(rendered)
+    }
+  })
+})
+
+describe("matchingDocQuestions", () => {
+  const unit = {
+    title: "Rappels et changements de créneau",
+    summary: "Les rappels envoyés avant chaque journée de créneaux.",
+    questions: ["Recevoir les rappels sur ton téléphone", "Je ne veux pas oublier mon créneau le jour J", "Je veux oublier le téléphone"],
+  }
+
+  it("shows no question when the title or the summary already matches", () => {
+    expect(matchingDocQuestions(unit, "rappels")).toEqual([])
+    expect(matchingDocQuestions(unit, "journée")).toEqual([])
+  })
+
+  it("shows the questions that hold every word when the unit is found by them", () => {
+    expect(matchingDocQuestions(unit, "jour J oublier")).toEqual(["Je ne veux pas oublier mon créneau le jour J"])
+    expect(matchingDocQuestions(unit, "telephone recevoir")).toEqual(["Recevoir les rappels sur ton téléphone"])
+  })
+
+  it("ignores accents and case", () => {
+    expect(matchingDocQuestions(unit, "TÉLÉPHONE")).toEqual(["Recevoir les rappels sur ton téléphone", "Je veux oublier le téléphone"])
+    expect(matchingDocQuestions(unit, "Oublier")).toEqual(["Je ne veux pas oublier mon créneau le jour J", "Je veux oublier le téléphone"])
+  })
+
+  it("shows two questions at most, in page order, and none for a blank query or a word no question holds", () => {
+    const many = { ...unit, questions: ["Question une", "Question deux", "Question trois"] }
+    expect(matchingDocQuestions(many, "question")).toEqual(["Question une", "Question deux"])
+    expect(matchingDocQuestions(many, "question", 1)).toEqual(["Question une"])
+    expect(matchingDocQuestions(many, "  ")).toEqual([])
+    expect(matchingDocQuestions(many, "xyz")).toEqual([])
+  })
+})
+
+describe("matchingDocQuestionLinks", () => {
+  const entry = {
+    title: "Rappels",
+    summary: "Avant chaque journée.",
+    questions: ["Question une", "Question deux", "Question trois"],
+    questionIds: ["question-une", "question-deux", "question-trois"],
+  }
+
+  it("pairs each matching question with its heading id, two at most", () => {
+    expect(matchingDocQuestionLinks(entry, "question")).toEqual([
+      { text: "Question une", id: "question-une" },
+      { text: "Question deux", id: "question-deux" },
+    ])
+    expect(matchingDocQuestionLinks(entry, "rappels")).toEqual([])
+  })
+
+  it("leaves out a question without an id (never a link to « #undefined »), and fills the cap with the next one", () => {
+    expect(matchingDocQuestionLinks({ ...entry, questionIds: ["", "question-deux"] }, "question")).toEqual([{ text: "Question deux", id: "question-deux" }])
+    expect(matchingDocQuestionLinks({ ...entry, questionIds: ["question-une"] }, "question")).toEqual([{ text: "Question une", id: "question-une" }])
+  })
+})
+
+describe("docFilterNextSteps", () => {
+  const faq = `#${DOC_FAQ_HEADING_ID}`
+
+  it("on the volunteers' guide, says « tu » and leads to the guide's questions", () => {
+    const { advice, lead, steps } = docFilterNextSteps("benevole")
+    expect(advice).toMatch(/^Essaie un autre mot\b/)
+    expect(lead).toMatch(/\bta réponse\b/)
+    expect(steps).toEqual([{ href: faq, label: "Questions fréquentes" }])
+  })
+
+  it("on the organisers' guide, says « vous » and adds the help unit", () => {
+    const { advice, lead, steps } = docFilterNextSteps("admin")
+    expect(advice).toMatch(/^Essayez un autre mot\b/)
+    expect(lead).toMatch(/\bvotre réponse\b/)
+    expect(steps.map((s) => s.href)).toEqual([faq, `/doc/${DOC_HELP_UNIT_SLUG}`])
+  })
+
+  it("on /doc, stays neutral and leads to both guides' questions and the help unit", () => {
+    const { advice, lead, steps } = docFilterNextSteps()
+    for (const text of [advice, lead]) expect(text).not.toMatch(/(?<![\w-])(tu|ta|ton|vous|votre|essaie|essayez)\b/i)
+    expect(steps.map((s) => s.href)).toEqual([`/doc/benevole${faq}`, `/doc/admin${faq}`, `/doc/${DOC_HELP_UNIT_SLUG}`])
+  })
+
+  it("leads to a help unit that exists, for organisers, and never uses a forbidden separator", () => {
+    const help = readDocUnits().find((u) => u.slug === DOC_HELP_UNIT_SLUG)
+    expect(help?.roles).toContain("admin")
+    for (const role of ["admin", "benevole", undefined] as const) {
+      const { advice, lead, steps } = docFilterNextSteps(role)
+      for (const text of [advice, lead, ...steps.flatMap((s) => [s.label, s.note ?? ""])]) expect(text).not.toMatch(/[·—]/)
+    }
   })
 })
 

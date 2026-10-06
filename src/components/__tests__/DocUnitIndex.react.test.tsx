@@ -60,6 +60,23 @@ describe("DocUnitIndex", () => {
     expect(container).not.toHaveTextContent("Pour")
   })
 
+  it("on a guide's page, offers that guide's questions when nothing matches, in its reader's voice", () => {
+    render(<DocUnitIndex units={units} role="benevole" />)
+    fireEvent.change(screen.getByRole("searchbox", { name: "Filtrer les fiches" }), { target: { value: "xyz" } })
+    expect(screen.getByText("Essaie un autre mot, ou efface le filtre pour revoir toute la liste.")).toBeVisible()
+    expect(screen.getByText(/^Tu trouveras peut-être ta réponse ici\s:$/)).toBeVisible()
+    expect(screen.getAllByRole("link").map((l) => [l.textContent, l.getAttribute("href")])).toEqual([["Questions fréquentes", "#faq-du-guide"]])
+    cleanup()
+
+    render(<DocUnitIndex units={units} role="admin" />)
+    fireEvent.change(screen.getByRole("searchbox", { name: "Filtrer les fiches" }), { target: { value: "xyz" } })
+    expect(screen.getByText("Essayez un autre mot, ou effacez le filtre pour revoir toute la liste.")).toBeVisible()
+    expect(screen.getByText(/^Vous trouverez peut-être votre réponse ici\s:$/)).toBeVisible()
+    expect(screen.getAllByRole("link").map((l) => l.getAttribute("href"))).toEqual(["#faq-du-guide", "/doc/aide-et-retours"])
+    // The status line stays the only live region.
+    expect(screen.getAllByRole("status")).toHaveLength(1)
+  })
+
   it("renders nothing for a role without any unit", () => {
     const { container } = render(<DocUnitIndex units={[unit("b")]} role="admin" />)
     expect(container).toBeEmptyDOMElement()
@@ -76,9 +93,15 @@ describe("DocUnitIndex", () => {
       expect(field).toHaveAttribute("enterkeyhint", "search")
       expect(field.closest("form")).toBeNull()
 
-      // « creneau » without its accent finds b by its question, nothing else.
+      // « creneau » without its accent finds b by its question, nothing else; the question links
+      // to its heading on b's page, under the result.
       fireEvent.change(field, { target: { value: "CRENEAU changer" } })
-      expect(screen.getAllByRole("link").map((l) => l.textContent)).toEqual(["Titre b"])
+      expect(screen.getAllByRole("link").map((l) => [l.textContent, l.getAttribute("href")])).toEqual([
+        ["Titre b", "/doc/b"],
+        ["Je veux changer de créneau", "/doc/b#je-veux-changer-de-creneau"],
+      ])
+      expect(screen.getByRole("list", { name: "Questions correspondantes" })).toBeVisible()
+      expect(screen.getByRole("link", { name: "Je veux changer de créneau" }).closest("li")!.parentElement!.closest("li")).toHaveTextContent(/^Titre b/)
       expect(screen.getAllByRole("heading", { level: 3 }).map((h) => h.textContent)).toEqual(["Après l'inscription"])
       expect(container.querySelector("#inscription")!.parentElement).toHaveAttribute("hidden")
       expect(status).toBeEmptyDOMElement()
@@ -86,9 +109,15 @@ describe("DocUnitIndex", () => {
       expect(status).toHaveTextContent("1 fiche sur 3 correspond à « CRENEAU changer ».")
       expect(document.activeElement).not.toBe(status)
 
+      // Found by its title: no question under it.
+      fireEvent.change(field, { target: { value: "titre b" } })
+      expect(screen.getAllByRole("link").map((l) => l.textContent)).toEqual(["Titre b"])
+
       fireEvent.change(field, { target: { value: "xyz" } })
-      expect(screen.queryAllByRole("link")).toHaveLength(0)
-      expect(screen.getByText(/Essayer un autre mot/)).toBeVisible()
+      expect(screen.getByText(/^Un autre mot peut donner des résultats/)).toBeVisible()
+      // Next steps, neutral on /doc: both guides' questions and the help unit, nothing else.
+      expect(screen.getByText(/^D'autres pistes\s:$/)).toBeVisible()
+      expect(screen.getAllByRole("link").map((l) => l.getAttribute("href"))).toEqual(["/doc/benevole#faq-du-guide", "/doc/admin#faq-du-guide", "/doc/aide-et-retours"])
       act(() => vi.advanceTimersByTime(300))
       expect(status).toHaveTextContent("Aucune fiche pour « xyz ».")
       // One « aucune fiche » sentence only: the status line's.

@@ -7,8 +7,15 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Ajouté
+
+- **Filtre de la documentation, des réponses plus directes** : quand une fiche est trouvée par une de ses questions (et non par son titre ou son résumé), la ou les questions concernées (deux au plus) s'affichent sous le résultat, chacune avec un lien qui ouvre directement la réponse dans la fiche. Sans aucun résultat, le filtre propose les « Questions fréquentes » du guide (des deux guides depuis `/doc`) et, pour les organisateurs, la fiche « Aide et retours ».
+
 ### Modifié
 
+- **Fiches communes aux organisateurs et aux bénévoles** : liste d'attente, inscriptions sur validation, âge minimum et rappels s'ouvrent sur une courte introduction, puis « Côté bénévole » et enfin « Côté organisation », dans l'ordre des liens en haut de la fiche. Les liens et anciennes adresses vers ces sections fonctionnent comme avant.
+- **Changer de créneau, expliqué** : la fiche « Ma page personnelle » a désormais une section « Changer de créneau » qui explique comment faire en deux temps (s'inscrire au nouveau créneau, puis annuler l'ancien, ou l'inverse si les deux se chevauchent) ; la question fréquente du guide bénévole y mène.
+- **Créer un événement** : la fiche décrit le chemin dans l'interface (**Événements → Nouvel événement**, **Modifier** sur la page de l'événement) au lieu d'adresses internes de l'application.
 - **Vidéos lues dans la documentation** : dans une fiche de documentation, « Voir la vidéo : titre (durée) » ouvre le lecteur sur place au lieu de quitter la documentation pour la bibliothèque. La vidéo ne se charge qu'à l'ouverture et démarre dès ce clic ; les sous-titres, la transcription et la question « utile ? » sont sous le lecteur, avec un lien pour l'ouvrir dans la bibliothèque. Sans JavaScript, le lien vers la bibliothèque reste.
 
 ## [2.1.0] — 2026-10-06
