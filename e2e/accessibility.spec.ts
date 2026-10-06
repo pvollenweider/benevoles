@@ -302,5 +302,10 @@ test.describe("super admin", () => {
     await expect(page.getByRole("region", { name: "Nouvelle version disponible" })).toBeVisible()
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
     expect.soft(await seriousViolations(page), "health").toEqual([])
+
+    // #646: answers to « Cette vidéo vous a-t-elle été utile ? », per video and revision.
+    await page.goto("/super-admin/video-feedback")
+    await expect(page.getByRole("heading", { level: 1, name: "Avis sur les vidéos" })).toBeVisible()
+    expect.soft(await seriousViolations(page), "video feedback").toEqual([])
   })
 })

@@ -16,7 +16,7 @@ describe("retention policy", () => {
 
   it("drives the cleanup cron: no hard-coded duration left there", () => {
     const cron = read("src/app/api/cron/cleanup/route.ts")
-    for (const key of ["deactivatedOrganization", "deactivatedAdmin", "failedNotification", "targetedMessage", "deliveryOutcome", "mergedMemberTombstone"]) expect(cron).toContain(`RETENTION_DAYS.${key}`)
+    for (const key of ["deactivatedOrganization", "deactivatedAdmin", "failedNotification", "targetedMessage", "deliveryOutcome", "mergedMemberTombstone", "videoFeedback"]) expect(cron).toContain(`RETENTION_DAYS.${key}`)
     expect(cron).not.toMatch(/\d+\s*\*\s*24\s*\*\s*60\s*\*\s*60\s*\*\s*1000/)
   })
 

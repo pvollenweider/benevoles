@@ -48,12 +48,20 @@ export const postgresStore: RateLimitStore = {
   },
 }
 
-/** Same semantics in this process only: for unit tests, which run without a database. */
-export function memoryStore(): RateLimitStore {
+/**
+ * Same semantics in this process only: for unit tests, which run without a database, and for a
+ * route that must not write the client's IP anywhere (the anonymous video feedback, #646: per
+ * replica, lost on restart, which is enough to slow down a script). Expired windows are swept once
+ * the map holds more than `sweepAbove` keys, so a long-running process doesn't grow without bound.
+ */
+export function memoryStore(sweepAbove = 10_000): RateLimitStore {
   const windows = new Map<string, { count: number; resetAt: number }>()
   return {
     async hit(key, windowMs) {
       const now = Date.now()
+      if (windows.size > sweepAbove) {
+        for (const [k, w] of windows) if (w.resetAt <= now) windows.delete(k)
+      }
       const win = windows.get(key)
       if (!win || win.resetAt <= now) {
         windows.set(key, { count: 1, resetAt: now + windowMs })

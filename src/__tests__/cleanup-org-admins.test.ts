@@ -11,6 +11,8 @@ const m = vi.hoisted(() => ({
   adminDeleteMany: vi.fn(),
 }))
 
+const videoFeedbackDeleteMany = vi.hoisted(() => vi.fn())
+
 vi.mock("@/lib/prisma", () => {
   const zero = { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), updateMany: vi.fn().mockResolvedValue({ count: 0 }), findMany: vi.fn().mockResolvedValue([]) }
   const tx = {
@@ -22,7 +24,7 @@ vi.mock("@/lib/prisma", () => {
   return {
     prisma: {
       ...tx,
-      volunteer: zero, rateLimit: zero, deliveryOutcome: zero,
+      volunteer: zero, rateLimit: zero, deliveryOutcome: zero, videoFeedback: { deleteMany: videoFeedbackDeleteMany },
       $transaction: async (fn: (t: typeof tx) => unknown) => fn(tx),
     },
   }
@@ -40,6 +42,7 @@ beforeEach(() => {
   vi.clearAllMocks()
   m.orgDeleteMany.mockResolvedValue({ count: 0 })
   m.adminDeleteMany.mockResolvedValue({ count: 0 })
+  videoFeedbackDeleteMany.mockResolvedValue({ count: 0 })
 })
 
 describe("nightly cleanup of deactivated organizations", () => {
@@ -72,5 +75,20 @@ describe("nightly cleanup of deactivated organizations", () => {
     await run()
     const where = m.adminDeleteMany.mock.calls.at(-1)![0].where
     expect(where.OR).toContainEqual({ organizationId: null, role: { not: "super_admin" } })
+  })
+})
+
+// #646: anonymous video feedback, purged after its retention window (src/lib/retention.ts).
+describe("nightly cleanup of video feedback", () => {
+  it("deletes the answers older than RETENTION_DAYS.videoFeedback, and counts them", async () => {
+    m.orgFindMany.mockResolvedValue([])
+    videoFeedbackDeleteMany.mockResolvedValue({ count: 4 })
+    const before = Date.now()
+    const body = await (await run()).json()
+    const cutoff: Date = videoFeedbackDeleteMany.mock.calls[0][0].where.answeredOn.lt
+    const { RETENTION_DAYS, DAY_MS } = await import("@/lib/retention")
+    expect(before - cutoff.getTime()).toBeGreaterThanOrEqual(RETENTION_DAYS.videoFeedback * DAY_MS - 1000)
+    expect(before - cutoff.getTime()).toBeLessThanOrEqual(RETENTION_DAYS.videoFeedback * DAY_MS + 1000)
+    expect(body.deleted.videoFeedback).toBe(4)
   })
 })

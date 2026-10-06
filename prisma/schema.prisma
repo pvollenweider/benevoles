@@ -764,3 +764,23 @@ model ReleaseCheckState {
   lastNotifiedVersion String?
   updatedAt           DateTime  @updatedAt
 }
+
+// « Cette vidéo vous a-t-elle été utile ? » (#646): one anonymous Oui/Non answer per row, tied to
+// the catalogue video id and the revision it was shown at (videos/catalog.json `revision`), so a
+// fully regenerated video starts with no answers. No relation to any organization, no person, no
+// IP, no cookie, no session; `answeredOn` is the day only, and the id is a random UUID (not a
+// cuid, which embeds a millisecond timestamp). Purged by the cleanup cron after
+// RETENTION_DAYS.videoFeedback (src/lib/retention.ts).
+model VideoFeedback {
+  id         String   @id @default(uuid())
+  videoId    String
+  revision   Int
+  language   String
+  useful     Boolean
+  // "masterclass" (the video library) or "documentation" (opened from a guide, ?from=doc).
+  context    String
+  answeredOn DateTime @db.Date
+
+  @@index([videoId, revision])
+  @@index([answeredOn])
+}

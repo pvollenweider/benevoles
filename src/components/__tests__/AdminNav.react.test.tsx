@@ -54,6 +54,8 @@ describe("AdminNav — mobile menu", () => {
     fireEvent.click(toggle())
     expect(within(panel()).getByRole("link", { name: /Organisations/ })).toHaveAttribute("href", "/super-admin/organizations")
     expect(within(panel()).getByRole("link", { name: /Communications admin/ })).toBeInTheDocument()
+    // #646: the video feedback view.
+    expect(within(panel()).getByRole("link", { name: /Avis sur les vidéos/ })).toHaveAttribute("href", "/super-admin/video-feedback")
   })
 
   it("closes on Escape, back on the button, and after following a link", () => {

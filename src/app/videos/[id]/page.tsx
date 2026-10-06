@@ -17,8 +17,11 @@ import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { env } from "@/lib/env"
 import VideoPlayer from "@/components/videos/VideoPlayer"
 import AutoplayLink from "@/components/videos/AutoplayLink"
+import VideoFeedback from "@/components/videos/VideoFeedback"
+import { feedbackContextFrom, FROM_DOC_PARAM, FROM_DOC_VALUE } from "@/lib/video-feedback"
 
 type Params = { id: string }
+type SearchParams = Record<string, string | string[] | undefined>
 
 // The stable id (e.g. EVENT_CREATE_BLANK) is canonical; the manifest slug (event-create-blank)
 // also resolves here and redirects to the id (#644 owner decision — one canonical URL per video,
@@ -47,12 +50,15 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   }
 }
 
-export default async function VideoDetailPage({ params }: { params: Promise<Params> }) {
+export default async function VideoDetailPage({ params, searchParams }: { params: Promise<Params>; searchParams: Promise<SearchParams> }) {
   const { id } = await params
+  // Reading context of the « utile ? » answer (#646): `?from=doc` when a guide links here (#645),
+  // the video library otherwise. Kept across the slug → id redirect.
+  const fromDoc = feedbackContextFrom((await searchParams)[FROM_DOC_PARAM]) === "documentation"
   const catalog = loadVideoCatalog()
   const { video, isSlug } = findVideo(catalog, id)
   if (!video) notFound()
-  if (isSlug) redirect(`/videos/${video.id}`)
+  if (isSlug) redirect(`/videos/${video.id}${fromDoc ? `?${FROM_DOC_PARAM}=${FROM_DOC_VALUE}` : ""}`)
 
   const mediaUrls = videoMediaUrls(video.slug, env.VIDEO_MEDIA_BASE_URL)
   const related = relatedVideos(video, catalog)
@@ -72,6 +78,8 @@ export default async function VideoDetailPage({ params }: { params: Promise<Para
       </div>
 
       <VideoPlayer title={video.title} mediaUrls={mediaUrls} />
+
+      <VideoFeedback videoId={video.id} revision={video.revision} audience={video.audience} context={fromDoc ? "documentation" : "masterclass"} />
 
       <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
         <div>

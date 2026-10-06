@@ -401,8 +401,9 @@ et `seedScenario` (#637, #638) :
   aujourd'hui, le plan ne donnant pas encore de niveau par module.
 - `feature` : le nom de la fonctionnalité Benevol illustrée (texte simple aujourd'hui, pas encore
   un lien vérifié vers une ancre de `FEATURES.md` ou `GUIDE_ADMIN.md`).
-- `updatedAt` (`AAAA-MM-JJ`) et `revision` (entier ≥ 1) : préparés pour le retour « utile ? »
-  lié à une révision précise (#646, PREPARE seulement — aucune UI).
+- `updatedAt` (`AAAA-MM-JJ`) et `revision` (entier ≥ 1) : `revision` identifie le rendu sur
+  lequel portent les réponses « utile ? » (#646, voir plus bas). L'augmenter quand une vidéo est
+  entièrement régénérée : ses réponses repartent de zéro.
 
 `published` vaut `true` pour une vidéo dont le film est en ligne sur `medias.benevol.app` : 51 des
 54 vidéos aujourd'hui. La galerie affiche aussi les trois autres, avec leur état (« À venir »). Elle
@@ -455,6 +456,26 @@ partageable avec lecture automatique) : `AutoplayLink.tsx` pose un indicateur da
 montage (`consumeAutoplayIntent`), et appelle `video.play()` sans l'attribut `autoplay` ; un refus
 du navigateur (politique de lecture automatique) est simplement ignoré, la vidéo reste en pause,
 prête pour « Lecture ».
+
+### « Cette vidéo vous a-t-elle été utile ? » (#646)
+
+Sous le lecteur de `/videos/[id]`, toujours visible (pas seulement à la fin de la lecture), deux
+boutons **Oui** et **Non**, sans commentaire (« tu » pour une vidéo destinée seulement aux
+bénévoles, « vous » sinon). `POST /api/public/video-feedback` enregistre une ligne anonyme
+(`VideoFeedback`) : identifiant et `revision` de la vidéo (refusée si ce n'est pas la révision
+actuelle du catalogue), langue (`fr`, tirée du manifeste), réponse, contexte de lecture et jour.
+Ni adresse IP, ni cookie, ni compte, ni organisation : la limitation de fréquence par IP reste en
+mémoire du processus, et le navigateur retient dans `localStorage` qu'il a déjà répondu pour cette
+vidéo et cette révision (au mieux). Les réponses sont effacées après la durée de
+`RETENTION_DAYS.videoFeedback` (`src/lib/retention.ts`, `docs/retention.md`).
+
+Contexte de lecture : `masterclass` par défaut ; `documentation` quand la page est ouverte avec
+`?from=doc`, à ajouter aux liens des guides vers une vidéo (#645), par exemple
+`/videos/EVENT_CREATE_BLANK?from=doc` (`FROM_DOC_PARAM`, `FROM_DOC_VALUE` dans
+`src/lib/video-feedback.ts` ; le paramètre est gardé lors de la redirection d'un slug).
+
+Les super admins voient Oui, Non et total par vidéo et par révision dans **Super Admin → Avis sur
+les vidéos** (`/super-admin/video-feedback`) ; aucun score n'est montré au public.
 
 ## Ajouter une vidéo
 
