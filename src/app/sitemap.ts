@@ -21,7 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!isKnownHost(hostname) || hostname.startsWith("staging.")) return []
     // A doc page's last change is its source file's: GUIDE_*.md and guide/*.md are shipped with the app.
     return apexSitemap(apexBaseUrl(), (source) => {
-      try { return fs.statSync(path.join(process.cwd(), source)).mtime } catch { return null }
+      try { return fs.statSync(path.join(/*turbopackIgnore: true*/ process.cwd(), source)).mtime } catch { return null }
     }, loadDocUnits())
   }
 

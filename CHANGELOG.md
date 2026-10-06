@@ -68,6 +68,7 @@ Mise à jour sans préparation particulière : toutes les migrations sont additi
 
 ### Corrigé
 
+- **Image Docker allégée** : la compilation n'embarque plus tout le dépôt (sources, tests, déploiement, documentation interne) dans le serveur de production à cause de deux lectures de fichiers à chemin dynamique (plan du site, pages de contenu publiques) ; le serveur passe de 143 à 128 Mo. Les fichiers Markdown publiés restent copiés explicitement par le `Dockerfile`.
 - **Bénévoles bloqués quand ils partagent une connexion** (#609) : la page personnelle, les annulations et les disponibilités avaient une limite commune à toutes les personnes d'une même connexion (club, famille, Wi-Fi du lieu), et retirer six créneaux d'un coup était refusé. Seuls les liens invalides comptent désormais par connexion ; un lien valable a sa propre limite, plus large.
 - **Retirer un bénévole de son créneau envoie bien l'email annoncé** (#703) : la confirmation annonçait un email d'annulation qui ne partait jamais. Chaque personne retirée reçoit maintenant un seul email listant les créneaux annulés, et le récapitulatif compte les personnes et non plus les lignes.
 - **Invitations et relances refusées par le serveur d'envoi** (#597) : elles étaient comptées comme envoyées. Elles comptent maintenant dans les échecs, et le résultat affiché le mentionne ; l'email de test signale aussi un échec.
