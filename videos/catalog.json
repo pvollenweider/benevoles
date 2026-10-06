@@ -12,7 +12,7 @@
         "recherche",
         "accessibilité"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "decouvrir-administration"
@@ -36,7 +36,7 @@
         "événements",
         "créneaux"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "decouvrir-administration"
@@ -60,7 +60,7 @@
         "sous-domaine",
         "page-publique"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "organisation-equipe"
@@ -84,7 +84,7 @@
         "rappels",
         "heures"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "organisation-equipe"
@@ -108,7 +108,7 @@
         "permissions",
         "invitation"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "organisation-equipe"
@@ -132,7 +132,7 @@
         "notifications",
         "test"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "organisation-equipe",
@@ -158,7 +158,7 @@
         "carte",
         "brouillon"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "evenement-cycle-de-vie"
@@ -183,7 +183,7 @@
         "sport",
         "brouillon"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "evenement-cycle-de-vie"
@@ -207,7 +207,7 @@
         "brouillon",
         "parcours-bénévole"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "evenement-cycle-de-vie"
@@ -231,7 +231,7 @@
         "programmation",
         "archivage"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "evenement-cycle-de-vie"
@@ -256,7 +256,7 @@
         "responsables",
         "brouillon"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "evenement-cycle-de-vie"
@@ -280,7 +280,7 @@
         "qr-code",
         "impression"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "evenement-cycle-de-vie",
@@ -305,7 +305,7 @@
         "suivi",
         "tableau-de-bord"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "evenement-cycle-de-vie"
@@ -329,7 +329,7 @@
         "propriétaire",
         "irréversible"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "evenement-cycle-de-vie"
@@ -354,7 +354,7 @@
         "couleurs",
         "ordre"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "planning-creneaux"
@@ -379,7 +379,7 @@
         "consigne",
         "annulation"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "planning-creneaux"
@@ -404,7 +404,7 @@
         "aperçu",
         "répétition"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "planning-creneaux"
@@ -428,7 +428,7 @@
         "copier",
         "raccourci"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "planning-creneaux"
@@ -453,7 +453,7 @@
         "fuseau-horaire",
         "durée"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "planning-creneaux"
@@ -477,7 +477,7 @@
         "expiration",
         "promotion"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "planning-creneaux",
@@ -503,7 +503,7 @@
         "poste-sensible",
         "email"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "planning-creneaux",
@@ -530,7 +530,7 @@
         "invitation",
         "téléphone"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "planning-creneaux",
@@ -557,7 +557,7 @@
         "mobile",
         "planning"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "parcours-benevole"
@@ -583,7 +583,7 @@
         "conflit",
         "quota"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "parcours-benevole"
@@ -608,7 +608,7 @@
         "nuit",
         "charge"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "parcours-benevole"
@@ -632,7 +632,7 @@
         "email",
         "capacité"
       ],
-      "published": false,
+      "published": true,
       "captureReady": true,
       "themes": [
         "parcours-benevole"
@@ -660,7 +660,7 @@
       "seedScenario": "personal-withdrawals",
       "feature": "Page personnelle du bénévole",
       "level": "essentiel",
-      "published": false,
+      "published": true,
       "audience": [
         "benevole"
       ],
@@ -684,7 +684,7 @@
       "seedScenario": "personal-calendar",
       "feature": "Export calendrier des créneaux",
       "level": "essentiel",
-      "published": false,
+      "published": true,
       "audience": [
         "benevole"
       ],
@@ -707,7 +707,7 @@
       "seedScenario": "personal-session",
       "feature": "Lien personnel et disponibilités",
       "level": "essentiel",
-      "published": false,
+      "published": true,
       "audience": [
         "benevole"
       ],
@@ -727,7 +727,7 @@
         "qr-code",
         "notifications"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "parcours-benevole"
@@ -750,7 +750,7 @@
         "publication",
         "invitations"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "evenement-cycle-de-vie",
@@ -773,7 +773,7 @@
         "fonctionnalités",
         "visite-guidée"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "decouvrir-administration"
@@ -795,7 +795,7 @@
         "relances",
         "jour-j"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "inscriptions-communication",
@@ -819,7 +819,7 @@
         "premier-événement",
         "inscription-test"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "fresh-organization",
       "themes": [
         "decouvrir-administration"
@@ -843,7 +843,7 @@
         "coordonnées",
         "poste"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "membres-invitations",
@@ -868,7 +868,7 @@
         "disponibilités",
         "activité"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "members-management",
       "themes": [
         "membres-invitations"
@@ -892,7 +892,7 @@
         "journal",
         "données"
       ],
-      "published": false,
+      "published": true,
       "captureReady": true,
       "seedScenario": "data-exports-archives",
       "themes": [
@@ -917,7 +917,7 @@
         "membres",
         "export"
       ],
-      "published": false,
+      "published": true,
       "captureReady": true,
       "seedScenario": "organization-activity-log",
       "themes": [
@@ -943,7 +943,7 @@
         "rejouer",
         "récit"
       ],
-      "published": false,
+      "published": true,
       "captureReady": true,
       "seedScenario": "event-activity-log",
       "themes": [
@@ -968,7 +968,7 @@
         "export",
         "jour-j"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "attendance-check-in",
       "themes": [
         "jour-j"
@@ -992,7 +992,7 @@
         "CSV",
         "impression"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "event-reports",
       "themes": [
         "jour-j"
@@ -1015,7 +1015,7 @@
         "terrain",
         "réimpression"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "volunteer-badges",
       "themes": [
         "jour-j"
@@ -1039,7 +1039,7 @@
         "annulation",
         "notifications"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "reminders-changes",
       "themes": [
         "inscriptions-communication",
@@ -1065,7 +1065,7 @@
         "email",
         "notifications"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "targeted-messages",
       "themes": [
         "inscriptions-communication"
@@ -1090,7 +1090,7 @@
         "validation",
         "responsables"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "staffing-gaps",
       "themes": [
         "inscriptions-communication",
@@ -1116,7 +1116,7 @@
         "charge",
         "actions-groupées"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "registrations-management",
       "themes": [
         "inscriptions-communication"
@@ -1140,7 +1140,7 @@
         "messages",
         "email"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "members-reminders",
       "themes": [
         "membres-invitations",
@@ -1165,7 +1165,7 @@
         "tags",
         "poste-réservé"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "members-invitations",
       "themes": [
         "membres-invitations"
@@ -1190,7 +1190,7 @@
         "doublons",
         "tags"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "demo",
       "themes": [
         "membres-invitations"
@@ -1285,7 +1285,7 @@
         "responsables",
         "récupération"
       ],
-      "published": false,
+      "published": true,
       "captureReady": true,
       "seedScenario": "privacy-personal-links",
       "themes": [
@@ -1312,7 +1312,7 @@
         "horaires",
         "annulation"
       ],
-      "published": false,
+      "published": true,
       "captureReady": true,
       "seedScenario": "last-minute-changes",
       "themes": [
