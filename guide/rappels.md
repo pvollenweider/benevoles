@@ -2,7 +2,7 @@
 roles: [admin, benevole]
 group: apres-inscription
 order: 40
-summary: Les rappels envoyés avant chaque journée de créneaux, par email ou notification, et les messages quand un créneau change ou est annulé.
+summary: Les rappels envoyés avant chaque journée de créneaux, par email ou notification sur le téléphone, et les messages quand un créneau change ou est annulé.
 related: [ma-page-personnelle, inscriptions-sur-validation]
 legacy: [admin#rappels-automatiques, admin#notifications-de-modification, benevole#recevoir-les-rappels-sur-votre-telephone]
 aliases: []

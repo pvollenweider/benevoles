@@ -2,7 +2,7 @@
 roles: [benevole]
 group: inscription
 order: 30
-summary: Remplir le formulaire, relire le récapitulatif de tes créneaux et leurs infos pratiques, puis recevoir ta confirmation par email.
+summary: Remplir le formulaire, relire le récapitulatif de tes créneaux, recevoir ta confirmation par email, et quoi faire si elle n'arrive pas.
 related: [choisir-ses-creneaux, ma-page-personnelle, lien-personnel]
 legacy: [benevole#s-inscrire, benevole#infos-pratiques-d-un-creneau, benevole#confirmation]
 aliases: []

@@ -2,7 +2,7 @@
 roles: [benevole]
 group: apres-inscription
 order: 10
-summary: Ta page personnelle : ton prochain créneau, tes infos pratiques, annuler une place, l'ajouter à ton calendrier, tes disponibilités.
+summary: Ta page personnelle : ton prochain créneau, tes infos pratiques, changer de créneau ou annuler, l'ajouter à ton calendrier, tes disponibilités.
 related: [lien-personnel, rappels, revenir-sur-la-page-d-inscription]
 legacy: [benevole#gerer-son-inscription]
 aliases: []

@@ -38,14 +38,14 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 
 - [Trouver la page d'inscription](trouver-la-page-d-inscription.md) : Ouvrir la page d'inscription d'un événement depuis le lien de l'organisation, ou depuis ton invitation personnelle. Pour : bénévoles.
 - [Choisir ses créneaux](choisir-ses-creneaux.md) : Lire le planning d'un événement, comprendre les couleurs des créneaux et en sélectionner un ou plusieurs avant de t'inscrire. Pour : bénévoles.
-- [S'inscrire](s-inscrire.md) : Remplir le formulaire, relire le récapitulatif de tes créneaux et leurs infos pratiques, puis recevoir ta confirmation par email. Pour : bénévoles.
+- [S'inscrire](s-inscrire.md) : Remplir le formulaire, relire le récapitulatif de tes créneaux, recevoir ta confirmation par email, et quoi faire si elle n'arrive pas. Pour : bénévoles.
 
 ### Après l'inscription
 
-- [Ma page personnelle](ma-page-personnelle.md) : Ta page personnelle : ton prochain créneau, tes infos pratiques, annuler une place, l'ajouter à ton calendrier, tes disponibilités. Pour : bénévoles.
-- [Ton lien personnel](lien-personnel.md) : Le lien reçu par email qui ouvre tes inscriptions : le garder pour toi, le recevoir à nouveau, et quoi faire s'il ne fonctionne plus. Pour : bénévoles.
+- [Ma page personnelle](ma-page-personnelle.md) : Ta page personnelle : ton prochain créneau, tes infos pratiques, changer de créneau ou annuler, l'ajouter à ton calendrier, tes disponibilités. Pour : bénévoles.
+- [Ton lien personnel](lien-personnel.md) : Le lien reçu par email qui ouvre tes inscriptions : le garder pour toi, le recevoir à nouveau si tu l'as perdu, et quoi faire s'il ne fonctionne plus. Pour : bénévoles.
 - [Revenir sur la page d'inscription](revenir-sur-la-page-d-inscription.md) : Retrouver tes inscriptions en rouvrant la page de l'événement, et quitter la session sur un appareil partagé. Pour : bénévoles.
-- [Rappels et changements de créneau](rappels.md) : Les rappels envoyés avant chaque journée de créneaux, par email ou notification, et les messages quand un créneau change ou est annulé. Pour : organisateurs, bénévoles.
+- [Rappels et changements de créneau](rappels.md) : Les rappels envoyés avant chaque journée de créneaux, par email ou notification sur le téléphone, et les messages quand un créneau change ou est annulé. Pour : organisateurs, bénévoles.
 - [Questions fréquentes des bénévoles](questions-frequentes-benevole.md) : Les questions que les bénévoles posent le plus souvent, chacune avec un lien vers la page qui y répond. Pour : bénévoles.
 
 ### Règles d'inscription
