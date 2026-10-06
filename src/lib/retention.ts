@@ -4,7 +4,7 @@
 /**
  * Retention policy (#486): one source of truth for how long each kind of data is kept, why, and
  * what deletes it. The cleanup cron reads its durations from RETENTION_DAYS; the documentation
- * tables (GUIDE_ADMIN.md, docs/retention.md) and the privacy page are generated from, or checked
+ * tables (RETENTION_GUIDE_SOURCE, docs/retention.md) and the privacy page are generated from, or checked
  * against, RETENTION; the backup CronJobs are checked against the backup durations. A stated
  * duration that isn't backed by an automated job says so (« procédure manuelle »).
  * See src/lib/__tests__/retention.test.ts.
@@ -260,7 +260,10 @@ export const RETENTION: readonly RetentionEntry[] = [
 // Markdown table cell: backslashes first, then pipes, so an escape can't be undone.
 const cell = (s: string) => s.replace(/\\/g, "\\\\").replace(/\|/g, "\\|")
 
-/** The organisers' table (GUIDE_ADMIN.md): data and retention. */
+/** The organisers' documentation unit that holds their retention table (#649, guide/). */
+export const RETENTION_GUIDE_SOURCE = "guide/exporter-et-conserver-ses-donnees.md"
+
+/** The organisers' table (RETENTION_GUIDE_SOURCE): data and retention. */
 export function retentionGuideTable(): string {
   return ["| Données | Conservation |", "|---|---|", ...RETENTION.filter((e) => e.public).map((e) => `| ${cell(e.data)} | ${cell(e.duration)} |`)].join("\n")
 }

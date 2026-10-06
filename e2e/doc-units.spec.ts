@@ -109,22 +109,36 @@ test("the volunteer guide is the index of its units alone; the admin guide lists
   await expect(adminHeadings.nth(0)).toHaveText("Pages par thème")
   await expect(adminHeadings.nth(1)).toHaveText("Le guide complet")
   await expect(adminHeadings).toHaveCount(2)
-  // The guide's sections sit under « Le guide complet », one level down, with their usual ids.
-  await expect(page.getByRole("heading", { level: 3, name: "Premiers pas" })).toHaveAttribute("id", "premiers-pas")
-  // A link name always leads to one place on the page (the guide also links to the shared units).
+  // A link name always leads to one place on the page (the guide also links to units).
   const links = await page.locator("main a").evaluateAll((as) => as.map((a) => [a.textContent?.trim(), a.getAttribute("href")]))
   const hrefByName = new Map<string, Set<string>>()
   for (const [name, href] of links) hrefByName.set(name ?? "", (hrefByName.get(name ?? "") ?? new Set<string>()).add(href ?? ""))
   for (const [name, hrefs] of hrefByName) expect(hrefs.size, name).toBe(1)
   await expect(page.locator("main a", { hasText: "Rappels et changements de créneau" }).first()).toHaveAttribute("href", "/doc/rappels")
+  await expect(page.getByRole("heading", { level: 3, name: "Préparer l'événement" })).toBeVisible()
+  await expect(page.locator("main li").getByRole("link", { name: "Premiers pas", exact: true })).toHaveAttribute("href", "/doc/premiers-pas")
+  // No volunteer-only unit in the organisers' index.
+  await expect(page.locator("main a", { hasText: "Revenir sur la page d'inscription" })).toHaveCount(0)
 })
 
 test.describe("old anchors of the guides", () => {
-  test("an anchor still in the guide stays on the guide", async ({ page }) => {
-    await page.goto("/doc/admin#premiers-pas")
+  test("an id still on the guide's page stays on the guide", async ({ page }) => {
+    // Every section has left both guides: give a heading of the page the id of a moved section.
+    await page.goto("/doc/admin")
     await waitForHydration(page.getByRole("button", { name: "Thème sombre" }))
-    await expect(page.getByRole("heading", { level: 3, name: "Premiers pas" })).toBeInViewport()
+    const id = await page.getByRole("heading", { level: 2, name: "Le guide complet" }).evaluate((h) => {
+      h.id = "premiers-pas"
+      return h.id
+    })
+    await page.evaluate((anchor) => {
+      window.location.hash = anchor
+    }, id)
     await expect(page).toHaveURL(/\/doc\/admin#premiers-pas$/)
+    // Had it left, the next moved anchor would be set on the unit's page, not followed from here.
+    await page.evaluate(() => {
+      window.location.hash = "configurer-les-creneaux"
+    })
+    await expect(page).toHaveURL(/\/doc\/configurer-les-creneaux$/)
   })
 
   test("an unknown anchor stays on the guide", async ({ page }) => {
@@ -148,6 +162,15 @@ test.describe("old anchors of the guides", () => {
     await expect(page.getByRole("heading", { level: 2, name: "Rappels automatiques" })).toBeInViewport()
     await page.goto("/doc/benevole#confirmation")
     await expect(page).toHaveURL(/\/doc\/s-inscrire#confirmation$/)
+    await page.goto("/doc/admin#page-blanche")
+    await expect(page).toHaveURL(/\/doc\/creer-un-evenement#page-blanche$/)
+    await expect(page.getByRole("heading", { level: 2, name: "Page blanche" })).toBeInViewport()
+  })
+
+  test("an organisers' section that moved without its heading opens its unit", async ({ page }) => {
+    await page.goto("/doc/admin#configurer-les-creneaux")
+    await expect(page).toHaveURL(/\/doc\/configurer-les-creneaux$/)
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Configurer les créneaux")
   })
 
   test("the same, when the fragment changes on the guide's page", async ({ page }) => {
