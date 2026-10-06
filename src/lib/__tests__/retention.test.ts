@@ -40,4 +40,13 @@ describe("retention policy", () => {
     }
     expect(RETENTION.find((e) => e.data.startsWith("Journaux techniques"))?.mechanism).toMatch(/procédure manuelle/)
   })
+
+  it("lists data in plain words, without ticket numbers or field names", () => {
+    for (const e of RETENTION) {
+      for (const text of [e.data, e.duration, e.mechanism]) {
+        expect(text, e.data).not.toMatch(/#\d/)
+        expect(text, e.data).not.toMatch(/mergedIntoId/)
+      }
+    }
+  })
 })

@@ -58,7 +58,7 @@ const inBackups = `oui, jusqu'à ${d.localBackup} jours sur le serveur et ${d.of
 
 export const RETENTION: readonly RetentionEntry[] = [
   {
-    data: "Membres, événements (dont le contact le jour J, nom et téléphone, #560), créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date, #569), versions de la convention déjà montrées à des bénévoles (texte par empreinte, #569), pages, journaux d'activité, comptes administrateurs, doublons possibles ignorés (#601), logo (#300) de l'organisation",
+    data: "Membres, événements (dont le contact le jour J, nom et téléphone), créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date), versions de la convention déjà montrées à des bénévoles (texte par empreinte), pages, journaux d'activité, comptes administrateurs, doublons possibles ignorés, logo de l'organisation",
     purpose: "Organiser les événements de l'organisation",
     duration: `tant que l'organisation est active, événements passés compris ; effacés ${d.deactivatedOrganization} jours après sa désactivation (délai compté depuis la dernière modification de l'organisation désactivée)`,
     trigger: "désactivation de l'organisation",
@@ -85,11 +85,11 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Fiche absorbée par une fusion de membres (#600) : fiche inactive sans donnée personnelle (« mergedIntoId »), le temps que les anciens identifiants restent résolus",
+    data: "Fiche absorbée par une fusion de membres : fiche inactive sans donnée personnelle, le temps que les anciens identifiants restent résolus",
     purpose: "Historique de l'organisation et liens personnels déjà envoyés",
     duration: `${d.mergedMemberTombstone} jours après la fusion`,
     trigger: "fusion de deux fiches membre",
-    mechanism: "nettoyage quotidien (cron cleanup) ; les résultats d'envoi (#598) encore liés à cette fiche sont effacés avec elle",
+    mechanism: "nettoyage quotidien (cron cleanup) ; les résultats d'envoi encore liés à cette fiche sont effacés avec elle",
     backups: inBackups,
     public: true,
   },
@@ -103,7 +103,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Données personnelles d'un membre dont l'effacement est demandé (#516) : nom, email, téléphone, date de naissance, notes, étiquettes, disponibilités, commentaires et téléphones de ses inscriptions, invitations (dont « pas disponible »), réponses aux questions, abonnements aux notifications, désignations comme responsable de secteur à son adresse, emails en file d'envoi qui la concernent, résultats d'envoi",
+    data: "Données personnelles d'un membre dont l'effacement est demandé : nom, email, téléphone, date de naissance, notes, étiquettes, disponibilités, commentaires et téléphones de ses inscriptions, invitations (dont « pas disponible »), réponses aux questions, abonnements aux notifications, désignations comme responsable de secteur à son adresse, emails en file d'envoi qui la concernent, résultats d'envoi",
     purpose: "Droit à l'effacement",
     duration: "effacées immédiatement ; la fiche devient « Bénévole effacé » et ses inscriptions restent, sans identité, pour les effectifs, les heures et l'historique",
     trigger: "effacement par un propriétaire ou un organisateur depuis la page du membre",
@@ -112,7 +112,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Registre des effacements (#516) : identifiant de la fiche effacée, empreinte salée de son adresse email (jamais l'adresse), date ; aussi écrit dans les journaux techniques",
+    data: "Registre des effacements : identifiant de la fiche effacée, empreinte salée de son adresse email (jamais l'adresse), date ; aussi écrit dans les journaux techniques",
     purpose: "Rejouer les effacements après une restauration de sauvegarde",
     duration: "tant que l'organisation existe",
     trigger: "effacement des données personnelles d'un membre",
@@ -130,11 +130,11 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Résultats d'envoi par destinataire (#598) : statut accepté/rejeté/échec, motif normalisé, codes, empreinte de l'adresse",
+    data: "Résultats d'envoi par destinataire : statut accepté/rejeté/échec, motif normalisé, codes, empreinte de l'adresse",
     purpose: "Fournir l'email à l'organisation, et permettre de corriger une adresse en échec",
     duration: `${d.deliveryOutcome} jours`,
     trigger: "envoi",
-    mechanism: "nettoyage quotidien (cron cleanup) ; effacés aussi si le membre est effacé (#516)",
+    mechanism: "nettoyage quotidien (cron cleanup) ; effacés aussi si le membre est effacé",
     backups: inBackups,
     public: true,
   },
@@ -184,7 +184,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: false,
   },
   {
-    data: "Compteurs de limitation de fréquence (adresse IP, email saisi à la connexion ou identifiant) ; ceux de la réponse « utile ? » aux vidéos (#646) restent en mémoire du processus, jamais en base",
+    data: "Compteurs de limitation de fréquence (adresse IP, email saisi à la connexion ou identifiant) ; ceux de la réponse « utile ? » aux vidéos restent en mémoire du processus, jamais en base",
     purpose: "Protéger contre les abus",
     duration: "effacés au nettoyage qui suit la fin de leur fenêtre (15 minutes à 1 heure)",
     trigger: "fin de la fenêtre",
@@ -202,7 +202,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: false,
   },
   {
-    data: "Réponses « Cette vidéo vous a-t-elle été utile ? » (#646) : identifiant et révision de la vidéo, langue, oui ou non, contexte de lecture (bibliothèque vidéo ou documentation), jour ; anonymes, sans adresse IP, cookie, compte ni organisation (pas une donnée personnelle)",
+    data: "Réponses « Cette vidéo vous a-t-elle été utile ? » : identifiant et révision de la vidéo, langue, oui ou non, contexte de lecture (bibliothèque vidéo ou documentation), jour ; anonymes, sans adresse IP, cookie, compte ni organisation (pas une donnée personnelle)",
     purpose: "Repérer les vidéos tutorielles à améliorer",
     duration: `${d.videoFeedback} jours`,
     trigger: "réponse",
