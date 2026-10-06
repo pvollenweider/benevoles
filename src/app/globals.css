@@ -61,7 +61,8 @@ body {
   }
 }
 
-/* Link to a video in the content pages (#645, src/lib/doc-video-references.ts): the sanitized
+/* Link to a video in the content pages (#645, src/lib/doc-video-references.ts), or on a
+   documentation unit the button that opens the player in place (DocVideoInline.tsx): the sanitized
    Markdown can't carry classes, so its paragraph is marked with data-doc-video. A bordered card
    (DESIGN.md: surface-page background, border-default), not a colour alone: the link stays an
    underlined link whose text names the video, and the border survives forced colours. */
@@ -74,7 +75,7 @@ body {
   overflow-wrap: anywhere;
 }
 
-[data-doc-video] a:focus-visible {
+[data-doc-video] :is(a, button):focus-visible {
   outline: 2px solid #1d4ed8;
   outline-offset: 2px;
 }
@@ -84,6 +85,6 @@ body {
   background: #1f2937;
 }
 
-.dark [data-doc-video] a:focus-visible {
+.dark [data-doc-video] :is(a, button):focus-visible {
   outline-color: #60a5fa;
 }

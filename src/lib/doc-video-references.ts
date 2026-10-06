@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { parseVideoReference, resolveVideoReference, type Video } from "@/lib/video-catalog"
+import { parseVideoReference, resolveVideoReference, videoMediaUrls, type Audience, type Video, type VideoMediaUrls } from "@/lib/video-catalog"
 
 /**
  * Videos referenced from the documentation by their stable id (#645). A source (GUIDE_ADMIN.md,
@@ -9,9 +9,10 @@ import { parseVideoReference, resolveVideoReference, type Video } from "@/lib/vi
  *
  *     <!-- video: ORG_FIRST_STEPS -->
  *
- * An HTML comment, so GitHub shows nothing; the public page renders it as a short link to
- * /videos/<ID>, with the title and duration taken from the video catalogue (one catalogue, never
- * two: the guide holds the id only). Nothing is rendered when the video isn't published or has no
+ * An HTML comment, so GitHub shows nothing; a guide page renders it as a short link to
+ * /videos/<ID>, a documentation unit (/doc/<slug>) as a button that opens the player in place
+ * (`docVideoPlayer`, src/components/videos/DocVideoInline.tsx), with the title and duration taken
+ * from the video catalogue (one catalogue, never two: the guide holds the id only). Nothing is rendered when the video isn't published or has no
  * render to play, so a guide never links to « Vidéo bientôt disponible ». Pure, no fs: the server
  * side (src/lib/public-content.ts) loads the catalogue and passes it in.
  */
@@ -91,4 +92,83 @@ export const DOC_VIDEO_ATTRIBUTE = "data-doc-video"
  */
 export function renderDocVideoCard(link: DocVideoLink): string {
   return `<p ${DOC_VIDEO_ATTRIBUTE}="true"><a href="${escapeHtml(link.href)}">${escapeHtml(link.label)}</a></p>\n`
+}
+
+/**
+ * Everything a documentation unit's inline player needs for one reference, or null when it renders
+ * nothing (the same rule as `docVideoLink`: published, with a render to play). The unit page draws
+ * it in place of the card (DocVideoInline): the button « Voir la vidéo : <titre> (<durée>) » opens
+ * the player right there, without leaving the documentation; `libraryHref` is the plain link
+ * rendered before hydration (no JavaScript) and the « Ouvrir dans la bibliothèque » link below the
+ * player. Plain data, safe to pass to a client component.
+ */
+export type DocVideoPlayer = {
+  id: string
+  title: string
+  /** « Voir la vidéo : <titre> (<durée>) », the button's and the fallback link's text. */
+  label: string
+  /** /videos/<ID>?from=doc */
+  libraryHref: string
+  revision: number
+  audience: Audience[]
+  media: VideoMediaUrls
+  /** The frame's ratio, from the recording viewport (« 1280 / 800 »), so the player keeps its height before the metadata loads. */
+  aspectRatio: string
+  /** The narration, one paragraph per segment: the « Transcription » under the player. */
+  transcript: string[]
+}
+
+export function docVideoPlayer(id: string, catalog: Video[], mediaBaseUrl: string | undefined | null): DocVideoPlayer | null {
+  const media = (video: Video) => videoMediaUrls(video.slug, mediaBaseUrl)
+  const link = docVideoLink(id, catalog, (video) => media(video) !== null)
+  const video = link ? resolveVideoReference(id, catalog) : null
+  const urls = video ? media(video) : null
+  if (!link || !video || !urls) return null
+  const { width, height } = video.manifest.viewport
+  return {
+    id: video.id,
+    title: video.title,
+    label: link.label,
+    libraryHref: link.href,
+    revision: video.revision,
+    audience: [...video.audience],
+    media: urls,
+    aspectRatio: width > 0 && height > 0 ? `${width} / ${height}` : "16 / 9",
+    transcript: video.manifest.segments.map((segment) => segment.transcript).filter((text) => text.trim() !== ""),
+  }
+}
+
+/**
+ * Where a unit's player goes: an empty paragraph carrying the video id, which the sanitizer keeps
+ * (DOC_VIDEO_ATTRIBUTE is allowed) and `splitAtDocVideoSlots` then cuts the HTML at. A reference
+ * stands on its own line between blank lines (guarded by the tests over the sources), so the slot
+ * is always a top-level block and both halves are whole HTML.
+ */
+export function renderDocVideoSlot(id: string): string {
+  return `<p ${DOC_VIDEO_ATTRIBUTE}="${escapeHtml(id)}"></p>\n`
+}
+
+const DOC_VIDEO_SLOT_RE = new RegExp(`<p ${DOC_VIDEO_ATTRIBUTE}="([A-Z][A-Z0-9_]*)"></p>\\n?`, "g")
+
+export type DocUnitPart = { kind: "html"; html: string } | { kind: "video"; player: DocVideoPlayer }
+
+/**
+ * A unit's HTML cut at its video slots: the HTML around them, and in their place the player of
+ * each slot's video. A slot whose id has no player (`players` lacks it) disappears; empty HTML
+ * chunks are dropped.
+ */
+export function splitAtDocVideoSlots(html: string, players: ReadonlyMap<string, DocVideoPlayer>): DocUnitPart[] {
+  const parts: DocUnitPart[] = []
+  let last = 0
+  const pushHtml = (chunk: string) => {
+    if (chunk.trim() !== "") parts.push({ kind: "html", html: chunk })
+  }
+  for (const match of html.matchAll(DOC_VIDEO_SLOT_RE)) {
+    pushHtml(html.slice(last, match.index))
+    const player = players.get(match[1])
+    if (player) parts.push({ kind: "video", player })
+    last = match.index + match[0].length
+  }
+  pushHtml(html.slice(last))
+  return parts
 }

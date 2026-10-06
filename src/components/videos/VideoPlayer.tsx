@@ -29,9 +29,21 @@ import type { VideoMediaUrls } from "@/lib/video-catalog"
  * reload) — src/lib/video-autoplay.ts's `shouldAutoplay` decides from the session's navigation
  * intent (set by AutoplayLink.tsx, consumed here once on mount) and `prefers-reduced-motion`; on
  * yes, `video.play()` is called directly and a rejection (the browser's own autoplay policy) is
- * swallowed — the player just waits for Play, nothing breaks.
+ * swallowed — the player just waits for Play, nothing breaks. A documentation unit's inline
+ * player (DocVideoInline.tsx) passes `galleryAutoplay={false}`: it never autoplays and leaves the
+ * session's intent alone. `aspectRatio` reserves the frame's height before the metadata loads.
  */
-export default function VideoPlayer({ title, mediaUrls }: { title: string; mediaUrls: VideoMediaUrls | null }) {
+export default function VideoPlayer({
+  title,
+  mediaUrls,
+  galleryAutoplay = true,
+  aspectRatio,
+}: {
+  title: string
+  mediaUrls: VideoMediaUrls | null
+  galleryAutoplay?: boolean
+  aspectRatio?: string
+}) {
   const [failed, setFailed] = useState(false)
   const [statusText, setStatusText] = useState("")
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -50,6 +62,7 @@ export default function VideoPlayer({ title, mediaUrls }: { title: string; media
   }, [failed])
 
   useEffect(() => {
+    if (!galleryAutoplay) return
     // Read once, on mount, regardless of whether a video is actually available here — a flag set
     // for a video with no render yet must not leak into autoplaying a later page in the session.
     const fromGallery = consumeAutoplayIntent()
@@ -72,9 +85,9 @@ export default function VideoPlayer({ title, mediaUrls }: { title: string; media
         <div
           ref={fallbackRef}
           tabIndex={-1}
-          className="aspect-video bg-gray-100 border border-gray-200 rounded-2xl flex items-center justify-center focus:outline-none"
+          className="aspect-video bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl flex items-center justify-center focus:outline-none"
         >
-          <p className="text-sm text-gray-600">Vidéo bientôt disponible.</p>
+          <p className="text-sm text-gray-600 dark:text-gray-300">Vidéo bientôt disponible.</p>
         </div>
       ) : (
         <video
@@ -84,12 +97,15 @@ export default function VideoPlayer({ title, mediaUrls }: { title: string; media
           crossOrigin="anonymous"
           preload="metadata"
           aria-label={title}
-          className="w-full rounded-2xl border border-gray-200 bg-black"
+          className="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-black"
+          style={aspectRatio ? { aspectRatio } : undefined}
           onError={handleError}
         >
           <source src={mediaUrls.video} type="video/mp4" />
           {/* Off by default (owner decision): still selectable from the native controls'
-              captions menu, WCAG 1.2.2 is met either way — the transcript below is always shown. */}
+              captions menu, WCAG 1.2.2 is met either way: a full transcript always follows the
+              player, in a closed <details> that stays in the DOM (video page and documentation
+              unit alike, DocVideoInline.tsx). */}
           <track kind="captions" srcLang="fr" label="Français" src={mediaUrls.captions} />
         </video>
       )}

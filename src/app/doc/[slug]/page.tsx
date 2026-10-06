@@ -3,14 +3,15 @@ import Link from "next/link"
 import { notFound, permanentRedirect } from "next/navigation"
 import { DOC_ROLE_INFO, docGroup, docGroupHref, docUnitMetadata, loadDocUnits, relatedDocUnits, resolveDocSlug } from "@/lib/doc-units"
 import { docJumpLinks, docMenuGroups, docGroupSiblings, docUnitNeighbours } from "@/lib/doc-navigation"
-import { headingIdsOf, renderDocUnit } from "@/lib/public-content"
+import { headingIdsOf, renderDocUnitParts } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
 import { env } from "@/lib/env"
 import DocFrame from "@/components/public/DocFrame"
 import DocSideMenu from "../DocSideMenu"
+import DocVideoInline from "@/components/videos/DocVideoInline"
 import { docUnitHref } from "@/lib/doc-href"
 
-// Rendered per request, like the guides (#645): the video link depends on VIDEO_MEDIA_BASE_URL,
+// Rendered per request, like the guides (#645): the video player depends on VIDEO_MEDIA_BASE_URL,
 // only set in the running container. The static pages of /doc (admin, benevole) win over this
 // segment; their slugs are reserved (RESERVED_DOC_SLUGS in src/lib/doc-units.ts).
 export const dynamic = "force-dynamic"
@@ -44,8 +45,9 @@ export default async function DocUnitPage({ params }: Props) {
   const { unit } = found
   const group = docGroup(unit.group)
   const related = relatedDocUnits(unit, units)
-  const html = renderDocUnit(unit, env.VIDEO_MEDIA_BASE_URL)
-  const jumps = docJumpLinks(headingIdsOf(html))
+  // The unit's HTML, cut where its video goes: the player opens in place (DocVideoInline).
+  const parts = renderDocUnitParts(unit, env.VIDEO_MEDIA_BASE_URL)
+  const jumps = docJumpLinks(headingIdsOf(parts.map((part) => (part.kind === "html" ? part.html : "")).join("")))
   const { previous, next } = docUnitNeighbours(unit, units)
   const siblings = docGroupSiblings(unit, units)
 
@@ -90,7 +92,9 @@ export default async function DocUnitPage({ params }: Props) {
         </ul>
       )}
 
-      <div dangerouslySetInnerHTML={{ __html: html }} />
+      {parts.map((part, i) =>
+        part.kind === "html" ? <div key={i} dangerouslySetInnerHTML={{ __html: part.html }} /> : <DocVideoInline key={i} player={part.player} />,
+      )}
 
       {related.length > 0 && (
         <>

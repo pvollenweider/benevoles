@@ -476,7 +476,9 @@ vidéo et cette révision (au mieux). Les réponses sont effacées après la dur
 Contexte de lecture : `masterclass` par défaut ; `documentation` quand la page est ouverte avec
 `?from=doc`, à ajouter aux liens des guides vers une vidéo (#645), par exemple
 `/videos/EVENT_CREATE_BLANK?from=doc` (`FROM_DOC_PARAM`, `FROM_DOC_VALUE` dans
-`src/lib/video-feedback.ts` ; le paramètre est gardé lors de la redirection d'un slug).
+`src/lib/video-feedback.ts` ; le paramètre est gardé lors de la redirection d'un slug). Le lecteur
+ouvert sur place dans une fiche de documentation (`/doc/<fiche>`) répond directement en
+`documentation`.
 
 Les super admins voient Oui, Non et total par vidéo et par révision dans **Super Admin → Avis sur
 les vidéos** (`/super-admin/video-feedback`) ; aucun score n'est montré au public.
