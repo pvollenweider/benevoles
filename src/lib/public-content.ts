@@ -29,19 +29,11 @@ function videoCatalog(): Video[] {
  * A `<!-- video: ID -->` line becomes a link to that video (#645, src/lib/doc-video-references.ts)
  * when it's published and `mediaBaseUrl` (VIDEO_MEDIA_BASE_URL) lets it play; otherwise nothing.
  * The pages pass the variable at request time, so they're rendered per request (force-dynamic).
- *
- * `shiftHeadings` renders every heading one level down (## → <h3>, capped at <h6>), for a guide
- * placed under a heading of its page (« Le guide complet », #649); the ids don't change.
  */
-export function renderPublicSource(
-  source: string,
-  fallbackTitle: string,
-  mediaBaseUrl?: string | null,
-  options: { shiftHeadings?: boolean } = {},
-): { title: string; html: string } {
+export function renderPublicSource(source: string, fallbackTitle: string, mediaBaseUrl?: string | null): { title: string; html: string } {
   const raw = fs.readFileSync(path.join(process.cwd(), source), "utf-8")
   const { title, body } = splitTitle(raw)
-  return { title: title ?? fallbackTitle, html: renderPublicMarkdown(body, mediaBaseUrl, options.shiftHeadings ?? false) }
+  return { title: title ?? fallbackTitle, html: renderPublicMarkdown(body, mediaBaseUrl) }
 }
 
 /**
@@ -63,12 +55,12 @@ export function docUnitHeadingIds(unit: DocUnit): string[] {
 }
 
 /** The Markdown of a public source, without its title, as the page's HTML. */
-function renderPublicMarkdown(body: string, mediaBaseUrl?: string | null, shiftHeadings = false): string {
+function renderPublicMarkdown(body: string, mediaBaseUrl?: string | null): string {
   const catalog = findVideoReferences(body).length > 0 ? videoCatalog() : []
   const hasRender = (video: Video) => videoMediaUrls(video.slug, mediaBaseUrl) !== null
   const videoCard = (id: string) => {
     const link = docVideoLink(id, catalog, hasRender)
     return link ? renderDocVideoCard(link) : ""
   }
-  return renderEventPageMarkdown(linkSourcesToRoutes(body), { shiftHeadings, headingIds: true, videoCard })
+  return renderEventPageMarkdown(linkSourcesToRoutes(body), { shiftHeadings: false, headingIds: true, videoCard })
 }

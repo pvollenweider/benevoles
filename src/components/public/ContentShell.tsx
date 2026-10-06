@@ -25,31 +25,12 @@ const THEME_INIT_SCRIPT = `
 `
 
 /**
- * Frame of the public content pages rendered from Markdown sources (features, documentation):
- * site header with the content navigation and the theme toggle, the prose recipe shared with
- * src/app/legal/layout.tsx, and the real PublicFooter. Links of the content (the Markdown, the
- * indexes of /doc) get the same visible focus outline as the links a page draws itself.
+ * The prose recipe of the content pages (features, accessibility), shared with
+ * src/app/legal/layout.tsx. Links of the content (the Markdown, the indexes) get the same visible
+ * focus outline as the links a page draws itself. The documentation has its own, larger recipe
+ * (DOC_PROSE_CLASS, src/components/public/DocFrame.tsx).
  */
-export default function ContentShell({ children }: { children: React.ReactNode }) {
-  return (
-    <div data-theme-scope className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
-      <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
-      <SkipLink />
-
-      <header className="border-b border-gray-100 dark:border-gray-800">
-        <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between flex-wrap gap-x-2 gap-y-4">
-          <Link href="/" className="inline-flex py-3 -my-3 text-sm font-semibold text-gray-900 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-300 transition-colors rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">
-            benevol.app
-          </Link>
-          <div className="flex items-center gap-3">
-            <ContentNav />
-            <DocThemeToggle />
-          </div>
-        </div>
-      </header>
-
-      <main id={MAIN_CONTENT_ID} tabIndex={-1} className="max-w-3xl mx-auto px-6 py-12 focus:outline-none">
-        <article className="prose prose-gray dark:prose-invert max-w-none
+export const CONTENT_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-none
           prose-headings:font-semibold prose-headings:tracking-tight prose-headings:scroll-mt-4
           prose-h1:text-2xl prose-h1:mb-2 prose-h1:pb-4 prose-h1:border-b prose-h1:border-gray-200 dark:prose-h1:border-gray-800
           prose-h2:text-base prose-h2:mt-10 prose-h2:mb-3
@@ -64,13 +45,43 @@ export default function ContentShell({ children }: { children: React.ReactNode }
           prose-pre:whitespace-pre-wrap prose-pre:break-words prose-pre:bg-gray-50 dark:prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-gray-700
           prose-table:text-sm prose-th:text-xs prose-th:uppercase prose-th:tracking-wider prose-th:text-gray-500 dark:prose-th:text-gray-400 prose-th:font-medium
           prose-td:text-gray-600 dark:prose-td:text-gray-400 prose-td:align-top
-          prose-img:rounded-lg prose-img:border prose-img:border-gray-200 dark:prose-img:border-gray-700 prose-img:shadow-sm
-        ">
-          {children}
-        </article>
-      </main>
+          prose-img:rounded-lg prose-img:border prose-img:border-gray-200 dark:prose-img:border-gray-700 prose-img:shadow-sm`
 
-      <div className="max-w-3xl mx-auto px-6">
+/**
+ * Frame of the public content pages rendered from Markdown sources (features, documentation):
+ * site header with the content navigation and the theme toggle, and the real PublicFooter.
+ * `layout="article"` (default) puts the page in a <main> with the shared prose recipe;
+ * `layout="doc"` widens the frame and lets the page draw its own <main> (DocFrame), so a unit's
+ * side menu can sit beside it, outside the main landmark that « Aller au contenu » jumps to.
+ */
+export default function ContentShell({ children, layout = "article" }: { children: React.ReactNode; layout?: "article" | "doc" }) {
+  const width = layout === "doc" ? "max-w-6xl" : "max-w-3xl"
+  return (
+    <div data-theme-scope className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
+      <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      <SkipLink />
+
+      <header className="border-b border-gray-100 dark:border-gray-800">
+        <div className={`${width} mx-auto px-6 py-4 flex items-center justify-between flex-wrap gap-x-2 gap-y-4`}>
+          <Link href="/" className="inline-flex py-3 -my-3 text-sm font-semibold text-gray-900 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-300 transition-colors rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">
+            benevol.app
+          </Link>
+          <div className="flex items-center gap-3">
+            <ContentNav />
+            <DocThemeToggle />
+          </div>
+        </div>
+      </header>
+
+      {layout === "doc" ? (
+        children
+      ) : (
+        <main id={MAIN_CONTENT_ID} tabIndex={-1} className="max-w-3xl mx-auto px-6 py-12 focus:outline-none">
+          <article className={CONTENT_PROSE_CLASS}>{children}</article>
+        </main>
+      )}
+
+      <div className={`${width} mx-auto px-6`}>
         <PublicFooter showSupport />
       </div>
     </div>

@@ -3,6 +3,7 @@ import { legacyAnchorTargets, roleHasDocUnits, type DocRole, type DocUnit } from
 import { DOC_FAQ, docFaqHref } from "@/lib/doc-faq"
 import { docUnitHeadingIds } from "@/lib/public-content"
 import DocUnitIndex from "@/components/public/DocUnitIndex"
+import DocFrame from "@/components/public/DocFrame"
 import LegacyAnchorRedirect from "./LegacyAnchorRedirect"
 
 /**
@@ -12,21 +13,21 @@ import LegacyAnchorRedirect from "./LegacyAnchorRedirect"
 const FAQ_HEADING_ID = "faq-du-guide"
 
 /**
- * A role's guide while it is split into units (#649): its title, the questions its readers ask
- * most (DOC_FAQ, src/lib/doc-faq.ts), the index of that role's units, then the whole guide under
- * « Le guide complet », rendered by the page from its Markdown source (source of truth, also
- * readable on GitHub) with its headings one level down (`shiftHeadings`, the page decides it with
- * roleHasDocUnits, as here). Until the guide has units, the page is the guide alone; once no guide
- * is left (`html` null, the volunteer guide), the page is the questions and the index alone. Old
- * anchors that moved to a unit are followed client-side (LegacyAnchorRedirect).
+ * A role's guide, split into units (#649): its title, its introduction (GUIDE_ADMIN.md or
+ * GUIDE_BENEVOLE.md, rendered by the page from its Markdown source, the source of truth also
+ * readable on GitHub), the questions its readers ask most (DOC_FAQ, src/lib/doc-faq.ts), then the
+ * index of that role's units, its groups in the role's order (DOC_ROLE_GROUP_ORDER). One <h1>,
+ * then the « Questions fréquentes » and « Toutes les fiches » <h2>, the groups as <h3> under the
+ * latter. Old anchors that moved to a unit are followed client-side (LegacyAnchorRedirect).
  */
-export default function RoleGuide({ role, units, title, html }: { role: DocRole; units: readonly DocUnit[]; title: string; html: string | null }) {
+export default function RoleGuide({ role, units, title, html }: { role: DocRole; units: readonly DocUnit[]; title: string; html: string }) {
   const hasUnits = roleHasDocUnits(units, role)
   const targets = legacyAnchorTargets(role, units, docUnitHeadingIds)
   const faq = DOC_FAQ[role].filter((item) => units.some((u) => u.slug === item.unit))
   return (
-    <>
+    <DocFrame>
       <h1>{title}</h1>
+      <div dangerouslySetInnerHTML={{ __html: html }} />
       {hasUnits && faq.length > 0 && (
         <section aria-labelledby={FAQ_HEADING_ID}>
           <h2 id={FAQ_HEADING_ID}>Questions fréquentes</h2>
@@ -40,13 +41,7 @@ export default function RoleGuide({ role, units, title, html }: { role: DocRole;
         </section>
       )}
       {hasUnits && <DocUnitIndex units={units} role={role} />}
-      {html !== null && (
-        <>
-          {hasUnits && <h2>Le guide complet</h2>}
-          <div dangerouslySetInnerHTML={{ __html: html }} />
-        </>
-      )}
       {Object.keys(targets).length > 0 && <LegacyAnchorRedirect targets={targets} />}
-    </>
+    </DocFrame>
   )
 }

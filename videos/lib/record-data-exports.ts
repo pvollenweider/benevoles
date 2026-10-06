@@ -103,9 +103,9 @@ export async function recordDataExports(options: { page: Page; base: string; dir
     await page.getByText("+41 79 000 9001", { exact: true }).waitFor()
     await at(0.27); const csv = await showMembersCsv(page, membersFile)
     if (csv.sha256 !== memberSha || !csv.rows.some(row => row[3] === "'+41 79 000 9900")) throw new Error("Previously downloaded copy changed with actual profile")
-    await at(0.51); await go("/doc/admin")
-    await page.getByRole("heading", { name: "Exporter et conserver ses données", exact: true }).scrollIntoViewIfNeeded()
-    await at(0.54); await page.getByText("Durées de conservation", { exact: true }).scrollIntoViewIfNeeded()
+    await at(0.51); await go("/doc/exporter-et-conserver-ses-donnees")
+    await page.getByRole("heading", { level: 1, name: "Exporter et conserver ses données", exact: true }).waitFor()
+    await at(0.54); await page.getByRole("heading", { name: "Durées de conservation", exact: true }).scrollIntoViewIfNeeded()
     await at(0.73); await showArchiveJson(page, archiveFile)
     checks.copyRemainsFrozenAfterActualModification = true
   })

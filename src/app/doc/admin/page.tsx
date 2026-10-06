@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { publicPageMetadata } from "@/lib/doc-pages"
-import { loadDocUnits, roleHasDocUnits } from "@/lib/doc-units"
+import { loadDocUnits } from "@/lib/doc-units"
 import { renderPublicSource } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
 import { env } from "@/lib/env"
@@ -14,12 +14,10 @@ export function generateMetadata(): Metadata {
   return publicPageMetadata("/doc/admin", apexBaseUrl())
 }
 
-// Rendered from the repo's own GUIDE_ADMIN.md (source of truth, also readable on GitHub), with the
-// index of its units above it while the guide is split (#649, src/app/doc/RoleGuide.tsx); the guide
-// then sits under « Le guide complet », its headings one level down (same ids).
+// The organisers' guide (#649, src/app/doc/RoleGuide.tsx): the introduction from the repo's own
+// GUIDE_ADMIN.md (source of truth, also readable on GitHub), then the frequent questions and the
+// index of its units.
 export default function DocAdminPage() {
-  const units = loadDocUnits()
-  const shiftHeadings = roleHasDocUnits(units, "admin")
-  const { title, html } = renderPublicSource("GUIDE_ADMIN.md", "Guide administrateur", env.VIDEO_MEDIA_BASE_URL, { shiftHeadings })
-  return <RoleGuide role="admin" units={units} title={title} html={html} />
+  const { title, html } = renderPublicSource("GUIDE_ADMIN.md", "Guide administrateur", env.VIDEO_MEDIA_BASE_URL)
+  return <RoleGuide role="admin" units={loadDocUnits()} title={title} html={html} />
 }

@@ -67,6 +67,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.
 # Guides utilisateur, rendus par /doc — fs.readFileSync() à la requête, hors du tracing
 # automatique de `output: "standalone"`, donc copiés explicitement comme prisma/ ci-dessus.
 COPY --from=builder --chown=nextjs:nodejs /app/GUIDE_ADMIN.md ./GUIDE_ADMIN.md
+COPY --from=builder --chown=nextjs:nodejs /app/GUIDE_BENEVOLE.md ./GUIDE_BENEVOLE.md
 COPY --from=builder --chown=nextjs:nodejs /app/FEATURES.md ./FEATURES.md
 COPY --from=builder --chown=nextjs:nodejs /app/ACCESSIBILITE.md ./ACCESSIBILITE.md
 # Documentation par tâche (#649) : guide/<slug>.md, lue de la même façon par /doc/<slug>.

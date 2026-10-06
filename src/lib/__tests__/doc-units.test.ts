@@ -345,7 +345,7 @@ describe("the units of guide/", () => {
     for (const u of units) {
       for (const [, slug] of u.body.matchAll(/\]\(([a-z0-9-]+)\.md(?:#[^)]*)?\)/g)) expect(slugs.has(slug), `${u.slug} links to ${slug}.md`).toBe(true)
     }
-    for (const file of PUBLIC_PAGES.flatMap((p) => [p.source, p.stubSource]).filter((f): f is string => !!f)) {
+    for (const file of PUBLIC_PAGES.map((p) => p.source).filter((f): f is string => !!f)) {
       for (const [, slug] of read(file).matchAll(/\]\(guide\/([a-z0-9-]+)\.md(?:#[^)]*)?\)/g)) expect(slugs.has(slug), `${file} links to guide/${slug}.md`).toBe(true)
     }
   })

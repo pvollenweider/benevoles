@@ -23,11 +23,6 @@ export type PublicPage = {
   metaDescription: string
   /** Markdown file at the repo root the page is rendered from; its mtime is the sitemap's lastModified. */
   source: string | null
-  /**
-   * A root Markdown file that no longer holds the page's content, only links to its documentation
-   * units (#649: GUIDE_BENEVOLE.md, kept for readers on GitHub): links to it still lead to the page.
-   */
-  stubSource?: string
   /** Sitemap priority. */
   priority: number
   /** Listed in the doc index and its navigation (the guides). */
@@ -83,9 +78,8 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     summary: "S'inscrire à un créneau, recevoir sa confirmation, gérer son inscription.",
     metaTitle: "Guide bénévole",
     metaDescription: "S'inscrire à un créneau sans créer de compte, recevoir sa confirmation, retrouver son planning et modifier ou annuler son inscription sur benevol.app.",
-    // Split into units (#649): the page is their index, GUIDE_BENEVOLE.md only points to guide/.
-    source: null,
-    stubSource: "GUIDE_BENEVOLE.md",
+    // Split into units (#649): GUIDE_BENEVOLE.md is the welcome above their index.
+    source: "GUIDE_BENEVOLE.md",
     priority: 0.8,
     guide: true,
   },
@@ -133,7 +127,7 @@ export function publicPageMetadata(path: string, base: string): Metadata {
  */
 export function linkSourcesToRoutes(markdown: string): string {
   const pages = PUBLIC_PAGES.reduce((md, p) => {
-    const file = p.source ?? p.stubSource
+    const file = p.source
     if (!file) return md
     const source = new RegExp(`\\]\\((?:\\.\\./)?${escapeRegExp(file)}(#[^)\\s]*)?\\)`, "g")
     return md.replace(source, (_match, anchor: string | undefined) => `](${p.path}${anchor ?? ""})`)

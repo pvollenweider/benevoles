@@ -13,6 +13,7 @@ docker-compose*.yml
 !FEATURES.md
 !ACCESSIBILITE.md
 !GUIDE_ADMIN.md
+!GUIDE_BENEVOLE.md
 # The documentation units (#649, src/lib/doc-units.ts), rendered by /doc/<slug>.
 !guide/*.md
 .DS_Store

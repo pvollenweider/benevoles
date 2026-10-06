@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test"
+import { test, expect, type Page } from "@playwright/test"
 import { seriousViolations } from "./helpers/axe"
 import { waitForHydration } from "./helpers/hydration"
 
@@ -70,6 +70,8 @@ test("the breadcrumb's group leads to that group on the documentation's index", 
 test("/doc lists every unit by group, linked by its title, with its summary and who it is for", async ({ page }) => {
   await page.goto("/doc")
   await expect(page.getByRole("heading", { level: 2, name: "Toutes les fiches" })).toBeVisible()
+  // Named region, like « Questions fréquentes » on the guides.
+  await expect(page.getByRole("region", { name: "Toutes les fiches" }).getByRole("heading", { level: 3, name: "Après l'inscription" })).toBeVisible()
   const group = page.getByRole("heading", { level: 3, name: "Après l'inscription" })
   await expect(group).toHaveAttribute("id", "apres-inscription")
   const item = page.locator("#apres-inscription + ul > li", { hasText: "Revenir sur la page d'inscription" })
@@ -92,21 +94,35 @@ test("a link of the index shows the same focus outline as the links a page draws
   await expect(link).toHaveCSS("outline-offset", "2px")
 })
 
-test("the volunteer guide is its questions and the index of its units alone; the admin guide lists its units above the whole guide", async ({ page }) => {
+// The heading levels of the page's main content, in order.
+const headingLevels = (page: Page) => page.locator("main").locator("h1, h2, h3, h4, h5, h6").evaluateAll((hs) => hs.filter((h) => (h as HTMLElement).offsetParent !== null).map((h) => Number(h.tagName[1])))
+
+test("both guides open on their introduction, then their questions and their index, with a valid outline", async ({ page }) => {
   await page.goto("/doc/benevole")
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Guide bénévole")
   const headings = page.getByRole("heading", { level: 2 })
   await expect(headings).toHaveText(["Questions fréquentes", "Toutes les fiches"])
   await expect(page.getByRole("heading", { name: "Le guide complet" })).toHaveCount(0)
+  // The welcome (GUIDE_BENEVOLE.md) comes first, in « tu », before the questions.
+  const welcome = page.locator("main p", { hasText: /^Bienvenue/ })
+  await expect(welcome).toContainText("Tu donnes un coup de main")
+  expect(await welcome.evaluate((p) => {
+    const faq = document.getElementById("faq-du-guide")!
+    return Boolean(p.compareDocumentPosition(faq) & Node.DOCUMENT_POSITION_FOLLOWING)
+  })).toBe(true)
+  // The volunteers' own groups first.
+  await expect(page.getByRole("heading", { level: 3 }).first()).toHaveText("S'inscrire à un créneau")
   for (const group of ["S'inscrire à un créneau", "Après l'inscription", "Règles d'inscription"]) {
     await expect(page.getByRole("heading", { level: 3, name: group })).toBeVisible()
   }
   await expect(page.locator("main li").getByRole("link", { name: "S'inscrire", exact: true })).toHaveAttribute("href", "/doc/s-inscrire")
 
   await page.goto("/doc/admin")
-  const adminHeadings = page.getByRole("heading", { level: 2 })
-  await expect(adminHeadings).toHaveText(["Questions fréquentes", "Toutes les fiches", "Le guide complet"])
-  // A link name always leads to one place on the page (the guide also links to units).
+  await expect(page.getByRole("heading", { level: 2 })).toHaveText(["Questions fréquentes", "Toutes les fiches"])
+  await expect(page.locator("main p", { hasText: /^Bienvenue/ })).not.toContainText("figure en tête")
+  // The organisers' groups start at « Démarrer ».
+  await expect(page.getByRole("heading", { level: 3 }).first()).toHaveText("Démarrer")
+  // A link name always leads to one place on the page (the introduction also links to units).
   const links = await page.locator("main a").evaluateAll((as) => as.map((a) => [a.textContent?.trim(), a.getAttribute("href")]))
   const hrefByName = new Map<string, Set<string>>()
   for (const [name, href] of links) hrefByName.set(name ?? "", (hrefByName.get(name ?? "") ?? new Set<string>()).add(href ?? ""))
@@ -116,6 +132,85 @@ test("the volunteer guide is its questions and the index of its units alone; the
   await expect(page.locator("main li").getByRole("link", { name: "Premiers pas", exact: true })).toHaveAttribute("href", "/doc/premiers-pas")
   // No volunteer-only unit in the organisers' index.
   await expect(page.locator("main a", { hasText: "Revenir sur la page d'inscription" })).toHaveCount(0)
+
+  // One <h1>, then no level skipped: the groups are <h3> under « Toutes les fiches ».
+  for (const path of ["/doc/benevole", "/doc/admin"]) {
+    await page.goto(path)
+    const levels = await headingLevels(page)
+    expect(levels.filter((l) => l === 1), path).toHaveLength(1)
+    expect(levels[0], path).toBe(1)
+    levels.forEach((level, i) => {
+      if (i > 0) expect(level - levels[i - 1], `${path}: heading ${i}`).toBeLessThanOrEqual(1)
+    })
+  }
+})
+
+test.describe("a unit's navigation on a wide screen", () => {
+  test.use({ viewport: { width: 1440, height: 900 } })
+
+  test("the side menu lists every group, opens the current one and marks the current unit", async ({ page }) => {
+    await page.goto("/doc/rappels")
+    const menu = page.getByRole("navigation", { name: "Documentation" })
+    await expect(menu).toBeVisible()
+    // Outside <main>: « Aller au contenu » skips it.
+    expect(await menu.evaluate((nav) => nav.closest("main") === null)).toBe(true)
+    await expect(menu.locator("summary")).toHaveCount(12)
+    const current = menu.locator('[aria-current="page"]')
+    await expect(current).toHaveCount(1)
+    await expect(current).toHaveText("Rappels et changements de créneau")
+    await expect(current).toHaveCSS("font-weight", "600")
+    await expect(menu.locator("details[open] > summary")).toHaveText(["Après l'inscription"])
+    // Another group opens from the keyboard and leads to its units.
+    const other = menu.locator("summary", { hasText: "Préparer l'événement" })
+    await other.focus()
+    await page.keyboard.press("Enter")
+    await menu.getByRole("link", { name: "Configurer les créneaux", exact: true }).click()
+    await expect(page).toHaveURL(/\/doc\/configurer-les-creneaux$/)
+    await expect(page.getByRole("navigation", { name: "Documentation" }).locator('[aria-current="page"]')).toHaveText("Configurer les créneaux")
+    // « Dans ce thème » is for narrow screens only.
+    await expect(page.getByRole("heading", { level: 2, name: "Dans ce thème" })).toBeHidden()
+  })
+
+  test("previous and next stay in the unit's group, named after their target", async ({ page }) => {
+    await page.goto("/doc/rappels")
+    const pager = page.getByRole("navigation", { name: "Pages du thème" })
+    await expect(pager.getByRole("link")).toHaveCount(2)
+    await expect(pager.getByRole("link", { name: "Précédent : Revenir sur la page d'inscription" })).toHaveAttribute("href", "/doc/revenir-sur-la-page-d-inscription")
+    await expect(pager.getByRole("link", { name: "Suivant : Questions fréquentes des bénévoles" })).toHaveAttribute("href", "/doc/questions-frequentes-benevole")
+    // The last unit of its group has no next one: nothing crosses into « Règles d'inscription ».
+    await page.goto("/doc/questions-frequentes-benevole")
+    await expect(page.getByRole("navigation", { name: "Pages du thème" }).getByRole("link")).toHaveText([/^Précédent/])
+  })
+
+  test("a shared unit jumps to the volunteers' half, then the organisers'", async ({ page }) => {
+    await page.goto("/doc/rappels")
+    const jumps = page.getByRole("list", { name: "Sur cette page" })
+    await expect(jumps.getByRole("link")).toHaveText(["Côté bénévole", "Côté organisation"])
+    await jumps.getByRole("link", { name: "Côté bénévole" }).click()
+    await expect(page).toHaveURL(/\/doc\/rappels#cote-benevole$/)
+    await expect(page.getByRole("heading", { level: 2, name: "Côté bénévole" })).toBeInViewport()
+    await jumps.getByRole("link", { name: "Côté organisation" }).click()
+    await expect(page).toHaveURL(/#cote-organisation$/)
+    await expect(page.getByRole("heading", { level: 2, name: "Côté organisation" })).toBeInViewport()
+    // A unit for one audience has none.
+    await page.goto(UNIT)
+    await expect(page.getByRole("list", { name: "Sur cette page" })).toHaveCount(0)
+  })
+})
+
+test.describe("a unit's navigation on a phone", () => {
+  test.use({ viewport: { width: 390, height: 844 } })
+
+  test("no side menu, the other units of the group at the bottom instead", async ({ page }) => {
+    await page.goto("/doc/rappels")
+    await expect(page.getByRole("navigation", { name: "Documentation" })).toBeHidden()
+    const theme = page.getByRole("region", { name: "Dans ce thème" })
+    await expect(theme).toBeVisible()
+    await expect(theme.getByRole("listitem")).toHaveText(["Ma page personnelle", "Ton lien personnel", "Revenir sur la page d'inscription", "Questions fréquentes des bénévoles"])
+    await expect(theme.getByRole("link", { name: "Après l'inscription" })).toHaveAttribute("href", "/doc#apres-inscription")
+    await expect(page.getByRole("navigation", { name: "Pages du thème" }).getByRole("link")).toHaveCount(2)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390)
+  })
 })
 
 test("the filter over the index narrows the list as you type, hides empty groups and says the result", async ({ page }) => {
@@ -188,7 +283,7 @@ test.describe("old anchors of the guides", () => {
     // Every section has left both guides: give a heading of the page the id of a moved section.
     await page.goto("/doc/admin")
     await waitForHydration(page.getByRole("button", { name: "Thème sombre" }))
-    const id = await page.getByRole("heading", { level: 2, name: "Le guide complet" }).evaluate((h) => {
+    const id = await page.getByRole("heading", { level: 2, name: "Toutes les fiches" }).evaluate((h) => {
       h.id = "premiers-pas"
       return h.id
     })

@@ -11,8 +11,6 @@ describe("PUBLIC_PAGES", () => {
     for (const p of PUBLIC_PAGES) {
       expect(fs.existsSync(path.join(process.cwd(), "src/app", p.path, "page.tsx")), `route for ${p.path}`).toBe(true)
       if (p.source) expect(fs.existsSync(path.join(process.cwd(), p.source)), `source for ${p.path}`).toBe(true)
-      if (p.stubSource) expect(fs.existsSync(path.join(process.cwd(), p.stubSource)), `stub for ${p.path}`).toBe(true)
-      expect(p.source && p.stubSource, `${p.path}: a source or a stub, not both`).toBeFalsy()
     }
   })
 
@@ -83,8 +81,8 @@ describe("FEATURES.md, the source of /fonctionnalites", () => {
 })
 
 describe("linkSourcesToRoutes", () => {
-  // GUIDE_BENEVOLE.md is only a stub since the split (#649): a link to it still leads to /doc/benevole.
-  it("rewrites links to the root sources and stubs, an anchor kept, from the root or from guide/", () => {
+  // GUIDE_BENEVOLE.md is the welcome of /doc/benevole since the split (#649): a link to it leads there.
+  it("rewrites links to the root sources, an anchor kept, from the root or from guide/", () => {
     expect(linkSourcesToRoutes("[a](GUIDE_ADMIN.md) [b](GUIDE_BENEVOLE.md#confirmation)")).toBe("[a](/doc/admin) [b](/doc/benevole#confirmation)")
     expect(linkSourcesToRoutes("[a](../GUIDE_ADMIN.md#creer-un-evenement)")).toBe("[a](/doc/admin#creer-un-evenement)")
   })

@@ -176,7 +176,7 @@ Elle doit aussi figurer dans `PERMISSIONS` (`src/lib/permissions.ts`) avec son n
 | Fichier | Rôle |
 |---------|------|
 | `FEATURES.md`, `GUIDE_ADMIN.md`, `ACCESSIBILITE.md` | Sources des pages publiques (`/fonctionnalites`, `/doc/admin`, `/accessibilite`), déclarées dans `src/lib/doc-pages.ts` et copiées dans l'image par le `Dockerfile` |
-| `GUIDE_BENEVOLE.md` | Renvoi vers `guide/README.md` pour les lecteurs sur GitHub : le guide bénévole est entièrement découpé en pages de `guide/`, et `/doc/benevole` en est l'index |
+| `GUIDE_BENEVOLE.md` | Mot d'accueil du guide bénévole, rendu en tête de `/doc/benevole` : le guide est entièrement découpé en pages de `guide/`, dont `/doc/benevole` est l'index |
 | `guide/*.md` | Documentation par tâche (#649), celle des bénévoles et des organisateurs, une page par fichier rendue à `/doc/<fichier>` ; le tableau des durées de conservation d'`exporter-et-conserver-ses-donnees.md` est généré par `npm run retention:docs` ; en-tête et règles d'écriture dans `guide/README.md`, dont la liste est générée par `npm run doc:index` depuis `src/lib/doc-units.ts` |
 | `FONCTIONNALITES.md` | Inventaire détaillé pour l'équipe |
 | `DESIGN.md`, `PRODUCT.md` | Système visuel et contexte produit, à relire avant tout changement d'interface |

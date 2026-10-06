@@ -2,6 +2,9 @@ import { docUnitAudience, docUnitsByGroup, type DocRole, type DocUnit } from "@/
 import { docUnitQuestions } from "@/lib/doc-search"
 import DocUnitFilterList, { type DocIndexGroup } from "./DocUnitFilterList"
 
+/** The id of « Toutes les fiches », which names its region (prefixed: never a Markdown heading's slug). */
+const INDEX_HEADING_ID = "doc-toutes-les-fiches"
+
 /**
  * The index of the documentation units (#649): a « ## » heading, then one « ### » heading per group
  * and the list of its units, each linked by its title and followed by its summary, with a filter
@@ -27,9 +30,9 @@ export default function DocUnitIndex({ units, role }: { units: readonly DocUnit[
   }))
   if (groups.length === 0) return null
   return (
-    <>
-      <h2>Toutes les fiches</h2>
+    <section aria-labelledby={INDEX_HEADING_ID}>
+      <h2 id={INDEX_HEADING_ID}>Toutes les fiches</h2>
       <DocUnitFilterList groups={groups} />
-    </>
+    </section>
   )
 }
