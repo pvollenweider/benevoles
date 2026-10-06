@@ -1,5 +1,6 @@
 import Link from "next/link"
 import type { DocMenuGroup } from "@/lib/doc-navigation"
+import { docUnitHref } from "@/lib/doc-href"
 
 const focusRing = "rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
 
@@ -29,7 +30,7 @@ export default function DocSideMenu({ groups, currentSlug }: { groups: readonly 
                 {units.map((unit) => (
                   <li key={unit.slug}>
                     <Link
-                      href={`/doc/${unit.slug}`}
+                      href={docUnitHref(unit.slug)}
                       aria-current={unit.slug === currentSlug ? "page" : undefined}
                       className={`block px-2 py-1.5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 aria-[current=page]:bg-blue-50 aria-[current=page]:font-semibold aria-[current=page]:text-blue-800 dark:aria-[current=page]:bg-gray-800 dark:aria-[current=page]:text-white ${focusRing}`}
                     >

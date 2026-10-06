@@ -8,6 +8,7 @@ import { apexBaseUrl } from "@/lib/urls"
 import { env } from "@/lib/env"
 import DocFrame from "@/components/public/DocFrame"
 import DocSideMenu from "../DocSideMenu"
+import { docUnitHref } from "@/lib/doc-href"
 
 // Rendered per request, like the guides (#645): the video link depends on VIDEO_MEDIA_BASE_URL,
 // only set in the running container. The static pages of /doc (admin, benevole) win over this
@@ -97,7 +98,7 @@ export default async function DocUnitPage({ params }: Props) {
           <ul>
             {related.map((r) => (
               <li key={r.slug}>
-                <Link href={`/doc/${r.slug}`} className={linkClass}>{r.title}</Link>
+                <Link href={docUnitHref(r.slug)} className={linkClass}>{r.title}</Link>
               </li>
             ))}
           </ul>
@@ -107,13 +108,13 @@ export default async function DocUnitPage({ params }: Props) {
       {(previous || next) && (
         <nav aria-label="Pages du thème" className="not-prose mt-10 grid gap-3 sm:grid-cols-2">
           {previous && (
-            <Link href={`/doc/${previous.slug}`} className={pagerClass}>
+            <Link href={docUnitHref(previous.slug)} className={pagerClass}>
               <span className="text-sm text-gray-600 dark:text-gray-400">Précédent&nbsp;: </span>
               <span className="font-medium text-blue-600 dark:text-blue-400 underline underline-offset-2"><span aria-hidden="true">← </span>{previous.title}</span>
             </Link>
           )}
           {next && (
-            <Link href={`/doc/${next.slug}`} className={`${pagerClass} sm:col-start-2 sm:items-end sm:text-right`}>
+            <Link href={docUnitHref(next.slug)} className={`${pagerClass} sm:col-start-2 sm:items-end sm:text-right`}>
               <span className="text-sm text-gray-600 dark:text-gray-400">Suivant&nbsp;: </span>
               <span className="font-medium text-blue-600 dark:text-blue-400 underline underline-offset-2">{next.title}<span aria-hidden="true"> →</span></span>
             </Link>
@@ -130,7 +131,7 @@ export default async function DocUnitPage({ params }: Props) {
           <ul>
             {siblings.map((s) => (
               <li key={s.slug}>
-                <Link href={`/doc/${s.slug}`} className={linkClass}>{s.title}</Link>
+                <Link href={docUnitHref(s.slug)} className={linkClass}>{s.title}</Link>
               </li>
             ))}
           </ul>

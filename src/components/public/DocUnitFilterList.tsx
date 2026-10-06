@@ -7,6 +7,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import { docFilterStatus, haystackMatches, searchHaystack, searchTerms, type DocSearchEntry } from "@/lib/doc-search"
 import { useHydrated } from "@/lib/use-hydrated"
+import { docUnitHref } from "@/lib/doc-href"
 
 export type DocIndexItem = DocSearchEntry & { slug: string; audience?: string }
 export type DocIndexGroup = { id: string; title: string; anchor?: string; items: DocIndexItem[] }
@@ -99,7 +100,7 @@ export default function DocUnitFilterList({ groups }: { groups: readonly DocInde
             <ul>
               {group.items.map((item) => (
                 <li key={item.slug} hidden={!visible(item)}>
-                  <Link href={`/doc/${item.slug}`}>{item.title}</Link>&nbsp;: {item.summary}
+                  <Link href={docUnitHref(item.slug)}>{item.title}</Link>&nbsp;: {item.summary}
                   {item.audience && <> Pour&nbsp;: {item.audience}.</>}
                 </li>
               ))}

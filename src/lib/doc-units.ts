@@ -7,6 +7,7 @@ import type { Metadata } from "next"
 import { z } from "zod"
 import { SITE_NAME, splitTitle } from "@/lib/doc-pages"
 import { findVideoReferences } from "@/lib/doc-video-references"
+import { DOC_SLUG_RE } from "@/lib/doc-href"
 
 /**
  * The documentation split into units (#649): one Markdown file per task in the root folder
@@ -93,7 +94,7 @@ export const DOC_UNITS_DIR = "guide"
 /** The generated index of `guide/`, not a unit. */
 export const DOC_INDEX_FILE = "README.md"
 
-const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+const SLUG_RE = DOC_SLUG_RE
 const LEGACY_RE = /^(admin|benevole)#[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 /** Separators the copy never uses (accessibility: read aloud as noise, or not at all). */
