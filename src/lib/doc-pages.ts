@@ -127,10 +127,15 @@ export function publicPageMetadata(path: string, base: string): Metadata {
 export function linkSourcesToRoutes(markdown: string): string {
   const pages = PUBLIC_PAGES.reduce((md, p) => {
     if (!p.source) return md
-    const source = new RegExp(`\\]\\((?:\\.\\./)?${p.source.replace(/\./g, "\\.")}(#[^)\\s]*)?\\)`, "g")
+    const source = new RegExp(`\\]\\((?:\\.\\./)?${escapeRegExp(p.source)}(#[^)\\s]*)?\\)`, "g")
     return md.replace(source, (_match, anchor: string | undefined) => `](${p.path}${anchor ?? ""})`)
   }, markdown)
   return pages.replace(UNIT_LINK_RE, (_match, slug: string, anchor: string | undefined) => `](/doc/${slug}${anchor ?? ""})`)
+}
+
+/** Escapes every character with a meaning in a regular expression (backslash included). */
+function escapeRegExp(text: string): string {
+  return text.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&")
 }
 
 /** `](guide/x.md#y)` or `](x.md#y)`: a link to a documentation unit by its file. */
