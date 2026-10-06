@@ -53,6 +53,7 @@ export type DocGroup = { id: string; title: string }
 export const DOC_GROUPS: readonly DocGroup[] = [
   { id: "inscription", title: "S'inscrire à un créneau" },
   { id: "apres-inscription", title: "Après l'inscription" },
+  { id: "regles", title: "Règles d'inscription" },
 ]
 
 /**

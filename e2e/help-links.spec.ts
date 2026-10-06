@@ -33,14 +33,14 @@ test("the shifts page's help link opens the guide at « Configurer les créneaux
   const [guide] = await Promise.all([page.context().waitForEvent("page"), link.click()])
   await guide.waitForLoadState()
   expect(new URL(guide.url()).pathname + new URL(guide.url()).hash).toBe("/doc/admin#configurer-les-creneaux")
-  const heading = guide.getByRole("heading", { level: 2, name: "Configurer les créneaux" })
+  const heading = guide.getByRole("heading", { name: "Configurer les créneaux", exact: true })
   await expect(heading).toHaveAttribute("id", "configurer-les-creneaux")
   await expect(heading).toBeInViewport()
   // The admin page stays where it was.
   await expect(page).toHaveURL(new RegExp(`/admin/events/${id}/shifts$`))
 })
 
-test("a help link works from the keyboard, and lands on a third-level section", async ({ page }) => {
+test("a help link works from the keyboard, and lands on a subsection", async ({ page }) => {
   const id = await newEvent(page)
   await page.goto(`/admin/events/${id}/day-of`)
   const link = page.getByRole("link", { name: "Aide : Présences le jour J (ouvre dans un nouvel onglet)" })
@@ -49,14 +49,14 @@ test("a help link works from the keyboard, and lands on a third-level section", 
   const [guide] = await Promise.all([page.context().waitForEvent("page"), page.keyboard.press("Enter")])
   await guide.waitForLoadState()
   expect(new URL(guide.url()).hash).toBe("#presences-le-jour-j")
-  await expect(guide.getByRole("heading", { level: 3, name: "Présences le jour J" })).toBeInViewport()
+  await expect(guide.getByRole("heading", { name: "Présences le jour J", exact: true })).toBeInViewport()
 })
 
 test("the guide says how to send feedback: email first, GitHub optional", async ({ page }) => {
   await page.goto("/doc/admin")
   await page.getByRole("link", { name: "Signaler un problème ou proposer une amélioration" }).click()
   await expect(page).toHaveURL(/#signaler-un-probleme-ou-proposer-une-amelioration$/)
-  const heading = page.getByRole("heading", { level: 3, name: "Signaler un problème ou proposer une amélioration" })
+  const heading = page.getByRole("heading", { name: "Signaler un problème ou proposer une amélioration", exact: true })
   await expect(heading).toBeInViewport()
   await expect(page.getByRole("link", { name: "contact@benevol.app" })).toHaveAttribute("href", "mailto:contact@benevol.app")
   await expect(page.getByRole("link", { name: "le suivi public sur GitHub" })).toHaveAttribute("href", "https://github.com/pvollenweider/benevoles/issues")

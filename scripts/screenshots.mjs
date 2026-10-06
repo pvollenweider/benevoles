@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 /**
- * Documentation screenshots (#497): every image of GUIDE_ADMIN.md / GUIDE_BENEVOLE.md, written
+ * Documentation screenshots (#497): every image of GUIDE_ADMIN.md and guide/*.md, written
  * to public/doc-img/ (served as /doc-img/… by /doc). Reproducible: run against a local stack
  * seeded with the demo event (scripts/seed-demo.ts), never against production.
  *

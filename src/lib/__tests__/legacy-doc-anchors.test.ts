@@ -16,10 +16,13 @@ import legacyAnchors from "./fixtures/legacy-doc-anchors.json"
 const fixture = legacyAnchors as Record<DocRole, string[]>
 const units = readDocUnits()
 
+// A guide entirely split into units has no source any more (the volunteer guide): its page is the
+// index alone, so every one of its anchors must be claimed by a unit.
 const guideIds = (role: DocRole): Set<string> => {
   const page = publicPage(DOC_ROLE_INFO[role].path)
-  return new Set(headingIdsOf(renderPublicSource(page.source!, page.title).html))
+  return page.source ? new Set(headingIdsOf(renderPublicSource(page.source, page.title).html)) : new Set()
 }
+const rolesWithGuide = DOC_ROLES.filter((role) => publicPage(DOC_ROLE_INFO[role].path).source)
 
 describe("the frozen anchors of the old guides", () => {
   it("cover both guides, each id once", () => {
@@ -42,7 +45,13 @@ describe("the frozen anchors of the old guides", () => {
     }
   })
 
-  it.each(DOC_ROLES)("keep their ids when the %s guide is rendered under « Le guide complet », one level down", (role) => {
+  it("leave no anchor of the volunteer guide on a page: it is entirely split, each anchor claimed by a unit", () => {
+    expect(rolesWithGuide).toEqual(["admin"])
+    const claimed = new Set(units.flatMap((u) => u.legacy))
+    for (const anchor of fixture.benevole) expect(claimed.has(`benevole#${anchor}`), anchor).toBe(true)
+  })
+
+  it.each(rolesWithGuide)("keep their ids when the %s guide is rendered under « Le guide complet », one level down", (role) => {
     const page = publicPage(DOC_ROLE_INFO[role].path)
     const flat = renderPublicSource(page.source!, page.title).html
     const shifted = renderPublicSource(page.source!, page.title, null, { shiftHeadings: true }).html

@@ -8,21 +8,22 @@ import LegacyAnchorRedirect from "./LegacyAnchorRedirect"
  * then the whole guide under « Le guide complet », rendered by the page from its Markdown source
  * (source of truth, also readable on GitHub) with its headings one level down (`shiftHeadings`,
  * the page decides it with roleHasDocUnits, as here). Until the guide has units, the page is the guide
- * alone. Old anchors that moved to a unit are followed client-side (LegacyAnchorRedirect).
+ * alone; once no guide is left (`html` null, the volunteer guide), the page is the index alone. Old
+ * anchors that moved to a unit are followed client-side (LegacyAnchorRedirect).
  */
-export default function RoleGuide({ role, units, title, html }: { role: DocRole; units: readonly DocUnit[]; title: string; html: string }) {
+export default function RoleGuide({ role, units, title, html }: { role: DocRole; units: readonly DocUnit[]; title: string; html: string | null }) {
   const hasUnits = roleHasDocUnits(units, role)
   const targets = legacyAnchorTargets(role, units, docUnitHeadingIds)
   return (
     <>
       <h1>{title}</h1>
-      {hasUnits && (
+      {hasUnits && <DocUnitIndex units={units} role={role} />}
+      {html !== null && (
         <>
-          <DocUnitIndex units={units} role={role} />
-          <h2>Le guide complet</h2>
+          {hasUnits && <h2>Le guide complet</h2>}
+          <div dangerouslySetInnerHTML={{ __html: html }} />
         </>
       )}
-      <div dangerouslySetInnerHTML={{ __html: html }} />
       {Object.keys(targets).length > 0 && <LegacyAnchorRedirect targets={targets} />}
     </>
   )

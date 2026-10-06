@@ -218,7 +218,7 @@ describe("video references in the public sources", () => {
   })
 
   it("the guides reference videos, one link per published reference once the media base is set", () => {
-    for (const source of ["GUIDE_ADMIN.md", "GUIDE_BENEVOLE.md"]) {
+    for (const source of ["GUIDE_ADMIN.md"]) {
       const refs = findVideoReferences(read(source))
       expect(refs.length, source).toBeGreaterThan(0)
       const published = refs.filter((r) => catalog.find((v) => v.id === r.id)?.published)
@@ -239,6 +239,6 @@ describe("video references in the public sources", () => {
 
   it("render no video link without VIDEO_MEDIA_BASE_URL", () => {
     expect(renderPublicSource("GUIDE_ADMIN.md", "x").html).not.toContain("data-doc-video")
-    expect(renderPublicSource("GUIDE_BENEVOLE.md", "x", null).html).not.toContain("/videos/")
+    expect(renderPublicSource("GUIDE_ADMIN.md", "x", null).html).not.toContain("/videos/")
   })
 })

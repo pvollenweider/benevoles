@@ -175,7 +175,8 @@ Elle doit aussi figurer dans `PERMISSIONS` (`src/lib/permissions.ts`) avec son n
 
 | Fichier | Rôle |
 |---------|------|
-| `FEATURES.md`, `GUIDE_ADMIN.md`, `GUIDE_BENEVOLE.md`, `ACCESSIBILITE.md` | Sources des pages publiques (`/fonctionnalites`, `/doc/admin`, `/doc/benevole`, `/accessibilite`), déclarées dans `src/lib/doc-pages.ts` et copiées dans l'image par le `Dockerfile` |
+| `FEATURES.md`, `GUIDE_ADMIN.md`, `ACCESSIBILITE.md` | Sources des pages publiques (`/fonctionnalites`, `/doc/admin`, `/accessibilite`), déclarées dans `src/lib/doc-pages.ts` et copiées dans l'image par le `Dockerfile` |
+| `GUIDE_BENEVOLE.md` | Renvoi vers `guide/README.md` pour les lecteurs sur GitHub : le guide bénévole est entièrement découpé en pages de `guide/`, et `/doc/benevole` en est l'index |
 | `guide/*.md` | Documentation par tâche (#649), une page par fichier rendue à `/doc/<fichier>` ; en-tête et règles d'écriture dans `guide/README.md`, dont la liste est générée par `npm run doc:index` depuis `src/lib/doc-units.ts` |
 | `FONCTIONNALITES.md` | Inventaire détaillé pour l'équipe |
 | `DESIGN.md`, `PRODUCT.md` | Système visuel et contexte produit, à relire avant tout changement d'interface |
@@ -191,13 +192,13 @@ Les titres des pages publiques ont une ancre stable, le slug de leur texte (`/do
 
 ### Principes de rédaction de la documentation
 
-Pour toute section nouvelle ou réécrite des guides (`GUIDE_ADMIN.md`, `GUIDE_BENEVOLE.md`) :
+Pour toute section nouvelle ou réécrite des guides (`GUIDE_ADMIN.md`, pages de `guide/`) :
 
 - **La tâche d'abord** : le titre dit ce que la personne veut faire (« Créer une série de créneaux », « Gérer son inscription »), pas le nom d'un écran ou d'un composant. La première phrase dit où cela se passe et à quoi cela sert.
 - **Des sections courtes** : une tâche par section, une procédure en étapes quand il y en a plusieurs, les cas rares dans les questions fréquentes. Une explication qui vaut pour plusieurs rôles est écrite une seule fois, au bon endroit, et les autres sections y renvoient par un lien.
 - **La vidéo par son identifiant** : quand une vidéo de la bibliothèque montre cette tâche, ajouter sous le titre, sur sa propre ligne entourée de lignes vides, `<!-- video: ID -->` avec l'identifiant stable de `videos/catalog.json` (jamais son titre, sa durée ni son adresse : ils viennent du catalogue). La page publique en fait un lien « Voir la vidéo : titre (durée) » si la vidéo est publiée et son film en ligne, et rien sinon ; GitHub n'affiche rien. Une vidéo au plus par section, et une seule fois par fichier. Un identifiant inconnu ou mal écrit fait échouer `src/lib/__tests__/doc-video-references.test.ts`.
 - **L'état actuel seulement** : décrire ce que fait le produit aujourd'hui, jamais « depuis la version X » ni « nouveau » ; l'historique va dans `CHANGELOG.md`.
-- **Un seul registre par guide**, celui de son public (`PRODUCT.md`) : « vous » dans le guide administrateur ; « tu » est celui des bénévoles dans le produit, ses emails et ses vidéos.
+- **Un seul registre par page**, celui de son public (`PRODUCT.md`) : « vous » dans le guide administrateur ; « tu » dans les pages pour les bénévoles, comme dans le produit, ses emails et ses vidéos ; une page pour les deux rôles explique une fois, puis « Côté organisation » (vous) et « Côté bénévole » (tu).
 
 ## Publier une nouvelle version
 
@@ -208,7 +209,7 @@ Checklist à suivre à chaque changement de version :
 3. **`SECURITY.md`** : dans le même commit que le bump de `package.json`, mettre à jour la première ligne `X.Y.x` de la table « Versions supportées » à chaque changement de version mineure ou majeure (un correctif ne la change pas). **Vérifié en CI** (`scripts/check-security-md.mjs`, job « Type-check, lint & tests ») : la CI échoue si cette ligne ne correspond pas à la version majeure et mineure de `package.json`.
 4. **`FONCTIONNALITES.md`** : vérifier que les fonctionnalités ajoutées ou retirées depuis la dernière relecture y figurent. Pas de vérification automatique : audit manuel périodique.
 5. **`FEATURES.md`** (page publique `/fonctionnalites`) : chaque fonctionnalité livrée y figure, aucune fonctionnalité non livrée n'y est annoncée (règle d'`AGENTS.md`).
-6. **`GUIDE_ADMIN.md` / `GUIDE_BENEVOLE.md`** : décrivent uniquement l'état actuel du produit, jamais de langage « depuis la version x, … ». Ce sont aussi les pages publiques `/doc/admin` et `/doc/benevole` (même source).
+6. **`GUIDE_ADMIN.md` / `guide/*.md`** : décrivent uniquement l'état actuel du produit, jamais de langage « depuis la version x, … ». Ce sont aussi les pages publiques `/doc/admin` et `/doc/<page>` (même source) ; `/doc/benevole` est l'index des pages bénévoles.
 7. **Changement incompatible** (variable obligatoire, manifeste, migration par Job) : section « Mise à jour depuis x » dans `docs/deploiement.md`, lien dans le README et en tête de la section du CHANGELOG.
 8. **Nouvelle variable d'environnement** : `src/lib/env.ts` si elle doit être validée au démarrage, `docs/configuration.md`, `.env.example`, l'étape « Sync k8s secret » de `.github/workflows/deploy.yml` et le secret GitHub correspondant.
 9. **Captures de la documentation** (`public/doc-img/`, utilisées par les guides et le README) : si des écrans ont changé, les régénérer sur une base jetable avec l'événement de démonstration (`scripts/seed-demo.ts` puis `npm run screenshots`, procédure en tête de `scripts/screenshots.mjs`), et relire les textes alternatifs.

@@ -12,7 +12,7 @@ Ce projet est gratuit et open source. Si vous l'utilisez et voulez soutenir son 
 
 | Document | Destinataires |
 |----------|---------------|
-| [Guide bénévole](GUIDE_BENEVOLE.md) | Personnes qui s'inscrivent comme bénévoles |
+| [Guide bénévole](guide/README.md) | Personnes qui s'inscrivent comme bénévoles (une page par tâche, dans `guide/`) |
 | [Guide administrateur](GUIDE_ADMIN.md) | Organisateurs qui gèrent les événements |
 | [Fonctionnalités](FONCTIONNALITES.md) | Liste exhaustive de tout ce que fait l'application |
 | [Présentation des fonctionnalités](FEATURES.md) | Page publique `/fonctionnalites`, par besoins |

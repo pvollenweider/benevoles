@@ -21,16 +21,18 @@ describe("sitemap on the apex host", () => {
     withHeaders({ host: "www.benevol.app" })
     const sitemap = (await import("../app/sitemap")).default
     const entries = await sitemap()
-    expect(entries.map((e) => e.url)).toEqual([
+    expect(entries.map((e) => e.url).slice(0, 6)).toEqual([
       "https://www.benevol.app/",
       "https://www.benevol.app/fonctionnalites",
       "https://www.benevol.app/accessibilite",
       "https://www.benevol.app/doc",
       "https://www.benevol.app/doc/admin",
       "https://www.benevol.app/doc/benevole",
-      // The documentation units of guide/ (#649), each at /doc/<slug>.
-      "https://www.benevol.app/doc/revenir-sur-la-page-d-inscription",
     ])
+    // Then the documentation units of guide/ (#649), each at /doc/<slug>, in reading order.
+    const { readDocUnits } = await import("../lib/doc-units")
+    expect(entries.map((e) => e.url).slice(6)).toEqual(readDocUnits().map((u) => `https://www.benevol.app/doc/${u.slug}`))
+    expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/revenir-sur-la-page-d-inscription")
     // The guides and the units are real files in the repo: their date is known.
     expect(entries.find((e) => e.url.endsWith("/doc/admin"))?.lastModified).toBeInstanceOf(Date)
     expect(entries.find((e) => e.url.endsWith("/doc/revenir-sur-la-page-d-inscription"))?.lastModified).toBeInstanceOf(Date)

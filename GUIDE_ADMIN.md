@@ -133,7 +133,7 @@ L'événement est créé en **brouillon** (`draft`) — il n'est pas visible du 
 
 En modification (**`/admin/events/[id]/edit`**), chaque changement est enregistré automatiquement ; l'heure du dernier enregistrement s'affiche en haut du formulaire. Si un enregistrement échoue, un message le dit et **Réessayer** renvoie vos modifications.
 
-Le formulaire de modification propose aussi la case **Rappels automatiques** (cochée par défaut) : décochée, aucun rappel J-2, J-1 ni du jour ne part pour cet événement (voir « Rappels automatiques »).
+Le formulaire de modification propose aussi la case **Rappels automatiques** (cochée par défaut) : décochée, aucun rappel J-2, J-1 ni du jour ne part pour cet événement (voir [Rappels et changements de créneau](guide/rappels.md)).
 
 <!-- video: EVENT_DUPLICATE -->
 
@@ -175,9 +175,9 @@ Un créneau correspond à un poste de bénévolat sur une plage horaire précise
 | Description | Texte court, qui n'est affiché ni sur la page publique ni dans les emails. Ce n'est pas un champ confidentiel : pour ce qui doit rester à l'organisation, utilisez les notes internes ; pour ce que les bénévoles doivent savoir, les infos pratiques |
 | Infos pratiques pour les bénévoles | Lieu de rendez-vous et consigne pratique, visibles sur la page publique d'inscription et dans les emails ; personne de contact (nom, téléphone), envoyée seulement aux inscrits (email de confirmation, rappels, page personnelle), jamais affichée publiquement, sous le libellé « Contact pour ce créneau ». Sans contact sur le créneau, les bénévoles confirmés voient le **Contact le jour J** de l'événement, s'il est renseigné. Facultatifs, courts : pas de fiche de mission. |
 | Notes internes | Jamais montrées aux bénévoles |
-| Âge minimum (optionnel) | Condition d'âge pour ce poste (ex. : `18` pour un poste avec permis de conduire). Affiché en info sur le planning public ; vérifié à l'inscription — voir « Âge minimum sur un poste » ci-dessous. |
-| Activer la liste d'attente | Une fois le créneau complet, les bénévoles peuvent s'inscrire en liste d'attente — voir « Activer la liste d'attente » ci-dessous |
-| Sur validation | Chaque inscription devient une demande à accepter ou refuser — voir « Inscriptions sur validation » ci-dessous |
+| Âge minimum (optionnel) | Condition d'âge pour ce poste (ex. : `18` pour un poste avec permis de conduire). Affiché en info sur le planning public ; vérifié à l'inscription, voir [Âge minimum sur un poste](guide/age-minimum.md). |
+| Activer la liste d'attente | Une fois le créneau complet, les bénévoles peuvent s'inscrire en liste d'attente, voir [Liste d'attente](guide/liste-d-attente.md) |
+| Sur validation | Chaque inscription devient une demande à accepter ou refuser, voir [Inscriptions sur validation](guide/inscriptions-sur-validation.md) |
 
 Un créneau est créé ouvert ; son état (inscriptions ouvertes, fermées, complet, créneau annulé) se change ensuite depuis le planning.
 
@@ -222,35 +222,6 @@ Un clic sur une barre du planning ouvre une petite fenêtre pour agir sans quitt
 - **Dupliquer** : crée une copie juste après, de même durée, avec tous les réglages du créneau (places, liste d'attente, âge minimum, infos pratiques) et sans inscriptions ; déplacez-la ensuite si besoin ;
 - **Voir les inscriptions** (lien vers les inscriptions du créneau) et **Supprimer le créneau**.
 
-### Activer la liste d'attente
-
-<!-- video: SHIFT_WAITLIST_OFFER -->
-
-Cochez **Activer la liste d'attente** dans le formulaire du créneau (ou dans celui d'une série de créneaux). Quand le créneau est complet, les bénévoles peuvent s'y inscrire ; une place libérée déclenche automatiquement l'envoi d'un email à la première personne en attente, avec un lien de confirmation valable **24 heures**. Passé ce délai sans réponse, la place est proposée à la personne suivante.
-
-La vue des inscriptions (`/admin/events/[id]/registrations`) affiche les bénévoles en attente (**Liste d'attente**, avec leur rang dans la file, par exemple « position 2 ») et ceux à qui une place a été proposée (**Place proposée**).
-
-### Inscriptions sur validation
-
-<!-- video: SHIFT_APPROVAL -->
-
-Pour un poste sensible (conduite, caisse, sécurité, une qualification), cochez **Sur validation** dans le formulaire du créneau (ou dans la série de créneaux). Une inscription sur ce créneau devient alors une **demande** :
-
-- le bénévole voit le créneau marqué « Sur validation » sur la page publique et dans le récapitulatif, puis « Demande envoyée » après l'envoi. Il reçoit un email « Demande reçue » avec son lien personnel, où il suit sa demande et peut la retirer ;
-- la demande **garde sa place** jusqu'à votre décision : quand les demandes remplissent le créneau, les suivants vont en liste d'attente (ou le créneau est complet) ;
-- dans les inscriptions de l'événement, chaque demande porte les boutons **Accepter** et **Refuser**, et la case **Demandes à traiter** n'affiche qu'elles. Un récapitulatif dit ce qui va se passer avant de confirmer ;
-- **Accepter** fait de la demande une inscription confirmée : le bénévole reçoit l'email de confirmation habituel, et les responsables du poste sont prévenus ;
-- **Refuser** libère la place, proposée ensuite à la liste d'attente. Le bénévole reçoit un email poli, sans raison, sauf si vous écrivez un message (facultatif) ;
-- chaque décision est inscrite dans le journal de l'événement (le texte du message n'y figure pas).
-
-![Inscriptions filtrées sur « Demandes à traiter (2) » : deux demandes sur le poste Navette, chacune avec les boutons Accepter et Refuser](/doc-img/admin-registrations-requests.png)
-
-![Fenêtre « Refuser la demande de Marc Duc ? » : ce qui va se passer, un message facultatif pour la personne, et les boutons Annuler et Refuser](/doc-img/admin-refuse-request.png)
-
-Les demandes ne reçoivent pas les rappels, ne figurent pas sur les feuilles de présence et les exports, et ne font pas partie de « tous les inscrits » dans les messages ciblés. Une demande compte comme une inscription pour les doublons, les chevauchements et la limite de créneaux par personne. Tant qu'elle n'est pas acceptée, elle garde sa place sans compter parmi les inscrits : la page de l'événement l'affiche à côté des inscrits (« + 2 demandes à traiter ») et ne la compte pas dans les places restantes, et « Où manque-t-il du monde ? » ne compte pas sa place comme manquante, avec un lien vers les demandes à traiter. Les **Rapports** ne la montrent nulle part, coordonnées comprises. Une place proposée depuis la liste d'attente sur un créneau sur validation devient, elle aussi, une demande. Si le créneau est annulé, les demandes le sont aussi, avec le même email que les inscrits.
-
-Une personne ajoutée à la main est inscrite directement, sans demande. Cocher **Sur validation** ne change rien aux inscriptions déjà confirmées ; le décocher laisse les demandes en cours à traiter. Les demandes en attente apparaissent dans **Ce qui demande votre attention**.
-
 ### Gérer les postes
 
 Le bouton **Gérer les postes** ouvre un panneau qui regroupe ces actions, poste par poste :
@@ -261,12 +232,6 @@ Le bouton **Gérer les postes** ouvre un panneau qui regroupe ces actions, poste
 - **Couleur** : le point coloré à gauche du nom ouvre un choix parmi 16 couleurs prédéfinies (ou « Automatique » pour revenir à la couleur assignée par défaut) ; la couleur choisie est cochée. S'applique à la timeline admin et à la page publique.
 - **Limite par personne** : le bouton « Limite » fixe le nombre maximum de créneaux de ce poste qu'une même personne peut prendre (par exemple 2 pour la loge des artistes, pour que plus de monde y participe). Laissez vide pour ne pas limiter. Comptent toutes les inscriptions de la personne sur ce poste, confirmées ou en liste d'attente ; les annulées ne comptent pas. La page publique empêche de sélectionner un créneau de trop et dit pourquoi ; le serveur refuse aussi toute inscription au-delà, même envoyée en même temps qu'une autre. Les inscriptions déjà au-delà d'une nouvelle limite restent. En ajoutant quelqu'un à la main, l'administration prévient et propose **Ajouter quand même**. La limite est copiée avec l'événement.
 - **Accès réservé** : le bouton « Accès » réserve le poste aux membres portant l'une des étiquettes indiquées (par exemple `sécurité` pour la sécurité). Ces membres s'y inscrivent avec le lien personnel de leur invitation (dans **Invitations**, filtrez les membres par étiquette pour les inviter). Sans ce lien, la page publique affiche le poste comme « Réservé » et le serveur refuse toute inscription ; les étiquettes ne sont jamais montrées aux bénévoles. L'étiquette est lue au moment de l'inscription : si vous la retirez à un membre, son invitation ne lui ouvre plus le poste. Les inscriptions déjà faites restent. Vous pouvez toujours ajouter quelqu'un à la main. Le réglage est copié avec l'événement.
-
-### Âge minimum sur un poste
-
-<!-- video: SHIFT_ELIGIBILITY_RULES -->
-
-Un poste peut exiger un âge minimum (majorité, permis de conduire, qualification…). Une fois renseigné dans le formulaire du créneau, il est affiché en petit sur le planning public (ex. « 18+ »). Le créneau reste sélectionnable — l'âge du bénévole n'est pas connu avant qu'il remplisse le formulaire — mais l'inscription lui demande alors sa date de naissance et est refusée si la condition n'est pas remplie. L'âge pris en compte est celui qu'aura le bénévole le jour du créneau, pas le jour de l'inscription.
 
 ---
 
@@ -455,7 +420,7 @@ Vue tabulaire des inscriptions, en quatre colonnes :
 
 ![Page des inscriptions d'un événement : compteurs (actives, liste d'attente, demandes à traiter), recherche et filtres, puis le tableau avec bénévole et coordonnées, créneau et source](/doc-img/admin-registrations.png)
 
-Seules les demandes sur un créneau sur validation ont leurs propres boutons, **Accepter** et **Refuser**, sur la ligne (voir « Inscriptions sur validation »). Tout le reste passe par la sélection : cocher une ou plusieurs inscriptions (case d'en-tête pour tout sélectionner d'un coup) fait apparaître une barre d'outils, appliquée à toute la sélection — même une inscription masquée entre-temps par un filtre ou une recherche :
+Seules les demandes sur un créneau sur validation ont leurs propres boutons, **Accepter** et **Refuser**, sur la ligne (voir [Inscriptions sur validation](guide/inscriptions-sur-validation.md)). Tout le reste passe par la sélection : cocher une ou plusieurs inscriptions (case d'en-tête pour tout sélectionner d'un coup) fait apparaître une barre d'outils, appliquée à toute la sélection, même une inscription masquée entre-temps par un filtre ou une recherche :
 
 - **Marquer présents** et **Annuler la présence** : voir « Présences le jour J » ci-dessous.
 - **Rendre responsable** de leur poste. Avec une seule ligne sélectionnée, une modale s'ouvre pour choisir le poste (si le bénévole a plusieurs inscriptions) et ajuster nom/email avant l'envoi. Avec plusieurs lignes, chaque bénévole est directement rattaché au poste de son propre créneau, sans étape intermédiaire.
@@ -704,27 +669,7 @@ Depuis la page de l'événement, le bouton **Envoyer le rappel** permet d'envoye
 
 Avant d'envoyer, rédiger un message dans la section « Message de rappel » (page d'édition de l'événement, `/admin/events/[id]/edit`). Ce message apparaîtra dans l'email, avec le récapitulatif des créneaux de chaque bénévole.
 
-### Rappels automatiques
-
-<!-- video: REMINDERS_CHANGES -->
-
-L'application envoie automatiquement des rappels :
-- **J-2** (environ 48 h avant le premier créneau du jour) : rappel avec détails des créneaux
-- **J-1** (environ 24 h avant le premier créneau du jour) : rappel court
-- **Jour J** (2–4 h avant le premier créneau du jour) : rappel de dernière minute
-
-Un bénévole inscrit sur plusieurs créneaux le même jour pour un même événement ne reçoit qu'un seul email par rappel (un seul J-2, un seul J-1, un seul rappel du jour), listant tous ses créneaux de ce jour-là dans l'ordre des horaires, plutôt qu'un email par créneau. S'il est aussi inscrit le même jour sur un autre événement, il reçoit un email séparé pour cet événement. Un créneau de nuit (qui se termine après minuit) compte sur son jour de début. Une inscription faite après l'envoi du rappel du jour (inscription tardive) reçoit son propre rappel, sans jamais en manquer ni en dupliquer un.
-
-Ces rappels sont envoyés sans intervention de votre part pour les événements publiés, sauf ceux décochés pour toute l'organisation dans **Paramètres → Emails** (voir « Réglages des emails »). Pour couper tous les rappels d'un seul événement, décochez **Rappels automatiques** dans son formulaire de modification ; cochée, la case laisse s'appliquer les réglages de l'organisation.
-
-La section **Communications** de la page de l'événement indique ce qui partira vraiment pour cet événement : les rappels envoyés avec leur délai, ceux désactivés pour l'organisation, ou l'absence de rappel (désactivés pour l'organisation, coupés pour cet événement, ou plus aucun créneau à venir). Pour un brouillon, elle précise que les rappels ne partent qu'une fois l'événement publié. Ses liens mènent à la case **Rappels automatiques** de l'événement et aux réglages des emails de l'organisation.
-
-### Notifications de modification
-
-<!-- video: LAST_MINUTE_CHANGES -->
-
-- **Annulation d'un créneau** → les bénévoles inscrits sont avertis automatiquement et leur inscription est annulée
-- **Modification des horaires** → email envoyé aux bénévoles inscrits
+Les rappels automatiques (J-2, J-1 et jour J) et les emails envoyés quand un créneau change ou est annulé sont décrits dans [Rappels et changements de créneau](guide/rappels.md).
 
 ---
 
@@ -978,9 +923,6 @@ Si votre organisation utilise sa propre installation de benevol.app, adressez-vo
 
 ## Questions fréquentes
 
-**Un bénévole inscrit sur plusieurs créneaux le même jour reçoit beaucoup de rappels.**
-Ce n'est plus le cas : les rappels sont regroupés par bénévole, par événement et par jour (voir « Rappels automatiques »). Une personne inscrite sur trois créneaux d'une même journée reçoit un seul email à J-2, un seul à J-1 et un seul le jour même, listant ses trois créneaux. Si elle est aussi inscrite le même jour sur un autre événement, elle reçoit un email séparé pour celui-ci. Pour envoyer moins de rappels encore, décochez ceux qui ne vous servent pas dans **Paramètres → Emails** (voir « Réglages des emails ») : le réglage vaut pour toute l'organisation.
-
 **Une personne s'est inscrite avec une adresse email mal saisie et a maintenant deux fiches.**
 Quand un email lui est définitivement refusé, sa fiche porte l'étiquette **Adresse à vérifier** : corrigez l'adresse depuis sa fiche. Si une seconde fiche a été créée, la page **Doublons possibles** la propose à côté de la première, avec les raisons du rapprochement ; le propriétaire de l'organisation peut alors **fusionner** les deux fiches, avec un aperçu de tout ce qui sera déplacé avant de confirmer (voir « Doublons possibles » et « Fusionner deux fiches en double »).
 
@@ -990,17 +932,11 @@ La page publique d'un événement n'affiche aucun nom : elle montre les places l
 **J'organise un événement sur plusieurs jours avec des postes différents chaque jour — comment je structure ça ?**
 Un seul événement, un seul planning : la timeline des créneaux affiche chaque jour de l'événement l'un sous l'autre. Créez un poste par type de mission (« Sécurité », « Bar »…) une seule fois — il regroupe automatiquement tous ses créneaux, même sur des jours différents et avec des horaires ou des capacités qui changent d'un jour à l'autre.
 
-**J'ai un poste qui demande d'être majeur (ou d'avoir un âge minimum précis, genre 21 ans pour conduire) — je fais comment ?**
-Renseignez le champ **Âge minimum** sur le créneau concerné (voir « Âge minimum sur un poste » plus haut). Le poste reste visible et sélectionnable pour tout le monde sur la page publique — c'est la date de naissance, demandée à l'inscription, qui filtre. Rien à gérer à la main : un bénévole trop jeune reçoit un message clair et son inscription n'aboutit pas.
-
 **Un poste critique risque d'être en sous-effectif (sécurité, premiers secours…) — comment je le surveille ?**
 La page **Où manque-t-il du monde ?** de l'événement (lien depuis sa page principale) liste tous les créneaux encore ouverts avec des places libres, tous postes confondus, du plus dégarni au plus proche du complet, et les postes où personne n'est inscrit — pas besoin d'éplucher le planning entier la veille pour repérer ce qui manque.
 
 **Je veux qu'une personne suive « son » poste sans lui donner accès à tout l'admin.**
 Faites-en un·e responsable de secteur (voir plus haut). Elle reçoit un lien personnel, sans compte à créer, qui affiche uniquement qui est inscrit sur son poste — parfait pour un chef d'équipe sécurité ou un responsable bar qui doit juste savoir qui arrive et quand.
-
-**Un poste est complet mais j'ai encore des demandes — je perds ces bénévoles ?**
-Activez la liste d'attente sur le créneau (voir plus haut). Une place libérée est proposée automatiquement à la première personne en attente, avec 24 h pour confirmer — vous n'avez rien à recontacter à la main.
 
 **Je veux donner des infos pratiques (accès, parking, ce qu'il faut apporter) sans surcharger le message principal.**
 Créez une ou plusieurs pages personnalisées (voir plus haut) : règlement, FAQ, plan d'accès… Elles apparaissent comme des liens discrets sous les instructions publiques, chacune sur sa propre page.
