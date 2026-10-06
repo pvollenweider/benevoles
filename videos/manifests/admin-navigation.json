@@ -15,7 +15,7 @@
     ],
     "remember": [
       "Votre rôle détermine les actions disponibles : certaines modifications sont réservées au propriétaire.",
-      "Le lien « Aller au contenu », accessible dès la première tabulation, saute directement à la page.",
+      "Le lien « Aller au contenu », accessible dès le premier appui sur Tab, mène directement au contenu principal.",
       "Pour une question précise, la recherche et l'aide vous évitent de repartir de zéro."
     ]
   },

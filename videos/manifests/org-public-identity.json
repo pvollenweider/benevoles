@@ -8,12 +8,12 @@
     "steps": [
       "Distinguez le nom de l'organisation du titre affiché sur la page publique, puis modifiez ce titre et enregistrez.",
       "Ajoutez le logo de l'association, vérifiez son aperçu, puis cliquez sur « Enregistrer le logo ».",
-      "Vérifiez l'identifiant public (le slug), qui forme l'adresse de votre page.",
+      "Vérifiez l'identifiant public (l'adresse de votre page).",
       "Ouvrez la page publique pour voir le titre, le logo et les événements publiés et répertoriés.",
       "Pour retirer le logo, utilisez « Retirer le logo » et confirmez."
     ],
     "remember": [
-      "Les anciens identifiants redirigent vers l'actuel tant que vous les conservez ; les supprimer casse les anciens liens et QR codes.",
+      "Les anciens identifiants, listés sous l'adresse de la page dans les réglages de l'organisation, redirigent vers l'actuel tant que vous les gardez ; les supprimer casse les anciens liens et QR codes.",
       "Un événement « Publié, non répertorié » reste accessible par son lien direct, sans mot de passe.",
       "Le logo ne remplace pas le nom de l'association, qui reste affiché.",
       "Ces réglages sont réservés au propriétaire."

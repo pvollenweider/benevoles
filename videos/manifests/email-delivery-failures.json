@@ -77,7 +77,7 @@
       "« Envoyé » signifie que le serveur d'envoi a accepté l'email, pas qu'il a été lu.",
       "« Renvoyer » réutilise l'ancien destinataire : il ne tient pas compte d'une fiche corrigée.",
       "Les organisateurs suivent les envois, mais seuls les propriétaires changent les réglages des emails.",
-      "Le suivi est récent : les emails envoyés sont nettoyés chaque nuit et les échecs gardés trente jours."
+      "Le suivi ne couvre que les derniers jours : les emails envoyés sont effacés chaque nuit, les échecs gardés trente jours."
     ]
   }
 }

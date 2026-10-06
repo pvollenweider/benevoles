@@ -82,7 +82,7 @@
       "Partagez le lien public ou son QR code pour faire découvrir l'événement et recruter.",
       "Gardez le lien personnel reçu par email : il ouvre votre propre inscription et peut être renvoyé avec « Recevoir ce lien par email ».",
       "Si le lien est perdu, utilisez la page de récupération avec l'adresse de l'inscription.",
-      "Réservez une invitation nominative à la personne invitée, jamais à une affiche.",
+      "N'utilisez une invitation nominative que pour la personne invitée : jamais sur une affiche.",
       "Remettez le lien de responsable seulement à la personne désignée ; retirer le responsable désactive ce lien.",
       "Avant de transmettre un document, choisissez celui qui convient à la personne et à sa tâche."
     ],
@@ -90,7 +90,7 @@
       "La page de récupération répond toujours de la même façon, sans révéler si une adresse est connue.",
       "La page personnelle ne montre pas les notes internes, et un responsable ne voit que les contacts de son équipe.",
       "Le CSV des membres contient des coordonnées et des notes internes : ne le distribuez pas à toute l'équipe.",
-      "Si un accès a été diffusé par erreur, contactez l'organisation plutôt que de le faire circuler."
+      "Si un accès a été diffusé par erreur, prévenez l'organisation et ne le transmettez pas plus loin."
     ]
   }
 }

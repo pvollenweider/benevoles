@@ -77,14 +77,14 @@
     }
   ],
   "viewer": {
-    "summary": "Dans cette vidéo, vous utilisez Benevol au clavier, suivez le focus, adaptez l'affichage et découvrez les limites connues de l'accessibilité.",
+    "summary": "Dans cette vidéo, vous utilisez Benevol au clavier, suivez le focus (le cadre autour de l'élément actif), adaptez l'affichage et découvrez les limites connues de l'accessibilité.",
     "steps": [
-      "Avancez avec Tab, revenez avec Majuscule et Tab, et utilisez le lien d'évitement pour rejoindre le contenu.",
-      "Dans une liste de créneaux, ouvrez-la avec une flèche, déplacez-vous avec les flèches, validez avec Entrée ou fermez avec Échap.",
+      "Avancez avec Tab, revenez avec Majuscule et Tab, et utilisez le lien « Aller au contenu » pour rejoindre le contenu.",
+      "Dans une liste déroulante, ouvrez-la avec Flèche bas, déplacez-vous avec les flèches, validez avec Entrée ou fermez avec Échap.",
       "Si un champ manque, lisez le message : le focus revient au champ à corriger.",
       "Dans « Gérer les postes », utilisez Monter et Descendre plutôt que le glisser-déposer.",
       "Agrandissez l'affichage avec le zoom du navigateur, jusqu'à 400 %.",
-      "Signalez une difficulté depuis la page Accessibilité, en précisant la page, le geste et votre navigateur."
+      "Signalez une difficulté depuis la page Accessibilité, en précisant la page, l'action tentée et votre navigateur."
     ],
     "remember": [
       "Le contour de focus indique quel bouton ou quel champ va réagir.",

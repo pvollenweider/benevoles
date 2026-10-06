@@ -93,7 +93,7 @@
     "steps": [
       "Créez une organisation avec son nom et son premier administrateur, puis envoyez le lien d'activation.",
       "Si besoin, renvoyez l'invitation : un nouveau lien remplace l'ancien, qui est refusé.",
-      "Modifiez le nom affiché ou l'identifiant public en vérifiant les liens déjà diffusés.",
+      "Modifiez le nom affiché ou l'identifiant public, sachant que les liens déjà diffusés utilisent l'ancien identifiant.",
       "Désactivez une organisation pour suspendre son accès, puis réactivez-la si nécessaire.",
       "Choisissez explicitement l'organisation avec « Gérer » avant d'y travailler.",
       "Consultez « Santé du service », puis préparez une communication avec son aperçu et un test avant la diffusion.",

@@ -81,7 +81,7 @@
     "remember": [
       "Confirmer de nouveau après une coupure ne crée pas une deuxième inscription.",
       "Après un formulaire public, ton lien personnel arrive par email ; avec une invitation, la page peut l'afficher directement.",
-      "Si l'email n'arrive pas, regarde dans les indésirables et vérifie l'adresse saisie.",
+      "Si l'email n'arrive pas, regarde dans le dossier des indésirables (spam) et vérifie l'adresse saisie.",
       "Garde l'email de confirmation : il permet de retrouver ou d'annuler ton inscription."
     ]
   },
