@@ -1,0 +1,12 @@
+{
+  "anchor": "Sans invitation, le poste Sécurité reste visible mais marqué réservé à",
+  "windowStart": 28.583,
+  "result": {
+    "found": true,
+    "startSeconds": 30.6,
+    "wordsHeard": "Sans invitation, le poste Sécurité reste visible mais marqué réservé à"
+  },
+  "onset": 59.183,
+  "proposedCut": 58.5826665,
+  "note": "Proposal only; recut then independently audit before capture"
+}

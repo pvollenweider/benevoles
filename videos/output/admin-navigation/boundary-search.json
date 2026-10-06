@@ -1,12 +1,12 @@
 {
   "anchor": "La loupe cherche dans toute l’organisation. Utilisez Contrôle K, ou Commande",
-  "windowStart": 38.983000000000004,
+  "windowStart": 17.936999999999998,
   "result": {
     "found": true,
-    "startSeconds": 14.88,
-    "wordsHeard": "La loupe cherche dans toute l’organisation. Utilisez Contrôle K, ou Commande"
+    "startSeconds": 33.39,
+    "wordsHeard": "La"
   },
-  "onset": 53.86300000000001,
-  "proposedCut": 53.9827085,
+  "onset": 51.327,
+  "proposedCut": 51.346166999999994,
   "note": "Proposal only; recut then independently audit before capture"
 }

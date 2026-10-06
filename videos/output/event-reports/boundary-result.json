@@ -1,0 +1,12 @@
+{
+  "anchor": "Nous avons maintenant une feuille adaptée à l'accueil, une autre pour",
+  "windowStart": 216.218,
+  "result": {
+    "found": true,
+    "startSeconds": 30.22,
+    "wordsHeard": "Nous"
+  },
+  "onset": 246.438,
+  "proposedCut": 246.2175,
+  "note": "Proposal only; recut then independently audit before capture"
+}

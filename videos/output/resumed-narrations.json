@@ -1,9 +1,29 @@
 {
-  "updatedAt": "2026-10-06T08:44:31.171Z",
+  "updatedAt": "2026-10-06T15:58:48.663Z",
   "scope": "Narration only, not capture, MP4 synchronization or completion",
   "results": [
     {
-      "id": "EVENT_DUPLICATE",
+      "id": "SHIFT_CREATE_SERIES",
+      "status": "source-audited"
+    },
+    {
+      "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
+      "status": "source-audited"
+    },
+    {
+      "id": "SHIFT_NIGHT_DST",
+      "status": "source-audited"
+    },
+    {
+      "id": "SHIFT_WAITLIST_OFFER",
+      "status": "source-audited"
+    },
+    {
+      "id": "SHIFT_APPROVAL",
+      "status": "source-audited"
+    },
+    {
+      "id": "SHIFT_ELIGIBILITY_RULES",
       "status": "source-audited"
     }
   ]

@@ -1,0 +1,249 @@
+{
+  "slug": "members-duplicates-merge",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T17:34:34.733Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "9ca0705a3ed3e72ed2447c112d07616f0e1ef4ae",
+    "sourceTree": "0ffd0c768cc975dd70b66e893c85fdc1dac2fee4",
+    "productSourceSha256": "af265f2602fedcac29b3b1e5114b61be0b2404e3843c0b568127aab81660fa3a",
+    "buildId": "jXO4BkQpwclQpoLJ_Y3Np",
+    "snapshot": "/tmp/benevoles-video-production.A1omfl",
+    "builtAt": "2026-10-06T17:27:11.076Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-fusion",
+    "scenario": "MEMBERS_DUPLICATES_MERGE",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 8394
+    },
+    {
+      "kind": "click",
+      "atMs": 14724
+    },
+    {
+      "kind": "click",
+      "atMs": 22710
+    },
+    {
+      "kind": "click",
+      "atMs": 41825
+    },
+    {
+      "kind": "click",
+      "atMs": 45041
+    },
+    {
+      "kind": "key",
+      "atMs": 45349
+    },
+    {
+      "kind": "key",
+      "atMs": 45446
+    },
+    {
+      "kind": "key",
+      "atMs": 45545
+    },
+    {
+      "kind": "key",
+      "atMs": 45643
+    },
+    {
+      "kind": "key",
+      "atMs": 45740
+    },
+    {
+      "kind": "key",
+      "atMs": 45837
+    },
+    {
+      "kind": "key",
+      "atMs": 45934
+    },
+    {
+      "kind": "key",
+      "atMs": 46032
+    },
+    {
+      "kind": "key",
+      "atMs": 46129
+    },
+    {
+      "kind": "key",
+      "atMs": 46226
+    },
+    {
+      "kind": "key",
+      "atMs": 46322
+    },
+    {
+      "kind": "key",
+      "atMs": 46419
+    },
+    {
+      "kind": "key",
+      "atMs": 46516
+    },
+    {
+      "kind": "key",
+      "atMs": 46614
+    },
+    {
+      "kind": "key",
+      "atMs": 46713
+    },
+    {
+      "kind": "key",
+      "atMs": 46810
+    },
+    {
+      "kind": "key",
+      "atMs": 46909
+    },
+    {
+      "kind": "key",
+      "atMs": 47006
+    },
+    {
+      "kind": "key",
+      "atMs": 47105
+    },
+    {
+      "kind": "key",
+      "atMs": 47203
+    },
+    {
+      "kind": "key",
+      "atMs": 47300
+    },
+    {
+      "kind": "key",
+      "atMs": 47397
+    },
+    {
+      "kind": "key",
+      "atMs": 47496
+    },
+    {
+      "kind": "key",
+      "atMs": 47593
+    },
+    {
+      "kind": "key",
+      "atMs": 47689
+    },
+    {
+      "kind": "key",
+      "atMs": 47786
+    },
+    {
+      "kind": "key",
+      "atMs": 47884
+    },
+    {
+      "kind": "key",
+      "atMs": 47981
+    },
+    {
+      "kind": "key",
+      "atMs": 48078
+    },
+    {
+      "kind": "click",
+      "atMs": 48808
+    },
+    {
+      "kind": "click",
+      "atMs": 50691
+    },
+    {
+      "kind": "click",
+      "atMs": 65390
+    },
+    {
+      "kind": "click",
+      "atMs": 70140
+    },
+    {
+      "kind": "click",
+      "atMs": 75789
+    },
+    {
+      "kind": "click",
+      "atMs": 113255
+    },
+    {
+      "kind": "click",
+      "atMs": 116688
+    },
+    {
+      "kind": "click",
+      "atMs": 127188
+    },
+    {
+      "kind": "click",
+      "atMs": 131870
+    },
+    {
+      "kind": "click",
+      "atMs": 147855
+    },
+    {
+      "kind": "click",
+      "atMs": 152870
+    },
+    {
+      "kind": "click",
+      "atMs": 165653
+    }
+  ],
+  "cues": [
+    {
+      "id": "duplicates",
+      "startMs": 2412,
+      "endMs": 29937
+    },
+    {
+      "id": "compare",
+      "startMs": 32197,
+      "endMs": 59109
+    },
+    {
+      "id": "fields",
+      "startMs": 61366,
+      "endMs": 91053
+    },
+    {
+      "id": "conflicts",
+      "startMs": 93310,
+      "endMs": 121939
+    },
+    {
+      "id": "confirm",
+      "startMs": 124196,
+      "endMs": 155529
+    },
+    {
+      "id": "result",
+      "startMs": 157909,
+      "endMs": 184846
+    },
+    {
+      "id": "links",
+      "startMs": 187108,
+      "endMs": 215453
+    }
+  ]
+}

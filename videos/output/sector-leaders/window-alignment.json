@@ -1,47 +1,47 @@
 {
-  "locatedAt": "2026-10-06T07:23:32.168Z",
-  "masterSha256": "7d393423e66f274ad37da4b29fc03e2dbefacbc573bb37e5c4f8bf5d4989ea54",
-  "totalSeconds": 212.28,
+  "locatedAt": "2026-10-06T17:19:06.073Z",
+  "masterSha256": "5cd7e71900409e00ebbc4161d82903a7fb7a25540716ac9da02a22de4b2ac17a",
+  "totalSeconds": 204.48,
   "cuts": [
     {
       "id": "nominate",
-      "seconds": 17.165750000000003
+      "seconds": 17.5507705
     },
     {
       "id": "registered",
-      "seconds": 36.830875
+      "seconds": 36.3477915
     },
     {
       "id": "email",
-      "seconds": 54.246271
+      "seconds": 53.9215835
     },
     {
       "id": "roster",
-      "seconds": 69.8007085
+      "seconds": 69.54595850000001
     },
     {
       "id": "mobile",
-      "seconds": 88.6991455
+      "seconds": 87.94954200000001
     },
     {
       "id": "scope",
-      "seconds": 107.561396
+      "seconds": 107.1159375
     },
     {
       "id": "new-signup",
-      "seconds": 122.89925
+      "seconds": 120.538146
     },
     {
       "id": "notification",
-      "seconds": 153.899771
+      "seconds": 150.0150205
     },
     {
       "id": "contact",
-      "seconds": 174.905646
+      "seconds": 169.0458125
     },
     {
       "id": "remove",
-      "seconds": 191.906646
+      "seconds": 184.5255
     }
   ],
   "applied": true,

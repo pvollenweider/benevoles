@@ -158,8 +158,11 @@ async function main() {
 
   // Native date controls also depend on Chromium's UI/process locale, not just
   // the context's Accept-Language. Keep French narration separate from this.
+  const questionsFrenchLauncher = ["event-questions", "volunteer-hours-certificate"].includes(slug) && process.platform === "darwin"
+  if (questionsFrenchLauncher && chromium.executablePath() !== "/Users/pol/Library/Caches/ms-playwright/chromium-1243/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing") throw new Error("Questions French launcher must be reverified against the current Playwright Chromium binary")
   const browser = await chromium.launch({
     headless: true,
+    ...(questionsFrenchLauncher ? { executablePath: path.resolve("videos/tools/chromium-fr-questions.sh") } : {}),
     args: ["--lang=fr-FR"],
     env: { ...process.env, LANG: "fr_FR.UTF-8", LC_ALL: "fr_FR.UTF-8" },
   })
@@ -879,7 +882,7 @@ async function main() {
         if (!eventResponse.ok) throw new Error(await eventResponse.text())
         const event = await eventResponse.json()
         const shifts = [
-          { roleName: "Nuit ordinaire", label: "Permanence de nuit", date: "2026-07-04", startTime: "22:00", endTime: "02:00", capacity: 2 },
+          { roleName: "Nuit ordinaire", label: "Permanence de nuit", date: "2026-07-04", startTime: "22:00", endTime: "02:00", capacity: 2, instructions: "Arriver samedi 4 juillet à 21h45 au stand d'accueil. Fin dimanche 5 juillet à 02h00." },
           { roleName: "Passage à l'heure d'été", label: "Nuit du printemps", date: "2026-03-29", startTime: "01:00", endTime: "05:00", capacity: 2 },
           { roleName: "Passage à l'heure d'hiver", label: "Nuit de l'automne", date: "2026-10-25", startTime: "01:00", endTime: "05:00", capacity: 2 },
         ]
@@ -897,7 +900,7 @@ async function main() {
       await scene("ordinary", async (at) => {
         const shift = page.getByRole("button", { name: /Nuit ordinaire/ })
         await shift.scrollIntoViewIfNeeded()
-        await at(0.42)
+        await at(0.66)
         await tap(page, shift)
         await page.getByRole("dialog").waitFor()
       })
@@ -912,118 +915,283 @@ async function main() {
         await tap(page, page.getByRole("button", { name: "Fermer et enregistrer" }))
         const shift = page.getByRole("button", { name: /Passage à l'heure d'hiver/ })
         await shift.scrollIntoViewIfNeeded()
-        await at(0.46)
+        await at(0.19)
         await tap(page, shift)
+        await page.getByRole("dialog").waitFor()
       })
       await scene("timezone", async (at) => {
         await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
         const timeZone = page.getByLabel("Fuseau horaire de vos événements")
         await timeZone.scrollIntoViewIfNeeded()
         await at(0.56)
-        await timeZone.focus()
+        await tap(page, timeZone)
       })
       await scene("calendar", async (at) => {
-        await page.goto(`${baseUrl}/admin/events/${nightEvent.id}/shifts`); await settle(page)
-        await tap(page, page.getByRole("button", { name: "Liste" }))
-        await at(0.42)
-        await page.getByText("Nuit du printemps", { exact: true }).scrollIntoViewIfNeeded()
+        // Demonstrate the real volunteer command, not an unrelated admin list.
+        await page.goto(`${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
+        const calendar = page.getByRole("link", { name: "Ajouter tout mon planning à mon calendrier (fichier .ics)", exact: true })
+        await calendar.scrollIntoViewIfNeeded()
+        await at(0.22)
+        const downloading = page.waitForEvent("download")
+        await tap(page, calendar)
+        const download = await downloading
+        if (await download.failure()) throw new Error("Real calendar export failed")
+        const stream = await download.createReadStream()
+        if (!stream) throw new Error("Calendar file is unavailable")
+        const chunks: Buffer[] = []
+        for await (const chunk of stream) chunks.push(Buffer.from(chunk))
+        const ics = Buffer.concat(chunks).toString("utf8")
+        if (!ics.includes("BEGIN:VCALENDAR") || !ics.includes("BEGIN:VEVENT") || !/DTSTART(?:;[^:]*)?:\d{8}T\d{6}/.test(ics)) throw new Error("Downloaded file does not contain actual calendar instants")
       })
       await scene("result", async (at) => {
-        await page.getByText("Nuit de l'automne", { exact: true }).scrollIntoViewIfNeeded()
-        await at(0.58)
+        await page.goto(`${baseUrl}/admin/events/${nightEvent.id}/shifts`); await settle(page)
+        await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
+        const row = page.locator("tr").filter({ hasText: "Permanence de nuit" })
+        await row.scrollIntoViewIfNeeded()
+        await tap(page, row.getByRole("button", { name: /^Modifier(?: le créneau)?/ }))
+        await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor()
+        await at(0.18)
+        const instructions = page.getByLabel("Consigne pratique", { exact: true })
+        await instructions.scrollIntoViewIfNeeded()
+        if (!(await instructions.inputValue()).includes("Fin dimanche 5 juillet à 02h00")) throw new Error("Night arrival and next-day instructions missing from actual editor")
+        await at(0.65)
       })
     } else if (slug === "shift-timeline-quick-actions") {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
+      const quickRegion = page.getByRole("region", { name: /Planning du/ }).first()
+      const drawnLabel = "Relève dessinée"
+      const duplicateLabel = "Relève suivante"
+      let createdBar: Locator
+      let duplicateBar: Locator
+      let drawnEnd = ""
+      let duplicateStart = ""
+      let duplicateEnd = ""
+      const shiftedTime = (value: string, minutes: number) => {
+        const [hours, mins] = value.split(":").map(Number)
+        const total = hours * 60 + mins + minutes
+        if (!Number.isFinite(total) || total < 0 || total >= 24 * 60) throw new Error("Quick-action demonstration must stay within the same day")
+        return `${String(Math.floor(total / 60)).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`
+      }
+      const typeQuickAction = async (field: Locator, value: string) => {
+        await tap(page, field)
+        await field.press("ControlOrMeta+A")
+        await field.press("Backspace")
+        await field.pressSequentially(value, { delay: 95 })
+        await page.waitForTimeout(180)
+      }
+      // Real mouse events on main's handles, slowed enough to see the intermediate width.
+      // Only the cursor marker is an overlay: no product styles or dimensions are changed.
+      const dragQuickAction = async (from: { x: number; y: number }, to: { x: number; y: number }) => {
+        await ensureTouchMarker(page)
+        await page.mouse.move(from.x, from.y)
+        await page.evaluate(point => {
+          const marker = document.getElementById("video-touch-marker")!
+          marker.style.transition = "opacity .12s ease"
+          marker.style.left = `${point.x}px`; marker.style.top = `${point.y}px`; marker.style.opacity = "1"
+        }, from)
+        await page.waitForTimeout(450)
+        await page.mouse.down()
+        for (let step = 1; step <= 20; step++) {
+          const point = { x: from.x + (to.x - from.x) * step / 20, y: from.y + (to.y - from.y) * step / 20 }
+          await page.mouse.move(point.x, point.y)
+          await page.evaluate(point => {
+            const marker = document.getElementById("video-touch-marker")!
+            marker.style.left = `${point.x}px`; marker.style.top = `${point.y}px`
+          }, point)
+          await page.waitForTimeout(100)
+        }
+        await page.mouse.up()
+        await page.waitForTimeout(650)
+        await page.evaluate(() => { document.getElementById("video-touch-marker")!.style.opacity = "0" })
+      }
+      const newBarAfter = async (before: string[]): Promise<Locator> => {
+        await page.waitForFunction(ids => Array.from(document.querySelectorAll('[data-shift-bar="1"]')).some(el => !ids.includes(el.id)), before)
+        const ids = await quickRegion.locator('[data-shift-bar="1"]').evaluateAll(elements => elements.map(el => el.id))
+        const added = ids.filter(id => !before.includes(id))
+        if (added.length !== 1) throw new Error(`Expected one actual newly saved shift, found ${added.length}`)
+        return page.locator(`[id="${added[0]}"]`)
+      }
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Dessiner et ajuster sans quitter le planning", duration: 2_300 })
         await page.getByRole("heading", { name: "Créneaux" }).waitFor()
       })
-      let createdBar: Locator
       await scene("draw", async (at) => {
-        const region = page.getByRole("region", { name: /Planning du/ }).first()
-        const row = region.locator(".cursor-crosshair").last()
+        const before = await quickRegion.locator('[data-shift-bar="1"]').evaluateAll(elements => elements.map(el => el.id))
+        const row = quickRegion.locator(".cursor-crosshair").last()
         await row.scrollIntoViewIfNeeded()
         const from = await row.evaluate((el) => {
           const rect = el.getBoundingClientRect()
           const y = rect.top + Math.min(18, rect.height / 2)
-          const limit = Math.min(rect.right - 100, window.innerWidth - 120)
-          for (let x = rect.left + 140; x < limit; x += 24) {
-            if (!(document.elementFromPoint(x, y) as HTMLElement | null)?.closest("[data-shift-bar]")) return { x, y }
+          const limit = Math.min(rect.right - 220, window.innerWidth - 240)
+          for (let x = Math.max(rect.left + 18, 18); x < limit; x += 15) {
+            const free = [0, 30, 60, 90, 120].every(offset => {
+              const hit = document.elementFromPoint(x + offset, y) as HTMLElement | null
+              return hit?.closest(".cursor-crosshair") === el && !hit.closest("[data-shift-bar]")
+            })
+            if (free) return { x, y }
           }
-          return { x: Math.max(rect.left + 20, limit - 100), y }
+          throw new Error("No genuinely empty, visible timeline interval for drawing")
         })
-        await at(0.32)
-        await dragVisibly(page, from, { x: from.x + 96, y: from.y })
+        await at(0.10)
+        await dragQuickAction(from, { x: from.x + 112.5, y: from.y })
         await page.getByRole("dialog").waitFor()
-        createdBar = row.locator('[data-shift-bar="1"]').last()
+        createdBar = await newBarAfter(before)
+        drawnEnd = await page.getByRole("dialog").getByLabel("Fin", { exact: true }).inputValue()
+        await at(0.43)
+        await typeQuickAction(page.getByRole("dialog").getByLabel("Libellé", { exact: true }), drawnLabel)
+        await at(0.64)
+        await tap(page, page.getByRole("dialog").getByLabel("Places", { exact: true }))
+        await page.getByRole("dialog").getByLabel("Places", { exact: true }).fill("3")
+        await at(0.81)
+        await tap(page, page.getByRole("button", { name: "Fermer et enregistrer", exact: true }))
+        await createdBar.getByText(drawnLabel, { exact: true }).waitFor()
       })
       await scene("resize", async (at) => {
-        await tap(page, page.getByRole("button", { name: "Fermer et enregistrer" }))
+        await createdBar.scrollIntoViewIfNeeded()
+        const before = await createdBar.boundingBox()
+        if (!before) throw new Error("Created shift bar is not visible before resize")
         const handle = createdBar.locator(".cursor-ew-resize").last()
+        await handle.scrollIntoViewIfNeeded()
         const box = await handle.boundingBox()
         if (!box) throw new Error("Created shift resize handle is not visible")
-        await at(0.34)
-        await dragVisibly(page, { x: box.x + box.width / 2, y: box.y + box.height / 2 }, { x: box.x + box.width / 2 + 48, y: box.y + box.height / 2 })
-        await page.waitForTimeout(900)
+        // main: PX_PER_MIN = 2.5, SNAP = 15; 112.5 px is a visible 45-minute extension.
+        const from = { x: box.x + box.width / 2, y: box.y + box.height / 2 }
+        await handle.evaluate((el, point) => {
+          if (document.elementFromPoint(point.x, point.y) !== el && !el.contains(document.elementFromPoint(point.x, point.y))) throw new Error("Resize handle is covered")
+          if (point.x + 112.5 >= window.innerWidth - 12) throw new Error("Resize destination is outside the visible viewport")
+        }, from)
+        await at(0.10)
+        await dragQuickAction(from, { x: from.x + 112.5, y: from.y })
+        await page.getByText("Horaires mis à jour", { exact: true }).waitFor()
+        const after = await createdBar.boundingBox()
+        if (!after || after.width - before.width < 90) throw new Error("Actual shift bar did not visibly grow during resize")
+        await at(0.52)
+        await tap(page, createdBar)
+        const actualEnd = await page.getByRole("dialog").getByLabel("Fin", { exact: true }).inputValue()
+        if (actualEnd !== shiftedTime(drawnEnd, 45)) throw new Error(`Resize did not persist the expected real end time: ${drawnEnd} → ${actualEnd}`)
+        drawnEnd = actualEnd
+        await at(0.83)
+        await tap(page, page.getByRole("button", { name: "Fermer et enregistrer", exact: true }))
       })
       await scene("popover", async (at) => {
-        await at(0.28)
+        await at(0.09)
         await tap(page, createdBar)
         await page.getByRole("dialog").waitFor()
         await at(0.62)
         await page.getByLabel("Inscriptions").scrollIntoViewIfNeeded()
       })
       await scene("copy", async (at) => {
+        const before = await quickRegion.locator('[data-shift-bar="1"]').evaluateAll(elements => elements.map(el => el.id))
         await page.getByRole("button", { name: "Dupliquer" }).scrollIntoViewIfNeeded()
-        await at(0.34)
+        await at(0.10)
         await tap(page, page.getByRole("button", { name: "Dupliquer" }))
         await page.getByText("Créneau dupliqué", { exact: true }).waitFor()
+        duplicateBar = await newBarAfter(before)
+        await tap(page, page.getByRole("button", { name: "Fermer et enregistrer", exact: true }))
+        await tap(page, duplicateBar)
+        const dialog = page.getByRole("dialog")
+        const start = await dialog.getByLabel("Début", { exact: true }).inputValue()
+        const end = await dialog.getByLabel("Fin", { exact: true }).inputValue()
+        if (start !== drawnEnd) throw new Error("Dupliquer must create the actual next shift immediately after the source")
+        await at(0.42)
+        await typeQuickAction(dialog.getByLabel("Libellé", { exact: true }), duplicateLabel)
+        duplicateStart = shiftedTime(start, 15)
+        duplicateEnd = shiftedTime(end, 15)
+        await at(0.60)
+        await tap(page, dialog.getByLabel("Début", { exact: true }))
+        await dialog.getByLabel("Début", { exact: true }).fill(duplicateStart)
+        await tap(page, dialog.getByLabel("Fin", { exact: true }))
+        await dialog.getByLabel("Fin", { exact: true }).fill(duplicateEnd)
+        await at(0.76)
+        await tap(page, dialog.getByRole("button", { name: "Décaler", exact: true }))
+        await dialog.getByText("Horaires enregistrés.", { exact: true }).waitFor()
+        await tap(page, page.getByRole("button", { name: "Fermer et enregistrer", exact: true }))
+        await duplicateBar.getByText(duplicateLabel, { exact: true }).waitFor()
       })
       await scene("detail", async (at) => {
-        await tap(page, page.getByRole("button", { name: "Fermer et enregistrer" }))
         await tap(page, page.getByRole("button", { name: "Liste" }))
-        const row = page.locator("tbody tr").last()
+        const row = page.locator("tbody tr").filter({ hasText: duplicateLabel })
         await row.scrollIntoViewIfNeeded()
-        await at(0.42)
-        await tap(page, row.getByRole("button", { name: "Modifier" }))
+        await at(0.12)
+        await tap(page, row.getByRole("button", { name: /^Modifier(?: le créneau)?/ }))
         await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor()
+        await at(0.38)
+        const instructions = page.getByLabel("Consigne pratique", { exact: true })
+        await instructions.scrollIntoViewIfNeeded()
+        await typeQuickAction(instructions, "Venir 10 minutes avant.")
+        await at(0.74)
+        await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
+        await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor({ state: "hidden" })
+        // Reopen the actual saved copy and check its persisted instruction, then leave the
+        // editor before the next chapter says "De retour en Liste".
+        await tap(page, page.locator("tbody tr").filter({ hasText: duplicateLabel }).getByRole("button", { name: /^Modifier(?: le créneau)?/ }))
+        if (await page.getByLabel("Consigne pratique", { exact: true }).inputValue() !== "Venir 10 minutes avant.") throw new Error("Detailed instruction did not persist on the actual copied shift")
+        await tap(page, page.getByRole("button", { name: "Annuler", exact: true }))
+        await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor({ state: "hidden" })
       })
       await scene("result", async (at) => {
-        await page.getByRole("group", { name: "Infos pratiques pour les bénévoles" }).scrollIntoViewIfNeeded()
-        await at(0.62)
+        await page.reload(); await settle(page)
+        const list = page.getByRole("button", { name: "Liste", exact: true })
+        if (await list.getAttribute("aria-pressed") !== "true") await tap(page, list)
+        await page.locator("tbody").waitFor()
+        const original = page.locator("tbody tr").filter({ hasText: drawnLabel })
+        const copied = page.locator("tbody tr").filter({ hasText: duplicateLabel })
+        if (await original.count() !== 1 || await copied.count() !== 1) throw new Error("Saved List must contain both independent shifts exactly once")
+        if (!(await copied.innerText()).includes(`${duplicateStart}–${duplicateEnd}`)) throw new Error("Reloaded List does not show the copied shift's saved hours")
+        await original.scrollIntoViewIfNeeded()
+        await at(0.28)
+        await copied.scrollIntoViewIfNeeded()
+        await copied.getByText("0/3", { exact: true }).waitFor()
+        await at(0.70)
       })
     } else if (slug === "shift-create-series") {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
-      await scene("welcome", async () => {
+      await scene("welcome", async (at) => {
         await page.screencast.showChapter(manifest.title, { description: "Découper une longue journée en relèves", duration: 2_300 })
         await page.getByRole("heading", { name: "Créneaux" }).waitFor()
+        await at(0.48)
+        await tap(page, page.getByRole("button", { name: "Créer une série", exact: true }))
+        await page.getByRole("heading", { name: "Créer une série de créneaux" }).waitFor()
       })
       await scene("range", async (at) => {
-        await tap(page, page.getByRole("button", { name: "Créer une série" }))
         await page.getByRole("heading", { name: "Créer une série de créneaux" }).waitFor()
-        await page.getByLabel("Poste *").fill("Buvette série")
-        const date = page.getByLabel("Date *")
+        await at(0.06)
+        await tap(page, page.getByLabel(/^Poste(?: \*)?$/))
+        await page.getByLabel(/^Poste(?: \*)?$/).fill("Buvette série")
+        await at(0.18)
+        const date = page.getByLabel(/^Date(?: \*)?$/)
         if (await date.count()) await date.selectOption({ index: 1 })
-        await at(0.46)
-        await page.getByLabel("Début *").fill("10:00")
-        await page.getByLabel("Fin *").fill("22:00")
+        await at(0.33)
+        await tap(page, page.getByLabel(/^Début(?: \*)?$/))
+        await page.getByLabel(/^Début(?: \*)?$/).fill("10:00")
+        await at(0.43)
+        await tap(page, page.getByLabel(/^Fin(?: \*)?$/))
+        await page.getByLabel(/^Fin(?: \*)?$/).fill("22:00")
       })
       await scene("duration", async (at) => {
-        await page.getByLabel("Durée d'un créneau *").selectOption("120")
-        await at(0.42)
-        await page.getByLabel("Personnes par créneau *").fill("3")
-        await at(0.70)
-        await page.getByLabel("Pause entre deux créneaux (min)").fill("0")
+        const duration = page.getByLabel(/^Durée d'un créneau(?: \*)?$/)
+        await tap(page, duration)
+        await duration.selectOption("120")
+        await at(0.21)
+        const capacity = page.getByLabel(/^Personnes par créneau(?: \*)?$/)
+        await tap(page, capacity)
+        await capacity.fill("3")
+        await at(0.48)
+        const pause = page.getByLabel("Pause entre deux créneaux (min)", { exact: true })
+        await pause.scrollIntoViewIfNeeded()
+        await tap(page, pause)
+        await at(0.64)
+        await pause.fill("0")
       })
       await scene("preview", async (at) => {
         await page.getByText(/Aperçu :/).scrollIntoViewIfNeeded()
-        await at(0.48)
         await page.getByRole("list", { name: "Créneaux qui seront créés" }).scrollIntoViewIfNeeded()
+        await at(0.68)
       })
       await scene("create", async (at) => {
         const create = page.getByRole("button", { name: "Créer 6 créneaux" })
         await create.scrollIntoViewIfNeeded()
-        await at(0.28)
+        await at(0.02)
         await tap(page, create)
         await page.getByText("Buvette série", { exact: true }).first().waitFor()
         await at(0.68)
@@ -1033,16 +1201,30 @@ async function main() {
         await tap(page, page.getByRole("button", { name: "Liste" }))
         const row = page.locator("tr").filter({ hasText: "Buvette série" }).first()
         await row.scrollIntoViewIfNeeded()
-        await at(0.34)
-        await tap(page, row.getByRole("button", { name: "Modifier" }))
+        await at(0.07)
+        await tap(page, row.getByRole("button", { name: /^Modifier(?: le créneau)?/ }))
         await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor()
-        await at(0.68)
-        await page.getByLabel("Capacité *").fill("4")
+        await at(0.38)
+        const capacity = page.getByLabel(/^Capacité(?: \*)?$/)
+        await tap(page, capacity)
+        await capacity.fill("4")
+        await at(0.55)
+        await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
+        await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor({ state: "hidden" })
+        await settle(page)
       })
       await scene("result", async (at) => {
-        await page.getByRole("button", { name: "Enregistrer" }).scrollIntoViewIfNeeded()
-        await at(0.42)
-        await tap(page, page.getByRole("button", { name: "Annuler" }))
+        await page.reload(); await settle(page)
+        const list = page.getByRole("button", { name: "Liste", exact: true })
+        if (await list.getAttribute("aria-pressed") !== "true") await tap(page, list)
+        const rows = page.locator("tr").filter({ hasText: "Buvette série" })
+        if (await rows.count() !== 6) throw new Error("Series result must contain exactly six actual shifts")
+        const first = rows.first()
+        await first.getByText("0/4", { exact: true }).waitFor()
+        for (let index = 1; index < 6; index++) await rows.nth(index).getByText("0/3", { exact: true }).waitFor()
+        await first.scrollIntoViewIfNeeded()
+        await at(0.55)
+        await rows.last().scrollIntoViewIfNeeded()
       })
     } else if (slug === "shift-create-edit-detail") {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
@@ -1092,6 +1274,9 @@ async function main() {
         await page.getByLabel("Consigne pratique").scrollIntoViewIfNeeded()
       })
       await scene("change", async (at) => {
+        // The preceding verification reopened the editor. Return to the real
+        // planning page before showing list actions; never click through it.
+        await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
         await tap(page, page.getByRole("button", { name: "Liste" }))
         const row = page.locator("tr").filter({ hasText: "Accueil des artistes" })
         await row.scrollIntoViewIfNeeded()
@@ -1185,10 +1370,10 @@ async function main() {
         const row = page.locator("tr").filter({ hasText: "Buvette" }).filter({ hasText: "14:00–18:00" }).first()
         await row.scrollIntoViewIfNeeded()
         await at(0.26)
-        await tap(page, row.getByRole("button", { name: "Modifier" }))
+        await tap(page, row.getByRole("button", { name: /^Modifier(?: le créneau)?/ }))
         await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor()
         await at(0.58)
-        const capacity = page.getByLabel("Capacité *")
+        const capacity = page.getByLabel(/^Capacité(?: \*)?$/)
         await capacity.scrollIntoViewIfNeeded()
         await capacity.focus()
         await at(0.76)
@@ -1200,12 +1385,15 @@ async function main() {
       await scene("admin", async (at) => {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/registrations?shift=${encodeURIComponent(waitlistShift.id)}`); await settle(page)
         await page.getByRole("heading", { name: "Inscriptions" }).waitFor()
+        const firstWaiting = page.locator("tbody tr").filter({ hasText: "Camille Rochat" })
+        if (await firstWaiting.count() !== 1) throw new Error("Expected Camille's single registration on the filtered waitlist shift")
         await at(0.32)
-        await page.getByText("Camille Rochat", { exact: true }).scrollIntoViewIfNeeded()
+        await firstWaiting.getByText("Camille Rochat", { exact: true }).scrollIntoViewIfNeeded()
         await at(0.62)
-        await page.getByText("#1", { exact: true }).scrollIntoViewIfNeeded()
+        // Current RegistrationRow renders plain-language "position N", not the old "#N".
+        await firstWaiting.getByText("position 1", { exact: true }).scrollIntoViewIfNeeded()
         await at(0.78)
-        await page.getByText("#3", { exact: true }).scrollIntoViewIfNeeded()
+        await page.locator("tbody tr").filter({ hasText: "position 3" }).getByText("position 3", { exact: true }).scrollIntoViewIfNeeded()
       })
 
       await page.screencast.showChapter("Une place se libère", { description: "La première personne reçoit une offre de 24 heures", duration: 1_400 })
@@ -1223,13 +1411,15 @@ async function main() {
 
       await scene("volunteer", async (at) => {
         await page.goto(`${baseUrl}/my/demo-waitlist-camille-0001`); await settle(page)
-        await page.getByText("Une place t'est proposée", { exact: true }).waitFor()
+        const offeredCard = page.getByRole("region", { name: "Tous mes créneaux", exact: true }).locator('[id^="registration-"]').filter({ has: page.getByRole("link", { name: `Prendre la place : ${waitlistShift.label}`, exact: true }) })
+        if (await offeredCard.count() !== 1) throw new Error("Expected a single actual offered registration card")
+        await offeredCard.getByText("Une place t'est proposée", { exact: true }).waitFor()
         await at(0.26)
-        await page.getByText(/Confirme avant/).scrollIntoViewIfNeeded()
+        await offeredCard.getByText(/Confirme avant/).scrollIntoViewIfNeeded()
         await at(0.58)
-        await page.getByRole("link", { name: `Prendre la place : ${waitlistShift.label}` }).focus()
+        await offeredCard.getByRole("link", { name: `Prendre la place : ${waitlistShift.label}`, exact: true }).focus()
         await at(0.76)
-        await page.getByRole("button", { name: `Refuser la place proposée sur le créneau ${waitlistShift.label}` }).focus()
+        await offeredCard.getByRole("button", { name: `Refuser la place proposée sur le créneau ${waitlistShift.label}`, exact: true }).focus()
       })
 
       await scene("expiry", async (at) => {
@@ -1242,10 +1432,12 @@ async function main() {
 
       await scene("result", async (at) => {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/registrations?shift=${encodeURIComponent(waitlistShift.id)}`); await settle(page)
+        const offeredRow = page.locator("tbody tr").filter({ hasText: "Camille Rochat" })
+        if (await offeredRow.count() !== 1) throw new Error("Expected Camille's actual offered registration on the filtered shift")
         await at(0.34)
-        await page.getByText("Camille Rochat", { exact: true }).scrollIntoViewIfNeeded()
+        await offeredRow.getByText("Camille Rochat", { exact: true }).scrollIntoViewIfNeeded()
         await at(0.62)
-        await page.getByText("Place proposée", { exact: true }).scrollIntoViewIfNeeded()
+        await offeredRow.getByText("Place proposée", { exact: true }).scrollIntoViewIfNeeded()
       })
     } else if (slug === "shift-approval") {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
@@ -1259,7 +1451,7 @@ async function main() {
         const row = page.locator("tr").filter({ hasText: "Chauffeur navette" }).filter({ hasText: "08:00–12:00" }).first()
         await row.scrollIntoViewIfNeeded()
         await at(0.24)
-        await tap(page, row.getByRole("button", { name: "Modifier" }))
+        await tap(page, row.getByRole("button", { name: /^Modifier(?: le créneau)?/ }))
         await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor()
         await at(0.48)
         const approval = page.getByRole("checkbox", { name: /Sur validation/ })
@@ -1275,23 +1467,27 @@ async function main() {
         await page.goto(`${baseUrl}/my/demo-approval-lucas-0001`); await settle(page)
         await page.getByRole("heading", { name: /Mes inscriptions/ }).waitFor()
         await at(0.30)
-        await page.getByText("Demande envoyée · en attente de réponse", { exact: true }).scrollIntoViewIfNeeded()
+        const requestedCard = page.getByRole("region", { name: "Tous mes créneaux", exact: true }).locator('[id^="registration-"]').filter({ hasText: "Chauffeur navette" })
+        if (await requestedCard.count() !== 1) throw new Error("Expected Lucas's single actual requested shift card")
+        await requestedCard.getByText("Demande envoyée · en attente de réponse", { exact: true }).scrollIntoViewIfNeeded()
         await at(0.62)
-        await page.getByText(/Créneau sur validation/).scrollIntoViewIfNeeded()
+        await requestedCard.getByText(/Créneau sur validation/).scrollIntoViewIfNeeded()
         await at(0.78)
-        await page.getByRole("button", { name: /Retirer ma demande/ }).focus()
+        await requestedCard.getByRole("button", { name: /Retirer ma demande/ }).focus()
       })
 
       await page.screencast.showChapter("Examiner la candidature", { description: "Coordonnées, réponses et disponibilités", duration: 1_400 })
       await scene("admin", async (at) => {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/registrations?demandes=1`); await settle(page)
         await page.getByRole("heading", { name: "Inscriptions" }).waitFor()
+        const lucasRequest = page.locator("tbody tr").filter({ hasText: "Lucas Girard" })
+        if (await lucasRequest.count() !== 1) throw new Error("Expected Lucas's single actual request in the requests view")
         await at(0.28)
-        await page.getByText("Lucas Girard", { exact: true }).scrollIntoViewIfNeeded()
+        await lucasRequest.getByText("Lucas Girard", { exact: true }).scrollIntoViewIfNeeded()
         await at(0.58)
-        await page.getByText(/permis B/i).first().scrollIntoViewIfNeeded()
+        await lucasRequest.getByText(/permis B/i).scrollIntoViewIfNeeded()
         await at(0.78)
-        await page.getByRole("button", { name: /Accepter la demande de Lucas Girard/ }).focus()
+        await lucasRequest.getByRole("button", { name: /Accepter la demande de Lucas Girard/ }).focus()
       })
 
       await scene("decision", async (at) => {
@@ -1312,23 +1508,35 @@ async function main() {
       await scene("volunteer", async (at) => {
         await page.goto(`${baseUrl}/my/demo-approval-lucas-0001`); await settle(page)
         await page.getByRole("heading", { name: /Mes inscriptions/ }).waitFor()
+        // "Avant ta mission" repeats the label, but it is not the saved registration.
+        const confirmedCard = page.getByRole("region", { name: "Tous mes créneaux", exact: true }).locator('[id^="registration-"]').filter({ hasText: "Chauffeur navette" })
+        if (await confirmedCard.count() !== 1) throw new Error("Expected Lucas's single actual confirmed registration card")
         await at(0.30)
-        await page.getByText("Chauffeur navette", { exact: true }).scrollIntoViewIfNeeded()
+        await confirmedCard.getByText("Chauffeur navette", { exact: true }).scrollIntoViewIfNeeded()
         await at(0.58)
-        await page.getByRole("link", { name: /Ajouter à mon calendrier/ }).scrollIntoViewIfNeeded()
+        await confirmedCard.getByRole("link", { name: /Ajouter à mon calendrier/ }).scrollIntoViewIfNeeded()
         await at(0.78)
-        await page.getByText("Permis B depuis 3 ans", { exact: true }).scrollIntoViewIfNeeded()
+        // Practical information for the next confirmed shift is shown in this dedicated brief.
+        await page.locator("#avant-ta-mission").getByText("Permis B depuis 3 ans", { exact: true }).scrollIntoViewIfNeeded()
       })
 
       await scene("result", async (at) => {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/registrations?q=Lucas%20Girard`); await settle(page)
+        const confirmedRow = page.locator("tbody tr").filter({ hasText: "Lucas Girard" })
+        if (await confirmedRow.count() !== 1) throw new Error("Expected Lucas's single confirmed registration after approval")
         await at(0.34)
-        await page.getByText("Lucas Girard", { exact: true }).scrollIntoViewIfNeeded()
+        await confirmedRow.getByText("Lucas Girard", { exact: true }).scrollIntoViewIfNeeded()
         await at(0.64)
-        const requests = page.getByText("Demande à traiter", { exact: true })
+        const requests = confirmedRow.getByText("Demande à traiter", { exact: true })
         if (await requests.count()) throw new Error("Lucas request should be confirmed")
       })
     } else if (slug === "shift-eligibility-rules") {
+      const publicPlanning = `${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`
+      const clearVolunteerSession = async () => {
+        await page.goto(publicPlanning); await settle(page)
+        const quit = page.getByRole("button", { name: "Quitter la session", exact: true })
+        if (await quit.count()) { await tap(page, quit); await quit.waitFor({ state: "hidden" }) }
+      }
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Des règles simples, expliquées avant l’inscription", duration: 2_300 })
@@ -1339,29 +1547,40 @@ async function main() {
         await tap(page, page.getByRole("button", { name: "Liste" }))
         const evening = page.locator("tr").filter({ hasText: "Buvette" }).filter({ hasText: "18:00–22:00" }).first()
         await evening.scrollIntoViewIfNeeded()
-        await at(0.18)
-        await tap(page, evening.getByRole("button", { name: "Modifier" }))
+        await at(0.08)
+        await tap(page, evening.getByRole("button", { name: /^Modifier(?: le créneau)?/ }))
         await page.getByRole("heading", { name: "Modifier le créneau" }).waitFor()
-        await at(0.36)
-        await page.getByLabel("Âge minimum (optionnel)").scrollIntoViewIfNeeded()
-        await at(0.52)
+        const age = page.getByLabel("Âge minimum (optionnel)", { exact: true })
+        await age.scrollIntoViewIfNeeded()
+        if (await age.inputValue() !== "18") throw new Error("Evening Buvette must genuinely require eighteen years")
+        await at(0.27)
         await tap(page, page.getByRole("button", { name: "Annuler" }))
         await tap(page, page.getByRole("button", { name: "Gérer les postes" }))
         await page.getByRole("heading", { name: "Gérer les postes" }).waitFor()
-        await at(0.70)
-        await page.getByRole("button", { name: /Limite : 2 créneaux par personne, poste « Buvette »/ }).scrollIntoViewIfNeeded()
-        await at(0.84)
-        await page.getByRole("button", { name: /Accès : sécurité, poste « Sécurité » réservé/ }).scrollIntoViewIfNeeded()
+        await at(0.44)
+        const limit = page.getByRole("button", { name: /Limite : 2 créneaux par personne, poste « Buvette »/ })
+        await tap(page, limit)
+        const limitField = page.getByLabel("Nombre maximal de créneaux « Buvette » par personne", { exact: true })
+        if (await limitField.inputValue() !== "2") throw new Error("Actual Buvette quota must equal two")
+        await at(0.68)
+        await tap(page, page.locator("form").filter({ has: limitField }).getByRole("button", { name: "Annuler", exact: true }))
+        await tap(page, page.getByRole("button", { name: /Accès : sécurité, poste « Sécurité » réservé/ }))
+        const reserved = page.getByLabel("Étiquettes donnant accès au poste « Sécurité »", { exact: true })
+        if (await reserved.inputValue() !== "sécurité") throw new Error("Actual reserved tag must be sécurité")
       })
 
       await scene("age", async (at) => {
-        await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
+        await clearVolunteerSession()
         const evening = page.getByRole("button", { name: /Buvette.*18h–22h.*18 ans minimum/ })
         await evening.scrollIntoViewIfNeeded()
         await at(0.32)
-        await evening.focus()
-        await at(0.64)
-        await page.getByText("18+", { exact: true }).scrollIntoViewIfNeeded()
+        await tap(page, evening)
+        await at(0.49)
+        await tap(page, page.getByRole("button", { name: /^Continuer/ }))
+        const birthdate = page.getByLabel("Date de naissance *", { exact: true })
+        await birthdate.scrollIntoViewIfNeeded()
+        await at(0.65)
+        await fillVisibly(page, birthdate, "1995-11-28")
       })
 
       await page.screencast.showChapter("Limiter sans masquer", { description: "La règle et sa solution restent compréhensibles", duration: 1_400 })
@@ -1369,47 +1588,62 @@ async function main() {
         await page.goto(`${baseUrl}/my/demo-waitlist-camille-0001`); await settle(page)
         await page.getByRole("heading", { name: /Mes inscriptions/ }).waitFor()
         await at(0.18)
-        await page.getByRole("link", { name: "Retour à l'accueil" }).focus()
+        await page.getByRole("link", { name: "Retour à l'accueil" }).scrollIntoViewIfNeeded()
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
         const limited = page.getByRole("button", { name: /Buvette.*limite de 2 par personne atteinte/ }).first()
         await limited.waitFor()
         await limited.scrollIntoViewIfNeeded()
         await at(0.34)
-        await limited.focus()
+        if (!(await limited.getAttribute("aria-label"))?.includes("limite de 2 par personne atteinte")) throw new Error("Actual quota-reached notice is missing")
         await at(0.70)
       })
 
       await scene("reserved", async (at) => {
-        await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
+        await clearVolunteerSession()
         const reserved = page.getByRole("button", { name: /Sécurité.*réservé à certains membres/ }).first()
         await reserved.waitFor()
         await reserved.scrollIntoViewIfNeeded()
         await at(0.30)
-        await reserved.focus()
+        if (!await reserved.isDisabled()) throw new Error("Reserved shift must expose its unavailable state")
         await at(0.62)
         await page.getByText(/Les postes marqués « Réservé » sont réservés à certains membres/).scrollIntoViewIfNeeded()
+        await at(0.77)
+        await page.goto(`${publicPlanning}&token=demo-invite-emma-no-security-0001`); await settle(page)
+        await page.getByRole("button", { name: /Sécurité.*réservé à certains membres/ }).first().scrollIntoViewIfNeeded()
       })
 
       await scene("eligible", async (at) => {
+        await clearVolunteerSession()
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}&token=demo-invite-julien-security-0001`); await settle(page)
         const security = page.getByRole("button", { name: /Sélectionner — Sécurité/ }).first()
         await security.waitFor()
         await security.scrollIntoViewIfNeeded()
         await at(0.34)
-        await security.focus()
-        await at(0.68)
         await tap(page, security)
+        await at(0.68)
+        await tap(page, page.getByRole("button", { name: /^Continuer/ }))
+        if (await page.getByLabel("Prénom *", { exact: true }).inputValue() !== "Julien") throw new Error("Invitation must identify Julien, not an earlier volunteer session")
+        if (await page.getByLabel("Nom *", { exact: true }).inputValue() !== "Favre") throw new Error("Wrong invitation member shown")
       })
 
       await scene("result", async (at) => {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/edit`); await settle(page)
+        await page.getByLabel("Description", { exact: true }).scrollIntoViewIfNeeded()
+        await at(0.26)
         const phone = page.getByRole("checkbox", { name: /Téléphone obligatoire/ })
         await phone.scrollIntoViewIfNeeded()
         if (!(await phone.isChecked())) throw new Error("Phone requirement must be enabled in the demo data")
-        await at(0.36)
-        await phone.focus()
-        await at(0.70)
         await page.getByText(/Les bénévoles devront indiquer un numéro/).scrollIntoViewIfNeeded()
+        await at(0.56)
+        await page.goto(`${baseUrl}/admin/members`); await settle(page)
+        await fillVisibly(page, page.getByPlaceholder("Rechercher (nom, email, téléphone)…"), "Julien Favre")
+        await tap(page, page.getByRole("button", { name: "Éditer Julien Favre", exact: true }))
+        const form = page.getByRole("dialog", { name: "Modifier le membre", exact: true })
+        const tags = form.getByLabel("Tags (séparés par des virgules)", { exact: true })
+        if (!(await tags.inputValue()).split(",").map(tag => tag.trim()).includes("sécurité")) throw new Error("Julien's actual internal tag is missing")
+        await tags.scrollIntoViewIfNeeded()
+        await at(0.85)
+        await tap(page, form.getByRole("button", { name: "Annuler", exact: true }))
       })
     } else if (slug === "volunteer-discover-event") {
       await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
@@ -1874,7 +2108,27 @@ async function main() {
       await recordEventLog({ page, base: baseUrl, eventId: featureEventId, directory: dir, title: manifest.title, scene, tap, settle })
     } else if (slug === "attendance-check-in") {
       const { recordAttendance } = await import("../lib/record-attendance")
-      await recordAttendance({ page, base: baseUrl, eventId: featureEventId, directory: dir, title: manifest.title, scene, tap, settle })
+      const { recordDayOf } = await import("../lib/record-day-of")
+      const { verifyDayOfReviewFixture } = await import("../lib/verify-dayof-review-fixture")
+      const { PrismaClient } = await import("../../src/generated/prisma/client")
+      const { PrismaPg } = await import("@prisma/adapter-pg")
+      if (baseUrl !== "http://localhost:43108") throw new Error("Attendance requires its independent Jour J server")
+      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      try {
+        await verifyDayOfReviewFixture(db)
+        await recordAttendance({ page, base: baseUrl, eventId: featureEventId, directory: dir, title: manifest.title, personPrefix: "video-dayof-attendance-person-", scene, tap, settle })
+        await recordDayOf({ page, base: baseUrl, productCommit: product.commit, scene, tap, settle, typeNaturally,
+          fixture: { eventId: "video-dayof-event-live", registrationId: "video-dayof-registration-zoe", volunteerName: "Zoé Exemple", volunteerEmail: "video.attendance.7@example.org", phone: "079 000 00 01", runningShiftId: "video-dayof-shift-running", upcomingShiftId: "video-dayof-shift-upcoming", earlierShiftId: "video-dayof-shift-earlier", nightShiftId: "video-dayof-shift-night", roleSearch: "Accueil", accentSearch: "zoe", expectedAccentName: "Zoé Exemple" },
+          verifyFixture: async () => {
+            await verifyDayOfReviewFixture(db)
+            const r = await db.registration.findUniqueOrThrow({ where: { id: "video-dayof-registration-zoe" }, include: { volunteer: true } })
+            const prep = JSON.parse(await readFile(path.join(dir, "dayof-preparation.json"), "utf8"))
+            const age = Date.now() - Date.parse(prep.preparedAt)
+            return { eventId: r.eventId, registrationId: r.id, email: r.volunteer.email!, status: r.status, checkedInAt: r.checkedInAt?.toISOString() ?? null, syntheticOnly: true, timeCasesPreparedForActualServerNow: age >= 0 && age < 45 * 60_000 }
+          },
+          evidence: async (chapter, observed) => { await writeFile(path.join(dir, `${chapter}-observations.json`), JSON.stringify({ observedAt: new Date().toISOString(), chapter, productCommit: product.commit, observed, finalValidation: false }, null, 2)) },
+        })
+      } finally { await db.$disconnect() }
     } else if (slug === "event-reports") {
       const { recordReports } = await import("../lib/record-reports")
       await recordReports({ page, base: baseUrl, eventId: featureEventId, directory: dir, title: manifest.title, scene, tap, settle })
@@ -2393,7 +2647,7 @@ async function main() {
       const { PrismaPg } = await import("@prisma/adapter-pg")
       const { linkToken } = await import("../../src/lib/token-vault")
       const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
-      const originalInvites = await db.memberInvite.findMany({ where: { eventId: featureEventId }, select: { id: true, volunteerId: true, ...linkToken.select } })
+      const originalInvites = await db.memberInvite.findMany({ where: { eventId: featureEventId }, select: { id: true, volunteerId: true, volunteer: { select: { email: true } }, ...linkToken.select } })
       const originalTokens = new Map(originalInvites.map(i => [i.id, linkToken.reveal(i)]))
       await db.$disconnect()
       const openMail = async (subject: string, email?: string) => {
@@ -2434,8 +2688,9 @@ async function main() {
         await openMail("On a besoin de toi", "anna.buhler@example.org")
         const href = await page.frameLocator("iframe").getByRole("link", { name: /Voir les missions/ }).getAttribute("href")
         if (!href) throw new Error("Reminder has no real invitation link")
-        const token = new URL(href.replace("?token=", "&token=")).searchParams.get("token")
-        if (!token || ![...originalTokens.values()].includes(token)) throw new Error("Reminder changed invitation token")
+        const token = new URL(href).searchParams.get("token")
+        const annaInvite = originalInvites.filter(invite => invite.volunteer.email === "anna.buhler@example.org")
+        if (annaInvite.length !== 1 || !token || token !== originalTokens.get(annaInvite[0].id)) throw new Error("Reminder link must retain the exact recipient's original invitation token")
         checks.originalInvitationTokenRetained = true
         await at(0.67)
         const current = await summary()
@@ -2592,7 +2847,12 @@ async function main() {
         await row.getByText("Participation confirmée", { exact: false }).waitFor()
         await row.scrollIntoViewIfNeeded()
         await at(0.42)
-        await page.getByRole("row").filter({ hasText: "Nicolas Renaud" }).getByText("Sans créneau confirmé", { exact: true }).scrollIntoViewIfNeeded()
+        const response = await page.request.get(`${baseUrl}/api/admin/events/${featureEventId}/invitations`)
+        if (!response.ok()) throw new Error("Cannot verify the unconfirmed invitation fixture")
+        const data = await response.json()
+        const nicolas = data.invites.filter((invite: { volunteer: { email: string }; state: string; registrations: unknown[] }) => invite.volunteer.email === "video.membre.4@example.org")
+        if (nicolas.length !== 1 || nicolas[0].state !== "no_answer" || nicolas[0].registrations.length !== 0) throw new Error("Nicolas must remain genuinely unconfirmed, not merely display a matching label")
+        await page.getByRole("row").filter({ hasText: "Nicolas Renaud" }).getByText("Sans réponse", { exact: true }).scrollIntoViewIfNeeded()
       })
       await scene("existing", async at => {
         await open()
@@ -2678,12 +2938,28 @@ async function main() {
         await form().getByRole("row").filter({ has: page.getByRole("rowheader", { name: "René Sansmail", exact: true }) }).scrollIntoViewIfNeeded()
       })
       await scene("confirm", async at => {
+        const dbUrl = new URL(process.env.DATABASE_URL ?? "")
+        if (!["localhost", "127.0.0.1"].includes(dbUrl.hostname) || dbUrl.port !== "45433" || dbUrl.pathname !== "/benevoles_video") throw new Error("Import ownership requires isolated video DB")
+        const { PrismaClient } = await import("../../src/generated/prisma/client")
+        const { PrismaPg } = await import("@prisma/adapter-pg")
+        const { collectImportOwnership } = await import("../lib/member-import-ownership")
+        const ownershipDb = new PrismaClient({ adapter: new PrismaPg({ connectionString: dbUrl.href }) })
+        try {
+        const beforeMembers = await ownershipDb.volunteer.findMany({ where: { organizationId: "default" } })
+        const importStartedAt = new Date().toISOString()
         const response = page.waitForResponse(r => r.url().endsWith("/api/admin/members/import") && r.request().method() === "POST")
         await tap(page, form().getByRole("button", { name: "Importer 40 membres", exact: true }))
         const result = await response
         if (!result.ok()) throw new Error(`Confirmed import failed: ${result.status()}`)
         const body = await result.json()
         if (body.created !== 38 || body.updated !== 2 || body.errors.length) throw new Error("Confirmed import differs from expected plan")
+        const afterMembers = await ownershipDb.volunteer.findMany({ where: { organizationId: "default" } })
+        const importFinishedAt = new Date().toISOString()
+        // Preserve actual response and snapshots even if the strict baseline
+        // guard refuses ownership. This is evidence, not permission to reset.
+        await writeFile(path.join(dir, "pending-import-receipt.json"), JSON.stringify({ schemaVersion: 1, scenario: "members-import", responseStatus: result.status(), receipt: body, startedAt: importStartedAt, finishedAt: importFinishedAt, before: beforeMembers, after: afterMembers }, null, 2))
+        const ledger = await collectImportOwnership(beforeMembers, afterMembers, body, result.status(), importStartedAt, importFinishedAt)
+        await writeFile(path.join(dir, "owned-import-members.json"), JSON.stringify(ledger, null, 2))
         checks.confirmed = body
         await form().getByText(/Import terminé/).waitFor()
         await at(0.36)
@@ -2694,6 +2970,7 @@ async function main() {
         if (!(await edit.getByLabel("Tags (séparés par des virgules)", { exact: true }).inputValue()).includes("permis-b")) throw new Error("Imported tags missing")
         await at(0.88)
         await tap(page, edit.getByRole("button", { name: "Annuler", exact: true }))
+        } finally { await ownershipDb.$disconnect() }
       })
       await scene("repeat", async at => {
         await fillVisibly(page, page.getByPlaceholder("Rechercher (nom, email, téléphone)…"), "")
@@ -2711,15 +2988,135 @@ async function main() {
         await page.getByRole("heading", { name: "Membres", exact: true }).scrollIntoViewIfNeeded()
       })
       await writeFile(path.join(dir, "import-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), ...checks }, null, 2))
+    } else if (slug === "volunteer-hours-certificate") {
+      const { loadCurrentVideoPrisma } = await import("../lib/current-product-prisma")
+      const { recordVolunteerHours } = await import("../lib/record-volunteer-hours")
+      const { HOURS_OWNER, readHoursScenario } = await import("../lib/volunteer-hours-fixture")
+      const { createHash } = await import("node:crypto")
+      const { execFile } = await import("node:child_process")
+      const { promisify } = await import("node:util")
+      const execute = promisify(execFile)
+      if (baseUrl !== "http://localhost:43114" || org !== "formation-heures" || process.env.ORG_ADMIN_EMAIL !== HOURS_OWNER) throw new Error("Hours require their dedicated owned local server")
+      const { db, product: hoursProduct, unregister } = await loadCurrentVideoPrisma("http://localhost:43114")
+      try {
+        const preparation = JSON.parse(await readFile(path.join(dir, "preparation.json"), "utf8"))
+        if (preparation.product?.commit !== hoursProduct.commit || preparation.product?.buildId !== hoursProduct.buildId || preparation.product?.productSourceSha256 !== hoursProduct.productSourceSha256) throw new Error("Hours preparation must match the current compiled product")
+        const facts: Record<string, unknown> = {}
+        await recordVolunteerHours({ page, base: baseUrl, product: hoursProduct, scene, tap, settle,
+          readScenario: () => readHoursScenario(db, hoursProduct),
+          setFrenchDate: async (current, field, iso) => { await fillVisibly(current, field, iso, 1000); if (await field.inputValue() !== iso) throw new Error("Actual date entry differs") },
+          showDownloadedCsv: async (current, file) => {
+            const csv = await readFile(file, "utf8")
+            const escape = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+            const rows = csv.replace(/^\uFEFF/, "").trim().split(/\r?\n/).map(line => line.split(";"))
+            const header = rows.shift()!
+            const table = `<table><thead><tr>${header.map(value => `<th>${escape(value)}</th>`).join("")}</tr></thead><tbody>${rows.map(row => `<tr>${row.map(value => `<td>${escape(value)}</td>`).join("")}</tr>`).join("")}</tbody></table>`
+            await current.setContent(`<html lang="fr"><meta charset="utf-8"><style>body{font:22px Arial;margin:35px;background:#f4f7fb}table{border-collapse:collapse;width:100%;font-size:19px}th,td{padding:18px;border-bottom:1px solid #ccd3de;text-align:left}th{background:#e2e8f0}tbody tr:last-child{font-weight:bold}</style><h1>Lecture du CSV réellement téléchargé</h1><p>Export des heures — septembre 2026. Présentation du fichier, distincte de l'application.</p>${table}</html>`)
+          },
+          preparePrintedPdf: async current => {
+            const printedFrom = current.url()
+            const folder = path.join(dir, "documents"); await mkdir(folder, { recursive: true })
+            return async () => {
+              // The product button has already invoked its genuine window.print.
+              // Headless Chromium has no visible print dialog; use its actual
+              // print engine afterwards, without intercepting or replacing it.
+              const file = path.join(folder, "attestation-aline.pdf")
+              await current.pdf({ path: file, format: "A4", printBackground: true, preferCSSPageSize: true })
+              const bytes = await readFile(file)
+              const extracted = await execute("pdftotext", ["-layout", file, "-"])
+              const info = await execute("pdfinfo", [file])
+              const pages = Number(info.stdout.match(/^Pages:\s+(\d+)/m)?.[1]); if (!pages) throw new Error("Actual printed PDF pages required")
+              const prefix = path.join(folder, "attestation-review")
+              await execute("pdftoppm", ["-scale-to", "1500", "-png", file, path.join(folder, "attestation-all-pages")])
+              await execute("pdftoppm", ["-f", "1", "-singlefile", "-scale-to", "1500", "-png", file, prefix])
+              const png = await readFile(`${prefix}.png`)
+              await current.setContent(`<html lang="fr"><meta charset="utf-8"><style>body{font:18px Arial;background:#eef1f5;margin:12px}h1{font-size:21px}img{display:block;height:640px;margin:auto}</style><h1>PDF réel — impression locale du navigateur</h1><p>Lecture de la première page, pas un téléchargement PDF du serveur.</p><img alt="Première page de l'attestation réellement imprimée" src="data:image/png;base64,${png.toString("base64")}"></html>`)
+              return { path: file, sha256: createHash("sha256").update(bytes).digest("hex"), text: extracted.stdout, pages, printedFrom, product: hoursProduct, method: "browser-print-engine" as const }
+            }
+          },
+          evidence: async (chapter, observed) => { facts[chapter] = observed; await writeFile(path.join(dir, "hours-evidence.json"), JSON.stringify({ checkedAt: new Date().toISOString(), product: hoursProduct, ...facts }, null, 2)) },
+        })
+      } finally { await db.$disconnect(); await unregister() }
+    } else if (slug === "event-questions") {
+      const { loadCurrentVideoPrisma } = await import("../lib/current-product-prisma")
+      const { recordEventQuestions } = await import("../lib/record-event-questions")
+      const { QUESTIONS_EVENT, QUESTIONS_EMAIL, QUESTIONS_OWNER, assertQuestionsReviewFixture, readQuestionsSnapshot } = await import("../lib/event-questions-fixture")
+      const { linkToken } = await import("../../src/lib/token-vault")
+      if (baseUrl !== "http://localhost:43112" || org !== "formation-questions" || process.env.ORG_ADMIN_EMAIL !== QUESTIONS_OWNER) throw new Error("Questions require the dedicated owned local server")
+      const { db, product: questionsProduct, unregister } = await loadCurrentVideoPrisma("http://localhost:43112")
+      try {
+        const owned = await assertQuestionsReviewFixture(db)
+        const preparation = JSON.parse(await readFile(path.join(dir, "preparation.json"), "utf8"))
+        if (preparation.product?.commit !== questionsProduct.commit || preparation.product?.buildId !== questionsProduct.buildId || preparation.product?.productSourceSha256 !== questionsProduct.productSourceSha256) throw new Error("Questions preparation does not match the current compiled product")
+        const invite = owned.events[0].memberInvites[0]
+        const invitationUrl = `${baseUrl}/atelier-questions?org=formation-questions&token=${encodeURIComponent(linkToken.reveal(invite))}`
+        const mailBefore = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()
+        const priorMailIds = new Set(mailBefore.messages.map((mail: { ID: string }) => mail.ID))
+        const observations: Record<string, unknown> = {}
+        await recordEventQuestions({ page, base: baseUrl, eventId: QUESTIONS_EVENT, email: QUESTIONS_EMAIL, publicSlug: "atelier-questions", invitationUrl, scene, tap, settle,
+          readSnapshot: () => readQuestionsSnapshot(db),
+          completeVolunteerForm: async current => {
+            for (const [label, value] of [["Prénom *", "Aline"], ["Nom *", "Exemple"], ["Email *", QUESTIONS_EMAIL]]) {
+              const field = current.getByLabel(label, { exact: true })
+              if (await field.inputValue() !== value) {
+                await tap(current, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(value, { delay: 75 })
+              }
+            }
+            for (const selector of ["#reg-charter", "#reg-consent"]) {
+              const checkbox = current.locator(selector)
+              if (!await checkbox.isChecked()) await tap(current, checkbox)
+            }
+          },
+          evidence: async (chapter, observed) => { observations[chapter] = observed; if (chapter === "required-validation") await page.screenshot({ path: path.join(dir, "native-required-validation-fr.png") }); await writeFile(path.join(dir, "questions-evidence.json"), JSON.stringify({ recordedAt: new Date().toISOString(), product: questionsProduct, ...observations }, null, 2)) },
+          showConfirmationEmail: async (current, recipient) => {
+            let mail: { ID: string; Subject: string; To: { Address: string }[] } | undefined
+            for (let attempt = 0; attempt < 40; attempt++) {
+              const inbox = await (await current.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()
+              mail = inbox.messages.find((item: { ID: string; Subject: string; To: { Address: string }[] }) => !priorMailIds.has(item.ID) && item.Subject.includes("Préparer les questions de l'équipe") && item.To.some(to => to.Address === recipient))
+              if (mail) break
+              await current.waitForTimeout(250)
+            }
+            if (!mail) throw new Error("Fresh actual confirmation email required; old mailbox messages cannot substitute")
+            await current.goto(`http://localhost:48026/view/${encodeURIComponent(mail.ID)}`); await settle(current)
+            const frame = current.frameLocator("iframe")
+            const anchor = frame.locator('a[href*="/my/"]').first()
+            await anchor.waitFor(); await anchor.scrollIntoViewIfNeeded()
+            const rawHref = await anchor.getAttribute("href")
+            if (!rawHref) throw new Error("Real received email lacks its personal link")
+            const actual = new URL(rawHref)
+            if (!(actual.hostname === "formation-questions.video.invalid" || actual.origin === baseUrl) || !/^\/my\/[^/]+$/.test(actual.pathname)) throw new Error("Received personal link is outside the fictional organization")
+            const local = new URL(actual.pathname, baseUrl)
+            local.searchParams.set("org", "formation-questions")
+            observations.freshEmail = { mailId: mail.ID, exactRecipient: recipient, messageProducedDuringThisTake: true, trainingDomainReplayedLocally: actual.origin !== baseUrl }
+            return { recipient, actualPersonalLink: local.href }
+          },
+        })
+      } finally { await db.$disconnect(); await unregister() }
+    } else if (slug === "members-duplicates-merge") {
+      const { loadCurrentVideoPrisma } = await import("../lib/current-product-prisma")
+      const { memberMergeReaders } = await import("../lib/member-merge-fixture")
+      const { recordMemberMerge } = await import("../lib/record-member-merge")
+      const databaseUrl = process.env.DATABASE_URL ?? ""
+      const { db, unregister } = await loadCurrentVideoPrisma("http://localhost:43110")
+      try {
+        const evidence = await recordMemberMerge({ page, baseUrl, scene, settle, tap, ...memberMergeReaders(db, databaseUrl, baseUrl) })
+        await writeFile(path.join(dir, "member-merge-evidence.json"), JSON.stringify({ recordedAt: new Date().toISOString(), ...evidence }, null, 2))
+      } finally { await db.$disconnect(); await unregister() }
     } else if (slug === "members-management") {
       const search = () => page.getByPlaceholder("Rechercher (nom, email, téléphone)…")
+      const mayaRow = () => page.getByRole("row").filter({ has: page.getByRole("button", { name: "Éditer Maya Berger", exact: true }) })
       const editMaya = async () => {
         await tap(page, page.getByRole("button", { name: "Éditer Maya Berger", exact: true }))
         await page.getByRole("dialog", { name: "Modifier le membre", exact: true }).waitFor()
       }
       const save = async () => {
-        await tap(page, page.getByRole("dialog").getByRole("button", { name: "Enregistrer", exact: true }))
-        await page.getByRole("dialog").waitFor({ state: "hidden" })
+        const form = page.getByRole("dialog", { name: "Modifier le membre", exact: true })
+        const saved = page.waitForResponse(response => response.request().method() === "PATCH" && /\/api\/admin\/members\/[^/]+$/.test(new URL(response.url()).pathname))
+        await tap(page, form.getByRole("button", { name: "Enregistrer", exact: true }))
+        const response = await saved
+        if (!response.ok()) throw new Error(`Member edit failed (${response.status()}); do not continue with an unsaved form`)
+        await form.waitFor({ state: "hidden" })
+        await settle(page)
       }
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Des fiches utiles, sans complication", duration: 2_300 })
@@ -2733,26 +3130,34 @@ async function main() {
         await typeNaturally(page, form.getByLabel("Email", { exact: true }), "maya.berger@example.org")
         await typeNaturally(page, form.getByLabel("Téléphone", { exact: true }), "079 000 90 01")
         await at(0.80)
+        const created = page.waitForResponse(response => response.request().method() === "POST" && new URL(response.url()).pathname === "/api/admin/members")
         await tap(page, form.getByRole("button", { name: "Créer", exact: true }))
+        if (!(await created).ok()) throw new Error("Maya was not actually created")
+        await form.waitFor({ state: "hidden" })
         await page.getByRole("button", { name: "Éditer Maya Berger", exact: true }).waitFor()
+        await mayaRow().getByText("maya.berger@example.org", { exact: true }).waitFor()
         await page.getByText("61 membres", { exact: true }).waitFor()
       })
       await scene("edit", async at => {
         await editMaya()
-        const form = page.getByRole("dialog")
+        const form = page.getByRole("dialog", { name: "Modifier le membre", exact: true })
         await typeNaturally(page, form.getByLabel("Tags (séparés par des virgules)", { exact: true }), "accueil, permis-b")
         await typeNaturally(page, form.getByLabel("Notes", { exact: true }), "Préfère le stand d'accueil.")
-        await at(0.64)
+        await at(0.78)
         await save(); await editMaya()
         if (await form.getByLabel("Notes", { exact: true }).inputValue() !== "Préfère le stand d'accueil.") throw new Error("Member notes did not persist")
+        if (await form.getByLabel("Tags (séparés par des virgules)", { exact: true }).inputValue() !== "accueil, permis-b") throw new Error("Member tags did not persist")
       })
       await scene("availability", async at => {
-        const form = page.getByRole("dialog")
+        const form = page.getByRole("dialog", { name: "Modifier le membre", exact: true })
+        await form.waitFor()
+        if (await form.getByLabel("Soir", { exact: true }).isChecked()) throw new Error("Expected initially empty fictional availability")
+        await at(0.58)
         await tap(page, form.getByLabel("Soir", { exact: true }))
         await typeNaturally(page, form.getByLabel(/Sauf \/ à savoir/), "Pas le vendredi")
-        await at(0.52)
+        await at(0.86)
         await save()
-        await page.getByText(/Soir.*Pas le vendredi/).waitFor()
+        await mayaRow().getByText(/Soir.*Pas le vendredi/).waitFor()
       })
       await scene("no-email", async at => {
         await tap(page, page.getByRole("button", { name: "+ Nouveau membre", exact: true }))
@@ -2761,7 +3166,24 @@ async function main() {
         await typeNaturally(page, form.getByLabel(/^Nom/), "Aubert")
         await typeNaturally(page, form.getByLabel("Téléphone", { exact: true }), "079 000 90 02")
         await at(0.63)
+        const created = page.waitForResponse(response => response.request().method() === "POST" && new URL(response.url()).pathname === "/api/admin/members")
         await tap(page, form.getByRole("button", { name: "Créer", exact: true }))
+        const response = await created
+        if (response.status() !== 201) throw new Error("René was not actually created")
+        const member = await response.json()
+        if (org !== "default" || member.organizationId !== "default" || !/^[A-Za-z0-9_-]{8,100}$/.test(member.id ?? "") || member.firstName !== "René" || member.lastName !== "Aubert" || member.email !== null || member.phone?.replace(/\s/g, "") !== "0790009002") throw new Error("Created no-email contact does not match the recorder-owned fictional identity")
+        const ledgerPath = path.resolve("videos/output/members-management/owned-members.json")
+        let entries: Record<string, unknown>[] = []
+        try {
+          const ledger = JSON.parse(await readFile(ledgerPath, "utf8"))
+          if (ledger.schemaVersion !== 1 || ledger.scenario !== "members-management" || !Array.isArray(ledger.members) || ledger.members.length > 30) throw new Error("Invalid member ownership ledger")
+          entries = ledger.members.filter((entry: Record<string, unknown>) => entry.id !== member.id)
+        } catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error }
+        if (entries.length >= 30) throw new Error("Member ownership ledger limit reached; do not broaden the reset guard")
+        entries.push({ id: member.id, organizationId: "default", firstName: "René", lastName: "Aubert", phone: member.phone, email: null, responseStatus: response.status(), createdAt: new Date().toISOString() })
+        await mkdir(path.dirname(ledgerPath), { recursive: true })
+        await writeFile(ledgerPath, JSON.stringify({ schemaVersion: 1, scenario: "members-management", members: entries }, null, 2))
+        await form.waitFor({ state: "hidden" })
         const row = page.getByRole("row").filter({ has: page.getByRole("button", { name: "Éditer René Aubert", exact: true }) })
         await row.waitFor()
         if ((await row.textContent())?.includes("@")) throw new Error("No-email demonstration has an email")
@@ -2775,26 +3197,37 @@ async function main() {
       })
       await scene("filter", async at => {
         await fillVisibly(page, search(), "")
-        const tags = page.locator("select").first()
+        const tags = page.getByRole("combobox", { name: "Étiquette", exact: true })
         await tap(page, tags); await tags.selectOption("accueil")
+        await mayaRow().waitFor()
         await at(0.30)
         await tap(page, tags); await tags.selectOption("")
         await at(0.48)
         await tap(page, page.getByRole("button", { name: /^Nom/ }).first())
-        await at(0.70)
+        await at(0.52)
         await tap(page, page.getByRole("button", { name: /^Heures planifiées/ }))
       })
       await scene("deactivate", async at => {
         await fillVisibly(page, search(), "Maya Berger")
         await tap(page, page.getByRole("button", { name: "Désactiver Maya Berger", exact: true }))
+        const deactivated = page.waitForResponse(response => response.request().method() === "DELETE" && /\/api\/admin\/members\/[^/]+$/.test(new URL(response.url()).pathname))
         await tap(page, page.getByRole("alertdialog").getByRole("button", { name: "Désactiver", exact: true }))
+        if (!(await deactivated).ok()) throw new Error("Maya deactivation did not persist")
+        await page.getByRole("alertdialog").waitFor({ state: "hidden" })
         await page.getByRole("button", { name: "Éditer Maya Berger", exact: true }).waitFor({ state: "hidden" })
         await at(0.43)
         await tap(page, page.getByLabel("Inclure inactifs", { exact: true }))
+        await at(0.70)
         await editMaya()
-        await tap(page, page.getByRole("dialog").getByLabel("Membre actif", { exact: true }))
+        const active = page.getByRole("dialog", { name: "Modifier le membre", exact: true }).getByLabel("Membre actif", { exact: true })
+        if (await active.isChecked()) throw new Error("Inactive member unexpectedly remains active")
+        await tap(page, active)
+        if (!await active.isChecked()) throw new Error("Actual reactivation checkbox did not change")
+        await at(0.84)
         await save()
         await tap(page, page.getByLabel("Inclure inactifs", { exact: true }))
+        await page.getByRole("button", { name: "Désactiver Maya Berger", exact: true }).waitFor()
+        await page.goto(`${baseUrl}/admin/members?q=Maya%20Berger`); await settle(page)
         await page.getByRole("button", { name: "Désactiver Maya Berger", exact: true }).waitFor()
       })
       await scene("activity", async at => {
@@ -3325,7 +3758,7 @@ async function main() {
         await page.waitForURL(/\/admin\/events\/[^/]+$/)
         copyId = new URL(page.url()).pathname.split("/").at(-1) ?? ""
         await page.getByRole("heading", { name: "Fête du village de Montvert 2027" }).waitFor()
-        await at(0.54)
+        await at(0.28)
         await page.getByText(/Brouillon/).first().scrollIntoViewIfNeeded()
         await at(0.40)
         await page.goto(`${baseUrl}/admin/events/${copyId}/edit`); await settle(page)
@@ -4415,10 +4848,15 @@ async function main() {
         await charterHeading.scrollIntoViewIfNeeded()
         const charterBox = charterHeading.locator("xpath=ancestor::div[contains(@class,'rounded-2xl')]")
         const charter = charterBox.locator("textarea")
-        await charter.fill("Je m’engage à venir à l’heure, à prévenir en cas d’empêchement et à respecter les consignes de sécurité et les autres bénévoles.")
+        const completeCharter = await charter.inputValue()
+        if (completeCharter.trim().length < 400) throw new Error("First-steps fixture must contain the complete legal convention, not a one-sentence substitute")
+        // Demonstrate the real complete text without rewriting its legal clauses.
+        await tap(page, charter)
+        await charter.press("ControlOrMeta+End")
         await at(0.72)
         await tap(page, charterBox.getByRole("button", { name: "Enregistrer" }))
         await charterBox.getByText("Enregistré ✓").waitFor()
+        if (await charter.inputValue() !== completeCharter) throw new Error("First-steps demonstration altered the full convention")
       })
 
       await scene("timezone", async (at) => {
@@ -4494,6 +4932,11 @@ async function main() {
         await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
       })
 
+      await page.goto(`${baseUrl}/admin/events`); await settle(page)
+      await scene("help", async at => {
+        const { recordInlineHelp } = await import("../lib/record-inline-help")
+        await recordInlineHelp(page, baseUrl, tap, at)
+      })
       await page.goto(`${baseUrl}/admin/events`); await settle(page)
       await scene("result", async (at) => {
         await page.getByRole("heading", { name: "Événements" }).waitFor()

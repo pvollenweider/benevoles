@@ -2,18 +2,66 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /** Actual outbox worker + controlled SMTP, only this local synthetic organization. */
 import assert from "node:assert/strict"
-import { mkdir, writeFile } from "node:fs/promises"
+import { mkdir, writeFile, realpath } from "node:fs/promises"
 import { controlledSmtp } from "../lib/controlled-smtp"
+import { verifyProductBuild } from "../lib/product-build"
+import { register } from "tsx/cjs/api"
+import { randomUUID } from "node:crypto"
+import { createRequire } from "node:module"
+import path from "node:path"
+import { pathToFileURL } from "node:url"
+
+/** Resolve worker, aliases and generated Prisma from the actual verified main snapshot. */
+export async function loadCurrentDeliveryRuntime(base: "http://localhost:43102" | "http://localhost:43106") {
+  assert.equal(process.env.NODE_ENV, "production", "Never reuse a development root Prisma singleton")
+  const product = await verifyProductBuild(base)
+  const canonicalSnapshot = await realpath(product.snapshot)
+  const importedSourcePaths: string[] = []
+  // The CJS API snapshots this variable synchronously at registration. Unlike
+  // tsImport's CJS path, this explicitly configures aliases before loading any
+  // product module. Restore the process setting immediately afterwards.
+  const previousConfig = process.env.TSX_TSCONFIG_PATH
+  process.env.TSX_TSCONFIG_PATH = path.join(canonicalSnapshot, "tsconfig.json")
+  const namespace = `delivery-${randomUUID()}`
+  // register() with a namespace returns a scoped loader; ReturnType only sees the last overload.
+  let loader: ReturnType<typeof register> & { require: (id: string, fromFile: string | URL) => ReturnType<typeof import("tsx/cjs/api").require>; resolve: (id: string, fromFile: string | URL) => string; unregister: () => void }
+  try { loader = register({ namespace }) }
+  finally {
+    if (previousConfig === undefined) delete process.env.TSX_TSCONFIG_PATH
+    else process.env.TSX_TSCONFIG_PATH = previousConfig
+  }
+  const parent = path.join(canonicalSnapshot, "package.json")
+  const load = (relative: string) => {
+    const file = path.join(canonicalSnapshot, relative)
+    const resolved = loader.resolve(file, parent)
+    assert(resolved.startsWith(`${canonicalSnapshot}/src/`), "Delivery runtime resolved an old root product source")
+    importedSourcePaths.push(resolved)
+    return loader.require(file, parent)
+  }
+  try {
+    const prismaModule = load("src/lib/prisma.ts")
+    const outboxModule = load("src/lib/notifications/outbox.ts")
+    const viewModule = load("src/lib/outbox-view.ts")
+    for (const file of Object.keys(createRequire(import.meta.url).cache)) {
+      if (!file.includes(`namespace=${namespace}`)) continue
+      if (!file.includes("/src/") || file.includes("/node_modules/")) continue
+      assert(file.startsWith(`${canonicalSnapshot}/src/`) || file.startsWith(`${product.snapshot}/src/`), "Delivery runtime imported an old root product source")
+      if (!importedSourcePaths.includes(file)) importedSourcePaths.push(file)
+    }
+    return { db: prismaModule.prisma as import("../../src/generated/prisma/client").PrismaClient, enqueueNotifications: outboxModule.enqueueNotifications as typeof import("../../src/lib/notifications/outbox").enqueueNotifications, deliverOutbox: outboxModule.deliverOutbox as typeof import("../../src/lib/notifications/outbox").deliverOutbox, openPayload: outboxModule.openPayload as typeof import("../../src/lib/notifications/outbox").openPayload, outboxErrorSentence: viewModule.outboxErrorSentence as (stored: string | null) => string | null, product, importedSourcePaths, unregister: async () => { loader.unregister() } }
+  } catch (error) { loader.unregister(); throw error }
+}
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
   assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
   assert.equal(process.env.VIDEO_BASE_URL, "http://localhost:43102")
-  const fixture = await controlledSmtp()
+  await verifyProductBuild("http://localhost:43102")
   // These settings apply only to this tool's process, never to the running app.
   Object.assign(process.env, { SMTP_HOST: "127.0.0.1", SMTP_PORT: "41028", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
-  const { prisma: db } = await import("../../src/lib/prisma")
-  const { enqueueNotifications, deliverOutbox, openPayload } = await import("../../src/lib/notifications/outbox")
+  const runtime = await loadCurrentDeliveryRuntime("http://localhost:43102")
+  const { db, enqueueNotifications, deliverOutbox, openPayload, outboxErrorSentence } = runtime
+  const fixture = await controlledSmtp().catch(async error => { await db.$disconnect(); await runtime.unregister(); throw error })
   const orgId = "video-delivery", orgName = "Formation — suivi des emails", slug = "formation-livraisons"
   const originalError = console.error
   let controlledErrors = 0
@@ -78,9 +126,10 @@ async function main() {
       return { id, recipient }
     }
     await create("pending")
-    for (const [label, attempts] of [["retrying", 1], ["recoverable", 6], ["wrong", 6], ["sent", 1]] as const) {
+    for (const [label, attempts] of [["retrying", 1], ["recoverable", 6], ["wrong", 1], ["sent", 1]] as const) {
       const row = await create(label)
-      if (label !== "sent") fixture.rejected.add(row.recipient)
+      if (label === "wrong") fixture.rejected.add(row.recipient)
+      else if (label !== "sent") fixture.temporaryRejected.add(row.recipient)
       for (let attempt = 0; attempt < attempts; attempt++) {
         const before = await db.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
         // Advance the worker's supported clock, not the persisted state or attempts.
@@ -88,12 +137,17 @@ async function main() {
         const outcome = await deliverOutbox({ ids: [row.id], now })
         const after = await db.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
         assert.equal(after.attempts, label === "sent" ? 0 : attempt + 1)
-        assert.equal(after.status, label === "sent" ? "sent" : attempt === 5 ? "failed" : "pending")
-        if (label !== "sent") assert(after.lastError?.includes("550 5.1.1 Synthetic recipient rejected"))
+        assert.equal(after.status, label === "sent" ? "sent" : label === "wrong" || attempt === 5 ? "failed" : "pending")
+        if (label !== "sent") {
+          assert(after.lastError?.startsWith(label === "wrong" ? "smtp:rejected_permanent:" : "smtp:failed_temporary:"))
+          assert(outboxErrorSentence(after.lastError)?.includes(label === "wrong" ? "Adresse à vérifier" : "temporaire"))
+        }
         snapshots.push({ id: row.id, recipient: row.recipient, now: now.toISOString(), status: after.status, attempts: after.attempts, nextAttemptAt: after.nextAttemptAt.toISOString(), outcome })
       }
     }
-    assert.equal(fixture.attempts.filter(attempt => !attempt.accepted).length, 13)
+    assert.equal(fixture.attempts.filter(attempt => !attempt.accepted).length, 8)
+    assert.equal(fixture.attempts.filter(attempt => attempt.responseCode === 451).length, 7)
+    assert.equal(fixture.attempts.filter(attempt => attempt.responseCode === 550).length, 1)
     assert.equal(fixture.attempts.filter(attempt => attempt.accepted).length, 1)
     const pending = await db.notificationOutbox.findUniqueOrThrow({ where: { id: ids.pending } })
     assert(pending.status === "pending" && pending.attempts === 0)
@@ -101,8 +155,8 @@ async function main() {
     const sent = inbox.messages.find(mail => mail.Subject === "Formation — sent — Atelier des emails" && mail.To.some(to => to.Address === "video.delivery.sent@example.org"))
     assert(sent, "Actual successful worker delivery missing")
     await mkdir("videos/output/email-delivery-failures", { recursive: true })
-    await writeFile("videos/output/email-delivery-failures/outbox-preparation.json", JSON.stringify({ checkedAt: new Date().toISOString(), organizationId: orgId, ids, clock: "Supported deliverOutbox now parameter advanced to each real scheduled due time; accelerated demonstration clock, no status/attempt columns manually changed", actualSmtpAttempts: fixture.attempts, workerSnapshots: snapshots, pendingWithoutAttempt: true, actualDeliveredMailId: sent.ID, controlledErrorLogsCount: controlledErrors, note: "Real worker/SMTP evidence; UI retry, address correction and campaign still to film" }, null, 2))
-    console.log("✓ Real outbox: pending without attempt, retry scheduled, two failures after six actual SMTP attempts each, and one actual successful Mailpit delivery; clock acceleration recorded")
-  } finally { console.error = originalError; await db.$disconnect(); await fixture.close() }
+    await writeFile("videos/output/email-delivery-failures/outbox-preparation.json", JSON.stringify({ checkedAt: new Date().toISOString(), organizationId: orgId, ids, product: runtime.product, importedSourcePaths: runtime.importedSourcePaths, clock: "Supported current-main deliverOutbox clock advanced to real due times; 451 temporary retries only; 550 permanent rejection stops after one attempt", actualSmtpAttempts: fixture.attempts, workerSnapshots: snapshots, pendingWithoutAttempt: true, actualDeliveredMailId: sent.ID, controlledErrorLogsCount: controlledErrors, note: "Real worker/SMTP evidence; UI retry, address correction and campaign still to film" }, null, 2))
+    console.log("✓ Current-main outbox: one temporary retry scheduled, six real 451 attempts before failure, permanent 550 stops after one, successful Mailpit delivery; accelerated clock recorded")
+  } finally { console.error = originalError; await db.$disconnect(); await runtime.unregister(); await fixture.close() }
 }
-main().catch(error => { console.error(error instanceof Error ? error.message : "Delivery preparation failed"); process.exitCode = 1 })
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) main().catch(error => { console.error(error instanceof Error ? error.message : "Delivery preparation failed"); process.exitCode = 1 })

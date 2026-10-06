@@ -1,12 +1,12 @@
 {
   "anchor": "Pour retirer quelqu'un d'un horaire, lis d'abord la confirmation : inscription",
-  "windowStart": 212.185,
+  "windowStart": 190.35699999999997,
   "result": {
     "found": true,
-    "startSeconds": 6.7,
+    "startSeconds": 30.04,
     "wordsHeard": "Pour retirer quelqu'un d'un horaire, lis d'abord la confirmation : inscription"
   },
-  "onset": 218.885,
-  "proposedCut": 218.3219375,
+  "onset": 220.39699999999996,
+  "proposedCut": 220.3566875,
   "note": "Proposal only; recut then independently audit before capture"
 }

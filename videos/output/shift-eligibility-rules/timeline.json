@@ -1,42 +1,85 @@
 {
   "slug": "shift-eligibility-rules",
-  "recordedAt": "2026-10-04T17:58:45.052Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T16:16:48.209Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "12928a8936f7b69d6ecf6ef91f6ecdbdffa09b60",
+    "sourceTree": "30dbb5aedc053cdb4c8279f2b678cc73eece207e",
+    "productSourceSha256": "c99792f1a68d4f9cd696d47c05d5c6a8d06aaa190f0a9cf15281957940612e03",
+    "buildId": "_3C5UypUJK5dyJUxNVbyG",
+    "snapshot": "/tmp/benevoles-video-production.fLrGxy",
+    "builtAt": "2026-10-06T16:02:24.130Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "SHIFT_ELIGIBILITY_RULES",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 16313
+    },
+    {
+      "kind": "click",
+      "atMs": 19242
+    },
+    {
+      "kind": "click",
+      "atMs": 24823
+    },
+    {
+      "kind": "click",
+      "atMs": 25639
+    },
+    {
+      "kind": "click",
+      "atMs": 91387
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1148,
-      "endMs": 15390
+      "startMs": 1133,
+      "endMs": 15311
     },
     {
       "id": "settings",
-      "startMs": 15840,
-      "endMs": 39184
+      "startMs": 15767,
+      "endMs": 32237
     },
     {
       "id": "age",
-      "startMs": 39638,
-      "endMs": 48515
+      "startMs": 32697,
+      "endMs": 46337
     },
     {
       "id": "quota",
-      "startMs": 50682,
-      "endMs": 62894
+      "startMs": 48495,
+      "endMs": 64548
     },
     {
       "id": "reserved",
-      "startMs": 63349,
-      "endMs": 83229
+      "startMs": 65000,
+      "endMs": 80059
     },
     {
       "id": "eligible",
-      "startMs": 83681,
-      "endMs": 99040
+      "startMs": 80511,
+      "endMs": 95783
     },
     {
       "id": "result",
-      "startMs": 99492,
-      "endMs": 115395
+      "startMs": 96234,
+      "endMs": 110816
     }
   ]
 }

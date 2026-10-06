@@ -1,12 +1,12 @@
 {
   "anchor": "Le filtre Demandes à traiter montre les personnes qui attendent une",
-  "windowStart": 57.824,
+  "windowStart": 39.482,
   "result": {
     "found": true,
-    "startSeconds": 8.58,
+    "startSeconds": 23.64,
     "wordsHeard": "Le filtre demandes à traiter montre les personnes qui attendent une"
   },
-  "onset": 66.404,
-  "proposedCut": 66.59875,
+  "onset": 63.122,
+  "proposedCut": 62.692146,
   "note": "Proposal only; recut then independently audit before capture"
 }

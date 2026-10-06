@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T15:59:30.407Z",
+  "videoSha256": "b51ff8665b7fdaf349ce5dae6fa7c6841618f18ca2d5978b0e1b15db2b124e14",
+  "promptSha256": "c3799c4b52067727e87318e554c9a11445000d78c0b8f498704f56aa67b147c7",
+  "clipSha256": "37711e2f433954bc4ac86cb02ce50a62e63e4b1cb9ff8e0458744e398ebc22ff",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "La Frise n'est pas seulement une vue de lecture",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.1,
+        "spoken": "La Frise n'est pas seulement une vue de lecture",
+        "visibleSeconds": 0,
+        "visible": "Titre du chapitre superposé sur la vue Frise",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.3,
+        "spoken": "construire rapidement un planning visuel",
+        "visibleSeconds": 2.8,
+        "visible": "Disparition du bandeau d'introduction et affichage de la frise des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "dessiner une plage libre, ajuster sa durée",
+        "visibleSeconds": 5.8,
+        "visible": "Vue statique du planning de la journée sans manipulation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix synthétique posée, débit régulier et bonne intelligibilité."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

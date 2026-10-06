@@ -1,12 +1,12 @@
 {
   "anchor": "Sur sa page personnelle, Lucas voit maintenant le créneau comme confirmé,",
-  "windowStart": 41.522000000000006,
+  "windowStart": 43.38499999999999,
   "result": {
     "found": true,
-    "startSeconds": 30.6,
-    "wordsHeard": "Sur"
+    "startSeconds": 30.3,
+    "wordsHeard": "Sur sa page personnelle, Lucas voit maintenant le créneau comme confirmé"
   },
-  "onset": 72.12200000000001,
-  "proposedCut": 71.52166700000001,
+  "onset": 73.68499999999999,
+  "proposedCut": 73.385333,
   "note": "Proposal only; recut then independently audit before capture"
 }

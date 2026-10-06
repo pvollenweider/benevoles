@@ -57,7 +57,7 @@
     },
     {
       "id": "mobile",
-      "transcript": "Regardons une fenêtre simulée de trois cent vingt pixels de large. Ce n'est pas un essai sur un téléphone physique. Dans la liste, les noms longs reviennent à la ligne, et Déjà inscrit comme conflit restent visibles. Il faut parfois faire défiler pour atteindre la suite. La page entière a encore une limite dans cette version : le filtre des postes dépasse la largeur disponible, et les champs de l'ajout manuel restent étroits. Nous ne masquons pas ce problème. Si cela gêne ton usage, décris l'écran et le geste dans ton retour.",
+      "transcript": "Regardons une fenêtre simulée de trois cent vingt pixels de large. Ce n'est pas un essai sur un téléphone physique. Dans la liste, vérifions les noms longs, la mention Déjà inscrit et les conflits d'horaire. Il faut parfois faire défiler pour atteindre la suite. Regardons aussi les filtres et les champs du formulaire : une liste qui tient dans l'écran ne suffit pas à valider toute la page. Si un élément gêne ton usage, décris l'écran et le geste dans ton retour. Cette simulation ne remplace pas un essai sur ton appareil.",
       "fallbackDurationMs": 85000
     },
     {
@@ -88,7 +88,7 @@
     ],
     "remember": [
       "Le contour de focus indique quel bouton ou quel champ va réagir.",
-      "Sur un écran très étroit, certains filtres et champs restent encore à améliorer.",
+      "Sur un écran étroit, il faut parfois faire défiler : vérifiez aussi les filtres et les champs du formulaire, pas seulement la liste.",
       "Les essais présentés sont partiels : ils ne garantissent pas tous les appareils ni tous les lecteurs d'écran."
     ]
   }

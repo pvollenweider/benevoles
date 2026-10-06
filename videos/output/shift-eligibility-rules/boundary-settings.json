@@ -1,0 +1,12 @@
+{
+  "anchor": "Les règles se configurent au bon niveau. L’âge minimum appartient au",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 14.12,
+    "wordsHeard": "Les règles se configurent au bon niveau. L’âge minimum appartient au"
+  },
+  "onset": 14.12,
+  "proposedCut": 13.478542000000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

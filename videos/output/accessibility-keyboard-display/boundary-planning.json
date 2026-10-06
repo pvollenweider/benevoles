@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour préparer le planning, le clavier permet aussi de passer de",
+  "windowStart": 82.698,
+  "result": {
+    "found": true,
+    "startSeconds": 30.78,
+    "wordsHeard": "Pour préparer le planning, le clavier permet aussi de passer de"
+  },
+  "onset": 113.478,
+  "proposedCut": 113.3574795,
+  "note": "Proposal only; recut then independently audit before capture"
+}

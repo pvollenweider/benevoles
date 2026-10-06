@@ -1,12 +1,12 @@
 {
   "anchor": "Une ligne représente une fiche membre. Lisons le prénom, le nom,",
-  "windowStart": 49.028999999999996,
+  "windowStart": 13.662999999999997,
   "result": {
     "found": true,
-    "startSeconds": 5.1,
-    "wordsHeard": "Une ligne représente une fiche membre. Lisons le prénom, le nom"
+    "startSeconds": 40,
+    "wordsHeard": "Une"
   },
-  "onset": 54.129,
-  "proposedCut": 54.2695625,
+  "onset": 53.663,
+  "proposedCut": 53.326354,
   "note": "Proposal only; recut then independently audit before capture"
 }

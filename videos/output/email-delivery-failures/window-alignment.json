@@ -1,0 +1,37 @@
+{
+  "locatedAt": "2026-10-06T17:04:15.228Z",
+  "masterSha256": "403eb48cd204559a029c1618eeba888b34b49c0f0953bd5aa84b483f62f5cd0b",
+  "totalSeconds": 276.2,
+  "cuts": [
+    {
+      "id": "states",
+      "seconds": 37.4398955
+    },
+    {
+      "id": "reason",
+      "seconds": 73.5154585
+    },
+    {
+      "id": "retry",
+      "seconds": 99.841208
+    },
+    {
+      "id": "address",
+      "seconds": 125.32733300000001
+    },
+    {
+      "id": "campaign",
+      "seconds": 180.323396
+    },
+    {
+      "id": "retention",
+      "seconds": 222.6709375
+    },
+    {
+      "id": "result",
+      "seconds": 249.605729
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

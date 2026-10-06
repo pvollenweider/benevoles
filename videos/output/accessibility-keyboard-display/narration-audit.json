@@ -1,0 +1,110 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-06T15:13:30.832Z",
+  "revalidatedAt": "2026-10-06T15:13:30.833Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "e8a65b8a88e930a84788410f17ca0b152524b820959529a6984693ad5edcf290",
+      "recognized": "Une souris n'est pas indispensable pour organiser une fête. Le clavier peut aussi rendre les gestes plus confortables. Dans notre organisation fictive, commençons par Tab. Le contour indique où nous sommes, le lien d'évitement permet de rejoindre directement le contenu avec Entrée. Tab avance, Majuscule et Tab reviennent au contrôle précédent. Les touches affichées correspondent aux gestes réellement effectués. Prends ton temps, ces repères servent à savoir quel bouton ou quel champ va réagir.",
+      "expected": "Une souris n'est pas indispensable pour organiser une fête. Le clavier peut aussi rendre les gestes plus confortables. Dans notre organisation fictive, commençons par Tab : le contour indique où nous sommes. Le lien d'évitement permet de rejoindre directement le contenu avec Entrée. Tab avance, Majuscule et Tab reviennent au contrôle précédent. Les touches affichées correspondent aux gestes réellement effectués. Prends ton temps : ce repère sert à savoir quel bouton ou quel champ va réagir.",
+      "wordErrorRate": 0.039473684210526314,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "public",
+      "audioSha256": "e069f68244c3c01a85d0f67e1ce71e8f3d85eaa1f2b1f96cdd5b7438c458c670",
+      "recognized": "Côté bénévole, atteignons un créneau avec le clavier, puis sélectionnons-le. Continuons jusqu'au formulaire. Le récapitulatif rappelle le poste, la date et l'horaire. Il permet de vérifier son choix avant de s'engager. Un champ obligatoire manque ? Lisons le message, revenons au champ et complétons-le. La validation n'est pas seulement une couleur rouge. Les personnes et adresses utilisées ici sont fictives. Nous ne contactons aucun vrai bénévole pendant cette formation.",
+      "expected": "Côté bénévole, atteignons un créneau avec le clavier, puis sélectionnons-le. Continuons jusqu'au formulaire. Le récapitulatif rappelle le poste, la date et l'horaire : il permet de vérifier son choix avant de s'engager. Un champ obligatoire manque ? Lisons le message, revenons au champ et complétons-le. La validation n'est pas seulement une couleur rouge. Les personnes et adresses utilisées ici sont fictives ; nous ne contactons aucun vrai bénévole pendant cette formation.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "picker",
+      "audioSha256": "922ba9106675ece2dd169753972d6b9f535e69764ab496418da4e01eed95cf65",
+      "recognized": "Dans les inscriptions, ouvrons l'ajout manuel. Aline a déjà un créneau à l'accueil. Renseignons son adresse, puis atteignons créneau. Une flèche ouvre la liste, et les flèches déplacent l'option active. Une lettre aide à retrouver un poste. À l'accueil, nous voyons déjà inscrit. Le vestiaire chevauche son horaire. La mention conflit nous invite à vérifier avant de choisir. Entrée retient une option. Rouvrons, puis appuyons sur Échap. La valeur précédente reste conservée. Le filtre de créneaux utilise le même principe pour retrouver les inscriptions à afficher.",
+      "expected": "Dans les inscriptions, ouvrons l'ajout manuel. Aline a déjà un créneau à l'accueil. Renseignons son adresse, puis atteignons Créneau. Une flèche ouvre la liste et les flèches déplacent l'option active. Une lettre aide à retrouver un poste. À l'accueil, nous voyons Déjà inscrit. Le vestiaire chevauche son horaire : la mention conflit nous invite à vérifier avant de choisir. Entrée retient une option. Rouvrons, puis appuyons sur Échap : la valeur précédente reste conservée. Le filtre de créneau utilise le même principe pour retrouver les inscriptions à afficher.",
+      "wordErrorRate": 0.011111111111111112,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "error",
+      "audioSha256": "090778e0d61eeed17bc186692581c4d773dc0757f9f864878f8794d40811c030",
+      "recognized": "Essayons maintenant d'ajouter une personne sans choisir de créneau. Le message sélectionnez un créneau apparaît et le focus revient au champ concerné. Il n'est pas nécessaire de repartir du début de la page. Choisissons un créneau libre puis ajoutons notre personne fictive. Vérifions le résultat dans les inscriptions et le compteur affiché. Une annonce de résultat, lorsqu'elle est lue par un lecteur d'écran, ne doit pas être confondue avec notre narration. Ici, nous montrons d'abord les gestes et l'état réel de l'interface.",
+      "expected": "Essayons maintenant d'ajouter une personne sans choisir de créneau. Le message Sélectionnez un créneau apparaît et le focus revient au champ concerné. Il n'est pas nécessaire de repartir du début de la page. Choisissons un créneau libre, puis ajoutons notre personne fictive. Vérifions le résultat dans les inscriptions et le compteur affiché. Une annonce de résultat, lorsqu'elle est lue par un lecteur d'écran, ne doit pas être confondue avec notre narration. Ici, nous montrons d'abord les gestes et l'état réel de l'interface.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "planning",
+      "audioSha256": "b85f563e83c1355faab045bf1c915c27f5d96ce234900ac66904a483f4404279",
+      "recognized": "Pour préparer le planning, le clavier permet aussi de passer de frise à liste. Vérifions quelle vue est sélectionnée. Ouvrons l'éditeur d'un créneau, puis annulons, le focus doit revenir à un contrôle utile. Dans Gérer les postes, les flèches monter et descendre offrent une alternative au glisser-déposer. Déplaçons un poste, puis regardons sa nouvelle position. Rechargeons pour vérifier que l'ordre a bien été enregistré. Le but n'est pas de mémoriser toutes les touches, mais de pouvoir construire et corriger son planning sans dépendre d'un geste précis à la souris.",
+      "expected": "Pour préparer le planning, le clavier permet aussi de passer de Frise à Liste. Vérifions quelle vue est sélectionnée. Ouvrons l'éditeur d'un créneau, puis annulons : le focus doit revenir à un contrôle utile. Dans Gérer les postes, les flèches Monter et Descendre offrent une alternative au glisser-déposer. Déplaçons un poste, puis regardons sa nouvelle position. Rechargeons pour vérifier que l'ordre a bien été enregistré. Le but n'est pas de mémoriser toutes les touches, mais de pouvoir construire et corriger son planning sans dépendre d'un geste précis à la souris.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "zoom",
+      "audioSha256": "bfdc0e5d600c3b17a4680a44fcb11c423134bd3b6b35d2461f6345f4c7d7f9c7",
+      "recognized": "Si le texte est trop petit, utilisons le zoom du navigateur. Passons à deux cents pour cent, puis à quatre cents pour cent. Ce n'est pas un agrandissement ajouté au montage, le navigateur adapte réellement son affichage. Vérifions les champs et les commandes. Sur la chronologie, un défilement horizontal peut rester nécessaire pour parcourir les horaires. Revenons ensuite à cent pour cent. Le confort dépend aussi de la taille de la fenêtre et du navigateur. Cette démonstration ne garantit pas tous les appareils.",
+      "expected": "Si le texte est trop petit, utilisons le zoom du navigateur. Passons à deux cents pour cent, puis à quatre cents pour cent. Ce n'est pas un agrandissement ajouté au montage : le navigateur adapte réellement son affichage. Vérifions les champs et les commandes. Sur la chronologie, un défilement horizontal peut rester nécessaire pour parcourir les horaires. Revenons ensuite à cent pour cent. Le confort dépend aussi de la taille de la fenêtre et du navigateur ; cette démonstration ne garantit pas tous les appareils.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "mobile",
+      "audioSha256": "f661026e73321063907a99e00f6e7cc6bd6c82a78e8722c362b2b5a573f938a5",
+      "recognized": "Regardons une fenêtre simulée de trois cent vingt pixels de large. Ce n'est pas un essai sur un téléphone physique. Dans la liste, vérifions les noms longs, la mention déjà inscrit et les conflits d'horaires. Il faut parfois faire défiler pour atteindre la suite. Regardons aussi les filtres et les champs du formulaire. Une liste qui tient dans l'écran ne suffit pas à valider toute la page. Si un élément gêne ton usage, décris l'écran et le geste dans ton retour. Cette simulation ne remplace pas un essai sur ton appareil.",
+      "expected": "Regardons une fenêtre simulée de trois cent vingt pixels de large. Ce n'est pas un essai sur un téléphone physique. Dans la liste, vérifions les noms longs, la mention Déjà inscrit et les conflits d'horaire. Il faut parfois faire défiler pour atteindre la suite. Regardons aussi les filtres et les champs du formulaire : une liste qui tient dans l'écran ne suffit pas à valider toute la page. Si un élément gêne ton usage, décris l'écran et le geste dans ton retour. Cette simulation ne remplace pas un essai sur ton appareil.",
+      "wordErrorRate": 0.010526315789473684,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "contrast",
+      "audioSha256": "b96aafd7ebdb5542ddf1d4b442644b9a3e35eba77ad0396f54930882b5fa4427",
+      "recognized": "Comparons maintenant l'affichage normal avec les couleurs forcées de Chromium, en clair, puis en sombre. L'encart précise qu'il s'agit d'une émulation, pas d'un test Windows. Le contour du champ, le marqueur de l'option active et la coche du choix retenu n'ont pas le même rôle. Vérifions qu'ils restent repérables. Regardons aussi un interrupteur activé, puis désactivé. Son état ne devrait pas dépendre seulement d'une couleur. Ces images aident à examiner le contraste sans remplacer un essai réel dans les thèmes de contraste du système.",
+      "expected": "Comparons maintenant l'affichage normal avec les couleurs forcées de Chromium, en clair puis en sombre. L'encart précise qu'il s'agit d'une émulation, pas d'un test Windows. Le contour du champ, le marqueur de l'option active et la coche du choix retenu n'ont pas le même rôle. Vérifions qu'ils restent repérables. Regardons aussi un interrupteur activé puis désactivé : son état ne devrait pas dépendre seulement d'une couleur. Ces images aident à examiner le contraste, sans remplacer un essai réel dans les thèmes de contraste du système.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "reader",
+      "audioSha256": "d1916c729938c3d47722cfca4f85495e40c93a0c517b88e51dec9ab336237404",
+      "recognized": "Un lecteur d'écran transforme les noms, les états et les messages en information parlée. Écoutons maintenant une courte utilisation réelle de VoiceOver avec le système et le navigateur indiqués à l'écran. Le nom du créneau et son état doivent aider à comprendre ce que l'on choisit. Notre voix de formation ne remplace pas cette lecture. Cet exemple porte sur ce parcours précis. Il ne signifie pas que tous les écrans sont validés, ni que le comportement sera identique avec NVDA ou sur un téléphone.",
+      "expected": "Un lecteur d'écran transforme les noms, les états et les messages en informations parlées. Écoutons maintenant une courte utilisation réelle de VoiceOver, avec le système et le navigateur indiqués à l'écran. Le nom du créneau et son état doivent aider à comprendre ce que l'on choisit. Notre voix de formation ne remplace pas cette lecture. Cet exemple porte sur ce parcours précis : il ne signifie pas que tous les écrans sont validés, ni que le comportement sera identique avec NVDA ou sur un téléphone.",
+      "wordErrorRate": 0.022988505747126436,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "limits",
+      "audioSha256": "b62e5522852528c2695d6310dc0c6efd00aa87b0c16ea82703ab4e489de88fa2",
+      "recognized": "Pour connaître le périmètre des essais et les limites connues, ouvrons Accessibilité depuis le pied de page. La page décrit une évaluation partielle, pas une promesse que tout fonctionne partout. Tu rencontres une difficulté ? Le lien de contact permet de la signaler. Indique la page, le geste tenté, le résultat attendu, le navigateur et si tu en utilises un, le lecteur d'écran. Nous n'envoyons pas de message dans cette démonstration. Un retour précis aide à rendre l'outil plus confortable pour tout le monde, petit à petit.",
+      "expected": "Pour connaître le périmètre des essais et les limites connues, ouvrons Accessibilité depuis le pied de page. La page décrit une évaluation partielle, pas une promesse que tout fonctionne partout. Tu rencontres une difficulté ? Le lien de contact permet de la signaler. Indique la page, le geste tenté, le résultat attendu, le navigateur et, si tu en utilises un, le lecteur d'écran. Nous n'envoyons pas de message dans cette démonstration. Un retour précis aide à rendre l'outil plus confortable pour tout le monde, petit à petit.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # Responsable de poste : accompagner son équipe
 
+Révision rédactionnelle du 6 octobre 2026 : narration adressée aux organisateurs au vouvoiement, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. Les anciennes preuves audio ne valident pas ce nouveau texte ; narration, sous-titres, synchronisation et MP4 final sont à recontrôler après régénération.
+
 Vidéo autonome 38. Voix Puck, souriante et bienveillante, en une prise continue.
 
 ## Utilité

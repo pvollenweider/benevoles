@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour une préférence de rendez-vous, laissons un peu de liberté. Ajoutons",
+  "windowStart": 96.097,
+  "result": {
+    "found": true,
+    "startSeconds": 30.73,
+    "wordsHeard": "Pour une préférence de rendez-vous laissons un peu de liberté Ajoutons"
+  },
+  "onset": 126.827,
+  "proposedCut": 126.0969375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -2,7 +2,7 @@ Horaires de nuit et changements d’heure
 
 Les événements du soir posent deux questions différentes : comment afficher une fin après minuit, et combien d’heures se sont réellement écoulées quand l’horloge change. Benevol conserve l’horaire local de l’événement et calcule les instants dans le fuseau de l’organisation.
 
-Une nuit ordinaire de vingt-deux heures à deux heures appartient au jour où le créneau commence. Dans la Timeline, elle peut s’étendre jusqu’à vingt-six heures pour garder une lecture continue ; dans les textes destinés aux personnes, la fin est présentée comme deux heures, le lendemain.
+Une nuit ordinaire de vingt-deux heures à deux heures appartient au jour où le créneau commence. La Frise continue après minuit, mais les heures affichées repartent bien de zéro : minuit, une heure, deux heures. Le récapitulatif précise que la fin se situe le lendemain. Ouvrons le créneau pour vérifier son horaire.
 
 Le dernier dimanche de mars, la Suisse passe directement de deux heures à trois heures. Un créneau affiché de une heure à cinq heures ne dure donc que trois heures réelles. Les emails et calendriers gardent les heures locales, tandis que les totaux utilisent la durée réellement écoulée.
 

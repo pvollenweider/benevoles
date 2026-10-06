@@ -7,7 +7,8 @@ import nodemailer from "nodemailer"
 export async function controlledSmtp(port = 41028) {
   if (port !== 41028) throw new Error("Only the dedicated local SMTP fixture port is allowed")
   const rejected = new Set<string>()
-  const attempts: { recipient: string; accepted: boolean; timestamp: string }[] = []
+  const temporaryRejected = new Set<string>()
+  const attempts: { recipient: string; accepted: boolean; responseCode: number; timestamp: string }[] = []
   const sockets = new Set<Socket>()
   const forward = nodemailer.createTransport({ host: "127.0.0.1", port: 41026, secure: false, connectionTimeout: 5000, socketTimeout: 10000 })
   const server = createServer(socket => {
@@ -31,10 +32,11 @@ export async function controlledSmtp(port = 41028) {
         else if (/^RCPT TO:/i.test(line)) {
           const recipient = /<([^>]*)>/.exec(line)?.[1] ?? ""
           if (!/^video\.delivery\.[a-z0-9.-]+@example\.org$/.test(recipient)) { socket.write("550 fixture recipient outside allowlist\r\n"); continue }
-          const accepted = !rejected.has(recipient)
-          attempts.push({ recipient, accepted, timestamp: new Date().toISOString() })
+          const temporary = temporaryRejected.has(recipient)
+          const accepted = !rejected.has(recipient) && !temporary
+          attempts.push({ recipient, accepted, responseCode: accepted ? 250 : temporary ? 451 : 550, timestamp: new Date().toISOString() })
           if (accepted) { recipients.push(recipient); socket.write("250 recipient accepted\r\n") }
-          else socket.write("550 5.1.1 Synthetic recipient rejected for video training\r\n")
+          else socket.write(temporary ? "451 4.3.0 Synthetic temporary rejection for video training\r\n" : "550 5.1.1 Synthetic recipient rejected for video training\r\n")
         } else if (line.toUpperCase() === "DATA") {
           if (!recipients.length) socket.write("503 no accepted recipient\r\n")
           else { data = true; body = []; socket.write("354 end with dot\r\n") }
@@ -46,5 +48,5 @@ export async function controlledSmtp(port = 41028) {
     })
   })
   await new Promise<void>((resolve, reject) => { server.once("error", reject); server.listen(port, "127.0.0.1", resolve) })
-  return { rejected, attempts, close: async () => { for (const socket of sockets) socket.destroy(); forward.close(); await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve())) } }
+  return { rejected, temporaryRejected, attempts, close: async () => { for (const socket of sockets) socket.destroy(); forward.close(); await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve())) } }
 }

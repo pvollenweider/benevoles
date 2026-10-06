@@ -1,5 +1,7 @@
 # Se coordonner avec le journal de l'organisation
 
+Révision rédactionnelle du 6 octobre 2026 : narration adressée aux organisateurs au vouvoiement, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. Les anciennes preuves audio ne valident pas ce nouveau texte ; narration, sous-titres, synchronisation et MP4 final sont à recontrôler après régénération.
+
 Vidéo autonome 49. Une seule prise Kore, souriante et patiente. Script fondé sur la page réelle `/admin/settings/activity`, `ActivityLog`, la route d'export et le format CSV. Aucun filtre de date, de prénom ou d'action n'est inventé dans l'écran : il propose un filtre par type et une pagination, pas Rejouer ou Récit.
 
 ## Utilité et parcours

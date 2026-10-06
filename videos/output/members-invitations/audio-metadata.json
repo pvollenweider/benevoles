@@ -1,57 +1,57 @@
 {
   "model": "gemini-3.8-flash-tts",
   "voice": "Puck",
-  "generatedAt": "2026-10-05T13:54:26.084Z",
+  "generatedAt": "2026-10-06T17:05:31.887Z",
   "segments": {
     "welcome": {
       "file": "audio/welcome.wav",
-      "durationMs": 23918,
-      "generationSha256": "591e88cf0456e704130d7bd9bcdc1910c96a7335291b1d2695e2bc80dd841bc0"
+      "durationMs": 24216,
+      "generationSha256": "b813f179c7a9a648bd5fda9664b0a13175b1c0f8cfc2d9d18578d6dedef70e85"
     },
     "test": {
       "file": "audio/test.wav",
-      "durationMs": 19599,
-      "generationSha256": "591e88cf0456e704130d7bd9bcdc1910c96a7335291b1d2695e2bc80dd841bc0"
+      "durationMs": 20551,
+      "generationSha256": "b813f179c7a9a648bd5fda9664b0a13175b1c0f8cfc2d9d18578d6dedef70e85"
     },
     "individual": {
       "file": "audio/individual.wav",
-      "durationMs": 23463,
-      "generationSha256": "591e88cf0456e704130d7bd9bcdc1910c96a7335291b1d2695e2bc80dd841bc0"
+      "durationMs": 22677,
+      "generationSha256": "b813f179c7a9a648bd5fda9664b0a13175b1c0f8cfc2d9d18578d6dedef70e85"
     },
     "group": {
       "file": "audio/group.wav",
-      "durationMs": 23461,
-      "generationSha256": "591e88cf0456e704130d7bd9bcdc1910c96a7335291b1d2695e2bc80dd841bc0"
+      "durationMs": 22140,
+      "generationSha256": "b813f179c7a9a648bd5fda9664b0a13175b1c0f8cfc2d9d18578d6dedef70e85"
     },
     "send": {
       "file": "audio/send.wav",
-      "durationMs": 21640,
-      "generationSha256": "591e88cf0456e704130d7bd9bcdc1910c96a7335291b1d2695e2bc80dd841bc0"
+      "durationMs": 20375,
+      "generationSha256": "b813f179c7a9a648bd5fda9664b0a13175b1c0f8cfc2d9d18578d6dedef70e85"
     },
     "personal-link": {
       "file": "audio/personal-link.wav",
-      "durationMs": 20912,
-      "generationSha256": "591e88cf0456e704130d7bd9bcdc1910c96a7335291b1d2695e2bc80dd841bc0"
+      "durationMs": 24409,
+      "generationSha256": "b813f179c7a9a648bd5fda9664b0a13175b1c0f8cfc2d9d18578d6dedef70e85"
     },
     "reserved": {
       "file": "audio/reserved.wav",
-      "durationMs": 23255,
-      "generationSha256": "591e88cf0456e704130d7bd9bcdc1910c96a7335291b1d2695e2bc80dd841bc0"
+      "durationMs": 24836,
+      "generationSha256": "b813f179c7a9a648bd5fda9664b0a13175b1c0f8cfc2d9d18578d6dedef70e85"
     },
     "status": {
       "file": "audio/status.wav",
-      "durationMs": 19372,
-      "generationSha256": "591e88cf0456e704130d7bd9bcdc1910c96a7335291b1d2695e2bc80dd841bc0"
+      "durationMs": 21547,
+      "generationSha256": "b813f179c7a9a648bd5fda9664b0a13175b1c0f8cfc2d9d18578d6dedef70e85"
     },
     "existing": {
       "file": "audio/existing.wav",
-      "durationMs": 21019,
-      "generationSha256": "591e88cf0456e704130d7bd9bcdc1910c96a7335291b1d2695e2bc80dd841bc0"
+      "durationMs": 23041,
+      "generationSha256": "b813f179c7a9a648bd5fda9664b0a13175b1c0f8cfc2d9d18578d6dedef70e85"
     },
     "no-email": {
       "file": "audio/no-email.wav",
-      "durationMs": 22201,
-      "generationSha256": "591e88cf0456e704130d7bd9bcdc1910c96a7335291b1d2695e2bc80dd841bc0"
+      "durationMs": 23889,
+      "generationSha256": "b813f179c7a9a648bd5fda9664b0a13175b1c0f8cfc2d9d18578d6dedef70e85"
     }
   }
 }

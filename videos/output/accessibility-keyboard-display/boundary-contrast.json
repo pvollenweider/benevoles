@@ -1,0 +1,12 @@
+{
+  "anchor": "Comparons maintenant l'affichage normal avec les couleurs forcées de Chromium, en",
+  "windowStart": 172.67899999999997,
+  "result": {
+    "found": true,
+    "startSeconds": 27.4,
+    "wordsHeard": "Comparons"
+  },
+  "onset": 200.07899999999998,
+  "proposedCut": 200.195042,
+  "note": "Proposal only; recut then independently audit before capture"
+}

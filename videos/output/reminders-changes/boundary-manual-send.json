@@ -1,0 +1,12 @@
+{
+  "anchor": "Depuis la page de l'événement, Envoyer le rappel demande une confirmation.",
+  "windowStart": 27.631,
+  "result": {
+    "found": true,
+    "startSeconds": 20.7,
+    "wordsHeard": "Depuis la page de l'événement, envoyer le rappel demande une confirmation."
+  },
+  "onset": 48.331,
+  "proposedCut": 47.821208,
+  "note": "Proposal only; recut then independently audit before capture"
+}

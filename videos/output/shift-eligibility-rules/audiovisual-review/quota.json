@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:18:36.627Z",
+  "videoSha256": "3cae3b8d01afc59d2bd5104644bcadd67b8b6f84a1b85bc55cb1aba2e3e95d1c",
+  "promptSha256": "f453bda3607e66f84810f4ad093bef965c1ef217b673d1310607ed965330980e",
+  "clipSha256": "c029aeea2de57db6bc73ebc2282ec9c303ccca78066d1bb342254760a7f53c45",
+  "scene": "quota",
+  "review": {
+    "heardOpening": "Camille possède déjà deux engagements",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Camille possède déjà deux engagements de Buvette",
+        "visibleSeconds": 0.5,
+        "visible": "Page 'Mes inscriptions' puis retour au planning affichant les créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "En revenant au planning depuis son lien personnel",
+        "visibleSeconds": 2.8,
+        "visible": "Affichage de la grille du planning avec session active",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "les autres créneaux restent visibles, mais indiquent que la limite de deux est atteinte",
+        "visibleSeconds": 8,
+        "visible": "Grille de créneaux et panneau latéral récapitulant les choix",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "Elle peut d’abord retirer un engagement si elle souhaite en choisir un autre",
+        "visibleSeconds": 12.5,
+        "visible": "Icônes de suppression visibles dans la liste des créneaux sélectionnés",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

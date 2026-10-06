@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans les inscriptions, ouvrons l'ajout manuel. Aline a déjà un créneau",
+  "windowStart": 17.08,
+  "result": {
+    "found": true,
+    "startSeconds": 35.8,
+    "wordsHeard": "Dans les inscriptions, ouvrons l'ajout manuel. Aline a déjà un créneau"
+  },
+  "onset": 52.879999999999995,
+  "proposedCut": 52.619708,
+  "note": "Proposal only; recut then independently audit before capture"
+}

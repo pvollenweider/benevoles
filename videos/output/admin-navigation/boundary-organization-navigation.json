@@ -3,10 +3,10 @@
   "windowStart": 0,
   "result": {
     "found": true,
-    "startSeconds": 12.9,
-    "wordsHeard": "Le tableau de bord rassemble les priorités de l'association. Événements ouvre"
+    "startSeconds": 11.8,
+    "wordsHeard": "Le tableau de bord rassemble les priorités de l’association. Événements ouvre"
   },
-  "onset": 12.9,
-  "proposedCut": 12.815229,
+  "onset": 11.8,
+  "proposedCut": 11.580625000000001,
   "note": "Proposal only; recut then independently audit before capture"
 }

@@ -15,7 +15,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Des bénévoles se sont inscrits, mais certains horaires ont encore besoin d'aide. Depuis l'événement, ouvre Où manque-t-il du monde. Cette vue regroupe les besoins pour savoir où concentrer tes efforts, plutôt que de parcourir tout le planning. Notre fête contient des postes vides, des créneaux partiellement remplis, des attentes et des demandes à valider. Regardons comment lire ces différences.",
+      "transcript": "Des bénévoles se sont inscrits, mais certains horaires ont encore besoin d'aide. Depuis l'événement, ouvrez Où manque-t-il du monde. Cette vue regroupe les besoins pour savoir où concentrer vos efforts, plutôt que de parcourir tout le planning. Notre fête contient des postes vides, des créneaux partiellement remplis, des attentes et des demandes à valider. Regardons comment lire ces différences.",
       "fallbackDurationMs": 36000
     },
     {
@@ -25,7 +25,7 @@
     },
     {
       "id": "empty",
-      "transcript": "Postes sans personne attire l'attention sur un poste entièrement vide. Ici, Photos comporte deux créneaux et six places à pourvoir. Clique sur le poste pour retrouver le planning et vérifier les dates, les horaires et la mission. Avant de recruter, assure-toi que la demande est claire : quelqu'un doit comprendre ce qu'il fera, où et pendant combien de temps.",
+      "transcript": "Postes sans personne attire l'attention sur un poste entièrement vide. Ici, Photos comporte deux créneaux et six places à pourvoir. Cliquez sur le poste pour retrouver le planning et vérifier les dates, les horaires et la mission. Avant de recruter, assurez-vous que la demande est claire : quelqu'un doit comprendre ce qu'il fera, où et pendant combien de temps.",
       "fallbackDurationMs": 35000
     },
     {
@@ -40,7 +40,7 @@
     },
     {
       "id": "waiting",
-      "transcript": "Dans Personnes en liste d'attente, tu repères les horaires où des personnes attendent une place. La buvette de l'après-midi affiche ses inscriptions confirmées et ses trois attentes séparément. En cliquant, tu retrouves les noms et leurs positions dans la liste. Tu peux ensuite réfléchir à une place supplémentaire ou à un autre horaire ; ce rapport ne les inscrit pas automatiquement sur un créneau différent.",
+      "transcript": "Dans Personnes en liste d'attente, vous repérez les horaires où des personnes attendent une place. La buvette de l'après-midi affiche ses inscriptions confirmées et ses trois attentes séparément. En cliquant, vous retrouvez les noms et leurs positions dans la liste. Vous pouvez ensuite réfléchir à une place supplémentaire ou à un autre horaire ; ce rapport ne les inscrit pas automatiquement sur un créneau différent.",
       "fallbackDurationMs": 37000
     },
     {
@@ -55,7 +55,7 @@
     },
     {
       "id": "action",
-      "transcript": "Pour terminer, Julien nous a confirmé qu'il pouvait aider aux photos le samedi. Nous ouvrons le créneau concerné, puis Ajouter manuellement. Son email retrouve sa fiche ; nous choisissons le bon horaire et enregistrons. La nouvelle inscription apparaît. En revenant au rapport, le besoin diminue d'une place et Photos n'est plus un poste entièrement vide. Tu peux vérifier le résultat, puis te concentrer sur le besoin suivant.",
+      "transcript": "Pour terminer, Julien nous a confirmé qu'il pouvait aider aux photos le samedi. Nous ouvrons le créneau concerné, puis Ajouter manuellement. Son email retrouve sa fiche ; nous choisissons le bon horaire et enregistrons. La nouvelle inscription apparaît. En revenant au rapport, le besoin diminue d'une place et Photos n'est plus un poste entièrement vide. Vous pouvez vérifier le résultat, puis vous concentrer sur le besoin suivant.",
       "fallbackDurationMs": 42000
     }
   ],

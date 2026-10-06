@@ -6,6 +6,7 @@ import { createHash } from "node:crypto"
 import { readFile, writeFile, mkdir } from "node:fs/promises"
 import path from "node:path"
 import { loadCatalog, loadManifest, videoDir } from "../lib/manifest"
+import { assembledOnTarget } from "../lib/product-evidence"
 
 const git = (...args: string[]) => execFileSync("git", args, { encoding: "utf8", maxBuffer: 8 * 1024 * 1024 }).trim()
 const target = git("rev-parse", "origin/main")
@@ -34,6 +35,7 @@ async function main() {
     const manifest = await loadManifest(entry.id)
     const directory = videoDir(manifest.slug)
     const timeline = await json(path.join(directory, "timeline.json"))
+    const mix = await json(path.join(directory, "audio-mix.json"))
     const audit = await json(path.join(directory, "narration-audit-video.json"))
     let videoSha256: string | null = null
     try { videoSha256 = createHash("sha256").update(await readFile(path.join(directory, `${manifest.slug}.mp4`))).digest("hex") } catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error }
@@ -43,7 +45,9 @@ async function main() {
     const heardLegacyTerms = (audit?.segments ?? []).filter((s: { recognized?: string }) => /\btimeline\b/i.test(s.recognized ?? "")).map((s: { id: string }) => s.id)
     const sourceChanges = changed.filter(file => group.paths.some(prefix => file.startsWith(prefix)))
     const productCommit = timeline?.product?.commit ?? null
-    rows.push({ id: entry.id, slug: manifest.slug, title: manifest.title, group: group.name, review: group.review, sourceChanges, videoSha256, productCommit, currentMainBuildProven: productCommit === target && !!timeline?.product?.buildId, transcriptLegacyTerms, heardLegacyTerms, recordedAt: timeline?.recordedAt ?? null, status: !videoSha256 ? "not-generated" : productCommit !== target ? "unverified-product-version" : "visual-review-required", finalDeliveryValidated: false })
+    const timelineSha256 = timeline ? createHash("sha256").update(await readFile(path.join(directory, "timeline.json"))).digest("hex") : null
+    const currentMainBuildProven = assembledOnTarget({ targetCommit: target, timeline, mix, videoSha256, timelineSha256 })
+    rows.push({ id: entry.id, slug: manifest.slug, title: manifest.title, group: group.name, review: group.review, sourceChanges, videoSha256, productCommit, currentMainBuildProven, transcriptLegacyTerms, heardLegacyTerms, recordedAt: timeline?.recordedAt ?? null, status: !videoSha256 ? "not-generated" : !currentMainBuildProven ? "unverified-product-version" : "visual-review-required", finalDeliveryValidated: false })
   }
   const report = { checkedAt: new Date().toISOString(), targetCommit: target, developmentCheckout: git("rev-parse", "HEAD"), recentCaptureBuild, changedProductFiles: changed, changesSinceRecentCaptureBuild: latestChanges, note: "All catalogue entries inventoried. Historical provenance must never be inferred from dates or retroactively stamped. Source review and old ASR are not a fresh visual review of each MP4. No final ISO certification.", groups, videos: rows }
   await mkdir("videos/output", { recursive: true })

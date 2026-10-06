@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour connaître le périmètre des essais et les limites connues, ouvrons",
+  "windowStart": 228.08099999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 30.3,
+    "wordsHeard": "Pour"
+  },
+  "onset": 258.381,
+  "proposedCut": 258.0808125,
+  "note": "Proposal only; recut then independently audit before capture"
+}

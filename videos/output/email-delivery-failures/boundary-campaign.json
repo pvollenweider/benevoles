@@ -1,0 +1,12 @@
+{
+  "anchor": "Préparons un autre message pour ces deux personnes. Notre serveur de",
+  "windowStart": 150.323,
+  "result": {
+    "found": true,
+    "startSeconds": 30.25,
+    "wordsHeard": "Préparons un autre message pour ces deux personnes. Notre serveur de"
+  },
+  "onset": 180.573,
+  "proposedCut": 180.323396,
+  "note": "Proposal only; recut then independently audit before capture"
+}

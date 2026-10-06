@@ -1,12 +1,12 @@
 {
   "anchor": "Attention à une autre distinction : le contact opérationnel indiqué sur",
-  "windowStart": 145.614,
+  "windowStart": 139.046,
   "result": {
     "found": true,
-    "startSeconds": 29.9,
-    "wordsHeard": "Attention à une autre distinction : le contact opérationnel indiqué sur"
+    "startSeconds": 30.28,
+    "wordsHeard": "Attention à une autre distinction"
   },
-  "onset": 175.514,
-  "proposedCut": 174.905646,
+  "onset": 169.326,
+  "proposedCut": 169.0458125,
   "note": "Proposal only; recut then independently audit before capture"
 }

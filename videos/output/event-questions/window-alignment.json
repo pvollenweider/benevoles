@@ -1,0 +1,69 @@
+{
+  "locatedAt": "2026-10-06T17:05:45.993Z",
+  "masterSha256": "68c0615e4d0f1a9ed1e59e608e08d44b1624d5f57718b7a9ce8df6a783643c33",
+  "totalSeconds": 482.8,
+  "cuts": [
+    {
+      "id": "create-single",
+      "seconds": 32.676125
+    },
+    {
+      "id": "create-yesno",
+      "seconds": 67.092396
+    },
+    {
+      "id": "create-multiple",
+      "seconds": 94.975979
+    },
+    {
+      "id": "create-text",
+      "seconds": 126.0969375
+    },
+    {
+      "id": "order",
+      "seconds": 155.85052100000001
+    },
+    {
+      "id": "required-validation",
+      "seconds": 181.91029200000003
+    },
+    {
+      "id": "volunteer-form",
+      "seconds": 211.6075415
+    },
+    {
+      "id": "email-proof",
+      "seconds": 242.38437499999998
+    },
+    {
+      "id": "admin-read",
+      "seconds": 275.360375
+    },
+    {
+      "id": "summary-export",
+      "seconds": 304.789
+    },
+    {
+      "id": "invited-update",
+      "seconds": 333.003875
+    },
+    {
+      "id": "unverified-update",
+      "seconds": 363.081396
+    },
+    {
+      "id": "answered-lock",
+      "seconds": 395.849375
+    },
+    {
+      "id": "edit-choices",
+      "seconds": 425.4969585
+    },
+    {
+      "id": "retire",
+      "seconds": 450.38177099999996
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

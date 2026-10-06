@@ -1,0 +1,45 @@
+{
+  "locatedAt": "2026-10-06T15:11:49.134Z",
+  "masterSha256": "0c5411f50bdcc8724284669c512e1689e42d3cb4780a19a5bc6ba54c9bfd53fe",
+  "totalSeconds": 287,
+  "cuts": [
+    {
+      "id": "public",
+      "seconds": 26.8453125
+    },
+    {
+      "id": "picker",
+      "seconds": 52.619708
+    },
+    {
+      "id": "error",
+      "seconds": 85.58725
+    },
+    {
+      "id": "planning",
+      "seconds": 113.3574795
+    },
+    {
+      "id": "zoom",
+      "seconds": 144.8723335
+    },
+    {
+      "id": "mobile",
+      "seconds": 172.2321875
+    },
+    {
+      "id": "contrast",
+      "seconds": 200.195042
+    },
+    {
+      "id": "reader",
+      "seconds": 231.0958335
+    },
+    {
+      "id": "limits",
+      "seconds": 258.0808125
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

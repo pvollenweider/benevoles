@@ -1,0 +1,12 @@
+{
+  "anchor": "Une invitation peut aussi donner accès à un poste réservé aux",
+  "windowStart": 109.47999999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 24.8,
+    "wordsHeard": "Une"
+  },
+  "onset": 134.28,
+  "proposedCut": 134.3665835,
+  "note": "Proposal only; recut then independently audit before capture"
+}

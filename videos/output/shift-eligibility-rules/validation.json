@@ -1,52 +1,53 @@
 {
   "id": "SHIFT_ELIGIBILITY_RULES",
   "slug": "shift-eligibility-rules",
-  "validatedAt": "2026-10-04T17:58:50.591Z",
+  "validatedAt": "2026-10-06T16:17:44.972Z",
   "continuousNarration": true,
+  "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 118080,
+  "captureMs": 115360,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 14242,
-      "audioMs": 14239,
-      "driftMs": 3
+      "visualMs": 14178,
+      "audioMs": 14169,
+      "driftMs": 9
     },
     {
       "id": "settings",
-      "visualMs": 23344,
-      "audioMs": 23341,
-      "driftMs": 3
+      "visualMs": 16470,
+      "audioMs": 16470,
+      "driftMs": 0
     },
     {
       "id": "age",
-      "visualMs": 8877,
-      "audioMs": 8875,
-      "driftMs": 2
+      "visualMs": 13640,
+      "audioMs": 13639,
+      "driftMs": 1
     },
     {
       "id": "quota",
-      "visualMs": 12212,
-      "audioMs": 12210,
+      "visualMs": 16053,
+      "audioMs": 16051,
       "driftMs": 2
     },
     {
       "id": "reserved",
-      "visualMs": 19880,
-      "audioMs": 19880,
+      "visualMs": 15059,
+      "audioMs": 15059,
       "driftMs": 0
     },
     {
       "id": "eligible",
-      "visualMs": 15359,
-      "audioMs": 15355,
-      "driftMs": 4
+      "visualMs": 15272,
+      "audioMs": 15271,
+      "driftMs": 1
     },
     {
       "id": "result",
-      "visualMs": 15903,
-      "audioMs": 15900,
-      "driftMs": 3
+      "visualMs": 14582,
+      "audioMs": 14581,
+      "driftMs": 1
     }
   ],
   "issues": []

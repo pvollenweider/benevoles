@@ -5,7 +5,7 @@
     {
       "action": "check_in",
       "changedIds": [
-        "cmuvk1gjr0004c0a5fjjr9c62"
+        "video-dayof-registration-old-0"
       ],
       "unchangedStatuses": true,
       "nonSelectedUnchanged": true
@@ -13,8 +13,8 @@
     {
       "action": "check_in",
       "changedIds": [
-        "cmuvk1gjx0005c0a50okbn7sq",
-        "cmuvk1gk30006c0a5zfzoi42m"
+        "video-dayof-registration-old-1",
+        "video-dayof-registration-old-2"
       ],
       "unchangedStatuses": true,
       "nonSelectedUnchanged": true
@@ -22,7 +22,7 @@
     {
       "action": "undo_check_in",
       "changedIds": [
-        "cmuvk1gk30006c0a5zfzoi42m"
+        "video-dayof-registration-old-2"
       ],
       "unchangedStatuses": true,
       "nonSelectedUnchanged": true
@@ -30,7 +30,7 @@
     {
       "action": "check_in",
       "changedIds": [
-        "cmuvk1gk30006c0a5zfzoi42m"
+        "video-dayof-registration-old-2"
       ],
       "unchangedStatuses": true,
       "nonSelectedUnchanged": true

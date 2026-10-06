@@ -1,0 +1,12 @@
+{
+  "anchor": "Avant de contacter l'équipe, vous pouvez tester l'envoi d'email. Indiquez une",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 24.2,
+    "wordsHeard": "Avant"
+  },
+  "onset": 24.2,
+  "proposedCut": 24.215646,
+  "note": "Proposal only; recut then independently audit before capture"
+}

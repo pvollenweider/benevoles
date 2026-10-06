@@ -1,14 +1,15 @@
 {
   "model": "gemini-3.8-flash",
-  "auditedAt": "2026-10-06T07:43:17.759Z",
-  "revalidatedAt": "2026-10-06T07:43:17.760Z",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-06T15:57:33.817Z",
+  "revalidatedAt": "2026-10-06T17:07:24.167Z",
   "source": "generated narration WAV",
-  "note": "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
   "segments": [
     {
       "id": "welcome",
-      "audioSha256": "b62ebf5d74d56282b41ce8a381420c11da23e93d25e1e112be0c8d56bb2f8823",
-      "recognized": "Pour une mission sensible comme conduire une navette, tenir une caisse ou gérer un accès, l'inscription immédiate n'est pas toujours adaptée. Le mode sur validation permet de recueillir une candidature, de réserver la place, puis de décider avec les bonnes informations.",
+      "audioSha256": "db9e00b4fea739aa2088129297bc4f3a6f805e1ca6c59ef410760658088e66f5",
+      "recognized": "Pour une mission sensible, comme conduire une navette, tenir une caisse ou gérer un accès, l'inscription immédiate n'est pas toujours adaptée. Le mode sur validation permet de recueillir une candidature, de réserver la place, puis de décider avec les bonnes informations.",
       "expected": "Pour une mission sensible, comme conduire une navette, tenir une caisse ou gérer un accès, l’inscription immédiate n’est pas toujours adaptée. Le mode sur validation permet de recueillir une candidature, de réserver la place, puis de décider avec les bonnes informations.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -17,18 +18,18 @@
     },
     {
       "id": "setup",
-      "audioSha256": "e9f8320cefb8d685fd4f930ad903de04fa0c27fd40e433e35c45298e824c87da",
-      "recognized": "Dans le créneau, active sur validation. Ajoute aussi les critères utiles. Ici, vingt-et-un ans minimum et un permis B depuis trois ans dans la consigne. La capacité reste réelle, une demande occupe déjà une place pendant que l'organisation l'examine.",
+      "audioSha256": "4f8ea88034dc060358085fa07e7598c4d6e198aeaba11a87740981ee0a4bd1d6",
+      "recognized": "Dans le créneau active sur validation. Ajoute aussi les critères utiles. Ici, 21 ans minimum et un permis B depuis 3 ans dans la consigne. La capacité reste réelle. Une demande occupe déjà une place pendant que l'organisation l'examine.",
       "expected": "Dans le créneau, active Sur validation. Ajoute aussi les critères utiles : ici, vingt et un ans minimum et un permis B depuis trois ans dans la consigne. La capacité reste réelle : une demande occupe déjà une place pendant que l’organisation l’examine.",
-      "wordErrorRate": 0,
+      "wordErrorRate": 0.09302325581395349,
       "needsReview": false,
       "unexpectedInstructions": [],
       "edgeIssues": []
     },
     {
       "id": "request",
-      "audioSha256": "8f3cbfed30c945ab7da6387ab1aa5cc5729e8b27a675ebcd1c11da4488ccbea8",
-      "recognized": "Côté bénévole, le créneau annonce clairement qu'il est soumis à validation, avant même l'inscription. Une fois le formulaire envoyé, la page personnelle affiche demande envoyée, en attente de réponse. Ce n'est pas présenté comme une confirmation définitive.",
+      "audioSha256": "d64c3aa3b3203dbf15103017ddbaf56a56ec03abf2facbe817446e8a5ff42dde",
+      "recognized": "Côté bénévole, le créneau annonce clairement qu'il est soumis à validation avant même l'inscription. Une fois le formulaire envoyé, la page personnelle affiche : demande envoyée, en attente de réponse. Ce n'est pas présenté comme une confirmation définitive.",
       "expected": "Côté bénévole, le créneau annonce clairement qu’il est soumis à validation avant même l’inscription. Une fois le formulaire envoyé, la page personnelle affiche Demande envoyée, en attente de réponse : ce n’est pas présenté comme une confirmation définitive.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -37,7 +38,7 @@
     },
     {
       "id": "admin",
-      "audioSha256": "a34635d549c9557ca3a4dfaf9f29c9805ccd9a1b465e2da6c9d381cd5b145c94",
+      "audioSha256": "b5464cbe5a305c6332b39f0e7d7fcb920200953643b6a6680c83558db1a40699",
       "recognized": "Dans les inscriptions, le filtre Demandes à traiter isole les candidatures. L'organisateur voit le nom, les coordonnées, les réponses au formulaire, les disponibilités et les éventuels avertissements de charge avant de prendre sa décision.",
       "expected": "Dans les inscriptions, le filtre Demandes à traiter isole les candidatures. L’organisateur voit le nom, les coordonnées, les réponses au formulaire, les disponibilités et les éventuels avertissements de charge avant de prendre sa décision.",
       "wordErrorRate": 0,
@@ -47,7 +48,7 @@
     },
     {
       "id": "decision",
-      "audioSha256": "543e3989826aa8af3f64b9299c00732a7acc63ee6a4091f46f601aad49206768",
+      "audioSha256": "80918ec73767721653f98290846ba498a66ba63fd3b49d9d4936a62c7de2b888",
       "recognized": "Accepter confirme le créneau et envoie un e-mail. Refuser libère la place et prévient aussi la personne. Ce parcours permet d'ajouter un message facultatif sans exposer de note interne. Après avoir vérifié cette possibilité, nous acceptons la demande de Lucas.",
       "expected": "Accepter confirme le créneau et envoie un email. Refuser libère la place et prévient aussi la personne ; ce parcours permet d’ajouter un message facultatif, sans exposer de notes internes. Après avoir vérifié cette possibilité, nous acceptons la demande de Lucas.",
       "wordErrorRate": 0.04878048780487805,
@@ -57,8 +58,8 @@
     },
     {
       "id": "volunteer",
-      "audioSha256": "57091f35efc948e442d5fd2d5df11fe98b2437383ff4d09ba9abfc7902e730b1",
-      "recognized": "Sur sa page personnelle, Lucas voit maintenant le créneau comme confirmé, avec les informations pratiques et son lien calendrier. Avant la décision, il pouvait retirer sa demande lui-même. Après un refus, la mission disparaît de ses engagements actifs.",
+      "audioSha256": "329d346247a9d56dbdc07879e8f67ec891779fbabb7a952e9cc7f19b4670629e",
+      "recognized": "Sur sa page personnelle, Lucas voit maintenant le créneau comme confirmé avec les informations pratiques et son lien calendrier. Avant la décision, il pouvait retirer sa demande lui-même. Après un refus, la mission disparaît de ses engagements actifs.",
       "expected": "Sur sa page personnelle, Lucas voit maintenant le créneau comme confirmé, avec les informations pratiques et son lien calendrier. Avant la décision, il pouvait retirer sa demande lui-même. Après un refus, la mission disparaît de ses engagements actifs.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -67,10 +68,10 @@
     },
     {
       "id": "result",
-      "audioSha256": "1a2d0fb8301adf9dc0a06607ff141274418e2c14d92ffb217e8bea17eceb940b",
-      "recognized": "Le mode sur validation évite donc une affectation risquée sans transformer l'inscription en boîte noire. Les critères sont annoncés avant la demande, la place est réservée pendant l'examen, la décision est traçable et la personne reçoit une réponse claire.",
+      "audioSha256": "f73c842b1fb45b8673c301e689b7998a638d7efb4b6d8283139780974937873d",
+      "recognized": "Le mode survalidation évite donc une affectation risquée sans transformer l'inscription en boîte noire. Les critères sont annoncés avant la demande, la place est réservée pendant l'examen, la décision est traçable et la personne reçoit une réponse claire.",
       "expected": "Le mode sur validation évite donc une affectation risquée sans transformer l’inscription en boîte noire. Les critères sont annoncés avant la demande, la place est réservée pendant l’examen, la décision est traçable et la personne reçoit une réponse claire.",
-      "wordErrorRate": 0,
+      "wordErrorRate": 0.04878048780487805,
       "needsReview": false,
       "unexpectedInstructions": [],
       "edgeIssues": []

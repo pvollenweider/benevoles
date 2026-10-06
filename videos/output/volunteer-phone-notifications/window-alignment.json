@@ -1,0 +1,45 @@
+{
+  "locatedAt": "2026-10-06T16:29:21.812Z",
+  "masterSha256": "08bc542aeb904fe5ebc47dd8c1791a863dc20f5ebcebf1576a4f48c045ba5213",
+  "totalSeconds": 272.48,
+  "cuts": [
+    {
+      "id": "conditions",
+      "seconds": 19.039562500000002
+    },
+    {
+      "id": "personal-link",
+      "seconds": 48.7918545
+    },
+    {
+      "id": "permission",
+      "seconds": 73.1977085
+    },
+    {
+      "id": "active",
+      "seconds": 94.7611875
+    },
+    {
+      "id": "reminders",
+      "seconds": 123.242021
+    },
+    {
+      "id": "delivery",
+      "seconds": 152.851125
+    },
+    {
+      "id": "blocked",
+      "seconds": 181.1648545
+    },
+    {
+      "id": "disable",
+      "seconds": 210.921354
+    },
+    {
+      "id": "result",
+      "seconds": 243.4271875
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans Paramètres, puis Emails, tu choisis les rappels automatiques de toute",
+  "windowStart": 43.025000000000006,
+  "result": {
+    "found": true,
+    "startSeconds": 30.2,
+    "wordsHeard": "Dans Paramètres, puis Emails, tu choisis les rappels automatiques de toute"
+  },
+  "onset": 73.22500000000001,
+  "proposedCut": 73.0245205,
+  "note": "Proposal only; recut then independently audit before capture"
+}

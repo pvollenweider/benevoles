@@ -1,0 +1,12 @@
+{
+  "anchor": "Ces rappels passent par le navigateur, pas par une application Benevol",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 19.36,
+    "wordsHeard": "Ces"
+  },
+  "onset": 19.36,
+  "proposedCut": 19.039562500000002,
+  "note": "Proposal only; recut then independently audit before capture"
+}

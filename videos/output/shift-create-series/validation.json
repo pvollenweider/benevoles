@@ -1,51 +1,52 @@
 {
   "id": "SHIFT_CREATE_SERIES",
   "slug": "shift-create-series",
-  "validatedAt": "2026-10-04T16:46:48.212Z",
+  "validatedAt": "2026-10-06T16:06:55.728Z",
   "continuousNarration": true,
+  "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 91200,
+  "captureMs": 101560,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 7911,
-      "audioMs": 7907,
-      "driftMs": 4
+      "visualMs": 12381,
+      "audioMs": 12380,
+      "driftMs": 1
     },
     {
       "id": "range",
-      "visualMs": 13420,
-      "audioMs": 13418,
-      "driftMs": 2
+      "visualMs": 10760,
+      "audioMs": 10759,
+      "driftMs": 1
     },
     {
       "id": "duration",
-      "visualMs": 13208,
-      "audioMs": 13206,
-      "driftMs": 2
-    },
-    {
-      "id": "preview",
-      "visualMs": 15330,
-      "audioMs": 15327,
-      "driftMs": 3
-    },
-    {
-      "id": "create",
-      "visualMs": 14297,
-      "audioMs": 14297,
+      "visualMs": 15436,
+      "audioMs": 15436,
       "driftMs": 0
     },
     {
+      "id": "preview",
+      "visualMs": 11153,
+      "audioMs": 11152,
+      "driftMs": 1
+    },
+    {
+      "id": "create",
+      "visualMs": 11581,
+      "audioMs": 11580,
+      "driftMs": 1
+    },
+    {
       "id": "adjust",
-      "visualMs": 12403,
-      "audioMs": 12400,
+      "visualMs": 16349,
+      "audioMs": 16346,
       "driftMs": 3
     },
     {
       "id": "result",
-      "visualMs": 10326,
-      "audioMs": 10325,
+      "visualMs": 14028,
+      "audioMs": 14027,
       "driftMs": 1
     }
   ],

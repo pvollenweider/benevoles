@@ -15,7 +15,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Tu utilises Benevol pour la première fois et tu as déjà une liste de bénévoles ? L'import évite de ressaisir chaque personne. Il peut aussi compléter une liste existante. Nous allons utiliser quarante fiches fictives, vérifier les erreurs, puis confirmer seulement quand tout est clair. Bien sûr, tu peux toujours créer les membres manuellement avec Nouveau membre.",
+      "transcript": "Vous utilisez Benevol pour la première fois et vous avez déjà une liste de bénévoles ? L'import évite de ressaisir chaque personne. Il peut aussi compléter une liste existante. Nous allons utiliser quarante fiches fictives, vérifier les erreurs, puis confirmer seulement quand tout est clair. Bien sûr, vous pouvez toujours créer les membres manuellement avec Nouveau membre.",
       "fallbackDurationMs": 34000
     },
     {
@@ -25,7 +25,7 @@
     },
     {
       "id": "preview",
-      "transcript": "Ouvre Importer des membres et choisis le fichier à vérifier. Si un email existe déjà, l'option Ignorer conserve la fiche actuelle. Clique sur Analyser le fichier. Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur. Les colonnes reconnues et les tags sont également indiqués. Rien n'est encore enregistré : tu peux prendre le temps de vérifier.",
+      "transcript": "Ouvrez Importer des membres et choisissez le fichier à vérifier. Si un email existe déjà, l'option Ignorer conserve la fiche actuelle. Cliquez sur Analyser le fichier. Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur. Les colonnes reconnues et les tags sont également indiqués. Rien n'est encore enregistré : vous pouvez prendre le temps de vérifier.",
       "fallbackDurationMs": 37000
     },
     {
@@ -35,27 +35,27 @@
     },
     {
       "id": "update",
-      "transcript": "Avec Retour, tu peux changer l'option puis refaire l'analyse. Mettre à jour remplace le prénom, le nom, le téléphone et les tags de la fiche portant le même email. Cela réactive aussi une fiche inactive. Les tags ne sont donc pas simplement ajoutés aux anciens : vérifie bien les valeurs du fichier. Ici, Camille et Julien passent de Ignorer à Mettre à jour, sans créer de nouvelles fiches pour ces adresses.",
+      "transcript": "Avec Retour, vous pouvez changer l'option puis refaire l'analyse. Mettre à jour remplace le prénom, le nom, le téléphone et les tags de la fiche portant le même email. Cela réactive aussi une fiche inactive. Les tags ne sont donc pas simplement ajoutés aux anciens : vérifiez bien les valeurs du fichier. Ici, Camille et Julien passent de Ignorer à Mettre à jour, sans créer de nouvelles fiches pour ces adresses.",
       "fallbackDurationMs": 43000
     },
     {
       "id": "corrected",
-      "transcript": "Nous choisissons maintenant le fichier Excel corrigé et relançons l'analyse. Les erreurs ont disparu. Les quarante lignes sont reconnues, dont les deux adresses déjà présentes. René n'a pas d'email : sa fiche peut être créée avec son téléphone. Vérifie une dernière fois les noms, les catégories et le récapitulatif. Le fichier est limité à deux mégaoctets et cinq mille lignes par import.",
+      "transcript": "Nous choisissons maintenant le fichier Excel corrigé et relançons l'analyse. Les erreurs ont disparu. Les quarante lignes sont reconnues, dont les deux adresses déjà présentes. René n'a pas d'email : sa fiche peut être créée avec son téléphone. Vérifiez une dernière fois les noms, les catégories et le récapitulatif. Le fichier est limité à deux mégaoctets et cinq mille lignes par import.",
       "fallbackDurationMs": 39000
     },
     {
       "id": "confirm",
-      "transcript": "Quand l'aperçu te convient, confirme l'import. Cette fois, les fiches sont enregistrées. Le résultat indique combien ont été créées, mises à jour ou ignorées, et signale les éventuelles lignes non importées. Ferme la fenêtre et recherche Maya : elle est maintenant dans la liste. Ouvre sa fiche pour vérifier son téléphone et ses tags. Importer une personne ne l'inscrit à aucun créneau.",
+      "transcript": "Quand l'aperçu te convient, confirme l'import. Cette fois, les fiches sont enregistrées. Le résultat indique combien ont été créées, mises à jour ou ignorées, et signale les éventuelles lignes non importées. Ferme la fenêtre et recherchez Maya : elle est maintenant dans la liste. Ouvrez sa fiche pour vérifier son téléphone et ses tags. Importer une personne ne l'inscrit à aucun créneau.",
       "fallbackDurationMs": 39000
     },
     {
       "id": "repeat",
-      "transcript": "Si tu analyses de nouveau ce fichier avec Ignorer, les emails déjà présents sont reconnus. Mais attention aux fiches sans email : le système ne peut pas les rapprocher par leur adresse, et le même nom ne suffit pas. Ne confirme donc pas une seconde fois machinalement. Regarde toujours le nombre de créations prévues, puis annule si tu ne souhaites rien ajouter.",
+      "transcript": "Si vous analysez de nouveau ce fichier avec Ignorer, les emails déjà présents sont reconnus. Mais attention aux fiches sans email : le système ne peut pas les rapprocher par leur adresse, et le même nom ne suffit pas. Ne confirmez donc pas une seconde fois machinalement. Regardez toujours le nombre de créations prévues, puis annulez si vous ne souhaitez rien ajouter.",
       "fallbackDurationMs": 34000
     },
     {
       "id": "result",
-      "transcript": "Ta liste est prête à être utilisée pour les prochaines invitations. Garde un fichier simple, vérifie les coordonnées et lis l'aperçu avant chaque confirmation. Si quelques personnes manquent, ajoute-les manuellement. Et si leurs disponibilités changent, complète leur fiche séparément. L'import fait gagner du temps, tout en te laissant le dernier mot sur ce qui sera enregistré.",
+      "transcript": "Ta liste est prête à être utilisée pour les prochaines invitations. Garde un fichier simple, vérifiez les coordonnées et lis l'aperçu avant chaque confirmation. Si quelques personnes manquent, ajoute-les manuellement. Et si leurs disponibilités changent, complète leur fiche séparément. L'import fait gagner du temps, tout en te laissant le dernier mot sur ce qui sera enregistré.",
       "fallbackDurationMs": 32000
     }
   ],

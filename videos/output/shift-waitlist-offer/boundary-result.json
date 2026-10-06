@@ -1,0 +1,12 @@
+{
+  "anchor": "La liste d’attente est utile pour les missions demandées, mais elle",
+  "windowStart": 47.565,
+  "result": {
+    "found": true,
+    "startSeconds": 30.4,
+    "wordsHeard": "La liste d’attente est utile pour les missions demandées, mais elle"
+  },
+  "onset": 77.965,
+  "proposedCut": 77.56475,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "organizationId": "video-questions",
+  "eventId": "video-questions-event",
+  "memberId": "video-questions-aline",
+  "owner": "video.questions.owner@example.org",
+  "email": "video.questions.aline@example.org",
+  "date": "2026-11-28T00:00:00.000Z",
+  "shifts": [
+    "video-questions-shift-0",
+    "video-questions-shift-1",
+    "video-questions-shift-2",
+    "video-questions-shift-3"
+  ],
+  "organizationCreatedAt": "2026-10-06T17:31:57.094Z",
+  "fixtureSchemaSha256": "f2211b26186e56106904469ff63feb0f5e22b98a9249c497370d46d9bd23c00d",
+  "preparedAt": "2026-10-06T17:31:57.173Z"
+}

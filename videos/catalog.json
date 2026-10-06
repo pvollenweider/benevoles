@@ -168,7 +168,7 @@
       ],
       "feature": "Création d'un événement",
       "updatedAt": "2026-10-06",
-      "revision": 2,
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -343,6 +343,30 @@
       "level": "avance"
     },
     {
+      "id": "EVENT_QUESTIONS",
+      "manifest": "event-questions",
+      "category": "event-preparation",
+      "tags": [
+        "questions",
+        "formulaire",
+        "réponses",
+        "t-shirts",
+        "synthèse"
+      ],
+      "published": true,
+      "themes": [
+        "evenement-cycle-de-vie",
+        "inscriptions-communication"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Questions aux bénévoles",
+      "updatedAt": "2026-10-06",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
       "id": "SHIFTS_ROLES_VIEWS",
       "manifest": "shifts-roles-views",
       "category": "planning",
@@ -413,8 +437,8 @@
         "organisateur"
       ],
       "feature": "Séries de créneaux",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -436,9 +460,9 @@
       "audience": [
         "organisateur"
       ],
-      "feature": "Timeline du planning",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "feature": "Frise du planning",
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "avance"
     },
     {
@@ -462,8 +486,8 @@
         "organisateur"
       ],
       "feature": "Créneaux de nuit et changement d'heure",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "avance"
     },
     {
@@ -540,8 +564,8 @@
         "organisateur"
       ],
       "feature": "Règles d'éligibilité des postes",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "avance"
     },
     {
@@ -718,6 +742,31 @@
       ]
     },
     {
+      "id": "VOLUNTEER_PHONE_NOTIFICATIONS",
+      "manifest": "volunteer-phone-notifications",
+      "category": "volunteer-experience",
+      "tags": [
+        "notifications",
+        "push",
+        "téléphone",
+        "autorisations",
+        "rappels"
+      ],
+      "published": false,
+      "captureReady": false,
+      "seedScenario": "personal-phone-notifications",
+      "themes": [
+        "parcours-benevole"
+      ],
+      "audience": [
+        "benevole"
+      ],
+      "feature": "Rappels par notification sur téléphone",
+      "updatedAt": "2026-10-06",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
       "id": "VOLUNTEER_REGISTER",
       "manifest": "volunteer-register-mobile",
       "category": "volunteer-journey",
@@ -877,8 +926,8 @@
         "organisateur"
       ],
       "feature": "Liste des membres",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -977,8 +1026,8 @@
         "organisateur"
       ],
       "feature": "Pointage des présences",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -1199,7 +1248,54 @@
         "organisateur"
       ],
       "feature": "Import des membres",
-      "updatedAt": "2026-10-05",
+      "updatedAt": "2026-10-06",
+      "revision": 2,
+      "level": "essentiel"
+    },
+    {
+      "id": "MEMBERS_DUPLICATES_MERGE",
+      "manifest": "members-duplicates-merge",
+      "category": "registrations-followup",
+      "tags": [
+        "membres",
+        "doublons",
+        "fusion",
+        "liens-personnels"
+      ],
+      "published": true,
+      "seedScenario": "members-duplicates-merge",
+      "themes": [
+        "membres-invitations"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Doublons et fusion de membres",
+      "updatedAt": "2026-10-06",
+      "revision": 1,
+      "level": "avance"
+    },
+    {
+      "id": "VOLUNTEER_HOURS_CERTIFICATE",
+      "manifest": "volunteer-hours-certificate",
+      "category": "registrations-followup",
+      "tags": [
+        "heures",
+        "présences",
+        "attestation",
+        "bilan",
+        "reconnaissance"
+      ],
+      "published": false,
+      "themes": [
+        "membres-invitations",
+        "tracabilite-donnees"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Heures de bénévolat et attestation",
+      "updatedAt": "2026-10-06",
       "revision": 1,
       "level": "essentiel"
     },
@@ -1238,7 +1334,7 @@
         "échecs",
         "relances"
       ],
-      "published": false,
+      "published": true,
       "captureReady": true,
       "themes": [
         "inscriptions-communication",

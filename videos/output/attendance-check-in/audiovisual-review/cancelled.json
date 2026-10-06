@@ -1,50 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:08:32.714Z",
-  "videoSha256": "58705cd0468ab625a8108945bd9244cff798768e56f4403e42e7c79dbda4612a",
-  "promptSha256": "e5f6dd5dc63cdddb65e497a28589f176aabb7b2e957e5edcb0cfca19660a5d04",
-  "clipSha256": "6a4a09d4df7c8a2ec424b7385ee155a792b02d9de0d5ad4158e54013db6bfd96",
+  "reviewedAt": "2026-10-06T17:39:03.989Z",
+  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "promptSha256": "e651907690a81f7056a6247d5530f3d2b527df1e9dfbc41e2cb80c531b8bc478",
+  "clipSha256": "6558b89f408896a06a6f1a56b0fda330fd4ec9be8b6448c9b1dd8d5744a4e118",
   "scene": "cancelled",
   "review": {
     "heardOpening": "Un cas à regarder de près",
     "checkpoints": [
       {
-        "spokenSeconds": 5.5,
+        "spokenSeconds": 5.6,
         "spoken": "Enregistrons d'abord sa présence",
         "visibleSeconds": 5.2,
-        "visible": "Sarah est cochée puis marquée présente dans la liste des inscriptions.",
+        "visible": "Sarah Exemple est sélectionnée et marquée présente",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.5,
+        "spokenSeconds": 7.4,
         "spoken": "ouvrons son créneau dans la liste",
-        "visibleSeconds": 9.5,
-        "visible": "Basculement sur l'onglet Liste de la vue Créneaux.",
+        "visibleSeconds": 8.8,
+        "visible": "Navigation vers l'onglet Événements puis affichage Liste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
+        "spokenSeconds": 11.2,
         "spoken": "confirmons la suppression",
-        "visibleSeconds": 12.3,
-        "visible": "Clic sur le bouton Supprimer dans la boîte de dialogue de confirmation.",
+        "visibleSeconds": 12.2,
+        "visible": "Clic sur le bouton Supprimer dans la boîte de dialogue",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.5,
+        "spokenSeconds": 14.2,
         "spoken": "Revenons aux inscriptions : sa ligne a disparu",
-        "visibleSeconds": 15.6,
-        "visible": "Retour à la vue Inscriptions où le créneau de Sarah n'apparaît plus.",
+        "visibleSeconds": 15,
+        "visible": "Page Inscriptions affichée sans la ligne de Sarah",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18.5,
+        "spokenSeconds": 17.1,
         "spoken": "Téléchargeons le fichier pour vérifier le bilan",
-        "visibleSeconds": 19.8,
-        "visible": "Clic sur Exporter les présences (CSV) puis affichage du tableau du fichier exporté.",
+        "visibleSeconds": 18.5,
+        "visible": "Clic sur Exporter les présences et ouverture du tableau CSV",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix pédagogique fluide, débit régulier et bonne articulation."
+      "observation": "Débit régulier et articulation claire, en accord avec les actions affichées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

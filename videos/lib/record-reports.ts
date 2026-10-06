@@ -4,41 +4,61 @@
 import type { Locator, Page } from "playwright"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
+import { verifyProductBuild } from "./product-build"
+import { parse } from "csv-parse/sync"
 import { recordReportDocuments } from "./record-report-documents"
-import { showDownloadedCsv } from "./show-downloaded-csv"
 
 type Scene = (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => Promise<void>
 
 export async function recordReports(options: { page: Page; base: string; eventId: string; directory: string; title: string; scene: Scene; tap: (page: Page, target: Locator) => Promise<void>; settle: (page: Page) => Promise<void> }) {
   const { page, base, eventId, directory, title, scene, tap, settle } = options
+  const product = await verifyProductBuild(base)
+  const documents = JSON.parse(await readFile(path.join(directory, "documents", "report-preflight.json"), "utf8"))
+  if (documents.product?.commit !== product.commit || documents.product?.buildId !== product.buildId) throw new Error("Regenerate report documents on the capture build before filming")
   const formUrl = `${base}/admin/events/${eventId}/print`
   await page.goto(`${base}/admin/events/${eventId}`); await settle(page)
   await scene("welcome", async at => {
     await page.screencast.showChapter(title, { duration: 2400 })
-    await at(0.43); await tap(page, page.getByRole("link", { name: "Rapports", exact: true }))
+    await at(0.23); await tap(page, page.getByRole("link", { name: "Rapports", exact: true }))
     await page.waitForURL(formUrl); await settle(page)
+    const headings = await page.getByRole("heading").allTextContents()
+    const expected = ["À afficher ou à remettre aux bénévoles", "Pour les organisateurs seulement", "Badges", "Résumé de l'événement", "Archive"]
+    let previous = -1
+    for (const text of expected) {
+      const position = headings.findIndex(heading => heading.includes(text))
+      if (position <= previous) throw new Error(`Current main report order missing: ${text}`)
+      previous = position
+    }
+    await page.getByRole("link", { name: /^Synthèse des réponses/ }).waitFor()
+    await at(0.56); await page.getByRole("heading", { name: "Badges", exact: true }).scrollIntoViewIfNeeded()
+    await at(0.76); await page.getByRole("heading", { name: "Archive", exact: true }).scrollIntoViewIfNeeded()
   })
   await recordReportDocuments(options)
   await scene("answers", async at => {
-    await page.goto(`${base}/admin/events/${eventId}/registrations`); await settle(page)
-    await at(0.14)
+    await page.goto(`${base}/admin/events/${eventId}/questions`); await settle(page)
+    await page.getByRole("heading", { name: "Synthèse des réponses", exact: true }).scrollIntoViewIfNeeded()
+    await page.getByText(/Chaque bénévole compte une fois/).waitFor()
+    await at(0.35)
     const ready = page.waitForEvent("download")
-    await tap(page, page.getByRole("link", { name: /Exporter les présences/ }))
+    await tap(page, page.getByRole("link", { name: /^Télécharger la synthèse/ }))
     const download = await ready
-    const file = path.join(directory, "documents", "attendance.csv")
+    const file = path.join(directory, "documents", "answers-summary.csv")
     await download.saveAs(file)
-    await at(0.32)
-    const csv = await showDownloadedCsv(page, file)
-    if (csv.rows.length !== 84 || csv.people !== 80) throw new Error("Unexpected document fixture in CSV")
-    await at(0.45); await page.locator(".scroll").evaluate(el => { el.scrollLeft = el.scrollWidth })
-    await at(0.63)
-    const person = page.getByLabel("Lecture d’une personne dans le fichier :", { exact: true })
-    await tap(page, person)
-    await person.selectOption("video.documents.000@example.org")
-    await page.getByText("5 lignes affichées sur 84. Le fichier téléchargé reste inchangé.", { exact: true }).waitFor()
-    const leaRows = page.locator("tbody tr").filter({ has: page.getByRole("cell", { name: "Léa", exact: true }) })
-    if (await leaRows.count() !== 5) throw new Error("Expected five actual CSV rows for Léa")
-    await leaRows.last().scrollIntoViewIfNeeded()
+    const csv = await readFile(file, "utf8")
+    if (!csv.includes("Taille") || csv.includes("video.documents.000@example.org")) throw new Error("Unexpected summary CSV or private coordinates included")
+    const rows = parse(csv, { bom: true, delimiter: ";", columns: true }) as Record<string, string>[]
+    const questionLabels = [...new Set(rows.map(row => row.Question))]
+    if (questionLabels.length !== 2 || questionLabels.some(label => rows.filter(row => row.Question === label).reduce((sum, row) => sum + Number(row["Confirmés"]), 0) !== 80)) throw new Error("Summary must count 80 people, not 84 registrations, for each question")
+    await at(0.60)
+    const popupReady = page.waitForEvent("popup")
+    await tap(page, page.getByRole("link", { name: /^Imprimer la synthèse/ }))
+    const popup = await popupReady
+    await popup.waitForLoadState("networkidle")
+    const url = new URL(popup.url())
+    if (url.origin !== new URL(base).origin || !url.pathname.endsWith("/export/sheets/answers")) throw new Error("Unexpected answer summary destination")
+    await popup.close()
+    await page.goto(url.href); await settle(page)
+    await page.getByText(/Taille/).first().waitFor()
   })
   await scene("print", async at => {
     // These PNGs are Poppler renders of the real application-generated PDFs.

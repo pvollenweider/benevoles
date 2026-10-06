@@ -1,0 +1,43 @@
+{
+  "scope": "Generated source WAV auditing and optional chapter recutting only. No new TTS, UI capture, database, product proof, final MP4 or completion certification.",
+  "ids": [
+    "MEMBERS_MANAGEMENT"
+  ],
+  "updatedAt": "2026-10-06T16:01:41.976Z",
+  "active": null,
+  "attempts": [
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "stage": "source-audit",
+      "startedAt": "2026-10-06T15:59:04.415Z",
+      "finishedAt": "2026-10-06T16:00:20.218Z",
+      "exitCode": 1,
+      "timedOut": false,
+      "signal": null
+    },
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "stage": "window-alignment",
+      "startedAt": "2026-10-06T16:00:20.219Z",
+      "finishedAt": "2026-10-06T16:00:40.649Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "signal": null
+    },
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "stage": "source-reaudit",
+      "startedAt": "2026-10-06T16:00:40.650Z",
+      "finishedAt": "2026-10-06T16:01:41.975Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "signal": null
+    }
+  ],
+  "results": [
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "status": "source-audited"
+    }
+  ]
+}

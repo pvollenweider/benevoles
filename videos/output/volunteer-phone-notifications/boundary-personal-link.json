@@ -1,0 +1,12 @@
+{
+  "anchor": "Ouvre ton lien personnel, celui que tu as reçu après ton",
+  "windowStart": 18.792,
+  "result": {
+    "found": true,
+    "startSeconds": 30.34,
+    "wordsHeard": "Ouvre ton lien personnel, celui que tu as reçu après ton"
+  },
+  "onset": 49.132000000000005,
+  "proposedCut": 48.7918545,
+  "note": "Proposal only; recut then independently audit before capture"
+}

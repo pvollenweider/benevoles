@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:37:31.411Z",
+  "videoSha256": "4f2463aa78f990278c1913f94a35e27170bbb7b98cd4fc848478da990a80a1cb",
+  "promptSha256": "b394b39a795e3bf5c0a46bac33ffc486b62e7cadcf60fe43f190e7e5e6389acd",
+  "clipSha256": "3a47c61a61cdde8fcd5bfb1b0c8244930e6b982f5e701cf0bf33921da0790c02",
+  "scene": "filter",
+  "review": {
+    "heardOpening": "Avec le filtre de tags, vous pouvez",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Avec le filtre de tags, vous pouvez afficher seulement les personnes d'une catégorie",
+        "visibleSeconds": 2.8,
+        "visible": "Sélection du tag 'accueil' dans le filtre et actualisation du tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "puis revenir à Tous les tags",
+        "visibleSeconds": 7.5,
+        "visible": "Réinitialisation du menu déroulant sur 'Tous les tags'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Les en-têtes permettent aussi de trier la liste",
+        "visibleSeconds": 8,
+        "visible": "Colonnes du tableau visibles avec en-têtes sans action de tri",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Les heures planifiées additionnent les durées des créneaux passés",
+        "visibleSeconds": 10,
+        "visible": "Colonne 'Heures planifiées' visible à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Les heures attestées en sont la part avec une présence enregistrée",
+        "visibleSeconds": 15,
+        "visible": "Colonne 'Heures attestées' visible à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction posée et claire, débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

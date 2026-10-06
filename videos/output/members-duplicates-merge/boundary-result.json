@@ -1,0 +1,12 @@
+{
+  "anchor": "Fusion effectuée : le résultat indique ce qui a été déplacé.",
+  "windowStart": 113.50900000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 30.7,
+    "wordsHeard": "Fusion effectuée"
+  },
+  "onset": 144.209,
+  "proposedCut": 144.0824585,
+  "note": "Proposal only; recut then independently audit before capture"
+}

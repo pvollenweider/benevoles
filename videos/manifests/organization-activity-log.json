@@ -66,7 +66,7 @@
     },
     {
       "id": "result",
-      "transcript": "Nous avons retrouvé les actions sur les membres et l'équipe, lu la suite de la liste et ouvert l'export complet. Pour avancer, le plus utile est souvent une question simple : j'ai vu ce changement, peux-tu m'expliquer ? Le journal facilite cette conversation. Il donne des repères quand plusieurs personnes organisent ensemble, sans remplacer leurs échanges ni leurs droits. Une fois le point compris, revenons à la fiche ou aux paramètres concernés pour faire la bonne correction, tranquillement.",
+      "transcript": "Nous avons retrouvé les actions sur les membres et l'équipe, lu la suite de la liste et ouvert l'export complet. Pour avancer, le plus utile est souvent une question simple : j'ai vu ce changement, pouvez-vous m'expliquer ? Le journal facilite cette conversation. Il donne des repères quand plusieurs personnes organisent ensemble, sans remplacer leurs échanges ni leurs droits. Une fois le point compris, revenons à la fiche ou aux paramètres concernés pour faire la bonne correction, tranquillement.",
       "fallbackDurationMs": 49000
     }
   ],

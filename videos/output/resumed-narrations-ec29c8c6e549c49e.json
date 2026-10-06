@@ -1,0 +1,14 @@
+{
+  "updatedAt": "2026-10-06T17:04:30.655Z",
+  "requested": [
+    "ATTENDANCE_CHECK_IN"
+  ],
+  "active": null,
+  "scope": "Narration only, not capture, MP4 synchronization or completion",
+  "results": [
+    {
+      "id": "ATTENDANCE_CHECK_IN",
+      "status": "source-audited"
+    }
+  ]
+}

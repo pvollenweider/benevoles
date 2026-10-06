@@ -1,12 +1,12 @@
 {
-  "anchor": "Dans un export calendrier, chaque créneau contient un instant précis avec",
-  "windowStart": 38.494,
+  "anchor": "Depuis la page personnelle de notre bénévole fictif, téléchargeons son planning",
+  "windowStart": 41.134,
   "result": {
     "found": true,
-    "startSeconds": 30.2,
-    "wordsHeard": "Dans un export calendrier, chaque créneau contient un instant précis avec"
+    "startSeconds": 30.3,
+    "wordsHeard": "Depuis la page personnelle de notre bénévole fictif, téléchargeons son planning"
   },
-  "onset": 68.694,
-  "proposedCut": 68.4935835,
+  "onset": 71.434,
+  "proposedCut": 71.13360399999999,
   "note": "Proposal only; recut then independently audit before capture"
 }

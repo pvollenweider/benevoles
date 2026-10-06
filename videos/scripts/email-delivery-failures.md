@@ -1,6 +1,16 @@
 # Comprendre un email en attente ou en échec
 
+La narration vouvoie les organisateurs et reste souriante et bienveillante. Les citations destinées aux bénévoles peuvent employer « tu » ; ce n’est pas l’adresse au spectateur de cette formation.
+
 Vidéo autonome 43. Préparation uniquement, durée visée six minutes. Une seule voix chaleureuse et souriante. Aucun écran d'échec inventé ne sera présenté comme une panne réellement constatée.
+
+## Reprise avec le worker actuel de main — 6 octobre 2026
+
+Les comptes rendus historiques plus bas décrivent des prises anciennes et ne valident pas le produit actuel. Le worker chargé depuis le snapshot propre vérifié (avec son `tsconfig`, ses alias et son client Prisma généré) remplace désormais les imports du vieux checkout. Sa preuve commit/source/BUILD_ID accompagne la préparation.
+
+La préparation attend exactement sept refus temporaires 451 (Sarah une fois, Emma six fois), un refus permanent 550 (Léa une fois), et une remise réussie. La campagne filmée refuse définitivement Emma une fois seulement ; avancer l'horloge ne doit pas créer d'autre tentative. Après correction, le renvoi produit une nouvelle remise SMTP réelle.
+
+Les chapitres `states`, `reason` et `campaign` ont changé : narration continue à régénérer avant la nouvelle capture. Aucun ancien MP4 ni ancienne preuve de worker ne doit être réattribué à cette version. Nouvelle préparation, capture puis contrôles audio et audiovisuels requis ; ces modifications n'ont pas encore été exécutées contre la DB.
 
 ## Utilité
 
@@ -9,8 +19,8 @@ Trouver pourquoi une information n'a pas été remise, choisir entre réessayer 
 ## Démonstration
 
 1. **Trouver le suivi.** Ouvrir Paramètres puis Emails. Montrer les lignes récentes : date, type, destinataire, état et détail. Distinguer le propriétaire, qui peut changer les réglages d'emails, et l'organisateur, qui peut consulter les livraisons et renvoyer un échec sans changer ces réglages.
-2. **Lire les quatre états.** En attente d'envoi signifie mis en file ; Nouvel essai prévu signifie qu'une tentative a échoué et qu'une autre est prévue ; Envoyé signifie remis au serveur, pas lu ; Échec définitif signifie que la limite des six tentatives a été atteinte. Montrer l'heure d'envoi ou de prochain essai et le compteur de tentatives sur de vraies lignes.
-3. **Comprendre la raison.** Lire un rejet contrôlé du serveur SMTP local, par exemple un destinataire de test refusé. Expliquer la différence entre une panne temporaire et une adresse à vérifier. Une acceptation SMTP ne prouve pas que l'adresse finale existe : certains rejets arrivent après cette acceptation et ne sont pas forcément visibles dans ce tableau. Ne pas prétendre afficher tous les bounces possibles.
+2. **Lire les quatre états.** En attente d'envoi signifie mis en file ; Nouvel essai prévu signifie un échec temporaire ; Envoyé signifie remis au serveur, pas lu. Échec définitif arrive après six tentatives temporaires échouées, ou immédiatement après un refus SMTP permanent. Montrer Emma à six essais temporaires 451 et Léa arrêtée après un seul refus permanent 550, sans confondre ces causes.
+3. **Comprendre la raison.** Lire les phrases françaises réellement affichées, pas le rejet SMTP brut : refus définitif avec boîte aux lettres introuvable et adresse à vérifier, ou échec temporaire avec nouvel essai. Une acceptation SMTP ne prouve pas que l'adresse finale existe : certains rejets arrivent après cette acceptation et ne sont pas forcément visibles dans ce tableau. Ne pas prétendre afficher tous les bounces possibles.
 4. **Renvoyer après une panne résolue.** Sur un échec définitif issu d'une panne locale réellement provoquée, rétablir le service de test. Cliquer sur Renvoyer, constater le retour en file puis l'email réellement reçu et l'état Envoyé. Ce bouton réessaie le même email ; ce n'est pas un nouvel envoi à tous les bénévoles.
 5. **Une adresse erronée.** Ouvrir la fiche du membre fictif et corriger son adresse. Montrer que l'ancienne ligne en échec garde son ancien destinataire : le contenu de cet email avait été préparé auparavant. Ne pas cliquer Renvoyer en promettant qu'il utilisera la nouvelle adresse. Déclencher ensuite une nouvelle action appropriée qui prépare un email à partir de la fiche corrigée, puis vérifier son vrai destinataire dans Mailpit. Le parcours exact doit être testé avant narration finale.
 6. **Le suivi d'un message ciblé.** Revenir dans l'événement, sous la page de message. Montrer Messages envoyés : objet, public, auteur, date, nombre et état de remise. Voir le texte envoyé, puis renvoyer seulement les emails en échec si la campagne de démonstration en contient. Vérifier qu'un second clic ne réenvoie pas les emails déjà remis en file ou déjà réussis. Les confirmations et rappels automatiques ne constituent pas des campagnes de cette liste.

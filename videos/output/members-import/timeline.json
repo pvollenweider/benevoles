@@ -1,52 +1,151 @@
 {
   "slug": "members-import",
-  "recordedAt": "2026-10-05T13:36:08.699Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T17:20:09.146Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "3228837c0ffa1d93867eb9200956b2ff0448e06c",
+    "sourceTree": "6146958f74b413779c87f870cce38d68f0e44a1e",
+    "productSourceSha256": "00d9d529ba5496c5cfec8a5b9d1133323690d39bdb4c4a0edcc7561257bb580b",
+    "buildId": "jOURT8sPJjj6JgROq8uOd",
+    "snapshot": "/tmp/benevoles-video-production.4YeEsm",
+    "builtAt": "2026-10-06T16:22:02.273Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "MEMBERS_IMPORT",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 22983
+    },
+    {
+      "kind": "click",
+      "atMs": 58514
+    },
+    {
+      "kind": "click",
+      "atMs": 99148
+    },
+    {
+      "kind": "click",
+      "atMs": 99960
+    },
+    {
+      "kind": "click",
+      "atMs": 105877
+    },
+    {
+      "kind": "click",
+      "atMs": 126592
+    },
+    {
+      "kind": "click",
+      "atMs": 131225
+    },
+    {
+      "kind": "click",
+      "atMs": 153285
+    },
+    {
+      "kind": "click",
+      "atMs": 161607
+    },
+    {
+      "kind": "click",
+      "atMs": 162437
+    },
+    {
+      "kind": "click",
+      "atMs": 164074
+    },
+    {
+      "kind": "click",
+      "atMs": 174324
+    },
+    {
+      "kind": "click",
+      "atMs": 177723
+    },
+    {
+      "kind": "key",
+      "atMs": 178032
+    },
+    {
+      "kind": "click",
+      "atMs": 179391
+    },
+    {
+      "kind": "click",
+      "atMs": 180207
+    },
+    {
+      "kind": "click",
+      "atMs": 180990
+    },
+    {
+      "kind": "click",
+      "atMs": 193807
+    },
+    {
+      "kind": "click",
+      "atMs": 194590
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
       "startMs": 0,
-      "endMs": 20296
+      "endMs": 22025
     },
     {
       "id": "file",
-      "startMs": 20748,
-      "endMs": 46958
+      "startMs": 22479,
+      "endMs": 48088
     },
     {
       "id": "preview",
-      "startMs": 47410,
-      "endMs": 73630
+      "startMs": 48543,
+      "endMs": 74170
     },
     {
       "id": "errors",
-      "startMs": 74082,
-      "endMs": 99073
+      "startMs": 74623,
+      "endMs": 98200
     },
     {
       "id": "update",
-      "startMs": 99524,
-      "endMs": 126277
+      "startMs": 98652,
+      "endMs": 125660
     },
     {
       "id": "corrected",
-      "startMs": 126729,
-      "endMs": 153374
+      "startMs": 126111,
+      "endMs": 151885
     },
     {
       "id": "confirm",
-      "startMs": 153827,
-      "endMs": 178799
+      "startMs": 152337,
+      "endMs": 176764
     },
     {
       "id": "repeat",
-      "startMs": 179252,
-      "endMs": 199555
+      "startMs": 177216,
+      "endMs": 198680
     },
     {
       "id": "result",
-      "startMs": 200010,
-      "endMs": 221040
+      "startMs": 199134,
+      "endMs": 220318
     }
   ]
 }

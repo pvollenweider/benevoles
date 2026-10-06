@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:36:24.755Z",
+  "videoSha256": "4f2463aa78f990278c1913f94a35e27170bbb7b98cd4fc848478da990a80a1cb",
+  "promptSha256": "43910318e8ad4e1a7be281eccbb12207a37565536eb866eb1c07556a8f6d4ad8",
+  "clipSha256": "bdec29c8c70298c42aa0a1e59bf1140912087969fa085bba62b5472802f4910c",
+  "scene": "create",
+  "review": {
+    "heardOpening": "Pour ajouter une personne, cliquez sur Nouveau membre.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "cliquez sur Nouveau membre",
+        "visibleSeconds": 1,
+        "visible": "Ouverture de la modale d'ajout Nouveau membre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "Saisissez son prénom et son nom, puis son email et son téléphone",
+        "visibleSeconds": 2.5,
+        "visible": "Saisie successive des champs prénom, nom, email et téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.2,
+        "spoken": "Nous ajoutons Maya Berger avec des coordonnées de démonstration",
+        "visibleSeconds": 3,
+        "visible": "Informations de Maya Berger renseignées à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "Après la création, Maya apparaît dans la liste",
+        "visibleSeconds": 18,
+        "visible": "Fermeture de la modale et ajout visible de Maya Berger dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

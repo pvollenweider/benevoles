@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:37:50.873Z",
+  "videoSha256": "4f2463aa78f990278c1913f94a35e27170bbb7b98cd4fc848478da990a80a1cb",
+  "promptSha256": "6afdd050997c464362c1c9db8683ee0de0ea23ec99eac29e76c30933785b7ee1",
+  "clipSha256": "d19d11722218461a330869462ba3dcb44cf0caddef08d3f942cd5f22b3d1ff91",
+  "scene": "deactivate",
+  "review": {
+    "heardOpening": "Pour mettre une fiche de côté",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "nous confirmons sa désactivation",
+        "visibleSeconds": 2.5,
+        "visible": "Clic sur Désactiver dans la modale de confirmation",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "elle disparaît de la liste habituelle",
+        "visibleSeconds": 3.2,
+        "visible": "La liste devient vide avec message d'absence de résultat",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Avec Inclure inactifs, nous la retrouvons",
+        "visibleSeconds": 9.8,
+        "visible": "Coche de Inclure inactifs et réapparition de Maya Berger",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Dans Éditer, la case Membre actif permet de la réactiver",
+        "visibleSeconds": 11.2,
+        "visible": "Modale d'édition ouverte et fermée avant l'annonce vocale",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:11 - 00:14 : La modale d'édition est ouverte et validée avant que la voix ne commence à expliquer l'étape Éditer."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire et débit régulier, malgré l'avance des actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

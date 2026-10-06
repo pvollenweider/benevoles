@@ -1,12 +1,12 @@
 {
   "anchor": "Dans les réglages de l'événement, le Message de rappel complète le",
-  "windowStart": 13.448,
+  "windowStart": 0,
   "result": {
     "found": true,
-    "startSeconds": 8.95,
-    "wordsHeard": "Dans les réglages de l'événement, le Message de rappel complète le"
+    "startSeconds": 21,
+    "wordsHeard": "Dans"
   },
-  "onset": 22.398,
-  "proposedCut": 22.379625,
+  "onset": 21,
+  "proposedCut": 21.213896,
   "note": "Proposal only; recut then independently audit before capture"
 }

@@ -1,12 +1,12 @@
 {
   "anchor": "Sur téléphone, la même page accompagne le responsable sur le terrain.",
-  "windowStart": 62.534000000000006,
+  "windowStart": 57.94999999999999,
   "result": {
     "found": true,
-    "startSeconds": 26.6,
+    "startSeconds": 30.2,
     "wordsHeard": "Sur téléphone, la même page accompagne le responsable sur le terrain."
   },
-  "onset": 89.13400000000001,
-  "proposedCut": 88.6991455,
+  "onset": 88.14999999999999,
+  "proposedCut": 87.94954200000001,
   "note": "Proposal only; recut then independently audit before capture"
 }

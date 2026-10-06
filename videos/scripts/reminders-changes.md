@@ -1,5 +1,7 @@
 # Rappeler le rendez-vous et prévenir quand le planning change
 
+Révision rédactionnelle du 6 octobre 2026 : narration adressée aux organisateurs au vouvoiement, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. Les anciennes preuves audio ne valident pas ce nouveau texte ; narration, sous-titres, synchronisation et MP4 final sont à recontrôler après régénération.
+
 Vidéo autonome 42. Prévisualisation narrée générée avec une seule voix Kore, chaleureuse et souriante.
 
 État courant au 5 octobre 2026 : neuf chapitres audio et montage passent ; rappels manuels, trois rappels automatiques sans doublon, modification et annulation ont produit de vrais emails locaux. La transition vers le brouillon et le retour au planning sont corrigés dans la dernière capture. Sa revue automatisée ne signale plus ces deux points, mais indique à tort l'absence d'annulation préalable et de sauvegarde J-1 : les images exactes à 4/6 secondes et 14,5/17 secondes, ainsi que les contrôles de capture, montrent ces actions. Voir `review-counterchecks.md` pour les preuves et limites ; leur lisibilité reste à apprécier en visionnage. Aucun jugement humain intégral n'est revendiqué. Les mentions de médias « restant à générer » dans l'historique ci-dessous décrivent les prises antérieures. Rien n'est publié.

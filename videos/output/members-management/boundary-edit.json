@@ -1,0 +1,12 @@
+{
+  "anchor": "Avec Éditer, vous pouvez corriger la fiche et ajouter des informations.",
+  "windowStart": 13.888000000000005,
+  "result": {
+    "found": true,
+    "startSeconds": 30.38,
+    "wordsHeard": "Avec"
+  },
+  "onset": 44.268,
+  "proposedCut": 43.887521,
+  "note": "Proposal only; recut then independently audit before capture"
+}

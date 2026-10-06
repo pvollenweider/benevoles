@@ -1,0 +1,12 @@
+{
+  "anchor": "Sur le planning public, la Buvette du soir annonce dix-huit ans",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 31.04,
+    "wordsHeard": "Sur le planning public, la buvette du soir annonce 18 ans"
+  },
+  "onset": 31.04,
+  "proposedCut": 31.0979375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

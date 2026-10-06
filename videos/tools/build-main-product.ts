@@ -32,7 +32,7 @@ async function main() {
   console.log(stdout); if (stderr) console.error(stderr)
   // Match the Docker runner's explicit fs-read sources, absent from Next tracing.
   const runner = path.join(snapshot, ".next/standalone")
-  for (const file of ["public", ".next/static", "GUIDE_ADMIN.md", "GUIDE_BENEVOLE.md", "FEATURES.md", "ACCESSIBILITE.md", "videos/catalog.json", "videos/manifests", "videos/scripts", "videos/MASTERCLASS_PLAN.md"]) {
+  for (const file of ["public", ".next/static", "GUIDE_ADMIN.md", "GUIDE_BENEVOLE.md", "FEATURES.md", "ACCESSIBILITE.md", "guide", "videos/catalog.json", "videos/manifests", "videos/scripts", "videos/MASTERCLASS_PLAN.md"]) {
     await cp(path.join(snapshot, file), path.join(runner, file), { recursive: true })
   }
   const buildId = (await readFile(path.join(snapshot, ".next/BUILD_ID"), "utf8")).trim()

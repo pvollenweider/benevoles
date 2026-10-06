@@ -1,0 +1,12 @@
+{
+  "anchor": "Passons au matériel de transport. Créons la question, puis choisissons Choix",
+  "windowStart": 64.976,
+  "result": {
+    "found": true,
+    "startSeconds": 30.3,
+    "wordsHeard": "Passons au matériel de transport. Créons la question, puis choisissons Choix"
+  },
+  "onset": 95.276,
+  "proposedCut": 94.975979,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -29,7 +29,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Une consigne pour toute l'équipe, un briefing pour la buvette ou une proposition aux personnes qui attendent une place : le bon message ne va pas forcément à tout le monde. Depuis ton événement, ouvre la page des messages. Nous allons choisir les destinataires, préparer un texte qui leur parle, vérifier l'aperçu, puis suivre un véritable envoi. Pas besoin d'écrire séparément à chaque personne.",
+      "transcript": "Une consigne pour toute l'équipe, un briefing pour la buvette ou une proposition aux personnes qui attendent une place : le bon message ne va pas forcément à tout le monde. Depuis votre événement, ouvrez la page des messages. Nous allons choisir les destinataires, préparer un texte qui leur parle, vérifier l'aperçu, puis suivre un véritable envoi. Pas besoin d'écrire séparément à chaque personne.",
       "fallbackDurationMs": 35000
     },
     {
@@ -44,7 +44,7 @@
     },
     {
       "id": "template-create",
-      "transcript": "Pour une consigne que tu réutilises, ouvre les modèles de messages de l'organisation, puis Nouveau modèle. Son nom sert à le retrouver dans l'administration : les bénévoles ne le voient pas. Prenons Briefing avant le créneau : un nom précis aide les autres organisateurs à retrouver le bon texte. L'objet annonce le sujet de l'email. Dans le message, une salutation, le rendez-vous et les consignes suffisent : les bénévoles n'ont pas besoin d'un long roman. Donnons-lui un objet court et un message accueillant, avec une consigne concrète. Enregistrons. Le modèle est maintenant disponible pour préparer un autre envoi, mais sa création n'a envoyé aucun email.",
+      "transcript": "Pour une consigne que vous réutilisez, ouvrez les modèles de messages de l'organisation, puis Nouveau modèle. Son nom sert à le retrouver dans l'administration : les bénévoles ne le voient pas. Prenons Briefing avant le créneau : un nom précis aide les autres organisateurs à retrouver le bon texte. L'objet annonce le sujet de l'email. Dans le message, une salutation, le rendez-vous et les consignes suffisent : les bénévoles n'ont pas besoin d'un long roman. Donnons-lui un objet court et un message accueillant, avec une consigne concrète. Enregistrons. Le modèle est maintenant disponible pour préparer un autre envoi, mais sa création n'a envoyé aucun email.",
       "fallbackDurationMs": 55000
     },
     {
@@ -54,37 +54,37 @@
     },
     {
       "id": "apply",
-      "transcript": "De retour dans le message, voici une première version écrite à la main. Choisir un modèle dans la liste ne la remplace pas encore : il faut cliquer sur Utiliser ce modèle. L'objet et le texte changent alors ensemble. Si ce n'est pas ce que tu voulais, Rétablir le texte précédent récupère ta version. Appliquons de nouveau notre briefing, puis choisissons un créneau pour que toutes ses variables puissent être remplacées.",
+      "transcript": "De retour dans le message, voici une première version écrite à la main. Choisir un modèle dans la liste ne la remplace pas encore : il faut cliquer sur Utiliser ce modèle. L'objet et le texte changent alors ensemble. Si ce n'est pas ce que vous vouliez, Rétablir le texte précédent récupère votre version. Appliquons de nouveau notre briefing, puis choisissons un créneau pour que toutes ses variables puissent être remplacées.",
       "fallbackDurationMs": 43000
     },
     {
       "id": "context",
-      "transcript": "Un modèle contenant créneau ne convient pas à toute l'équipe : chacun peut avoir un horaire différent. Si nous choisissons ce public, l'erreur explique pourquoi le texte n'est pas prêt à partir. Revenons à un seul créneau. Pour écrire à tout le monde, tu peux aussi adapter le modèle avec une consigne générale et garder seulement prénom et événement. L'idée est de personnaliser juste, pas de remplir les accolades au hasard.",
+      "transcript": "Un modèle contenant créneau ne convient pas à toute l'équipe : chacun peut avoir un horaire différent. Si nous choisissons ce public, l'erreur explique pourquoi le texte n'est pas prêt à partir. Revenons à un seul créneau. Pour écrire à tout le monde, vous pouvez aussi adapter le modèle avec une consigne générale et garder seulement prénom et événement. L'idée est de personnaliser juste, pas de remplir les accolades au hasard.",
       "fallbackDurationMs": 41000
     },
     {
       "id": "preview",
-      "transcript": "Ouvrons maintenant l'aperçu. C'est l'email préparé pour le premier destinataire : son prénom, le nom de l'événement, le poste et le bon horaire sont déjà dans le texte. Prends le temps de le lire comme si tu le recevais. Ce n'est pas un aperçu de toutes les personnes à la fois. Si une phrase manque de clarté, retourne au message, corrige-la et ouvre de nouveau l'aperçu avant de poursuivre.",
+      "transcript": "Ouvrons maintenant l'aperçu. C'est l'email préparé pour le premier destinataire : son prénom, le nom de l'événement, le poste et le bon horaire sont déjà dans le texte. Prenez le temps de le lire comme si vous le receviez. Ce n'est pas un aperçu de toutes les personnes à la fois. Si une phrase manque de clarté, retournez au message, corrigez-la et ouvrez de nouveau l'aperçu avant de poursuivre.",
       "fallbackDurationMs": 40000
     },
     {
       "id": "push",
-      "transcript": "Tu peux aussi demander une notification sur téléphone ou ordinateur. Elle concerne seulement les appareils réellement abonnés aux notifications ; elle ne remplace pas l'email et n'atteint pas tous les téléphones par magie. L'objet sert de titre, et la première ligne non vide du message sert de texte court. Le nombre d'appareils n'est donc pas le nombre de personnes. Garde les informations utiles au début et vérifie ce qui sera envoyé.",
+      "transcript": "Vous pouvez aussi demander une notification sur téléphone ou ordinateur. Elle concerne seulement les appareils réellement abonnés aux notifications ; elle ne remplace pas l'email et n'atteint pas tous les téléphones par magie. L'objet sert de titre, et la première ligne non vide du message sert de texte court. Le nombre d'appareils n'est donc pas le nombre de personnes. Gardez les informations utiles au début et vérifiez ce qui sera envoyé.",
       "fallbackDurationMs": 40000
     },
     {
       "id": "confirm",
-      "transcript": "Le bouton d'envoi dans l'aperçu ouvre une seconde confirmation. Relis le public et le nombre de destinataires avant de valider. Nous annulons une première fois : aucun message n'est parti. Reprenons ensuite le parcours et confirmons réellement notre briefing. Ces étapes servent à éviter le clic trop rapide, surtout quand tu écris à beaucoup de monde. Attends le résultat plutôt que de relancer l'envoi immédiatement.",
+      "transcript": "Le bouton d'envoi dans l'aperçu ouvre une seconde confirmation. Relisez le public et le nombre de destinataires avant de valider. Nous annulons une première fois : aucun message n'est parti. Reprenons ensuite le parcours et confirmons réellement notre briefing. Ces étapes servent à éviter le clic trop rapide, surtout quand vous écrivez à beaucoup de monde. Attendez le résultat plutôt que de relancer l'envoi immédiatement.",
       "fallbackDurationMs": 42000
     },
     {
       "id": "result",
-      "transcript": "L'application affiche le résultat de l'envoi. Dans notre boîte de test, ouvrons les emails de deux bénévoles : chacun a son prénom, les mêmes consignes et le bon créneau. La personne inscrite plusieurs fois ne reçoit qu'une copie pour cette campagne. L'historique conserve ensuite le message et son audience. Un envoi réussi ne prouve pas que la personne l'a lu ; pour une information urgente, prévois aussi ton relais sur le terrain.",
+      "transcript": "L'application affiche le résultat de l'envoi. Dans notre boîte de test, ouvrons les emails de deux bénévoles : chacun a son prénom, les mêmes consignes et le bon créneau. La personne inscrite plusieurs fois ne reçoit qu'une copie pour cette campagne. L'historique conserve ensuite le message et son audience. Un envoi réussi ne prouve pas que la personne l'a lu ; pour une information urgente, prévoyez aussi votre relais sur le terrain.",
       "fallbackDurationMs": 42000
     },
     {
       "id": "maintain",
-      "transcript": "Les modèles peuvent évoluer avec ton organisation. Ouvre Modifier, ajuste le nom ou le texte et enregistre. La suppression demande une confirmation : tu peux encore annuler. Un modèle n'est pas l'historique d'un message déjà envoyé. Pour chaque nouveau briefing, garde le même réflexe : choisir les bonnes personnes, vérifier le texte personnalisé, confirmer, puis consulter le résultat. Des consignes simples et un petit merci, ça aide aussi l'équipe à se sentir accueillie.",
+      "transcript": "Les modèles peuvent évoluer avec votre organisation. Ouvrez Modifier, ajustez le nom ou le texte et enregistrez. La suppression demande une confirmation : vous pouvez encore annuler. Un modèle n'est pas l'historique d'un message déjà envoyé. Pour chaque nouveau briefing, gardez le même réflexe : choisir les bonnes personnes, vérifier le texte personnalisé, confirmer, puis consulter le résultat. Des consignes simples et un petit merci, ça aide aussi l'équipe à se sentir accueillie.",
       "fallbackDurationMs": 43000
     }
   ],

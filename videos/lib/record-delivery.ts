@@ -8,6 +8,8 @@ import path from "node:path"
 import type { Page, Locator } from "playwright"
 import type { PrismaClient } from "../../src/generated/prisma/client"
 import { controlledSmtp } from "./controlled-smtp"
+import { loadCurrentDeliveryRuntime } from "../tools/prepare-delivery"
+import { verifyProductBuild } from "./product-build"
 import { loadManifest, type AudioMetadata } from "./manifest"
 
 export async function validateDeliveryNarration(directory: string) {
@@ -35,7 +37,9 @@ export async function recordDeliveryStates(options: {
   assert.equal(base, "http://localhost:43106")
   const proof = JSON.parse(await readFile(path.join(directory, "outbox-preparation.json"), "utf8"))
   assert.equal(proof.organizationId, "video-delivery")
-  const expected = { pending: ["pending", 0], retrying: ["pending", 1], recoverable: ["failed", 6], wrong: ["failed", 6], sent: ["sent", 0] } as const
+  const product = await verifyProductBuild("http://localhost:43106")
+  assert(proof.product?.commit === product.commit && proof.product?.buildId === product.buildId && proof.product?.productSourceSha256 === product.productSourceSha256, "Outbox fixture must be produced by current-main worker, not an old checkout")
+  const expected = { pending: ["pending", 0], retrying: ["pending", 1], recoverable: ["failed", 6], wrong: ["failed", 1], sent: ["sent", 0] } as const
   for (const [label, [status, attempts]] of Object.entries(expected)) {
     const row = await db.notificationOutbox.findUniqueOrThrow({ where: { id: proof.ids[label] } })
     assert(row.organizationId === proof.organizationId && row.status === status && row.attempts === attempts, "Fresh real SMTP/outbox preparation required")
@@ -46,7 +50,10 @@ export async function recordDeliveryStates(options: {
   await go()
   await scene("welcome", async at => {
     await page.screencast.showChapter(title, { description: "Lire l'état, vérifier la cause, choisir le bon envoi", duration: 6000 })
-    await at(0.28)
+    await at(0.18)
+    await rowFor("pending").scrollIntoViewIfNeeded()
+    assert(await rowFor("pending").isVisible(), "Owner's actual delivery history must be visible while described")
+    await at(0.58)
     // Switch to the real synthetic organizer account, rather than injecting a
     // role or hiding the owner's form with CSS. Keep this account for the rest.
     await page.goto("about:blank")
@@ -81,7 +88,9 @@ export async function recordDeliveryStates(options: {
   })
   await scene("reason", async at => {
     await rowFor("wrong").scrollIntoViewIfNeeded()
-    assert((await rowFor("wrong").innerText()).includes("550 5.1.1 Synthetic recipient rejected"))
+    const wrongText = await rowFor("wrong").innerText()
+    assert(wrongText.includes("Refus définitif du serveur d'envoi") && wrongText.includes("Adresse à vérifier"))
+    assert(!wrongText.includes("Synthetic recipient rejected") && !wrongText.includes("550 5.1.1"), "Raw SMTP recipient details must stay out of UI")
     await at(0.55)
     await rowFor("retrying").scrollIntoViewIfNeeded()
   })
@@ -117,11 +126,13 @@ export async function recordDeliveryStates(options: {
 }
 
 export async function recordDelivery(options: Parameters<typeof recordDeliveryStates>[0]) {
-  const { page, base, directory, db, scene, tap, settle } = options
-  const fixture = await controlledSmtp()
+  const { page, base, directory, scene, tap, settle } = options
+  assert.equal(base, "http://localhost:43106")
+  const runtime = await loadCurrentDeliveryRuntime("http://localhost:43106")
+  const { db, deliverOutbox } = runtime
+  const fixture = await controlledSmtp().catch(async error => { await db.$disconnect(); await runtime.unregister(); throw error })
   try {
-    const { deliverOutbox } = await import("../../src/lib/notifications/outbox")
-    const checks = await recordDeliveryStates(options)
+    const checks = await recordDeliveryStates({ ...options, db })
     const eventId = "video-delivery-event"
     const event = await db.event.findUniqueOrThrow({ where: { id: eventId } })
     assert(event.organizationId === "video-delivery" && event.title === "Atelier des emails")
@@ -155,7 +166,7 @@ export async function recordDelivery(options: Parameters<typeof recordDeliverySt
       await tap(page, dialog.getByRole("button", { name: "Enregistrer", exact: true }))
       await dialog.waitFor({ state: "hidden" })
       assert.equal((await db.volunteer.findUniqueOrThrow({ where: { id: "video-delivery-member-wrong" } })).email, "video.delivery.corrected@example.org")
-      await at(0.25); await go("/admin/settings/notifications")
+      await at(0.16); await go("/admin/settings/notifications")
       await page.getByRole("row").filter({ hasText: "video.delivery.wrong@example.org" }).scrollIntoViewIfNeeded()
       assert(JSON.stringify((await db.notificationOutbox.findUniqueOrThrow({ where: { id: wrong.id } })).payload) === JSON.stringify(wrong.payload))
       await at(0.40)
@@ -176,25 +187,22 @@ export async function recordDelivery(options: Parameters<typeof recordDeliverySt
       const history = await send("Formation — échec partiel", "Bonjour {prénom}, merci pour ton aide !")
       let rows = await db.notificationOutbox.findMany({ where: { targetedMessageId: history.id } })
       for (let n = 0; n < 40 && !rows.some(row => row.attempts === 1); n++) { await page.waitForTimeout(250); rows = await db.notificationOutbox.findMany({ where: { targetedMessageId: history.id } }) }
-      const failed = rows.find(row => row.attempts === 1 && row.status === "pending")
+      const failed = rows.find(row => row.attempts === 1 && row.status === "failed")
       const successful = rows.find(row => row.status === "sent")
       assert(failed && successful)
-      const clock: { now: string; attempts: number; status: string }[] = []
-      for (let n = 1; n < 6; n++) {
-        const row: (typeof rows)[number] = await db.notificationOutbox.findUniqueOrThrow({ where: { id: failed.id } })
-        const now = new Date(Math.max(Date.now(), row.nextAttemptAt.getTime()) + 1)
-        await deliverOutbox({ ids: [row.id], now })
-        const next: (typeof rows)[number] = await db.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
-        assert.equal(next.attempts, n + 1)
-        clock.push({ now: now.toISOString(), attempts: next.attempts, status: next.status })
-      }
+      // A real permanent 550 stops immediately on current main. Advancing the
+      // clock must not invent five more SMTP exchanges for this campaign.
+      const now = new Date(Math.max(Date.now(), failed.nextAttemptAt.getTime()) + 1)
+      const refusedAgain = await deliverOutbox({ ids: [failed.id], now })
+      assert.equal(refusedAgain.sent, 0)
+      assert.equal((await db.notificationOutbox.findUniqueOrThrow({ where: { id: failed.id } })).attempts, 1)
       await at(0.43); await go(`/admin/events/${eventId}/message`)
       const article = page.getByRole("article").filter({ has: page.locator(`[id="msg-${history.id}"]`) })
       await article.scrollIntoViewIfNeeded()
       assert((await article.innerText()).includes("1 envoyé, 1 en échec"))
-      await at(0.57); await tap(page, article.locator("summary"))
+      await at(0.45); await tap(page, article.locator("summary"))
       fixture.rejected.delete("video.delivery.recoverable@example.org")
-      await at(0.70); await tap(page, article.getByRole("button", { name: /^Renvoyer/ }))
+      await at(0.60); await tap(page, article.getByRole("button", { name: /^Renvoyer/ }))
       const used = article.getByRole("button", { name: /^Remis en file/ })
       await used.waitFor(); assert.equal(await used.getAttribute("aria-disabled"), "true")
       await waitDelivered(failed.id)
@@ -202,21 +210,24 @@ export async function recordDelivery(options: Parameters<typeof recordDeliverySt
       assert.equal((await repeated.json()).resent, 0)
       assert.equal((await db.notificationOutbox.findUniqueOrThrow({ where: { id: successful.id } })).sentAt?.toISOString(), successful.sentAt?.toISOString())
       await at(0.86); await go(`/admin/events/${eventId}/message`)
-      assert((await page.getByRole("article").filter({ has: page.locator(`[id="msg-${history.id}"]`) }).innerText()).includes("2 envoyés"))
-      checks.campaignId = history.id; checks.onlyFailedResent = true; checks.repeatedResendCreatedNothing = true; checks.acceleratedClock = clock
+      const completed = page.getByRole("article").filter({ has: page.locator(`[id="msg-${history.id}"]`) })
+      await completed.scrollIntoViewIfNeeded()
+      assert((await completed.innerText()).includes("2 envoyés"))
+      checks.campaignId = history.id; checks.onlyFailedResent = true; checks.repeatedResendCreatedNothing = true; checks.permanentFailureStoppedAfterOneAttempt = true
     })
     await scene("retention", async at => {
       await go("/admin/settings/notifications")
       await page.getByText(/Les emails envoyés sont effacés chaque nuit/).scrollIntoViewIfNeeded()
-      await at(0.60); await go(`/admin/events/${eventId}/message`)
+      await at(0.46); await go(`/admin/events/${eventId}/message`)
       await page.getByText(/Les messages sont conservés 12 mois/).scrollIntoViewIfNeeded()
     })
     await scene("result", async () => {
       await go("/admin/settings/notifications")
       await page.getByRole("row").filter({ hasText: "video.delivery.corrected@example.org" }).first().scrollIntoViewIfNeeded()
     })
-    assert.equal(fixture.attempts.filter(attempt => !attempt.accepted).length, 6)
+    assert.equal(fixture.attempts.filter(attempt => !attempt.accepted).length, 1)
+    assert.equal(fixture.attempts.find(attempt => !attempt.accepted)?.responseCode, 550)
     checks.smtpAttemptsDuringCapture = fixture.attempts
     await writeFile(path.join(directory, "capture-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), ...checks, audiovisualValidated: false }, null, 2))
-  } finally { await fixture.close() }
+  } finally { await fixture.close(); await db.$disconnect(); await runtime.unregister() }
 }

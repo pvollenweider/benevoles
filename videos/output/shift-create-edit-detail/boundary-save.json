@@ -1,12 +1,12 @@
 {
   "anchor": "Enregistrons le créneau et vérifions sa place dans le planning. Le",
-  "windowStart": 36.849000000000004,
+  "windowStart": 45.908,
   "result": {
     "found": true,
-    "startSeconds": 30.4,
+    "startSeconds": 26.34,
     "wordsHeard": "Enregistrons le créneau et vérifions sa place dans le planning. Le"
   },
-  "onset": 67.249,
-  "proposedCut": 66.849271,
+  "onset": 72.248,
+  "proposedCut": 71.86756249999999,
   "note": "Proposal only; recut then independently audit before capture"
 }

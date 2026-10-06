@@ -1,12 +1,12 @@
 {
   "anchor": "Regardons Camille. Tu retrouves son nom, son email, son téléphone, ses",
-  "windowStart": 6.9239999999999995,
+  "windowStart": 0,
   "result": {
     "found": true,
-    "startSeconds": 15.2,
+    "startSeconds": 20.76,
     "wordsHeard": "Regardons Camille. Tu retrouves son nom, son email, son téléphone, ses"
   },
-  "onset": 22.124,
-  "proposedCut": 21.924478999999998,
+  "onset": 20.76,
+  "proposedCut": 20.4209165,
   "note": "Proposal only; recut then independently audit before capture"
 }

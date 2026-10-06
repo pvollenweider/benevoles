@@ -24,18 +24,18 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Tu as envoyé un message, mais une personne ne le retrouve pas. Avant de renvoyer à toute l'équipe, regarde ce qui s'est passé. Dans Paramètres, puis Emails, les lignes récentes montrent le type d'email, le destinataire, la date et l'état de livraison. Nous sommes d'abord dans le compte propriétaire, qui peut aussi changer les réglages. Connectons-nous maintenant avec Marc, notre organisateur de démonstration. Il retrouve le suivi et peut traiter un échec, mais les réglages restent réservés au propriétaire. Le message de la page le précise. Nous allons poursuivre avec ce compte organisateur, sur des personnes et des emails fictifs.",
+      "transcript": "Vous avez envoyé un message, mais une personne ne le retrouve pas. Avant de renvoyer à toute l'équipe, regardez ce qui s'est passé. Dans Paramètres, puis Emails, les lignes récentes montrent le type d'email, le destinataire, la date et l'état de livraison. Nous sommes d'abord dans le compte propriétaire, qui peut aussi changer les réglages. Connectons-nous maintenant avec Marc, notre organisateur de démonstration. Il retrouve le suivi et peut traiter un échec, mais les réglages restent réservés au propriétaire. Le message de la page le précise. Nous allons poursuivre avec ce compte organisateur, sur des personnes et des emails fictifs.",
       "fallbackDurationMs": 65000
     },
     {
       "id": "states",
-      "transcript": "En attente d'envoi signifie que l'email est dans la file : Jules n'a pas encore eu de tentative. Pour Sarah, Nouvel essai prévu indique qu'une tentative a échoué et que l'application réessaiera : regarde l'échéance et le nombre d'essais. Nicolas est marqué Envoyé : remis au serveur, pas lu par le bénévole. Après six tentatives échouées, la ligne devient Échec définitif, comme pour Léa. Dans cette formation, les délais entre les essais ont été accélérés, mais les six échanges SMTP ont réellement eu lieu. Le détail aide à chercher la cause plutôt qu'à multiplier les clics.",
+      "transcript": "En attente d'envoi signifie que l'email est dans la file : Jules n'a pas encore eu de tentative. Pour Sarah, Nouvel essai prévu indique un échec temporaire : regardez l'échéance et le nombre d'essais. Nicolas est marqué Envoyé : remis au serveur, pas lu par le bénévole. Emma a atteint six essais après une panne temporaire persistante. Léa a reçu un refus définitif : l'application s'arrête dès le premier essai, sans attendre six tentatives. Dans cette formation, les délais des essais temporaires ont été accélérés, mais les échanges SMTP ont réellement eu lieu. Lisons le détail avant de choisir une action.",
       "fallbackDurationMs": 65000
     },
     {
       "id": "reason",
-      "transcript": "Ici, le serveur de notre démonstration refuse un destinataire de test. Le détail peut orienter vers une adresse à vérifier ou un problème temporaire. Mais cette page ne connaît pas forcément tous les rejets qui arrivent plus tard, après l'acceptation par le serveur. Elle n'est pas une preuve que l'email est dans la boîte de réception. Et aucun état ne prouve sa lecture : si l'information est urgente, contacte aussi la personne directement.",
-      "fallbackDurationMs": 44000
+      "transcript": "Pour Léa, la cause est indiquée en français : refus définitif du serveur d'envoi, boîte aux lettres introuvable, adresse à vérifier. Pour Sarah, le problème est temporaire et un nouvel essai est prévu. Les détails techniques bruts ne sont pas affichés. Cette page ne connaît pas forcément les rejets arrivant plus tard après l'acceptation par le serveur. Envoyé ne prouve ni l'arrivée dans la boîte de réception, ni la lecture. Si l'information est urgente, contactez aussi la personne directement.",
+      "fallbackDurationMs": 50000
     },
     {
       "id": "retry",
@@ -49,17 +49,17 @@
     },
     {
       "id": "campaign",
-      "transcript": "Préparons un autre message pour ces deux personnes. Cette fois, notre serveur de démonstration refuse volontairement Emma, mais accepte Léa. Après six vrais essais, les délais étant accélérés comme annoncé, ouvrons Messages envoyés sous le formulaire. L'historique conserve l'objet, le public, l'auteur et le résultat : un envoyé, un en échec. Voir le texte envoyé permet de relire la consigne originale et sa variable. Le refus de test est maintenant levé. Cliquons sur Renvoyer l'email en échec : seule Emma repart dans la file, pas Léa. Le bouton devient Remis en file. Une autre demande ne renvoie rien de plus. Rechargeons enfin le suivi pour voir les deux remises réussies. Les rappels et confirmations automatiques ne sont pas des messages de cette liste.",
+      "transcript": "Préparons un autre message pour ces deux personnes. Notre serveur de démonstration refuse définitivement Emma, mais accepte Léa. Un seul essai suffit pour cet échec permanent. Ouvrons Messages envoyés sous le formulaire. L'historique conserve l'objet, le public, l'auteur et le résultat : un envoyé, un en échec. Voir le texte envoyé permet de relire la consigne originale et sa variable. Le refus de test est maintenant levé. Cliquons sur Renvoyer l'email en échec : seule Emma repart dans la file, pas Léa. Le bouton devient Remis en file. Une autre demande ne renvoie rien de plus. Rechargeons enfin le suivi pour voir les deux remises réussies. Les rappels et confirmations automatiques ne sont pas des messages de cette liste.",
       "fallbackDurationMs": 95000
     },
     {
       "id": "retention",
-      "transcript": "Le suivi de la file est volontairement récent : les emails envoyés sont supprimés par le nettoyage nocturne, et les échecs restent trente jours. La page montre les deux cents lignes les plus récentes. L'historique des messages ciblés est différent et reste douze mois. Ne compte donc pas sur le tableau des emails pour une archive permanente. Pour comprendre un incident, consulte-le au bon moment, sans conserver inutilement des données personnelles.",
+      "transcript": "Le suivi de la file est volontairement récent : les emails envoyés sont supprimés par le nettoyage nocturne, et les échecs restent trente jours. La page montre les deux cents lignes les plus récentes. L'historique des messages ciblés est différent et reste douze mois. Ne comptez donc pas sur le tableau des emails pour une archive permanente. Pour comprendre un incident, consultez-le au bon moment, sans conserver inutilement des données personnelles.",
       "fallbackDurationMs": 43000
     },
     {
       "id": "result",
-      "transcript": "Le bon réflexe, c'est de lire l'état et le détail, vérifier la cause, puis choisir la bonne action. Réessayer le même email après une panne, ou préparer un nouvel envoi quand l'adresse a changé : ce n'est pas la même chose. Notre boîte de test confirme la réception de ces exemples, mais pas leur lecture par une personne. Avec une consigne claire et un contact humain si besoin, tu aides l'équipe à retrouver l'information sans l'inonder de messages.",
+      "transcript": "Le bon réflexe, c'est de lire l'état et le détail, vérifier la cause, puis choisir la bonne action. Réessayer le même email après une panne, ou préparer un nouvel envoi quand l'adresse a changé : ce n'est pas la même chose. Notre boîte de test confirme la réception de ces exemples, mais pas leur lecture par une personne. Avec une consigne claire et un contact humain si besoin, vous aidez l'équipe à retrouver l'information sans l'inonder de messages.",
       "fallbackDurationMs": 45000
     }
   ],

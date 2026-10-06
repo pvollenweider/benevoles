@@ -1,5 +1,13 @@
 {
-  "checkedAt": "2026-10-05T16:03:25.396Z",
+  "checkedAt": "2026-10-06T12:03:12.320Z",
+  "product": {
+    "commit": "36b214edd1d7b12ce76615a2d96279122f36551f",
+    "sourceTree": "76543afc9b7352081b912d767f35dde30d9769a9",
+    "productSourceSha256": "cfae6189d9a950758737001a3529247f7b0e8758ea32ab81f43046ecbc52fe58",
+    "buildId": "E7XCR78PvXnVEl-wDQdJH",
+    "snapshot": "/tmp/benevoles-video-production.KNG0lt",
+    "builtAt": "2026-10-06T12:02:10.018Z"
+  },
   "scope": "actual report links, live HTML and generated PDFs; PDF pagination and visual review still required",
   "pdfVisualReview": false,
   "activePeople": 80,

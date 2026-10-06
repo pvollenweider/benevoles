@@ -1,0 +1,12 @@
+{
+  "anchor": "Une fois le groupe et le texte vérifiés, confirme l'envoi. Nous",
+  "windowStart": 111.58000000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 30.2,
+    "wordsHeard": "Une"
+  },
+  "onset": 141.78,
+  "proposedCut": 141.58045850000002,
+  "note": "Proposal only; recut then independently audit before capture"
+}

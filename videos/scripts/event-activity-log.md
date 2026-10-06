@@ -1,5 +1,7 @@
 # Comprendre ce qui a changé dans son événement
 
+Révision rédactionnelle du 6 octobre 2026 : narration adressée aux organisateurs au vouvoiement, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. Les anciennes preuves audio ne valident pas ce nouveau texte ; narration, sous-titres, synchronisation et MP4 final sont à recontrôler après régénération.
+
 Vidéo autonome 48. Une narration continue Puck, souriante et posée. Sources fonctionnelles vérifiées : section Journal de l'événement du guide admin, Explorer, filtres, Rejouer, Récit et génération d'état initial. Aucun écran vide présenté comme une démonstration réussie.
 
 ## Parcours à filmer

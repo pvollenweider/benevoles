@@ -1,0 +1,81 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-06T15:59:15.124Z",
+  "revalidatedAt": "2026-10-06T15:59:15.125Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "b51ff8665b7fdaf349ce5dae6fa7c6841618f18ca2d5978b0e1b15db2b124e14",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "e3ce2e3c5aeca9741c590ef52f726ae044a05d4ed8a2c8a15a3b5392eec8871b",
+      "recognized": "La frise n'est pas seulement une vue de lecture. Elle permet aussi de construire rapidement un planning visuel. Dessiner une plage libre, ajuster sa durée, copier une relève et ouvrir le détail sans quitter le contexte de la journée.",
+      "expected": "La Frise n’est pas seulement une vue de lecture. Elle permet aussi de construire rapidement un planning visuel : dessiner une plage libre, ajuster sa durée, copier une relève et ouvrir le détail sans quitter le contexte de la journée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "draw",
+      "audioSha256": "a67ca48ffe3f21256b6035078bdfd91b921a7f38a7a5febbb8220f39315717c4",
+      "recognized": "Dans une zone vide, clique, puis fais glisser jusqu'à l'heure de fin souhaitée. Le formulaire s'ouvre avec la date et les heures déjà calculées. Il reste à choisir le poste, le libellé et la capacité avant d'enregistrer",
+      "expected": "Dans une zone vide, clique puis fais glisser jusqu’à l’heure de fin souhaitée. Le formulaire s’ouvre avec la date et les heures déjà calculées. Il reste à choisir le poste, le libellé et la capacité avant d’enregistrer.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "resize",
+      "audioSha256": "65347420fa74af77e93d84088e25a5d1eaecf1570405cbe693ac32841893c777",
+      "recognized": "Pour corriger une durée, attrape le bord droit du créneau et déplace-le. La grille aide à rester sur des horaires cohérents. Une modification rapide doit rester lisible. Vérifie toujours les heures affichées après le geste.",
+      "expected": "Pour corriger une durée, attrape le bord droit du créneau et déplace-le. La grille aide à rester sur des horaires cohérents. Une modification rapide doit rester lisible : vérifie toujours les heures affichées après le geste.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "popover",
+      "audioSha256": "d8339641a18b91f196815fb859abdb660d6c4df540ca241c86a8dca684eaff56",
+      "recognized": "Un clic sur la barre ouvre ses actions rapides. On y retrouve les heures, l'état des inscriptions et les commandes utiles. C'est le bon endroit pour une petite correction, sans parcourir tout le formulaire.",
+      "expected": "Un clic sur la barre ouvre ses actions rapides. On y retrouve les heures, l’état des inscriptions et les commandes utiles. C’est le bon endroit pour une petite correction, sans parcourir tout le formulaire.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "copy",
+      "audioSha256": "497419e033377ce131926adff3b10df25825f9983e8a1793b1cc5ba0622a1914",
+      "recognized": "Copier reprend le poste, la durée, la capacité et les informations du créneau, puis place la nouvelle plage à l'horaire choisi. La copie est indépendante. Elle peut ensuite recevoir un autre libellé ou d'autres consignes.",
+      "expected": "Copier reprend le poste, la durée, la capacité et les informations du créneau, puis place la nouvelle plage à l’horaire choisi. La copie est indépendante : elle peut ensuite recevoir un autre libellé ou d’autres consignes.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "detail",
+      "audioSha256": "31e20d2d4d2cf15f315c24b9c83bdf47496e59e205b25e17527eb96051018769",
+      "recognized": "Dès qu'une modification concerne le lieu, le contact, l'âge minimum ou les règles d'inscription, ouvre l'éditeur détaillé. Les gestes de frise accélèrent la construction, l'éditeur reste la source complète avant publication.",
+      "expected": "Dès qu’une modification concerne le lieu, le contact, l’âge minimum ou les règles d’inscription, ouvre l’éditeur détaillé. Les gestes de Frise accélèrent la construction ; l’éditeur reste la source complète avant publication.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "b912c582d0e0c5b387120136b9b550a1ea8e879c37195b79fb0e10125b790cca",
+      "recognized": "Travaille d'abord visuellement, puis relis la liste pour contrôler les valeurs. Cette combinaison est rapide, mais elle garde un résultat précis et compréhensible pour les bénévoles.",
+      "expected": "Travaille d’abord visuellement, puis relis la Liste pour contrôler les valeurs. Cette combinaison est rapide, mais elle garde un résultat précis et compréhensible pour les bénévoles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

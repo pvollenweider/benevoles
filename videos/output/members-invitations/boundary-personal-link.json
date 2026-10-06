@@ -1,0 +1,12 @@
+{
+  "anchor": "Ouvrons le lien reçu par Aline. Il mène à la fête",
+  "windowStart": 85.565,
+  "result": {
+    "found": true,
+    "startSeconds": 24.6,
+    "wordsHeard": "Ouvrons le lien reçu par Aline. Il mène à la fête"
+  },
+  "onset": 110.16499999999999,
+  "proposedCut": 109.9579375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,13 +1,14 @@
 {
   "model": "gemini-3.8-flash",
-  "auditedAt": "2026-10-06T01:34:58.187Z",
-  "revalidatedAt": "2026-10-06T01:34:58.189Z",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-06T17:24:16.253Z",
+  "revalidatedAt": "2026-10-06T17:24:16.254Z",
   "source": "generated narration WAV",
-  "note": "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
   "segments": [
     {
       "id": "welcome",
-      "audioSha256": "ace4ecaf102f9c4671b42f2091e664c8a1db5ed6ebdbe62c1095859f9963aeb3",
+      "audioSha256": "05ec88cf5c4c78ff458f3a2dcd3235a4e1e4c2179f8b20d72414882590f014b5",
       "recognized": "Bienvenue dans l'administration. Vous allez retrouver les principaux points d'entrée, distinguer les réglages de l'association du suivi d'un événement et chercher une information sans parcourir tous les écrans.",
       "expected": "Bienvenue dans l’administration. Vous allez retrouver les principaux points d’entrée, distinguer les réglages de l’association du suivi d’un événement et chercher une information sans parcourir tous les écrans.",
       "wordErrorRate": 0,
@@ -17,8 +18,8 @@
     },
     {
       "id": "organization-navigation",
-      "audioSha256": "8f68510f2b0e12b858b8ff6c6a340d4b2b094bd9b2ec116d452175335d6ee3ab",
-      "recognized": "Le tableau de bord rassemble les priorités de l'association. Événements ouvre la liste de vos événements et membres les personnes connues de l'association. Paramètres concerne les réglages communs. Certaines modifications sont réservées aux propriétaires. Votre rôle détermine les actions disponibles.",
+      "audioSha256": "21e1ddd261fc66d0f8f7685048e8790543a29230cf1ff0f064d7bb72b55f6b74",
+      "recognized": "Le tableau de bord rassemble les priorités de l'association. Événements ouvre la liste de vos événements et membres, les personnes connues de l'association. Paramètres concerne les réglages communs. Certaines modifications sont réservées aux propriétaires, votre rôle détermine les actions disponibles.",
       "expected": "Le Tableau de bord rassemble les priorités de l’association. Événements ouvre la liste de vos événements, et Membres les personnes connues de l’association. Paramètres concerne les réglages communs. Certaines modifications sont réservées au propriétaire : votre rôle détermine les actions disponibles.",
       "wordErrorRate": 0.047619047619047616,
       "needsReview": false,
@@ -27,8 +28,8 @@
     },
     {
       "id": "event-navigation",
-      "audioSha256": "3c23857cdc5a4e555d3b93cabe8ec18c7fbe7d4118dc08eb7b2d94dfed075381",
-      "recognized": "Ouvrez un événement. Sa page propose gérer les créneaux, voir les inscriptions et inviter des membres. Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions. Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement. Le lien Événement vous ramène à la liste de l'association.",
+      "audioSha256": "1ff5cf9436c6e2bc272e1a200efbc245b1d43ae4a1148e248dbceead02c293a4",
+      "recognized": "Ouvrez un événement. Sa page propose gérer les créneaux, voir les inscriptions et inviter des membres. Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions. Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement. Le lien événement vous ramène à la liste de l'association.",
       "expected": "Ouvrez un événement. Sa page propose Gérer les créneaux, Voir les inscriptions et Inviter des membres. Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions. Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement. Le lien Événements vous ramène à la liste de l’association.",
       "wordErrorRate": 0.016666666666666666,
       "needsReview": false,
@@ -37,8 +38,8 @@
     },
     {
       "id": "search",
-      "audioSha256": "a3ce7782217119c2fad81cd15e4c3290e2e67875e295060fc2e4bd9dd9ac8898",
-      "recognized": "La loupe cherche dans toute l'organisation. Utilisez contrôle K ou commande K sur Mac, puis saisissez un nom ou un poste. Ouvrez un résultat pour accéder à la fiche ou à la liste correspondante. Si plusieurs résultats se ressemblent, précisez votre recherche avec un second mot.",
+      "audioSha256": "a09f6f09a48302866d85d958116d140e745b658e84e054b1724e310b8b4f9025",
+      "recognized": "La loupe cherche dans toute l'organisation. Utilisez Contrôle K ou Commande K sur Mac, puis saisissez un nom ou un poste. Ouvrez un résultat pour accéder à la fiche ou à la liste correspondante. Si plusieurs résultats se ressemblent, précisez votre recherche avec un second mot.",
       "expected": "La loupe cherche dans toute l’organisation. Utilisez Contrôle K, ou Commande K sur Mac, puis saisissez un nom ou un poste. Ouvrez un résultat pour accéder à la fiche ou à la liste correspondante. Si plusieurs résultats se ressemblent, précisez votre recherche avec un second mot.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -47,7 +48,7 @@
     },
     {
       "id": "account-help",
-      "audioSha256": "0fbbb9bb59ccea324a923f5b009c1b745ba775369c1e71ec8decaa2328a054db",
+      "audioSha256": "7ee0617168605a7707e2c9c513e4a562a85ee3f2bdc477f78244b7291fa2a2fe",
       "recognized": "Le menu de votre compte propose Mon compte et Se déconnecter. L'aide se trouve séparément dans la barre de navigation et ouvre le guide dans un nouvel onglet. Les liens Aide placés sous les titres de certaines pages vous conduisent directement à la rubrique concernée.",
       "expected": "Le menu de votre compte propose Mon compte et Se déconnecter. L’aide se trouve séparément dans la barre de navigation et ouvre le guide dans un nouvel onglet. Les liens Aide placés sous les titres de certaines pages vous conduisent directement à la rubrique concernée.",
       "wordErrorRate": 0,
@@ -57,7 +58,7 @@
     },
     {
       "id": "mobile-keyboard",
-      "audioSha256": "9cebbbf929502d74fc7a10c07ac9a1f5dd829448b03ccbee25114e77cf5dcea6",
+      "audioSha256": "80e7baacc2928b4a929fd8f97bf4fea8c9b95d8ad3640e566555d2da9aac578b",
       "recognized": "Sur téléphone, ouvrez le menu pour retrouver les principales destinations. Sur ordinateur, la première tabulation révèle aller au contenu. Ce lien évite de traverser toute la barre de navigation. Vous arrivez directement dans le contenu de la page.",
       "expected": "Sur téléphone, ouvrez le menu pour retrouver les principales destinations. Sur ordinateur, la première tabulation révèle Aller au contenu : ce lien évite de traverser toute la barre de navigation. Vous arrivez directement dans le contenu de la page.",
       "wordErrorRate": 0,
@@ -67,8 +68,8 @@
     },
     {
       "id": "result",
-      "audioSha256": "c3d09945bc94e51a2c473d9d6341afecba47369ab19df454d304284999f81816",
-      "recognized": "Vous avez les bons repères : tableau de bord pour les priorités, membres et paramètres au niveau de l'association, puis la page de chaque événement pour son planning et son suivi. Pour une question précise, la recherche et l'aide vous évitent de repartir de zéro.",
+      "audioSha256": "a6307b3ed9f0d44c6878d5e1659ad7212fb1a4dc27528ccd5cf39776ab9d830f",
+      "recognized": "vous avez les bons repères : tableau de bord pour les priorités, membres et paramètres au niveau de l'association, puis la page de chaque événement pour son planning et son suivi. Pour une question précise, la recherche et l'aide vous évitent de repartir de zéro.",
       "expected": "Vous avez les bons repères : Tableau de bord pour les priorités, Membres et Paramètres au niveau de l’association, puis la page de chaque événement pour son planning et son suivi. Pour une question précise, la recherche et l’aide vous évitent de repartir de zéro.",
       "wordErrorRate": 0,
       "needsReview": false,

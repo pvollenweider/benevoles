@@ -1,0 +1,12 @@
+{
+  "anchor": "Tu choisis d'abord Recevoir des rappels push. Le navigateur peut alors",
+  "windowStart": 43.19800000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 30.26,
+    "wordsHeard": "Tu choisis d'abord Recevoir des rappels push. Le navigateur peut alors"
+  },
+  "onset": 73.45800000000001,
+  "proposedCut": 73.1977085,
+  "note": "Proposal only; recut then independently audit before capture"
+}

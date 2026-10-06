@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:37:13.541Z",
+  "videoSha256": "4f2463aa78f990278c1913f94a35e27170bbb7b98cd4fc848478da990a80a1cb",
+  "promptSha256": "c5dd1d4fa7ca621f8fe51b627cbd8646ddb67d17868babded37d068e0b5c1644",
+  "clipSha256": "b766c51ec9d3ab0cc2b7317321bff132f43fd1af7dd84e1c03081f2d5f1706bc",
+  "scene": "search",
+  "review": {
+    "heardOpening": "La recherche aide à retrouver une personne",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La recherche aide à retrouver une personne par son nom",
+        "visibleSeconds": 0.8,
+        "visible": "Saisie dans le champ de recherche filtrant la liste des membres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "ici, deux Stéphane Favre ont des coordonnées différentes",
+        "visibleSeconds": 9.8,
+        "visible": "Affichage de deux résultats pour Stéphane Favre avec emails distincts",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Vérifiez le contact et les inscriptions avant de modifier une fiche",
+        "visibleSeconds": 17.5,
+        "visible": "Tableau affichant les détails de contact et actions disponibles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

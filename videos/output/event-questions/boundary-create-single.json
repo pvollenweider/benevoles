@@ -1,0 +1,12 @@
+{
+  "anchor": "Commençons par la taille du t-shirt. Cliquons sur Ajouter une question,",
+  "windowStart": 2.676000000000002,
+  "result": {
+    "found": true,
+    "startSeconds": 30.16,
+    "wordsHeard": "Commençons par la taille du t-shirt. Cliquons sur Ajouter une question"
+  },
+  "onset": 32.836,
+  "proposedCut": 32.676125,
+  "note": "Proposal only; recut then independently audit before capture"
+}

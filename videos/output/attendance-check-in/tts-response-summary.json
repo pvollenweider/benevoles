@@ -1,36 +1,36 @@
 {
-  "receivedAt": "2026-10-05T17:39:53.011Z",
+  "receivedAt": "2026-10-06T17:01:25.970Z",
   "status": "completed",
   "usage": {
-    "total_tokens": 6510,
-    "total_input_tokens": 1010,
+    "total_tokens": 10680,
+    "total_input_tokens": 1614,
     "input_tokens_by_modality": [
+      {
+        "modality": "text",
+        "tokens": 1413
+      },
       {
         "modality": "audio",
         "tokens": 201
-      },
-      {
-        "modality": "text",
-        "tokens": 809
       }
     ],
     "total_cached_tokens": 0,
-    "total_output_tokens": 5500,
+    "total_output_tokens": 9066,
     "output_tokens_by_modality": [
       {
         "modality": "audio",
-        "tokens": 5500
+        "tokens": 9066
       }
     ],
     "total_tool_use_tokens": 0,
     "total_thought_tokens": 0,
-    "raw_prompt_token": 1088,
+    "raw_prompt_token": 598,
     "model_invocation_token_counts": [
       {
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 481
+            "tokens": 234
           },
           {
             "modality": "audio",
@@ -40,7 +40,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2659
+            "tokens": 909
           }
         ]
       },
@@ -48,7 +48,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 966
+            "tokens": 995
           },
           {
             "modality": "audio",
@@ -58,7 +58,43 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2845
+            "tokens": 2721
+          }
+        ]
+      },
+      {
+        "prompt_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 970
+          },
+          {
+            "modality": "audio",
+            "tokens": 201
+          }
+        ],
+        "candidates_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 2737
+          }
+        ]
+      },
+      {
+        "prompt_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 937
+          },
+          {
+            "modality": "audio",
+            "tokens": 201
+          }
+        ],
+        "candidates_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 2707
           }
         ]
       }
@@ -68,7 +104,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 481
+            "tokens": 234
           },
           {
             "modality": "audio",
@@ -78,7 +114,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2659
+            "tokens": 909
           }
         ]
       },
@@ -86,7 +122,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 966
+            "tokens": 995
           },
           {
             "modality": "audio",
@@ -96,7 +132,43 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2845
+            "tokens": 2721
+          }
+        ]
+      },
+      {
+        "prompt_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 970
+          },
+          {
+            "modality": "audio",
+            "tokens": 201
+          }
+        ],
+        "candidates_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 2737
+          }
+        ]
+      },
+      {
+        "prompt_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 937
+          },
+          {
+            "modality": "audio",
+            "tokens": 201
+          }
+        ],
+        "candidates_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 2707
           }
         ]
       }
@@ -108,7 +180,7 @@
       "content": [
         {
           "type": "audio",
-          "encodedLength": 14088156
+          "encodedLength": 23217112
         }
       ]
     }

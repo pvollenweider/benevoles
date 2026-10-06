@@ -1,0 +1,14 @@
+{
+  "updatedAt": "2026-10-06T17:08:32.738Z",
+  "requested": [
+    "MEMBERS_MANAGEMENT"
+  ],
+  "active": null,
+  "scope": "Narration only, not capture, MP4 synchronization or completion",
+  "results": [
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "status": "source-audited"
+    }
+  ]
+}

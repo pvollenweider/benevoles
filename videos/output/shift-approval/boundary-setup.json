@@ -3,10 +3,10 @@
   "windowStart": 0,
   "result": {
     "found": true,
-    "startSeconds": 15.4,
-    "wordsHeard": "Dans le créneau, active Sur validation. Ajoute aussi les critères utiles"
+    "startSeconds": 16.18,
+    "wordsHeard": "Dans le créneau"
   },
-  "onset": 15.4,
-  "proposedCut": 15.084916499999999,
+  "onset": 16.18,
+  "proposedCut": 15.80075,
   "note": "Proposal only; recut then independently audit before capture"
 }

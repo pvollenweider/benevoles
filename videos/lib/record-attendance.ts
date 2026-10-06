@@ -12,8 +12,9 @@ import { showDownloadedCsv } from "./show-downloaded-csv"
 
 type Scene = (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => Promise<void>
 
-export async function recordAttendance(options: { page: Page; base: string; eventId: string; directory: string; title: string; scene: Scene; tap: (page: Page, target: Locator) => Promise<void>; settle: (page: Page) => Promise<void> }) {
+export async function recordAttendance(options: { page: Page; base: string; eventId: string; directory: string; title: string; personPrefix?: string; scene: Scene; tap: (page: Page, target: Locator) => Promise<void>; settle: (page: Page) => Promise<void> }) {
   const { page, base, eventId, directory, title, scene, tap, settle } = options
+  const personPrefix = options.personPrefix ?? "video-attendance-person-"
   if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Isolated video DB required")
   const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
   const registrationsUrl = `${base}/admin/events/${eventId}/registrations`
@@ -47,7 +48,7 @@ export async function recordAttendance(options: { page: Page; base: string; even
     let cancelledId = ""
     await scene("cancelled", async at => {
       await at(0.08); await go()
-      const sarah = await db.registration.findFirstOrThrow({ where: { eventId, volunteerId: "video-attendance-person-4" }, include: { shift: true } })
+      const sarah = await db.registration.findFirstOrThrow({ where: { eventId, volunteerId: `${personPrefix}4` }, include: { shift: true } })
       cancelledId = sarah.id
       const before = await snapshot()
       await tap(page, page.getByRole("row").filter({ hasText: "video.attendance.4@example.org" }).getByRole("checkbox"))
@@ -58,7 +59,7 @@ export async function recordAttendance(options: { page: Page; base: string; even
       cancelledCheckIn = (await db.registration.findUniqueOrThrow({ where: { id: sarah.id } })).checkedInAt!.toISOString()
       await at(0.20); await go(`${base}/admin/events/${eventId}/shifts`)
       await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
-      await tap(page, page.getByRole("row").filter({ hasText: sarah.shift.label }).getByRole("button", { name: "Supprimer", exact: true }))
+      await tap(page, page.getByRole("row").filter({ hasText: sarah.shift.label }).getByRole("button", { name: /^Supprimer le créneau / }))
       const dialog = page.getByRole("alertdialog")
       await dialog.waitFor(); await at(0.32)
       const cancelled = page.waitForResponse(r => r.url().endsWith(`/shifts/${sarah.shiftId}`) && r.request().method() === "DELETE")
@@ -99,6 +100,14 @@ export async function recordAttendance(options: { page: Page; base: string; even
       await at(0.66)
       await page.getByLabel("Lecture d’une personne dans le fichier :", { exact: true }).selectOption("video.attendance.2@example.org")
       if (await page.locator("tbody tr:visible").count() !== 2) throw new Error("Léa's two export rows missing")
+      // The concluding sentence introduces this screen now, not only in the
+      // following chapter. Show the genuine dedicated Jour J route in time.
+      if (base === "http://localhost:43108") {
+        await at(0.82)
+        await page.setViewportSize({ width: 390, height: 844 })
+        await go(`${base}/admin/events/video-dayof-event-live/day-of`)
+        await page.getByRole("heading", { name: "Jour J", exact: true }).waitFor()
+      }
       await writeFile(path.join(directory, "attendance-capture-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), audiovisualValidation: false, activeRows: 5, people: 4, presentRows: 3, absentRows: 2, cancellation: { registrationId: cancelledId, retainedCheckIn: cancelledCheckIn, excludedFromActiveExport: true }, noWorkedHoursCalculated: true }, null, 2))
     })
   } finally { await db.$disconnect() }

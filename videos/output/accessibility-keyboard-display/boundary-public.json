@@ -1,0 +1,12 @@
+{
+  "anchor": "Côté bénévole, atteignons un créneau avec le clavier, puis sélectionnons-le. Continuons",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 26.84,
+    "wordsHeard": "Côté bénévole"
+  },
+  "onset": 26.84,
+  "proposedCut": 26.8453125,
+  "note": "Proposal only; recut then independently audit before capture"
+}

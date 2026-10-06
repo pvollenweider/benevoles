@@ -1,23 +1,107 @@
 WEBVTT
 
-00:00:01.293 --> 00:00:09.595
-Les événements du soir posent deux questions différentes : comment afficher une fin après minuit, et combien d’heures se sont réellement écoulées quand l’horloge change. Benevol conserve l’horaire local de l’événement et calcule les instants dans le fuseau de l’organisation.
+00:00:01.266 --> 00:00:04.817
+Les événements du soir posent deux
+questions différentes : comment afficher
 
-00:00:10.048 --> 00:00:30.425
-Une nuit ordinaire de vingt-deux heures à deux heures appartient au jour où le créneau commence. Dans la Timeline, elle peut s’étendre jusqu’à vingt-six heures pour garder une lecture continue ; dans les textes destinés aux personnes, la fin est présentée comme deux heures, le lendemain.
+00:00:04.817 --> 00:00:08.691
+une fin après minuit, et combien d’heures
+se sont réellement écoulées quand
 
-00:00:30.877 --> 00:00:46.440
-Le dernier dimanche de mars, la Suisse passe directement de deux heures à trois heures. Un créneau affiché de une heure à cinq heures ne dure donc que trois heures réelles. Les emails et calendriers gardent les heures locales, tandis que les totaux utilisent la durée réellement écoulée.
+00:00:08.691 --> 00:00:11.919
+l’horloge change. Benevol conserve
+l’horaire local de l’événement et calcule
 
-00:00:46.891 --> 00:01:06.177
-Le dernier dimanche d’octobre, l’heure entre deux et trois se répète. Le même créneau de une heure à cinq heures dure alors cinq heures réelles. Cette différence compte pour les heures planifiées et évite de sous-estimer l’engagement d’une personne présente toute la nuit.
+00:00:11.919 --> 00:00:14.179
+les instants dans le fuseau de
+l’organisation.
 
-00:01:06.629 --> 00:01:15.136
-Ces calculs dépendent du fuseau horaire de l’organisation, ici Europe Zurich. Le serveur peut fonctionner en UTC sans décaler les rappels : une heure saisie reste l’heure locale comprise par l’organisateur et le bénévole.
+00:00:14.633 --> 00:00:18.956
+Une nuit ordinaire de vingt-deux heures à
+deux heures appartient au jour où le
 
-00:01:15.589 --> 00:01:29.032
-Dans un export calendrier, chaque créneau contient un instant précis avec le bon décalage d’été ou d’hiver. Après une modification, retélécharge le fichier pour que les informations du téléphone ou de l’agenda correspondent au planning actuel.
+00:00:18.956 --> 00:00:22.353
+créneau commence. La Frise continue après
+minuit, mais les heures affichées
 
-00:01:29.484 --> 00:01:41.539
-Pour une permanence de nuit, indique clairement le jour de départ, l’heure du lendemain et les consignes d’arrivée. L’affichage reste humain, tandis que les rappels, calendriers et totaux restent justes autour de minuit et des changements d’heure.
+00:00:22.353 --> 00:00:26.059
+repartent bien de zéro : minuit, une
+heure, deux heures. Le récapitulatif
+
+00:00:26.059 --> 00:00:30.382
+précise que la fin se situe le lendemain.
+Ouvrons le créneau pour vérifier son
+
+00:00:30.382 --> 00:00:30.691
+horaire.
+
+00:00:31.143 --> 00:00:35.092
+Le dernier dimanche de mars, la Suisse
+passe directement de deux heures à trois
+
+00:00:35.092 --> 00:00:39.606
+heures. Un créneau affiché de une heure à
+cinq heures ne dure donc que trois heures
+
+00:00:39.606 --> 00:00:43.273
+réelles. Les emails et calendriers gardent
+les heures locales, tandis que les totaux
+
+00:00:43.273 --> 00:00:44.684
+utilisent la durée réellement écoulée.
+
+00:00:45.140 --> 00:00:48.947
+Le dernier dimanche d’octobre, l’heure
+entre deux et trois se répète. Le même
+
+00:00:48.947 --> 00:00:52.754
+créneau de une heure à cinq heures dure
+alors cinq heures réelles. Cette
+
+00:00:52.754 --> 00:00:55.682
+différence compte pour les heures
+planifiées et évite de sous-estimer
+
+00:00:55.682 --> 00:00:57.732
+l’engagement d’une personne présente toute
+la nuit.
+
+00:00:58.185 --> 00:01:02.267
+Ces calculs dépendent du fuseau horaire de
+l’organisation, ici Europe Zurich. Le
+
+00:01:02.267 --> 00:01:06.689
+serveur peut fonctionner en UTC sans
+décaler les rappels : une heure saisie
+
+00:01:06.689 --> 00:01:09.750
+reste l’heure locale comprise par
+l’organisateur et le bénévole.
+
+00:01:10.202 --> 00:01:14.488
+Dans un export calendrier, chaque créneau
+contient un instant précis avec le bon
+
+00:01:14.488 --> 00:01:18.115
+décalage d’été ou d’hiver. Après une
+modification, retélécharge le fichier pour
+
+00:01:18.115 --> 00:01:22.071
+que les informations du téléphone ou de
+l’agenda correspondent au planning actuel.
+
+00:01:22.524 --> 00:01:26.720
+Pour une permanence de nuit, indique
+clairement le jour de départ, l’heure du
+
+00:01:26.720 --> 00:01:30.271
+lendemain et les consignes d’arrivée.
+L’affichage reste humain, tandis que les
+
+00:01:30.271 --> 00:01:34.144
+rappels, calendriers et totaux restent
+justes autour de minuit et des changements
+
+00:01:34.144 --> 00:01:34.467
+d’heure.
 

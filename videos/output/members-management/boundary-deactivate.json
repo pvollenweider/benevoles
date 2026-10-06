@@ -1,12 +1,12 @@
 {
-  "anchor": "Pour mettre une fiche de côté, tu peux la désactiver. Ici,",
-  "windowStart": 136.145,
+  "anchor": "Pour mettre une fiche de côté, vous pouvez la désactiver. Ici,",
+  "windowStart": 123.13600000000002,
   "result": {
     "found": true,
-    "startSeconds": 11.8,
-    "wordsHeard": "Pour"
+    "startSeconds": 28.2,
+    "wordsHeard": "Pour mettre une fiche de côté, vous pouvez la désactiver. Ici,"
   },
-  "onset": 147.94500000000002,
-  "proposedCut": 147.76822950000002,
+  "onset": 151.336,
+  "proposedCut": 151.47275,
   "note": "Proposal only; recut then independently audit before capture"
 }

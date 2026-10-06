@@ -1,42 +1,97 @@
 {
   "slug": "shift-timeline-quick-actions",
-  "recordedAt": "2026-10-04T16:56:06.596Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T15:58:25.741Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "fcea46ccaf5f830988ccbb60a3f4634ddb0b1cb5",
+    "sourceTree": "367c15fecd6e3a05996e9a6508781e8556c3e95c",
+    "productSourceSha256": "4cc63f21d6cbf5a8dd72f281e7dbb8ce0f7f304cfa440303e61be98dacf691c3",
+    "buildId": "WekAsMefW7JedYGLaN7z-",
+    "snapshot": "/tmp/benevoles-video-production.Tn5IhO",
+    "builtAt": "2026-10-06T15:50:24.803Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "SHIFT_TIMELINE_QUICK_ACTIONS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 18491
+    },
+    {
+      "kind": "click",
+      "atMs": 28375
+    },
+    {
+      "kind": "click",
+      "atMs": 32092
+    },
+    {
+      "kind": "click",
+      "atMs": 44092
+    },
+    {
+      "kind": "click",
+      "atMs": 56858
+    },
+    {
+      "kind": "click",
+      "atMs": 66306
+    },
+    {
+      "kind": "click",
+      "atMs": 67090
+    },
+    {
+      "kind": "click",
+      "atMs": 71740
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1130,
-      "endMs": 15325
+      "startMs": 1101,
+      "endMs": 13786
     },
     {
       "id": "draw",
-      "startMs": 15779,
-      "endMs": 29872
+      "startMs": 14239,
+      "endMs": 27453
     },
     {
       "id": "resize",
-      "startMs": 30325,
-      "endMs": 43590
+      "startMs": 27905,
+      "endMs": 40171
     },
     {
       "id": "popover",
-      "startMs": 44045,
-      "endMs": 56189
+      "startMs": 40623,
+      "endMs": 51303
     },
     {
       "id": "copy",
-      "startMs": 56641,
-      "endMs": 71616
+      "startMs": 51754,
+      "endMs": 65379
     },
     {
       "id": "detail",
-      "startMs": 72067,
-      "endMs": 86387
+      "startMs": 65831,
+      "endMs": 78779
     },
     {
       "id": "result",
-      "startMs": 86841,
-      "endMs": 97464
+      "startMs": 79231,
+      "endMs": 88101
     }
   ]
 }

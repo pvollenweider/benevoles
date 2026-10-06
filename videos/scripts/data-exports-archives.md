@@ -1,5 +1,7 @@
 # Exporter ses données et garder une copie utile
 
+Révision rédactionnelle du 6 octobre 2026 : narration adressée aux organisateurs au vouvoiement, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. Les anciennes preuves audio ne valident pas ce nouveau texte ; narration, sous-titres, synchronisation et MP4 final sont à recontrôler après régénération.
+
 Vidéo autonome 50, identifiant `DATA_EXPORTS_ARCHIVES`. Une narration continue Puck, souriante et patiente. Sources lues : GUIDE_ADMIN « Exporter et conserver ses données », routes membres/export et archive d'événement, `membersCsv`, `activityCsv`, `eventArchive` et `stripSecrets`.
 
 ## Parcours et résultats à filmer

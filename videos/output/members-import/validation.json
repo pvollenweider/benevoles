@@ -1,65 +1,65 @@
 {
   "id": "MEMBERS_IMPORT",
   "slug": "members-import",
-  "validatedAt": "2026-10-05T13:37:59.680Z",
+  "validatedAt": "2026-10-06T17:22:06.603Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 221480,
+  "captureMs": 220760,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 20296,
-      "audioMs": 20294,
+      "visualMs": 22025,
+      "audioMs": 22023,
       "driftMs": 2
     },
     {
       "id": "file",
-      "visualMs": 26210,
-      "audioMs": 26208,
-      "driftMs": 2
+      "visualMs": 25609,
+      "audioMs": 25606,
+      "driftMs": 3
     },
     {
       "id": "preview",
-      "visualMs": 26220,
-      "audioMs": 26218,
-      "driftMs": 2
+      "visualMs": 25627,
+      "audioMs": 25626,
+      "driftMs": 1
     },
     {
       "id": "errors",
-      "visualMs": 24991,
-      "audioMs": 24990,
+      "visualMs": 23577,
+      "audioMs": 23576,
       "driftMs": 1
     },
     {
       "id": "update",
-      "visualMs": 26753,
-      "audioMs": 26752,
+      "visualMs": 27008,
+      "audioMs": 27007,
       "driftMs": 1
     },
     {
       "id": "corrected",
-      "visualMs": 26645,
-      "audioMs": 26640,
-      "driftMs": 5
+      "visualMs": 25774,
+      "audioMs": 25772,
+      "driftMs": 2
     },
     {
       "id": "confirm",
-      "visualMs": 24972,
-      "audioMs": 24969,
-      "driftMs": 3
+      "visualMs": 24427,
+      "audioMs": 24426,
+      "driftMs": 1
     },
     {
       "id": "repeat",
-      "visualMs": 20303,
-      "audioMs": 20301,
+      "visualMs": 21464,
+      "audioMs": 21462,
       "driftMs": 2
     },
     {
       "id": "result",
-      "visualMs": 21030,
-      "audioMs": 21028,
-      "driftMs": 2
+      "visualMs": 21184,
+      "audioMs": 21183,
+      "driftMs": 1
     }
   ],
   "issues": []

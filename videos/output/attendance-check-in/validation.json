@@ -1,59 +1,95 @@
 {
   "id": "ATTENDANCE_CHECK_IN",
   "slug": "attendance-check-in",
-  "validatedAt": "2026-10-05T18:07:27.280Z",
+  "validatedAt": "2026-10-06T17:37:17.428Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 235000,
+  "captureMs": 401800,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 24082,
-      "audioMs": 24076,
-      "driftMs": 6
-    },
-    {
-      "id": "one",
-      "visualMs": 24946,
-      "audioMs": 24938,
-      "driftMs": 8
-    },
-    {
-      "id": "group",
-      "visualMs": 25394,
-      "audioMs": 25392,
-      "driftMs": 2
-    },
-    {
-      "id": "correction",
-      "visualMs": 22992,
-      "audioMs": 22992,
+      "visualMs": 24386,
+      "audioMs": 24386,
       "driftMs": 0
     },
     {
+      "id": "one",
+      "visualMs": 24668,
+      "audioMs": 24667,
+      "driftMs": 1
+    },
+    {
+      "id": "group",
+      "visualMs": 23329,
+      "audioMs": 23328,
+      "driftMs": 1
+    },
+    {
+      "id": "correction",
+      "visualMs": 22565,
+      "audioMs": 22564,
+      "driftMs": 1
+    },
+    {
       "id": "multiple",
-      "visualMs": 28189,
-      "audioMs": 28186,
-      "driftMs": 3
+      "visualMs": 26131,
+      "audioMs": 26130,
+      "driftMs": 1
     },
     {
       "id": "limits",
-      "visualMs": 26797,
-      "audioMs": 26796,
+      "visualMs": 24380,
+      "audioMs": 24379,
       "driftMs": 1
     },
     {
       "id": "cancelled",
-      "visualMs": 39746,
-      "audioMs": 39744,
-      "driftMs": 2
+      "visualMs": 37912,
+      "audioMs": 37909,
+      "driftMs": 3
     },
     {
       "id": "export",
-      "visualMs": 27877,
-      "audioMs": 27875,
+      "visualMs": 24065,
+      "audioMs": 24064,
+      "driftMs": 1
+    },
+    {
+      "id": "dayof-window",
+      "visualMs": 28643,
+      "audioMs": 28642,
+      "driftMs": 1
+    },
+    {
+      "id": "dayof-search",
+      "visualMs": 23323,
+      "audioMs": 23321,
       "driftMs": 2
+    },
+    {
+      "id": "dayof-phone",
+      "visualMs": 26118,
+      "audioMs": 26117,
+      "driftMs": 1
+    },
+    {
+      "id": "dayof-checkin",
+      "visualMs": 25050,
+      "audioMs": 25048,
+      "driftMs": 2
+    },
+    {
+      "id": "dayof-refresh",
+      "visualMs": 25143,
+      "audioMs": 25142,
+      "driftMs": 1
+    },
+    {
+      "id": "dayof-undo",
+      "visualMs": 26944,
+      "audioMs": 26944,
+      "driftMs": 0
     }
   ],
   "issues": []

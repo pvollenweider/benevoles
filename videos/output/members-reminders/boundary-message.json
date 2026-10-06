@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour expliquer davantage, utilise Écrire un message aux personnes sans créneau.",
+  "windowStart": 66.81700000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 30.08,
+    "wordsHeard": "Pour"
+  },
+  "onset": 96.897,
+  "proposedCut": 96.81704149999999,
+  "note": "Proposal only; recut then independently audit before capture"
+}

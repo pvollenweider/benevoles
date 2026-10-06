@@ -1,0 +1,12 @@
+{
+  "anchor": "Regardons une fenêtre simulée de trois cent vingt pixels de large.",
+  "windowStart": 142.23199999999997,
+  "result": {
+    "found": true,
+    "startSeconds": 30.14,
+    "wordsHeard": "Regardons"
+  },
+  "onset": 172.37199999999996,
+  "proposedCut": 172.2321875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

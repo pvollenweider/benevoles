@@ -3,10 +3,10 @@
   "windowStart": 0,
   "result": {
     "found": true,
-    "startSeconds": 14.84,
+    "startSeconds": 14.28,
     "wordsHeard": "Une"
   },
-  "onset": 14.84,
-  "proposedCut": 14.716875,
+  "onset": 14.28,
+  "proposedCut": 14.141458,
   "note": "Proposal only; recut then independently audit before capture"
 }

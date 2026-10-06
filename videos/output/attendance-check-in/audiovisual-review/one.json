@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T18:07:47.721Z",
-  "videoSha256": "58705cd0468ab625a8108945bd9244cff798768e56f4403e42e7c79dbda4612a",
-  "promptSha256": "9cedf9219b6bd30a3f3c3e4142404d6f4f1c783c59df83e89b53861a514461f0",
-  "clipSha256": "60615eeacf580a4805acf653fecaa3a64c8ebd976bcfa4ef33c782ef3e97c36c",
+  "reviewedAt": "2026-10-06T17:37:55.556Z",
+  "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
+  "promptSha256": "885a5592f6ea00c9911cd540f5d7724bc6c35e22765271aad052d12f1d925cbc",
+  "clipSha256": "de83fdafd5fc156c93cf8e77bb39d90c8cf59da283fe2d8a8600c67b299a3198",
   "scene": "one",
   "review": {
-    "heardOpening": "Aline vient d'arriver",
+    "heardOpening": "Aline vient d'arriver.",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 2,
         "spoken": "Sélectionnons uniquement sa ligne",
-        "visibleSeconds": 3.8,
-        "visible": "Coche de la ligne d'Aline et affichage du bandeau de sélection",
+        "visibleSeconds": 3.5,
+        "visible": "Sélection de la case à cocher d'Aline Exemple",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.2,
+        "spokenSeconds": 5.5,
         "spoken": "avant de marquer sa présence",
-        "visibleSeconds": 7.5,
-        "visible": "Clic sur le bouton Marquer présent",
+        "visibleSeconds": 6.8,
+        "visible": "Clic sur le bouton Marquer présent (1)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
+        "spokenSeconds": 7.5,
         "spoken": "La marque apparaît sur son inscription",
-        "visibleSeconds": 9.2,
-        "visible": "Badge Présent affiché sur la ligne d'Aline",
+        "visibleSeconds": 8.5,
+        "visible": "Apparition du badge Présent sur la ligne d'Aline",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11,
+        "spokenSeconds": 9.5,
         "spoken": "Rechargeons la page : elle est toujours là",
-        "visibleSeconds": 12,
-        "visible": "Rechargement de la page avec persistance du badge Présent",
+        "visibleSeconds": 10.5,
+        "visible": "Rafraîchissement de la page avec maintien de la mention",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire, calme et régulière."
+      "observation": "Voix claire, posée et bien synchronisée avec les actions."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

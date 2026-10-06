@@ -1,0 +1,12 @@
+{
+  "anchor": "Comparons avec une inscription depuis le simple formulaire public, sans invitation.",
+  "windowStart": 331.17699999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 32.2,
+    "wordsHeard": "Comparons"
+  },
+  "onset": 363.37699999999995,
+  "proposedCut": 363.081396,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -2,8 +2,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Sequential common-fixture captures. Failures stay visible and do not block other videos.
 import { spawn } from "node:child_process"
+import { createHash } from "node:crypto"
 import { mkdir, writeFile } from "node:fs/promises"
 import { catalogEntry } from "../lib/manifest"
+import { verifyProductBuild } from "../lib/product-build"
 
 const allowed = ["SECTOR_LEADERS", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH", "EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP"]
 async function run(script: string, args: string[]) {
@@ -19,7 +21,14 @@ async function main() {
   for (const id of ids) await catalogEntry(id)
   const results: { id: string; status: string; failedStage?: string }[] = []
   await mkdir("videos/output", { recursive: true })
+  const batch = createHash("sha256").update(ids.join("\n")).digest("hex").slice(0, 16)
+  const reportFile = `videos/output/resumed-captures-${batch}.json`
+  const save = (active: { id: string; stage: string } | null = null) => writeFile(reportFile, JSON.stringify({ updatedAt: new Date().toISOString(), requested: ids, active, note: "Generated-for-review is not human validation, complete coverage or publication. Every failed stage remains listed.", results }, null, 2))
+  await save()
   for (const id of ids) {
+    // Fail before resetting any fixture if another main update invalidated the
+    // server. An outdated server is a batch-level condition, not four retries.
+    await verifyProductBuild("http://localhost:43102")
     console.log(`Capturing ${id}; common synthetic fixture only`)
     const local = (script: string, args: string[] = []): [string, string[]] => ["videos/tools/local-production.ts", ["run", script, ...args]]
     const stages: [string, string, string[]][] = [
@@ -36,6 +45,7 @@ async function main() {
     stages.push(["audiovisual-review", ...local("videos/tools/audit-audiovisual.ts", [id])])
     let failedStage: string | undefined
     for (const [stage, script, args] of stages) {
+      await save({ id, stage })
       let code = await run(script, args)
       if (code !== 0 && ["source-audit", "final-audio"].includes(stage)) {
         console.log(`${id}: retrying independent ${stage}; a failed transcription is never edited or accepted`)
@@ -44,7 +54,7 @@ async function main() {
       if (code !== 0) { failedStage = stage; break }
     }
     results.push({ id, status: failedStage ? "needs-review" : "generated-for-review", failedStage })
-    await writeFile("videos/output/resumed-captures.json", JSON.stringify({ updatedAt: new Date().toISOString(), note: "Generated-for-review is not human validation, complete coverage or publication. Every failed stage remains listed.", results }, null, 2))
+    await save()
     console.log(`${id}: ${failedStage ? `needs review at ${failedStage}` : "generated for review"}`)
   }
   if (results.some(result => result.failedStage)) process.exitCode = 1

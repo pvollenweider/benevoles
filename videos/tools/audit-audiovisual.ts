@@ -10,25 +10,84 @@ import { promisify } from "node:util"
 import { loadManifest, videoDir, type Timeline } from "../lib/manifest"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
+import assert from "node:assert/strict"
+import { pathToFileURL } from "node:url"
+import { ownsRecordedNoEmailMember } from "./prepare-demo"
+import { ownsImportedNoEmailMember, readImportOwnership, type ImportOwnership } from "../lib/member-import-ownership"
 
 const exec = promisify(execFile)
 const reference = process.argv[2]
 const selected = process.argv.slice(3).find(arg => !arg.startsWith("--"))
 const force = process.argv.includes("--force")
 const commonDemoVideos = ["SECTOR_LEADERS", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH", "EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP"]
+const memberDemoVideos = ["MEMBERS_MANAGEMENT", "MEMBERS_IMPORT", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "REGISTRATIONS_MANAGEMENT", "STAFFING_GAPS", "TARGETED_MESSAGES", "REMINDERS_CHANGES"]
+type Member = Parameters<typeof ownsRecordedNoEmailMember>[0]
+type Ownership = Parameters<typeof ownsRecordedNoEmailMember>[1]
+type MemberFixture = { id: string; name: string; volunteers: Member[]; admins: { email: string }[]; events: { slug: string; sectorLeaders: { email: string }[]; registrations: { volunteer: Member }[] }[] }
+
+/** Pure guard shared by the eight member journeys; no broad exemption for missing email. */
+export function validateMemberReviewFixture(databaseUrl: string, fixture: MemberFixture, owned: Ownership, now = Date.now(), imported: ImportOwnership | null = null) {
+  const url = new URL(databaseUrl)
+  assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Member review requires isolated local video database")
+  assert(fixture.id === "default" && fixture.name === "Fêtes de Montvert" && fixture.events.some(event => event.slug === "fete-du-village"), "Member review requires the exact fictional default organization")
+  const synthetic = (member: Member) => {
+    if (member.organizationId !== "default") return false
+    if (member.email?.endsWith("@example.org")) return true
+    if (member.email !== null) return false
+    // Exact two seed identities, not every no-email contact with a familiar name.
+    if (member.id === "video-message-sansmail") return member.firstName === "René" && member.lastName === "Sansmail" && member.phone === null
+    if (member.id === "video-member-management-2") return member.phone?.replace(/\s/g, "") === "0790000200" && ((member.firstName === "Sébastien" && member.lastName === "Morel 3") || (member.firstName === "René" && member.lastName === "Sansmail"))
+    return ownsRecordedNoEmailMember(member, owned, now) || ownsImportedNoEmailMember(member, imported, now)
+  }
+  assert(fixture.volunteers.every(synthetic), "Member review contains non-synthetic organization members")
+  assert(fixture.events.every(event => event.registrations.every(registration => synthetic(registration.volunteer)) && event.sectorLeaders.every(leader => leader.email.endsWith("@example.org"))), "Member review contains non-synthetic event recipients")
+  assert(fixture.admins.every(admin => admin.email.endsWith("@example.org") || admin.email === "org-admin@localhost"), "Member review contains non-synthetic administrators")
+}
+
+async function memberOwnership(): Promise<Ownership> {
+  let raw: string
+  try { raw = await readFile(path.resolve("videos/output/members-management/owned-members.json"), "utf8") }
+  catch (error) { if ((error as NodeJS.ErrnoException).code === "ENOENT") return []; throw error }
+  const ledger = JSON.parse(raw)
+  assert(ledger.schemaVersion === 1 && ledger.scenario === "members-management" && Array.isArray(ledger.members) && ledger.members.length <= 30, "Invalid member capture ownership ledger")
+  assert(ledger.members.every((entry: Ownership[number]) => entry && typeof entry.id === "string" && typeof entry.createdAt === "string"), "Invalid member ownership entry")
+  return ledger.members
+}
 type Checkpoint = { spokenSeconds: number; spoken: string; visibleSeconds: number | null; visible: string; sync: "aligned" | "early" | "late" | "missing" | "uncertain"; severity: "none" | "minor" | "major" }
 type Review = { heardOpening: string; checkpoints: Checkpoint[]; issues: string[]; voice: { consistent: boolean; warm: boolean; observation: string } }
-const reviewRules = "\nUne introduction qui annonce au futur les chapitres à venir n'exige pas que ces actions aient déjà lieu dans cet extrait. Ne signale pas un texte saisi non dicté mot à mot, sauf s'il contredit la consigne entendue ou si la voix promet une dictée exacte. Une variante lexicale de même sens n'est pas un défaut de synchronisation ; une phrase omise, un fait modifié ou un conseil ajouté hors script doit rester signalé. N'atténue aucun retard d'action réellement annoncée au présent."
+const reviewRules = "\nUne introduction qui annonce au futur les chapitres à venir n'exige pas que ces actions aient déjà lieu dans cet extrait. Une explication générale ou une conclusion peut s'appuyer sur un écran stable pertinent : l'absence de clic n'est pas, à elle seule, un défaut. Cette règle n'excuse jamais une action concrète annoncée mais absente, tardive, ou dont le résultat n'est pas visible. Ne signale pas un texte saisi non dicté mot à mot, sauf s'il contredit la consigne entendue ou si la voix promet une dictée exacte. Une variante lexicale de même sens n'est pas un défaut de synchronisation ; une phrase omise, un fait modifié ou un conseil ajouté hors script doit rester signalé. N'atténue aucun retard d'action réellement annoncée au présent."
 
 async function main() {
   if (!reference) throw new Error("Usage: audit-audiovisual.ts VIDEO_ID [scene] [--force]")
   const manifest = await loadManifest(reference)
   // External visual review is opt-in here only for the fixture we can prove synthetic.
   // Do not export arbitrary videos, production captures or real volunteer information.
-  if (!["ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", ...commonDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  if (!["ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
+  if (memberDemoVideos.includes(manifest.id) || manifest.id === "ATTENDANCE_CHECK_IN" || manifest.id === "MEMBERS_DUPLICATES_MERGE") {
+    const url = new URL(process.env.DATABASE_URL!)
+    assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Member review requires isolated video database before connection")
+  }
+  const currentMerge = manifest.id === "MEMBERS_DUPLICATES_MERGE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43110") : manifest.id === "EVENT_QUESTIONS" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43112") : manifest.id === "VOLUNTEER_HOURS_CERTIFICATE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43114") : null
+  const db = currentMerge?.db ?? new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
   try {
-    if (commonDemoVideos.includes(manifest.id)) {
+    if (memberDemoVideos.includes(manifest.id)) {
+      const fixture = await db.organization.findUniqueOrThrow({ where: { id: "default" }, include: { volunteers: true, admins: true, events: { include: { sectorLeaders: true, registrations: { include: { volunteer: true } } } } } })
+      validateMemberReviewFixture(process.env.DATABASE_URL!, fixture, await memberOwnership(), Date.now(), await readImportOwnership())
+    }
+    // Keep the existing reminder-specific nine-registration / three-event guard below as well.
+    if (manifest.id === "VOLUNTEER_HOURS_CERTIFICATE") {
+      await (await import("../lib/volunteer-hours-fixture")).assertOwnedHoursFixture(db)
+    } else if (manifest.id === "EVENT_QUESTIONS") {
+      await (await import("../lib/event-questions-fixture")).assertQuestionsReviewFixture(db)
+    } else if (manifest.id === "MEMBERS_DUPLICATES_MERGE") {
+      const { assertMergeReviewFixture } = await import("../lib/member-merge-fixture")
+      await assertMergeReviewFixture(db, process.env.DATABASE_URL!)
+    } else if (manifest.id === "ATTENDANCE_CHECK_IN") {
+      const { verifyDayOfReviewFixture } = await import("../lib/verify-dayof-review-fixture")
+      await verifyDayOfReviewFixture(db)
+    } else if (memberDemoVideos.includes(manifest.id) && manifest.id !== "REMINDERS_CHANGES") {
+      // The whole organization, including every displayable volunteer, was checked above.
+    } else if (commonDemoVideos.includes(manifest.id)) {
       const url = new URL(process.env.DATABASE_URL!)
       if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video") throw new Error("Common demo review requires isolated video database")
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "default" }, include: { admins: true, events: { include: { sectorLeaders: true, registrations: { include: { volunteer: true } } } } } })
@@ -100,7 +159,7 @@ async function main() {
       throw new Error("Attendance is not exclusively synthetic fixture data")
     }
     }
-  } finally { await db.$disconnect() }
+  } finally { await db.$disconnect(); await currentMerge?.unregister() }
   const directory = videoDir(manifest.slug)
   const timeline = JSON.parse(await readFile(path.join(directory, "timeline.json"), "utf8")) as Timeline
   if (timeline.capturePurpose === "rehearsal") throw new Error("A rehearsal has no synchronized audio to review")
@@ -151,4 +210,4 @@ async function main() {
   console.log(`${checked} scene reviews; ${flagged} flagged. This does not replace inspection of the final video.`)
   if (flagged) process.exitCode = 1
 }
-main().catch(error => { console.error(error instanceof Error ? error.message : "Audiovisual review failed"); process.exitCode = 1 })
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) main().catch(error => { console.error(error instanceof Error ? error.message : "Audiovisual review failed"); process.exitCode = 1 })

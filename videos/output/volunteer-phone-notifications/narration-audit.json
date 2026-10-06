@@ -1,0 +1,110 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-06T16:30:15.165Z",
+  "revalidatedAt": "2026-10-06T16:30:15.166Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "c96ed87940e0bfa4a1405b062d40b7935eac0f328016167a9c8ffa19597b65aa",
+      "recognized": "Tu as trouvé ton créneau et tu veux garder l'esprit tranquille jusqu'au jour de la fête ? Les notifications peuvent te donner un petit rappel sur l'appareil que tu utilises. Elles complètent les e-mails sans changer ton inscription. Nous allons partir du lien personnel d'une bénévole fictive, activer les rappels avec son accord, puis voir comment garder la main sur ce choix.",
+      "expected": "Tu as trouvé ton créneau, et tu veux garder l'esprit tranquille jusqu'au jour de la fête ? Les notifications peuvent te donner un petit rappel sur l'appareil que tu utilises. Elles complètent les emails, sans changer ton inscription. Nous allons partir du lien personnel d'une bénévole fictive, activer les rappels avec son accord, puis voir comment garder la main sur ce choix.",
+      "wordErrorRate": 0.03076923076923077,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "conditions",
+      "audioSha256": "1acb72b210345127e5cd08a33c60e3c55112daffac11cd76726a3c88fb9707ec",
+      "recognized": "Ces rappels passent par le navigateur, pas par une application bénévole à installer. Leur disponibilité dépend de ton appareil, de ton navigateur et de la configuration du site. Sur certains téléphones, des étapes supplémentaires peuvent être nécessaires. Si le bouton n'apparaît pas, cela ne veut pas dire que ton inscription a disparu. Pour une démonstration locale, nous utilisons un environnement sécurisé compatible. Un écran d'ordinateur réduit à la taille d'un téléphone ne prouve pas que les notifications fonctionnent sur un vrai téléphone.",
+      "expected": "Ces rappels passent par le navigateur, pas par une application Benevol à installer. Leur disponibilité dépend de ton appareil, de ton navigateur et de la configuration du site. Sur certains téléphones, des étapes supplémentaires peuvent être nécessaires. Si le bouton n'apparaît pas, cela ne veut pas dire que ton inscription a disparu. Pour une démonstration locale, nous utilisons un environnement sécurisé compatible. Un écran d'ordinateur réduit à la taille d'un téléphone ne prouve pas que les notifications fonctionnent sur un vrai téléphone.",
+      "wordErrorRate": 0.011764705882352941,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "personal-link",
+      "audioSha256": "bb649a202d977ac5e57cf96bd70374319bf1fb77a8bb450c3e015d0d502800f4",
+      "recognized": "Ouvre ton lien personnel, celui que tu as reçu après ton inscription. Cette page reprend tes créneaux et les informations utiles pour ta mission. Repère le bouton recevoir des rappels push. Push, c'est simplement le nom de ces notifications envoyées à ton navigateur. Le bouton peut aussi apparaître sur la page de confirmation d'une inscription faite depuis une invitation. Garde ton lien pour toi, il donne accès à tes inscriptions.",
+      "expected": "Ouvre ton lien personnel, celui que tu as reçu après ton inscription. Cette page reprend tes créneaux et les informations utiles pour ta mission. Repère le bouton Recevoir des rappels push. Push, c'est simplement le nom de ces notifications envoyées à ton navigateur. Le bouton peut aussi apparaître sur la page de confirmation d'une inscription faite depuis une invitation. Garde ton lien pour toi : il donne accès à tes inscriptions.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "permission",
+      "audioSha256": "ab4ada53397792fdaf9f1952a6934e95e37eeb335b634df74097c548e97f8343",
+      "recognized": "Tu choisis d'abord recevoir des rappels push. Le navigateur peut alors te demander si tu autorises les notifications pour ce site. Prends le temps de lire le nom du site, puis choisis librement. Autoriser permet de poursuivre l'activation, refuser reste tout à fait possible. Tu n'annules aucun créneau. Si tu as déjà fait ce choix dans ce navigateur, la demande peut ne pas s'afficher à nouveau.",
+      "expected": "Tu choisis d'abord Recevoir des rappels push. Le navigateur peut alors te demander si tu autorises les notifications pour ce site. Prends le temps de lire le nom du site, puis choisis librement. Autoriser permet de poursuivre l'activation. Refuser reste tout à fait possible : tu n'annules aucun créneau. Si tu as déjà fait ce choix dans ce navigateur, la demande peut ne pas s'afficher à nouveau.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "active",
+      "audioSha256": "911a61ac00afcb176cb6189513a18964cde6f704909ffb0937488ba996e99bb9",
+      "recognized": "Une activation réussie affiche rappel push activé. Le site a alors accepté l'abonnement de ce navigateur pour cette bénévole. C'est une étape importante mais ce texte ne prouve pas qu'un rappel est déjà arrivé sur l'appareil. L'autorisation du navigateur, l'abonnement enregistré et la notification effectivement reçue sont trois choses différentes. Sur un autre appareil ou un autre navigateur, il faut vérifier les réglages de ce nouvel environnement.",
+      "expected": "Une activation réussie affiche Rappels push activés. Le site a alors accepté l'abonnement de ce navigateur pour cette bénévole. C'est une étape importante, mais ce texte ne prouve pas qu'un rappel est déjà arrivé sur l'appareil. L'autorisation du navigateur, l'abonnement enregistré et la notification effectivement reçue sont trois choses différentes. Sur un autre appareil ou un autre navigateur, il faut vérifier les réglages de ce nouvel environnement.",
+      "wordErrorRate": 0.0273972602739726,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "reminders",
+      "audioSha256": "2e2352011a596629d52698a51601e5a40558231d17afe8a922e05c0ded7eea67",
+      "recognized": "Pour tes places confirmées, l'organisation peut prévoir les rappels deux jours avant, la veille et le jour de tes créneaux. Les rappels d'un même événement et d'une même journée regroupent tes créneaux. Un rappel ne veut pas dire un message pour chaque poste. Les demandes encore sous validation et les places en liste d'attente ne sont pas des places confirmées. Les réglages de l'organisation et de l'événement restent prioritaires. Activer les notifications ne rallume pas un rappel que l'organisation a désactivé.",
+      "expected": "Pour tes places confirmées, l'organisation peut prévoir les rappels deux jours avant, la veille et le jour de tes créneaux. Les rappels d'un même événement et d'une même journée regroupent tes créneaux : un rappel ne veut pas dire un message pour chaque poste. Les demandes encore sur validation et les places en liste d'attente ne sont pas des places confirmées. Les réglages de l'organisation et de l'événement restent prioritaires : activer les notifications ne rallume pas un rappel que l'organisation a désactivé.",
+      "wordErrorRate": 0.011363636363636364,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "delivery",
+      "audioSha256": "49de697dbba7a4a5adc107dba036cfd86a238bc7d06d338a38bdf12b71b71596",
+      "recognized": "Un message urgent de l'organisation peut aussi être accompagné d'une notification si elle choisit cette option. Le message complet est envoyé par e-mail aux destinataires du message ciblé. Pour comprendre le résultat, distingue le court aperçu affiché par ton appareil et les informations complètes. Quand tu ouvres une notification de BénévoC, son lien te ramène vers la page concernée. Vérifie les horaires et les consignes sur ta page personnelle plutôt que de te fier uniquement à l'aperçu.",
+      "expected": "Un message urgent de l'organisation peut aussi être accompagné d'une notification, si elle choisit cette option. Le message complet est envoyé par email aux destinataires du message ciblé. Pour comprendre le résultat, distingue le court aperçu affiché par ton appareil et les informations complètes. Quand tu ouvres une notification de Benevol, son lien te ramène vers la page concernée. Vérifie les horaires et les consignes sur ta page personnelle, plutôt que de te fier uniquement à l'aperçu.",
+      "wordErrorRate": 0.0125,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "blocked",
+      "audioSha256": "a8eaf83fdfc712fb369f1f0438f5d0fe66f6f636ba590cd87dfcb8d31da410a6",
+      "recognized": "Si tu refuses la demande, le site indique notification bloquée dans les paramètres du navigateur. Pour changer d'avis, il faudra passer par les réglages de ce navigateur. Si l'activation rencontre un problème, le message les rappels n'ont pas pu être activés t'invite à réessayer dans un moment. Le site peut aussi ne pas proposer cette fonction. Ne multiplie pas les essais. Vérifie d'abord ta connexion, les autorisations et l'appareil utilisé. Tu peux toujours consulter ton planning depuis ton lien personnel.",
+      "expected": "Si tu refuses la demande, le site indique Notifications bloquées dans les paramètres du navigateur. Pour changer d'avis, il faudra passer par les réglages de ce navigateur. Si l'activation rencontre un problème, le message Les rappels n'ont pas pu être activés t'invite à réessayer dans un moment. Le site peut aussi ne pas proposer cette fonction. Ne multiplie pas les essais : vérifie d'abord ta connexion, les autorisations et l'appareil utilisé. Tu peux toujours consulter ton planning depuis ton lien personnel.",
+      "wordErrorRate": 0.023255813953488372,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "disable",
+      "audioSha256": "19adc90ff29e6a901de62f8a36a419c959fb04908703315fbce8853bc8f864f8",
+      "recognized": "Tu veux arrêter ces notifications ? Ouvre les autorisations du site dans les réglages du navigateur et retire l'autorisation d'envoyer des notifications. Le chemin exact dépend de ton appareil. Ce qui est montré ici correspond au navigateur de la démonstration. Ce choix ne supprime pas tes inscriptions et ne modifie pas les emails prévus par l'organisation. Ce n'est pas non plus un bouton pour se désinscrire d'un créneau. Si tu réactives plus tard, reviens sur ta page personnelle et vérifie le résultat de l'activation.",
+      "expected": "Tu veux arrêter ces notifications ? Ouvre les autorisations du site dans les réglages du navigateur et retire l'autorisation d'envoyer des notifications. Le chemin exact dépend de ton appareil ; ce qui est montré ici correspond au navigateur de la démonstration. Ce choix ne supprime pas tes inscriptions, et ne modifie pas les emails prévus par l'organisation. Ce n'est pas non plus un bouton pour se désinscrire d'un créneau. Si tu réactives plus tard, reviens sur ta page personnelle et vérifie le résultat de l'activation.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "60e97e6763bc8b86bc6b1bb8492d49c553b0adfa3cb512ee2afd6efdf0e05dba",
+      "recognized": "Voilà, tu sais où demander les rappels, ce que signifie l'activation et comment retirer ton autorisation. Les notifications sont un complément pratique, pas une garantie de réception à chaque instant. Les e-mails restent un canal séparé, selon les réglages de l'organisation et ton lien personnel reste la référence pour tes créneaux. Le plus important, c'est que tu puisses choisir ce qui te convient et retrouver facilement les bonnes informations avant de venir donner un coup de main.",
+      "expected": "Voilà : tu sais où demander les rappels, ce que signifie l'activation et comment retirer ton autorisation. Les notifications sont un complément pratique, pas une garantie de réception à chaque instant. Les emails restent un canal séparé, selon les réglages de l'organisation, et ton lien personnel reste la référence pour tes créneaux. Le plus important, c'est que tu puisses choisir ce qui te convient, et retrouver facilement les bonnes informations avant de venir donner un coup de main.",
+      "wordErrorRate": 0.025,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

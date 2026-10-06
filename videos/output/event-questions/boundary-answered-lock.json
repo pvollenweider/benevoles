@@ -1,0 +1,12 @@
+{
+  "anchor": "Le formulaire a maintenant des réponses : revenons modifier la taille",
+  "windowStart": 364.881,
+  "result": {
+    "found": true,
+    "startSeconds": 31.08,
+    "wordsHeard": "Le formulaire a maintenant des réponses. Revenons modifier la taille"
+  },
+  "onset": 395.96099999999996,
+  "proposedCut": 395.849375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

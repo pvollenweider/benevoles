@@ -1,0 +1,45 @@
+{
+  "locatedAt": "2026-10-06T17:07:44.312Z",
+  "masterSha256": "135f921f37fe85db5a2f3ccac7022ec8a250679084e44c948d732d94f36b4183",
+  "totalSeconds": 214.68,
+  "cuts": [
+    {
+      "id": "create",
+      "seconds": 22.623354
+    },
+    {
+      "id": "edit",
+      "seconds": 43.887521
+    },
+    {
+      "id": "availability",
+      "seconds": 65.6091665
+    },
+    {
+      "id": "no-email",
+      "seconds": 87.2967915
+    },
+    {
+      "id": "search",
+      "seconds": 105.522354
+    },
+    {
+      "id": "filter",
+      "seconds": 127.09741650000001
+    },
+    {
+      "id": "deactivate",
+      "seconds": 151.47275
+    },
+    {
+      "id": "activity",
+      "seconds": 172.959792
+    },
+    {
+      "id": "result",
+      "seconds": 193.65283349999999
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

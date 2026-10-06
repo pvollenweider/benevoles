@@ -1,58 +1,120 @@
 {
   "slug": "event-reports",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-05T18:04:50.383Z",
+  "recordedAt": "2026-10-06T12:08:34.770Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "36b214edd1d7b12ce76615a2d96279122f36551f",
+    "sourceTree": "76543afc9b7352081b912d767f35dde30d9769a9",
+    "productSourceSha256": "cfae6189d9a950758737001a3529247f7b0e8758ea32ab81f43046ecbc52fe58",
+    "buildId": "E7XCR78PvXnVEl-wDQdJH",
+    "snapshot": "/tmp/benevoles-video-production.KNG0lt",
+    "builtAt": "2026-10-06T12:02:10.018Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "default",
+    "scenario": "EVENT_REPORTS",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 6988
+    },
+    {
+      "kind": "click",
+      "atMs": 31604
+    },
+    {
+      "kind": "click",
+      "atMs": 57836
+    },
+    {
+      "kind": "click",
+      "atMs": 86637
+    },
+    {
+      "kind": "click",
+      "atMs": 110872
+    },
+    {
+      "kind": "click",
+      "atMs": 146383
+    },
+    {
+      "kind": "click",
+      "atMs": 184585
+    },
+    {
+      "kind": "click",
+      "atMs": 193345
+    },
+    {
+      "kind": "click",
+      "atMs": 219520
+    },
+    {
+      "kind": "click",
+      "atMs": 227148
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1286,
-      "endMs": 22342
+      "startMs": 1411,
+      "endMs": 23581
     },
     {
       "id": "complete",
-      "startMs": 22797,
-      "endMs": 50294
+      "startMs": 25901,
+      "endMs": 53158
     },
     {
       "id": "day",
-      "startMs": 50747,
-      "endMs": 77097
+      "startMs": 55428,
+      "endMs": 81010
     },
     {
       "id": "role",
-      "startMs": 77550,
-      "endMs": 102461
+      "startMs": 83272,
+      "endMs": 108064
     },
     {
       "id": "individual",
-      "startMs": 106322,
-      "endMs": 134630
+      "startMs": 114398,
+      "endMs": 143285
     },
     {
       "id": "attendance",
-      "startMs": 138466,
-      "endMs": 165730
+      "startMs": 149905,
+      "endMs": 177284
     },
     {
       "id": "contacts",
-      "startMs": 166182,
-      "endMs": 192884
+      "startMs": 179549,
+      "endMs": 206101
     },
     {
       "id": "answers",
-      "startMs": 193336,
-      "endMs": 227201
+      "startMs": 208363,
+      "endMs": 238849
     },
     {
       "id": "print",
-      "startMs": 227652,
-      "endMs": 256949
+      "startMs": 241124,
+      "endMs": 272348
     },
     {
       "id": "result",
-      "startMs": 258617,
-      "endMs": 285991
+      "startMs": 275842,
+      "endMs": 305624
     }
   ]
 }

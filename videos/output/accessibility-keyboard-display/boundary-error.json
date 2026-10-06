@@ -1,0 +1,12 @@
+{
+  "anchor": "Essayons maintenant d'ajouter une personne sans choisir de créneau. Le message",
+  "windowStart": 55.58699999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 30.6,
+    "wordsHeard": "Essayons maintenant d'ajouter une personne sans choisir de créneau. Le message"
+  },
+  "onset": 86.18699999999998,
+  "proposedCut": 85.58725,
+  "note": "Proposal only; recut then independently audit before capture"
+}

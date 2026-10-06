@@ -1,0 +1,33 @@
+{
+  "locatedAt": "2026-10-06T15:55:03.884Z",
+  "masterSha256": "3f32110f3f548e70799836a9e55e81c9d449abb4dbc35c639af690f81556000d",
+  "totalSeconds": 89.32,
+  "cuts": [
+    {
+      "id": "setup",
+      "seconds": 13.9660835
+    },
+    {
+      "id": "admin",
+      "seconds": 28.780250000000002
+    },
+    {
+      "id": "release",
+      "seconds": 41.612125
+    },
+    {
+      "id": "volunteer",
+      "seconds": 52.954792
+    },
+    {
+      "id": "expiry",
+      "seconds": 66.22272899999999
+    },
+    {
+      "id": "result",
+      "seconds": 77.56475
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

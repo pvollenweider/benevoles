@@ -1,87 +1,110 @@
 {
   "model": "gemini-3.8-flash",
-  "auditedAt": "2026-10-05T13:55:02.195Z",
-  "note": "ASR evidence, not a full audiovisual or voice-quality validation",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-06T17:08:30.885Z",
+  "revalidatedAt": "2026-10-06T17:38:15.949Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
   "segments": [
     {
       "id": "welcome",
-      "audioSha256": "32fd6ec512f8e665e045284958028c68430cf222a70cb118ea52dfb6b719bdef",
-      "recognized": "Ta fête est prête et tu souhaites proposer des créneaux aux membres de ton association ? Dans Invitations, tu peux contacter une personne ou un groupe. Une invitation n'est pas une inscription. Chacun choisit ensuite sa participation. Les compteurs distinguent les personnes invitées et celles qui ont un créneau confirmé. Voyons tout le parcours, de l'envoi au choix du bénévole.",
-      "expected": "Ta fête est prête, et tu souhaites proposer des créneaux aux membres de ton association ? Dans Invitations, tu peux contacter une personne ou un groupe. Une invitation n'est pas une inscription : chacun choisit ensuite sa participation. Les compteurs distinguent les personnes invitées et celles qui ont un créneau confirmé. Voyons tout le parcours, de l'envoi au choix du bénévole.",
-      "wordErrorRate": 0,
-      "needsReview": false
+      "audioSha256": "7d303020ab1b9e5e12c47904d8e9335561db7304d63bc9aa784f8109bf0b4ec2",
+      "recognized": "Votre fête est prête, et vous souhaitez proposer des créneaux aux membres de votre association ? Dans Invitation, vous pouvez contacter une personne ou un groupe. Une invitation n'est pas une inscription, chacun choisit ensuite sa participation. Les compteurs distinguent les personnes invitées et celles qui ont un créneau confirmé. Voyons tout le parcours, de l'envoi au choix du bénévole.",
+      "expected": "Votre fête est prête, et vous souhaitez proposer des créneaux aux membres de votre association ? Dans Invitations, vous pouvez contacter une personne ou un groupe. Une invitation n'est pas une inscription : chacun choisit ensuite sa participation. Les compteurs distinguent les personnes invitées et celles qui ont un créneau confirmé. Voyons tout le parcours, de l'envoi au choix du bénévole.",
+      "wordErrorRate": 0.01639344262295082,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     },
     {
       "id": "test",
-      "audioSha256": "5730e59b0ad6487d72e72b7c7c00586c4ab265acc40de292fcd8c1d847fa7314",
-      "recognized": "Avant de contacter l'équipe, tu peux tester l'envoi d'e-mail. Indique une adresse que tu utilises pour vérifier les messages, puis envoie le test. Nous ouvrons ici le message reçu dans notre boîte de démonstration. Cela permet de regarder la présentation. Un e-mail de test n'inscrit personne et ne remplace pas une vraie invitation à un membre.",
-      "expected": "Avant de contacter l'équipe, tu peux tester l'envoi d'email. Indique une adresse que tu utilises pour vérifier les messages, puis envoie le test. Nous ouvrons ici le message reçu dans notre boîte de démonstration. Cela permet de regarder la présentation. Un email de test n'inscrit personne et ne remplace pas une vraie invitation à un membre.",
-      "wordErrorRate": 0,
-      "needsReview": false
+      "audioSha256": "ffad3d66692cbad7cb693ed352e33692a7f81dd81950256f68e489b87d09e60d",
+      "recognized": "Avant de contacter l'équipe, vous pouvez tester l'envoi d'emails. Indiquez une adresse que vous utilisez pour vérifier les messages, puis envoyez le test. Nous ouvrons ici le message reçu dans notre boîte de démonstration. Cela permet de regarder la présentation. Un email de test n'inscrit personne et ne remplace pas une vraie invitation à un membre.",
+      "expected": "Avant de contacter l'équipe, vous pouvez tester l'envoi d'email. Indiquez une adresse que vous utilisez pour vérifier les messages, puis envoyez le test. Nous ouvrons ici le message reçu dans notre boîte de démonstration. Cela permet de regarder la présentation. Un email de test n'inscrit personne et ne remplace pas une vraie invitation à un membre.",
+      "wordErrorRate": 0.016666666666666666,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     },
     {
       "id": "individual",
-      "audioSha256": "5f6968416fa6a3de0d1b2277388ed6531071f7ad81ab3e49c7670caeaa0fc276",
-      "recognized": "Clique sur inviter des membres. Pour une invitation individuelle, recherche Aline, puis coche seulement sa fiche. Le compteur indique une personne sélectionnée. Tu peux ajouter un court mot d'accompagnement. Bonjour Aline, nous serions ravis de te retrouver à l'accueil. Vérifie le destinataire, puis envoie cette invitation. La personne apparaît ensuite dans le tableau de l'événement.",
-      "expected": "Clique sur Inviter des membres. Pour une invitation individuelle, recherche Aline, puis coche seulement sa fiche. Le compteur indique une personne sélectionnée. Tu peux ajouter un court mot d'accompagnement : Bonjour Aline, nous serions ravis de te retrouver à l'accueil. Vérifie le destinataire, puis envoie cette invitation. La personne apparaît ensuite dans le tableau de l'événement.",
+      "audioSha256": "ef6d8b25ed45cbaab57e6ffe7b2c690af43dde9e30a2393213987e5752765470",
+      "recognized": "Cliquez sur Inviter des membres. Pour une invitation individuelle, recherchez Aline, puis cochez seulement sa fiche. Le compteur indique une personne sélectionnée. Vous pouvez ajouter un court mot d'accompagnement. Bonjour Aline, nous serions ravis de te retrouver à l'accueil. Vérifiez le destinataire, puis envoyez cette invitation. La personne apparaît ensuite dans le tableau de l'événement.",
+      "expected": "Cliquez sur Inviter des membres. Pour une invitation individuelle, recherchez Aline, puis cochez seulement sa fiche. Le compteur indique une personne sélectionnée. Vous pouvez ajouter un court mot d'accompagnement : Bonjour Aline, nous serions ravis de te retrouver à l'accueil. Vérifiez le destinataire, puis envoyez cette invitation. La personne apparaît ensuite dans le tableau de l'événement.",
       "wordErrorRate": 0,
-      "needsReview": false
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     },
     {
       "id": "group",
-      "audioSha256": "13b3cc2db71650333240fc21e0402c1de3b1e46a278a1ae70ad23039eab42bbb",
-      "recognized": "Pour un groupe, utilise le filtre de tags. Il permet par exemple de retrouver les personnes de l'accueil. Tout sélectionner ajoute les membres visibles à ta sélection. Attention, une personne déjà cochée peut rester sélectionnée après un changement de filtre. Le compteur reste ton repère. Avec Effacer, repars d'une sélection vide, puis choisis précisément les personnes que tu veux inviter.",
-      "expected": "Pour un groupe, utilise le filtre de tags. Il permet par exemple de retrouver les personnes de l'accueil. Tout sélectionner ajoute les membres visibles à ta sélection. Attention : une personne déjà cochée peut rester sélectionnée après un changement de filtre. Le compteur reste ton repère. Avec Effacer, repars d'une sélection vide, puis choisis précisément les personnes que tu veux inviter.",
+      "audioSha256": "bcac8905c002770d88c5726255dbab2e099942e3511a17c44660f27428159f12",
+      "recognized": "Pour un groupe, utilisez le filtre de tags. Il permet par exemple de retrouver les personnes de l'accueil. Tout sélectionner ajoute les membres visibles à votre sélection. Attention, une personne déjà cochée peut rester sélectionnée après un changement de filtre. Le compteur reste votre repère. Avec Effacer, repartez d'une sélection vide, puis choisissez précisément les personnes que vous voulez inviter.",
+      "expected": "Pour un groupe, utilisez le filtre de tags. Il permet par exemple de retrouver les personnes de l'accueil. Tout sélectionner ajoute les membres visibles à votre sélection. Attention : une personne déjà cochée peut rester sélectionnée après un changement de filtre. Le compteur reste votre repère. Avec Effacer, repartez d'une sélection vide, puis choisissez précisément les personnes que vous voulez inviter.",
       "wordErrorRate": 0,
-      "needsReview": false
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     },
     {
       "id": "send",
-      "audioSha256": "cfa6b98af8ce18ae0c8c231b5e30f0e4f0c029f05f0e52207ef0b4a87b885fa4",
+      "audioSha256": "4ffedaf29d0566eb7b44603a95f5bc49363a92b05ae9e93fc2127acf50d89af8",
       "recognized": "Nous sélectionnons maintenant deux personnes et ajoutons un message commun. Envoyer deux invitations déclenche des messages individuels. Dans la boîte de démonstration, chaque personne reçoit son propre e-mail et son propre lien. Les coordonnées des autres invités ne sont pas affichées dans son message. La remise à cette boîte de test ne prouve évidemment pas qu'un bénévole a lu son e-mail.",
       "expected": "Nous sélectionnons maintenant deux personnes et ajoutons un message commun. Envoyer deux invitations déclenche des messages individuels. Dans la boîte de démonstration, chaque personne reçoit son propre email et son propre lien. Les coordonnées des autres invités ne sont pas affichées dans son message. La remise à cette boîte de test ne prouve évidemment pas qu'un bénévole a lu son email.",
       "wordErrorRate": 0,
-      "needsReview": false
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     },
     {
       "id": "personal-link",
-      "audioSha256": "1551049aaa8ba96205b8e5c38b0ad1b75ae5ef23d10f93c6e997fc252ec06163",
-      "recognized": "Ouvrons le lien reçu par Aline.\nIl mène à la fête avec ses coordonnées préremplies.\nElle peut regarder les horaires, choisir un créneau disponible et compléter les informations demandées.\nNous faisons une vraie inscription de démonstration, jusqu'à la confirmation.\nLe lien est personnel, il ne faut pas le partager comme si c'était l'adresse publique de la fête.",
+      "audioSha256": "d5546e56036ab8d22dc2b6da3198521d625c8ccaa19825c39445d7773e5bf4a0",
+      "recognized": "Ouvrons le lien reçu par Aline. Il mène à la fête avec ses coordonnées préremplies. Elle peut regarder les horaires, choisir un créneau disponible et compléter les informations demandées. Nous faisons une vraie inscription de démonstration jusqu'à la confirmation. Le lien est personnel, il ne faut pas le partager comme si c'était l'adresse publique de la fête.",
       "expected": "Ouvrons le lien reçu par Aline. Il mène à la fête avec ses coordonnées préremplies. Elle peut regarder les horaires, choisir un créneau disponible et compléter les informations demandées. Nous faisons une vraie inscription de démonstration, jusqu'à la confirmation. Le lien est personnel : il ne faut pas le partager comme si c'était l'adresse publique de la fête.",
       "wordErrorRate": 0,
-      "needsReview": false
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     },
     {
       "id": "reserved",
-      "audioSha256": "79dfbdfc238408a4838c6a4c2d5f61df1bef43f92906a5151fa2aac88fda46ec",
-      "recognized": "Une invitation peut aussi donner accès à un poste réservé aux membres portant un certain tag. Ici, Nicolas a le tag sécurité. Avec son invitation valide, il peut choisir le poste réservé correspondant. Ce n'est pas une autorisation générale, les tags actuels sont revérifiés à l'inscription. Et un poste réservé est différent d'une demande que l'organisateur doit accepter avant confirmation.",
+      "audioSha256": "0b842ac543859d6c279641226762e06f35d732f02d0115b173333259addcd16a",
+      "recognized": "Une invitation peut aussi donner accès à un poste réservé aux membres portant un certain tag. Ici, Nicolas a le tag sécurité. Avec son invitation valide, il peut choisir le poste réservé correspondant. Ce n'est pas une autorisation générale. Les tags actuels sont revérifiés à l'inscription. Et un poste réservé est différent d'une demande que l'organisateur doit accepter avant confirmation.",
       "expected": "Une invitation peut aussi donner accès à un poste réservé aux membres portant un certain tag. Ici, Nicolas a le tag sécurité. Avec son invitation valide, il peut choisir le poste réservé correspondant. Ce n'est pas une autorisation générale : les tags actuels sont revérifiés à l'inscription. Et un poste réservé est différent d'une demande que l'organisateur doit accepter avant confirmation.",
       "wordErrorRate": 0,
-      "needsReview": false
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     },
     {
       "id": "status",
-      "audioSha256": "faca40638544381e63e5c9518a58426b835ce47923820ebce57973305d435f86",
-      "recognized": "De retour dans invitations, Aline a maintenant une participation confirmée. D'autres personnes restent sans créneau confirmé. Ce statut ne dit pas si elles ont ouvert leur e-mail. Il peut aussi concerner une personne en liste d'attente, ou une demande encore à valider. Le tableau sert à suivre la participation, pas à surveiller la lecture des messages.",
+      "audioSha256": "58a060b7481440369f0092335bcc61dd09402c45085a1a5bae14164c3c32ff05",
+      "recognized": "De retour dans invitation, Aline a maintenant une participation confirmée. D'autres personnes restent sans créneau confirmé. Ce statut ne dit pas si elles ont ouvert leur e-mail. Il peut aussi concerner une personne en liste d'attente ou une demande encore à valider. Le tableau sert à suivre la participation, pas à surveiller la lecture des messages.",
       "expected": "De retour dans Invitations, Aline a maintenant une participation confirmée. D'autres personnes restent sans créneau confirmé. Ce statut ne dit pas si elles ont ouvert leur email. Il peut aussi concerner une personne en liste d'attente ou une demande encore à valider. Le tableau sert à suivre la participation, pas à surveiller la lecture des messages.",
-      "wordErrorRate": 0,
-      "needsReview": false
+      "wordErrorRate": 0.017241379310344827,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     },
     {
       "id": "existing",
-      "audioSha256": "ff7afa6d4249a29ef59e60ab34cd088c4a1b0c79a6f35c1e8d8270f7137840b2",
-      "recognized": "La case Cacher déjà invité évite de sélectionner facilement les mêmes personnes à nouveau. Décoche-la si tu veux les retrouver. Un nouvel envoi à une personne déjà invitée réutilise son invitation pour cette fête au lieu d'en créer une seconde. Prends néanmoins le temps de vérifier le groupe avant d'envoyer. Recevoir plusieurs messages identiques peut vite devenir agaçant. Enfin",
-      "expected": "La case Cacher déjà invités évite de sélectionner facilement les mêmes personnes à nouveau. Décoche-la si tu veux les retrouver. Un nouvel envoi à une personne déjà invitée réutilise son invitation pour cette fête, au lieu d'en créer une seconde. Prends néanmoins le temps de vérifier le groupe avant d'envoyer : recevoir plusieurs messages identiques peut vite devenir agaçant.",
-      "wordErrorRate": 0.03278688524590164,
-      "needsReview": false
+      "audioSha256": "0a489aed86ef441621c3a6934330c24ab39326196c43220a6900791214cbfea0",
+      "recognized": "La case Cacher déjà invité évite de sélectionner facilement les mêmes personnes à nouveau. Décochez-la si vous voulez les retrouver. Un nouvel envoi à une personne déjà invitée réutilise son invitation pour cette fête au lieu d'en créer une seconde. Prenez néanmoins le temps de vérifier le groupe avant d'envoyer. Recevoir plusieurs messages identiques peut vite devenir agaçant.",
+      "expected": "La case Cacher déjà invités évite de sélectionner facilement les mêmes personnes à nouveau. Décochez-la si vous voulez les retrouver. Un nouvel envoi à une personne déjà invitée réutilise son invitation pour cette fête, au lieu d'en créer une seconde. Prenez néanmoins le temps de vérifier le groupe avant d'envoyer : recevoir plusieurs messages identiques peut vite devenir agaçant.",
+      "wordErrorRate": 0.01639344262295082,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     },
     {
       "id": "no-email",
-      "audioSha256": "6d42b7d5774ae098e29b032f5549f1abbc843191b1c1f017fad607b2c1e7552e",
-      "recognized": "Une fiche sans email peut être sélectionnée, mais aucun message ne peut partir vers une adresse absente. René devra être contacté autrement. Le nombre d'invités ne correspond donc pas forcément au nombre d'emails envoyés, encore moins au nombre de messages lus. Une invitation claire, le bon groupe et quelques vérifications, c'est tout ce qu'il faut pour lancer la participation sereinement.",
+      "audioSha256": "712c1605c9e7359c87fd266afd4f43818a37859c7d0c463f8a155ef3a43efe11",
+      "recognized": "Enfin, une fiche sans e-mail peut être sélectionnée, mais aucun message ne peut partir vers une adresse absente. René devrait être contacté autrement. Le nombre d'invités ne correspond donc pas forcément au nombre d'e-mails envoyés, encore moins au nombre de messages lus. Une invitation claire, le bon groupe et quelques vérifications, c'est tout ce qu'il faut pour lancer la participation sereinement.",
       "expected": "Enfin, une fiche sans email peut être sélectionnée, mais aucun message ne peut partir vers une adresse absente. René devra être contacté autrement. Le nombre d'invités ne correspond donc pas forcément au nombre d'emails envoyés, encore moins au nombre de messages lus. Une invitation claire, le bon groupe et quelques vérifications : c'est tout ce qu'il faut pour lancer la participation sereinement.",
-      "wordErrorRate": 0.015384615384615385,
-      "needsReview": false
+      "wordErrorRate": 0.046153846153846156,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
     }
   ]
 }

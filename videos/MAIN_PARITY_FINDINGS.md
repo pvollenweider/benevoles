@@ -1,6 +1,14 @@
 # Vidéos : écarts avec main et plan de remise en conformité
 
-Revue du 6 octobre 2026. Référence : `09380114c1f111feed1b610c7379682924c2c627`.
+Revue initiale du 6 octobre 2026 : `09380114c1f111feed1b610c7379682924c2c627`.
+
+## Reprise des corrections
+
+Main a évolué pendant la première recapture vers `36b214edd1d7b12ce76615a2d96279122f36551f` (#722, documentation par tâche). Le montage a été bloqué automatiquement, sans réécriture de la provenance. Une nouvelle compilation isolée de cette référence est prête ; 29 pages de référence, dont la nouvelle page de documentation, ont été contrôlées (HTTP 200). Pour les très longues listes fictives, l'index signale explicitement les images limitées à la fenêtre.
+
+Les scripts et narrations Rapports et Exports ont été corrigés. Rapports montre désormais la Synthèse des réponses réelle, son CSV et sa version imprimable ; Exports situe l'archive en bas de Rapports. La vidéo des nuits ne doit plus parler d'une fin affichée à 26 h : l'axe affiche les heures modulo 24.
+
+Les sept premières corrections (Rapports et six parcours du planning) ont été lancées. Main a ensuite avancé vers `97432f62` (#723), puis `d304e9f7` (#725, index de documentation et redirections). Les deux recaptures de Rapports restent associées à leurs références originales et ont été bloquées au montage ; la troisième compilation est devenue obsolète avant le redémarrage du lot. Le traitement automatique n'est plus actif : attendre une référence stabilisée ou une décision explicite sur un travail en version figée. Aucune publication ni validation finale de la série n'est revendiquée.
 
 ## Verdict
 
@@ -46,7 +54,7 @@ Les scripts disent déjà « Frise » : leur correction n'a donc pas suffi à me
 
 ### Lacunes de couverture constatées dans les scripts
 
-La « Synthèse des réponses » n'est pas explicitement présentée dans les 54 manifestes. Le nouveau parcours de recherche de renforts n'y est pas expliqué explicitement non plus. Les vidéos Membres et Pointage nécessitent une revue de couverture pour les fusions, certificats et le tableau Jour J. Il faut compléter les explications, pas uniquement réenregistrer les mêmes manipulations.
+Avant les corrections, la « Synthèse des réponses » n'était explicitement présentée dans aucun des 54 manifestes ; le script Rapports a depuis été complété, mais son MP4 reste à contrôler. Le nouveau parcours de recherche de renforts reste à expliquer. Les vidéos Membres et Pointage nécessitent une revue de couverture pour les fusions, certificats et le tableau Jour J. Il faut compléter les explications, pas uniquement réenregistrer les mêmes manipulations.
 
 ## Garde-fous désormais dans les outils vidéo
 
@@ -70,4 +78,3 @@ Pour chaque vidéo : scénario et narration comparés à main, recapture des éc
 - État des preuves audiovisuelles : `output/final-review-evidence.json`
 
 La compétence understand-diff a servi à cartographier les changements ; son graphe ancien n'est pas utilisé comme preuve du produit actuel. Les sources Git de main et sa compilation sont les références.
-

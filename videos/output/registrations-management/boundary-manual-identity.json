@@ -1,12 +1,12 @@
 {
   "anchor": "Un bénévole te confirme un nouvel horaire par téléphone ? Clique",
-  "windowStart": 75.583,
+  "windowStart": 54.041,
   "result": {
     "found": true,
-    "startSeconds": 12.04,
+    "startSeconds": 30,
     "wordsHeard": "Un bénévole te confirme un nouvel horaire par téléphone ? Clique"
   },
-  "onset": 87.62299999999999,
-  "proposedCut": 87.7481665,
+  "onset": 84.041,
+  "proposedCut": 84.0413125,
   "note": "Proposal only; recut then independently audit before capture"
 }

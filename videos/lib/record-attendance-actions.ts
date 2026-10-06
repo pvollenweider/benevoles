@@ -11,7 +11,7 @@ import path from "node:path"
 type Scene = (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => Promise<void>
 
 /** Arrival/correction chapters. Cancellation and export are separate required chapters. */
-export async function recordAttendanceActions(options: { page: Page; base: string; eventId: string; directory: string; scene: Scene; tap: (page: Page, target: Locator) => Promise<void>; settle: (page: Page) => Promise<void> }) {
+export async function recordAttendanceActions(options: { page: Page; base: string; eventId: string; directory: string; personPrefix?: string; scene: Scene; tap: (page: Page, target: Locator) => Promise<void>; settle: (page: Page) => Promise<void> }) {
   const { page, base, eventId, directory, scene, tap, settle } = options
   if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Isolated video DB required")
   const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
@@ -21,7 +21,7 @@ export async function recordAttendanceActions(options: { page: Page; base: strin
     if (event.slug !== "atelier-pointage" || event.registrations.length !== 8 || event.registrations.some(r => r.checkedInAt)) throw new Error("Fresh attendance fixture required")
     const rows = event.registrations
     const find = (person: number, role = "Accueil") => {
-      const row = rows.find(r => r.volunteerId === `video-attendance-person-${person}` && r.shift.roleName === role)
+      const row = rows.find(r => r.volunteerId === `${options.personPrefix ?? "video-attendance-person-"}${person}` && r.shift.roleName === role)
       if (!row) throw new Error("Attendance actor missing")
       return row
     }
@@ -59,8 +59,8 @@ export async function recordAttendanceActions(options: { page: Page; base: strin
       await at(0.70); await page.getByRole("row").filter({ hasText: "video.attendance.5@example.org" }).scrollIntoViewIfNeeded()
     })
     await scene("correction", async at => {
-      await go(); await at(0.15); await select(2)
-      await at(0.32); await apply([find(2).id], false)
+      await go(); await at(0.10); await select(2)
+      await at(0.18); await apply([find(2).id], false)
       // The real manager clears its selection after every presence action.
       await at(0.66); await go(); await select(2); await apply([find(2).id], true)
     })
@@ -68,7 +68,7 @@ export async function recordAttendanceActions(options: { page: Page; base: strin
       await go(); await at(0.10)
       const search = page.getByRole("textbox", { name: "Rechercher un bénévole", exact: true })
       await tap(page, search); await search.pressSequentially("video.attendance.2@example.org", { delay: 65 })
-      const lea = await db.registration.findMany({ where: { eventId, volunteerId: "video-attendance-person-2" }, include: { shift: true } })
+      const lea = await db.registration.findMany({ where: { eventId, volunteerId: `${options.personPrefix ?? "video-attendance-person-"}2` }, include: { shift: true } })
       if (lea.length !== 2 || lea.filter(r => r.checkedInAt).length !== 1 || lea.find(r => r.shift.roleName === "Buvette")?.checkedInAt !== null) throw new Error("Presence propagated to another shift")
       if (await page.locator("tbody tr").count() !== 2) throw new Error("Léa's two registrations are not shown together")
       await page.getByRole("row").filter({ hasText: "video.attendance.2@example.org" }).last().scrollIntoViewIfNeeded()

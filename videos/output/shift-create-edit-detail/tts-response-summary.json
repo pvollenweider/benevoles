@@ -1,9 +1,9 @@
 {
-  "receivedAt": "2026-10-06T07:56:50.255Z",
+  "receivedAt": "2026-10-06T17:19:26.216Z",
   "status": "completed",
   "usage": {
-    "total_tokens": 3415,
-    "total_input_tokens": 632,
+    "total_tokens": 3618,
+    "total_input_tokens": 631,
     "input_tokens_by_modality": [
       {
         "modality": "audio",
@@ -11,15 +11,15 @@
       },
       {
         "modality": "text",
-        "tokens": 431
+        "tokens": 430
       }
     ],
     "total_cached_tokens": 0,
-    "total_output_tokens": 2783,
+    "total_output_tokens": 2987,
     "output_tokens_by_modality": [
       {
         "modality": "audio",
-        "tokens": 2783
+        "tokens": 2987
       }
     ],
     "total_tool_use_tokens": 0,
@@ -40,7 +40,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 158
+            "tokens": 151
           }
         ]
       },
@@ -48,7 +48,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 977
+            "tokens": 975
           },
           {
             "modality": "audio",
@@ -58,7 +58,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2629
+            "tokens": 2840
           }
         ]
       }
@@ -78,7 +78,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 158
+            "tokens": 151
           }
         ]
       },
@@ -86,7 +86,7 @@
         "prompt_tokens_details": [
           {
             "modality": "text",
-            "tokens": 977
+            "tokens": 975
           },
           {
             "modality": "audio",
@@ -96,7 +96,7 @@
         "candidates_tokens_details": [
           {
             "modality": "text",
-            "tokens": 2629
+            "tokens": 2840
           }
         ]
       }
@@ -108,7 +108,7 @@
       "content": [
         {
           "type": "audio",
-          "encodedLength": 7132632
+          "encodedLength": 7654872
         }
       ]
     }

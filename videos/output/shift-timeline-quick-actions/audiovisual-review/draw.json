@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T15:59:47.482Z",
+  "videoSha256": "b51ff8665b7fdaf349ce5dae6fa7c6841618f18ca2d5978b0e1b15db2b124e14",
+  "promptSha256": "63ba42a1f89b88a98eb15f84e7747ac32de0a091152eeedfb4112d68a2753605",
+  "clipSha256": "5b8abd32fda7137ea8923422781320470780f1a63275b5bc278a99cc6ff428cb",
+  "scene": "draw",
+  "review": {
+    "heardOpening": "Dans une zone vide",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "clique puis fais glisser jusqu’à l’heure de fin souhaitée",
+        "visibleSeconds": 2.8,
+        "visible": "Glissement du curseur sur la frise chronologique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Le formulaire s’ouvre avec la date et les heures déjà calculées",
+        "visibleSeconds": 4.5,
+        "visible": "Affichage de la fenêtre contextuelle avec les horaires préremplis",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.2,
+        "spoken": "Il reste à choisir le poste, le libellé et la capacité avant d’enregistrer",
+        "visibleSeconds": 5,
+        "visible": "Champs de saisie affichés dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, bien synchronisée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

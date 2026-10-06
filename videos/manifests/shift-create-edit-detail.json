@@ -45,7 +45,7 @@
     },
     {
       "id": "identity",
-      "transcript": "Choisis d’abord le poste et, si nécessaire, un libellé plus précis. La date, l’heure de début et l’heure de fin placent la barre dans le planning. La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
+      "transcript": "Choisissez d’abord le poste et, si nécessaire, un libellé plus précis. La date, l’heure de début et l’heure de fin placent la barre dans le planning. La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
       "fallbackDurationMs": 22000
     },
     {
@@ -65,7 +65,7 @@
     },
     {
       "id": "change",
-      "transcript": "Dans la liste, le statut indique si les inscriptions sont ouvertes, fermées ou si le créneau est annulé. Rouvrir l’éditeur permet de corriger l’horaire et les informations pratiques. Pour un créneau déjà occupé, relis toujours le nouveau jour, les heures et le rendez-vous avant de confirmer et de prévenir les bénévoles.",
+      "transcript": "Dans la liste, le statut indique si les inscriptions sont ouvertes, fermées ou si le créneau est annulé. Rouvrir l’éditeur permet de corriger l’horaire et les informations pratiques. Pour un créneau déjà occupé, relisez toujours le nouveau jour, les heures et le rendez-vous avant de confirmer et de prévenir les bénévoles.",
       "fallbackDurationMs": 27000
     },
     {

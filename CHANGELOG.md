@@ -10,12 +10,14 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Ajouté
 
 - **Filtre de la documentation, des réponses plus directes** : quand une fiche est trouvée par une de ses questions (et non par son titre ou son résumé), la ou les questions concernées (deux au plus) s'affichent sous le résultat, chacune avec un lien qui ouvre directement la réponse dans la fiche. Sans aucun résultat, le filtre propose les « Questions fréquentes » du guide (des deux guides depuis `/doc`) et, pour les organisateurs, la fiche « Aide et retours ».
+- **Deux nouveaux tutoriels vidéo** : « Poser les bonnes questions à ses bénévoles » (questions du formulaire, réponses, synthèse et évolution du formulaire sans perdre les réponses) et « Repérer les doublons et fusionner sans perdre le fil » (doublons possibles, aperçu, choix des valeurs et fusion). Les fiches « Questions aux bénévoles » et « Doublons et fusion de fiches » les proposent. Deux autres sont annoncés « À venir » : les heures de bénévolat avec l'attestation, et les rappels par notification sur téléphone.
 
 ### Modifié
 
 - **Fiches communes aux organisateurs et aux bénévoles** : liste d'attente, inscriptions sur validation, âge minimum et rappels s'ouvrent sur une courte introduction, puis « Côté bénévole » et enfin « Côté organisation », dans l'ordre des liens en haut de la fiche. Les liens et anciennes adresses vers ces sections fonctionnent comme avant.
 - **Changer de créneau, expliqué** : la fiche « Ma page personnelle » a désormais une section « Changer de créneau » qui explique comment faire en deux temps (s'inscrire au nouveau créneau, puis annuler l'ancien, ou l'inverse si les deux se chevauchent) ; la question fréquente du guide bénévole y mène.
 - **Créer un événement** : la fiche décrit le chemin dans l'interface (**Événements → Nouvel événement**, **Modifier** sur la page de l'événement) au lieu d'adresses internes de l'application.
+- **Tutoriels vidéo refilmés** : créer un événement depuis une page blanche, importer et gérer les membres, créer une série de créneaux, règles d'éligibilité, créneaux de nuit et changement d'heure, actions rapides de la Frise (vocabulaire « Frise » à l'écran et dans la narration), et pointage des présences, qui montre désormais aussi la page Jour J. Leurs réponses « utile ? » repartent de zéro. Le tutoriel sur le suivi de livraison des emails est maintenant en ligne.
 - **Vidéos lues dans la documentation** : dans une fiche de documentation, « Voir la vidéo : titre (durée) » ouvre le lecteur sur place au lieu de quitter la documentation pour la bibliothèque. La vidéo ne se charge qu'à l'ouverture et démarre dès ce clic ; les sous-titres, la transcription et la question « utile ? » sont sous le lecteur, avec un lien pour l'ouvrir dans la bibliothèque. Sans JavaScript, le lien vers la bibliothèque reste.
 
 ## [2.1.0] — 2026-10-06

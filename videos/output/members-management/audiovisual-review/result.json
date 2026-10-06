@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:38:15.706Z",
+  "videoSha256": "4f2463aa78f990278c1913f94a35e27170bbb7b98cd4fc848478da990a80a1cb",
+  "promptSha256": "88b4ea5f79643a33c2761d68d3660817c219652ddf46b954f1a6232b3806d090",
+  "clipSha256": "5ada41ad533bc11db95efed968246bf918f27b032e04cf69febe70b267579bd7",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Une liste bien entretenue",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Une liste bien entretenue, ce sont les bonnes coordonnées",
+        "visibleSeconds": 0,
+        "visible": "Affichage fixe de la liste des membres avec coordonnées et étiquettes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "Mets les fiches à jour quand une personne te signale un changement",
+        "visibleSeconds": 0,
+        "visible": "Écran stable de la liste des membres, conseil général sans action requise",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "garde seulement les notes nécessaires",
+        "visibleSeconds": 0,
+        "visible": "Vue d'ensemble de la liste des membres maintenue à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et ton engageant, rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,12 +1,35 @@
 # Accueillir les bénévoles et corriger une présence
 
-Vidéo autonome 46. Prévisualisation narrée recapturée et assemblée, avec une seule voix Kore continue, souriante et patiente.
+Vidéo autonome 46. Une seule voix Kore continue, souriante et patiente.
 
-État courant au 5 octobre 2026 : huit chapitres passent les transcriptions et contrôles de montage. Les actions de pointage et la conservation après annulation sont vérifiées en base ; le CSV réel est montré. La revue audiovisuelle ne signale rien sur sept chapitres. Sur le chapitre des deux inscriptions, elle relève que Léa est recherchée par son email, tandis que la voix dit « Recherchons Léa » : le bon résultat apparaît, mais ce point reste à examiner visuellement. Le visionnage humain intégral reste ouvert ; rien n'est publié. Les étapes d'historique ci-dessous ne remplacent pas cet état courant.
+La narration vouvoie les organisateurs, avec un ton accueillant et bienveillant. Les identifiants de scènes et les durées sont conservés lors de cette révision éditoriale.
+
+État courant au 6 octobre 2026 : le manifeste comprend quatorze chapitres, dont six nouveaux sur le vrai écran Jour J. Le recorder et la fixture indépendante sont intégrés ; **aucune capture UI, génération vocale ou validation de ces ajouts n'a encore eu lieu**. Les huit anciens chapitres/MP4 ne prouvent pas la nouvelle version et devront être régénérés. Les étapes d'historique ci-dessous restent historiques, pas une certification courante.
 
 ## Utilité
 
-Savoir qui est arrivé à son créneau, éviter de pointer la mauvaise personne et corriger une erreur sans supprimer son inscription. Une inscription décrit ce qui était prévu ; une marque de présence indique un pointage. Elle ne mesure ni l'heure de départ, ni la durée réellement travaillée et ne suffit pas à certifier des heures.
+Savoir qui est arrivé à son créneau, éviter de pointer la mauvaise personne et corriger une erreur sans supprimer son inscription. Une inscription décrit ce qui était prévu ; une marque de présence indique un pointage. Elle ne mesure ni l'heure de départ ni la durée réellement travaillée. Le produit appelle « heures attestées » les durées planifiées des créneaux passés avec présence enregistrée, et non des heures chronométrées.
+
+## Complément Jour J — prise indépendante
+
+Organisation `video-dayof`, identifiant public `formation-jour-j`, propriétaire fictif `video.dayof.owner@example.org`. Serveur dédié `http://localhost:43108`, même compilation propre de `main`, preuve vérifiée par le wrapper. Aucune réinitialisation de `default`.
+
+`prepare-day-of.ts` crée deux événements : huit inscriptions pour les chapitres de pointage historiques, et quatre créneaux de terrain relatifs à l'heure réelle Europe/Zurich. Le créneau courant a commencé il y a trente minutes ; la relève arrive dans une heure ; un créneau est terminé et un autre, commencé la veille, est encore en cours. Préparer entre 03h et 23h pour rendre les quatre cas réellement possibles. Ne pas trafiquer l'horloge du navigateur ni remplacer l'écran produit par une carte HTML.
+
+### Démonstration
+
+1. `dayof-window` : visiter la vraie page Jour J ; montrer En cours, la veille commencée hier, les trois prochaines heures, puis ouvrir Plus tôt aujourd'hui. Préciser que la fenêtre 390 × 844 simule un affichage mobile, pas un appareil réel.
+2. `dayof-search` : chercher « zoe », retrouver Zoé Exemple, chercher Accueil, puis vider la recherche.
+3. `dayof-phone` : montrer son lien téléphone et le contact du créneau ; **aucun clic `tel:` ni appel réel**.
+4. `dayof-checkin` : marquer uniquement Zoé ; constater le vrai POST et son `changedIds`, recharger, puis vérifier sa présence dans la fixture.
+5. `dayof-refresh` : Actualiser, lire l'annonce et l'heure de mise à jour ; ne pas prétendre montrer une modification depuis un autre téléphone.
+6. `dayof-undo` : annuler le pointage, recharger, vérifier que la marque a disparu et que l'inscription reste active.
+
+### Résultat visible et points d'attention
+
+Les chapitres utilisent la même action de présence que la liste d'inscriptions. La réception d'un email, l'heure de départ et les heures réellement effectuées ne sont pas annoncées comme résultats du pointage. La page ne montre que les informations opérationnelles, pas les emails, réponses ni notes privées. Chaque chapitre écrit des observations séparées avec le commit produit ; elles ne remplacent pas la revue des écrans et du son du MP4 final.
+
+La fixture doit être préparée juste avant la prise : un âge supérieur à quarante-cinq minutes bloque ce parcours. Une répétition ou une prise interrompue peut modifier ses présences et annuler le créneau historique ; `--reset-owned` autorise un reset limité après vérification stricte des identifiants de cette organisation. Aucun état n'est effacé ailleurs.
 
 ## Démonstration
 

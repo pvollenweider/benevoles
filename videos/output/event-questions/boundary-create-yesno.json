@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour le permis de conduire, une réponse simple suffit. Ajoutons une",
+  "windowStart": 32.112,
+  "result": {
+    "found": true,
+    "startSeconds": 35.38,
+    "wordsHeard": "Pour le permis de conduire, une réponse simple suffit. Ajoutons une"
+  },
+  "onset": 67.492,
+  "proposedCut": 67.092396,
+  "note": "Proposal only; recut then independently audit before capture"
+}

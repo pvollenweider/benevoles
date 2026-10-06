@@ -1,12 +1,12 @@
 {
   "anchor": "Vous avez les bons repères : Tableau de bord pour les",
-  "windowStart": 86.276,
+  "windowStart": 65.766,
   "result": {
     "found": true,
-    "startSeconds": 15.13,
-    "wordsHeard": "Vous avez les bons repères : Tableau de bord pour les"
+    "startSeconds": 30.04,
+    "wordsHeard": "Vous avez les bons repères Tableau de bord pour les"
   },
-  "onset": 101.40599999999999,
-  "proposedCut": 101.275833,
+  "onset": 95.80600000000001,
+  "proposedCut": 95.7657915,
   "note": "Proposal only; recut then independently audit before capture"
 }

@@ -1,31 +1,31 @@
 {
-  "locatedAt": "2026-10-06T01:33:56.406Z",
-  "masterSha256": "c66d5929efa61ec5e1dec44e510163de3aecda2209447f3b9e811cc9e12f8f16",
-  "totalSeconds": 117.2,
+  "locatedAt": "2026-10-06T17:23:46.955Z",
+  "masterSha256": "779ae9c6c7ccbb6acefdae1d87888c90c8765ff9a6fe8634119531b025184e32",
+  "totalSeconds": 109.4,
   "cuts": [
     {
       "id": "organization-navigation",
-      "seconds": 12.815229
+      "seconds": 11.580625000000001
     },
     {
       "id": "event-navigation",
-      "seconds": 30.6728125
+      "seconds": 29.5054375
     },
     {
       "id": "search",
-      "seconds": 53.9827085
+      "seconds": 51.346166999999994
     },
     {
       "id": "account-help",
-      "seconds": 71.13229150000001
+      "seconds": 67.72052099999999
     },
     {
       "id": "mobile-keyboard",
-      "seconds": 87.1342085
+      "seconds": 82.31256250000001
     },
     {
       "id": "result",
-      "seconds": 101.275833
+      "seconds": 95.7657915
     }
   ],
   "applied": true,

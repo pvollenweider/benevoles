@@ -25,27 +25,27 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Un petit rappel aide les bénévoles à retrouver leur rendez-vous. Et si l'horaire change, mieux vaut les prévenir clairement. Ici, nous allons distinguer trois choses : le rappel que tu envoies toi-même, les rappels automatiques et les messages de changement. Nous utiliserons un événement de démonstration et sa vraie boîte mail de test pour regarder ce que les personnes reçoivent.",
+      "transcript": "Un petit rappel aide les bénévoles à retrouver leur rendez-vous. Et si l'horaire change, mieux vaut les prévenir clairement. Ici, nous allons distinguer trois choses : le rappel que vous envoyez vous-même, les rappels automatiques et les messages de changement. Nous utiliserons un événement de démonstration et sa vraie boîte mail de test pour regarder ce que les personnes reçoivent.",
       "fallbackDurationMs": 35000
     },
     {
       "id": "manual-message",
-      "transcript": "Dans les réglages de l'événement, le Message de rappel complète le récapitulatif des créneaux. Écrivons une consigne simple : retrouve-nous au stand quinze minutes avant ton horaire, et merci pour ton aide. Le texte s'enregistre automatiquement : attends la confirmation Enregistré avant de quitter la page. Ce message est propre à cet événement. Ce n'est pas un modèle de campagne ni une nouvelle invitation : il accompagne le planning des personnes déjà confirmées.",
+      "transcript": "Dans les réglages de l'événement, le Message de rappel complète le récapitulatif des créneaux. Écrivons une consigne simple : retrouve-nous au stand quinze minutes avant ton horaire, et merci pour ton aide. Le texte s'enregistre automatiquement : attendez la confirmation Enregistré avant de quitter la page. Ce message est propre à cet événement. Ce n'est pas un modèle de campagne ni une nouvelle invitation : il accompagne le planning des personnes déjà confirmées.",
       "fallbackDurationMs": 42000
     },
     {
       "id": "manual-send",
-      "transcript": "Depuis la page de l'événement, Envoyer le rappel demande une confirmation. Nous annulons une première fois, puis reprenons et confirmons le véritable envoi. Ouvrons l'email de Léa : ses deux créneaux sont regroupés dans un seul message, avec notre consigne. Les personnes qui ont seulement une demande ou une attente ne reçoivent pas ce rappel des inscriptions confirmées. Regarde le résultat de l'envoi, pas seulement le nombre affiché avant.",
+      "transcript": "Depuis la page de l'événement, Envoyer le rappel demande une confirmation. Nous annulons une première fois, puis reprenons et confirmons le véritable envoi. Ouvrons l'email de Léa : ses deux créneaux sont regroupés dans un seul message, avec notre consigne. Les personnes qui ont seulement une demande ou une attente ne reçoivent pas ce rappel des inscriptions confirmées. Regardez le résultat de l'envoi, pas seulement le nombre affiché avant.",
       "fallbackDurationMs": 47000
     },
     {
       "id": "organization",
-      "transcript": "Dans Paramètres, puis Emails, tu choisis les rappels automatiques de toute l'organisation : J moins deux, J moins un et le rappel du jour. Une case décochée ne suffit pas : il faut enregistrer le changement. Nous coupons celui de la veille, enregistrons, puis le réactivons. Tu trouves aussi l'adresse de réponse : c'est là que les réponses des bénévoles arrivent, pas une adresse différente pour chaque rappel.",
+      "transcript": "Dans Paramètres, puis Emails, vous choisissez les rappels automatiques de toute l'organisation : J moins deux, J moins un et le rappel du jour. Une case décochée ne suffit pas : il faut enregistrer le changement. Nous coupons celui de la veille, enregistrons, puis le réactivons. Vous trouvez aussi l'adresse de réponse : c'est là que les réponses des bénévoles arrivent, pas une adresse différente pour chaque rappel.",
       "fallbackDurationMs": 42000
     },
     {
       "id": "event-switch",
-      "transcript": "Les trois cases que nous venons de voir concernent toute l'organisation. Dans la version actuelle, le formulaire de l'événement ne propose pas de bouton pour couper seulement ses rappels. Ne confonds pas non plus rappel automatique et rappel manuel : ce sont deux actions différentes. Regardons maintenant notre événement en brouillon. Il ne reçoit pas les rappels automatiques réservés aux événements publiés.",
+      "transcript": "Les trois cases que nous venons de voir concernent toute l'organisation. Dans la version actuelle, le formulaire de l'événement ne propose pas de bouton pour couper seulement ses rappels. Ne confondez pas non plus rappel automatique et rappel manuel : ce sont deux actions différentes. Regardons maintenant notre événement en brouillon. Il ne reçoit pas les rappels automatiques réservés aux événements publiés.",
       "fallbackDurationMs": 40000
     },
     {
@@ -60,12 +60,12 @@
     },
     {
       "id": "changed",
-      "transcript": "Si un horaire change, ouvre le créneau concerné. Nous décalons son début et sa fin, puis enregistrons. Le système prépare automatiquement le message de changement pour les confirmations de ce créneau. Voici l'email réellement reçu avec le nouvel horaire. La personne dont la demande attend encore une décision n'a pas reçu ce message. Vérifions donc le résultat dans le planning et dans la boîte mail, plutôt que de supposer qu'un clic prouve la réception.",
+      "transcript": "Si un horaire change, ouvrez le créneau concerné. Nous décalons son début et sa fin, puis enregistrons. Le système prépare automatiquement le message de changement pour les confirmations de ce créneau. Voici l'email réellement reçu avec le nouvel horaire. La personne dont la demande attend encore une décision n'a pas reçu ce message. Vérifions donc le résultat dans le planning et dans la boîte mail, plutôt que de supposer qu'un clic prouve la réception.",
       "fallbackDurationMs": 48000
     },
     {
       "id": "cancelled",
-      "transcript": "Pour annuler un créneau entier, lis bien le récapitulatif avant de confirmer. Ce n'est pas simplement retirer une personne de son horaire. Dans notre exemple, une inscription confirmée et une demande sont annulées, et leurs personnes sont prévenues. Ouvrons les messages reçus puis revenons au planning. Rappeler, modifier, annuler : ce sont trois situations différentes. Et pour une consigne urgente, garde aussi un contact direct avec ton équipe : envoyé ne veut pas dire lu.",
+      "transcript": "Pour annuler un créneau entier, lisez bien le récapitulatif avant de confirmer. Ce n'est pas simplement retirer une personne de son horaire. Dans notre exemple, une inscription confirmée et une demande sont annulées, et leurs personnes sont prévenues. Ouvrons les messages reçus puis revenons au planning. Rappeler, modifier, annuler : ce sont trois situations différentes. Et pour une consigne urgente, gardez aussi un contact direct avec votre équipe : envoyé ne veut pas dire lu.",
       "fallbackDurationMs": 48000
     }
   ],

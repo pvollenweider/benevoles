@@ -1,31 +1,31 @@
 {
-  "locatedAt": "2026-10-06T07:42:46.650Z",
-  "masterSha256": "918698960bec18fe8efd8c63690e996aea406b605f9ed376352d42b59e31863c",
-  "totalSeconds": 97.44,
+  "locatedAt": "2026-10-06T15:57:02.470Z",
+  "masterSha256": "2f6bbf5586cea178ab6a344386a9eb4d3056cc12f2266c14397ed543ed52488f",
+  "totalSeconds": 100.4,
   "cuts": [
     {
       "id": "setup",
-      "seconds": 15.084916499999999
+      "seconds": 15.80075
     },
     {
       "id": "request",
-      "seconds": 30.33325
+      "seconds": 31.243167
     },
     {
       "id": "admin",
-      "seconds": 44.331312499999996
+      "seconds": 44.8883335
     },
     {
       "id": "decision",
-      "seconds": 57.0564795
+      "seconds": 58.3877915
     },
     {
       "id": "volunteer",
-      "seconds": 71.52166700000001
+      "seconds": 73.385333
     },
     {
       "id": "result",
-      "seconds": 83.89487500000001
+      "seconds": 86.9400625
     }
   ],
   "applied": true,

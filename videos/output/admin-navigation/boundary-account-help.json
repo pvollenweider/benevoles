@@ -1,12 +1,12 @@
 {
   "anchor": "Le menu de votre compte propose Mon compte et Se déconnecter.",
-  "windowStart": 56.132000000000005,
+  "windowStart": 37.721000000000004,
   "result": {
     "found": true,
-    "startSeconds": 15.3,
-    "wordsHeard": "Le menu de votre compte propose Mon compte et Se déconnecter"
+    "startSeconds": 30.36,
+    "wordsHeard": "Le"
   },
-  "onset": 71.432,
-  "proposedCut": 71.13229150000001,
+  "onset": 68.081,
+  "proposedCut": 67.72052099999999,
   "note": "Proposal only; recut then independently audit before capture"
 }

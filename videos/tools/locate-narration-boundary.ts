@@ -18,7 +18,9 @@ async function main() {
   const dir = videoDir(manifest.slug)
   const metadata = JSON.parse(await readFile(path.join(dir, "audio-metadata.json"), "utf8")) as AudioMetadata
   const estimated = manifest.segments.slice(0, index).reduce((sum, s) => sum + metadata.segments[s.id].durationMs / 1000, 0)
-  const windowSeconds = process.argv.includes("--wide") ? 60 : 30
+  // A poor initial split can place an anchor outside the normal window.
+  // Widen the audio actually heard; never accept a text-length estimate as a cut.
+  const windowSeconds = process.argv.includes("--extra-wide") ? 120 : process.argv.includes("--wide") ? 60 : 30
   const start = Math.max(0, estimated - windowSeconds / 2)
   const temp = await mkdtemp(path.join(tmpdir(), "benevol-narration-window-"))
   const clip = path.join(temp, "window.wav")

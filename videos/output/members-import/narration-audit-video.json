@@ -1,0 +1,101 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-06T17:23:14.783Z",
+  "revalidatedAt": "2026-10-06T17:23:14.784Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "a0f8f25737889eb4dace86f8707c4aa700a43ef671a3e3572d0f2fd4dba9bf44",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "140adbde363f4834a725013710b64265abcde275dcd564fe49afff84269fb28b",
+      "recognized": "Vous utilisez Bénévol pour la première fois et vous avez déjà une liste de bénévoles ? L'import évite de ressaisir chaque personne. Il peut aussi compléter une liste existante. Nous allons utiliser quarante fiches fictives, vérifier les erreurs, puis confirmer seulement quand tout est clair. Bien sûr, vous pouvez toujours créer les membres manuellement avec Nouveau membre.",
+      "expected": "Vous utilisez Benevol pour la première fois et vous avez déjà une liste de bénévoles ? L'import évite de ressaisir chaque personne. Il peut aussi compléter une liste existante. Nous allons utiliser quarante fiches fictives, vérifier les erreurs, puis confirmer seulement quand tout est clair. Bien sûr, vous pouvez toujours créer les membres manuellement avec Nouveau membre.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "file",
+      "audioSha256": "ed6863e730520f1a10928fe3648505fbba1e1e66bf52ab1bca4f8fcb837acd2a",
+      "recognized": "Le fichier peut être un CSV ou un Excel. La première ligne contient les noms des colonnes : prénom, nom, e-mail, téléphone et tag. Le prénom et le nom sont nécessaires. Une fiche sans e-mail reste possible, mais elle ne recevra pas de message par e-mail. Les tags se séparent par des virgules. Les disponibilités, elles, se renseignent ensuite dans la fiche, elles ne sont pas importées.",
+      "expected": "Le fichier peut être un CSV ou un Excel. La première ligne contient les noms des colonnes : prénom, nom, email, téléphone et tags. Le prénom et le nom sont nécessaires. Une fiche sans email reste possible, mais elle ne recevra pas de messages par email. Les tags se séparent par des virgules. Les disponibilités, elles, se renseignent ensuite dans la fiche : elles ne sont pas importées.",
+      "wordErrorRate": 0.030303030303030304,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "preview",
+      "audioSha256": "a6b506be4c9c6667b05d66ace0535e8314cd2f56dd64e72179f7801f887b413d",
+      "recognized": "Ouvrez Importer des membres et choisissez le fichier à vérifier. Si un email existe déjà, l'option Ignorer conserve la fiche actuelle. Cliquez sur Analyser le fichier. Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur. Les colonnes reconnues et les tags sont également indiqués. Rien n'est encore enregistré. Vous pouvez prendre le temps de vérifier.",
+      "expected": "Ouvrez Importer des membres et choisissez le fichier à vérifier. Si un email existe déjà, l'option Ignorer conserve la fiche actuelle. Cliquez sur Analyser le fichier. Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur. Les colonnes reconnues et les tags sont également indiqués. Rien n'est encore enregistré : vous pouvez prendre le temps de vérifier.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "errors",
+      "audioSha256": "3251e764d23022a49bb82e785cc38b424f37157a84126199e320beb1dfda5caf",
+      "recognized": "Ici, la ligne six n'a pas de prénom et la ligne sept contient une adresse e-mail invalide. La ligne neuf reprend l'e-mail de la ligne huit. Ce doublon dans le fichier est également signalé. Ces lignes ne seront pas importées. Corrige le fichier d'origine plutôt que de laisser une erreur de contact. Deux personnes portant le même nom ne sont pas automatiquement fusionnées. La comparaison utilise l'e-mail.",
+      "expected": "Ici, la ligne six n'a pas de prénom, et la ligne sept contient une adresse email invalide. La ligne neuf reprend l'email de la ligne huit : ce doublon dans le fichier est également signalé. Ces lignes ne seront pas importées. Corrige le fichier d'origine plutôt que de laisser une erreur de contact. Deux personnes portant le même nom ne sont pas automatiquement fusionnées : la comparaison utilise l'email.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "update",
+      "audioSha256": "5596950d87e253b55ded109e2ba2a135f0322e5ce6ae2497effb1b7734b21f8a",
+      "recognized": "Avec retour, vous pouvez changer l'option, puis refaire l'analyse. Mettre à jour remplace le prénom, le nom, le téléphone et les tags de la fiche portant le même e-mail. Cela réactive aussi une fiche inactive. Les tags ne sont donc pas simplement ajoutés aux anciens. Vérifiez bien les valeurs du fichier. Ici, Camille et Julien passent de ignorer à mettre à jour, sans créer de nouvelles fiches pour ces adresses.",
+      "expected": "Avec Retour, vous pouvez changer l'option puis refaire l'analyse. Mettre à jour remplace le prénom, le nom, le téléphone et les tags de la fiche portant le même email. Cela réactive aussi une fiche inactive. Les tags ne sont donc pas simplement ajoutés aux anciens : vérifiez bien les valeurs du fichier. Ici, Camille et Julien passent de Ignorer à Mettre à jour, sans créer de nouvelles fiches pour ces adresses.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "corrected",
+      "audioSha256": "4a622241ba6d788cb1654a97560931627ed87a131a5198d9975a5fd1fdf4df5d",
+      "recognized": "Nous choisissons maintenant le fichier Excel corrigé et relançons l'analyse. Les erreurs ont disparu. Les quarante lignes sont reconnues, dont les deux adresses déjà présentes. René n'a pas d'e-mail, sa fiche peut être créée avec son téléphone. Vérifiez une dernière fois les noms, les catégories et le récapitulatif. Le fichier est limité à deux mégaoctets et cinq mille lignes par import.",
+      "expected": "Nous choisissons maintenant le fichier Excel corrigé et relançons l'analyse. Les erreurs ont disparu. Les quarante lignes sont reconnues, dont les deux adresses déjà présentes. René n'a pas d'email : sa fiche peut être créée avec son téléphone. Vérifiez une dernière fois les noms, les catégories et le récapitulatif. Le fichier est limité à deux mégaoctets et cinq mille lignes par import.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "confirm",
+      "audioSha256": "f716ffee00b92df3161ae124f25379c306a4841ffb46f2841fda82f1a34b751f",
+      "recognized": "Quand l'aperçu te convient, confirme l'import. Cette fois, les fiches sont enregistrées. Le résultat indique combien ont été créées, mises à jour ou ignorées, et signale les éventuelles lignes non importées. Ferme la fenêtre et recherche Maya. Elle est maintenant dans la liste. Ouvre sa fiche pour vérifier son téléphone et ses tags. Importer une personne ne l'inscrit à aucun créneau.",
+      "expected": "Quand l'aperçu te convient, confirme l'import. Cette fois, les fiches sont enregistrées. Le résultat indique combien ont été créées, mises à jour ou ignorées, et signale les éventuelles lignes non importées. Ferme la fenêtre et recherchez Maya : elle est maintenant dans la liste. Ouvrez sa fiche pour vérifier son téléphone et ses tags. Importer une personne ne l'inscrit à aucun créneau.",
+      "wordErrorRate": 0.03125,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "repeat",
+      "audioSha256": "d04c2b895e101f245779d0ccbe13ef619d83ec534ca919553584ece78255783e",
+      "recognized": "Si vous analysez de nouveau ce fichier avec ignorer, les emails déjà présents sont reconnus. Mais attention aux fiches sans email, le système ne peut pas les rapprocher par leur adresse et le même nom ne suffit pas. Ne confirmez donc pas une seconde fois machinalement. Regardez toujours le nombre de créations prévues, puis annulez si vous ne souhaitez rien ajouter.",
+      "expected": "Si vous analysez de nouveau ce fichier avec Ignorer, les emails déjà présents sont reconnus. Mais attention aux fiches sans email : le système ne peut pas les rapprocher par leur adresse, et le même nom ne suffit pas. Ne confirmez donc pas une seconde fois machinalement. Regardez toujours le nombre de créations prévues, puis annulez si vous ne souhaitez rien ajouter.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "37b0f3af8a4f485041499abf455a808f9b40d47703fdf7202facb3698ff8a506",
+      "recognized": "Ta liste est prête à être utilisée pour les prochaines invitations. Garde un fichier simple, vérifie les coordonnées et lis l'aperçu avant chaque confirmation. Si quelques personnes manquent, ajoute-les manuellement. Et si leur disponibilité change, complète leur fiche séparément. L'import fait gagner du temps tout en te laissant le dernier mot sur ce qui sera enregistré.",
+      "expected": "Ta liste est prête à être utilisée pour les prochaines invitations. Garde un fichier simple, vérifiez les coordonnées et lis l'aperçu avant chaque confirmation. Si quelques personnes manquent, ajoute-les manuellement. Et si leurs disponibilités changent, complète leur fiche séparément. L'import fait gagner du temps, tout en te laissant le dernier mot sur ce qui sera enregistré.",
+      "wordErrorRate": 0.06779661016949153,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

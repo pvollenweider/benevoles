@@ -1,12 +1,12 @@
 {
-  "anchor": "Avant d'imprimer toute la série, vérifie les pages réellement produites. Le",
-  "windowStart": 205.79699999999997,
+  "anchor": "Avant d'imprimer toute la série, vérifiez les pages réellement produites. Le",
+  "windowStart": 191.119,
   "result": {
     "found": true,
-    "startSeconds": 11.04,
-    "wordsHeard": "Avant d'imprimer toute la série, vérifie les pages réellement produites. Le"
+    "startSeconds": 25.84,
+    "wordsHeard": "Avant d'imprimer toute la série, vérifiez les pages réellement produites. Le"
   },
-  "onset": 216.83699999999996,
-  "proposedCut": 215.93349999999998,
+  "onset": 216.959,
+  "proposedCut": 216.8224795,
   "note": "Proposal only; recut then independently audit before capture"
 }

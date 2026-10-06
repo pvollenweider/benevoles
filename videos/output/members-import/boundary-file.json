@@ -1,0 +1,12 @@
+{
+  "anchor": "Le fichier peut être un CSV ou un Excel. La première",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 22.4,
+    "wordsHeard": "Le fichier peut être un CSV ou un Excel. La première"
+  },
+  "onset": 22.4,
+  "proposedCut": 22.0234795,
+  "note": "Proposal only; recut then independently audit before capture"
+}

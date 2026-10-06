@@ -13,25 +13,25 @@
     "deviceScaleFactor": 1
   },
   "chapterTitles": {
-    "complete": "Le document complet",
+    "complete": "La vue d’ensemble pour l’organisation",
     "day": "Le planning par jour",
     "role": "Le planning par poste",
     "individual": "Le planning de chaque personne",
     "attendance": "La feuille de présence",
     "contacts": "Les coordonnées : usage réservé",
-    "answers": "Retrouver les réponses aux questions",
+    "answers": "La synthèse des réponses",
     "print": "Vérifier avant d'imprimer",
     "result": "Remplacer les anciennes versions"
   },
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Au stand d'accueil, un document clair fait gagner du temps à toute l'équipe. Mais on ne remet pas la même feuille à un bénévole et à la personne qui coordonne l'événement. Ouvrons Rapports et choisissons les documents selon leur usage. Nous allons regarder ce qu'ils contiennent vraiment, avec plusieurs journées, des places libres et des bénévoles sur plusieurs postes.",
+      "transcript": "Au stand d’accueil, un document clair fait gagner du temps à toute l’équipe. Ouvrons Rapports. Les feuilles à afficher ou à remettre aux bénévoles arrivent en premier. Les documents réservés à l’organisation viennent ensuite, puis les badges, le résumé de l’événement et l’archive. Choisissons ensemble le bon document, avec plusieurs journées et des personnes sur plusieurs postes.",
       "fallbackDurationMs": 35000
     },
     {
       "id": "complete",
-      "transcript": "Le document complet rassemble une vue d'ensemble en couleur, les créneaux et le récapitulatif des bénévoles. Il s'ouvre dans un nouvel onglet. Lisons une journée : les horaires permettent de suivre la succession des postes, et les effectifs montrent où il manque encore du monde. Ce document décrit le planning enregistré au moment de son ouverture. Une personne inscrite n'est pas forcément une personne arrivée : ne lis pas ce tableau comme une preuve de présence.",
+      "transcript": "Pour une vue d’ensemble, descendez dans la partie réservée aux organisateurs et ouvrez Export complet. Ce document en couleur réunit le planning, les créneaux et le récapitulatif des bénévoles. Lisons une journée, puis retrouvons Léa. Les effectifs indiquent où il manque du monde. Le document décrit le planning enregistré au moment de son ouverture, pas une preuve de présence : une inscription ne veut pas forcément dire que la personne est arrivée.",
       "fallbackDurationMs": 47000
     },
     {
@@ -41,56 +41,56 @@
     },
     {
       "id": "role",
-      "transcript": "Si tu coordonnes un poste, choisis le planning par poste. La buvette a sa propre page, avec ses horaires, ses bénévoles et son responsable. Regardons aussi les autres postes pour comprendre le découpage. Remettre cette feuille à un relais terrain l'aide à savoir qui arrive et quand. Cela ne crée pas un compte d'administration, ni un droit supplémentaire : c'est un document de coordination, à remettre à la personne qui en a besoin.",
+      "transcript": "Si vous coordonnez un poste, choisissez le planning par poste. La buvette a sa propre page, avec ses horaires, ses bénévoles et son responsable. Regardons aussi les autres postes pour comprendre le découpage. Remettre cette feuille à un relais terrain l'aide à savoir qui arrive et quand. Cela ne crée pas un compte d'administration, ni un droit supplémentaire : c'est un document de coordination, à remettre à la personne qui en a besoin.",
       "fallbackDurationMs": 45000
     },
     {
       "id": "individual",
-      "transcript": "Pour Léa, le planning individuel regroupe ses cinq créneaux sur trois postes. Sa frise montre aussi les prénoms des coéquipiers présents sur ces horaires. On retrouve ensuite le lieu, les consignes et le contact opérationnel lorsqu'ils sont renseignés. Ici, son planning tient sur deux pages : passons à la suivante pour lire le dernier poste. Remets-lui les deux pages de son planning, pas toutes celles de l'équipe. Et pour les homonymes, vérifie les créneaux avant de distribuer les documents.",
+      "transcript": "Pour Léa, le planning individuel regroupe ses cinq créneaux sur trois postes. Sa frise montre aussi les prénoms des coéquipiers présents sur ces horaires. On retrouve ensuite le lieu, les consignes et le contact opérationnel lorsqu'ils sont renseignés. Ici, son planning tient sur deux pages : passons à la suivante pour lire le dernier poste. Remettez-lui les deux pages de son planning, pas toutes celles de l'équipe. Et pour les homonymes, vérifiez les créneaux avant de distribuer les documents.",
       "fallbackDurationMs": 52000
     },
     {
       "id": "attendance",
-      "transcript": "La feuille de présence sert au pointage sur papier. Chaque personne a sa case, et des lignes supplémentaires permettent de noter les arrivées imprévues. Voici aussi une présence déjà enregistrée dans l'application, représentée sur la feuille. En revanche, cocher une case au stylo ne met pas le site à jour. Si tu utilises le papier sur le terrain, il faudra ensuite reporter les présences utiles dans l'application. Le planning et l'arrivée sont deux informations différentes.",
+      "transcript": "La feuille de présence sert au pointage sur papier. Chaque personne a sa case, et des lignes supplémentaires permettent de noter les arrivées imprévues. Voici aussi une présence déjà enregistrée dans l'application, représentée sur la feuille. En revanche, cocher une case au stylo ne met pas le site à jour. Si vous utilisez le papier sur le terrain, il faudra ensuite reporter les présences utiles dans l'application. Le planning et l'arrivée sont deux informations différentes.",
       "fallbackDurationMs": 46000
     },
     {
       "id": "contacts",
-      "transcript": "La liste avec téléphones est réservée à l'organisation. Elle permet de retrouver une personne, son email, son téléphone et ses créneaux. Pour notre exemple, le numéro donné dans l'inscription est différent du numéro de sa fiche : regardons celui retenu dans le document. Cette liste contient des coordonnées personnelles. Elle ne va pas sur le panneau public du stand et ne se distribue pas à tout le monde. Garde-la pour les personnes qui doivent réellement contacter l'équipe.",
+      "transcript": "La liste avec téléphones est réservée à l'organisation. Elle permet de retrouver une personne, son email, son téléphone et ses créneaux. Pour notre exemple, le numéro donné dans l'inscription est différent du numéro de sa fiche : regardons celui retenu dans le document. Cette liste contient des coordonnées personnelles. Elle ne va pas sur le panneau public du stand et ne se distribue pas à tout le monde. Gardez-la pour les personnes qui doivent réellement contacter l'équipe.",
       "fallbackDurationMs": 47000
     },
     {
       "id": "answers",
-      "transcript": "Les réponses aux questions se retrouvent dans les inscriptions et les exports. Voici une taille de t-shirt et un régime alimentaire réellement renseignés. Téléchargeons l'export des présences : il contient les réponses, les créneaux et les pointages des inscriptions confirmées. Attention : une ligne correspond à une inscription, pas à une personne. Léa a cinq créneaux, donc sa réponse apparaît cinq fois. Pour compter les repas ou les t-shirts, garde une seule réponse par personne. Et partage seulement les colonnes utiles : ce CSV contient aussi des coordonnées personnelles.",
+      "transcript": "Pour préparer les t-shirts et les repas, ouvrez Questions aux bénévoles, puis la Synthèse des réponses. Chaque personne compte une seule fois, même si elle a plusieurs créneaux. Lisons les tailles et les régimes renseignés. Les confirmés et les personnes en attente sont distingués ; les inscriptions annulées ne comptent pas. Vous pouvez télécharger cette synthèse en CSV pour travailler avec les chiffres, ou ouvrir sa version imprimable. Regardons ce vrai document : les réponses sont regroupées sans distribuer les coordonnées de toute l’équipe.",
       "fallbackDurationMs": 57000
     },
     {
       "id": "print",
-      "transcript": "Avant d'imprimer toute la série, vérifie les pages réellement produites. Le navigateur permet d'imprimer ou d'enregistrer en PDF. Ici, nous lisons un aperçu du vrai fichier A4, pas la boîte d'impression. Voici le planning de Léa : regardons la frise, les marges, puis les consignes plus bas. La dernière passe sur la page suivante. Pense à remettre les deux pages ensemble. Vérifie toujours le document final : c'est celui que l'équipe utilisera sur le terrain.",
+      "transcript": "Avant d'imprimer toute la série, vérifiez les pages réellement produites. Le navigateur permet d'imprimer ou d'enregistrer en PDF. Ici, nous lisons un aperçu du vrai fichier A4, pas la boîte d'impression. Voici le planning de Léa : regardons la frise, les marges, puis les consignes plus bas. La dernière passe sur la page suivante. Pensez à remettre les deux pages ensemble. Vérifiez toujours le document final : c'est celui que l'équipe utilisera sur le terrain.",
       "fallbackDurationMs": 46000
     },
     {
       "id": "result",
-      "transcript": "Nous avons maintenant une feuille adaptée à l'accueil, une autre pour un poste, un planning personnel et une liste de contacts réservée à l'organisation. Un fichier enregistré ne se met pas à jour tout seul. Si le planning change, génère une nouvelle version et remplace les anciennes copies. Pour les coordonnées et les réponses personnelles, conserve seulement ce qui reste utile. Le bon document, remis à la bonne personne : c'est souvent le plus simple pour un jour J serein.",
+      "transcript": "Nous avons maintenant une feuille adaptée à l'accueil, une autre pour un poste, un planning personnel et une liste de contacts réservée à l'organisation. Un fichier enregistré ne se met pas à jour tout seul. Si le planning change, générez une nouvelle version et remplacez les anciennes copies. Pour les coordonnées et les réponses personnelles, conservez seulement ce qui reste utile. Le bon document, remis à la bonne personne : c'est souvent le plus simple pour un jour J serein.",
       "fallbackDurationMs": 42000
     }
   ],
   "viewer": {
     "summary": "Dans cette vidéo, vous choisissez dans Rapports le bon document pour chaque usage sur le terrain, vous le lisez et vous vérifiez la version à imprimer.",
     "steps": [
-      "Ouvrez Rapports et choisissez le document selon la personne qui va l'utiliser.",
-      "Consultez le document complet pour une vue d'ensemble des créneaux et des effectifs.",
+      "Ouvrez Rapports : les feuilles à afficher ou à remettre aux bénévoles arrivent en premier, les documents réservés à l'organisation ensuite.",
+      "Pour une vue d'ensemble des créneaux et des effectifs, ouvrez « Export complet » dans la partie réservée aux organisateurs.",
       "Imprimez le planning par jour pour l'accueil et le planning par poste pour un relais sur le terrain.",
       "Générez le planning individuel d'un bénévole et remettez-lui toutes ses pages.",
       "Utilisez la feuille de présence pour pointer sur papier, puis reportez les présences dans l'application.",
-      "Réservez la liste avec téléphones aux personnes qui doivent contacter l'équipe.",
+      "Pour les t-shirts et les repas, ouvrez « Questions aux bénévoles », puis la synthèse des réponses.",
       "Avant d'imprimer la série, vérifiez le document final ou enregistrez-le en PDF."
     ],
     "remember": [
       "Un document décrit le planning au moment où il est ouvert : générez une nouvelle version après un changement.",
       "Une personne inscrite n'est pas forcément arrivée : un planning n'est pas une preuve de présence.",
       "Cocher une case au stylo ne met pas l'application à jour.",
-      "Les coordonnées et les réponses personnelles ne vont jamais sur un panneau public."
+      "La liste avec téléphones est réservée à l'organisation : les coordonnées ne vont jamais sur un panneau public."
     ]
   }
 }

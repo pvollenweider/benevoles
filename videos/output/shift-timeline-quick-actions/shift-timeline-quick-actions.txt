@@ -1,6 +1,6 @@
-Créer, copier et redimensionner depuis la Timeline
+Créer, copier et redimensionner depuis la Frise
 
-La Timeline n’est pas seulement une vue de lecture. Elle permet aussi de construire rapidement un planning visuel : dessiner une plage libre, ajuster sa durée, copier une relève et ouvrir le détail sans quitter le contexte de la journée.
+La Frise n’est pas seulement une vue de lecture. Elle permet aussi de construire rapidement un planning visuel : dessiner une plage libre, ajuster sa durée, copier une relève et ouvrir le détail sans quitter le contexte de la journée.
 
 Dans une zone vide, clique puis fais glisser jusqu’à l’heure de fin souhaitée. Le formulaire s’ouvre avec la date et les heures déjà calculées. Il reste à choisir le poste, le libellé et la capacité avant d’enregistrer.
 
@@ -10,6 +10,6 @@ Un clic sur la barre ouvre ses actions rapides. On y retrouve les heures, l’é
 
 Copier reprend le poste, la durée, la capacité et les informations du créneau, puis place la nouvelle plage à l’horaire choisi. La copie est indépendante : elle peut ensuite recevoir un autre libellé ou d’autres consignes.
 
-Dès qu’une modification concerne le lieu, le contact, l’âge minimum ou les règles d’inscription, ouvre l’éditeur détaillé. Les gestes de Timeline accélèrent la construction ; l’éditeur reste la source complète avant publication.
+Dès qu’une modification concerne le lieu, le contact, l’âge minimum ou les règles d’inscription, ouvre l’éditeur détaillé. Les gestes de Frise accélèrent la construction ; l’éditeur reste la source complète avant publication.
 
 Travaille d’abord visuellement, puis relis la Liste pour contrôler les valeurs. Cette combinaison est rapide, mais elle garde un résultat précis et compréhensible pour les bénévoles.

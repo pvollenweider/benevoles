@@ -1,0 +1,12 @@
+{
+  "anchor": "Un lecteur d'écran transforme les noms, les états et les messages",
+  "windowStart": 201.09599999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 30.4,
+    "wordsHeard": "Un lecteur d'écran transforme les noms, les états et les messages"
+  },
+  "onset": 231.49599999999998,
+  "proposedCut": 231.0958335,
+  "note": "Proposal only; recut then independently audit before capture"
+}

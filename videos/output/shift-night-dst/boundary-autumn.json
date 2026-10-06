@@ -1,12 +1,12 @@
 {
   "anchor": "Le dernier dimanche d’octobre, l’heure entre deux et trois se répète.",
-  "windowStart": 13.006,
+  "windowStart": 16.14,
   "result": {
     "found": true,
-    "startSeconds": 30.5,
-    "wordsHeard": "Le dernier dimanche d'octobre, l'heure entre deux et trois se répète."
+    "startSeconds": 30.4,
+    "wordsHeard": "Le dernier dimanche d’octobre, l’heure entre deux et trois se répète"
   },
-  "onset": 43.506,
-  "proposedCut": 43.0063335,
+  "onset": 46.54,
+  "proposedCut": 46.140187499999996,
   "note": "Proposal only; recut then independently audit before capture"
 }

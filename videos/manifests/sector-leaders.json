@@ -15,17 +15,17 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Le jour de la fête, tu n'as pas besoin de tout coordonner seul. Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles. Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter. Aucun accès à toute l'administration n'est nécessaire.",
+      "transcript": "Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule. Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles. Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter. Aucun accès à toute l'administration n'est nécessaire.",
       "fallbackDurationMs": 29000
     },
     {
       "id": "nominate",
-      "transcript": "Dans l'événement, ouvre les responsables et ajoute une personne. Choisis le poste, puis renseigne son nom et son email. Vérifie bien cette adresse : c'est là que son lien sera envoyé. Tu peux désigner quelqu'un qui n'est pas lui-même inscrit à un créneau. Ajouter et envoyer le lien enregistre la nomination et prépare son email.",
+      "transcript": "Dans l'événement, ouvrez les responsables et ajoutez une personne. Choisissez le poste, puis renseignez son nom et son email. Vérifiez bien cette adresse : c'est là que son lien sera envoyé. Vous pouvez désigner quelqu'un qui n'est pas lui-même inscrit à un créneau. Ajouter et envoyer le lien enregistre la nomination et prépare son email.",
       "fallbackDurationMs": 42000
     },
     {
       "id": "registered",
-      "transcript": "Si la personne participe déjà, la liste des inscrits permet de reprendre ses coordonnées sans tout ressaisir. Vérifie le poste proposé avant de confirmer. Être responsable d'un poste et être bénévole sur un créneau sont deux choses différentes : la nomination ne remplace pas une inscription et ne crée pas un nouvel engagement dans le planning.",
+      "transcript": "Si la personne participe déjà, la liste des inscrits permet de reprendre ses coordonnées sans tout ressaisir. Vérifiez le poste proposé avant de confirmer. Être responsable d'un poste et être bénévole sur un créneau sont deux choses différentes : la nomination ne remplace pas une inscription et ne crée pas un nouvel engagement dans le planning.",
       "fallbackDurationMs": 34000
     },
     {
@@ -65,7 +65,7 @@
     },
     {
       "id": "remove",
-      "transcript": "Quand la responsabilité change, retire la personne de ce poste et confirme. Son ancien lien ne donne alors plus accès à cette équipe. Cette action retire la responsabilité, pas ses éventuelles inscriptions comme bénévole. Tu peux ensuite désigner la nouvelle personne et lui envoyer son propre lien : chacun dispose du bon accès, au bon moment.",
+      "transcript": "Quand la responsabilité change, retirez la personne de ce poste et confirmez. Son ancien lien ne donne alors plus accès à cette équipe. Cette action retire la responsabilité, pas ses éventuelles inscriptions comme bénévole. Vous pouvez ensuite désigner la nouvelle personne et lui envoyer son propre lien : chacun dispose du bon accès, au bon moment.",
       "fallbackDurationMs": 35000
     }
   ],

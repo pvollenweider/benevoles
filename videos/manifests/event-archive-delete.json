@@ -36,7 +36,7 @@
     },
     {
       "id": "prepare",
-      "transcript": "Pour cette démonstration, nous travaillons sur une copie jetable de l’ancienne édition. Dans la vraie vie, vérifie d’abord les inscriptions, les invitations, le journal et les rapports. Si des bénévoles doivent être prévenus, annule les créneaux avant l’archivage.",
+      "transcript": "Pour cette démonstration, nous travaillons sur une copie jetable de l’ancienne édition. Dans la vraie vie, vérifiez d’abord les inscriptions, les invitations, le journal et les rapports. Si des bénévoles doivent être prévenus, annulez les créneaux avant l’archivage.",
       "fallbackDurationMs": 24000
     },
     {
@@ -51,7 +51,7 @@
     },
     {
       "id": "backup",
-      "transcript": "Avant d’aller plus loin, ouvre l’export PDF. Il contient le planning, le récapitulatif par poste et la liste des bénévoles. Enregistre-le si l’association doit garder une archive opérationnelle ou répondre plus tard à une question sur cette édition.",
+      "transcript": "Avant d’aller plus loin, ouvrez l’export PDF. Il contient le planning, le récapitulatif par poste et la liste des bénévoles. Enregistrez-le si l’association doit garder une archive opérationnelle ou répondre plus tard à une question sur cette édition.",
       "fallbackDurationMs": 22000
     },
     {
@@ -61,7 +61,7 @@
     },
     {
       "id": "result",
-      "transcript": "L’événement disparaît de la liste après validation. Utilise donc l’archivage comme état normal de fin de vie, et réserve la suppression aux éditions de test, aux erreurs de création ou aux cas où la conservation n’a plus de raison d’être.",
+      "transcript": "L’événement disparaît de la liste après validation. Utilisez donc l’archivage comme état normal de fin de vie, et réservez la suppression aux éditions de test, aux erreurs de création ou aux cas où la conservation n’a plus de raison d’être.",
       "fallbackDurationMs": 20000
     }
   ]

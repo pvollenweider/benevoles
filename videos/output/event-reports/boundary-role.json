@@ -1,0 +1,12 @@
+{
+  "anchor": "Si vous coordonnez un poste, choisissez le planning par poste. La",
+  "windowStart": 43.665000000000006,
+  "result": {
+    "found": true,
+    "startSeconds": 30.4,
+    "wordsHeard": "Si vous coordonnez un poste, choisissez le planning par poste. La"
+  },
+  "onset": 74.065,
+  "proposedCut": 73.66539549999999,
+  "note": "Proposal only; recut then independently audit before capture"
+}

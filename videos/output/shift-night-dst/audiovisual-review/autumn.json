@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T16:12:24.639Z",
+  "videoSha256": "9711d32befbf3bd796f9846b4cc0eafc958f1fd41f9679745ebd4280c84c31e6",
+  "promptSha256": "bdc3e1bc46b8dcddcf0062e32de98494f64aa36224f5cd1ff5c51cb8b2e5dff6",
+  "clipSha256": "86ea312421a097e16723fee567717ef7f49061f8824f4d70c6f663cb8f284a4e",
+  "scene": "autumn",
+  "review": {
+    "heardOpening": "Le dernier dimanche d'octobre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Le dernier dimanche d'octobre",
+        "visibleSeconds": 0.5,
+        "visible": "Section dimanche 25 octobre affichée sur la frise",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "Le même créneau de une heure à cinq heures dure alors cinq heures réelles",
+        "visibleSeconds": 6,
+        "visible": "Ouverture du volet du créneau 01h-05h indiquant 5h",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "Cette différence compte pour les heures planifiées",
+        "visibleSeconds": 7.2,
+        "visible": "Fiche détaillée du créneau d'automne visible à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:06 : Léger décalage avant l'ouverture du créneau illustrant les 5 heures réelles."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et élocution claire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

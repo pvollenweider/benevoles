@@ -2,6 +2,8 @@
 
 Vidéo autonome 34. Ton souriant, patient et concret. Expliquer le besoin, montrer chaque manipulation puis son résultat.
 
+La narration vouvoie les organisateurs. Les heures planifiées concernent uniquement les créneaux passés confirmés et non annulés. Les heures attestées sont la part de ce total avec une présence enregistrée, sans chronométrage du travail réel.
+
 ## Jeu de données
 
 Scénario `members-management`, après le seed de démonstration : 60 membres fictifs. Deux Stéphane Favre avec adresses distinctes, noms accentués, tags, disponibilités, une personne sans email et une personne inactive. Camille possède déjà plusieurs inscriptions et une activité consultable. Aucun score d'engagement n'est ajouté.

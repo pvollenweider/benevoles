@@ -4,6 +4,29 @@
 import assert from "node:assert/strict"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
+import { readFile } from "node:fs/promises"
+import path from "node:path"
+import { pathToFileURL } from "node:url"
+import { ownsImportedNoEmailMember, readImportOwnership } from "../lib/member-import-ownership"
+
+type OwnedMember = { id: string; organizationId: string; firstName: string; lastName: string; phone: string | null; email: string | null; responseStatus: number; createdAt: string }
+const compactPhone = (value: string | null) => value?.replace(/\s/g, "")
+export function ownsRecordedNoEmailMember(person: Omit<OwnedMember, "responseStatus" | "createdAt" | "organizationId"> & { organizationId: string | null }, entries: OwnedMember[], now = Date.now()) {
+  return entries.some(entry => entry.id === person.id && /^[A-Za-z0-9_-]{8,100}$/.test(entry.id) &&
+    entry.responseStatus === 201 && entry.organizationId === "default" && person.organizationId === "default" &&
+    entry.firstName === "René" && person.firstName === entry.firstName && entry.lastName === "Aubert" && person.lastName === entry.lastName &&
+    entry.email === null && person.email === null && compactPhone(entry.phone) === "0790009002" && compactPhone(person.phone) === "0790009002" &&
+    Number.isFinite(Date.parse(entry.createdAt)) && Date.parse(entry.createdAt) <= now + 60_000 && Date.parse(entry.createdAt) >= now - 30 * 86_400_000)
+}
+async function recordedMembers(): Promise<OwnedMember[]> {
+  let raw: string
+  try { raw = await readFile(path.resolve("videos/output/members-management/owned-members.json"), "utf8") }
+  catch (error) { if ((error as NodeJS.ErrnoException).code === "ENOENT") return []; throw error }
+  const ledger = JSON.parse(raw)
+  assert(ledger.schemaVersion === 1 && ledger.scenario === "members-management" && Array.isArray(ledger.members) && ledger.members.length <= 30, "Invalid recorder ownership ledger")
+  assert(ledger.members.every((entry: OwnedMember) => entry && typeof entry.id === "string" && typeof entry.createdAt === "string"), "Invalid ownership entries")
+  return ledger.members
+}
 
 async function main() {
 const url = new URL(process.env.DATABASE_URL ?? "")
@@ -13,22 +36,36 @@ assert.equal(url.pathname, "/benevoles_video")
 assert.equal(process.env.VIDEO_BASE_URL, "http://localhost:43102")
 const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
 try {
+  const owned = await recordedMembers()
+  const imported = await readImportOwnership()
+  const recoveredImport = await readImportOwnership("recovered-import-members.json")
+  const ownsImport = (person: Parameters<typeof ownsImportedNoEmailMember>[0]) => ownsImportedNoEmailMember(person, imported) || ownsImportedNoEmailMember(person, recoveredImport)
   const fixture = await db.organization.findUniqueOrThrow({
     where: { id: "default" },
     include: { volunteers: true, admins: true, events: { include: { registrations: { include: { volunteer: true } } } } },
   })
   assert.equal(fixture.name, "Fêtes de Montvert", "Refuse to reset an unknown organization")
   // These two existing seed identities deliberately demonstrate missing email.
-  const synthetic = (person: { id: string; email: string | null }) =>
+  const synthetic = (person: { id: string; email: string | null; organizationId: string | null; firstName: string; lastName: string; phone: string | null }) =>
     Boolean(person.email?.endsWith("@example.org")) ||
-    (person.email === null && ["video-message-sansmail", "video-member-management-2"].includes(person.id))
+    (person.email === null && ["video-message-sansmail", "video-member-management-2"].includes(person.id)) ||
+    ownsRecordedNoEmailMember(person, owned) || ownsImport(person)
   assert(fixture.volunteers.every(synthetic), "Non-training member found")
   assert(fixture.events.every(event => event.registrations.every(registration => synthetic(registration.volunteer))), "Non-training registration found")
   assert(fixture.admins.every(admin => admin.email.endsWith("@example.org") || admin.email === "org-admin@localhost"), "Non-training administrator found")
   const team = await db.adminUser.findMany({ where: { email: { in: ["colette.owner@example.org", "sam.organizer@example.org", "lea.pending@example.org"] } }, select: { organizationId: true } })
   assert(team.every(admin => admin.organizationId === "default"), "Demo team belongs to another organization")
+  // seed-demo deletes email-bearing fixtures only. Remove prior import rows
+  // without email only by their actual ledger-backed global IDs and all fields.
+  const importedWithoutEmail = fixture.volunteers.filter(person => ownsImport(person))
+  for (const person of importedWithoutEmail) {
+    const relations = await db.volunteer.findUniqueOrThrow({ where: { id: person.id }, include: { _count: { select: { registrations: true, invites: true, pushSubscriptions: true, questionAnswers: true } } } })
+    assert(Object.values(relations._count).every(count => count === 0), "Imported no-email fixture has relations; refuse automatic reset")
+    const deleted = await db.volunteer.deleteMany({ where: { id: person.id, organizationId: "default", email: null, firstName: person.firstName, lastName: person.lastName, phone: person.phone, createdAt: person.createdAt } })
+    assert.equal(deleted.count, 1, "Exact owned imported no-email fixture changed before reset")
+  }
   console.log(`Verified synthetic common fixture: ${fixture.events.length} events, ${fixture.volunteers.length} members. Reset confined to default training organization; other organizations preserved.`)
 } finally { await db.$disconnect() }
 await import("../../scripts/seed-demo")
 }
-main().catch(error => { console.error(error instanceof Error ? error.message : "Demo fixture preparation failed"); process.exitCode = 1 })
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) main().catch(error => { console.error(error instanceof Error ? error.message : "Demo fixture preparation failed"); process.exitCode = 1 })

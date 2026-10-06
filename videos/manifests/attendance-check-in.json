@@ -20,7 +20,13 @@
     "multiple": "Un pointage par créneau",
     "limits": "Présence, pas chronomètre",
     "cancelled": "Un créneau annulé après pointage",
-    "export": "Relire le bilan"
+    "export": "Relire le bilan",
+    "dayof-window": "Le jour J sur le terrain",
+    "dayof-search": "Retrouver une personne ou un poste",
+    "dayof-phone": "Le bon numéro, au bon endroit",
+    "dayof-checkin": "Une arrivée, une inscription",
+    "dayof-refresh": "Actualiser les présences",
+    "dayof-undo": "Corriger sans retirer la place"
   },
   "segments": [
     {
@@ -35,44 +41,74 @@
     },
     {
       "id": "group",
-      "transcript": "Nicolas et Léa arrivent ensemble. Sélectionnons leurs deux lignes et vérifions le nombre avant de cliquer sur Marquer présents. Voici les deux marques, tandis qu'une personne pas encore arrivée reste sans marque. Une demande en attente de validation n'est pas une inscription confirmée à pointer. Ne la transforme pas en présence simplement pour compléter ton bilan : traite d'abord sa demande selon les règles de l'événement.",
+      "transcript": "Nicolas et Léa arrivent ensemble. Sélectionnons leurs deux lignes et vérifions le nombre avant de cliquer sur Marquer présents. Voici les deux marques, tandis qu'une personne pas encore arrivée reste sans marque. Une demande en attente de validation n'est pas une inscription confirmée à pointer. Ne la transformez pas en présence simplement pour compléter votre bilan : traitez d'abord sa demande selon les règles de l'événement.",
       "fallbackDurationMs": 46000
     },
     {
       "id": "correction",
-      "transcript": "Tu as pointé Léa par erreur ? Sélectionnons sa ligne et annulons la présence. La marque disparaît, mais son inscription et sa place restent. Ce n'est pas la même action que retirer quelqu'un de son créneau. Quand la bonne personne arrive, tu peux enregistrer sa présence à nouveau. Relis le nom et l'horaire avant chaque correction : c'est plus simple que de reconstruire une inscription supprimée par mégarde.",
+      "transcript": "Vous avez pointé Léa par erreur ? Sélectionnons sa ligne et annulons la présence. La marque disparaît, mais son inscription et sa place restent. Ce n'est pas la même action que retirer quelqu'un de son créneau. Quand la bonne personne arrive, vous pouvez enregistrer sa présence à nouveau. Relisez le nom et l'horaire avant chaque correction : c'est plus simple que de reconstruire une inscription supprimée par mégarde.",
       "fallbackDurationMs": 46000
     },
     {
       "id": "multiple",
-      "transcript": "Une personne peut aider sur plusieurs horaires. Recherchons Léa pour retrouver ses deux inscriptions. Elle aide le matin, puis à la buvette. Le pointage concerne la ligne sélectionnée, pas toute sa journée. Sa présence au premier créneau ne prouve pas qu'elle est arrivée au second. Regardons les deux lignes côte à côte : l'une est pointée et l'autre ne l'est pas. Tu gardes ainsi une information utile pour chaque équipe, sans généraliser une seule arrivée à tous les postes.",
+      "transcript": "Une personne peut aider sur plusieurs horaires. Recherchons Léa pour retrouver ses deux inscriptions. Elle aide le matin, puis à la buvette. Le pointage concerne la ligne sélectionnée, pas toute sa journée. Sa présence au premier créneau ne prouve pas qu'elle est arrivée au second. Regardons les deux lignes côte à côte : l'une est pointée et l'autre ne l'est pas. Vous gardez ainsi une information utile pour chaque équipe, sans généraliser une seule arrivée à tous les postes.",
       "fallbackDurationMs": 48000
     },
     {
       "id": "limits",
-      "transcript": "Le pointage enregistre une arrivée. Il ne mesure pas l'heure de départ ni la durée réellement travaillée. Dans la fiche membre, les heures planifiées restent les heures prévues par les créneaux. Ne les présente pas comme des heures attestées. De la même façon, une arrivée plus tardive n'est pas un calcul automatique du retard. Le site conserve une marque de présence ; le suivi du temps réellement effectué demande autre chose.",
+      "transcript": "Le pointage enregistre une arrivée. Il ne mesure pas l'heure de départ ni la durée réellement travaillée. Dans la fiche membre, les heures planifiées restent les heures prévues par les créneaux passés. Les heures attestées reprennent, parmi elles, les créneaux où une présence a été enregistrée. Ce ne sont donc pas des heures chronométrées. Une arrivée plus tardive n'est pas un calcul automatique du retard : gardez cette différence en tête quand vous lisez le bilan.",
       "fallbackDurationMs": 44000
     },
     {
       "id": "cancelled",
-      "transcript": "Un cas à regarder de près : Sarah est arrivée, mais son créneau doit finalement être annulé. Enregistrons d'abord sa présence, puis ouvrons son créneau dans la liste. Lisons le récapitulatif et confirmons la suppression. Revenons aux inscriptions : sa ligne a disparu. Téléchargeons le fichier pour vérifier le bilan. Sarah n'y figure pas, car cet export ne retient que les inscriptions actives. Pourtant, le pointage enregistré avant l'annulation est conservé. Ce fichier n'est donc pas un relevé complet de tout ce qui s'est passé. Avant d'annuler un créneau déjà commencé, vérifie avec l'organisation comment garder une trace utile.",
+      "transcript": "Un cas à regarder de près : Sarah est arrivée, mais son créneau doit finalement être annulé. Enregistrons d'abord sa présence, puis ouvrons son créneau dans la liste. Lisons le récapitulatif et confirmons la suppression. Revenons aux inscriptions : sa ligne a disparu. Téléchargeons le fichier pour vérifier le bilan. Sarah n'y figure pas, car cet export ne retient que les inscriptions actives. Pourtant, le pointage enregistré avant l'annulation est conservé. Ce fichier n'est donc pas un relevé complet de tout ce qui s'est passé. Avant d'annuler un créneau déjà commencé, vérifiez avec l'organisation comment garder une trace utile.",
       "fallbackDurationMs": 65000
     },
     {
       "id": "export",
-      "transcript": "Téléchargeons maintenant le véritable export des présences. Comparons une ligne pointée et une ligne non pointée, leurs créneaux et les colonnes Présent et Pointé le. Ce fichier ne calcule pas des heures réellement travaillées. Il peut aussi contenir des coordonnées et des réponses aux questions : partage seulement ce qui est nécessaire. Pour un bilan fiable, pointe la bonne ligne, corrige sans désinscrire et relis le fichier avant de le transmettre.",
-      "fallbackDurationMs": 49000
+      "transcript": "Téléchargeons maintenant le véritable export des présences. Comparons une ligne pointée et une ligne non pointée, leurs créneaux et les colonnes Présent et Pointé le. Ce fichier ne calcule pas des heures réellement travaillées. Il peut aussi contenir des coordonnées et des réponses aux questions : partagez seulement ce qui est nécessaire. Voyons maintenant un écran plus simple à utiliser sur le terrain, depuis son téléphone.",
+      "fallbackDurationMs": 45000
+    },
+    {
+      "id": "dayof-window",
+      "transcript": "La page Jour J se concentre sur les personnes attendues maintenant. La vue En cours regroupe les créneaux qui ont commencé, y compris une veille commencée hier et pas encore terminée. Dans les trois prochaines heures montre les prochaines relèves. Plus tôt aujourd'hui permet de retrouver les créneaux terminés, par exemple pour corriger une arrivée oubliée. Les horaires suivent le fuseau de l'organisation. Ici, nous montrons cette page dans une fenêtre de la taille d'un téléphone, pas sur un appareil physique.",
+      "fallbackDurationMs": 50000
+    },
+    {
+      "id": "dayof-search",
+      "transcript": "Vous cherchez Zoé ? Tapez son prénom sans accent : sa ligne reste facile à retrouver. Vous pouvez aussi chercher un poste, comme Accueil. Les personnes de ce poste restent ensemble, ce qui aide à coordonner l'équipe. Effaçons la recherche pour retrouver le planning du moment. Cette page montre les inscriptions confirmées : une demande encore à valider n'est pas une personne attendue à pointer.",
+      "fallbackDurationMs": 39000
+    },
+    {
+      "id": "dayof-phone",
+      "transcript": "Quand un téléphone est renseigné, un lien permet de préparer un appel à la personne concernée. Voici celui de Zoé. Le contact du créneau peut aussi figurer sur sa carte. Nous montrons le lien, sans appeler qui que ce soit. Cette page garde seulement les informations utiles sur place : les noms, les horaires, le téléphone et la présence. Elle ne distribue pas les emails, les réponses aux questions ou les notes internes.",
+      "fallbackDurationMs": 42000
+    },
+    {
+      "id": "dayof-checkin",
+      "transcript": "Zoé arrive à l'accueil. Marquer présent enregistre sa présence sur ce créneau, et le bouton devient Annuler la présence. Rechargeons la page : la marque est conservée. C'est la même présence que depuis les inscriptions, pas un deuxième système de pointage. Si une personne aide sur plusieurs créneaux, son arrivée ici ne marque pas automatiquement tous les autres. Ce geste confirme une arrivée ; il ne démarre pas un chronomètre.",
+      "fallbackDurationMs": 41000
+    },
+    {
+      "id": "dayof-refresh",
+      "transcript": "Avec Actualiser, vous récupérez les informations enregistrées sur le serveur. La page indique l'heure de sa mise à jour. C'est utile quand plusieurs personnes accueillent les bénévoles avec des appareils différents. Dans cette démonstration, nous actualisons réellement la page ; nous ne prétendons pas qu'une autre personne vient de modifier une présence ailleurs. Relisez les noms et les compteurs avant d'agir, surtout quand une nouvelle relève arrive.",
+      "fallbackDurationMs": 39000
+    },
+    {
+      "id": "dayof-undo",
+      "transcript": "Une erreur de pointage ? Annuler la présence retire la marque, pas l'inscription. Vérifions après rechargement : Zoé conserve sa place, et son arrivée n'est plus marquée. Vous pouvez recommencer lorsqu'elle sera vraiment là. Sur le terrain, le plus utile reste ce petit réflexe : vérifier la personne et le créneau, marquer une arrivée, et corriger sans désinscrire. Vous gardez ainsi un planning juste et une équipe accueillie sereinement.",
+      "fallbackDurationMs": 41000
     }
   ],
   "viewer": {
-    "summary": "Dans cette vidéo, vous enregistrez l'arrivée des bénévoles inscription par inscription, corrigez une erreur de pointage et vérifiez le bilan dans l'export des présences.",
+    "summary": "Dans cette vidéo, vous enregistrez l'arrivée des bénévoles depuis les inscriptions ou la page Jour J, corrigez une erreur de pointage et vérifiez le bilan dans l'export des présences.",
     "steps": [
       "Dans les inscriptions, filtrez sur le créneau concerné, par exemple l'accueil du matin.",
       "Sélectionnez la ligne de la personne arrivée, vérifiez le nombre sélectionné, puis cliquez sur « Marquer présents ».",
-      "Pour un groupe, cochez plusieurs lignes avant de marquer leur présence en une fois.",
+      "Pour un groupe, cochez plusieurs lignes avant de marquer leur présence en une fois. Pour une personne inscrite sur plusieurs horaires, pointez chaque créneau séparément.",
       "En cas d'erreur, sélectionnez la ligne et annulez sa présence : l'inscription et la place restent.",
-      "Pour une personne inscrite sur plusieurs horaires, pointez chaque créneau séparément.",
-      "Téléchargez l'export des présences et relisez les colonnes « Présent » et « Pointé le » avant de le transmettre."
+      "Téléchargez l'export des présences et relisez les colonnes « Présent » et « Pointé le » avant de le transmettre.",
+      "Sur le terrain, ouvrez la page Jour J : cherchez une personne par son prénom ou son poste, cliquez sur « Marquer présent », puis sur « Actualiser » pour voir les dernières présences."
     ],
     "remember": [
       "Être inscrit et être marqué présent sont deux informations différentes.",

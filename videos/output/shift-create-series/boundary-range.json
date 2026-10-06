@@ -1,12 +1,12 @@
 {
-  "anchor": "Choisis le poste, la date et la plage globale à couvrir.",
+  "anchor": "Choisissez le poste, la date et la plage globale à couvrir.",
   "windowStart": 0,
   "result": {
     "found": true,
-    "startSeconds": 13.1,
-    "wordsHeard": "Choisis"
+    "startSeconds": 13.15,
+    "wordsHeard": "Choisissez"
   },
-  "onset": 13.1,
-  "proposedCut": 13.3393955,
+  "onset": 13.15,
+  "proposedCut": 12.89625,
   "note": "Proposal only; recut then independently audit before capture"
 }
