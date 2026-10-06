@@ -92,6 +92,8 @@ Mise à jour sans préparation particulière : toutes les migrations sont additi
 
 ### Sécurité
 
+- **Dépendances à jour** : Next.js 16.3.8, Sentry 11.4, nodemailer 10.0.13, pg, resend, sharp, Vite et Vitest ; `source-map-js` 1.2.2 et `postcss-selector-parser` 7.1.6 forcés (déni de service par entrée malveillante, outils de compilation uniquement).
+- **Liens de la documentation** : les liens vers une page de documentation (menu latéral, précédent et suivant, « Dans ce thème », « Voir aussi », index) passent par une fonction qui n'accepte qu'un identifiant de page valide, ce qui ferme trois alertes d'analyse de code.
 - **Adresse d'un bénévole dans le texte d'une erreur d'envoi** (#598) : la raison affichée pour un email en échec pouvait citer la réponse brute du serveur SMTP, qui contient parfois l'adresse, et était journalisée telle quelle. Les échecs sont décrits par une phrase normalisée, sans adresse ni réponse brute, y compris pour les lignes déjà en base.
 
 ---
