@@ -2,9 +2,13 @@
 
 Hello ! Ce guide explique comment s'inscrire à un créneau de bénévolat, recevoir sa confirmation, et gérer son inscription si un imprévu arrive — en 2 minutes montre en main.
 
+<!-- video: VOLUNTEER_REGISTER -->
+
 ---
 
 ## Trouver la page d'inscription
+
+<!-- video: VOLUNTEER_DISCOVER_EVENT -->
 
 L'organisateur vous communique un lien du type :
 
@@ -25,6 +29,8 @@ Vous ne pouvez pas venir cette fois ? L'email et la page proposent **Je ne suis 
 ---
 
 ## Choisir ses créneaux
+
+<!-- video: VOLUNTEER_CHOOSE_SHIFTS -->
 
 La page affiche un **planning par jour**. Chaque ligne correspond à un poste (accueil, photos, buvette…) et chaque barre colorée représente un créneau disponible.
 
@@ -69,6 +75,8 @@ L'application empêche automatiquement de sélectionner deux créneaux qui se ch
 
 ## S'inscrire
 
+<!-- video: VOLUNTEER_FORM_RECAP -->
+
 Une fois vos créneaux choisis, cliquez sur **Continuer**.
 
 Renseignez :
@@ -97,6 +105,8 @@ Cliquez sur **Confirmer mon inscription**.
 
 ## Confirmation
 
+<!-- video: VOLUNTEER_CONFIRMATION_ERRORS -->
+
 Après l'inscription, un **email de confirmation** est envoyé à votre adresse. Il récapitule vos créneaux et contient un **lien personnel** pour gérer votre inscription.
 
 Ce lien vous est envoyé uniquement par email, jamais affiché à l'écran, pour que personne ne puisse y accéder en saisissant votre adresse à votre place. Seule exception : si vous vous inscrivez depuis un lien d'invitation reçu par email, la page de succès l'affiche aussi.
@@ -104,6 +114,8 @@ Ce lien vous est envoyé uniquement par email, jamais affiché à l'écran, pour
 ---
 
 ## Gérer son inscription
+
+<!-- video: VOLUNTEER_PERSONAL_REGISTRATIONS -->
 
 Depuis votre **lien personnel** (reçu par email) :
 
@@ -139,6 +151,8 @@ Vous pouvez :
 Le lien « Retour à l'accueil » vous ramène directement sur la page de l'événement — elle vous reconnaît automatiquement.
 
 ### Votre lien personnel
+
+<!-- video: VOLUNTEER_SESSION_AVAILABILITY -->
 
 Ce lien donne accès à vos inscriptions et permet de les annuler : **ne le partagez pas**. Sur votre page personnelle, l'encadré **Ton lien personnel** rappelle la date du dernier email qui le contenait et propose **Recevoir ce lien par email** pour l'avoir à nouveau dans votre boîte (au plus trois envois par heure). Si l'organisation a indiqué une adresse de contact, un lien **Écrire à l'organisation** ouvre votre messagerie avec l'objet déjà rempli.
 

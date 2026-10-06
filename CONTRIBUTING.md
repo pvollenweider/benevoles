@@ -188,6 +188,16 @@ Les guides et les pages publiques décrivent l'état actuel du produit, jamais �
 
 Les titres des pages publiques ont une ancre stable, le slug de leur texte (`/doc/admin#configurer-les-creneaux`, `src/lib/heading-anchors.ts`). Les liens « Aide : … » des pages d'administration ouvrent une section de `GUIDE_ADMIN.md` listée dans `src/lib/help-links.ts` : renommer ou supprimer un de ces titres demande de mettre ce fichier à jour dans le même changement (`src/lib/__tests__/help-links.test.ts` échoue sinon). Il en va de même pour les liens internes du guide (`](#...)`).
 
+### Principes de rédaction de la documentation
+
+Pour toute section nouvelle ou réécrite des guides (`GUIDE_ADMIN.md`, `GUIDE_BENEVOLE.md`) :
+
+- **La tâche d'abord** : le titre dit ce que la personne veut faire (« Créer une série de créneaux », « Gérer son inscription »), pas le nom d'un écran ou d'un composant. La première phrase dit où cela se passe et à quoi cela sert.
+- **Des sections courtes** : une tâche par section, une procédure en étapes quand il y en a plusieurs, les cas rares dans les questions fréquentes. Une explication qui vaut pour plusieurs rôles est écrite une seule fois, au bon endroit, et les autres sections y renvoient par un lien.
+- **La vidéo par son identifiant** : quand une vidéo de la bibliothèque montre cette tâche, ajouter sous le titre, sur sa propre ligne entourée de lignes vides, `<!-- video: ID -->` avec l'identifiant stable de `videos/catalog.json` (jamais son titre, sa durée ni son adresse : ils viennent du catalogue). La page publique en fait un lien « Voir la vidéo : titre (durée) » si la vidéo est publiée et son film en ligne, et rien sinon ; GitHub n'affiche rien. Une vidéo au plus par section, et une seule fois par fichier. Un identifiant inconnu ou mal écrit fait échouer `src/lib/__tests__/doc-video-references.test.ts`.
+- **L'état actuel seulement** : décrire ce que fait le produit aujourd'hui, jamais « depuis la version X » ni « nouveau » ; l'historique va dans `CHANGELOG.md`.
+- **Un seul registre par guide**, celui de son public (`PRODUCT.md`) : « vous » dans le guide administrateur ; « tu » est celui des bénévoles dans le produit, ses emails et ses vidéos.
+
 ## Publier une nouvelle version
 
 Checklist à suivre à chaque changement de version :

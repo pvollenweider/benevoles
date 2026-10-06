@@ -409,7 +409,7 @@ describe("relatedVideos", () => {
   })
 })
 
-describe("doc reference resolver (#645, prepare only)", () => {
+describe("doc reference resolver (#645)", () => {
   it("parses a video: ID token", () => {
     expect(parseVideoReference("video: ORG_CREATE")).toBe("ORG_CREATE")
     expect(parseVideoReference("video:ORG_CREATE")).toBe("ORG_CREATE")

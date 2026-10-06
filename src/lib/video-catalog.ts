@@ -323,11 +323,11 @@ export function relatedVideos(video: Video, catalog: Video[], limit = 4): Video[
     .map((x) => x.v)
 }
 
-// --- #645 (prepare only): reference a video from the documentation by its stable id -----------
+// --- #645: reference a video from the documentation by its stable id ---------------------------
 
 const DOC_VIDEO_REFERENCE_RE = /^video:\s*([A-Z][A-Z0-9_]+)\s*$/
 
-/** Parses a `video: ORG_CREATE` reference token from a guide's Markdown (#645, PREPARE only — no UI yet). */
+/** Parses a `video: ORG_CREATE` reference token, the inside of a guide's `<!-- video: ORG_CREATE -->` line (#645, src/lib/doc-video-references.ts). */
 export function parseVideoReference(token: string): string | null {
   const match = token.trim().match(DOC_VIDEO_REFERENCE_RE)
   return match ? match[1] : null
