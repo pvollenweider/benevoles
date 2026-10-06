@@ -21,4 +21,12 @@ describe("public page sources in the Docker image", () => {
     expect(ignore).toContain(`!${source}`)
     expect(read("Dockerfile")).toMatch(new RegExp(`COPY --from=builder .*/app/${source.replace(".", "\\.")} \\./${source.replace(".", "\\.")}`))
   })
+
+  // The documentation units (#649): the whole folder, read by src/lib/doc-units.ts at runtime.
+  it("guide/*.md is re-included by .dockerignore and the folder copied into the runtime image", () => {
+    const ignore = read(".dockerignore").split("\n").map((l) => l.trim())
+    expect(ignore).toContain("!guide/*.md")
+    expect(read("Dockerfile")).toMatch(/COPY --from=builder .*\/app\/guide \.\/guide\n/)
+    expect(fs.readdirSync(path.join(root, "guide")).filter((f) => f.endsWith(".md")).length).toBeGreaterThan(1)
+  })
 })

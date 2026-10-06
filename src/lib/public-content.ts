@@ -8,6 +8,7 @@ import { linkSourcesToRoutes, splitTitle } from "@/lib/doc-pages"
 import { docVideoLink, findVideoReferences, renderDocVideoCard } from "@/lib/doc-video-references"
 import { videoMediaUrls, type Video } from "@/lib/video-catalog"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
+import type { DocUnit } from "@/lib/doc-units"
 
 // The catalogue doesn't change while the server runs (it's in the image), so production reads it
 // once; in development it's read again on each render, so editing videos/catalog.json shows up.
@@ -32,11 +33,24 @@ function videoCatalog(): Video[] {
 export function renderPublicSource(source: string, fallbackTitle: string, mediaBaseUrl?: string | null): { title: string; html: string } {
   const raw = fs.readFileSync(path.join(process.cwd(), source), "utf-8")
   const { title, body } = splitTitle(raw)
+  return { title: title ?? fallbackTitle, html: renderPublicMarkdown(body, mediaBaseUrl) }
+}
+
+/**
+ * A documentation unit's HTML (#649, src/lib/doc-units.ts), the same rendering as the guides: its
+ * own heading ids (one slugger per unit), its video link, links between sources made site links.
+ */
+export function renderDocUnit(unit: DocUnit, mediaBaseUrl?: string | null): string {
+  return renderPublicMarkdown(unit.body, mediaBaseUrl)
+}
+
+/** The Markdown of a public source, without its title, as the page's HTML. */
+function renderPublicMarkdown(body: string, mediaBaseUrl?: string | null): string {
   const catalog = findVideoReferences(body).length > 0 ? videoCatalog() : []
   const hasRender = (video: Video) => videoMediaUrls(video.slug, mediaBaseUrl) !== null
   const videoCard = (id: string) => {
     const link = docVideoLink(id, catalog, hasRender)
     return link ? renderDocVideoCard(link) : ""
   }
-  return { title: title ?? fallbackTitle, html: renderEventPageMarkdown(linkSourcesToRoutes(body), { shiftHeadings: false, headingIds: true, videoCard }) }
+  return renderEventPageMarkdown(linkSourcesToRoutes(body), { shiftHeadings: false, headingIds: true, videoCard })
 }

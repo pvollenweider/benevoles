@@ -70,6 +70,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/GUIDE_ADMIN.md ./GUIDE_ADMIN.md
 COPY --from=builder --chown=nextjs:nodejs /app/GUIDE_BENEVOLE.md ./GUIDE_BENEVOLE.md
 COPY --from=builder --chown=nextjs:nodejs /app/FEATURES.md ./FEATURES.md
 COPY --from=builder --chown=nextjs:nodejs /app/ACCESSIBILITE.md ./ACCESSIBILITE.md
+# Documentation par tâche (#649) : guide/<slug>.md, lue de la même façon par /doc/<slug>.
+COPY --from=builder --chown=nextjs:nodejs /app/guide ./guide
 
 # Catalogue vidéo (#644) : src/lib/video-catalog.ts lit ces fichiers avec fs, hors du tracing de
 # `output: "standalone"`, comme les guides ci-dessus. Le reste de videos/ (tools, assets, output)

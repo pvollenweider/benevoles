@@ -43,7 +43,8 @@ test.describe("public pages", () => {
 
 test.describe("content pages on a phone, in dark mode", () => {
   test.use({ viewport: { width: 320, height: 640 }, colorScheme: "dark" })
-  for (const path of ["/accessibilite", "/doc"]) {
+  // A documentation unit (#649): its breadcrumb wraps at 320 px.
+  for (const path of ["/accessibilite", "/doc", "/doc/revenir-sur-la-page-d-inscription"]) {
     test(`${path} has no serious violation at 320 px, dark`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()

@@ -7,6 +7,7 @@ import { resolveOrgSlug } from "@/lib/resolve-org"
 import { apexBaseUrl, isKnownHost, orgBaseUrl } from "@/lib/urls"
 import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
 import { apexSitemap } from "@/lib/doc-pages"
+import { loadDocUnits } from "@/lib/doc-units"
 
 // Multi-tenant by subdomain: each org's own [orgSlug].benevol.app/sitemap.xml lists only that
 // org's published events (and their custom pages, #188) — the host already scopes it via
@@ -18,10 +19,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!rawOrgSlug) {
     const hostname = (h.get("host") ?? "").split(":")[0]
     if (!isKnownHost(hostname) || hostname.startsWith("staging.")) return []
-    // A doc page's last change is its source file's: GUIDE_*.md are shipped with the app.
+    // A doc page's last change is its source file's: GUIDE_*.md and guide/*.md are shipped with the app.
     return apexSitemap(apexBaseUrl(), (source) => {
       try { return fs.statSync(path.join(process.cwd(), source)).mtime } catch { return null }
-    })
+    }, loadDocUnits())
   }
 
   const resolved = await resolveOrgSlug(rawOrgSlug)

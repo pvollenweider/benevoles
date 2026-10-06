@@ -28,9 +28,12 @@ describe("sitemap on the apex host", () => {
       "https://www.benevol.app/doc",
       "https://www.benevol.app/doc/admin",
       "https://www.benevol.app/doc/benevole",
+      // The documentation units of guide/ (#649), each at /doc/<slug>.
+      "https://www.benevol.app/doc/revenir-sur-la-page-d-inscription",
     ])
-    // The guides are real files in the repo: their date is known.
+    // The guides and the units are real files in the repo: their date is known.
     expect(entries.find((e) => e.url.endsWith("/doc/admin"))?.lastModified).toBeInstanceOf(Date)
+    expect(entries.find((e) => e.url.endsWith("/doc/revenir-sur-la-page-d-inscription"))?.lastModified).toBeInstanceOf(Date)
   })
 
   it("stays empty on staging and on unknown hosts", async () => {
