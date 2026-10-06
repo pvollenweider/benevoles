@@ -55,7 +55,8 @@ Modules `src/lib/` à connaître :
 | `notifications/` | `sendNotification()`, gabarits (`templates/`, un fichier par famille, `render()` dans `templates/index.ts`), canal email |
 | `push.ts` | Envoi Web Push, purge des abonnements expirés |
 | `waitlist.ts` | Promotion du premier de la liste d'attente |
-| `rate-limit.ts` | Limiteur de requêtes, compteurs dans PostgreSQL (partagés entre instances) |
+| `rate-limit.ts` | Limiteur de requêtes, compteurs dans PostgreSQL (partagés entre instances) ; en mémoire du processus pour la réponse anonyme aux vidéos (#646), qui n'écrit pas l'IP en base |
+| `video-feedback.ts` | « Cette vidéo vous a-t-elle été utile ? » (#646) : validation, contexte de lecture (`?from=doc`), formulation tu/vous, agrégation par vidéo et révision |
 | `csv-import.ts` | Import CSV et xlsx des membres ; `member-import-server.ts` et `member-import-plan.ts` analysent le fichier et planifient l'import |
 | `targeted-message.ts` | Messages ciblés : audiences, limites, push associé |
 | `registration-decision.ts` | Acceptation ou refus des demandes sur les créneaux « Sur validation » |

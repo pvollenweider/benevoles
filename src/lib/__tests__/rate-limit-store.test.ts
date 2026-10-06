@@ -53,6 +53,24 @@ describe("rateLimit (#322)", () => {
     expect(await isRateLimited("a", "r", 1, broken)).toBe(false)
   })
 
+  // #646: the anonymous video feedback keeps its per-IP counters in memory only, for the life of
+  // the process — expired windows must not pile up.
+  it("the memory store's sweep of expired windows never drops a running one", async () => {
+    vi.useFakeTimers()
+    const store = memoryStore(2)
+    await rateLimit("a", "r", 1, 1000, store)
+    await rateLimit("b", "r", 1, 1000, store)
+    await rateLimit("c", "r", 1, 1000, store)
+    vi.advanceTimersByTime(1001)
+    await rateLimit("d", "r", 1, 1000, store)
+    expect(await store.peek("r:a")).toBeNull()
+    // A window still running is never swept.
+    await rateLimit("e", "r", 1, HOUR, store)
+    await rateLimit("f", "r", 1, HOUR, store)
+    await rateLimit("g", "r", 1, HOUR, store)
+    expect((await rateLimit("e", "r", 1, HOUR, store)).ok).toBe(false)
+  })
+
   it("never tells a refused client to retry after 0 seconds", () => {
     expect(decide({ count: 5, msLeft: 200 }, 3).retryAfter).toBe(1)
     expect(decide({ count: 5, msLeft: 1500 }, 3).retryAfter).toBe(2)

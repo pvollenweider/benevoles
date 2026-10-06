@@ -138,6 +138,12 @@ async function run(req: Request) {
     where: { createdAt: { lt: deliveryOutcomeCutoff } },
   })
 
+  // --- 6c. Anonymous video feedback (#646): answers older than their retention window ---
+  // `answeredOn` is a day; a row is kept until the whole retention window has passed.
+  const deletedVideoFeedback = await prisma.videoFeedback.deleteMany({
+    where: { answeredOn: { lt: daysAgo(now, RETENTION_DAYS.videoFeedback) } },
+  })
+
   // --- 7. Encrypt volunteer-facing tokens still stored in clear (#290) ---
   // No-op until TOKEN_ENCRYPTION_KEY is set; then drains the legacy columns.
   const tokenEncryption = await encryptLegacyTokens().catch((e) => {
@@ -184,6 +190,7 @@ async function run(req: Request) {
       targetedMessages: deletedMessages.count,
       rateLimits: deletedRateLimits.count,
       deliveryOutcomes: deletedDeliveryOutcomes.count,
+      videoFeedback: deletedVideoFeedback.count,
       organizations: deletedOrgs.count,
       volunteers: deletedVolunteers.count,
       mergedMemberTombstones: deletedMergedTombstones.count,

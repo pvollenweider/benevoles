@@ -26,6 +26,10 @@ export const RETENTION_DAYS = {
   deliveryOutcome: 30,
   /** Targeted message (subject, text, audience, counts), #467. */
   targetedMessage: 365,
+  /** Anonymous « utile ? » answer to a tutorial video (#646): not personal data, but no reason to
+   * keep it longer than the videos it judges stay current; a year of answers is enough to find
+   * the videos to improve, and a regenerated video starts fresh anyway (new revision). */
+  videoFeedback: 365,
   /** Encrypted database dump on the server. */
   localBackup: 30,
   /** Copy of the encrypted dumps off site. */
@@ -180,7 +184,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: false,
   },
   {
-    data: "Compteurs de limitation de fréquence (adresse IP, email saisi à la connexion ou identifiant)",
+    data: "Compteurs de limitation de fréquence (adresse IP, email saisi à la connexion ou identifiant) ; ceux de la réponse « utile ? » aux vidéos (#646) restent en mémoire du processus, jamais en base",
     purpose: "Protéger contre les abus",
     duration: "effacés au nettoyage qui suit la fin de leur fenêtre (15 minutes à 1 heure)",
     trigger: "fin de la fenêtre",
@@ -193,6 +197,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     purpose: "Renvoyer les liens personnels",
     duration: "chiffrés puis effacés au nettoyage suivant dès qu'une clé est configurée (clé obligatoire en production)",
     trigger: "configuration de TOKEN_ENCRYPTION_KEY",
+    mechanism: "nettoyage quotidien (cron cleanup)",
+    backups: inBackups,
+    public: false,
+  },
+  {
+    data: "Réponses « Cette vidéo vous a-t-elle été utile ? » (#646) : identifiant et révision de la vidéo, langue, oui ou non, contexte de lecture (bibliothèque vidéo ou documentation), jour ; anonymes, sans adresse IP, cookie, compte ni organisation (pas une donnée personnelle)",
+    purpose: "Repérer les vidéos tutorielles à améliorer",
+    duration: `${d.videoFeedback} jours`,
+    trigger: "réponse",
     mechanism: "nettoyage quotidien (cron cleanup)",
     backups: inBackups,
     public: false,
