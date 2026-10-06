@@ -18,7 +18,7 @@ Le `Dockerfile` est multi-étapes (`node:26-alpine`) :
 1. `deps` : `npm ci`
 2. `prisma-cli` : installe la CLI Prisma pour les migrations à l'exécution
 3. `builder` : `prisma generate` puis `npm run build`. `DATABASE_URL` et `AUTH_SECRET` reçoivent des valeurs factices pendant le build. `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` (affiché sur la page Santé du service) sont des arguments de build, `SENTRY_AUTH_TOKEN` un secret de build (`sentry_auth_token`)
-4. `runner` : sortie `standalone` de Next.js, utilisateur non root, port 3000. Copie aussi `prisma/`, `prisma.config.ts` et les sources des pages de contenu (`GUIDE_ADMIN.md`, `GUIDE_BENEVOLE.md`, `FEATURES.md`, `ACCESSIBILITE.md`), lues à la requête : toute nouvelle page de contenu s'ajoute au `Dockerfile`
+4. `runner` : sortie `standalone` de Next.js, utilisateur non root, port 3000. Copie aussi `prisma/`, `prisma.config.ts` et les sources des pages de contenu (`GUIDE_ADMIN.md`, `FEATURES.md`, `ACCESSIBILITE.md`) et les pages de documentation (`guide/`), lues à la requête : toute nouvelle page de contenu s'ajoute au `Dockerfile`
 
 Au démarrage, `docker-entrypoint.sh` attend PostgreSQL, exécute `prisma migrate deploy` sauf si `MIGRATE_ON_START=false`, puis lance `node server.js`. Avec Docker Compose, les migrations s'appliquent donc au démarrage de l'application. Sur Kubernetes, les pods de l'application ont `MIGRATE_ON_START=false` : c'est le Job de migration qui les applique, une seule fois par déploiement (voir ci-dessous).
 

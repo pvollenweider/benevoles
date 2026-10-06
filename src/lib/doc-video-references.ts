@@ -4,8 +4,8 @@
 import { parseVideoReference, resolveVideoReference, type Video } from "@/lib/video-catalog"
 
 /**
- * Videos referenced from the documentation by their stable id (#645). A guide (GUIDE_ADMIN.md,
- * GUIDE_BENEVOLE.md, FEATURES.md...) writes, on its own line and at the start of the line:
+ * Videos referenced from the documentation by their stable id (#645). A source (GUIDE_ADMIN.md,
+ * guide/<page>.md, FEATURES.md...) writes, on its own line and at the start of the line:
  *
  *     <!-- video: ORG_FIRST_STEPS -->
  *

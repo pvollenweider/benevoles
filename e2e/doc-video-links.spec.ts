@@ -12,7 +12,7 @@ const mediaBase = process.env.VIDEO_MEDIA_BASE_URL
 test("without VIDEO_MEDIA_BASE_URL the guide shows no video link", async ({ page }) => {
   test.skip(!!mediaBase, "VIDEO_MEDIA_BASE_URL is set: the links are followed below")
   await page.goto("/doc/admin")
-  await expect(page.getByRole("heading", { level: 2, name: "Premiers pas" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Premiers pas", exact: true })).toBeVisible()
   await expect(page.locator('a[href^="/videos/"]')).toHaveCount(0)
 })
 
@@ -26,7 +26,7 @@ test.describe("with VIDEO_MEDIA_BASE_URL", () => {
     await expect(link).not.toHaveAttribute("target", /.*/)
 
     // Right under its section's title.
-    const sectionLink = page.locator("h2#premiers-pas + p[data-doc-video] a")
+    const sectionLink = page.locator("#premiers-pas + p[data-doc-video] a")
     await expect(sectionLink).toHaveAttribute("href", "/videos/ORG_FIRST_STEPS?from=doc")
 
     let opened = false
@@ -37,8 +37,8 @@ test.describe("with VIDEO_MEDIA_BASE_URL", () => {
     expect(opened).toBe(false)
   })
 
-  test("the link works with the keyboard", async ({ page }) => {
-    await page.goto("/doc/benevole")
+  test("the link of a documentation unit works with the keyboard", async ({ page }) => {
+    await page.goto("/doc/trouver-la-page-d-inscription")
     const link = page.getByRole("link", { name: /^Voir la vidéo\s: Trouver et lire la page d’inscription \(\d+ min\)$/ })
     await link.focus()
     await expect(link).toBeFocused()

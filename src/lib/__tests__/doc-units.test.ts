@@ -29,7 +29,7 @@ import {
 import { PUBLIC_PAGES } from "../doc-pages"
 import { findVideoReferences } from "../doc-video-references"
 import { loadVideoCatalog } from "../video-catalog-load"
-import { renderDocUnit } from "../public-content"
+import { docUnitHeadingIds, renderDocUnit } from "../public-content"
 
 // #649: the documentation split into one Markdown file per task in guide/, served at /doc/<slug>.
 
@@ -318,7 +318,8 @@ describe("the units of guide/", () => {
 
   it("speak to volunteers with « tu », and split a shared unit into « Côté organisation » and « Côté bénévole »", () => {
     for (const u of units) {
-      if (u.roles.length === 1 && u.roles[0] === "benevole") expect(u.body, u.slug).not.toMatch(/\b(vous|votre|vos)\b/i)
+      // « rendez-vous » (the meeting point of a shift) isn't a « vous ».
+      if (u.roles.length === 1 && u.roles[0] === "benevole") expect(u.body, u.slug).not.toMatch(/(?<![\w-])(vous|votre|vos)\b/i)
       if (u.roles.length === 2) {
         expect(u.body, u.slug).toMatch(/^## Côté organisation$/m)
         expect(u.body, u.slug).toMatch(/^## Côté bénévole$/m)
@@ -344,8 +345,17 @@ describe("the units of guide/", () => {
     for (const u of units) {
       for (const [, slug] of u.body.matchAll(/\]\(([a-z0-9-]+)\.md(?:#[^)]*)?\)/g)) expect(slugs.has(slug), `${u.slug} links to ${slug}.md`).toBe(true)
     }
-    for (const page of PUBLIC_PAGES.filter((p) => p.source)) {
-      for (const [, slug] of read(page.source!).matchAll(/\]\(guide\/([a-z0-9-]+)\.md(?:#[^)]*)?\)/g)) expect(slugs.has(slug), `${page.source} links to guide/${slug}.md`).toBe(true)
+    for (const file of PUBLIC_PAGES.flatMap((p) => [p.source, p.stubSource]).filter((f): f is string => !!f)) {
+      for (const [, slug] of read(file).matchAll(/\]\(guide\/([a-z0-9-]+)\.md(?:#[^)]*)?\)/g)) expect(slugs.has(slug), `${file} links to guide/${slug}.md`).toBe(true)
+    }
+  })
+
+  // The volunteer FAQ (#649) links to each question in its unit: a renamed heading would break it.
+  it("link to a heading of another unit only by an id it renders", () => {
+    for (const u of units) {
+      for (const [, slug, id] of u.body.matchAll(/\]\(([a-z0-9-]+)\.md#([^)]*)\)/g)) {
+        expect(docUnitHeadingIds(units.find((other) => other.slug === slug)!), `${u.slug} links to ${slug}.md#${id}`).toContain(id)
+      }
     }
   })
 

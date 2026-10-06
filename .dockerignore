@@ -7,13 +7,12 @@ node_modules
 docker-compose*.yml
 *.md
 # The sources of the public content pages (PUBLIC_PAGES in src/lib/doc-pages.ts) are read at
-# build time (next build prerenders /fonctionnalites, /doc/admin, /doc/benevole) and at runtime:
+# build time (next build prerenders /fonctionnalites, /doc/admin) and at runtime:
 # each must be listed here, or the *.md rule above breaks the production build (ENOENT).
 # Checked by src/lib/__tests__/docker-public-sources.test.ts.
 !FEATURES.md
 !ACCESSIBILITE.md
 !GUIDE_ADMIN.md
-!GUIDE_BENEVOLE.md
 # The documentation units (#649, src/lib/doc-units.ts), rendered by /doc/<slug>.
 !guide/*.md
 .DS_Store
