@@ -85,6 +85,22 @@ test("/doc lists every unit by group, linked by its title, with its summary and 
   await expect(page.locator("main")).not.toContainText("—")
 })
 
+test("each unit of the index: its title link on its own line, its summary below in smaller muted text", async ({ page }) => {
+  await page.goto("/doc/admin")
+  const index = page.getByRole("region", { name: "Toutes les fiches" })
+  const link = index.getByRole("link", { name: "Premiers pas", exact: true })
+  const summary = link.locator("xpath=following-sibling::span[1]")
+  await expect(summary).toBeVisible()
+  const [linkBox, summaryBox] = [await link.boundingBox(), await summary.boundingBox()]
+  expect(summaryBox!.y).toBeGreaterThanOrEqual(linkBox!.y + linkBox!.height - 1)
+  expect(parseFloat(await summary.evaluate((el) => getComputedStyle(el).fontSize))).toBeLessThan(parseFloat(await link.evaluate((el) => getComputedStyle(el).fontSize)))
+  // Every visible group is a heading of the page, none inside a disclosure.
+  await expect(index.locator("details")).toHaveCount(0)
+  const visibleGroups = await index.locator("div:not([hidden]) > h3").count()
+  expect(visibleGroups).toBeGreaterThan(5)
+  await expect(index.getByRole("heading", { level: 3 })).toHaveCount(visibleGroups)
+})
+
 test("a link of the index shows the same focus outline as the links a page draws itself", async ({ page }) => {
   await page.goto("/doc")
   const link = page.getByRole("link", { name: "Revenir sur la page d'inscription", exact: true })
@@ -153,8 +169,17 @@ test.describe("a unit's navigation on a wide screen", () => {
 
   test("the side menu lists every group, opens the current one and marks the current unit", async ({ page }) => {
     await page.goto("/doc/rappels")
-    const menu = page.getByRole("navigation", { name: "Documentation" })
+    // One navigation landmark for the whole menu: its sections are headings, not regions.
+    await expect(page.getByRole("navigation", { name: "Documentation", exact: true })).toHaveCount(1)
+    const menu = page.getByRole("navigation", { name: "Documentation", exact: true })
     await expect(menu).toBeVisible()
+    await expect(menu.getByRole("region")).toHaveCount(0)
+    // Each section is a list named by its visible label, not a heading: the page's first heading is its <h1>.
+    await expect(menu.getByRole("heading")).toHaveCount(0)
+    await expect(menu.locator(":scope > div > ul")).toHaveCount(3)
+    for (const name of ["Bénévoles", "Organisateurs", "Commun"]) await expect(menu.getByRole("list", { name, exact: true })).toBeVisible()
+    expect(await menu.locator(":scope > div > ul").evaluateAll((uls) => uls.map((ul) => document.getElementById(ul.getAttribute("aria-labelledby")!)!.textContent))).toEqual(["Bénévoles", "Organisateurs", "Commun"])
+    expect(await page.evaluate(() => document.querySelector("h1, h2, h3, h4, h5, h6")!.tagName)).toBe("H1")
     // Outside <main>: « Aller au contenu » skips it.
     expect(await menu.evaluate((nav) => nav.closest("main") === null)).toBe(true)
     await expect(menu.locator("summary")).toHaveCount(12)
@@ -163,13 +188,28 @@ test.describe("a unit's navigation on a wide screen", () => {
     await expect(current).toHaveText("Rappels et changements de créneau")
     await expect(current).toHaveCSS("font-weight", "600")
     await expect(menu.locator("details[open] > summary")).toHaveText(["Après l'inscription"])
+    await expect(menu.locator('details[open] [aria-current="page"]')).toHaveCount(1)
+    await expect(menu.locator("details details")).toHaveCount(0)
+    // Each group once, under its audience; the same menu, in the same order, on another unit.
+    const shape = () => menu.evaluate((nav) => [...nav.querySelectorAll(":scope > div > ul")].map((ul) => [document.getElementById(ul.getAttribute("aria-labelledby")!)!.textContent, [...ul.querySelectorAll(":scope > li > details > summary")].map((s) => s.textContent)]))
+    const onRappels = await shape()
+    const groups = onRappels.flatMap(([, g]) => g as string[])
+    expect(new Set(groups).size).toBe(groups.length)
+    expect(onRappels).toEqual([
+      ["Bénévoles", ["S'inscrire à un créneau"]],
+      ["Organisateurs", ["Démarrer", "Préparer l'événement", "Publier et partager", "Suivre l'événement", "Le jour J", "Membres et invitations", "Communiquer avec les bénévoles", "Paramètres de l'organisation", "Aide"]],
+      ["Commun", ["Après l'inscription", "Règles d'inscription"]],
+    ])
+    expect.soft(await seriousViolations(page)).toEqual([])
     // Another group opens from the keyboard and leads to its units.
     const other = menu.locator("summary", { hasText: "Préparer l'événement" })
     await other.focus()
     await page.keyboard.press("Enter")
     await menu.getByRole("link", { name: "Configurer les créneaux", exact: true }).click()
     await expect(page).toHaveURL(/\/doc\/configurer-les-creneaux$/)
-    await expect(page.getByRole("navigation", { name: "Documentation" }).locator('[aria-current="page"]')).toHaveText("Configurer les créneaux")
+    await expect(page.getByRole("navigation", { name: "Documentation", exact: true }).locator('[aria-current="page"]')).toHaveText("Configurer les créneaux")
+    expect(await shape()).toEqual(onRappels)
+    await expect(menu.locator("details[open] > summary")).toHaveText(["Préparer l'événement"])
     // « Dans ce thème » is for narrow screens only.
     await expect(page.getByRole("heading", { level: 2, name: "Dans ce thème" })).toBeHidden()
   })
@@ -234,6 +274,7 @@ test("the filter over the index narrows the list as you type, hides empty groups
   // A group without any match is hidden whole, heading included.
   await expect(page.getByRole("heading", { level: 3, name: "S'inscrire à un créneau" })).toHaveCount(0)
   await expect(page.getByRole("heading", { level: 3, name: "Après l'inscription" })).toBeVisible()
+  await expect(page.getByRole("region", { name: "Toutes les fiches" }).getByRole("heading", { level: 3 })).toHaveCount(1)
   await expect(field).toBeFocused()
 
   await field.fill("creneau changer")
@@ -367,5 +408,85 @@ test.describe("old anchors of the guides", () => {
     }, ANCHOR)
     await expect(page).toHaveURL(new RegExp(`${UNIT}$`))
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Revenir sur la page d'inscription")
+  })
+})
+
+test.describe("the filter of the index before hydration", () => {
+  for (const path of ["/doc/benevole", "/doc"]) {
+    test(`${path}: no field in the accessibility tree before hydration, nothing moves when it appears`, async ({ page }) => {
+      // Hold every script of the page until the server-rendered HTML has been measured.
+      let release!: () => void
+      const gate = new Promise<void>((resolve) => (release = resolve))
+      await page.route(/\/_next\/static\/.*\.js(\?.*)?$/, async (route) => {
+        await gate
+        await route.continue()
+      })
+      await page.goto(path, { waitUntil: "commit" })
+      const index = page.getByRole("region", { name: "Toutes les fiches" })
+      const firstGroup = index.locator("h3").first()
+      await expect(firstGroup).toBeVisible()
+      await page.evaluate(() => document.fonts.ready)
+      await expect(page.getByRole("searchbox")).toHaveCount(0)
+      await expect(index.getByRole("status")).toHaveCount(1)
+      const before = (await firstGroup.boundingBox())!.y
+
+      release()
+      const field = page.getByRole("searchbox", { name: "Filtrer les fiches" })
+      await expect(field).toBeVisible()
+      await waitForHydration(field)
+      await page.evaluate(() => document.fonts.ready)
+      expect(Math.abs((await firstGroup.boundingBox())!.y - before)).toBeLessThanOrEqual(1)
+    })
+  }
+})
+
+test.describe("the reading width of the documentation", () => {
+  // WCAG 1.4.10 (reflow at 320 CSS px) and 1.4.12 (text spacing).
+  const TEXT_SPACING = "* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; } p { margin-bottom: 2em !important; }"
+  const overflows = (page: Page) => page.evaluate(() => {
+    const root = document.documentElement
+    const main = document.querySelector("main")!
+    return { page: root.scrollWidth > root.clientWidth, main: main.scrollWidth > main.clientWidth }
+  })
+
+  for (const width of [320, 1440]) {
+    test.describe(`at ${width} px`, () => {
+      test.use({ viewport: { width, height: 900 } })
+      for (const path of ["/doc/rappels", "/doc/admin", "/doc/benevole", "/doc", "/doc/creer-un-evenement"]) {
+        test(`${path}: no horizontal scroll, even with larger text spacing`, async ({ page }) => {
+          await page.goto(path)
+          await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+          expect(await overflows(page)).toEqual({ page: false, main: false })
+          await page.addStyleTag({ content: TEXT_SPACING })
+          expect(await overflows(page)).toEqual({ page: false, main: false })
+        })
+      }
+    })
+  }
+
+  test("paragraphs and list items are capped at 70ch, headings follow a clear scale", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 })
+    await page.goto("/doc/rappels")
+    const p = page.locator("main article p").filter({ hasText: /\w{3,}.{60,}/ }).first()
+    const style = await p.evaluate((el) => {
+      const cs = getComputedStyle(el)
+      const probe = document.createElement("span")
+      probe.style.cssText = "position:absolute;visibility:hidden;width:70ch"
+      el.appendChild(probe)
+      const ch70 = probe.getBoundingClientRect().width
+      probe.remove()
+      return { maxWidth: parseFloat(cs.maxWidth), ch70, width: el.getBoundingClientRect().width, lineHeight: cs.lineHeight, fontSize: parseFloat(cs.fontSize) }
+    })
+    expect(style.maxWidth).toBeCloseTo(style.ch70, 0)
+    expect(style.width).toBeLessThanOrEqual(style.ch70 + 1)
+    expect(parseFloat(style.lineHeight) / style.fontSize).toBeCloseTo(1.75, 1)
+    // A list item of the content (the breadcrumb and the jump links are not prose).
+    const liMaxWidth = await page.evaluate(() => getComputedStyle([...document.querySelectorAll("main article li")].find((li) => !li.closest(".not-prose"))!).maxWidth)
+    expect(parseFloat(liMaxWidth)).toBeCloseTo(style.ch70, 0)
+    const sizes = await page.evaluate(() => ["h1", "h2", "h3"].map((tag) => parseFloat(getComputedStyle(document.querySelector(`main article ${tag}`)!).fontSize)))
+    expect(sizes[0]).toBe(30)
+    expect(sizes[0]).toBeGreaterThan(sizes[1])
+    expect(sizes[1]).toBeGreaterThan(sizes[2])
+    expect(sizes[2]).toBeGreaterThan(16)
   })
 })

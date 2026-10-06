@@ -12,8 +12,6 @@ aliases: []
 
 <!-- video: GLOBAL_SEARCH -->
 
-**`/admin/search`**
-
 La loupe **Rechercher** de la barre du haut ouvre le champ de recherche (**Ctrl + K**, ou **Cmd + K** (⌘) sur Mac, l'ouvre aussi ; **Échap** le referme). Sur un petit écran, le champ est dans le **Menu**. Il retrouve en une fois, dans toute votre organisation :
 
 - les **bénévoles** dont le prénom, le nom, l'email ou le téléphone correspond : le lien ouvre la page Membres filtrée sur cette personne, membres désactivés compris ;

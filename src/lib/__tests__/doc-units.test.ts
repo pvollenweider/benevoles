@@ -376,3 +376,25 @@ describe("the units of guide/", () => {
     }
   })
 })
+
+// The guides name a page the way the reader finds it, by the labels of the admin navigation
+// (« Événements, puis l'événement, puis Gérer les créneaux »), never by its internal route: a URL with
+// « [id] » in it is no use to a reader and goes stale when the routes move. Code fences may still
+// show one (an example of an address, say).
+describe("the pages of guide/", () => {
+  const outsideCodeFences = (markdown: string) => markdown.replace(/^(```|~~~)[^\n]*\n[\s\S]*?^\1[^\n]*$/gm, "")
+
+  it("drops fenced code only", () => {
+    expect(outsideCodeFences("Avant\n```\n/admin/events\n```\nAprès `/admin/x`")).toBe("Avant\n\nAprès `/admin/x`")
+  })
+
+  it("never name an internal /admin/ route outside a code fence", () => {
+    const dir = path.join(process.cwd(), "guide")
+    const files = fs.readdirSync(dir).filter((f) => f.endsWith(".md"))
+    expect(files.length).toBeGreaterThan(0)
+    for (const file of files) {
+      const lines = outsideCodeFences(fs.readFileSync(path.join(dir, file), "utf8")).split("\n").filter((line) => line.includes("/admin/"))
+      expect(lines, file).toEqual([])
+    }
+  })
+})

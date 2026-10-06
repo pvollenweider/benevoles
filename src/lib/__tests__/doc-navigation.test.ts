@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { DOC_GROUPS, DOC_ROLE_GROUP_ORDER, DOC_ROLES, docGroupsInOrder, docUnitsByGroup, readDocUnits, type DocUnit } from "../doc-units"
-import { docGroupSiblings, docGroupUnits, docJumpLinks, docMenuGroups, docUnitNeighbours } from "../doc-navigation"
+import { DOC_MENU_SECTIONS, docGroupSiblings, docGroupUnits, docJumpLinks, docMenuGroupAudience, docMenuGroups, docMenuSections, docUnitNeighbours } from "../doc-navigation"
 import { docUnitHeadingIds } from "../public-content"
 
 function unit(overrides: Partial<DocUnit> & { slug: string }): DocUnit {
@@ -65,6 +65,46 @@ describe("docMenuGroups", () => {
 
   it("marks no group for an unknown slug", () => {
     expect(docMenuGroups(units, "absent").some((g) => g.current)).toBe(false)
+  })
+})
+
+describe("docMenuSections", () => {
+  it("puts each group once under its audience: volunteers, organisers, then both", () => {
+    const menu = docMenuSections(units, "b")
+    expect(menu.map((s) => [s.title, s.groups.map((g) => g.group.id)])).toEqual([
+      ["Bénévoles", ["inscription"]],
+      ["Organisateurs", ["preparer"]],
+      ["Commun", ["apres-inscription"]],
+    ])
+    expect(menu.flatMap((s) => s.groups).filter((g) => g.current).map((g) => g.group.id)).toEqual(["apres-inscription"])
+  })
+
+  it("keeps the same sections and groups in the same order whatever the current unit", () => {
+    const shape = (slug: string) => docMenuSections(units, slug).map((s) => [s.title, s.groups.map((g) => g.group.id)])
+    for (const slug of ["seul", "p", "a", "absent"]) expect(shape(slug), slug).toEqual(shape("b"))
+    expect(docMenuSections(units, "p").flatMap((s) => s.groups).filter((g) => g.current).map((g) => g.group.id)).toEqual(["preparer"])
+  })
+
+  it("leaves out a section without any group", () => {
+    const volunteersOnly = units.filter((u) => u.group === "inscription")
+    expect(docMenuSections(volunteersOnly, "seul").map((s) => s.title)).toEqual(["Bénévoles"])
+    expect(DOC_MENU_SECTIONS.map((s) => s.title)).toEqual(["Bénévoles", "Organisateurs", "Commun"])
+  })
+
+  it("calls a group shared when a unit is for both roles or its units cover both", () => {
+    expect(docMenuGroupAudience([unit({ slug: "x", roles: ["admin"] })])).toBe("admin")
+    expect(docMenuGroupAudience([unit({ slug: "x", roles: ["benevole"] }), unit({ slug: "y", roles: ["benevole"] })])).toBe("benevole")
+    expect(docMenuGroupAudience([unit({ slug: "x", roles: ["admin"] }), unit({ slug: "y", roles: ["benevole"] })])).toBe("commun")
+    expect(docMenuGroupAudience([unit({ slug: "x", roles: ["admin", "benevole"] })])).toBe("commun")
+  })
+
+  it("files every group of guide/ exactly once", () => {
+    const real = readDocUnits()
+    const menu = docMenuSections(real, real[0].slug)
+    const ids = menu.flatMap((s) => s.groups.map((g) => g.group.id))
+    expect(new Set(ids).size).toBe(ids.length)
+    expect([...ids].sort()).toEqual(docUnitsByGroup(real).map((g) => g.group.id).sort())
+    expect(menu.map((s) => s.title)).toEqual(DOC_MENU_SECTIONS.map((s) => s.title).filter((t) => menu.some((s) => s.title === t)))
   })
 })
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, permanentRedirect } from "next/navigation"
 import { DOC_ROLE_INFO, docGroup, docGroupHref, docUnitMetadata, loadDocUnits, relatedDocUnits, resolveDocSlug } from "@/lib/doc-units"
-import { docJumpLinks, docMenuGroups, docGroupSiblings, docUnitNeighbours } from "@/lib/doc-navigation"
+import { docJumpLinks, docMenuSections, docGroupSiblings, docUnitNeighbours } from "@/lib/doc-navigation"
 import { headingIdsOf, renderDocUnitParts } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
 import { env } from "@/lib/env"
@@ -52,7 +52,7 @@ export default async function DocUnitPage({ params }: Props) {
   const siblings = docGroupSiblings(unit, units)
 
   return (
-    <DocFrame menu={<DocSideMenu groups={docMenuGroups(units, unit.slug)} currentSlug={unit.slug} />}>
+    <DocFrame menu={<DocSideMenu sections={docMenuSections(units, unit.slug)} currentSlug={unit.slug} />}>
       <nav aria-label="Fil d'Ariane" className="not-prose mb-6 text-sm text-gray-600 dark:text-gray-400">
         <ol className="flex flex-wrap items-center gap-x-2">
           <li>

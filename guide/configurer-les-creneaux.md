@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: SHIFTS_ROLES_VIEWS -->
 
-**`/admin/events/[id]/shifts`**
+**Événements**, puis l'événement, puis **Gérer les créneaux**
 
 Un créneau correspond à un poste de bénévolat sur une plage horaire précise.
 

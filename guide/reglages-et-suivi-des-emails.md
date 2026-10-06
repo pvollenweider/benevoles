@@ -14,7 +14,7 @@ aliases: []
 
 ## Réglages des emails
 
-**Paramètres → Emails** (`/admin/settings/notifications`) commence par les réglages de l'organisation (réservé aux propriétaires ; un organisateur n'y voit que l'adresse de réponse) :
+La page **Emails** (**Paramètres**, puis **Emails**) commence par les réglages de l'organisation (réservé aux propriétaires ; un organisateur n'y voit que l'adresse de réponse) :
 
 - **Rappels automatiques** : cochez ou décochez le rappel J-2, le rappel J-1 et le rappel du jour pour toute l'organisation (voir [Rappels et changements de créneau](rappels.md)).
 - **Prévenir les administrateurs à chaque inscription** : l'email envoyé à chaque administrateur actif quand un bénévole s'inscrit depuis la page publique.
