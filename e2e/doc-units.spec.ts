@@ -69,7 +69,7 @@ test("the breadcrumb's group leads to that group on the documentation's index", 
 
 test("/doc lists every unit by group, linked by its title, with its summary and who it is for", async ({ page }) => {
   await page.goto("/doc")
-  await expect(page.getByRole("heading", { level: 2, name: "Pages par thème" })).toBeVisible()
+  await expect(page.getByRole("heading", { level: 2, name: "Toutes les fiches" })).toBeVisible()
   const group = page.getByRole("heading", { level: 3, name: "Après l'inscription" })
   await expect(group).toHaveAttribute("id", "apres-inscription")
   const item = page.locator("#apres-inscription + ul > li", { hasText: "Revenir sur la page d'inscription" })
@@ -92,12 +92,11 @@ test("a link of the index shows the same focus outline as the links a page draws
   await expect(link).toHaveCSS("outline-offset", "2px")
 })
 
-test("the volunteer guide is the index of its units alone; the admin guide lists its units above the whole guide", async ({ page }) => {
+test("the volunteer guide is its questions and the index of its units alone; the admin guide lists its units above the whole guide", async ({ page }) => {
   await page.goto("/doc/benevole")
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Guide bénévole")
   const headings = page.getByRole("heading", { level: 2 })
-  await expect(headings).toHaveCount(1)
-  await expect(headings.nth(0)).toHaveText("Pages par thème")
+  await expect(headings).toHaveText(["Questions fréquentes", "Toutes les fiches"])
   await expect(page.getByRole("heading", { name: "Le guide complet" })).toHaveCount(0)
   for (const group of ["S'inscrire à un créneau", "Après l'inscription", "Règles d'inscription"]) {
     await expect(page.getByRole("heading", { level: 3, name: group })).toBeVisible()
@@ -106,9 +105,7 @@ test("the volunteer guide is the index of its units alone; the admin guide lists
 
   await page.goto("/doc/admin")
   const adminHeadings = page.getByRole("heading", { level: 2 })
-  await expect(adminHeadings.nth(0)).toHaveText("Pages par thème")
-  await expect(adminHeadings.nth(1)).toHaveText("Le guide complet")
-  await expect(adminHeadings).toHaveCount(2)
+  await expect(adminHeadings).toHaveText(["Questions fréquentes", "Toutes les fiches", "Le guide complet"])
   // A link name always leads to one place on the page (the guide also links to units).
   const links = await page.locator("main a").evaluateAll((as) => as.map((a) => [a.textContent?.trim(), a.getAttribute("href")]))
   const hrefByName = new Map<string, Set<string>>()
@@ -119,6 +116,71 @@ test("the volunteer guide is the index of its units alone; the admin guide lists
   await expect(page.locator("main li").getByRole("link", { name: "Premiers pas", exact: true })).toHaveAttribute("href", "/doc/premiers-pas")
   // No volunteer-only unit in the organisers' index.
   await expect(page.locator("main a", { hasText: "Revenir sur la page d'inscription" })).toHaveCount(0)
+})
+
+test("the filter over the index narrows the list as you type, hides empty groups and says the result", async ({ page }) => {
+  await page.goto("/doc/benevole")
+  const field = page.getByRole("searchbox", { name: "Filtrer les fiches" })
+  await expect(field).toBeVisible()
+  await expect(field).toHaveAttribute("type", "search")
+  const status = page.locator("main").getByRole("status")
+  await expect(status).toHaveText("")
+  // Every link of the page's lists: the four frequent questions, then one per unit.
+  const allLinks = await page.locator("main li").getByRole("link").count()
+
+  // Accents and case don't matter; every word must match.
+  await field.fill("LIEN perdu")
+  await expect(status).toHaveText(/^1 fiche sur \d+ correspond à « LIEN perdu »\.$/)
+  await expect(page.locator("main li").getByRole("link", { name: "Ton lien personnel", exact: true })).toBeVisible()
+  await expect(page.locator("main li").getByRole("link", { name: "S'inscrire", exact: true })).toBeHidden()
+  // A group without any match is hidden whole, heading included.
+  await expect(page.getByRole("heading", { level: 3, name: "S'inscrire à un créneau" })).toHaveCount(0)
+  await expect(page.getByRole("heading", { level: 3, name: "Après l'inscription" })).toBeVisible()
+  await expect(field).toBeFocused()
+
+  await field.fill("creneau changer")
+  await expect(page.locator("main li").getByRole("link", { name: "Ma page personnelle", exact: true })).toBeVisible()
+
+  await field.fill("xyz")
+  await expect(status).toHaveText("Aucune fiche pour « xyz ».")
+  await expect(page.getByText(/Essayer un autre mot/)).toBeVisible()
+  await expect(page.locator("main").getByText(/Aucune fiche/)).toHaveCount(1)
+  await expect(page.getByRole("heading", { level: 3 })).toHaveCount(0)
+  await expect(page.getByRole("search").getByRole("searchbox", { name: "Filtrer les fiches" })).toBeVisible()
+
+  // « Effacer le filtre » (Firefox has no clear button of its own) brings every unit back.
+  await page.getByRole("button", { name: "Effacer le filtre" }).click()
+  await expect(field).toHaveValue("")
+  await expect(field).toBeFocused()
+  await expect(page.locator("main li:visible").getByRole("link")).toHaveCount(allLinks)
+  await expect(page.getByRole("button", { name: "Effacer le filtre" })).toHaveCount(0)
+
+  await field.fill("xyz")
+  await expect(page.getByRole("heading", { level: 3 })).toHaveCount(0)
+
+  await field.press("Escape")
+  await expect(field).toHaveValue("")
+  await expect(field).toBeFocused()
+  await expect(status).toHaveText(`Les ${allLinks - 4} fiches sont affichées.`)
+  await expect(page.locator("main li:visible").getByRole("link")).toHaveCount(allLinks)
+  expect.soft(await seriousViolations(page)).toEqual([])
+})
+
+test("both guides open on their four frequent questions, each leading to its answer", async ({ page }) => {
+  for (const path of ["/doc/benevole", "/doc/admin"]) {
+    await page.goto(path)
+    const faq = page.getByRole("region", { name: "Questions fréquentes" })
+    await expect(faq.getByRole("heading", { level: 2, name: "Questions fréquentes" })).toBeVisible()
+    const items = faq.getByRole("listitem")
+    await expect(items).toHaveCount(4)
+    const names = await faq.getByRole("link").allTextContents()
+    expect(new Set(names).size, path).toBe(4)
+    for (const name of names) expect(name, path).toMatch(/\u00a0\?$/)
+  }
+  await page.goto("/doc/benevole")
+  await page.getByRole("region", { name: "Questions fréquentes" }).getByRole("link", { name: "Comment changer de créneau\u00a0?" }).click()
+  await expect(page).toHaveURL(/\/doc\/ma-page-personnelle#je-veux-changer-de-creneau$/)
+  await expect(page.getByRole("heading", { level: 3, name: "Je veux changer de créneau" })).toBeInViewport()
 })
 
 test.describe("old anchors of the guides", () => {
