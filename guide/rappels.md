@@ -46,7 +46,7 @@ Les rappels sont regroupés par bénévole, par événement et par jour : une pe
 
 ### Régler les rappels
 
-Les rappels partent sans intervention de votre part pour les événements publiés, sauf ceux décochés pour toute l'organisation dans **Paramètres → Emails** (voir [Réglages des emails](reglages-et-suivi-des-emails.md#reglages-des-emails)). Pour couper tous les rappels d'un seul événement, décochez **Rappels automatiques** dans son formulaire de modification ; cochée, la case laisse s'appliquer les réglages de l'organisation.
+Les rappels partent sans intervention de votre part pour les événements publiés, sauf ceux décochés pour toute l'organisation dans **Paramètres**, puis **Emails** (voir [Réglages des emails](reglages-et-suivi-des-emails.md#reglages-des-emails)). Pour couper tous les rappels d'un seul événement, décochez **Rappels automatiques** dans son formulaire de modification ; cochée, la case laisse s'appliquer les réglages de l'organisation.
 
 La section **Communications** de la page de l'événement indique ce qui partira vraiment pour cet événement : les rappels envoyés avec leur délai, ceux désactivés pour l'organisation, ou l'absence de rappel (désactivés pour l'organisation, coupés pour cet événement, ou plus aucun créneau à venir). Pour un brouillon, elle précise que les rappels ne partent qu'une fois l'événement publié. Ses liens mènent à la case **Rappels automatiques** de l'événement et aux réglages des emails de l'organisation.
 
@@ -54,4 +54,4 @@ Pour envoyer vous-même un rappel à tous les inscrits, voir [Rappel manuel](ecr
 
 ### Un bénévole inscrit sur plusieurs créneaux le même jour reçoit-il beaucoup de rappels ?
 
-Non : une personne inscrite sur trois créneaux d'une même journée reçoit un seul email à J-2, un seul à J-1 et un seul le jour même, listant ses trois créneaux. Si elle est aussi inscrite le même jour sur un autre événement, elle reçoit un email séparé pour celui-ci. Pour envoyer moins de rappels encore, décochez ceux qui ne vous servent pas dans **Paramètres → Emails** : le réglage vaut pour toute l'organisation.
+Non : une personne inscrite sur trois créneaux d'une même journée reçoit un seul email à J-2, un seul à J-1 et un seul le jour même, listant ses trois créneaux. Si elle est aussi inscrite le même jour sur un autre événement, elle reçoit un email séparé pour celui-ci. Pour envoyer moins de rappels encore, décochez ceux qui ne vous servent pas dans **Paramètres**, puis **Emails** : le réglage vaut pour toute l'organisation.

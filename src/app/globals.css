@@ -7,6 +7,10 @@
    app uses a `dark:` utility today, so this has zero effect anywhere else. */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Without script (`noscript:hidden`): a control that only works once hydrated keeps no room it
+   could never fill, as the filter of /doc's index (DocUnitFilterList). */
+@custom-variant noscript (@media (scripting: none));
+
 :root {
   --background: #ffffff;
   --foreground: #111827;

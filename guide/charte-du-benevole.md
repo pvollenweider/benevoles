@@ -14,7 +14,7 @@ aliases: []
 
 Dans l'interface, la charte s'appelle « Convention des Bénévoles ».
 
-**`/admin/settings/admins`** → section **Convention des Bénévoles** (réservé aux propriétaires)
+**Paramètres**, puis la section **Convention des Bénévoles** (réservé aux propriétaires)
 
 La charte est le texte que les bénévoles doivent lire et accepter avant de finaliser leur inscription. Un texte par défaut est fourni ; vous pouvez le personnaliser librement ou le réinitialiser.
 

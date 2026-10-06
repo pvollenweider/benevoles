@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: EVENT_PROGRAM_PAGES_QR -->
 
-Dans le formulaire de l'événement, à la création comme dans la page d'édition (**`/admin/events/[id]/edit`**), section **Spectacles**. Elle apparaît dès que les dates de début et de fin sont renseignées.
+Dans le formulaire de l'événement, à la création comme dans la page d'édition (page de l'événement, puis **Modifier**), section **Spectacles**. Elle apparaît dès que les dates de début et de fin sont renseignées.
 
 Chaque entrée définit une plage horaire qui apparaît en fond coloré sur la timeline, permettant aux bénévoles de visualiser quand ils travaillent par rapport aux spectacles.
 

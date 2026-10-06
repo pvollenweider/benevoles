@@ -4,6 +4,7 @@
 import { describe, it, expect, afterEach, vi } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { act, render, screen, cleanup, within, fireEvent } from "@testing-library/react"
+import { renderToString } from "react-dom/server"
 import DocUnitIndex from "../public/DocUnitIndex"
 import type { DocUnit } from "@/lib/doc-units"
 
@@ -45,7 +46,12 @@ describe("DocUnitIndex", () => {
     const lists = screen.getAllByRole("list")
     expect(within(lists[0]).getByRole("link", { name: "Titre a" })).toHaveAttribute("href", "/doc/a")
     expect(within(lists[1]).getAllByRole("link").map((l) => l.textContent)).toEqual(["Titre b", "Titre c"])
-    expect(lists[0]).toHaveTextContent(/^Titre a\s: Résumé de a\. Pour\s: organisateurs, bénévoles\.$/)
+    // The title link on its own line, then the summary (and who it is for) below it, not in the link.
+    const link = within(lists[0]).getByRole("link", { name: "Titre a" })
+    const summary = link.nextElementSibling!
+    expect(summary).toHaveClass("block", "text-sm")
+    expect(summary).toHaveTextContent(/^Résumé de a\. Pour\s: organisateurs, bénévoles\.$/)
+    expect(link).not.toHaveTextContent("Résumé")
     // Link names are the units' titles, each once.
     const names = [...container.querySelectorAll("a")].map((a) => a.textContent)
     expect(new Set(names).size).toBe(names.length)
@@ -75,6 +81,22 @@ describe("DocUnitIndex", () => {
     expect(screen.getAllByRole("link").map((l) => l.getAttribute("href"))).toEqual(["#faq-du-guide", "/doc/aide-et-retours"])
     // The status line stays the only live region.
     expect(screen.getAllByRole("status")).toHaveLength(1)
+  })
+
+  it("server-renders the filter at its final size but invisible, gone without script, and the status from the first paint", () => {
+    const html = renderToString(<DocUnitIndex units={units} />)
+    const doc = new DOMParser().parseFromString(html, "text/html")
+    const search = doc.querySelector("search")!
+    expect(search.className.split(/\s+/)).toEqual(expect.arrayContaining(["invisible", "noscript:hidden"]))
+    // A real field, neither disabled nor hidden from assistive technology by an attribute.
+    const field = search.querySelector("input[type=search]")!
+    expect(field.hasAttribute("disabled")).toBe(false)
+    expect(doc.querySelector("[aria-hidden]")).toBeNull()
+    expect(doc.querySelectorAll('[role="status"]')).toHaveLength(1)
+    // Once hydrated (a client render), it shows.
+    const { container } = render(<DocUnitIndex units={units} />)
+    expect(container.querySelector("search")).not.toHaveClass("invisible")
+    expect(screen.getByRole("searchbox", { name: "Filtrer les fiches" })).toBeVisible()
   })
 
   it("renders nothing for a role without any unit", () => {

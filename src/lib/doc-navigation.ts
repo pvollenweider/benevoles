@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { docUnitsByGroup, sortDocUnits, type DocGroup, type DocUnit } from "@/lib/doc-units"
+import { docUnitsByGroup, sortDocUnits, type DocGroup, type DocRole, type DocUnit } from "@/lib/doc-units"
 
 /**
  * The navigation around a documentation unit (#649, src/app/doc/[slug]/page.tsx): the side menu
@@ -22,6 +22,48 @@ export function docMenuGroups(units: readonly DocUnit[], currentSlug: string): D
     units: inGroup,
     current: inGroup.some((u) => u.slug === currentSlug),
   }))
+}
+
+/** Who a section of the side menu speaks to: one audience, or both (« Commun »). */
+export type DocMenuAudience = DocRole | "commun"
+
+/** A section of the side menu: its visible <h2>, then its groups, in DOC_GROUPS order. */
+export type DocMenuSection = { audience: DocMenuAudience; title: string; groups: DocMenuGroup[] }
+
+/**
+ * The sections of the side menu, in this order on every page: what volunteers read, what
+ * organisers read, then what both read. Fixed, so the menu never moves from one page to the next
+ * (WCAG 3.2.3, consistent navigation).
+ */
+export const DOC_MENU_SECTIONS: readonly { audience: DocMenuAudience; title: string }[] = [
+  { audience: "benevole", title: "Bénévoles" },
+  { audience: "admin", title: "Organisateurs" },
+  { audience: "commun", title: "Commun" },
+]
+
+/**
+ * The audience of a group in the side menu: « commun » as soon as one of its units is for both
+ * roles, or its units together cover both; else the one role all its units share.
+ */
+export function docMenuGroupAudience(units: readonly DocUnit[]): DocMenuAudience {
+  const roles = new Set(units.flatMap((u) => u.roles))
+  if (roles.size !== 1 || units.some((u) => u.roles.length > 1)) return "commun"
+  return [...roles][0]
+}
+
+/**
+ * The side menu of a unit's page, by audience (DOC_MENU_SECTIONS): each group once, in the section
+ * of its audience (docMenuGroupAudience), in DOC_GROUPS order within it; a section without any
+ * group is left out. The current unit only decides which group is open (`current`), never the
+ * order of the sections or of the groups.
+ */
+export function docMenuSections(units: readonly DocUnit[], currentSlug: string): DocMenuSection[] {
+  const groups = docMenuGroups(units, currentSlug)
+  return DOC_MENU_SECTIONS.map(({ audience, title }) => ({
+    audience,
+    title,
+    groups: groups.filter((g) => docMenuGroupAudience(g.units) === audience),
+  })).filter((s) => s.groups.length > 0)
 }
 
 /** The units of a unit's group, itself included, in reading order (`order`, then slug). */

@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: EVENT_ACTIVITY_LOG -->
 
-**`/admin/events/[id]/log`**
+**Événements**, puis l'événement, puis **Journal**
 
 L'historique complet de ce qui s'est passé sur un événement : créneaux créés/modifiés, inscriptions, annulations, pages ajoutées, responsables désignés, jalons… Trois modes :
 

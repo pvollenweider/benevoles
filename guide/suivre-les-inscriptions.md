@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: REGISTRATIONS_MANAGEMENT -->
 
-**`/admin/events/[id]/registrations`**
+**Événements**, puis l'événement, puis **Voir les inscriptions**
 
 Vue tabulaire des inscriptions, en quatre colonnes :
 

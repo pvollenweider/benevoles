@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: EVENT_MILESTONES -->
 
-Section **Jalons** sur la page de l'événement (`/admin/events/[id]`).
+Section **Jalons** sur la page de l'événement (**Événements**, puis l'événement).
 
 Une checklist simple de dates clés pour l'événement (ex. « Fermer les inscriptions », « Envoyer les rappels ») : titre, échéance, coché ou non. Purement informatif : cocher un jalon ne déclenche aucune action automatique. Un jalon dépassé et non coché est mis en évidence, sur la page de l'événement et dans **Ce qui demande votre attention** du [tableau de bord](tableau-de-bord.md).
 

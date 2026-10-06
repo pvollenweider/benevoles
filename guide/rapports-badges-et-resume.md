@@ -14,7 +14,7 @@ aliases: []
 
 ## Rapports
 
-**`/admin/events/[id]/print`**, depuis la page de l'événement (**Rapports**). Des documents à imprimer ou enregistrer en PDF depuis le navigateur, chacun ouvert dans un nouvel onglet ; l'archive de l'événement se télécharge :
+**Événements**, puis l'événement, puis **Rapports**. Des documents à imprimer ou enregistrer en PDF depuis le navigateur, chacun ouvert dans un nouvel onglet ; l'archive de l'événement se télécharge :
 
 ![Page « Rapports » d'un événement : les plannings à remettre aux bénévoles (par jour, par poste, individuel), puis la section réservée aux organisateurs, qui commence par l'export complet](/doc-img/admin-print.png)
 

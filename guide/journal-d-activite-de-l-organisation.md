@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: ORGANIZATION_ACTIVITY_LOG -->
 
-**`/admin/settings/activity`**
+**Paramètres**, puis **Journal d'activité**
 
 Liste chronologique de ce qui concerne l'organisation plutôt qu'un événement précis :
 

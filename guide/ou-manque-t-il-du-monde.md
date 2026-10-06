@@ -12,9 +12,9 @@ aliases: []
 
 <!-- video: STAFFING_GAPS -->
 
-**`/admin/events/[id]/staffing`**
+**Événements**, puis l'événement, puis, dans la section **Où manque-t-il du monde ?**, **Voir les créneaux à compléter** (ou **Voir le détail des créneaux** quand tout est complet)
 
-En haut de la page principale de l'événement (`/admin/events/[id]`), 4 chiffres donnent l'état en un coup d'œil : créneaux, places totales, inscrits, places restantes. Juste en dessous, **Où manque-t-il du monde ?** résume en une phrase (« Il manque encore 12 personnes sur 20 places ») et mène à la vue détaillée.
+En haut de la page principale de l'événement (**Événements**, puis l'événement), 4 chiffres donnent l'état en un coup d'œil : créneaux, places totales, inscrits, places restantes. Juste en dessous, **Où manque-t-il du monde ?** résume en une phrase (« Il manque encore 12 personnes sur 20 places ») et mène à la vue détaillée.
 
 La question que se pose l'organisateur avant l'événement, en une page, du plus urgent au moins urgent :
 
@@ -30,7 +30,7 @@ Chaque ligne mène là où on agit : les inscriptions filtrées sur le créneau,
 
 ## Chercher des bénévoles
 
-**`/admin/events/[id]/staffing/search`**
+Depuis cette page, **Chercher des bénévoles** sur la ligne d'un créneau, ou **Chercher des bénévoles pour plusieurs créneaux** sous la liste.
 
 Sous chaque créneau à compléter, **Chercher des bénévoles** ouvre une page pour proposer ce créneau à des membres choisis ; **Chercher des bénévoles pour plusieurs créneaux**, sous la liste, permet d'en proposer plusieurs à la fois. Sur cette page :
 

@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: ORG_TEAM_PERMISSIONS -->
 
-**`/admin/settings/admins`**
+**Paramètres**, dans la barre du haut
 
 Deux rôles :
 

@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: ORG_PUBLIC_IDENTITY -->
 
-Ces réglages sont sur la page **`/admin/settings/admins`** et réservés aux propriétaires.
+Ces réglages sont sur la page **Paramètres** et réservés aux propriétaires.
 
 ## Nom et adresse de l'organisation
 

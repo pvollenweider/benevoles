@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: ADMIN_NAVIGATION -->
 
-**`/admin/dashboard`**
+**Tableau de bord**, dans la barre du haut
 
 En haut, **Ce qui demande votre attention** liste, du plus urgent au moins urgent, les situations de vos événements publiés sur lesquelles agir, chacune avec un lien vers l'endroit où la régler :
 

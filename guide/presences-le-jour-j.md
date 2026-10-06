@@ -22,7 +22,7 @@ Pendant les dates de l'événement, sa page principale affiche un encadré **C'e
 - **Actualiser** recharge la page, avec les présences marquées depuis un autre téléphone ; l'heure de la dernière mise à jour est affichée au-dessus.
 - En bas, des liens vers les inscriptions, « Où manque-t-il du monde ? » et l'écriture aux bénévoles.
 
-La page reste accessible en dehors des dates (`/admin/events/[id]/day-of`) : elle le signale et n'affiche que ce qui tombe dans la fenêtre du moment. Elle est ouverte aux propriétaires et aux organisateurs, pas aux responsables de secteur.
+La page reste accessible en dehors des dates, par exemple depuis un favori enregistré sur le téléphone : elle le signale et n'affiche que ce qui tombe dans la fenêtre du moment. Elle est ouverte aux propriétaires et aux organisateurs, pas aux responsables de secteur.
 
 ## Depuis les inscriptions
 

@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: EVENT_QUESTIONS -->
 
-**`/admin/events/[id]/questions`**, depuis la page de l'événement (**Questions**).
+**Événements**, puis l'événement, puis **Questions**.
 
 ![Page des questions d'un événement : « Taille de t-shirt » (choix unique S à XL, obligatoire) et « Régime alimentaire » (texte court), avec les actions pour les modifier, les réordonner ou les retirer](/doc-img/admin-questions.png)
 

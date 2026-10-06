@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: EVENT_CREATE_PUBLISH_OVERVIEW -->
 
-**Événements → Nouvel événement** pour créer un événement, et **Modifier** sur la page d'un événement pour le reprendre : c'est le même formulaire, décrit ci-dessous (voir aussi [Modifier un événement](#modifier-un-evenement)).
+**Événements**, puis **Nouvel événement** pour créer un événement, et **Modifier** sur la page d'un événement pour le reprendre : c'est le même formulaire, décrit ci-dessous (voir aussi [Modifier un événement](#modifier-un-evenement)).
 
 La création se fait en trois étapes, indiquées en haut de page : **1. Informations**, **2. Postes et créneaux**, **3. Vérification et publication**. Après l'étape 1, vous arrivez sur les créneaux avec un bouton **Continuer** ; l'étape 3 récapitule ce qui est prêt et ce qui manque, propose l'aperçu bénévole, puis **Publier** ou **Rester en brouillon** (voir [Publier un événement](publier-un-evenement.md)). On peut publier sans les points facultatifs, mais pas sans créneau : cette règle vaut partout (page de l'événement, formulaire d'édition), pas seulement dans l'assistant, et un événement est toujours créé en brouillon. Dans l'autre sens, si le dernier créneau d'un événement publié est annulé (ou son dernier poste supprimé), l'événement repasse en brouillon, avec une entrée dans le journal. **Quitter l'assistant** ramène à tout moment à la page de l'événement : rien n'est perdu, chaque étape est une page normale de l'administration.
 

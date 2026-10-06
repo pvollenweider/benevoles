@@ -19,12 +19,18 @@ const ANNOUNCE_DELAY_MS = 300
 
 /**
  * The groups of the documentation's index with a filter above them (#649). Every link is in the
- * server-rendered HTML; the field only appears once React has hydrated (without script, the full
- * list stays). Typing hides the units that don't match (title, summary, questions of the page,
- * src/lib/doc-search.ts) and every group left empty, heading included. A status region, present
- * from the first paint, says the result in a full sentence once the reader pauses; the focus never
- * moves. Échap empties a field that has a value, and only then; « Effacer le filtre » does it too
- * (Firefox has no clear button of its own) and gives the focus back to the field.
+ * server-rendered HTML. The filter is rendered from the first paint, at its final size, but
+ * `invisible` (out of the accessibility tree, out of the tab order) until React has hydrated, so
+ * nothing moves when it appears; without script it takes no room at all (`noscript:hidden`) and
+ * the full list stays. Typing hides the units that don't match (title, summary, questions of the
+ * page, src/lib/doc-search.ts) and every group left empty, heading included. A status region,
+ * present from the first paint, says the result in a full sentence once the reader pauses; the
+ * focus never moves. Échap empties a field that has a value, and only then; « Effacer le filtre »
+ * does it too (Firefox has no clear button of its own) and gives the focus back to the field.
+ *
+ * Each unit: its title, a link on its own line, then its summary below in smaller muted text,
+ * always shown (no disclosure per group: a heading inside a <summary> loses its role, and a closed
+ * group would hide what the filter found).
  *
  * A unit found by its questions only (not its title or summary) lists, under its result, the two
  * first questions that match, each a link to its heading. When nothing matches, the advice is
@@ -59,43 +65,41 @@ export default function DocUnitFilterList({ groups, role }: { groups: readonly D
 
   return (
     <>
-      {hydrated && (
-        <search className="not-prose mt-4 block">
-          <label htmlFor={inputId} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Filtrer les fiches
-          </label>
-          <div className="flex flex-wrap items-center gap-2">
-            <input
-              ref={inputRef}
-              id={inputId}
-              type="search"
-              autoComplete="off"
-              enterKeyHint="search"
-              spellCheck={false}
-              value={query}
-              onChange={(e) => change(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key !== "Escape" || e.currentTarget.value === "") return
-                e.preventDefault()
+      <search className={`not-prose mt-4 block noscript:hidden ${hydrated ? "" : "invisible"}`}>
+        <label htmlFor={inputId} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Filtrer les fiches
+        </label>
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            ref={inputRef}
+            id={inputId}
+            type="search"
+            autoComplete="off"
+            enterKeyHint="search"
+            spellCheck={false}
+            value={query}
+            onChange={(e) => change(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key !== "Escape" || e.currentTarget.value === "") return
+              e.preventDefault()
+              change("")
+            }}
+            className="block w-full max-w-md min-h-11 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-base text-gray-900 dark:text-gray-100 outline-hidden focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+          />
+          {query !== "" && (
+            <button
+              type="button"
+              onClick={() => {
                 change("")
+                inputRef.current?.focus()
               }}
-              className="block w-full max-w-md min-h-11 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-base text-gray-900 dark:text-gray-100 outline-hidden focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
-            />
-            {query !== "" && (
-              <button
-                type="button"
-                onClick={() => {
-                  change("")
-                  inputRef.current?.focus()
-                }}
-                className="min-h-11 rounded-xl border border-blue-600 dark:border-blue-400 bg-transparent px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-800 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
-              >
-                Effacer le filtre
-              </button>
-            )}
-          </div>
-        </search>
-      )}
+              className="min-h-11 rounded-xl border border-blue-600 dark:border-blue-400 bg-transparent px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-800 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
+            >
+              Effacer le filtre
+            </button>
+          )}
+        </div>
+      </search>
       <p role="status" className="text-sm text-gray-600 dark:text-gray-400 min-h-5 mt-2 mb-0">
         {announcement}
       </p>
@@ -111,8 +115,11 @@ export default function DocUnitFilterList({ groups, role }: { groups: readonly D
                 const questions = shownItem ? matchingDocQuestionLinks(item, query) : []
                 return (
                   <li key={item.slug} hidden={!shownItem}>
-                    <Link href={docUnitHref(item.slug)}>{item.title}</Link>&nbsp;: {item.summary}
-                    {item.audience && <> Pour&nbsp;: {item.audience}.</>}
+                    <Link href={docUnitHref(item.slug)} className="font-medium">{item.title}</Link>
+                    <span className="mt-0.5 block text-sm text-gray-600 dark:text-gray-400">
+                      {item.summary}
+                      {item.audience && <> Pour&nbsp;: {item.audience}.</>}
+                    </span>
                     {questions.length > 0 && (
                       <ul aria-label="Questions correspondantes">
                         {questions.map((question) => (

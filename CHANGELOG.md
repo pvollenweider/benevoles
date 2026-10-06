@@ -19,6 +19,14 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Créer un événement** : la fiche décrit le chemin dans l'interface (**Événements → Nouvel événement**, **Modifier** sur la page de l'événement) au lieu d'adresses internes de l'application.
 - **Tutoriels vidéo refilmés** : créer un événement depuis une page blanche, importer et gérer les membres, créer une série de créneaux, règles d'éligibilité, créneaux de nuit et changement d'heure, actions rapides de la Frise (vocabulaire « Frise » à l'écran et dans la narration), et pointage des présences, qui montre désormais aussi la page Jour J. Leurs réponses « utile ? » repartent de zéro. Le tutoriel sur le suivi de livraison des emails est maintenant en ligne.
 - **Vidéos lues dans la documentation** : dans une fiche de documentation, « Voir la vidéo : titre (durée) » ouvre le lecteur sur place au lieu de quitter la documentation pour la bibliothèque. La vidéo ne se charge qu'à l'ouverture et démarre dès ce clic ; les sous-titres, la transcription et la question « utile ? » sont sous le lecteur, avec un lien pour l'ouvrir dans la bibliothèque. Sans JavaScript, le lien vers la bibliothèque reste.
+- **Menu de la documentation par public** : sur grand écran, le menu latéral d'une fiche range ses thèmes sous trois titres visibles, « Bénévoles », « Organisateurs » puis « Commun » (thèmes qui concernent les deux), dans le même ordre sur toutes les pages ; seule l'ouverture du thème de la fiche en cours change.
+- **Liste « Toutes les fiches » plus lisible** : sur `/doc` et les guides, le titre de chaque fiche est sur sa propre ligne, son résumé en dessous en plus petit.
+- **Lecture de la documentation** : titres plus grands et mieux hiérarchisés (titre de page en 30 px), paragraphes et listes limités à 70 caractères de large, interligne qui suit la taille du texte ; la page se lit sans défilement horizontal à 320 px, même avec un espacement du texte agrandi.
+- **Chemins dans l'interface plutôt qu'adresses internes** : les fiches des organisateurs indiquent où trouver chaque page avec les libellés de l'application (par exemple **Événements**, puis l'événement, puis **Gérer les créneaux**) au lieu d'adresses `/admin/…`.
+
+### Corrigé
+
+- **Filtre de la documentation** : le champ « Filtrer les fiches » occupe sa place dès l'affichage de la page, la liste ne descend plus quand il apparaît ; sans JavaScript, il ne laisse aucun espace vide.
 
 ## [2.1.0] — 2026-10-06
 
