@@ -31,7 +31,7 @@ function videoCatalog(): Video[] {
  * The pages pass the variable at request time, so they're rendered per request (force-dynamic).
  */
 export function renderPublicSource(source: string, fallbackTitle: string, mediaBaseUrl?: string | null): { title: string; html: string } {
-  const raw = fs.readFileSync(path.join(process.cwd(), source), "utf-8")
+  const raw = fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), source), "utf-8")
   const { title, body } = splitTitle(raw)
   return { title: title ?? fallbackTitle, html: renderPublicMarkdown(body, mediaBaseUrl) }
 }
