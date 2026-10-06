@@ -30,11 +30,11 @@ Les demandes sur un créneau sur validation et les places en liste d'attente ne 
 
 ## Côté organisation
 
-Les rappels partent sans intervention de votre part pour les événements publiés, sauf ceux décochés pour toute l'organisation dans **Paramètres → Emails** (voir « Réglages des emails » dans le [guide administrateur](../GUIDE_ADMIN.md#reglages-des-emails)). Pour couper tous les rappels d'un seul événement, décochez **Rappels automatiques** dans son formulaire de modification ; cochée, la case laisse s'appliquer les réglages de l'organisation.
+Les rappels partent sans intervention de votre part pour les événements publiés, sauf ceux décochés pour toute l'organisation dans **Paramètres → Emails** (voir [Réglages des emails](../GUIDE_ADMIN.md#reglages-des-emails) dans le guide administrateur). Pour couper tous les rappels d'un seul événement, décochez **Rappels automatiques** dans son formulaire de modification ; cochée, la case laisse s'appliquer les réglages de l'organisation.
 
 La section **Communications** de la page de l'événement indique ce qui partira vraiment pour cet événement : les rappels envoyés avec leur délai, ceux désactivés pour l'organisation, ou l'absence de rappel (désactivés pour l'organisation, coupés pour cet événement, ou plus aucun créneau à venir). Pour un brouillon, elle précise que les rappels ne partent qu'une fois l'événement publié. Ses liens mènent à la case **Rappels automatiques** de l'événement et aux réglages des emails de l'organisation.
 
-Pour envoyer vous-même un rappel à tous les inscrits, voir « Rappel manuel » dans le [guide administrateur](../GUIDE_ADMIN.md#rappel-manuel).
+Pour envoyer vous-même un rappel à tous les inscrits, voir [Rappel manuel](../GUIDE_ADMIN.md#rappel-manuel) dans le guide administrateur.
 
 ### Un bénévole inscrit sur plusieurs créneaux le même jour reçoit-il beaucoup de rappels ?
 

@@ -420,7 +420,7 @@ Vue tabulaire des inscriptions, en quatre colonnes :
 
 ![Page des inscriptions d'un événement : compteurs (actives, liste d'attente, demandes à traiter), recherche et filtres, puis le tableau avec bénévole et coordonnées, créneau et source](/doc-img/admin-registrations.png)
 
-Seules les demandes sur un créneau sur validation ont leurs propres boutons, **Accepter** et **Refuser**, sur la ligne (voir [Inscriptions sur validation](guide/inscriptions-sur-validation.md)). Tout le reste passe par la sélection : cocher une ou plusieurs inscriptions (case d'en-tête pour tout sélectionner d'un coup) fait apparaître une barre d'outils, appliquée à toute la sélection — même une inscription masquée entre-temps par un filtre ou une recherche :
+Seules les demandes sur un créneau sur validation ont leurs propres boutons, **Accepter** et **Refuser**, sur la ligne (voir [Inscriptions sur validation](guide/inscriptions-sur-validation.md)). Tout le reste passe par la sélection : cocher une ou plusieurs inscriptions (case d'en-tête pour tout sélectionner d'un coup) fait apparaître une barre d'outils, appliquée à toute la sélection, même une inscription masquée entre-temps par un filtre ou une recherche :
 
 - **Marquer présents** et **Annuler la présence** : voir « Présences le jour J » ci-dessous.
 - **Rendre responsable** de leur poste. Avec une seule ligne sélectionnée, une modale s'ouvre pour choisir le poste (si le bénévole a plusieurs inscriptions) et ajuster nom/email avant l'envoi. Avec plusieurs lignes, chaque bénévole est directement rattaché au poste de son propre créneau, sans étape intermédiaire.
