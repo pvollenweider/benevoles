@@ -7,6 +7,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+## [2.1.0] — 2026-10-06
+
 ### En bref
 
 - **Documentation refondue** : les deux longs guides (administrateur et bénévole) deviennent 49 fiches courtes, une par tâche, rangées par thème, avec recherche, questions fréquentes, menu de navigation, liens « Aide » depuis chaque écran d'administration et redirection des anciens liens. Détails sous « Modifié ».
