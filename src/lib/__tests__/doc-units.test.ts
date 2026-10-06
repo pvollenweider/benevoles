@@ -8,7 +8,12 @@ import {
   DOC_INDEX_START,
   DOC_ROLE_INFO,
   RESERVED_DOC_SLUGS,
+  docGroupHref,
   docIndexMarkdown,
+  docUnitAudience,
+  docUnitsByGroup,
+  legacyAnchorTargets,
+  roleHasDocUnits,
   docUnitMetadata,
   docUnitProblems,
   parseDocUnit,
@@ -152,6 +157,12 @@ describe("docUnitProblems", () => {
     expect(docUnitProblems([unit({ slug: "a", body: "\n<!-- video: A -->\n\nx\n\n<!-- video: B -->\n" })])).toEqual(["a: one video at most per unit"])
     expect(docUnitProblems([unit({ slug: "a", title: "Un · deux" })])).toEqual(["a: no « · » or em dash in the title"])
   })
+
+  it("rejects « · » and the em dash in a summary too (a unit built without the front matter's schema)", () => {
+    expect(docUnitProblems([unit({ slug: "a", summary: `${SUMMARY} · suite` })])).toEqual(["a: no « · » or em dash in the summary"])
+    expect(docUnitProblems([unit({ slug: "a", summary: `${SUMMARY} — suite` })])).toEqual(["a: no « · » or em dash in the summary"])
+    expect(docUnitProblems([unit({ slug: "a", summary: `${SUMMARY} - suite` })])).toEqual([])
+  })
 })
 
 describe("readDocUnits", () => {
@@ -195,6 +206,24 @@ describe("lookups", () => {
     expect(resolveLegacyAnchor("benevole", "autre", units)).toBeNull()
   })
 
+  it("keeps the fragment when the unit has a heading of the same id (a subsection moved as is)", () => {
+    const withHeading = [unit({ slug: "a", legacy: ["benevole#revenir", "benevole#modifier"] })]
+    const headingIds = () => ["modifier"]
+    expect(resolveLegacyAnchor("benevole", "modifier", withHeading, headingIds)).toBe("/doc/a#modifier")
+    expect(resolveLegacyAnchor("benevole", "revenir", withHeading, headingIds)).toBe("/doc/a")
+  })
+
+  it("maps every old anchor of a role to its target, and nothing of the other role", () => {
+    const many = [
+      unit({ slug: "a", legacy: ["benevole#revenir", "admin#creneaux", "benevole#modifier"] }),
+      unit({ slug: "b", roles: ["admin"], legacy: ["admin#inviter"] }),
+    ]
+    const headingIds = (u: DocUnit) => (u.slug === "a" ? ["modifier"] : [])
+    expect(legacyAnchorTargets("benevole", many, headingIds)).toEqual({ revenir: "/doc/a", modifier: "/doc/a#modifier" })
+    expect(legacyAnchorTargets("admin", many)).toEqual({ creneaux: "/doc/a", inviter: "/doc/b" })
+    expect(legacyAnchorTargets("admin", [])).toEqual({})
+  })
+
   it("lists the related units in the front matter's order", () => {
     expect(relatedDocUnits(units[0], units).map((u) => u.slug)).toEqual(["b"])
   })
@@ -202,6 +231,37 @@ describe("lookups", () => {
   it("sorts by group, then order, then slug", () => {
     const sorted = sortDocUnits([unit({ slug: "z", group: "apres-inscription", order: 1 }), unit({ slug: "y", group: "inscription", order: 5 }), unit({ slug: "x", group: "inscription", order: 5 })])
     expect(sorted.map((u) => u.slug)).toEqual(["x", "y", "z"])
+  })
+})
+
+describe("docUnitsByGroup", () => {
+  const units = [
+    unit({ slug: "z", group: "apres-inscription", order: 1, roles: ["admin", "benevole"] }),
+    unit({ slug: "y", group: "inscription", order: 5 }),
+    unit({ slug: "x", group: "apres-inscription", order: 0, roles: ["admin"] }),
+  ]
+
+  it("groups every unit in the groups' order, then reading order, without empty groups", () => {
+    expect(docUnitsByGroup(units).map((g) => [g.group.id, g.units.map((u) => u.slug)])).toEqual([
+      ["inscription", ["y"]],
+      ["apres-inscription", ["x", "z"]],
+    ])
+  })
+
+  it("keeps a role's units only, a group with none of them left out", () => {
+    expect(docUnitsByGroup(units, "admin").map((g) => [g.group.id, g.units.map((u) => u.slug)])).toEqual([["apres-inscription", ["x", "z"]]])
+    expect(docUnitsByGroup([], "benevole")).toEqual([])
+  })
+
+  it("tells whether a role has units yet", () => {
+    expect(roleHasDocUnits(units, "admin")).toBe(true)
+    expect(roleHasDocUnits([units[1]], "admin")).toBe(false)
+    expect(roleHasDocUnits([], "benevole")).toBe(false)
+  })
+
+  it("says who a unit is for, and where its group is listed", () => {
+    expect(docUnitAudience(units[0])).toBe("organisateurs, bénévoles")
+    expect(docGroupHref(DOC_GROUPS[1])).toBe("/doc#apres-inscription")
   })
 })
 

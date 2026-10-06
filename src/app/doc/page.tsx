@@ -1,14 +1,17 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { DOC_GUIDES, publicPageMetadata } from "@/lib/doc-pages"
+import { loadDocUnits } from "@/lib/doc-units"
 import { apexBaseUrl } from "@/lib/urls"
+import DocUnitIndex from "@/components/public/DocUnitIndex"
 
 export function generateMetadata(): Metadata {
   return publicPageMetadata("/doc", apexBaseUrl())
 }
 
 // The guides come from one registry (src/lib/doc-pages.ts), shared with the navigation and the
-// sitemap: a new guide is added there once.
+// sitemap: a new guide is added there once. Then every documentation unit (#649, guide/), by
+// group; a group's heading is the target of a unit's breadcrumb (/doc#<group>).
 export default function DocIndexPage() {
   return (
     <>
@@ -17,7 +20,7 @@ export default function DocIndexPage() {
       <ul>
         {DOC_GUIDES.map((g) => (
           <li key={g.path}>
-            <Link href={g.path}>{g.title}</Link> — {g.summary}
+            <Link href={g.path}>{g.title}</Link>&nbsp;: {g.summary}
           </li>
         ))}
       </ul>
@@ -25,6 +28,7 @@ export default function DocIndexPage() {
         Vous découvrez benevol.app ? La page <Link href="/fonctionnalites">Fonctionnalités</Link> présente ce que
         fait l&apos;outil, besoin par besoin.
       </p>
+      <DocUnitIndex units={loadDocUnits()} />
     </>
   )
 }
