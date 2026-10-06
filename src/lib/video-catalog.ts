@@ -208,9 +208,9 @@ export type Video = {
 // --- pure helpers (testable without fs) -------------------------------------------------------
 
 /**
- * Whether the gallery shows every catalogued video or only the published ones. Every video is
- * `published: false` today (#644 owner decision: show all, with their state, until the catalogue
- * has videos worth publicising). Flipping this one constant is the whole migration to the public
+ * Whether the gallery shows every catalogued video or only the published ones. Videos with a render
+ * online are `published: true` (owner decision, 2026-10-06); the others show « À venir ». The
+ * gallery still lists all of them, with their state, and stays unlinked (#644). Flipping this one constant is the whole migration to the public
  * version — `filterPublishedVideos` itself never changes.
  */
 export const VIDEO_LIBRARY_PUBLIC_ONLY = false
