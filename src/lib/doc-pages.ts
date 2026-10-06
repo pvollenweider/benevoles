@@ -118,11 +118,23 @@ export function publicPageMetadata(path: string, base: string): Metadata {
 
 /**
  * Links between source files become site links: FEATURES.md links to GUIDE_ADMIN.md so that it
- * reads well on GitHub; rendered on the site, the same link points to /doc/admin.
+ * reads well on GitHub; rendered on the site, the same link points to /doc/admin (an anchor is
+ * kept). The same goes for the documentation units (#649, src/lib/doc-units.ts): `](guide/x.md#y)`
+ * from a file at the root, or `](x.md#y)` from another unit of guide/, becomes `](/doc/x#y)`; a
+ * unit links to a root source with `](../GUIDE_ADMIN.md)`. Only a lower-case file name is a unit
+ * (guide/README.md, the index, isn't one).
  */
 export function linkSourcesToRoutes(markdown: string): string {
-  return PUBLIC_PAGES.reduce((md, p) => (p.source ? md.split(`](${p.source})`).join(`](${p.path})`) : md), markdown)
+  const pages = PUBLIC_PAGES.reduce((md, p) => {
+    if (!p.source) return md
+    const source = new RegExp(`\\]\\((?:\\.\\./)?${p.source.replace(/\./g, "\\.")}(#[^)\\s]*)?\\)`, "g")
+    return md.replace(source, (_match, anchor: string | undefined) => `](${p.path}${anchor ?? ""})`)
+  }, markdown)
+  return pages.replace(UNIT_LINK_RE, (_match, slug: string, anchor: string | undefined) => `](/doc/${slug}${anchor ?? ""})`)
 }
+
+/** `](guide/x.md#y)` or `](x.md#y)`: a link to a documentation unit by its file. */
+const UNIT_LINK_RE = /\]\((?:guide\/)?([a-z0-9]+(?:-[a-z0-9]+)*)\.md(#[^)\s]*)?\)/g
 
 /** The source's own first-level title (the page's <h1>) and the rest of the document. */
 export function splitTitle(markdown: string): { title: string | null; body: string } {
@@ -131,17 +143,27 @@ export function splitTitle(markdown: string): { title: string | null; body: stri
 }
 
 /**
- * Sitemap entries of the apex host: the marketing home, then every public content page.
- * `modifiedAt` gives a page's last change from its source file (null when unknown), injected so
- * the list stays pure and testable.
+ * Sitemap entries of the apex host: the marketing home, every public content page, then the
+ * documentation units (`/doc/<slug>`, #649) in reading order. `modifiedAt` gives a page's last
+ * change from its source file (null when unknown), injected, like the units, so the list stays
+ * pure and testable.
  */
-export function apexSitemap(base: string, modifiedAt: (source: string) => Date | null): MetadataRoute.Sitemap {
+export function apexSitemap(
+  base: string,
+  modifiedAt: (source: string) => Date | null,
+  units: readonly { slug: string; source: string }[] = [],
+): MetadataRoute.Sitemap {
   const root = base.replace(/\/+$/, "")
+  const entry = (pagePath: string, source: string | null, priority: number) => {
+    const lastModified = source ? modifiedAt(source) : null
+    return { url: `${root}${pagePath}`, changeFrequency: "monthly" as const, priority, ...(lastModified ? { lastModified } : {}) }
+  }
   return [
     { url: `${root}/`, changeFrequency: "weekly", priority: 1 },
-    ...PUBLIC_PAGES.map((p) => {
-      const lastModified = p.source ? modifiedAt(p.source) : null
-      return { url: `${root}${p.path}`, changeFrequency: "monthly" as const, priority: p.priority, ...(lastModified ? { lastModified } : {}) }
-    }),
+    ...PUBLIC_PAGES.map((p) => entry(p.path, p.source, p.priority)),
+    ...units.map((u) => entry(`/doc/${u.slug}`, u.source, DOC_UNIT_PRIORITY)),
   ]
 }
+
+/** Sitemap priority of a documentation unit: under the guides' indexes, above the legal pages. */
+export const DOC_UNIT_PRIORITY = 0.5

@@ -175,6 +175,7 @@ Toutes les variables, leurs défauts et leurs effets, ainsi que la rotation de l
 | `npm run db:generate` | Régénérer le client Prisma |
 | `npm run screenshots` | Génère les captures d'écran (`scripts/screenshots.mjs`) |
 | `npm run retention:docs` | Régénère les tableaux de conservation de `GUIDE_ADMIN.md` et `docs/retention.md` depuis `src/lib/retention.ts` |
+| `npm run doc:index` | Régénère la liste des pages de `guide/README.md` depuis les fichiers de `guide/` |
 
 `db:migrate`, `db:push`, `db:seed` et `db:studio` ne chargent pas `.env` : exporter `DATABASE_URL` avant, ou passer par `make` (voir « Setup manuel »). `npm run dev` et `npm run test:e2e` vérifient d'abord la version de Node (`scripts/check-node-version.mjs`).
 

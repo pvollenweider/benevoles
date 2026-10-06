@@ -36,6 +36,7 @@
     "video:features": "npm run video:record -- admin-features-tour && npm run video:assemble -- admin-features-tour",
     "video:followup": "npm run video:record -- organizer-monitor-followup && npm run video:assemble -- organizer-monitor-followup",
     "retention:docs": "tsx scripts/retention-docs.ts",
+    "doc:index": "tsx scripts/doc-index.ts",
     "prepare": "husky",
     "postinstall": "[ -f prisma/schema.prisma ] && prisma generate || true"
   },

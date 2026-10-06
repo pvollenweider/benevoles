@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import fs from "fs"
 import path from "path"
-import { apexSitemap, CONTENT_NAV, DOC_GUIDES, DOC_PAGES, linkSourcesToRoutes, PUBLIC_PAGES, publicPageMetadata, splitTitle } from "../doc-pages"
+import { apexSitemap, CONTENT_NAV, DOC_UNIT_PRIORITY, DOC_GUIDES, DOC_PAGES, linkSourcesToRoutes, PUBLIC_PAGES, publicPageMetadata, splitTitle } from "../doc-pages"
 
 const read = (f: string) => fs.readFileSync(path.join(process.cwd(), f), "utf-8")
 
@@ -14,9 +14,10 @@ describe("PUBLIC_PAGES", () => {
     }
   })
 
+  // The dynamic segment src/app/doc/[slug] serves the documentation units (#649, doc-units.test.ts).
   it("lists every doc route that exists, and the features page, so a new page cannot be forgotten", () => {
     const docDir = path.join(process.cwd(), "src/app/doc")
-    const routes = ["/doc", ...fs.readdirSync(docDir, { withFileTypes: true }).filter((d) => d.isDirectory() && fs.existsSync(path.join(docDir, d.name, "page.tsx"))).map((d) => `/doc/${d.name}`)]
+    const routes = ["/doc", ...fs.readdirSync(docDir, { withFileTypes: true }).filter((d) => d.isDirectory() && !d.name.startsWith("[") && fs.existsSync(path.join(docDir, d.name, "page.tsx"))).map((d) => `/doc/${d.name}`)]
     expect(DOC_PAGES.map((p) => p.path).sort()).toEqual(routes.sort())
     expect(PUBLIC_PAGES.map((p) => p.path)).toContain("/fonctionnalites")
     expect(DOC_GUIDES.map((p) => p.path)).toEqual(["/doc/admin", "/doc/benevole"])
@@ -79,6 +80,24 @@ describe("FEATURES.md, the source of /fonctionnalites", () => {
   })
 })
 
+describe("linkSourcesToRoutes", () => {
+  it("rewrites links to the root sources, an anchor kept, from the root or from guide/", () => {
+    expect(linkSourcesToRoutes("[a](GUIDE_ADMIN.md) [b](GUIDE_BENEVOLE.md#confirmation)")).toBe("[a](/doc/admin) [b](/doc/benevole#confirmation)")
+    expect(linkSourcesToRoutes("[a](../GUIDE_ADMIN.md#creer-un-evenement)")).toBe("[a](/doc/admin#creer-un-evenement)")
+  })
+
+  it("rewrites links to the documentation units (#649), by path from the root or relative from another unit", () => {
+    expect(linkSourcesToRoutes("[a](guide/revenir-sur-la-page.md)")).toBe("[a](/doc/revenir-sur-la-page)")
+    expect(linkSourcesToRoutes("[a](guide/confirmation.md#le-lien)")).toBe("[a](/doc/confirmation#le-lien)")
+    expect(linkSourcesToRoutes("[a](confirmation.md#le-lien) et [b](s-inscrire.md)")).toBe("[a](/doc/confirmation#le-lien) et [b](/doc/s-inscrire)")
+  })
+
+  it("leaves other links alone: site paths, URLs, the guide index, files elsewhere", () => {
+    const md = "[a](/doc/admin) [b](https://example.org/x.md) [c](README.md) [d](guide/README.md) [e](docs/retention.md) [f](CHANGELOG.md)"
+    expect(linkSourcesToRoutes(md)).toBe(md)
+  })
+})
+
 describe("apexSitemap", () => {
   it("lists the home, the features page and the documentation on the apex host, with the source file's date", () => {
     const d = new Date("2026-09-30T10:00:00Z")
@@ -87,5 +106,14 @@ describe("apexSitemap", () => {
     expect(entries.map((e) => e.url)).toEqual(["https://www.benevol.app/", "https://www.benevol.app/fonctionnalites", "https://www.benevol.app/accessibilite", "https://www.benevol.app/doc", "https://www.benevol.app/doc/admin", "https://www.benevol.app/doc/benevole"])
     expect(entries.find((e) => e.url.endsWith("/fonctionnalites"))).toMatchObject({ lastModified: d, priority: 0.9 })
     expect(entries.find((e) => e.url.endsWith("/doc/benevole"))).not.toHaveProperty("lastModified")
+  })
+
+  it("lists the documentation units after the pages, with their own file's date (#649)", () => {
+    const d = new Date("2026-10-01T10:00:00Z")
+    const entries = apexSitemap("https://www.benevol.app", (src) => (src === "guide/b.md" ? d : null), [{ slug: "a", source: "guide/a.md" }, { slug: "b", source: "guide/b.md" }])
+    expect(entries.slice(-2)).toEqual([
+      { url: "https://www.benevol.app/doc/a", changeFrequency: "monthly", priority: DOC_UNIT_PRIORITY },
+      { url: "https://www.benevol.app/doc/b", changeFrequency: "monthly", priority: DOC_UNIT_PRIORITY, lastModified: d },
+    ])
   })
 })

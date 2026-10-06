@@ -170,9 +170,7 @@ Pour vous inscrire à de nouveaux créneaux, retournez sur la page de l'événem
 
 ## Revenir sur la page d'inscription
 
-Si vous rouvrez la page de l'événement depuis le même navigateur (et que vous n'avez pas vidé son cache), votre session est reconnue automatiquement : vos inscriptions existantes sont prises en compte et votre nom est affiché en haut à droite.
-
-Pour vous déconnecter de cette session (par exemple sur un appareil partagé), cliquez sur **Quitter la session** en haut à droite.
+Retrouver vos inscriptions en rouvrant la page de l'événement, et quitter la session sur un appareil partagé : voir [Revenir sur la page d'inscription](guide/revenir-sur-la-page-d-inscription.md).
 
 ---
 

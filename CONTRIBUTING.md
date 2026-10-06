@@ -176,6 +176,7 @@ Elle doit aussi figurer dans `PERMISSIONS` (`src/lib/permissions.ts`) avec son n
 | Fichier | Rôle |
 |---------|------|
 | `FEATURES.md`, `GUIDE_ADMIN.md`, `GUIDE_BENEVOLE.md`, `ACCESSIBILITE.md` | Sources des pages publiques (`/fonctionnalites`, `/doc/admin`, `/doc/benevole`, `/accessibilite`), déclarées dans `src/lib/doc-pages.ts` et copiées dans l'image par le `Dockerfile` |
+| `guide/*.md` | Documentation par tâche (#649), une page par fichier rendue à `/doc/<fichier>` ; en-tête et règles d'écriture dans `guide/README.md`, dont la liste est générée par `npm run doc:index` depuis `src/lib/doc-units.ts` |
 | `FONCTIONNALITES.md` | Inventaire détaillé pour l'équipe |
 | `DESIGN.md`, `PRODUCT.md` | Système visuel et contexte produit, à relire avant tout changement d'interface |
 | `docs/accessibilite.md` | Vérifications d'accessibilité, à dater |
