@@ -1,5 +1,5 @@
 import { docUnitAudience, docUnitsByGroup, type DocRole, type DocUnit } from "@/lib/doc-units"
-import { docUnitQuestions } from "@/lib/doc-search"
+import { docUnitQuestionAnchors } from "@/lib/doc-search"
 import DocUnitFilterList, { type DocIndexGroup } from "./DocUnitFilterList"
 
 /** The id of « Toutes les fiches », which names its region (prefixed: never a Markdown heading's slug). */
@@ -13,26 +13,31 @@ const INDEX_HEADING_ID = "doc-toutes-les-fiches"
  * breadcrumb, and each unit says who it is for. On a guide's page, only that role's units, without
  * ids (the guide's own heading ids stay as they were) and without « Pour : », which would only
  * repeat the page's audience. The filter also searches the questions a unit's page answers (its
- * « ### » headings), passed as plain strings.
+ * « ### » headings), passed as plain strings with the ids their page gives them: a unit found by
+ * one of them links to it under the result.
  */
 export default function DocUnitIndex({ units, role }: { units: readonly DocUnit[]; role?: DocRole }) {
   const groups: DocIndexGroup[] = docUnitsByGroup(units, role).map(({ group, units: inGroup }) => ({
     id: group.id,
     title: group.title,
     anchor: role ? undefined : group.id,
-    items: inGroup.map((unit) => ({
-      slug: unit.slug,
-      title: unit.title,
-      summary: unit.summary,
-      questions: docUnitQuestions(unit.body),
-      audience: role ? undefined : docUnitAudience(unit),
-    })),
+    items: inGroup.map((unit) => {
+      const questions = docUnitQuestionAnchors(unit.body)
+      return {
+        slug: unit.slug,
+        title: unit.title,
+        summary: unit.summary,
+        questions: questions.map((q) => q.text),
+        questionIds: questions.map((q) => q.id),
+        audience: role ? undefined : docUnitAudience(unit),
+      }
+    }),
   }))
   if (groups.length === 0) return null
   return (
     <section aria-labelledby={INDEX_HEADING_ID}>
       <h2 id={INDEX_HEADING_ID}>Toutes les fiches</h2>
-      <DocUnitFilterList groups={groups} />
+      <DocUnitFilterList groups={groups} role={role} />
     </section>
   )
 }

@@ -5,11 +5,13 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { docFilterStatus, haystackMatches, searchHaystack, searchTerms, type DocSearchEntry } from "@/lib/doc-search"
+import { docFilterNextSteps, docFilterStatus, haystackMatches, matchingDocQuestionLinks, searchHaystack, searchTerms, type DocSearchEntry } from "@/lib/doc-search"
+import type { DocRole } from "@/lib/doc-units"
 import { useHydrated } from "@/lib/use-hydrated"
 import { docUnitHref } from "@/lib/doc-href"
 
-export type DocIndexItem = DocSearchEntry & { slug: string; audience?: string }
+/** A unit of the index; `questionIds[i]` is the heading id of `questions[i]` on the unit's page. */
+export type DocIndexItem = DocSearchEntry & { slug: string; questionIds: readonly string[]; audience?: string }
 export type DocIndexGroup = { id: string; title: string; anchor?: string; items: DocIndexItem[] }
 
 /** How long the live region waits after the last keystroke before it speaks. */
@@ -23,8 +25,14 @@ const ANNOUNCE_DELAY_MS = 300
  * from the first paint, says the result in a full sentence once the reader pauses; the focus never
  * moves. Échap empties a field that has a value, and only then; « Effacer le filtre » does it too
  * (Firefox has no clear button of its own) and gives the focus back to the field.
+ *
+ * A unit found by its questions only (not its title or summary) lists, under its result, the two
+ * first questions that match, each a link to its heading. When nothing matches, the advice is
+ * followed by next steps for the page's reader (`role`: the guide's, none on /doc): the guide's
+ * « Questions fréquentes », and the help unit for organisers. Neither is announced on its own: the
+ * status sentence stays the only live text.
  */
-export default function DocUnitFilterList({ groups }: { groups: readonly DocIndexGroup[] }) {
+export default function DocUnitFilterList({ groups, role }: { groups: readonly DocIndexGroup[]; role?: DocRole }) {
   const hydrated = useHydrated()
   const inputId = useId()
   const [query, setQuery] = useState("")
@@ -91,23 +99,55 @@ export default function DocUnitFilterList({ groups }: { groups: readonly DocInde
       <p role="status" className="text-sm text-gray-600 dark:text-gray-400 min-h-5 mt-2 mb-0">
         {announcement}
       </p>
-      {terms.length > 0 && shown === 0 && <p>Essayer un autre mot, ou effacer le filtre pour revoir toute la liste.</p>}
+      {terms.length > 0 && shown === 0 && <EmptyState role={role} />}
       {groups.map((group) => {
         const groupHidden = !group.items.some(visible)
         return (
           <div key={group.id} hidden={groupHidden}>
             <h3 id={group.anchor}>{group.title}</h3>
             <ul>
-              {group.items.map((item) => (
-                <li key={item.slug} hidden={!visible(item)}>
-                  <Link href={docUnitHref(item.slug)}>{item.title}</Link>&nbsp;: {item.summary}
-                  {item.audience && <> Pour&nbsp;: {item.audience}.</>}
-                </li>
-              ))}
+              {group.items.map((item) => {
+                const shownItem = visible(item)
+                const questions = shownItem ? matchingDocQuestionLinks(item, query) : []
+                return (
+                  <li key={item.slug} hidden={!shownItem}>
+                    <Link href={docUnitHref(item.slug)}>{item.title}</Link>&nbsp;: {item.summary}
+                    {item.audience && <> Pour&nbsp;: {item.audience}.</>}
+                    {questions.length > 0 && (
+                      <ul aria-label="Questions correspondantes">
+                        {questions.map((question) => (
+                          <li key={question.id}>
+                            <Link href={`${docUnitHref(item.slug)}#${question.id}`}>{question.text}</Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                )
+              })}
             </ul>
           </div>
         )
       })}
+    </>
+  )
+}
+
+/** The advice when no unit matches, then where to look next (docFilterNextSteps). */
+function EmptyState({ role }: { role?: DocRole }) {
+  const { advice, lead, steps } = docFilterNextSteps(role)
+  return (
+    <>
+      <p>{advice}</p>
+      <p>{lead}</p>
+      <ul>
+        {steps.map((step) => (
+          <li key={step.href}>
+            <Link href={step.href}>{step.label}</Link>
+            {step.note && <>&nbsp;: {step.note}</>}
+          </li>
+        ))}
+      </ul>
     </>
   )
 }

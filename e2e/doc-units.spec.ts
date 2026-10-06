@@ -43,6 +43,9 @@ test("a unit for both roles says so, then speaks to each under its own heading",
   await expect(page.getByRole("heading", { level: 2, name: "Côté organisation" })).toBeVisible()
   await expect(page.getByRole("heading", { level: 2, name: "Côté bénévole" })).toBeVisible()
   expect.soft(await seriousViolations(page)).toEqual([])
+  // The volunteers' half comes first, as the jump links offer it.
+  await page.goto("/doc/rappels")
+  await expect(page.locator("main h2").filter({ hasText: /^Côté / })).toHaveText(["Côté bénévole", "Côté organisation"])
 })
 
 test("the volunteer guide's page lists its units, each linked by its site path", async ({ page }) => {
@@ -236,12 +239,22 @@ test("the filter over the index narrows the list as you type, hides empty groups
   await field.fill("creneau changer")
   await expect(page.locator("main li").getByRole("link", { name: "Ma page personnelle", exact: true })).toBeVisible()
 
+  // A unit found by one of its questions links to it, under its result.
+  await field.fill("oublier")
+  const result = page.locator("main li").filter({ has: page.getByRole("link", { name: "Rappels et changements de créneau", exact: true }) })
+  const question = result.getByRole("link", { name: "Je ne veux pas oublier mon créneau le jour J" })
+  await expect(question).toBeVisible()
+  await expect(question).toHaveAttribute("href", "/doc/rappels#je-ne-veux-pas-oublier-mon-creneau-le-jour-j")
+  await expect(field).toBeFocused()
+
   await field.fill("xyz")
   await expect(status).toHaveText("Aucune fiche pour « xyz ».")
-  await expect(page.getByText(/Essayer un autre mot/)).toBeVisible()
+  await expect(page.getByText(/^Essaie un autre mot/)).toBeVisible()
   await expect(page.locator("main").getByText(/Aucune fiche/)).toHaveCount(1)
   await expect(page.getByRole("heading", { level: 3 })).toHaveCount(0)
   await expect(page.getByRole("search").getByRole("searchbox", { name: "Filtrer les fiches" })).toBeVisible()
+  // Next steps: the guide's own frequent questions.
+  await expect(page.locator("main li:visible").getByRole("link", { name: "Questions fréquentes", exact: true })).toHaveAttribute("href", "#faq-du-guide")
 
   // « Effacer le filtre » (Firefox has no clear button of its own) brings every unit back.
   await page.getByRole("button", { name: "Effacer le filtre" }).click()
@@ -274,8 +287,24 @@ test("both guides open on their four frequent questions, each leading to its ans
   }
   await page.goto("/doc/benevole")
   await page.getByRole("region", { name: "Questions fréquentes" }).getByRole("link", { name: "Comment changer de créneau\u00a0?" }).click()
-  await expect(page).toHaveURL(/\/doc\/ma-page-personnelle#je-veux-changer-de-creneau$/)
-  await expect(page.getByRole("heading", { level: 3, name: "Je veux changer de créneau" })).toBeInViewport()
+  await expect(page).toHaveURL(/\/doc\/ma-page-personnelle#changer-de-creneau$/)
+  await expect(page.getByRole("heading", { level: 2, name: "Changer de créneau" })).toBeInViewport()
+})
+
+test("with no match, the filter leads to the frequent questions of the guide, or of both guides from /doc", async ({ page }) => {
+  await page.goto("/doc/benevole")
+  const field = page.getByRole("searchbox", { name: "Filtrer les fiches" })
+  await field.fill("xyz")
+  await page.locator("main li:visible").getByRole("link", { name: "Questions fréquentes", exact: true }).click()
+  await expect(page).toHaveURL(/\/doc\/benevole#faq-du-guide$/)
+  await expect(page.getByRole("heading", { level: 2, name: "Questions fréquentes" })).toBeInViewport()
+
+  await page.goto("/doc")
+  await page.getByRole("searchbox", { name: "Filtrer les fiches" }).fill("xyz")
+  const next = page.getByRole("region", { name: "Toutes les fiches" }).locator("li:visible").getByRole("link")
+  await expect(next).toHaveText(["Questions fréquentes des bénévoles", "Questions fréquentes des organisateurs", "Aide et retours"])
+  await next.filter({ hasText: "des organisateurs" }).click()
+  await expect(page).toHaveURL(/\/doc\/admin#faq-du-guide$/)
 })
 
 test.describe("old anchors of the guides", () => {
@@ -316,7 +345,7 @@ test.describe("old anchors of the guides", () => {
   test("a moved section keeps its fragment when its unit has the same heading", async ({ page }) => {
     await page.goto("/doc/admin#rappels-automatiques")
     await expect(page).toHaveURL(/\/doc\/rappels#rappels-automatiques$/)
-    await expect(page.getByRole("heading", { level: 2, name: "Rappels automatiques" })).toBeInViewport()
+    await expect(page.getByRole("heading", { level: 3, name: "Rappels automatiques" })).toBeInViewport()
     await page.goto("/doc/benevole#confirmation")
     await expect(page).toHaveURL(/\/doc\/s-inscrire#confirmation$/)
     await page.goto("/doc/admin#page-blanche")

@@ -1,16 +1,10 @@
 import Link from "next/link"
 import { legacyAnchorTargets, roleHasDocUnits, type DocRole, type DocUnit } from "@/lib/doc-units"
-import { DOC_FAQ, docFaqHref } from "@/lib/doc-faq"
+import { DOC_FAQ, DOC_FAQ_HEADING_ID as FAQ_HEADING_ID, docFaqHref } from "@/lib/doc-faq"
 import { docUnitHeadingIds } from "@/lib/public-content"
 import DocUnitIndex from "@/components/public/DocUnitIndex"
 import DocFrame from "@/components/public/DocFrame"
 import LegacyAnchorRedirect from "./LegacyAnchorRedirect"
-
-/**
- * The id of the « Questions fréquentes » block. Not « questions-frequentes »: that old anchor of
- * both guides now leads to their FAQ unit (legacy), and an id still on the page would keep it here.
- */
-const FAQ_HEADING_ID = "faq-du-guide"
 
 /**
  * A role's guide, split into units (#649): its title, its introduction (GUIDE_ADMIN.md or

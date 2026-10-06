@@ -49,6 +49,10 @@ Si l'annulation n'aboutit pas (connexion coupée, par exemple), un message sous 
 
 Quand tu annules ton dernier créneau, la page affiche « Toutes tes inscriptions ont été annulées » : pour participer à nouveau, retourne sur la page de l'événement et choisis tes créneaux.
 
+## Changer de créneau
+
+Il n'y a pas de bouton pour échanger un créneau contre un autre : le changement se fait en deux temps. Inscris-toi d'abord au nouveau créneau sur la page de l'événement (le lien « Retour à l'accueil », en bas de ta page personnelle, t'y ramène et te reconnaît), puis reviens ici annuler l'ancien avec **Annuler**. Si les deux créneaux se chevauchent, le nouveau ne peut pas être sélectionné : annule alors d'abord l'ancien, en sachant que sa place est aussitôt proposée à la liste d'attente. Le champ « Un mot pour l'organisation ? » de l'annulation te permet de prévenir l'organisation du changement.
+
 ## Ajouter mes créneaux à mon calendrier
 
 Tes créneaux s'ajoutent à ton calendrier (téléphone, Google, Outlook, Apple…) : avec plusieurs créneaux, « Ajouter tout mon planning à mon calendrier » télécharge un fichier `.ics` de tes créneaux confirmés, et « Ajouter à mon calendrier » sous un créneau le fait pour lui seul. Ouvre le fichier pour l'importer. Il ne se met pas à jour tout seul : si un horaire change, tu reçois un email ; télécharge-le à nouveau (le créneau est alors remplacé, pas dupliqué, dans la plupart des calendriers).
@@ -56,9 +60,3 @@ Tes créneaux s'ajoutent à ton calendrier (téléphone, Google, Outlook, Apple�
 ## Mes disponibilités
 
 Tu peux indiquer, si tu le souhaites, **tes disponibilités** en général (matin, après-midi, soir, et une remarque comme « pas le dimanche »). C'est facultatif : cela aide l'organisation si elle doit te proposer un autre créneau, mais tu choisis toujours tes créneaux toi-même.
-
-## Questions fréquentes
-
-### Je veux changer de créneau
-
-Annule le créneau concerné depuis ta page personnelle, puis retourne sur la page de l'événement pour en choisir un autre.

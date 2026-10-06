@@ -10,11 +10,18 @@ import type { DocRole } from "@/lib/doc-units"
  * answer is a section of that unit, to the section's heading. A test checks that every target unit
  * exists, is for that role and renders that heading id (src/lib/__tests__/doc-faq.test.ts).
  */
+/**
+ * The id of the « Questions fréquentes » block on a guide's page, the target of the filter's empty
+ * state. Not « questions-frequentes »: that old anchor of both guides now leads to their FAQ unit
+ * (legacy), and an id still on the page would keep it there.
+ */
+export const DOC_FAQ_HEADING_ID = "faq-du-guide"
+
 export type DocFaqItem = { question: string; unit: string; heading?: string }
 
 export const DOC_FAQ: Record<DocRole, readonly DocFaqItem[]> = {
   benevole: [
-    { question: "Comment changer de créneau ?", unit: "ma-page-personnelle", heading: "je-veux-changer-de-creneau" },
+    { question: "Comment changer de créneau ?", unit: "ma-page-personnelle", heading: "changer-de-creneau" },
     { question: "Comment annuler mon inscription ?", unit: "ma-page-personnelle", heading: "annuler-un-creneau" },
     { question: "J'ai perdu mon lien personnel, que faire ?", unit: "lien-personnel", heading: "je-n-ai-plus-le-lien-vers-ma-page-personnelle" },
     { question: "Comment recevoir un rappel avant mon créneau ?", unit: "rappels", heading: "je-ne-veux-pas-oublier-mon-creneau-le-jour-j" },
