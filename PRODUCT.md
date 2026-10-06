@@ -20,6 +20,25 @@ Benevol est un outil communautaire open source qui simplifie la gestion des bén
 
 Ce n'est pas un produit SaaS commercial — c'est un outil que des organisations gèrent elles-mêmes ou partagent en multi-tenant. Le succès se mesure à la réduction de friction pour les organisateurs et à la clarté absolue pour les bénévoles.
 
+## Core Loop and Scope
+
+Référence pour trier les demandes de fonctionnalités (revue produit du 29 septembre 2026).
+
+**Boucle centrale** : créer un planning, partager un lien, laisser les bénévoles choisir leurs créneaux. On ne court pas après les outils d'accréditation fonctionnalité par fonctionnalité.
+
+**Six capacités essentielles** ; toute autre fonctionnalité doit clairement en améliorer une :
+
+1. Créer ou dupliquer un événement.
+2. Construire rapidement les postes et les créneaux.
+3. Permettre aux bénévoles de s'inscrire sans compte.
+4. Voir immédiatement où il manque du monde.
+5. Communiquer simplement avec les personnes concernées.
+6. Disposer d'un planning fiable, à l'écran comme sur papier.
+
+**Volontairement pas construit** : accréditations et zones d'accès ; badges complexes ; repas et hébergement ; signature électronique ; attribution automatique des bénévoles ; CRM marketing ; campagnes SMS bidirectionnelles ; gestion documentaire générique ; application mobile native ; workflows configurables ; constructeur de formulaires libre ; des dizaines de rôles et de permissions ; facturation à la fonctionnalité.
+
+**Positionnement** : « Organisez les créneaux de vos bénévoles en quelques minutes. Aucun compte à créer, aucun logiciel compliqué à apprendre. » ou « Le planning des bénévoles, simplement. » Objectif : une petite association publie son premier planning correctement en quinze minutes, sans formation ni démonstration commerciale.
+
 ## Brand Personality
 
 **Simple · Humain · Fiable**
