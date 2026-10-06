@@ -14,6 +14,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Acceptation de la convention des bénévoles obligatoire** : une inscription publique sans la case « J'ai lu et j'accepte la convention des bénévoles » est refusée, avec un message qui invite à cocher la case ou à recharger la page ; chaque inscription publique garde la preuve de l'acceptation.
 - **Fiches communes aux organisateurs et aux bénévoles** : liste d'attente, inscriptions sur validation, âge minimum et rappels s'ouvrent sur une courte introduction, puis « Côté bénévole » et enfin « Côté organisation », dans l'ordre des liens en haut de la fiche. Les liens et anciennes adresses vers ces sections fonctionnent comme avant.
 - **Changer de créneau, expliqué** : la fiche « Ma page personnelle » a désormais une section « Changer de créneau » qui explique comment faire en deux temps (s'inscrire au nouveau créneau, puis annuler l'ancien, ou l'inverse si les deux se chevauchent) ; la question fréquente du guide bénévole y mène.
 - **Créer un événement** : la fiche décrit le chemin dans l'interface (**Événements → Nouvel événement**, **Modifier** sur la page de l'événement) au lieu d'adresses internes de l'application.

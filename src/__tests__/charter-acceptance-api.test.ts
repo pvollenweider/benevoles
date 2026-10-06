@@ -71,15 +71,17 @@ describe("POST /api/public/registrations — proof of charter acceptance (#569)"
     expect(m.shiftFindMany).not.toHaveBeenCalled()
   })
 
-  // A page loaded before #569 shipped showed the checkbox but did not send the field: the sign-up
-  // goes through, without a proof of acceptance (owner decision 2026-10-05).
-  it("accepts a sign-up from a page that does not send the field yet, without storing a proof", async () => {
+  // Required since #696: a page opened before the field was sent gets the same readable refusal,
+  // with a hint to reload, and nothing is looked up or stored.
+  it("refuses a sign-up that does not send the field, asking to reload the page", async () => {
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post({ charterAccepted: undefined }))
-    expect(res.status).toBeLessThan(300)
-    expect(m.txCreate).toHaveBeenCalledWith(expect.objectContaining({
-      data: expect.objectContaining({ charterAcceptedHash: null, charterAcceptedAt: null }),
-    }))
+    expect(res.status).toBe(400)
+    const data = await res.json()
+    expect(data.field).toBe("charterAccepted")
+    expect(data.error).toContain("recharge la page")
+    expect(m.shiftFindMany).not.toHaveBeenCalled()
+    expect(m.txCreate).not.toHaveBeenCalled()
     expect(m.charterUpsert).not.toHaveBeenCalled()
   })
 
