@@ -1,0 +1,60 @@
+{
+  "id": "MEMBERS_REMINDERS",
+  "slug": "members-reminders",
+  "validatedAt": "2026-10-05T14:32:44.381Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 187400,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 24007,
+      "audioMs": 24007,
+      "driftMs": 0
+    },
+    {
+      "id": "statuses",
+      "visualMs": 24920,
+      "audioMs": 24919,
+      "driftMs": 1
+    },
+    {
+      "id": "confirm",
+      "visualMs": 24356,
+      "audioMs": 24356,
+      "driftMs": 0
+    },
+    {
+      "id": "link",
+      "visualMs": 21148,
+      "audioMs": 21145,
+      "driftMs": 3
+    },
+    {
+      "id": "message",
+      "visualMs": 23710,
+      "audioMs": 23709,
+      "driftMs": 1
+    },
+    {
+      "id": "waitlist",
+      "visualMs": 23533,
+      "audioMs": 23532,
+      "driftMs": 1
+    },
+    {
+      "id": "send",
+      "visualMs": 20281,
+      "audioMs": 20281,
+      "driftMs": 0
+    },
+    {
+      "id": "result",
+      "visualMs": 21171,
+      "audioMs": 21171,
+      "driftMs": 0
+    }
+  ],
+  "issues": []
+}

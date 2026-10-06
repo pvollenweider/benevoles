@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T20:51:34.032Z",
+  "videoSha256": "3e2b054ce139ced7f32f4059559c36ac89bc83cb334bbe34e341997d8f994942",
+  "promptSha256": "d164943b580685aff2e1c68d8a061ecf70ac2c1a585ab2c2e0e3cddd473421ea",
+  "clipSha256": "79e08d2e27ee9ba1145b8aaa5e582f3b23dd7ef3abeb2810e4ed5dd539e5a2b6",
+  "scene": "availability",
+  "review": {
+    "heardOpening": "Pour chercher de l'aide, regardons les disponibilités",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "regardons les disponibilités générales dans les membres",
+        "visibleSeconds": 2,
+        "visible": "Navigation vers l'onglet Membres affichant la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Zoé a indiqué le matin avec une remarque",
+        "visibleSeconds": 4.8,
+        "visible": "Filtre sur Zoé montrant sa disponibilité matin et son commentaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Regardons aussi ses inscriptions pour éviter un chevauchement",
+        "visibleSeconds": 17.5,
+        "visible": "Ouverture de la page d'activité et inscriptions de Zoé",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction fluide et ton calme adapté au tutoriel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Le résumé quotidien des adresses à vérifier aide à repérer les",
+  "windowStart": 77.56899999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 9.92,
+    "wordsHeard": "Le"
+  },
+  "onset": 87.48899999999999,
+  "proposedCut": 87.8356455,
+  "note": "Proposal only; recut then independently audit before capture"
+}

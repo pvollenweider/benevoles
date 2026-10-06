@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:59:31.998Z",
+  "videoSha256": "1a398dc1b0f9c269772795bf5a7edf3279b335085513b5b8d5e5c3440600bbd1",
+  "promptSha256": "68f98141da8953e9a7d12bb76804f5f27343ca0bd2173b1dc35568abafa97da4",
+  "clipSha256": "f014a88821bbd0efcba5a17780a859c32089b08070f1f35895205edd39ad288c",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Une bonne page d'inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Une bonne page d’inscription ne montre pas seulement des créneaux",
+        "visibleSeconds": 0,
+        "visible": "Affichage du bandeau de titre du chapitre en superposition",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Le programme, les informations pratiques et un QR code simple à afficher",
+        "visibleSeconds": 2.5,
+        "visible": "Retrait du bandeau, affichage du formulaire de modification de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "donnent aux bénévoles le contexte dont ils ont besoin",
+        "visibleSeconds": 2.5,
+        "visible": "Vue statique sur les paramètres généraux de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

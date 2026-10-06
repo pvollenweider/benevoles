@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T01:59:34.450Z",
+  "videoSha256": "f4c0c3c28ab04d429a33a9fd82687797f0081bd26e4214dabb9f06b4d4c9beac",
+  "promptSha256": "5a88799828f3b262d2a0dcf67f9cb5ca1058b94fed358912194bcf694c5b7caf",
+  "clipSha256": "10290891c258df49c1ecf076ba221142ba1080fc529a5c1bd76ce4e1edd3321a",
+  "scene": "search",
+  "review": {
+    "heardOpening": "La loupe cherche dans toute l'organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "saisissez un nom ou un poste",
+        "visibleSeconds": 6.5,
+        "visible": "Page de recherche affichant les résultats pour le terme saisi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Ouvrez un résultat pour accéder à la fiche ou à la liste",
+        "visibleSeconds": 9,
+        "visible": "Clic sur un résultat et ouverture de la liste des inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "précisez votre recherche avec un second mot",
+        "visibleSeconds": 14.5,
+        "visible": "Retour à la recherche et ajout du terme 'village'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -35,27 +35,27 @@
     },
     {
       "id": "open",
-      "transcript": "Ouvre la loupe dans la barre du haut. Tu peux aussi utiliser Contrôle K, ou Commande K sur Mac : le champ s’ouvre et reçoit immédiatement le curseur. Échap le referme sans lancer de recherche et rend le focus au bouton.",
+      "transcript": "Ouvrez la loupe dans la barre du haut. Vous pouvez aussi utiliser Contrôle K, ou Commande K sur Mac : le champ s’ouvre et reçoit immédiatement le curseur. Échap le referme sans lancer de recherche et rend le focus au bouton.",
       "fallbackDurationMs": 17000
     },
     {
       "id": "person",
-      "transcript": "Cherchons Camille Rochat. Les résultats distinguent sa fiche de membre et ses inscriptions. Le lien du membre ouvre sa fiche et ses activités dans l’organisation ; le lien d’inscription arrive sur l’événement concerné avec la personne déjà filtrée. Rien n’est modifié par une recherche.",
-      "fallbackDurationMs": 21000
+      "transcript": "Cherchons Léa Morel. Les résultats distinguent sa fiche de membre et ses inscriptions. Ouvrons d’abord sa fiche, puis une inscription : la liste de l’événement est déjà filtrée sur Léa. Le badge Liste d’attente distingue une demande de place d’une inscription confirmée. La recherche elle-même ne modifie rien.",
+      "fallbackDurationMs": 23000
     },
     {
       "id": "shift",
-      "transcript": "Avec Buvette, la même page retrouve tous les créneaux qui portent ce nom. Chaque résultat rappelle l’événement, la date et l’horaire, puis ouvre directement le bon contexte. Une recherche avec plusieurs mots réduit les ambiguïtés entre des postes ou des personnes aux noms proches.",
-      "fallbackDurationMs": 20000
+      "transcript": "Avec Buvette, vous retrouvez les créneaux de plusieurs événements. Chaque résultat rappelle l’événement, la date et l’horaire. Ajoutons village pour ne garder que le service qui nous intéresse, puis ouvrons le résultat : la liste des inscriptions est filtrée sur ce créneau.",
+      "fallbackDurationMs": 21000
     },
     {
       "id": "limits",
-      "transcript": "La recherche ne montre que les vingt premiers résultats de chaque catégorie. Si ce plafond apparaît, précise le prénom, le nom, l’événement ou le poste. Les accents et la casse ne bloquent pas la recherche : Zoé peut être retrouvée en écrivant zoe.",
-      "fallbackDurationMs": 19000
+      "transcript": "La recherche affiche au maximum vingt résultats par catégorie. Ici, beaucoup de membres portent le nom Morel : le message indique qu’il reste d’autres résultats. Ajoutez un prénom pour préciser la recherche. Les accents et la casse ne bloquent pas la recherche : écrire zoe permet aussi de retrouver Zoé.",
+      "fallbackDurationMs": 24000
     },
     {
       "id": "result",
-      "transcript": "Le résultat est un raccourci sûr vers la bonne fiche ou le bon planning, sans action cachée et sans envoi de message. Utilise la recherche pour un besoin précis ; garde les listes et leurs filtres pour examiner un ensemble complet ou effectuer des actions groupées.",
+      "transcript": "Vous arrivez à la bonne fiche ou à la bonne liste, sans envoi de message. Utilisez la recherche pour un besoin précis. Pour examiner toutes les personnes ou effectuer des actions groupées, revenez aux listes de membres et d’inscriptions avec leurs filtres.",
       "fallbackDurationMs": 19000
     }
   ]

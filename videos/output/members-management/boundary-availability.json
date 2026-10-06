@@ -1,0 +1,12 @@
+{
+  "anchor": "Les disponibilités donnent une indication générale : matin, après-midi, soir, et",
+  "windowStart": 49.06100000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 15.08,
+    "wordsHeard": "Les"
+  },
+  "onset": 64.141,
+  "proposedCut": 64.061354,
+  "note": "Proposal only; recut then independently audit before capture"
+}

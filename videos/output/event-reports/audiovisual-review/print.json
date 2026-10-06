@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:10:05.316Z",
+  "videoSha256": "e1d04c9dfb88e51be35835c764597a3a9ef877a6424916753f079011043c1217",
+  "promptSha256": "fd79ef36b9d534e0568b617363ebdca05d6d4d13e45960c3d081cedc28915087",
+  "clipSha256": "c5bdb1cea7cfc4ce5cee8477c238d090555c66617192b2be39c1afe4f69f2cfe",
+  "scene": "print",
+  "review": {
+    "heardOpening": "Avant d'imprimer toute la série",
+    "checkpoints": [
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Ici, nous lisons un aperçu du vrai fichier A4, pas la boîte d'impression.",
+        "visibleSeconds": 3,
+        "visible": "Affichage de la vue 'Lecture du PDF réel — planning individuel, page 4'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "Voici le planning de Léa : regardons la frise, les marges, puis les consignes plus bas.",
+        "visibleSeconds": 14,
+        "visible": "Défilement vers le bas révélant le bas de la frise et les consignes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.8,
+        "spoken": "La dernière passe sur la page suivante.",
+        "visibleSeconds": 20.2,
+        "visible": "Passage à la page 5 affichant la consigne isolée en haut de page.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec le défilement du document."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

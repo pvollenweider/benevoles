@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:26:18.498Z",
+  "videoSha256": "b4d9efddbd5814fbdceb220cd5cca7cd88facb3e9f33c37784cfdb0ef5043701",
+  "promptSha256": "ddf5e4fa3c3490688002f9784d75d25905674d53ac93aa070a279e713bdd538d",
+  "clipSha256": "cf05d492519b0716441feeeb0f139558f10b9fa94054a2a8f56f73cec970fbab",
+  "scene": "personal",
+  "review": {
+    "heardOpening": "Sur la page personnelle, Jules retrouve son créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "Jules retrouve son créneau et les actions prévues",
+        "visibleSeconds": 2,
+        "visible": "Page 'Mes inscriptions' affichant le créneau de Jules et les options de gestion",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Le panneau Ton lien personnel rappelle à quoi sert cet accès",
+        "visibleSeconds": 5.5,
+        "visible": "Section encadrée intitulée 'Ton lien personnel'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Utilisons Recevoir ce lien par email",
+        "visibleSeconds": 16.3,
+        "visible": "Clic sur le bouton 'Recevoir ce lien par email'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "ouvrons le nouveau message reçu",
+        "visibleSeconds": 19,
+        "visible": "Affichage de la boîte de réception Mailpit avec l'e-mail ouvert",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

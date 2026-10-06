@@ -9,7 +9,7 @@
       "Choisissez le poste, la date et la plage horaire globale à couvrir.",
       "Indiquez la durée de chaque relève : elle découpe automatiquement la plage.",
       "Vérifiez l'aperçu des créneaux générés avant de confirmer.",
-      "Créez la série : les créneaux apparaissent dans la Timeline avec le même poste et la même capacité.",
+      "Créez la série : les créneaux apparaissent dans la Frise avec le même poste et la même capacité.",
       "Ouvrez un créneau après coup pour adapter son libellé, sa capacité ou sa consigne."
     ],
     "remember": [
@@ -50,7 +50,7 @@
     },
     {
       "id": "create",
-      "transcript": "Créons la série. Les nouvelles barres apparaissent dans la Timeline avec le même poste, la même capacité et des horaires consécutifs. Elles restent pourtant indépendantes : chacune possède son propre effectif et peut recevoir ses inscriptions.",
+      "transcript": "Créons la série. Les nouvelles barres apparaissent dans la Frise avec le même poste, la même capacité et des horaires consécutifs. Elles restent pourtant indépendantes : chacune possède son propre effectif et peut recevoir ses inscriptions.",
       "fallbackDurationMs": 23000
     },
     {

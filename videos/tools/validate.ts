@@ -7,6 +7,7 @@ import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { promisify } from "node:util"
 import { loadManifest, videoDir, type AudioMetadata, type Timeline } from "../lib/manifest"
+import { mismatchedNarrationEdges, unexpectedPauseInstructions } from "../lib/narration-fidelity"
 
 const exec = promisify(execFile)
 const reference = process.argv.find((argument) => !argument.startsWith("-") && argument !== process.argv[0] && argument !== process.argv[1])
@@ -27,8 +28,9 @@ async function main() {
     throw new Error(`${manifest.id}: masterclass videos must use one continuous narration take`)
   }
   const dir = videoDir(manifest.slug)
-  const audio = await readJson<AudioMetadata>(path.join(dir, "audio-metadata.json"))
   const timeline = await readJson<Timeline>(path.join(dir, "timeline.json"))
+  if (timeline.capturePurpose === "rehearsal") throw new Error(`${manifest.id}: rehearsal cannot be validated as a synchronized narrated video`)
+  const audio = await readJson<AudioMetadata>(path.join(dir, "audio-metadata.json"))
   if (audio.voice !== manifest.voice) throw new Error(`${manifest.id}: generated voice differs from manifest`)
   if (timeline.slug !== manifest.slug) throw new Error(`${manifest.id}: timeline belongs to another video`)
   if (timeline.cues.length !== manifest.segments.length) {
@@ -38,7 +40,7 @@ async function main() {
   const issues: string[] = []
   let narrationContentChecked = false
   try {
-    const audit = await readJson<{ segments: { id: string; audioSha256: string; expected: string; needsReview: boolean }[] }>(path.join(dir, "narration-audit.json"))
+    const audit = await readJson<{ segments: { id: string; audioSha256: string; expected: string; recognized?: string; needsReview: boolean }[] }>(path.join(dir, "narration-audit.json"))
     narrationContentChecked = true
     for (const segment of manifest.segments) {
       const checked = audit.segments.find(s => s.id === segment.id)
@@ -46,11 +48,14 @@ async function main() {
         issues.push(`${segment.id}: independent narration audit missing, outdated or failed`)
         continue
       }
+      if (!checked.recognized || unexpectedPauseInstructions(segment.transcript, checked.recognized).length) issues.push(`${segment.id}: unrequested spoken instruction or missing recognized text`)
+      if (checked.recognized && mismatchedNarrationEdges(segment.transcript, checked.recognized).length) issues.push(`${segment.id}: narration beginning/end needs review despite overall word score`)
       const bytes = await readFile(path.join(dir, audio.segments[segment.id].file))
       if (createHash("sha256").update(bytes).digest("hex") !== checked.audioSha256) issues.push(`${segment.id}: narration audio changed since content audit`)
     }
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
+    issues.push("independent narration audit is missing; scene timing alone cannot validate this video")
   }
   const scenes = manifest.segments.map((segment, index) => {
     const cue = timeline.cues[index]

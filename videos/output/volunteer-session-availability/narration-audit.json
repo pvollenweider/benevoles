@@ -1,12 +1,12 @@
 {
   "model": "gemini-3.8-flash",
-  "auditedAt": "2026-10-05T11:23:10.675Z",
+  "auditedAt": "2026-10-05T11:29:52.864Z",
   "note": "ASR evidence, not a full audiovisual or voice-quality validation",
   "segments": [
     {
       "id": "welcome",
       "audioSha256": "31edd025efb0872dee05c4219398db1e3ee0e77d33672ae7891364e4ec5df654",
-      "recognized": "Pour retrouver tes inscriptions, tu n'as pas besoin de créer un compte. Ton email contient un lien personnel qui ouvre directement ta page. Ce lien donne accès à tes informations et permet d'annuler tes créneaux. Garde-le pour toi. Nous allons aussi voir comment indiquer tes disponibilités et utiliser le site sur un appareil partagé.",
+      "recognized": "Pour retrouver tes inscriptions, tu n'as pas besoin de créer un compte. Ton e-mail contient un lien personnel qui ouvre directement ta page. Ce lien donne accès à tes informations et permet d'annuler tes créneaux. Garde-le pour toi. Nous allons aussi voir comment indiquer tes disponibilités et utiliser le site sur un appareil partagé.",
       "expected": "Pour retrouver tes inscriptions, tu n'as pas besoin de créer un compte. Ton email contient un lien personnel qui ouvre directement ta page. Ce lien donne accès à tes informations et permet d'annuler tes créneaux : garde-le pour toi. Nous allons aussi voir comment indiquer tes disponibilités et utiliser le site sur un appareil partagé.",
       "wordErrorRate": 0,
       "needsReview": false
@@ -14,7 +14,7 @@
     {
       "id": "session",
       "audioSha256": "b7d203a77e0e88010864875a104d0bb13aaa0b08ff55b32c02caa02afcfe4bf3",
-      "recognized": "Après avoir ouvert ta page personnelle, le navigateur peut te reconnaître quand tu reviens sur l'événement. Ici, Camille retrouve son nom et ses inscriptions. Cela aide à choisir un autre créneau sans repartir de zéro. Sur un ordinateur ou un téléphone partagé, pense à cliquer sur Quitter la session quand tu as terminé. La page redevient anonyme, mais tes inscriptions ne sont pas annulées.",
+      "recognized": "Après avoir ouvert ta page personnelle, le navigateur peut te reconnaître quand tu reviens sur l'événement. Ici, Camille retrouve son nom et ses inscriptions. Cela aide à choisir un autre créneau sans repartir de zéro. Sur un ordinateur ou un téléphone partagé, pense à cliquer sur « Quitter la session » quand tu as terminé. La page redevient anonyme, mais tes inscriptions ne sont pas annulées.",
       "expected": "Après avoir ouvert ta page personnelle, le navigateur peut te reconnaître quand tu reviens sur l'événement. Ici, Camille retrouve son nom et ses inscriptions. Cela aide à choisir un autre créneau sans repartir de zéro. Sur un ordinateur ou un téléphone partagé, pense à cliquer sur Quitter la session quand tu as terminé. La page redevient anonyme, mais tes inscriptions ne sont pas annulées.",
       "wordErrorRate": 0,
       "needsReview": false
@@ -22,7 +22,7 @@
     {
       "id": "resend",
       "audioSha256": "2c55e44ab451cb3d080f3313effdc084bdf6c12916e65d7452e8036953b7f916",
-      "recognized": "Sur ta page personnelle, la rubrique ton lien personnel rappelle à quoi il sert et quand il a été envoyé. Avec recevoir ce lien par e-mail, tu peux le retrouver dans ta boîte. Attendons le résultat, puis ouvrons le message réellement reçu. Pense aussi à vérifier les courriers indésirables et l'adresse utilisée lors de ton inscription.",
+      "recognized": "Sur ta page personnelle, la rubrique \"Ton lien personnel\" rappelle à quoi il sert et quand il a été envoyé. Avec \"Recevoir ce lien par e-mail\", tu peux le retrouver dans ta boîte. Attendons le résultat, puis ouvrons le message réellement reçu. Pense aussi à vérifier les courriers indésirables et l'adresse utilisée lors de ton inscription.",
       "expected": "Sur ta page personnelle, la rubrique Ton lien personnel rappelle à quoi il sert et quand il a été envoyé. Avec Recevoir ce lien par email, tu peux le retrouver dans ta boîte. Attendons le résultat, puis ouvrons le message réellement reçu. Pense aussi à vérifier les courriers indésirables et l'adresse utilisée lors de ton inscription.",
       "wordErrorRate": 0,
       "needsReview": false
@@ -46,7 +46,7 @@
     {
       "id": "availability",
       "audioSha256": "31c2105f9b55f63d5dff4ce86d996d25b3086e5f28c58520a2ff0cb71255b945",
-      "recognized": "La rubrique « Mes disponibilités » permet d'indiquer les moments où tu es généralement disponible. Camille coche « Matin » et « Soir », puis ajoute une exception : pas le dimanche matin. Ces informations sont facultatives. Après « Enregistrer mes disponibilités », le message confirme le résultat. Rechargeons la page, les choix et la note sont bien conservés.",
+      "recognized": "La rubrique mes disponibilités permet d'indiquer les moments où tu es généralement disponible. Camille coche matin et soir puis ajoute une exception. Pas le dimanche matin. Ces informations sont facultatives. Après enregistrer mes disponibilités le message confirme le résultat. Rechargeons la page Les choix et la note sont bien conservés.",
       "expected": "La rubrique Mes disponibilités permet d'indiquer les moments où tu es généralement disponible. Camille coche Matin et Soir, puis ajoute une exception : pas le dimanche matin. Ces informations sont facultatives. Après Enregistrer mes disponibilités, le message confirme le résultat. Rechargeons la page : les choix et la note sont bien conservés.",
       "wordErrorRate": 0,
       "needsReview": false

@@ -1,0 +1,12 @@
+{
+  "anchor": "Gardons Tous les postes et Tous les bénévoles, puis ouvrons les",
+  "windowStart": 5.815000000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 15.1,
+    "wordsHeard": "Gardons tous les postes et tous les bénévoles puis ouvrons les"
+  },
+  "onset": 20.915,
+  "proposedCut": 20.8152915,
+  "note": "Proposal only; recut then independently audit before capture"
+}

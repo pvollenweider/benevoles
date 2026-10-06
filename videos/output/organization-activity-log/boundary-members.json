@@ -1,0 +1,12 @@
+{
+  "anchor": "Voici une création de membre, puis une modification et une désactivation.",
+  "windowStart": 41.666,
+  "result": {
+    "found": true,
+    "startSeconds": 15.08,
+    "wordsHeard": "Voici une création de membre puis une modification et une désactivation"
+  },
+  "onset": 56.745999999999995,
+  "proposedCut": 56.6657085,
+  "note": "Proposal only; recut then independently audit before capture"
+}

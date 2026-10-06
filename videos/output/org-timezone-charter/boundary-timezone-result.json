@@ -1,0 +1,12 @@
+{
+  "anchor": "Enregistrer le fuseau ne décale pas les heures saisies dans le",
+  "windowStart": 12.707,
+  "result": {
+    "found": true,
+    "startSeconds": 15.08,
+    "wordsHeard": "Enregistrer le fuseau ne décale pas les heures saisies dans le"
+  },
+  "onset": 27.787,
+  "proposedCut": 27.706646,
+  "note": "Proposal only; recut then independently audit before capture"
+}

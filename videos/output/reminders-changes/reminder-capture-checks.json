@@ -1,0 +1,112 @@
+{
+  "checkedAt": "2026-10-05T18:40:03.362Z",
+  "audiovisualValidation": false,
+  "pushReceptionVerified": false,
+  "perEventToggleAvailableInForm": false,
+  "messageAutoSaved": true,
+  "manualReminder": {
+    "sent": 3,
+    "cancelledWithoutEmail": true,
+    "twoShiftsInOneEmail": true,
+    "mailIds": [
+      "6ZuFxFE1AodNx7RjHkmTeB",
+      "5M1HvoMXOtMvbKg7nlixcP",
+      "48SSkSaKaUzr4TZn36hyAT"
+    ]
+  },
+  "organizationSavedOffThenOn": true,
+  "automaticReminders": {
+    "mailIds": [
+      "6cY7tIP0MTjNx3IuCBFH5Q",
+      "2U2TFZnjoaDCmyXbxvgK9q",
+      "3YwA1wG2QElRshuaVGBA40"
+    ],
+    "noDuplicate": true,
+    "first": {
+      "runAt": "2026-10-05T18:38:22.320Z",
+      "totals": {
+        "reminder_j2": {
+          "eligible": 1,
+          "sent": 1,
+          "failed": 0
+        },
+        "reminder_j1": {
+          "eligible": 1,
+          "sent": 1,
+          "failed": 0
+        },
+        "reminder_dd": {
+          "eligible": 1,
+          "sent": 1,
+          "failed": 0
+        }
+      },
+      "expiredOffers": 0,
+      "waitlist": {
+        "shifts": 3,
+        "offered": 1
+      },
+      "outbox": {
+        "sent": 1,
+        "retried": 0,
+        "failed": 0
+      },
+      "outboxStatus": {
+        "failedLastDay": 0,
+        "oldestPendingMinutes": null,
+        "staleClaims": 0,
+        "healthy": true
+      }
+    },
+    "second": {
+      "runAt": "2026-10-05T18:38:22.555Z",
+      "totals": {
+        "reminder_j2": {
+          "eligible": 0,
+          "sent": 0,
+          "failed": 0
+        },
+        "reminder_j1": {
+          "eligible": 0,
+          "sent": 0,
+          "failed": 0
+        },
+        "reminder_dd": {
+          "eligible": 0,
+          "sent": 0,
+          "failed": 0
+        }
+      },
+      "expiredOffers": 0,
+      "waitlist": {
+        "shifts": 2,
+        "offered": 0
+      },
+      "outbox": {
+        "sent": 0,
+        "retried": 0,
+        "failed": 0
+      },
+      "outboxStatus": {
+        "failedLastDay": 0,
+        "oldestPendingMinutes": null,
+        "staleClaims": 0,
+        "healthy": true
+      }
+    }
+  },
+  "excludedWitnesses": 6,
+  "changed": {
+    "notified": 1,
+    "pendingRequestExcluded": true,
+    "mailId": "06RDGNZnvKCOmdhj7FaqkG"
+  },
+  "cancelled": {
+    "registrations": 2,
+    "includesPendingRequest": true,
+    "mailIds": [
+      "0BlUrlR4zjgWtz6ZGTubQu",
+      "2eidROd6TsiCCXu7EsjNju"
+    ]
+  }
+}

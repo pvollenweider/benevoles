@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:26:36.401Z",
+  "videoSha256": "b4d9efddbd5814fbdceb220cd5cca7cd88facb3e9f33c37784cfdb0ef5043701",
+  "promptSha256": "e15eb223b2f6f9c860b96a5f028d692215150fcc678730a2a290dcdfbff19b8b",
+  "clipSha256": "24fc65c5048e34245278b814c707324c00faba65ebf5a0b694266208a6af7bed",
+  "scene": "invitation",
+  "review": {
+    "heardOpening": "Une invitation nominative est différente d'un lien public",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "L'organisation l'envoie à Zoé",
+        "visibleSeconds": 3.5,
+        "visible": "Sélection de Zoé dans la modale d'invitation puis envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "puis nous ouvrons le vrai email reçu",
+        "visibleSeconds": 6.3,
+        "visible": "Ouverture du courriel adressé à Zoé dans la boîte de test",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.6,
+        "spoken": "Son lien conduit au formulaire avec les informations prévues",
+        "visibleSeconds": 8.8,
+        "visible": "Clic sur le lien du mail et affichage des créneaux puis du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.9,
+        "spoken": "Vérifions le prénom, l'adresse et le créneau avant de continuer",
+        "visibleSeconds": 17,
+        "visible": "Formulaire pré-rempli avec prénom, e-mail et créneau sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction fluide et ton pédagogique régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

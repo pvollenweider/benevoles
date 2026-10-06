@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:08:04.134Z",
+  "videoSha256": "58705cd0468ab625a8108945bd9244cff798768e56f4403e42e7c79dbda4612a",
+  "promptSha256": "918262107d6be9b6815e9cbf088680536d2c4a6e1e80c2d0f7df88eba01c9675",
+  "clipSha256": "ea1fe0259591d43ad6bad521a422b88e4fb65c59f5f140f3e7ad6c3358698604",
+  "scene": "correction",
+  "review": {
+    "heardOpening": "Tu as pointé Léa par erreur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Sélectionnons sa ligne",
+        "visibleSeconds": 2.9,
+        "visible": "Sélection de la case de Léa Exemple",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "annulons la présence",
+        "visibleSeconds": 5.1,
+        "visible": "Clic sur le bouton Annuler la présence",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "La marque disparaît",
+        "visibleSeconds": 6.7,
+        "visible": "Retrait de la mention Présent sur la ligne",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.7,
+        "spoken": "tu peux enregistrer sa présence à nouveau",
+        "visibleSeconds": 16.6,
+        "visible": "Nouvelle sélection de la ligne et clic sur Marquer présent",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

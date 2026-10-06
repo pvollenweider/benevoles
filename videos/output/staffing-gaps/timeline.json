@@ -1,0 +1,53 @@
+{
+  "slug": "staffing-gaps",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-05T18:13:17.661Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 161,
+      "endMs": 24567
+    },
+    {
+      "id": "overview",
+      "startMs": 25019,
+      "endMs": 47643
+    },
+    {
+      "id": "empty",
+      "startMs": 48100,
+      "endMs": 68893
+    },
+    {
+      "id": "needs",
+      "startMs": 69345,
+      "endMs": 94718
+    },
+    {
+      "id": "requests",
+      "startMs": 95172,
+      "endMs": 119835
+    },
+    {
+      "id": "waiting",
+      "startMs": 120289,
+      "endMs": 144544
+    },
+    {
+      "id": "leaders",
+      "startMs": 144997,
+      "endMs": 169350
+    },
+    {
+      "id": "full",
+      "startMs": 169802,
+      "endMs": 194099
+    },
+    {
+      "id": "action",
+      "startMs": 194554,
+      "endMs": 220133
+    }
+  ]
+}

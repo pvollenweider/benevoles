@@ -1,0 +1,42 @@
+{
+  "checkedAt": "2026-10-05T20:34:07.500Z",
+  "scope": "actual local downloads, literal file views and frozen copy check; not full audiovisual or native spreadsheet validation",
+  "members": {
+    "exportedWithSearch": true,
+    "rows": 4,
+    "includesInactive": true
+  },
+  "csvLiteralValuesVisible": true,
+  "fullJournalDespiteFilter": true,
+  "archive": {
+    "sha256": "3189e2dcc5ad13920d6633c0680d1a986d29c696d6e75778c7e4ce30bf0b44ae",
+    "sections": [
+      "event",
+      "shifts",
+      "registrations",
+      "pages",
+      "questions",
+      "sectorLeaders",
+      "milestones",
+      "log",
+      "counts",
+      "organization"
+    ]
+  },
+  "collectionsActuallyOpened": true,
+  "copyRemainsFrozenAfterActualModification": true,
+  "files": [
+    {
+      "file": "members-capture.csv",
+      "sha256": "3d652c9d4a255a993328a1fd7da2e1c1fa2a210dec1292b51ab72c68ac85b65c"
+    },
+    {
+      "file": "activity-capture.csv",
+      "sha256": "ab17e7d3b5bc380c5f890bdbb1906b0962dd099500efc16c85ba244a19d43c1d"
+    },
+    {
+      "file": "event-archive-capture.json",
+      "sha256": "3189e2dcc5ad13920d6633c0680d1a986d29c696d6e75778c7e4ce30bf0b44ae"
+    }
+  ]
+}

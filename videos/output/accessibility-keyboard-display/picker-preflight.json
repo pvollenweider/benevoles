@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-05T23:05:01.175Z",
+  "requiredErrorVisible": true,
+  "focusRestoredByApplication": true,
+  "existingRegistrationWarning": true,
+  "actualOverlapWarning": true,
+  "arrowChangesActiveOption": true,
+  "enterKeepsFocus": true,
+  "escapePreservesValue": true,
+  "listFitsSimulated320": true,
+  "narrowPage": {
+    "viewportWidth": 320,
+    "documentWidth": 381
+  },
+  "wholePageFitsViewport": false,
+  "forcedColorEmulationCaptured": [
+    "light",
+    "dark"
+  ],
+  "actualKeys": [
+    "ArrowDown",
+    "ArrowDown",
+    "Enter",
+    "ArrowDown",
+    "Escape",
+    "ArrowDown"
+  ],
+  "noRegistrationSubmitted": true,
+  "nativeScreenReaderTest": false,
+  "realWindowsTest": false,
+  "synchronizedVideoValidated": false
+}

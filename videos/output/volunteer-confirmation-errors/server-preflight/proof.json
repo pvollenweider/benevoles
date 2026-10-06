@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-05T23:09:33.840Z",
+  "organizationId": "video-errors",
+  "eventId": "video-errors-event",
+  "actualOverlapStatus": 409,
+  "overlapError": "Ce créneau chevauche une inscription existante (Accueil — démonstration).",
+  "firstRequestCommittedStatus": 201,
+  "responseLossSimulatedAfterCommit": true,
+  "retryStatus": 409,
+  "retryError": "Vous êtes déjà inscrit(e) à un de ces créneaux. Le lien pour gérer vos inscriptions a été envoyé à votre adresse email.",
+  "singleRegistrationBeforeAndAfterRetry": true,
+  "actualOrganizerRowCount": 1,
+  "audiovisualValidated": false
+}

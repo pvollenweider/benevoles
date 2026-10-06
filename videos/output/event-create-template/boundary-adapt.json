@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans le planning obtenu, chaque ligne est ordinaire. On peut renommer",
+  "windowStart": 50.668000000000006,
+  "result": {
+    "found": true,
+    "startSeconds": 15.08,
+    "wordsHeard": "Dans le planning obtenu, chaque ligne est ordinaire. On peut renommer"
+  },
+  "onset": 65.748,
+  "proposedCut": 65.668042,
+  "note": "Proposal only; recut then independently audit before capture"
+}

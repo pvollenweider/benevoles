@@ -1,0 +1,12 @@
+{
+  "anchor": "Sur la page personnelle, Jules retrouve son créneau et les actions",
+  "windowStart": 54.257999999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 15.1,
+    "wordsHeard": "Sur la page personnelle, Jules retrouve son créneau et les actions"
+  },
+  "onset": 69.35799999999999,
+  "proposedCut": 69.258229,
+  "note": "Proposal only; recut then independently audit before capture"
+}

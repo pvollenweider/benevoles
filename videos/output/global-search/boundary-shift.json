@@ -1,0 +1,12 @@
+{
+  "anchor": "Avec Buvette, vous retrouvez les créneaux de plusieurs événements. Chaque résultat",
+  "windowStart": 32.549,
+  "result": {
+    "found": true,
+    "startSeconds": 15.16,
+    "wordsHeard": "Avec Buvette, vous retrouvez les créneaux de plusieurs événements. Chaque résultat"
+  },
+  "onset": 47.709,
+  "proposedCut": 47.54875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

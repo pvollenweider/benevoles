@@ -1,0 +1,29 @@
+{
+  "locatedAt": "2026-10-06T01:50:03.049Z",
+  "masterSha256": "3269e1616579a52bd9f75bd6559f83974191b96f5f9cb37b5aa0ff891914aa76",
+  "totalSeconds": 92.84,
+  "cuts": [
+    {
+      "id": "open",
+      "seconds": 14.163542
+    },
+    {
+      "id": "person",
+      "seconds": 27.836479500000003
+    },
+    {
+      "id": "shift",
+      "seconds": 47.54875
+    },
+    {
+      "id": "limits",
+      "seconds": 63.4949375
+    },
+    {
+      "id": "result",
+      "seconds": 80.15810400000001
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

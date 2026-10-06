@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:06:17.166Z",
+  "videoSha256": "def3f175cbcff33d8062687769e261b570c74a82596228d25494827f534a8fb5",
+  "promptSha256": "811df9edc740bc9acc9b276938d0598740fad6a9c7e32b9cbb320765b23c6deb",
+  "clipSha256": "1682cc869d443965f4dc0d0725022461c00f68ffe7c5e1e00dd4baa41fced4d1",
+  "scene": "limits",
+  "review": {
+    "heardOpening": "La suppression définitive d'un événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "les réglages de l'organisation restent réservés aux propriétaires",
+        "visibleSeconds": 0.5,
+        "visible": "Section Organisation précisant que les réglages sont réservés aux propriétaires",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Attribuez les droits selon la responsabilité réelle",
+        "visibleSeconds": 1,
+        "visible": "Liste des Administrateurs affichant les différents rôles attribués",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.2,
+        "spoken": "Changer un rôle s'applique aussitôt",
+        "visibleSeconds": 14.5,
+        "visible": "Écran statique sans démonstration de modification de rôle",
+        "sync": "uncertain",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:14 - Absence de manipulation à l'écran illustrant le changement de rôle mentionné."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier, diction claire et ton pédagogique posé."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

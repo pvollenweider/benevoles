@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans les réglages de l’événement, ajoutons un spectacle au programme. Saisissons",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 13.2,
+    "wordsHeard": "Dans les réglages de l’événement, ajoutons un spectacle au programme. Saisissons"
+  },
+  "onset": 13.2,
+  "proposedCut": 12.6869165,
+  "note": "Proposal only; recut then independently audit before capture"
+}

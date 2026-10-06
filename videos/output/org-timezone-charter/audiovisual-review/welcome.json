@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:19:26.822Z",
+  "videoSha256": "d99f66e1d00de93a9e4f15c6a1ec3d17b02a4396ee86da063360cee3f65319f4",
+  "promptSha256": "ce1fcb1520753a245aa35620cfd72000ec6881eded429753a57a0a83649c5435",
+  "clipSha256": "bfecc1bf41959f27443141a4001a088392251f48d18ecb3a5e70c21a76d3ae69",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Deux réglages communs évitent",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Deux réglages communs évitent beaucoup de malentendus",
+        "visibleSeconds": 0,
+        "visible": "Titre 'Régler le fuseau horaire et la Convention des Bénévoles'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "le fuseau horaire donne la bonne référence",
+        "visibleSeconds": 3,
+        "visible": "Affichage de la page Paramètres de l'organisation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.6,
+        "spoken": "la Convention des Bénévoles explique clairement le cadre",
+        "visibleSeconds": 6.6,
+        "visible": "Haut de la page Paramètres toujours affiché",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

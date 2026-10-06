@@ -1,11 +1,11 @@
 {
   "model": "gemini-3.8-flash",
-  "auditedAt": "2026-10-05T11:14:21.431Z",
+  "auditedAt": "2026-10-05T13:11:35.354Z",
   "note": "ASR evidence, not a full audiovisual or voice-quality validation",
   "segments": [
     {
       "id": "welcome",
-      "audioSha256": "ad43842bb833c0ead013b22e9bcb0871270b545a33bb1fcb5fd5f1d8fa5d08a9",
+      "audioSha256": "172a54d3d96d8f025ebbf73a57bd0590893173a6b8af62d7344aab2ee2c496fe",
       "recognized": "Tes créneaux confirmés peuvent rejoindre l'agenda que tu utilises déjà. Depuis ton lien personnel, tu télécharges un fichier calendrier, puis tu l'importes dans ton agenda. Ici, Camille a trois créneaux confirmés, dont un de nuit, et une inscription en attente. Nous allons voir ce qui est ajouté et comment reprendre un horaire après une modification.",
       "expected": "Tes créneaux confirmés peuvent rejoindre l'agenda que tu utilises déjà. Depuis ton lien personnel, tu télécharges un fichier calendrier, puis tu l'importes dans ton agenda. Ici, Camille a trois créneaux confirmés, dont un de nuit, et une inscription en attente. Nous allons voir ce qui est ajouté et comment reprendre un horaire après une modification.",
       "wordErrorRate": 0,
@@ -13,64 +13,64 @@
     },
     {
       "id": "one",
-      "audioSha256": "5b40044cbf5562da57118e26dcddce1a0eb480571463b3a5fa86332ea0628397",
-      "recognized": "Sous le créneau accueil, Ajouter à mon calendrier télécharge uniquement ce créneau. Le fichier porte l'extension .ics. C'est un format que les applications de calendrier peuvent lire. Ce téléchargement ne crée pas une nouvelle inscription dans Bénévoles. Il prépare simplement un événement à ajouter à ton propre agenda.",
+      "audioSha256": "ce18a7af0f5b807d89a54966998bed4f531ca08f952909a6565ba97ceccc2c5d",
+      "recognized": "Sous le créneau accueil, Ajouter à mon calendrier télécharge uniquement ce créneau. Le fichier porte l'extension .ics. C'est un format que les applications de calendrier peuvent lire. Ce téléchargement ne crée pas une nouvelle inscription dans Bénévolu. Il prépare simplement un événement à ajouter à ton propre agenda.",
       "expected": "Sous le créneau Accueil, Ajouter à mon calendrier télécharge uniquement ce créneau. Le fichier porte l'extension point i c s : c'est un format que les applications de calendrier peuvent lire. Ce téléchargement ne crée pas une nouvelle inscription dans Benevol. Il prépare simplement un événement à ajouter à ton propre agenda.",
       "wordErrorRate": 0.09433962264150944,
       "needsReview": false
     },
     {
       "id": "all",
-      "audioSha256": "db09e361b6ba2cc9d4578a6115dc926060396595829f37f6bdd81140449be77e",
-      "recognized": "Avec plusieurs créneaux confirmés, le bouton Ajouter tout mon planning à mon calendrier permet de récupérer un seul fichier pour l'ensemble. Le planning de Camille contient l'accueil, le rangement de nuit et la buvette du dimanche. L'inscription en liste d'attente n'y figure pas. Elle n'est pas encore confirmée. Les offres et les demandes en cours de validation sont également exclues.",
+      "audioSha256": "86ceea73f068c91bdee7694a12937ba28b3411b1b8a3cfc54e10c7f58cbb6bdd",
+      "recognized": "Avec plusieurs créneaux confirmés, le bouton \"Ajouter tout mon planning à mon calendrier\" permet de récupérer un seul fichier pour l'ensemble. Le planning de Camille contient l'accueil, le rangement de nuit et la buvette du dimanche. L'inscription en liste d'attente n'y figure pas. Elle n'est pas encore confirmée. Les offres et les demandes en cours de validation sont également exclues.",
       "expected": "Avec plusieurs créneaux confirmés, le bouton Ajouter tout mon planning à mon calendrier permet de récupérer un seul fichier pour l'ensemble. Le planning de Camille contient l'Accueil, le Rangement de nuit et la Buvette du dimanche. L'inscription en liste d'attente n'y figure pas : elle n'est pas encore confirmée. Les offres et les demandes en cours de validation sont également exclues.",
       "wordErrorRate": 0,
       "needsReview": false
     },
     {
       "id": "import",
-      "audioSha256": "9b0b9635371c1b6ea38be77e49bfbe41e70ee1a2d0748f35b58716f91e1bf10d",
-      "recognized": "Ouvre le fichier téléchargé dans ton application de calendrier et choisis le calendrier où tu veux l'ajouter. Selon l'application, il peut s'agir d'une fenêtre d'import ou d'une proposition d'ajout. Sur Google Agenda, depuis un ordinateur, l'import se trouve dans les paramètres. Avant de confirmer, vérifie le calendrier choisi et les horaires présentés.",
-      "expected": "Ouvre le fichier téléchargé dans ton application de calendrier et choisis le calendrier où tu veux l'ajouter. Selon l'application, il peut s'agir d'une fenêtre d'import ou d'une proposition d'ajout. Sur Google Agenda depuis un ordinateur, l'import se trouve dans les paramètres. Avant de confirmer, vérifie le calendrier choisi et les horaires présentés.",
+      "audioSha256": "da0eedb1d4a1f349b0877da6518f41bf0a83ba9ba2710513c181341d15521ce5",
+      "recognized": "Le fichier est prêt à être ouvert dans ton application de calendrier. L'import n'est pas réalisé dans cette démonstration, il dépend de ton application. Selon celle-ci, tu verras une fenêtre d'import ou une proposition d'ajout. Sur Google Agenda, depuis un ordinateur, l'import se trouve dans les paramètres. Vérifie le calendrier choisi et les horaires avant de confirmer.",
+      "expected": "Le fichier est prêt à être ouvert dans ton application de calendrier. L'import n'est pas réalisé dans cette démonstration : il dépend de ton application. Selon celle-ci, tu verras une fenêtre d'import ou une proposition d'ajout. Sur Google Agenda depuis un ordinateur, l'import se trouve dans les paramètres. Vérifie le calendrier choisi et les horaires avant de confirmer.",
       "wordErrorRate": 0,
       "needsReview": false
     },
     {
       "id": "details",
-      "audioSha256": "f740d4a4297426f3a4122baf3ed84f0abae0c990cfc8787fe6921278543e2f48",
-      "recognized": "Dans l'événement importé, tu retrouves le nom de la fête et le poste. Le lieu et les consignes pratiques accompagnent le créneau, avec le contact lorsqu'il est renseigné. Un lien permet de revenir à tes inscriptions. Comme le fichier contient ce lien personnel, garde-le pour toi. Ce n'est pas un planning collectif à publier ou à distribuer.",
-      "expected": "Dans l'événement importé, tu retrouves le nom de la fête et le poste. Le lieu et les consignes pratiques accompagnent le créneau, avec le contact lorsqu'il est renseigné. Un lien permet de revenir à tes inscriptions. Comme le fichier contient ce lien personnel, garde-le pour toi : ce n'est pas un planning collectif à publier ou à distribuer.",
-      "wordErrorRate": 0,
+      "audioSha256": "a31aeb0ee3684f85c98966316abe03a2086b53f52e75e4593d45e4965dbb3051",
+      "recognized": "Le fichier contient le nom de la fête et le poste, ainsi que les informations pratiques que nous voyons ici dans Bénévolu : le lieu, les consignes et le contact lorsqu'il est renseigné. Un lien permet de revenir à tes inscriptions. Garde ce fichier pour toi, il contient ton lien personnel, ce n'est pas un planning collectif à publier.",
+      "expected": "Le fichier contient le nom de la fête et le poste, ainsi que les informations pratiques que nous voyons ici dans Benevol : le lieu, les consignes et le contact lorsqu'il est renseigné. Un lien permet de revenir à tes inscriptions. Garde ce fichier pour toi : il contient ton lien personnel, ce n'est pas un planning collectif à publier.",
+      "wordErrorRate": 0.016666666666666666,
       "needsReview": false
     },
     {
       "id": "night",
-      "audioSha256": "c370a0f4eaa053b32a677ebd9b81f4d64b82a12813dd3a1e23e576b7f03695b9",
-      "recognized": "Le rangement commence samedi à 22h et se termine dimanche à 2h. L'agenda doit donc montrer la fin le lendemain, pas une mission qui se termine avant de commencer. Les horaires sont calculés avec le fuseau de l'organisation. Si tu voyages, ton agenda peut les afficher dans le fuseau de ton appareil. Vérifie ce réglage.",
+      "audioSha256": "a42e7088a8d37afacc40a2baaebb09086945e59cfa36f0ebe810c5441e8fced6",
+      "recognized": "Le rangement commence samedi à 22h et se termine dimanche à 2h. L'agenda doit donc montrer la fin le lendemain. Pas une mission qui se termine avant de commencer. Les horaires sont calculés avec le fuseau de l'organisation. Si tu voyages, ton agenda peut les afficher dans le fuseau de ton appareil. Vérifie ce réglage.",
       "expected": "Le Rangement commence samedi à vingt-deux heures et se termine dimanche à deux heures. L'agenda doit donc montrer la fin le lendemain, pas une mission qui se termine avant de commencer. Les horaires sont calculés avec le fuseau de l'organisation. Si tu voyages, ton agenda peut les afficher dans le fuseau de ton appareil : vérifie ce réglage.",
       "wordErrorRate": 0.08333333333333333,
       "needsReview": false
     },
     {
       "id": "change",
-      "audioSha256": "a7ca6b08c3d5d3f743eb715559833f618095cd4db87d587113e7a33b6d975093",
-      "recognized": "Ce fichier n'est pas un abonnement au planning. L'organisateur décale maintenant le début du rangement à 23h. L'ancien fichier conserve 22h. Il ne se met pas à jour tout seul. Si ton créneau change, l'organisation te prévient par e-mail. Reviens sur ton lien personnel pour voir les informations actuelles et télécharger la nouvelle version.",
+      "audioSha256": "368e8fd964ed9dea080250d492bb419ba5a1595fe3a0c064ce9398c5a6c046e7",
+      "recognized": "Ce fichier n'est pas un abonnement au planning. L'organisateur décale maintenant le début du rangement à 23h. L'ancien fichier conserve 22h, il ne se met pas à jour tout seul. Si ton créneau change, l'organisation te prévient par e-mail. Reviens sur ton lien personnel pour voir les informations actuelles et télécharger la nouvelle version.",
       "expected": "Ce fichier n'est pas un abonnement au planning. L'organisateur décale maintenant le début du Rangement à vingt-trois heures. L'ancien fichier conserve vingt-deux heures : il ne se met pas à jour tout seul. Si ton créneau change, l'organisation te prévient par email. Reviens sur ton lien personnel pour voir les informations actuelles et télécharger la nouvelle version.",
       "wordErrorRate": 0.0967741935483871,
       "needsReview": false
     },
     {
       "id": "reimport",
-      "audioSha256": "e2a7a3390d7b222dc477de5b584f33afdf8d0247a0a7aa285c9950577175c39e",
-      "recognized": "Télécharge à nouveau le planning, puis importe cette nouvelle version. L'identifiant du créneau reste le même, ce qui permet à la plupart des calendriers de remplacer l'événement plutôt que de le dupliquer. Le résultat dépend de ton application et de la méthode d'import. Vérifie l'horaire et l'absence de doublons avant de te fier à ton agenda.",
-      "expected": "Télécharge à nouveau le planning, puis importe cette nouvelle version. L'identifiant du créneau reste le même, ce qui permet à la plupart des calendriers de remplacer l'événement plutôt que de le dupliquer. Le résultat dépend de ton application et de la méthode d'import : vérifie l'horaire et l'absence de doublon avant de te fier à ton agenda.",
-      "wordErrorRate": 0.01639344262295082,
+      "audioSha256": "5470c3b2ae9173d4f5be4de946581e13f0d3ff2c343edb082d69b9f27f932666",
+      "recognized": "Télécharge à nouveau le planning pour récupérer l'horaire actuel. Le fichier conserve le même identifiant pour chaque inscription. Lorsque tu l'importes dans ton agenda, le remplacement ou l'ajout dépend de ton application et de la méthode utilisée. Cette étape n'est pas filmée ici. Vérifie le nouvel horaire et l'absence de doublons dans ton agenda avant de t'y fier.",
+      "expected": "Télécharge à nouveau le planning pour récupérer l'horaire actuel. Le fichier conserve le même identifiant pour chaque inscription. Lorsque tu l'importes dans ton agenda, le remplacement ou l'ajout dépend de ton application et de la méthode utilisée. Cette étape n'est pas filmée ici : vérifie le nouvel horaire et l'absence de doublon dans ton agenda avant de t'y fier.",
+      "wordErrorRate": 0.015625,
       "needsReview": false
     },
     {
       "id": "result",
-      "audioSha256": "af5b75847f19bd47d8fd64a5c249cc32799d8c778e08d3c7b6a42e1f15940ffa",
-      "recognized": "Ton agenda aide à te rappeler les horaires, mais la page personnelle reste la référence pour tes inscriptions. Elle affiche aussi l'attente, les offres et les demandes qui n'ont pas leur place dans le fichier des créneaux confirmés. Après une modification, consulte cette page, récupère le nouveau fichier et vérifie le résultat dans ton calendrier.",
+      "audioSha256": "d33d13995f66311b32fafdbf32f2e9f1fb81be9d3cc9f47e5ec9ab5151ff9260",
+      "recognized": "Ton agenda aide à te rappeler les horaires, mais la page personnelle reste la référence pour tes inscriptions. Elle affiche aussi l'attente, les offres et les demandes qui n'ont pas leur place dans le fichier des créneaux confirmés. Après une modification, consulte cette page. Récupère le nouveau fichier et vérifie le résultat dans ton calendrier.",
       "expected": "Ton agenda aide à te rappeler les horaires, mais la page personnelle reste la référence pour tes inscriptions. Elle affiche aussi l'attente, les offres et les demandes, qui n'ont pas leur place dans le fichier des créneaux confirmés. Après une modification, consulte cette page, récupère le nouveau fichier et vérifie le résultat dans ton calendrier.",
       "wordErrorRate": 0,
       "needsReview": false

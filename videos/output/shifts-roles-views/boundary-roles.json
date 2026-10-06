@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans Gérer les postes, l’ordre choisi devient l’ordre du planning. Les",
+  "windowStart": 29.939999999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 10.98,
+    "wordsHeard": "Dans Gérer les postes, l’ordre choisi devient l’ordre du planning. Les"
+  },
+  "onset": 40.92,
+  "proposedCut": 40.420312499999994,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -34,8 +34,8 @@
     },
     {
       "id": "timezone",
-      "transcript": "Dans Paramètres, choisis le fuseau du lieu où se déroulent habituellement les événements. Europe Zurich applique automatiquement l’heure d’hiver et l’heure d’été. Il sert aux rappels, aux offres de liste d’attente, au journal et aux documents produits par le serveur.",
-      "fallbackDurationMs": 20000
+      "transcript": "Dans Paramètres, choisissez le fuseau du lieu où se déroulent vos événements. Europe Zurich tient compte de l’heure d’hiver et de l’heure d’été. Ce réglage donne la bonne référence aux rappels, aux délais des offres de liste d’attente et aux dates affichées dans le journal et les documents.",
+      "fallbackDurationMs": 24000
     },
     {
       "id": "timezone-result",
@@ -44,22 +44,22 @@
     },
     {
       "id": "charter",
-      "transcript": "La Convention des Bénévoles décrit maintenant les engagements concrets : arriver à l’heure, prévenir en cas d’empêchement et suivre les consignes de sécurité. Enregistre un texte compréhensible et adapté à l’association. Le bouton de rétablissement permet de revenir au texte proposé par défaut.",
-      "fallbackDurationMs": 22000
+      "transcript": "La Convention des Bénévoles présente le cadre de l’engagement. Le réglage Assurance RC fournie par l’organisation change la clause correspondante et remplit de nouveau le texte proposé : choisissez-le selon la situation réelle de votre association. Ici, nous conservons le texte complet, notamment la consigne de prévenir dès que possible. Réinitialiser la convention par défaut remplit le champ, mais il faut ensuite cliquer sur Enregistrer.",
+      "fallbackDurationMs": 38000
     },
     {
       "id": "public-setup",
-      "transcript": "Vérifions le résultat comme le ferait un bénévole. Ouvre l’événement public, sélectionne un créneau, puis continue vers le formulaire. Cette étape ne crée encore aucune inscription : elle permet simplement d’atteindre les informations et les consentements avant la confirmation.",
+      "transcript": "Vérifions le résultat côté bénévole. Ouvrez l’événement public, sélectionnez un créneau, puis cliquez sur Continuer. Vous arrivez au formulaire, avec les informations demandées et les consentements, avant toute confirmation d’inscription.",
       "fallbackDurationMs": 19000
     },
     {
       "id": "public-result",
-      "transcript": "La convention apparaît avant la confirmation. Ouvre-la pour afficher le texte qui vient d’être enregistré. Le bénévole peut le lire dans son intégralité, puis choisir J’ai lu et j’accepte. Ce n’est donc pas une note interne : le destinataire voit réellement le cadre auquel il consent.",
-      "fallbackDurationMs": 21000
+      "transcript": "Ouvrez la convention depuis le formulaire. Le texte enregistré est présenté au bénévole : faisons-le défiler pour lire aussi les engagements de l’organisation et la clause d’assurance. Le bouton J’ai lu et j’accepte ferme la fenêtre et coche l’acceptation dans le formulaire.",
+      "fallbackDurationMs": 23000
     },
     {
       "id": "attention",
-      "transcript": "L’acceptation revient dans le formulaire et reste cochée. Une modification ultérieure de la convention s’appliquera aux nouvelles inscriptions, mais n’enverra pas d’information urgente aux personnes déjà inscrites. Avant de changer le fuseau d’une organisation active, vérifie aussi les prochains rappels et les créneaux de nuit.",
+      "transcript": "Quand le bénévole confirme son inscription, la version exacte de la convention acceptée et la date sont conservées. Une modification de votre texte concerne les prochaines inscriptions ; elle n’envoie pas automatiquement un message aux personnes déjà inscrites. Pour une information urgente, utilisez les communications de l’événement.",
       "fallbackDurationMs": 23000
     },
     {

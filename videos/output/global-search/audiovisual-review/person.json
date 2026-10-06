@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:29:47.269Z",
+  "videoSha256": "258ab12d15939f6b8d477f5d8a71162bf2e5bf54555dca8ead27b706b9391071",
+  "promptSha256": "9e3c8c4daa40d5ebdf8299d49e4e030fbca320451e2b403ec3e9bc415436d770",
+  "clipSha256": "e27e371b6a52eeec1c7393036669ea8d3736a6e3de29c71fefccb68174d86528",
+  "scene": "person",
+  "review": {
+    "heardOpening": "Cherchons Léa Morel",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Cherchons Léa Morel.",
+        "visibleSeconds": 1,
+        "visible": "Saisie de « Léa Morel » dans la barre de recherche en haut à droite.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Les résultats distinguent sa fiche de membre et ses inscriptions.",
+        "visibleSeconds": 3,
+        "visible": "Page de recherche avec les sections Bénévoles et Inscriptions.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Ouvrons d’abord sa fiche,",
+        "visibleSeconds": 6.5,
+        "visible": "Clic sur Léa Morel et ouverture de la vue Membres filtrée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "puis une inscription : la liste de l’événement est déjà filtrée sur Léa.",
+        "visibleSeconds": 11.5,
+        "visible": "Retour aux résultats, clic sur une inscription et affichage de la liste filtrée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "Le badge Liste d’attente distingue une demande de place d’une inscription confirmée.",
+        "visibleSeconds": 13,
+        "visible": "Badge orange « Liste d'attente » visible dans la colonne Statut.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, synchronisation globale satisfaisante."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

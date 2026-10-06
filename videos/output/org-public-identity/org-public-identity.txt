@@ -2,12 +2,16 @@ Configurer l’identité publique de l’organisation
 
 L’identité de l’organisation donne un point d’entrée commun à tous ses événements. Elle sert à présenter clairement l’association, à fournir une adresse facile à partager et à éviter que les bénévoles confondent un nom technique avec le titre qu’ils voient.
 
-Dans Paramètres, le nom de l’organisation identifie le tenant dans l’administration. Le titre de la page publique peut être plus accueillant. Remplaçons-le par Les bénévoles des Fêtes de Montvert, puis enregistrons. Ce changement touche la page publique de l’organisation, pas le titre de chaque événement.
+Dans Paramètres, le nom de l’organisation apparaît dans l’administration, les emails et au-dessus du titre public. Le titre de la page publique peut être plus accueillant. Remplaçons-le par Les bénévoles des Fêtes de Montvert, puis enregistrons. Le message Titre enregistré confirme la modification : les titres des événements ne changent pas.
 
-L’identifiant public, aussi appelé slug, forme une adresse comme fetes-de-montvert point benevol point app. Il doit rester court et reconnaissable. Le changer peut rendre les anciens favoris ou QR codes obsolètes : choisis-le avant de diffuser largement les liens, et ne le modifie pas simplement pour corriger une majuscule dans le titre.
+Ajoutons le logo de l’association. Choisissez une image dans les formats indiqués, vérifiez son aperçu, puis cliquez sur Enregistrer le logo. L’image enregistrée apparaît dans les pages publiques, les emails et les documents. Le nom de l’association reste écrit à côté : le logo ne remplace pas ce repère.
 
-Ouvrons maintenant la page publique. Le nouveau titre apparaît au-dessus des événements disponibles. Seuls les événements publiés et répertoriés sont affichés ici. Un événement non répertorié reste accessible avec son lien direct, mais n’est pas annoncé dans cette liste.
+L’identifiant public, ou slug, sert à former l’adresse de votre association sur benevol point app. Ici, les adresses appartiennent à notre environnement de démonstration. Si vous changez l’identifiant alors que des événements sont publiés, une confirmation est demandée. Les anciens identifiants continuent de rediriger vers l’actuel tant que vous les conservez. C’est leur suppression qui casse les anciens liens et QR codes. Ici, gardons l’adresse actuelle.
+
+Ouvrons la page publique. Le nouveau titre et le logo apparaissent au-dessus des deux événements publiés et répertoriés. La rencontre des organisateurs n’est pas dans cette liste : elle est publiée, mais non répertoriée. Ouvrons son lien direct pour vérifier qu’elle reste accessible aux personnes qui le reçoivent. Non répertorié ne signifie pas protégé par un mot de passe.
 
 En ouvrant la Fête du village, on retrouve l’identité de l’organisation avec les informations propres à cet événement. Le nom de l’événement, son lieu et son planning restent indépendants. On peut donc réutiliser la même page d’organisation pour plusieurs manifestations au fil de l’année.
 
-Le résultat est une identité cohérente : un nom interne pour l’équipe, un titre public lisible et une adresse stable à communiquer. Pour corriger le texte visible, modifie le titre public. Pour déplacer réellement l’adresse, change le slug seulement après avoir mesuré l’impact sur les liens déjà distribués.
+Pour retirer le logo, revenez dans Paramètres et choisissez Retirer le logo. La confirmation vous laisse encore annuler. Après validation, l’image disparaît des pages et des prochains documents, mais le nom et le titre restent affichés. Cela ne retire pas une copie déjà téléchargée ou un ancien email.
+
+Vous avez une identité cohérente : le nom de l’association, un titre public accueillant, un logo facultatif et une adresse identifiable. Ces réglages sont réservés au propriétaire. Pour corriger un texte visible, modifiez son titre plutôt que l’adresse, et conservez les anciens identifiants si vous avez déjà diffusé leurs liens.

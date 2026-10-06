@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-10-05T13:58:50.558Z",
+  "individual": {
+    "invitedNew": 1,
+    "skippedExisting": 0,
+    "emailsSent": 1,
+    "emailsFailed": 0,
+    "membersWithoutEmail": 0
+  },
+  "group": {
+    "invitedNew": 2,
+    "skippedExisting": 0,
+    "emailsSent": 2,
+    "emailsFailed": 0,
+    "membersWithoutEmail": 0
+  },
+  "noEmail": {
+    "invitedNew": 1,
+    "skippedExisting": 0,
+    "emailsSent": 0,
+    "emailsFailed": 0,
+    "membersWithoutEmail": 1
+  }
+}

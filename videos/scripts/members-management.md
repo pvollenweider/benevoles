@@ -28,4 +28,4 @@ Scénario `members-management`, après le seed de démonstration : 60 membres fi
 - Les champs Notes n'existent que dans l'édition actuelle : ne pas chercher à les remplir dans le formulaire de création.
 - Audit des paroles, capture et visionnage intégral requis ; aucun résultat n'est déclaré validé sur la seule présence d'un script.
 
-État : scénario et seed préparés ; narration, capture et vérifications restent à produire.
+État : narration continue Puck et dix paragraphes contrôlés indépendamment ; capture, assemblage et planche visuelle contrôlés. Les données et manipulations ont été vérifiées par le recorder. Le visionnage audiovisuel intégral reste à effectuer avant livraison.

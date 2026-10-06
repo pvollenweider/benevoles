@@ -1,0 +1,12 @@
+{
+  "anchor": "Le badge choisi est prêt pour l'accueil. Il n'a ni photo,",
+  "windowStart": 173.921,
+  "result": {
+    "found": true,
+    "startSeconds": 12.9,
+    "wordsHeard": "Le badge choisi est prêt pour l'accueil. Il n'a ni photo"
+  },
+  "onset": 186.821,
+  "proposedCut": 186.77016700000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

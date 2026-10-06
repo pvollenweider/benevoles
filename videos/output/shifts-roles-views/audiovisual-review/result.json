@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:19:50.412Z",
+  "videoSha256": "0f491cde965c013c06c43265bcde6fea381c806c088a2e0a95c2b91fa6c35bdf",
+  "promptSha256": "79cf53c74bb3bd7967a7ac618d962a104ba83a566f483a86993352e7c49befa2",
+  "clipSha256": "74efc47f4fe762f70e79c356aa4fdfc56d73f380066f19abcd635bbc53ad6fff",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Utilisez la Frise pour construire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Utilisez la Frise pour construire et équilibrer la journée",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la vue Frise",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "puis la Liste pour contrôler le détail",
+        "visibleSeconds": 5.5,
+        "visible": "Basculement vers la vue Liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "le planning reste compréhensible même lorsqu’il couvre plusieurs jours",
+        "visibleSeconds": 10.5,
+        "visible": "Retour à la vue Frise",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée et claire, ton pédagogique régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

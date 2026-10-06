@@ -1,0 +1,225 @@
+{
+  "video": "reminders-changes",
+  "source": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/capture.webm",
+  "capturePurpose": "rehearsal",
+  "extractedAt": "2026-10-05T16:22:43.563Z",
+  "note": "Four raw rehearsal frames per scene, including chapter start; no narration or audiovisual validation",
+  "frames": [
+    {
+      "scene": "welcome",
+      "fraction": 0.017142367360932546,
+      "seconds": 0.802,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/welcome-2.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.25,
+      "seconds": 8.95225,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/welcome-25.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.6,
+      "seconds": 21.202599999999997,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/welcome-60.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.85,
+      "seconds": 29.952849999999998,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/welcome-85.png"
+    },
+    {
+      "scene": "manual-message",
+      "fraction": 0.014284693950432113,
+      "seconds": 36.256,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/manual-message-1.png"
+    },
+    {
+      "scene": "manual-message",
+      "fraction": 0.25,
+      "seconds": 46.15675,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/manual-message-25.png"
+    },
+    {
+      "scene": "manual-message",
+      "fraction": 0.6,
+      "seconds": 60.857800000000005,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/manual-message-60.png"
+    },
+    {
+      "scene": "manual-message",
+      "fraction": 0.85,
+      "seconds": 71.35855,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/manual-message-85.png"
+    },
+    {
+      "scene": "manual-send",
+      "fraction": 0.012765685836471564,
+      "seconds": 78.713,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/manual-send-1.png"
+    },
+    {
+      "scene": "manual-send",
+      "fraction": 0.25,
+      "seconds": 89.86325,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/manual-send-25.png"
+    },
+    {
+      "scene": "manual-send",
+      "fraction": 0.6,
+      "seconds": 106.31360000000001,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/manual-send-60.png"
+    },
+    {
+      "scene": "manual-send",
+      "fraction": 0.85,
+      "seconds": 118.06385,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/manual-send-85.png"
+    },
+    {
+      "scene": "organization",
+      "fraction": 0.014285374157758149,
+      "seconds": 126.182,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/organization-1.png"
+    },
+    {
+      "scene": "organization",
+      "fraction": 0.25,
+      "seconds": 136.08225,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/organization-25.png"
+    },
+    {
+      "scene": "organization",
+      "fraction": 0.6,
+      "seconds": 150.7826,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/organization-60.png"
+    },
+    {
+      "scene": "organization",
+      "fraction": 0.85,
+      "seconds": 161.28285,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/organization-85.png"
+    },
+    {
+      "scene": "event-switch",
+      "fraction": 0.014999625009374766,
+      "seconds": 168.634,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/event-switch-1.png"
+    },
+    {
+      "scene": "event-switch",
+      "fraction": 0.25,
+      "seconds": 178.03425,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/event-switch-25.png"
+    },
+    {
+      "scene": "event-switch",
+      "fraction": 0.6,
+      "seconds": 192.0346,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/event-switch-60.png"
+    },
+    {
+      "scene": "event-switch",
+      "fraction": 0.85,
+      "seconds": 202.03485,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/event-switch-85.png"
+    },
+    {
+      "scene": "timing",
+      "fraction": 0.01276595744680851,
+      "seconds": 209.088,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/timing-1.png"
+    },
+    {
+      "scene": "timing",
+      "fraction": 0.25,
+      "seconds": 220.238,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/timing-25.png"
+    },
+    {
+      "scene": "timing",
+      "fraction": 0.6,
+      "seconds": 236.688,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/timing-60.png"
+    },
+    {
+      "scene": "timing",
+      "fraction": 0.85,
+      "seconds": 248.438,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/timing-85.png"
+    },
+    {
+      "scene": "exclusions",
+      "fraction": 0.014285374157758149,
+      "seconds": 256.54,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/exclusions-1.png"
+    },
+    {
+      "scene": "exclusions",
+      "fraction": 0.25,
+      "seconds": 266.44025,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/exclusions-25.png"
+    },
+    {
+      "scene": "exclusions",
+      "fraction": 0.6,
+      "seconds": 281.14059999999995,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/exclusions-60.png"
+    },
+    {
+      "scene": "exclusions",
+      "fraction": 0.85,
+      "seconds": 291.64085,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/exclusions-85.png"
+    },
+    {
+      "scene": "changed",
+      "fraction": 0.0125,
+      "seconds": 298.993,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/changed-1.png"
+    },
+    {
+      "scene": "changed",
+      "fraction": 0.25,
+      "seconds": 310.393,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/changed-25.png"
+    },
+    {
+      "scene": "changed",
+      "fraction": 0.6,
+      "seconds": 327.193,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/changed-60.png"
+    },
+    {
+      "scene": "changed",
+      "fraction": 0.85,
+      "seconds": 339.193,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/changed-85.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.0125,
+      "seconds": 347.446,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/cancelled-1.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.25,
+      "seconds": 358.846,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/cancelled-25.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.6,
+      "seconds": 375.646,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/cancelled-60.png"
+    },
+    {
+      "scene": "cancelled",
+      "fraction": 0.85,
+      "seconds": 387.646,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/reminders-changes/rehearsal-review-frames/cancelled-85.png"
+    }
+  ]
+}

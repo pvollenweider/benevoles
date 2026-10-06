@@ -1,0 +1,72 @@
+{
+  "id": "LAST_MINUTE_CHANGES",
+  "slug": "last-minute-changes",
+  "validatedAt": "2026-10-05T22:29:48.713Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 338720,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 30666,
+      "audioMs": 30658,
+      "driftMs": 8
+    },
+    {
+      "id": "withdrawal",
+      "visualMs": 31285,
+      "audioMs": 31282,
+      "driftMs": 3
+    },
+    {
+      "id": "offer",
+      "visualMs": 26531,
+      "audioMs": 26528,
+      "driftMs": 3
+    },
+    {
+      "id": "coverage",
+      "visualMs": 30051,
+      "audioMs": 30049,
+      "driftMs": 2
+    },
+    {
+      "id": "availability",
+      "visualMs": 29454,
+      "audioMs": 29452,
+      "driftMs": 2
+    },
+    {
+      "id": "message",
+      "visualMs": 60897,
+      "audioMs": 60895,
+      "driftMs": 2
+    },
+    {
+      "id": "schedule",
+      "visualMs": 30486,
+      "audioMs": 30484,
+      "driftMs": 2
+    },
+    {
+      "id": "cancel",
+      "visualMs": 33276,
+      "audioMs": 33274,
+      "driftMs": 2
+    },
+    {
+      "id": "journal",
+      "visualMs": 29181,
+      "audioMs": 29180,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 28040,
+      "audioMs": 28038,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}

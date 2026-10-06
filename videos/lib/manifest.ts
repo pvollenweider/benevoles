@@ -30,6 +30,9 @@ export type VideoManifest = {
   voice: string
   voiceStyle: string
   continuousNarration?: boolean
+  /** Disable inline pause tags if a voice reads a stage direction aloud. */
+  continuousPauseTags?: boolean
+  chapterTitles?: Record<string, string>
   viewport: { width: number; height: number; deviceScaleFactor: number }
   segments: VideoSegment[]
   viewer?: ManifestViewerContent
@@ -41,6 +44,8 @@ export type VideoCatalogEntry = {
   category: string
   tags: string[]
   published: boolean
+  /** False while a video's real UI recorder and fixture are still being prepared. */
+  captureReady?: boolean
   seedScenario?: string
 }
 
@@ -58,9 +63,12 @@ export type AudioMetadata = {
 
 export type Timeline = {
   slug: string
+  capturePurpose?: "rehearsal" | "narration-timed"
   recordedAt: string
   video: string
   cues: { id: string; startMs: number; endMs: number }[]
+  portraitFrames?: { startMs: number; endMs: number; width: number; height: number }[]
+  detailFrames?: { startMs: number; endMs: number; x: number; y: number; width: number; height: number }[]
 }
 
 export const videosRoot = path.resolve(process.cwd(), "videos")
@@ -102,6 +110,9 @@ export async function loadManifest(reference: string): Promise<VideoManifest> {
     if (!segment.transcript.trim()) throw new Error(`${file}: ${segment.id} has no transcript`)
     if (segment.fallbackDurationMs < 1_000) throw new Error(`${file}: ${segment.id} fallbackDurationMs is too short`)
     ids.add(segment.id)
+  }
+  for (const [id, title] of Object.entries(manifest.chapterTitles ?? {})) {
+    if (!ids.has(id) || !title.trim()) throw new Error(`${file}: invalid chapter title for ${id}`)
   }
   return manifest
 }

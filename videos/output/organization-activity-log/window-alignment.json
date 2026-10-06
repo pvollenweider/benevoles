@@ -1,0 +1,41 @@
+{
+  "locatedAt": "2026-10-05T18:53:14.014Z",
+  "masterSha256": "0620f091f758394351516aab4563fc1de5f5bb1fb291448fbe95b9198cbb4988",
+  "totalSeconds": 262.84,
+  "cuts": [
+    {
+      "id": "read",
+      "seconds": 29.925896
+    },
+    {
+      "id": "members",
+      "seconds": 56.6657085
+    },
+    {
+      "id": "team",
+      "seconds": 83.0016875
+    },
+    {
+      "id": "filters",
+      "seconds": 109.379958
+    },
+    {
+      "id": "pages",
+      "seconds": 137.4556045
+    },
+    {
+      "id": "export",
+      "seconds": 167.168167
+    },
+    {
+      "id": "limits",
+      "seconds": 203.7108955
+    },
+    {
+      "id": "result",
+      "seconds": 231.22302100000002
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

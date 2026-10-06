@@ -1,0 +1,12 @@
+{
+  "anchor": "Nous choisissons maintenant le fichier Excel corrigé et relançons l'analyse. Les",
+  "windowStart": 106.74,
+  "result": {
+    "found": true,
+    "startSeconds": 18.14,
+    "wordsHeard": "Nous choisissons maintenant le fichier Excel corrigé et relançons l'analyse. Les"
+  },
+  "onset": 124.88,
+  "proposedCut": 124.461979,
+  "note": "Proposal only; recut then independently audit before capture"
+}

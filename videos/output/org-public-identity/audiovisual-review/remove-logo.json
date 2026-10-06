@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:39:17.235Z",
+  "videoSha256": "37f0ffaad0a3d4219ff316210f773fa8ed94aef6541a60f1002c969b42adf7e0",
+  "promptSha256": "a541aa2c76182e00724667c8b19e92bc7f382722301378af59467e4503ec66e3",
+  "clipSha256": "5f4a945f9f7f47459abb2733ec2fbaab675df348c94ea827370749b72b4fdced",
+  "scene": "remove-logo",
+  "review": {
+    "heardOpening": "Pour retirer le logo",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "choisissez Retirer le logo",
+        "visibleSeconds": 5.2,
+        "visible": "Clic sur le bouton Retirer le logo",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "La confirmation vous laisse encore annuler",
+        "visibleSeconds": 6.2,
+        "visible": "Fenêtre de confirmation affichant l'option Annuler",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "le nom et le titre restent affichés",
+        "visibleSeconds": 14,
+        "visible": "Affichage de la page publique sans logo avec titre et nom maintenus",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton neutre et régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

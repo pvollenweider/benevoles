@@ -1,0 +1,12 @@
+{
+  "anchor": "L’identifiant public, ou slug, sert à former l’adresse de votre association",
+  "windowStart": 42.295,
+  "result": {
+    "found": true,
+    "startSeconds": 8.78,
+    "wordsHeard": "L’identifiant public ou slug sert à former l’adresse de votre association"
+  },
+  "onset": 51.075,
+  "proposedCut": 50.952417,
+  "note": "Proposal only; recut then independently audit before capture"
+}

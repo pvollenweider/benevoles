@@ -1,0 +1,52 @@
+{
+  "slug": "members-import",
+  "recordedAt": "2026-10-05T13:36:08.699Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 20296
+    },
+    {
+      "id": "file",
+      "startMs": 20748,
+      "endMs": 46958
+    },
+    {
+      "id": "preview",
+      "startMs": 47410,
+      "endMs": 73630
+    },
+    {
+      "id": "errors",
+      "startMs": 74082,
+      "endMs": 99073
+    },
+    {
+      "id": "update",
+      "startMs": 99524,
+      "endMs": 126277
+    },
+    {
+      "id": "corrected",
+      "startMs": 126729,
+      "endMs": 153374
+    },
+    {
+      "id": "confirm",
+      "startMs": 153827,
+      "endMs": 178799
+    },
+    {
+      "id": "repeat",
+      "startMs": 179252,
+      "endMs": 199555
+    },
+    {
+      "id": "result",
+      "startMs": 200010,
+      "endMs": 221040
+    }
+  ]
+}

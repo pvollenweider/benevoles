@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T20:51:17.414Z",
+  "videoSha256": "3e2b054ce139ced7f32f4059559c36ac89bc83cb334bbe34e341997d8f994942",
+  "promptSha256": "01490ac0cba104874dc1662aa6b3b921979306768febeb4d9eef0d6cbaf0e0c3",
+  "clipSha256": "899124fd0de93f79c807dcbc8f8a498ff0ec874f87746a449f05a9387e78fc85",
+  "scene": "offer",
+  "review": {
+    "heardOpening": "Une place proposée n'est pas encore une personne confirmée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Une place proposée n'est pas encore une personne confirmée",
+        "visibleSeconds": 1.8,
+        "visible": "Page 'Mes inscriptions' affichant la mention 'Une place t'est proposée'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "Ouvrons son lien et acceptons la place dans cet exemple",
+        "visibleSeconds": 7,
+        "visible": "Écran de confirmation avec le message 'Place confirmée !'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.6,
+        "spoken": "Puis vérifions le statut dans les inscriptions",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage de la liste des inscriptions de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire, posée et bien articulée tout au long de l'extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

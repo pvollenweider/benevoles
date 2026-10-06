@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:07:55.481Z",
+  "videoSha256": "58705cd0468ab625a8108945bd9244cff798768e56f4403e42e7c79dbda4612a",
+  "promptSha256": "042b3ca0c8b6c5f9771679140eff23008fa8d20fc866997440182f49ea963868",
+  "clipSha256": "1090039b23694a1f8f31d4ff9f968dd3302e6374ecd03ecc6981d88d299daa1b",
+  "scene": "group",
+  "review": {
+    "heardOpening": "Nicolas et Léa arrivent ensemble",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "Sélectionnons leurs deux lignes",
+        "visibleSeconds": 4.5,
+        "visible": "Sélection des cases à cocher pour Léa et Nicolas",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "cliquer sur Marquer présents",
+        "visibleSeconds": 7.2,
+        "visible": "Clic sur le bouton Marquer présents (2)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Voici les deux marques",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage de la mention Présent pour les deux bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée et claire, synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

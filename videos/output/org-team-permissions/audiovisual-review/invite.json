@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:05:32.938Z",
+  "videoSha256": "def3f175cbcff33d8062687769e261b570c74a82596228d25494827f534a8fb5",
+  "promptSha256": "7f3059c5cbc3e37ca9c8334d1c9e4fa22d9e6e87fefdb1bed0977bb62d0d21b9",
+  "clipSha256": "22229edbdaf4446b95042c21b70a3b9c81acb9b957d5370a38579fb158ec7b3f",
+  "scene": "invite",
+  "review": {
+    "heardOpening": "Pour inviter Léa, ouvrez le formulaire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "ouvrez le formulaire",
+        "visibleSeconds": 2.5,
+        "visible": "Clic sur le bouton + Inviter et ouverture du formulaire d'invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "saisissez son nom et son adresse",
+        "visibleSeconds": 4,
+        "visible": "Saisie du nom Léa Martin puis de l'adresse email dans les champs dédiés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Prenons Organisateur",
+        "visibleSeconds": 7.8,
+        "visible": "Option Organisateur cochée pour le rôle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Cliquez sur Envoyer l'invitation",
+        "visibleSeconds": 14,
+        "visible": "Clic sur le bouton Envoyer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "le message confirme son adresse",
+        "visibleSeconds": 15,
+        "visible": "Bannière de confirmation affichant l'envoi de l'invitation à l'adresse renseignée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et synchronisation fluide avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

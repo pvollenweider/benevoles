@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:53:26.018Z",
+  "videoSha256": "0417e88ec9fa5119cc7d3d49c94fd8060a475f3f66d07f782cbbe4950dd14d66",
+  "promptSha256": "80f43c0df770fa577c8cabbdceb5d0867a0c81c47ccd72fd60a289e4433b271f",
+  "clipSha256": "56c1780cf3f2c2a5b58f32972ca3c7eff090937eab7da2b649db59caef7756e8",
+  "scene": "all",
+  "review": {
+    "heardOpening": "Gardons tous les postes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.6,
+        "spoken": "puis ouvrons les badges",
+        "visibleSeconds": 3.4,
+        "visible": "Clic sur le lien 'Ouvrir les badges' et affichage des planches de badges",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Léa est sur plusieurs horaires : elle n'a qu'un badge",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage du badge unique au nom de Léa regroupant plusieurs créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Regardons la première feuille puis la suivante",
+        "visibleSeconds": 14.1,
+        "visible": "Défilement vertical vers le bas révélant la suite des badges",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, débit stable et bonne clarté d'ensemble."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

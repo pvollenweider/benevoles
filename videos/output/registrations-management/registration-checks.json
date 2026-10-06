@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-10-05T14:27:16.293Z",
+  "initialLiveCount": 80,
+  "filteredAfternoonRows": 6,
+  "requestDecisionCancelled": true,
+  "duplicateRejected": true,
+  "overlapWarningObservedWithoutSubmitting": true,
+  "manualAdditionReusesMember": true,
+  "selectionSurvivesFiltering": true,
+  "resend": {
+    "done": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "singleEmailForTwoRows": true,
+  "leaderNominationAndBadge": true,
+  "undoWithoutDatabaseOrEmailEffect": true,
+  "removal": {
+    "done": 1,
+    "cancelledIds": [
+      "cmuvcc5hv007gmna5dutlqhkn"
+    ],
+    "skipped": 0,
+    "occupiedBefore": 7,
+    "occupiedAfter": 6,
+    "cancellationEmailsObserved": 0,
+    "recapEmailPromiseNotMet": true
+  },
+  "realWorkloadWarning": true,
+  "finalLiveCount": 80
+}

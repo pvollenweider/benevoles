@@ -1,0 +1,19 @@
+Voir précisément où il manque du monde
+
+Des bénévoles se sont inscrits, mais certains horaires ont encore besoin d'aide. Depuis l'événement, ouvre Où manque-t-il du monde. Cette vue regroupe les besoins pour savoir où concentrer tes efforts, plutôt que de parcourir tout le planning. Notre fête contient des postes vides, des créneaux partiellement remplis, des attentes et des demandes à valider. Regardons comment lire ces différences.
+
+En haut, les places pourvues sont les inscriptions confirmées, comparées à la capacité totale. Une personne inscrite à deux horaires occupe deux places : ce n'est pas un compteur de personnes différentes. La phrase de besoin et la barre donnent un aperçu, mais lis aussi les attentes et les demandes. Un bon chiffre global peut cacher un horaire où il manque encore quelqu'un.
+
+Postes sans personne attire l'attention sur un poste entièrement vide. Ici, Photos comporte deux créneaux et six places à pourvoir. Clique sur le poste pour retrouver le planning et vérifier les dates, les horaires et la mission. Avant de recruter, assure-toi que la demande est claire : quelqu'un doit comprendre ce qu'il fera, où et pendant combien de temps.
+
+Créneaux à compléter va du plus dégarni au plus proche du complet. Chaque ligne indique la date, l'horaire, les places confirmées et le nombre manquant. Les créneaux fermés aux inscriptions sont exclus de ce groupe. Cliquons sur la buvette du soir : la liste des inscriptions s'ouvre déjà filtrée. Le lien Écrire à ce créneau prépare ensuite un message pour les personnes de cet horaire, pas pour recruter des inconnus.
+
+Les demandes à traiter gardent leur place pendant la décision. À la navette, deux demandes remplissent donc les deux places réservées, même si aucune n'est encore confirmée. Le rapport ne les présente pas comme deux places manquantes. Suis le lien des demandes pour retrouver Lucas et Marc, puis examine leurs informations avant de décider. La confirmation et la demande en attente restent deux situations différentes.
+
+Dans Personnes en liste d'attente, tu repères les horaires où des personnes attendent une place. La buvette de l'après-midi affiche ses inscriptions confirmées et ses trois attentes séparément. En cliquant, tu retrouves les noms et leurs positions dans la liste. Tu peux ensuite réfléchir à une place supplémentaire ou à un autre horaire ; ce rapport ne les inscrit pas automatiquement sur un créneau différent.
+
+Postes sans responsable de secteur est un autre besoin, facultatif cette fois. Le poste peut avoir des bénévoles et manquer seulement d'un relais sur le terrain. Le lien ouvre la gestion des responsables. Ceux qui sont déjà nommés pour la buvette et l'accueil restent visibles. Leur rôle est de suivre leur équipe ; il ne leur donne pas automatiquement les droits d'un organisateur dans l'administration.
+
+Créneaux complets rassemble les horaires sans besoin supplémentaire et sans liste d'attente. L'accueil de midi est rempli par des inscriptions confirmées. La navette, elle, reste complète grâce aux demandes qui gardent leur place. Lis donc aussi les mentions de statut, pas seulement le ratio. Être complet ne signifie ni que tout le monde est présent, ni que toutes les décisions ont déjà été prises.
+
+Pour terminer, Julien nous a confirmé qu'il pouvait aider aux photos le samedi. Nous ouvrons le créneau concerné, puis Ajouter manuellement. Son email retrouve sa fiche ; nous choisissons le bon horaire et enregistrons. La nouvelle inscription apparaît. En revenant au rapport, le besoin diminue d'une place et Photos n'est plus un poste entièrement vide. Tu peux vérifier le résultat, puis te concentrer sur le besoin suivant.

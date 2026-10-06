@@ -1,0 +1,53 @@
+{
+  "locatedAt": "2026-10-05T21:40:11.140Z",
+  "masterSha256": "4d167fbaa920701584b4315bb7d3d59e0897270e95e220648434a8ba2e66967d",
+  "totalSeconds": 399.32,
+  "cuts": [
+    {
+      "id": "create",
+      "seconds": 30.435291499999998
+    },
+    {
+      "id": "renew",
+      "seconds": 59.9536665
+    },
+    {
+      "id": "activate",
+      "seconds": 91.70697899999999
+    },
+    {
+      "id": "identity",
+      "seconds": 120.03902049999999
+    },
+    {
+      "id": "availability",
+      "seconds": 157.069854
+    },
+    {
+      "id": "context",
+      "seconds": 187.96837499999998
+    },
+    {
+      "id": "health",
+      "seconds": 218.34745850000002
+    },
+    {
+      "id": "preview",
+      "seconds": 256.7634375
+    },
+    {
+      "id": "broadcast",
+      "seconds": 288.082083
+    },
+    {
+      "id": "delete",
+      "seconds": 323.85397950000004
+    },
+    {
+      "id": "result",
+      "seconds": 360.951729
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

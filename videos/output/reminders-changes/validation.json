@@ -1,0 +1,66 @@
+{
+  "id": "REMINDERS_CHANGES",
+  "slug": "reminders-changes",
+  "validatedAt": "2026-10-05T18:42:05.471Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 233800,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 22382,
+      "audioMs": 22380,
+      "driftMs": 2
+    },
+    {
+      "id": "manual-message",
+      "visualMs": 28372,
+      "audioMs": 28369,
+      "driftMs": 3
+    },
+    {
+      "id": "manual-send",
+      "visualMs": 26755,
+      "audioMs": 26753,
+      "driftMs": 2
+    },
+    {
+      "id": "organization",
+      "visualMs": 25129,
+      "audioMs": 25127,
+      "driftMs": 2
+    },
+    {
+      "id": "event-switch",
+      "visualMs": 24058,
+      "audioMs": 24057,
+      "driftMs": 1
+    },
+    {
+      "id": "timing",
+      "visualMs": 23200,
+      "audioMs": 23198,
+      "driftMs": 2
+    },
+    {
+      "id": "exclusions",
+      "visualMs": 23344,
+      "audioMs": 23342,
+      "driftMs": 2
+    },
+    {
+      "id": "changed",
+      "visualMs": 25625,
+      "audioMs": 25622,
+      "driftMs": 3
+    },
+    {
+      "id": "cancelled",
+      "visualMs": 30193,
+      "audioMs": 30192,
+      "driftMs": 1
+    }
+  ],
+  "issues": []
+}

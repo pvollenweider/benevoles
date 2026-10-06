@@ -1,0 +1,12 @@
+{
+  "anchor": "Ouvrons la page publique. Le nouveau titre et le logo apparaissent",
+  "windowStart": 60.479,
+  "result": {
+    "found": true,
+    "startSeconds": 15,
+    "wordsHeard": "Ouvrons la page publique. Le nouveau titre et le logo apparaissent"
+  },
+  "onset": 75.479,
+  "proposedCut": 75.4785835,
+  "note": "Proposal only; recut then independently audit before capture"
+}

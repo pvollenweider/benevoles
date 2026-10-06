@@ -1,0 +1,53 @@
+{
+  "slug": "data-exports-archives",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-05T20:34:08.633Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1188,
+      "endMs": 29449
+    },
+    {
+      "id": "members",
+      "startMs": 29902,
+      "endMs": 55913
+    },
+    {
+      "id": "columns",
+      "startMs": 56364,
+      "endMs": 85917
+    },
+    {
+      "id": "csv",
+      "startMs": 86372,
+      "endMs": 117779
+    },
+    {
+      "id": "journal",
+      "startMs": 119391,
+      "endMs": 151070
+    },
+    {
+      "id": "archive",
+      "startMs": 152717,
+      "endMs": 180851
+    },
+    {
+      "id": "contents",
+      "startMs": 181303,
+      "endMs": 212486
+    },
+    {
+      "id": "privacy",
+      "startMs": 212939,
+      "endMs": 246132
+    },
+    {
+      "id": "result",
+      "startMs": 247732,
+      "endMs": 278566
+    }
+  ]
+}

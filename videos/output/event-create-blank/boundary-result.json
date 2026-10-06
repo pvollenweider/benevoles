@@ -1,0 +1,12 @@
+{
+  "anchor": "Le résultat est un brouillon structuré, encore invisible au public :",
+  "windowStart": 108.559,
+  "result": {
+    "found": true,
+    "startSeconds": 12.75,
+    "wordsHeard": "Le résultat est un brouillon structuré"
+  },
+  "onset": 121.309,
+  "proposedCut": 121.2671665,
+  "note": "Proposal only; recut then independently audit before capture"
+}

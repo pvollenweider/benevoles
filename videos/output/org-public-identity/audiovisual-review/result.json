@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:39:24.748Z",
+  "videoSha256": "37f0ffaad0a3d4219ff316210f773fa8ed94aef6541a60f1002c969b42adf7e0",
+  "promptSha256": "766b3bb4ae599e6a0344e3ea05c2e8ce3c16088f63e08279e2025f2464394448",
+  "clipSha256": "184a7c7c410ca6c1f40bd85db1a6fe906778e329aec7480210b28bc404ff8995",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Vous avez une identité cohérente",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "le nom de l'association, un titre public accueillant",
+        "visibleSeconds": 2,
+        "visible": "Affichage de la page publique avec le nom de l'association et le titre d'accueil",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "un logo facultatif et une adresse identifiable",
+        "visibleSeconds": 6.8,
+        "visible": "Ouverture des paramètres affichant la section du logo et du nom",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "modifiez son titre plutôt que l'adresse",
+        "visibleSeconds": 12.5,
+        "visible": "Défilement vers les champs Titre de la page publique et Identifiant public",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "et conservez les anciens identifiants",
+        "visibleSeconds": 16.2,
+        "visible": "Affichage de la section Anciens identifiants",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée et claire, synchronisation fluide avec la navigation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

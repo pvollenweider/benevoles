@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:08:41.838Z",
+  "videoSha256": "58705cd0468ab625a8108945bd9244cff798768e56f4403e42e7c79dbda4612a",
+  "promptSha256": "bd32a17d24edd36866d11b7037f00f8c46a2a81f059f94dba92aa790d714b084",
+  "clipSha256": "89f47173d0b3f95e57fc4722bc2675a5161d9b05811685c3fb9916fa836aeab5",
+  "scene": "export",
+  "review": {
+    "heardOpening": "Téléchargeons maintenant le véritable export des présences",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Téléchargeons maintenant le véritable export des présences",
+        "visibleSeconds": 1.8,
+        "visible": "Lien Exporter les présences (CSV) survolé puis transition vers le visualiseur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Comparons une ligne pointée et une ligne non pointée",
+        "visibleSeconds": 4.8,
+        "visible": "Affichage du tableau CSV avec lignes alternant présence confirmée et non pointée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "leurs créneaux et les colonnes Présent et Pointé le",
+        "visibleSeconds": 8,
+        "visible": "Colonnes Présent et Pointé le visibles à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "partage seulement ce qui est nécessaire",
+        "visibleSeconds": 17.8,
+        "visible": "Filtrage appliqué sur une personne spécifique (Léa Exemple)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier, intonation claire et naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

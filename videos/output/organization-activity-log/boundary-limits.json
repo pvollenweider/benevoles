@@ -1,0 +1,12 @@
+{
+  "anchor": "Le journal ne doit pas devenir une collection de captures envoyées",
+  "windowStart": 186.48100000000002,
+  "result": {
+    "found": true,
+    "startSeconds": 17.8,
+    "wordsHeard": "Le journal ne doit pas devenir une collection de captures envoyées"
+  },
+  "onset": 204.28100000000003,
+  "proposedCut": 203.7108955,
+  "note": "Proposal only; recut then independently audit before capture"
+}

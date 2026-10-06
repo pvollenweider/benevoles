@@ -1,0 +1,12 @@
+{
+  "anchor": "L’adresse de réponse indique où arrive un message lorsqu’un bénévole répond",
+  "windowStart": 98.17299999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 8.9,
+    "wordsHeard": "L’adresse"
+  },
+  "onset": 107.073,
+  "proposedCut": 106.572,
+  "note": "Proposal only; recut then independently audit before capture"
+}

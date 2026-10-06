@@ -1,0 +1,12 @@
+{
+  "anchor": "Le lien public, ou son QR code, sert à découvrir les",
+  "windowStart": 12.883,
+  "result": {
+    "found": true,
+    "startSeconds": 18.9,
+    "wordsHeard": "Le lien public, ou son QR code, sert à découvrir les"
+  },
+  "onset": 31.782999999999998,
+  "proposedCut": 31.5143955,
+  "note": "Proposal only; recut then independently audit before capture"
+}

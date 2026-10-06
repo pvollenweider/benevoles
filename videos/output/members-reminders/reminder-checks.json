@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-05T14:32:34.351Z",
+  "simpleReminder": {
+    "sent": 3,
+    "failed": 0
+  },
+  "originalInvitationTokenRetained": true,
+  "targetedMessage": {
+    "sent": 3,
+    "audience": "les invités sans créneau confirmé",
+    "pushDevices": 0
+  },
+  "participationUnchanged": true
+}

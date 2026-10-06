@@ -1,0 +1,33 @@
+{
+  "locatedAt": "2026-10-06T01:33:56.406Z",
+  "masterSha256": "c66d5929efa61ec5e1dec44e510163de3aecda2209447f3b9e811cc9e12f8f16",
+  "totalSeconds": 117.2,
+  "cuts": [
+    {
+      "id": "organization-navigation",
+      "seconds": 12.815229
+    },
+    {
+      "id": "event-navigation",
+      "seconds": 30.6728125
+    },
+    {
+      "id": "search",
+      "seconds": 53.9827085
+    },
+    {
+      "id": "account-help",
+      "seconds": 71.13229150000001
+    },
+    {
+      "id": "mobile-keyboard",
+      "seconds": 87.1342085
+    },
+    {
+      "id": "result",
+      "seconds": 101.275833
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

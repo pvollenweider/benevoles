@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:14:48.469Z",
+  "videoSha256": "7870f9ea1677bd47654af21d36008efe133c24074cd482c8474c14e976e12509",
+  "promptSha256": "37c111043f1d1de8ae5103f20856be6660489b1de9849c945778ed576e2e02f2",
+  "clipSha256": "5ae313168eefe9fbe82583af5c1f085489185cf56f20c9c47b0ae726f02ea749",
+  "scene": "preview",
+  "review": {
+    "heardOpening": "Choisissons Fête de village.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Choisissons Fête de village.",
+        "visibleSeconds": 0.9,
+        "visible": "Sélection de l'option Fête de village et affichage du formulaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "L'aperçu résume les postes, le nombre de créneaux",
+        "visibleSeconds": 2,
+        "visible": "Section Ce qui sera créé visible sous le formulaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "donnez un titre à cette édition",
+        "visibleSeconds": 8,
+        "visible": "Saisie de Fête villageoise de Bellevue dans le champ Titre.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "prenons le samedi 21 novembre",
+        "visibleSeconds": 10.8,
+        "visible": "Saisie de la date 21/11/2026 dans le champ Premier jour.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,66 @@
+{
+  "id": "EVENT_ACTIVITY_LOG",
+  "slug": "event-activity-log",
+  "validatedAt": "2026-10-05T19:05:13.276Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 245120,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 25654,
+      "audioMs": 25653,
+      "driftMs": 1
+    },
+    {
+      "id": "read",
+      "visualMs": 25712,
+      "audioMs": 25711,
+      "driftMs": 1
+    },
+    {
+      "id": "filters",
+      "visualMs": 25095,
+      "audioMs": 25094,
+      "driftMs": 1
+    },
+    {
+      "id": "period",
+      "visualMs": 23146,
+      "audioMs": 23146,
+      "driftMs": 0
+    },
+    {
+      "id": "replay",
+      "visualMs": 30529,
+      "audioMs": 30528,
+      "driftMs": 1
+    },
+    {
+      "id": "story",
+      "visualMs": 25782,
+      "audioMs": 25780,
+      "driftMs": 2
+    },
+    {
+      "id": "baseline",
+      "visualMs": 26363,
+      "audioMs": 26361,
+      "driftMs": 2
+    },
+    {
+      "id": "privacy",
+      "visualMs": 24177,
+      "audioMs": 24176,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 30592,
+      "audioMs": 30592,
+      "driftMs": 0
+    }
+  ],
+  "issues": []
+}

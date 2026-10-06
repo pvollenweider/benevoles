@@ -1,0 +1,36 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:29:32.465Z",
+  "videoSha256": "258ab12d15939f6b8d477f5d8a71162bf2e5bf54555dca8ead27b706b9391071",
+  "promptSha256": "225b08538e994e52ca3e4fff0a467c35559d0d88d55dd2e1ce43b3b9a93b8f7a",
+  "clipSha256": "76394325aae88d3d1f233ee9f25508df8f6fe3b227ee7400742253be4354a89f",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Quand une association compte plusieurs événements",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Quand une association compte plusieurs événements",
+        "visibleSeconds": 0,
+        "visible": "Encart de titre 'Tout retrouver avec la recherche globale' sur fond de liste d'événements",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "La recherche globale sert à retrouver une personne",
+        "visibleSeconds": 3,
+        "visible": "Affichage de la page Événements avec l'icône de recherche dans l'en-tête",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et conforme au texte."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

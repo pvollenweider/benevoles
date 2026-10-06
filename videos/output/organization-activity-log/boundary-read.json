@@ -1,0 +1,12 @@
+{
+  "anchor": "Chaque ligne indique un auteur, une action et une date. Lisons",
+  "windowStart": 14.036000000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 15.8,
+    "wordsHeard": "Chaque ligne indique un auteur, une action et une date. Lisons"
+  },
+  "onset": 29.836000000000002,
+  "proposedCut": 29.925896,
+  "note": "Proposal only; recut then independently audit before capture"
+}

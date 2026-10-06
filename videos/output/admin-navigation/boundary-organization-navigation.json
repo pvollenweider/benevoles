@@ -1,0 +1,12 @@
+{
+  "anchor": "Le Tableau de bord rassemble les priorités de l’association. Événements ouvre",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 12.9,
+    "wordsHeard": "Le tableau de bord rassemble les priorités de l'association. Événements ouvre"
+  },
+  "onset": 12.9,
+  "proposedCut": 12.815229,
+  "note": "Proposal only; recut then independently audit before capture"
+}

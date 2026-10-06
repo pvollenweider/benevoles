@@ -1,0 +1,57 @@
+{
+  "slug": "members-invitations",
+  "recordedAt": "2026-10-05T13:58:51.741Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 0,
+      "endMs": 23921
+    },
+    {
+      "id": "test",
+      "startMs": 24374,
+      "endMs": 43972
+    },
+    {
+      "id": "individual",
+      "startMs": 44424,
+      "endMs": 67889
+    },
+    {
+      "id": "group",
+      "startMs": 68341,
+      "endMs": 91803
+    },
+    {
+      "id": "send",
+      "startMs": 92256,
+      "endMs": 113908
+    },
+    {
+      "id": "personal-link",
+      "startMs": 114361,
+      "endMs": 135280
+    },
+    {
+      "id": "reserved",
+      "startMs": 135732,
+      "endMs": 158988
+    },
+    {
+      "id": "status",
+      "startMs": 159440,
+      "endMs": 178813
+    },
+    {
+      "id": "existing",
+      "startMs": 179266,
+      "endMs": 200284
+    },
+    {
+      "id": "no-email",
+      "startMs": 200736,
+      "endMs": 222938
+    }
+  ]
+}

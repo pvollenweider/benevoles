@@ -2,7 +2,7 @@
   "id": "ORG_TEAM_PERMISSIONS",
   "slug": "org-team-permissions",
   "title": "Gérer l’équipe et les permissions",
-  "description": "Inviter une personne, choisir son rôle et vérifier concrètement ce qu’un organisateur peut faire.",
+  "description": "Pour les propriétaires : inviter une personne, choisir son rôle et vérifier concrètement les droits d’un organisateur, distincts du lien de responsable de secteur.",
   "viewer": {
     "summary": "Dans cette vidéo, vous gérez les membres de votre équipe d'administration et leurs rôles.",
     "steps": [
@@ -35,13 +35,13 @@
     },
     {
       "id": "roles",
-      "transcript": "Le propriétaire gère tout, y compris l’équipe, l’identité et les réglages sensibles de l’organisation. L’organisateur prépare les événements, les créneaux, les inscriptions, les membres et les messages, mais ne modifie ni l’équipe ni les réglages de l’organisation. Garde donc au moins deux propriétaires actifs pour ne jamais dépendre d’une seule personne.",
-      "fallbackDurationMs": 26000
+      "transcript": "Le propriétaire gère tout, y compris l’équipe et les réglages de l’organisation. L’organisateur prépare les événements, les créneaux, les inscriptions, les membres et les messages, mais ne change pas l’équipe ni ces réglages. Gardez si possible deux propriétaires actifs. Un responsable de secteur est différent : désigné pour un événement, il reçoit un lien personnel, pas un rôle dans cette équipe d’administration.",
+      "fallbackDurationMs": 32000
     },
     {
       "id": "invite",
-      "transcript": "Pour inviter Léa, ouvre le formulaire, saisis son nom et une adresse valide, puis choisis son rôle avant l’envoi. Prenons Organisateur : c’est le bon niveau pour aider sur les plannings et les bénévoles sans accéder aux paramètres les plus sensibles.",
-      "fallbackDurationMs": 23000
+      "transcript": "Pour inviter Léa, ouvrez le formulaire, saisissez son nom et son adresse, puis choisissez son rôle avant l’envoi. Prenons Organisateur : c’est le bon niveau pour aider sur les plannings et les bénévoles sans accéder aux paramètres sensibles. Cliquez sur Envoyer l’invitation ; le message confirme son adresse.",
+      "fallbackDurationMs": 25000
     },
     {
       "id": "invite-result",
@@ -60,8 +60,8 @@
     },
     {
       "id": "limits",
-      "transcript": "La suppression définitive d’un événement et les réglages de l’organisation restent réservés aux propriétaires, car leurs conséquences dépassent le travail quotidien. Attribue les droits selon la responsabilité réelle, retire rapidement les accès devenus inutiles et utilise toujours un compte nominatif par personne.",
-      "fallbackDurationMs": 23000
+      "transcript": "La suppression définitive d’un événement et les réglages de l’organisation restent réservés aux propriétaires. Attribuez les droits selon la responsabilité réelle, retirez les accès devenus inutiles et utilisez un compte nominatif par personne. Changer un rôle s’applique aussitôt, y compris aux sessions déjà ouvertes : vérifiez donc la personne avant d’appliquer.",
+      "fallbackDurationMs": 26000
     },
     {
       "id": "result",

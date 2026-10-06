@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T20:36:41.306Z",
+  "videoSha256": "20ccf7d54add31d2e5210c71d07e9b917ced0c5680878b1202f4e29e6e1ebc81",
+  "promptSha256": "54fd54f7afbcb39ddaa3971d641b6c010a32cd4bf9d1bb093c5ac173b27501e1",
+  "clipSha256": "0df5ad2354b187632cfb030da8054a52c13246fd564dee2fec03b1ed750cf4f0",
+  "scene": "archive",
+  "review": {
+    "heardOpening": "Pour un événement complet, passons par Rapports",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "passons par Rapports",
+        "visibleSeconds": 2.5,
+        "visible": "Affichage de la page Rapports",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "Archive de l'événement, JSON",
+        "visibleSeconds": 3.5,
+        "visible": "Section Archive de l'événement (JSON) visible dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "c'est un format structuré",
+        "visibleSeconds": 12.5,
+        "visible": "Affichage de l'écran Lecture de l'archive JSON",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "L'export est limité à cet événement",
+        "visibleSeconds": 20,
+        "visible": "Sélection de la valeur event dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton didactique constant."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

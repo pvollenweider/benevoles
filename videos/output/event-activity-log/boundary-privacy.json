@@ -1,0 +1,12 @@
+{
+  "anchor": "Le journal n'est pas un carnet d'adresses. Le contenu des pages",
+  "windowStart": 169.654,
+  "result": {
+    "found": true,
+    "startSeconds": 13,
+    "wordsHeard": "Le journal n'est pas un carnet d'adresses. Le contenu des pages"
+  },
+  "onset": 182.654,
+  "proposedCut": 182.272354,
+  "note": "Proposal only; recut then independently audit before capture"
+}

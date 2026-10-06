@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:38:40.589Z",
+  "videoSha256": "37f0ffaad0a3d4219ff316210f773fa8ed94aef6541a60f1002c969b42adf7e0",
+  "promptSha256": "2b5251847bc4ecda7215b69a00aca2ce6d24554bc6276de2d1b1e1e37060fc3a",
+  "clipSha256": "5cf5883543a8938859e6db8fd610b1e399a92811a5393a8ad36055cbb63bbcac",
+  "scene": "logo",
+  "review": {
+    "heardOpening": "Ajoutons le logo de l'association",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Choisissez une image dans les formats indiqués, vérifiez son aperçu",
+        "visibleSeconds": 3.4,
+        "visible": "Fichier logo sélectionné et aperçu Montvert affiché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.1,
+        "spoken": "puis cliquez sur Enregistrer le logo",
+        "visibleSeconds": 7.3,
+        "visible": "Clic sur le bouton Enregistrer le logo",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "L'image enregistrée apparaît",
+        "visibleSeconds": 8.6,
+        "visible": "Validation Logo enregistré et intégration de l'image confirmée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier, synchronisé avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

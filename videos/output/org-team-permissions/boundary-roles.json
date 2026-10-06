@@ -1,0 +1,12 @@
+{
+  "anchor": "Le propriétaire gère tout, y compris l’équipe et les réglages de",
+  "windowStart": 0.006999999999999673,
+  "result": {
+    "found": true,
+    "startSeconds": 15.19,
+    "wordsHeard": "Le propriétaire gère tout, y compris l’équipe et les réglages de"
+  },
+  "onset": 15.197,
+  "proposedCut": 15.0073335,
+  "note": "Proposal only; recut then independently audit before capture"
+}

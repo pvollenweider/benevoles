@@ -1,0 +1,13 @@
+{
+  "preparedAt": "2026-10-05T22:59:56.912Z",
+  "organizationId": "video-accessibility",
+  "eventId": "video-accessibility-event",
+  "members": 5,
+  "roles": 4,
+  "shifts": 5,
+  "registrations": 2,
+  "actualOverlap": true,
+  "nativeZoomRecorded": false,
+  "screenReaderRecorded": false,
+  "captureReady": false
+}

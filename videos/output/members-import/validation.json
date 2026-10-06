@@ -1,0 +1,66 @@
+{
+  "id": "MEMBERS_IMPORT",
+  "slug": "members-import",
+  "validatedAt": "2026-10-05T13:37:59.680Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 221480,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 20296,
+      "audioMs": 20294,
+      "driftMs": 2
+    },
+    {
+      "id": "file",
+      "visualMs": 26210,
+      "audioMs": 26208,
+      "driftMs": 2
+    },
+    {
+      "id": "preview",
+      "visualMs": 26220,
+      "audioMs": 26218,
+      "driftMs": 2
+    },
+    {
+      "id": "errors",
+      "visualMs": 24991,
+      "audioMs": 24990,
+      "driftMs": 1
+    },
+    {
+      "id": "update",
+      "visualMs": 26753,
+      "audioMs": 26752,
+      "driftMs": 1
+    },
+    {
+      "id": "corrected",
+      "visualMs": 26645,
+      "audioMs": 26640,
+      "driftMs": 5
+    },
+    {
+      "id": "confirm",
+      "visualMs": 24972,
+      "audioMs": 24969,
+      "driftMs": 3
+    },
+    {
+      "id": "repeat",
+      "visualMs": 20303,
+      "audioMs": 20301,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 21030,
+      "audioMs": 21028,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}

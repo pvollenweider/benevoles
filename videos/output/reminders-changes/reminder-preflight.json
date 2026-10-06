@@ -1,0 +1,57 @@
+{
+  "checkedAt": "2026-10-05T15:03:26.788Z",
+  "scope": "local real cron and mailbox, not audiovisual validation",
+  "actualReminderEmails": 3,
+  "closedShiftReminded": true,
+  "excludedWitnesses": 6,
+  "secondRunNoDuplicate": true,
+  "firstTotals": {
+    "reminder_j2": {
+      "eligible": 1,
+      "sent": 1,
+      "failed": 0
+    },
+    "reminder_j1": {
+      "eligible": 1,
+      "sent": 1,
+      "failed": 0
+    },
+    "reminder_dd": {
+      "eligible": 1,
+      "sent": 1,
+      "failed": 0
+    }
+  },
+  "secondTotals": {
+    "reminder_j2": {
+      "eligible": 0,
+      "sent": 0,
+      "failed": 0
+    },
+    "reminder_j1": {
+      "eligible": 0,
+      "sent": 0,
+      "failed": 0
+    },
+    "reminder_dd": {
+      "eligible": 0,
+      "sent": 0,
+      "failed": 0
+    }
+  },
+  "reconciliation": {
+    "first": {
+      "shifts": 2,
+      "offered": 1
+    },
+    "second": {
+      "shifts": 1,
+      "offered": 0
+    }
+  },
+  "mailIds": [
+    "0wMhxvNvT72OQdFnq9Q5JB",
+    "6bKVjkdOefZsczx3B89i0q",
+    "2Ku3boy7Js18H49lmazxGA"
+  ]
+}

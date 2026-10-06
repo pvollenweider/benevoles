@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour garder une copie des actions de l'équipe, ouvrons le journal",
+  "windowStart": 99.416,
+  "result": {
+    "found": true,
+    "startSeconds": 15.8,
+    "wordsHeard": "Pour garder une copie des actions de l'équipe, ouvrons le journal"
+  },
+  "onset": 115.216,
+  "proposedCut": 115.22468749999999,
+  "note": "Proposal only; recut then independently audit before capture"
+}

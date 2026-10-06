@@ -1,0 +1,12 @@
+{
+  "anchor": "Une place proposée n'est pas encore une personne confirmée. Nicolas doit",
+  "windowStart": 39.669,
+  "result": {
+    "found": true,
+    "startSeconds": 22.75,
+    "wordsHeard": "Une place proposée n'est pas encore une personne confirmée. Nicolas doit"
+  },
+  "onset": 62.419,
+  "proposedCut": 61.939729,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Tu sais quand le changement a eu lieu ? Renseigne Depuis",
+  "windowStart": 57.480999999999995,
+  "result": {
+    "found": true,
+    "startSeconds": 19.44,
+    "wordsHeard": "Tu sais quand le changement a eu lieu ? Renseigne Depuis"
+  },
+  "onset": 76.92099999999999,
+  "proposedCut": 76.4571045,
+  "note": "Proposal only; recut then independently audit before capture"
+}

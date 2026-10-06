@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-05T21:41:43.741Z",
+  "evidence": "Real API actions in isolated local database; not filmed UI validation",
+  "createdPendingAccount": true,
+  "twoInvitationsAcceptedByLocalSmtp": true,
+  "oldLinkRefused": true,
+  "newLinkActivatedAndConsumed": true,
+  "actualOwnerLogin": true,
+  "occupiedSlugStatus": 409,
+  "oldSlugStoredInHistory": true,
+  "activeDeletionStatus": 409,
+  "existingSessionWhileInactiveStatus": 401,
+  "existingSessionAfterReactivationStatus": 200,
+  "wrongDeletionChallengeStatus": 400,
+  "disposableOrganizationDeleted": true,
+  "originalOrganizationsRemaining": 3,
+  "publicRedirectStillToCheck": true
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:15:01.576Z",
+  "videoSha256": "7870f9ea1677bd47654af21d36008efe133c24074cd482c8474c14e976e12509",
+  "promptSha256": "8cb7db497f74685b2d883d3ec4ee6ee238b72d2f865e1fb29d7944beda0cf29e",
+  "clipSha256": "19aaff7c2439cb53fcb5b755d56b1db339c95542cd2680a9637fd8ddc13e587a",
+  "scene": "create",
+  "review": {
+    "heardOpening": "Créer le brouillon génère ici",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Créer le brouillon génère ici dix créneaux et ouvre l’étape du planning.",
+        "visibleSeconds": 2.5,
+        "visible": "Clic sur le bouton et affichage de l'étape Postes et créneaux.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Le statut reste Brouillon.",
+        "visibleSeconds": 4.8,
+        "visible": "Affichage du tableau de bord avec le statut Brouillon coché.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Le modèle n’envoie aucun email et n’ouvre aucune inscription",
+        "visibleSeconds": 6.8,
+        "visible": "Encadré visible indiquant qu'aucun rappel n'est envoyé et inscriptions fermées.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "il fournit seulement une base de travail plus rapide à corriger",
+        "visibleSeconds": 10.2,
+        "visible": "Retour à la vue planning montrant la frise des créneaux générés.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier, bien synchronisé."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

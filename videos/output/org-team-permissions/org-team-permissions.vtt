@@ -1,26 +1,139 @@
 WEBVTT
 
-00:00:01.157 --> 00:00:16.354
-Une équipe bien réglée évite de partager un seul mot de passe et donne à chacun exactement les droits dont il a besoin. Ici, trois personnes sont déjà actives : deux propriétaires et une organisatrice. Le badge Vous repère le compte actuellement connecté.
+00:00:01.126 --> 00:00:06.710
+Une équipe bien réglée évite de partager
+un seul mot de passe et donne à chacun
 
-00:00:18.517 --> 00:00:39.236
-Le propriétaire gère tout, y compris l’équipe, l’identité et les réglages sensibles de l’organisation. L’organisateur prépare les événements, les créneaux, les inscriptions, les membres et les messages, mais ne modifie ni l’équipe ni les réglages de l’organisation. Garde donc au moins deux propriétaires actifs pour ne jamais dépendre d’une seule personne.
+00:00:06.710 --> 00:00:11.596
+exactement les droits dont il a besoin.
+Ici, trois personnes sont déjà actives :
 
-00:00:39.688 --> 00:00:47.584
-Pour inviter Léa, ouvre le formulaire, saisis son nom et une adresse valide, puis choisis son rôle avant l’envoi. Prenons Organisateur : c’est le bon niveau pour aider sur les plannings et les bénévoles sans accéder aux paramètres les plus sensibles.
+00:00:11.596 --> 00:00:15.435
+deux propriétaires et une organisatrice.
+Le badge Vous repère le compte
 
-00:00:48.036 --> 00:00:54.844
-Après l’envoi, Léa apparaît avec le statut En attente. Un email contient son lien personnel, valable sept jours ; on peut aussi copier ce lien pour le lui transmettre autrement. Son accès ne devient actif qu’après la création de son mot de passe.
+00:00:15.435 --> 00:00:16.133
+actuellement connecté.
 
-00:00:57.002 --> 00:01:19.634
-Le rôle peut évoluer. On choisit d’abord Propriétaire dans la liste, puis on confirme avec Appliquer : parcourir simplement la liste au clavier ne change donc jamais les droits par accident. La confirmation indique le nouveau rôle. Retirer une personne coupe son accès, mais ne supprime pas l’historique des actions déjà réalisées.
+00:00:18.297 --> 00:00:22.433
+Le propriétaire gère tout, y compris
+l’équipe et les réglages de
 
-00:01:20.087 --> 00:01:34.085
-Vérifions maintenant avec le compte de Samira, qui est organisatrice. Elle retrouve les événements et les outils opérationnels. Sur la page de l’équipe, la liste reste visible pour comprendre qui administre l’espace, mais les commandes d’invitation, de retrait et de changement de rôle ont disparu.
+00:00:22.433 --> 00:00:25.440
+l’organisation. L’organisateur prépare les
+événements, les créneaux, les
 
-00:01:34.538 --> 00:01:51.510
-La suppression définitive d’un événement et les réglages de l’organisation restent réservés aux propriétaires, car leurs conséquences dépassent le travail quotidien. Attribue les droits selon la responsabilité réelle, retire rapidement les accès devenus inutiles et utilise toujours un compte nominatif par personne.
+00:00:25.440 --> 00:00:30.328
+inscriptions, les membres et les messages,
+mais ne change pas l’équipe ni ces
 
-00:01:51.963 --> 00:02:01.473
-Le résultat est une équipe autonome sans donner les pleins pouvoirs à tout le monde : les propriétaires protègent le cadre, les organisateurs font vivre les événements, et chaque action reste liée à la bonne personne.
+00:00:30.328 --> 00:00:34.088
+réglages. Gardez si possible deux
+propriétaires actifs. Un responsable de
+
+00:00:34.088 --> 00:00:38.975
+secteur est différent : désigné pour un
+événement, il reçoit un lien personnel,
+
+00:00:38.975 --> 00:00:41.607
+pas un rôle dans cette équipe
+d’administration.
+
+00:00:43.209 --> 00:00:48.046
+Pour inviter Léa, ouvrez le formulaire,
+saisissez son nom et son adresse, puis
+
+00:00:48.046 --> 00:00:52.883
+choisissez son rôle avant l’envoi. Prenons
+Organisateur : c’est le bon niveau pour
+
+00:00:52.883 --> 00:00:57.347
+aider sur les plannings et les bénévoles
+sans accéder aux paramètres sensibles.
+
+00:00:57.347 --> 00:01:01.068
+Cliquez sur Envoyer l’invitation ; le
+message confirme son adresse.
+
+00:01:01.523 --> 00:01:05.895
+Après l’envoi, Léa apparaît avec le statut
+En attente. Un email contient son lien
+
+00:01:05.895 --> 00:01:10.267
+personnel, valable sept jours ; on peut
+aussi copier ce lien pour le lui
+
+00:01:10.267 --> 00:01:14.015
+transmettre autrement. Son accès ne
+devient actif qu’après la création de son
+
+00:01:14.015 --> 00:01:14.952
+mot de passe.
+
+00:01:17.122 --> 00:01:21.499
+Le rôle peut évoluer. On choisit d’abord
+Propriétaire dans la liste, puis on
+
+00:01:21.499 --> 00:01:25.539
+confirme avec Appliquer : parcourir
+simplement la liste au clavier ne change
+
+00:01:25.539 --> 00:01:29.580
+donc jamais les droits par accident. La
+confirmation indique le nouveau rôle.
+
+00:01:29.580 --> 00:01:33.957
+Retirer une personne coupe son accès, mais
+ne supprime pas l’historique des actions
+
+00:01:33.957 --> 00:01:34.630
+déjà réalisées.
+
+00:01:35.084 --> 00:01:39.097
+Vérifions maintenant avec le compte de
+Samira, qui est organisatrice. Elle
+
+00:01:39.097 --> 00:01:43.839
+retrouve les événements et les outils
+opérationnels. Sur la page de l’équipe, la
+
+00:01:43.839 --> 00:01:47.851
+liste reste visible pour comprendre qui
+administre l’espace, mais les commandes
+
+00:01:47.851 --> 00:01:51.499
+d’invitation, de retrait et de changement
+de rôle ont disparu.
+
+00:01:51.954 --> 00:01:56.379
+La suppression définitive d’un événement
+et les réglages de l’organisation restent
+
+00:01:56.379 --> 00:02:00.401
+réservés aux propriétaires. Attribuez les
+droits selon la responsabilité réelle,
+
+00:02:00.401 --> 00:02:05.228
+retirez les accès devenus inutiles et
+utilisez un compte nominatif par personne.
+
+00:02:05.228 --> 00:02:10.055
+Changer un rôle s’applique aussitôt, y
+compris aux sessions déjà ouvertes :
+
+00:02:10.055 --> 00:02:12.469
+vérifiez donc la personne avant
+d’appliquer.
+
+00:02:12.922 --> 00:02:17.687
+Le résultat est une équipe autonome sans
+donner les pleins pouvoirs à tout le monde
+
+00:02:17.687 --> 00:02:21.182
+: les propriétaires protègent le cadre,
+les organisateurs font vivre les
+
+00:02:21.182 --> 00:02:24.359
+événements, et chaque action reste liée à
+la bonne personne.
 

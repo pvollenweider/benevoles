@@ -1,0 +1,12 @@
+{
+  "anchor": "Le matériel arrive plus tard : nous devons décaler un horaire.",
+  "windowStart": 193.86399999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 15,
+    "wordsHeard": "Le"
+  },
+  "onset": 208.86399999999998,
+  "proposedCut": 208.863521,
+  "note": "Proposal only; recut then independently audit before capture"
+}

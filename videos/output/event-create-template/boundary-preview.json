@@ -1,0 +1,12 @@
+{
+  "anchor": "Choisissons Fête de village. L’aperçu résume les postes, le nombre de",
+  "windowStart": 20.334000000000003,
+  "result": {
+    "found": true,
+    "startSeconds": 15,
+    "wordsHeard": "Choisissons"
+  },
+  "onset": 35.334,
+  "proposedCut": 35.3342915,
+  "note": "Proposal only; recut then independently audit before capture"
+}

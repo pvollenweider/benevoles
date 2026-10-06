@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:42:43.047Z",
+  "videoSha256": "35c2c209bcf69614d4a31c035d42e8f425aec8d211722ce9864b8daa6096a067",
+  "promptSha256": "8777177513af88cf35fdb390dbcfc474d74ff1885a9b9fc5fa1fc8dc73129020",
+  "clipSha256": "45be7c1fcf041829804e08861ca87924c0b3d4fd98173ebdd3388802d7915e43",
+  "scene": "organization",
+  "review": {
+    "heardOpening": "Dans Paramètres, puis Emails",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Dans Paramètres, puis Emails",
+        "visibleSeconds": 1.8,
+        "visible": "Affichage de l'écran Paramètres > Emails",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "J moins deux, J moins un et le rappel du jour",
+        "visibleSeconds": 2,
+        "visible": "Cases à cocher des trois rappels visibles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.2,
+        "spoken": "Nous coupons celui de la veille, enregistrons, puis le réactivons",
+        "visibleSeconds": 14.5,
+        "visible": "Aucune manipulation à l'écran : les cases et le bouton restent inchangés",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 18.8,
+        "spoken": "Tu trouves aussi l'adresse de réponse",
+        "visibleSeconds": 2,
+        "visible": "Champ Adresse de réponse visible sous les options",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:14 - 00:18 : La démonstration annoncée (décocher la veille, enregistrer, réactiver) n'est pas effectuée visuellement."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, claire et au débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

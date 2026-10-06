@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:25:57.158Z",
+  "videoSha256": "8f7dbb76df343426f83b4eb397041fab9002326ed3456c11d215b198e2e67c54",
+  "promptSha256": "b987ede0efaef9bf39e6c20d2ea7136808b7fda3dbc631c90a2ea27340fc8d56",
+  "clipSha256": "abad15c691beb793fed9ba2306dfe2c893a7364074dc10bbbc9f16dbd74aeeda",
+  "scene": "create",
+  "review": {
+    "heardOpening": "Ajoutons Fermer les inscriptions",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Ajoutons Fermer les inscriptions",
+        "visibleSeconds": 1,
+        "visible": "Saisie du titre « Fermer les inscriptions » dans le formulaire de jalon",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "avec une date d’échéance",
+        "visibleSeconds": 2.8,
+        "visible": "Renseignement du champ Échéance avec la date 10/14/2026",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "valider le plan de sécurité",
+        "visibleSeconds": 1,
+        "visible": "Le jalon « Valider le plan de sécurité » est visible dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "penser à la communication",
+        "visibleSeconds": 14.5,
+        "visible": "Clic sur Ajouter et apparition du jalon dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Ton pédagogique et posé, bonne intelligibilité globale."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

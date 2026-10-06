@@ -1,0 +1,53 @@
+{
+  "slug": "volunteer-badges",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-05T18:50:17.544Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1173,
+      "endMs": 21991
+    },
+    {
+      "id": "all",
+      "startMs": 22446,
+      "endMs": 46840
+    },
+    {
+      "id": "role",
+      "startMs": 47293,
+      "endMs": 69381
+    },
+    {
+      "id": "individual",
+      "startMs": 69834,
+      "endMs": 93793
+    },
+    {
+      "id": "empty",
+      "startMs": 94246,
+      "endMs": 114165
+    },
+    {
+      "id": "colors",
+      "startMs": 114618,
+      "endMs": 135355
+    },
+    {
+      "id": "fields",
+      "startMs": 135808,
+      "endMs": 158633
+    },
+    {
+      "id": "print",
+      "startMs": 159086,
+      "endMs": 191132
+    },
+    {
+      "id": "result",
+      "startMs": 196405,
+      "endMs": 219876
+    }
+  ]
+}

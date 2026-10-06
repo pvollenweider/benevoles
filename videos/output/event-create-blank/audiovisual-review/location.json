@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:58:33.695Z",
+  "videoSha256": "4811f60870b8951ec947f46457c7c3ae2638f46e4bec4edec4a8b0252e972acd",
+  "promptSha256": "a29f918be7de1352cf9ccd7ecbed8d70678e9126201833f032157e82f83faaab",
+  "clipSha256": "b22823a6ed241a835485f7c41b24b44ccfc11bd7835ba79e18760156c8e26750",
+  "scene": "location",
+  "review": {
+    "heardOpening": "Le lieu reste lisible comme une adresse",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.3,
+        "spoken": "Le lieu reste lisible comme une adresse",
+        "visibleSeconds": 1,
+        "visible": "L'adresse 'Maison de quartier, 12 avenue des Tilleuls, Montvert' apparaît dans le champ Lieu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.3,
+        "spoken": "Juste dessous, collez une paire de coordonnées",
+        "visibleSeconds": 4.1,
+        "visible": "Saisie des coordonnées GPS dans le champ Coordonnées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "prépare un lien Vérifier sur la carte",
+        "visibleSeconds": 5,
+        "visible": "Le lien cliquable 'vérifier sur la carte' s'affiche sous le champ",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, bien synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

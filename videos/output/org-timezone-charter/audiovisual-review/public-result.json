@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:20:05.631Z",
+  "videoSha256": "d99f66e1d00de93a9e4f15c6a1ec3d17b02a4396ee86da063360cee3f65319f4",
+  "promptSha256": "4eab404bf55c53214d7c4ab878cfe68158548e854c8f1223b810621afe13ba63",
+  "clipSha256": "3f4f9b0f1aa6363070e095cd7035f3b2a77e9cb5b90aa18033a93f3baaf9f288",
+  "scene": "public-result",
+  "review": {
+    "heardOpening": "Ouvrez la convention depuis le formulaire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.1,
+        "spoken": "Ouvrez la convention depuis le formulaire.",
+        "visibleSeconds": 1.8,
+        "visible": "Clic sur le lien et ouverture de la modale de convention.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "faisons-le défiler pour lire aussi les engagements de l’organisation et la clause d’assurance.",
+        "visibleSeconds": 5.2,
+        "visible": "Défilement vers le bas affichant les engagements et la clause d'assurance.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Le bouton J’ai lu et j’accepte ferme la fenêtre et coche l’acceptation dans le formulaire.",
+        "visibleSeconds": 9.9,
+        "visible": "Clic sur le bouton, fermeture de la modale et case d'acceptation cochée.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Nous avons retrouvé les actions sur les membres et l'équipe, lu",
+  "windowStart": 220.01000000000002,
+  "result": {
+    "found": true,
+    "startSeconds": 11.2,
+    "wordsHeard": "Nous avons retrouvé les actions sur les membres et l'équipe, lu"
+  },
+  "onset": 231.21,
+  "proposedCut": 231.22302100000002,
+  "note": "Proposal only; recut then independently audit before capture"
+}

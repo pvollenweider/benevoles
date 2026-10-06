@@ -1,0 +1,90 @@
+{
+  "id": "EVENT_ACTIVITY_LOG",
+  "slug": "event-activity-log",
+  "title": "Comprendre ce qui a changé dans son événement",
+  "description": "Lire le journal, filtrer les actions, rejouer un élément et distinguer un récit causal d'un état initial généré.",
+  "language": "fr-CH",
+  "voice": "Puck",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "French, warm and friendly with an audible smile. Patient conversational delivery, clear articulation and natural pauses. Keep one consistent voice throughout.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "chapterTitles": {
+    "read": "Lire qui a fait quoi",
+    "filters": "Retrouver les bonnes actions",
+    "period": "Choisir une période",
+    "replay": "Rejouer un élément",
+    "story": "Lire un enchaînement réel",
+    "baseline": "Un départ, pas un passé inventé",
+    "privacy": "Le journal garde ses limites",
+    "result": "Revenir à l'action utile"
+  },
+  "segments": [
+    {
+      "id": "welcome",
+      "transcript": "Une inscription a disparu, un horaire a changé : avant de chercher un coupable, retrouvons ce qui s'est passé. Depuis notre événement de démonstration, ouvrons le Journal. Son historique contient des actions sur les créneaux, les inscriptions et les réglages de cet événement. Nous allons lire une entrée, filtrer la liste et suivre un enchaînement. Les personnes et l'histoire utilisées ici sont fictives, mais les écrans sont ceux de l'application.",
+      "fallbackDurationMs": 47000
+    },
+    {
+      "id": "read",
+      "transcript": "Dans Explorer, chaque entrée indique le type d'élément, la date et la personne à l'origine de l'action. Une action automatique apparaît avec le système, pas avec le nom d'un organisateur. Lisons une inscription, puis une modification de créneau. Quand des valeurs ont changé, les lignes en dessous donnent les différences enregistrées. Le journal aide à comprendre une modification ; il ne faut pas confondre son auteur avec la personne concernée par l'inscription.",
+      "fallbackDurationMs": 49000
+    },
+    {
+      "id": "filters",
+      "transcript": "Pour retrouver une désinscription, commençons par Type d'élément, puis choisissons Inscription. Le filtre Qui distingue les actions des bénévoles, des administrateurs et du système. Il ne recherche pas un prénom. Le filtre Action permet aussi de se concentrer sur les inscriptions, les créneaux ou les pages. Regardons la liste changer, puis revenons à toutes les actions. Les filtres limitent l'affichage ; ils ne suppriment aucune entrée de l'historique.",
+      "fallbackDurationMs": 50000
+    },
+    {
+      "id": "period",
+      "transcript": "Tu sais quand le changement a eu lieu ? Renseigne Depuis et Jusqu'à pour limiter la période. Choisissons quelques jours de notre exemple, puis élargissons à nouveau la recherche. Une liste vide peut simplement venir des filtres : ce n'est pas la preuve qu'aucune action n'a jamais eu lieu. Quand il reste des entrées à lire, Charger plus complète la liste. Le nombre affiché décrit ce qui a été chargé, pas forcément tout l'historique de l'événement.",
+      "fallbackDurationMs": 51000
+    },
+    {
+      "id": "replay",
+      "transcript": "Pour comprendre l'évolution d'un même créneau, ouvrons Rejouer. Choisissons un élément qui possède plusieurs entrées, puis avançons étape par étape. Les boutons précédent et suivant, comme le curseur, permettent de parcourir les changements enregistrés. Regardons la capacité avant et après sa modification. Rejouer ne remet pas l'événement dans un ancien état : c'est une lecture de l'historique, pas une restauration. Changer d'élément permet ensuite de suivre une inscription plutôt qu'un créneau.",
+      "fallbackDurationMs": 52000
+    },
+    {
+      "id": "story",
+      "transcript": "Le mode Récit répond à une autre question : quelle action en a provoqué une autre ? Dans notre exemple, une annulation libère une place et déclenche une offre à la liste d'attente. Ouvrons cet enchaînement et lisons le résultat. Deux actions proches dans le temps ne forment pas automatiquement une chaîne. Le récit utilise les liens de cause enregistrés par l'application ; il n'invente pas une explication à partir de la seule chronologie.",
+      "fallbackDurationMs": 50000
+    },
+    {
+      "id": "baseline",
+      "transcript": "Un ancien événement peut avoir des créneaux et des inscriptions sans historique enregistré. Générer l'état initial ajoute alors un point de départ pour ces éléments existants. Faisons-le sur notre second exemple, puis lisons la mention grise : Généré, pas une action réelle. Ce bouton ne retrouve pas les anciennes manipulations oubliées. Une nouvelle génération ne doit pas créer de doublons. Elle sert à partir d'un état connu, pas à prétendre que l'on connaît tout le passé.",
+      "fallbackDurationMs": 52000
+    },
+    {
+      "id": "privacy",
+      "transcript": "Le journal n'est pas un carnet d'adresses. Le contenu des pages personnalisées et les coordonnées des bénévoles n'y sont pas recopiés. Il montre les champs modifiés et résout le nom de l'auteur lorsque ce compte existe encore. Pour joindre une personne, retourne à la vue prévue pour les inscriptions ou les membres, avec les droits nécessaires. Une capture d'historique peut tout de même contenir des noms : partage-la seulement avec les personnes qui en ont besoin.",
+      "fallbackDurationMs": 49000
+    },
+    {
+      "id": "result",
+      "transcript": "Nous avons retrouvé une action, vu l'évolution d'un élément et lu un enchaînement sans modifier le planning. Pour agir, reviens ensuite aux inscriptions ou aux créneaux concernés. Le bon réflexe, c'est de vérifier le type, la période et l'origine avant de conclure. Le journal facilite la coordination quand plusieurs personnes organisent ensemble. Il aide à poser une question précise et à corriger le bon problème, calmement, plutôt qu'à recommencer tout le planning.",
+      "fallbackDurationMs": 49000
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, vous retrouvez ce qui a changé dans un événement grâce à son journal : lire une entrée, filtrer, revoir pas à pas l'évolution d'un créneau et suivre un enchaînement d'actions.",
+    "steps": [
+      "Depuis l'événement, ouvrez le Journal et lisez une entrée : type d'élément, date, auteur et différences enregistrées.",
+      "Filtrez par type d'élément, par origine (bénévole, administrateur ou système) ou par action.",
+      "Limitez la période avec Depuis et Jusqu'à, puis utilisez « Charger plus » si la liste continue.",
+      "Ouvrez Rejouer pour parcourir étape par étape l'évolution d'un créneau ou d'une inscription.",
+      "Passez en mode Récit pour voir quelle action en a provoqué une autre.",
+      "Sur un ancien événement sans historique, enregistrez l'état actuel comme point de départ."
+    ],
+    "remember": [
+      "Les filtres limitent l'affichage sans rien supprimer : une liste vide ne prouve pas qu'aucune action n'a eu lieu.",
+      "Rejouer est une lecture de l'historique, pas une restauration.",
+      "L'état initial généré est signalé comme tel : il ne retrouve pas les anciennes manipulations.",
+      "Le journal ne recopie pas les coordonnées des bénévoles, mais il contient des noms : partagez-le avec prudence."
+    ]
+  }
+}

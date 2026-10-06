@@ -31,8 +31,8 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Quand aucun modèle ne correspond vraiment, pars d’une page blanche. L’événement est d’abord créé comme brouillon : tu peux donc préparer tranquillement les informations et le planning avant de montrer quoi que ce soit aux bénévoles.",
-      "fallbackDurationMs": 18000
+      "transcript": "Quand aucun modèle ne correspond vraiment, partez d’une page blanche. L’événement est d’abord créé comme brouillon : vous pouvez préparer tranquillement les informations et le planning avant de les montrer aux bénévoles. Créons ensemble une fête de quartier sur deux jours.",
+      "fallbackDurationMs": 21000
     },
     {
       "id": "identity-dates",
@@ -41,8 +41,8 @@
     },
     {
       "id": "location",
-      "transcript": "Le lieu reste lisible comme une adresse normale. Juste dessous, colle une paire de coordonnées ou un lien OpenStreetMap ou Google Maps. L’application extrait le point et prépare un lien Voir sur la carte, sans charger de carte ni appeler un service externe sur la page publique.",
-      "fallbackDurationMs": 24000
+      "transcript": "Le lieu reste lisible comme une adresse. Juste dessous, collez une paire de coordonnées ou un lien de carte reconnu. L’application extrait le point et prépare un lien Vérifier sur la carte. Le bénévole trouvera Voir sur la carte sur la page publique. La carte externe ne s’ouvre que lorsqu’on suit ce lien.",
+      "fallbackDurationMs": 27000
     },
     {
       "id": "public-content",
@@ -51,8 +51,8 @@
     },
     {
       "id": "phone-color",
-      "transcript": "Rends le téléphone obligatoire seulement si l’équipe doit réellement joindre les bénévoles le jour même. La couleur d’accent personnalise la page publique avec une palette contrôlée pour garder un contraste lisible. Ces deux choix pourront être modifiés plus tard.",
-      "fallbackDurationMs": 21000
+      "transcript": "Rendez le téléphone obligatoire seulement si l’équipe doit joindre les bénévoles le jour même. La couleur personnalise l’en-tête public avec une palette prévue pour garder un texte lisible. Choisissons Émeraude et regardons l’aperçu. Ces deux réglages pourront être modifiés plus tard.",
+      "fallbackDurationMs": 23000
     },
     {
       "id": "create",
@@ -61,13 +61,13 @@
     },
     {
       "id": "autosave",
-      "transcript": "Une fois le brouillon créé, les réglages sont sauvegardés automatiquement après une courte pause. On peut donc quitter cette page, revenir depuis la liste des événements et reprendre la préparation. Le témoin Enregistré confirme que la dernière modification est bien conservée.",
-      "fallbackDurationMs": 22000
+      "transcript": "Après la création, les modifications des réglages s’enregistrent automatiquement après une courte pause. Corrigeons la description, puis attendons Modifications enregistrées à, suivi de l’heure. Ce témoin confirme la sauvegarde. Si la page dit Modifications non enregistrées, restez sur place et réessayez avant de partir.",
+      "fallbackDurationMs": 25000
     },
     {
       "id": "result",
-      "transcript": "Le résultat est un événement structuré mais encore privé : identité, dates, adresse, position GPS et messages sont prêts. L’étape suivante consiste à créer au moins un créneau ; la publication restera impossible tant que le planning ne contient aucune place active.",
-      "fallbackDurationMs": 20000
+      "transcript": "Le résultat est un brouillon structuré, encore invisible au public : identité, dates, adresse, point sur la carte et messages sont prêts. Retrouvons-le dans les événements. Il reste à créer les créneaux, tester le parcours bénévole dans l’aperçu, puis publier quand tout est prêt.",
+      "fallbackDurationMs": 23000
     }
   ]
 }

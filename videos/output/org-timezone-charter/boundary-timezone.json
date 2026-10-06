@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans Paramètres, choisissez le fuseau du lieu où se déroulent vos",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 11.8,
+    "wordsHeard": "Dans Paramètres, choisissez le fuseau du lieu où se déroulent vos"
+  },
+  "onset": 11.8,
+  "proposedCut": 11.367771000000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

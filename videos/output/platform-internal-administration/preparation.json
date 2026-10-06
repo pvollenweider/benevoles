@@ -1,0 +1,46 @@
+{
+  "checkedAt": "2026-10-05T21:24:28.235Z",
+  "organizations": [
+    {
+      "id": "video-operator-org-c",
+      "active": false,
+      "counts": {
+        "events": 0,
+        "admins": 1,
+        "volunteers": 0
+      }
+    },
+    {
+      "id": "video-operator-org-b",
+      "active": true,
+      "counts": {
+        "events": 1,
+        "admins": 1,
+        "volunteers": 3
+      }
+    },
+    {
+      "id": "video-operator-org-a",
+      "active": true,
+      "counts": {
+        "events": 2,
+        "admins": 1,
+        "volunteers": 6
+      }
+    }
+  ],
+  "actualPlatformLogin": true,
+  "actualOwnerLogin": true,
+  "unselectedContextStatus": 409,
+  "ownerPlatformStatus": 403,
+  "anonymousPlatformStatus": 401,
+  "crossOrganizationStatus": 404,
+  "explicitOrganizationSelection": true,
+  "healthPageReal": true,
+  "noInventedHeartbeats": true,
+  "subscribedActiveRecipients": [
+    {
+      "email": "video.operator.a.owner@example.org"
+    }
+  ]
+}

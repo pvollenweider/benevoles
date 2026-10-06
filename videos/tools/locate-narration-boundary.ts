@@ -33,8 +33,8 @@ async function main() {
     ] }], generationConfig: { responseMimeType: "application/json" } }),
   })
   if (!response.ok) throw new Error(`Boundary location HTTP ${response.status}`)
-  const body = await response.json() as { candidates?: { content?: { parts?: { text?: string }[] } }[] }
-  const result = JSON.parse(body.candidates?.[0]?.content?.parts?.map(p => p.text ?? "").join("") ?? "null") as { found: boolean; startSeconds: number; wordsHeard: string }
+  const body = await response.json() as { candidates?: { content?: { parts?: { text?: string; thought?: boolean }[] } }[] }
+  const result = JSON.parse(body.candidates?.[0]?.content?.parts?.filter(p => !p.thought).map(p => p.text ?? "").join("") ?? "null") as { found: boolean; startSeconds: number; wordsHeard: string }
   if (!result?.found || result.startSeconds < 0 || result.startSeconds > 30) throw new Error("Anchor not reliably located in window")
   const onset = start + result.startSeconds
   const { stderr } = await exec("ffmpeg", ["-i", master, "-af", "silencedetect=noise=-35dB:d=0.15", "-f", "null", "-"], { maxBuffer: 10 * 1024 * 1024 })

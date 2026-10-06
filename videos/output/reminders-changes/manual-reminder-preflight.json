@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-10-05T15:38:50.040Z",
+  "scope": "real local UI, persisted data and received emails; no audiovisual validation",
+  "automaticSaveVerified": true,
+  "cancelledWithoutRequestOrEmail": true,
+  "sent": 3,
+  "excludedRequestAndWaitlist": true,
+  "oneEmailPerActiveVolunteer": true,
+  "leaTwoShiftsInOneEmail": true,
+  "customMessageReceived": true,
+  "mailIds": [
+    "5kfQQj45BFC6PtbNq9tmD4",
+    "7aRbOLQgMdNJwQvBQfPlWm",
+    "0Wxr46Usxkn3IXO9DQfmNm"
+  ]
+}

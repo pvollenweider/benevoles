@@ -1,0 +1,12 @@
+{
+  "anchor": "La recherche affiche au maximum vingt résultats par catégorie. Ici, beaucoup",
+  "windowStart": 45.484,
+  "result": {
+    "found": true,
+    "startSeconds": 17.85,
+    "wordsHeard": "La recherche affiche au maximum"
+  },
+  "onset": 63.334,
+  "proposedCut": 63.4949375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

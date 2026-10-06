@@ -1,0 +1,44 @@
+{
+  "checkedAt": "2026-10-05T22:03:12.874Z",
+  "scope": "SMTP fixture only; no outbox rows or app UI proven yet",
+  "attempts": [
+    {
+      "recipient": "video.delivery.smtp-probe@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:03:12.733Z"
+    },
+    {
+      "recipient": "video.delivery.smtp-probe@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:03:12.736Z"
+    },
+    {
+      "recipient": "video.delivery.smtp-probe@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:03:12.737Z"
+    },
+    {
+      "recipient": "video.delivery.smtp-probe@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:03:12.739Z"
+    },
+    {
+      "recipient": "video.delivery.smtp-probe@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:03:12.741Z"
+    },
+    {
+      "recipient": "video.delivery.smtp-probe@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:03:12.742Z"
+    },
+    {
+      "recipient": "video.delivery.smtp-probe@example.org",
+      "accepted": true,
+      "timestamp": "2026-10-05T22:03:12.743Z"
+    }
+  ],
+  "actualDeliveredMailId": "33dp5cjKHx7ZMeE32oNPHp",
+  "localSmtpPort": 41028,
+  "forwardingOnlyToLocalMailpit": 41026
+}

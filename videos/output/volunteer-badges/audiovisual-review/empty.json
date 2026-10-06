@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:53:48.894Z",
+  "videoSha256": "0417e88ec9fa5119cc7d3d49c94fd8060a475f3f66d07f782cbbe4950dd14d66",
+  "promptSha256": "d481466f3f677c824c90f2be04e795b8e82f9577acae3175f60041f727f13be4",
+  "clipSha256": "7fc2fc54433b0cc626358b548c0be8cf1186f740377edcee78de344528ed612c",
+  "scene": "empty",
+  "review": {
+    "heardOpening": "Si tu combines un poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Si tu combines un poste et une personne qui n'y est pas inscrite, la sélection ne donne aucun badge.",
+        "visibleSeconds": 4.5,
+        "visible": "Sélection du poste Loge et du bénévole Camille Berger puis clic sur Ouvrir les badges",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Voici le vrai message de l'application.",
+        "visibleSeconds": 6.8,
+        "visible": "Affichage de la page indiquant l'absence de créneau sur le poste Loge",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Revenons aux filtres et choisissons Tous les postes, puis ouvrons à nouveau le document.",
+        "visibleSeconds": 10.5,
+        "visible": "Retour aux réglages avec filtre Tous les postes et nouveau clic d'ouverture",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "Le résultat doit correspondre à la personne choisie et à ses confirmations",
+        "visibleSeconds": 13,
+        "visible": "Génération et affichage du badge Buvette pour Camille Berger",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et synchronisation visuelle globalement fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

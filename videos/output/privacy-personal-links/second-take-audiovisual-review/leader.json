@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:26:44.886Z",
+  "videoSha256": "b4d9efddbd5814fbdceb220cd5cca7cd88facb3e9f33c37784cfdb0ef5043701",
+  "promptSha256": "42ddd9ec056467cc34b081321085d6887247869b4dfdcc728ee5585281a171da",
+  "clipSha256": "6aa206d88d7afaf45442ce35a21e9e6dc7f3a2510cc28220bcc3e45df13ec221",
+  "scene": "leader",
+  "review": {
+    "heardOpening": "Le responsable a lui aussi un accès destiné",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Ouvrons le lien de Camille, responsable de l'accueil",
+        "visibleSeconds": 2.2,
+        "visible": "Affichage de la page Responsable - Accueil avec les bénévoles inscrits",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Il voit les bénévoles de ce poste, leurs horaires et les coordonnées",
+        "visibleSeconds": 7.3,
+        "visible": "Liste des bénévoles (Jules, Emma, Léa) avec créneaux et contacts",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.8,
+        "spoken": "Revenons dans l'administration et retirons ce responsable",
+        "visibleSeconds": 22,
+        "visible": "Page Responsables de secteur affichée, puis clic sur Retirer et confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.2,
+        "spoken": "En rouvrant son ancien lien, l'accès n'est plus disponible",
+        "visibleSeconds": 26.8,
+        "visible": "Page blanche affichant le message Lien introuvable",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions montrées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

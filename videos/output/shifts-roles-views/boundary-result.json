@@ -1,0 +1,12 @@
+{
+  "anchor": "Utilisez la Frise pour construire et équilibrer la journée, puis la",
+  "windowStart": 53.721000000000004,
+  "result": {
+    "found": true,
+    "startSeconds": 15.42,
+    "wordsHeard": "Utilisez la frise pour construire et équilibrer la journée, puis la"
+  },
+  "onset": 69.141,
+  "proposedCut": 68.72116650000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

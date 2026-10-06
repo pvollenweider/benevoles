@@ -2,12 +2,12 @@
   "id": "SHIFTS_ROLES_VIEWS",
   "slug": "shifts-roles-views",
   "title": "Comprendre postes, créneaux et vues du planning",
-  "description": "Lire la structure du planning, passer de la Timeline à la Liste et organiser les postes.",
+  "description": "Lire la structure du planning, passer de la Frise à la Liste et organiser les postes.",
   "viewer": {
     "summary": "Dans cette vidéo, vous découvrez les postes, les créneaux et les deux vues du planning.",
     "steps": [
       "Distinguez un poste (une mission) d'un créneau (une plage précise de ce poste).",
-      "Utilisez la vue Timeline pour voir qui travaille quand, avec les chevauchements et les trous.",
+      "Utilisez la vue Frise pour voir qui travaille quand, avec les chevauchements et les trous.",
       "Utilisez la vue Liste pour relire les libellés, les capacités et les statuts.",
       "Ouvrez « Gérer les postes » pour réordonner les postes avec Monter et Descendre.",
       "Choisissez une couleur pour chaque poste dans la palette prévue."
@@ -35,7 +35,7 @@
     },
     {
       "id": "timeline",
-      "transcript": "La vue Timeline répond d’abord à une question visuelle : qui travaille quand ? Chaque couleur correspond à un poste, les barres montrent les horaires et leur longueur révèle immédiatement les chevauchements, les trous et les périodes chargées.",
+      "transcript": "La vue Frise répond d’abord à une question visuelle : quelles missions faut-il assurer, et quand ? Les barres montrent les horaires des créneaux. Leur longueur permet de repérer les chevauchements, les trous et les périodes chargées. Une couleur peut aider à reconnaître un poste.",
       "fallbackDurationMs": 22000
     },
     {
@@ -50,13 +50,14 @@
     },
     {
       "id": "colors",
-      "transcript": "La couleur sert à reconnaître une mission d’un coup d’œil. Choisis-la dans la palette prévue : elle reste cohérente dans les vues et lisible pour les bénévoles. La couleur aide à se repérer, mais le nom du poste reste toujours l’information principale.",
+      "transcript": "La couleur sert à reconnaître une mission d’un coup d’œil. Choisissez-la dans la palette prévue : elle reste cohérente dans les vues et lisible pour les bénévoles. La couleur aide à se repérer, mais le nom du poste reste toujours l’information principale.",
       "fallbackDurationMs": 22000
     },
     {
       "id": "result",
-      "transcript": "Utilise la Timeline pour construire et équilibrer la journée, puis la Liste pour contrôler le détail. Avec des noms courts, un ordre logique et des couleurs stables, le planning reste compréhensible même lorsqu’il couvre plusieurs jours.",
+      "transcript": "Utilisez la Frise pour construire et équilibrer la journée, puis la Liste pour contrôler le détail. Avec des noms courts, un ordre logique et des couleurs stables, le planning reste compréhensible même lorsqu’il couvre plusieurs jours.",
       "fallbackDurationMs": 20000
     }
-  ]
+  ],
+  "continuousPauseTags": false
 }

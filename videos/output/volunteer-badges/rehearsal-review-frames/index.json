@@ -1,0 +1,225 @@
+{
+  "video": "volunteer-badges",
+  "source": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/capture.webm",
+  "capturePurpose": "rehearsal",
+  "extractedAt": "2026-10-05T16:21:58.805Z",
+  "note": "Four raw rehearsal frames per scene, including chapter start; no narration or audiovisual validation",
+  "frames": [
+    {
+      "scene": "welcome",
+      "fraction": 0.018181267234326233,
+      "seconds": 1.76,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/welcome-2.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.25,
+      "seconds": 9.41025,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/welcome-25.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.6,
+      "seconds": 20.9606,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/welcome-60.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.85,
+      "seconds": 29.210849999999997,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/welcome-85.png"
+    },
+    {
+      "scene": "all",
+      "fraction": 0.014286054429867377,
+      "seconds": 35.214,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/all-1.png"
+    },
+    {
+      "scene": "all",
+      "fraction": 0.25,
+      "seconds": 45.11375,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/all-25.png"
+    },
+    {
+      "scene": "all",
+      "fraction": 0.6,
+      "seconds": 59.813399999999994,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/all-60.png"
+    },
+    {
+      "scene": "all",
+      "fraction": 0.85,
+      "seconds": 70.31315,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/all-85.png"
+    },
+    {
+      "scene": "role",
+      "fraction": 0.014999250037498125,
+      "seconds": 77.664,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/role-1.png"
+    },
+    {
+      "scene": "role",
+      "fraction": 0.25,
+      "seconds": 87.0645,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/role-25.png"
+    },
+    {
+      "scene": "role",
+      "fraction": 0.6,
+      "seconds": 101.06519999999999,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/role-60.png"
+    },
+    {
+      "scene": "role",
+      "fraction": 0.85,
+      "seconds": 111.06569999999999,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/role-85.png"
+    },
+    {
+      "scene": "individual",
+      "fraction": 0.013953488372093023,
+      "seconds": 118.118,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/individual-1.png"
+    },
+    {
+      "scene": "individual",
+      "fraction": 0.25,
+      "seconds": 128.268,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/individual-25.png"
+    },
+    {
+      "scene": "individual",
+      "fraction": 0.6,
+      "seconds": 143.318,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/individual-60.png"
+    },
+    {
+      "scene": "individual",
+      "fraction": 0.85,
+      "seconds": 154.068,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/individual-85.png"
+    },
+    {
+      "scene": "empty",
+      "fraction": 0.015789058182679405,
+      "seconds": 161.57,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/empty-2.png"
+    },
+    {
+      "scene": "empty",
+      "fraction": 0.25,
+      "seconds": 170.47025,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/empty-25.png"
+    },
+    {
+      "scene": "empty",
+      "fraction": 0.6,
+      "seconds": 183.7706,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/empty-60.png"
+    },
+    {
+      "scene": "empty",
+      "fraction": 0.85,
+      "seconds": 193.27085,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/empty-85.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.013952514940818082,
+      "seconds": 200.025,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/colors-1.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.25,
+      "seconds": 210.17575,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/colors-25.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.6,
+      "seconds": 225.2268,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/colors-60.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.85,
+      "seconds": 235.97754999999998,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/colors-85.png"
+    },
+    {
+      "scene": "fields",
+      "fraction": 0.013635433947685386,
+      "seconds": 243.482,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/fields-1.png"
+    },
+    {
+      "scene": "fields",
+      "fraction": 0.25,
+      "seconds": 253.88275,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/fields-25.png"
+    },
+    {
+      "scene": "fields",
+      "fraction": 0.6,
+      "seconds": 269.2838,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/fields-60.png"
+    },
+    {
+      "scene": "fields",
+      "fraction": 0.85,
+      "seconds": 280.28454999999997,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/fields-85.png"
+    },
+    {
+      "scene": "print",
+      "fraction": 0.01395316387990977,
+      "seconds": 287.939,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/print-1.png"
+    },
+    {
+      "scene": "print",
+      "fraction": 0.25,
+      "seconds": 298.08925,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/print-25.png"
+    },
+    {
+      "scene": "print",
+      "fraction": 0.6,
+      "seconds": 313.1396,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/print-60.png"
+    },
+    {
+      "scene": "print",
+      "fraction": 0.85,
+      "seconds": 323.88984999999997,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/print-85.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.016214463301264727,
+      "seconds": 331.393,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/result-2.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.25,
+      "seconds": 340.044,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/result-25.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.6,
+      "seconds": 352.9954,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/result-60.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.85,
+      "seconds": 362.24640000000005,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-badges/rehearsal-review-frames/result-85.png"
+    }
+  ]
+}

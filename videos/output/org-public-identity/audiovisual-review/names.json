@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:38:28.290Z",
+  "videoSha256": "37f0ffaad0a3d4219ff316210f773fa8ed94aef6541a60f1002c969b42adf7e0",
+  "promptSha256": "3802f24791e2573a5293872a06a0ecaca931965e74b7148d6622661787fd6a65",
+  "clipSha256": "9bed19f249a9be1c011ac9ec6916eac1a9d0eb7e72f06d1ddd85fbd377d110ad",
+  "scene": "names",
+  "review": {
+    "heardOpening": "Dans Paramètres, le nom de l'organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans Paramètres, le nom de l'organisation apparaît",
+        "visibleSeconds": 0,
+        "visible": "Section Paramètres affichée avec le champ Nom de l'organisation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Remplaçons-le par Les bénévoles des Fêtes de Montvert",
+        "visibleSeconds": 7,
+        "visible": "Saisie du texte Les bénévoles des Fêtes de Montvert",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "puis enregistrons",
+        "visibleSeconds": 13.4,
+        "visible": "Clic sur le bouton Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "Le message Titre enregistré confirme la modification",
+        "visibleSeconds": 14.6,
+        "visible": "Apparition de la mention Titre enregistré.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et élocution nette."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

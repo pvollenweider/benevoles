@@ -1,0 +1,98 @@
+{
+  "model": "gemini-3.8-flash",
+  "auditedAt": "2026-10-05T18:43:28.378Z",
+  "revalidatedAt": "2026-10-05T18:43:28.380Z",
+  "note": "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "0c5e0cb7b36ff5cd49859a83c7e8733cccc0840536576c2416318454be70afdf",
+      "recognized": "Une inscription a disparu, un horaire a changé. Avant de chercher un coupable, retrouvons ce qui s'est passé. Depuis notre événement de démonstration, ouvrons le journal. Son historique contient des actions sur les créneaux, les inscriptions et les réglages de cet événement. Nous allons lire une entrée, filtrer la liste et suivre un enchaînement. Les personnes et l'histoire utilisées ici sont fictives, mais les écrans sont ceux de l'application.",
+      "expected": "Une inscription a disparu, un horaire a changé : avant de chercher un coupable, retrouvons ce qui s'est passé. Depuis notre événement de démonstration, ouvrons le Journal. Son historique contient des actions sur les créneaux, les inscriptions et les réglages de cet événement. Nous allons lire une entrée, filtrer la liste et suivre un enchaînement. Les personnes et l'histoire utilisées ici sont fictives, mais les écrans sont ceux de l'application.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "read",
+      "audioSha256": "7b15ad550de004db7e56848ca0abae91402f4c60de09afe938e682bfbdf591f3",
+      "recognized": "Dans Explorer, chaque entrée indique le type d'élément, la date et la personne à l'origine de l'action. Une action automatique apparaît avec le système, pas avec le nom d'un organisateur. Lisons une inscription, puis une modification de créneau. Quand des valeurs ont changé, les lignes en dessous donnent les différences enregistrées. Le journal aide à comprendre une modification, il ne faut pas confondre son auteur avec la personne concernée par l'inscription.",
+      "expected": "Dans Explorer, chaque entrée indique le type d'élément, la date et la personne à l'origine de l'action. Une action automatique apparaît avec le système, pas avec le nom d'un organisateur. Lisons une inscription, puis une modification de créneau. Quand des valeurs ont changé, les lignes en dessous donnent les différences enregistrées. Le journal aide à comprendre une modification ; il ne faut pas confondre son auteur avec la personne concernée par l'inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "filters",
+      "audioSha256": "b339bcc9baaf8c72b55eab5e7aecbda80e6f4e31e7d85637578b8a069cf796da",
+      "recognized": "Pour retrouver une désinscription, commençons par type d'élément puis choisissons inscription. Le filtre qui distingue les actions des bénévoles, des administrateurs et du système. Il ne recherche pas un prénom. Le filtre action permet aussi de se concentrer sur les inscriptions, les créneaux ou les pages. Regardons la liste changer puis revenons à toutes les actions. Les filtres limitent l'affichage. Il ne supprime aucune entrée de l'historique",
+      "expected": "Pour retrouver une désinscription, commençons par Type d'élément, puis choisissons Inscription. Le filtre Qui distingue les actions des bénévoles, des administrateurs et du système. Il ne recherche pas un prénom. Le filtre Action permet aussi de se concentrer sur les inscriptions, les créneaux ou les pages. Regardons la liste changer, puis revenons à toutes les actions. Les filtres limitent l'affichage ; ils ne suppriment aucune entrée de l'historique.",
+      "wordErrorRate": 0.02857142857142857,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "period",
+      "audioSha256": "364a9b5077e90d9ed454dbadc8e0ce4acabc65f574eb16b6d88de5ba47ac07c3",
+      "recognized": "Tu sais quand le changement a eu lieu ? Renseigne Depuis et Jusqu'à pour limiter la période. Choisissons quelques jours dans notre exemple, puis élargissons à nouveau la recherche. Une liste vide peut simplement venir des filtres, ce n'est pas la preuve qu'aucune action n'a jamais eu lieu. Quand il reste des entrées à lire, Charger plus complète la liste. Le nombre affiché décrit ce qui a été chargé, pas forcément tout l'historique de l'événement.",
+      "expected": "Tu sais quand le changement a eu lieu ? Renseigne Depuis et Jusqu'à pour limiter la période. Choisissons quelques jours de notre exemple, puis élargissons à nouveau la recherche. Une liste vide peut simplement venir des filtres : ce n'est pas la preuve qu'aucune action n'a jamais eu lieu. Quand il reste des entrées à lire, Charger plus complète la liste. Le nombre affiché décrit ce qui a été chargé, pas forcément tout l'historique de l'événement.",
+      "wordErrorRate": 0.0125,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "replay",
+      "audioSha256": "ffa412d0bb89f77368ae75ac83393017d39b6672c2f1ceb3a10c2162b593450b",
+      "recognized": "Pour comprendre l'évolution d'un même créneau, ouvrons Rejouer. Choisissons un élément qui possède plusieurs entrées, puis avançons étape par étape. Les boutons précédent et suivant, comme le curseur, permettent de parcourir les changements enregistrés. Regardons la capacité avant et après sa modification. Rejouer ne remet pas l'événement dans un ancien état. C'est une lecture de l'historique, pas une restauration. Changer d'élément permet ensuite de suivre une inscription plutôt qu'un créneau.",
+      "expected": "Pour comprendre l'évolution d'un même créneau, ouvrons Rejouer. Choisissons un élément qui possède plusieurs entrées, puis avançons étape par étape. Les boutons précédent et suivant, comme le curseur, permettent de parcourir les changements enregistrés. Regardons la capacité avant et après sa modification. Rejouer ne remet pas l'événement dans un ancien état : c'est une lecture de l'historique, pas une restauration. Changer d'élément permet ensuite de suivre une inscription plutôt qu'un créneau.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "story",
+      "audioSha256": "648e0f963a8c54ce4c07062c2a59188463c6c914d9557d8e1be95addb6052ccd",
+      "recognized": "Le mode Récit répond à une autre question : quelle action en a provoqué une autre ? Dans notre exemple, une annulation libère une place et déclenche une offre à la liste d'attente. Ouvrons cet enchaînement et lisons le résultat. Deux actions proches dans le temps ne forment pas automatiquement une chaîne. Le récit utilise les liens de cause enregistrés par l'application. Il n'invente pas une explication à partir de la seule chronologie.",
+      "expected": "Le mode Récit répond à une autre question : quelle action en a provoqué une autre ? Dans notre exemple, une annulation libère une place et déclenche une offre à la liste d'attente. Ouvrons cet enchaînement et lisons le résultat. Deux actions proches dans le temps ne forment pas automatiquement une chaîne. Le récit utilise les liens de cause enregistrés par l'application ; il n'invente pas une explication à partir de la seule chronologie.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "baseline",
+      "audioSha256": "6bbc5f0b23a72a0ef8cf2ba1f80d1ba8966180947c4045e2c5e235ab1e63ae45",
+      "recognized": "Un ancien événement peut avoir des créneaux et des inscriptions sans historique enregistré. Générer l'état initial ajoute alors un point de départ pour ces éléments existants. Faisons-le sur notre second exemple puis lisons la mention grise, générée, pas une action réelle. Ce bouton ne retrouve pas les anciennes manipulations oubliées. Une nouvelle génération ne doit pas créer de doublons. Elle sert à partir d'un état connu, pas à prétendre que l'on connaît tout le passé.",
+      "expected": "Un ancien événement peut avoir des créneaux et des inscriptions sans historique enregistré. Générer l'état initial ajoute alors un point de départ pour ces éléments existants. Faisons-le sur notre second exemple, puis lisons la mention grise : Généré, pas une action réelle. Ce bouton ne retrouve pas les anciennes manipulations oubliées. Une nouvelle génération ne doit pas créer de doublons. Elle sert à partir d'un état connu, pas à prétendre que l'on connaît tout le passé.",
+      "wordErrorRate": 0.012658227848101266,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "privacy",
+      "audioSha256": "002960e0255e6dffadd78199fc30a6e7ee6dfa1ef5de9800ed7cfb6f545a39d2",
+      "recognized": "Le journal n'est pas un carnet d'adresses. Le contenu des pages personnalisées et les coordonnées des bénévoles n'y sont pas recopiés. Il montre les champs modifiés et résout le nom de l'auteur lorsque ce compte existe encore. Pour joindre une personne, retourne à la vue prévue pour les inscriptions ou les membres, avec les droits nécessaires. Une capture d'historique peut tout de même contenir des noms. Partage-la seulement avec les personnes qui en ont besoin.",
+      "expected": "Le journal n'est pas un carnet d'adresses. Le contenu des pages personnalisées et les coordonnées des bénévoles n'y sont pas recopiés. Il montre les champs modifiés et résout le nom de l'auteur lorsque ce compte existe encore. Pour joindre une personne, retourne à la vue prévue pour les inscriptions ou les membres, avec les droits nécessaires. Une capture d'historique peut tout de même contenir des noms : partage-la seulement avec les personnes qui en ont besoin.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "3f73429d1edf6f1be1b018f60222e7d3fc8ad45df23af7238945863f0911b204",
+      "recognized": "nous avons retrouvé une action, vu l'évolution d'un élément et lu un enchaînement, sans modifier le planning. Pour agir, reviens ensuite aux inscriptions ou aux créneaux concernés. Le bon réflexe, c'est de vérifier le type, la période et l'origine avant de conclure. Le journal facilite la coordination quand plusieurs personnes organisent ensemble. Il aide à poser une question précise et à corriger le bon problème, calmement plutôt qu'à recommencer tout le planning.",
+      "expected": "Nous avons retrouvé une action, vu l'évolution d'un élément et lu un enchaînement sans modifier le planning. Pour agir, reviens ensuite aux inscriptions ou aux créneaux concernés. Le bon réflexe, c'est de vérifier le type, la période et l'origine avant de conclure. Le journal facilite la coordination quand plusieurs personnes organisent ensemble. Il aide à poser une question précise et à corriger le bon problème, calmement, plutôt qu'à recommencer tout le planning.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

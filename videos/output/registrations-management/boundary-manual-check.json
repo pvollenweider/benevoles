@@ -1,0 +1,12 @@
+{
+  "anchor": "Ouvrons le choix du créneau. Déjà inscrit signale l'horaire que Camille",
+  "windowStart": 99.969,
+  "result": {
+    "found": true,
+    "startSeconds": 9.58,
+    "wordsHeard": "Ouvrons le choix du créneau Déjà inscrit signale l'horaire que Camille"
+  },
+  "onset": 109.54899999999999,
+  "proposedCut": 109.4588545,
+  "note": "Proposal only; recut then independently audit before capture"
+}

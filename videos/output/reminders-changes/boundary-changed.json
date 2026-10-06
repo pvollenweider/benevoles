@@ -1,0 +1,12 @@
+{
+  "anchor": "Si un horaire change, ouvre le créneau concerné. Nous décalons son",
+  "windowStart": 159.79899999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 13.16,
+    "wordsHeard": "Si un horaire change ouvre le créneau concerné nous décalons son"
+  },
+  "onset": 172.95899999999997,
+  "proposedCut": 173.2261875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

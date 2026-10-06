@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:13:52.915Z",
+  "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
+  "promptSha256": "7bd138a01bb9afc1d7a1119c679dc791e55a9bc9fea7e76eaa714a4ab261c9a6",
+  "clipSha256": "9b015631da69eaf6ed91da74f7ba830d325ea4b36ffb25c13198b1b562a43a9f",
+  "scene": "reminders",
+  "review": {
+    "heardOpening": "Vous pouvez activer le rappel",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "activer le rappel à deux jours, à un jour, puis le jour même",
+        "visibleSeconds": 0,
+        "visible": "Cases à cocher Rappel J-2, J-1 et Rappel du jour affichées à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Décochons puis recochons le premier rappel",
+        "visibleSeconds": 8.5,
+        "visible": "Aucune action de clic visible, la case Rappel J-2 reste immobile",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "chaque rappel regroupe ses créneaux dans un seul email",
+        "visibleSeconds": 14.5,
+        "visible": "Écran de paramétrage fixe sans visualisation d'email",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:08 - L'action annoncée de décocher puis recocher le premier rappel n'est pas réalisée à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

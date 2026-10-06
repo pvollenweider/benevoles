@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:59:13.967Z",
+  "videoSha256": "4811f60870b8951ec947f46457c7c3ae2638f46e4bec4edec4a8b0252e972acd",
+  "promptSha256": "2cdcc18bcb8837d561ab39211ce1e0915d8229f2bbd317119348422f1ee4156c",
+  "clipSha256": "9974ff27245dbfa213a3eb70a25e6518f23289f30f75a23504f0b94315286e7d",
+  "scene": "autosave",
+  "review": {
+    "heardOpening": "Après la création",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Corrigeons la description",
+        "visibleSeconds": 8.5,
+        "visible": "Saisie de texte ajoutée dans le champ Description",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "attendons Modifications enregistrées à, suivi de l’heure",
+        "visibleSeconds": 12.2,
+        "visible": "Apparition du message 'Modifications enregistrées à 07h55'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Si la page dit Modifications non enregistrées",
+        "visibleSeconds": 16.5,
+        "visible": "Condition théorique expliquée, l'écran reste sur l'enregistrement validé",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

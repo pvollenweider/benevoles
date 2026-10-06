@@ -1,0 +1,96 @@
+{
+  "id": "REGISTRATIONS_MANAGEMENT",
+  "slug": "registrations-management",
+  "validatedAt": "2026-10-05T14:34:37.347Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 324200,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 21925,
+      "audioMs": 21924,
+      "driftMs": 1
+    },
+    {
+      "id": "columns",
+      "visualMs": 23679,
+      "audioMs": 23678,
+      "driftMs": 1
+    },
+    {
+      "id": "filters",
+      "visualMs": 20996,
+      "audioMs": 20996,
+      "driftMs": 0
+    },
+    {
+      "id": "requests",
+      "visualMs": 21151,
+      "audioMs": 21149,
+      "driftMs": 2
+    },
+    {
+      "id": "manual-identity",
+      "visualMs": 21716,
+      "audioMs": 21711,
+      "driftMs": 5
+    },
+    {
+      "id": "manual-check",
+      "visualMs": 23809,
+      "audioMs": 23806,
+      "driftMs": 3
+    },
+    {
+      "id": "manual-result",
+      "visualMs": 20683,
+      "audioMs": 20682,
+      "driftMs": 1
+    },
+    {
+      "id": "selection",
+      "visualMs": 21984,
+      "audioMs": 21983,
+      "driftMs": 1
+    },
+    {
+      "id": "resend",
+      "visualMs": 19978,
+      "audioMs": 19977,
+      "driftMs": 1
+    },
+    {
+      "id": "leader",
+      "visualMs": 22415,
+      "audioMs": 22415,
+      "driftMs": 0
+    },
+    {
+      "id": "undo",
+      "visualMs": 26540,
+      "audioMs": 26539,
+      "driftMs": 1
+    },
+    {
+      "id": "remove",
+      "visualMs": 26465,
+      "audioMs": 26464,
+      "driftMs": 1
+    },
+    {
+      "id": "workload",
+      "visualMs": 25724,
+      "audioMs": 25723,
+      "driftMs": 1
+    },
+    {
+      "id": "result",
+      "visualMs": 20154,
+      "audioMs": 20153,
+      "driftMs": 1
+    }
+  ],
+  "issues": []
+}

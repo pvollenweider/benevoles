@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:00:30.294Z",
+  "videoSha256": "1a398dc1b0f9c269772795bf5a7edf3279b335085513b5b8d5e5c3440600bbd1",
+  "promptSha256": "6832b491eff11dcce7892a635b88225e199bf7f20292723753e6b75f8e6b1b2e",
+  "clipSha256": "e746b386d69801066d731581b16545bb6d19cbdcd3a911deeb3e557b50b8b96b",
+  "scene": "public",
+  "review": {
+    "heardOpening": "Ouvrons maintenant la page publique",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrons maintenant la page publique",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la page publique de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Le concert apparaît en repère sur le planning",
+        "visibleSeconds": 2.2,
+        "visible": "Repère Concert du village visible sur la frise chronologique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Les liens d’information reprennent l’ordre choisi",
+        "visibleSeconds": 5.1,
+        "visible": "Onglets d'informations affichés en en-tête",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.7,
+        "spoken": "Ouvrons Ce qu’il faut apporter",
+        "visibleSeconds": 8.5,
+        "visible": "Transition vers la page Ce qu'il faut apporter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "le titre, le gras et la liste sont mis en forme, et la gourde est bien présente",
+        "visibleSeconds": 10.1,
+        "visible": "Titre en gras et liste à puces incluant Une gourde",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec l'affichage."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

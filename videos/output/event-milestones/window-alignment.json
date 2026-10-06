@@ -1,0 +1,29 @@
+{
+  "locatedAt": "2026-10-06T01:58:55.329Z",
+  "masterSha256": "54682a97da18f3f757faab68e358313b2dedfab62e089a1399074e52df3bf3a7",
+  "totalSeconds": 85.68,
+  "cuts": [
+    {
+      "id": "create",
+      "seconds": 12.152333500000001
+    },
+    {
+      "id": "states",
+      "seconds": 29.374354
+    },
+    {
+      "id": "toggle",
+      "seconds": 44.2291875
+    },
+    {
+      "id": "dashboard",
+      "seconds": 57.738083
+    },
+    {
+      "id": "result",
+      "seconds": 73.07124999999999
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

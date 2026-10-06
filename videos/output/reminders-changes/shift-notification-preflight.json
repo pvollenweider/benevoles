@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-10-05T15:05:20.859Z",
+  "scope": "local routes, database and actual mailbox; no audiovisual validation",
+  "modified": {
+    "notified": 1,
+    "oldStart": "17:02",
+    "newStart": "17:32",
+    "oldEnd": "19:02",
+    "newEnd": "19:32",
+    "pendingRequestNotNotified": true
+  },
+  "cancellation": {
+    "cancelledRegistrations": 2,
+    "notified": 2,
+    "includesPendingRequest": true,
+    "checkedInDataUnchanged": true,
+    "response": {
+      "success": true,
+      "cancelledRegistrations": 2,
+      "notified": 2,
+      "unpublished": false
+    }
+  },
+  "actualMail": [
+    {
+      "kind": "shift_cancelled",
+      "mailId": "6bT7hOLNcFHVtgD5MkurKu"
+    },
+    {
+      "kind": "shift_cancelled",
+      "mailId": "1RSEGeqtckIvN5hxQttTYL"
+    },
+    {
+      "kind": "shift_modified",
+      "mailId": "0uoG7yTs0EYsw9RDtwfRQl"
+    }
+  ]
+}

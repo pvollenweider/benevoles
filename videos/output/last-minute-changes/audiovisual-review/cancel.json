@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T20:52:03.838Z",
+  "videoSha256": "3e2b054ce139ced7f32f4059559c36ac89bc83cb334bbe34e341997d8f994942",
+  "promptSha256": "d8e86cde1deac919f1899546fd471e0dec133e8c8d02102c8dfd9d7dfe6a7156",
+  "clipSha256": "a704b9985a4ad060c602d18df8769567d807b8100c928fd462275476d2ec9a9c",
+  "scene": "cancel",
+  "review": {
+    "heardOpening": "Une mission n'a plus lieu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Ouvrons la confirmation et prenons le temps de lire les conséquences.",
+        "visibleSeconds": 6.8,
+        "visible": "Ouverture de la modale de confirmation de suppression du créneau.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.1,
+        "spoken": "Après confirmation, les inscriptions concernées sont annulées",
+        "visibleSeconds": 12.3,
+        "visible": "Clic sur Supprimer et mise à jour de la liste sans le créneau.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.2,
+        "spoken": "puis le vrai email reçu.",
+        "visibleSeconds": 22.4,
+        "visible": "Affichage de la boîte de réception Mailpit avec l'e-mail d'annulation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 29,
+        "spoken": "Annuler n'est pas simplement fermer les nouvelles inscriptions.",
+        "visibleSeconds": 29.8,
+        "visible": "Affichage du tableau des inscriptions.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

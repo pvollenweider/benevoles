@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:43:04.969Z",
+  "videoSha256": "74ad8b7010a5231a83be946771cc9efc6fe7565c20bad30cecf13062260ad851",
+  "promptSha256": "6cb563f5ca92ef63209526d2de0351fa06aec2e444b2ce4943efebd0f4d8075b",
+  "clipSha256": "c092ed7f73b679a66e05f5d37720391acc29de0f2f29a38d908064200e3c8063",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un lien pour recruter",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Un lien pour recruter, un lien pour gérer son inscription",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la liste des membres pour Formation – confidentialité A avec encart titre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Dans notre démonstration, deux organisations ont chacune une Léa Exemple",
+        "visibleSeconds": 14.5,
+        "visible": "Transition vers la liste des membres de Formation – confidentialité B affichant Léa Exemple",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24,
+        "spoken": "Chaque organisation retrouve son propre événement dans son administration",
+        "visibleSeconds": 25.5,
+        "visible": "Affichage du planning de l'événement Fête des liens — organisation A",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, synchronisée avec les transitions visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

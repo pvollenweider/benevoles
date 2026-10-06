@@ -1,0 +1,51 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:44:00.062Z",
+  "videoSha256": "74ad8b7010a5231a83be946771cc9efc6fe7565c20bad30cecf13062260ad851",
+  "promptSha256": "75386a5c865ed48115ad357893fb5962ad4c840474d9747e73cb8f05ba434377",
+  "clipSha256": "9eee366cac7198d8410fc5755966436de52baedbb681f3a0095c75912d498312",
+  "scene": "admin",
+  "review": {
+    "heardOpening": "L'organisateur travaille dans son administration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5,
+        "spoken": "Dans les inscriptions, il retrouve les personnes",
+        "visibleSeconds": 2,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Dans les membres, il peut consulter les disponibilités",
+        "visibleSeconds": 10,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "Regardons la fiche de Léa",
+        "visibleSeconds": 11.5,
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Sa page personnelle ne montre pas les notes internes",
+        "visibleSeconds": 18.5,
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:11 : la modale de la fiche de Léa s'ouvre quelques secondes avant son annonce orale à 00:15.",
+      "00:22 : l'accès ou la vue spécifique au responsable d'équipe mentionnée n'est pas illustrée à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, posée et intelligible tout au long de l'extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

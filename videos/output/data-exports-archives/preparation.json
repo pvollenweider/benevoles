@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-05T20:28:48.150Z",
+  "scope": "actual UI downloads and local byte/data checks; not spreadsheet native execution or audiovisual validation",
+  "organizationId": "video-data-exports",
+  "eventId": "video-data-exports-event",
+  "members": 4,
+  "memberColumns": 12,
+  "journalEntries": 2,
+  "inactiveIncluded": true,
+  "accentsPreserved": true,
+  "formulaAndPhoneApostrophesVerified": true,
+  "archiveCollectionsPopulated": true,
+  "actualQuestionAnswerVerified": true,
+  "secretKeysAndKnownTokensAbsent": true
+}

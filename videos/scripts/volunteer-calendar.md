@@ -11,11 +11,11 @@ Retrouver les créneaux confirmés dans l'agenda que le bénévole utilise déj�
 1. Depuis la page personnelle de Camille, montrer trois créneaux confirmés et une attente.
 2. Télécharger un seul créneau avec « Ajouter à mon calendrier » ; vérifier que le fichier contient exactement un événement.
 3. Télécharger « Ajouter tout mon planning à mon calendrier » ; vérifier les trois événements et l'absence de la liste d'attente.
-4. Montrer le résultat de l'import dans un agenda de démonstration isolé. Ouvrir un événement pour lire lieu, consignes, personne de contact et lien personnel. Ne pas utiliser un agenda réel contenant les données de Philippe.
-5. Montrer le créneau de nuit : samedi 22 h à dimanche 2 h. Vérifier les dates, le fuseau et la durée réelle dans le fichier puis dans le rendu de l'agenda.
+4. Expliquer l'import dans son agenda sans ouvrir une application native, selon la décision de Philippe de poursuivre sans accès à Calendrier. Montrer les informations correspondantes sur la page Benevol et vérifier leur présence dans le fichier réellement téléchargé. Ne pas annoncer un import effectué.
+5. Montrer le créneau de nuit : samedi 22 h à dimanche 2 h. Vérifier les dates, le fuseau et la durée réelle dans le fichier ; ne pas prétendre avoir vérifié un rendu dans un agenda externe.
 6. Expliquer l'ouverture dans Apple, Google ou Outlook ; ne pas faire passer un visualiseur maison pour l'un de ces logiciels. Toute importation annoncée comme vérifiée doit être réellement réalisée dans un environnement de démonstration approprié.
 7. Modifier le créneau de nuit côté organisateur. Montrer que l'ancien fichier conserve l'ancien horaire : il ne se met pas à jour automatiquement.
-8. Télécharger la nouvelle version, vérifier le même identifiant d'événement et le nouvel horaire. Montrer le résultat de la réimportation dans le client testé, sans promettre un remplacement universel dans tous les calendriers.
+8. Télécharger la nouvelle version, vérifier le même identifiant d'événement et le nouvel horaire. Expliquer la réimportation, sans présenter un résultat externe non filmé ni promettre un remplacement universel dans tous les calendriers.
 
 ## Données
 
@@ -31,4 +31,4 @@ Scénario `personal-calendar`, lancé après `demo` : Accueil samedi 9–12, Ran
 
 ## État
 
-Scénario et script préparés. Narration, capture, import dans un agenda et rendu final à réaliser.
+Neuf paragraphes de narration contrôlés indépendamment ; capture Benevol, assemblage MP4 et validation des durées terminés. Visionnage audiovisuel intégral encore à effectuer. Import natif hors périmètre à la demande de Philippe ; aucun accès supplémentaire à Calendrier ne sera demandé pour cette vidéo.

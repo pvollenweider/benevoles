@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour retirer le logo, revenez dans Paramètres et choisissez Retirer le",
+  "windowStart": 103.574,
+  "result": {
+    "found": true,
+    "startSeconds": 9.34,
+    "wordsHeard": "Pour"
+  },
+  "onset": 112.914,
+  "proposedCut": 111.65575,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,42 +1,51 @@
 {
   "slug": "admin-navigation",
-  "recordedAt": "2026-10-04T10:38:33.570Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T01:54:51.210Z",
   "video": "capture.webm",
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1,
-      "endMs": 14921
+      "startMs": 0,
+      "endMs": 12818
     },
     {
       "id": "organization-navigation",
-      "startMs": 17083,
-      "endMs": 39351
+      "startMs": 14978,
+      "endMs": 32837
     },
     {
       "id": "event-navigation",
-      "startMs": 41509,
-      "endMs": 62096
+      "startMs": 34992,
+      "endMs": 58305
     },
     {
       "id": "search",
-      "startMs": 64264,
-      "endMs": 84299
+      "startMs": 60468,
+      "endMs": 77631
     },
     {
       "id": "account-help",
-      "startMs": 85916,
-      "endMs": 101255
+      "startMs": 79217,
+      "endMs": 95221
     },
     {
       "id": "mobile-keyboard",
-      "startMs": 103415,
-      "endMs": 121235
+      "startMs": 97381,
+      "endMs": 111524
     },
     {
       "id": "result",
-      "startMs": 121686,
-      "endMs": 138804
+      "startMs": 111975,
+      "endMs": 127901
+    }
+  ],
+  "portraitFrames": [
+    {
+      "startMs": 97388,
+      "endMs": 104173,
+      "width": 390,
+      "height": 800
     }
   ]
 }

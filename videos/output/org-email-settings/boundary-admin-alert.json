@@ -1,0 +1,12 @@
+{
+  "anchor": "L’option Prévenir les administrateurs à chaque inscription envoie un email à",
+  "windowStart": 39.102999999999994,
+  "result": {
+    "found": true,
+    "startSeconds": 15.26,
+    "wordsHeard": "L'option"
+  },
+  "onset": 54.36299999999999,
+  "proposedCut": 54.103333,
+  "note": "Proposal only; recut then independently audit before capture"
+}

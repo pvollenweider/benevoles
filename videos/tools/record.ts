@@ -4,7 +4,7 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { chromium, type Locator, type Page } from "playwright"
-import { loadManifest, videoDir, type AudioMetadata, type Timeline } from "../lib/manifest"
+import { catalogEntry, loadManifest, videoDir, type AudioMetadata, type Timeline } from "../lib/manifest"
 
 const reference = process.argv.find((arg) => !arg.startsWith("-") && arg !== process.argv[0] && arg !== process.argv[1])
 if (!reference) throw new Error("Usage: npm run video:record -- <VIDEO_ID>")
@@ -18,6 +18,9 @@ if (host !== "localhost" && host !== "127.0.0.1" && host !== "::1") {
 const org = process.env.VIDEO_ORG ?? "default"
 const eventSlug = process.env.VIDEO_EVENT_SLUG ?? "fete-du-village"
 const gapMs = 450
+const rehearsal = process.argv.includes("--rehearse")
+const quickRehearsal = process.argv.includes("--quick-rehearse")
+if (quickRehearsal && !rehearsal) throw new Error("--quick-rehearse requires --rehearse; never use accelerated timing for narrated captures")
 
 async function metadata(file: string): Promise<AudioMetadata | null> {
   try {
@@ -136,12 +139,18 @@ async function fillVisibly(page: Page, field: Locator, value: string, pauseMs = 
 
 async function main() {
   const manifest = await loadManifest(reference!)
+  if ((await catalogEntry(reference!)).captureReady === false) throw new Error(`${manifest.id}: real UI recorder and fixture are not ready; refusing a substitute capture`)
   const slug = manifest.slug
   const dir = videoDir(manifest.slug)
   const rawVideo = path.join(dir, "capture.webm")
   const timelineFile = path.join(dir, "timeline.json")
   const audio = await metadata(path.join(dir, "audio-metadata.json"))
-  const durations = new Map(manifest.segments.map((segment) => [segment.id, audio?.segments[segment.id]?.durationMs ?? segment.fallbackDurationMs]))
+  if (slug === "email-delivery-failures" && !rehearsal) await (await import("../lib/record-delivery")).validateDeliveryNarration(dir)
+  if (slug === "volunteer-confirmation-errors" && !rehearsal) await (await import("../lib/record-registration-errors")).validateRegistrationErrorNarration(dir)
+  if (slug === "platform-internal-administration" && !rehearsal) {
+    await (await import("../lib/record-operator")).validateOperatorNarration(dir)
+  }
+  const durations = new Map(manifest.segments.map((segment) => [segment.id, rehearsal ? segment.fallbackDurationMs : audio?.segments[segment.id]?.durationMs ?? segment.fallbackDurationMs]))
   await mkdir(dir, { recursive: true })
   await rm(rawVideo, { force: true })
 
@@ -159,10 +168,13 @@ async function main() {
   })
   const page = await context.newPage()
   const cues: Timeline["cues"] = []
+  const portraitFrames: NonNullable<Timeline["portraitFrames"]> = []
+  const detailFrames: NonNullable<Timeline["detailFrames"]> = []
   let startedAt = 0
   let recording = false
 
   const scene = async (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => {
+    console.log(`Scene ${id}: ${rehearsal ? "rehearsal" : "narration-timed"}`)
     const audioDuration = durations.get(id)
     if (!audioDuration) throw new Error(`Missing duration for ${id}`)
     // The TTS take contains a short tail, the recorder adds a chapter gap, and the next take has
@@ -172,26 +184,33 @@ async function main() {
     const start = performance.now()
     cues.push({ id, startMs: Math.round(start - startedAt), endMs: 0 })
     const at = async (fraction: number) => {
+      if (quickRehearsal) return
       const remaining = start + expected * fraction - performance.now()
       if (remaining > 0) await page.waitForTimeout(remaining)
     }
     try {
+      const title = manifest.chapterTitles?.[id]
+      if (title) await page.screencast.showChapter(title, { duration: 1500 })
       await action(at)
     } catch (error) {
       throw new Error(`Scene ${id} failed`, { cause: error })
     }
     const elapsed = performance.now() - start
-    if (elapsed > expected + 1_000) {
+    if (!quickRehearsal && elapsed > expected + 1_000) {
       throw new Error(`Scene ${id} overruns its narration by ${Math.round(elapsed - expected)} ms`)
     }
-    if (elapsed < expected) await page.waitForTimeout(expected - elapsed)
+    if (!quickRehearsal && elapsed < expected) await page.waitForTimeout(expected - elapsed)
     cues.at(-1)!.endMs = Math.round(performance.now() - startedAt)
     await page.waitForTimeout(gapMs)
   }
 
   try {
     let featureEventId = ""
-    if (slug === "volunteer-form-recap" || slug === "volunteer-confirmation-errors") {
+    if (slug === "volunteer-confirmation-errors") {
+      await (await import("../lib/record-registration-errors")).prepareRegistrationErrorRecording(page, baseUrl, dir)
+      await settle(page)
+    }
+    if (slug === "volunteer-form-recap") {
       await page.goto(`${baseUrl}/admin/login`)
       await page.getByLabel("Email").fill(process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost")
       await page.getByLabel("Mot de passe").fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
@@ -219,10 +238,11 @@ async function main() {
       if (!(await heading.isVisible())) throw new Error("Demo event not found; run scripts/seed-demo.ts on the local database first")
     } else if (slug !== "volunteer-form-recap" && slug !== "volunteer-confirmation-errors") {
       await page.goto(`${baseUrl}/admin/login`)
-      await page.getByLabel("Email").fill(process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost")
+      await page.getByLabel("Email").fill(slug === "platform-internal-administration" ? "video.operator.platform@example.org" : slug === "privacy-personal-links" ? "video.privacy.a.owner@example.org" : slug === "last-minute-changes" ? "video.last-minute.owner@example.org" : slug === "organization-activity-log" ? "video.org-activity.owner@example.org" : slug === "data-exports-archives" ? "video.exports.owner@example.org" : process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost")
       await page.getByLabel("Mot de passe").fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
       await page.getByRole("button", { name: "Se connecter" }).click()
-      await page.waitForURL(/\/admin\/events/)
+      await page.waitForURL(slug === "platform-internal-administration" ? /\/super-admin\/organizations/ : /\/admin\/(events|dashboard)/)
+      if (slug !== "platform-internal-administration") await page.goto(`${baseUrl}/admin/events`)
       await settle(page)
       if (slug === "admin-features-tour" || slug === "organizer-monitor-followup" || slug === "admin-navigation" || slug === "global-search" || slug === "org-public-identity" || slug === "org-timezone-charter" || slug === "event-review-publish" || slug === "event-visibility-registration-window" || slug === "event-duplicate" || slug === "event-program-pages-qr" || slug === "event-milestones" || slug === "event-archive-delete" || slug === "shifts-roles-views" || slug === "shift-create-edit-detail" || slug === "shift-create-series" || slug === "shift-timeline-quick-actions" || slug === "shift-night-dst" || slug === "shift-waitlist-offer" || slug === "shift-approval" || slug === "shift-eligibility-rules" || slug === "volunteer-discover-event" || slug === "volunteer-choose-shifts") {
         const href = await page.getByRole("link", { name: "Fête du village de Montvert" }).first().getAttribute("href")
@@ -272,17 +292,51 @@ async function main() {
       }
     }
 
-    if (slug === "sector-leaders" || slug === "volunteer-personal-registrations" || slug === "volunteer-session-availability") {
+    if (slug === "targeted-messages" || slug === "staffing-gaps" || slug === "registrations-management" || slug === "members-reminders" || slug === "members-invitations" || slug === "sector-leaders" || slug === "volunteer-personal-registrations" || slug === "volunteer-session-availability" || slug === "volunteer-calendar") {
       const href = await page.getByRole("link", { name: "Fête du village de Montvert" }).first().getAttribute("href")
       if (!href) throw new Error("Seed event link not found")
       featureEventId = href.split("/").filter(Boolean).at(-1)!
-      await page.goto(slug === "sector-leaders" ? `${baseUrl}/admin/events/${featureEventId}/sector-leaders` : `${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
+      await page.goto(slug === "targeted-messages" ? `${baseUrl}/admin/events/${featureEventId}/message` : slug === "staffing-gaps" ? `${baseUrl}/admin/events/${featureEventId}` : slug === "registrations-management" ? `${baseUrl}/admin/events/${featureEventId}/registrations` : slug === "members-invitations" || slug === "members-reminders" ? `${baseUrl}/admin/events/${featureEventId}/invitations` : slug === "sector-leaders" ? `${baseUrl}/admin/events/${featureEventId}/sector-leaders` : `${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
+    }
+
+    if (slug === "event-activity-log") {
+      const href = await page.getByRole("link", { name: "Comprendre le journal de la fête", exact: true }).getAttribute("href")
+      if (!href) throw new Error("Dedicated event-log fixture missing")
+      featureEventId = href.split("/").filter(Boolean).at(-1)!
+      await page.goto(`${baseUrl}/admin/events/${featureEventId}`); await settle(page)
+    }
+    if (slug === "attendance-check-in") {
+      const href = await page.getByRole("link", { name: "Accueil des bénévoles — pointage", exact: true }).getAttribute("href")
+      if (!href) throw new Error("Dedicated attendance fixture missing")
+      featureEventId = href.split("/").filter(Boolean).at(-1)!
+      await page.goto(`${baseUrl}/admin/events/${featureEventId}/registrations`); await settle(page)
+    }
+    if (slug === "volunteer-badges" || slug === "event-reports") {
+      const href = await page.getByRole("link", { name: "Fête des associations — documents terrain", exact: true }).getAttribute("href")
+      if (!href) throw new Error("Dedicated document fixture missing")
+      featureEventId = href.split("/").filter(Boolean).at(-1)!
+      await page.goto(`${baseUrl}/admin/events/${featureEventId}${slug === "event-reports" ? "" : "/print"}`); await settle(page)
+    }
+
+    if (slug === "reminders-changes") {
+      const href = await page.getByRole("link", { name: "Atelier des rappels", exact: true }).getAttribute("href")
+      if (!href) throw new Error("Fresh reminder fixture missing")
+      featureEventId = href.split("/").filter(Boolean).at(-1)!
+      for (const route of [`/admin/events/${featureEventId}/edit`, `/admin/events/${featureEventId}/shifts`, `/admin/events/${featureEventId}/registrations`, "/admin/settings/notifications", `/admin/events/${featureEventId}`]) {
+        await page.goto(`${baseUrl}${route}`); await settle(page)
+      }
+    }
+
+    if (slug === "members-management" || slug === "members-import") {
+      await page.goto(`${baseUrl}/admin/members`); await settle(page)
+      await page.getByRole("heading", { name: "Membres", exact: true }).waitFor()
     }
 
     // Recorder-owned demo data must be cleaned before capture starts. These scenarios are often
     // retried while tuning synchronization; doing it here keeps both the database and the first
     // frame deterministic, without showing maintenance actions in the finished lesson.
     if (slug === "event-milestones") {
+      if (featureEventId !== "video-foundation-milestones-event-0" || org !== "formation-milestones") throw new Error("Milestone cleanup must remain in its explicitly owned synthetic fixture")
       await page.goto(`${baseUrl}/admin/events/${featureEventId}`); await settle(page)
       while (await page.getByRole("checkbox", { name: "Fermer les inscriptions", exact: true }).count()) {
         await page.getByRole("button", { name: "Supprimer le jalon Fermer les inscriptions", exact: true }).first().click()
@@ -292,6 +346,7 @@ async function main() {
         await dialog.waitFor({ state: "hidden" })
       }
     } else if (slug === "event-program-pages-qr") {
+      if (featureEventId !== "video-foundation-pages-event-0" || org !== "formation-pages") throw new Error("Page cleanup must remain in its explicitly owned synthetic fixture")
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/pages`); await settle(page)
       while (await page.getByText("FAQ bénévoles", { exact: true }).count()) {
         await page.getByRole("button", { name: "Supprimer la page « FAQ bénévoles »", exact: true }).first().click()
@@ -309,6 +364,13 @@ async function main() {
       }
     }
 
+    const privacyRecording = slug === "privacy-personal-links"
+      ? await (await import("../lib/record-privacy")).preparePrivacyRecording(page, baseUrl, dir)
+      : undefined
+    const operatorRecording = slug === "platform-internal-administration"
+      ? await (await import("../lib/record-operator")).prepareOperatorRecording(page, baseUrl, dir, rehearsal)
+      : undefined
+
     await page.screencast.start({
       path: rawVideo,
       size: { width: manifest.viewport.width, height: manifest.viewport.height },
@@ -317,7 +379,10 @@ async function main() {
     recording = true
     startedAt = performance.now()
 
-    if (slug === "volunteer-register-mobile") {
+    if (slug === "platform-internal-administration" && operatorRecording) {
+      const { recordOperator } = await import("../lib/record-operator")
+      await recordOperator({ page, base: baseUrl, directory: dir, title: manifest.title, setup: operatorRecording, scene, tap, settle })
+    } else if (slug === "volunteer-register-mobile") {
     await scene("welcome", async () => {
       await page.screencast.showChapter(manifest.title, { description: "Le parcours bénévole, simplement", duration: 2_300 })
     })
@@ -334,7 +399,7 @@ async function main() {
       await continueButton.scrollIntoViewIfNeeded()
       await page.waitForTimeout(900)
       await tap(page, continueButton)
-      await page.getByRole("heading", { name: "Vos informations" }).waitFor()
+      await page.getByRole("heading", { name: "Tes informations" }).waitFor()
     })
 
     const stamp = Date.now()
@@ -377,13 +442,18 @@ async function main() {
 
       await page.screencast.showChapter("Toute l’organisation", { description: "Événements, membres et réglages communs", duration: 1_400 })
       await scene("organization-navigation", async (at) => {
-        await at(0.08)
+        await at(0.04)
+        await tap(page, page.getByRole("link", { name: "Tableau de bord", exact: true }).first())
+        await settle(page)
+        await at(0.28)
+        await tap(page, page.getByRole("link", { name: "Événements", exact: true }).first())
+        await at(0.43)
         await tap(page, page.getByRole("link", { name: "Membres", exact: true }).first())
         await page.getByRole("heading", { name: "Membres" }).waitFor()
-        await at(0.43)
+        await at(0.63)
         await tap(page, page.getByRole("link", { name: "Paramètres", exact: true }).first())
         await page.getByRole("heading", { name: "Paramètres" }).waitFor()
-        await at(0.72)
+        await at(0.91)
         await tap(page, page.getByRole("link", { name: "Événements", exact: true }).first())
         await page.getByRole("heading", { name: "Événements" }).waitFor()
       })
@@ -392,14 +462,17 @@ async function main() {
       await scene("event-navigation", async (at) => {
         await tap(page, page.getByRole("link", { name: "Fête du village de Montvert" }).first())
         await page.waitForURL(new RegExp(`/admin/events/${featureEventId}$`))
+        await page.getByRole("link", { name: "Gérer les créneaux", exact: true }).scrollIntoViewIfNeeded()
         await at(0.34)
-        await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
-        await page.getByRole("heading", { name: "Créneaux" }).waitFor()
-        await at(0.66)
-        await page.goto(`${baseUrl}/admin/events/${featureEventId}/registrations`); await settle(page)
-        await page.getByRole("heading", { name: "Inscriptions" }).waitFor()
-        await at(0.84)
-        await page.goto(`${baseUrl}/admin/events`); await settle(page)
+        await page.getByRole("link", { name: "QR code", exact: true }).scrollIntoViewIfNeeded()
+        await at(0.63)
+        await page.getByRole("heading", { name: "Jalons", exact: true }).scrollIntoViewIfNeeded()
+        await at(0.73)
+        await page.getByRole("heading", { name: "Communications", exact: true }).scrollIntoViewIfNeeded()
+        await at(0.82)
+        await page.getByRole("heading", { name: "Où manque-t-il du monde ?", exact: true }).scrollIntoViewIfNeeded()
+        await at(0.94)
+        await tap(page, page.getByRole("link", { name: "← Événements", exact: true }))
       })
 
       await page.screencast.showChapter("Retrouver directement", { description: "Recherche globale et raccourci clavier", duration: 1_400 })
@@ -412,9 +485,27 @@ async function main() {
         await search.press("Enter")
         await page.waitForURL(/\/admin\/search\?q=buvette/)
         await page.getByRole("heading", { name: "Recherche" }).waitFor()
-        await at(0.70)
-        const result = page.getByRole("link", { name: /Buvette/i }).first()
-        if (await result.isVisible()) await result.scrollIntoViewIfNeeded()
+        await at(0.52)
+        const result = page.getByRole("link", { name: /Buvette.*village/ }).first()
+        const href = await result.getAttribute("href")
+        if (!href?.startsWith(`/admin/events/${featureEventId}/`)) throw new Error("Search result does not belong to this video event")
+        const pendingPage = await result.getAttribute("target") === "_blank" ? page.waitForEvent("popup") : null
+        await tap(page, result)
+        if (pendingPage) {
+          const openedPage = await pendingPage
+          await openedPage.waitForLoadState("domcontentloaded")
+          await page.goto(openedPage.url())
+          await openedPage.close()
+        }
+        await page.waitForURL(new RegExp(`/admin/events/${featureEventId}/`))
+        await settle(page)
+        await at(0.76)
+        await page.goto(`${baseUrl}/admin/search?q=buvette`); await settle(page)
+        const refined = page.getByRole("searchbox").first()
+        await refined.fill("")
+        await typeNaturally(page, refined, "buvette village")
+        await refined.press("Enter")
+        await page.getByRole("link", { name: /Buvette.*village/ }).waitFor()
       })
 
       await page.goto(`${baseUrl}/admin/events`); await settle(page)
@@ -424,18 +515,31 @@ async function main() {
         await page.getByRole("menu", { name: "Menu du compte" }).waitFor()
         await at(0.44)
         await page.getByRole("menuitem", { name: "Mon compte" }).hover()
-        await at(0.72)
+        await at(0.35)
         await page.keyboard.press("Escape")
-        await page.getByRole("link", { name: /Aide/ }).filter({ visible: true }).first().scrollIntoViewIfNeeded()
+        const help = page.getByRole("link", { name: /Aide/ }).filter({ visible: true }).first()
+        const popupPromise = page.waitForEvent("popup")
+        await tap(page, help)
+        const guide = await popupPromise
+        await guide.waitForLoadState("domcontentloaded")
+        const guideUrl = guide.url()
+        if (!guideUrl.startsWith(baseUrl)) throw new Error("Help must remain on the isolated local application")
+        await page.goto(guideUrl); await settle(page)
+        await guide.close()
+        await at(0.77)
+        await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
+        await page.getByRole("link", { name: /Aide/ }).filter({ visible: true }).last().scrollIntoViewIfNeeded()
       })
 
       await page.screencast.showChapter("Mobile et clavier", { description: "Les mêmes repères pour tout le monde", duration: 1_400 })
       await scene("mobile-keyboard", async (at) => {
         await page.setViewportSize({ width: 390, height: 800 })
+        const portraitStart = Math.round(performance.now() - startedAt)
         await at(0.10)
         await tap(page, page.getByRole("button", { name: /Menu/ }))
         await page.getByRole("link", { name: "Membres", exact: true }).waitFor()
         await at(0.48)
+        portraitFrames.push({ startMs: portraitStart, endMs: Math.round(performance.now() - startedAt), width: 390, height: 800 })
         await page.setViewportSize({ width: 1280, height: 800 })
         await page.goto(`${baseUrl}/admin/events`); await settle(page)
         await page.locator("body").click({ position: { x: 4, y: 120 } })
@@ -456,52 +560,87 @@ async function main() {
       })
 
       await scene("open", async (at) => {
-        await page.keyboard.press(process.platform === "darwin" ? "Meta+K" : "Control+K")
+        const detailStart = Math.round(performance.now() - startedAt)
+        await tap(page, page.getByRole("button", { name: "Rechercher", exact: true }).filter({ visible: true }))
         const field = page.getByLabel("Rechercher un bénévole, un événement ou un poste").filter({ visible: true })
         await field.waitFor()
-        await at(0.46)
+        await at(0.30)
         await page.keyboard.press("Escape")
-        await at(0.72)
-        await tap(page, page.getByRole("button", { name: "Rechercher" }).filter({ visible: true }))
+        await at(0.42)
+        await page.keyboard.press(process.platform === "darwin" ? "Meta+K" : "Control+K")
+        await field.waitFor()
+        if (!(await field.evaluate(element => element === document.activeElement))) throw new Error("Shortcut did not focus the search field")
+        await at(0.75)
+        await page.keyboard.press("Escape")
+        detailFrames.push({ startMs: detailStart, endMs: Math.round(performance.now() - startedAt), x: 640, y: 0, width: 640, height: 400 })
       })
 
       await page.screencast.showChapter("Retrouver une personne", { description: "Fiche membre ou inscription", duration: 1_400 })
       await scene("person", async (at) => {
+        await tap(page, page.getByRole("button", { name: "Rechercher" }).filter({ visible: true }))
         const field = page.getByLabel("Rechercher un bénévole, un événement ou un poste").filter({ visible: true })
-        await typeNaturally(page, field, "Camille Rochat")
+        await typeNaturally(page, field, "Léa Morel")
         await field.press("Enter")
         await page.waitForURL(/\/admin\/search/)
         await page.getByRole("heading", { name: "Recherche" }).waitFor()
-        await at(0.52)
-        await page.getByRole("heading", { name: /Bénévoles/ }).scrollIntoViewIfNeeded()
-        await at(0.74)
-        await page.getByRole("heading", { name: /Inscriptions/ }).scrollIntoViewIfNeeded()
+        const resultsUrl = page.url()
+        await at(0.30)
+        await tap(page, page.locator("#search-volunteers").locator("..").getByRole("link", { name: "Léa Morel", exact: true }))
+        await page.waitForURL(/\/admin\/members\?q=/); await settle(page)
+        await page.getByRole("row").filter({ hasText: /Léa\s+Morel/ }).first().waitFor()
+        await at(0.50)
+        await page.goto(resultsUrl); await settle(page)
+        await tap(page, page.locator("#search-registrations").locator("..").getByRole("link", { name: /Léa Morel/ }).first())
+        await page.waitForURL(new RegExp(`/admin/events/${featureEventId}/registrations\\?q=`)); await settle(page)
+        await page.getByRole("row").filter({ hasText: /Léa\s+Morel/ }).first().waitFor()
+        await at(0.75)
+        await page.getByText("Liste d'attente", { exact: true }).scrollIntoViewIfNeeded()
       })
 
       await scene("shift", async (at) => {
+        await page.goto(`${baseUrl}/admin/search?q=Buvette`); await settle(page)
         const search = page.getByLabel("Nom, email, téléphone, événement ou poste")
-        await tap(page, search)
-        await search.fill("Buvette")
-        await page.getByRole("button", { name: "Rechercher", exact: true }).click()
-        await page.waitForURL(/q=Buvette/)
-        await at(0.58)
+        await at(0.32)
         await page.getByRole("heading", { name: /Créneaux/ }).scrollIntoViewIfNeeded()
+        await at(0.46)
+        await search.fill("")
+        await typeNaturally(page, search, "Buvette village")
+        await search.press("Enter")
+        await page.getByRole("link", { name: /Buvette.*village/ }).waitFor()
+        await at(0.72)
+        await tap(page, page.getByRole("link", { name: /Buvette.*village/ }))
+        await page.waitForURL(new RegExp(`/admin/events/${featureEventId}/registrations\\?shift=`)); await settle(page)
       })
 
       await scene("limits", async (at) => {
+        await page.goto(`${baseUrl}/admin/search?q=Morel`); await settle(page)
+        await page.getByText(/Seuls les 20 premiers résultats/).scrollIntoViewIfNeeded()
         const search = page.getByLabel("Nom, email, téléphone, événement ou poste")
-        await tap(page, search)
-        await search.fill("zoe")
-        await page.getByRole("button", { name: "Rechercher", exact: true }).click()
+        await at(0.46)
+        await search.fill("")
+        await typeNaturally(page, search, "Léa Morel")
+        await search.press("Enter")
+        await page.getByRole("heading", { name: /^Bénévoles \(1\)/ }).waitFor()
+        await at(0.72)
+        const narrowed = page.getByLabel("Nom, email, téléphone, événement ou poste")
+        await narrowed.fill("")
+        await typeNaturally(page, narrowed, "zoe")
+        await narrowed.press("Enter")
         await page.waitForURL(/q=zoe/)
-        await at(0.55)
-        await page.getByText("Zoé Pittet").first().scrollIntoViewIfNeeded()
+        await page.getByText("Zoé Perrin").first().scrollIntoViewIfNeeded()
       })
 
-      await scene("result", async () => {
+      await scene("result", async (at) => {
         await page.getByRole("heading", { name: "Recherche" }).waitFor()
+        await at(0.72)
+        await page.goto(`${baseUrl}/admin/members`); await settle(page)
+        await page.getByRole("heading", { name: "Membres", exact: true }).waitFor()
+        await at(0.87)
+        await page.goto(`${baseUrl}/admin/events/${featureEventId}/registrations`); await settle(page)
+        await page.getByRole("heading", { name: "Inscriptions", exact: true }).waitFor()
       })
     } else if (slug === "org-public-identity") {
+      if (featureEventId !== "video-foundation-identity-event-0" || org !== "fetes-de-montvert") throw new Error("Identity recording requires its explicitly owned fixture")
       await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Un nom clair et une adresse stable", duration: 2_300 })
@@ -516,29 +655,60 @@ async function main() {
         const form = titleHeading.locator("xpath=ancestor::form")
         const field = form.getByLabel("Titre affiché en haut de la page de vos événements")
         await tap(page, field)
-        await field.fill("Les bénévoles des Fêtes de Montvert")
+        await field.fill("")
+        await typeNaturally(page, field, "Les bénévoles des Fêtes de Montvert")
         await at(0.70)
         await tap(page, form.getByRole("button", { name: "Enregistrer" }))
-        await form.getByText(/Titre enregistré|Aucune modification/).waitFor()
+        await form.getByText("Titre enregistré.", { exact: true }).waitFor()
+      })
+
+      await scene("logo", async (at) => {
+        const panel = page.getByRole("heading", { name: "Logo de l'organisation", exact: true }).locator("..")
+        await panel.scrollIntoViewIfNeeded()
+        await at(0.20)
+        await panel.locator('input[type="file"]').setInputFiles(path.resolve("videos/fixtures/montvert-demo-logo.png"))
+        await panel.getByAltText("Aperçu de l'image choisie").waitFor()
+        await at(0.46)
+        await tap(page, panel.getByRole("button", { name: "Enregistrer le logo", exact: true }))
+        await panel.getByText("Logo enregistré. Il apparaît maintenant sur vos pages publiques et vos documents.", { exact: true }).waitFor()
+        await panel.getByText("Logo actuel", { exact: true }).scrollIntoViewIfNeeded()
       })
 
       await scene("slug", async (at) => {
         const heading = page.getByRole("heading", { name: "Identifiant public (slug)" })
         await heading.scrollIntoViewIfNeeded()
-        await at(0.44)
-        await page.getByLabel("Identifiant", { exact: true }).click()
-        await at(0.72)
+        await at(0.10)
+        const identifier = page.getByLabel("Identifiant", { exact: true })
+        await tap(page, identifier)
         await page.getByText(/Adresse de votre espace/).scrollIntoViewIfNeeded()
+        await at(0.32)
+        await identifier.fill("fetes-de-montvert-rencontres")
+        await tap(page, heading.locator("..").getByRole("button", { name: "Modifier", exact: true }))
+        await page.getByText(/Des événements publiés existent/).waitFor()
+        await at(0.90)
+        await tap(page, page.getByRole("button", { name: "Annuler", exact: true }))
+        await identifier.fill("fetes-de-montvert")
+        await at(0.94)
+        await page.getByText("Anciens identifiants (redirigent vers l'actuel)", { exact: true }).scrollIntoViewIfNeeded()
+        await page.getByText("montvert-ancien", { exact: true }).waitFor()
+        await page.getByText(/supprimer un ancien identifiant cassera les liens/).waitFor()
       })
 
       await page.goto(`${baseUrl}/?org=${encodeURIComponent(org)}`); await settle(page)
       await scene("public-page", async (at) => {
         await page.getByText("Les bénévoles des Fêtes de Montvert").first().waitFor()
-        await at(0.52)
+        await page.locator('img[src^="/api/public/organizations/video-foundation-identity/logo?"]').waitFor()
+        await page.getByRole("link", { name: "Marché solidaire" }).waitFor()
+        if (await page.getByRole("link", { name: "Rencontre des organisateurs" }).count()) throw new Error("Unlisted event leaked into public organization list")
+        await at(0.40)
         await page.getByRole("link", { name: "Fête du village de Montvert" }).scrollIntoViewIfNeeded()
+        await at(0.62)
+        await page.goto(`${baseUrl}/rencontre-2?org=${encodeURIComponent(org)}`); await settle(page)
+        await page.getByRole("heading", { name: "Rencontre des organisateurs", exact: true }).waitFor()
       })
 
       await scene("event-result", async (at) => {
+        await page.goto(`${baseUrl}/?org=${encodeURIComponent(org)}`); await settle(page)
         const eventLink = page.getByRole("link", { name: "Fête du village de Montvert" })
         await tap(page, eventLink)
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
@@ -547,9 +717,32 @@ async function main() {
         await page.getByText("Place du Collège, Montvert").first().scrollIntoViewIfNeeded()
       })
 
-      await scene("result", async () => {
+      await scene("remove-logo", async (at) => {
+        await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
+        const panel = page.getByRole("heading", { name: "Logo de l'organisation", exact: true }).locator("..")
+        await panel.scrollIntoViewIfNeeded()
+        await at(0.25)
+        await tap(page, panel.getByRole("button", { name: "Retirer le logo", exact: true }))
+        const confirmation = page.getByRole("alertdialog", { name: "Retirer le logo de l'organisation ?" })
+        await confirmation.waitFor()
+        await at(0.48)
+        await tap(page, confirmation.getByRole("button", { name: "Retirer le logo", exact: true }))
+        await panel.getByText("Logo retiré. Le nom de l'organisation reste affiché.", { exact: true }).waitFor()
+        await at(0.67)
+        await page.goto(`${baseUrl}/?org=${encodeURIComponent(org)}`); await settle(page)
+        await page.getByText("Les bénévoles des Fêtes de Montvert", { exact: true }).waitFor()
+      })
+
+      await scene("result", async (at) => {
         await page.goto(`${baseUrl}/?org=${encodeURIComponent(org)}`); await settle(page)
         await page.getByText("Les bénévoles des Fêtes de Montvert").first().waitFor()
+        await at(0.34)
+        await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
+        await page.getByRole("heading", { name: "Nom de l'organisation", exact: true }).scrollIntoViewIfNeeded()
+        await at(0.58)
+        await page.getByRole("heading", { name: "Titre de la page publique", exact: true }).scrollIntoViewIfNeeded()
+        await at(0.76)
+        await page.getByText("Anciens identifiants (redirigent vers l'actuel)", { exact: true }).scrollIntoViewIfNeeded()
       })
     } else if (slug === "org-timezone-charter") {
       await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
@@ -573,8 +766,13 @@ async function main() {
         const heading = page.getByRole("heading", { name: "Fuseau horaire" })
         const form = heading.locator("xpath=ancestor::form")
         await tap(page, form.getByRole("button", { name: "Enregistrer" }))
-        await at(0.52)
-        await page.getByText(/sans modifier leurs heures affichées/).scrollIntoViewIfNeeded()
+        await at(0.24)
+        await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
+        const unchangedSlot = page.getByRole("button", { name: /Accueil.*09h.*12h/ })
+        await unchangedSlot.waitFor()
+        await unchangedSlot.scrollIntoViewIfNeeded()
+        await at(0.84)
+        await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
       })
 
       await page.screencast.showChapter("La convention", { description: "Le cadre accepté par chaque bénévole", duration: 1_400 })
@@ -583,22 +781,32 @@ async function main() {
         await heading.scrollIntoViewIfNeeded()
         const panel = heading.locator("xpath=ancestor::div[contains(@class,'rounded-2xl')]")
         const charter = panel.locator("textarea")
+        const insurance = panel.getByRole("switch", { name: "Assurance RC fournie par l'organisation" })
+        await at(0.12)
+        await tap(page, insurance)
+        await at(0.23)
+        await tap(page, insurance)
+        await at(0.72)
+        await tap(page, panel.getByRole("button", { name: "Réinitialiser la convention par défaut", exact: true }))
+        const completeText = await charter.inputValue()
+        if (!completeText.includes("dès que possible") || !completeText.includes("3. L'organisation")) {
+          throw new Error("Current complete convention required: do not capture the obsolete build or the one-sentence test text")
+        }
         await tap(page, charter)
-        await charter.fill("Je m’engage à arriver à l’heure, à prévenir rapidement en cas d’empêchement et à respecter les consignes de sécurité données par les responsables.")
-        await at(0.65)
+        await at(0.85)
         await tap(page, panel.getByRole("button", { name: "Enregistrer" }))
         await panel.getByText("Enregistré ✓").waitFor()
       })
 
-      await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
       await page.screencast.showChapter("Côté bénévole", { description: "Vérifier le texte réellement présenté", duration: 1_400 })
       await scene("public-setup", async (at) => {
+        await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
         await page.getByRole("heading", { name: "Fête du village de Montvert" }).waitFor()
         await at(0.22)
-        await tap(page, page.getByRole("button", { name: /Sélectionner — Accueil 09h–12h/ }))
+        await tap(page, page.getByRole("button", { name: /Accueil.*09h.*12h/ }))
         await at(0.52)
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
-        await page.getByRole("heading", { name: "Vos informations" }).waitFor()
+        await page.getByRole("heading", { name: "Tes informations" }).waitFor()
       })
 
       await scene("public-result", async (at) => {
@@ -606,23 +814,37 @@ async function main() {
         await at(0.08)
         await tap(page, page.getByRole("button", { name: "convention des bénévoles" }))
         await page.getByRole("dialog", { name: "Convention des Bénévoles" }).waitFor()
-        await at(0.24)
-        await page.getByText(/Je m’engage à arriver à l’heure/).scrollIntoViewIfNeeded()
+        await at(0.32)
+        const dialog = page.getByRole("dialog", { name: "Convention des Bénévoles" })
+        const box = await dialog.boundingBox()
+        if (!box) throw new Error("Convention dialog is not visible")
+        const previousScroll = await dialog.evaluate(element => [element, ...element.querySelectorAll("*")].reduce((sum, node) => sum + node.scrollTop, 0))
+        await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
+        await page.mouse.wheel(0, 650)
+        await page.waitForTimeout(450)
+        await page.mouse.wheel(0, 250)
+        await page.waitForTimeout(450)
+        const currentScroll = await dialog.evaluate(element => [element, ...element.querySelectorAll("*")].reduce((sum, node) => sum + node.scrollTop, 0))
+        if (currentScroll <= previousScroll) throw new Error("Convention body did not actually scroll")
         await at(0.66)
         await tap(page, page.getByRole("button", { name: "J'ai lu et j'accepte" }))
-        await page.getByRole("heading", { name: "Vos informations" }).waitFor()
+        await page.getByRole("heading", { name: "Tes informations" }).waitFor()
       })
 
       await scene("attention", async (at) => {
-        await page.getByRole("heading", { name: "Vos informations" }).scrollIntoViewIfNeeded()
+        await page.getByRole("heading", { name: "Tes informations" }).scrollIntoViewIfNeeded()
         await at(0.24)
         await page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).scrollIntoViewIfNeeded()
-        await at(0.68)
+        await at(0.36)
         await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
-        await page.getByRole("heading", { name: "Fuseau horaire" }).scrollIntoViewIfNeeded()
+        await page.getByRole("heading", { name: "Convention des Bénévoles", exact: true }).scrollIntoViewIfNeeded()
+        await at(0.80)
+        await page.goto(`${baseUrl}/admin/events/${featureEventId}`); await settle(page)
+        await page.getByRole("heading", { name: "Communications", exact: true }).scrollIntoViewIfNeeded()
       })
 
       await scene("result", async () => {
+        await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
         await page.getByRole("heading", { name: "Fuseau horaire" }).scrollIntoViewIfNeeded()
       })
     } else if (slug === "shift-night-dst") {
@@ -865,7 +1087,7 @@ async function main() {
         await page.getByRole("heading", { name: "Créneaux" }).waitFor()
       })
       await scene("timeline", async (at) => {
-        await page.getByRole("button", { name: "Timeline" }).scrollIntoViewIfNeeded()
+        await page.getByRole("button", { name: "Frise", exact: true }).scrollIntoViewIfNeeded()
         await at(0.40)
         await page.getByText("Buvette", { exact: true }).first().scrollIntoViewIfNeeded()
       })
@@ -892,21 +1114,30 @@ async function main() {
         const palette = page.getByRole("group", { name: /Couleur du poste/ })
         await at(0.58)
         await palette.scrollIntoViewIfNeeded()
-        await tap(page, palette.getByRole("button", { name: "Indigo" }))
+        const indigo = palette.getByRole("button", { name: "Indigo", exact: true })
+        // Retakes retain their own data. Always demonstrate a real change,
+        // rather than clicking an already-selected colour without an effect.
+        const choice = await indigo.getAttribute("aria-pressed") === "true"
+          ? palette.getByRole("button", { name: "Automatique", exact: false })
+          : indigo
+        await tap(page, choice)
         await palette.waitFor({ state: "hidden" })
       })
+      // Save outside the narrated cue: its first sentence already refers to
+      // the Frise, not to the still-open management panel.
+      await tap(page, page.getByRole("button", { name: "Enregistrer l'ordre" }))
+      await page.getByRole("heading", { name: "Gérer les postes" }).waitFor({ state: "hidden" })
       await scene("result", async (at) => {
-        // Persist the reordered roles first. Saving closes the management panel; only then switch
-        // the underlying schedule to Timeline, so the final frame actually demonstrates the view.
-        await tap(page, page.getByRole("button", { name: "Enregistrer l'ordre" }))
-        await page.getByRole("heading", { name: "Gérer les postes" }).waitFor({ state: "hidden" })
-        const timeline = page.getByRole("button", { name: "Timeline" })
+        const timeline = page.getByRole("button", { name: "Frise", exact: true })
         await timeline.scrollIntoViewIfNeeded()
-        await at(0.38)
+        await at(0.03)
         await tap(page, timeline)
-        await page.getByText(/Cliquer \+ glisser sur un poste pour ajouter un créneau/).first().waitFor()
+        await page.getByRole("region", { name: /^Planning du/ }).first().waitFor()
+        await at(0.38)
+        await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
+        await at(0.78)
+        await tap(page, timeline)
         if (await timeline.getAttribute("aria-pressed") !== "true") throw new Error("Timeline view was not selected")
-        await at(0.72)
       })
     } else if (slug === "shift-waitlist-offer") {
       const waitlistShift = await page.evaluate(async (eventId) => {
@@ -1373,68 +1604,7 @@ async function main() {
         await continueButton.focus()
       })
     } else if (slug === "volunteer-confirmation-errors") {
-      let shiftId = ""
-      await scene("welcome", async () => {
-        await page.screencast.showChapter(manifest.title, { description: "Comprendre le message et reprendre sereinement", duration: 2_300 })
-      })
-      await scene("form", async () => {
-        const data = await page.evaluate(async () => (await fetch(`/api/public/${location.pathname.split('/')[1]}?org=default`)).json())
-        shiftId = data.shifts.find((s: { roleName: string; startTime: string }) => s.roleName === "Accueil" && s.startTime === "09:00").id
-        await tap(page, page.getByRole("button", { name: /Sélectionner — Accueil 09h–12h/ }))
-        await tap(page, page.getByRole("button", { name: /^Continuer/ }))
-        await typeNaturally(page, page.getByLabel("Prénom *", { exact: true }), "Alex")
-        await typeNaturally(page, page.getByLabel("Nom *", { exact: true }), "Martin")
-        await typeNaturally(page, page.getByLabel("Email *", { exact: true }), "alex.errors@example.org")
-        await typeNaturally(page, page.getByLabel("Téléphone *", { exact: true }), "079 000 12 34")
-        await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
-        await tap(page, page.locator("label").filter({ hasText: "J'accepte que l'association" }).getByRole("checkbox"))
-      })
-      const submit = page.getByRole("button", { name: "Confirmer mon inscription" })
-      await scene("validation", async (at) => {
-        await tap(page, submit)
-        await page.locator('[role="alert"]').first().waitFor()
-        await at(0.48)
-        await tap(page, page.getByRole("radio", { name: "M", exact: true }))
-      })
-      const capacity = async (value: number) => page.evaluate(async ({ id, value }) => {
-        const response = await fetch(`/api/admin/shifts/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ capacity: value }) })
-        if (!response.ok) throw new Error(await response.text())
-      }, { id: shiftId, value })
-      await scene("capacity", async (at) => {
-        await capacity(2)
-        await tap(page, submit)
-        await page.getByText("Votre sélection n'est plus disponible").waitFor()
-        await at(0.60)
-        await page.getByLabel("Email *", { exact: true }).scrollIntoViewIfNeeded()
-      })
-      await scene("network", async (at) => {
-        await capacity(3)
-        await page.route("**/api/public/registrations", (route) => route.abort("internetdisconnected"))
-        await tap(page, submit)
-        await page.getByText("Connexion interrompue", { exact: true }).waitFor()
-        await at(0.52)
-        await submit.scrollIntoViewIfNeeded()
-        await at(0.78)
-        await page.unroute("**/api/public/registrations")
-      })
-      await scene("success", async (at) => {
-        await tap(page, submit)
-        await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
-        await at(0.45)
-        if (await page.getByRole("link", { name: "Accéder à mon inscription" }).count()) throw new Error("Public confirmation must not expose a personal link")
-      })
-      await scene("email", async (at) => {
-        await page.goto("http://localhost:48026"); await settle(page)
-        const mail = page.getByText(/Inscription confirmée/).first()
-        await mail.waitFor()
-        await at(0.20)
-        await tap(page, mail)
-        await at(0.64)
-      })
-      await scene("result", async () => {
-        await page.goto(`${baseUrl}/${eventSlug}/success?org=${encodeURIComponent(org)}`); await settle(page)
-        await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
-      })
+      await (await import("../lib/record-registration-errors")).recordRegistrationErrors({ page, base: baseUrl, directory: dir, title: manifest.title, scene, tap, settle })
     } else if (slug === "volunteer-form-recap") {
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Les bonnes informations et un engagement réaliste", duration: 2_300 })
@@ -1447,7 +1617,7 @@ async function main() {
         }
         await at(0.64)
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
-        await page.getByRole("heading", { name: "Vos informations" }).waitFor()
+        await page.getByRole("heading", { name: "Tes informations" }).waitFor()
       })
       await scene("identity", async (at) => {
         await typeNaturally(page, page.getByLabel("Prénom *", { exact: true }), "Alex")
@@ -1491,7 +1661,7 @@ async function main() {
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
       })
       await scene("result", async (at) => {
-        await page.getByRole("heading", { name: "Vos informations" }).scrollIntoViewIfNeeded()
+        await page.getByRole("heading", { name: "Tes informations" }).scrollIntoViewIfNeeded()
         await at(0.30)
         await page.getByLabel("Email *", { exact: true }).scrollIntoViewIfNeeded()
         await at(0.64)
@@ -1572,11 +1742,1064 @@ async function main() {
         await at(0.48)
         await page.getByRole("button", { name: /Sélectionner —/ }).first().scrollIntoViewIfNeeded()
       })
+    } else if (slug === "volunteer-calendar") {
+      const personalUrl = `${baseUrl}/my/demo-volunteer-camille-0001`
+      const folder = path.join(dir, "downloads")
+      await mkdir(folder, { recursive: true })
+      const download = async (link: Locator, filename: string) => {
+        const pending = page.waitForEvent("download")
+        await tap(page, link)
+        const file = await pending
+        const target = path.join(folder, filename)
+        await file.saveAs(target)
+        return (await readFile(target, "utf8")).replace(/\r\n[ \t]/g, "")
+      }
+      const allLink = () => page.getByRole("link", { name: /^Ajouter tout mon planning/ })
+      const events = (ics: string) => ics.split("BEGIN:VEVENT").slice(1).map(block => block.split("END:VEVENT")[0])
+      let oldPlanning = ""
+      let newPlanning = ""
+      await scene("welcome", async () => {
+        await page.screencast.showChapter(manifest.title, { description: "Un fichier pour les créneaux confirmés", duration: 2_300 })
+        await allLink().waitFor()
+      })
+      await scene("one", async at => {
+        const one = await download(page.getByRole("link", { name: /Ajouter à mon calendrier.*Accueil/ }), "accueil.ics")
+        if (events(one).length !== 1 || !one.includes("Accueil")) throw new Error("Single calendar download is not exactly Accueil")
+        await at(0.55)
+        await page.getByText(/Le fichier s'ouvre avec l'agenda/).scrollIntoViewIfNeeded()
+      })
+      await scene("all", async at => {
+        oldPlanning = await download(allLink(), "planning-original.ics")
+        if (events(oldPlanning).length !== 3) throw new Error("Calendar export must contain exactly three confirmed registrations")
+        if (!oldPlanning.includes("Rangement de nuit") || !oldPlanning.includes("Accueil")) throw new Error("Calendar export is missing a confirmed shift")
+        await at(0.55)
+        await page.getByRole("button", { name: "Quitter la liste d'attente du créneau Buvette", exact: true }).scrollIntoViewIfNeeded()
+      })
+      await scene("import", async at => {
+        // User requested no native Calendar access. Explain import over the real download
+        // control and its hint; do not fabricate or claim a calendar-client result.
+        await allLink().scrollIntoViewIfNeeded()
+        await at(0.48)
+        await page.getByText(/Le fichier s'ouvre avec l'agenda/).scrollIntoViewIfNeeded()
+      })
+      await scene("details", async at => {
+        for (const expected of ["Arrive 15 minutes avant", "Manon Aebi", "/my/", "GEO:"]) {
+          if (!oldPlanning.includes(expected)) throw new Error(`Calendar download missing ${expected}`)
+        }
+        await page.getByText("Arrive 15 minutes avant, au stand bleu.", { exact: true }).scrollIntoViewIfNeeded()
+        await at(0.38)
+        await page.getByText(/Manon Aebi/).scrollIntoViewIfNeeded()
+        await at(0.66)
+        await page.getByRole("heading", { name: "Ton lien personnel", exact: true }).scrollIntoViewIfNeeded()
+      })
+      await scene("night", async () => {
+        await page.getByText("Rangement de nuit — calendrier", { exact: true }).scrollIntoViewIfNeeded()
+        const night = events(oldPlanning).find(event => event.includes("Rangement de nuit"))
+        if (!night?.includes("DTSTART:20261010T200000Z") || !night.includes("DTEND:20261011T000000Z")) throw new Error("Overnight calendar dates or Zurich conversion incorrect")
+      })
+      await scene("change", async at => {
+        await page.goto(`${baseUrl}/admin/events/${featureEventId}/shifts`); await settle(page)
+        await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
+        const row = page.getByRole("row").filter({ hasText: "Rangement de nuit — calendrier" })
+        await tap(page, row.getByRole("button", { name: "Modifier", exact: true }))
+        await fillVisibly(page, page.getByLabel("Début *"), "23:00")
+        await at(0.45)
+        await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
+        await page.getByRole("heading", { name: "Modifier le créneau", exact: true }).waitFor({ state: "hidden" })
+        if ((await readFile(path.join(folder, "planning-original.ics"), "utf8")).replace(/\r\n[ \t]/g, "") !== oldPlanning) throw new Error("Previously downloaded calendar changed unexpectedly")
+        await at(0.75)
+        await page.goto(personalUrl); await settle(page)
+        await page.getByText("Rangement de nuit — calendrier", { exact: true }).scrollIntoViewIfNeeded()
+      })
+      await scene("reimport", async at => {
+        newPlanning = await download(allLink(), "planning-modifie.ics")
+        const uids = (ics: string) => [...ics.matchAll(/^UID:(.+)$/gm)].map(match => match[1].trim()).sort()
+        if (JSON.stringify(uids(oldPlanning)) !== JSON.stringify(uids(newPlanning))) throw new Error("Calendar registration identifiers changed")
+        const night = events(newPlanning).find(event => event.includes("Rangement de nuit"))
+        if (!night?.includes("DTSTART:20261010T210000Z")) throw new Error("Updated calendar does not contain 23:00 Zurich start")
+        await at(0.52)
+        await page.getByText(/Le fichier s'ouvre avec l'agenda/).scrollIntoViewIfNeeded()
+      })
+      await scene("result", async at => {
+        await page.getByRole("heading", { name: "Mes inscriptions", exact: true }).scrollIntoViewIfNeeded()
+        await at(0.50)
+        await page.getByRole("button", { name: "Quitter la liste d'attente du créneau Buvette", exact: true }).scrollIntoViewIfNeeded()
+      })
+      await writeFile(path.join(dir, "calendar-download-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), originalEvents: events(oldPlanning).length, updatedEvents: events(newPlanning).length, stableRegistrationIds: true, overnightUtcVerified: true, originalFileUnchanged: true, nativeCalendarImport: "Not performed, per user request" }, null, 2))
+    } else if (slug === "privacy-personal-links") {
+      if (!privacyRecording) throw new Error("Privacy recording preparation missing")
+      const { recordPrivacy } = await import("../lib/record-privacy")
+      await recordPrivacy({ page, base: baseUrl, directory: dir, title: manifest.title, setup: privacyRecording, scene, tap, settle })
+    } else if (slug === "email-delivery-failures") {
+      const { recordDelivery } = await import("../lib/record-delivery")
+      const { prisma: db } = await import("../../src/lib/prisma")
+      try { await recordDelivery({ page, base: baseUrl, directory: dir, title: manifest.title, db, scene, tap, settle }) }
+      finally { await db.$disconnect() }
+    } else if (slug === "last-minute-changes") {
+      const { recordLastMinute } = await import("../lib/record-last-minute")
+      await recordLastMinute({ page, base: baseUrl, directory: dir, title: manifest.title, scene, tap, settle })
+    } else if (slug === "data-exports-archives") {
+      const { recordDataExports } = await import("../lib/record-data-exports")
+      await recordDataExports({ page, base: baseUrl, directory: dir, title: manifest.title, scene, tap, settle })
+    } else if (slug === "organization-activity-log") {
+      const { recordOrgActivity } = await import("../lib/record-org-activity")
+      await recordOrgActivity({ page, base: baseUrl, directory: dir, title: manifest.title, scene, tap, settle })
+    } else if (slug === "event-activity-log") {
+      const { recordEventLog } = await import("../lib/record-event-log")
+      await recordEventLog({ page, base: baseUrl, eventId: featureEventId, directory: dir, title: manifest.title, scene, tap, settle })
+    } else if (slug === "attendance-check-in") {
+      const { recordAttendance } = await import("../lib/record-attendance")
+      await recordAttendance({ page, base: baseUrl, eventId: featureEventId, directory: dir, title: manifest.title, scene, tap, settle })
+    } else if (slug === "event-reports") {
+      const { recordReports } = await import("../lib/record-reports")
+      await recordReports({ page, base: baseUrl, eventId: featureEventId, directory: dir, title: manifest.title, scene, tap, settle })
+    } else if (slug === "volunteer-badges") {
+      const { recordBadges } = await import("../lib/record-badges")
+      await recordBadges({ page, base: baseUrl, eventId: featureEventId, title: manifest.title, scene, tap, settle })
+    } else if (slug === "reminders-changes") {
+      const { recordReminders } = await import("../lib/record-reminders")
+      await recordReminders({ page, base: baseUrl, eventId: featureEventId, directory: dir, title: manifest.title, scene, tap, settle })
+    } else if (slug === "targeted-messages") {
+      if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Messages require isolated video DB")
+      const { PrismaClient } = await import("../../src/generated/prisma/client")
+      const { PrismaPg } = await import("@prisma/adapter-pg")
+      const { selectRecipients, selectInvitedWithoutShift } = await import("../../src/lib/targeted-message")
+      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const url = `${baseUrl}/admin/events/${featureEventId}/message`
+      const templatesUrl = `${baseUrl}/admin/settings/message-templates`
+      const modelName = "Briefing avant le créneau"
+      const subject = "Ton briefing pour {poste}"
+      const body = "Bonjour {prénom},\n\nPour {événement}, retrouve-nous quinze minutes avant {créneau}.\nLe responsable te montrera le matériel et répondra à tes questions.\n\nMerci pour ton aide et à très vite !"
+      const checks: Record<string, unknown> = { pushReceptionVerified: false }
+      const shift = await db.shift.findFirstOrThrow({ where: { eventId: featureEventId, roleName: "Buvette", status: "open" }, orderBy: [{ date: "asc" }, { startTime: "asc" }] })
+      const registrations = await db.registration.findMany({ where: { eventId: featureEventId }, include: { volunteer: true, shift: true } })
+      const invites = await db.memberInvite.findMany({ where: { eventId: featureEventId }, include: { volunteer: true } })
+      const roleRecipients = selectRecipients(registrations, { kind: "role", roleName: "Buvette" })
+      const recipients = selectRecipients(registrations, { kind: "shift", shiftId: shift.id })
+      const historyBefore = await db.targetedMessage.count({ where: { eventId: featureEventId } })
+      const outboxBefore = await db.notificationOutbox.count({ where: { organizationId: "default" } })
+      const writeField = async (field: Locator, value: string) => {
+        await tap(page, field)
+        await field.press("ControlOrMeta+A")
+        await field.pressSequentially(value, { delay: 95 })
+        await page.waitForTimeout(180)
+      }
+      const chooseShift = async () => {
+        await tap(page, page.getByRole("radio", { name: "Les bénévoles d'un créneau", exact: true }))
+        await page.getByLabel("Créneau", { exact: true }).selectOption(shift.id); await settle(page)
+      }
+      const preview = async () => { await tap(page, page.getByRole("button", { name: "Voir l'aperçu et envoyer", exact: true })); await page.getByRole("dialog", { name: "Aperçu de l'email", exact: true }).waitFor() }
+      const confirm = async () => { await tap(page, page.getByRole("dialog").getByRole("button", { name: /^Envoyer à/ })); await page.getByRole("dialog", { name: "Confirmer l'envoi", exact: true }).waitFor() }
+      try {
+        await scene("welcome", async () => { await page.screencast.showChapter(manifest.title, { description: "Choisir, personnaliser, vérifier", duration: 2400 }); await page.getByRole("heading", { name: "Écrire aux bénévoles", exact: true }).waitFor() })
+        await scene("audiences", async at => {
+          const choices = [
+            ["Tous les bénévoles inscrits", selectRecipients(registrations, { kind: "event" }).length],
+            ["Les bénévoles d'un poste", roleRecipients.length],
+            ["Les bénévoles d'un créneau", recipients.length],
+            ["Les personnes en liste d'attente", selectRecipients(registrations, { kind: "waitlist" }).length],
+            ["Les invités sans créneau confirmé", selectInvitedWithoutShift(invites, registrations).length],
+          ] as const
+          for (const [index, [label, expected]] of choices.entries()) {
+            await at(index * 0.18); await tap(page, page.getByRole("radio", { name: label, exact: true }))
+            if (index === 1) await page.getByLabel("Poste", { exact: true }).selectOption("Buvette")
+            if (index === 2) await page.getByLabel("Créneau", { exact: true }).selectOption(shift.id)
+            await page.getByText(new RegExp(`^${expected} personnes? recevr`)).waitFor()
+          }
+          checks.fiveAudienceCounts = true
+        })
+        await scene("count", async at => {
+          const lea = roleRecipients.filter(r => r.volunteerId === "video-message-lea")
+          if (lea.length !== 1 || lea[0].registrations.length !== 2) throw new Error("Léa deduplication fixture missing")
+          await page.goto(`${baseUrl}/admin/events/${featureEventId}/registrations`); await settle(page)
+          await typeNaturally(page, page.getByRole("textbox", { name: "Rechercher un bénévole", exact: true }), "Léa Giroud")
+          if (await page.locator("tbody tr").count() !== 2) throw new Error("Expected two Léa registrations")
+          await at(0.55); await page.goto(url); await settle(page)
+          await tap(page, page.getByRole("radio", { name: "Les bénévoles d'un poste", exact: true })); await page.getByLabel("Poste", { exact: true }).selectOption("Buvette"); await settle(page)
+          checks.multipleRegistrationsOneRecipient = true
+        })
+        await scene("template-create", async at => {
+          await page.goto(templatesUrl); await settle(page)
+          if (await db.messageTemplate.count({ where: { organizationId: "default", name: modelName } })) throw new Error("Model already exists; reset scenario")
+          await tap(page, page.getByRole("button", { name: "Nouveau modèle", exact: true }))
+          await writeField(page.getByLabel("Nom du modèle *", { exact: true }), modelName)
+          await writeField(page.getByLabel("Objet *", { exact: true }), subject)
+          await writeField(page.getByLabel("Message *", { exact: true }), body)
+          await at(0.8); await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true })); await page.getByText(modelName, { exact: true }).waitFor()
+        })
+        await scene("variables", async at => {
+          await tap(page, page.getByRole("button", { name: `Modifier le modèle « ${modelName} »`, exact: true }))
+          await page.getByLabel("Objet *", { exact: true }).scrollIntoViewIfNeeded()
+          await at(0.35); await writeField(page.getByLabel("Objet *", { exact: true }), "Ton briefing pour {lieu}")
+          await page.getByText(/Variable inconnue : \{lieu\}/).waitFor()
+          await at(0.62); await writeField(page.getByLabel("Objet *", { exact: true }), subject)
+          await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
+          checks.unknownVariableVisible = true
+        })
+        await scene("apply", async at => {
+          await page.goto(url); await settle(page)
+          await writeField(page.getByLabel("Objet *", { exact: true }), "Merci pour ton aide")
+          await writeField(page.getByLabel("Message *", { exact: true }), "On se retrouve au stand d'accueil.")
+          await page.getByLabel("Partir d'un modèle", { exact: true }).selectOption({ label: modelName })
+          if (await page.getByLabel("Objet *", { exact: true }).inputValue() !== "Merci pour ton aide") throw new Error("Selection replaced text prematurely")
+          await at(0.35); await tap(page, page.getByRole("button", { name: "Utiliser ce modèle", exact: true }))
+          await at(0.53); await tap(page, page.getByRole("button", { name: "Rétablir le texte précédent", exact: true }))
+          if (await page.getByLabel("Objet *", { exact: true }).inputValue() !== "Merci pour ton aide") throw new Error("Text restore failed")
+          await at(0.72); await tap(page, page.getByRole("button", { name: "Utiliser ce modèle", exact: true })); await chooseShift()
+          checks.modelApplyAndRestore = true
+        })
+        await scene("context", async at => {
+          await tap(page, page.getByRole("radio", { name: "Tous les bénévoles inscrits", exact: true }))
+          await page.getByLabel("Message *", { exact: true }).scrollIntoViewIfNeeded()
+          if (await page.getByLabel("Message *", { exact: true }).getAttribute("aria-invalid") !== "true") throw new Error("Context error not exposed")
+          await at(0.57); await chooseShift()
+          if (await page.getByLabel("Message *", { exact: true }).getAttribute("aria-invalid") === "true") throw new Error("Context error not cleared")
+          checks.contextVariableErrorVisible = true
+        })
+        await scene("preview", async at => {
+          await preview()
+          const text = await page.frameLocator('iframe[title="Contenu de l\'email"]').locator("body").innerText()
+          if (text.includes("{prénom}") || !text.includes(recipients[0].volunteer.firstName) || !text.includes(shift.startTime)) throw new Error("Preview variables not rendered")
+          await at(0.64); await tap(page, page.getByRole("button", { name: "Retour au message", exact: true }))
+          const message = page.getByLabel("Message *", { exact: true })
+          await tap(page, message); await message.press("ControlOrMeta+A"); await message.press("ArrowRight")
+          await message.pressSequentially("\nPrends aussi une gourde.", { delay: 95 })
+          if (await message.inputValue() !== body + "\nPrends aussi une gourde.") throw new Error("Preview correction wasn't appended as intended")
+          checks.personalizedPreviewVisible = true
+        })
+        await scene("push", async at => {
+          const checkbox = page.getByRole("checkbox", { name: "Envoyer aussi une notification (téléphone ou ordinateur)", exact: true })
+          await checkbox.scrollIntoViewIfNeeded(); await at(0.25); await tap(page, checkbox)
+          await at(0.7); await tap(page, checkbox)
+          checks.pushOptionExplainedNotReceipt = true
+        })
+        await scene("confirm", async at => {
+          await preview(); await at(0.18); await confirm()
+          await at(0.35); await tap(page, page.getByRole("dialog").getByRole("button", { name: "Annuler", exact: true }))
+          if (await db.targetedMessage.count({ where: { eventId: featureEventId } }) !== historyBefore || await db.notificationOutbox.count({ where: { organizationId: "default" } }) !== outboxBefore) throw new Error("Cancelled send created notification")
+          checks.cancelCreatedNoSend = true
+          await at(0.48); await preview(); await confirm()
+          await at(0.7)
+          const response = page.waitForResponse(r => r.url().endsWith(`/api/admin/events/${featureEventId}/message`) && r.request().method() === "POST" && !r.request().postDataJSON().dryRun)
+          await tap(page, page.getByRole("dialog").getByRole("button", { name: "Confirmer l'envoi", exact: true }))
+          const result = await response; if (!result.ok()) throw new Error("Actual message send failed")
+          const sent = await result.json(); if (sent.sent !== recipients.length) throw new Error("Actual send count differs")
+          checks.sent = sent
+        })
+        await scene("result", async at => {
+          await page.getByRole("heading", { name: new RegExp(`Message envoyé à ${recipients.length}`) }).waitFor()
+          const history = await db.targetedMessage.findFirstOrThrow({ where: { eventId: featureEventId, subject }, orderBy: { createdAt: "desc" } })
+          let delivered = false
+          for (let attempt = 0; attempt < 30; attempt++) {
+            if (await db.notificationOutbox.count({ where: { targetedMessageId: history.id, status: "sent" } }) === recipients.length) { delivered = true; break }
+            await page.waitForTimeout(200)
+          }
+          if (!delivered) throw new Error("Campaign not delivered to local SMTP")
+          const inbox = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json() as { messages: { ID: string; Subject: string; To: { Address: string }[]; Created: string }[] }
+          const mails = inbox.messages.filter(m => m.Subject.includes("Ton briefing pour Buvette") && Date.parse(m.Created) >= history.createdAt.getTime() - 1000)
+          if (mails.length !== recipients.length || mails.filter(m => m.To.some(t => t.Address === "lea.giroud@example.org")).length !== 1) throw new Error("Actual campaign mail deduplication failed")
+          for (const [index, recipient] of recipients.slice(0, 2).entries()) {
+            await at(0.23 + index * 0.3)
+            const mail = mails.find(m => m.To.some(t => t.Address === recipient.volunteer.email)); if (!mail) throw new Error("Recipient mail missing")
+            await page.goto(`http://localhost:48026/view/${mail.ID}`); await settle(page)
+            const text = await page.frameLocator("iframe").locator("body").innerText()
+            if (!text.includes(recipient.volunteer.firstName) || !text.includes("Prends aussi une gourde")) throw new Error("Actual personalized mail missing content")
+          }
+          await at(0.84); await page.goto(url); await settle(page); await page.getByRole("heading", { name: "Messages envoyés", exact: true }).scrollIntoViewIfNeeded()
+          checks.realEmailsPersonalizedAndDeduplicated = true
+        })
+        await scene("maintain", async at => {
+          await page.goto(templatesUrl); await settle(page)
+          await tap(page, page.getByRole("button", { name: `Modifier le modèle « ${modelName} »`, exact: true }))
+          await writeField(page.getByLabel("Nom du modèle *", { exact: true }), modelName + " — équipe")
+          await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
+          await at(0.35); await tap(page, page.getByRole("button", { name: `Supprimer le modèle « ${modelName} — équipe »`, exact: true }))
+          await at(0.48); await tap(page, page.getByRole("alertdialog").getByRole("button", { name: "Annuler", exact: true }))
+          await at(0.62); await tap(page, page.getByRole("button", { name: `Supprimer le modèle « ${modelName} — équipe »`, exact: true }))
+          await tap(page, page.getByRole("alertdialog").getByRole("button", { name: "Supprimer", exact: true }))
+          if (await db.targetedMessage.count({ where: { eventId: featureEventId } }) !== historyBefore + 1) throw new Error("Deleting model changed campaign history")
+          await at(0.84); await page.goto(url); await settle(page); await page.getByRole("heading", { name: "Messages envoyés", exact: true }).scrollIntoViewIfNeeded()
+          checks.modelDeletedHistoryRetained = true
+        })
+        await writeFile(path.join(dir, "targeted-message-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), ...checks }, null, 2))
+      } finally { await db.$disconnect() }
+    } else if (slug === "staffing-gaps") {
+      if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Staffing checks require isolated video DB")
+      const { PrismaClient } = await import("../../src/generated/prisma/client")
+      const { PrismaPg } = await import("@prisma/adapter-pg")
+      const { staffingSummary } = await import("../../src/lib/staffing")
+      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const staffingUrl = `${baseUrl}/admin/events/${featureEventId}/staffing`
+      const readSummary = async () => {
+        const shifts = await db.shift.findMany({ where: { eventId: featureEventId, status: { not: "cancelled" } }, include: { registrations: true } })
+        const leaders = await db.sectorLeader.findMany({ where: { eventId: featureEventId } })
+        return staffingSummary(shifts.map(s => ({ id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10), startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, active: s.registrations.filter(r => r.status === "active").length, waiting: s.registrations.filter(r => r.status === "waiting" || r.status === "offered").length, requested: s.registrations.filter(r => r.status === "requested").length, closed: s.status === "closed" })), leaders.map(l => l.roleName))
+      }
+      const initial = await readSummary()
+      const checks: Record<string, unknown> = { initialTotals: initial.totals }
+      const section = (id: string) => page.locator(`section[aria-labelledby="${id}"]`)
+      const returnToReport = async () => { await page.goto(staffingUrl); await settle(page) }
+      try {
+        await scene("welcome", async at => {
+          await page.screencast.showChapter(manifest.title, { description: "Concentrer son énergie sur les bons horaires", duration: 2300 })
+          await page.getByRole("heading", { name: "Où manque-t-il du monde ?", exact: true }).scrollIntoViewIfNeeded()
+          await at(0.3)
+          await tap(page, page.getByRole("link", { name: /^Voir les créneaux à compléter/ }))
+          await settle(page)
+          await page.getByRole("heading", { level: 1, name: "Où manque-t-il du monde ?", exact: true }).waitFor()
+        })
+        await scene("overview", async () => {
+          await section("staffing-overview").scrollIntoViewIfNeeded()
+          if (!initial.totals.waiting || initial.totals.requested !== 2) throw new Error("Missing waitlist/request examples")
+          await section("staffing-overview").getByRole("link", { name: "2 demandes à traiter", exact: true }).waitFor()
+        })
+        await scene("empty", async at => {
+          await section("staffing-empty").scrollIntoViewIfNeeded()
+          await section("staffing-empty").getByText("6 places", { exact: true }).waitFor()
+          await at(0.34)
+          await tap(page, section("staffing-empty").getByRole("link", { name: /^Photos/ }))
+          await settle(page)
+          await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
+          await page.getByText("Photos — reportage bénévole", { exact: true }).first().scrollIntoViewIfNeeded()
+          await at(0.82); await returnToReport()
+        })
+        await scene("needs", async at => {
+          await section("staffing-underfilled").scrollIntoViewIfNeeded()
+          const closed = await db.shift.findFirstOrThrow({ where: { eventId: featureEventId, roleName: "Accueil", startTime: "15:00" } })
+          if (initial.underfilled.some(s => s.id === closed.id)) throw new Error("Closed shift counted as recruitment need")
+          checks.closedShiftExcludedFromMissing = true
+          await at(0.38)
+          await tap(page, section("staffing-underfilled").getByRole("link", { name: /Buvette.*18:00.*22:00/ }))
+          await settle(page)
+          if (await page.locator("tbody tr").count() !== 2) throw new Error("Shift link didn't filter actual evening registrations")
+          await at(0.62); await tap(page, page.getByRole("link", { name: "Écrire à ce créneau", exact: true }))
+          await settle(page)
+          if (!await page.getByRole("radio", { name: "Les bénévoles d'un créneau", exact: true }).isChecked()) throw new Error("Message audience wasn't prefilled by shift")
+          checks.messageAudiencePrefilled = true
+          await at(0.87); await returnToReport()
+        })
+        await scene("requests", async at => {
+          await section("staffing-full").getByRole("link", { name: /Navette.*08:00.*12:00/ }).scrollIntoViewIfNeeded()
+          const held = initial.full.find(s => s.roleName === "Navette" && s.startTime === "08:00")
+          if (!held || held.active !== 0 || held.requested !== 2 || held.missing !== 0) throw new Error("Requests didn't hold exactly two places")
+          checks.requestsHoldPlacesWithoutConfirmations = true
+          await at(0.45)
+          await section("staffing-overview").scrollIntoViewIfNeeded()
+          await tap(page, section("staffing-overview").getByRole("link", { name: "2 demandes à traiter", exact: true }))
+          await settle(page)
+          if (await page.locator("tbody tr").count() !== 2) throw new Error("Requests link didn't filter list")
+          await page.getByRole("row").filter({ hasText: "Lucas Girard" }).waitFor()
+          await page.getByRole("row").filter({ hasText: "Marc Duc" }).waitFor()
+          await at(0.84); await returnToReport()
+        })
+        await scene("waiting", async at => {
+          await section("staffing-waitlist").scrollIntoViewIfNeeded()
+          await section("staffing-waitlist").getByText("3 personnes en attente", { exact: false }).waitFor()
+          await at(0.41)
+          await tap(page, section("staffing-waitlist").getByRole("link", { name: /Buvette.*14:00.*18:00/ }))
+          await settle(page)
+          await page.getByRole("row").filter({ hasText: "Camille Rochat" }).getByText("#1", { exact: true }).waitFor()
+          await page.getByRole("row").filter({ hasText: "Anna Bühler" }).getByText("#2", { exact: true }).waitFor()
+          await page.getByRole("row").filter({ hasText: "Eva Clerc" }).getByText("#3", { exact: true }).waitFor()
+          checks.realWaitingPositions = [1, 2, 3]
+          await at(0.84); await returnToReport()
+        })
+        await scene("leaders", async at => {
+          await section("staffing-leaders").scrollIntoViewIfNeeded()
+          await at(0.35)
+          await tap(page, section("staffing-leaders").getByRole("link", { name: /^Photos/ }))
+          await settle(page)
+          await page.getByText("Élodie Rochat", { exact: true }).last().waitFor()
+          await page.getByText("Manon Aebi", { exact: true }).waitFor()
+          checks.existingLeadersVisible = true
+          await at(0.82); await returnToReport()
+        })
+        await scene("full", async () => {
+          await section("staffing-full").scrollIntoViewIfNeeded()
+          await section("staffing-full").getByRole("link", { name: /Accueil.*12:00.*15:00/ }).waitFor()
+          await section("staffing-full").getByRole("link", { name: /Navette.*08:00.*12:00/ }).waitFor()
+        })
+        await scene("action", async at => {
+          await section("staffing-underfilled").scrollIntoViewIfNeeded()
+          await tap(page, section("staffing-underfilled").getByRole("link", { name: /Photos.*sam\..*10:00.*12:00/ }))
+          await settle(page)
+          await tap(page, page.getByRole("button", { name: "+ Ajouter manuellement", exact: true }))
+          await typeNaturally(page, page.getByLabel("Prénom *", { exact: true }), "Julien")
+          await typeNaturally(page, page.getByLabel("Nom *", { exact: true }), "Favre")
+          await typeNaturally(page, page.getByLabel("Email", { exact: true }), "julien.favre@example.org")
+          await tap(page, page.getByRole("combobox", { name: "Créneau *", exact: true }))
+          await tap(page, page.getByRole("option", { name: /^sam\..*de 10h à 12h, Photos/ }))
+          await at(0.59)
+          const response = page.waitForResponse(r => r.url().endsWith("/api/admin/registrations") && r.request().method() === "POST")
+          await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
+          const result = await response
+          if (result.status() !== 201) throw new Error("Actual photo assignment failed")
+          await page.getByRole("row").filter({ hasText: "Julien Favre" }).waitFor()
+          await at(0.76); await returnToReport()
+          const after = await readSummary()
+          if (after.totals.missing !== initial.totals.missing - 1 || after.totals.active !== initial.totals.active + 1 || after.emptyRoles.some(r => r.roleName === "Photos")) throw new Error("Report didn't reflect actual assignment")
+          checks.finalTotals = after.totals
+          checks.photoRoleNoLongerEntirelyEmpty = true
+          await section("staffing-overview").scrollIntoViewIfNeeded()
+        })
+        await writeFile(path.join(dir, "staffing-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), ...checks }, null, 2))
+      } finally { await db.$disconnect() }
+    } else if (slug === "registrations-management") {
+      if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Registration checks require isolated video DB")
+      const { PrismaClient } = await import("../../src/generated/prisma/client")
+      const { PrismaPg } = await import("@prisma/adapter-pg")
+      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const checks: Record<string, unknown> = {}
+      const adminUrl = `${baseUrl}/admin/events/${featureEventId}/registrations`
+      const search = () => page.getByRole("textbox", { name: "Rechercher un bénévole", exact: true })
+      const toolbar = () => page.getByRole("group", { name: "Actions sur la sélection", exact: true })
+      const row = (name: string, role: string, hours: string) => page.getByRole("row").filter({ hasText: name }).filter({ hasText: role }).filter({ hasText: hours })
+      const chooseShift = async (name: "Créneau *" | "Filtrer par créneau", option: RegExp) => {
+        await tap(page, page.getByRole("combobox", { name, exact: true }))
+        await tap(page, page.getByRole("option", { name: option }))
+      }
+      const inbox = async () => {
+        const response = await page.request.get("http://localhost:48026/api/v1/messages", { headers: { "Cache-Control": "no-cache" } })
+        if (!response.ok()) throw new Error("Local mail evidence unavailable")
+        return await response.json() as { messages: { ID: string; To: { Address: string }[]; Subject: string; Created: string }[] }
+      }
+      const openNewMail = async (email: string, before: Set<string>) => {
+        let match: { ID: string } | undefined
+        for (let attempt = 0; attempt < 20; attempt++) {
+          match = (await inbox()).messages.find(m => !before.has(m.ID) && m.To.some(t => t.Address === email))
+          if (match) break
+          await page.waitForTimeout(250)
+        }
+        if (!match) throw new Error("New actual email not found")
+        await page.goto(`http://localhost:48026/view/${match.ID}`); await settle(page)
+      }
+      const bulkResponse = (action: string) => page.waitForResponse(r => r.url().endsWith("/registrations/bulk") && r.request().method() === "POST" && r.request().postDataJSON().action === action)
+      const camille = await db.volunteer.findFirstOrThrow({ where: { organizationId: "default", email: "camille.rochat@example.org" } })
+      const afternoon = await db.shift.findFirstOrThrow({ where: { eventId: featureEventId, roleName: "Accueil", startTime: "15:00" } })
+      const initialCount = await db.registration.count({ where: { eventId: featureEventId, status: { in: ["active", "waiting", "offered", "requested"] } } })
+      if (initialCount !== 80) throw new Error(`Expected 80 live registrations, got ${initialCount}`)
+      let addedId = "", logHref = ""
+      try {
+        await scene("welcome", async at => {
+          await page.screencast.showChapter(manifest.title, { description: "Retrouver les bonnes personnes et agir en confiance", duration: 2300 })
+          await at(0.48)
+          await page.getByRole("row").nth(6).scrollIntoViewIfNeeded()
+          await at(0.73); await page.evaluate(() => window.scrollTo({ top: 0, behavior: "smooth" }))
+        })
+        await scene("columns", async at => {
+          await fillVisibly(page, search(), "Camille")
+          await page.getByText("Taille de t-shirt :", { exact: true }).first().waitFor()
+          await at(0.63); await fillVisibly(page, search(), "Inès")
+          await page.getByText('"Inscrite par téléphone"', { exact: true }).waitFor()
+          await at(0.84); await fillVisibly(page, search(), "Camille")
+        })
+        await scene("filters", async at => {
+          await fillVisibly(page, search(), "camille.rochat@example.org")
+          await at(0.27); await fillVisibly(page, search(), "")
+          await page.getByRole("combobox", { name: "Filtrer par poste", exact: true }).selectOption({ label: "Accueil" })
+          await at(0.43); await chooseShift("Filtrer par créneau", /de 15h à 18h, Accueil/)
+          await page.getByRole("link", { name: "Écrire à ce créneau", exact: true }).waitFor()
+          checks.filteredAfternoonRows = await page.locator("tbody tr").count()
+          await at(0.75); await page.getByRole("combobox", { name: "Filtrer par poste", exact: true }).selectOption("")
+          await chooseShift("Filtrer par créneau", /^Tous les créneaux$/)
+          if (await page.locator("tbody tr").count() !== 80) throw new Error("Filters did not restore full list")
+        })
+        await scene("requests", async at => {
+          await tap(page, page.getByRole("checkbox", { name: /^Demandes à traiter/ }))
+          await fillVisibly(page, search(), "Lucas")
+          await page.getByText("Permis B depuis 2021", { exact: false }).waitFor()
+          await at(0.44)
+          await tap(page, page.getByRole("button", { name: /^Accepter la demande de Lucas/ }))
+          const decision = page.getByRole("dialog")
+          await decision.waitFor()
+          await at(0.77); await tap(page, decision.getByRole("button", { name: "Annuler", exact: true }))
+          const current = await db.registration.findFirstOrThrow({ where: { eventId: featureEventId, volunteer: { email: "lucas.girard@example.org" } } })
+          if (current.status !== "requested") throw new Error("Cancelling decision changed request")
+          checks.requestDecisionCancelled = true
+          await tap(page, page.getByRole("checkbox", { name: /^Demandes à traiter/ }))
+          await fillVisibly(page, search(), "")
+        })
+        await scene("manual-identity", async at => {
+          await tap(page, page.getByRole("button", { name: "+ Ajouter manuellement", exact: true }))
+          await typeNaturally(page, page.getByLabel("Prénom *", { exact: true }), "Camille")
+          await typeNaturally(page, page.getByLabel("Nom *", { exact: true }), "Rochat")
+          await at(0.26); await typeNaturally(page, page.getByLabel("Email", { exact: true }), "camille.rochat@example.org")
+          await typeNaturally(page, page.getByLabel("Téléphone", { exact: true }), "079 555 10 20")
+          await at(0.48); await typeNaturally(page, page.getByLabel("Note", { exact: true }), "Horaire convenu par téléphone")
+        })
+        await scene("manual-check", async at => {
+          await chooseShift("Créneau *", /de 9h à 12h, Accueil.*déjà inscrit/)
+          await at(0.23)
+          const response = page.waitForResponse(r => r.url().endsWith("/api/admin/registrations") && r.request().method() === "POST")
+          await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
+          const result = await response
+          if (result.status() !== 409) throw new Error("Duplicate registration was not refused")
+          await page.getByText("Cette personne est déjà inscrite sur ce créneau.", { exact: true }).waitFor()
+          checks.duplicateRejected = true
+          await at(0.43); await chooseShift("Créneau *", /de 10h à 14h, Buvette.*conflit d'horaire/)
+          await page.locator("#add-shift-conflict").waitFor()
+          checks.overlapWarningObservedWithoutSubmitting = true
+        })
+        await scene("manual-result", async at => {
+          await chooseShift("Créneau *", /de 15h à 18h, Accueil/)
+          await at(0.23)
+          const response = page.waitForResponse(r => r.url().endsWith("/api/admin/registrations") && r.request().method() === "POST")
+          await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
+          const result = await response
+          if (result.status() !== 201) throw new Error(`Manual compatible addition failed: ${result.status()}`)
+          const data = await result.json()
+          addedId = data.id
+          if (data.volunteer.id !== camille.id || data.source !== "admin_manual" || data.comment !== "Horaire convenu par téléphone") throw new Error("Manual addition did not reuse expected member")
+          await row("Camille Rochat", "Accueil", "15h–18h").waitFor()
+          checks.manualAdditionReusesMember = true
+        })
+        await scene("selection", async at => {
+          await fillVisibly(page, search(), "Camille")
+          await tap(page, row("Camille Rochat", "Accueil", "9h–12h").getByRole("checkbox"))
+          await at(0.25); await tap(page, row("Camille Rochat", "Buvette", "10h–14h").getByRole("checkbox"))
+          await at(0.46); await fillVisibly(page, search(), "Sarah")
+          await toolbar().getByText("2 sélectionnées", { exact: true }).waitFor()
+          checks.selectionSurvivesFiltering = true
+          await at(0.74); await tap(page, toolbar().getByRole("button", { name: "Désélectionner", exact: true }))
+          await fillVisibly(page, search(), "Camille")
+        })
+        await scene("resend", async at => {
+          await tap(page, row("Camille Rochat", "Accueil", "9h–12h").getByRole("checkbox"))
+          await tap(page, row("Camille Rochat", "Buvette", "10h–14h").getByRole("checkbox"))
+          const before = new Set((await inbox()).messages.map(m => m.ID))
+          await tap(page, toolbar().getByRole("button", { name: "Renvoyer le lien", exact: true }))
+          await page.getByRole("dialog").getByText(/un seul email par personne/).waitFor()
+          await at(0.43)
+          const response = bulkResponse("resend_link")
+          await tap(page, page.getByRole("dialog").getByRole("button", { name: "Renvoyer", exact: true }))
+          const result = await response
+          const data = await result.json()
+          if (!result.ok() || data.done !== 1 || data.failed) throw new Error("Expected one successful personal-link email")
+          checks.resend = data
+          await at(0.65); await openNewMail(camille.email!, before)
+          const received = (await inbox()).messages.filter(m => !before.has(m.ID) && m.To.some(t => t.Address === camille.email))
+          if (received.length !== 1) throw new Error("Resend produced multiple emails for one person")
+          checks.singleEmailForTwoRows = true
+        })
+        await scene("leader", async at => {
+          await page.goto(adminUrl); await settle(page)
+          await fillVisibly(page, search(), "Sarah")
+          await tap(page, row("Sarah Jaquet", "Accueil", "15h–18h").getByRole("checkbox"))
+          await tap(page, toolbar().getByRole("button", { name: "Rendre responsable", exact: true }))
+          const dialog = page.getByRole("dialog", { name: "Rendre Sarah Jaquet responsable", exact: true })
+          await dialog.waitFor()
+          const before = new Set((await inbox()).messages.map(m => m.ID))
+          await at(0.4)
+          const response = page.waitForResponse(r => r.url().endsWith("/sector-leaders") && r.request().method() === "POST")
+          await tap(page, dialog.getByRole("button", { name: "Rendre responsable", exact: true }))
+          const result = await response
+          if (result.status() !== 201) throw new Error("Leader nomination failed")
+          await at(0.56); await openNewMail("sarah.jaquet@example.org", before)
+          await at(0.79); await page.goto(adminUrl); await settle(page)
+          await fillVisibly(page, search(), "Sarah")
+          await row("Sarah Jaquet", "Accueil", "15h–18h").getByText("Responsable", { exact: true }).waitFor()
+          checks.leaderNominationAndBadge = true
+        })
+        await scene("undo", async at => {
+          await fillVisibly(page, search(), "Camille")
+          await tap(page, row("Camille Rochat", "Accueil", "15h–18h").getByRole("checkbox"))
+          const before = new Set((await inbox()).messages.map(m => m.ID))
+          await tap(page, toolbar().getByRole("button", { name: "Retirer de leur créneau (1)", exact: true }))
+          await at(0.28); await tap(page, page.getByRole("alertdialog").getByRole("button", { name: "Retirer", exact: true }))
+          await page.getByRole("button", { name: "Annuler le retrait", exact: true }).waitFor()
+          await at(0.72); await tap(page, page.getByRole("button", { name: "Annuler le retrait", exact: true }))
+          await row("Camille Rochat", "Accueil", "15h–18h").waitFor()
+          const current = await db.registration.findUniqueOrThrow({ where: { id: addedId } })
+          const logged = await db.eventLog.count({ where: { entityId: addedId, action: "registration.cancelled" } })
+          const received = (await inbox()).messages.filter(m => !before.has(m.ID) && m.To.some(t => t.Address === camille.email))
+          if (current.status !== "active" || logged !== 0 || received.length !== 0) throw new Error("Undo had a committed cancellation side effect")
+          checks.undoWithoutDatabaseOrEmailEffect = true
+        })
+        await scene("remove", async at => {
+          const before = new Set((await inbox()).messages.map(m => m.ID))
+          const occupiedBefore = await db.registration.count({ where: { shiftId: afternoon.id, status: "active" } })
+          await tap(page, row("Camille Rochat", "Accueil", "15h–18h").getByRole("checkbox"))
+          await tap(page, toolbar().getByRole("button", { name: "Retirer de leur créneau (1)", exact: true }))
+          await at(0.22); await tap(page, page.getByRole("alertdialog").getByRole("button", { name: "Retirer", exact: true }))
+          await at(0.33)
+          const response = bulkResponse("cancel")
+          await tap(page, page.getByRole("button", { name: "Retirer maintenant", exact: true }))
+          const result = await response
+          const data = await result.json()
+          if (!result.ok() || data.done !== 1 || !data.cancelledIds.includes(addedId)) throw new Error("Final removal failed")
+          const current = await db.registration.findUniqueOrThrow({ where: { id: addedId } })
+          const occupiedAfter = await db.registration.count({ where: { shiftId: afternoon.id, status: "active" } })
+          if (current.status !== "cancelled" || occupiedAfter !== occupiedBefore - 1) throw new Error("Removal did not free actual place")
+          const journal = page.getByRole("link", { name: "Voir cette action dans le journal", exact: true })
+          await journal.waitFor(); logHref = (await journal.getAttribute("href"))!
+          await at(0.7)
+          const received = (await inbox()).messages.filter(m => !before.has(m.ID) && m.To.some(t => t.Address === camille.email))
+          // Known product discrepancy: recap promises an email, helper doesn't send it.
+          // Do not fabricate a cancellation email to make the tutorial look complete.
+          if (received.length !== 0) throw new Error("Cancellation email behaviour changed: update narration before recording")
+          checks.removal = { ...data, occupiedBefore, occupiedAfter, cancellationEmailsObserved: received.length, recapEmailPromiseNotMet: true }
+        })
+        await scene("workload", async () => {
+          await fillVisibly(page, search(), "Noah")
+          await page.getByText("Charge élevée :", { exact: true }).first().waitFor()
+          await page.getByText(/10 h de créneaux dans la journée/).first().waitFor()
+          checks.realWorkloadWarning = true
+        })
+        await scene("result", async at => {
+          if (!logHref) throw new Error("No actual journal link from cancellation")
+          await page.goto(`${baseUrl}${logHref}`); await settle(page)
+          await at(0.66); await page.goto(adminUrl); await settle(page)
+          if (await page.locator("tbody tr").count() !== 80) throw new Error("Final live list did not return to 80 rows")
+          checks.finalLiveCount = 80
+        })
+        await writeFile(path.join(dir, "registration-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), initialLiveCount: initialCount, ...checks }, null, 2))
+      } finally { await db.$disconnect() }
+    } else if (slug === "members-reminders") {
+      const adminUrl = `${baseUrl}/admin/events/${featureEventId}/invitations`
+      const checks: Record<string, unknown> = {}
+      const summary = async () => {
+        const response = await page.request.get(`${baseUrl}/api/admin/events/${featureEventId}/invitations`)
+        if (!response.ok()) throw new Error("Cannot read invitation summary")
+        return (await response.json()).summary
+      }
+      const initialSummary = await summary()
+      if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Reminder checks require isolated video DB")
+      const { PrismaClient } = await import("../../src/generated/prisma/client")
+      const { PrismaPg } = await import("@prisma/adapter-pg")
+      const { linkToken } = await import("../../src/lib/token-vault")
+      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const originalInvites = await db.memberInvite.findMany({ where: { eventId: featureEventId }, select: { id: true, volunteerId: true, ...linkToken.select } })
+      const originalTokens = new Map(originalInvites.map(i => [i.id, linkToken.reveal(i)]))
+      await db.$disconnect()
+      const openMail = async (subject: string, email?: string) => {
+        const response = await page.request.get("http://localhost:48026/api/v1/messages")
+        const inbox = await response.json() as { messages: { ID: string; To: { Address: string }[]; Subject: string; Created: string }[] }
+        const mail = inbox.messages.filter(m => m.Subject.includes(subject) && (!email || m.To.some(t => t.Address === email))).sort((a, b) => Date.parse(b.Created) - Date.parse(a.Created))[0]
+        if (!mail) throw new Error("Real reminder email not found")
+        await page.goto(`http://localhost:48026/view/${mail.ID}`); await settle(page)
+      }
+      await scene("welcome", async () => { await page.screencast.showChapter(manifest.title, { description: "Un rappel utile, sans pression", duration: 2_300 }) })
+      await scene("statuses", async at => {
+        await page.goto(`${baseUrl}/admin/events/${featureEventId}/registrations`); await settle(page)
+        const search = page.getByRole("textbox", { name: "Rechercher un bénévole", exact: true })
+        await fillVisibly(page, search, "Anna")
+        await page.getByRole("row").filter({ hasText: "Anna" }).waitFor()
+        await at(0.26); await fillVisibly(page, search, "Tom")
+        await at(0.46); await fillVisibly(page, search, "Lucas")
+        await page.getByRole("row").filter({ hasText: "Lucas" }).getByText("Demande à traiter", { exact: true }).first().waitFor()
+        await at(0.67); await fillVisibly(page, search, "Camille")
+      })
+      await scene("confirm", async at => {
+        await page.goto(adminUrl); await settle(page)
+        const button = page.getByRole("button", { name: /^Relancer .*sans créneau/ })
+        await tap(page, button)
+        await at(0.22)
+        await tap(page, page.getByRole("dialog", { name: /^Relancer .*sans créneau confirmé/ }).getByRole("button", { name: "Annuler", exact: true }))
+        await at(0.32); await tap(page, button)
+        await at(0.45)
+        const response = page.waitForResponse(r => r.url().endsWith("/invitations/remind") && r.request().method() === "POST")
+        await tap(page, page.getByRole("dialog", { name: /^Relancer .*sans créneau confirmé/ }).getByRole("button", { name: "Relancer", exact: true }))
+        const result = await response
+        const sent = await result.json()
+        if (!result.ok() || sent.failed || sent.sent < 1) throw new Error("Reminder delivery failed")
+        checks.simpleReminder = sent
+        await page.getByText(`${sent.sent} relances envoyées`, { exact: true }).waitFor()
+      })
+      await scene("link", async at => {
+        await openMail("On a besoin de toi", "anna.buhler@example.org")
+        const href = await page.frameLocator("iframe").getByRole("link", { name: /Voir les missions/ }).getAttribute("href")
+        if (!href) throw new Error("Reminder has no real invitation link")
+        const token = new URL(href.replace("?token=", "&token=")).searchParams.get("token")
+        if (!token || ![...originalTokens.values()].includes(token)) throw new Error("Reminder changed invitation token")
+        checks.originalInvitationTokenRetained = true
+        await at(0.67)
+        const current = await summary()
+        if (JSON.stringify(current) !== JSON.stringify(initialSummary)) throw new Error("Reminder changed participation counts")
+      })
+      await scene("message", async at => {
+        await page.goto(adminUrl); await settle(page)
+        await tap(page, page.getByRole("link", { name: /^Écrire un message .*sans créneau/ }))
+        await settle(page)
+        if (!await page.getByRole("radio", { name: "Les invités sans créneau confirmé", exact: true }).isChecked()) throw new Error("Wrong prefilled message audience")
+        await typeNaturally(page, page.getByLabel("Objet *", { exact: true }), "Un horaire qui te convient")
+        await typeNaturally(page, page.getByLabel("Message *", { exact: true }), "Tu peux choisir un horaire si tu le souhaites. Merci !")
+        await at(0.78)
+        await tap(page, page.getByRole("button", { name: "Voir l'aperçu et envoyer", exact: true }))
+        await page.getByRole("dialog", { name: "Aperçu de l'email", exact: true }).waitFor()
+      })
+      await scene("waitlist", async at => {
+        await tap(page, page.getByRole("dialog").getByRole("button", { name: "Retour au message", exact: true }))
+        await page.getByText(/dont .*en liste d'attente/).scrollIntoViewIfNeeded()
+        await at(0.27)
+        await typeNaturally(page, page.getByLabel("Message *", { exact: true }), "Tu peux choisir un horaire si tu le souhaites. Si tu es en attente, ta demande reste enregistrée. Merci !")
+        await at(0.83)
+        await tap(page, page.getByRole("button", { name: "Voir l'aperçu et envoyer", exact: true }))
+      })
+      await scene("send", async at => {
+        await tap(page, page.getByRole("dialog", { name: "Aperçu de l'email", exact: true }).getByRole("button", { name: /^Envoyer à/ }))
+        const response = page.waitForResponse(r => r.url().endsWith(`/events/${featureEventId}/message`) && r.request().method() === "POST" && !r.request().postDataJSON().dryRun)
+        await tap(page, page.getByRole("dialog", { name: "Confirmer l'envoi", exact: true }).getByRole("button", { name: "Confirmer l'envoi", exact: true }))
+        const result = await response
+        if (!result.ok()) throw new Error("Targeted reminder failed")
+        checks.targetedMessage = await result.json()
+        await page.getByRole("heading", { name: /^Message envoyé à/ }).waitFor()
+        await at(0.32)
+        await openMail("Un horaire qui te convient")
+        await at(0.68)
+        await page.goto(`${baseUrl}/admin/events/${featureEventId}/message`); await settle(page)
+        await page.getByText("Un horaire qui te convient", { exact: true }).first().scrollIntoViewIfNeeded()
+      })
+      await scene("result", async () => {
+        await page.goto(adminUrl); await settle(page)
+        const current = await summary()
+        if (JSON.stringify(current) !== JSON.stringify(initialSummary)) throw new Error("Targeted message changed invitations or registrations")
+        checks.participationUnchanged = true
+      })
+      await writeFile(path.join(dir, "reminder-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), ...checks }, null, 2))
+    } else if (slug === "members-invitations") {
+      const adminUrl = `${baseUrl}/admin/events/${featureEventId}/invitations`
+      const dialog = () => page.getByRole("dialog", { name: "Inviter des membres", exact: true })
+      const open = async () => { await tap(page, page.getByRole("button", { name: "+ Inviter des membres", exact: true })); await dialog().waitFor() }
+      const send = async (count: number) => {
+        const response = page.waitForResponse(r => r.url().endsWith(`/events/${featureEventId}/invitations`) && r.request().method() === "POST")
+        await tap(page, dialog().getByRole("button", { name: `Envoyer ${count} invitation${count > 1 ? "s" : ""}`, exact: true }))
+        const result = await response
+        if (!result.ok()) throw new Error(`Invitation send failed: ${result.status()}`)
+        const data = await result.json()
+        if (data.emailsFailed) throw new Error("Invitation email failed in local SMTP")
+        await dialog().waitFor({ state: "hidden" })
+        return data
+      }
+      const mail = async (email: string) => {
+        // Retried takes leave older emails with revoked seed tokens. Open the newest
+        // exact recipient's message, not whichever matching item the UI renders first.
+        const response = await page.request.get("http://localhost:48026/api/v1/messages", { headers: { "Cache-Control": "no-cache" } })
+        const inbox = await response.json() as { messages: { ID: string; To: { Address: string }[]; Subject: string; Created: string }[] }
+        const latest = inbox.messages.filter(m => m.To.some(to => to.Address === email) && m.Subject.includes("On a besoin de toi")).sort((a, b) => Date.parse(b.Created) - Date.parse(a.Created))[0]
+        if (!latest) throw new Error("Current invitation email not found in local mailbox")
+        await page.goto(`http://localhost:48026/view/${latest.ID}`); await settle(page)
+        const link = page.frameLocator("iframe").getByRole("link", { name: "Voir les missions et m'inscrire", exact: true })
+        await link.waitFor()
+        const href = await link.getAttribute("href")
+        if (!href) throw new Error("Invitation email link missing")
+        // Local eventPublicUrl already has ?org=; the invitation renderer appends
+        // ?token=. Normalize this development-only delimiter, preserving the real
+        // emailed token. Production subdomain URLs do not have the org query.
+        const localHref = href.includes("localhost") && href.includes("?org=") ? href.replace("?token=", "&token=") : href
+        const url = new URL(localHref)
+        if (!url.searchParams.get("token")) throw new Error("Invitation URL has no readable token")
+        return `${baseUrl}${url.pathname}?org=${encodeURIComponent(org)}&token=${encodeURIComponent(url.searchParams.get("token") ?? "")}`
+      }
+      let alineLink = "", nicolasLink = ""
+      const checks: Record<string, unknown> = {}
+      await scene("welcome", async () => { await page.screencast.showChapter(manifest.title, { description: "Proposer une participation, sans réserver à la place des bénévoles", duration: 2_300 }) })
+      await scene("test", async at => {
+        await tap(page, page.getByRole("button", { name: "Tester l'envoi d'email", exact: true }))
+        await typeNaturally(page, page.getByPlaceholder("votre@email.com"), "test.invitation@example.org")
+        await tap(page, page.getByRole("button", { name: "Envoyer le test", exact: true }))
+        await page.getByText("Envoyé.", { exact: true }).waitFor()
+        await at(0.56)
+        await mail("test.invitation@example.org")
+        await page.frameLocator("iframe").getByText(/les liens sont fictifs/).waitFor()
+      })
+      await scene("individual", async at => {
+        await page.goto(adminUrl); await settle(page); await open()
+        await typeNaturally(page, dialog().getByRole("searchbox", { name: "Rechercher un membre", exact: true }), "Aline")
+        await tap(page, dialog().getByRole("checkbox", { name: "Inviter Aline Mercier", exact: true }))
+        await typeNaturally(page, dialog().getByLabel("Message (optionnel)", { exact: true }), "Bonjour Aline, nous serions ravis de te retrouver à l'accueil.")
+        await at(0.83)
+        checks.individual = await send(1)
+        await page.getByRole("row").filter({ hasText: "Aline Mercier" }).waitFor()
+      })
+      await scene("group", async at => {
+        await page.goto(adminUrl); await settle(page); await open()
+        const tag = dialog().getByRole("combobox", { name: "Filtrer par tag", exact: true })
+        await tap(page, tag); await tag.selectOption("accueil")
+        await tap(page, dialog().getByRole("button", { name: "Tout sélectionner", exact: true }))
+        await at(0.54)
+        await tap(page, tag); await tag.selectOption("sécurité")
+        await at(0.77)
+        await tap(page, dialog().getByRole("button", { name: "Effacer", exact: true }))
+        await tag.selectOption("")
+      })
+      await scene("send", async at => {
+        await tap(page, dialog().getByRole("checkbox", { name: "Inviter Nicolas Renaud", exact: true }))
+        await tap(page, dialog().getByRole("checkbox", { name: "Inviter Sébastien Morel 9", exact: true }))
+        await typeNaturally(page, dialog().getByLabel("Message (optionnel)", { exact: true }), "Bonjour, choisis le créneau qui te convient. Merci pour ton aide !")
+        await at(0.39)
+        checks.group = await send(2)
+        nicolasLink = await mail("video.membre.4@example.org")
+        await at(0.70)
+        await mail("video.membre.8@example.org")
+      })
+      await scene("personal-link", async at => {
+        alineLink = await mail("video.membre.3@example.org")
+        await at(0.15)
+        await page.goto(alineLink); await settle(page)
+        await tap(page, page.getByRole("button", { name: /Sélectionner — Démontage/ }).first())
+        await tap(page, page.getByRole("button", { name: /^Continuer/ }))
+        if (await page.getByLabel("Email *", { exact: true }).inputValue() !== "video.membre.3@example.org") throw new Error("Invitation form not prefilled")
+        await at(0.36)
+        await tap(page, page.getByRole("radio", { name: "M", exact: true }))
+        await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
+        await tap(page, page.locator("label").filter({ hasText: "J'accepte que l'association" }).getByRole("checkbox"))
+        await at(0.76)
+        await tap(page, page.getByRole("button", { name: "Confirmer mon inscription", exact: true }))
+        await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+      })
+      await scene("reserved", async at => {
+        await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
+        const quit = page.getByRole("button", { name: "Quitter la session", exact: true })
+        if (await quit.count()) {
+          await tap(page, quit)
+          await quit.waitFor({ state: "hidden" })
+        }
+        await at(0.27)
+        await page.goto(nicolasLink); await settle(page)
+        await tap(page, page.getByRole("button", { name: /Sélectionner — Sécurité/ }).first())
+        await at(0.52)
+        await tap(page, page.getByRole("button", { name: /^Continuer/ }))
+        if (await page.getByLabel("Email *", { exact: true }).inputValue() !== "video.membre.4@example.org") throw new Error("Reserved invitation identity missing")
+      })
+      await scene("status", async at => {
+        await page.goto(adminUrl); await settle(page)
+        const row = page.getByRole("row").filter({ hasText: "Aline Mercier" })
+        await row.getByText("Participation confirmée", { exact: false }).waitFor()
+        await row.scrollIntoViewIfNeeded()
+        await at(0.42)
+        await page.getByRole("row").filter({ hasText: "Nicolas Renaud" }).getByText("Sans créneau confirmé", { exact: true }).scrollIntoViewIfNeeded()
+      })
+      await scene("existing", async at => {
+        await open()
+        await tap(page, dialog().getByLabel("Cacher déjà invités", { exact: true }))
+        await typeNaturally(page, dialog().getByRole("searchbox", { name: "Rechercher un membre", exact: true }), "Aline")
+        await at(0.45)
+        await dialog().getByRole("checkbox", { name: "Inviter Aline Mercier", exact: true }).waitFor()
+        await at(0.82)
+        await tap(page, dialog().getByRole("button", { name: "Annuler", exact: true }))
+      })
+      await scene("no-email", async at => {
+        await open()
+        await typeNaturally(page, dialog().getByRole("searchbox", { name: "Rechercher un membre", exact: true }), "Sansmail")
+        await tap(page, dialog().getByRole("checkbox", { name: "Inviter René Sansmail", exact: true }))
+        await at(0.29)
+        const result = await send(1)
+        if (result.membersWithoutEmail !== 1 || result.emailsSent !== 0) throw new Error("No-email invitation demonstration incorrect")
+        checks.noEmail = result
+        await page.getByRole("row").filter({ hasText: "René Sansmail" }).scrollIntoViewIfNeeded()
+      })
+      await writeFile(path.join(dir, "invitation-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), ...checks }, null, 2))
+    } else if (slug === "members-import") {
+      const form = () => page.getByRole("dialog", { name: "Importer des membres", exact: true })
+      const fixture = (name: string) => path.resolve("videos/fixtures/member-import", name)
+      const analyse = async () => {
+        const response = page.waitForResponse(r => r.url().endsWith("/api/admin/members/import/preview") && r.request().method() === "POST")
+        await tap(page, form().getByRole("button", { name: "Analyser le fichier", exact: true }))
+        const result = await response
+        if (!result.ok()) throw new Error(`Import preview failed: ${result.status()}`)
+        const body = await result.json()
+        await form().getByText("Analyse du fichier, rien n'est encore enregistré.", { exact: true }).waitFor()
+        return body
+      }
+      const open = async () => {
+        await tap(page, page.getByRole("button", { name: "Importer CSV/Excel", exact: true }))
+        await form().waitFor()
+      }
+      let initialCount = ""
+      const checks: Record<string, unknown> = {}
+      await scene("welcome", async () => {
+        await page.screencast.showChapter(manifest.title, { description: "Analyser avant de confirmer", duration: 2_300 })
+        initialCount = await page.getByText(/^\d+ membres$/).innerText()
+      })
+      await scene("file", async at => {
+        await open()
+        await at(0.17)
+        await form().getByLabel("Fichier CSV ou Excel", { exact: true }).setInputFiles(fixture("membres-a-verifier.csv"))
+        await form().getByText(/Colonnes attendues/).scrollIntoViewIfNeeded()
+      })
+      await scene("preview", async at => {
+        await at(0.37)
+        const body = await analyse()
+        checks.firstPreview = body.plan.counts
+        if (body.plan.counts.skip !== 2 || body.plan.counts.error !== 3) throw new Error("Expected two existing emails and three real file errors")
+        if (await page.getByText(/^\d+ membres$/).innerText() !== initialCount) throw new Error("Preview changed member count")
+        await at(0.72)
+        await form().getByText(/Colonnes reconnues/).scrollIntoViewIfNeeded()
+      })
+      await scene("errors", async at => {
+        await form().getByRole("region").filter({ has: page.getByText("Prénom manquant", { exact: true }) }).scrollIntoViewIfNeeded()
+        await form().getByText("Même email que la ligne 8", { exact: true }).waitFor()
+        await at(0.55)
+        await form().getByText("Email invalide : adresse-incomplete", { exact: true }).scrollIntoViewIfNeeded()
+      })
+      await scene("update", async at => {
+        await tap(page, form().getByRole("button", { name: "Retour", exact: true }))
+        await tap(page, form().getByLabel("Mettre à jour", { exact: true }))
+        await at(0.25)
+        const body = await analyse()
+        if (body.plan.counts.update !== 2 || body.plan.counts.skip !== 0) throw new Error("Update preview must target two existing members")
+        checks.updatePreview = body.plan.counts
+        await at(0.74)
+        await form().getByRole("row").filter({ has: page.getByRole("rowheader", { name: "Camille Rochat", exact: true }) }).scrollIntoViewIfNeeded()
+      })
+      await scene("corrected", async at => {
+        await tap(page, form().getByRole("button", { name: "Retour", exact: true }))
+        await form().getByLabel("Fichier CSV ou Excel", { exact: true }).setInputFiles(fixture("membres-corriges.xlsx"))
+        await at(0.18)
+        const body = await analyse()
+        if (body.plan.counts.create !== 38 || body.plan.counts.update !== 2 || body.plan.counts.error !== 0) throw new Error("Corrected Excel must plan 38 creations and two updates")
+        checks.correctedPreview = body.plan.counts
+        await at(0.46)
+        await form().getByRole("row").filter({ has: page.getByRole("rowheader", { name: "René Sansmail", exact: true }) }).scrollIntoViewIfNeeded()
+      })
+      await scene("confirm", async at => {
+        const response = page.waitForResponse(r => r.url().endsWith("/api/admin/members/import") && r.request().method() === "POST")
+        await tap(page, form().getByRole("button", { name: "Importer 40 membres", exact: true }))
+        const result = await response
+        if (!result.ok()) throw new Error(`Confirmed import failed: ${result.status()}`)
+        const body = await result.json()
+        if (body.created !== 38 || body.updated !== 2 || body.errors.length) throw new Error("Confirmed import differs from expected plan")
+        checks.confirmed = body
+        await form().getByText(/Import terminé/).waitFor()
+        await at(0.36)
+        await tap(page, form().getByRole("button", { name: "Fermer", exact: true }).last())
+        await fillVisibly(page, page.getByPlaceholder("Rechercher (nom, email, téléphone)…"), "Maya")
+        await tap(page, page.getByRole("button", { name: "Éditer Maya Mercier 9", exact: true }))
+        const edit = page.getByRole("dialog", { name: "Modifier le membre", exact: true })
+        if (!(await edit.getByLabel("Tags (séparés par des virgules)", { exact: true }).inputValue()).includes("permis-b")) throw new Error("Imported tags missing")
+        await at(0.88)
+        await tap(page, edit.getByRole("button", { name: "Annuler", exact: true }))
+      })
+      await scene("repeat", async at => {
+        await fillVisibly(page, page.getByPlaceholder("Rechercher (nom, email, téléphone)…"), "")
+        await open()
+        await form().getByLabel("Fichier CSV ou Excel", { exact: true }).setInputFiles(fixture("membres-corriges.xlsx"))
+        await tap(page, form().getByLabel("Ignorer", { exact: true }))
+        const body = await analyse()
+        if (body.plan.counts.skip !== 39 || body.plan.counts.create !== 1) throw new Error("Repeat preview must expose the no-email recreation risk")
+        checks.repeatPreview = body.plan.counts
+        await at(0.75)
+        await tap(page, form().getByRole("button", { name: "Retour", exact: true }))
+        await tap(page, form().getByRole("button", { name: "Annuler", exact: true }))
+      })
+      await scene("result", async () => {
+        await page.getByRole("heading", { name: "Membres", exact: true }).scrollIntoViewIfNeeded()
+      })
+      await writeFile(path.join(dir, "import-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), ...checks }, null, 2))
+    } else if (slug === "members-management") {
+      const search = () => page.getByPlaceholder("Rechercher (nom, email, téléphone)…")
+      const editMaya = async () => {
+        await tap(page, page.getByRole("button", { name: "Éditer Maya Berger", exact: true }))
+        await page.getByRole("dialog", { name: "Modifier le membre", exact: true }).waitFor()
+      }
+      const save = async () => {
+        await tap(page, page.getByRole("dialog").getByRole("button", { name: "Enregistrer", exact: true }))
+        await page.getByRole("dialog").waitFor({ state: "hidden" })
+      }
+      await scene("welcome", async () => {
+        await page.screencast.showChapter(manifest.title, { description: "Des fiches utiles, sans complication", duration: 2_300 })
+        await page.getByText("60 membres", { exact: true }).waitFor()
+      })
+      await scene("create", async at => {
+        await tap(page, page.getByRole("button", { name: "+ Nouveau membre", exact: true }))
+        const form = page.getByRole("dialog", { name: "Nouveau membre", exact: true })
+        await typeNaturally(page, form.getByLabel(/^Prénom/), "Maya")
+        await typeNaturally(page, form.getByLabel(/^Nom/), "Berger")
+        await typeNaturally(page, form.getByLabel("Email", { exact: true }), "maya.berger@example.org")
+        await typeNaturally(page, form.getByLabel("Téléphone", { exact: true }), "079 000 90 01")
+        await at(0.80)
+        await tap(page, form.getByRole("button", { name: "Créer", exact: true }))
+        await page.getByRole("button", { name: "Éditer Maya Berger", exact: true }).waitFor()
+        await page.getByText("61 membres", { exact: true }).waitFor()
+      })
+      await scene("edit", async at => {
+        await editMaya()
+        const form = page.getByRole("dialog")
+        await typeNaturally(page, form.getByLabel("Tags (séparés par des virgules)", { exact: true }), "accueil, permis-b")
+        await typeNaturally(page, form.getByLabel("Notes", { exact: true }), "Préfère le stand d'accueil.")
+        await at(0.64)
+        await save(); await editMaya()
+        if (await form.getByLabel("Notes", { exact: true }).inputValue() !== "Préfère le stand d'accueil.") throw new Error("Member notes did not persist")
+      })
+      await scene("availability", async at => {
+        const form = page.getByRole("dialog")
+        await tap(page, form.getByLabel("Soir", { exact: true }))
+        await typeNaturally(page, form.getByLabel(/Sauf \/ à savoir/), "Pas le vendredi")
+        await at(0.52)
+        await save()
+        await page.getByText(/Soir.*Pas le vendredi/).waitFor()
+      })
+      await scene("no-email", async at => {
+        await tap(page, page.getByRole("button", { name: "+ Nouveau membre", exact: true }))
+        const form = page.getByRole("dialog")
+        await typeNaturally(page, form.getByLabel(/^Prénom/), "René")
+        await typeNaturally(page, form.getByLabel(/^Nom/), "Aubert")
+        await typeNaturally(page, form.getByLabel("Téléphone", { exact: true }), "079 000 90 02")
+        await at(0.63)
+        await tap(page, form.getByRole("button", { name: "Créer", exact: true }))
+        const row = page.getByRole("row").filter({ has: page.getByRole("button", { name: "Éditer René Aubert", exact: true }) })
+        await row.waitFor()
+        if ((await row.textContent())?.includes("@")) throw new Error("No-email demonstration has an email")
+      })
+      await scene("search", async at => {
+        await typeNaturally(page, search(), "Emilie")
+        await page.getByText("Émilie", { exact: true }).first().waitFor()
+        await at(0.43)
+        await fillVisibly(page, search(), "Stephane Favre")
+        if (await page.getByRole("button", { name: "Éditer Stéphane Favre", exact: true }).count() !== 2) throw new Error("Homonym demonstration must show two distinct members")
+      })
+      await scene("filter", async at => {
+        await fillVisibly(page, search(), "")
+        const tags = page.locator("select").first()
+        await tap(page, tags); await tags.selectOption("accueil")
+        await at(0.30)
+        await tap(page, tags); await tags.selectOption("")
+        await at(0.48)
+        await tap(page, page.getByRole("button", { name: /^Nom/ }).first())
+        await at(0.70)
+        await tap(page, page.getByRole("button", { name: /^Heures planifiées/ }))
+      })
+      await scene("deactivate", async at => {
+        await fillVisibly(page, search(), "Maya Berger")
+        await tap(page, page.getByRole("button", { name: "Désactiver Maya Berger", exact: true }))
+        await tap(page, page.getByRole("alertdialog").getByRole("button", { name: "Désactiver", exact: true }))
+        await page.getByRole("button", { name: "Éditer Maya Berger", exact: true }).waitFor({ state: "hidden" })
+        await at(0.43)
+        await tap(page, page.getByLabel("Inclure inactifs", { exact: true }))
+        await editMaya()
+        await tap(page, page.getByRole("dialog").getByLabel("Membre actif", { exact: true }))
+        await save()
+        await tap(page, page.getByLabel("Inclure inactifs", { exact: true }))
+        await page.getByRole("button", { name: "Désactiver Maya Berger", exact: true }).waitFor()
+      })
+      await scene("activity", async at => {
+        await fillVisibly(page, search(), "Camille Rochat")
+        await tap(page, page.getByRole("link", { name: "Activité de Camille Rochat", exact: true }))
+        await settle(page)
+        await page.getByRole("heading", { name: "Activité de Camille Rochat", exact: true }).waitFor()
+        if (!await page.getByRole("list", { name: "Chronologie", exact: true }).getByRole("listitem").count()) throw new Error("Activity demonstration is empty")
+        await at(0.50)
+        await page.getByRole("list", { name: "Chronologie", exact: true }).getByRole("listitem").last().scrollIntoViewIfNeeded()
+      })
+      await scene("result", async () => {
+        await page.goto(`${baseUrl}/admin/members`); await settle(page)
+        await page.getByRole("heading", { name: "Membres", exact: true }).waitFor()
+      })
     } else if (slug === "volunteer-session-availability") {
       const personalUrl = `${baseUrl}/my/demo-volunteer-camille-0001`
       const eventUrl = `${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`
       const invalidUrl = `${baseUrl}/my/demo-invalid-video-link?org=${encodeURIComponent(org)}`
       const section = () => page.locator("form").filter({ has: page.getByRole("heading", { name: "Mes disponibilités", exact: true }) })
+      const startSeparateReadJourney = async () => {
+        // Separate demonstrations share one local IP. Reset only the read counter between
+        // journeys, never the resend counters whose real limit is demonstrated above.
+        if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Read-counter fixture requires isolated video DB")
+        const { PrismaClient } = await import("../../src/generated/prisma/client")
+        const { PrismaPg } = await import("@prisma/adapter-pg")
+        const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+        try { await db.rateLimit.deleteMany({ where: { key: { startsWith: "reg-token-read:" } } }) }
+        finally { await db.$disconnect() }
+      }
       await scene("welcome", async at => {
         await page.screencast.showChapter(manifest.title, { description: "Un lien privé et des informations utiles à l'équipe", duration: 2_300 })
         await at(0.45)
@@ -1622,6 +2845,7 @@ async function main() {
         await page.getByRole("link", { name: "Écrire à l'organisation" }).scrollIntoViewIfNeeded()
       })
       await scene("availability", async at => {
+        await startSeparateReadJourney()
         await section().scrollIntoViewIfNeeded()
         await tap(page, section().getByLabel("Matin", { exact: true }))
         await tap(page, section().getByLabel("Soir", { exact: true }))
@@ -1636,6 +2860,7 @@ async function main() {
         if (await section().getByLabel(/Sauf/).inputValue() !== "Pas le dimanche matin") throw new Error("Availability note did not persist")
       })
       await scene("organizer", async at => {
+        await startSeparateReadJourney()
         await page.goto(`${baseUrl}/admin/members`); await settle(page)
         await page.getByText(/Pas le dimanche matin/).first().scrollIntoViewIfNeeded()
         await at(0.65)
@@ -1827,6 +3052,7 @@ async function main() {
       })
     } else if (slug === "event-milestones") {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}`); await settle(page)
+      await page.getByRole("heading", { name: "Jalons", exact: true }).scrollIntoViewIfNeeded()
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Les échéances essentielles, au même endroit", duration: 2_300 })
         await page.getByRole("heading", { name: "Jalons" }).waitFor()
@@ -1834,11 +3060,11 @@ async function main() {
 
       await scene("create", async (at) => {
         await page.getByRole("heading", { name: "Jalons" }).scrollIntoViewIfNeeded()
-        await at(0.26)
+        await at(0.03)
         await tap(page, page.getByRole("button", { name: "+ Ajouter un jalon" }))
-        await at(0.48)
+        await at(0.08)
         await page.getByLabel("Titre *").fill("Fermer les inscriptions")
-        await at(0.68)
+        await at(0.17)
         const due = new Date(); due.setDate(due.getDate() + 8)
         await page.getByLabel("Échéance *").fill(due.toISOString().slice(0, 10))
         await at(0.84)
@@ -1848,22 +3074,36 @@ async function main() {
 
       await scene("states", async (at) => {
         await page.getByRole("heading", { name: "Jalons" }).scrollIntoViewIfNeeded()
+        await page.getByRole("checkbox", { name: "Préparer le matériel", exact: true }).waitFor()
+        if (!(await page.getByRole("checkbox", { name: "Préparer le matériel", exact: true }).isChecked())) throw new Error("Finished milestone missing")
+        if (await page.getByRole("checkbox", { name: "Valider le plan de sécurité", exact: true }).isChecked()) throw new Error("Overdue milestone must remain unfinished")
         await at(0.56)
         await page.getByText("Fermer les inscriptions", { exact: true }).first().scrollIntoViewIfNeeded()
       })
 
       await scene("toggle", async (at) => {
         const checkbox = page.getByRole("checkbox", { name: "Fermer les inscriptions", exact: true }).first()
-        await at(0.28)
+        await checkbox.scrollIntoViewIfNeeded()
+        const box = await checkbox.boundingBox()
+        if (!box) throw new Error("Milestone checkbox must be visible")
+        const detailStart = Math.round(performance.now() - startedAt)
+        detailFrames.push({ startMs: detailStart, endMs: detailStart + durations.get("toggle")!, x: Math.max(0, Math.min(640, Math.floor(box.x - 60))), y: Math.max(0, Math.min(400, Math.floor(box.y - 100))), width: 640, height: 400 })
+        await at(0.12)
         await tap(page, checkbox)
-        await at(0.58)
+        if (!(await checkbox.isChecked())) throw new Error("Milestone did not become finished after the click")
+        await at(0.44)
         await tap(page, checkbox)
+        if (await checkbox.isChecked()) throw new Error("Milestone did not reopen after the click")
       })
 
       await scene("dashboard", async (at) => {
-        await page.goto(`${baseUrl}/admin/events`); await settle(page)
-        await at(0.42)
-        await page.getByRole("link", { name: "Fête du village de Montvert" }).first().scrollIntoViewIfNeeded()
+        await tap(page, page.getByRole("link", { name: "Tableau de bord", exact: true }).first()); await settle(page)
+        await page.getByText(/1 jalon est en retard/).scrollIntoViewIfNeeded()
+        const returnToMilestones = page.getByRole("link", { name: /Voir les jalons.*Fête du village de Montvert/ })
+        await returnToMilestones.waitFor()
+        await at(0.47)
+        await tap(page, returnToMilestones); await settle(page)
+        await page.getByRole("checkbox", { name: "Envoyer les consignes", exact: true }).scrollIntoViewIfNeeded()
       })
 
       await scene("result", async (at) => {
@@ -1880,51 +3120,110 @@ async function main() {
 
       await scene("program", async (at) => {
         await page.getByText("Spectacles", { exact: true }).scrollIntoViewIfNeeded()
-        await at(0.38)
-        const add = page.getByRole("button", { name: "+ Ajouter" })
-        if (await add.isVisible()) await tap(page, add)
-        await at(0.62)
-        const name = page.getByPlaceholder("Nom du spectacle")
-        if (await name.isVisible()) {
-          await name.fill("Concert de clôture")
-          const times = page.locator('input[type="time"]')
-          await times.nth((await times.count()) - 2).fill("23:30")
-          await times.nth((await times.count()) - 1).fill("01:00")
-        }
+        await at(0.08)
+        await tap(page, page.getByRole("button", { name: "+ Ajouter", exact: true }))
+        await at(0.18)
+        await typeNaturally(page, page.getByLabel("Nom du spectacle", { exact: true }), "Concert du village")
+        await fillVisibly(page, page.locator("#new-show-date"), "2026-11-14", 700)
+        await fillVisibly(page, page.locator("#new-show-start"), "11:00", 700)
+        await fillVisibly(page, page.locator("#new-show-end"), "12:30", 700)
+        await at(0.59)
+        const saved = page.waitForResponse(response => response.url().endsWith(`/api/admin/events/${featureEventId}`) && response.request().method() === "PATCH")
+        await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
+        if (!(await saved).ok()) throw new Error("Program entry was not saved")
+        await page.getByText("Concert du village", { exact: true }).waitFor()
+      })
+
+      await scene("program-edit", async (at) => {
+        await at(0.16)
+        await tap(page, page.getByRole("button", { name: "Modifier le spectacle Concert du village", exact: true }))
+        await at(0.32)
+        await fillVisibly(page, page.locator("#edit-show-end"), "13:00", 800)
+        const saved = page.waitForResponse(response => response.url().endsWith(`/api/admin/events/${featureEventId}`) && response.request().method() === "PATCH")
+        await tap(page, page.getByRole("button", { name: "Confirmer", exact: true }))
+        if (!(await saved).ok()) throw new Error("Program correction was not saved")
+        await page.getByText(/11:00–13:00/).waitFor()
+        await at(0.76)
+        await page.getByRole("button", { name: "Supprimer le spectacle Concert du village", exact: true }).focus()
       })
 
       await scene("pages", async (at) => {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/pages`); await settle(page)
         await page.getByRole("heading", { name: "Pages" }).waitFor()
-        await at(0.22)
-        const faqRow = page.getByRole("listitem").filter({ hasText: "Questions fréquentes" }).first()
-        await tap(page, faqRow.getByRole("button", { name: "Modifier" }))
-        await page.getByRole("heading", { name: "Modifier la page" }).waitFor()
-        await at(0.44)
-        await page.getByLabel("Titre *").focus()
-        await at(0.64)
-        await page.getByLabel(/Contenu/).fill("# Questions fréquentes\n\n**Où se garer ?** Parking nord.\n\n**Que prendre ?** Une gourde et des chaussures fermées.")
-        await at(0.72)
-        await tap(page, page.getByRole("button", { name: "Enregistrer" }))
-        await page.getByText("Questions fréquentes", { exact: true }).first().waitFor()
+        await at(0.05)
+        await tap(page, page.getByRole("button", { name: "+ Ajouter une page", exact: true }))
+        const form = page.getByRole("dialog", { name: "Nouvelle page", exact: true })
+        await typeNaturally(page, form.getByLabel("Titre *"), "Ce qu’il faut apporter")
+        await at(0.30)
+        await tap(page, form.getByLabel(/Contenu/))
+        await form.getByLabel(/Contenu/).pressSequentially("# Bien préparer sa mission\n\n- **Chaussures fermées**\n- Une veste", { delay: 100 })
+        await at(0.79)
+        await tap(page, form.getByRole("button", { name: "Enregistrer", exact: true }))
+        await form.waitFor({ state: "hidden" })
+        if (await page.getByRole("listitem").filter({ hasText: "Ce qu’il faut apporter" }).count() !== 1) throw new Error("Expected one newly created practical page")
+      })
+
+      await scene("page-order", async (at) => {
+        await at(0.26)
+        const saved = page.waitForResponse(response => response.url().endsWith(`/api/admin/events/${featureEventId}/pages/reorder`) && response.request().method() === "POST")
+        await tap(page, page.getByRole("button", { name: "Monter la page « Ce qu’il faut apporter »", exact: true }))
+        if (!(await saved).ok()) throw new Error("Page order was not saved")
+        await at(0.30)
+        await tap(page, page.getByRole("button", { name: "Modifier la page « Ce qu’il faut apporter »", exact: true }))
+        const form = page.getByRole("dialog", { name: "Modifier la page", exact: true })
+        await tap(page, form.getByLabel(/Contenu/))
+        await form.getByLabel(/Contenu/).press("End")
+        await form.getByLabel(/Contenu/).pressSequentially("\n- Une gourde", { delay: 120 })
+        await at(0.57)
+        await tap(page, form.getByRole("button", { name: "Enregistrer", exact: true }))
+        await form.waitFor({ state: "hidden" })
+        await at(0.77)
+        await tap(page, page.getByRole("button", { name: "Supprimer la page « Ce qu’il faut apporter »", exact: true }))
+        const confirmation = page.getByRole("alertdialog")
+        await confirmation.waitFor()
+        await at(0.91)
+        await tap(page, confirmation.getByRole("button", { name: "Annuler", exact: true }))
       })
 
       await scene("public", async (at) => {
-        await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
-        await at(0.34)
-        await page.getByRole("heading", { level: 1, name: "Fête du village de Montvert" }).scrollIntoViewIfNeeded()
-        await at(0.62)
-        await page.getByRole("button", { name: /Sélectionner — Accueil 15h–18h/ }).scrollIntoViewIfNeeded()
+        // The public page links are relative. A host carrying the organization is
+        // required, just as in production; ?org= on localhost isn't propagated by
+        // those links. Chromium resolves *.localhost to loopback, never the network.
+        const publicOrigin = "http://formation-pages.demo.localhost:43102"
+        await page.goto(`${publicOrigin}/${eventSlug}`); await settle(page)
+        await page.getByText(/Concert du village/).first().scrollIntoViewIfNeeded()
+        await at(0.33)
+        const link = page.getByRole("link", { name: "Ce qu’il faut apporter", exact: true })
+        await link.scrollIntoViewIfNeeded()
+        await at(0.47)
+        const target = await link.getAttribute("target")
+        const popup = target === "_blank" ? page.waitForEvent("popup") : undefined
+        await tap(page, link)
+        if (popup) {
+          const opened = await popup
+          await opened.waitForLoadState("domcontentloaded")
+          const destination = opened.url()
+          if (!destination.startsWith(publicOrigin + "/")) throw new Error("Public page left the local video environment")
+          await page.goto(destination)
+          await opened.close()
+        }
+        await settle(page)
+        await page.getByRole("heading", { name: "Bien préparer sa mission", exact: true }).waitFor()
+        await page.getByText("Une gourde", { exact: true }).waitFor()
       })
 
       await scene("qr", async (at) => {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/qr`); await settle(page)
         await page.getByRole("heading", { name: "QR code" }).waitFor()
-        await at(0.34)
-        await page.getByRole("link", { name: "Télécharger PNG" }).scrollIntoViewIfNeeded()
-        await at(0.58)
-        await page.getByRole("link", { name: "Télécharger SVG" }).focus()
-        await at(0.78)
+        for (const [fraction, format] of [[0.20, "PNG"], [0.38, "SVG"]] as const) {
+          await at(fraction)
+          const pending = page.waitForEvent("download")
+          await tap(page, page.getByRole("link", { name: `Télécharger ${format}`, exact: true }))
+          const download = await pending
+          if (!download.suggestedFilename().toLowerCase().endsWith(`.${format.toLowerCase()}`)) throw new Error("Unexpected QR download format")
+          await download.saveAs(path.join(dir, `qr-demo.${format.toLowerCase()}`))
+        }
+        await at(0.60)
         await page.getByRole("button", { name: "Imprimer" }).focus()
       })
 
@@ -2113,7 +3412,7 @@ async function main() {
         await tap(page, page.getByRole("button", { name: /Sélectionner — Accueil 09h–12h/ }))
         await at(0.24)
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
-        await page.getByRole("heading", { name: "Vos informations" }).waitFor()
+        await page.getByRole("heading", { name: "Tes informations" }).waitFor()
         await at(0.58)
         await page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).scrollIntoViewIfNeeded()
       })
@@ -2151,6 +3450,7 @@ async function main() {
         await page.getByRole("link", { name: "Inviter des membres" }).scrollIntoViewIfNeeded()
       })
     } else if (slug === "event-create-template") {
+      let templateEventId = ""
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Une base prête à adapter", duration: 2_300 })
         await tap(page, page.getByRole("link", { name: "+ Nouvel événement" }))
@@ -2165,18 +3465,21 @@ async function main() {
         await at(0.42)
         await tap(page, page.getByRole("radio", { name: /Manifestation sportive/ }))
         await at(0.60)
-        await tap(page, page.getByRole("radio", { name: /Montage, exploitation, démontage/ }))
-        await at(0.78)
         await tap(page, page.getByRole("radio", { name: /Fête de village/ }))
+        await at(0.78)
+        await tap(page, page.getByRole("radio", { name: /Montage, exploitation, démontage/ }))
+        await at(0.94)
+        await tap(page, page.getByRole("radio", { name: /Page blanche/ }))
       })
 
       await scene("preview", async (at) => {
+        await tap(page, page.getByRole("radio", { name: /Fête de village/ }))
         await page.getByRole("heading", { name: "Fête de village", exact: true }).scrollIntoViewIfNeeded()
         await at(0.20)
         await page.getByRole("heading", { name: "Ce qui sera créé" }).scrollIntoViewIfNeeded()
         await at(0.44)
         await fillVisibly(page, page.getByLabel("Titre"), "Fête villageoise de Bellevue", 1_000)
-        await fillVisibly(page, page.getByLabel(/Premier jour/), "2031-07-05", 1_100)
+        await fillVisibly(page, page.getByLabel(/Premier jour/), "2026-11-21", 1_100)
         await at(0.78)
         await page.getByText(/Brouillon, non publié/).scrollIntoViewIfNeeded()
       })
@@ -2185,9 +3488,13 @@ async function main() {
         await at(0.14)
         await tap(page, page.getByRole("button", { name: /Créer le brouillon \(10 créneaux\)/ }))
         await page.waitForURL(/\/admin\/events\/[^/]+\/shifts\?wizard=1$/)
+        templateEventId = new URL(page.url()).pathname.split("/")[3]
         await page.getByRole("heading", { name: "Créneaux" }).waitFor()
-        await at(0.48)
-        await page.getByRole("navigation", { name: "Étapes de création de l'événement" }).scrollIntoViewIfNeeded()
+        await at(0.38)
+        await page.goto(`${baseUrl}/admin/events/${templateEventId}`); await settle(page)
+        await page.getByText("Brouillon", { exact: true }).first().waitFor()
+        await at(0.78)
+        await page.goto(`${baseUrl}/admin/events/${templateEventId}/shifts`); await settle(page)
       })
 
       await page.screencast.showChapter("Adapter le planning", { description: "Chaque créneau reste entièrement modifiable", duration: 1_400 })
@@ -2199,17 +3506,24 @@ async function main() {
         await tap(page, row.getByRole("button", { name: "Modifier" }))
         const editor = page.getByRole("group", { name: "Modifier le créneau" })
         await editor.waitFor()
-        await at(0.52)
+        await at(0.67)
         const capacity = editor.getByLabel("Capacité *")
         await tap(page, capacity)
         await capacity.fill("5")
-        await at(0.76)
+        await at(0.84)
         await tap(page, editor.getByRole("button", { name: "Enregistrer", exact: true }))
         await page.getByRole("status").filter({ hasText: /Créneau modifié/ }).waitFor()
+        await row.getByText("0/5", { exact: true }).waitFor()
       })
 
-      await scene("result", async () => {
-        await page.screencast.showChapter("Un départ rapide, un planning maîtrisé", { description: "Le modèle propose, l’équipe décide", duration: 2_300 })
+      await page.screencast.showChapter("Un départ rapide, un planning maîtrisé", { description: "Le modèle propose, l’équipe décide", duration: 2_300 })
+      await scene("result", async (at) => {
+        await at(0.36)
+        await page.goto(`${baseUrl}/admin/events/${templateEventId}/review`); await settle(page)
+        await at(0.54)
+        await tap(page, page.getByRole("link", { name: "Prévisualiser comme un bénévole" }))
+        await page.waitForURL(/\/preview$/)
+        await page.getByText(/Aperçu : la page telle que la verront les bénévoles/).waitFor()
       })
     } else if (slug === "event-create-blank") {
       let createdEventId = ""
@@ -2226,13 +3540,13 @@ async function main() {
         await typeNaturally(page, page.getByLabel("Titre *"), "Fête du quartier des Tilleuls")
         await fillVisibly(page, page.getByLabel("Description"), "Deux jours de rencontres, de musique et de repas partagés avec les habitantes et habitants du quartier.", 1_200)
         await at(0.48)
-        await fillVisibly(page, page.getByLabel("Date début *"), "2031-06-14", 1_100)
-        await fillVisibly(page, page.getByLabel("Date fin *"), "2031-06-15", 1_100)
+        await fillVisibly(page, page.getByLabel("Date début *"), "2026-11-14", 1_100)
+        await fillVisibly(page, page.getByLabel("Date fin *"), "2026-11-15", 1_100)
       })
 
       await scene("location", async (at) => {
         await fillVisibly(page, page.getByLabel("Lieu"), "Maison de quartier, 12 avenue des Tilleuls, Montvert", 1_200)
-        await at(0.32)
+        await at(0.14)
         await typeNaturally(page, page.getByLabel("Coordonnées GPS ou lien de carte"), "46.180573, 6.122829")
         await at(0.72)
         await page.getByRole("link", { name: /Vérifier sur la carte/ }).scrollIntoViewIfNeeded()
@@ -2241,10 +3555,10 @@ async function main() {
       await page.screencast.showChapter("Ce que verra le bénévole", { description: "Des consignes et une confirmation utiles", duration: 1_400 })
       await scene("public-content", async (at) => {
         const instructions = page.getByText("Instructions publiques", { exact: true }).locator("xpath=following-sibling::textarea")
-        await fillVisibly(page, instructions, "Entre par la cour nord et présente-toi à l’accueil quinze minutes avant ton premier créneau.", 1_200)
+        await typeNaturally(page, instructions, "Entre par la cour nord. Arrive quinze minutes avant ton créneau.")
         await at(0.48)
         const confirmation = page.getByText("Message de confirmation", { exact: true }).locator("xpath=following-sibling::textarea")
-        await fillVisibly(page, confirmation, "Merci {{prenom}} ! Ton créneau {{créneau}} est bien réservé. Toutes les informations pratiques suivront par email.", 1_200)
+        await typeNaturally(page, confirmation, "Merci {prénom} ! Ton inscription est confirmée. Retrouve ton planning par email.")
         await at(0.78)
         await page.getByText(/Supporte le \*\*gras\*\*/).scrollIntoViewIfNeeded()
       })
@@ -2277,7 +3591,7 @@ async function main() {
         await at(0.48)
         await tap(page, description)
         await description.fill("Deux jours de rencontres, de musique, de repas partagés et d’activités pour les familles du quartier.")
-        await page.getByText("Enregistré ✓").waitFor({ timeout: 10_000 })
+        await page.getByText(/^Modifications enregistrées à/).waitFor({ timeout: 10_000 })
       })
 
       await scene("result", async (at) => {
@@ -2308,15 +3622,18 @@ async function main() {
         await page.getByText(/Événements, créneaux, inscriptions/).scrollIntoViewIfNeeded()
       })
 
+      await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
       await scene("invite", async (at) => {
+        await at(0.12)
+        await tap(page, page.getByRole("button", { name: "Inviter" }))
         const form = page.getByRole("heading", { name: "Inviter un administrateur" }).locator("xpath=ancestor::form")
         await typeNaturally(page, form.getByLabel("Nom"), "Léa Martin")
-        await typeNaturally(page, form.getByLabel("Email"), "lea.pending@example.org")
+        await typeNaturally(page, form.getByLabel("Email"), "video.team.lea@example.org")
         await at(0.62)
         await tap(page, form.getByRole("radio", { name: /Organisateur/ }))
         await at(0.78)
         await tap(page, form.getByRole("button", { name: "Envoyer l'invitation" }))
-        await page.getByText("Invitation envoyée à lea.pending@example.org.").waitFor()
+        await page.getByText("Invitation envoyée à video.team.lea@example.org.").waitFor()
       })
 
       await scene("invite-result", async (at) => {
@@ -2335,7 +3652,7 @@ async function main() {
         await role.scrollIntoViewIfNeeded()
         await at(0.20)
         await role.selectOption("admin")
-        await at(0.46)
+        await at(0.38)
         await tap(page, row.getByRole("button", { name: /Appliquer/ }))
         await page.getByRole("status").filter({ hasText: /Léa Martin : propriétaire/ }).waitFor()
         await at(0.74)
@@ -2345,10 +3662,10 @@ async function main() {
       await scene("organizer-view", async (at) => {
         await page.context().clearCookies()
         await page.goto(`${baseUrl}/admin/login`); await settle(page)
-        await typeNaturally(page, page.getByLabel("Email"), "sam.organizer@example.org")
-        await typeNaturally(page, page.getByLabel("Mot de passe"), process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
+        await page.getByLabel("Email").fill("video.team.samira@example.org")
+        await page.getByLabel("Mot de passe").fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
         await tap(page, page.getByRole("button", { name: "Se connecter" }))
-        await page.waitForURL(/\/admin\/events/)
+        await page.waitForURL(/\/admin\/(events|dashboard)/)
         await at(0.48)
         await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
         await page.getByText(/Votre rôle : organisateur\. Seuls les propriétaires/).waitFor()
@@ -2359,16 +3676,17 @@ async function main() {
       await scene("limits", async (at) => {
         await page.getByText(/Votre rôle : organisateur\. Seuls les propriétaires/).scrollIntoViewIfNeeded()
         await at(0.48)
-        await page.goto(`${baseUrl}/admin/events`); await settle(page)
-        await page.getByRole("heading", { name: "Événements" }).waitFor()
+        await page.getByText(/Seuls les propriétaires invitent/).scrollIntoViewIfNeeded()
         await at(0.74)
-        await page.getByRole("link", { name: "Fête du village de Montvert" }).first().scrollIntoViewIfNeeded()
+        await page.getByRole("main").getByText("Samira Diallo", { exact: true }).scrollIntoViewIfNeeded()
       })
 
       await scene("result", async () => {
         await page.screencast.showChapter("Une équipe autonome et maîtrisée", { description: "Des comptes nominatifs, des droits adaptés", duration: 2_300 })
       })
     } else if (slug === "org-email-settings") {
+      if (baseUrl !== "http://localhost:43102" || org !== "formation-email" || process.env.ORG_ADMIN_EMAIL !== "video.email.owner@example.org") throw new Error("Email recording requires its owned synthetic fixture")
+      const emailEventId = "video-foundation-email-event-0"
       await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Rappels, alertes et réponses", duration: 2_300 })
@@ -2379,16 +3697,43 @@ async function main() {
       await scene("reminders", async (at) => {
         const group = page.getByRole("group", { name: "Rappels automatiques aux bénévoles inscrits" })
         await group.scrollIntoViewIfNeeded()
-        await at(0.18)
+        const box = await group.boundingBox()
+        if (!box) throw new Error("Reminder controls are not visible")
+        const detailStart = Math.round(performance.now() - startedAt)
+        detailFrames.push({ startMs: detailStart, endMs: detailStart + 1, x: Math.max(0, Math.min(640, Math.floor(box.x - 25))), y: Math.max(0, Math.min(400, Math.floor(box.y - 35))), width: 640, height: 400 })
+        await at(0.38)
         const j2 = page.getByRole("checkbox", { name: /Rappel J-2/ })
         if (await j2.isChecked()) await tap(page, j2)
-        await at(0.46)
+        await at(0.48)
         await tap(page, j2)
         await at(0.70)
         await page.getByText(/un événement peut en plus couper tous ses rappels/).scrollIntoViewIfNeeded()
       })
 
+      await scene("event-reminders", async (at) => {
+        await page.goto(`${baseUrl}/admin/events/${emailEventId}/edit`); await settle(page)
+        const enabled = page.getByRole("checkbox", { name: "Rappels automatiques", exact: true })
+        await enabled.scrollIntoViewIfNeeded()
+        await at(0.19)
+        if (!await enabled.isChecked()) {
+          const saved = page.waitForResponse(response => response.url().endsWith(`/api/admin/events/${emailEventId}`) && response.request().method() === "PATCH")
+          await tap(page, enabled)
+          if (!(await saved).ok()) throw new Error("Event reminder enable was not saved")
+          await page.getByText(/^Modifications enregistrées à/).waitFor()
+        }
+        await at(0.35)
+        const saved = page.waitForResponse(response => response.url().endsWith(`/api/admin/events/${emailEventId}`) && response.request().method() === "PATCH")
+        await tap(page, enabled)
+        if (!(await saved).ok()) throw new Error("Event reminder disable was not saved")
+        await page.getByText(/^Modifications enregistrées à/).waitFor()
+        await at(0.43)
+        await page.goto(`${baseUrl}/admin/events/${emailEventId}`); await settle(page)
+        await page.getByRole("heading", { name: "Communications", exact: true }).scrollIntoViewIfNeeded()
+        await page.getByText("Rappels automatiques coupés pour cet événement", { exact: true }).waitFor()
+      })
+
       await scene("admin-alert", async (at) => {
+        await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
         const alert = page.getByRole("checkbox", { name: /Prévenir les administrateurs/ })
         await alert.scrollIntoViewIfNeeded()
         await at(0.30)
@@ -2397,14 +3742,33 @@ async function main() {
         await tap(page, alert)
       })
 
+      await scene("withdrawal", async (at) => {
+        const checkbox = page.getByRole("checkbox", { name: "Prévenir en cas de désistement", exact: true })
+        await checkbox.scrollIntoViewIfNeeded()
+        await at(0.39)
+        if (await checkbox.isChecked()) await tap(page, checkbox)
+        await at(0.74)
+        if (!await checkbox.isChecked()) await tap(page, checkbox)
+      })
+
+      await scene("addresses", async (at) => {
+        const checkbox = page.getByRole("checkbox", { name: "Résumé quotidien des adresses à vérifier", exact: true })
+        await checkbox.scrollIntoViewIfNeeded()
+        await at(0.38)
+        if (await checkbox.isChecked()) await tap(page, checkbox)
+        await at(0.72)
+        if (!await checkbox.isChecked()) await tap(page, checkbox)
+      })
+
       await page.screencast.showChapter("Les réponses", { description: "Une adresse suivie par l’association", duration: 1_400 })
       await scene("reply-to", async (at) => {
         const replyTo = page.getByLabel("Adresse de réponse")
         await replyTo.scrollIntoViewIfNeeded()
-        await at(0.22)
+        await at(0.32)
         await tap(page, replyTo)
         await replyTo.fill("")
         await replyTo.pressSequentially("benevoles@example.org", { delay: 115 })
+        if (await replyTo.inputValue() !== "benevoles@example.org") throw new Error("Reply address must be fully entered before showing its result")
         await at(0.72)
         await page.getByText(/Cette adresse figure aussi sur la page personnelle/).scrollIntoViewIfNeeded()
       })
@@ -2413,28 +3777,43 @@ async function main() {
         await at(0.14)
         await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
         await page.getByRole("status").filter({ hasText: "Réglages enregistrés." }).waitFor()
-        await at(0.52)
+        await at(0.26)
         await page.getByRole("status").filter({ hasText: "Réglages enregistrés." }).scrollIntoViewIfNeeded()
       })
 
       await page.screencast.showChapter("Tester avant d’envoyer", { description: "Contrôler le transport et l’expéditeur", duration: 1_400 })
       await scene("test", async (at) => {
+        const inboxBefore = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json() as { messages: { ID: string }[] }
+        const priorIds = new Set(inboxBefore.messages.map(mail => mail.ID))
         const testButton = page.getByRole("button", { name: "M'envoyer un email de test" })
         await testButton.scrollIntoViewIfNeeded()
         await at(0.18)
         await tap(page, testButton)
         await page.getByRole("status").filter({ hasText: /Email de test envoyé/ }).waitFor()
-        await at(0.54)
-        await page.goto("http://localhost:48026"); await settle(page)
-        await page.getByText("Email de test", { exact: false }).first().waitFor()
+        let mailId = ""
+        for (let attempt = 0; attempt < 40; attempt++) {
+          const inbox = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json() as { messages: { ID: string; Subject: string; To: { Address: string }[] }[] }
+          const message = inbox.messages.find(mail => !priorIds.has(mail.ID) && mail.Subject.includes("Email de test") && mail.To.some(to => to.Address === "video.email.owner@example.org"))
+          if (message) { mailId = message.ID; break }
+          await page.waitForTimeout(200)
+        }
+        if (!mailId) throw new Error("Actual test message missing from isolated SMTP inbox")
+        const detail = await (await page.request.get(`http://localhost:48026/api/v1/message/${mailId}`)).json() as { Text: string; ReplyTo?: { Address: string }[]; Headers?: Record<string, string[]> }
+        if (!detail.Text.includes("benevoles@example.org")) throw new Error("Test message does not use saved reply-to address")
+        await at(0.36)
+        await page.goto(`http://localhost:48026/view/${mailId}`); await settle(page)
+        await page.frameLocator("iframe").locator("body").getByText(/Cet email vérifie l'envoi/).filter({ visible: true }).waitFor()
+        const detailStart = Math.round(performance.now() - startedAt)
+        detailFrames.push({ startMs: detailStart, endMs: detailStart + 1, x: 300, y: 0, width: 960, height: 600 })
       })
 
       await scene("result", async (at) => {
-        await at(0.44)
+        await at(0.28)
         await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
         await page.getByRole("heading", { name: "Réglages des emails" }).waitFor()
-        await at(0.72)
-        await page.getByLabel("Adresse de réponse").scrollIntoViewIfNeeded()
+        await at(0.36)
+        await page.getByRole("heading", { name: "Emails envoyés", exact: true }).scrollIntoViewIfNeeded()
+        await page.getByRole("row").filter({ hasText: "video.email.owner@example.org" }).first().waitFor()
       })
     } else if (slug === "organizer-create-publish") {
       let organizerEventId = ""
@@ -2523,7 +3902,7 @@ async function main() {
         const previewShift = page.getByRole("button", { name: /Sélectionner — Accueil/ }).first()
         await tap(page, previewShift)
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
-        await page.getByRole("heading", { name: "Vos informations" }).waitFor()
+        await page.getByRole("heading", { name: "Tes informations" }).waitFor()
         await typeNaturally(page, page.getByRole("textbox", { name: "Prénom *", exact: true }), "Alex")
         await typeNaturally(page, page.getByRole("textbox", { name: "Nom *", exact: true }), "Martin")
         await typeNaturally(page, page.getByRole("textbox", { name: "Email *", exact: true }), "alex.martin@example.org")
@@ -2679,7 +4058,7 @@ async function main() {
         await at(0.25)
         await tap(page, quickEditor.getByRole("button", { name: "Annuler" }))
         await at(0.30)
-        const timelineButton = page.getByRole("button", { name: "Timeline" })
+        const timelineButton = page.getByRole("button", { name: "Frise", exact: true })
         if (await timelineButton.isVisible()) await tap(page, timelineButton)
         await at(0.36)
         await tap(page, page.getByRole("button", { name: /Montage.*modifier/i }).first())
@@ -3039,7 +4418,7 @@ async function main() {
         await page.getByRole("heading", { name: "Fête du parc" }).waitFor()
         await tap(page, page.getByRole("button", { name: /Sélectionner — Accueil/ }))
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
-        await page.getByRole("heading", { name: "Vos informations" }).waitFor()
+        await page.getByRole("heading", { name: "Tes informations" }).waitFor()
         await at(0.28)
         await typeNaturally(page, page.getByRole("textbox", { name: "Prénom *", exact: true }), "Alex")
         await typeNaturally(page, page.getByRole("textbox", { name: "Nom *", exact: true }), "Martin")
@@ -3072,9 +4451,12 @@ async function main() {
 
   const timeline: Timeline = {
     slug: manifest.slug,
+    capturePurpose: rehearsal ? "rehearsal" : "narration-timed",
     recordedAt: new Date().toISOString(),
     video: path.basename(rawVideo),
     cues,
+    ...(portraitFrames.length ? { portraitFrames } : {}),
+    ...(detailFrames.length ? { detailFrames } : {}),
   }
   await writeFile(timelineFile, `${JSON.stringify(timeline, null, 2)}\n`)
   console.log(`Capture ready: ${rawVideo}`)

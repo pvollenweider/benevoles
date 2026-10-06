@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:15:23.745Z",
+  "videoSha256": "adf29f20360d5cfb94d5ed198cc63852ce8045f4d3ff623267351d447772a253",
+  "promptSha256": "d09c760c781daad063cf9441e6b541b0001c9cada2a2899f58e85a71928528e5",
+  "clipSha256": "57eb49c735f95aa99dd50bab0a2cb03fb835fb32b25feec2d88bddab0f80400e",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Revenons à la page personnelle et à son avertissement.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Revenons à la page personnelle et à son avertissement",
+        "visibleSeconds": 1.8,
+        "visible": "Page 'Mes inscriptions' affichée avec le bloc d'avertissement 'Ton lien personnel'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "Pour recruter, partage la page publique",
+        "visibleSeconds": 4.2,
+        "visible": "L'écran reste figé sur la page personnelle, pas d'affichage de page publique",
+        "sync": "uncertain",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "garde le lien personnel pour son destinataire",
+        "visibleSeconds": 7.5,
+        "visible": "Le bloc 'Ton lien personnel' reste visible à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:03 - L'interface reste complètement statique pendant toute l'énumération des bonnes pratiques"
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier, ton calme et articulation nette."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

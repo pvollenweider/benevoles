@@ -1,37 +1,38 @@
 {
   "slug": "event-create-template",
-  "recordedAt": "2026-10-04T14:30:28.160Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T03:14:04.307Z",
   "video": "capture.webm",
   "cues": [
     {
       "id": "welcome",
       "startMs": 0,
-      "endMs": 12471
+      "endMs": 13168
     },
     {
       "id": "compare",
-      "startMs": 14634,
-      "endMs": 36235
+      "startMs": 15326,
+      "endMs": 37495
     },
     {
       "id": "preview",
-      "startMs": 36689,
-      "endMs": 50733
+      "startMs": 37948,
+      "endMs": 54560
     },
     {
       "id": "create",
-      "startMs": 51185,
-      "endMs": 63567
+      "startMs": 55013,
+      "endMs": 68737
     },
     {
       "id": "adapt",
-      "startMs": 65727,
-      "endMs": 82529
+      "startMs": 70910,
+      "endMs": 89843
     },
     {
       "id": "result",
-      "startMs": 82981,
-      "endMs": 96648
+      "startMs": 92904,
+      "endMs": 108985
     }
   ]
 }

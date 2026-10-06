@@ -27,4 +27,8 @@ Retrouver ses inscriptions sans créer de compte, protéger sa session sur un ap
 - Vérifier les libellés et routes de session/récupération avant la capture : ne pas inventer de commande absente.
 - Contrôler séparément les paroles, leur concordance avec les actions, la persistance et la vue organisateur.
 
-État : scénario détaillé préparé ; narration, seed dédié, capture et vérification audiovisuelle restent à produire.
+État : narration continue Kore, huit paragraphes contrôlés indépendamment ; capture et assemblage terminés, planche visuelle contrôlée. Le visionnage audiovisuel intégral reste requis avant livraison.
+
+## Observation de capture
+
+Le parcours de démonstration répété sur le serveur de développement a atteint la limite réelle de lecture du lien (10 requêtes par IP et par heure), avec réponse 429 « Trop de tentatives ». Le recorder sépare les parcours récupération et disponibilités en réinitialisant uniquement ce compteur de lecture dans la base vidéo, avant le parcours disponibilités et avant la vue organisateur. Il ne réinitialise pas les compteurs de renvoi : leur limitation est réellement montrée. La vidéo illustre plusieurs usages, pas la preuve qu'on peut enchaîner tous ces allers-retours en production sans rencontrer cette limite. Aucun changement du produit n'a été effectué.

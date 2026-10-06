@@ -9,7 +9,7 @@
       "Ajoutez un jalon avec une date d'échéance et une description vérifiable, par exemple « Fermer les inscriptions ».",
       "Consultez la liste triée par date : une échéance dépassée est signalée, une étape faite reste visible mais barrée.",
       "Cochez une étape quand elle est terminée, et décochez-la si la situation change.",
-      "Suivez les échéances proches ou en retard depuis le pilotage général."
+      "Suivez les jalons en retard depuis le Tableau de bord de l'association."
     ],
     "remember": [
       "Les jalons ne remplacent pas un outil de gestion de projet.",
@@ -34,7 +34,7 @@
     },
     {
       "id": "create",
-      "transcript": "Ajoutons Fermer les inscriptions avec une date d’échéance. Un bon jalon décrit un résultat vérifiable : valider le plan de sécurité, envoyer les consignes, imprimer les badges ou remercier les bénévoles. Évite les formulations vagues comme penser à la communication.",
+      "transcript": "Ajoutons Fermer les inscriptions avec une date d’échéance. Un bon jalon décrit un résultat vérifiable : valider le plan de sécurité, envoyer les consignes, imprimer les badges ou remercier les bénévoles. Évitez les formulations vagues comme penser à la communication.",
       "fallbackDurationMs": 24000
     },
     {
@@ -44,17 +44,17 @@
     },
     {
       "id": "toggle",
-      "transcript": "Quand une étape est terminée, coche-la. Si la situation change, décoche-la simplement pour la remettre à faire : aucune information n’est perdue et toute l’équipe retrouve le même état lors du prochain passage.",
+      "transcript": "Quand une étape est terminée, cochez-la. Le titre devient barré. Si la situation change, décochez-la pour la remettre à faire : la date et le titre sont conservés, et toute l’équipe retrouve le même état lors du prochain passage.",
       "fallbackDurationMs": 20000
     },
     {
       "id": "dashboard",
-      "transcript": "Les échéances proches ou en retard remontent aussi dans le pilotage général. Avant l’événement, elles structurent la préparation ; pendant, elles rappellent les contrôles opérationnels ; après, elles aident à fermer proprement les dernières tâches.",
-      "fallbackDurationMs": 22000
+      "transcript": "Ouvrons le Tableau de bord de l’association. Les jalons en retard y apparaissent parmi les priorités, avec un lien vers l’événement concerné. Les jalons à venir restent visibles sur la page de leur événement : ils ne déclenchent ni email ni fermeture automatique des inscriptions.",
+      "fallbackDurationMs": 24000
     },
     {
       "id": "result",
-      "transcript": "Garde cette liste courte et utile. Quelques jalons datés, avec un état fiable, sont plus efficaces qu’une longue liste jamais relue. Le résultat attendu est simple : chacun sait quelle est la prochaine étape importante.",
+      "transcript": "Gardez cette liste courte et utile. Quelques jalons datés, avec un état fiable, sont plus efficaces qu’une longue liste jamais relue. Le résultat attendu est simple : chacun sait quelle est la prochaine étape importante.",
       "fallbackDurationMs": 19000
     }
   ]

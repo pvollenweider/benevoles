@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:13:56.109Z",
+  "videoSha256": "adf29f20360d5cfb94d5ed198cc63852ce8045f4d3ff623267351d447772a253",
+  "promptSha256": "6cb563f5ca92ef63209526d2de0351fa06aec2e444b2ce4943efebd0f4d8075b",
+  "clipSha256": "74a8b0c1b46265e09333b4a0b670bfadd4719f7dc8a396b4cc2ed39954acf4cd",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un lien pour recruter",
+    "checkpoints": [
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "deux organisations ont chacune une Léa Exemple",
+        "visibleSeconds": 14.2,
+        "visible": "Bascule vers la liste des membres de l'organisation B affichant Léa Exemple",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21,
+        "spoken": "les fiches et les adresses sont différentes",
+        "visibleSeconds": 21,
+        "visible": "Détails de contact et adresses distincts affichés dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.5,
+        "spoken": "Chaque organisation retrouve son propre événement dans son administration",
+        "visibleSeconds": 24.5,
+        "visible": "Affichage du planning de l'événement Fête des liens – organisation A",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton régulier et bien articulé."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

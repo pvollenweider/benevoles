@@ -1,0 +1,340 @@
+{
+  "video": "volunteer-confirmation-errors",
+  "source": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/capture.webm",
+  "sourceSha256": "d41e78b17a22f80ac61c713bbfa3c6c35b794f8fd1567ed008d9c1b7c26b170a",
+  "capturePurpose": "rehearsal",
+  "extractedAt": "2026-10-05T23:36:16.985Z",
+  "note": "Five raw rehearsal frames per scene, including chapter start and end; no narration or audiovisual validation",
+  "frames": [
+    {
+      "scene": "welcome",
+      "fraction": 0.1,
+      "seconds": 0.292,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/welcome-10.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.25,
+      "seconds": 0.6835,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/welcome-25.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.6,
+      "seconds": 1.597,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/welcome-60.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.85,
+      "seconds": 2.2495,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/welcome-85.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.95,
+      "seconds": 2.5105,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/welcome-end.png"
+    },
+    {
+      "scene": "form",
+      "fraction": 0.04215851602023609,
+      "seconds": 3.693,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/form-4.png"
+    },
+    {
+      "scene": "form",
+      "fraction": 0.25,
+      "seconds": 6.651,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/form-25.png"
+    },
+    {
+      "scene": "form",
+      "fraction": 0.6,
+      "seconds": 11.6322,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/form-60.png"
+    },
+    {
+      "scene": "form",
+      "fraction": 0.85,
+      "seconds": 15.190199999999999,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/form-85.png"
+    },
+    {
+      "scene": "form",
+      "fraction": 0.978920741989882,
+      "seconds": 17.025,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/form-end.png"
+    },
+    {
+      "scene": "validation",
+      "fraction": 0.1,
+      "seconds": 18.1144,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/validation-10.png"
+    },
+    {
+      "scene": "validation",
+      "fraction": 0.25,
+      "seconds": 18.619,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/validation-25.png"
+    },
+    {
+      "scene": "validation",
+      "fraction": 0.6,
+      "seconds": 19.796400000000002,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/validation-60.png"
+    },
+    {
+      "scene": "validation",
+      "fraction": 0.85,
+      "seconds": 20.637400000000003,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/validation-85.png"
+    },
+    {
+      "scene": "validation",
+      "fraction": 0.95,
+      "seconds": 20.9738,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/validation-end.png"
+    },
+    {
+      "scene": "capacity",
+      "fraction": 0.1,
+      "seconds": 21.8614,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/capacity-10.png"
+    },
+    {
+      "scene": "capacity",
+      "fraction": 0.25,
+      "seconds": 22.2625,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/capacity-25.png"
+    },
+    {
+      "scene": "capacity",
+      "fraction": 0.6,
+      "seconds": 23.198400000000003,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/capacity-60.png"
+    },
+    {
+      "scene": "capacity",
+      "fraction": 0.85,
+      "seconds": 23.8669,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/capacity-85.png"
+    },
+    {
+      "scene": "capacity",
+      "fraction": 0.95,
+      "seconds": 24.1343,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/capacity-end.png"
+    },
+    {
+      "scene": "network",
+      "fraction": 0.1,
+      "seconds": 24.9882,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/network-10.png"
+    },
+    {
+      "scene": "network",
+      "fraction": 0.25,
+      "seconds": 25.389,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/network-25.png"
+    },
+    {
+      "scene": "network",
+      "fraction": 0.6,
+      "seconds": 26.3242,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/network-60.png"
+    },
+    {
+      "scene": "network",
+      "fraction": 0.85,
+      "seconds": 26.9922,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/network-85.png"
+    },
+    {
+      "scene": "network",
+      "fraction": 0.95,
+      "seconds": 27.259400000000003,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/network-end.png"
+    },
+    {
+      "scene": "success",
+      "fraction": 0.1,
+      "seconds": 28.103099999999998,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/success-10.png"
+    },
+    {
+      "scene": "success",
+      "fraction": 0.25,
+      "seconds": 28.49025,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/success-25.png"
+    },
+    {
+      "scene": "success",
+      "fraction": 0.6,
+      "seconds": 29.3936,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/success-60.png"
+    },
+    {
+      "scene": "success",
+      "fraction": 0.85,
+      "seconds": 30.03885,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/success-85.png"
+    },
+    {
+      "scene": "success",
+      "fraction": 0.95,
+      "seconds": 30.296950000000002,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/success-end.png"
+    },
+    {
+      "scene": "email",
+      "fraction": 0.1,
+      "seconds": 31.1784,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/email-10.png"
+    },
+    {
+      "scene": "email",
+      "fraction": 0.25,
+      "seconds": 31.6275,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/email-25.png"
+    },
+    {
+      "scene": "email",
+      "fraction": 0.6,
+      "seconds": 32.6754,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/email-60.png"
+    },
+    {
+      "scene": "email",
+      "fraction": 0.85,
+      "seconds": 33.4239,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/email-85.png"
+    },
+    {
+      "scene": "email",
+      "fraction": 0.95,
+      "seconds": 33.7233,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/email-end.png"
+    },
+    {
+      "scene": "overlap",
+      "fraction": 0.034786641929499075,
+      "seconds": 34.925,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/overlap-3.png"
+    },
+    {
+      "scene": "overlap",
+      "fraction": 0.25,
+      "seconds": 38.637,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/overlap-25.png"
+    },
+    {
+      "scene": "overlap",
+      "fraction": 0.6,
+      "seconds": 44.6738,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/overlap-60.png"
+    },
+    {
+      "scene": "overlap",
+      "fraction": 0.85,
+      "seconds": 48.985800000000005,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/overlap-85.png"
+    },
+    {
+      "scene": "overlap",
+      "fraction": 0.9826066790352505,
+      "seconds": 51.273,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/overlap-end.png"
+    },
+    {
+      "scene": "response-loss",
+      "fraction": 0.03460207612456748,
+      "seconds": 52.627,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/response-loss-3.png"
+    },
+    {
+      "scene": "response-loss",
+      "fraction": 0.25,
+      "seconds": 56.362,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/response-loss-25.png"
+    },
+    {
+      "scene": "response-loss",
+      "fraction": 0.6,
+      "seconds": 62.431,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/response-loss-60.png"
+    },
+    {
+      "scene": "response-loss",
+      "fraction": 0.85,
+      "seconds": 66.766,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/response-loss-85.png"
+    },
+    {
+      "scene": "response-loss",
+      "fraction": 0.9826989619377162,
+      "seconds": 69.067,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/response-loss-end.png"
+    },
+    {
+      "scene": "invitation-success",
+      "fraction": 0.025657472738935216,
+      "seconds": 70.42,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/invitation-success-3.png"
+    },
+    {
+      "scene": "invitation-success",
+      "fraction": 0.25,
+      "seconds": 75.66625,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/invitation-success-25.png"
+    },
+    {
+      "scene": "invitation-success",
+      "fraction": 0.6,
+      "seconds": 83.851,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/invitation-success-60.png"
+    },
+    {
+      "scene": "invitation-success",
+      "fraction": 0.85,
+      "seconds": 89.69725,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/invitation-success-85.png"
+    },
+    {
+      "scene": "invitation-success",
+      "fraction": 0.9871712636305324,
+      "seconds": 92.905,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/invitation-success-end.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.1,
+      "seconds": 93.95660000000001,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/result-10.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.25,
+      "seconds": 94.4045,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/result-25.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.6,
+      "seconds": 95.4496,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/result-60.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.85,
+      "seconds": 96.1961,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/result-85.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.95,
+      "seconds": 96.4947,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/volunteer-confirmation-errors/rehearsal-review-frames/result-end.png"
+    }
+  ]
+}

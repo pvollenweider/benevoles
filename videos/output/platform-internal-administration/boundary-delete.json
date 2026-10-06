@@ -1,0 +1,12 @@
+{
+  "anchor": "La suppression définitive demande une autre précaution. Utilisons seulement notre nouvel",
+  "windowStart": 315.475,
+  "result": {
+    "found": true,
+    "startSeconds": 8.68,
+    "wordsHeard": "La suppression définitive demande une autre précaution. Utilisons seulement notre nouvel"
+  },
+  "onset": 324.15500000000003,
+  "proposedCut": 323.85397950000004,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans les réglages d’un événement, la case Rappels automatiques peut couper",
+  "windowStart": 21.570999999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 14.9,
+    "wordsHeard": "Dans les réglages d’un événement, la case Rappels automatiques peut couper"
+  },
+  "onset": 36.471,
+  "proposedCut": 36.570729,
+  "note": "Proposal only; recut then independently audit before capture"
+}

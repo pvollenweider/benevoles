@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour retrouver une désinscription, commençons par Type d'élément, puis choisissons Inscription.",
+  "windowStart": 42.132,
+  "result": {
+    "found": true,
+    "startSeconds": 9.3,
+    "wordsHeard": "Pour retrouver une désinscription"
+  },
+  "onset": 51.432,
+  "proposedCut": 51.363375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

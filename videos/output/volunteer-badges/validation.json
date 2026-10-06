@@ -1,0 +1,66 @@
+{
+  "id": "VOLUNTEER_BADGES",
+  "slug": "volunteer-badges",
+  "validatedAt": "2026-10-05T18:53:05.414Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 220320,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 20818,
+      "audioMs": 20815,
+      "driftMs": 3
+    },
+    {
+      "id": "all",
+      "visualMs": 24394,
+      "audioMs": 24394,
+      "driftMs": 0
+    },
+    {
+      "id": "role",
+      "visualMs": 22088,
+      "audioMs": 22087,
+      "driftMs": 1
+    },
+    {
+      "id": "individual",
+      "visualMs": 23959,
+      "audioMs": 23957,
+      "driftMs": 2
+    },
+    {
+      "id": "empty",
+      "visualMs": 19919,
+      "audioMs": 19914,
+      "driftMs": 5
+    },
+    {
+      "id": "colors",
+      "visualMs": 20737,
+      "audioMs": 20736,
+      "driftMs": 1
+    },
+    {
+      "id": "fields",
+      "visualMs": 22825,
+      "audioMs": 22823,
+      "driftMs": 2
+    },
+    {
+      "id": "print",
+      "visualMs": 32046,
+      "audioMs": 32044,
+      "driftMs": 2
+    },
+    {
+      "id": "result",
+      "visualMs": 23471,
+      "audioMs": 23470,
+      "driftMs": 1
+    }
+  ],
+  "issues": []
+}

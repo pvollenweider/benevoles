@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-10-05T18:35:23.904Z",
+  "pushReceptionVerified": false,
+  "fiveAudienceCounts": true,
+  "multipleRegistrationsOneRecipient": true,
+  "unknownVariableVisible": true,
+  "modelApplyAndRestore": true,
+  "contextVariableErrorVisible": true,
+  "personalizedPreviewVisible": true,
+  "pushOptionExplainedNotReceipt": true,
+  "cancelCreatedNoSend": true,
+  "sent": {
+    "sent": 5,
+    "audience": "les bénévoles du créneau Buvette (samedi 10 octobre, 10:00–14:00)",
+    "pushDevices": 0
+  },
+  "realEmailsPersonalizedAndDeduplicated": true,
+  "modelDeletedHistoryRetained": true
+}

@@ -1,0 +1,37 @@
+{
+  "locatedAt": "2026-10-06T01:29:42.677Z",
+  "masterSha256": "c8970b211f3dba300dad101c7e3f299a11199d25baa720e225cd3a1aebacd800",
+  "totalSeconds": 127.44,
+  "cuts": [
+    {
+      "id": "timezone",
+      "seconds": 11.367771000000001
+    },
+    {
+      "id": "timezone-result",
+      "seconds": 27.706646
+    },
+    {
+      "id": "charter",
+      "seconds": 40.8049585
+    },
+    {
+      "id": "public-setup",
+      "seconds": 66.411271
+    },
+    {
+      "id": "public-result",
+      "seconds": 80.116417
+    },
+    {
+      "id": "attention",
+      "seconds": 94.5260625
+    },
+    {
+      "id": "result",
+      "seconds": 112.5159585
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

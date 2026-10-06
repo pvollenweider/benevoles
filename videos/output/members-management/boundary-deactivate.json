@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour mettre une fiche de côté, tu peux la désactiver. Ici,",
+  "windowStart": 136.145,
+  "result": {
+    "found": true,
+    "startSeconds": 11.8,
+    "wordsHeard": "Pour"
+  },
+  "onset": 147.94500000000002,
+  "proposedCut": 147.76822950000002,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Le résultat est prévisible : les automatismes utilisent le bon temps",
+  "windowStart": 97.51599999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 15.12,
+    "wordsHeard": "Le résultat est prévisible : les automatismes utilisent le bon temps"
+  },
+  "onset": 112.636,
+  "proposedCut": 112.5159585,
+  "note": "Proposal only; recut then independently audit before capture"
+}

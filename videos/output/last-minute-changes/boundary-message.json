@@ -1,0 +1,12 @@
+{
+  "anchor": "Depuis les messages de l'événement, choisissons les bénévoles d'un créneau, puis",
+  "windowStart": 135.51999999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 13,
+    "wordsHeard": "Depuis les messages de l'événement choisissons les bénévoles d'un créneau puis"
+  },
+  "onset": 148.51999999999998,
+  "proposedCut": 147.968229,
+  "note": "Proposal only; recut then independently audit before capture"
+}

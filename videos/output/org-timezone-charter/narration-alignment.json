@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "masterSha256": "c8970b211f3dba300dad101c7e3f299a11199d25baa720e225cd3a1aebacd800",
+  "segments": [
+    {
+      "id": "welcome",
+      "startSeconds": 0,
+      "firstWordsHeard": "Deux réglages communs évitent"
+    },
+    {
+      "id": "timezone",
+      "startSeconds": 11.8,
+      "firstWordsHeard": "Dans Paramètres"
+    },
+    {
+      "id": "timezone-result",
+      "startSeconds": 28,
+      "firstWordsHeard": "Enregistrer le fuseau"
+    },
+    {
+      "id": "charter",
+      "startSeconds": 41.2,
+      "firstWordsHeard": "La Convention des Bénévoles"
+    },
+    {
+      "id": "public-setup",
+      "startSeconds": 106.9,
+      "firstWordsHeard": "Vérifions le résultat côté bénévole"
+    },
+    {
+      "id": "public-result",
+      "startSeconds": 120.4,
+      "firstWordsHeard": "Ouvrez la convention"
+    },
+    {
+      "id": "attention",
+      "startSeconds": 134.8,
+      "firstWordsHeard": "Quand le bénévole confirme"
+    },
+    {
+      "id": "result",
+      "startSeconds": 153,
+      "firstWordsHeard": "Le résultat est prévisible"
+    }
+  ]
+}

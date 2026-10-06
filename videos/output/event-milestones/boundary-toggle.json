@@ -1,0 +1,12 @@
+{
+  "anchor": "Quand une étape est terminée, cochez-la. Le titre devient barré. Si",
+  "windowStart": 29.229,
+  "result": {
+    "found": true,
+    "startSeconds": 15,
+    "wordsHeard": "Quand une étape est terminée, cochez-la. Le titre devient barré. Si"
+  },
+  "onset": 44.229,
+  "proposedCut": 44.2291875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

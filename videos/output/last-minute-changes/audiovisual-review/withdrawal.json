@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T20:51:09.318Z",
+  "videoSha256": "3e2b054ce139ced7f32f4059559c36ac89bc83cb334bbe34e341997d8f994942",
+  "promptSha256": "e110d775b179d509292582912c33c8367ac5a20bad343800b23523a985e4e447",
+  "clipSha256": "20a97dafc35ab8e10679e0429b004fa71e9e3e925dd2d8e35dea70702afa1b9b",
+  "scene": "withdrawal",
+  "review": {
+    "heardOpening": "Aline ne peut plus venir à l'accueil",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "elle annule son inscription",
+        "visibleSeconds": 5.2,
+        "visible": "Clic sur Annuler puis confirmation pour le créneau Accueil du matin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Revenons dans les inscriptions côté organisation",
+        "visibleSeconds": 12.8,
+        "visible": "Affichage de la liste des inscriptions dans l'interface organisateur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21,
+        "spoken": "Ouvrons le vrai email reçu par Nicolas",
+        "visibleSeconds": 21.1,
+        "visible": "Affichage de l'email Mailpit envoyé à Nicolas avec créneau et date d'expiration",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier, ton calme et bonne intelligibilité."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+WEBVTT
+
+00:00:00.153 --> 00:00:22.078
+Le planning se remplit : c'est le moment de savoir qui vient, et quand. Dans Inscriptions, chaque ligne correspond à une inscription sur un créneau, pas forcément à une personne différente. Notre fête contient quatre-vingts lignes, avec plusieurs situations. Nous allons retrouver les bonnes personnes, ajouter un horaire et effectuer quelques actions, en regardant chaque fois ce qui change réellement.
+
+00:00:22.530 --> 00:00:46.209
+Regardons Camille. Tu retrouves son nom, son email, son téléphone, ses disponibilités et les réponses aux questions, ici la taille de t-shirt. À droite figurent le poste et ses horaires. La source distingue le formulaire public de l'ajout manuel. Une note, comme inscrit par téléphone, donne du contexte. Plusieurs lignes pour Camille sont normales : elle participe à plusieurs créneaux.
+
+00:00:46.661 --> 00:01:07.657
+Pour chercher une personne, saisis son nom ou son email. Tu peux ensuite filtrer par poste, puis par créneau. Nous choisissons Accueil, et seulement l'horaire de l'après-midi : la liste se réduit aux inscriptions correspondantes. Le lien pour écrire s'adapte aussi au filtre. Pour retrouver toute la liste, remets tous les postes et tous les créneaux, puis efface la recherche.
+
+00:01:08.108 --> 00:01:29.259
+Le filtre Demandes à traiter montre les personnes qui attendent une décision. Ce n'est pas une participation confirmée. Lucas a demandé une place à la navette ; ses réponses peuvent aider à vérifier les conditions du poste. Le bouton Accepter ouvre une confirmation avec les conséquences de la décision. Ici, nous annulons : sa demande reste à traiter et aucun email de décision ne part.
+
+00:01:29.710 --> 00:01:51.426
+Un bénévole te confirme un nouvel horaire par téléphone ? Clique sur Ajouter manuellement. Nous renseignons Camille Rochat, son email et son téléphone, puis une courte note : horaire convenu par téléphone. L'email permet de retrouver sa fiche existante et ses horaires déjà enregistrés. Une personne sans email peut aussi être ajoutée, mais elle ne recevra pas de lien par email.
+
+00:01:51.878 --> 00:02:15.687
+Ouvrons le choix du créneau. Déjà inscrit signale l'horaire que Camille possède déjà. Si nous essayons de l'ajouter une seconde fois, le système refuse ce doublon. Sur la buvette du matin, l'indication conflit signale un chevauchement avec son accueil. Dans l'ajout manuel, c'est un avertissement à lire avant de décider : ne le confonds pas avec un contrôle bloquant. Choisissons plutôt un horaire compatible.
+
+00:02:16.138 --> 00:02:36.821
+Nous choisissons l'accueil de quinze à dix-huit heures, puis Ajouter. La nouvelle ligne apparaît avec la source Manuel et notre note. Elle est maintenant inscrite sur cet horaire. L'ajout manuel ne déclenche pas ici un email de confirmation automatique. Si Camille a besoin de son récapitulatif, tu peux lui renvoyer son lien personnel depuis les actions de sélection.
+
+00:02:37.274 --> 00:02:59.258
+Les cases permettent de sélectionner une inscription, ou plusieurs. La barre propose les actions applicables : présence, responsable, lien personnel ou retrait. Une sélection reste active quand une recherche masque ses lignes ; un filtre n'est donc pas une nouvelle sélection. Regarde toujours le nombre sélectionné. Désélectionner remet ce nombre à zéro avant de préparer une autre action.
+
+00:02:59.709 --> 00:03:19.687
+Sélectionnons deux inscriptions confirmées de Camille, puis Renvoyer le lien. Le récapitulatif précise qu'un seul email part pour cette personne, même avec plusieurs lignes cochées. Confirme seulement après l'avoir lu. Nous ouvrons le vrai email reçu : Camille y retrouve son lien personnel et son récapitulatif. Ses inscriptions ne sont pas modifiées par cet envoi.
+
+00:03:20.138 --> 00:03:42.553
+Pour désigner un responsable depuis une inscription, sélectionne la personne puis Rendre responsable. Ici, Sarah prend le relais à l'accueil. Vérifie le poste et l'adresse qui recevra le lien, puis confirme. L'email donne accès à la vue de son équipe, pas à l'administration entière. Après rechargement, le badge Responsable apparaît sur ses inscriptions du poste concerné.
+
+00:03:43.004 --> 00:04:09.544
+Pour retirer quelqu'un d'un horaire, lis d'abord la confirmation : inscription annulée, place libérée, email éventuel et liste d'attente. Après confirmation, une barre laisse dix secondes pour annuler. Le délai attend tant que le pointeur ou le focus est sur cette barre. Nous utilisons Annuler le retrait : la ligne revient, sans annulation enregistrée ni email de retrait envoyé.
+
+00:04:10.000 --> 00:04:36.465
+Cette fois, Camille nous a confirmé qu'elle ne peut pas assurer l'accueil de l'après-midi. Nous refaisons le retrait, puis utilisons Retirer maintenant pour le valider sans attendre. L'inscription disparaît et la place est libérée. Attention : le récapitulatif annonce un email, mais nous n'en constatons pas dans cette version. Préviens la personne directement. Le journal conserve l'action, même si la ligne annulée n'apparaît plus ici.
+
+00:04:36.920 --> 00:05:02.644
+Une autre vérification utile : la charge prévue. Noah a le montage, la buvette du matin et celle du soir, avec de vraies pauses entre les horaires. Cela représente dix heures sur la journée. L'alerte Charge élevée conseille l'organisateur ; elle ne signifie pas un chevauchement, une présence attestée ou un refus automatique. Discute avec la personne avant de lui proposer davantage.
+
+00:05:03.097 --> 00:05:23.251
+La liste sert à agir, le journal sert à comprendre ce qui s'est passé. Ouvrons l'action correspondant au retrait dans le journal de l'événement : tu retrouves qui a agi et quand. Avant de passer à autre chose, vérifie les filtres et vide la sélection. Tu repars avec un planning lisible, et des changements dont tu connais les conséquences.
+

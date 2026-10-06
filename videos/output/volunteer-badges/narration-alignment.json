@@ -1,0 +1,51 @@
+{
+  "model": "gemini-3.8-flash",
+  "masterSha256": "96b50a86be12a7994921297bd51704736f236e432bed3a6baa603b0f9f102499",
+  "segments": [
+    {
+      "id": "welcome",
+      "startSeconds": 0,
+      "firstWordsHeard": "Un prénom visible"
+    },
+    {
+      "id": "all",
+      "startSeconds": 22.3,
+      "firstWordsHeard": "Gardons tous les postes"
+    },
+    {
+      "id": "role",
+      "startSeconds": 48.7,
+      "firstWordsHeard": "Pour préparer seulement la buvette"
+    },
+    {
+      "id": "individual",
+      "startSeconds": 112.5,
+      "firstWordsHeard": "Un badge perdu"
+    },
+    {
+      "id": "empty",
+      "startSeconds": 137.6,
+      "firstWordsHeard": "Si tu combines un poste"
+    },
+    {
+      "id": "colors",
+      "startSeconds": 201.2,
+      "firstWordsHeard": "Le bandeau peut prendre"
+    },
+    {
+      "id": "fields",
+      "startSeconds": 227,
+      "firstWordsHeard": "Tu peux alléger le badge"
+    },
+    {
+      "id": "print",
+      "startSeconds": 257,
+      "firstWordsHeard": "Avant d'imprimer en quantité"
+    },
+    {
+      "id": "result",
+      "startSeconds": 328,
+      "firstWordsHeard": "Le badge choisi est prêt"
+    }
+  ]
+}

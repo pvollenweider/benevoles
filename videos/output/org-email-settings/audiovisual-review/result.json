@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:15:17.292Z",
+  "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
+  "promptSha256": "570935770205638415a354f406b5b598a519ba31c72bc8291641435a906d5401",
+  "clipSha256": "654f2d0b632956749a65ae751e4e076e52ff2d187a10880394f734ebd353f32e",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Les réglages sont enregistrés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "le message de test est visible dans la boîte de démonstration",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la messagerie Mailpit avec le message de test",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Dans Emails envoyés, Envoyé indique une acceptation",
+        "visibleSeconds": 5,
+        "visible": "Tableau Emails envoyés avec statut Envoyé affiché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "utilisez plutôt les messages ciblés de l’événement",
+        "visibleSeconds": 14,
+        "visible": "L'écran reste figé sur les paramètres d'emails sans montrer les messages ciblés",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:14 : mention des messages ciblés de l'événement sans transition visuelle vers la fonctionnalité"
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire, rythme fluide et ton adapté."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

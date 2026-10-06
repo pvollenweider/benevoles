@@ -1,37 +1,48 @@
 {
   "slug": "global-search",
-  "recordedAt": "2026-10-04T11:22:58.056Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T02:27:20.176Z",
   "video": "capture.webm",
   "cues": [
     {
       "id": "welcome",
       "startMs": 0,
-      "endMs": 13619
+      "endMs": 14165
     },
     {
       "id": "open",
-      "startMs": 14073,
-      "endMs": 27012
+      "startMs": 14616,
+      "endMs": 28291
     },
     {
       "id": "person",
-      "startMs": 29173,
-      "endMs": 48847
+      "startMs": 30454,
+      "endMs": 50166
     },
     {
       "id": "shift",
-      "startMs": 49306,
-      "endMs": 59559
+      "startMs": 50620,
+      "endMs": 66568
     },
     {
       "id": "limits",
-      "startMs": 60012,
-      "endMs": 72939
+      "startMs": 67024,
+      "endMs": 83688
     },
     {
       "id": "result",
-      "startMs": 73394,
-      "endMs": 86035
+      "startMs": 84140,
+      "endMs": 96823
+    }
+  ],
+  "detailFrames": [
+    {
+      "startMs": 14616,
+      "endMs": 24876,
+      "x": 640,
+      "y": 0,
+      "width": 640,
+      "height": 400
     }
   ]
 }

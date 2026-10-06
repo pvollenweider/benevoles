@@ -6,17 +6,17 @@
   "viewer": {
     "summary": "Dans cette vidéo, vous apprenez à vous repérer dans l'administration et à retrouver rapidement une information.",
     "steps": [
-      "Utilisez la barre principale pour accéder aux événements, aux membres et aux paramètres.",
-      "Ouvrez un événement pour passer à sa navigation propre : aperçu, créneaux, inscriptions, communications, pages et rapports.",
-      "Ouvrez la recherche avec la loupe ou Ctrl+K (Cmd+K sur Mac) pour retrouver un bénévole, une inscription, un événement ou un créneau.",
-      "Précisez votre recherche avec un second mot si la liste de résultats est trop longue.",
-      "Ouvrez le menu de votre compte pour changer votre mot de passe ou accéder à l'aide.",
-      "Sur un écran étroit, retrouvez les mêmes destinations dans le menu mobile."
+      "Utilisez le Tableau de bord pour les priorités, Événements pour vos événements, Membres pour les personnes et Paramètres pour les réglages communs.",
+      "Ouvrez un événement pour accéder à ses créneaux, ses inscriptions, ses invitations, son QR code, ses rapports, son journal, ses pages et ses questions.",
+      "Ouvrez la recherche avec la loupe ou Ctrl+K (Cmd+K sur Mac) et précisez avec un second mot si besoin.",
+      "Retrouvez « Mon compte » et « Se déconnecter » dans le menu de votre compte ; l'aide est dans la barre de navigation.",
+      "Suivez les liens Aide placés sous les titres de certaines pages pour ouvrir directement la bonne rubrique du guide.",
+      "Sur téléphone, ouvrez le menu pour retrouver les mêmes destinations."
     ],
     "remember": [
-      "Changer votre mot de passe déconnecte vos autres sessions.",
-      "Le lien « Aller au contenu », accessible dès la première tabulation, saute directement à la page.",
-      "La navigation s'adapte à votre écran mais reste la même sur ordinateur et téléphone."
+      "Votre rôle détermine les actions disponibles : certaines modifications sont réservées au propriétaire.",
+      "Le lien « Aller au contenu », accessible dès le premier appui sur Tab, mène directement au contenu principal.",
+      "Pour une question précise, la recherche et l'aide vous évitent de repartir de zéro."
     ]
   },
   "language": "fr-CH",
@@ -31,37 +31,37 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "L’administration rassemble tout ce qui sert à préparer les événements et à suivre les bénévoles. Cette visite te montre où chercher, comment passer du niveau de l’association à celui d’un événement, et comment retrouver rapidement une information sans parcourir tous les écrans.",
+      "transcript": "Bienvenue dans l’administration. Vous allez retrouver les principaux points d’entrée, distinguer les réglages de l’association du suivi d’un événement et chercher une information sans parcourir tous les écrans.",
       "fallbackDurationMs": 16000
     },
     {
       "id": "organization-navigation",
-      "transcript": "La barre principale reste disponible partout. Événements ouvre la liste et les priorités de l’association. Membres regroupe les personnes connues, même lorsqu’elles ne sont inscrites à aucun événement. Les paramètres concernent l’identité, l’équipe et les réglages communs. Un organisateur ne voit pas forcément les réglages réservés au propriétaire : l’interface suit ses permissions.",
+      "transcript": "Le Tableau de bord rassemble les priorités de l’association. Événements ouvre la liste de vos événements, et Membres les personnes connues de l’association. Paramètres concerne les réglages communs. Certaines modifications sont réservées au propriétaire : votre rôle détermine les actions disponibles.",
       "fallbackDurationMs": 23000
     },
     {
       "id": "event-navigation",
-      "transcript": "Quand tu ouvres un événement, la navigation change de contexte. L’aperçu résume ce planning précis ; les créneaux servent à le construire ; les inscriptions, les communications, les pages et les rapports ne concernent que cet événement. Revenir à Événements ramène au niveau de l’organisation. Cette distinction évite de modifier le mauvais planning lorsque plusieurs fêtes sont actives.",
-      "fallbackDurationMs": 24000
+      "transcript": "Ouvrez un événement. Sa page propose Gérer les créneaux, Voir les inscriptions et Inviter des membres. Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions. Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement. Le lien Événements vous ramène à la liste de l’association.",
+      "fallbackDurationMs": 28000
     },
     {
       "id": "search",
-      "transcript": "La loupe permet de chercher dans toute l’organisation. Avec Contrôle K, ou Commande K sur Mac, le curseur arrive directement dans le champ. Une recherche peut retrouver un bénévole, une inscription, un événement ou un créneau, puis ouvrir la vue correspondante. Les résultats restent limités : si la liste est longue, précise le nom ou ajoute un second mot.",
+      "transcript": "La loupe cherche dans toute l’organisation. Utilisez Contrôle K, ou Commande K sur Mac, puis saisissez un nom ou un poste. Ouvrez un résultat pour accéder à la fiche ou à la liste correspondante. Si plusieurs résultats se ressemblent, précisez votre recherche avec un second mot.",
       "fallbackDurationMs": 24000
     },
     {
       "id": "account-help",
-      "transcript": "Le menu du compte donne accès à ton profil, à l’aide et à la déconnexion. Mon compte permet notamment de changer ton mot de passe ; cela déconnecte les autres sessions pour protéger l’accès. L’aide ouvre la documentation générale : elle n’envoie rien et ne modifie aucune donnée.",
-      "fallbackDurationMs": 19000
+      "transcript": "Le menu de votre compte propose Mon compte et Se déconnecter. L’aide se trouve séparément dans la barre de navigation et ouvre le guide dans un nouvel onglet. Les liens Aide placés sous les titres de certaines pages vous conduisent directement à la rubrique concernée.",
+      "fallbackDurationMs": 22000
     },
     {
       "id": "mobile-keyboard",
-      "transcript": "Sur un écran étroit, les mêmes destinations restent disponibles dans le menu mobile. Au clavier, la toute première tabulation révèle le lien Aller au contenu : il saute la barre de navigation et place directement sur la page. Le résultat est le même sur ordinateur et sur téléphone ; seule la présentation s’adapte.",
-      "fallbackDurationMs": 21000
+      "transcript": "Sur téléphone, ouvrez le menu pour retrouver les principales destinations. Sur ordinateur, la première tabulation révèle Aller au contenu : ce lien évite de traverser toute la barre de navigation. Vous arrivez directement dans le contenu de la page.",
+      "fallbackDurationMs": 19000
     },
     {
       "id": "result",
-      "transcript": "Tu sais maintenant choisir le bon niveau avant d’agir : l’association pour les membres et les réglages communs, l’événement pour son planning et son suivi. La recherche accélère les cas précis, le menu du compte rassemble les actions personnelles, et la navigation reste utilisable sur mobile comme au clavier.",
+      "transcript": "Vous avez les bons repères : Tableau de bord pour les priorités, Membres et Paramètres au niveau de l’association, puis la page de chaque événement pour son planning et son suivi. Pour une question précise, la recherche et l’aide vous évitent de repartir de zéro.",
       "fallbackDurationMs": 19000
     }
   ]

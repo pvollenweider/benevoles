@@ -1,4 +1,4 @@
-# Créer, copier et redimensionner depuis la Timeline
+# Créer, copier et redimensionner depuis la Frise
 
 **Identifiant stable :** `SHIFT_TIMELINE_QUICK_ACTIONS`
 

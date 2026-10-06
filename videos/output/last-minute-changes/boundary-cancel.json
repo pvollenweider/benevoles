@@ -1,0 +1,12 @@
+{
+  "anchor": "Une mission n'a plus lieu : cette fois, on annule le",
+  "windowStart": 224.34699999999998,
+  "result": {
+    "found": true,
+    "startSeconds": 15.5,
+    "wordsHeard": "Une mission n'a plus lieu. Cette fois, on annule le"
+  },
+  "onset": 239.84699999999998,
+  "proposedCut": 239.347375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

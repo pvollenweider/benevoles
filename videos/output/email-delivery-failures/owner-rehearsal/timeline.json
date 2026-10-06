@@ -1,0 +1,48 @@
+{
+  "slug": "email-delivery-failures",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-05T22:40:26.244Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 2280,
+      "endMs": 8607
+    },
+    {
+      "id": "states",
+      "startMs": 9060,
+      "endMs": 10996
+    },
+    {
+      "id": "reason",
+      "startMs": 11450,
+      "endMs": 13311
+    },
+    {
+      "id": "retry",
+      "startMs": 13764,
+      "endMs": 18837
+    },
+    {
+      "id": "address",
+      "startMs": 19328,
+      "endMs": 51873
+    },
+    {
+      "id": "campaign",
+      "startMs": 52328,
+      "endMs": 70555
+    },
+    {
+      "id": "retention",
+      "startMs": 71009,
+      "endMs": 75063
+    },
+    {
+      "id": "result",
+      "startMs": 75516,
+      "endMs": 78477
+    }
+  ]
+}

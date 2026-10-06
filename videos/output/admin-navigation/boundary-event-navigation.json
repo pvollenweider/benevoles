@@ -1,0 +1,12 @@
+{
+  "anchor": "Ouvrez un événement. Sa page propose Gérer les créneaux, Voir les",
+  "windowStart": 15.673000000000002,
+  "result": {
+    "found": true,
+    "startSeconds": 15.18,
+    "wordsHeard": "Ouvrez un événement"
+  },
+  "onset": 30.853,
+  "proposedCut": 30.6728125,
+  "note": "Proposal only; recut then independently audit before capture"
+}

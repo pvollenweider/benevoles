@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:15:14.494Z",
+  "videoSha256": "adf29f20360d5cfb94d5ed198cc63852ce8045f4d3ff623267351d447772a253",
+  "promptSha256": "736815f4db31c827bb73ccca7eac50d36a26b6c2edccc8c13dd0fe4313fdfd87",
+  "clipSha256": "9ad8b8131961d7c0a27ca3eb4c4f91646d5cf86797e84a11f63bad04b52045dc",
+  "scene": "copies",
+  "review": {
+    "heardOpening": "Sur le terrain, une liste bien choisie",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Ouvrons le rapport prévu pour le stand et regardons les informations qu'il contient.",
+        "visibleSeconds": 4.9,
+        "visible": "Clic sur « Planning par jour » puis affichage du planning correspondant.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Comparons-le au CSV des membres :",
+        "visibleSeconds": 10.1,
+        "visible": "Page Membres affichée avec le bouton « Exporter les membres (CSV) ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "ce fichier comporte notamment des coordonnées et des notes internes.",
+        "visibleSeconds": 14,
+        "visible": "Affichage du tableau d'aperçu du CSV avec les coordonnées puis les colonnes de notes.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et régulière."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

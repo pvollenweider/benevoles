@@ -1,0 +1,12 @@
+{
+  "anchor": "Prévenir en cas de désistement est un réglage séparé. Il informe",
+  "windowStart": 53.50999999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 15.17,
+    "wordsHeard": "Prévenir en cas de désistement est un réglage séparé. Il informe"
+  },
+  "onset": 68.67999999999999,
+  "proposedCut": 68.5096875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

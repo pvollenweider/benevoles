@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-05T23:36:06.880Z",
+  "actualCapacityRefusal": true,
+  "interruptionBeforeCommit": true,
+  "publicSuccessDoesNotExposeToken": true,
+  "publicConfirmationMailId": "4QsLNBctPIBPzWfkf9hYRV",
+  "actualOverlapRefused": true,
+  "responseLostAfterCommit": true,
+  "retryCreatedNoDuplicate": true,
+  "invitedSuccessHasPersonalLink": true,
+  "finalRegistrations": 5,
+  "personalTokensStored": false,
+  "audiovisualValidated": false
+}

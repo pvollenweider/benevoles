@@ -1,0 +1,12 @@
+{
+  "anchor": "Le nom affiché et l'identifiant public sont deux informations différentes. Modifions",
+  "windowStart": 112.894,
+  "result": {
+    "found": true,
+    "startSeconds": 7.9,
+    "wordsHeard": "Le nom affiché et l'identifiant public sont deux informations différentes. Modifions"
+  },
+  "onset": 120.79400000000001,
+  "proposedCut": 120.03902049999999,
+  "note": "Proposal only; recut then independently audit before capture"
+}

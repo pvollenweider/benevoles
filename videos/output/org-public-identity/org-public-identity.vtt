@@ -1,20 +1,147 @@
 WEBVTT
 
-00:00:01.143 --> 00:00:15.171
-L’identité de l’organisation donne un point d’entrée commun à tous ses événements. Elle sert à présenter clairement l’association, à fournir une adresse facile à partager et à éviter que les bénévoles confondent un nom technique avec le titre qu’ils voient.
+00:00:01.098 --> 00:00:04.671
+L’identité de l’organisation donne un
+point d’entrée commun à tous ses
 
-00:00:15.627 --> 00:00:33.237
-Dans Paramètres, le nom de l’organisation identifie le tenant dans l’administration. Le titre de la page publique peut être plus accueillant. Remplaçons-le par Les bénévoles des Fêtes de Montvert, puis enregistrons. Ce changement touche la page publique de l’organisation, pas le titre de chaque événement.
+00:00:04.671 --> 00:00:07.919
+événements. Elle sert à présenter
+clairement l’association, à fournir une
 
-00:00:33.690 --> 00:00:54.458
-L’identifiant public, aussi appelé slug, forme une adresse comme fetes-de-montvert point benevol point app. Il doit rester court et reconnaissable. Le changer peut rendre les anciens favoris ou QR codes obsolètes : choisis-le avant de diffuser largement les liens, et ne le modifie pas simplement pour corriger une majuscule dans le titre.
+00:00:07.919 --> 00:00:12.466
+adresse facile à partager et à éviter que
+les bénévoles confondent un nom technique
 
-00:00:56.071 --> 00:01:05.380
-Ouvrons maintenant la page publique. Le nouveau titre apparaît au-dessus des événements disponibles. Seuls les événements publiés et répertoriés sont affichés ici. Un événement non répertorié reste accessible avec son lien direct, mais n’est pas annoncé dans cette liste.
+00:00:12.466 --> 00:00:14.090
+avec le titre qu’ils voient.
 
-00:01:05.831 --> 00:01:26.976
-En ouvrant la Fête du village, on retrouve l’identité de l’organisation avec les informations propres à cet événement. Le nom de l’événement, son lieu et son planning restent indépendants. On peut donc réutiliser la même page d’organisation pour plusieurs manifestations au fil de l’année.
+00:00:14.545 --> 00:00:18.912
+Dans Paramètres, le nom de l’organisation
+apparaît dans l’administration, les emails
 
-00:01:27.427 --> 00:01:45.220
-Le résultat est une identité cohérente : un nom interne pour l’équipe, un titre public lisible et une adresse stable à communiquer. Pour corriger le texte visible, modifie le titre public. Pour déplacer réellement l’adresse, change le slug seulement après avoir mesuré l’impact sur les liens déjà distribués.
+00:00:18.912 --> 00:00:24.471
+et au-dessus du titre public. Le titre de
+la page publique peut être plus
+
+00:00:24.471 --> 00:00:28.441
+accueillant. Remplaçons-le par Les
+bénévoles des Fêtes de Montvert, puis
+
+00:00:28.441 --> 00:00:33.206
+enregistrons. Le message Titre enregistré
+confirme la modification : les titres des
+
+00:00:33.206 --> 00:00:34.794
+événements ne changent pas.
+
+00:00:35.247 --> 00:00:39.223
+Ajoutons le logo de l’association.
+Choisissez une image dans les formats
+
+00:00:39.223 --> 00:00:43.199
+indiqués, vérifiez son aperçu, puis
+cliquez sur Enregistrer le logo. L’image
+
+00:00:43.199 --> 00:00:47.536
+enregistrée apparaît dans les pages
+publiques, les emails et les documents. Le
+
+00:00:47.536 --> 00:00:52.958
+nom de l’association reste écrit à côté :
+le logo ne remplace pas ce repère.
+
+00:00:53.414 --> 00:00:57.873
+L’identifiant public, ou slug, sert à
+former l’adresse de votre association sur
+
+00:00:57.873 --> 00:01:01.961
+benevol point app. Ici, les adresses
+appartiennent à notre environnement de
+
+00:01:01.961 --> 00:01:05.305
+démonstration. Si vous changez
+l’identifiant alors que des événements
+
+00:01:05.305 --> 00:01:08.650
+sont publiés, une confirmation est
+demandée. Les anciens identifiants
+
+00:01:08.650 --> 00:01:13.109
+continuent de rediriger vers l’actuel tant
+que vous les conservez. C’est leur
+
+00:01:13.109 --> 00:01:17.940
+suppression qui casse les anciens liens et
+QR codes. Ici, gardons l’adresse actuelle.
+
+00:01:19.532 --> 00:01:23.989
+Ouvrons la page publique. Le nouveau titre
+et le logo apparaissent au-dessus des deux
+
+00:01:23.989 --> 00:01:27.491
+événements publiés et répertoriés. La
+rencontre des organisateurs n’est pas dans
+
+00:01:27.491 --> 00:01:31.949
+cette liste : elle est publiée, mais non
+répertoriée. Ouvrons son lien direct pour
+
+00:01:31.949 --> 00:01:35.451
+vérifier qu’elle reste accessible aux
+personnes qui le reçoivent. Non répertorié
+
+00:01:35.451 --> 00:01:38.316
+ne signifie pas protégé par un mot de
+passe.
+
+00:01:38.783 --> 00:01:43.922
+En ouvrant la Fête du village, on retrouve
+l’identité de l’organisation avec les
+
+00:01:43.922 --> 00:01:49.061
+informations propres à cet événement. Le
+nom de l’événement, son lieu et son
+
+00:01:49.061 --> 00:01:53.014
+planning restent indépendants. On peut
+donc réutiliser la même page
+
+00:01:53.014 --> 00:01:56.176
+d’organisation pour plusieurs
+manifestations au fil de l’année.
+
+00:01:56.632 --> 00:02:02.023
+Pour retirer le logo, revenez dans
+Paramètres et choisissez Retirer le logo.
+
+00:02:02.023 --> 00:02:06.067
+La confirmation vous laisse encore
+annuler. Après validation, l’image
+
+00:02:06.067 --> 00:02:12.356
+disparaît des pages et des prochains
+documents, mais le nom et le titre restent
+
+00:02:12.356 --> 00:02:18.197
+affichés. Cela ne retire pas une copie
+déjà téléchargée ou un ancien email.
+
+00:02:18.650 --> 00:02:24.084
+Vous avez une identité cohérente : le nom
+de l’association, un titre public
+
+00:02:24.084 --> 00:02:28.682
+accueillant, un logo facultatif et une
+adresse identifiable. Ces réglages sont
+
+00:02:28.682 --> 00:02:33.698
+réservés au propriétaire. Pour corriger un
+texte visible, modifiez son titre plutôt
+
+00:02:33.698 --> 00:02:38.714
+que l’adresse, et conservez les anciens
+identifiants si vous avez déjà diffusé
+
+00:02:38.714 --> 00:02:39.550
+leurs liens.
 

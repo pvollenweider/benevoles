@@ -1,0 +1,69 @@
+{
+  "model": "gemini-3.8-flash",
+  "auditedAt": "2026-10-06T03:12:05.273Z",
+  "revalidatedAt": "2026-10-06T03:12:05.274Z",
+  "source": "generated narration WAV",
+  "note": "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "f5fa7d2b189b41f1e2433e02e6a8877124e3b0ede0453e1296e6a61c31477648",
+      "recognized": "Un poste décrit une mission, par exemple accueil ou buvette. Un créneau est une plage précise de ce poste, avec une date, des heures et un nombre de places. Le même poste peut donc contenir plusieurs créneaux sur un ou plusieurs jours.",
+      "expected": "Un poste décrit une mission, par exemple Accueil ou Buvette. Un créneau est une plage précise de ce poste, avec une date, des heures et un nombre de places. Le même poste peut donc contenir plusieurs créneaux, sur un ou plusieurs jours.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "timeline",
+      "audioSha256": "bed4dabbfb9d527f77777a9428982673539c0ea3f58110ecb5f95abf28c6cba9",
+      "recognized": "La vue frise répond d'abord à une question visuelle : quelles missions faut-il assurer et quand ? Les barres montrent les horaires des créneaux, leur longueur permet de repérer les chevauchements, les trous et les périodes chargées. Une couleur peut t'aider à reconnaître un poste.",
+      "expected": "La vue Frise répond d’abord à une question visuelle : quelles missions faut-il assurer, et quand ? Les barres montrent les horaires des créneaux. Leur longueur permet de repérer les chevauchements, les trous et les périodes chargées. Une couleur peut aider à reconnaître un poste.",
+      "wordErrorRate": 0.022222222222222223,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "list",
+      "audioSha256": "8fa9a6d23c1312ed0ca9e9d9501a2d9f12c66b1100c0c08e6623d3215502a557",
+      "recognized": "La vue liste présente les mêmes données sous une forme plus compacte. Elle est pratique pour relire les libellés, les capacités et les statuts ou pour parcourir rapidement un grand nombre de créneaux sans suivre l'axe horaire.",
+      "expected": "La vue Liste présente les mêmes données sous une forme plus compacte. Elle est pratique pour relire les libellés, les capacités et les statuts, ou pour parcourir rapidement un grand nombre de créneaux sans suivre l’axe horaire.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "roles",
+      "audioSha256": "c97c56c293f3bf7f77633d77b0cc3d3679b3e4e462e0cc4cd1eb5be4629f27e7",
+      "recognized": "Dans Gérer les postes, l'ordre choisi devient l'ordre du planning. Les flèches monter et descendre offrent une alternative claire au glisser-déposer et gardent le focus sur le poste déplacé. C'est aussi ici qu'on renomme un poste et qu'on ouvre ses règles.",
+      "expected": "Dans Gérer les postes, l’ordre choisi devient l’ordre du planning. Les flèches Monter et Descendre offrent une alternative claire au glisser-déposer et gardent le focus sur le poste déplacé. C’est aussi ici qu’on renomme un poste et qu’on ouvre ses règles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "colors",
+      "audioSha256": "084036042dd0cba2c975569861db0237261786037f3a9a398ffa4a4738204990",
+      "recognized": "La couleur sert à reconnaître une mission d'un coup d'œil. Choisissez-la dans la palette prévue. Elle reste cohérente dans les vues et lisible pour les bénévoles. La couleur aide à se repérer mais le nom du poste reste toujours l'information principale.",
+      "expected": "La couleur sert à reconnaître une mission d’un coup d’œil. Choisissez-la dans la palette prévue : elle reste cohérente dans les vues et lisible pour les bénévoles. La couleur aide à se repérer, mais le nom du poste reste toujours l’information principale.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "543e99579130a5e400af595219d801932fe6967628838c0264dc98d5afb82bfb",
+      "recognized": "Utilisez la frise pour construire et équilibrer la journée, puis la liste pour contrôler le détail. Avec des noms courts, un ordre logique et des couleurs stables, le planning reste compréhensible même lorsqu'il couvre plusieurs jours.",
+      "expected": "Utilisez la Frise pour construire et équilibrer la journée, puis la Liste pour contrôler le détail. Avec des noms courts, un ordre logique et des couleurs stables, le planning reste compréhensible même lorsqu’il couvre plusieurs jours.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

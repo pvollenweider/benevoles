@@ -1,0 +1,53 @@
+{
+  "slug": "event-activity-log",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-05T19:02:21.930Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1504,
+      "endMs": 27158
+    },
+    {
+      "id": "read",
+      "startMs": 27612,
+      "endMs": 53324
+    },
+    {
+      "id": "filters",
+      "startMs": 53778,
+      "endMs": 78873
+    },
+    {
+      "id": "period",
+      "startMs": 79325,
+      "endMs": 102471
+    },
+    {
+      "id": "replay",
+      "startMs": 102923,
+      "endMs": 133452
+    },
+    {
+      "id": "story",
+      "startMs": 133904,
+      "endMs": 159686
+    },
+    {
+      "id": "baseline",
+      "startMs": 161360,
+      "endMs": 187723
+    },
+    {
+      "id": "privacy",
+      "startMs": 189462,
+      "endMs": 213639
+    },
+    {
+      "id": "result",
+      "startMs": 214091,
+      "endMs": 244683
+    }
+  ]
+}

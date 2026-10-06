@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:53:32.847Z",
+  "videoSha256": "0417e88ec9fa5119cc7d3d49c94fd8060a475f3f66d07f782cbbe4950dd14d66",
+  "promptSha256": "4e759d0d7a029180ce7815d04300d325ab81708da64c28ec5100c15307475aad",
+  "clipSha256": "aaaf614f1cb0105d8f88a51ec4895fed702f19434f89cc367c4c485bbd676e5d",
+  "scene": "role",
+  "review": {
+    "heardOpening": "Pour préparer seulement la buvette",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "revenons au formulaire et choisissons ce poste",
+        "visibleSeconds": 3.7,
+        "visible": "Sélection de 'Buvette' dans la liste déroulante des badges",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Les personnes retenues ont une inscription confirmée à la buvette",
+        "visibleSeconds": 6.8,
+        "visible": "Affichage de la page de badges filtrés pour la buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Comparons le badge de Léa avec sa version complète",
+        "visibleSeconds": 8.8,
+        "visible": "Écran comparatif montrant le badge de Léa 'tous les postes' et 'filtre Buvette'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "reviens à Tous les postes avant de le refaire",
+        "visibleSeconds": 18.5,
+        "visible": "L'écran comparatif reste affiché sans retour effectif au formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisation fluide avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:15:06.563Z",
+  "videoSha256": "adf29f20360d5cfb94d5ed198cc63852ce8045f4d3ff623267351d447772a253",
+  "promptSha256": "284a9338b924fae9a9f5276c8b508e88421cbfb1fda30dda949b330c8aedf62f",
+  "clipSha256": "08dcf96f950dde1c311449137cedf8ba047aee05be36eeaeb5963202624aca69",
+  "scene": "legal",
+  "review": {
+    "heardOpening": "Les informations publiques se trouvent aussi dans le pied de page.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Les informations publiques se trouvent aussi dans le pied de page.",
+        "visibleSeconds": 2,
+        "visible": "Clic sur le lien Confidentialité situé dans le pied de page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Ouvrons Confidentialité",
+        "visibleSeconds": 3,
+        "visible": "Affichage de la page Politique de confidentialité",
+        "sync": "early",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Lisons les usages annoncés, les destinataires des données, les indications de conservation",
+        "visibleSeconds": 8,
+        "visible": "Défilement des rubriques relatives aux données et durées de conservation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "puis les conditions d'utilisation",
+        "visibleSeconds": 23,
+        "visible": "Ouverture de la page Conditions générales d'utilisation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, synchronisée avec les actions."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Le lien est perdu ? Depuis la page de récupération, saisissons",
+  "windowStart": 94.03399999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 4.08,
+    "wordsHeard": "Le lien est perdu ? Depuis la page de récupération, saisissons"
+  },
+  "onset": 98.11399999999999,
+  "proposedCut": 98.0865625,
+  "note": "Proposal only; recut then independently audit before capture"
+}

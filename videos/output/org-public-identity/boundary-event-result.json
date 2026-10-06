@@ -1,0 +1,12 @@
+{
+  "anchor": "En ouvrant la Fête du village, on retrouve l’identité de l’organisation",
+  "windowStart": 90.451,
+  "result": {
+    "found": true,
+    "startSeconds": 4,
+    "wordsHeard": "En ouvrant"
+  },
+  "onset": 94.451,
+  "proposedCut": 94.26279149999999,
+  "note": "Proposal only; recut then independently audit before capture"
+}

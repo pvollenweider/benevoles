@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T18:43:08.391Z",
+  "videoSha256": "35c2c209bcf69614d4a31c035d42e8f425aec8d211722ce9864b8daa6096a067",
+  "promptSha256": "73d02fe8ff34481303da308990b47b6c130de7919d595be2f392aa3569351f03",
+  "clipSha256": "56c885719b700aade0b78db5bd059e8b9ebe1826dcc9f6589d4a2b1017e2ddbe",
+  "scene": "exclusions",
+  "review": {
+    "heardOpening": "Une demande à valider",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Une demande à valider ou une place en attente n'est pas une inscription confirmée",
+        "visibleSeconds": 2,
+        "visible": "Affichage de la liste des inscriptions avec le filtre Demandes à traiter coché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "Même chose pour notre brouillon",
+        "visibleSeconds": 7,
+        "visible": "Filtrage sur Anna affichant un statut Place proposée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "En revanche, fermer un créneau aux nouvelles inscriptions ne l'annule pas",
+        "visibleSeconds": 12.5,
+        "visible": "Affichage de la liste des créneaux avec un créneau au statut Fermé",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction fluide et ton calme bien adapté au tutoriel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

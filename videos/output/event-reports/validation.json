@@ -1,0 +1,72 @@
+{
+  "id": "EVENT_REPORTS",
+  "slug": "event-reports",
+  "validatedAt": "2026-10-05T18:08:46.560Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 290600,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 21056,
+      "audioMs": 21053,
+      "driftMs": 3
+    },
+    {
+      "id": "complete",
+      "visualMs": 27497,
+      "audioMs": 27493,
+      "driftMs": 4
+    },
+    {
+      "id": "day",
+      "visualMs": 26350,
+      "audioMs": 26346,
+      "driftMs": 4
+    },
+    {
+      "id": "role",
+      "visualMs": 24911,
+      "audioMs": 24909,
+      "driftMs": 2
+    },
+    {
+      "id": "individual",
+      "visualMs": 28308,
+      "audioMs": 28307,
+      "driftMs": 1
+    },
+    {
+      "id": "attendance",
+      "visualMs": 27264,
+      "audioMs": 27262,
+      "driftMs": 2
+    },
+    {
+      "id": "contacts",
+      "visualMs": 26702,
+      "audioMs": 26700,
+      "driftMs": 2
+    },
+    {
+      "id": "answers",
+      "visualMs": 33865,
+      "audioMs": 33863,
+      "driftMs": 2
+    },
+    {
+      "id": "print",
+      "visualMs": 29297,
+      "audioMs": 29294,
+      "driftMs": 3
+    },
+    {
+      "id": "result",
+      "visualMs": 27374,
+      "audioMs": 27372,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}

@@ -1,0 +1,57 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Puck",
+  "generatedAt": "2026-10-05T13:02:16.500Z",
+  "segments": {
+    "welcome": {
+      "file": "audio/welcome.wav",
+      "durationMs": 21038,
+      "generationSha256": "63124217060399ae0849080946a71e42ff52af72dc36eb76943af11535a5360c"
+    },
+    "create": {
+      "file": "audio/create.wav",
+      "durationMs": 21706,
+      "generationSha256": "63124217060399ae0849080946a71e42ff52af72dc36eb76943af11535a5360c"
+    },
+    "edit": {
+      "file": "audio/edit.wav",
+      "durationMs": 21317,
+      "generationSha256": "63124217060399ae0849080946a71e42ff52af72dc36eb76943af11535a5360c"
+    },
+    "availability": {
+      "file": "audio/availability.wav",
+      "durationMs": 21691,
+      "generationSha256": "63124217060399ae0849080946a71e42ff52af72dc36eb76943af11535a5360c"
+    },
+    "no-email": {
+      "file": "audio/no-email.wav",
+      "durationMs": 17658,
+      "generationSha256": "63124217060399ae0849080946a71e42ff52af72dc36eb76943af11535a5360c"
+    },
+    "search": {
+      "file": "audio/search.wav",
+      "durationMs": 22299,
+      "generationSha256": "63124217060399ae0849080946a71e42ff52af72dc36eb76943af11535a5360c"
+    },
+    "filter": {
+      "file": "audio/filter.wav",
+      "durationMs": 22058,
+      "generationSha256": "63124217060399ae0849080946a71e42ff52af72dc36eb76943af11535a5360c"
+    },
+    "deactivate": {
+      "file": "audio/deactivate.wav",
+      "durationMs": 22353,
+      "generationSha256": "63124217060399ae0849080946a71e42ff52af72dc36eb76943af11535a5360c"
+    },
+    "activity": {
+      "file": "audio/activity.wav",
+      "durationMs": 20847,
+      "generationSha256": "63124217060399ae0849080946a71e42ff52af72dc36eb76943af11535a5360c"
+    },
+    "result": {
+      "file": "audio/result.wav",
+      "durationMs": 22752,
+      "generationSha256": "63124217060399ae0849080946a71e42ff52af72dc36eb76943af11535a5360c"
+    }
+  }
+}
