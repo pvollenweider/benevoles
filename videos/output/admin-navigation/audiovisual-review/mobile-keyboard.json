@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T01:59:53.622Z",
+  "videoSha256": "f4c0c3c28ab04d429a33a9fd82687797f0081bd26e4214dabb9f06b4d4c9beac",
+  "promptSha256": "301bea852341f387c28f382648ab192451a235cbfc949ad7aa46e9a5aa950b0d",
+  "clipSha256": "d9480af915551d787fd5340b08000fb051761e96b69ca240dd2ea999895f2a2d",
+  "scene": "mobile-keyboard",
+  "review": {
+    "heardOpening": "Sur téléphone, ouvrez le menu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "ouvrez le menu pour retrouver les principales destinations",
+        "visibleSeconds": 1.5,
+        "visible": "Ouverture du menu déroulant sur interface mobile",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "la première tabulation révèle Aller au contenu",
+        "visibleSeconds": 7.2,
+        "visible": "Affichage de la version bureau et apparition du lien d'évitement Aller au contenu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Vous arrivez directement dans le contenu de la page",
+        "visibleSeconds": 10.8,
+        "visible": "Vue d'ensemble de la liste des événements sur ordinateur",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire et posée, débit régulier bien synchronisé avec les démonstrations visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

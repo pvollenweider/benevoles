@@ -1,20 +1,83 @@
 WEBVTT
 
-00:00:01.157 --> 00:00:16.062
-Un poste décrit une mission, par exemple Accueil ou Buvette. Un créneau est une plage précise de ce poste, avec une date, des heures et un nombre de places. Le même poste peut donc contenir plusieurs créneaux, sur un ou plusieurs jours.
+00:00:01.101 --> 00:00:05.852
+Un poste décrit une mission, par exemple
+Accueil ou Buvette. Un créneau est une
 
-00:00:16.516 --> 00:00:30.529
-La vue Timeline répond d’abord à une question visuelle : qui travaille quand ? Chaque couleur correspond à un poste, les barres montrent les horaires et leur longueur révèle immédiatement les chevauchements, les trous et les périodes chargées.
+00:00:05.852 --> 00:00:11.620
+plage précise de ce poste, avec une date,
+des heures et un nombre de places. Le même
 
-00:00:30.982 --> 00:00:43.387
-La vue Liste présente les mêmes données sous une forme plus compacte. Elle est pratique pour relire les libellés, les capacités et les statuts, ou pour parcourir rapidement un grand nombre de créneaux sans suivre l’axe horaire.
+00:00:11.620 --> 00:00:15.353
+poste peut donc contenir plusieurs
+créneaux, sur un ou plusieurs jours.
 
-00:00:43.844 --> 00:00:59.030
-Dans Gérer les postes, l’ordre choisi devient l’ordre du planning. Les flèches Monter et Descendre offrent une alternative claire au glisser-déposer et gardent le focus sur le poste déplacé. C’est aussi ici qu’on renomme un poste et qu’on ouvre ses règles.
+00:00:15.807 --> 00:00:20.015
+La vue Frise répond d’abord à une question
+visuelle : quelles missions faut-il
 
-00:00:59.482 --> 00:01:12.885
-La couleur sert à reconnaître une mission d’un coup d’œil. Choisis-la dans la palette prévue : elle reste cohérente dans les vues et lisible pour les bénévoles. La couleur aide à se repérer, mais le nom du poste reste toujours l’information principale.
+00:00:20.015 --> 00:00:24.223
+assurer, et quand ? Les barres montrent
+les horaires des créneaux. Leur longueur
 
-00:01:13.339 --> 00:01:25.606
-Utilise la Timeline pour construire et équilibrer la journée, puis la Liste pour contrôler le détail. Avec des noms courts, un ordre logique et des couleurs stables, le planning reste compréhensible même lorsqu’il couvre plusieurs jours.
+00:00:24.223 --> 00:00:28.108
+permet de repérer les chevauchements, les
+trous et les périodes chargées. Une
+
+00:00:28.108 --> 00:00:30.374
+couleur peut aider à reconnaître un poste.
+
+00:00:30.832 --> 00:00:35.222
+La vue Liste présente les mêmes données
+sous une forme plus compacte. Elle est
+
+00:00:35.222 --> 00:00:38.984
+pratique pour relire les libellés, les
+capacités et les statuts, ou pour
+
+00:00:38.984 --> 00:00:42.433
+parcourir rapidement un grand nombre de
+créneaux sans suivre l’axe horaire.
+
+00:00:42.887 --> 00:00:47.317
+Dans Gérer les postes, l’ordre choisi
+devient l’ordre du planning. Les flèches
+
+00:00:47.317 --> 00:00:51.008
+Monter et Descendre offrent une
+alternative claire au glisser-déposer et
+
+00:00:51.008 --> 00:00:56.545
+gardent le focus sur le poste déplacé.
+C’est aussi ici qu’on renomme un poste et
+
+00:00:56.545 --> 00:00:58.022
+qu’on ouvre ses règles.
+
+00:00:58.473 --> 00:01:02.548
+La couleur sert à reconnaître une mission
+d’un coup d’œil. Choisissez-la dans la
+
+00:01:02.548 --> 00:01:07.250
+palette prévue : elle reste cohérente dans
+les vues et lisible pour les bénévoles. La
+
+00:01:07.250 --> 00:01:11.325
+couleur aide à se repérer, mais le nom du
+poste reste toujours l’information
+
+00:01:11.325 --> 00:01:11.638
+principale.
+
+00:01:12.875 --> 00:01:17.670
+Utilisez la Frise pour construire et
+équilibrer la journée, puis la Liste pour
+
+00:01:17.670 --> 00:01:22.834
+contrôler le détail. Avec des noms courts,
+un ordre logique et des couleurs stables,
+
+00:01:22.834 --> 00:01:26.154
+le planning reste compréhensible même
+lorsqu’il couvre plusieurs jours.
 

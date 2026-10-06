@@ -3,6 +3,18 @@
 
 const normalized = (text: string) => text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().replace(/\be-mail\b/g, "email").replace(/[^a-z0-9]+/g, " ").trim()
 
+/** Equivalent written/spoken notations used in the CSV demonstration, not a WER waiver. */
+export function narrationWords(text: string): string[] {
+  return text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase()
+    .replace(/\be-mail\b/g, "email")
+    .replace(/\butf[-\s]?8\b/g, "utf huit")
+    .replace(/\+41\b/g, "plus quarante et un")
+    .replace(/=\s*1\s*\+\s*1\b/g, "egal un plus un")
+    .replace(/=/g, " egal ").replace(/\+/g, " plus ").replace(/@/g, " arobase ")
+    .replace(/(^|[\s,])-(?=[\s,]|$)/g, "$1 moins ")
+    .match(/[a-z0-9]+/g) ?? []
+}
+
 function wordDistance(a: string[], b: string[]) {
   let row = Array.from({ length: b.length + 1 }, (_, i) => i)
   for (let i = 1; i <= a.length; i++) {

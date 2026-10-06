@@ -1,65 +1,65 @@
 {
   "id": "DATA_EXPORTS_ARCHIVES",
   "slug": "data-exports-archives",
-  "validatedAt": "2026-10-05T19:26:04.403Z",
+  "validatedAt": "2026-10-05T20:35:42.397Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 284080,
+  "captureMs": 279440,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 29373,
-      "audioMs": 29371,
-      "driftMs": 2
+      "visualMs": 28261,
+      "audioMs": 28260,
+      "driftMs": 1
     },
     {
       "id": "members",
-      "visualMs": 30594,
-      "audioMs": 30595,
-      "driftMs": -1
+      "visualMs": 26011,
+      "audioMs": 26009,
+      "driftMs": 2
     },
     {
       "id": "columns",
-      "visualMs": 31515,
-      "audioMs": 31514,
-      "driftMs": 1
+      "visualMs": 29553,
+      "audioMs": 29551,
+      "driftMs": 2
     },
     {
       "id": "csv",
-      "visualMs": 34740,
-      "audioMs": 34736,
-      "driftMs": 4
+      "visualMs": 31407,
+      "audioMs": 31405,
+      "driftMs": 2
     },
     {
       "id": "journal",
-      "visualMs": 30024,
-      "audioMs": 30023,
-      "driftMs": 1
+      "visualMs": 31679,
+      "audioMs": 31677,
+      "driftMs": 2
     },
     {
       "id": "archive",
-      "visualMs": 25577,
-      "audioMs": 25577,
+      "visualMs": 28134,
+      "audioMs": 28134,
       "driftMs": 0
     },
     {
       "id": "contents",
-      "visualMs": 29357,
-      "audioMs": 29355,
-      "driftMs": 2
+      "visualMs": 31183,
+      "audioMs": 31180,
+      "driftMs": 3
     },
     {
       "id": "privacy",
-      "visualMs": 32811,
-      "audioMs": 32809,
-      "driftMs": 2
+      "visualMs": 33193,
+      "audioMs": 33193,
+      "driftMs": 0
     },
     {
       "id": "result",
-      "visualMs": 30621,
-      "audioMs": 30620,
-      "driftMs": 1
+      "visualMs": 30834,
+      "audioMs": 30831,
+      "driftMs": 3
     }
   ],
   "issues": []

@@ -50,6 +50,90 @@ développement ni ceux des tests E2E :
 - SMTP : `41026` ;
 - interface Mailpit : `48026`.
 
+Pour les jeux spécialisés, exécuter le point d'entrée, pas le module qui ne fait
+qu'exporter une fonction :
+
+```bash
+node --env-file=.env.video.e2e --import tsx scripts/seed-video-scenario.ts data-exports-archives
+node --env-file=.env.video.e2e --import tsx scripts/seed-video-scenario.ts last-minute-changes
+node --env-file=.env.video.e2e --import tsx scripts/seed-video-scenario.ts privacy-personal-links
+```
+
+Une commande terminée sans message de création n'est pas une preuve de remise à
+zéro. Les précontrôles et le début du recorder vérifient aussi les valeurs attendues.
+
+### Cas de la confirmation en environnement compilé local
+
+Les effets doublés du mode développement peuvent confirmer une offre puis afficher
+le refus du second appel. Ne pas monter une telle prise comme un succès. Pour
+`LAST_MINUTE_CHANGES`, une copie compilée jetable sous
+`/tmp/benevoles-video-production.<suffixe>/` peut tourner sur **43102**, sans toucher
+au serveur de développement ni déployer. `local-production.ts serve <copie>`
+sert le build standalone avec ses assets copiés. La copie doit être construite
+depuis le même code que le tournage. `local-production.ts build <copie>` compile
+cette copie avec le domaine réservé `http://video.invalid` ; les assets doivent
+ensuite être copiés dans le standalone. Le wrapper ne copie pas le dépôt.
+
+```bash
+node --env-file=.env.video.e2e --import tsx videos/tools/local-production.ts run scripts/seed-video-scenario.ts last-minute-changes
+node --env-file=.env.video.e2e --import tsx videos/tools/local-production.ts run videos/tools/record.ts LAST_MINUTE_CHANGES
+node --env-file=.env.video.e2e --import tsx videos/tools/local-production.ts run videos/tools/verify-last-minute-mail.ts
+node --env-file=.env.video.e2e --env-file=.env.video.local --import tsx videos/tools/local-production.ts run videos/tools/audit-audiovisual.ts LAST_MINUTE_CHANGES
+```
+
+Le wrapper refuse une base non locale ou autre que `benevoles_video`. Sa clé
+déterministe publique est réservée aux fixtures, **jamais à une application
+déployée**. Employer le même wrapper pour les outils qui lisent les jetons ou la
+file d'envoi de cette prise. Montage, extraction d'images et contrôle des paroles
+ne lisent pas ces données et restent inchangés. Ne pas arrêter un serveur de
+l'utilisateur pour libérer un port ; identifier uniquement le processus vidéo créé.
+
+`PRIVACY_PERSONAL_LINKS` utilise aussi cette copie. Le domaine réservé évite le
+double `?` de l'email d'invitation sous localhost (`?org=…?token=…`). Ne pas réparer
+le lien reçu dans le recorder : générer le vrai message avec la configuration de
+formation. Aucun accès réseau à `video.invalid` n'est nécessaire : seuls les
+chemins des liens de ces messages fictifs sont ouverts sur localhost:43102.
+Avant la capture, exécuter le seed `privacy-personal-links`, `prepare-privacy.ts`,
+puis `verify-privacy-details.ts` via ce wrapper ; refaire le seed avant chaque
+répétition ou prise narrée. Les deux sessions administrateurs proviennent de vrais
+logins. Jules et Zoé sont deux destinataires distincts : la session bénévole locale
+de l'événement est vidée avant d'ouvrir l'invitation de Zoé.
+
+### Vidéo opérateur : base séparée
+
+La console super-admin et ses communications sont globales. Ne pas utiliser la
+base des autres captures pour cette vidéo. `provision-operator-db.ts`, lancé avec
+`.env.video.e2e`, crée uniquement `benevoles_video_operator` sur le PostgreSQL local
+45433 et y applique les migrations. Il refuse une base existante sans marqueur de
+fixture ; il ne vide aucune base. `scripts/seed-video-operator.ts` exige cette base
+nouvelle et vide et crée ses seules identités fictives.
+
+`operator-local.ts serve <copie compilée>` utilise le port **43104**, la base
+opérateur marquée et uniquement le SMTP local **41026**. Il ne déploie rien.
+`operator-local.ts run videos/tools/prepare-operator.ts` contrôle les vrais logins,
+les refus d'accès, le choix explicite d'organisation et la page santé sans écrire
+de faux succès de sauvegarde. Le premier jeu compte trois organisations et un seul
+administrateur actif abonné aux communications. Re-vérifier les destinataires
+avant chaque diffusion, notamment après l'activation d'un nouveau compte fictif.
+
+`operator-local.ts run videos/tools/verify-operator-lifecycle.ts` contrôle les
+routes réelles sur un quatrième espace jetable : création, rotation de lien,
+activation, collision d'identifiant, désactivation/réactivation et suppression
+avec identifiant exact. Ce contrôle API ne remplace pas le parcours visuel.
+Le recorder vérifie trois organisations initiales et les destinataires fictifs ;
+il peut retirer uniquement son précédent espace jetable, identifié par son nom,
+son identifiant, son unique administrateur réservé et l'absence d'événements ou de
+membres. Aucune autre organisation n'est vidée. Les comptes opérateur et nouveau
+propriétaire utilisent des sessions obtenues par de vraies connexions.
+
+```bash
+node --env-file=.env.video.e2e --import tsx videos/tools/operator-local.ts run videos/tools/record.ts PLATFORM_INTERNAL_ADMINISTRATION --rehearse --quick-rehearse
+node --env-file=.env.video.e2e --import tsx videos/tools/operator-local.ts run videos/tools/record.ts PLATFORM_INTERNAL_ADMINISTRATION
+```
+
+La répétition accélérée vérifie les actions mais n'est jamais montée avec une
+narration. L'entrée opérateur du catalogue est interne et reste non publiée.
+
 Préparation :
 
 ```bash
@@ -165,6 +249,8 @@ npm run video:record -- VOLUNTEER_REGISTER
 
 Rejouer le seed avant **chaque** prise : le scénario crée une véritable inscription et finirait sinon par remplir son créneau de démonstration.
 
+Pour tester seulement les manipulations avant le tournage, `video:record -- VIDEO_ID --rehearse --quick-rehearse` conserve les vrais clics, saisies et assertions, mais saute les attentes calées sur la narration. Cette répétition accélérée reste marquée `rehearsal` : elle ne peut ni être assemblée en livrable ni servir de preuve de synchronisation. `--quick-rehearse` est refusé sans `--rehearse`. La capture narrée complète, à vitesse normale, reste obligatoire après remise à zéro du scénario.
+
 Variables facultatives :
 
 - `VIDEO_BASE_URL`, par défaut `http://localhost:43100` ;
@@ -183,6 +269,9 @@ Le dossier `review-frames/` contient les images, leur index temporel et une plan
 Cette planche aide à repérer un écran erroné ou vide ; elle ne remplace pas le visionnage intégral
 avec la narration, ni un contrôle de la voix.
 
+Les images citées comme preuve dans une revue (`videos/scripts/*.md`, `videos/*.md`) sont copiées
+dans `videos/evidence/<slug>/` et versionnées ; le reste de `review-frames/` reste local.
+
 ### Contrôle audiovisuel assisté sur les données fictives
 
 ```bash
@@ -197,10 +286,13 @@ confrontées aux images et au parcours réel. Un résultat signalé ne doit pas 
 motif que `video:validate` passe.
 
 L'envoi visuel est pour l'instant limité à `EVENT_REPORTS`, `VOLUNTEER_BADGES`,
-`ATTENDANCE_CHECK_IN` et `REMINDERS_CHANGES`, dans la base locale `benevoles_video`.
+`ATTENDANCE_CHECK_IN`, `REMINDERS_CHANGES`, `DATA_EXPORTS_ARCHIVES` et
+`LAST_MINUTE_CHANGES`, dans la base locale `benevoles_video`.
 Un garde-fou vérifie le jeu explicitement fictif (dont les trois événements des rappels) et les identifiants,
 adresses `example.org` et téléphones de démonstration (ou leur absence pour le pointage) de chaque inscription. Aucune autre
-vidéo, capture de production ou donnée réelle n'est acceptée. L'API utilisée pour ces extraits
+vidéo, capture de production ou donnée réelle n'est acceptée. Les exports et les
+imprévus ont leurs propres vérifications de périmètre, de fichiers ou d'emails
+fictifs. L'API utilisée pour ces extraits
 est distincte de celle du TTS ; le modèle de narration reste `gemini-3.8-flash-tts`.
 
 Le contrôle de narration signale aussi les consignes de pause ajoutées à tort, même si
@@ -312,7 +404,7 @@ et `seedScenario` (#637, #638) :
 - `updatedAt` (`AAAA-MM-JJ`) et `revision` (entier ≥ 1) : préparés pour le retour « utile ? »
   lié à une révision précise (#646, PREPARE seulement — aucune UI).
 
-`published` reste `false` sur les 49 vidéos aujourd'hui ; la galerie les affiche quand même, avec
+`published` reste `false` sur les 54 vidéos aujourd'hui ; la galerie les affiche quand même, avec
 leur état (« À venir »). `filterPublishedVideos(videos, VIDEO_LIBRARY_PUBLIC_ONLY)` filtre déjà sur
 `published` : passer la constante `VIDEO_LIBRARY_PUBLIC_ONLY` (dans `video-catalog.ts`) à `true`
 est le seul changement nécessaire pour ne montrer que les vidéos publiées, le jour venu.

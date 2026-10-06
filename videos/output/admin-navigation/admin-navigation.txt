@@ -1,15 +1,15 @@
 Se repérer dans l’administration
 
-L’administration rassemble tout ce qui sert à préparer les événements et à suivre les bénévoles. Cette visite te montre où chercher, comment passer du niveau de l’association à celui d’un événement, et comment retrouver rapidement une information sans parcourir tous les écrans.
+Bienvenue dans l’administration. Vous allez retrouver les principaux points d’entrée, distinguer les réglages de l’association du suivi d’un événement et chercher une information sans parcourir tous les écrans.
 
-La barre principale reste disponible partout. Événements ouvre la liste et les priorités de l’association. Membres regroupe les personnes connues, même lorsqu’elles ne sont inscrites à aucun événement. Les paramètres concernent l’identité, l’équipe et les réglages communs. Un organisateur ne voit pas forcément les réglages réservés au propriétaire : l’interface suit ses permissions.
+Le Tableau de bord rassemble les priorités de l’association. Événements ouvre la liste de vos événements, et Membres les personnes connues de l’association. Paramètres concerne les réglages communs. Certaines modifications sont réservées au propriétaire : votre rôle détermine les actions disponibles.
 
-Quand tu ouvres un événement, la navigation change de contexte. L’aperçu résume ce planning précis ; les créneaux servent à le construire ; les inscriptions, les communications, les pages et les rapports ne concernent que cet événement. Revenir à Événements ramène au niveau de l’organisation. Cette distinction évite de modifier le mauvais planning lorsque plusieurs fêtes sont actives.
+Ouvrez un événement. Sa page propose Gérer les créneaux, Voir les inscriptions et Inviter des membres. Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions. Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement. Le lien Événements vous ramène à la liste de l’association.
 
-La loupe permet de chercher dans toute l’organisation. Avec Contrôle K, ou Commande K sur Mac, le curseur arrive directement dans le champ. Une recherche peut retrouver un bénévole, une inscription, un événement ou un créneau, puis ouvrir la vue correspondante. Les résultats restent limités : si la liste est longue, précise le nom ou ajoute un second mot.
+La loupe cherche dans toute l’organisation. Utilisez Contrôle K, ou Commande K sur Mac, puis saisissez un nom ou un poste. Ouvrez un résultat pour accéder à la fiche ou à la liste correspondante. Si plusieurs résultats se ressemblent, précisez votre recherche avec un second mot.
 
-Le menu du compte donne accès à ton profil, à l’aide et à la déconnexion. Mon compte permet notamment de changer ton mot de passe ; cela déconnecte les autres sessions pour protéger l’accès. L’aide ouvre la documentation générale : elle n’envoie rien et ne modifie aucune donnée.
+Le menu de votre compte propose Mon compte et Se déconnecter. L’aide se trouve séparément dans la barre de navigation et ouvre le guide dans un nouvel onglet. Les liens Aide placés sous les titres de certaines pages vous conduisent directement à la rubrique concernée.
 
-Sur un écran étroit, les mêmes destinations restent disponibles dans le menu mobile. Au clavier, la toute première tabulation révèle le lien Aller au contenu : il saute la barre de navigation et place directement sur la page. Le résultat est le même sur ordinateur et sur téléphone ; seule la présentation s’adapte.
+Sur téléphone, ouvrez le menu pour retrouver les principales destinations. Sur ordinateur, la première tabulation révèle Aller au contenu : ce lien évite de traverser toute la barre de navigation. Vous arrivez directement dans le contenu de la page.
 
-Tu sais maintenant choisir le bon niveau avant d’agir : l’association pour les membres et les réglages communs, l’événement pour son planning et son suivi. La recherche accélère les cas précis, le menu du compte rassemble les actions personnelles, et la navigation reste utilisable sur mobile comme au clavier.
+Vous avez les bons repères : Tableau de bord pour les priorités, Membres et Paramètres au niveau de l’association, puis la page de chaque événement pour son planning et son suivi. Pour une question précise, la recherche et l’aide vous évitent de repartir de zéro.

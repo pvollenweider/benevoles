@@ -1,0 +1,12 @@
+{
+  "anchor": "Commençons par un titre parlant, une courte description, puis les dates",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 14.84,
+    "wordsHeard": "Commençons par un titre parlant"
+  },
+  "onset": 14.84,
+  "proposedCut": 14.2879165,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,36 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T01:58:58.886Z",
+  "videoSha256": "f4c0c3c28ab04d429a33a9fd82687797f0081bd26e4214dabb9f06b4d4c9beac",
+  "promptSha256": "f04e6481b460beb6f01dbedfe15e58c2abc58ceee22d769591a1f19c71fc0578",
+  "clipSha256": "1092dd6ac544e89ddd3672585ffb1cc164adcc5dca3d1c8f62fbe850d06462c6",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Bienvenue dans l'administration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Bienvenue dans l'administration",
+        "visibleSeconds": 0.5,
+        "visible": "Titre 'Se repérer dans l'administration' affiché au centre de l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "retrouver les principaux points d'entrée",
+        "visibleSeconds": 2.5,
+        "visible": "Menu de navigation supérieur visible avec les rubriques principales",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et conforme au script d'introduction."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

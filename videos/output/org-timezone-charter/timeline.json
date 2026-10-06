@@ -1,47 +1,48 @@
 {
   "slug": "org-timezone-charter",
-  "recordedAt": "2026-10-04T12:55:44.403Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T02:14:31.785Z",
   "video": "capture.webm",
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1134,
-      "endMs": 11602
+      "startMs": 1104,
+      "endMs": 12472
     },
     {
       "id": "timezone",
-      "startMs": 13763,
-      "endMs": 27883
+      "startMs": 14635,
+      "endMs": 30975
     },
     {
       "id": "timezone-result",
-      "startMs": 28335,
-      "endMs": 40770
+      "startMs": 31429,
+      "endMs": 44529
     },
     {
       "id": "charter",
-      "startMs": 42931,
-      "endMs": 65340
+      "startMs": 46700,
+      "endMs": 72309
     },
     {
       "id": "public-setup",
-      "startMs": 69476,
-      "endMs": 78944
+      "startMs": 74469,
+      "endMs": 88177
     },
     {
       "id": "public-result",
-      "startMs": 79396,
-      "endMs": 94546
+      "startMs": 88628,
+      "endMs": 103039
     },
     {
       "id": "attention",
-      "startMs": 95007,
-      "endMs": 110180
+      "startMs": 103492,
+      "endMs": 121485
     },
     {
       "id": "result",
-      "startMs": 110633,
-      "endMs": 124185
+      "startMs": 121941,
+      "endMs": 136866
     }
   ]
 }

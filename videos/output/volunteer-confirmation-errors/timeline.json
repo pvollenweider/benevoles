@@ -1,47 +1,63 @@
 {
   "slug": "volunteer-confirmation-errors",
-  "recordedAt": "2026-10-05T10:05:35.977Z",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-05T23:36:07.050Z",
   "video": "capture.webm",
   "cues": [
     {
       "id": "welcome",
-      "startMs": 0,
-      "endMs": 21319
+      "startMs": 31,
+      "endMs": 2641
     },
     {
       "id": "form",
-      "startMs": 21772,
-      "endMs": 36155
+      "startMs": 3093,
+      "endMs": 17325
     },
     {
       "id": "validation",
-      "startMs": 36609,
-      "endMs": 57146
+      "startMs": 17778,
+      "endMs": 21142
     },
     {
       "id": "capacity",
-      "startMs": 57598,
-      "endMs": 73123
+      "startMs": 21594,
+      "endMs": 24268
     },
     {
       "id": "network",
-      "startMs": 73575,
-      "endMs": 96599
+      "startMs": 24721,
+      "endMs": 27393
     },
     {
       "id": "success",
-      "startMs": 97049,
-      "endMs": 115466
+      "startMs": 27845,
+      "endMs": 30426
     },
     {
       "id": "email",
-      "startMs": 115918,
-      "endMs": 136304
+      "startMs": 30879,
+      "endMs": 33873
+    },
+    {
+      "id": "overlap",
+      "startMs": 34325,
+      "endMs": 51573
+    },
+    {
+      "id": "response-loss",
+      "startMs": 52027,
+      "endMs": 69367
+    },
+    {
+      "id": "invitation-success",
+      "startMs": 69820,
+      "endMs": 93205
     },
     {
       "id": "result",
-      "startMs": 136756,
-      "endMs": 156702
+      "startMs": 93658,
+      "endMs": 96644
     }
   ]
 }

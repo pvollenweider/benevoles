@@ -1,47 +1,48 @@
 {
   "slug": "event-create-blank",
-  "recordedAt": "2026-10-04T14:21:52.610Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T02:56:25.347Z",
   "video": "capture.webm",
   "cues": [
     {
       "id": "welcome",
       "startMs": 0,
-      "endMs": 12151
+      "endMs": 14289
     },
     {
       "id": "identity-dates",
-      "startMs": 14313,
-      "endMs": 30821
+      "startMs": 16450,
+      "endMs": 32640
     },
     {
       "id": "location",
-      "startMs": 31273,
-      "endMs": 53941
+      "startMs": 33092,
+      "endMs": 51238
     },
     {
       "id": "public-content",
-      "startMs": 56105,
-      "endMs": 69039
+      "startMs": 53396,
+      "endMs": 71284
     },
     {
       "id": "phone-color",
-      "startMs": 69493,
-      "endMs": 87605
+      "startMs": 71736,
+      "endMs": 88397
     },
     {
       "id": "create",
-      "startMs": 88059,
-      "endMs": 104992
+      "startMs": 88849,
+      "endMs": 103156
     },
     {
       "id": "autosave",
-      "startMs": 105445,
-      "endMs": 121949
+      "startMs": 103609,
+      "endMs": 127409
     },
     {
       "id": "result",
-      "startMs": 122402,
-      "endMs": 136290
+      "startMs": 127862,
+      "endMs": 146316
     }
   ]
 }

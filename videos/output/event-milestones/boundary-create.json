@@ -1,0 +1,12 @@
+{
+  "anchor": "Ajoutons Fermer les inscriptions avec une date d’échéance. Un bon jalon",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 12.86,
+    "wordsHeard": "Ajoutons fermer les inscriptions avec une date d’échéance. Un bon jalon"
+  },
+  "onset": 12.86,
+  "proposedCut": 12.152333500000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

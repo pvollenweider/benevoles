@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-05T23:13:46.880Z",
+  "completionMode": "read-only after original UI run reached personal page",
+  "ordinaryPublicRegistrationExists": true,
+  "invitedPublicRegistrationExists": true,
+  "inviteUsageRecorded": true,
+  "personalPageOpened": true,
+  "publicConfirmationMailId": "533zlfcgwIJ1TpRFDRxSac",
+  "publicConfirmationEmailHasPersonalLink": true,
+  "originalPublicSuccessScreenshot": "ordinary-success-no-personal-link.png",
+  "originalInvitedSuccessScreenshot": "invited-success-personal-link.png",
+  "noNewRegistrationOrInvitationOnResume": true,
+  "personalTokensStoredInReport": false,
+  "audiovisualValidated": false
+}

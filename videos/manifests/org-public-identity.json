@@ -2,19 +2,21 @@
   "id": "ORG_PUBLIC_IDENTITY",
   "slug": "org-public-identity",
   "title": "Configurer l’identité publique de l’organisation",
-  "description": "Choisir le nom interne, le titre visible et l’adresse publique de l’organisation, puis vérifier le résultat.",
+  "description": "Pour les propriétaires : choisir le titre public, ajouter le logo et comprendre l’adresse de l’association et ses anciennes adresses.",
   "viewer": {
-    "summary": "Dans cette vidéo, vous réglez le nom, le titre public et l'adresse de votre organisation.",
+    "summary": "Dans cette vidéo, vous réglez le titre public, le logo et l'adresse de votre organisation.",
     "steps": [
-      "Distinguez le nom interne de l'organisation du titre affiché sur la page publique.",
-      "Modifiez le titre public et enregistrez.",
+      "Distinguez le nom de l'organisation du titre affiché sur la page publique, puis modifiez ce titre et enregistrez.",
+      "Ajoutez le logo de l'association, vérifiez son aperçu, puis cliquez sur « Enregistrer le logo ».",
       "Vérifiez l'identifiant public (le slug), qui forme l'adresse de votre page.",
-      "Ouvrez la page publique pour voir le nouveau titre et la liste des événements publiés et répertoriés."
+      "Ouvrez la page publique pour voir le titre, le logo et les événements publiés et répertoriés.",
+      "Pour retirer le logo, utilisez « Retirer le logo » et confirmez."
     ],
     "remember": [
-      "Changer l'identifiant public peut rendre obsolètes d'anciens favoris ou QR codes.",
-      "Un événement non répertorié reste accessible par son lien direct mais n'apparaît pas dans la liste publique.",
-      "Modifiez le titre public pour corriger un texte ; ne changez le slug qu'après avoir mesuré l'impact sur les liens déjà diffusés."
+      "Les anciens identifiants redirigent vers l'actuel tant que vous les conservez ; les supprimer casse les anciens liens et QR codes.",
+      "Un événement « Publié, non répertorié » reste accessible par son lien direct, sans mot de passe.",
+      "Le logo ne remplace pas le nom de l'association, qui reste affiché.",
+      "Ces réglages sont réservés au propriétaire."
     ]
   },
   "language": "fr-CH",
@@ -34,18 +36,23 @@
     },
     {
       "id": "names",
-      "transcript": "Dans Paramètres, le nom de l’organisation identifie le tenant dans l’administration. Le titre de la page publique peut être plus accueillant. Remplaçons-le par Les bénévoles des Fêtes de Montvert, puis enregistrons. Ce changement touche la page publique de l’organisation, pas le titre de chaque événement.",
-      "fallbackDurationMs": 22000
+      "transcript": "Dans Paramètres, le nom de l’organisation apparaît dans l’administration, les emails et au-dessus du titre public. Le titre de la page publique peut être plus accueillant. Remplaçons-le par Les bénévoles des Fêtes de Montvert, puis enregistrons. Le message Titre enregistré confirme la modification : les titres des événements ne changent pas.",
+      "fallbackDurationMs": 26000
+    },
+    {
+      "id": "logo",
+      "transcript": "Ajoutons le logo de l’association. Choisissez une image dans les formats indiqués, vérifiez son aperçu, puis cliquez sur Enregistrer le logo. L’image enregistrée apparaît dans les pages publiques, les emails et les documents. Le nom de l’association reste écrit à côté : le logo ne remplace pas ce repère.",
+      "fallbackDurationMs": 26000
     },
     {
       "id": "slug",
-      "transcript": "L’identifiant public, aussi appelé slug, forme une adresse comme fetes-de-montvert point benevol point app. Il doit rester court et reconnaissable. Le changer peut rendre les anciens favoris ou QR codes obsolètes : choisis-le avant de diffuser largement les liens, et ne le modifie pas simplement pour corriger une majuscule dans le titre.",
-      "fallbackDurationMs": 23000
+      "transcript": "L’identifiant public, ou slug, sert à former l’adresse de votre association sur benevol point app. Ici, les adresses appartiennent à notre environnement de démonstration. Si vous changez l’identifiant alors que des événements sont publiés, une confirmation est demandée. Les anciens identifiants continuent de rediriger vers l’actuel tant que vous les conservez. C’est leur suppression qui casse les anciens liens et QR codes. Ici, gardons l’adresse actuelle.",
+      "fallbackDurationMs": 34000
     },
     {
       "id": "public-page",
-      "transcript": "Ouvrons maintenant la page publique. Le nouveau titre apparaît au-dessus des événements disponibles. Seuls les événements publiés et répertoriés sont affichés ici. Un événement non répertorié reste accessible avec son lien direct, mais n’est pas annoncé dans cette liste.",
-      "fallbackDurationMs": 21000
+      "transcript": "Ouvrons la page publique. Le nouveau titre et le logo apparaissent au-dessus des deux événements publiés et répertoriés. La rencontre des organisateurs n’est pas dans cette liste : elle est publiée, mais non répertoriée. Ouvrons son lien direct pour vérifier qu’elle reste accessible aux personnes qui le reçoivent. Non répertorié ne signifie pas protégé par un mot de passe.",
+      "fallbackDurationMs": 30000
     },
     {
       "id": "event-result",
@@ -53,9 +60,14 @@
       "fallbackDurationMs": 20000
     },
     {
+      "id": "remove-logo",
+      "transcript": "Pour retirer le logo, revenez dans Paramètres et choisissez Retirer le logo. La confirmation vous laisse encore annuler. Après validation, l’image disparaît des pages et des prochains documents, mais le nom et le titre restent affichés. Cela ne retire pas une copie déjà téléchargée ou un ancien email.",
+      "fallbackDurationMs": 24000
+    },
+    {
       "id": "result",
-      "transcript": "Le résultat est une identité cohérente : un nom interne pour l’équipe, un titre public lisible et une adresse stable à communiquer. Pour corriger le texte visible, modifie le titre public. Pour déplacer réellement l’adresse, change le slug seulement après avoir mesuré l’impact sur les liens déjà distribués.",
-      "fallbackDurationMs": 21000
+      "transcript": "Vous avez une identité cohérente : le nom de l’association, un titre public accueillant, un logo facultatif et une adresse identifiable. Ces réglages sont réservés au propriétaire. Pour corriger un texte visible, modifiez son titre plutôt que l’adresse, et conservez les anciens identifiants si vous avez déjà diffusé leurs liens.",
+      "fallbackDurationMs": 24000
     }
   ]
 }

@@ -1,0 +1,68 @@
+{
+  "slug": "platform-internal-administration",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-10-05T22:01:20.520Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 5,
+      "endMs": 3998
+    },
+    {
+      "id": "create",
+      "startMs": 4451,
+      "endMs": 19935
+    },
+    {
+      "id": "renew",
+      "startMs": 20388,
+      "endMs": 28541
+    },
+    {
+      "id": "activate",
+      "startMs": 28995,
+      "endMs": 51897
+    },
+    {
+      "id": "identity",
+      "startMs": 52350,
+      "endMs": 69757
+    },
+    {
+      "id": "availability",
+      "startMs": 70210,
+      "endMs": 78552
+    },
+    {
+      "id": "context",
+      "startMs": 79024,
+      "endMs": 84038
+    },
+    {
+      "id": "health",
+      "startMs": 84491,
+      "endMs": 87545
+    },
+    {
+      "id": "preview",
+      "startMs": 87998,
+      "endMs": 113035
+    },
+    {
+      "id": "broadcast",
+      "startMs": 113488,
+      "endMs": 140456
+    },
+    {
+      "id": "delete",
+      "startMs": 140908,
+      "endMs": 151978
+    },
+    {
+      "id": "result",
+      "startMs": 152431,
+      "endMs": 158900
+    }
+  ]
+}

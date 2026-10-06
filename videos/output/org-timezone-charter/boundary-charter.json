@@ -1,0 +1,12 @@
+{
+  "anchor": "La Convention des Bénévoles présente le cadre de l’engagement. Le réglage",
+  "windowStart": 25.805,
+  "result": {
+    "found": true,
+    "startSeconds": 15.14,
+    "wordsHeard": "La convention des bénévoles présente le cadre de l'engagement. Le réglage"
+  },
+  "onset": 40.945,
+  "proposedCut": 40.8049585,
+  "note": "Proposal only; recut then independently audit before capture"
+}

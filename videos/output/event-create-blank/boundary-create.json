@@ -1,0 +1,12 @@
+{
+  "anchor": "Le bouton Créer l’événement enregistre maintenant un brouillon, puis ouvre directement",
+  "windowStart": 73.96199999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 9.6,
+    "wordsHeard": "Le bouton Créer l'événement enregistre maintenant un brouillon"
+  },
+  "onset": 83.56199999999998,
+  "proposedCut": 83.163542,
+  "note": "Proposal only; recut then independently audit before capture"
+}

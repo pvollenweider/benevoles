@@ -1,42 +1,76 @@
 {
   "slug": "org-email-settings",
-  "recordedAt": "2026-10-04T13:59:43.087Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T03:13:12.323Z",
   "video": "capture.webm",
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1860,
-      "endMs": 15947
+      "startMs": 1111,
+      "endMs": 18653
     },
     {
       "id": "reminders",
-      "startMs": 18107,
-      "endMs": 33978
+      "startMs": 20830,
+      "endMs": 39864
+    },
+    {
+      "id": "event-reminders",
+      "startMs": 40317,
+      "endMs": 57851
     },
     {
       "id": "admin-alert",
-      "startMs": 34431,
-      "endMs": 49452
+      "startMs": 58305,
+      "endMs": 72712
+    },
+    {
+      "id": "withdrawal",
+      "startMs": 73166,
+      "endMs": 92494
+    },
+    {
+      "id": "addresses",
+      "startMs": 92945,
+      "endMs": 111685
     },
     {
       "id": "reply-to",
-      "startMs": 51617,
-      "endMs": 68392
+      "startMs": 113856,
+      "endMs": 132294
     },
     {
       "id": "save",
-      "startMs": 68844,
-      "endMs": 83956
+      "startMs": 132747,
+      "endMs": 148315
     },
     {
       "id": "test",
-      "startMs": 86114,
-      "endMs": 103618
+      "startMs": 150478,
+      "endMs": 173325
     },
     {
       "id": "result",
-      "startMs": 104070,
-      "endMs": 122513
+      "startMs": 173777,
+      "endMs": 191759
+    }
+  ],
+  "detailFrames": [
+    {
+      "startMs": 20868,
+      "endMs": 20869,
+      "x": 140,
+      "y": 223,
+      "width": 640,
+      "height": 400
+    },
+    {
+      "startMs": 159941,
+      "endMs": 159942,
+      "x": 300,
+      "y": 0,
+      "width": 960,
+      "height": 600
     }
   ]
 }

@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:14:37.256Z",
+  "videoSha256": "7870f9ea1677bd47654af21d36008efe133c24074cd482c8474c14e976e12509",
+  "promptSha256": "f3f4e2a769f0790e3d6a3c51ada676affa00946774a1dd9d641f8d6f860fa155",
+  "clipSha256": "9bc7491b8f68ecd87dde24217f832e87145f4ab0d65f74a0baa0bf3046d9ce61",
+  "scene": "compare",
+  "review": {
+    "heardOpening": "Cinq points de départ sont proposés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Festival couvre plusieurs soirées",
+        "visibleSeconds": 1,
+        "visible": "Option Festival sur plusieurs jours cochée et formulaire affiché",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Buvette organise le bar et la caisse sur une journée",
+        "visibleSeconds": 5.4,
+        "visible": "Option Buvette sélectionnée avec ses champs dédiés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Manifestation sportive prépare dossards, parcours et ravitaillement",
+        "visibleSeconds": 9.3,
+        "visible": "Option Manifestation sportive sélectionnée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.9,
+        "spoken": "Fête de village s’étale sur deux jours",
+        "visibleSeconds": 13,
+        "visible": "Option Fête de village cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "Montage, exploitation, démontage sépare clairement les trois phases",
+        "visibleSeconds": 17.1,
+        "visible": "Option Montage, exploitation, démontage sélectionnée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.8,
+        "spoken": "La page blanche reste préférable pour un format très particulier",
+        "visibleSeconds": 20.2,
+        "visible": "Sélection repositionnée sur Page blanche",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée et claire, débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,47 +1,48 @@
 {
   "slug": "org-team-permissions",
-  "recordedAt": "2026-10-04T14:34:03.042Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T03:04:47.475Z",
   "video": "capture.webm",
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1157,
-      "endMs": 16354
+      "startMs": 1126,
+      "endMs": 16135
     },
     {
       "id": "roles",
-      "startMs": 18517,
-      "endMs": 39236
+      "startMs": 18297,
+      "endMs": 41609
     },
     {
       "id": "invite",
-      "startMs": 39688,
-      "endMs": 47584
+      "startMs": 43209,
+      "endMs": 61069
     },
     {
       "id": "invite-result",
-      "startMs": 48036,
-      "endMs": 54844
+      "startMs": 61523,
+      "endMs": 74954
     },
     {
       "id": "change-role",
-      "startMs": 57002,
-      "endMs": 79634
+      "startMs": 77122,
+      "endMs": 94632
     },
     {
       "id": "organizer-view",
-      "startMs": 80087,
-      "endMs": 94085
+      "startMs": 95084,
+      "endMs": 111501
     },
     {
       "id": "limits",
-      "startMs": 94538,
-      "endMs": 111510
+      "startMs": 111954,
+      "endMs": 132470
     },
     {
       "id": "result",
-      "startMs": 111963,
-      "endMs": 121473
+      "startMs": 132922,
+      "endMs": 144361
     }
   ]
 }

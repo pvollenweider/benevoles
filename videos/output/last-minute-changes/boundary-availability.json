@@ -1,12 +1,12 @@
 {
   "anchor": "Pour chercher de l'aide, regardons les disponibilités générales dans les membres.",
-  "windowStart": 98.845,
+  "windowStart": 108.42999999999999,
   "result": {
     "found": true,
-    "startSeconds": 18.4,
-    "wordsHeard": "Pour chercher de l'aide, regardons les disponibilités générales dans les membres."
+    "startSeconds": 10.22,
+    "wordsHeard": "Pour chercher de l'aide"
   },
-  "onset": 117.245,
-  "proposedCut": 117.28475,
+  "onset": 118.64999999999999,
+  "proposedCut": 118.51666650000001,
   "note": "Proposal only; recut then independently audit before capture"
 }

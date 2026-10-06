@@ -1,0 +1,12 @@
+{
+  "anchor": "Revenons à la page personnelle et à son avertissement. Pour recruter,",
+  "windowStart": 291.516,
+  "result": {
+    "found": true,
+    "startSeconds": 15.1,
+    "wordsHeard": "Revenons à la page personnelle et à son avertissement. Pour recruter"
+  },
+  "onset": 306.61600000000004,
+  "proposedCut": 306.5159585,
+  "note": "Proposal only; recut then independently audit before capture"
+}

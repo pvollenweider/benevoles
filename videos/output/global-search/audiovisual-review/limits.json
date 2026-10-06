@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:30:01.199Z",
+  "videoSha256": "258ab12d15939f6b8d477f5d8a71162bf2e5bf54555dca8ead27b706b9391071",
+  "promptSha256": "776726a86cbe6d1a55c94fa23fea5a850a00c2273a7a536cc999c41e45c43119",
+  "clipSha256": "87d3a4be7cb1d20467a38d408fff2244c5fe79cb697dee71dd19e5c3e46001fd",
+  "scene": "limits",
+  "review": {
+    "heardOpening": "La recherche affiche au maximum vingt résultats",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "La recherche affiche au maximum vingt résultats par catégorie",
+        "visibleSeconds": 0.5,
+        "visible": "Page de recherche affichant 20 bénévoles pour le nom Morel avec mention de résultats supplémentaires",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "Ajoutez un prénom pour préciser la recherche",
+        "visibleSeconds": 8.5,
+        "visible": "Saisie de Léa Morel dans la barre de recherche et affichage des résultats restreints",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "écrire zoe permet aussi de retrouver Zoé",
+        "visibleSeconds": 13,
+        "visible": "Saisie du terme zoe en minuscules sans accent et affichage du résultat Zoé Perrin",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:14:24.809Z",
+  "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
+  "promptSha256": "645203fb681277c400f6b9624660d0bdbaddf353a0c174641269d2be4aa030a3",
+  "clipSha256": "e319d4a3b196b8868fa2c0285f0a18becaf8d4eb2a22654c6f14429b0b68774a",
+  "scene": "withdrawal",
+  "review": {
+    "heardOpening": "Prévenir en cas de désistement est un réglage séparé",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Prévenir en cas de désistement est un réglage séparé",
+        "visibleSeconds": 0.5,
+        "visible": "Option 'Prévenir en cas de désistement' cochée dans la liste des réglages",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Il informe les administrateurs et les responsables du poste",
+        "visibleSeconds": 3,
+        "visible": "Sous-texte explicatif affiché sous l'option",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Décocher cette option coupe aussi l’email aux responsables",
+        "visibleSeconds": 12,
+        "visible": "Option visible à l'écran sans manipulation directe",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction fluide et ton calme bien adapté au tutoriel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

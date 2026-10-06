@@ -1,0 +1,37 @@
+{
+  "locatedAt": "2026-10-06T02:48:50.325Z",
+  "masterSha256": "394438fc5bd8d755f3f7d16f56cafe480e184ee5f1f16d3274c409b51b067d88",
+  "totalSeconds": 135.48,
+  "cuts": [
+    {
+      "id": "roles",
+      "seconds": 15.0073335
+    },
+    {
+      "id": "invite",
+      "seconds": 38.317
+    },
+    {
+      "id": "invite-result",
+      "seconds": 56.1761875
+    },
+    {
+      "id": "change-role",
+      "seconds": 69.60552100000001
+    },
+    {
+      "id": "organizer-view",
+      "seconds": 87.1134375
+    },
+    {
+      "id": "limits",
+      "seconds": 103.5282915
+    },
+    {
+      "id": "result",
+      "seconds": 124.0433125
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

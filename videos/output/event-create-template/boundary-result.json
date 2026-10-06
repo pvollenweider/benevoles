@@ -1,0 +1,12 @@
+{
+  "anchor": "Vous avez un brouillon de dix créneaux et la capacité de",
+  "windowStart": 69.60000000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 15.08,
+    "wordsHeard": "Vous avez un brouillon de dix créneaux et la capacité de"
+  },
+  "onset": 84.68,
+  "proposedCut": 84.6001045,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T01:59:21.916Z",
+  "videoSha256": "f4c0c3c28ab04d429a33a9fd82687797f0081bd26e4214dabb9f06b4d4c9beac",
+  "promptSha256": "9e8bb1097756d78db3f8dbed24776c63c641942ff73cdd170f9a3ef94b080c31",
+  "clipSha256": "8aee389960e4d88f419f6c2250f48586ff30f666e3f2f456903950648acab489",
+  "scene": "event-navigation",
+  "review": {
+    "heardOpening": "Ouvrez un événement.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrez un événement.",
+        "visibleSeconds": 0.5,
+        "visible": "Clic sur l'événement et ouverture de la page dédiée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Gérer les créneaux, Voir les inscriptions et Inviter des membres",
+        "visibleSeconds": 1.5,
+        "visible": "Boutons d'action visibles sur la fiche événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "liens vers le QR code, les rapports, le journal, les pages et les questions",
+        "visibleSeconds": 7,
+        "visible": "Liens secondaires affichés sous les boutons principaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "sections présentent les jalons, les communications et les besoins",
+        "visibleSeconds": 15,
+        "visible": "Défilement vers les sections Jalons et Communications",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Le lien Événements vous ramène à la liste de l’association.",
+        "visibleSeconds": 20.5,
+        "visible": "Clic sur le lien de retour et affichage de la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution fluide et conforme aux actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

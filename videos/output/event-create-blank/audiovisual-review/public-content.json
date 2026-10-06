@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:58:43.495Z",
+  "videoSha256": "4811f60870b8951ec947f46457c7c3ae2638f46e4bec4edec4a8b0252e972acd",
+  "promptSha256": "379dfe7157c991c595dfa138b3603077cc078b6512d1ea45dff6bfd8d22e540c",
+  "clipSha256": "0128b2a63c67cca3e8bd1014ba0e06eadce22cf36bb782babab463c1e472ffe9",
+  "scene": "public-content",
+  "review": {
+    "heardOpening": "Les instructions publiques apparaissent avant l'inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Les instructions publiques apparaissent avant l'inscription",
+        "visibleSeconds": 0.8,
+        "visible": "Sélection du champ Instructions publiques et début de saisie",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "indiquez ici l'entrée à utiliser et le moment d'arrivée",
+        "visibleSeconds": 2.5,
+        "visible": "Texte saisi précisant l'entrée cour nord et l'arrivée 15 minutes avant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "Le message de confirmation est affiché juste après l'inscription",
+        "visibleSeconds": 7.8,
+        "visible": "Curseur placé dans le champ Message de confirmation avec saisie de texte et variables",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "donner la prochaine étape, sans remplacer les consignes propres à chaque créneau",
+        "visibleSeconds": 13.5,
+        "visible": "Saisie de la suite du message mentionnant la confirmation et le planning",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

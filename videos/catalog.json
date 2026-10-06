@@ -21,8 +21,8 @@
         "organisateur"
       ],
       "feature": "Navigation de l'administration",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "decouverte"
     },
     {
@@ -45,8 +45,8 @@
         "organisateur"
       ],
       "feature": "Recherche globale",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "decouverte"
     },
     {
@@ -69,8 +69,8 @@
         "organisateur"
       ],
       "feature": "Identité publique de l'organisation",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "decouverte"
     },
     {
@@ -93,8 +93,8 @@
         "organisateur"
       ],
       "feature": "Fuseau horaire et charte des bénévoles",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "avance"
     },
     {
@@ -117,8 +117,8 @@
         "organisateur"
       ],
       "feature": "Équipe et permissions",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -142,8 +142,8 @@
         "organisateur"
       ],
       "feature": "Réglages des emails",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -167,8 +167,8 @@
         "organisateur"
       ],
       "feature": "Création d'un événement",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -192,8 +192,8 @@
         "organisateur"
       ],
       "feature": "Modèles d'événement",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -290,8 +290,8 @@
         "organisateur"
       ],
       "feature": "Pages d'information et QR code",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -314,8 +314,8 @@
         "organisateur"
       ],
       "feature": "Jalons de préparation",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "avance"
     },
     {
@@ -363,8 +363,8 @@
         "organisateur"
       ],
       "feature": "Postes et vues du planning",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-06",
+      "revision": 2,
       "level": "decouverte"
     },
     {
@@ -633,7 +633,7 @@
         "capacité"
       ],
       "published": false,
-      "seedScenario": "demo",
+      "captureReady": true,
       "themes": [
         "parcours-benevole"
       ],
@@ -1200,6 +1200,130 @@
       ],
       "feature": "Import des membres",
       "updatedAt": "2026-10-05",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
+      "id": "ACCESSIBILITY_KEYBOARD_DISPLAY",
+      "manifest": "accessibility-keyboard-display",
+      "category": "getting-started",
+      "tags": [
+        "accessibilité",
+        "clavier",
+        "affichage",
+        "limites"
+      ],
+      "published": false,
+      "captureReady": false,
+      "themes": [
+        "decouvrir-administration",
+        "parcours-benevole"
+      ],
+      "audience": [
+        "organisateur",
+        "benevole"
+      ],
+      "feature": "Clavier et affichage",
+      "updatedAt": "2026-10-06",
+      "revision": 1,
+      "level": "decouverte"
+    },
+    {
+      "id": "EMAIL_DELIVERY_FAILURES",
+      "manifest": "email-delivery-failures",
+      "category": "registrations-followup",
+      "tags": [
+        "emails",
+        "livraison",
+        "échecs",
+        "relances"
+      ],
+      "published": false,
+      "captureReady": true,
+      "themes": [
+        "inscriptions-communication",
+        "tracabilite-donnees"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Suivi de livraison des emails",
+      "updatedAt": "2026-10-06",
+      "revision": 1,
+      "level": "avance"
+    },
+    {
+      "id": "PLATFORM_INTERNAL_ADMINISTRATION",
+      "manifest": "platform-internal-administration",
+      "category": "internal-operations",
+      "tags": [
+        "opérateur",
+        "organisations",
+        "santé",
+        "communications"
+      ],
+      "published": false,
+      "captureReady": true,
+      "themes": [
+        "tracabilite-donnees"
+      ],
+      "audience": [
+        "super-admin"
+      ],
+      "feature": "Administration de la plateforme",
+      "updatedAt": "2026-10-06",
+      "revision": 1,
+      "level": "avance"
+    },
+    {
+      "id": "PRIVACY_PERSONAL_LINKS",
+      "manifest": "privacy-personal-links",
+      "category": "getting-started",
+      "tags": [
+        "confidentialité",
+        "liens-personnels",
+        "responsables",
+        "récupération"
+      ],
+      "published": false,
+      "captureReady": true,
+      "seedScenario": "privacy-personal-links",
+      "themes": [
+        "parcours-benevole",
+        "tracabilite-donnees"
+      ],
+      "audience": [
+        "benevole",
+        "organisateur"
+      ],
+      "feature": "Liens publics, personnels et de responsables",
+      "updatedAt": "2026-10-06",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
+      "id": "LAST_MINUTE_CHANGES",
+      "manifest": "last-minute-changes",
+      "category": "registrations-followup",
+      "tags": [
+        "imprévus",
+        "désistement",
+        "remplacement",
+        "horaires",
+        "annulation"
+      ],
+      "published": false,
+      "captureReady": true,
+      "seedScenario": "last-minute-changes",
+      "themes": [
+        "inscriptions-communication",
+        "jour-j"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Gérer un imprévu",
+      "updatedAt": "2026-10-06",
       "revision": 1,
       "level": "essentiel"
     }

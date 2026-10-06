@@ -1,0 +1,12 @@
+{
+  "anchor": "La couleur sert à reconnaître une mission d’un coup d’œil. Choisissez-la",
+  "windowStart": 43.891999999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 11.9,
+    "wordsHeard": "La couleur sert à reconnaître une mission d’un coup d’œil. Choisissez-la"
+  },
+  "onset": 55.791999999999994,
+  "proposedCut": 55.555771,
+  "note": "Proposal only; recut then independently audit before capture"
+}

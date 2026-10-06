@@ -1,0 +1,12 @@
+{
+  "anchor": "Avant la diffusion, vérifions le nombre de destinataires et lisons la",
+  "windowStart": 282.26,
+  "result": {
+    "found": true,
+    "startSeconds": 5.96,
+    "wordsHeard": "Avant la diffusion vérifions le nombre de destinataires et lisons la"
+  },
+  "onset": 288.21999999999997,
+  "proposedCut": 288.082083,
+  "note": "Proposal only; recut then independently audit before capture"
+}

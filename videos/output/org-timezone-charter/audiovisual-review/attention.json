@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:20:12.432Z",
+  "videoSha256": "d99f66e1d00de93a9e4f15c6a1ec3d17b02a4396ee86da063360cee3f65319f4",
+  "promptSha256": "0b52b52301739a6f285090d62913b497798ab85bdbce533f3368b7e733792203",
+  "clipSha256": "05e512479205c9f63df389256eb47c453c78794c212b38e68141c6faba990720",
+  "scene": "attention",
+  "review": {
+    "heardOpening": "Quand le bénévole confirme son inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Quand le bénévole confirme son inscription",
+        "visibleSeconds": 0.5,
+        "visible": "Formulaire d'inscription avec case convention et bouton de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Une modification de votre texte concerne les prochaines inscriptions",
+        "visibleSeconds": 7.5,
+        "visible": "Section Convention des Bénévoles dans les paramètres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.2,
+        "spoken": "utilisez les communications de l’événement",
+        "visibleSeconds": 15.5,
+        "visible": "Section Communications sur la page de gestion de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit posé et articulation nette, en adéquation avec le visuel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

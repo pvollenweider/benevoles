@@ -1,0 +1,42 @@
+{
+  "slug": "admin-navigation",
+  "recordedAt": "2026-10-04T10:38:33.570Z",
+  "video": "capture.webm",
+  "cues": [
+    {
+      "id": "welcome",
+      "startMs": 1,
+      "endMs": 14921
+    },
+    {
+      "id": "organization-navigation",
+      "startMs": 17083,
+      "endMs": 39351
+    },
+    {
+      "id": "event-navigation",
+      "startMs": 41509,
+      "endMs": 62096
+    },
+    {
+      "id": "search",
+      "startMs": 64264,
+      "endMs": 84299
+    },
+    {
+      "id": "account-help",
+      "startMs": 85916,
+      "endMs": 101255
+    },
+    {
+      "id": "mobile-keyboard",
+      "startMs": 103415,
+      "endMs": 121235
+    },
+    {
+      "id": "result",
+      "startMs": 121686,
+      "endMs": 138804
+    }
+  ]
+}

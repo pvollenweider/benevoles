@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:43:42.505Z",
+  "videoSha256": "74ad8b7010a5231a83be946771cc9efc6fe7565c20bad30cecf13062260ad851",
+  "promptSha256": "e15eb223b2f6f9c860b96a5f028d692215150fcc678730a2a290dcdfbff19b8b",
+  "clipSha256": "06582816578fb1e2d2ead16c8f3a809290c0fa5262e89e67be9218f5e0df4d58",
+  "scene": "invitation",
+  "review": {
+    "heardOpening": "Une invitation nominative est différente",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "L'organisation l'envoie à Zoé",
+        "visibleSeconds": 5.5,
+        "visible": "Sélection de Zoé Example et envoi de l'invitation dans la fenêtre modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.6,
+        "spoken": "puis nous ouvrons le vrai email reçu",
+        "visibleSeconds": 7.5,
+        "visible": "Boîte de réception Mailpit ouverte affichant le courriel reçu pour Zoé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.9,
+        "spoken": "Son lien conduit au formulaire avec les informations prévues",
+        "visibleSeconds": 10.5,
+        "visible": "Clic sur le lien de l'email et affichage de la sélection des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.1,
+        "spoken": "Vérifions le prénom, l'adresse et le créneau avant de continuer",
+        "visibleSeconds": 14.2,
+        "visible": "Formulaire affiché avec prénom et courriel préremplis ainsi que le créneau choisi",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec le déroulement de la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

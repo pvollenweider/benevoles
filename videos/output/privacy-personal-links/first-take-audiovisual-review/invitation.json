@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:14:35.581Z",
+  "videoSha256": "adf29f20360d5cfb94d5ed198cc63852ce8045f4d3ff623267351d447772a253",
+  "promptSha256": "e15eb223b2f6f9c860b96a5f028d692215150fcc678730a2a290dcdfbff19b8b",
+  "clipSha256": "843db770e38ee20337981c2256ccea187b82435a96fe22374f5b6752ab6f7be0",
+  "scene": "invitation",
+  "review": {
+    "heardOpening": "Une invitation nominative est différente d'un lien public.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "L'organisation l'envoie à Zoé",
+        "visibleSeconds": 4.5,
+        "visible": "Sélection de Zoé puis validation de l'envoi de l'invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "nous ouvrons le vrai email reçu",
+        "visibleSeconds": 7.5,
+        "visible": "Affichage de la boîte de réception avec le message adressé à Zoé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Son lien conduit au formulaire",
+        "visibleSeconds": 10.5,
+        "visible": "Clic sur le lien de l'email et ouverture du choix de créneau puis formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.3,
+        "spoken": "Vérifions le prénom, l'adresse et le créneau",
+        "visibleSeconds": 19.5,
+        "visible": "Formulaire visible avec créneau et email préremplis, champ prénom vide",
+        "sync": "aligned",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:19 : Le prénom n'est pas prérempli dans le formulaire contrairement à l'adresse email et au créneau mentionnés."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton pédagogique régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

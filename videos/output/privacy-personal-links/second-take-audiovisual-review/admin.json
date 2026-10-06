@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:26:53.500Z",
+  "videoSha256": "b4d9efddbd5814fbdceb220cd5cca7cd88facb3e9f33c37784cfdb0ef5043701",
+  "promptSha256": "75386a5c865ed48115ad357893fb5962ad4c840474d9747e73cb8f05ba434377",
+  "clipSha256": "4cede8c1eb1e8e4b30f67f3b8c344e8bedd7b6041fd60946d05f1d3faab3e43d",
+  "scene": "admin",
+  "review": {
+    "heardOpening": "L'organisateur travaille dans son administration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Dans les inscriptions, il retrouve les personnes",
+        "visibleSeconds": 2,
+        "visible": "Page des Inscriptions affichée avec la liste des participants",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Dans les membres, il peut consulter les disponibilités",
+        "visibleSeconds": 10.2,
+        "visible": "Affichage de la liste sous l'onglet Membres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.1,
+        "spoken": "Regardons la fiche de Léa",
+        "visibleSeconds": 12.8,
+        "visible": "Ouverture du formulaire modal Modifier le membre Léa",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Sa page personnelle ne montre pas les notes internes",
+        "visibleSeconds": 19,
+        "visible": "Affichage de la vue personnelle Mes inscriptions pour Léa",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et rythme naturel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

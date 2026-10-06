@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:14:46.796Z",
+  "videoSha256": "adf29f20360d5cfb94d5ed198cc63852ce8045f4d3ff623267351d447772a253",
+  "promptSha256": "42ddd9ec056467cc34b081321085d6887247869b4dfdcc728ee5585281a171da",
+  "clipSha256": "669a9011deb836694426427907f8257def2ecce07e8a127fbd5dfee18ad5d08a",
+  "scene": "leader",
+  "review": {
+    "heardOpening": "Le responsable a lui aussi un accès",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "Ouvrons le lien de Camille, responsable de l'accueil.",
+        "visibleSeconds": 2,
+        "visible": "Affichage de la page Responsable - Accueil avec les bénévoles inscrits.",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Il voit les bénévoles de ce poste, leurs horaires et les coordonnées utiles",
+        "visibleSeconds": 7.5,
+        "visible": "Présentation des 3 bénévoles avec contacts et créneau horaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.5,
+        "spoken": "Revenons dans l'administration et retirons ce responsable.",
+        "visibleSeconds": 19,
+        "visible": "Transition vers l'administration et validation du retrait du responsable.",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 26.5,
+        "spoken": "En rouvrant son ancien lien, l'accès n'est plus disponible.",
+        "visibleSeconds": 25,
+        "visible": "Écran affichant le message Lien introuvable.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:19 : L'action de retour dans l'administration et de suppression démarre avant son annonce vocale à 00:22."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier sur l'ensemble de l'extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

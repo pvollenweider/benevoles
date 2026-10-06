@@ -1,0 +1,12 @@
+{
+  "anchor": "Ouvrons le Tableau de bord de l’association. Les jalons en retard",
+  "windowStart": 42.738,
+  "result": {
+    "found": true,
+    "startSeconds": 15.54,
+    "wordsHeard": "Ouvrons le tableau de bord de l'association les jalons en retard"
+  },
+  "onset": 58.278,
+  "proposedCut": 57.738083,
+  "note": "Proposal only; recut then independently audit before capture"
+}

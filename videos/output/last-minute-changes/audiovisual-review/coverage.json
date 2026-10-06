@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T20:51:25.878Z",
+  "videoSha256": "3e2b054ce139ced7f32f4059559c36ac89bc83cb334bbe34e341997d8f994942",
+  "promptSha256": "b21b5973930d8c812535f222d1d50535a22a003649ddbb9e9a26cef2a07a2930",
+  "clipSha256": "bd266b387cbfdb00259e0f97e3ec10134f3379e8d1ca73cbcb95ac968275b568",
+  "scene": "coverage",
+  "review": {
+    "heardOpening": "Où manque-t-il encore du monde ? Ouvrons la vue de couverture",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Ouvrons la vue de couverture de l'événement.",
+        "visibleSeconds": 2,
+        "visible": "Affichage de la page récapitulative « Où manque-t-il du monde ? »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "Lisons le poste, la date, l'horaire et le nombre de places manquantes.",
+        "visibleSeconds": 10.1,
+        "visible": "Section « Créneaux à compléter » avec intitulés, dates, horaires et mentions de manque.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Une demande à valider réserve déjà une place",
+        "visibleSeconds": 16,
+        "visible": "Indication « 1 demande à traiter » visible sur la ligne Préparation.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

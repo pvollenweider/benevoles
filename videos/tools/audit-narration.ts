@@ -9,7 +9,7 @@ import { execFile } from "node:child_process"
 import { promisify } from "node:util"
 import path from "node:path"
 import { loadManifest, videoDir, type Timeline } from "../lib/manifest"
-import { mismatchedNarrationEdges, unexpectedPauseInstructions } from "../lib/narration-fidelity"
+import { mismatchedNarrationEdges, unexpectedPauseInstructions, narrationWords } from "../lib/narration-fidelity"
 
 const reference = process.argv[2]
 if (!reference) throw new Error("Usage: audit-narration.ts VIDEO_ID [segment-id] [--force]")
@@ -19,7 +19,7 @@ const fromVideo = process.argv.includes("--from-video")
 const exec = promisify(execFile)
 const model = process.env.VIDEO_AUDIT_MODEL ?? "gemini-3.8-flash"
 // ASR may write « e-mail » where the reference uses « email »: same spoken word.
-const words = (text: string) => text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().replace(/\be-mail\b/g, "email").match(/[a-z0-9]+/g) ?? []
+const words = narrationWords
 function distance(a: string[], b: string[]) {
   let row = Array.from({ length: b.length + 1 }, (_, i) => i)
   for (let i = 1; i <= a.length; i++) {
@@ -75,7 +75,7 @@ async function main() {
       headers: { "Content-Type": "application/json", "x-goog-api-key": key },
       signal: AbortSignal.timeout(120_000),
       body: JSON.stringify({ contents: [{ parts: [
-        { text: "Transcris exactement les paroles françaises audibles dans cet extrait, une seule fois et dans leur ordre. Retranscris une répétition uniquement si elle est réellement audible. Ne donne pas deux versions de la transcription. Ne complète pas les phrases coupées. Ne résume pas. Retourne uniquement le texte prononcé, sans introduction ni commentaire." },
+        { text: "Transcris exactement les paroles françaises audibles dans cet extrait, une seule fois et dans leur ordre. Écris les dates, années et heures en toutes lettres telles qu’elles sont prononcées, plutôt qu’en chiffres : cela évite de confondre une différence de notation avec un mot omis. Retranscris une répétition uniquement si elle est réellement audible. Ne donne pas deux versions de la transcription. Ne complète pas les phrases coupées. Ne résume pas. Retourne uniquement le texte prononcé, sans introduction ni commentaire." },
         { inlineData: { mimeType: "audio/wav", data: bytes.toString("base64") } },
       ] }] }),
     })

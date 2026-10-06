@@ -1,0 +1,12 @@
+{
+  "anchor": "Vérifions le résultat côté bénévole. Ouvrez l’événement public, sélectionnez un créneau,",
+  "windowStart": 45.338,
+  "result": {
+    "found": true,
+    "startSeconds": 21.08,
+    "wordsHeard": "Vérifions"
+  },
+  "onset": 66.418,
+  "proposedCut": 66.411271,
+  "note": "Proposal only; recut then independently audit before capture"
+}

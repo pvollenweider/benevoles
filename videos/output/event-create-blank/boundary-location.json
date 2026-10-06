@@ -1,0 +1,12 @@
+{
+  "anchor": "Le lieu reste lisible comme une adresse. Juste dessous, collez une",
+  "windowStart": 15.475999999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 15.8,
+    "wordsHeard": "Le lieu reste lisible comme une adresse. Juste dessous, collez une"
+  },
+  "onset": 31.276,
+  "proposedCut": 30.475708500000003,
+  "note": "Proposal only; recut then independently audit before capture"
+}

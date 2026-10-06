@@ -1,0 +1,70 @@
+{
+  "model": "gemini-3.8-flash",
+  "auditedAt": "2026-10-06T03:15:39.965Z",
+  "revalidatedAt": "2026-10-06T03:15:39.966Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "7870f9ea1677bd47654af21d36008efe133c24074cd482c8474c14e976e12509",
+  "note": "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "72352d4fcfd465d632bba9a9e9fcaadf6a173a3d2add470fa10f6cd90f05cef3",
+      "recognized": "Un modèle fait gagner du temps quand l'événement ressemble à un cas courant. Il crée un brouillon avec des postes, des créneaux, des horaires et des capacités déjà cohérents. Rien n'est publié automatiquement et tout reste modifiable.",
+      "expected": "Un modèle fait gagner du temps quand l’événement ressemble à un cas courant. Il crée un brouillon avec des postes, des créneaux, des horaires et des capacités déjà cohérents. Rien n’est publié automatiquement, et tout reste modifiable.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "compare",
+      "audioSha256": "926f8bfab92f96c91bd453b65db85803ee627780f41b7b01d0a2cdfa2cb441ef",
+      "recognized": "Cinq points de départ sont proposés : festival, couvre plusieurs soirées ; buvette, organise le bar et la caisse sur une journée ; manifestation sportive, prépare dossards, parcours et ravitaillement ; fête de village, s'étale sur deux jours ; montage, exploitation, démontage sépare clairement les trois phases. La page blanche reste préférable pour un format très particulier.",
+      "expected": "Cinq points de départ sont proposés. Festival couvre plusieurs soirées ; Buvette organise le bar et la caisse sur une journée ; Manifestation sportive prépare dossards, parcours et ravitaillement ; Fête de village s’étale sur deux jours ; Montage, exploitation, démontage sépare clairement les trois phases. La page blanche reste préférable pour un format très particulier.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "preview",
+      "audioSha256": "2d81f849cd9d3324ea40d3ae0a072415ae848e485bf39bf50999a40e02e6129e",
+      "recognized": "Choisissons Fête de village. L'aperçu résume les postes, le nombre de créneaux et les places qui seront créées. Avant de continuer, donnez un titre à cette édition et indiquez son premier jour. Prenons le samedi vingt et un novembre. Le deuxième jour est calculé automatiquement par le modèle.",
+      "expected": "Choisissons Fête de village. L’aperçu résume les postes, le nombre de créneaux et les places qui seront créées. Avant de continuer, donnez un titre à cette édition et indiquez son premier jour ; prenons le samedi vingt-et-un novembre. Le deuxième jour est calculé automatiquement par le modèle.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "create",
+      "audioSha256": "1013e84928c19053b04448198abbaecc48b7940b9c963f486ba05ba4826b62ae",
+      "recognized": "Créer le brouillon génère ici dix créneaux et ouvre l'étape du planning. Le statut reste brouillon. Le modèle n'envoie aucun email et n'ouvre aucune inscription. Il fournit seulement une base de travail plus rapide à corriger qu'une page vide.",
+      "expected": "Créer le brouillon génère ici dix créneaux et ouvre l’étape du planning. Le statut reste Brouillon. Le modèle n’envoie aucun email et n’ouvre aucune inscription : il fournit seulement une base de travail plus rapide à corriger qu’une page vide.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "adapt",
+      "audioSha256": "8da85e6aae7ba9e14772788d7e11d26944fcfad9325742657dc984f0bc9ed858",
+      "recognized": "Dans le planning obtenu, chaque ligne est unitaire. On peut renommer un poste, modifier son libellé, ses horaires, sa capacité, ses conditions ou sa couleur. On peut aussi supprimer un créneau inutile et en ajouter d'autres. Ajustons par exemple la capacité de la première buvette pour coller à la taille réelle de l'équipe.",
+      "expected": "Dans le planning obtenu, chaque ligne est ordinaire. On peut renommer un poste, modifier son libellé, ses horaires, sa capacité, ses conditions ou sa couleur ; on peut aussi supprimer un créneau inutile et en ajouter d’autres. Ajustons par exemple la capacité de la première Buvette pour coller à la taille réelle de l’équipe.",
+      "wordErrorRate": 0.01818181818181818,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "84850dcce24f2e075341d36a8a64ba5d8e7bfaf10af13648029923864c1b735b",
+      "recognized": "Vous avez un brouillon de dix créneaux et la capacité de la première buvette est maintenant de cinq places. Choisissez le modèle le plus proche de votre besoin, vérifiez les postes et les horaires, puis testez l'aperçu bénévole avant de publier. Le modèle propose une base, vous adaptez le planning réel.",
+      "expected": "Vous avez un brouillon de dix créneaux et la capacité de la première Buvette est maintenant de cinq places. Choisissez le modèle le plus proche de votre besoin, vérifiez les postes et les horaires, puis testez l’aperçu bénévole avant de publier. Le modèle propose une base ; vous adaptez le planning réel.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

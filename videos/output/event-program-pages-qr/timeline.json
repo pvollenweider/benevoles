@@ -1,37 +1,48 @@
 {
   "slug": "event-program-pages-qr",
-  "recordedAt": "2026-10-04T17:14:11.826Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T02:57:39.338Z",
   "video": "capture.webm",
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1222,
-      "endMs": 13807
+      "startMs": 1107,
+      "endMs": 13796
     },
     {
       "id": "program",
-      "startMs": 14258,
-      "endMs": 28757
+      "startMs": 14250,
+      "endMs": 33182
+    },
+    {
+      "id": "program-edit",
+      "startMs": 33635,
+      "endMs": 51302
     },
     {
       "id": "pages",
-      "startMs": 29210,
-      "endMs": 41210
+      "startMs": 51755,
+      "endMs": 74235
+    },
+    {
+      "id": "page-order",
+      "startMs": 74689,
+      "endMs": 93876
     },
     {
       "id": "public",
-      "startMs": 41663,
-      "endMs": 57899
+      "startMs": 94328,
+      "endMs": 112960
     },
     {
       "id": "qr",
-      "startMs": 58409,
-      "endMs": 70446
+      "startMs": 113413,
+      "endMs": 132537
     },
     {
       "id": "result",
-      "startMs": 70898,
-      "endMs": 83587
+      "startMs": 132990,
+      "endMs": 155617
     }
   ]
 }

@@ -1,0 +1,12 @@
+{
+  "anchor": "Désactiver une organisation n'est pas la supprimer. Ouvrons la confirmation et",
+  "windowStart": 148.445,
+  "result": {
+    "found": true,
+    "startSeconds": 8.44,
+    "wordsHeard": "Désactiver une organisation n'est pas la supprimer. Ouvrons la confirmation et"
+  },
+  "onset": 156.885,
+  "proposedCut": 157.069854,
+  "note": "Proposal only; recut then independently audit before capture"
+}

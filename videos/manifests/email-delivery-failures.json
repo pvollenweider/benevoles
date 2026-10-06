@@ -9,22 +9,75 @@
   "chapterTitles": {
     "states": "Lire les quatre états d'envoi",
     "reason": "Comprendre la cause",
-    "retry": "Réessayer après une panne",
+    "retry": "Renvoyer après résolution du problème",
     "address": "Corriger une adresse : préparer un nouvel email",
     "campaign": "Suivre les messages ciblés",
     "retention": "Un suivi récent, pas une archive permanente",
     "result": "Vérifier le bon résultat"
   },
   "voiceStyle": "French, warm and friendly with an audible smile. Patient and reassuring, clear articulation and natural pauses. Keep the same voice throughout.",
-  "viewport": { "width": 1280, "height": 800, "deviceScaleFactor": 1 },
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
   "segments": [
-    { "id": "welcome", "transcript": "Tu as envoyé un message, mais une personne ne le retrouve pas. Avant de renvoyer à toute l'équipe, regarde ce qui s'est passé. Dans Paramètres, puis Emails, les lignes récentes montrent le type d'email, le destinataire, la date et l'état de livraison. Un organisateur peut les consulter et traiter un échec ; les réglages d'emails de l'organisation restent réservés à son propriétaire.", "fallbackDurationMs": 39000 },
-    { "id": "states", "transcript": "En attente d'envoi signifie que l'email est dans la file. Nouvel essai prévu indique qu'une tentative a échoué et que l'application réessaiera : regarde l'échéance et le nombre d'essais. Envoyé veut dire remis au serveur, pas lu par le bénévole. Après six tentatives échouées, la ligne devient Échec définitif. Le détail aide alors à chercher la cause plutôt qu'à multiplier les clics.", "fallbackDurationMs": 41000 },
-    { "id": "reason", "transcript": "Ici, le serveur de notre démonstration refuse un destinataire de test. Le détail peut orienter vers une adresse à vérifier ou un problème temporaire. Mais cette page ne connaît pas forcément tous les rejets qui arrivent plus tard, après l'acceptation par le serveur. Elle n'est pas une preuve que l'email est dans la boîte de réception. Et aucun état ne prouve sa lecture : si l'information est urgente, contacte aussi la personne directement.", "fallbackDurationMs": 44000 },
-    { "id": "retry", "transcript": "Pour cet autre exemple, la panne du service de test est maintenant résolue. Sur l'échec définitif, Renvoyer remet le même email dans la file. Ce n'est pas un nouvel envoi à tout le monde. Attendons le résultat, puis ouvrons l'email réellement reçu dans la boîte locale. La ligne passe à Envoyé avec une heure. Si le problème n'était pas corrigé, cliquer de nouveau ne suffirait pas à le faire disparaître.", "fallbackDurationMs": 44000 },
-    { "id": "address", "transcript": "Une adresse erronée demande une autre attention. Corrige la fiche du membre, mais l'ancien email en échec garde le destinataire avec lequel il avait été préparé. Le bouton Renvoyer ne reconstruit pas cet email à partir de la fiche corrigée. Pour écrire à la nouvelle adresse, prépare un nouvel envoi avec l'action appropriée, puis vérifie son destinataire. Ne confonds donc pas correction de la fiche et correction d'un ancien message.", "fallbackDurationMs": 46000 },
-    { "id": "campaign", "transcript": "Pour un message ciblé, retourne dans l'événement, sous le formulaire d'envoi. Messages envoyés conserve l'objet, le public, l'auteur et le résultat. Voir le texte envoyé permet de relire les consignes. Quand des emails ont échoué, le bouton de renvoi vise seulement ces échecs, pas les personnes déjà livrées. Une nouvelle demande ne doit pas renvoyer ceux qui viennent d'être remis en file. Les rappels et confirmations automatiques ne sont pas des campagnes de cette liste.", "fallbackDurationMs": 48000 },
-    { "id": "retention", "transcript": "Le suivi de la file est volontairement récent : les emails envoyés sont supprimés par le nettoyage nocturne, et les échecs restent trente jours. La page montre les deux cents lignes les plus récentes. L'historique des messages ciblés est différent et reste douze mois. Ne compte donc pas sur le tableau des emails pour une archive permanente. Pour comprendre un incident, consulte-le au bon moment, sans conserver inutilement des données personnelles.", "fallbackDurationMs": 43000 },
-    { "id": "result", "transcript": "Le bon réflexe, c'est de lire l'état et le détail, vérifier la cause, puis choisir la bonne action. Réessayer le même email après une panne, ou préparer un nouvel envoi quand l'adresse a changé : ce n'est pas la même chose. Notre boîte de test confirme la réception de ces exemples, mais pas leur lecture par une personne. Avec une consigne claire et un contact humain si besoin, tu aides l'équipe à retrouver l'information sans l'inonder de messages.", "fallbackDurationMs": 45000 }
-  ]
+    {
+      "id": "welcome",
+      "transcript": "Tu as envoyé un message, mais une personne ne le retrouve pas. Avant de renvoyer à toute l'équipe, regarde ce qui s'est passé. Dans Paramètres, puis Emails, les lignes récentes montrent le type d'email, le destinataire, la date et l'état de livraison. Nous sommes d'abord dans le compte propriétaire, qui peut aussi changer les réglages. Connectons-nous maintenant avec Marc, notre organisateur de démonstration. Il retrouve le suivi et peut traiter un échec, mais les réglages restent réservés au propriétaire. Le message de la page le précise. Nous allons poursuivre avec ce compte organisateur, sur des personnes et des emails fictifs.",
+      "fallbackDurationMs": 65000
+    },
+    {
+      "id": "states",
+      "transcript": "En attente d'envoi signifie que l'email est dans la file : Jules n'a pas encore eu de tentative. Pour Sarah, Nouvel essai prévu indique qu'une tentative a échoué et que l'application réessaiera : regarde l'échéance et le nombre d'essais. Nicolas est marqué Envoyé : remis au serveur, pas lu par le bénévole. Après six tentatives échouées, la ligne devient Échec définitif, comme pour Léa. Dans cette formation, les délais entre les essais ont été accélérés, mais les six échanges SMTP ont réellement eu lieu. Le détail aide à chercher la cause plutôt qu'à multiplier les clics.",
+      "fallbackDurationMs": 65000
+    },
+    {
+      "id": "reason",
+      "transcript": "Ici, le serveur de notre démonstration refuse un destinataire de test. Le détail peut orienter vers une adresse à vérifier ou un problème temporaire. Mais cette page ne connaît pas forcément tous les rejets qui arrivent plus tard, après l'acceptation par le serveur. Elle n'est pas une preuve que l'email est dans la boîte de réception. Et aucun état ne prouve sa lecture : si l'information est urgente, contacte aussi la personne directement.",
+      "fallbackDurationMs": 44000
+    },
+    {
+      "id": "retry",
+      "transcript": "Pour Emma, le refus de notre serveur de test est maintenant levé. Sur l'échec définitif, Renvoyer remet le même email dans la file. Ce n'est pas un nouvel envoi à tout le monde. Attendons le résultat et rechargeons le suivi. La ligne passe à Envoyé avec une heure. Ouvrons ensuite l'email réellement reçu dans la boîte locale. Si le problème n'était pas corrigé, cliquer de nouveau ne suffirait pas à le faire disparaître.",
+      "fallbackDurationMs": 50000
+    },
+    {
+      "id": "address",
+      "transcript": "Une adresse erronée demande une autre attention. Ouvrons les membres, puis la fiche de Léa. Corrigeons son email et enregistrons. Revenons au suivi : l'ancien email en échec garde toujours son ancien destinataire. Le bouton Renvoyer ne reconstruit pas ce message à partir de la fiche corrigée. Pour écrire à la nouvelle adresse, préparons donc un nouvel envoi. Dans notre événement de formation, Léa et Emma sont inscrites : ce message partira à toutes les deux. Choisissons un objet clair, puis écrivons notre consigne. La variable prénom personnalise le texte pour chacune. Prenons le temps de vérifier l'aperçu, les deux destinataires et la confirmation. Cet envoi crée un nouveau message, pas une réparation de l'ancien. Ouvrons maintenant celui réellement reçu par Léa : l'adresse corrigée apparaît dans le destinataire. Correction de la fiche et renvoi d'un ancien email sont bien deux choses différentes.",
+      "fallbackDurationMs": 100000
+    },
+    {
+      "id": "campaign",
+      "transcript": "Préparons un autre message pour ces deux personnes. Cette fois, notre serveur de démonstration refuse volontairement Emma, mais accepte Léa. Après six vrais essais, les délais étant accélérés comme annoncé, ouvrons Messages envoyés sous le formulaire. L'historique conserve l'objet, le public, l'auteur et le résultat : un envoyé, un en échec. Voir le texte envoyé permet de relire la consigne originale et sa variable. Le refus de test est maintenant levé. Cliquons sur Renvoyer l'email en échec : seule Emma repart dans la file, pas Léa. Le bouton devient Remis en file. Une autre demande ne renvoie rien de plus. Rechargeons enfin le suivi pour voir les deux remises réussies. Les rappels et confirmations automatiques ne sont pas des messages de cette liste.",
+      "fallbackDurationMs": 95000
+    },
+    {
+      "id": "retention",
+      "transcript": "Le suivi de la file est volontairement récent : les emails envoyés sont supprimés par le nettoyage nocturne, et les échecs restent trente jours. La page montre les deux cents lignes les plus récentes. L'historique des messages ciblés est différent et reste douze mois. Ne compte donc pas sur le tableau des emails pour une archive permanente. Pour comprendre un incident, consulte-le au bon moment, sans conserver inutilement des données personnelles.",
+      "fallbackDurationMs": 43000
+    },
+    {
+      "id": "result",
+      "transcript": "Le bon réflexe, c'est de lire l'état et le détail, vérifier la cause, puis choisir la bonne action. Réessayer le même email après une panne, ou préparer un nouvel envoi quand l'adresse a changé : ce n'est pas la même chose. Notre boîte de test confirme la réception de ces exemples, mais pas leur lecture par une personne. Avec une consigne claire et un contact humain si besoin, tu aides l'équipe à retrouver l'information sans l'inonder de messages.",
+      "fallbackDurationMs": 45000
+    }
+  ],
+  "continuousPauseTags": false,
+  "viewer": {
+    "summary": "Dans cette vidéo, vous lisez l'état de livraison d'un email, traitez un échec et distinguez le renvoi du même email d'un nouvel envoi.",
+    "steps": [
+      "Dans Paramètres, puis Emails, lisez pour chaque ligne le type d'email, le destinataire, la date et l'état de livraison.",
+      "Distinguez « En attente d'envoi », « Nouvel essai prévu », « Envoyé » et « Échec définitif », et lisez le détail.",
+      "Une fois la cause corrigée, cliquez sur « Renvoyer » pour remettre le même email dans la file.",
+      "Si l'adresse était erronée, corrigez la fiche du membre puis préparez un nouvel envoi.",
+      "Dans « Messages envoyés », utilisez « Renvoyer l'email en échec » pour ne renvoyer qu'aux destinataires en échec."
+    ],
+    "remember": [
+      "« Envoyé » signifie que le serveur d'envoi a accepté l'email, pas qu'il a été lu.",
+      "« Renvoyer » réutilise l'ancien destinataire : il ne tient pas compte d'une fiche corrigée.",
+      "Les organisateurs suivent les envois, mais seuls les propriétaires changent les réglages des emails.",
+      "Le suivi est récent : les emails envoyés sont nettoyés chaque nuit et les échecs gardés trente jours."
+    ]
+  }
 }

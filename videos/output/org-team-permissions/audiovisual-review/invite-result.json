@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:05:44.849Z",
+  "videoSha256": "def3f175cbcff33d8062687769e261b570c74a82596228d25494827f534a8fb5",
+  "promptSha256": "e983e5d8ab04f5542c2a175ea931a756315a9f20d58fd0ca007d915c53bc4d1b",
+  "clipSha256": "3f93e0b7ae078e7891100e71f454690efd9f34f9a6d1ff41515537f2305375ce",
+  "scene": "invite-result",
+  "review": {
+    "heardOpening": "Après l'envoi, Léa apparaît",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Léa apparaît avec le statut En attente",
+        "visibleSeconds": 0,
+        "visible": "Ligne de Léa Martin visible avec le libellé En attente",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "valable sept jours",
+        "visibleSeconds": 0,
+        "visible": "Mention de l'expiration du lien sous 7 jours affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "copier ce lien pour le lui transmettre",
+        "visibleSeconds": 6.3,
+        "visible": "Clic sur le bouton Copier le lien qui passe à Copié !",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction fluide et ton calme conforme au script."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

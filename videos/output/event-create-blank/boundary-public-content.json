@@ -1,0 +1,12 @@
+{
+  "anchor": "Les instructions publiques apparaissent avant l’inscription : indique ici l’entrée à",
+  "windowStart": 33.620999999999995,
+  "result": {
+    "found": true,
+    "startSeconds": 15.3,
+    "wordsHeard": "Les instructions publiques apparaissent avant l’inscription"
+  },
+  "onset": 48.92099999999999,
+  "proposedCut": 48.621042,
+  "note": "Proposal only; recut then independently audit before capture"
+}

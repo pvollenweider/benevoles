@@ -7,7 +7,7 @@
   "voice": "Puck",
   "continuousNarration": true,
   "continuousPauseTags": false,
-  "voiceStyle": "French, warm and friendly with an audible smile. Patient conversational delivery, clear articulation and natural pauses. Keep one consistent voice throughout.",
+  "voiceStyle": "French. One warm narrator with an audible smile, clear and patient. Same timbre and speaking register throughout; natural intonation, no character changes.",
   "viewport": {
     "width": 1280,
     "height": 800,
@@ -74,14 +74,14 @@
     "summary": "Dans cette vidéo, vous téléchargez la liste des membres, le journal de l'organisation et l'archive d'un événement, puis vous lisez ce que chaque fichier contient.",
     "steps": [
       "Dans Membres, cliquez sur « Exporter les membres » pour obtenir un fichier CSV de toutes les fiches, y compris désactivées.",
-      "Ouvrez le fichier dans votre tableur en UTF-8, avec le point-virgule comme séparateur.",
+      "Ouvrez le fichier dans votre tableur : si les accents ou les colonnes s'affichent mal, choisissez l'encodage UTF-8 et le point-virgule comme séparateur.",
       "Dans les paramètres, ouvrez le journal d'activité et cliquez sur « Exporter tout le journal ».",
       "Dans Rapports, téléchargez l'archive de l'événement au format JSON avant de quitter l'outil ou de supprimer l'événement.",
       "Rangez ces copies dans un espace protégé et limitez les destinataires."
     ],
     "remember": [
       "L'export des membres ignore la recherche affichée et contient les notes internes : ce n'est pas un annuaire à distribuer.",
-      "Une valeur précédée d'une apostrophe est protégée contre les formules du tableur : gardez cette protection.",
+      "Certaines valeurs commencent par une apostrophe : c'est une protection, ne la supprimez pas.",
       "Le journal exporté contient tout l'historique de l'organisation, même si l'écran est filtré.",
       "Un fichier téléchargé ne se met pas à jour, et l'archive JSON ne se réimporte pas pour restaurer un événement."
     ]

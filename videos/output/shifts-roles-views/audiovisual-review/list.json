@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:19:19.189Z",
+  "videoSha256": "0f491cde965c013c06c43265bcde6fea381c806c088a2e0a95c2b91fa6c35bdf",
+  "promptSha256": "93e9b1c6b1975b9e358b81caab2929989f068d8b73bbb95e8edb829da6b12f11",
+  "clipSha256": "6d590706f6c6534a8c66ec2aced9d167f8bf5d68955699563a5422eb71c0dd6b",
+  "scene": "list",
+  "review": {
+    "heardOpening": "La vue Liste présente",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La vue Liste présente les mêmes données",
+        "visibleSeconds": 2.5,
+        "visible": "Basculement de l'onglet Frise vers l'onglet Liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "pratique pour relire les libellés",
+        "visibleSeconds": 3,
+        "visible": "Affichage des colonnes Date et horaire ainsi que Poste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "les capacités et les statuts",
+        "visibleSeconds": 3,
+        "visible": "Affichage des colonnes Places et Statut dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme posé, conforme au texte."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

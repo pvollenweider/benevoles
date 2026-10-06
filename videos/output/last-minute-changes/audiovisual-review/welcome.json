@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T20:51:01.260Z",
+  "videoSha256": "3e2b054ce139ced7f32f4059559c36ac89bc83cb334bbe34e341997d8f994942",
+  "promptSha256": "355ee33623e97c68190d19766bc83c66cb1782e9d55ae67331c2e2c3a1e165ac",
+  "clipSha256": "a65b61eae9aa173ddf2d437c0c92ee876ed2768ee7520f480c794db68c8f102a",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un désistement, un horaire qui bouge",
+    "checkpoints": [
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "vérifier les faits, prévenir les bonnes personnes et regarder le résultat",
+        "visibleSeconds": 9,
+        "visible": "Encadré central affichant l'étape 'Vérifier, prévenir, contrôler le résultat'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "Dans notre fête fictive, nous allons suivre une place libérée",
+        "visibleSeconds": 12,
+        "visible": "Affichage de la page de gestion 'Fête des imprévus — démonstration'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.5,
+        "spoken": "Chaque changement sera réellement enregistré dans notre environnement de formation",
+        "visibleSeconds": 26.5,
+        "visible": "Vue d'ensemble de l'événement de démonstration en attente d'action",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, bonne synchronisation globale."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

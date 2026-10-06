@@ -1,0 +1,12 @@
+{
+  "anchor": "Une invitation nominative est différente d'un lien public. L'organisation l'envoie à",
+  "windowStart": 120.57900000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 15.65,
+    "wordsHeard": "Une invitation nominative est différente d'un lien public. L'organisation l'envoie à"
+  },
+  "onset": 136.229,
+  "proposedCut": 135.578625,
+  "note": "Proposal only; recut then independently audit before capture"
+}

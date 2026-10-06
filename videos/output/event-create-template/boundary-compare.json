@@ -1,0 +1,12 @@
+{
+  "anchor": "Cinq points de départ sont proposés. Festival couvre plusieurs soirées ;",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 13.56,
+    "wordsHeard": "Cinq points de départ sont proposés Festival couvre plusieurs soirées"
+  },
+  "onset": 13.56,
+  "proposedCut": 13.166104,
+  "note": "Proposal only; recut then independently audit before capture"
+}

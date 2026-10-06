@@ -1,0 +1,12 @@
+{
+  "anchor": "La liste est triée par date. Une échéance passée et non",
+  "windowStart": 14.374000000000002,
+  "result": {
+    "found": true,
+    "startSeconds": 15.4,
+    "wordsHeard": "La liste est triée par date. Une échéance passée et non"
+  },
+  "onset": 29.774,
+  "proposedCut": 29.374354,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:00:04.358Z",
+  "videoSha256": "1a398dc1b0f9c269772795bf5a7edf3279b335085513b5b8d5e5c3440600bbd1",
+  "promptSha256": "e03616a194dbbb77eb244e069d90fc67731bf3e09e4378e4cb080267f6efcdb2",
+  "clipSha256": "d015c984616861926b1ba3bd0d2543155a9d92baf2533bbe96350b1dcbf290dc",
+  "scene": "pages",
+  "review": {
+    "heardOpening": "Créons une page",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Créons une page Ce qu’il faut apporter",
+        "visibleSeconds": 1.2,
+        "visible": "Clic sur Ajouter une page puis saisie du titre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Dans le contenu, un dièse crée un titre, les tirets une liste et deux astérisques du gras",
+        "visibleSeconds": 8,
+        "visible": "Saisie Markdown avec titre dièse, tirets et astérisques",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "puis enregistrons",
+        "visibleSeconds": 17,
+        "visible": "Clic sur Enregistrer et affichage de la nouvelle ligne dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation pédagogique claire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

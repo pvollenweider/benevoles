@@ -1,0 +1,12 @@
+{
+  "anchor": "Rendez le téléphone obligatoire seulement si l’équipe doit joindre les bénévoles",
+  "windowStart": 51.50699999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 15.36,
+    "wordsHeard": "Rendez le téléphone obligatoire seulement si l’équipe doit joindre les bénévoles"
+  },
+  "onset": 66.86699999999999,
+  "proposedCut": 66.506729,
+  "note": "Proposal only; recut then independently audit before capture"
+}

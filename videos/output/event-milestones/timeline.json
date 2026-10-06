@@ -1,37 +1,48 @@
 {
   "slug": "event-milestones",
-  "recordedAt": "2026-10-04T17:15:51.437Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T02:22:01.374Z",
   "video": "capture.webm",
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1130,
-      "endMs": 12138
+      "startMs": 1186,
+      "endMs": 13338
     },
     {
       "id": "create",
-      "startMs": 12590,
-      "endMs": 24812
+      "startMs": 13792,
+      "endMs": 31016
     },
     {
       "id": "states",
-      "startMs": 25264,
-      "endMs": 41352
+      "startMs": 31470,
+      "endMs": 46326
     },
     {
       "id": "toggle",
-      "startMs": 41804,
-      "endMs": 52253
+      "startMs": 46780,
+      "endMs": 60290
     },
     {
       "id": "dashboard",
-      "startMs": 52713,
-      "endMs": 65099
+      "startMs": 60742,
+      "endMs": 76076
     },
     {
       "id": "result",
-      "startMs": 65552,
-      "endMs": 77166
+      "startMs": 76528,
+      "endMs": 89140
+    }
+  ],
+  "detailFrames": [
+    {
+      "startMs": 46804,
+      "endMs": 60313,
+      "x": 97,
+      "y": 292,
+      "width": 640,
+      "height": 400
     }
   ]
 }

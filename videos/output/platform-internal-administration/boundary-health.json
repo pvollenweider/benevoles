@@ -1,0 +1,12 @@
+{
+  "anchor": "La page Santé du service regroupe trois ensembles d'informations : le",
+  "windowStart": 215.678,
+  "result": {
+    "found": true,
+    "startSeconds": 2.84,
+    "wordsHeard": "La page Santé du service regroupe trois ensembles d'informations : le"
+  },
+  "onset": 218.518,
+  "proposedCut": 218.34745850000002,
+  "note": "Proposal only; recut then independently audit before capture"
+}

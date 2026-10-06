@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:14:54.542Z",
+  "videoSha256": "adf29f20360d5cfb94d5ed198cc63852ce8045f4d3ff623267351d447772a253",
+  "promptSha256": "75386a5c865ed48115ad357893fb5962ad4c840474d9747e73cb8f05ba434377",
+  "clipSha256": "6856dbfe828bbd8de4a2bfa31f69073bacbb887cb9dd94352fabb36d747544ac",
+  "scene": "admin",
+  "review": {
+    "heardOpening": "L'organisateur travaille dans son administration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Dans les inscriptions, il retrouve les personnes",
+        "visibleSeconds": 2.2,
+        "visible": "Affichage du tableau Inscriptions avec les bénévoles inscrits",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Dans les membres, il peut consulter les disponibilités",
+        "visibleSeconds": 10.1,
+        "visible": "Navigation vers l'onglet Membres affichant la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "Regardons la fiche de Léa",
+        "visibleSeconds": 12.8,
+        "visible": "Ouverture du formulaire d'édition du membre Léa",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.3,
+        "spoken": "Sa page personnelle ne montre pas les notes internes",
+        "visibleSeconds": 18.5,
+        "visible": "Affichage de la vue publique Mes inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:14:14.795Z",
+  "videoSha256": "adf29f20360d5cfb94d5ed198cc63852ce8045f4d3ff623267351d447772a253",
+  "promptSha256": "ddf5e4fa3c3490688002f9784d75d25905674d53ac93aa070a279e713bdd538d",
+  "clipSha256": "fcf7593ffc6f18ba529e589fe4e2efac0238ced7f461da452ac63a7e61957e9d",
+  "scene": "personal",
+  "review": {
+    "heardOpening": "Sur la page personnelle",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Sur la page personnelle, Jules retrouve son créneau",
+        "visibleSeconds": 1.8,
+        "visible": "Page 'Mes inscriptions' affichant les détails d'inscription de Jules.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.8,
+        "spoken": "Utilisons Recevoir ce lien par email",
+        "visibleSeconds": 13.5,
+        "visible": "Clic sur le bouton et notification d'envoi d'email affichée.",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "puis ouvrons le nouveau message reçu",
+        "visibleSeconds": 18.8,
+        "visible": "Affichage de la boîte Mailpit avec l'email ouvert.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:13 - Le clic sur 'Recevoir ce lien par email' précède de deux secondes l'énoncé vocal."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation pédagogique conforme."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

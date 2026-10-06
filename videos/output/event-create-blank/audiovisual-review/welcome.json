@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:58:10.414Z",
+  "videoSha256": "4811f60870b8951ec947f46457c7c3ae2638f46e4bec4edec4a8b0252e972acd",
+  "promptSha256": "e4313ffa4aa1ff681c8d4f5ce3c8d0bebc358f3376dde944ba1a764009dbeef3",
+  "clipSha256": "b374d3bd4bf8c3c2e3dde324010b6faea32ca70ae7ab95e0a984929c562a1e28",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Quand aucun modèle ne correspond vraiment",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "partez d'une page blanche",
+        "visibleSeconds": 2.5,
+        "visible": "Formulaire 'Nouvel événement' avec l'option 'Page blanche' sélectionnée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "L'événement est d'abord créé comme brouillon",
+        "visibleSeconds": 3,
+        "visible": "Mention du brouillon visible dans le descriptif sous les options",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "Créons ensemble une fête de quartier sur deux jours",
+        "visibleSeconds": 11,
+        "visible": "Champs Titre et Description prêts pour la saisie de l'exercice annoncé",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,12 +1,12 @@
 {
   "anchor": "Où manque-t-il encore du monde ? Ouvrons la vue de couverture",
-  "windowStart": 71.91,
+  "windowStart": 78.496,
   "result": {
     "found": true,
-    "startSeconds": 15.25,
+    "startSeconds": 10.6,
     "wordsHeard": "Où manque-t-il encore du monde ? Ouvrons la vue de couverture"
   },
-  "onset": 87.16,
-  "proposedCut": 86.910167,
+  "onset": 89.09599999999999,
+  "proposedCut": 88.4676665,
   "note": "Proposal only; recut then independently audit before capture"
 }

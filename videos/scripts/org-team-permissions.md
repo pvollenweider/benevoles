@@ -11,6 +11,8 @@ personnes qui en portent réellement la responsabilité.
 
 1. Lire la liste d’une équipe contenant deux propriétaires et une organisatrice.
 2. Comparer précisément les deux rôles.
+   Distinguer aussi le responsable de secteur : il consulte les informations
+   de sa mission par un lien personnel, ce n’est pas un troisième rôle de compte admin.
 3. Inviter Léa comme organisatrice et montrer son statut en attente.
 4. Copier le lien d’invitation et expliquer sa durée de validité.
 5. Modifier son rôle avec la confirmation explicite « Appliquer ».
@@ -24,7 +26,7 @@ personnes qui en portent réellement la responsabilité.
 
 ## Points d’attention
 
-- Conserver au moins deux propriétaires actifs.
+- Avoir deux propriétaires actifs est une précaution recommandée, pas une obligation du logiciel.
 - Un rôle n’est changé qu’après le bouton « Appliquer ».
 - Retirer un accès ne supprime pas l’historique.
 - Les réglages sensibles et les suppressions définitives restent réservés aux propriétaires.

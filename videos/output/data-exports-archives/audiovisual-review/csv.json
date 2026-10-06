@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T20:36:25.293Z",
+  "videoSha256": "20ccf7d54add31d2e5210c71d07e9b917ced0c5680878b1202f4e29e6e1ebc81",
+  "promptSha256": "7b811a059b0d1f0edcb3b660f51c0a4c0ed4bf12c935b24987e9029fd1ac7ecd",
+  "clipSha256": "4841a77f226234cf990e4c95cbb2e15c3a6be0c3eb85d2d40f444e2f6270ca28",
+  "scene": "csv",
+  "review": {
+    "heardOpening": "Les accents sont conservés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Regarde ce numéro qui commence par plus quarante et un",
+        "visibleSeconds": 5.1,
+        "visible": "Défilement vers la colonne Téléphone montrant les numéros précédés d'une apostrophe",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "Une valeur qui commence par égal, plus, moins ou arobase",
+        "visibleSeconds": 14.2,
+        "visible": "Retour sur les colonnes de droite affichant les valeurs sous Notes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.4,
+        "spoken": "Notre exemple égal un plus un reste une valeur textuelle",
+        "visibleSeconds": 14.5,
+        "visible": "Cellule affichant la mention '=1+1 sous la colonne Notes",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée avec un ton pédagogique régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

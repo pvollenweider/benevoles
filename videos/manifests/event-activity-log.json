@@ -71,14 +71,14 @@
     }
   ],
   "viewer": {
-    "summary": "Dans cette vidéo, vous retrouvez ce qui a changé dans un événement grâce à son journal : lire une entrée, filtrer, rejouer un élément et suivre un enchaînement d'actions.",
+    "summary": "Dans cette vidéo, vous retrouvez ce qui a changé dans un événement grâce à son journal : lire une entrée, filtrer, revoir pas à pas l'évolution d'un créneau et suivre un enchaînement d'actions.",
     "steps": [
       "Depuis l'événement, ouvrez le Journal et lisez une entrée : type d'élément, date, auteur et différences enregistrées.",
       "Filtrez par type d'élément, par origine (bénévole, administrateur ou système) ou par action.",
       "Limitez la période avec Depuis et Jusqu'à, puis utilisez « Charger plus » si la liste continue.",
       "Ouvrez Rejouer pour parcourir étape par étape l'évolution d'un créneau ou d'une inscription.",
       "Passez en mode Récit pour voir quelle action en a provoqué une autre.",
-      "Sur un ancien événement sans historique, générez l'état initial pour disposer d'un point de départ."
+      "Sur un ancien événement sans historique, enregistrez l'état actuel comme point de départ."
     ],
     "remember": [
       "Les filtres limitent l'affichage sans rien supprimer : une liste vide ne prouve pas qu'aucune action n'a eu lieu.",

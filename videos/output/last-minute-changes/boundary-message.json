@@ -1,12 +1,12 @@
 {
-  "anchor": "Une proposition utile donne le poste, l'horaire et la manière de",
-  "windowStart": 132.614,
+  "anchor": "Depuis les messages de l'événement, choisissons les bénévoles d'un créneau, puis",
+  "windowStart": 135.51999999999998,
   "result": {
     "found": true,
-    "startSeconds": 16.1,
-    "wordsHeard": "Une proposition utile donne le poste, l'horaire et la manière de"
+    "startSeconds": 13,
+    "wordsHeard": "Depuis les messages de l'événement choisissons les bénévoles d'un créneau puis"
   },
-  "onset": 148.714,
-  "proposedCut": 148.515833,
+  "onset": 148.51999999999998,
+  "proposedCut": 147.968229,
   "note": "Proposal only; recut then independently audit before capture"
 }

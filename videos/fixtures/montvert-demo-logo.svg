@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="160" viewBox="0 0 400 160">
+  <rect width="400" height="160" rx="20" fill="#eef6f0"/>
+  <path d="M24 110 74 40 124 110Z" fill="#176749"/>
+  <path d="M68 110 108 64 148 110Z" fill="#3f8b65"/>
+  <text x="163" y="77" font-family="Arial,sans-serif" font-size="34" font-weight="700" fill="#17452f">Montvert</text>
+  <text x="164" y="109" font-family="Arial,sans-serif" font-size="19" fill="#17452f">Les amis du village</text>
+</svg>

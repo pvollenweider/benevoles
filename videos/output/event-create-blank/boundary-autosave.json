@@ -1,0 +1,12 @@
+{
+  "anchor": "Après la création, les modifications des réglages s’enregistrent automatiquement après une",
+  "windowStart": 89.14099999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 8.2,
+    "wordsHeard": "Après la création les modifications des réglages s’enregistrent automatiquement après une"
+  },
+  "onset": 97.341,
+  "proposedCut": 97.46875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

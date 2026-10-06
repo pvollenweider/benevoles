@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:14:25.641Z",
+  "videoSha256": "adf29f20360d5cfb94d5ed198cc63852ce8045f4d3ff623267351d447772a253",
+  "promptSha256": "9092b94e4bc946e1347255f7b69ced758ce596d6426516253f3650eecccf29ad",
+  "clipSha256": "9dbbd45a89a4f00c5ad4ef13e8f392c0e7792b2c6f53ae0dd7e4570388d16245",
+  "scene": "recovery",
+  "review": {
+    "heardOpening": "Le lien est perdu ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "saisissons l'adresse utilisée pour l'inscription",
+        "visibleSeconds": 3.5,
+        "visible": "Saisie de l'adresse email dans le champ dédié puis clic sur Recevoir un nouveau lien",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "La réponse indique quoi faire ensuite, sans afficher de coordonnées",
+        "visibleSeconds": 8,
+        "visible": "Affichage de la mention invitant à consulter les courriels",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Vérifions le message reçu dans la boîte de Léa",
+        "visibleSeconds": 10.2,
+        "visible": "Boîte Mailpit affichant le courriel destiné à Léa",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "Recommençons avec une adresse fictive inconnue",
+        "visibleSeconds": 16.5,
+        "visible": "Formulaire de récupération avec saisie d'une adresse inconnue",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "demandons depuis l'organisation A le lien d'une adresse appartenant seulement à B",
+        "visibleSeconds": 24.5,
+        "visible": "Saisie de l'adresse liée à l'organisation B et soumission",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier bien synchronisé avec les manipulations."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

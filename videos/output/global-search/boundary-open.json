@@ -1,0 +1,12 @@
+{
+  "anchor": "Ouvrez la loupe dans la barre du haut. Vous pouvez aussi",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 14.34,
+    "wordsHeard": "Ouvrez la loupe dans la barre du haut. Vous pouvez aussi"
+  },
+  "onset": 14.34,
+  "proposedCut": 14.163542,
+  "note": "Proposal only; recut then independently audit before capture"
+}

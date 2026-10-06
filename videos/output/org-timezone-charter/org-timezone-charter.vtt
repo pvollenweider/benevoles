@@ -1,26 +1,133 @@
 WEBVTT
 
-00:00:01.134 --> 00:00:11.602
-Deux réglages communs évitent beaucoup de malentendus : le fuseau horaire donne la bonne référence aux calculs automatiques, et la Convention des Bénévoles explique clairement le cadre accepté avant chaque inscription.
+00:00:01.104 --> 00:00:05.871
+Deux réglages communs évitent beaucoup de
+malentendus : le fuseau horaire donne la
 
-00:00:13.763 --> 00:00:27.883
-Dans Paramètres, choisis le fuseau du lieu où se déroulent habituellement les événements. Europe Zurich applique automatiquement l’heure d’hiver et l’heure d’été. Il sert aux rappels, aux offres de liste d’attente, au journal et aux documents produits par le serveur.
+00:00:05.871 --> 00:00:09.905
+bonne référence aux calculs automatiques,
+et la Convention des Bénévoles explique
 
-00:00:28.335 --> 00:00:40.770
-Enregistrer le fuseau ne décale pas les heures saisies dans le planning : un créneau prévu à neuf heures reste affiché à neuf heures. Le réglage permet au système de convertir correctement cette heure locale en instant réel, y compris le dimanche d’un changement d’heure.
+00:00:09.905 --> 00:00:12.472
+clairement le cadre accepté avant chaque
+inscription.
 
-00:00:42.931 --> 00:01:05.340
-La Convention des Bénévoles décrit maintenant les engagements concrets : arriver à l’heure, prévenir en cas d’empêchement et suivre les consignes de sécurité. Enregistre un texte compréhensible et adapté à l’association. Le bouton de rétablissement permet de revenir au texte proposé par défaut.
+00:00:14.635 --> 00:00:18.720
+Dans Paramètres, choisissez le fuseau du
+lieu où se déroulent vos événements.
 
-00:01:09.476 --> 00:01:18.944
-Vérifions le résultat comme le ferait un bénévole. Ouvre l’événement public, sélectionne un créneau, puis continue vers le formulaire. Cette étape ne crée encore aucune inscription : elle permet simplement d’atteindre les informations et les consentements avant la confirmation.
+00:00:18.720 --> 00:00:23.145
+Europe Zurich tient compte de l’heure
+d’hiver et de l’heure d’été. Ce réglage
 
-00:01:19.396 --> 00:01:34.546
-La convention apparaît avant la confirmation. Ouvre-la pour afficher le texte qui vient d’être enregistré. Le bénévole peut le lire dans son intégralité, puis choisir J’ai lu et j’accepte. Ce n’est donc pas une note interne : le destinataire voit réellement le cadre auquel il consent.
+00:00:23.145 --> 00:00:27.910
+donne la bonne référence aux rappels, aux
+délais des offres de liste d’attente et
 
-00:01:35.007 --> 00:01:50.180
-L’acceptation revient dans le formulaire et reste cochée. Une modification ultérieure de la convention s’appliquera aux nouvelles inscriptions, mais n’enverra pas d’information urgente aux personnes déjà inscrites. Avant de changer le fuseau d’une organisation active, vérifie aussi les prochains rappels et les créneaux de nuit.
+00:00:27.910 --> 00:00:30.974
+aux dates affichées dans le journal et les
+documents.
 
-00:01:50.633 --> 00:02:04.185
-Le résultat est prévisible : les automatismes utilisent le bon temps local et chaque nouvelle inscription accepte le même cadre. Ces deux réglages sont communs à l’organisation, tandis que les horaires et consignes détaillées restent configurés dans chaque événement et chaque créneau.
+00:00:31.429 --> 00:00:35.504
+Enregistrer le fuseau ne décale pas les
+heures saisies dans le planning : un
+
+00:00:35.504 --> 00:00:39.579
+créneau prévu à neuf heures reste affiché
+à neuf heures. Le réglage permet au
+
+00:00:39.579 --> 00:00:43.363
+système de convertir correctement cette
+heure locale en instant réel, y compris le
+
+00:00:43.363 --> 00:00:44.527
+dimanche d’un changement d’heure.
+
+00:00:46.700 --> 00:00:51.033
+La Convention des Bénévoles présente le
+cadre de l’engagement. Le réglage
+
+00:00:51.033 --> 00:00:55.367
+Assurance RC fournie par l’organisation
+change la clause correspondante et remplit
+
+00:00:55.367 --> 00:01:00.094
+de nouveau le texte proposé :
+choisissez-le selon la situation réelle de
+
+00:01:00.094 --> 00:01:04.821
+votre association. Ici, nous conservons le
+texte complet, notamment la consigne de
+
+00:01:04.821 --> 00:01:09.548
+prévenir dès que possible. Réinitialiser
+la convention par défaut remplit le champ,
+
+00:01:09.548 --> 00:01:12.306
+mais il faut ensuite cliquer sur
+Enregistrer.
+
+00:01:14.469 --> 00:01:19.037
+Vérifions le résultat côté bénévole.
+Ouvrez l’événement public, sélectionnez un
+
+00:01:19.037 --> 00:01:24.063
+créneau, puis cliquez sur Continuer. Vous
+arrivez au formulaire, avec les
+
+00:01:24.063 --> 00:01:27.717
+informations demandées et les
+consentements, avant toute confirmation
+
+00:01:27.717 --> 00:01:28.174
+d’inscription.
+
+00:01:28.628 --> 00:01:32.745
+Ouvrez la convention depuis le formulaire.
+Le texte enregistré est présenté au
+
+00:01:32.745 --> 00:01:36.862
+bénévole : faisons-le défiler pour lire
+aussi les engagements de l’organisation et
+
+00:01:36.862 --> 00:01:41.666
+la clause d’assurance. Le bouton J’ai lu
+et j’accepte ferme la fenêtre et coche
+
+00:01:41.666 --> 00:01:43.038
+l’acceptation dans le formulaire.
+
+00:01:43.492 --> 00:01:47.702
+Quand le bénévole confirme son
+inscription, la version exacte de la
+
+00:01:47.702 --> 00:01:51.913
+convention acceptée et la date sont
+conservées. Une modification de votre
+
+00:01:51.913 --> 00:01:56.123
+texte concerne les prochaines inscriptions
+; elle n’envoie pas automatiquement un
+
+00:01:56.123 --> 00:02:00.334
+message aux personnes déjà inscrites. Pour
+une information urgente, utilisez les
+
+00:02:00.334 --> 00:02:01.482
+communications de l’événement.
+
+00:02:01.941 --> 00:02:06.205
+Le résultat est prévisible : les
+automatismes utilisent le bon temps local
+
+00:02:06.205 --> 00:02:10.824
+et chaque nouvelle inscription accepte le
+même cadre. Ces deux réglages sont communs
+
+00:02:10.824 --> 00:02:14.733
+à l’organisation, tandis que les horaires
+et consignes détaillées restent configurés
+
+00:02:14.733 --> 00:02:16.865
+dans chaque événement et chaque créneau.
 

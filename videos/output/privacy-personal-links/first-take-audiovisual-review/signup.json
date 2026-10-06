@@ -1,0 +1,78 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:14:06.133Z",
+  "videoSha256": "adf29f20360d5cfb94d5ed198cc63852ce8045f4d3ff623267351d447772a253",
+  "promptSha256": "3cd4a2301ec083ccbf8a5bdd9b37830d9f64bb3c690b99ed32370fa3b9a5c9e0",
+  "clipSha256": "3ae7666b2356348d65dd548a849977f86a39e9e16476547470e06ee2f76fa73c",
+  "scene": "signup",
+  "review": {
+    "heardOpening": "Le lien public, ou son QR code",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5,
+        "spoken": "Jules choisit un créneau",
+        "visibleSeconds": 3,
+        "visible": "Affichage du formulaire d'inscription après sélection du créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "renseigne ses coordonnées",
+        "visibleSeconds": 5.5,
+        "visible": "Saisie des champs prénom, nom, courriel et téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "et accepte les conditions du formulaire",
+        "visibleSeconds": 14,
+        "visible": "Cochage des cases d'acceptation",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Après l'envoi, l'inscription est enregistrée",
+        "visibleSeconds": 16,
+        "visible": "Clic sur validation et affichage de la confirmation",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 22,
+        "spoken": "Ouvrons donc le vrai message reçu par Jules",
+        "visibleSeconds": 23,
+        "visible": "Boîte Mailpit affichant le courriel de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.5,
+        "spoken": "puis son lien personnel",
+        "visibleSeconds": 25.5,
+        "visible": "Clic sur le bouton Gérer mes inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.5,
+        "spoken": "Nous arrivons sur sa propre inscription",
+        "visibleSeconds": 27,
+        "visible": "Page Mes inscriptions affichée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Léger décalage entre 00:08 et 00:15 où la voix annonce les conditions et l'envoi avant leur exécution visuelle."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

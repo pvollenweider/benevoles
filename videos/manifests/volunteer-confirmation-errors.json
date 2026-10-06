@@ -30,8 +30,8 @@
     },
     {
       "id": "capacity",
-      "transcript": "Une place peut être prise pendant que tu remplis le formulaire. Nous rendons ici le créneau complet dans la base de démonstration : la confirmation répond Votre sélection n’est plus disponible. Reviens au planning pour ajuster ton choix ; les informations saisies restent conservées. Le serveur revérifie aussi les chevauchements à cet instant.",
-      "fallbackDurationMs": 30000
+      "transcript": "Une place peut être prise pendant que tu remplis le formulaire. Nous rendons ici le créneau complet par une modification réelle de sa capacité dans la démonstration. La confirmation répond Votre sélection n'est plus disponible. Reviens au planning pour ajuster ton choix ; les informations saisies restent conservées. Une place visible quelques minutes plus tôt n'est pas une réservation tant que l'inscription n'a pas été confirmée.",
+      "fallbackDurationMs": 42000
     },
     {
       "id": "network",
@@ -49,9 +49,24 @@
       "fallbackDurationMs": 30000
     },
     {
+      "id": "overlap",
+      "transcript": "Le serveur revérifie aussi tes horaires. Aline est déjà inscrite à l'accueil de dix heures à midi. Essayons le vestiaire de onze à treize heures avec sa même adresse. Remplissons le formulaire et confirmons. Le refus nomme le créneau qui chevauche cette demande. Les informations restent remplies et aucune nouvelle inscription n'a été ajoutée. Ce contrôle évite de compter une personne sur deux postes en même temps. Pour continuer, reviens au planning et choisis un horaire compatible.",
+      "fallbackDurationMs": 70000
+    },
+    {
+      "id": "response-loss",
+      "transcript": "Une coupure peut arriver après l'enregistrement. Nicolas choisit la logistique. Cette fois, la requête arrive réellement au serveur, qui crée son inscription ; nous interrompons volontairement seulement la réponse au navigateur. Le formulaire affiche Connexion interrompue parce qu'il ne sait pas si l'envoi a abouti. Rétablissons la connexion et confirmons à nouveau. Le message indique qu'il est déjà inscrit et que son lien lui a été envoyé par email. Vérifions côté organisation : une seule ligne de Nicolas apparaît sur ce créneau. Le nouvel essai n'a pas créé une deuxième inscription.",
+      "fallbackDurationMs": 85000
+    },
+    {
+      "id": "invitation-success",
+      "transcript": "Comparons maintenant deux confirmations réussies. Zoé choisit le vestiaire dans le formulaire public ordinaire. Après ses informations et les consentements, confirmons. La page annonce le succès mais ne montre pas son lien personnel : saisir une adresse ne prouve pas que l'on possède cette boîte. Aline a ensuite reçu une invitation personnelle envoyée par l'organisation. Ouvrons ce lien pour choisir la logistique. Ses informations sont préremplies ; vérifions-les, choisissons sa taille de t-shirt et confirmons les consentements. Cette confirmation peut afficher Accéder à mon inscription, car l'invitation apporte la preuve d'adresse. Ouvrons ce lien : Aline retrouve ses deux créneaux. Ce lien reste privé et permet aussi d'annuler ses inscriptions.",
+      "fallbackDurationMs": 110000
+    },
+    {
       "id": "result",
-      "transcript": "Une erreur de champ se corrige sur place. Une sélection indisponible se revoit dans le planning. Une interruption réseau se retente après vérification de la connexion. Dans tous les cas, les indications expliquent quoi faire, et la confirmation réussie donne un résultat clair. Ton email personnel reste la clé pour retrouver tes inscriptions.",
-      "fallbackDurationMs": 28000
+      "transcript": "Revenons côté organisation pour vérifier les inscriptions réellement présentes. Une erreur de champ se corrige sur place. Une sélection indisponible se revoit dans le planning. Une interruption réseau se retente après vérification de la connexion, sans inventer une deuxième inscription. Lis le message jusqu'au bout et conserve ton email personnel pour retrouver tes créneaux. Dans cette démonstration, les personnes sont fictives, mais les refus, les confirmations et les résultats sont bien ceux de l'application.",
+      "fallbackDurationMs": 42000
     }
   ],
   "viewer": {
@@ -59,14 +74,28 @@
     "steps": [
       "Remplis le formulaire et relis ton adresse email avant d'envoyer.",
       "Si une question obligatoire manque, complète-la : tes autres réponses sont conservées.",
-      "Si ta sélection n'est plus disponible, reviens au planning pour choisir un autre créneau.",
+      "Si ta sélection n'est plus disponible ou chevauche un de tes créneaux, reviens au planning pour choisir un autre horaire.",
       "En cas de coupure réseau, vérifie ta connexion puis clique à nouveau sur « Confirmer mon inscription ».",
       "Retrouve l'email de confirmation, qui contient ton lien personnel."
     ],
     "remember": [
-      "Confirmer deux fois après une coupure ne crée pas deux inscriptions.",
+      "Confirmer de nouveau après une coupure ne crée pas une deuxième inscription.",
+      "Après un formulaire public, ton lien personnel arrive par email ; avec une invitation, la page peut l'afficher directement.",
       "Si l'email n'arrive pas, regarde dans les indésirables et vérifie l'adresse saisie.",
       "Garde l'email de confirmation : il permet de retrouver ou d'annuler ton inscription."
     ]
+  },
+  "continuousPauseTags": false,
+  "chapterTitles": {
+    "form": "Relire ses informations",
+    "validation": "Corriger une réponse",
+    "capacity": "Une place devenue indisponible",
+    "network": "Une requête interrompue",
+    "success": "Vérifier la confirmation",
+    "email": "Retrouver le vrai email",
+    "overlap": "Le serveur vérifie les horaires",
+    "response-loss": "Une réponse perdue, pas deux inscriptions",
+    "invitation-success": "Public et invitation : deux confirmations",
+    "result": "Vérifier le résultat côté organisation"
   }
 }

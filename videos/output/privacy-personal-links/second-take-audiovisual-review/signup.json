@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:26:10.039Z",
+  "videoSha256": "b4d9efddbd5814fbdceb220cd5cca7cd88facb3e9f33c37784cfdb0ef5043701",
+  "promptSha256": "c1b3efc3ab4489d053a7dca39a007efb36eb463410123eb3429a9f70ef2ca643",
+  "clipSha256": "39dcbbc29a9c84fc0a1903ad8de9f778e49b7606dc9e50065e7d523da49ca8a6",
+  "scene": "signup",
+  "review": {
+    "heardOpening": "Le lien public ou son QR code",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Jules choisit un créneau et renseigne ses coordonnées",
+        "visibleSeconds": 4.5,
+        "visible": "Affichage et saisie des champs du formulaire d'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Il accepte ensuite les conditions du formulaire",
+        "visibleSeconds": 16.8,
+        "visible": "Cochage des cases de consentement sous le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.3,
+        "spoken": "Après l'envoi l'inscription est enregistrée",
+        "visibleSeconds": 19.1,
+        "visible": "Validation et affichage de l'écran Inscription confirmée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 31.8,
+        "spoken": "Ouvrons donc le vrai message reçu par Jules",
+        "visibleSeconds": 31.5,
+        "visible": "Ouverture du client Mailpit avec l'e-mail de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 34.6,
+        "spoken": "puis son lien personnel",
+        "visibleSeconds": 35.8,
+        "visible": "Clic sur le bouton Gérer mes inscriptions et chargement de la page personnelle",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire, posée et parfaitement synchronisée avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

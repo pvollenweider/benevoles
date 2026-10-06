@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:20:19.454Z",
+  "videoSha256": "d99f66e1d00de93a9e4f15c6a1ec3d17b02a4396ee86da063360cee3f65319f4",
+  "promptSha256": "c93cc4b1170b22900056b2151fd2d1b86c47547d51658843a2ce3d09cd46377b",
+  "clipSha256": "1be6c450476448a7bf7e09d97f8f3fb91d857e5bf6df05f6c03eb260af29dbc2",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Le résultat est prévisible",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "les automatismes utilisent le bon temps local",
+        "visibleSeconds": 1,
+        "visible": "Section Fuseau horaire visible avec Europe/Zurich sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "chaque nouvelle inscription accepte le même cadre",
+        "visibleSeconds": 1,
+        "visible": "Section Convention des bénévoles visible à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "horaires et consignes détaillées restent configurés dans chaque événement",
+        "visibleSeconds": 1,
+        "visible": "Écran maintenu sur les paramètres généraux pour illustrer le contraste conceptuel",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier, ton clair et posé."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

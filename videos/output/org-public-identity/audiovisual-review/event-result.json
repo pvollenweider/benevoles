@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:39:06.413Z",
+  "videoSha256": "37f0ffaad0a3d4219ff316210f773fa8ed94aef6541a60f1002c969b42adf7e0",
+  "promptSha256": "ea4436299bbf2b8258c66baf26c61247fe44b039dc14ffe328de51df0948bf2c",
+  "clipSha256": "20b0f4a04e00360fdc41ad7c37538fef5eb25eb5a41bf5149537fc8b2d3b34c6",
+  "scene": "event-result",
+  "review": {
+    "heardOpening": "En ouvrant la Fête du village",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "En ouvrant la Fête du village",
+        "visibleSeconds": 1.8,
+        "visible": "Ouverture de la page de l'événement Fête du village",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "on retrouve l’identité de l’organisation",
+        "visibleSeconds": 2,
+        "visible": "Affichage du nom de l'organisation Les amis de Montvert",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Le nom de l’événement, son lieu et son planning",
+        "visibleSeconds": 2.5,
+        "visible": "Affichage du titre, de l'adresse et de la frise horaire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec la navigation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

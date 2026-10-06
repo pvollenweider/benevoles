@@ -1,0 +1,12 @@
+{
+  "anchor": "Ouvrons maintenant la page publique. Le concert apparaît en repère sur",
+  "windowStart": 78.068,
+  "result": {
+    "found": true,
+    "startSeconds": 13,
+    "wordsHeard": "Ouvrons maintenant la page publique. Le concert apparaît en repère sur"
+  },
+  "onset": 91.068,
+  "proposedCut": 90.9422295,
+  "note": "Proposal only; recut then independently audit before capture"
+}

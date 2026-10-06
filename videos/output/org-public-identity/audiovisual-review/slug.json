@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:38:48.011Z",
+  "videoSha256": "37f0ffaad0a3d4219ff316210f773fa8ed94aef6541a60f1002c969b42adf7e0",
+  "promptSha256": "b746c2691af484320371e7208c99770351e279b2a92f653af86e890325369f20",
+  "clipSha256": "75d9d4d352fe24800cc955bae6e0b83e21758347e593b6a6bd23abfa0f3e82b0",
+  "scene": "slug",
+  "review": {
+    "heardOpening": "L’identifiant public, ou slug",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "L’identifiant public, ou slug, sert à former l’adresse",
+        "visibleSeconds": 1.8,
+        "visible": "Défilement vers la section Identifiant public (slug)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "une confirmation est demandée",
+        "visibleSeconds": 8,
+        "visible": "Apparition du bloc d'avertissement avec options Confirmer et Annuler",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 22.1,
+        "spoken": "Ici, gardons l’adresse actuelle",
+        "visibleSeconds": 22,
+        "visible": "Clic sur Annuler et rétablissement de l'identifiant initial",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

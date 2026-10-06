@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:25:45.276Z",
+  "videoSha256": "8f7dbb76df343426f83b4eb397041fab9002326ed3456c11d215b198e2e67c54",
+  "promptSha256": "2630fd8b123ebbb653fe8463198f1ee172407300fa1cba1c9fbf7cedaa0df095",
+  "clipSha256": "3cc1d028d10b99c00074cc069f26a604628250b8f052854255a89167af5d6263",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Les jalons servent à garder sous les yeux",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Les jalons servent à garder sous les yeux les quelques échéances",
+        "visibleSeconds": 0,
+        "visible": "Encadré central intitulé « Jalons et pilotage de la préparation »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Ils ne remplacent pas un outil de gestion de projet",
+        "visibleSeconds": 3,
+        "visible": "Affichage de la page de gestion de l'événement avec les compteurs et onglets",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "directement à côté des inscriptions et du planning",
+        "visibleSeconds": 3,
+        "visible": "Boutons « Gérer les créneaux » et « Voir les inscriptions » visibles au centre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, conforme au texte."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:15:05.285Z",
+  "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
+  "promptSha256": "7d76a28cadc92f85e63b0f9ed666b81b8d2e1684ad6fa6fc40f8f31413e13a61",
+  "clipSha256": "4bd5e26f8acf99c0f67fe1f632050f05ebcbe8b00a5a94259a380a9c329600cb",
+  "scene": "test",
+  "review": {
+    "heardOpening": "M'envoyer un email de test",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "M'envoyer un email de test envoie un exemple",
+        "visibleSeconds": 3.8,
+        "visible": "Clic sur le bouton et affichage du message de confirmation d'envoi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "Ouvrons le message reçu dans la boîte locale",
+        "visibleSeconds": 7.5,
+        "visible": "Affichage de la boîte de réception Mailpit avec l'e-mail ouvert",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Vérifiez l'expéditeur et l'adresse de réponse, ici benevoles arobase example point org",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage des en-têtes Reply-To avec l'adresse benevoles@example.org et du corps du message",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier, diction claire et ton pédagogique adapté."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

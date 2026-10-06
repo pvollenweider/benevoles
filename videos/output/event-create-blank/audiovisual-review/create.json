@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:59:02.687Z",
+  "videoSha256": "4811f60870b8951ec947f46457c7c3ae2638f46e4bec4edec4a8b0252e972acd",
+  "promptSha256": "5baeb32284e1e9e531d3ed0a3a06d44a3bd71bbbe5c0fd47913263e2bbb2acb9",
+  "clipSha256": "b584d5526e6c22c4495470ead6d30f060a9daf61f3e5265d4126ab36b5f4d490",
+  "scene": "create",
+  "review": {
+    "heardOpening": "Le bouton Créer l'événement enregistre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le bouton Créer l’événement enregistre maintenant un brouillon",
+        "visibleSeconds": 2.2,
+        "visible": "Clic sur le bouton Créer l'événement en bas de page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "puis ouvre directement l’étape des créneaux",
+        "visibleSeconds": 3,
+        "visible": "Affichage de la page de gestion des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Le bandeau de progression montre clairement qu’il reste à construire le planning",
+        "visibleSeconds": 7.5,
+        "visible": "Bandeau supérieur indiquant les étapes du processus",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix fluide, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

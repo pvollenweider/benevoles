@@ -1,12 +1,12 @@
 {
   "anchor": "Une fois téléchargée, cette copie ne se met pas à jour.",
-  "windowStart": 196.17,
+  "windowStart": 191.216,
   "result": {
     "found": true,
-    "startSeconds": 15,
+    "startSeconds": 15.1,
     "wordsHeard": "Une fois téléchargée, cette copie ne se met pas à jour."
   },
-  "onset": 211.17,
-  "proposedCut": 211.170375,
+  "onset": 206.316,
+  "proposedCut": 206.2160835,
   "note": "Proposal only; recut then independently audit before capture"
 }

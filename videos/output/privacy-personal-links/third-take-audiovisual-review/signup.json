@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:43:14.440Z",
+  "videoSha256": "74ad8b7010a5231a83be946771cc9efc6fe7565c20bad30cecf13062260ad851",
+  "promptSha256": "c1b3efc3ab4489d053a7dca39a007efb36eb463410123eb3429a9f70ef2ca643",
+  "clipSha256": "d01695a79d83a014a810bece3298b02a41c78381bf6f1d1d044664f4f879441e",
+  "scene": "signup",
+  "review": {
+    "heardOpening": "Le lien public, ou son QR code",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Jules choisit un créneau et renseigne ses coordonnées",
+        "visibleSeconds": 4,
+        "visible": "Formulaire de coordonnées affiché et en cours de saisie",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.9,
+        "spoken": "Il accepte ensuite les conditions du formulaire",
+        "visibleSeconds": 15.2,
+        "visible": "Cases d'acceptation cochées en bas du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Après l'envoi, l'inscription est enregistrée",
+        "visibleSeconds": 17.8,
+        "visible": "Écran de confirmation d'inscription affiché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28.5,
+        "spoken": "Ouvrons donc le vrai message reçu par Jules",
+        "visibleSeconds": 29,
+        "visible": "Affichage de la boîte de réception Mailpit et ouverture de l'email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 32.8,
+        "spoken": "Nous arrivons sur sa propre inscription",
+        "visibleSeconds": 33.8,
+        "visible": "Page 'Mes inscriptions' de Jules affichée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

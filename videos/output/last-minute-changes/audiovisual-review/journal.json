@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T20:52:12.532Z",
+  "videoSha256": "3e2b054ce139ced7f32f4059559c36ac89bc83cb334bbe34e341997d8f994942",
+  "promptSha256": "797e08f0dfd99a4d321948cf0f27f8632a19e7d5fddcfbbf3c8c36af7ad8e2a7",
+  "clipSha256": "01d1fd92981f0cda2f80ee24c5fe18c60a9eac6b03ef5f759e1a2940528f9e4a",
+  "scene": "journal",
+  "review": {
+    "heardOpening": "Pour comprendre l'imprévu après coup",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "ouvrons le journal de l'événement",
+        "visibleSeconds": 2,
+        "visible": "Navigation vers la page du journal de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Retrouvons le retrait, l'offre et son acceptation",
+        "visibleSeconds": 6,
+        "visible": "Défilement de la liste des actions montrant l'offre et la confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.4,
+        "spoken": "Le mode Récit peut montrer les conséquences reliées à une action",
+        "visibleSeconds": 12.5,
+        "visible": "Sélection de l'onglet Récit puis ouverture d'un enchaînement causal",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton pédagogique adapté."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

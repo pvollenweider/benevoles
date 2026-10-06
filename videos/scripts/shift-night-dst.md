@@ -13,6 +13,6 @@
 
 ## Résultat visible
 
-- La Timeline peut prolonger l’axe au-delà de minuit.
+- La Frise peut prolonger l’axe au-delà de minuit.
 - Les heures locales restent lisibles.
 - Les durées réelles tiennent compte du changement d’heure.

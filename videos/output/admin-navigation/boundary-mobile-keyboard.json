@@ -1,0 +1,12 @@
+{
+  "anchor": "Sur téléphone, ouvrez le menu pour retrouver les principales destinations. Sur",
+  "windowStart": 72.134,
+  "result": {
+    "found": true,
+    "startSeconds": 14.92,
+    "wordsHeard": "Sur téléphone"
+  },
+  "onset": 87.054,
+  "proposedCut": 87.1342085,
+  "note": "Proposal only; recut then independently audit before capture"
+}

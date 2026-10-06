@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:38:55.471Z",
+  "videoSha256": "37f0ffaad0a3d4219ff316210f773fa8ed94aef6541a60f1002c969b42adf7e0",
+  "promptSha256": "e25b9eaf1646736603db48a602f5cc3fd4d9b816da576767d8ffcd65b7c75033",
+  "clipSha256": "2aa36bb466f8dc93783e8253d112ebc9a8c3eaaa8dd8363696788989d376cc76",
+  "scene": "public-page",
+  "review": {
+    "heardOpening": "Ouvrons la page publique",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrons la page publique.",
+        "visibleSeconds": 0,
+        "visible": "La page publique est déjà ouverte avec la liste des événements.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Le nouveau titre et le logo apparaissent au-dessus des deux événements",
+        "visibleSeconds": 2.1,
+        "visible": "Le logo, le titre et les deux événements répertoriés sont affichés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "Ouvrons son lien direct",
+        "visibleSeconds": 11.2,
+        "visible": "Affichage de la page de l'événement Rencontre des organisateurs.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et synchronisée avec la navigation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

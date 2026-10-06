@@ -29,3 +29,11 @@ Script et manifeste préparés le 5 octobre 2026, puis explication de Rejouer co
 Le recorder dédié a terminé ses neuf chapitres après correction des sélecteurs pour les filtres, le choix d'élément et la racine causale. Le MP4 est assemblé ; durées et narration source passent le validateur. Une reconnaissance indépendante de l'audio extrait du MP4 final passe également sur les neuf chapitres (0 à 3,9 % de différence, sans consigne ajoutée ni phrase déplacée signalée). La planche des 36 images a été inspectée : filtres, pagination, Rejouer, Récit, état initial, pages et retour au planning sont présents. Ces preuves ne valent pas une revue audiovisuelle intégrale.
 
 Les actions préparées datent du jour courant ; le jeu couvrant deux semaines prévu dans le plan reste à compléter avant validation de couverture. Rien n'est publié.
+
+Le contrôle local en lecture seule `verify-event-log-coverage.ts` confirme
+64 entrées, une pagination réelle, la chaîne causale et les trois entrées
+d'état initial. La période mesurée n'est que d'environ huit secondes : elle
+ne satisfait donc pas le scénario d'historique sur deux semaines.
+Le rapport `coverage-check.json` marque explicitement ce manque. Ce contrôle
+ne constitue pas un garde-fou complet pour envoyer la vidéo à un service
+externe et n'autorise aucun upload. Aucun horodatage n'a été réécrit.

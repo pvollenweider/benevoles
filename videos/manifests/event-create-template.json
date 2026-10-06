@@ -41,8 +41,8 @@
     },
     {
       "id": "preview",
-      "transcript": "Choisissons Fête de village. L’aperçu résume exactement les postes, le nombre de créneaux et les places qui seront créées. Avant de continuer, donne un titre propre à cette édition et indique son premier jour ; le deuxième est calculé automatiquement par le modèle.",
-      "fallbackDurationMs": 24000
+      "transcript": "Choisissons Fête de village. L’aperçu résume les postes, le nombre de créneaux et les places qui seront créées. Avant de continuer, donnez un titre à cette édition et indiquez son premier jour ; prenons le samedi vingt-et-un novembre. Le deuxième jour est calculé automatiquement par le modèle.",
+      "fallbackDurationMs": 25000
     },
     {
       "id": "create",
@@ -56,8 +56,8 @@
     },
     {
       "id": "result",
-      "transcript": "Le bon réflexe est donc simple : choisis le modèle le plus proche, vérifie chaque poste au lieu de lui faire confiance aveuglément, puis poursuis avec l’aperçu bénévole et la publication. Le modèle accélère le départ ; l’organisateur reste responsable du planning final.",
-      "fallbackDurationMs": 21000
+      "transcript": "Vous avez un brouillon de dix créneaux et la capacité de la première Buvette est maintenant de cinq places. Choisissez le modèle le plus proche de votre besoin, vérifiez les postes et les horaires, puis testez l’aperçu bénévole avant de publier. Le modèle propose une base ; vous adaptez le planning réel.",
+      "fallbackDurationMs": 25000
     }
   ]
 }

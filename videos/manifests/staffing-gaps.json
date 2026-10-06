@@ -71,7 +71,7 @@
     ],
     "remember": [
       "Les places pourvues comptent des inscriptions confirmées, pas des personnes différentes.",
-      "Une demande à traiter garde sa place pendant la décision.",
+      "Une demande à traiter bloque une place tant que vous n'avez pas accepté ou refusé.",
       "Le rapport n'inscrit personne automatiquement sur un autre créneau.",
       "Complet ne veut dire ni que tout le monde est présent, ni que toutes les décisions sont prises."
     ]

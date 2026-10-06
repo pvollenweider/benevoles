@@ -89,10 +89,11 @@
     "steps": [
       "Dans Inscriptions, lisez une ligne : coordonnées, réponses, poste, horaires, source et note.",
       "Recherchez par nom ou email, puis filtrez par poste et par créneau ; « Demandes à traiter » regroupe les décisions en attente.",
-      "Cliquez sur « Ajouter manuellement », saisissez la personne et choisissez un créneau en lisant les mentions « Déjà inscrit » et conflit.",
+      "Cliquez sur « Ajouter manuellement », saisissez la personne et choisissez un créneau en lisant les avertissements « Déjà inscrit » ou de conflit d'horaire.",
       "Cochez une ou plusieurs inscriptions pour renvoyer le lien personnel, désigner un responsable ou retirer une personne.",
       "Avant un retrait, lisez la confirmation : « Annuler le retrait » reste possible pendant quelques secondes.",
-      "Tenez compte de l'alerte « Charge élevée », puis retrouvez chaque action dans le journal de l'événement."
+      "Tenez compte de l'alerte « Charge élevée » avant de proposer d'autres horaires à une personne.",
+      "Retrouvez chaque action dans le journal de l'événement."
     ],
     "remember": [
       "Une ligne correspond à une inscription sur un créneau, pas à une personne.",

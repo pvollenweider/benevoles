@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:43:50.876Z",
+  "videoSha256": "74ad8b7010a5231a83be946771cc9efc6fe7565c20bad30cecf13062260ad851",
+  "promptSha256": "42ddd9ec056467cc34b081321085d6887247869b4dfdcc728ee5585281a171da",
+  "clipSha256": "2785dca44ded3443d746ed0bbb9d726af3f532d0612a23c9fd7c600db5fb0249",
+  "scene": "leader",
+  "review": {
+    "heardOpening": "Le responsable a lui aussi un accès destiné",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "Ouvrons le lien de Camille, responsable de l'accueil.",
+        "visibleSeconds": 2.2,
+        "visible": "Affichage de la vue Responsable - Accueil pour l'équipe",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Il voit les bénévoles de ce poste, leurs horaires et les coordonnées utiles pour les contacter.",
+        "visibleSeconds": 7.5,
+        "visible": "Liste des trois bénévoles avec leurs créneaux et coordonnées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.5,
+        "spoken": "Revenons dans l'administration et retirons ce responsable.",
+        "visibleSeconds": 23.2,
+        "visible": "Page administration ouverte, clic sur Retirer puis confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.8,
+        "spoken": "En rouvrant son ancien lien, l'accès n'est plus disponible.",
+        "visibleSeconds": 27.5,
+        "visible": "Affichage du message Lien introuvable",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier, diction claire et ton calme."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

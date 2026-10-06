@@ -2,9 +2,9 @@ Gérer l’équipe et les permissions
 
 Une équipe bien réglée évite de partager un seul mot de passe et donne à chacun exactement les droits dont il a besoin. Ici, trois personnes sont déjà actives : deux propriétaires et une organisatrice. Le badge Vous repère le compte actuellement connecté.
 
-Le propriétaire gère tout, y compris l’équipe, l’identité et les réglages sensibles de l’organisation. L’organisateur prépare les événements, les créneaux, les inscriptions, les membres et les messages, mais ne modifie ni l’équipe ni les réglages de l’organisation. Garde donc au moins deux propriétaires actifs pour ne jamais dépendre d’une seule personne.
+Le propriétaire gère tout, y compris l’équipe et les réglages de l’organisation. L’organisateur prépare les événements, les créneaux, les inscriptions, les membres et les messages, mais ne change pas l’équipe ni ces réglages. Gardez si possible deux propriétaires actifs. Un responsable de secteur est différent : désigné pour un événement, il reçoit un lien personnel, pas un rôle dans cette équipe d’administration.
 
-Pour inviter Léa, ouvre le formulaire, saisis son nom et une adresse valide, puis choisis son rôle avant l’envoi. Prenons Organisateur : c’est le bon niveau pour aider sur les plannings et les bénévoles sans accéder aux paramètres les plus sensibles.
+Pour inviter Léa, ouvrez le formulaire, saisissez son nom et son adresse, puis choisissez son rôle avant l’envoi. Prenons Organisateur : c’est le bon niveau pour aider sur les plannings et les bénévoles sans accéder aux paramètres sensibles. Cliquez sur Envoyer l’invitation ; le message confirme son adresse.
 
 Après l’envoi, Léa apparaît avec le statut En attente. Un email contient son lien personnel, valable sept jours ; on peut aussi copier ce lien pour le lui transmettre autrement. Son accès ne devient actif qu’après la création de son mot de passe.
 
@@ -12,6 +12,6 @@ Le rôle peut évoluer. On choisit d’abord Propriétaire dans la liste, puis o
 
 Vérifions maintenant avec le compte de Samira, qui est organisatrice. Elle retrouve les événements et les outils opérationnels. Sur la page de l’équipe, la liste reste visible pour comprendre qui administre l’espace, mais les commandes d’invitation, de retrait et de changement de rôle ont disparu.
 
-La suppression définitive d’un événement et les réglages de l’organisation restent réservés aux propriétaires, car leurs conséquences dépassent le travail quotidien. Attribue les droits selon la responsabilité réelle, retire rapidement les accès devenus inutiles et utilise toujours un compte nominatif par personne.
+La suppression définitive d’un événement et les réglages de l’organisation restent réservés aux propriétaires. Attribuez les droits selon la responsabilité réelle, retirez les accès devenus inutiles et utilisez un compte nominatif par personne. Changer un rôle s’applique aussitôt, y compris aux sessions déjà ouvertes : vérifiez donc la personne avant d’appliquer.
 
 Le résultat est une équipe autonome sans donner les pleins pouvoirs à tout le monde : les propriétaires protègent le cadre, les organisateurs font vivre les événements, et chaque action reste liée à la bonne personne.

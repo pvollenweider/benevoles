@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T21:27:20.364Z",
+  "videoSha256": "b4d9efddbd5814fbdceb220cd5cca7cd88facb3e9f33c37784cfdb0ef5043701",
+  "promptSha256": "d09c760c781daad063cf9441e6b541b0001c9cada2a2899f58e85a71928528e5",
+  "clipSha256": "315f01532fac8b867ebe81234674559e7de8db66724ccf8f769845d8b1bf1780",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Revenons à la page personnelle et à son avertissement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Revenons à la page personnelle et à son avertissement.",
+        "visibleSeconds": 1.5,
+        "visible": "Affichage de la page Mes inscriptions avec le bloc avertissement sur le lien personnel.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Pour recruter, partage la page publique.",
+        "visibleSeconds": 4.5,
+        "visible": "Affichage du planning public des inscriptions.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Pour gérer une inscription, garde le lien personnel pour son destinataire.",
+        "visibleSeconds": 7.3,
+        "visible": "Retour à la page Mes inscriptions.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Pour coordonner un poste, remets le lien du responsable à la personne désignée.",
+        "visibleSeconds": 10,
+        "visible": "L'interface reste sur la page d'inscription personnelle ; le lien responsable n'est pas illustré.",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:09 : Le lien ou l'écran du responsable de poste évoqué n'est pas présenté à l'image."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

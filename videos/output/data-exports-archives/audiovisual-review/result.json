@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T20:37:05.743Z",
+  "videoSha256": "20ccf7d54add31d2e5210c71d07e9b917ced0c5680878b1202f4e29e6e1ebc81",
+  "promptSha256": "f32585753682cf64054c07f7a923ce96c9c00502027009f2a2f8254976d55caa",
+  "clipSha256": "3580e15d666503cb03a271ccf2be8e62dccd1a5927c05f3fa6f954de2998cb2d",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Pour travailler sur les fiches",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "prends le CSV des membres",
+        "visibleSeconds": 1.8,
+        "visible": "Page Membres avec le bouton Exporter les membres (CSV)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "prends le CSV du journal",
+        "visibleSeconds": 5,
+        "visible": "Page Paramètres - Journal d'activité avec option Exporter tout le journal",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "prends son archive JSON",
+        "visibleSeconds": 10.2,
+        "visible": "Page Rapports avec le lien Archive de l'événement (JSON)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "se choisissent dans Rapports",
+        "visibleSeconds": 13.5,
+        "visible": "Sections de rapports imprimables et plannings affichées à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et synchronisation fluide avec les transitions d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

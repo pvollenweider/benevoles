@@ -24,9 +24,64 @@ async function main() {
   const manifest = await loadManifest(reference)
   // External visual review is opt-in here only for the fixture we can prove synthetic.
   // Do not export arbitrary videos, production captures or real volunteer information.
-  if (!["EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES"].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
+  if (!["ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES"].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
   const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
   try {
+    if (manifest.id === "ADMIN_NAVIGATION") {
+      const url = new URL(process.env.DATABASE_URL!)
+      if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video") throw new Error("Navigation review requires isolated video database")
+      const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-navigation-current" }, include: { events: true, volunteers: true, admins: true } })
+      if (fixture.slug !== "formation-navigation" || fixture.events.length !== 3 || fixture.volunteers.length !== 4 || fixture.volunteers.some(member => !/^video-navigation-current-member-[0-3]$/.test(member.id) || !/^video\.navigation\.[0-3]@example\.org$/.test(member.email ?? "") || member.phone) || fixture.admins.length !== 1 || fixture.admins[0].email !== "video.navigation.owner@example.org") throw new Error("Navigation data is not exclusively synthetic")
+    } else if (manifest.id === "GLOBAL_SEARCH") {
+      const url = new URL(process.env.DATABASE_URL!)
+      if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video") throw new Error("Search review requires isolated video database")
+      const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-search-current" }, include: { events: { include: { registrations: true } }, volunteers: true, admins: true } })
+      if (fixture.slug !== "formation-recherche" || fixture.events.length !== 2 || fixture.volunteers.length !== 26 || fixture.volunteers.some(member => !/^video-search-current-member-\d+$/.test(member.id) || !/^video\.search\.\d+@example\.org$/.test(member.email ?? "") || member.phone) || fixture.admins.length !== 1 || fixture.admins[0].email !== "video.search.owner@example.org" || fixture.events.flatMap(event => event.registrations).some(registration => !/^video-search-current-registration-[01]$/.test(registration.id))) throw new Error("Search data is not exclusively synthetic")
+    } else if (manifest.id === "ORG_PUBLIC_IDENTITY") {
+      const url = new URL(process.env.DATABASE_URL!)
+      if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video") throw new Error("Identity review requires isolated video database")
+      const id = "video-foundation-identity"
+      const fixture = await db.organization.findUniqueOrThrow({ where: { id }, include: { events: { include: { registrations: true } }, volunteers: true, admins: true } })
+      if (fixture.slug !== "fetes-de-montvert" || fixture.events.length !== 3 || fixture.events.some(event => !new RegExp(`^${id}-event-[0-2]$`).test(event.id) || event.registrations.length) || fixture.volunteers.length || fixture.admins.length !== 1 || fixture.admins[0].email !== "video.identity.owner@example.org") throw new Error("Identity data is not exclusively synthetic")
+    } else if (["ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE"].includes(manifest.id)) {
+      const url = new URL(process.env.DATABASE_URL!)
+      if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video") throw new Error("Creation and team review requires isolated video database")
+      const scenario = ({ ORG_TEAM_PERMISSIONS: "team", EVENT_CREATE_BLANK: "blank", EVENT_CREATE_TEMPLATE: "template" } as Record<string, string>)[manifest.id]
+      const id = `video-foundation-${scenario}`
+      const fixture = await db.organization.findUniqueOrThrow({ where: { id }, include: { events: { include: { registrations: true } }, volunteers: true, admins: true } })
+      if (fixture.slug !== `formation-${scenario}` || fixture.volunteers.length || fixture.events.some(event => event.registrations.length) || fixture.admins.some(admin => !new RegExp(`^video\\.${scenario}\\.(owner|colette|samira|lea)@example\\.org$`).test(admin.email))) throw new Error("Creation and team fixture is not exclusively synthetic")
+      if (scenario === "team" ? fixture.events.length !== 1 || fixture.admins.length !== 4 : fixture.events.length !== 2 || fixture.admins.length !== 1) throw new Error("Unexpected synthetic scenario counts")
+    } else if (["ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "SHIFTS_ROLES_VIEWS"].includes(manifest.id)) {
+      const url = new URL(process.env.DATABASE_URL!)
+      if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video") throw new Error("Foundation review requires isolated video database")
+      const scenario = ({ ORG_TIMEZONE_CHARTER: "charter", EVENT_MILESTONES: "milestones", ORG_EMAIL_SETTINGS: "email", EVENT_PROGRAM_PAGES_QR: "pages", SHIFTS_ROLES_VIEWS: "planning" } as Record<string, string>)[manifest.id]
+      const id = `video-foundation-${scenario}`
+      const fixture = await db.organization.findUniqueOrThrow({ where: { id }, include: { events: { include: { registrations: true } }, volunteers: true, admins: true } })
+      if (fixture.slug !== `formation-${scenario}` || fixture.events.length !== 1 || fixture.events[0].id !== `${id}-event-0` || fixture.events[0].registrations.length || fixture.volunteers.length || fixture.admins.length !== 1 || fixture.admins[0].email !== `video.${scenario}.owner@example.org`) throw new Error("Foundation data is not exclusively synthetic")
+      if (scenario === "email") {
+        const { openPayload } = await import("../../src/lib/notifications/outbox")
+        const messages = await db.notificationOutbox.findMany({ where: { organizationId: id } })
+        if (!messages.length || messages.some(message => {
+          const payload = openPayload(message.payload)
+          return payload.kind !== "targeted_message" || payload.recipient.email !== "video.email.owner@example.org" || payload.data.subject !== "Email de test"
+        })) throw new Error("Email review may include only actual synthetic administrator test messages")
+      }
+    } else if (manifest.id === "EMAIL_DELIVERY_FAILURES") {
+      const { verifyDeliveryReviewFixture } = await import("../lib/verify-delivery-review-fixture")
+      await verifyDeliveryReviewFixture(db, videoDir(manifest.slug))
+    } else if (manifest.id === "PLATFORM_INTERNAL_ADMINISTRATION") {
+      const { verifyOperatorReviewFixture } = await import("../lib/verify-operator-review-fixture")
+      await verifyOperatorReviewFixture(db, videoDir(manifest.slug))
+    } else if (manifest.id === "PRIVACY_PERSONAL_LINKS") {
+      const { verifyPrivacyReviewFixture } = await import("../lib/verify-privacy-review-fixture")
+      await verifyPrivacyReviewFixture(db, videoDir(manifest.slug))
+    } else if (manifest.id === "DATA_EXPORTS_ARCHIVES") {
+      const { verifyExportReviewFixture } = await import("../lib/verify-export-review-fixture")
+      await verifyExportReviewFixture(db, videoDir(manifest.slug))
+    } else if (manifest.id === "LAST_MINUTE_CHANGES") {
+      const { verifyLastMinuteReviewFixture } = await import("../lib/verify-last-minute-review-fixture")
+      await verifyLastMinuteReviewFixture(db, videoDir(manifest.slug))
+    } else {
     const reports = ["EVENT_REPORTS", "VOLUNTEER_BADGES"].includes(manifest.id)
     const event = await db.event.findFirstOrThrow({ where: { organizationId: "default", slug: reports ? "festival-des-documents" : manifest.id === "REMINDERS_CHANGES" ? "atelier-rappels" : "atelier-pointage" }, include: { registrations: { include: { volunteer: true } } } })
     if (reports) {
@@ -36,6 +91,7 @@ async function main() {
       if (events.length !== 3 || event.registrations.length !== 9 || events.flatMap(e => e.registrations).some(r => !/^video-reminder-(j2|j1|dd|request|waiting)$/.test(r.volunteerId) || !/^video\.reminder\.(j2|j1|dd|request|waiting)@example\.org$/.test(r.volunteer.email ?? "") || r.volunteer.phone)) throw new Error("Reminder events are not exclusively synthetic fixture data")
     } else if (event.registrations.length !== 8 || event.registrations.some(r => !/^video-attendance-person-[0-6]$/.test(r.volunteerId) || !/^video\.attendance\.[0-6]@example\.org$/.test(r.volunteer.email ?? "") || r.volunteer.lastName !== "Exemple" || r.volunteer.phone)) {
       throw new Error("Attendance is not exclusively synthetic fixture data")
+    }
     }
   } finally { await db.$disconnect() }
   const directory = videoDir(manifest.slug)

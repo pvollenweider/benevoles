@@ -7,7 +7,7 @@
     "summary": "Dans cette vidéo, vous comprenez comment les créneaux de nuit et les changements d'heure sont affichés et calculés.",
     "steps": [
       "Créez un créneau de nuit qui se termine après minuit : il reste rattaché au jour de son début.",
-      "Vérifiez l'affichage dans la Timeline et dans les textes destinés aux bénévoles (« fin à deux heures, le lendemain »).",
+      "Vérifiez l'affichage dans la Frise et dans les textes destinés aux bénévoles (« fin à deux heures, le lendemain »).",
       "Vérifiez les totaux d'heures autour du passage à l'heure d'été ou d'hiver.",
       "Retéléchargez l'export calendrier après toute modification d'un créneau de nuit."
     ],
@@ -34,7 +34,7 @@
     },
     {
       "id": "ordinary",
-      "transcript": "Une nuit ordinaire de vingt-deux heures à deux heures appartient au jour où le créneau commence. Dans la Timeline, elle peut s’étendre jusqu’à vingt-six heures pour garder une lecture continue ; dans les textes destinés aux personnes, la fin est présentée comme deux heures, le lendemain.",
+      "transcript": "Une nuit ordinaire de vingt-deux heures à deux heures appartient au jour où le créneau commence. Dans la Frise, elle peut s’étendre jusqu’à vingt-six heures pour garder une lecture continue ; dans les textes destinés aux personnes, la fin est présentée comme deux heures, le lendemain.",
       "fallbackDurationMs": 25000
     },
     {

@@ -13,6 +13,6 @@
 
 ## Résultat visible
 
-- La Timeline reflète les dates et horaires saisis.
+- La Frise reflète les dates et horaires saisis.
 - La fiche bénévole reçoit les informations pratiques.
 - Une modification sensible indique ses conséquences.

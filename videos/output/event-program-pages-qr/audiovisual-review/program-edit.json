@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:59:53.823Z",
+  "videoSha256": "1a398dc1b0f9c269772795bf5a7edf3279b335085513b5b8d5e5c3440600bbd1",
+  "promptSha256": "276ea1731bf1f8be8fab2b6d72591f892f29021cbeb0b8a2a6be801e4ae02f70",
+  "clipSha256": "642cd4ea3ddbe70ed293910fb430437fb73245ef7540826871f40a85eb592d32",
+  "scene": "program-edit",
+  "review": {
+    "heardOpening": "Vous pouvez corriger le programme",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Ouvrons le concert avec Modifier",
+        "visibleSeconds": 2.9,
+        "visible": "Clic sur l'icône de modification et ouverture du formulaire d'édition",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "avançons sa fin à treize heures",
+        "visibleSeconds": 6.3,
+        "visible": "Changement de l'heure de fin à 01:00 PM",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "et confirmons",
+        "visibleSeconds": 7.8,
+        "visible": "Clic sur le bouton Confirmer et mise à jour de la ligne",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

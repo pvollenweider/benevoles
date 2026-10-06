@@ -67,6 +67,8 @@ export type Timeline = {
   recordedAt: string
   video: string
   cues: { id: string; startMs: number; endMs: number }[]
+  portraitFrames?: { startMs: number; endMs: number; width: number; height: number }[]
+  detailFrames?: { startMs: number; endMs: number; x: number; y: number; width: number; height: number }[]
 }
 
 export const videosRoot = path.resolve(process.cwd(), "videos")

@@ -5,7 +5,8 @@ import type { PrismaClient } from "../src/generated/prisma/client"
 import { registrationToken } from "../src/lib/token-vault"
 
 export async function seedVideoLastMinute(db: PrismaClient) {
-  if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Isolated local video database required")
+  const databaseUrl = new URL(process.env.DATABASE_URL ?? "")
+  if (!["localhost", "127.0.0.1", "[::1]"].includes(databaseUrl.hostname) || databaseUrl.pathname !== "/benevoles_video") throw new Error("Isolated local video database required")
   const organizationId = "video-last-minute", slug = "formation-imprevus", name = "Formation — imprévus"
   const existing = await db.organization.findUnique({ where: { id: organizationId } })
   if (existing && (existing.slug !== slug || existing.name !== name)) throw new Error("Last-minute organization is not the recorder-owned fixture")
@@ -19,8 +20,9 @@ export async function seedVideoLastMinute(db: PrismaClient) {
   // this fixture's notifications so deterministic demo IDs get fresh deliveries.
   await db.notificationOutbox.deleteMany({ where: { organizationId } })
   // Repeated real withdrawals hit the application's five-per-hour limiter.
-  // Reset only the observed loopback read/withdrawal buckets in this local test DB.
-  await db.rateLimit.deleteMany({ where: { key: { in: ["reg-token-delete:::1", "reg-token-read:::1"] } } })
+  // Reset only the observed loopback read/withdrawal/confirmation buckets in
+  // this local test DB. Repeated rehearsals also exhaust confirmation reads.
+  await db.rateLimit.deleteMany({ where: { key: { in: ["reg-token-delete:::1", "reg-token-read:::1", "waitlist-confirm:::1", "reg-token-delete:127.0.0.1", "reg-token-read:127.0.0.1", "waitlist-confirm:127.0.0.1"] } } })
   if (existing) await db.organization.delete({ where: { id: organizationId } })
   await db.volunteer.deleteMany({ where: { id: { in: fixtureIds } } })
   // Organization deletion retains administrators with a null organizationId.

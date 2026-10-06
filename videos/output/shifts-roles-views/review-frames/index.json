@@ -1,0 +1,226 @@
+{
+  "video": "shifts-roles-views",
+  "source": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/shifts-roles-views.mp4",
+  "sourceSha256": "0f491cde965c013c06c43265bcde6fea381c806c088a2e0a95c2b91fa6c35bdf",
+  "capturePurpose": "narration-timed",
+  "extractedAt": "2026-10-06T03:18:25.051Z",
+  "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
+  "frames": [
+    {
+      "scene": "welcome",
+      "fraction": 0.04209049456331112,
+      "seconds": 1.701,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/welcome-4.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.25,
+      "seconds": 4.66475,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/welcome-25.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.45,
+      "seconds": 7.51575,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/welcome-45.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.6,
+      "seconds": 9.654,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/welcome-60.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.85,
+      "seconds": 13.21775,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/welcome-85.png"
+    },
+    {
+      "scene": "welcome",
+      "fraction": 0.9789547527183444,
+      "seconds": 15.056,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/welcome-end.png"
+    },
+    {
+      "scene": "timeline",
+      "fraction": 0.04118050789293068,
+      "seconds": 16.407,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/timeline-4.png"
+    },
+    {
+      "scene": "timeline",
+      "fraction": 0.25,
+      "seconds": 19.4495,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/timeline-25.png"
+    },
+    {
+      "scene": "timeline",
+      "fraction": 0.45,
+      "seconds": 22.3635,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/timeline-45.png"
+    },
+    {
+      "scene": "timeline",
+      "fraction": 0.6,
+      "seconds": 24.549,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/timeline-60.png"
+    },
+    {
+      "scene": "timeline",
+      "fraction": 0.85,
+      "seconds": 28.1915,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/timeline-85.png"
+    },
+    {
+      "scene": "timeline",
+      "fraction": 0.9794097460535347,
+      "seconds": 30.077,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/timeline-end.png"
+    },
+    {
+      "scene": "list",
+      "fraction": 0.05171522151353215,
+      "seconds": 31.432,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/list-5.png"
+    },
+    {
+      "scene": "list",
+      "fraction": 0.25,
+      "seconds": 33.7325,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/list-25.png"
+    },
+    {
+      "scene": "list",
+      "fraction": 0.45,
+      "seconds": 36.0529,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/list-45.png"
+    },
+    {
+      "scene": "list",
+      "fraction": 0.6,
+      "seconds": 37.7932,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/list-60.png"
+    },
+    {
+      "scene": "list",
+      "fraction": 0.85,
+      "seconds": 40.6937,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/list-85.png"
+    },
+    {
+      "scene": "list",
+      "fraction": 0.9741423892432339,
+      "seconds": 42.134,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/list-end.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.03964059196617336,
+      "seconds": 43.487,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/roles-4.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.25,
+      "seconds": 46.671,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/roles-25.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.45,
+      "seconds": 49.6982,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/roles-45.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.6,
+      "seconds": 51.968599999999995,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/roles-60.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.85,
+      "seconds": 55.7526,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/roles-85.png"
+    },
+    {
+      "scene": "roles",
+      "fraction": 0.9801797040169133,
+      "seconds": 57.723,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/roles-end.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.04556154605512947,
+      "seconds": 59.073,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/colors-5.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.25,
+      "seconds": 61.76525,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/colors-25.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.45,
+      "seconds": 64.39905,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/colors-45.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.6,
+      "seconds": 66.3744,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/colors-60.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.85,
+      "seconds": 69.66664999999999,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/colors-85.png"
+    },
+    {
+      "scene": "colors",
+      "fraction": 0.9772192269724352,
+      "seconds": 71.342,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/colors-end.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.04518752824220515,
+      "seconds": 73.475,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/result-5.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.25,
+      "seconds": 76.1945,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/result-25.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.45,
+      "seconds": 78.85010000000001,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/result-45.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.6,
+      "seconds": 80.8418,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/result-60.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.85,
+      "seconds": 84.1613,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/result-85.png"
+    },
+    {
+      "scene": "result",
+      "fraction": 0.9774062358788974,
+      "seconds": 85.853,
+      "file": "/Users/pol/Desktop/benevoles/videos/output/shifts-roles-views/review-frames/result-end.png"
+    }
+  ]
+}

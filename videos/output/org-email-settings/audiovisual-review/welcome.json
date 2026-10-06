@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:13:40.151Z",
+  "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
+  "promptSha256": "75470f0b59ee7dd773ffeb05e3f3ec5688a77dc51e7ad973fb86cfa633f71d24",
+  "clipSha256": "852bf0e1f1c7fa3939a2064d7f2ad04dcfb1299aac6afcb4f9311de476628b10",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Dans Paramètres, emails",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans Paramètres, emails",
+        "visibleSeconds": 0.5,
+        "visible": "Page Emails accessible depuis la section Paramètres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Voyons les rappels, les alertes",
+        "visibleSeconds": 10.5,
+        "visible": "Options de rappels automatiques et alertes visibles à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "et l’adresse de réponse",
+        "visibleSeconds": 12.8,
+        "visible": "Section Adresse de réponse visible au bas de la page",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

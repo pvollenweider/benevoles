@@ -1,0 +1,12 @@
+{
+  "anchor": "Vérifions maintenant avec le compte de Samira, qui est organisatrice. Elle",
+  "windowStart": 72.113,
+  "result": {
+    "found": true,
+    "startSeconds": 15.48,
+    "wordsHeard": "Vérifions"
+  },
+  "onset": 87.593,
+  "proposedCut": 87.1134375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T02:19:48.361Z",
+  "videoSha256": "d99f66e1d00de93a9e4f15c6a1ec3d17b02a4396ee86da063360cee3f65319f4",
+  "promptSha256": "260fe3ed525fc52955157da1603c2907e2081859f1b6321befe736bd381c8662",
+  "clipSha256": "e85ac398db4541910a1813a6631e3aeabfea7dc59f0055970156599c3c1710a5",
+  "scene": "charter",
+  "review": {
+    "heardOpening": "La Convention des Bénévoles présente le cadre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "Le réglage Assurance RC fournie par l’organisation change la clause correspondante",
+        "visibleSeconds": 4,
+        "visible": "Le commutateur Assurance RC est basculé, modifiant le texte de la convention",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.2,
+        "spoken": "notamment la consigne de prévenir dès que possible",
+        "visibleSeconds": 17,
+        "visible": "Défilement vers le bas affichant la fin du texte et les boutons d'action",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.1,
+        "spoken": "mais il faut ensuite cliquer sur Enregistrer",
+        "visibleSeconds": 23.3,
+        "visible": "Clic sur le bouton Enregistrer avec animation de sauvegarde",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

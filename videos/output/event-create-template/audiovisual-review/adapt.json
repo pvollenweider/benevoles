@@ -1,0 +1,43 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:15:13.605Z",
+  "videoSha256": "7870f9ea1677bd47654af21d36008efe133c24074cd482c8474c14e976e12509",
+  "promptSha256": "08bbaf3a47d11766f24ec183611440825beab812974c784fd2da032f23bccdbd",
+  "clipSha256": "0effffabed309336e7ba9bd27c77f542d2fd4b8c8d8380a482584cbe736c64f9",
+  "scene": "adapt",
+  "review": {
+    "heardOpening": "Dans le planning obtenu, chaque ligne est ordinaire.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "modifier son libellé",
+        "visibleSeconds": 5.2,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.1,
+        "spoken": "Ajustons par exemple la capacité de la première Buvette",
+        "visibleSeconds": 14.1,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "pour coller à la taille réelle de l'équipe.",
+        "visibleSeconds": 16.8,
+        "sync": "aligned",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:17, après l'enregistrement, la capacité de la première buvette affiche toujours 4 places au lieu de 5 dans le tableau."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

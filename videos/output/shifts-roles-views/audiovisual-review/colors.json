@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T03:19:41.182Z",
+  "videoSha256": "0f491cde965c013c06c43265bcde6fea381c806c088a2e0a95c2b91fa6c35bdf",
+  "promptSha256": "659ba0e71aba4cb9f513f2fde1312057a1d915129891936dbef68822d8b6f1c0",
+  "clipSha256": "020a092a0004a3ae2151914b93a8bc33ccbbe1081ed57e1b53948f11de67b48e",
+  "scene": "colors",
+  "review": {
+    "heardOpening": "La couleur sert à reconnaître une mission",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "La couleur sert à reconnaître une mission d’un coup d’œil",
+        "visibleSeconds": 0.5,
+        "visible": "Liste des postes avec pastilles de couleur associées affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Choisissez-la dans la palette prévue",
+        "visibleSeconds": 4.1,
+        "visible": "Clic sur la pastille et ouverture du nuancier de couleurs",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "lisible pour les bénévoles",
+        "visibleSeconds": 7.3,
+        "visible": "Sélection d'une couleur dans la palette puis fermeture du sélecteur",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

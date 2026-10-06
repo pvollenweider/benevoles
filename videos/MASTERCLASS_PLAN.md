@@ -913,7 +913,7 @@ Cette matrice doit devenir un contrôle automatisé simple : chaque titre de sec
 | 26 — Trouver et lire la page d’inscription | Prévisualisation générée | `demo` | Lien, QR, pages, carte, programme, états, défilement mobile et invitation autorisée réellement montrés ; 9 scènes synchronisées et planche validée |
 | 27 — Choisir un ou plusieurs créneaux | Prévisualisation générée | `demo` | Ajouts/retraits, capacités, attente, validation, réservé, chevauchement, session existante et quota montrés ; 9 scènes synchronisées et planche contrôlée |
 | 28 — Formulaire et récapitulatif | Prévisualisation générée | `demo` | Coordonnées, naissance, questions, convention, consentement, nuit, pauses, carte, charge et correction réellement montrés ; 8 scènes synchronisées et planche contrôlée |
-| 29 — Confirmation et erreurs | Prévisualisation générée, couverture à compléter | `demo` | Validation, capacité devenue insuffisante, coupure/reprise, succès sans lien public et email contrôlés ; 8 scènes synchronisées. Restent la preuve visuelle de non-duplication après réponse perdue, le conflit serveur d’horaire et la comparaison du succès via invitation |
+| 29 — Confirmation et erreurs | Recorder enrichi répété, nouvelle voix restante | `volunteer-confirmation-errors` | Ancien montage de huit chapitres sauvegardé. Nouvelle répétition complète de onze chapitres réussie sur organisation dédiée : validation, capacité, coupure avant transmission, vrai conflit serveur, réponse perdue après enregistrement sans doublon, succès public et invité, cinq inscriptions finales. Capture normale refusée sans audit audio à jour, fichier brut et données conservés. Nouvelle narration Kore continue, alignement, montage et audits finaux restants |
 | 38 — Responsables de secteur | Prévisualisation générée, contrôle final en cours | `demo` | Deux nominations, email avec ouverture du lien, équipe remplie, mobile recentré, notification réelle de Nora et révocation ; onze paragraphes contrôlés indépendamment ; saisie/notification séparées et email visible dès le début du chapitre |
 | 30 — Gérer ses inscriptions depuis son lien | Prévisualisation générée | `personal-withdrawals` | Quatre statuts pour Camille, huit paragraphes contrôlés ; capture, assemblage et planche vérifiés, état vide et retour à l'événement montrés. Visionnage audiovisuel intégral restant ; limite du lien lié à une inscription retirée consignée dans le script |
 | 31 — Ajouter son planning au calendrier | Prévisualisation générée | `personal-calendar` | Sans application Calendrier à la demande de Philippe, aucune importation externe annoncée comme réalisée. Neuf paragraphes contrôlés indépendamment ; téléchargements individuels/globaux, nuit, modification et identifiants stables vérifiés ; capture, assemblage et durées validés. Visionnage audiovisuel intégral restant |
@@ -926,16 +926,19 @@ Cette matrice doit devenir un contrôle automatisé simple : chaque titre de sec
 | 39 — Lire et gérer les inscriptions | Prévisualisation générée | `registrations-management` | Quatorze paragraphes recalés et contrôlés indépendamment ; capture, MP4 et durées validés. 80 inscriptions, doublon refusé, avertissement de conflit, ajout compatible, un email pour deux lignes, nomination et badge, retrait annulé sans effet puis place réellement libérée vérifiés. Absence réelle d'email de retrait constatée et annoncée honnêtement. Planche de 42 images contrôlée ; visionnage audiovisuel intégral restant |
 | 40 — Où manque-t-il du monde | Prévisualisation générée | `staffing-gaps` | Neuf chapitres audio et montage contrôlés ; affectation réelle et diminution du manque vérifiées. Revue audiovisuelle et visionnage intégral restants |
 | 41 — Messages ciblés | Prévisualisation générée | `targeted-messages` | Répétition complète : audiences, déduplication, cinq emails réels, restauration et historique vérifiés. Explication du modèle enrichie pour conserver une frappe lisible ; nouvelle prise unique Puck, douze transcriptions, capture complète et montage contrôlés. Revue audiovisuelle et réception push restants |
-| 42 — Rappels et changements | Prévisualisation générée ; corrections restantes | `reminders-changes` | Neuf chapitres et montage contrôlés ; rappels réels et absence de doublon vérifiés. Revue audiovisuelle : transition vers le brouillon trop tôt et retour au planning à ajouter après modification. Observation de voix contradictoire avec l'analyse du WAV ; pas de validation humaine revendiquée |
-| 43 — Échecs d'envoi | Script et manifeste préparés | À créer | Limites SMTP et destinataire conservé lors d'une nouvelle tentative confrontés au code ; aucun envoi en échec ni média final encore filmé |
+| 42 — Rappels et changements | Prévisualisation recapturée ; revue intégrale restante | `reminders-changes` | Neuf chapitres, montage et 36 images contrôlés ; rappels réels et absence de doublon vérifiés. Transition vers le brouillon et retour au planning recapturés. Sept chapitres sans signalement automatisé ; deux absences de manipulations signalées sont contredites par les images et résultats réels (voir contre-vérifications). Lisibilité et visionnage humain intégral restants |
+| 43 — Échecs d'envoi | Répétition complète réussie ; narration restante | `email-delivery-failures` | Huit chapitres répétés sur 43106 avec le vrai rôle organisateur. Rapport local : états d'outbox/SMTP, payload de reprise inchangé, nouveau mail réel après correction d'adresse, renvoi des seuls destinataires échoués et aucun doublon au second renvoi. Horloge accélérée explicitement distinguée d'une attente réelle. Serveur de livraison arrêté. Voix Puck continue, capture narrée, montage et contrôles finaux restants ; plafond Gemini bloquant. Aucune publication |
 | 44 — Rapports | Prévisualisation corrigée et revue | `event-reports` | Dix transcriptions et contrôles de montage passent ; revue audiovisuelle automatisée sans signalement sur les dix chapitres. Documents réels, CSV, pages PDF de Léa et planche de quarante images vérifiés. Visionnage humain intégral et inspection de toutes les pages PDF non revendiqués |
-| 45 — Badges | Prévisualisation recapturée ; revue en cours | `volunteer-badges` | Neuf transcriptions et montage passent ; deux homonymes montrés, comparaison explicite de deux vrais badges de Léa, aperçu des pages 1/8 du PDF et limite de boîte native expliquée. Résultats des champs et badge final avancés ; revue audiovisuelle de cette prise en cours |
+| 45 — Badges | Prévisualisation recapturée ; écoute finale restante | `volunteer-badges` | Neuf transcriptions et montage passent ; deux homonymes, deux vrais badges de Léa, pages 1/8 du PDF et limite de boîte native montrés. Huit chapitres sans signalement automatisé ; coupure finale signalée non établie par l'ASR et les 284 ms de silence terminal du WAV. Articulation à écouter, visionnage humain intégral non revendiqué |
 | 46 — Pointage | Prévisualisation recapturée et revue | `attendance-check-in` | Huit transcriptions et montage contrôlés ; arrivée, groupe, correction, deux inscriptions et conservation après annulation prouvés. Sept chapitres sans signalement audiovisuel ; un signalement sur la recherche de Léa par son email plutôt que son prénom reste à examiner. Visionnage humain intégral restant |
 | 48 — Journal d'un événement | Prévisualisation générée ; couverture et revue restantes | `event-activity-log` | Neuf chapitres Puck, montage et reconnaissance de l'audio du MP4 passent ; planche de 36 images inspectée. Pagination, Rejouer sans mutation, chaîne bénévole→offre→email et état initial sans doublon prouvés. Revue audiovisuelle intégrale et historique sur deux semaines restants |
 | 49 — Journal d'organisation | Prévisualisation générée ; revue restante | `organization-activity-log` | Neuf chapitres Kore, montage et ASR du MP4 passent ; planche de 36 images inspectée. 61 vraies actions de deux sessions, activité membre non vide et CSV complet téléchargé malgré un filtre, comparé à l'API. Revue audiovisuelle intégrale restante |
-| 50 — Exports et archives | Prévisualisation générée ; contrôles post-montage en cours | `data-exports-archives` | Neuf chapitres Puck et montage passent. Vrais CSV/JSON téléchargés depuis les listes filtrées, collections ouvertes, apostrophes et secrets vérifiés. Modification réelle de fiche avec copie téléchargée inchangée. ASR du MP4, images et revue restante |
-| 47 — Changements de dernière minute | Narration et jeu dédiés préparés | `last-minute-changes` | Dix chapitres Kore contrôlés. Organisation séparée : désistement à filmer, attente, sous-effectif, disponibilités, demandes et présence préalable. Précontrôles, recorder et MP4 restants |
-| 02, 04, 51–53 | Planifiées | À créer selon le tableau « Jeux de données vidéo » | Non commencées |
+| 50 — Exports et archives | Prévisualisation contrôlée | `data-exports-archives` | Quatrième capture terminée et montée après véritable seed et précontrôle. Neuf durées et transcriptions du MP4 passent, 36 images inspectées ; revue audiovisuelle neuf chapitres sans signalement sur cette empreinte. Voix continue Puck cohérente. Vrais fichiers, apostrophes, secrets et copie figée vérifiés. Contrôles assistés, sans revendication de visionnage humain intégral ; aucune publication |
+| 47 — Changements de dernière minute | Nouveau montage annoté, contrôles finaux en attente | `last-minute-changes` | Capture complète réussie, dix durées alignées, voix Kore inchangée et musique Mixkit. Annotation vérifiée à 253 s : une inscription confirmée et une demande sont annulées, sans modifier le texte de la confirmation. Ancien montage sauvegardé. Quarante nouvelles images inspectées individuellement ; SHA-256 actuel revérifié. Audits ASR/AV du nouveau MP4 à refaire : le plafond Gemini les bloque, et les contrôles précédents ne valident pas cette prise. Aucune correction applicative ni publication |
+| 51 — Confidentialité et liens personnels | Quatrième MP4 monté, contrôle final restant | `privacy-personal-links` | Troisième prise : dix transcriptions du MP4 exactes, neuf chapitres sans signalement audiovisuel ; comparaison admin/responsable corrigée. Quatrième capture réelle et montage terminés, dix durées alignées, quarante images inspectées individuellement, empreinte MP4 revérifiée. Nouveaux contrôles MP4 refusés par Gemini HTTP 429 : plafond mensuel du projet atteint ; les résultats précédents ne valident pas cette empreinte. Copie locale 43102, aucune publication |
+| 52 — Accessibilité | Manifeste de dix chapitres et données locales préparés | `accessibility-keyboard-display` | Organisation dédiée créée sans remplacement : quatre postes, cinq créneaux et membres fictifs, un chevauchement réel, une inscription confirmée et une demande. Précontrôle clavier et images à 320 px/couleurs forcées vérifiés ; débordement de la page 381 px explicitement décrit. Catalogue non prêt au tournage et non publié. Recorder complet, audio et MP4 restants. Le Mac reste verrouillé : zoom réel et lecteur d'écran non enregistrés ; aucune simulation présentée comme validation native |
+| 53 — Administration interne | Douze chapitres répétés ; narration à actualiser | `platform-internal-administration` | Base `benevoles_video_operator` dédiée, serveur 43104/SMTP local imposé. Rapport réel : invitations, activation, ancien lien refusé, alias, désactivation/réactivation, contexte explicite, état de santé, email de test, diffusion reçue par deux destinataires, désinscription, suppression de l'espace fictif exact et refus de l'accès plateforme au propriétaire ordinaire. Première narration Kore contrôlée mais désormais obsolète pour « broadcast » ; nouvelle prise continue refusée par le plafond mensuel Gemini. Les prises narrées exigent des preuves audio correspondant au script actuel. Capture narrée, MP4 et revue complète restants |
+| 02, 04 | Planifiées | À créer selon le tableau « Jeux de données vidéo » | Non commencées |
 
 Une vidéo ne passe à « terminée » qu’après validation du contrat de couverture, visionnage complet
 et vérification de sa synchronisation. La génération d’un MP4 ne suffit pas.
@@ -1020,3 +1023,110 @@ assemblée, jamais sur la seule base du transcript.
 - Une vérification périodique compare les titres des guides, `FEATURES.md` et `FONCTIONNALITES.md` à la matrice de couverture.
 - Une vidéo obsolète reste masquée du carrousel jusqu’à sa nouvelle capture ; ne jamais laisser une procédure fausse en ligne.
 - Les scripts, manifestes, sous-titres et seeds sont versionnés. Les MP4 restent des artefacts générés.
+
+## Relecture critique reçue le 6 octobre 2026 — reprise de production
+
+La relecture du 5 octobre porte sur 51 modules et conclut qu'aucun n'est
+acceptable tel quel. Ses constats deviennent des points de contrôle, pas des
+preuves de l'état actuel : certains fichiers locaux ont changé depuis cette
+relecture. Les corrections détaillées restent dans le document reçu
+`/Users/pol/.codex/attachments/ab8d7f82-8a76-45f8-8fe6-18f3c5ce9b41/Texte collé.txt`.
+Ne pas présenter les chiffres de cette relecture comme un nouvel audit exécuté.
+
+### État technique revérifié
+
+Le checkout de développement est réellement à `cf1e2956` (#608), avec des
+modifications locales à préserver. La référence locale `origin/main` est à
+`23b2d604` (#714), sans nouveau fetch ni vérification du dernier état distant.
+Les captures existantes ne prouvent donc pas le produit récent. Aucun
+`git stash -u`, pull, reset ou changement du checkout du propriétaire n'est
+autorisé par cette reprise documentaire. Pour les prochains rendus, utiliser
+une copie dédiée du code réconciliée avec la version cible et conserver le
+travail vidéo ; ne pas simplement recopier une ancienne compilation.
+
+### Ordre de reprise
+
+1. **Fixer la version cible.** Vérifier les écrans et fonctionnalités livrés,
+   notamment aide contextuelle, logo, effacement, email de retrait, journal,
+   rappels, consentement et récapitulatif de nuit. Les numéros de tickets cités
+   dans la relecture ne prouvent pas que leur changement est encore en attente.
+   Consigner commit du code, commit de compilation, locale et scénario par prise.
+2. **Réconcilier toutes les sources vidéo.** Comparer les manifestes, scripts,
+   seeds, recorders et métadonnées entre les copies avant d'écraser quoi que
+   ce soit. Les modules 43 et 47 ont déjà un recorder et une entrée au catalogue
+   ici ; le constat « non catalogué / scénario absent » n'est plus actuel.
+3. **Corriger les explications P1 avant la voix.** Navigation réelle, nom et
+   comportement de Dupliquer, création directe par glisser, périmètre des
+   contacts, heures attestées, rappels groupés, erreurs SMTP permanentes et
+   temporaires, consentement, fusion et résultat des actions. Vérifier chaque
+   affirmation contre le code et une action réelle sur la version cible.
+4. **Rebâtir les scénarios de démonstration.** Une organisation cohérente,
+   prénoms/noms fictifs variés, adresses lisibles, responsable distinct de
+   l'organisateur, calendrier cohérent. Remise à zéro limitée aux données
+   possédées par le scénario dans la base vidéo ; jamais de purge globale
+   des autres organisations ou de la boîte Mailpit partagée. Filtrer les
+   nouveaux messages du destinataire concerné et cadrer leur contenu.
+5. **Recapturer et renarrer les modules concernés.** Production locale,
+   navigateur fr-CH et Europe/Zurich, pas d'indicateur Next de développement.
+   Résultats lisibles, vrais emails, session bénévole correcte, état avant/après,
+   cadrage mobile et documents grossis. Démontrer la fonction disponible,
+   pas son ancien contournement. Ne pas fabriquer un domaine public ni
+   masquer un comportement erroné en retouchant le texte de l'interface.
+6. **Sous-titres et revue finale.** Découpage en phrases courtes, deux lignes
+   d'environ 42 caractères, durée maximale cible de 6–7 secondes, chiffres
+   lisibles. Aligner sur l'audio réel, pas seulement proportionnellement au
+   nombre de caractères. Toute modification du script invalide l'audit
+   précédent ; toute modification du MP4 invalide sa revue précédente.
+
+### Décisions éditoriales pour la renarration générale
+
+- **Confirmé par Philippe le 6 octobre 2026 : « vous » pour les organisateurs,
+  « tu » pour les bénévoles.** Appliquer cette règle aux narrations, scripts,
+  sous-titres et textes d'accompagnement lors de leur révision. Une vidéo
+  organisateur conserve le « tu » dans les messages destinés aux bénévoles
+  qu'elle cite ; ne pas transformer automatiquement ces citations en « vous ».
+  Le vouvoiement reste naturel, souriant et bienveillant, sans ton administratif.
+- Une voix par thème est une proposition, pas une nouvelle exigence. L'exigence
+  confirmée reste une voix constante, souriante et bienveillante par vidéo.
+- Les durées proposées servent de cible, jamais de raison pour supprimer une
+  fonctionnalité à illustrer. Scinder un module trop chargé si nécessaire.
+- Chaque vidéo doit rester autonome. Les renvois facultatifs vers les modules
+  détaillés ne remplacent pas l'explication et le résultat promis dans celle-ci.
+
+### Compléments de couverture à rattacher à la matrice documentaire
+
+Ces sujets doivent être expliqués et montrés, dans un module existant remanié
+ou un module dédié, sans prétendre qu'ils sont déjà couverts :
+
+- Jour J sur téléphone : arrivées, pointage et correction.
+- Chercher des bénévoles : besoin constaté, disponibilités, choix et envoi.
+- Synthèse des réponses : t-shirts/repas, document et CSV sans coordonnées.
+- Heures planifiées/attestées, période, attestation et résumé de l'événement.
+- Doublons possibles, fusion, suppression et effacement : permissions et effets.
+- Adresses à vérifier, remise et erreurs SMTP : abandon immédiat d'un rejet
+  permanent versus reprises limitées d'une erreur temporaire, explication
+  normalisée en français, correction et véritable nouveau message reçu.
+- Avant la mission : contact du jour, responsables et refus de disponibilité.
+- Relecture avant publication, partage, accès non répertorié et logo livré.
+
+### Critères supplémentaires bloquant la livraison
+
+- Aucun bug ancien enseigné comme une limite actuelle ou une bonne pratique.
+- Aucun « Aucune modification » présenté comme une nouvelle valeur enregistrée.
+- Aucun résultat seulement annoncé : ouvrir la recherche, l'email, le document
+  ou la page destinataire et maintenir son contenu à l'écran.
+- Aucun nom, compte, titre, date ou session incohérent entre voix et image.
+- Aucun jeton personnel exposé dans l'interface filmée ; les liens de partage
+  et QR doivent viser le même événement publié sur le domaine de démonstration.
+- Pas de validation de chronologie sur un journal entièrement créé à la même
+  seconde. Si l'historique est synthétique, l'identifier clairement comme tel.
+- Aucun ancien audit ne valide un nouveau rendu. Les captures répétées et
+  captures natives encore absentes restent explicitement incomplètes.
+
+La reprise est en cours au 6 octobre 2026 : plusieurs modules ont été renarrés
+en une seule génération de voix puis recapturés sur la version de production
+locale isolée. Le quota Gemini permet à nouveau ces générations. Les contrôles
+natifs nécessitant un Mac déverrouillé restent distincts de cette reprise.
+Les anciennes validations ne suffisent pas à déclarer la série terminée ou
+prête à publier ; l'inventaire `FINAL_REVIEW_EVIDENCE.md` distingue les preuves
+qui correspondent effectivement au MP4 actuel des contrôles encore manquants.

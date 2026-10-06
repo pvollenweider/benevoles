@@ -75,13 +75,13 @@
     "steps": [
       "Dans Rapports, ouvrez les options des badges et générez la série pour tous les postes et tous les bénévoles.",
       "Choisissez un poste pour ne préparer que les badges de cette équipe.",
-      "Pour un badge perdu, choisissez la personne à réimprimer, en vous aidant de l'adresse affichée pour distinguer les homonymes.",
+      "Pour un badge perdu, choisissez la personne à réimprimer, en vous aidant de l'adresse email affichée pour distinguer les homonymes.",
       "Choisissez la couleur du bandeau : celle du poste, celle de l'événement, ou noir et blanc.",
       "Retirez si besoin le nom de famille ou les créneaux du badge.",
       "Contrôlez la première et la dernière feuille, puis imprimez en A4 ou enregistrez en PDF."
     ],
     "remember": [
-      "Un badge par personne confirmée, pas par inscription : les demandes et les attentes n'en ont pas.",
+      "Un badge par personne confirmée, pas par inscription : les demandes et la liste d'attente n'en ont pas.",
       "Le filtre de poste reste actif pour une réimpression individuelle : revenez à « Tous les postes » si nécessaire.",
       "Le badge affiche au plus quatre créneaux et ne remplace pas le planning individuel.",
       "Sans photo ni QR code, le badge n'est pas une autorisation d'accès."

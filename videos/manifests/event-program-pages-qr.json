@@ -6,9 +6,9 @@
   "viewer": {
     "summary": "Dans cette vidéo, vous complétez votre page d'inscription avec un programme, des pages d'information et un QR code à diffuser.",
     "steps": [
-      "Ajoutez chaque spectacle au programme avec son nom, sa date et ses horaires (une fin après minuit reste possible).",
+      "Ajoutez chaque spectacle au programme avec son nom, sa date et ses horaires, et corrigez-le avec Modifier si besoin.",
       "Créez des pages comme Accès, Foire aux questions ou Règlement, en Markdown.",
-      "Organisez l'ordre d'affichage des pages.",
+      "Changez l'ordre des pages avec Monter et Descendre : il est enregistré aussitôt.",
       "Vérifiez que le programme et les pages apparaissent correctement sur la page publique.",
       "Téléchargez le QR code en PNG ou en SVG, ou imprimez la fiche prête à poser.",
       "Scannez le code avec un vrai téléphone avant de le diffuser."
@@ -36,28 +36,38 @@
     },
     {
       "id": "program",
-      "transcript": "Le programme se règle avec les dates de l’événement. Chaque spectacle reçoit un nom, une date, une heure de début et une heure de fin. Une fin après minuit reste possible : elle sera présentée correctement dans le planning et servira de repère visuel aux équipes.",
-      "fallbackDurationMs": 24000
+      "transcript": "Dans les réglages de l’événement, ajoutons un spectacle au programme. Saisissons Concert du village, le quatorze novembre deux mille vingt-six, de onze heures à douze heures trente, puis cliquez sur Ajouter. Son horaire sert de repère dans le planning, sans réserver de bénévoles ni créer de créneau de travail.",
+      "fallbackDurationMs": 29000
+    },
+    {
+      "id": "program-edit",
+      "transcript": "Vous pouvez corriger le programme sans le recréer. Ouvrons le concert avec Modifier, puis avançons sa fin à treize heures et confirmons. Le concert garde son nom et sa date. Une entrée ajoutée par erreur peut être supprimée avec sa propre commande, indépendamment des créneaux des bénévoles.",
+      "fallbackDurationMs": 25000
     },
     {
       "id": "pages",
-      "transcript": "Les pages complètent les instructions courtes. On peut créer par exemple Accès, Foire aux questions ou Règlement. Le contenu accepte le Markdown pour structurer des titres, des listes, du gras et des liens. Chaque page peut ensuite être modifiée, supprimée ou déplacée dans l’ordre d’affichage.",
-      "fallbackDurationMs": 26000
+      "transcript": "Créons une page Ce qu’il faut apporter, en complément des pages d’accès et des questions fréquentes. Le titre devient son adresse. Dans le contenu, un dièse crée un titre, les tirets une liste et deux astérisques du gras. Saisissons une courte liste, puis enregistrons. Cette page doit donner des informations pratiques, pas demander une nouvelle inscription.",
+      "fallbackDurationMs": 30000
+    },
+    {
+      "id": "page-order",
+      "transcript": "Les flèches Monter et Descendre changent l’ordre des pages et l’enregistrent aussitôt. Faisons monter Ce qu’il faut apporter. Ouvrons ensuite Modifier pour ajouter une gourde à sa liste, puis enregistrons. Pour supprimer une page, une confirmation permet encore d’annuler : vérifions-la sans perdre notre contenu.",
+      "fallbackDurationMs": 28000
     },
     {
       "id": "public",
-      "transcript": "Sur la page publique, le programme apparaît au bon moment et les pages sont accessibles comme des informations complémentaires. Le bénévole peut ainsi préparer son arrivée sans chercher un ancien email ou appeler l’organisation.",
-      "fallbackDurationMs": 20000
+      "transcript": "Ouvrons maintenant la page publique. Le concert apparaît en repère sur le planning. Les liens d’information reprennent l’ordre choisi. Ouvrons Ce qu’il faut apporter : le titre, le gras et la liste sont mis en forme, et la gourde est bien présente. Le bénévole peut préparer son arrivée sans chercher un ancien email.",
+      "fallbackDurationMs": 29000
     },
     {
       "id": "qr",
-      "transcript": "Le QR code pointe directement vers cette page publique. Télécharge-le en PNG pour les réseaux ou un document, en SVG pour une impression nette à toute taille, ou imprime directement la fiche prête à poser sur un stand.",
-      "fallbackDurationMs": 22000
+      "transcript": "Le QR code mène à la page publique de cet événement. Téléchargez le PNG pour l’intégrer à un document, ou le SVG pour une impression nette. La commande Imprimer prépare une fiche à afficher sur un stand. Vérifiez le nom de l’événement et l’adresse avant de diffuser le support.",
+      "fallbackDurationMs": 27000
     },
     {
       "id": "result",
-      "transcript": "Avant de diffuser, scanne le code avec un vrai téléphone et relis les pages publiques. Le résultat doit être immédiat : une personne découvre l’événement, comprend où venir, consulte le programme et peut commencer son inscription.",
-      "fallbackDurationMs": 19000
+      "transcript": "Vous avez un programme corrigé, des pages pratiques lisibles et deux fichiers QR téléchargés. Avant votre diffusion, scannez le code avec un vrai téléphone : ce contrôle reste à faire sur votre appareil. Vérifiez que la page attendue s’ouvre et que les inscriptions sont ouvertes au bon moment. Un QR code facilite l’accès ; il ne change pas les règles d’inscription.",
+      "fallbackDurationMs": 31000
     }
   ]
 }

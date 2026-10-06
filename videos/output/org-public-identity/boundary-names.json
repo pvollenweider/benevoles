@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans Paramètres, le nom de l’organisation apparaît dans l’administration, les emails",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 13.04,
+    "wordsHeard": "Dans Paramètres"
+  },
+  "onset": 13.04,
+  "proposedCut": 12.9922705,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -48,6 +48,10 @@ async function freshOrganization() {
 }
 
 async function main() {
+  if (scenario === "privacy-personal-links") {
+    const { seedVideoPrivacy } = await import("./seed-video-privacy")
+    return seedVideoPrivacy(prisma)
+  }
   if (scenario === "last-minute-changes") {
     const { seedVideoLastMinute } = await import("./seed-video-last-minute")
     return seedVideoLastMinute(prisma)

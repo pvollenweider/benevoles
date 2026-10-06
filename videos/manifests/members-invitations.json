@@ -69,7 +69,7 @@
     "steps": [
       "Dans Invitations, envoyez d'abord un email de test à votre adresse pour vérifier la présentation.",
       "Cliquez sur « Inviter des membres », recherchez une personne et cochez sa fiche.",
-      "Pour un groupe, filtrez par tag, sélectionnez les membres visibles et vérifiez le compteur ; « Effacer » repart d'une sélection vide.",
+      "Pour un groupe, filtrez par tag, sélectionnez les membres visibles et vérifiez le compteur ; « Effacer » vide la sélection.",
       "Ajoutez si besoin un court message, puis envoyez : chaque personne reçoit son propre email et son lien personnel.",
       "Suivez dans le tableau qui a une participation confirmée.",
       "Gardez « Cacher déjà invités » coché pour éviter d'inviter deux fois les mêmes personnes."

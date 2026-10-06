@@ -1,0 +1,37 @@
+{
+  "locatedAt": "2026-10-06T02:11:01.944Z",
+  "masterSha256": "0d8315e24dd95cc5cf6f8755610e825ecda49c97e9fa57039e615a2dd2171c25",
+  "totalSeconds": 154.12,
+  "cuts": [
+    {
+      "id": "names",
+      "seconds": 12.9922705
+    },
+    {
+      "id": "logo",
+      "seconds": 33.2415625
+    },
+    {
+      "id": "slug",
+      "seconds": 50.952417
+    },
+    {
+      "id": "public-page",
+      "seconds": 75.4785835
+    },
+    {
+      "id": "event-result",
+      "seconds": 94.26279149999999
+    },
+    {
+      "id": "remove-logo",
+      "seconds": 111.65575
+    },
+    {
+      "id": "result",
+      "seconds": 133.22031249999998
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

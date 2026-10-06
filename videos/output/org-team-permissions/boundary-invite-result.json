@@ -1,0 +1,12 @@
+{
+  "anchor": "Après l’envoi, Léa apparaît avec le statut En attente. Un email",
+  "windowStart": 41.176,
+  "result": {
+    "found": true,
+    "startSeconds": 15,
+    "wordsHeard": "Après l'envoi Léa apparaît avec le statut En attente Un email"
+  },
+  "onset": 56.176,
+  "proposedCut": 56.1761875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

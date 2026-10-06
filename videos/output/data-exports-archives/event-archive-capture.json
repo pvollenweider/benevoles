@@ -1,7 +1,7 @@
 {
   "format": "benevol-event-archive",
   "version": 1,
-  "exportedAt": "2026-10-05T19:22:28.659Z",
+  "exportedAt": "2026-10-05T20:32:05.967Z",
   "organization": {
     "name": "Formation — données et archives",
     "slug": "formation-exports"
@@ -30,12 +30,12 @@
     "registrationClosesAt": null,
     "latitude": 46.2,
     "longitude": 6.14,
-    "createdAt": "2026-10-05T19:13:39.387Z",
-    "updatedAt": "2026-10-05T19:13:39.387Z"
+    "createdAt": "2026-10-05T20:27:50.593Z",
+    "updatedAt": "2026-10-05T20:27:50.593Z"
   },
   "shifts": [
     {
-      "id": "cmuvmocox000076a51wfakmep",
+      "id": "cmuvpbr9g0000jsa5dhwiy9o2",
       "eventId": "video-data-exports-event",
       "roleName": "Accueil",
       "label": "Accueil — archives",
@@ -59,11 +59,11 @@
       "colorKey": null,
       "maxPerVolunteer": null,
       "reservedTags": [],
-      "createdAt": "2026-10-05T19:13:39.393Z",
-      "updatedAt": "2026-10-05T19:13:39.393Z"
+      "createdAt": "2026-10-05T20:27:50.596Z",
+      "updatedAt": "2026-10-05T20:27:50.596Z"
     },
     {
-      "id": "cmuvmocp2000176a59hbywtor",
+      "id": "cmuvpbr9i0001jsa553j0izrc",
       "eventId": "video-data-exports-event",
       "roleName": "Logistique",
       "label": "Logistique — archives",
@@ -87,15 +87,15 @@
       "colorKey": null,
       "maxPerVolunteer": null,
       "reservedTags": [],
-      "createdAt": "2026-10-05T19:13:39.398Z",
-      "updatedAt": "2026-10-05T19:13:39.398Z"
+      "createdAt": "2026-10-05T20:27:50.598Z",
+      "updatedAt": "2026-10-05T20:27:50.598Z"
     }
   ],
   "registrations": [
     {
-      "id": "cmuvmocp7000276a5xs9sow7f",
+      "id": "cmuvpbr9k0002jsa5lu09cnww",
       "eventId": "video-data-exports-event",
-      "shiftId": "cmuvmocox000076a51wfakmep",
+      "shiftId": "cmuvpbr9g0000jsa5dhwiy9o2",
       "volunteerId": "video-data-exports-member-0",
       "status": "active",
       "source": "admin_manual",
@@ -109,8 +109,8 @@
       "waitingExpiresAt": null,
       "checkedInAt": null,
       "linkEmailedAt": null,
-      "createdAt": "2026-10-05T19:13:39.403Z",
-      "updatedAt": "2026-10-05T19:13:39.403Z",
+      "createdAt": "2026-10-05T20:27:50.600Z",
+      "updatedAt": "2026-10-05T20:27:50.600Z",
       "volunteer": {
         "id": "video-data-exports-member-0",
         "organizationId": "video-data-exports",
@@ -129,14 +129,14 @@
           "morning"
         ],
         "availabilityNote": "Disponible le matin ; retour à midi.",
-        "createdAt": "2026-10-05T19:13:39.365Z",
-        "updatedAt": "2026-10-05T19:15:16.802Z"
+        "createdAt": "2026-10-05T20:27:50.582Z",
+        "updatedAt": "2026-10-05T20:28:47.398Z"
       }
     },
     {
-      "id": "cmuvmocpi000376a5u61g458x",
+      "id": "cmuvpbr9p0003jsa5nh9ohyc1",
       "eventId": "video-data-exports-event",
-      "shiftId": "cmuvmocox000076a51wfakmep",
+      "shiftId": "cmuvpbr9g0000jsa5dhwiy9o2",
       "volunteerId": "video-data-exports-member-2",
       "status": "active",
       "source": "admin_manual",
@@ -150,8 +150,8 @@
       "waitingExpiresAt": null,
       "checkedInAt": null,
       "linkEmailedAt": null,
-      "createdAt": "2026-10-05T19:13:39.414Z",
-      "updatedAt": "2026-10-05T19:13:39.414Z",
+      "createdAt": "2026-10-05T20:27:50.605Z",
+      "updatedAt": "2026-10-05T20:27:50.605Z",
       "volunteer": {
         "id": "video-data-exports-member-2",
         "organizationId": "video-data-exports",
@@ -169,14 +169,14 @@
           "afternoon"
         ],
         "availabilityNote": "Après le repas.",
-        "createdAt": "2026-10-05T19:13:39.376Z",
-        "updatedAt": "2026-10-05T19:13:39.376Z"
+        "createdAt": "2026-10-05T20:27:50.588Z",
+        "updatedAt": "2026-10-05T20:27:50.588Z"
       }
     },
     {
-      "id": "cmuvmocpk000476a52sq3y1kh",
+      "id": "cmuvpbr9q0004jsa58dp7b9b4",
       "eventId": "video-data-exports-event",
-      "shiftId": "cmuvmocp2000176a59hbywtor",
+      "shiftId": "cmuvpbr9i0001jsa553j0izrc",
       "volunteerId": "video-data-exports-member-3",
       "status": "active",
       "source": "admin_manual",
@@ -190,8 +190,8 @@
       "waitingExpiresAt": null,
       "checkedInAt": null,
       "linkEmailedAt": null,
-      "createdAt": "2026-10-05T19:13:39.416Z",
-      "updatedAt": "2026-10-05T19:13:39.416Z",
+      "createdAt": "2026-10-05T20:27:50.606Z",
+      "updatedAt": "2026-10-05T20:27:50.606Z",
       "volunteer": {
         "id": "video-data-exports-member-3",
         "organizationId": "video-data-exports",
@@ -205,26 +205,26 @@
         "birthDate": null,
         "availabilityPeriods": [],
         "availabilityNote": "",
-        "createdAt": "2026-10-05T19:13:39.380Z",
-        "updatedAt": "2026-10-05T19:13:39.380Z"
+        "createdAt": "2026-10-05T20:27:50.590Z",
+        "updatedAt": "2026-10-05T20:27:50.590Z"
       }
     }
   ],
   "pages": [
     {
-      "id": "cmuvmocpn000576a5xxptnyxh",
+      "id": "cmuvpbr9s0005jsa51leloi6j",
       "eventId": "video-data-exports-event",
       "slug": "bienvenue",
       "title": "Bienvenue au stand",
       "content": "Informations fictives pour la fête des archives.",
       "displayOrder": 0,
-      "createdAt": "2026-10-05T19:13:39.419Z",
-      "updatedAt": "2026-10-05T19:13:39.419Z"
+      "createdAt": "2026-10-05T20:27:50.608Z",
+      "updatedAt": "2026-10-05T20:27:50.608Z"
     }
   ],
   "questions": [
     {
-      "id": "cmuvmocq0000876a52bs7mifz",
+      "id": "cmuvpbr9y0008jsa5s9c9wbof",
       "eventId": "video-data-exports-event",
       "position": 0,
       "label": "Taille du t-shirt",
@@ -236,14 +236,14 @@
       ],
       "required": false,
       "archivedAt": null,
-      "createdAt": "2026-10-05T19:13:39.432Z",
+      "createdAt": "2026-10-05T20:27:50.614Z",
       "answers": [
         {
           "volunteerId": "video-data-exports-member-0",
           "values": [
             "M"
           ],
-          "updatedAt": "2026-10-05T19:13:39.436Z"
+          "updatedAt": "2026-10-05T20:27:50.616Z"
         }
       ]
     }
@@ -253,23 +253,23 @@
       "roleName": "Accueil",
       "name": "Nicolas Exemple",
       "email": "video.exports.leader@example.org",
-      "createdAt": "2026-10-05T19:13:39.423Z"
+      "createdAt": "2026-10-05T20:27:50.610Z"
     }
   ],
   "milestones": [
     {
-      "id": "cmuvmocpw000776a5slbp3331",
+      "id": "cmuvpbr9x0007jsa5xdc3uns0",
       "eventId": "video-data-exports-event",
       "title": "Préparer les panneaux",
       "dueDate": "2026-10-15T12:00:00.000Z",
       "done": true,
-      "createdAt": "2026-10-05T19:13:39.428Z",
-      "updatedAt": "2026-10-05T19:13:39.428Z"
+      "createdAt": "2026-10-05T20:27:50.613Z",
+      "updatedAt": "2026-10-05T20:27:50.613Z"
     }
   ],
   "log": [
     {
-      "id": "cmuvmqg1y00kumna5zl3h8o6x",
+      "id": "cmuvpcz5600p4mna503tetmfz",
       "eventId": "video-data-exports-event",
       "actorType": "system",
       "actorId": null,
@@ -295,16 +295,16 @@
         }
       },
       "causedByLogId": null,
-      "createdAt": "2026-10-05T19:13:39.387Z"
+      "createdAt": "2026-10-05T20:27:50.593Z"
     },
     {
-      "id": "cmuvmqg2300kvmna5ll44lyr0",
+      "id": "cmuvpcz5a00p5mna5yfeypbyh",
       "eventId": "video-data-exports-event",
       "actorType": "system",
       "actorId": null,
       "action": "shift.baseline",
       "entityType": "Shift",
-      "entityId": "cmuvmocox000076a51wfakmep",
+      "entityId": "cmuvpbr9g0000jsa5dhwiy9o2",
       "changes": {
         "date": {
           "to": "2026-10-17T00:00:00.000Z",
@@ -336,16 +336,16 @@
         }
       },
       "causedByLogId": null,
-      "createdAt": "2026-10-05T19:13:39.393Z"
+      "createdAt": "2026-10-05T20:27:50.596Z"
     },
     {
-      "id": "cmuvmqg2900kwmna5wv4uxrx6",
+      "id": "cmuvpcz5d00p6mna5tt31hc6x",
       "eventId": "video-data-exports-event",
       "actorType": "system",
       "actorId": null,
       "action": "shift.baseline",
       "entityType": "Shift",
-      "entityId": "cmuvmocp2000176a59hbywtor",
+      "entityId": "cmuvpbr9i0001jsa553j0izrc",
       "changes": {
         "date": {
           "to": "2026-10-17T00:00:00.000Z",
@@ -377,16 +377,16 @@
         }
       },
       "causedByLogId": null,
-      "createdAt": "2026-10-05T19:13:39.398Z"
+      "createdAt": "2026-10-05T20:27:50.598Z"
     },
     {
-      "id": "cmuvmqg2c00kxmna5gvd2onc9",
+      "id": "cmuvpcz5f00p7mna57plb5m1v",
       "eventId": "video-data-exports-event",
       "actorType": "system",
       "actorId": null,
       "action": "registration.baseline",
       "entityType": "Registration",
-      "entityId": "cmuvmocp7000276a5xs9sow7f",
+      "entityId": "cmuvpbr9k0002jsa5lu09cnww",
       "changes": {
         "source": {
           "to": "admin_manual",
@@ -397,21 +397,21 @@
           "from": null
         },
         "shiftId": {
-          "to": "cmuvmocox000076a51wfakmep",
+          "to": "cmuvpbr9g0000jsa5dhwiy9o2",
           "from": null
         }
       },
       "causedByLogId": null,
-      "createdAt": "2026-10-05T19:13:39.403Z"
+      "createdAt": "2026-10-05T20:27:50.600Z"
     },
     {
-      "id": "cmuvmqg2e00kymna5bt4bpx1v",
+      "id": "cmuvpcz5h00p8mna5q97wtjyp",
       "eventId": "video-data-exports-event",
       "actorType": "system",
       "actorId": null,
       "action": "registration.baseline",
       "entityType": "Registration",
-      "entityId": "cmuvmocpi000376a5u61g458x",
+      "entityId": "cmuvpbr9p0003jsa5nh9ohyc1",
       "changes": {
         "source": {
           "to": "admin_manual",
@@ -422,21 +422,21 @@
           "from": null
         },
         "shiftId": {
-          "to": "cmuvmocox000076a51wfakmep",
+          "to": "cmuvpbr9g0000jsa5dhwiy9o2",
           "from": null
         }
       },
       "causedByLogId": null,
-      "createdAt": "2026-10-05T19:13:39.414Z"
+      "createdAt": "2026-10-05T20:27:50.605Z"
     },
     {
-      "id": "cmuvmqg2j00kzmna5hj8ayzi2",
+      "id": "cmuvpcz5j00p9mna5wx8muw6b",
       "eventId": "video-data-exports-event",
       "actorType": "system",
       "actorId": null,
       "action": "registration.baseline",
       "entityType": "Registration",
-      "entityId": "cmuvmocpk000476a52sq3y1kh",
+      "entityId": "cmuvpbr9q0004jsa58dp7b9b4",
       "changes": {
         "source": {
           "to": "admin_manual",
@@ -447,12 +447,12 @@
           "from": null
         },
         "shiftId": {
-          "to": "cmuvmocp2000176a59hbywtor",
+          "to": "cmuvpbr9i0001jsa553j0izrc",
           "from": null
         }
       },
       "causedByLogId": null,
-      "createdAt": "2026-10-05T19:13:39.416Z"
+      "createdAt": "2026-10-05T20:27:50.606Z"
     }
   ],
   "counts": {

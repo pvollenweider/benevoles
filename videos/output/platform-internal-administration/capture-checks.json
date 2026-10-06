@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-05T22:01:20.350Z",
+  "audiovisualValidated": false,
+  "localDatabaseOnly": true,
+  "isolatedSmtpOnly": true,
+  "createdPendingOrganization": true,
+  "actualInviteMails": [
+    "58xzl6UDN2nXHvLGwsCvQ5",
+    "2M4FAONei5k5gRw8y1hBF5"
+  ],
+  "oldInviteRefused": true,
+  "actualActivationAndLogin": true,
+  "publicAliasRedirect": {
+    "status": 307,
+    "targetHost": "formation-operateur-jetable-renommee.video.invalid"
+  },
+  "sessionRejectedWhileInactive": true,
+  "sessionRestoredAfterReactivation": true,
+  "explicitContextSelection": true,
+  "realHealthWithoutInventedJobs": true,
+  "actualTestEmail": "48swkEGu4jyk9Il6kfgm8g",
+  "actualBroadcastEmails": [
+    "2o3zpbuBRIucFVv0c3SMwu",
+    "0dFVFMOuWji7cbvUaRtmJw"
+  ],
+  "actualUnsubscribe": true,
+  "exactDisposableDeletion": true,
+  "ordinaryOwnerPlatformAccessRefused": true
+}

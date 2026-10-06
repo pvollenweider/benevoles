@@ -1,0 +1,272 @@
+{
+  "checkedAt": "2026-10-05T22:48:59.218Z",
+  "organizationId": "video-delivery",
+  "ids": {
+    "pending": "cmuvud9ic0000sra5vrdmnpdo",
+    "retrying": "cmuvud9if0001sra587v48ru5",
+    "recoverable": "cmuvud9jd0002sra5op4xo9j5",
+    "wrong": "cmuvud9kr0003sra5thzaefdz",
+    "sent": "cmuvud9lw0004sra5ebym6ufe"
+  },
+  "clock": "Supported deliverOutbox now parameter advanced to each real scheduled due time; accelerated demonstration clock, no status/attempt columns manually changed",
+  "actualSmtpAttempts": [
+    {
+      "recipient": "video.delivery.retrying@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:48:59.011Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:48:59.029Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:48:59.036Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:48:59.043Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:48:59.051Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:48:59.057Z"
+    },
+    {
+      "recipient": "video.delivery.recoverable@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:48:59.064Z"
+    },
+    {
+      "recipient": "video.delivery.wrong@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:48:59.074Z"
+    },
+    {
+      "recipient": "video.delivery.wrong@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:48:59.081Z"
+    },
+    {
+      "recipient": "video.delivery.wrong@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:48:59.086Z"
+    },
+    {
+      "recipient": "video.delivery.wrong@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:48:59.092Z"
+    },
+    {
+      "recipient": "video.delivery.wrong@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:48:59.099Z"
+    },
+    {
+      "recipient": "video.delivery.wrong@example.org",
+      "accepted": false,
+      "timestamp": "2026-10-05T22:48:59.105Z"
+    },
+    {
+      "recipient": "video.delivery.sent@example.org",
+      "accepted": true,
+      "timestamp": "2026-10-05T22:48:59.114Z"
+    }
+  ],
+  "workerSnapshots": [
+    {
+      "id": "cmuvud9if0001sra587v48ru5",
+      "recipient": "video.delivery.retrying@example.org",
+      "now": "2026-10-05T22:48:58.988Z",
+      "status": "pending",
+      "attempts": 1,
+      "nextAttemptAt": "2026-10-05T22:53:58.988Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmuvud9jd0002sra5op4xo9j5",
+      "recipient": "video.delivery.recoverable@example.org",
+      "now": "2026-10-05T22:48:59.023Z",
+      "status": "pending",
+      "attempts": 1,
+      "nextAttemptAt": "2026-10-05T22:53:59.023Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmuvud9jd0002sra5op4xo9j5",
+      "recipient": "video.delivery.recoverable@example.org",
+      "now": "2026-10-05T22:53:59.024Z",
+      "status": "pending",
+      "attempts": 2,
+      "nextAttemptAt": "2026-10-05T23:03:59.024Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmuvud9jd0002sra5op4xo9j5",
+      "recipient": "video.delivery.recoverable@example.org",
+      "now": "2026-10-05T23:03:59.025Z",
+      "status": "pending",
+      "attempts": 3,
+      "nextAttemptAt": "2026-10-05T23:23:59.025Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmuvud9jd0002sra5op4xo9j5",
+      "recipient": "video.delivery.recoverable@example.org",
+      "now": "2026-10-05T23:23:59.026Z",
+      "status": "pending",
+      "attempts": 4,
+      "nextAttemptAt": "2026-10-06T00:03:59.026Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmuvud9jd0002sra5op4xo9j5",
+      "recipient": "video.delivery.recoverable@example.org",
+      "now": "2026-10-06T00:03:59.027Z",
+      "status": "pending",
+      "attempts": 5,
+      "nextAttemptAt": "2026-10-06T01:23:59.027Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmuvud9jd0002sra5op4xo9j5",
+      "recipient": "video.delivery.recoverable@example.org",
+      "now": "2026-10-06T01:23:59.028Z",
+      "status": "failed",
+      "attempts": 6,
+      "nextAttemptAt": "2026-10-06T04:03:59.028Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 0,
+        "failed": 1
+      }
+    },
+    {
+      "id": "cmuvud9kr0003sra5thzaefdz",
+      "recipient": "video.delivery.wrong@example.org",
+      "now": "2026-10-05T22:48:59.070Z",
+      "status": "pending",
+      "attempts": 1,
+      "nextAttemptAt": "2026-10-05T22:53:59.070Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmuvud9kr0003sra5thzaefdz",
+      "recipient": "video.delivery.wrong@example.org",
+      "now": "2026-10-05T22:53:59.071Z",
+      "status": "pending",
+      "attempts": 2,
+      "nextAttemptAt": "2026-10-05T23:03:59.071Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmuvud9kr0003sra5thzaefdz",
+      "recipient": "video.delivery.wrong@example.org",
+      "now": "2026-10-05T23:03:59.072Z",
+      "status": "pending",
+      "attempts": 3,
+      "nextAttemptAt": "2026-10-05T23:23:59.072Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmuvud9kr0003sra5thzaefdz",
+      "recipient": "video.delivery.wrong@example.org",
+      "now": "2026-10-05T23:23:59.073Z",
+      "status": "pending",
+      "attempts": 4,
+      "nextAttemptAt": "2026-10-06T00:03:59.073Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmuvud9kr0003sra5thzaefdz",
+      "recipient": "video.delivery.wrong@example.org",
+      "now": "2026-10-06T00:03:59.074Z",
+      "status": "pending",
+      "attempts": 5,
+      "nextAttemptAt": "2026-10-06T01:23:59.074Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 1,
+        "failed": 0
+      }
+    },
+    {
+      "id": "cmuvud9kr0003sra5thzaefdz",
+      "recipient": "video.delivery.wrong@example.org",
+      "now": "2026-10-06T01:23:59.075Z",
+      "status": "failed",
+      "attempts": 6,
+      "nextAttemptAt": "2026-10-06T04:03:59.075Z",
+      "outcome": {
+        "sent": 0,
+        "retried": 0,
+        "failed": 1
+      }
+    },
+    {
+      "id": "cmuvud9lw0004sra5ebym6ufe",
+      "recipient": "video.delivery.sent@example.org",
+      "now": "2026-10-05T22:48:59.111Z",
+      "status": "sent",
+      "attempts": 0,
+      "nextAttemptAt": "2026-10-05T22:48:59.108Z",
+      "outcome": {
+        "sent": 1,
+        "retried": 0,
+        "failed": 0
+      }
+    }
+  ],
+  "pendingWithoutAttempt": true,
+  "actualDeliveredMailId": "6y9sZXI5xwxmUFxniR3a6y",
+  "controlledErrorLogsCount": 15,
+  "note": "Real worker/SMTP evidence; UI retry, address correction and campaign still to film"
+}
