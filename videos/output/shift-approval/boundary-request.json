@@ -1,0 +1,12 @@
+{
+  "anchor": "Côté bénévole, le créneau annonce clairement qu’il est soumis à validation",
+  "windowStart": 0.3329999999999984,
+  "result": {
+    "found": true,
+    "startSeconds": 30.48,
+    "wordsHeard": "Côté bénévole, le créneau annonce clairement qu’il est soumis à validation"
+  },
+  "onset": 30.813,
+  "proposedCut": 30.33325,
+  "note": "Proposal only; recut then independently audit before capture"
+}

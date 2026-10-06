@@ -1,0 +1,41 @@
+{
+  "locatedAt": "2026-10-06T07:46:09.886Z",
+  "masterSha256": "d41eca4cad756df762b3e18a1a7df528a2e4a71630e5f19fd63eac85ba996466",
+  "totalSeconds": 169.56,
+  "cuts": [
+    {
+      "id": "access",
+      "seconds": 13.521167
+    },
+    {
+      "id": "identity",
+      "seconds": 35.878104
+    },
+    {
+      "id": "pages",
+      "seconds": 52.635000000000005
+    },
+    {
+      "id": "desktop",
+      "seconds": 70.47562500000001
+    },
+    {
+      "id": "states",
+      "seconds": 91.412354
+    },
+    {
+      "id": "mobile",
+      "seconds": 114.22606250000001
+    },
+    {
+      "id": "invitation",
+      "seconds": 135.05181249999998
+    },
+    {
+      "id": "result",
+      "seconds": 153.0017915
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

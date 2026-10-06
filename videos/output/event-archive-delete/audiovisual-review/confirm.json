@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:51:12.638Z",
+  "videoSha256": "0a23771336fc9dded1bb36bcee845927d7ab55a082cb7c2c3e2873d18c009840",
+  "promptSha256": "19567e89ece249bdb85a2d3ea93061e0307e881f094c7d87797aada84c782676",
+  "clipSha256": "10fda2612bc4762ffcd354ff7606154f40820dcf51a2cf64949bea15f3e1e96a",
+  "scene": "confirm",
+  "review": {
+    "heardOpening": "La confirmation renforcée demande",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "demande de saisir le titre de l’événement",
+        "visibleSeconds": 4.5,
+        "visible": "Champ de saisie complété avec le titre requis",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "le bouton reste indisponible",
+        "visibleSeconds": 5,
+        "visible": "Validation de correspondance affichée et bouton de suppression activé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "Une fois la suppression lancée",
+        "visibleSeconds": 9.2,
+        "visible": "Clic sur le bouton et redirection vers la liste avec notification de suppression",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution fluide, claire et posée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

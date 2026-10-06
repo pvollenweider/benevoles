@@ -1,0 +1,41 @@
+{
+  "locatedAt": "2026-10-06T08:43:54.470Z",
+  "masterSha256": "c81653f348d995f6324ef2cad553222902f770f2a6b8033056981d639287a2a1",
+  "totalSeconds": 140.12,
+  "cuts": [
+    {
+      "id": "identity",
+      "seconds": 12.0721455
+    },
+    {
+      "id": "choices",
+      "seconds": 25.2287295
+    },
+    {
+      "id": "leaders",
+      "seconds": 42.043208
+    },
+    {
+      "id": "summary",
+      "seconds": 56.185437500000006
+    },
+    {
+      "id": "create",
+      "seconds": 68.6287915
+    },
+    {
+      "id": "copied-details",
+      "seconds": 84.430896
+    },
+    {
+      "id": "leader-emails",
+      "seconds": 102.1128125
+    },
+    {
+      "id": "result",
+      "seconds": 124.6642295
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

@@ -1,0 +1,116 @@
+{
+  "receivedAt": "2026-10-06T07:45:02.056Z",
+  "status": "completed",
+  "usage": {
+    "total_tokens": 5208,
+    "total_input_tokens": 969,
+    "input_tokens_by_modality": [
+      {
+        "modality": "audio",
+        "tokens": 259
+      },
+      {
+        "modality": "text",
+        "tokens": 710
+      }
+    ],
+    "total_cached_tokens": 0,
+    "total_output_tokens": 4239,
+    "output_tokens_by_modality": [
+      {
+        "modality": "audio",
+        "tokens": 4239
+      }
+    ],
+    "total_tool_use_tokens": 0,
+    "total_thought_tokens": 0,
+    "raw_prompt_token": 1026,
+    "model_invocation_token_counts": [
+      {
+        "prompt_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 460
+          },
+          {
+            "modality": "audio",
+            "tokens": 259
+          }
+        ],
+        "candidates_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 1799
+          }
+        ]
+      },
+      {
+        "prompt_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 1073
+          },
+          {
+            "modality": "audio",
+            "tokens": 259
+          }
+        ],
+        "candidates_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 2523
+          }
+        ]
+      }
+    ],
+    "non_grounding_model_invocation_token_counts": [
+      {
+        "prompt_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 460
+          },
+          {
+            "modality": "audio",
+            "tokens": 259
+          }
+        ],
+        "candidates_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 1799
+          }
+        ]
+      },
+      {
+        "prompt_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 1073
+          },
+          {
+            "modality": "audio",
+            "tokens": 259
+          }
+        ],
+        "candidates_tokens_details": [
+          {
+            "modality": "text",
+            "tokens": 2523
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "type": "model_output",
+      "content": [
+        {
+          "type": "audio",
+          "encodedLength": 10859992
+        }
+      ]
+    }
+  ]
+}

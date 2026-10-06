@@ -1,0 +1,12 @@
+{
+  "anchor": "Le nouveau récapitulatif garde trois missions et une vraie pause entre",
+  "windowStart": 107.457,
+  "result": {
+    "found": true,
+    "startSeconds": 29.8,
+    "wordsHeard": "Le nouveau récapitulatif garde trois missions et une vraie pause entre"
+  },
+  "onset": 137.257,
+  "proposedCut": 137.2000415,
+  "note": "Proposal only; recut then independently audit before capture"
+}

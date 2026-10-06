@@ -1,0 +1,12 @@
+{
+  "anchor": "Le dernier dimanche de mars, la Suisse passe directement de deux",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 28.8,
+    "wordsHeard": "Le dernier dimanche de mars, la Suisse passe directement de deux"
+  },
+  "onset": 28.8,
+  "proposedCut": 28.5635,
+  "note": "Proposal only; recut then independently audit before capture"
+}

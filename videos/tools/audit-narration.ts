@@ -45,7 +45,7 @@ async function main() {
   const report: { id: string; audioSha256: string; recognized: string; expected: string; wordErrorRate: number; needsReview: boolean; unexpectedInstructions?: string[]; edgeIssues?: string[] }[] = []
   const suffix = `${fromVideo ? "-video" : ""}${segmentId ? `-${segmentId}` : ""}`
   const reportFile = path.join(dir, `narration-audit${suffix}.json`)
-  let previous: { model: string; auditedAt: string; segments: typeof report } | undefined
+  let previous: { model: string; promptVersion?: number; auditedAt: string; segments: typeof report } | undefined
   try { previous = JSON.parse(await readFile(reportFile, "utf8")) } catch { /* No prior evidence. */ }
   let newRecognitions = 0
   for (const segment of manifest.segments.filter(s => !segmentId || s.id === segmentId)) {
@@ -57,7 +57,7 @@ async function main() {
     }
     const bytes = await readFile(audioFile)
     const audioSha256 = createHash("sha256").update(bytes).digest("hex")
-    const cached = previous?.model === model ? previous.segments.find(s => s.id === segment.id) : undefined
+    const cached = previous?.model === model && previous.promptVersion === 2 ? previous.segments.find(s => s.id === segment.id) : undefined
     // A saved independent transcription is valid only for the exact audio bytes and text.
     // Recompute its score under today's normalization; never reuse a failed split.
     if (!force && cached?.audioSha256 === audioSha256 && cached.expected === segment.transcript && cached.recognized && !cached.needsReview) {
@@ -75,7 +75,7 @@ async function main() {
       headers: { "Content-Type": "application/json", "x-goog-api-key": key },
       signal: AbortSignal.timeout(120_000),
       body: JSON.stringify({ contents: [{ parts: [
-        { text: "Transcris exactement les paroles françaises audibles dans cet extrait, une seule fois et dans leur ordre. Écris les dates, années et heures en toutes lettres telles qu’elles sont prononcées, plutôt qu’en chiffres : cela évite de confondre une différence de notation avec un mot omis. Retranscris une répétition uniquement si elle est réellement audible. Ne donne pas deux versions de la transcription. Ne complète pas les phrases coupées. Ne résume pas. Retourne uniquement le texte prononcé, sans introduction ni commentaire." },
+        { text: "Transcris exactement TOUTES les paroles audibles dans cet extrait, quelle que soit leur langue, une seule fois et dans leur ordre. N'omets surtout pas les mots anglais ou les indications techniques prononcées, par exemple short pause : ils doivent figurer dans la transcription s'ils sont audibles. Écris les dates, années et heures en toutes lettres telles qu’elles sont prononcées, plutôt qu’en chiffres : cela évite de confondre une différence de notation avec un mot omis. Retranscris une répétition uniquement si elle est réellement audible. Ne donne pas deux versions de la transcription. Ne complète pas les phrases coupées. Ne résume pas. Retourne uniquement le texte prononcé, sans introduction ni commentaire." },
         { inlineData: { mimeType: "audio/wav", data: bytes.toString("base64") } },
       ] }] }),
     })
@@ -94,7 +94,7 @@ async function main() {
   }
   if (!report.length) throw new Error("No matching segment")
   if (videoSha256 && videoSha256 !== createHash("sha256").update(await readFile(path.join(dir, `${manifest.slug}.mp4`))).digest("hex")) throw new Error("Final MP4 changed during its audio audit")
-  await writeFile(reportFile, JSON.stringify({ model, auditedAt: newRecognitions ? new Date().toISOString() : previous!.auditedAt, revalidatedAt: new Date().toISOString(), source: fromVideo ? "actual final MP4 audio" : "generated narration WAV", videoSha256, note: "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation", segments: report }, null, 2))
+  await writeFile(reportFile, JSON.stringify({ model, promptVersion: 2, auditedAt: newRecognitions ? new Date().toISOString() : previous!.auditedAt, revalidatedAt: new Date().toISOString(), source: fromVideo ? "actual final MP4 audio" : "generated narration WAV", videoSha256, note: "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation", segments: report }, null, 2))
   if (report.some(s => s.needsReview)) process.exitCode = 1
 }
 main().catch(error => { console.error(error instanceof Error ? error.message : "Narration audit failed"); process.exitCode = 1 })

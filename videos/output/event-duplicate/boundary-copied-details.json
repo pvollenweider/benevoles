@@ -1,0 +1,12 @@
+{
+  "anchor": "Ouvrons le planning de la nouvelle édition. Les dates ont été",
+  "windowStart": 57.21199999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 27.5,
+    "wordsHeard": "Ouvrons le planning de la nouvelle édition. Les dates ont été"
+  },
+  "onset": 84.71199999999999,
+  "proposedCut": 84.430896,
+  "note": "Proposal only; recut then independently audit before capture"
+}

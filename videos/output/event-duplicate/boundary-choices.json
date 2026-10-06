@@ -1,0 +1,12 @@
+{
+  "anchor": "Choisis ensuite ce qui doit suivre. Les créneaux conservent postes, horaires,",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 25.32,
+    "wordsHeard": "Choisis ensuite ce qui doit suivre"
+  },
+  "onset": 25.32,
+  "proposedCut": 25.2287295,
+  "note": "Proposal only; recut then independently audit before capture"
+}

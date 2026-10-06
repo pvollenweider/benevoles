@@ -1,62 +1,63 @@
 {
   "slug": "sector-leaders",
-  "recordedAt": "2026-10-05T10:41:26.224Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T07:57:13.310Z",
   "video": "capture.webm",
   "cues": [
     {
       "id": "welcome",
       "startMs": 0,
-      "endMs": 17681
+      "endMs": 17172
     },
     {
       "id": "nominate",
-      "startMs": 18134,
-      "endMs": 39315
+      "startMs": 17626,
+      "endMs": 37291
     },
     {
       "id": "registered",
-      "startMs": 39767,
-      "endMs": 56734
+      "startMs": 37744,
+      "endMs": 55160
     },
     {
       "id": "email",
-      "startMs": 57186,
-      "endMs": 73274
+      "startMs": 55614,
+      "endMs": 71169
     },
     {
       "id": "roster",
-      "startMs": 73726,
-      "endMs": 93943
+      "startMs": 71621,
+      "endMs": 90527
     },
     {
       "id": "mobile",
-      "startMs": 94395,
-      "endMs": 114425
+      "startMs": 90978,
+      "endMs": 109842
     },
     {
       "id": "scope",
-      "startMs": 114878,
-      "endMs": 129119
+      "startMs": 110293,
+      "endMs": 125635
     },
     {
       "id": "new-signup",
-      "startMs": 129570,
-      "endMs": 159417
+      "startMs": 126088,
+      "endMs": 157091
     },
     {
       "id": "notification",
-      "startMs": 162322,
-      "endMs": 181724
+      "startMs": 160005,
+      "endMs": 181012
     },
     {
       "id": "contact",
-      "startMs": 182176,
-      "endMs": 199935
+      "startMs": 181464,
+      "endMs": 198467
     },
     {
       "id": "remove",
-      "startMs": 200388,
-      "endMs": 217949
+      "startMs": 198919,
+      "endMs": 219294
     }
   ]
 }

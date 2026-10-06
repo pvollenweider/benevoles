@@ -5,6 +5,7 @@ import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { chromium, type Locator, type Page } from "playwright"
 import { catalogEntry, loadManifest, videoDir, type AudioMetadata, type Timeline } from "../lib/manifest"
+import { verifyProductBuild } from "../lib/product-build"
 
 const reference = process.argv.find((arg) => !arg.startsWith("-") && arg !== process.argv[0] && arg !== process.argv[1])
 if (!reference) throw new Error("Usage: npm run video:record -- <VIDEO_ID>")
@@ -139,6 +140,7 @@ async function fillVisibly(page: Page, field: Locator, value: string, pauseMs = 
 
 async function main() {
   const manifest = await loadManifest(reference!)
+  const product = await verifyProductBuild(baseUrl)
   if ((await catalogEntry(reference!)).captureReady === false) throw new Error(`${manifest.id}: real UI recorder and fixture are not ready; refusing a substitute capture`)
   const slug = manifest.slug
   const dir = videoDir(manifest.slug)
@@ -154,13 +156,19 @@ async function main() {
   await mkdir(dir, { recursive: true })
   await rm(rawVideo, { force: true })
 
-  const browser = await chromium.launch({ headless: true })
+  // Native date controls also depend on Chromium's UI/process locale, not just
+  // the context's Accept-Language. Keep French narration separate from this.
+  const browser = await chromium.launch({
+    headless: true,
+    args: ["--lang=fr-FR"],
+    env: { ...process.env, LANG: "fr_FR.UTF-8", LC_ALL: "fr_FR.UTF-8" },
+  })
   const context = await browser.newContext({
     viewport: { width: manifest.viewport.width, height: manifest.viewport.height },
     deviceScaleFactor: manifest.viewport.deviceScaleFactor,
-    isMobile: true,
-    hasTouch: true,
-    locale: manifest.language,
+    isMobile: manifest.viewport.width < 600,
+    hasTouch: manifest.viewport.width < 600,
+    locale: "fr-FR",
     timezoneId: "Europe/Zurich",
     colorScheme: "light",
     reducedMotion: "reduce",
@@ -172,6 +180,19 @@ async function main() {
   const detailFrames: NonNullable<Timeline["detailFrames"]> = []
   let startedAt = 0
   let recording = false
+  const inputEvents: NonNullable<Timeline["inputEvents"]> = []
+  await context.exposeBinding("videoInputSound", (_source, kind: "click" | "key") => {
+    if (recording && (kind === "click" || kind === "key")) inputEvents.push({ kind, atMs: Math.round(performance.now() - startedAt) })
+  })
+  // String source avoids transpiler helpers leaking into the browser script.
+  await context.addInitScript(`
+    document.addEventListener("pointerdown", () => {
+      void window.videoInputSound("click").catch(() => {});
+    }, true);
+    document.addEventListener("keydown", () => {
+      void window.videoInputSound("key").catch(() => {});
+    }, true);
+  `)
 
   const scene = async (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => {
     console.log(`Scene ${id}: ${rehearsal ? "rehearsal" : "narration-timed"}`)
@@ -418,7 +439,7 @@ async function main() {
       await tap(page, size)
       const charter = page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox")
       await tap(page, charter)
-      const privacy = page.locator("label").filter({ hasText: "J'accepte que l'association" }).getByRole("checkbox")
+      const privacy = page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ })
       await tap(page, privacy)
     })
 
@@ -1045,28 +1066,30 @@ async function main() {
       await scene("availability", async (at) => {
         const waitlist = page.getByRole("checkbox", { name: /Activer la liste d'attente/ })
         await waitlist.scrollIntoViewIfNeeded()
-        await at(0.38)
+        await at(0.22)
         await tap(page, waitlist)
         await at(0.64)
         await page.getByRole("checkbox", { name: /Sur validation/ }).scrollIntoViewIfNeeded()
       })
       await scene("practical", async (at) => {
         await page.getByRole("group", { name: "Infos pratiques pour les bénévoles" }).scrollIntoViewIfNeeded()
-        await at(0.22)
-        await page.getByLabel("Lieu de rendez-vous").fill("Entrée artistes, portail nord")
-        await page.getByLabel("Coordonnées GPS ou lien de carte").fill("46.1805734, 6.1228285")
-        await at(0.52)
-        await page.getByLabel("Personne de contact").fill("Léa, accueil artistes")
-        await page.getByLabel("Téléphone du contact").fill("079 555 01 24")
-        await page.getByLabel("Consigne pratique").fill("Venir dix minutes avant avec des chaussures fermées.")
+        await at(0.05)
+        await typeNaturally(page, page.getByLabel("Lieu de rendez-vous"), "Entrée artistes, portail nord")
+        await typeNaturally(page, page.getByLabel("Consigne pratique"), "Venir dix minutes avant avec des chaussures fermées.")
+        await typeNaturally(page, page.getByLabel("Personne de contact"), "Léa, accueil artistes")
+        await typeNaturally(page, page.getByLabel("Téléphone du contact"), "079 000 01 24")
+        await at(0.63)
+        await typeNaturally(page, page.getByLabel("Coordonnées GPS ou lien de carte"), "46.1805734, 6.1228285")
       })
       await scene("save", async (at) => {
         await page.getByRole("button", { name: "Ajouter", exact: true }).scrollIntoViewIfNeeded()
-        await at(0.30)
+        await at(0.08)
         await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
         await page.getByText("Accueil des artistes", { exact: true }).first().waitFor()
-        await at(0.66)
-        await page.getByText("Accueil des artistes", { exact: true }).first().scrollIntoViewIfNeeded()
+        await at(0.60)
+        await tap(page, page.getByRole("button", { name: "Liste", exact: true }))
+        await tap(page, page.getByRole("row").filter({ hasText: "Accueil des artistes" }).getByRole("button", { name: "Modifier", exact: true }))
+        await page.getByLabel("Consigne pratique").scrollIntoViewIfNeeded()
       })
       await scene("change", async (at) => {
         await tap(page, page.getByRole("button", { name: "Liste" }))
@@ -1644,7 +1667,7 @@ async function main() {
         await at(0.44)
         await tap(page, page.getByRole("button", { name: "J'ai lu et j'accepte" }))
         await at(0.70)
-        await tap(page, page.locator("label").filter({ hasText: "J'accepte que l'association" }).getByRole("checkbox"))
+        await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
       })
       const recap = page.locator(".lg\\:col-start-2").filter({ hasText: "Vos créneaux" }).first()
       await scene("recap", async (at) => {
@@ -2544,7 +2567,7 @@ async function main() {
         await at(0.36)
         await tap(page, page.getByRole("radio", { name: "M", exact: true }))
         await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
-        await tap(page, page.locator("label").filter({ hasText: "J'accepte que l'association" }).getByRole("checkbox"))
+        await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
         await at(0.76)
         await tap(page, page.getByRole("button", { name: "Confirmer mon inscription", exact: true }))
         await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
@@ -2885,7 +2908,8 @@ async function main() {
         await page.screencast.showChapter(manifest.title, { description: "Un accès simple pour accompagner son équipe", duration: 2_300 })
       })
       await scene("nominate", async (at) => {
-        await tap(page, page.getByRole("button", { name: "+ Ajouter un·e responsable" }))
+        await tap(page, page.getByRole("button", { name: "+ Ajouter un responsable", exact: true }))
+        await at(0.12)
         await typeNaturally(page, page.getByLabel("Poste *", { exact: true }), "Montage")
         await typeNaturally(page, page.getByLabel("Nom *", { exact: true }), "Samira Perrin")
         await typeNaturally(page, page.getByLabel("Email *", { exact: true }), "samira.perrin@example.org")
@@ -2894,7 +2918,7 @@ async function main() {
         await page.getByText("Samira Perrin", { exact: true }).waitFor()
       })
       await scene("registered", async (at) => {
-        await tap(page, page.getByRole("button", { name: "+ Ajouter un·e responsable" }))
+        await tap(page, page.getByRole("button", { name: "+ Ajouter un responsable", exact: true }))
         const picker = page.getByLabel("Depuis les inscrits (optionnel)")
         const option = picker.locator("option").filter({ hasText: "Camille" }).first()
         const value = await option.getAttribute("value")
@@ -2910,7 +2934,7 @@ async function main() {
         await page.goto("http://localhost:48026"); await settle(page)
         const mail = page.getByText(/responsable/i).first()
         await mail.waitFor(); await tap(page, mail)
-        await at(0.55)
+        await at(0.24)
         const link = page.frameLocator("iframe").locator('a[href*="/leader/"]').first()
         const href = await link.getAttribute("href")
         if (!href) throw new Error("Nomination email has no personal leader link")
@@ -2924,7 +2948,7 @@ async function main() {
         await at(0.42)
         await page.getByText("Liste d'attente", { exact: true }).first().scrollIntoViewIfNeeded()
         await at(0.72)
-        await page.locator("section").last().scrollIntoViewIfNeeded()
+        await page.getByText("Liste d'attente", { exact: true }).first().scrollIntoViewIfNeeded()
       })
       await scene("mobile", async (at) => {
         await page.setViewportSize({ width: 390, height: 800 })
@@ -2944,6 +2968,7 @@ async function main() {
       await scene("new-signup", async (at) => {
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
         await tap(page, page.getByRole("button", { name: /Sélectionner — Buvette 10h–14h/ }).last())
+        await at(0.18)
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         await at(0.24)
         await typeNaturally(page, page.getByLabel("Prénom *", { exact: true }), "Nora")
@@ -2954,7 +2979,7 @@ async function main() {
         await at(0.50)
         await tap(page, page.getByRole("radio", { name: "M", exact: true }))
         await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
-        await tap(page, page.locator("label").filter({ hasText: "J'accepte que l'association" }).getByRole("checkbox"))
+        await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
         await at(0.74)
         await page.getByRole("button", { name: "Confirmer mon inscription" }).scrollIntoViewIfNeeded()
         await at(0.87)
@@ -2986,7 +3011,7 @@ async function main() {
         await at(0.28)
         await tap(page, dialog.getByRole("button", { name: "Retirer", exact: true }))
         await dialog.waitFor({ state: "hidden" })
-        await at(0.60)
+        await at(0.43)
         await page.goto(rosterUrl); await settle(page)
         await page.getByRole("heading", { name: "Lien introuvable", exact: true }).waitFor()
       })
@@ -3015,7 +3040,7 @@ async function main() {
         await at(0.28)
         await tap(page, page.getByRole("button", { name: "Archiver" }))
         await page.getByRole("alertdialog").waitFor()
-        await at(0.58)
+        await at(0.34)
         await tap(page, page.getByRole("button", { name: "Confirmer" }))
         await page.getByText("Archivé", { exact: true }).first().waitFor()
       })
@@ -3030,10 +3055,20 @@ async function main() {
       })
 
       await scene("backup", async (at) => {
+        const deletionUrl = page.url()
         const backup = page.getByRole("link", { name: /Ouvrir l'export PDF/ })
         await backup.scrollIntoViewIfNeeded()
-        await at(0.48)
-        await backup.focus()
+        await at(0.10)
+        const ready = page.waitForEvent("popup")
+        await tap(page, backup)
+        const popup = await ready
+        await popup.waitForLoadState("networkidle")
+        const exportedUrl = new URL(popup.url())
+        if (exportedUrl.origin !== new URL(baseUrl).origin || !exportedUrl.pathname.endsWith(`/export/pdf`)) throw new Error("Unexpected archival report destination")
+        await popup.close()
+        await page.goto(exportedUrl.href); await settle(page)
+        await at(0.80)
+        await page.goto(deletionUrl); await settle(page)
       })
 
       await scene("confirm", async (at) => {
@@ -3245,11 +3280,12 @@ async function main() {
         const title = page.getByLabel("Titre de la copie")
         await title.scrollIntoViewIfNeeded()
         await at(0.18)
-        await tap(page, title); await title.fill("Fête du village de Montvert 2027")
-        const source = await page.getByLabel("Premier jour de la copie").inputValue()
-        const next = new Date(`${source}T00:00:00Z`); next.setUTCFullYear(next.getUTCFullYear() + 1)
-        await fillVisibly(page, page.getByLabel("Premier jour de la copie"), next.toISOString().slice(0, 10), 1_100)
+        await title.fill("")
+        await typeNaturally(page, title, "Fête du village de Montvert 2027")
+        // Non-ambiguous date makes the day/month order reviewable in the pilot.
+        await fillVisibly(page, page.getByLabel("Premier jour de la copie"), "2027-11-28", 1_100)
         await page.getByLabel("Premier jour de la copie").blur()
+        await page.screenshot({ path: path.join(dir, "date-locale-check.png") })
         await at(0.70)
         await page.getByText(/Toutes les dates.*décalées/).first().scrollIntoViewIfNeeded()
       })
@@ -3280,7 +3316,10 @@ async function main() {
       })
 
       let copyId = ""
+      let copiedInvitationIds = new Set<string>()
       await scene("create", async (at) => {
+        const mailbox = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json() as { messages: { ID: string }[] }
+        copiedInvitationIds = new Set(mailbox.messages.map(mail => mail.ID))
         await at(0.16)
         await tap(page, page.getByRole("button", { name: "Créer la copie" }))
         await page.waitForURL(/\/admin\/events\/[^/]+$/)
@@ -3288,9 +3327,32 @@ async function main() {
         await page.getByRole("heading", { name: "Fête du village de Montvert 2027" }).waitFor()
         await at(0.54)
         await page.getByText(/Brouillon/).first().scrollIntoViewIfNeeded()
-        await at(0.78)
+        await at(0.40)
         await page.goto(`${baseUrl}/admin/events/${copyId}/edit`); await settle(page)
         await page.getByRole("checkbox", { name: "Inscriptions ouvertes" }).scrollIntoViewIfNeeded()
+        if (await page.getByRole("checkbox", { name: "Inscriptions ouvertes" }).isChecked()) throw new Error("Copied event registrations must be closed")
+      })
+
+      await scene("copied-details", async (at) => {
+        await page.goto(`${baseUrl}/admin/events/${copyId}/shifts`); await settle(page)
+        await page.getByRole("heading", { name: "Créneaux" }).waitFor()
+        await at(0.66)
+        await page.goto(`${baseUrl}/admin/events/${copyId}/pages`); await settle(page)
+        await page.getByText("Questions fréquentes", { exact: true }).first().waitFor()
+      })
+
+      await scene("leader-emails", async (at) => {
+        const mailbox = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json() as { messages: { ID: string; To: { Address: string }[] }[] }
+        let invitationId: string | undefined
+        for (const mail of mailbox.messages.filter(mail => !copiedInvitationIds.has(mail.ID))) {
+          if (mail.To.some(recipient => !recipient.Address.endsWith("@example.org"))) throw new Error("Non-training copied invitation recipient")
+          const detail = await (await page.request.get(`http://localhost:48026/api/v1/message/${mail.ID}`)).json() as { Text: string }
+          if (detail.Text.includes("Fête du village de Montvert 2027") && detail.Text.includes("/leader/")) { invitationId = mail.ID; break }
+        }
+        if (!invitationId) throw new Error("Actual copied leader invitation missing")
+        await at(0.20)
+        await page.goto(`http://localhost:48026/view/${invitationId}`); await settle(page)
+        await page.frameLocator("iframe").locator('a[href*="/leader/"]').first().waitFor()
       })
 
       await scene("result", async (at) => {
@@ -3412,32 +3474,32 @@ async function main() {
 
       await scene("preview-form", async (at) => {
         await tap(page, page.getByRole("button", { name: /Sélectionner — Accueil 09h–12h/ }))
-        await at(0.24)
+        await at(0.10)
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         await page.getByRole("heading", { name: "Tes informations" }).waitFor()
-        await at(0.58)
-        await page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).scrollIntoViewIfNeeded()
-      })
-
-      await scene("preview-result", async (at) => {
+        await at(0.22)
         await typeNaturally(page, page.getByRole("textbox", { name: "Prénom *", exact: true }), "Alex")
         await typeNaturally(page, page.getByRole("textbox", { name: "Nom *", exact: true }), "Martin")
         await typeNaturally(page, page.getByRole("textbox", { name: "Email *", exact: true }), "alex.preview@example.org")
         await typeNaturally(page, page.getByRole("textbox", { name: /Téléphone \*/, exact: true }), "079 000 12 34")
         await tap(page, page.getByRole("radio", { name: "M", exact: true }))
-        await at(0.48)
+        await at(0.75)
         await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
-        await tap(page, page.locator("label").filter({ hasText: "J'accepte que l'association" }).getByRole("checkbox"))
+        await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
+      })
+
+      await scene("preview-result", async (at) => {
+        await at(0.08)
         await tap(page, page.getByRole("button", { name: "Voir la confirmation (aperçu)" }))
         await page.getByRole("heading", { name: /Aperçu de la confirmation/ }).waitFor()
-        await at(0.76)
+        await at(0.40)
         await page.getByRole("heading", { name: /Email de confirmation/ }).scrollIntoViewIfNeeded()
       })
 
       await scene("publish", async (at) => {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/review`); await settle(page)
         await page.getByRole("heading", { name: "Publication" }).scrollIntoViewIfNeeded()
-        await at(0.40)
+        await at(0.20)
         await tap(page, page.getByRole("button", { name: "Publier" }))
         await page.getByText("L'événement est publié : les bénévoles peuvent s'inscrire.").waitFor()
         await at(0.76)
@@ -3910,7 +3972,7 @@ async function main() {
         await typeNaturally(page, page.getByRole("textbox", { name: "Email *", exact: true }), "alex.martin@example.org")
         const charter = page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox")
         await tap(page, charter)
-        const privacy = page.locator("label").filter({ hasText: "J'accepte que l'association" }).getByRole("checkbox")
+        const privacy = page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ })
         await tap(page, privacy)
         await tap(page, page.getByRole("button", { name: "Voir la confirmation (aperçu)" }))
         await page.getByRole("heading", { name: /Aperçu de la confirmation/ }).waitFor()
@@ -4427,7 +4489,7 @@ async function main() {
         await typeNaturally(page, page.getByRole("textbox", { name: "Email *", exact: true }), "alex.masterclass@example.org")
         await at(0.62)
         await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
-        await tap(page, page.locator("label").filter({ hasText: "J'accepte que l'association" }).getByRole("checkbox"))
+        await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
         await tap(page, page.getByRole("button", { name: "Confirmer mon inscription" }))
         await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
       })
@@ -4456,6 +4518,10 @@ async function main() {
     capturePurpose: rehearsal ? "rehearsal" : "narration-timed",
     recordedAt: new Date().toISOString(),
     video: path.basename(rawVideo),
+    product,
+    captureEnvironment: { locale: "fr-FR", timeZone: "Europe/Zurich", organization: org, scenario: manifest.id, viewport: { width: manifest.viewport.width, height: manifest.viewport.height }, mobile: manifest.viewport.width < 600 },
+    inputAudioVersion: 1,
+    inputEvents,
     cues,
     ...(portraitFrames.length ? { portraitFrames } : {}),
     ...(detailFrames.length ? { detailFrames } : {}),

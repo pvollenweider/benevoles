@@ -23,6 +23,7 @@
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
+  "continuousPauseTags": false,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping a new volunteer choose a comfortable schedule. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
   "viewport": {
     "width": 1280,

@@ -1,0 +1,12 @@
+{
+  "anchor": "Chaque barre indique les inscriptions sur la capacité totale. Deux sur",
+  "windowStart": 1.858000000000004,
+  "result": {
+    "found": true,
+    "startSeconds": 30.1,
+    "wordsHeard": "Chaque barre indique les inscriptions sur la capacité totale. Deux sur"
+  },
+  "onset": 31.958000000000006,
+  "proposedCut": 31.8577085,
+  "note": "Proposal only; recut then independently audit before capture"
+}

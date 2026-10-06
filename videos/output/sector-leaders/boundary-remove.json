@@ -1,0 +1,12 @@
+{
+  "anchor": "Quand la responsabilité change, retire la personne de ce poste et",
+  "windowStart": 164.06300000000002,
+  "result": {
+    "found": true,
+    "startSeconds": 28.02,
+    "wordsHeard": "Quand la responsabilité change retire la personne de ce poste et"
+  },
+  "onset": 192.08300000000003,
+  "proposedCut": 191.906646,
+  "note": "Proposal only; recut then independently audit before capture"
+}

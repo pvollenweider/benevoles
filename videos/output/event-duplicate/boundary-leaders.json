@@ -1,0 +1,12 @@
+{
+  "anchor": "Les responsables de secteur sont volontairement décochés au départ, car les",
+  "windowStart": 11.260999999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 30.8,
+    "wordsHeard": "Les responsables de secteur sont volontairement décochés au départ, car les"
+  },
+  "onset": 42.06099999999999,
+  "proposedCut": 42.043208,
+  "note": "Proposal only; recut then independently audit before capture"
+}

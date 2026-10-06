@@ -1,0 +1,12 @@
+{
+  "anchor": "Dès qu’un créneau est choisi, les missions qui chevauchent le même",
+  "windowStart": 53.989999999999995,
+  "result": {
+    "found": true,
+    "startSeconds": 30.18,
+    "wordsHeard": "Dès qu’un créneau est choisi les missions qui chevauchent le même"
+  },
+  "onset": 84.16999999999999,
+  "proposedCut": 83.990271,
+  "note": "Proposal only; recut then independently audit before capture"
+}

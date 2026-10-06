@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:50:24.594Z",
+  "videoSha256": "4fe508a90cb701f731db4f20b4ce3a24fc333a05ff19b1887ce04e9c2c911528",
+  "promptSha256": "506a8e32ae7b6e01a505179656bc9751fb2169154e68a73bd6ecb861bfa522b6",
+  "clipSha256": "7cf3532e9ff5dddcc0a948793f839c7624b62589501fb283ac55cc5c5b9eed09",
+  "scene": "leader-emails",
+  "review": {
+    "heardOpening": "Les responsables que nous avons conservés",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Ouvrons le message réellement arrivé dans la boîte de formation",
+        "visibleSeconds": 4.8,
+        "visible": "Affichage de la messagerie Mailpit avec le courriel ouvert",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Il nomme la nouvelle édition",
+        "visibleSeconds": 5.5,
+        "visible": "Mention de 'Fête du village de Montvert 2027' dans le sujet et le corps",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "contient un nouveau lien personnel de responsable",
+        "visibleSeconds": 5.5,
+        "visible": "Bouton bleu 'Voir qui est inscrit' affiché dans l'e-mail",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

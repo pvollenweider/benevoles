@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:50:28.701Z",
+  "videoSha256": "0a23771336fc9dded1bb36bcee845927d7ab55a082cb7c2c3e2873d18c009840",
+  "promptSha256": "10ea1208a159bc6728ce0587a707df022f87608c13748f54c5c59f4291c5ba78",
+  "clipSha256": "f44c77d27035336efa8b39fa56ccf358e0ba8730991f2143c682488c693174ee",
+  "scene": "archive",
+  "review": {
+    "heardOpening": "Le bouton Archiver demande une confirmation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le bouton Archiver demande une confirmation claire.",
+        "visibleSeconds": 4,
+        "visible": "Clic sur Archiver et affichage de la boîte de confirmation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "Après validation, la page publique disparaît",
+        "visibleSeconds": 8.5,
+        "visible": "Clic sur Confirmer et passage de l'événement au statut Archivé.",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "l’équipe garde accès au planning, aux inscriptions, aux rapports et au journal.",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage des onglets Rapports, Journal et des boutons de gestion.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Léger décalage : le clic de confirmation à l'écran intervient à 00:08, après l'annonce vocale à 00:04."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction fluide, claire et posée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

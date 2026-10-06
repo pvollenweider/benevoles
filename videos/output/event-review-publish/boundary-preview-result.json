@@ -1,0 +1,12 @@
+{
+  "anchor": "Le bouton de simulation affiche ensuite la confirmation et l’email automatique",
+  "windowStart": 44.866,
+  "result": {
+    "found": true,
+    "startSeconds": 30.45,
+    "wordsHeard": "Le bouton de simulation affiche ensuite la confirmation et l’email automatique"
+  },
+  "onset": 75.316,
+  "proposedCut": 74.866083,
+  "note": "Proposal only; recut then independently audit before capture"
+}

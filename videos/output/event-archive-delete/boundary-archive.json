@@ -1,0 +1,12 @@
+{
+  "anchor": "Le bouton Archiver demande une confirmation claire. Après validation, la page",
+  "windowStart": 0.3710000000000022,
+  "result": {
+    "found": true,
+    "startSeconds": 30.08,
+    "wordsHeard": "Le bouton Archiver demande"
+  },
+  "onset": 30.451,
+  "proposedCut": 30.371417,
+  "note": "Proposal only; recut then independently audit before capture"
+}

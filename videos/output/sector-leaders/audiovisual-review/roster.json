@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T07:59:29.781Z",
+  "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
+  "promptSha256": "3be7f1550a9ac318e6ce73e6797b05f59a115beef3dccc4ef4b9552fbff594fa",
+  "clipSha256": "f9b75606af452dae409ae86a5f9731d5b735bfb05784961ed576eb4f75d6e59c",
+  "scene": "roster",
+  "review": {
+    "heardOpening": "Sur ce lien, la responsable de la Buvette",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "la responsable de la Buvette retrouve uniquement les inscriptions de son poste",
+        "visibleSeconds": 1,
+        "visible": "En-tête affichant Responsable - Buvette et la liste des inscrits",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Les personnes sont regroupées par créneau, avec la date et les horaires",
+        "visibleSeconds": 5,
+        "visible": "Blocs de créneaux avec intitulé Buvette, date et plages horaires",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.1,
+        "spoken": "Chaque ligne donne le nom, l'email, le téléphone lorsqu'il est renseigné",
+        "visibleSeconds": 9,
+        "visible": "Lignes de bénévoles comportant nom, adresse email et numéro de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "La mention Liste d'attente distingue les personnes",
+        "visibleSeconds": 14,
+        "visible": "Défilement vers le bas masquant la majorité des badges Liste d'attente",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:14 - Le défilement vers le bas masque les badges Liste d'attente au moment exact où ils sont décrits."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

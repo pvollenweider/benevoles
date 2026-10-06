@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T20:51:25.878Z",
-  "videoSha256": "3e2b054ce139ced7f32f4059559c36ac89bc83cb334bbe34e341997d8f994942",
+  "reviewedAt": "2026-10-06T07:23:48.544Z",
+  "videoSha256": "581346aebe0397c4a562745c5eafe7ad692c94c626291ecc7f0013c2726e7b84",
   "promptSha256": "b21b5973930d8c812535f222d1d50535a22a003649ddbb9e9a26cef2a07a2930",
-  "clipSha256": "bd266b387cbfdb00259e0f97e3ec10134f3379e8d1ca73cbcb95ac968275b568",
+  "clipSha256": "658707834ff56eecefe8e5d44c989211c2b9ac1c42ca19d96eede1a24e0d43db",
   "scene": "coverage",
   "review": {
-    "heardOpening": "Où manque-t-il encore du monde ? Ouvrons la vue de couverture",
+    "heardOpening": "Où manque-t-il encore du monde ?",
     "checkpoints": [
       {
         "spokenSeconds": 2.5,
         "spoken": "Ouvrons la vue de couverture de l'événement.",
-        "visibleSeconds": 2,
-        "visible": "Affichage de la page récapitulative « Où manque-t-il du monde ? »",
+        "visibleSeconds": 1.8,
+        "visible": "Transition vers la page 'Où manque-t-il du monde ?'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.1,
+        "spokenSeconds": 5.5,
+        "spoken": "Le poste d'accueil est à nouveau rempli, mais un autre créneau reste sous-effectif.",
+        "visibleSeconds": 5.5,
+        "visible": "Sections 'Créneaux à compléter' et 'Créneaux complets' visibles à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
         "spoken": "Lisons le poste, la date, l'horaire et le nombre de places manquantes.",
-        "visibleSeconds": 10.1,
-        "visible": "Section « Créneaux à compléter » avec intitulés, dates, horaires et mentions de manque.",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 16,
-        "spoken": "Une demande à valider réserve déjà une place",
-        "visibleSeconds": 16,
-        "visible": "Indication « 1 demande à traiter » visible sur la ligne Préparation.",
+        "visibleSeconds": 10.5,
+        "visible": "Détails textuels des créneaux affichés (intitulé, date, horaire, statut).",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et rythme régulier."
+      "observation": "Élocution claire, régulière et posée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,0 +1,12 @@
+{
+  "anchor": "Sur téléphone, la page garde les mêmes informations. Le planning est",
+  "windowStart": 84.226,
+  "result": {
+    "found": true,
+    "startSeconds": 30.1,
+    "wordsHeard": "Sur téléphone, la page garde les mêmes informations. Le planning est"
+  },
+  "onset": 114.326,
+  "proposedCut": 114.22606250000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

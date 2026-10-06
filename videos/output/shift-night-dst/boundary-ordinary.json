@@ -1,0 +1,12 @@
+{
+  "anchor": "Une nuit ordinaire de vingt-deux heures à deux heures appartient au",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 14.84,
+    "wordsHeard": "Une"
+  },
+  "onset": 14.84,
+  "proposedCut": 14.716875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "Une place peut être prise pendant que tu remplis le formulaire.",
+  "windowStart": 25.925000000000004,
+  "result": {
+    "found": true,
+    "startSeconds": 30.6,
+    "wordsHeard": "Une place peut être prise pendant que tu remplis le formulaire."
+  },
+  "onset": 56.525000000000006,
+  "proposedCut": 55.925354,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -26,6 +26,8 @@ async function main() {
   await exec("ffmpeg", ["-loglevel", "error", "-y", "-ss", String(start), "-i", master, "-t", String(windowSeconds), "-c:a", "pcm_s16le", clip])
   const bytes = await readFile(clip)
   const anchor = manifest.segments[index].transcript.split(" ").slice(0, 11).join(" ")
+  let result: { found: boolean; startSeconds: number; wordsHeard: string } | undefined
+  for (let attempt = 0; attempt < 3; attempt++) {
   const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${process.env.VIDEO_AUDIT_MODEL ?? "gemini-3.8-flash"}:generateContent`, {
     method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": key }, signal: AbortSignal.timeout(120000),
     body: JSON.stringify({ contents: [{ parts: [
@@ -35,7 +37,15 @@ async function main() {
   })
   if (!response.ok) throw new Error(`Boundary location HTTP ${response.status}`)
   const body = await response.json() as { candidates?: { content?: { parts?: { text?: string; thought?: boolean }[] } }[] }
-  const result = JSON.parse(body.candidates?.[0]?.content?.parts?.filter(p => !p.thought).map(p => p.text ?? "").join("") ?? "null") as { found: boolean; startSeconds: number; wordsHeard: string }
+  try {
+    const parsed = JSON.parse(body.candidates?.[0]?.content?.parts?.filter(p => !p.thought).map(p => p.text ?? "").join("") ?? "null") as { found: boolean; startSeconds: number; wordsHeard: string } | null
+    if (!parsed || typeof parsed.found !== "boolean" || (parsed.found && (!Number.isFinite(parsed.startSeconds) || typeof parsed.wordsHeard !== "string"))) throw new Error("Invalid boundary response")
+    result = parsed
+    break
+  } catch {
+    if (attempt === 2) throw new Error("Boundary location returned invalid JSON after three attempts; no cut accepted")
+  }
+  }
   if (!result?.found || result.startSeconds < 0 || result.startSeconds > windowSeconds) throw new Error("Anchor not reliably located in window")
   const onset = start + result.startSeconds
   const { stderr } = await exec("ffmpeg", ["-i", master, "-af", "silencedetect=noise=-35dB:d=0.15", "-f", "null", "-"], { maxBuffer: 10 * 1024 * 1024 })

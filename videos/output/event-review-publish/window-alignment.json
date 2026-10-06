@@ -1,0 +1,33 @@
+{
+  "locatedAt": "2026-10-06T07:43:56.615Z",
+  "masterSha256": "f3035e6a5c169d12716dda23f363403c0b1db2ba7d2c8c070828f67150f28f75",
+  "totalSeconds": 119.04,
+  "cuts": [
+    {
+      "id": "checks",
+      "seconds": 10.5412705
+    },
+    {
+      "id": "preview-start",
+      "seconds": 29.123479500000002
+    },
+    {
+      "id": "preview-form",
+      "seconds": 43.7279165
+    },
+    {
+      "id": "preview-result",
+      "seconds": 74.866083
+    },
+    {
+      "id": "publish",
+      "seconds": 89.11206250000001
+    },
+    {
+      "id": "result",
+      "seconds": 104.55962500000001
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

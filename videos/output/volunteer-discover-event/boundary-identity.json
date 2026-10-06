@@ -1,0 +1,12 @@
+{
+  "anchor": "En haut, vérifie le nom de l’association et celui de l’événement.",
+  "windowStart": 5.1299999999999955,
+  "result": {
+    "found": true,
+    "startSeconds": 30.76,
+    "wordsHeard": "En haut, vérifie le nom de l’association et celui de l’événement."
+  },
+  "onset": 35.89,
+  "proposedCut": 35.878104,
+  "note": "Proposal only; recut then independently audit before capture"
+}

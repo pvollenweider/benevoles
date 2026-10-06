@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T20:52:22.337Z",
-  "videoSha256": "3e2b054ce139ced7f32f4059559c36ac89bc83cb334bbe34e341997d8f994942",
+  "reviewedAt": "2026-10-06T07:25:14.194Z",
+  "videoSha256": "581346aebe0397c4a562745c5eafe7ad692c94c626291ecc7f0013c2726e7b84",
   "promptSha256": "349dcfeccec8f485589bffa5083285528107fe7beca95b35caf8c3ab4edbb2b0",
-  "clipSha256": "dbbce49d2a79d6dba8de4cb303ccd127bcc886081a81f150a122eb4aa29ab03a",
+  "clipSha256": "21011c80b5c6e254c4a873244c711a6d38ce72154e66ee881b0c5b947c14c016",
   "scene": "result",
   "review": {
     "heardOpening": "Terminons dans la vue de couverture",
     "checkpoints": [
       {
-        "spokenSeconds": 1,
-        "spoken": "Terminons dans la vue de couverture et les inscriptions à jour",
+        "spokenSeconds": 1.1,
+        "spoken": "Terminons dans la vue de couverture",
         "visibleSeconds": 2,
-        "visible": "Affichage de la page de couverture puis bascule vers la liste des inscriptions",
+        "visible": "Affichage de la page Où manque-t-il du monde",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
+        "spokenSeconds": 3,
+        "spoken": "et les inscriptions à jour",
+        "visibleSeconds": 3.8,
+        "visible": "Affichage du tableau Inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
         "spoken": "Nicolas a accepté sa place, Zoé est sur le créneau convenu",
-        "visibleSeconds": 4.5,
-        "visible": "Tableau des inscriptions avec les lignes de Zoé et Nicolas",
+        "visibleSeconds": 5.2,
+        "visible": "Lignes d'inscriptions de Zoé et Nicolas visibles",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8,
-        "spoken": "le nouvel horaire est visible",
+        "spokenSeconds": 8.3,
+        "spoken": "le nouvel horaire est visible et la mission annulée n'est plus à pourvoir",
         "visibleSeconds": 9.5,
-        "visible": "Affichage de la vue planning avec les créneaux horaires",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 10.5,
-        "spoken": "et la mission annulée n'est plus à pourvoir",
-        "visibleSeconds": 12,
-        "visible": "Bascule sur la vue en liste des créneaux et statuts",
+        "visible": "Bascule sur le planning des créneaux en vue timeline puis liste",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, synchronisée avec les transitions visuelles."
+      "observation": "Élocution posée, claire et rythme adapté aux transitions visuelles."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

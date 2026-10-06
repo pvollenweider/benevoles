@@ -1,0 +1,12 @@
+{
+  "anchor": "L’événement disparaît de la liste après validation. Utilise donc l’archivage comme",
+  "windowStart": 58.809,
+  "result": {
+    "found": true,
+    "startSeconds": 26.96,
+    "wordsHeard": "l'événement disparaît de la liste après validation. Utilise donc l'archivage comme"
+  },
+  "onset": 85.769,
+  "proposedCut": 86.074104,
+  "note": "Proposal only; recut then independently audit before capture"
+}

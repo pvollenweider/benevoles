@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:14:08.925Z",
+  "videoSha256": "ad9e0295903b3a397ce87e15f61fada476799eb2fabd180a3d67e22fd5ad9e84",
+  "promptSha256": "dee6e15860eb1b00d04701eea411db08f559759e1cf2cf7c5a573ae8ec40510a",
+  "clipSha256": "89437708e526da7510d78dc82d4bb2acb73c35a4cfd346cc819d5fafe48f0af8",
+  "scene": "publish",
+  "review": {
+    "heardOpening": "Revenons à la vérification et publions.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "et publions",
+        "visibleSeconds": 2.8,
+        "visible": "Clic sur le bouton vert Publier sous la section Publication",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "La page devient accessible à toute personne qui possède le lien",
+        "visibleSeconds": 3.5,
+        "visible": "Affichage de la mention Événement publié et du lien à partager",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.4,
+        "spoken": "il faudra partager le QR code, envoyer des invitations",
+        "visibleSeconds": 11,
+        "visible": "Liens QR code et Inviter des membres visibles sous le lien de partage",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et dynamique, bonne intelligibilité."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

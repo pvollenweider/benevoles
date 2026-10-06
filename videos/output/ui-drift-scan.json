@@ -1,0 +1,718 @@
+{
+  "checkedAt": "2026-10-06T09:08:45.764Z",
+  "scratch": "/tmp/benevoles-ui-drift-S9sft2",
+  "method": "Local Apple Vision OCR of actual MP4 frames sampled every 15 seconds; no cloud upload and no personal text retained. Positive flags need visual confirmation; negative sampling is NOT proof of conformity.",
+  "videos": [
+    {
+      "id": "PLATFORM_INTERNAL_ADMINISTRATION",
+      "slug": "platform-internal-administration",
+      "videoSha256": "820b278d07f2b830d9b9d838e31315878a3fdfe8836b4e1b04fa853ca4ce11ce",
+      "frames": 32,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "PRIVACY_PERSONAL_LINKS",
+      "slug": "privacy-personal-links",
+      "videoSha256": "f58091c20cbe8c06f1bd189d798ea38b8369e6bc18aaba29f19086cafde497a1",
+      "frames": 23,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "LAST_MINUTE_CHANGES",
+      "slug": "last-minute-changes",
+      "videoSha256": "581346aebe0397c4a562745c5eafe7ad692c94c626291ecc7f0013c2726e7b84",
+      "frames": 23,
+      "flags": [
+        {
+          "secondsApproximate": 247.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/last-minute-changes/0017.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        }
+      ],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": true
+    },
+    {
+      "id": "DATA_EXPORTS_ARCHIVES",
+      "slug": "data-exports-archives",
+      "videoSha256": "20ccf7d54add31d2e5210c71d07e9b917ced0c5680878b1202f4e29e6e1ebc81",
+      "frames": 19,
+      "flags": [
+        {
+          "secondsApproximate": 157.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/data-exports-archives/0011.png",
+          "oldTimelineLabel": false,
+          "oldArchivePlacement": true
+        },
+        {
+          "secondsApproximate": 262.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/data-exports-archives/0018.png",
+          "oldTimelineLabel": false,
+          "oldArchivePlacement": true
+        },
+        {
+          "secondsApproximate": 277.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/data-exports-archives/0019.png",
+          "oldTimelineLabel": false,
+          "oldArchivePlacement": true
+        }
+      ],
+      "framesShowingFrise": 3,
+      "humanConfirmationRequired": true
+    },
+    {
+      "id": "ORGANIZATION_ACTIVITY_LOG",
+      "slug": "organization-activity-log",
+      "videoSha256": "932bf50387f6accb30455da6b5916952e0e0981ec276d55e722342e9d4cc4489",
+      "frames": 18,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "EVENT_ACTIVITY_LOG",
+      "slug": "event-activity-log",
+      "videoSha256": "40e987c11425be6ae1217dbc9f3206a295a1572773c3cf8ff729da99a22ba934",
+      "frames": 16,
+      "flags": [
+        {
+          "secondsApproximate": 232.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/event-activity-log/0016.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        }
+      ],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": true
+    },
+    {
+      "id": "ATTENDANCE_CHECK_IN",
+      "slug": "attendance-check-in",
+      "videoSha256": "58705cd0468ab625a8108945bd9244cff798768e56f4403e42e7c79dbda4612a",
+      "frames": 16,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "EVENT_REPORTS",
+      "slug": "event-reports",
+      "videoSha256": "e1d04c9dfb88e51be35835c764597a3a9ef877a6424916753f079011043c1217",
+      "frames": 19,
+      "flags": [
+        {
+          "secondsApproximate": 22.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/event-reports/0002.png",
+          "oldTimelineLabel": false,
+          "oldArchivePlacement": true
+        },
+        {
+          "secondsApproximate": 262.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/event-reports/0018.png",
+          "oldTimelineLabel": false,
+          "oldArchivePlacement": true
+        }
+      ],
+      "framesShowingFrise": 3,
+      "humanConfirmationRequired": true
+    },
+    {
+      "id": "VOLUNTEER_BADGES",
+      "slug": "volunteer-badges",
+      "videoSha256": "0417e88ec9fa5119cc7d3d49c94fd8060a475f3f66d07f782cbbe4950dd14d66",
+      "frames": 15,
+      "flags": [],
+      "framesShowingFrise": 6,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "REMINDERS_CHANGES",
+      "slug": "reminders-changes",
+      "videoSha256": "35c2c209bcf69614d4a31c035d42e8f425aec8d211722ce9864b8daa6096a067",
+      "frames": 16,
+      "flags": [
+        {
+          "secondsApproximate": 172.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/reminders-changes/0012.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 202.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/reminders-changes/0014.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 232.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/reminders-changes/0016.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        }
+      ],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": true
+    },
+    {
+      "id": "TARGETED_MESSAGES",
+      "slug": "targeted-messages",
+      "videoSha256": "3db582b2cb23f0c8c8a04444cc5e1951775ec48a201d08490a577f0759ef2f73",
+      "frames": 20,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "STAFFING_GAPS",
+      "slug": "staffing-gaps",
+      "videoSha256": "11fb411eec8f59e4ffc337fe1baffbda6ba584aac1b2bd56044d65ea5ae1e37d",
+      "frames": 15,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "REGISTRATIONS_MANAGEMENT",
+      "slug": "registrations-management",
+      "videoSha256": "d3233bb521537c65d2d667f12639cf7eb0b9b1c83fb20037ed9bb92639a171be",
+      "frames": 22,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "MEMBERS_REMINDERS",
+      "slug": "members-reminders",
+      "videoSha256": "e2fae135d04bf295d52fec986b0725ce6f8281d4a94fcdaa0528d9f975d1fb2e",
+      "frames": 12,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "MEMBERS_INVITATIONS",
+      "slug": "members-invitations",
+      "videoSha256": "3b33c4f156a8d8abab16302de9dad25cd1a3ecc150988b28bb1a04a611308c06",
+      "frames": 15,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "MEMBERS_IMPORT",
+      "slug": "members-import",
+      "videoSha256": "43b8d8d33548af57a1b07d7c47c4488fbd3f20068254ff88876508c97c474b49",
+      "frames": 15,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "slug": "members-management",
+      "videoSha256": "aa51df88ece68bdd003381961126f425a004de1f47b3bc456abf58da7cca03b6",
+      "frames": 15,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "VOLUNTEER_SESSION_AVAILABILITY",
+      "slug": "volunteer-session-availability",
+      "videoSha256": "119eee5bcd7977a884786b742f62409abbfcd021c7b62e8f856ab5f980f6aaed",
+      "frames": 12,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "VOLUNTEER_CALENDAR",
+      "slug": "volunteer-calendar",
+      "videoSha256": "5a3920226659e428a9da2ff4e5ae2d5b275c6946db5c04f6aab0acacec4d8dd1",
+      "frames": 12,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "VOLUNTEER_PERSONAL_REGISTRATIONS",
+      "slug": "volunteer-personal-registrations",
+      "videoSha256": "34bc378740dce8ab41d789adbf6e80d26f9276536c3c338605e4214d5ec54588",
+      "frames": 12,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "SECTOR_LEADERS",
+      "slug": "sector-leaders",
+      "videoSha256": "e00f2169d5031fbd992e9a771059a2b145ebaebed326413c6a68a0afd4da22cf",
+      "frames": 15,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "ADMIN_NAVIGATION",
+      "slug": "admin-navigation",
+      "videoSha256": "f4c0c3c28ab04d429a33a9fd82687797f0081bd26e4214dabb9f06b4d4c9beac",
+      "frames": 9,
+      "flags": [],
+      "framesShowingFrise": 1,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "GLOBAL_SEARCH",
+      "slug": "global-search",
+      "videoSha256": "258ab12d15939f6b8d477f5d8a71162bf2e5bf54555dca8ead27b706b9391071",
+      "frames": 7,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "ORG_PUBLIC_IDENTITY",
+      "slug": "org-public-identity",
+      "videoSha256": "37f0ffaad0a3d4219ff316210f773fa8ed94aef6541a60f1002c969b42adf7e0",
+      "frames": 11,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "ORG_TIMEZONE_CHARTER",
+      "slug": "org-timezone-charter",
+      "videoSha256": "d99f66e1d00de93a9e4f15c6a1ec3d17b02a4396ee86da063360cee3f65319f4",
+      "frames": 9,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "ORG_TEAM_PERMISSIONS",
+      "slug": "org-team-permissions",
+      "videoSha256": "def3f175cbcff33d8062687769e261b570c74a82596228d25494827f534a8fb5",
+      "frames": 10,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "ORG_EMAIL_SETTINGS",
+      "slug": "org-email-settings",
+      "videoSha256": "79871d5984f2ce332e7acea3315aa928202d1010f63f77417446acae13d34314",
+      "frames": 13,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "EVENT_CREATE_BLANK",
+      "slug": "event-create-blank",
+      "videoSha256": "4811f60870b8951ec947f46457c7c3ae2638f46e4bec4edec4a8b0252e972acd",
+      "frames": 10,
+      "flags": [],
+      "framesShowingFrise": 1,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "EVENT_CREATE_TEMPLATE",
+      "slug": "event-create-template",
+      "videoSha256": "7870f9ea1677bd47654af21d36008efe133c24074cd482c8474c14e976e12509",
+      "frames": 7,
+      "flags": [],
+      "framesShowingFrise": 2,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "EVENT_REVIEW_PUBLISH",
+      "slug": "event-review-publish",
+      "videoSha256": "ad9e0295903b3a397ce87e15f61fada476799eb2fabd180a3d67e22fd5ad9e84",
+      "frames": 9,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "EVENT_VISIBILITY_REGISTRATION_WINDOW",
+      "slug": "event-visibility-registration-window",
+      "videoSha256": "e28f0dc30e95aab840c90ebcdcdc48481519db83631c30a7ffa34c2512c27844",
+      "frames": 8,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "EVENT_DUPLICATE",
+      "slug": "event-duplicate",
+      "videoSha256": "4fe508a90cb701f731db4f20b4ce3a24fc333a05ff19b1887ce04e9c2c911528",
+      "frames": 11,
+      "flags": [],
+      "framesShowingFrise": 3,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "EVENT_PROGRAM_PAGES_QR",
+      "slug": "event-program-pages-qr",
+      "videoSha256": "1a398dc1b0f9c269772795bf5a7edf3279b335085513b5b8d5e5c3440600bbd1",
+      "frames": 10,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "EVENT_MILESTONES",
+      "slug": "event-milestones",
+      "videoSha256": "8f7dbb76df343426f83b4eb397041fab9002326ed3456c11d215b198e2e67c54",
+      "frames": 6,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "EVENT_ARCHIVE_DELETE",
+      "slug": "event-archive-delete",
+      "videoSha256": "0a23771336fc9dded1bb36bcee845927d7ab55a082cb7c2c3e2873d18c009840",
+      "frames": 7,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "SHIFTS_ROLES_VIEWS",
+      "slug": "shifts-roles-views",
+      "videoSha256": "0f491cde965c013c06c43265bcde6fea381c806c088a2e0a95c2b91fa6c35bdf",
+      "frames": 6,
+      "flags": [],
+      "framesShowingFrise": 6,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "SHIFT_CREATE_EDIT_DETAIL",
+      "slug": "shift-create-edit-detail",
+      "videoSha256": "eb51158215703b190440b453cccfa9fd19f77c1567d0b9390b9e91d772d6c6b1",
+      "frames": 7,
+      "flags": [],
+      "framesShowingFrise": 2,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "SHIFT_CREATE_SERIES",
+      "slug": "shift-create-series",
+      "videoSha256": "70a5a02bba75df88e8bc2ed706627676f3b35f250eaeb10db0d6fdab089eb644",
+      "frames": 6,
+      "flags": [
+        {
+          "secondsApproximate": 7.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-create-series/0001.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 22.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-create-series/0002.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 37.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-create-series/0003.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 52.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-create-series/0004.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 67.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-create-series/0005.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        }
+      ],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": true
+    },
+    {
+      "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
+      "slug": "shift-timeline-quick-actions",
+      "videoSha256": "9bf7837496784c63cc92714fdfb85e43b04b9408e420a95df5ae414dd62c4c01",
+      "frames": 7,
+      "flags": [
+        {
+          "secondsApproximate": 7.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-timeline-quick-actions/0001.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 22.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-timeline-quick-actions/0002.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 37.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-timeline-quick-actions/0003.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 52.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-timeline-quick-actions/0004.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 67.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-timeline-quick-actions/0005.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        }
+      ],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": true
+    },
+    {
+      "id": "SHIFT_NIGHT_DST",
+      "slug": "shift-night-dst",
+      "videoSha256": "9ce2ec310ba2482895ecc5b0ff6748d2642eafb6940feb348d0a783f4a78484f",
+      "frames": 7,
+      "flags": [
+        {
+          "secondsApproximate": 7.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-night-dst/0001.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 22.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-night-dst/0002.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 37.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-night-dst/0003.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 52.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-night-dst/0004.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 82.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-night-dst/0006.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 97.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-night-dst/0007.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        }
+      ],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": true
+    },
+    {
+      "id": "SHIFT_WAITLIST_OFFER",
+      "slug": "shift-waitlist-offer",
+      "videoSha256": "42ec77c3cfa49d4e21e20f33b3042bc32839d48ef19981112c901d3eb0d60492",
+      "frames": 7,
+      "flags": [
+        {
+          "secondsApproximate": 7.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-waitlist-offer/0001.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        }
+      ],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": true
+    },
+    {
+      "id": "SHIFT_APPROVAL",
+      "slug": "shift-approval",
+      "videoSha256": "683538e2f1ba9a865dcccc799ecd2633963429e8eb87ee58519ffce3d6f50867",
+      "frames": 7,
+      "flags": [
+        {
+          "secondsApproximate": 7.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-approval/0001.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        }
+      ],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": true
+    },
+    {
+      "id": "SHIFT_ELIGIBILITY_RULES",
+      "slug": "shift-eligibility-rules",
+      "videoSha256": "87c8f516a0425a1f8e2f38880db6d2c71de6aeb881ccd105cf0e4622f6ca6188",
+      "frames": 8,
+      "flags": [
+        {
+          "secondsApproximate": 7.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-eligibility-rules/0001.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 37.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/shift-eligibility-rules/0003.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        }
+      ],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": true
+    },
+    {
+      "id": "VOLUNTEER_DISCOVER_EVENT",
+      "slug": "volunteer-discover-event",
+      "videoSha256": "c65920b0f3035bdc679237bd0f67965d56d4e1235da5abfc4f6098443ce67ed6",
+      "frames": 12,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "VOLUNTEER_CHOOSE_SHIFTS",
+      "slug": "volunteer-choose-shifts",
+      "videoSha256": "73ff4ae2033be045862665d2465961a75dc16b1cf0ba3df4ace1727847d7c866",
+      "frames": 11,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "VOLUNTEER_FORM_RECAP",
+      "slug": "volunteer-form-recap",
+      "videoSha256": "e48f87418115eebeff6416f4ea9e8a1d1853e2d6722835df938884cb991a3c7d",
+      "frames": 11,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "VOLUNTEER_CONFIRMATION_ERRORS",
+      "slug": "volunteer-confirmation-errors",
+      "videoSha256": "d5519d5d6578d94179077b9f16f921e76d32c42af0f99b8fd2c9600983501b68",
+      "frames": 11,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "VOLUNTEER_REGISTER",
+      "slug": "volunteer-register-mobile",
+      "videoSha256": "79954c7f25d81e042965d1973bb15fbc9ee9a5679ccec92448c35775d29f440d",
+      "frames": 4,
+      "flags": [],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": false
+    },
+    {
+      "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
+      "slug": "organizer-create-publish",
+      "videoSha256": "e361fa6f8cf63acac391fc6dbfb0abbd3b9980738551d14a8dad2a54c2caba2f",
+      "frames": 13,
+      "flags": [
+        {
+          "secondsApproximate": 37.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/organizer-create-publish/0003.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 67.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/organizer-create-publish/0005.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        }
+      ],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": true
+    },
+    {
+      "id": "ADMIN_FEATURES_OVERVIEW",
+      "slug": "admin-features-tour",
+      "videoSha256": "e0cd3fca1b499669a2f5c44fc09a2b49655ba3a2b129cd1f94b5c5a2db50a999",
+      "frames": 19,
+      "flags": [
+        {
+          "secondsApproximate": 112.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/admin-features-tour/0008.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 127.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/admin-features-tour/0009.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 247.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/admin-features-tour/0017.png",
+          "oldTimelineLabel": false,
+          "oldArchivePlacement": true
+        }
+      ],
+      "framesShowingFrise": 2,
+      "humanConfirmationRequired": true
+    },
+    {
+      "id": "REGISTRATION_MONITOR_FOLLOWUP",
+      "slug": "organizer-monitor-followup",
+      "videoSha256": "2ae37f88d70e326f50de7ed03cf554822b6c1940c67b84104def454ed2c30cb5",
+      "frames": 13,
+      "flags": [
+        {
+          "secondsApproximate": 157.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/organizer-monitor-followup/0011.png",
+          "oldTimelineLabel": false,
+          "oldArchivePlacement": true
+        }
+      ],
+      "framesShowingFrise": 1,
+      "humanConfirmationRequired": true
+    },
+    {
+      "id": "ORG_FIRST_STEPS",
+      "slug": "masterclass-03-first-steps",
+      "videoSha256": "e9eb298b1edb54858df3f6192b9bd2b36b7139a77f96375c5cc12040222e67a3",
+      "frames": 12,
+      "flags": [
+        {
+          "secondsApproximate": 97.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/masterclass-03-first-steps/0007.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        },
+        {
+          "secondsApproximate": 112.5,
+          "frame": "/tmp/benevoles-ui-drift-S9sft2/masterclass-03-first-steps/0008.png",
+          "oldTimelineLabel": true,
+          "oldArchivePlacement": false
+        }
+      ],
+      "framesShowingFrise": 0,
+      "humanConfirmationRequired": true
+    }
+  ]
+}

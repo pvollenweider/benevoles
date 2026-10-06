@@ -22,6 +22,15 @@
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
+  "continuousPauseTags": false,
+  "chapterTitles": {
+    "identity": "La mission et les horaires",
+    "availability": "Les conditions d'inscription",
+    "practical": "Les informations pour le jour J",
+    "save": "Enregistrer et vérifier",
+    "change": "Modifier un créneau existant",
+    "result": "Un créneau clair et complet"
+  },
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
   "viewport": {
     "width": 1280,
@@ -46,8 +55,8 @@
     },
     {
       "id": "practical",
-      "transcript": "Les informations pratiques peuvent préciser un point de rendez-vous, une consigne, un contact opérationnel et une position sur la carte. Si le créneau n’a pas de lieu propre, il reprend celui de l’événement. Ces détails deviennent visibles aux personnes inscrites.",
-      "fallbackDurationMs": 25000
+      "transcript": "Renseignons d'abord le lieu de rendez-vous : entrée artistes, portail nord. Ajoutons une consigne : venir dix minutes avant avec des chaussures fermées. Le contact opérationnel indique qui appeler sur place : ici Léa, accueil artistes, et son téléphone de démonstration. Les coordonnées GPS placent ce rendez-vous sur la carte. Si un créneau n'a pas de lieu propre, il reprend celui de l'événement. Ces détails seront visibles aux personnes inscrites.",
+      "fallbackDurationMs": 41000
     },
     {
       "id": "save",

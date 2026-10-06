@@ -1,0 +1,12 @@
+{
+  "anchor": "Le serveur revérifie aussi tes horaires. Aline est déjà inscrite à",
+  "windowStart": 117.68700000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 23.33,
+    "wordsHeard": "Le serveur revérifie aussi tes horaires. Aline est déjà inscrite à"
+  },
+  "onset": 141.017,
+  "proposedCut": 140.726625,
+  "note": "Proposal only; recut then independently audit before capture"
+}

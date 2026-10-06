@@ -1,52 +1,53 @@
 {
   "id": "SHIFT_CREATE_EDIT_DETAIL",
   "slug": "shift-create-edit-detail",
-  "validatedAt": "2026-10-04T16:41:33.945Z",
+  "validatedAt": "2026-10-06T07:51:53.214Z",
   "continuousNarration": true,
+  "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 111320,
+  "captureMs": 108840,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 13945,
-      "audioMs": 13944,
-      "driftMs": 1
-    },
-    {
-      "id": "identity",
-      "visualMs": 15716,
-      "audioMs": 15713,
-      "driftMs": 3
-    },
-    {
-      "id": "availability",
-      "visualMs": 14690,
-      "audioMs": 14689,
-      "driftMs": 1
-    },
-    {
-      "id": "practical",
-      "visualMs": 15293,
-      "audioMs": 15293,
-      "driftMs": 0
-    },
-    {
-      "id": "save",
-      "visualMs": 14420,
-      "audioMs": 14414,
-      "driftMs": 6
-    },
-    {
-      "id": "change",
-      "visualMs": 18723,
-      "audioMs": 18721,
+      "visualMs": 14025,
+      "audioMs": 14023,
       "driftMs": 2
     },
     {
+      "id": "identity",
+      "visualMs": 14399,
+      "audioMs": 14398,
+      "driftMs": 1
+    },
+    {
+      "id": "availability",
+      "visualMs": 14456,
+      "audioMs": 14454,
+      "driftMs": 2
+    },
+    {
+      "id": "practical",
+      "visualMs": 15338,
+      "audioMs": 15337,
+      "driftMs": 1
+    },
+    {
+      "id": "save",
+      "visualMs": 14440,
+      "audioMs": 14438,
+      "driftMs": 2
+    },
+    {
+      "id": "change",
+      "visualMs": 17248,
+      "audioMs": 17247,
+      "driftMs": 1
+    },
+    {
       "id": "result",
-      "visualMs": 13150,
-      "audioMs": 13146,
-      "driftMs": 4
+      "visualMs": 13465,
+      "audioMs": 13463,
+      "driftMs": 2
     }
   ],
   "issues": []

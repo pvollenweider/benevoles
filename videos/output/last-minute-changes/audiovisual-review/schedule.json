@@ -1,57 +1,41 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T20:51:52.911Z",
-  "videoSha256": "3e2b054ce139ced7f32f4059559c36ac89bc83cb334bbe34e341997d8f994942",
+  "reviewedAt": "2026-10-06T07:24:30.225Z",
+  "videoSha256": "581346aebe0397c4a562745c5eafe7ad692c94c626291ecc7f0013c2726e7b84",
   "promptSha256": "7ac2619ba87b320a1bfd4abab33afea82ed212a9cf7902b3e2227a9586b46c4c",
-  "clipSha256": "925a66803a9a795bbbd83a184cd53a9a080fd787872047e22569fcbb932c7f41",
+  "clipSha256": "7742376014d4c8c4041b3ae03767ea86e15a26da6f4b0fb885a6582e53564e30",
   "scene": "schedule",
   "review": {
     "heardOpening": "Le matériel arrive plus tard",
     "checkpoints": [
       {
-        "spokenSeconds": 4.1,
+        "spokenSeconds": 3.5,
         "spoken": "Ouvrons le créneau concerné",
-        "visibleSeconds": 4.2,
-        "visible": "Ouverture du formulaire de modification du créneau Préparation",
+        "visibleSeconds": 3.8,
+        "visible": "Clic sur Modifier et ouverture du formulaire d'édition du créneau",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.8,
-        "spoken": "lisons la date, le début et la fin avant de modifier",
-        "visibleSeconds": 5.5,
-        "visible": "Affichage de la date et des champs d'horaires début/fin",
+        "spokenSeconds": 9.5,
+        "spoken": "Décalons les deux heures, puis enregistrons.",
+        "visibleSeconds": 10,
+        "visible": "Modification des horaires à 14:30 et 16:30, puis clic sur Enregistrer",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.2,
-        "spoken": "Décalons les deux heures, puis enregistrons",
-        "visibleSeconds": 11.8,
-        "visible": "Modification appliquée à 14:30 - 16:30 puis clic sur Enregistrer",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 14.5,
-        "spoken": "par un email de changement",
-        "visibleSeconds": 15,
-        "visible": "Affichage de la boîte Mailpit avec le courriel de notification",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 18,
+        "spokenSeconds": 17,
         "spoken": "Lisons l'ancien et le nouvel horaire dans le message reçu",
-        "visibleSeconds": 17.5,
-        "visible": "L'e-mail affiche le passage de 14:00-16:00 à 14:30-16:30",
+        "visibleSeconds": 15.5,
+        "visible": "Affichage de l'e-mail avec l'ancien et le nouvel horaire comparés",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 21.2,
-        "spoken": "puis revenons au planning",
-        "visibleSeconds": 22.8,
+        "spokenSeconds": 20.8,
+        "spoken": "puis revenons au planning.",
+        "visibleSeconds": 22.5,
         "visible": "Retour à la vue planning des créneaux",
         "sync": "aligned",
         "severity": "none"
@@ -61,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire et posée, bien synchronisée avec les manipulations à l'écran."
+      "observation": "Diction fluide et claire, bon alignement avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

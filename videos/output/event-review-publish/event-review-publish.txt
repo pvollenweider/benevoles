@@ -6,7 +6,7 @@ Les lignes marquées comme faites couvrent le titre, les dates et le planning. U
 
 Prévisualiser comme un bénévole ouvre la vraie page d’inscription dans un mode sans conséquence. On vérifie d’abord l’en-tête, le lieu, les instructions, le programme et les créneaux, exactement comme ils seront présentés sur téléphone ou ordinateur.
 
-Sélectionnons un créneau et poursuivons jusqu’au formulaire. Ce test permet de relire les questions, la Convention des Bénévoles, les consentements et les informations demandées sans créer d’inscription réelle.
+Sélectionnons un créneau et poursuivons jusqu’au formulaire. Pour ce test, renseignons une identité fictive : Alex Martin. Ajoutons son adresse email de démonstration et son téléphone fictif. Choisissons aussi une taille de t-shirt : cette question est obligatoire pour notre événement. Le formulaire permet de relire les informations demandées et la Convention des Bénévoles. Acceptons cette convention, puis l’utilisation des données par l’association pour gérer ses bénévoles. Nous testons le parcours sans créer d’inscription réelle.
 
 Le bouton de simulation affiche ensuite la confirmation et l’email automatique avec les valeurs de test. C’est ici qu’on repère un message trop vague, une consigne manquante ou une variable mal placée, avant qu’un vrai bénévole ne les reçoive.
 

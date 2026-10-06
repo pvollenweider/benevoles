@@ -1,0 +1,12 @@
+{
+  "anchor": "Le récapitulatif est la dernière vérification. Il rappelle les éléments copiés",
+  "windowStart": 26.184999999999995,
+  "result": {
+    "found": true,
+    "startSeconds": 30.5,
+    "wordsHeard": "Le récapitulatif est la dernière vérification. Il rappelle les éléments copiés"
+  },
+  "onset": 56.684999999999995,
+  "proposedCut": 56.185437500000006,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,23 +1,105 @@
 WEBVTT
 
-00:00:01.142 --> 00:00:14.840
-Fermer les inscriptions, archiver et supprimer répondent à trois besoins différents. Fermer bloque seulement les nouvelles inscriptions. Archiver retire l’événement du public tout en gardant ses données consultables. Supprimer efface définitivement l’édition.
+00:00:01.087 --> 00:00:06.333
+Fermer les inscriptions, archiver et
+supprimer répondent à trois besoins
 
-00:00:15.294 --> 00:00:28.706
-Pour cette démonstration, nous travaillons sur une copie jetable de l’ancienne édition. Dans la vraie vie, vérifie d’abord les inscriptions, les invitations, le journal et les rapports. Si des bénévoles doivent être prévenus, annule les créneaux avant l’archivage.
+00:00:06.333 --> 00:00:11.055
+différents. Fermer bloque seulement les
+nouvelles inscriptions. Archiver retire
 
-00:00:29.158 --> 00:00:42.960
-Le bouton Archiver demande une confirmation claire. Après validation, la page publique disparaît, mais l’équipe garde accès au planning, aux inscriptions, aux rapports et au journal. On peut donc conserver l’historique sans laisser croire que l’événement accepte encore du monde.
+00:00:11.055 --> 00:00:16.826
+l’événement du public tout en gardant ses
+données consultables. Supprimer efface
 
-00:00:43.413 --> 00:00:56.461
-La suppression définitive n’apparaît qu’après archivage et seulement pour un propriétaire de l’organisation. Le récapitulatif indique précisément combien de créneaux, d’inscriptions et d’invitations vont disparaître. Les membres du pool, eux, sont conservés.
+00:00:16.826 --> 00:00:17.875
+définitivement l’édition.
 
-00:00:56.912 --> 00:01:09.437
-Avant d’aller plus loin, ouvre l’export PDF. Il contient le planning, le récapitulatif par poste et la liste des bénévoles. Enregistre-le si l’association doit garder une archive opérationnelle ou répondre plus tard à une question sur cette édition.
+00:00:18.329 --> 00:00:22.261
+Pour cette démonstration, nous travaillons
+sur une copie jetable de l’ancienne
 
-00:01:09.891 --> 00:01:25.270
-La confirmation renforcée demande de saisir le titre de l’événement. Tant qu’il ne correspond pas, le bouton reste indisponible. Une fois la suppression lancée, les liens personnels cessent de fonctionner et les données rattachées ne sont pas récupérables depuis l’application.
+00:00:22.261 --> 00:00:26.193
+édition. Dans la vraie vie, vérifie
+d’abord les inscriptions, les invitations,
 
-00:01:25.723 --> 00:01:37.552
-L’événement disparaît de la liste après validation. Utilise donc l’archivage comme état normal de fin de vie, et réserve la suppression aux éditions de test, aux erreurs de création ou aux cas où la conservation n’a plus de raison d’être.
+00:00:26.193 --> 00:00:30.482
+le journal et les rapports. Si des
+bénévoles doivent être prévenus, annule
+
+00:00:30.482 --> 00:00:31.912
+les créneaux avant l’archivage.
+
+00:00:32.375 --> 00:00:35.983
+Le bouton Archiver demande une
+confirmation claire. Après validation, la
+
+00:00:35.983 --> 00:00:39.952
+page publique disparaît, mais l’équipe
+garde accès au planning, aux inscriptions,
+
+00:00:39.952 --> 00:00:44.643
+aux rapports et au journal. On peut donc
+conserver l’historique sans laisser croire
+
+00:00:44.643 --> 00:00:46.808
+que l’événement accepte encore du monde.
+
+00:00:47.261 --> 00:00:51.744
+La suppression définitive n’apparaît
+qu’après archivage et seulement pour un
+
+00:00:51.744 --> 00:00:55.331
+propriétaire de l’organisation. Le
+récapitulatif indique précisément combien
+
+00:00:55.331 --> 00:00:58.918
+de créneaux, d’inscriptions et
+d’invitations vont disparaître. Les
+
+00:00:58.918 --> 00:01:01.608
+membres du pool, eux, sont conservés.
+
+00:01:02.061 --> 00:01:06.303
+Avant d’aller plus loin, ouvre l’export
+PDF. Il contient le planning, le
+
+00:01:06.303 --> 00:01:10.192
+récapitulatif par poste et la liste des
+bénévoles. Enregistre-le si l’association
+
+00:01:10.192 --> 00:01:14.788
+doit garder une archive opérationnelle ou
+répondre plus tard à une question sur
+
+00:01:14.788 --> 00:01:15.495
+cette édition.
+
+00:01:15.950 --> 00:01:19.997
+La confirmation renforcée demande de
+saisir le titre de l’événement. Tant qu’il
+
+00:01:19.997 --> 00:01:23.706
+ne correspond pas, le bouton reste
+indisponible. Une fois la suppression
+
+00:01:23.706 --> 00:01:27.753
+lancée, les liens personnels cessent de
+fonctionner et les données rattachées ne
+
+00:01:27.753 --> 00:01:29.439
+sont pas récupérables depuis
+l’application.
+
+00:01:29.894 --> 00:01:33.658
+L’événement disparaît de la liste après
+validation. Utilise donc l’archivage comme
+
+00:01:33.658 --> 00:01:38.790
+état normal de fin de vie, et réserve la
+suppression aux éditions de test, aux
+
+00:01:38.790 --> 00:01:43.580
+erreurs de création ou aux cas où la
+conservation n’a plus de raison d’être.
 

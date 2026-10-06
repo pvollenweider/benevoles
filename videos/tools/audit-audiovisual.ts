@@ -15,6 +15,7 @@ const exec = promisify(execFile)
 const reference = process.argv[2]
 const selected = process.argv.slice(3).find(arg => !arg.startsWith("--"))
 const force = process.argv.includes("--force")
+const commonDemoVideos = ["SECTOR_LEADERS", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH", "EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP"]
 type Checkpoint = { spokenSeconds: number; spoken: string; visibleSeconds: number | null; visible: string; sync: "aligned" | "early" | "late" | "missing" | "uncertain"; severity: "none" | "minor" | "major" }
 type Review = { heardOpening: string; checkpoints: Checkpoint[]; issues: string[]; voice: { consistent: boolean; warm: boolean; observation: string } }
 const reviewRules = "\nUne introduction qui annonce au futur les chapitres à venir n'exige pas que ces actions aient déjà lieu dans cet extrait. Ne signale pas un texte saisi non dicté mot à mot, sauf s'il contredit la consigne entendue ou si la voix promet une dictée exacte. Une variante lexicale de même sens n'est pas un défaut de synchronisation ; une phrase omise, un fait modifié ou un conseil ajouté hors script doit rester signalé. N'atténue aucun retard d'action réellement annoncée au présent."
@@ -24,10 +25,16 @@ async function main() {
   const manifest = await loadManifest(reference)
   // External visual review is opt-in here only for the fixture we can prove synthetic.
   // Do not export arbitrary videos, production captures or real volunteer information.
-  if (!["ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES"].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
+  if (!["ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", ...commonDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
   const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
   try {
-    if (manifest.id === "ADMIN_NAVIGATION") {
+    if (commonDemoVideos.includes(manifest.id)) {
+      const url = new URL(process.env.DATABASE_URL!)
+      if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video") throw new Error("Common demo review requires isolated video database")
+      const fixture = await db.organization.findUniqueOrThrow({ where: { id: "default" }, include: { admins: true, events: { include: { sectorLeaders: true, registrations: { include: { volunteer: true } } } } } })
+      if (fixture.name !== "Fêtes de Montvert" || !fixture.events.some(event => event.slug === "fete-du-village") || fixture.admins.some(admin => !admin.email.endsWith("@example.org") && admin.email !== "org-admin@localhost")) throw new Error("Common training organization changed")
+      if (fixture.events.some(event => event.sectorLeaders.some(leader => !leader.email.endsWith("@example.org")) || event.registrations.some(registration => !registration.volunteer.email?.endsWith("@example.org")))) throw new Error("Common demo contains non-synthetic recipients")
+    } else if (manifest.id === "ADMIN_NAVIGATION") {
       const url = new URL(process.env.DATABASE_URL!)
       if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video") throw new Error("Navigation review requires isolated video database")
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-navigation-current" }, include: { events: true, volunteers: true, admins: true } })

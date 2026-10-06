@@ -21,7 +21,8 @@
   "language": "fr-CH",
   "voice": "Puck",
   "continuousNarration": true,
-  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult male voice, like a helpful association coordinator. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "continuousPauseTags": false,
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult male voice, like a helpful association coordinator. Natural conversational French, calm medium pace and clear articulation. Read every provided sentence verbatim, without omission, addition, paraphrase or summary. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
   "viewport": {
     "width": 1280,
     "height": 800,

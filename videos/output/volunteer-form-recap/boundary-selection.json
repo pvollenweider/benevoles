@@ -1,0 +1,12 @@
+{
+  "anchor": "Voici quatre missions : Accueil le matin, Logistique juste après, Rangement",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 18.67,
+    "wordsHeard": "Voici quatre missions"
+  },
+  "onset": 18.67,
+  "proposedCut": 18.123125,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T08:49:12.919Z",
+  "videoSha256": "4fe508a90cb701f731db4f20b4ce3a24fc333a05ff19b1887ce04e9c2c911528",
+  "promptSha256": "a8a0d0d2b465e0be5374f75fda4cd45e28108fb63d99f2198c67f73c01352cb5",
+  "clipSha256": "84cca50d69d3970676380786fa2d0ea8e461c4bb318dabf62513c07ba9c6196a",
+  "scene": "identity",
+  "review": {
+    "heardOpening": "Commence par donner le titre de la nouvelle édition",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Commence par donner le titre de la nouvelle édition",
+        "visibleSeconds": 1.8,
+        "visible": "Le champ Titre de la copie est effacé puis complété avec Fête du village de Montvert 2027",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "et son premier jour",
+        "visibleSeconds": 3,
+        "visible": "Le champ Premier jour de la copie reste pré-renseigné avec la date 10. 10. 2026",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Le résumé indique immédiatement de combien de jours elles seront déplacées",
+        "visibleSeconds": 9.5,
+        "visible": "La mention d'aide sous la date indique la règle générale sans afficher un calcul précis en jours",
+        "sync": "uncertain",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:09 - L'indication dynamique du nombre exact de jours déplacés n'est pas clairement visible à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et articulation claire, ton neutre et posé."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

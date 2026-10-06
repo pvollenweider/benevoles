@@ -3,6 +3,22 @@
   "slug": "event-review-publish",
   "title": "Vérifier, prévisualiser et publier",
   "description": "Contrôler les points obligatoires, tester tout le parcours bénévole puis publier sans envoyer de message.",
+  "viewer": {
+    "summary": "Dans cette vidéo, vous vérifiez votre événement puis le publiez en toute confiance.",
+    "steps": [
+      "Consultez l'écran de vérification : titre, dates et planning cochés, lieu et instructions facultatifs.",
+      "Cliquez sur « Prévisualiser comme un bénévole » pour ouvrir la vraie page d'inscription sans conséquence.",
+      "Sélectionnez un créneau et avancez jusqu'au formulaire pour relire les questions et la convention.",
+      "Simulez l'inscription pour voir la confirmation et l'email automatique avec des valeurs de test.",
+      "Revenez à la vérification et cliquez sur Publier.",
+      "Partagez le lien, le QR code ou une invitation pour prévenir vos bénévoles : rien n'est envoyé automatiquement."
+    ],
+    "remember": [
+      "Le bouton Publier reste bloqué tant qu'aucun créneau actif n'existe.",
+      "Aucun email n'est envoyé automatiquement à la publication.",
+      "Pensez à vérifier régulièrement les inscriptions et les besoins de personnel après publication."
+    ]
+  },
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
@@ -30,8 +46,8 @@
     },
     {
       "id": "preview-form",
-      "transcript": "Sélectionnons un créneau et poursuivons jusqu’au formulaire. Ce test permet de relire les questions, la Convention des Bénévoles, les consentements et les informations demandées sans créer d’inscription réelle.",
-      "fallbackDurationMs": 21000
+      "transcript": "Sélectionnons un créneau et poursuivons jusqu’au formulaire. Pour ce test, renseignons une identité fictive : Alex Martin. Ajoutons son adresse email de démonstration et son téléphone fictif. Choisissons aussi une taille de t-shirt : cette question est obligatoire pour notre événement. Le formulaire permet de relire les informations demandées et la Convention des Bénévoles. Acceptons cette convention, puis l’utilisation des données par l’association pour gérer ses bénévoles. Nous testons le parcours sans créer d’inscription réelle.",
+      "fallbackDurationMs": 41000
     },
     {
       "id": "preview-result",
@@ -48,21 +64,5 @@
       "transcript": "Le résultat est un événement publié avec son lien public, son QR code et ses outils d’invitation. Publier ouvre l’accès ; cela ne remplace ni la communication, ni la vérification régulière des inscriptions et des besoins de personnel.",
       "fallbackDurationMs": 19000
     }
-  ],
-  "viewer": {
-    "summary": "Dans cette vidéo, vous vérifiez votre événement puis le publiez en toute confiance.",
-    "steps": [
-      "Consultez l'écran de vérification : titre, dates et planning cochés, lieu et instructions facultatifs.",
-      "Cliquez sur « Prévisualiser comme un bénévole » pour ouvrir la vraie page d'inscription sans conséquence.",
-      "Sélectionnez un créneau et avancez jusqu'au formulaire pour relire les questions et la convention.",
-      "Simulez l'inscription pour voir la confirmation et l'email automatique avec des valeurs de test.",
-      "Revenez à la vérification et cliquez sur Publier.",
-      "Partagez le lien, le QR code ou une invitation pour prévenir vos bénévoles : rien n'est envoyé automatiquement."
-    ],
-    "remember": [
-      "Le bouton Publier reste bloqué tant qu'aucun créneau actif n'existe.",
-      "Aucun email n'est envoyé automatiquement à la publication.",
-      "Pensez à vérifier régulièrement les inscriptions et les besoins de personnel après publication."
-    ]
-  }
+  ]
 }

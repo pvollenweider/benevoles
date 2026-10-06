@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour cette démonstration, nous travaillons sur une copie jetable de l’ancienne",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 16.9,
+    "wordsHeard": "Pour"
+  },
+  "onset": 16.9,
+  "proposedCut": 16.7881875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

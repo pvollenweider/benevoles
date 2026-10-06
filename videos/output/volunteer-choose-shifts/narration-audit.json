@@ -1,0 +1,99 @@
+{
+  "model": "gemini-3.8-flash",
+  "auditedAt": "2026-10-06T07:54:16.274Z",
+  "revalidatedAt": "2026-10-06T07:54:16.275Z",
+  "source": "generated narration WAV",
+  "note": "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "169abedaccba77b277f47e0876cdd000559f9a2de9aaecbc0d2e67226ae8e3c8",
+      "recognized": "Choisir ses créneaux, c'est construire un engagement réaliste avant de donner ses coordonnées. Tu peux essayer plusieurs combinaisons, retirer un choix et lire les contraintes sans rien enregistrer. L'inscription ne partira qu'après le formulaire et sa confirmation.",
+      "expected": "Choisir ses créneaux, c’est construire un engagement réaliste avant de donner ses coordonnées. Tu peux essayer plusieurs combinaisons, retirer un choix et lire les contraintes sans rien enregistrer. L’inscription ne partira qu’après le formulaire et sa confirmation.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "select",
+      "audioSha256": "ebec1c71272371d14a0cab27ce7a6cdb07c5b368f9ae665aa1b1aa378719b69d",
+      "recognized": "Clique sur une mission disponible pour la sélectionner. Elle change d'état et rejoint le récapitulatif à droite. Tu peux en ajouter plusieurs, même sur deux journées. Pour retirer un choix avant de continuer, reclique sur sa barre ou utilise la croix du récapitulatif. Aucune place n'a encore été réservée.",
+      "expected": "Clique sur une mission disponible pour la sélectionner. Elle change d’état et rejoint le récapitulatif à droite. Tu peux en ajouter plusieurs, même sur deux journées. Pour retirer un choix avant de continuer, reclique sur sa barre ou utilise la croix du récapitulatif : aucune place n’a encore été réservée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "capacity",
+      "audioSha256": "defc43643d721d95a80d2f67f006ceca12a3c8b9ae5a898d9e6b45ee34d13e91",
+      "recognized": "Chaque barre indique les inscriptions sur la capacité totale. Deux sur trois signifie qu'il reste une place. Un créneau complet sans liste d'attente ne peut plus être choisi. S'il reste important pour toi, contacte l'association plutôt que de remplacer quelqu'un ou de partager une invitation.",
+      "expected": "Chaque barre indique les inscriptions sur la capacité totale. Deux sur trois signifie qu’il reste une place. Un créneau complet sans liste d’attente ne peut plus être choisi. S’il reste important pour toi, contacte l’association plutôt que de remplacer quelqu’un ou de partager une invitation.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "waitlist",
+      "audioSha256": "2ed6d8858057a81902493f7c4801204de1c1ed77725593bfe8afcfa9eca7f6cd",
+      "recognized": "Quand l'organisateur a activé une liste d'attente, un créneau complet reste cliquable. Le choix devient en attente et le récapitulatif le distingue d'une place confirmable. Reclique pour le retirer. La position et une éventuelle offre de place n'existeront qu'après l'envoi du formulaire.",
+      "expected": "Quand l’organisateur a activé une liste d’attente, un créneau complet reste cliquable. Le choix devient En attente et le récapitulatif le distingue d’une place confirmable. Reclique pour le retirer. La position et une éventuelle offre de place n’existeront qu’après l’envoi du formulaire.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "approval-reserved",
+      "audioSha256": "05e7285b2b8158386fa16a9031b0dcb4dc3ee1748ce559e421afac149c06ea0d",
+      "recognized": "D'autres missions ont une règle particulière. Chauffeur navette affiche sur validation. Tu peux la demander, puis l'organisateur décidera. Sécurité est réservée à certains membres et reste bloquée sans leur invitation personnelle. Ces deux états ne veulent donc pas dire complet et ils ne produisent pas le même suivi.",
+      "expected": "D’autres missions ont une règle particulière. Chauffeur navette affiche Sur validation : tu peux la demander, puis l’organisateur décidera. Sécurité est réservée à certains membres et reste bloquée sans leur invitation personnelle. Ces deux états ne veulent donc pas dire complet, et ils ne produisent pas le même suivi.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "conflict",
+      "audioSha256": "8557d98c0fed1205032399eb44c70db1b0b6cc9ba21bd2baa99d11f49761407d",
+      "recognized": "Dès qu'un créneau est choisi, les missions qui chevauchent le même horaire deviennent indisponibles. Ici, accueil de neuf à midi empêche la navette de huit à midi. Retire le premier choix si la seconde mission te convient mieux. Le serveur vérifiera encore ce conflit au moment de confirmer.",
+      "expected": "Dès qu’un créneau est choisi, les missions qui chevauchent le même horaire deviennent indisponibles. Ici, Accueil de neuf à midi empêche la Navette de huit à midi. Retire le premier choix si la seconde mission te convient mieux. Le serveur vérifiera encore ce conflit au moment de confirmer.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "known",
+      "audioSha256": "62614c1315728554921f658b01a6f6bd97abda04cc2114694427a42ba5d54960",
+      "recognized": "Depuis son lien personnel, Camille retrouve automatiquement les créneaux qu'elle possède déjà. Ils apparaissent dans son récapitulatif et ne seront pas créés une deuxième fois. Elle peut ajouter une autre mission, mais l'annulation d'un engagement existant demande une confirmation séparée, pour éviter un clic accidentel.",
+      "expected": "Depuis son lien personnel, Camille retrouve automatiquement les créneaux qu’elle possède déjà. Ils apparaissent dans son récapitulatif et ne seront pas créés une deuxième fois. Elle peut ajouter une autre mission, mais l’annulation d’un engagement existant demande une confirmation séparée pour éviter un clic accidentel.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "limit",
+      "audioSha256": "be052acfc982e4a27b2c04185531d69db8a002638745f7a20e00e973db62de13",
+      "recognized": "La buvette est limitée à deux créneaux par personne. Camille a déjà atteint ce maximum. Les autres plages restent visibles, mais annoncent la limite et ne peuvent pas être ajoutées. Elle doit d'abord annuler une buvette existante ou demander à l'organisateur de corriger son planning.",
+      "expected": "La Buvette est limitée à deux créneaux par personne. Camille a déjà atteint ce maximum : les autres plages restent visibles, mais annoncent la limite et ne peuvent pas être ajoutées. Elle doit d’abord annuler une Buvette existante, ou demander à l’organisateur de corriger son planning.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "38940560db158b95d2c0ec2344f5321cbef0229c84a62db56bf6a3cbd88ac119",
+      "recognized": "Avant de continuer, relis le récapitulatif : jour, heure, mission, attente ou demande sur validation. Tu peux encore tout ajuster sans envoyer de données. Une fois la combinaison réaliste, le bouton Continuer ouvre le formulaire. Il ne confirme toujours rien tant que tu n'as pas validé la dernière étape.",
+      "expected": "Avant de continuer, relis le récapitulatif : jours, heures, missions, attente ou demande sur validation. Tu peux encore tout ajuster sans envoyer de données. Une fois la combinaison réaliste, le bouton Continuer ouvre le formulaire ; il ne confirme toujours rien tant que tu n’as pas validé la dernière étape.",
+      "wordErrorRate": 0.061224489795918366,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

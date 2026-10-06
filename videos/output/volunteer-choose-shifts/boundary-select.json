@@ -1,0 +1,12 @@
+{
+  "anchor": "Clique sur une mission disponible pour la sélectionner. Elle change d’état",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 14.72,
+    "wordsHeard": "Clique sur une mission disponible pour la sélectionner. Elle change d’état"
+  },
+  "onset": 14.72,
+  "proposedCut": 14.4123545,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T21:44:25.243Z",
-  "videoSha256": "74ad8b7010a5231a83be946771cc9efc6fe7565c20bad30cecf13062260ad851",
+  "reviewedAt": "2026-10-06T07:24:17.658Z",
+  "videoSha256": "f58091c20cbe8c06f1bd189d798ea38b8369e6bc18aaba29f19086cafde497a1",
   "promptSha256": "d09c760c781daad063cf9441e6b541b0001c9cada2a2899f58e85a71928528e5",
-  "clipSha256": "917b80c2ee015cf8a5d553c1f1352234c6d18b50343c82101c9dcf1546e0a6b2",
+  "clipSha256": "85b4e2bc09103bb1c69c6c754cbf928928968af5fa7bfdb2cfe8630633651d0c",
   "scene": "result",
   "review": {
-    "heardOpening": "Revenons à la page personnelle",
+    "heardOpening": "Revenons à la page personnelle et à son avertissement.",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Revenons à la page personnelle et à son avertissement",
-        "visibleSeconds": 1.5,
-        "visible": "Affichage de la page Mes inscriptions avec encart d'avertissement",
+        "spokenSeconds": 3.2,
+        "spoken": "Pour recruter, partage la page publique.",
+        "visibleSeconds": 3.5,
+        "visible": "Affichage du planning public des créneaux",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4,
-        "spoken": "partage la page publique",
-        "visibleSeconds": 3.8,
-        "visible": "Affichage du planning public de recrutement",
+        "spokenSeconds": 6.8,
+        "spoken": "Pour gérer une inscription, garde le lien personnel pour son destinataire.",
+        "visibleSeconds": 7.1,
+        "visible": "Retour à la vue Mes inscriptions",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.2,
-        "spoken": "garde le lien personnel pour son destinataire",
-        "visibleSeconds": 6.8,
-        "visible": "Retour à la page personnelle d'inscription",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 11.5,
-        "spoken": "remets le lien du responsable à la personne désignée",
+        "spokenSeconds": 11.2,
+        "spoken": "Pour coordonner un poste, remets le lien du responsable à la personne désignée.",
         "visibleSeconds": 11,
-        "visible": "Affichage de la vue Responsable - Accueil",
+        "visible": "Affichage de la page Responsable - Accueil",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit posé et articulation nette sans artefact sonore."
+      "observation": "Élocution posée, claire et régulière."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

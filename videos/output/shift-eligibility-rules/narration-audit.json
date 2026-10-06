@@ -1,0 +1,79 @@
+{
+  "model": "gemini-3.8-flash",
+  "auditedAt": "2026-10-06T07:44:26.130Z",
+  "revalidatedAt": "2026-10-06T07:44:26.133Z",
+  "source": "generated narration WAV",
+  "note": "Independent ASR evidence, reused only for identical audio/text; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "f9fca2a7021cc6af09dea53cb10d81e054603ace65c590adc6f649536a535bde",
+      "recognized": "Certaines missions demandent une règle simple, un âge minimum, un nombre maximum de créneaux, ou l'appartenance à une équipe déjà formée. Ces contrôles évitent les affectations impossibles, tout en expliquant clairement la situation avant l'inscription.",
+      "expected": "Certaines missions demandent une règle simple : un âge minimum, un nombre maximum de créneaux, ou l’appartenance à une équipe déjà formée. Ces contrôles évitent les affectations impossibles tout en expliquant clairement la situation avant l’inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "settings",
+      "audioSha256": "8de766b74761e3b2bcd5ada3ca4af726ac38e62c29c2dd798695049439b916b4",
+      "recognized": "Les règles se configurent au bon niveau. L'âge minimum appartient au créneau. La limite et les tags réservés appartiennent au poste entier pour rester cohérent sur toutes ses plages horaires. Ici, buvette est limitée à deux créneaux, et sécurité exige le tag sécurité.",
+      "expected": "Les règles se configurent au bon niveau. L’âge minimum appartient au créneau. La limite et les tags réservés appartiennent au poste entier, pour rester cohérents sur toutes ses plages horaires. Ici, Buvette est limitée à deux créneaux et Sécurité exige le tag sécurité.",
+      "wordErrorRate": 0.022727272727272728,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "age",
+      "audioSha256": "05483db6a08f6a559640a4a9a287fe4ed6ca163090db30775034360fec25e68e",
+      "recognized": "Sur le planning public, la buvette du soir annonce dix-huit ans minimum avant toute sélection. La date de naissance demandée dans le formulaire permet au serveur de vérifier la règle. Modifier le navigateur ou masquer le texte ne permet donc pas de la contourner.",
+      "expected": "Sur le planning public, la Buvette du soir annonce dix-huit ans minimum avant toute sélection. La date de naissance demandée dans le formulaire permet au serveur de vérifier la règle ; modifier le navigateur ou masquer le texte ne permet donc pas de la contourner.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "quota",
+      "audioSha256": "39c724d993d440e80ada7da21cc91636bc653f8703e7c3ccbd54d9a5797ca41d",
+      "recognized": "Camille possède déjà deux engagements de buvette. En revenant au planning depuis son lien personnel, sa session reconnaît ses inscriptions. Les autres créneaux restent visibles mais indiquent que la limite de deux est atteinte. Elle peut d'abord retirer un engagement si elle souhaite en choisir un autre.",
+      "expected": "Camille possède déjà deux engagements de Buvette. En revenant au planning depuis son lien personnel, sa session reconnaît ces inscriptions : les autres créneaux restent visibles, mais indiquent que la limite de deux est atteinte. Elle peut d’abord retirer un engagement si elle souhaite en choisir un autre.",
+      "wordErrorRate": 0.020833333333333332,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "reserved",
+      "audioSha256": "1d2f7d5a24fd2a089907b7a48f47ba4213d5fe0ee58936551c566206de2fa9dd",
+      "recognized": "Sans invitation, le poste sécurité reste visible mais marqué réservé à certains membres. Le message ne révèle pas les tags internes. Il demande simplement d'utiliser le lien personnel reçu par email. Une invitation sans le bon tag ne donne pas davantage accès.",
+      "expected": "Sans invitation, le poste Sécurité reste visible mais marqué réservé à certains membres. Le message ne révèle pas les tags internes : il demande simplement d’utiliser le lien personnel reçu par email. Une invitation sans le bon tag ne donne pas davantage accès.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "eligible",
+      "audioSha256": "46b13a44a31592a5a18e1ea0bdc6b983fb9cd3071b95c42dbc1fc31184661588",
+      "recognized": "Julien possède le tag sécurité. En ouvrant son invitation, la même mission devient sélectionnable. Le lien prouve quel membre a été invité et le serveur contrôle ses tags au moment de l'inscription. Il n'y a donc ni compte à créer, ni code à recopier.",
+      "expected": "Julien possède le tag sécurité. En ouvrant son invitation, la même mission devient sélectionnable : le lien prouve quel membre a été invité et le serveur contrôle ses tags au moment de l’inscription. Il n’y a donc ni compte à créer, ni code à recopier.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "f03155452080ff677b23f309f170ba2d09c9514e10a2e9f3814610a3f4c8c8a0",
+      "recognized": "Ces règles doivent rester rares et compréhensibles. Indique les critères dans la description. Garde les tags internes confidentiels, vérifie le téléphone obligatoire si l'équipe doit appeler le jour J, et prévois toujours une manière de corriger un profil ou une affectation.",
+      "expected": "Ces règles doivent rester rares et compréhensibles. Indique les critères dans la description, garde les tags internes confidentiels, vérifie le téléphone obligatoire si l’équipe doit appeler le jour J, et prévois toujours une manière de corriger un profil ou une affectation.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

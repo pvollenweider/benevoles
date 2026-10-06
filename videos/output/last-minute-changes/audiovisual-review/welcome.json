@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T20:51:01.260Z",
-  "videoSha256": "3e2b054ce139ced7f32f4059559c36ac89bc83cb334bbe34e341997d8f994942",
+  "reviewedAt": "2026-10-06T07:23:04.777Z",
+  "videoSha256": "581346aebe0397c4a562745c5eafe7ad692c94c626291ecc7f0013c2726e7b84",
   "promptSha256": "355ee33623e97c68190d19766bc83c66cb1782e9d55ae67331c2e2c3a1e165ac",
-  "clipSha256": "a65b61eae9aa173ddf2d437c0c92ee876ed2768ee7520f480c794db68c8f102a",
+  "clipSha256": "17465134aaadb1ac3ed3044f8b02bb71530147eb0018bca1717173bdadff9df8",
   "scene": "welcome",
   "review": {
     "heardOpening": "Un désistement, un horaire qui bouge",
     "checkpoints": [
       {
-        "spokenSeconds": 9.2,
+        "spokenSeconds": 0.9,
+        "spoken": "Un désistement, un horaire qui bouge, une mission devenue inutile",
+        "visibleSeconds": 0.5,
+        "visible": "Fenêtre d'introduction affichant 'Gérer un imprévu sans perdre le fil'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
         "spoken": "vérifier les faits, prévenir les bonnes personnes et regarder le résultat",
-        "visibleSeconds": 9,
-        "visible": "Encadré central affichant l'étape 'Vérifier, prévenir, contrôler le résultat'",
+        "visibleSeconds": 11.8,
+        "visible": "Fermeture du volet d'introduction et affichage du tableau de bord de l'événement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.5,
-        "spoken": "Dans notre fête fictive, nous allons suivre une place libérée",
-        "visibleSeconds": 12,
-        "visible": "Affichage de la page de gestion 'Fête des imprévus — démonstration'",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 26.5,
-        "spoken": "Chaque changement sera réellement enregistré dans notre environnement de formation",
-        "visibleSeconds": 26.5,
-        "visible": "Vue d'ensemble de l'événement de démonstration en attente d'action",
+        "spokenSeconds": 16.5,
+        "spoken": "nous allons suivre une place libérée, chercher une autre aide",
+        "visibleSeconds": 16.5,
+        "visible": "Vue d'ensemble de l'événement 'Fête des imprévus — démonstration'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, bonne synchronisation globale."
+      "observation": "Voix posée, claire et fluide, conforme au contexte de présentation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

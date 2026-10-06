@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-05T20:51:09.318Z",
-  "videoSha256": "3e2b054ce139ced7f32f4059559c36ac89bc83cb334bbe34e341997d8f994942",
+  "reviewedAt": "2026-10-06T07:23:20.625Z",
+  "videoSha256": "581346aebe0397c4a562745c5eafe7ad692c94c626291ecc7f0013c2726e7b84",
   "promptSha256": "e110d775b179d509292582912c33c8367ac5a20bad343800b23523a985e4e447",
-  "clipSha256": "20a97dafc35ab8e10679e0429b004fa71e9e3e925dd2d8e35dea70702afa1b9b",
+  "clipSha256": "d2373d3568fc78b3f736f62331ef4240864a20f5e2571bf7983bac70fc8f55bc",
   "scene": "withdrawal",
   "review": {
     "heardOpening": "Aline ne peut plus venir à l'accueil",
     "checkpoints": [
       {
-        "spokenSeconds": 4.1,
+        "spokenSeconds": 3.2,
         "spoken": "elle annule son inscription",
-        "visibleSeconds": 5.2,
-        "visible": "Clic sur Annuler puis confirmation pour le créneau Accueil du matin",
+        "visibleSeconds": 4.8,
+        "visible": "Clic sur le bouton Annuler puis validation du retrait de l'accueil",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.3,
+        "spokenSeconds": 10.1,
         "spoken": "Revenons dans les inscriptions côté organisation",
-        "visibleSeconds": 12.8,
-        "visible": "Affichage de la liste des inscriptions dans l'interface organisateur",
+        "visibleSeconds": 12.3,
+        "visible": "Transition vers la liste des inscriptions de l'événement côté administrateur",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 21,
+        "spokenSeconds": 17,
+        "spoken": "l'application lui propose de la prendre",
+        "visibleSeconds": 14,
+        "visible": "La ligne de Nicolas affiche le statut Place proposée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.2,
         "spoken": "Ouvrons le vrai email reçu par Nicolas",
-        "visibleSeconds": 21.1,
-        "visible": "Affichage de l'email Mailpit envoyé à Nicolas avec créneau et date d'expiration",
+        "visibleSeconds": 21,
+        "visible": "Affichage du client de messagerie Mailpit avec le message destiné à Nicolas",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier, ton calme et bonne intelligibilité."
+      "observation": "Élocution claire et rythme régulier adapté au didacticiel."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

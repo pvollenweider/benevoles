@@ -1,0 +1,12 @@
+{
+  "anchor": "Avant d’aller plus loin, ouvre l’export PDF. Il contient le planning,",
+  "windowStart": 29.150999999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 30.14,
+    "wordsHeard": "Avant"
+  },
+  "onset": 59.291,
+  "proposedCut": 59.151187500000006,
+  "note": "Proposal only; recut then independently audit before capture"
+}

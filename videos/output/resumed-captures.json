@@ -1,0 +1,11 @@
+{
+  "updatedAt": "2026-10-06T08:50:38.918Z",
+  "note": "Generated-for-review is not human validation, complete coverage or publication. Every failed stage remains listed.",
+  "results": [
+    {
+      "id": "EVENT_DUPLICATE",
+      "status": "needs-review",
+      "failedStage": "audiovisual-review"
+    }
+  ]
+}

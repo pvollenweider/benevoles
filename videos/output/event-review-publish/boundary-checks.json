@@ -3,10 +3,10 @@
   "windowStart": 0,
   "result": {
     "found": true,
-    "startSeconds": 5.5,
-    "wordsHeard": "Les lignes marquées comme faites couvrent le titre, les dates et"
+    "startSeconds": 11.08,
+    "wordsHeard": "Les lignes marquées comme faites couvrent le titre, les dates et le planning."
   },
-  "onset": 5.5,
-  "proposedCut": 5.3194165,
+  "onset": 11.08,
+  "proposedCut": 10.5412705,
   "note": "Proposal only; recut then independently audit before capture"
 }

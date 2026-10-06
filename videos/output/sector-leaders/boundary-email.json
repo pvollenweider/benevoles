@@ -1,0 +1,12 @@
+{
+  "anchor": "Voici l'email reçu. Le responsable ouvre son lien personnel directement, sans",
+  "windowStart": 26.492000000000004,
+  "result": {
+    "found": true,
+    "startSeconds": 28,
+    "wordsHeard": "Voici l'email reçu. Le responsable ouvre son lien personnel directement, sans"
+  },
+  "onset": 54.492000000000004,
+  "proposedCut": 54.246271,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,12 @@
+{
+  "anchor": "La Buvette est limitée à deux créneaux par personne. Camille a",
+  "windowStart": 91.304,
+  "result": {
+    "found": true,
+    "startSeconds": 26.8,
+    "wordsHeard": "La buvette est limitée à deux créneaux par personne. Camille a"
+  },
+  "onset": 118.104,
+  "proposedCut": 117.865396,
+  "note": "Proposal only; recut then independently audit before capture"
+}

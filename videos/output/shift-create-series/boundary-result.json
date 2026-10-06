@@ -1,0 +1,12 @@
+{
+  "anchor": "Avant de publier, vérifie les relèves, les pauses et les heures",
+  "windowStart": 42.73599999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 29,
+    "wordsHeard": "Avant de publier, vérifie les relèves, les pauses et les heures"
+  },
+  "onset": 71.73599999999999,
+  "proposedCut": 71.495875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

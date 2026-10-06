@@ -1,0 +1,12 @@
+{
+  "anchor": "Les boutons juste sous les consignes ouvrent des pages complémentaires. Accès",
+  "windowStart": 21.900999999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 30.76,
+    "wordsHeard": "Les boutons juste sous les consignes ouvrent des pages complémentaires. Accès"
+  },
+  "onset": 52.661,
+  "proposedCut": 52.635000000000005,
+  "note": "Proposal only; recut then independently audit before capture"
+}
