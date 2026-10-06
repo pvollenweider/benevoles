@@ -33,6 +33,7 @@ describe("sitemap on the apex host", () => {
     const { readDocUnits } = await import("../lib/doc-units")
     expect(entries.map((e) => e.url).slice(6)).toEqual(readDocUnits().map((u) => `https://www.benevol.app/doc/${u.slug}`))
     expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/revenir-sur-la-page-d-inscription")
+    expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/configurer-les-creneaux")
     // The guides and the units are real files in the repo: their date is known.
     expect(entries.find((e) => e.url.endsWith("/doc/admin"))?.lastModified).toBeInstanceOf(Date)
     expect(entries.find((e) => e.url.endsWith("/doc/revenir-sur-la-page-d-inscription"))?.lastModified).toBeInstanceOf(Date)

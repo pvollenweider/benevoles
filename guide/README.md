@@ -53,4 +53,69 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 - [Liste d'attente](liste-d-attente.md) : Quand un créneau est complet, les bénévoles rejoignent une liste d'attente ; une place libérée est proposée à la suite, 24 heures pour répondre. Pour : organisateurs, bénévoles.
 - [Inscriptions sur validation](inscriptions-sur-validation.md) : Sur un poste sensible, chaque inscription devient une demande que l'organisation accepte ou refuse ; la place reste réservée en attendant. Pour : organisateurs, bénévoles.
 - [Âge minimum sur un poste](age-minimum.md) : Un poste peut exiger un âge minimum : la date de naissance est demandée à l'inscription et l'âge compte au jour du créneau. Pour : organisateurs, bénévoles.
+
+### Démarrer
+
+- [Se connecter](se-connecter.md) : Se connecter à l'administration, activer son compte depuis une invitation, changer ou réinitialiser son mot de passe. Pour : organisateurs.
+- [Premiers pas](premiers-pas.md) : La liste Premiers pas guide la mise en place d'une nouvelle organisation, de la page publique à une inscription de test. Pour : organisateurs.
+- [Tableau de bord](tableau-de-bord.md) : Le tableau de bord liste ce qui demande votre attention, du plus urgent au moins urgent, puis les chiffres clés de l'organisation. Pour : organisateurs.
+- [Rechercher](rechercher.md) : Retrouver en une recherche les bénévoles, leurs inscriptions, les événements et les créneaux de toute l'organisation. Pour : organisateurs.
+
+### Préparer l'événement
+
+- [Créer un événement](creer-un-evenement.md) : Créer un événement en trois étapes, depuis un modèle ou une page blanche, puis le modifier avec l'enregistrement automatique. Pour : organisateurs.
+- [Dupliquer un événement](dupliquer-un-evenement.md) : Repartir d'un événement existant pour l'édition suivante, avec ses créneaux et réglages décalés à la nouvelle date. Pour : organisateurs.
+- [Configurer les créneaux](configurer-les-creneaux.md) : Poser les créneaux d'un événement sur le planning : poste, horaires, places, infos pratiques et notes internes. Pour : organisateurs.
+- [Créer une série de créneaux](creer-une-serie-de-creneaux.md) : Couvrir une plage horaire avec des créneaux qui se suivent, de même durée, en une seule saisie avec un aperçu. Pour : organisateurs.
+- [Horaires et créneaux de nuit](horaires-et-nuit.md) : Saisir les horaires d'un créneau de 00:00 à 23:59, et poser un créneau qui passe minuit ou commence après minuit. Pour : organisateurs.
+- [Modifier vite depuis le planning](modifier-vite-depuis-le-planning.md) : Changer les places, les horaires ou l'état d'un créneau, le dupliquer ou le supprimer sans quitter le planning. Pour : organisateurs.
+- [Gérer les postes](gerer-les-postes.md) : Réordonner, renommer, supprimer ou colorer les postes, limiter les créneaux par personne et réserver un poste à certains membres. Pour : organisateurs.
+- [Programme des spectacles](programme-des-spectacles.md) : Afficher les spectacles en fond coloré sur le planning, pour que les bénévoles situent leurs créneaux par rapport au programme. Pour : organisateurs.
+- [Questions aux bénévoles](questions-aux-benevoles.md) : Ajouter jusqu'à 5 questions au formulaire d'inscription, puis compter les réponses pour passer commande. Pour : organisateurs.
+- [Pages personnalisées de l'événement](pages-personnalisees.md) : Ajouter à un événement des pages libres (règlement, accès, ce qu'il faut apporter), liées depuis sa page d'inscription. Pour : organisateurs.
+- [Responsables de secteur](responsables-de-secteur.md) : Désigner des bénévoles responsables d'un poste : un lien personnel, sans compte, leur montre qui est inscrit sur ce poste. Pour : organisateurs.
+- [Jalons de l'événement](jalons.md) : Une liste de dates clés à cocher sur la page de l'événement, avec les jalons en retard mis en évidence. Pour : organisateurs.
+
+### Publier et partager
+
+- [Publier un événement](publier-un-evenement.md) : Vérifier ce qui manque, prévisualiser comme un bénévole, puis publier l'événement, répertorié ou non sur la page publique. Pour : organisateurs.
+- [Partager le lien de l'événement](partager-le-lien.md) : Copier ou partager le lien public d'un événement publié, savoir ce que montre son aperçu, et télécharger son QR code. Pour : organisateurs.
+- [Ouvrir et fermer les inscriptions](ouvrir-et-fermer-les-inscriptions.md) : Ouvrir ou fermer les inscriptions d'un événement publié, à la main ou à une date programmée, en gardant le planning visible. Pour : organisateurs.
+- [Archiver ou supprimer un événement](archiver-ou-supprimer-un-evenement.md) : Archiver un événement terminé pour le retirer du public, ou le supprimer définitivement après l'avoir sauvegardé. Pour : organisateurs.
+
+### Suivre l'événement
+
+- [Suivre les inscriptions](suivre-les-inscriptions.md) : Le tableau des inscriptions d'un événement : coordonnées, statut, actions groupées, et ajout d'une personne à la main. Pour : organisateurs.
+- [Où manque-t-il du monde ?](ou-manque-t-il-du-monde.md) : Voir en une page les créneaux et les postes qui manquent de monde, puis proposer ces créneaux à des membres choisis. Pour : organisateurs.
+- [Journal de l'événement](journal-de-l-evenement.md) : L'historique de tout ce qui s'est passé sur un événement, à explorer, rejouer à un instant donné ou raconter en une phrase. Pour : organisateurs.
+
+### Le jour J
+
+- [Présences le jour J](presences-le-jour-j.md) : Le jour J, suivre sur téléphone les créneaux en cours et à venir, et marquer les présences à l'arrivée des bénévoles. Pour : organisateurs.
+- [Rapports, badges et résumé](rapports-badges-et-resume.md) : Les plannings et listes à imprimer, les badges des bénévoles, le résumé pour faire le bilan et l'archive complète d'un événement. Pour : organisateurs.
+
+### Membres et invitations
+
+- [Gérer les membres](gerer-les-membres.md) : Le répertoire des bénévoles de l'organisation : ajout, import, adresses à vérifier, heures données et attestation de bénévolat. Pour : organisateurs.
+- [Doublons et fusion de fiches](doublons-et-fusion.md) : Repérer les fiches de membres qui désignent sans doute la même personne, puis fusionner deux fiches avec un aperçu complet. Pour : organisateurs.
+- [Effacer ou supprimer un membre](effacer-ou-supprimer-un-membre.md) : Supprimer une fiche inactive sans inscription, ou effacer les données personnelles d'un membre qui le demande. Pour : organisateurs.
+- [Inviter des membres à un événement](inviter-des-membres.md) : Inviter des membres à un événement par email, suivre qui a répondu, et relancer les invités qui n'ont pas encore de créneau. Pour : organisateurs.
+
+### Communiquer avec les bénévoles
+
+- [Écrire aux bénévoles](ecrire-aux-benevoles.md) : Envoyer un email aux inscrits d'un événement, d'un poste ou d'un créneau, avec des modèles, et retrouver les messages envoyés. Pour : organisateurs.
+- [Réglages et suivi des emails](reglages-et-suivi-des-emails.md) : Régler les rappels, les alertes et l'adresse de réponse de l'organisation, et suivre l'état de chaque email envoyé. Pour : organisateurs.
+
+### Paramètres de l'organisation
+
+- [Gérer l'équipe admin](equipe-admin.md) : Les deux rôles d'administrateur, propriétaire et organisateur, et comment inviter, changer de rôle ou retirer un admin. Pour : organisateurs.
+- [Exporter et conserver ses données](exporter-et-conserver-ses-donnees.md) : Exporter un événement, les membres ou le journal à tout moment, et savoir combien de temps chaque donnée est conservée. Pour : organisateurs.
+- [Journal d'activité de l'organisation](journal-d-activite-de-l-organisation.md) : La liste chronologique de ce qui concerne l'organisation plutôt qu'un événement : membres, comptes admin, emails, réglages. Pour : organisateurs.
+- [Personnaliser l'organisation](personnaliser-l-organisation.md) : Le nom, l'adresse publique, le logo, le titre de la page publique et le fuseau horaire de l'organisation. Pour : organisateurs.
+- [Charte du bénévole](charte-du-benevole.md) : Personnaliser la convention que les bénévoles acceptent avant de s'inscrire, et retrouver la preuve de leur acceptation. Pour : organisateurs.
+
+### Aide
+
+- [Aide et retours](aide-et-retours.md) : Ouvrir l'aide d'un écran de l'administration, et signaler un problème ou proposer une amélioration par email. Pour : organisateurs.
+- [Questions fréquentes des organisateurs](questions-frequentes-organisateurs.md) : Les questions que se posent souvent les organisateurs, chacune reliée à la page de la documentation qui y répond. Pour : organisateurs.
 <!-- doc-index:end -->

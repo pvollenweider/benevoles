@@ -15,7 +15,7 @@ const SUPER_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "e2e-admin-password"
 test.describe("public pages", () => {
   // /videos and /videos/[id] (#644) aren't linked from anywhere but are still reachable by URL —
   // same accessibility bar as every other page.
-  for (const path of ["/", "/fonctionnalites", "/doc", "/doc/admin", "/doc/benevole", "/accessibilite", "/legal/privacy", "/videos", "/videos/EVENT_CREATE_BLANK"]) {
+  for (const path of ["/", "/fonctionnalites", "/doc", "/doc/admin", "/doc/benevole", "/doc/creer-un-evenement", "/accessibilite", "/legal/privacy", "/videos", "/videos/EVENT_CREATE_BLANK"]) {
     test(`${path} has no serious violation`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
@@ -43,8 +43,8 @@ test.describe("public pages", () => {
 
 test.describe("content pages on a phone, in dark mode", () => {
   test.use({ viewport: { width: 320, height: 640 }, colorScheme: "dark" })
-  // A documentation unit (#649): its breadcrumb wraps at 320 px.
-  for (const path of ["/accessibilite", "/doc", "/doc/revenir-sur-la-page-d-inscription"]) {
+  // Documentation units (#649): the breadcrumb wraps at 320 px; an organisers' unit has wide tables.
+  for (const path of ["/accessibilite", "/doc", "/doc/revenir-sur-la-page-d-inscription", "/doc/creer-un-evenement"]) {
     test(`${path} has no serious violation at 320 px, dark`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()

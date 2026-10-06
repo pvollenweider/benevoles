@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
-import { RETENTION, RETENTION_DAYS, retentionGuideTable, retentionMatrixTable, TABLE_END, TABLE_START } from "../retention"
+import { RETENTION, RETENTION_DAYS, RETENTION_GUIDE_SOURCE, retentionGuideTable, retentionMatrixTable, TABLE_END, TABLE_START } from "../retention"
 
 // A stated retention period must match what actually deletes the data (#486).
 const root = path.join(__dirname, "..", "..", "..")
@@ -9,8 +9,9 @@ const read = (f: string) => fs.readFileSync(path.join(root, f), "utf-8")
 const section = (md: string) => md.slice(md.indexOf(TABLE_START) + TABLE_START.length, md.indexOf(TABLE_END)).trim()
 
 describe("retention policy", () => {
-  it("is the table of the organisers' guide and of docs/retention.md (npm run retention:docs)", () => {
-    expect(section(read("GUIDE_ADMIN.md"))).toBe(retentionGuideTable())
+  it("is the table of the organisers' documentation and of docs/retention.md (npm run retention:docs)", () => {
+    expect(RETENTION_GUIDE_SOURCE).toMatch(/^guide\/[a-z0-9-]+\.md$/)
+    expect(section(read(RETENTION_GUIDE_SOURCE))).toBe(retentionGuideTable())
     expect(section(read("docs/retention.md"))).toBe(retentionMatrixTable())
   })
 

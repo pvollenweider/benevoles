@@ -83,4 +83,4 @@ C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles
 
 benevol.app est un projet open source, ouvert aux associations qui veulent l'essayer. Écrivez à [contact@benevol.app](mailto:contact@benevol.app) : on vous crée un espace.
 
-Pour aller plus loin, le [guide administrateur](GUIDE_ADMIN.md) explique la mise en place pas à pas, et le [guide bénévole](GUIDE_BENEVOLE.md) montre ce que vivent vos bénévoles. Dans l'administration, les principaux écrans ont un lien « Aide » qui ouvre directement la section du guide qui les explique. Un problème ou une idée d'amélioration ? Écrivez à la même adresse, aucun compte n'est nécessaire.
+Pour aller plus loin, le [guide administrateur](GUIDE_ADMIN.md) explique la mise en place pas à pas, et le [guide bénévole](GUIDE_BENEVOLE.md) montre ce que vivent vos bénévoles. Dans l'administration, les principaux écrans ont un lien « Aide » qui ouvre directement la page de la documentation qui les explique. Un problème ou une idée d'amélioration ? Écrivez à la même adresse, aucun compte n'est nécessaire.

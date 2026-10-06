@@ -54,6 +54,15 @@ export const DOC_GROUPS: readonly DocGroup[] = [
   { id: "inscription", title: "S'inscrire à un créneau" },
   { id: "apres-inscription", title: "Après l'inscription" },
   { id: "regles", title: "Règles d'inscription" },
+  { id: "demarrer", title: "Démarrer" },
+  { id: "preparer", title: "Préparer l'événement" },
+  { id: "publier", title: "Publier et partager" },
+  { id: "suivre", title: "Suivre l'événement" },
+  { id: "jour-j", title: "Le jour J" },
+  { id: "membres", title: "Membres et invitations" },
+  { id: "communiquer", title: "Communiquer avec les bénévoles" },
+  { id: "organisation", title: "Paramètres de l'organisation" },
+  { id: "aide", title: "Aide" },
 ]
 
 /**

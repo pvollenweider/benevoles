@@ -29,7 +29,7 @@ export async function GET() {
     }),
   ])
   // The member's own delivery outcomes (#598): this export is how an access request is answered
-  // (GUIDE_ADMIN.md, « Exporter et conserver ses données »), so it carries the member's own data
+  // (guide/exporter-et-conserver-ses-donnees.md), so it carries the member's own data
   // — in French words and a normalized reason, never the raw SMTP reply or the address.
   const outcomes = await prisma.deliveryOutcome.findMany({
     where: { organizationId, volunteerId: { in: members.map((m) => m.id) } },
