@@ -12,6 +12,8 @@ docker-compose*.yml
 # Checked by src/lib/__tests__/docker-public-sources.test.ts.
 !FEATURES.md
 !ACCESSIBILITE.md
+!ACCORD-SOUS-TRAITANCE.md
+!SOUS-TRAITANTS.md
 !GUIDE_ADMIN.md
 !GUIDE_BENEVOLE.md
 # The documentation units (#649, src/lib/doc-units.ts), rendered by /doc/<slug>.

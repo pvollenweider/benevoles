@@ -47,15 +47,14 @@ dans [inventaire.md](inventaire.md) et [sous-traitants.md](sous-traitants.md). E
   rejoué après une restauration de sauvegarde ([procedure-effacement.md](procedure-effacement.md)).
 - **Violation de données** : procédure interne en projet, pas encore validée ([procedure-violation.md](procedure-violation.md)).
 
-## Les brouillons à relire
+## Les documents à relire
 
-1. **Accord de traitement (art. 28 RGPD / art. 9 nLPD)** : [accord-sous-traitance-brouillon.md](accord-sous-traitance-brouillon.md),
-   construit sur la base des clauses contractuelles types de la Commission européenne, avec des
-   placeholders entre crochets pour tout ce que seule une personne qualifiée (ou l'opérateur, avec
-   son avis) peut trancher : entité juridique exacte, délais de notification, plafonds de
-   responsabilité, droit applicable.
-2. **Liste publique des sous-traitants** : [sous-traitants-page-publique-brouillon.md](sous-traitants-page-publique-brouillon.md),
-   texte prêt pour une future page publique, pas encore publiée.
+1. **Accord de traitement (art. 28 RGPD / art. 9 nLPD)** : [ACCORD-SOUS-TRAITANCE.md](../../ACCORD-SOUS-TRAITANCE.md),
+   publié le 2026-10-06 sur `/legal/sous-traitance` sans relecture préalable (décision de
+   l'opérateur, voir [README.md](README.md)) ; les choix faits pour le publier (délais, audits,
+   responsabilité, droit applicable) sont à relire.
+2. **Liste publique des sous-traitants** : [SOUS-TRAITANTS.md](../../SOUS-TRAITANTS.md),
+   publiée le 2026-10-06 sur `/legal/sous-traitants`.
 3. **Variantes de la convention de bénévolat** : [convention-benevoles-variantes-brouillon.md](convention-benevoles-variantes-brouillon.md),
    un texte neutre générique plus des notes par pays (Suisse, France, Belgique, « autre pays »),
    construites sur le texte actuel de `src/lib/volunteer-charter.ts` (après le changement décidé
@@ -65,9 +64,9 @@ dans [inventaire.md](inventaire.md) et [sous-traitants.md](sous-traitants.md). E
 
 ### Accord de traitement et sous-traitants (#485)
 
-1. Le brouillon de l'accord de traitement est-il utilisable en l'état comme base de négociation
+1. L'accord de traitement publié est-il utilisable en l'état comme base de négociation
    avec une organisation cliente, en Suisse comme dans l'UE ? Quelles clauses manquent ou doivent
-   être reformulées (article du brouillon à citer) ?
+   être reformulées (article de l'accord à citer) ?
 2. **Sous-traitants hors Suisse/UE** : Sentry (traitement UE, compte aux États-Unis) : quelles
    garanties de transfert sont nécessaires dans l'accord ? Faut-il mentionner quelque part les
    anciennes copies de sauvegarde envoyées à Dropbox (États-Unis, offre individuelle sans DPA)
@@ -77,11 +76,11 @@ dans [inventaire.md](inventaire.md) et [sous-traitants.md](sous-traitants.md). E
    [sous-traitants.md](sous-traitants.md) appelle-t-elle d'autres clauses de transfert (services de
    notification des navigateurs par exemple) ?
 4. **Page publique des sous-traitants** : le contenu de
-   [sous-traitants-page-publique-brouillon.md](sous-traitants-page-publique-brouillon.md)
+   [SOUS-TRAITANTS.md](../../SOUS-TRAITANTS.md)
    suffit-il à l'obligation de transparence, et la ligne Infomaniak peut-elle être publiée avant
    la confirmation de son accord de traitement ?
-5. **Délai de notification des violations** (article 11 du brouillon d'accord, actuellement
-   laissé à fixer) : quel délai recommander entre la connaissance d'une violation par l'opérateur
+5. **Délai de notification des violations** (article 11 de l'accord publié, sans délai
+   chiffré pour l'instant) : quel délai recommander entre la connaissance d'une violation par l'opérateur
    et sa notification à l'organisation cliente, compte tenu du délai que l'organisation doit
    elle-même respecter envers son autorité de contrôle ?
 6. **Rôles non tranchés** : la répartition des données des comptes administrateurs entre

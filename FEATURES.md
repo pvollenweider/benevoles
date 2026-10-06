@@ -76,6 +76,7 @@ C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles
 - **Chaque organisation est séparée** : elle ne voit que ses événements et ses bénévoles.
 - **Les liens personnels restent privés** : ils sont envoyés par email, et affichés à l'écran seulement à qui a prouvé recevoir les emails de l'adresse (par exemple en s'inscrivant depuis son lien d'invitation). Un lien perdu se redemande avec son adresse email.
 - **Vos données vous appartiennent** : exportez vos membres, votre journal ou l'archive complète d'un événement à tout moment.
+- **Un cadre écrit pour vos données** : un [accord de sous-traitance](ACCORD-SOUS-TRAITANCE.md) (RGPD et loi suisse) encadre ce que benevol.app fait des données de vos bénévoles, et la [liste des sous-traitants](SOUS-TRAITANTS.md) dit quels prestataires les traitent, où, et avec quelles garanties.
 - **Les emails sont suivis** : vous voyez ceux qui sont partis, en attente ou en échec, et pouvez renvoyer ces derniers.
 - **Pensé pour tous** : inscription et administration conçues pour le clavier et les lecteurs d'écran, analysées automatiquement et revues à chaque modification ; la [déclaration d'accessibilité](ACCESSIBILITE.md) dit ce qui est testé et les limites connues.
 

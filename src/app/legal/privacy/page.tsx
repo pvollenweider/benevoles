@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { RETENTION, RETENTION_DAYS } from "@/lib/retention"
 
 export const metadata = { title: "Politique de confidentialité — benevol.app" }
@@ -104,6 +105,11 @@ export default function PrivacyPage() {
         bénévoles sur le traitement de leurs données, de la base légale applicable et du respect du
         RGPD ou de toute réglementation nationale applicable.
       </p>
+      <p>
+        Ces engagements sont détaillés dans l&apos;
+        <Link href="/legal/sous-traitance">accord de sous-traitance (art. 28 RGPD et art. 9 nLPD)</Link>, qui
+        s&apos;applique à toute Organisation utilisant le Service.
+      </p>
 
       <h2>4. Transferts et sous-traitants</h2>
       <p>
@@ -141,6 +147,11 @@ export default function PrivacyPage() {
         copies sur Dropbox relèvent d&apos;un compte personnel, sans accord de traitement spécifique ;
         les transferts vers les États-Unis reposent sur les garanties que Dropbox déclare
         appliquer (clauses contractuelles types, Data Privacy Framework).
+      </p>
+      <p>
+        La <Link href="/legal/sous-traitants">liste des sous-traitants</Link> précise, pour chacun, les
+        données concernées, la localisation et les garanties en place. Tout ajout ou remplacement est
+        annoncé à l&apos;avance aux Organisations, comme le prévoit l&apos;accord de sous-traitance.
       </p>
 
       <h2>5. Sécurité</h2>
@@ -185,7 +196,7 @@ export default function PrivacyPage() {
         de 72 heures.
       </p>
 
-      <h2>7. Conservation des données</h2>
+      <h2 id="conservation">7. Conservation des données</h2>
       <p>
         Les données des bénévoles sont conservées tant que l&apos;Organisation maintient son compte
         sur la plateforme. Elles sont supprimées dans un délai de {RETENTION_DAYS.deactivatedOrganization} jours suivant la désactivation du

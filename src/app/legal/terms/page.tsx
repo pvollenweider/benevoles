@@ -6,7 +6,7 @@ export default function TermsPage() {
   return (
     <>
       <h1>Conditions générales d&apos;utilisation</h1>
-      <p className="text-gray-500 text-sm">Dernière mise à jour : 30 avril 2026</p>
+      <p className="text-gray-500 text-sm">Dernière mise à jour : 6 octobre 2026</p>
 
       <h2>1. Objet</h2>
       <p>
@@ -84,7 +84,9 @@ export default function TermsPage() {
       <p>
         benevol.app s&apos;engage à traiter les données des bénévoles exclusivement pour les
         besoins du Service, à ne pas les vendre ni les communiquer à des tiers non autorisés, et à
-        les supprimer sur demande de l&apos;Organisation.
+        les supprimer sur demande de l&apos;Organisation. Ce traitement est encadré par l&apos;
+        <Link href="/legal/sous-traitance">accord de sous-traitance</Link>, qui fait partie des
+        présentes CGU, et par la <Link href="/legal/sous-traitants">liste des sous-traitants</Link>.
       </p>
 
       <h2>6. Responsabilité et limitation de garantie</h2>

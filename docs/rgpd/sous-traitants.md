@@ -1,6 +1,6 @@
 # Sous-traitants ultérieurs (projet)
 
-Liste destinée à l'annexe III de l'accord ([accord-sous-traitance-brouillon.md](accord-sous-traitance-brouillon.md)). Les faits ci-dessous viennent de **pages officielles des fournisseurs** (consultées le 2026-09-30) ou d'une **observation technique** (DNS public, code du site). Ce qui ne peut être établi que dans le compte du fournisseur ou par contrat reste marqué « à confirmer » ; le détail est dans [verifications-production.md](verifications-production.md). Ce document n'est pas un avis juridique.
+Source des faits de la liste publique des sous-traitants ([SOUS-TRAITANTS.md](../../SOUS-TRAITANTS.md)), annexe III de l'accord ([ACCORD-SOUS-TRAITANCE.md](../../ACCORD-SOUS-TRAITANCE.md)) ; un test vérifie que chaque prestataire publié figure ici. Les faits ci-dessous viennent de **pages officielles des fournisseurs** (consultées le 2026-09-30) ou d'une **observation technique** (DNS public, code du site). Ce qui ne peut être établi que dans le compte du fournisseur ou par contrat reste marqué « à confirmer » ; le détail est dans [verifications-production.md](verifications-production.md). Ce document n'est pas un avis juridique.
 
 | Prestataire | Service et finalité | Données concernées | Rôle probable | Localisation et accès | Contrat, DPA, transferts | Conservation chez lui | Vérifié le |
 |---|---|---|---|---|---|---|---|
