@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useId, useLayoutEffect, useRef, useState } from "react"
+import { flushSync } from "react-dom"
 import { useHydrated } from "@/lib/use-hydrated"
 import { DOC_VIDEO_ATTRIBUTE, type DocVideoPlayer } from "@/lib/doc-video-references"
 import VideoPlayer from "@/components/videos/VideoPlayer"
@@ -30,7 +31,11 @@ function PlayIcon() {
  * « Voir la vidéo : <titre> (<durée>) » opens the player right there, so the reader never leaves
  * the documentation. A disclosure, not a dialog: `aria-expanded` and `aria-controls` on the button,
  * the player below it in DOM order; focus stays on the button (nothing moves it) and pressing it
- * again hides the player and pauses the video. No autoplay: the reader presses Play.
+ * again hides the player and pauses the video. Opening starts playback (owner decision): the press is
+ * the reader's own gesture, so the player is mounted synchronously (`flushSync`) and `play()` runs
+ * inside the click handler, which every browser accepts with sound; a refusal leaves the player
+ * paused, Play still works. Reopening resumes where it was. No `autoplay` attribute, and the
+ * gallery's session autoplay intent is never read or consumed here.
  *
  * Progressive enhancement: the server HTML (and a page whose JavaScript failed) is the plain link to
  * /videos/<ID>?from=doc in the same card, the button replaces it once hydrated (src/lib/use-hydrated.ts),
@@ -77,9 +82,22 @@ export default function DocVideoInline({ player }: { player: DocVideoPlayer }) {
   }
 
   function toggle() {
-    if (expanded) regionRef.current?.querySelector("video")?.pause()
-    else setOpened(true)
-    setExpanded(!expanded)
+    if (expanded) {
+      regionRef.current?.querySelector("video")?.pause()
+      setExpanded(false)
+      return
+    }
+    flushSync(() => {
+      setOpened(true)
+      setExpanded(true)
+    })
+    const video = regionRef.current?.querySelector("video")
+    // One soundtrack at a time: any other video playing on the page is paused first.
+    document.querySelectorAll("video").forEach((other) => { if (other !== video) other.pause() })
+    // Promise.resolve: older engines return undefined from play() instead of a promise.
+    Promise.resolve(video?.play()).catch(() => {
+      // Refused (no media, browser policy): the player stays paused, Play still works.
+    })
   }
 
   return (
