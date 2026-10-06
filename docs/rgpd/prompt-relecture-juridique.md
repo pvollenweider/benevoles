@@ -28,8 +28,10 @@ dans [inventaire.md](inventaire.md) et [sous-traitants.md](sous-traitants.md). E
   accepté le 2026-04-02.
 - **Envoi des emails** : Gandi Mail (France, sans transfert selon son DPA).
 - **Sauvegardes** : locales chiffrées (AES-256) sur le serveur (30 jours), copie hors site chiffrée
-  vers un compte Dropbox **individuel** (États-Unis, **sans DPA** pour cette offre, 90 jours) ;
-  remplacement par un hébergement suisse prévu mais pas encore en service (#524).
+  vers Infomaniak Swiss Backup (Suisse, 90 jours) depuis le 2026-10-05 (#524) ; accord de
+  traitement propre à Swiss Backup **pas encore confirmé**. Jusqu'au 2026-10-05, cette copie
+  allait sur un compte Dropbox individuel (États-Unis, sans DPA) ; les anciennes copies sont en
+  cours de suppression (#697).
 - **Suivi des erreurs** : Sentry (Functional Software, Inc.), région de traitement UE (Francfort),
   compte et réglages aux États-Unis ; jetons d'accès et adresses email systématiquement retirés
   avant l'envoi (`src/lib/sentry-scrub.ts`) ; conservation 30 jours (offre Developer).
@@ -66,18 +68,18 @@ dans [inventaire.md](inventaire.md) et [sous-traitants.md](sous-traitants.md). E
 1. Le brouillon de l'accord de traitement est-il utilisable en l'état comme base de négociation
    avec une organisation cliente, en Suisse comme dans l'UE ? Quelles clauses manquent ou doivent
    être reformulées (article du brouillon à citer) ?
-2. **Sous-traitants hors Suisse/UE** : Sentry (traitement UE, compte aux États-Unis) et Dropbox
-   (stockage aux États-Unis, offre individuelle sans DPA) — quelles garanties de transfert sont
-   nécessaires dans l'accord, et le maintien de Dropbox en l'état est-il acceptable le temps de la
-   migration vers un hébergement suisse (#524), ou faut-il accélérer ce remplacement avant de
-   signer un premier accord de traitement ?
-3. **Transferts internationaux** : au-delà de Sentry et Dropbox, la liste de
+2. **Sous-traitants hors Suisse/UE** : Sentry (traitement UE, compte aux États-Unis) : quelles
+   garanties de transfert sont nécessaires dans l'accord ? Faut-il mentionner quelque part les
+   anciennes copies de sauvegarde envoyées à Dropbox (États-Unis, offre individuelle sans DPA)
+   jusqu'au 2026-10-05, en cours de suppression ? Et Infomaniak Swiss Backup (Suisse) peut-il
+   figurer dans la liste avant que son accord de traitement soit confirmé ?
+3. **Transferts internationaux** : au-delà de Sentry, la liste de
    [sous-traitants.md](sous-traitants.md) appelle-t-elle d'autres clauses de transfert (services de
    notification des navigateurs par exemple) ?
 4. **Page publique des sous-traitants** : le contenu de
    [sous-traitants-page-publique-brouillon.md](sous-traitants-page-publique-brouillon.md)
-   suffit-il à l'obligation de transparence, et la ligne Dropbox doit-elle être publiée telle
-   quelle ou attendre la migration (#524) ?
+   suffit-il à l'obligation de transparence, et la ligne Infomaniak peut-elle être publiée avant
+   la confirmation de son accord de traitement ?
 5. **Délai de notification des violations** (article 11 du brouillon d'accord, actuellement
    laissé à fixer) : quel délai recommander entre la connaissance d'une violation par l'opérateur
    et sa notification à l'organisation cliente, compte tenu du délai que l'organisation doit

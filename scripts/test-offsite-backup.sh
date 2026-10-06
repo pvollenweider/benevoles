@@ -3,16 +3,16 @@
 # SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 # SPDX-License-Identifier: AGPL-3.0-only
 
-# Local regression test for the off-site backup provider switch (#524). No network, no real
-# rclone: a fake rclone and wget on PATH record their arguments so this runs offline and never
-# touches Dropbox, Swiss Backup, or the health endpoint.
+# Local regression test for the off-site backup copy to Swiss Backup (#524, #697). No network,
+# no real rclone: a fake rclone and wget on PATH record their arguments so this runs offline and
+# never touches Swiss Backup or the health endpoint.
 #
 # Covers:
 #   1. The CronJob's inline script (k8s/cronjob-backup-offsite.yaml), extracted verbatim from
-#      between the "OFFSITE_SCRIPT_START"/"OFFSITE_SCRIPT_END" markers, for both providers,
-#      the unset-OFFSITE_BUCKET error case, the unknown-provider error case, and DRY_RUN=true.
-#   2. scripts/restore-test-offsite.sh end to end, for both providers, against a fixture
-#      encrypted the same way cronjob-backup.yaml encrypts real dumps.
+#      between the "OFFSITE_SCRIPT_START"/"OFFSITE_SCRIPT_END" markers: remote selection, the
+#      unset-OFFSITE_BUCKET error case, and DRY_RUN=true.
+#   2. scripts/restore-test-offsite.sh end to end, against a fixture encrypted the same way
+#      cronjob-backup.yaml encrypts real dumps, plus its unset-OFFSITE_BUCKET error case.
 #
 # Run: sh scripts/test-offsite-backup.sh
 
@@ -72,42 +72,29 @@ run_cronjob_script() {
   # Same env the CronJob container would get, minus what we override per case.
   : > "$FAKE_RCLONE_LOG"; : > "$FAKE_WGET_LOG"
   ( CRON_SECRET=x APP_URL=http://example.invalid DRY_RUN="${DRY_RUN:-false}" \
-    OFFSITE_PROVIDER="$OFFSITE_PROVIDER" OFFSITE_BUCKET="$OFFSITE_BUCKET" \
+    OFFSITE_BUCKET="$OFFSITE_BUCKET" \
     sh "$WORK/cronjob-script.sh" )
 }
 
-# 1. dropbox (default): remote must be dropbox:/benevol-backups
-OFFSITE_PROVIDER=dropbox OFFSITE_BUCKET="" run_cronjob_script
-grep -q 'rclone copy /backups dropbox:/benevol-backups' "$FAKE_RCLONE_LOG" || fail "dropbox copy target"
-grep -q 'rclone delete dropbox:/benevol-backups' "$FAKE_RCLONE_LOG" || fail "dropbox delete target"
-grep -q -- '--min-age 90d' "$FAKE_RCLONE_LOG" || fail "90-day retention flag missing"
-pass "dropbox remote selection"
-
-# 2. swissbackup with a bucket: remote must be swissbackup:<bucket>/benevol-backups
-OFFSITE_PROVIDER=swissbackup OFFSITE_BUCKET=my-bucket run_cronjob_script
+# 1. remote must be swissbackup:<bucket>/benevol-backups, with the 90-day purge
+OFFSITE_BUCKET=my-bucket run_cronjob_script
 grep -q 'rclone copy /backups swissbackup:my-bucket/benevol-backups' "$FAKE_RCLONE_LOG" || fail "swissbackup copy target"
+grep -q 'rclone delete swissbackup:my-bucket/benevol-backups' "$FAKE_RCLONE_LOG" || fail "swissbackup delete target"
+grep -q -- '--min-age 90d' "$FAKE_RCLONE_LOG" || fail "90-day retention flag missing"
 pass "swissbackup remote selection"
 
-# 3. swissbackup without a bucket: must fail fast, before calling rclone
+# 2. without a bucket: must fail fast, before calling rclone
 : > "$FAKE_RCLONE_LOG"
-if ( OFFSITE_PROVIDER=swissbackup OFFSITE_BUCKET="" CRON_SECRET=x APP_URL=http://example.invalid DRY_RUN=false \
+if ( OFFSITE_BUCKET="" CRON_SECRET=x APP_URL=http://example.invalid DRY_RUN=false \
      sh "$WORK/cronjob-script.sh" ) 2>"$WORK/err.txt"; then
-  fail "swissbackup with no OFFSITE_BUCKET should have failed"
+  fail "no OFFSITE_BUCKET should have failed"
 fi
 grep -q "OFFSITE_BUCKET" "$WORK/err.txt" || fail "missing-bucket error message"
 [ -s "$FAKE_RCLONE_LOG" ] && fail "rclone should not run when OFFSITE_BUCKET is missing"
-pass "swissbackup without a bucket fails before touching rclone"
+pass "no OFFSITE_BUCKET fails before touching rclone"
 
-# 4. unknown provider: must fail fast
-if ( OFFSITE_PROVIDER=onedrive OFFSITE_BUCKET="" CRON_SECRET=x APP_URL=http://example.invalid DRY_RUN=false \
-     sh "$WORK/cronjob-script.sh" ) 2>"$WORK/err.txt"; then
-  fail "unknown provider should have failed"
-fi
-grep -q "OFFSITE_PROVIDER inconnu" "$WORK/err.txt" || fail "unknown-provider error message"
-pass "unknown OFFSITE_PROVIDER fails before touching rclone"
-
-# 5. DRY_RUN=true appends --dry-run to copy and delete
-DRY_RUN=true OFFSITE_PROVIDER=dropbox OFFSITE_BUCKET="" run_cronjob_script
+# 3. DRY_RUN=true appends --dry-run to copy and delete
+DRY_RUN=true OFFSITE_BUCKET=my-bucket run_cronjob_script
 [ "$(grep -c -- '--dry-run' "$FAKE_RCLONE_LOG")" = 2 ] || fail "DRY_RUN=true should add --dry-run to copy and delete (got: $(cat "$FAKE_RCLONE_LOG"))"
 pass "DRY_RUN=true passes --dry-run to rclone copy and delete"
 
@@ -121,24 +108,27 @@ openssl enc -aes-256-cbc -pbkdf2 -iter 100000 -pass "pass:${PASSPHRASE}" \
 export FAKE_FIXTURE="$WORK/fixture.enc"
 
 : > "$FAKE_RCLONE_LOG"
-OUT=$(OFFSITE_PROVIDER=dropbox BACKUP_PASSPHRASE="$PASSPHRASE" RCLONE_CONFIG=/dev/null \
+OUT=$(OFFSITE_BUCKET=my-bucket BACKUP_PASSPHRASE="$PASSPHRASE" RCLONE_CONFIG=/dev/null \
   sh "$RESTORE_SCRIPT")
-echo "$OUT" | grep -q "OK : benevoles_2026-09-01_01-00.sql.gz.enc" || fail "restore-test-offsite.sh (dropbox) did not report success:\n$OUT"
-grep -q '^rclone lsl dropbox:/benevol-backups' "$FAKE_RCLONE_LOG" || fail "restore-test-offsite.sh should list the dropbox remote"
-grep -q '^rclone copy dropbox:/benevol-backups/benevoles_2026-09-01_01-00.sql.gz.enc' "$FAKE_RCLONE_LOG" || fail "restore-test-offsite.sh should copy FROM the remote"
-grep -q 'delete' "$FAKE_RCLONE_LOG" && fail "restore-test-offsite.sh must never call rclone delete (read-only on the remote)"
-pass "restore-test-offsite.sh (dropbox): downloads, decrypts, validates a real fixture"
-
-: > "$FAKE_RCLONE_LOG"
-OUT=$(OFFSITE_PROVIDER=swissbackup OFFSITE_BUCKET=my-bucket BACKUP_PASSPHRASE="$PASSPHRASE" RCLONE_CONFIG=/dev/null \
-  sh "$RESTORE_SCRIPT")
-echo "$OUT" | grep -q "OK : benevoles_2026-09-01_01-00.sql.gz.enc" || fail "restore-test-offsite.sh (swissbackup) did not report success:\n$OUT"
+echo "$OUT" | grep -q "OK : benevoles_2026-09-01_01-00.sql.gz.enc" || fail "restore-test-offsite.sh did not report success:\n$OUT"
 grep -q '^rclone lsl swissbackup:my-bucket/benevol-backups' "$FAKE_RCLONE_LOG" || fail "restore-test-offsite.sh should list the swissbackup remote"
-pass "restore-test-offsite.sh (swissbackup): downloads, decrypts, validates a real fixture"
+grep -q '^rclone copy swissbackup:my-bucket/benevol-backups/benevoles_2026-09-01_01-00.sql.gz.enc' "$FAKE_RCLONE_LOG" || fail "restore-test-offsite.sh should copy FROM the remote"
+grep -q 'delete' "$FAKE_RCLONE_LOG" && fail "restore-test-offsite.sh must never call rclone delete (read-only on the remote)"
+pass "restore-test-offsite.sh: downloads, decrypts, validates a real fixture"
+
+# no bucket: must fail fast, before calling rclone
+: > "$FAKE_RCLONE_LOG"
+if OFFSITE_BUCKET="" BACKUP_PASSPHRASE="$PASSPHRASE" RCLONE_CONFIG=/dev/null \
+     sh "$RESTORE_SCRIPT" >"$WORK/out.txt" 2>&1; then
+  fail "restore-test-offsite.sh without OFFSITE_BUCKET should have failed"
+fi
+grep -q "OFFSITE_BUCKET" "$WORK/out.txt" || fail "restore-test-offsite.sh missing-bucket error message"
+[ -s "$FAKE_RCLONE_LOG" ] && fail "restore-test-offsite.sh should not run rclone when OFFSITE_BUCKET is missing"
+pass "restore-test-offsite.sh without OFFSITE_BUCKET fails before touching rclone"
 
 # wrong passphrase must be rejected, not silently accepted
 : > "$FAKE_RCLONE_LOG"
-if OFFSITE_PROVIDER=dropbox BACKUP_PASSPHRASE="wrong-passphrase" RCLONE_CONFIG=/dev/null \
+if OFFSITE_BUCKET=my-bucket BACKUP_PASSPHRASE="wrong-passphrase" RCLONE_CONFIG=/dev/null \
      sh "$RESTORE_SCRIPT" >"$WORK/out.txt" 2>&1; then
   fail "restore-test-offsite.sh accepted a wrong passphrase:\n$(cat "$WORK/out.txt")"
 fi

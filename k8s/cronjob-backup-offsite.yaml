@@ -6,12 +6,9 @@
 # AES-256 avant d'arriver ici : rclone ne voit et n'envoie que du contenu déjà illisible sans
 # BACKUP_PASSPHRASE.
 #
-# Deux fournisseurs possibles derrière OFFSITE_PROVIDER (#524) :
-#   - "swissbackup" (valeur actuelle depuis le 2026-10-05) : Infomaniak Swiss Backup
-#     (OpenStack Swift), stockage en Suisse ; voir docs/deploiement.md « Copie hors site ».
-#   - "dropbox" (ancien fournisseur) : plan individuel, pas de DPA, stockage aux États-Unis
-#     (voir docs/rgpd/sous-traitants.md). Gardé comme retour arrière le temps de confirmer
-#     plusieurs nuits réussies sur Swiss Backup, puis retiré.
+# Fournisseur : Infomaniak Swiss Backup (OpenStack Swift), stockage en Suisse, remote rclone
+# "swissbackup" ; voir docs/deploiement.md « Copie hors site ». Jusqu'au 2026-10-05 la copie
+# partait vers un autre fournisseur, retiré depuis (#524, #697).
 #
 # Utilise "copy" (upload uniquement, ne touche jamais aux fichiers déjà présents côté
 # fournisseur) puis "delete --min-age" pour purger les fichiers de plus de 90 jours. Ce n'est
@@ -19,25 +16,19 @@
 # côté fournisseur tout fichier que le PVC a déjà purgé, rendant la copie hors site inutile en
 # cas de perte du cluster (le PVC et son historique auraient disparu en même temps).
 #
-# Mise en place du remote Dropbox (à faire une fois, en local, jamais dans ce dépôt) :
-#   1. rclone config  →  nouveau remote nommé "dropbox", type "dropbox", autoriser dans le
-#      navigateur. Produit ~/.config/rclone/rclone.conf (contient un jeton OAuth, secret).
-#   2. kubectl create secret generic rclone-config -n benevoles \
-#        --from-file=rclone.conf=$HOME/.config/rclone/rclone.conf
-#      (à refaire si le jeton est révoqué ou expire ; Dropbox ne fait pas expirer les jetons
-#      rclone par défaut, mais une révocation manuelle côté Dropbox le ferait.)
-#
 # Mise en place du remote Swiss Backup (à faire une fois, en local, jamais dans ce dépôt) :
 #   0. Dans le Manager Infomaniak, créer un appareil Swiss Backup « rclone » et lui donner un
 #      mot de passe. Le Manager fournit un bloc rclone.conf de type "swift" (user, auth
 #      https://swiss-backup02.infomaniak.com/identity/v3, tenant, region RegionOne...).
-#   1. Coller ce bloc dans le même rclone.conf que Dropbox, renommer sa section en
-#      [swissbackup] et remplacer key = [password] par le mot de passe de l'appareil.
-#   2. Créer le container : rclone mkdir swissbackup:<container>, puis recréer le secret
-#      comme pour Dropbox ci-dessus (le fichier a deux sections [dropbox] et [swissbackup]).
+#   1. Coller ce bloc dans un rclone.conf local, renommer sa section en [swissbackup] et
+#      remplacer key = [password] par le mot de passe de l'appareil.
+#   2. Créer le container : rclone mkdir swissbackup:<container>, puis créer le secret :
+#        kubectl create secret generic rclone-config -n benevoles \
+#          --from-file=rclone.conf=$HOME/.config/rclone/rclone.conf
+#      (à refaire si le mot de passe de l'appareil change).
 #   3. Ajouter le secret GitHub OFFSITE_BUCKET (nom du container) : repris dans
 #      benevoles-secret au déploiement suivant (.github/workflows/deploy.yml).
-#   4. Tester avec scripts/restore-test-offsite.sh avant de basculer OFFSITE_PROVIDER.
+#   4. Vérifier avec scripts/restore-test-offsite.sh (make restore-test-offsite).
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -67,11 +58,7 @@ spec:
             - name: offsite-sync
               image: rclone/rclone:1.68
               env:
-                # Bascule du fournisseur (#524) : "dropbox" ou "swissbackup". Seule valeur à
-                # changer pour basculer ; voir le commentaire d'en-tête et docs/deploiement.md.
-                - name: OFFSITE_PROVIDER
-                  value: "swissbackup"
-                # Nom du container Swiss Backup (OFFSITE_BUCKET) ; ignoré pour dropbox.
+                # Nom du container Swiss Backup (OFFSITE_BUCKET), requis.
                 - name: OFFSITE_BUCKET
                   valueFrom:
                     secretKeyRef:
@@ -106,40 +93,29 @@ spec:
                   set -e
 
                   # >>> OFFSITE_SCRIPT_START (kept in sync with scripts/test-offsite-backup.sh)
-                  case "$OFFSITE_PROVIDER" in
-                    dropbox)
-                      REMOTE="dropbox:/benevol-backups"
-                      ;;
-                    swissbackup)
-                      if [ -z "$OFFSITE_BUCKET" ]; then
-                        echo "ERREUR : OFFSITE_BUCKET n'est pas défini (requis pour swissbackup)." >&2
-                        exit 1
-                      fi
-                      REMOTE="swissbackup:${OFFSITE_BUCKET}/benevol-backups"
-                      ;;
-                    *)
-                      echo "ERREUR : OFFSITE_PROVIDER inconnu (\"${OFFSITE_PROVIDER}\"), attendu \"dropbox\" ou \"swissbackup\"." >&2
-                      exit 1
-                      ;;
-                  esac
+                  if [ -z "$OFFSITE_BUCKET" ]; then
+                    echo "ERREUR : OFFSITE_BUCKET n'est pas défini (container Swiss Backup)." >&2
+                    exit 1
+                  fi
+                  REMOTE="swissbackup:${OFFSITE_BUCKET}/benevol-backups"
 
                   DRY_RUN_FLAG=""
                   if [ "${DRY_RUN:-false}" = "true" ]; then
                     DRY_RUN_FLAG="--dry-run"
-                    echo "==> DRY_RUN=true : rien ne sera envoyé ni supprimé côté ${OFFSITE_PROVIDER}"
+                    echo "==> DRY_RUN=true : rien ne sera envoyé ni supprimé côté Swiss Backup"
                   fi
 
-                  echo "==> Envoi vers ${OFFSITE_PROVIDER} (${REMOTE})"
+                  echo "==> Envoi vers Swiss Backup (${REMOTE})"
                   rclone copy /backups "$REMOTE" \
                     --config /config/rclone/rclone.conf \
                     --checksum -v $DRY_RUN_FLAG
 
-                  echo "==> Purge des fichiers ${OFFSITE_PROVIDER} de plus de 90 jours"
+                  echo "==> Purge des fichiers Swiss Backup de plus de 90 jours"
                   rclone delete "$REMOTE" \
                     --config /config/rclone/rclone.conf \
                     --min-age 90d -v $DRY_RUN_FLAG
 
-                  echo "==> Inventaire ${OFFSITE_PROVIDER} :"
+                  echo "==> Inventaire Swiss Backup :"
                   rclone lsl "$REMOTE" --config /config/rclone/rclone.conf
                   # <<< OFFSITE_SCRIPT_END
 

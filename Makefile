@@ -191,12 +191,13 @@ video-media-serve: ## Sert videos/output en local pour VIDEO_MEDIA_BASE_URL (POR
 
 # ── Copie hors site (#524) ─────────────────────────────────────────────────────
 
-test-offsite-backup: ## Test hors ligne (faux rclone/wget) du choix de fournisseur et du script de restauration
+test-offsite-backup: ## Test hors ligne (faux rclone/wget) du script du CronJob et du script de restauration
 	sh scripts/test-offsite-backup.sh
 
-restore-test-offsite: ## Test de restauration réel (OFFSITE_PROVIDER=dropbox|swissbackup, BACKUP_PASSPHRASE=…, [OFFSITE_BUCKET=…])
+restore-test-offsite: ## Test de restauration réel depuis Swiss Backup (OFFSITE_BUCKET=…, BACKUP_PASSPHRASE=…)
 	@test -n "$(BACKUP_PASSPHRASE)" || (echo "BACKUP_PASSPHRASE est obligatoire"; exit 1)
-	OFFSITE_PROVIDER=$(or $(OFFSITE_PROVIDER),dropbox) OFFSITE_BUCKET="$(OFFSITE_BUCKET)" BACKUP_PASSPHRASE="$(BACKUP_PASSPHRASE)" \
+	@test -n "$(OFFSITE_BUCKET)" || (echo "OFFSITE_BUCKET (container Swiss Backup) est obligatoire"; exit 1)
+	OFFSITE_BUCKET="$(OFFSITE_BUCKET)" BACKUP_PASSPHRASE="$(BACKUP_PASSPHRASE)" \
 		RCLONE_CONFIG="$(or $(RCLONE_CONFIG),$(HOME)/.config/rclone/rclone.conf)" \
 		sh scripts/restore-test-offsite.sh
 
