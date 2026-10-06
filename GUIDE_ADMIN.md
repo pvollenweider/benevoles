@@ -2,6 +2,8 @@
 
 Bienvenue ! Ce guide couvre tout ce qu'il faut pour faire tourner un événement de A à Z : créer l'événement, poser les créneaux, inviter les membres de votre pool, suivre les inscriptions en direct, et les fonctionnalités qui font gagner du temps le jour J — pages personnalisées, responsables de secteur, jalons, journaux d'activité.
 
+<!-- video: ADMIN_FEATURES_OVERVIEW -->
+
 Rien de sorcier : chaque section ci-dessous correspond à un écran de l'admin, dans l'ordre où vous les rencontrerez en montant un événement. Une question sans réponse ici ? La FAQ tout en bas couvre les cas un peu moins courants.
 
 Un problème, une idée d'amélioration ? Voir [Signaler un problème ou proposer une amélioration](#signaler-un-probleme-ou-proposer-une-amelioration).
@@ -28,6 +30,8 @@ Sur un téléphone ou un petit écran, les liens de la barre du haut (Tableau de
 
 ## Premiers pas
 
+<!-- video: ORG_FIRST_STEPS -->
+
 Tant que votre organisation n'a pas terminé sa mise en place, une liste **Premiers pas** s'affiche en haut de la liste des événements et du tableau de bord. Elle indique dans quel ordre procéder, avec un lien vers chaque étape :
 
 1. personnaliser la page publique et la charte (facultatif, des valeurs par défaut existent) ;
@@ -42,6 +46,8 @@ Les étapes se cochent d'elles-mêmes au fur et à mesure. La liste disparaît q
 ---
 
 ## Tableau de bord
+
+<!-- video: ADMIN_NAVIGATION -->
 
 **`/admin/dashboard`**
 
@@ -68,6 +74,8 @@ Vue d'ensemble de votre organisation : nombre d'événements (publiés et à ven
 
 ## Rechercher
 
+<!-- video: GLOBAL_SEARCH -->
+
 **`/admin/search`**
 
 La loupe **Rechercher** de la barre du haut ouvre le champ de recherche (**Ctrl + K**, ou **Cmd + K** (⌘) sur Mac, l'ouvre aussi ; **Échap** le referme). Sur un petit écran, le champ est dans le **Menu**. Il retrouve en une fois, dans toute votre organisation :
@@ -85,6 +93,8 @@ Au clavier, la première pression sur **Tab** en haut d'une page fait apparaîtr
 
 ## Créer un événement
 
+<!-- video: EVENT_CREATE_PUBLISH_OVERVIEW -->
+
 **`/admin/events/new`**, et **`/admin/events/[id]/edit`** pour modifier un événement existant : c'est le même formulaire, décrit ci-dessous (voir aussi l'enregistrement automatique en modification, plus bas dans cette section).
 
 La création se fait en trois étapes, indiquées en haut de page : **1. Informations**, **2. Postes et créneaux**, **3. Vérification et publication**. Après l'étape 1, vous arrivez sur les créneaux avec un bouton **Continuer** ; l'étape 3 (`/admin/events/[id]/review`) récapitule ce qui est prêt et ce qui manque (dates, créneaux, lieu, message de confirmation, instructions, responsables, puis les points décrits ci-dessous), propose l'aperçu bénévole, puis **Publier** ou **Rester en brouillon**. On peut publier sans les points facultatifs, mais pas sans créneau : cette règle vaut partout (page de l'événement, formulaire d'édition), pas seulement dans l'assistant, et un événement est toujours créé en brouillon. Dans l'autre sens, si le dernier créneau d'un événement publié est annulé (ou son dernier poste supprimé), l'événement repasse en brouillon, avec une entrée dans le journal. **Quitter l'assistant** ramène à tout moment à la page de l'événement : rien n'est perdu, chaque étape est une page normale de l'administration.
@@ -98,9 +108,13 @@ La vérification signale aussi, sans jamais bloquer la publication, des points *
 
 ### Partir d'un modèle
 
+<!-- video: EVENT_CREATE_TEMPLATE -->
+
 En haut de la page, **Comment commencer ?** propose une page blanche ou un modèle : festival sur plusieurs jours, buvette, manifestation sportive, fête de village, montage / exploitation / démontage. Un modèle n'est qu'un événement déjà rempli : choisissez-le, donnez un titre et la date du premier jour, et le brouillon est créé avec ses postes et ses créneaux (la liste de ce qui sera créé est affichée avant). Vous arrivez sur ses créneaux : horaires, effectifs et postes sont des points de départ, chacun se modifie ou se supprime comme d'habitude. Rien n'est publié.
 
 ### Page blanche
+
+<!-- video: EVENT_CREATE_BLANK -->
 
 | Champ | Description |
 |-------|-------------|
@@ -121,6 +135,8 @@ En modification (**`/admin/events/[id]/edit`**), chaque changement est enregistr
 
 Le formulaire de modification propose aussi la case **Rappels automatiques** (cochée par défaut) : décochée, aucun rappel J-2, J-1 ni du jour ne part pour cet événement (voir « Rappels automatiques »).
 
+<!-- video: EVENT_DUPLICATE -->
+
 **Repartir d'un événement existant** (édition suivante d'un festival, même organisation d'une année sur l'autre) : **Dupliquer**, depuis la liste des événements ou la page de l'événement, ouvre une page de choix :
 
 - le **titre** de la copie (« (copie) » par défaut) ;
@@ -137,6 +153,8 @@ Une fois créé, chaque événement a sa propre page de pilotage : statistiques 
 
 ## Configurer les créneaux
 
+<!-- video: SHIFTS_ROLES_VIEWS -->
+
 **`/admin/events/[id]/shifts`**
 
 Un créneau correspond à un poste de bénévolat sur une plage horaire précise.
@@ -144,6 +162,8 @@ Un créneau correspond à un poste de bénévolat sur une plage horaire précise
 ![Frise des créneaux d'un événement, un bloc par jour, avec les postes en lignes et les créneaux en barres colorées par poste](/doc-img/admin-shifts.png)
 
 ### Ajouter un créneau
+
+<!-- video: SHIFT_CREATE_EDIT_DETAIL -->
 
 | Champ | Description |
 |-------|-------------|
@@ -163,6 +183,8 @@ Un créneau est créé ouvert ; son état (inscriptions ouvertes, fermées, comp
 
 ### Créer une série de créneaux
 
+<!-- video: SHIFT_CREATE_SERIES -->
+
 Pour couvrir une plage horaire avec des créneaux qui se suivent (une buvette de 10 h à 22 h par créneaux de deux heures, trois personnes à chaque fois), cliquez sur **Créer une série** au lieu de saisir chaque créneau.
 
 | Champ | Description |
@@ -179,6 +201,8 @@ Une fois créés, ce sont des créneaux ordinaires : chacun se modifie ou se sup
 
 #### Horaires et nuit
 
+<!-- video: SHIFT_NIGHT_DST -->
+
 L'horloge va de `00:00` à `23:59` : on ne saisit jamais `24:00`, `25:00` ou `26:00`, l'horloge repart à zéro après minuit.
 
 - **Créneau qui passe minuit** : saisissez une heure de fin plus petite que le début, par exemple `22:00` à `02:00`. Il est affiché « 22h–02h +1 » sur le planning.
@@ -187,6 +211,8 @@ L'horloge va de `00:00` à `23:59` : on ne saisit jamais `24:00`, `25:00` ou `26
 - Les heures invalides (`26:00`, `-2:30`, `12:75`) sont refusées avec un message. Sur le planning administrateur, glisser une barre ne permet pas de sortir de la journée.
 
 ### Modifier vite depuis le planning
+
+<!-- video: SHIFT_TIMELINE_QUICK_ACTIONS -->
 
 Un clic sur une barre du planning ouvre une petite fenêtre pour agir sans quitter la vue :
 
@@ -198,11 +224,15 @@ Un clic sur une barre du planning ouvre une petite fenêtre pour agir sans quitt
 
 ### Activer la liste d'attente
 
+<!-- video: SHIFT_WAITLIST_OFFER -->
+
 Cochez **Activer la liste d'attente** dans le formulaire du créneau (ou dans celui d'une série de créneaux). Quand le créneau est complet, les bénévoles peuvent s'y inscrire ; une place libérée déclenche automatiquement l'envoi d'un email à la première personne en attente, avec un lien de confirmation valable **24 heures**. Passé ce délai sans réponse, la place est proposée à la personne suivante.
 
 La vue des inscriptions (`/admin/events/[id]/registrations`) affiche les bénévoles en attente (**Liste d'attente**, avec leur rang dans la file, par exemple « position 2 ») et ceux à qui une place a été proposée (**Place proposée**).
 
 ### Inscriptions sur validation
+
+<!-- video: SHIFT_APPROVAL -->
 
 Pour un poste sensible (conduite, caisse, sécurité, une qualification), cochez **Sur validation** dans le formulaire du créneau (ou dans la série de créneaux). Une inscription sur ce créneau devient alors une **demande** :
 
@@ -234,11 +264,15 @@ Le bouton **Gérer les postes** ouvre un panneau qui regroupe ces actions, poste
 
 ### Âge minimum sur un poste
 
+<!-- video: SHIFT_ELIGIBILITY_RULES -->
+
 Un poste peut exiger un âge minimum (majorité, permis de conduire, qualification…). Une fois renseigné dans le formulaire du créneau, il est affiché en petit sur le planning public (ex. « 18+ »). Le créneau reste sélectionnable — l'âge du bénévole n'est pas connu avant qu'il remplisse le formulaire — mais l'inscription lui demande alors sa date de naissance et est refusée si la condition n'est pas remplie. L'âge pris en compte est celui qu'aura le bénévole le jour du créneau, pas le jour de l'inscription.
 
 ---
 
 ## Configurer le programme des spectacles
+
+<!-- video: EVENT_PROGRAM_PAGES_QR -->
 
 Dans le formulaire de l'événement, à la création comme dans la page d'édition (**`/admin/events/[id]/edit`**), section **Spectacles**. Elle apparaît dès que les dates de début et de fin sont renseignées.
 
@@ -293,6 +327,8 @@ Les pages apparaissent sous forme de liens juste après les instructions publiqu
 
 ## Responsables de secteur
 
+<!-- video: SECTOR_LEADERS -->
+
 **`/admin/events/[id]/sector-leaders`**
 
 Désignez un ou plusieurs bénévoles responsables d'un poste (ex. « Bar »). Chacun reçoit un lien personnel — sans compte à créer — qui affiche en lecture seule la liste des bénévoles inscrits sur ce poste (nom, email, téléphone).
@@ -314,6 +350,8 @@ Désignez un ou plusieurs bénévoles responsables d'un poste (ex. « Bar »). C
 
 ## Jalons de l'événement
 
+<!-- video: EVENT_MILESTONES -->
+
 Section **Jalons** sur la page de l'événement (`/admin/events/[id]`).
 
 Une checklist simple de dates clés pour l'événement (ex. « Fermer les inscriptions », « Envoyer les rappels ») : titre, échéance, coché ou non. Purement informatif — cocher un jalon ne déclenche aucune action automatique. Un jalon dépassé et non coché est mis en évidence.
@@ -321,6 +359,8 @@ Une checklist simple de dates clés pour l'événement (ex. « Fermer les inscri
 ---
 
 ## Publier un événement
+
+<!-- video: EVENT_REVIEW_PUBLISH -->
 
 ### Brouillon, publié, répertorié, archivé
 
@@ -368,6 +408,8 @@ Une messagerie peut garder l'ancien aperçu quelque temps après une modificatio
 
 ### Ouvrir et fermer les inscriptions
 
+<!-- video: EVENT_VISIBILITY_REGISTRATION_WINDOW -->
+
 Publier rend le planning visible. Les inscriptions, elles, se règlent à part, dans la section **Inscriptions** du formulaire d'édition :
 
 - **Inscriptions ouvertes** : décochez pour fermer les inscriptions tout en laissant le planning consultable. La page publique affiche « Les inscriptions sont fermées pour le moment » et ne permet plus de choisir de créneau.
@@ -381,6 +423,8 @@ Une copie d'événement ou un événement créé depuis un modèle démarre avec
 ---
 
 ## Archiver et supprimer un événement
+
+<!-- video: EVENT_ARCHIVE_DELETE -->
 
 ### Archiver
 
@@ -397,6 +441,8 @@ Seul un événement archivé peut être supprimé. En bas de sa page, section **
 ---
 
 ## Suivre les inscriptions
+
+<!-- video: REGISTRATIONS_MANAGEMENT -->
 
 **`/admin/events/[id]/registrations`**
 
@@ -434,6 +480,8 @@ Un badge **Responsable** s'affiche sur une ligne quand ce bénévole est déjà 
 
 ### Présences le jour J
 
+<!-- video: ATTENDANCE_CHECK_IN -->
+
 Pendant les dates de l'événement, sa page principale affiche un encadré **C'est le jour J** avec le bouton **Ouvrir le jour J**. Cette page est faite pour le téléphone, sur place :
 
 - **En cours** : les créneaux commencés et pas encore terminés, y compris un créneau de nuit commencé la veille. **Dans les 3 prochaines heures** : ceux qui commencent bientôt, même après minuit. Les heures sont celles du fuseau de l'organisation. Les créneaux sont regroupés par heure de début, puis par poste.
@@ -455,6 +503,8 @@ Depuis la page principale de l'événement (`/admin/events/[id]`) :
 - **Où manque-t-il du monde ?** : une phrase (« Il manque encore 12 personnes sur 20 places ») et un lien vers la vue détaillée décrite ci-dessous
 
 ### Où manque-t-il du monde ?
+
+<!-- video: STAFFING_GAPS -->
 
 **`/admin/events/[id]/staffing`**
 
@@ -488,6 +538,8 @@ Chaque personne reçoit un seul email avec les créneaux qu'elle peut prendre (d
 
 ## Journal de l'événement
 
+<!-- video: EVENT_ACTIVITY_LOG -->
+
 **`/admin/events/[id]/log`**
 
 L'historique complet de ce qui s'est passé sur un événement : créneaux créés/modifiés, inscriptions, annulations, pages ajoutées, responsables désignés, jalons… Trois modes :
@@ -503,6 +555,8 @@ Le contenu des pages personnalisées et les coordonnées des bénévoles n'appar
 ---
 
 ## Gérer les membres
+
+<!-- video: MEMBERS_MANAGEMENT -->
 
 **`/admin/members`**
 
@@ -578,6 +632,8 @@ L'effacement vaut pour votre organisation seulement : si la même personne est a
 
 ## Inviter des membres à un événement
 
+<!-- video: MEMBERS_INVITATIONS -->
+
 **`/admin/events/[id]/invitations`**
 
 Les invitations permettent d'envoyer des emails personnalisés aux membres de votre liste, avec un lien pré-rempli vers la page d'inscription.
@@ -610,6 +666,8 @@ L'email d'invitation et la page de l'événement ouverte depuis le lien personne
 
 ### Relancer les invités sans réponse
 
+<!-- video: MEMBERS_REMINDERS -->
+
 Le compteur **Sans réponse** compte les membres invités qui n'ont encore ni inscription confirmée ni réponse à l'événement (ceux qui ne sont qu'en liste d'attente en font partie). Le bouton **Relancer les N sans créneau** leur renvoie un rappel, sans message personnalisé, contrairement à l'invitation initiale ; une confirmation récapitule l'envoi avant qu'il parte et précise combien de personnes ayant indiqué ne pas être disponibles ne sont pas relancées. **Écrire un message aux N sans créneau** ouvre « Écrire aux bénévoles » avec ce public déjà choisi, pour un texte libre ; la même exclusion s'applique, et l'aperçu comme la confirmation disent combien de personnes en ont été exclues.
 
 ---
@@ -617,6 +675,8 @@ Le compteur **Sans réponse** compte les membres invités qui n'ont encore ni in
 ## Communications bénévoles
 
 ### Écrire aux bénévoles
+
+<!-- video: TARGETED_MESSAGES -->
 
 **`/admin/events/[id]/message`**, depuis la page de l'événement (**Écrire aux bénévoles**) ou depuis les inscriptions (le bouton reprend le poste ou le créneau filtré).
 
@@ -646,6 +706,8 @@ Avant d'envoyer, rédiger un message dans la section « Message de rappel » (pa
 
 ### Rappels automatiques
 
+<!-- video: REMINDERS_CHANGES -->
+
 L'application envoie automatiquement des rappels :
 - **J-2** (environ 48 h avant le premier créneau du jour) : rappel avec détails des créneaux
 - **J-1** (environ 24 h avant le premier créneau du jour) : rappel court
@@ -659,6 +721,8 @@ La section **Communications** de la page de l'événement indique ce qui partira
 
 ### Notifications de modification
 
+<!-- video: LAST_MINUTE_CHANGES -->
+
 - **Annulation d'un créneau** → les bénévoles inscrits sont avertis automatiquement et leur inscription est annulée
 - **Modification des horaires** → email envoyé aux bénévoles inscrits
 
@@ -667,6 +731,8 @@ La section **Communications** de la page de l'événement indique ce qui partira
 ## Exports
 
 ### Rapports
+
+<!-- video: EVENT_REPORTS -->
 
 **`/admin/events/[id]/print`**, depuis la page de l'événement (**Rapports**). Des documents à imprimer ou enregistrer en PDF depuis le navigateur, chacun ouvert dans un nouvel onglet ; l'archive de l'événement se télécharge :
 
@@ -689,6 +755,8 @@ Sauf l'export complet, ces documents sont conçus pour le noir et blanc ; le log
 
 ### Badges
 
+<!-- video: VOLUNTEER_BADGES -->
+
 Depuis **Rapports**, la section **Badges** imprime un badge d'identification par bénévole inscrit : prénom en grand et poste(s), toujours imprimés ; nom de famille et créneaux, cochés par défaut, peuvent être retirés. **Couleur du bandeau** : celle du poste (à défaut celle de l'événement), celle de l'événement, ou noir et blanc. Le logo de l'organisation, s'il y en a un, figure dans un coin de chaque badge (en gris avec le bandeau noir et blanc). Dix badges par feuille A4, à découper sur les pointillés. Filtre par **Poste**, et liste **Bénévole (réimpression)** pour réimprimer un badge perdu (deux homonymes y sont distingués par leur email) ; avec un poste choisi, seuls ses créneaux sur ce poste figurent sur le badge. Pas de photo ni de code QR : un badge peut être photographié ou perdu, il ne porte donc aucun lien vers les données du bénévole.
 
 ### Résumé de l'événement
@@ -702,6 +770,8 @@ Depuis la page de l'événement → **QR code**, télécharger le QR code de la 
 ---
 
 ## Gérer l'équipe admin
+
+<!-- video: ORG_TEAM_PERMISSIONS -->
 
 **`/admin/settings/admins`**
 
@@ -724,6 +794,8 @@ Sur cette page, un propriétaire peut :
 ## Emails
 
 ### Réglages des emails
+
+<!-- video: ORG_EMAIL_SETTINGS -->
 
 **Paramètres → Emails** (`/admin/settings/notifications`) commence par les réglages de l'organisation (réservé aux propriétaires ; un organisateur n'y voit que l'adresse de réponse) :
 
@@ -752,6 +824,8 @@ Un rejet permanent sur l'adresse actuelle d'un membre se retrouve aussi, sans av
 Les emails envoyés sont effacés chaque nuit (ils contiennent des données personnelles) ; ceux en échec restent 30 jours, comme le résultat détaillé de chaque envoi (destinataire concerné, type de message, résultat, raison), conservé pour la même durée. Les 200 plus récents sont affichés.
 
 ## Exporter et conserver ses données
+
+<!-- video: DATA_EXPORTS_ARCHIVES -->
 
 Vos données vous appartiennent et sortent de l'application à tout moment, sans demande :
 
@@ -791,6 +865,8 @@ Une donnée effacée reste dans les sauvegardes chiffrées jusqu'à leur rotatio
 
 ## Journal d'activité de l'organisation
 
+<!-- video: ORGANIZATION_ACTIVITY_LOG -->
+
 **`/admin/settings/activity`**
 
 Liste chronologique de ce qui concerne l'organisation plutôt qu'un événement précis :
@@ -806,6 +882,8 @@ Liste chronologique de ce qui concerne l'organisation plutôt qu'un événement 
 ---
 
 ## Nom et adresse de l'organisation
+
+<!-- video: ORG_PUBLIC_IDENTITY -->
 
 **`/admin/settings/admins`** → sections **Nom de l'organisation** et **Identifiant public (slug)** (réservé aux propriétaires)
 
@@ -840,6 +918,8 @@ Le titre affiché en haut de la page publique de vos événements (l'adresse de 
 ---
 
 ## Fuseau horaire
+
+<!-- video: ORG_TIMEZONE_CHARTER -->
 
 **`/admin/settings/admins`** → section **Fuseau horaire** (réservé aux propriétaires)
 

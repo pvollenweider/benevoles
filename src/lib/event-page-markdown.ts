@@ -21,6 +21,7 @@
 import { marked, Renderer } from "marked"
 import DOMPurify from "isomorphic-dompurify"
 import { createHeadingSlugger } from "@/lib/heading-anchors"
+import { DOC_VIDEO_ATTRIBUTE, videoReferenceId } from "@/lib/doc-video-references"
 
 // Page title is already rendered as the page's own <h1> (see [eventSlug]/[pageSlug]/page.tsx).
 // Shift every Markdown heading down one level so admin content can't produce a second/duplicate
@@ -34,7 +35,11 @@ import { createHeadingSlugger } from "@/lib/heading-anchors"
 // so a link can point to a section: /doc/admin#configurer-les-creneaux. Only the public content
 // pages rendered from the repo's own Markdown ask for it; admin-authored event pages don't get ids
 // (nothing links into them, and their ids could collide with the page's own).
-function makeRenderer(shiftHeadings: boolean, headingIds: boolean): Renderer {
+//
+// videoCard (#645) turns a `<!-- video: ID -->` line of the repo's own Markdown into the HTML the
+// caller returns for that id (src/lib/doc-video-references.ts), "" to render nothing. Only block
+// HTML on its own line counts; any other raw HTML is left to DOMPurify, as before.
+function makeRenderer(shiftHeadings: boolean, headingIds: boolean, videoCard?: (id: string) => string): Renderer {
   const renderer = new Renderer()
   const slug = createHeadingSlugger()
   renderer.heading = function ({ tokens, depth }) {
@@ -42,6 +47,12 @@ function makeRenderer(shiftHeadings: boolean, headingIds: boolean): Renderer {
     const text = this.parser.parseInline(tokens)
     const id = headingIds ? ` id="${slug(this.parser.parseInline(tokens, this.parser.textRenderer))}"` : ""
     return `<h${level}${id}>${text}</h${level}>\n`
+  }
+  if (videoCard) {
+    renderer.html = ({ text, block }) => {
+      const id = block ? videoReferenceId(text) : null
+      return id ? videoCard(id) : text
+    }
   }
   return renderer
 }
@@ -58,8 +69,12 @@ const ALLOWED_TAGS = [
 // supply one syntactically, but DOMPurify still needs "alt" allowlisted for it to survive.
 const ALLOWED_ATTR = ["href", "title", "src", "alt", "width", "height"]
 
-export function renderEventPageMarkdown(content: string, options: { shiftHeadings?: boolean; headingIds?: boolean } = {}): string {
-  const { shiftHeadings = true, headingIds = false } = options
-  const html = marked.parse(content, { async: false, gfm: true, breaks: true, renderer: makeRenderer(shiftHeadings, headingIds) })
-  return DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR: headingIds ? [...ALLOWED_ATTR, "id"] : ALLOWED_ATTR })
+export function renderEventPageMarkdown(
+  content: string,
+  options: { shiftHeadings?: boolean; headingIds?: boolean; videoCard?: (id: string) => string } = {},
+): string {
+  const { shiftHeadings = true, headingIds = false, videoCard } = options
+  const html = marked.parse(content, { async: false, gfm: true, breaks: true, renderer: makeRenderer(shiftHeadings, headingIds, videoCard) })
+  const allowedAttr = [...ALLOWED_ATTR, ...(headingIds ? ["id"] : []), ...(videoCard ? [DOC_VIDEO_ATTRIBUTE] : [])]
+  return DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR: allowedAttr })
 }

@@ -404,8 +404,10 @@ et `seedScenario` (#637, #638) :
 - `updatedAt` (`AAAA-MM-JJ`) et `revision` (entier ≥ 1) : préparés pour le retour « utile ? »
   lié à une révision précise (#646, PREPARE seulement — aucune UI).
 
-`published` reste `false` sur les 54 vidéos aujourd'hui ; la galerie les affiche quand même, avec
-leur état (« À venir »). `filterPublishedVideos(videos, VIDEO_LIBRARY_PUBLIC_ONLY)` filtre déjà sur
+`published` vaut `true` pour une vidéo dont le film est en ligne sur `medias.benevol.app` : 51 des
+54 vidéos aujourd'hui. La galerie affiche aussi les trois autres, avec leur état (« À venir »). Elle
+n'est pas dans la navigation du site, mais les guides publics renvoient aux vidéos publiées par leur
+identifiant (`<!-- video: ID -->`, #645, `src/lib/doc-video-references.ts`). `filterPublishedVideos(videos, VIDEO_LIBRARY_PUBLIC_ONLY)` filtre déjà sur
 `published` : passer la constante `VIDEO_LIBRARY_PUBLIC_ONLY` (dans `video-catalog.ts`) à `true`
 est le seul changement nécessaire pour ne montrer que les vidéos publiées, le jour venu.
 

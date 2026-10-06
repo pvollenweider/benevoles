@@ -60,3 +60,30 @@ body {
     outline-offset: 2px;
   }
 }
+
+/* Link to a video in the content pages (#645, src/lib/doc-video-references.ts): the sanitized
+   Markdown can't carry classes, so its paragraph is marked with data-doc-video. A bordered card
+   (DESIGN.md: surface-page background, border-default), not a colour alone: the link stays an
+   underlined link whose text names the video, and the border survives forced colours. */
+[data-doc-video] {
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  background: #f9fafb;
+  overflow-wrap: anywhere;
+}
+
+[data-doc-video] a:focus-visible {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
+.dark [data-doc-video] {
+  border-color: #374151;
+  background: #1f2937;
+}
+
+.dark [data-doc-video] a:focus-visible {
+  outline-color: #60a5fa;
+}
