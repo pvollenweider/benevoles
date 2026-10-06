@@ -30,8 +30,8 @@ import type { VideoMediaUrls } from "@/lib/video-catalog"
  * intent (set by AutoplayLink.tsx, consumed here once on mount) and `prefers-reduced-motion`; on
  * yes, `video.play()` is called directly and a rejection (the browser's own autoplay policy) is
  * swallowed — the player just waits for Play, nothing breaks. A documentation unit's inline
- * player (DocVideoInline.tsx) passes `galleryAutoplay={false}`: it never autoplays and leaves the
- * session's intent alone. `aspectRatio` reserves the frame's height before the metadata loads.
+ * player (DocVideoInline.tsx) passes `galleryAutoplay={false}`: it ignores the session's intent and
+ * starts playback itself from the reader's click on « Voir la vidéo ». `aspectRatio` reserves the frame's height before the metadata loads.
  */
 export default function VideoPlayer({
   title,

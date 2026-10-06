@@ -113,17 +113,44 @@ describe("DocVideoInline", () => {
     expect(screen.getByRole("link", { name: "Ouvrir dans la bibliothèque" })).toHaveAttribute("href", "/videos/ORG_FIRST_STEPS?from=doc")
   })
 
-  it("never autoplays, even with a gallery autoplay intent left in the session, and leaves the intent alone", () => {
+  it("starts playback from the press that opens it, without an autoplay attribute, and leaves the gallery's intent alone", () => {
     const play = vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue(undefined)
     markAutoplayIntent()
     render(<DocVideoInline player={player} />)
     fireEvent.click(button())
-    expect(play).not.toHaveBeenCalled()
+    expect(play).toHaveBeenCalledTimes(1)
+    expect(document.querySelector("video")).not.toHaveAttribute("autoplay")
     expect(sessionStorage.getItem("benevol:video-autoplay-intent")).toBe("1")
   })
 
-  it("hides the player and pauses it on a second press, then shows the same player again", () => {
+  it("pauses any other video playing on the page before starting its own", () => {
+    vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue(undefined)
     const pause = vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(() => {})
+    const other = document.createElement("video")
+    document.body.appendChild(other)
+    try {
+      render(<DocVideoInline player={player} />)
+      fireEvent.click(button())
+      expect(pause.mock.contexts).toContain(other)
+      expect(pause.mock.contexts).not.toContain(document.querySelector("[data-doc-video] ~ div video"))
+    } finally {
+      other.remove()
+    }
+  })
+
+  it("keeps the player usable when the browser refuses to play", async () => {
+    vi.spyOn(HTMLMediaElement.prototype, "play").mockRejectedValue(new DOMException("NotAllowedError"))
+    render(<DocVideoInline player={player} />)
+    const b = button()
+    fireEvent.click(b)
+    await Promise.resolve()
+    expect(b).toHaveAttribute("aria-expanded", "true")
+    expect(document.querySelector("video")).toBeVisible()
+  })
+
+  it("hides the player and pauses it on a second press, then shows the same player again and resumes", () => {
+    const pause = vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(() => {})
+    const play = vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue(undefined)
     render(<DocVideoInline player={player} />)
     const b = button()
     fireEvent.click(b)
@@ -135,6 +162,7 @@ describe("DocVideoInline", () => {
     fireEvent.click(b)
     expect(document.querySelector("video")).toBe(video)
     expect(video).toBeVisible()
+    expect(play).toHaveBeenCalledTimes(2)
   })
 
   it("omits the transcript disclosure when the video has no transcript", () => {
