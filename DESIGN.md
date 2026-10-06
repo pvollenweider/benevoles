@@ -170,6 +170,7 @@ Conventions du code (classes Tailwind) :
 - **Titre de page** (`<h1>`, `text-xl font-bold`, 1.25rem, 700): Titres de page, admin et public. `text-2xl` (1.5rem) sur quelques pages (connexion et mot de passe, page d'un événement et fiche d'un membre dans l'administration, accueil). Pas de taille fluide (`clamp`).
 - **Titre de section** (`<h2>`, `text-sm font-semibold`, 0.875rem, 600, `text-gray-700` ou `text-gray-900`): Titres de section et de carte. `text-lg font-semibold` pour les rares sections qui ouvrent une page longue. La hiérarchie passe par le poids, pas par la taille.
 - **Body** (400, `text-sm` 0.875rem, lh 1.6): Contenu principal, descriptions, texte de formulaire. Max 65–75ch sur les blocs de texte prose.
+- **Texte de la documentation** (`/doc`, `DOC_PROSE_CLASS` dans `src/components/public/DocFrame.tsx`) : page de lecture, plus grande que l'interface. Corps `text-base` (1rem) `text-gray-700`, interligne 1.75, lignes de 70ch au plus ; `<h2>` `text-xl`, `<h3>` `text-lg`, tous deux semibold ; liens soulignés. Les autres pages de contenu gardent leur recette (`CONTENT_PROSE_CLASS`).
 - **Label de champ** (`block text-sm font-medium text-gray-700 mb-1`): au-dessus du champ. `text-xs font-medium text-gray-600` dans les formulaires denses.
 - **Label de badge / métadonnée** (500, `text-xs` 0.75rem): Badges, étiquettes de métadonnées, en-têtes de colonnes, chips. Jamais uppercase.
 

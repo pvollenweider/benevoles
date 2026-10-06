@@ -4,6 +4,7 @@ import { DOC_GUIDES, publicPageMetadata } from "@/lib/doc-pages"
 import { loadDocUnits } from "@/lib/doc-units"
 import { apexBaseUrl } from "@/lib/urls"
 import DocUnitIndex from "@/components/public/DocUnitIndex"
+import DocFrame from "@/components/public/DocFrame"
 
 export function generateMetadata(): Metadata {
   return publicPageMetadata("/doc", apexBaseUrl())
@@ -14,9 +15,9 @@ export function generateMetadata(): Metadata {
 // group; a group's heading is the target of a unit's breadcrumb (/doc#<group>).
 export default function DocIndexPage() {
   return (
-    <>
+    <DocFrame>
       <h1>Documentation</h1>
-      <p>{DOC_GUIDES.length > 1 ? `${DOC_GUIDES.length} guides` : "Un guide"}, selon ce que vous cherchez à faire sur benevol.app :</p>
+      <p>{DOC_GUIDES.length > 1 ? `${DOC_GUIDES.length} guides` : "Un guide"}, selon ce que vous cherchez à faire sur benevol.app&nbsp;:</p>
       <ul>
         {DOC_GUIDES.map((g) => (
           <li key={g.path}>
@@ -29,6 +30,6 @@ export default function DocIndexPage() {
         fait l&apos;outil, besoin par besoin.
       </p>
       <DocUnitIndex units={loadDocUnits()} />
-    </>
+    </DocFrame>
   )
 }

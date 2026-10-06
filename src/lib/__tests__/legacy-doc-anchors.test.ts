@@ -16,13 +16,12 @@ import legacyAnchors from "./fixtures/legacy-doc-anchors.json"
 const fixture = legacyAnchors as Record<DocRole, string[]>
 const units = readDocUnits()
 
-// A guide entirely split into units has no source any more (the volunteer guide): its page is the
-// index alone, so every one of its anchors must be claimed by a unit.
+// The ids a guide's page still renders from its source (its introduction, above the questions and
+// the index): an anchor that isn't one of them must be claimed by a unit.
 const guideIds = (role: DocRole): Set<string> => {
   const page = publicPage(DOC_ROLE_INFO[role].path)
   return page.source ? new Set(headingIdsOf(renderPublicSource(page.source, page.title).html)) : new Set()
 }
-const rolesWithGuide = DOC_ROLES.filter((role) => publicPage(DOC_ROLE_INFO[role].path).source)
 
 describe("the frozen anchors of the old guides", () => {
   it("cover both guides, each id once", () => {
@@ -45,19 +44,13 @@ describe("the frozen anchors of the old guides", () => {
     }
   })
 
-  it("leave no anchor of the volunteer guide on a page: it is entirely split, each anchor claimed by a unit", () => {
-    expect(rolesWithGuide).toEqual(["admin"])
+  it("leave no anchor of the volunteer guide on its page: it is entirely split, each anchor claimed by a unit", () => {
+    const onPage = guideIds("benevole")
     const claimed = new Set(units.flatMap((u) => u.legacy))
-    for (const anchor of fixture.benevole) expect(claimed.has(`benevole#${anchor}`), anchor).toBe(true)
-  })
-
-  it.each(rolesWithGuide)("keep their ids when the %s guide is rendered under « Le guide complet », one level down", (role) => {
-    const page = publicPage(DOC_ROLE_INFO[role].path)
-    const flat = renderPublicSource(page.source!, page.title).html
-    const shifted = renderPublicSource(page.source!, page.title, null, { shiftHeadings: true }).html
-    expect(headingIdsOf(shifted)).toEqual(headingIdsOf(flat))
-    expect(shifted).not.toMatch(/<h2[ >]/)
-    expect(shifted.match(/<h3[ >]/g)?.length).toBe(flat.match(/<h2[ >]/g)?.length)
+    for (const anchor of fixture.benevole) {
+      expect(onPage.has(anchor), anchor).toBe(false)
+      expect(claimed.has(`benevole#${anchor}`), anchor).toBe(true)
+    }
   })
 
   it("are the only anchors a unit can claim (an anchor the guides never had is a typo)", () => {

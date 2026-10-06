@@ -66,6 +66,21 @@ export const DOC_GROUPS: readonly DocGroup[] = [
 ]
 
 /**
+ * The order of the groups on a role's guide (/doc/admin, /doc/benevole): each audience starts with
+ * its own groups, then finds the others; every group of DOC_GROUPS exactly once (a test checks it).
+ * The documentation's index (/doc) and the side menu of a unit keep the order of DOC_GROUPS.
+ */
+export const DOC_ROLE_GROUP_ORDER: Record<DocRole, readonly string[]> = {
+  admin: ["demarrer", "preparer", "publier", "suivre", "jour-j", "membres", "communiquer", "organisation", "regles", "inscription", "apres-inscription", "aide"],
+  benevole: ["inscription", "apres-inscription", "regles", "demarrer", "preparer", "publier", "suivre", "jour-j", "membres", "communiquer", "organisation", "aide"],
+}
+
+/** The groups in a role's order (DOC_ROLE_GROUP_ORDER), or in DOC_GROUPS order without a role. */
+export function docGroupsInOrder(role?: DocRole): DocGroup[] {
+  return role ? DOC_ROLE_GROUP_ORDER[role].map((id) => docGroup(id)) : [...DOC_GROUPS]
+}
+
+/**
  * Slugs a unit can never take: the static pages under src/app/doc win over the dynamic segment,
  * so a unit with one of these slugs would never be shown. A test checks that every static folder
  * of src/app/doc is listed here.
@@ -304,15 +319,16 @@ export function legacyAnchorTargets(
 }
 
 /**
- * The units of a role (every unit without one), by group in DOC_GROUPS order and in reading order
- * within a group; a group without any unit is left out. What the indexes of /doc show.
+ * The units of a role (every unit without one), by group (in the role's order, DOC_GROUPS order
+ * without a role) and in reading order within a group; a group without any unit is left out. What
+ * the indexes of /doc show.
  */
 export function docUnitsByGroup(units: readonly DocUnit[], role?: DocRole): { group: DocGroup; units: DocUnit[] }[] {
   const sorted = sortDocUnits(role ? units.filter((u) => u.roles.includes(role)) : units)
-  return DOC_GROUPS.map((group) => ({ group, units: sorted.filter((u) => u.group === group.id) })).filter((g) => g.units.length > 0)
+  return docGroupsInOrder(role).map((group) => ({ group, units: sorted.filter((u) => u.group === group.id) })).filter((g) => g.units.length > 0)
 }
 
-/** Whether a role's guide has units yet: its page then lists them above « Le guide complet ». */
+/** Whether a role's guide has units yet: its page then lists them under its introduction. */
 export function roleHasDocUnits(units: readonly DocUnit[], role: DocRole): boolean {
   return units.some((u) => u.roles.includes(role))
 }

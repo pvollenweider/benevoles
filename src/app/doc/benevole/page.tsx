@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
-import { publicPage, publicPageMetadata } from "@/lib/doc-pages"
+import { publicPageMetadata } from "@/lib/doc-pages"
 import { loadDocUnits } from "@/lib/doc-units"
+import { renderPublicSource } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
+import { env } from "@/lib/env"
 import RoleGuide from "../RoleGuide"
 
 // Rendered per request, like the units it lists (src/app/doc/[slug]/page.tsx).
@@ -11,10 +13,10 @@ export function generateMetadata(): Metadata {
   return publicPageMetadata("/doc/benevole", apexBaseUrl())
 }
 
-// The volunteer guide is entirely split into units (#649): the page is their index, by group
-// (src/app/doc/RoleGuide.tsx), and follows the old /doc/benevole#<anchor> links to their unit.
-// GUIDE_BENEVOLE.md stays at the repo root only to point readers on GitHub to guide/.
+// The volunteers' guide (#649, src/app/doc/RoleGuide.tsx): the welcome from the repo's own
+// GUIDE_BENEVOLE.md (source of truth, also readable on GitHub), then the frequent questions and the
+// index of its units; old /doc/benevole#<anchor> links are followed to their unit.
 export default function DocBenevolePage() {
-  const { title } = publicPage("/doc/benevole")
-  return <RoleGuide role="benevole" units={loadDocUnits()} title={title} html={null} />
+  const { title, html } = renderPublicSource("GUIDE_BENEVOLE.md", "Guide bénévole", env.VIDEO_MEDIA_BASE_URL)
+  return <RoleGuide role="benevole" units={loadDocUnits()} title={title} html={html} />
 }
