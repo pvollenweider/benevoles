@@ -54,8 +54,9 @@ describe("DocUnitIndex", () => {
   it("on a guide's page: that role's units only, no ids (the guide's own anchors stay as they were)", () => {
     const { container } = render(<DocUnitIndex units={units} role="admin" />)
     expect(screen.getAllByRole("link").map((l) => l.getAttribute("href"))).toEqual(["/doc/a", "/doc/c"])
-    // Only the filter field has an id (React useId, never a slug).
-    expect(container.querySelectorAll("[id]:not(input)")).toHaveLength(0)
+    // Besides the filter field (React useId), only the section heading has an id, prefixed so it
+    // never matches a heading slug of the guide; the groups get none.
+    expect([...container.querySelectorAll("[id]:not(input)")].map((e) => e.id)).toEqual(["doc-toutes-les-fiches"])
     expect(container).not.toHaveTextContent("Pour")
   })
 
