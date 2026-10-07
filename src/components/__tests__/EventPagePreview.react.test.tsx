@@ -3,7 +3,7 @@
  */
 import { describe, it, expect, vi, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { render, screen, cleanup, waitFor } from "@testing-library/react"
+import { render, screen, cleanup, waitFor, fireEvent } from "@testing-library/react"
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: vi.fn() }),
@@ -75,5 +75,17 @@ describe("EventPageClient — preview mode", () => {
     expect(main.contains(document.getElementById("action-notice"))).toBe(false)
     expect(main.contains(screen.getByRole("contentinfo"))).toBe(false)
     expect(main).toContainElement(screen.getByRole("region", { name: /^Planning/ }))
+  })
+  // WCAG 2.4.11: below lg the fixed « Continuer » bar covers the bottom of the viewport; the
+  // footer gets room under it as soon as the bar shows, so a focused footer link stays visible.
+  it("leaves room under the footer while the mobile « Continuer » bar is shown", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ...event, publicStatus: undefined }) }))
+    render(<EventPageClient orgSlug="org" eventSlug="fete" />)
+    await screen.findByRole("heading", { level: 1 })
+    const slot = () => screen.getByRole("contentinfo").parentElement!
+    expect(slot()).not.toHaveClass("pb-28")
+    fireEvent.click(screen.getByRole("button", { name: /^Sélectionner — Bar/ }))
+    await screen.findAllByRole("button", { name: /^Continuer/ })
+    expect(slot()).toHaveClass("pb-28", "lg:pb-0")
   })
 })

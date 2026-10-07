@@ -98,7 +98,8 @@ export default async function HomePage() {
   })
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <>
+    <main className="flex-1 bg-gray-50">
       <header className="bg-white border-b border-gray-200 px-4 py-5">
         <div className="max-w-2xl mx-auto flex flex-wrap items-center gap-x-4 gap-y-3">
           {/* Decorative when the name is written beside it (above the title, or as the title itself). */}
@@ -155,8 +156,10 @@ export default async function HomePage() {
           </div>
         )}
       </div>
-      <PublicFooter />
     </main>
+    {/* After </main>: a footer inside main loses its contentinfo role. */}
+    <div className="px-4"><PublicFooter /></div>
+    </>
   )
 }
 
@@ -438,12 +441,12 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* showSupport scoped to this page and /doc (see doc/layout.tsx) only — not the
-          org-subdomain events list above, or any volunteer/admin-facing page: those are seen by
-          someone else's audience, registering for or running someone else's event, not
-          benevol.app's own. */}
+      {/* The `site` footer (help, sign-in, support appeal) on benevol.app's own pages only (this
+          page and ContentShell), not on the org-subdomain events list above or any
+          volunteer-facing page: those are seen by someone else's audience, registering for
+          someone else's event, not benevol.app's own. */}
     </main>
-      <PublicFooter showSupport />
+      <div className="px-4"><PublicFooter variant="site" /></div>
     </>
   )
 }

@@ -238,7 +238,7 @@ export default function MyRegistrationPage() {
   return (
     <>
     {status}
-    <main className="min-h-screen bg-gray-50 px-4 py-10">
+    <main className="flex-1 bg-gray-50 px-4 py-10">
       <div className="max-w-md mx-auto space-y-4">
         <div>
           <h1 id={LIST_TITLE_ID} tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Mes inscriptions</h1>
@@ -426,8 +426,9 @@ export default function MyRegistrationPage() {
           <PushSubscribeButton editToken={token} />
         </div>
       </div>
-      <PublicFooter />
     </main>
+    {/* After </main>: a footer inside main loses its contentinfo role. */}
+    <div className="px-4"><PublicFooter /></div>
     </>
   )
 }

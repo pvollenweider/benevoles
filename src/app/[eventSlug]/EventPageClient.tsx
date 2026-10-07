@@ -531,6 +531,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
 
   const allSelectedShifts = event.shifts.filter((s) => selectedShifts.has(s.id))
   const newShiftIds = new Set(allSelectedShifts.map((s) => s.id).filter((id) => !myShiftIds.has(id)))
+  // The fixed « Continuer » bar of the shift choice, below lg (see the footer's bottom room).
+  const showMobileCta = !previewResult && step === "select" && newShiftIds.size > 0
 
   // The organiser's colour (#300): a band behind the title, neutral header otherwise.
   const accent = eventAccent(event.accentColorKey)
@@ -775,7 +777,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
             </div>
 
             {/* Mobile: fixed bottom CTA */}
-            {newShiftIds.size > 0 && (
+            {showMobileCta && (
               <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 pointer-events-none">
                 <div className="max-w-2xl mx-auto px-4 pb-5 pt-10 bg-gradient-to-t from-gray-50 via-gray-50/90 to-transparent pointer-events-none">
                   <button
@@ -1046,7 +1048,11 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
       {/* Always mounted, outside the steps: the result of a withdrawal. The role limit has its own. */}
       <p id="action-notice" role="status" className="sr-only">{actionNotice}</p>
 
-      <PublicFooter />
+      {/* Below lg the fixed « Continuer » bar covers the bottom of the page: room under the
+          footer so a focused footer link is never hidden behind it (WCAG 2.4.11). */}
+      <div className={`px-4 ${showMobileCta ? "pb-28 lg:pb-0" : ""}`}>
+        <PublicFooter />
+      </div>
     </div>
   )
 }

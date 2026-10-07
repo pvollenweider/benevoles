@@ -53,7 +53,7 @@ test("shows the public sections only, never [Unreleased], and links to site page
 test("is reached from the public footer and from the documentation", async ({ page }) => {
   await page.goto("/doc")
   await expect(page.getByRole("main").getByRole("link", { name: "nouveautés" })).toHaveAttribute("href", "/nouveautes")
-  await page.getByRole("navigation", { name: "Pied de page" }).getByRole("link", { name: "Nouveautés" }).click()
+  await page.getByRole("navigation", { name: "Liens utiles" }).getByRole("link", { name: "Nouveautés" }).click()
   await expect(page).toHaveURL(/\/nouveautes$/)
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nouveautés")
 })

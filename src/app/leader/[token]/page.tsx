@@ -86,7 +86,8 @@ export default function SectorLeaderPage() {
   const groups = groupByShift(data.registrations)
 
   return (
-    <main className="min-h-screen bg-gray-50 px-4 py-10">
+    <>
+    <main className="flex-1 bg-gray-50 px-4 py-10">
       <div className="max-w-lg mx-auto space-y-4">
         <div>
           <p className="text-sm text-gray-500">{data.event.title}</p>
@@ -135,7 +136,9 @@ export default function SectorLeaderPage() {
           </div>
         )}
       </div>
-      <PublicFooter />
     </main>
+    {/* After </main>: a footer inside main loses its contentinfo role. */}
+    <div className="px-4"><PublicFooter /></div>
+    </>
   )
 }
