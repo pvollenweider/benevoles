@@ -5,6 +5,8 @@ import NextAuth from "next-auth"
 import { authConfig } from "./auth.config"
 import { NextResponse } from "next/server"
 import { withOrgHeader } from "@/lib/org-subdomain"
+import { apexRedirectUrl } from "@/lib/apex-redirect"
+import { apexBaseUrl } from "@/lib/urls"
 
 const { auth } = NextAuth(authConfig)
 
@@ -12,6 +14,11 @@ const { auth } = NextAuth(authConfig)
 // alone and the organization header; the authoritative checks stay server-side (auth-guard.ts).
 export default auth((req) => {
   const { pathname } = req.nextUrl
+
+  // --- Bare domain to the www site (#759): one address per page for search engines. 308 keeps
+  // the method and body of a POST. ---
+  const apexTarget = apexRedirectUrl(req.headers.get("host") ?? "", `${pathname}${req.nextUrl.search}`, apexBaseUrl())
+  if (apexTarget) return NextResponse.redirect(apexTarget, 308)
 
   // --- Auth guards ---
   const isSuperAdminPath = pathname.startsWith("/super-admin")
