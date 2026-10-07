@@ -57,6 +57,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `deployment.yaml` | Deployment `benevoles-app` | oui, en dernier | 1 réplica, mise à jour progressive sans indisponibilité, secret injecté avec `envFrom`, limites 500m CPU et 512 Mi, sondes sur `/api/health` |
 | `service.yaml`, `ingress.yaml` | Service et Ingress `benevoles-app` | oui | Exposition via Traefik pour `*.benevol.app`, `benevol.app` et `www.benevol.app`, TLS `benevol-app-wildcard-tls` |
 | `ingressroute-tokens.yaml` | IngressRoute `benevoles-app-tokens` et `benevoles-app-tokens-http`, Middleware `benevoles-https-redirect` | oui | Routeur prioritaire, **sans journal d'accès**, pour les requêtes qui portent un jeton personnel (chemins `/my/`, `/leader/`… et requêtes `token`, `t`) et la recherche admin, en HTTPS et en HTTP (redirigé). Un jeton ne doit jamais être journalisé ; limité à benevol.app, le Traefik partagé n'est pas modifié. Toute nouvelle route à jeton s'y ajoute (vérifié par `no-tokens-in-access-logs.test.ts`) |
+| `ingressroute-http.yaml` | IngressRoute `benevoles-app-http` | oui | Route de dernière priorité sur l'entrée `web` : toute adresse `http://` de benevol.app (apex et sous-domaines) est redirigée de façon permanente vers `https://`, avec le Middleware de `ingressroute-tokens.yaml` (à appliquer avant). Sans elle, Traefik répondait « 404 page not found » |
 | `traefik-config.yaml` | HelmChartConfig `traefik` (`kube-system`) | non | Réglage du Traefik fourni par k3s : `externalTrafficPolicy: Local` pour conserver l'adresse réelle des visiteurs (voir ci-dessous), journaux d'accès activés, délais de lecture et d'écriture de 30 min sur `web` et `websecure` |
 | `certificate-wildcard.yaml` | Certificate `benevol-app-wildcard` | non | Certificat wildcard (cert-manager, `ClusterIssuer` `letsencrypt-prod`, hors dépôt) |
 | `gandi-webhook.yaml` | Deployment `cert-manager-webhook-gandi`, APIService `v1alpha1.acme.bwolf.me`… (`cert-manager`) | non | Webhook DNS Gandi pour la validation DNS-01 du certificat wildcard ; lit le secret `gandi-api-key` |
@@ -91,7 +92,7 @@ Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publi
    3. régénère `benevoles-secret` (« Sync k8s secret ») ;
    4. applique `k8s/postgres.yaml` et attend PostgreSQL (120 s au plus) ;
    5. supprime le Job de migration précédent, applique `k8s/job-migrate.yaml` avec la nouvelle image et attend sa réussite (300 s au plus). En cas d'échec, le déploiement s'arrête, la version en cours continue de servir, et les journaux du Job s'affichent dans le workflow ;
-   6. applique `service.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml` et les cinq CronJobs ;
+   6. applique `service.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et les cinq CronJobs ;
    7. seulement ensuite, applique `k8s/deployment.yaml` et attend la fin du remplacement (300 s au plus). Le nouveau pod démarre avant l'arrêt de l'ancien (`maxSurge: 1`, `maxUnavailable: 0`).
 
 Le workflow n'applique pas `secret.yaml` (modèle), `traefik-config.yaml`, `certificate-wildcard.yaml` ni `gandi-webhook.yaml`.
@@ -130,7 +131,7 @@ kubectl -n benevoles wait --for=condition=complete job/benevoles-migrate --timeo
 kubectl -n benevoles logs job/benevoles-migrate
 
 # 4. Exposition et tâches planifiées
-kubectl apply -f k8s/service.yaml -f k8s/ingress.yaml -f k8s/ingressroute-tokens.yaml -f k8s/certificate-wildcard.yaml
+kubectl apply -f k8s/service.yaml -f k8s/ingress.yaml -f k8s/ingressroute-tokens.yaml -f k8s/ingressroute-http.yaml -f k8s/certificate-wildcard.yaml
 kubectl apply -f k8s/cronjob-reminders.yaml -f k8s/cronjob-cleanup.yaml -f k8s/cronjob-release-check.yaml -f k8s/cronjob-backup.yaml -f k8s/cronjob-backup-offsite.yaml
 
 # 5. Seulement ensuite, l'application
@@ -211,7 +212,7 @@ kubectl apply -f k8s/traefik-config.yaml
 kubectl -n kube-system get svc traefik -o jsonpath='{.spec.externalTrafficPolicy}'   # Local
 ```
 
-`ingressroute-tokens.yaml` demande Traefik 3.1 ou plus récent, et ses domaines (`benevol.app`) et son secret TLS sont écrits en dur : les adapter pour un autre domaine.
+`ingressroute-tokens.yaml` demande Traefik 3.1 ou plus récent, et ses domaines (`benevol.app`) et son secret TLS sont écrits en dur, comme les domaines de `ingressroute-http.yaml` : les adapter pour un autre domaine.
 
 **Pendant le remplacement du pod**, le code 1.x tourne sur le schéma 2.0 et ne peut plus créer d'inscription, de responsable de secteur ni d'invitation (nouvelle colonne obligatoire qu'il ne remplit pas). Déployer hors période d'inscriptions, ou passer ponctuellement la `strategy` du Deployment à `Recreate` (courte coupure au lieu d'erreurs).
 

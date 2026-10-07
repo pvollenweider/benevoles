@@ -1,0 +1,29 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
+# Plain HTTP to HTTPS for every benevol.app host (#759).
+#
+# The Ingress (ingress.yaml) only listens on websecure, so a link typed or copied as
+# http://www.benevol.app/... got Traefik's bare « 404 page not found ». This catch-all route on the
+# web entry point answers a permanent redirect to the same URL over https, with the
+# benevoles-https-redirect middleware defined in ingressroute-tokens.yaml (apply that file first).
+# Its priority stays under the token route (200), which keeps its own HTTP route without access logs.
+#
+#   kubectl apply -f k8s/ingressroute-http.yaml      (also applied by the deploy workflow)
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: benevoles-app-http
+  namespace: benevoles
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      priority: 1
+      match: Host(`benevol.app`) || HostRegexp(`^[a-z0-9-]+\.benevol\.app$`)
+      middlewares:
+        - name: benevoles-https-redirect
+      services:
+        - name: benevoles-app
+          port: 80
