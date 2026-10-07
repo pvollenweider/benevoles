@@ -22,4 +22,9 @@ describe("PublicFooter", () => {
     // No separate version text left beside it.
     expect(document.body.textContent!.split(`v${pkg.version}`)).toHaveLength(2)
   })
+
+  it("links the public video library", () => {
+    render(<PublicFooter />)
+    expect(screen.getByRole("link", { name: "Tutoriels vidéo" })).toHaveAttribute("href", "/videos")
+  })
 })

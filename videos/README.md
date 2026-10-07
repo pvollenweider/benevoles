@@ -374,24 +374,67 @@ make video-publish KUBE_CONTEXT=<contexte> ID=EVENT_CREATE_BLANK APPLY=1  # envo
 ```
 
 Sans `ID` ni `IDS`, tout le catalogue est comparé. Seuls les fichiers nouveaux ou modifiés partent
-(`<slug>/<slug>.mp4`, `.vtt`, `.txt`, comparés par SHA-256 avec ceux du serveur) ; rien n'est jamais
+(`<slug>/<slug>.mp4`, `.vtt`, `.txt`, et les affiches `<slug>.jpg` et `<slug>-og.jpg`, comparés par
+SHA-256 avec ceux du serveur) ; rien n'est jamais
 supprimé sur le serveur, et une vidéo pas encore rendue en local est simplement signalée.
 `KUBE_CONTEXT` est obligatoire : la commande écrit sur le cluster de production. Si `kubectl` ne
 joint pas le serveur de médias (mauvais contexte, `k8s/media.yaml` pas encore appliqué), elle
 s'arrête sans rien envoyer.
 
 Le serveur n'autorise que `benevol.app` et ses sous-domaines en CORS (nécessaire aux sous-titres
-chargés depuis un autre domaine), sert les types `video/mp4` et `text/vtt`, accepte les requêtes
+chargés depuis un autre domaine), sert les types `video/mp4`, `text/vtt` et `image/jpeg`, accepte les requêtes
 partielles (avancer dans la vidéo) et ne liste pas les dossiers. Son volume n'est pas sauvegardé :
 tout se régénère depuis les sources de ce dossier ; gardez votre copie de `videos/output`.
 
-## Bibliothèque vidéo interne (`/videos`, #644)
+### Affiches et durée réelle (`videos/renders.json`)
 
-`src/lib/video-catalog.ts` lit `catalog.json`, les manifestes et les scripts (server-only, au
-build et à la requête) pour alimenter `/videos` (galerie) et `/videos/[id]` (détail, l'identifiant
-stable ; le slug du manifeste redirige vers l'identifiant). Cette page n'est référencée nulle part
-(pas de navigation, pas de sitemap, `robots: noindex,nofollow`, et `robots.ts` l'exclut aussi) :
-c'est un outil interne pour revoir le catalogue, pas encore la bibliothèque publique.
+Après un rendu, et avant de publier, générez les affiches de la vidéo :
+
+```bash
+node --import tsx videos/tools/posters.ts EVENT_CREATE_BLANK                       # une vidéo
+node --import tsx videos/tools/posters.ts                                          # toutes les vidéos publiées
+node --import tsx videos/tools/posters.ts --input /chemin/vers/videos/output       # rendus d'un autre dossier
+```
+
+L'outil (FFmpeg et FFprobe du système, avec l'encodeur JPEG) prend une image au tiers de la vidéo,
+ou à `posterAtMs` (millisecondes) si le manifeste le précise, en choisissant la plus représentative
+des 48 images suivantes (filtre `thumbnail`, pour éviter une transition). Il écrit dans
+`videos/output/<slug>/` (ignoré par Git) :
+
+- `<slug>.jpg` : l'affiche au format de la vidéo (1280 x 800, ou 390 x 844 pour une vidéo
+  mobile), montrée par le lecteur avant la lecture et utilisée comme miniature par les moteurs de
+  recherche ;
+- `<slug>-og.jpg` : la même image dans un cadre de 1200 x 630 sur fond bleu, pour les aperçus de
+  lien (WhatsApp, X, LinkedIn...).
+
+Il met aussi à jour `videos/renders.json` (versionné, copié dans l'image) : durée réelle du MP4,
+taille de l'image, et `poster: true`. L'application ne référence une affiche que si ce fichier le
+dit : sans entrée, pas d'affiche (jamais d'image cassée) et la durée reste l'estimation du
+manifeste. Publiez donc les affiches (`make video-publish … APPLY=1`) avant de déployer un
+`renders.json` qui les annonce.
+
+## Bibliothèque vidéo publique (`/videos`, #644)
+
+`src/lib/video-catalog.ts` lit `catalog.json`, `renders.json`, les manifestes et les scripts
+(server-only, au build et à la requête) pour alimenter `/videos` (galerie) et `/videos/[id]`
+(détail, l'identifiant stable ; le slug du manifeste redirige vers l'identifiant).
+
+Depuis le 2026-10-07, la bibliothèque est publique et référencée (`src/lib/video-seo.ts`) :
+
+- une vidéo publiée **et** jouable (`VIDEO_MEDIA_BASE_URL` défini, la même condition que le
+  lecteur) est indexée ; une vidéo « À venir » garde `noindex` ;
+- canonique absolue `https://www.benevol.app/videos/<ID>` (jamais le slug ni `?from=doc`),
+  construite sur `NEXT_PUBLIC_APP_URL` lu à l'exécution (pages rendues à la requête) ;
+- données structurées `VideoObject` (titre, résumé, affiches, date `updatedAt`, durée ISO 8601,
+  MP4, langue, transcription, éditeur) et `BreadcrumbList` ; sur la galerie, `CollectionPage` et
+  `ItemList` des vidéos indexées ;
+- aperçus de lien : Open Graph `video.other` (affiche 1200 x 630, `og:video` vers le MP4, avec sa
+  taille) et carte X `summary_large_image` (pas de `twitter:player` : aucune page de lecteur
+  intégrable) ; la galerie a sa propre image (`/videos/og-image.png`) ;
+- sitemap vidéo `/video-sitemap.xml` (extension vidéo de Google), cité dans `robots.txt`, servi
+  sur le domaine principal seulement ;
+- liens « Tutoriels vidéo » dans le pied de page public, sur `/doc` et sur `/fonctionnalites`
+  (`FEATURES.md`).
 
 Champs du catalogue ajoutés par #644, en plus de `id`, `manifest`, `category`, `tags`, `published`
 et `seedScenario` (#637, #638) :
@@ -410,21 +453,22 @@ et `seedScenario` (#637, #638) :
   entièrement régénérée : ses réponses repartent de zéro.
 
 `published` vaut `true` pour une vidéo dont le film est en ligne sur `medias.benevol.app` : 55 des
-58 vidéos aujourd'hui. La galerie affiche aussi les trois autres, avec leur état (« À venir »). Elle
-n'est pas dans la navigation du site, mais les guides publics renvoient aux vidéos publiées par leur
+58 vidéos aujourd'hui. La galerie affiche aussi les trois autres, avec leur état (« À venir »). Les
+guides publics renvoient aux vidéos publiées par leur
 identifiant (`<!-- video: ID -->`, #645, `src/lib/doc-video-references.ts`). `filterPublishedVideos(videos, VIDEO_LIBRARY_PUBLIC_ONLY)` filtre déjà sur
 `published` : passer la constante `VIDEO_LIBRARY_PUBLIC_ONLY` (dans `video-catalog.ts`) à `true`
 est le seul changement nécessaire pour ne montrer que les vidéos publiées, le jour venu.
 
-La durée affichée vient de la somme des `fallbackDurationMs` des segments du manifeste, sauf si
-`videos/output/<slug>/audio-metadata.json` existe déjà (rendu réel) : dans ce cas la durée mesurée
-par FFprobe est utilisée.
+La durée affichée est celle du MP4 mesurée par `videos/tools/posters.ts` (`renders.json`) ; à
+défaut, celle de `videos/output/<slug>/audio-metadata.json` (présent dans un checkout seulement,
+jamais dans l'image) ; à défaut, la somme des `fallbackDurationMs` des segments du manifeste.
 
 ### Lecture des médias (`VIDEO_MEDIA_BASE_URL`)
 
 Les fichiers rendus ne sont jamais dans Git ni dans l'image : la page construit leurs URLs à partir
 de `VIDEO_MEDIA_BASE_URL` (`src/lib/env.ts`, voir `docs/configuration.md`) —
-`<base>/<slug>/<slug>.mp4`, `.vtt`, `.txt`. Sans la variable, ou si le rendu d'une vidéo précise
+`<base>/<slug>/<slug>.mp4`, `.vtt`, `.txt` (et `.jpg`, `-og.jpg` quand `renders.json` annonce
+les affiches). Sans la variable, ou si le rendu d'une vidéo précise
 n'existe pas encore sur le serveur de médias, la page affiche « Vidéo bientôt disponible » :
 jamais de sonde réseau côté serveur (build ou requête) ; côté navigateur, l'échec de chargement de
 la balise `<video>` (`onError`) retombe sur le même message.

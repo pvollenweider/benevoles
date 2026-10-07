@@ -21,6 +21,7 @@ const CONTENT_TYPES = {
   ".mp4": "video/mp4",
   ".vtt": "text/vtt; charset=utf-8",
   ".txt": "text/plain; charset=utf-8",
+  ".jpg": "image/jpeg",
 }
 
 const server = createServer((req, res) => {

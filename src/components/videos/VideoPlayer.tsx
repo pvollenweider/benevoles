@@ -96,6 +96,8 @@ export default function VideoPlayer({
           tabIndex={0}
           crossOrigin="anonymous"
           preload="metadata"
+          // Only set when the poster was generated (videos/renders.json): never a broken image.
+          poster={mediaUrls.poster}
           aria-label={title}
           className="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-black"
           style={aspectRatio ? { aspectRatio } : undefined}

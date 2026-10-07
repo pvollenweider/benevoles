@@ -85,6 +85,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/doc-lastmod.json ./doc-lastmod.js
 # `output: "standalone"`, comme les guides ci-dessus. Le reste de videos/ (tools, assets, output)
 # est exclu de l'image par .dockerignore.
 COPY --from=builder --chown=nextjs:nodejs /app/videos/catalog.json ./videos/catalog.json
+# Durée réelle, taille et affiches des rendus publiés (videos/tools/posters.ts).
+COPY --from=builder --chown=nextjs:nodejs /app/videos/renders.json ./videos/renders.json
 COPY --from=builder --chown=nextjs:nodejs /app/videos/manifests ./videos/manifests
 COPY --from=builder --chown=nextjs:nodejs /app/videos/scripts ./videos/scripts
 COPY --from=builder --chown=nextjs:nodejs /app/videos/MASTERCLASS_PLAN.md ./videos/MASTERCLASS_PLAN.md

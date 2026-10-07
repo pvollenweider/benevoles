@@ -15,6 +15,8 @@ import {
 } from "@/lib/video-catalog"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { env } from "@/lib/env"
+import { serializeJsonLd, videoDetailMetadata, videoJsonLd } from "@/lib/video-seo"
+import { videoSeoContext } from "@/lib/video-seo-context"
 import VideoPlayer from "@/components/videos/VideoPlayer"
 import AutoplayLink from "@/components/videos/AutoplayLink"
 import VideoFeedback from "@/components/videos/VideoFeedback"
@@ -43,11 +45,9 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { id } = await params
   const { video } = findVideo(loadVideoCatalog(), id)
   if (!video) return { robots: { index: false, follow: false } }
-  return {
-    title: `${video.title} — Bibliothèque vidéo — benevol.app`,
-    description: video.description,
-    robots: { index: false, follow: false },
-  }
+  // Indexed only when published with a render to play (src/lib/video-seo.ts); canonical is always
+  // the absolute /videos/<ID>, without `?from=doc` and for the slug alias too.
+  return videoDetailMetadata(video, videoSeoContext())
 }
 
 export default async function VideoDetailPage({ params, searchParams }: { params: Promise<Params>; searchParams: Promise<SearchParams> }) {
@@ -60,7 +60,8 @@ export default async function VideoDetailPage({ params, searchParams }: { params
   if (!video) notFound()
   if (isSlug) redirect(`/videos/${video.id}${fromDoc ? `?${FROM_DOC_PARAM}=${FROM_DOC_VALUE}` : ""}`)
 
-  const mediaUrls = videoMediaUrls(video.slug, env.VIDEO_MEDIA_BASE_URL)
+  const mediaUrls = videoMediaUrls(video.slug, env.VIDEO_MEDIA_BASE_URL, video.render)
+  const jsonLd = videoJsonLd(video, videoSeoContext())
   const related = relatedVideos(video, catalog)
   const updatedAtLabel = new Date(`${video.updatedAt}T00:00:00Z`).toLocaleDateString("fr-CH", { timeZone: "UTC", day: "numeric", month: "long", year: "numeric" })
 
@@ -68,6 +69,8 @@ export default async function VideoDetailPage({ params, searchParams }: { params
 
   return (
     <div className="space-y-10">
+      {/* VideoObject + BreadcrumbList, only for an indexed video; « < » escaped (serializeJsonLd). */}
+      {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />}
       <div>
         <Link href="/videos" className="text-sm text-blue-600 hover:underline">← Bibliothèque vidéo</Link>
       </div>

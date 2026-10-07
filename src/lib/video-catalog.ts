@@ -79,6 +79,25 @@ export const catalogSchema = z.object({
   videos: z.array(catalogEntrySchema),
 })
 
+// --- videos/renders.json --------------------------------------------------------------------
+
+/**
+ * What the app knows of a video's render without the render itself (the MP4 never ships with the
+ * app): its real duration and frame size, and whether its posters exist. Written by
+ * videos/tools/posters.ts from each published render, keyed by manifest slug; a video missing
+ * from it simply has no poster and keeps the manifest's estimated duration.
+ */
+export const renderInfoSchema = z.object({
+  durationMs: z.number().int().positive(),
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+  /** `<slug>.jpg` (the video's own ratio) and `<slug>-og.jpg` (1200 x 630) are published next to the MP4. */
+  poster: z.boolean(),
+})
+export type VideoRender = z.infer<typeof renderInfoSchema>
+
+export const rendersSchema = z.record(z.string(), renderInfoSchema)
+
 // --- videos/manifests/*.json ---------------------------------------------------------------
 
 const segmentSchema = z.object({
@@ -203,6 +222,8 @@ export type Video = {
   durationMs: number
   manifest: VideoManifest
   script: VideoScript
+  /** From videos/renders.json, when the render was measured there (see `renderInfoSchema`). */
+  render?: VideoRender
 }
 
 // --- pure helpers (testable without fs) -------------------------------------------------------
@@ -293,7 +314,15 @@ export function formatDuration(durationMs: number): string {
   return `${hours} h ${String(minutes).padStart(2, "0")}`
 }
 
-export type VideoMediaUrls = { video: string; captions: string; transcript: string }
+export type VideoMediaUrls = {
+  video: string
+  captions: string
+  transcript: string
+  /** Only when the render's posters were generated (`render.poster`): never a broken image. */
+  poster?: string
+  /** The 1200 x 630 link preview, same condition. */
+  ogImage?: string
+}
 
 /**
  * Builds the media URLs for a video from `VIDEO_MEDIA_BASE_URL` (#644 owner decision): without
@@ -302,13 +331,14 @@ export type VideoMediaUrls = { video: string; captions: string; transcript: stri
  * for why); if a specific render is actually missing, the player's own `onError` falls back to the
  * same message client-side, which still never probes the network at request/render time.
  */
-export function videoMediaUrls(slug: string, baseUrl: string | undefined | null): VideoMediaUrls | null {
+export function videoMediaUrls(slug: string, baseUrl: string | undefined | null, render?: Pick<VideoRender, "poster"> | null): VideoMediaUrls | null {
   if (!baseUrl || !baseUrl.trim()) return null
   const base = baseUrl.trim().replace(/\/+$/, "")
   return {
     video: `${base}/${slug}/${slug}.mp4`,
     captions: `${base}/${slug}/${slug}.vtt`,
     transcript: `${base}/${slug}/${slug}.txt`,
+    ...(render?.poster ? { poster: `${base}/${slug}/${slug}.jpg`, ogImage: `${base}/${slug}/${slug}-og.jpg` } : {}),
   }
 }
 

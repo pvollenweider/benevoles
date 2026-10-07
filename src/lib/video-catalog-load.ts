@@ -3,7 +3,7 @@
 
 import fs from "fs"
 import path from "path"
-import { catalogSchema, manifestSchema, parseScript, type Audience, type ThemeId, type Video } from "@/lib/video-catalog"
+import { catalogSchema, manifestSchema, parseScript, rendersSchema, type Audience, type ThemeId, type Video } from "@/lib/video-catalog"
 
 /**
  * Video library (#644), server-only: reads `videos/catalog.json`, the per-video manifests and
@@ -29,6 +29,9 @@ function readJson(file: string): unknown {
  */
 export function loadVideoCatalog(): Video[] {
   const catalog = catalogSchema.parse(readJson(path.join(videosRoot, "catalog.json")))
+  // Measured renders (videos/tools/posters.ts): optional file, shipped in the image like catalog.json.
+  const rendersFile = path.join(videosRoot, "renders.json")
+  const renders = fs.existsSync(rendersFile) ? rendersSchema.parse(readJson(rendersFile)) : {}
 
   const ids = new Set<string>()
   const manifestSlugs = new Set<string>()
@@ -50,12 +53,16 @@ export function loadVideoCatalog(): Video[] {
       throw new Error(`${scriptFile}: script's stable id "${script.stableId}" differs from catalogue id "${entry.id}"`)
     }
 
-    // A rendered video's real duration (videos/lib/manifest.ts `AudioMetadata`), when the audio
-    // was generated — not committed to the repo today, so this always falls back to the sum of
-    // the manifest's fallback durations, which is what every current video uses.
+    // The real duration, best source first: the MP4 measured by videos/tools/posters.ts
+    // (videos/renders.json, in the image); else the narration's audio metadata
+    // (videos/output/<slug>/audio-metadata.json, in a checkout only, never in the image); else the
+    // sum of the manifest's fallback durations.
+    const render = renders[entry.manifest]
     let durationMs = manifest.segments.reduce((sum, s) => sum + s.fallbackDurationMs, 0)
     const audioMetadataFile = path.join(videosRoot, "output", entry.manifest, "audio-metadata.json")
-    if (fs.existsSync(audioMetadataFile)) {
+    if (render) {
+      durationMs = render.durationMs
+    } else if (fs.existsSync(audioMetadataFile)) {
       try {
         const audio = readJson(audioMetadataFile) as { segments?: Record<string, { durationMs: number }> }
         if (audio.segments) {
@@ -84,6 +91,7 @@ export function loadVideoCatalog(): Video[] {
       durationMs,
       manifest,
       script,
+      ...(render ? { render } : {}),
     }
   })
 }

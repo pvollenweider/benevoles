@@ -33,14 +33,16 @@ describe("robots (production domain: benevol.app)", () => {
     withHost("benevol.app")
     const robots = (await import("../app/robots")).default
     const result = await robots()
-    const disallow = ["/admin", "/api/", "/my/", "/waitlist/", "/leader/", "/videos"]
+    const disallow = ["/admin", "/api/", "/my/", "/waitlist/", "/leader/"]
     const rules = result.rules as { userAgent: string | string[]; allow: string; disallow: string[] }[]
     expect(rules[0]).toEqual({ userAgent: "*", allow: "/", disallow })
     // The search and AI crawlers are named and allowed, with the same private areas closed.
     expect(rules[1]).toMatchObject({ allow: "/", disallow })
     expect(rules[1].userAgent).toEqual(expect.arrayContaining(["Googlebot", "Bingbot", "GPTBot", "OAI-SearchBot", "ClaudeBot", "PerplexityBot"]))
-    // The index lists the apex sitemap and every organisation's (#746).
-    expect(result.sitemap).toBe("https://benevol.app/sitemap-index.xml")
+    // /videos is public and indexed (2026-10-07): never disallowed.
+    expect(JSON.stringify(result.rules)).not.toContain("/videos")
+    // The index lists the apex sitemap and every organisation's (#746); the video sitemap is named too.
+    expect(result.sitemap).toEqual(["https://benevol.app/sitemap-index.xml", "https://benevol.app/video-sitemap.xml"])
   })
 
   it("allows an org subdomain and points to its own sitemap", async () => {
@@ -65,6 +67,6 @@ describe("robots (dev: localhost)", () => {
     const robots = (await import("../app/robots")).default
     const result = await robots()
     expect((result.rules as object[])[0]).toMatchObject({ userAgent: "*", allow: "/" })
-    expect(result.sitemap).toBe("http://localhost:3000/sitemap-index.xml")
+    expect(result.sitemap).toEqual(["http://localhost:3000/sitemap-index.xml", "http://localhost:3000/video-sitemap.xml"])
   })
 })

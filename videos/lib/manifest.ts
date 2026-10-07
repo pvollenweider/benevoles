@@ -37,6 +37,8 @@ export type VideoManifest = {
   viewport: { width: number; height: number; deviceScaleFactor: number }
   segments: VideoSegment[]
   viewer?: ManifestViewerContent
+  /** Where videos/tools/posters.ts takes the poster frame (ms); a third of the video otherwise. */
+  posterAtMs?: number
 }
 
 export type VideoCatalogEntry = {

@@ -2,9 +2,9 @@ import { test, expect } from "@playwright/test"
 import { waitForHydration } from "./helpers/hydration"
 
 /**
- * The internal video library (#644): unlisted (no nav link), but still reachable and working by
- * URL. VIDEO_MEDIA_BASE_URL isn't set in the e2e environment (.env.e2e.5), so the detail page's
- * "coming soon" fallback is exercised here, not an actual <video> playback.
+ * The video library (#644). VIDEO_MEDIA_BASE_URL isn't set in the CI e2e environment, so the
+ * detail page's "coming soon" fallback is exercised there, not an actual <video> playback; with it
+ * set (local run against medias.benevol.app), e2e/videos-seo.spec.ts covers the playable pages.
  */
 
 test("gallery loads, filters by theme, and opens a detail page", async ({ page }) => {
@@ -39,6 +39,7 @@ test("an unknown id gives a 404", async ({ page }) => {
 })
 
 test("shows « Vidéo bientôt disponible » without VIDEO_MEDIA_BASE_URL", async ({ page }) => {
+  test.skip(Boolean(process.env.VIDEO_MEDIA_BASE_URL), "VIDEO_MEDIA_BASE_URL is set: the player is shown instead")
   await page.goto("/videos/EVENT_CREATE_BLANK")
   await expect(page.getByText("Vidéo bientôt disponible.")).toBeVisible()
   await expect(page.locator("video")).toHaveCount(0)

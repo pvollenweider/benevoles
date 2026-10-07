@@ -7,10 +7,13 @@
  * its own; videos/tools/publish.ts does the reading, hashing and transfer.
  */
 
-/** Files of a rendered video served to viewers: the video, its captions and its transcript. */
-export const PUBLISHED_EXTENSIONS = [".mp4", ".vtt", ".txt"] as const
+/**
+ * Files of a rendered video served to viewers: the video, its captions, its transcript, and its
+ * two posters (`<slug>.jpg` and the `<slug>-og.jpg` link preview, videos/tools/posters.ts).
+ */
+export const PUBLISHED_EXTENSIONS = [".mp4", ".vtt", ".txt", ".jpg", "-og.jpg"] as const
 
-/** `<slug>/<slug>.mp4` etc.: the path of a published file, relative to the media root. */
+/** `<slug>/<slug>.mp4`, `<slug>/<slug>-og.jpg` etc.: the path of a published file, relative to the media root. */
 export function publishedFiles(slug: string): string[] {
   return PUBLISHED_EXTENSIONS.map((ext) => `${slug}/${slug}${ext}`)
 }

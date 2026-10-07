@@ -15,3 +15,13 @@ describe("/videos/[id] is rendered per request", () => {
     expect(source).not.toMatch(/generateStaticParams/)
   })
 })
+
+// The gallery too (2026-10-07): its robots, canonical and structured data depend on
+// VIDEO_MEDIA_BASE_URL and NEXT_PUBLIC_APP_URL, read from the running container.
+describe("/videos and /video-sitemap.xml are rendered per request", () => {
+  for (const file of ["src/app/videos/page.tsx", "src/app/video-sitemap.xml/route.ts"]) {
+    it(file, () => {
+      expect(readFileSync(path.join(process.cwd(), file), "utf8")).toMatch(/export const dynamic = "force-dynamic"/)
+    })
+  }
+})

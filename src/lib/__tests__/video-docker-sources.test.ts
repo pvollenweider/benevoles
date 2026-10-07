@@ -19,7 +19,7 @@ describe("video catalogue sources in the Docker image", () => {
     }
     // catalog.json and manifests/*.json aren't matched by the blanket `*.md` rule, so they need
     // no negation — only that nothing re-excludes them.
-    for (const excluded of ["videos/catalog.json", "videos/manifests"]) {
+    for (const excluded of ["videos/catalog.json", "videos/renders.json", "videos/manifests"]) {
       expect(ignore).not.toContain(excluded)
     }
   })
@@ -32,6 +32,8 @@ describe("video catalogue sources in the Docker image", () => {
 
   it("copies the four sources into the runtime image", () => {
     expect(dockerfile).toMatch(/COPY --from=builder .*\/app\/videos\/catalog\.json .\/videos\/catalog\.json/)
+    // Real duration, frame size and posters of the published renders (videos/tools/posters.ts).
+    expect(dockerfile).toMatch(/COPY --from=builder .*\/app\/videos\/renders\.json .\/videos\/renders\.json/)
     expect(dockerfile).toMatch(/COPY --from=builder .*\/app\/videos\/manifests .\/videos\/manifests/)
     expect(dockerfile).toMatch(/COPY --from=builder .*\/app\/videos\/scripts .\/videos\/scripts/)
     expect(dockerfile).toMatch(/COPY --from=builder .*\/app\/videos\/MASTERCLASS_PLAN\.md .\/videos\/MASTERCLASS_PLAN\.md/)

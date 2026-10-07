@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 /**
- * Sends the rendered videos (videos/output/<slug>/<slug>.mp4, .vtt, .txt) to the media server
+ * Sends the rendered videos (videos/output/<slug>/<slug>.mp4, .vtt, .txt, and the posters
+ * <slug>.jpg and <slug>-og.jpg from videos/tools/posters.ts) to the media server
  * behind https://medias.benevol.app (k8s/media.yaml): only new or changed files, by SHA-256.
  *
  *   npm run video:publish -- --context <kube-context> [--apply] [ID …]
@@ -66,7 +67,7 @@ async function main() {
   // deployed yet) stops here: treating it as an empty server would resend everything.
   let remoteOut: string
   try {
-    remoteOut = await kubectl(["exec", TARGET, "--", "sh", "-c", `cd ${MEDIA_ROOT} && find . -type f \\( -name '*.mp4' -o -name '*.vtt' -o -name '*.txt' \\) -exec sha256sum {} + ; true`])
+    remoteOut = await kubectl(["exec", TARGET, "--", "sh", "-c", `cd ${MEDIA_ROOT} && find . -type f \\( -name '*.mp4' -o -name '*.vtt' -o -name '*.txt' -o -name '*.jpg' \\) -exec sha256sum {} + ; true`])
   } catch {
     console.error(`Serveur de médias injoignable avec le contexte « ${context} » : vérifiez le contexte, et que k8s/media.yaml est appliqué (kubectl -n ${NAMESPACE} get ${TARGET}).`)
     process.exit(1)
