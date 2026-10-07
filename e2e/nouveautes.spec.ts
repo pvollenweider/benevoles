@@ -32,7 +32,7 @@ test("lists the released versions, newest first, each linked to its anchored hea
   expect(dates).toEqual([...dates].sort().reverse())
 
   await links.first().click()
-  await expect(page).toHaveURL(new RegExp(`${hrefs[0].replace(/\./g, "\\.")}$`))
+  await expect(page).toHaveURL(new RegExp(`${hrefs[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`))
 })
 
 test("shows the public sections only, never [Unreleased], and links to site pages rather than files", async ({ page }) => {

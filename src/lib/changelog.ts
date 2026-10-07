@@ -95,13 +95,17 @@ export function publicMarkdown(markdown: string): string {
   }
   // An internal bullet goes, but not the blank lines after it, which separate what follows.
   const trailingBlanks = (lines: string[]) => lines.slice(lines.findLastIndex((l) => l.trim() !== "") + 1)
-  return blocks
+  let text = blocks
     .flatMap((b) => (b.item && b.lines.join("\n").includes(INTERNAL_MARKER) ? trailingBlanks(b.lines) : b.lines))
     .filter((line) => line.trim() !== "---")
     .join("\n")
-    .replace(/[ \t]*<!--[\s\S]*?-->/g, "")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim()
+  // Until nothing changes: removing one comment must not leave another one assembled from its
+  // pieces (« <!<!-- -->-- »). The HTML is sanitized after rendering anyway (DOMPurify).
+  for (let previous = ""; previous !== text; ) {
+    previous = text
+    text = text.replace(/[ \t]*<!--[\s\S]*?-->/g, "")
+  }
+  return text.replace(/\n{3,}/g, "\n\n").trim()
 }
 
 /**

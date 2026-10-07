@@ -157,6 +157,10 @@ describe("isPublicSection", () => {
 })
 
 describe("publicMarkdown", () => {
+  it("removes a comment rebuilt from the pieces of another one (« <!<!-- -->-- »)", () => {
+    expect(publicMarkdown("- texte <!<!-- a -->-- b -->")).toBe("- texte")
+  })
+
   it("removes an internal bullet with its continuation lines, and any leftover HTML comment", () => {
     const md = `- garder\n- retirer ${INTERNAL_MARKER}\n  - sa sous-liste\n\n#### Sous-titre\n\n- garder aussi <!-- note -->`
     expect(publicMarkdown(md)).toBe("- garder\n\n#### Sous-titre\n\n- garder aussi")
@@ -217,7 +221,7 @@ describe("CHANGELOG.md, the source of /nouveautes", () => {
     expect(rendered[0].dateLabel).toBe(formatReleaseDate(releases[0].date))
     const html = rendered.flatMap((r) => [r.introHtml, ...r.sections.map((s) => s.html)]).join("")
     expect(html).toContain("<li>")
-    expect(html).not.toMatch(/<!--|<script/)
+    expect(html).not.toMatch(/<!--|<script/i)
     // Every link leads to a page of the site or to a full URL, never to a relative file (a 404).
     for (const [, href] of html.matchAll(/href="([^"]*)"/g)) expect(href).toMatch(/^(\/|#|https:\/\/|mailto:)/)
     expect(html).toContain('href="https://github.com/pvollenweider/benevoles/blob/main/docs/deploiement.md#')
