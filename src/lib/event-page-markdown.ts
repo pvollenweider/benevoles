@@ -68,11 +68,23 @@ function makeRenderer(
   if (image) {
     let index = 0
     renderer.image = function ({ href, title, text, tokens }) {
-      const alt = tokens ? this.parser.parseInline(tokens, this.parser.textRenderer) : text
+      // Plain text for the caller to escape once: an entity written in the source (« &amp; ») is
+      // decoded here, otherwise it would reach the alt attribute double-escaped.
+      const alt = decodeBasicEntities(tokens ? this.parser.parseInline(tokens, this.parser.textRenderer) : text)
       return image({ src: href, alt, title }, index++)
     }
   }
   return renderer
+}
+
+/** The few entities marked can leave in plain text, back to their characters (&amp; last). */
+function decodeBasicEntities(text: string): string {
+  return text
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#0?39;|&apos;/g, "'")
+    .replace(/&amp;/g, "&")
 }
 
 const ALLOWED_TAGS = [

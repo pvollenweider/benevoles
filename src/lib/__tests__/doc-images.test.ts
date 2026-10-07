@@ -110,6 +110,18 @@ describe("Markdown images drawn by the caller (renderEventPageMarkdown `image`)"
     expect(html).toContain('<img src="/doc-img/b.png?v=1" alt="Deux" title="Titre" width="10" height="20" loading="lazy" decoding="async">')
   })
 
+  // The alt text is what a screen reader reads: an ampersand, an escaped Markdown character or an
+  // entity in it must reach the page once, never double-escaped (« &amp;amp; » read aloud).
+  it("keeps special characters of the alt text escaped exactly once", () => {
+    const html = renderEventPageMarkdown("![A & B \\*x\\* &amp; « C »](/doc-img/a.png)", {
+      shiftHeadings: false,
+      image: (img, index) => docImageTag(img, null, index),
+    })
+    const alt = /alt="([^"]*)"/.exec(html)?.[1]
+    expect(alt).toBe("A &amp; B *x* &amp; « C »")
+    expect(html).not.toContain("&amp;amp;")
+  })
+
   it("leaves admin-authored event pages with marked's own image and no loading attribute", () => {
     const html = renderEventPageMarkdown('![x](/a.png)<img src="/b.png" loading="lazy">')
     expect(html).not.toContain("loading=")
