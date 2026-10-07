@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { headers } from "next/headers"
-import { redirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import type { Metadata, Viewport } from "next"
 import { prisma } from "@/lib/prisma"
 import { formatShortDate } from "@/lib/utils"
@@ -54,7 +54,9 @@ export default async function HomePage() {
   let orgLogo: OrgLogo | null = null
   if (rawOrgSlug) {
     const resolved = await resolveOrgSlug(rawOrgSlug)
-    if (!resolved) orgSlug = null
+    // An unknown organisation's subdomain (a typo, a deleted or never created organisation) is a
+    // real 404, not a copy of the marketing home that search engines would index (#759).
+    if (!resolved) notFound()
     else if (resolved.redirectUrl) redirect(resolved.redirectUrl)
     else {
       orgSlug = resolved.org.slug

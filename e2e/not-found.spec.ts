@@ -67,6 +67,15 @@ test("on an organization: an unknown documentation unit too", async ({ page }) =
   await expect(page.getByRole("link", { name: "Voir les événements" })).toHaveAttribute("href", "/?org=default")
 })
 
+// An unknown organisation (a mistyped or deleted subdomain) is a real 404, not a copy of the
+// marketing home that search engines would index (#759); its links are the apex ones.
+test("an unknown organisation answers 404, not the marketing home", async ({ page }) => {
+  const response = await page.goto("/?org=organisation-inexistante")
+  expect(response?.status()).toBe(404)
+  await expectNotFoundPage(page)
+  await expect(page.getByRole("link", { name: "Voir les événements" })).toHaveCount(0)
+})
+
 for (const colorScheme of ["light", "dark"] as const) {
   test(`no serious violation (${colorScheme})`, async ({ page }) => {
     await page.emulateMedia({ colorScheme })
