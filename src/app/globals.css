@@ -4,12 +4,48 @@
 /* Class-based dark mode (opt-in via a `dark` class on <html>, toggled by DocThemeToggle) instead
    of Tailwind's default `prefers-color-scheme` media query — needed so a manual override can win
    over system preference. Only /doc's own layout ever adds this class, and no other part of the
-   app uses a `dark:` utility today, so this has zero effect anywhere else. */
-@custom-variant dark (&:where(.dark, .dark *));
+   app uses a `dark:` utility today, so this has zero effect anywhere else.
+   A frame marked `data-color-scheme="system"` follows the system preference with no script and
+   no toggle: the 404 page (src/components/public/NotFoundPage.tsx), which React may render on the
+   client, where an inline theme script would not run. */
+@custom-variant dark {
+  &:where(.dark, .dark *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where([data-color-scheme="system"], [data-color-scheme="system"] *) {
+      @slot;
+    }
+  }
+}
 
 /* Without script (`noscript:hidden`): a control that only works once hydrated keeps no room it
    could never fill, as the filter of /doc's index (DocUnitFilterList). */
 @custom-variant noscript (@media (scripting: none));
+
+/* The rain of the 404 page (src/components/public/NotFoundPage.tsx): drops falling, rings on the
+   puddle, the water's surface drifting. Only ever used behind `motion-safe:`, so « Réduire les
+   animations » leaves a still picture. */
+@theme {
+  --animate-rain-fall: rain-fall 1.4s linear infinite;
+  --animate-rain-ripple: rain-ripple 2.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  --animate-rain-drift: rain-drift 9s linear infinite;
+
+  @keyframes rain-fall {
+    0% { transform: translate3d(0, -7rem, 0); opacity: 0; }
+    15% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { transform: translate3d(0, 9rem, 0); opacity: 0; }
+  }
+  @keyframes rain-ripple {
+    0% { transform: scale(0.15); opacity: 0.9; }
+    100% { transform: scale(1); opacity: 0; }
+  }
+  @keyframes rain-drift {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+}
 
 :root {
   --background: #ffffff;

@@ -103,6 +103,12 @@ Liste exhaustive des fonctionnalités de l'application.
 - Contrôles automatiques axe-core dans les tests E2E (`e2e/accessibility.spec.ts`)
 - **Sitemap du domaine principal** (`apexSitemap`) : page d'accueil de benevol.app et pages de contenu publiques, avec la date de modification de leur fichier source ; rien pour les hôtes de préproduction ou inconnus
 
+### Page introuvable (`src/app/not-found.tsx`)
+
+- Toute adresse inconnue et tout `notFound()` (événement inconnu ou non publié, fiche de documentation, vidéo, page d'administration d'une autre organisation) : code HTTP 404, titre « Page introuvable | benevol.app », `noindex`, page « Cette page est tombée à l'eau. » rendue dans la seule mise en page racine (`src/components/public/NotFoundPage.tsx`)
+- Liens utiles (`src/lib/not-found-links.ts`) : sur le domaine principal, accueil, fonctionnalités, documentation, guides bénévole et organisateurs, tutoriels vidéo, espace organisateur ; sur l'adresse d'une organisation (`x-org-slug`), « Voir les événements » vers sa page publique, où retrouver son lien personnel, guide bénévole, documentation, vidéos, espace organisateur. Ni « tu » ni « vous » : bénévoles et organisateurs y arrivent
+- Pluie décorative en CSS (masquée aux technologies d'assistance), immobile avec « Réduire les animations » ; thème clair ou sombre selon le système (`data-color-scheme="system"`)
+
 ### Documentation publique (`/doc`, `/doc/admin`, `/doc/benevole`)
 
 - Guides administrateur et bénévole publiés comme pages du site (captures d'écran, FAQ), au lieu de fichiers Markdown lisibles seulement sur GitHub — sources uniques avec `GUIDE_ADMIN.md` et les pages de `guide/`
