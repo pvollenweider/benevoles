@@ -110,7 +110,10 @@ describe("DocVideoInline", () => {
     expect(screen.queryByRole("heading")).toBeNull()
     expect(screen.getByText("Transcription")).toBeInTheDocument()
     expect(screen.getByText("Second passage.")).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Ouvrir dans la bibliothèque" })).toHaveAttribute("href", "/videos/ORG_FIRST_STEPS?from=doc")
+    const library = screen.getByRole("link", { name: /^Ouvrir dans la bibliothèque/ })
+    expect(library).toHaveAttribute("href", "/videos/ORG_FIRST_STEPS?from=doc")
+    // Several players on one page: each library link names its video, not only « Ouvrir dans la bibliothèque ».
+    expect(library.textContent).toMatch(/^Ouvrir dans la bibliothèque : \S/)
   })
 
   it("starts playback from the press that opens it, without an autoplay attribute, and leaves the gallery's intent alone", () => {

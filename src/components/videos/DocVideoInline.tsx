@@ -128,7 +128,7 @@ export default function DocVideoInline({ player }: { player: DocVideoPlayer }) {
             )}
             <p className="text-sm">
               <a href={player.libraryHref} className={linkClass}>
-                Ouvrir dans la bibliothèque
+                Ouvrir dans la bibliothèque<span className="sr-only"> : {player.title}</span>
               </a>
             </p>
           </>

@@ -59,7 +59,7 @@ En savoir plus : [les rappels](guide/rappels.md), [écrire aux bénévoles](guid
 
 ## Voir où il manque du monde
 
-<!-- image: STAFFING_GAPS | « Où manque-t-il du monde ? » : 33 places pourvues sur 56, puis les créneaux à compléter, du plus dégarni au plus proche du complet. -->
+<!-- image: STAFFING_GAPS | « Où manque-t-il du monde ? » : le nombre de places pourvues sur le total, puis les créneaux à compléter, du plus dégarni au plus proche du complet. -->
 
 - **Les créneaux à compléter**, du plus dégarni au plus proche du complet, et les postes sans personne.
 - **Chercher des bénévoles** parmi vos membres pour ces créneaux, puis leur écrire en une fois, sans classement ni présélection : vous choisissez.

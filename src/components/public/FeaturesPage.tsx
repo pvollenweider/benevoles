@@ -8,7 +8,7 @@ import type { FeatureStill, RenderedFeaturesPage } from "@/lib/public-content"
 import type { FeatureAction } from "@/lib/features-page"
 import type { DocUnitPart } from "@/lib/doc-video-references"
 
-const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 dark:focus-visible:outline-blue-300"
+const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
 const balance = { textWrap: "balance" } as React.CSSProperties
 const pretty = { textWrap: "pretty" } as React.CSSProperties
 
@@ -46,6 +46,12 @@ function ActionLinks({ actions }: { actions: FeatureAction[] }) {
                 : `inline-flex items-center py-2 text-base font-medium text-blue-700 dark:text-blue-300 underline underline-offset-4 hover:decoration-2 rounded ${focusRing}`
             }
           >
+            {address && (
+              // Visible cue that the button opens the mail app; the address is spelled out for screen readers.
+              <svg aria-hidden="true" viewBox="0 0 20 20" className="h-4 w-4 shrink-0 fill-current">
+                <path d="M2.5 4h15A1.5 1.5 0 0 1 19 5.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 1 14.5v-9A1.5 1.5 0 0 1 2.5 4Zm.4 1.5L10 10.2l7.1-4.7H2.9Zm14.6 1.3-7.1 4.7a.75.75 0 0 1-.8 0L2.5 6.8v7.7h15V6.8Z" />
+              </svg>
+            )}
             {action.label}
             {address && <span className="sr-only"> par email ({address})</span>}
             {primary && <span aria-hidden="true">→</span>}
@@ -97,7 +103,7 @@ export default function FeaturesPage({ page }: { page: RenderedFeaturesPage }) {
   const introVideos = intro.parts.filter((p) => p.kind === "video")
   return (
     <main id={MAIN_CONTENT_ID} tabIndex={-1} className="focus:outline-none">
-      <section aria-labelledby="features-title" className="max-w-6xl mx-auto px-6 pt-12 pb-16 sm:pt-16">
+      <section className="max-w-6xl mx-auto px-6 pt-12 pb-16 sm:pt-16">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center">
           <div>
             <p className="text-base font-semibold text-blue-700 dark:text-blue-300">Fonctionnalités</p>
@@ -136,7 +142,7 @@ export default function FeaturesPage({ page }: { page: RenderedFeaturesPage }) {
           const still = s.stills[0]
           const flip = index % 2 === 1
           return (
-            <section key={s.id} aria-labelledby={s.id} className="py-16 sm:py-20 border-b border-gray-100 dark:border-gray-800 last:border-b-0">
+            <section key={s.id} className="py-16 sm:py-20 border-b border-gray-100 dark:border-gray-800 last:border-b-0">
               <div className={still ? "grid gap-10 lg:grid-cols-12 lg:gap-12 lg:items-start" : ""}>
                 <div className={still ? `lg:col-span-6 ${flip ? "lg:order-2 lg:col-start-7" : ""}` : ""}>
                   <h2 id={s.id} className="scroll-mt-6 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50 break-words" style={balance}>
