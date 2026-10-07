@@ -6,7 +6,8 @@ import path from "path"
 import { renderEventPageMarkdown } from "@/lib/event-page-markdown"
 import { linkSourcesToRoutes, splitTitle } from "@/lib/doc-pages"
 import { docVideoLink, docVideoPlayer, findVideoReferences, renderDocVideoCard, renderDocVideoSlot, splitAtDocVideoSlots, type DocUnitPart, type DocVideoPlayer } from "@/lib/doc-video-references"
-import { videoMediaUrls, type Video } from "@/lib/video-catalog"
+import { resolveVideoReference, videoMediaUrls, type Video } from "@/lib/video-catalog"
+import { parseFeaturesPage, type FeatureAction, type FeatureBlock, type FeatureImage, type FeatureStep } from "@/lib/features-page"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import type { DocUnit } from "@/lib/doc-units"
 
@@ -81,4 +82,58 @@ function renderPublicMarkdown(body: string, mediaBaseUrl?: string | null): strin
     return link ? renderDocVideoCard(link) : ""
   }
   return renderEventPageMarkdown(linkSourcesToRoutes(body), { shiftHeadings: false, headingIds: true, videoCard })
+}
+
+/** A still of a video (its poster), as /fonctionnalites shows it: never a broken image. */
+export type FeatureStill = { src: string; width: number; height: number; alt: string }
+
+export type RenderedFeatureBlock = {
+  /** The block's HTML, cut where its videos go (the inline player in their place). */
+  parts: DocUnitPart[]
+  actions: FeatureAction[]
+  stills: FeatureStill[]
+}
+
+export type RenderedFeaturesPage = {
+  title: string
+  intro: RenderedFeatureBlock
+  sections: (RenderedFeatureBlock & { heading: string; id: string; steps: FeatureStep[] | null })[]
+}
+
+/**
+ * FEATURES.md as /fonctionnalites draws it (src/lib/features-page.ts): each block's Markdown as
+ * HTML (links between sources made site links), its actions, the stills and players of the videos
+ * it names. A still needs a published video whose posters were generated (videos/renders.json) and
+ * VIDEO_MEDIA_BASE_URL; a player, a render to play. Otherwise nothing, never a broken image.
+ */
+export function renderFeaturesPage(mediaBaseUrl?: string | null): RenderedFeaturesPage {
+  const raw = fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), "FEATURES.md"), "utf-8")
+  const page = parseFeaturesPage(raw)
+  const catalog = videoCatalog()
+  const still = (image: FeatureImage): FeatureStill | null => {
+    const video = resolveVideoReference(image.videoId, catalog)
+    if (!video || !video.published || !video.render) return null
+    const poster = videoMediaUrls(video.slug, mediaBaseUrl, video.render)?.poster
+    return poster ? { src: poster, width: video.render.width, height: video.render.height, alt: image.alt } : null
+  }
+  const render = (block: FeatureBlock): RenderedFeatureBlock => {
+    const players = new Map<string, DocVideoPlayer>()
+    const videoSlot = (id: string) => {
+      const player = docVideoPlayer(id, catalog, mediaBaseUrl)
+      if (!player) return ""
+      players.set(id, player)
+      return renderDocVideoSlot(id)
+    }
+    const html = block.markdown ? renderEventPageMarkdown(linkSourcesToRoutes(block.markdown), { shiftHeadings: false, videoCard: videoSlot }) : ""
+    return {
+      parts: splitAtDocVideoSlots(html, players),
+      actions: block.actions,
+      stills: block.images.map(still).filter((s): s is FeatureStill => s !== null),
+    }
+  }
+  return {
+    title: page.title ?? "Fonctionnalités",
+    intro: render(page.intro),
+    sections: page.sections.map((s) => ({ ...render(s), heading: s.heading, id: s.id, steps: s.steps })),
+  }
 }

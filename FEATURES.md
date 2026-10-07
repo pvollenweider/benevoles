@@ -1,87 +1,147 @@
-# Fonctionnalités de benevol.app
+# Le planning de vos bénévoles, simplement
 
-benevol.app aide les associations et les organisateurs d'événements à planifier leurs bénévoles. Vous créez les postes et les créneaux, vous partagez la page d'inscription, et vous gardez une vue claire du planning. Les bénévoles n'ont pas de compte à créer : un lien suffit.
+Vous créez les postes et les créneaux, vous partagez un lien, et chaque bénévole choisit ses créneaux depuis son téléphone, sans compte à créer. Vous voyez tout de suite où il manque du monde, et les rappels partent tout seuls.
 
-C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles à prendre en main, pour une fête de village, une buvette, un festival sur plusieurs jours ou une manifestation sportive.
+Gratuit, open source et hébergé en France, pour une fête de village, une buvette, un festival sur plusieurs jours ou une manifestation sportive.
 
-## Préparer l'événement et son planning
+<!-- actions -->
+- [Demander un espace](mailto:contact@benevol.app?subject=Demande%20d%E2%80%99un%20espace%20sur%20benevol.app&body=Bonjour%2C%0A%0ANous%20aimerions%20essayer%20benevol.app%20pour%20organiser%20nos%20b%C3%A9n%C3%A9voles.%0A%0AAssociation%20%3A%0A%C3%89v%C3%A9nement%20%28nom%2C%20dates%2C%20nombre%20de%20b%C3%A9n%C3%A9voles%20environ%29%20%3A%0AAdresse%20souhait%C3%A9e%20%3A%20%E2%80%A6.benevol.app%0A%0AMerci%20%21)
+- [Voir comment ça marche](#comment-ca-marche)
 
-- **Un planning par postes et par créneaux.** Bar, accueil, montage : chaque poste a ses créneaux, avec le nombre de places voulu. Un créneau de nuit peut finir le lendemain.
-- **Des créneaux en série.** Une buvette de 10 h à 22 h par tranches de deux heures se crée en une fois, avec un aperçu avant.
-- **Guidé pas à pas.** Une nouvelle organisation suit une liste de premiers pas (page publique et charte, fuseau horaire, premier événement, créneaux, publication, inscription de test), cochée automatiquement au fil de la mise en place. Un événement se crée en trois étapes : les informations, les créneaux, puis une page de vérification avant de publier, qui signale aussi les créneaux sans lieu ou sans contact, des inscriptions fermées sans date d'ouverture et des rappels désactivés.
-- **Un bon départ.** Des modèles d'événement (festival, buvette, manifestation sportive, fête de village, montage et démontage) créent un brouillon déjà rempli. Un événement de l'an dernier se duplique en décalant toutes ses dates, et vous choisissez ce qui est repris : créneaux, réglages, pages, responsables.
-- **Un brouillon, puis la publication.** Vous préparez tranquillement, vous voyez la page exactement comme les bénévoles la verront, puis vous publiez.
-- **Les infos pratiques au bon endroit.** Pour chaque créneau : lieu de rendez-vous, lien vers la carte, personne de contact et consigne courte. Un contact le jour J, facultatif, prend le relais pour les créneaux sans contact : seuls les bénévoles inscrits le voient, jamais la page publique. Sur sa page personnelle, le bénévole trouve en haut « Avant ta mission » : son prochain créneau, où aller, qui appeler, le responsable du poste, la consigne et les pages d'information de l'événement.
-- **Des responsables de secteur.** Chaque responsable reçoit un lien personnel pour suivre les bénévoles de son poste, sans compte. Les bénévoles confirmés du poste voient son nom, jamais ses coordonnées.
-- **Des jalons de préparation.** « Fermer les inscriptions », « commander les t-shirts » : les étapes à ne pas oublier, avec leur échéance.
+<!-- image: VOLUNTEER_CHOOSE_SHIFTS | La page d'inscription d'un événement : les créneaux de chaque poste sur une frise par jour, et à droite le récapitulatif des créneaux choisis. -->
 
-## Faciliter l'inscription des bénévoles
+<!-- video: ADMIN_FEATURES_OVERVIEW -->
 
-- **Sans compte ni mot de passe.** Le bénévole ouvre le lien, choisit ses créneaux sur son téléphone et confirme.
-- **Plusieurs créneaux en une fois.** Les chevauchements sont signalés avant l'envoi et les places restantes sont affichées.
-- **Un récapitulatif clair avant de confirmer.** Les créneaux dans l'ordre, les pauses entre eux et les informations transmises à l'organisation. Une journée trop longue ou des créneaux enchaînés sans vraie pause sont signalés, sans bloquer.
-- **Une liste d'attente.** Quand un créneau est complet, on peut s'inscrire en attente. Si une place se libère, la personne suivante la reçoit par email et a 24 heures pour la prendre.
-- **Sur validation, pour les postes sensibles.** Conduite, caisse, sécurité : l'inscription devient une demande qui garde sa place, et vous acceptez ou refusez. Le bénévole est prévenu par email dans les deux cas.
-- **Vos règles.** Un âge minimum par créneau, un téléphone obligatoire si vous devez pouvoir appeler vos bénévoles, un nombre maximum de créneaux par personne sur un poste très demandé, quelques questions à vous (taille de t-shirt, permis, régime), un poste réservé aux membres qui portent une étiquette (ils s'inscrivent avec leur lien d'invitation).
-- **Ouvrir quand vous êtes prêt.** Le planning peut être publié avant l'ouverture des inscriptions. Ouvrez-les ou fermez-les dans les réglages de l'événement, ou programmez une date d'ouverture et de fermeture ; la page indique aux bénévoles quand revenir.
-- **Visible ou discret.** Un événement peut apparaître sur votre page publique ou rester accessible seulement à ceux qui ont le lien.
-- **Un lien facile à partager.** Copiez le lien de l'événement en un clic, ou partagez-le depuis votre téléphone. Collé dans une messagerie ou sur un réseau social, il s'affiche avec le titre de l'événement, sa description ou ses dates, et une image. Le lien de la page de votre organisation aussi s'affiche avec son titre et une image.
+## Comment ça marche
 
-## Garder les bénévoles informés
+1. **Préparez le planning.** Créez l'événement, ses postes et ses créneaux, à partir d'un modèle ou de l'édition de l'an dernier.
+2. **Partagez le lien.** Les bénévoles ouvrent la page sur leur téléphone, choisissent leurs créneaux et confirment, sans compte ni mot de passe.
+3. **Suivez et prévenez.** Vous voyez où il manque du monde, les confirmations et les rappels partent par email, et le jour J vous pointez les arrivées.
 
-- **Une confirmation par email** avec le récapitulatif des créneaux et un lien personnel pour les retrouver, les modifier ou les annuler, et les ajouter à son calendrier.
-- **Des rappels automatiques** deux jours avant, la veille et le jour même, et des notifications sur le téléphone pour ceux qui les activent. Plusieurs créneaux le même jour pour le même événement : un seul rappel les regroupe tous, plutôt qu'un par créneau. Chaque organisation choisit les rappels envoyés et l'adresse qui reçoit les réponses des bénévoles, et peut couper tous les rappels d'un événement.
-- **Des messages ciblés** à tous les inscrits, à un poste, à un créneau, à la liste d'attente ou aux invités qui n'ont pas encore de créneau (ceux qui ont dit ne pas être disponibles sont exclus), avec un aperçu avant l'envoi, une notification sur le téléphone en plus de l'email pour l'urgent, des modèles réutilisables avec le prénom de chacun, et l'historique de ce qui a été envoyé, par qui et avec quel résultat.
-- **Prévenus des changements.** Si un créneau change d'horaire ou est annulé, les inscrits reçoivent un email.
+## Préparer le planning
 
-## Suivre l'organisation au quotidien
+<!-- image: SHIFTS_ROLES_VIEWS | La Frise des créneaux d'un événement : une ligne par poste, chaque créneau placé sur la journée avec ses places. -->
 
-- **Où manque-t-il du monde ?** Une page par événement liste les postes sans personne et les créneaux à compléter, du plus dégarni au plus proche du complet. Depuis un ou plusieurs créneaux à compléter, **Chercher des bénévoles** liste vos membres avec ce qui peut vous aider à choisir (tags, disponibilité générale indicative, déjà inscrits à l'événement, chevauchement avec un autre de leurs créneaux), sans classement ni présélection : vous cochez qui vous voulez, et chacun reçoit un email avec les créneaux qu'il peut prendre, les places libres et son lien pour s'inscrire.
-- **Ce qui demande votre attention.** Le tableau de bord commence par ce qui presse : créneaux des prochains jours pas encore complets, demandes à valider, places de liste d'attente qui expirent, jalons en retard, bénévoles aux journées trop chargées, invités sans réponse, membres avec une adresse à vérifier.
-- **Où en est l'événement ?** Une barre d'étapes, du brouillon à l'archivage, montre où il en est et ce qu'il reste à faire.
-- **Tout retrouver.** Une recherche globale (Ctrl + K, ou Cmd + K sur Mac) trouve un bénévole, une inscription, un événement ou un créneau, sans se soucier des accents.
-- **Les inscriptions en main.** Ajouter quelqu'un à la main, retirer, désigner un responsable, renvoyer un lien, avec une confirmation avant chaque action et quelques secondes pour annuler un retrait.
-- **Prévenus d'un désistement.** Quand un bénévole annule une place confirmée ou une demande, vous et les responsables du poste recevez un email avec le mot qu'il a laissé le cas échéant ; ce réglage se coupe indépendamment de celui des nouvelles inscriptions.
-- **Deux rôles pour l'équipe.** Les propriétaires gèrent l'équipe, les réglages de l'organisation et la suppression définitive d'un événement ; les organisateurs préparent les événements, gèrent les inscriptions et les membres, et écrivent aux bénévoles.
-- **Vos membres.** Fiches avec étiquettes, notes et disponibilités, invitations et relances, import depuis un fichier CSV ou Excel, avec un aperçu de ce qui sera créé ou mis à jour avant de confirmer. L'activité de chaque membre, événement par événement : invitations, inscriptions, présences, sans score. Un membre invité peut répondre qu'il n'est pas disponible cette fois : vous le voyez dans la liste des invitations et il n'est ni relancé ni compté dans « sans réponse ».
-- **Adresses à vérifier.** Un membre dont l'adresse a été refusée définitivement par le serveur destinataire pour un message important (confirmation, proposition de liste d'attente, rappel) l'indique sur sa fiche et dans la liste, avec la date et une explication simple, jamais une mise en cause de la personne ; un filtre les retrouve toutes, et un résumé quotidien par email vous prévient quand ça arrive. Rien n'est bloqué : c'est un signal, pas une interdiction. Écrire à un groupe qui en compte vous le dit aussi, sans empêcher l'envoi.
-- **Doublons possibles.** Des fiches qui se ressemblent (même nom, même numéro, adresses email très proches, adresse à vérifier proche d'une autre fiche, même date de naissance) sont suggérées, avec les raisons en mots, jamais fusionnées automatiquement. Ignorer une paire ne la cache pas pour toujours : elle revient si un nouveau signal apparaît. Visible et à ignorer par les organisateurs ; la fusion elle-même reste réservée aux propriétaires.
-- **Fusionner deux fiches en double.** Deux fiches confirmées comme la même personne (une adresse saisie de travers, une saisie en double) se fusionnent sans perdre d'inscription : aperçu complet de ce qui bouge, choix explicite champ par champ, conflits signalés avant de confirmer, régénération des liens personnels déplacés. Réservé aux propriétaires, irréversible une fois confirmé.
-- **Supprimer une fiche créée par erreur.** Une fiche inactive qui n'a jamais eu d'inscription, quel que soit son statut, peut être supprimée définitivement, pas seulement désactivée : les doublons de saisie ou les tests disparaissent vraiment de la liste et des exports. Une fiche avec de l'historique à conserver, elle, se désactive ou s'efface sans perdre cet historique.
-- **Effacer les données personnelles d'un membre.** À la demande d'une personne, sa fiche est vidée de tout ce qui l'identifie (nom, coordonnées, notes, réponses, invitations) en une action, avec un récapitulatif de ce qui est effacé et conservé avant de confirmer. Ses inscriptions restent, sans identité, pour que les effectifs, les heures et l'historique des événements restent justes. Ouvert aux propriétaires et aux organisateurs, irréversible.
-- **Les présences.** Le jour J, une page faite pour le téléphone montre les créneaux en cours et ceux des trois prochaines heures, qui est attendu, qui est arrivé et où il manque du monde : un toucher marque une personne présente, un autre l'appelle. Depuis la liste des inscriptions, cochez plusieurs arrivées d'un coup.
-- **Attestation de bénévolat.** Pour un membre et une période, un document imprimable avec les événements, les postes tenus et les heures attestées par une présence enregistrée ; les heures planifiées sans présence peuvent être ajoutées à part, clairement distinguées.
-- **Combien de t-shirts commander ?** Les réponses à vos questions sont comptées par choix, sur les bénévoles confirmés, chacun une seule fois, avec à part ceux qui sont en attente. Un tableau par question, daté, à télécharger en CSV pour le fournisseur ou à imprimer.
-- **Le bilan d'un événement.** Bénévoles distincts, nouveaux et de retour, présences saisies sur le total de créneaux confirmés, heures planifiées et, parmi elles, heures attestées, taux de remplissage global et par poste, créneaux restés incomplets : un résumé imprimable, avec le détail de chaque chiffre.
-- **Les heures par bénévole, pour une période.** Un fichier CSV avec une ligne par membre (événements, créneaux, heures planifiées et heures attestées parmi elles) et un total pour l'organisation, pour le rapport annuel.
-- **Tout est noté.** Un journal d'activité par événement retrace qui a fait quoi, et quand.
+- **Des postes et des créneaux**, avec le nombre de places voulu. Un créneau de nuit peut finir le lendemain.
+- **Des créneaux en série** : une buvette de 10 h à 22 h par tranches de deux heures se crée en une fois, avec un aperçu avant.
+- **Un bon départ** : des modèles d'événement (festival, buvette, manifestation sportive, fête de village), ou l'événement de l'an dernier dupliqué avec toutes ses dates décalées.
+- **Un brouillon, puis la publication**, après une page de vérification qui signale ce qui manque : un créneau sans lieu ou sans contact, des inscriptions fermées sans date d'ouverture.
 
-## Préparer le jour J
+<!-- video: EVENT_CREATE_PUBLISH_OVERVIEW -->
 
-- **Le planning complet** en frise, en couleur, prêt à imprimer ou à enregistrer en PDF.
-- **Des feuilles pour le terrain**, lisibles en noir et blanc : planning par jour, par poste et par bénévole, feuille de présence à cocher, liste avec téléphones pour les organisateurs.
+En savoir plus : [créer un événement](guide/creer-un-evenement.md), [configurer les créneaux](guide/configurer-les-creneaux.md), [publier un événement](guide/publier-un-evenement.md).
+
+## Inscrire les bénévoles
+
+<!-- image: VOLUNTEER_REGISTER | La page d'inscription sur un téléphone : le créneau choisi, puis le court formulaire « Vos informations ». -->
+
+- **Sans compte ni mot de passe** : un lien, quelques créneaux, une confirmation.
+- **Plusieurs créneaux en une fois**, avec les places restantes, les chevauchements signalés et un récapitulatif clair avant de confirmer.
+- **Une liste d'attente** : quand une place se libère, la personne suivante la reçoit par email et a 24 heures pour la prendre.
+- **Vos règles** : un âge minimum, un téléphone obligatoire, une validation pour les postes sensibles, quelques questions (taille de t-shirt, permis), des postes réservés aux membres qui portent une étiquette.
+
+<!-- video: VOLUNTEER_REGISTER -->
+
+En savoir plus : [s'inscrire](guide/s-inscrire.md), [la liste d'attente](guide/liste-d-attente.md), [les inscriptions sur validation](guide/inscriptions-sur-validation.md).
+
+## Garder chacun informé
+
+<!-- image: TARGETED_MESSAGES | Les modèles de messages : un briefing réutilisable, avec le prénom du bénévole et le nom de l'événement remplis à l'envoi. -->
+
+- **Une confirmation par email**, avec un lien personnel pour retrouver ses créneaux, les modifier, les annuler ou les ajouter à son calendrier.
+- **Des rappels automatiques** deux jours avant, la veille et le jour même. Plusieurs créneaux le même jour pour le même événement : un seul rappel les regroupe.
+- **Des messages ciblés** à tous les inscrits, à un poste, à un créneau ou à la liste d'attente, avec un aperçu, des modèles réutilisables et l'historique des envois.
+- **Prévenus des changements** : si un créneau change d'horaire ou est annulé, les inscrits reçoivent un email.
+
+<!-- video: TARGETED_MESSAGES -->
+
+En savoir plus : [les rappels](guide/rappels.md), [écrire aux bénévoles](guide/ecrire-aux-benevoles.md).
+
+## Voir où il manque du monde
+
+<!-- image: STAFFING_GAPS | « Où manque-t-il du monde ? » : 33 places pourvues sur 56, puis les créneaux à compléter, du plus dégarni au plus proche du complet. -->
+
+- **Les créneaux à compléter**, du plus dégarni au plus proche du complet, et les postes sans personne.
+- **Chercher des bénévoles** parmi vos membres pour ces créneaux, puis leur écrire en une fois, sans classement ni présélection : vous choisissez.
+- **Un tableau de bord** qui commence par ce qui presse : créneaux des prochains jours pas encore complets, demandes à valider, jalons en retard.
+- **Une recherche globale** (Ctrl + K, ou Cmd + K sur Mac) pour retrouver un bénévole, une inscription, un événement ou un créneau.
+
+<!-- video: STAFFING_GAPS -->
+
+En savoir plus : [où manque-t-il du monde ?](guide/ou-manque-t-il-du-monde.md), [le tableau de bord](guide/tableau-de-bord.md).
+
+## Tenir le jour J
+
+<!-- image: EVENT_REPORTS | Le planning imprimé : pour chaque poste, les créneaux de la journée et le nom des bénévoles inscrits, lisible en noir et blanc. -->
+
+- **Une page faite pour le téléphone** : les créneaux en cours et ceux des trois prochaines heures, qui est arrivé et qui manque. Un toucher pointe une arrivée, un autre appelle.
+- **Le planning complet en frise**, prêt à imprimer, et des feuilles pour le terrain : par jour, par poste et par bénévole, et une feuille de présence à cocher.
 - **Des badges** à imprimer et découper, avec le prénom et le poste de chaque bénévole.
+- **Des responsables de secteur** qui suivent les bénévoles de leur poste depuis un lien personnel, sans compte.
 
-## Adapter la page à votre association
+<!-- video: ATTENDANCE_CHECK_IN -->
 
-- **Votre adresse**, du type `votre-association.benevol.app`, avec votre nom et le titre de votre page d'accueil.
-- **Votre charte du bénévole**, à accepter avant de s'inscrire.
-- **Des pages d'information** pour chaque événement : accès, FAQ, règlement.
-- **Une couleur** pour l'en-tête de la page d'inscription, choisie dans une palette qui reste lisible.
-- **Votre logo** à côté de votre nom : sur vos pages publiques, vos feuilles imprimées, les badges, les attestations et les emails.
+En savoir plus : [les présences le jour J](guide/presences-le-jour-j.md), [rapports, badges et résumé](guide/rapports-badges-et-resume.md), [les responsables de secteur](guide/responsables-de-secteur.md).
+
+## Après l'événement
+
+- **Le bilan** : bénévoles distincts, nouveaux et de retour, heures planifiées et heures attestées par une présence, remplissage par poste, créneaux restés incomplets. Un résumé imprimable.
+- **Une attestation de bénévolat** imprimable pour un membre et une période, avec ses événements, ses postes et ses heures.
+- **Les heures par bénévole** sur une période, dans un fichier CSV, pour le rapport annuel.
+- **Tout est noté** : le journal d'activité de chaque événement retrace qui a fait quoi, et quand.
+
+<!-- video: EVENT_REPORTS -->
+
+En savoir plus : [rapports, badges et résumé](guide/rapports-badges-et-resume.md), [le journal de l'événement](guide/journal-de-l-evenement.md).
+
+## Vos membres et leurs données
+
+<!-- image: MEMBERS_MANAGEMENT | La fiche d'un membre : prénom, nom, email, téléphone, étiquettes, notes et disponibilités générales. -->
+
+- **Vos membres au même endroit** : fiches avec étiquettes, notes et disponibilités, invitations et relances, import depuis un fichier CSV ou Excel.
+- **Les doublons repérés**, jamais fusionnés sans vous : vous choisissez champ par champ, sans perdre d'inscription.
+- **Vos données vous appartiennent** : exportez vos membres, votre journal ou l'archive complète d'un événement à tout moment.
+- **L'effacement sur demande** : les données personnelles d'un membre s'effacent en une action, ses inscriptions restent sans identité pour que les chiffres restent justes.
+
+<!-- video: MEMBERS_MANAGEMENT -->
+
+En savoir plus : [gérer les membres](guide/gerer-les-membres.md), [doublons et fusion](guide/doublons-et-fusion.md), [exporter et conserver ses données](guide/exporter-et-conserver-ses-donnees.md).
+
+## À l'image de votre association
+
+- **Votre adresse**, du type `votre-association.benevol.app`, avec votre nom, votre logo et une couleur pour l'en-tête de vos pages.
+- **Votre charte du bénévole**, à accepter avant de s'inscrire, et des pages d'information pour chaque événement : accès, FAQ, règlement.
 - **Votre fuseau horaire**, pour que rappels et horaires tombent juste.
 
-## Fiabilité et respect des données
+En savoir plus : [personnaliser l'organisation](guide/personnaliser-l-organisation.md), [la charte du bénévole](guide/charte-du-benevole.md).
 
-- **Chaque organisation est séparée** : elle ne voit que ses événements et ses bénévoles.
-- **Les liens personnels restent privés** : ils sont envoyés par email, et affichés à l'écran seulement à qui a prouvé recevoir les emails de l'adresse (par exemple en s'inscrivant depuis son lien d'invitation). Un lien perdu se redemande avec son adresse email.
-- **Vos données vous appartiennent** : exportez vos membres, votre journal ou l'archive complète d'un événement à tout moment.
-- **Un cadre écrit pour vos données** : un [accord de sous-traitance](ACCORD-SOUS-TRAITANCE.md) (RGPD et loi suisse) encadre ce que benevol.app fait des données de vos bénévoles, et la [liste des sous-traitants](SOUS-TRAITANTS.md) dit quels prestataires les traitent, où, et avec quelles garanties.
-- **Les emails sont suivis** : vous voyez ceux qui sont partis, en attente ou en échec, et pouvez renvoyer ces derniers.
-- **Pensé pour tous** : inscription et administration conçues pour le clavier et les lecteurs d'écran, analysées automatiquement et revues à chaque modification ; la [déclaration d'accessibilité](ACCESSIBILITE.md) dit ce qui est testé et les limites connues.
+## Un outil sur lequel compter
 
-## Pour démarrer
+- **Gratuit et open source** : le code est publié sous licence AGPL. Pas d'abonnement, pas de fonction payante.
+- **Hébergé en France**, avec une copie de sauvegarde chiffrée en Suisse. Aucun cookie de pistage, d'analyse ou de publicité.
+- **Un cadre écrit pour vos données** : un [accord de sous-traitance](ACCORD-SOUS-TRAITANCE.md) (RGPD et loi suisse) et la [liste des sous-traitants](SOUS-TRAITANTS.md), avec leur localisation et leurs garanties.
+- **Chaque organisation est séparée**, et les liens personnels restent privés : ils sont envoyés par email, et un lien perdu se redemande avec son adresse.
+- **Pensé pour tous** : inscription et administration conçues pour le clavier et les lecteurs d'écran ; la [déclaration d'accessibilité](ACCESSIBILITE.md) dit ce qui est testé et les limites connues.
 
-benevol.app est un projet open source, ouvert aux associations qui veulent l'essayer. Écrivez à [contact@benevol.app](mailto:contact@benevol.app) : on vous crée un espace.
+## Se former
 
-Pour aller plus loin, le [guide administrateur](GUIDE_ADMIN.md) explique la mise en place pas à pas, et le [guide bénévole](GUIDE_BENEVOLE.md) montre ce que vivent vos bénévoles. Les [tutoriels vidéo](/videos) montrent en quelques minutes chaque étape, de la création d'un événement au jour J, avec leur transcription complète. Dans l'administration, les principaux écrans ont un lien « Aide » qui ouvre directement la page de la documentation qui les explique. Un problème ou une idée d'amélioration ? Écrivez à la même adresse, aucun compte n'est nécessaire.
+Les [tutoriels vidéo](/videos) montrent chaque étape en quelques minutes, avec leur transcription complète. Le [guide administrateur](GUIDE_ADMIN.md) explique la mise en place pas à pas, et le [guide bénévole](GUIDE_BENEVOLE.md) montre ce que vivent vos bénévoles. Dans l'administration, les principaux écrans ont un lien « Aide » vers la page qui les explique. Une question, un problème ou une idée d'amélioration ? Écrivez à [contact@benevol.app](mailto:contact@benevol.app), aucun compte n'est nécessaire.
+
+> **Bénévole ?** Rien à installer, aucun compte à créer : il suffit d'ouvrir le lien reçu par email ou partagé par l'association. Lien perdu ? [Le recevoir à nouveau](guide/lien-personnel.md).
+
+## Démarrer
+
+benevol.app est ouvert aux associations qui veulent l'essayer. Écrivez-nous : on vous crée un espace, puis la liste des [premiers pas](guide/premiers-pas.md) vous guide jusqu'à une inscription de test.
+
+<!-- actions -->
+- [Demander un espace](mailto:contact@benevol.app?subject=Demande%20d%E2%80%99un%20espace%20sur%20benevol.app&body=Bonjour%2C%0A%0ANous%20aimerions%20essayer%20benevol.app%20pour%20organiser%20nos%20b%C3%A9n%C3%A9voles.%0A%0AAssociation%20%3A%0A%C3%89v%C3%A9nement%20%28nom%2C%20dates%2C%20nombre%20de%20b%C3%A9n%C3%A9voles%20environ%29%20%3A%0AAdresse%20souhait%C3%A9e%20%3A%20%E2%80%A6.benevol.app%0A%0AMerci%20%21)
+- [Lire les premiers pas](guide/premiers-pas.md)
+
+## Ce que benevol.app ne fait pas, volontairement
+
+Pour rester simple, benevol.app s'en tient au planning des bénévoles. Il ne cherche pas à être :
+
+- un outil d'accréditation ou de zones d'accès, ni de gestion des repas et de l'hébergement ;
+- un outil qui attribue les bénévoles à leur place : chacun choisit ses créneaux, vous gardez la main ;
+- un CRM, un outil de campagnes SMS ou un constructeur de formulaires et de workflows ;
+- une application à installer : tout se fait dans le navigateur, sur téléphone comme sur ordinateur.

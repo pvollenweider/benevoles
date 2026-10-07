@@ -69,8 +69,8 @@ describe("FEATURES.md, the source of /fonctionnalites", () => {
 
   it("has one title and the main categories", () => {
     expect(md.match(/^# /gm)).toHaveLength(1)
-    expect(splitTitle(md).title).toBe("Fonctionnalités de benevol.app")
-    for (const h of ["Préparer l'événement et son planning", "Faciliter l'inscription des bénévoles", "Garder les bénévoles informés", "Suivre l'organisation au quotidien", "Préparer le jour J", "Adapter la page à votre association"]) {
+    expect(splitTitle(md).title).toBe("Le planning de vos bénévoles, simplement")
+    for (const h of ["Comment ça marche", "Préparer le planning", "Inscrire les bénévoles", "Garder chacun informé", "Voir où il manque du monde", "Tenir le jour J", "Après l'événement", "Vos membres et leurs données", "Démarrer"]) {
       expect(md).toContain(`## ${h}`)
     }
   })
@@ -91,7 +91,7 @@ describe("FEATURES.md, the source of /fonctionnalites", () => {
   })
 
   it("announces the organization logo now that it is built (#300)", () => {
-    expect(md).toMatch(/\*\*Votre logo\*\*/)
+    expect(md).toMatch(/votre logo/)
   })
 
   it("is copied into the runtime image, like the guides", () => {

@@ -1,0 +1,120 @@
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
+
+import { splitTitle } from "@/lib/doc-pages"
+import { createHeadingSlugger } from "@/lib/heading-anchors"
+import { videoReferenceId } from "@/lib/doc-video-references"
+
+/**
+ * The structure of FEATURES.md as /fonctionnalites lays it out: FEATURES.md stays the only copy of
+ * the page's content (AGENTS.md), the page only arranges it. Plain Markdown that reads well on
+ * GitHub, plus three conventions, each an HTML comment on its own line (GitHub shows nothing):
+ *
+ *     <!-- video: ADMIN_FEATURES_OVERVIEW -->         the video's inline player (src/lib/doc-video-references.ts)
+ *     <!-- image: STAFFING_GAPS | Texte alternatif --> a still of that video (its poster), with its alt text
+ *     <!-- actions -->                                 the list of links right below becomes buttons
+ *
+ * The text before the first `## ` is the page's opening; each `## ` opens a section, its id the
+ * heading's slug (the same anchors as the rest of the site, src/lib/heading-anchors.ts). A section
+ * made of a single ordered list whose items start with a bold title is drawn as numbered steps.
+ * Pure: the page resolves the videos and renders the Markdown (src/lib/public-content.ts).
+ */
+
+export type FeatureAction = { label: string; href: string }
+export type FeatureImage = { videoId: string; alt: string }
+export type FeatureStep = { title: string; text: string }
+
+export type FeatureBlock = {
+  /** The Markdown once the images and actions are taken out (video lines stay, where the players go). */
+  markdown: string
+  actions: FeatureAction[]
+  images: FeatureImage[]
+  videos: string[]
+}
+
+export type FeatureSection = FeatureBlock & {
+  heading: string
+  id: string
+  /** Set when the section is a single ordered list of « **Title.** text » items. */
+  steps: FeatureStep[] | null
+}
+
+export type FeaturesPage = { title: string | null; intro: FeatureBlock; sections: FeatureSection[] }
+
+const IMAGE_RE = /^<!--\s*image:\s*([A-Z][A-Z0-9_]+)\s*\|\s*([\s\S]+?)\s*-->$/
+const ACTIONS_RE = /^<!--\s*actions\s*-->$/i
+const LINK_ITEM_RE = /^[-*]\s+\[([^\]]+)\]\(([^)\s]+)\)\s*$/
+
+/** A block's conventions taken out of its Markdown. An image or a video with a malformed id is dropped. */
+export function parseFeatureBlock(markdown: string): FeatureBlock {
+  const lines = markdown.split("\n")
+  const kept: string[] = []
+  const actions: FeatureAction[] = []
+  const images: FeatureImage[] = []
+  const videos: string[] = []
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim()
+    if (/^<!--\s*image\b/i.test(line)) {
+      // A malformed image line (lower-case id, no alt text) shows nothing, like a malformed video.
+      const image = line.match(IMAGE_RE)
+      if (image) images.push({ videoId: image[1], alt: image[2].replace(/\s+/g, " ") })
+      continue
+    }
+    if (line.startsWith("<!--") && /^<!--\s*video\b/i.test(line)) {
+      // Kept in place: the page draws the player where the line stands.
+      const id = videoReferenceId(line)
+      if (id) videos.push(id)
+      kept.push(lines[i])
+      continue
+    }
+    if (ACTIONS_RE.test(line)) {
+      // The list right below (blank lines before it allowed) holds the actions.
+      let j = i + 1
+      while (j < lines.length && lines[j].trim() === "") j++
+      while (j < lines.length) {
+        const item = lines[j].trim().match(LINK_ITEM_RE)
+        if (!item) break
+        actions.push({ label: item[1], href: item[2] })
+        j++
+      }
+      i = j - 1
+      continue
+    }
+    kept.push(lines[i])
+  }
+  return { markdown: kept.join("\n").replace(/\n{3,}/g, "\n\n").trim(), actions, images, videos }
+}
+
+/** « 1. **Title.** text » items (comment lines ignored), or null when the Markdown is anything else than such a list. */
+export function parseSteps(markdown: string): FeatureStep[] | null {
+  const lines = markdown.split("\n").filter((l) => l.trim() !== "" && !l.trim().startsWith("<!--"))
+  if (lines.length === 0) return null
+  const steps: FeatureStep[] = []
+  for (const line of lines) {
+    const m = line.trim().match(/^\d+\.\s+\*\*(.+?)\*\*\s*(.*)$/)
+    if (!m) return null
+    steps.push({ title: m[1].trim(), text: m[2].trim() })
+  }
+  return steps
+}
+
+/** FEATURES.md as the page arranges it. */
+export function parseFeaturesPage(source: string): FeaturesPage {
+  const { title, body } = splitTitle(source)
+  const slug = createHeadingSlugger()
+  const chunks = body.split(/^## +/m)
+  const intro = parseFeatureBlock(chunks[0])
+  const sections = chunks.slice(1).map((chunk): FeatureSection => {
+    const newline = chunk.indexOf("\n")
+    const heading = (newline === -1 ? chunk : chunk.slice(0, newline)).replace(/ +#*$/, "").trim()
+    const block = parseFeatureBlock(newline === -1 ? "" : chunk.slice(newline + 1))
+    return { heading, id: slug(heading), ...block, steps: parseSteps(block.markdown) }
+  })
+  return { title, intro, sections }
+}
+
+/** A `mailto:` action: the address it writes to, for the button's accessible name; null otherwise. */
+export function mailtoAddress(href: string): string | null {
+  const m = href.match(/^mailto:([^?]+)/i)
+  return m ? decodeURIComponent(m[1]) : null
+}
