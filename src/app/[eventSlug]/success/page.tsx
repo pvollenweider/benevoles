@@ -52,7 +52,8 @@ function SuccessContent() {
   })()
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col px-4">
+    <>
+    <main className="flex-1 bg-gray-50 flex flex-col px-4">
       <div className="flex-1 flex items-center justify-center py-12">
         <div
           role="status"
@@ -122,8 +123,10 @@ function SuccessContent() {
           </Link>
         </div>
       </div>
-      <PublicFooter />
     </main>
+    {/* After </main>: a footer inside main loses its contentinfo role. */}
+    <div className="px-4"><PublicFooter /></div>
+    </>
   )
 }
 

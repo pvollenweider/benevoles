@@ -65,15 +65,17 @@ function LinkItems({ links }: { links: readonly FooterLink[] }) {
  *   project, its code and support, then the legal pages);
  * - `event` (default), the pages an organisation's audience sees (its events, a registration, a
  *   personal or sector leader link): they come for someone else's event, so one quiet row with the
- *   volunteers' guide, the legal pages and the name of the tool, no support appeal.
- * Each group is a list in a named navigation, without visual separators: a « · » dangles at the
+ *   volunteers' guide, the legal pages and the name of the tool, no support appeal, in text-sm
+ *   (read on a phone, by volunteers of every age).
+ * The navigations are named « Liens utiles » (and « Informations légales »), not « Pied de
+ * page », which would repeat the contentinfo role. Each group is a list, without visual separators: a « · » dangles at the
  * end of a wrapped line on a phone.
  */
 export default function PublicFooter({ variant = "event" }: { variant?: "site" | "event" }) {
   if (variant === "event") {
     return (
-      <footer className="mt-12 pb-6 text-xs text-gray-500 dark:text-gray-400">
-        <nav aria-label="Pied de page">
+      <footer className="mt-12 pb-6 text-sm text-gray-500 dark:text-gray-400">
+        <nav aria-label="Liens utiles">
           <ul className={listClass}>
             <li><SourceLink /></li>
             <LinkItems links={[...FOOTER_EVENT_LINKS, ...FOOTER_LEGAL_LINKS]} />
@@ -85,7 +87,7 @@ export default function PublicFooter({ variant = "event" }: { variant?: "site" |
 
   return (
     <footer className="mt-12 pb-6 text-gray-500 dark:text-gray-400">
-      <nav aria-label="Pied de page" className="text-sm text-gray-600 dark:text-gray-300">
+      <nav aria-label="Liens utiles" className="text-sm text-gray-600 dark:text-gray-300">
         <ul className={listClass}>
           <LinkItems links={FOOTER_SITE_LINKS} />
         </ul>

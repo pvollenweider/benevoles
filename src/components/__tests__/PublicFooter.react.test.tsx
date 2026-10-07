@@ -32,7 +32,7 @@ describe("PublicFooter", () => {
   describe("site variant (benevol.app's own pages)", () => {
     it("puts help and the organisers' sign-in in the primary navigation, in this order", () => {
       render(<PublicFooter variant="site" />)
-      const nav = screen.getByRole("navigation", { name: "Pied de page" })
+      const nav = screen.getByRole("navigation", { name: "Liens utiles" })
       expect(within(nav).getAllByRole("listitem")).toHaveLength(4)
       // #757 (changelog) and the public video library stay one click away from every page.
       expect(linksOf(nav)).toEqual([
@@ -69,7 +69,7 @@ describe("PublicFooter", () => {
 
     it("shows the volunteers' guide and the legal pages only, no support appeal nor platform news", () => {
       render(<PublicFooter variant="event" />)
-      const nav = screen.getByRole("navigation", { name: "Pied de page" })
+      const nav = screen.getByRole("navigation", { name: "Liens utiles" })
       expect(linksOf(nav)).toEqual([
         [`benevol.app v${pkg.version}, code source sur GitHub (ouvre dans un nouvel onglet)`, "https://github.com/pvollenweider/benevoles"],
         ["Guide bénévole", "/doc/benevole"],
