@@ -111,7 +111,7 @@ export default function DocVideoInline({ player }: { player: DocVideoPlayer }) {
       <div ref={regionRef} id={regionId} hidden={!expanded} className="not-prose my-6 space-y-4">
         {opened && (
           <>
-            <VideoPlayer title={player.title} mediaUrls={player.media} galleryAutoplay={false} aspectRatio={player.aspectRatio} />
+            <VideoPlayer title={player.title} mediaUrls={player.media} galleryAutoplay={false} frame={player.frame} />
             <VideoFeedback videoId={player.id} revision={player.revision} audience={player.audience} context="documentation" heading="p" />
             {player.transcript.length > 0 && (
               <details className="group">

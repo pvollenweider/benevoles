@@ -90,6 +90,56 @@ describe("VideoPlayer — fallback on error (#644 accessibility review)", () => 
   })
 })
 
+describe("VideoPlayer — reserved frame (#773, no layout shift)", () => {
+  it("gives the wrapper and the video the frame's ratio and size before any metadata", () => {
+    render(<VideoPlayer title="Titre" mediaUrls={mediaUrls} frame={{ width: 1280, height: 800 }} />)
+    const video = document.querySelector("video")!
+    expect(video).toHaveAttribute("width", "1280")
+    expect(video).toHaveAttribute("height", "800")
+    expect(video.style.aspectRatio).toBe("1280 / 800")
+    expect(video.parentElement!.style.aspectRatio).toBe("1280 / 800")
+  })
+
+  it("reserves 16:9 when the frame is unknown", () => {
+    render(<VideoPlayer title="Titre" mediaUrls={mediaUrls} />)
+    const video = document.querySelector("video")!
+    expect(video).toHaveAttribute("width", "1280")
+    expect(video).toHaveAttribute("height", "720")
+    expect(video.parentElement!.style.aspectRatio).toBe("1280 / 720")
+  })
+
+  it("keeps the same box when swapping to the fallback, without a video", async () => {
+    render(<VideoPlayer title="Titre" mediaUrls={mediaUrls} frame={{ width: 1280, height: 800 }} />)
+    const box = document.querySelector("video")!.parentElement!
+    fireEvent.error(document.querySelector("video")!)
+    await settle()
+    const fallback = document.querySelector("[tabindex='-1']")!
+    expect(fallback.parentElement).toBe(box)
+    expect(box.style.aspectRatio).toBe("1280 / 800")
+    expect(fallback).toHaveClass("h-full", "w-full")
+  })
+
+  // A portrait capture (390x844) at full column width ran far below the screen, controls out of
+  // view at high zoom: its width is capped so the height stays within 80vh.
+  it("caps a portrait frame's width so it never grows taller than the screen", () => {
+    render(<VideoPlayer title="Titre" mediaUrls={mediaUrls} frame={{ width: 390, height: 844 }} />)
+    // 80vh * 390 / 844 ≈ 36.97vh (jsdom folds the calc()).
+    const maxWidth = document.querySelector("video")!.parentElement!.style.maxWidth
+    const vh = Number(/^min\(100%, (?:calc\()?([\d.]+)vh\)?\)$/.exec(maxWidth)?.[1])
+    expect(vh).toBeCloseTo((80 * 390) / 844, 3)
+  })
+
+  it("leaves a landscape frame at full width", () => {
+    render(<VideoPlayer title="Titre" mediaUrls={mediaUrls} frame={{ width: 1280, height: 800 }} />)
+    expect(document.querySelector("video")!.parentElement!.style.maxWidth).toBe("")
+  })
+
+  it("reserves the frame for the « bientôt disponible » message too", () => {
+    render(<VideoPlayer title="Titre" mediaUrls={null} frame={{ width: 1280, height: 800 }} />)
+    expect(screen.getByText("Vidéo bientôt disponible.").closest("[tabindex='-1']")!.parentElement!.style.aspectRatio).toBe("1280 / 800")
+  })
+})
+
 describe("VideoPlayer — autoplay (#644 owner decision)", () => {
   it("calls play() when arriving from the gallery and motion is allowed", async () => {
     stubReducedMotion(false)

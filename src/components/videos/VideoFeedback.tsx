@@ -118,23 +118,28 @@ export default function VideoFeedback({
     <div role="group" aria-labelledby={headingId} aria-busy={state === "sending" || undefined} className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl px-5 py-4">
       <div role="status" aria-live="polite" className="sr-only">{statusText}</div>
       <Heading id={headingId} className="text-sm font-semibold text-gray-900 dark:text-gray-100">{wording.question}</Heading>
-      {state === "thanks" ? (
-        <p ref={thanksRef} tabIndex={-1} className="mt-2 text-sm text-gray-700 dark:text-gray-300 focus:outline-none">{wording.thanks}</p>
-      ) : alreadyAnswered ? (
-        <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">{wording.alreadyAnswered}</p>
-      ) : (
-        <>
-          <div className="mt-3 flex flex-wrap gap-3">
-            <button type="button" className={buttonClass} aria-disabled={busy || undefined} aria-describedby={error ? errorId : undefined} onClick={() => answer(true)}>
-              Oui
-            </button>
-            <button type="button" className={buttonClass} aria-disabled={busy || undefined} aria-describedby={error ? errorId : undefined} onClick={() => answer(false)}>
-              Non
-            </button>
-          </div>
-          {error && <p id={errorId} className="mt-2 text-sm text-red-700 dark:text-red-400">{error}</p>}
-        </>
-      )}
+      {/* At least one row of buttons tall (#773): a returning reader's « déjà répondu », read from
+          localStorage after hydration, and the thank-you replace the buttons without pulling up
+          what follows on the page. */}
+      <div className="mt-3 min-h-[2.375rem]">
+        {state === "thanks" ? (
+          <p ref={thanksRef} tabIndex={-1} className="text-sm text-gray-700 dark:text-gray-300 focus:outline-none">{wording.thanks}</p>
+        ) : alreadyAnswered ? (
+          <p className="text-sm text-gray-700 dark:text-gray-300">{wording.alreadyAnswered}</p>
+        ) : (
+          <>
+            <div className="flex flex-wrap gap-3">
+              <button type="button" className={buttonClass} aria-disabled={busy || undefined} aria-describedby={error ? errorId : undefined} onClick={() => answer(true)}>
+                Oui
+              </button>
+              <button type="button" className={buttonClass} aria-disabled={busy || undefined} aria-describedby={error ? errorId : undefined} onClick={() => answer(false)}>
+                Non
+              </button>
+            </div>
+            {error && <p id={errorId} className="mt-2 text-sm text-red-700 dark:text-red-400">{error}</p>}
+          </>
+        )}
+      </div>
     </div>
   )
 }

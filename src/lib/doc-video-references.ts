@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { parseVideoReference, resolveVideoReference, videoMediaUrls, type Audience, type Video, type VideoMediaUrls } from "@/lib/video-catalog"
+import { videoFrame, type VideoFrame } from "@/lib/video-frame"
 
 /**
  * Videos referenced from the documentation by their stable id (#645). A source (GUIDE_ADMIN.md,
@@ -112,8 +113,8 @@ export type DocVideoPlayer = {
   revision: number
   audience: Audience[]
   media: VideoMediaUrls
-  /** The frame's ratio, from the recording viewport (« 1280 / 800 »), so the player keeps its height before the metadata loads. */
-  aspectRatio: string
+  /** The frame's size (src/lib/video-frame.ts: the render's, else the recording viewport, else 16:9), so the player keeps its height before the metadata loads. */
+  frame: VideoFrame
   /** The narration, one paragraph per segment: the « Transcription » under the player. */
   transcript: string[]
 }
@@ -125,7 +126,6 @@ export function docVideoPlayer(id: string, catalog: Video[], mediaBaseUrl: strin
   const video = link ? resolveVideoReference(id, catalog) : null
   const urls = video ? media(video) : null
   if (!link || !video || !urls) return null
-  const { width, height } = video.manifest.viewport
   return {
     id: video.id,
     title: video.title,
@@ -134,7 +134,7 @@ export function docVideoPlayer(id: string, catalog: Video[], mediaBaseUrl: strin
     revision: video.revision,
     audience: [...video.audience],
     media: urls,
-    aspectRatio: width > 0 && height > 0 ? `${width} / ${height}` : "16 / 9",
+    frame: videoFrame(video),
     transcript: video.manifest.segments.map((segment) => segment.transcript).filter((text) => text.trim() !== ""),
   }
 }

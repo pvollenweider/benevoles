@@ -8,6 +8,7 @@ import { announce } from "@/lib/announce"
 import { focusFirstAvailableNextFrame } from "@/lib/focus-return"
 import { consumeAutoplayIntent, shouldAutoplay } from "@/lib/video-autoplay"
 import type { VideoMediaUrls } from "@/lib/video-catalog"
+import { frameOrDefault, type VideoFrame } from "@/lib/video-frame"
 
 /**
  * The detail page's player (#644). `mediaUrls` is `null` without `VIDEO_MEDIA_BASE_URL` — no
@@ -31,18 +32,25 @@ import type { VideoMediaUrls } from "@/lib/video-catalog"
  * yes, `video.play()` is called directly and a rejection (the browser's own autoplay policy) is
  * swallowed — the player just waits for Play, nothing breaks. A documentation unit's inline
  * player (DocVideoInline.tsx) passes `galleryAutoplay={false}`: it ignores the session's intent and
- * starts playback itself from the reader's click on « Voir la vidéo ». `aspectRatio` reserves the frame's height before the metadata loads.
+ * starts playback itself from the reader's click on « Voir la vidéo ».
+ *
+ * Reserved box (#773): the wrapper, the `<video>` (CSS `aspect-ratio` plus `width`/`height`
+ * attributes) and the fallback all take the frame's ratio (src/lib/video-frame.ts, 16:9 when
+ * unknown) from the first paint, so neither the metadata, the poster, the captions track nor a
+ * swap to the fallback moves what follows. The poster's preload is the page's job (only the
+ * detail page, where it is the largest element: src/app/videos/[id]/page.tsx).
  */
 export default function VideoPlayer({
   title,
   mediaUrls,
   galleryAutoplay = true,
-  aspectRatio,
+  frame,
 }: {
   title: string
   mediaUrls: VideoMediaUrls | null
   galleryAutoplay?: boolean
-  aspectRatio?: string
+  /** The frame's size in pixels (videos/renders.json); 16:9 when missing. */
+  frame?: VideoFrame
 }) {
   const [failed, setFailed] = useState(false)
   const [statusText, setStatusText] = useState("")
@@ -77,40 +85,48 @@ export default function VideoPlayer({
   }, [])
 
   const unavailable = !mediaUrls || failed
+  const { width, height } = frameOrDefault(frame)
+  const aspectRatio = `${width} / ${height}`
 
   return (
     <>
       <div role="status" aria-live="polite" className="sr-only">{statusText}</div>
-      {unavailable ? (
-        <div
-          ref={fallbackRef}
-          tabIndex={-1}
-          className="aspect-video bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl flex items-center justify-center focus:outline-none"
-        >
-          <p className="text-sm text-gray-600 dark:text-gray-300">Vidéo bientôt disponible.</p>
-        </div>
-      ) : (
-        <video
-          ref={videoRef}
-          controls
-          tabIndex={0}
-          crossOrigin="anonymous"
-          preload="metadata"
-          // Only set when the poster was generated (videos/renders.json): never a broken image.
-          poster={mediaUrls.poster}
-          aria-label={title}
-          className="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
-          style={aspectRatio ? { aspectRatio } : undefined}
-          onError={handleError}
-        >
-          <source src={mediaUrls.video} type="video/mp4" />
-          {/* Off by default (owner decision): still selectable from the native controls'
-              captions menu, WCAG 1.2.2 is met either way: a full transcript always follows the
-              player, in a closed <details> that stays in the DOM (video page and documentation
-              unit alike, DocVideoInline.tsx). */}
-          <track kind="captions" srcLang="fr" label="Français" src={mediaUrls.captions} />
-        </video>
-      )}
+      {/* A portrait capture (a phone screen) never grows taller than the screen: its width is capped
+          so that its height stays within 80vh, controls in view, ratio kept. */}
+      <div className="mx-auto w-full" style={{ aspectRatio, maxWidth: height > width ? `min(100%, calc(80vh * ${width} / ${height}))` : undefined }}>
+        {unavailable ? (
+          <div
+            ref={fallbackRef}
+            tabIndex={-1}
+            className="h-full w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl flex items-center justify-center focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
+          >
+            <p className="text-sm text-gray-600 dark:text-gray-300">Vidéo bientôt disponible.</p>
+          </div>
+        ) : (
+          <video
+            ref={videoRef}
+            controls
+            tabIndex={0}
+            crossOrigin="anonymous"
+            preload="metadata"
+            // Only set when the poster was generated (videos/renders.json): never a broken image.
+            poster={mediaUrls.poster}
+            aria-label={title}
+            width={width}
+            height={height}
+            className="block h-full w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
+            style={{ aspectRatio }}
+            onError={handleError}
+          >
+            <source src={mediaUrls.video} type="video/mp4" />
+            {/* Off by default (owner decision): still selectable from the native controls'
+                captions menu, WCAG 1.2.2 is met either way: a full transcript always follows the
+                player, in a closed <details> that stays in the DOM (video page and documentation
+                unit alike, DocVideoInline.tsx). */}
+            <track kind="captions" srcLang="fr" label="Français" src={mediaUrls.captions} />
+          </video>
+        )}
+      </div>
     </>
   )
 }

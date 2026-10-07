@@ -196,7 +196,7 @@ describe("docVideoPlayer", () => {
         captions: "https://medias.example.org/org-first-steps/org-first-steps.vtt",
         transcript: "https://medias.example.org/org-first-steps/org-first-steps.txt",
       },
-      aspectRatio: "1280 / 800",
+      frame: { width: 1280, height: 800 },
       transcript: ["t"],
     })
   })
@@ -212,7 +212,7 @@ describe("docVideoPlayer", () => {
     expect(docVideoPlayer("ORG_FIRST_STEPS", catalog, "  ")).toBeNull()
   })
 
-  it("skips empty transcript segments and falls back to 16 / 9 without a viewport size", () => {
+  it("skips empty transcript segments and falls back to 16:9 without a viewport size", () => {
     const video = makeVideo({})
     const odd = makeVideo({
       manifest: {
@@ -226,8 +226,13 @@ describe("docVideoPlayer", () => {
       },
     })
     const player = docVideoPlayer("ORG_FIRST_STEPS", [odd], base)!
-    expect(player.aspectRatio).toBe("16 / 9")
+    expect(player.frame).toEqual({ width: 1280, height: 720 })
     expect(player.transcript).toEqual(["Un.", "Deux."])
+  })
+
+  it("reserves the render's measured frame over the recording viewport (#773)", () => {
+    const video = makeVideo({ render: { durationMs: 1000, width: 1920, height: 1080, poster: true } })
+    expect(docVideoPlayer("ORG_FIRST_STEPS", [video], "https://medias.example.org")!.frame).toEqual({ width: 1920, height: 1080 })
   })
 })
 
