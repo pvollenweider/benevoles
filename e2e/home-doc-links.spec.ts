@@ -10,7 +10,7 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 375, height: 667 
     await page.setViewportSize(viewport)
     await page.goto("/")
     const hero = page.locator("section").first()
-    const link = hero.getByRole("link", { name: "Créer son premier événement" })
+    const link = hero.getByRole("link", { name: "Guide : créer son premier événement" })
     await expect(link).toHaveAttribute("href", QUICKSTART)
     await expect(link).toBeInViewport()
     // The mailto CTA stays first.
@@ -18,12 +18,15 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 375, height: 667 
   })
 }
 
-test("« Bien démarrer » links to at least five documentation units, then the volunteers' guide", async ({ page }) => {
+test("« Bien démarrer » lists at least five documentation units in order, then the volunteers' guide apart", async ({ page }) => {
   await page.goto("/")
   const block = page.getByRole("region", { name: "Bien démarrer" })
-  const hrefs = await block.getByRole("listitem").getByRole("link").evaluateAll((as) => as.map((a) => a.getAttribute("href")))
+  const steps = block.locator("ol > li")
+  await expect(steps.first().getByRole("link")).toHaveText("Créer son premier événement")
+  const hrefs = await steps.getByRole("link").evaluateAll((as) => as.map((a) => a.getAttribute("href")))
   expect(hrefs[0]).toBe(QUICKSTART)
-  expect(hrefs.filter((h) => /^\/doc\/[a-z0-9-]+$/.test(h ?? "") && h !== "/doc/benevole").length).toBeGreaterThanOrEqual(5)
-  expect(hrefs.at(-1)).toBe("/doc/benevole")
+  expect(hrefs.filter((h) => /^\/doc\/[a-z0-9-]+$/.test(h ?? "")).length).toBeGreaterThanOrEqual(5)
+  expect(hrefs).not.toContain("/doc/benevole")
+  await expect(block.getByRole("link", { name: "Guide bénévole" })).toHaveAttribute("href", "/doc/benevole")
   await expect(block.getByRole("link", { name: "Toute la documentation" })).toHaveAttribute("href", "/doc")
 })

@@ -15,7 +15,7 @@ import { orgHomeMetadata } from "@/lib/event-share"
 import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
 import { CONTACT_EMAIL, LANDING_FAQ, REPOSITORY_URL, jsonLdScript, landingJsonLd, landingMetadata } from "@/lib/landing-seo"
 import { loadDocUnits } from "@/lib/doc-units"
-import { landingQuickstartLink, landingStartLinks } from "@/lib/landing-start-guides"
+import { landingQuickstartLink, landingStartLinks, landingVolunteerGuideLink } from "@/lib/landing-start-guides"
 import LandingStartGuides from "@/components/public/LandingStartGuides"
 
 export const dynamic = "force-dynamic"
@@ -240,7 +240,8 @@ function LandingPage() {
                   href={quickstart.href}
                   className={`inline-flex items-center gap-2 py-2 text-white text-base font-semibold underline underline-offset-4 decoration-blue-300 hover:decoration-white rounded ${focusRing} focus-visible:outline-white`}
                 >
-                  {quickstart.title}<span aria-hidden="true"> →</span>
+                  {/* Says it opens a guide: the page creates nothing by itself. */}
+                  Guide&nbsp;: créer son premier événement<span aria-hidden="true"> →</span>
                 </Link>
               )}
               <a
@@ -301,7 +302,7 @@ function LandingPage() {
       </section>
 
       {/* ── Bien démarrer : the essential guides ──────────────────────────── */}
-      <LandingStartGuides links={landingStartLinks(units)} />
+      <LandingStartGuides links={landingStartLinks(units)} guide={landingVolunteerGuideLink()} />
 
       {/* ── Ce qui change pour vous ──────────────────────────────────────── */}
       <section aria-labelledby="benefits-heading" className="bg-gray-50 border-y border-gray-200 px-4 sm:px-6 py-20 sm:py-24">

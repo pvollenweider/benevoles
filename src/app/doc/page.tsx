@@ -34,8 +34,8 @@ export default function DocIndexPage() {
       </ul>
       {quickstart && (
         <p>
-          Vous organisez votre premier événement ? Suivez <Link href={docUnitHref(quickstart.slug)}>{quickstart.title}</Link>
-          &nbsp;: huit étapes, de la demande d&apos;espace au lien partagé.
+          Vous organisez votre premier événement&nbsp;? Suivez <Link href={docUnitHref(quickstart.slug)}>{quickstart.title}</Link>.{" "}
+          {quickstart.summary}
         </p>
       )}
       <p>
