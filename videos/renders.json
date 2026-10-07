@@ -24,7 +24,7 @@
     "poster": true
   },
   "email-delivery-failures": {
-    "durationMs": 295360,
+    "durationMs": 295200,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -72,7 +72,7 @@
     "poster": true
   },
   "event-questions": {
-    "durationMs": 520720,
+    "durationMs": 520600,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -114,7 +114,7 @@
     "poster": true
   },
   "members-duplicates-merge": {
-    "durationMs": 221640,
+    "durationMs": 221600,
     "width": 1280,
     "height": 800,
     "poster": true

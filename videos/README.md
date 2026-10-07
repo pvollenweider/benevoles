@@ -413,6 +413,16 @@ dit : sans entrée, pas d'affiche (jamais d'image cassée) et la durée reste l'
 manifeste. Publiez donc les affiches (`make video-publish … APPLY=1`) avant de déployer un
 `renders.json` qui les annonce.
 
+Les affiches doivent venir des MP4 réellement publiés, pas d'un rendu local plus ancien : au
+besoin, téléchargez-les depuis `https://medias.benevol.app/<slug>/<slug>.mp4` dans un dossier et
+passez-le à `--input`. `POSTERS_ONLY=1` (`--posters-only`) n'envoie alors que les deux affiches,
+sans jamais renvoyer une vidéo, ses sous-titres ou sa transcription :
+
+```
+make video-publish KUBE_CONTEXT=<contexte> POSTERS_ONLY=1           # aperçu
+make video-publish KUBE_CONTEXT=<contexte> POSTERS_ONLY=1 APPLY=1   # envoi
+```
+
 ## Bibliothèque vidéo publique (`/videos`, #644)
 
 `src/lib/video-catalog.ts` lit `catalog.json`, `renders.json`, les manifestes et les scripts

@@ -13,9 +13,15 @@
  */
 export const PUBLISHED_EXTENSIONS = [".mp4", ".vtt", ".txt", ".jpg", "-og.jpg"] as const
 
-/** `<slug>/<slug>.mp4`, `<slug>/<slug>-og.jpg` etc.: the path of a published file, relative to the media root. */
-export function publishedFiles(slug: string): string[] {
-  return PUBLISHED_EXTENSIONS.map((ext) => `${slug}/${slug}${ext}`)
+/** The two posters only: what `--posters-only` sends, never touching a published video or its captions. */
+export const POSTER_EXTENSIONS = [".jpg", "-og.jpg"] as const
+
+/**
+ * `<slug>/<slug>.mp4`, `<slug>/<slug>-og.jpg` etc.: the path of a published file, relative to the
+ * media root. With `postersOnly`, only the two posters.
+ */
+export function publishedFiles(slug: string, { postersOnly = false }: { postersOnly?: boolean } = {}): string[] {
+  return (postersOnly ? POSTER_EXTENSIONS : PUBLISHED_EXTENSIONS).map((ext) => `${slug}/${slug}${ext}`)
 }
 
 /**

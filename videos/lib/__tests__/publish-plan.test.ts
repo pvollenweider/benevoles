@@ -16,6 +16,13 @@ describe("publishedFiles", () => {
       "event-create-blank/event-create-blank-og.jpg",
     ])
   })
+
+  it("lists only the two posters with postersOnly: a published video or its captions are never resent", () => {
+    expect(publishedFiles("event-create-blank", { postersOnly: true })).toEqual([
+      "event-create-blank/event-create-blank.jpg",
+      "event-create-blank/event-create-blank-og.jpg",
+    ])
+  })
 })
 
 describe("parseSha256Sum", () => {

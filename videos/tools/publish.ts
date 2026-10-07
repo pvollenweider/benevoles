@@ -6,10 +6,11 @@
  * <slug>.jpg and <slug>-og.jpg from videos/tools/posters.ts) to the media server
  * behind https://medias.benevol.app (k8s/media.yaml): only new or changed files, by SHA-256.
  *
- *   npm run video:publish -- --context <kube-context> [--apply] [ID …]
+ *   npm run video:publish -- --context <kube-context> [--apply] [--posters-only] [ID …]
  *
  * Without --apply it only prints the plan. The kube context is required on purpose: the command
- * writes to the production cluster. Nothing is ever deleted on the server.
+ * writes to the production cluster. Nothing is ever deleted on the server. `--posters-only` sends
+ * only the posters, leaving the published videos, captions and transcripts as they are.
  */
 import { createHash } from "node:crypto"
 import { createReadStream, existsSync } from "node:fs"
@@ -24,6 +25,7 @@ const MEDIA_ROOT = "/usr/share/nginx/html"
 
 const args = process.argv.slice(2)
 const apply = args.includes("--apply")
+const postersOnly = args.includes("--posters-only")
 const contextIndex = args.indexOf("--context")
 const context = contextIndex >= 0 ? args[contextIndex + 1] : undefined
 const ids = args.filter((a, i) => !a.startsWith("--") && i !== contextIndex + 1)
@@ -56,7 +58,7 @@ async function main() {
   const local = new Map<string, string>()
   const missing: string[] = []
   for (const entry of entries) {
-    for (const file of publishedFiles(entry.manifest)) {
+    for (const file of publishedFiles(entry.manifest, { postersOnly })) {
       const full = path.join(outputRoot, file)
       if (existsSync(full)) local.set(file, await sha256(full))
       else missing.push(file)
