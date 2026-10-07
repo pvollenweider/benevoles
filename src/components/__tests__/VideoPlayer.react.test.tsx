@@ -123,7 +123,10 @@ describe("VideoPlayer — reserved frame (#773, no layout shift)", () => {
   // view at high zoom: its width is capped so the height stays within 80vh.
   it("caps a portrait frame's width so it never grows taller than the screen", () => {
     render(<VideoPlayer title="Titre" mediaUrls={mediaUrls} frame={{ width: 390, height: 844 }} />)
-    expect(document.querySelector("video")!.parentElement!.style.maxWidth).toBe("min(100%, calc(80vh * 390 / 844))")
+    // 80vh * 390 / 844 ≈ 36.97vh (jsdom folds the calc()).
+    const maxWidth = document.querySelector("video")!.parentElement!.style.maxWidth
+    const vh = Number(/^min\(100%, (?:calc\()?([\d.]+)vh\)?\)$/.exec(maxWidth)?.[1])
+    expect(vh).toBeCloseTo((80 * 390) / 844, 3)
   })
 
   it("leaves a landscape frame at full width", () => {
