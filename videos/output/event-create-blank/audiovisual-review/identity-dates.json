@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T02:58:21.429Z",
-  "videoSha256": "4811f60870b8951ec947f46457c7c3ae2638f46e4bec4edec4a8b0252e972acd",
-  "promptSha256": "7031725c17603d3d89675af8ab04f259c6e4b9fd184a3ff502c077d71cd2005f",
-  "clipSha256": "553a93f4b76285dbea76ddcc7368bb72ea6ea14b6a17a3566067428006ed8a11",
+  "reviewedAt": "2026-10-06T18:35:36.811Z",
+  "videoSha256": "6b84b7d2666011cb2546ca34a661cde8c778ad75bf0113ca8be438175db28665",
+  "promptSha256": "cfda50476b86a904da177258066e60db8c310b2555f7a03ba305895ace7209ff",
+  "clipSha256": "e8339bc1d72fbd612c3edd52ab7e2b94563262f58a10393720c835d84c703d4d",
   "scene": "identity-dates",
   "review": {
     "heardOpening": "Commençons par un titre parlant",
@@ -12,31 +12,31 @@
         "spokenSeconds": 0.5,
         "spoken": "Commençons par un titre parlant",
         "visibleSeconds": 1,
-        "visible": "Le champ Titre se remplit avec 'Fête du quartier des Tilleuls'",
+        "visible": "Saisie du titre Fête du quartier des Tilleuls",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 2.2,
         "spoken": "une courte description",
-        "visibleSeconds": 4.5,
-        "visible": "Le texte de description s'affiche dans le champ dédié",
+        "visibleSeconds": 3.5,
+        "visible": "Saisie de la description de l'événement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.2,
+        "spokenSeconds": 6.8,
         "spoken": "La date de fin se cale d’abord sur la date de début",
-        "visibleSeconds": 8.8,
-        "visible": "La date de début est saisie et la date de fin prend la même valeur",
+        "visibleSeconds": 8.5,
+        "visible": "Affichage des champs Date début et Date fin calés au 14.11.2026",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.5,
+        "spokenSeconds": 10.2,
         "spoken": "nous la faisons terminer le dimanche",
-        "visibleSeconds": 10.6,
-        "visible": "La date de fin est ajustée au lendemain (dimanche)",
+        "visibleSeconds": 12,
+        "visible": "Modification du champ Date fin au 15.11.2026",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, bien synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

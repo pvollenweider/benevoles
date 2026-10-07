@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:55:26.857Z",
+  "videoSha256": "7865ee3c9d753ad6be7f07a321542b52dd57d845b40ef40c31ca2901050f5f45",
+  "promptSha256": "098877742f200f530075ffdffcd425a741efb62887012dda6dfcdd84969db141",
+  "clipSha256": "b5c80993db5bb20c77deb4a831658e0ac4431800327c6f407029c4544bad5e93",
+  "scene": "link",
+  "review": {
+    "heardOpening": "Ouvrons l'email reçu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.2,
+        "spoken": "Ouvrons l'email reçu dans la boîte de démonstration",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la boîte Mailpit avec l'e-mail ouvert",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Il propose à nouveau le lien d'invitation",
+        "visibleSeconds": 3.4,
+        "visible": "Bouton d'invitation visible dans le corps du message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "la relance ne crée pas une deuxième invitation",
+        "visibleSeconds": 7.2,
+        "visible": "Contenu de l'e-mail stable illustrant l'explication",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,53 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:45:21.019Z",
-  "videoSha256": "8fd119fcc7be2e7433955eb308377f0bafecf962c880a14c93f0b1b0c8f0ca78",
+  "reviewedAt": "2026-10-07T02:49:29.300Z",
+  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
   "promptSha256": "7a43ffa810bd2e72968a60d2731da2a1a7ccacc342149321f861aa2731a3fb1f",
-  "clipSha256": "50205d76192ea27271ae2258b1494184878de8b3f6dc5208814f98047b6e63e5",
+  "clipSha256": "9812f78debb8a32ee295c85edbebc492ccf3e71c04e937d8b9c18b8fdcd179c3",
   "scene": "admin-read",
   "review": {
     "heardOpening": "Revenons côté organisation, dans les inscriptions.",
     "checkpoints": [
       {
-        "spokenSeconds": 3.8,
-        "spoken": "Sous celle d'Aline, les réponses permettent de préparer son t-shirt et le matériel.",
-        "visibleSeconds": 0,
-        "visible": "Page Inscriptions brièvement visible avec la fiche d'Aline, puis masquée dès 00:01.",
-        "sync": "missing",
-        "severity": "major"
-      },
-      {
-        "spokenSeconds": 8.5,
-        "spoken": "Ouvrons ensuite Questions",
-        "visibleSeconds": 1,
-        "visible": "Affichage de la page Questions aux bénévoles.",
-        "sync": "early",
-        "severity": "major"
-      },
-      {
-        "spokenSeconds": 10.5,
-        "spoken": "la Synthèse des réponses compte les choix.",
-        "visibleSeconds": 1,
-        "visible": "Section Synthèse des réponses affichée à l'écran.",
+        "spokenSeconds": 0.5,
+        "spoken": "Revenons côté organisation, dans les inscriptions. Sous celle d'Aline",
+        "visibleSeconds": 0.5,
+        "visible": "Page Inscriptions affichée avec les réponses sous le nom d'Aline Mercier",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14,
-        "spoken": "Aline est comptée une seule fois parmi les bénévoles confirmés",
-        "visibleSeconds": 1,
-        "visible": "Mention « 1 bénévole confirmé » présente sous Synthèse des réponses.",
+        "spokenSeconds": 8.7,
+        "spoken": "Ouvrons ensuite Questions",
+        "visibleSeconds": 8.8,
+        "visible": "Affichage de la page Questions aux bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "la Synthèse des réponses compte les choix",
+        "visibleSeconds": 11,
+        "visible": "Section Synthèse des réponses visible avec le détail des bénévoles",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "00:01 : passage prématuré à la page Questions alors que les réponses d'Aline dans les inscriptions sont commentées jusqu'à 00:08."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide, claire et posée."
+      "observation": "Voix claire, posée et bien synchronisée avec les transitions visuelles."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

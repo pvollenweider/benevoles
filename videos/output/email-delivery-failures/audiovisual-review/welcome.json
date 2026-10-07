@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:36:00.019Z",
-  "videoSha256": "0e1d6ca56b0033e4694d6f34c74897fff990758b119a02cf3febeec27d85a9ed",
+  "reviewedAt": "2026-10-07T02:26:11.837Z",
+  "videoSha256": "747f7c10d9984c7ea3a97366fb011f0a9cb96b9e15f737f69903b78da2ae2e36",
   "promptSha256": "4d78f13854aff474e3d9ea8c8c140d2112c0d02024a4dc8d3d1baffc648619c0",
-  "clipSha256": "8662671af96700518b638562d094882cf3e473f9849060457a7e887bc3a7580d",
+  "clipSha256": "45b5cb7780a7181657a371a34b87cfc2fdf2089729d264db46d614c58c8ea974",
   "scene": "welcome",
   "review": {
     "heardOpening": "Vous avez envoyé un message",
     "checkpoints": [
       {
-        "spokenSeconds": 10.5,
-        "spoken": "les lignes récentes montrent le type d'email, le destinataire, la date et l'état de livraison",
+        "spokenSeconds": 8.5,
+        "spoken": "Dans Paramètres, puis Emails, les lignes récentes montrent le type d'email",
         "visibleSeconds": 8,
-        "visible": "Tableau des emails envoyés avec colonnes Date, Email, Destinataire et État",
+        "visible": "Tableau des emails envoyés affichant type, destinataire, date et statut",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 21,
         "spoken": "Connectons-nous maintenant avec Marc, notre organisateur de démonstration",
-        "visibleSeconds": 22,
-        "visible": "Formulaire de connexion renseigné puis validation pour le compte organisateur",
+        "visibleSeconds": 21.5,
+        "visible": "Écran de connexion et saisie de l'identifiant organisateur",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 27.5,
+        "spokenSeconds": 28,
         "spoken": "les réglages restent réservés au propriétaire. Le message de la page le précise",
         "visibleSeconds": 28.5,
-        "visible": "Message d'avertissement affiché indiquant que les réglages sont réservés aux propriétaires",
+        "visible": "Affichage du compte Marc Dupont avec mention des réglages réservés",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, synchronisation fluide avec la démonstration."
+      "observation": "Élocution claire et rythme régulier bien calé sur l'affichage."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

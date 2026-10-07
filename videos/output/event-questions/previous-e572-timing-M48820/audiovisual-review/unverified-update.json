@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:28:51.299Z",
+  "videoSha256": "f6ee805a2a5d1386fbd03a014714cf489ae12f80d0fc33e6c0a6004b3e061dd5",
+  "promptSha256": "e22e20c828a4fa5b35808bb0e87fc2fc6f4e2c680c3cd12e1c35cc08a7e04a56",
+  "clipSha256": "7a6d32eaab58960865e9f302701d8ae8a3c55f2d6ff6373ed79fd0783d6745ef",
+  "scene": "unverified-update",
+  "review": {
+    "heardOpening": "Comparons avec une inscription depuis le simple formulaire public",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "depuis le simple formulaire public, sans invitation",
+        "visibleSeconds": 2.8,
+        "visible": "Affichage du formulaire d'inscription public",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "Saisissons la même adresse pour un troisième créneau",
+        "visibleSeconds": 6.3,
+        "visible": "Remplissage de l'identité et de l'adresse e-mail",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.2,
+        "spoken": "mais choisissons S",
+        "visibleSeconds": 8.9,
+        "visible": "Sélection de la taille de t-shirt S",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.9,
+        "spoken": "L'inscription peut être créée",
+        "visibleSeconds": 13.8,
+        "visible": "Clic sur confirmer puis écran Inscription confirmée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

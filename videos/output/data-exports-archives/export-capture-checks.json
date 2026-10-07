@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-05T20:34:07.500Z",
+  "checkedAt": "2026-10-06T18:08:09.950Z",
   "scope": "actual local downloads, literal file views and frozen copy check; not full audiovisual or native spreadsheet validation",
   "members": {
     "exportedWithSearch": true,
@@ -9,7 +9,7 @@
   "csvLiteralValuesVisible": true,
   "fullJournalDespiteFilter": true,
   "archive": {
-    "sha256": "3189e2dcc5ad13920d6633c0680d1a986d29c696d6e75778c7e4ce30bf0b44ae",
+    "sha256": "aa44dc467315165b7ca90cd13c84078f956bcc54fd7b0972d1dbf3700b0bd22c",
     "sections": [
       "event",
       "shifts",
@@ -28,15 +28,15 @@
   "files": [
     {
       "file": "members-capture.csv",
-      "sha256": "3d652c9d4a255a993328a1fd7da2e1c1fa2a210dec1292b51ab72c68ac85b65c"
+      "sha256": "3b36c789740f96bbac9a39b9d9e63ff8c1dbf981db6e1fa7edbb428e12ed10dd"
     },
     {
       "file": "activity-capture.csv",
-      "sha256": "ab17e7d3b5bc380c5f890bdbb1906b0962dd099500efc16c85ba244a19d43c1d"
+      "sha256": "1265fa9043f624e3b19b006d6cdc792f60a1fd28970110bd198209ddf46593cb"
     },
     {
       "file": "event-archive-capture.json",
-      "sha256": "3189e2dcc5ad13920d6633c0680d1a986d29c696d6e75778c7e4ce30bf0b44ae"
+      "sha256": "aa44dc467315165b7ca90cd13c84078f956bcc54fd7b0972d1dbf3700b0bd22c"
     }
   ]
 }

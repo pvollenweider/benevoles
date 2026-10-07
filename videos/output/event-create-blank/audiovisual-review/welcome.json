@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T02:58:10.414Z",
-  "videoSha256": "4811f60870b8951ec947f46457c7c3ae2638f46e4bec4edec4a8b0252e972acd",
-  "promptSha256": "e4313ffa4aa1ff681c8d4f5ce3c8d0bebc358f3376dde944ba1a764009dbeef3",
-  "clipSha256": "b374d3bd4bf8c3c2e3dde324010b6faea32ca70ae7ab95e0a984929c562a1e28",
+  "reviewedAt": "2026-10-06T18:35:24.341Z",
+  "videoSha256": "6b84b7d2666011cb2546ca34a661cde8c778ad75bf0113ca8be438175db28665",
+  "promptSha256": "63386b8816038804b4e491d0e874d4dd017e145676887e4d5511dc3811e12575",
+  "clipSha256": "2ee04032eb46d73431c383daba43e471bc962ec8eb232087b29ae543a2db9b23",
   "scene": "welcome",
   "review": {
     "heardOpening": "Quand aucun modèle ne correspond vraiment",
     "checkpoints": [
       {
         "spokenSeconds": 2,
-        "spoken": "partez d'une page blanche",
-        "visibleSeconds": 2.5,
-        "visible": "Formulaire 'Nouvel événement' avec l'option 'Page blanche' sélectionnée",
+        "spoken": "partez d’une page blanche",
+        "visibleSeconds": 2.8,
+        "visible": "Affichage de l'assistant Nouvel événement avec l'option Page blanche présélectionnée",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 4,
-        "spoken": "L'événement est d'abord créé comme brouillon",
+        "spoken": "L’événement est d’abord créé comme brouillon",
         "visibleSeconds": 3,
-        "visible": "Mention du brouillon visible dans le descriptif sous les options",
+        "visible": "Mention descriptive visible sous l'option Page blanche indiquant la création en brouillon",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 10.8,
         "spoken": "Créons ensemble une fête de quartier sur deux jours",
-        "visibleSeconds": 11,
-        "visible": "Champs Titre et Description prêts pour la saisie de l'exercice annoncé",
+        "visibleSeconds": 10.8,
+        "visible": "Écran stable sur le formulaire prêt pour la saisie du titre et des détails",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, claire et fluide."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

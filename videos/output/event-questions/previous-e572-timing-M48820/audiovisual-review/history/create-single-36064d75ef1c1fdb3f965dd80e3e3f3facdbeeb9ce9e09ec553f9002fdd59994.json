@@ -1,0 +1,76 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:08:39.282Z",
+  "videoSha256": "50715a383930b94c66960386d0996cbbd6de02ea593b0ed689ab9af2ac881d81",
+  "promptSha256": "344cb6ce62ab99b9a2401a977fbfb1c2423287f525c83c3465e7626283b4eb47",
+  "clipSha256": "33034e01146bbe8a1111412d6a1fe272a024126d0204cd89a1775d5b4e87ad88",
+  "scene": "create-single",
+  "review": {
+    "heardOpening": "Commençons par la taille du t-shirt",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Cliquons sur Ajouter une question",
+        "visibleSeconds": 2.1,
+        "visible": "Clic sur le lien et apparition du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "puis saisissons son intitulé",
+        "visibleSeconds": 4.5,
+        "visible": "Texte 'Taille de t-shirt' saisi dans le champ",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "choisissons Choix unique",
+        "visibleSeconds": 8.5,
+        "visible": "Menu déroulant positionné sur Choix unique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.8,
+        "spoken": "Voici S, M, L et XL",
+        "visibleSeconds": 12,
+        "visible": "Choix listés dans la zone de texte",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 25.4,
+        "spoken": "cochons Réponse obligatoire",
+        "visibleSeconds": 25.1,
+        "visible": "Case Réponse obligatoire cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.2,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 27,
+        "visible": "Clic sur le bouton Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 29.8,
+        "spoken": "La question est maintenant dans la liste",
+        "visibleSeconds": 28.5,
+        "visible": "Question affichée dans la liste récapitulative",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier en adéquation avec les manipulations."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

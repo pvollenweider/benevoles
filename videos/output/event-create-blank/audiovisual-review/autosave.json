@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T02:59:13.967Z",
-  "videoSha256": "4811f60870b8951ec947f46457c7c3ae2638f46e4bec4edec4a8b0252e972acd",
-  "promptSha256": "2cdcc18bcb8837d561ab39211ce1e0915d8229f2bbd317119348422f1ee4156c",
-  "clipSha256": "9974ff27245dbfa213a3eb70a25e6518f23289f30f75a23504f0b94315286e7d",
+  "reviewedAt": "2026-10-06T18:36:36.490Z",
+  "videoSha256": "6b84b7d2666011cb2546ca34a661cde8c778ad75bf0113ca8be438175db28665",
+  "promptSha256": "c2da1ceedfb331729b18725b52cea9c5af02cd63209758ac7c557dcb6f132101",
+  "clipSha256": "46ebe7573fbbe972f456f05b223ae8197053e0a39fee8053640ab8a2f98840e4",
   "scene": "autosave",
   "review": {
-    "heardOpening": "Après la création",
+    "heardOpening": "Après la création, les modifications des réglages",
     "checkpoints": [
       {
-        "spokenSeconds": 6.8,
+        "spokenSeconds": 6,
         "spoken": "Corrigeons la description",
-        "visibleSeconds": 8.5,
-        "visible": "Saisie de texte ajoutée dans le champ Description",
+        "visibleSeconds": 7.5,
+        "visible": "Sélection et modification du texte dans le champ Description",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 9.2,
-        "spoken": "attendons Modifications enregistrées à, suivi de l’heure",
-        "visibleSeconds": 12.2,
-        "visible": "Apparition du message 'Modifications enregistrées à 07h55'",
+        "spoken": "Modifications enregistrées à, suivi de l’heure",
+        "visibleSeconds": 10.5,
+        "visible": "Affichage de la mention 'Modifications enregistrées à 20h33' en haut du formulaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.5,
+        "spokenSeconds": 14.8,
         "spoken": "Si la page dit Modifications non enregistrées",
-        "visibleSeconds": 16.5,
-        "visible": "Condition théorique expliquée, l'écran reste sur l'enregistrement validé",
+        "visibleSeconds": 14.8,
+        "visible": "Maintien de l'écran avec la sauvegarde active pour illustrer la consigne de vigilance",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Diction claire et rythme régulier."
+      "observation": "Voix fluide, posée et claire, avec un débit régulier bien synchronisé."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -12,8 +12,9 @@ import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import assert from "node:assert/strict"
 import { pathToFileURL } from "node:url"
-import { ownsRecordedNoEmailMember } from "./prepare-demo"
+import { ownsRecordedNoEmailMember, recordedMembers } from "./prepare-demo"
 import { ownsImportedNoEmailMember, readImportOwnership, type ImportOwnership } from "../lib/member-import-ownership"
+import { ownsNaturalMemberSeed, readSeedProofV2, type SeedProofV2, type SeedIdentity } from "../lib/member-fixture-v2"
 
 const exec = promisify(execFile)
 const reference = process.argv[2]
@@ -26,7 +27,7 @@ type Ownership = Parameters<typeof ownsRecordedNoEmailMember>[1]
 type MemberFixture = { id: string; name: string; volunteers: Member[]; admins: { email: string }[]; events: { slug: string; sectorLeaders: { email: string }[]; registrations: { volunteer: Member }[] }[] }
 
 /** Pure guard shared by the eight member journeys; no broad exemption for missing email. */
-export function validateMemberReviewFixture(databaseUrl: string, fixture: MemberFixture, owned: Ownership, now = Date.now(), imported: ImportOwnership | null = null) {
+export function validateMemberReviewFixture(databaseUrl: string, fixture: MemberFixture, owned: Ownership, now = Date.now(), imported: ImportOwnership | null = null, seedProof: SeedProofV2 | null = null) {
   const url = new URL(databaseUrl)
   assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Member review requires isolated local video database")
   assert(fixture.id === "default" && fixture.name === "Fêtes de Montvert" && fixture.events.some(event => event.slug === "fete-du-village"), "Member review requires the exact fictional default organization")
@@ -35,9 +36,8 @@ export function validateMemberReviewFixture(databaseUrl: string, fixture: Member
     if (member.email?.endsWith("@example.org")) return true
     if (member.email !== null) return false
     // Exact two seed identities, not every no-email contact with a familiar name.
-    if (member.id === "video-message-sansmail") return member.firstName === "René" && member.lastName === "Sansmail" && member.phone === null
-    if (member.id === "video-member-management-2") return member.phone?.replace(/\s/g, "") === "0790000200" && ((member.firstName === "Sébastien" && member.lastName === "Morel 3") || (member.firstName === "René" && member.lastName === "Sansmail"))
-    return ownsRecordedNoEmailMember(member, owned, now) || ownsImportedNoEmailMember(member, imported, now)
+    if (member.id === "video-member-management-2") return ownsNaturalMemberSeed(member as Partial<SeedIdentity>, seedProof, now)
+    return ownsRecordedNoEmailMember(member, owned, now) || imported?.schemaVersion === 3 && ownsImportedNoEmailMember(member, imported, now)
   }
   assert(fixture.volunteers.every(synthetic), "Member review contains non-synthetic organization members")
   assert(fixture.events.every(event => event.registrations.every(registration => synthetic(registration.volunteer)) && event.sectorLeaders.every(leader => leader.email.endsWith("@example.org"))), "Member review contains non-synthetic event recipients")
@@ -45,16 +45,14 @@ export function validateMemberReviewFixture(databaseUrl: string, fixture: Member
 }
 
 async function memberOwnership(): Promise<Ownership> {
-  let raw: string
-  try { raw = await readFile(path.resolve("videos/output/members-management/owned-members.json"), "utf8") }
-  catch (error) { if ((error as NodeJS.ErrnoException).code === "ENOENT") return []; throw error }
-  const ledger = JSON.parse(raw)
-  assert(ledger.schemaVersion === 1 && ledger.scenario === "members-management" && Array.isArray(ledger.members) && ledger.members.length <= 30, "Invalid member capture ownership ledger")
-  assert(ledger.members.every((entry: Ownership[number]) => entry && typeof entry.id === "string" && typeof entry.createdAt === "string"), "Invalid member ownership entry")
-  return ledger.members
+  return recordedMembers()
 }
 type Checkpoint = { spokenSeconds: number; spoken: string; visibleSeconds: number | null; visible: string; sync: "aligned" | "early" | "late" | "missing" | "uncertain"; severity: "none" | "minor" | "major" }
 type Review = { heardOpening: string; checkpoints: Checkpoint[]; issues: string[]; voice: { consistent: boolean; warm: boolean; observation: string } }
+export function audiovisualNeedsReview(review: Review): boolean {
+  return review.issues.length > 0 || review.voice.consistent !== true || review.voice.warm !== true ||
+    review.checkpoints.some(c => c.severity === "major" || c.sync === "uncertain" || c.sync === "missing")
+}
 const reviewRules = "\nUne introduction qui annonce au futur les chapitres à venir n'exige pas que ces actions aient déjà lieu dans cet extrait. Une explication générale ou une conclusion peut s'appuyer sur un écran stable pertinent : l'absence de clic n'est pas, à elle seule, un défaut. Cette règle n'excuse jamais une action concrète annoncée mais absente, tardive, ou dont le résultat n'est pas visible. Ne signale pas un texte saisi non dicté mot à mot, sauf s'il contredit la consigne entendue ou si la voix promet une dictée exacte. Une variante lexicale de même sens n'est pas un défaut de synchronisation ; une phrase omise, un fait modifié ou un conseil ajouté hors script doit rester signalé. N'atténue aucun retard d'action réellement annoncée au présent."
 
 async function main() {
@@ -67,12 +65,12 @@ async function main() {
     const url = new URL(process.env.DATABASE_URL!)
     assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Member review requires isolated video database before connection")
   }
-  const currentMerge = manifest.id === "MEMBERS_DUPLICATES_MERGE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43110") : manifest.id === "EVENT_QUESTIONS" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43112") : manifest.id === "VOLUNTEER_HOURS_CERTIFICATE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43114") : null
+  const currentMerge = manifest.id === "MEMBERS_DUPLICATES_MERGE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43110") : manifest.id === "EVENT_QUESTIONS" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43112") : manifest.id === "VOLUNTEER_HOURS_CERTIFICATE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43114") : manifest.id === "DATA_EXPORTS_ARCHIVES" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43102") : null
   const db = currentMerge?.db ?? new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
   try {
     if (memberDemoVideos.includes(manifest.id)) {
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "default" }, include: { volunteers: true, admins: true, events: { include: { sectorLeaders: true, registrations: { include: { volunteer: true } } } } } })
-      validateMemberReviewFixture(process.env.DATABASE_URL!, fixture, await memberOwnership(), Date.now(), await readImportOwnership())
+      validateMemberReviewFixture(process.env.DATABASE_URL!, fixture, await memberOwnership(), Date.now(), await readImportOwnership("owned-import-members-v2.json"), await readSeedProofV2())
     }
     // Keep the existing reminder-specific nine-registration / three-event guard below as well.
     if (manifest.id === "VOLUNTEER_HOURS_CERTIFICATE") {
@@ -80,7 +78,7 @@ async function main() {
     } else if (manifest.id === "EVENT_QUESTIONS") {
       await (await import("../lib/event-questions-fixture")).assertQuestionsReviewFixture(db)
     } else if (manifest.id === "MEMBERS_DUPLICATES_MERGE") {
-      const { assertMergeReviewFixture } = await import("../lib/member-merge-fixture")
+      const { assertMergeReviewFixture } = await import("../lib/member-merge-v5-fixture")
       await assertMergeReviewFixture(db, process.env.DATABASE_URL!)
     } else if (manifest.id === "ATTENDANCE_CHECK_IN") {
       const { verifyDayOfReviewFixture } = await import("../lib/verify-dayof-review-fixture")
@@ -97,7 +95,9 @@ async function main() {
       const url = new URL(process.env.DATABASE_URL!)
       if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video") throw new Error("Navigation review requires isolated video database")
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-navigation-current" }, include: { events: true, volunteers: true, admins: true } })
-      if (fixture.slug !== "formation-navigation" || fixture.events.length !== 3 || fixture.volunteers.length !== 4 || fixture.volunteers.some(member => !/^video-navigation-current-member-[0-3]$/.test(member.id) || !/^video\.navigation\.[0-3]@example\.org$/.test(member.email ?? "") || member.phone) || fixture.admins.length !== 1 || fixture.admins[0].email !== "video.navigation.owner@example.org") throw new Error("Navigation data is not exclusively synthetic")
+      const { assertNavigationMembers } = await import("../lib/navigation-classroom")
+      assertNavigationMembers(fixture.volunteers)
+      if (fixture.slug !== "formation-navigation" || fixture.events.length !== 3 || fixture.admins.length !== 1 || fixture.admins[0].email !== "video.navigation.owner@example.org") throw new Error("Navigation data is not exclusively synthetic")
     } else if (manifest.id === "GLOBAL_SEARCH") {
       const url = new URL(process.env.DATABASE_URL!)
       if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video") throw new Error("Search review requires isolated video database")
@@ -177,7 +177,7 @@ async function main() {
     let previous: { videoSha256: string; promptSha256: string; model: string; review: Review } | undefined
     try { previous = JSON.parse(await readFile(reportFile, "utf8")) } catch { /* no matching evidence */ }
     if (!force && previous?.videoSha256 === videoSha256 && previous.promptSha256 === promptSha256 && previous.model === model) {
-      checked++; if (previous.review.issues.length || previous.review.checkpoints.some(c => c.severity === "major" || c.sync === "uncertain")) flagged++
+      checked++; if (audiovisualNeedsReview(previous.review)) flagged++
       console.log(`${cue.id}: existing review of identical final video`)
       continue
     }
@@ -199,9 +199,18 @@ async function main() {
     for (const checkpoint of review.checkpoints) {
       if (!Number.isFinite(checkpoint.spokenSeconds) || checkpoint.spokenSeconds < 0 || checkpoint.spokenSeconds > (cue.endMs - cue.startMs) / 1000 + 1 || !["aligned", "early", "late", "missing", "uncertain"].includes(checkpoint.sync)) throw new Error(`${cue.id}: unreliable review timestamp/state`)
     }
+    if (previous) {
+      const archive = path.join(reviewDir, "history")
+      await mkdir(archive, { recursive: true })
+      const evidence = JSON.stringify(previous, null, 2)
+      const digest = createHash("sha256").update(evidence).digest("hex")
+      await writeFile(path.join(archive, `${cue.id}-${digest}.json`), evidence, { flag: "wx" }).catch(error => {
+        if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error
+      })
+    }
     await writeFile(reportFile, JSON.stringify({ model, reviewedAt: new Date().toISOString(), videoSha256, promptSha256, clipSha256: createHash("sha256").update(bytes).digest("hex"), scene: cue.id, review, note: "Automated observation of actual final video audio and images; not a claim of complete human validation" }, null, 2))
     checked++
-    const needsReview = review.issues.length > 0 || review.checkpoints.some(c => c.severity === "major" || c.sync === "uncertain")
+    const needsReview = audiovisualNeedsReview(review)
     if (needsReview) flagged++
     console.log(`${cue.id}: ${review.checkpoints.length} audiovisual checkpoints; ${needsReview ? "REVIEW" : "no issue reported"}`)
     for (const issue of review.issues) console.log(`  ${issue}`)

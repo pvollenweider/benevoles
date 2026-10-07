@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:27:43.407Z",
+  "videoSha256": "f6ee805a2a5d1386fbd03a014714cf489ae12f80d0fc33e6c0a6004b3e061dd5",
+  "promptSha256": "c072dfb4dc26e94e3617d8317234ee9d5a0611268264e1f76768a6d3479eb14b",
+  "clipSha256": "b4ce36d74f857bf0f3b24ba62258263b9e930de917dccaca8a027dfcdf72e767",
+  "scene": "required-validation",
+  "review": {
+    "heardOpening": "Voyons maintenant le formulaire public avec Aline",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Voyons maintenant le formulaire public avec Aline.",
+        "visibleSeconds": 3.5,
+        "visible": "Affichage de la page publique de sélection des créneaux.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Choisissons le premier créneau et continuons.",
+        "visibleSeconds": 5,
+        "visible": "Sélection du créneau de 10h-12h et chargement du formulaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Renseignons son identité et les consentements demandés.",
+        "visibleSeconds": 7.8,
+        "visible": "Saisie du prénom, nom, e-mail et validation des cases de consentement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Essayons de confirmer sans répondre à nos deux questions obligatoires.",
+        "visibleSeconds": 13.6,
+        "visible": "Clic sur le bouton « Confirmer mon inscription » sans remplir les champs obligatoires.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "Le formulaire indique ce qui manque et place le focus sur la première réponse attendue.",
+        "visibleSeconds": 15.3,
+        "visible": "Message d'erreur affiché sur la première question obligatoire non renseignée.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

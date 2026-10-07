@@ -5,24 +5,28 @@ import { readFile } from "node:fs/promises"
 import path from "node:path"
 import type { PrismaClient } from "../../src/generated/prisma/client"
 import { openPayload } from "../../src/lib/notifications/outbox"
+import { privateIdentities, readPrivateIdentityVersion } from "./private-identity-version"
 
 /** Inspect exact synthetic scope before uploading any delivery capture to review. */
 export async function verifyDeliveryReviewFixture(db: PrismaClient, directory: string) {
   const url = new URL(process.env.DATABASE_URL ?? "")
   assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
   const orgId = "video-delivery"
+  const identityV2 = await readPrivateIdentityVersion("delivery")
+  const identities = privateIdentities.delivery
   const org = await db.organization.findUniqueOrThrow({ where: { id: orgId } })
   assert(org.name === "Formation — suivi des emails" && org.slug === "formation-livraisons" && org.replyToEmail === "video.delivery.owner@example.org")
+  if (identityV2) assert.equal(org.createdAt.toISOString(), identityV2.organizationCreatedAt, "Identity migration belongs to a different delivery fixture generation")
   const people = await db.volunteer.findMany({ where: { organizationId: orgId } })
   const names: Record<string, string> = { pending: "Jules", retrying: "Sarah", recoverable: "Emma", wrong: "Léa", sent: "Nicolas" }
   assert.equal(people.length, 5)
   for (const person of people) {
     const label = person.id.replace("video-delivery-member-", "")
-    assert(person.id === `video-delivery-member-${label}` && names[label] === person.firstName && person.lastName === "Exemple" && person.email === `video.delivery.${label === "wrong" ? "corrected" : label}@example.org` && !person.phone && person.notes === "Données fictives pour la démonstration des livraisons.")
+    assert(person.id === `video-delivery-member-${label}` && names[label] === person.firstName && person.lastName === (identityV2 ? identities.members[label as keyof typeof identities.members] : "Exemple") && person.email === `video.delivery.${label === "wrong" ? "corrected" : label}@example.org` && !person.phone && person.notes === "Données fictives pour la démonstration des livraisons.")
   }
   const admins = await db.adminUser.findMany({ where: { organizationId: orgId } })
   assert.equal(admins.length, 2)
-  assert(admins.every(admin => admin.id === "video-delivery-owner" ? admin.role === "admin" && admin.name === "Élodie Exemple" && admin.email === "video.delivery.owner@example.org" : admin.id === "video-delivery-organizer" && admin.role === "organizer" && admin.name === "Marc Exemple" && admin.email === "video.delivery.organizer@example.org"))
+  assert(admins.every(admin => admin.id === "video-delivery-owner" ? admin.role === "admin" && admin.name === (identityV2 ? identities.owner : "Élodie Exemple") && admin.email === "video.delivery.owner@example.org" : admin.id === "video-delivery-organizer" && admin.role === "organizer" && admin.name === (identityV2 ? identities.organizer : "Marc Exemple") && admin.email === "video.delivery.organizer@example.org"))
   const events = await db.event.findMany({ where: { organizationId: orgId }, include: { shifts: true, registrations: true } })
   assert.equal(events.length, 1)
   const event = events[0]
@@ -37,7 +41,7 @@ export async function verifyDeliveryReviewFixture(db: PrismaClient, directory: s
   assert.equal(rejected[0].responseCode, 550, "Permanent failure must come from the actual controlled SMTP response")
   const histories = await db.targetedMessage.findMany({ where: { organizationId: orgId } })
   assert.equal(histories.length, 2)
-  assert(histories.every(item => item.eventId === event.id && item.authorId === "video-delivery-organizer" && item.authorName === "Marc Exemple" && item.recipientCount === 2 && ["Formation — adresse corrigée", "Formation — échec partiel"].includes(item.subject)))
+  assert(histories.every(item => item.eventId === event.id && item.authorId === "video-delivery-organizer" && item.authorName === (identityV2 ? identities.organizer : "Marc Exemple") && item.recipientCount === 2 && ["Formation — adresse corrigée", "Formation — échec partiel"].includes(item.subject)))
   const rows = await db.notificationOutbox.findMany({ where: { organizationId: orgId } })
   assert.equal(rows.length, 9)
   assert(rows.every(row => openPayload(row.payload).kind === "targeted_message" && /^video\.delivery\.[a-z-]+@example\.org$/.test(openPayload(row.payload).recipient.email ?? "") && openPayload(row.payload).data.eventTitle === "Atelier des emails"))

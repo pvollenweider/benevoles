@@ -1,45 +1,51 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:43:24.441Z",
-  "videoSha256": "8fd119fcc7be2e7433955eb308377f0bafecf962c880a14c93f0b1b0c8f0ca78",
+  "reviewedAt": "2026-10-07T02:48:04.542Z",
+  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
   "promptSha256": "3b8e98e90e0bb79b66bb3f7ccf16c5af9a2a70130d59c91abf8ca39cad2e1143",
-  "clipSha256": "c3f7a063801f8ba9579a180ceb4abb51594a4a91898b138235d7b7598e3cf968",
+  "clipSha256": "74126b56dd4d1dd4cae32688088175e42b5d25ecfa053aa4551b711a8b0b818f",
   "scene": "create-yesno",
   "review": {
     "heardOpening": "Pour le permis de conduire",
     "checkpoints": [
       {
-        "spokenSeconds": 3.9,
-        "spoken": "Ajoutons une nouvelle question, puis écrivons Permis de conduire.",
-        "visibleSeconds": 1.5,
-        "visible": "Le formulaire s'ouvre et la saisie commence avant la consigne vocale.",
-        "sync": "early",
-        "severity": "minor"
+        "spokenSeconds": 2.8,
+        "spoken": "Ajoutons une nouvelle question",
+        "visibleSeconds": 3.1,
+        "visible": "Clic sur Ajouter une question et affichage du formulaire",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 8,
-        "spoken": "Choisissons Oui ou non dans le type de réponse.",
-        "visibleSeconds": 8.5,
-        "visible": "Sélection de l'option Oui / Non dans la liste déroulante.",
+        "spokenSeconds": 5.1,
+        "spoken": "puis écrivons Permis de conduire",
+        "visibleSeconds": 5.5,
+        "visible": "Saisie de Permis de conduire dans le champ d'intitulé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.9,
+        "spoken": "Choisissons Oui ou non dans le type de réponse",
+        "visibleSeconds": 8.3,
+        "visible": "Sélection de Oui ou non dans le menu déroulant",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 16,
-        "spoken": "rendons aussi la réponse obligatoire, puis enregistrons.",
-        "visibleSeconds": 17.5,
-        "visible": "Coche de la case obligatoire puis clic sur Enregistrer.",
+        "spoken": "rendons aussi la réponse obligatoire, puis enregistrons",
+        "visibleSeconds": 16.5,
+        "visible": "Coche de Réponse obligatoire puis clic sur Enregistrer",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "00:01 - L'ouverture du formulaire et la saisie de texte précèdent l'annonce orale."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et rythme régulier."
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

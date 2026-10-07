@@ -1,59 +1,61 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:37:20.025Z",
-  "videoSha256": "0e1d6ca56b0033e4694d6f34c74897fff990758b119a02cf3febeec27d85a9ed",
+  "reviewedAt": "2026-10-07T02:27:23.383Z",
+  "videoSha256": "747f7c10d9984c7ea3a97366fb011f0a9cb96b9e15f737f69903b78da2ae2e36",
   "promptSha256": "f260ae6eb456af542624888fe1f6186e29dbd52e426252e2f276899712f70cda",
-  "clipSha256": "5f1377397129bac4851aa2847af854183be902849b9c7ce548ed5cdf807b481b",
+  "clipSha256": "d1bd6328c4211e9be1246c857f0b859192127ad621c8b6ff7addca269dcd80b1",
   "scene": "campaign",
   "review": {
     "heardOpening": "Préparons un autre message pour ces deux personnes",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Préparons un autre message pour ces deux personnes.",
-        "visibleSeconds": 1,
-        "visible": "Saisie dans les champs Objet et Message du formulaire.",
+        "spokenSeconds": 1.2,
+        "spoken": "Préparons un autre message pour ces deux personnes",
+        "visibleSeconds": 2,
+        "visible": "Saisie de l'objet et du message dans le formulaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.8,
-        "spoken": "Ouvrons Messages envoyés sous le formulaire.",
-        "visibleSeconds": 11.5,
-        "visible": "Validation de l'envoi et affichage de la section Messages envoyés.",
+        "spokenSeconds": 10,
+        "spoken": "Ouvrons Messages envoyés sous le formulaire",
+        "visibleSeconds": 11.2,
+        "visible": "Confirmation d'envoi puis affichage de la section Messages envoyés",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.3,
+        "spokenSeconds": 19.5,
         "spoken": "Voir le texte envoyé permet de relire la consigne originale",
-        "visibleSeconds": 20,
-        "visible": "Clic sur 'Voir le texte envoyé' et déploiement du contenu du message.",
+        "visibleSeconds": 20.3,
+        "visible": "Dépliage du texte envoyé sous l'entrée d'historique",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 25.5,
+        "spokenSeconds": 26.2,
         "spoken": "Cliquons sur Renvoyer l'email en échec",
-        "visibleSeconds": 26.2,
-        "visible": "Clic sur le lien 'Renvoyer l'email en échec' et affichage du statut 'Remis en file'.",
+        "visibleSeconds": 26,
+        "visible": "Clic sur le lien Renvoyer l'email en échec et message d'information",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 35.1,
-        "spoken": "Rechargeons enfin le suivi pour voir les deux remises réussies.",
-        "visibleSeconds": 36.5,
-        "visible": "Actualisation de la page et mise à jour de la remise à 2 envoyés.",
+        "spokenSeconds": 35.8,
+        "spoken": "Rechargeons enfin le suivi pour voir les deux remises réussies",
+        "visibleSeconds": 37.5,
+        "visible": "Rafraîchissement de la page et affichage de Remise 2 envoyés",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [],
+    "issues": [
+      "00:31 : L'interface affiche une mention textuelle de remise en file plutôt qu'un bouton intitulé 'Remis en file'."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions visibles."
+      "observation": "Voix claire et posée, débit régulier et bien synchronisé."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

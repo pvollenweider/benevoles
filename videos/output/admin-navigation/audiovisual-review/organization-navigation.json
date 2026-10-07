@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T01:59:09.336Z",
-  "videoSha256": "f4c0c3c28ab04d429a33a9fd82687797f0081bd26e4214dabb9f06b4d4c9beac",
-  "promptSha256": "eb2f8ac193b79a24090441148e0e1e7d57e347d1d64a1f828730c3d5f7eab283",
-  "clipSha256": "8b3b788948f83b836d33e22875584ad961648366b6c4a85e1a43ecd116937f14",
+  "reviewedAt": "2026-10-06T18:21:37.079Z",
+  "videoSha256": "92c7d0b2f631187fe228ccacb815e8e02c5ec38981b424ceba61c85428e8388f",
+  "promptSha256": "8793a02346d71b1a8413bd1f667ff3fdce56c6c1a03b152d8732ba4df92b1220",
+  "clipSha256": "3aeb757a85cb97197c6f8bae3fef73aeb3a2ddad47af3d93b7f56f339046c045",
   "scene": "organization-navigation",
   "review": {
     "heardOpening": "Le Tableau de bord",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Le Tableau de bord rassemble les priorités de l’association",
-        "visibleSeconds": 1,
-        "visible": "Affichage de la page Tableau de bord",
+        "spokenSeconds": 0.5,
+        "spoken": "Le Tableau de bord rassemble les priorités de l'association",
+        "visibleSeconds": 0.8,
+        "visible": "Clic sur l'onglet Tableau de bord et affichage de la page",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.8,
+        "spokenSeconds": 3.7,
         "spoken": "Événements ouvre la liste de vos événements",
-        "visibleSeconds": 5.2,
-        "visible": "Affichage de la liste des événements",
+        "visibleSeconds": 4.8,
+        "visible": "Clic sur l'onglet Événements et affichage de la liste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.3,
-        "spoken": "et Membres les personnes connues de l’association",
-        "visibleSeconds": 7.3,
-        "visible": "Affichage de la liste des membres",
+        "spokenSeconds": 6.7,
+        "spoken": "et Membres les personnes connues de l'association",
+        "visibleSeconds": 7.4,
+        "visible": "Clic sur l'onglet Membres et affichage du répertoire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.3,
+        "spokenSeconds": 9.6,
         "spoken": "Paramètres concerne les réglages communs",
         "visibleSeconds": 11.2,
-        "visible": "Affichage de la page Paramètres",
+        "visible": "Navigation vers la page Paramètres",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec les clics de navigation."
+      "observation": "Élocution claire et synchronisation fluide avec la navigation."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

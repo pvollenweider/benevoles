@@ -1,31 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:38:01.854Z",
-  "videoSha256": "01fafadfba036da8aac5f19c6359a31892b79dcfccbfe3936309fabe4cf0f4be",
+  "reviewedAt": "2026-10-07T02:03:42.571Z",
+  "videoSha256": "a24b4bfd2c19e5331f7acd65fa54800c1f8745634493fc2ef40d68c1f05d48c4",
   "promptSha256": "64aab1e687beb3df5d5ca469d447aaa5729535d2a120357d7d7469971fcf810f",
-  "clipSha256": "bad87e1a62a815d96e7186d8d2f825dd45c1b23a08ca2c8a63a23eb2425ff0ff",
+  "clipSha256": "fe1842b99440dbfb924b6830a44c1e336f4a24546726775dc46828f111cf1f70",
   "scene": "confirm",
   "review": {
     "heardOpening": "Cette case permet d'envoyer les nouveaux liens personnels",
     "checkpoints": [
       {
         "spokenSeconds": 5.4,
-        "spoken": "on la décoche",
-        "visibleSeconds": 6.4,
+        "spoken": "Dans cette démonstration, on la décoche",
+        "visibleSeconds": 6.8,
+        "visible": "La case à cocher est désélectionnée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 23.3,
+        "spokenSeconds": 23,
         "spoken": "Fusionner les deux fiches ouvre une dernière confirmation",
         "visibleSeconds": 23.8,
+        "visible": "Clic sur le bouton et ouverture de la fenêtre modale de confirmation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 28.5,
+        "spokenSeconds": 28.1,
         "spoken": "confirmez la fusion",
         "visibleSeconds": 28.6,
+        "visible": "Clic sur le bouton de confirmation finale et affichage du résultat",
         "sync": "aligned",
         "severity": "none"
       }
@@ -34,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et synchronisation fluide avec les manipulations à l'écran."
+      "observation": "Diction fluide et rythme régulier adapté aux actions."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

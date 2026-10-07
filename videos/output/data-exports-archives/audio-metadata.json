@@ -5,47 +5,47 @@
   "segments": {
     "welcome": {
       "file": "audio/welcome.wav",
-      "durationMs": 34196,
+      "durationMs": 25022,
       "generationSha256": "7c1c6027b9fa581641091d188c8e04e413c632a1e33f2909f88f2f6182529922"
     },
     "members": {
       "file": "audio/members.wav",
-      "durationMs": 39467,
+      "durationMs": 25623,
       "generationSha256": "7c1c6027b9fa581641091d188c8e04e413c632a1e33f2909f88f2f6182529922"
     },
     "columns": {
       "file": "audio/columns.wav",
-      "durationMs": 36628,
+      "durationMs": 27615,
       "generationSha256": "7c1c6027b9fa581641091d188c8e04e413c632a1e33f2909f88f2f6182529922"
     },
     "csv": {
       "file": "audio/csv.wav",
-      "durationMs": 44784,
+      "durationMs": 29605,
       "generationSha256": "7c1c6027b9fa581641091d188c8e04e413c632a1e33f2909f88f2f6182529922"
     },
     "journal": {
       "file": "audio/journal.wav",
-      "durationMs": 34247,
+      "durationMs": 31721,
       "generationSha256": "7c1c6027b9fa581641091d188c8e04e413c632a1e33f2909f88f2f6182529922"
     },
     "archive": {
       "file": "audio/archive.wav",
-      "durationMs": 39360,
+      "durationMs": 30201,
       "generationSha256": "7c1c6027b9fa581641091d188c8e04e413c632a1e33f2909f88f2f6182529922"
     },
     "contents": {
       "file": "audio/contents.wav",
-      "durationMs": 41195,
+      "durationMs": 30214,
       "generationSha256": "7c1c6027b9fa581641091d188c8e04e413c632a1e33f2909f88f2f6182529922"
     },
     "privacy": {
       "file": "audio/privacy.wav",
-      "durationMs": 40212,
+      "durationMs": 33940,
       "generationSha256": "7c1c6027b9fa581641091d188c8e04e413c632a1e33f2909f88f2f6182529922"
     },
     "result": {
       "file": "audio/result.wav",
-      "durationMs": 40471,
+      "durationMs": 31350,
       "generationSha256": "7c1c6027b9fa581641091d188c8e04e413c632a1e33f2909f88f2f6182529922"
     }
   }

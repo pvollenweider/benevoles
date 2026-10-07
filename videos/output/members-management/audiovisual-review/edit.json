@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:36:34.649Z",
-  "videoSha256": "4f2463aa78f990278c1913f94a35e27170bbb7b98cd4fc848478da990a80a1cb",
+  "reviewedAt": "2026-10-06T18:23:19.015Z",
+  "videoSha256": "d217b3a0a43428c453f7c2c1a5bc4b13ee389513c507c1e86a749f7830b0d369",
   "promptSha256": "903e61dea3cb7f040bff000c2c160f1271eba76a128ee96eb8e2a2a605d78d18",
-  "clipSha256": "0dc55b6d1cd75f98bfb400874097b41b1440297ec4093cdfb04a5b6ac7c99651",
+  "clipSha256": "72fb25e302b91401a533fd0768948fcb703d10cfb32d03a48fa96504ebc30af9",
   "scene": "edit",
   "review": {
-    "heardOpening": "Avec Éditer, vous pouvez corriger la fiche",
+    "heardOpening": "Avec Éditer, vous pouvez corriger",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
         "spoken": "Avec Éditer, vous pouvez corriger la fiche",
         "visibleSeconds": 0.8,
-        "visible": "Ouverture du formulaire modal 'Modifier le membre'",
+        "visible": "Clic sur Éditer et ouverture de la modale de modification",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.8,
-        "spoken": "Les tags, séparés par des virgules, servent à retrouver un groupe, comme accueil ou permis b",
-        "visibleSeconds": 2.5,
-        "visible": "Saisie des valeurs 'accueil, permis-b' dans le champ Tags",
-        "sync": "early",
-        "severity": "minor"
+        "spokenSeconds": 7.2,
+        "spoken": "comme accueil ou permis b",
+        "visibleSeconds": 6,
+        "visible": "Saisie des tags accueil et permis-b dans le champ dédié",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 16.9,
-        "spoken": "Enregistrons, puis rouvrons la fiche",
-        "visibleSeconds": 17.2,
-        "visible": "Clic sur Enregistrer puis réouverture immédiate de la fiche",
+        "spokenSeconds": 17,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 17.4,
+        "visible": "Clic sur le bouton Enregistrer en bas de la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "puis rouvrons la fiche pour vérifier que les changements sont conservés",
+        "visibleSeconds": 19.1,
+        "visible": "Réouverture de la fiche affichant les données sauvegardées",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, bien articulée."
+      "observation": "Élocution claire et synchronisation fluide avec les manipulations."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

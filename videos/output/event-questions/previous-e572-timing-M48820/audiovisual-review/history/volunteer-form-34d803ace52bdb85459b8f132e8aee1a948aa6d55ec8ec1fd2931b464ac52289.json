@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:09:56.234Z",
+  "videoSha256": "50715a383930b94c66960386d0996cbbd6de02ea593b0ed689ab9af2ac881d81",
+  "promptSha256": "313cd01eb1f6c91af99c2b539b7746bf8a7df075b9959c748f0669e3a12e409c",
+  "clipSha256": "9aa997b2ef1132f445ec22295e627b41aff407c9b28a1399c404fe763805268c",
+  "scene": "volunteer-form",
+  "review": {
+    "heardOpening": "Répondons maintenant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Aline choisit M pour son t-shirt, puis Oui pour le permis",
+        "visibleSeconds": 2.8,
+        "visible": "Sélection de l'option M pour la taille de t-shirt",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Pour le matériel, elle coche Vélo et Remorque",
+        "visibleSeconds": 6.8,
+        "visible": "Cochage successif des cases Vélo et Remorque",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Dans le texte libre, écrivons Entrée nord",
+        "visibleSeconds": 12,
+        "visible": "Saisie de 'Entrée nord' dans le point de rendez-vous",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "le récapitulatif Transmis à l'organisation montre les informations",
+        "visibleSeconds": 17.2,
+        "visible": "Défilement vers le volet Transmis à l'organisation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22,
+        "spoken": "confirmons réellement l'inscription",
+        "visibleSeconds": 22.8,
+        "visible": "Clic sur le bouton et affichage du message Inscription confirmée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:04 : L'option Oui pour le permis était déjà cochée dès l'ouverture."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier adapté aux actions."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

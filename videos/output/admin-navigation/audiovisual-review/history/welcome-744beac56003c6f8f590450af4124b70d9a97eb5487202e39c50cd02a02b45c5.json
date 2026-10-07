@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:56:42.420Z",
+  "videoSha256": "efc3fa2ff00bbca286a3418dff1a87edc31728a93b5394b54d608373a831309d",
+  "promptSha256": "29d2e9d2504bf6b66d3740f643af3f849ae54eb8951c73244e9329edb1feb3d1",
+  "clipSha256": "b21979c6d79c73db9d80e57a68471e5a99ab6d723fa69767d9bdcac6e2c20857",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Bienvenue dans l'administration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Bienvenue dans l'administration",
+        "visibleSeconds": 0,
+        "visible": "Titre 'Se repérer dans l'administration' affiché en superposition",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Vous allez retrouver les principaux points d'entrée",
+        "visibleSeconds": 3,
+        "visible": "Menu de navigation supérieur visible avec les rubriques principales",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "distinguer les réglages de l'association du suivi d'un événement",
+        "visibleSeconds": 4,
+        "visible": "Écran 'Événements' affiché avec onglet 'Paramètres' en en-tête",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction posée, claire et fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T01:59:44.056Z",
+  "videoSha256": "f4c0c3c28ab04d429a33a9fd82687797f0081bd26e4214dabb9f06b4d4c9beac",
+  "promptSha256": "7c1204ed5d82169a656137aa24c45e49a4a333788d5a1f8f014a51301590fa2c",
+  "clipSha256": "faab366d2a848676698f8caf1c6bda7c1357a38e3045d54b711389499a44a4e4",
+  "scene": "account-help",
+  "review": {
+    "heardOpening": "Le menu de votre compte propose",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Le menu de votre compte propose Mon compte et Se déconnecter",
+        "visibleSeconds": 0.8,
+        "visible": "Menu déroulant affiché avec Mon compte et Se déconnecter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "ouvre le guide dans un nouvel onglet",
+        "visibleSeconds": 7.2,
+        "visible": "Affichage de la page Guide administrateur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Les liens Aide placés sous les titres de certaines pages",
+        "visibleSeconds": 11.5,
+        "visible": "Lien Aide visible sous le titre Créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et synchronisation visuelle adéquate."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

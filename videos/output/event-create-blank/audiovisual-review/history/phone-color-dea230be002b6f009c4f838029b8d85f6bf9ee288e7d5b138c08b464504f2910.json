@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:27:04.714Z",
+  "videoSha256": "af53e113f481e6d6e2d0628296c0ca270f88c17fc79961b9d9777a99de418954",
+  "promptSha256": "1e99918f39bb1c2ab3ea8b4aacd4f5dcdfec22356c39470da5196914b49b54c1",
+  "clipSha256": "6a88357554f3c4e9624130f6d9af35298bfb3e75d60f4d266707c981f220589b",
+  "scene": "phone-color",
+  "review": {
+    "heardOpening": "Rendez le téléphone obligatoire seulement si",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Rendez le téléphone obligatoire",
+        "visibleSeconds": 3.4,
+        "visible": "Coche de la case Téléphone obligatoire à l'inscription",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Choisissons Émeraude",
+        "visibleSeconds": 8.7,
+        "visible": "Sélection de la pastille de couleur Émeraude",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "regardons l’aperçu",
+        "visibleSeconds": 8.9,
+        "visible": "Affichage de l'aperçu du site public aux couleurs choisies",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:08 - L'option de couleur Émeraude est sélectionnée et l'aperçu apparaît environ deux secondes avant l'annonce vocale."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée tout au long de l'extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

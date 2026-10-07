@@ -2,19 +2,20 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { chromium } from "playwright"
-import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { loadCurrentVideoPrisma } from "../lib/current-product-prisma"
+import { verifyExportClassroom } from "../lib/verify-export-review-fixture"
 import { mkdir, writeFile, readFile } from "node:fs/promises"
 import path from "node:path"
 import { parse } from "csv-parse/sync"
-import { registrationToken, linkToken } from "../../src/lib/token-vault"
+import { enrichExportClassroom } from "../lib/enrich-export-classroom"
 
 async function main() {
-  const base = process.env.VIDEO_BASE_URL ?? "http://localhost:43100"
-  if (!["localhost", "127.0.0.1"].includes(new URL(base).hostname) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Isolated local video environment required")
+  const base = process.env.VIDEO_BASE_URL
+  if (base !== "http://localhost:43102") throw new Error("Verified export server 43102 required")
   const organizationId = "video-data-exports"
   const directory = "videos/output/data-exports-archives"
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const { db, product, tokens: { registrationToken, linkToken }, unregister } = await loadCurrentVideoPrisma(base)
+  await verifyExportClassroom(db)
   const browser = await chromium.launch()
   try {
     await mkdir(directory, { recursive: true })
@@ -24,6 +25,10 @@ async function main() {
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
     await page.waitForURL(/\/admin\/events/)
+    await enrichExportClassroom(db, page, directory)
+    await verifyExportClassroom(db)
+    const resetPhone = await page.request.patch(`${base}/api/admin/members/video-data-exports-member-0`, { data: { phone: "+41 79 000 9900" } })
+    if (!resetPhone.ok()) throw new Error("Exact owned phone reset failed")
     const event = await db.event.findFirstOrThrow({ where: { organizationId, id: "video-data-exports-event" }, include: { shifts: true, registrations: true, pages: true, questions: { include: { answers: true } }, sectorLeaders: true, milestones: true } })
     if (!await db.orgLog.count({ where: { organizationId } })) {
       const modified = await page.request.patch(`${base}/api/admin/members/video-data-exports-member-0`, { data: { notes: "=1+1", phone: "+41 79 000 9900" } })
@@ -44,7 +49,7 @@ async function main() {
     const bytes = await readFile(path.join(directory, "members.csv"))
     const [headers, ...rows] = parse(bytes, { bom: true, delimiter: ";", relax_column_count: false }) as string[][]
     const people = await db.volunteer.findMany({ where: { organizationId }, orderBy: [{ lastName: "asc" }, { firstName: "asc" }] })
-    if (headers.length !== 12 || rows.length !== 4 || !bytes.subarray(0, 3).equals(Buffer.from([0xef, 0xbb, 0xbf]))) throw new Error("Actual member export shape or UTF-8 BOM differs")
+    if (headers.length !== 14 || headers[12] !== "Derniers envois (résultat)" || headers[13] !== "Convention acceptée (dernière fois)" || rows.length !== 4 || !bytes.subarray(0, 3).equals(Buffer.from([0xef, 0xbb, 0xbf]))) throw new Error("Actual current-main member export shape or UTF-8 BOM differs")
     for (const [index, person] of people.entries()) {
       const row = rows[index]
       const activeCount = await db.registration.count({ where: { volunteerId: person.id, status: "active" } })
@@ -52,6 +57,7 @@ async function main() {
       if (row[9] !== (person.notes?.startsWith("=") || person.notes?.startsWith("@") ? `'${person.notes}` : person.notes ?? "")) throw new Error("Formula-like note is not protected as literal text")
     }
     if (!rows.some(row => row[0] === "Léa" && row[9] === "'=1+1") || !rows.some(row => row[0] === "Étienne" && row[5] === "non")) throw new Error("Accents, literal formula or inactive member missing")
+    if (!rows.some(row => row[0] === "Zoé" && row[12].trim() && row[13].trim())) throw new Error("Real delivery outcome and real charter acceptance missing from member CSV")
     await download("/admin/settings/activity", "Exporter tout le journal (CSV)", "activity.csv")
     const journalRows = parse(await readFile(path.join(directory, "activity.csv")), { bom: true, delimiter: ";" }) as string[][]
     if (journalRows[0].length !== 7 || journalRows.length - 1 !== await db.orgLog.count({ where: { organizationId } })) throw new Error("Actual journal export count differs")
@@ -77,6 +83,7 @@ async function main() {
     if (tokens.some(token => archiveText.includes(token))) throw new Error("Personal access value present in actual archive")
     await writeFile(path.join(directory, "preparation.json"), JSON.stringify({ checkedAt: new Date().toISOString(), scope: "actual UI downloads and local byte/data checks; not spreadsheet native execution or audiovisual validation", organizationId, eventId: event.id, members: rows.length, memberColumns: headers.length, journalEntries: journalRows.length - 1, inactiveIncluded: true, accentsPreserved: true, formulaAndPhoneApostrophesVerified: true, archiveCollectionsPopulated: true, actualQuestionAnswerVerified: true, secretKeysAndKnownTokensAbsent: true }, null, 2))
     console.log("✓ Actual member/journal/JSON downloads: accented and inactive members, protected formula-like notes and phone, populated archive, no secret keys or personal tokens")
-  } finally { await browser.close(); await db.$disconnect() }
+    await writeFile(path.join(directory, "product-preparation.json"), JSON.stringify(product, null, 2))
+  } finally { await browser.close(); await db.$disconnect(); await unregister() }
 }
 main().catch(error => { console.error(error instanceof Error ? error.message : "Data export preparation failed"); process.exitCode = 1 })

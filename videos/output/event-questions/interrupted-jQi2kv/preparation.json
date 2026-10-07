@@ -1,0 +1,18 @@
+{
+  "product": {
+    "commit": "025c68ccb98d72a096931f8f110a7bcc02095502",
+    "sourceTree": "8ffb323bc2949219d23254251dbb70048c3ec6d5",
+    "productSourceSha256": "e6c0c70cb46f15fff94480c8de7288303eda7e54f8d17dee42c2539c0e7edd27",
+    "buildId": "9HHDId7D2S4N4BOjjqht6",
+    "snapshot": "/tmp/benevoles-video-production.pXK0Fa",
+    "builtAt": "2026-10-06T18:46:48.999Z"
+  },
+  "preparedAt": "2026-10-06T18:49:18.306Z",
+  "organizationId": "video-questions",
+  "eventId": "video-questions-event",
+  "synthetic": true,
+  "questions": 0,
+  "registrations": 0,
+  "freeSlots": 4,
+  "emailsSent": false
+}

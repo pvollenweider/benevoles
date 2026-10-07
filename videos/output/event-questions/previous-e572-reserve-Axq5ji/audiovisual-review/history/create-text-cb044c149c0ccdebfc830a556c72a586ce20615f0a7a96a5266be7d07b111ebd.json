@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:29:27.203Z",
+  "videoSha256": "40c2daacfc4c477f3a0078d17f0c72458436f38255c820e3d6645f649fd1db79",
+  "promptSha256": "ce74e892aec4fb02ca695945deebb62b619f3f1d6f709912c09025f031a3bfd9",
+  "clipSha256": "b07f0721ca49d8be7ad1daf0d5278a92c2ea1c1c0ce18aee96b599892a07f696",
+  "scene": "create-text",
+  "review": {
+    "heardOpening": "Pour une préférence de rendez-vous",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Ajoutons Point de rendez-vous préféré.",
+        "visibleSeconds": 4.8,
+        "visible": "Formulaire ouvert et saisie de 'Point de rendez-vous préféré'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.2,
+        "spoken": "Conservons Texte court",
+        "visibleSeconds": 8,
+        "visible": "Menu déroulant affichant l'option Texte court sélectionnée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Cette question reste facultative.",
+        "visibleSeconds": 14.5,
+        "visible": "Option Réponse obligatoire laissée décochée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.8,
+        "spoken": "Enregistrons.",
+        "visibleSeconds": 21.6,
+        "visible": "Clic sur Enregistrer et retour à la liste avec la nouvelle question.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et synchronisation fluide avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:51:36.636Z",
+  "videoSha256": "5b05ec09f33370d8a36989f503422dd329922701216b4084b0a2366fb687ad4c",
+  "promptSha256": "f0747e17bc88f0ec179e90f82d7275f0d9d782037f306b953887da13304fb50b",
+  "clipSha256": "2b11d23d188fe365b8365f50f98a42617ec5c4043a032137af4957c68cc1c26f",
+  "scene": "no-email",
+  "review": {
+    "heardOpening": "Une personne peut avoir une fiche",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Une personne peut avoir une fiche sans adresse email",
+        "visibleSeconds": 1,
+        "visible": "Ouverture du formulaire Nouveau membre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Nous créons René Aubert avec son téléphone seulement",
+        "visibleSeconds": 4.5,
+        "visible": "Saisie de René Aubert et du numéro de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.2,
+        "spoken": "le système ne peut pas lui envoyer un email tant que l'adresse manque",
+        "visibleSeconds": 12,
+        "visible": "Fiche de René Aubert ajoutée dans la liste sans email",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier, intonation claire et naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

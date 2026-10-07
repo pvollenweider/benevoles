@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:08:58.926Z",
+  "videoSha256": "27f9909f7b69ce0919bf10854b00f5062a806ca282cc0e5a5775ea62270b9cce",
+  "promptSha256": "f8feca2621304f490278685b190594ced46301e624016fe82fe41137ea57c58d",
+  "clipSha256": "ec7a6c2bac2697dedb21a6b57d8507f1427c8f691d7c9766ab55134013e3001d",
+  "scene": "retry",
+  "review": {
+    "heardOpening": "Pour Emma, le refus de notre serveur de test",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Sur l'échec définitif, Renvoyer remet le même email dans la file",
+        "visibleSeconds": 4.8,
+        "visible": "Le statut d'Emma Pavre passe à 'Nouvel essai prévu'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Attendons le résultat et rechargeons le suivi",
+        "visibleSeconds": 11.8,
+        "visible": "Rechargement de la page de suivi",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "La ligne passe à Envoyé avec une heure",
+        "visibleSeconds": 14,
+        "visible": "La ligne d'Emma reste à l'état 'Nouvel essai prévu' et ne passe pas à 'Envoyé'",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "Ouvrons ensuite l'email réellement reçu dans la boîte locale",
+        "visibleSeconds": 16,
+        "visible": "Affichage de la boîte Mailpit avec l'e-mail ouvert pour Emma",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:13 - Le statut de l'e-mail d'Emma Pavre reste affiché en 'Nouvel essai prévu' au rechargement au lieu de passer à 'Envoyé' comme annoncé."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

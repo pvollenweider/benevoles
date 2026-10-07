@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:32:31.132Z",
+  "videoSha256": "6832eeb70e84d56d0b2d21fe51dfac435f5bcdc4226b19bf7457aabccbdc3d4e",
+  "promptSha256": "98ad904a9aefb3497e90e7ea24b5ff1474fc6d60910fa3c34352e9dd00e3d3e4",
+  "clipSha256": "55ae73f761da9541fc84ab38cc4517aec06240e02ab2366ff504033b06b88063",
+  "scene": "no-email",
+  "review": {
+    "heardOpening": "Enfin, une fiche sans email",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "une fiche sans email peut être sélectionnée",
+        "visibleSeconds": 2.5,
+        "visible": "Sélection de René Sansmail dans la modale d'invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "René devra être contacté autrement",
+        "visibleSeconds": 8.5,
+        "visible": "Ajout de René Sansmail dans la liste avec mention pas d'email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Le nombre d'invités ne correspond donc pas forcément au nombre d'emails envoyés",
+        "visibleSeconds": 9,
+        "visible": "Compteur mis à jour à 13 invités sur la page récapitulative",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

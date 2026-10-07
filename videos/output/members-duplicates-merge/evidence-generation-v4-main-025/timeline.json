@@ -1,0 +1,261 @@
+{
+  "slug": "members-duplicates-merge",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-06T19:10:49.433Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "025c68ccb98d72a096931f8f110a7bcc02095502",
+    "sourceTree": "8ffb323bc2949219d23254251dbb70048c3ec6d5",
+    "productSourceSha256": "e6c0c70cb46f15fff94480c8de7288303eda7e54f8d17dee42c2539c0e7edd27",
+    "buildId": "uxDCWm5NrLEAsHqLC5Vq0",
+    "snapshot": "/tmp/benevoles-video-production.jVPbsn",
+    "builtAt": "2026-10-06T19:06:11.470Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-fusion-v4",
+    "scenario": "MEMBERS_DUPLICATES_MERGE",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 8316
+    },
+    {
+      "kind": "click",
+      "atMs": 14649
+    },
+    {
+      "kind": "click",
+      "atMs": 22648
+    },
+    {
+      "kind": "click",
+      "atMs": 41769
+    },
+    {
+      "kind": "click",
+      "atMs": 45000
+    },
+    {
+      "kind": "key",
+      "atMs": 45309
+    },
+    {
+      "kind": "key",
+      "atMs": 45405
+    },
+    {
+      "kind": "key",
+      "atMs": 45503
+    },
+    {
+      "kind": "key",
+      "atMs": 45602
+    },
+    {
+      "kind": "key",
+      "atMs": 45701
+    },
+    {
+      "kind": "key",
+      "atMs": 45798
+    },
+    {
+      "kind": "key",
+      "atMs": 45895
+    },
+    {
+      "kind": "key",
+      "atMs": 45992
+    },
+    {
+      "kind": "key",
+      "atMs": 46090
+    },
+    {
+      "kind": "key",
+      "atMs": 46188
+    },
+    {
+      "kind": "key",
+      "atMs": 46285
+    },
+    {
+      "kind": "key",
+      "atMs": 46383
+    },
+    {
+      "kind": "key",
+      "atMs": 46480
+    },
+    {
+      "kind": "key",
+      "atMs": 46578
+    },
+    {
+      "kind": "key",
+      "atMs": 46675
+    },
+    {
+      "kind": "key",
+      "atMs": 46772
+    },
+    {
+      "kind": "key",
+      "atMs": 46870
+    },
+    {
+      "kind": "key",
+      "atMs": 46968
+    },
+    {
+      "kind": "key",
+      "atMs": 47066
+    },
+    {
+      "kind": "key",
+      "atMs": 47164
+    },
+    {
+      "kind": "key",
+      "atMs": 47262
+    },
+    {
+      "kind": "key",
+      "atMs": 47360
+    },
+    {
+      "kind": "key",
+      "atMs": 47458
+    },
+    {
+      "kind": "key",
+      "atMs": 47556
+    },
+    {
+      "kind": "key",
+      "atMs": 47654
+    },
+    {
+      "kind": "key",
+      "atMs": 47752
+    },
+    {
+      "kind": "key",
+      "atMs": 47850
+    },
+    {
+      "kind": "key",
+      "atMs": 47948
+    },
+    {
+      "kind": "key",
+      "atMs": 48045
+    },
+    {
+      "kind": "key",
+      "atMs": 48142
+    },
+    {
+      "kind": "key",
+      "atMs": 48240
+    },
+    {
+      "kind": "key",
+      "atMs": 48338
+    },
+    {
+      "kind": "click",
+      "atMs": 48901
+    },
+    {
+      "kind": "click",
+      "atMs": 50618
+    },
+    {
+      "kind": "click",
+      "atMs": 65333
+    },
+    {
+      "kind": "click",
+      "atMs": 70083
+    },
+    {
+      "kind": "click",
+      "atMs": 75716
+    },
+    {
+      "kind": "click",
+      "atMs": 113198
+    },
+    {
+      "kind": "click",
+      "atMs": 116615
+    },
+    {
+      "kind": "click",
+      "atMs": 127097
+    },
+    {
+      "kind": "click",
+      "atMs": 131797
+    },
+    {
+      "kind": "click",
+      "atMs": 147780
+    },
+    {
+      "kind": "click",
+      "atMs": 152796
+    },
+    {
+      "kind": "click",
+      "atMs": 165513
+    }
+  ],
+  "cues": [
+    {
+      "id": "duplicates",
+      "startMs": 2338,
+      "endMs": 29864
+    },
+    {
+      "id": "compare",
+      "startMs": 32123,
+      "endMs": 59036
+    },
+    {
+      "id": "fields",
+      "startMs": 61297,
+      "endMs": 90984
+    },
+    {
+      "id": "conflicts",
+      "startMs": 93242,
+      "endMs": 121871
+    },
+    {
+      "id": "confirm",
+      "startMs": 124129,
+      "endMs": 155462
+    },
+    {
+      "id": "result",
+      "startMs": 157775,
+      "endMs": 184712
+    },
+    {
+      "id": "links",
+      "startMs": 186974,
+      "endMs": 215318
+    }
+  ]
+}

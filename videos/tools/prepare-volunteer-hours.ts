@@ -8,6 +8,8 @@ import { pathToFileURL } from "node:url"
 import { loadCurrentVideoPrisma } from "../lib/current-product-prisma"
 import { HOURS_ORG, HOURS_OWNER, HOURS_ROWS, assertOwnedHoursFixture, readHoursScenario } from "../lib/volunteer-hours-fixture"
 import { registrationToken } from "../../src/lib/token-vault"
+import { HOURS_LAST_NAMES, HOURS_LABELS } from "../lib/record-volunteer-hours"
+import { createHoursLogo } from "../lib/volunteer-hours-logo"
 
 export const hoursSchemaHash = createHash("sha256").update(JSON.stringify({ org: HOURS_ORG, owner: HOURS_OWNER, rows: HOURS_ROWS })).digest("hex")
 export function assertHoursOwnership(value: unknown, createdAt: string) {
@@ -22,6 +24,7 @@ async function main() {
   try { ledger = JSON.parse(await readFile(path.join(dir, "ownership.json"), "utf8")) } catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error }
   const runtime = await loadCurrentVideoPrisma("http://localhost:43114")
   const { db, product } = runtime
+  const logo = await createHoursLogo()
   try {
     await db.$transaction(async tx => {
       const existing = await tx.organization.findFirst({ where: { OR: [{ id: HOURS_ORG }, { slug: "formation-heures" }] }, select: { id: true, createdAt: true } })
@@ -29,7 +32,7 @@ async function main() {
       if (existing) {
         assert.equal(args[0], "--reset-owned"); assert.equal(existing.id, HOURS_ORG)
         assertHoursOwnership(ledger, existing.createdAt.toISOString())
-        const owned = await assertOwnedHoursFixture(tx as unknown as typeof db)
+        const owned = await assertOwnedHoursFixture(tx as unknown as typeof db, "legacy-owned-reset")
         passwordHash = owned.admins[0].passwordHash
         for (const log of owned.logs) await tx.orgLog.delete({ where: { id: log.id } })
         for (const event of owned.events) await tx.event.delete({ where: { id: event.id } })
@@ -45,11 +48,12 @@ async function main() {
       for (const kind of ["may", "september", "future"]) assert.equal(await tx.event.count({ where: { id: `${HOURS_ORG}-event-${kind}` } }), 0)
       for (const [key] of HOURS_ROWS) { assert.equal(await tx.shift.count({ where: { id: `${HOURS_ORG}-shift-${key}` } }), 0); assert.equal(await tx.registration.count({ where: { id: `${HOURS_ORG}-registration-${key}` } }), 0) }
       await tx.organization.create({ data: { id: HOURS_ORG, name: "Formation — heures et attestations", slug: "formation-heures", timeZone: "Europe/Zurich", replyToEmail: HOURS_OWNER, active: true } })
-      await tx.adminUser.create({ data: { id: `${HOURS_ORG}-owner`, organizationId: HOURS_ORG, email: HOURS_OWNER, name: "Élodie Exemple", passwordHash, role: "admin", isActive: true } })
-      for (const [id, firstName] of [["aline", "Aline"], ["benoit", "Benoît"], ["clara", "Clara"]]) await tx.volunteer.create({ data: { id: `${HOURS_ORG}-${id}`, organizationId: HOURS_ORG, firstName, lastName: "Exemple", email: `video.hours.${id}@example.org`, active: true } })
+      await tx.organizationLogo.create({ data: { organizationId: HOURS_ORG, ...logo, data: new Uint8Array(logo.data) } })
+      await tx.adminUser.create({ data: { id: `${HOURS_ORG}-owner`, organizationId: HOURS_ORG, email: HOURS_OWNER, name: "Élodie Rochat", passwordHash, role: "admin", isActive: true } })
+      for (const [id, firstName] of [["aline", "Aline"], ["benoit", "Benoît"], ["clara", "Clara"]]) await tx.volunteer.create({ data: { id: `${HOURS_ORG}-${id}`, organizationId: HOURS_ORG, firstName, lastName: HOURS_LAST_NAMES[id as keyof typeof HOURS_LAST_NAMES], email: `video.hours.${id}@example.org`, active: true } })
       for (const [kind, day, title] of [["may", "2026-05-02", "Rencontre de printemps"], ["september", "2026-09-12", "Fête de septembre"], ["future", "2026-11-28", "Préparer la prochaine fête"]]) await tx.event.create({ data: { id: `${HOURS_ORG}-event-${kind}`, organizationId: HOURS_ORG, title, slug: `heures-${kind}`, startDate: new Date(`${day}T00:00:00Z`), endDate: new Date(`${day}T00:00:00Z`), publicStatus: "published", isListed: false, registrationsOpen: true, remindersEnabled: false } })
       for (const [key, member, event, day, status, shiftStatus, startTime, endTime, checked] of HOURS_ROWS) {
-        await tx.shift.create({ data: { id: `${HOURS_ORG}-shift-${key}`, eventId: `${HOURS_ORG}-event-${event}`, roleName: "Accueil", label: `Formation — ${key}`, date: new Date(`${day}T00:00:00Z`), startTime, endTime, capacity: 3, status: shiftStatus } })
+        await tx.shift.create({ data: { id: `${HOURS_ORG}-shift-${key}`, eventId: `${HOURS_ORG}-event-${event}`, roleName: "Accueil", label: HOURS_LABELS[key], date: new Date(`${day}T00:00:00Z`), startTime, endTime, capacity: 3, status: shiftStatus } })
         await tx.registration.create({ data: { id: `${HOURS_ORG}-registration-${key}`, eventId: `${HOURS_ORG}-event-${event}`, shiftId: `${HOURS_ORG}-shift-${key}`, volunteerId: `${HOURS_ORG}-${member}`, status, source: "admin_manual", checkedInAt: checked ? new Date(`${day}T08:00:00Z`) : null, ...registrationToken.data(`demo-hours-${key}`) } })
       }
     }, { timeout: 30000 })

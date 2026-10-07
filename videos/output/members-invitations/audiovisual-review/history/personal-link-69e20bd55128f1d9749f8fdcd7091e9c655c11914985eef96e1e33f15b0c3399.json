@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:31:41.289Z",
+  "videoSha256": "6832eeb70e84d56d0b2d21fe51dfac435f5bcdc4226b19bf7457aabccbdc3d4e",
+  "promptSha256": "5835654d60e0f8961c3359ccf67e81042e3537d7712653f53386bf7e213410ba",
+  "clipSha256": "1e860af75ad54a6f95b57d2ce87c615c5228da7350f05a51aeb7fcd294a608e6",
+  "scene": "personal-link",
+  "review": {
+    "heardOpening": "Ouvrons le lien reçu par Aline",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrons le lien reçu par Aline",
+        "visibleSeconds": 2.5,
+        "visible": "Clic sur le lien dans l'e-mail et ouverture de la page de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Il mène à la fête avec ses coordonnées préremplies",
+        "visibleSeconds": 5,
+        "visible": "Page du formulaire affichant les coordonnées d'Aline déjà saisies",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "choisir un créneau disponible et compléter les informations demandées",
+        "visibleSeconds": 4.5,
+        "visible": "Le créneau est sélectionné juste avant l'étape du formulaire",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "jusqu'à la confirmation",
+        "visibleSeconds": 18,
+        "visible": "Affichage de la page Inscription confirmée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit posé et articulation claire, accompagnement fluide des actions."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

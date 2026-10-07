@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:07:10.213Z",
+  "videoSha256": "c829d6b7cac20906db3eacf6399fafe15e467a356e5c27c1d25a7ec94fb14f43",
+  "promptSha256": "b8a9cf2ccd47837137a7d3efe5fcc9ca724c2fcee0c33a287f247bd2edc4c511",
+  "clipSha256": "6cab4d3abbdca47cb55f3497c6b26b7849338af66d5d42a28b3305154f9f11c8",
+  "scene": "mobile-keyboard",
+  "review": {
+    "heardOpening": "Sur téléphone, ouvrez le menu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "ouvrez le menu pour retrouver les principales destinations",
+        "visibleSeconds": 1.5,
+        "visible": "Ouverture du menu déroulant affichant les rubriques de navigation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "la première tabulation révèle Aller au contenu",
+        "visibleSeconds": 7.1,
+        "visible": "Apparition du lien d'évitement Aller au contenu en haut à gauche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "Vous arrivez directement dans le contenu de la page",
+        "visibleSeconds": 11.5,
+        "visible": "L'activation du lien menant directement au contenu n'est pas illustrée",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:11 - L'activation effective du lien pour atteindre le contenu n'est pas montrée à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire, régulière et posée tout au long de l'extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

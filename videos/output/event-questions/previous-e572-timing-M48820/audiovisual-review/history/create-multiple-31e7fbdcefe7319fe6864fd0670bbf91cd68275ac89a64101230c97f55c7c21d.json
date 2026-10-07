@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:09:01.533Z",
+  "videoSha256": "50715a383930b94c66960386d0996cbbd6de02ea593b0ed689ab9af2ac881d81",
+  "promptSha256": "e2c7bfa4f9f0b27797ca77054c17e6cfa95a670b031c063f1f11201c8043514f",
+  "clipSha256": "55f09465f90e42559376453038b90f68604c29bd10bdfbbfa8201e457d25fd78",
+  "scene": "create-multiple",
+  "review": {
+    "heardOpening": "Passons au matériel de transport",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Créons la question, puis choisissons Choix multiple.",
+        "visibleSeconds": 2.8,
+        "visible": "Affichage du formulaire et sélection du type Choix multiple.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Saisissons Vélo, Remorque et Voiture",
+        "visibleSeconds": 8,
+        "visible": "Saisie des options Vélo, Remorque et Voiture dans le champ prévu.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23,
+        "spoken": "Enregistrons et vérifions les trois choix dans la liste.",
+        "visibleSeconds": 23.4,
+        "visible": "Validation du formulaire et affichage de la question enregistrée dans la liste.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme bien synchronisé avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

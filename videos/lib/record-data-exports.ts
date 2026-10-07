@@ -7,12 +7,18 @@ import { createHash } from "node:crypto"
 import path from "node:path"
 import { showMembersCsv, showArchiveJson } from "./show-export-files"
 import { showActivityCsv } from "./show-activity-csv"
+import { loadCurrentVideoPrisma } from "./current-product-prisma"
+import { verifyExportClassroom } from "./verify-export-review-fixture"
 
 type Scene = (id: string, action: (at: (fraction: number) => Promise<void>) => Promise<void>) => Promise<void>
 
 export async function recordDataExports(options: { page: Page; base: string; directory: string; title: string; scene: Scene; tap: (page: Page, target: Locator) => Promise<void>; settle: (page: Page) => Promise<void> }) {
   const { page, base, directory, title, scene, tap, settle } = options
-  if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Isolated video database required")
+  if (base !== "http://localhost:43102") throw new Error("Exact verified export server required")
+  const runtime = await loadCurrentVideoPrisma(base)
+  try { await verifyExportClassroom(runtime.db) } finally { await runtime.db.$disconnect(); await runtime.unregister() }
+  const preparationProduct = JSON.parse(await readFile(path.join(directory, "product-preparation.json"), "utf8"))
+  if (preparationProduct.commit !== runtime.product.commit || preparationProduct.buildId !== runtime.product.buildId || preparationProduct.productSourceSha256 !== runtime.product.productSourceSha256) throw new Error("Export preflight must come from this current build")
   const prepared = JSON.parse(await readFile(path.join(directory, "preparation.json"), "utf8"))
   if (prepared.organizationId !== "video-data-exports" || !prepared.secretKeysAndKnownTokensAbsent || !prepared.formulaAndPhoneApostrophesVerified) throw new Error("Actual export preflight required")
   const go = async (route: string) => { await page.goto(`${base}${route}`); await settle(page) }
@@ -106,8 +112,8 @@ export async function recordDataExports(options: { page: Page; base: string; dir
     await at(0.27); const csv = await showMembersCsv(page, membersFile)
     if (csv.sha256 !== memberSha || !csv.rows.some(row => row[3] === "'+41 79 000 9900")) throw new Error("Previously downloaded copy changed with actual profile")
     await at(0.51); await go("/doc/exporter-et-conserver-ses-donnees")
-    await page.getByRole("heading", { level: 1, name: "Exporter et conserver ses données", exact: true }).waitFor()
-    await at(0.54); await page.getByRole("heading", { name: "Durées de conservation", exact: true }).scrollIntoViewIfNeeded()
+    await page.getByRole("heading", { name: "Exporter et conserver ses données", exact: true }).scrollIntoViewIfNeeded()
+    await at(0.54); await page.getByText("Durées de conservation", { exact: true }).scrollIntoViewIfNeeded()
     await at(0.73); await showArchiveJson(page, archiveFile)
     checks.copyRemainsFrozenAfterActualModification = true
   })
@@ -116,6 +122,9 @@ export async function recordDataExports(options: { page: Page; base: string; dir
     await at(0.19); await go("/admin/settings/activity")
     await at(0.38); await go(`/admin/events/${prepared.eventId}/print`)
     await page.getByRole("heading", { name: "Archive", exact: true }).scrollIntoViewIfNeeded()
+    await at(0.52)
+    await page.getByRole("heading", { name: "Rapports", exact: true }).scrollIntoViewIfNeeded()
+    await page.getByRole("heading", { name: "À afficher ou à remettre aux bénévoles", exact: true }).waitFor({ state: "visible" })
   })
   const files = await Promise.all([membersFile, journalFile, archiveFile].map(async file => ({ file: path.basename(file), sha256: createHash("sha256").update(await readFile(file)).digest("hex") })))
   await writeFile(path.join(directory, "export-capture-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), scope: "actual local downloads, literal file views and frozen copy check; not full audiovisual or native spreadsheet validation", ...checks, files }, null, 2))

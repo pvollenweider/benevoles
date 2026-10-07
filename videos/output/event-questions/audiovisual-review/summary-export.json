@@ -1,45 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:45:33.765Z",
-  "videoSha256": "8fd119fcc7be2e7433955eb308377f0bafecf962c880a14c93f0b1b0c8f0ca78",
+  "reviewedAt": "2026-10-07T02:49:41.268Z",
+  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
   "promptSha256": "4fda116e4ce60ab724d98b8450372f9a230b374de4df35d6316892779e55101c",
-  "clipSha256": "4d0d3cc2b213f7aefd314a742da73ea91b31d992c24c9614a146819d86123f93",
+  "clipSha256": "61f9825b869799a8901d5ed795ad215ca8d4923927a155fbb829f9d3c1c85dc7",
   "scene": "summary-export",
   "review": {
     "heardOpening": "Pour préparer une commande",
     "checkpoints": [
       {
-        "spokenSeconds": 2.2,
+        "spokenSeconds": 2.5,
         "spoken": "téléchargeons la synthèse en CSV",
-        "visibleSeconds": 2.2,
-        "visible": "Lien 'Télécharger la synthèse (CSV)' présent à l'écran mais aucun clic ni téléchargement n'a lieu",
-        "sync": "missing",
-        "severity": "major"
-      },
-      {
-        "spokenSeconds": 5.4,
-        "spoken": "Le fichier rassemble les questions, les réponses et leurs totaux",
-        "visibleSeconds": 5.4,
-        "visible": "Section 'Synthèse des réponses' affichée à l'écran",
+        "visibleSeconds": 3.5,
+        "visible": "Affichage de la synthèse du fichier CSV téléchargé",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.3,
-        "spoken": "La synthèse décrit l'état actuel",
-        "visibleSeconds": 20.3,
-        "visible": "Page statique affichant le décompte actuel",
+        "spokenSeconds": 5,
+        "spoken": "Le fichier rassemble les questions, les réponses et leurs totaux",
+        "visibleSeconds": 4.5,
+        "visible": "Tableau avec colonnes Question, Réponse, Confirmés et En attente",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Il ne contient ni noms ni coordonnées",
+        "visibleSeconds": 11,
+        "visible": "Vue du tableau montrant uniquement des quantités anonymisées",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "00:02 - L'action annoncée 'téléchargeons la synthèse en CSV' n'est pas effectuée (aucun clic, écran statique)."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Diction fluide et ton pédagogique régulier."
+      "observation": "Élocution posée, claire et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

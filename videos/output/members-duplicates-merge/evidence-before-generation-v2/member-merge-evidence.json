@@ -1,0 +1,54 @@
+{
+  "recordedAt": "2026-10-06T17:34:32.666Z",
+  "productBuild": {
+    "commit": "9ca0705a3ed3e72ed2447c112d07616f0e1ef4ae",
+    "sourceTree": "0ffd0c768cc975dd70b66e893c85fdc1dac2fee4",
+    "productSourceSha256": "af265f2602fedcac29b3b1e5114b61be0b2404e3843c0b568127aab81660fa3a",
+    "buildId": "jXO4BkQpwclQpoLJ_Y3Np",
+    "snapshot": "/tmp/benevoles-video-production.A1omfl",
+    "builtAt": "2026-10-06T17:27:11.076Z"
+  },
+  "keepId": "video-member-merge-a",
+  "absorbId": "video-member-merge-b",
+  "linkFingerprints": [
+    {
+      "kind": "registration",
+      "entityId": "video-member-merge-registration-moved",
+      "oldLinkSha256": "4b136836487dde208660f0de88eac10708d829afb287112424c564cbfdacb532",
+      "newLinkSha256": "a8ae70ec10327052d1e1ed294946aecf83c89c9884353b5dc4fa39dec3a90ead"
+    },
+    {
+      "kind": "registration",
+      "entityId": "video-member-merge-registration-same",
+      "oldLinkSha256": "f1de4ab85d449a880bebef049b7c6cdcd4bc4793c6e98b9f9de9a6148dcfb58f",
+      "newLinkSha256": "dd30a60ef1b744270ab1a07e2234f7ae9a85a5a4aecac4688eabe1d20427abbe"
+    },
+    {
+      "kind": "invitation",
+      "entityId": "video-member-merge-invite-absorb",
+      "oldLinkSha256": "84972f32e7c8f85ee77d88b59caea692ce09118722d0714b2c6e86ef4211cb1d",
+      "newLinkSha256": "d9ed77a95984416fddfe82fe723a6a7697ef8e0852655cf242e86d27b4eafc09"
+    }
+  ],
+  "linkChecks": [
+    {
+      "kind": "registration",
+      "entityId": "video-member-merge-registration-moved",
+      "oldStatus": 404,
+      "newStatus": 200
+    },
+    {
+      "kind": "registration",
+      "entityId": "video-member-merge-registration-same",
+      "oldStatus": 404,
+      "newStatus": 404
+    },
+    {
+      "kind": "invitation",
+      "entityId": "video-member-merge-invite-absorb",
+      "oldStatus": 404,
+      "newStatus": 200
+    }
+  ],
+  "emailsSent": false
+}

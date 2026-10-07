@@ -6,7 +6,6 @@ import type { ProductBuild } from "./product-build"
 import { test } from "vitest"
 
 test("record-volunteer-hours guards", async () => {
-
   const product = { commit: "a".repeat(40), buildId: "test-only", productSourceSha256: "b".repeat(64) } as ProductBuild
   const rows = [
     ["prior", "aline", "may", "2026-05-02", "active", "open", 240, true],
@@ -20,7 +19,7 @@ test("record-volunteer-hours guards", async () => {
   ] as const
   const fixture = (): HoursScenario => ({
     organizationId: "video-hours", organizationName: "Formation — heures et attestations", organizationSlug: "formation-heures", product: { ...product },
-    members: [["aline", "Aline", 480, 360], ["benoit", "Benoît", 120, 0], ["clara", "Clara", 0, 0]].map(([id, name, planned, attested]) => ({ id: `video-hours-${id}`, firstName: String(name), lastName: "Exemple", email: `video.hours.${id}@example.org`, plannedMinutes: Number(planned), attestedMinutes: Number(attested) })),
+    members: [["aline", "Aline", 480, 360], ["benoit", "Benoît", 120, 0], ["clara", "Clara", 0, 0]].map(([id, name, planned, attested]) => ({ id: `video-hours-${id}`, firstName: String(name), lastName: ({ aline: "Mercier", benoit: "Favre", clara: "Besson" } as Record<string, string>)[String(id)], email: `video.hours.${id}@example.org`, plannedMinutes: Number(planned), attestedMinutes: Number(attested) })),
     rows: rows.map(([id, member, event, date, status, shiftStatus, minutes, checked]) => ({ id: `video-hours-registration-${id}`, volunteerId: `video-hours-${member}`, eventId: `video-hours-event-${event}`, localDate: date, status, shiftStatus, minutes, checkedInAt: checked ? `${date}T08:00:00Z` : null })),
     confirmedSummary: { distinct: 2, firstTime: 1, returning: 1, confirmed: 3, withPresence: 1, plannedMinutes: 360, attestedMinutes: 120 },
   })
@@ -40,11 +39,12 @@ test("record-volunteer-hours guards", async () => {
   }
   assert.throws(() => assertHoursScenario(fixture(), product, new Date("2026-12-01T12:00:00Z")))
   const header = "Prénom;Nom;Événements;Créneaux;Heures planifiées;Heures attestées\r\n"
-  const base = "Aline;Exemple;1;2;4;2\r\nBenoît;Exemple;1;1;2;0\r\n"
+  const base = "Benoît;Favre;1;1;2;0\r\nAline;Mercier;1;2;4;2\r\n"
   const total = "Total;;;3;6;2\r\n"
   assertHoursCsv(`\uFEFF${header}${base}${total}`, false)
-  assertHoursCsv(`${header}${base}Clara;Exemple;0;0;0;0\r\n${total}`, true)
+  assertHoursCsv(`${header}Clara;Besson;0;0;0;0\r\n${base}${total}`, true)
   assert.throws(() => assertHoursCsv(`${header}${base}${total}`.replace("4;2", "6;4"), false))
   assert.throws(() => assertHoursCsv(`${header}${base}${total}contact@example.org`, false))
   assert.throws(() => assertHoursCsv(`${header}${base}${total}`, true))
+  console.log("Hours and certificate journey pure guards passed; no browser, database, print or API access")
 })

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T20:36:48.357Z",
+  "videoSha256": "20ccf7d54add31d2e5210c71d07e9b917ced0c5680878b1202f4e29e6e1ebc81",
+  "promptSha256": "b86107bd5a403d9221d6b0562cce6670e7717e99cac912b3c11b1b8417fcdd39",
+  "clipSha256": "18d3ae6eb4283df676d8521aeaf55314c360e4c02d35bff9552c8cd2d37b1418",
+  "scene": "contents",
+  "review": {
+    "heardOpening": "Ouvrons les différentes parties du vrai fichier",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "les créneaux et les inscriptions",
+        "visibleSeconds": 4.1,
+        "visible": "Sélection de 'shifts' puis de 'registrations' dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Les pages, les questions et leurs réponses",
+        "visibleSeconds": 8.3,
+        "visible": "Affichage des sections 'pages' puis 'questions'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.8,
+        "spoken": "Des nombres récapitulent plusieurs de ces collections",
+        "visibleSeconds": 15.6,
+        "visible": "Affichage de la section 'counts'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "Vérifions un créneau et une réponse",
+        "visibleSeconds": 18.6,
+        "visible": "Sélection de 'shifts' puis bascule vers 'questions'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et synchronisation fluide avec les changements de section à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:27:52.698Z",
+  "videoSha256": "f6ee805a2a5d1386fbd03a014714cf489ae12f80d0fc33e6c0a6004b3e061dd5",
+  "promptSha256": "313cd01eb1f6c91af99c2b539b7746bf8a7df075b9959c748f0669e3a12e409c",
+  "clipSha256": "2cf622c408ae8a632834c7840f08d5c6d74966a25650a6e94a53efd67867c1ac",
+  "scene": "volunteer-form",
+  "review": {
+    "heardOpening": "Répondons maintenant.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Aline choisit M pour son t-shirt, puis Oui pour le permis.",
+        "visibleSeconds": 2.8,
+        "visible": "Sélection de la taille M sur le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Pour le matériel, elle coche Vélo et Remorque",
+        "visibleSeconds": 6.5,
+        "visible": "Cases Vélo et Remorque cochées successivement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.4,
+        "spoken": "Dans le texte libre, écrivons Entrée nord.",
+        "visibleSeconds": 11.2,
+        "visible": "Saisie du texte 'Entrée nord' dans le champ point de rendez-vous",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "le récapitulatif Transmis à l'organisation montre les informations qui seront partagées.",
+        "visibleSeconds": 17,
+        "visible": "Affichage du panneau récapitulatif latéral 'Transmis à l'organisation'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.8,
+        "spoken": "confirmons réellement l'inscription.",
+        "visibleSeconds": 22.3,
+        "visible": "Clic sur le bouton de confirmation et affichage de la page de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et synchronisation fluide avec l'interface."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

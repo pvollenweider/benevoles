@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T20:36:08.322Z",
+  "videoSha256": "20ccf7d54add31d2e5210c71d07e9b917ced0c5680878b1202f4e29e6e1ebc81",
+  "promptSha256": "d67d07f1ec3b1842529fe270f643c1546a087292a74005edc0752f04496f5fc9",
+  "clipSha256": "6f56a864ecdf188832128d055b8074b520e0a7366d25f36dfb64ea6d2eb1e759",
+  "scene": "members",
+  "review": {
+    "heardOpening": "Depuis Membres, Exporter les membres",
+    "checkpoints": [
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Une recherche à l'écran ne transforme pas cet export",
+        "visibleSeconds": 4,
+        "visible": "Filtre 'Léa' appliqué dans la barre de recherche",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "téléchargeons",
+        "visibleSeconds": 13.2,
+        "visible": "Clic sur 'Exporter les membres (CSV)'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "comparons le fichier avec la liste complète",
+        "visibleSeconds": 15,
+        "visible": "Ouverture de la vue 'Lecture du CSV des membres'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "On retrouve aussi une personne désactivée",
+        "visibleSeconds": 15.5,
+        "visible": "Ligne Étienne affichée avec le statut inactif",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:56:58.902Z",
+  "videoSha256": "efc3fa2ff00bbca286a3418dff1a87edc31728a93b5394b54d608373a831309d",
+  "promptSha256": "8793a02346d71b1a8413bd1f667ff3fdce56c6c1a03b152d8732ba4df92b1220",
+  "clipSha256": "d9e004ca294f802c16dd5ea61503bce9df85c57e9af041638dfdf10ccb269e79",
+  "scene": "organization-navigation",
+  "review": {
+    "heardOpening": "Le Tableau de bord rassemble",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Le Tableau de bord rassemble les priorités",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la page Tableau de bord",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "Événements ouvre la liste de vos événements",
+        "visibleSeconds": 5,
+        "visible": "Affichage de la liste des événements",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "et Membres les personnes connues de l'association",
+        "visibleSeconds": 7.5,
+        "visible": "Affichage de la liste des membres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Paramètres concerne les réglages communs",
+        "visibleSeconds": 11,
+        "visible": "Affichage de l'écran des paramètres",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction fluide et articulation claire, rythme adapté."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

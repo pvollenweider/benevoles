@@ -1,35 +1,35 @@
 {
   "id": "EVENT_CREATE_BLANK",
   "slug": "event-create-blank",
-  "validatedAt": "2026-10-06T17:21:58.615Z",
+  "validatedAt": "2026-10-06T18:34:26.565Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 150120,
+  "captureMs": 153640,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 14276,
+      "visualMs": 14277,
       "audioMs": 14275,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "identity-dates",
-      "visualMs": 17750,
+      "visualMs": 17751,
       "audioMs": 17749,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "location",
-      "visualMs": 18359,
+      "visualMs": 18361,
       "audioMs": 18359,
-      "driftMs": 0
+      "driftMs": 2
     },
     {
       "id": "public-content",
-      "visualMs": 19195,
+      "visualMs": 19193,
       "audioMs": 19193,
-      "driftMs": 2
+      "driftMs": 0
     },
     {
       "id": "phone-color",
@@ -39,9 +39,9 @@
     },
     {
       "id": "create",
-      "visualMs": 15712,
+      "visualMs": 15713,
       "audioMs": 15711,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "autosave",
@@ -51,9 +51,9 @@
     },
     {
       "id": "result",
-      "visualMs": 16927,
+      "visualMs": 16929,
       "audioMs": 16927,
-      "driftMs": 0
+      "driftMs": 2
     }
   ],
   "issues": []

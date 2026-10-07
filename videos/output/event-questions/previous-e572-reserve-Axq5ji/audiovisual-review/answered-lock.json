@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:11:05.799Z",
+  "videoSha256": "50715a383930b94c66960386d0996cbbd6de02ea593b0ed689ab9af2ac881d81",
+  "promptSha256": "25531fd130d559ea51f55e05ae0392b019f60b3428468116e859983bc9f29f6d",
+  "clipSha256": "2c3e134d93bf6e7b5b089ac9cb0d2a89b0c092d3eda0ba329c6a8746bef9f82a",
+  "scene": "answered-lock",
+  "review": {
+    "heardOpening": "Le formulaire a maintenant des réponses",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "revenons modifier la taille du t-shirt",
+        "visibleSeconds": 1.5,
+        "visible": "Clic sur le lien Modifier de la question Taille de t-shirt",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Le type est verrouillé",
+        "visibleSeconds": 4.5,
+        "visible": "Champ Type de réponse grisé avec mention de verrouillage",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "retirer L des choix proposés",
+        "visibleSeconds": 12,
+        "visible": "Suppression de la lettre L dans la liste des choix",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "L'application refuse",
+        "visibleSeconds": 14.5,
+        "visible": "Affichage du message d'erreur bloquant le retrait de L",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.3,
+        "spoken": "Annulons cette modification",
+        "visibleSeconds": 19.1,
+        "visible": "Clic sur le bouton Annuler",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

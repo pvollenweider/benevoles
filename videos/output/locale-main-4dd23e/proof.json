@@ -1,0 +1,15 @@
+{
+  "product": {
+    "commit": "4dd23e57b7c7e76f32c717069a177f4141801c91",
+    "sourceTree": "81b677d009427f1ce7f0ae94a6ffbf6023f314da",
+    "productSourceSha256": "9f7cee41df28382e6487a88c462a6919c7d3569155d2c9a6bc975341ee0b16a3",
+    "buildId": "tAYOB6BubM1tVY1OLqT3o",
+    "snapshot": "/tmp/benevoles-video-production.O7gzXR",
+    "builtAt": "2026-10-06T19:35:05.839Z"
+  },
+  "checkedAt": "2026-10-06T19:36:16.265Z",
+  "locale": "fr-FR",
+  "processLocale": "fr_FR.UTF-8",
+  "value": "2026-11-28",
+  "navigatorLanguage": "fr-FR"
+}

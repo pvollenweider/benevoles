@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:45:02.696Z",
+  "videoSha256": "8fd119fcc7be2e7433955eb308377f0bafecf962c880a14c93f0b1b0c8f0ca78",
+  "promptSha256": "f3cb4fd8d4b53d49030b8840b22871d2f5258fe9e7a1933cf680fcb158e9192f",
+  "clipSha256": "2bf46e57219b672d5f67b0a88a842e068283caae2f62e239df3c7fae1fd82593",
+  "scene": "email-proof",
+  "review": {
+    "heardOpening": "Aline existait déjà dans la liste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Ouvrons le nouveau message réellement reçu pour cette adresse",
+        "visibleSeconds": 0,
+        "visible": "Le courriel est déjà affiché à l'écran dans Mailpit dès le début",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 20.5,
+        "spoken": "avec son lien personnel",
+        "visibleSeconds": 20.5,
+        "visible": "Bouton d'accès « Gérer mes inscriptions » affiché dans le corps du message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25.2,
+        "spoken": "La boîte de test prouve cette réception locale",
+        "visibleSeconds": 25.2,
+        "visible": "Affichage fixe de l'interface Mailpit avec le message sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:14 : L'action d'ouverture annoncée n'a pas lieu à l'écran, le courriel étant déjà ouvert dès 00:00."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, sans artefact sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

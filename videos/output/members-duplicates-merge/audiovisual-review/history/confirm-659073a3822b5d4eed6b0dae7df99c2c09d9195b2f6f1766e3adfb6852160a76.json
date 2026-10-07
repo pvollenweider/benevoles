@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:43:42.294Z",
+  "videoSha256": "386a2aaa7a8b33a87a4af265149f6b3b026fe93db5f4941b88209af9b51b34d3",
+  "promptSha256": "64aab1e687beb3df5d5ca469d447aaa5729535d2a120357d7d7469971fcf810f",
+  "clipSha256": "20c2f3886beea415f90b9c60e24c67689122981f6e07512d92ec06fa79ae568f",
+  "scene": "confirm",
+  "review": {
+    "heardOpening": "Cette case permet d'envoyer les nouveaux liens personnels",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Dans cette démonstration, on la décoche",
+        "visibleSeconds": 6.3,
+        "visible": "La case Envoyer les nouveaux liens personnels est décochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.4,
+        "spoken": "Fusionner les deux fiches ouvre une dernière confirmation",
+        "visibleSeconds": 23.7,
+        "visible": "Clic sur Fusionner les deux fiches et ouverture de la modale de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28.5,
+        "spoken": "confirmez la fusion",
+        "visibleSeconds": 28.4,
+        "visible": "Clic sur Confirmer la fusion et affichage de la page de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

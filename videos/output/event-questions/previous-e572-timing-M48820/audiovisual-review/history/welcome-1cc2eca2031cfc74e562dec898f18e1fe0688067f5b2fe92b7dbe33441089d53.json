@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T19:18:17.443Z",
+  "videoSha256": "d06d14223ff995674d62c29e7a94d1400de7af563b83439753ac588157b6a4a6",
+  "promptSha256": "129820408457dba3852a0ef23df4ceec775ded82efbe670c63854135b8eba3c2",
+  "clipSha256": "385bd85becfacd8e084e8ec419d45a62aba6c34bb0b2e85ee19dd90489627213",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un t-shirt à prévoir",
+    "checkpoints": [
+      {
+        "spokenSeconds": 7,
+        "spoken": "Ouvrons Questions aux bénévoles pour notre événement de formation",
+        "visibleSeconds": 0,
+        "visible": "Page Questions aux bénévoles déjà ouverte et affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "On peut ajouter jusqu'à cinq questions",
+        "visibleSeconds": 0,
+        "visible": "Compteur Questions (0/5) et texte explicatif visibles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19,
+        "spoken": "Pas d'information sensible sur la santé, la religion ou les opinions",
+        "visibleSeconds": 0,
+        "visible": "Avertissement textuel visible sous le titre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction fluide et ton pédagogique régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,36 @@
+{
+  "scope": "merge",
+  "version": 2,
+  "organizationId": "video-member-merge",
+  "identities": {
+    "organizationId": "video-member-merge",
+    "directory": "videos/output/members-duplicates-merge",
+    "owner": "Élodie Martin",
+    "members": {
+      "a": "Favre",
+      "b": "Favre"
+    }
+  },
+  "product": {
+    "commit": "54224c7ad2bd465e63dcf30ab91266b1455a3a23",
+    "sourceTree": "cee2ccecd3aa5c82abfea3fcee4c5691dc16ba0b",
+    "productSourceSha256": "9490665d241594d8e538bc3d1c8238667338aeaaac1336a944062c5260dce6da",
+    "buildId": "uqE7YLJo_7r8CbyaqRify",
+    "snapshot": "/tmp/benevoles-video-production.KsjGwn",
+    "builtAt": "2026-10-06T18:15:27.264Z"
+  },
+  "evidenceSha256": "9da3f18f81bedbb2e3c271f7dc60b9373f9c8f52cc0400560a5105c5c746127a",
+  "evidenceFile": "identity-v1-evidence.json",
+  "migratedAt": "2026-10-06T18:33:21.806Z",
+  "protectedBeforeSha256": "c50f26da21a8991735719407ed9c649b7e1a57e380302bd921024fc7c04f4109",
+  "protectedAfterSha256": "c50f26da21a8991735719407ed9c649b7e1a57e380302bd921024fc7c04f4109",
+  "changedMemberIds": [
+    "video-member-merge-a"
+  ],
+  "changedAdminIds": [
+    "video-member-merge-owner"
+  ],
+  "changedAuthorHistoryIds": [],
+  "organizationCreatedAt": "2026-10-06T17:30:53.011Z",
+  "note": "Encrypted sent payloads, erased tombstones, tokens, results, logs and fixture-generation ownership are preserved."
+}

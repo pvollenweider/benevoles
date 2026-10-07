@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:37:13.190Z",
-  "videoSha256": "01fafadfba036da8aac5f19c6359a31892b79dcfccbfe3936309fabe4cf0f4be",
+  "reviewedAt": "2026-10-07T02:02:35.321Z",
+  "videoSha256": "a24b4bfd2c19e5331f7acd65fa54800c1f8745634493fc2ef40d68c1f05d48c4",
   "promptSha256": "c8a8543634d07616f9c471b82288b1817513cd9611e3bfc44de978ae92909c5c",
-  "clipSha256": "ccf73fb51c7de0bbb7f0257a6996ff27bf05033bf50e0b8527c24f1475ee938b",
+  "clipSha256": "ee403833484323188806875786bb1bfc0a5d0a28033ad9c5287a88db51853afc",
   "scene": "duplicates",
   "review": {
     "heardOpening": "Deux fiches pour une seule personne ?",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 3.4,
         "spoken": "Dans Membres, ouvrez Doublons possibles.",
-        "visibleSeconds": 4.5,
-        "visible": "Clic sur l'onglet Doublons possibles et affichage des suggestions",
+        "visibleSeconds": 5.4,
+        "visible": "Clic sur l'onglet 'Doublons possibles' et affichage de la liste",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.8,
+        "spokenSeconds": 12.5,
         "spoken": "Comparer et fusionner ouvre un aperçu",
         "visibleSeconds": 12,
-        "visible": "Ouverture de la vue Aperçu de la fusion avec Robin Exemple",
+        "visible": "Page 'Fusionner Robin Favre' affichant l'aperçu de fusion",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.8,
+        "spoken": "Revenons aux suggestions.",
+        "visibleSeconds": 17.2,
+        "visible": "Clic sur 'Retour à la liste' et retour aux doublons possibles",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 19.1,
         "spoken": "Ignorer retire simplement la paire de cette liste.",
-        "visibleSeconds": 20,
-        "visible": "Clic sur Ignorer et disparition de la suggestion",
+        "visibleSeconds": 19.8,
+        "visible": "Clic sur 'Ignorer', la liste devient vide",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier, intonation claire et naturelle."
+      "observation": "Élocution claire et synchronisation correcte avec l'interface."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

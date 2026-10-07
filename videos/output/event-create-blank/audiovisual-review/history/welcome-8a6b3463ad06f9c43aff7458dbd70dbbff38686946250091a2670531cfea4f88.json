@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:10:58.788Z",
+  "videoSha256": "3a5b954060449450e682d4286caea681b96fd7ba2c09fe2533a35ca86f69d15f",
+  "promptSha256": "63386b8816038804b4e491d0e874d4dd017e145676887e4d5511dc3811e12575",
+  "clipSha256": "ea7ecb2b59a974e01481f7ea036606df7c6b0db66ac0ba8e73ab8e291fd3dc3a",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Quand aucun modèle ne correspond vraiment",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "partez d’une page blanche",
+        "visibleSeconds": 2.8,
+        "visible": "Affichage de la page de création avec l'option Page blanche cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "L’événement est d’abord créé comme brouillon",
+        "visibleSeconds": 3,
+        "visible": "Sous-titre sous Page blanche indiquant la création en brouillon",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Créons ensemble une fête de quartier sur deux jours",
+        "visibleSeconds": 11.5,
+        "visible": "Formulaire de configuration du nouvel événement prêt à être complété",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

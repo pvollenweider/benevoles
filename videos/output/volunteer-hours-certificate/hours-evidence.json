@@ -1,18 +1,24 @@
 {
-  "checkedAt": "2026-10-06T17:44:43.252Z",
+  "checkedAt": "2026-10-06T18:51:58.357Z",
   "product": {
-    "commit": "9ca0705a3ed3e72ed2447c112d07616f0e1ef4ae",
-    "sourceTree": "0ffd0c768cc975dd70b66e893c85fdc1dac2fee4",
-    "productSourceSha256": "af265f2602fedcac29b3b1e5114b61be0b2404e3843c0b568127aab81660fa3a",
-    "buildId": "jXO4BkQpwclQpoLJ_Y3Np",
-    "snapshot": "/tmp/benevoles-video-production.A1omfl",
-    "builtAt": "2026-10-06T17:27:11.076Z"
+    "commit": "025c68ccb98d72a096931f8f110a7bcc02095502",
+    "sourceTree": "8ffb323bc2949219d23254251dbb70048c3ec6d5",
+    "productSourceSha256": "e6c0c70cb46f15fff94480c8de7288303eda7e54f8d17dee42c2539c0e7edd27",
+    "buildId": "9HHDId7D2S4N4BOjjqht6",
+    "snapshot": "/tmp/benevoles-video-production.pXK0Fa",
+    "builtAt": "2026-10-06T18:46:48.999Z"
   },
   "hours-list": {
     "plannedHours": 8,
     "attestedHours": 6,
     "futureAndCancelledExcluded": true,
     "attestedIsSubsetNotAdditional": true
+  },
+  "last-participation": {
+    "confirmedDateAndPresenceDateShownSeparately": true,
+    "noPresenceNotAbsence": true,
+    "actualAttestedSortCycleVerified": true,
+    "actualLastParticipationSortVerified": true
   },
   "activity": {
     "realFactualChronologyShown": true,
@@ -29,7 +35,9 @@
   "certificate-settings": {
     "actualLivePreview": true,
     "period": "MayToSeptember2026",
-    "actualNoteEntered": true
+    "actualNoteEntered": true,
+    "actualLogoLoaded": true,
+    "actualPrintGrayscaleComputed": true
   },
   "certificate-presence": {
     "attestedHours": 6,
@@ -38,8 +46,8 @@
     "noClockedWorkedHoursClaim": true
   },
   "certificate-pdf": {
-    "actualPdfSha256": "04556bbe7e7793f2dfa0f670f0ab257f923d673577e4a0677f3501e6e476c8af",
-    "actualPdfPages": 1,
+    "actualPdfSha256": "eccb8e9b694556905b02718d2a532c530d0a8f023ccd56278233f4246d5d47c6",
+    "actualPdfPages": 2,
     "method": "browser-print-engine",
     "realProductPrintActionLogged": true,
     "serverPdfDownloadFeature": false,

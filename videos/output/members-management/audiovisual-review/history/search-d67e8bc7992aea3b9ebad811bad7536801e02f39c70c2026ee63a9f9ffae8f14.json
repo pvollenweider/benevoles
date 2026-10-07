@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:08:07.489Z",
+  "videoSha256": "5ba525686f46bb6316cae59a3d9cdebc88e7985fbe1f97cb452d10251e693b0c",
+  "promptSha256": "c5dd1d4fa7ca621f8fe51b627cbd8646ddb67d17868babded37d068e0b5c1644",
+  "clipSha256": "e54840d08296d72ac9fe106cc482aa919d719d1b677138aa56f6914bae3cbc3b",
+  "scene": "search",
+  "review": {
+    "heardOpening": "La recherche aide à retrouver une personne",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La recherche aide à retrouver une personne par son nom",
+        "visibleSeconds": 0.8,
+        "visible": "Saisie du prénom dans la barre de recherche et filtrage de la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Les accents ne doivent pas compliquer la recherche",
+        "visibleSeconds": 5,
+        "visible": "Résultats affichant Émilie avec accent malgré la saisie",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "ici, deux Stéphane Favre ont des coordonnées différentes",
+        "visibleSeconds": 10,
+        "visible": "Recherche de Stéphane Favre affichant deux lignes distinctes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Vérifiez le contact et les inscriptions avant de modifier une fiche",
+        "visibleSeconds": 17.5,
+        "visible": "Affichage des colonnes Contact et Inscriptions dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction claire et rythme posé, parfaitement synchronisé avec les démonstrations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

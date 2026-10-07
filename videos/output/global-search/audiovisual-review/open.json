@@ -1,43 +1,45 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T02:29:39.432Z",
-  "videoSha256": "258ab12d15939f6b8d477f5d8a71162bf2e5bf54555dca8ead27b706b9391071",
-  "promptSha256": "37a1bd71cf206cf221864e376b36ae4d43c1fb133ece3cc78c70911ae04165c4",
-  "clipSha256": "53c21072a8645f7fd34a8a5601359da2e2d9eb3aa839a5c0c078f3772edb430c",
+  "reviewedAt": "2026-10-06T18:39:46.146Z",
+  "videoSha256": "a5678b6a18e77e7ecb2489666df876bd539ced6fe6a4ba2d5fc4df91d56e7b9e",
+  "promptSha256": "b0328fa0c8b596925b476a23edffe702e85022af8fb0b236600b4189121c716b",
+  "clipSha256": "69d939634223f083b2dbbf6cfbdb8ed2423966adc093a501358cbdd036c5fdaa",
   "scene": "open",
   "review": {
     "heardOpening": "Ouvrez la loupe dans la barre du haut",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0,
         "spoken": "Ouvrez la loupe dans la barre du haut",
         "visibleSeconds": 0.8,
-        "visible": "Clic sur la loupe et ouverture de la barre de recherche",
+        "visible": "Le champ de recherche s'ouvre en haut",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.2,
-        "spoken": "le champ s’ouvre et reçoit immédiatement le curseur",
-        "visibleSeconds": 5.8,
-        "visible": "Affichage du champ de recherche avec curseur actif",
-        "sync": "aligned",
-        "severity": "none"
+        "spokenSeconds": 5.5,
+        "spoken": "le champ s'ouvre et reçoit immédiatement le curseur",
+        "visibleSeconds": 4.5,
+        "visible": "Champ ouvert avec focus actif visible",
+        "sync": "early",
+        "severity": "minor"
       },
       {
-        "spokenSeconds": 9.3,
+        "spokenSeconds": 8.9,
         "spoken": "Échap le referme sans lancer de recherche",
-        "visibleSeconds": 9.1,
-        "visible": "Fermeture du champ de recherche et retour au bouton loupe",
+        "visibleSeconds": 9.3,
+        "visible": "Le champ disparaît et le focus revient sur la loupe",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [],
+    "issues": [
+      "00:03 - Fermeture puis réouverture rapide du champ avant l'explication du curseur"
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée."
+      "observation": "Élocution claire et posée, ton neutre et régulier."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

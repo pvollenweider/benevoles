@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:28:31.238Z",
+  "videoSha256": "40c2daacfc4c477f3a0078d17f0c72458436f38255c820e3d6645f649fd1db79",
+  "promptSha256": "129820408457dba3852a0ef23df4ceec775ded82efbe670c63854135b8eba3c2",
+  "clipSha256": "8cb6340b5565311c7810a7d994cbf5f1d2367900aa78efdd724154ab17995ba2",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Un t-shirt à prévoir",
+    "checkpoints": [
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "Ouvrons Questions aux bénévoles pour notre événement de formation",
+        "visibleSeconds": 0,
+        "visible": "Page Questions aux bénévoles déjà affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.1,
+        "spoken": "On peut ajouter jusqu'à cinq questions",
+        "visibleSeconds": 0,
+        "visible": "Mention Questions (0/5) et texte explicatif visibles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.1,
+        "spoken": "Pas d'information sensible sur la santé, la religion ou les opinions",
+        "visibleSeconds": 0,
+        "visible": "Avertissement textuel visible sous le titre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, sur fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

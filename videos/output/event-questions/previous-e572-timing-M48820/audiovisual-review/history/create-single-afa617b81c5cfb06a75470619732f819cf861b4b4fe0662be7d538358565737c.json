@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:43:09.618Z",
+  "videoSha256": "8fd119fcc7be2e7433955eb308377f0bafecf962c880a14c93f0b1b0c8f0ca78",
+  "promptSha256": "344cb6ce62ab99b9a2401a977fbfb1c2423287f525c83c3465e7626283b4eb47",
+  "clipSha256": "8a1221c7050f5ed410c473d630fab2875087047a8712f24b5f7d09b1a775f712",
+  "scene": "create-single",
+  "review": {
+    "heardOpening": "Commençons par la taille du t-shirt.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "Cliquons sur Ajouter une question",
+        "visibleSeconds": 0.8,
+        "visible": "Affichage du volet Nouvelle question",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Dans Type de réponse, choisissons Choix unique",
+        "visibleSeconds": 8.5,
+        "visible": "Sélection de l'option Choix unique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25,
+        "spoken": "cochons Réponse obligatoire",
+        "visibleSeconds": 21.5,
+        "visible": "Case Réponse obligatoire cochée",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 27.5,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 22.5,
+        "visible": "Validation via le bouton Enregistrer",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 30,
+        "spoken": "La question est maintenant dans la liste",
+        "visibleSeconds": 23,
+        "visible": "Question ajoutée affichée dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "Certaines manipulations à l'écran devancent les consignes vocales de 2 à 4 secondes (00:21 à 00:27)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution fluide, claire et posée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

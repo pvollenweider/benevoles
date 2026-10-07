@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:10:31.752Z",
+  "videoSha256": "50715a383930b94c66960386d0996cbbd6de02ea593b0ed689ab9af2ac881d81",
+  "promptSha256": "4fda116e4ce60ab724d98b8450372f9a230b374de4df35d6316892779e55101c",
+  "clipSha256": "2d36170ac3e4c6b99cfad6f9146293ca1b42d190836124b664dac04b98a96a68",
+  "scene": "summary-export",
+  "review": {
+    "heardOpening": "Pour préparer une commande",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "téléchargeons la synthèse en CSV",
+        "visibleSeconds": 4.5,
+        "visible": "Transition vers l'affichage de la synthèse CSV téléchargée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Le fichier rassemble les questions, les réponses et leurs totaux, avec les confirmés et les personnes en attente",
+        "visibleSeconds": 5,
+        "visible": "Tableau avec colonnes Question, Réponse, Confirmés et En attente",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Il ne contient ni noms ni coordonnées",
+        "visibleSeconds": 11,
+        "visible": "Tableau sans données personnelles et mention 'Aucune identité ni coordonnée'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution fluide, claire et conforme au texte affiché."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

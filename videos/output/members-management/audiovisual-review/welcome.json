@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:36:11.757Z",
-  "videoSha256": "4f2463aa78f990278c1913f94a35e27170bbb7b98cd4fc848478da990a80a1cb",
+  "reviewedAt": "2026-10-06T18:22:52.636Z",
+  "videoSha256": "d217b3a0a43428c453f7c2c1a5bc4b13ee389513c507c1e86a749f7830b0d369",
   "promptSha256": "cbe2af25a82aee4bc3b0a48812ce16805d6bde9567e3463040c6a5cd7b190547",
-  "clipSha256": "7b94fd3e054d1545b93f6dfca37217763d2c53c44c0b9ba166713e761dc05aa6",
+  "clipSha256": "21f457fe49c843299984207dbf692b504346f707e9309a5405cfdca4a27b1e2b",
   "scene": "welcome",
   "review": {
     "heardOpening": "La liste des membres rassemble les personnes",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "La liste des membres rassemble les personnes que votre association souhaite retrouver",
+        "spokenSeconds": 0.7,
+        "spoken": "La liste des membres rassemble les personnes",
         "visibleSeconds": 2.5,
-        "visible": "Page Membres avec le tableau des contacts affiché après fermeture du titre",
+        "visible": "Affichage de la page de gestion des membres après disparition du bandeau titre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
-        "spoken": "Ici, soixante fiches donnent un aperçu d'une vraie équipe",
+        "spokenSeconds": 6.4,
+        "spoken": "soixante fiches donnent un aperçu d'une vraie équipe",
         "visibleSeconds": 3,
-        "visible": "Indication '60 membres' affichée sous le titre principal",
+        "visible": "Compteur indiquant '60 membres' sous le titre du tableau",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 13,
-        "spoken": "Ajouter un membre ne l'inscrit pas automatiquement à une fête",
+        "spoken": "Ajouter un membre ne l'inscrit pas automatiquement",
         "visibleSeconds": 3,
-        "visible": "Bouton '+ Nouveau membre' présent en haut à droite sans interaction",
+        "visible": "Bouton bleu '+ Nouveau membre' visible en haut à droite",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, claire et fluide, sans bruits parasites."
+      "observation": "Élocution claire et rythme régulier."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

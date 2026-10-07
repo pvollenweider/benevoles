@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:28:18.692Z",
+  "videoSha256": "f6ee805a2a5d1386fbd03a014714cf489ae12f80d0fc33e6c0a6004b3e061dd5",
+  "promptSha256": "7a43ffa810bd2e72968a60d2731da2a1a7ccacc342149321f861aa2731a3fb1f",
+  "clipSha256": "f630e18a89ca3dfca7d2e383804e709e88f7ba1f4c7aeff07adee5d92bcc140f",
+  "scene": "admin-read",
+  "review": {
+    "heardOpening": "Revenons côté organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Revenons côté organisation, dans les inscriptions",
+        "visibleSeconds": 0.5,
+        "visible": "Page Inscriptions affichée avec la ligne Aline Mercier",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Sous celle d'Aline, les réponses permettent de préparer son t-shirt et le matériel",
+        "visibleSeconds": 4.5,
+        "visible": "Réponses visibles sous le profil d'Aline (taille t-shirt, matériel)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "Ouvrons ensuite Questions",
+        "visibleSeconds": 8.8,
+        "visible": "Transition vers la page Questions aux bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "la Synthèse des réponses compte les choix",
+        "visibleSeconds": 10.8,
+        "visible": "Section Synthèse des réponses visible à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction fluide et ton calme adapté au tutoriel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

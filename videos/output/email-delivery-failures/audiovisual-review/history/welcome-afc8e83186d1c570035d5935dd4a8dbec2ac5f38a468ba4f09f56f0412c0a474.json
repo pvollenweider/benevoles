@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:16:55.410Z",
+  "videoSha256": "93ca011b7412c8a9fcb72f8759a1fa8bce8cd18a553031980bbee7051d36b1ca",
+  "promptSha256": "4d78f13854aff474e3d9ea8c8c140d2112c0d02024a4dc8d3d1baffc648619c0",
+  "clipSha256": "d97a6f65d5bb1db3df4a484ab7326cd759d823a0c8b68da612a4fdfed465bf30",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Vous avez envoyé un message, mais une personne ne le retrouve pas.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Dans Paramètres, puis Emails, les lignes récentes montrent le type d'email",
+        "visibleSeconds": 7.5,
+        "visible": "Tableau des emails envoyés affichant la date, le type, le destinataire et l'état",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21,
+        "spoken": "Connectons-nous maintenant avec Marc, notre organisateur de démonstration",
+        "visibleSeconds": 21.5,
+        "visible": "Écran de connexion avec saisie des identifiants de l'organisateur Marc Dupont",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 29.5,
+        "spoken": "les réglages restent réservés au propriétaire. Le message de la page le précise.",
+        "visibleSeconds": 28,
+        "visible": "Encadré Réglages des emails indiquant la restriction d'accès au rôle propriétaire",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton neutre et professionnel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

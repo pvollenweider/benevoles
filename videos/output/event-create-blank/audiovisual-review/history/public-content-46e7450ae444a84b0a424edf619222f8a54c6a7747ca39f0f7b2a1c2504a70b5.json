@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:52:24.723Z",
+  "videoSha256": "1a35b065080e4dcc60862acc6b3c5e896e1427802cf20c1e1bb81da074e0b8e7",
+  "promptSha256": "cf52058a5a1008218328af6125c5196112422dee4ef0ec2b486918de12b63963",
+  "clipSha256": "89ac686082b56a1d70ffb17232d095a3d5d4b404d05999b7f3d65a5af871782b",
+  "scene": "public-content",
+  "review": {
+    "heardOpening": "Les instructions publiques apparaissent avant l'inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Les instructions publiques apparaissent avant l'inscription",
+        "visibleSeconds": 1,
+        "visible": "Saisie de texte dans le champ Instructions publiques",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Le message de confirmation est affiché juste après l'inscription",
+        "visibleSeconds": 8,
+        "visible": "Défilement vers le champ Message de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "accepte du texte mis en forme ainsi que des variables",
+        "visibleSeconds": 10.5,
+        "visible": "Saisie dans le champ avec intégration d'une variable entre accolades",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,49 +1,251 @@
 {
   "slug": "admin-navigation",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-06T01:54:51.210Z",
+  "recordedAt": "2026-10-06T18:37:37.943Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "54224c7ad2bd465e63dcf30ab91266b1455a3a23",
+    "sourceTree": "cee2ccecd3aa5c82abfea3fcee4c5691dc16ba0b",
+    "productSourceSha256": "9490665d241594d8e538bc3d1c8238667338aeaaac1336a944062c5260dce6da",
+    "buildId": "uqE7YLJo_7r8CbyaqRify",
+    "snapshot": "/tmp/benevoles-video-production.KsjGwn",
+    "builtAt": "2026-10-06T18:15:27.264Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-navigation",
+    "scenario": "ADMIN_NAVIGATION",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 14936
+    },
+    {
+      "kind": "click",
+      "atMs": 19254
+    },
+    {
+      "kind": "click",
+      "atMs": 21919
+    },
+    {
+      "kind": "click",
+      "atMs": 25518
+    },
+    {
+      "kind": "click",
+      "atMs": 30518
+    },
+    {
+      "kind": "click",
+      "atMs": 34301
+    },
+    {
+      "kind": "click",
+      "atMs": 54867
+    },
+    {
+      "kind": "key",
+      "atMs": 57837
+    },
+    {
+      "kind": "key",
+      "atMs": 57838
+    },
+    {
+      "kind": "click",
+      "atMs": 58349
+    },
+    {
+      "kind": "key",
+      "atMs": 58656
+    },
+    {
+      "kind": "key",
+      "atMs": 58755
+    },
+    {
+      "kind": "key",
+      "atMs": 58853
+    },
+    {
+      "kind": "key",
+      "atMs": 58951
+    },
+    {
+      "kind": "key",
+      "atMs": 59049
+    },
+    {
+      "kind": "key",
+      "atMs": 59148
+    },
+    {
+      "kind": "key",
+      "atMs": 59246
+    },
+    {
+      "kind": "key",
+      "atMs": 64389
+    },
+    {
+      "kind": "click",
+      "atMs": 66842
+    },
+    {
+      "kind": "key",
+      "atMs": 71436
+    },
+    {
+      "kind": "click",
+      "atMs": 71944
+    },
+    {
+      "kind": "key",
+      "atMs": 72252
+    },
+    {
+      "kind": "key",
+      "atMs": 72350
+    },
+    {
+      "kind": "key",
+      "atMs": 72448
+    },
+    {
+      "kind": "key",
+      "atMs": 72547
+    },
+    {
+      "kind": "key",
+      "atMs": 72645
+    },
+    {
+      "kind": "key",
+      "atMs": 72743
+    },
+    {
+      "kind": "key",
+      "atMs": 72841
+    },
+    {
+      "kind": "key",
+      "atMs": 72939
+    },
+    {
+      "kind": "key",
+      "atMs": 73036
+    },
+    {
+      "kind": "key",
+      "atMs": 73134
+    },
+    {
+      "kind": "key",
+      "atMs": 73233
+    },
+    {
+      "kind": "key",
+      "atMs": 73329
+    },
+    {
+      "kind": "key",
+      "atMs": 73427
+    },
+    {
+      "kind": "key",
+      "atMs": 73526
+    },
+    {
+      "kind": "key",
+      "atMs": 73624
+    },
+    {
+      "kind": "key",
+      "atMs": 73908
+    },
+    {
+      "kind": "click",
+      "atMs": 76265
+    },
+    {
+      "kind": "key",
+      "atMs": 82234
+    },
+    {
+      "kind": "click",
+      "atMs": 82714
+    },
+    {
+      "kind": "click",
+      "atMs": 94355
+    },
+    {
+      "kind": "click",
+      "atMs": 100171
+    },
+    {
+      "kind": "key",
+      "atMs": 100173
+    },
+    {
+      "kind": "key",
+      "atMs": 101957
+    },
+    {
+      "kind": "key",
+      "atMs": 103032
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
       "startMs": 0,
-      "endMs": 12818
+      "endMs": 11582
     },
     {
       "id": "organization-navigation",
-      "startMs": 14978,
-      "endMs": 32837
+      "startMs": 13742,
+      "endMs": 31668
     },
     {
       "id": "event-navigation",
-      "startMs": 34992,
-      "endMs": 58305
+      "startMs": 33835,
+      "endMs": 55677
     },
     {
       "id": "search",
-      "startMs": 60468,
-      "endMs": 77631
+      "startMs": 57836,
+      "endMs": 74209
     },
     {
       "id": "account-help",
-      "startMs": 79217,
-      "endMs": 95221
+      "startMs": 75783,
+      "endMs": 90377
     },
     {
       "id": "mobile-keyboard",
-      "startMs": 97381,
-      "endMs": 111524
+      "startMs": 92537,
+      "endMs": 105991
     },
     {
       "id": "result",
-      "startMs": 111975,
-      "endMs": 127901
+      "startMs": 106444,
+      "endMs": 120081
     }
   ],
   "portraitFrames": [
     {
-      "startMs": 97388,
-      "endMs": 104173,
+      "startMs": 92544,
+      "endMs": 98997,
       "width": 390,
       "height": 800
     }

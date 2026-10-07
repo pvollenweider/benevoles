@@ -1,0 +1,36 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:06:02.471Z",
+  "videoSha256": "c829d6b7cac20906db3eacf6399fafe15e467a356e5c27c1d25a7ec94fb14f43",
+  "promptSha256": "29d2e9d2504bf6b66d3740f643af3f849ae54eb8951c73244e9329edb1feb3d1",
+  "clipSha256": "05296e0b40aa9bcbc82769e3ce61eb1eb1a1db9529095d974f03c2e200421f18",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Bienvenue dans l'administration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Bienvenue dans l'administration",
+        "visibleSeconds": 0,
+        "visible": "Encart de titre 'Se repérer dans l'administration' au centre de l'interface",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "retrouver les principaux points d'entrée",
+        "visibleSeconds": 2.5,
+        "visible": "Disparition du titre, affichage de l'interface avec le menu principal",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et ton fluide, conforme au contexte de formation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

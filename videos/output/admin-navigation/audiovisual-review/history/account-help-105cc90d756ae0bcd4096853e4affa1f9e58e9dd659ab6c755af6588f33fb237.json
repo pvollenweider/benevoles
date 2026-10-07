@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:57:37.203Z",
+  "videoSha256": "efc3fa2ff00bbca286a3418dff1a87edc31728a93b5394b54d608373a831309d",
+  "promptSha256": "626348501805f9c7407b2f67bdc952150f44286b648a89ebdfd386b773aeb2df",
+  "clipSha256": "3ae9ae644018ab6ff1d245f98c83822676ef741f1454f271d0272cde12935e99",
+  "scene": "account-help",
+  "review": {
+    "heardOpening": "Le menu de votre compte propose",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Mon compte et Se déconnecter",
+        "visibleSeconds": 1,
+        "visible": "Menu déroulant affichant Mon compte et Se déconnecter",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "ouvre le guide dans un nouvel onglet",
+        "visibleSeconds": 6.2,
+        "visible": "Affichage de la page Guide administrateur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.3,
+        "spoken": "Les liens Aide placés sous les titres",
+        "visibleSeconds": 10.4,
+        "visible": "Page Créneaux avec lien Aide : Configurer les créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisation globale correcte."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

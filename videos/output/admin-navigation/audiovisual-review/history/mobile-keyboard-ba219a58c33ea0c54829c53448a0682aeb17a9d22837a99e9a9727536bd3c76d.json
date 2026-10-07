@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:57:47.685Z",
+  "videoSha256": "efc3fa2ff00bbca286a3418dff1a87edc31728a93b5394b54d608373a831309d",
+  "promptSha256": "b8a9cf2ccd47837137a7d3efe5fcc9ca724c2fcee0c33a287f247bd2edc4c511",
+  "clipSha256": "7d2ba0981f87dc28dd7dfc1e21927a092b3f718540b18aa480e90aa2fb7a38c8",
+  "scene": "mobile-keyboard",
+  "review": {
+    "heardOpening": "Sur téléphone, ouvrez le menu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "ouvrez le menu pour retrouver les principales destinations",
+        "visibleSeconds": 1.5,
+        "visible": "Ouverture du menu déroulant sur interface mobile affichant les sections",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "la première tabulation révèle Aller au contenu",
+        "visibleSeconds": 7.2,
+        "visible": "Apparition du lien d'évitement « Aller au contenu » en haut à gauche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Vous arrivez directement dans le contenu de la page",
+        "visibleSeconds": 11,
+        "visible": "Vue d'ensemble de la page Événements",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, bonne synchronisation avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,20 +1,20 @@
 {
   "slug": "members-duplicates-merge",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-06T17:34:34.733Z",
+  "recordedAt": "2026-10-07T02:01:34.946Z",
   "video": "capture.webm",
   "product": {
-    "commit": "9ca0705a3ed3e72ed2447c112d07616f0e1ef4ae",
-    "sourceTree": "0ffd0c768cc975dd70b66e893c85fdc1dac2fee4",
-    "productSourceSha256": "af265f2602fedcac29b3b1e5114b61be0b2404e3843c0b568127aab81660fa3a",
-    "buildId": "jXO4BkQpwclQpoLJ_Y3Np",
-    "snapshot": "/tmp/benevoles-video-production.A1omfl",
-    "builtAt": "2026-10-06T17:27:11.076Z"
+    "commit": "e572f7e99bbfaaac112e47513de5a93b02a5bda0",
+    "sourceTree": "bfab8fbc924aded37eb0fd93e8d919c9adbeb263",
+    "productSourceSha256": "22bb6e20c2de867839c01472d726f2c928ea5f47ec1923cece8b72c11c3df37e",
+    "buildId": "D_AkF4h7ikVJu_EdLprcI",
+    "snapshot": "/tmp/benevoles-video-production.bI4zju",
+    "builtAt": "2026-10-07T01:56:36.997Z"
   },
   "captureEnvironment": {
     "locale": "fr-FR",
     "timeZone": "Europe/Zurich",
-    "organization": "formation-fusion",
+    "organization": "formation-fusion-v5",
     "scenario": "MEMBERS_DUPLICATES_MERGE",
     "viewport": {
       "width": 1280,
@@ -26,224 +26,236 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 8394
+      "atMs": 8331
     },
     {
       "kind": "click",
-      "atMs": 14724
+      "atMs": 14661
     },
     {
       "kind": "click",
-      "atMs": 22710
+      "atMs": 22643
     },
     {
       "kind": "click",
-      "atMs": 41825
+      "atMs": 41752
     },
     {
       "kind": "click",
-      "atMs": 45041
+      "atMs": 44985
     },
     {
       "kind": "key",
-      "atMs": 45349
+      "atMs": 45293
     },
     {
       "kind": "key",
-      "atMs": 45446
+      "atMs": 45391
     },
     {
       "kind": "key",
-      "atMs": 45545
+      "atMs": 45490
     },
     {
       "kind": "key",
-      "atMs": 45643
+      "atMs": 45588
     },
     {
       "kind": "key",
-      "atMs": 45740
+      "atMs": 45688
     },
     {
       "kind": "key",
-      "atMs": 45837
+      "atMs": 45785
     },
     {
       "kind": "key",
-      "atMs": 45934
+      "atMs": 45884
     },
     {
       "kind": "key",
-      "atMs": 46032
+      "atMs": 45983
     },
     {
       "kind": "key",
-      "atMs": 46129
+      "atMs": 46080
     },
     {
       "kind": "key",
-      "atMs": 46226
+      "atMs": 46179
     },
     {
       "kind": "key",
-      "atMs": 46322
+      "atMs": 46275
     },
     {
       "kind": "key",
-      "atMs": 46419
+      "atMs": 46374
     },
     {
       "kind": "key",
-      "atMs": 46516
+      "atMs": 46473
     },
     {
       "kind": "key",
-      "atMs": 46614
+      "atMs": 46571
     },
     {
       "kind": "key",
-      "atMs": 46713
+      "atMs": 46669
     },
     {
       "kind": "key",
-      "atMs": 46810
+      "atMs": 46768
     },
     {
       "kind": "key",
-      "atMs": 46909
+      "atMs": 46866
     },
     {
       "kind": "key",
-      "atMs": 47006
+      "atMs": 46963
     },
     {
       "kind": "key",
-      "atMs": 47105
+      "atMs": 47063
     },
     {
       "kind": "key",
-      "atMs": 47203
+      "atMs": 47161
     },
     {
       "kind": "key",
-      "atMs": 47300
+      "atMs": 47257
     },
     {
       "kind": "key",
-      "atMs": 47397
+      "atMs": 47355
     },
     {
       "kind": "key",
-      "atMs": 47496
+      "atMs": 47453
     },
     {
       "kind": "key",
-      "atMs": 47593
+      "atMs": 47550
     },
     {
       "kind": "key",
-      "atMs": 47689
+      "atMs": 47648
     },
     {
       "kind": "key",
-      "atMs": 47786
+      "atMs": 47748
     },
     {
       "kind": "key",
-      "atMs": 47884
+      "atMs": 47845
     },
     {
       "kind": "key",
-      "atMs": 47981
+      "atMs": 47944
     },
     {
       "kind": "key",
-      "atMs": 48078
+      "atMs": 48043
+    },
+    {
+      "kind": "key",
+      "atMs": 48142
+    },
+    {
+      "kind": "key",
+      "atMs": 48240
+    },
+    {
+      "kind": "key",
+      "atMs": 48339
     },
     {
       "kind": "click",
-      "atMs": 48808
+      "atMs": 48901
     },
     {
       "kind": "click",
-      "atMs": 50691
+      "atMs": 50650
     },
     {
       "kind": "click",
-      "atMs": 65390
+      "atMs": 65351
     },
     {
       "kind": "click",
-      "atMs": 70140
+      "atMs": 70082
     },
     {
       "kind": "click",
-      "atMs": 75789
+      "atMs": 72167
     },
     {
       "kind": "click",
-      "atMs": 113255
+      "atMs": 113198
     },
     {
       "kind": "click",
-      "atMs": 116688
+      "atMs": 116631
     },
     {
       "kind": "click",
-      "atMs": 127188
+      "atMs": 127130
     },
     {
       "kind": "click",
-      "atMs": 131870
+      "atMs": 131831
     },
     {
       "kind": "click",
-      "atMs": 147855
+      "atMs": 147813
     },
     {
       "kind": "click",
-      "atMs": 152870
+      "atMs": 152831
     },
     {
       "kind": "click",
-      "atMs": 165653
+      "atMs": 165580
     }
   ],
   "cues": [
     {
       "id": "duplicates",
-      "startMs": 2412,
-      "endMs": 29937
+      "startMs": 2329,
+      "endMs": 29856
     },
     {
       "id": "compare",
-      "startMs": 32197,
-      "endMs": 59109
+      "startMs": 32128,
+      "endMs": 59041
     },
     {
       "id": "fields",
-      "startMs": 61366,
-      "endMs": 91053
+      "startMs": 61305,
+      "endMs": 90993
     },
     {
       "id": "conflicts",
-      "startMs": 93310,
-      "endMs": 121939
+      "startMs": 93258,
+      "endMs": 121888
     },
     {
       "id": "confirm",
-      "startMs": 124196,
-      "endMs": 155529
+      "startMs": 124152,
+      "endMs": 155487
     },
     {
       "id": "result",
-      "startMs": 157909,
-      "endMs": 184846
+      "startMs": 157832,
+      "endMs": 184774
     },
     {
       "id": "links",
-      "startMs": 187108,
-      "endMs": 215453
+      "startMs": 187042,
+      "endMs": 215388
     }
   ]
 }

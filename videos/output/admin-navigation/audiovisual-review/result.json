@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T02:00:07.523Z",
-  "videoSha256": "f4c0c3c28ab04d429a33a9fd82687797f0081bd26e4214dabb9f06b4d4c9beac",
-  "promptSha256": "084f28921f03f1688c039c26f19ac138308840de111134f0001f7a2fada099af",
-  "clipSha256": "8fea0cd4b2b8c4d2ec307942030674420a9e326c0b69f8b4c8dca8dba03eca36",
+  "reviewedAt": "2026-10-06T18:22:39.597Z",
+  "videoSha256": "92c7d0b2f631187fe228ccacb815e8e02c5ec38981b424ceba61c85428e8388f",
+  "promptSha256": "9f1cf4b870b3b24fc20e4ca9221621782e04cda823c1601bca96a31d17dbfd4d",
+  "clipSha256": "1d87846c929350d9707ffa4de2e7e46d9287e4fdb8e8e5158bbf01729c9b81f9",
   "scene": "result",
   "review": {
     "heardOpening": "Vous avez les bons repères",
     "checkpoints": [
       {
-        "spokenSeconds": 2.2,
+        "spokenSeconds": 1.2,
         "spoken": "Tableau de bord pour les priorités",
-        "visibleSeconds": 2.2,
-        "visible": "Onglet Tableau de bord visible dans l'en-tête",
+        "visibleSeconds": 0,
+        "visible": "Onglet Tableau de bord visible dans la barre de navigation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
-        "spoken": "Membres et Paramètres",
-        "visibleSeconds": 4.5,
-        "visible": "Onglets Membres et Paramètres visibles dans l'en-tête",
+        "spokenSeconds": 3.4,
+        "spoken": "Membres et Paramètres au niveau de l’association",
+        "visibleSeconds": 0,
+        "visible": "Onglets Membres et Paramètres visibles dans le menu supérieur",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.2,
+        "spokenSeconds": 6.2,
+        "spoken": "puis la page de chaque événement",
+        "visibleSeconds": 0,
+        "visible": "Liste des événements affichée avec options de gestion",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.1,
         "spoken": "la recherche et l’aide",
-        "visibleSeconds": 12.2,
-        "visible": "Lien Aide visible en haut à droite",
+        "visibleSeconds": 0,
+        "visible": "Boutons de recherche et Aide présents en haut à droite",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier, ton calme et articulation nette."
+      "observation": "Diction fluide et intonation claire adaptée au résumé."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

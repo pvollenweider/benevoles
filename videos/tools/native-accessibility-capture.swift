@@ -6,6 +6,35 @@ import ScreenCaptureKit
 import AVFoundation
 import AppKit
 import CoreGraphics
+import CryptoKit
+
+// Supplied by the verified-product launcher BEFORE recording. Never stamp old media.
+let env = ProcessInfo.processInfo.environment
+guard let proofPath = env["VIDEO_NATIVE_PRODUCT_PROOF"],
+      let proofData = FileManager.default.contents(atPath: proofPath),
+      let product = try JSONSerialization.jsonObject(with: proofData) as? [String: String],
+      product["verification"] == "at-capture-start",
+      let verified = product["verifiedAt"],
+      let verifiedDate = ISO8601DateFormatter().date(from: verified),
+      Date().timeIntervalSince(verifiedDate) >= 0,
+      Date().timeIntervalSince(verifiedDate) <= 30,
+      product["commit"]?.count == 40, product["productSourceSha256"]?.count == 64,
+      !(product["buildId"] ?? "").isEmpty else { fatalError("Fresh verified product proof required before capture") }
+let captureKind = env["VIDEO_NATIVE_KIND"] ?? "reader"
+guard ["reader", "zoom"].contains(captureKind) else { fatalError("Invalid native capture kind") }
+let locale = env["VIDEO_NATIVE_LOCALE"] ?? ""
+guard ["fr-FR", "fr-CH"].contains(locale) else { fatalError("Verified French browser locale required") }
+func hashFile(_ file: String) throws -> String {
+    SHA256.hash(data: try Data(contentsOf: URL(fileURLWithPath: file))).map { String(format: "%02x", $0) }.joined()
+}
+var inputEvents = [[String: Any]]()
+var captureClock: Double?
+let tapCallback: CGEventTapCallBack = { _, type, event, _ in
+    if let start = captureClock, [.keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown].contains(type) {
+        inputEvents.append(["atMs": max(0, (Double(event.timestamp) / 1_000_000_000 - start) * 1000), "kind": type == .keyDown ? "key" : "click"])
+    }
+    return Unmanaged.passUnretained(event)
+}
 
 // Read-only guard: never let global VoiceOver speech follow another window
 // while the picture remains pinned to the training window.
@@ -25,6 +54,7 @@ final class MediaSink: NSObject, SCStreamOutput {
     let kind: SCStreamOutputType
     var firstPTS: Double?
     var packets = 0
+    var lastPTS: Double?
     init(url: URL, kind: SCStreamOutputType, width: Int = 1280, height: Int = 800) throws {
         self.kind = kind
         writer = try AVAssetWriter(outputURL: url, fileType: kind == .audio ? .m4a : .mp4)
@@ -47,7 +77,10 @@ final class MediaSink: NSObject, SCStreamOutput {
             writer.startSession(atSourceTime: sample.presentationTimeStamp)
             firstPTS = sample.presentationTimeStamp.seconds
         }
-        if input.isReadyForMoreMediaData, input.append(sample) { packets += 1 }
+        if input.isReadyForMoreMediaData, input.append(sample) {
+            packets += 1
+            lastPTS = sample.presentationTimeStamp.seconds + max(0, sample.duration.seconds.isFinite ? sample.duration.seconds : 0)
+        }
     }
     func finish(queue: DispatchQueue) async throws {
         queue.sync { input.markAsFinished() }
@@ -82,7 +115,7 @@ Task {
         guard trainingWindowIsFront(window, browserBundle: browserBundle) else {
             throw NSError(domain: "Native capture", code: 6, userInfo: [NSLocalizedDescriptionKey: "Training window must be frontmost before any audio capture"])
         }
-        guard readers.count == 1 else { throw NSError(domain: "Native capture", code: 5, userInfo: [NSLocalizedDescriptionKey: "Real VoiceOver must be running"] ) }
+        guard captureKind == "zoom" || readers.count == 1 else { throw NSError(domain: "Native capture", code: 5, userInfo: [NSLocalizedDescriptionKey: "Real VoiceOver must be running"] ) }
         let width = Int(window.frame.width / 2) * 2
         let height = Int(window.frame.height / 2) * 2
         let videoConfig = SCStreamConfiguration()
@@ -102,25 +135,52 @@ Task {
         let audioSink = try MediaSink(url: URL(fileURLWithPath: files[1]), kind: .audio)
         try video.addStreamOutput(videoSink, type: .screen, sampleHandlerQueue: videoQueue)
         try audio.addStreamOutput(audioSink, type: .audio, sampleHandlerQueue: audioQueue)
-        try await audio.startCapture()
+        let mask = [CGEventType.keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown].reduce(CGEventMask(0)) { $0 | (1 << $1.rawValue) }
+        guard let tap = CGEvent.tapCreate(tap: .cgSessionEventTap, place: .headInsertEventTap, options: .listenOnly, eventsOfInterest: mask, callback: tapCallback, userInfo: nil) else {
+            throw NSError(domain: "Native capture", code: 8, userInfo: [NSLocalizedDescriptionKey: "Read-only input monitoring permission required; no invented cues"])
+        }
+        let tapSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
+        CFRunLoopAddSource(CFRunLoopGetMain(), tapSource, .commonModes)
+        CGEvent.tapEnable(tap: tap, enable: true)
+        let captureStartedAt = Date()
+        captureClock = Double(DispatchTime.now().uptimeNanoseconds) / 1_000_000_000
+        if captureKind == "reader" { try await audio.startCapture() }
         try await video.startCapture()
         print("Recording one training browser window and VoiceOver only for \(duration) seconds")
         fflush(stdout)
         let deadline = Date().addingTimeInterval(duration)
         var lostTrainingFocus = false
+        var checks = 0
+        var maxGapMs = 0.0
+        var lastCheck = captureStartedAt
         while Date() < deadline {
+            let now = Date()
+            maxGapMs = max(maxGapMs, now.timeIntervalSince(lastCheck) * 1000)
+            lastCheck = now; checks += 1
             if !trainingWindowIsFront(window, browserBundle: browserBundle) {
                 lostTrainingFocus = true
                 break
             }
             try await Task.sleep(nanoseconds: 100_000_000)
         }
-        try await video.stopCapture(); try await audio.stopCapture()
-        try await videoSink.finish(queue: videoQueue); try await audioSink.finish(queue: audioQueue)
+        let captureEndedAt = Date()
+        CGEvent.tapEnable(tap: tap, enable: false)
+        captureClock = nil
+        CFRunLoopRemoveSource(CFRunLoopGetMain(), tapSource, .commonModes)
+        try await video.stopCapture()
+        if captureKind == "reader" { try await audio.stopCapture() }
+        try await videoSink.finish(queue: videoQueue)
+        if captureKind == "reader" { try await audioSink.finish(queue: audioQueue) }
         guard !lostTrainingFocus else {
             throw NSError(domain: "Native capture", code: 7, userInfo: [NSLocalizedDescriptionKey: "Capture rejected: training window lost focus; no valid evidence written"])
         }
-        let evidence: [String: Any] = ["recordedAt": ISO8601DateFormatter().string(from: Date()), "windowTitle": title, "browser": browserBundle, "reader": "VoiceOver", "microphone": false, "audioProcess": "com.apple.VoiceOver", "width": width, "height": height, "videoFirstPTS": videoSink.firstPTS!, "audioFirstPTS": audioSink.firstPTS!, "videoPackets": videoSink.packets, "audioPackets": audioSink.packets, "durationRequested": duration, "finalVideo": false]
+        let formatter = ISO8601DateFormatter(); formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        var evidence: [String: Any] = ["schemaVersion": 1, "kind": captureKind, "captureSessionId": UUID().uuidString, "captureStartedAt": formatter.string(from: captureStartedAt), "captureEndedAt": formatter.string(from: captureEndedAt), "product": product, "locale": locale, "platform": "macOS", "windowTitle": title, "browser": browserBundle, "frontWindowGuard": ["checkedFromStart": true, "lostFocus": false, "checks": checks, "maxGapMs": maxGapMs], "video": ["path": files[0], "sha256": try hashFile(files[0]), "durationMs": ((videoSink.lastPTS ?? videoSink.firstPTS!) - videoSink.firstPTS!) * 1000], "inputEvents": inputEvents, "finalVideo": false]
+        if captureKind == "reader" {
+            evidence["reader"] = "VoiceOver"; evidence["microphone"] = false; evidence["audioProcess"] = "com.apple.VoiceOver"
+            evidence["audio"] = ["path": files[1], "sha256": try hashFile(files[1]), "durationMs": ((audioSink.lastPTS ?? audioSink.firstPTS!) - audioSink.firstPTS!) * 1000]
+            evidence["sync"] = ["videoFirstPTS": videoSink.firstPTS!, "audioFirstPTS": audioSink.firstPTS!]
+        }
         try JSONSerialization.data(withJSONObject: evidence, options: [.prettyPrinted, .sortedKeys]).write(to: URL(fileURLWithPath: files[2]), options: .withoutOverwriting)
         print("Native capture complete; audio/video timestamps retained for synchronization")
         exit(0)

@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:37:51.384Z",
-  "videoSha256": "01fafadfba036da8aac5f19c6359a31892b79dcfccbfe3936309fabe4cf0f4be",
+  "reviewedAt": "2026-10-07T02:03:15.925Z",
+  "videoSha256": "a24b4bfd2c19e5331f7acd65fa54800c1f8745634493fc2ef40d68c1f05d48c4",
   "promptSha256": "4022bc0d3e0da98be8a6800766d80443fbba999c82022bf1b4cc6c2496779b09",
-  "clipSha256": "43ee6f9b3cd2676c0df0dabfa4dabedc2ec1ebd38e6802222995a86df6072fe5",
+  "clipSha256": "7910c945ae153db0f83e55e2d83749a73cebcbfcc8ae1503f91e58249b179440",
   "scene": "conflicts",
   "review": {
     "heardOpening": "Les points à vérifier",
     "checkpoints": [
       {
-        "spokenSeconds": 20.1,
-        "spoken": "Ici, on garde la réponse de la fiche absorbée.",
-        "visibleSeconds": 20.3,
-        "visible": "Sélection du bouton radio 'Prendre la réponse de la fiche absorbée'.",
+        "spokenSeconds": 0.5,
+        "spoken": "Les points à vérifier évitent les surprises",
+        "visibleSeconds": 0.5,
+        "visible": "Section 'Points à vérifier' affichée à l'écran",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 22.4,
-        "spoken": "On choisit aussi son invitation.",
-        "visibleSeconds": 23.2,
-        "visible": "Sélection de l'option 'Prendre l'invitation de la fiche absorbée'.",
+        "spokenSeconds": 19.8,
+        "spoken": "on garde la réponse de la fiche absorbée",
+        "visibleSeconds": 20.3,
+        "visible": "Sélection de l'option 'Prendre la réponse de la fiche absorbée'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22,
+        "spoken": "On choisit aussi son invitation",
+        "visibleSeconds": 23,
+        "visible": "Sélection de 'Prendre l'invitation de la fiche absorbée'",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 26,
-        "spoken": "la confirmation devient disponible.",
-        "visibleSeconds": 24,
-        "visible": "Le bouton 'Fusionner les deux fiches' s'active en bas de page.",
+        "spoken": "la confirmation devient disponible",
+        "visibleSeconds": 24.5,
+        "visible": "Le bouton rouge 'Fusionner les deux fiches' s'active",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et rythme régulier, cohérent avec l'affichage."
+      "observation": "Diction fluide et synchronisation visuelle adéquate."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

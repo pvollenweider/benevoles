@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:30:54.848Z",
+  "videoSha256": "7b0f188c8a6566bb756eef4389d586e7ddef3f7424a908e865a1a1826cb3bca8",
+  "promptSha256": "e0bcfda989026b8cf7d6c7bdb1f289513fe3635788597b9aaaf77b8ee34f9280",
+  "clipSha256": "9ee41475c052eb0b4377234cec8f975092ac3c965bd9fdb880ac82d55825b03b",
+  "scene": "shift",
+  "review": {
+    "heardOpening": "Avec Buvette, vous retrouvez",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Avec Buvette, vous retrouvez les créneaux de plusieurs événements",
+        "visibleSeconds": 0.5,
+        "visible": "Page de recherche affichant deux créneaux pour le mot-clé Buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "Chaque résultat rappelle l’événement, la date et l’horaire",
+        "visibleSeconds": 4,
+        "visible": "Lignes de résultats détaillant l'événement, la date et l'horaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "Ajoutons village pour ne garder que le service qui nous intéresse",
+        "visibleSeconds": 8,
+        "visible": "Saisie de village dans la barre de recherche puis actualisation à un résultat",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "puis ouvrons le résultat : la liste des inscriptions est filtrée",
+        "visibleSeconds": 11.8,
+        "visible": "Clic sur le lien et affichage de la liste des inscriptions filtrée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et rythme adapté à la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

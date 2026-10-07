@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:30:08.459Z",
+  "videoSha256": "7b0f188c8a6566bb756eef4389d586e7ddef3f7424a908e865a1a1826cb3bca8",
+  "promptSha256": "8d013fd1b309653e8b5888912cee14026191ee848aa8bdb5982411319dfb8345",
+  "clipSha256": "5d02ef617e876db59b9f5d3fbf678346e3f4a595357c89e1a4aebe0f6bcb394a",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Quand une association compte plusieurs événements",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Quand une association compte plusieurs événements",
+        "visibleSeconds": 0.5,
+        "visible": "Encart de titre 'Tout retrouver avec la recherche globale' superposé à la page Événements",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "ouvrir chaque planning prend vite du temps",
+        "visibleSeconds": 2.8,
+        "visible": "Disparition de l'encart, affichage de la liste des événements avec leurs créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "La recherche globale sert à retrouver une personne",
+        "visibleSeconds": 5.8,
+        "visible": "Vue d'ensemble de l'interface d'administration stable",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, niveau sonore stable."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

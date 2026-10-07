@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:52:34.809Z",
+  "videoSha256": "1a35b065080e4dcc60862acc6b3c5e896e1427802cf20c1e1bb81da074e0b8e7",
+  "promptSha256": "1e99918f39bb1c2ab3ea8b4aacd4f5dcdfec22356c39470da5196914b49b54c1",
+  "clipSha256": "140df679946f624801955db9ad2aaa4b194391b6d9a37f52ae1d163b6f1563c6",
+  "scene": "phone-color",
+  "review": {
+    "heardOpening": "Rendez le téléphone obligatoire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Rendez le téléphone obligatoire",
+        "visibleSeconds": 3.7,
+        "visible": "Case 'Téléphone obligatoire à l'inscription' cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "Choisissons Émeraude",
+        "visibleSeconds": 9.5,
+        "visible": "Sélection de la pastille de couleur Émeraude",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "regardons l’aperçu",
+        "visibleSeconds": 10,
+        "visible": "Bandeau d'aperçu du site public mis à jour en vert",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit posé, bonne intelligibilité et ton fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

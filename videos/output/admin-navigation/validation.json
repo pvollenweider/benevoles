@@ -1,52 +1,53 @@
 {
   "id": "ADMIN_NAVIGATION",
   "slug": "admin-navigation",
-  "validatedAt": "2026-10-04T11:14:26.221Z",
+  "validatedAt": "2026-10-06T18:37:45.810Z",
   "continuousNarration": true,
+  "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 139720,
+  "captureMs": 123760,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 14920,
-      "audioMs": 14920,
-      "driftMs": 0
+      "visualMs": 11582,
+      "audioMs": 11581,
+      "driftMs": 1
     },
     {
       "id": "organization-navigation",
-      "visualMs": 22268,
-      "audioMs": 22267,
+      "visualMs": 17926,
+      "audioMs": 17925,
       "driftMs": 1
     },
     {
       "id": "event-navigation",
-      "visualMs": 20587,
-      "audioMs": 20585,
-      "driftMs": 2
+      "visualMs": 21842,
+      "audioMs": 21841,
+      "driftMs": 1
     },
     {
       "id": "search",
-      "visualMs": 20035,
-      "audioMs": 20033,
-      "driftMs": 2
+      "visualMs": 16373,
+      "audioMs": 16374,
+      "driftMs": -1
     },
     {
       "id": "account-help",
-      "visualMs": 15339,
-      "audioMs": 15338,
-      "driftMs": 1
+      "visualMs": 14594,
+      "audioMs": 14592,
+      "driftMs": 2
     },
     {
       "id": "mobile-keyboard",
-      "visualMs": 17820,
-      "audioMs": 17820,
-      "driftMs": 0
+      "visualMs": 13454,
+      "audioMs": 13453,
+      "driftMs": 1
     },
     {
       "id": "result",
-      "visualMs": 17118,
-      "audioMs": 17117,
-      "driftMs": 1
+      "visualMs": 13637,
+      "audioMs": 13634,
+      "driftMs": 3
     }
   ],
   "issues": []

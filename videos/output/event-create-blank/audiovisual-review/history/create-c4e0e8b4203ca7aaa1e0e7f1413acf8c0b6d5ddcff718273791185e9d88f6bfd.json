@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:27:16.860Z",
+  "videoSha256": "af53e113f481e6d6e2d0628296c0ca270f88c17fc79961b9d9777a99de418954",
+  "promptSha256": "259f0875afc280d6d825a699c5b1c4905f9a5c51d63f53169b8bcf81f4a94b67",
+  "clipSha256": "409cac8820f3e3a62799dbd3861effd3f95f7c3606371f91878d948e6d2c810e",
+  "scene": "create",
+  "review": {
+    "heardOpening": "Le bouton Créer l'événement enregistre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Le bouton Créer l'événement enregistre maintenant un brouillon",
+        "visibleSeconds": 2.1,
+        "visible": "Clic sur le bouton Créer l'événement en bas de page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "puis ouvre directement l'étape des créneaux",
+        "visibleSeconds": 2.9,
+        "visible": "Affichage de la page Postes et créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Le bandeau de progression montre clairement",
+        "visibleSeconds": 8,
+        "visible": "Bandeau supérieur indiquant les trois étapes du processus",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

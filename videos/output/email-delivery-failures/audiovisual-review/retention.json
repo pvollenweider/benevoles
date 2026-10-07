@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:37:33.159Z",
-  "videoSha256": "0e1d6ca56b0033e4694d6f34c74897fff990758b119a02cf3febeec27d85a9ed",
+  "reviewedAt": "2026-10-07T02:27:34.294Z",
+  "videoSha256": "747f7c10d9984c7ea3a97366fb011f0a9cb96b9e15f737f69903b78da2ae2e36",
   "promptSha256": "db4ef558e5ec6c4f4f9682cf65490ab089dd10ec7fc4c8740327914cee3025a5",
-  "clipSha256": "ae1a6a4a7d866ea95aa7eee07b8a80b650bac70688d7677570292558845311cb",
+  "clipSha256": "8fc6e1fbe36bc415b56b0a3d8ba1acadb70b7d029f5aebbe521c203cc97e44b0",
   "scene": "retention",
   "review": {
     "heardOpening": "Le suivi de la file est volontairement récent",
@@ -12,23 +12,23 @@
         "spokenSeconds": 0.5,
         "spoken": "Le suivi de la file est volontairement récent",
         "visibleSeconds": 0.5,
-        "visible": "Affichage de la page Paramètres avec la section Emails envoyés",
+        "visible": "Page des paramètres affichant la liste des emails récents",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.2,
+        "spokenSeconds": 9,
         "spoken": "La page montre les deux cents lignes les plus récentes",
-        "visibleSeconds": 9.2,
-        "visible": "Tableau récapitulatif des derniers emails envoyés affiché",
+        "visibleSeconds": 9,
+        "visible": "Tableau de suivi des emails toujours affiché",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.5,
+        "spokenSeconds": 13,
         "spoken": "L'historique des messages ciblés est différent et reste douze mois",
-        "visibleSeconds": 13.5,
-        "visible": "Navigation vers la page Événements et affichage des messages envoyés conservés 12 mois",
+        "visibleSeconds": 14,
+        "visible": "Défilement vers la section Messages envoyés dans Événements",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et rythme régulier, conforme au support visuel."
+      "observation": "Élocution claire et synchronisation conforme."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

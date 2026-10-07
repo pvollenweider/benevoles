@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:07:14.116Z",
+  "videoSha256": "5ba525686f46bb6316cae59a3d9cdebc88e7985fbe1f97cb452d10251e693b0c",
+  "promptSha256": "43910318e8ad4e1a7be281eccbb12207a37565536eb866eb1c07556a8f6d4ad8",
+  "clipSha256": "a4bd52f36d93236827a8223be2f2300d62e35053f3583f4e9e26597093691e51",
+  "scene": "create",
+  "review": {
+    "heardOpening": "Pour ajouter une personne, cliquez sur Nouveau membre.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "cliquez sur Nouveau membre",
+        "visibleSeconds": 0.8,
+        "visible": "Ouverture de la fenêtre modale Nouveau membre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Saisissez son prénom et son nom",
+        "visibleSeconds": 2.2,
+        "visible": "Champs Prénom et Nom remplis avec Maya Berger",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "puis son email et son téléphone",
+        "visibleSeconds": 5.5,
+        "visible": "Champs Email et Téléphone complétés avec les coordonnées fictives",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Après la création, Maya apparaît dans la liste.",
+        "visibleSeconds": 17.8,
+        "visible": "Clic sur Créer et affichage de Maya Berger dans le tableau des membres",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et synchronisation fluide avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T19:21:40.883Z",
+  "videoSha256": "d06d14223ff995674d62c29e7a94d1400de7af563b83439753ac588157b6a4a6",
+  "promptSha256": "cc8b0beadb01ccc0bad4f18e6d58faef73f4a040f5da08e5afe5d780cccb84bb",
+  "clipSha256": "e3123c11cb1aaa24adba5def168dc2bdd7116939a41340748dc1ec9bcf29c4ba",
+  "scene": "retire",
+  "review": {
+    "heardOpening": "Nous n'avons plus besoin de demander la taille",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "Cliquons sur Retirer, puis lisons la confirmation",
+        "visibleSeconds": 3.6,
+        "visible": "Clic sur Retirer et ouverture de la fenêtre modale de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Confirmons",
+        "visibleSeconds": 11.8,
+        "visible": "Clic sur le bouton rouge Retirer et transition vers la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "sa taille L est encore visible, avec la mention question retirée",
+        "visibleSeconds": 14.2,
+        "visible": "Ligne Aline Mercier avec Taille de t-shirt (question retirée) : L affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Ouvrons enfin un autre créneau public : la question n'est plus proposée",
+        "visibleSeconds": 21,
+        "visible": "Affichage du formulaire public sans le champ de taille de t-shirt",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et synchronisation fluide avec les manipulations."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

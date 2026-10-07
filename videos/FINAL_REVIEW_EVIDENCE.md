@@ -79,10 +79,3 @@ ce manque.
 - Tous les autres modules et les compléments de couverture documentaire ne
   sont pas encore repris. Ces résultats ne constituent pas une livraison des
   54 vidéos, ni une garantie de couverture intégrale du produit.
-
-## Écart connu : documentation (#649)
-
-- `DATA_EXPORTS_ARCHIVES` : la scène « privacy » ouvre maintenant la page
-  `/doc/exporter-et-conserver-ses-donnees` (`videos/lib/record-data-exports.ts`) au lieu de
-  `/doc/admin`, où ce titre n'est plus depuis le découpage du guide. La vidéo publiée montre
-  encore l'ancien guide à cet instant : elle reste à réenregistrer.

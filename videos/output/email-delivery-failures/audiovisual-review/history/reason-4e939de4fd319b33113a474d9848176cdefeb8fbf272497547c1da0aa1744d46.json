@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:36:33.693Z",
+  "videoSha256": "0e1d6ca56b0033e4694d6f34c74897fff990758b119a02cf3febeec27d85a9ed",
+  "promptSha256": "436549e8473d4612b2172c9b70cb8103b8284bc60fa4504e882dd3d2fb5b22e5",
+  "clipSha256": "3d85b275e224b1a4df431efdbaf29632dc34753641f8a77e893062c6d93892b1",
+  "scene": "reason",
+  "review": {
+    "heardOpening": "Pour Léa, la cause est indiquée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Pour Léa, la cause est indiquée en français",
+        "visibleSeconds": 0.5,
+        "visible": "Ligne de Léa Exemple avec détail du refus définitif affiché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Pour Sarah, le problème est temporaire et un nouvel essai est prévu",
+        "visibleSeconds": 8,
+        "visible": "Ligne de Sarah Exemple avec statut Nouvel essai prévu visible",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "Envoyé ne prouve ni l'arrivée dans la boîte de réception",
+        "visibleSeconds": 18.5,
+        "visible": "Tableau récapitulatif des statuts d'envoi affiché en continu",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, bonne intelligibilité."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,53 +1,53 @@
 {
   "id": "MEMBERS_DUPLICATES_MERGE",
   "slug": "members-duplicates-merge",
-  "validatedAt": "2026-10-06T17:36:17.362Z",
+  "validatedAt": "2026-10-07T02:02:16.879Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 221760,
+  "captureMs": 221640,
   "scenes": [
     {
       "id": "duplicates",
-      "visualMs": 27525,
+      "visualMs": 27527,
       "audioMs": 27525,
-      "driftMs": 0
+      "driftMs": 2
     },
     {
       "id": "compare",
-      "visualMs": 26912,
+      "visualMs": 26913,
       "audioMs": 26912,
-      "driftMs": 0
+      "driftMs": 1
     },
     {
       "id": "fields",
-      "visualMs": 29687,
+      "visualMs": 29688,
       "audioMs": 29686,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "conflicts",
-      "visualMs": 28629,
+      "visualMs": 28630,
       "audioMs": 28628,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "confirm",
-      "visualMs": 31333,
+      "visualMs": 31335,
       "audioMs": 31332,
-      "driftMs": 1
+      "driftMs": 3
     },
     {
       "id": "result",
-      "visualMs": 26937,
+      "visualMs": 26942,
       "audioMs": 26935,
-      "driftMs": 2
+      "driftMs": 7
     },
     {
       "id": "links",
-      "visualMs": 28345,
+      "visualMs": 28346,
       "audioMs": 28343,
-      "driftMs": 2
+      "driftMs": 3
     }
   ],
   "issues": []

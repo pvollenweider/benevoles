@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:27:42.327Z",
+  "videoSha256": "af53e113f481e6d6e2d0628296c0ca270f88c17fc79961b9d9777a99de418954",
+  "promptSha256": "3c2daff203e5c633cc783f718b7da9d1059a4a34e4e100affb0c5b4a52061dc8",
+  "clipSha256": "f05ca98a24238827c857fb8195f8cebdf2bfcd8488c0ead64759888649308f1f",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Le résultat est un brouillon structuré",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le résultat est un brouillon structuré, encore invisible au public",
+        "visibleSeconds": 0.5,
+        "visible": "Formulaire affichant le statut Brouillon (non visible)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Retrouvons-le dans les événements",
+        "visibleSeconds": 8.5,
+        "visible": "Navigation vers la page Événements avec la liste des brouillons",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Il reste à créer les créneaux, tester le parcours bénévole",
+        "visibleSeconds": 10,
+        "visible": "Liste des étapes et actions restantes visibles sur la page",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier en accord avec les visuels."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

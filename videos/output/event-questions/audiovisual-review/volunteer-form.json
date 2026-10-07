@@ -1,61 +1,59 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:44:42.251Z",
-  "videoSha256": "8fd119fcc7be2e7433955eb308377f0bafecf962c880a14c93f0b1b0c8f0ca78",
+  "reviewedAt": "2026-10-07T02:49:05.556Z",
+  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
   "promptSha256": "313cd01eb1f6c91af99c2b539b7746bf8a7df075b9959c748f0669e3a12e409c",
-  "clipSha256": "e9be13b20c337201864661577cf57c082490a7ffb57d0f510ad7d1d2bbd18ee4",
+  "clipSha256": "20d4727d0ad1d878f93eaa6d74e625eaa0048a09a19a9ed9d592e44a648dc9f3",
   "scene": "volunteer-form",
   "review": {
-    "heardOpening": "Répondons maintenant.",
+    "heardOpening": "Répondons maintenant",
     "checkpoints": [
       {
-        "spokenSeconds": 2.2,
-        "spoken": "Aline choisit M pour son t-shirt",
-        "visibleSeconds": 2.6,
-        "visible": "Sélection de la taille M dans le formulaire",
+        "spokenSeconds": 2.5,
+        "spoken": "Aline choisit M pour son t-shirt, puis Oui pour le permis.",
+        "visibleSeconds": 3,
+        "visible": "Sélection de la taille M puis case Oui cochée pour le permis",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 6.8,
-        "spoken": "elle coche Vélo et Remorque",
-        "visibleSeconds": 7.3,
-        "visible": "Cochage successif de Vélo puis Remorque",
+        "spoken": "Pour le matériel, elle coche Vélo et Remorque",
+        "visibleSeconds": 6.8,
+        "visible": "Cases Vélo et Remorque cochées successivement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.8,
-        "spoken": "écrivons Entrée nord",
-        "visibleSeconds": 10.9,
+        "spokenSeconds": 11.2,
+        "spoken": "Dans le texte libre, écrivons Entrée nord.",
+        "visibleSeconds": 11.4,
         "visible": "Saisie de Entrée nord dans le champ point de rendez-vous",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 16.5,
-        "spoken": "le récapitulatif Transmis à l'organisation montre les informations",
-        "visibleSeconds": 18,
-        "visible": "Aucun récapitulatif Transmis à l'organisation n'apparaît à l'écran",
-        "sync": "missing",
-        "severity": "major"
+        "spoken": "le récapitulatif Transmis à l'organisation",
+        "visibleSeconds": 16.8,
+        "visible": "Défilement vers le haut affichant l'encart Transmis à l'organisation",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 22.8,
+        "spokenSeconds": 22.1,
         "spoken": "confirmons réellement l'inscription",
-        "visibleSeconds": 21.8,
-        "visible": "Clic sur Confirmer mon inscription puis affichage de confirmation",
+        "visibleSeconds": 22.3,
+        "visible": "Clic sur le bouton et affichage de l'écran Inscription confirmée",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "00:16 - Le récapitulatif annoncé 'Transmis à l'organisation' n'est pas affiché avant la validation."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit régulier et intonation naturelle."
+      "observation": "Élocution claire et synchronisation fluide avec les manipulations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

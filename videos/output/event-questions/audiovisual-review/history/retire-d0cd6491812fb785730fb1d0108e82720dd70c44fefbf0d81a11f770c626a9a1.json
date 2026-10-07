@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:29:30.487Z",
+  "videoSha256": "f6ee805a2a5d1386fbd03a014714cf489ae12f80d0fc33e6c0a6004b3e061dd5",
+  "promptSha256": "cc8b0beadb01ccc0bad4f18e6d58faef73f4a040f5da08e5afe5d780cccb84bb",
+  "clipSha256": "cf233487ccba79a1392dfb1d20d559529da3258398e44b1821cb999423d9bacf",
+  "scene": "retire",
+  "review": {
+    "heardOpening": "Nous n'avons plus besoin de demander la taille",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "Cliquons sur Retirer, puis lisons la confirmation",
+        "visibleSeconds": 4,
+        "visible": "Clic sur Retirer et affichage de la fenêtre modale de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Confirmons.",
+        "visibleSeconds": 12.5,
+        "visible": "Confirmation validée et bascule vers la liste des inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "Dans l'inscription d'Aline, sa taille L est encore visible, avec la mention question retirée.",
+        "visibleSeconds": 14.5,
+        "visible": "Ligne d'Aline affichant la taille L et la mention question retirée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "Ouvrons enfin un autre créneau public : la question n'est plus proposée",
+        "visibleSeconds": 21,
+        "visible": "Formulaire public affiché sans le champ de taille de t-shirt",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec le déroulement visuel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

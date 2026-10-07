@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:42:49.986Z",
+  "videoSha256": "386a2aaa7a8b33a87a4af265149f6b3b026fe93db5f4941b88209af9b51b34d3",
+  "promptSha256": "c8a8543634d07616f9c471b82288b1817513cd9611e3bfc44de978ae92909c5c",
+  "clipSha256": "747606814bc3e5ff385914ecd2a74c18ffa942b21254b54d6271f5f362e4f3a1",
+  "scene": "duplicates",
+  "review": {
+    "heardOpening": "Deux fiches pour une seule personne ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "ouvrez Doublons possibles",
+        "visibleSeconds": 5.1,
+        "visible": "Affichage de la page Doublons possibles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "Comparer et fusionner ouvre un aperçu",
+        "visibleSeconds": 11.8,
+        "visible": "Aperçu de la fusion pour Robin Favre affiché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.2,
+        "spoken": "Revenons aux suggestions",
+        "visibleSeconds": 16.5,
+        "visible": "Retour à l'écran Doublons possibles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.3,
+        "spoken": "Ignorer retire simplement la paire de cette liste",
+        "visibleSeconds": 20.2,
+        "visible": "La paire disparaît et affiche Aucune paire possible en double",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

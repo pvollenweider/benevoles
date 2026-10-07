@@ -1,0 +1,21 @@
+{
+  "updatedAt": "2026-10-06T18:40:39.940Z",
+  "requested": [
+    "EVENT_CREATE_BLANK",
+    "GLOBAL_SEARCH"
+  ],
+  "active": null,
+  "results": [
+    {
+      "id": "EVENT_CREATE_BLANK",
+      "status": "needs-review",
+      "error": "videos/tools/local-production.ts exited 1"
+    },
+    {
+      "id": "GLOBAL_SEARCH",
+      "status": "needs-review",
+      "error": "videos/tools/local-production.ts exited 1"
+    }
+  ],
+  "note": "Actual narrated capture and automated final checks. No publication or complete human validation claimed."
+}

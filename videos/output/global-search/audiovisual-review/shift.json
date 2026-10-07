@@ -1,42 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T02:29:54.825Z",
-  "videoSha256": "258ab12d15939f6b8d477f5d8a71162bf2e5bf54555dca8ead27b706b9391071",
-  "promptSha256": "9469b103a93c54180c473681d3fa9b85fa9c0964ca363e7df04ed8eeffdf6fb4",
-  "clipSha256": "7191010b757c09fa4c78328bd3dec3965718611ee3bd92233b8c81fecaa1da5f",
+  "reviewedAt": "2026-10-06T18:40:16.102Z",
+  "videoSha256": "a5678b6a18e77e7ecb2489666df876bd539ced6fe6a4ba2d5fc4df91d56e7b9e",
+  "promptSha256": "e0bcfda989026b8cf7d6c7bdb1f289513fe3635788597b9aaaf77b8ee34f9280",
+  "clipSha256": "8157c602f1873194315ac6d7ca29984a148313b6677271bcff20ec14750b752e",
   "scene": "shift",
   "review": {
-    "heardOpening": "Avec Buvette, vous retrouvez les créneaux",
+    "heardOpening": "Avec Buvette, vous retrouvez",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
         "spoken": "Avec Buvette, vous retrouvez les créneaux de plusieurs événements",
-        "visibleSeconds": 0.5,
-        "visible": "Page de recherche affichant deux résultats pour le mot-clé Buvette",
+        "visibleSeconds": 0,
+        "visible": "Recherche 'Buvette' affichant deux créneaux d'événements distincts",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
+        "spokenSeconds": 4.1,
+        "spoken": "Chaque résultat rappelle l’événement, la date et l’horaire",
+        "visibleSeconds": 4,
+        "visible": "Détails visibles sous chaque lien de créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
         "spoken": "Ajoutons village pour ne garder que le service qui nous intéresse",
-        "visibleSeconds": 7.5,
-        "visible": "Saisie du mot village et affichage du résultat unique filtré",
+        "visibleSeconds": 7.8,
+        "visible": "Saisie de 'village' et actualisation à un résultat",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 10.8,
         "spoken": "puis ouvrons le résultat",
-        "visibleSeconds": 11.5,
-        "visible": "Clic sur le lien du créneau Buvette Midi - village",
+        "visibleSeconds": 11.2,
+        "visible": "Clic sur le lien du créneau restant",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.5,
+        "spokenSeconds": 12.6,
         "spoken": "la liste des inscriptions est filtrée sur ce créneau",
-        "visibleSeconds": 12.5,
-        "visible": "Page des inscriptions affichée avec le filtre appliqué sur le créneau sélectionné",
+        "visibleSeconds": 12,
+        "visible": "Tableau des inscriptions affiché avec filtre du créneau actif",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et synchronisation correcte avec l'affichage."
+      "observation": "Élocution claire, posée et régulière."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,12 +1,12 @@
 {
-  "anchor": "Pour travailler sur les fiches, prends le CSV des membres. Pour",
-  "windowStart": 226.393,
+  "anchor": "Pour travailler sur les fiches, prenez le CSV des membres. Pour",
+  "windowStart": 305,
   "result": {
     "found": true,
-    "startSeconds": 13.28,
-    "wordsHeard": "Pour travailler sur les fiches prends le CSV des membres Pour"
+    "startSeconds": 14.14,
+    "wordsHeard": "Pour travailler sur les fiches prenez le CSV des membres. Pour"
   },
-  "onset": 239.673,
-  "proposedCut": 239.409042,
+  "onset": 319.14,
+  "proposedCut": 319.209917,
   "note": "Proposal only; recut then independently audit before capture"
 }

@@ -1,63 +1,63 @@
 {
-  "checkedAt": "2026-10-06T17:29:20.408Z",
+  "checkedAt": "2026-10-07T02:19:26.927Z",
   "organizationId": "video-delivery",
   "ids": {
-    "pending": "cmuwye1j5000055a5brjlv3fw",
-    "retrying": "cmuwye1jb000155a56wgrhsf7",
-    "recoverable": "cmuwye1kr000355a5culbalcp",
-    "wrong": "cmuwye1o9000a55a5y0mp0rs9",
-    "sent": "cmuwye1op000c55a5f72ru9dr"
+    "pending": "cmuxhbrs800005ya5yj03brg1",
+    "retrying": "cmuxhbrsc00015ya52686x1j0",
+    "recoverable": "cmuxhbrta00035ya5bccg609g",
+    "wrong": "cmuxhbrv8000a5ya57esnkakm",
+    "sent": "cmuxhbrvm000c5ya5nbskm33r"
   },
   "product": {
-    "commit": "9ca0705a3ed3e72ed2447c112d07616f0e1ef4ae",
-    "sourceTree": "0ffd0c768cc975dd70b66e893c85fdc1dac2fee4",
-    "productSourceSha256": "af265f2602fedcac29b3b1e5114b61be0b2404e3843c0b568127aab81660fa3a",
-    "buildId": "jXO4BkQpwclQpoLJ_Y3Np",
-    "snapshot": "/tmp/benevoles-video-production.A1omfl",
-    "builtAt": "2026-10-06T17:27:11.076Z"
+    "commit": "e572f7e99bbfaaac112e47513de5a93b02a5bda0",
+    "sourceTree": "bfab8fbc924aded37eb0fd93e8d919c9adbeb263",
+    "productSourceSha256": "22bb6e20c2de867839c01472d726f2c928ea5f47ec1923cece8b72c11c3df37e",
+    "buildId": "D_AkF4h7ikVJu_EdLprcI",
+    "snapshot": "/tmp/benevoles-video-production.bI4zju",
+    "builtAt": "2026-10-07T01:56:36.997Z"
   },
   "importedSourcePaths": [
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/prisma.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/notifications/outbox.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/outbox-view.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/generated/prisma/client.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/generated/prisma/internal/class.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/generated/prisma/internal/prismaNamespace.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/generated/prisma/enums.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/report-error.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/notifications/index.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/notifications/channels/email.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/env.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/notifications/templates/index.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/notifications/templates/shared.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/urls.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/shift-info.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/map-link.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/org-logo.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/notifications/templates/registration.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/message-variables.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/gantt-utils.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/markdown.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/spoken-time.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/registrations-list.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/text-fold.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/utils.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/notifications/templates/invitations.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/notifications/templates/reminders.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/notifications/templates/waitlist.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/waitlist-copy.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/notifications/templates/sector-leaders.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/notifications/templates/open-shifts.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/open-shifts.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/availability.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/role-reservation.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/notifications/templates/administration.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/notifications/smtp-outcome.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/notifications/delivery-outcomes.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/notifications/types.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/outbox-merge-cancel-reason.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/token-vault.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d",
-    "/private/tmp/benevoles-video-production.A1omfl/src/lib/token-hash.ts?namespace=delivery-4bdc4770-d872-4e0b-9acc-232c3f60f02d"
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/prisma.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/outbox.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/outbox-view.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/generated/prisma/client.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/generated/prisma/internal/class.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/generated/prisma/internal/prismaNamespace.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/generated/prisma/enums.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/report-error.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/index.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/channels/email.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/env.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/index.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/shared.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/urls.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/shift-info.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/map-link.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/org-logo.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/registration.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/message-variables.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/gantt-utils.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/markdown.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/spoken-time.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/registrations-list.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/text-fold.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/utils.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/invitations.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/reminders.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/waitlist.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/waitlist-copy.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/sector-leaders.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/open-shifts.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/open-shifts.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/availability.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/role-reservation.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/templates/administration.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/smtp-outcome.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/delivery-outcomes.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/notifications/types.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/outbox-merge-cancel-reason.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/token-vault.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d",
+    "/private/tmp/benevoles-video-production.bI4zju/src/lib/token-hash.ts?namespace=delivery-7570e06d-957a-4bf0-a734-79b477c2e72d"
   ],
   "clock": "Supported current-main deliverOutbox clock advanced to real due times; 451 temporary retries only; 550 permanent rejection stops after one attempt",
   "actualSmtpAttempts": [
@@ -65,65 +65,65 @@
       "recipient": "video.delivery.retrying@example.org",
       "accepted": false,
       "responseCode": 451,
-      "timestamp": "2026-10-06T17:29:19.974Z"
+      "timestamp": "2026-10-07T02:19:26.725Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": false,
       "responseCode": 451,
-      "timestamp": "2026-10-06T17:29:20.026Z"
+      "timestamp": "2026-10-07T02:19:26.745Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": false,
       "responseCode": 451,
-      "timestamp": "2026-10-06T17:29:20.047Z"
+      "timestamp": "2026-10-07T02:19:26.756Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": false,
       "responseCode": 451,
-      "timestamp": "2026-10-06T17:29:20.060Z"
+      "timestamp": "2026-10-07T02:19:26.767Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": false,
       "responseCode": 451,
-      "timestamp": "2026-10-06T17:29:20.079Z"
+      "timestamp": "2026-10-07T02:19:26.778Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": false,
       "responseCode": 451,
-      "timestamp": "2026-10-06T17:29:20.099Z"
+      "timestamp": "2026-10-07T02:19:26.789Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": false,
       "responseCode": 451,
-      "timestamp": "2026-10-06T17:29:20.115Z"
+      "timestamp": "2026-10-07T02:19:26.799Z"
     },
     {
       "recipient": "video.delivery.wrong@example.org",
       "accepted": false,
       "responseCode": 550,
-      "timestamp": "2026-10-06T17:29:20.130Z"
+      "timestamp": "2026-10-07T02:19:26.814Z"
     },
     {
       "recipient": "video.delivery.sent@example.org",
       "accepted": true,
       "responseCode": 250,
-      "timestamp": "2026-10-06T17:29:20.148Z"
+      "timestamp": "2026-10-07T02:19:26.828Z"
     }
   ],
   "workerSnapshots": [
     {
-      "id": "cmuwye1jb000155a56wgrhsf7",
+      "id": "cmuxhbrsc00015ya52686x1j0",
       "recipient": "video.delivery.retrying@example.org",
-      "now": "2026-10-06T17:29:19.951Z",
+      "now": "2026-10-07T02:19:26.705Z",
       "status": "pending",
       "attempts": 1,
-      "nextAttemptAt": "2026-10-06T17:34:19.951Z",
+      "nextAttemptAt": "2026-10-07T02:24:26.705Z",
       "outcome": {
         "sent": 0,
         "retried": 1,
@@ -131,12 +131,12 @@
       }
     },
     {
-      "id": "cmuwye1kr000355a5culbalcp",
+      "id": "cmuxhbrta00035ya5bccg609g",
       "recipient": "video.delivery.recoverable@example.org",
-      "now": "2026-10-06T17:29:20.009Z",
+      "now": "2026-10-07T02:19:26.739Z",
       "status": "pending",
       "attempts": 1,
-      "nextAttemptAt": "2026-10-06T17:34:20.009Z",
+      "nextAttemptAt": "2026-10-07T02:24:26.739Z",
       "outcome": {
         "sent": 0,
         "retried": 1,
@@ -144,12 +144,12 @@
       }
     },
     {
-      "id": "cmuwye1kr000355a5culbalcp",
+      "id": "cmuxhbrta00035ya5bccg609g",
       "recipient": "video.delivery.recoverable@example.org",
-      "now": "2026-10-06T17:34:20.010Z",
+      "now": "2026-10-07T02:24:26.740Z",
       "status": "pending",
       "attempts": 2,
-      "nextAttemptAt": "2026-10-06T17:44:20.010Z",
+      "nextAttemptAt": "2026-10-07T02:34:26.740Z",
       "outcome": {
         "sent": 0,
         "retried": 1,
@@ -157,12 +157,12 @@
       }
     },
     {
-      "id": "cmuwye1kr000355a5culbalcp",
+      "id": "cmuxhbrta00035ya5bccg609g",
       "recipient": "video.delivery.recoverable@example.org",
-      "now": "2026-10-06T17:44:20.011Z",
+      "now": "2026-10-07T02:34:26.741Z",
       "status": "pending",
       "attempts": 3,
-      "nextAttemptAt": "2026-10-06T18:04:20.011Z",
+      "nextAttemptAt": "2026-10-07T02:54:26.741Z",
       "outcome": {
         "sent": 0,
         "retried": 1,
@@ -170,12 +170,12 @@
       }
     },
     {
-      "id": "cmuwye1kr000355a5culbalcp",
+      "id": "cmuxhbrta00035ya5bccg609g",
       "recipient": "video.delivery.recoverable@example.org",
-      "now": "2026-10-06T18:04:20.012Z",
+      "now": "2026-10-07T02:54:26.742Z",
       "status": "pending",
       "attempts": 4,
-      "nextAttemptAt": "2026-10-06T18:44:20.012Z",
+      "nextAttemptAt": "2026-10-07T03:34:26.742Z",
       "outcome": {
         "sent": 0,
         "retried": 1,
@@ -183,12 +183,12 @@
       }
     },
     {
-      "id": "cmuwye1kr000355a5culbalcp",
+      "id": "cmuxhbrta00035ya5bccg609g",
       "recipient": "video.delivery.recoverable@example.org",
-      "now": "2026-10-06T18:44:20.013Z",
+      "now": "2026-10-07T03:34:26.743Z",
       "status": "pending",
       "attempts": 5,
-      "nextAttemptAt": "2026-10-06T20:04:20.013Z",
+      "nextAttemptAt": "2026-10-07T04:54:26.743Z",
       "outcome": {
         "sent": 0,
         "retried": 1,
@@ -196,12 +196,12 @@
       }
     },
     {
-      "id": "cmuwye1kr000355a5culbalcp",
+      "id": "cmuxhbrta00035ya5bccg609g",
       "recipient": "video.delivery.recoverable@example.org",
-      "now": "2026-10-06T20:04:20.014Z",
+      "now": "2026-10-07T04:54:26.744Z",
       "status": "failed",
       "attempts": 6,
-      "nextAttemptAt": "2026-10-06T22:44:20.014Z",
+      "nextAttemptAt": "2026-10-07T07:34:26.744Z",
       "outcome": {
         "sent": 0,
         "retried": 0,
@@ -209,12 +209,12 @@
       }
     },
     {
-      "id": "cmuwye1o9000a55a5y0mp0rs9",
+      "id": "cmuxhbrv8000a5ya57esnkakm",
       "recipient": "video.delivery.wrong@example.org",
-      "now": "2026-10-06T17:29:20.125Z",
+      "now": "2026-10-07T02:19:26.809Z",
       "status": "failed",
       "attempts": 1,
-      "nextAttemptAt": "2026-10-06T17:34:20.125Z",
+      "nextAttemptAt": "2026-10-07T02:24:26.809Z",
       "outcome": {
         "sent": 0,
         "retried": 0,
@@ -222,12 +222,12 @@
       }
     },
     {
-      "id": "cmuwye1op000c55a5f72ru9dr",
+      "id": "cmuxhbrvm000c5ya5nbskm33r",
       "recipient": "video.delivery.sent@example.org",
-      "now": "2026-10-06T17:29:20.141Z",
+      "now": "2026-10-07T02:19:26.822Z",
       "status": "sent",
       "attempts": 0,
-      "nextAttemptAt": "2026-10-06T17:29:20.137Z",
+      "nextAttemptAt": "2026-10-07T02:19:26.818Z",
       "outcome": {
         "sent": 1,
         "retried": 0,
@@ -236,7 +236,7 @@
     }
   ],
   "pendingWithoutAttempt": true,
-  "actualDeliveredMailId": "2ANydKWs0YMLZINx0PJUvp",
+  "actualDeliveredMailId": "5enUQLA27QM4v3ZCl6felN",
   "controlledErrorLogsCount": 2,
   "note": "Real worker/SMTP evidence; UI retry, address correction and campaign still to film"
 }

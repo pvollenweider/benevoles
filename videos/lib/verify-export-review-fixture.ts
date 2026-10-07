@@ -4,21 +4,46 @@ import { readFile } from "node:fs/promises"
 import { createHash } from "node:crypto"
 import path from "node:path"
 import type { PrismaClient } from "../../src/generated/prisma/client"
+import { readExportEnrichment } from "./enrich-export-classroom"
+import { exportIdentityVersion, exportIdentityV2 } from "./export-identity-version"
 
 /** Fail closed before uploading the export classroom's captured screens. */
-export async function verifyExportReviewFixture(db: PrismaClient, directory: string) {
-  if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Local video database required")
+export async function verifyExportClassroom(db: PrismaClient) {
+  const url = new URL(process.env.DATABASE_URL ?? "")
+  if (!["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video") throw new Error("Exact isolated video database required")
   const organizationId = "video-data-exports"
   const organization = await db.organization.findUniqueOrThrow({ where: { id: organizationId } })
   if (organization.slug !== "formation-exports" || organization.name !== "Formation — données et archives") throw new Error("Wrong export classroom")
   const people = await db.volunteer.findMany({ where: { organizationId }, orderBy: { id: "asc" } })
+  const identityVersion = await exportIdentityVersion()
   const names = ["Léa", "Étienne", "Zoé", "Camille"]
   const notes = ["=1+1", "Fiche désactivée — exemple fictif.", "Prévenir à l'arrivée.", "@exemple"]
-  if (people.length !== 4 || people.some((person, index) => person.id !== `video-data-exports-member-${index}` || person.firstName !== names[index] || person.lastName !== "Exemple" || person.email !== `video.exports.member.${index}@example.org` || !/^\+41 79 000 \d{4}$/.test(person.phone ?? "") || person.notes !== notes[index])) throw new Error("Export members are not the exact synthetic classroom")
+  if (people.length !== 4 || people.some((person, index) => person.id !== `video-data-exports-member-${index}` || person.firstName !== names[index] || person.lastName !== (identityVersion ? exportIdentityV2.lastNames[index] : "Exemple") || person.email !== `video.exports.member.${index}@example.org` || !/^\+41 79 000 \d{4}$/.test(person.phone ?? "") || person.notes !== notes[index])) throw new Error("Export members are not the exact synthetic classroom")
   const admins = await db.adminUser.findMany({ where: { organizationId } })
-  if (admins.length !== 1 || admins[0].id !== "video-data-exports-owner" || admins[0].name !== "Élodie Exemple" || admins[0].email !== "video.exports.owner@example.org") throw new Error("Export classroom administrator differs")
+  if (admins.length !== 1 || admins[0].id !== "video-data-exports-owner" || admins[0].name !== (identityVersion ? exportIdentityV2.owner : "Élodie Exemple") || admins[0].email !== "video.exports.owner@example.org") throw new Error("Export classroom administrator differs")
   const events = await db.event.findMany({ where: { organizationId }, include: { registrations: true, sectorLeaders: true } })
-  if (events.length !== 1 || events[0].id !== "video-data-exports-event" || events[0].title !== "Fête des archives — démonstration" || events[0].registrations.length !== 3 || events[0].registrations.some(reg => !people.some(person => person.id === reg.volunteerId)) || events[0].sectorLeaders.length !== 1 || events[0].sectorLeaders[0].email !== "video.exports.leader@example.org" || events[0].sectorLeaders[0].name !== "Nicolas Exemple") throw new Error("Export event is not exclusively synthetic")
+  const enrichment = await readExportEnrichment("videos/output/data-exports-archives")
+  const expectedRegistrationIds = ["cmuvpbr9k0002jsa5lu09cnww", "cmuvpbr9p0003jsa5nh9ohyc1", "cmuvpbr9q0004jsa58dp7b9b4", ...(enrichment ? [enrichment.registrationId] : [])]
+  if (events.length !== 1 || events[0].id !== "video-data-exports-event" || events[0].title !== "Fête des archives — démonstration" || events[0].registrations.length !== expectedRegistrationIds.length || events[0].registrations.some(reg => !expectedRegistrationIds.includes(reg.id) || !people.some(person => person.id === reg.volunteerId)) || events[0].sectorLeaders.length !== 1 || events[0].sectorLeaders[0].email !== "video.exports.leader@example.org" || events[0].sectorLeaders[0].name !== (identityVersion ? exportIdentityV2.leader : "Nicolas Exemple")) throw new Error("Export event is not exclusively synthetic")
+  if (enrichment) {
+    const reg = events[0].registrations.find(r => r.id === enrichment.registrationId) as (typeof events[0]["registrations"][number] & { charterAcceptedAt: Date | null; charterAcceptedHash: string | null }) | undefined
+    if (!reg || reg.volunteerId !== enrichment.memberId || reg.shiftId !== enrichment.shiftId || reg.source !== "public_form" || reg.status !== "active" || reg.charterAcceptedAt?.toISOString() !== enrichment.charterAcceptedAt || reg.charterAcceptedHash !== enrichment.charterAcceptedHash || events[0].publicStatus !== "published" || events[0].isListed !== false) throw new Error("API-created export acceptance no longer matches exact action ledger")
+    if (enrichment.completed) {
+      if (!Array.isArray(enrichment.outcomeIds) || !enrichment.outcomeIds.length || !Array.isArray(enrichment.outboxIds) || !enrichment.outboxIds.length || !enrichment.mailpitMessageId) throw new Error("Completed export action evidence missing")
+      const outcomes = await db.deliveryOutcome.findMany({ where: { id: { in: enrichment.outcomeIds } } })
+      if (outcomes.length !== enrichment.outcomeIds.length || outcomes.some(o => o.organizationId !== organizationId || o.volunteerId !== enrichment.memberId || !enrichment.outboxIds.includes(o.outboxId) || o.outcome !== "accepted_by_relay")) throw new Error("Export email result differs from owned action ledger")
+      const outbox = await db.notificationOutbox.findMany({ where: { id: { in: enrichment.outboxIds } } })
+      if (outbox.length !== enrichment.outboxIds.length || outbox.some(o => o.organizationId !== organizationId || o.status !== "sent")) throw new Error("Export worker evidence differs from owned action ledger")
+    }
+  } else if (events[0].publicStatus !== "draft") throw new Error("Initial export event state differs; inspect partial enrichment")
+  if (people.some((person, index) => index === 0 ? !["+41 79 000 9900", "+41 79 000 9001"].includes(person.phone!) : person.phone !== `+41 79 000 000${index}`)) throw new Error("Export phone differs from the exact initial/post-capture schema")
+  if (people.some((person, index) => person.active !== (index !== 1)) || admins[0].role !== "admin" || !admins[0].isActive || events[0].slug !== "fete-des-archives") throw new Error("Export active states, owner or event slug differ")
+  return { organization, people, events }
+}
+
+export async function verifyExportReviewFixture(db: PrismaClient, directory: string) {
+  const { organization, events } = await verifyExportClassroom(db)
+  const organizationId = organization.id
   const preparation = JSON.parse(await readFile(path.join(directory, "preparation.json"), "utf8"))
   const capture = JSON.parse(await readFile(path.join(directory, "export-capture-checks.json"), "utf8"))
   if (preparation.organizationId !== organizationId || !preparation.secretKeysAndKnownTokensAbsent || !capture.collectionsActuallyOpened || !capture.copyRemainsFrozenAfterActualModification || !capture.csvLiteralValuesVisible || !Array.isArray(capture.files) || capture.files.length !== 3) throw new Error("Actual export privacy/capture evidence missing")

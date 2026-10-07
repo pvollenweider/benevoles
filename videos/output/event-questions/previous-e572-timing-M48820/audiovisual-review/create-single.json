@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:26:34.031Z",
+  "videoSha256": "f6ee805a2a5d1386fbd03a014714cf489ae12f80d0fc33e6c0a6004b3e061dd5",
+  "promptSha256": "344cb6ce62ab99b9a2401a977fbfb1c2423287f525c83c3465e7626283b4eb47",
+  "clipSha256": "84646fab3307d298106912c1b57984bd5a5e209a92b16bbba43750a68f82ae07",
+  "scene": "create-single",
+  "review": {
+    "heardOpening": "Commençons par la taille du t-shirt.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Cliquons sur Ajouter une question",
+        "visibleSeconds": 2,
+        "visible": "Clic sur le bouton et affichage du formulaire de nouvelle question",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "puis saisissons son intitulé",
+        "visibleSeconds": 4,
+        "visible": "Saisie de « Taille de t-shirt » dans le champ intitulé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Dans Type de réponse, choisissons Choix unique",
+        "visibleSeconds": 8.5,
+        "visible": "Sélection de « Choix unique » dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25.8,
+        "spoken": "cochons Réponse obligatoire",
+        "visibleSeconds": 24.5,
+        "visible": "Case à cocher « Réponse obligatoire » activée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 27.5,
+        "visible": "Clic sur « Enregistrer » et retour au tableau avec la question ajoutée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

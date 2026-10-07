@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:31:03.107Z",
+  "videoSha256": "7b0f188c8a6566bb756eef4389d586e7ddef3f7424a908e865a1a1826cb3bca8",
+  "promptSha256": "88ec303c25929af86d7757c876b096298ada5fa03cf55adbba9fa453ad39496e",
+  "clipSha256": "579804b325b5c9653138d0f81f340d68446ef121e4853b526fca5caaeb3fd19c",
+  "scene": "limits",
+  "review": {
+    "heardOpening": "La recherche affiche au maximum 20 résultats par catégorie.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La recherche affiche au maximum vingt résultats par catégorie.",
+        "visibleSeconds": 0.5,
+        "visible": "Page de recherche avec message limitant l'affichage à 20 résultats.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Ajoutez un prénom pour préciser la recherche.",
+        "visibleSeconds": 7.8,
+        "visible": "Saisie de 'Léa Morel' et actualisation des résultats.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "écrire zoe permet aussi de retrouver Zoé.",
+        "visibleSeconds": 13,
+        "visible": "Saisie de 'zoe' en minuscules sans accent affichant le résultat 'Zoé Perrin'.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier, synchronisé avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

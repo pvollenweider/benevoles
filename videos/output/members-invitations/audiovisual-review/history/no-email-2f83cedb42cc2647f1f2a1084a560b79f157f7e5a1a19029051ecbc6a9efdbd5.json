@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T19:23:58.583Z",
+  "videoSha256": "0e85e3058f7a7da104e70aac8b997327157628240313b75dba0ea4d2f501df7e",
+  "promptSha256": "98ad904a9aefb3497e90e7ea24b5ff1474fc6d60910fa3c34352e9dd00e3d3e4",
+  "clipSha256": "749f9d52ec6e5f124322954a7ea0c21e9d7914bf3934dc98b480562f6be21b9c",
+  "scene": "no-email",
+  "review": {
+    "heardOpening": "Enfin, une fiche sans email",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "une fiche sans email peut être sélectionnée",
+        "visibleSeconds": 3,
+        "visible": "René Meyer avec la mention pas d'email est sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.4,
+        "spoken": "René devra être contacté autrement",
+        "visibleSeconds": 8.8,
+        "visible": "Invitation envoyée, René Meyer s'affiche dans la liste avec avertissement pas d'email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Le nombre d'invités ne correspond donc pas forcément au nombre d'emails envoyés",
+        "visibleSeconds": 9.5,
+        "visible": "Tableau de bord affichant le compteur de 13 invités",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,15 @@
+{
+  "updatedAt": "2026-10-06T18:38:24.889Z",
+  "requested": [
+    "ADMIN_NAVIGATION"
+  ],
+  "active": null,
+  "results": [
+    {
+      "id": "ADMIN_NAVIGATION",
+      "status": "needs-review",
+      "error": "videos/tools/local-production.ts exited 1"
+    }
+  ],
+  "note": "Actual narrated capture and automated final checks. No publication or complete human validation claimed."
+}

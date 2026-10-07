@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:37:38.481Z",
-  "videoSha256": "01fafadfba036da8aac5f19c6359a31892b79dcfccbfe3936309fabe4cf0f4be",
+  "reviewedAt": "2026-10-07T02:03:05.626Z",
+  "videoSha256": "a24b4bfd2c19e5331f7acd65fa54800c1f8745634493fc2ef40d68c1f05d48c4",
   "promptSha256": "b57868132dc29bbd659231c1323f74e8e2317cad66dc125a0198a5bf5b05b912",
-  "clipSha256": "54dd3bc5e5bf5657c9a13b0c0444f2cab1c84d9627c1d87dfc4b63a8c95962b7",
+  "clipSha256": "255fd93d2cf54acc8d70ca601997b223097b64f859f91dbb57a0dc3c3b3e6612",
   "scene": "fields",
   "review": {
     "heardOpening": "Pour chaque information différente, vous choisissez",
     "checkpoints": [
       {
-        "spokenSeconds": 5.8,
+        "spokenSeconds": 5.5,
         "spoken": "on prend le téléphone de l'autre fiche",
-        "visibleSeconds": 6.8,
-        "visible": "Sélection du bouton radio pour le deuxième numéro de téléphone",
+        "visibleSeconds": 7,
+        "visible": "Sélection du second numéro de téléphone par bouton radio",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.4,
+        "spokenSeconds": 9.2,
         "spoken": "Les notes internes peuvent aussi être mises à la suite",
-        "visibleSeconds": 11.2,
-        "visible": "Sélection de l'option Mettre les deux notes à la suite",
+        "visibleSeconds": 11,
+        "visible": "Sélection de l'option 'Mettre les deux notes à la suite'",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 17.5,
-        "spoken": "Le tableau récapitule les inscriptions",
-        "visibleSeconds": 20.5,
-        "visible": "Tableau récapitulatif Ce qui sera déplacé affiché à l'écran",
+        "spoken": "Le tableau récapitule les inscriptions, les invitations et les réponses concernées",
+        "visibleSeconds": 18.5,
+        "visible": "Défilement affichant le tableau récapitulatif 'Ce qui sera déplacé'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.2,
+        "spoken": "les abonnements aux notifications du navigateur ne sont jamais déplacés",
+        "visibleSeconds": 18.5,
+        "visible": "Ligne 'Abonnements aux notifications du navigateur' visible dans le tableau",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, bien synchronisée avec les interactions visuelles."
+      "observation": "Élocution calme, fluide et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

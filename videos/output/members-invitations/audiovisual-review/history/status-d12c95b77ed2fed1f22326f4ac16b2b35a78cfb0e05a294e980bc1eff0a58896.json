@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T19:23:32.678Z",
+  "videoSha256": "0e85e3058f7a7da104e70aac8b997327157628240313b75dba0ea4d2f501df7e",
+  "promptSha256": "ad867215dd9d3ca7cfb84cd2310f411e2123fb4375321e25e032c68ba3940508",
+  "clipSha256": "5aa6e9bafb1304077566cad660d2f8770f627a84ae018617a9092be184d7fcef",
+  "scene": "status",
+  "review": {
+    "heardOpening": "De retour dans Invitations",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "De retour dans Invitations",
+        "visibleSeconds": 0.5,
+        "visible": "Page Invitations affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.1,
+        "spoken": "Aline a maintenant une participation confirmée",
+        "visibleSeconds": 1,
+        "visible": "Ligne Aline Mercier avec statut Participation confirmée visible",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.8,
+        "spoken": "Le tableau sert à suivre la participation",
+        "visibleSeconds": 16,
+        "visible": "Tableau récapitulatif des statuts toujours à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T19:19:32.298Z",
+  "videoSha256": "d06d14223ff995674d62c29e7a94d1400de7af563b83439753ac588157b6a4a6",
+  "promptSha256": "c072dfb4dc26e94e3617d8317234ee9d5a0611268264e1f76768a6d3479eb14b",
+  "clipSha256": "2160b848c79e50f77d3023e4f54714529d44dd206dd2e84bcf88f075c9fcc35e",
+  "scene": "required-validation",
+  "review": {
+    "heardOpening": "Voyons maintenant le formulaire public avec Aline.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4,
+        "spoken": "Choisissons le premier créneau et continuons.",
+        "visibleSeconds": 1.8,
+        "visible": "Sélection du créneau 10h-12h et clic sur Continuer déjà effectués.",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Renseignons son identité et les consentements demandés.",
+        "visibleSeconds": 7.5,
+        "visible": "Saisie de l'identité Aline Mercier et sélection des cases de consentement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Essayons de confirmer sans répondre à nos deux questions obligatoires.",
+        "visibleSeconds": 13.5,
+        "visible": "Clic sur le bouton Confirmer mon inscription en laissant les champs obligatoires vides.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "Le formulaire indique ce qui manque et place le focus sur la première réponse attendue.",
+        "visibleSeconds": 14,
+        "visible": "Infobulle d'erreur affichée sur la question obligatoire non renseignée.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:02 : La sélection du créneau et la validation ont lieu avant l'annonce vocale à 00:04."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et ton pédagogique régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

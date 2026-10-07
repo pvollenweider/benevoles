@@ -1,49 +1,49 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:37:24.236Z",
-  "videoSha256": "01fafadfba036da8aac5f19c6359a31892b79dcfccbfe3936309fabe4cf0f4be",
+  "reviewedAt": "2026-10-07T02:02:49.040Z",
+  "videoSha256": "a24b4bfd2c19e5331f7acd65fa54800c1f8745634493fc2ef40d68c1f05d48c4",
   "promptSha256": "8a4a48ddc874b4ee856f3bf36f5ca2c22b740ad3183ab6645dc2ee97928891de",
-  "clipSha256": "3b3f923283efc8ff0dce2bc8da7f9c8ef51ee3d4230fbbd35fc9c878779b97a9",
+  "clipSha256": "e996651e0f1f5a16c952f5765b341a49345d5c0a08574038231042315b591341",
   "scene": "compare",
   "review": {
-    "heardOpening": "Si vous savez que ces deux fiches désignent bien la même personne",
+    "heardOpening": "Si vous savez que ces deux fiches",
     "checkpoints": [
       {
         "spokenSeconds": 4.1,
         "spoken": "ouvrez l’activité de la fiche que vous voulez conserver",
-        "visibleSeconds": 0,
-        "visible": "L'écran affiche déjà l'activité de Robin Exemple",
+        "visibleSeconds": 0.5,
+        "visible": "Page Activité de Robin Favre déjà affichée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.4,
-        "spoken": "Fusionner avec un autre membre est réservé au propriétaire",
-        "visibleSeconds": 8.8,
+        "spokenSeconds": 7.3,
+        "spoken": "Fusionner avec un autre membre",
+        "visibleSeconds": 8.9,
         "visible": "Clic sur le lien Fusionner avec un autre membre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
+        "spokenSeconds": 11.8,
         "spoken": "Recherchez précisément l’adresse de la seconde fiche",
-        "visibleSeconds": 12.5,
-        "visible": "Saisie de l'adresse email puis clic sur Chercher",
+        "visibleSeconds": 13,
+        "visible": "Saisie de l'adresse dans le champ de recherche et clic sur Chercher",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.2,
-        "spoken": "puis choisissez Fusionner avec cette fiche",
+        "spokenSeconds": 15.6,
+        "spoken": "choisissez Fusionner avec cette fiche",
         "visibleSeconds": 17.8,
         "visible": "Clic sur le bouton Fusionner avec cette fiche",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.3,
+        "spokenSeconds": 19.8,
         "spoken": "L’aperçu permet maintenant de comparer les informations",
-        "visibleSeconds": 19,
+        "visibleSeconds": 19.3,
         "visible": "Affichage de la page Aperçu de la fusion",
         "sync": "aligned",
         "severity": "none"
@@ -53,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit posé et bonne synchronisation d'ensemble."
+      "observation": "Voix posée et claire, débit adapté aux actions présentées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

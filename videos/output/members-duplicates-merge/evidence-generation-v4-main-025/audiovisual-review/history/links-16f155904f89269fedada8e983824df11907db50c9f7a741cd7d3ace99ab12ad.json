@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:38:30.421Z",
+  "videoSha256": "01fafadfba036da8aac5f19c6359a31892b79dcfccbfe3936309fabe4cf0f4be",
+  "promptSha256": "d4d9e0e77e8a922f80de144e8bac3baad1c8f034c93d74f5b79066a94f85d587",
+  "clipSha256": "994fc235bebeb8582f8c0ebcfed880271d16d4fad27a5c972c558a045fd45e19",
+  "scene": "links",
+  "review": {
+    "heardOpening": "Vérifions enfin les liens",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "L'ancien lien personnel de la fiche absorbée ne fonctionne plus",
+        "visibleSeconds": 2.8,
+        "visible": "Écran affichant l'erreur « Ce lien ne fonctionne pas »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Le nouveau lien ouvre bien ses inscriptions sous la fiche conservée",
+        "visibleSeconds": 8.8,
+        "visible": "Affichage de la page « Mes inscriptions » pour la fiche conservée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.6,
+        "spoken": "Une inscription annulée parce qu'elle faisait doublon ne redevient pas active",
+        "visibleSeconds": 13.6,
+        "visible": "Détail des créneaux validés affiché sans doublon réactivé",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et synchronisation fluide avec les écrans présentés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

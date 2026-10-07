@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:51:11.070Z",
+  "videoSha256": "5b05ec09f33370d8a36989f503422dd329922701216b4084b0a2366fb687ad4c",
+  "promptSha256": "903e61dea3cb7f040bff000c2c160f1271eba76a128ee96eb8e2a2a605d78d18",
+  "clipSha256": "4437f08ba33129356b92747a86050d75881facd61b8e6d991142366885d07af2",
+  "scene": "edit",
+  "review": {
+    "heardOpening": "Avec Éditer, vous pouvez corriger la fiche",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Avec Éditer, vous pouvez corriger la fiche",
+        "visibleSeconds": 0.8,
+        "visible": "Clic sur Éditer et ouverture de la fenêtre Modifier le membre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "comme accueil ou permis b",
+        "visibleSeconds": 3.5,
+        "visible": "Saisie de 'accueil, permis-b' dans le champ Tags",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "La note peut rappeler un détail pratique",
+        "visibleSeconds": 6.8,
+        "visible": "Saisie du texte dans le champ Notes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.1,
+        "spoken": "Enregistrons, puis rouvrons la fiche",
+        "visibleSeconds": 17.5,
+        "visible": "Clic sur Enregistrer puis réouverture de la fiche Maya Berger",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -11,3 +11,14 @@ test("normalized captions remain two lines and retain scene bounds", () => {
   assert.equal(cues[0].startMs, 1000); assert.equal(cues.at(-1)!.endMs, 13000)
   assert(cues.every(c => c.text.split("\n").length <= 2 && c.text.split("\n").every(line => line.length <= 42)))
 })
+test("display normalization cannot move any spoken cue boundary", () => {
+  for (const text of [
+    "Avant le programme, le vingt-huit novembre deux mille vingt-six, à onze heures trente, nous préparons la relève. Après cette date, vérifions les places et le lieu.",
+    "Commençons à dix heures. La consigne est importante : le quatorze novembre deux mille vingt-six, de onze heures à douze heures trente. Puis revenons à la liste.",
+  ]) {
+    const source = readableCaptions(text, 1200, 24000, false)
+    const display = readableCaptions(text, 1200, 24000, true)
+    assert.deepEqual(display.map(c => [c.startMs, c.endMs]), source.map(c => [c.startMs, c.endMs]))
+    assert(display.every(c => c.text.split("\n").length <= 2 && c.text.split("\n").every(line => line.length <= 42)))
+  }
+})

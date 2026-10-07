@@ -1,7 +1,7 @@
 {
   "format": "benevol-event-archive",
   "version": 1,
-  "exportedAt": "2026-10-05T20:28:48.145Z",
+  "exportedAt": "2026-10-06T18:26:23.871Z",
   "organization": {
     "name": "Formation — données et archives",
     "slug": "formation-exports"
@@ -13,8 +13,8 @@
     "title": "Fête des archives — démonstration",
     "description": null,
     "location": "Parc de démonstration",
-    "publicStatus": "draft",
-    "isListed": true,
+    "publicStatus": "published",
+    "isListed": false,
     "startDate": "2026-10-17T00:00:00.000Z",
     "endDate": "2026-10-17T00:00:00.000Z",
     "publicInstructions": null,
@@ -30,8 +30,10 @@
     "registrationClosesAt": null,
     "latitude": 46.2,
     "longitude": 6.14,
+    "dayContactName": null,
+    "dayContactPhone": null,
     "createdAt": "2026-10-05T20:27:50.593Z",
-    "updatedAt": "2026-10-05T20:27:50.593Z"
+    "updatedAt": "2026-10-06T18:20:06.869Z"
   },
   "shifts": [
     {
@@ -109,13 +111,15 @@
       "waitingExpiresAt": null,
       "checkedInAt": null,
       "linkEmailedAt": null,
+      "charterAcceptedHash": null,
+      "charterAcceptedAt": null,
       "createdAt": "2026-10-05T20:27:50.600Z",
       "updatedAt": "2026-10-05T20:27:50.600Z",
       "volunteer": {
         "id": "video-data-exports-member-0",
         "organizationId": "video-data-exports",
         "firstName": "Léa",
-        "lastName": "Exemple",
+        "lastName": "Rochat",
         "email": "video.exports.member.0@example.org",
         "phone": "+41 79 000 9900",
         "tags": [
@@ -129,8 +133,11 @@
           "morning"
         ],
         "availabilityNote": "Disponible le matin ; retour à midi.",
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
         "createdAt": "2026-10-05T20:27:50.582Z",
-        "updatedAt": "2026-10-05T20:28:47.398Z"
+        "updatedAt": "2026-10-06T18:26:22.510Z"
       }
     },
     {
@@ -150,13 +157,15 @@
       "waitingExpiresAt": null,
       "checkedInAt": null,
       "linkEmailedAt": null,
+      "charterAcceptedHash": null,
+      "charterAcceptedAt": null,
       "createdAt": "2026-10-05T20:27:50.605Z",
       "updatedAt": "2026-10-05T20:27:50.605Z",
       "volunteer": {
         "id": "video-data-exports-member-2",
         "organizationId": "video-data-exports",
         "firstName": "Zoé",
-        "lastName": "Exemple",
+        "lastName": "Perrin",
         "email": "video.exports.member.2@example.org",
         "phone": "+41 79 000 0002",
         "tags": [
@@ -169,6 +178,9 @@
           "afternoon"
         ],
         "availabilityNote": "Après le repas.",
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
         "createdAt": "2026-10-05T20:27:50.588Z",
         "updatedAt": "2026-10-05T20:27:50.588Z"
       }
@@ -190,13 +202,15 @@
       "waitingExpiresAt": null,
       "checkedInAt": null,
       "linkEmailedAt": null,
+      "charterAcceptedHash": null,
+      "charterAcceptedAt": null,
       "createdAt": "2026-10-05T20:27:50.606Z",
       "updatedAt": "2026-10-05T20:27:50.606Z",
       "volunteer": {
         "id": "video-data-exports-member-3",
         "organizationId": "video-data-exports",
         "firstName": "Camille",
-        "lastName": "Exemple",
+        "lastName": "Morel",
         "email": "video.exports.member.3@example.org",
         "phone": "+41 79 000 0003",
         "tags": [],
@@ -205,8 +219,56 @@
         "birthDate": null,
         "availabilityPeriods": [],
         "availabilityNote": "",
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
         "createdAt": "2026-10-05T20:27:50.590Z",
         "updatedAt": "2026-10-05T20:27:50.590Z"
+      }
+    },
+    {
+      "id": "cmux07clp0007o1a5hyeufw2x",
+      "eventId": "video-data-exports-event",
+      "shiftId": "cmuvpbr9i0001jsa553j0izrc",
+      "volunteerId": "video-data-exports-member-2",
+      "status": "active",
+      "source": "public_form",
+      "comment": null,
+      "phone": "+41 79 000 0002",
+      "reminderJ2Sent": null,
+      "reminderJ1Sent": null,
+      "reminderDdSent": null,
+      "waitingPosition": null,
+      "waitingOfferedAt": null,
+      "waitingExpiresAt": null,
+      "checkedInAt": null,
+      "linkEmailedAt": "2026-10-06T18:20:06.924Z",
+      "charterAcceptedHash": "241e171634d39aed15fce32fbf9606aae5a802453b850c0ebd9619d28343846d",
+      "charterAcceptedAt": "2026-10-06T18:20:06.908Z",
+      "createdAt": "2026-10-06T18:20:06.925Z",
+      "updatedAt": "2026-10-06T18:20:06.925Z",
+      "volunteer": {
+        "id": "video-data-exports-member-2",
+        "organizationId": "video-data-exports",
+        "firstName": "Zoé",
+        "lastName": "Perrin",
+        "email": "video.exports.member.2@example.org",
+        "phone": "+41 79 000 0002",
+        "tags": [
+          "Accueil"
+        ],
+        "active": true,
+        "notes": "Prévenir à l'arrivée.",
+        "birthDate": null,
+        "availabilityPeriods": [
+          "afternoon"
+        ],
+        "availabilityNote": "Après le repas.",
+        "mergedIntoId": null,
+        "mergedAt": null,
+        "erasedAt": null,
+        "createdAt": "2026-10-05T20:27:50.588Z",
+        "updatedAt": "2026-10-05T20:27:50.588Z"
       }
     }
   ],
@@ -251,7 +313,7 @@
   "sectorLeaders": [
     {
       "roleName": "Accueil",
-      "name": "Nicolas Exemple",
+      "name": "Nicolas Berger",
       "email": "video.exports.leader@example.org",
       "createdAt": "2026-10-05T20:27:50.610Z"
     }
@@ -453,14 +515,81 @@
       },
       "causedByLogId": null,
       "createdAt": "2026-10-05T20:27:50.606Z"
+    },
+    {
+      "id": "cmux07ck70005o1a5sd1q3fj7",
+      "eventId": "video-data-exports-event",
+      "actorType": "admin",
+      "actorId": "video-data-exports-owner",
+      "action": "event.published",
+      "entityType": "Event",
+      "entityId": "video-data-exports-event",
+      "changes": {
+        "isListed": {
+          "to": false,
+          "from": true
+        },
+        "publicStatus": {
+          "to": "published",
+          "from": "draft"
+        }
+      },
+      "causedByLogId": null,
+      "createdAt": "2026-10-06T18:20:06.871Z"
+    },
+    {
+      "id": "cmux07cm4000ao1a58acghofh",
+      "eventId": "video-data-exports-event",
+      "actorType": "volunteer",
+      "actorId": "video-data-exports-member-2",
+      "action": "registration.created",
+      "entityType": "Registration",
+      "entityId": "cmux07clp0007o1a5hyeufw2x",
+      "changes": {
+        "source": {
+          "to": "public_form",
+          "from": null
+        },
+        "shiftId": {
+          "to": "cmuvpbr9i0001jsa553j0izrc",
+          "from": null
+        }
+      },
+      "causedByLogId": null,
+      "createdAt": "2026-10-06T18:20:06.940Z"
+    },
+    {
+      "id": "cmux07cqm000eo1a56xgim6zj",
+      "eventId": "video-data-exports-event",
+      "actorType": "admin",
+      "actorId": "video-data-exports-owner",
+      "action": "message.sent",
+      "entityType": "Event",
+      "entityId": "video-data-exports-event",
+      "changes": {
+        "subject": {
+          "to": "Formation — copie des résultats d'envoi",
+          "from": null
+        },
+        "audience": {
+          "to": "les bénévoles du créneau Logistique — archives (samedi 17 octobre, 12:00–14:00)",
+          "from": null
+        },
+        "recipients": {
+          "to": 2,
+          "from": null
+        }
+      },
+      "causedByLogId": null,
+      "createdAt": "2026-10-06T18:20:07.102Z"
     }
   ],
   "counts": {
     "shifts": 2,
-    "registrations": 3,
+    "registrations": 4,
     "pages": 1,
     "sectorLeaders": 1,
     "milestones": 1,
-    "log": 6
+    "log": 9
   }
 }

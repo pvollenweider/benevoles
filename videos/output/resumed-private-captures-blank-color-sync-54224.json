@@ -1,0 +1,15 @@
+{
+  "updatedAt": "2026-10-06T18:31:14.392Z",
+  "requested": [
+    "EVENT_CREATE_BLANK"
+  ],
+  "active": null,
+  "results": [
+    {
+      "id": "EVENT_CREATE_BLANK",
+      "status": "needs-review",
+      "error": "videos/tools/local-production.ts exited 1"
+    }
+  ],
+  "note": "Actual narrated capture and automated final checks. No publication or complete human validation claimed."
+}

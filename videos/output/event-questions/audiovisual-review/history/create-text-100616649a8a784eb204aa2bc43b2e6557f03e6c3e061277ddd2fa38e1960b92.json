@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:09:12.929Z",
+  "videoSha256": "50715a383930b94c66960386d0996cbbd6de02ea593b0ed689ab9af2ac881d81",
+  "promptSha256": "ce74e892aec4fb02ca695945deebb62b619f3f1d6f709912c09025f031a3bfd9",
+  "clipSha256": "e70aa2b2140ffe08270c1717a6bf9b68c8a21240d549be7c98a9438f53fb38f6",
+  "scene": "create-text",
+  "review": {
+    "heardOpening": "Pour une préférence de rendez-vous, laissons un peu de liberté.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Ajoutons Point de rendez-vous préféré.",
+        "visibleSeconds": 4.2,
+        "visible": "Ouverture du formulaire et saisie de l'intitulé « Point de rendez-vous préféré ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.2,
+        "spoken": "Conservons Texte court",
+        "visibleSeconds": 8.5,
+        "visible": "Le menu « Type de réponse » reste sur « Texte court ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Cette question reste facultative.",
+        "visibleSeconds": 14.5,
+        "visible": "La case « Réponse obligatoire » demeure non cochée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.6,
+        "spoken": "Enregistrons.",
+        "visibleSeconds": 21.8,
+        "visible": "Clic sur le bouton Enregistrer puis récapitulatif des 4 questions.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit posé, diction claire et ton engageant en bonne adéquation avec la démonstration."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

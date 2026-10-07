@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:37:33.159Z",
+  "videoSha256": "0e1d6ca56b0033e4694d6f34c74897fff990758b119a02cf3febeec27d85a9ed",
+  "promptSha256": "db4ef558e5ec6c4f4f9682cf65490ab089dd10ec7fc4c8740327914cee3025a5",
+  "clipSha256": "ae1a6a4a7d866ea95aa7eee07b8a80b650bac70688d7677570292558845311cb",
+  "scene": "retention",
+  "review": {
+    "heardOpening": "Le suivi de la file est volontairement récent",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le suivi de la file est volontairement récent",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage de la page Paramètres avec la section Emails envoyés",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "La page montre les deux cents lignes les plus récentes",
+        "visibleSeconds": 9.2,
+        "visible": "Tableau récapitulatif des derniers emails envoyés affiché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "L'historique des messages ciblés est différent et reste douze mois",
+        "visibleSeconds": 13.5,
+        "visible": "Navigation vers la page Événements et affichage des messages envoyés conservés 12 mois",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier, conforme au support visuel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

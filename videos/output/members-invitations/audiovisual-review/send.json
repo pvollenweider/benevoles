@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T05:11:55.833Z",
+  "videoSha256": "aafb41546e04254818368695034ba565cb6196644a16b80cdfc69ec1939a20c2",
+  "promptSha256": "8989cbed4d5978cbbb41f9b21ec12f27eef6505f9533950fa52198738dcc08db",
+  "clipSha256": "0245328233bbdc940a776a831c5e3f7c17ca9252209fcbb2d83d014721e45d92",
+  "scene": "send",
+  "review": {
+    "heardOpening": "Nous sélectionnons maintenant deux personnes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Nous sélectionnons maintenant deux personnes",
+        "visibleSeconds": 0.8,
+        "visible": "Sélection de deux personnes cochées dans la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "et ajoutons un message commun",
+        "visibleSeconds": 2.5,
+        "visible": "Saisie du message personnalisé dans le champ dédié",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "Envoyer deux invitations déclenche des messages individuels",
+        "visibleSeconds": 5.6,
+        "visible": "Clic sur le bouton d'envoi des invitations",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Dans la boîte de démonstration, chaque personne reçoit son propre email",
+        "visibleSeconds": 7,
+        "visible": "Affichage de l'outil Mailpit avec les messages individuels",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier bien adapté au tutoriel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

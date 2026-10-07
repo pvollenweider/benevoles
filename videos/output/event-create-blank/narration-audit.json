@@ -2,7 +2,7 @@
   "model": "gemini-3.8-flash",
   "promptVersion": 2,
   "auditedAt": "2026-10-06T17:16:11.200Z",
-  "revalidatedAt": "2026-10-06T17:16:11.202Z",
+  "revalidatedAt": "2026-10-06T18:31:46.588Z",
   "source": "generated narration WAV",
   "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
   "segments": [

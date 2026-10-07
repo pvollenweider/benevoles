@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:31:03.022Z",
+  "videoSha256": "40c2daacfc4c477f3a0078d17f0c72458436f38255c820e3d6645f649fd1db79",
+  "promptSha256": "d825ee0a6aad3f9b83d1aa3bc11e51965f5859ba4ce75435679248c384d5fb68",
+  "clipSha256": "ff67d6a6f486728fda47ee6196a4d7f8c553508867ba50e024df178a47de393d",
+  "scene": "invited-update",
+  "review": {
+    "heardOpening": "Aline se réinscrit maintenant depuis son véritable lien d'invitation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "pour un deuxième créneau",
+        "visibleSeconds": 2.5,
+        "visible": "Sélection du créneau 12h-14h puis validation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Choisissons L au lieu de M",
+        "visibleSeconds": 10.5,
+        "visible": "Aucune sélection de taille effectuée à l'écran",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Confirmons",
+        "visibleSeconds": 16.8,
+        "visible": "Clic sur le bouton Confirmer mon inscription",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:10 - La taille L n'est pas cochée malgré l'annonce vocale."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire et débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -57,7 +57,8 @@ export async function loadCurrentVideoPrisma(base: CurrentVideoBase) {
     }
     // The type is only a compile-time convenience for the old tooling checkout;
     // the runtime client's model fields always come from the verified snapshot.
-    return { db: loaded.prisma as import("../../src/generated/prisma/client").PrismaClient, product, unregister: async () => { loader.unregister() } }
+    const tokens = loader.require(path.join(snapshot, "src/lib/token-vault.ts"), parent) as typeof import("../../src/lib/token-vault")
+    return { db: loaded.prisma as import("../../src/generated/prisma/client").PrismaClient, tokens, product, unregister: async () => { loader.unregister() } }
   } catch (error) {
     loader.unregister()
     throw error
