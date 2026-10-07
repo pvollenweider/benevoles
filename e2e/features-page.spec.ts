@@ -34,7 +34,8 @@ test("« Sur cette page » leads to every section, and « Comment ça marche » 
   }
   await toc.getByRole("link", { name: "Comment ça marche" }).click()
   await expect(page).toHaveURL(/#comment-ca-marche$/)
-  const steps = page.locator("section[aria-labelledby='comment-ca-marche'] ol > li")
+  // Sections are plain <section>s (not region landmarks): the steps are the list that follows the heading.
+  const steps = page.locator("section:has(h2#comment-ca-marche) ol > li")
   await expect(steps).toHaveCount(3)
   await expect(steps.first().getByRole("heading", { level: 3 })).toHaveText("Étape 1 : Préparez le planning")
 })
