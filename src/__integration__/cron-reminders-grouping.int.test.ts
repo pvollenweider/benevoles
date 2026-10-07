@@ -19,7 +19,7 @@ vi.mock("@/lib/waitlist", () => ({
 }))
 vi.mock("@/lib/notifications/outbox", () => ({
   deliverOutbox: vi.fn().mockResolvedValue(null),
-  outboxHealth: vi.fn().mockResolvedValue({ healthy: true }),
+  outboxHealth: vi.fn().mockResolvedValue({ healthy: true, stuck: false }),
 }))
 
 const sendNotificationMock = vi.hoisted(() => vi.fn())

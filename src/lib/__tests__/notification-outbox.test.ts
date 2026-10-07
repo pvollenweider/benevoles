@@ -231,7 +231,7 @@ describe("outboxHealth (#316)", () => {
   it("healthy when nothing failed, nothing stuck", async () => {
     m.count.mockResolvedValue(0)
     m.findFirst.mockResolvedValue({ createdAt: new Date(now.getTime() - 5 * 60000) })
-    expect(await outboxHealth(now)).toEqual({ failedLastDay: 0, oldestPendingMinutes: 5, staleClaims: 0, healthy: true })
+    expect(await outboxHealth(now)).toEqual({ failedLastDay: 0, oldestPendingMinutes: 5, staleClaims: 0, healthy: true, stuck: false })
   })
 
   it("unhealthy on a failure, a stale claim, or a pending row older than 2 h", async () => {
@@ -241,6 +241,18 @@ describe("outboxHealth (#316)", () => {
 
     m.count.mockResolvedValueOnce(0).mockResolvedValueOnce(0)
     m.findFirst.mockResolvedValue({ createdAt: new Date(now.getTime() - 3 * 60 * 60000) })
-    expect(await outboxHealth(now)).toMatchObject({ oldestPendingMinutes: 180, healthy: false })
+    expect(await outboxHealth(now)).toMatchObject({ oldestPendingMinutes: 180, healthy: false, stuck: true })
+
+    m.count.mockResolvedValueOnce(0).mockResolvedValueOnce(2)
+    m.findFirst.mockResolvedValue(null)
+    expect(await outboxHealth(now)).toMatchObject({ staleClaims: 2, healthy: false, stuck: true })
+  })
+
+  // Regression: one row that gave up (already reported when it failed) made the hourly cron alert
+  // « Notification outbox unhealthy » every hour for a day. Unhealthy for the health page, not stuck.
+  it("a row that gave up, with nothing pending, is unhealthy but not stuck: no hourly alert", async () => {
+    m.count.mockResolvedValueOnce(1).mockResolvedValueOnce(0)
+    m.findFirst.mockResolvedValue(null)
+    expect(await outboxHealth(now)).toEqual({ failedLastDay: 1, oldestPendingMinutes: null, staleClaims: 0, healthy: false, stuck: false })
   })
 })
