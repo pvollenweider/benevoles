@@ -5,6 +5,7 @@ import { describe, it, expect, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, cleanup, within } from "@testing-library/react"
 import LegalLayout from "../layout"
+import { CONTENT_PROSE_CLASS } from "@/components/public/ContentShell"
 import PrivacyPage from "../privacy/page"
 import TermsPage from "../terms/page"
 import ProcessingAgreementPage from "../sous-traitance/page"
@@ -53,6 +54,19 @@ describe("legal pages layout", () => {
     const banner = screen.getByRole("banner")
     expect(within(banner).getByRole("link", { name: "benevol.app" })).toHaveAttribute("href", "/")
     expect(banner).toHaveTextContent("Documents légaux")
+    // Same 24 px target and focus outline as the content pages' header link.
+    const home = within(banner).getByRole("link", { name: "benevol.app" })
+    expect(home.className).toContain("py-3 -my-3")
+    expect(home.className).toContain("focus-visible:outline-blue-600")
+  })
+
+  // The content pages' prose recipe: focus outline on the links, scroll margin on the headings.
+  it("draws the document with the shared prose recipe", () => {
+    renderLegal("/legal/privacy")
+    const article = screen.getByRole("main").querySelector("article")!
+    expect(article.className).toBe(CONTENT_PROSE_CLASS)
+    expect(article.className).toContain("prose-a:focus-visible:outline")
+    expect(article.className).toContain("prose-headings:scroll-mt-4")
   })
 
   // The old legal footer also linked the processing agreement and the sub-processors list; the

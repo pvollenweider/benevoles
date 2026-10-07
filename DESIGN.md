@@ -294,7 +294,7 @@ La timeline Gantt (inscription bénévole + vue admin) est le composant le plus 
 
 Ces règles restent la cible ; le code s'en écarte encore aux endroits suivants, à corriger :
 
-- **Règle No-Caps** : `prose-th:uppercase prose-th:tracking-wider` sur les en-têtes de tableaux des pages de contenu (`ContentShell.tsx`) et des pages légales (`legal/layout.tsx`).
+- **Règle No-Caps** : `prose-th:uppercase prose-th:tracking-wider` sur les en-têtes de tableaux des pages de contenu (`CONTENT_PROSE_CLASS` de `ContentShell.tsx`, repris par les pages légales).
 - **Ombres au repos** : CTA collant de la page publique en `shadow-xl` (`EventPageClient.tsx`), toasts et menus déroulants en `shadow-lg`.
 - **Forme des boutons** : une douzaine de boutons primaires en `rounded-full` et quelques-uns en `rounded-lg`, hors convention `rounded-xl`.
 - **Mouvement non gardé** : glissement du bouton de l'interrupteur de la charte (`OrgCharterForm.tsx`, `transition` avec `translate-x-5`), que le garde-fou `src/__tests__/a11y/motion-safe.test.ts` ne détecte pas encore.
