@@ -15,6 +15,9 @@
 /playwright-report
 /test-results
 /blob-report
+# Lighthouse CI reports (#773)
+/.lighthouseci
+/lighthouse-reports
 # Video renders (#636): the heavy files stay out of Git (MP4 and WAV are regenerated or kept
 # locally; captures too), the small files that let a video be reassembled are committed.
 /videos/output/**
