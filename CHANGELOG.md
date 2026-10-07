@@ -40,6 +40,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Liste « Toutes les fiches » plus lisible** : sur `/doc` et les guides, le titre de chaque fiche est sur sa propre ligne, son résumé en dessous en plus petit.
 - **Lecture de la documentation** : titres plus grands et mieux hiérarchisés (titre de page en 30 px), paragraphes et listes limités à 70 caractères de large, interligne qui suit la taille du texte ; la page se lit sans défilement horizontal à 320 px, même avec un espacement du texte agrandi.
 - **Chemins dans l'interface plutôt qu'adresses internes** : les fiches des organisateurs indiquent où trouver chaque page avec les libellés de l'application (par exemple **Événements**, puis l'événement, puis **Gérer les créneaux**) au lieu d'adresses `/admin/…`.
+- **Images des pages publiques plus légères et mieux mises en cache** (#773, #759) : les captures d'écran de la documentation s'affichent à leur taille réelle réservée dès le chargement (plus de saut de mise en page), se chargent au fil de la lecture après la première, et restent en cache dans le navigateur au lieu d'être revérifiées à chaque visite ; une capture refaite est servie à jour. Sur la page d'accueil, la capture du téléphone est servie dans une taille plus proche de son affichage sur mobile.
 
 ### Corrigé
 

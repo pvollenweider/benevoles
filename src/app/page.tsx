@@ -274,6 +274,8 @@ function LandingPage() {
                   width={780}
                   height={1688}
                   alt="La page d'inscription sur un téléphone : la Fête du village de Montvert, ses postes (Montage, Accueil, Buvette, Navette, Sécurité) sur une frise horaire, avec les places prises et les créneaux complets."
+                  // The frame's inner width (300 or 340 px less its 10 px borders). The 512 px width
+                  // of next.config.ts `images.imageSizes` serves it to 1.75x screens (#773).
                   sizes="(min-width: 1024px) 320px, 280px"
                   loading="eager"
                   fetchPriority="high"
@@ -328,7 +330,8 @@ function LandingPage() {
                     width={1280}
                     height={800}
                     alt={b.alt}
-                    sizes="(min-width: 1024px) 640px, 100vw"
+                    // Its column from lg; below, the section's width less its padding (px-4, sm:px-6).
+                    sizes="(min-width: 1024px) 640px, (min-width: 640px) calc(100vw - 3rem), calc(100vw - 2rem)"
                     className="w-full h-auto rounded-xl border border-gray-200 shadow-lg bg-white"
                   />
                 </div>

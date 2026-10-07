@@ -39,7 +39,18 @@ import { DOC_VIDEO_ATTRIBUTE, videoReferenceId } from "@/lib/doc-video-reference
 // videoCard (#645) turns a `<!-- video: ID -->` line of the repo's own Markdown into the HTML the
 // caller returns for that id (src/lib/doc-video-references.ts), "" to render nothing. Only block
 // HTML on its own line counts; any other raw HTML is left to DOMPurify, as before.
-function makeRenderer(shiftHeadings: boolean, headingIds: boolean, videoCard?: (id: string) => string): Renderer {
+//
+// image (#759 F2) draws each Markdown image itself, given its index in the page (0 for the first):
+// the repo's documentation gives its screenshots their size and lazy loading (src/lib/doc-images.ts).
+// Admin-authored event pages keep marked's own <img>.
+export type MarkdownImage = { src: string; alt: string; title?: string | null }
+
+function makeRenderer(
+  shiftHeadings: boolean,
+  headingIds: boolean,
+  videoCard?: (id: string) => string,
+  image?: (img: MarkdownImage, index: number) => string,
+): Renderer {
   const renderer = new Renderer()
   const slug = createHeadingSlugger()
   renderer.heading = function ({ tokens, depth }) {
@@ -54,7 +65,26 @@ function makeRenderer(shiftHeadings: boolean, headingIds: boolean, videoCard?: (
       return id ? videoCard(id) : text
     }
   }
+  if (image) {
+    let index = 0
+    renderer.image = function ({ href, title, text, tokens }) {
+      // Plain text for the caller to escape once: an entity written in the source (« &amp; ») is
+      // decoded here, otherwise it would reach the alt attribute double-escaped.
+      const alt = decodeBasicEntities(tokens ? this.parser.parseInline(tokens, this.parser.textRenderer) : text)
+      return image({ src: href, alt, title }, index++)
+    }
+  }
   return renderer
+}
+
+/** The few entities marked can leave in plain text, back to their characters (&amp; last). */
+function decodeBasicEntities(text: string): string {
+  return text
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#0?39;|&apos;/g, "'")
+    .replace(/&amp;/g, "&")
 }
 
 const ALLOWED_TAGS = [
@@ -68,13 +98,25 @@ const ALLOWED_TAGS = [
 // img needs its own alt text (WCAG 1.1.1) — Markdown's ![alt](src) already forces authors to
 // supply one syntactically, but DOMPurify still needs "alt" allowlisted for it to survive.
 const ALLOWED_ATTR = ["href", "title", "src", "alt", "width", "height"]
+// Only kept when the caller draws the images itself (`image`).
+const IMAGE_LOADING_ATTR = ["loading", "decoding"]
 
 export function renderEventPageMarkdown(
   content: string,
-  options: { shiftHeadings?: boolean; headingIds?: boolean; videoCard?: (id: string) => string } = {},
+  options: {
+    shiftHeadings?: boolean
+    headingIds?: boolean
+    videoCard?: (id: string) => string
+    image?: (img: MarkdownImage, index: number) => string
+  } = {},
 ): string {
-  const { shiftHeadings = true, headingIds = false, videoCard } = options
-  const html = marked.parse(content, { async: false, gfm: true, breaks: true, renderer: makeRenderer(shiftHeadings, headingIds, videoCard) })
-  const allowedAttr = [...ALLOWED_ATTR, ...(headingIds ? ["id"] : []), ...(videoCard ? [DOC_VIDEO_ATTRIBUTE] : [])]
+  const { shiftHeadings = true, headingIds = false, videoCard, image } = options
+  const html = marked.parse(content, { async: false, gfm: true, breaks: true, renderer: makeRenderer(shiftHeadings, headingIds, videoCard, image) })
+  const allowedAttr = [
+    ...ALLOWED_ATTR,
+    ...(headingIds ? ["id"] : []),
+    ...(videoCard ? [DOC_VIDEO_ATTRIBUTE] : []),
+    ...(image ? IMAGE_LOADING_ATTR : []),
+  ]
   return DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR: allowedAttr })
 }
