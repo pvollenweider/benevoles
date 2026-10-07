@@ -21,7 +21,7 @@ export type PublicPage = {
   metaTitle: string
   /** Meta and social description, about 140 to 160 characters. */
   metaDescription: string
-  /** Markdown file at the repo root the page is rendered from; its mtime is the sitemap's lastModified. */
+  /** Markdown file at the repo root the page is rendered from; its last commit is the sitemap's lastModified (doc-lastmod.json). */
   source: string | null
   /** Sitemap priority. */
   priority: number

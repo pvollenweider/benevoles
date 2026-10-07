@@ -29,6 +29,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Corrigé
 
 - **Bénévole sans adresse email** : annuler un créneau (ou toute autre action qui prévient les bénévoles par email) ne met plus en file un message pour une personne ajoutée à la main sans adresse. Le message ne pouvait jamais partir : il échouait six fois et déclenchait l'alerte de santé de la file d'envoi.
+- **Dates du plan du site** : dans `sitemap.xml`, la date de dernière modification de chaque page de documentation et de contenu est celle de la dernière modification réelle de son texte, et non plus l'heure de construction de l'application, identique pour toutes les pages à chaque mise en ligne.
 - **Filtre de la documentation** : le champ « Filtrer les fiches » occupe sa place dès l'affichage de la page, la liste ne descend plus quand il apparaît ; sans JavaScript, il ne laisse aucun espace vide.
 
 ## [2.1.0] — 2026-10-06

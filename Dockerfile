@@ -25,6 +25,9 @@ WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# doc-lastmod.json n'existe que si deploy.yml l'a écrit : sans lui, un objet vide (pas de lastmod
+# dans le sitemap) plutôt qu'un COPY qui échoue dans l'étape runner.
+RUN [ -f doc-lastmod.json ] || echo '{}' > doc-lastmod.json
 
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV DATABASE_URL=postgresql://build:build@localhost/build
@@ -74,6 +77,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/ACCORD-SOUS-TRAITANCE.md ./ACCORD
 COPY --from=builder --chown=nextjs:nodejs /app/SOUS-TRAITANTS.md ./SOUS-TRAITANTS.md
 # Documentation par tâche (#649) : guide/<slug>.md, lue de la même façon par /doc/<slug>.
 COPY --from=builder --chown=nextjs:nodejs /app/guide ./guide
+# Date du dernier commit de chacune de ces sources (lastmod du sitemap), écrite par
+# scripts/doc-lastmod.mjs dans deploy.yml avant le build ; `{}` pour un build local (étape builder).
+COPY --from=builder --chown=nextjs:nodejs /app/doc-lastmod.json ./doc-lastmod.json
 
 # Catalogue vidéo (#644) : src/lib/video-catalog.ts lit ces fichiers avec fs, hors du tracing de
 # `output: "standalone"`, comme les guides ci-dessus. Le reste de videos/ (tools, assets, output)

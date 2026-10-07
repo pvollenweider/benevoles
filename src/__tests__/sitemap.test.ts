@@ -36,10 +36,10 @@ describe("sitemap on the apex host", () => {
     expect(entries.map((e) => e.url).slice(8)).toEqual(readDocUnits().map((u) => `https://www.benevol.app/doc/${u.slug}`))
     expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/revenir-sur-la-page-d-inscription")
     expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/configurer-les-creneaux")
-    // The guides and the units are real files in the repo: their date is known.
-    expect(entries.find((e) => e.url.endsWith("/doc/admin"))?.lastModified).toBeInstanceOf(Date)
-    expect(entries.find((e) => e.url.endsWith("/legal/sous-traitants"))?.lastModified).toBeInstanceOf(Date)
-    expect(entries.find((e) => e.url.endsWith("/doc/revenir-sur-la-page-d-inscription"))?.lastModified).toBeInstanceOf(Date)
+    // Dates come from doc-lastmod.json, written at deploy from git: without it (tests,
+    // development) no page claims a lastmod, rather than the build time.
+    expect(entries.find((e) => e.url.endsWith("/doc/admin"))?.lastModified).toBeUndefined()
+    expect(entries.find((e) => e.url.endsWith("/doc/revenir-sur-la-page-d-inscription"))?.lastModified).toBeUndefined()
   })
 
   it("stays empty on staging and on unknown hosts", async () => {

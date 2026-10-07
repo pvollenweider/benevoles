@@ -31,6 +31,8 @@
 /build
 
 # misc
+# Last commit date of each doc source, generated at deploy (scripts/doc-lastmod.mjs).
+/doc-lastmod.json
 .DS_Store
 *.pem
 
