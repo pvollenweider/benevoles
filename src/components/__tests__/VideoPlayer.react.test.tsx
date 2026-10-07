@@ -90,6 +90,41 @@ describe("VideoPlayer — fallback on error (#644 accessibility review)", () => 
   })
 })
 
+describe("VideoPlayer — reserved frame (#773, no layout shift)", () => {
+  it("gives the wrapper and the video the frame's ratio and size before any metadata", () => {
+    render(<VideoPlayer title="Titre" mediaUrls={mediaUrls} frame={{ width: 1280, height: 800 }} />)
+    const video = document.querySelector("video")!
+    expect(video).toHaveAttribute("width", "1280")
+    expect(video).toHaveAttribute("height", "800")
+    expect(video.style.aspectRatio).toBe("1280 / 800")
+    expect(video.parentElement!.style.aspectRatio).toBe("1280 / 800")
+  })
+
+  it("reserves 16:9 when the frame is unknown", () => {
+    render(<VideoPlayer title="Titre" mediaUrls={mediaUrls} />)
+    const video = document.querySelector("video")!
+    expect(video).toHaveAttribute("width", "1280")
+    expect(video).toHaveAttribute("height", "720")
+    expect(video.parentElement!.style.aspectRatio).toBe("1280 / 720")
+  })
+
+  it("keeps the same box when swapping to the fallback, without a video", async () => {
+    render(<VideoPlayer title="Titre" mediaUrls={mediaUrls} frame={{ width: 1280, height: 800 }} />)
+    const box = document.querySelector("video")!.parentElement!
+    fireEvent.error(document.querySelector("video")!)
+    await settle()
+    const fallback = document.querySelector("[tabindex='-1']")!
+    expect(fallback.parentElement).toBe(box)
+    expect(box.style.aspectRatio).toBe("1280 / 800")
+    expect(fallback).toHaveClass("h-full", "w-full")
+  })
+
+  it("reserves the frame for the « bientôt disponible » message too", () => {
+    render(<VideoPlayer title="Titre" mediaUrls={null} frame={{ width: 1280, height: 800 }} />)
+    expect(screen.getByText("Vidéo bientôt disponible.").closest("[tabindex='-1']")!.parentElement!.style.aspectRatio).toBe("1280 / 800")
+  })
+})
+
 describe("VideoPlayer — autoplay (#644 owner decision)", () => {
   it("calls play() when arriving from the gallery and motion is allowed", async () => {
     stubReducedMotion(false)

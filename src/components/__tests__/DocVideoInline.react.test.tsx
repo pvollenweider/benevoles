@@ -30,7 +30,7 @@ const player: DocVideoPlayer = {
     captions: "https://medias.benevol.app/x/x.vtt",
     transcript: "https://medias.benevol.app/x/x.txt",
   },
-  aspectRatio: "1280 / 800",
+  frame: { width: 1280, height: 800 },
   transcript: ["Premier passage.", "Second passage."],
 }
 
@@ -104,6 +104,7 @@ describe("DocVideoInline", () => {
     expect(video).toBeVisible()
     expect(video).not.toHaveAttribute("autoplay")
     expect(video.style.aspectRatio).toBe("1280 / 800")
+    expect(video.parentElement!.style.aspectRatio).toBe("1280 / 800")
     expect(video.querySelector('track[kind="captions"]')).toHaveAttribute("srclang", "fr")
     expect(screen.getByRole("group", { name: "Cette vidéo vous a-t-elle été utile ?" })).toBeInTheDocument()
     // The question is not a heading: it would open a section in the unit's outline.

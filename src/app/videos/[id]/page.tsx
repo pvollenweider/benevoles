@@ -4,6 +4,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, permanentRedirect } from "next/navigation"
+import { preload } from "react-dom"
 import {
   relatedVideos,
   videoMediaUrls,
@@ -14,6 +15,7 @@ import {
   type Video,
 } from "@/lib/video-catalog"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
+import { videoFrame } from "@/lib/video-frame"
 import { env } from "@/lib/env"
 import { serializeJsonLd, videoDetailMetadata, videoJsonLd } from "@/lib/video-seo"
 import { videoSeoContext } from "@/lib/video-seo-context"
@@ -62,6 +64,12 @@ export default async function VideoDetailPage({ params, searchParams }: { params
   if (isSlug) permanentRedirect(`/videos/${video.id}${fromDoc ? `?${FROM_DOC_PARAM}=${FROM_DOC_VALUE}` : ""}`)
 
   const mediaUrls = videoMediaUrls(video.slug, env.VIDEO_MEDIA_BASE_URL, video.render)
+  // The poster is this page's largest element (#773, Lighthouse LCP): `<video>` has no
+  // `fetchpriority`, so a high-priority image preload (sent by Next.js as a `Link` response header)
+  // starts it with the response, before the HTML is parsed. Same request as the poster's own (no
+  // `crossorigin`: the poster is fetched as a plain image, unlike the media and the captions track),
+  // so it is downloaded once. Only here: a documentation unit mounts its player on the reader's click.
+  if (mediaUrls?.poster) preload(mediaUrls.poster, { as: "image", fetchPriority: "high" })
   const jsonLd = videoJsonLd(video, videoSeoContext())
   const related = relatedVideos(video, catalog)
   const updatedAtLabel = new Date(`${video.updatedAt}T00:00:00Z`).toLocaleDateString("fr-CH", { timeZone: "UTC", day: "numeric", month: "long", year: "numeric" })
@@ -81,7 +89,7 @@ export default async function VideoDetailPage({ params, searchParams }: { params
         <p className="mt-2 text-sm text-gray-600 leading-relaxed">{video.description}</p>
       </div>
 
-      <VideoPlayer title={video.title} mediaUrls={mediaUrls} />
+      <VideoPlayer title={video.title} mediaUrls={mediaUrls} frame={videoFrame(video)} />
 
       <VideoFeedback videoId={video.id} revision={video.revision} audience={video.audience} context={fromDoc ? "documentation" : "masterclass"} />
 

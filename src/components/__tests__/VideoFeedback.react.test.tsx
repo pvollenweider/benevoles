@@ -67,6 +67,8 @@ describe("VideoFeedback", () => {
     await settle()
     expect(screen.queryByRole("button", { name: "Oui" })).toBeNull()
     expect(screen.getByText("Vous avez déjà répondu pour cette vidéo. Merci.")).toBeInTheDocument()
+    // Same reserved area as the buttons it replaces after hydration (#773, no layout shift).
+    expect(screen.getByText("Vous avez déjà répondu pour cette vidéo. Merci.").parentElement).toHaveClass("min-h-[2.375rem]")
     // Not announced on load: nothing happened.
     expect(screen.getByRole("status")).toBeEmptyDOMElement()
   })
