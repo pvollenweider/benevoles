@@ -10,17 +10,14 @@ import GitHubMark from "@/components/GitHubMark"
 import PublicFooter from "@/components/PublicFooter"
 import OrgLogoImage from "@/components/OrgLogoImage"
 import { ORG_LOGO_SELECT, orgLogoOf, type OrgLogo } from "@/lib/org-logo"
-import { apexBaseUrl } from "@/lib/urls"
+import { apexBaseUrl, orgBaseUrl } from "@/lib/urls"
+import { orgHomeMetadata } from "@/lib/event-share"
 import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
 import { CONTACT_EMAIL, LANDING_FAQ, REPOSITORY_URL, jsonLdScript, landingJsonLd, landingMetadata } from "@/lib/landing-seo"
 
 export const dynamic = "force-dynamic"
 
 const DEFAULT_TITLE = "Bénévoles"
-
-// The marketing home of the apex host: its own title, description, social card and structured
-// data (src/lib/landing-seo.ts), canonical on the apex.
-const APEX_METADATA: Metadata = landingMetadata(apexBaseUrl())
 
 // The browser bar takes the hero's colour on the apex home only: organisation pages have their
 // own header colour.
@@ -33,10 +30,16 @@ export async function generateViewport(): Promise<Viewport> {
 // resolveOrgSlug is cached per request, so this adds no extra query.
 export async function generateMetadata(): Promise<Metadata> {
   const rawOrgSlug = (await headers()).get("x-org-slug")
-  if (!rawOrgSlug) return APEX_METADATA
+  // The marketing home of the apex host: its own title, description, social card and structured
+  // data (src/lib/landing-seo.ts), canonical on the apex.
+  if (!rawOrgSlug) return landingMetadata(apexBaseUrl())
   const resolved = await resolveOrgSlug(rawOrgSlug)
   if (!resolved || resolved.redirectUrl) return {}
-  return { title: resolved.org.publicTitle?.trim() || DEFAULT_TITLE }
+  // The organisation's page shared in a message or found in a search (#564 for its events).
+  return orgHomeMetadata(
+    { name: resolved.org.name, title: resolved.org.publicTitle?.trim() || DEFAULT_TITLE },
+    { canonicalUrl: `${orgBaseUrl(resolved.org.slug)}/`, imageUrl: `${apexBaseUrl()}/og-image.png` },
+  )
 }
 
 export default async function HomePage() {

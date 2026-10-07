@@ -5,6 +5,8 @@ import type { Metadata } from "next"
 import { publicPageMetadata } from "@/lib/doc-pages"
 import { renderPublicSource } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
+import { publicPageJsonLd } from "@/lib/structured-data"
+import JsonLd from "@/components/public/JsonLd"
 
 export function generateMetadata(): Metadata {
   return publicPageMetadata("/legal/sous-traitance", apexBaseUrl())
@@ -16,6 +18,7 @@ export default function ProcessingAgreementPage() {
   const { title, html } = renderPublicSource("ACCORD-SOUS-TRAITANCE.md", "Accord de sous-traitance")
   return (
     <>
+      <JsonLd data={publicPageJsonLd("/legal/sous-traitance", apexBaseUrl())} />
       <h1>{title}</h1>
       <div dangerouslySetInnerHTML={{ __html: html }} />
     </>

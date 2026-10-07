@@ -3,6 +3,8 @@ import Link from "next/link"
 import { DOC_GUIDES, publicPageMetadata } from "@/lib/doc-pages"
 import { loadDocUnits } from "@/lib/doc-units"
 import { apexBaseUrl } from "@/lib/urls"
+import { publicPageJsonLd } from "@/lib/structured-data"
+import JsonLd from "@/components/public/JsonLd"
 import DocUnitIndex from "@/components/public/DocUnitIndex"
 import DocFrame from "@/components/public/DocFrame"
 
@@ -16,6 +18,7 @@ export function generateMetadata(): Metadata {
 export default function DocIndexPage() {
   return (
     <DocFrame>
+      <JsonLd data={publicPageJsonLd("/doc", apexBaseUrl())} />
       <h1>Documentation</h1>
       <p>{DOC_GUIDES.length > 1 ? `${DOC_GUIDES.length} guides` : "Un guide"}, selon ce que vous cherchez à faire sur benevol.app&nbsp;:</p>
       <ul>

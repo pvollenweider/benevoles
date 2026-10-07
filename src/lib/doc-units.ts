@@ -5,7 +5,8 @@ import fs from "node:fs"
 import path from "node:path"
 import type { Metadata } from "next"
 import { z } from "zod"
-import { SITE_NAME, splitTitle } from "@/lib/doc-pages"
+import { splitTitle } from "@/lib/doc-pages"
+import { SITE_NAME, seoMetadata } from "@/lib/seo-metadata"
 import { findVideoReferences } from "@/lib/doc-video-references"
 import { DOC_SLUG_RE } from "@/lib/doc-href"
 
@@ -355,17 +356,21 @@ export function relatedDocUnits(unit: DocUnit, units: readonly DocUnit[]): DocUn
   return unit.related.flatMap((slug) => units.filter((u) => u.slug === slug))
 }
 
-/** Metadata of a unit's page: its title and summary, an absolute canonical on the apex host, Open Graph, indexable. */
-export function docUnitMetadata(unit: DocUnit, base: string): Metadata {
-  const url = `${base.replace(/\/+$/, "")}/doc/${unit.slug}`
-  const title = `${unit.title} — ${SITE_NAME}`
-  return {
-    title,
+/**
+ * Metadata of a unit's page: its title and summary, an absolute canonical on the apex host, Open
+ * Graph as an article of its group with its own social card, the large Twitter card, indexable.
+ */
+export function docUnitMetadata(unit: DocUnit, base: string, modifiedTime?: Date | null): Metadata {
+  return seoMetadata({
+    base,
+    path: `/doc/${unit.slug}`,
+    title: unit.title,
     description: unit.summary,
-    alternates: { canonical: url },
-    openGraph: { type: "article", siteName: SITE_NAME, locale: "fr_CH", url, title, description: unit.summary },
-    robots: { index: true, follow: true },
-  }
+    type: "article",
+    imageAlt: `${unit.title}, documentation de ${SITE_NAME}`,
+    section: docGroup(unit.group).title,
+    modifiedTime,
+  })
 }
 
 // ---------------------------------------------------------------------------------------------

@@ -25,7 +25,7 @@ C'est un outil volontairement simple : peu de fonctions, mais fiables et faciles
 - **Vos règles.** Un âge minimum par créneau, un téléphone obligatoire si vous devez pouvoir appeler vos bénévoles, un nombre maximum de créneaux par personne sur un poste très demandé, quelques questions à vous (taille de t-shirt, permis, régime), un poste réservé aux membres qui portent une étiquette (ils s'inscrivent avec leur lien d'invitation).
 - **Ouvrir quand vous êtes prêt.** Le planning peut être publié avant l'ouverture des inscriptions. Ouvrez-les ou fermez-les dans les réglages de l'événement, ou programmez une date d'ouverture et de fermeture ; la page indique aux bénévoles quand revenir.
 - **Visible ou discret.** Un événement peut apparaître sur votre page publique ou rester accessible seulement à ceux qui ont le lien.
-- **Un lien facile à partager.** Copiez le lien de l'événement en un clic, ou partagez-le depuis votre téléphone. Collé dans une messagerie ou sur un réseau social, il s'affiche avec le titre de l'événement, sa description ou ses dates, et une image.
+- **Un lien facile à partager.** Copiez le lien de l'événement en un clic, ou partagez-le depuis votre téléphone. Collé dans une messagerie ou sur un réseau social, il s'affiche avec le titre de l'événement, sa description ou ses dates, et une image. Le lien de la page de votre organisation aussi s'affiche avec son titre et une image.
 
 ## Garder les bénévoles informés
 

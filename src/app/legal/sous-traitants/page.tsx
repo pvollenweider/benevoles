@@ -5,6 +5,8 @@ import type { Metadata } from "next"
 import { publicPageMetadata } from "@/lib/doc-pages"
 import { renderPublicSource } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
+import { publicPageJsonLd } from "@/lib/structured-data"
+import JsonLd from "@/components/public/JsonLd"
 
 export function generateMetadata(): Metadata {
   return publicPageMetadata("/legal/sous-traitants", apexBaseUrl())
@@ -16,6 +18,7 @@ export default function SubProcessorsPage() {
   const { title, html } = renderPublicSource("SOUS-TRAITANTS.md", "Liste des sous-traitants")
   return (
     <>
+      <JsonLd data={publicPageJsonLd("/legal/sous-traitants", apexBaseUrl())} />
       <h1>{title}</h1>
       <div dangerouslySetInnerHTML={{ __html: html }} />
     </>

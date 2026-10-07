@@ -2,22 +2,24 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Metadata } from "next"
+import { CONTACT_EMAIL, REPOSITORY_URL, jsonLdGraph, organizationNode, softwareApplicationNode, softwareSourceCodeNode, websiteNode } from "@/lib/structured-data"
+import { INDEXABLE, OG_LOCALE, SITE_NAME, SOCIAL_IMAGE } from "@/lib/seo-metadata"
+
+export { CONTACT_EMAIL, REPOSITORY_URL }
+export { jsonLdScript } from "@/lib/structured-data"
 
 /**
  * The apex home (www.benevol.app): its metadata, its FAQ and its structured data, in one place.
  * The visible FAQ and the FAQPage JSON-LD both read LANDING_FAQ, so they cannot drift (search
  * engines ignore, or penalise, structured data that the page does not show). Everything here is
- * a fact the product or the legal pages already state: no price, rating or review is published,
- * so none is declared.
+ * a fact the product or the legal pages already state: free (price 0), and no rating or review is
+ * published, so none is declared.
  */
 
 export const LANDING_TITLE = "Planning et inscription des bénévoles | benevol.app"
 export const LANDING_DESCRIPTION =
   "Organisez vos bénévoles par postes et créneaux. Ils s'inscrivent depuis leur téléphone, sans créer de compte. Rappels automatiques, feuilles du jour J. Gratuit."
 export const OG_IMAGE_ALT = "benevol.app : le planning des bénévoles, inscription sans compte"
-
-export const REPOSITORY_URL = "https://github.com/pvollenweider/benevoles"
-export const CONTACT_EMAIL = "contact@benevol.app"
 
 export type FaqEntry = {
   question: string
@@ -64,16 +66,16 @@ export const LANDING_FAQ: readonly FaqEntry[] = [
 /** Metadata of the apex home: canonical, Open Graph and Twitter card, fully indexable. */
 export function landingMetadata(base: string): Metadata {
   const url = `${base.replace(/\/+$/, "")}/`
-  const image = { url: "/og-image.png", width: 1200, height: 630, alt: OG_IMAGE_ALT, type: "image/png" }
+  const image = { url: "/og-image.png", ...SOCIAL_IMAGE, alt: OG_IMAGE_ALT }
   return {
     title: { absolute: LANDING_TITLE },
     description: LANDING_DESCRIPTION,
-    applicationName: "benevol.app",
+    applicationName: SITE_NAME,
     alternates: { canonical: url },
     openGraph: {
       type: "website",
-      siteName: "benevol.app",
-      locale: "fr_CH",
+      siteName: SITE_NAME,
+      locale: OG_LOCALE,
       alternateLocale: ["fr_FR", "fr_BE"],
       url,
       title: LANDING_TITLE,
@@ -81,70 +83,28 @@ export function landingMetadata(base: string): Metadata {
       images: [image],
     },
     twitter: { card: "summary_large_image", title: LANDING_TITLE, description: LANDING_DESCRIPTION, images: [image] },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
-    },
+    robots: INDEXABLE,
     category: "software",
   }
 }
 
 /** The home's structured data: the site, its publisher, the application, its code and the FAQ. */
 export function landingJsonLd(base: string): Record<string, unknown> {
-  const root = base.replace(/\/+$/, "")
-  const url = `${root}/`
-  return {
-    "@context": "https://schema.org",
-    "@graph": [
-      { "@type": "WebSite", "@id": `${url}#website`, url, name: "benevol.app", inLanguage: "fr", publisher: { "@id": `${url}#organization` } },
-      {
-        "@type": "Organization",
-        "@id": `${url}#organization`,
-        name: "benevol.app",
-        url,
-        logo: `${root}/apple-icon.png`,
-        email: CONTACT_EMAIL,
-        sameAs: [REPOSITORY_URL],
-      },
-      {
-        "@type": "SoftwareApplication",
-        "@id": `${url}#application`,
-        name: "benevol.app",
-        url,
-        description: LANDING_DESCRIPTION,
-        applicationCategory: "BusinessApplication",
-        operatingSystem: "Web",
-        inLanguage: "fr",
-        isAccessibleForFree: true,
-        license: "https://www.gnu.org/licenses/agpl-3.0.html",
-        image: `${root}/og-image.png`,
-        publisher: { "@id": `${url}#organization` },
-      },
-      {
-        "@type": "SoftwareSourceCode",
-        "@id": `${url}#code`,
-        name: "benevoles",
-        codeRepository: REPOSITORY_URL,
-        programmingLanguage: "TypeScript",
-        license: "https://www.gnu.org/licenses/agpl-3.0.html",
-        targetProduct: { "@id": `${url}#application` },
-      },
-      {
-        "@type": "FAQPage",
-        "@id": `${url}#faq`,
-        inLanguage: "fr",
-        mainEntity: LANDING_FAQ.map((f) => ({
-          "@type": "Question",
-          name: f.question,
-          acceptedAnswer: { "@type": "Answer", text: f.answer },
-        })),
-      },
-    ],
-  }
-}
-
-/** JSON for a <script type="application/ld+json">: "<" escaped so the data cannot close the element. */
-export function jsonLdScript(data: unknown): string {
-  return JSON.stringify(data).replace(/</g, "\\u003c")
+  const url = `${base.replace(/\/+$/, "")}/`
+  return jsonLdGraph([
+    websiteNode(base),
+    organizationNode(base),
+    softwareApplicationNode(base, LANDING_DESCRIPTION),
+    softwareSourceCodeNode(base),
+    {
+      "@type": "FAQPage",
+      "@id": `${url}#faq`,
+      inLanguage: "fr",
+      mainEntity: LANDING_FAQ.map((f) => ({
+        "@type": "Question",
+        name: f.question,
+        acceptedAnswer: { "@type": "Answer", text: f.answer },
+      })),
+    },
+  ])
 }

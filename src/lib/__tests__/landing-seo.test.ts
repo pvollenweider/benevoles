@@ -34,9 +34,11 @@ describe("landing structured data", () => {
     expect(entities.length).toBeGreaterThanOrEqual(4)
   })
 
-  it("declares no price, rating or review: none is published", () => {
+  // Free is published (the FAQ, the card): a price of 0. No rating or review is.
+  it("declares the free offer, and no rating or review: none is published", () => {
+    expect(node("SoftwareApplication").offers).toEqual({ "@type": "Offer", price: "0", priceCurrency: "CHF" })
     const json = JSON.stringify(landingJsonLd(BASE))
-    for (const field of ["offers", "aggregateRating", "review", "ratingValue", "price"]) expect(json).not.toContain(`"${field}"`)
+    for (const field of ["aggregateRating", "review", "ratingValue"]) expect(json).not.toContain(`"${field}"`)
   })
 
   it("links the site, its publisher, the application and its code", () => {

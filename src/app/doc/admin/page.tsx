@@ -3,6 +3,8 @@ import { publicPageMetadata } from "@/lib/doc-pages"
 import { loadDocUnits } from "@/lib/doc-units"
 import { renderPublicSource } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
+import { publicPageJsonLd } from "@/lib/structured-data"
+import JsonLd from "@/components/public/JsonLd"
 import { env } from "@/lib/env"
 import RoleGuide from "../RoleGuide"
 
@@ -19,5 +21,10 @@ export function generateMetadata(): Metadata {
 // index of its units.
 export default function DocAdminPage() {
   const { title, html } = renderPublicSource("GUIDE_ADMIN.md", "Guide administrateur", env.VIDEO_MEDIA_BASE_URL)
-  return <RoleGuide role="admin" units={loadDocUnits()} title={title} html={html} />
+  return (
+    <>
+      <JsonLd data={publicPageJsonLd("/doc/admin", apexBaseUrl())} />
+      <RoleGuide role="admin" units={loadDocUnits()} title={title} html={html} />
+    </>
+  )
 }

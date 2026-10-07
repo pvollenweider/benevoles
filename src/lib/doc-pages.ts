@@ -2,10 +2,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Metadata, MetadataRoute } from "next"
+import { SITE_NAME, seoMetadata } from "@/lib/seo-metadata"
+
+export { SITE_NAME }
 
 /**
  * The public content pages of the apex site, in one place: the features page, the documentation
- * and the data processing documents (agreement and sub-processors, under /legal). Their navigation, the doc index, their metadata and the apex sitemap all read
+ * and the legal pages (privacy, terms, data processing agreement and sub-processors, under /legal). Their navigation, the doc index, their metadata and the apex sitemap all read
  * this list, so a new page is declared here once and appears everywhere (SEO: the sitemap is what
  * search engines read first). Each page renders its Markdown source file directly: that file is
  * the only copy of the content, also readable on GitHub.
@@ -21,15 +24,13 @@ export type PublicPage = {
   metaTitle: string
   /** Meta and social description, about 140 to 160 characters. */
   metaDescription: string
-  /** Markdown file at the repo root the page is rendered from; its last commit is the sitemap's lastModified (doc-lastmod.json). */
+  /** Markdown file at the repo root the page is rendered from (null: written in its page.tsx); its last commit is the sitemap's lastModified (doc-lastmod.json). */
   source: string | null
   /** Sitemap priority. */
   priority: number
   /** Listed in the doc index and its navigation (the guides). */
   guide: boolean
 }
-
-export const SITE_NAME = "benevol.app"
 
 export const PUBLIC_PAGES: readonly PublicPage[] = [
   {
@@ -50,6 +51,26 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     metaDescription: "Déclaration d'accessibilité de benevol.app : niveau visé (WCAG 2.2 AA), méthode de vérification, limites connues et comment signaler un problème.",
     source: "ACCESSIBILITE.md",
     priority: 0.3,
+    guide: false,
+  },
+  {
+    path: "/legal/privacy",
+    title: "Politique de confidentialité",
+    summary: "Les données que benevol.app traite, pourquoi, où, combien de temps, et vos droits.",
+    metaTitle: "Politique de confidentialité",
+    metaDescription: "Comment benevol.app traite les données des organisateurs et des bénévoles : finalités, hébergement en France, sous-traitants, conservation et vos droits.",
+    source: null,
+    priority: 0.3,
+    guide: false,
+  },
+  {
+    path: "/legal/terms",
+    title: "Conditions générales d'utilisation",
+    summary: "Les règles d'utilisation du service, gratuit et fourni en l'état.",
+    metaTitle: "Conditions générales d'utilisation",
+    metaDescription: "Conditions générales d'utilisation de benevol.app : un service gratuit, les comptes, l'utilisation acceptable, les données, la responsabilité et le droit suisse.",
+    source: null,
+    priority: 0.2,
     guide: false,
   },
   {
@@ -122,19 +143,19 @@ export function publicPage(path: string): PublicPage {
 
 /**
  * Metadata of a public content page: its own title and description, an absolute canonical on
- * the apex host (the same page also answers on organisation subdomains), Open Graph, indexable.
+ * the apex host (the same page also answers on organisation subdomains), Open Graph and Twitter
+ * with its own social card, indexable (src/lib/seo-metadata.ts).
  */
 export function publicPageMetadata(path: string, base: string): Metadata {
   const page = publicPage(path)
-  const url = `${base.replace(/\/+$/, "")}${page.path}`
-  const title = `${page.metaTitle} — ${SITE_NAME}`
-  return {
-    title,
+  return seoMetadata({
+    base,
+    path: page.path,
+    title: page.metaTitle,
     description: page.metaDescription,
-    alternates: { canonical: url },
-    openGraph: { type: "website", siteName: SITE_NAME, locale: "fr_CH", url, title, description: page.metaDescription },
-    robots: { index: true, follow: true },
-  }
+    type: "website",
+    imageAlt: `${page.title}, ${SITE_NAME}`,
+  })
 }
 
 /**

@@ -21,10 +21,13 @@ describe("sitemap on the apex host", () => {
     withHeaders({ host: "www.benevol.app" })
     const sitemap = (await import("../app/sitemap")).default
     const entries = await sitemap()
-    expect(entries.map((e) => e.url).slice(0, 8)).toEqual([
+    expect(entries.map((e) => e.url).slice(0, 10)).toEqual([
       "https://www.benevol.app/",
       "https://www.benevol.app/fonctionnalites",
       "https://www.benevol.app/accessibilite",
+      // Privacy and terms (#747), written in their page.tsx: no source file, so no lastmod.
+      "https://www.benevol.app/legal/privacy",
+      "https://www.benevol.app/legal/terms",
       "https://www.benevol.app/legal/sous-traitance",
       "https://www.benevol.app/legal/sous-traitants",
       "https://www.benevol.app/doc",
@@ -33,7 +36,7 @@ describe("sitemap on the apex host", () => {
     ])
     // Then the documentation units of guide/ (#649), each at /doc/<slug>, in reading order.
     const { readDocUnits } = await import("../lib/doc-units")
-    expect(entries.map((e) => e.url).slice(8)).toEqual(readDocUnits().map((u) => `https://www.benevol.app/doc/${u.slug}`))
+    expect(entries.map((e) => e.url).slice(10)).toEqual(readDocUnits().map((u) => `https://www.benevol.app/doc/${u.slug}`))
     expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/revenir-sur-la-page-d-inscription")
     expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/configurer-les-creneaux")
     // Dates come from doc-lastmod.json, written at deploy from git: without it (tests,

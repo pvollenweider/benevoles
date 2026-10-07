@@ -36,12 +36,31 @@ describe("PUBLIC_PAGES", () => {
 
   it("builds metadata with an absolute canonical on the apex host, Open Graph and indexing", () => {
     const m = publicPageMetadata("/fonctionnalites", "https://www.benevol.app/")
-    expect(m.title).toBe("Fonctionnalités pour organiser vos bénévoles — benevol.app")
+    // The site name after a vertical bar, never an em dash (#747).
+    expect(m.title).toEqual({ absolute: "Fonctionnalités pour organiser vos bénévoles | benevol.app" })
     expect(m.alternates?.canonical).toBe("https://www.benevol.app/fonctionnalites")
-    expect(m.openGraph).toMatchObject({ url: "https://www.benevol.app/fonctionnalites", siteName: "benevol.app", type: "website" })
-    expect(m.robots).toEqual({ index: true, follow: true })
+    expect(m.openGraph).toMatchObject({ url: "https://www.benevol.app/fonctionnalites", siteName: "benevol.app", type: "website", locale: "fr_CH" })
+    expect(m.robots).toMatchObject({ index: true, follow: true })
     expect(publicPageMetadata("/doc/admin", "https://www.benevol.app").alternates?.canonical).toBe("https://www.benevol.app/doc/admin")
     expect(() => publicPageMetadata("/nope", "https://x")).toThrow()
+  })
+})
+
+describe("every public page's link preview", () => {
+  it("has a large social card of its own, the large Twitter card and no em dash in its title", () => {
+    for (const p of PUBLIC_PAGES) {
+      const m = publicPageMetadata(p.path, "https://www.benevol.app")
+      const image = { url: `https://www.benevol.app/og-image.png${p.path}`, width: 1200, height: 630, type: "image/png", alt: `${p.title}, benevol.app` }
+      expect(m.openGraph, p.path).toMatchObject({ type: "website", siteName: "benevol.app", locale: "fr_CH", images: [image] })
+      expect(m.twitter, p.path).toMatchObject({ card: "summary_large_image", description: p.metaDescription, images: [image] })
+      expect(JSON.stringify(m.title), p.path).not.toMatch(/[—·]/)
+      expect(m.description, p.path).toBe(p.metaDescription)
+    }
+  })
+
+  it("declares privacy and terms, written in their page.tsx (no Markdown source)", () => {
+    expect(PUBLIC_PAGES.filter((p) => p.path.startsWith("/legal/")).map((p) => p.path)).toEqual(["/legal/privacy", "/legal/terms", "/legal/sous-traitance", "/legal/sous-traitants"])
+    expect(PUBLIC_PAGES.find((p) => p.path === "/legal/privacy")?.source).toBeNull()
   })
 })
 
@@ -100,11 +119,12 @@ describe("linkSourcesToRoutes", () => {
 })
 
 describe("apexSitemap", () => {
-  it("lists the home, the features page and the documentation on the apex host, with the source file's date", () => {
+  // Privacy and terms too (#747), like the data processing documents.
+  it("lists the home, the features page, the legal pages and the documentation on the apex host, with the source file's date", () => {
     const d = new Date("2026-09-30T10:00:00Z")
     const entries = apexSitemap("https://www.benevol.app/", (src) => (src === "FEATURES.md" ? d : null))
     expect(entries[0]).toEqual({ url: "https://www.benevol.app/", changeFrequency: "weekly", priority: 1 })
-    expect(entries.map((e) => e.url)).toEqual(["https://www.benevol.app/", "https://www.benevol.app/fonctionnalites", "https://www.benevol.app/accessibilite", "https://www.benevol.app/legal/sous-traitance", "https://www.benevol.app/legal/sous-traitants", "https://www.benevol.app/doc", "https://www.benevol.app/doc/admin", "https://www.benevol.app/doc/benevole"])
+    expect(entries.map((e) => e.url)).toEqual(["https://www.benevol.app/", "https://www.benevol.app/fonctionnalites", "https://www.benevol.app/accessibilite", "https://www.benevol.app/legal/privacy", "https://www.benevol.app/legal/terms", "https://www.benevol.app/legal/sous-traitance", "https://www.benevol.app/legal/sous-traitants", "https://www.benevol.app/doc", "https://www.benevol.app/doc/admin", "https://www.benevol.app/doc/benevole"])
     expect(entries.find((e) => e.url.endsWith("/fonctionnalites"))).toMatchObject({ lastModified: d, priority: 0.9 })
     expect(entries.find((e) => e.url.endsWith("/doc/benevole"))).not.toHaveProperty("lastModified")
   })

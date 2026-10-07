@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { eventDateRange, eventPageMetadata, eventShareDescription, previewText, PREVIEW_DESCRIPTION_MAX, type EventForMetadata } from "../event-share"
+import { eventDateRange, eventPageMetadata, eventShareDescription, orgHomeMetadata, previewText, PREVIEW_DESCRIPTION_MAX, type EventForMetadata } from "../event-share"
 
 // Link preview of a shared event (#564).
 const links = { canonicalUrl: "https://fete.benevol.app/fete-2031", imageUrl: "https://www.benevol.app/og-image.png" }
@@ -109,5 +109,31 @@ describe("eventDateRange", () => {
   it("keeps the calendar day as entered, whatever the server's zone", () => {
     // Stored at midnight UTC: formatting in a zone west of UTC would give 31 décembre.
     expect(eventDateRange(d("2032-01-01"), d("2032-01-01"))).toBe("le 1er janvier 2032")
+  })
+})
+
+describe("the locale of a shared event", () => {
+  it("is French as written in Switzerland, like the rest of the site", () => {
+    const m = eventPageMetadata(
+      { title: "Fête", description: null, startDate: new Date("2031-06-06T00:00:00Z"), endDate: new Date("2031-06-06T00:00:00Z"), organizationName: "Asso", publicStatus: "published", isListed: true },
+      { canonicalUrl: "https://asso.benevol.app/fete", imageUrl: "https://www.benevol.app/og-image.png" },
+    )
+    expect(m.openGraph).toMatchObject({ locale: "fr_CH" })
+  })
+})
+
+describe("orgHomeMetadata", () => {
+  it("gives an organisation's page its canonical on its host and a link preview with the platform's card", () => {
+    const links = { canonicalUrl: "https://lausanne-rocks.benevol.app/", imageUrl: "https://www.benevol.app/og-image.png" }
+    const m = orgHomeMetadata({ name: "Lausanne Rocks", title: "Bénévoles du festival" }, links)
+    const description = "Lausanne Rocks cherche des bénévoles : choisissez vos créneaux et inscrivez-vous en ligne, sans créer de compte."
+    expect(m).toMatchObject({
+      title: "Bénévoles du festival",
+      description,
+      alternates: { canonical: links.canonicalUrl },
+      openGraph: { type: "website", siteName: "Lausanne Rocks", locale: "fr_CH", url: links.canonicalUrl, images: [expect.objectContaining({ url: links.imageUrl, width: 1200, height: 630 })] },
+      twitter: { card: "summary_large_image", description },
+    })
+    expect(m).not.toHaveProperty("robots")
   })
 })

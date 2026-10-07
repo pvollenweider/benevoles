@@ -1,5 +1,7 @@
 import type { Metadata } from "next"
-import { publicPage, publicPageMetadata, SITE_NAME } from "@/lib/doc-pages"
+import { publicPageMetadata } from "@/lib/doc-pages"
+import { publicPageJsonLd } from "@/lib/structured-data"
+import JsonLd from "@/components/public/JsonLd"
 import { renderPublicSource } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
 import { env } from "@/lib/env"
@@ -16,22 +18,10 @@ export function generateMetadata(): Metadata {
 // file changes this page, nothing here duplicates it.
 export default function FeaturesPage() {
   const { title, html } = renderPublicSource("FEATURES.md", "Fonctionnalités", env.VIDEO_MEDIA_BASE_URL)
-  const page = publicPage("/fonctionnalites")
-  // Minimal and exact: what the product is, where it lives, its language. No price, rating or
-  // review (none is published). "<" escaped so the JSON can't close the script element.
-  const jsonLd = JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: SITE_NAME,
-    url: `${apexBaseUrl()}/`,
-    applicationCategory: "BusinessApplication",
-    operatingSystem: "Web",
-    inLanguage: "fr",
-    description: page.metaDescription,
-  }).replace(/</g, "\\u003c")
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
+      {/* The page, its breadcrumb and the application it presents (src/lib/structured-data.ts). */}
+      <JsonLd data={publicPageJsonLd("/fonctionnalites", apexBaseUrl())} />
       <h1>{title}</h1>
       <div dangerouslySetInnerHTML={{ __html: html }} />
     </>

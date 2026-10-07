@@ -5,6 +5,8 @@ import { DOC_ROLE_INFO, docGroup, docGroupHref, docUnitMetadata, loadDocUnits, r
 import { docJumpLinks, docMenuSections, docGroupSiblings, docUnitNeighbours } from "@/lib/doc-navigation"
 import { headingIdsOf, renderDocUnitParts } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
+import { docUnitJsonLd } from "@/lib/structured-data"
+import JsonLd from "@/components/public/JsonLd"
 import { env } from "@/lib/env"
 import DocFrame from "@/components/public/DocFrame"
 import DocSideMenu from "../DocSideMenu"
@@ -53,6 +55,7 @@ export default async function DocUnitPage({ params }: Props) {
 
   return (
     <DocFrame menu={<DocSideMenu sections={docMenuSections(units, unit.slug)} currentSlug={unit.slug} />}>
+      <JsonLd data={docUnitJsonLd(unit, apexBaseUrl())} />
       <nav aria-label="Fil d'Ariane" className="not-prose mb-6 text-sm text-gray-600 dark:text-gray-400">
         <ol className="flex flex-wrap items-center gap-x-2">
           <li>

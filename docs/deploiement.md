@@ -250,6 +250,36 @@ Ce passage fait aussi la purge habituelle des données arrivées en fin de duré
 
 Revenir à une image 1.x sur une base migrée ne fonctionne pas : le code 1.x ne peut plus créer d'inscription, et il ne retrouve pas les liens chiffrés. Le seul retour arrière est la restauration de la sauvegarde de l'étape 1, en perdant ce qui a été saisi depuis.
 
+## Référencement et aperçus de liens
+
+Les adresses absolues des pages (canonique, Open Graph, données structurées, sitemaps) viennent de
+`NEXT_PUBLIC_APP_URL`, lue à chaque requête : l'image est construite sans elle, et aucune page n'est
+générée au build (`connection()` dans `src/app/layout.tsx`). Elle doit donc être définie dans
+l'environnement du conteneur, pas comme argument de build.
+
+Le domaine principal sert :
+
+- `/robots.txt` : moteurs de recherche et assistants IA autorisés sur les pages publiques
+  (`src/lib/crawlers.ts`), zones privées exclues, et l'adresse de l'index des sitemaps ;
+- `/sitemap-index.xml` : le sitemap de `www` (accueil, fonctionnalités, documentation, pages
+  légales), puis celui de chaque organisation active (`<slug>.benevol.app/sitemap.xml`) ;
+- `/llms.txt` et `/llms-full.txt` : le site résumé pour les assistants IA ;
+- `/og-image.png/<chemin>` : l'image d'aperçu de chaque page publique.
+
+Une fois, après le premier déploiement qui les contient :
+
+1. **Google Search Console**, propriété de domaine `benevol.app` (elle couvre `www` et tous les
+   sous-domaines) : **Sitemaps**, soumettre `https://www.benevol.app/sitemap-index.xml`. Les
+   sitemaps des organisations, sur d'autres sous-domaines, sont acceptés parce que la propriété de
+   domaine les couvre. L'ancien `sitemap.xml` soumis peut rester.
+2. **Bing Webmaster Tools** (son index sert aussi à d'autres moteurs, dont DuckDuckGo) : importer
+   le site depuis la Search Console, ou vérifier `benevol.app` par DNS, puis soumettre le même index.
+3. Vérifier un aperçu : l'outil d'inspection d'URL de la Search Console, le
+   [Rich Results Test](https://search.google.com/test/rich-results) sur une fiche (`TechArticle`,
+   `BreadcrumbList`) et le [Sharing Debugger](https://developers.facebook.com/tools/debug/) de Meta
+   sur `/doc` (image, titre, description, adresse en `https://www.benevol.app`). Ce dernier vide aussi
+   le cache des aperçus déjà partagés avec l'ancienne adresse `localhost`.
+
 ## Serveur de médias (vidéos)
 
 `k8s/media.yaml` sert les tutoriels vidéo sur `https://medias.benevol.app` : un nginx, un volume
