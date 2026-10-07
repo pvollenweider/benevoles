@@ -14,6 +14,9 @@ import { apexBaseUrl, orgBaseUrl } from "@/lib/urls"
 import { orgHomeMetadata } from "@/lib/event-share"
 import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
 import { CONTACT_EMAIL, LANDING_FAQ, REPOSITORY_URL, jsonLdScript, landingJsonLd, landingMetadata } from "@/lib/landing-seo"
+import { loadDocUnits } from "@/lib/doc-units"
+import { landingQuickstartLink, landingStartLinks, landingVolunteerGuideLink } from "@/lib/landing-start-guides"
+import LandingStartGuides from "@/components/public/LandingStartGuides"
 
 export const dynamic = "force-dynamic"
 
@@ -199,6 +202,9 @@ const BENEFITS = [
 ]
 
 function LandingPage() {
+  // The documentation's entry points (#764): titles and summaries read from guide/.
+  const units = loadDocUnits()
+  const quickstart = landingQuickstartLink(units)
   return (
     <>
     <main className="min-h-screen bg-white text-gray-900">
@@ -229,6 +235,15 @@ function LandingPage() {
               >
                 Demander un espace<span className="sr-only"> par email ({CONTACT_EMAIL})</span><span aria-hidden="true"> →</span>
               </a>
+              {quickstart && (
+                <Link
+                  href={quickstart.href}
+                  className={`inline-flex items-center gap-2 py-2 text-white text-base font-semibold underline underline-offset-4 decoration-blue-300 hover:decoration-white rounded ${focusRing} focus-visible:outline-white`}
+                >
+                  {/* Says it opens a guide: the page creates nothing by itself. */}
+                  Guide&nbsp;: créer son premier événement<span aria-hidden="true"> →</span>
+                </Link>
+              )}
               <a
                 href={REPOSITORY_URL}
                 target="_blank"
@@ -285,6 +300,9 @@ function LandingPage() {
           </ol>
         </div>
       </section>
+
+      {/* ── Bien démarrer : the essential guides ──────────────────────────── */}
+      <LandingStartGuides links={landingStartLinks(units)} guide={landingVolunteerGuideLink()} />
 
       {/* ── Ce qui change pour vous ──────────────────────────────────────── */}
       <section aria-labelledby="benefits-heading" className="bg-gray-50 border-y border-gray-200 px-4 sm:px-6 py-20 sm:py-24">

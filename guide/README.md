@@ -56,6 +56,7 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 
 ### Démarrer
 
+- [Créer son premier événement](creer-son-premier-evenement.md) : De la demande d'espace au lien partagé : les huit étapes pour publier un premier événement et recevoir ses premières inscriptions. Pour : organisateurs.
 - [Se connecter](se-connecter.md) : Se connecter à l'administration, activer son compte depuis une invitation, changer ou réinitialiser son mot de passe. Pour : organisateurs.
 - [Premiers pas](premiers-pas.md) : La liste Premiers pas guide la mise en place d'une nouvelle organisation, de la page publique à une inscription de test. Pour : organisateurs.
 - [Tableau de bord](tableau-de-bord.md) : Le tableau de bord liste ce qui demande votre attention, du plus urgent au moins urgent, puis les chiffres clés de l'organisation. Pour : organisateurs.
