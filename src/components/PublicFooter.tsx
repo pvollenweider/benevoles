@@ -12,107 +12,108 @@ import GitHubMark from "./GitHubMark"
 const linkClass =
   "inline-flex items-center min-h-6 rounded underline underline-offset-2 decoration-gray-300 dark:decoration-gray-600 hover:decoration-current hover:text-gray-900 dark:hover:text-gray-100 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
 
-const listClass = "flex flex-wrap justify-center gap-x-5 gap-y-1"
+const NEW_TAB = "(ouvre dans un nouvel onglet)"
+const REPOSITORY_URL = "https://github.com/pvollenweider/benevoles"
 
-type FooterLink = { href: string; label: string }
+type FooterLink = { href: string; label: string; external?: boolean; github?: boolean }
+type FooterColumn = { id: string; title: string; links: readonly FooterLink[] }
 
-/** The legal pages every public page links to; the data processing agreement and the sub-processors are linked from them. */
-export const FOOTER_LEGAL_LINKS: readonly FooterLink[] = [
-  { href: "/legal/privacy", label: "Confidentialité" },
-  { href: "/legal/terms", label: "CGU" },
-  { href: "/accessibilite", label: "Accessibilité" },
+const LEGAL: FooterColumn = {
+  id: "footer-legal",
+  title: "Informations légales",
+  links: [
+    { href: "/legal/privacy", label: "Confidentialité" },
+    { href: "/legal/terms", label: "CGU" },
+    { href: "/accessibilite", label: "Accessibilité" },
+  ],
+}
+
+/** benevol.app's own pages: help, the project (sign-in, code, support), legal. */
+export const FOOTER_SITE_COLUMNS: readonly FooterColumn[] = [
+  {
+    id: "footer-help",
+    title: "Aide",
+    links: [
+      { href: "/doc", label: "Documentation" },
+      { href: "/videos", label: "Tutoriels vidéo" },
+      { href: "/nouveautes", label: "Nouveautés" },
+    ],
+  },
+  {
+    id: "footer-project",
+    title: "benevol.app",
+    links: [
+      { href: "/admin/login", label: "Espace organisateur" },
+      { href: REPOSITORY_URL, label: `Code source v${pkg.version}`, external: true, github: true },
+      { href: "https://buymeacoffee.com/benevol.app", label: "Soutenir le projet", external: true },
+    ],
+  },
+  LEGAL,
 ]
 
-/** Help and the organisers' sign-in, on benevol.app's own pages. */
-export const FOOTER_SITE_LINKS: readonly FooterLink[] = [
-  { href: "/doc", label: "Documentation" },
-  { href: "/videos", label: "Tutoriels vidéo" },
-  { href: "/nouveautes", label: "Nouveautés" },
-  { href: "/admin/login", label: "Espace organisateur" },
+/** An organisation's pages: what its volunteers (and its organisers) need, then legal. */
+export const FOOTER_EVENT_COLUMNS: readonly FooterColumn[] = [
+  {
+    id: "footer-help",
+    title: "Aide",
+    links: [
+      { href: "/doc/benevole", label: "Guide bénévole" },
+      { href: "/admin/login", label: "Espace organisateur" },
+    ],
+  },
+  LEGAL,
 ]
 
-/** On an organisation's pages, the help its volunteers need. */
-export const FOOTER_EVENT_LINKS: readonly FooterLink[] = [{ href: "/doc/benevole", label: "Guide bénévole" }]
-
-/** One link (#494): the name, the version and the code, which is on GitHub. */
-function SourceLink() {
+function FooterAnchor({ link }: { link: FooterLink }) {
+  if (!link.external) return <Link href={link.href} className={linkClass}>{link.label}</Link>
   return (
-    <a
-      href="https://github.com/pvollenweider/benevoles"
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`${linkClass} gap-1.5`}
-    >
-      <GitHubMark className="w-3.5 h-3.5" />
-      benevol.app v{pkg.version}
-      <span className="sr-only">, code source sur GitHub (ouvre dans un nouvel onglet)</span>
+    <a href={link.href} target="_blank" rel="noopener noreferrer" className={`${linkClass} gap-1.5`}>
+      {link.github && <GitHubMark className="w-3.5 h-3.5" />}
+      {link.label}{" "}
+      <span className="sr-only">{link.github ? `sur GitHub ${NEW_TAB}` : NEW_TAB}</span>
     </a>
   )
 }
 
-function LinkItems({ links }: { links: readonly FooterLink[] }) {
-  return links.map((l) => (
-    <li key={l.href}>
-      <Link href={l.href} className={linkClass}>{l.label}</Link>
-    </li>
-  ))
-}
-
 /**
- * The footer of the public pages, server-rendered, in two variants:
+ * The footer of the public pages, server-rendered: one `<footer>` (contentinfo), one `<nav>`
+ * « Liens utiles », and in it one column per group, its visible title a `<p>` (not a heading: the
+ * columns stay out of the page outline) that names its list (`<ul aria-labelledby>`). Columns
+ * side by side from `sm`, two per row on a phone, lists left-aligned. Two variants:
  * - `site`, benevol.app's own pages (home, features, documentation, videos, changelog,
- *   accessibility): a primary row (help and the organisers' sign-in) above a quieter row (the
- *   project, its code and support, then the legal pages);
+ *   accessibility): Aide, benevol.app (sign-in, code with the version, support), Informations légales;
  * - `event` (default), the pages an organisation's audience sees (its events, a registration, a
- *   personal or sector leader link): they come for someone else's event, so one quiet row with the
- *   volunteers' guide, the legal pages and the name of the tool, no support appeal, in text-sm
- *   (read on a phone, by volunteers of every age).
- * The navigations are named « Liens utiles » (and « Informations légales »), not « Pied de
- * page », which would repeat the contentinfo role. Each group is a list, without visual separators: a « · » dangles at the
- * end of a wrapped line on a phone.
+ *   personal or sector leader link): Aide (volunteers' guide, organisers' sign-in) and
+ *   Informations légales, then the name and version of the tool on a small line; no support
+ *   appeal nor platform news, they come for someone else's event.
+ * The page puts it after its `</main>`, with `px-4` when it has no container of its own.
  */
 export default function PublicFooter({ variant = "event" }: { variant?: "site" | "event" }) {
-  if (variant === "event") {
-    return (
-      <footer className="mt-12 pb-6 text-sm text-gray-500 dark:text-gray-400">
-        <nav aria-label="Liens utiles">
-          <ul className={listClass}>
-            <li><SourceLink /></li>
-            <LinkItems links={[...FOOTER_EVENT_LINKS, ...FOOTER_LEGAL_LINKS]} />
-          </ul>
-        </nav>
-      </footer>
-    )
-  }
-
+  const columns = variant === "site" ? FOOTER_SITE_COLUMNS : FOOTER_EVENT_COLUMNS
+  const width = variant === "site" ? "max-w-3xl" : "max-w-xl"
   return (
-    <footer className="mt-12 pb-6 text-gray-500 dark:text-gray-400">
-      <nav aria-label="Liens utiles" className="text-sm text-gray-600 dark:text-gray-300">
-        <ul className={listClass}>
-          <LinkItems links={FOOTER_SITE_LINKS} />
-        </ul>
+    <footer className={`${width} mx-auto mt-12 pt-8 pb-8 border-t border-gray-200 dark:border-gray-800 text-sm text-gray-600 dark:text-gray-300`}>
+      <nav aria-label="Liens utiles" className={`grid grid-cols-2 gap-x-8 gap-y-6 ${variant === "site" ? "sm:grid-cols-3" : ""}`}>
+        {columns.map((col) => (
+          <div key={col.id}>
+            <p id={col.id} className="font-semibold text-gray-900 dark:text-gray-100">{col.title}</p>
+            <ul aria-labelledby={col.id} className="mt-2 space-y-1">
+              {col.links.map((l) => (
+                <li key={l.href}><FooterAnchor link={l} /></li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </nav>
-      <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800 flex flex-wrap justify-center gap-x-5 gap-y-1 text-xs">
-        <ul className={listClass}>
-          <li><SourceLink /></li>
-          <li>
-            <a
-              href="https://buymeacoffee.com/benevol.app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={linkClass}
-            >
-              <span aria-hidden="true">☕&nbsp;</span>Soutenir le projet{" "}
-              <span className="sr-only">(ouvre dans un nouvel onglet)</span>
-            </a>
-          </li>
-        </ul>
-        <nav aria-label="Informations légales">
-          <ul className={listClass}>
-            <LinkItems links={FOOTER_LEGAL_LINKS} />
-          </ul>
-        </nav>
-      </div>
+      {variant === "event" && (
+        <p className="mt-6 text-xs text-gray-500 dark:text-gray-400">
+          <a href={REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className={`${linkClass} gap-1.5`}>
+            <GitHubMark className="w-3.5 h-3.5" />
+            benevol.app v{pkg.version}
+            <span className="sr-only">, code source sur GitHub {NEW_TAB}</span>
+          </a>
+        </p>
+      )}
     </footer>
   )
 }

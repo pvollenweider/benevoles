@@ -1050,7 +1050,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
 
       {/* Below lg the fixed « Continuer » bar covers the bottom of the page: room under the
           footer so a focused footer link is never hidden behind it (WCAG 2.4.11). */}
-      <div className={showMobileCta ? "pb-28 lg:pb-0" : undefined}>
+      <div className={`px-4 ${showMobileCta ? "pb-28 lg:pb-0" : ""}`}>
         <PublicFooter />
       </div>
     </div>
