@@ -21,6 +21,10 @@ async function firstTabThenEnter(page: Page) {
 test("legal pages: the first Tab reveals a skip link that focuses the main content", async ({ page }) => {
   await page.goto("/legal/privacy")
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+  // The shared public footer, after </main> (a footer inside main loses its contentinfo role).
+  await expect(page.locator("main footer")).toHaveCount(0)
+  await expect(page.getByRole("contentinfo")).toHaveCount(1)
+  await expect(page.getByRole("contentinfo").getByRole("navigation", { name: "Liens utiles" })).toBeVisible()
   await firstTabThenEnter(page)
 })
 

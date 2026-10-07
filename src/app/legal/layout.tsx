@@ -1,4 +1,5 @@
 import Link from "next/link"
+import PublicFooter from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 
 // The browser bar takes the colour of the legal pages' white header.
@@ -33,16 +34,13 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
         ">
           {children}
         </article>
-
-        <footer className="mt-16 pt-6 border-t border-gray-100 flex flex-wrap gap-x-6 gap-y-2 text-xs text-gray-500">
-          <Link href="/legal/terms" className="hover:text-gray-600 transition-colors">CGU</Link>
-          <Link href="/legal/privacy" className="hover:text-gray-600 transition-colors">Confidentialité</Link>
-          <Link href="/legal/sous-traitance" className="hover:text-gray-600 transition-colors">Accord de sous-traitance</Link>
-          <Link href="/legal/sous-traitants" className="hover:text-gray-600 transition-colors">Sous-traitants</Link>
-          <Link href="/accessibilite" className="hover:text-gray-600 transition-colors">Accessibilité</Link>
-          <a href="mailto:contact@benevol.app" className="hover:text-gray-600 transition-colors">Contact</a>
-        </footer>
       </main>
+
+      {/* After </main>: a footer inside main loses its contentinfo role. The processing agreement
+          and the sub-processors list are linked from the privacy policy, the terms and each other. */}
+      <div className="max-w-3xl mx-auto px-6">
+        <PublicFooter variant="site" />
+      </div>
     </div>
   )
 }
