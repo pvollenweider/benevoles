@@ -50,7 +50,7 @@ describe("robots (production domain: benevol.app)", () => {
     const robots = (await import("../app/robots")).default
     const result = await robots()
     // Unchanged on an organisation's host: one group, its own sitemap.
-    expect(result.rules).toEqual({ userAgent: "*", allow: "/", disallow: ["/admin", "/api/", "/my/", "/waitlist/", "/leader/", "/videos"] })
+    expect(result.rules).toEqual({ userAgent: "*", allow: "/", disallow: ["/admin", "/api/", "/my/", "/waitlist/", "/leader/"] })
     expect(result.sitemap).toBe("https://lausanne-rocks.benevol.app/sitemap.xml")
   })
 })
