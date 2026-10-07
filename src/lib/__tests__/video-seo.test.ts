@@ -17,8 +17,11 @@ import {
   videoLibraryJsonLd,
   videoLibraryMetadata,
   videoPageUrl,
+  videoSitemapEntries,
   videoSitemapXml,
   videoUploadDate,
+  VIDEO_LIBRARY_PRIORITY,
+  VIDEO_PAGE_PRIORITY,
   type VideoSeoContext,
 } from "../video-seo"
 
@@ -228,6 +231,30 @@ describe("videoSitemapXml", () => {
     const out = videoSitemapXml([makeVideo()], offline)
     expect(out).toContain("<urlset")
     expect(out).not.toContain("<url>")
+  })
+})
+
+describe("videoSitemapEntries", () => {
+  it("lists the gallery and each indexed video for sitemap.xml, dated by the catalogue", () => {
+    const entries = videoSitemapEntries(
+      [makeVideo({ updatedAt: "2026-10-01" }), makeVideo({ id: "LATER", slug: "later", updatedAt: "2026-10-05" }), makeVideo({ id: "SOON", slug: "soon", published: false, updatedAt: "2026-12-01" })],
+      ctx,
+    )
+    expect(entries).toEqual([
+      { url: "https://www.benevol.app/videos", lastModified: new Date("2026-10-05T00:00:00Z"), changeFrequency: "monthly", priority: VIDEO_LIBRARY_PRIORITY },
+      { url: "https://www.benevol.app/videos/EVENT_CREATE_BLANK", lastModified: new Date("2026-10-01T00:00:00Z"), changeFrequency: "monthly", priority: VIDEO_PAGE_PRIORITY },
+      { url: "https://www.benevol.app/videos/LATER", lastModified: new Date("2026-10-05T00:00:00Z"), changeFrequency: "monthly", priority: VIDEO_PAGE_PRIORITY },
+    ])
+  })
+
+  it("lists the same pages as the video sitemap", () => {
+    const videos = [makeVideo(), makeVideo({ id: "SOON", slug: "soon", published: false })]
+    const locs = [...videoSitemapXml(videos, ctx).matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])
+    expect(videoSitemapEntries(videos, ctx).map((e) => e.url)).toEqual(locs)
+  })
+
+  it("is empty without media: nothing playable, not even the gallery", () => {
+    expect(videoSitemapEntries([makeVideo()], offline)).toEqual([])
   })
 })
 

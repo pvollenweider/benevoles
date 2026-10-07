@@ -4,17 +4,18 @@ import { latestDate, sitemapIndexEntries, sitemapIndexXml } from "../sitemap-ind
 const orgUrl = (slug: string) => `https://${slug}.benevol.app/sitemap.xml`
 
 describe("sitemapIndexEntries (#746)", () => {
-  it("lists the apex sitemap first, then each organisation's by slug, with its last change", () => {
+  it("lists the apex sitemaps first, then each organisation's by slug, with its last change", () => {
     const d = new Date("2026-10-01T00:00:00Z")
-    expect(sitemapIndexEntries("https://www.benevol.app/sitemap.xml", [{ slug: "zurich", lastmod: null }, { slug: "lausanne-rocks", lastmod: d }], orgUrl)).toEqual([
+    expect(sitemapIndexEntries(["https://www.benevol.app/sitemap.xml", "https://www.benevol.app/video-sitemap.xml"], [{ slug: "zurich", lastmod: null }, { slug: "lausanne-rocks", lastmod: d }], orgUrl)).toEqual([
       { loc: "https://www.benevol.app/sitemap.xml" },
+      { loc: "https://www.benevol.app/video-sitemap.xml" },
       { loc: "https://lausanne-rocks.benevol.app/sitemap.xml", lastmod: d },
       { loc: "https://zurich.benevol.app/sitemap.xml", lastmod: null },
     ])
   })
 
   it("never lists a system subdomain as an organisation", () => {
-    const entries = sitemapIndexEntries("https://www.benevol.app/sitemap.xml", [{ slug: "www", lastmod: null }, { slug: "medias", lastmod: null }, { slug: "", lastmod: null }], orgUrl)
+    const entries = sitemapIndexEntries(["https://www.benevol.app/sitemap.xml"], [{ slug: "www", lastmod: null }, { slug: "medias", lastmod: null }, { slug: "", lastmod: null }], orgUrl)
     expect(entries).toEqual([{ loc: "https://www.benevol.app/sitemap.xml" }])
   })
 })

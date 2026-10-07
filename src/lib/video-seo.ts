@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import type { Metadata } from "next"
+import type { Metadata, MetadataRoute } from "next"
 import { videoMediaUrls, type Video, type VideoMediaUrls } from "@/lib/video-catalog"
 
 /**
@@ -246,27 +246,60 @@ function xml(text: string): string {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;")
 }
 
+/** Sitemap priority of the gallery and of a video page: under the guides' indexes, above a documentation unit. */
+export const VIDEO_LIBRARY_PRIORITY = 0.7
+export const VIDEO_PAGE_PRIORITY = 0.6
+
+type VideoSitemapPage = { url: string; lastmod: string; video: Video | null }
+
+/**
+ * The pages both sitemaps list, the one selection: the gallery (when at least one video is
+ * indexed, its last change the latest video's), then each indexed video page. Never an
+ * unpublished or unplayable (« À venir ») video.
+ */
+function videoSitemapPages(videos: Video[], ctx: VideoSeoContext): VideoSitemapPage[] {
+  const base = trimBase(ctx.siteBase)
+  const listed = indexableVideos(videos, ctx.mediaBaseUrl)
+  if (listed.length === 0) return []
+  const latest = listed.map((v) => v.updatedAt).sort().at(-1)!
+  return [
+    { url: videoLibraryUrl(base), lastmod: latest, video: null },
+    ...listed.map((video) => ({ url: videoPageUrl(base, video.id), lastmod: video.updatedAt, video })),
+  ]
+}
+
+/**
+ * The same pages for the apex sitemap.xml (src/app/sitemap.ts), without the video extension: the
+ * video sitemap stays the one carrying it, this makes the pages reachable from the main sitemap.
+ */
+export function videoSitemapEntries(videos: Video[], ctx: VideoSeoContext): MetadataRoute.Sitemap {
+  return videoSitemapPages(videos, ctx).map((p) => ({
+    url: p.url,
+    lastModified: new Date(`${p.lastmod}T00:00:00Z`),
+    changeFrequency: "monthly" as const,
+    priority: p.video ? VIDEO_PAGE_PRIORITY : VIDEO_LIBRARY_PRIORITY,
+  }))
+}
+
 /**
  * The video sitemap (Google's video extension): the gallery, then one `<url>` per indexed video
  * page with its `<video:video>`. Lists nothing else, so the site's own sitemap index can point to it.
  */
 export function videoSitemapXml(videos: Video[], ctx: VideoSeoContext): string {
-  const base = trimBase(ctx.siteBase)
-  const listed = indexableVideos(videos, ctx.mediaBaseUrl)
   const lines = [
     `<?xml version="1.0" encoding="UTF-8"?>`,
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">`,
   ]
-  if (listed.length > 0) {
-    const latest = listed.map((v) => v.updatedAt).sort().at(-1)!
-    lines.push(`<url>`, `<loc>${xml(videoLibraryUrl(base))}</loc>`, `<lastmod>${latest}</lastmod>`, `</url>`)
-  }
-  for (const video of listed) {
+  for (const { url, lastmod, video } of videoSitemapPages(videos, ctx)) {
+    if (!video) {
+      lines.push(`<url>`, `<loc>${xml(url)}</loc>`, `<lastmod>${lastmod}</lastmod>`, `</url>`)
+      continue
+    }
     const media = videoMedia(video, ctx.mediaBaseUrl)!
     lines.push(
       `<url>`,
-      `<loc>${xml(videoPageUrl(base, video.id))}</loc>`,
-      `<lastmod>${video.updatedAt}</lastmod>`,
+      `<loc>${xml(url)}</loc>`,
+      `<lastmod>${lastmod}</lastmod>`,
       `<video:video>`,
       `<video:thumbnail_loc>${xml(videoThumbnailUrl(video, ctx))}</video:thumbnail_loc>`,
       `<video:title>${xml(video.title)}</video:title>`,
