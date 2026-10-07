@@ -119,6 +119,18 @@ describe("VideoPlayer — reserved frame (#773, no layout shift)", () => {
     expect(fallback).toHaveClass("h-full", "w-full")
   })
 
+  // A portrait capture (390x844) at full column width ran far below the screen, controls out of
+  // view at high zoom: its width is capped so the height stays within 80vh.
+  it("caps a portrait frame's width so it never grows taller than the screen", () => {
+    render(<VideoPlayer title="Titre" mediaUrls={mediaUrls} frame={{ width: 390, height: 844 }} />)
+    expect(document.querySelector("video")!.parentElement!.style.maxWidth).toBe("min(100%, calc(80vh * 390 / 844))")
+  })
+
+  it("leaves a landscape frame at full width", () => {
+    render(<VideoPlayer title="Titre" mediaUrls={mediaUrls} frame={{ width: 1280, height: 800 }} />)
+    expect(document.querySelector("video")!.parentElement!.style.maxWidth).toBe("")
+  })
+
   it("reserves the frame for the « bientôt disponible » message too", () => {
     render(<VideoPlayer title="Titre" mediaUrls={null} frame={{ width: 1280, height: 800 }} />)
     expect(screen.getByText("Vidéo bientôt disponible.").closest("[tabindex='-1']")!.parentElement!.style.aspectRatio).toBe("1280 / 800")

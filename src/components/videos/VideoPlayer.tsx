@@ -91,12 +91,14 @@ export default function VideoPlayer({
   return (
     <>
       <div role="status" aria-live="polite" className="sr-only">{statusText}</div>
-      <div className="w-full" style={{ aspectRatio }}>
+      {/* A portrait capture (a phone screen) never grows taller than the screen: its width is capped
+          so that its height stays within 80vh, controls in view, ratio kept. */}
+      <div className="mx-auto w-full" style={{ aspectRatio, maxWidth: height > width ? `min(100%, calc(80vh * ${width} / ${height}))` : undefined }}>
         {unavailable ? (
           <div
             ref={fallbackRef}
             tabIndex={-1}
-            className="h-full w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl flex items-center justify-center focus:outline-none"
+            className="h-full w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl flex items-center justify-center focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
           >
             <p className="text-sm text-gray-600 dark:text-gray-300">Vidéo bientôt disponible.</p>
           </div>
