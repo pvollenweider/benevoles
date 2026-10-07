@@ -82,7 +82,7 @@ export default function ContentShell({ children, layout = "article" }: { childre
       )}
 
       <div className={`${width} mx-auto px-6`}>
-        <PublicFooter showSupport />
+        <PublicFooter variant="site" />
       </div>
     </div>
   )
