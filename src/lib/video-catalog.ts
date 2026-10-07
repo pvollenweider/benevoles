@@ -229,6 +229,22 @@ export type Video = {
 // --- pure helpers (testable without fs) -------------------------------------------------------
 
 /**
+ * What the gallery (/videos, a client component) needs of a video: its card and the fields the
+ * filters and the search read (#644). Everything else of the catalogue entry, the manifest's
+ * narration segments and the editorial script, stays on the server: sent whole, it was most of a
+ * 820 KB page (#759).
+ */
+export type GalleryVideo = Pick<Video, "id" | "title" | "description" | "feature" | "tags" | "themes" | "audience" | "level" | "published" | "durationMs"> & {
+  manifest: { viewer: Pick<ViewerContent, "summary" | "steps"> }
+}
+
+export function toGalleryVideo(video: Video): GalleryVideo {
+  const { id, title, description, feature, tags, themes, audience, level, published, durationMs } = video
+  const { summary, steps } = video.manifest.viewer
+  return { id, title, description, feature, tags, themes, audience, level, published, durationMs, manifest: { viewer: { summary, steps } } }
+}
+
+/**
  * Whether the gallery shows every catalogued video or only the published ones. Videos with a render
  * online are `published: true` (owner decision, 2026-10-06); the others show « À venir ». The
  * gallery still lists all of them, with their state, and stays unlinked (#644). Flipping this one constant is the whole migration to the public
@@ -252,7 +268,7 @@ function normalizeSearch(text: string): string {
  * Dropped the internal editorial script from the index when it stopped being shown on the detail
  * page: it was never meant for viewers, so it shouldn't surface them into search results either.
  */
-export function searchVideos(videos: Video[], query: string): Video[] {
+export function searchVideos<T extends GalleryVideo>(videos: T[], query: string): T[] {
   const q = normalizeSearch(query.trim())
   if (!q) return videos
   return videos.filter((v) => {
@@ -271,7 +287,7 @@ export type VideoFilters = {
 }
 
 /** Applies the gallery's theme, audience, level, tag and free-text filters together (AND, each optional). */
-export function applyVideoFilters(videos: Video[], filters: VideoFilters): Video[] {
+export function applyVideoFilters<T extends GalleryVideo>(videos: T[], filters: VideoFilters): T[] {
   let result = videos
   if (filters.theme) result = result.filter((v) => v.themes.includes(filters.theme!))
   if (filters.audience) result = result.filter((v) => v.audience.includes(filters.audience!))
@@ -282,24 +298,24 @@ export function applyVideoFilters(videos: Video[], filters: VideoFilters): Video
 }
 
 /** The themes actually used by at least one video, in carousel order — what the filter form offers. */
-export function themesInUse(videos: Video[]): { id: ThemeId; label: string }[] {
+export function themesInUse(videos: GalleryVideo[]): { id: ThemeId; label: string }[] {
   const used = new Set(videos.flatMap((v) => v.themes))
   return THEMES.filter((t) => used.has(t.id)).map((t) => ({ id: t.id, label: t.label }))
 }
 
 /** The levels actually used by at least one video, in the fixed `LEVELS` order (progression). */
-export function levelsInUse(videos: Video[]): Level[] {
+export function levelsInUse(videos: GalleryVideo[]): Level[] {
   const used = new Set(videos.map((v) => v.level))
   return LEVELS.filter((l) => used.has(l))
 }
 
 /** The tags actually used by at least one video, alphabetically. */
-export function tagsInUse(videos: Video[]): string[] {
+export function tagsInUse(videos: GalleryVideo[]): string[] {
   return [...new Set(videos.flatMap((v) => v.tags))].sort((a, b) => a.localeCompare(b, "fr"))
 }
 
 /** The audiences actually used by at least one video, in the fixed `AUDIENCES` order. */
-export function audiencesInUse(videos: Video[]): Audience[] {
+export function audiencesInUse(videos: GalleryVideo[]): Audience[] {
   const used = new Set(videos.flatMap((v) => v.audience))
   return AUDIENCES.filter((a) => used.has(a))
 }

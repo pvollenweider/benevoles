@@ -17,13 +17,13 @@ import {
   LEVEL_LABELS,
   type Audience,
   type Level,
+  type GalleryVideo,
   type ThemeId,
-  type Video,
 } from "@/lib/video-catalog"
 
-// The gallery searches script text too (#644), so it needs the full Video, script included —
-// the catalogue is small (under 60 videos, a few KB of script each), an acceptable payload.
-export default function VideoGallery({ videos }: { videos: Video[] }) {
+// Only what the cards, the filters and the search read (`toGalleryVideo`): the whole catalogue
+// entry, narration and script included, made the page's payload ten times heavier (#759).
+export default function VideoGallery({ videos }: { videos: GalleryVideo[] }) {
   const [theme, setTheme] = useState<ThemeId | "">("")
   const [audience, setAudience] = useState<Audience | "">("")
   const [level, setLevel] = useState<Level | "">("")

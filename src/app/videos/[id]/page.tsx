@@ -3,7 +3,7 @@
 
 import type { Metadata } from "next"
 import Link from "next/link"
-import { notFound, redirect } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
 import {
   relatedVideos,
   videoMediaUrls,
@@ -27,7 +27,8 @@ type SearchParams = Record<string, string | string[] | undefined>
 
 // The stable id (e.g. EVENT_CREATE_BLANK) is canonical; the manifest slug (event-create-blank)
 // also resolves here and redirects to the id (#644 owner decision — one canonical URL per video,
-// so links and analytics never split between the two).
+// so links and analytics never split between the two). Permanently (308, #759): a temporary 307
+// tells search engines the alias may come back, so they keep both addresses.
 function findVideo(catalog: Video[], param: string): { video: Video | null; isSlug: boolean } {
   const byId = catalog.find((v) => v.id === param)
   if (byId) return { video: byId, isSlug: false }
@@ -58,7 +59,7 @@ export default async function VideoDetailPage({ params, searchParams }: { params
   const catalog = loadVideoCatalog()
   const { video, isSlug } = findVideo(catalog, id)
   if (!video) notFound()
-  if (isSlug) redirect(`/videos/${video.id}${fromDoc ? `?${FROM_DOC_PARAM}=${FROM_DOC_VALUE}` : ""}`)
+  if (isSlug) permanentRedirect(`/videos/${video.id}${fromDoc ? `?${FROM_DOC_PARAM}=${FROM_DOC_VALUE}` : ""}`)
 
   const mediaUrls = videoMediaUrls(video.slug, env.VIDEO_MEDIA_BASE_URL, video.render)
   const jsonLd = videoJsonLd(video, videoSeoContext())

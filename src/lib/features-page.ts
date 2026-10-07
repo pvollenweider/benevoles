@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { splitTitle } from "@/lib/doc-pages"
+import { linkSourcesToRoutes, splitTitle } from "@/lib/doc-pages"
 import { createHeadingSlugger } from "@/lib/heading-anchors"
 import { videoReferenceId } from "@/lib/doc-video-references"
 
@@ -45,6 +45,16 @@ const IMAGE_RE = /^<!--\s*image:\s*([A-Z][A-Z0-9_]+)\s*\|\s*([\s\S]+?)\s*-->$/
 const ACTIONS_RE = /^<!--\s*actions\s*-->$/i
 const LINK_ITEM_RE = /^[-*]\s+\[([^\]]+)\]\(([^)\s]+)\)\s*$/
 
+/**
+ * An action's address as the site serves it: a link to a source file (`guide/premiers-pas.md`,
+ * `GUIDE_ADMIN.md#x`) becomes its page, like the links of the text (`linkSourcesToRoutes`); the
+ * buttons are drawn from the raw list, so without this they pointed at a file path that 404s (#759).
+ */
+export function actionHref(href: string): string {
+  const routed = linkSourcesToRoutes(`](${href})`)
+  return routed.slice(2, -1)
+}
+
 /** A block's conventions taken out of its Markdown. An image or a video with a malformed id is dropped. */
 export function parseFeatureBlock(markdown: string): FeatureBlock {
   const lines = markdown.split("\n")
@@ -74,7 +84,7 @@ export function parseFeatureBlock(markdown: string): FeatureBlock {
       while (j < lines.length) {
         const item = lines[j].trim().match(LINK_ITEM_RE)
         if (!item) break
-        actions.push({ label: item[1], href: item[2] })
+        actions.push({ label: item[1], href: actionHref(item[2]) })
         j++
       }
       i = j - 1

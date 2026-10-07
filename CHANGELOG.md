@@ -41,6 +41,9 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Lien « premiers pas » de la page Fonctionnalités** : les boutons « Lire les premiers pas » de `/fonctionnalites` menaient à une page introuvable (`/guide/premiers-pas.md`) ; ils ouvrent maintenant la fiche `/doc/premiers-pas`, comme les liens du texte.
+- **Bibliothèque vidéo plus légère** : `/videos` ne transmet plus au navigateur la narration complète et les notes de production de chaque vidéo, seulement ce que les cartes, les filtres et la recherche utilisent ; la page est environ dix fois moins lourde à charger.
+- **Ancienne adresse d'une vidéo** : `/videos/<nom-de-la-video>` redirige désormais de façon permanente vers `/videos/<IDENTIFIANT>`, pour que les moteurs de recherche ne gardent qu'une adresse par vidéo.
 - **Adresse canonique en « localhost »** : `/doc`, `/accessibilite` et les pages légales annonçaient aux moteurs de recherche et aux aperçus de liens une adresse `http://localhost:3000/…` au lieu de `https://www.benevol.app/…`. Ces pages étaient générées lors de la construction de l'image, qui ne connaît pas l'adresse du site ; toutes les pages prennent maintenant l'adresse à la requête.
 - **Bénévole sans adresse email** : annuler un créneau (ou toute autre action qui prévient les bénévoles par email) ne met plus en file un message pour une personne ajoutée à la main sans adresse. Le message ne pouvait jamais partir : il échouait six fois et déclenchait l'alerte de santé de la file d'envoi.
 - **Dates du plan du site** : dans `sitemap.xml`, la date de dernière modification de chaque page de documentation et de contenu est celle de la dernière modification réelle de son texte, et non plus l'heure de construction de l'application, identique pour toutes les pages à chaque mise en ligne.
