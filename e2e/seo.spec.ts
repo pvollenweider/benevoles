@@ -39,6 +39,7 @@ const PAGES: { path: string; types: string[]; ogType: string }[] = [
   { path: "/doc", types: ["CollectionPage", "BreadcrumbList", "Organization"], ogType: "website" },
   { path: "/doc/revenir-sur-la-page-d-inscription", types: ["TechArticle", "BreadcrumbList", "Organization"], ogType: "article" },
   { path: "/legal/privacy", types: ["WebPage", "BreadcrumbList"], ogType: "website" },
+  { path: "/nouveautes", types: ["WebPage", "BreadcrumbList", "Organization"], ogType: "website" },
 ]
 
 for (const { path, types, ogType } of PAGES) {

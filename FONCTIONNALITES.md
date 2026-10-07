@@ -97,6 +97,12 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - Politique de confidentialité (`/legal/privacy`) et conditions d'utilisation (`/legal/terms`), déclarées dans `src/lib/doc-pages.ts` (métadonnées, aperçu, sitemap)
 
+### Nouveautés (`/nouveautes`)
+
+- `/nouveautes` rend les versions publiées de `CHANGELOG.md`, la plus récente en premier (`src/lib/changelog.ts`, #757) : chaque version sous son titre ancré (`/nouveautes#2.1.0`) avec sa date, puis ses sections publiques ; une liste « Toutes les versions » en tête ; liens entre sources rendus en liens du site (`linkSourcesToRoutes`). Déclarée dans `src/lib/doc-pages.ts` (métadonnées, aperçu, sitemap, `/llms.txt`), liée depuis le pied de page public, `/doc` et `/fonctionnalites`
+- Ce qui est public : `[Unreleased]` jamais ; un titre de version sans numéro ou sans date valide est ignoré avec son contenu ; seules les sections « En bref », « Ajouté », « Modifié », « Amélioré », « Corrigé », « Corrections notables », « Supprimé », « Sécurité », « Accessibilité », « Fonctionnalités » (« Mise à jour depuis … », « Infrastructure », « Refactoring », « Documentation » restent sur GitHub) ; une puce terminée par `<!-- interne -->` est écartée. Convention décrite dans `CONTRIBUTING.md`
+- `releaseMarkdown` redonne le contenu public d'une version en Markdown, point de départ prévu pour l'email de nouveautés (#762)
+
 ### Fonctionnalités et accessibilité (`/fonctionnalites`, `/accessibilite`)
 
 - `/fonctionnalites` rend `FEATURES.md` (page de décision, par besoins), mise en page par `src/lib/features-page.ts` : le titre et l'ouverture, chaque `## ` en section avec son ancre et un sommaire « Sur cette page », une liste numérotée « **Titre.** texte » dessinée en étapes ; trois conventions en commentaires HTML (invisibles sur GitHub) : `<!-- video: ID -->` (lecteur sur place), `<!-- image: ID | texte alternatif -->` (affiche du tutoriel, seulement si la vidéo est publiée avec une affiche et `VIDEO_MEDIA_BASE_URL` défini, jamais d'image cassée) et `<!-- actions -->` suivi d'une liste de liens (boutons ; le premier, principal, « Demander un espace » par un email pré-rempli, en haut et en bas de page) ; `/accessibilite` rend `ACCESSIBILITE.md` (déclaration d'accessibilité : ce qui est testé, limites connues) ; pages déclarées dans `src/lib/doc-pages.ts` (métadonnées, navigation, sitemap), fichiers sources copiés dans l'image

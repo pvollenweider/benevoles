@@ -42,6 +42,7 @@ export default function DocIndexPage() {
         Vous découvrez benevol.app ? La page <Link href="/fonctionnalites">Fonctionnalités</Link> présente ce que
         fait l&apos;outil, besoin par besoin. Pour voir chaque étape à l&apos;écran, les{" "}
         <Link href="/videos">tutoriels vidéo</Link> la montrent en quelques minutes, avec leur transcription.
+        Ce qui a changé récemment est dans les <Link href="/nouveautes">nouveautés</Link>, version par version.
       </p>
       <DocUnitIndex units={units} />
     </DocFrame>

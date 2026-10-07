@@ -152,7 +152,7 @@ Les badges de statut (`StatusBadge`) utilisent des combinaisons fond clair / tex
 
 **La Règle du Bleu Unique.** `#2563eb` est la seule couleur d'action dans l'interface. Tous les boutons primaires, tous les liens, tous les focus sur fond clair : même bleu (le `#1d4ed8` des boutons et le `#3b82f6` des champs en sont les variantes de focus, voir §4). Introduire un deuxième bleu ou une autre couleur d'action crée de l'ambiguïté sur ce qui est cliquable.
 
-**Exceptions.** La couleur d'accent d'un événement (`src/lib/event-accent.ts`) colore le bandeau de sa page publique : même palette fermée que les postes, texte blanc, AA ; le focus y prend la couleur de l'accent. Les pages de contenu (`/doc`, `/fonctionnalites`, `/accessibilite`) ont un thème sombre, par classe `dark` sur `<html>`, qui suit le système ou le choix du lecteur. La page introuvable (404) suit le système seul (`data-color-scheme="system"`, sans script). Aucune autre surface n'utilise `dark:`.
+**Exceptions.** La couleur d'accent d'un événement (`src/lib/event-accent.ts`) colore le bandeau de sa page publique : même palette fermée que les postes, texte blanc, AA ; le focus y prend la couleur de l'accent. Les pages de contenu (`/doc`, `/fonctionnalites`, `/nouveautes`, `/accessibilite`) ont un thème sombre, par classe `dark` sur `<html>`, qui suit le système ou le choix du lecteur. La page introuvable (404) suit le système seul (`data-color-scheme="system"`, sans script). Aucune autre surface n'utilise `dark:`.
 
 **Pas d'information par la couleur seule.** Le lien actif est souligné, un créneau réservé a un cadenas et le mot « Réservé », un créneau complet est hachuré.
 
