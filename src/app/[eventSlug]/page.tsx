@@ -37,5 +37,13 @@ export default async function EventPage({ params }: { params: Promise<{ eventSlu
   if (!resolved) notFound()
   if (resolved.redirectUrl) redirect(resolved.redirectUrl)
 
+  // Same condition as the page's data (src/app/api/public/[eventSlug]/route.ts): an unknown or
+  // unpublished event answers a real 404 with the 404 page, not « Événement introuvable. ».
+  const event = await prisma.event.findFirst({
+    where: { slug: eventSlug, publicStatus: "published", organizationId: resolved.org.id },
+    select: { id: true },
+  })
+  if (!event) notFound()
+
   return <EventPageClient orgSlug={resolved.org.slug} eventSlug={eventSlug} />
 }
