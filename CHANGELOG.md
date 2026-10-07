@@ -43,6 +43,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Page publique d'un événement mieux décrite pour les moteurs de recherche** (#773) : sa description (balise `description` et aperçu du lien partagé) est désormais toujours dans l'en-tête de la page, aussi pour un navigateur ordinaire (Lighthouse la signalait absente), et plus complète, en 160 caractères au plus : la description de l'événement suivie de ses dates, ou à défaut « {organisation} cherche des bénévoles pour {événement}, du … au … » et l'invitation à choisir ses créneaux. Les pages d'information d'un événement publié ont aussi leur propre titre (« {page} · {événement} ») et une description tirée de leur texte. Un événement non publié ou inconnu reste introuvable et non indexé.
 - **Lien « premiers pas » de la page Fonctionnalités** : les boutons « Lire les premiers pas » de `/fonctionnalites` menaient à une page introuvable (`/guide/premiers-pas.md`) ; ils ouvrent maintenant la fiche `/doc/premiers-pas`, comme les liens du texte.
 - **Bibliothèque vidéo plus légère** : `/videos` ne transmet plus au navigateur la narration complète et les notes de production de chaque vidéo, seulement ce que les cartes, les filtres et la recherche utilisent ; la page est environ dix fois moins lourde à charger.
 - **Ancienne adresse d'une vidéo** : `/videos/<nom-de-la-video>` redirige désormais de façon permanente vers `/videos/<IDENTIFIANT>`, pour que les moteurs de recherche ne gardent qu'une adresse par vidéo.

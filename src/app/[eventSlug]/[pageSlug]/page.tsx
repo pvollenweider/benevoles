@@ -2,21 +2,44 @@ import type { Metadata } from "next"
 import { headers } from "next/headers"
 import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
+import { cache } from "react"
 import { prisma } from "@/lib/prisma"
 import { resolveOrgSlug } from "@/lib/resolve-org"
 import { renderEventPageMarkdown } from "@/lib/event-page-markdown"
-import { robotsFor } from "@/lib/event-visibility"
+import { eventInfoPageMetadata } from "@/lib/event-share"
 
-// The pages of an unlisted event (#414) aren't indexed either.
+// One query for the page and its metadata, awaited by the page: the metadata is resolved before
+// the shell is sent and its tags land in the <head> (see ../page.tsx, #773).
+const loadEvent = cache((organizationId: string, slug: string) =>
+  prisma.event.findFirst({
+    where: { slug, organizationId },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      startDate: true,
+      endDate: true,
+      publicStatus: true,
+      isListed: true,
+      pages: { select: { slug: true, title: true, content: true }, orderBy: { displayOrder: "asc" } },
+    },
+  }),
+)
+
+// Title and description of a published event's page; the pages of an unlisted event (#414) aren't
+// indexed either, and a draft or an archived event's give nothing away.
 export async function generateMetadata({ params }: { params: Promise<{ eventSlug: string; pageSlug: string }> }): Promise<Metadata> {
-  const { eventSlug } = await params
+  const { eventSlug, pageSlug } = await params
   const rawOrgSlug = (await headers()).get("x-org-slug")
   if (!rawOrgSlug) return {}
-  const resolved = await resolveOrgSlug(rawOrgSlug)
+  const resolved = await resolveOrgSlug(rawOrgSlug, `/${eventSlug}/${pageSlug}`)
   if (!resolved || resolved.redirectUrl) return {}
-  const event = await prisma.event.findFirst({ where: { slug: eventSlug, organizationId: resolved.org.id }, select: { publicStatus: true, isListed: true } })
-  const robots = robotsFor(event)
-  return robots ? { robots } : {}
+  const event = await loadEvent(resolved.org.id, eventSlug)
+  if (!event) return {}
+  return eventInfoPageMetadata(
+    { ...event, organizationName: resolved.org.name },
+    event.pages.find((p) => p.slug === pageSlug) ?? null,
+  )
 }
 
 export default async function EventCustomPage({
@@ -32,15 +55,8 @@ export default async function EventCustomPage({
   if (!resolved) notFound()
   if (resolved.redirectUrl) redirect(resolved.redirectUrl)
 
-  const event = await prisma.event.findFirst({
-    where: { slug: eventSlug, publicStatus: "published", organizationId: resolved.org.id },
-    select: {
-      id: true,
-      title: true,
-      pages: { select: { slug: true, title: true, content: true }, orderBy: { displayOrder: "asc" } },
-    },
-  })
-  if (!event) notFound()
+  const event = await loadEvent(resolved.org.id, eventSlug)
+  if (!event || event.publicStatus !== "published") notFound()
 
   const page = event.pages.find((p) => p.slug === pageSlug)
   if (!page) notFound()

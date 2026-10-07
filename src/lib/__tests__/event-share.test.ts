@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { eventDateRange, eventPageMetadata, eventShareDescription, orgHomeMetadata, previewText, PREVIEW_DESCRIPTION_MAX, type EventForMetadata } from "../event-share"
+import { eventDateRange, eventInfoPageMetadata, eventPageMetadata, eventShareDescription, META_DESCRIPTION_MAX, orgHomeMetadata, previewText, PREVIEW_DESCRIPTION_MAX, type EventForMetadata } from "../event-share"
 
 // Link preview of a shared event (#564).
 const links = { canonicalUrl: "https://fete.benevol.app/fete-2031", imageUrl: "https://www.benevol.app/og-image.png" }
@@ -28,7 +28,7 @@ describe("eventPageMetadata", () => {
   it("a published listed event: full preview, canonical, indexable", () => {
     const m = eventPageMetadata(base, links)
     expect(m.title).toBe("Fête du village")
-    expect(m.description).toBe("Amicale de Bex cherche des bénévoles pour Fête du village, du 6 au 8 juin 2031.")
+    expect(m.description).toBe("Amicale de Bex cherche des bénévoles pour Fête du village, du 6 au 8 juin 2031. Choisissez vos créneaux et inscrivez-vous en ligne, sans créer de compte.")
     expect(m.alternates).toEqual({ canonical: links.canonicalUrl })
     expect(m.openGraph).toMatchObject({ type: "website", siteName: "Amicale de Bex", url: links.canonicalUrl, title: "Fête du village", description: m.description })
     expect(m.openGraph?.images).toEqual([expect.objectContaining({ url: links.imageUrl, width: 1200, height: 630 })])
@@ -64,17 +64,80 @@ describe("eventPageMetadata", () => {
   })
 })
 
-describe("eventShareDescription", () => {
-  it("uses the event's own description when it has one", () => {
-    expect(eventShareDescription({ ...base, description: "  Trois jours de fête.\n\nOn compte sur vous !  " })).toBe("Trois jours de fête. On compte sur vous !")
+describe("eventShareDescription (meta description and link preview, #773)", () => {
+  const within = (s: string) => expect(s.length).toBeLessThanOrEqual(META_DESCRIPTION_MAX)
+
+  it("without a description: organisation, event, dates and how to sign up, within 160 characters", () => {
+    const out = eventShareDescription(base)
+    expect(out).toBe("Amicale de Bex cherche des bénévoles pour Fête du village, du 6 au 8 juin 2031. Choisissez vos créneaux et inscrivez-vous en ligne, sans créer de compte.")
+    within(out)
+    expect(out.length).toBeGreaterThanOrEqual(140)
   })
 
-  it("falls back when the description is only blanks or Markdown markers", () => {
-    expect(eventShareDescription({ ...base, description: " \n ## \n" })).toMatch(/^Amicale de Bex cherche des bénévoles/)
+  it("with a short description: the description, then the dates", () => {
+    expect(eventShareDescription({ ...base, description: "  Trois jours de fête.\n\nOn compte sur vous !  " })).toBe("Trois jours de fête. On compte sur vous ! Bénévoles recherchés du 6 au 8 juin 2031.")
+    expect(eventShareDescription({ ...base, description: "Trois jours de fête" })).toBe("Trois jours de fête. Bénévoles recherchés du 6 au 8 juin 2031.")
+  })
+
+  it("with a long description: the description alone, cut on a word boundary", () => {
+    const out = eventShareDescription({ ...base, description: "Le **grand** rendez-vous de l'été. ".repeat(10) })
+    within(out)
+    expect(out).toMatch(/^Le grand rendez-vous de l'été\. Le grand/)
+    expect(out.endsWith("…")).toBe(true)
+    expect(out).not.toMatch(/\*\*|Bénévoles recherchés/)
+  })
+
+  it("drops the sign-up sentence, then cuts, when the title is long", () => {
+    const longer = eventShareDescription({ ...base, title: "Grande fête populaire du village et de ses environs" })
+    expect(longer).toBe("Amicale de Bex cherche des bénévoles pour Grande fête populaire du village et de ses environs, du 6 au 8 juin 2031.")
+    const huge = eventShareDescription({ ...base, title: "Festival ".repeat(30).trim() })
+    within(huge)
+    expect(huge).toMatch(/^Amicale de Bex cherche des bénévoles pour Festival/)
+    expect(huge.endsWith("…")).toBe(true)
+  })
+
+  it("falls back when the description is only blanks, Markdown markers or HTML tags", () => {
+    for (const description of [" \n ## \n", "<p></p>"]) {
+      expect(eventShareDescription({ ...base, description })).toMatch(/^Amicale de Bex cherche des bénévoles/)
+    }
+  })
+
+  it("is plain text: no Markdown, no HTML, no line break", () => {
+    const out = eventShareDescription({ ...base, description: "# Fête\n\n<b>Venez</b> [nous aider](https://x.ch) !" })
+    expect(out).toBe("Fête Venez nous aider ! Bénévoles recherchés du 6 au 8 juin 2031.")
   })
 
   it("does not mention the remaining places (stale in caches)", () => {
     expect(eventShareDescription(base)).not.toMatch(/place/)
+  })
+})
+
+describe("eventInfoPageMetadata", () => {
+  const page = { title: "Infos pratiques", content: "## Accès\n\nParking à la **salle communale**." }
+
+  it("a published event's page: its title and its own text as description", () => {
+    expect(eventInfoPageMetadata(base, page)).toEqual({ title: "Infos pratiques · Fête du village", description: "Accès Parking à la salle communale." })
+  })
+
+  it("an empty page falls back to the event's description", () => {
+    expect(eventInfoPageMetadata(base, { ...page, content: " " }).description).toBe(eventShareDescription(base))
+  })
+
+  it("a long page is cut within 160 characters", () => {
+    const d = eventInfoPageMetadata(base, { ...page, content: "Bienvenue à tous. ".repeat(20) }).description as string
+    expect(d.length).toBeLessThanOrEqual(META_DESCRIPTION_MAX)
+  })
+
+  it("an unlisted event's page: described but noindex", () => {
+    expect(eventInfoPageMetadata({ ...base, isListed: false }, page)).toMatchObject({ title: "Infos pratiques · Fête du village", robots: NOINDEX })
+  })
+
+  it("a draft or archived event, or an unknown page: noindex or nothing, never the content", () => {
+    for (const publicStatus of ["draft", "archived"]) {
+      expect(eventInfoPageMetadata({ ...base, publicStatus }, page)).toEqual({ robots: NOINDEX })
+    }
+    expect(eventInfoPageMetadata(base, null)).toEqual({})
+    expect(eventInfoPageMetadata(null, page)).toEqual({})
   })
 })
 
