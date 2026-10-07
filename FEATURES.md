@@ -131,11 +131,11 @@ Les [tutoriels vidéo](/videos) montrent chaque étape en quelques minutes, avec
 
 ## Démarrer
 
-benevol.app est ouvert aux associations qui veulent l'essayer. Écrivez-nous : on vous crée un espace, puis la liste des [premiers pas](guide/premiers-pas.md) vous guide jusqu'à une inscription de test.
+benevol.app est ouvert aux associations qui veulent l'essayer. Écrivez-nous : on vous crée un espace, puis la page [Créer son premier événement](guide/creer-son-premier-evenement.md) vous mène, en huit étapes, jusqu'au lien partagé ; dans l'application, la liste des [premiers pas](guide/premiers-pas.md) suit le même chemin.
 
 <!-- actions -->
 - [Demander un espace](mailto:contact@benevol.app?subject=Demande%20d%E2%80%99un%20espace%20sur%20benevol.app&body=Bonjour%2C%0A%0ANous%20aimerions%20essayer%20benevol.app%20pour%20organiser%20nos%20b%C3%A9n%C3%A9voles.%0A%0AAssociation%20%3A%0A%C3%89v%C3%A9nement%20%28nom%2C%20dates%2C%20nombre%20de%20b%C3%A9n%C3%A9voles%20environ%29%20%3A%0AAdresse%20souhait%C3%A9e%20%3A%20%E2%80%A6.benevol.app%0A%0AMerci%20%21)
-- [Lire les premiers pas](guide/premiers-pas.md)
+- [Créer son premier événement](guide/creer-son-premier-evenement.md)
 
 ## Ce que benevol.app ne fait pas, volontairement
 

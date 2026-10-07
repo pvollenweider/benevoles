@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { DOC_GUIDES, publicPageMetadata } from "@/lib/doc-pages"
 import { loadDocUnits } from "@/lib/doc-units"
+import { docUnitHref } from "@/lib/doc-href"
+import { docQuickstartUnit } from "@/lib/doc-quickstart"
 import { apexBaseUrl } from "@/lib/urls"
 import { publicPageJsonLd } from "@/lib/structured-data"
 import JsonLd from "@/components/public/JsonLd"
@@ -16,6 +18,8 @@ export function generateMetadata(): Metadata {
 // sitemap: a new guide is added there once. Then every documentation unit (#649, guide/), by
 // group; a group's heading is the target of a unit's breadcrumb (/doc#<group>).
 export default function DocIndexPage() {
+  const units = loadDocUnits()
+  const quickstart = docQuickstartUnit(units)
   return (
     <DocFrame>
       <JsonLd data={publicPageJsonLd("/doc", apexBaseUrl())} />
@@ -28,12 +32,18 @@ export default function DocIndexPage() {
           </li>
         ))}
       </ul>
+      {quickstart && (
+        <p>
+          Vous organisez votre premier événement ? Suivez <Link href={docUnitHref(quickstart.slug)}>{quickstart.title}</Link>
+          &nbsp;: huit étapes, de la demande d&apos;espace au lien partagé.
+        </p>
+      )}
       <p>
         Vous découvrez benevol.app ? La page <Link href="/fonctionnalites">Fonctionnalités</Link> présente ce que
         fait l&apos;outil, besoin par besoin. Pour voir chaque étape à l&apos;écran, les{" "}
         <Link href="/videos">tutoriels vidéo</Link> la montrent en quelques minutes, avec leur transcription.
       </p>
-      <DocUnitIndex units={loadDocUnits()} />
+      <DocUnitIndex units={units} />
     </DocFrame>
   )
 }

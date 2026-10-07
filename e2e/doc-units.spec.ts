@@ -83,6 +83,8 @@ test("/doc lists every unit by group, linked by its title, with its summary and 
   // The guides' list keeps its links, without an em dash.
   await expect(page.getByRole("link", { name: "Guide bénévole" }).first()).toBeVisible()
   await expect(page.locator("main")).not.toContainText("—")
+  // A newcomer organiser is pointed to the quickstart (#758) before the index.
+  await expect(page.locator("main p", { hasText: /^Vous organisez votre premier événement/ }).getByRole("link", { name: "Créer son premier événement" })).toHaveAttribute("href", "/doc/creer-son-premier-evenement")
 })
 
 test("each unit of the index: its title link on its own line, its summary below in smaller muted text", async ({ page }) => {
@@ -141,6 +143,9 @@ test("both guides open on their introduction, then their questions and their ind
   await expect(page.locator("main p", { hasText: /^Bienvenue/ })).not.toContainText("figure en tête")
   // The organisers' groups start at « Démarrer ».
   await expect(page.getByRole("heading", { level: 3 }).first()).toHaveText("Démarrer")
+  // The quickstart (#758) comes first under « Démarrer », and the introduction points to it.
+  await expect(page.getByRole("region", { name: "Toutes les fiches" }).locator("li a").first()).toHaveText("Créer son premier événement")
+  await expect(page.locator("main p", { hasText: /^Bienvenue/ }).getByRole("link", { name: "Créer son premier événement" })).toHaveAttribute("href", "/doc/creer-son-premier-evenement")
   // A link name always leads to one place on the page (the introduction also links to units).
   const links = await page.locator("main a").evaluateAll((as) => as.map((a) => [a.textContent?.trim(), a.getAttribute("href")]))
   const hrefByName = new Map<string, Set<string>>()
