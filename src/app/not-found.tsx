@@ -7,6 +7,7 @@ import NotFoundPage from "@/components/public/NotFoundPage"
 import { NOT_FOUND_TITLE, notFoundLinks, type NotFoundOrg } from "@/lib/not-found-links"
 import { ORG_HEADER } from "@/lib/org-subdomain"
 import { resolveOrgSlug } from "@/lib/resolve-org"
+import { apexBaseUrl } from "@/lib/urls"
 
 // Absolute: a title template added to the root layout must not double the site name.
 export const metadata: Metadata = {
@@ -34,5 +35,5 @@ async function currentOrg(): Promise<NotFoundOrg | null> {
  */
 export default async function NotFound() {
   const host = (await headers()).get("host") ?? ""
-  return <NotFoundPage links={notFoundLinks(await currentOrg(), host)} />
+  return <NotFoundPage links={notFoundLinks(await currentOrg(), host, apexBaseUrl())} />
 }
