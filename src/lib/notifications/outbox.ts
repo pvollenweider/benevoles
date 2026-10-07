@@ -76,7 +76,10 @@ export function openPayload(stored: unknown): NotificationPayload {
 /**
  * Stores the notifications; returns the ids of rows to deliver now. A payload with a
  * `dedupeKey` already enqueued (#315) is skipped (ON CONFLICT DO NOTHING) and not re-delivered:
- * the existing row is either sent already or pending its own delivery.
+ * the existing row is either sent already or pending its own delivery. A payload whose recipient
+ * has no email address (a member added by hand without one) is not stored: email is the only
+ * channel, so it could never be delivered and would only fail MAX_ATTEMPTS times and raise the
+ * outbox health alert. Callers counting « notified » get the stored ids, so it isn't counted.
  */
 export async function enqueueNotifications(
   payloads: NotificationPayload[],
@@ -87,6 +90,7 @@ export async function enqueueNotifications(
   const link = opts.targetedMessageId ? { targetedMessageId: opts.targetedMessageId } : {}
   const ids: string[] = []
   for (const { dedupeKey, ...payload } of payloads) {
+    if (!payload.recipient.email?.trim()) continue
     // Stored in clear on the row (#382): the page filters on it, the payload stays sealed.
     const organizationId = payload.organizationId ?? opts.organizationId ?? null
     if (dedupeKey) {
