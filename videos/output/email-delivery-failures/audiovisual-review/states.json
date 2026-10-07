@@ -1,58 +1,58 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:36:21.499Z",
-  "videoSha256": "0e1d6ca56b0033e4694d6f34c74897fff990758b119a02cf3febeec27d85a9ed",
+  "reviewedAt": "2026-10-07T02:26:28.324Z",
+  "videoSha256": "747f7c10d9984c7ea3a97366fb011f0a9cb96b9e15f737f69903b78da2ae2e36",
   "promptSha256": "6d2d19af448268277f89976b40785ee9a444cd76a9f48614b50e8f464218d771",
-  "clipSha256": "77a321a7072c23afc48b9c69e8587189a541541d950da40c33e12c488c8f8301",
+  "clipSha256": "676ac7cd977b931a5dae1e537f1509215846bc6e15cf93e22597b719d110979e",
   "scene": "states",
   "review": {
-    "heardOpening": "En attente d'envoi signifie que l'email est dans la file",
+    "heardOpening": "En attente d'envoi signifie que l'email",
     "checkpoints": [
       {
-        "spokenSeconds": 3.4,
-        "spoken": "Jules n'a pas encore eu de tentative.",
-        "visibleSeconds": 0,
-        "visible": "Ligne de Jules avec statut En attente d'envoi visible dans le tableau.",
+        "spokenSeconds": 0.5,
+        "spoken": "En attente d'envoi signifie que l'email est dans la file : Jules n'a pas encore eu de tentative.",
+        "visibleSeconds": 0.5,
+        "visible": "Ligne de Jules Berger avec l'état 'En attente d'envoi' visible dans la liste.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 6.2,
         "spoken": "Pour Sarah, Nouvel essai prévu indique un échec temporaire",
-        "visibleSeconds": 0,
-        "visible": "Ligne de Sarah affichant Nouvel essai prévu et essai 2 sur 6.",
+        "visibleSeconds": 6,
+        "visible": "Ligne de Sarah Rochat affichant l'état 'Nouvel essai prévu' et 'essai 2 sur 6'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.4,
-        "spoken": "Nicolas est marqué Envoyé",
-        "visibleSeconds": 0,
-        "visible": "Ligne de Nicolas affichant le statut Envoyé en vert.",
+        "spokenSeconds": 12.5,
+        "spoken": "Nicolas est marqué Envoyé : remis au serveur",
+        "visibleSeconds": 12,
+        "visible": "Ligne de Nicolas Morel affichant le statut vert 'Envoyé'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 17.5,
         "spoken": "Emma a atteint six essais après une panne temporaire persistante.",
-        "visibleSeconds": 0,
-        "visible": "Ligne d'Emma affichant Échec définitif après incident serveur.",
+        "visibleSeconds": 17,
+        "visible": "Ligne d'Emma Pavte avec le statut 'Échec définitif' affiché.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 21.3,
         "spoken": "Léa a reçu un refus définitif",
-        "visibleSeconds": 0,
-        "visible": "Ligne de Léa affichant Échec définitif avec mention de refus du serveur.",
+        "visibleSeconds": 21,
+        "visible": "Ligne de Léa Perrin affichant le statut 'Échec définitif' et son motif.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 26.5,
+        "spokenSeconds": 27.2,
         "spoken": "Dans cette formation, les délais des essais temporaires ont été accélérés",
-        "visibleSeconds": 26,
-        "visible": "Bandeau informatif noir affiché en bas de page.",
+        "visibleSeconds": 26.5,
+        "visible": "Apparition du bandeau d'information précisant l'accélération des délais.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -61,7 +61,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, débit régulier et bonne articulation générale."
+      "observation": "Élocution posée, claire et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

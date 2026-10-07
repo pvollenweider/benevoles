@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T05:12:40.004Z",
+  "videoSha256": "aafb41546e04254818368695034ba565cb6196644a16b80cdfc69ec1939a20c2",
+  "promptSha256": "688765ad85350345999f8bf58a5060d13c0fe3221bfe18d3c2fde4c38ae88dd3",
+  "clipSha256": "7db46f418cea7337657ccc1b29bc4cb06f1df8f5344232df5c10ea8e0f752032",
+  "scene": "existing",
+  "review": {
+    "heardOpening": "La case Cacher déjà invités",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "La case Cacher déjà invités évite de sélectionner facilement",
+        "visibleSeconds": 1,
+        "visible": "Fenêtre modale ouverte avec la case Cacher déjà invités cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Décochez-la si vous voulez les retrouver",
+        "visibleSeconds": 7,
+        "visible": "Case Cacher déjà invités décochée, le nombre de membres affichés augmente",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Un nouvel envoi à une personne déjà invitée réutilise son invitation",
+        "visibleSeconds": 9.5,
+        "visible": "Saisie de Aline dans la recherche et affichage des membres correspondants",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, bonne synchronisation avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

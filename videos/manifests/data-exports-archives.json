@@ -36,7 +36,7 @@
     },
     {
       "id": "columns",
-      "transcript": "Une ligne représente une fiche membre. Lisons le prénom, le nom, l'email et le téléphone, puis les étiquettes et l'état actif. En faisant défiler les colonnes, on retrouve la date de naissance, les disponibilités, leur remarque, les notes internes, le nombre d'inscriptions actives et la date de création de la fiche. Les notes sont donc dans ce fichier. Ce n'est pas seulement un annuaire à distribuer. Le nombre d'inscriptions n'est pas un total d'heures ni une attestation de présence.",
+      "transcript": "Une ligne représente une fiche membre. Lisons le prénom, le nom, l'email et le téléphone, puis les étiquettes et l'état actif. En faisant défiler les colonnes, on retrouve la date de naissance, les disponibilités, leur remarque, les notes internes, le nombre d'inscriptions actives et la date de création de la fiche. Les derniers envois indiquent les résultats des emails de cette personne, avec leur date et la raison connue, sans la réponse brute du serveur. La dernière acceptation de la Convention indique quand elle a été acceptée lors d'une inscription. Une case vide n'atteste aucune acceptation. Les notes sont donc dans ce fichier. Ce n'est pas seulement un annuaire à distribuer. Le nombre d'inscriptions n'est pas un total d'heures ni une attestation de présence.",
       "fallbackDurationMs": 49000
     },
     {
@@ -73,7 +73,7 @@
   "viewer": {
     "summary": "Dans cette vidéo, vous téléchargez la liste des membres, le journal de l'organisation et l'archive d'un événement, puis vous lisez ce que chaque fichier contient.",
     "steps": [
-      "Dans Membres, cliquez sur « Exporter les membres » pour obtenir un fichier CSV de toutes les fiches, y compris désactivées.",
+      "Dans Membres, cliquez sur « Exporter les membres » pour obtenir un fichier CSV de toutes les fiches, y compris désactivées, avec les derniers envois d'emails et la dernière acceptation de la Convention.",
       "Ouvrez le fichier dans votre tableur : si les accents ou les colonnes s'affichent mal, choisissez l'encodage UTF-8 et le point-virgule comme séparateur.",
       "Dans les paramètres, ouvrez le journal d'activité et cliquez sur « Exporter tout le journal ».",
       "Dans Rapports, téléchargez l'archive de l'événement au format JSON avant de quitter l'outil ou de supprimer l'événement.",

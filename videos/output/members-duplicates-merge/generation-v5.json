@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 5,
+  "scenario": "members-duplicates-merge",
+  "organizationId": "video-member-merge-v5",
+  "organizationCreatedAt": "2026-10-07T01:57:54.584Z",
+  "preparedAt": "2026-10-07T01:57:54.650Z",
+  "product": {
+    "commit": "e572f7e99bbfaaac112e47513de5a93b02a5bda0",
+    "sourceTree": "bfab8fbc924aded37eb0fd93e8d919c9adbeb263",
+    "productSourceSha256": "22bb6e20c2de867839c01472d726f2c928ea5f47ec1923cece8b72c11c3df37e",
+    "buildId": "D_AkF4h7ikVJu_EdLprcI",
+    "snapshot": "/tmp/benevoles-video-production.bI4zju",
+    "builtAt": "2026-10-07T01:56:36.997Z"
+  },
+  "members": [
+    "video-member-merge-v5-a",
+    "video-member-merge-v5-b"
+  ],
+  "eventId": "video-member-merge-v5-event",
+  "oldGenerationsPreserved": [
+    "video-member-merge",
+    "video-member-merge-v2",
+    "video-member-merge-v3",
+    "video-member-merge-v4"
+  ],
+  "legacyBeforeSha256": "49fe1c2d73fcbeee0d330a84e1b3efcaae3cbec438a26e37bbf51240891576c2",
+  "legacyAfterSha256": "49fe1c2d73fcbeee0d330a84e1b3efcaae3cbec438a26e37bbf51240891576c2",
+  "createdOnceNoReset": true
+}

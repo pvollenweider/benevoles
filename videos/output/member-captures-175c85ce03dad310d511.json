@@ -1,0 +1,21 @@
+{
+  "batch": "175c85ce03dad310d511",
+  "startedAt": "2026-10-06T19:16:11.311Z",
+  "updatedAt": "2026-10-06T19:23:58.601Z",
+  "state": "failed",
+  "pid": 23398,
+  "requested": [
+    "MEMBERS_INVITATIONS"
+  ],
+  "rehearsalPerformed": false,
+  "active": null,
+  "results": [
+    {
+      "id": "MEMBERS_INVITATIONS",
+      "status": "needs-review",
+      "failedStage": "audiovisual-review",
+      "error": "Child exited 1"
+    }
+  ],
+  "note": "Generated-for-review is not publication, human validation or proof of complete masterclass coverage. Direct capture omits only rehearsal; actual full capture, integrity checks and final media reviews remain required. Never run alongside another default-fixture capture."
+}

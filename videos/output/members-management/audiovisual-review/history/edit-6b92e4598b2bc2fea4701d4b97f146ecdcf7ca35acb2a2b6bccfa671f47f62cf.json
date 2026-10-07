@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:07:28.830Z",
+  "videoSha256": "5ba525686f46bb6316cae59a3d9cdebc88e7985fbe1f97cb452d10251e693b0c",
+  "promptSha256": "903e61dea3cb7f040bff000c2c160f1271eba76a128ee96eb8e2a2a605d78d18",
+  "clipSha256": "a67aa61a0cf23e00069478b08077aadd147a35e151ab9704bcd0d8db1e75d55c",
+  "scene": "edit",
+  "review": {
+    "heardOpening": "Avec Éditer, vous pouvez corriger la fiche",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Avec Éditer, vous pouvez corriger la fiche",
+        "visibleSeconds": 0.8,
+        "visible": "Clic sur Éditer et ouverture de la fenêtre Modifier le membre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "comme accueil ou permis b",
+        "visibleSeconds": 3.2,
+        "visible": "Saisie des tags accueil, permis-b dans le champ dédié",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 16.5,
+        "visible": "Validation et fermeture du formulaire de modification",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "rouvrons la fiche pour vérifier",
+        "visibleSeconds": 18.8,
+        "visible": "Clic sur Éditer et réaffichage des données enregistrées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et synchronisation fluide avec les manipulations."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

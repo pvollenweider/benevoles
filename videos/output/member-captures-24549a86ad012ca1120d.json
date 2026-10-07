@@ -1,0 +1,28 @@
+{
+  "batch": "24549a86ad012ca1120d",
+  "startedAt": "2026-10-06T18:42:41.974Z",
+  "updatedAt": "2026-10-06T18:46:42.175Z",
+  "state": "failed",
+  "pid": 69424,
+  "requested": [
+    "MEMBERS_INVITATIONS",
+    "MEMBERS_REMINDERS"
+  ],
+  "rehearsalPerformed": false,
+  "active": null,
+  "results": [
+    {
+      "id": "MEMBERS_INVITATIONS",
+      "status": "needs-review",
+      "failedStage": "assemble",
+      "error": "Video server does not match target main; rebuild before recording"
+    },
+    {
+      "id": "MEMBERS_REMINDERS",
+      "status": "needs-review",
+      "failedStage": "source-audit",
+      "error": "Video server does not match target main; rebuild before recording"
+    }
+  ],
+  "note": "Generated-for-review is not publication, human validation or proof of complete masterclass coverage. Direct capture omits only rehearsal; actual full capture, integrity checks and final media reviews remain required. Never run alongside another default-fixture capture."
+}

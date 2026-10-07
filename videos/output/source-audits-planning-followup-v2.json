@@ -1,0 +1,67 @@
+{
+  "scope": "Generated source WAV auditing and optional chapter recutting only. No new TTS, UI capture, database, product proof, final MP4 or completion certification.",
+  "ids": [
+    "SHIFT_CREATE_EDIT_DETAIL",
+    "SHIFT_CREATE_SERIES",
+    "SHIFT_TIMELINE_QUICK_ACTIONS",
+    "SHIFT_NIGHT_DST"
+  ],
+  "updatedAt": "2026-10-06T18:46:26.141Z",
+  "active": null,
+  "attempts": [
+    {
+      "id": "SHIFT_CREATE_EDIT_DETAIL",
+      "stage": "source-audit",
+      "startedAt": "2026-10-06T18:46:25.657Z",
+      "finishedAt": "2026-10-06T18:46:25.851Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "signal": null
+    },
+    {
+      "id": "SHIFT_CREATE_SERIES",
+      "stage": "source-audit",
+      "startedAt": "2026-10-06T18:46:25.853Z",
+      "finishedAt": "2026-10-06T18:46:25.949Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "signal": null
+    },
+    {
+      "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
+      "stage": "source-audit",
+      "startedAt": "2026-10-06T18:46:25.950Z",
+      "finishedAt": "2026-10-06T18:46:26.042Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "signal": null
+    },
+    {
+      "id": "SHIFT_NIGHT_DST",
+      "stage": "source-audit",
+      "startedAt": "2026-10-06T18:46:26.043Z",
+      "finishedAt": "2026-10-06T18:46:26.140Z",
+      "exitCode": 0,
+      "timedOut": false,
+      "signal": null
+    }
+  ],
+  "results": [
+    {
+      "id": "SHIFT_CREATE_EDIT_DETAIL",
+      "status": "source-audited"
+    },
+    {
+      "id": "SHIFT_CREATE_SERIES",
+      "status": "source-audited"
+    },
+    {
+      "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
+      "status": "source-audited"
+    },
+    {
+      "id": "SHIFT_NIGHT_DST",
+      "status": "source-audited"
+    }
+  ]
+}

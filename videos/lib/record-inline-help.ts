@@ -24,7 +24,11 @@ export async function recordInlineHelp(page: Page, baseUrl: string, tap: (page: 
   const region = page.locator(`[id="${regionId}"]`)
   const video = region.locator("video")
   await video.waitFor()
-  assert(await video.evaluate((el: HTMLVideoElement) => el.paused && !el.autoplay), "Inline help must not autoplay")
+  assert(await video.evaluate((el: HTMLVideoElement) => !el.autoplay), "The reader's click must start playback, not an autoplay attribute")
+  await page.waitForFunction(id => {
+    const el = document.getElementById(id)?.querySelector("video")
+    return !!el && !el.paused && el.currentTime > 0
+  }, regionId, { timeout: 8000 })
   assert(await video.evaluate((el: HTMLVideoElement) => el.controls), "Show the real playback controls")
   await at(0.58); await tap(page, region.locator("summary").filter({ hasText: "Transcription" }))
   assert(await region.getByRole("link", { name: "Ouvrir dans la bibliothèque", exact: true }).count() === 1)

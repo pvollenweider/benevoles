@@ -13,11 +13,13 @@ export const QUESTIONS_EVENT = "video-questions-event"
 export const QUESTIONS_MEMBER = "video-questions-aline"
 export const QUESTIONS_OWNER = "video.questions.owner@example.org"
 export const QUESTIONS_EMAIL = "video.questions.aline@example.org"
+export const QUESTIONS_MEMBER_NAME = "Aline Mercier"
+export const QUESTIONS_OWNER_NAME = "Élodie Rochat"
 export const QUESTIONS_DATE = "2026-11-28T00:00:00.000Z"
 export const QUESTIONS_SHIFTS = [0, 1, 2, 3].map(i => `${QUESTIONS_ORG}-shift-${i}`)
 
 /** Read all event children before any cascading owned reset or external review. */
-export async function assertQuestionsReviewFixture(db: PrismaClient) {
+export async function assertQuestionsReviewFixture(db: PrismaClient, identity: "current" | "legacy-owned-reset" = "current") {
   const org = await db.organization.findUniqueOrThrow({ where: { id: QUESTIONS_ORG }, include: {
     admins: true, volunteers: true, slugHistory: true, logs: true, targetedMessages: true, messageTemplates: true,
     duplicateDismissals: true, charterVersions: true, logo: true, erasureRecords: true,
@@ -25,10 +27,11 @@ export async function assertQuestionsReviewFixture(db: PrismaClient) {
   } })
   assert(org.name === "Formation — questions aux bénévoles" && org.slug === "formation-questions" && org.timeZone === "Europe/Zurich" && org.replyToEmail === QUESTIONS_OWNER && org.active)
   assert.equal(org.admins.length, 1)
-  assert(org.admins[0].id === `${QUESTIONS_ORG}-owner` && org.admins[0].name === "Élodie Exemple" && org.admins[0].email === QUESTIONS_OWNER && org.admins[0].role === "admin" && org.admins[0].isActive)
+  const legacy = identity === "legacy-owned-reset" && org.admins[0].name === "Élodie Exemple" && org.volunteers[0]?.lastName === "Exemple"
+  assert(org.admins[0].id === `${QUESTIONS_ORG}-owner` && org.admins[0].name === (legacy ? "Élodie Exemple" : QUESTIONS_OWNER_NAME) && org.admins[0].email === QUESTIONS_OWNER && org.admins[0].role === "admin" && org.admins[0].isActive)
   assert.equal(org.volunteers.length, 1)
   const member = org.volunteers[0]
-  assert(member.id === QUESTIONS_MEMBER && member.firstName === "Aline" && member.lastName === "Exemple" && member.email === QUESTIONS_EMAIL && !member.phone && member.tags.length === 0 && member.active)
+  assert(member.id === QUESTIONS_MEMBER && member.firstName === "Aline" && member.lastName === (legacy ? "Exemple" : "Mercier") && member.email === QUESTIONS_EMAIL && !member.phone && member.tags.length === 0 && member.active)
   assert([org.slugHistory, org.logs, org.targetedMessages, org.messageTemplates, org.duplicateDismissals, org.erasureRecords].every(rows => rows.length === 0) && org.logo === null, "Unexpected organization children; refusing owned reset/review")
   // The real public submission creates proof of the convention accepted (#569).
   // Permit only the exact default convention from the verified build, never an
@@ -57,6 +60,7 @@ export async function assertQuestionsReviewFixture(db: PrismaClient) {
   }
   assert(event.registrations.length <= 3 && new Set(event.registrations.map(r => r.shiftId)).size === event.registrations.length)
   assert(event.registrations.every(r => r.eventId === QUESTIONS_EVENT && r.volunteerId === QUESTIONS_MEMBER && QUESTIONS_SHIFTS.slice(0, 3).includes(r.shiftId) && r.status === "active" && r.source === "public_form"), "Unexpected registrations in owned fixture")
+  assert(event.registrations.every(r => org.charterVersions.length === 1 && r.charterAcceptedHash === org.charterVersions[0].hash && r.charterAcceptedAt instanceof Date), "Each actual public registration must retain the current convention acceptance proof")
   assert.equal(event.memberInvites.length, 1)
   assert(event.memberInvites[0].id === `${QUESTIONS_ORG}-invite` && event.memberInvites[0].volunteerId === QUESTIONS_MEMBER)
   assert(event.questions.length <= 4 && new Set(event.questions.map(q => q.label)).size === event.questions.length)

@@ -1,0 +1,108 @@
+{
+  "id": "EVENT_QUESTIONS",
+  "slug": "event-questions",
+  "validatedAt": "2026-10-06T19:17:32.145Z",
+  "continuousNarration": true,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 520600,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 32679,
+      "audioMs": 32676,
+      "driftMs": 3
+    },
+    {
+      "id": "create-single",
+      "visualMs": 34421,
+      "audioMs": 34416,
+      "driftMs": 5
+    },
+    {
+      "id": "create-yesno",
+      "visualMs": 27888,
+      "audioMs": 27884,
+      "driftMs": 4
+    },
+    {
+      "id": "create-multiple",
+      "visualMs": 31121,
+      "audioMs": 31121,
+      "driftMs": 0
+    },
+    {
+      "id": "create-text",
+      "visualMs": 29754,
+      "audioMs": 29754,
+      "driftMs": 0
+    },
+    {
+      "id": "order",
+      "visualMs": 26063,
+      "audioMs": 26060,
+      "driftMs": 3
+    },
+    {
+      "id": "required-validation",
+      "visualMs": 29697,
+      "audioMs": 29697,
+      "driftMs": 0
+    },
+    {
+      "id": "volunteer-form",
+      "visualMs": 30777,
+      "audioMs": 30777,
+      "driftMs": 0
+    },
+    {
+      "id": "email-proof",
+      "visualMs": 32976,
+      "audioMs": 32976,
+      "driftMs": 0
+    },
+    {
+      "id": "admin-read",
+      "visualMs": 29430,
+      "audioMs": 29429,
+      "driftMs": 1
+    },
+    {
+      "id": "summary-export",
+      "visualMs": 28216,
+      "audioMs": 28215,
+      "driftMs": 1
+    },
+    {
+      "id": "invited-update",
+      "visualMs": 30078,
+      "audioMs": 30078,
+      "driftMs": 0
+    },
+    {
+      "id": "unverified-update",
+      "visualMs": 32771,
+      "audioMs": 32768,
+      "driftMs": 3
+    },
+    {
+      "id": "answered-lock",
+      "visualMs": 29648,
+      "audioMs": 29648,
+      "driftMs": 0
+    },
+    {
+      "id": "edit-choices",
+      "visualMs": 24887,
+      "audioMs": 24885,
+      "driftMs": 2
+    },
+    {
+      "id": "retire",
+      "visualMs": 32420,
+      "audioMs": 32418,
+      "driftMs": 2
+    }
+  ],
+  "issues": []
+}

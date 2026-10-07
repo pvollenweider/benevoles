@@ -1,0 +1,79 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:09:19.701Z",
+  "videoSha256": "27f9909f7b69ce0919bf10854b00f5062a806ca282cc0e5a5775ea62270b9cce",
+  "promptSha256": "f3940b78049824b9e450e2e285fdc02ac2acf954c4464ad25c0bc9ad7537b9bb",
+  "clipSha256": "f0583ad10a8244d0614f92c5c6d95772c183b179a86cbebd069591e9378a8de4",
+  "scene": "address",
+  "review": {
+    "heardOpening": "Une adresse erronée demande une autre attention",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "Ouvrons les membres, puis la fiche de Léa.",
+        "visibleSeconds": 2,
+        "visible": "Ouverture du formulaire de modification de la fiche de Léa.",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Corrigeons son email et enregistrons.",
+        "visibleSeconds": 7,
+        "visible": "Validation et enregistrement du nouvel email.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "Revenons au suivi",
+        "visibleSeconds": 8.5,
+        "visible": "Retour à la page de suivi des emails envoyés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "préparons donc un nouvel envoi.",
+        "visibleSeconds": 21.5,
+        "visible": "Chargement de la page Écrire aux bénévoles.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28,
+        "spoken": "Choisissons un objet clair, puis écrivons notre consigne.",
+        "visibleSeconds": 24.5,
+        "visible": "Saisie déjà en cours dans le champ Objet puis Message.",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 36,
+        "spoken": "Prenons le temps de vérifier l'aperçu, les deux destinataires et la confirmation.",
+        "visibleSeconds": 40.5,
+        "visible": "Clic sur Voir l'aperçu et apparition de la boîte de dialogue de confirmation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 45,
+        "spoken": "Ouvrons maintenant celui réellement reçu par Léa",
+        "visibleSeconds": 44.5,
+        "visible": "Ouverture de l'interface Mailpit avec l'email reçu par Léa.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:02 - La modale de Léa s'ouvre légèrement avant son annonce orale.",
+      "00:24 - La saisie de l'objet débute quelques secondes avant l'annonce de l'objet."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et rythme régulier tout au long de l'extrait."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

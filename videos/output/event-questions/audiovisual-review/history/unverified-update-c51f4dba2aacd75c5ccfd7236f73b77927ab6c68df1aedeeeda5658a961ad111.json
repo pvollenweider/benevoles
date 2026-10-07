@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:46:13.766Z",
+  "videoSha256": "8fd119fcc7be2e7433955eb308377f0bafecf962c880a14c93f0b1b0c8f0ca78",
+  "promptSha256": "e22e20c828a4fa5b35808bb0e87fc2fc6f4e2c680c3cd12e1c35cc08a7e04a56",
+  "clipSha256": "4b3ee974016db40fd1c185349417fec69700047a17eac6ff9d3fab5361eb2fb8",
+  "scene": "unverified-update",
+  "review": {
+    "heardOpening": "Comparons avec une inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "depuis le simple formulaire public, sans invitation",
+        "visibleSeconds": 3.8,
+        "visible": "Affichage de la page de saisie 'Tes informations'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Saisissons la même adresse pour un troisième créneau",
+        "visibleSeconds": 8,
+        "visible": "Saisie du courriel et des coordonnées dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "mais choisissons S",
+        "visibleSeconds": 11.8,
+        "visible": "Sélection de la taille S dans les options",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 11.3,
+        "spoken": "L'inscription peut être créée",
+        "visibleSeconds": 14.5,
+        "visible": "Validation et confirmation de l'inscription à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:12 : Sélection de la taille S légèrement décalée par rapport à l'annonce orale."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit posé et diction claire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

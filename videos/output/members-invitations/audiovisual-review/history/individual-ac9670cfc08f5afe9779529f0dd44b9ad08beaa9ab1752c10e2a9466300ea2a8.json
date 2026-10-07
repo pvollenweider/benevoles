@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:30:59.746Z",
+  "videoSha256": "6832eeb70e84d56d0b2d21fe51dfac435f5bcdc4226b19bf7457aabccbdc3d4e",
+  "promptSha256": "66c157c605b8f8dd7b337e0776ce19fd8c7861318817d3f5ed3d6f7714aa98b6",
+  "clipSha256": "fab65f8bce4aaa6a81b8674e6e499c74eeaf01f458d1e369fec517b91a23fe1b",
+  "scene": "individual",
+  "review": {
+    "heardOpening": "Cliquez sur Inviter des membres",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.2,
+        "spoken": "Cliquez sur Inviter des membres",
+        "visibleSeconds": 1.2,
+        "visible": "Clic sur le bouton et ouverture de la fenêtre modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "recherchez Aline, puis cochez seulement sa fiche",
+        "visibleSeconds": 3.8,
+        "visible": "Saisie de Aline et coche de la fiche Aline Mercier",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Le compteur indique une personne sélectionnée",
+        "visibleSeconds": 7.5,
+        "visible": "Mention 1 sélectionnée affichée sous le champ de recherche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "Bonjour Aline, nous serions ravis de te retrouver à l'accueil",
+        "visibleSeconds": 13,
+        "visible": "Message saisi intégralement dans le champ texte",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "puis envoyez cette invitation",
+        "visibleSeconds": 19.1,
+        "visible": "Clic sur Envoyer 1 invitation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.2,
+        "spoken": "La personne apparaît ensuite dans le tableau de l'événement",
+        "visibleSeconds": 21.2,
+        "visible": "Ligne d'Aline Mercier visible dans le tableau des invitations",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier, diction naturelle et bonne intelligibilité."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

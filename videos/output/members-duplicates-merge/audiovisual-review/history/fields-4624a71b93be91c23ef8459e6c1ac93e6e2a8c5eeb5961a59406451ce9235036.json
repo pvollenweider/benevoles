@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:37:38.481Z",
+  "videoSha256": "01fafadfba036da8aac5f19c6359a31892b79dcfccbfe3936309fabe4cf0f4be",
+  "promptSha256": "b57868132dc29bbd659231c1323f74e8e2317cad66dc125a0198a5bf5b05b912",
+  "clipSha256": "54dd3bc5e5bf5657c9a13b0c0444f2cab1c84d9627c1d87dfc4b63a8c95962b7",
+  "scene": "fields",
+  "review": {
+    "heardOpening": "Pour chaque information différente, vous choisissez",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "on prend le téléphone de l'autre fiche",
+        "visibleSeconds": 6.8,
+        "visible": "Sélection du bouton radio pour le deuxième numéro de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Les notes internes peuvent aussi être mises à la suite",
+        "visibleSeconds": 11.2,
+        "visible": "Sélection de l'option Mettre les deux notes à la suite",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Le tableau récapitule les inscriptions",
+        "visibleSeconds": 20.5,
+        "visible": "Tableau récapitulatif Ce qui sera déplacé affiché à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, bien synchronisée avec les interactions visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

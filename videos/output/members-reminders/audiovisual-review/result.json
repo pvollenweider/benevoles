@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:38:32.544Z",
+  "videoSha256": "96f25dcd75edf073893a4fa9444b8ee84771dfad727624389ba8c38a02331343",
+  "promptSha256": "709ed43fc1b3db4e357fd03c7fc8e37e3779f322e26c4b63842dde8dacc3c42e",
+  "clipSha256": "3f5d9906304f5e7b788d736e31a8fff0b80f1ef414bfea30f8a87f77b42ae89b",
+  "scene": "result",
+  "review": {
+    "heardOpening": "De retour dans Invitations",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "De retour dans Invitations",
+        "visibleSeconds": 0,
+        "visible": "Page Invitations affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "les participations n'ont pas changé",
+        "visibleSeconds": 0,
+        "visible": "Tableau récapitulatif des statuts et présences",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Une relance courte, au bon moment",
+        "visibleSeconds": 0,
+        "visible": "Boutons d'action de relance visibles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, accompagnant un écran récapitulatif statique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

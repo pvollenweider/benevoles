@@ -1,59 +1,59 @@
 {
   "id": "EMAIL_DELIVERY_FAILURES",
   "slug": "email-delivery-failures",
-  "validatedAt": "2026-10-06T17:35:34.646Z",
+  "validatedAt": "2026-10-07T02:25:52.208Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 295200,
+  "captureMs": 295360,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 37441,
+      "visualMs": 37442,
       "audioMs": 37440,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "states",
-      "visualMs": 36077,
+      "visualMs": 36079,
       "audioMs": 36076,
-      "driftMs": 1
+      "driftMs": 3
     },
     {
       "id": "reason",
-      "visualMs": 26328,
+      "visualMs": 26327,
       "audioMs": 26326,
-      "driftMs": 2
+      "driftMs": 1
     },
     {
       "id": "retry",
-      "visualMs": 25488,
+      "visualMs": 25490,
       "audioMs": 25486,
-      "driftMs": 2
+      "driftMs": 4
     },
     {
       "id": "address",
-      "visualMs": 54997,
+      "visualMs": 54999,
       "audioMs": 54996,
-      "driftMs": 1
+      "driftMs": 3
     },
     {
       "id": "campaign",
-      "visualMs": 42349,
+      "visualMs": 42350,
       "audioMs": 42348,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "retention",
-      "visualMs": 26936,
+      "visualMs": 26937,
       "audioMs": 26935,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "result",
-      "visualMs": 26595,
+      "visualMs": 26596,
       "audioMs": 26594,
-      "driftMs": 1
+      "driftMs": 2
     }
   ],
   "issues": []

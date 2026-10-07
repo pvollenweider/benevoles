@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:08:25.882Z",
+  "videoSha256": "5ba525686f46bb6316cae59a3d9cdebc88e7985fbe1f97cb452d10251e693b0c",
+  "promptSha256": "b394b39a795e3bf5c0a46bac33ffc486b62e7cadcf60fe43f190e7e5e6389acd",
+  "clipSha256": "73bbcf26866ecfcc5ab7280761c7f376c4e6ba7cdff072b8be1f0b4aec96e10c",
+  "scene": "filter",
+  "review": {
+    "heardOpening": "Avec le filtre de tags, vous pouvez",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "afficher seulement les personnes d'une catégorie",
+        "visibleSeconds": 3,
+        "visible": "Sélection de l'étiquette accueil et filtrage de la liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "puis revenir à Tous les tags",
+        "visibleSeconds": 7.5,
+        "visible": "Réinitialisation du filtre sur Tous les tags",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Les en-têtes permettent aussi de trier la liste",
+        "visibleSeconds": 8.5,
+        "visible": "Aucun clic de tri effectué sur les en-têtes",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Les heures planifiées additionnent les durées",
+        "visibleSeconds": 11.2,
+        "visible": "Survol de la colonne Heures planifiées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:07 - Action de retour à Tous les tags légèrement décalée après l'annonce vocale.",
+      "00:07 - Le tri via les en-têtes est évoqué mais non exécuté."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation claire, conforme au ton pédagogique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

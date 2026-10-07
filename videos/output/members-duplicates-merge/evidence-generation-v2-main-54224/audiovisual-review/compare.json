@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:43:03.311Z",
+  "videoSha256": "386a2aaa7a8b33a87a4af265149f6b3b026fe93db5f4941b88209af9b51b34d3",
+  "promptSha256": "8a4a48ddc874b4ee856f3bf36f5ca2c22b740ad3183ab6645dc2ee97928891de",
+  "clipSha256": "1a443cc7820abc9656252893172fcd649e4ec1f1da9810e5c2865201a093626a",
+  "scene": "compare",
+  "review": {
+    "heardOpening": "Si vous savez que ces deux fiches",
+    "checkpoints": [
+      {
+        "spokenSeconds": 7,
+        "spoken": "Fusionner avec un autre membre est réservé au propriétaire",
+        "visibleSeconds": 8.5,
+        "visible": "Clic sur le lien Fusionner avec un autre membre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Recherchez précisément l’adresse de la seconde fiche",
+        "visibleSeconds": 12.5,
+        "visible": "Saisie de l'adresse dans le champ puis clic sur Chercher",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.2,
+        "spoken": "puis choisissez Fusionner avec cette fiche",
+        "visibleSeconds": 17.2,
+        "visible": "Clic sur le bouton Fusionner avec cette fiche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.3,
+        "spoken": "L’aperçu permet maintenant de comparer les informations",
+        "visibleSeconds": 18.5,
+        "visible": "Affichage de la page Aperçu de la fusion",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

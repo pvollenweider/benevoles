@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:51:57.828Z",
+  "videoSha256": "1a35b065080e4dcc60862acc6b3c5e896e1427802cf20c1e1bb81da074e0b8e7",
+  "promptSha256": "cfda50476b86a904da177258066e60db8c310b2555f7a03ba305895ace7209ff",
+  "clipSha256": "851892f29ae643fba74487e8b5b599beeaa62e20edb74d08c2b58b6f40b4b0b0",
+  "scene": "identity-dates",
+  "review": {
+    "heardOpening": "Commençons par un titre parlant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Commençons par un titre parlant",
+        "visibleSeconds": 1,
+        "visible": "Saisie du titre de l'événement dans le champ Titre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.3,
+        "spoken": "une courte description",
+        "visibleSeconds": 3.2,
+        "visible": "Remplissage automatique du champ Description",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "La date de fin se cale d’abord sur la date de début",
+        "visibleSeconds": 8.5,
+        "visible": "Défilement vers les champs de dates initialisées au 14.11.2026",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "nous la faisons terminer le dimanche",
+        "visibleSeconds": 11.2,
+        "visible": "Modification du champ Date fin pour le 15.11.2026",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit posé et diction naturelle, synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

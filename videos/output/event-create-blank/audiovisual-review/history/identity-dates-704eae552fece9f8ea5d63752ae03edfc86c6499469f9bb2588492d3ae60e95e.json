@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:11:16.040Z",
+  "videoSha256": "3a5b954060449450e682d4286caea681b96fd7ba2c09fe2533a35ca86f69d15f",
+  "promptSha256": "cfda50476b86a904da177258066e60db8c310b2555f7a03ba305895ace7209ff",
+  "clipSha256": "3cfb1a2263a2a3cdb772de20c79baf7233bce53f22163a92b54ff6166c34bbf2",
+  "scene": "identity-dates",
+  "review": {
+    "heardOpening": "Commençons par un titre parlant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Commençons par un titre parlant",
+        "visibleSeconds": 1,
+        "visible": "Saisie du titre 'Fête du quartier des Tilleuls'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "une courte description",
+        "visibleSeconds": 3.8,
+        "visible": "Affichage de la description saisie",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "La date de fin se cale d’abord sur la date de début",
+        "visibleSeconds": 8,
+        "visible": "Affichage des dates identiques au 14.11.2026",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "nous la faisons terminer le dimanche",
+        "visibleSeconds": 11.2,
+        "visible": "Suppression du jour dans la date de fin sans saisie du nouveau jour",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:11 - La date de fin reste incomplète (.11.2026), le jour correspondant au dimanche n'est pas saisi."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

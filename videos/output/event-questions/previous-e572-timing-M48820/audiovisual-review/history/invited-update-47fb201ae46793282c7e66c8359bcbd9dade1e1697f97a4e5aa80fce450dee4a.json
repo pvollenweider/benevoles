@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:10:42.818Z",
+  "videoSha256": "50715a383930b94c66960386d0996cbbd6de02ea593b0ed689ab9af2ac881d81",
+  "promptSha256": "d825ee0a6aad3f9b83d1aa3bc11e51965f5859ba4ce75435679248c384d5fb68",
+  "clipSha256": "61b251262dd35eecdb3704418b9c1bd10c9b8a0da135f7a5cd83b64742895ab4",
+  "scene": "invited-update",
+  "review": {
+    "heardOpening": "Aline se réinscrit maintenant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "pour un deuxième créneau",
+        "visibleSeconds": 3.4,
+        "visible": "Clic sur le créneau 12h-14h puis validation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Choisissons L au lieu de M",
+        "visibleSeconds": 9.8,
+        "visible": "Sélection de la taille L dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "Confirmons",
+        "visibleSeconds": 16.5,
+        "visible": "Clic sur le bouton Confirmer mon inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "La nouvelle taille remplace l'ancienne",
+        "visibleSeconds": 17.5,
+        "visible": "Écran de confirmation affiché",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et synchronisation correcte avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

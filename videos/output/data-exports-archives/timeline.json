@@ -1,53 +1,111 @@
 {
   "slug": "data-exports-archives",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-05T20:34:08.633Z",
+  "recordedAt": "2026-10-06T18:08:11.802Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "1937bcc499ef732c8a6ddbb3a579e8fec58cd64c",
+    "sourceTree": "8daee33cc355ebde1c6a849d2a642855f028e5ca",
+    "productSourceSha256": "564d5c1d0e7b4c129a436a7eaf9fb46afdc8c609b4b12a6899691e01097d5ff5",
+    "buildId": "OVmcFhuwHK28Ui5UakTkL",
+    "snapshot": "/tmp/benevoles-video-production.qMp68s",
+    "builtAt": "2026-10-06T18:00:42.883Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-exports",
+    "scenario": "DATA_EXPORTS_ARCHIVES",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 31865
+    },
+    {
+      "kind": "key",
+      "atMs": 32175
+    },
+    {
+      "kind": "key",
+      "atMs": 32545
+    },
+    {
+      "kind": "click",
+      "atMs": 42381
+    },
+    {
+      "kind": "click",
+      "atMs": 123273
+    },
+    {
+      "kind": "click",
+      "atMs": 125157
+    },
+    {
+      "kind": "click",
+      "atMs": 128007
+    },
+    {
+      "kind": "click",
+      "atMs": 158300
+    },
+    {
+      "kind": "click",
+      "atMs": 162549
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1188,
-      "endMs": 29449
+      "startMs": 1552,
+      "endMs": 26576
     },
     {
       "id": "members",
-      "startMs": 29902,
-      "endMs": 55913
+      "startMs": 28836,
+      "endMs": 54462
     },
     {
       "id": "columns",
-      "startMs": 56364,
-      "endMs": 85917
+      "startMs": 56722,
+      "endMs": 84337
     },
     {
       "id": "csv",
-      "startMs": 86372,
-      "endMs": 117779
+      "startMs": 86599,
+      "endMs": 116206
     },
     {
       "id": "journal",
-      "startMs": 119391,
-      "endMs": 151070
+      "startMs": 119611,
+      "endMs": 151334
     },
     {
       "id": "archive",
-      "startMs": 152717,
-      "endMs": 180851
+      "startMs": 154816,
+      "endMs": 185019
     },
     {
       "id": "contents",
-      "startMs": 181303,
-      "endMs": 212486
+      "startMs": 187279,
+      "endMs": 217495
     },
     {
       "id": "privacy",
-      "startMs": 212939,
-      "endMs": 246132
+      "startMs": 219759,
+      "endMs": 253701
     },
     {
       "id": "result",
-      "startMs": 247732,
-      "endMs": 278566
+      "startMs": 257143,
+      "endMs": 288496
     }
   ]
 }

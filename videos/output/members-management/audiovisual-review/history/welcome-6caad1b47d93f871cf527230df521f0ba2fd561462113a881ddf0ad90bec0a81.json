@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:50:43.839Z",
+  "videoSha256": "5b05ec09f33370d8a36989f503422dd329922701216b4084b0a2366fb687ad4c",
+  "promptSha256": "cbe2af25a82aee4bc3b0a48812ce16805d6bde9567e3463040c6a5cd7b190547",
+  "clipSha256": "2b2924851226c3954f17d85edff90c3e925ec14d846569b3b318445b00684c45",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "La liste des membres rassemble",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "La liste des membres rassemble les personnes",
+        "visibleSeconds": 2.8,
+        "visible": "Disparition du bandeau d'introduction et affichage complet de la liste des membres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Ici, soixante fiches donnent un aperçu d'une vraie équipe",
+        "visibleSeconds": 6.2,
+        "visible": "Compteur '60 membres' affiché en haut à gauche avec coordonnées et étiquettes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Ajouter un membre ne l'inscrit pas automatiquement à une fête",
+        "visibleSeconds": 13,
+        "visible": "Bouton '+ Nouveau membre' visible en haut à droite sur le tableau récapitulatif",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton informatif adapté."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:07:55.259Z",
+  "videoSha256": "5ba525686f46bb6316cae59a3d9cdebc88e7985fbe1f97cb452d10251e693b0c",
+  "promptSha256": "f0747e17bc88f0ec179e90f82d7275f0d9d782037f306b953887da13304fb50b",
+  "clipSha256": "76875e13f3919bebf7dadae406dea1a17ff4bb9e24fc2355533de5884d3dfeed",
+  "scene": "no-email",
+  "review": {
+    "heardOpening": "Une personne peut avoir une fiche sans adresse email",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Une personne peut avoir une fiche sans adresse email",
+        "visibleSeconds": 1,
+        "visible": "Ouverture de la fenêtre Nouveau membre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Nous créons René Aubert",
+        "visibleSeconds": 2.5,
+        "visible": "Saisie du prénom René et du nom Aubert",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "avec son téléphone seulement",
+        "visibleSeconds": 5,
+        "visible": "Numéro renseigné dans le champ Téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "le système ne peut pas lui envoyer un email",
+        "visibleSeconds": 11.5,
+        "visible": "Validation et affichage du nouveau membre dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et en phase avec les manipulations."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

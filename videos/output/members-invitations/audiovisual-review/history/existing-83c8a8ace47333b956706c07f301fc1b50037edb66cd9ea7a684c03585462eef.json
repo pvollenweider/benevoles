@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:32:18.440Z",
+  "videoSha256": "6832eeb70e84d56d0b2d21fe51dfac435f5bcdc4226b19bf7457aabccbdc3d4e",
+  "promptSha256": "688765ad85350345999f8bf58a5060d13c0fe3221bfe18d3c2fde4c38ae88dd3",
+  "clipSha256": "e03b58104f408dcfa32f69785bb270d4870a060d69a425e389cc70a806b2c0d4",
+  "scene": "existing",
+  "review": {
+    "heardOpening": "La case Cacher déjà invités",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "La case Cacher déjà invités évite de sélectionner facilement les mêmes personnes",
+        "visibleSeconds": 1,
+        "visible": "Ouverture de la fenêtre Inviter des membres avec la case cochée par défaut",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Décochez-la si vous voulez les retrouver",
+        "visibleSeconds": 7,
+        "visible": "La case Cacher déjà invités reste cochée sans action de décochage",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Prenez néanmoins le temps de vérifier le groupe avant d'envoyer",
+        "visibleSeconds": 18.5,
+        "visible": "Fermeture de la modale et retour à la liste des invités",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:07 : L'instruction de décocher la case n'est pas exécutée à l'écran.",
+      "00:18 : Fermeture soudaine du formulaire d'invitation sans validation explicite."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et dynamique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

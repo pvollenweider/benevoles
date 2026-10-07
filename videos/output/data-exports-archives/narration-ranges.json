@@ -1,0 +1,53 @@
+{
+  "appliedAt": "2026-10-06T17:50:10.619Z",
+  "sourceHash": "dd2c50d50b7706c7e5c3f0fb0716cdd46af5505b8ad2c1a53aea19f8948fef8c",
+  "sourceDuration": 350.56,
+  "ranges": [
+    {
+      "id": "welcome",
+      "start": 0,
+      "end": 25.022167
+    },
+    {
+      "id": "members",
+      "start": 110.290521,
+      "end": 135.913937
+    },
+    {
+      "id": "columns",
+      "start": 135.913937,
+      "end": 163.528875
+    },
+    {
+      "id": "csv",
+      "start": 163.528875,
+      "end": 193.13373
+    },
+    {
+      "id": "journal",
+      "start": 193.13373,
+      "end": 224.854646
+    },
+    {
+      "id": "archive",
+      "start": 224.854646,
+      "end": 255.055395
+    },
+    {
+      "id": "contents",
+      "start": 255.055395,
+      "end": 285.269729
+    },
+    {
+      "id": "privacy",
+      "start": 285.269729,
+      "end": 319.209917
+    },
+    {
+      "id": "result",
+      "start": 319.209917,
+      "end": 350.56
+    }
+  ],
+  "note": "Original master preserved; omitted source passages explicitly visible. Independent chapter ASR and new capture required. No final validation claimed."
+}

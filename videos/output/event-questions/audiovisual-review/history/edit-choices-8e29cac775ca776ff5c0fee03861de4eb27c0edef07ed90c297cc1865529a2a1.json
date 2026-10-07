@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:29:17.143Z",
+  "videoSha256": "f6ee805a2a5d1386fbd03a014714cf489ae12f80d0fc33e6c0a6004b3e061dd5",
+  "promptSha256": "a9576a6b270395d1122efe046d278d49779a241beb23da59256b0dadba4f6547",
+  "clipSha256": "d03bd84b30a9fe0fcd05ad65078072eff0c0bb0cd969b477ad0f75cdc6e560bc",
+  "scene": "edit-choices",
+  "review": {
+    "heardOpening": "On peut cependant enrichir la liste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "Rouvrons la question et ajoutons XXL",
+        "visibleSeconds": 4.1,
+        "visible": "Formulaire de modification ouvert avec le choix XXL présent",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 10.9,
+        "visible": "Validation et retour à la synthèse affichant XXL",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "la taille L d'Aline reste conservée",
+        "visibleSeconds": 13,
+        "visible": "Vue Inscriptions montrant Aline Mercier avec la taille L",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

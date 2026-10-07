@@ -1,44 +1,282 @@
 {
   "slug": "global-search",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-06T02:27:20.176Z",
+  "recordedAt": "2026-10-06T18:38:27.389Z",
   "video": "capture.webm",
+  "product": {
+    "commit": "54224c7ad2bd465e63dcf30ab91266b1455a3a23",
+    "sourceTree": "cee2ccecd3aa5c82abfea3fcee4c5691dc16ba0b",
+    "productSourceSha256": "9490665d241594d8e538bc3d1c8238667338aeaaac1336a944062c5260dce6da",
+    "buildId": "uqE7YLJo_7r8CbyaqRify",
+    "snapshot": "/tmp/benevoles-video-production.KsjGwn",
+    "builtAt": "2026-10-06T18:15:27.264Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-FR",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-recherche",
+    "scenario": "GLOBAL_SEARCH",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 13745
+    },
+    {
+      "kind": "key",
+      "atMs": 17016
+    },
+    {
+      "kind": "key",
+      "atMs": 18508
+    },
+    {
+      "kind": "key",
+      "atMs": 18508
+    },
+    {
+      "kind": "key",
+      "atMs": 23482
+    },
+    {
+      "kind": "click",
+      "atMs": 28344
+    },
+    {
+      "kind": "click",
+      "atMs": 29159
+    },
+    {
+      "kind": "key",
+      "atMs": 29466
+    },
+    {
+      "kind": "key",
+      "atMs": 29662
+    },
+    {
+      "kind": "key",
+      "atMs": 29761
+    },
+    {
+      "kind": "key",
+      "atMs": 29858
+    },
+    {
+      "kind": "key",
+      "atMs": 29956
+    },
+    {
+      "kind": "key",
+      "atMs": 30054
+    },
+    {
+      "kind": "key",
+      "atMs": 30152
+    },
+    {
+      "kind": "key",
+      "atMs": 30251
+    },
+    {
+      "kind": "key",
+      "atMs": 30536
+    },
+    {
+      "kind": "click",
+      "atMs": 33365
+    },
+    {
+      "kind": "click",
+      "atMs": 37826
+    },
+    {
+      "kind": "key",
+      "atMs": 52112
+    },
+    {
+      "kind": "click",
+      "atMs": 52638
+    },
+    {
+      "kind": "key",
+      "atMs": 52945
+    },
+    {
+      "kind": "key",
+      "atMs": 53043
+    },
+    {
+      "kind": "key",
+      "atMs": 53140
+    },
+    {
+      "kind": "key",
+      "atMs": 53239
+    },
+    {
+      "kind": "key",
+      "atMs": 53336
+    },
+    {
+      "kind": "key",
+      "atMs": 53434
+    },
+    {
+      "kind": "key",
+      "atMs": 53533
+    },
+    {
+      "kind": "key",
+      "atMs": 53630
+    },
+    {
+      "kind": "key",
+      "atMs": 53728
+    },
+    {
+      "kind": "key",
+      "atMs": 53827
+    },
+    {
+      "kind": "key",
+      "atMs": 53925
+    },
+    {
+      "kind": "key",
+      "atMs": 54024
+    },
+    {
+      "kind": "key",
+      "atMs": 54121
+    },
+    {
+      "kind": "key",
+      "atMs": 54220
+    },
+    {
+      "kind": "key",
+      "atMs": 54317
+    },
+    {
+      "kind": "key",
+      "atMs": 54601
+    },
+    {
+      "kind": "click",
+      "atMs": 56573
+    },
+    {
+      "kind": "key",
+      "atMs": 68106
+    },
+    {
+      "kind": "click",
+      "atMs": 68620
+    },
+    {
+      "kind": "key",
+      "atMs": 68926
+    },
+    {
+      "kind": "key",
+      "atMs": 69122
+    },
+    {
+      "kind": "key",
+      "atMs": 69221
+    },
+    {
+      "kind": "key",
+      "atMs": 69319
+    },
+    {
+      "kind": "key",
+      "atMs": 69417
+    },
+    {
+      "kind": "key",
+      "atMs": 69515
+    },
+    {
+      "kind": "key",
+      "atMs": 69613
+    },
+    {
+      "kind": "key",
+      "atMs": 69710
+    },
+    {
+      "kind": "key",
+      "atMs": 69993
+    },
+    {
+      "kind": "key",
+      "atMs": 72197
+    },
+    {
+      "kind": "click",
+      "atMs": 72716
+    },
+    {
+      "kind": "key",
+      "atMs": 73023
+    },
+    {
+      "kind": "key",
+      "atMs": 73121
+    },
+    {
+      "kind": "key",
+      "atMs": 73219
+    },
+    {
+      "kind": "key",
+      "atMs": 73503
+    }
+  ],
   "cues": [
     {
       "id": "welcome",
       "startMs": 0,
-      "endMs": 14165
+      "endMs": 12831
     },
     {
       "id": "open",
-      "startMs": 14616,
-      "endMs": 28291
+      "startMs": 13283,
+      "endMs": 25719
     },
     {
       "id": "person",
-      "startMs": 30454,
-      "endMs": 50166
+      "startMs": 27881,
+      "endMs": 44584
     },
     {
       "id": "shift",
-      "startMs": 50620,
-      "endMs": 66568
+      "startMs": 45034,
+      "endMs": 60407
     },
     {
       "id": "limits",
-      "startMs": 67024,
-      "endMs": 83688
+      "startMs": 60859,
+      "endMs": 76601
     },
     {
       "id": "result",
-      "startMs": 84140,
-      "endMs": 96823
+      "startMs": 77054,
+      "endMs": 89338
     }
   ],
   "detailFrames": [
     {
-      "startMs": 14616,
-      "endMs": 24876,
+      "startMs": 13283,
+      "endMs": 23484,
       "x": 640,
       "y": 0,
       "width": 640,

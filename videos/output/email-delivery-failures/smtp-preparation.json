@@ -1,44 +1,51 @@
 {
-  "checkedAt": "2026-10-05T22:03:12.874Z",
+  "checkedAt": "2026-10-06T19:35:05.651Z",
   "scope": "SMTP fixture only; no outbox rows or app UI proven yet",
   "attempts": [
     {
       "recipient": "video.delivery.smtp-probe@example.org",
       "accepted": false,
-      "timestamp": "2026-10-05T22:03:12.733Z"
+      "responseCode": 550,
+      "timestamp": "2026-10-06T19:35:05.496Z"
     },
     {
       "recipient": "video.delivery.smtp-probe@example.org",
       "accepted": false,
-      "timestamp": "2026-10-05T22:03:12.736Z"
+      "responseCode": 550,
+      "timestamp": "2026-10-06T19:35:05.499Z"
     },
     {
       "recipient": "video.delivery.smtp-probe@example.org",
       "accepted": false,
-      "timestamp": "2026-10-05T22:03:12.737Z"
+      "responseCode": 550,
+      "timestamp": "2026-10-06T19:35:05.502Z"
     },
     {
       "recipient": "video.delivery.smtp-probe@example.org",
       "accepted": false,
-      "timestamp": "2026-10-05T22:03:12.739Z"
+      "responseCode": 550,
+      "timestamp": "2026-10-06T19:35:05.503Z"
     },
     {
       "recipient": "video.delivery.smtp-probe@example.org",
       "accepted": false,
-      "timestamp": "2026-10-05T22:03:12.741Z"
+      "responseCode": 550,
+      "timestamp": "2026-10-06T19:35:05.505Z"
     },
     {
       "recipient": "video.delivery.smtp-probe@example.org",
       "accepted": false,
-      "timestamp": "2026-10-05T22:03:12.742Z"
+      "responseCode": 550,
+      "timestamp": "2026-10-06T19:35:05.506Z"
     },
     {
       "recipient": "video.delivery.smtp-probe@example.org",
       "accepted": true,
-      "timestamp": "2026-10-05T22:03:12.743Z"
+      "responseCode": 250,
+      "timestamp": "2026-10-06T19:35:05.507Z"
     }
   ],
-  "actualDeliveredMailId": "33dp5cjKHx7ZMeE32oNPHp",
+  "actualDeliveredMailId": "1O60SWr7RHroC42OKPSOPt",
   "localSmtpPort": 41028,
   "forwardingOnlyToLocalMailpit": 41026
 }

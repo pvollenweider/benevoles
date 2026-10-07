@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:26:49.624Z",
+  "videoSha256": "f6ee805a2a5d1386fbd03a014714cf489ae12f80d0fc33e6c0a6004b3e061dd5",
+  "promptSha256": "3b8e98e90e0bb79b66bb3f7ccf16c5af9a2a70130d59c91abf8ca39cad2e1143",
+  "clipSha256": "88a3167385da95da73b0e5afe61fdb6cec534428c5994e91ec215b212d129364",
+  "scene": "create-yesno",
+  "review": {
+    "heardOpening": "Pour le permis de conduire, une réponse simple suffit",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Ajoutons une nouvelle question",
+        "visibleSeconds": 3.1,
+        "visible": "Ouverture du formulaire d'ajout d'une question",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "puis écrivons Permis de conduire",
+        "visibleSeconds": 5.2,
+        "visible": "Saisie de « Permis de conduire » dans le champ de question",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Choisissons Oui ou non dans le type de réponse",
+        "visibleSeconds": 8.8,
+        "visible": "Sélection de l'option « Oui ou non » dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "rendons aussi la réponse obligatoire",
+        "visibleSeconds": 16,
+        "visible": "Coche de la case « Réponse obligatoire »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "puis enregistrons",
+        "visibleSeconds": 17.8,
+        "visible": "Clic sur Enregistrer et affichage de la question dans la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

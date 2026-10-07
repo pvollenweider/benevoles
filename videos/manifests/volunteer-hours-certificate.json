@@ -6,10 +6,10 @@
   "viewer": {
     "summary": "Dans cette vidéo, vous lisez les heures planifiées et attestées de vos bénévoles, exportez un bilan par période et préparez une attestation de bénévolat.",
     "steps": [
-      "Dans la liste des membres, comparez les heures planifiées et les heures attestées de chaque personne.",
+      "Dans la liste des membres, comparez les heures planifiées et les heures attestées de chaque personne, puis triez ces heures ou la dernière participation.",
       "Ouvrez l'activité d'un membre pour retrouver les faits enregistrés et les événements concernés.",
       "Dans « Heures par bénévole », choisissez une période et téléchargez le CSV, en incluant si besoin les membres sans créneau confirmé.",
-      "Depuis l'activité du membre, ouvrez « Attestation de bénévolat », choisissez la période et ajoutez une remarque si vous le souhaitez.",
+      "Depuis l'activité du membre, ouvrez « Attestation de bénévolat », choisissez la période et ajoutez une remarque si vous le souhaitez : l'aperçu reprend le logo de votre organisation.",
       "Cochez au besoin « Inclure les heures planifiées sans présence saisie », puis vérifiez l'aperçu.",
       "Cliquez sur « Générer et imprimer l'attestation », enregistrez-la en PDF puis complétez la signature.",
       "Dans les rapports de l'événement, lisez le résumé des personnes, des inscriptions et des heures."
@@ -17,7 +17,7 @@
     "remember": [
       "Les heures attestées font partie des heures planifiées : elles ne s'y ajoutent pas.",
       "Les heures reposent sur la durée des créneaux et la présence saisie, pas sur un temps chronométré.",
-      "Une présence non saisie n'est pas une preuve d'absence.",
+      "Une présence non saisie n'est pas une preuve d'absence, et aucun de ces repères ne désactive un membre à votre place.",
       "Les créneaux à venir et les inscriptions ou créneaux annulés ne comptent pas, sauf dates futures incluses dans la période choisie."
     ]
   },
@@ -33,6 +33,7 @@
   },
   "chapterTitles": {
     "hours-list": "Lire les heures des membres",
+    "last-participation": "Dernière participation et tris",
     "activity": "Retrouver les faits enregistrés",
     "period-export": "Exporter une période",
     "certificate-settings": "Préparer l'attestation",
@@ -47,6 +48,11 @@
       "fallbackDurationMs": 44000
     },
     {
+      "id": "last-participation",
+      "transcript": "La dernière participation apporte un autre repère. Pour Aline, la date du dernier créneau confirmé apparaît au-dessus de celle de sa dernière présence enregistrée. Pour Benoît, aucune présence n'a été saisie : ce n'est pas une preuve d'absence. Vous pouvez aussi trier les heures attestées. Un clic les classe par ordre croissant, un deuxième inverse cet ordre, et le troisième rétablit la liste initiale. Cliquons enfin sur Dernière participation pour trier cette date. Aucun de ces repères ne désactive automatiquement un membre : vous gardez la décision.",
+      "fallbackDurationMs": 50000
+    },
+    {
       "id": "activity",
       "transcript": "Ouvrons l'activité d'Aline. Vous retrouvez les faits enregistrés, leur date et l'événement concerné. C'est utile pour comprendre son parcours et vérifier ce qui s'est passé. Ce journal ne mesure pas le temps réellement travaillé : les heures attestées reposent sur une présence saisie et sur la durée du créneau. L'absence de présence saisie ne permet pas, à elle seule, de conclure qu'une personne était absente.",
       "fallbackDurationMs": 38000
@@ -58,8 +64,8 @@
     },
     {
       "id": "certificate-settings",
-      "transcript": "Préparons maintenant une attestation pour Aline. Depuis son activité, ouvrons Attestation de bénévolat. Choisissons une période du premier mai au trente septembre. Vous pouvez ajouter une remarque facultative : écrivons Accueil du public et rangement du matériel. L'aperçu reprend le nom du bénévole, celui de l'organisation, les dates et le détail par événement. Prenez le temps de vérifier que cette période et ce commentaire correspondent bien au document que vous voulez remettre.",
-      "fallbackDurationMs": 45000
+      "transcript": "Préparons maintenant une attestation pour Aline. Depuis son activité, ouvrons Attestation de bénévolat. Choisissons une période du premier mai au trente septembre. Vous pouvez ajouter une remarque facultative : écrivons Accueil du public et rangement du matériel. L'aperçu reprend le nom du bénévole, celui de l'organisation, les dates et le détail par événement. Le logo enregistré dans les réglages de l'organisation apparaît aussi. Il est imprimé en gris pour garder un document adapté au noir et blanc. Prenez le temps de vérifier que cette période et ce commentaire correspondent bien au document que vous voulez remettre.",
+      "fallbackDurationMs": 52000
     },
     {
       "id": "certificate-presence",

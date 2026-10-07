@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:38:04.037Z",
+  "videoSha256": "96f25dcd75edf073893a4fa9444b8ee84771dfad727624389ba8c38a02331343",
+  "promptSha256": "4b686f754d1873d90d86a7307cf54d5ceda21ac3c3365ff8eb046cce12595d79",
+  "clipSha256": "e97b2d542bc946e89561534c0b4190e4f1c4b056795bef35500354bcce1acc35",
+  "scene": "waitlist",
+  "review": {
+    "heardOpening": "Dans cet aperçu, regardez aussi les personnes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans cet aperçu, regardez aussi les personnes qui sont seulement en liste d'attente",
+        "visibleSeconds": 1,
+        "visible": "Fermeture de la fenêtre d'aperçu au lieu d'un examen du contenu",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Vous pouvez rappeler qu'elles n'ont pas à refaire leur demande",
+        "visibleSeconds": 7.5,
+        "visible": "Saisie du texte d'information sur la liste d'attente dans le champ message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "La relance simple, elle, n'attend pas automatiquement trois jours",
+        "visibleSeconds": 18.5,
+        "visible": "Clic sur Voir l'aperçu et réouverture de la modale",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:01 : La fenêtre d'aperçu se ferme alors que la voix demande d'y examiner les personnes en liste d'attente."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

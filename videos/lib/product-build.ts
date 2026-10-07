@@ -14,6 +14,21 @@ export type ProductBuild = {
   snapshot: string
   builtAt: string
 }
+let activeCaptureProof: ProductBuild | null = null
+/** Pin only after the full live-server check against current main succeeds.
+ * This is process-local, never an environment override or a rewritten stamp.
+ * Final validation remains against main; an in-flight take cannot change builds.
+ */
+export async function pinProductBuildForCapture(baseUrl: string): Promise<ProductBuild> {
+  if (activeCaptureProof) throw new Error("A capture reference is already pinned in this process")
+  const proof = await verifyProductBuild(baseUrl)
+  activeCaptureProof = Object.freeze({ ...proof })
+  return proof
+}
+export function requireCaptureRevision(actual: ProductBuild, target: string, pinned: ProductBuild | null) {
+  if (actual.commit !== (pinned?.commit ?? target)) throw new Error("Video server does not match target main; rebuild before recording")
+  if (pinned && JSON.stringify(actual) !== JSON.stringify(pinned)) throw new Error("Video build changed during the pinned take; refuse mixed provenance")
+}
 /** Require the actual listening process, not just an env var claiming a revision. */
 export async function verifyProductBuild(baseUrl: string): Promise<ProductBuild> {
   const url = new URL(baseUrl)
@@ -22,7 +37,8 @@ export async function verifyProductBuild(baseUrl: string): Promise<ProductBuild>
   if (!Number.isInteger(port) || !((port >= 43100 && port <= 43110) || port === 43112 || port === 43114)) throw new Error("Dedicated video port required")
   const registry = JSON.parse(await readFile(path.resolve(`videos/output/product-server-${port}.json`), "utf8")) as ProductBuild & { pid: number; port: number }
   const { stdout: target } = await exec("git", ["rev-parse", "origin/main"])
-  if (registry.commit !== target.trim()) throw new Error("Video server does not match target main; rebuild before recording")
+  const registeredProof = Object.fromEntries(Object.entries(registry).filter(([key]) => !["pid", "port"].includes(key))) as ProductBuild
+  requireCaptureRevision(registeredProof, target.trim(), activeCaptureProof)
   if (registry.port !== port || !Number.isInteger(registry.pid) || !/^\/(?:private\/)?tmp\/benevoles-video-production\.[A-Za-z0-9]+$/.test(registry.snapshot)) throw new Error("Invalid product server registry")
   const { stdout: listener } = await exec("lsof", ["-nP", "-a", `-iTCP:${port}`, "-sTCP:LISTEN", "-Fp"])
   if (!listener.split("\n").includes(`p${registry.pid}`)) throw new Error("Video port is served by a different process")

@@ -20,9 +20,11 @@ export function captionDisplayText(text: string): string {
   return result
 }
 
-export function readableCaptions(text: string, startMs: number, durationMs: number) {
+export function readableCaptions(text: string, startMs: number, durationMs: number, normalizeDisplay = true) {
   if (!(durationMs > 0) || startMs < 0) throw new Error("Invalid caption interval")
-  const words = captionDisplayText(text).trim().split(/\s+/).filter(Boolean)
+  // The original spoken words alone determine boundaries and timing. Never
+  // count a display date (six spoken words condensed to one) as one spoken word.
+  const words = text.trim().split(/\s+/).filter(Boolean)
   if (!words.length || words.some(word => word.length > 42)) throw new Error("Caption text contains an empty or overlong word")
   const maxWords = Math.max(1, Math.floor(words.length * 6_800 / durationMs))
   const blocks: { text: string; words: number }[] = []
@@ -49,6 +51,15 @@ export function readableCaptions(text: string, startMs: number, durationMs: numb
     consumed += block.words
     const end = startMs + Math.round(durationMs * consumed / words.length)
     if (end - beginning > 7_000) throw new Error("Narration too slow for readable seven-second captions; needs manual alignment")
-    return { startMs: beginning, endMs: end, text: block.text }
+    const normalized = normalizeDisplay ? captionDisplayText(block.text.replace(/\n/g, " ")) : block.text
+    const displayLines = [""]
+    for (const word of normalized.split(/\s+/)) {
+      if (displayLines.at(-1)!.length + (displayLines.at(-1) ? 1 : 0) + word.length > 42) displayLines.push("")
+      const index = displayLines.length - 1
+      displayLines[index] += `${displayLines[index] ? " " : ""}${word}`
+    }
+    // If typography expands unusually, preserve the already-valid source block.
+    // A date spanning two distinct cues is intentionally not joined or retimed.
+    return { startMs: beginning, endMs: end, text: displayLines.length <= 2 ? displayLines.join("\n") : block.text }
   })
 }

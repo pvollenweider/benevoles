@@ -59,6 +59,11 @@ async function main() {
     allowed.add("videos/tools/prepare-accessibility.ts")
     allowed.add("videos/tools/prepare-day-of.ts")
     allowed.add("videos/tools/prepare-member-merge.ts")
+    allowed.add("videos/tools/prepare-member-merge-v2.ts")
+    allowed.add("videos/tools/prepare-member-merge-v3.ts")
+    allowed.add("videos/tools/prepare-member-merge-v4.ts")
+    allowed.add("videos/tools/prepare-member-merge-v5.ts")
+    allowed.add("videos/tools/prepare-data-exports.ts")
     allowed.add("videos/tools/prepare-event-questions.ts")
     allowed.add("videos/tools/prepare-volunteer-hours.ts")
     allowed.add("videos/tools/prepare-navigation.ts")
@@ -73,10 +78,12 @@ async function main() {
     allowed.add("videos/tools/verify-registration-errors.ts")
     allowed.add("videos/tools/verify-registration-invitation-success.ts")
     allowed.add("videos/tools/check-registration-error-reset-guard.ts")
+    allowed.add("videos/tools/migrate-private-identities.ts")
+    allowed.add("videos/tools/migrate-export-identities.ts")
     if (!allowed.has(script)) throw new Error("Unknown local video tool")
     if (mode === "run-delivery") {
       if (!["videos/tools/record.ts", "videos/tools/audit-audiovisual.ts"].includes(script) || rest[0] !== "EMAIL_DELIVERY_FAILURES") throw new Error("Only the delivery recorder/review is allowed on the dedicated server")
-      Object.assign(env, { NEXTAUTH_URL: "http://localhost:43106", VIDEO_BASE_URL: "http://localhost:43106", ORG_ADMIN_EMAIL: "video.delivery.owner@example.org", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41028", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
+      Object.assign(env, { NEXTAUTH_URL: "http://localhost:43106", VIDEO_BASE_URL: "http://localhost:43106", VIDEO_ORG: "formation-livraisons", ORG_ADMIN_EMAIL: "video.delivery.owner@example.org", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41028", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     }
     if (script === "videos/tools/record.ts" || script === "videos/tools/audit-audiovisual.ts") {
       const commonTake = ["EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP", ...memberTakes].includes(rest[0])
@@ -84,9 +91,10 @@ async function main() {
       if (rest[0] === "ADMIN_NAVIGATION") Object.assign(env, { ORG_ADMIN_EMAIL: "video.navigation.owner@example.org", VIDEO_ORG: "formation-navigation", VIDEO_EVENT_SLUG: "rencontre-0" })
       if (rest[0] === "GLOBAL_SEARCH") Object.assign(env, { ORG_ADMIN_EMAIL: "video.search.owner@example.org", VIDEO_ORG: "formation-recherche", VIDEO_EVENT_SLUG: "rencontre-0" })
       if (rest[0] === "ATTENDANCE_CHECK_IN") Object.assign(env, { NEXTAUTH_URL: "http://localhost:43108", VIDEO_BASE_URL: "http://localhost:43108", ORG_ADMIN_EMAIL: "video.dayof.owner@example.org", VIDEO_ORG: "formation-jour-j", VIDEO_EVENT_SLUG: "atelier-pointage" })
+      if (rest[0] === "DATA_EXPORTS_ARCHIVES") Object.assign(env, { NEXTAUTH_URL: "http://localhost:43102", VIDEO_BASE_URL: "http://localhost:43102", ORG_ADMIN_EMAIL: "video.exports.owner@example.org", VIDEO_ORG: "formation-exports", VIDEO_EVENT_SLUG: "fete-des-archives" })
       if (rest[0] === "MEMBERS_DUPLICATES_MERGE") {
         if (mode !== "run" || url.port !== "45433") throw new Error("Merge recording requires isolated local wrapper")
-        Object.assign(env, { NEXTAUTH_URL: "http://localhost:43110", VIDEO_BASE_URL: "http://localhost:43110", ORG_ADMIN_EMAIL: "video.merge.owner@example.org", VIDEO_ORG: "formation-fusion", VIDEO_EVENT_SLUG: "atelier-fusion", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
+        Object.assign(env, { NEXTAUTH_URL: "http://localhost:43110", VIDEO_BASE_URL: "http://localhost:43110", ORG_ADMIN_EMAIL: "video.merge-v5.owner@example.org", VIDEO_ORG: "formation-fusion-v5", VIDEO_EVENT_SLUG: "atelier-fusion-v5", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
       }
       if (rest[0] === "EVENT_QUESTIONS") {
         if (mode !== "run" || url.port !== "45433") throw new Error("Questions recording requires isolated local wrapper")
@@ -99,14 +107,35 @@ async function main() {
       const foundation = ({ ORG_TIMEZONE_CHARTER: "charter", ORG_PUBLIC_IDENTITY: "identity", ORG_EMAIL_SETTINGS: "email", ORG_TEAM_PERMISSIONS: "team", EVENT_CREATE_BLANK: "blank", EVENT_CREATE_TEMPLATE: "template", EVENT_MILESTONES: "milestones", EVENT_PROGRAM_PAGES_QR: "pages", SHIFTS_ROLES_VIEWS: "planning" } as Record<string, string>)[rest[0]]
       if (foundation) Object.assign(env, { ORG_ADMIN_EMAIL: `video.${foundation}.owner@example.org`, VIDEO_ORG: foundation === "identity" ? "fetes-de-montvert" : `formation-${foundation}`, VIDEO_EVENT_SLUG: "rencontre-0" })
       const validFlags = rest.length === 1 || (script === "videos/tools/record.ts" && rest.length === 3 && rest[1] === "--rehearse" && rest[2] === "--quick-rehearse")
-      if (!(validTake || commonTake || rest[0] === "SHIFTS_ROLES_VIEWS" || rest[0] === "EVENT_REPORTS" || rest[0] === "ATTENDANCE_CHECK_IN" || rest[0] === "MEMBERS_DUPLICATES_MERGE" || rest[0] === "EVENT_QUESTIONS" || rest[0] === "VOLUNTEER_HOURS_CERTIFICATE") || !validFlags) throw new Error("Only explicit local video takes and rehearsal flags accepted")
+      if (!(validTake || commonTake || rest[0] === "SHIFTS_ROLES_VIEWS" || rest[0] === "EVENT_REPORTS" || rest[0] === "ATTENDANCE_CHECK_IN" || rest[0] === "MEMBERS_DUPLICATES_MERGE" || rest[0] === "EVENT_QUESTIONS" || rest[0] === "VOLUNTEER_HOURS_CERTIFICATE" || rest[0] === "DATA_EXPORTS_ARCHIVES") || !validFlags) throw new Error("Only explicit local video takes and rehearsal flags accepted")
       if (memberTakes.includes(rest[0])) Object.assign(env, { VIDEO_ORG: "default", VIDEO_EVENT_SLUG: rest[0] === "REMINDERS_CHANGES" ? "atelier-rappels" : "fete-du-village" })
+    } else if (script === "videos/tools/migrate-private-identities.ts") {
+      if (mode !== "run" || url.port !== "45433" || rest.length !== 2 || !["delivery", "merge"].includes(rest[0]) || !["--check-only", "--apply-exact-owned"].includes(rest[1])) throw new Error("Only exact private identity migration or read-only preflight accepted")
+      await verifyProductBuild(rest[0] === "delivery" ? "http://localhost:43106" : "http://localhost:43110")
+    } else if (script === "videos/tools/migrate-export-identities.ts") {
+      if (mode !== "run" || url.port !== "45433" || rest.length !== 1 || rest[0] !== "--apply-exact-owned") throw new Error("Only exact export identity migration accepted")
+      await verifyProductBuild("http://localhost:43102")
+    } else if (script === "videos/tools/prepare-data-exports.ts") {
+      if (mode !== "run" || url.port !== "45433" || rest.length) throw new Error("Only exact owned export preparation accepted")
+      await verifyProductBuild("http://localhost:43102")
     } else if (script === "videos/tools/prepare-volunteer-hours.ts") {
       if (mode !== "run" || url.port !== "45433" || (rest.length && !(rest.length === 1 && rest[0] === "--reset-owned"))) throw new Error("Only isolated hours preparation or explicit owned reset accepted")
       await verifyProductBuild("http://localhost:43114")
     } else if (script === "videos/tools/prepare-event-questions.ts") {
       if (mode !== "run" || url.port !== "45433" || (rest.length && !(rest.length === 1 && rest[0] === "--reset-owned"))) throw new Error("Only isolated questions preparation or explicit owned reset accepted")
       await verifyProductBuild("http://localhost:43112")
+    } else if (script === "videos/tools/prepare-member-merge-v5.ts") {
+      if (mode !== "run" || url.port !== "45433" || rest.length) throw new Error("Only create-once isolated merge generation v5 accepted")
+      await verifyProductBuild("http://localhost:43110")
+    } else if (script === "videos/tools/prepare-member-merge-v4.ts") {
+      if (mode !== "run" || url.port !== "45433" || rest.length) throw new Error("Only create-once isolated merge generation v4 accepted")
+      await verifyProductBuild("http://localhost:43110")
+    } else if (script === "videos/tools/prepare-member-merge-v3.ts") {
+      if (mode !== "run" || url.port !== "45433" || rest.length) throw new Error("Only create-once isolated merge generation v3 accepted")
+      await verifyProductBuild("http://localhost:43110")
+    } else if (script === "videos/tools/prepare-member-merge-v2.ts") {
+      if (mode !== "run" || url.port !== "45433" || rest.length) throw new Error("Only create-once isolated merge generation v2 accepted")
+      await verifyProductBuild("http://localhost:43110")
     } else if (script === "videos/tools/prepare-member-merge.ts") {
       if (mode !== "run" || url.port !== "45433" || (rest.length && !(rest.length === 1 && rest[0] === "--reset-owned"))) throw new Error("Only isolated merge preparation or explicit owned reset accepted")
       await verifyProductBuild("http://localhost:43110")

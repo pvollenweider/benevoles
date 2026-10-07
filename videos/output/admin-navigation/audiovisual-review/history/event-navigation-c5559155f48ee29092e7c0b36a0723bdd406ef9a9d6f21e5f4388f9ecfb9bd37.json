@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:57:11.324Z",
+  "videoSha256": "efc3fa2ff00bbca286a3418dff1a87edc31728a93b5394b54d608373a831309d",
+  "promptSha256": "d750a3c3f00175451494aaca94ca424ddc9593f6ea2de0ab59cd4caa55a38803",
+  "clipSha256": "72a6f3943bc00a60ef6c01fa512b7b21717f09bed8cc35b7c3189ea4ae952564",
+  "scene": "event-navigation",
+  "review": {
+    "heardOpening": "Ouvrez un événement.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrez un événement.",
+        "visibleSeconds": 0.8,
+        "visible": "Clic sur l'événement et affichage de la fiche correspondante.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Sa page propose Gérer les créneaux, Voir les inscriptions et Inviter des membres.",
+        "visibleSeconds": 2,
+        "visible": "Affichage des trois boutons d'action principaux.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "Vous retrouvez aussi les liens vers le QR code, les rapports, le journal, les pages et les questions.",
+        "visibleSeconds": 7,
+        "visible": "Présence de la ligne de liens contextuels sous les boutons.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Plus bas, les sections présentent les jalons, les communications et les besoins de cet événement.",
+        "visibleSeconds": 15,
+        "visible": "Défilement de la page affichant les sections mentionnées.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.8,
+        "spoken": "Le lien Événements vous ramène à la liste de l’association.",
+        "visibleSeconds": 20.2,
+        "visible": "Clic sur le lien de navigation et retour à la liste générale.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier, synchronisé avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:37:13.541Z",
-  "videoSha256": "4f2463aa78f990278c1913f94a35e27170bbb7b98cd4fc848478da990a80a1cb",
+  "reviewedAt": "2026-10-06T18:24:07.734Z",
+  "videoSha256": "d217b3a0a43428c453f7c2c1a5bc4b13ee389513c507c1e86a749f7830b0d369",
   "promptSha256": "c5dd1d4fa7ca621f8fe51b627cbd8646ddb67d17868babded37d068e0b5c1644",
-  "clipSha256": "b766c51ec9d3ab0cc2b7317321bff132f43fd1af7dd84e1c03081f2d5f1706bc",
+  "clipSha256": "e77a5d954cbdf08f01f3aac9250d7e9a8c518463c2ea83ad5df05a204678bad1",
   "scene": "search",
   "review": {
     "heardOpening": "La recherche aide à retrouver une personne",
@@ -11,24 +11,24 @@
       {
         "spokenSeconds": 0.5,
         "spoken": "La recherche aide à retrouver une personne par son nom",
-        "visibleSeconds": 0.8,
-        "visible": "Saisie dans le champ de recherche filtrant la liste des membres",
+        "visibleSeconds": 1,
+        "visible": "Recherche 'Emilié' active avec liste de résultats filtrée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10,
-        "spoken": "ici, deux Stéphane Favre ont des coordonnées différentes",
-        "visibleSeconds": 9.8,
-        "visible": "Affichage de deux résultats pour Stéphane Favre avec emails distincts",
+        "spokenSeconds": 5.2,
+        "spoken": "Les accents ne doivent pas compliquer la recherche",
+        "visibleSeconds": 5,
+        "visible": "Résultats affichés malgré la variante accentuée saisie",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 17.5,
-        "spoken": "Vérifiez le contact et les inscriptions avant de modifier une fiche",
-        "visibleSeconds": 17.5,
-        "visible": "Tableau affichant les détails de contact et actions disponibles",
+        "spokenSeconds": 9.8,
+        "spoken": "deux Stéphane Favre ont des coordonnées différentes",
+        "visibleSeconds": 10,
+        "visible": "Deux fiches Stéphane Favre affichées avec emails distincts",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      "observation": "Élocution posée, claire et rythme régulier."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

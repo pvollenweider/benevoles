@@ -1,0 +1,81 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-06T19:12:19.960Z",
+  "revalidatedAt": "2026-10-06T19:12:19.960Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "4e9055095f2bdb94e79a6bb5da0887d2877507a94efc7df2305de2074de7aff2",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "duplicates",
+      "audioSha256": "e882efc3245e8280ac39388a7f1359d774b5feac8ffbca5a2909797c45393352",
+      "recognized": "Deux fiches pour une seule personne ? Dans membres, ouvrez doublons possibles. Les raisons du rapprochement sont expliquées, mais un nom identique ne suffit pas à décider. Deux personnes peuvent être homonymes. Comparer et fusionner ouvre un aperçu sans encore modifier les fiches. Revenons aux suggestions. Ignorer retire simplement la paire de cette liste. Les deux fiches existent toujours et une nouvelle raison de rapprochement pourrait faire revenir la suggestion plus tard.",
+      "expected": "Deux fiches pour une seule personne ? Dans Membres, ouvrez Doublons possibles. Les raisons du rapprochement sont expliquées, mais un nom identique ne suffit pas à décider : deux personnes peuvent être homonymes. Comparer et fusionner ouvre un aperçu, sans encore modifier les fiches. Revenons aux suggestions. Ignorer retire simplement la paire de cette liste. Les deux fiches existent toujours, et une nouvelle raison de rapprochement pourrait faire revenir la suggestion plus tard.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "compare",
+      "audioSha256": "0b3fd25b8be842db4a8d75fd731673a88f2c5d0510d64a41acb9c0759204c922",
+      "recognized": "Si vous savez que ces deux fiches désignent bien la même personne, ouvrez l'activité de la fiche que vous voulez conserver. Fusionner avec un autre membre est réservé aux propriétaires de l'organisation. Recherchez précisément l'adresse de la seconde fiche, puis choisissez Fusionner avec cette fiche. Celle-ci sera absorbée. L'aperçu permet maintenant de comparer les informations sans lancer la fusion. Vérifiez bien quelle fiche vous gardez avant de continuer.",
+      "expected": "Si vous savez que ces deux fiches désignent bien la même personne, ouvrez l’activité de la fiche que vous voulez conserver. Fusionner avec un autre membre est réservé au propriétaire de l’organisation. Recherchez précisément l’adresse de la seconde fiche, puis choisissez Fusionner avec cette fiche. Celle-ci sera absorbée. L’aperçu permet maintenant de comparer les informations, sans lancer la fusion. Vérifiez bien quelle fiche vous gardez avant de continuer.",
+      "wordErrorRate": 0.0273972602739726,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "fields",
+      "audioSha256": "010504f1aee6cfec2aa14bdfea238544d68b4c2a5d473079d38de6cec2d5ff98",
+      "recognized": "Pour chaque information différente, vous choisissez la valeur à garder. Ici, on conserve la bonne adresse e-mail et on prend le téléphone de l'autre fiche. Les notes internes peuvent aussi être mises à la suite, pratique pour ne rien oublier. Les étiquettes et les disponibilités sont réunies automatiquement. Le tableau récapitule les inscriptions, les invitations et les réponses concernées. Attention, les abonnements aux notifications du navigateur ne sont jamais déplacés. La personne devra les réactiver elle-même.",
+      "expected": "Pour chaque information différente, vous choisissez la valeur à garder. Ici, on conserve la bonne adresse email et on prend le téléphone de l’autre fiche. Les notes internes peuvent aussi être mises à la suite : pratique pour ne rien oublier. Les étiquettes et les disponibilités sont réunies automatiquement. Le tableau récapitule les inscriptions, les invitations et les réponses concernées. Attention : les abonnements aux notifications du navigateur ne sont jamais déplacés. La personne devra les réactiver elle-même.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "conflicts",
+      "audioSha256": "88993f0a2235a1054d185589a88b8391d5fde87f045184152d7a3723df9cf0d4",
+      "recognized": "Les points à vérifier évitent les surprises. Sur un même créneau, l'inscription la plus avancée est conservée, l'autre sera annulée avec une trace dans le journal. Les chevauchements, limites, âge minimum et postes réservés sont signalés mais ne bloquent pas la fusion. En revanche, deux réponses différentes à la même question demandent un choix. Ici, on garde la réponse de la fiche absorbée. On choisit aussi son invitation. Une fois ces choix résolus, la confirmation devient disponible.",
+      "expected": "Les points à vérifier évitent les surprises. Sur un même créneau, l’inscription la plus avancée est conservée ; l’autre sera annulée avec une trace dans le journal. Les chevauchements, limites, âges minimums et postes réservés sont signalés, mais ne bloquent pas la fusion. En revanche, deux réponses différentes à la même question demandent un choix. Ici, on garde la réponse de la fiche absorbée. On choisit aussi son invitation. Une fois ces choix résolus, la confirmation devient disponible.",
+      "wordErrorRate": 0.02531645569620253,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "confirm",
+      "audioSha256": "ea9a3bbbabd981de3ea31949353ed179cddc68b25fe2d67ee2d26be77d4dfd74",
+      "recognized": "Cette case permet d'envoyer les nouveaux liens personnels à l'adresse conservée. Dans cette démonstration, on la décoche. Aucun e-mail ne sera envoyé. Lisez le résumé avant de confirmer. La fusion est irréversible. La fiche absorbée sera désactivée et vidée de ses informations personnelles. Ses liens déplacés seront régénérés et les anciens ne fonctionneront plus. Fusionner les deux fiches ouvre une dernière confirmation. Quand vous êtes vraiment sûr de votre choix, confirmez la fusion.",
+      "expected": "Cette case permet d’envoyer les nouveaux liens personnels à l’adresse conservée. Dans cette démonstration, on la décoche : aucun email ne sera envoyé. Lisez le résumé avant de confirmer. La fusion est irréversible : la fiche absorbée sera désactivée et vidée de ses informations personnelles. Ses liens déplacés seront régénérés, et les anciens ne fonctionneront plus. Fusionner les deux fiches ouvre une dernière confirmation. Quand vous êtes vraiment sûr de votre choix, confirmez la fusion.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "20b029e54bcc31154d89f995a190726fe566eacc5dacccb7701067634869b06b",
+      "recognized": "Fusion effectuée. Le résultat indique ce qui a été déplacé. Retournez à la fiche conservée pour retrouver son activité et les inscriptions réunies. Dans la liste des membres actifs, il ne reste qu'une fiche pour cette personne. L'historique n'est pas réécrit, les faits enregistrés sous l'ancienne fiche restent consultables depuis la fiche conservée. Si un responsable de secteur utilisait l'adresse abandonnée, son adresse doit être vérifiée séparément.",
+      "expected": "Fusion effectuée : le résultat indique ce qui a été déplacé. Retournez à la fiche conservée pour retrouver son activité et les inscriptions réunies. Dans la liste des membres actifs, il ne reste qu’une fiche pour cette personne. L’historique n’est pas réécrit : les faits enregistrés sous l’ancienne fiche restent consultables depuis la fiche conservée. Si un responsable de secteur utilisait l’adresse abandonnée, son adresse doit être vérifiée séparément.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "links",
+      "audioSha256": "382b841cf2abe5925dc70d8c87006fe4522c124402cbaeca031c4e4a7c193cb8",
+      "recognized": "Vérifions enfin les liens. L'ancien lien personnel de la fiche absorbée ne fonctionne plus. C'est normal, il a été remplacé pour protéger la personne. Le nouveau lien ouvre bien ses inscriptions sous la fiche conservée. Une inscription annulée parce qu'elle faisait doublon ne redevient pas active. Si vous cochez l'envoi des liens lors d'une vraie fusion, la personne reçoit ses nouveaux accès à l'adresse choisie. Vous avez ainsi une seule fiche, des informations cohérentes et des accès renouvelés.",
+      "expected": "Vérifions enfin les liens. L’ancien lien personnel de la fiche absorbée ne fonctionne plus : c’est normal, il a été remplacé pour protéger la personne. Le nouveau lien ouvre bien ses inscriptions sous la fiche conservée. Une inscription annulée parce qu’elle faisait doublon ne redevient pas active. Si vous cochez l’envoi des liens lors d’une vraie fusion, la personne reçoit ses nouveaux accès à l’adresse choisie. Vous avez ainsi une seule fiche, des informations cohérentes, et des accès renouvelés.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

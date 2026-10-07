@@ -1,59 +1,59 @@
 {
   "id": "MEMBERS_REMINDERS",
   "slug": "members-reminders",
-  "validatedAt": "2026-10-05T14:32:44.381Z",
+  "validatedAt": "2026-10-06T18:54:35.990Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 187400,
+  "captureMs": 194120,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 24007,
-      "audioMs": 24007,
-      "driftMs": 0
+      "visualMs": 23837,
+      "audioMs": 23836,
+      "driftMs": 1
     },
     {
       "id": "statuses",
-      "visualMs": 24920,
-      "audioMs": 24919,
+      "visualMs": 26089,
+      "audioMs": 26088,
       "driftMs": 1
     },
     {
       "id": "confirm",
-      "visualMs": 24356,
-      "audioMs": 24356,
-      "driftMs": 0
+      "visualMs": 25300,
+      "audioMs": 25299,
+      "driftMs": 1
     },
     {
       "id": "link",
-      "visualMs": 21148,
-      "audioMs": 21145,
-      "driftMs": 3
+      "visualMs": 21652,
+      "audioMs": 21651,
+      "driftMs": 1
     },
     {
       "id": "message",
-      "visualMs": 23710,
-      "audioMs": 23709,
+      "visualMs": 22896,
+      "audioMs": 22895,
       "driftMs": 1
     },
     {
       "id": "waitlist",
-      "visualMs": 23533,
-      "audioMs": 23532,
-      "driftMs": 1
+      "visualMs": 22523,
+      "audioMs": 22520,
+      "driftMs": 3
     },
     {
       "id": "send",
-      "visualMs": 20281,
-      "audioMs": 20281,
+      "visualMs": 21202,
+      "audioMs": 21202,
       "driftMs": 0
     },
     {
       "id": "result",
-      "visualMs": 21171,
-      "audioMs": 21171,
-      "driftMs": 0
+      "visualMs": 20713,
+      "audioMs": 20709,
+      "driftMs": 4
     }
   ],
   "issues": []

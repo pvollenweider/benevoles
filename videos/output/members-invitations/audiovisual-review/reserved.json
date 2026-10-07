@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T05:12:16.400Z",
+  "videoSha256": "aafb41546e04254818368695034ba565cb6196644a16b80cdfc69ec1939a20c2",
+  "promptSha256": "7c46c796a76ed473e2e9d3b76729516086eb4077bfebeb0fb2c729159b5fc64d",
+  "clipSha256": "6ed09dba61fd89b17f0d1d1eb30ee6d38dd7a4a0489d3a93350e53129839511c",
+  "scene": "reserved",
+  "review": {
+    "heardOpening": "Une invitation peut aussi donner accès",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Ici, Nicolas a le tag sécurité.",
+        "visibleSeconds": 6.8,
+        "visible": "Sélection du créneau rouge réservé Sécurité sur le planning",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "il peut choisir le poste réservé correspondant.",
+        "visibleSeconds": 12,
+        "visible": "Clic sur Continuer puis transition vers la page de coordonnées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "les tags actuels sont revérifiés à l'inscription.",
+        "visibleSeconds": 13,
+        "visible": "Formulaire d'inscription affichant le nom de Nicolas Renaud",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation naturelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

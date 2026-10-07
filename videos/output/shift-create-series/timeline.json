@@ -1,15 +1,15 @@
 {
   "slug": "shift-create-series",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-06T16:06:06.234Z",
+  "recordedAt": "2026-10-06T19:01:01.969Z",
   "video": "capture.webm",
   "product": {
-    "commit": "12928a8936f7b69d6ecf6ef91f6ecdbdffa09b60",
-    "sourceTree": "30dbb5aedc053cdb4c8279f2b678cc73eece207e",
-    "productSourceSha256": "c99792f1a68d4f9cd696d47c05d5c6a8d06aaa190f0a9cf15281957940612e03",
-    "buildId": "_3C5UypUJK5dyJUxNVbyG",
-    "snapshot": "/tmp/benevoles-video-production.fLrGxy",
-    "builtAt": "2026-10-06T16:02:24.130Z"
+    "commit": "025c68ccb98d72a096931f8f110a7bcc02095502",
+    "sourceTree": "8ffb323bc2949219d23254251dbb70048c3ec6d5",
+    "productSourceSha256": "e6c0c70cb46f15fff94480c8de7288303eda7e54f8d17dee42c2539c0e7edd27",
+    "buildId": "9HHDId7D2S4N4BOjjqht6",
+    "snapshot": "/tmp/benevoles-video-production.pXK0Fa",
+    "builtAt": "2026-10-06T18:46:48.999Z"
   },
   "captureEnvironment": {
     "locale": "fr-FR",
@@ -26,92 +26,92 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 7569
+      "atMs": 7824
     },
     {
       "kind": "click",
-      "atMs": 15086
+      "atMs": 15657
     },
     {
       "kind": "click",
-      "atMs": 17985
+      "atMs": 18739
     },
     {
       "kind": "click",
-      "atMs": 19069
+      "atMs": 19888
     },
     {
       "kind": "click",
-      "atMs": 25653
+      "atMs": 26856
     },
     {
       "kind": "click",
-      "atMs": 28902
+      "atMs": 30389
     },
     {
       "kind": "click",
-      "atMs": 33118
+      "atMs": 34939
     },
     {
       "kind": "click",
-      "atMs": 53367
+      "atMs": 57337
     },
     {
       "kind": "click",
-      "atMs": 65183
+      "atMs": 70138
     },
     {
       "kind": "click",
-      "atMs": 66350
+      "atMs": 71505
     },
     {
       "kind": "click",
-      "atMs": 71383
+      "atMs": 77453
     },
     {
       "kind": "click",
-      "atMs": 74183
+      "atMs": 80754
     },
     {
       "kind": "click",
-      "atMs": 83150
+      "atMs": 91015
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1138,
-      "endMs": 13519
+      "startMs": 1143,
+      "endMs": 14039
     },
     {
       "id": "range",
-      "startMs": 13971,
-      "endMs": 24731
+      "startMs": 14492,
+      "endMs": 25939
     },
     {
       "id": "duration",
-      "startMs": 25183,
-      "endMs": 40619
+      "startMs": 26391,
+      "endMs": 43172
     },
     {
       "id": "preview",
-      "startMs": 41070,
-      "endMs": 52223
+      "startMs": 43622,
+      "endMs": 56154
     },
     {
       "id": "create",
-      "startMs": 52674,
-      "endMs": 64255
+      "startMs": 56608,
+      "endMs": 69212
     },
     {
       "id": "adjust",
-      "startMs": 64712,
-      "endMs": 81061
+      "startMs": 69662,
+      "endMs": 88939
     },
     {
       "id": "result",
-      "startMs": 81516,
-      "endMs": 95544
+      "startMs": 89391,
+      "endMs": 104740
     }
   ]
 }

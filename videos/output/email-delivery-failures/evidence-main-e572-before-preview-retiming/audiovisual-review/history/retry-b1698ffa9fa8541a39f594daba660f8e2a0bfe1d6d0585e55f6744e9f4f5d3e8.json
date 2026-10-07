@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:36:48.957Z",
+  "videoSha256": "0e1d6ca56b0033e4694d6f34c74897fff990758b119a02cf3febeec27d85a9ed",
+  "promptSha256": "f8feca2621304f490278685b190594ced46301e624016fe82fe41137ea57c58d",
+  "clipSha256": "bae2059bac7915df1a484c3edd3073a3f45087ad2dd75966e1096e3285e8c7e5",
+  "scene": "retry",
+  "review": {
+    "heardOpening": "Pour Emma, le refus de notre serveur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Sur l'échec définitif, Renvoyer remet le même email dans la file",
+        "visibleSeconds": 5.2,
+        "visible": "Clic sur le lien Renvoyer sur la ligne d'Emma",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Attendons le résultat et rechargeons le suivi",
+        "visibleSeconds": 11.5,
+        "visible": "Rafraîchissement de la page de suivi des emails",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.2,
+        "spoken": "La ligne passe à Envoyé avec une heure",
+        "visibleSeconds": 13.5,
+        "visible": "La ligne d'Emma affiche le statut Envoyé avec l'horodatage",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.8,
+        "spoken": "Ouvrons ensuite l'email réellement reçu dans la boîte locale",
+        "visibleSeconds": 16.2,
+        "visible": "Affichage de l'interface Mailpit avec le message reçu pour Emma",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et synchronisation fluide avec les manipulations."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

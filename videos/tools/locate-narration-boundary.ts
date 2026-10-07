@@ -21,7 +21,9 @@ async function main() {
   // A poor initial split can place an anchor outside the normal window.
   // Widen the audio actually heard; never accept a text-length estimate as a cut.
   const windowSeconds = process.argv.includes("--extra-wide") ? 120 : process.argv.includes("--wide") ? 60 : 30
-  const start = Math.max(0, estimated - windowSeconds / 2)
+  const explicitStart = process.argv.find(arg => arg.startsWith("--window-start="))
+  const start = explicitStart ? Number(explicitStart.slice("--window-start=".length)) : Math.max(0, estimated - windowSeconds / 2)
+  if (!Number.isFinite(start) || start < 0) throw new Error("Window start must be a finite nonnegative number")
   const temp = await mkdtemp(path.join(tmpdir(), "benevol-narration-window-"))
   const clip = path.join(temp, "window.wav")
   const master = path.join(dir, "audio", "continuous-narration.wav")

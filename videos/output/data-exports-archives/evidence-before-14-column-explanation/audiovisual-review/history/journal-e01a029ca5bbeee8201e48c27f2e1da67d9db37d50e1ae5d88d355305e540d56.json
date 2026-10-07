@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T20:36:33.473Z",
+  "videoSha256": "20ccf7d54add31d2e5210c71d07e9b917ced0c5680878b1202f4e29e6e1ebc81",
+  "promptSha256": "7b646631cba1739352ace7b7674783546487ffb3899c335ecfa4dee647b94a3c",
+  "clipSha256": "6f45a37d9cc3f77f76618ff78f31bf6d545c569002012056aeccab9bc64f824c",
+  "scene": "journal",
+  "review": {
+    "heardOpening": "Pour garder une copie des actions de l'équipe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "ouvrons le journal d'activité dans les paramètres",
+        "visibleSeconds": 2.8,
+        "visible": "Clic sur le lien Journal d'activité dans la barre supérieure",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "Choisissons un type",
+        "visibleSeconds": 5.4,
+        "visible": "Sélection de la valeur Organisation dans le filtre de type",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.6,
+        "spoken": "puis Exporter tout le journal",
+        "visibleSeconds": 7.2,
+        "visible": "Clic sur le lien Exporter tout le journal (CSV)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "le CSV contient tout le journal de l'organisation",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage de la page de lecture du CSV téléchargé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Il indique la date, l'acteur, son type, l'action, l'entité, l'identifiant et les changements",
+        "visibleSeconds": 12.5,
+        "visible": "Tableau avec colonnes Date, Acteur, Type, Action, Entité, Identifiant puis défilement vers Changements",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -12,6 +12,8 @@ const scenarios: Record<string, string | null> = {
   MEMBERS_INVITATIONS: "members-invitations", MEMBERS_REMINDERS: "members-reminders",
   REGISTRATIONS_MANAGEMENT: "registrations-management", STAFFING_GAPS: "staffing-gaps",
   TARGETED_MESSAGES: "targeted-messages", REMINDERS_CHANGES: "reminders-changes",
+  SHIFT_CREATE_EDIT_DETAIL: null, SHIFT_CREATE_SERIES: null,
+  SHIFT_TIMELINE_QUICK_ACTIONS: null, SHIFT_NIGHT_DST: null,
 }
 type Result = { id: string; status: "generated-for-review" | "needs-review"; failedStage?: string; error?: string }
 type Stage = [string, string, string[]]
@@ -27,7 +29,7 @@ async function main() {
   const directCapture = requested.includes("--direct-capture")
   if (requested.filter(arg => arg === "--direct-capture").length > 1) throw new Error("Duplicate capture mode")
   const ids = requested.filter(arg => arg !== "--direct-capture")
-  if (!ids.length || new Set(ids).size !== ids.length || ids.some(id => !Object.hasOwn(scenarios, id))) throw new Error("Supply unique explicit member-training IDs only")
+  if (!ids.length || new Set(ids).size !== ids.length || ids.some(id => !Object.hasOwn(scenarios, id))) throw new Error("Supply unique explicit member/planning-training IDs only")
   for (const id of ids) await catalogEntry(id)
   const startedAt = new Date().toISOString()
   const batch = createHash("sha256").update(JSON.stringify({ ids, startedAt, pid: process.pid })).digest("hex").slice(0, 20)

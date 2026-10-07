@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:36:24.755Z",
-  "videoSha256": "4f2463aa78f990278c1913f94a35e27170bbb7b98cd4fc848478da990a80a1cb",
+  "reviewedAt": "2026-10-06T18:23:04.248Z",
+  "videoSha256": "d217b3a0a43428c453f7c2c1a5bc4b13ee389513c507c1e86a749f7830b0d369",
   "promptSha256": "43910318e8ad4e1a7be281eccbb12207a37565536eb866eb1c07556a8f6d4ad8",
-  "clipSha256": "bdec29c8c70298c42aa0a1e59bf1140912087969fa085bba62b5472802f4910c",
+  "clipSha256": "736657008025b2351ffc3b3a46dd33f453192df4a4d5b2a790cd9c2c8d2170cf",
   "scene": "create",
   "review": {
     "heardOpening": "Pour ajouter une personne, cliquez sur Nouveau membre.",
     "checkpoints": [
       {
-        "spokenSeconds": 1,
+        "spokenSeconds": 0.8,
         "spoken": "cliquez sur Nouveau membre",
-        "visibleSeconds": 1,
-        "visible": "Ouverture de la modale d'ajout Nouveau membre",
+        "visibleSeconds": 0.9,
+        "visible": "Ouverture du formulaire modal Nouveau membre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.5,
-        "spoken": "Saisissez son prénom et son nom, puis son email et son téléphone",
+        "spokenSeconds": 3,
+        "spoken": "Saisissez son prénom et son nom",
         "visibleSeconds": 2.5,
-        "visible": "Saisie successive des champs prénom, nom, email et téléphone",
+        "visible": "Remplissage des champs Prénom (Maya) et Nom (Berger)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.2,
-        "spoken": "Nous ajoutons Maya Berger avec des coordonnées de démonstration",
-        "visibleSeconds": 3,
-        "visible": "Informations de Maya Berger renseignées à l'écran",
+        "spokenSeconds": 5.4,
+        "spoken": "puis son email et son téléphone",
+        "visibleSeconds": 5.8,
+        "visible": "Saisie de l'adresse courriel et du numéro de téléphone",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18.5,
-        "spoken": "Après la création, Maya apparaît dans la liste",
+        "spokenSeconds": 18.2,
+        "spoken": "Maya apparaît dans la liste",
         "visibleSeconds": 18,
-        "visible": "Fermeture de la modale et ajout visible de Maya Berger dans le tableau",
+        "visible": "Fermeture de la modale et affichage de la ligne Maya Berger dans le tableau",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, claire et synchronisée avec la démonstration."
+      "observation": "Diction fluide, claire et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

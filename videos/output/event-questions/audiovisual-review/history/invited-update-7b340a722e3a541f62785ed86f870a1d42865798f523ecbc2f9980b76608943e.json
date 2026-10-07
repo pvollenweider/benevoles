@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T19:20:48.565Z",
+  "videoSha256": "d06d14223ff995674d62c29e7a94d1400de7af563b83439753ac588157b6a4a6",
+  "promptSha256": "d825ee0a6aad3f9b83d1aa3bc11e51965f5859ba4ce75435679248c384d5fb68",
+  "clipSha256": "8ed1e171dfc281ec57ba6015d050d509a2dcfa4b5bc6abc04a4bd4b16bb5d22c",
+  "scene": "invited-update",
+  "review": {
+    "heardOpening": "Aline se réinscrit maintenant depuis son véritable lien",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "pour un deuxième créneau",
+        "visibleSeconds": 3,
+        "visible": "Sélection du créneau 12h-14h puis validation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Choisissons L au lieu de M",
+        "visibleSeconds": 11,
+        "visible": "L'option L n'est pas cochée, M reste sélectionné",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "Confirmons",
+        "visibleSeconds": 17,
+        "visible": "Clic sur le bouton Confirmer mon inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "La nouvelle taille remplace l'ancienne",
+        "visibleSeconds": 20,
+        "visible": "Écran de confirmation affiché sans détail des données modifiées",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:10 - La taille L n'est jamais sélectionnée à l'écran alors que la voix l'annonce."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée et fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

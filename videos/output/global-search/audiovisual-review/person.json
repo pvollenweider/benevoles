@@ -1,50 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T02:29:47.269Z",
-  "videoSha256": "258ab12d15939f6b8d477f5d8a71162bf2e5bf54555dca8ead27b706b9391071",
-  "promptSha256": "9e3c8c4daa40d5ebdf8299d49e4e030fbca320451e2b403ec3e9bc415436d770",
-  "clipSha256": "e27e371b6a52eeec1c7393036669ea8d3736a6e3de29c71fefccb68174d86528",
+  "reviewedAt": "2026-10-06T18:40:03.396Z",
+  "videoSha256": "a5678b6a18e77e7ecb2489666df876bd539ced6fe6a4ba2d5fc4df91d56e7b9e",
+  "promptSha256": "52a0a4c00ce19507ee402e9f2ad80879653b5f481af5d38b15c3b21d0c93cb61",
+  "clipSha256": "d57c286364e5209ceae623cb6b1cb4e7b6d605ac1708b7ec0924c9128b5829ed",
   "scene": "person",
   "review": {
     "heardOpening": "Cherchons Léa Morel",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Cherchons Léa Morel.",
-        "visibleSeconds": 1,
-        "visible": "Saisie de « Léa Morel » dans la barre de recherche en haut à droite.",
+        "spokenSeconds": 0.5,
+        "spoken": "Cherchons Léa Morel",
+        "visibleSeconds": 1.5,
+        "visible": "Saisie du nom dans la barre de recherche et affichage des résultats",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.2,
-        "spoken": "Les résultats distinguent sa fiche de membre et ses inscriptions.",
-        "visibleSeconds": 3,
-        "visible": "Page de recherche avec les sections Bénévoles et Inscriptions.",
+        "spokenSeconds": 4.8,
+        "spoken": "Ouvrons d’abord sa fiche",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur le profil bénévole et ouverture de la fiche membre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.5,
-        "spoken": "Ouvrons d’abord sa fiche,",
-        "visibleSeconds": 6.5,
-        "visible": "Clic sur Léa Morel et ouverture de la vue Membres filtrée.",
+        "spokenSeconds": 6.8,
+        "spoken": "puis une inscription : la liste de l’événement est déjà filtrée",
+        "visibleSeconds": 9.2,
+        "visible": "Clic sur une inscription et affichage de la liste d'inscriptions filtrée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
-        "spoken": "puis une inscription : la liste de l’événement est déjà filtrée sur Léa.",
-        "visibleSeconds": 11.5,
-        "visible": "Retour aux résultats, clic sur une inscription et affichage de la liste filtrée.",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 12.8,
-        "spoken": "Le badge Liste d’attente distingue une demande de place d’une inscription confirmée.",
-        "visibleSeconds": 13,
-        "visible": "Badge orange « Liste d'attente » visible dans la colonne Statut.",
+        "spokenSeconds": 10.5,
+        "spoken": "Le badge Liste d’attente",
+        "visibleSeconds": 10,
+        "visible": "Badge Liste d'attente affiché dans le tableau",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, synchronisation globale satisfaisante."
+      "observation": "Élocution claire et synchronisation fluide avec les manipulations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

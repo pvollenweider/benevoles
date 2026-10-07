@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:31:17.019Z",
+  "videoSha256": "6832eeb70e84d56d0b2d21fe51dfac435f5bcdc4226b19bf7457aabccbdc3d4e",
+  "promptSha256": "1fd816bdca1cb126f462024dcaa7686d77a6b79ae38a543719232ac03e25c717",
+  "clipSha256": "7e846ff0b0402be3d0f60108232be797c4c78731cfd0625984e9c7a177296506",
+  "scene": "group",
+  "review": {
+    "heardOpening": "Pour un groupe, utilisez le filtre de tags",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "utilisez le filtre de tags",
+        "visibleSeconds": 1.8,
+        "visible": "Ouverture du dialogue et interaction avec le filtre de tags",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "retrouver les personnes de l'accueil",
+        "visibleSeconds": 3,
+        "visible": "Filtre accueil appliqué avec affichage des membres correspondants",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Tout sélectionner ajoute les membres visibles",
+        "visibleSeconds": 6,
+        "visible": "Clic sur Tout sélectionner et mise à jour du compteur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "rester sélectionnée après un changement de filtre",
+        "visibleSeconds": 12.5,
+        "visible": "Changement de filtre vers sécurité maintenant les sélections antérieures",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Avec Effacer, repartez d'une sélection vide",
+        "visibleSeconds": 17.5,
+        "visible": "Clic sur Effacer et réinitialisation du compteur à zéro",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, ton pédagogique et bonne clarté audio."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

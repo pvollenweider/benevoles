@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:18:03.838Z",
+  "videoSha256": "93ca011b7412c8a9fcb72f8759a1fa8bce8cd18a553031980bbee7051d36b1ca",
+  "promptSha256": "f260ae6eb456af542624888fe1f6186e29dbd52e426252e2f276899712f70cda",
+  "clipSha256": "dd51a17825aa3eb85945498ce633fc322cb34387ea5f5ce3e4c63f846ced956f",
+  "scene": "campaign",
+  "review": {
+    "heardOpening": "Préparons un autre message",
+    "checkpoints": [
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Ouvrons Messages envoyés sous le formulaire",
+        "visibleSeconds": 12.5,
+        "visible": "Défilement vers la section Messages envoyés affichant l'échec partiel",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.3,
+        "spoken": "Voir le texte envoyé permet de relire la consigne originale",
+        "visibleSeconds": 20.2,
+        "visible": "Clic sur Voir le texte envoyé et affichage du contenu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.2,
+        "spoken": "Cliquons sur Renvoyer l'email en échec",
+        "visibleSeconds": 25.8,
+        "visible": "Clic sur Renvoyer l'email en échec et message de remise en file",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 35.1,
+        "spoken": "Rechargeons enfin le suivi pour voir les deux remises réussies",
+        "visibleSeconds": 36.8,
+        "visible": "Rechargement de la page et affichage actualisé à 2 envoyés",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

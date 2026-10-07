@@ -10,6 +10,7 @@ import { randomUUID } from "node:crypto"
 import { createRequire } from "node:module"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
+import { privateIdentities, readPrivateIdentityVersion } from "../lib/private-identity-version"
 
 /** Resolve worker, aliases and generated Prisma from the actual verified main snapshot. */
 export async function loadCurrentDeliveryRuntime(base: "http://localhost:43102" | "http://localhost:43106") {
@@ -63,6 +64,8 @@ async function main() {
   const { db, enqueueNotifications, deliverOutbox, openPayload, outboxErrorSentence } = runtime
   const fixture = await controlledSmtp().catch(async error => { await db.$disconnect(); await runtime.unregister(); throw error })
   const orgId = "video-delivery", orgName = "Formation — suivi des emails", slug = "formation-livraisons"
+  const identityV2 = await readPrivateIdentityVersion("delivery")
+  const identities = privateIdentities.delivery
   const originalError = console.error
   let controlledErrors = 0
   console.error = (...args: unknown[]) => {
@@ -73,12 +76,13 @@ async function main() {
   try {
     const existing = await db.organization.findUnique({ where: { id: orgId } })
     if (existing) assert(existing.name === orgName && existing.slug === slug)
+    if (identityV2) assert(existing && existing.createdAt.toISOString() === identityV2.organizationCreatedAt, "Delivery identity ledger belongs to another generation")
     const previousCampaigns = await db.targetedMessage.findMany({ where: { organizationId: orgId } })
     const expectedCampaignText: Record<string, string> = {
       "Formation — adresse corrigée": "Bonjour {prénom}, voici ton nouveau message, préparé après correction de ton adresse. Merci pour ton aide !",
       "Formation — échec partiel": "Bonjour {prénom}, merci pour ton aide !",
     }
-    const expectedAuthors: Record<string, string> = { "video-delivery-owner": "Élodie Exemple", "video-delivery-organizer": "Marc Exemple" }
+    const expectedAuthors: Record<string, string> = { "video-delivery-owner": identityV2 ? identities.owner : "Élodie Exemple", "video-delivery-organizer": identityV2 ? identities.organizer : "Marc Exemple" }
     assert(previousCampaigns.every(message => message.eventId === "video-delivery-event" && message.authorId && expectedAuthors[message.authorId] === message.authorName && expectedCampaignText[message.subject] === message.message), "Unrecognized campaign in delivery fixture; refusing cleanup")
     const campaignIds = new Set(previousCampaigns.map(message => message.id))
     const oldRows = await db.notificationOutbox.findMany({ where: { organizationId: orgId }, select: { id: true, payload: true, dedupeKey: true, targetedMessageId: true } })
@@ -98,15 +102,15 @@ async function main() {
     if (!existing) await db.organization.create({ data: { id: orgId, name: orgName, slug, timeZone: "Europe/Zurich", replyToEmail: "video.delivery.owner@example.org", hasOrgInsurance: true } })
     const ownerId = "video-delivery-owner", ownerEmail = "video.delivery.owner@example.org"
     const owner = await db.adminUser.findUnique({ where: { id: ownerId } })
-    if (owner) assert(owner.email === ownerEmail && owner.organizationId === orgId && owner.name === "Élodie Exemple")
+    if (owner) assert(owner.email === ownerEmail && owner.organizationId === orgId && owner.name === expectedAuthors[ownerId])
     else {
       const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost" }, select: { passwordHash: true } })
-      await db.adminUser.create({ data: { id: ownerId, organizationId: orgId, name: "Élodie Exemple", email: ownerEmail, role: "admin", passwordHash: source.passwordHash } })
+      await db.adminUser.create({ data: { id: ownerId, organizationId: orgId, name: expectedAuthors[ownerId], email: ownerEmail, role: "admin", passwordHash: source.passwordHash } })
     }
     const organizerId = "video-delivery-organizer", organizerEmail = "video.delivery.organizer@example.org"
     const organizer = await db.adminUser.findUnique({ where: { id: organizerId } })
     if (organizer) assert(organizer.organizationId === orgId && organizer.email === organizerEmail && organizer.role === "organizer")
-    else await db.adminUser.create({ data: { id: organizerId, organizationId: orgId, name: "Marc Exemple", email: organizerEmail, role: "organizer", passwordHash: (await db.adminUser.findUniqueOrThrow({ where: { id: ownerId } })).passwordHash } })
+    else await db.adminUser.create({ data: { id: organizerId, organizationId: orgId, name: expectedAuthors[organizerId], email: organizerEmail, role: "organizer", passwordHash: (await db.adminUser.findUniqueOrThrow({ where: { id: ownerId } })).passwordHash } })
     const names: Record<string, string> = { pending: "Jules", retrying: "Sarah", recoverable: "Emma", wrong: "Léa", sent: "Nicolas" }
     // IDs are globally unique: validate their ownership before an upsert can
     // update an existing member, even if that member belongs to another tenant.
@@ -114,13 +118,14 @@ async function main() {
     const globallyMatchingPeople = await db.volunteer.findMany({ where: { id: { in: fixtureIds } } })
     assert(globallyMatchingPeople.every(person => person.organizationId === orgId), "Delivery fixture member ID belongs to another organization; refusing to update")
     const previousPeople = await db.volunteer.findMany({ where: { organizationId: orgId } })
-    assert(previousPeople.every(person => Object.keys(names).some(label => person.id === `video-delivery-member-${label}` && person.firstName === names[label] && person.lastName === "Exemple" && [ `video.delivery.${label}@example.org`, ...(label === "wrong" ? ["video.delivery.corrected@example.org"] : []) ].includes(person.email ?? ""))))
-    for (const [label, firstName] of Object.entries(names)) await db.volunteer.upsert({ where: { id: `video-delivery-member-${label}` }, create: { id: `video-delivery-member-${label}`, organizationId: orgId, firstName, lastName: "Exemple", email: `video.delivery.${label}@example.org`, notes: "Données fictives pour la démonstration des livraisons." }, update: { email: `video.delivery.${label}@example.org` } })
+    const surname = (label: string) => identityV2 ? identities.members[label as keyof typeof identities.members] : "Exemple"
+    assert(previousPeople.every(person => Object.keys(names).some(label => person.id === `video-delivery-member-${label}` && person.firstName === names[label] && person.lastName === surname(label) && [ `video.delivery.${label}@example.org`, ...(label === "wrong" ? ["video.delivery.corrected@example.org"] : []) ].includes(person.email ?? ""))))
+    for (const [label, firstName] of Object.entries(names)) await db.volunteer.upsert({ where: { id: `video-delivery-member-${label}` }, create: { id: `video-delivery-member-${label}`, organizationId: orgId, firstName, lastName: surname(label), email: `video.delivery.${label}@example.org`, notes: "Données fictives pour la démonstration des livraisons." }, update: { email: `video.delivery.${label}@example.org` } })
     const snapshots: { id: string; recipient: string; now: string; status: string; attempts: number; nextAttemptAt: string; outcome: unknown }[] = []
     const ids: Record<string, string> = {}
     async function create(label: string) {
       const recipient = `video.delivery.${label}@example.org`
-      const name = `${names[label]} Exemple`
+      const name = `${names[label]} ${surname(label)}`
       const [id] = await enqueueNotifications([{ kind: "targeted_message", organizationId: orgId, dedupeKey: `video-delivery-preparation:${label}`, recipient: { email: recipient, name }, data: { volunteerName: name, organizationName: orgName, eventTitle: "Atelier des emails", subject: `Formation — ${label}`, message: "Données fictives. Rendez-vous au stand quinze minutes avant votre créneau.", shifts: [] } }])
       ids[label] = id
       return { id, recipient }

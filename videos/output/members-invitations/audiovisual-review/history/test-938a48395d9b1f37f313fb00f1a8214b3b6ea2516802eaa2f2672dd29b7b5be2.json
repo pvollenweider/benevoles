@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:30:43.137Z",
+  "videoSha256": "6832eeb70e84d56d0b2d21fe51dfac435f5bcdc4226b19bf7457aabccbdc3d4e",
+  "promptSha256": "db4029b7864d61b9f8ec0de746ee8a377b463cfc933ddd9fe8a48e154f4e1cff",
+  "clipSha256": "f2b8a6dc6c6010c611c4dccc16ddd229fc5eed5303fc5fd7b47d63400e2ce06a",
+  "scene": "test",
+  "review": {
+    "heardOpening": "Avant de contacter l'équipe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "vous pouvez tester l'envoi d'email",
+        "visibleSeconds": 1,
+        "visible": "Activation de l'option Tester l'envoi d'email et affichage du champ de saisie",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "Indiquez une adresse que vous utilisez",
+        "visibleSeconds": 3.8,
+        "visible": "Saisie de l'adresse test.invitation@example.org dans le champ",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "puis envoyez le test",
+        "visibleSeconds": 6.8,
+        "visible": "Clic sur Envoyer le test et confirmation Envoyé affichée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Nous ouvrons ici le message reçu dans notre boîte de démonstration",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage de la boîte Mailpit avec le courriel de test ouvert",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier, synchronisé avec les actions."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

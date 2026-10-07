@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T20:36:17.024Z",
+  "videoSha256": "20ccf7d54add31d2e5210c71d07e9b917ced0c5680878b1202f4e29e6e1ebc81",
+  "promptSha256": "3e4072d11dd299ed7fe1b793e5b9c43f683493328b187be27d2a4eb322ee7406",
+  "clipSha256": "2d17b7f0883cdb63af8619dc5e1c3c3bfeb7f81f1a198d61e64d98a677929dca",
+  "scene": "columns",
+  "review": {
+    "heardOpening": "Une ligne représente une fiche membre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "Lisons le prénom, le nom, l'email et le téléphone",
+        "visibleSeconds": 2.5,
+        "visible": "Colonnes Prénom, Nom, Email et Téléphone visibles dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "En faisant défiler les colonnes, on retrouve la date de naissance",
+        "visibleSeconds": 7.5,
+        "visible": "Défilement horizontal vers la droite affichant Disponibilités et Notes",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 17.2,
+        "spoken": "le nombre d'inscriptions actives et la date de création de la fiche",
+        "visibleSeconds": 14,
+        "visible": "Colonnes Inscriptions et Membre depuis visibles à l'écran",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisation globale correcte avec l'affichage."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

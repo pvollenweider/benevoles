@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 3,
+  "scenario": "members-duplicates-merge",
+  "organizationId": "video-member-merge-v3",
+  "organizationCreatedAt": "2026-10-06T18:48:37.315Z",
+  "preparedAt": "2026-10-06T18:48:37.376Z",
+  "product": {
+    "commit": "025c68ccb98d72a096931f8f110a7bcc02095502",
+    "sourceTree": "8ffb323bc2949219d23254251dbb70048c3ec6d5",
+    "productSourceSha256": "e6c0c70cb46f15fff94480c8de7288303eda7e54f8d17dee42c2539c0e7edd27",
+    "buildId": "9HHDId7D2S4N4BOjjqht6",
+    "snapshot": "/tmp/benevoles-video-production.pXK0Fa",
+    "builtAt": "2026-10-06T18:46:48.999Z"
+  },
+  "members": [
+    "video-member-merge-v3-a",
+    "video-member-merge-v3-b"
+  ],
+  "eventId": "video-member-merge-v3-event",
+  "oldGenerationsPreserved": [
+    "video-member-merge",
+    "video-member-merge-v2"
+  ],
+  "legacyBeforeSha256": "02ad48de2cae8abaa3908358655268a2d0a0f224caee08a4ee618974b5bd3d64",
+  "legacyAfterSha256": "02ad48de2cae8abaa3908358655268a2d0a0f224caee08a4ee618974b5bd3d64",
+  "createdOnceNoReset": true
+}

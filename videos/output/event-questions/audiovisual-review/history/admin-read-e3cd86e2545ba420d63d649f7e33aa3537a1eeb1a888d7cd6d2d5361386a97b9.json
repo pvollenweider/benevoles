@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:30:37.657Z",
+  "videoSha256": "40c2daacfc4c477f3a0078d17f0c72458436f38255c820e3d6645f649fd1db79",
+  "promptSha256": "7a43ffa810bd2e72968a60d2731da2a1a7ccacc342149321f861aa2731a3fb1f",
+  "clipSha256": "c227353456a5e222fed1a3d47e64998badcb175814133c7e027c9223489651a5",
+  "scene": "admin-read",
+  "review": {
+    "heardOpening": "Revenons côté organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Revenons côté organisation, dans les inscriptions.",
+        "visibleSeconds": 0,
+        "visible": "Page Inscriptions affichée avec la liste des inscrits.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Sous celle d'Aline, les réponses permettent de préparer son t-shirt et le matériel.",
+        "visibleSeconds": 3.4,
+        "visible": "Détails des réponses sous la ligne Aline Exemple visibles.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "Ouvrons ensuite Questions : la Synthèse des réponses compte les choix.",
+        "visibleSeconds": 8.8,
+        "visible": "Affichage de la page Questions aux bénévoles avec la section Synthèse des réponses.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.6,
+        "spoken": "Aline est comptée une seule fois parmi les bénévoles confirmés",
+        "visibleSeconds": 13.6,
+        "visible": "Mention de 1 bénévole confirmé visible dans le texte sous Synthèse des réponses.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec l'affichage."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

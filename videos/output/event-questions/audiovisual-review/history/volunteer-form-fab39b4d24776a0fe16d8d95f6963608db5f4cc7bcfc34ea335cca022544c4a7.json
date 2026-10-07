@@ -1,0 +1,70 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:30:13.555Z",
+  "videoSha256": "40c2daacfc4c477f3a0078d17f0c72458436f38255c820e3d6645f649fd1db79",
+  "promptSha256": "313cd01eb1f6c91af99c2b539b7746bf8a7df075b9959c748f0669e3a12e409c",
+  "clipSha256": "89fdef39ff8cfbab4cd7c9177eda968065e0d6a8b2e76ed54ff12713087e4f6e",
+  "scene": "volunteer-form",
+  "review": {
+    "heardOpening": "Répondons maintenant.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Aline choisit M pour son t-shirt",
+        "visibleSeconds": 3.2,
+        "visible": "Sélection de l'option M pour la taille de t-shirt",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "puis Oui pour le permis",
+        "visibleSeconds": 0,
+        "visible": "La case Oui pour le permis de conduire était déjà sélectionnée au début",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 7.1,
+        "spoken": "elle coche Vélo et Remorque",
+        "visibleSeconds": 7.4,
+        "visible": "Sélection des cases à cocher Vélo puis Remorque",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.6,
+        "spoken": "écrivons Entrée nord",
+        "visibleSeconds": 11.8,
+        "visible": "Saisie de « Entrée nord » dans le champ Point de rendez-vous",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "le récapitulatif Transmis à l'organisation montre les informations",
+        "visibleSeconds": 17.3,
+        "visible": "Remontée de page affichant le bloc latéral Transmis à l'organisation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.2,
+        "spoken": "confirmons réellement l'inscription",
+        "visibleSeconds": 22.7,
+        "visible": "Clic sur Confirmer mon inscription et apparition de l'écran Inscription confirmée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:04 - L'action « puis Oui pour le permis » est annoncée après coup alors que l'option était déjà cochée dès l'ouverture."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation pédagogique fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

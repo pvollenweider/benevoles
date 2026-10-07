@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:46:27.821Z",
+  "videoSha256": "8fd119fcc7be2e7433955eb308377f0bafecf962c880a14c93f0b1b0c8f0ca78",
+  "promptSha256": "25531fd130d559ea51f55e05ae0392b019f60b3428468116e859983bc9f29f6d",
+  "clipSha256": "360f978b0587f38020cc3fb0a7cb58ec2872d75c34e0fee99440a221173f3442",
+  "scene": "answered-lock",
+  "review": {
+    "heardOpening": "Le formulaire a maintenant des réponses",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2,
+        "spoken": "revenons modifier la taille du t-shirt",
+        "visibleSeconds": 2,
+        "visible": "Clic sur Modifier et ouverture du formulaire d'édition",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Essayons aussi de retirer L des choix proposés",
+        "visibleSeconds": 8,
+        "visible": "Suppression de la ligne L effectuée et validation tentée avant l'annonce",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "L'application refuse, car cette taille a déjà été retenue",
+        "visibleSeconds": 10,
+        "visible": "Message d'erreur rouge affiché indiquant le refus",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 19.3,
+        "spoken": "Annulons cette modification",
+        "visibleSeconds": 21.5,
+        "visible": "Clic sur Annuler et fermeture du panneau de modification",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:12 : La narration décrivant la suppression de l'option L intervient après l'action à l'écran (00:08)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

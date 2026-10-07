@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-06T17:46:27.019Z",
+  "checkedAt": "2026-10-06T18:27:08.731Z",
   "note": "All catalogue entries inspected locally. Matching video hashes are necessary, not sufficient: transcript/prompt freshness, audio, functional coverage and human review remain separate gates. No upload or API call.",
   "videos": [
     {
@@ -126,10 +126,10 @@
     {
       "id": "EVENT_QUESTIONS",
       "slug": "event-questions",
-      "videoSha256": "8fd119fcc7be2e7433955eb308377f0bafecf962c880a14c93f0b1b0c8f0ca78",
+      "videoSha256": "5701b73dcbb00004e708e33b49f100b9050a47e539cb5019413331db93717583",
       "capturePurpose": "narration-timed",
       "timelineMatchesManifest": true,
-      "currentProductBuildProven": true,
+      "currentProductBuildProven": false,
       "narrationChapters": [
         {
           "id": "welcome",
@@ -266,113 +266,113 @@
         {
           "id": "welcome",
           "reportPresent": true,
-          "sameVideo": true,
+          "sameVideo": false,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": false
         },
         {
           "id": "create-single",
           "reportPresent": true,
-          "sameVideo": true,
+          "sameVideo": false,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": true
         },
         {
           "id": "create-yesno",
           "reportPresent": true,
-          "sameVideo": true,
+          "sameVideo": false,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": true
         },
         {
           "id": "create-multiple",
           "reportPresent": true,
-          "sameVideo": true,
+          "sameVideo": false,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": true
         },
         {
           "id": "create-text",
           "reportPresent": true,
-          "sameVideo": true,
+          "sameVideo": false,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": true
         },
         {
           "id": "order",
           "reportPresent": true,
-          "sameVideo": true,
+          "sameVideo": false,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": false
         },
         {
           "id": "required-validation",
           "reportPresent": true,
-          "sameVideo": true,
+          "sameVideo": false,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": false
         },
         {
           "id": "volunteer-form",
           "reportPresent": true,
-          "sameVideo": true,
+          "sameVideo": false,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": true
         },
         {
           "id": "email-proof",
           "reportPresent": true,
-          "sameVideo": true,
+          "sameVideo": false,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": true
         },
         {
           "id": "admin-read",
           "reportPresent": true,
-          "sameVideo": true,
+          "sameVideo": false,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": true
         },
         {
           "id": "summary-export",
           "reportPresent": true,
-          "sameVideo": true,
+          "sameVideo": false,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": true
         },
         {
           "id": "invited-update",
           "reportPresent": true,
-          "sameVideo": true,
+          "sameVideo": false,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": true
         },
         {
           "id": "unverified-update",
           "reportPresent": true,
-          "sameVideo": true,
+          "sameVideo": false,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": true
         },
         {
           "id": "answered-lock",
-          "reportPresent": false,
+          "reportPresent": true,
           "sameVideo": false,
-          "structurallyComplete": false,
+          "structurallyComplete": true,
           "automatedReviewNeedsAttention": true
         },
         {
           "id": "edit-choices",
-          "reportPresent": false,
+          "reportPresent": true,
           "sameVideo": false,
-          "structurallyComplete": false,
+          "structurallyComplete": true,
           "automatedReviewNeedsAttention": true
         },
         {
           "id": "retire",
-          "reportPresent": false,
+          "reportPresent": true,
           "sameVideo": false,
-          "structurallyComplete": false,
+          "structurallyComplete": true,
           "automatedReviewNeedsAttention": true
         }
       ],
@@ -385,7 +385,7 @@
       "videoSha256": "01fafadfba036da8aac5f19c6359a31892b79dcfccbfe3936309fabe4cf0f4be",
       "capturePurpose": "narration-timed",
       "timelineMatchesManifest": true,
-      "currentProductBuildProven": true,
+      "currentProductBuildProven": false,
       "narrationChapters": [
         {
           "id": "duplicates",
@@ -497,7 +497,7 @@
           "automatedReviewNeedsAttention": false
         }
       ],
-      "currentAutomatedAudiovisualReviewsComplete": true,
+      "currentAutomatedAudiovisualReviewsComplete": false,
       "finalDeliveryValidated": false
     },
     {
@@ -672,7 +672,7 @@
       "videoSha256": "0e1d6ca56b0033e4694d6f34c74897fff990758b119a02cf3febeec27d85a9ed",
       "capturePurpose": "narration-timed",
       "timelineMatchesManifest": true,
-      "currentProductBuildProven": true,
+      "currentProductBuildProven": false,
       "narrationChapters": [
         {
           "id": "welcome",
@@ -799,7 +799,7 @@
           "automatedReviewNeedsAttention": false
         }
       ],
-      "currentAutomatedAudiovisualReviewsComplete": true,
+      "currentAutomatedAudiovisualReviewsComplete": false,
       "finalDeliveryValidated": false
     },
     {
@@ -1333,7 +1333,7 @@
     {
       "id": "DATA_EXPORTS_ARCHIVES",
       "slug": "data-exports-archives",
-      "videoSha256": "20ccf7d54add31d2e5210c71d07e9b917ced0c5680878b1202f4e29e6e1ebc81",
+      "videoSha256": "2500685d6302ad59c35b556398c683cecf81008356261b66a4a343cd7b2370d9",
       "capturePurpose": "narration-timed",
       "timelineMatchesManifest": true,
       "currentProductBuildProven": false,
@@ -1343,7 +1343,7 @@
           "audioPresent": true,
           "expectedTranscriptCurrent": true,
           "auditMatchesAudio": true,
-          "auditPassed": false,
+          "auditPassed": true,
           "generationIdentified": true
         },
         {
@@ -1351,15 +1351,15 @@
           "audioPresent": true,
           "expectedTranscriptCurrent": true,
           "auditMatchesAudio": true,
-          "auditPassed": false,
+          "auditPassed": true,
           "generationIdentified": true
         },
         {
           "id": "columns",
           "audioPresent": true,
-          "expectedTranscriptCurrent": true,
+          "expectedTranscriptCurrent": false,
           "auditMatchesAudio": true,
-          "auditPassed": false,
+          "auditPassed": true,
           "generationIdentified": true
         },
         {
@@ -1367,7 +1367,7 @@
           "audioPresent": true,
           "expectedTranscriptCurrent": true,
           "auditMatchesAudio": true,
-          "auditPassed": false,
+          "auditPassed": true,
           "generationIdentified": true
         },
         {
@@ -1375,7 +1375,7 @@
           "audioPresent": true,
           "expectedTranscriptCurrent": true,
           "auditMatchesAudio": true,
-          "auditPassed": false,
+          "auditPassed": true,
           "generationIdentified": true
         },
         {
@@ -1383,7 +1383,7 @@
           "audioPresent": true,
           "expectedTranscriptCurrent": true,
           "auditMatchesAudio": true,
-          "auditPassed": false,
+          "auditPassed": true,
           "generationIdentified": true
         },
         {
@@ -1391,7 +1391,7 @@
           "audioPresent": true,
           "expectedTranscriptCurrent": true,
           "auditMatchesAudio": true,
-          "auditPassed": false,
+          "auditPassed": true,
           "generationIdentified": true
         },
         {
@@ -1399,7 +1399,7 @@
           "audioPresent": true,
           "expectedTranscriptCurrent": true,
           "auditMatchesAudio": true,
-          "auditPassed": false,
+          "auditPassed": true,
           "generationIdentified": true
         },
         {
@@ -1407,7 +1407,7 @@
           "audioPresent": true,
           "expectedTranscriptCurrent": true,
           "auditMatchesAudio": true,
-          "auditPassed": false,
+          "auditPassed": true,
           "generationIdentified": true
         }
       ],
@@ -1475,7 +1475,7 @@
           "reportPresent": true,
           "sameVideo": true,
           "structurallyComplete": true,
-          "automatedReviewNeedsAttention": false
+          "automatedReviewNeedsAttention": true
         }
       ],
       "currentAutomatedAudiovisualReviewsComplete": false,
@@ -1789,7 +1789,7 @@
       "videoSha256": "1d8fe9de2081bd109b86f4375ddb0ce5b5486cb91614088d5cd6bd5cbba1757f",
       "capturePurpose": "narration-timed",
       "timelineMatchesManifest": true,
-      "currentProductBuildProven": true,
+      "currentProductBuildProven": false,
       "narrationChapters": [
         {
           "id": "welcome",
@@ -3189,8 +3189,8 @@
     {
       "id": "MEMBERS_INVITATIONS",
       "slug": "members-invitations",
-      "videoSha256": "3b33c4f156a8d8abab16302de9dad25cd1a3ecc150988b28bb1a04a611308c06",
-      "capturePurpose": null,
+      "videoSha256": "c357025ee9bfb9e294517d8b6ead6a83da05375e41463406cab84c66b4024fdc",
+      "capturePurpose": "narration-timed",
       "timelineMatchesManifest": true,
       "currentProductBuildProven": false,
       "narrationChapters": [
@@ -3506,7 +3506,7 @@
     {
       "id": "MEMBERS_MANAGEMENT",
       "slug": "members-management",
-      "videoSha256": "4f2463aa78f990278c1913f94a35e27170bbb7b98cd4fc848478da990a80a1cb",
+      "videoSha256": "d217b3a0a43428c453f7c2c1a5bc4b13ee389513c507c1e86a749f7830b0d369",
       "capturePurpose": "narration-timed",
       "timelineMatchesManifest": true,
       "currentProductBuildProven": true,
@@ -3649,7 +3649,7 @@
           "reportPresent": true,
           "sameVideo": true,
           "structurallyComplete": true,
-          "automatedReviewNeedsAttention": true
+          "automatedReviewNeedsAttention": false
         },
         {
           "id": "activity",
@@ -3666,7 +3666,7 @@
           "automatedReviewNeedsAttention": false
         }
       ],
-      "currentAutomatedAudiovisualReviewsComplete": false,
+      "currentAutomatedAudiovisualReviewsComplete": true,
       "finalDeliveryValidated": false
     },
     {
@@ -4442,10 +4442,10 @@
     {
       "id": "ADMIN_NAVIGATION",
       "slug": "admin-navigation",
-      "videoSha256": "f4c0c3c28ab04d429a33a9fd82687797f0081bd26e4214dabb9f06b4d4c9beac",
+      "videoSha256": "92c7d0b2f631187fe228ccacb815e8e02c5ec38981b424ceba61c85428e8388f",
       "capturePurpose": "narration-timed",
       "timelineMatchesManifest": true,
-      "currentProductBuildProven": false,
+      "currentProductBuildProven": true,
       "narrationChapters": [
         {
           "id": "welcome",
@@ -4557,7 +4557,7 @@
           "automatedReviewNeedsAttention": false
         }
       ],
-      "currentAutomatedAudiovisualReviewsComplete": false,
+      "currentAutomatedAudiovisualReviewsComplete": true,
       "finalDeliveryValidated": false
     },
     {
@@ -5243,10 +5243,10 @@
     {
       "id": "EVENT_CREATE_BLANK",
       "slug": "event-create-blank",
-      "videoSha256": "3f20ef19a8b0a0a33e4e7020a025d610264349c91b327b6c4f794b1b47764719",
+      "videoSha256": "af53e113f481e6d6e2d0628296c0ca270f88c17fc79961b9d9777a99de418954",
       "capturePurpose": "narration-timed",
       "timelineMatchesManifest": true,
-      "currentProductBuildProven": false,
+      "currentProductBuildProven": true,
       "narrationChapters": [
         {
           "id": "welcome",
@@ -5319,37 +5319,37 @@
         {
           "id": "welcome",
           "reportPresent": true,
-          "sameVideo": false,
+          "sameVideo": true,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": false
         },
         {
           "id": "identity-dates",
           "reportPresent": true,
-          "sameVideo": false,
+          "sameVideo": true,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": false
         },
         {
           "id": "location",
           "reportPresent": true,
-          "sameVideo": false,
+          "sameVideo": true,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": false
         },
         {
           "id": "public-content",
           "reportPresent": true,
-          "sameVideo": false,
+          "sameVideo": true,
           "structurallyComplete": true,
           "automatedReviewNeedsAttention": false
         },
         {
           "id": "phone-color",
           "reportPresent": true,
-          "sameVideo": false,
+          "sameVideo": true,
           "structurallyComplete": true,
-          "automatedReviewNeedsAttention": false
+          "automatedReviewNeedsAttention": true
         },
         {
           "id": "create",
@@ -8629,7 +8629,7 @@
       "slug": "masterclass-03-first-steps",
       "videoSha256": "e9eb298b1edb54858df3f6192b9bd2b36b7139a77f96375c5cc12040222e67a3",
       "capturePurpose": null,
-      "timelineMatchesManifest": true,
+      "timelineMatchesManifest": false,
       "currentProductBuildProven": false,
       "narrationChapters": [
         {
@@ -8697,6 +8697,14 @@
           "generationIdentified": true
         },
         {
+          "id": "help",
+          "audioPresent": false,
+          "expectedTranscriptCurrent": false,
+          "auditMatchesAudio": false,
+          "auditPassed": false,
+          "generationIdentified": false
+        },
+        {
           "id": "result",
           "audioPresent": true,
           "expectedTranscriptCurrent": false,
@@ -8759,6 +8767,13 @@
         },
         {
           "id": "test",
+          "reportPresent": false,
+          "sameVideo": false,
+          "structurallyComplete": false,
+          "automatedReviewNeedsAttention": true
+        },
+        {
+          "id": "help",
           "reportPresent": false,
           "sameVideo": false,
           "structurallyComplete": false,

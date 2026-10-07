@@ -1,13 +1,13 @@
 {
-  "checkedAt": "2026-10-06T17:34:33.198Z",
+  "checkedAt": "2026-10-07T02:25:10.293Z",
   "actualInitialWorkerStates": true,
   "actualOrganizerReadOnlySettings": true,
-  "actualRetryMailId": "0aAYAZGSrUbqoSoB1wM8oF",
+  "actualRetryMailId": "3ieoyUVaOM9fBAu4AnrUfn",
   "samePayloadOnRetry": true,
-  "correctedRecipientMailId": "3H1xfXy0sx8CgaRAcHiW4Z",
+  "correctedRecipientMailId": "15iQLZChGujjrW2yNXYP0V",
   "correctedRecipientMailIsNew": true,
   "oldPayloadUnchanged": true,
-  "campaignId": "cmuwyiuqr0009ksa5cik6mh8v",
+  "campaignId": "cmuxhh8es0017ira5uy4yaaul",
   "onlyFailedResent": true,
   "repeatedResendCreatedNothing": true,
   "permanentFailureStoppedAfterOneAttempt": true,
@@ -16,37 +16,37 @@
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": true,
       "responseCode": 250,
-      "timestamp": "2026-10-06T17:31:32.529Z"
+      "timestamp": "2026-10-07T02:22:09.452Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": true,
       "responseCode": 250,
-      "timestamp": "2026-10-06T17:32:37.248Z"
+      "timestamp": "2026-10-07T02:23:10.000Z"
     },
     {
       "recipient": "video.delivery.corrected@example.org",
       "accepted": true,
       "responseCode": 250,
-      "timestamp": "2026-10-06T17:32:37.366Z"
+      "timestamp": "2026-10-07T02:23:10.030Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": false,
       "responseCode": 550,
-      "timestamp": "2026-10-06T17:33:04.471Z"
+      "timestamp": "2026-10-07T02:23:41.553Z"
     },
     {
       "recipient": "video.delivery.corrected@example.org",
       "accepted": true,
       "responseCode": 250,
-      "timestamp": "2026-10-06T17:33:04.545Z"
+      "timestamp": "2026-10-07T02:23:41.591Z"
     },
     {
       "recipient": "video.delivery.recoverable@example.org",
       "accepted": true,
       "responseCode": 250,
-      "timestamp": "2026-10-06T17:33:18.288Z"
+      "timestamp": "2026-10-07T02:23:55.330Z"
     }
   ],
   "audiovisualValidated": false

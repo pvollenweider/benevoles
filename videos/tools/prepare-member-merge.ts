@@ -5,22 +5,23 @@ import assert from "node:assert/strict"
 import { loadCurrentVideoPrisma } from "../lib/current-product-prisma"
 import { assertMergeResetFixture, mergeOwnedSchema, mergeOwnedSchemaSha256, type MergeOwnershipLedger } from "../lib/member-merge-reset-guard"
 import { createHash } from "node:crypto"
-import { registrationToken, linkToken } from "../../src/lib/token-vault"
 import { mkdir, writeFile, readFile } from "node:fs/promises"
 import path from "node:path"
 import { MERGE_ORG, MERGE_SLUG, MERGE_OWNER, MERGE_KEEP, MERGE_ABSORB, MERGE_EVENT, MERGE_MOVED_REGISTRATION, MERGE_MOVED_INVITE, MERGE_QUESTION, assertMergeDatabase, assertMergeReviewFixture } from "../lib/member-merge-fixture"
+import { readPrivateIdentityVersion } from "../lib/private-identity-version"
 
 async function main() {
   const databaseUrl = process.env.DATABASE_URL ?? ""
   assertMergeDatabase(databaseUrl)
   const args = process.argv.slice(2)
   assert(args.length === 0 || (args.length === 1 && args[0] === "--reset-owned"), "Only explicit --reset-owned is accepted")
+  assert(!await readPrivateIdentityVersion("merge"), "Migrated merge identities must not be reconstructed by the legacy reset; preserve current records and ledger")
   const directory = path.resolve("videos/output/members-duplicates-merge")
   const ledgerPath = path.join(directory, "ownership.json")
   let ledger: MergeOwnershipLedger | null = null
   try { ledger = JSON.parse(await readFile(ledgerPath, "utf8")) }
   catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error }
-  const { db, unregister } = await loadCurrentVideoPrisma("http://localhost:43110")
+  const { db, tokens: { registrationToken, linkToken }, unregister } = await loadCurrentVideoPrisma("http://localhost:43110")
   try {
     const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost" }, select: { passwordHash: true } })
     const date = new Date("2026-11-28T00:00:00Z")

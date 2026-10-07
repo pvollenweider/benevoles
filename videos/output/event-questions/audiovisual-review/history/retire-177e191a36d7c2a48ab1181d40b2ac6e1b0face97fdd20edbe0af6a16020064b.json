@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:47:06.195Z",
+  "videoSha256": "8fd119fcc7be2e7433955eb308377f0bafecf962c880a14c93f0b1b0c8f0ca78",
+  "promptSha256": "cc8b0beadb01ccc0bad4f18e6d58faef73f4a040f5da08e5afe5d780cccb84bb",
+  "clipSha256": "02169c379460dfa1278e9050ba794c81cc90b1322d587bba1d1e9a2755fc5677",
+  "scene": "retire",
+  "review": {
+    "heardOpening": "Nous n'avons plus besoin de demander la taille",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4,
+        "spoken": "Cliquons sur Retirer, puis lisons la confirmation",
+        "visibleSeconds": 0.5,
+        "visible": "Le clic sur Retirer et la modale s'affichent dès 0:01 avant de disparaître",
+        "sync": "early",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "Confirmons",
+        "visibleSeconds": 1.5,
+        "visible": "La confirmation s'est produite à 0:01",
+        "sync": "early",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "Dans l'inscription d'Aline, sa taille L est encore visible",
+        "visibleSeconds": 2,
+        "visible": "L'écran des inscriptions n'a été visible qu'entre 0:02 et 0:03 ; à 0:14 le formulaire public est affiché",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Ouvrons enfin un autre créneau public",
+        "visibleSeconds": 6.5,
+        "visible": "Le créneau public a été sélectionné et ouvert dès 0:06",
+        "sync": "early",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "Désynchronisation majeure : l'ensemble des actions visuelles (retrait, consultation d'Aline, ouverture du créneau) se déroule dans les 7 premières secondes, très en avance sur le commentaire audio."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire et posée, mais totalement décalée par rapport au déroulement de l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

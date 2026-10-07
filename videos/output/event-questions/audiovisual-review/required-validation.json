@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:44:26.351Z",
-  "videoSha256": "8fd119fcc7be2e7433955eb308377f0bafecf962c880a14c93f0b1b0c8f0ca78",
+  "reviewedAt": "2026-10-07T02:48:54.020Z",
+  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
   "promptSha256": "c072dfb4dc26e94e3617d8317234ee9d5a0611268264e1f76768a6d3479eb14b",
-  "clipSha256": "ce9ecd9233e46e4422d6f32870170985e427262265deb6511b0f2006d884f78f",
+  "clipSha256": "c138e8f3465593b0b0aefda49a7a8c530de8cfbaa62efbde9ce4f4030a0fdaf4",
   "scene": "required-validation",
   "review": {
-    "heardOpening": "Voyons maintenant le formulaire public",
+    "heardOpening": "Voyons maintenant le formulaire public avec Aline.",
     "checkpoints": [
       {
-        "spokenSeconds": 4,
+        "spokenSeconds": 4.5,
         "spoken": "Choisissons le premier créneau et continuons.",
-        "visibleSeconds": 3,
-        "visible": "Sélection du créneau 10h-12h et clic sur Continuer.",
+        "visibleSeconds": 5.5,
+        "visible": "Sélection du créneau puis affichage du formulaire.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.5,
+        "spokenSeconds": 7,
         "spoken": "Renseignons son identité et les consentements demandés.",
-        "visibleSeconds": 8,
-        "visible": "Saisie des informations d'Aline et validation des consentements.",
+        "visibleSeconds": 7.5,
+        "visible": "Saisie du prénom, nom, courriel et cases de consentement cochées.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
+        "spokenSeconds": 11,
         "spoken": "Essayons de confirmer sans répondre à nos deux questions obligatoires.",
-        "visibleSeconds": 13,
-        "visible": "Clic sur le bouton de confirmation sans remplir les champs requis.",
+        "visibleSeconds": 13.5,
+        "visible": "Clic sur le bouton Confirmer mon inscription.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.5,
+        "spokenSeconds": 15,
         "spoken": "Le formulaire indique ce qui manque et place le focus sur la première réponse attendue.",
-        "visibleSeconds": 14,
-        "visible": "Affichage de l'alerte de validation sur la question du permis.",
+        "visibleSeconds": 14.5,
+        "visible": "Apparition du message d'erreur d'option manquante avec focus.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Débit posé et diction claire, bonne synchronisation globale."
+      "observation": "Élocution claire et synchronisation visuelle adéquate."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

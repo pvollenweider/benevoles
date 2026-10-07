@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:30:24.282Z",
+  "videoSha256": "7b0f188c8a6566bb756eef4389d586e7ddef3f7424a908e865a1a1826cb3bca8",
+  "promptSha256": "b0328fa0c8b596925b476a23edffe702e85022af8fb0b236600b4189121c716b",
+  "clipSha256": "45a5d3759cf7e7cf783f1a0022a6c7be98c03439aef68258f48f5758ca617b7c",
+  "scene": "open",
+  "review": {
+    "heardOpening": "Ouvrez la loupe dans la barre du haut",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrez la loupe dans la barre du haut",
+        "visibleSeconds": 0.8,
+        "visible": "Ouverture du champ de recherche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "le champ s’ouvre et reçoit immédiatement le curseur",
+        "visibleSeconds": 4.8,
+        "visible": "Réouverture du champ avec curseur actif",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "Échap le referme sans lancer de recherche",
+        "visibleSeconds": 8.3,
+        "visible": "Fermeture du champ et focus restitué au bouton",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:08 - La fermeture du champ précède l'énoncé de la touche Échap."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T19:12:12.712Z",
+  "videoSha256": "4e9055095f2bdb94e79a6bb5da0887d2877507a94efc7df2305de2074de7aff2",
+  "promptSha256": "c8a8543634d07616f9c471b82288b1817513cd9611e3bfc44de978ae92909c5c",
+  "clipSha256": "0ba725e9f9bc86592e3cb3e4687de291d08ce2a2df4be1db0ff5b8e872062385",
+  "scene": "duplicates",
+  "review": {
+    "heardOpening": "Deux fiches pour une seule personne ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Dans Membres, ouvrez Doublons possibles.",
+        "visibleSeconds": 5,
+        "visible": "Navigation vers la liste des doublons possibles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Comparer et fusionner ouvre un aperçu",
+        "visibleSeconds": 12,
+        "visible": "Ouverture de la page Aperçu de la fusion",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "Revenons aux suggestions.",
+        "visibleSeconds": 17,
+        "visible": "Retour à l'écran précédent des suggestions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19,
+        "spoken": "Ignorer retire simplement la paire de cette liste.",
+        "visibleSeconds": 20,
+        "visible": "Clic sur Ignorer et disparition de la suggestion",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier en adéquation avec les manipulations."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -4,6 +4,7 @@ import assert from "node:assert/strict"
 import type { PrismaClient } from "../../src/generated/prisma/client"
 import { registrationToken, linkToken } from "../../src/lib/token-vault"
 import type { MemberMergeBefore, MemberMergeAfter } from "./record-member-merge"
+import { privateIdentities, readPrivateIdentityVersion } from "./private-identity-version"
 
 export const MERGE_ORG = "video-member-merge"
 export const MERGE_SLUG = "formation-fusion"
@@ -31,19 +32,21 @@ export function assertMergeDatabase(databaseUrl: string) {
 /** Also accepts the actual post-merge tombstone, but never arbitrary null-email members. */
 export async function assertMergeReviewFixture(db: PrismaClient, databaseUrl: string) {
   assertMergeDatabase(databaseUrl)
+  const identityV2 = await readPrivateIdentityVersion("merge")
   const org = await db.organization.findUniqueOrThrow({ where: { id: MERGE_ORG }, include: { admins: true, volunteers: true, events: { include: { shifts: true, registrations: true, memberInvites: true, questions: { include: { answers: true } }, sectorLeaders: true } } } })
   assert.equal(org.slug, MERGE_SLUG)
   assert.equal(org.name, "Formation — doublons et fusion")
+  if (identityV2) assert.equal(org.createdAt.toISOString(), identityV2.organizationCreatedAt, "Identity migration belongs to a different merge fixture generation")
   assert.equal(org.admins.length, 1)
-  assert(org.admins[0].id === `${MERGE_ORG}-owner` && org.admins[0].name === "Élodie Exemple" && org.admins[0].email === MERGE_OWNER && org.admins[0].role === "admin" && org.admins[0].isActive)
+  assert(org.admins[0].id === `${MERGE_ORG}-owner` && org.admins[0].name === (identityV2 ? privateIdentities.merge.owner : "Élodie Exemple") && org.admins[0].email === MERGE_OWNER && org.admins[0].role === "admin" && org.admins[0].isActive)
   assert.equal(org.volunteers.length, 2)
   const keep = org.volunteers.find(member => member.id === MERGE_KEEP)
   const absorb = org.volunteers.find(member => member.id === MERGE_ABSORB)
-  assert(keep && absorb && keep.active && keep.email === "video.merge.robin@example.org" && keep.firstName === "Robin" && keep.lastName === "Exemple")
+  assert(keep && absorb && keep.active && keep.email === "video.merge.robin@example.org" && keep.firstName === "Robin" && keep.lastName === (identityV2 ? privateIdentities.merge.members.a : "Exemple"))
   assert(mergeFixturePhone(keep.phone) && keep.tags.every(tag => ["accueil", "buvette"].includes(tag)) && keep.availabilityPeriods.every(period => ["morning", "afternoon"].includes(period)))
   if (absorb.mergedIntoId === MERGE_KEEP) {
     assert(!absorb.active && absorb.email === null && absorb.phone === null && absorb.firstName === "" && absorb.lastName === "" && absorb.notes === null && absorb.birthDate === null && absorb.tags.length === 0 && absorb.availabilityPeriods.length === 0 && absorb.availabilityNote === null)
-  } else assert(absorb.active && absorb.mergedIntoId === null && absorb.email === "video.merge.robim@example.org" && absorb.firstName === "Robin" && absorb.lastName === "Exemple" && mergeFixturePhone(absorb.phone) === "0790000101")
+  } else assert(absorb.active && absorb.mergedIntoId === null && absorb.email === "video.merge.robim@example.org" && absorb.firstName === "Robin" && absorb.lastName === (identityV2 ? privateIdentities.merge.members.b : "Exemple") && mergeFixturePhone(absorb.phone) === "0790000101")
   assert.equal(org.events.length, 1)
   const event = org.events[0]
   assert(event.id === MERGE_EVENT && event.slug === "atelier-fusion" && event.title === "Fusion de fiches — démonstration" && event.sectorLeaders.length === 0 && event.remindersEnabled === false)

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T19:18:32.220Z",
+  "videoSha256": "d06d14223ff995674d62c29e7a94d1400de7af563b83439753ac588157b6a4a6",
+  "promptSha256": "344cb6ce62ab99b9a2401a977fbfb1c2423287f525c83c3465e7626283b4eb47",
+  "clipSha256": "271e092d556dfbfd70bc28000372d21f63aed30f302e47c69ae8d1b6e2e69ac2",
+  "scene": "create-single",
+  "review": {
+    "heardOpening": "Commençons par la taille du t-shirt",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Cliquons sur Ajouter une question",
+        "visibleSeconds": 2,
+        "visible": "Ouverture du formulaire d'ajout d'une question",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "puis saisissons son intitulé",
+        "visibleSeconds": 3.8,
+        "visible": "Saisie de l'intitulé Taille de t-shirt",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "choisissons Choix unique",
+        "visibleSeconds": 8.8,
+        "visible": "Sélection de Choix unique dans la liste déroulante",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25.5,
+        "spoken": "cochons Réponse obligatoire",
+        "visibleSeconds": 25.4,
+        "visible": "Activation de la case à cocher Réponse obligatoire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.8,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 27.9,
+        "visible": "Clic sur le bouton Enregistrer et affichage de la question créée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et naturelle, bon calibrage du débit."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

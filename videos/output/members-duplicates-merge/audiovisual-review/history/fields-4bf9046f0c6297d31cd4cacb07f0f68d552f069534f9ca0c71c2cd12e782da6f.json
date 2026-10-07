@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:43:18.969Z",
+  "videoSha256": "386a2aaa7a8b33a87a4af265149f6b3b026fe93db5f4941b88209af9b51b34d3",
+  "promptSha256": "b57868132dc29bbd659231c1323f74e8e2317cad66dc125a0198a5bf5b05b912",
+  "clipSha256": "2be6554df10692f04bb799ea8c5960a562068a49e06790dead4b73797fc43adc",
+  "scene": "fields",
+  "review": {
+    "heardOpening": "Pour chaque information différente",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "on prend le téléphone de l'autre fiche",
+        "visibleSeconds": 7.4,
+        "visible": "Sélection du bouton radio pour le second numéro de téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "mises à la suite",
+        "visibleSeconds": 11.6,
+        "visible": "Option 'Mettre les deux notes à la suite' cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Le tableau récapitule les inscriptions",
+        "visibleSeconds": 20.3,
+        "visible": "Défilement affichant le tableau récapitulatif 'Ce qui sera déplacé'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.1,
+        "spoken": "les abonnements aux notifications du navigateur ne sont jamais déplacés",
+        "visibleSeconds": 21.5,
+        "visible": "Ligne du tableau mentionnant les notifications non déplacées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton pédagogique adapté."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

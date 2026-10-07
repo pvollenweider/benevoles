@@ -13,7 +13,7 @@ type Member = {
 /** Tokens remain in memory. Evidence returned below contains fingerprints only. */
 export type MergePersonalLink = { entityId: string; kind: "registration" | "invitation"; apiUrl: string; expectedAfterStatus?: 200 | 404 }
 export type MemberMergeBefore = {
-  databaseUrl: string; organizationId: "video-member-merge"; sessionRole: "owner"
+  databaseUrl: string; organizationId: "video-member-merge" | "video-member-merge-v2" | "video-member-merge-v3" | "video-member-merge-v4" | "video-member-merge-v5"; sessionRole: "owner"
   keep: Member; absorb: Member; organizationMembers: Member[]
   questionConflictIds: string[]; invitationConflictEventIds: string[]
   movedRegistrationIds: string[]; movedInvitationIds: string[]
@@ -57,11 +57,12 @@ export function validateMemberMergeBefore(before: MemberMergeBefore, baseUrl: st
   check(local.protocol === "http:" && !local.username && !local.password && ["localhost", "127.0.0.1", "[::1]"].includes(local.hostname) && Number(local.port) >= 43100 && Number(local.port) <= 43110, "dedicated local capture server required")
   const database = new URL(before.databaseUrl)
   check(["localhost", "127.0.0.1", "[::1]"].includes(database.hostname) && database.port === "45433" && database.pathname === "/benevoles_video", "isolated video database required")
-  check(before.organizationId === "video-member-merge" && before.sessionRole === "owner", "exact fictional organization and owner session required")
+  check(["video-member-merge", "video-member-merge-v2", "video-member-merge-v3", "video-member-merge-v4", "video-member-merge-v5"].includes(before.organizationId) && before.sessionRole === "owner", "exact fictional organization and owner session required")
   check(before.keep.id !== before.absorb.id && [before.keep, before.absorb].every(member => /^video-member-merge-[a-zA-Z0-9_-]+$/.test(member.id)), "two dedicated, distinct merge fixture members required")
-  check(before.organizationMembers.length === 2 && before.organizationMembers.every(member => member.organizationId === "video-member-merge" && syntheticEmail(member.email)), "organization contains a non-synthetic member")
+  check(before.keep.id === `${before.organizationId}-a` && before.absorb.id === `${before.organizationId}-b`, "exact generation-owned pair required")
+  check(before.organizationMembers.length === 2 && before.organizationMembers.every(member => member.organizationId === before.organizationId && syntheticEmail(member.email)), "organization contains a non-synthetic member")
   for (const member of [before.keep, before.absorb]) {
-    check(member.organizationId === "video-member-merge" && member.active && member.mergedIntoId === null && syntheticEmail(member.email) && member.firstName.trim() && member.lastName.trim(), "merge source is not an active owned synthetic fixture")
+    check(member.organizationId === before.organizationId && member.active && member.mergedIntoId === null && syntheticEmail(member.email) && member.firstName.trim() && member.lastName.trim(), "merge source is not an active owned synthetic fixture")
     const live = before.organizationMembers.find(candidate => candidate.id === member.id)
     check(live && Object.keys(member).every(key => JSON.stringify(live[key as keyof Member]) === JSON.stringify(member[key as keyof Member])), "merge source is absent or differs from live organization snapshot")
   }
@@ -76,10 +77,10 @@ export function validateMemberMergeBefore(before: MemberMergeBefore, baseUrl: st
 }
 
 export function validateMemberMergeAfter(before: MemberMergeBefore, after: MemberMergeAfter, baseUrl: string) {
-  check(after.keep.id === before.keep.id && after.keep.organizationId === "video-member-merge" && after.keep.active && after.keep.email === before.keep.email, "wrong retained profile or email after merge")
+  check(after.keep.id === before.keep.id && after.keep.organizationId === before.organizationId && after.keep.active && after.keep.email === before.keep.email, "wrong retained profile or email after merge")
   if (before.keep.phone !== before.absorb.phone) check(after.keep.phone === before.absorb.phone, "selected absorbed phone was not retained")
   const absorbed = after.absorb
-  check(absorbed.id === before.absorb.id && absorbed.organizationId === "video-member-merge" && !absorbed.active && absorbed.mergedIntoId === before.keep.id, "absorbed profile was not actually deactivated")
+  check(absorbed.id === before.absorb.id && absorbed.organizationId === before.organizationId && !absorbed.active && absorbed.mergedIntoId === before.keep.id, "absorbed profile was not actually deactivated")
   check(absorbed.email === null && absorbed.phone === null && absorbed.notes === null && absorbed.birthDate === null && absorbed.availabilityNote === null && absorbed.tags.length === 0 && absorbed.availabilityPeriods.length === 0, "absorbed personal data was not cleared")
   // The persisted tombstone uses no original name (its exact marker is product-owned).
   check(absorbed.firstName === "" && absorbed.lastName === "", "absorbed name still contains personal identity")
@@ -174,9 +175,9 @@ export async function recordMemberMerge(options: MemberMergeRecordingOptions) {
       await tap(page, page.getByRole("group", { name: "Téléphone", exact: true }).getByRole("radio", { name: `Prendre « ${before.absorb.phone ?? "(vide)"} » (${absorbedName})`, exact: true }))
       await waitPreview()
     }
-    await at(0.47); await tap(page, page.getByRole("radio", { name: "Mettre les deux notes à la suite", exact: true }))
+    await at(0.35); await tap(page, page.getByRole("radio", { name: "Mettre les deux notes à la suite", exact: true }))
     await waitPreview()
-    await at(0.72); await page.getByRole("table", { name: "Nombre de lignes concernées par la fusion, par type", exact: true }).scrollIntoViewIfNeeded()
+    await at(0.59); await page.getByRole("table", { name: "Nombre de lignes concernées par la fusion, par type", exact: true }).scrollIntoViewIfNeeded()
   })
   await scene("conflicts", async at => {
     await page.getByRole("heading", { name: "Points à vérifier", exact: true }).scrollIntoViewIfNeeded()
@@ -251,5 +252,5 @@ export async function recordMemberMerge(options: MemberMergeRecordingOptions) {
     await page.getByRole("heading", { name: "Mes inscriptions", exact: true }).waitFor()
     await page.getByRole("region", { name: "Tous mes créneaux", exact: true }).waitFor()
   })
-  return { productBuild, keepId: before.keep.id, absorbId: before.absorb.id, linkFingerprints: links, linkChecks, emailsSent: false }
+  return { productBuild, organizationId: before.organizationId, keepId: before.keep.id, absorbId: before.absorb.id, linkFingerprints: links, linkChecks, emailsSent: false }
 }

@@ -1,35 +1,35 @@
 {
   "id": "EVENT_QUESTIONS",
   "slug": "event-questions",
-  "validatedAt": "2026-10-06T17:42:07.542Z",
+  "validatedAt": "2026-10-07T02:51:40.306Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 520640,
+  "captureMs": 520720,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 32702,
+      "visualMs": 32678,
       "audioMs": 32676,
-      "driftMs": 26
+      "driftMs": 2
     },
     {
       "id": "create-single",
-      "visualMs": 34416,
+      "visualMs": 34418,
       "audioMs": 34416,
-      "driftMs": 0
+      "driftMs": 2
     },
     {
       "id": "create-yesno",
-      "visualMs": 27885,
+      "visualMs": 27884,
       "audioMs": 27884,
-      "driftMs": 1
+      "driftMs": 0
     },
     {
       "id": "create-multiple",
-      "visualMs": 31124,
+      "visualMs": 31123,
       "audioMs": 31121,
-      "driftMs": 3
+      "driftMs": 2
     },
     {
       "id": "create-text",
@@ -39,39 +39,39 @@
     },
     {
       "id": "order",
-      "visualMs": 26061,
+      "visualMs": 26060,
       "audioMs": 26060,
-      "driftMs": 1
+      "driftMs": 0
     },
     {
       "id": "required-validation",
-      "visualMs": 29697,
+      "visualMs": 29698,
       "audioMs": 29697,
-      "driftMs": 0
+      "driftMs": 1
     },
     {
       "id": "volunteer-form",
-      "visualMs": 30778,
+      "visualMs": 30780,
       "audioMs": 30777,
-      "driftMs": 1
+      "driftMs": 3
     },
     {
       "id": "email-proof",
-      "visualMs": 32976,
+      "visualMs": 32979,
       "audioMs": 32976,
-      "driftMs": 0
+      "driftMs": 3
     },
     {
       "id": "admin-read",
-      "visualMs": 29433,
+      "visualMs": 29430,
       "audioMs": 29429,
-      "driftMs": 4
+      "driftMs": 1
     },
     {
       "id": "summary-export",
-      "visualMs": 28216,
+      "visualMs": 28217,
       "audioMs": 28215,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "invited-update",
@@ -87,9 +87,9 @@
     },
     {
       "id": "answered-lock",
-      "visualMs": 29648,
+      "visualMs": 29649,
       "audioMs": 29648,
-      "driftMs": 0
+      "driftMs": 1
     },
     {
       "id": "edit-choices",
@@ -99,9 +99,9 @@
     },
     {
       "id": "retire",
-      "visualMs": 32418,
+      "visualMs": 32420,
       "audioMs": 32418,
-      "driftMs": 0
+      "driftMs": 2
     }
   ],
   "issues": []

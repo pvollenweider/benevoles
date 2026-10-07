@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:31:30.716Z",
+  "videoSha256": "40c2daacfc4c477f3a0078d17f0c72458436f38255c820e3d6645f649fd1db79",
+  "promptSha256": "25531fd130d559ea51f55e05ae0392b019f60b3428468116e859983bc9f29f6d",
+  "clipSha256": "c3986a175cc5a63523f8f428b30614e861284ecdeee142825e0810aa69fbb693",
+  "scene": "answered-lock",
+  "review": {
+    "heardOpening": "Le formulaire a maintenant des réponses",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "revenons modifier la taille du t-shirt",
+        "visibleSeconds": 1.8,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Clic sur Modifier pour la question Taille de t-shirt"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Le type est verrouillé",
+        "visibleSeconds": 10.5,
+        "sync": "late",
+        "severity": "minor",
+        "visible": "Champ Type de réponse grisé visible après défilement"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "retirer L des choix proposés",
+        "visibleSeconds": 12,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Suppression de l'option L dans la zone de texte"
+      },
+      {
+        "spokenSeconds": 15.2,
+        "spoken": "L'application refuse",
+        "visibleSeconds": 15,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Message d'erreur bloquant sous le champ de saisie"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Annulons cette modification",
+        "visibleSeconds": 19.2,
+        "sync": "aligned",
+        "severity": "none",
+        "visible": "Clic sur Annuler et fermeture du formulaire d'édition"
+      }
+    ],
+    "issues": [
+      "00:05 - Le défilement vers le champ de type verrouillé n'intervient qu'autour de 00:10."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

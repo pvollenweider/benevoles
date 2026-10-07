@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:52:12.131Z",
+  "videoSha256": "1a35b065080e4dcc60862acc6b3c5e896e1427802cf20c1e1bb81da074e0b8e7",
+  "promptSha256": "d7817b0e8be7461ed8b0503e9b23f93282a3c21afaabb3ef84db5b5d71cd824f",
+  "clipSha256": "c1f5026bcaf80ce293a0394290524fae843e509223c4aaa7859f23061cfd69fb",
+  "scene": "location",
+  "review": {
+    "heardOpening": "Le lieu reste lisible comme une adresse",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le lieu reste lisible comme une adresse",
+        "visibleSeconds": 0.6,
+        "visible": "L'adresse est saisie dans le champ Lieu",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "collez une paire de coordonnées ou un lien de carte reconnu",
+        "visibleSeconds": 3.9,
+        "visible": "Insertion des coordonnées GPS dans le champ correspondant",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "prépare un lien Vérifier sur la carte",
+        "visibleSeconds": 4.2,
+        "visible": "Affichage de la mention avec le lien Vérifier sur la carte sous le champ",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Le bénévole trouvera Voir sur la carte sur la page publique",
+        "visibleSeconds": 12,
+        "visible": "Maintien de l'affichage du formulaire (information contextuelle)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

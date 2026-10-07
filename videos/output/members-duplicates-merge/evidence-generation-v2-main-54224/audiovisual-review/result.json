@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:43:53.842Z",
+  "videoSha256": "386a2aaa7a8b33a87a4af265149f6b3b026fe93db5f4941b88209af9b51b34d3",
+  "promptSha256": "3d20f0a23e0d73cc6f4359d14b5436ac2a62a718c075e02832adb36774802ce0",
+  "clipSha256": "dea536892e6e82e6be331a1956b99c1748bf094bcdff5aabd705f86ba04a1a14",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Fusion effectuée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Fusion effectuée : le résultat indique ce qui a été déplacé.",
+        "visibleSeconds": 0.5,
+        "visible": "Page confirmant la fusion avec le détail des inscriptions et invitations déplacées.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Retournez à la fiche conservée pour retrouver son activité et les inscriptions réunies.",
+        "visibleSeconds": 7.5,
+        "visible": "Clic sur le lien vers la fiche de Robin Favre et ouverture de son activité.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Dans la liste des membres actifs, il ne reste qu’une fiche pour cette personne.",
+        "visibleSeconds": 10,
+        "visible": "Affichage de la liste des membres montrant une unique ligne pour Robin Favre.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "L’historique n’est pas réécrit : les faits enregistrés sous l’ancienne fiche restent consultables",
+        "visibleSeconds": 15.3,
+        "visible": "Retour à la page d'activité affichant l'historique complet consolidé.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, bien synchronisée avec les transitions visuelles."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

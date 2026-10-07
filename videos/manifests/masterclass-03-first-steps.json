@@ -71,7 +71,7 @@
     },
     {
       "id": "help",
-      "transcript": "Besoin d’aide ? Aide ouvre le guide organisateur dans un nouvel onglet. Retrouvons Premiers pas. Quand une vidéo est disponible, Voir la vidéo ouvre le lecteur directement dans la documentation, sans démarrer la lecture automatiquement. Les commandes du lecteur permettent ensuite de lancer la vidéo et d’activer les sous-titres. La transcription reste consultable juste dessous. Vous pouvez aussi ouvrir la bibliothèque, ou replier le lecteur pour continuer votre lecture.",
+      "transcript": "Besoin d’aide ? Aide ouvre le guide organisateur dans un nouvel onglet. Retrouvons Premiers pas. Quand une vidéo est disponible, Voir la vidéo ouvre le lecteur directement dans la documentation et lance la lecture grâce à votre clic. Les commandes du lecteur permettent ensuite de mettre en pause et d’activer les sous-titres. La transcription reste consultable juste dessous. Vous pouvez aussi ouvrir la bibliothèque, ou replier le lecteur pour continuer votre lecture.",
       "fallbackDurationMs": 38000
     },
     {

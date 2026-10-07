@@ -1,0 +1,71 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T19:19:49.773Z",
+  "videoSha256": "d06d14223ff995674d62c29e7a94d1400de7af563b83439753ac588157b6a4a6",
+  "promptSha256": "313cd01eb1f6c91af99c2b539b7746bf8a7df075b9959c748f0669e3a12e409c",
+  "clipSha256": "c7b2f3ebf370e19e9c8cefac59f434d581ab7fea748f07bf04b1cb50ba38e951",
+  "scene": "volunteer-form",
+  "review": {
+    "heardOpening": "Répondons maintenant.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Aline choisit M pour son t-shirt",
+        "visibleSeconds": 2.1,
+        "visible": "Sélection de la taille M dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "puis Oui pour le permis",
+        "visibleSeconds": 0,
+        "visible": "L'option Oui est déjà cochée dès le départ",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "elle coche Vélo et Remorque",
+        "visibleSeconds": 0,
+        "visible": "Les cases Vélo et Remorque sont déjà cochées",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 12.1,
+        "spoken": "écrivons Entrée nord",
+        "visibleSeconds": 11.2,
+        "visible": "Saisie du texte 'Entrée nord' dans le champ dédié",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "le récapitulatif Transmis à l'organisation montre les informations",
+        "visibleSeconds": 17,
+        "visible": "Défilement vers le bloc latéral Transmis à l'organisation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.1,
+        "spoken": "confirmons réellement l'inscription",
+        "visibleSeconds": 22.4,
+        "visible": "Clic sur le bouton et affichage de la confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:04 : Le permis 'Oui' était déjà présélectionné avant l'annonce vocale.",
+      "00:07 : Les options Vélo et Remorque sont déjà cochées au lieu d'être sélectionnées en direct."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:26:29.770Z",
+  "videoSha256": "af53e113f481e6d6e2d0628296c0ca270f88c17fc79961b9d9777a99de418954",
+  "promptSha256": "cfda50476b86a904da177258066e60db8c310b2555f7a03ba305895ace7209ff",
+  "clipSha256": "0dc14c5b47a4194e593cc0d949d1cfd5034882d2a1979eff5a3a739bbf643d31",
+  "scene": "identity-dates",
+  "review": {
+    "heardOpening": "Commençons par un titre parlant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Commençons par un titre parlant",
+        "visibleSeconds": 1.5,
+        "visible": "Saisie du titre dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "une courte description",
+        "visibleSeconds": 3.5,
+        "visible": "Saisie du texte de description",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "La date de fin se cale d’abord sur la date de début",
+        "visibleSeconds": 8.5,
+        "visible": "Dates de début et de fin alignées sur le 14.11.2026",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "nous la faisons terminer le dimanche",
+        "visibleSeconds": 12.5,
+        "visible": "Ajustement de la date de fin au 15.11.2026",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et synchronisée aux actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

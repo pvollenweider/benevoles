@@ -1,0 +1,37 @@
+{
+  "version": 2,
+  "organizationId": "video-data-exports",
+  "identities": {
+    "lastNames": [
+      "Rochat",
+      "Favre",
+      "Perrin",
+      "Morel"
+    ],
+    "owner": "Élodie Martin",
+    "leader": "Nicolas Berger"
+  },
+  "memberIds": [
+    "video-data-exports-member-0",
+    "video-data-exports-member-1",
+    "video-data-exports-member-2",
+    "video-data-exports-member-3"
+  ],
+  "actionSha256": "d10e23423043ccf5910a1da9eb0496d3d86454b1a6525ec58276c5e851153910",
+  "product": {
+    "commit": "54224c7ad2bd465e63dcf30ab91266b1455a3a23",
+    "sourceTree": "cee2ccecd3aa5c82abfea3fcee4c5691dc16ba0b",
+    "productSourceSha256": "9490665d241594d8e538bc3d1c8238667338aeaaac1336a944062c5260dce6da",
+    "buildId": "uqE7YLJo_7r8CbyaqRify",
+    "snapshot": "/tmp/benevoles-video-production.KsjGwn",
+    "builtAt": "2026-10-06T18:15:27.264Z"
+  },
+  "migratedAt": "2026-10-06T18:25:47.142Z",
+  "protectedBeforeSha256": "fd455c4619b32368798b462a54ef4df8b2cad5d8c0043f2caaa5fc1ee477b979",
+  "protectedAfterSha256": "fd455c4619b32368798b462a54ef4df8b2cad5d8c0043f2caaa5fc1ee477b979",
+  "authorHistoryIds": [
+    "cmux07cqd000bo1a52byny9tb"
+  ],
+  "leaderId": "cmuvpbr9u0006jsa5ia66qez7",
+  "note": "Existing sent email bodies and acceptance hashes are immutable; no outbox rewrite or deletion."
+}

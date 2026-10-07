@@ -21,8 +21,8 @@
         "organisateur"
       ],
       "feature": "Navigation de l'administration",
-      "updatedAt": "2026-10-06",
-      "revision": 2,
+      "updatedAt": "2026-10-07",
+      "revision": 3,
       "level": "decouverte"
     },
     {
@@ -45,8 +45,8 @@
         "organisateur"
       ],
       "feature": "Recherche globale",
-      "updatedAt": "2026-10-06",
-      "revision": 2,
+      "updatedAt": "2026-10-07",
+      "revision": 3,
       "level": "decouverte"
     },
     {
@@ -167,8 +167,8 @@
         "organisateur"
       ],
       "feature": "Création d'un événement",
-      "updatedAt": "2026-10-06",
-      "revision": 3,
+      "updatedAt": "2026-10-07",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -362,8 +362,8 @@
         "organisateur"
       ],
       "feature": "Questions aux bénévoles",
-      "updatedAt": "2026-10-06",
-      "revision": 1,
+      "updatedAt": "2026-10-07",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -437,8 +437,8 @@
         "organisateur"
       ],
       "feature": "Séries de créneaux",
-      "updatedAt": "2026-10-06",
-      "revision": 2,
+      "updatedAt": "2026-10-07",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -926,8 +926,8 @@
         "organisateur"
       ],
       "feature": "Liste des membres",
-      "updatedAt": "2026-10-06",
-      "revision": 2,
+      "updatedAt": "2026-10-07",
+      "revision": 3,
       "level": "essentiel"
     },
     {
@@ -951,8 +951,8 @@
         "organisateur"
       ],
       "feature": "Exports et archive d'un événement",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-07",
+      "revision": 2,
       "level": "avance"
     },
     {
@@ -1199,8 +1199,8 @@
         "organisateur"
       ],
       "feature": "Relance des invités",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-07",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -1223,8 +1223,8 @@
         "organisateur"
       ],
       "feature": "Invitations des membres",
-      "updatedAt": "2026-10-05",
-      "revision": 1,
+      "updatedAt": "2026-10-07",
+      "revision": 2,
       "level": "essentiel"
     },
     {
@@ -1271,8 +1271,8 @@
         "organisateur"
       ],
       "feature": "Doublons et fusion de membres",
-      "updatedAt": "2026-10-06",
-      "revision": 1,
+      "updatedAt": "2026-10-07",
+      "revision": 2,
       "level": "avance"
     },
     {

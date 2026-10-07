@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:28:28.859Z",
+  "videoSha256": "f6ee805a2a5d1386fbd03a014714cf489ae12f80d0fc33e6c0a6004b3e061dd5",
+  "promptSha256": "4fda116e4ce60ab724d98b8450372f9a230b374de4df35d6316892779e55101c",
+  "clipSha256": "036bcd97a7e0c2a91b5f91dd19f242c6f9fc9408891749bfb9d8f2ffa7c80a3c",
+  "scene": "summary-export",
+  "review": {
+    "heardOpening": "Pour préparer une commande, téléchargeons la synthèse en CSV",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "téléchargeons la synthèse en CSV",
+        "visibleSeconds": 4.5,
+        "visible": "Affichage de la page de présentation du tableau issu du CSV",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Le fichier rassemble les questions, les réponses et leurs totaux",
+        "visibleSeconds": 5,
+        "visible": "Tableau récapitulatif avec colonnes Question, Réponse, Confirmés et En attente",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Il ne contient ni noms ni coordonnées",
+        "visibleSeconds": 5,
+        "visible": "Mention sous le titre précisant qu'aucune identité ni coordonnée n'apparaît",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit posé et articulation nette, narration fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

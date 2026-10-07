@@ -141,10 +141,11 @@ export async function recordDelivery(options: Parameters<typeof recordDeliverySt
     assert.equal(await db.targetedMessage.count({ where: { eventId } }), 0)
     const go = async (route: string) => { await page.goto(`${base}${route}`); await settle(page) }
     const write = async (field: Locator, text: string) => { await tap(page, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(text, { delay: 110 }) }
-    const send = async (subject: string, message: string) => {
+    const send = async (subject: string, message: string, beforePreview?: () => Promise<void>) => {
       await go(`/admin/events/${eventId}/message`)
       await write(page.getByLabel("Objet *", { exact: true }), subject)
       await write(page.getByLabel("Message *", { exact: true }), message)
+      if (beforePreview) await beforePreview()
       await tap(page, page.getByRole("button", { name: "Voir l'aperçu et envoyer", exact: true }))
       await tap(page, page.getByRole("dialog", { name: "Aperçu de l'email" }).getByRole("button", { name: "Envoyer à 2 personnes", exact: true }))
       await tap(page, page.getByRole("dialog", { name: "Confirmer l'envoi" }).getByRole("button", { name: "Confirmer l'envoi", exact: true }))
@@ -160,7 +161,10 @@ export async function recordDelivery(options: Parameters<typeof recordDeliverySt
     await scene("address", async at => {
       const wrong = await db.notificationOutbox.findFirstOrThrow({ where: { organizationId: "video-delivery", dedupeKey: "video-delivery-preparation:wrong" } })
       await go("/admin/members")
-      await tap(page, page.getByRole("button", { name: "Éditer Léa Exemple", exact: true }))
+      const currentMember = await db.volunteer.findUniqueOrThrow({ where: { id: "video-delivery-member-wrong" } })
+      assert(currentMember.organizationId === "video-delivery" && currentMember.firstName === "Léa")
+      await at(0.065)
+      await tap(page, page.getByRole("button", { name: `Éditer ${currentMember.firstName} ${currentMember.lastName}`, exact: true }))
       const dialog = page.getByRole("dialog", { name: "Modifier le membre" })
       await write(dialog.getByLabel("Email", { exact: true }), "video.delivery.corrected@example.org")
       await tap(page, dialog.getByRole("button", { name: "Enregistrer", exact: true }))
@@ -169,10 +173,12 @@ export async function recordDelivery(options: Parameters<typeof recordDeliverySt
       await at(0.16); await go("/admin/settings/notifications")
       await page.getByRole("row").filter({ hasText: "video.delivery.wrong@example.org" }).scrollIntoViewIfNeeded()
       assert(JSON.stringify((await db.notificationOutbox.findUniqueOrThrow({ where: { id: wrong.id } })).payload) === JSON.stringify(wrong.payload))
-      await at(0.40)
+      await at(0.44)
       const inboxBefore = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()
       const priorIds = new Set(inboxBefore.messages.map((mail: { ID: string }) => mail.ID))
-      const history = await send("Formation — adresse corrigée", "Bonjour {prénom}, voici ton nouveau message, préparé après correction de ton adresse. Merci pour ton aide !")
+      // A short, actual operational instruction remains readable at the same
+      // natural typing speed; do not accelerate keys to fit the narration.
+      const history = await send("Formation — adresse corrigée", "Bonjour {prénom}, rendez-vous au stand. Merci !", () => at(0.65))
       const rows = await db.notificationOutbox.findMany({ where: { targetedMessageId: history.id } })
       assert.equal(rows.length, 2)
       for (const row of rows) await waitDelivered(row.id)
@@ -186,10 +192,12 @@ export async function recordDelivery(options: Parameters<typeof recordDeliverySt
       fixture.rejected.add("video.delivery.recoverable@example.org")
       const history = await send("Formation — échec partiel", "Bonjour {prénom}, merci pour ton aide !")
       let rows = await db.notificationOutbox.findMany({ where: { targetedMessageId: history.id } })
-      for (let n = 0; n < 40 && !rows.some(row => row.attempts === 1); n++) { await page.waitForTimeout(250); rows = await db.notificationOutbox.findMany({ where: { targetedMessageId: history.id } }) }
+      // Wait for BOTH actual outcomes; the permanent rejection can finish before
+      // the other recipient's independent Mailpit relay. Never infer delivery.
+      for (let n = 0; n < 120 && !(rows.some(row => row.attempts === 1 && row.status === "failed") && rows.some(row => row.status === "sent")); n++) { await page.waitForTimeout(250); rows = await db.notificationOutbox.findMany({ where: { targetedMessageId: history.id } }) }
       const failed = rows.find(row => row.attempts === 1 && row.status === "failed")
       const successful = rows.find(row => row.status === "sent")
-      assert(failed && successful)
+      assert(failed && successful, `Actual partial campaign outcomes required: ${JSON.stringify(rows.map(row => ({ status: row.status, attempts: row.attempts, error: row.lastError })))}`)
       // A real permanent 550 stops immediately on current main. Advancing the
       // clock must not invent five more SMTP exchanges for this campaign.
       const now = new Date(Math.max(Date.now(), failed.nextAttemptAt.getTime()) + 1)

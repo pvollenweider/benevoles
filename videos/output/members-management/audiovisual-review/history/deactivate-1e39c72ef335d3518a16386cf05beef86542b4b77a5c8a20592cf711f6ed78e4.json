@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:52:21.025Z",
+  "videoSha256": "5b05ec09f33370d8a36989f503422dd329922701216b4084b0a2366fb687ad4c",
+  "promptSha256": "6afdd050997c464362c1c9db8683ee0de0ea23ec99eac29e76c30933785b7ee1",
+  "clipSha256": "91659f315368e4e6c6e9fcd59f76dd56551551592c1769acee9e70840f8aa98b",
+  "scene": "deactivate",
+  "review": {
+    "heardOpening": "Pour mettre une fiche de côté, vous pouvez la désactiver.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6,
+        "spoken": "nous confirmons sa désactivation",
+        "visibleSeconds": 2.8,
+        "visible": "Clic sur Désactiver dans la modale de confirmation",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "elle disparaît de la liste habituelle",
+        "visibleSeconds": 3.2,
+        "visible": "La liste devient vide sous le filtre de recherche",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "Avec Inclure inactifs, nous la retrouvons",
+        "visibleSeconds": 10,
+        "visible": "Coche du filtre Inclure inactifs et réapparition de Maya",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Dans Éditer, la case Membre actif permet de la réactiver",
+        "visibleSeconds": 15.5,
+        "visible": "Ouverture du formulaire et coche de Membre actif",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Après enregistrement, elle revient parmi les membres",
+        "visibleSeconds": 18.2,
+        "visible": "Clic sur Enregistrer et retour sur la liste filtrée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:02 - 00:06 : La désactivation dans la modale est validée à l'écran avant que la voix ne commente la confirmation."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

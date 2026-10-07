@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:09:23.220Z",
+  "videoSha256": "50715a383930b94c66960386d0996cbbd6de02ea593b0ed689ab9af2ac881d81",
+  "promptSha256": "b2b9c2ae71eb60d4ea7f95f2aca66d0bada0016809cff476c4a776288de72c1e",
+  "clipSha256": "6e857fb13256763aa6cbf9fd1ea924501079ac7308151851bcb471203c5ec8bc",
+  "scene": "order",
+  "review": {
+    "heardOpening": "L'ordre compte aussi pour rendre le formulaire agréable.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "avec Monter, sur la ligne du permis",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur le lien Monter de la question Permis de conduire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "La question remonte d'une position",
+        "visibleSeconds": 6,
+        "visible": "La question Permis de conduire s'affiche en première position",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "Rechargeons la page : le nouvel ordre est conservé",
+        "visibleSeconds": 16.5,
+        "visible": "Actualisation de la page et maintien de l'ordre des questions",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Diction fluide, claire et posée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

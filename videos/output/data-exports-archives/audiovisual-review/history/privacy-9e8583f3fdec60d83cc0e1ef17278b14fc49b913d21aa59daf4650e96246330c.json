@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-05T20:36:57.182Z",
+  "videoSha256": "20ccf7d54add31d2e5210c71d07e9b917ced0c5680878b1202f4e29e6e1ebc81",
+  "promptSha256": "d725b87682c964a83dbc774f80ae3b8d8ae6d5b94ce01c279827aa6a53ec8d97",
+  "clipSha256": "6c4031306f44e5fea5928f539a27d798f2a8e223b6735efcd57478433ad5bbb9",
+  "scene": "privacy",
+  "review": {
+    "heardOpening": "Une fois téléchargée, cette copie",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Si une fiche change dans l'application",
+        "visibleSeconds": 4,
+        "visible": "Affichage de la liste des membres dans l'application",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Range-le dans un espace protégé",
+        "visibleSeconds": 8.5,
+        "visible": "Affichage du visualiseur du CSV des membres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.5,
+        "spoken": "Consulte les durées de conservation dans le guide avant de décider",
+        "visibleSeconds": 18,
+        "visible": "Tableau des durées de conservation affiché dans le guide",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.5,
+        "spoken": "Il n'y a pas de bouton pour restaurer un événement depuis ce JSON",
+        "visibleSeconds": 24,
+        "visible": "Vue du visualiseur de l'archive JSON",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier, posé et bien articulé."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

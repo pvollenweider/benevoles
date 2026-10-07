@@ -1,45 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:46:43.659Z",
-  "videoSha256": "8fd119fcc7be2e7433955eb308377f0bafecf962c880a14c93f0b1b0c8f0ca78",
+  "reviewedAt": "2026-10-07T02:50:35.518Z",
+  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
   "promptSha256": "a9576a6b270395d1122efe046d278d49779a241beb23da59256b0dadba4f6547",
-  "clipSha256": "44518ad6674e9d694b541d00e2996e448a599d81863282de145b9d78075a1698",
+  "clipSha256": "e1faa8ab800db6a80dacb174aa84ff371fee871f60fae70c2d850992c483ff2c",
   "scene": "edit-choices",
   "review": {
     "heardOpening": "On peut cependant enrichir la liste",
     "checkpoints": [
       {
-        "spokenSeconds": 4.5,
-        "spoken": "Rouvrons la question et ajoutons XXL",
-        "visibleSeconds": 1.2,
-        "visible": "Formulaire ouvert et XXL déjà ajouté",
-        "sync": "early",
-        "severity": "major"
+        "spokenSeconds": 4.2,
+        "spoken": "Rouvrons la question",
+        "visibleSeconds": 3.8,
+        "visible": "Ouverture du formulaire de modification de la question",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 10.8,
-        "spoken": "Enregistrons",
-        "visibleSeconds": 3.2,
-        "visible": "Clic sur Enregistrer déjà effectué",
-        "sync": "early",
-        "severity": "major"
-      },
-      {
-        "spokenSeconds": 12.5,
-        "spoken": "Le nouveau choix apparaît dans la liste",
+        "spokenSeconds": 5.8,
+        "spoken": "et ajoutons XXL",
         "visibleSeconds": 4.5,
-        "visible": "Ligne mise à jour visible dans le tableau",
+        "visible": "L'option XXL apparaît déjà saisie dans la liste des choix proposés",
         "sync": "early",
         "severity": "minor"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 10.5,
+        "visible": "Clic sur le bouton Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "la taille L d'Aline reste conservée",
+        "visibleSeconds": 13,
+        "visible": "Affichage de la vue Inscriptions avec la taille L sous le profil d'Aline Mercier",
+        "sync": "aligned",
+        "severity": "none"
       }
     ],
     "issues": [
-      "Désynchronisation majeure : la réouverture, la saisie de XXL et l'enregistrement ont lieu entre 00:01 et 00:04, bien avant leur annonce vocale entre 00:04 et 00:11."
+      "00:05 - L'ajout de l'option XXL n'est pas saisi à l'écran, elle figure déjà dans le champ lors de l'ouverture."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée."
+      "observation": "Élocution claire et rythme régulier sur l'ensemble de l'extrait."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

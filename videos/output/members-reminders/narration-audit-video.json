@@ -1,0 +1,91 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-06T18:54:35.746Z",
+  "revalidatedAt": "2026-10-06T18:54:35.747Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "7865ee3c9d753ad6be7f07a321542b52dd57d845b40ef40c31ca2901050f5f45",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "d42f731d0b35cebb0f34f37a553ecd881c4ebe8c4661cad37aaa2d5169d68057",
+      "recognized": "Quelques membres ont été invités, mais n'ont pas encore de créneau confirmé. Une relance peut les aider à retrouver leur lien, sans leur mettre la pression. Dans invitations, regarde d'abord la date d'envoi et les statuts. Une ancienne invitation ne prouve pas que la personne a oublié de répondre. Peut-être attend-elle simplement de connaître ses disponibilités ?",
+      "expected": "Quelques membres ont été invités, mais n'ont pas encore de créneau confirmé. Une relance peut les aider à retrouver leur lien, sans leur mettre la pression. Dans Invitations, regarde d'abord la date d'envoi et les statuts. Une ancienne invitation ne prouve pas que la personne a oublié de répondre. Peut-être attend-elle simplement de connaître ses disponibilités.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "statuses",
+      "audioSha256": "8662eb5b37d1830894ad94addb517a8beeb615ab1a6e0a4f928c2359090ea1d5",
+      "recognized": "Sans créneau confirmé ne signifie pas forcément aucune démarche. Dans les inscriptions, une personne peut être en liste d'attente, recevoir une offre ou attendre la validation de l'organisateur. Une autre a déjà une participation confirmée. Vérifiez ces situations avant de relancer. Un message adapté sera plus utile qu'une demande générale de s'inscrire adressée à quelqu'un qui l'a déjà fait.",
+      "expected": "Sans créneau confirmé ne signifie pas forcément aucune démarche. Dans les inscriptions, une personne peut être en liste d'attente, recevoir une offre ou attendre la validation de l'organisateur. Une autre a déjà une participation confirmée. Vérifiez ces situations avant de relancer. Un message adapté sera plus utile qu'une demande générale de s'inscrire adressée à quelqu'un qui l'a déjà fait.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "confirm",
+      "audioSha256": "6d8b7f02f7355f5f08421a931207876fea282f5edd0d195da38c24e4454020f7",
+      "recognized": "Le bouton Relancer les personnes sans créneau ouvre un récapitulatif. Vous pouvez encore annuler. Pour cette démonstration, nous confirmons l'envoi réel. Les membres déjà inscrits ne sont pas relancés. Les fiches inactives et celles sans e-mail ne reçoivent pas ce message non plus. Le résultat indique le nombre effectivement envoyé. Lisez-le plutôt que de vous fier seulement au compteur initial.",
+      "expected": "Le bouton Relancer les personnes sans créneau ouvre un récapitulatif. Vous pouvez encore annuler. Pour cette démonstration, nous confirmons l'envoi réel. Les membres déjà inscrits ne sont pas relancés. Les fiches inactives et celles sans email ne reçoivent pas ce message non plus. Le résultat indique le nombre effectivement envoyé : lisez-le, plutôt que de vous fier seulement au compteur initial.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "link",
+      "audioSha256": "e6c9aad3a632ef263f0353eda79ccaf391e741cf80a0644fbe1ccf314956d9c1",
+      "recognized": "Ouvrons l'email reçu dans la boîte de démonstration. Il propose à nouveau le lien d'invitation. Ce lien est conservé. La relance ne crée pas une deuxième invitation ni une inscription automatique. Une personne en attente peut aussi être dans ce groupe si elle n'a aucun créneau confirmé. C'est pourquoi il est important de comprendre les statuts avant d'envoyer.",
+      "expected": "Ouvrons l'email reçu dans la boîte de démonstration. Il propose à nouveau le lien d'invitation. Ce lien est conservé : la relance ne crée pas une deuxième invitation ni une inscription automatique. Une personne en attente peut aussi être dans ce groupe si elle n'a aucun créneau confirmé. C'est pourquoi il est important de comprendre les statuts avant d'envoyer.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "message",
+      "audioSha256": "bfe8f8b145052899c22990363d0f8bcee679df986a77aadc9d666cf43b32a9d3",
+      "recognized": "Pour expliquer davantage, utilisez écrire un message aux personnes sans créneau. Le groupe est déjà choisi dans la page de message. Nous saisissons un objet clair et quelques mots bienveillants. Vous pouvez encore choisir un horaire si vous le souhaitez. Avant d'envoyer, prévisualisez les destinataires et le contenu. L'aperçu permet de vérifier à qui vous écrivez réellement.",
+      "expected": "Pour expliquer davantage, utilisez Écrire un message aux personnes sans créneau. Le groupe est déjà choisi dans la page de message. Nous saisissons un objet clair et quelques mots bienveillants : vous pouvez encore choisir un horaire si vous le souhaitez. Avant d'envoyer, prévisualisez les destinataires et le contenu. L'aperçu permet de vérifier à qui vous écrivez réellement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "waitlist",
+      "audioSha256": "118dab1f92d3ae09866a73b84e3d87ed658e36644d48d5a4dfd9742c357017ab",
+      "recognized": "Dans cet aperçu, regardez aussi les personnes qui sont seulement en liste d'attente. Leur situation mérite une formulation différente. Vous pouvez rappeler qu'elles n'ont pas à refaire leur demande et qu'une place leur sera proposée selon le fonctionnement de la liste d'attente. La relance simple, elle, n'attend pas automatiquement trois jours. C'est vous qui choisissez le bon moment.",
+      "expected": "Dans cet aperçu, regardez aussi les personnes qui sont seulement en liste d'attente. Leur situation mérite une formulation différente. Vous pouvez rappeler qu'elles n'ont pas à refaire leur demande et qu'une place leur sera proposée selon le fonctionnement de la liste d'attente. La relance simple, elle, n'attend pas automatiquement trois jours : c'est vous qui choisissez le bon moment.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "send",
+      "audioSha256": "55305ac46e8a34478e8df4d9a08989c218190acb18e6ae99def840dae21026e9",
+      "recognized": "Une fois le groupe et le texte vérifiés, confirmons l'envoi. Nous ouvrons le vrai message reçu, puis l'historique disponible dans l'administration. Un e-mail remis au serveur n'est pas une preuve de lecture par la personne. L'historique aide à savoir ce qui a été envoyé sans transformer le suivi des bénévoles en surveillance.",
+      "expected": "Une fois le groupe et le texte vérifiés, confirme l'envoi. Nous ouvrons le vrai message reçu, puis l'historique disponible dans l'administration. Un email remis au serveur n'est pas une preuve de lecture par la personne. L'historique aide à savoir ce qui a été envoyé, sans transformer le suivi des bénévoles en surveillance.",
+      "wordErrorRate": 0.017543859649122806,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "06ce0473d4ff8709e1be2584e83019943ee0bc7ab5747e13314e6e316ae2af4e",
+      "recognized": "De retour dans invitations, les participations n'ont pas changé simplement parce qu'un message est parti. La prochaine étape appartient aux bénévoles. Une relance courte, au bon moment, avec un lien facile à retrouver, c'est souvent suffisant. Et si vous savez qu'une personne ne peut pas venir, respectez sa réponse plutôt que de multiplier les messages.",
+      "expected": "De retour dans Invitations, les participations n'ont pas changé simplement parce qu'un message est parti. La prochaine étape appartient aux bénévoles. Une relance courte, au bon moment, avec un lien facile à retrouver : c'est souvent suffisant. Et si vous savez qu'une personne ne peut pas venir, respectez sa réponse plutôt que de multiplier les messages.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

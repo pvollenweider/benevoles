@@ -1,250 +1,250 @@
 WEBVTT
 
-00:00:02.665 --> 00:00:07.907
+00:00:02.732 --> 00:00:07.974
 Vous avez envoyé un message, mais une
 personne ne le retrouve pas. Avant de
 
-00:00:07.907 --> 00:00:12.774
+00:00:07.974 --> 00:00:12.841
 renvoyer à toute l'équipe, regardez ce qui
 s'est passé. Dans Paramètres, puis Emails,
 
-00:00:12.774 --> 00:00:17.267
+00:00:12.841 --> 00:00:17.334
 les lignes récentes montrent le type
 d'email, le destinataire, la date et
 
-00:00:17.267 --> 00:00:21.759
+00:00:17.334 --> 00:00:21.826
 l'état de livraison. Nous sommes d'abord
 dans le compte propriétaire, qui peut
 
-00:00:21.759 --> 00:00:24.755
+00:00:21.826 --> 00:00:24.822
 aussi changer les réglages.
 Connectons-nous maintenant avec Marc,
 
-00:00:24.755 --> 00:00:29.247
+00:00:24.822 --> 00:00:29.314
 notre organisateur de démonstration. Il
 retrouve le suivi et peut traiter un
 
-00:00:29.247 --> 00:00:34.489
+00:00:29.314 --> 00:00:34.556
 échec, mais les réglages restent réservés
 au propriétaire. Le message de la page le
 
-00:00:34.489 --> 00:00:38.982
+00:00:34.556 --> 00:00:39.049
 précise. Nous allons poursuivre avec ce
 compte organisateur, sur des personnes et
 
-00:00:38.982 --> 00:00:40.105
+00:00:39.049 --> 00:00:40.172
 des emails fictifs.
 
-00:00:42.362 --> 00:00:48.077
+00:00:42.444 --> 00:00:48.159
 En attente d'envoi signifie que l'email
 est dans la file : Jules n'a pas encore eu
 
-00:00:48.077 --> 00:00:52.363
+00:00:48.159 --> 00:00:52.445
 de tentative. Pour Sarah, Nouvel essai
 prévu indique un échec temporaire :
 
-00:00:52.363 --> 00:00:57.007
+00:00:52.445 --> 00:00:57.089
 regardez l'échéance et le nombre d'essais.
 Nicolas est marqué Envoyé : remis au
 
-00:00:57.007 --> 00:01:02.007
+00:00:57.089 --> 00:01:02.089
 serveur, pas lu par le bénévole. Emma a
 atteint six essais après une panne
 
-00:01:02.007 --> 00:01:05.936
+00:01:02.089 --> 00:01:06.018
 temporaire persistante. Léa a reçu un
 refus définitif : l'application s'arrête
 
-00:01:05.936 --> 00:01:10.223
+00:01:06.018 --> 00:01:10.305
 dès le premier essai, sans attendre six
 tentatives. Dans cette formation, les
 
-00:01:10.223 --> 00:01:14.509
+00:01:10.305 --> 00:01:14.591
 délais des essais temporaires ont été
 accélérés, mais les échanges SMTP ont
 
-00:01:14.509 --> 00:01:18.438
+00:01:14.591 --> 00:01:18.520
 réellement eu lieu. Lisons le détail avant
 de choisir une action.
 
-00:01:20.698 --> 00:01:25.030
+00:01:20.787 --> 00:01:25.119
 Pour Léa, la cause est indiquée en
 français : refus définitif du serveur
 
-00:01:25.030 --> 00:01:28.696
+00:01:25.119 --> 00:01:28.785
 d'envoi, boîte aux lettres introuvable,
 adresse à vérifier. Pour Sarah, le
 
-00:01:28.696 --> 00:01:33.361
+00:01:28.785 --> 00:01:33.450
 problème est temporaire et un nouvel essai
 est prévu. Les détails techniques bruts ne
 
-00:01:33.361 --> 00:01:37.693
+00:01:33.450 --> 00:01:37.782
 sont pas affichés. Cette page ne connaît
 pas forcément les rejets arrivant plus
 
-00:01:37.693 --> 00:01:42.025
+00:01:37.782 --> 00:01:42.114
 tard après l'acceptation par le serveur.
 Envoyé ne prouve ni l'arrivée dans la
 
-00:01:42.025 --> 00:01:46.024
+00:01:42.114 --> 00:01:46.113
 boîte de réception, ni la lecture. Si
 l'information est urgente, contactez aussi
 
-00:01:46.024 --> 00:01:47.024
+00:01:46.113 --> 00:01:47.113
 la personne directement.
 
-00:01:49.292 --> 00:01:54.180
+00:01:49.374 --> 00:01:54.262
 Pour Emma, le refus de notre serveur de
 test est maintenant levé. Sur l'échec
 
-00:01:54.180 --> 00:01:59.417
+00:01:54.262 --> 00:01:59.499
 définitif, Renvoyer remet le même email
 dans la file. Ce n'est pas un nouvel envoi
 
-00:01:59.417 --> 00:02:04.653
+00:01:59.499 --> 00:02:04.735
 à tout le monde. Attendons le résultat et
 rechargeons le suivi. La ligne passe à
 
-00:02:04.653 --> 00:02:08.843
-Envoyé avec une heure. Ouvrons ensuite
-l'email réellement reçu dans la boîte
+00:02:04.735 --> 00:02:08.925
+Envoyé avec 1 h. Ouvrons ensuite l'email
+réellement reçu dans la boîte
 
-00:02:08.843 --> 00:02:13.032
+00:02:08.925 --> 00:02:13.114
 locale. Si le problème n'était pas
 corrigé, cliquer de nouveau ne suffirait
 
-00:02:13.032 --> 00:02:14.778
+00:02:13.114 --> 00:02:14.860
 pas à le faire disparaître.
 
-00:02:17.091 --> 00:02:21.706
+00:02:17.206 --> 00:02:21.821
 Une adresse erronée demande une autre
 attention. Ouvrons les membres, puis la
 
-00:02:21.706 --> 00:02:26.706
+00:02:21.821 --> 00:02:26.821
 fiche de Léa. Corrigeons son email et
 enregistrons. Revenons au suivi : l'ancien
 
-00:02:26.706 --> 00:02:31.321
+00:02:26.821 --> 00:02:31.436
 email en échec garde toujours son ancien
 destinataire. Le bouton Renvoyer ne
 
-00:02:31.321 --> 00:02:37.090
+00:02:31.436 --> 00:02:37.205
 reconstruit pas ce message à partir de la
 fiche corrigée. Pour écrire à la nouvelle
 
-00:02:37.090 --> 00:02:42.089
+00:02:37.205 --> 00:02:42.204
 adresse, préparons donc un nouvel envoi.
 Dans notre événement de formation, Léa et
 
-00:02:42.089 --> 00:02:47.473
+00:02:42.204 --> 00:02:47.588
 Emma sont inscrites : ce message partira à
 toutes les deux. Choisissons un objet
 
-00:02:47.473 --> 00:02:52.088
+00:02:47.588 --> 00:02:52.203
 clair, puis écrivons notre consigne. La
 variable prénom personnalise le texte pour
 
-00:02:52.088 --> 00:02:56.704
+00:02:52.203 --> 00:02:56.819
 chacune. Prenons le temps de vérifier
 l'aperçu, les deux destinataires et la
 
-00:02:56.704 --> 00:03:01.319
+00:02:56.819 --> 00:03:01.434
 confirmation. Cet envoi crée un nouveau
 message, pas une réparation de l'ancien.
 
-00:03:01.319 --> 00:03:05.934
+00:03:01.434 --> 00:03:06.049
 Ouvrons maintenant celui réellement reçu
 par Léa : l'adresse corrigée apparaît dans
 
-00:03:05.934 --> 00:03:11.318
+00:03:06.049 --> 00:03:11.433
 le destinataire. Correction de la fiche et
 renvoi d'un ancien email sont bien deux
 
-00:03:11.318 --> 00:03:12.087
+00:03:11.433 --> 00:03:12.202
 choses différentes.
 
-00:03:14.358 --> 00:03:18.628
+00:03:14.488 --> 00:03:18.758
 Préparons un autre message pour ces deux
 personnes. Notre serveur de démonstration
 
-00:03:18.628 --> 00:03:23.255
+00:03:18.758 --> 00:03:23.385
 refuse définitivement Emma, mais accepte
 Léa. Un seul essai suffit pour cet échec
 
-00:03:23.255 --> 00:03:26.457
+00:03:23.385 --> 00:03:26.587
 permanent. Ouvrons Messages envoyés sous
 le formulaire. L'historique conserve
 
-00:03:26.457 --> 00:03:31.795
+00:03:26.587 --> 00:03:31.925
 l'objet, le public, l'auteur et le
 résultat : un envoyé, un en échec. Voir le
 
-00:03:31.795 --> 00:03:37.133
+00:03:31.925 --> 00:03:37.263
 texte envoyé permet de relire la consigne
 originale et sa variable. Le refus de test
 
-00:03:37.133 --> 00:03:42.116
+00:03:37.263 --> 00:03:42.246
 est maintenant levé. Cliquons sur Renvoyer
 l'email en échec : seule Emma repart dans
 
-00:03:42.116 --> 00:03:47.809
+00:03:42.246 --> 00:03:47.939
 la file, pas Léa. Le bouton devient Remis
 en file. Une autre demande ne renvoie rien
 
-00:03:47.809 --> 00:03:52.436
+00:03:47.939 --> 00:03:52.566
 de plus. Rechargeons enfin le suivi pour
 voir les deux remises réussies. Les
 
-00:03:52.436 --> 00:03:56.706
+00:03:52.566 --> 00:03:56.836
 rappels et confirmations automatiques ne
 sont pas des messages de cette liste.
 
-00:03:58.966 --> 00:04:04.277
+00:03:59.111 --> 00:04:04.422
 Le suivi de la file est volontairement
 récent : les emails envoyés sont supprimés
 
-00:04:04.277 --> 00:04:09.588
+00:04:04.422 --> 00:04:09.733
 par le nettoyage nocturne, et les échecs
 restent trente jours. La page montre les
 
-00:04:09.588 --> 00:04:13.761
+00:04:09.733 --> 00:04:13.906
 deux cents lignes les plus récentes.
 L'historique des messages ciblés est
 
-00:04:13.761 --> 00:04:19.452
+00:04:13.906 --> 00:04:19.597
 différent et reste douze mois. Ne comptez
 donc pas sur le tableau des emails pour
 
-00:04:19.452 --> 00:04:24.004
+00:04:19.597 --> 00:04:24.149
 une archive permanente. Pour comprendre un
 incident, consultez-le au bon moment, sans
 
-00:04:24.004 --> 00:04:25.901
+00:04:24.149 --> 00:04:26.046
 conserver inutilement des données
 personnelles.
 
-00:04:28.157 --> 00:04:33.612
+00:04:28.316 --> 00:04:33.771
 Le bon réflexe, c'est de lire l'état et le
 détail, vérifier la cause, puis choisir la
 
-00:04:33.612 --> 00:04:38.045
+00:04:33.771 --> 00:04:38.204
 bonne action. Réessayer le même email
 après une panne, ou préparer un nouvel
 
-00:04:38.045 --> 00:04:43.500
+00:04:38.204 --> 00:04:43.659
 envoi quand l'adresse a changé : ce n'est
 pas la même chose. Notre boîte de test
 
-00:04:43.500 --> 00:04:47.932
+00:04:43.659 --> 00:04:48.091
 confirme la réception de ces exemples,
 mais pas leur lecture par une personne.
 
-00:04:47.932 --> 00:04:52.705
+00:04:48.091 --> 00:04:52.864
 Avec une consigne claire et un contact
 humain si besoin, vous aidez l'équipe à
 
-00:04:52.705 --> 00:04:54.751
+00:04:52.864 --> 00:04:54.910
 retrouver l'information sans l'inonder de
 messages.
 

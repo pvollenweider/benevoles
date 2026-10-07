@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T19:23:07.625Z",
+  "videoSha256": "0e85e3058f7a7da104e70aac8b997327157628240313b75dba0ea4d2f501df7e",
+  "promptSha256": "5835654d60e0f8961c3359ccf67e81042e3537d7712653f53386bf7e213410ba",
+  "clipSha256": "e6a7a92de5b2ced1d2c8eb8c91980e299f3d6a769cbfd059ac966a382ffd9445",
+  "scene": "personal-link",
+  "review": {
+    "heardOpening": "Ouvrons le lien reçu par Aline",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Ouvrons le lien reçu par Aline.",
+        "visibleSeconds": 2.2,
+        "visible": "Clic sur le lien dans l'e-mail de démonstration",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "Il mène à la fête avec ses coordonnées préremplies.",
+        "visibleSeconds": 5.4,
+        "visible": "Affichage de la page d'inscription avec nom et prénom préremplis",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "Elle peut regarder les horaires, choisir un créneau disponible",
+        "visibleSeconds": 4,
+        "visible": "La grille horaire est déjà dépassée et le créneau est déjà validé dans le récapitulatif",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "jusqu'à la confirmation.",
+        "visibleSeconds": 18.2,
+        "visible": "Clic sur valider puis écran de confirmation affiché",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:06 - L'explication sur la sélection du créneau arrive après le passage direct au formulaire récapitulatif."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse claire, posée et articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

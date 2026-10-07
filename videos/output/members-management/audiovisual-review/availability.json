@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:36:47.276Z",
-  "videoSha256": "4f2463aa78f990278c1913f94a35e27170bbb7b98cd4fc848478da990a80a1cb",
+  "reviewedAt": "2026-10-06T18:25:46.233Z",
+  "videoSha256": "d217b3a0a43428c453f7c2c1a5bc4b13ee389513c507c1e86a749f7830b0d369",
   "promptSha256": "ca9d1af621b46823273d4d1a2872949391bdf66a48c875feee9d5c0556e746c8",
-  "clipSha256": "45ed68568fcbb126c7495b1bc9caac70844cb5e618822c4e3636609f27b6416b",
+  "clipSha256": "a4e24b27ca73436a6ccc1b903848251ab67caf632e9e24101d5739122e4e1e57",
   "scene": "availability",
   "review": {
     "heardOpening": "Les disponibilités donnent une indication générale",
     "checkpoints": [
       {
-        "spokenSeconds": 3,
-        "spoken": "matin, après-midi, soir, et une courte exception",
-        "visibleSeconds": 2,
-        "visible": "Champs de disponibilité visibles dans la fenêtre de modification",
+        "spokenSeconds": 2.8,
+        "spoken": "matin, après-midi, soir, et une courte exception si nécessaire",
+        "visibleSeconds": 2.8,
+        "visible": "Options de disponibilité affichées dans la modale de modification",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14,
-        "spoken": "Ici, Maya est disponible le soir, sauf le vendredi",
-        "visibleSeconds": 13.5,
-        "visible": "Case Soir cochée puis saisie de l'exception",
+        "spokenSeconds": 14.5,
+        "spoken": "Maya est disponible le soir, sauf le vendredi",
+        "visibleSeconds": 13,
+        "visible": "Case Soir cochée dans le formulaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18.5,
-        "spoken": "cette indication apparaît avec ses coordonnées dans la liste",
+        "spokenSeconds": 18.2,
+        "spoken": "Après enregistrement, cette indication apparaît avec ses coordonnées dans la liste",
         "visibleSeconds": 19,
-        "visible": "Affichage de la mention sous les coordonnées de Maya dans le tableau",
+        "visible": "Modale fermée, mention affichée sous le contact de Maya Berger dans le tableau",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, claire et régulière."
+      "observation": "Voix claire, posée et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

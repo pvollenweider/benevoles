@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T02:11:17.014Z",
+  "videoSha256": "50715a383930b94c66960386d0996cbbd6de02ea593b0ed689ab9af2ac881d81",
+  "promptSha256": "a9576a6b270395d1122efe046d278d49779a241beb23da59256b0dadba4f6547",
+  "clipSha256": "dcf0d751db2106d15d737433f118c748ce332e7bad86d3e72b6bdd33e0554cbd",
+  "scene": "edit-choices",
+  "review": {
+    "heardOpening": "On peut cependant enrichir la liste sans perdre ce qui existe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Rouvrons la question et ajoutons XXL",
+        "visibleSeconds": 4,
+        "visible": "Ouverture du formulaire de modification et ajout de XXL",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 10.5,
+        "visible": "Clic sur le bouton Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Le nouveau choix apparaît dans la liste",
+        "visibleSeconds": 11.5,
+        "visible": "La liste mise à jour affiche XXL",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "la taille L d'Aline reste conservée",
+        "visibleSeconds": 15.8,
+        "visible": "Affichage de la page Inscriptions montrant la taille L pour Aline",
+        "sync": "late",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:14 - Légère latence avant l'affichage de la page Inscriptions vérifiant la réponse d'Aline"
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et régulière."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

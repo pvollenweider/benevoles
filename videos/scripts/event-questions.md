@@ -10,7 +10,7 @@ Le manifeste est le transcript canonique : ne pas en créer une copie divergente
 ## Prise locale isolée
 
 Produit : copie propre de main vérifiée, port dédié **43112**, locale française.
-Fixture : organisation `video-questions` / `formation-questions`, événement `video-questions-event` / `atelier-questions`, Aline Exemple `video.questions.aline@example.org`, quatre créneaux libres non chevauchants le 28 novembre 2026. Aucun destinataire extérieur.
+Fixture : organisation `video-questions` / `formation-questions`, événement `video-questions-event` / `atelier-questions`, Aline Mercier `video.questions.aline@example.org`, organisatrice Élodie Rochat, quatre créneaux libres non chevauchants le 28 novembre 2026. Aucun destinataire extérieur.
 
 1. Lancer `local-production.ts serve-questions SNAPSHOT_APPROUVE` avec le wrapper et l'environnement local habituels.
 2. Préparer : `local-production.ts run videos/tools/prepare-event-questions.ts`.

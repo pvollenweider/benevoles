@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T02:58:53.178Z",
-  "videoSha256": "4811f60870b8951ec947f46457c7c3ae2638f46e4bec4edec4a8b0252e972acd",
-  "promptSha256": "969548df3c3401e95e11f0f2aa3ef63e48443b6bce5c139e531fd9a88de7e355",
-  "clipSha256": "b83919f5d4721f7fc801b5af3f09e7f5a1d7b20b8b068475bc80a9de7fb0e1ad",
+  "reviewedAt": "2026-10-06T18:36:13.765Z",
+  "videoSha256": "6b84b7d2666011cb2546ca34a661cde8c778ad75bf0113ca8be438175db28665",
+  "promptSha256": "1e99918f39bb1c2ab3ea8b4aacd4f5dcdfec22356c39470da5196914b49b54c1",
+  "clipSha256": "0f2241003d00506696547a7d8e7f521d6a4a647cbcc0c0c63e96bc22e43ec1a5",
   "scene": "phone-color",
   "review": {
-    "heardOpening": "Rendez le téléphone obligatoire",
+    "heardOpening": "Rendez le téléphone obligatoire seulement si",
     "checkpoints": [
       {
         "spokenSeconds": 0.8,
         "spoken": "Rendez le téléphone obligatoire",
-        "visibleSeconds": 3.6,
-        "visible": "Coche de l'option Téléphone obligatoire à l'inscription",
+        "visibleSeconds": 0.9,
+        "visible": "Coche de la case Téléphone obligatoire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.2,
+        "spokenSeconds": 11,
         "spoken": "Choisissons Émeraude",
-        "visibleSeconds": 9.5,
+        "visibleSeconds": 11.4,
         "visible": "Sélection de la pastille de couleur Émeraude",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.9,
+        "spokenSeconds": 12.5,
         "spoken": "regardons l'aperçu",
-        "visibleSeconds": 9.8,
-        "visible": "Affichage de la section Aperçu de l'en-tête avec le fond vert",
+        "visibleSeconds": 12,
+        "visible": "Affichage du bandeau d'aperçu coloré",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée."
+      "observation": "Élocution claire, posée et conforme au script."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

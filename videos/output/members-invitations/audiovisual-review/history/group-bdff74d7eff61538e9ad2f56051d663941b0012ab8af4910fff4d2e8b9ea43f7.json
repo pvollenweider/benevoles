@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T19:22:36.284Z",
+  "videoSha256": "0e85e3058f7a7da104e70aac8b997327157628240313b75dba0ea4d2f501df7e",
+  "promptSha256": "1fd816bdca1cb126f462024dcaa7686d77a6b79ae38a543719232ac03e25c717",
+  "clipSha256": "3c663e36b98b133bb0e118ac93a6164d58902f43713a064a53dc98fcce1f6517",
+  "scene": "group",
+  "review": {
+    "heardOpening": "Pour un groupe",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "utilisez le filtre de tags",
+        "visibleSeconds": 1.8,
+        "visible": "Ouverture de la modale avec le filtre Tous les tags",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "retrouver les personnes de l'accueil",
+        "visibleSeconds": 3.1,
+        "visible": "Filtre accueil sélectionné affichant 17 membres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Tout sélectionner ajoute les membres visibles",
+        "visibleSeconds": 6,
+        "visible": "Clic sur Tout sélectionner, membres cochés et compteur à 17",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "après un changement de filtre",
+        "visibleSeconds": 12.8,
+        "visible": "Sélection du tag sécurité, le bouton affiche toujours 17 invitations",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.5,
+        "spoken": "Avec Effacer, repartez d'une sélection vide",
+        "visibleSeconds": 17.5,
+        "visible": "Clic sur Effacer, sélection réinitialisée à 0 membre",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire et bien articulée, synchronisation adéquate."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

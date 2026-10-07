@@ -1,7 +1,7 @@
 {
   "id": "MEMBERS_MANAGEMENT",
   "slug": "members-management",
-  "validatedAt": "2026-10-06T17:36:01.399Z",
+  "validatedAt": "2026-10-06T18:22:39.467Z",
   "continuousNarration": true,
   "narrationContentChecked": true,
   "voice": "Puck",
@@ -9,51 +9,51 @@
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 22629,
+      "visualMs": 22625,
       "audioMs": 22623,
-      "driftMs": 6
-    },
-    {
-      "id": "create",
-      "visualMs": 21265,
-      "audioMs": 21264,
-      "driftMs": 1
-    },
-    {
-      "id": "edit",
-      "visualMs": 21723,
-      "audioMs": 21722,
-      "driftMs": 1
-    },
-    {
-      "id": "availability",
-      "visualMs": 21688,
-      "audioMs": 21688,
-      "driftMs": 0
-    },
-    {
-      "id": "no-email",
-      "visualMs": 18228,
-      "audioMs": 18226,
       "driftMs": 2
     },
     {
-      "id": "search",
-      "visualMs": 21576,
-      "audioMs": 21575,
+      "id": "create",
+      "visualMs": 21266,
+      "audioMs": 21264,
+      "driftMs": 2
+    },
+    {
+      "id": "edit",
+      "visualMs": 21724,
+      "audioMs": 21722,
+      "driftMs": 2
+    },
+    {
+      "id": "availability",
+      "visualMs": 21691,
+      "audioMs": 21688,
+      "driftMs": 3
+    },
+    {
+      "id": "no-email",
+      "visualMs": 18227,
+      "audioMs": 18226,
       "driftMs": 1
+    },
+    {
+      "id": "search",
+      "visualMs": 21578,
+      "audioMs": 21575,
+      "driftMs": 3
     },
     {
       "id": "filter",
-      "visualMs": 24376,
+      "visualMs": 24378,
       "audioMs": 24375,
-      "driftMs": 1
+      "driftMs": 3
     },
     {
       "id": "deactivate",
-      "visualMs": 21488,
+      "visualMs": 21489,
       "audioMs": 21487,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "activity",

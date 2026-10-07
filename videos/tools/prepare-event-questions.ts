@@ -8,7 +8,7 @@ import path from "node:path"
 import { pathToFileURL } from "node:url"
 import { loadCurrentVideoPrisma } from "../lib/current-product-prisma"
 import { linkToken, decryptValue } from "../../src/lib/token-vault"
-import { assertQuestionsReviewFixture, QUESTIONS_ORG, QUESTIONS_EVENT, QUESTIONS_MEMBER, QUESTIONS_OWNER, QUESTIONS_EMAIL, QUESTIONS_DATE, QUESTIONS_SHIFTS } from "../lib/event-questions-fixture"
+import { assertQuestionsReviewFixture, QUESTIONS_ORG, QUESTIONS_EVENT, QUESTIONS_MEMBER, QUESTIONS_OWNER, QUESTIONS_EMAIL, QUESTIONS_DATE, QUESTIONS_SHIFTS, QUESTIONS_OWNER_NAME } from "../lib/event-questions-fixture"
 
 export function assertQuestionsOwnership(ledger: unknown, createdAt: string) {
   const value = ledger as { schemaVersion?: number; organizationId?: string; eventId?: string; memberId?: string; organizationCreatedAt?: string; fixtureSchemaSha256?: string }
@@ -34,7 +34,9 @@ async function main() {
         assert.equal(args[0], "--reset-owned", "Existing fixture requires explicit --reset-owned")
         assert.equal(existing.id, QUESTIONS_ORG)
         assertQuestionsOwnership(ledger, existing.createdAt.toISOString())
-        const owned = await assertQuestionsReviewFixture(tx as unknown as typeof db)
+        // Only after exact ownership proof: allow the old pair of fixture names
+        // for this one reset. Capture/review guards never accept legacy names.
+        const owned = await assertQuestionsReviewFixture(tx as unknown as typeof db, "legacy-owned-reset")
         const owner = await tx.adminUser.findFirstOrThrow({ where: { id: `${QUESTIONS_ORG}-owner`, organizationId: QUESTIONS_ORG, email: QUESTIONS_OWNER, role: "admin", isActive: true }, select: { passwordHash: true } })
         passwordHash = owner.passwordHash
         // Validate every actual outbox payload before deleting by its exact ID.
@@ -44,7 +46,7 @@ async function main() {
           const payload = stored.enc ? JSON.parse(decryptValue(stored.enc)!) as typeof stored : stored
           const confirmation = payload.kind === "registration_confirmation" && payload.recipient?.email === QUESTIONS_EMAIL
           const organizer = payload.kind === "admin_notification" && payload.recipient?.email === QUESTIONS_OWNER && payload.data?.volunteerEmail === QUESTIONS_EMAIL
-          assert((confirmation || organizer) && payload.data?.eventTitle === owned.events[0].title && payload.data?.volunteerName === "Aline Exemple", "Unknown email row in questions fixture")
+          assert((confirmation || organizer) && payload.data?.eventTitle === owned.events[0].title && payload.data?.volunteerName === `${owned.volunteers[0].firstName} ${owned.volunteers[0].lastName}`, "Unknown email row in questions fixture")
         }
         for (const row of outbox) await tx.notificationOutbox.delete({ where: { id: row.id } })
         await tx.event.delete({ where: { id: QUESTIONS_EVENT } })
@@ -62,8 +64,8 @@ async function main() {
       assert.equal(await tx.shift.count({ where: { id: { in: QUESTIONS_SHIFTS } } }), 0)
       assert.equal(await tx.memberInvite.count({ where: { id: `${QUESTIONS_ORG}-invite` } }), 0)
       await tx.organization.create({ data: { id: QUESTIONS_ORG, name: "Formation — questions aux bénévoles", slug: "formation-questions", timeZone: "Europe/Zurich", replyToEmail: QUESTIONS_OWNER, active: true, hasOrgInsurance: true } })
-      await tx.adminUser.create({ data: { id: `${QUESTIONS_ORG}-owner`, organizationId: QUESTIONS_ORG, name: "Élodie Exemple", email: QUESTIONS_OWNER, passwordHash, role: "admin", isActive: true } })
-      await tx.volunteer.create({ data: { id: QUESTIONS_MEMBER, organizationId: QUESTIONS_ORG, firstName: "Aline", lastName: "Exemple", email: QUESTIONS_EMAIL, active: true } })
+      await tx.adminUser.create({ data: { id: `${QUESTIONS_ORG}-owner`, organizationId: QUESTIONS_ORG, name: QUESTIONS_OWNER_NAME, email: QUESTIONS_OWNER, passwordHash, role: "admin", isActive: true } })
+      await tx.volunteer.create({ data: { id: QUESTIONS_MEMBER, organizationId: QUESTIONS_ORG, firstName: "Aline", lastName: "Mercier", email: QUESTIONS_EMAIL, active: true } })
       const date = new Date(QUESTIONS_DATE)
       await tx.event.create({ data: { id: QUESTIONS_EVENT, organizationId: QUESTIONS_ORG, title: "Préparer les questions de l'équipe", slug: "atelier-questions", description: "Une formation avec des données fictives, pour préparer nos t-shirts et le matériel.", startDate: date, endDate: date, publicStatus: "published", isListed: false, registrationsOpen: true, remindersEnabled: false } })
       for (const [i, id] of QUESTIONS_SHIFTS.entries()) await tx.shift.create({ data: { id, eventId: QUESTIONS_EVENT, roleName: "Accueil", label: `Accueil — passage ${i + 1}`, date, startTime: `${10 + i * 2}:00`, endTime: `${12 + i * 2}:00`, capacity: 4 } })

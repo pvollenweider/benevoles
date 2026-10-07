@@ -1,26 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T02:29:32.465Z",
-  "videoSha256": "258ab12d15939f6b8d477f5d8a71162bf2e5bf54555dca8ead27b706b9391071",
-  "promptSha256": "225b08538e994e52ca3e4fff0a467c35559d0d88d55dd2e1ce43b3b9a93b8f7a",
-  "clipSha256": "76394325aae88d3d1f233ee9f25508df8f6fe3b227ee7400742253be4354a89f",
+  "reviewedAt": "2026-10-06T18:39:32.526Z",
+  "videoSha256": "a5678b6a18e77e7ecb2489666df876bd539ced6fe6a4ba2d5fc4df91d56e7b9e",
+  "promptSha256": "8d013fd1b309653e8b5888912cee14026191ee848aa8bdb5982411319dfb8345",
+  "clipSha256": "3c89e31cfac3f35c4271348ecbf5048ab376651a64d02780fd943cb432b67f58",
   "scene": "welcome",
   "review": {
     "heardOpening": "Quand une association compte plusieurs événements",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
+        "spokenSeconds": 0.5,
         "spoken": "Quand une association compte plusieurs événements",
-        "visibleSeconds": 0,
-        "visible": "Encart de titre 'Tout retrouver avec la recherche globale' sur fond de liste d'événements",
+        "visibleSeconds": 0.5,
+        "visible": "Encart de titre 'Tout retrouver avec la recherche globale' sur la liste des événements",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
-        "spoken": "La recherche globale sert à retrouver une personne",
+        "spokenSeconds": 3.5,
+        "spoken": "ouvrir chaque planning prend vite du temps",
         "visibleSeconds": 3,
-        "visible": "Affichage de la page Événements avec l'icône de recherche dans l'en-tête",
+        "visible": "Page Événements affichée avec la liste des plannings",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "La recherche globale sert à retrouver une personne",
+        "visibleSeconds": 6,
+        "visible": "Écran d'administration général stable montrant les événements",
         "sync": "aligned",
         "severity": "none"
       }
@@ -29,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution posée, claire et conforme au texte."
+      "observation": "Voix claire, posée et dynamique avec un léger fond musical bien dosé."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

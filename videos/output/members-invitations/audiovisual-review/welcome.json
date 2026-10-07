@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-07T05:11:09.670Z",
+  "videoSha256": "aafb41546e04254818368695034ba565cb6196644a16b80cdfc69ec1939a20c2",
+  "promptSha256": "39ce652defb685e6ad5cb10709b45ab64e39346715651c8166c679011589a4e3",
+  "clipSha256": "cec9769088e9dc99b81deb071787ced9a1b6479ce0695181cc419d5c412c4699",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Votre fête est prête et vous souhaitez proposer",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Dans Invitations, vous pouvez contacter une personne ou un groupe",
+        "visibleSeconds": 4.5,
+        "visible": "Page Invitations affichée avec liste de membres et bouton d'action",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.1,
+        "spoken": "Les compteurs distinguent les personnes invitées et celles qui ont un créneau confirmé",
+        "visibleSeconds": 15,
+        "visible": "Compteurs chiffrés en haut : Invités, Inscrits, Pas disponible, Sans réponse",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.3,
+        "spoken": "Voyons tout le parcours, de l'envoi au choix du bénévole",
+        "visibleSeconds": 20.5,
+        "visible": "Écran stable présentant la vue d'ensemble avant la démonstration",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, ton régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

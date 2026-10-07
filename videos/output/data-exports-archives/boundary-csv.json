@@ -1,12 +1,12 @@
 {
   "anchor": "Les accents sont conservés et les colonnes sont séparées par des",
-  "windowStart": 50.291,
+  "windowStart": 160,
   "result": {
     "found": true,
-    "startSeconds": 32.8,
+    "startSeconds": 3.47,
     "wordsHeard": "Les accents sont conservés et les colonnes sont séparées par des"
   },
-  "onset": 83.091,
-  "proposedCut": 83.0497705,
+  "onset": 163.47,
+  "proposedCut": 163.528875,
   "note": "Proposal only; recut then independently audit before capture"
 }

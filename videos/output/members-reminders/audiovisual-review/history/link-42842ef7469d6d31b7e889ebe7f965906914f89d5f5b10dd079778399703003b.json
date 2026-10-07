@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:37:38.734Z",
+  "videoSha256": "96f25dcd75edf073893a4fa9444b8ee84771dfad727624389ba8c38a02331343",
+  "promptSha256": "098877742f200f530075ffdffcd425a741efb62887012dda6dfcdd84969db141",
+  "clipSha256": "f5d416076eb171d0138dc7ec5551408435e065d294c3846579cecdd95df54325",
+  "scene": "link",
+  "review": {
+    "heardOpening": "Ouvrons l'email reçu dans la boîte de démonstration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Ouvrons l'email reçu dans la boîte de démonstration",
+        "visibleSeconds": 0,
+        "visible": "L'e-mail est déjà ouvert et affiché dans l'interface Mailpit",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Il propose à nouveau le lien d'invitation",
+        "visibleSeconds": 3,
+        "visible": "Bouton d'invitation 'Voir les missions et m'inscrire' visible dans le message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "comprendre les statuts avant d'envoyer",
+        "visibleSeconds": 18,
+        "visible": "Affichage fixe de l'e-mail reçu, aucun écran de gestion des statuts",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:00 - L'action 'Ouvrons l'email' n'est pas effectuée : le message est déjà ouvert dès le début et l'écran reste statique."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec un écran statique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

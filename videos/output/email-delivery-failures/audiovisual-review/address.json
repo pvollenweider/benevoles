@@ -1,74 +1,66 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:37:07.639Z",
-  "videoSha256": "0e1d6ca56b0033e4694d6f34c74897fff990758b119a02cf3febeec27d85a9ed",
+  "reviewedAt": "2026-10-07T02:27:11.025Z",
+  "videoSha256": "747f7c10d9984c7ea3a97366fb011f0a9cb96b9e15f737f69903b78da2ae2e36",
   "promptSha256": "f3940b78049824b9e450e2e285fdc02ac2acf954c4464ad25c0bc9ad7537b9bb",
-  "clipSha256": "7529c08bdc37ec94af67b1a22c1a4b9d8cdb36e384a43a48d4993c3c41e5d14e",
+  "clipSha256": "da51222b4cc3aa710fc456b3747de85f67167a77ae756b463b3d6500311ea009",
   "scene": "address",
   "review": {
-    "heardOpening": "Une adresse erronée demande une autre attention",
+    "heardOpening": "Une adresse erronée demande",
     "checkpoints": [
       {
-        "spokenSeconds": 3,
+        "spokenSeconds": 3.1,
         "spoken": "Ouvrons les membres, puis la fiche de Léa.",
-        "visibleSeconds": 2,
+        "visibleSeconds": 3.5,
         "visible": "Ouverture de la fenêtre de modification du profil de Léa.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6,
+        "spokenSeconds": 6.3,
         "spoken": "Corrigeons son email et enregistrons.",
-        "visibleSeconds": 7.5,
-        "visible": "Saisie de l'adresse corrigée et clic sur Enregistrer.",
+        "visibleSeconds": 7,
+        "visible": "Saisie de la nouvelle adresse email puis clic sur Enregistrer.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.8,
+        "spokenSeconds": 9.4,
         "spoken": "Revenons au suivi",
-        "visibleSeconds": 9.2,
-        "visible": "Affichage de la page de suivi des emails envoyés.",
+        "visibleSeconds": 10,
+        "visible": "Affichage de la page du suivi des emails.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20,
-        "spoken": "préparons donc un nouvel envoi.",
-        "visibleSeconds": 22,
-        "visible": "Accès au formulaire Écrire aux bénévoles.",
+        "spokenSeconds": 23.2,
+        "spoken": "Dans notre événement de formation, Léa et Emma sont inscrites",
+        "visibleSeconds": 23.8,
+        "visible": "Affichage du formulaire d'envoi aux bénévoles de l'événement.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 28.5,
         "spoken": "Choisissons un objet clair, puis écrivons notre consigne.",
-        "visibleSeconds": 27.5,
-        "visible": "Saisie de l'objet puis rédaction du corps du message.",
+        "visibleSeconds": 28,
+        "visible": "Saisie de l'objet et rédaction du message avec variable.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 36,
+        "spokenSeconds": 35.8,
         "spoken": "Prenons le temps de vérifier l'aperçu, les deux destinataires et la confirmation.",
-        "visibleSeconds": 40.5,
-        "visible": "Clic sur l'aperçu et apparition de la boîte de confirmation.",
+        "visibleSeconds": 36.2,
+        "visible": "Affichage de la modale d'aperçu puis de la confirmation d'envoi.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 44.8,
         "spoken": "Ouvrons maintenant celui réellement reçu par Léa",
-        "visibleSeconds": 44.5,
-        "visible": "Basculement vers la boîte Mailpit affichant le message de Léa.",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 48,
-        "spoken": "l'adresse corrigée apparaît dans le destinataire.",
-        "visibleSeconds": 46,
-        "visible": "En-tête de l'email montrant l'adresse corrigée dans le champ To.",
+        "visibleSeconds": 45,
+        "visible": "Ouverture de la boîte Mailpit montrant l'email reçu par Léa.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -77,7 +69,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix fluide, claire et bien calée sur les manipulations."
+      "observation": "Voix synthétique fluide, claire et bien articulée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

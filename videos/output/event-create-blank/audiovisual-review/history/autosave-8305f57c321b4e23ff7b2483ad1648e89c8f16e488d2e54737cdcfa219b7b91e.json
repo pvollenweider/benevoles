@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:59:37.524Z",
+  "videoSha256": "9b05c2be8567451a4e197fbb89abb8412059b99f789ef5946843fa82058bdcbb",
+  "promptSha256": "c2da1ceedfb331729b18725b52cea9c5af02cd63209758ac7c557dcb6f132101",
+  "clipSha256": "3b6d7a308a76c0b8f4c750014461147a7aaccb0530cce757e3dd1a419c478f74",
+  "scene": "autosave",
+  "review": {
+    "heardOpening": "Après la création, les modifications",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "Corrigeons la description",
+        "visibleSeconds": 7.8,
+        "visible": "Ajout de texte dans le champ Description",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "attendons Modifications enregistrées à",
+        "visibleSeconds": 9.4,
+        "visible": "Affichage de la mention Modifications enregistrées à 19h56",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "Si la page dit Modifications non enregistrées",
+        "visibleSeconds": 15,
+        "visible": "Explication préventive sur l'écran stable",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et rythme régulier en accord avec les actions."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

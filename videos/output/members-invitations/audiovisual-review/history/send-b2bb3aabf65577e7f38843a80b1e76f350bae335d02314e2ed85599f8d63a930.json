@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:31:26.740Z",
+  "videoSha256": "6832eeb70e84d56d0b2d21fe51dfac435f5bcdc4226b19bf7457aabccbdc3d4e",
+  "promptSha256": "8989cbed4d5978cbbb41f9b21ec12f27eef6505f9533950fa52198738dcc08db",
+  "clipSha256": "8054b2304bbe6d8cf0700b01702e6df89833285dea84742fed261452bfa71dec",
+  "scene": "send",
+  "review": {
+    "heardOpening": "Nous sélectionnons maintenant deux personnes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Nous sélectionnons maintenant deux personnes et ajoutons un message commun.",
+        "visibleSeconds": 1,
+        "visible": "Deux membres sont cochés dans la modale et la saisie du message débute.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Envoyer deux invitations déclenche des messages individuels.",
+        "visibleSeconds": 9.2,
+        "visible": "Clic sur le bouton Envoyer 2 invitations.",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 7.6,
+        "spoken": "Dans la boîte de démonstration, chaque personne reçoit son propre email",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage de la boîte de réception Mailpit avec les emails reçus.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.4,
+        "spoken": "Les coordonnées des autres invités ne sont pas affichées dans son message.",
+        "visibleSeconds": 13.5,
+        "visible": "Affichage du contenu individuel pour Sébastien dans l'interface de messagerie.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:04 - 00:09 : Le clic d'envoi effectif intervient plusieurs secondes après l'évocation de l'action."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et intelligible tout au long de la séquence."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

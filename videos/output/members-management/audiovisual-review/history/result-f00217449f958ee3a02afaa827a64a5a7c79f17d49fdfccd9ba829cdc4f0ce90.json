@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:52:45.923Z",
+  "videoSha256": "5b05ec09f33370d8a36989f503422dd329922701216b4084b0a2366fb687ad4c",
+  "promptSha256": "88b4ea5f79643a33c2761d68d3660817c219652ddf46b954f1a6232b3806d090",
+  "clipSha256": "fb8b2a5382d8a42c0c5113667bf5ce5445b45882f594edba32b7a44bd98bc468",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Une liste bien entretenue",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Une liste bien entretenue, ce sont les bonnes coordonnées",
+        "visibleSeconds": 0,
+        "visible": "Page Membres affichant la liste avec coordonnées et étiquettes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "Mets les fiches à jour quand une personne te signale un changement",
+        "visibleSeconds": 7.2,
+        "visible": "Tableau des membres affichant les liens d'édition de fiche",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "garde seulement les notes nécessaires",
+        "visibleSeconds": 14.5,
+        "visible": "Vue d'ensemble de la liste des membres maintenue à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier et intonation pédagogique adaptée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

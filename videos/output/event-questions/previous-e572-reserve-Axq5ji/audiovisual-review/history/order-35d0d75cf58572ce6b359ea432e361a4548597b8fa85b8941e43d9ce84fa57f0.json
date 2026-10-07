@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T19:19:16.784Z",
+  "videoSha256": "d06d14223ff995674d62c29e7a94d1400de7af563b83439753ac588157b6a4a6",
+  "promptSha256": "b2b9c2ae71eb60d4ea7f95f2aca66d0bada0016809cff476c4a776288de72c1e",
+  "clipSha256": "ae5276ded6e5045de4ccec78e911368bf3431336f255e32c9b91444489ae474c",
+  "scene": "order",
+  "review": {
+    "heardOpening": "L'ordre compte aussi pour rendre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Plaçons le permis avant la taille du t-shirt avec Monter, sur la ligne du permis.",
+        "visibleSeconds": 5.2,
+        "visible": "Clic sur le lien Monter en face de Permis de conduire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "La question remonte d'une position.",
+        "visibleSeconds": 6.2,
+        "visible": "La question Permis de conduire passe en première position avec message de confirmation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.1,
+        "spoken": "Rechargeons la page : le nouvel ordre est conservé.",
+        "visibleSeconds": 16.5,
+        "visible": "Aucun rafraîchissement de page visible à l'écran.",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "00:15 - L'action de recharger la page annoncée n'est pas effectuée à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et conforme au script."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

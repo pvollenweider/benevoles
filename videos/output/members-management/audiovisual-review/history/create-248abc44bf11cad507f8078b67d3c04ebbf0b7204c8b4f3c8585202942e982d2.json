@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:50:57.663Z",
+  "videoSha256": "5b05ec09f33370d8a36989f503422dd329922701216b4084b0a2366fb687ad4c",
+  "promptSha256": "43910318e8ad4e1a7be281eccbb12207a37565536eb866eb1c07556a8f6d4ad8",
+  "clipSha256": "a43b3150622a157338e5902fb8fc2124de778fcfafc405e93443dc3b832da80c",
+  "scene": "create",
+  "review": {
+    "heardOpening": "Pour ajouter une personne, cliquez sur Nouveau membre.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "cliquez sur Nouveau membre",
+        "visibleSeconds": 1,
+        "visible": "Ouverture de la fenêtre modale Nouveau membre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Saisissez son prénom et son nom",
+        "visibleSeconds": 2.5,
+        "visible": "Saisie des champs Prénom et Nom",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "Nous ajoutons Maya Berger avec des coordonnées de démonstration",
+        "visibleSeconds": 7,
+        "visible": "Complétion de l'email et saisie du téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Après la création, Maya apparaît dans la liste",
+        "visibleSeconds": 18,
+        "visible": "Fermeture du formulaire et affichage de la ligne Maya Berger dans le tableau",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire et posée, parfaitement synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T19:13:33.555Z",
+  "videoSha256": "4e9055095f2bdb94e79a6bb5da0887d2877507a94efc7df2305de2074de7aff2",
+  "promptSha256": "d4d9e0e77e8a922f80de144e8bac3baad1c8f034c93d74f5b79066a94f85d587",
+  "clipSha256": "5f038f3382c862e78b8eac372f0f81fec0b87ad811c20c1de766e9ecfd81c964",
+  "scene": "links",
+  "review": {
+    "heardOpening": "Vérifions enfin les liens",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "L'ancien lien personnel de la fiche absorbée ne fonctionne plus",
+        "visibleSeconds": 2.8,
+        "visible": "Affichage de la page 'Ce lien ne fonctionne pas'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Le nouveau lien ouvre bien ses inscriptions sous la fiche conservée",
+        "visibleSeconds": 8.8,
+        "visible": "Affichage de la page 'Mes inscriptions' pour Robin Favre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "Une inscription annulée parce qu'elle faisait doublon ne redevient pas active",
+        "visibleSeconds": 13.8,
+        "visible": "Liste des créneaux et inscriptions affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les transitions."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

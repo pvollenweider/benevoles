@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T17:53:15.818Z",
+  "videoSha256": "1a35b065080e4dcc60862acc6b3c5e896e1427802cf20c1e1bb81da074e0b8e7",
+  "promptSha256": "3c2daff203e5c633cc783f718b7da9d1059a4a34e4e100affb0c5b4a52061dc8",
+  "clipSha256": "991d8958fff13533c9836016dd0424f55f8709605d43f20163331df36c43e05b",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Le résultat est un brouillon structuré",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Le résultat est un brouillon structuré, encore invisible au public",
+        "visibleSeconds": 0,
+        "visible": "Formulaire affichant le statut Brouillon (non visible)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "Retrouvons-le dans les événements",
+        "visibleSeconds": 12,
+        "visible": "Affichage de la page de gestion des Événements",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Il reste à créer les créneaux, tester le parcours bénévole dans l’aperçu",
+        "visibleSeconds": 12.5,
+        "visible": "Page Événements visible avec récapitulatif des étapes",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:09 - 00:12 : La transition vers la page Événements intervient environ 3 secondes après l'annonce vocale."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution claire, débit régulier et bonne articulation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:23:35.691Z",
+  "videoSha256": "d217b3a0a43428c453f7c2c1a5bc4b13ee389513c507c1e86a749f7830b0d369",
+  "promptSha256": "ca9d1af621b46823273d4d1a2872949391bdf66a48c875feee9d5c0556e746c8",
+  "clipSha256": "8d964cfee430c7533a88b235e6ab417a9e3b9e796a4f9c7b8fb2ab8eab809588",
+  "scene": "availability",
+  "review": {
+    "heardOpening": "Les disponibilités donnent une indication générale",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "matin, après-midi, soir, et une courte exception",
+        "visibleSeconds": 3,
+        "visible": "Section de sélection des disponibilités affichée dans la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.8,
+        "spoken": "Maya est disponible le soir",
+        "visibleSeconds": 13,
+        "visible": "Case à cocher Soir sélectionnée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Après enregistrement, cette indication apparaît avec ses coordonnées",
+        "visibleSeconds": 19,
+        "visible": "Fermeture de la modale et affichage de la mention sous Maya Berger",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "00:16 - La saisie de l'exception « sauf le vendredi » n'est pas montrée dans le champ avant la fermeture de la modale."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Élocution posée, claire et fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

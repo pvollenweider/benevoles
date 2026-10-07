@@ -43,6 +43,54 @@ test("personal proof rejects remote hosts and mutation paths", () => {
   assert.throws(() => validateMergeLink({ ...link, apiUrl: `${link.apiUrl}/resend-link` }, base), /read-only/)
   assert.throws(() => validateMergeLink({ ...link, apiUrl: `${link.apiUrl}?token=private` }, base), /invalid personal/)
 })
+test("generation v2 is explicit and cannot mix its members with generation v1", () => {
+  const before = beforeFixture()
+  before.organizationId = "video-member-merge-v2"
+  for (const member of [before.keep, before.absorb]) {
+    member.organizationId = "video-member-merge-v2"
+    member.id = member.id.replace("video-member-merge-", "video-member-merge-v2-")
+    member.lastName = "Favre"
+  }
+  validateMemberMergeBefore(before, base)
+  validateMemberMergeAfter(before, afterFixture(before), base)
+  before.absorb.id = "video-member-merge-b"
+  assert.throws(() => validateMemberMergeBefore(before, base), /generation-owned pair/)
+})
+test("generation v4 cannot reuse the interrupted v3 pair", () => {
+  const before = beforeFixture()
+  before.organizationId = "video-member-merge-v4"
+  for (const member of [before.keep, before.absorb]) {
+    member.organizationId = "video-member-merge-v4"
+    member.id = member.id.replace("video-member-merge-", "video-member-merge-v4-")
+  }
+  validateMemberMergeBefore(before, base)
+  before.absorb.id = "video-member-merge-v3-b"
+  assert.throws(() => validateMemberMergeBefore(before, base), /generation-owned pair/)
+})
+test("generation v5 cannot reuse consumed v4 members", () => {
+  const before = beforeFixture()
+  before.organizationId = "video-member-merge-v5"
+  for (const member of [before.keep, before.absorb]) {
+    member.organizationId = "video-member-merge-v5"
+    member.id = member.id.replace("video-member-merge-", "video-member-merge-v5-")
+  }
+  validateMemberMergeBefore(before, base)
+  before.absorb.id = "video-member-merge-v4-b"
+  assert.throws(() => validateMemberMergeBefore(before, base), /generation-owned pair/)
+})
+test("generation v3 remains an exact separate pair", () => {
+  const before = beforeFixture()
+  before.organizationId = "video-member-merge-v3"
+  for (const member of [before.keep, before.absorb]) {
+    member.organizationId = "video-member-merge-v3"
+    member.id = member.id.replace("video-member-merge-", "video-member-merge-v3-")
+    member.lastName = "Favre"
+  }
+  validateMemberMergeBefore(before, base)
+  validateMemberMergeAfter(before, afterFixture(before), base)
+  before.absorb.organizationId = "video-member-merge-v2"
+  assert.throws(() => validateMemberMergeBefore(before, base), /non-synthetic member/)
+})
 test("after proof requires moved owners, erased tombstone, notes union and newly generated tokens", () => {
   const before = beforeFixture()
   const after = afterFixture(before)

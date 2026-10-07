@@ -1,46 +1,47 @@
 {
   "id": "GLOBAL_SEARCH",
   "slug": "global-search",
-  "validatedAt": "2026-10-04T11:23:10.274Z",
+  "validatedAt": "2026-10-06T18:38:34.130Z",
   "continuousNarration": true,
+  "narrationContentChecked": true,
   "voice": "Charon",
-  "captureMs": 90320,
+  "captureMs": 91560,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 13619,
-      "audioMs": 13619,
-      "driftMs": 0
+      "visualMs": 12831,
+      "audioMs": 12829,
+      "driftMs": 2
     },
     {
       "id": "open",
-      "visualMs": 12939,
-      "audioMs": 12937,
+      "visualMs": 12436,
+      "audioMs": 12434,
       "driftMs": 2
     },
     {
       "id": "person",
-      "visualMs": 19674,
-      "audioMs": 19673,
+      "visualMs": 16703,
+      "audioMs": 16702,
       "driftMs": 1
     },
     {
       "id": "shift",
-      "visualMs": 10253,
-      "audioMs": 10250,
-      "driftMs": 3
+      "visualMs": 15373,
+      "audioMs": 15371,
+      "driftMs": 2
     },
     {
       "id": "limits",
-      "visualMs": 12927,
-      "audioMs": 12923,
-      "driftMs": 4
+      "visualMs": 15742,
+      "audioMs": 15741,
+      "driftMs": 1
     },
     {
       "id": "result",
-      "visualMs": 12641,
-      "audioMs": 12638,
-      "driftMs": 3
+      "visualMs": 12284,
+      "audioMs": 12282,
+      "driftMs": 2
     }
   ],
   "issues": []

@@ -8,6 +8,7 @@ import path from "node:path"
 import { promisify } from "node:util"
 import { loadManifest, videoDir, type AudioMetadata, type Timeline } from "../lib/manifest"
 import { mismatchedNarrationEdges, unexpectedPauseInstructions } from "../lib/narration-fidelity"
+import { assertNarrationGeneration } from "../lib/narration-generation"
 
 const exec = promisify(execFile)
 const reference = process.argv.find((argument) => !argument.startsWith("-") && argument !== process.argv[0] && argument !== process.argv[1])
@@ -31,6 +32,7 @@ async function main() {
   const timeline = await readJson<Timeline>(path.join(dir, "timeline.json"))
   if (timeline.capturePurpose === "rehearsal") throw new Error(`${manifest.id}: rehearsal cannot be validated as a synchronized narrated video`)
   const audio = await readJson<AudioMetadata>(path.join(dir, "audio-metadata.json"))
+  assertNarrationGeneration(manifest, audio)
   if (audio.voice !== manifest.voice) throw new Error(`${manifest.id}: generated voice differs from manifest`)
   if (timeline.slug !== manifest.slug) throw new Error(`${manifest.id}: timeline belongs to another video`)
   if (timeline.cues.length !== manifest.segments.length) {

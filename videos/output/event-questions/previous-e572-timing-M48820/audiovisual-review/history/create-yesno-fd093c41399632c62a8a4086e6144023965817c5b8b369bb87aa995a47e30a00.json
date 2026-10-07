@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T19:18:46.902Z",
+  "videoSha256": "d06d14223ff995674d62c29e7a94d1400de7af563b83439753ac588157b6a4a6",
+  "promptSha256": "3b8e98e90e0bb79b66bb3f7ccf16c5af9a2a70130d59c91abf8ca39cad2e1143",
+  "clipSha256": "c270a879ee3e87b351022b7759b27a39a38304611b21ee70d6111641a654cf4f",
+  "scene": "create-yesno",
+  "review": {
+    "heardOpening": "Pour le permis de conduire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Ajoutons une nouvelle question",
+        "visibleSeconds": 2.8,
+        "visible": "Clic sur le bouton Ajouter une question et affichage du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "puis écrivons Permis de conduire",
+        "visibleSeconds": 5,
+        "visible": "Saisie de 'Permis de conduire' dans le champ de la question",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Choisissons Oui ou non dans le type de réponse",
+        "visibleSeconds": 9.2,
+        "visible": "Sélection de l'option Oui ou non dans la liste déroulante",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.5,
+        "spoken": "rendons aussi la réponse obligatoire, puis enregistrons",
+        "visibleSeconds": 16.5,
+        "visible": "Coche de la case Réponse obligatoire puis clic sur Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée sans défaut sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

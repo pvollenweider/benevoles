@@ -5,7 +5,6 @@ import { assertAnswer, assertQuestionFixture, assertQuestionConfiguration, train
 import { test } from "vitest"
 
 test("record-event-questions guards", async () => {
-
   const snapshot: QuestionSnapshot = {
     organizationId: "video-questions", eventId: "video-questions-training", volunteerEmail: "video.questions.aline@example.org",
     confirmedRegistrationCount: 1,
@@ -29,4 +28,5 @@ test("record-event-questions guards", async () => {
   const retired = { ...snapshot, questions: snapshot.questions.map(q => q.id === "q0" ? { ...q, active: false } : q) }
   assertAnswer(retired, "Taille de t-shirt", "M")
   assert.throws(() => assertQuestionConfiguration(retired, 4))
+  console.log("Question recorder helper guards passed; no browser or DB access")
 })

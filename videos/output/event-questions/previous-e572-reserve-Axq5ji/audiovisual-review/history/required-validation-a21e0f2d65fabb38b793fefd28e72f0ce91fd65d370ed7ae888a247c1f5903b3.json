@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:29:55.181Z",
+  "videoSha256": "40c2daacfc4c477f3a0078d17f0c72458436f38255c820e3d6645f649fd1db79",
+  "promptSha256": "c072dfb4dc26e94e3617d8317234ee9d5a0611268264e1f76768a6d3479eb14b",
+  "clipSha256": "600f76d11a51379008d4286c29459277d66070777930e92876997713ba3a79a9",
+  "scene": "required-validation",
+  "review": {
+    "heardOpening": "Voyons maintenant le formulaire public avec Aline",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Choisissons le premier créneau et continuons.",
+        "visibleSeconds": 2.2,
+        "visible": "Sélection du créneau puis clic sur Continuer",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Renseignons son identité et les consentements demandés.",
+        "visibleSeconds": 4.5,
+        "visible": "Saisie des données personnelles et validation des consentements",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Essayons de confirmer sans répondre à nos deux questions obligatoires.",
+        "visibleSeconds": 13.8,
+        "visible": "Clic sur Confirmer mon inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "Le formulaire indique ce qui manque et place le focus sur la première réponse attendue.",
+        "visibleSeconds": 14.2,
+        "visible": "Message d'erreur affiché sur le champ obligatoire non rempli",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et articulée de manière fluide."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

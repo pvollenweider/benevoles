@@ -6,8 +6,8 @@ Source de narration : `videos/manifests/volunteer-hours-certificate.json`.
 Voix Kore, vouvoiement, ton souriant, patient et bienveillant. Aucune balise de
 pause à prononcer, aucune promesse de mesure chronométrée.
 
-Les sept chapitres expliquent l'utilité, montrent les gestes réels et vérifient
-leur résultat : liste des membres, chronologie, deux exports de période, réglages
+Les huit chapitres expliquent l'utilité, montrent les gestes réels et vérifient
+leur résultat : liste des membres, dernière participation et tris, chronologie, deux exports de période, réglages
 de l'attestation, distinction présence/prévision, PDF imprimé réellement et
 résumé d'événement. Le module est dans `videos/lib/record-volunteer-hours.ts`.
 
@@ -15,6 +15,8 @@ résumé d'événement. Le module est dans `videos/lib/record-volunteer-hours.ts
 
 - Serveur exclusivement `http://localhost:43114`, mode wrapper `serve-hours`.
 - Organisation `video-hours` / `formation-heures` ; aucun membre de `default`.
+- Personnes fictives aux noms naturels : Aline Mercier, Benoît Favre, Clara Besson ; organisatrice Élodie Rochat.
+- Logo vectoriel original rasterisé localement en PNG 240 × 80 : octets, dimensions et SHA-256 exacts contrôlés avant chaque revue/reset. Le rendu `grayscale(1)` est vérifié avec les vraies règles CSS d'impression du produit.
 - Owner `video.hours.owner@example.org` ; son hash est conservé lors du reset.
 - Première création : hash repris uniquement du compte de formation navigation
   dont l'identité complète est explicitement vérifiée.

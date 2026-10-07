@@ -6,7 +6,8 @@ import { randomUUID } from "node:crypto"
 import { register } from "tsx/cjs/api"
 import type { ProductBuild } from "./product-build"
 import type { PrismaClient } from "../../src/generated/prisma/client"
-import { assertHoursScenario, type HoursScenario } from "./record-volunteer-hours"
+import { assertHoursScenario, HOURS_LAST_NAMES, HOURS_LABELS, type HoursScenario } from "./record-volunteer-hours"
+import { assertHoursLogo } from "./volunteer-hours-logo"
 
 export const HOURS_ORG = "video-hours"
 export const HOURS_OWNER = "video.hours.owner@example.org"
@@ -22,21 +23,24 @@ export const HOURS_ROWS = [
 ] as const
 
 /** Entire owned cascade, including reverse relations, verified before any reset. */
-export async function assertOwnedHoursFixture(db: PrismaClient) {
+export async function assertOwnedHoursFixture(db: PrismaClient, identity: "current" | "legacy-owned-reset" = "current") {
   const org = await db.organization.findUniqueOrThrow({ where: { id: HOURS_ORG }, include: {
     admins: true, volunteers: { include: { registrations: true, invites: true, questionAnswers: true, pushSubscriptions: true, deliveryOutcomes: true, mergedFrom: true, duplicateDismissalsAsA: true, duplicateDismissalsAsB: true } },
     slugHistory: true, logs: true, targetedMessages: true, messageTemplates: true, duplicateDismissals: true, charterVersions: true, logo: true, erasureRecords: true,
     events: { include: { shifts: { include: { registrations: true } }, registrations: true, memberInvites: true, logs: true, pages: true, sectorLeaders: true, milestones: true, targetedMessages: true, questions: true, questionAnswers: true } },
   } })
   assert(org.name === "Formation — heures et attestations" && org.slug === "formation-heures" && org.timeZone === "Europe/Zurich" && org.replyToEmail === HOURS_OWNER && org.active)
-  assert(org.admins.length === 1 && org.admins[0].id === `${HOURS_ORG}-owner` && org.admins[0].email === HOURS_OWNER && org.admins[0].role === "admin" && org.admins[0].isActive)
-  assert([org.slugHistory, org.targetedMessages, org.messageTemplates, org.duplicateDismissals, org.charterVersions, org.erasureRecords].every(rows => rows.length === 0) && org.logo === null)
+  const legacy = identity === "legacy-owned-reset" && org.admins[0]?.name === "Élodie Exemple" && org.volunteers.every(member => member.lastName === "Exemple")
+  assert(org.admins.length === 1 && org.admins[0].id === `${HOURS_ORG}-owner` && org.admins[0].name === (legacy ? "Élodie Exemple" : "Élodie Rochat") && org.admins[0].email === HOURS_OWNER && org.admins[0].role === "admin" && org.admins[0].isActive)
+  assert([org.slugHistory, org.targetedMessages, org.messageTemplates, org.duplicateDismissals, org.charterVersions, org.erasureRecords].every(rows => rows.length === 0))
+  if (legacy) assert.equal(org.logo, null)
+  else await assertHoursLogo(org.logo)
   assert(org.logs.length <= 5 && org.logs.every(log => log.action === "volunteer.certificate_generated" && log.organizationId === HOURS_ORG && log.entityType === "Member" && log.entityId === `${HOURS_ORG}-aline` && log.actorType === "admin" && log.actorId === `${HOURS_ORG}-owner` && log.changes === null), "Unknown organization log")
   assert.equal(await db.notificationOutbox.count({ where: { organizationId: HOURS_ORG } }), 0, "Hours fixture must send no notifications")
   assert.equal(org.volunteers.length, 3)
   for (const [id, name] of [["aline", "Aline"], ["benoit", "Benoît"], ["clara", "Clara"]]) {
     const member = org.volunteers.find(m => m.id === `${HOURS_ORG}-${id}`)
-    assert(member && member.organizationId === HOURS_ORG && member.firstName === name && member.lastName === "Exemple" && member.email === `video.hours.${id}@example.org` && member.active && !member.phone && member.tags.length === 0 && member.mergedIntoId === null && member.erasedAt === null)
+    assert(member && member.organizationId === HOURS_ORG && member.firstName === name && member.lastName === (legacy ? "Exemple" : HOURS_LAST_NAMES[id as keyof typeof HOURS_LAST_NAMES]) && member.email === `video.hours.${id}@example.org` && member.active && member.phone === null && member.tags.length === 0 && member.notes === null && member.birthDate === null && member.availabilityPeriods.length === 0 && member.availabilityNote === null && member.mergedIntoId === null && member.erasedAt === null)
     assert([member.invites, member.questionAnswers, member.pushSubscriptions, member.deliveryOutcomes, member.mergedFrom, member.duplicateDismissalsAsA, member.duplicateDismissalsAsB].every(rows => rows.length === 0))
     assert(member.registrations.every(r => HOURS_ROWS.some(([key, who, event]) => r.id === `${HOURS_ORG}-registration-${key}` && r.volunteerId === `${HOURS_ORG}-${who}` && r.eventId === `${HOURS_ORG}-event-${event}`)), "Member has foreign registrations")
   }
@@ -50,8 +54,9 @@ export async function assertOwnedHoursFixture(db: PrismaClient) {
     for (const [key, who, , day, state, shiftState, start, end, checked] of expected) {
       const shift: (typeof event.shifts)[number] | undefined = event.shifts.find(s => s.id === `${HOURS_ORG}-shift-${key}`)
       const reg: (typeof event.registrations)[number] | undefined = event.registrations.find(r => r.id === `${HOURS_ORG}-registration-${key}`)
-      assert(shift && shift.eventId === event.id && shift.roleName === "Accueil" && shift.label === `Formation — ${key}` && shift.date.toISOString() === `${day}T00:00:00.000Z` && shift.startTime === start && shift.endTime === end && shift.status === shiftState && shift.capacity === 3 && shift.reservedTags.length === 0 && !shift.minAge)
+      assert(shift && shift.eventId === event.id && shift.roleName === "Accueil" && shift.label === (legacy ? `Formation — ${key}` : HOURS_LABELS[key]) && shift.date.toISOString() === `${day}T00:00:00.000Z` && shift.startTime === start && shift.endTime === end && shift.status === shiftState && shift.capacity === 3 && shift.reservedTags.length === 0 && !shift.minAge)
       assert(reg && reg.eventId === event.id && reg.shiftId === shift.id && reg.volunteerId === `${HOURS_ORG}-${who}` && reg.status === state && reg.source === "admin_manual" && Boolean(reg.checkedInAt) === checked)
+      assert(reg.phone === null && reg.comment === null && (reg.checkedInAt?.toISOString() ?? null) === (checked ? `${day}T08:00:00.000Z` : null), "Unexpected registration contact, comment or presence time")
       assert(shift.registrations.length === 1 && shift.registrations[0].id === reg.id, "Foreign shift cascade")
     }
   }
@@ -76,7 +81,7 @@ export async function readHoursScenario(db: PrismaClient, product: ProductBuild)
     const all = hours.volunteerHourEntries(registrations, org.timeZone)
     const today = hours.localToday(new Date(), org.timeZone)
     const september = org.events.find(e => e.id === `${HOURS_ORG}-event-september`)!
-    const returned = new Set(all.filter((entry: { localDate: string }) => entry.localDate < "2026-09-12").map((entry: { volunteerId: string }) => entry.volunteerId))
+    const returned = hours.returningVolunteerIds(all.map((entry: { volunteerId: string; eventId: string }) => ({ volunteerId: entry.volunteerId, eventId: entry.eventId, eventStart: org.events.find(event => event.id === entry.eventId)!.startDate })), september.id, september.startDate)
     const actual = summary.eventSummary(registrations.filter(r => r.eventId === september.id), returned, september.shifts.filter(s => s.status !== "cancelled").map(s => ({ ...s, date: s.date.toISOString().slice(0, 10), active: september.registrations.filter(r => r.shiftId === s.id && r.status === "active").length, waiting: september.registrations.filter(r => r.shiftId === s.id && ["waiting", "offered"].includes(r.status)).length, requested: 0, closed: s.status === "closed" })), [], org.timeZone)
     const scenario: HoursScenario = { organizationId: org.id, organizationName: org.name, organizationSlug: org.slug, product,
       members: org.volunteers.map(member => ({ id: member.id, firstName: member.firstName, lastName: member.lastName, email: member.email!, ...(() => { const total = hours.splitMinutes(hours.pastEntries(all.filter((e: { volunteerId: string }) => e.volunteerId === member.id), today)); return { plannedMinutes: total.plannedMinutes, attestedMinutes: total.attestedMinutes } })() })),

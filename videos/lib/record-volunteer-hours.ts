@@ -15,6 +15,8 @@ export type HoursScenario = {
 }
 export const HOURS_MEMBER = "video-hours-aline"
 export const HOURS_EVENT = "video-hours-event-september"
+export const HOURS_LAST_NAMES = { aline: "Mercier", benoit: "Favre", clara: "Besson" } as const
+export const HOURS_LABELS: Record<string, string> = { prior: "Accueil du printemps", morning: "Accueil du matin", afternoon: "Accueil de l'après-midi", benoit: "Information du public", "cancelled-shift": "Créneau annulé", "cancelled-registration": "Inscription annulée", waiting: "Liste d'attente", future: "Accueil de la prochaine fête" }
 export function assertHoursScenario(scenario: HoursScenario, product: ProductBuild, now = new Date()) {
   assert(scenario.organizationId === "video-hours" && scenario.organizationName === "Formation — heures et attestations" && scenario.organizationSlug === "formation-heures")
   assert(scenario.product.commit === product.commit && scenario.product.buildId === product.buildId && scenario.product.productSourceSha256 === product.productSourceSha256, "Current compiled hours fixture required")
@@ -22,7 +24,7 @@ export function assertHoursScenario(scenario: HoursScenario, product: ProductBui
   assert.equal(scenario.members.length, 3)
   for (const [name, planned, attested] of [["aline", 480, 360], ["benoit", 120, 0], ["clara", 0, 0]] as const) {
     const member = scenario.members.find(m => m.id === `video-hours-${name}`)
-    assert(member && member.firstName === ({ aline: "Aline", benoit: "Benoît", clara: "Clara" }[name]) && member.lastName === "Exemple" && member.email === `video.hours.${name}@example.org`)
+    assert(member && member.firstName === ({ aline: "Aline", benoit: "Benoît", clara: "Clara" }[name]) && member.lastName === HOURS_LAST_NAMES[name] && member.email === `video.hours.${name}@example.org`)
     assert.equal(member.plannedMinutes, planned); assert.equal(member.attestedMinutes, attested)
   }
   assert.equal(scenario.rows.length, 8)
@@ -50,9 +52,9 @@ export function assertHoursCsv(csv: string, includeAll: boolean) {
   const lines = csv.replace(/^\uFEFF/, "").trim().split(/\r?\n/).map(line => line.split(";"))
   assert.deepEqual(lines[0], ["Prénom", "Nom", "Événements", "Créneaux", "Heures planifiées", "Heures attestées"])
   assert.deepEqual(lines.slice(1), [
-    ["Aline", "Exemple", "1", "2", "4", "2"],
-    ["Benoît", "Exemple", "1", "1", "2", "0"],
-    ...(includeAll ? [["Clara", "Exemple", "0", "0", "0", "0"]] : []),
+    ...(includeAll ? [["Clara", "Besson", "0", "0", "0", "0"]] : []),
+    ["Benoît", "Favre", "1", "1", "2", "0"],
+    ["Aline", "Mercier", "1", "2", "4", "2"],
     ["Total", "", "", "3", "6", "2"],
   ])
   assert(!csv.includes("@") && !csv.includes("079"), "Hours export must not include contact details")
@@ -84,7 +86,7 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
   await read()
   const go = async (pathname: string) => { await page.goto(`${base}${pathname}`); await settle(page) }
   const certificatePath = `/admin/members/${HOURS_MEMBER}/certificate`
-  const row = () => page.getByRole("row").filter({ has: page.getByRole("link", { name: "Activité de Aline Exemple", exact: true }) })
+  const row = () => page.getByRole("row").filter({ has: page.getByRole("link", { name: "Activité de Aline Mercier", exact: true }) })
   await go("/admin/members")
   await scene("hours-list", async () => {
     await page.getByRole("columnheader", { name: "Heures planifiées", exact: true }).scrollIntoViewIfNeeded()
@@ -98,9 +100,33 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     assert.equal((await cells.nth(headers.findIndex(h => h.trim() === "Heures attestées")).innerText()).trim(), "6h")
     await evidence("hours-list", { plannedHours: 8, attestedHours: 6, futureAndCancelledExcluded: true, attestedIsSubsetNotAdditional: true })
   })
+  await scene("last-participation", async at => {
+    const table = page.getByRole("table", { name: "Liste des membres", exact: true })
+    const header = table.getByRole("columnheader", { name: "Dernière participation", exact: true })
+    await header.scrollIntoViewIfNeeded()
+    const headers = (await table.getByRole("columnheader").allTextContents()).map(text => text.replace(/[↕↑↓]/g, "").trim())
+    const index = headers.indexOf("Dernière participation"); assert(index >= 0)
+    const aline = row().getByRole("cell").nth(index)
+    assert.match((await aline.innerText()).replace(/\s+/g, " "), /12.*sept.*2026.*Présence le 12.*sept.*2026/)
+    await aline.scrollIntoViewIfNeeded()
+    await at(0.20)
+    const benoit = table.getByRole("row").filter({ has: page.getByRole("link", { name: "Activité de Benoît Favre", exact: true }) }).getByRole("cell").nth(index)
+    assert((await benoit.innerText()).includes("Aucune présence saisie"))
+    await benoit.scrollIntoViewIfNeeded()
+    const sorted = table.getByRole("columnheader", { name: "Heures attestées", exact: true })
+    await at(0.40); await tap(page, sorted.getByRole("button", { name: "Heures attestées", exact: true }))
+    assert.equal(await sorted.getAttribute("aria-sort"), "ascending")
+    await at(0.53); await tap(page, sorted.getByRole("button", { name: "Heures attestées", exact: true }))
+    assert.equal(await sorted.getAttribute("aria-sort"), "descending")
+    await at(0.65); await tap(page, sorted.getByRole("button", { name: "Heures attestées", exact: true }))
+    assert.equal(await sorted.getAttribute("aria-sort"), "none")
+    await at(0.76); await tap(page, header.getByRole("button", { name: "Dernière participation", exact: true }))
+    assert.equal(await header.getAttribute("aria-sort"), "ascending")
+    await evidence("last-participation", { confirmedDateAndPresenceDateShownSeparately: true, noPresenceNotAbsence: true, actualAttestedSortCycleVerified: true, actualLastParticipationSortVerified: true })
+  })
   await scene("activity", async () => {
-    await tap(page, row().getByRole("link", { name: "Activité de Aline Exemple", exact: true }))
-    await page.getByRole("heading", { name: "Activité de Aline Exemple", exact: true }).waitFor()
+    await tap(page, row().getByRole("link", { name: "Activité de Aline Mercier", exact: true }))
+    await page.getByRole("heading", { name: "Activité de Aline Mercier", exact: true }).waitFor()
     await page.getByRole("list", { name: "Chronologie", exact: true }).scrollIntoViewIfNeeded()
     await evidence("activity", { realFactualChronologyShown: true, hoursColumnsAreOnMembersListNotThisPage: true })
   })
@@ -133,7 +159,15 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     const note = page.getByLabel("Texte libre (facultatif)", { exact: true })
     await at(0.4); await tap(page, note); await note.pressSequentially("Accueil du public et rangement du matériel.", { delay: 75 })
     await page.getByRole("article", { name: "Attestation de bénévolat", exact: true }).scrollIntoViewIfNeeded()
-    await evidence("certificate-settings", { actualLivePreview: true, period: "MayToSeptember2026", actualNoteEntered: true })
+    const logo = page.getByRole("article", { name: "Attestation de bénévolat", exact: true }).locator("img")
+    assert.equal(await logo.count(), 1)
+    assert(await logo.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth === 240 && image.naturalHeight === 80))
+    await page.emulateMedia({ media: "print" })
+    try { assert.equal(await logo.evaluate(image => getComputedStyle(image).filter), "grayscale(1)", "Actual main print CSS must make the owned logo grey") }
+    // Restore the browser default, not an explicit screen override: page.pdf()
+    // must subsequently apply real print styles rather than print the admin form.
+    finally { await page.emulateMedia({ media: null }) }
+    await evidence("certificate-settings", { actualLivePreview: true, period: "MayToSeptember2026", actualNoteEntered: true, actualLogoLoaded: true, actualPrintGrayscaleComputed: true })
   })
   await scene("certificate-presence", async at => {
     const include = page.getByRole("checkbox", { name: "Inclure les heures planifiées sans présence saisie", exact: true })
@@ -158,7 +192,7 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     assert.equal(createHash("sha256").update(bytes).digest("hex"), pdf.sha256)
     assert.equal(pdf.printedFrom, `${base}${certificatePath}`)
     assert(pdf.product.commit === product.commit && pdf.product.buildId === product.buildId && pdf.product.productSourceSha256 === product.productSourceSha256)
-    assert(pdf.pages >= 1 && pdf.text.includes("Attestation de bénévolat") && pdf.text.includes("Aline Exemple") && pdf.text.includes("Signature") && pdf.text.includes("Nom du signataire"))
+    assert(pdf.pages >= 1 && pdf.text.includes("Attestation de bénévolat") && pdf.text.includes("Aline Mercier") && pdf.text.includes("Signature") && pdf.text.includes("Nom du signataire"))
     // PDF text extraction follows physical column order: the narrow header
     // wraps “Heures” and “attestées” onto different lines/interleaved columns.
     // The real UI header has already been checked above; do not mistake that

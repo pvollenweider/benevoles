@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-06T18:31:17.920Z",
+  "videoSha256": "40c2daacfc4c477f3a0078d17f0c72458436f38255c820e3d6645f649fd1db79",
+  "promptSha256": "e22e20c828a4fa5b35808bb0e87fc2fc6f4e2c680c3cd12e1c35cc08a7e04a56",
+  "clipSha256": "b7fc0211f27bff8e086068420d49cdb1e3334a27f518fb1e433c4c49993811b0",
+  "scene": "unverified-update",
+  "review": {
+    "heardOpening": "Comparons avec une inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Comparons avec une inscription depuis le simple formulaire public",
+        "visibleSeconds": 2.5,
+        "visible": "Affichage du formulaire public d'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Saisissons la même adresse pour un troisième créneau",
+        "visibleSeconds": 6.8,
+        "visible": "Remplissage des champs d'identité et de l'adresse courriel",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "mais choisissons S",
+        "visibleSeconds": 9.5,
+        "visible": "Sélection du bouton radio pour la taille S",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "L'inscription peut être créée",
+        "visibleSeconds": 13.8,
+        "visible": "Validation du formulaire et affichage du message Inscription confirmée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Débit régulier, diction nette et ton pédagogique."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

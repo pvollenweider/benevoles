@@ -1,54 +1,51 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-06T17:43:36.059Z",
-  "videoSha256": "8fd119fcc7be2e7433955eb308377f0bafecf962c880a14c93f0b1b0c8f0ca78",
+  "reviewedAt": "2026-10-07T02:48:16.054Z",
+  "videoSha256": "49dd55a2ddfd02f878292f0b5d9c20a34ff8644760eab8ee9d3abcea8d8abba7",
   "promptSha256": "e2c7bfa4f9f0b27797ca77054c17e6cfa95a670b031c063f1f11201c8043514f",
-  "clipSha256": "c7166adad70800e81b7c08d3ecfbb2b67eaa3335e8fdf878797badf9a78d1e4b",
+  "clipSha256": "9a2bc086d0e200dee28319f59f95c756c5d27940c952cf9539fd2ea503e7da09",
   "scene": "create-multiple",
   "review": {
-    "heardOpening": "Passons au matériel de transport.",
+    "heardOpening": "Passons au matériel de transport",
     "checkpoints": [
       {
-        "spokenSeconds": 2.8,
+        "spokenSeconds": 2.1,
         "spoken": "Créons la question, puis choisissons Choix multiple.",
-        "visibleSeconds": 1.2,
-        "visible": "Le formulaire Nouvelle question s'ouvre, puis le type Choix multiple est sélectionné.",
-        "sync": "early",
-        "severity": "minor"
+        "visibleSeconds": 2.8,
+        "visible": "Clic sur Ajouter une question et sélection de Choix multiple",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
+        "spokenSeconds": 6.5,
         "spoken": "Saisissons Vélo, Remorque et Voiture",
-        "visibleSeconds": 8,
-        "visible": "Saisie des options Vélo, Remorque et Voiture dans le champ dédié.",
+        "visibleSeconds": 7.5,
+        "visible": "Saisie des options Vélo, Remorque et Voiture dans le champ dédié",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 17.2,
+        "spokenSeconds": 17.5,
         "spoken": "Laissons Réponse obligatoire décochée.",
-        "visibleSeconds": 17.5,
-        "visible": "La case Réponse obligatoire reste non cochée.",
+        "visibleSeconds": 18,
+        "visible": "La case Réponse obligatoire reste décochée à l'écran",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 23.1,
+        "spokenSeconds": 22.8,
         "spoken": "Enregistrons et vérifions les trois choix dans la liste.",
-        "visibleSeconds": 19.8,
-        "visible": "Clic sur Enregistrer et affichage de la question Matériel de transport dans la liste.",
-        "sync": "early",
-        "severity": "minor"
+        "visibleSeconds": 23.5,
+        "visible": "Enregistrement et affichage de la question Matériel de transport dans la liste",
+        "sync": "aligned",
+        "severity": "none"
       }
     ],
-    "issues": [
-      "00:01 : L'ouverture du formulaire intervient légèrement avant l'annonce orale.",
-      "00:19 : L'enregistrement s'effectue un peu avant la consigne parlée."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Élocution claire et posée, bien audible."
+      "observation": "Élocution posée, claire et synchronisée avec les actions affichées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
