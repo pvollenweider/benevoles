@@ -3,7 +3,8 @@
 
 import fs from "fs"
 import path from "path"
-import { renderEventPageMarkdown } from "@/lib/event-page-markdown"
+import { renderEventPageMarkdown, type MarkdownImage } from "@/lib/event-page-markdown"
+import { docImageFile, docImageFromBytes, docImageTag, type DocImage } from "@/lib/doc-images"
 import { linkSourcesToRoutes, splitTitle } from "@/lib/doc-pages"
 import { docVideoLink, docVideoPlayer, findVideoReferences, renderDocVideoCard, renderDocVideoSlot, splitAtDocVideoSlots, type DocUnitPart, type DocVideoPlayer } from "@/lib/doc-video-references"
 import { resolveVideoReference, videoMediaUrls, type Video } from "@/lib/video-catalog"
@@ -20,6 +21,30 @@ function videoCatalog(): Video[] {
   if (process.env.NODE_ENV !== "production") return loadVideoCatalog()
   cachedCatalog ??= loadVideoCatalog()
   return cachedCatalog
+}
+
+// A screenshot's size and fingerprint (src/lib/doc-images.ts), read from public/doc-img once per
+// file in production (the image doesn't change while the server runs), on each render in
+// development, so a new capture shows up. A missing or unreadable file keeps the plain <img>.
+const docImageCache = new Map<string, DocImage | null>()
+function docImage(src: string): DocImage | null {
+  const file = docImageFile(src)
+  if (!file) return null
+  const cached = docImageCache.get(file)
+  if (cached !== undefined && process.env.NODE_ENV === "production") return cached
+  let info: DocImage | null = null
+  try {
+    info = docImageFromBytes(src, fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), "public", "doc-img", file)))
+  } catch {
+    info = null
+  }
+  docImageCache.set(file, info)
+  return info
+}
+
+/** The <img> of a documentation image: its size, its versioned URL, lazy after the first (#759 F2). */
+function docImageHtml(image: MarkdownImage, index: number): string {
+  return docImageTag(image, docImage(image.src), index)
 }
 
 /**
@@ -61,7 +86,7 @@ export function renderDocUnitParts(unit: DocUnit, mediaBaseUrl?: string | null):
     players.set(id, player)
     return renderDocVideoSlot(id)
   }
-  const html = renderEventPageMarkdown(linkSourcesToRoutes(unit.body), { shiftHeadings: false, headingIds: true, videoCard: videoSlot })
+  const html = renderEventPageMarkdown(linkSourcesToRoutes(unit.body), { shiftHeadings: false, headingIds: true, videoCard: videoSlot, image: docImageHtml })
   return splitAtDocVideoSlots(html, players)
 }
 
@@ -83,7 +108,7 @@ function renderPublicMarkdown(body: string, mediaBaseUrl?: string | null): strin
     const link = docVideoLink(id, catalog, hasRender)
     return link ? renderDocVideoCard(link) : ""
   }
-  return renderEventPageMarkdown(linkSourcesToRoutes(body), { shiftHeadings: false, headingIds: true, videoCard })
+  return renderEventPageMarkdown(linkSourcesToRoutes(body), { shiftHeadings: false, headingIds: true, videoCard, image: docImageHtml })
 }
 
 /** A still of a video (its poster), as /fonctionnalites shows it: never a broken image. */
