@@ -119,7 +119,8 @@ export type DocVideoPlayer = {
 }
 
 export function docVideoPlayer(id: string, catalog: Video[], mediaBaseUrl: string | undefined | null): DocVideoPlayer | null {
-  const media = (video: Video) => videoMediaUrls(video.slug, mediaBaseUrl)
+  // With the poster when the render has one (videos/renders.json): the inline player shows it too.
+  const media = (video: Video) => videoMediaUrls(video.slug, mediaBaseUrl, video.render)
   const link = docVideoLink(id, catalog, (video) => media(video) !== null)
   const video = link ? resolveVideoReference(id, catalog) : null
   const urls = video ? media(video) : null

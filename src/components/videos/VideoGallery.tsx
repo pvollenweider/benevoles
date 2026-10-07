@@ -22,8 +22,7 @@ import {
 } from "@/lib/video-catalog"
 
 // The gallery searches script text too (#644), so it needs the full Video, script included —
-// the catalogue is small (28 videos, a few KB of script each), an acceptable payload for an
-// internal, unlisted tool.
+// the catalogue is small (under 60 videos, a few KB of script each), an acceptable payload.
 export default function VideoGallery({ videos }: { videos: Video[] }) {
   const [theme, setTheme] = useState<ThemeId | "">("")
   const [audience, setAudience] = useState<Audience | "">("")

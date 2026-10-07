@@ -70,7 +70,7 @@ node -e "const wp=require('web-push'); console.log(JSON.stringify(wp.generateVAP
 
 ## Bibliothèque vidéo (optionnel)
 
-`/videos` et `/videos/[id]` (#644) ne sont référencés nulle part (pas de navigation, pas de sitemap, `robots: noindex,nofollow`) : une bibliothèque interne pour l'instant, pas une page publique. Le catalogue (`videos/catalog.json`, les manifestes et les scripts éditoriaux) est toujours dans l'image et la page s'affiche sans `VIDEO_MEDIA_BASE_URL` ; seule la lecture change.
+`/videos` et `/videos/[id]` (#644) sont la bibliothèque publique des tutoriels vidéo. Le catalogue (`videos/catalog.json`, `videos/renders.json`, les manifestes et les scripts éditoriaux) est toujours dans l'image et la page s'affiche sans `VIDEO_MEDIA_BASE_URL` ; seule la lecture change, et avec elle le référencement : sans la variable, aucune vidéo n'est jouable, donc aucune n'est indexée ni listée dans `/video-sitemap.xml` (voir `videos/README.md`). Les adresses canoniques et le sitemap vidéo sont construits sur `NEXT_PUBLIC_APP_URL`, lu à l'exécution.
 
 | Variable | Requis | Description |
 |----------|--------|-------------|

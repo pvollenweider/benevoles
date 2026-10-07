@@ -13,8 +13,7 @@ const SUPER_ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "admin@localhost"
 const SUPER_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "e2e-admin-password"
 
 test.describe("public pages", () => {
-  // /videos and /videos/[id] (#644) aren't linked from anywhere but are still reachable by URL —
-  // same accessibility bar as every other page.
+  // /videos and /videos/[id] (#644): the public video library, same accessibility bar as every other page.
   for (const path of ["/", "/fonctionnalites", "/doc", "/doc/admin", "/doc/benevole", "/doc/creer-un-evenement", "/doc/rappels", "/accessibilite", "/legal/privacy", "/legal/sous-traitance", "/legal/sous-traitants", "/videos", "/videos/EVENT_CREATE_BLANK"]) {
     test(`${path} has no serious violation`, async ({ page }) => {
       await page.goto(path)

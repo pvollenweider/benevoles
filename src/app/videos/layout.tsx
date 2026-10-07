@@ -5,9 +5,9 @@ import Link from "next/link"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 
 /**
- * The video library (#644) isn't a public content page: no site navigation links here, not in
- * CONTENT_NAV (src/lib/doc-pages.ts), not in the sitemap, and every page under here sets
- * `robots: { index: false, follow: false }`. Its own minimal frame instead of ContentShell.
+ * The video library (#644): public and indexed since 2026-10-07 (src/lib/video-seo.ts), linked
+ * from the site footer and the documentation, listed in its own /video-sitemap.xml rather than in
+ * CONTENT_NAV (src/lib/doc-pages.ts). Its own minimal frame instead of ContentShell.
  */
 export default function VideosLayout({ children }: { children: React.ReactNode }) {
   return (

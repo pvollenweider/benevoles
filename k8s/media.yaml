@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 # Media server for the video tutorials (#632): https://medias.benevol.app serves the rendered
-# files (<slug>/<slug>.mp4, .vtt, .txt) from a volume. They are never in Git nor in the app image:
+# files (<slug>/<slug>.mp4, .vtt, .txt, and the posters <slug>.jpg, <slug>-og.jpg) from a volume. They are never in Git nor in the app image:
 # `make video-publish` sends new or changed files (see videos/README.md). Nothing here holds
 # personal data; the volume is not backed up because every file can be rendered again from the
 # sources in videos/.
@@ -47,6 +47,7 @@ data:
           video/mp4 mp4;
           text/vtt vtt;
           text/plain txt;
+          image/jpeg jpg;
         }
         default_type application/octet-stream;
         add_header Access-Control-Allow-Origin $media_cors_origin always;

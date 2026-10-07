@@ -390,6 +390,14 @@ describe("videoMediaUrls", () => {
       transcript: "https://medias.benevol.app/event-create-blank/event-create-blank.txt",
     })
   })
+
+  it("adds the posters only when the render says they exist (videos/renders.json), never a broken image", () => {
+    const urls = videoMediaUrls("event-create-blank", "https://medias.benevol.app", { poster: true })
+    expect(urls?.poster).toBe("https://medias.benevol.app/event-create-blank/event-create-blank.jpg")
+    expect(urls?.ogImage).toBe("https://medias.benevol.app/event-create-blank/event-create-blank-og.jpg")
+    expect(videoMediaUrls("event-create-blank", "https://medias.benevol.app", { poster: false })).not.toHaveProperty("poster")
+    expect(videoMediaUrls("event-create-blank", "https://medias.benevol.app", undefined)).not.toHaveProperty("poster")
+  })
 })
 
 describe("relatedVideos", () => {

@@ -182,9 +182,9 @@ videos: ## Régénère une liste (IDS="ORG_FIRST_STEPS VOLUNTEER_REGISTER") ou t
 
 # Envoie vers https://medias.benevol.app (k8s/media.yaml) les rendus nouveaux ou modifiés, comparés
 # par SHA-256 ; sans APPLY=1, affiche seulement ce qui partirait. Rien n'est jamais supprimé.
-video-publish: ## Publie les vidéos nouvelles ou modifiées (KUBE_CONTEXT=… [ID=… | IDS="…"] [APPLY=1])
+video-publish: ## Publie les vidéos nouvelles ou modifiées (KUBE_CONTEXT=… [ID=… | IDS="…"] [POSTERS_ONLY=1] [APPLY=1])
 	@test -n "$(KUBE_CONTEXT)" || (echo "KUBE_CONTEXT=<contexte kubectl de production> est obligatoire (kubectl config get-contexts)"; exit 1)
-	npm run video:publish -- --context "$(KUBE_CONTEXT)" $(if $(APPLY),--apply) $(ID) $(IDS)
+	npm run video:publish -- --context "$(KUBE_CONTEXT)" $(if $(APPLY),--apply) $(if $(POSTERS_ONLY),--posters-only) $(ID) $(IDS)
 
 video-media-serve: ## Sert videos/output en local pour VIDEO_MEDIA_BASE_URL (PORT=4870 par défaut, mêmes en-têtes CORS/Content-Type que k8s/media.yaml)
 	node scripts/serve-video-media.mjs

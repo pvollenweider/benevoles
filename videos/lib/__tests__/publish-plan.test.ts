@@ -7,11 +7,20 @@ import { parseSha256Sum, planPublish, publishedFiles } from "../publish-plan"
 const h = (c: string) => c.repeat(64)
 
 describe("publishedFiles", () => {
-  it("lists the video, captions and transcript of a slug", () => {
+  it("lists the video, captions, transcript and both posters of a slug", () => {
     expect(publishedFiles("event-create-blank")).toEqual([
       "event-create-blank/event-create-blank.mp4",
       "event-create-blank/event-create-blank.vtt",
       "event-create-blank/event-create-blank.txt",
+      "event-create-blank/event-create-blank.jpg",
+      "event-create-blank/event-create-blank-og.jpg",
+    ])
+  })
+
+  it("lists only the two posters with postersOnly: a published video or its captions are never resent", () => {
+    expect(publishedFiles("event-create-blank", { postersOnly: true })).toEqual([
+      "event-create-blank/event-create-blank.jpg",
+      "event-create-blank/event-create-blank-og.jpg",
     ])
   })
 })

@@ -3,12 +3,12 @@ import { headers } from "next/headers"
 import { NON_ORG_SUBDOMAINS } from "@/lib/org-subdomain"
 import { apexBaseUrl, orgBaseUrl, isKnownHost } from "@/lib/urls"
 import { apexRobotsRules } from "@/lib/crawlers"
+import { VIDEO_SITEMAP_PATH } from "@/lib/video-seo"
 
 // Token-bearing and admin/API surfaces: never worth indexing, and some carry secrets in the URL
 // (/my/[token], /waitlist/[token]/confirm, /leader/[token] (#186), /admin/accept-invite?token=...).
-// /videos (#644): unlisted video library, not linked from anywhere; each page also sets its own
-// `robots: noindex,nofollow` metadata, but a crawler still shouldn't walk the gallery at all.
-const DISALLOW = ["/admin", "/api/", "/my/", "/waitlist/", "/leader/", "/videos"]
+// /videos is public and indexed since 2026-10-07 (src/lib/video-seo.ts): no longer listed here.
+const DISALLOW = ["/admin", "/api/", "/my/", "/waitlist/", "/leader/"]
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const host = (await headers()).get("host") ?? ""
@@ -27,7 +27,8 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
   // An org host lists its events in its own sitemap.
   if (orgSlug) return { rules: { userAgent: "*", allow: "/", disallow: DISALLOW }, sitemap: `${orgBaseUrl(orgSlug)}/sitemap.xml` }
 
-  // The apex host names the search and AI crawlers it welcomes (src/lib/crawlers.ts), and its
-  // sitemap index: its own sitemap and every organisation's (src/app/sitemap-index.xml).
-  return { rules: apexRobotsRules(DISALLOW), sitemap: `${apexBaseUrl()}/sitemap-index.xml` }
+  // The apex host names the search and AI crawlers it welcomes (src/lib/crawlers.ts), its
+  // sitemap index (its own sitemap and every organisation's, src/app/sitemap-index.xml) and its
+  // video sitemap (src/lib/video-seo.ts).
+  return { rules: apexRobotsRules(DISALLOW), sitemap: [`${apexBaseUrl()}/sitemap-index.xml`, `${apexBaseUrl()}${VIDEO_SITEMAP_PATH}`] }
 }
