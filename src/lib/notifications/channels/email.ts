@@ -69,7 +69,10 @@ export const emailChannel: { send: Send } = {
   async send(payload: NotificationPayload) {
     const to = payload.recipient.email
     if (!to) {
-      return { ok: false as const, reason: "recipient has no email" }
+      // Nothing to retry: no address will appear on this queued row. Permanent, so the outbox
+      // stops at once instead of retrying MAX_ATTEMPTS times (rows queued before such payloads
+      // were filtered out at enqueue time).
+      return { ok: false as const, reason: "recipient has no email", permanent: true as const }
     }
 
     const org = payload.organizationId ? await orgEmailContext(payload.organizationId) : null

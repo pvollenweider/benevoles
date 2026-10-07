@@ -56,6 +56,11 @@ describe("emailChannel without SMTP_HOST", () => {
     error.mockRestore()
   })
 
+  it("a recipient without an email address is a permanent failure: the outbox doesn't retry it", async () => {
+    const outcome = await emailChannel.send({ ...payload, recipient: { ...payload.recipient, email: null } } as NotificationPayload)
+    expect(outcome).toEqual({ ok: false, reason: "recipient has no email", permanent: true })
+  })
+
   it("in production: fails, and logs neither the recipient nor the body", async () => {
     vi.stubEnv("NODE_ENV", "production")
     const outcome = await emailChannel.send(payload)

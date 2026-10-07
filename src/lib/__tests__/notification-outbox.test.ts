@@ -79,6 +79,21 @@ describe("collectNotifications / enqueueNotifications / deliverAfterResponse", (
     expect(m.create).toHaveBeenLastCalledWith(expect.objectContaining({ data: expect.objectContaining({ organizationId: null }) }))
   })
 
+  it("doesn't store a notification whose recipient has no email: it could never be delivered", async () => {
+    m.create.mockResolvedValue({ id: "n1" })
+    m.createMany.mockResolvedValue({ count: 1 })
+    m.findUniqueOrThrowByKey.mockResolvedValue({ id: "k1" })
+    const ids = await enqueueNotifications([
+      { ...payload, recipient: { email: null } },
+      { ...payload, recipient: { email: "   " } },
+      { ...payload, recipient: { email: null }, dedupeKey: "shift_cancelled:r1" },
+      payload,
+    ])
+    expect(ids).toEqual(["n1"])
+    expect(m.create).toHaveBeenCalledOnce()
+    expect(m.createMany).not.toHaveBeenCalled()
+  })
+
   it("schedules nothing for an empty batch", () => {
     deliverAfterResponse([])
     expect(m.after).not.toHaveBeenCalled()
