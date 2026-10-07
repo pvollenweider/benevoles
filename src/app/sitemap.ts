@@ -9,6 +9,10 @@ import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
 import { apexSitemap } from "@/lib/doc-pages"
 import { loadDocUnits } from "@/lib/doc-units"
 import { docLastmodLookup } from "@/lib/doc-lastmod"
+import { loadVideoCatalog } from "@/lib/video-catalog-load"
+import { videoSitemapEntries } from "@/lib/video-seo"
+import { videoSeoContext } from "@/lib/video-seo-context"
+import { reportError } from "@/lib/report-error"
 
 // A doc page's last change is its source file's last commit, written at deploy into
 // doc-lastmod.json (scripts/doc-lastmod.mjs): in the image every file's mtime is the build time.
@@ -26,17 +30,29 @@ function docLastmodFromFile(): (source: string) => Date | null {
   return docLastmod
 }
 
+// The video library and every indexed video, the selection /video-sitemap.xml lists (one
+// function, src/lib/video-seo.ts) without its video extension. A broken catalogue never takes the
+// rest of the sitemap down.
+function apexVideoEntries(): MetadataRoute.Sitemap {
+  try {
+    return videoSitemapEntries(loadVideoCatalog(), videoSeoContext())
+  } catch (error) {
+    reportError("sitemap-videos")(error)
+    return []
+  }
+}
+
 // Multi-tenant by subdomain: each org's own [orgSlug].benevol.app/sitemap.xml lists only that
 // org's published events (and their custom pages, #188) — the host already scopes it via
 // x-org-slug, no need to iterate other orgs. The apex host (www) lists the marketing home and the
-// documentation pages (SEO); staging, previews and unknown hosts get nothing.
+// documentation pages, the video library and its indexed videos (SEO); staging, previews and unknown hosts get nothing.
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const h = await headers()
   const rawOrgSlug = h.get("x-org-slug")
   if (!rawOrgSlug) {
     const hostname = (h.get("host") ?? "").split(":")[0]
     if (!isKnownHost(hostname) || hostname.startsWith("staging.")) return []
-    return apexSitemap(apexBaseUrl(), docLastmodFromFile(), loadDocUnits())
+    return [...apexSitemap(apexBaseUrl(), docLastmodFromFile(), loadDocUnits()), ...apexVideoEntries()]
   }
 
   const resolved = await resolveOrgSlug(rawOrgSlug)

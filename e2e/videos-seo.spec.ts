@@ -89,4 +89,11 @@ test.describe("with the media host online", () => {
     expect(body).toMatch(/<loc>[^<]+\/videos\/EVENT_CREATE_BLANK<\/loc>/)
     expect(body).not.toContain("VOLUNTEER_HOURS_CERTIFICATE")
   })
+
+  test("the main sitemap also lists the gallery and the published videos", async ({ request }) => {
+    const body = await (await request.get("/sitemap.xml")).text()
+    expect(body).toMatch(/<loc>[^<]+\/videos<\/loc>/)
+    expect(body).toMatch(/<loc>[^<]+\/videos\/EVENT_CREATE_BLANK<\/loc>/)
+    expect(body).not.toContain("VOLUNTEER_HOURS_CERTIFICATE")
+  })
 })

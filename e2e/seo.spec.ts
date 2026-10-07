@@ -101,6 +101,8 @@ test("the sitemap index lists the www sitemap and the organisations' own", async
   expect(response.headers()["content-type"]).toContain("application/xml")
   const locs = [...(await response.text()).matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])
   expect(locs[0]).toBe(`${BASE}/sitemap.xml`)
+  // The video sitemap (Google's video extension) right after it.
+  expect(locs[1]).toBe(`${BASE}/video-sitemap.xml`)
   // Locally, without subdomains, an organisation's sitemap is the apex one scoped by ?org=.
   expect(locs).toContain(`${BASE}/sitemap.xml?org=default`)
   const sitemap = await (await request.get("/sitemap.xml")).text()

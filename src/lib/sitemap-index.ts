@@ -5,7 +5,8 @@ import { NON_ORG_SUBDOMAINS } from "@/lib/org-subdomain"
 
 /**
  * The apex sitemap index (/sitemap-index.xml, src/app/sitemap-index.xml/route.ts): the apex's own
- * sitemap (home, features, documentation, legal pages), then the sitemap of every active
+ * sitemaps (sitemap.xml: home, features, documentation, legal pages, videos; video-sitemap.xml:
+ * the same video pages with Google's video extension), then the sitemap of every active
  * organisation (<slug>.benevol.app/sitemap.xml: its public page and its listed events). Each
  * organisation's robots.txt already names its own sitemap, but nobody submits twenty of them by
  * hand: submitting this index once in Search Console (a domain property covers the subdomains)
@@ -16,13 +17,13 @@ export type SitemapRef = { loc: string; lastmod?: Date | null }
 
 export type OrgForIndex = { slug: string; lastmod: Date | null }
 
-/** The apex sitemap first, then one per organisation (by slug, never a system subdomain). */
-export function sitemapIndexEntries(apexSitemapUrl: string, orgs: readonly OrgForIndex[], orgSitemapUrl: (slug: string) => string): SitemapRef[] {
+/** The apex sitemaps first, in the order given, then one per organisation (by slug, never a system subdomain). */
+export function sitemapIndexEntries(apexSitemapUrls: readonly string[], orgs: readonly OrgForIndex[], orgSitemapUrl: (slug: string) => string): SitemapRef[] {
   const listed = orgs
     .filter((o) => o.slug && !NON_ORG_SUBDOMAINS.has(o.slug))
     .toSorted((a, b) => a.slug.localeCompare(b.slug))
     .map((o) => ({ loc: orgSitemapUrl(o.slug), lastmod: o.lastmod }))
-  return [{ loc: apexSitemapUrl }, ...listed]
+  return [...apexSitemapUrls.map((loc) => ({ loc })), ...listed]
 }
 
 const XML_ESCAPES: Record<string, string> = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" }

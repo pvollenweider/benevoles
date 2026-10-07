@@ -18,7 +18,7 @@ describe("GET /sitemap-index.xml", () => {
   })
   afterEach(() => vi.unstubAllEnvs())
 
-  it("lists the www sitemap and every active organisation's", async () => {
+  it("lists the www sitemap, the video sitemap and every active organisation's", async () => {
     request("www.benevol.app")
     m.findMany.mockResolvedValue([
       { slug: "lausanne-rocks", updatedAt: new Date("2026-09-01T00:00:00Z"), events: [{ updatedAt: new Date("2026-10-01T00:00:00Z") }] },
@@ -31,6 +31,7 @@ describe("GET /sitemap-index.xml", () => {
     const xml = await res.text()
     expect([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((x) => x[1])).toEqual([
       "https://www.benevol.app/sitemap.xml",
+      "https://www.benevol.app/video-sitemap.xml",
       "https://fete-du-village.benevol.app/sitemap.xml",
       "https://lausanne-rocks.benevol.app/sitemap.xml",
     ])
@@ -47,11 +48,11 @@ describe("GET /sitemap-index.xml", () => {
     expect(m.findMany).not.toHaveBeenCalled()
   })
 
-  it("still gives the www sitemap when the database fails", async () => {
+  it("still gives the www sitemaps when the database fails", async () => {
     request("www.benevol.app")
     m.findMany.mockRejectedValue(new Error("down"))
     const { GET } = await import("@/app/sitemap-index.xml/route")
     const xml = await (await GET()).text()
-    expect([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((x) => x[1])).toEqual(["https://www.benevol.app/sitemap.xml"])
+    expect([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((x) => x[1])).toEqual(["https://www.benevol.app/sitemap.xml", "https://www.benevol.app/video-sitemap.xml"])
   })
 })
