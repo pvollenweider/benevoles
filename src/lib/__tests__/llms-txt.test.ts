@@ -56,7 +56,7 @@ describe("llmsTxt", () => {
 describe("llmsFullTxt", () => {
   it("gives the features, the guides and every unit, each under its title with its address", () => {
     const full = llmsFullTxt(sources())
-    expect(full).toContain(`# Fonctionnalités de benevol.app\n\nAdresse : ${BASE}/fonctionnalites`)
+    expect(full).toContain(`# Le planning de vos bénévoles, simplement\n\nAdresse : ${BASE}/fonctionnalites`)
     expect(full).toContain(`# Guide administrateur\n\nAdresse : ${BASE}/doc/admin`)
     for (const u of loadDocUnits()) expect(full, u.slug).toContain(`# ${u.title}\n\nAdresse : ${BASE}/doc/${u.slug}`)
     expect(full).not.toMatch(/<!--|\]\(\/(?!\/)/)
