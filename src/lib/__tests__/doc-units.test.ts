@@ -8,6 +8,7 @@ import {
   DOC_INDEX_START,
   DOC_ROLE_INFO,
   RESERVED_DOC_SLUGS,
+  docGroup,
   docGroupHref,
   docIndexMarkdown,
   docUnitAudience,
@@ -268,11 +269,21 @@ describe("docUnitsByGroup", () => {
 describe("docUnitMetadata", () => {
   it("gives the unit's title and summary, an absolute canonical on the apex host, Open Graph and indexing", () => {
     const m = docUnitMetadata(unit({ slug: "a", title: "Ma page" }), "https://www.benevol.app/")
-    expect(m.title).toBe("Ma page — benevol.app")
+    // The site name after a vertical bar, never an em dash (#747).
+    expect(m.title).toEqual({ absolute: "Ma page | benevol.app" })
     expect(m.description).toBe(`${SUMMARY} (a)`)
     expect(m.alternates?.canonical).toBe("https://www.benevol.app/doc/a")
-    expect(m.openGraph).toMatchObject({ url: "https://www.benevol.app/doc/a", siteName: "benevol.app" })
-    expect(m.robots).toEqual({ index: true, follow: true })
+    expect(m.openGraph).toMatchObject({ type: "article", url: "https://www.benevol.app/doc/a", siteName: "benevol.app", locale: "fr_CH", section: expect.any(String) })
+    expect(m.robots).toMatchObject({ index: true, follow: true })
+  })
+
+  it("is an article of its group, with its own social card, the large Twitter card and its last change when known", () => {
+    const u = unit({ slug: "a", title: "Ma page" })
+    const image = { url: "https://www.benevol.app/og-image.png/doc/a", width: 1200, height: 630, type: "image/png", alt: "Ma page, documentation de benevol.app" }
+    const m = docUnitMetadata(u, "https://www.benevol.app", new Date("2026-10-01T08:00:00Z"))
+    expect(m.openGraph).toMatchObject({ section: docGroup(u.group).title, modifiedTime: "2026-10-01T08:00:00.000Z", images: [image] })
+    expect(m.twitter).toEqual({ card: "summary_large_image", title: "Ma page | benevol.app", description: `${SUMMARY} (a)`, images: [image] })
+    expect(docUnitMetadata(u, "https://www.benevol.app").openGraph).not.toHaveProperty("modifiedTime")
   })
 })
 

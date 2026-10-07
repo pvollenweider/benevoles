@@ -5,6 +5,8 @@ import type { Metadata } from "next"
 import { publicPageMetadata } from "@/lib/doc-pages"
 import { renderPublicSource } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
+import { publicPageJsonLd } from "@/lib/structured-data"
+import JsonLd from "@/components/public/JsonLd"
 
 export function generateMetadata(): Metadata {
   return publicPageMetadata("/accessibilite", apexBaseUrl())
@@ -15,6 +17,7 @@ export default function AccessibilityPage() {
   const { title, html } = renderPublicSource("ACCESSIBILITE.md", "Accessibilité")
   return (
     <>
+      <JsonLd data={publicPageJsonLd("/accessibilite", apexBaseUrl())} />
       <h1>{title}</h1>
       <div dangerouslySetInnerHTML={{ __html: html }} />
     </>

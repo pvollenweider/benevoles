@@ -1,11 +1,19 @@
+import type { Metadata } from "next"
+import { publicPageMetadata } from "@/lib/doc-pages"
+import { publicPageJsonLd } from "@/lib/structured-data"
+import { apexBaseUrl } from "@/lib/urls"
+import JsonLd from "@/components/public/JsonLd"
 import Link from "next/link"
 import { RETENTION, RETENTION_DAYS } from "@/lib/retention"
 
-export const metadata = { title: "Politique de confidentialité — benevol.app" }
+export function generateMetadata(): Metadata {
+  return publicPageMetadata("/legal/privacy", apexBaseUrl())
+}
 
 export default function PrivacyPage() {
   return (
     <>
+      <JsonLd data={publicPageJsonLd("/legal/privacy", apexBaseUrl())} />
       <h1>Politique de confidentialité</h1>
       <p className="text-gray-500 text-sm">Dernière mise à jour : 6 octobre 2026</p>
 

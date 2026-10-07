@@ -3,6 +3,8 @@ import { publicPageMetadata } from "@/lib/doc-pages"
 import { loadDocUnits } from "@/lib/doc-units"
 import { renderPublicSource } from "@/lib/public-content"
 import { apexBaseUrl } from "@/lib/urls"
+import { publicPageJsonLd } from "@/lib/structured-data"
+import JsonLd from "@/components/public/JsonLd"
 import { env } from "@/lib/env"
 import RoleGuide from "../RoleGuide"
 
@@ -18,5 +20,10 @@ export function generateMetadata(): Metadata {
 // index of its units; old /doc/benevole#<anchor> links are followed to their unit.
 export default function DocBenevolePage() {
   const { title, html } = renderPublicSource("GUIDE_BENEVOLE.md", "Guide bénévole", env.VIDEO_MEDIA_BASE_URL)
-  return <RoleGuide role="benevole" units={loadDocUnits()} title={title} html={html} />
+  return (
+    <>
+      <JsonLd data={publicPageJsonLd("/doc/benevole", apexBaseUrl())} />
+      <RoleGuide role="benevole" units={loadDocUnits()} title={title} html={html} />
+    </>
+  )
 }

@@ -30,7 +30,7 @@ test("a unit page has a breadcrumb, one title, its audience and no serious viola
   await expect(page.getByRole("link", { name: "bénévoles", exact: true })).toHaveCount(0)
   await expect(page.getByText("Quitter la session")).toBeVisible()
 
-  await expect(page).toHaveTitle("Revenir sur la page d'inscription — benevol.app")
+  await expect(page).toHaveTitle("Revenir sur la page d'inscription | benevol.app")
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/doc\/revenir-sur-la-page-d-inscription$/)
 
   expect.soft(await seriousViolations(page)).toEqual([])

@@ -95,13 +95,16 @@ Liste exhaustive des fonctionnalités de l'application.
 
 ### Pages légales
 
-- Politique de confidentialité (`/legal/privacy`) et conditions d'utilisation (`/legal/terms`)
+- Politique de confidentialité (`/legal/privacy`) et conditions d'utilisation (`/legal/terms`), déclarées dans `src/lib/doc-pages.ts` (métadonnées, aperçu, sitemap)
 
 ### Fonctionnalités et accessibilité (`/fonctionnalites`, `/accessibilite`)
 
 - `/fonctionnalites` rend `FEATURES.md` (présentation publique, par besoins) ; `/accessibilite` rend `ACCESSIBILITE.md` (déclaration d'accessibilité : ce qui est testé, limites connues) ; pages déclarées dans `src/lib/doc-pages.ts` (métadonnées, navigation, sitemap), fichiers sources copiés dans l'image
 - Contrôles automatiques axe-core dans les tests E2E (`e2e/accessibility.spec.ts`)
 - **Sitemap du domaine principal** (`apexSitemap`) : page d'accueil de benevol.app et pages de contenu publiques, avec la date de modification de leur fichier source ; rien pour les hôtes de préproduction ou inconnus
+- **Référencement et aperçus de liens des pages publiques** (#746, #747) : métadonnées d'une seule fabrique (`src/lib/seo-metadata.ts`) : titre « Titre | benevol.app », description propre à la page (le résumé pour une fiche), canonique absolue sur l'apex, Open Graph (`fr_CH`, `article` avec rubrique pour une fiche) et carte Twitter `summary_large_image` avec une image par page (`/og-image.png/<chemin>`, `ImageResponse` 1200 x 630 générée au build : rubrique, titre, résumé, public ; `src/lib/social-card.ts`) ; JSON-LD (`src/lib/structured-data.ts`) : `WebSite`, `Organization`, `SoftwareApplication` gratuite (prix 0, AGPL) sur l'accueil et `/fonctionnalites`, `WebPage` et `BreadcrumbList` sur les pages de contenu, `TechArticle` et `BreadcrumbList` sur les fiches (pas de `FAQPage` sur les fiches de questions fréquentes, qui ne contiennent que des liens) ; adresses lues à la requête (`connection()` dans `src/app/layout.tsx`), jamais figées au build ; `theme-color` des pages de contenu
+- **Index des sitemaps** (`/sitemap-index.xml`, `src/lib/sitemap-index.ts`, #746) : sitemap de l'apex puis celui de chaque organisation active, avec la dernière modification connue ; référencé par le `robots.txt` de l'apex ; à soumettre une fois dans la Search Console (voir `docs/deploiement.md`)
+- **Robots et assistants IA** (`src/lib/crawlers.ts`) : sur l'apex, Googlebot, Bingbot, Applebot, DuckDuckBot et les robots des assistants IA (OpenAI, Anthropic, Perplexity, Google-Extended, Applebot-Extended, Common Crawl) nommés et autorisés, avec les mêmes zones privées interdites ; `robots.txt` des organisations inchangé. `/llms.txt` et `/llms-full.txt` (`src/lib/llms-txt.ts`) : présentation, fonctionnalités, guides, fiches par thème et pages légales, générés depuis `FEATURES.md`, les guides et `guide/`
 
 ### Page introuvable (`src/app/not-found.tsx`)
 

@@ -1,4 +1,7 @@
 import ContentShell from "@/components/public/ContentShell"
+import { CONTENT_VIEWPORT } from "@/lib/seo-metadata"
+
+export const viewport = CONTENT_VIEWPORT
 
 // The documentation shares its header and footer with the features page
 // (src/components/public/ContentShell.tsx); each page draws its own <main> with DocFrame, so a

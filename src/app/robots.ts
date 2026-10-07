@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next"
 import { headers } from "next/headers"
 import { NON_ORG_SUBDOMAINS } from "@/lib/org-subdomain"
 import { apexBaseUrl, orgBaseUrl, isKnownHost } from "@/lib/urls"
+import { apexRobotsRules } from "@/lib/crawlers"
 
 // Token-bearing and admin/API surfaces: never worth indexing, and some carry secrets in the URL
 // (/my/[token], /waitlist/[token]/confirm, /leader/[token] (#186), /admin/accept-invite?token=...).
@@ -23,9 +24,10 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
 
   const orgSlug = subdomain && !NON_ORG_SUBDOMAINS.has(subdomain) ? subdomain : null
 
-  return {
-    rules: { userAgent: "*", allow: "/", disallow: DISALLOW },
-    // An org host lists its events; the apex host lists the home and the documentation.
-    sitemap: orgSlug ? `${orgBaseUrl(orgSlug)}/sitemap.xml` : `${apexBaseUrl()}/sitemap.xml`,
-  }
+  // An org host lists its events in its own sitemap.
+  if (orgSlug) return { rules: { userAgent: "*", allow: "/", disallow: DISALLOW }, sitemap: `${orgBaseUrl(orgSlug)}/sitemap.xml` }
+
+  // The apex host names the search and AI crawlers it welcomes (src/lib/crawlers.ts), and its
+  // sitemap index: its own sitemap and every organisation's (src/app/sitemap-index.xml).
+  return { rules: apexRobotsRules(DISALLOW), sitemap: `${apexBaseUrl()}/sitemap-index.xml` }
 }

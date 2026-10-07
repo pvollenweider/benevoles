@@ -1,6 +1,9 @@
 import Link from "next/link"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 
+// The browser bar takes the colour of the legal pages' white header.
+export const viewport = { themeColor: "#ffffff" }
+
 export default function LegalLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-white">

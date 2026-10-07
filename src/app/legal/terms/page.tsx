@@ -1,10 +1,18 @@
+import type { Metadata } from "next"
+import { publicPageMetadata } from "@/lib/doc-pages"
+import { publicPageJsonLd } from "@/lib/structured-data"
+import { apexBaseUrl } from "@/lib/urls"
+import JsonLd from "@/components/public/JsonLd"
 import Link from "next/link"
 
-export const metadata = { title: "Conditions générales d'utilisation — benevol.app" }
+export function generateMetadata(): Metadata {
+  return publicPageMetadata("/legal/terms", apexBaseUrl())
+}
 
 export default function TermsPage() {
   return (
     <>
+      <JsonLd data={publicPageJsonLd("/legal/terms", apexBaseUrl())} />
       <h1>Conditions générales d&apos;utilisation</h1>
       <p className="text-gray-500 text-sm">Dernière mise à jour : 6 octobre 2026</p>
 

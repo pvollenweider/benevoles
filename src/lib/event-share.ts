@@ -4,6 +4,7 @@
 import type { Metadata } from "next"
 import { robotsFor, type Visibility } from "./event-visibility"
 import { OG_IMAGE_ALT } from "./landing-seo"
+import { OG_LOCALE, SOCIAL_IMAGE } from "./seo-metadata"
 
 /**
  * The preview of a shared event link (#564): what WhatsApp, a newsletter or a social network shows
@@ -83,7 +84,7 @@ export function eventPageMetadata(
   const robots = robotsFor(e)
   if (!e || e.publicStatus !== "published") return robots ? { robots } : {}
   const description = eventShareDescription(e)
-  const image = { url: links.imageUrl, width: 1200, height: 630, alt: OG_IMAGE_ALT, type: "image/png" }
+  const image = { url: links.imageUrl, ...SOCIAL_IMAGE, alt: OG_IMAGE_ALT }
   return {
     title: e.title,
     description,
@@ -91,6 +92,7 @@ export function eventPageMetadata(
     openGraph: {
       type: "website",
       siteName: e.organizationName,
+      locale: OG_LOCALE,
       url: links.canonicalUrl,
       title: e.title,
       description,
@@ -98,5 +100,26 @@ export function eventPageMetadata(
     },
     twitter: { card: "summary_large_image", title: e.title, description, images: [image] },
     ...(robots ? { robots } : {}),
+  }
+}
+
+/** The description of an organisation's public page, when it is shared or found in a search. */
+export function orgHomeDescription(organizationName: string): string {
+  return `${organizationName} cherche des bénévoles : choisissez vos créneaux et inscrivez-vous en ligne, sans créer de compte.`
+}
+
+/**
+ * Metadata of an organisation's public page (<slug>.benevol.app): its own title, a description,
+ * the canonical URL on its host and the same link preview as its events (the platform's card).
+ */
+export function orgHomeMetadata(org: { name: string; title: string }, links: { canonicalUrl: string; imageUrl: string }): Metadata {
+  const description = orgHomeDescription(org.name)
+  const image = { url: links.imageUrl, ...SOCIAL_IMAGE, alt: OG_IMAGE_ALT }
+  return {
+    title: org.title,
+    description,
+    alternates: { canonical: links.canonicalUrl },
+    openGraph: { type: "website", siteName: org.name, locale: OG_LOCALE, url: links.canonicalUrl, title: org.title, description, images: [image] },
+    twitter: { card: "summary_large_image", title: org.title, description, images: [image] },
   }
 }
