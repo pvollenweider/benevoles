@@ -126,6 +126,14 @@ describe("parseChangelog", () => {
     expect(stable.sections).toEqual([{ title: "Corrigé", markdown: "- **Un bug** : corrigé." }])
   })
 
+  it("turns a heading of a version's intro into a bold paragraph, never an <h4> under the version's <h2>", () => {
+    const [release] = parseChangelog("## [3.0.0] — 2026-11-01\n\nIntro.\n\n#### Points forts\n\n- un point\n\n### Ajouté\n\n#### Sous-titre\n\n- x\n")
+    expect(release.intro).toBe("Intro.\n\n**Points forts**\n\n- un point")
+    expect(release.intro).not.toMatch(/^#/m)
+    // Inside a section, under its <h3>, a #### stays a heading (<h4>).
+    expect(release.sections[0].markdown).toBe("#### Sous-titre\n\n- x")
+  })
+
   it("drops a version left with nothing public", () => {
     expect(findRelease(releases, "1.0.0-beta.2")).toBeNull()
   })

@@ -30,6 +30,14 @@ describe("ReleaseNotes", () => {
     expect(screen.getByText("Première version.")).toBeInTheDocument()
   })
 
+  it("ends each version with a link back to the list of versions", () => {
+    render(<ReleaseNotes releases={RELEASES} fullChangelogUrl="https://example.org/CHANGELOG.md" />)
+    const back = screen.getAllByRole("link", { name: "Retour à la liste des versions" })
+    expect(back).toHaveLength(RELEASES.length)
+    for (const link of back) expect(link).toHaveAttribute("href", "#toutes-les-versions")
+    expect(screen.getByRole("navigation", { name: "Toutes les versions" }).querySelector("li")).toHaveClass("break-inside-avoid")
+  })
+
   it("links the full changelog, features and documentation", () => {
     render(<ReleaseNotes releases={RELEASES} fullChangelogUrl="https://example.org/CHANGELOG.md" />)
     expect(screen.getByRole("link", { name: "journal complet des versions sur GitHub" })).toHaveAttribute("href", "https://example.org/CHANGELOG.md")

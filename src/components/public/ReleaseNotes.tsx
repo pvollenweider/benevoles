@@ -8,7 +8,8 @@ import type { RenderedRelease } from "@/lib/public-content"
  * The body of /nouveautes (#757), inside ContentShell's article and its prose recipe: the page's
  * <h1>, a short introduction, « Toutes les versions » (a <nav> named by its <h2>, one link per
  * version to its anchor), then each version: <h2 id="<version>"> (the anchor #762's emails link
- * to), its date in a <time>, its intro and its sections under <h3>. The HTML comes from
+ * to), its date in a <time>, its intro, its sections under <h3> and a link back to the list.
+ * Each item of the list stays whole in its column (break-inside-avoid). The HTML comes from
  * CHANGELOG.md through renderChangelog (src/lib/public-content.ts), sanitized there.
  */
 export default function ReleaseNotes({ releases, fullChangelogUrl }: { releases: readonly RenderedRelease[]; fullChangelogUrl: string }) {
@@ -30,7 +31,7 @@ export default function ReleaseNotes({ releases, fullChangelogUrl }: { releases:
             <h2 id="toutes-les-versions">Toutes les versions</h2>
             <ul className="sm:columns-2">
               {releases.map((r) => (
-                <li key={r.version}>
+                <li key={r.version} className="break-inside-avoid">
                   <a href={`#${r.version}`}>Version {r.version}</a>, {r.dateLabel}
                 </li>
               ))}
@@ -50,6 +51,9 @@ export default function ReleaseNotes({ releases, fullChangelogUrl }: { releases:
                   <div dangerouslySetInnerHTML={{ __html: s.html }} />
                 </div>
               ))}
+              <p>
+                <a href="#toutes-les-versions">Retour à la liste des versions</a>
+              </p>
             </section>
           ))}
         </>

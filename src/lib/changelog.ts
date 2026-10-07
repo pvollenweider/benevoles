@@ -15,6 +15,8 @@
  *   application and stay on GitHub;
  * - inside a public section, a bullet that ends with `<!-- interne -->` is left out (a test, a
  *   monitoring setting). The marker is an HTML comment: invisible on GitHub, nothing rewritten;
+ * - a heading in a version's intro (before its first `### `) becomes a bold paragraph, so the
+ *   page never skips from the version's <h2> to an <h4>;
  * - a section left empty is dropped, and so is a version left with nothing to say.
  */
 
@@ -55,6 +57,15 @@ export const PUBLIC_SECTIONS = [
 const VERSION_HEADING = /^## \[(\d+\.\d+\.\d+(?:-[0-9A-Za-z.]+)?)\]\s+[—–-]\s+(\d{4})-(\d{2})-(\d{2})\s*$/
 const SECTION_HEADING = /^### (.+?)\s*$/
 const LIST_ITEM = /^[-*+] /
+
+/**
+ * A line of a version's intro (before its first `### ` section). A heading there would render as
+ * an <h4> straight under the version's <h2>, skipping a level: it becomes a bold paragraph.
+ */
+function introLine(line: string): string {
+  const heading = line.match(/^#{4,6}\s+(.+?)\s*#*\s*$/)
+  return heading ? `**${heading[1]}**` : line
+}
 
 /** Whether a section title is one of the public sections (by its start, case and accents as written). */
 export function isPublicSection(title: string): boolean {
@@ -114,7 +125,7 @@ export function parseChangelog(markdown: string): ChangelogRelease[] {
     const section = line.match(SECTION_HEADING)
     if (section) current.sections.push({ title: section[1], lines: [] })
     else if (current.sections.length > 0) current.sections[current.sections.length - 1].lines.push(line)
-    else current.intro.push(line)
+    else current.intro.push(introLine(line))
   }
 
   const releases = drafts
