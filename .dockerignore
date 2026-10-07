@@ -18,6 +18,9 @@ docker-compose*.yml
 !GUIDE_BENEVOLE.md
 # The documentation units (#649, src/lib/doc-units.ts), rendered by /doc/<slug>.
 !guide/*.md
+# Their last commit dates (scripts/doc-lastmod.mjs, run by deploy.yml before the build): the
+# sitemap's lastmod. Not matched by the rules above, re-included in case one ever does.
+!doc-lastmod.json
 .DS_Store
 coverage
 # Video sources and renders (#636, #644): the generation tools, their library and any rendered

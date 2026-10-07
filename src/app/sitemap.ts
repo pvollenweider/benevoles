@@ -8,6 +8,23 @@ import { apexBaseUrl, isKnownHost, orgBaseUrl } from "@/lib/urls"
 import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
 import { apexSitemap } from "@/lib/doc-pages"
 import { loadDocUnits } from "@/lib/doc-units"
+import { docLastmodLookup } from "@/lib/doc-lastmod"
+
+// A doc page's last change is its source file's last commit, written at deploy into
+// doc-lastmod.json (scripts/doc-lastmod.mjs): in the image every file's mtime is the build time.
+// Read once; without the file (development, tests) or with a malformed one, no lastmod at all.
+let docLastmod: ((source: string) => Date | null) | null = null
+function docLastmodFromFile(): (source: string) => Date | null {
+  if (docLastmod) return docLastmod
+  let json: unknown = null
+  try {
+    json = JSON.parse(fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), "doc-lastmod.json"), "utf-8"))
+  } catch {
+    json = null
+  }
+  docLastmod = docLastmodLookup(json)
+  return docLastmod
+}
 
 // Multi-tenant by subdomain: each org's own [orgSlug].benevol.app/sitemap.xml lists only that
 // org's published events (and their custom pages, #188) — the host already scopes it via
@@ -19,10 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!rawOrgSlug) {
     const hostname = (h.get("host") ?? "").split(":")[0]
     if (!isKnownHost(hostname) || hostname.startsWith("staging.")) return []
-    // A doc page's last change is its source file's: GUIDE_*.md and guide/*.md are shipped with the app.
-    return apexSitemap(apexBaseUrl(), (source) => {
-      try { return fs.statSync(path.join(/*turbopackIgnore: true*/ process.cwd(), source)).mtime } catch { return null }
-    }, loadDocUnits())
+    return apexSitemap(apexBaseUrl(), docLastmodFromFile(), loadDocUnits())
   }
 
   const resolved = await resolveOrgSlug(rawOrgSlug)
