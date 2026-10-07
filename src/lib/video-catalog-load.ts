@@ -26,11 +26,15 @@ function readJson(file: string): unknown {
  * Loads and validates the whole catalogue from disk. Throws on the first inconsistency (unknown
  * theme, id mismatch between catalog.json and its manifest, missing script file...): a broken
  * catalogue must fail the build, not render a partial gallery.
+ *
+ * `root` defaults to the repository's `videos/`; tests pass a temporary directory to exercise a
+ * broken catalogue without ever rewriting the real files, which other test files read in parallel
+ * (#779).
  */
-export function loadVideoCatalog(): Video[] {
-  const catalog = catalogSchema.parse(readJson(path.join(videosRoot, "catalog.json")))
+export function loadVideoCatalog(root: string = videosRoot): Video[] {
+  const catalog = catalogSchema.parse(readJson(path.join(root, "catalog.json")))
   // Measured renders (videos/tools/posters.ts): optional file, shipped in the image like catalog.json.
-  const rendersFile = path.join(videosRoot, "renders.json")
+  const rendersFile = path.join(root, "renders.json")
   const renders = fs.existsSync(rendersFile) ? rendersSchema.parse(readJson(rendersFile)) : {}
 
   const ids = new Set<string>()
@@ -42,12 +46,12 @@ export function loadVideoCatalog(): Video[] {
     if (manifestSlugs.has(entry.manifest)) throw new Error(`videos/catalog.json: duplicate manifest "${entry.manifest}"`)
     manifestSlugs.add(entry.manifest)
 
-    const manifestFile = path.join(videosRoot, "manifests", `${entry.manifest}.json`)
+    const manifestFile = path.join(root, "manifests", `${entry.manifest}.json`)
     const manifest = manifestSchema.parse(readJson(manifestFile))
     if (manifest.id !== entry.id) throw new Error(`${manifestFile}: id must be "${entry.id}"`)
     if (manifest.slug !== entry.manifest) throw new Error(`${manifestFile}: slug must be "${entry.manifest}"`)
 
-    const scriptFile = path.join(videosRoot, "scripts", `${entry.manifest}.md`)
+    const scriptFile = path.join(root, "scripts", `${entry.manifest}.md`)
     const script = parseScript(fs.readFileSync(scriptFile, "utf8"))
     if (script.stableId && script.stableId !== entry.id) {
       throw new Error(`${scriptFile}: script's stable id "${script.stableId}" differs from catalogue id "${entry.id}"`)
@@ -59,7 +63,7 @@ export function loadVideoCatalog(): Video[] {
     // sum of the manifest's fallback durations.
     const render = renders[entry.manifest]
     let durationMs = manifest.segments.reduce((sum, s) => sum + s.fallbackDurationMs, 0)
-    const audioMetadataFile = path.join(videosRoot, "output", entry.manifest, "audio-metadata.json")
+    const audioMetadataFile = path.join(root, "output", entry.manifest, "audio-metadata.json")
     if (render) {
       durationMs = render.durationMs
     } else if (fs.existsSync(audioMetadataFile)) {

@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
 import fs from "node:fs"
+import os from "node:os"
 import path from "node:path"
 import {
   parseScript,
@@ -152,20 +153,32 @@ describe("loadVideoCatalog", () => {
     }
   })
 
+  // A broken catalogue is written to a temporary directory, never over videos/catalog.json:
+  // other test files read the real catalogue in parallel workers and failed on the fake one (#779).
+  function loadBrokenCatalog(entry: Record<string, unknown>) {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "video-catalog-"))
+    try {
+      fs.writeFileSync(path.join(dir, "catalog.json"), JSON.stringify({ defaultLanguage: "fr-CH", videos: [entry] }))
+      return loadVideoCatalog(dir)
+    } finally {
+      fs.rmSync(dir, { recursive: true, force: true })
+    }
+  }
+  const brokenEntry = { ...validEntry, manifest: "does-not-exist" }
+
   it("throws when an entry references a manifest that doesn't exist", () => {
-    // loadVideoCatalog re-reads from disk each call; we can't easily corrupt the fixture here,
-    // so this documents the behaviour via a focused unit test of the failure path instead.
-    expect(() => {
-      const bad = { defaultLanguage: "fr-CH", videos: [{ id: "X", manifest: "does-not-exist", category: "x", tags: [], published: false, themes: ["decouvrir-administration"], audience: ["organisateur"], feature: "x", updatedAt: "2026-01-01", revision: 1 }] }
-      const file = path.join(videosRoot, "catalog.json")
-      const original = fs.readFileSync(file, "utf8")
-      fs.writeFileSync(file, JSON.stringify(bad))
-      try {
-        loadVideoCatalog()
-      } finally {
-        fs.writeFileSync(file, original)
-      }
-    }).toThrow()
+    expect(() => loadBrokenCatalog(brokenEntry)).toThrow(/does-not-exist\.json/)
+  })
+
+  it("throws when an entry's id isn't a stable id", () => {
+    expect(() => loadBrokenCatalog({ ...brokenEntry, id: "X" })).toThrow(/identifiant stable invalide/)
+  })
+
+  it("never rewrites the real catalogue while testing a broken one", () => {
+    const file = path.join(videosRoot, "catalog.json")
+    const before = fs.readFileSync(file, "utf8")
+    expect(() => loadBrokenCatalog(brokenEntry)).toThrow()
+    expect(fs.readFileSync(file, "utf8")).toBe(before)
   })
 })
 
