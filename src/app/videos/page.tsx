@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Metadata } from "next"
-import { filterPublishedVideos, VIDEO_LIBRARY_PUBLIC_ONLY } from "@/lib/video-catalog"
+import { filterPublishedVideos, toGalleryVideo, VIDEO_LIBRARY_PUBLIC_ONLY } from "@/lib/video-catalog"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { serializeJsonLd, videoLibraryJsonLd, videoLibraryMetadata } from "@/lib/video-seo"
 import { videoSeoContext } from "@/lib/video-seo-context"
@@ -32,7 +32,7 @@ export default function VideosPage() {
           {videos.length} tutoriel{videos.length > 1 ? "s" : ""} vidéo pour prendre en main benevol.app, par thème et par public.
         </p>
       </div>
-      <VideoGallery videos={videos} />
+      <VideoGallery videos={videos.map(toGalleryVideo)} />
     </div>
   )
 }

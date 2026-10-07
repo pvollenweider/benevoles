@@ -4,7 +4,7 @@
 import fs from "fs"
 import path from "path"
 import { describe, it, expect } from "vitest"
-import { mailtoAddress, parseFeatureBlock, parseFeaturesPage, parseSteps } from "../features-page"
+import { actionHref, mailtoAddress, parseFeatureBlock, parseFeaturesPage, parseSteps } from "../features-page"
 import { loadVideoCatalog } from "../video-catalog-load"
 import { resolveVideoReference } from "../video-catalog"
 
@@ -36,6 +36,30 @@ describe("parseFeatureBlock", () => {
     const block = parseFeatureBlock("<!-- actions -->\n- [Un](/un)\n- pas un lien\n")
     expect(block.actions).toEqual([{ label: "Un", href: "/un" }])
     expect(block.markdown).toBe("- pas un lien")
+  })
+})
+
+describe("actionHref (#759)", () => {
+  it("turns a link to a source file into the page that serves it", () => {
+    expect(actionHref("guide/premiers-pas.md")).toBe("/doc/premiers-pas")
+    expect(actionHref("guide/premiers-pas.md#la-liste")).toBe("/doc/premiers-pas#la-liste")
+    expect(actionHref("GUIDE_ADMIN.md")).toBe("/doc/admin")
+  })
+
+  it("leaves every other address as it is", () => {
+    for (const href of ["mailto:a@b.c?subject=x", "#comment", "/videos", "https://github.com/x/y"]) expect(actionHref(href)).toBe(href)
+  })
+
+  it("a source link in an actions list becomes a site link, not a file path that 404s", () => {
+    const block = parseFeatureBlock("<!-- actions -->\n- [Lire](guide/premiers-pas.md)\n")
+    expect(block.actions).toEqual([{ label: "Lire", href: "/doc/premiers-pas" }])
+  })
+
+  it("no action of FEATURES.md points at a Markdown file", () => {
+    const page = parseFeaturesPage(read("FEATURES.md"))
+    const hrefs = [page.intro, ...page.sections].flatMap((b) => b.actions.map((a) => a.href))
+    expect(hrefs.length).toBeGreaterThan(0)
+    for (const href of hrefs) expect(href, href).not.toMatch(/\.md(#|$)/)
   })
 })
 
