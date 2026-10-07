@@ -14,13 +14,16 @@ function linksOf(container: HTMLElement): [string, string | null][] {
   return within(container).getAllByRole("link").map((a) => [a.textContent!.replace(/\s+/g, " ").trim(), a.getAttribute("href")])
 }
 
-/** The column lists, each named by its visible title. */
+/** The columns: groups named by their visible title, each with one unnamed list of links. */
 function columns(): Record<string, [string, string | null][]> {
   const nav = screen.getByRole("navigation", { name: "Liens utiles" })
-  return Object.fromEntries(within(nav).getAllByRole("list").map((ul) => {
-    const title = document.getElementById(ul.getAttribute("aria-labelledby")!)!.textContent!
-    expect(ul).toHaveAccessibleName(title)
-    return [title, linksOf(ul)]
+  return Object.fromEntries(within(nav).getAllByRole("group").map((group) => {
+    const title = document.getElementById(group.getAttribute("aria-labelledby")!)!
+    expect(group).toContainElement(title)
+    expect(group).toHaveAccessibleName(title.textContent!)
+    const list = within(group).getByRole("list")
+    expect(list).not.toHaveAttribute("aria-labelledby")
+    return [title.textContent!, linksOf(list)]
   }))
 }
 
@@ -32,6 +35,10 @@ describe("PublicFooter", () => {
     expect(screen.getAllByRole("contentinfo")).toHaveLength(1)
     expect(screen.getAllByRole("navigation")).toHaveLength(1)
     expect(screen.queryAllByRole("heading")).toHaveLength(0)
+    // Title ids prefixed with the variant, unique on the page.
+    const ids = [...document.querySelectorAll("[role=group]")].map((g) => g.getAttribute("aria-labelledby"))
+    expect(ids.every((id) => id!.startsWith(`footer-${variant}-`))).toBe(true)
+    expect(new Set(ids).size).toBe(ids.length)
     // No separate version text: the version is said once, in the GitHub link.
     expect(document.body.textContent!.split(`v${pkg.version}`)).toHaveLength(2)
   })

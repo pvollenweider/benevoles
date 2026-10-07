@@ -10,7 +10,7 @@ import GitHubMark from "./GitHubMark"
  * rest and full on hover; at least 24 px tall (WCAG 2.5.8); the focus outline of DESIGN.md §4.
  */
 const linkClass =
-  "inline-flex items-center min-h-6 rounded underline underline-offset-2 decoration-gray-300 dark:decoration-gray-600 hover:decoration-current hover:text-gray-900 dark:hover:text-gray-100 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
+  "inline-flex items-center min-h-6 max-w-full break-words rounded underline underline-offset-2 decoration-gray-300 dark:decoration-gray-600 hover:decoration-current hover:text-gray-900 dark:hover:text-gray-100 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
 
 const NEW_TAB = "(ouvre dans un nouvel onglet)"
 const REPOSITORY_URL = "https://github.com/pvollenweider/benevoles"
@@ -19,7 +19,7 @@ type FooterLink = { href: string; label: string; external?: boolean; github?: bo
 type FooterColumn = { id: string; title: string; links: readonly FooterLink[] }
 
 const LEGAL: FooterColumn = {
-  id: "footer-legal",
+  id: "legal",
   title: "Informations légales",
   links: [
     { href: "/legal/privacy", label: "Confidentialité" },
@@ -31,7 +31,7 @@ const LEGAL: FooterColumn = {
 /** benevol.app's own pages: help, the project (sign-in, code, support), legal. */
 export const FOOTER_SITE_COLUMNS: readonly FooterColumn[] = [
   {
-    id: "footer-help",
+    id: "help",
     title: "Aide",
     links: [
       { href: "/doc", label: "Documentation" },
@@ -40,7 +40,7 @@ export const FOOTER_SITE_COLUMNS: readonly FooterColumn[] = [
     ],
   },
   {
-    id: "footer-project",
+    id: "project",
     title: "benevol.app",
     links: [
       { href: "/admin/login", label: "Espace organisateur" },
@@ -54,7 +54,7 @@ export const FOOTER_SITE_COLUMNS: readonly FooterColumn[] = [
 /** An organisation's pages: what its volunteers (and its organisers) need, then legal. */
 export const FOOTER_EVENT_COLUMNS: readonly FooterColumn[] = [
   {
-    id: "footer-help",
+    id: "help",
     title: "Aide",
     links: [
       { href: "/doc/benevole", label: "Guide bénévole" },
@@ -78,7 +78,9 @@ function FooterAnchor({ link }: { link: FooterLink }) {
 /**
  * The footer of the public pages, server-rendered: one `<footer>` (contentinfo), one `<nav>`
  * « Liens utiles », and in it one column per group, its visible title a `<p>` (not a heading: the
- * columns stay out of the page outline) that names its list (`<ul aria-labelledby>`). Columns
+ * columns stay out of the page outline) that names its column (`<div role="group"
+ * aria-labelledby>`: NVDA says the name when Tab enters it, VoiceOver says it once). The title ids
+ * are `footer-<variant>-<column>`: unique, one footer per page. Columns
  * side by side from `sm`, two per row on a phone, lists left-aligned. Two variants:
  * - `site`, benevol.app's own pages (home, features, documentation, videos, changelog,
  *   accessibility): Aide, benevol.app (sign-in, code with the version, support), Informations légales;
@@ -93,11 +95,11 @@ export default function PublicFooter({ variant = "event" }: { variant?: "site" |
   const width = variant === "site" ? "max-w-3xl" : "max-w-xl"
   return (
     <footer className={`${width} mx-auto mt-12 pt-8 pb-8 border-t border-gray-200 dark:border-gray-800 text-sm text-gray-600 dark:text-gray-300`}>
-      <nav aria-label="Liens utiles" className={`grid grid-cols-2 gap-x-8 gap-y-6 ${variant === "site" ? "sm:grid-cols-3" : ""}`}>
+      <nav aria-label="Liens utiles" className={`grid grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-6 ${variant === "site" ? "sm:grid-cols-3" : ""}`}>
         {columns.map((col) => (
-          <div key={col.id}>
-            <p id={col.id} className="font-semibold text-gray-900 dark:text-gray-100">{col.title}</p>
-            <ul aria-labelledby={col.id} className="mt-2 space-y-1">
+          <div key={col.id} role="group" aria-labelledby={`footer-${variant}-${col.id}`} className="min-w-0">
+            <p id={`footer-${variant}-${col.id}`} className="font-semibold text-gray-900 dark:text-gray-100">{col.title}</p>
+            <ul className="mt-2 space-y-1">
               {col.links.map((l) => (
                 <li key={l.href}><FooterAnchor link={l} /></li>
               ))}
