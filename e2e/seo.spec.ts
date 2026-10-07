@@ -16,7 +16,8 @@ const BASE = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replac
 const PREVIEWER = { "user-agent": "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)" }
 
 const headOf = (html: string) => html.slice(0, html.indexOf("</head>"))
-const decode = (s: string | undefined) => s?.replace(/&amp;/g, "&").replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"')
+// &amp; last, so that an escaped entity (&amp;quot;) is not decoded twice.
+const decode = (s: string | undefined) => s?.replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&")
 const meta = (head: string, attr: "name" | "property", key: string) => decode(head.match(new RegExp(`<meta ${attr}="${key}" content="([^"]*)"`))?.[1])
 
 /** Every @type of the page's JSON-LD documents, each of which must parse. */
@@ -44,8 +45,9 @@ for (const { path, types, ogType } of PAGES) {
   test(`${path} gives an absolute canonical, a fetchable social card and structured data`, async ({ request }) => {
     const { html, head } = await fetchPage(request, path)
     const canonical = head.match(/<link rel="canonical" href="([^"]*)"/)?.[1]
-    expect(canonical).toBe(`${BASE}${path}`)
-    expect(meta(head, "property", "og:url")).toBe(canonical)
+    // Next.js writes the root URL without its trailing slash: same address for search engines.
+    expect(canonical).toBe(path === "/" ? BASE : `${BASE}${path}`)
+    expect(meta(head, "property", "og:url")?.replace(/\/$/, "")).toBe(canonical?.replace(/\/$/, ""))
     expect(meta(head, "property", "og:type")).toBe(ogType)
     expect(meta(head, "property", "og:locale")).toBe("fr_CH")
     expect(meta(head, "property", "og:site_name")).toBe("benevol.app")
