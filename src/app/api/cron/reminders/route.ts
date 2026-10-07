@@ -180,12 +180,13 @@ async function run(req: Request) {
     reportError("outbox.cron_deliver")(e)
     return null
   })
-  // Queue health (#316): alert when something is stuck or gave up.
+  // Queue health (#316): alert when delivery is stuck. A row that gave up was already reported
+  // when it failed; alerting on it here too would repeat every hour for a day.
   const outboxStatus = await outboxHealth(now).catch((e) => {
     reportError("outbox.health")(e)
     return null
   })
-  if (outboxStatus && !outboxStatus.healthy) {
+  if (outboxStatus?.stuck) {
     Sentry.captureMessage("Notification outbox unhealthy", { level: "warning", extra: { ...outboxStatus } })
   }
 

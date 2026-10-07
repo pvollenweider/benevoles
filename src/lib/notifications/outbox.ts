@@ -202,15 +202,21 @@ export type OutboxHealth = {
   oldestPendingMinutes: number | null
   staleClaims: number
   healthy: boolean
+  /**
+   * Delivery is stuck (abandoned claim, or a row pending too long): what the hourly cron alerts on.
+   * A row that gave up is already reported once when it fails (outbox.gave_up.*), so counting it
+   * again would repeat the same alert every hour for a day.
+   */
+  stuck: boolean
 }
 
 /** Alert thresholds (#316): a pending email older than this means delivery is stuck. */
 export const MAX_PENDING_AGE_MINUTES = 120
 
 /**
- * Health of the queue (#316), reported by the hourly cron and sent to Sentry when unhealthy:
- * rows that gave up in the last day, age of the oldest undelivered row, claims abandoned by a
- * crashed delivery.
+ * Health of the queue (#316): rows that gave up in the last day, age of the oldest undelivered
+ * row, claims abandoned by a crashed delivery. The health page shows it all; the hourly cron sends
+ * it to Sentry only when delivery is stuck.
  */
 export async function outboxHealth(now: Date = new Date()): Promise<OutboxHealth> {
   const [failedLastDay, oldestPending, staleClaims] = await Promise.all([
@@ -223,6 +229,7 @@ export async function outboxHealth(now: Date = new Date()): Promise<OutboxHealth
     prisma.notificationOutbox.count({ where: { status: "sending", claimedAt: { lt: new Date(now.getTime() - STALE_CLAIM_MS) } } }),
   ])
   const oldestPendingMinutes = oldestPending ? Math.floor((now.getTime() - oldestPending.createdAt.getTime()) / 60000) : null
-  const healthy = failedLastDay === 0 && staleClaims === 0 && (oldestPendingMinutes ?? 0) <= MAX_PENDING_AGE_MINUTES
-  return { failedLastDay, oldestPendingMinutes, staleClaims, healthy }
+  const stuck = staleClaims > 0 || (oldestPendingMinutes ?? 0) > MAX_PENDING_AGE_MINUTES
+  const healthy = failedLastDay === 0 && !stuck
+  return { failedLastDay, oldestPendingMinutes, staleClaims, healthy, stuck }
 }
