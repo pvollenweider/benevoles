@@ -27,4 +27,10 @@ describe("PublicFooter", () => {
     render(<PublicFooter />)
     expect(screen.getByRole("link", { name: "Tutoriels vidéo" })).toHaveAttribute("href", "/videos")
   })
+
+  // #757: what changed, version by version, rendered from CHANGELOG.md.
+  it("links the public changelog", () => {
+    render(<PublicFooter />)
+    expect(screen.getByRole("link", { name: "Nouveautés" })).toHaveAttribute("href", "/nouveautes")
+  })
 })

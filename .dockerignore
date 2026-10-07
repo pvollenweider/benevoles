@@ -14,6 +14,7 @@ docker-compose*.yml
 !ACCESSIBILITE.md
 !ACCORD-SOUS-TRAITANCE.md
 !SOUS-TRAITANTS.md
+!CHANGELOG.md
 !GUIDE_ADMIN.md
 !GUIDE_BENEVOLE.md
 # The documentation units (#649, src/lib/doc-units.ts), rendered by /doc/<slug>.

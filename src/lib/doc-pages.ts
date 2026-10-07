@@ -44,6 +44,17 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     guide: false,
   },
   {
+    // Rendered from the released versions of CHANGELOG.md (#757, src/lib/changelog.ts).
+    path: "/nouveautes",
+    title: "Nouveautés",
+    summary: "Ce qui a changé dans benevol.app, version par version, la plus récente en premier.",
+    metaTitle: "Nouveautés, version par version",
+    metaDescription: "Ce qui change dans benevol.app, version par version : nouvelles fonctionnalités, améliorations et corrections, en clair, avec leur date de mise en ligne.",
+    source: "CHANGELOG.md",
+    priority: 0.5,
+    guide: false,
+  },
+  {
     path: "/accessibilite",
     title: "Accessibilité",
     summary: "Ce qui a été vérifié pour l'accessibilité, comment, et les limites connues.",

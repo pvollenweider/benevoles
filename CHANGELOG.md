@@ -3,6 +3,10 @@
 Toutes les modifications notables de ce projet sont documentées ici.
 Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
+<!-- Source de la page publique /nouveautes : versions publiées seulement, sections publiques
+     seulement, et une puce terminée par le commentaire HTML « interne » en est écartée.
+     Convention dans CONTRIBUTING.md, section « Le CHANGELOG et la page Nouveautés ». -->
+
 ---
 
 ## [Unreleased]
@@ -11,6 +15,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 - **Accueil : bien démarrer en un clic** (#764) : la page d'accueil de benevol.app propose, dès le premier écran et à côté de « Demander un espace », un lien « Guide : créer son premier événement » vers le parcours pas à pas, et un bloc « Bien démarrer » avec les fiches essentielles dans l'ordre (créer son premier événement, configurer les créneaux, ouvrir les inscriptions, partager le lien, suivre les inscriptions), puis le guide bénévole et toute la documentation.
 - **« Créer son premier événement », un parcours en une page** (#758) : la nouvelle fiche `/doc/creer-son-premier-evenement` mène un nouvel organisateur, en huit étapes courtes, de la demande d'espace au lien d'inscription partagé (créer l'événement, poser les postes et les créneaux, ouvrir les inscriptions, publier, faire une inscription de test, partager le lien, suivre les inscriptions), avec la vidéo « Préparer, publier et partager un planning bénévole » ; chaque étape renvoie à la fiche qui la détaille. Elle ouvre le thème « Démarrer » et le guide administrateur, et `/doc` ainsi que la page Fonctionnalités y renvoient.
+- **Page « Nouveautés »** (#757) : `/nouveautes` dit ce qui a changé dans benevol.app, version par version, la plus récente en premier, chacune avec sa date et ce qu'elle apporte, en clair, sans passer par GitHub. Elle est rendue directement depuis ce journal des versions : les versions publiées seulement, sans les sections techniques (mise à jour d'une installation, outils de développement). Liens depuis le pied de page, la documentation et la page Fonctionnalités.
 - **Page « Fonctionnalités » repensée pour décider vite** : `/fonctionnalites` ne déroule plus une longue liste, elle répond en quelques minutes à « est-ce fait pour nous ? ». La promesse et deux boutons (« Demander un espace », un email déjà rédigé, et « Voir comment ça marche »), une image du produit et la vidéo de présentation à ouvrir sur place ; un sommaire « Sur cette page » ; trois étapes ; puis chaque besoin (préparer le planning, inscrire les bénévoles, garder chacun informé, voir où il manque du monde, tenir le jour J, après l'événement, vos membres et leurs données) avec ses avantages, une image tirée du tutoriel vidéo, la vidéo elle-même et les fiches de documentation qui en disent plus. Suivent ce qui fait la confiance (gratuit, open source, hébergé en France, aucun cookie de pistage, cadre écrit pour les données, accessibilité), un encadré pour le bénévole arrivé là par erreur, « Démarrer » avec le même bouton, et ce que benevol.app ne fait pas, volontairement. Texte en 16 px et lignes plus courtes. `FEATURES.md` reste la seule source de la page.
 - **Page introuvable digne de ce nom** : une adresse inconnue n'affiche plus la page 404 anglaise par défaut, mais « Cette page est tombée à l'eau. », un événement annulé pour cause de pluie (avec une pluie qui s'arrête quand le système demande de réduire les animations), en clair ou en sombre selon le système, et les liens utiles : accueil, fonctionnalités, documentation, guides bénévole et organisateurs, tutoriels vidéo et espace organisateur. Sur l'adresse d'une organisation, le lien principal ramène à ses événements. Un événement inconnu ou non publié répond désormais par cette page (et un vrai code 404) au lieu de « Événement introuvable. ».
 - **Bibliothèque de tutoriels vidéo publique et référencée** : `/videos` et chaque vidéo publiée (`/videos/<ID>`) sont désormais indexables par les moteurs de recherche, avec une adresse canonique, des données structurées `VideoObject` (titre, résumé, miniature, durée réelle, date, fichier vidéo, transcription complète) et un fil d'Ariane, et un sitemap vidéo dédié (`/video-sitemap.xml`, cité dans `robots.txt`). Un lien partagé (WhatsApp, X, LinkedIn, Facebook...) s'affiche avec l'image de la vidéo, son titre et sa description ; la galerie a sa propre image d'aperçu. Les vidéos « À venir » restent hors index. Lien « Tutoriels vidéo » dans le pied de page, sur `/doc` et sur `/fonctionnalites`.
@@ -352,7 +357,7 @@ Version majeure : une installation 1.x ne se met pas à jour sans préparation. 
 - **Âge minimum** : l'âge est désormais vérifié à la date du créneau et non à la date d'inscription ; un bénévole qui atteint l'âge requis entre son inscription et le créneau n'est plus refusé.
 - **Super admin sans organisation sélectionnée** : l'espace admin ne bascule plus silencieusement sur la plus ancienne organisation ; il renvoie vers la liste des organisations pour en choisir une. L'en-tête affiche aussi désormais l'organisation réellement sélectionnée (il affichait toujours la plus ancienne).
 - **Export PDF** : les heures qui passent minuit s'affichaient en brut au-delà de 23h (« 24h », « 26h ») au lieu de repartir à zéro ; la colonne « Libellé » s'affichait vide quand aucun créneau du jour n'avait de libellé distinct de son poste.
-- **Sentry** : filtre le bruit bénin « The destination stream closed early » (abandon client, pas une erreur applicative).
+- **Sentry** : filtre le bruit bénin « The destination stream closed early » (abandon client, pas une erreur applicative). <!-- interne -->
 
 ### Sécurité
 
@@ -411,7 +416,7 @@ Version majeure : une installation 1.x ne se met pas à jour sans préparation. 
 - **Conflits d'horaires** : la détection de chevauchement comprend maintenant les créneaux qui passent minuit et les chevauchements entre deux dates (côté bénévole et côté administrateur).
 - **Lien d'invitation admin expiré** : la tâche planifiée de nettoyage effaçait le jeton d'invitation dès son expiration (7 jours), avant même que la personne invitée n'ait cliqué dessus ; le lien affichait alors le même message générique « invalide ou déjà utilisé » qu'un lien réellement déjà utilisé, au lieu du message « Ce lien a expiré » prévu pour ce cas. Le nettoyage ne touche plus ce jeton avant expiration ; il continue d'être supprimé avec le compte inactif au bout de 30 jours.
 - **Sauvegardes de la base de données** : chaque exécution du backup nocturne échouait silencieusement depuis sa création (début mai 2026) — l'image utilisée n'a jamais fourni la commande `openssl`, et l'ancien script ne détectait pas l'échec du chiffrement caché derrière un tube (`pg_dump | gzip | openssl`) ; 144 jours de fichiers de sauvegarde vides, sans alerte. Le script installe désormais `openssl`, vérifie la taille du dump, et re-déchiffre chaque fichier produit pour confirmer qu'il correspond au dump avant de le conserver ; toute anomalie fait échouer le job au lieu de produire un fichier vide. Le manifeste (`k8s/cronjob-backup.yaml`) est maintenant appliqué à chaque déploiement comme les autres tâches planifiées, ce qui n'était pas le cas. Voir `docs/deploiement.md` : aucune sauvegarde antérieure au 22/09/2026 n'est utilisable.
-- **Sentry** : n'est plus actif qu'en production. Le développement local et les tests E2E chargeaient le vrai DSN depuis `.env` et envoyaient leurs erreurs (environnement `development`) dans le projet Sentry de production. Le bruit de l'extension navigateur MetaMask (« Failed to connect to MetaMask », injecté par l'extension elle-même sur chaque page, sans rapport avec l'application) est maintenant filtré, comme les autres extensions déjà exclues (`__firefox__`, DarkReader, `window.ethereum`).
+- **Sentry** : n'est plus actif qu'en production. Le développement local et les tests E2E chargeaient le vrai DSN depuis `.env` et envoyaient leurs erreurs (environnement `development`) dans le projet Sentry de production. Le bruit de l'extension navigateur MetaMask (« Failed to connect to MetaMask », injecté par l'extension elle-même sur chaque page, sans rapport avec l'application) est maintenant filtré, comme les autres extensions déjà exclues (`__firefox__`, DarkReader, `window.ethereum`). <!-- interne -->
 
 ### Accessibilité
 
@@ -434,8 +439,8 @@ Version majeure : une installation 1.x ne se met pas à jour sans préparation. 
 - **Page publique d'une organisation** : les événements terminés ne s'affichent plus comme ouverts avec des places à pourvoir ; les badges de statut suivent `DESIGN.md` (places à pourvoir en vert, complet en bleu) ; la page d'accueil du site n'exécute plus la requête sur tous les événements pour afficher la page de présentation ; le pied de page a un lien « Espace organisateur » vers la connexion.
 - **Membres** : le bouton « Importer un fichier » de l'état vide menait à une page inexistante (404) ; il ouvre maintenant la fenêtre d'import.
 - **Accessibilité** : les fenêtres « Envoyer le rappel » et « Inviter des membres » ont une vraie sémantique de dialogue (titre lié, Échap, piège de focus, retour du focus, verrou de défilement) via un composant partagé ; le texte gris trop clair (2,5:1) est remplacé sur 22 fichiers ; `DESIGN.md` réserve « Encre Fantôme » au décoratif.
-- **Infrastructure** : les sondes Kubernetes de l'application interrogent `/api/health` avec des délais de 3 et 5 s (des échecs par délai apparaissaient pendant les déploiements) ; la sonde Postgres passe par un shell (elle journalisait `FATAL: role "root" does not exist` toutes les 5 s) ; l'image du webhook Gandi se construit de nouveau (Go 1.25) et est validée à chaque pull request.
-- **Données de démonstration** : les dates du seed correspondent aux jours annoncés (samedi 13 et dimanche 14 juin 2026).
+- **Infrastructure** : les sondes Kubernetes de l'application interrogent `/api/health` avec des délais de 3 et 5 s (des échecs par délai apparaissaient pendant les déploiements) ; la sonde Postgres passe par un shell (elle journalisait `FATAL: role "root" does not exist` toutes les 5 s) ; l'image du webhook Gandi se construit de nouveau (Go 1.25) et est validée à chaque pull request. <!-- interne -->
+- **Données de démonstration** : les dates du seed correspondent aux jours annoncés (samedi 13 et dimanche 14 juin 2026). <!-- interne -->
 - **Réglages de l'organisation** : les formulaires « Nom de l'organisation » et « Identifiant public (slug) » ont désormais des étiquettes, des textes d'aide, des messages de succès et d'erreur annoncés aux lecteurs d'écran, des contrastes conformes et des noms explicites sur les boutons de suppression des anciens identifiants. L'adresse affichée par le formulaire du slug est calculée côté serveur, ce qui supprime une erreur d'hydratation React sur cette page.
 
 ### Sécurité
@@ -564,7 +569,7 @@ Version majeure : une installation 1.x ne se met pas à jour sans préparation. 
 - **Page événement admin** : la mention « X manquants » est remplacée par une barre de progression colorée (places pourvues / capacité).
 - **Rappels automatiques** : une tâche planifiée horaire envoie les rappels J-2/J-1/jour J, distincts du rappel manuel ponctuel.
 - **Emails** : structure HTML complète (carte blanche sur fond gris, texte d'aperçu avant ouverture) sur tous les templates ; tutoiement unifié côté bénévole.
-- **Monitoring d'erreurs (Sentry)** ajouté.
+- **Monitoring d'erreurs (Sentry)** ajouté. <!-- interne -->
 
 ---
 
@@ -631,14 +636,14 @@ Version majeure : une installation 1.x ne se met pas à jour sans préparation. 
 - **Communications automatiques** : rappels J-2, J-1 et Jour J envoyés par cron (`/api/cron/reminders`) ; notification automatique aux bénévoles en cas d'annulation ou de modification d'horaires d'un créneau
 - **Rappel manuel** : bouton d'envoi depuis la page de l'événement ; chaque bénévole reçoit un seul email regroupant tous ses créneaux
 - **QR code** : téléchargement PNG/SVG du QR code de la page publique depuis la page admin de l'événement
-- **20 tests d'isolation cross-tenant** (Vitest) — vérifient qu'aucune route ne divulgue ou ne modifie des données d'une autre organisation
+- **20 tests d'isolation cross-tenant** (Vitest) — vérifient qu'aucune route ne divulgue ou ne modifie des données d'une autre organisation <!-- interne -->
 
 ### Modifié
 
-- Middleware reécrit pour protéger `/super-admin/*` (rôle requis) en plus de `/admin/*` (authentification)
+- Middleware reécrit pour protéger `/super-admin/*` (rôle requis) en plus de `/admin/*` (authentification) <!-- interne -->
 - Lien « Vue publique » affiché uniquement si l'événement est publié
-- Migration Prisma unique (squashée) : les 6 migrations précédentes ont été consolidées en une seule migration `init`
-- Variables d'environnement : `ADMIN_EMAIL` / `ADMIN_PASSWORD` supprimées ; `CRON_SECRET` ajouté
+- Migration Prisma unique (squashée) : les 6 migrations précédentes ont été consolidées en une seule migration `init` <!-- interne -->
+- Variables d'environnement : `ADMIN_EMAIL` / `ADMIN_PASSWORD` supprimées ; `CRON_SECRET` ajouté <!-- interne -->
 
 ---
 
@@ -681,7 +686,7 @@ Première version bêta publique. Toutes les fonctionnalités de base sont stabl
 - **Exports** : Excel (`.xlsx`) et PDF avec Gantt + tableaux récapitulatifs
 - **Emails** : confirmation bénévole + notification admin optionnelle (SMTP Nodemailer)
 - **Auth admin** : NextAuth v5, credentials, session sécurisée
-- **CI/CD** : GitHub Actions → build Docker → déploiement Kubernetes automatique
+- **CI/CD** : GitHub Actions → build Docker → déploiement Kubernetes automatique <!-- interne -->
 
 ### Infrastructure
 
@@ -695,7 +700,7 @@ Première version bêta publique. Toutes les fonctionnalités de base sont stabl
 
 - Scroll horizontal mobile : passage d'un positionnement en % (qui ne scrollait pas) à des pixels absolus
 - Auth derrière reverse proxy : `AUTH_TRUST_HOST` + `AUTH_URL` pour NextAuth v5
-- Token Prisma WASM dans l'image Docker standalone
+- Token Prisma WASM dans l'image Docker standalone <!-- interne -->
 - Contrainte unique `editToken` lors d'inscriptions multi-créneaux
 
 ---

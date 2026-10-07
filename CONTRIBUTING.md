@@ -200,6 +200,16 @@ Pour toute section nouvelle ou réécrite des guides (`GUIDE_ADMIN.md`, pages de
 - **L'état actuel seulement** : décrire ce que fait le produit aujourd'hui, jamais « depuis la version X » ni « nouveau » ; l'historique va dans `CHANGELOG.md`.
 - **Un seul registre par page**, celui de son public (`PRODUCT.md`) : « vous » dans le guide administrateur et les pages pour les organisateurs ; « tu » dans les pages pour les bénévoles, comme dans le produit, ses emails et ses vidéos ; une page pour les deux rôles explique une fois, puis « Côté organisation » (vous) et « Côté bénévole » (tu).
 
+### Le CHANGELOG et la page Nouveautés
+
+`CHANGELOG.md` est aussi la source de la page publique `/nouveautes` (`src/lib/changelog.ts`), écrite pour les organisateurs et les bénévoles :
+
+- **Versions publiées seulement** : un titre `## [x.y.z] — AAAA-MM-JJ`. `[Unreleased]` n'est jamais affiché ; un titre sans numéro ou sans date valide est ignoré, son contenu avec lui.
+- **Sections publiques** : « En bref », « Ajouté », « Modifié », « Amélioré », « Corrigé », « Corrections notables », « Supprimé », « Sécurité », « Accessibilité », « Fonctionnalités » (un titre qui commence ainsi compte : « Ajouté (repris de … ) »). Ce qui sert à installer ou développer benevol.app va dans « Mise à jour depuis x », « Infrastructure », « Refactoring » ou « Documentation », qui restent sur GitHub.
+- **Une puce interne dans une section publique** (un test, un réglage de suivi des erreurs) se termine par `<!-- interne -->` : invisible sur GitHub, écartée de la page.
+- **Pas de titre avant la première section d'une version** : un `####` placé là (entre `## [x.y.z]` et le premier `###`) est rendu en paragraphe gras, pour ne pas sauter un niveau de titre ; les `####` vont dans une section.
+- **L'ancre d'une version** est son numéro (`/nouveautes#2.1.0`) : ne pas renommer une version publiée.
+
 ## Publier une nouvelle version
 
 Checklist à suivre à chaque changement de version :

@@ -122,6 +122,7 @@ En savoir plus : [personnaliser l'organisation](guide/personnaliser-l-organisati
 - **Un cadre écrit pour vos données** : un [accord de sous-traitance](ACCORD-SOUS-TRAITANCE.md) (RGPD et loi suisse) et la [liste des sous-traitants](SOUS-TRAITANTS.md), avec leur localisation et leurs garanties.
 - **Chaque organisation est séparée**, et les liens personnels restent privés : ils sont envoyés par email, et un lien perdu se redemande avec son adresse.
 - **Pensé pour tous** : inscription et administration conçues pour le clavier et les lecteurs d'écran ; la [déclaration d'accessibilité](ACCESSIBILITE.md) dit ce qui est testé et les limites connues.
+- **Ce qui change, en clair** : les [nouveautés](CHANGELOG.md) disent ce que chaque version apporte, avec sa date.
 
 ## Se former
 

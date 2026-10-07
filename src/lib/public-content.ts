@@ -10,6 +10,8 @@ import { resolveVideoReference, videoMediaUrls, type Video } from "@/lib/video-c
 import { parseFeaturesPage, type FeatureAction, type FeatureBlock, type FeatureImage, type FeatureStep } from "@/lib/features-page"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import type { DocUnit } from "@/lib/doc-units"
+import { formatReleaseDate, parseChangelog, repositoryLinks } from "@/lib/changelog"
+import { REPOSITORY_URL } from "@/lib/structured-data"
 
 // The catalogue doesn't change while the server runs (it's in the image), so production reads it
 // once; in development it's read again on each render, so editing videos/catalog.json shows up.
@@ -136,4 +138,34 @@ export function renderFeaturesPage(mediaBaseUrl?: string | null): RenderedFeatur
     intro: render(page.intro),
     sections: page.sections.map((s) => ({ ...render(s), heading: s.heading, id: s.id, steps: s.steps })),
   }
+}
+
+/** A released version as /nouveautes draws it: its date for people, its intro and sections as HTML. */
+export type RenderedRelease = {
+  version: string
+  /** ISO date, for <time dateTime>. */
+  date: string
+  /** « 6 octobre 2026 ». */
+  dateLabel: string
+  introHtml: string
+  sections: { title: string; html: string }[]
+}
+
+/**
+ * CHANGELOG.md as /nouveautes shows it (#757): its released versions, newest first, public
+ * sections only (src/lib/changelog.ts). Links between sources become site links, links to other
+ * files of the repository GitHub links (they aren't on the site); the headings
+ * inside a section (#### in the 2.0.0 notes) keep their depth under the section's <h3>, without
+ * ids, which would repeat from one version to the next.
+ */
+export function renderChangelog(): RenderedRelease[] {
+  const raw = fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), "CHANGELOG.md"), "utf-8")
+  const html = (markdown: string) => (markdown ? renderEventPageMarkdown(repositoryLinks(linkSourcesToRoutes(markdown), REPOSITORY_URL), { shiftHeadings: false }) : "")
+  return parseChangelog(raw).map((r) => ({
+    version: r.version,
+    date: r.date,
+    dateLabel: formatReleaseDate(r.date),
+    introHtml: html(r.intro),
+    sections: r.sections.map((s) => ({ title: s.title, html: html(s.markdown) })),
+  }))
 }
