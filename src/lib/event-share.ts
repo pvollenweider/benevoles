@@ -26,13 +26,14 @@ export type EventForMetadata = Visibility & {
 }
 
 /**
- * The event's own description as one plain line: Markdown markers and line breaks removed,
+ * The event's own description as one plain line: Markdown markers, HTML tags and line breaks removed,
  * whitespace collapsed, cut on a word boundary with « … » past `max` characters. Empty when
  * nothing readable is left.
  */
 export function previewText(text: string | null | undefined, max = PREVIEW_DESCRIPTION_MAX): string {
   if (!text) return ""
   const plain = text
+    .replace(/<[^>]*>/g, " ") // raw HTML tags (Markdown allows them)
     .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1") // images: keep the alt text
     .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1") // links: keep the label
     .replace(/^\s{0,3}(#{1,6}\s+|>\s?|[-*+]\s+|\d+[.)]\s+)/gm, "") // headings, quotes, list items
@@ -66,9 +67,31 @@ export function eventDateRange(start: Date, end: Date): string {
   return `du ${day(start, full)} au ${day(end, full)}`
 }
 
-/** The event description, else « {organisation} cherche des bénévoles pour {événement}, du … au … ». */
+/** Search engines show about this many characters of a page's meta description. */
+export const META_DESCRIPTION_MAX = 160
+
+const SIGN_UP_INVITE = "Choisissez vos créneaux et inscrivez-vous en ligne, sans créer de compte."
+
+/** Ends the sentence with a full stop unless it already ends with one (or with « … »). */
+const sentence = (s: string) => (/[.!?…]$/.test(s) ? s : `${s}.`)
+
+/**
+ * The meta description of a published event page, also its link preview (#564, #773): one plain
+ * line of at most 160 characters, from the event's public data only (description, title, dates,
+ * organisation). The longest of these that fits:
+ *   - with a description: « {description}. Bénévoles recherchés du … au …. », else the description alone;
+ *   - without: « {organisation} cherche des bénévoles pour {événement}, du … au …. Choisissez vos
+ *     créneaux et inscrivez-vous en ligne, sans créer de compte. », else its first sentence, cut
+ *     on a word boundary if the title is very long.
+ * No remaining places (stale in caches) and nothing personal.
+ */
 export function eventShareDescription(e: Pick<EventForMetadata, "title" | "description" | "startDate" | "endDate" | "organizationName">): string {
-  return previewText(e.description) || `${e.organizationName} cherche des bénévoles pour ${e.title}, ${eventDateRange(e.startDate, e.endDate)}.`
+  const max = META_DESCRIPTION_MAX
+  const dates = eventDateRange(e.startDate, e.endDate)
+  const own = previewText(e.description, max)
+  const lead = `${e.organizationName} cherche des bénévoles pour ${e.title}, ${dates}.`
+  const candidates = own ? [`${sentence(own)} Bénévoles recherchés ${dates}.`, own] : [`${lead} ${SIGN_UP_INVITE}`, lead]
+  return candidates.find((c) => c.length <= max) ?? previewText(candidates[candidates.length - 1], max)
 }
 
 /**
@@ -99,6 +122,22 @@ export function eventPageMetadata(
       images: [image],
     },
     twitter: { card: "summary_large_image", title: e.title, description, images: [image] },
+    ...(robots ? { robots } : {}),
+  }
+}
+
+/**
+ * Metadata of an event's information page (/<event>/<page>): « {page} · {événement} » as title,
+ * the page's own text as description, else the event's (#773). Same visibility rules as the
+ * event page: only a published event gives anything away, an unlisted one stays noindex, a draft
+ * or an archived one gets noindex alone, an unknown event or page nothing.
+ */
+export function eventInfoPageMetadata(e: EventForMetadata | null, page: { title: string; content: string } | null): Metadata {
+  const robots = robotsFor(e)
+  if (!e || e.publicStatus !== "published" || !page) return robots ? { robots } : {}
+  return {
+    title: `${page.title} · ${e.title}`,
+    description: previewText(page.content, META_DESCRIPTION_MAX) || eventShareDescription(e),
     ...(robots ? { robots } : {}),
   }
 }

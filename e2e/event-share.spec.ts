@@ -12,6 +12,9 @@ const ORG_ADMIN_PASSWORD = process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-pass
 // A user agent Next.js treats as an HTML-limited bot: the metadata is rendered in <head>, as
 // WhatsApp, Facebook or a newsletter tool would read it.
 const PREVIEWER = { "user-agent": "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)" }
+// An ordinary browser (Lighthouse 13 sends this one, without « Chrome-Lighthouse »): Next.js may
+// stream its metadata into the <body>, where Lighthouse doesn't look (#773).
+const BROWSER = { "user-agent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36" }
 
 const headOf = (html: string) => html.slice(0, html.indexOf("</head>"))
 const metaContent = (head: string, attr: "name" | "property", key: string) =>
@@ -42,10 +45,12 @@ test("a published event has a rich link preview and a copyable link; a draft has
   expect(shift.ok()).toBeTruthy()
   expect((await page.request.patch(`/api/admin/events/${event.id}`, { data: { publicStatus: "published" } })).ok()).toBeTruthy()
 
-  // Published, no description: the fallback sentence, canonical, Open Graph and Twitter card.
+  // Published, no description: the fallback sentence (with the sign-up one when it fits in 160
+  // characters), canonical, Open Graph and Twitter card.
   const head = headOf(await (await page.request.get(`/${event.slug}?org=default`, { headers: PREVIEWER })).text())
   const description = metaContent(head, "name", "description")
-  expect(description).toMatch(new RegExp(`cherche des bénévoles pour ${title}, du 6 au 8 juin 2031\\.$`))
+  expect(description).toMatch(new RegExp(`cherche des bénévoles pour ${title}, du 6 au 8 juin 2031\\.( Choisissez vos créneaux et inscrivez-vous en ligne, sans créer de compte\\.)?$`))
+  expect(description!.length).toBeLessThanOrEqual(160)
   expect(metaContent(head, "property", "og:title")).toBe(title)
   expect(metaContent(head, "property", "og:description")).toBe(description)
   expect(metaContent(head, "property", "og:image")).toMatch(/\/og-image\.png$/)
@@ -54,6 +59,9 @@ test("a published event has a rich link preview and a copyable link; a draft has
   expect(canonical).toContain(`/${event.slug}`)
   expect(metaContent(head, "property", "og:url")).toBe(canonical)
   expect(metaContent(head, "name", "robots")).toBeUndefined()
+  // A browser gets the same description in the <head> too (#773).
+  const browserHead = headOf(await (await page.request.get(`/${event.slug}?org=default`, { headers: BROWSER })).text())
+  expect(metaContent(browserHead, "name", "description")).toBe(description)
 
   // Admin: copy the public link, with a visible confirmation in the status region.
   await context.grantPermissions(["clipboard-read", "clipboard-write"])
