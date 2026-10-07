@@ -82,7 +82,7 @@ function FooterAnchor({ link }: { link: FooterLink }) {
  * aria-labelledby>`: NVDA says the name when Tab enters it, VoiceOver says it once). The title ids
  * are `footer-<variant>-<column>`: unique, one footer per page. Columns
  * side by side from `sm`, two per row on a phone, lists left-aligned. Two variants:
- * - `site`, benevol.app's own pages (home, features, documentation, videos, changelog,
+ * - `site`, benevol.app's own pages (home, features, documentation, videos, changelog, legal,
  *   accessibility): Aide, benevol.app (sign-in, code with the version, support), Informations légales;
  * - `event` (default), the pages an organisation's audience sees (its events, a registration, a
  *   personal or sector leader link): Aide (volunteers' guide, organisers' sign-in) and
