@@ -99,7 +99,7 @@ export default function VideoPlayer({
           // Only set when the poster was generated (videos/renders.json): never a broken image.
           poster={mediaUrls.poster}
           aria-label={title}
-          className="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-black"
+          className="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
           style={aspectRatio ? { aspectRatio } : undefined}
           onError={handleError}
         >
