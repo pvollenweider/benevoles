@@ -8,6 +8,8 @@ const desktop = process.env.LHCI_FORM_FACTOR === "desktop"
 
 // Organisation pages are reached with `?org=default` on localhost, as in the E2E specs.
 // Pages behind a personal token (/my/<token>, leader, waitlist) are not measured here.
+// The 404 page is left out: Lighthouse stops with ERRORED_DOCUMENT_REQUEST on any 404 status,
+// so it cannot score it (its accessibility is covered by the axe-core E2E specs).
 const paths = [
   "/",
   "/fonctionnalites",
@@ -19,7 +21,6 @@ const paths = [
   "/videos/EVENT_CREATE_BLANK",
   "/accessibilite",
   "/legal/privacy",
-  "/n-existe-pas",
   "/?org=default",
   "/spectacle-cirque-2026?org=default",
   "/spectacle-cirque-2026/success?org=default",
