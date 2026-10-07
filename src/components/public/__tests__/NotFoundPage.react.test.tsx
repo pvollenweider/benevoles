@@ -21,7 +21,7 @@ describe("NotFoundPage", () => {
   afterEach(cleanup)
 
   it("on the apex: one h1, the way home and the main pages in « Liens utiles »", () => {
-    render(<NotFoundPage links={notFoundLinks(null, "www.benevol.app")} />)
+    render(<NotFoundPage links={notFoundLinks(null, "www.benevol.app", "https://www.benevol.app")} />)
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1)
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Cette page est tombée à l'eau.")
     expect(screen.getByRole("main")).toHaveAttribute("id", "main")
@@ -41,7 +41,7 @@ describe("NotFoundPage", () => {
   })
 
   it("on an organization's host: back to its events, and where to find a personal link", () => {
-    render(<NotFoundPage links={notFoundLinks({ slug: "festival" }, "festival.benevol.app")} />)
+    render(<NotFoundPage links={notFoundLinks({ slug: "festival" }, "festival.benevol.app", "https://www.benevol.app")} />)
     expect(screen.getByRole("link", { name: "Voir les événements" })).toHaveAttribute("href", "/")
     expect(screen.getByText(/le lien personnel se trouve dans l'e-mail de confirmation/)).toBeInTheDocument()
     const nav = screen.getByRole("navigation", { name: "Liens utiles" })
@@ -50,7 +50,7 @@ describe("NotFoundPage", () => {
   })
 
   it("keeps the rain and the sinking card away from assistive technologies", () => {
-    const { container } = render(<NotFoundPage links={notFoundLinks(null, "benevol.app")} />)
+    const { container } = render(<NotFoundPage links={notFoundLinks(null, "benevol.app", "https://www.benevol.app")} />)
     const drops = container.querySelectorAll("[data-rain-drop]")
     expect(drops.length).toBeGreaterThan(10)
     drops.forEach((drop) => expect(drop.closest("[aria-hidden='true']")).not.toBeNull())
@@ -65,7 +65,7 @@ describe("NotFoundPage", () => {
 
   it("speaks to nobody in particular: no « tu », no « vous », no em dash nor middle dot", () => {
     for (const org of [null, { slug: "a" }]) {
-      const { container, unmount } = render(<NotFoundPage links={notFoundLinks(org, "a.benevol.app")} />)
+      const { container, unmount } = render(<NotFoundPage links={notFoundLinks(org, "a.benevol.app", "https://www.benevol.app")} />)
       const text = (container.textContent ?? "").replace(/\s+/g, " ")
       expect(text).not.toMatch(/\b(tu|te|toi|ton|ta|tes|vous|votre|vos)\b|\bt'/i)
       expect(text).not.toMatch(/[—·]/)

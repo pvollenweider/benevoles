@@ -33,11 +33,16 @@ const ORGANIZER_SPACE: NotFoundLink = { href: "/admin/login", label: "Espace org
  * leads back to its events; without an org subdomain (localhost, `?org=`), that page needs `?org=`.
  * The label leaves the organization's name out: « de » + a name does not elide (« de Association »).
  * Wording is neutral (no « tu », no « vous »): volunteers and organizers both land here.
+ *
+ * On the subdomain of no organisation (a typo, a deleted organisation), every page of that host is
+ * itself a 404, so the links lead to the main site (`apexUrl`), never back to the same host.
  */
-export function notFoundLinks(org: NotFoundOrg | null, host: string): NotFoundLinks {
+export function notFoundLinks(org: NotFoundOrg | null, host: string, apexUrl: string): NotFoundLinks {
   if (!org) {
+    const base = orgSlugFromHost(host) !== null ? apexUrl.replace(/\/+$/, "") : ""
+    const onSite = (link: NotFoundLink): NotFoundLink => ({ ...link, href: `${base}${link.href}` })
     return {
-      primary: { href: "/", label: "Retour à l'accueil" },
+      primary: { href: `${base}/`, label: "Retour à l'accueil" },
       note: null,
       links: [
         { href: "/fonctionnalites", label: "Fonctionnalités", description: "Ce que fait benevol.app, besoin par besoin." },
@@ -46,7 +51,7 @@ export function notFoundLinks(org: NotFoundOrg | null, host: string): NotFoundLi
         { href: "/doc/admin", label: "Guide des organisateurs", description: "Préparer un événement et ses créneaux." },
         VIDEOS,
         ORGANIZER_SPACE,
-      ],
+      ].map(onSite),
     }
   }
   const onOrgHost = orgSlugFromHost(host) !== null
