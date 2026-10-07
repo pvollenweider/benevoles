@@ -139,3 +139,82 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+  lighthouse:
+    name: Lighthouse (report)
+    runs-on: ubuntu-latest
+
+    # Same database and seed as the E2E job, against `next build` + `next start` (#773).
+    # Phase 1: category assertions only warn; the job fails only if Lighthouse cannot run.
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: benevoles_e2e
+          POSTGRES_USER: benevoles
+          POSTGRES_PASSWORD: benevoles
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U benevoles"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://benevoles:benevoles@localhost:5432/benevoles_e2e
+      # Throwaway secrets, CI-only — never used outside this ephemeral job.
+      AUTH_SECRET: ci-e2e-only-secret-not-used-anywhere-else-0000
+      TOKEN_ENCRYPTION_KEY: Y2ktZTJlLW9ubHktdG9rZW4ta2V5LTMyLWJ5dGVzISE=
+      ADMIN_EMAIL: admin@localhost
+      ADMIN_PASSWORD: ci-e2e-admin-password
+      ORG_ADMIN_EMAIL: org-admin@localhost
+      ORG_ADMIN_PASSWORD: ci-e2e-org-admin-password
+      NEXT_PUBLIC_APP_URL: http://localhost:3100
+      AUTH_URL: http://localhost:3100
+      AUTH_TRUST_HOST: "true"
+      E2E_PORT: "3100"
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Migrate + seed e2e database
+        run: |
+          npx prisma generate
+          npx prisma migrate deploy
+          npx prisma db seed
+
+      - name: Build
+        run: npm run build
+
+      - name: Lighthouse CI (mobile and desktop)
+        # One run per URL and form factor. Reports go to temporary public storage (the repo is
+        # public; links are printed in the log) and to the workflow artifact below.
+        run: |
+          for form_factor in mobile desktop; do
+            export LHCI_FORM_FACTOR=$form_factor
+            npx lhci collect --config=lighthouserc.cjs
+            npx lhci assert --config=lighthouserc.cjs || true
+            npx lhci upload --config=lighthouserc.cjs --target=temporary-public-storage || true
+            npx lhci upload --config=lighthouserc.cjs --target=filesystem --outputDir=lighthouse-reports/$form_factor
+          done
+
+      - name: Score summary
+        if: always()
+        run: node scripts/lighthouse-summary.mjs lighthouse-reports >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-reports
+          path: lighthouse-reports/
+          retention-days: 14
