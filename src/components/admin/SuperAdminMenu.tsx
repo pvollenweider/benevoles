@@ -16,6 +16,7 @@ import { usePathname } from "next/navigation"
 // on a tablet fires no mousedown on non-clickable content) and when focus moves out of the menu.
 export const SUPER_ADMIN_ITEMS = [
   { href: "/super-admin/organizations", label: "Organisations" },
+  { href: "/super-admin/stats", label: "Statistiques" },
   { href: "/super-admin/health", label: "Santé du service" },
   { href: "/super-admin/product-updates", label: "Communications admin" },
   { href: "/super-admin/video-feedback", label: "Avis sur les vidéos" },

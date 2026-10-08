@@ -8,6 +8,7 @@ import { RESENT_LINK_NOTICE } from "@/lib/invite-link"
 import { announce } from "@/lib/announce"
 import { requestJson } from "@/lib/use-submit"
 import { deleteOrgRecap, toggleOrgRecap } from "@/lib/action-recap"
+import { formatCount, type UsageRow } from "@/lib/usage-counters"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -38,7 +39,7 @@ type Org = {
   admins: Admin[]
 }
 
-export default function OrgDetail({ org }: { org: Org }) {
+export default function OrgDetail({ org, cumulative }: { org: Org; cumulative: UsageRow[] }) {
   const router = useRouter()
   const [, startTransition] = useTransition()
   const [toggling, setToggling] = useState(false)
@@ -237,6 +238,20 @@ export default function OrgDetail({ org }: { org: Org }) {
         <StatCard label="Administrateurs" value={org._count.admins} />
         <StatCard label="Membres" value={org._count.volunteers} />
       </div>
+
+      {/* Cumulative counters (#805): what this organisation ever created, never lowered by a deletion. */}
+      <section aria-labelledby="org-cumulative" className="bg-white border border-gray-200 rounded-xl p-4">
+        <h2 id="org-cumulative" className="text-sm font-semibold text-gray-900">Depuis le début</h2>
+        <p className="text-xs text-gray-600 mt-0.5">Tout ce que cette organisation a créé, y compris ce qui a été supprimé depuis. Ce qui avait été supprimé avant la mise en place de ces compteurs n&apos;y figure pas.</p>
+        <dl className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-3">
+          {cumulative.map((r) => (
+            <div key={r.key}>
+              <dt className="text-xs text-gray-600">{r.label}</dt>
+              <dd className="text-lg font-semibold text-gray-900 tabular-nums">{formatCount(r.value)}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
 
       {/* Edit name + slug */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

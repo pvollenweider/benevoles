@@ -42,6 +42,7 @@ model Organization {
   charterVersions CharterVersion[]
   logo        OrganizationLogo?
   erasureRecords  ErasureRecord[]
+  counters    OrganizationCounter[]
 }
 
 // The organization's logo (#300), processed server-side (PNG or JPEG, at most 512 px on its longest
@@ -783,4 +784,24 @@ model VideoFeedback {
 
   @@index([videoId, revision])
   @@index([answeredOn])
+}
+
+// Cumulative usage counters for the super admin (#805): how many rows of each kind were ever created,
+// never lowered by a deletion. Incremented by AFTER INSERT triggers that Prisma does not model
+// (migration 20261008150000_usage_counters); the metrics are listed in src/lib/usage-counters.ts.
+// Read only by the app. Counts only, no personal data.
+model PlatformCounter {
+  metric String @id
+  value  BigInt @default(0)
+}
+
+// The same counters per organisation, deleted with it: its counts stay in PlatformCounter.
+model OrganizationCounter {
+  organizationId String
+  metric         String
+  value          BigInt @default(0)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@id([organizationId, metric])
 }

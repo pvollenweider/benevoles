@@ -49,6 +49,7 @@ Modules `src/lib/` à connaître :
 | `env.ts` | Validation des variables d'environnement |
 | `statuses.ts` | Valeurs autorisées des colonnes de statut, imposées aussi par des contraintes CHECK |
 | `retention.ts` | Durées de conservation, source unique de [retention.md](retention.md) et du nettoyage |
+| `usage-counters.ts`, `usage-stats.ts` | Statistiques du super admin (#805) : compteurs cumulés « depuis le début » (tables `PlatformCounter` et `OrganizationCounter`, tenues par des triggers `AFTER INSERT` de la migration `20261008150000_usage_counters`, jamais diminuées) et comptages actuels ; `usage-stats.ts` fait les requêtes (serveur seulement) |
 | `job-runs.ts` | Dernière exécution de chaque tâche planifiée (`JobRun`), lue par `/super-admin/health` |
 | `sentry-scrub.ts` | Retire jetons, emails et données personnelles des événements Sentry (serveur, edge, navigateur) |
 | `time-zone.ts` | Fuseau de l'organisation (`APP_TIME_ZONE` par défaut), conversion des heures locales des créneaux |
