@@ -4,7 +4,8 @@
 import fs from "fs"
 import path from "path"
 import { describe, it, expect } from "vitest"
-import { actionHref, mailtoAddress, parseFeatureBlock, parseFeaturesPage, parseSteps } from "../features-page"
+import { actionHref, mailtoAddress, parseFaq, parseFeatureBlock, parseFeaturesPage, parseSteps, plainAnswer } from "../features-page"
+import { createHeadingSlugger } from "../heading-anchors"
 import { loadVideoCatalog } from "../video-catalog-load"
 import { resolveVideoReference } from "../video-catalog"
 
@@ -93,6 +94,49 @@ describe("parseFeaturesPage", () => {
   })
 })
 
+describe("parseFaq (#767)", () => {
+  it("reads « ### Question » headings with the answer below each one, anchored by the page's slugger", () => {
+    const slug = createHeadingSlugger()
+    expect(parseFaq("### Est-ce gratuit ?\n\nOui.\n\n### Faut-il un compte ?\n\nNon. Un [lien](/doc) suffit.\n", slug)).toEqual([
+      { question: "Est-ce gratuit ?", id: "est-ce-gratuit", answer: "Oui." },
+      { question: "Faut-il un compte ?", id: "faut-il-un-compte", answer: "Non. Un [lien](/doc) suffit." },
+    ])
+  })
+
+  it("is null for anything else: text before the first question, a question without answer, a deeper heading", () => {
+    const slug = createHeadingSlugger()
+    expect(parseFaq("Intro.\n\n### Q ?\n\nR.", slug)).toBeNull()
+    expect(parseFaq("### Q ?\n\n### R ?\n\nOui.", slug)).toBeNull()
+    expect(parseFaq("### Q ?\n\nR.\n\n#### Détail\n\nX.", slug)).toBeNull()
+    expect(parseFaq("- un point", slug)).toBeNull()
+    expect(parseFaq("", slug)).toBeNull()
+  })
+
+  it("uses no anchor for a section that turns out not to be a FAQ", () => {
+    const slug = createHeadingSlugger()
+    parseFaq("### Q ?\n\nR.\n\n### Sans réponse", slug)
+    expect(slug("Q ?")).toBe("q")
+  })
+
+  it("makes a source's FAQ section a list of questions, and leaves the other sections alone", () => {
+    const page = parseFeaturesPage("# T\n\n## Étapes\n\n1. **Un.** a\n\n## Questions fréquentes\n\n### Gratuit ?\n\nOui.\n")
+    expect(page.sections[0].faq).toBeNull()
+    expect(page.sections[1]).toMatchObject({ id: "questions-frequentes", steps: null, faq: [{ question: "Gratuit ?", id: "gratuit", answer: "Oui." }] })
+  })
+})
+
+describe("plainAnswer (#767)", () => {
+  it("keeps the words the page shows: link text, no emphasis or code marks, one line", () => {
+    expect(plainAnswer("Oui. La page [Créer son premier événement](guide/creer.md) vous **mène** au `lien`.\n\nEnsuite *tout* va.")).toBe(
+      "Oui. La page Créer son premier événement vous mène au lien. Ensuite tout va.",
+    )
+  })
+
+  it("drops list marks, comment lines and images", () => {
+    expect(plainAnswer("- un\n- deux\n1. trois\n<!-- video: X -->\n![alt](/x.png)")).toBe("un deux trois")
+  })
+})
+
 describe("mailtoAddress", () => {
   it("gives the address of a mailto link, without its query", () => {
     expect(mailtoAddress("mailto:contact@benevol.app?subject=Bonjour")).toBe("contact@benevol.app")
@@ -156,5 +200,73 @@ describe("FEATURES.md, as /fonctionnalites lays it out", () => {
 
   it("says « étiquette », never « tag », like the rest of the page", () => {
     expect(read("FEATURES.md")).not.toMatch(/\btags?\b/i)
+  })
+
+  it("has no FAQ section: its questions live on the home and the editorial pages", () => {
+    expect(page.sections.every((s) => s.faq === null)).toBe(true)
+  })
+})
+
+describe("LOGICIEL-PLANNING-BENEVOLES.md, the editorial page on volunteer scheduling (#767)", () => {
+  const source = read("LOGICIEL-PLANNING-BENEVOLES.md")
+  const page = parseFeaturesPage(source)
+  const catalog = loadVideoCatalog()
+  const features = parseFeaturesPage(read("FEATURES.md"))
+
+  it("answers the search with its title, then asks for a space by email, like /fonctionnalites", () => {
+    expect(page.title).toBe("Logiciel de planning pour bénévoles")
+    expect(page.intro.actions[0]).toEqual(features.intro.actions[0])
+    expect(page.intro.actions[1].href).toBe("#questions-frequentes")
+    expect(page.sections.find((s) => s.id === "demarrer")!.actions[0]).toEqual(features.intro.actions[0])
+  })
+
+  it("covers the organiser, the volunteer, the day itself, the hours after, trust, then a FAQ", () => {
+    expect(page.sections.map((s) => s.id)).toEqual([
+      "le-principe-en-trois-etapes",
+      "pour-l-organisateur-postes-creneaux-et-frise",
+      "pour-le-benevole-un-lien-sans-compte-ni-application",
+      "avant-l-evenement-voir-ou-il-manque-du-monde",
+      "le-jour-j-feuilles-imprimees-et-page-sur-le-telephone",
+      "apres-l-evenement-heures-attestation-et-exports",
+      "un-outil-sur-lequel-compter",
+      "questions-frequentes",
+      "demarrer",
+    ])
+    expect(page.sections[0].steps).toHaveLength(3)
+  })
+
+  it("answers the questions people ask before choosing, every answer short enough to read", () => {
+    const faq = page.sections.find((s) => s.id === "questions-frequentes")!.faq!
+    expect(faq.map((q) => q.question)).toEqual([
+      "Est-ce vraiment gratuit ?",
+      "Est-ce adapté à une petite association ?",
+      "Les bénévoles doivent-ils créer un compte ?",
+      "Faut-il installer une application ?",
+      "Peut-on compter les heures de bénévolat pour un financeur ?",
+      "Est-ce adapté à une fête de village ou à un festival ?",
+      "Comment commencer ?",
+    ])
+    for (const q of faq) expect(plainAnswer(q.answer).length, q.question).toBeLessThan(400)
+  })
+
+  it("only shows the stills /fonctionnalites already shows, and published videos", () => {
+    const shown = new Set([features.intro, ...features.sections].flatMap((b) => b.images.map((i) => i.videoId)))
+    const blocks = [page.intro, ...page.sections]
+    const images = blocks.flatMap((b) => b.images)
+    expect(images.length).toBeGreaterThanOrEqual(4)
+    for (const image of images) {
+      expect(shown.has(image.videoId), image.videoId).toBe(true)
+      expect(image.alt.length, image.videoId).toBeGreaterThan(20)
+    }
+    for (const id of blocks.flatMap((b) => b.videos)) expect(resolveVideoReference(id, catalog)?.published, id).toBe(true)
+  })
+
+  it("announces nothing that isn't built and keeps the site's writing rules", () => {
+    // No native app, no time clock or location, no perks (#749): none is built.
+    for (const future of [/pointeuse/i, /\bGPS\b/, /géolocalis/i, /avantages? (pour|aux) (les )?bénévoles/i, /App Store|Google Play/i, /application mobile/i]) {
+      expect(source, String(future)).not.toMatch(future)
+    }
+    expect(source).not.toMatch(/—/)
+    expect(source).not.toMatch(/\btags?\b/i)
   })
 })

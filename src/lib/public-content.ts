@@ -8,7 +8,7 @@ import { docImageFile, docImageFromBytes, docImageTag, type DocImage } from "@/l
 import { linkSourcesToRoutes, splitTitle } from "@/lib/doc-pages"
 import { docVideoLink, docVideoPlayer, findVideoReferences, renderDocVideoCard, renderDocVideoSlot, splitAtDocVideoSlots, type DocUnitPart, type DocVideoPlayer } from "@/lib/doc-video-references"
 import { resolveVideoReference, videoMediaUrls, type Video } from "@/lib/video-catalog"
-import { parseFeaturesPage, type FeatureAction, type FeatureBlock, type FeatureImage, type FeatureStep } from "@/lib/features-page"
+import { parseFeaturesPage, plainAnswer, type FeatureAction, type FeatureBlock, type FeatureImage, type FeatureStep } from "@/lib/features-page"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import type { DocUnit } from "@/lib/doc-units"
 import { formatReleaseDate, parseChangelog, repositoryLinks } from "@/lib/changelog"
@@ -135,24 +135,29 @@ export type RenderedFeatureBlock = {
   stills: FeatureStill[]
 }
 
+/** A question of a FAQ section: its answer as HTML for the page, as plain text for the FAQPage data. */
+export type RenderedQuestion = { question: string; id: string; html: string; text: string }
+
 export type RenderedFeaturesPage = {
   title: string
   intro: RenderedFeatureBlock
-  sections: (RenderedFeatureBlock & { heading: string; id: string; steps: FeatureStep[] | null })[]
+  sections: (RenderedFeatureBlock & { heading: string; id: string; steps: FeatureStep[] | null; faq: RenderedQuestion[] | null })[]
 }
 
 /**
- * FEATURES.md as /fonctionnalites draws it (src/lib/features-page.ts): each block's Markdown as
+ * FEATURES.md as /fonctionnalites draws it (src/lib/features-page.ts), or another source laid out
+ * the same way (an editorial page such as /logiciel-planning-benevoles): each block's Markdown as
  * HTML (links between sources made site links), its actions, the stills and players of the videos
- * it names. A still needs a published video whose posters were generated (videos/renders.json) and
- * VIDEO_MEDIA_BASE_URL; a player, a render to play. Otherwise nothing, never a broken image.
+ * it names, and a FAQ section's questions. A still needs a published video whose posters were
+ * generated (videos/renders.json) and VIDEO_MEDIA_BASE_URL; a player, a render to play. Otherwise
+ * nothing, never a broken image.
  */
-export function renderFeaturesPage(mediaBaseUrl?: string | null): RenderedFeaturesPage {
-  return featuresPageCache(mediaBaseUrl ?? "", () => renderFeaturesPageNow(mediaBaseUrl))
+export function renderFeaturesPage(mediaBaseUrl?: string | null, source = "FEATURES.md", fallbackTitle = "Fonctionnalités"): RenderedFeaturesPage {
+  return featuresPageCache(`${source}\0${mediaBaseUrl ?? ""}`, () => renderFeaturesPageNow(mediaBaseUrl, source, fallbackTitle))
 }
 
-function renderFeaturesPageNow(mediaBaseUrl?: string | null): RenderedFeaturesPage {
-  const raw = fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), "FEATURES.md"), "utf-8")
+function renderFeaturesPageNow(mediaBaseUrl: string | null | undefined, source: string, fallbackTitle: string): RenderedFeaturesPage {
+  const raw = fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), source), "utf-8")
   const page = parseFeaturesPage(raw)
   const catalog = videoCatalog()
   const still = (image: FeatureImage): FeatureStill | null => {
@@ -176,10 +181,17 @@ function renderFeaturesPageNow(mediaBaseUrl?: string | null): RenderedFeaturesPa
       stills: block.images.map(still).filter((s): s is FeatureStill => s !== null),
     }
   }
+  const markdownHtml = (markdown: string) => renderEventPageMarkdown(linkSourcesToRoutes(markdown), { shiftHeadings: false })
   return {
-    title: page.title ?? "Fonctionnalités",
+    title: page.title ?? fallbackTitle,
     intro: render(page.intro),
-    sections: page.sections.map((s) => ({ ...render(s), heading: s.heading, id: s.id, steps: s.steps })),
+    sections: page.sections.map((s) => ({
+      ...render(s),
+      heading: s.heading,
+      id: s.id,
+      steps: s.steps,
+      faq: s.faq?.map((q) => ({ question: q.question, id: q.id, html: markdownHtml(q.answer), text: plainAnswer(q.answer) })) ?? null,
+    })),
   }
 }
 

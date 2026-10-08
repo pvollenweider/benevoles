@@ -422,6 +422,12 @@ function LandingPage() {
               </details>
             ))}
           </div>
+          <p className="mt-8 text-base text-gray-600 leading-relaxed">
+            D&apos;autres questions avant de choisir ?{" "}
+            <Link href="/logiciel-planning-benevoles" className={`font-semibold text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
+              Logiciel de planning pour bénévoles : ce qu&apos;il fait et les questions fréquentes
+            </Link>
+          </p>
         </div>
       </section>
 

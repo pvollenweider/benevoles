@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Metadata } from "next"
-import { CONTACT_EMAIL, REPOSITORY_URL, jsonLdGraph, organizationNode, softwareApplicationNode, softwareSourceCodeNode, websiteNode } from "@/lib/structured-data"
+import { CONTACT_EMAIL, REPOSITORY_URL, faqPageNode, jsonLdGraph, organizationNode, softwareApplicationNode, softwareSourceCodeNode, websiteNode } from "@/lib/structured-data"
 import { INDEXABLE, OG_LOCALE, SITE_NAME, SOCIAL_IMAGE } from "@/lib/seo-metadata"
 
 export { CONTACT_EMAIL, REPOSITORY_URL }
@@ -89,21 +89,11 @@ export function landingMetadata(base: string): Metadata {
 
 /** The home's structured data: the site, its publisher, the application, its code and the FAQ. */
 export function landingJsonLd(base: string): Record<string, unknown> {
-  const url = `${base.replace(/\/+$/, "")}/`
   return jsonLdGraph([
     websiteNode(base),
     organizationNode(base),
     softwareApplicationNode(base, LANDING_DESCRIPTION),
     softwareSourceCodeNode(base),
-    {
-      "@type": "FAQPage",
-      "@id": `${url}#faq`,
-      inLanguage: "fr",
-      mainEntity: LANDING_FAQ.map((f) => ({
-        "@type": "Question",
-        name: f.question,
-        acceptedAnswer: { "@type": "Answer", text: f.answer },
-      })),
-    },
+    faqPageNode(base, "/", LANDING_FAQ),
   ])
 }

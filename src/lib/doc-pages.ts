@@ -44,6 +44,20 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     guide: false,
   },
   {
+    // An editorial page (#767), laid out like /fonctionnalites (src/lib/features-page.ts), for
+    // people who search for a volunteer scheduling tool: what it does, then a visible FAQ that is
+    // also its FAQPage structured data. Linked from the home and /fonctionnalites, not from the
+    // header navigation.
+    path: "/logiciel-planning-benevoles",
+    title: "Logiciel de planning pour bénévoles",
+    summary: "Ce que fait un logiciel de planning pour bénévoles, côté organisateur et côté bénévole, et les questions qu'on se pose avant de choisir.",
+    metaTitle: "Logiciel de planning pour bénévoles, gratuit",
+    metaDescription: "Le planning de vos bénévoles : postes et créneaux, inscription par lien sans compte ni application, rappels, jour J et heures. Gratuit, hébergé en France.",
+    source: "LOGICIEL-PLANNING-BENEVOLES.md",
+    priority: 0.8,
+    guide: false,
+  },
+  {
     // Rendered from the released versions of CHANGELOG.md (#757, src/lib/changelog.ts).
     path: "/nouveautes",
     title: "Nouveautés",

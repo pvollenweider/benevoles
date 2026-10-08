@@ -66,6 +66,20 @@ describe("publicPageJsonLd", () => {
     expect(types(publicPageJsonLd("/doc", BASE))[0]).toBe("CollectionPage")
     expect(types(publicPageJsonLd("/fonctionnalites", BASE))).toContain("SoftwareApplication")
     expect(types(publicPageJsonLd("/legal/privacy", BASE))).not.toContain("SoftwareApplication")
+    expect(types(publicPageJsonLd("/logiciel-planning-benevoles", BASE))).toContain("SoftwareApplication")
+  })
+
+  // #767: only the questions a page renders, word for word, never a FAQ the page doesn't show.
+  it("adds a FAQPage only when the page passes the questions it shows", () => {
+    expect(types(publicPageJsonLd("/logiciel-planning-benevoles", BASE))).not.toContain("FAQPage")
+    const faq = [{ question: "Est-ce gratuit ?", answer: "Oui." }]
+    const node = graphOf(publicPageJsonLd("/logiciel-planning-benevoles", BASE, faq)).find((n) => n["@type"] === "FAQPage")
+    expect(node).toEqual({
+      "@type": "FAQPage",
+      "@id": `${BASE}/logiciel-planning-benevoles#faq`,
+      inLanguage: "fr",
+      mainEntity: [{ "@type": "Question", name: "Est-ce gratuit ?", acceptedAnswer: { "@type": "Answer", text: "Oui." } }],
+    })
   })
 })
 
