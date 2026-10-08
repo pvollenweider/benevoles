@@ -57,6 +57,10 @@ spec:
         || QueryRegexp(`token`, `.+`) || QueryRegexp(`t`, `.+`))
       observability:
         accessLogs: false
+      # Same compression as the Ingress (middleware-compress.yaml).
+      middlewares:
+        - name: benevoles-compress
+        - name: benevoles-identity-upstream
       services:
         - name: benevoles-app
           port: 80

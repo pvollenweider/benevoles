@@ -13,6 +13,7 @@ import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import type { DocUnit } from "@/lib/doc-units"
 import { formatReleaseDate, parseChangelog, repositoryLinks } from "@/lib/changelog"
 import { REPOSITORY_URL } from "@/lib/structured-data"
+import { createRenderCache } from "@/lib/render-cache"
 
 // The catalogue doesn't change while the server runs (it's in the image), so production reads it
 // once; in development it's read again on each render, so editing videos/catalog.json shows up.
@@ -59,10 +60,19 @@ function docImageHtml(image: MarkdownImage, index: number): string {
  * The pages pass the variable at request time, so they're rendered per request (force-dynamic).
  */
 export function renderPublicSource(source: string, fallbackTitle: string, mediaBaseUrl?: string | null): { title: string; html: string } {
-  const raw = fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), source), "utf-8")
-  const { title, body } = splitTitle(raw)
-  return { title: title ?? fallbackTitle, html: renderPublicMarkdown(body, mediaBaseUrl) }
+  return publicSourceCache(`${source}\0${fallbackTitle}\0${mediaBaseUrl ?? ""}`, () => {
+    const raw = fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), source), "utf-8")
+    const { title, body } = splitTitle(raw)
+    return { title: title ?? fallbackTitle, html: renderPublicMarkdown(body, mediaBaseUrl) }
+  })
 }
+
+// Rendered once per process in production (src/lib/render-cache.ts, #773): the sources are in the image.
+const publicSourceCache = createRenderCache<{ title: string; html: string }>()
+const docUnitPartsCache = createRenderCache<DocUnitPart[]>()
+const docUnitHeadingIdsCache = createRenderCache<string[]>()
+const featuresPageCache = createRenderCache<RenderedFeaturesPage>()
+const changelogCache = createRenderCache<RenderedRelease[]>()
 
 /**
  * A documentation unit's HTML (#649, src/lib/doc-units.ts), the same rendering as the guides: its
@@ -78,6 +88,10 @@ export function renderDocUnit(unit: DocUnit, mediaBaseUrl?: string | null): stri
  * `splitAtDocVideoSlots`); nothing there when the video can't play.
  */
 export function renderDocUnitParts(unit: DocUnit, mediaBaseUrl?: string | null): DocUnitPart[] {
+  return docUnitPartsCache(`${unit.slug}\0${mediaBaseUrl ?? ""}`, () => renderDocUnitPartsNow(unit, mediaBaseUrl))
+}
+
+function renderDocUnitPartsNow(unit: DocUnit, mediaBaseUrl?: string | null): DocUnitPart[] {
   const catalog = findVideoReferences(unit.body).length > 0 ? videoCatalog() : []
   const players = new Map<string, DocVideoPlayer>()
   const videoSlot = (id: string) => {
@@ -97,7 +111,7 @@ export function headingIdsOf(html: string): string[] {
 
 /** A unit's heading ids, as its page renders them: where a moved anchor can keep its fragment (#649). */
 export function docUnitHeadingIds(unit: DocUnit): string[] {
-  return headingIdsOf(renderDocUnit(unit))
+  return docUnitHeadingIdsCache(unit.slug, () => headingIdsOf(renderDocUnit(unit)))
 }
 
 /** The Markdown of a public source, without its title, as the page's HTML. */
@@ -134,6 +148,10 @@ export type RenderedFeaturesPage = {
  * VIDEO_MEDIA_BASE_URL; a player, a render to play. Otherwise nothing, never a broken image.
  */
 export function renderFeaturesPage(mediaBaseUrl?: string | null): RenderedFeaturesPage {
+  return featuresPageCache(mediaBaseUrl ?? "", () => renderFeaturesPageNow(mediaBaseUrl))
+}
+
+function renderFeaturesPageNow(mediaBaseUrl?: string | null): RenderedFeaturesPage {
   const raw = fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), "FEATURES.md"), "utf-8")
   const page = parseFeaturesPage(raw)
   const catalog = videoCatalog()
@@ -184,6 +202,10 @@ export type RenderedRelease = {
  * ids, which would repeat from one version to the next.
  */
 export function renderChangelog(): RenderedRelease[] {
+  return changelogCache("CHANGELOG.md", renderChangelogNow)
+}
+
+function renderChangelogNow(): RenderedRelease[] {
   const raw = fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), "CHANGELOG.md"), "utf-8")
   const html = (markdown: string) => (markdown ? renderEventPageMarkdown(repositoryLinks(linkSourcesToRoutes(markdown), REPOSITORY_URL), { shiftHeadings: false }) : "")
   return parseChangelog(raw).map((r) => ({

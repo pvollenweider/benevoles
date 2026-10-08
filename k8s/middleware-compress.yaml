@@ -1,0 +1,56 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
+# Brotli (and zstd) for benevol.app's text responses (#759 F7, #773).
+#
+# The app compresses on its own with gzip only (Next.js), so a browser asking for Brotli got gzip.
+# Traefik compresses instead, with the best encoding the browser offers (zstd, then br, then gzip,
+# Traefik >= 3.1): benevoles-compress. For that, the app must answer uncompressed, since Traefik
+# never compresses a response that already has a Content-Encoding: benevoles-identity-upstream
+# removes Accept-Encoding from the request forwarded to the app, after benevoles-compress has read
+# it (the order of the router's middleware list). Without Traefik in front (Docker Compose), the app
+# keeps its own gzip.
+#
+# Only text is compressed (HTML, the RSC payloads of client navigation, CSS, JavaScript, JSON, XML,
+# SVG, CSV, calendars); images, videos and PDFs are already compressed. Responses under 1024 bytes
+# are sent as they are (Traefik's default).
+#
+# Used by the Ingress (ingress.yaml, annotation) and the token IngressRoute on websecure
+# (ingressroute-tokens.yaml). Apply this file first: a router that names a missing middleware is
+# disabled by Traefik. Applied by the deploy workflow, before the Ingress.
+#
+#   kubectl apply -f k8s/middleware-compress.yaml
+#   curl -sI -H 'Accept-Encoding: br' https://www.benevol.app/doc | grep -i content-encoding   # → br
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: benevoles-compress
+  namespace: benevoles
+spec:
+  compress:
+    includedContentTypes:
+      - text/html
+      - text/x-component
+      - text/css
+      - text/plain
+      - text/javascript
+      - application/javascript
+      - application/json
+      - application/ld+json
+      - application/manifest+json
+      - application/xml
+      - text/xml
+      - image/svg+xml
+      - text/csv
+      - text/calendar
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: benevoles-identity-upstream
+  namespace: benevoles
+spec:
+  headers:
+    customRequestHeaders:
+      # An empty value removes the header.
+      Accept-Encoding: ""

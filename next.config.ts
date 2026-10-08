@@ -6,6 +6,8 @@ import pkg from "./package.json"
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  // No `X-Powered-By: Next.js` on the responses (#759 F7): it tells nothing a visitor needs.
+  poweredByHeader: false,
   allowedDevOrigins: ["localhost", "127.0.0.1"],
   // The version shown by client components (src/lib/app-version.ts), inlined at build time: importing
   // package.json there shipped the whole file in the public pages' JavaScript (#773).
