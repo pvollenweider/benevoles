@@ -5,7 +5,8 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { validationError } from "@/lib/api-error"
 import { adminActor, logEvent } from "@/lib/event-log"
-import { questionChangeProblem, questionSchema } from "@/lib/event-questions"
+import { questionChangeProblem } from "@/lib/event-questions"
+import { questionSchema } from "@/lib/event-questions-schema"
 
 type Params = { params: Promise<{ id: string; questionId: string }> }
 

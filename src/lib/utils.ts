@@ -15,6 +15,16 @@ export function formatDate(date: Date | string): string {
   return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
 }
 
+/**
+ * A calendar day (stored at midnight UTC, or written YYYY-MM-DD) as « samedi 1 juin », read in UTC:
+ * the same text on the server and in any browser, so the server-rendered public event page and its
+ * hydration agree (#773). formatDate reads it in the runtime's zone instead.
+ */
+export function formatCalendarDay(date: Date | string): string {
+  const d = typeof date === "string" ? new Date(date) : date
+  return d.toLocaleDateString("fr-FR", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" })
+}
+
 export function formatShortDate(date: Date | string): string {
   const d = typeof date === "string" ? new Date(date) : date
   return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })

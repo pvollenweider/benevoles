@@ -1,9 +1,14 @@
 import { defineConfig } from "vitest/config"
 import path from "path"
+import { readFileSync } from "fs"
+
+// What next.config.ts inlines for client components (src/lib/app-version.ts).
+const { version } = JSON.parse(readFileSync(path.resolve(import.meta.dirname, "package.json"), "utf8"))
 
 export default defineConfig({
   test: {
     environment: "node",
+    env: { APP_VERSION: version },
     // e2e/**/*.spec.ts are Playwright specs, not vitest tests.
     exclude: ["**/node_modules/**", "e2e/**", "src/__integration__/**"],
     coverage: {

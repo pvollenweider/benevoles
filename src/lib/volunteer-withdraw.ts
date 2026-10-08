@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { z } from "zod"
 import { LIVE_STATUSES, OCCUPYING_STATUSES, COMMITTED_STATUSES } from "./registration-capacity"
 import { dayLabel } from "./action-recap"
 import { fmtHour } from "./registrations-list"
@@ -12,7 +11,8 @@ import { fmtHour } from "./registrations-list"
  * waitlist included: a waitlist entry the volunteer can see but not leave would keep them
  * receiving offers they no longer want.
  *
- * Pure (no Prisma at runtime): shared by the DELETE route and the /my page.
+ * Pure (no Prisma at runtime, no zod): shared by the DELETE route, the /my page and the public
+ * event page; the DELETE body schema is in volunteer-withdraw-schema.ts (#773).
  */
 
 /** Statuses a volunteer can withdraw with their personal link: every live one. */
@@ -55,11 +55,6 @@ export const WITHDRAWAL_MESSAGE_LABEL = "Un mot pour l'organisation ? (facultati
 export function withdrawalMessageHint(length: number): string {
   return `Vu par l'organisation et les responsables du poste. N'écris pas d'informations de santé ni d'autres détails sensibles. ${length}/${WITHDRAWAL_MESSAGE_MAX} caractères.`
 }
-
-/** Body of the DELETE request: the optional message, trimmed and length-checked (301 → 400). */
-export const withdrawRequestSchema = z.object({
-  message: z.string().trim().max(WITHDRAWAL_MESSAGE_MAX).optional(),
-})
 
 export type WithdrawCopy = {
   /** Visible button label. */

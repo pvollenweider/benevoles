@@ -5,7 +5,8 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { validationError } from "@/lib/api-error"
 import { adminActor, logEvent } from "@/lib/event-log"
-import { QUESTION_LIMIT, questionSchema } from "@/lib/event-questions"
+import { QUESTION_LIMIT } from "@/lib/event-questions"
+import { questionSchema } from "@/lib/event-questions-schema"
 
 const select = { id: true, label: true, type: true, options: true, required: true, position: true, _count: { select: { answers: true } } } as const
 

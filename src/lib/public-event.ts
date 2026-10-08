@@ -97,3 +97,11 @@ export function toPublicEvent(event: PublicEventRow) {
     pages: event.pages,
   }
 }
+
+/**
+ * The public page's data exactly as the API sends it (#773): the event page is server-rendered
+ * with it, and its client component keeps receiving dates as ISO strings, never Date objects.
+ */
+export function publicEventPayload(event: PublicEventRow): unknown {
+  return JSON.parse(JSON.stringify(toPublicEvent(event)))
+}

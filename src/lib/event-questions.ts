@@ -5,10 +5,9 @@
  * Custom questions of an event's sign-up form (#483): text, yes/no, single or multiple choice,
  * required or not, a few per event. The server validates the answers (the page only helps);
  * a question with answers is archived rather than deleted, and its type or used options can't
- * change under existing answers. Pure.
+ * change under existing answers. Pure, and free of zod: the public sign-up page imports it (#773);
+ * the question schema of the admin API is in event-questions-schema.ts.
  */
-import { z } from "zod"
-
 export const QUESTION_LIMIT = 5
 export const QUESTION_TYPES = ["text", "yesno", "single", "multiple"] as const
 export type QuestionType = (typeof QUESTION_TYPES)[number]
@@ -24,27 +23,6 @@ export const NO = "Non"
 
 export type Question = { id: string; label: string; type: string; options: string[]; required: boolean }
 
-/** Options without case-insensitive duplicates, the first spelling kept. */
-function firstSpellings(options: string[]): string[] {
-  const seen = new Set<string>()
-  return options.filter((o) => {
-    const k = o.toLocaleLowerCase("fr")
-    if (seen.has(k)) return false
-    seen.add(k)
-    return true
-  })
-}
-
-export const questionSchema = z
-  .object({
-    label: z.string().trim().min(1, "La question est obligatoire.").max(120),
-    type: z.enum(QUESTION_TYPES),
-    options: z.array(z.string().trim().min(1).max(60)).max(12).default([]),
-    required: z.boolean().default(false),
-  })
-  .transform((q) => ({ ...q, options: q.type === "single" || q.type === "multiple" ? firstSpellings(q.options) : [] }))
-  .refine((q) => !(q.type === "single" || q.type === "multiple") || q.options.length >= 2, { message: "Donnez au moins deux choix.", path: ["options"] })
-export type QuestionInput = z.infer<typeof questionSchema>
 
 /** Raw answers as posted: text, "Oui"/"Non", one option, or a list of options. */
 export type RawAnswers = Record<string, unknown>

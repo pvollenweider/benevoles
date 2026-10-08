@@ -14,7 +14,7 @@ import SignupRecap from "@/components/public/SignupRecap"
 import ShiftRow from "@/components/public/ShiftRow"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { formatDate } from "@/lib/utils"
+import { formatCalendarDay } from "@/lib/utils"
 import {
   CONSENT_PRIVACY_HREF,
   EMPTY_SIGNUP_FORM,
@@ -73,7 +73,7 @@ type Shift = {
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
 
-type EventData = {
+export type EventData = {
   /** Custom sign-up questions (#483). */
   questions?: Question[]
   id: string
@@ -110,11 +110,16 @@ type PreviewResult = { subject: string; html: string; confirmationMessage: strin
  * `preview` (#370): the admin's « Prévisualiser comme un bénévole ». Reads the event through the
  * admin API (drafts included), keeps no local session, ignores invitation links, and shows the
  * confirmation and email a volunteer would get instead of registering.
+ *
+ * `initialEvent` (#773): the public page's data, read by the server page as the public API sends
+ * it. The page is then server-rendered with its schedule; without it (the preview), the event is
+ * fetched after mounting.
  */
-export default function EventPageClient({ orgSlug, eventSlug, preview }: {
+export default function EventPageClient({ orgSlug, eventSlug, preview, initialEvent }: {
   orgSlug: string
   eventSlug: string
   preview?: { eventId: string; adminEventUrl: string }
+  initialEvent?: EventData
 }) {
   const previewEventId = preview?.eventId ?? null
   const [previewResult, setPreviewResult] = useState<PreviewResult | null>(null)
@@ -126,8 +131,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
 
   type MyReg = MyRegistration
 
-  const [event, setEvent] = useState<EventData | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [event, setEvent] = useState<EventData | null>(initialEvent ?? null)
+  const [loading, setLoading] = useState(!initialEvent)
+  const serverRendered = !!initialEvent
   const [selectedShifts, setSelectedShifts] = useState<Set<string>>(new Set())
   const [limitNotice, setLimitNotice] = useState("")
   const [answers, setAnswers] = useState<Answers>({})
@@ -232,6 +238,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
   )
 
   useEffect(() => {
+    if (serverRendered) return
     const url = previewEventId
       ? `/api/admin/events/${previewEventId}/preview`
       : `/api/public/${eventSlug}?org=${encodeURIComponent(orgSlug)}`
@@ -243,7 +250,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
         setLoading(false)
       })
       .catch(() => setLoading(false))
-  }, [eventSlug, orgSlug, previewEventId])
+  }, [eventSlug, orgSlug, previewEventId, serverRendered])
 
   useEffect(() => {
     if (!inviteToken || previewEventId) return
@@ -692,7 +699,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                   return (
                     <div key={day}>
                       <h2 className="text-sm font-semibold text-gray-600 mb-3">
-                        {formatDate(day)}
+                        {formatCalendarDay(day)}
                       </h2>
                       <p className="sm:hidden text-[11px] text-gray-500 text-center mb-1.5">
                         <span aria-hidden="true">← </span>Fais défiler pour voir toutes les plages<span aria-hidden="true"> →</span>
@@ -708,7 +715,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                         describedBy={[!accepting && "registration-window-msg", reservedShiftIds.size > 0 && "reserved-roles-msg"].filter(Boolean).join(" ") || undefined}
                         limitReachedRoles={limitReachedRoles}
                         reservedShiftIds={reservedShiftIds}
-                        dayLabel={formatDate(day)}
+                        dayLabel={formatCalendarDay(day)}
                       />
                       {limitNotice && limitNoticeDay === day && (
                         <p className="mt-2 rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-950">{limitNotice}</p>
@@ -744,8 +751,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview }: {
                     )}
                     <div className="mt-3 pt-3 border-t border-gray-100 space-y-1.5 text-xs text-gray-500">
                       <div>
-                        <span aria-hidden="true">📅 </span>{formatDate(event.startDate)}
-                        {event.startDate !== event.endDate && ` – ${formatDate(event.endDate)}`}
+                        <span aria-hidden="true">📅 </span>{formatCalendarDay(event.startDate)}
+                        {event.startDate !== event.endDate && ` – ${formatCalendarDay(event.endDate)}`}
                       </div>
                       {event.location && <div><span aria-hidden="true">📍 </span>{event.location}</div>}
                     </div>
