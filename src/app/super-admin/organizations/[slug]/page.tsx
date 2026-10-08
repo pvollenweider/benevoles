@@ -2,6 +2,7 @@ import { redirect, notFound } from "next/navigation"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import OrgDetail from "@/components/super-admin/OrgDetail"
+import { loadOrganizationCumulative } from "@/lib/usage-stats"
 
 export const dynamic = "force-dynamic"
 
@@ -43,6 +44,7 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
   })
 
   if (!org) notFound()
+  const cumulative = await loadOrganizationCumulative(org.id)
 
   return (
     <OrgDetail
@@ -52,6 +54,7 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
         updatedAt: org.updatedAt.toISOString(),
         admins: org.admins.map((a) => ({ ...a, createdAt: a.createdAt.toISOString() })),
       }}
+      cumulative={cumulative}
     />
   )
 }

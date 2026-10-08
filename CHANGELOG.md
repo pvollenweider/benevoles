@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Ajouté
+
+- **Statistiques de la plateforme pour le super admin** (#805) : la page **Statistiques** de l'espace super admin donne, « depuis le début », le nombre d'organisations, d'événements, de créneaux, d'inscriptions, de membres, de comptes administrateurs, de responsables de secteur et d'invitations créés. Ces chiffres ne baissent jamais, même quand un événement ou une organisation entière est supprimé ; ils partent de ce que contenait la base à leur mise en place. À côté, « en ce moment » : organisations actives, événements par statut, membres, propriétaires, organisateurs et responsables de secteur. La fiche d'une organisation montre aussi ce qu'elle a créé depuis le début. Des nombres seulement, aucune donnée personnelle.
+
 ### Modifié
 
 - **Médiathèque, même en-tête et même pied de page que le reste du site** : `/videos` et chaque page vidéo affichent en haut les liens Fonctionnalités, Guide administrateur et Guide bénévole, comme la documentation, et se terminent par le pied de page en colonnes de benevol.app.

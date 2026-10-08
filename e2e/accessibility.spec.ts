@@ -308,5 +308,10 @@ test.describe("super admin", () => {
     await page.goto("/super-admin/video-feedback")
     await expect(page.getByRole("heading", { level: 1, name: "Avis sur les vidéos" })).toBeVisible()
     expect.soft(await seriousViolations(page), "video feedback").toEqual([])
+
+    // #805: cumulative and current usage counts.
+    await page.goto("/super-admin/stats")
+    await expect(page.getByRole("heading", { level: 1, name: "Statistiques" })).toBeVisible()
+    expect.soft(await seriousViolations(page), "stats").toEqual([])
   })
 })

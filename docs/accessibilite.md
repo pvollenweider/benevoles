@@ -11,7 +11,7 @@ Ce que recouvre la déclaration publique (`ACCESSIBILITE.md`, page `/accessibili
 - la page personnelle `/my/[token]`, demande de confirmation fermée puis ouverte (`e2e/personal-page.spec.ts`, avec un événement et une inscription créés par `e2e/helpers/public-signup.ts`) ;
 - la page d'un événement avec une session, fenêtre d'annulation d'un créneau ouverte (`e2e/public-unregister.spec.ts`) ;
 - dans l'administration : `/admin/login`, `/admin/events`, la page d'un événement et ses sous-pages `/shifts`, `/registrations`, `/message`, `/invitations`, `/day-of` (« Jour J », #561) et `/print` (« Rapports », avec le résumé de l'événement, #557) ; la liste des membres `/admin/members`, formulaire « Heures par bénévole » ouvert (#557), la page d'activité d'un membre et son attestation de bénévolat `/admin/members/[id]/certificate` (#556) ;
-- dans l'espace super admin : `/super-admin/organizations`, `/super-admin/health` et `/super-admin/video-feedback` (#646), avec la bannière « Une nouvelle version est disponible » affichée (#612, version connue placée directement en base par `scripts/e2e-seed-release-check.ts`, sans appel réseau).
+- dans l'espace super admin : `/super-admin/organizations`, `/super-admin/health`, `/super-admin/video-feedback` (#646) et `/super-admin/stats` (#805), avec la bannière « Une nouvelle version est disponible » affichée (#612, version connue placée directement en base par `scripts/e2e-seed-release-check.ts`, sans appel réseau).
 
 `/accessibilite` et `/doc` sont aussi analysées à 320 px de large en thème sombre. La page « Jour J » d'un événement en cours (`e2e/day-of.spec.ts`, #561) est analysée à 320 px avec des créneaux, des personnes et une présence marquée, et le test vérifie qu'elle ne défile pas horizontalement.
 

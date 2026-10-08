@@ -432,6 +432,13 @@ Accessible uniquement aux comptes avec rôle `super_admin` (protégé au niveau 
 - **Édition inline** : nom et slug modifiables directement depuis la fiche organisation
 - **URLs par slug** : `/super-admin/organizations/<slug>` au lieu de l'identifiant interne
 - **Basculement d'organisation** : bouton « Gérer → » bascule le contexte admin vers l'organisation choisie (cookie `sa-org-id`) sans déconnexion
+- **Depuis le début** (#805) : sur la fiche d'une organisation, ce qu'elle a créé depuis son ouverture (événements, créneaux, inscriptions, membres, comptes administrateurs, responsables de secteur, invitations), y compris ce qui a été supprimé depuis la mise en place de ces compteurs
+
+### Statistiques (`/super-admin/stats`, #805)
+
+- **Depuis le début** : organisations, événements, créneaux, inscriptions, membres, comptes administrateurs, responsables de secteur et invitations créés sur toute la plateforme. Ces compteurs ne baissent jamais, même quand une organisation entière est supprimée ; ils sont tenus par des triggers PostgreSQL à chaque création (tables `PlatformCounter` et `OrganizationCounter`), quel que soit le chemin (formulaire, série, duplication, import, scripts), et ont été initialisés à leur mise en place depuis ce que contenait la base
+- **En ce moment** : organisations actives et désactivées, événements publiés, en brouillon et archivés, membres actifs et désactivés, propriétaires, organisateurs et super admins actifs, responsables de secteur
+- Des nombres seulement, aucune donnée personnelle
 
 ### Nouveautés produit (`/super-admin/product-updates`)
 
