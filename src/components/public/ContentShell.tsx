@@ -6,7 +6,7 @@ import PublicFooter from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import DocThemeToggle from "@/app/doc/DocThemeToggle"
 import ContentNav from "@/components/public/ContentNav"
-import { SITE_CONTAINER_CLASS } from "@/components/public/site-container"
+import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
 
 // Sets the `dark` class on the shell's own root before first paint — from a saved choice
 // (doc-theme in localStorage) or, absent one, the OS/browser preference — so there's no flash of
@@ -28,8 +28,8 @@ const THEME_INIT_SCRIPT = `
 /**
  * The prose recipe of the content pages (changelog, accessibility), shared with
  * src/app/legal/layout.tsx: 14 px text, each paragraph and list item capped at 75ch (a maximum,
- * never a width), the article (headings, tables) at max-w-3xl, on the left edge of the site
- * container, never stretched to its width. Links of the content (the Markdown, the indexes) get the same visible
+ * never a width), the article (headings, tables) at max-w-3xl, centred in the site container
+ * (SITE_READING_COLUMN_CLASS), never stretched to its width. Links of the content (the Markdown, the indexes) get the same visible
  * focus outline as the links a page draws itself. The documentation has its own, larger recipe
  * (DOC_PROSE_CLASS, src/components/public/DocFrame.tsx).
  */
@@ -80,7 +80,7 @@ export default function ContentShell({ children, layout = "article" }: { childre
         children
       ) : (
         <main id={MAIN_CONTENT_ID} tabIndex={-1} className={`${SITE_CONTAINER_CLASS} py-12 focus:outline-none`}>
-          <article className={CONTENT_PROSE_CLASS}>{children}</article>
+          <article className={`${CONTENT_PROSE_CLASS} ${SITE_READING_COLUMN_CLASS}`}>{children}</article>
         </main>
       )}
 

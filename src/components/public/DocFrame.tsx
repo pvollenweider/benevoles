@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
-import { SITE_CONTAINER_CLASS } from "@/components/public/site-container"
+import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
 
 /**
  * The prose recipe of the documentation (/doc and its pages), larger than the other content
@@ -33,13 +33,14 @@ export const DOC_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-[70ch]
 /**
  * The frame of a documentation page, inside ContentShell's `layout="doc"`: an optional side menu
  * (a unit's DocSideMenu, from `lg`), then the page's <main>, target of « Aller au contenu », so the
- * menu is skipped like the header. Both in the site container (SITE_CONTAINER_CLASS), the text on
- * its left edge and capped at 70ch; without a menu, the room on the right stays empty.
+ * menu is skipped like the header. Both in the site container (SITE_CONTAINER_CLASS), the text
+ * capped at 70ch: beside the menu, in the column after it; without a menu, centred
+ * (SITE_READING_COLUMN_CLASS), an even margin on both sides.
  */
 export default function DocFrame({ menu, children }: { menu?: React.ReactNode; children: React.ReactNode }) {
   const main = (
     <main id={MAIN_CONTENT_ID} tabIndex={-1} className="min-w-0 py-12 focus:outline-none">
-      <article className={DOC_PROSE_CLASS}>{children}</article>
+      <article className={menu ? DOC_PROSE_CLASS : `${DOC_PROSE_CLASS} ${SITE_READING_COLUMN_CLASS}`}>{children}</article>
     </main>
   )
   if (!menu) return <div className={SITE_CONTAINER_CLASS}>{main}</div>

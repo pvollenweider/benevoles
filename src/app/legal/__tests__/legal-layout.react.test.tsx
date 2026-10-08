@@ -6,6 +6,7 @@ import "@testing-library/jest-dom/vitest"
 import { render, screen, cleanup, within } from "@testing-library/react"
 import LegalLayout from "../layout"
 import { CONTENT_PROSE_CLASS } from "@/components/public/ContentShell"
+import { SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
 import PrivacyPage from "../privacy/page"
 import TermsPage from "../terms/page"
 import ProcessingAgreementPage from "../sous-traitance/page"
@@ -64,7 +65,7 @@ describe("legal pages layout", () => {
   it("draws the document with the shared prose recipe", () => {
     renderLegal("/legal/privacy")
     const article = screen.getByRole("main").querySelector("article")!
-    expect(article.className).toBe(CONTENT_PROSE_CLASS)
+    expect(article.className).toBe(`${CONTENT_PROSE_CLASS} ${SITE_READING_COLUMN_CLASS}`)
     expect(article.className).toContain("prose-a:focus-visible:outline")
     expect(article.className).toContain("prose-headings:scroll-mt-4")
   })

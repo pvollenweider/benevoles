@@ -4,7 +4,7 @@ import PublicFooter from "@/components/PublicFooter"
 // its dark: variants are inert here, the legal pages have no dark scope.
 import { CONTENT_PROSE_CLASS } from "@/components/public/ContentShell"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
-import { SITE_CONTAINER_CLASS } from "@/components/public/site-container"
+import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
 
 // The browser bar takes the colour of the legal pages' white header.
 export const viewport = { themeColor: "#ffffff" }
@@ -23,7 +23,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
       </header>
 
       <main id={MAIN_CONTENT_ID} tabIndex={-1} className={`${SITE_CONTAINER_CLASS} py-12 focus:outline-none`}>
-        <article className={CONTENT_PROSE_CLASS}>
+        <article className={`${CONTENT_PROSE_CLASS} ${SITE_READING_COLUMN_CLASS}`}>
           {children}
         </article>
       </main>

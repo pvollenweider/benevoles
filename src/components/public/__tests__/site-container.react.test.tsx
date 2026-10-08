@@ -9,7 +9,7 @@ vi.mock("next/navigation", () => ({ usePathname: () => "/doc/admin" }))
 // The theme toggle reads matchMedia, absent from jsdom; it plays no part in the frame's width.
 vi.mock("@/app/doc/DocThemeToggle", () => ({ default: () => null }))
 
-import { SITE_CONTAINER_CLASS } from "../site-container"
+import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "../site-container"
 import ContentShell, { CONTENT_PROSE_CLASS } from "../ContentShell"
 import DocFrame, { DOC_PROSE_CLASS } from "../DocFrame"
 import FeaturesPage from "../FeaturesPage"
@@ -51,24 +51,25 @@ describe("site container (one width for every public page)", () => {
     expectSiteContainer(footerWrapper)
   })
 
-  // The text keeps its measure on the container's left edge: never stretched to 72rem.
-  it("keeps the article prose at a reading measure", () => {
+  // The text keeps its measure, centred in the container: never stretched to 72rem.
+  it("keeps the article prose at a reading measure, centred", () => {
     render(<ContentShell><p>Texte</p></ContentShell>)
     const article = screen.getByRole("main").querySelector("article")!
-    expect(article.className).toBe(CONTENT_PROSE_CLASS)
+    expect(article.className).toBe(`${CONTENT_PROSE_CLASS} ${SITE_READING_COLUMN_CLASS}`)
+    expect(SITE_READING_COLUMN_CLASS).toBe("mx-auto")
     expect(CONTENT_PROSE_CLASS).toContain("max-w-3xl")
     expect(CONTENT_PROSE_CLASS).not.toContain("max-w-none")
     expect(CONTENT_PROSE_CLASS).toContain("prose-p:max-w-[75ch]")
     expect(CONTENT_PROSE_CLASS).toContain("prose-li:max-w-[75ch]")
   })
 
-  it("frames a guide without a side menu (/doc, /doc/admin) like the features page, text capped at 70ch", () => {
+  it("frames a guide without a side menu (/doc, /doc/admin) like the features page, text capped at 70ch and centred", () => {
     render(<ContentShell layout="doc"><DocFrame><h1>Guide administrateur</h1></DocFrame></ContentShell>)
     const { header, footerWrapper } = frameParts()
     expectSiteContainer(header)
     expectSiteContainer(screen.getByRole("main").parentElement)
     expectSiteContainer(footerWrapper)
-    expect(screen.getByRole("main").querySelector("article")!.className).toBe(DOC_PROSE_CLASS)
+    expect(screen.getByRole("main").querySelector("article")!.className).toBe(`${DOC_PROSE_CLASS} ${SITE_READING_COLUMN_CLASS}`)
     expect(DOC_PROSE_CLASS).toContain("max-w-[70ch]")
   })
 
@@ -78,6 +79,8 @@ describe("site container (one width for every public page)", () => {
     expectSiteContainer(frame)
     expect(frame.className).toContain("lg:grid-cols-[15rem_minmax(0,1fr)]")
     expect(frame).toContainElement(screen.getByRole("navigation", { name: "Documentation" }))
+    // Beside the menu, the text starts in its own column, not centred in it.
+    expect(screen.getByRole("main").querySelector("article")!.className).toBe(DOC_PROSE_CLASS)
   })
 
   it("frames the features page's sections in the same container", () => {
