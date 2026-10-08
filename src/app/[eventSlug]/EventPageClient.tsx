@@ -626,7 +626,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
             registration on this event — the open question answers "no" to offering it again once
             every shift has been withdrawn, and this page only ever sees the current session. */}
         {inviteToken && !preview && myRegistrations.length === 0 && !previewResult && (
-          <DeclineInvite token={inviteToken} eventSlug={eventSlug} initialDeclined={declined} autoOpen={autoOpenDecline} />
+          <DeclineInvite token={inviteToken} eventSlug={eventSlug} initialDeclined={declined} autoOpen={autoOpenDecline} fallbackFocusOnClose={() => titleRef.current} />
         )}
 
         {event.pages.length > 0 && (
