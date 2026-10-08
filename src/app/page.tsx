@@ -302,7 +302,7 @@ function LandingPage() {
                   <span className="sr-only">Étape {i + 1} : </span>
                   {step.title}
                 </h3>
-                <p className="mt-3 text-base text-gray-600 leading-relaxed">{step.text}</p>
+                <p className="mt-3 max-w-[65ch] text-base text-gray-600 leading-relaxed">{step.text}</p>
               </li>
             ))}
           </ol>
@@ -323,7 +323,7 @@ function LandingPage() {
               <div key={b.title} className="grid gap-8 lg:grid-cols-12 lg:gap-12 lg:items-center">
                 <div className={`lg:col-span-5 ${i % 2 === 1 ? "lg:order-2 lg:col-start-8" : ""}`}>
                   <h3 className="text-2xl font-bold tracking-tight" style={{ textWrap: "balance" } as React.CSSProperties}>{b.title}</h3>
-                  <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed" style={{ textWrap: "pretty" } as React.CSSProperties}>{b.text}</p>
+                  <p className="mt-4 max-w-[65ch] text-base sm:text-lg text-gray-600 leading-relaxed" style={{ textWrap: "pretty" } as React.CSSProperties}>{b.text}</p>
                 </div>
                 <div className={`lg:col-span-7 ${i % 2 === 1 ? "lg:order-1 lg:col-start-1" : ""}`}>
                   <Image
@@ -406,7 +406,7 @@ function LandingPage() {
                     <span aria-hidden="true" className="text-2xl font-normal text-blue-700 transition-transform group-open:rotate-45 motion-reduce:transition-none">+</span>
                   </summary>
                   <div className="pb-6 pr-8 text-base text-gray-600 leading-relaxed">
-                    <p>{f.answer}</p>
+                    <p className="max-w-[70ch]">{f.answer}</p>
                     {f.link && (
                       <p className="mt-2">
                         {f.link.href.startsWith("http") ? (

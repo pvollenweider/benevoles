@@ -97,7 +97,12 @@ describe("legal pages layout", () => {
         const region = table.parentElement!
         expect(region).toHaveAttribute("role", "region")
         expect(region).toHaveAttribute("tabindex", "0")
-        expect(region).toHaveAccessibleName()
+        // Named by its visible heading, with a hint on a narrow screen.
+        const heading = document.getElementById(region.getAttribute("aria-labelledby")!)
+        expect(heading?.tagName).toMatch(/^H[2-4]$/)
+        expect(region).toHaveAccessibleName(heading!.textContent!)
+        expect(region.previousElementSibling).toHaveTextContent("Faites défiler le tableau horizontalement.")
+        expect(region.previousElementSibling!.className).toContain("sm:hidden")
         expect(region.className).toContain("overflow-x-auto")
       }
       cleanup()

@@ -39,9 +39,11 @@ export default function PrivacyPage() {
 
       <h2>2. Données que nous traitons en qualité de responsable</h2>
 
-      <h3>2.1 Administrateurs</h3>
-      {/* A wide table scrolls in its own focusable region, so the page reflows at 320 px (1.4.10). */}
-      <div role="region" aria-label="Données des administrateurs" tabIndex={0} className="overflow-x-auto rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+      <h3 id="donnees-administrateurs">2.1 Administrateurs</h3>
+      {/* A wide table scrolls in its own focusable region, named by its heading, so the page
+          reflows at 320 px (1.4.10); the hint says so where the table is wider than the screen. */}
+      <p className="sm:hidden">Faites défiler le tableau horizontalement.</p>
+      <div role="region" aria-labelledby="donnees-administrateurs" tabIndex={0} className="overflow-x-auto rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
         <table>
           <thead>
             <tr>

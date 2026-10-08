@@ -86,7 +86,7 @@ export default async function VideoDetailPage({ params, searchParams }: { params
 
       <div>
         <h1 className="text-xl font-bold text-gray-900">{video.title}</h1>
-        <p className="mt-2 text-sm text-gray-600 leading-relaxed">{video.description}</p>
+        <p className="mt-2 max-w-[70ch] text-sm text-gray-600 leading-relaxed">{video.description}</p>
       </div>
 
       <VideoPlayer title={video.title} mediaUrls={mediaUrls} frame={videoFrame(video)} />
