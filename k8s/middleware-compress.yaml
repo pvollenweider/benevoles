@@ -28,6 +28,13 @@ metadata:
   namespace: benevoles
 spec:
   compress:
+    # Server preference when the browser lists several encodings without weights (Chrome sends
+    # « gzip, deflate, br, zstd »): Traefik's default order puts gzip first, so browsers got gzip.
+    # Requires Traefik >= 3.2 (production runs 3.6).
+    encodings:
+      - zstd
+      - br
+      - gzip
     includedContentTypes:
       - text/html
       - text/x-component

@@ -12,13 +12,21 @@ const workflow = read(".github/workflows/deploy.yml")
 
 describe("compression by Traefik", () => {
   it("compresses text only, and has the app answer uncompressed", () => {
-    expect(middlewares).toMatch(/name: benevoles-compress\n[\s\S]*?compress:\n\s+includedContentTypes:/)
+    expect(middlewares).toMatch(/name: benevoles-compress\n[\s\S]*?compress:\n[\s\S]*?includedContentTypes:/)
     for (const type of ["text/html", "text/x-component", "text/css", "application/javascript", "application/json"]) {
       expect(middlewares).toContain(`- ${type}\n`)
     }
     for (const type of ["image/png", "image/jpeg", "video/mp4", "application/pdf"]) expect(middlewares).not.toContain(type)
     // Traefik never compresses a response that already has a Content-Encoding (the app's gzip).
     expect(middlewares).toMatch(/name: benevoles-identity-upstream\n[\s\S]*?customRequestHeaders:\n(\s+#.*\n)*\s+Accept-Encoding: ""/)
+  })
+
+  // Regression: with Traefik's default order (gzip first), Chrome's « gzip, deflate, br, zstd »
+  // got gzip in production. The server preference puts zstd, then Brotli, before gzip.
+  it("prefers zstd, then Brotli, then gzip when the browser expresses no preference", () => {
+    const compress = middlewares.slice(middlewares.indexOf("name: benevoles-compress"), middlewares.indexOf("name: benevoles-identity-upstream"))
+    const encodings = /encodings:\n((?:\s+- \S+\n)+)/.exec(compress)?.[1].match(/- (\S+)/g)?.map((e) => e.slice(2))
+    expect(encodings).toEqual(["zstd", "br", "gzip"])
   })
 
   it("runs compress before the Accept-Encoding removal, on the Ingress and the token route", () => {
