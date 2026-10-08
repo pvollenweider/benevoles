@@ -92,6 +92,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/videos/manifests ./videos/manifes
 COPY --from=builder --chown=nextjs:nodejs /app/videos/scripts ./videos/scripts
 COPY --from=builder --chown=nextjs:nodejs /app/videos/MASTERCLASS_PLAN.md ./videos/MASTERCLASS_PLAN.md
 
+# Warm-up of a new server before it takes traffic (docker-entrypoint.sh, src/lib/readiness.ts):
+# plain Node, no dependency.
+COPY --from=builder --chown=nextjs:nodejs /app/scripts/warmup.mjs ./scripts/warmup.mjs
+
 # Merge prisma CLI (+ toutes ses deps) dans node_modules
 # Appeler index.js directement préserve __dirname = node_modules/prisma/build/
 # ce qui permet de trouver prisma_schema_build_bg.wasm et tous les modules

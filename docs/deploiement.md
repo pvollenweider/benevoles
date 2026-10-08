@@ -20,7 +20,7 @@ Le `Dockerfile` est multi-étapes (`node:26-alpine`) :
 3. `builder` : `prisma generate` puis `npm run build`. `DATABASE_URL` et `AUTH_SECRET` reçoivent des valeurs factices pendant le build. `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` (affiché sur la page Santé du service) sont des arguments de build, `SENTRY_AUTH_TOKEN` un secret de build (`sentry_auth_token`)
 4. `runner` : sortie `standalone` de Next.js, utilisateur non root, port 3000. Copie aussi `prisma/`, `prisma.config.ts` et les sources des pages de contenu (`GUIDE_ADMIN.md`, `FEATURES.md`, `ACCESSIBILITE.md`) et les pages de documentation (`guide/`), lues à la requête, ainsi que `doc-lastmod.json` (`{}` si le build ne l'a pas reçu) : toute nouvelle page de contenu s'ajoute au `Dockerfile`
 
-Au démarrage, `docker-entrypoint.sh` attend PostgreSQL, exécute `prisma migrate deploy` sauf si `MIGRATE_ON_START=false`, puis lance `node server.js`. Avec Docker Compose, les migrations s'appliquent donc au démarrage de l'application. Sur Kubernetes, les pods de l'application ont `MIGRATE_ON_START=false` : c'est le Job de migration qui les applique, une seule fois par déploiement (voir ci-dessous).
+Au démarrage, `docker-entrypoint.sh` attend PostgreSQL, exécute `prisma migrate deploy` sauf si `MIGRATE_ON_START=false`, puis lance `node server.js` et, en arrière-plan, le préchauffage de ses pages publiques (voir [Préchauffage avant la mise en service](#préchauffage-avant-la-mise-en-service)). Avec Docker Compose, les migrations s'appliquent donc au démarrage de l'application. Sur Kubernetes, les pods de l'application ont `MIGRATE_ON_START=false` : c'est le Job de migration qui les applique, une seule fois par déploiement (voir ci-dessous).
 
 ## Docker Compose
 
@@ -54,7 +54,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `secret.yaml` | Secret `benevoles-secret` | non | Modèle incomplet ; le secret réel est régénéré par le workflow (voir [configuration.md](configuration.md#secrets-kubernetes)) |
 | `postgres.yaml` | PVC `postgres-pvc` (5 Gi), Deployment et Service `postgres` | oui | PostgreSQL 16 |
 | `job-migrate.yaml` | Job `benevoles-migrate` | oui, avant l'application | `prisma migrate deploy` avec l'image déployée ; `backoffLimit: 0`, 300 s au plus |
-| `deployment.yaml` | Deployment `benevoles-app` | oui, en dernier | 1 réplica, mise à jour progressive sans indisponibilité, secret injecté avec `envFrom`, limites 500m CPU et 512 Mi, sondes sur `/api/health` |
+| `deployment.yaml` | Deployment `benevoles-app` | oui, en dernier | 1 réplica, mise à jour progressive sans indisponibilité, secret injecté avec `envFrom`, limites 500m CPU et 512 Mi, sonde de disponibilité sur `/api/health/ready` (après le préchauffage), sonde de vie sur `/api/health` |
 | `service.yaml`, `ingress.yaml` | Service et Ingress `benevoles-app` | oui | Exposition via Traefik pour `*.benevol.app`, `benevol.app` et `www.benevol.app`, TLS `benevol-app-wildcard-tls`, avec les middlewares de compression de `middleware-compress.yaml` |
 | `middleware-compress.yaml` | Middlewares `benevoles-compress` et `benevoles-identity-upstream` | oui, avant `ingress.yaml` | Compression des réponses texte par Traefik (zstd, Brotli ou gzip selon le navigateur) ; l'application reçoit la requête sans `Accept-Encoding` et répond donc sans compression, ce que Traefik exige pour compresser. Voir « Compression » ci-dessous |
 | `ingressroute-tokens.yaml` | IngressRoute `benevoles-app-tokens` et `benevoles-app-tokens-http`, Middleware `benevoles-https-redirect` | oui | Routeur prioritaire, **sans journal d'accès**, pour les requêtes qui portent un jeton personnel (chemins `/my/`, `/leader/`… et requêtes `token`, `t`) et la recherche admin, en HTTPS et en HTTP (redirigé). Un jeton ne doit jamais être journalisé ; limité à benevol.app, le Traefik partagé n'est pas modifié. Toute nouvelle route à jeton s'y ajoute (vérifié par `no-tokens-in-access-logs.test.ts`) |
@@ -99,7 +99,7 @@ Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publi
    4. applique `k8s/postgres.yaml` et attend PostgreSQL (120 s au plus) ;
    5. supprime le Job de migration précédent, applique `k8s/job-migrate.yaml` avec la nouvelle image et attend sa réussite (300 s au plus). En cas d'échec, le déploiement s'arrête, la version en cours continue de servir, et les journaux du Job s'affichent dans le workflow ;
    6. applique `service.yaml`, `middleware-compress.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et les cinq CronJobs ;
-   7. seulement ensuite, applique `k8s/deployment.yaml` et attend la fin du remplacement (300 s au plus). Le nouveau pod démarre avant l'arrêt de l'ancien (`maxSurge: 1`, `maxUnavailable: 0`).
+   7. seulement ensuite, applique `k8s/deployment.yaml` et attend la fin du remplacement (300 s au plus). Le nouveau pod démarre avant l'arrêt de l'ancien (`maxSurge: 1`, `maxUnavailable: 0`), et ne reçoit le trafic qu'une fois préchauffé.
 
 Le workflow n'applique pas `secret.yaml` (modèle), `traefik-config.yaml`, `certificate-wildcard.yaml` ni `gandi-webhook.yaml`.
 
@@ -150,7 +150,29 @@ Si l'étape 3 échoue, ne pas passer à la suite : lire les journaux du Job, cor
 Points d'attention :
 
 - Le secret `benevoles-secret` réel n'est pas appliqué depuis `k8s/secret.yaml` (simple modèle) : l'étape « Sync k8s secret » de `deploy.yml` le régénère à chaque déploiement à partir des secrets GitHub (clés et origines : [configuration.md](configuration.md#secrets-kubernetes)). Une clé qu'il gère, modifiée à la main, est écrasée ; une clé qu'il ne gère pas, comme `BACKUP_PASSPHRASE`, est conservée. Le DSN navigateur, lui, est injecté au build.
-- Les sondes `readiness` et `liveness` interrogent `/api/health` (une requête `SELECT 1`), avec des délais de 3 et 5 s.
+- La sonde `readiness` interroge `/api/health/ready` (503 pendant le préchauffage, puis une requête `SELECT 1`) toutes les 5 s, avec un délai de 3 s ; la sonde `liveness` interroge `/api/health` (une requête `SELECT 1`) toutes les 30 s, avec un délai de 5 s.
+
+### Préchauffage avant la mise en service
+
+Les pages sont rendues à chaque requête : sur un serveur qui vient de démarrer, la première visite de chaque page paie le chargement et la compilation de son code et le remplissage des caches internes. Pour qu'elle ne tombe pas sur un visiteur juste après un déploiement, `docker-entrypoint.sh` lance, à côté de `node server.js`, le script `scripts/warmup.mjs` (Node seul, sans dépendance) :
+
+1. il demande `http://127.0.0.1:$PORT/sitemap.xml` avec l'en-tête `Host` du site (celui de `NEXT_PUBLIC_APP_URL`, `www.benevol.app` en production), en réessayant tant que le serveur ne répond pas ;
+2. il en garde les pages du site lui-même, accueil en tête : fonctionnalités, nouveautés, accessibilité, pages légales, documentation et chacune de ses fiches, bibliothèque et pages des vidéos. Jamais une page d'administration, une route d'API, une page à lien personnel ni une adresse avec paramètres. Sitemap vide (hôte de préproduction) ou illisible : l'accueil seul ;
+3. il les demande 4 à la fois, 15 s au plus par page et 60 s au total, avec l'agent `benevoles-warmup/1` ; chaque page et un bilan sont écrits dans les journaux du conteneur (`[warmup] …`). Une erreur est journalisée puis ignorée : le préchauffage ne fait jamais échouer le conteneur.
+
+Ces requêtes passent par `localhost`, pas par Traefik : elles n'apparaissent pas dans ses journaux d'accès. Les pages préchauffées n'écrivent rien, n'envoient aucun email et ne comptent aucune visite.
+
+Quand le script se termine, échoue ou atteint sa limite, l'entrée écrit le fichier `/tmp/benevoles-ready` (`WARMUP_READY_FILE`). `/api/health/ready` répond 503 tant qu'il n'existe pas, puis vérifie la base comme `/api/health`. Pendant ce temps, l'ancien pod garde tout le trafic (`maxUnavailable: 0`) ; la sonde de vie, elle, reste sur `/api/health` et ne dépend pas du préchauffage, qui ne peut donc pas faire redémarrer le pod. Au pire, un pod est disponible un peu plus d'une minute après son démarrage, loin des 300 s qu'attend `deploy.yml`.
+
+| Variable | Défaut | Rôle |
+|----------|--------|------|
+| `WARMUP` | `true` | `false` : pas de préchauffage, le pod est disponible dès le démarrage du serveur |
+| `WARMUP_TIMEOUT_MS` | `60000` | Durée totale maximale, attente du serveur comprise |
+| `WARMUP_REQUEST_TIMEOUT_MS` | `15000` | Délai par page |
+| `WARMUP_CONCURRENCY` | `4` | Pages demandées en parallèle |
+| `WARMUP_READY_FILE` | `/tmp/benevoles-ready` | Fichier qui marque la fin du préchauffage |
+
+Avec Docker Compose, le préchauffage tourne de la même façon (sur l'hôte de `NEXT_PUBLIC_APP_URL`, `localhost` par défaut) ; rien n'attend `/api/health/ready`, le serveur répond dès son démarrage. Le préchauffage ne se lance que pour la commande `node server.js` : le Job de migration, qui utilise la même image, n'est pas concerné.
 - Les cron jobs de rappels et de purge lisent `NEXT_PUBLIC_APP_URL` et `CRON_SECRET` dans `benevoles-secret`.
 
 ## Mise à jour depuis 1.x
