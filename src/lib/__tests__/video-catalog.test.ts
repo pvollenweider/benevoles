@@ -17,9 +17,9 @@ import {
   parseVideoReference,
   resolveVideoReference,
   THEMES,
-  catalogEntrySchema,
   type Video,
 } from "../video-catalog"
+import { catalogEntrySchema } from "../video-catalog-schema"
 import { loadVideoCatalog } from "../video-catalog-load"
 
 const videosRoot = path.join(process.cwd(), "videos")

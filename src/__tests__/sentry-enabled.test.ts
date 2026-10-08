@@ -8,19 +8,31 @@ vi.mock("@sentry/nextjs", () => ({
   init,
   replayIntegration: vi.fn(() => ({ name: "Replay" })),
   captureRouterTransitionStart: vi.fn(),
+  captureException: vi.fn(),
+  addIntegration: vi.fn(),
 }))
 
+// The browser SDK is initialised from a deferred chunk (#773), by calling initSentryClient().
 const configs = [
   ["server", "../../sentry.server.config"],
   ["edge", "../../sentry.edge.config"],
-  ["client", "../../instrumentation-client"],
+  ["client", "@/lib/sentry-client-init"],
 ] as const
+
+async function loadConfig(path: string) {
+  const mod = await import(/* @vite-ignore */ path)
+  if (typeof mod.initSentryClient === "function") {
+    vi.stubGlobal("window", { location: { pathname: "/" } })
+    mod.initSentryClient()
+    vi.unstubAllGlobals()
+  }
+}
 
 async function enabledFor(path: string, nodeEnv: string) {
   vi.stubEnv("NODE_ENV", nodeEnv)
   vi.resetModules()
   init.mockClear()
-  await import(/* @vite-ignore */ path)
+  await loadConfig(path)
   expect(init).toHaveBeenCalledOnce()
   return init.mock.calls[0][0].enabled
 }
@@ -49,16 +61,41 @@ describe("Sentry configs keep personal data out (@sentry/nextjs 11)", () => {
       vi.stubEnv("NODE_ENV", "production")
       vi.resetModules()
       init.mockClear()
-      await import(/* @vite-ignore */ path)
-      const { NO_PII_DATA_COLLECTION, scrubSpan, scrubEvent, scrubBreadcrumb } = await import("@/lib/sentry-scrub")
+      await loadConfig(path)
+      const { NO_PII_DATA_COLLECTION, scrubSpan, scrubEvent, scrubBreadcrumb, beforeSendClient } = await import("@/lib/sentry-scrub")
       const opts = init.mock.calls[0][0]
       expect(opts.dataCollection).toEqual(NO_PII_DATA_COLLECTION)
       expect(opts.beforeSendSpan).toBe(scrubSpan)
-      expect(opts.beforeSend).toBe(scrubEvent)
+      // The client also drops browser noise first (BENEVOLAPP-P), then scrubs the same way.
+      expect(opts.beforeSend).toBe(name === "client" ? beforeSendClient : scrubEvent)
       expect(opts.beforeBreadcrumb).toBe(scrubBreadcrumb)
       expect(opts).not.toHaveProperty("sendDefaultPii")
       expect(opts).not.toHaveProperty("beforeSendTransaction")
       expect(opts).not.toHaveProperty("enableLogs")
     })
   }
+})
+
+describe("browser Sentry sends nothing on a clean public page view (#773)", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs()
+    vi.unstubAllGlobals()
+  })
+
+  it("no release-health session, no trace and no replay on public pages", async () => {
+    vi.stubEnv("NODE_ENV", "production")
+    vi.resetModules()
+    init.mockClear()
+    const sentry = await import("@sentry/nextjs")
+    vi.mocked(sentry.addIntegration).mockClear()
+    await loadConfig("@/lib/sentry-client-init")
+    const opts = init.mock.calls[0][0]
+    const defaults = [{ name: "BrowserSession" }, { name: "GlobalHandlers" }, { name: "BrowserTracing" }]
+    expect(opts.integrations(defaults).map((i: { name: string }) => i.name)).toEqual(["GlobalHandlers", "BrowserTracing"])
+    vi.stubGlobal("window", { location: { pathname: "/doc" } })
+    expect(opts.tracesSampler({ name: "/doc" })).toBe(0)
+    expect(opts.tracesSampler({ name: "/admin/events/[id]" })).toBe(0.1)
+    expect(opts).not.toHaveProperty("tracesSampleRate")
+    expect(sentry.addIntegration).not.toHaveBeenCalled()
+  })
 })

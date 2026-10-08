@@ -83,16 +83,18 @@ Le lecteur (`<video crossOrigin="anonymous">`) charge la vidéo et ses sous-titr
 | Variable | Description |
 |----------|-------------|
 | `SENTRY_DSN` | DSN serveur et edge (`sentry.server.config.ts`, `sentry.edge.config.ts`) |
-| `NEXT_PUBLIC_SENTRY_DSN` | DSN navigateur (`instrumentation-client.ts`). Argument de build Docker |
+| `NEXT_PUBLIC_SENTRY_DSN` | DSN navigateur (`src/lib/sentry-client-init.ts`). Argument de build Docker |
 | `SENTRY_AUTH_TOKEN` | Upload des source maps au build. Secret de build Docker (`sentry_auth_token`) |
 
-Le client Sentry ignore les erreurs des scripts injectés par les navigateurs et les extensions (`__firefox__` des navigateurs iOS, `DarkReader`, `window.ethereum`, `MetaMask`), le rejet « Object Not Found Matching Id:…, MethodName:…, ParamCount:… » des analyseurs de liens de Microsoft (Outlook Safe Links, Defender), qui ouvrent les liens personnels des emails, et les erreurs des URLs `app://` et `inpage.js`. La liste est `BROWSER_NOISE_ERRORS` (`src/lib/sentry-scrub.ts`). Côté serveur, il ignore « The destination stream closed early » (client déconnecté pendant un flux).
+Le client Sentry ignore les erreurs des scripts injectés par les navigateurs et les extensions (`__firefox__` des navigateurs iOS, `DarkReader`, `window.ethereum`, `MetaMask`), le rejet « Object Not Found Matching Id:…, MethodName:…, ParamCount:… » des analyseurs de liens de Microsoft (Outlook Safe Links, Defender), qui ouvrent les liens personnels des emails, et les erreurs des URLs `app://` et `inpage.js`. La liste est `BROWSER_NOISE_ERRORS` (`src/lib/sentry-scrub.ts`). Il écarte aussi les rejets de promesse dont la raison est un événement DOM sans pile (« Event `Event` (type=error) captured as promise rejection », vus depuis des clients automatisés), par `beforeSendClient`. Côté serveur, il ignore « The destination stream closed early » (client déconnecté pendant un flux).
 
 Données envoyées à Sentry (navigateur, serveur et edge) :
 
 - Sentry n'est actif que dans les builds de production (`enabled: NODE_ENV === "production"`). Le développement local et les tests E2E, qui chargent le vrai DSN depuis `.env`, n'envoient rien.
 - `dataCollection: NO_PII_DATA_COLLECTION` (`src/lib/sentry-scrub.ts`) : ni informations utilisateur, ni cookies, ni en-têtes, ni corps de requête, ni paramètres d'URL, ni données de requêtes SQL, ni variables locales. `includeLocalVariables` est aussi désactivé côté serveur.
-- `src/lib/sentry-scrub.ts` masque les jetons d'accès dans les URLs (`/my/<jeton>`, `/leader/<jeton>`, `/waitlist/<jeton>/confirm`, `/api/public/registrations/<jeton>`, `/api/public/member-invite/<jeton>`, `/api/public/leader/<jeton>`, et les paramètres `token` et `t`) avant l'envoi des événements, transactions, spans et fils d'Ariane. Les enregistrements de session (Session Replay : 10 % des sessions, 100 % de celles avec erreur) masquent tous les textes et les médias ; leurs URLs ne sont pas nettoyées par ce module.
+- `src/lib/sentry-scrub.ts` masque les jetons d'accès dans les URLs (`/my/<jeton>`, `/leader/<jeton>`, `/waitlist/<jeton>/confirm`, `/api/public/registrations/<jeton>`, `/api/public/member-invite/<jeton>`, `/api/public/leader/<jeton>`, et les paramètres `token` et `t`) avant l'envoi des événements, transactions, spans et fils d'Ariane. Les enregistrements de session (Session Replay : 10 % des sessions, 100 % de celles avec erreur) ne concernent que l'espace d'administration (`/admin`, `/super-admin`) ; ils masquent tous les textes et les médias, et leurs URLs ne sont pas nettoyées par ce module.
+- Navigateur (`src/lib/sentry-client-policy.ts`) : les erreurs sont envoyées depuis toutes les pages ; les traces de performance (10 %) seulement depuis l'espace d'administration ; aucune session de suivi de version (`BrowserSession`). Une page publique sans erreur n'envoie donc rien à `/monitoring`.
+- Le SDK navigateur se charge quand la page est inactive, ou dès la première erreur (`src/lib/sentry-client-loader.ts`) ; les erreurs survenues avant sont conservées puis envoyées.
 - Région du compte : Union européenne (Allemagne), d'après le DSN public du navigateur (`ingest.de.sentry.io`).
 
 ## Seed (`npm run db:seed`)

@@ -1,14 +1,14 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { z } from "zod"
 import type { Audience } from "@/lib/video-catalog"
 
 /**
  * « Cette vidéo vous a-t-elle été utile ? » (#646): pure helpers shared by the detail page's
  * VideoFeedback component, the public POST route (/api/public/video-feedback) and the super-admin
- * view (/super-admin/video-feedback). No Prisma and no `fs` import: the component is bundled for
- * the browser (see the top comment of src/lib/video-catalog.ts).
+ * view (/super-admin/video-feedback). No Prisma, no `fs` and no zod import: the component is bundled
+ * for the browser (see the top comment of src/lib/video-catalog.ts); the request schema lives in
+ * src/lib/video-feedback-schema.ts.
  *
  * Privacy: an answer is anonymous. What is stored is the video id, its catalogue revision, the
  * language, Oui/Non, the reading context and the day; never an IP, a cookie, a session or an
@@ -33,13 +33,13 @@ export function feedbackContextFrom(from: string | string[] | undefined | null):
   return value === FROM_DOC_VALUE ? "documentation" : "masterclass"
 }
 
-export const feedbackBodySchema = z.object({
-  videoId: z.string().regex(/^[A-Z][A-Z0-9_]+$/).max(100),
-  revision: z.number().int().min(1).max(100_000),
-  useful: z.boolean(),
-  context: z.enum(FEEDBACK_CONTEXTS),
-})
-export type FeedbackBody = z.infer<typeof feedbackBodySchema>
+/** A posted answer, as checked by `feedbackBodySchema` (src/lib/video-feedback-schema.ts). */
+export type FeedbackBody = {
+  videoId: string
+  revision: number
+  useful: boolean
+  context: FeedbackContext
+}
 
 /** Primary language subtag of the manifest's language: "fr-CH" → "fr". */
 export function feedbackLanguage(manifestLanguage: string): string {

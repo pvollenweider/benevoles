@@ -1,14 +1,18 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { z } from "zod"
+import type { VideoManifest, VideoRender, ViewerContent } from "@/lib/video-catalog-schema"
+
+export type { VideoCatalogEntry, VideoManifest, VideoRender, ViewerContent } from "@/lib/video-catalog-schema"
 
 /**
  * Video library (#644): types, Zod schemas and pure helpers (filtering, search, formatting). No
  * `fs`/`path` import on purpose — this module is bundled for the client too (VideoGallery.tsx's
  * filters run in the browser), and a `node:fs` import breaks that build (same reason there's no
  * Prisma import in a shared `src/lib` module, see CLAUDE.md). The fs-reading loader lives in
- * `src/lib/video-catalog-load.ts` (server-only), which imports the schemas from here.
+ * `src/lib/video-catalog-load.ts` (server-only). The Zod schemas live in
+ * `src/lib/video-catalog-schema.ts`, kept out of this module so zod (about 85 KiB compressed) is
+ * not shipped to the browser with the gallery filters (#773).
  */
 
 // The nine themes of the masterclass carousel (videos/MASTERCLASS_PLAN.md, "Organisation du
@@ -28,7 +32,6 @@ export const THEMES = [
 ] as const
 
 export type ThemeId = (typeof THEMES)[number]["id"]
-const THEME_IDS = THEMES.map((t) => t.id) as [ThemeId, ...ThemeId[]]
 
 export function themeLabel(id: ThemeId): string {
   return THEMES.find((t) => t.id === id)?.label ?? id
@@ -51,94 +54,6 @@ export const LEVEL_LABELS: Record<Level, string> = {
   essentiel: "Essentiel",
   avance: "Avancé",
 }
-
-// --- videos/catalog.json ------------------------------------------------------------------
-
-export const catalogEntrySchema = z.object({
-  id: z.string().regex(/^[A-Z][A-Z0-9_]+$/, "identifiant stable invalide"),
-  manifest: z.string().regex(/^[a-z0-9-]+$/, "slug de manifeste invalide"),
-  category: z.string().min(1),
-  tags: z.array(z.string().min(1)),
-  published: z.boolean(),
-  seedScenario: z.string().optional(),
-  // Added for the video library (#644): a video may belong to several themes without being
-  // duplicated in the catalogue (#645 principle — one entry, several classifications).
-  themes: z.array(z.enum(THEME_IDS)).min(1, "au moins un thème est requis"),
-  audience: z.array(z.enum(AUDIENCES)).min(1, "au moins un public est requis"),
-  level: z.enum(LEVELS),
-  feature: z.string().min(1),
-  updatedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "date ISO attendue (AAAA-MM-JJ)"),
-  // Prepared for #646 (feedback tied to a precise revision): bumped when a video is fully
-  // regenerated, so older feedback never applies to the new render. Not used by any UI yet.
-  revision: z.number().int().min(1),
-})
-export type VideoCatalogEntry = z.infer<typeof catalogEntrySchema>
-
-export const catalogSchema = z.object({
-  defaultLanguage: z.string().min(1),
-  videos: z.array(catalogEntrySchema),
-})
-
-// --- videos/renders.json --------------------------------------------------------------------
-
-/**
- * What the app knows of a video's render without the render itself (the MP4 never ships with the
- * app): its real duration and frame size, and whether its posters exist. Written by
- * videos/tools/posters.ts from each published render, keyed by manifest slug; a video missing
- * from it simply has no poster and keeps the manifest's estimated duration.
- */
-export const renderInfoSchema = z.object({
-  durationMs: z.number().int().positive(),
-  width: z.number().int().positive(),
-  height: z.number().int().positive(),
-  /** `<slug>.jpg` (the video's own ratio) and `<slug>-og.jpg` (1200 x 630) are published next to the MP4. */
-  poster: z.boolean(),
-})
-export type VideoRender = z.infer<typeof renderInfoSchema>
-
-export const rendersSchema = z.record(z.string(), renderInfoSchema)
-
-// --- videos/manifests/*.json ---------------------------------------------------------------
-
-const segmentSchema = z.object({
-  id: z.string().min(1),
-  transcript: z.string().min(1),
-  style: z.string().optional(),
-  fallbackDurationMs: z.number().int().min(1000),
-})
-
-/**
- * Viewer-facing content for the detail page (#644 owner feedback): what the video explains to the
- * viewer, written from the narration segments above — never the internal editorial script (the
- * four-part Utilité/Démonstration/Résultat visible/Points d'attention recipe is production
- * material, not shown to viewers any more). `videos/lib/manifest.ts` keeps this field optional at
- * the type level (the generation tools never read or write it); here it's required, every one of
- * the 29 manifests has one.
- */
-export const viewerContentSchema = z.object({
-  /** 1–2 sentences, "Dans cette vidéo, vous …". */
-  summary: z.string().min(1),
-  /** 3–7 short imperative steps, in the order shown in the video. */
-  steps: z.array(z.string().min(1)).min(3).max(7),
-  /** 1–4 key points: limits, what happens next, good practice. */
-  remember: z.array(z.string().min(1)).min(1).max(4),
-})
-export type ViewerContent = z.infer<typeof viewerContentSchema>
-
-export const manifestSchema = z.object({
-  id: z.string().min(1),
-  slug: z.string().min(1),
-  title: z.string().min(1),
-  description: z.string().min(1),
-  language: z.string().min(1),
-  voice: z.string().min(1),
-  voiceStyle: z.string().min(1),
-  continuousNarration: z.boolean().optional(),
-  viewport: z.object({ width: z.number(), height: z.number(), deviceScaleFactor: z.number() }),
-  segments: z.array(segmentSchema).min(1),
-  viewer: viewerContentSchema,
-})
-export type VideoManifest = z.infer<typeof manifestSchema>
 
 // --- videos/scripts/*.md -------------------------------------------------------------------
 

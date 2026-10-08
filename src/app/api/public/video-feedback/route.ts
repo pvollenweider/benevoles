@@ -5,7 +5,8 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getClientIp, memoryStore, rateLimit } from "@/lib/rate-limit"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
-import { checkFeedbackTarget, feedbackBodySchema, feedbackDay, feedbackLanguage, FEEDBACK_RATE_LIMIT } from "@/lib/video-feedback"
+import { checkFeedbackTarget, feedbackDay, feedbackLanguage, FEEDBACK_RATE_LIMIT } from "@/lib/video-feedback"
+import { feedbackBodySchema } from "@/lib/video-feedback-schema"
 
 /**
  * « Cette vidéo vous a-t-elle été utile ? » (#646). Public and unauthenticated: the video library

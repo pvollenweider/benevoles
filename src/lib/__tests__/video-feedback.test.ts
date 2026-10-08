@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest"
 import {
   checkFeedbackTarget,
-  feedbackBodySchema,
   feedbackContextFrom,
   feedbackDay,
   feedbackLanguage,
@@ -9,6 +8,7 @@ import {
   feedbackWording,
   summarizeFeedback,
 } from "../video-feedback"
+import { feedbackBodySchema } from "../video-feedback-schema"
 
 // « Cette vidéo vous a-t-elle été utile ? » (#646).
 

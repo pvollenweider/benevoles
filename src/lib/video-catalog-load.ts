@@ -3,7 +3,8 @@
 
 import fs from "fs"
 import path from "path"
-import { catalogSchema, manifestSchema, parseScript, rendersSchema, type Audience, type ThemeId, type Video } from "@/lib/video-catalog"
+import { parseScript, type Audience, type ThemeId, type Video } from "@/lib/video-catalog"
+import { catalogSchema, manifestSchema, rendersSchema } from "@/lib/video-catalog-schema"
 
 /**
  * Video library (#644), server-only: reads `videos/catalog.json`, the per-video manifests and
