@@ -93,10 +93,13 @@ export function videoThumbnailUrl(video: Video, ctx: VideoSeoContext): string {
  * The <title> of a video page: the longest site suffix that keeps it within 65 characters
  * (src/lib/meta-length.ts), the bare video title when even « | benevol.app » does not fit.
  */
-export function videoPageTitle(video: Pick<Video, "title">): string {
+export function videoPageTitle(video: Pick<Video, "title"> & Partial<Pick<Video, "feature">>): string {
+  // A title that alone exceeds the limit is spoken in the narration, so it stays on the page; the
+  // <title> uses the catalogue's short feature name instead (« Heures de bénévolat et attestation »).
+  const base = video.title.length > META_TITLE_MAX && video.feature ? video.feature : video.title
   const suffixes = [" | Tutoriel vidéo benevol.app", " | Vidéo benevol.app", ` | ${VIDEO_SITE_NAME}`]
-  const fitting = suffixes.find((suffix) => video.title.length + suffix.length <= META_TITLE_MAX)
-  return fitting ? `${video.title}${fitting}` : video.title
+  const fitting = suffixes.find((suffix) => base.length + suffix.length <= META_TITLE_MAX)
+  return fitting ? `${base}${fitting}` : base
 }
 
 /**

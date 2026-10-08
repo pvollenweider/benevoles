@@ -82,5 +82,6 @@
       "transcript": "Enfin, ouvrons les rapports de la Fête de septembre. Le résumé distingue les personnes et les inscriptions. Ici, deux bénévoles occupent trois créneaux confirmés : une personne participe pour la première fois, l'autre est de retour. Les présences n'ont été saisies que pour un créneau. Le bilan le signale : les autres ne sont pas déclarés absents. Nous retrouvons six heures planifiées, dont deux attestées, puis le remplissage par poste. Ces repères vous aident à préparer la prochaine édition, sans confondre inscription, présence et durée prévue.",
       "fallbackDurationMs": 50000
     }
-  ]
+  ],
+  "posterAtMs": 175000
 }

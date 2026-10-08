@@ -34,7 +34,7 @@ test("the gallery's social card is a 1200 x 630 PNG", async ({ request }) => {
 })
 
 test("an unpublished video page stays out of the index", async ({ page }) => {
-  await page.goto("/videos/VOLUNTEER_HOURS_CERTIFICATE")
+  await page.goto("/videos/VOLUNTEER_PHONE_NOTIFICATIONS")
   expect(await robotsMeta(page)).toContain("noindex")
   const types = (await jsonLd(page)).map((d) => JSON.stringify(d))
   expect(types.join(" ")).not.toContain("VideoObject")
@@ -53,7 +53,7 @@ test.describe("with the media host online", () => {
     expect(collection["@type"]).toBe("CollectionPage")
     const list = collection.mainEntity as { numberOfItems: number; itemListElement: { url: string }[] }
     expect(list.numberOfItems).toBeGreaterThan(10)
-    expect(list.itemListElement.map((i) => i.url)).not.toContainEqual(expect.stringContaining("VOLUNTEER_HOURS_CERTIFICATE"))
+    expect(list.itemListElement.map((i) => i.url)).not.toContainEqual(expect.stringContaining("VOLUNTEER_PHONE_NOTIFICATIONS"))
   })
 
   test("a published video page is indexed with an absolute canonical, a VideoObject and og:video", async ({ page }) => {
@@ -87,13 +87,13 @@ test.describe("with the media host online", () => {
     const body = await response.text()
     expect(body).toContain("<video:video>")
     expect(body).toMatch(/<loc>[^<]+\/videos\/EVENT_CREATE_BLANK<\/loc>/)
-    expect(body).not.toContain("VOLUNTEER_HOURS_CERTIFICATE")
+    expect(body).not.toContain("VOLUNTEER_PHONE_NOTIFICATIONS")
   })
 
   test("the main sitemap also lists the gallery and the published videos", async ({ request }) => {
     const body = await (await request.get("/sitemap.xml")).text()
     expect(body).toMatch(/<loc>[^<]+\/videos<\/loc>/)
     expect(body).toMatch(/<loc>[^<]+\/videos\/EVENT_CREATE_BLANK<\/loc>/)
-    expect(body).not.toContain("VOLUNTEER_HOURS_CERTIFICATE")
+    expect(body).not.toContain("VOLUNTEER_PHONE_NOTIFICATIONS")
   })
 })
