@@ -141,11 +141,12 @@ jobs:
           retention-days: 7
 
   lighthouse:
-    name: Lighthouse (report)
+    name: Lighthouse
     runs-on: ubuntu-latest
 
     # Same database and seed as the E2E job, against `next build` + `next start` (#773).
-    # Phase 1: category assertions only warn; the job fails only if Lighthouse cannot run.
+    # Fails below the thresholds of lighthouserc.cjs (100 in accessibility, best practices and SEO,
+    # 95 in desktop performance); mobile performance and the video library's SEO only warn.
     services:
       postgres:
         image: postgres:16-alpine
@@ -198,14 +199,18 @@ jobs:
       - name: Lighthouse CI (mobile and desktop)
         # One run per URL and form factor. Reports go to temporary public storage (the repo is
         # public; links are printed in the log) and to the workflow artifact below.
+        # Both form factors are always measured and uploaded; the step fails at the end if either
+        # missed a threshold.
         run: |
+          failed=0
           for form_factor in mobile desktop; do
             export LHCI_FORM_FACTOR=$form_factor
             npx lhci collect --config=lighthouserc.cjs
-            npx lhci assert --config=lighthouserc.cjs || true
+            npx lhci assert --config=lighthouserc.cjs || failed=1
             npx lhci upload --config=lighthouserc.cjs --target=temporary-public-storage || true
             npx lhci upload --config=lighthouserc.cjs --target=filesystem --outputDir=lighthouse-reports/$form_factor
           done
+          exit $failed
 
       - name: Score summary
         if: always()
