@@ -43,6 +43,11 @@ export function createSentryLoader({ load, win, idleTimeoutMs = 4000 }: SentryLo
     void ensureLoaded()
   }
   const onRejection = (event: PromiseRejectionEvent) => {
+    // A rejection with a bare DOM Event (a failed resource load) has no stack: once loaded, the
+    // SDK's own handler reports it as « captured as promise rejection » and beforeSendClient drops
+    // it (BENEVOLAPP-P). Replayed here through captureException, it would read « captured as
+    // exception » with this file as its stack and slip past that filter, so it is not kept.
+    if (typeof Event !== "undefined" && event.reason instanceof Event) return
     pending.push({ error: event.reason, mechanism: "onunhandledrejection" })
     void ensureLoaded()
   }
