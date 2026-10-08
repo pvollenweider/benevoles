@@ -33,32 +33,32 @@ export const LANDING_FAQ: readonly FaqEntry[] = [
   {
     question: "Les bénévoles doivent-ils créer un compte ?",
     answer:
-      "Non. Ils ouvrent le lien de votre événement, choisissent leurs créneaux et confirment. Un email leur donne un lien personnel pour retrouver, modifier ou annuler leur inscription.",
+      "Non. Ils ouvrent le lien de votre événement, cochent leurs créneaux et laissent leur nom et leur email. L'email de confirmation contient un lien personnel pour revenir modifier ou annuler leur inscription.",
   },
   {
     question: "Combien ça coûte ?",
     answer:
-      "Rien. benevol.app est gratuit et open source. Si l'outil vous rend service, vous pouvez soutenir le projet par un don.",
+      "Rien, c'est gratuit. Si l'outil vous rend service et que vous voulez soutenir le projet, vous pouvez faire un don.",
   },
   {
     question: "Comment commencer ?",
-    answer: `Écrivez à ${CONTACT_EMAIL} : on vous crée un espace à l'adresse de votre association, du type votre-association.benevol.app. Une liste de premiers pas vous guide ensuite, jusqu'à une inscription de test.`,
+    answer: `Envoyez un email à ${CONTACT_EMAIL}. On vous ouvre un espace à l'adresse de votre association (du type votre-association.benevol.app). Ensuite, une liste de premiers pas vous accompagne jusqu'à une première inscription de test.`,
   },
   {
     question: "Ça marche sur téléphone ?",
     answer:
-      "Oui. La page d'inscription est pensée d'abord pour le téléphone, avec un planning qu'on fait défiler du doigt. L'administration fonctionne aussi sur mobile, et plus confortablement sur ordinateur.",
+      "Oui. La page d'inscription a été conçue d'abord pour le téléphone, on fait défiler le planning du doigt. Vous pouvez aussi gérer l'événement depuis votre mobile, même si c'est plus confortable sur un ordinateur.",
   },
   {
     question: "Où sont les données ?",
     answer:
-      "L'application et sa base de données sont hébergées en France, chez OVH. Une copie des sauvegardes, chiffrée avec une clé que le prestataire ne détient pas, est conservée hors site chez Infomaniak, en Suisse. Chaque organisation ne voit que ses événements et ses bénévoles, et peut tout exporter à tout moment. Aucun cookie de pistage, analytique ou publicitaire.",
+      "Sur des serveurs OVH en France, pour l'application comme pour sa base de données. Une copie des sauvegardes est aussi gardée hors site chez Infomaniak, en Suisse, chiffrée avec une clé que ce prestataire n'a pas. Une organisation ne voit que ses propres événements et bénévoles, et peut tout exporter quand elle veut. Le site ne pose aucun cookie de pistage, ni analytique ni publicitaire.",
     link: { href: "/legal/privacy", label: "Politique de confidentialité" },
   },
   {
     question: "Peut-on l'installer soi-même ?",
     answer:
-      "Oui. Le code est publié sous licence AGPL-3.0, avec un guide de déploiement (Docker, Kubernetes, sauvegardes).",
+      "Oui, le code est sous licence AGPL-3.0. Un guide explique comment le déployer avec Docker ou Kubernetes et comment mettre en place les sauvegardes.",
     link: { href: `${REPOSITORY_URL}/blob/main/docs/deploiement.md`, label: "Guide de déploiement sur GitHub" },
   },
 ]

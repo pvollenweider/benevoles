@@ -173,35 +173,35 @@ const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:o
 
 const STEPS = [
   {
-    title: "Vous préparez le planning",
-    text: "Des postes, des créneaux, un nombre de places. Partez d'un modèle (festival, buvette, fête de village) ou de l'édition de l'an dernier, décalée à la bonne date.",
+    title: "Vous créez les postes et les créneaux",
+    text: "Pour chaque créneau, indiquez combien de personnes il vous faut. Un modèle (buvette, fête de village, festival sur plusieurs jours, entre autres) vous donne une base. Ou reprenez l'édition de l'an dernier avec la nouvelle date, le planning entier se décale.",
   },
   {
-    title: "Vous partagez un lien",
-    text: "Votre page, à l'adresse de votre association, s'envoie par email, se poste sur les réseaux ou s'imprime sur une affiche. Vous pouvez aussi inviter directement les membres de votre équipe.",
+    title: "Vous envoyez le lien",
+    text: "La page de l'événement est à l'adresse de votre association. Mettez-la dans la newsletter ou sur Facebook, ou collez son QR code sur l'affiche. Les habitués, vous pouvez aussi les inviter un par un depuis votre liste de membres.",
   },
   {
-    title: "Ils choisissent leurs créneaux",
-    text: "Depuis leur téléphone, sans compte ni mot de passe. Ils reçoivent une confirmation, des rappels, et un lien personnel pour modifier ou annuler.",
+    title: "Les bénévoles s'inscrivent",
+    text: "Sur leur téléphone, sans compte ni mot de passe. Un email confirme l'inscription. Il contient un lien personnel pour modifier ou annuler si un imprévu tombe.",
   },
 ]
 
 const BENEFITS = [
   {
-    title: "Vous savez où il manque du monde",
-    text: "Le tableau de bord commence par ce qui presse : créneaux pas encore complets, demandes à valider, places de liste d'attente qui expirent. Une page par événement classe les créneaux du plus dégarni au presque complet, et chaque ligne mène là où on agit.",
+    title: "Les créneaux vides se voient tout de suite",
+    text: "En ouvrant le tableau de bord, vous tombez d'abord sur ce qui presse, comme les créneaux encore incomplets ou les demandes à valider. La page « Où manque-t-il du monde ? » trie les créneaux du plus vide au presque plein. Il manque deux personnes au bar samedi matin ? Vous le savez avant d'y être, et un clic vous amène sur le créneau.",
     image: "/doc-img/admin-staffing.png",
     alt: "Page « Où manque-t-il du monde ? » : 29 places pourvues sur 44, puis la liste des créneaux à compléter, chacun avec sa barre de remplissage et le nombre de personnes qui manquent.",
   },
   {
-    title: "Les messages partent tout seuls",
-    text: "Confirmation à l'inscription, rappels deux jours avant, la veille et le jour même. Quand une place se libère, la personne suivante sur la liste d'attente est prévenue. Pour le reste, écrivez à tous les inscrits, à un poste ou à un créneau, avec un aperçu avant l'envoi.",
+    title: "Vous n'avez plus à relancer chacun",
+    text: "Chaque bénévole reçoit une confirmation en s'inscrivant, puis un rappel deux jours avant, la veille et le jour même. Si quelqu'un se désiste, la personne suivante sur la liste d'attente est prévenue. Quand vous avez une info à faire passer, vous écrivez à tous les inscrits ou seulement à ceux d'un poste ou d'un créneau, avec un aperçu avant d'envoyer.",
     image: "/doc-img/admin-message.png",
     alt: "Page « Écrire aux bénévoles » : choix des destinataires (tous les inscrits, un poste, un créneau, la liste d'attente, les invités sans créneau) et modèles de message réutilisables.",
   },
   {
-    title: "Le jour J tient sur une feuille",
-    text: "Plannings par jour, par poste ou par bénévole, feuille de présence à cocher, badges à découper : tout s'imprime lisiblement en noir et blanc, ou s'enregistre en PDF.",
+    title: "Le planning du jour J, sur papier",
+    text: "Sur place, le réseau ne passe pas toujours. Imprimez le planning par jour, par poste ou par bénévole, avec la feuille de présence à cocher et les badges à découper. Ça reste lisible en noir et blanc, et vous pouvez aussi en garder un PDF.",
     image: "/doc-img/admin-print.png",
     alt: "Page « Rapports » : export complet, archive de l'événement, plannings par jour, par poste et individuel, prêts à imprimer.",
   },
@@ -224,15 +224,16 @@ function LandingPage() {
               className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.05] tracking-tight"
               style={{ textWrap: "balance" } as React.CSSProperties}
             >
-              Un lien, et vos bénévoles s&apos;inscrivent.
+              Vos bénévoles s&apos;inscrivent eux-mêmes, à partir d&apos;un simple lien
             </h1>
             <p className="mt-6 text-lg sm:text-xl text-blue-100 max-w-xl leading-relaxed" style={{ textWrap: "pretty" } as React.CSSProperties}>
-              Ils choisissent leurs créneaux sur leur téléphone, sans créer de compte. Vous voyez où il
-              manque du monde, les rappels partent tout seuls, et le jour J tient sur une feuille.
+              Plus besoin de faire circuler un fichier Excel par email. Ils ouvrent la page sur leur
+              téléphone et prennent les créneaux qui les arrangent, sans créer de compte. Vous voyez
+              tout de suite quels postes sont encore vides. Les rappels, c&apos;est l&apos;outil qui les envoie.
             </p>
             <p className="mt-3 text-base text-blue-200 max-w-xl leading-relaxed">
-              Pour les festivals, les buvettes, les fêtes de village et toutes les associations qui
-              comptent sur des bénévoles.
+              Fait pour les associations qui tournent avec des bénévoles, que ce soit pour la fête du
+              village ou un festival sur plusieurs jours.
             </p>
             <div className="mt-10 flex flex-wrap gap-x-6 gap-y-4 items-center">
               <a
@@ -262,7 +263,7 @@ function LandingPage() {
               </a>
             </div>
             <p className="mt-8 text-sm text-blue-200">
-              Gratuit <span aria-hidden="true">·</span> Open source <span aria-hidden="true">·</span> Hébergé en France
+              Gratuit et open source, hébergé en France
             </p>
           </div>
 
@@ -292,7 +293,7 @@ function LandingPage() {
       <section aria-labelledby="steps-heading" className="py-20 sm:py-24">
         <div className={SITE_CONTAINER_CLASS}>
           <h2 id="steps-heading" className="text-3xl sm:text-4xl font-bold tracking-tight" style={{ textWrap: "balance" } as React.CSSProperties}>
-            Prêt en trois étapes
+            Comment ça marche
           </h2>
           <ol role="list" className="mt-12 grid gap-10 md:grid-cols-3 md:gap-12">
             {STEPS.map((step, i) => (
@@ -316,7 +317,7 @@ function LandingPage() {
       <section aria-labelledby="benefits-heading" className="bg-gray-50 border-y border-gray-200 py-20 sm:py-24">
         <div className={SITE_CONTAINER_CLASS}>
           <h2 id="benefits-heading" className="text-3xl sm:text-4xl font-bold tracking-tight max-w-2xl" style={{ textWrap: "balance" } as React.CSSProperties}>
-            Moins de tableurs, moins de relances, plus de temps pour la fête
+            Ce qui change par rapport au tableur partagé
           </h2>
           <div className="mt-16 space-y-20 sm:space-y-28">
             {BENEFITS.map((b, i) => (
@@ -351,21 +352,21 @@ function LandingPage() {
       <section aria-labelledby="trust-heading" className="py-20 sm:py-24">
         <div className={SITE_CONTAINER_CLASS}>
           <h2 id="trust-heading" className="text-3xl sm:text-4xl font-bold tracking-tight" style={{ textWrap: "balance" } as React.CSSProperties}>
-            Un outil sur lequel compter
+            Avant de nous confier vos bénévoles
           </h2>
           <dl className="mt-12 grid gap-x-12 gap-y-10 sm:grid-cols-2">
             <div>
               <dt className="text-lg font-semibold">Gratuit et open source</dt>
               <dd className="mt-2 text-base text-gray-600 leading-relaxed">
-                Pas d&apos;abonnement ni de version payante. Le code est public, sous licence AGPL-3.0,
-                et l&apos;outil grandit avec les retours des associations qui l&apos;utilisent.
+                Il n&apos;y a ni abonnement ni version payante. Le code est publié sous licence
+                AGPL-3.0. L&apos;outil évolue avec les retours des associations qui s&apos;en servent.
               </dd>
             </div>
             <div>
               <dt className="text-lg font-semibold">Hébergé en France, sans pistage</dt>
               <dd className="mt-2 text-base text-gray-600 leading-relaxed">
-                L&apos;application et sa base de données sont chez OVH, en France. Aucun cookie de
-                pistage, analytique ou publicitaire.{" "}
+                Le site et sa base de données tournent sur des serveurs OVH, en France. On ne pose aucun
+                cookie de pistage, ni analytique ni publicitaire.{" "}
                 <Link href="/legal/privacy" className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
                   Politique de confidentialité
                 </Link>
@@ -374,15 +375,16 @@ function LandingPage() {
             <div>
               <dt className="text-lg font-semibold">Vos données restent les vôtres</dt>
               <dd className="mt-2 text-base text-gray-600 leading-relaxed">
-                Chaque organisation ne voit que ses événements et ses bénévoles. Membres, journal
-                d&apos;activité, archive complète d&apos;un événement : tout s&apos;exporte, à tout moment.
+                Une organisation ne voit jamais les événements ni les bénévoles d&apos;une autre. Pour
+                garder une copie, ou pour partir, vous exportez quand vous voulez vos membres, le journal
+                d&apos;activité ou l&apos;archive complète d&apos;un événement.
               </dd>
             </div>
             <div>
-              <dt className="text-lg font-semibold">Pensé pour tout le monde</dt>
+              <dt className="text-lg font-semibold">Utilisable au clavier et au lecteur d&apos;écran</dt>
               <dd className="mt-2 text-base text-gray-600 leading-relaxed">
-                Inscription et administration conçues pour le clavier et les lecteurs d&apos;écran,
-                vérifiées à chaque modification.{" "}
+                L&apos;inscription comme l&apos;administration se font sans souris et avec un lecteur
+                d&apos;écran. On le vérifie à chaque modification du code.{" "}
                 <Link href="/accessibilite" className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
                   Déclaration d&apos;accessibilité
                 </Link>
@@ -440,11 +442,11 @@ function LandingPage() {
         <div className={SITE_CONTAINER_CLASS}>
           <div className="max-w-2xl mx-auto text-center">
             <h2 id="cta-heading" className="text-3xl sm:text-4xl font-bold text-white tracking-tight" style={{ textWrap: "balance" } as React.CSSProperties}>
-              Votre prochain événement commence ici
+              Un événement en préparation ?
             </h2>
             <p className="mt-4 text-lg text-blue-100 leading-relaxed">
-              Écrivez-nous : on vous crée un espace à l&apos;adresse de votre association, et une liste
-              de premiers pas vous guide jusqu&apos;à la publication.
+              Écrivez-nous avec le nom de votre association. On vous crée un espace à son adresse.
+              Ensuite, une liste de premiers pas vous accompagne jusqu&apos;à la mise en ligne du planning.
             </p>
             <a
               href={`mailto:${CONTACT_EMAIL}`}

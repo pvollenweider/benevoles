@@ -62,4 +62,12 @@ describe("landing FAQ", () => {
     expect(data?.answer).toContain("chez Infomaniak, en Suisse")
     expect(data?.answer).not.toContain("Dropbox")
   })
+
+  // The home copy was rewritten so it no longer reads as generated text: no em dash anywhere.
+  it("uses no em dash in questions or answers", () => {
+    for (const entry of LANDING_FAQ) {
+      expect(entry.question).not.toContain("\u2014")
+      expect(entry.answer).not.toContain("\u2014")
+    }
+  })
 })
