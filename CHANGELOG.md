@@ -15,6 +15,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 - **Médiathèque, même en-tête et même pied de page que le reste du site** : `/videos` et chaque page vidéo affichent en haut les liens Fonctionnalités, Guide administrateur et Guide bénévole, comme la documentation, et se terminent par le pied de page en colonnes de benevol.app.
 
+### Corrigé
+
+- **Affiche d'une vidéo téléchargée une seule fois** : sur la page d'une vidéo, l'image affichée avant la lecture était préchargée sans le mode CORS du lecteur ; le navigateur ignorait ce préchargement (avertissement dans la console) et téléchargeait l'image une seconde fois. Préchargement et lecteur utilisent maintenant le même mode.
+
 ## [2.2.0] — 2026-10-08
 
 ### En bref

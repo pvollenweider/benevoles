@@ -8,6 +8,7 @@ import { announce } from "@/lib/announce"
 import { focusFirstAvailableNextFrame } from "@/lib/focus-return"
 import { consumeAutoplayIntent, shouldAutoplay } from "@/lib/video-autoplay"
 import type { VideoMediaUrls } from "@/lib/video-catalog"
+import { VIDEO_CROSS_ORIGIN } from "@/lib/video-cors"
 import { frameOrDefault, type VideoFrame } from "@/lib/video-frame"
 
 /**
@@ -19,6 +20,8 @@ import { frameOrDefault, type VideoFrame } from "@/lib/video-frame"
  * `crossOrigin="anonymous"` (#644 owner decision): the media comes from a separate origin
  * (medias.benevol.app) — required for the `<track>` captions to load under CORS. The media host
  * must send `Access-Control-Allow-Origin` (videos/README.md, docs/configuration.md).
+ * The poster is fetched in that same mode: /videos/[id] preloads it with the same constant
+ * (src/lib/video-cors.ts).
  *
  * Accessibility (#644 review): a native `<video>` that errors silently drops focus with nothing
  * announced. The fallback is always announced through a status region (src/lib/announce.ts
@@ -107,7 +110,7 @@ export default function VideoPlayer({
             ref={videoRef}
             controls
             tabIndex={0}
-            crossOrigin="anonymous"
+            crossOrigin={VIDEO_CROSS_ORIGIN}
             preload="metadata"
             // Only set when the poster was generated (videos/renders.json): never a broken image.
             poster={mediaUrls.poster}

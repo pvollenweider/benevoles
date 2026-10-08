@@ -5,6 +5,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, permanentRedirect } from "next/navigation"
 import { preload } from "react-dom"
+import { posterPreloadOptions } from "@/lib/video-cors"
 import {
   relatedVideos,
   videoMediaUrls,
@@ -66,10 +67,10 @@ export default async function VideoDetailPage({ params, searchParams }: { params
   const mediaUrls = videoMediaUrls(video.slug, env.VIDEO_MEDIA_BASE_URL, video.render)
   // The poster is this page's largest element (#773, Lighthouse LCP): `<video>` has no
   // `fetchpriority`, so a high-priority image preload (sent by Next.js as a `Link` response header)
-  // starts it with the response, before the HTML is parsed. Same request as the poster's own (no
-  // `crossorigin`: the poster is fetched as a plain image, unlike the media and the captions track),
-  // so it is downloaded once. Only here: a documentation unit mounts its player on the reader's click.
-  if (mediaUrls?.poster) preload(mediaUrls.poster, { as: "image", fetchPriority: "high" })
+  // starts it with the response, before the HTML is parsed. Same request as the poster's own, in the
+  // player's CORS mode (src/lib/video-cors.ts), so it is downloaded once. Only here: a documentation
+  // unit mounts its player on the reader's click.
+  if (mediaUrls?.poster) preload(mediaUrls.poster, posterPreloadOptions())
   const jsonLd = videoJsonLd(video, videoSeoContext())
   const related = relatedVideos(video, catalog)
   const updatedAtLabel = new Date(`${video.updatedAt}T00:00:00Z`).toLocaleDateString("fr-CH", { timeZone: "UTC", day: "numeric", month: "long", year: "numeric" })
