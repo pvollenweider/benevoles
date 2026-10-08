@@ -173,7 +173,7 @@ describe.skipIf(!url)("member merge transaction (#600)", () => {
 
     for (const id of [byVolunteerId.id, byEmail.id]) {
       const row = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id } })
-      expect(row.status).toBe("failed")
+      expect(row.status).toBe("cancelled")
       expect(row.lastError).toBe(MERGED_MEMBER_CANCEL_REASON)
     }
     expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: unrelated.id } })).status).toBe("pending")

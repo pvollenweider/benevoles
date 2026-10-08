@@ -42,7 +42,7 @@ export function matchesAbsorbedRecipient(payload: Pick<NotificationPayload, "vol
 export interface OutboxMergeCancelDb {
   notificationOutbox: {
     findMany(args: { where: { organizationId: string; status: "pending" }; select: { id: true; payload: true } }): Promise<{ id: string; payload: unknown }[]>
-    updateMany(args: { where: { id: { in: string[] } }; data: { status: "failed"; lastError: string } }): Promise<{ count: number }>
+    updateMany(args: { where: { id: { in: string[] } }; data: { status: "cancelled"; lastError: string } }): Promise<{ count: number }>
   }
 }
 
@@ -64,7 +64,7 @@ export async function cancelOutboxForMergedMember(db: OutboxMergeCancelDb, organ
     if (matchesAbsorbedRecipient(payload, absorbed)) toCancel.push(row.id)
   }
   if (toCancel.length > 0) {
-    await db.notificationOutbox.updateMany({ where: { id: { in: toCancel } }, data: { status: "failed", lastError: MERGED_MEMBER_CANCEL_REASON } })
+    await db.notificationOutbox.updateMany({ where: { id: { in: toCancel } }, data: { status: "cancelled", lastError: MERGED_MEMBER_CANCEL_REASON } })
   }
   return toCancel
 }

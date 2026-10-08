@@ -5,6 +5,7 @@ import { ORG_INACTIVE_REASON } from "@/lib/outbox-org-cancel-reason"
 import { MAX_ATTEMPTS, type NotificationKind, type NotificationPayload } from "./notifications/types"
 import type { SmtpOutcome, SmtpReason } from "./notifications/smtp-outcome"
 import { MERGED_MEMBER_CANCEL_REASON } from "./outbox-merge-cancel-reason"
+import { MEMBER_DELETED_CANCEL_REASON } from "./outbox-member-deleted-reason"
 
 /**
  * The email delivery page of an organization (#382): how an outbox row reads for an admin.
@@ -102,6 +103,7 @@ export const REASON_LABEL_FR: Record<SmtpReason, string> = {
 export function outboxErrorSentence(lastError: string | null): string | null {
   if (!lastError) return null
   if (lastError === MERGED_MEMBER_CANCEL_REASON) return "Annulé : fiche fusionnée avec une autre."
+  if (lastError === MEMBER_DELETED_CANCEL_REASON) return "Annulé : membre supprimé."
   if (lastError === ORG_INACTIVE_REASON) return "Annulé : organisation désactivée, jamais envoyé."
   const decoded = decodeOutcomeReason(lastError)
   if (decoded) return sentenceFor(decoded)
@@ -214,9 +216,10 @@ export function outboxRowView(row: OutboxRow, payload: Pick<NotificationPayload,
     createdAt: row.createdAt,
     sentAt: row.sentAt,
     nextAttemptAt: state === "pending" || state === "retrying" ? row.nextAttemptAt : null,
-    // A row cancelled by a merge (#600) isn't retryable: its payload still carries the absorbed
-    // record's old address, which the organizer just confirmed was wrong — retrying would email it.
-    canRetry: state === "failed" && row.lastError !== MERGED_MEMBER_CANCEL_REASON,
+    // Only a real failure is retryable. A cancelled row (#814, #815: deactivated organisation,
+    // deleted member, absorbed record) never is: retrying would email someone who must not get it.
+    // The reason check covers a row written as « failed » before the « cancelled » state (#815).
+    canRetry: state === "failed" && row.lastError !== MERGED_MEMBER_CANCEL_REASON && row.lastError !== MEMBER_DELETED_CANCEL_REASON,
   }
 }
 

@@ -144,11 +144,13 @@ export async function runMemberErasure(
 
     // 1. Outbox rows addressed to or naming the person (no FK to Volunteer: only the sealed payload
     // knows). Pending ones are deleted (never sent); sent and failed ones too, once their count is
-    // added to their targeted message's summary, as the nightly cleanup does (#467). A row being
+    // added to their targeted message's summary, as the nightly cleanup does (#467); cancelled ones
+    // as well (#814, #815: deactivated organisation, merged record), which still hold the address and
+    // content and would otherwise wait 30 days for the cleanup. A row being
     // sent right now ("sending") is left to the delivery in flight; the nightly cleanup deletes it
     // once sent. A row sealed with a key rotated away since can't be read and is left as is.
     const candidates = await tx.notificationOutbox.findMany({
-      where: { organizationId, status: { in: ["pending", "sent", "failed"] } },
+      where: { organizationId, status: { in: ["pending", "sent", "failed", "cancelled"] } },
       select: { id: true, payload: true, status: true, targetedMessageId: true },
     })
     const identity = { volunteerId: id, email: member.email, firstName: member.firstName, lastName: member.lastName }

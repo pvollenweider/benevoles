@@ -47,7 +47,7 @@ describe("cancelOutboxForMergedMember", () => {
     ])
     const ids = await cancelOutboxForMergedMember(db, "org-1", { volunteerId: "vol-absorbed", email: "wrong@example.com" })
     expect(ids.sort()).toEqual(["row-1", "row-2"])
-    expect(updateMany).toHaveBeenCalledWith({ where: { id: { in: ["row-1", "row-2"] } }, data: { status: "failed", lastError: MERGED_MEMBER_CANCEL_REASON } })
+    expect(updateMany).toHaveBeenCalledWith({ where: { id: { in: ["row-1", "row-2"] } }, data: { status: "cancelled", lastError: MERGED_MEMBER_CANCEL_REASON } })
   })
 
   it("queries only pending rows of the organization", async () => {
