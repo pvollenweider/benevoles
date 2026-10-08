@@ -121,6 +121,8 @@ describe.skipIf(!url)("member erasure transaction (#516)", () => {
     const outboxToX = await prisma.notificationOutbox.create({ data: { organizationId: orgId, status: "pending", payload: sealPayload({ kind: "reminder_j2", recipient: { email: v.email }, volunteerId: x.id, data: {} }) } })
     const outboxSentToX = await prisma.notificationOutbox.create({ data: { organizationId: orgId, status: "sent", targetedMessageId: message.id, payload: sealPayload({ kind: "targeted_message", recipient: { email: v.email }, volunteerId: x.id, data: {} }) } })
     const outboxNamingX = await prisma.notificationOutbox.create({ data: { organizationId: orgId, status: "pending", payload: sealPayload({ kind: "sector_leader_withdrawal", recipient: { email: "admin@example.org" }, data: { volunteerName: `${v.firstName} ${v.lastName}` } }) } })
+    // #814: an email cancelled (organisation deactivated meanwhile) still holds the address: erased too.
+    const outboxCancelledToX = await prisma.notificationOutbox.create({ data: { organizationId: orgId, status: "cancelled", lastError: "org_inactive", payload: sealPayload({ kind: "reminder_j1", recipient: { email: v.email }, volunteerId: x.id, data: {} }) } })
     const outboxOther = await prisma.notificationOutbox.create({ data: { organizationId: orgId, status: "pending", payload: sealPayload({ kind: "reminder_j2", recipient: { email: `${tag}-paul@example.org` }, volunteerId: other.id, data: {} }) } })
     const outboxSameAddressOtherOrg = await prisma.notificationOutbox.create({ data: { organizationId: orgBId, status: "pending", payload: sealPayload({ kind: "reminder_j2", recipient: { email: v.email }, volunteerId: elsewhere.id, data: {} }) } })
     await prisma.eventLog.create({ data: { eventId, actorType: "volunteer", actorId: x.id, action: "registration.created", entityType: "Registration", entityId: regPast.id } })
@@ -130,7 +132,7 @@ describe.skipIf(!url)("member erasure transaction (#516)", () => {
 
     const result = await runMemberErasure(getOrgClient(orgId), orgId, ADMIN_ACTOR, x.id)
     expect(result.alreadyErased).toBe(false)
-    expect(result.outboxDeleted).toBe(3)
+    expect(result.outboxDeleted).toBe(4)
     expect(result.counts).toMatchObject({ registrations: 2, upcomingLive: 1, invites: 1, answers: 1, pushSubscriptions: 1, sectorLeaders: 1, tombstones: 1 })
 
     // 1. No value the person gave survives, in any table — except in the other organisation's own
@@ -159,7 +161,7 @@ describe.skipIf(!url)("member erasure transaction (#516)", () => {
     expect(await prisma.orgLog.count({ where: { organizationId: orgId, entityId: x.id, action: "member.created" } })).toBe(1)
 
     // 4. Outbox: the person's rows and the one naming them are gone; the sent one was counted first.
-    const remainingOutbox = await prisma.notificationOutbox.findMany({ where: { id: { in: [outboxToX.id, outboxSentToX.id, outboxNamingX.id, outboxOther.id, outboxSameAddressOtherOrg.id] } }, select: { id: true } })
+    const remainingOutbox = await prisma.notificationOutbox.findMany({ where: { id: { in: [outboxToX.id, outboxSentToX.id, outboxNamingX.id, outboxCancelledToX.id, outboxOther.id, outboxSameAddressOtherOrg.id] } }, select: { id: true } })
     expect(remainingOutbox.map((r) => r.id).sort()).toEqual([outboxOther.id, outboxSameAddressOtherOrg.id].sort())
     expect((await prisma.targetedMessage.findUniqueOrThrow({ where: { id: message.id } })).sentCount).toBe(1)
 

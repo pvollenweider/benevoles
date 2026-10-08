@@ -13,7 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Sécurité
 
-- **Emails d'un membre supprimé ou fusionné jamais renvoyés** (#815) : quand un membre était supprimé ou sa fiche fusionnée avec une autre, ses emails en attente étaient bien arrêtés, mais la page Emails les affichait comme un « Échec technique » avec un bouton **Renvoyer**, tout comme « renvoyer les échecs » d'un message ciblé : un clic les aurait envoyés à la personne. Ils sont désormais « Annulé : membre supprimé » ou « Annulé : fiche fusionnée avec une autre », sans possibilité de renvoi.
+- **Emails d'un membre supprimé ou fusionné jamais renvoyés** (#815) : quand un membre était supprimé ou sa fiche fusionnée avec une autre, ses emails en attente étaient bien arrêtés, mais la page Emails les affichait comme un « Échec technique » avec un bouton **Renvoyer**, tout comme « renvoyer les échecs » d'un message ciblé : un clic les aurait envoyés à la personne. Ils sont désormais « Annulé : membre supprimé » ou « Annulé : fiche fusionnée avec une autre », sans possibilité de renvoi. L'effacement des données d'un membre supprime aussi ses emails annulés, qui contiennent encore son adresse.
 - **Plus aucun email ni notification pour une organisation désactivée** (#814) : les emails déjà en file d'attente d'une organisation partaient encore après sa désactivation, et même après sa suppression. Chaque envoi vérifie désormais l'organisation au dernier moment : l'email d'une organisation désactivée ou supprimée est annulé, jamais envoyé, et n'est pas renvoyé si elle est réactivée plus tard. La désactivation annule aussi tout de suite les emails encore en attente. Les notifications sur téléphone suivent la même règle.
 
 ### Ajouté
