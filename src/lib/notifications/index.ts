@@ -28,7 +28,7 @@ export async function sendNotification(
   if (await organizationBlocksSending(payload.organizationId)) {
     return { ok: false, reason: ORG_INACTIVE_REASON, permanent: true, blocked: true }
   }
-  const allowance = await takeSendAllowance(payload.organizationId, payload.kind)
+  const allowance = await takeSendAllowance(payload.organizationId, payload.kind, { recipientEmail: payload.recipient?.email })
   if (!allowance.ok) return { ok: false, reason: `limit:${allowance.limit}`, held: true, retryAfterMs: allowance.retryAfterMs }
   return emailChannel.send(payload)
 }

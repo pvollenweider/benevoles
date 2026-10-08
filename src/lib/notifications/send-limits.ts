@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { decide, memoryStore, postgresStore, type RateLimitStore } from "@/lib/rate-limit"
+import { createHash } from "node:crypto"
+import { memoryStore, postgresStore, type RateLimitStore } from "@/lib/rate-limit"
 import { reportError } from "@/lib/report-error"
 import type { NotificationKind } from "./types"
 
@@ -17,6 +18,13 @@ import type { NotificationKind } from "./types"
  * outbox keeps it pending and tries again when the window ends; a direct send reports it to its
  * caller. One alert per window (the first email over the limit), never one per held email.
  *
+ * Only an email that goes is counted (every window is checked first, then counted): an email held
+ * and retried every minute never eats into a window again, so a backlog cannot exhaust a daily cap
+ * on its own. Emails anyone can trigger from a public page (password reset, registration
+ * confirmation, lost link) also have a per-recipient cap, checked first: a flood of requests for
+ * one address stops there, without using up the organisation's caps and without blocking the
+ * other administrators' password resets.
+ *
  * Defaults are generous for real use (a message to a whole roster goes out over a few minutes)
  * and can be changed by environment variables, read at each call so tests and operators can set
  * them without a restart of the logic.
@@ -26,7 +34,13 @@ import type { NotificationKind } from "./types"
 export type SendCategory = "bulk" | "automatic" | "account"
 
 const BULK: readonly NotificationKind[] = ["targeted_message", "member_invite", "manual_reminder", "open_shifts"]
-const ACCOUNT: readonly NotificationKind[] = ["admin_invite", "admin_welcome", "password_reset"]
+// Admin invitations come from an authenticated owner or the super admin. A password reset is not
+// here: anyone can request one, so it has its per-recipient cap instead of an organisation-wide one
+// that a stranger could use up.
+const ACCOUNT: readonly NotificationKind[] = ["admin_invite", "admin_welcome"]
+
+/** Kinds anyone can trigger from a public page: capped per recipient address. */
+export const PUBLIC_TRIGGERED: readonly NotificationKind[] = ["password_reset", "registration_confirmation", "registration_link_resend"]
 
 export function sendCategory(kind: NotificationKind): SendCategory {
   if (BULK.includes(kind)) return "bulk"
@@ -45,6 +59,8 @@ export const DEFAULT_SEND_LIMITS = {
   orgAccountPerDay: 50,
   /** Every email of the platform, per minute: a safety net for the sending domain's reputation. */
   globalPerMinute: 600,
+  /** Emails triggered from a public page (password reset, confirmation, lost link) to one address, per hour. */
+  recipientPerHour: 5,
 } as const
 
 export type SendLimits = { -readonly [K in keyof typeof DEFAULT_SEND_LIMITS]: number }
@@ -55,6 +71,7 @@ const ENV: Record<keyof SendLimits, string> = {
   orgBulkPerDay: "EMAIL_LIMIT_ORG_BULK_PER_DAY",
   orgAccountPerDay: "EMAIL_LIMIT_ORG_ACCOUNT_PER_DAY",
   globalPerMinute: "EMAIL_LIMIT_GLOBAL_PER_MINUTE",
+  recipientPerHour: "EMAIL_LIMIT_RECIPIENT_PER_HOUR",
 }
 
 /** The limits in force: each default replaced by its variable when that is a positive integer. */
@@ -68,13 +85,26 @@ export function sendLimits(env: Record<string, string | undefined> = process.env
 }
 
 const MINUTE = 60_000
-const DAY = 24 * 60 * MINUTE
+const HOUR = 60 * MINUTE
+const DAY = 24 * HOUR
+
+/** The address as a key: a hash, never the address itself in the RateLimit table. */
+export function recipientKey(email: string): string {
+  return createHash("sha256").update(email.trim().toLowerCase()).digest("hex").slice(0, 32)
+}
 
 type Window = { key: string; windowMs: number; limit: number; name: string }
 
-/** The windows one email counts against, global first. */
-export function sendWindows(organizationId: string | null | undefined, kind: NotificationKind, limits: SendLimits = sendLimits()): Window[] {
-  const windows: Window[] = [{ key: "email:global:minute", windowMs: MINUTE, limit: limits.globalPerMinute, name: "global_per_minute" }]
+/**
+ * The windows one email counts against: the per-recipient one first (public-triggered kinds), so a
+ * flood for one address is stopped before it reaches the organisation's or the platform's.
+ */
+export function sendWindows(organizationId: string | null | undefined, kind: NotificationKind, limits: SendLimits = sendLimits(), recipientEmail?: string | null): Window[] {
+  const windows: Window[] = []
+  if (recipientEmail && PUBLIC_TRIGGERED.includes(kind)) {
+    windows.push({ key: `email:recipient:${recipientKey(recipientEmail)}:${kind}:hour`, windowMs: HOUR, limit: limits.recipientPerHour, name: "recipient_per_hour" })
+  }
+  windows.push({ key: "email:global:minute", windowMs: MINUTE, limit: limits.globalPerMinute, name: "global_per_minute" })
   if (!organizationId) return windows
   windows.push(
     { key: `email:org:${organizationId}:minute`, windowMs: MINUTE, limit: limits.orgPerMinute, name: "org_per_minute" },
@@ -91,32 +121,33 @@ export type SendAllowance = { ok: true } | { ok: false; limit: string; retryAfte
 const defaultStore: RateLimitStore = process.env.NODE_ENV === "test" ? memoryStore() : postgresStore
 
 /**
- * Counts one email against each of its windows and says whether it may go. Every window is
- * counted even after one is exceeded, so a held email still uses its share of the others. Over a
- * limit, the first email of the window raises one alert. If the store fails, the email goes and
- * the error is reported: a limiter must never be the reason no email leaves.
+ * Says whether one email may go, and counts it only if it does: every window is read first; if one
+ * is full the email is held and nothing is counted, otherwise every window counts it. Two sends at
+ * the same instant can overshoot a limit by a few emails, which is acceptable for a safety cap.
+ * Over a limit, the first held email of the window raises one alert. If the store fails, the email
+ * goes and the error is reported: a limiter must never be the reason no email leaves.
  */
 export async function takeSendAllowance(
   organizationId: string | null | undefined,
   kind: NotificationKind,
-  opts: { store?: RateLimitStore; limits?: SendLimits; alert?: (limit: string, organizationId: string | null) => void } = {},
+  opts: { store?: RateLimitStore; limits?: SendLimits; recipientEmail?: string | null; alert?: (limit: string, organizationId: string | null) => void } = {},
 ): Promise<SendAllowance> {
   const store = opts.store ?? defaultStore
   const alert = opts.alert ?? ((limit, org) => reportError(`email.limit.${limit}`)(new Error(`Email sending limit reached: ${limit}${org ? ` (organisation ${org})` : ""}`)))
-  let blocked: { limit: string; retryAfterMs: number } | null = null
+  const windows = sendWindows(organizationId, kind, opts.limits, opts.recipientEmail)
   try {
-    for (const w of sendWindows(organizationId, kind, opts.limits)) {
-      const state = await store.hit(w.key, w.windowMs)
-      const verdict = decide(state, w.limit)
-      if (verdict.ok) continue
-      // Only the first email over the limit alerts: the rest of the window stays quiet.
-      if (state.count === w.limit + 1) alert(w.name, organizationId ?? null)
-      const retryAfterMs = Math.max(1000, Math.ceil(state.msLeft))
-      if (!blocked || retryAfterMs > blocked.retryAfterMs) blocked = { limit: w.name, retryAfterMs }
+    for (const w of windows) {
+      const state = await store.peek(w.key)
+      if (state && state.count >= w.limit) {
+        // One alert per window: the first email held marks the window, the next ones stay quiet.
+        const marker = await store.hit(`${w.key}:held`, Math.max(1000, Math.ceil(state.msLeft)))
+        if (marker.count === 1) alert(w.name, organizationId ?? null)
+        return { ok: false, limit: w.name, retryAfterMs: Math.max(1000, Math.ceil(state.msLeft)) }
+      }
     }
+    for (const w of windows) await store.hit(w.key, w.windowMs)
   } catch (e) {
     reportError("email.limit.store")(e)
-    return { ok: true }
   }
-  return blocked ? { ok: false, ...blocked } : { ok: true }
+  return { ok: true }
 }
