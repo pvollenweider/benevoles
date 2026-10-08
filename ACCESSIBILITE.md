@@ -2,7 +2,7 @@
 
 benevol.app vise le niveau **AA des WCAG 2.2**. Cette page dit ce qui a été vérifié, comment, et ce qui ne l'est pas encore.
 
-Déclaration établie le 5 octobre 2026, mise à jour le 6 octobre 2026, sur la base d'une auto-évaluation à la même date.
+Déclaration établie le 5 octobre 2026, mise à jour le 8 octobre 2026, sur la base d'une auto-évaluation à la même date.
 
 ## Périmètre
 
@@ -34,7 +34,7 @@ Parcours concernés : découvrir un événement ; choisir ses créneaux ; rempli
 ## Limites connues
 
 - Le **planning** d'une journée est une chronologie horizontale : sur un petit écran, il faut la faire défiler latéralement. Chaque créneau reste un bouton nommé en toutes lettres (poste, heures, et selon le cas places, conditions ou état de l'inscription).
-- Le **planning**, les **feuilles** et les **badges** à imprimer sont des pages HTML, pas encore analysées par les tests automatiques. Un PDF enregistré depuis le navigateur n'est balisé pour les lecteurs d'écran que si le navigateur le fait. Les présences s'exportent aussi en CSV.
+- Le **planning**, les **feuilles** et les **badges** à imprimer sont des pages HTML, analysées par les tests automatiques comme le reste du site : ce sont elles, ouvertes dans le navigateur, la version accessible de ces documents. Un PDF enregistré depuis le navigateur n'est balisé pour les lecteurs d'écran que si le navigateur le fait. Les présences s'exportent aussi en CSV.
 - Le lien **Voir sur la carte** ouvre OpenStreetMap, un service externe dont nous ne maîtrisons pas l'accessibilité.
 - Le contenu écrit par les organisateurs (messages, pages d'information, consignes) dépend de leur rédaction.
 - Les **vidéos** de la documentation sont narrées, sous-titrées et accompagnées d'une transcription, mais n'ont pas de description audio séparée : la narration explique ce qui est fait à l'écran, sans garantie qu'elle décrive chaque information purement visuelle (couleur, position, état affiché sans être nommé). Le texte de chaque fiche décrit les mêmes étapes.
