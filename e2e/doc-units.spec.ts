@@ -469,25 +469,25 @@ test.describe("the reading width of the documentation", () => {
     })
   }
 
-  test("paragraphs and list items are capped at 70ch, headings follow a clear scale", async ({ page }) => {
+  test("paragraphs and list items are capped at 65ch, headings follow a clear scale", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 })
     await page.goto("/doc/rappels")
     const p = page.locator("main article p").filter({ hasText: /\w{3,}.{60,}/ }).first()
     const style = await p.evaluate((el) => {
       const cs = getComputedStyle(el)
       const probe = document.createElement("span")
-      probe.style.cssText = "position:absolute;visibility:hidden;width:70ch"
+      probe.style.cssText = "position:absolute;visibility:hidden;width:65ch"
       el.appendChild(probe)
-      const ch70 = probe.getBoundingClientRect().width
+      const ch65 = probe.getBoundingClientRect().width
       probe.remove()
-      return { maxWidth: parseFloat(cs.maxWidth), ch70, width: el.getBoundingClientRect().width, lineHeight: cs.lineHeight, fontSize: parseFloat(cs.fontSize) }
+      return { maxWidth: parseFloat(cs.maxWidth), ch65, width: el.getBoundingClientRect().width, lineHeight: cs.lineHeight, fontSize: parseFloat(cs.fontSize) }
     })
-    expect(style.maxWidth).toBeCloseTo(style.ch70, 0)
-    expect(style.width).toBeLessThanOrEqual(style.ch70 + 1)
+    expect(style.maxWidth).toBeCloseTo(style.ch65, 0)
+    expect(style.width).toBeLessThanOrEqual(style.ch65 + 1)
     expect(parseFloat(style.lineHeight) / style.fontSize).toBeCloseTo(1.75, 1)
     // A list item of the content (the breadcrumb and the jump links are not prose).
     const liMaxWidth = await page.evaluate(() => getComputedStyle([...document.querySelectorAll("main article li")].find((li) => !li.closest(".not-prose"))!).maxWidth)
-    expect(parseFloat(liMaxWidth)).toBeCloseTo(style.ch70, 0)
+    expect(parseFloat(liMaxWidth)).toBeCloseTo(style.ch65, 0)
     const sizes = await page.evaluate(() => ["h1", "h2", "h3"].map((tag) => parseFloat(getComputedStyle(document.querySelector(`main article ${tag}`)!).fontSize)))
     expect(sizes[0]).toBe(30)
     expect(sizes[0]).toBeGreaterThan(sizes[1])

@@ -116,8 +116,10 @@ function checkActiveElementInPage({ exclude }: InPageArgs) {
     if (getComputedStyle(a).forcedColorAdjust === "none") { failures.push(`forced-color-adjust: none on ${describe(a)}`); break }
   }
 
-  // 5: visible and not covered.
-  const r = t.getBoundingClientRect()
+  // 5: visible and not covered. A link wrapped over two lines has two boxes: its bounding rect
+  // spans both lines, and its centre falls on the text around it; its first box is the link.
+  const boxes = t.getClientRects()
+  const r = boxes.length > 1 ? boxes[0] : t.getBoundingClientRect()
   if (r.width === 0 || r.height === 0) failures.push(`empty rect ${r.width}x${r.height}`)
   for (let a: Element | null = t; a; a = a.parentElement) {
     const s = getComputedStyle(a)
