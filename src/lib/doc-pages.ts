@@ -22,7 +22,7 @@ export type PublicPage = {
   summary: string
   /** <title> of the page (without the site name, added by the metadata helper). */
   metaTitle: string
-  /** Meta and social description, about 140 to 160 characters. */
+  /** Meta and social description: 70 to 160 characters, as audited (src/lib/meta-length.ts). */
   metaDescription: string
   /** Markdown file at the repo root the page is rendered from (null: written in its page.tsx); its last commit is the sitemap's lastModified (doc-lastmod.json). */
   source: string | null
@@ -38,7 +38,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     title: "Fonctionnalités",
     summary: "Ce que fait benevol.app, besoin par besoin.",
     metaTitle: "Fonctionnalités pour organiser vos bénévoles",
-    metaDescription: "Planning de bénévoles par postes et créneaux, inscriptions sans compte, rappels et messages, feuilles et badges pour le jour J : tout ce que fait benevol.app.",
+    metaDescription: "Planning de bénévoles par postes et créneaux, inscription sans compte, rappels et messages, feuilles et badges du jour J : tout ce que fait benevol.app.",
     source: "FEATURES.md",
     priority: 0.9,
     guide: false,
@@ -79,7 +79,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     title: "Conditions générales d'utilisation",
     summary: "Les règles d'utilisation du service, gratuit et fourni en l'état.",
     metaTitle: "Conditions générales d'utilisation",
-    metaDescription: "Conditions générales d'utilisation de benevol.app : un service gratuit, les comptes, l'utilisation acceptable, les données, la responsabilité et le droit suisse.",
+    metaDescription: "Conditions générales d'utilisation de benevol.app : service gratuit, comptes, usage acceptable, données, responsabilité et droit suisse applicable.",
     source: null,
     priority: 0.2,
     guide: false,
@@ -99,7 +99,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     title: "Liste des sous-traitants",
     summary: "Les prestataires qui traitent les données de votre organisation, où et avec quelles garanties.",
     metaTitle: "Liste des sous-traitants",
-    metaDescription: "Les prestataires de benevol.app qui traitent les données de votre organisation : hébergement, emails, sauvegarde, erreurs, leur localisation et leurs garanties.",
+    metaDescription: "Les prestataires qui traitent les données de votre organisation pour benevol.app : hébergement, emails, sauvegardes, suivi des erreurs, lieu et garanties.",
     source: "SOUS-TRAITANTS.md",
     priority: 0.2,
     guide: false,
@@ -109,7 +109,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     title: "Documentation",
     summary: "Le point d'entrée des guides.",
     metaTitle: "Documentation",
-    metaDescription: "Les guides de benevol.app : pour les organisateurs qui préparent un événement et ses créneaux, et pour les bénévoles qui s'inscrivent et gèrent leur planning.",
+    metaDescription: "Guides de benevol.app pour les organisateurs qui préparent un événement et ses créneaux, et pour les bénévoles qui s'inscrivent à un planning.",
     source: null,
     priority: 0.6,
     guide: false,

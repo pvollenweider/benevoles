@@ -9,6 +9,7 @@ import { splitTitle } from "@/lib/doc-pages"
 import { SITE_NAME, seoMetadata } from "@/lib/seo-metadata"
 import { findVideoReferences } from "@/lib/doc-video-references"
 import { DOC_SLUG_RE } from "@/lib/doc-href"
+import { META_DESCRIPTION_MAX, META_DESCRIPTION_MIN, auditedLength } from "@/lib/meta-length"
 
 /**
  * The documentation split into units (#649): one Markdown file per task in the root folder
@@ -19,7 +20,7 @@ import { DOC_SLUG_RE } from "@/lib/doc-href"
  *     roles: [benevole]
  *     group: apres-inscription
  *     order: 10
- *     summary: One sentence of 60 to 160 characters, also the page's meta description.
+ *     summary: One sentence of 70 to 160 characters, also the page's meta description.
  *     related: [another-unit]
  *     legacy: [benevole#old-anchor]
  *     aliases: [old-slug]
@@ -150,8 +151,10 @@ export const docUnitFrontMatterSchema = z.strictObject({
   order: z.string().regex(/^\d+$/, "order: a whole number").transform(Number),
   summary: z
     .string()
-    .min(60, "summary: at least 60 characters")
-    .max(160, "summary: at most 160 characters")
+    .min(META_DESCRIPTION_MIN, `summary: at least ${META_DESCRIPTION_MIN} characters`)
+    .max(META_DESCRIPTION_MAX, `summary: at most ${META_DESCRIPTION_MAX} characters`)
+    // As SEO audit tools count it: an apostrophe or an accent costs more than one (src/lib/meta-length.ts).
+    .refine((s) => auditedLength(s) <= META_DESCRIPTION_MAX, `summary: at most ${META_DESCRIPTION_MAX} as audited (an apostrophe counts 6, an accent 2)`)
     .refine((s) => !FORBIDDEN_SEPARATORS.test(s), "summary: no « · » or em dash"),
   related: slugList,
   legacy: z.array(z.string().regex(LEGACY_RE, "legacy: role#anchor, e.g. benevole#confirmation")).default([]),
