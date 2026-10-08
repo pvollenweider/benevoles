@@ -3,7 +3,7 @@
  */
 import { describe, it, expect, afterEach, vi } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { render, screen, cleanup } from "@testing-library/react"
+import { render, screen, cleanup, within } from "@testing-library/react"
 
 vi.mock("next/navigation", () => ({ usePathname: () => "/doc/admin" }))
 // The theme toggle reads matchMedia, absent from jsdom; it plays no part in the frame's width.
@@ -102,10 +102,16 @@ describe("site container (one width for every public page)", () => {
     expectSiteContainer(footerWrapper)
   })
 
-  it("frames the video library's header and main", () => {
+  it("frames the video library's header, main and footer, with the content navigation", () => {
     render(<VideosLayout><h1>Bibliothèque vidéo</h1></VideosLayout>)
-    expectSiteContainer(screen.getByRole("banner").firstElementChild)
+    const { header, footerWrapper } = frameParts()
+    expectSiteContainer(header)
     expectSiteContainer(screen.getByRole("main"))
+    expectSiteContainer(footerWrapper)
+    const nav = screen.getByRole("navigation", { name: "Fonctionnalités et guides" })
+    for (const [name, href] of [["Fonctionnalités", "/fonctionnalites"], ["Guide administrateur", "/doc/admin"], ["Guide bénévole", "/doc/benevole"]]) {
+      expect(within(nav).getByRole("link", { name })).toHaveAttribute("href", href)
+    }
   })
 
   it("frames the 404 page's main", () => {
