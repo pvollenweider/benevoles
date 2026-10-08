@@ -135,6 +135,53 @@ describe("/logiciel-planning-benevoles, the editorial page on volunteer scheduli
   })
 })
 
+describe("/remplacer-tableur-benevoles, the editorial page for those leaving a spreadsheet (#767)", () => {
+  const page = PUBLIC_PAGES.find((p) => p.path === "/remplacer-tableur-benevoles")!
+
+  it("is a public page rendered from its own source, copied into the image, outside the header navigation", () => {
+    expect(page.source).toBe("REMPLACER-TABLEUR-BENEVOLES.md")
+    expect(splitTitle(read(page.source!)).title).toBe(page.title)
+    expect(CONTENT_NAV.map((p) => p.path)).not.toContain(page.path)
+    expect(read("Dockerfile")).toContain("/app/REMPLACER-TABLEUR-BENEVOLES.md ./REMPLACER-TABLEUR-BENEVOLES.md")
+    expect(read(".dockerignore")).toMatch(/^!REMPLACER-TABLEUR-BENEVOLES\.md$/m)
+  })
+
+  it("has a title and a description that fit search results and name the spreadsheets people use", () => {
+    expect(metaLengthProblems(pageTitle(page.metaTitle), page.metaDescription)).toEqual([])
+    expect(page.metaDescription.length).toBeGreaterThanOrEqual(120)
+    expect(page.metaTitle).toMatch(/tableur/i)
+    expect(page.metaTitle).toMatch(/bénévoles/)
+    expect(page.metaDescription).toContain("Excel")
+    expect(page.metaDescription).toContain("Google Sheets")
+  })
+
+  it("is linked from /logiciel-planning-benevoles and from /fonctionnalites, its source link made a site link", () => {
+    expect(read("LOGICIEL-PLANNING-BENEVOLES.md")).toContain("](REMPLACER-TABLEUR-BENEVOLES.md)")
+    expect(read("FEATURES.md")).toContain("](REMPLACER-TABLEUR-BENEVOLES.md)")
+    expect(linkSourcesToRoutes("[a](REMPLACER-TABLEUR-BENEVOLES.md)")).toBe("[a](/remplacer-tableur-benevoles)")
+  })
+
+  it("renders its FAQ: answers as HTML for the page, as plain text for the FAQPage", () => {
+    const rendered = renderFeaturesPage(null, page.source!, page.title)
+    expect(rendered.title).toBe("Remplacer le tableur des bénévoles")
+    const faq = rendered.sections.find((s) => s.id === "questions-frequentes")!.faq!
+    expect(faq.length).toBeGreaterThanOrEqual(6)
+    const importing = faq.find((q) => q.id === "comment-importer-la-liste-des-benevoles")!
+    expect(importing.html).toContain("<strong>Importer CSV/Excel</strong>")
+    expect(importing.text).toContain("bouton Importer CSV/Excel, avec un fichier .xlsx ou .csv")
+    for (const q of faq) expect(q.text, q.question).not.toMatch(/[<>[\]*`]/)
+  })
+
+  it("links its source sections to pages that exist", () => {
+    const rendered = renderFeaturesPage(null, page.source!, page.title)
+    const html = [rendered.intro, ...rendered.sections].flatMap((b) => b.parts).map((p) => (p.kind === "html" ? p.html : "")).join("")
+    for (const href of ["/doc/gerer-les-membres", "/doc/creer-une-serie-de-creneaux", "/doc/exporter-et-conserver-ses-donnees", "/doc/partager-le-lien", "/doc/creer-son-premier-evenement", "/logiciel-planning-benevoles", "/fonctionnalites"]) {
+      expect(html, href).toContain(`href="${href}"`)
+    }
+    expect(html).not.toMatch(/href="[^"]*\.md/)
+  })
+})
+
 describe("linkSourcesToRoutes", () => {
   // GUIDE_BENEVOLE.md is the welcome of /doc/benevole since the split (#649): a link to it leads there.
   it("rewrites links to the root sources, an anchor kept, from the root or from guide/", () => {
@@ -165,7 +212,7 @@ describe("apexSitemap", () => {
     const d = new Date("2026-09-30T10:00:00Z")
     const entries = apexSitemap("https://www.benevol.app/", (src) => (src === "FEATURES.md" ? d : null))
     expect(entries[0]).toEqual({ url: "https://www.benevol.app/", changeFrequency: "weekly", priority: 1 })
-    expect(entries.map((e) => e.url)).toEqual(["https://www.benevol.app/", "https://www.benevol.app/fonctionnalites", "https://www.benevol.app/logiciel-planning-benevoles", "https://www.benevol.app/nouveautes", "https://www.benevol.app/accessibilite", "https://www.benevol.app/legal/privacy", "https://www.benevol.app/legal/terms", "https://www.benevol.app/legal/sous-traitance", "https://www.benevol.app/legal/sous-traitants", "https://www.benevol.app/doc", "https://www.benevol.app/doc/admin", "https://www.benevol.app/doc/benevole"])
+    expect(entries.map((e) => e.url)).toEqual(["https://www.benevol.app/", "https://www.benevol.app/fonctionnalites", "https://www.benevol.app/logiciel-planning-benevoles", "https://www.benevol.app/remplacer-tableur-benevoles", "https://www.benevol.app/nouveautes", "https://www.benevol.app/accessibilite", "https://www.benevol.app/legal/privacy", "https://www.benevol.app/legal/terms", "https://www.benevol.app/legal/sous-traitance", "https://www.benevol.app/legal/sous-traitants", "https://www.benevol.app/doc", "https://www.benevol.app/doc/admin", "https://www.benevol.app/doc/benevole"])
     expect(entries.find((e) => e.url.endsWith("/fonctionnalites"))).toMatchObject({ lastModified: d, priority: 0.9 })
     expect(entries.find((e) => e.url.endsWith("/doc/benevole"))).not.toHaveProperty("lastModified")
   })

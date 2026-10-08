@@ -73,6 +73,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/GUIDE_ADMIN.md ./GUIDE_ADMIN.md
 COPY --from=builder --chown=nextjs:nodejs /app/GUIDE_BENEVOLE.md ./GUIDE_BENEVOLE.md
 COPY --from=builder --chown=nextjs:nodejs /app/FEATURES.md ./FEATURES.md
 COPY --from=builder --chown=nextjs:nodejs /app/LOGICIEL-PLANNING-BENEVOLES.md ./LOGICIEL-PLANNING-BENEVOLES.md
+COPY --from=builder --chown=nextjs:nodejs /app/REMPLACER-TABLEUR-BENEVOLES.md ./REMPLACER-TABLEUR-BENEVOLES.md
 COPY --from=builder --chown=nextjs:nodejs /app/ACCESSIBILITE.md ./ACCESSIBILITE.md
 COPY --from=builder --chown=nextjs:nodejs /app/ACCORD-SOUS-TRAITANCE.md ./ACCORD-SOUS-TRAITANCE.md
 COPY --from=builder --chown=nextjs:nodejs /app/SOUS-TRAITANTS.md ./SOUS-TRAITANTS.md

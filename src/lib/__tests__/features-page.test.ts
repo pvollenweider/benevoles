@@ -270,3 +270,89 @@ describe("LOGICIEL-PLANNING-BENEVOLES.md, the editorial page on volunteer schedu
     expect(source).not.toMatch(/\btags?\b/i)
   })
 })
+
+describe("REMPLACER-TABLEUR-BENEVOLES.md, the editorial page for those leaving a spreadsheet (#767)", () => {
+  const source = read("REMPLACER-TABLEUR-BENEVOLES.md")
+  const page = parseFeaturesPage(source)
+  const catalog = loadVideoCatalog()
+  const features = parseFeaturesPage(read("FEATURES.md"))
+
+  it("answers the search with its title, then asks for a space by email, like /fonctionnalites", () => {
+    expect(page.title).toBe("Remplacer le tableur des bénévoles")
+    expect(page.intro.actions[0]).toEqual(features.intro.actions[0])
+    expect(page.intro.actions[1].href).toBe("#passer-du-tableur-a-benevol-app-en-trois-etapes")
+    expect(page.sections.find((s) => s.id === "demarrer")!.actions[0]).toEqual(features.intro.actions[0])
+  })
+
+  it("is honest about the spreadsheet first, then shows the move and the exports, then a FAQ", () => {
+    expect(page.sections.map((s) => s.id)).toEqual([
+      "ce-que-le-tableur-fait-bien",
+      "la-ou-il-coince",
+      "passer-du-tableur-a-benevol-app-en-trois-etapes",
+      "importer-la-liste-de-vos-benevoles",
+      "recreer-le-planning",
+      "partager-un-lien-plutot-qu-un-fichier",
+      "ce-que-la-feuille-ne-faisait-pas",
+      "garder-un-tableur-sous-la-main",
+      "questions-frequentes",
+      "demarrer",
+    ])
+    const steps = page.sections.find((s) => s.id === "passer-du-tableur-a-benevol-app-en-trois-etapes")!.steps!
+    expect(steps.map((s) => s.title)).toEqual(["Importez vos bénévoles.", "Recréez les postes et les créneaux.", "Partagez le lien."])
+  })
+
+  it("answers the questions people ask before leaving their spreadsheet, every answer short enough to read", () => {
+    const faq = page.sections.find((s) => s.id === "questions-frequentes")!.faq!
+    expect(faq.map((q) => q.question)).toEqual([
+      "Que deviennent mes données Excel ?",
+      "Comment importer la liste des bénévoles ?",
+      "Pourrai-je encore exporter vers un tableur ?",
+      "Combien de temps faut-il pour passer au nouvel outil ?",
+      "Et si je veux revenir au tableur ?",
+      "Mes bénévoles devront-ils créer un compte ?",
+      "Est-ce gratuit ?",
+    ])
+    for (const q of faq) expect(plainAnswer(q.answer).length, q.question).toBeLessThan(400)
+  })
+
+  it("only shows the stills /fonctionnalites already shows, and published videos", () => {
+    const shown = new Set([features.intro, ...features.sections].flatMap((b) => b.images.map((i) => i.videoId)))
+    const blocks = [page.intro, ...page.sections]
+    const images = blocks.flatMap((b) => b.images)
+    expect(images.length).toBeGreaterThanOrEqual(4)
+    expect(new Set(images.map((i) => i.videoId)).size).toBe(images.length)
+    for (const image of images) {
+      expect(shown.has(image.videoId), image.videoId).toBe(true)
+      expect(image.alt.length, image.videoId).toBeGreaterThan(20)
+    }
+    const videos = blocks.flatMap((b) => b.videos)
+    expect(videos).toContain("MEMBERS_IMPORT")
+    expect(videos).toContain("SHIFT_CREATE_SERIES")
+    expect(videos).toContain("DATA_EXPORTS_ARCHIVES")
+    for (const id of videos) expect(resolveVideoReference(id, catalog)?.published, id).toBe(true)
+  })
+
+  it("says what the import and the exports really do, with the labels of the screens", () => {
+    // The import (src/components/admin/members/ImportModal.tsx): .csv or .xlsx, 5000 rows, analysed first.
+    for (const label of ["Importer CSV/Excel", "Analyser le fichier", "Créer une série", "Copier le lien", "+ Ajouter manuellement", "Exporter les présences (CSV)", "Exporter les membres (CSV)", "Heures par bénévole, pour une période (CSV)", "Où manque-t-il du monde ?"]) {
+      expect(source, label).toContain(label)
+    }
+    expect(source).toMatch(/5000 lignes/)
+    expect(source).toMatch(/\.xlsx/)
+    // The planning itself is not imported: the page says so rather than letting it be assumed.
+    expect(source).toContain("Le planning lui-même ne s'importe pas")
+  })
+
+  it("announces nothing that isn't built, names and links no other tool than the spreadsheets, and keeps the site's writing rules", () => {
+    // No native app, no time clock or location, no perks (#749), no shift import: none is built.
+    for (const future of [/pointeuse/i, /\bGPS\b/, /géolocalis/i, /avantages? (pour|aux) (les )?bénévoles/i, /App Store|Google Play/i, /application mobile/i, /\bSMS\b/, /importe[rz]? (vos|les|le) (créneaux|planning)/i]) {
+      expect(source, String(future)).not.toMatch(future)
+    }
+    // Every link stays on the site (or writes to the contact address): no other tool is linked.
+    const links = [...source.matchAll(/\]\(([^)\s]+)\)/g)].map((m) => m[1])
+    for (const href of links) expect(href, href).toMatch(/^(#|\/|guide\/|[A-Z_-]+\.md|mailto:contact@benevol\.app)/)
+    expect(source).not.toMatch(/https?:\/\//)
+    expect(source).not.toMatch(/—/)
+    expect(source).not.toMatch(/\btags?\b/i)
+  })
+})

@@ -58,6 +58,20 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     guide: false,
   },
   {
+    // The second editorial page (#767), same layout, for people whose volunteer schedule lives in
+    // an Excel or Google Sheets file: what the spreadsheet does well, where it breaks, how to move
+    // (member import, shift series, the link) and the exports that keep a spreadsheet at hand.
+    // Linked from /logiciel-planning-benevoles and /fonctionnalites, not from the header navigation.
+    path: "/remplacer-tableur-benevoles",
+    title: "Remplacer le tableur des bénévoles",
+    summary: "Du planning tenu dans Excel ou Google Sheets aux inscriptions par lien : import des membres, créneaux en série et exports CSV.",
+    metaTitle: "Remplacer le tableur Excel des bénévoles",
+    metaDescription: "Votre planning de bénévoles tient dans Excel ou Google Sheets ? Importez vos membres, créez les créneaux en série et partagez un lien. Exports CSV inclus.",
+    source: "REMPLACER-TABLEUR-BENEVOLES.md",
+    priority: 0.7,
+    guide: false,
+  },
+  {
     // Rendered from the released versions of CHANGELOG.md (#757, src/lib/changelog.ts).
     path: "/nouveautes",
     title: "Nouveautés",

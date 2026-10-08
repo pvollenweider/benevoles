@@ -326,7 +326,7 @@ describe("video references in the public sources", () => {
       const route = read(path.join("src/app", page.path, "page.tsx"))
       expect(route, page.path).toMatch(/export const dynamic = "force-dynamic"/)
       // /fonctionnalites and the editorial pages (#767) lay their source out (src/lib/features-page.ts), same variable.
-      const laidOut = source === "FEATURES.md" || source === "LOGICIEL-PLANNING-BENEVOLES.md"
+      const laidOut = ["FEATURES.md", "LOGICIEL-PLANNING-BENEVOLES.md", "REMPLACER-TABLEUR-BENEVOLES.md"].includes(source)
       expect(route, page.path).toContain(laidOut ? "renderFeaturesPage(" : `renderPublicSource("${source}", `)
       expect(route, page.path).toMatch(/env\.VIDEO_MEDIA_BASE_URL[,)]/)
     }

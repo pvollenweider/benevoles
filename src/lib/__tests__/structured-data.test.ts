@@ -67,6 +67,7 @@ describe("publicPageJsonLd", () => {
     expect(types(publicPageJsonLd("/fonctionnalites", BASE))).toContain("SoftwareApplication")
     expect(types(publicPageJsonLd("/legal/privacy", BASE))).not.toContain("SoftwareApplication")
     expect(types(publicPageJsonLd("/logiciel-planning-benevoles", BASE))).toContain("SoftwareApplication")
+    expect(types(publicPageJsonLd("/remplacer-tableur-benevoles", BASE))).toContain("SoftwareApplication")
   })
 
   // #767: only the questions a page renders, word for word, never a FAQ the page doesn't show.

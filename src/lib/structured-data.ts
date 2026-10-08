@@ -149,7 +149,7 @@ function publicPageCrumbs(path: string, title: string): Crumb[] {
 }
 
 /** The pages that present the application itself, so their structured data describes it too. */
-const APPLICATION_PAGES: readonly string[] = ["/fonctionnalites", "/logiciel-planning-benevoles"]
+const APPLICATION_PAGES: readonly string[] = ["/fonctionnalites", "/logiciel-planning-benevoles", "/remplacer-tableur-benevoles"]
 
 /**
  * The structured data of a public content page (src/lib/doc-pages.ts): the page, its breadcrumb,

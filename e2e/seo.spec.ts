@@ -37,6 +37,7 @@ const PAGES: { path: string; types: string[]; ogType: string }[] = [
   { path: "/", types: ["WebSite", "Organization", "SoftwareApplication", "FAQPage"], ogType: "website" },
   { path: "/fonctionnalites", types: ["WebPage", "BreadcrumbList", "SoftwareApplication"], ogType: "website" },
   { path: "/logiciel-planning-benevoles", types: ["WebPage", "BreadcrumbList", "SoftwareApplication", "FAQPage"], ogType: "website" },
+  { path: "/remplacer-tableur-benevoles", types: ["WebPage", "BreadcrumbList", "SoftwareApplication", "FAQPage"], ogType: "website" },
   { path: "/doc", types: ["CollectionPage", "BreadcrumbList", "Organization"], ogType: "website" },
   { path: "/doc/revenir-sur-la-page-d-inscription", types: ["TechArticle", "BreadcrumbList", "Organization"], ogType: "article" },
   { path: "/legal/privacy", types: ["WebPage", "BreadcrumbList"], ogType: "website" },

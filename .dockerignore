@@ -12,6 +12,7 @@ docker-compose*.yml
 # Checked by src/lib/__tests__/docker-public-sources.test.ts.
 !FEATURES.md
 !LOGICIEL-PLANNING-BENEVOLES.md
+!REMPLACER-TABLEUR-BENEVOLES.md
 !ACCESSIBILITE.md
 !ACCORD-SOUS-TRAITANCE.md
 !SOUS-TRAITANTS.md

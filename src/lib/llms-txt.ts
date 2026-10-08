@@ -66,6 +66,7 @@ export function llmsTxt(s: LlmsSources): string {
   const docIndex = PUBLIC_PAGES.find((p) => p.path === "/doc")!
   const news = PUBLIC_PAGES.find((p) => p.path === "/nouveautes")!
   const planning = PUBLIC_PAGES.find((p) => p.path === "/logiciel-planning-benevoles")!
+  const spreadsheet = PUBLIC_PAGES.find((p) => p.path === "/remplacer-tableur-benevoles")!
   const units = sortDocUnits(s.units)
   const out: string[] = [`# ${SITE_NAME}`, "", `> ${s.summary}`, "", portableMarkdown(introduction(s.features), s.base), ""]
 
@@ -74,6 +75,7 @@ export function llmsTxt(s: LlmsSources): string {
   out.push(link(features.title, url(features.path), features.summary))
   for (const section of markdownSections(s.features)) out.push(`  ${link(section.title, url(`${features.path}#${section.id}`))}`)
   out.push(link(planning.title, url(planning.path), planning.summary))
+  out.push(link(spreadsheet.title, url(spreadsheet.path), spreadsheet.summary))
   out.push(link(news.title, url(news.path), news.summary))
   out.push("")
 

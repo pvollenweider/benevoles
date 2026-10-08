@@ -14,7 +14,7 @@ const SUPER_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "e2e-admin-password"
 
 test.describe("public pages", () => {
   // /videos and /videos/[id] (#644): the public video library, same accessibility bar as every other page.
-  for (const path of ["/", "/fonctionnalites", "/logiciel-planning-benevoles", "/doc", "/doc/admin", "/doc/benevole", "/doc/creer-son-premier-evenement", "/doc/creer-un-evenement", "/doc/rappels", "/accessibilite", "/legal/privacy", "/legal/sous-traitance", "/legal/sous-traitants", "/videos", "/videos/EVENT_CREATE_BLANK"]) {
+  for (const path of ["/", "/fonctionnalites", "/logiciel-planning-benevoles", "/remplacer-tableur-benevoles", "/doc", "/doc/admin", "/doc/benevole", "/doc/creer-son-premier-evenement", "/doc/creer-un-evenement", "/doc/rappels", "/accessibilite", "/legal/privacy", "/legal/sous-traitance", "/legal/sous-traitants", "/videos", "/videos/EVENT_CREATE_BLANK"]) {
     test(`${path} has no serious violation`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
@@ -44,7 +44,7 @@ test.describe("content pages on a phone, in dark mode", () => {
   test.use({ viewport: { width: 320, height: 640 }, colorScheme: "dark" })
   // Documentation units (#649): the breadcrumb wraps at 320 px; an organisers' unit has wide tables.
   // /doc/rappels: a unit for both audiences, with its jump links, previous and next, « Dans ce thème ».
-  for (const path of ["/accessibilite", "/logiciel-planning-benevoles", "/doc", "/doc/revenir-sur-la-page-d-inscription", "/doc/creer-un-evenement", "/doc/rappels"]) {
+  for (const path of ["/accessibilite", "/logiciel-planning-benevoles", "/remplacer-tableur-benevoles", "/doc", "/doc/revenir-sur-la-page-d-inscription", "/doc/creer-un-evenement", "/doc/rappels"]) {
     test(`${path} has no serious violation at 320 px, dark`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()

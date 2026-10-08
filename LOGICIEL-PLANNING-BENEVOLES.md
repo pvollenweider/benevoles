@@ -27,7 +27,7 @@ Il est pensé pour les événements d'une association, une fête de village, une
 - **Des créneaux en série** : une buvette de 10 h à 22 h par tranches de deux heures se crée en une fois, avec un aperçu avant.
 - **Un bon départ** : un modèle d'événement (festival, buvette, manifestation sportive, fête de village), ou l'édition de l'an dernier dupliquée avec ses dates décalées.
 - **Un brouillon, puis la publication**, après une page de vérification qui signale ce qui manque. Une fois l'événement publié, vous copiez son lien ou téléchargez son QR code pour l'affiche.
-- **Vos bénévoles habituels** importés depuis un fichier CSV (ouvrable dans un tableur) ou Excel, puis invités par email, avec un lien vers la page d'inscription.
+- **Vos bénévoles habituels** importés depuis un fichier CSV (ouvrable dans un tableur) ou Excel, puis invités par email, avec un lien vers la page d'inscription. Votre planning tient encore dans un tableur ? Voyez comment [remplacer le tableur des bénévoles](REMPLACER-TABLEUR-BENEVOLES.md).
 
 <!-- video: EVENT_CREATE_PUBLISH_OVERVIEW -->
 

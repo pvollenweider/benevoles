@@ -33,11 +33,13 @@ describe("sitemap on the apex host", () => {
     withHeaders({ host: "www.benevol.app" })
     const sitemap = (await import("../app/sitemap")).default
     const entries = await sitemap()
-    expect(entries.map((e) => e.url).slice(0, 12)).toEqual([
+    expect(entries.map((e) => e.url).slice(0, 13)).toEqual([
       "https://www.benevol.app/",
       "https://www.benevol.app/fonctionnalites",
       // The editorial page on volunteer scheduling (#767).
       "https://www.benevol.app/logiciel-planning-benevoles",
+      // The editorial page for those leaving a spreadsheet (#767).
+      "https://www.benevol.app/remplacer-tableur-benevoles",
       // What changed, rendered from CHANGELOG.md (#757).
       "https://www.benevol.app/nouveautes",
       "https://www.benevol.app/accessibilite",
@@ -53,7 +55,7 @@ describe("sitemap on the apex host", () => {
     // Then the documentation units of guide/ (#649), each at /doc/<slug>, in reading order. No video:
     // without VIDEO_MEDIA_BASE_URL none can be played, so none is indexed.
     const { readDocUnits } = await import("../lib/doc-units")
-    expect(entries.map((e) => e.url).slice(12)).toEqual(readDocUnits().map((u) => `https://www.benevol.app/doc/${u.slug}`))
+    expect(entries.map((e) => e.url).slice(13)).toEqual(readDocUnits().map((u) => `https://www.benevol.app/doc/${u.slug}`))
     expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/revenir-sur-la-page-d-inscription")
     expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/configurer-les-creneaux")
     // Dates come from doc-lastmod.json, written at deploy from git: without it (tests,
