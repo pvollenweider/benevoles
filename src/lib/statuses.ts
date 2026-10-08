@@ -28,7 +28,7 @@ export type EventPublicStatus = (typeof EVENT_PUBLIC_STATUSES)[number]
 export const ADMIN_ROLES = ["admin", "organizer", "super_admin"] as const
 export type AdminRole = (typeof ADMIN_ROLES)[number]
 
-export const OUTBOX_STATUSES = ["pending", "sending", "sent", "failed"] as const
+export const OUTBOX_STATUSES = ["pending", "sending", "sent", "failed", "cancelled"] as const
 export type OutboxStatus = (typeof OUTBOX_STATUSES)[number]
 
 export const EVENT_LOG_ACTOR_TYPES = ["admin", "volunteer", "system"] as const

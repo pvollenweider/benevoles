@@ -15,6 +15,9 @@ vi.mock("@/lib/prisma", () => ({
   prisma: {
     pushSubscription: { findMany: m.findMany, deleteMany: m.deleteMany, count: m.count },
     targetedMessage: { update: m.update },
+    // The organisation check of every push (#814): an active one.
+    volunteer: { findUnique: vi.fn().mockResolvedValue({ organizationId: "org-1" }) },
+    organization: { findUnique: vi.fn().mockResolvedValue({ active: true }) },
   },
 }))
 

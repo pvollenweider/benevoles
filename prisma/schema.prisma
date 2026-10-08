@@ -531,7 +531,7 @@ model ErasureRecord {
 model NotificationOutbox {
   id            String    @id @default(cuid())
   payload       Json
-  status        String    @default("pending") // "pending" | "sending" | "sent" | "failed"
+  status        String    @default("pending") // "pending" | "sending" | "sent" | "failed" | "cancelled" (#814)
   attempts      Int       @default(0)
   nextAttemptAt DateTime  @default(now())
   claimedAt     DateTime?

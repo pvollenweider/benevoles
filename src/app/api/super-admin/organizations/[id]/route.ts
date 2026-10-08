@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { cancelPendingOutboxForOrganization } from "@/lib/notifications/org-send-guard"
 import { NextResponse } from "next/server"
 import { requireSuperAdmin } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
@@ -138,6 +139,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   }
 
   const org = await prisma.$transaction(async (tx) => {
+    // Deactivation (#814): its queued emails are cancelled with it, never sent later.
+    if (updates.active === false) await cancelPendingOutboxForOrganization(tx, id)
     if (oldSlug && updates.slug) {
       await tx.orgSlugHistory.deleteMany({ where: { slug: updates.slug, organizationId: id } })
       await tx.orgSlugHistory.create({ data: { slug: oldSlug, organizationId: id } })

@@ -110,7 +110,7 @@ async function run(req: Request) {
   // 30 days (kept that long only to investigate why they failed).
   // A targeted message keeps the count of its rows deleted here (#467), in the same transaction,
   // so its delivery summary stays right after the purge.
-  const outboxToDelete = { OR: [{ status: "sent" }, { status: "failed", createdAt: { lt: failedCutoff } }] }
+  const outboxToDelete = { OR: [{ status: "sent" }, { status: { in: ["failed", "cancelled"] }, createdAt: { lt: failedCutoff } }] }
   const deletedOutbox = await prisma.$transaction(async (tx) => {
     // Exactly the rows counted are deleted: one that turns « sent » meanwhile waits for tomorrow.
     const linked = await tx.notificationOutbox.findMany({

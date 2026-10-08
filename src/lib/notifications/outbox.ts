@@ -135,7 +135,7 @@ export function deliverAfterResponse(ids: string[]): void {
  * row is marked "sent" leaves it claimed, and the stale-claim pickup sends it again. A rare
  * duplicate email is the accepted trade-off against a lost one.
  */
-export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?: Date } = {}): Promise<{ sent: number; retried: number; failed: number }> {
+export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?: Date } = {}): Promise<{ sent: number; retried: number; failed: number; cancelled: number }> {
   const now = opts.now ?? new Date()
   const due = await prisma.notificationOutbox.findMany({
     where: {
@@ -150,7 +150,7 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     select: { id: true, status: true, claimedAt: true },
   })
 
-  const result = { sent: 0, retried: 0, failed: 0 }
+  const result = { sent: 0, retried: 0, failed: 0, cancelled: 0 }
   for (const row of due) {
     const { count } = await prisma.notificationOutbox.updateMany({
       where: { id: row.id, status: row.status, claimedAt: row.claimedAt },
@@ -160,10 +160,23 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
 
     const claimed = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
     const outcome = await Promise.resolve()
-      .then(() => sendNotification({ ...openPayload(claimed.payload), messageId: outboxMessageId(row.id), outboxId: row.id }))
+      // The row's organisation (#814) is checked by sendNotification right before this one send,
+      // not when the batch was read: a deactivation during a batch stops the rest of it.
+      .then(() => {
+        const payload = openPayload(claimed.payload)
+        return sendNotification({ ...payload, organizationId: claimed.organizationId ?? payload.organizationId ?? null, messageId: outboxMessageId(row.id), outboxId: row.id })
+      })
       .catch(
-      (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e), permanent: undefined as true | undefined }),
+      (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e), permanent: undefined as true | undefined, blocked: undefined as true | undefined }),
     )
+
+    if (!outcome.ok && outcome.blocked) {
+      // Deactivated or deleted organisation (#814): cancelled for good, never retried, and never
+      // sent by a later reactivation.
+      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: outcome.reason, claimedAt: null } })
+      result.cancelled++
+      continue
+    }
 
     if (outcome.ok) {
       await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt: new Date(), lastError: null } })

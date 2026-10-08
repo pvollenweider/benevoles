@@ -46,14 +46,14 @@ function regRow(overrides: Partial<{
   }
 }
 
-function leaderRow(overrides: Partial<{ id: string; roleName: string; name: string; email: string; tokenHash: string; event: { title: string; organization: { slug: string } } }> = {}) {
+function leaderRow(overrides: Partial<{ id: string; roleName: string; name: string; email: string; tokenHash: string; event: { title: string; organizationId: string; organization: { slug: string } } }> = {}) {
   return {
     id: "ldr-1",
     roleName: "Buvette",
     name: "Bob",
     email: "bob@x.ch",
     tokenHash: hashToken("old-leader-token"),
-    event: { title: "Fête", organization: { slug: "orga" } },
+    event: { title: "Fête", organizationId: orgA, organization: { slug: "orga" } },
     ...overrides,
   }
 }
