@@ -116,6 +116,16 @@ describe("sentry client loader", () => {
     })
   })
 
+  it("does not keep an early rejection whose reason is a bare DOM Event (BENEVOLAPP-P)", async () => {
+    const win = fakeWindow()
+    const sentry = fakeSentry()
+    const loader = createSentryLoader({ load: async () => sentry, win })
+    loader.start()
+    win.dispatchEvent(Object.assign(new Event("unhandledrejection"), { reason: new Event("error") }))
+    await loader.ensureLoaded()
+    expect(sentry.captureException).not.toHaveBeenCalled()
+  })
+
   it("stops listening once the SDK is loaded (its own handlers take over)", async () => {
     const win = fakeWindow()
     const sentry = fakeSentry()
