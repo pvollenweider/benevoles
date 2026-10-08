@@ -133,12 +133,12 @@ export default async function VideoDetailPage({ params, searchParams }: { params
           visible/Points d'attention), which is production material and isn't shown here. */}
       <section aria-labelledby="video-summary-heading" className="space-y-2">
         <h2 id="video-summary-heading" className="text-sm font-semibold text-gray-900">Dans cette vidéo</h2>
-        <p className="text-sm text-gray-600 leading-relaxed">{viewer.summary}</p>
+        <p className="max-w-[70ch] text-sm text-gray-600 leading-relaxed">{viewer.summary}</p>
       </section>
 
       <section aria-labelledby="video-steps-heading" className="space-y-2">
         <h2 id="video-steps-heading" className="text-sm font-semibold text-gray-900">Les étapes</h2>
-        <ol className="list-decimal list-inside space-y-1.5 text-sm text-gray-600 leading-relaxed">
+        <ol className="max-w-[70ch] list-decimal list-inside space-y-1.5 text-sm text-gray-600 leading-relaxed">
           {viewer.steps.map((step) => (
             <li key={step}>{step}</li>
           ))}
@@ -147,7 +147,7 @@ export default async function VideoDetailPage({ params, searchParams }: { params
 
       <section aria-labelledby="video-remember-heading" className="space-y-2">
         <h2 id="video-remember-heading" className="text-sm font-semibold text-gray-900">À retenir</h2>
-        <ul className="list-disc list-inside space-y-1.5 text-sm text-gray-600 leading-relaxed">
+        <ul className="max-w-[70ch] list-disc list-inside space-y-1.5 text-sm text-gray-600 leading-relaxed">
           {viewer.remember.map((item) => (
             <li key={item}>{item}</li>
           ))}
@@ -165,7 +165,7 @@ export default async function VideoDetailPage({ params, searchParams }: { params
             <span aria-hidden="true" className="inline-block transition-transform group-open:rotate-90 motion-reduce:transition-none mr-1">▸</span>
             Transcription complète
           </summary>
-          <div className="mt-3 text-sm text-gray-600 leading-relaxed space-y-3">
+          <div className="mt-3 max-w-[70ch] text-sm text-gray-600 leading-relaxed space-y-3">
             {video.manifest.segments.map((segment) => (
               <p key={segment.id}>{segment.transcript}</p>
             ))}

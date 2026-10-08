@@ -1,5 +1,6 @@
 import Link from "next/link"
 import type { LandingStartLink } from "@/lib/landing-start-guides"
+import { SITE_CONTAINER_CLASS } from "@/components/public/site-container"
 
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
 
@@ -11,8 +12,8 @@ const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:o
 export default function LandingStartGuides({ links, guide }: { links: readonly LandingStartLink[]; guide?: LandingStartLink }) {
   if (links.length === 0) return null
   return (
-    <section aria-labelledby="start-heading" className="border-t border-gray-200 px-4 sm:px-6 py-20 sm:py-24">
-      <div className="max-w-6xl mx-auto">
+    <section aria-labelledby="start-heading" className="border-t border-gray-200 py-20 sm:py-24">
+      <div className={SITE_CONTAINER_CLASS}>
         <h2 id="start-heading" className="text-3xl sm:text-4xl font-bold tracking-tight" style={{ textWrap: "balance" } as React.CSSProperties}>
           Bien démarrer
         </h2>

@@ -4,6 +4,7 @@
 import Link from "next/link"
 import { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import NotFoundTitle from "@/components/public/NotFoundTitle"
+import { SITE_CONTAINER_CLASS } from "@/components/public/site-container"
 import type { NotFoundLinks } from "@/lib/not-found-links"
 
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
@@ -100,7 +101,7 @@ export default function NotFoundPage({ links }: { links: NotFoundLinks }) {
   return (
     <div data-color-scheme="system" className="flex flex-1 flex-col bg-gray-50 text-gray-900 [color-scheme:light] dark:bg-gray-900 dark:text-gray-50 dark:[color-scheme:dark]">
       <NotFoundTitle />
-      <main id={MAIN_CONTENT_ID} tabIndex={-1} className="mx-auto w-full max-w-5xl flex-1 px-4 py-12 focus:outline-none sm:px-6 sm:py-20">
+      <main id={MAIN_CONTENT_ID} tabIndex={-1} className={`${SITE_CONTAINER_CLASS} flex-1 py-12 focus:outline-none sm:py-20`}>
         <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:gap-12">
           <div>
             <h1 className="text-[clamp(2.5rem,2rem+3vw,5.5rem)] font-extrabold leading-[0.98] tracking-[-0.035em] text-balance">

@@ -87,6 +87,24 @@ describe("legal pages layout", () => {
     expect(contentHrefs()).toEqual(expect.arrayContaining(["/legal/sous-traitance", "/legal/privacy"]))
   })
 
+  // Regression: the privacy table was wider than a 320 px screen and scrolled the whole page.
+  it("puts every legal table in its own focusable scroll region", () => {
+    let tables = 0
+    for (const path of Object.keys(PAGES) as (keyof typeof PAGES)[]) {
+      renderLegal(path)
+      for (const table of screen.getByRole("main").querySelectorAll("table")) {
+        tables++
+        const region = table.parentElement!
+        expect(region).toHaveAttribute("role", "region")
+        expect(region).toHaveAttribute("tabindex", "0")
+        expect(region).toHaveAccessibleName()
+        expect(region.className).toContain("overflow-x-auto")
+      }
+      cleanup()
+    }
+    expect(tables).toBeGreaterThan(0)
+  })
+
   // The old footer's « Contact » mailto: the address stays in every legal document.
   it.each(Object.keys(PAGES) as (keyof typeof PAGES)[])("gives the contact address in the document (%s)", (path) => {
     renderLegal(path)
