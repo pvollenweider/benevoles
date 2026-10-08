@@ -6,6 +6,7 @@ import "@testing-library/jest-dom/vitest"
 import { render, screen, cleanup, within } from "@testing-library/react"
 import LegalLayout from "../layout"
 import { CONTENT_PROSE_CLASS } from "@/components/public/ContentShell"
+import { SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
 import PrivacyPage from "../privacy/page"
 import TermsPage from "../terms/page"
 import ProcessingAgreementPage from "../sous-traitance/page"
@@ -64,7 +65,7 @@ describe("legal pages layout", () => {
   it("draws the document with the shared prose recipe", () => {
     renderLegal("/legal/privacy")
     const article = screen.getByRole("main").querySelector("article")!
-    expect(article.className).toBe(CONTENT_PROSE_CLASS)
+    expect(article.className).toBe(`${CONTENT_PROSE_CLASS} ${SITE_READING_COLUMN_CLASS}`)
     expect(article.className).toContain("prose-a:focus-visible:outline")
     expect(article.className).toContain("prose-headings:scroll-mt-4")
   })
@@ -85,6 +86,29 @@ describe("legal pages layout", () => {
     cleanup()
     renderLegal("/legal/sous-traitants")
     expect(contentHrefs()).toEqual(expect.arrayContaining(["/legal/sous-traitance", "/legal/privacy"]))
+  })
+
+  // Regression: the privacy table was wider than a 320 px screen and scrolled the whole page.
+  it("puts every legal table in its own focusable scroll region", () => {
+    let tables = 0
+    for (const path of Object.keys(PAGES) as (keyof typeof PAGES)[]) {
+      renderLegal(path)
+      for (const table of screen.getByRole("main").querySelectorAll("table")) {
+        tables++
+        const region = table.parentElement!
+        expect(region).toHaveAttribute("role", "region")
+        expect(region).toHaveAttribute("tabindex", "0")
+        // Named by its visible heading, with a hint on a narrow screen.
+        const heading = document.getElementById(region.getAttribute("aria-labelledby")!)
+        expect(heading?.tagName).toMatch(/^H[2-4]$/)
+        expect(region).toHaveAccessibleName(heading!.textContent!)
+        expect(region.previousElementSibling).toHaveTextContent("Faites défiler le tableau horizontalement.")
+        expect(region.previousElementSibling!.className).toContain("sm:hidden")
+        expect(region.className).toContain("overflow-x-auto")
+      }
+      cleanup()
+    }
+    expect(tables).toBeGreaterThan(0)
   })
 
   // The old footer's « Contact » mailto: the address stays in every legal document.

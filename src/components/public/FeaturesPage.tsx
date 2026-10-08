@@ -3,6 +3,7 @@
 
 import { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import DocVideoInline from "@/components/videos/DocVideoInline"
+import { SITE_CONTAINER_CLASS } from "@/components/public/site-container"
 import { mailtoAddress } from "@/lib/features-page"
 import type { FeatureStill, RenderedFeaturesPage, RenderedQuestion } from "@/lib/public-content"
 import type { FeatureAction } from "@/lib/features-page"
@@ -125,7 +126,7 @@ export default function FeaturesPage({ page, eyebrow = "Fonctionnalités" }: { p
   const introVideos = intro.parts.filter((p) => p.kind === "video")
   return (
     <main id={MAIN_CONTENT_ID} tabIndex={-1} className="focus:outline-none">
-      <section className="max-w-6xl mx-auto px-6 pt-12 pb-16 sm:pt-16">
+      <section className={`${SITE_CONTAINER_CLASS} pt-12 pb-16 sm:pt-16`}>
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center">
           <div>
             {/* The small label belongs to the title: an <hgroup>, so it reads as its lead-in, not a heading of its own. */}
@@ -148,7 +149,7 @@ export default function FeaturesPage({ page, eyebrow = "Fonctionnalités" }: { p
       </section>
 
       <nav aria-labelledby="features-toc" className="border-y border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
-        <div className="max-w-6xl mx-auto px-6 py-6">
+        <div className={`${SITE_CONTAINER_CLASS} py-6`}>
           <h2 id="features-toc" className="text-base font-semibold text-gray-900 dark:text-gray-100">Sur cette page</h2>
           <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
             {sections.map((s) => (
@@ -162,7 +163,7 @@ export default function FeaturesPage({ page, eyebrow = "Fonctionnalités" }: { p
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-6">
+      <div className={SITE_CONTAINER_CLASS}>
         {sections.map((s, index) => {
           const still = s.stills[0]
           const flip = index % 2 === 1

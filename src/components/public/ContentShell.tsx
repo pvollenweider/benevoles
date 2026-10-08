@@ -6,6 +6,7 @@ import PublicFooter from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import DocThemeToggle from "@/app/doc/DocThemeToggle"
 import ContentNav from "@/components/public/ContentNav"
+import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
 
 // Sets the `dark` class on the shell's own root before first paint — from a saved choice
 // (doc-theme in localStorage) or, absent one, the OS/browser preference — so there's no flash of
@@ -25,44 +26,49 @@ const THEME_INIT_SCRIPT = `
 `
 
 /**
- * The prose recipe of the content pages (features, accessibility), shared with
- * src/app/legal/layout.tsx. Links of the content (the Markdown, the indexes) get the same visible
- * focus outline as the links a page draws itself. The documentation has its own, larger recipe
- * (DOC_PROSE_CLASS, src/components/public/DocFrame.tsx).
+ * The prose recipe of the content pages (changelog, accessibility), shared with
+ * src/app/legal/layout.tsx: 14 px text, each paragraph and list item capped at 65ch (a maximum,
+ * never a width: about 80 characters a line), the article (headings, tables) at 36rem, the same
+ * width as that measure, centred in the site container (SITE_READING_COLUMN_CLASS), never
+ * stretched to its width. A clear heading scale over the 14 px body, in rem, never fluid: h1 30 px
+ * bold, h2 20 px, h3 16 px, h4 14 px, all semibold except h1, gray-900 (gray-100 in dark). Table
+ * headers in sentence case, never uppercase (DESIGN.md, No-Caps). Links of the content (the
+ * Markdown, the indexes) get the same visible focus outline as the links a page draws itself. The
+ * documentation has its own, larger recipe (DOC_PROSE_CLASS, src/components/public/DocFrame.tsx).
  */
-export const CONTENT_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-none
-          prose-headings:font-semibold prose-headings:tracking-tight prose-headings:scroll-mt-4
-          prose-h1:text-2xl prose-h1:mb-2 prose-h1:pb-4 prose-h1:border-b prose-h1:border-gray-200 dark:prose-h1:border-gray-800
-          prose-h2:text-base prose-h2:mt-10 prose-h2:mb-3
-          prose-h3:text-sm prose-h3:mt-6 prose-h3:mb-2 prose-h3:text-gray-700 dark:prose-h3:text-gray-300
-          prose-h4:text-sm prose-h4:mt-4 prose-h4:mb-1 prose-h4:text-gray-700 dark:prose-h4:text-gray-300
-          prose-p:text-sm prose-p:text-gray-600 dark:prose-p:text-gray-400 prose-p:leading-relaxed
-          prose-li:text-sm prose-li:text-gray-600 dark:prose-li:text-gray-400
+export const CONTENT_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-[36rem]
+          prose-headings:font-semibold prose-headings:tracking-tight prose-headings:scroll-mt-4 prose-headings:break-words prose-headings:text-gray-900 dark:prose-headings:text-gray-100
+          prose-h1:text-3xl prose-h1:font-bold prose-h1:leading-[1.2] prose-h1:mb-2 prose-h1:pb-4 prose-h1:border-b prose-h1:border-gray-200 dark:prose-h1:border-gray-800
+          prose-h2:text-xl prose-h2:leading-[1.3] prose-h2:mt-12 prose-h2:mb-3
+          prose-h3:text-base prose-h3:leading-[1.4] prose-h3:mt-8 prose-h3:mb-2
+          prose-h4:text-sm prose-h4:leading-[1.4] prose-h4:mt-6 prose-h4:mb-1
+          prose-p:text-sm prose-p:text-gray-600 dark:prose-p:text-gray-400 prose-p:leading-relaxed prose-p:max-w-[65ch]
+          prose-li:text-sm prose-li:text-gray-600 dark:prose-li:text-gray-400 prose-li:max-w-[65ch]
           prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:underline prose-a:underline-offset-2 hover:prose-a:decoration-2
           prose-a:rounded prose-a:focus-visible:outline prose-a:focus-visible:outline-2 prose-a:focus-visible:outline-offset-2 prose-a:focus-visible:outline-blue-600 dark:prose-a:focus-visible:outline-blue-400
           prose-strong:text-gray-800 dark:prose-strong:text-gray-200 prose-strong:font-semibold
           prose-code:text-xs prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-gray-700 dark:prose-code:text-gray-300 prose-code:before:content-none prose-code:after:content-none
           prose-pre:whitespace-pre-wrap prose-pre:break-words prose-pre:bg-gray-50 dark:prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-gray-700
-          prose-table:text-sm prose-th:text-xs prose-th:uppercase prose-th:tracking-wider prose-th:text-gray-500 dark:prose-th:text-gray-400 prose-th:font-medium
+          prose-table:text-sm prose-th:text-sm prose-th:text-gray-900 dark:prose-th:text-gray-100 prose-th:font-semibold
           prose-td:text-gray-600 dark:prose-td:text-gray-400 prose-td:align-top
           prose-img:rounded-lg prose-img:border prose-img:border-gray-200 dark:prose-img:border-gray-700 prose-img:shadow-sm`
 
 /**
  * Frame of the public content pages rendered from Markdown sources (features, documentation):
  * site header with the content navigation and the theme toggle, and the real PublicFooter.
+ * Header, content and footer share one container (SITE_CONTAINER_CLASS), so their edges line up.
  * `layout="article"` (default) puts the page in a <main> with the shared prose recipe;
- * `layout="doc"` widens the frame and lets the page draw its own <main> (DocFrame), so a unit's
- * side menu can sit beside it, outside the main landmark that « Aller au contenu » jumps to.
+ * `layout="doc"` lets the page draw its own <main> (DocFrame, FeaturesPage), so a unit's side
+ * menu can sit beside it, outside the main landmark that « Aller au contenu » jumps to.
  */
 export default function ContentShell({ children, layout = "article" }: { children: React.ReactNode; layout?: "article" | "doc" }) {
-  const width = layout === "doc" ? "max-w-6xl" : "max-w-3xl"
   return (
     <div data-theme-scope className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
       <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       <SkipLink />
 
       <header className="border-b border-gray-100 dark:border-gray-800">
-        <div className={`${width} mx-auto px-6 py-4 flex items-center justify-between flex-wrap gap-x-2 gap-y-4`}>
+        <div className={`${SITE_CONTAINER_CLASS} py-4 flex items-center justify-between flex-wrap gap-x-2 gap-y-4`}>
           <Link href="/" className="inline-flex py-3 -my-3 text-sm font-semibold text-gray-900 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-300 transition-colors rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">
             benevol.app
           </Link>
@@ -76,12 +82,12 @@ export default function ContentShell({ children, layout = "article" }: { childre
       {layout === "doc" ? (
         children
       ) : (
-        <main id={MAIN_CONTENT_ID} tabIndex={-1} className="max-w-3xl mx-auto px-6 py-12 focus:outline-none">
-          <article className={CONTENT_PROSE_CLASS}>{children}</article>
+        <main id={MAIN_CONTENT_ID} tabIndex={-1} className={`${SITE_CONTAINER_CLASS} py-12 focus:outline-none`}>
+          <article className={`${CONTENT_PROSE_CLASS} ${SITE_READING_COLUMN_CLASS}`}>{children}</article>
         </main>
       )}
 
-      <div className={`${width} mx-auto px-6`}>
+      <div className={SITE_CONTAINER_CLASS}>
         <PublicFooter variant="site" />
       </div>
     </div>

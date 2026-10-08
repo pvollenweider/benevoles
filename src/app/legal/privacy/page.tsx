@@ -39,37 +39,42 @@ export default function PrivacyPage() {
 
       <h2>2. Données que nous traitons en qualité de responsable</h2>
 
-      <h3>2.1 Administrateurs</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Donnée</th>
-            <th>Finalité</th>
-            <th>Base légale</th>
-            <th>Durée</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Nom, adresse e-mail</td>
-            <td>Création et gestion du compte</td>
-            <td>Exécution du contrat</td>
-            <td>Durée du compte ; effacé avec l&apos;Organisation {RETENTION_DAYS.deactivatedOrganization} jours après sa désactivation</td>
-          </tr>
-          <tr>
-            <td>Mot de passe (hashé bcrypt)</td>
-            <td>Authentification</td>
-            <td>Exécution du contrat</td>
-            <td>Durée du compte</td>
-          </tr>
-          <tr>
-            <td>Logs de connexion</td>
-            <td>Sécurité et débogage</td>
-            <td>Intérêt légitime</td>
-            <td>{RETENTION_DAYS.technicalLogs} jours</td>
-          </tr>
-        </tbody>
-      </table>
+      <h3 id="donnees-administrateurs">2.1 Administrateurs</h3>
+      {/* A wide table scrolls in its own focusable region, named by its heading, so the page
+          reflows at 320 px (1.4.10); the hint says so where the table is wider than the screen. */}
+      <p className="sm:hidden">Faites défiler le tableau horizontalement.</p>
+      <div role="region" aria-labelledby="donnees-administrateurs" tabIndex={0} className="overflow-x-auto rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+        <table>
+          <thead>
+            <tr>
+              <th>Donnée</th>
+              <th>Finalité</th>
+              <th>Base légale</th>
+              <th>Durée</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Nom, adresse e-mail</td>
+              <td>Création et gestion du compte</td>
+              <td>Exécution du contrat</td>
+              <td>Durée du compte ; effacé avec l&apos;Organisation {RETENTION_DAYS.deactivatedOrganization} jours après sa désactivation</td>
+            </tr>
+            <tr>
+              <td>Mot de passe (hashé bcrypt)</td>
+              <td>Authentification</td>
+              <td>Exécution du contrat</td>
+              <td>Durée du compte</td>
+            </tr>
+            <tr>
+              <td>Logs de connexion</td>
+              <td>Sécurité et débogage</td>
+              <td>Intérêt légitime</td>
+              <td>{RETENTION_DAYS.technicalLogs} jours</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <h3>2.2 Cookies et stockage local</h3>
       <p>

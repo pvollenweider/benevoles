@@ -17,6 +17,7 @@ import { CONTACT_EMAIL, LANDING_FAQ, REPOSITORY_URL, jsonLdScript, landingJsonLd
 import { loadDocUnits } from "@/lib/doc-units"
 import { landingQuickstartLink, landingStartLinks, landingVolunteerGuideLink } from "@/lib/landing-start-guides"
 import LandingStartGuides from "@/components/public/LandingStartGuides"
+import { SITE_CONTAINER_CLASS } from "@/components/public/site-container"
 
 export const dynamic = "force-dynamic"
 
@@ -216,8 +217,8 @@ function LandingPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(landingJsonLd(apexBaseUrl())) }} />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="bg-blue-900 px-4 sm:px-6 pt-16 pb-0 sm:pt-24 overflow-hidden">
-        <div className="max-w-6xl mx-auto grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end">
+      <section className="bg-blue-900 pt-16 pb-0 sm:pt-24 overflow-hidden">
+        <div className={`${SITE_CONTAINER_CLASS} grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end`}>
           <div className="pb-4 lg:pb-24">
             <h1
               className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.05] tracking-tight"
@@ -288,8 +289,8 @@ function LandingPage() {
       </section>
 
       {/* ── Comment ça marche ────────────────────────────────────────────── */}
-      <section aria-labelledby="steps-heading" className="px-4 sm:px-6 py-20 sm:py-24">
-        <div className="max-w-6xl mx-auto">
+      <section aria-labelledby="steps-heading" className="py-20 sm:py-24">
+        <div className={SITE_CONTAINER_CLASS}>
           <h2 id="steps-heading" className="text-3xl sm:text-4xl font-bold tracking-tight" style={{ textWrap: "balance" } as React.CSSProperties}>
             Prêt en trois étapes
           </h2>
@@ -301,7 +302,7 @@ function LandingPage() {
                   <span className="sr-only">Étape {i + 1} : </span>
                   {step.title}
                 </h3>
-                <p className="mt-3 text-base text-gray-600 leading-relaxed">{step.text}</p>
+                <p className="mt-3 max-w-[65ch] text-base text-gray-600 leading-relaxed">{step.text}</p>
               </li>
             ))}
           </ol>
@@ -312,8 +313,8 @@ function LandingPage() {
       <LandingStartGuides links={landingStartLinks(units)} guide={landingVolunteerGuideLink()} />
 
       {/* ── Ce qui change pour vous ──────────────────────────────────────── */}
-      <section aria-labelledby="benefits-heading" className="bg-gray-50 border-y border-gray-200 px-4 sm:px-6 py-20 sm:py-24">
-        <div className="max-w-6xl mx-auto">
+      <section aria-labelledby="benefits-heading" className="bg-gray-50 border-y border-gray-200 py-20 sm:py-24">
+        <div className={SITE_CONTAINER_CLASS}>
           <h2 id="benefits-heading" className="text-3xl sm:text-4xl font-bold tracking-tight max-w-2xl" style={{ textWrap: "balance" } as React.CSSProperties}>
             Moins de tableurs, moins de relances, plus de temps pour la fête
           </h2>
@@ -322,7 +323,7 @@ function LandingPage() {
               <div key={b.title} className="grid gap-8 lg:grid-cols-12 lg:gap-12 lg:items-center">
                 <div className={`lg:col-span-5 ${i % 2 === 1 ? "lg:order-2 lg:col-start-8" : ""}`}>
                   <h3 className="text-2xl font-bold tracking-tight" style={{ textWrap: "balance" } as React.CSSProperties}>{b.title}</h3>
-                  <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed" style={{ textWrap: "pretty" } as React.CSSProperties}>{b.text}</p>
+                  <p className="mt-4 max-w-[65ch] text-base sm:text-lg text-gray-600 leading-relaxed" style={{ textWrap: "pretty" } as React.CSSProperties}>{b.text}</p>
                 </div>
                 <div className={`lg:col-span-7 ${i % 2 === 1 ? "lg:order-1 lg:col-start-1" : ""}`}>
                   <Image
@@ -330,8 +331,8 @@ function LandingPage() {
                     width={1280}
                     height={800}
                     alt={b.alt}
-                    // Its column from lg; below, the section's width less its padding (px-4, sm:px-6).
-                    sizes="(min-width: 1024px) 640px, (min-width: 640px) calc(100vw - 3rem), calc(100vw - 2rem)"
+                    // Its column from lg; below, the site container's width less its 24 px gutters.
+                    sizes="(min-width: 1024px) 640px, calc(100vw - 3rem)"
                     className="w-full h-auto rounded-xl border border-gray-200 shadow-lg bg-white"
                   />
                 </div>
@@ -347,8 +348,8 @@ function LandingPage() {
       </section>
 
       {/* ── Confiance ────────────────────────────────────────────────────── */}
-      <section aria-labelledby="trust-heading" className="px-4 sm:px-6 py-20 sm:py-24">
-        <div className="max-w-6xl mx-auto">
+      <section aria-labelledby="trust-heading" className="py-20 sm:py-24">
+        <div className={SITE_CONTAINER_CLASS}>
           <h2 id="trust-heading" className="text-3xl sm:text-4xl font-bold tracking-tight" style={{ textWrap: "balance" } as React.CSSProperties}>
             Un outil sur lequel compter
           </h2>
@@ -392,35 +393,38 @@ function LandingPage() {
       </section>
 
       {/* ── FAQ (same text as the FAQPage structured data) ───────────────── */}
-      <section aria-labelledby="faq-heading" className="bg-gray-50 border-t border-gray-200 px-4 sm:px-6 py-20 sm:py-24">
-        <div className="max-w-3xl mx-auto">
-          <h2 id="faq-heading" className="text-3xl sm:text-4xl font-bold tracking-tight">Questions fréquentes</h2>
-          <div className="mt-10 divide-y divide-gray-200 border-y border-gray-200">
-            {LANDING_FAQ.map((f) => (
-              <details key={f.question} className="group">
-                <summary className={`flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-lg font-semibold rounded [&::-webkit-details-marker]:hidden ${focusRing} focus-visible:outline-blue-700`}>
-                  {f.question}
-                  <span aria-hidden="true" className="text-2xl font-normal text-blue-700 transition-transform group-open:rotate-45 motion-reduce:transition-none">+</span>
-                </summary>
-                <div className="pb-6 pr-8 text-base text-gray-600 leading-relaxed">
-                  <p>{f.answer}</p>
-                  {f.link && (
-                    <p className="mt-2">
-                      {f.link.href.startsWith("http") ? (
-                        <a href={f.link.href} target="_blank" rel="noopener noreferrer" className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
-                          {f.link.label}
-                          <span className="sr-only"> (ouvre dans un nouvel onglet)</span>
-                        </a>
-                      ) : (
-                        <Link href={f.link.href} className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
-                          {f.link.label}
-                        </Link>
-                      )}
-                    </p>
-                  )}
-                </div>
-              </details>
-            ))}
+      <section aria-labelledby="faq-heading" className="bg-gray-50 border-t border-gray-200 py-20 sm:py-24">
+        {/* The questions keep a reading measure, on the container's left edge like every heading. */}
+        <div className={SITE_CONTAINER_CLASS}>
+          <div className="max-w-3xl">
+            <h2 id="faq-heading" className="text-3xl sm:text-4xl font-bold tracking-tight">Questions fréquentes</h2>
+            <div className="mt-10 divide-y divide-gray-200 border-y border-gray-200">
+              {LANDING_FAQ.map((f) => (
+                <details key={f.question} className="group">
+                  <summary className={`flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-lg font-semibold rounded [&::-webkit-details-marker]:hidden ${focusRing} focus-visible:outline-blue-700`}>
+                    {f.question}
+                    <span aria-hidden="true" className="text-2xl font-normal text-blue-700 transition-transform group-open:rotate-45 motion-reduce:transition-none">+</span>
+                  </summary>
+                  <div className="pb-6 pr-8 text-base text-gray-600 leading-relaxed">
+                    <p className="max-w-[70ch]">{f.answer}</p>
+                    {f.link && (
+                      <p className="mt-2">
+                        {f.link.href.startsWith("http") ? (
+                          <a href={f.link.href} target="_blank" rel="noopener noreferrer" className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
+                            {f.link.label}
+                            <span className="sr-only"> (ouvre dans un nouvel onglet)</span>
+                          </a>
+                        ) : (
+                          <Link href={f.link.href} className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
+                            {f.link.label}
+                          </Link>
+                        )}
+                      </p>
+                    )}
+                  </div>
+                </details>
+              ))}
+            </div>
           </div>
           <p className="mt-8 text-base text-gray-600 leading-relaxed">
             D&apos;autres questions avant de choisir ?{" "}
@@ -432,21 +436,23 @@ function LandingPage() {
       </section>
 
       {/* ── CTA bas ──────────────────────────────────────────────────────── */}
-      <section aria-labelledby="cta-heading" className="bg-blue-900 px-4 sm:px-6 py-20">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 id="cta-heading" className="text-3xl sm:text-4xl font-bold text-white tracking-tight" style={{ textWrap: "balance" } as React.CSSProperties}>
-            Votre prochain événement commence ici
-          </h2>
-          <p className="mt-4 text-lg text-blue-100 leading-relaxed">
-            Écrivez-nous : on vous crée un espace à l&apos;adresse de votre association, et une liste
-            de premiers pas vous guide jusqu&apos;à la publication.
-          </p>
-          <a
-            href={`mailto:${CONTACT_EMAIL}`}
-            className={`mt-8 inline-flex items-center gap-2 bg-white text-blue-900 text-base font-bold px-7 py-3.5 rounded-full hover:bg-blue-50 transition-colors ${focusRing} focus-visible:outline-white`}
-          >
-            {CONTACT_EMAIL}
-          </a>
+      <section aria-labelledby="cta-heading" className="bg-blue-900 py-20">
+        <div className={SITE_CONTAINER_CLASS}>
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 id="cta-heading" className="text-3xl sm:text-4xl font-bold text-white tracking-tight" style={{ textWrap: "balance" } as React.CSSProperties}>
+              Votre prochain événement commence ici
+            </h2>
+            <p className="mt-4 text-lg text-blue-100 leading-relaxed">
+              Écrivez-nous : on vous crée un espace à l&apos;adresse de votre association, et une liste
+              de premiers pas vous guide jusqu&apos;à la publication.
+            </p>
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              className={`mt-8 inline-flex items-center gap-2 bg-white text-blue-900 text-base font-bold px-7 py-3.5 rounded-full hover:bg-blue-50 transition-colors ${focusRing} focus-visible:outline-white`}
+            >
+              {CONTACT_EMAIL}
+            </a>
+          </div>
         </div>
       </section>
 
@@ -455,7 +461,7 @@ function LandingPage() {
           volunteer-facing page: those are seen by someone else's audience, registering for
           someone else's event, not benevol.app's own. */}
     </main>
-      <div className="px-4"><PublicFooter variant="site" /></div>
+      <div className={SITE_CONTAINER_CLASS}><PublicFooter variant="site" /></div>
     </>
   )
 }

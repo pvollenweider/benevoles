@@ -2,24 +2,26 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
+import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
 
 /**
  * The prose recipe of the documentation (/doc and its pages), larger than the other content
  * pages' (CONTENT_PROSE_CLASS in ContentShell.tsx), which it leaves alone: body text 16 px in
- * gray-700 with a unitless line height of 1.75, each paragraph and list item capped at 70ch (a
- * maximum, never a width, so a narrow screen or larger text spacing only wraps sooner), a clear
+ * gray-700 with a unitless line height of 1.75, each paragraph and list item capped at 65ch, about
+ * 80 characters a line (a maximum, never a width, so a narrow screen or larger text spacing only
+ * wraps sooner), a clear
  * heading scale in rem (h1 30 px, h2 24 px, h3 20 px, h4 18 px, all semibold, long words wrapped
  * rather than overflowing), underlined links with the same visible focus outline as the links a
  * page draws itself. No fixed height anywhere. Dark variants stay AA on gray-900.
  */
-export const DOC_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-[70ch]
+export const DOC_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-[65ch]
   prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-headings:scroll-mt-4 prose-headings:break-words
   prose-h1:text-3xl prose-h1:leading-[1.2] prose-h1:mb-2 prose-h1:pb-4 prose-h1:border-b prose-h1:border-gray-200 dark:prose-h1:border-gray-800
   prose-h2:text-2xl prose-h2:leading-[1.3] prose-h2:mt-10 prose-h2:mb-3
   prose-h3:text-xl prose-h3:leading-[1.4] prose-h3:mt-8 prose-h3:mb-2
   prose-h4:text-lg prose-h4:leading-[1.4] prose-h4:mt-6 prose-h4:mb-1
-  prose-p:text-base prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-[1.75] prose-p:max-w-[70ch]
-  prose-li:text-base prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-li:leading-[1.75] prose-li:max-w-[70ch]
+  prose-p:text-base prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-[1.75] prose-p:max-w-[65ch]
+  prose-li:text-base prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-li:leading-[1.75] prose-li:max-w-[65ch]
   prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:underline prose-a:underline-offset-2 hover:prose-a:decoration-2
   prose-a:rounded prose-a:focus-visible:outline prose-a:focus-visible:outline-2 prose-a:focus-visible:outline-offset-2 prose-a:focus-visible:outline-blue-600 dark:prose-a:focus-visible:outline-blue-400
   prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-strong:font-semibold
@@ -32,17 +34,19 @@ export const DOC_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-[70ch]
 /**
  * The frame of a documentation page, inside ContentShell's `layout="doc"`: an optional side menu
  * (a unit's DocSideMenu, from `lg`), then the page's <main>, target of « Aller au contenu », so the
- * menu is skipped like the header. Without a menu, the page is a single centred column.
+ * menu is skipped like the header. Both in the site container (SITE_CONTAINER_CLASS), the text
+ * capped at 65ch: beside the menu, in the column after it; without a menu, centred
+ * (SITE_READING_COLUMN_CLASS), an even margin on both sides.
  */
 export default function DocFrame({ menu, children }: { menu?: React.ReactNode; children: React.ReactNode }) {
   const main = (
     <main id={MAIN_CONTENT_ID} tabIndex={-1} className="min-w-0 py-12 focus:outline-none">
-      <article className={DOC_PROSE_CLASS}>{children}</article>
+      <article className={menu ? DOC_PROSE_CLASS : `${DOC_PROSE_CLASS} ${SITE_READING_COLUMN_CLASS}`}>{children}</article>
     </main>
   )
-  if (!menu) return <div className="max-w-3xl mx-auto px-6">{main}</div>
+  if (!menu) return <div className={SITE_CONTAINER_CLASS}>{main}</div>
   return (
-    <div className="max-w-6xl mx-auto px-6 lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-12">
+    <div className={`${SITE_CONTAINER_CLASS} lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-12`}>
       {menu}
       {main}
     </div>

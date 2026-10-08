@@ -88,11 +88,13 @@ function FooterAnchor({ link }: { link: FooterLink }) {
  *   personal or sector leader link): Aide (volunteers' guide, organisers' sign-in) and
  *   Informations légales, then the name and version of the tool on a small line; no support
  *   appeal nor platform news, they come for someone else's event.
- * The page puts it after its `</main>`, with `px-4` when it has no container of its own.
+ * The page puts it after its `</main>`: `site` inside the site container (SITE_CONTAINER_CLASS,
+ * src/components/public/site-container.ts), whose width it takes, so its edges line up with the
+ * header and the content; `event` at `max-w-xl`, with `px-4` when the page has no container.
  */
 export default function PublicFooter({ variant = "event" }: { variant?: "site" | "event" }) {
   const columns = variant === "site" ? FOOTER_SITE_COLUMNS : FOOTER_EVENT_COLUMNS
-  const width = variant === "site" ? "max-w-3xl" : "max-w-xl"
+  const width = variant === "site" ? "w-full" : "max-w-xl"
   return (
     <footer className={`${width} mx-auto mt-12 pt-8 pb-8 border-t border-gray-200 dark:border-gray-800 text-sm text-gray-600 dark:text-gray-300`}>
       <nav aria-label="Liens utiles" className={`grid grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-6 ${variant === "site" ? "sm:grid-cols-3" : ""}`}>
