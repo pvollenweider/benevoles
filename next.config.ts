@@ -2,10 +2,14 @@ import type { NextConfig } from "next"
 import { withSentryConfig } from "@sentry/nextjs/config"
 import { SECURITY_HEADERS } from "./src/lib/security-headers"
 import { STATIC_CACHE_HEADERS } from "./src/lib/static-cache-headers"
+import pkg from "./package.json"
 
 const nextConfig: NextConfig = {
   output: "standalone",
   allowedDevOrigins: ["localhost", "127.0.0.1"],
+  // The version shown by client components (src/lib/app-version.ts), inlined at build time: importing
+  // package.json there shipped the whole file in the public pages' JavaScript (#773).
+  env: { APP_VERSION: pkg.version },
   async headers() {
     return [{ source: "/:path*", headers: [...SECURITY_HEADERS] }, ...STATIC_CACHE_HEADERS]
   },

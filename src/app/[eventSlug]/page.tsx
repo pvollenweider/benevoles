@@ -5,8 +5,9 @@ import { cache } from "react"
 import { prisma } from "@/lib/prisma"
 import { resolveOrgSlug } from "@/lib/resolve-org"
 import { eventPageMetadata } from "@/lib/event-share"
+import { publicEventInclude, publicEventPayload } from "@/lib/public-event"
 import { apexBaseUrl, eventPublicUrl } from "@/lib/urls"
-import EventPageClient from "./EventPageClient"
+import EventPageClient, { type EventData } from "./EventPageClient"
 
 // Only a published event gives its title and its link preview (#564); unlisted (#414), draft and
 // archived events are noindex. The canonical URL is the event's public one on the organization's
@@ -16,11 +17,11 @@ import EventPageClient from "./EventPageClient"
 // resolved by the time the page's shell is sent, so its tags (description included) land in the
 // <head>. Otherwise Next.js may stream them into the <body> when the metadata query finishes last,
 // where Lighthouse and HTML-only crawlers don't look for them (#773).
+// It reads what the public API reads (src/lib/public-event.ts): the page is server-rendered with
+// its data instead of fetching it after hydration, which kept the schedule (and the largest
+// paint) waiting for the JavaScript, then for a second request (#773).
 const loadEvent = cache((organizationId: string, slug: string) =>
-  prisma.event.findFirst({
-    where: { slug, organizationId },
-    select: { slug: true, title: true, description: true, startDate: true, endDate: true, publicStatus: true, isListed: true },
-  }),
+  prisma.event.findFirst({ where: { slug, organizationId }, include: publicEventInclude }),
 )
 
 export async function generateMetadata({ params }: { params: Promise<{ eventSlug: string }> }): Promise<Metadata> {
@@ -52,5 +53,11 @@ export default async function EventPage({ params }: { params: Promise<{ eventSlu
   const event = await loadEvent(resolved.org.id, eventSlug)
   if (!event || event.publicStatus !== "published") notFound()
 
-  return <EventPageClient orgSlug={resolved.org.slug} eventSlug={eventSlug} />
+  return (
+    <EventPageClient
+      orgSlug={resolved.org.slug}
+      eventSlug={eventSlug}
+      initialEvent={publicEventPayload(event) as EventData}
+    />
+  )
 }

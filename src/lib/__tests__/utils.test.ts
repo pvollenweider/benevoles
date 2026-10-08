@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest"
-import { shiftsOverlap, slugify, cn, generateToken, formatDate, formatShortDate, calculateAgeAt, shiftsTooYoungFor } from "../utils"
+import { describe, it, expect, afterEach } from "vitest"
+import { shiftsOverlap, slugify, cn, generateToken, formatDate, formatCalendarDay, formatShortDate, calculateAgeAt, shiftsTooYoungFor } from "../utils"
 
 // ── shiftsOverlap ────────────────────────────────────────────────────────────
 
@@ -124,6 +124,27 @@ describe("formatDate", () => {
   it("accepte un objet Date", () => {
     const result = formatDate(new Date("2025-12-25T12:00:00Z"))
     expect(result).toMatch(/décembre/)
+  })
+})
+
+// The public event page is server-rendered (#773): its day labels must read the same on the server
+// and in the browser, whatever their time zones.
+describe("formatCalendarDay", () => {
+  const tz = process.env.TZ
+  afterEach(() => { if (tz === undefined) delete process.env.TZ; else process.env.TZ = tz })
+
+  it("writes a stored day (midnight UTC) as formatDate does in Europe", () => {
+    process.env.TZ = "Europe/Zurich"
+    expect(formatCalendarDay("2025-08-02")).toBe("samedi 2 août")
+    expect(formatCalendarDay("2025-08-02T00:00:00.000Z")).toBe(formatDate("2025-08-02T00:00:00.000Z"))
+    expect(formatCalendarDay(new Date("2025-12-25T00:00:00Z"))).toBe("jeudi 25 décembre")
+  })
+
+  it("gives the same day whatever the runtime's time zone", () => {
+    for (const zone of ["UTC", "America/Los_Angeles", "Pacific/Auckland", "Europe/Zurich"]) {
+      process.env.TZ = zone
+      expect(formatCalendarDay("2025-08-02"), zone).toBe("samedi 2 août")
+    }
   })
 })
 

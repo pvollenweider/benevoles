@@ -1,8 +1,9 @@
 import { describe, it, expect } from "vitest"
 import {
   WITHDRAWABLE_STATUSES, WITHDRAWAL_MESSAGE_MAX, planVolunteerWithdraw, withdrawCopy, withdrawDoneMessage,
-  withdrawFailureMessage, withdrawRequestSchema, withdrawalMessageHint,
+  withdrawFailureMessage, withdrawalMessageHint,
 } from "../volunteer-withdraw"
+import { withdrawRequestSchema } from "../volunteer-withdraw-schema"
 
 describe("planVolunteerWithdraw", () => {
   it("lets every live status be withdrawn", () => {

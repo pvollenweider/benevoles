@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import Link from "next/link"
-import pkg from "../../package.json"
+import { APP_VERSION } from "@/lib/app-version"
 import GitHubMark from "./GitHubMark"
 
 /**
@@ -44,7 +44,7 @@ export const FOOTER_SITE_COLUMNS: readonly FooterColumn[] = [
     title: "benevol.app",
     links: [
       { href: "/admin/login", label: "Espace organisateur" },
-      { href: REPOSITORY_URL, label: `Code source v${pkg.version}`, external: true, github: true },
+      { href: REPOSITORY_URL, label: `Code source v${APP_VERSION}`, external: true, github: true },
       { href: "https://buymeacoffee.com/benevol.app", label: "Soutenir le projet", external: true },
     ],
   },
@@ -111,7 +111,7 @@ export default function PublicFooter({ variant = "event" }: { variant?: "site" |
         <p className="mt-6 text-xs text-gray-500 dark:text-gray-400">
           <a href={REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className={`${linkClass} gap-1.5`}>
             <GitHubMark className="w-3.5 h-3.5" />
-            benevol.app v{pkg.version}
+            benevol.app v{APP_VERSION}
             <span className="sr-only">, code source sur GitHub {NEW_TAB}</span>
           </a>
         </p>

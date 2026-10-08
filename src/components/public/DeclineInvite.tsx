@@ -5,6 +5,7 @@
 
 import { useId, useLayoutEffect, useRef, useState } from "react"
 import ModalShell from "@/components/admin/ModalShell"
+import { useHydrated } from "@/lib/use-hydrated"
 
 type Props = {
   token: string
@@ -13,6 +14,12 @@ type Props = {
   initialDeclined: boolean
   /** From the email's second link (`?decline=1`): opens the confirmation step right away. */
   autoOpen?: boolean
+  /**
+   * Where focus goes if the dialog disappears with nothing to return to (an auto-opened dialog has
+   * no opener), e.g. this component unmounts because the visitor's session turned out to hold a
+   * registration (#773 a11y review).
+   */
+  fallbackFocusOnClose?: () => HTMLElement | null
 }
 
 /**
@@ -22,30 +29,40 @@ type Props = {
  * dialog, focus on « Non, annuler » first) but its own component: a different action, a different
  * audience state (declined vs. withdrawn), and no message field.
  */
-export default function DeclineInvite({ token, eventSlug, initialDeclined, autoOpen }: Props) {
+export default function DeclineInvite({ token, eventSlug, initialDeclined, autoOpen, fallbackFocusOnClose }: Props) {
   // `initialDeclined` arrives asynchronously (the parent's own GET to member-invite resolves after
   // mount), so it is read on every render rather than only to seed useState: capturing it once
   // would freeze this component on its first value (false, before the fetch resolves) and ignore
   // the real answer once it arrives. `confirmedHere` only remembers a decline from this session.
   const [confirmedHere, setConfirmedHere] = useState(false)
   const declined = initialDeclined || confirmedHere
-  const [confirming, setConfirming] = useState(!!autoOpen && !initialDeclined)
+  // Opened from the button, or by `?decline=1` once hydrated: never in the server HTML (#773),
+  // where the dialog would have neither its focus trap nor Escape. Closing it, either way, closes
+  // both.
+  const hydrated = useHydrated()
+  const [opened, setOpened] = useState(false)
+  const [autoClosed, setAutoClosed] = useState(false)
+  const confirming = opened || (!!autoOpen && hydrated && !autoClosed)
+  const setConfirming = (open: boolean) => {
+    setOpened(open)
+    if (!open) setAutoClosed(true)
+  }
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const descId = useId()
   const cancelRef = useRef<HTMLButtonElement>(null)
   const resultRef = useRef<HTMLParagraphElement>(null)
-  // Tracks the previous render's value rather than "did I just confirm" (#558 a11y review): the
-  // GET to member-invite resolving (initialDeclined flipping true) is just as valid a transition
-  // into the acknowledgement as confirming here, e.g. the ?decline=1 auto-opened dialog is still
-  // showing when that GET answers "already declined" — the dialog's own unmount must not leave
-  // focus on <body>, so every path into `declined` moves it onto the result paragraph.
+  // Focus moves onto the acknowledgement only when it replaces something the visitor was using
+  // (#558 a11y review): a decline confirmed here, or the dialog (e.g. the ?decline=1 one) still open
+  // when the member-invite GET answers "already declined", whose unmount must not leave focus on
+  // <body>. That GET answering on a plain page load (the page is server-rendered with the button,
+  // #773) swaps the button for the acknowledgement without taking focus.
   const wasDeclined = useRef(declined)
 
   useLayoutEffect(() => {
-    if (declined && !wasDeclined.current) resultRef.current?.focus()
+    if (declined && !wasDeclined.current && (confirmedHere || confirming)) resultRef.current?.focus()
     wasDeclined.current = declined
-  }, [declined])
+  }, [declined, confirmedHere, confirming])
 
   async function confirmDecline() {
     if (busy) return
@@ -88,6 +105,7 @@ export default function DeclineInvite({ token, eventSlug, initialDeclined, autoO
           title="Confirmer que tu n'es pas disponible ?"
           describedBy={descId}
           initialFocusRef={cancelRef}
+          fallbackFocusOnClose={fallbackFocusOnClose}
           closeOnBackdrop={false}
           onClose={() => { if (!busy) setConfirming(false) }}
           panelClassName="max-w-sm"

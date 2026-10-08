@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
-import { answerText, checkAnswers, questionChangeProblem, questionSchema, planAnswerWrites } from "../event-questions"
+import { answerText, checkAnswers, questionChangeProblem, planAnswerWrites } from "../event-questions"
+import { questionSchema } from "../event-questions-schema"
 
 // Custom sign-up questions (#483).
 const qs = [
