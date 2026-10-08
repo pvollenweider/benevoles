@@ -3,6 +3,7 @@
 
 import type { Metadata, MetadataRoute } from "next"
 import { videoMediaUrls, type Video, type VideoMediaUrls } from "@/lib/video-catalog"
+import { META_TITLE_MAX } from "@/lib/meta-length"
 
 /**
  * Search engines, AI crawlers and link previews for the video library (/videos, /videos/<ID>):
@@ -88,8 +89,14 @@ export function videoThumbnailUrl(video: Video, ctx: VideoSeoContext): string {
   return videoMedia(video, ctx.mediaBaseUrl)?.poster ?? `${trimBase(ctx.siteBase)}${DEFAULT_OG_IMAGE_PATH}`
 }
 
-export function videoPageTitle(video: Video): string {
-  return `${video.title} | Tutoriel vidéo benevol.app`
+/**
+ * The <title> of a video page: the longest site suffix that keeps it within 65 characters
+ * (src/lib/meta-length.ts), the bare video title when even « | benevol.app » does not fit.
+ */
+export function videoPageTitle(video: Pick<Video, "title">): string {
+  const suffixes = [" | Tutoriel vidéo benevol.app", " | Vidéo benevol.app", ` | ${VIDEO_SITE_NAME}`]
+  const fitting = suffixes.find((suffix) => video.title.length + suffix.length <= META_TITLE_MAX)
+  return fitting ? `${video.title}${fitting}` : video.title
 }
 
 /**
@@ -154,7 +161,7 @@ export function videoJsonLd(video: Video, ctx: VideoSeoContext): Record<string, 
 
 export function videoLibraryDescription(count: number): string {
   const n = count > 1 ? `${count} tutoriels vidéo` : count === 1 ? "Un tutoriel vidéo" : "Des tutoriels vidéo"
-  return `${n} pour prendre en main benevol.app : créer un événement, construire le planning, inscrire les bénévoles, communiquer et préparer le jour J.`
+  return `${n} pour prendre en main benevol.app : créer un événement, bâtir le planning, inscrire les bénévoles, communiquer, préparer le jour J.`
 }
 
 /** CollectionPage of the gallery, its ItemList holding the indexed videos only, in gallery order. */

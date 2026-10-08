@@ -2,7 +2,7 @@
   "id": "ORG_TEAM_PERMISSIONS",
   "slug": "org-team-permissions",
   "title": "Gérer l’équipe et les permissions",
-  "description": "Pour les propriétaires : inviter une personne, choisir son rôle et vérifier concrètement les droits d’un organisateur, distincts du lien de responsable de secteur.",
+  "description": "Pour les propriétaires : inviter une personne, choisir son rôle et vérifier les droits d’un organisateur, distincts du lien de responsable de secteur.",
   "viewer": {
     "summary": "Dans cette vidéo, vous gérez les membres de votre équipe d'administration et leurs rôles.",
     "steps": [

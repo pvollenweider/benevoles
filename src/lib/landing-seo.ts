@@ -18,7 +18,7 @@ export { jsonLdScript } from "@/lib/structured-data"
 
 export const LANDING_TITLE = "Planning et inscription des bénévoles | benevol.app"
 export const LANDING_DESCRIPTION =
-  "Organisez vos bénévoles par postes et créneaux. Ils s'inscrivent depuis leur téléphone, sans créer de compte. Rappels automatiques, feuilles du jour J. Gratuit."
+  "Organisez vos bénévoles par postes et créneaux. Inscription depuis le téléphone, sans compte, rappels automatiques et feuilles du jour J. Gratuit."
 export const OG_IMAGE_ALT = "benevol.app : le planning des bénévoles, inscription sans compte"
 
 export type FaqEntry = {
@@ -76,7 +76,6 @@ export function landingMetadata(base: string): Metadata {
       type: "website",
       siteName: SITE_NAME,
       locale: OG_LOCALE,
-      alternateLocale: ["fr_FR", "fr_BE"],
       url,
       title: LANDING_TITLE,
       description: LANDING_DESCRIPTION,

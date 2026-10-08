@@ -109,9 +109,11 @@ describe("parseDocUnit", () => {
     expect(() => parseDocUnit("p.md", front("order", "premier"))).toThrow(/whole number/)
   })
 
-  it("keeps the summary between 60 and 160 characters, without « · » or em dash", () => {
-    expect(() => parseDocUnit("p.md", source(validFront.replace(SUMMARY, "Trop court.")))).toThrow(/at least 60/)
+  it("keeps the summary between 70 and 160 characters, as audited too, without « · » or em dash", () => {
+    expect(() => parseDocUnit("p.md", source(validFront.replace(SUMMARY, "Trop court.")))).toThrow(/at least 70/)
     expect(() => parseDocUnit("p.md", source(validFront.replace(SUMMARY, "x".repeat(161))))).toThrow(/at most 160/)
+    // 149 characters, but about 300 bytes once escaped and encoded, as SEO audit tools count them.
+    expect(() => parseDocUnit("p.md", source(validFront.replace(SUMMARY, "l'été ".repeat(25).trim())))).toThrow(/as audited/)
     expect(() => parseDocUnit("p.md", source(validFront.replace(SUMMARY, `${SUMMARY} · suite`)))).toThrow(/no « · »/)
     expect(() => parseDocUnit("p.md", source(validFront.replace(SUMMARY, `${SUMMARY} — suite`)))).toThrow(/no « · »/)
   })

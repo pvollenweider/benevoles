@@ -11,7 +11,7 @@ Chaque fichier commence par un en-tête court, puis par son titre `# ` (le seul 
 roles: [benevole]
 group: apres-inscription
 order: 10
-summary: Une phrase de 60 à 160 caractères, reprise comme description de la page.
+summary: Une phrase de 70 à 160 caractères, reprise comme description de la page.
 related: [autre-page]
 legacy: [benevole#ancienne-ancre]
 aliases: [ancien-nom]
@@ -43,7 +43,7 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 ### Après l'inscription
 
 - [Ma page personnelle](ma-page-personnelle.md) : Ta page personnelle : ton prochain créneau, tes infos pratiques, changer de créneau ou annuler, l'ajouter à ton calendrier, tes disponibilités. Pour : bénévoles.
-- [Ton lien personnel](lien-personnel.md) : Le lien reçu par email qui ouvre tes inscriptions : le garder pour toi, le recevoir à nouveau si tu l'as perdu, et quoi faire s'il ne fonctionne plus. Pour : bénévoles.
+- [Ton lien personnel](lien-personnel.md) : Le lien reçu par email qui ouvre tes inscriptions : le garder pour toi, le recevoir à nouveau en cas de perte, et que faire s'il ne fonctionne plus. Pour : bénévoles.
 - [Revenir sur la page d'inscription](revenir-sur-la-page-d-inscription.md) : Retrouver tes inscriptions en rouvrant la page de l'événement, et quitter la session sur un appareil partagé. Pour : bénévoles.
 - [Rappels et changements de créneau](rappels.md) : Les rappels envoyés avant chaque journée de créneaux, par email ou notification sur le téléphone, et les messages quand un créneau change ou est annulé. Pour : organisateurs, bénévoles.
 - [Questions fréquentes des bénévoles](questions-frequentes-benevole.md) : Les questions que les bénévoles posent le plus souvent, chacune avec un lien vers la page qui y répond. Pour : bénévoles.

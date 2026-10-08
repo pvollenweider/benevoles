@@ -2,7 +2,7 @@
 roles: [benevole]
 group: apres-inscription
 order: 20
-summary: Le lien reçu par email qui ouvre tes inscriptions : le garder pour toi, le recevoir à nouveau si tu l'as perdu, et quoi faire s'il ne fonctionne plus.
+summary: Le lien reçu par email qui ouvre tes inscriptions : le garder pour toi, le recevoir à nouveau en cas de perte, et que faire s'il ne fonctionne plus.
 related: [ma-page-personnelle, revenir-sur-la-page-d-inscription]
 legacy: [benevole#votre-lien-personnel]
 aliases: []
