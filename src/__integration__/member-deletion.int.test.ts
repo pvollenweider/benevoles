@@ -64,7 +64,12 @@ describe.skipIf(!url)("member deletion transaction (#667)", () => {
     expect(await prisma.deliveryOutcome.findUnique({ where: { id: outcome.id } })).toBeNull()
 
     const row = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: outbox.id } })
-    expect(row.status).toBe("failed")
+    // #815: cancelled, a final state, and never re-sendable to the deleted person.
+    expect(row.status).toBe("cancelled")
+    expect(row.lastError).toBe("member_deleted")
+    const { retryOutboxRow } = await import("@/lib/outbox-data")
+    expect(await retryOutboxRow(outbox.id, orgId)).toBe(false)
+    expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: outbox.id } })).status).toBe("cancelled")
 
     const log = await prisma.orgLog.findFirstOrThrow({ where: { organizationId: orgId, action: "member.deleted", entityId: member.id } })
     expect(log.changes).toBeNull()

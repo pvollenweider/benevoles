@@ -28,7 +28,7 @@ describe("cancelOutboxForDeletedMember (#667)", () => {
     ])
     const ids = await cancelOutboxForDeletedMember(db, "org-1", { volunteerId: "vol-deleted", email: "gone@example.com" })
     expect(ids.sort()).toEqual(["row-1", "row-2"])
-    expect(updateMany).toHaveBeenCalledWith({ where: { id: { in: ["row-1", "row-2"] } }, data: { status: "failed", lastError: MEMBER_DELETED_CANCEL_REASON } })
+    expect(updateMany).toHaveBeenCalledWith({ where: { id: { in: ["row-1", "row-2"] } }, data: { status: "cancelled", lastError: MEMBER_DELETED_CANCEL_REASON } })
   })
 
   it("queries only pending rows of the organization", async () => {

@@ -1,4 +1,6 @@
 import { describe, it, expect } from "vitest"
+import { MEMBER_DELETED_CANCEL_REASON } from "../outbox-member-deleted-reason"
+import { MERGED_MEMBER_CANCEL_REASON } from "../outbox-merge-cancel-reason"
 import { ORG_INACTIVE_REASON } from "../outbox-org-cancel-reason"
 import { encodeOutcomeReason, kindLabel, KIND_LABELS, outboxCounts, outboxErrorSentence, outboxHeadline, outboxRowView, outboxState, recipientLabel } from "../outbox-view"
 import { MAX_ATTEMPTS } from "../notifications/types"
@@ -98,6 +100,21 @@ describe("outbox view", () => {
     expect(view.canRetry).toBe(false)
     expect(view.nextAttemptAt).toBeNull()
     expect(view.lastErrorIsCancellation).toBe(true)
+  })
+
+  // #815: a member deleted or absorbed by a merge: cancelled, neutral sentence, never retryable.
+  it("shows emails cancelled for a deleted or merged member as cancelled, never retryable", () => {
+    const base = { id: "x", status: "cancelled", attempts: 0, nextAttemptAt: new Date(), sentAt: null, createdAt: new Date() }
+    const p = { kind: "registration_confirmation" as const, recipient: { email: "a@b.ch" } }
+    const deleted = outboxRowView({ ...base, lastError: MEMBER_DELETED_CANCEL_REASON }, p)
+    expect(deleted.lastError).toBe("Annulé : membre supprimé.")
+    expect(deleted.canRetry).toBe(false)
+    expect(deleted.lastErrorIsCancellation).toBe(true)
+    const merged = outboxRowView({ ...base, lastError: MERGED_MEMBER_CANCEL_REASON }, p)
+    expect(merged.lastError).toBe("Annulé : fiche fusionnée avec une autre.")
+    expect(merged.canRetry).toBe(false)
+    // A row written before #815 (still « failed ») is not retryable either.
+    expect(outboxRowView({ ...base, status: "failed", attempts: 1, lastError: MEMBER_DELETED_CANCEL_REASON }, p).canRetry).toBe(false)
   })
 
   it("never says every email left while some were cancelled", () => {

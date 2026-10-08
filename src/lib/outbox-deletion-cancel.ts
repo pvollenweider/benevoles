@@ -18,7 +18,9 @@ import { openPayload } from "./notifications/outbox"
 import { matchesAbsorbedRecipient, type AbsorbedMemberIdentity, type OutboxMergeCancelDb } from "./outbox-merge-cancel"
 import type { NotificationPayload } from "./notifications/types"
 
-export const MEMBER_DELETED_CANCEL_REASON = "member_deleted"
+import { MEMBER_DELETED_CANCEL_REASON } from "./outbox-member-deleted-reason"
+
+export { MEMBER_DELETED_CANCEL_REASON }
 
 export type DeletedMemberIdentity = AbsorbedMemberIdentity
 export type OutboxDeletionCancelDb = OutboxMergeCancelDb
@@ -40,7 +42,7 @@ export async function cancelOutboxForDeletedMember(db: OutboxDeletionCancelDb, o
     if (matchesAbsorbedRecipient(payload, member)) toCancel.push(row.id)
   }
   if (toCancel.length > 0) {
-    await db.notificationOutbox.updateMany({ where: { id: { in: toCancel } }, data: { status: "failed", lastError: MEMBER_DELETED_CANCEL_REASON } })
+    await db.notificationOutbox.updateMany({ where: { id: { in: toCancel } }, data: { status: "cancelled", lastError: MEMBER_DELETED_CANCEL_REASON } })
   }
   return toCancel
 }

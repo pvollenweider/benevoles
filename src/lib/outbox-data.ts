@@ -8,6 +8,7 @@ import { openPayload } from "./notifications/outbox"
 import { outboxCounts, outboxRowView, type OutboxRowView } from "./outbox-view"
 import type { NotificationPayload } from "./notifications/types"
 import { MERGED_MEMBER_CANCEL_REASON } from "./outbox-merge-cancel-reason"
+import { MEMBER_DELETED_CANCEL_REASON } from "./outbox-member-deleted-reason"
 
 /** Rows shown on the delivery page; sent rows only live until the nightly cleanup anyway. */
 export const OUTBOX_PAGE_LIMIT = 200
@@ -41,7 +42,9 @@ export async function loadOutbox(organizationId: string, limit: number = OUTBOX_
  */
 export async function retryOutboxRow(id: string, organizationId: string): Promise<boolean> {
   const { count } = await prisma.notificationOutbox.updateMany({
-    where: { id, organizationId, status: "failed", NOT: { lastError: MERGED_MEMBER_CANCEL_REASON } },
+    // « failed » only: a cancelled row (#814, #815) is never put back, whatever the UI shows. The
+    // reason check stays for a row written before the « cancelled » state existed.
+    where: { id, organizationId, status: "failed", NOT: { lastError: { in: [MERGED_MEMBER_CANCEL_REASON, MEMBER_DELETED_CANCEL_REASON] } } },
     data: { status: "pending", attempts: 0, nextAttemptAt: new Date(), claimedAt: null },
   })
   return count === 1
