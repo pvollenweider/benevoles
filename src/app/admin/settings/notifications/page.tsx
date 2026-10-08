@@ -28,6 +28,7 @@ const STATE_STYLE: Record<OutboxState, string> = {
   retrying: "bg-amber-100 text-amber-900",
   sent: "bg-green-100 text-green-900",
   failed: "bg-red-100 text-red-900",
+  cancelled: "bg-gray-100 text-gray-800",
 }
 
 /** Emails of the organization (#382): pending, retrying, sent, failed, with the reason and a « Renvoyer ». */
@@ -72,7 +73,7 @@ export default async function NotificationsPage() {
         <h2 className="text-base font-semibold text-gray-900">Emails envoyés</h2>
         <p className="text-sm text-gray-700 mt-1">{outboxHeadline(counts)}</p>
         <p className="text-sm text-gray-600 mt-1">
-          Les emails envoyés sont effacés chaque nuit (ils contiennent des données personnelles) ; ceux en échec restent 30 jours.
+          Les emails envoyés sont effacés chaque nuit (ils contiennent des données personnelles) ; ceux en échec ou annulés restent 30 jours.
           {truncated && ` Seuls les ${OUTBOX_PAGE_LIMIT} plus récents sont affichés.`}
         </p>
       </div>
@@ -124,7 +125,9 @@ function Row({ r, when }: { r: OutboxRowView; when: (d: Date) => string }) {
       <td className="px-4 py-2 text-gray-700 align-top">
         {r.state === "sent" && r.sentAt && <span className="block">Parti à {when(r.sentAt)}</span>}
         {r.nextAttemptAt && <span className="block">Prochain essai {when(r.nextAttemptAt)}</span>}
-        {r.lastError && <span className="block text-xs text-red-800 mt-0.5 break-words">Erreur : {r.lastError}</span>}
+        {r.lastError && (r.lastErrorIsCancellation
+          ? <span className="block text-xs text-gray-700 mt-0.5 break-words">{r.lastError}</span>
+          : <span className="block text-xs text-red-800 mt-0.5 break-words">Erreur : {r.lastError}</span>)}
         <span className="block mt-1"><OutboxRetryButton id={r.id} recipient={r.recipient} canRetry={r.canRetry} /></span>
       </td>
     </tr>

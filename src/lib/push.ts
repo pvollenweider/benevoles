@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { organizationBlocksSending } from "@/lib/notifications/org-send-guard"
 import webpush from "web-push"
 import { env } from "./env"
 import { prisma } from "./prisma"
@@ -35,6 +36,9 @@ export async function sendPushToVolunteer(
 ): Promise<PushOutcome> {
   ensureConfigured()
   if (!configured) return { sent: 0, failed: 0, removed: 0 }
+  // Same rule as the emails (#814): nothing for a member of a deactivated or deleted organisation.
+  const volunteer = await prisma.volunteer.findUnique({ where: { id: volunteerId }, select: { organizationId: true } })
+  if (await organizationBlocksSending(volunteer?.organizationId)) return { sent: 0, failed: 0, removed: 0 }
 
   const subs = await prisma.pushSubscription.findMany({ where: { volunteerId } })
   const dead: string[] = []

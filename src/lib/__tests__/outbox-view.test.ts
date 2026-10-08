@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest"
+import { ORG_INACTIVE_REASON } from "../outbox-org-cancel-reason"
 import { encodeOutcomeReason, kindLabel, KIND_LABELS, outboxCounts, outboxErrorSentence, outboxHeadline, outboxRowView, outboxState, recipientLabel } from "../outbox-view"
 import { MAX_ATTEMPTS } from "../notifications/types"
 
@@ -80,10 +81,27 @@ describe("outbox view", () => {
   })
 
   it("counts and summarizes", () => {
-    const c = outboxCounts([{ state: "sent" }, { state: "sent" }, { state: "retrying" }, { state: "failed" }])
-    expect(c).toEqual({ pending: 0, retrying: 1, sent: 2, failed: 1 })
+    const c = outboxCounts([{ state: "sent" }, { state: "sent" }, { state: "retrying" }, { state: "failed" }, { state: "cancelled" }])
+    expect(c).toEqual({ pending: 0, retrying: 1, sent: 2, failed: 1, cancelled: 1 })
     expect(outboxHeadline(c)).toBe("1 email en échec définitif : à renvoyer ou à vérifier.")
-    expect(outboxHeadline({ pending: 2, retrying: 1, sent: 0, failed: 0 })).toBe("3 emails en cours d'envoi.")
-    expect(outboxHeadline({ pending: 0, retrying: 0, sent: 5, failed: 0 })).toBe("Tous les emails récents sont partis.")
+    expect(outboxHeadline({ pending: 2, retrying: 1, sent: 0, failed: 0, cancelled: 0 })).toBe("3 emails en cours d'envoi.")
+    expect(outboxHeadline({ pending: 0, retrying: 0, sent: 5, failed: 0, cancelled: 0 })).toBe("Tous les emails récents sont partis.")
+  })
+
+  // #814: an email of a deactivated organisation is cancelled, not failed: never retryable.
+  it("shows an email cancelled by a deactivation as cancelled, with its reason, never retryable", () => {
+    const row = { id: "x", status: "cancelled", attempts: 0, nextAttemptAt: new Date(), lastError: ORG_INACTIVE_REASON, sentAt: null, createdAt: new Date() }
+    const view = outboxRowView(row, { kind: "registration_confirmation", recipient: { email: "a@b.ch" } })
+    expect(view.state).toBe("cancelled")
+    expect(view.stateLabel).toBe("Annulé")
+    expect(view.lastError).toBe("Annulé : organisation désactivée, jamais envoyé.")
+    expect(view.canRetry).toBe(false)
+    expect(view.nextAttemptAt).toBeNull()
+    expect(view.lastErrorIsCancellation).toBe(true)
+  })
+
+  it("never says every email left while some were cancelled", () => {
+    expect(outboxHeadline({ pending: 0, retrying: 0, sent: 2, failed: 0, cancelled: 1 })).toBe("1 email annulé (organisation désactivée), jamais envoyé ; les autres sont partis.")
+    expect(outboxHeadline({ pending: 0, retrying: 0, sent: 0, failed: 0, cancelled: 2 })).toBe("2 emails annulés (organisation désactivée), jamais envoyés.")
   })
 })

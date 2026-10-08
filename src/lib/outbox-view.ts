@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { ORG_INACTIVE_REASON } from "@/lib/outbox-org-cancel-reason"
 import { MAX_ATTEMPTS, type NotificationKind, type NotificationPayload } from "./notifications/types"
 import type { SmtpOutcome, SmtpReason } from "./notifications/smtp-outcome"
 import { MERGED_MEMBER_CANCEL_REASON } from "./outbox-merge-cancel-reason"
@@ -101,6 +102,7 @@ export const REASON_LABEL_FR: Record<SmtpReason, string> = {
 export function outboxErrorSentence(lastError: string | null): string | null {
   if (!lastError) return null
   if (lastError === MERGED_MEMBER_CANCEL_REASON) return "Annulé : fiche fusionnée avec une autre."
+  if (lastError === ORG_INACTIVE_REASON) return "Annulé : organisation désactivée, jamais envoyé."
   const decoded = decodeOutcomeReason(lastError)
   if (decoded) return sentenceFor(decoded)
   return "Échec technique de l'envoi (détail non disponible)."
@@ -150,12 +152,16 @@ export type OutboxRow = {
   createdAt: Date
 }
 
-export type OutboxState = "pending" | "retrying" | "sent" | "failed"
+export type OutboxState = "pending" | "retrying" | "sent" | "failed" | "cancelled"
 
-/** Pending on first try, retrying after a failure, sent, or given up after MAX_ATTEMPTS. */
+/**
+ * Pending on first try, retrying after a failure, sent, given up after MAX_ATTEMPTS, or cancelled
+ * because the organisation was deactivated (#814): never sent, never retried.
+ */
 export function outboxState(row: Pick<OutboxRow, "status" | "attempts">): OutboxState {
   if (row.status === "sent") return "sent"
   if (row.status === "failed") return "failed"
+  if (row.status === "cancelled") return "cancelled"
   return row.attempts > 0 ? "retrying" : "pending"
 }
 
@@ -164,6 +170,7 @@ export const STATE_LABELS: Record<OutboxState, string> = {
   retrying: "Nouvel essai prévu",
   sent: "Envoyé",
   failed: "Échec définitif",
+  cancelled: "Annulé",
 }
 
 export type OutboxRowView = {
@@ -176,6 +183,8 @@ export type OutboxRowView = {
   /** « essai 2 sur 6 » while retrying, empty otherwise. */
   attemptsLabel: string
   lastError: string | null
+  /** The reason explains a deliberate cancellation (#814, merge), not an error: shown neutral. */
+  lastErrorIsCancellation: boolean
   createdAt: Date
   sentAt: Date | null
   nextAttemptAt: Date | null
@@ -201,6 +210,7 @@ export function outboxRowView(row: OutboxRow, payload: Pick<NotificationPayload,
     recipient: recipientLabel(payload?.recipient),
     attemptsLabel: state === "retrying" ? `essai ${row.attempts + 1} sur ${MAX_ATTEMPTS}` : "",
     lastError: outboxErrorSentence(row.lastError),
+    lastErrorIsCancellation: state === "cancelled",
     createdAt: row.createdAt,
     sentAt: row.sentAt,
     nextAttemptAt: state === "pending" || state === "retrying" ? row.nextAttemptAt : null,
@@ -213,7 +223,7 @@ export function outboxRowView(row: OutboxRow, payload: Pick<NotificationPayload,
 export type OutboxCounts = Record<OutboxState, number>
 
 export function outboxCounts(rows: { state: OutboxState }[]): OutboxCounts {
-  const c: OutboxCounts = { pending: 0, retrying: 0, sent: 0, failed: 0 }
+  const c: OutboxCounts = { pending: 0, retrying: 0, sent: 0, failed: 0, cancelled: 0 }
   for (const r of rows) c[r.state]++
   return c
 }
@@ -223,5 +233,10 @@ export function outboxHeadline(c: OutboxCounts): string {
   if (c.failed > 0) return `${c.failed} email${c.failed > 1 ? "s" : ""} en échec définitif : à renvoyer ou à vérifier.`
   const waiting = c.pending + c.retrying
   if (waiting > 0) return `${waiting} email${waiting > 1 ? "s" : ""} en cours d'envoi.`
+  // Never « tous partis » while the list shows emails that never left (#814).
+  if (c.cancelled > 0) {
+    const s = c.cancelled > 1 ? "s" : ""
+    return `${c.cancelled} email${s} annulé${s} (organisation désactivée), jamais envoyé${s}${c.sent > 0 ? " ; les autres sont partis" : ""}.`
+  }
   return "Tous les emails récents sont partis."
 }

@@ -123,8 +123,8 @@ export const RETENTION: readonly RetentionEntry[] = [
   {
     data: "Emails en file d'envoi (destinataire et contenu)",
     purpose: "Envoyer les emails",
-    duration: `effacés chaque nuit une fois partis ; ceux en échec ${d.failedNotification} jours après leur mise en file`,
-    trigger: "envoi, ou échec définitif",
+    duration: `effacés chaque nuit une fois partis ; ceux en échec ou annulés ${d.failedNotification} jours après leur mise en file`,
+    trigger: "envoi, échec définitif ou annulation (organisation désactivée)",
     mechanism: "nettoyage quotidien (cron cleanup)",
     backups: inBackups,
     public: true,

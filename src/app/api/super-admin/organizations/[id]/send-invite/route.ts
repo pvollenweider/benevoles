@@ -48,6 +48,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const result = await sendNotification({
     kind: "admin_invite",
     recipient: { email: admin.email, name: admin.name },
+    organizationId: id,
     data: { adminName: admin.name, organizationName: org.name, inviteUrl },
   })
 

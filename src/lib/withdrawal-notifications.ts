@@ -75,7 +75,7 @@ export async function buildWithdrawalNotifications(
       ? [{ email: fallbackEmail, name: "Admin" }]
       : []
   for (const r of adminRecipients) {
-    await outbox.send({ kind: "registration_cancelled", recipient: { email: r.email, name: r.name }, data: shiftData })
+    await outbox.send({ kind: "registration_cancelled", recipient: { email: r.email, name: r.name }, organizationId: event.organizationId, data: shiftData })
   }
 
   const leaders = await prisma.sectorLeader.findMany({ where: { eventId: event.id, roleName: shift.roleName } })
@@ -83,6 +83,7 @@ export async function buildWithdrawalNotifications(
     await outbox.send({
       kind: "sector_leader_withdrawal",
       recipient: { email: leader.email, name: leader.name },
+      organizationId: event.organizationId,
       data: {
         ...shiftData,
         leaderName: leader.name,

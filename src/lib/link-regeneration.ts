@@ -63,7 +63,7 @@ type LeaderRow = {
   roleName: string
   name: string
   email: string
-  event: { title: string; organization: { slug: string } }
+  event: { title: string; organizationId: string; organization: { slug: string } }
 }
 
 type InviteRow = {
@@ -94,7 +94,7 @@ const leaderSelect = {
   roleName: true,
   name: true,
   email: true,
-  event: { select: { title: true, organization: { select: { slug: true } } } },
+  event: { select: { title: true, organizationId: true, organization: { select: { slug: true } } } },
 } as const
 
 const inviteSelect = {
@@ -265,6 +265,7 @@ async function resendLeaderLinks(rows: LeaderRow[], newTokenById: Map<string, st
       const result = await sendNotification({
         kind: "sector_leader_invite",
         recipient: { email: l.email, name: l.name },
+        organizationId: l.event.organizationId,
         data: { leaderName: l.name, roleName: l.roleName, eventTitle: l.event.title, orgSlug: l.event.organization.slug, token: newTokenById.get(l.id)! },
       })
       if (result.ok) sent++; else failed++

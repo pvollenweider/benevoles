@@ -103,7 +103,7 @@ describe("collectNotifications / enqueueNotifications / deliverAfterResponse", (
 describe("deliverOutbox", () => {
   it("claims, sends and marks as sent", async () => {
     m.sendNotification.mockResolvedValue({ ok: true })
-    expect(await deliverOutbox({ now })).toEqual({ sent: 1, retried: 0, failed: 0 })
+    expect(await deliverOutbox({ now })).toEqual({ sent: 1, retried: 0, failed: 0, cancelled: 0 })
     expect(m.updateMany).toHaveBeenCalledWith({
       where: { id: "n1", status: "pending", claimedAt: null },
       data: { status: "sending", claimedAt: now },
@@ -113,13 +113,13 @@ describe("deliverOutbox", () => {
 
   it("skips a row another delivery claimed first (never sends twice)", async () => {
     m.updateMany.mockResolvedValue({ count: 0 })
-    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 0, failed: 0 })
+    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 0, failed: 0, cancelled: 0 })
     expect(m.sendNotification).not.toHaveBeenCalled()
   })
 
   it("schedules a retry with backoff on failure", async () => {
     m.sendNotification.mockResolvedValue({ ok: false, reason: "smtp down" })
-    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 1, failed: 0 })
+    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 1, failed: 0, cancelled: 0 })
     expect(m.update).toHaveBeenCalledWith({
       where: { id: "n1" },
       data: expect.objectContaining({
@@ -133,7 +133,7 @@ describe("deliverOutbox", () => {
   // spending ~2.5h of backoff (MAX_ATTEMPTS) on a retry that can't succeed.
   it("stops retrying at once on a permanent rejection, even on the first attempt", async () => {
     m.sendNotification.mockResolvedValue({ ok: false, reason: "smtp:rejected_permanent:mailbox_unknown:550:5.1.1", permanent: true })
-    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 0, failed: 1 })
+    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 0, failed: 1, cancelled: 0 })
     expect(m.update).toHaveBeenCalledWith({
       where: { id: "n1" },
       data: expect.objectContaining({ status: "failed", attempts: 1, lastError: "smtp:rejected_permanent:mailbox_unknown:550:5.1.1" }),
@@ -142,13 +142,13 @@ describe("deliverOutbox", () => {
 
   it("treats a thrown error as a failed attempt", async () => {
     m.sendNotification.mockRejectedValue(new Error("boom"))
-    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 1, failed: 0 })
+    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 1, failed: 0, cancelled: 0 })
   })
 
   it("gives up after MAX_ATTEMPTS and reports it", async () => {
     m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: MAX_ATTEMPTS - 1, payload })
     m.sendNotification.mockResolvedValue({ ok: false, reason: "smtp down" })
-    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 0, failed: 1 })
+    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 0, failed: 1, cancelled: 0 })
     expect(m.update).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ status: "failed" }) }))
     expect(m.reported).toHaveBeenCalledWith("outbox.gave_up.registration_confirmation", expect.any(Error))
   })
@@ -195,7 +195,8 @@ describe("outbox payload at rest (#290)", () => {
     m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, payload: sealPayload(payload) })
     m.sendNotification.mockResolvedValue({ ok: true })
     await deliverOutbox({ now })
-    expect(m.sendNotification).toHaveBeenCalledWith({ ...payload, messageId: outboxMessageId("n1"), outboxId: "n1" })
+    // organizationId (#814): the row's, for the send-time check; none here, a platform message.
+    expect(m.sendNotification).toHaveBeenCalledWith({ ...payload, organizationId: null, messageId: outboxMessageId("n1"), outboxId: "n1" })
   })
 })
 

@@ -10,11 +10,21 @@
  */
 
 import { emailChannel } from "./channels/email"
+import { ORG_INACTIVE_REASON, organizationBlocksSending } from "./org-send-guard"
 import type { NotificationKind, NotificationPayload } from "./types"
 
+/**
+ * The only way to send an email: every path (direct sends, scheduled jobs, the outbox and its
+ * retries) comes through here, and the email channel is the only code that talks to SMTP. An
+ * email of a deactivated or deleted organisation is refused here, right before the send (#814),
+ * with `blocked: true` so the outbox cancels the row instead of retrying it.
+ */
 export async function sendNotification(
   payload: NotificationPayload,
-): Promise<{ ok: true } | { ok: false; reason: string; permanent?: boolean }> {
+): Promise<{ ok: true } | { ok: false; reason: string; permanent?: boolean; blocked?: true }> {
+  if (await organizationBlocksSending(payload.organizationId)) {
+    return { ok: false, reason: ORG_INACTIVE_REASON, permanent: true, blocked: true }
+  }
   return emailChannel.send(payload)
 }
 

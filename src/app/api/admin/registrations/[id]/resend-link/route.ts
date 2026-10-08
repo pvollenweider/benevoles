@@ -29,7 +29,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     where: { id },
     include: {
       volunteer: { select: { firstName: true, lastName: true, email: true } },
-      event: { select: { title: true, organization: { select: { slug: true } } } },
+      event: { select: { title: true, organizationId: true, organization: { select: { slug: true } } } },
     },
   })
 
@@ -40,6 +40,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   const result = await sendNotification({
     kind: "registration_link_resend",
     recipient: { email: registration.volunteer.email, name: `${registration.volunteer.firstName} ${registration.volunteer.lastName}` },
+    organizationId: registration.event.organizationId,
     data: {
       volunteerName: `${registration.volunteer.firstName} ${registration.volunteer.lastName}`,
       eventTitle: registration.event.title,

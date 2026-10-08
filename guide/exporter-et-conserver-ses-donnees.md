@@ -35,7 +35,7 @@ Les fichiers CSV s'ouvrent tels quels dans Excel ou LibreOffice (UTF-8, point-vi
 | Fiche absorbée par une fusion de membres : fiche inactive sans donnée personnelle, le temps que les anciens identifiants restent résolus | 30 jours après la fusion |
 | Membres retirés, inscriptions annulées ou refusées, questions archivées | tant que l'organisation existe (tant que leur événement existe pour les inscriptions et les questions), sauf effacement des données personnelles d'un membre à sa demande (ligne suivante) |
 | Données personnelles d'un membre dont l'effacement est demandé : nom, email, téléphone, date de naissance, notes, étiquettes, disponibilités, commentaires et téléphones de ses inscriptions, invitations (dont « pas disponible »), réponses aux questions, abonnements aux notifications, désignations comme responsable de secteur à son adresse, emails en file d'envoi qui la concernent, résultats d'envoi | effacées immédiatement ; la fiche devient « Bénévole effacé » et ses inscriptions restent, sans identité, pour les effectifs, les heures et l'historique |
-| Emails en file d'envoi (destinataire et contenu) | effacés chaque nuit une fois partis ; ceux en échec 30 jours après leur mise en file |
+| Emails en file d'envoi (destinataire et contenu) | effacés chaque nuit une fois partis ; ceux en échec ou annulés 30 jours après leur mise en file |
 | Résultats d'envoi par destinataire : statut accepté/rejeté/échec, motif normalisé, codes, empreinte de l'adresse | 30 jours |
 | Messages ciblés (objet, texte, public, nombres) | 365 jours, ou avec l'événement |
 | Invitations d'administrateur non acceptées | effacées 30 jours après leur dernier envoi |

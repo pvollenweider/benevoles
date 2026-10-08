@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Sécurité
+
+- **Plus aucun email ni notification pour une organisation désactivée** (#814) : les emails déjà en file d'attente d'une organisation partaient encore après sa désactivation, et même après sa suppression. Chaque envoi vérifie désormais l'organisation au dernier moment : l'email d'une organisation désactivée ou supprimée est annulé, jamais envoyé, et n'est pas renvoyé si elle est réactivée plus tard. La désactivation annule aussi tout de suite les emails encore en attente. Les notifications sur téléphone suivent la même règle.
+
 ### Ajouté
 
 - **Statistiques de la plateforme pour le super admin** (#805) : la page **Statistiques** de l'espace super admin donne, « depuis le début », le nombre d'organisations, d'événements, de créneaux, d'inscriptions, de membres, de comptes administrateurs, de responsables de secteur et d'invitations créés. Ces chiffres ne baissent jamais, même quand un événement ou une organisation entière est supprimé ; ils partent de ce que contenait la base à leur mise en place. À côté, « en ce moment » : organisations actives, événements par statut, membres, propriétaires, organisateurs et responsables de secteur. La fiche d'une organisation montre aussi ce qu'elle a créé depuis le début. Des nombres seulement, aucune donnée personnelle.
