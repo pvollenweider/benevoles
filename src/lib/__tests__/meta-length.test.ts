@@ -84,5 +84,7 @@ describe("videoPageTitle", () => {
     expect(videoPageTitle({ title: "x".repeat(45) })).toBe(`${"x".repeat(45)} | Vidéo benevol.app`)
     expect(videoPageTitle({ title: "x".repeat(51) })).toBe(`${"x".repeat(51)} | benevol.app`)
     expect(videoPageTitle({ title: "x".repeat(60) })).toBe("x".repeat(60))
+    // A title too long on its own (spoken in the video) gives way to the short feature name.
+    expect(videoPageTitle({ title: "Reconnaître l'engagement, avec des heures et une attestation fiables", feature: "Heures de bénévolat et attestation" })).toBe("Heures de bénévolat et attestation | Tutoriel vidéo benevol.app")
   })
 })

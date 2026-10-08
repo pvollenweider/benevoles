@@ -1286,7 +1286,7 @@
         "bilan",
         "reconnaissance"
       ],
-      "published": false,
+      "published": true,
       "themes": [
         "membres-invitations",
         "tracabilite-donnees"
@@ -1295,7 +1295,7 @@
         "organisateur"
       ],
       "feature": "Heures de bénévolat et attestation",
-      "updatedAt": "2026-10-06",
+      "updatedAt": "2026-10-08",
       "revision": 1,
       "level": "essentiel"
     },
