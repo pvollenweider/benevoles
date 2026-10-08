@@ -1,8 +1,8 @@
 # Logiciel de planning pour bénévoles
 
-benevol.app est un logiciel de planning pour les bénévoles d'un événement. Vous découpez la journée en postes et en créneaux, vous partagez un lien, et chaque bénévole choisit ses créneaux depuis son téléphone, sans créer de compte ni installer d'application.
+benevol.app est un logiciel de planning pour les bénévoles d'un événement. Vous découpez la journée en postes et en créneaux, puis vous partagez un lien. Chaque bénévole choisit ses créneaux depuis son téléphone, sans créer de compte ni installer d'application.
 
-Il est pensé pour les événements d'une association, une fête de village, une buvette, un festival sur plusieurs jours ou une manifestation sportive, plutôt que pour les horaires d'une équipe salariée. Gratuit, open source et hébergé en France.
+Il est pensé pour les événements d'une association, une fête de village, une buvette, un festival sur plusieurs jours ou une manifestation sportive, plutôt que pour les horaires d'une équipe salariée. Gratuit, open source (son code est public et libre de réutilisation) et hébergé en France.
 
 <!-- actions -->
 - [Demander un espace](mailto:contact@benevol.app?subject=Demande%20d%E2%80%99un%20espace%20sur%20benevol.app&body=Bonjour%2C%0A%0ANous%20aimerions%20essayer%20benevol.app%20pour%20organiser%20nos%20b%C3%A9n%C3%A9voles.%0A%0AAssociation%20%3A%0A%C3%89v%C3%A9nement%20%28nom%2C%20dates%2C%20nombre%20de%20b%C3%A9n%C3%A9voles%20environ%29%20%3A%0AAdresse%20souhait%C3%A9e%20%3A%20%E2%80%A6.benevol.app%0A%0AMerci%20%21)
@@ -14,11 +14,11 @@ Il est pensé pour les événements d'une association, une fête de village, une
 
 ## Le principe en trois étapes
 
-1. **Vous construisez le planning.** Un poste par mission (accueil, bar, parking), des créneaux avec le nombre de places voulu, le tout visible sur une frise par jour.
+1. **Vous construisez le planning.** Un poste par mission (accueil, bar, parking), des créneaux avec le nombre de places voulu, le tout visible sur la Frise, jour par jour.
 2. **Vous partagez un lien.** Par email, sur les réseaux de l'association ou sur une affiche : les bénévoles ouvrent la page, choisissent leurs créneaux et confirment.
-3. **Vous suivez les inscriptions.** Vous voyez où il manque du monde, les confirmations et les rappels partent par email, et le jour J vous savez qui est arrivé.
+3. **Vous suivez les inscriptions.** Vous voyez où il manque du monde, les confirmations et les rappels partent par email, et le jour J (le jour de l'événement) vous savez qui est arrivé.
 
-## Pour l'organisateur : postes, créneaux et frise
+## Pour l'organisateur : postes, créneaux et Frise
 
 <!-- image: SHIFTS_ROLES_VIEWS | La Frise des créneaux d'un événement : une ligne par poste, chaque créneau placé sur la journée avec ses places. -->
 
@@ -27,7 +27,7 @@ Il est pensé pour les événements d'une association, une fête de village, une
 - **Des créneaux en série** : une buvette de 10 h à 22 h par tranches de deux heures se crée en une fois, avec un aperçu avant.
 - **Un bon départ** : un modèle d'événement (festival, buvette, manifestation sportive, fête de village), ou l'édition de l'an dernier dupliquée avec ses dates décalées.
 - **Un brouillon, puis la publication**, après une page de vérification qui signale ce qui manque. Une fois l'événement publié, vous copiez son lien ou téléchargez son QR code pour l'affiche.
-- **Vos bénévoles habituels** importés depuis un fichier CSV ou Excel, puis invités par email, avec un lien vers la page d'inscription.
+- **Vos bénévoles habituels** importés depuis un fichier CSV (ouvrable dans un tableur) ou Excel, puis invités par email, avec un lien vers la page d'inscription.
 
 <!-- video: EVENT_CREATE_PUBLISH_OVERVIEW -->
 
@@ -49,9 +49,9 @@ En savoir plus : [s'inscrire](guide/s-inscrire.md), [la page personnelle du bén
 
 ## Avant l'événement : voir où il manque du monde
 
-<!-- image: STAFFING_GAPS | « Où manque-t-il du monde ? » : le nombre de places pourvues sur le total, puis les créneaux à compléter, du plus dégarni au plus proche du complet. -->
+<!-- image: STAFFING_GAPS | « Où manque-t-il du monde ? » : le nombre de places pourvues sur le total, puis les créneaux à compléter, là où il manque le plus de monde d'abord. -->
 
-- **Les créneaux à compléter**, du plus dégarni au plus proche du complet, et les postes où personne n'est encore inscrit.
+- **Les créneaux à compléter**, là où il manque le plus de monde d'abord, et les postes où personne n'est encore inscrit.
 - **Chercher des bénévoles** parmi vos membres pour ces créneaux, puis leur écrire en une fois. Vous choisissez à qui écrire, rien n'est attribué à leur place.
 - **Des messages ciblés** à tous les inscrits, à un poste, à un créneau ou à la liste d'attente, avec un aperçu avant l'envoi.
 - **Prévenus des changements** : si un créneau change d'horaire ou est annulé, les inscrits reçoivent un email.
@@ -64,7 +64,7 @@ En savoir plus : [où manque-t-il du monde ?](guide/ou-manque-t-il-du-monde.md),
 
 <!-- image: EVENT_REPORTS | Le planning imprimé : pour chaque poste, les créneaux de la journée et le nom des bénévoles inscrits, lisible en noir et blanc. -->
 
-- **Une page jour J pour le téléphone** : les créneaux en cours et ceux des trois prochaines heures, qui est arrivé et qui manque. Un toucher marque une arrivée, un autre appelle le bénévole.
+- **Une page jour J pour le téléphone** : les créneaux en cours et ceux des trois prochaines heures, qui est arrivé et qui manque. Touchez « Marquer présent » quand un bénévole arrive, ou son numéro pour l'appeler.
 - **Des feuilles pour le terrain** : le planning par jour, par poste et par bénévole, et une feuille de présence à cocher, à imprimer ou à enregistrer en PDF.
 - **Des badges** à imprimer et découper, avec le prénom et le poste de chaque bénévole.
 - **Des responsables de secteur** qui suivent les bénévoles de leur poste depuis un lien personnel, sans compte.
@@ -75,7 +75,7 @@ En savoir plus : [les présences le jour J](guide/presences-le-jour-j.md), [rapp
 
 ## Après l'événement : heures, attestation et exports
 
-- **Le bilan de l'événement** : bénévoles distincts, nouveaux et de retour, heures planifiées et heures attestées par une présence, remplissage par poste, créneaux restés incomplets.
+- **Le bilan de l'événement** : bénévoles distincts, nouveaux et de retour, heures planifiées et heures effectuées (présence notée le jour de l'événement), remplissage par poste, créneaux restés incomplets.
 - **Les heures par bénévole** sur une période, dans un fichier CSV : de quoi nourrir un rapport annuel ou un dossier de subvention.
 - **Une attestation de bénévolat** à imprimer pour un membre et une période, avec ses événements, ses postes et ses heures.
 - **Vos données vous appartiennent** : vos membres, le journal d'activité et l'archive complète d'un événement s'exportent à tout moment.
@@ -87,15 +87,15 @@ En savoir plus : [rapports, badges et résumé](guide/rapports-badges-et-resume.
 ## Un outil sur lequel compter
 
 - **Gratuit, sans limite** : pas d'abonnement, pas de fonction payante, pas de plafond de bénévoles ni d'événements.
-- **Open source** : le code est publié sous licence AGPL, et chacun peut le lire ou l'installer lui-même.
-- **Hébergé en France**, avec une copie de sauvegarde chiffrée en Suisse. Aucun cookie de pistage, d'analyse ou de publicité ; un [accord de sous-traitance](ACCORD-SOUS-TRAITANCE.md) encadre les données de votre association.
+- **Open source** : le code est public et libre de réutilisation, sous licence AGPL ; chacun peut le lire ou l'installer lui-même.
+- **Hébergé en France**, avec une copie de sauvegarde chiffrée (illisible sans sa clé) en Suisse. Aucun cookie de pistage, d'analyse ou de publicité. Un [accord de sous-traitance](ACCORD-SOUS-TRAITANCE.md) fixe par écrit comment benevol.app traite les données de votre association.
 - **Pensé pour tous** : inscription et administration conçues pour le clavier et les lecteurs d'écran. La [déclaration d'accessibilité](ACCESSIBILITE.md) dit ce qui est testé et les limites connues.
 
 ## Questions fréquentes
 
 ### Est-ce vraiment gratuit ?
 
-Oui. benevol.app n'a ni abonnement, ni fonction payante, ni plafond de bénévoles ou d'événements. Le code est open source, sous licence AGPL. Si l'outil vous rend service, vous pouvez soutenir le projet par un don.
+Oui. benevol.app n'a ni abonnement, ni fonction payante, ni plafond de bénévoles ou d'événements. Le code est open source, sous licence AGPL : il est public et libre de réutilisation. Si l'outil vous rend service, vous pouvez soutenir le projet par un don.
 
 ### Est-ce adapté à une petite association ?
 
@@ -111,7 +111,7 @@ Non, ni pour vous ni pour les bénévoles. Tout se passe dans le navigateur, sur
 
 ### Peut-on compter les heures de bénévolat pour un financeur ?
 
-Oui. Le bilan de chaque événement donne les heures planifiées et celles attestées par une présence enregistrée le jour J. L'export des heures par bénévole sur une période, en CSV, et l'attestation de bénévolat imprimable servent au rapport annuel ou à une demande de subvention.
+Oui. Le bilan de chaque événement donne les heures planifiées et les heures effectuées, celles où la présence a été notée le jour de l'événement. L'export des heures par bénévole sur une période, en CSV (un fichier qui s'ouvre dans un tableur), et l'attestation de bénévolat imprimable servent au rapport annuel ou à une demande de subvention.
 
 ### Est-ce adapté à une fête de village ou à un festival ?
 

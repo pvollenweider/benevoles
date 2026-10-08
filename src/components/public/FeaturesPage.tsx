@@ -128,10 +128,13 @@ export default function FeaturesPage({ page, eyebrow = "Fonctionnalités" }: { p
       <section className="max-w-6xl mx-auto px-6 pt-12 pb-16 sm:pt-16">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center">
           <div>
-            <p className="text-base font-semibold text-blue-700 dark:text-blue-300">{eyebrow}</p>
-            <h1 id="features-title" className="mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.08] text-gray-900 dark:text-gray-50 break-words" style={balance}>
-              {page.title}
-            </h1>
+            {/* The small label belongs to the title: an <hgroup>, so it reads as its lead-in, not a heading of its own. */}
+            <hgroup>
+              <p className="text-base font-semibold text-blue-700 dark:text-blue-300">{eyebrow}</p>
+              <h1 id="features-title" className="mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.08] text-gray-900 dark:text-gray-50 break-words" style={balance}>
+                {page.title}
+              </h1>
+            </hgroup>
             <Parts parts={introText} className="mt-6 [&_p]:text-lg sm:[&_p]:text-xl [&_p]:leading-relaxed" />
             <ActionLinks actions={intro.actions} />
           </div>

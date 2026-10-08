@@ -17,7 +17,7 @@ test("answers the search with one title, its sections and the email request at t
   await page.goto(PATH)
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Logiciel de planning pour bénévoles")
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1)
-  for (const heading of ["Pour l'organisateur : postes, créneaux et frise", "Pour le bénévole : un lien, sans compte ni application", "Le jour J : feuilles imprimées et page sur le téléphone", "Après l'événement : heures, attestation et exports", "Un outil sur lequel compter", "Questions fréquentes"]) {
+  for (const heading of ["Pour l'organisateur : postes, créneaux et Frise", "Pour le bénévole : un lien, sans compte ni application", "Le jour J : feuilles imprimées et page sur le téléphone", "Après l'événement : heures, attestation et exports", "Un outil sur lequel compter", "Questions fréquentes"]) {
     await expect(page.getByRole("heading", { level: 2, name: heading })).toBeVisible()
   }
   const requests = page.getByRole("link", { name: /^Demander un espace par email \(contact@benevol\.app\)/ })
