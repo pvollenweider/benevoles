@@ -27,4 +27,20 @@ else
   echo "↷ Migrations ignorées (MIGRATE_ON_START=false, appliquées par le Job de migration)"
 fi
 
+# Warm-up before readiness: the server starts below, and scripts/warmup.mjs requests its public
+# pages in the background (from the sitemap, on localhost) so the first visitors after a deploy
+# don't pay for the cold start. Whatever the outcome (done, failed, time cap, WARMUP=false), the
+# readiness file is written afterwards, and /api/health/ready (the Kubernetes readiness probe)
+# answers 200 from then on. Only for the server itself: the migration Job runs `true` instead.
+# Default path shared with src/lib/readiness.ts (DEFAULT_READY_FILE).
+READY_FILE="${WARMUP_READY_FILE:-/tmp/benevoles-ready}"
+rm -f "$READY_FILE"
+if [ "$*" = "node server.js" ]; then
+  if [ "${WARMUP:-true}" != "false" ]; then
+    ( node scripts/warmup.mjs || echo "[warmup] exited with an error, continuing"; touch "$READY_FILE" ) &
+  else
+    touch "$READY_FILE"
+  fi
+fi
+
 exec "$@"
