@@ -110,3 +110,27 @@ export const BROWSER_NOISE_ERRORS: RegExp[] = [
   /MetaMask/,
   /Object Not Found Matching Id:\d+, MethodName:\w+, ParamCount:\d+/,
 ]
+
+// « Event `Event` (type=error) captured as promise rejection »: what the SDK reports when a promise
+// is rejected with a DOM Event instead of an Error (BENEVOLAPP-P). Seen from headless clients
+// probing unknown subdomains, where a resource load failed; it has no stack and no app frame, so
+// there is nothing to fix or even locate.
+const DOM_EVENT_REJECTION = /^Event `\w*Event` \(type=[\w-]+\) captured as promise rejection$/
+
+/** An unhandled rejection whose reason is a DOM Event without any stack (client only). */
+export function isStacklessDomEventRejection(event: Event): boolean {
+  const exceptions = event.exception?.values ?? []
+  if (exceptions.length === 0) return false
+  return exceptions.every(
+    (ex) =>
+      DOM_EVENT_REJECTION.test(ex.value ?? "") &&
+      (ex.mechanism?.type ?? "").includes("onunhandledrejection") &&
+      !ex.stacktrace?.frames?.length,
+  )
+}
+
+/** Client `beforeSend`: drops browser noise that `ignoreErrors` cannot express, then scrubs. */
+export function beforeSendClient<T extends Event>(event: T): T | null {
+  if (isStacklessDomEventRejection(event)) return null
+  return scrubEvent(event)
+}

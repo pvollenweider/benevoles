@@ -187,7 +187,7 @@ Seules les inscriptions `active` d'un événement publié, aux rappels activés,
 
 ## Observabilité
 
-- Sentry : `sentry.server.config.ts` et `sentry.edge.config.ts` sont chargés par `src/instrumentation.ts`, qui exporte aussi `onRequestError` et lance au démarrage les vérifications de `production-guards.ts`. Le navigateur est initialisé par `instrumentation-client.ts` et passe par le tunnel `/monitoring`. Les trois configurations filtrent jetons et données personnelles (`src/lib/sentry-scrub.ts`).
+- Sentry : `sentry.server.config.ts` et `sentry.edge.config.ts` sont chargés par `src/instrumentation.ts`, qui exporte aussi `onRequestError` et lance au démarrage les vérifications de `production-guards.ts`. Côté navigateur, `instrumentation-client.ts` ne fait qu'écouter les erreurs : le SDK (`src/lib/sentry-client-init.ts`) est importé quand la page est inactive ou à la première erreur (`src/lib/sentry-client-loader.ts`), et passe par le tunnel `/monitoring`. Session Replay est chargé à part, sur l'espace d'administration seulement (`src/lib/sentry-client-policy.ts`). Les trois configurations filtrent jetons et données personnelles (`src/lib/sentry-scrub.ts`).
 - `/api/health` répond `200` si la base est joignable, `503` sinon ; les sondes Kubernetes l'interrogent.
 - `/super-admin/health` : base, migrations, file d'envoi, dernière exécution de chaque tâche planifiée (`JobRun`, alimenté par `recordJobRun` dans les crons et par `/api/cron/heartbeat` pour les sauvegardes et le test de restauration), version et commit déployés (`GIT_SHA`).
 - Les requêtes qui portent un jeton personnel ne sont pas écrites dans le journal d'accès de Traefik (`k8s/ingressroute-tokens.yaml`, #485).
