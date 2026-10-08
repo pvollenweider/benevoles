@@ -10,6 +10,8 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
     traefik.ingress.kubernetes.io/router.priority: "100"
+    # Brotli/zstd compression by Traefik, the app answering uncompressed (middleware-compress.yaml).
+    traefik.ingress.kubernetes.io/router.middlewares: benevoles-benevoles-compress@kubernetescrd,benevoles-benevoles-identity-upstream@kubernetescrd
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: traefik

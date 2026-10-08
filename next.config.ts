@@ -5,6 +5,8 @@ import { STATIC_CACHE_HEADERS } from "./src/lib/static-cache-headers"
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  // No `X-Powered-By: Next.js` on the responses (#759 F7): it tells nothing a visitor needs.
+  poweredByHeader: false,
   allowedDevOrigins: ["localhost", "127.0.0.1"],
   async headers() {
     return [{ source: "/:path*", headers: [...SECURITY_HEADERS] }, ...STATIC_CACHE_HEADERS]

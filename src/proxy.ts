@@ -3,16 +3,40 @@
 
 import NextAuth from "next-auth"
 import { authConfig } from "./auth.config"
-import { NextResponse } from "next/server"
+import { NextResponse, type NextFetchEvent, type NextRequest } from "next/server"
 import { withOrgHeader } from "@/lib/org-subdomain"
 import { apexRedirectUrl } from "@/lib/apex-redirect"
 import { apexBaseUrl } from "@/lib/urls"
+import { anonymousPublicCacheControl } from "@/lib/public-cache"
 
 const { auth } = NextAuth(authConfig)
 
 // Proxy file convention (Next.js 16, formerly `middleware`): a first filter on pages from the JWT
 // alone and the organization header; the authoritative checks stay server-side (auth-guard.ts).
-export default auth((req) => {
+//
+// An anonymous visit to a public content page (src/lib/public-cache.ts, #773) skips Auth.js: no
+// session to read, and Auth.js would answer it with CSRF and callback-URL cookies. It gets the same
+// apex redirect and organization header, and a cacheable Cache-Control. Every other request goes
+// through Auth.js as before.
+export default function proxy(req: NextRequest, event: NextFetchEvent) {
+  const cacheControl = anonymousPublicCacheControl({
+    method: req.method,
+    pathname: req.nextUrl.pathname,
+    host: req.headers.get("host") ?? "",
+    searchParams: req.nextUrl.searchParams,
+    cookieNames: req.cookies.getAll().map((c) => c.name),
+  })
+  if (cacheControl) {
+    const response = route(req, null)
+    if (!response.headers.has("location")) response.headers.set("Cache-Control", cacheControl)
+    return response
+  }
+  return withAuth(req, event as unknown as Parameters<typeof withAuth>[1])
+}
+
+const withAuth = auth((req) => route(req, req.auth))
+
+function route(req: NextRequest, session: { user?: { role?: string } } | null): NextResponse | Response {
   const { pathname } = req.nextUrl
 
   // --- Bare domain to the www site (#759): one address per page for search engines. 308 keeps
@@ -27,17 +51,17 @@ export default auth((req) => {
   const isPublicAdminPage = pathname === "/admin/accept-invite" || pathname === "/admin/reset-password" || pathname === "/admin/forgot-password"
 
   if (isSuperAdminPath) {
-    if (!req.auth) {
+    if (!session) {
       const loginUrl = new URL("/admin/login", req.url)
       loginUrl.searchParams.set("callbackUrl", req.url)
       return Response.redirect(loginUrl)
     }
-    if (req.auth.user?.role !== "super_admin") {
+    if (session.user?.role !== "super_admin") {
       return Response.redirect(new URL("/admin", req.url))
     }
   }
 
-  if (isAdminPath && !isLoginPage && !isPublicAdminPage && !req.auth) {
+  if (isAdminPath && !isLoginPage && !isPublicAdminPage && !session) {
     const loginUrl = new URL("/admin/login", req.url)
     loginUrl.searchParams.set("callbackUrl", req.url)
     return Response.redirect(loginUrl)
@@ -49,7 +73,7 @@ export default auth((req) => {
   const requestHeaders = withOrgHeader(req.headers, req.headers.get("host") ?? "", req.nextUrl.searchParams.get("org"))
 
   return NextResponse.next({ request: { headers: requestHeaders } })
-})
+}
 
 export const config = {
   matcher: ["/((?!monitoring|_next/static|_next/image|favicon.ico).*)"],

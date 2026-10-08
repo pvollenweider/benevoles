@@ -55,7 +55,8 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `postgres.yaml` | PVC `postgres-pvc` (5 Gi), Deployment et Service `postgres` | oui | PostgreSQL 16 |
 | `job-migrate.yaml` | Job `benevoles-migrate` | oui, avant l'application | `prisma migrate deploy` avec l'image déployée ; `backoffLimit: 0`, 300 s au plus |
 | `deployment.yaml` | Deployment `benevoles-app` | oui, en dernier | 1 réplica, mise à jour progressive sans indisponibilité, secret injecté avec `envFrom`, limites 500m CPU et 512 Mi, sondes sur `/api/health` |
-| `service.yaml`, `ingress.yaml` | Service et Ingress `benevoles-app` | oui | Exposition via Traefik pour `*.benevol.app`, `benevol.app` et `www.benevol.app`, TLS `benevol-app-wildcard-tls` |
+| `service.yaml`, `ingress.yaml` | Service et Ingress `benevoles-app` | oui | Exposition via Traefik pour `*.benevol.app`, `benevol.app` et `www.benevol.app`, TLS `benevol-app-wildcard-tls`, avec les middlewares de compression de `middleware-compress.yaml` |
+| `middleware-compress.yaml` | Middlewares `benevoles-compress` et `benevoles-identity-upstream` | oui, avant `ingress.yaml` | Compression des réponses texte par Traefik (zstd, Brotli ou gzip selon le navigateur) ; l'application reçoit la requête sans `Accept-Encoding` et répond donc sans compression, ce que Traefik exige pour compresser. Voir « Compression et cache HTTP » ci-dessous |
 | `ingressroute-tokens.yaml` | IngressRoute `benevoles-app-tokens` et `benevoles-app-tokens-http`, Middleware `benevoles-https-redirect` | oui | Routeur prioritaire, **sans journal d'accès**, pour les requêtes qui portent un jeton personnel (chemins `/my/`, `/leader/`… et requêtes `token`, `t`) et la recherche admin, en HTTPS et en HTTP (redirigé). Un jeton ne doit jamais être journalisé ; limité à benevol.app, le Traefik partagé n'est pas modifié. Toute nouvelle route à jeton s'y ajoute (vérifié par `no-tokens-in-access-logs.test.ts`) |
 | `ingressroute-http.yaml` | IngressRoute `benevoles-app-http` | oui | Route de dernière priorité sur l'entrée `web` : toute adresse `http://` de benevol.app (apex et sous-domaines) est redirigée de façon permanente vers `https://`, avec le Middleware de `ingressroute-tokens.yaml` (à appliquer avant). Sans elle, Traefik répondait « 404 page not found » |
 | `traefik-config.yaml` | HelmChartConfig `traefik` (`kube-system`) | non | Réglage du Traefik fourni par k3s : `externalTrafficPolicy: Local` pour conserver l'adresse réelle des visiteurs (voir ci-dessous), journaux d'accès activés, délais de lecture et d'écriture de 30 min sur `web` et `websecure` |
@@ -80,6 +81,12 @@ kubectl -n kube-system get svc traefik -o jsonpath='{.spec.externalTrafficPolicy
 
 Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publiques, plus `10.42.0.1`.
 
+### Compression et cache HTTP
+
+- **Compression** : Traefik compresse les réponses texte (HTML, charges RSC, CSS, JavaScript, JSON, XML, SVG, CSV, agendas) avec le meilleur encodage proposé par le navigateur (zstd, puis Brotli, puis gzip), via `k8s/middleware-compress.yaml`. L'application ne compresse qu'en gzip et Traefik ne recompresse jamais une réponse déjà compressée : le second middleware retire `Accept-Encoding` de la requête transmise à l'application, après que le premier l'a lu. Sans Traefik (Docker Compose), l'application garde son gzip. Vérifier après application : `curl -sI -H 'Accept-Encoding: br' https://www.benevol.app/doc | grep -i content-encoding` doit donner `br`. Un routeur qui nomme un middleware absent est désactivé par Traefik : appliquer `middleware-compress.yaml` avant `ingress.yaml` et `ingressroute-tokens.yaml`.
+- **Pages publiques** : une visite anonyme de la page d'accueil de benevol.app, de `/fonctionnalites`, `/nouveautes`, `/accessibilite`, `/doc` et ses fiches, `/videos` et ses vidéos, et des pages légales ne passe pas par Auth.js (aucun cookie déposé) et reçoit `Cache-Control: public, max-age=0, s-maxage=60, stale-while-revalidate=300` (`src/lib/public-cache.ts`). Tout le reste (administration, super admin, API, pages à jeton, pages d'une organisation, `?org=`, visiteur connecté, formulaires) garde Auth.js et le `no-store` de Next.js. Aucun cache partagé n'est placé devant benevol.app aujourd'hui : `s-maxage` ne sert qu'à un éventuel CDN futur, qui devra respecter l'en-tête `Vary` de Next.js. Après un déploiement, un tel cache pourrait servir pendant quelques minutes une page qui référence les fichiers JavaScript de la version précédente : à garder en tête avant d'en ajouter un.
+- `X-Powered-By` n'est plus envoyé (`poweredByHeader: false`).
+
 ### Ordre de déploiement
 
 À chaque push sur `main`, `deploy.yml` enchaîne trois jobs et applique les migrations **avant** de mettre à jour l'application :
@@ -92,7 +99,7 @@ Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publi
    3. régénère `benevoles-secret` (« Sync k8s secret ») ;
    4. applique `k8s/postgres.yaml` et attend PostgreSQL (120 s au plus) ;
    5. supprime le Job de migration précédent, applique `k8s/job-migrate.yaml` avec la nouvelle image et attend sa réussite (300 s au plus). En cas d'échec, le déploiement s'arrête, la version en cours continue de servir, et les journaux du Job s'affichent dans le workflow ;
-   6. applique `service.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et les cinq CronJobs ;
+   6. applique `service.yaml`, `middleware-compress.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et les cinq CronJobs ;
    7. seulement ensuite, applique `k8s/deployment.yaml` et attend la fin du remplacement (300 s au plus). Le nouveau pod démarre avant l'arrêt de l'ancien (`maxSurge: 1`, `maxUnavailable: 0`).
 
 Le workflow n'applique pas `secret.yaml` (modèle), `traefik-config.yaml`, `certificate-wildcard.yaml` ni `gandi-webhook.yaml`.
@@ -131,7 +138,7 @@ kubectl -n benevoles wait --for=condition=complete job/benevoles-migrate --timeo
 kubectl -n benevoles logs job/benevoles-migrate
 
 # 4. Exposition et tâches planifiées
-kubectl apply -f k8s/service.yaml -f k8s/ingress.yaml -f k8s/ingressroute-tokens.yaml -f k8s/ingressroute-http.yaml -f k8s/certificate-wildcard.yaml
+kubectl apply -f k8s/service.yaml -f k8s/middleware-compress.yaml -f k8s/ingress.yaml -f k8s/ingressroute-tokens.yaml -f k8s/ingressroute-http.yaml -f k8s/certificate-wildcard.yaml
 kubectl apply -f k8s/cronjob-reminders.yaml -f k8s/cronjob-cleanup.yaml -f k8s/cronjob-release-check.yaml -f k8s/cronjob-backup.yaml -f k8s/cronjob-backup-offsite.yaml
 
 # 5. Seulement ensuite, l'application

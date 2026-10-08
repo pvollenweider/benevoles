@@ -6,6 +6,9 @@ export default defineConfig({
     environment: "node",
     // e2e/**/*.spec.ts are Playwright specs, not vitest tests.
     exclude: ["**/node_modules/**", "e2e/**", "src/__integration__/**"],
+    // next-auth's ESM imports `next/server` without an extension, which Node's resolver refuses:
+    // inlined, Vite resolves it, so src/__tests__/proxy-public-cache.test.ts can run the real proxy.
+    server: { deps: { inline: [/next-auth/] } },
     coverage: {
       provider: "v8",
       // Routes and components too, not just src/lib: the API routes carry most of the
