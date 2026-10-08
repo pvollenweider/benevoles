@@ -27,26 +27,29 @@ const THEME_INIT_SCRIPT = `
 
 /**
  * The prose recipe of the content pages (changelog, accessibility), shared with
- * src/app/legal/layout.tsx: 14 px text, each paragraph and list item capped at 75ch (a maximum,
- * never a width), the article (headings, tables) at max-w-3xl, centred in the site container
- * (SITE_READING_COLUMN_CLASS), never stretched to its width. Links of the content (the Markdown, the indexes) get the same visible
- * focus outline as the links a page draws itself. The documentation has its own, larger recipe
- * (DOC_PROSE_CLASS, src/components/public/DocFrame.tsx).
+ * src/app/legal/layout.tsx: 14 px text, each paragraph and list item capped at 65ch (a maximum,
+ * never a width: about 80 characters a line), the article (headings, tables) at 36rem, the same
+ * width as that measure, centred in the site container (SITE_READING_COLUMN_CLASS), never
+ * stretched to its width. A clear heading scale over the 14 px body, in rem, never fluid: h1 30 px
+ * bold, h2 20 px, h3 16 px, h4 14 px, all semibold except h1, gray-900 (gray-100 in dark). Table
+ * headers in sentence case, never uppercase (DESIGN.md, No-Caps). Links of the content (the
+ * Markdown, the indexes) get the same visible focus outline as the links a page draws itself. The
+ * documentation has its own, larger recipe (DOC_PROSE_CLASS, src/components/public/DocFrame.tsx).
  */
-export const CONTENT_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-3xl
-          prose-headings:font-semibold prose-headings:tracking-tight prose-headings:scroll-mt-4
-          prose-h1:text-2xl prose-h1:mb-2 prose-h1:pb-4 prose-h1:border-b prose-h1:border-gray-200 dark:prose-h1:border-gray-800
-          prose-h2:text-base prose-h2:mt-10 prose-h2:mb-3
-          prose-h3:text-sm prose-h3:mt-6 prose-h3:mb-2 prose-h3:text-gray-700 dark:prose-h3:text-gray-300
-          prose-h4:text-sm prose-h4:mt-4 prose-h4:mb-1 prose-h4:text-gray-700 dark:prose-h4:text-gray-300
-          prose-p:text-sm prose-p:text-gray-600 dark:prose-p:text-gray-400 prose-p:leading-relaxed prose-p:max-w-[75ch]
-          prose-li:text-sm prose-li:text-gray-600 dark:prose-li:text-gray-400 prose-li:max-w-[75ch]
+export const CONTENT_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-[36rem]
+          prose-headings:font-semibold prose-headings:tracking-tight prose-headings:scroll-mt-4 prose-headings:break-words prose-headings:text-gray-900 dark:prose-headings:text-gray-100
+          prose-h1:text-3xl prose-h1:font-bold prose-h1:leading-[1.2] prose-h1:mb-2 prose-h1:pb-4 prose-h1:border-b prose-h1:border-gray-200 dark:prose-h1:border-gray-800
+          prose-h2:text-xl prose-h2:leading-[1.3] prose-h2:mt-12 prose-h2:mb-3
+          prose-h3:text-base prose-h3:leading-[1.4] prose-h3:mt-8 prose-h3:mb-2
+          prose-h4:text-sm prose-h4:leading-[1.4] prose-h4:mt-6 prose-h4:mb-1
+          prose-p:text-sm prose-p:text-gray-600 dark:prose-p:text-gray-400 prose-p:leading-relaxed prose-p:max-w-[65ch]
+          prose-li:text-sm prose-li:text-gray-600 dark:prose-li:text-gray-400 prose-li:max-w-[65ch]
           prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:underline prose-a:underline-offset-2 hover:prose-a:decoration-2
           prose-a:rounded prose-a:focus-visible:outline prose-a:focus-visible:outline-2 prose-a:focus-visible:outline-offset-2 prose-a:focus-visible:outline-blue-600 dark:prose-a:focus-visible:outline-blue-400
           prose-strong:text-gray-800 dark:prose-strong:text-gray-200 prose-strong:font-semibold
           prose-code:text-xs prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-gray-700 dark:prose-code:text-gray-300 prose-code:before:content-none prose-code:after:content-none
           prose-pre:whitespace-pre-wrap prose-pre:break-words prose-pre:bg-gray-50 dark:prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-gray-700
-          prose-table:text-sm prose-th:text-xs prose-th:uppercase prose-th:tracking-wider prose-th:text-gray-500 dark:prose-th:text-gray-400 prose-th:font-medium
+          prose-table:text-sm prose-th:text-sm prose-th:text-gray-900 dark:prose-th:text-gray-100 prose-th:font-semibold
           prose-td:text-gray-600 dark:prose-td:text-gray-400 prose-td:align-top
           prose-img:rounded-lg prose-img:border prose-img:border-gray-200 dark:prose-img:border-gray-700 prose-img:shadow-sm`
 

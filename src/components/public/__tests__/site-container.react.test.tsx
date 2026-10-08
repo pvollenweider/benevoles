@@ -57,20 +57,24 @@ describe("site container (one width for every public page)", () => {
     const article = screen.getByRole("main").querySelector("article")!
     expect(article.className).toBe(`${CONTENT_PROSE_CLASS} ${SITE_READING_COLUMN_CLASS}`)
     expect(SITE_READING_COLUMN_CLASS).toBe("mx-auto")
-    expect(CONTENT_PROSE_CLASS).toContain("max-w-3xl")
+    // About 80 characters a line at 14 px; the article as wide as that measure, so the centred
+    // column is the text itself.
+    expect(CONTENT_PROSE_CLASS).toMatch(/^prose prose-gray dark:prose-invert max-w-\[36rem\]/)
     expect(CONTENT_PROSE_CLASS).not.toContain("max-w-none")
-    expect(CONTENT_PROSE_CLASS).toContain("prose-p:max-w-[75ch]")
-    expect(CONTENT_PROSE_CLASS).toContain("prose-li:max-w-[75ch]")
+    expect(CONTENT_PROSE_CLASS).toContain("prose-p:max-w-[65ch]")
+    expect(CONTENT_PROSE_CLASS).toContain("prose-li:max-w-[65ch]")
   })
 
-  it("frames a guide without a side menu (/doc, /doc/admin) like the features page, text capped at 70ch and centred", () => {
+  it("frames a guide without a side menu (/doc, /doc/admin) like the features page, text capped at 65ch and centred", () => {
     render(<ContentShell layout="doc"><DocFrame><h1>Guide administrateur</h1></DocFrame></ContentShell>)
     const { header, footerWrapper } = frameParts()
     expectSiteContainer(header)
     expectSiteContainer(screen.getByRole("main").parentElement)
     expectSiteContainer(footerWrapper)
     expect(screen.getByRole("main").querySelector("article")!.className).toBe(`${DOC_PROSE_CLASS} ${SITE_READING_COLUMN_CLASS}`)
-    expect(DOC_PROSE_CLASS).toContain("max-w-[70ch]")
+    expect(DOC_PROSE_CLASS).toContain("max-w-[65ch]")
+    expect(DOC_PROSE_CLASS).toContain("prose-p:max-w-[65ch]")
+    expect(DOC_PROSE_CLASS).not.toContain("70ch")
   })
 
   it("frames a documentation unit's side menu and text in the same container", () => {
@@ -119,5 +123,14 @@ describe("site container (one width for every public page)", () => {
     cleanup()
     render(<PublicFooter />)
     expect(screen.getByRole("contentinfo").className).toContain("max-w-xl")
+  })
+
+  // A heading scale over the 14 px body (P3 of the design critique): fixed rem sizes, never fluid,
+  // and table headers in sentence case (DESIGN.md, No-Caps).
+  it("gives the content pages a clear heading scale, no uppercase table headers", () => {
+    for (const c of ["prose-h1:text-3xl", "prose-h2:text-xl", "prose-h3:text-base", "prose-h4:text-sm", "prose-p:text-sm", "dark:prose-headings:text-gray-100"]) {
+      expect(CONTENT_PROSE_CLASS).toContain(c)
+    }
+    expect(CONTENT_PROSE_CLASS).not.toMatch(/clamp|uppercase|tracking-wider/)
   })
 })
