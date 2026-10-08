@@ -4,7 +4,7 @@
 import { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import DocVideoInline from "@/components/videos/DocVideoInline"
 import { mailtoAddress } from "@/lib/features-page"
-import type { FeatureStill, RenderedFeaturesPage } from "@/lib/public-content"
+import type { FeatureStill, RenderedFeaturesPage, RenderedQuestion } from "@/lib/public-content"
 import type { FeatureAction } from "@/lib/features-page"
 import type { DocUnitPart } from "@/lib/doc-video-references"
 
@@ -89,13 +89,35 @@ function Still({ still, priority = false }: { still: FeatureStill; priority?: bo
 }
 
 /**
+ * A FAQ section (« ### Question » in the source): each question an <h3> with its anchor, its
+ * answer beside it from lg, under it below; a hairline above each question (the section's own
+ * rule closes the list), all of them open (the
+ * same words as the FAQPage structured data, never hidden behind a disclosure).
+ */
+function Questions({ faq }: { faq: RenderedQuestion[] }) {
+  return (
+    <div className="mt-10 border-t border-gray-200 dark:border-gray-800 divide-y divide-gray-200 dark:divide-gray-800">
+      {faq.map((q) => (
+        <div key={q.id} className="py-8 lg:grid lg:grid-cols-12 lg:gap-12">
+          <h3 id={q.id} className="scroll-mt-6 text-xl font-semibold text-gray-900 dark:text-gray-50 break-words lg:col-span-5" style={balance}>
+            {q.question}
+          </h3>
+          <div className={`${FEATURES_PROSE_CLASS} mt-3 lg:mt-0 lg:col-span-7 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0`} style={pretty} dangerouslySetInnerHTML={{ __html: q.html }} />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/**
  * /fonctionnalites (FEATURES.md, laid out by src/lib/features-page.ts): the promise with its two
  * actions and a still of the product, the presentation video opened in place, a « Sur cette page »
  * list of every section, then each section with its benefits, a still of the matching tutorial,
  * its video and the documentation pages that say more. Server-rendered; only the inline players
- * are client components (DocVideoInline).
+ * are client components (DocVideoInline). The editorial pages (/logiciel-planning-benevoles) use
+ * the same layout with their own small label above the title, and a FAQ section.
  */
-export default function FeaturesPage({ page }: { page: RenderedFeaturesPage }) {
+export default function FeaturesPage({ page, eyebrow = "Fonctionnalités" }: { page: RenderedFeaturesPage; eyebrow?: string }) {
   const { intro, sections } = page
   const heroStill = intro.stills[0]
   // The opening's text on the left; its video, under the still, on the right.
@@ -106,7 +128,7 @@ export default function FeaturesPage({ page }: { page: RenderedFeaturesPage }) {
       <section className="max-w-6xl mx-auto px-6 pt-12 pb-16 sm:pt-16">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center">
           <div>
-            <p className="text-base font-semibold text-blue-700 dark:text-blue-300">Fonctionnalités</p>
+            <p className="text-base font-semibold text-blue-700 dark:text-blue-300">{eyebrow}</p>
             <h1 id="features-title" className="mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.08] text-gray-900 dark:text-gray-50 break-words" style={balance}>
               {page.title}
             </h1>
@@ -148,7 +170,9 @@ export default function FeaturesPage({ page }: { page: RenderedFeaturesPage }) {
                   <h2 id={s.id} className="scroll-mt-6 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50 break-words" style={balance}>
                     {s.heading}
                   </h2>
-                  {s.steps ? (
+                  {s.faq ? (
+                    <Questions faq={s.faq} />
+                  ) : s.steps ? (
                     <ol role="list" className="mt-10 grid gap-10 md:grid-cols-3 md:gap-12">
                       {s.steps.map((step, i) => (
                         <li key={step.title}>

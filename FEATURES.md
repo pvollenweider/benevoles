@@ -126,7 +126,7 @@ En savoir plus : [personnaliser l'organisation](guide/personnaliser-l-organisati
 
 ## Se former
 
-Les [tutoriels vidéo](/videos) montrent chaque étape en quelques minutes, avec leur transcription complète. Le [guide administrateur](GUIDE_ADMIN.md) explique la mise en place pas à pas, et le [guide bénévole](GUIDE_BENEVOLE.md) montre ce que vivent vos bénévoles. Dans l'administration, les principaux écrans ont un lien « Aide » vers la page qui les explique. Une question, un problème ou une idée d'amélioration ? Écrivez à [contact@benevol.app](mailto:contact@benevol.app), aucun compte n'est nécessaire.
+Les [tutoriels vidéo](/videos) montrent chaque étape en quelques minutes, avec leur transcription complète. Le [guide administrateur](GUIDE_ADMIN.md) explique la mise en place pas à pas, et le [guide bénévole](GUIDE_BENEVOLE.md) montre ce que vivent vos bénévoles. Dans l'administration, les principaux écrans ont un lien « Aide » vers la page qui les explique. Vous cherchez encore le bon outil ? La page [Logiciel de planning pour bénévoles](LOGICIEL-PLANNING-BENEVOLES.md) répond aux questions qu'on se pose avant de choisir. Une question, un problème ou une idée d'amélioration ? Écrivez à [contact@benevol.app](mailto:contact@benevol.app), aucun compte n'est nécessaire.
 
 > **Bénévole ?** Rien à installer, aucun compte à créer : il suffit d'ouvrir le lien reçu par email ou partagé par l'association. Lien perdu ? [Le recevoir à nouveau](guide/lien-personnel.md).
 

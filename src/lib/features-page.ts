@@ -16,13 +16,18 @@ import { videoReferenceId } from "@/lib/doc-video-references"
  *
  * The text before the first `## ` is the page's opening; each `## ` opens a section, its id the
  * heading's slug (the same anchors as the rest of the site, src/lib/heading-anchors.ts). A section
- * made of a single ordered list whose items start with a bold title is drawn as numbered steps.
+ * made of a single ordered list whose items start with a bold title is drawn as numbered steps; a
+ * section made only of `### Question ?` headings, each followed by its answer, is a list of
+ * questions (the FAQ of an editorial page, also its FAQPage structured data). The same layout
+ * serves other sources than FEATURES.md (the editorial pages, src/lib/doc-pages.ts).
  * Pure: the page resolves the videos and renders the Markdown (src/lib/public-content.ts).
  */
 
 export type FeatureAction = { label: string; href: string }
 export type FeatureImage = { videoId: string; alt: string }
 export type FeatureStep = { title: string; text: string }
+/** A question of a FAQ section, its answer as written (Markdown). */
+export type FeatureQuestion = { question: string; id: string; answer: string }
 
 export type FeatureBlock = {
   /** The Markdown once the images and actions are taken out (video lines stay, where the players go). */
@@ -37,6 +42,8 @@ export type FeatureSection = FeatureBlock & {
   id: string
   /** Set when the section is a single ordered list of « **Title.** text » items. */
   steps: FeatureStep[] | null
+  /** Set when the section is made only of « ### Question » headings with their answers. */
+  faq: FeatureQuestion[] | null
 }
 
 export type FeaturesPage = { title: string | null; intro: FeatureBlock; sections: FeatureSection[] }
@@ -108,7 +115,44 @@ export function parseSteps(markdown: string): FeatureStep[] | null {
   return steps
 }
 
-/** FEATURES.md as the page arranges it. */
+/**
+ * « ### Question » headings, each with the answer below it, or null when the Markdown is anything
+ * else (text before the first question, a question without an answer). `slug` gives each question
+ * its anchor, from the page's own slugger so ids never repeat.
+ */
+export function parseFaq(markdown: string, slug: (text: string) => string): FeatureQuestion[] | null {
+  const trimmed = markdown.trim()
+  if (!trimmed.startsWith("### ")) return null
+  const entries: { question: string; answer: string }[] = []
+  for (const chunk of trimmed.split(/^### +/m).slice(1)) {
+    const newline = chunk.indexOf("\n")
+    const question = (newline === -1 ? chunk : chunk.slice(0, newline)).replace(/ +#*$/, "").trim()
+    const answer = newline === -1 ? "" : chunk.slice(newline + 1).trim()
+    if (!question || !answer || /^#{1,6} /m.test(answer)) return null
+    entries.push({ question, answer })
+  }
+  // Slugged once the whole section is known to be a FAQ, so a section that isn't uses no id.
+  return entries.map((e) => ({ ...e, id: slug(e.question) }))
+}
+
+/**
+ * An answer as plain text, for the FAQPage structured data: the same words the page shows, links
+ * kept as their text, emphasis and code marks dropped, paragraphs and list items on one line.
+ */
+export function plainAnswer(markdown: string): string {
+  return markdown
+    .replace(/^[ \t]*<!--[\s\S]*?-->[ \t]*$/gm, "")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/\*\*([^*]+)\*\*|__([^_]+)__/g, "$1$2")
+    .replace(/(^|[^*])\*([^*\n]+)\*/g, "$1$2")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/^[ \t]*(?:[-*]|\d+\.)[ \t]+/gm, "")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+/** A source laid out by the page (FEATURES.md, an editorial page) as the page arranges it. */
 export function parseFeaturesPage(source: string): FeaturesPage {
   const { title, body } = splitTitle(source)
   const slug = createHeadingSlugger()
@@ -118,7 +162,8 @@ export function parseFeaturesPage(source: string): FeaturesPage {
     const newline = chunk.indexOf("\n")
     const heading = (newline === -1 ? chunk : chunk.slice(0, newline)).replace(/ +#*$/, "").trim()
     const block = parseFeatureBlock(newline === -1 ? "" : chunk.slice(newline + 1))
-    return { heading, id: slug(heading), ...block, steps: parseSteps(block.markdown) }
+    const id = slug(heading)
+    return { heading, id, ...block, steps: parseSteps(block.markdown), faq: parseFaq(block.markdown, slug) }
   })
   return { title, intro, sections }
 }

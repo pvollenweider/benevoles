@@ -119,6 +119,22 @@ export function webPageNode(
   }
 }
 
+/** A question and its answer, word for word as the page shows them. */
+export type FaqItem = { question: string; answer: string }
+
+/**
+ * The FAQ a page shows, as a FAQPage: only ever built from the questions the page itself renders
+ * (search engines ignore, or penalise, structured data the page does not show).
+ */
+export function faqPageNode(base: string, pagePath: string, faq: readonly FaqItem[]): JsonLdNode {
+  return {
+    "@type": "FAQPage",
+    "@id": `${absoluteUrl(base, pagePath)}#faq`,
+    inLanguage: "fr",
+    mainEntity: faq.map((f) => ({ "@type": "Question", name: f.question, acceptedAnswer: { "@type": "Answer", text: f.answer } })),
+  }
+}
+
 /** A JSON-LD document of several nodes. */
 export function jsonLdGraph(nodes: readonly JsonLdNode[]): JsonLdNode {
   return { "@context": "https://schema.org", "@graph": nodes }
@@ -132,11 +148,15 @@ function publicPageCrumbs(path: string, title: string): Crumb[] {
   return [home, { name: title }]
 }
 
+/** The pages that present the application itself, so their structured data describes it too. */
+const APPLICATION_PAGES: readonly string[] = ["/fonctionnalites", "/logiciel-planning-benevoles"]
+
 /**
  * The structured data of a public content page (src/lib/doc-pages.ts): the page, its breadcrumb,
- * the site and its publisher; the features page also describes the application.
+ * the site and its publisher; the pages that present the application also describe it, and a page
+ * with a visible FAQ passes its questions for a FAQPage.
  */
-export function publicPageJsonLd(path: string, base: string): JsonLdNode {
+export function publicPageJsonLd(path: string, base: string, faq: readonly FaqItem[] = []): JsonLdNode {
   const page = publicPage(path)
   const nodes: JsonLdNode[] = [
     webPageNode(base, { path: page.path, name: page.metaTitle, description: page.metaDescription, type: page.path === "/doc" ? "CollectionPage" : "WebPage" }),
@@ -144,7 +164,8 @@ export function publicPageJsonLd(path: string, base: string): JsonLdNode {
     websiteNode(base),
     organizationNode(base),
   ]
-  if (page.path === "/fonctionnalites") nodes.push(softwareApplicationNode(base, page.metaDescription))
+  if (APPLICATION_PAGES.includes(page.path)) nodes.push(softwareApplicationNode(base, page.metaDescription))
+  if (faq.length > 0) nodes.push(faqPageNode(base, page.path, faq))
   return jsonLdGraph(nodes)
 }
 

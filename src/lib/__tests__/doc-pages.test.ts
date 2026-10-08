@@ -1,6 +1,9 @@
 import { describe, it, expect } from "vitest"
 import fs from "fs"
 import path from "path"
+import { metaLengthProblems } from "../meta-length"
+import { pageTitle } from "../seo-metadata"
+import { renderFeaturesPage } from "../public-content"
 import { apexSitemap, CONTENT_NAV, DOC_UNIT_PRIORITY, DOC_GUIDES, DOC_PAGES, linkSourcesToRoutes, PUBLIC_PAGES, publicPageMetadata, splitTitle } from "../doc-pages"
 
 const read = (f: string) => fs.readFileSync(path.join(process.cwd(), f), "utf-8")
@@ -99,6 +102,39 @@ describe("FEATURES.md, the source of /fonctionnalites", () => {
   })
 })
 
+describe("/logiciel-planning-benevoles, the editorial page on volunteer scheduling (#767)", () => {
+  const page = PUBLIC_PAGES.find((p) => p.path === "/logiciel-planning-benevoles")!
+
+  it("is a public page rendered from its own source, copied into the image, outside the header navigation", () => {
+    expect(page.source).toBe("LOGICIEL-PLANNING-BENEVOLES.md")
+    expect(splitTitle(read(page.source!)).title).toBe(page.title)
+    expect(CONTENT_NAV.map((p) => p.path)).not.toContain(page.path)
+    expect(read("Dockerfile")).toContain("/app/LOGICIEL-PLANNING-BENEVOLES.md ./LOGICIEL-PLANNING-BENEVOLES.md")
+  })
+
+  it("has a title and a description that fit search results", () => {
+    expect(metaLengthProblems(pageTitle(page.metaTitle), page.metaDescription)).toEqual([])
+    expect(page.metaTitle.toLowerCase()).toContain("planning pour bénévoles")
+  })
+
+  it("is linked from the home and from /fonctionnalites (internal links), its source link made a site link", () => {
+    expect(read("src/app/page.tsx")).toContain('href="/logiciel-planning-benevoles"')
+    expect(read("FEATURES.md")).toContain("](LOGICIEL-PLANNING-BENEVOLES.md)")
+    expect(linkSourcesToRoutes("[a](LOGICIEL-PLANNING-BENEVOLES.md)")).toBe("[a](/logiciel-planning-benevoles)")
+  })
+
+  it("renders its FAQ: answers as HTML with site links for the page, as plain text for the FAQPage", () => {
+    const rendered = renderFeaturesPage(null, page.source!, page.title)
+    expect(rendered.title).toBe("Logiciel de planning pour bénévoles")
+    const faq = rendered.sections.find((s) => s.id === "questions-frequentes")!.faq!
+    expect(faq.length).toBeGreaterThanOrEqual(6)
+    const small = faq.find((q) => q.id === "est-ce-adapte-a-une-petite-association")!
+    expect(small.html).toContain('href="/doc/premiers-pas"')
+    expect(small.text).toContain("la liste des premiers pas vous guide")
+    for (const q of faq) expect(q.text, q.question).not.toMatch(/[<>[\]*`]/)
+  })
+})
+
 describe("linkSourcesToRoutes", () => {
   // GUIDE_BENEVOLE.md is the welcome of /doc/benevole since the split (#649): a link to it leads there.
   it("rewrites links to the root sources, an anchor kept, from the root or from guide/", () => {
@@ -129,7 +165,7 @@ describe("apexSitemap", () => {
     const d = new Date("2026-09-30T10:00:00Z")
     const entries = apexSitemap("https://www.benevol.app/", (src) => (src === "FEATURES.md" ? d : null))
     expect(entries[0]).toEqual({ url: "https://www.benevol.app/", changeFrequency: "weekly", priority: 1 })
-    expect(entries.map((e) => e.url)).toEqual(["https://www.benevol.app/", "https://www.benevol.app/fonctionnalites", "https://www.benevol.app/nouveautes", "https://www.benevol.app/accessibilite", "https://www.benevol.app/legal/privacy", "https://www.benevol.app/legal/terms", "https://www.benevol.app/legal/sous-traitance", "https://www.benevol.app/legal/sous-traitants", "https://www.benevol.app/doc", "https://www.benevol.app/doc/admin", "https://www.benevol.app/doc/benevole"])
+    expect(entries.map((e) => e.url)).toEqual(["https://www.benevol.app/", "https://www.benevol.app/fonctionnalites", "https://www.benevol.app/logiciel-planning-benevoles", "https://www.benevol.app/nouveautes", "https://www.benevol.app/accessibilite", "https://www.benevol.app/legal/privacy", "https://www.benevol.app/legal/terms", "https://www.benevol.app/legal/sous-traitance", "https://www.benevol.app/legal/sous-traitants", "https://www.benevol.app/doc", "https://www.benevol.app/doc/admin", "https://www.benevol.app/doc/benevole"])
     expect(entries.find((e) => e.url.endsWith("/fonctionnalites"))).toMatchObject({ lastModified: d, priority: 0.9 })
     expect(entries.find((e) => e.url.endsWith("/doc/benevole"))).not.toHaveProperty("lastModified")
   })
