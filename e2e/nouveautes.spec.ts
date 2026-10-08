@@ -76,3 +76,38 @@ test.describe("on a phone, in dark mode", () => {
     expect(overflow).toBe(0)
   })
 })
+
+test.describe("on a desktop", () => {
+  test.use({ viewport: { width: 1440, height: 900 } })
+
+  // 16 px text like /fonctionnalites and the documentation, the article as wide as its 65ch
+  // measure, and the two columns of « Toutes les versions » starting level (a list item margin was
+  // dropped at the top of the second column only, which started about 7 px higher).
+  test("sets the text in 16 px, the article at its 65ch measure, both version columns level", async ({ page }) => {
+    await page.goto("/nouveautes")
+    const metrics = await page.evaluate(() => {
+      const article = document.querySelector("main article")!
+      const p = article.querySelector("p")!
+      const probe = document.createElement("span")
+      probe.style.cssText = "position:absolute;visibility:hidden;width:65ch"
+      p.appendChild(probe)
+      const ch65 = probe.getBoundingClientRect().width
+      probe.remove()
+      return { fontSize: parseFloat(getComputedStyle(p).fontSize), articleWidth: article.getBoundingClientRect().width, ch65 }
+    })
+    expect(metrics.fontSize).toBe(16)
+    expect(Math.abs(metrics.articleWidth - metrics.ch65)).toBeLessThan(2)
+
+    const tops = await page.getByRole("navigation", { name: "Toutes les versions" }).locator("li").evaluateAll((lis) => {
+      const byColumn = new Map<number, number>()
+      for (const li of lis) {
+        const r = li.getBoundingClientRect()
+        const left = Math.round(r.left)
+        byColumn.set(left, Math.min(byColumn.get(left) ?? Infinity, r.top))
+      }
+      return [...byColumn.values()]
+    })
+    expect(tops.length).toBe(2)
+    expect(Math.abs(tops[0] - tops[1])).toBeLessThan(1)
+  })
+})

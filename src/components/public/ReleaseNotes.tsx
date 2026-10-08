@@ -29,7 +29,9 @@ export default function ReleaseNotes({ releases, fullChangelogUrl }: { releases:
         <>
           <nav aria-labelledby="toutes-les-versions">
             <h2 id="toutes-les-versions">Toutes les versions</h2>
-            <ul className="sm:columns-2">
+            {/* Spacing by padding, not margin: a margin is dropped at the top of the second
+                column but not the first, which then started lower. */}
+            <ul className="sm:columns-2 [&>li]:my-0 [&>li]:py-1">
               {releases.map((r) => (
                 <li key={r.version} className="break-inside-avoid">
                   <a href={`#${r.version}`}>Version {r.version}</a>, {r.dateLabel}

@@ -57,9 +57,9 @@ describe("site container (one width for every public page)", () => {
     const article = screen.getByRole("main").querySelector("article")!
     expect(article.className).toBe(`${CONTENT_PROSE_CLASS} ${SITE_READING_COLUMN_CLASS}`)
     expect(SITE_READING_COLUMN_CLASS).toBe("mx-auto")
-    // About 80 characters a line at 14 px; the article as wide as that measure, so the centred
-    // column is the text itself.
-    expect(CONTENT_PROSE_CLASS).toMatch(/^prose prose-gray dark:prose-invert max-w-\[36rem\]/)
+    // About 80 characters a line at 16 px; the article measured in the same ch (prose sets 1rem on
+    // it), so the centred column is the text itself.
+    expect(CONTENT_PROSE_CLASS).toMatch(/^prose prose-gray dark:prose-invert max-w-\[65ch\]/)
     expect(CONTENT_PROSE_CLASS).not.toContain("max-w-none")
     expect(CONTENT_PROSE_CLASS).toContain("prose-p:max-w-[65ch]")
     expect(CONTENT_PROSE_CLASS).toContain("prose-li:max-w-[65ch]")
@@ -125,10 +125,11 @@ describe("site container (one width for every public page)", () => {
     expect(screen.getByRole("contentinfo").className).toContain("max-w-xl")
   })
 
-  // A heading scale over the 14 px body (P3 of the design critique): fixed rem sizes, never fluid,
-  // and table headers in sentence case (DESIGN.md, No-Caps).
-  it("gives the content pages a clear heading scale, no uppercase table headers", () => {
-    for (const c of ["prose-h1:text-3xl", "prose-h2:text-xl", "prose-h3:text-base", "prose-h4:text-sm", "prose-p:text-sm", "dark:prose-headings:text-gray-100"]) {
+  // A 16 px body, as on /fonctionnalites and in the documentation, under a heading scale in fixed
+  // rem sizes, never fluid (h1 30, h2 24, h3 18, h4 16 px semibold), table headers in sentence case
+  // (DESIGN.md, No-Caps).
+  it("gives the content pages a 16 px body, a clear heading scale, no uppercase table headers", () => {
+    for (const c of ["prose-h1:text-3xl", "prose-h2:text-2xl", "prose-h3:text-lg", "prose-h4:text-base", "prose-p:text-base", "prose-li:text-base", "prose-p:leading-[1.75]", "dark:prose-headings:text-gray-100"]) {
       expect(CONTENT_PROSE_CLASS).toContain(c)
     }
     expect(CONTENT_PROSE_CLASS).not.toMatch(/clamp|uppercase|tracking-wider/)

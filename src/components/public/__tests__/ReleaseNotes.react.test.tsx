@@ -30,6 +30,16 @@ describe("ReleaseNotes", () => {
     expect(screen.getByText("Première version.")).toBeInTheDocument()
   })
 
+  // Regression: the prose margin of the list items was dropped at the top of the second column
+  // only, which started about 7 px higher than the first.
+  it("spaces the two-column list of versions by padding, so both columns start level", () => {
+    render(<ReleaseNotes releases={RELEASES} fullChangelogUrl="https://example.org/CHANGELOG.md" />)
+    const list = within(screen.getByRole("navigation")).getByRole("list")
+    expect(list.className).toContain("sm:columns-2")
+    expect(list.className).toContain("[&>li]:my-0")
+    expect(list.className).toContain("[&>li]:py-1")
+  })
+
   it("ends each version with a link back to the list of versions", () => {
     render(<ReleaseNotes releases={RELEASES} fullChangelogUrl="https://example.org/CHANGELOG.md" />)
     const back = screen.getAllByRole("link", { name: "Retour à la liste des versions" })
