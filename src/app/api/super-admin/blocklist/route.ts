@@ -5,6 +5,7 @@ import { NextResponse } from "next/server"
 import { requireSuperAdmin } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { validateBlock } from "@/lib/signup-blocklist"
+import { logOperator } from "@/lib/operator-log"
 
 /** Block list of the self-service sign-up (#810, part 5): super admin only. */
 export async function GET() {
@@ -26,11 +27,16 @@ export async function POST(req: Request) {
 
   const { kind, value, label, reason, expiresAt } = result.block
   // Same value again: the reason and the expiry are refreshed, never two rows for one value.
-  const block = await prisma.signupBlock.upsert({
-    where: { kind_value: { kind, value } },
-    create: { kind, value, label, reason, expiresAt, createdById: guard.session.user?.id ?? null },
-    update: { reason, expiresAt, label },
-    select: { id: true, kind: true, label: true, reason: true, expiresAt: true, createdAt: true },
+  const block = await prisma.$transaction(async (tx) => {
+    const saved = await tx.signupBlock.upsert({
+      where: { kind_value: { kind, value } },
+      create: { kind, value, label, reason, expiresAt, createdById: guard.session.user?.id ?? null },
+      update: { reason, expiresAt, label },
+      select: { id: true, kind: true, label: true, reason: true, expiresAt: true, createdAt: true },
+    })
+    // The label, never the value: an IP is only its last characters (src/lib/signup-blocklist.ts).
+    await logOperator(tx, { action: "blocklist.added", actor: guard.session.user, entityType: "SignupBlock", entityId: saved.id, target: saved.label, detail: reason })
+    return saved
   })
   return NextResponse.json(block, { status: 201 })
 }

@@ -30,6 +30,8 @@ export const RETENTION_DAYS = {
    * keep it longer than the videos it judges stay current; a year of answers is enough to find
    * the videos to improve, and a regenerated video starts fresh anyway (new revision). */
   videoFeedback: 365,
+  /** The operator's decisions (#810): space validated, refused, suspended, deleted, block list. */
+  operatorLog: 365,
   /** Self-service sign-up request (#810): name, contact name and address typed on /inscription. */
   signupRequest: 7,
   /** Encrypted database dump on the server. */
@@ -92,6 +94,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     duration: "jusqu'au retrait par l'opérateur ou jusqu'à l'échéance choisie ; une adresse IP est toujours bloquée pour une durée limitée, 90 jours au plus",
     trigger: "blocage par l'opérateur",
     mechanism: "nettoyage quotidien des entrées échues (cron cleanup)",
+    backups: inBackups,
+    public: true,
+  },
+  {
+    data: "Journal des décisions de l'opérateur : espace validé, refusé, suspendu, désactivé ou supprimé (nom et identifiant de l'espace), ajout ou retrait de la liste de blocage (adresse ou domaine bloqué, jamais une adresse IP en clair), raison donnée, auteur et date",
+    purpose: "Garder la trace des décisions de l'opérateur, y compris pour un espace supprimé depuis",
+    duration: `${d.operatorLog} jours après la décision`,
+    trigger: "décision de l'opérateur",
+    mechanism: "nettoyage quotidien (cron cleanup)",
     backups: inBackups,
     public: true,
   },

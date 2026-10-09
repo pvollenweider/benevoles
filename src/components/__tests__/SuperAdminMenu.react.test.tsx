@@ -48,13 +48,15 @@ describe("SuperAdminMenu", () => {
   it("moves focus into the menu, cycles with the arrows, and returns to the trigger on Escape", () => {
     render(<SuperAdminMenu />)
     fireEvent.keyDown(trigger(), { key: "ArrowDown" })
-    const [orgs, stats, blocklist, health, updates, videoFeedback] = screen.getAllByRole("menuitem")
+    const [orgs, stats, blocklist, journal, health, updates, videoFeedback] = screen.getAllByRole("menuitem")
     expect(orgs).toHaveFocus()
 
     fireEvent.keyDown(document, { key: "ArrowDown" })
     expect(stats).toHaveFocus()
     fireEvent.keyDown(document, { key: "ArrowDown" })
     expect(blocklist).toHaveFocus()
+    fireEvent.keyDown(document, { key: "ArrowDown" })
+    expect(journal).toHaveFocus()
     fireEvent.keyDown(document, { key: "ArrowDown" })
     expect(health).toHaveFocus()
     fireEvent.keyDown(document, { key: "ArrowDown" })
