@@ -37,7 +37,7 @@ export const COMMITTED_STATUSES = ["active", "requested"] as const
  * Row-locks the given shifts until the end of the transaction. Ordered by id so two
  * transactions locking overlapping sets always acquire them in the same order (no deadlock).
  */
-export async function lockShifts(tx: Tx, shiftIds: string[]): Promise<void> {
+export async function lockShifts(tx: Pick<Tx, "$queryRaw">, shiftIds: string[]): Promise<void> {
   if (shiftIds.length === 0) return
   await tx.$queryRaw`SELECT id FROM "Shift" WHERE id = ANY(${shiftIds}::text[]) ORDER BY id FOR UPDATE`
 }

@@ -921,6 +921,15 @@ describe("Registrations — cross-tenant isolation", () => {
     expect(prismaMock.registration.update).not.toHaveBeenCalled()
   })
 
+  it("POST /api/admin/registrations/[id]/restore returns 404 for org-B registration, restoring nothing (#809)", async () => {
+    const { POST } = await import("@/app/api/admin/registrations/[id]/restore/route")
+    setupGuard()
+
+    const res = await POST(makeRequest("/api/admin/registrations/reg-b/restore", "POST"), params("reg-b"))
+    expect(res.status).toBe(404)
+    expect(prismaMock.registration.update).not.toHaveBeenCalled()
+  })
+
   it("POST /api/admin/registrations returns 404 when shift belongs to org-B", async () => {
     const { POST } = await import("@/app/api/admin/registrations/route")
     setupGuard() // shift.findFirst → null (org-B shift not visible to org-A)

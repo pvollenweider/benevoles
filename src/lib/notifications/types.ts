@@ -34,6 +34,7 @@ export type NotificationKind =
   | "registration_refused"
   | "registration_removed"
   | "registration_withdrawn"
+  | "registration_restored"
   | "release_available"
   | "addresses_to_verify_summary"
   | "open_shifts"

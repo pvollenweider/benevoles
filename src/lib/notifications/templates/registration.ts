@@ -255,6 +255,51 @@ export function renderRegistrationWithdrawn(p: NotificationPayload): RenderedEma
   return { subject, html, text }
 }
 
+/**
+ * An organiser put back a cancelled place or request (#809). Always sent: the volunteer must know
+ * they hold the place again. The link opens their page, with this registration on it.
+ */
+export function renderRegistrationRestored(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    volunteerName: string
+    eventTitle: string
+    orgSlug: string
+    status: "active" | "requested"
+    shift: { roleName: string; label?: string | null; date: string; startTime: string; endTime: string }
+    editToken: string
+  }
+  const firstName = d.volunteerName.split(" ")[0]
+  const line = spokenShift(d.shift)
+  const what = d.status === "requested"
+    ? `L'organisation de ${d.eventTitle} a rétabli ta demande d'inscription, qui attend sa réponse :`
+    : `L'organisation de ${d.eventTitle} a rétabli ton inscription :`
+  const linkUrl = myPageUrl(d.orgSlug, d.editToken)
+  const subject = `${d.status === "requested" ? "Demande rétablie" : "Inscription rétablie"} : ${d.eventTitle}`
+  const unwanted = "Tu ne veux plus de ce créneau ? Annule-le depuis ton lien personnel, ou réponds à cet email."
+
+  const text = [
+    `Hello ${firstName},`,
+    ``,
+    what,
+    `- ${line}`,
+    ``,
+    `Ton lien personnel pour voir ou gérer tes créneaux :`,
+    linkUrl,
+    ``,
+    unwanted,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)},</h2>
+    <p style="color:#555">${escapeHtml(what)}</p>
+    <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em"><li>${escapeHtml(line)}</li></ul>
+    <p style="margin-top:1.5em">${btn(linkUrl, "Voir mes créneaux")}</p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">${escapeHtml(unwanted)}</p>
+  `, `${d.status === "requested" ? "Demande rétablie" : "Inscription rétablie"} : ${line}.`)
+
+  return { subject, html, text }
+}
+
 // ── Notif modification d'un shift ────────────────────────────────────────────
 
 export function renderShiftModified(p: NotificationPayload): RenderedEmail {

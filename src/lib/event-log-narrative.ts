@@ -96,6 +96,7 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "registration.created": (a) => `${a} a enregistré une inscription`,
   "registration.updated": (a) => `${a} a modifié l'inscription`,
   "registration.cancelled": (a) => `${a} a annulé une inscription`,
+  "registration.restored": (a) => `${a} a rétabli une inscription annulée`,
   "registration.waitlist_joined": (a) => `${a} a rejoint la liste d'attente`,
   "registration.waitlist_offered": () => "une place s'est libérée et a été proposée",
   "registration.waitlist_confirmed": (a) => `${a} a confirmé sa place`,
@@ -134,7 +135,7 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
 
 /** Actions whose sentence benefits from naming which shift it's about (registration.* mostly). */
 const SHIFT_AWARE_ACTIONS = new Set([
-  "registration.created", "registration.cancelled", "registration.waitlist_joined",
+  "registration.created", "registration.cancelled", "registration.restored", "registration.waitlist_joined",
   "registration.waitlist_offered", "registration.waitlist_confirmed", "registration.baseline",
   "registration.checked_in", "registration.check_in_undone",
   "registration.requested", "registration.accepted", "registration.refused",
