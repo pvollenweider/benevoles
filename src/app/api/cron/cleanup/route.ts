@@ -145,6 +145,11 @@ async function run(req: Request) {
     where: { answeredOn: { lt: daysAgo(now, RETENTION_DAYS.videoFeedback) } },
   })
 
+  // --- 6d. Self-service sign-up requests (#810): confirmed or not, gone after their window ---
+  const deletedSignupRequests = await prisma.signupRequest.deleteMany({
+    where: { createdAt: { lt: daysAgo(now, RETENTION_DAYS.signupRequest) } },
+  })
+
   // --- 7. Encrypt volunteer-facing tokens still stored in clear (#290) ---
   // No-op until TOKEN_ENCRYPTION_KEY is set; then drains the legacy columns.
   const tokenEncryption = await encryptLegacyTokens().catch((e) => {
@@ -192,6 +197,7 @@ async function run(req: Request) {
       rateLimits: deletedRateLimits.count,
       deliveryOutcomes: deletedDeliveryOutcomes.count,
       videoFeedback: deletedVideoFeedback.count,
+      signupRequests: deletedSignupRequests.count,
       organizations: deletedOrgs.count,
       volunteers: deletedVolunteers.count,
       mergedMemberTombstones: deletedMergedTombstones.count,

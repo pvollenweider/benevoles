@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest"
 import { memoryStore } from "@/lib/rate-limit"
 import { DEFAULT_SEND_LIMITS, sendCategory, sendLimits, sendWindows, takeSendAllowance, type SendLimits } from "../send-limits"
 
-const tight: SendLimits = { orgPerMinute: 3, orgPerDay: 5, orgBulkPerDay: 2, orgAccountPerDay: 1, globalPerMinute: 10, recipientPerHour: 2 }
+const tight: SendLimits = { orgPerMinute: 3, orgPerDay: 5, orgBulkPerDay: 2, orgAccountPerDay: 1, globalPerMinute: 10, recipientPerHour: 2, signupConfirmationsPerHour: 3 }
 
 describe("email sending limits (#810)", () => {
   it("sorts kinds into bulk, account and automatic", () => {

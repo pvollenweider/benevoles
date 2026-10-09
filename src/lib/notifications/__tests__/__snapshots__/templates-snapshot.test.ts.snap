@@ -2283,6 +2283,52 @@ exports[`render — snapshot of every notification kind > shift_modified 1`] = `
 }
 `;
 
+exports[`render — snapshot of every notification kind > signup_confirmation 1`] = `
+{
+  "html": [
+    "<!DOCTYPE html>",
+    "<html lang="fr">",
+    "<head>",
+    "<meta charset="UTF-8">",
+    "<meta name="viewport" content="width=device-width,initial-scale=1">",
+    "<meta http-equiv="X-UA-Compatible" content="IE=edge">",
+    "</head>",
+    "<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">",
+    "<div style="display:none;font-size:1px;color:#f5f5f5;max-height:0;overflow:hidden;opacity:0;">Confirmez votre adresse pour créer votre espace benevol.app.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>",
+    "<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;">",
+    "<tr><td align="center" style="padding:32px 16px 24px;">",
+    "<!-- align="center" above only centers this table CELL on the page; text-align is inherited CSS,",
+    "     so without an explicit override here every unstyled heading/paragraph inside would inherit",
+    "     "center" too instead of reading left-aligned like normal body text. -->",
+    "<div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">",
+    "",
+    "    <h2 style="margin:0 0 0.5em">Confirmez votre adresse</h2>",
+    "    <p>Bonjour,</p>",
+    "    <p>Une demande d'espace benevol.app a été faite avec cette adresse. Pour la confirmer, ouvrez ce lien, valable 24 heures :</p>",
+    "    <p style="margin-top:1.5em"><a href="https://www.benevol.app/inscription/confirmer?t=tok-1" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">Confirmer mon adresse</a></p>",
+    "    <p style="color:#4b5563;font-size:0.9em;margin-top:1.5em">Si vous n'êtes pas à l'origine de cette demande, ignorez cet email : rien ne sera créé.</p>",
+    "  ",
+    "<div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#666;text-align:center;">",
+    "  <a href="https://benevol.app" style="color:#666;text-decoration:none;">benevol.app</a>",
+    "</div>",
+    "</div>",
+    "</td></tr>",
+    "</table>",
+    "</body>",
+    "</html>",
+  ],
+  "subject": "Confirmez votre adresse pour créer votre espace benevol.app",
+  "text": [
+    "Bonjour,",
+    "",
+    "Une demande d'espace benevol.app a été faite avec cette adresse. Pour la confirmer, ouvrez ce lien (valable 24 heures) :",
+    "https://www.benevol.app/inscription/confirmer?t=tok-1",
+    "",
+    "Si vous n'êtes pas à l'origine de cette demande, ignorez cet email : rien ne sera créé.",
+  ],
+}
+`;
+
 exports[`render — snapshot of every notification kind > targeted_message (waitlist, invited without shift) 1`] = `
 {
   "html": [

@@ -30,6 +30,8 @@ export const RETENTION_DAYS = {
    * keep it longer than the videos it judges stay current; a year of answers is enough to find
    * the videos to improve, and a regenerated video starts fresh anyway (new revision). */
   videoFeedback: 365,
+  /** Self-service sign-up request (#810): name, contact name and address typed on /inscription. */
+  signupRequest: 7,
   /** Encrypted database dump on the server. */
   localBackup: 30,
   /** Copy of the encrypted dumps off site. */
@@ -72,6 +74,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     duration: "conservées pendant la suspension, jusqu'à la décision de l'opérateur : levée de la suspension (la règle ordinaire s'applique alors) ou suppression définitive",
     trigger: "suspension de l'organisation par l'opérateur",
     mechanism: "aucune suppression automatique pendant la suspension ; suppression définitive par l'opérateur",
+    backups: inBackups,
+    public: true,
+  },
+  {
+    data: "Demande d'espace faite sur le site : nom de l'association, nom et adresse email de la personne",
+    purpose: "Confirmer l'adresse puis créer l'espace et son compte propriétaire",
+    duration: `${d.signupRequest} jours après la demande, confirmée ou non (l'espace et le compte créés suivent ensuite les règles de l'organisation)`,
+    trigger: "demande sur la page d'inscription",
+    mechanism: "nettoyage quotidien (cron cleanup)",
     backups: inBackups,
     public: true,
   },
