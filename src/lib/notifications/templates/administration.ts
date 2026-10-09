@@ -262,25 +262,29 @@ export function renderOperatorAlert(p: NotificationPayload): RenderedEmail {
 }
 
 
-/** Confirmation of a self-service sign-up (#810): the link opens a page with a « Confirmer » button. */
+/**
+ * Confirmation of a self-service sign-up (#810). Contains **no text typed on the form** (neither
+ * the association's nor the person's name): the form can send this email to any address, so
+ * anything typed there could be used to phish from benevol.app's domain. The association's name
+ * appears only on the confirmation page, on benevol.app, after the click.
+ */
 export function renderSignupConfirmation(p: NotificationPayload): RenderedEmail {
-  const d = p.data as { contactName: string; organizationName: string; confirmUrl: string; hours: number }
+  const d = p.data as { confirmUrl: string; hours: number }
   const subject = "Confirmez votre adresse pour créer votre espace benevol.app"
   const text = [
-    `Bonjour ${d.contactName},`,
+    `Bonjour,`,
     ``,
-    `Vous avez demandé un espace benevol.app pour ${d.organizationName}. Pour confirmer votre adresse, ouvrez ce lien (valable ${d.hours} heures) :`,
+    `Une demande d'espace benevol.app a été faite avec cette adresse. Pour la confirmer, ouvrez ce lien (valable ${d.hours} heures) :`,
     d.confirmUrl,
     ``,
     `Si vous n'êtes pas à l'origine de cette demande, ignorez cet email : rien ne sera créé.`,
   ].join("\n")
   const html = wrap(`
     <h2 style="margin:0 0 0.5em">Confirmez votre adresse</h2>
-    <p>Bonjour ${escapeHtml(d.contactName)},</p>
-    <p>Vous avez demandé un espace benevol.app pour <strong>${escapeHtml(d.organizationName)}</strong>. Pour confirmer votre adresse, ouvrez ce lien, valable ${d.hours} heures :</p>
+    <p>Bonjour,</p>
+    <p>Une demande d'espace benevol.app a été faite avec cette adresse. Pour la confirmer, ouvrez ce lien, valable ${d.hours} heures :</p>
     <p style="margin-top:1.5em">${btn(d.confirmUrl, "Confirmer mon adresse")}</p>
     <p style="color:#4b5563;font-size:0.9em;margin-top:1.5em">Si vous n'êtes pas à l'origine de cette demande, ignorez cet email : rien ne sera créé.</p>
-  `, `Confirmez votre adresse pour créer l'espace de ${d.organizationName}.`)
+  `, "Confirmez votre adresse pour créer votre espace benevol.app.")
   return { subject, html, text }
 }
-

@@ -9,7 +9,7 @@ import { inviteLink } from "@/lib/invite-link"
 import { isReservedOrgSlug } from "@/lib/org-subdomain"
 import { reportError } from "@/lib/report-error"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
-import { confirmable, slugify, SIGNUP_LINK_HOURS, type SignupInput } from "@/lib/signup"
+import { confirmable, plainLabel, slugify, SIGNUP_LINK_HOURS, type SignupInput } from "@/lib/signup"
 
 /**
  * Database side of the self-service sign-up (#810, part 4b); the rules are in src/lib/signup.ts.
@@ -54,10 +54,9 @@ export async function createSignupRequest(input: Pick<SignupInput, "organization
   })
   const ids = await enqueueNotifications([{
     kind: "signup_confirmation",
-    recipient: { email: input.email, name: input.contactName },
+    // No typed text in this email (see renderSignupConfirmation): only the link.
+    recipient: { email: input.email },
     data: {
-      contactName: input.contactName,
-      organizationName: input.organizationName,
       confirmUrl: `${appUrl()}/inscription/confirmer?t=${encodeURIComponent(token)}`,
       hours: SIGNUP_LINK_HOURS,
     },
@@ -127,7 +126,7 @@ export async function confirmSignupRequest(token: string, now: Date = new Date()
     .then((m) => m.notifyOperator({
       key: `signup:${result.org.id}`,
       title: "Nouvelle demande d'espace",
-      message: `${result.org.name} a créé son espace et attend une validation.`,
+      message: `${plainLabel(result.org.name)} a créé son espace et attend une validation.`,
       priority: 4,
       url: `${appUrl()}/super-admin/organizations/${result.org.slug}`,
     }))

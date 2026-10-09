@@ -413,7 +413,7 @@ const cases: [string, NotificationPayload][] = [
   ["signup_confirmation", {
     kind: "signup_confirmation",
     recipient: { email: "camille@example.org" },
-    data: { contactName: "Camille", organizationName: "Fête du village", confirmUrl: "https://www.benevol.app/inscription/confirmer?t=tok-1", hours: 24 },
+    data: { confirmUrl: "https://www.benevol.app/inscription/confirmer?t=tok-1", hours: 24 },
   }],
   ["operator_alert", {
     kind: "operator_alert",

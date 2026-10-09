@@ -61,8 +61,12 @@ export const DEFAULT_SEND_LIMITS = {
   globalPerMinute: 600,
   /** Emails triggered from a public page (password reset, confirmation, lost link) to one address, per hour. */
   recipientPerHour: 5,
-  /** Sign-up confirmation emails of the whole platform, per hour (#810): the form must not become a mail cannon. */
-  signupConfirmationsPerHour: 30,
+  /**
+   * Sign-up confirmation emails of the whole platform, per hour (#810): the form must not become a
+   * mail cannon. A trade-off: someone can use it up on purpose and delay real sign-ups for up to an
+   * hour (past the per-IP and per-address limits); the operator is alerted when it is reached.
+   */
+  signupConfirmationsPerHour: 60,
 } as const
 
 export type SendLimits = { -readonly [K in keyof typeof DEFAULT_SEND_LIMITS]: number }

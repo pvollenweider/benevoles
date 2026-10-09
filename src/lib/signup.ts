@@ -22,9 +22,16 @@ export const SIGNUP_LINK_HOURS = 24
 /** Below this, the form was filled by a script. */
 export const SIGNUP_MIN_FILL_MS = 3000
 
+/**
+ * A name typed on a public form must not carry a link, an address or a line break: it is shown
+ * to the operator and in the space, and must never become a way to pass a message or a link.
+ */
+const LINKISH = /(https?:\/\/|www\.|@|[\r\n]|\.(com|net|org|ch|fr|io|ru|xyz|info|biz)\b)/i
+export const NO_LINK_MESSAGE = "Indiquez seulement un nom, sans lien ni adresse."
+
 export const signupSchema = z.object({
-  organizationName: z.string().trim().min(2, "Indiquez le nom de l'association (2 caractères au moins).").max(100, "Le nom de l'association est trop long (100 caractères au plus)."),
-  contactName: z.string().trim().min(2, "Indiquez votre nom (2 caractères au moins).").max(100, "Votre nom est trop long (100 caractères au plus)."),
+  organizationName: z.string().trim().min(2, "Indiquez le nom de l'association (2 caractères au moins).").max(100, "Le nom de l'association est trop long (100 caractères au plus).").refine((v) => !LINKISH.test(v), NO_LINK_MESSAGE),
+  contactName: z.string().trim().min(2, "Indiquez votre nom (2 caractères au moins).").max(100, "Votre nom est trop long (100 caractères au plus).").refine((v) => !LINKISH.test(v), NO_LINK_MESSAGE),
   email: z.string().trim().toLowerCase().email("Indiquez une adresse email valide, par exemple nom@exemple.org.").max(200),
   /** Honeypot: hidden from people, filled by naive scripts. */
   website: z.string().optional(),
@@ -74,3 +81,10 @@ export function slugify(name: string): string {
     .replace(/^-+|-+$/g, "")
     .slice(0, 60)
 }
+
+/** Typed text shown in an operator alert: one line, no link-like part, 80 characters at most. */
+export function plainLabel(text: string): string {
+  const flat = text.replace(/[\r\n\t]+/g, " ").replace(/https?:\/\/\S+|www\.\S+/gi, "[lien retiré]").replace(/\s+/g, " ").trim()
+  return flat.length > 80 ? `${flat.slice(0, 79)}…` : flat
+}
+

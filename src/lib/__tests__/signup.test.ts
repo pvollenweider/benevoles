@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest"
-import { confirmable, looksAutomated, signupOpen, signupSchema, slugify, SIGNUP_MIN_FILL_MS } from "../signup"
+import { confirmable, looksAutomated, NO_LINK_MESSAGE, plainLabel, signupOpen, signupSchema, slugify, SIGNUP_MIN_FILL_MS } from "../signup"
+import { render } from "../notifications/templates"
 import { memoryStore } from "../rate-limit"
 import { sendWindows, takeSendAllowance, type SendLimits } from "../notifications/send-limits"
 
@@ -55,3 +56,27 @@ describe("sign-up confirmation emails and the sending limits (#810)", () => {
     expect(await send("d@example.org")).toMatchObject({ ok: false, limit: "signup_per_hour", drop: true })
   })
 })
+
+// Security review of part 4b: typed text must never become a phishing vector.
+describe("typed text and phishing (#810)", () => {
+  it("refuses links, addresses and line breaks in the names", () => {
+    for (const organizationName of ["Gagnez sur http://evil.example", "www.evil.example", "Fête chez bob@evil.example", "Fête\nCliquez", "evil.com"]) {
+      const r = signupSchema.safeParse({ organizationName, contactName: "Camille", email: "camille@example.org" })
+      expect(!r.success && r.error.issues[0].message).toBe(NO_LINK_MESSAGE)
+    }
+    expect(signupSchema.safeParse({ organizationName: "Fête du village de Saint-Légier", contactName: "Camille Dupont-Muller", email: "c@example.org" }).success).toBe(true)
+  })
+
+  it("sends a confirmation email with no typed text at all", () => {
+    const email = render({ kind: "signup_confirmation", recipient: { email: "victim@example.org" }, data: { confirmUrl: "https://www.benevol.app/inscription/confirmer?t=x", hours: 24, organizationName: "EVIL TEXT", contactName: "EVIL NAME" } })
+    expect(email.html).not.toContain("EVIL")
+    expect(email.text).not.toContain("EVIL")
+    expect(email.text).toContain("https://www.benevol.app/inscription/confirmer?t=x")
+  })
+
+  it("flattens typed text for an operator alert: one line, no link, 80 characters at most", () => {
+    expect(plainLabel("Fête\n  du village https://evil.example/x")).toBe("Fête du village [lien retiré]")
+    expect(plainLabel("x".repeat(200))).toHaveLength(80)
+  })
+})
+
