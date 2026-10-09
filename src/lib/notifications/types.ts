@@ -38,6 +38,7 @@ export type NotificationKind =
   | "open_shifts"
   | "operator_alert"
   | "signup_confirmation"
+  | "signup_account_link"
   | "space_approved"
 
 /** Delivery attempts before the outbox gives up (5 min, 10, 20, 40, 80 between them). */

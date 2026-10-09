@@ -289,6 +289,32 @@ export function renderSignupConfirmation(p: NotificationPayload): RenderedEmail 
   return { subject, html, text }
 }
 
+/**
+ * The link to choose a password, right after a self-service sign-up is confirmed (#810). The
+ * browser already goes there; this email is the copy for a person who closed the page, since an
+ * inactive account cannot use « Mot de passe oublié ». No typed text, like the confirmation: it
+ * goes to the address that has just been confirmed.
+ */
+export function renderSignupAccountLink(p: NotificationPayload): RenderedEmail {
+  const d = p.data as { inviteUrl: string; days: number }
+  const subject = "Choisissez votre mot de passe benevol.app"
+  const text = [
+    `Bonjour,`,
+    ``,
+    `Votre espace benevol.app est créé. Si vous n'avez pas encore choisi votre mot de passe, ouvrez ce lien (valable ${d.days} jours) :`,
+    d.inviteUrl,
+    ``,
+    `Si vous l'avez déjà choisi, ignorez cet email.`,
+  ].join("\n")
+  const html = wrap(`
+    <h2 style="margin:0 0 0.5em">Choisissez votre mot de passe</h2>
+    <p>Bonjour,</p>
+    <p>Votre espace benevol.app est créé. Si vous n'avez pas encore choisi votre mot de passe, ouvrez ce lien, valable ${d.days} jours :</p>
+    <p style="margin-top:1.5em">${btn(d.inviteUrl, "Choisir mon mot de passe")}</p>
+    <p style="color:#4b5563;font-size:0.9em;margin-top:1.5em">Si vous l'avez déjà choisi, ignorez cet email.</p>
+  `, "Votre espace benevol.app est créé : choisissez votre mot de passe.")
+  return { subject, html, text }
+}
 
 /** The operator validated a space created by self-service sign-up (#810): it can publish and email. */
 export function renderSpaceApproved(p: NotificationPayload): RenderedEmail {

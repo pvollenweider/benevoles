@@ -13,7 +13,7 @@ type State = "ok" | "unknown" | "expired" | "used"
 const STATE_TEXT: Record<Exclude<State, "ok">, { title: string; text: string }> = {
   unknown: { title: "Lien non valable", text: "Ce lien de confirmation n'est pas valable. Refaites une demande depuis la page d'inscription." },
   expired: { title: "Lien expiré", text: "Ce lien de confirmation a expiré : il était valable 24 heures. Refaites une demande depuis la page d'inscription." },
-  used: { title: "Demande déjà confirmée", text: "Cette demande est déjà confirmée. Si vous n'avez pas encore choisi votre mot de passe, utilisez le lien reçu après la confirmation, ou « Mot de passe oublié » une fois votre compte activé." },
+  used: { title: "Demande déjà confirmée", text: "Cette demande est déjà confirmée. Si vous n'avez pas encore choisi votre mot de passe, utilisez le lien de l'email « Choisissez votre mot de passe benevol.app », valable 7 jours. Une fois votre mot de passe choisi, « Mot de passe oublié » sur la page de connexion vous en envoie un nouveau si besoin." },
 }
 
 /**

@@ -137,6 +137,21 @@ export async function confirmSignupRequest(token: string, now: Date = new Date()
   })
   if (!result.ok) return result
 
+  const inviteUrl = inviteLink(appUrl(), setupToken)
+  // A copy of the link by email, for a person who closes the page before choosing a password.
+  // A platform email (no organisation): the space awaits validation and the account is still
+  // inactive, which the organisation check would refuse; the address was just confirmed.
+  try {
+    const ids = await enqueueNotifications([{
+      kind: "signup_account_link",
+      recipient: { email: req.email },
+      data: { inviteUrl, days: ACCOUNT_LINK_DAYS },
+    }])
+    try { deliverAfterResponse(ids) } catch { /* outside a request: the next outbox run sends it */ }
+  } catch (e) {
+    reportError("signup.account_link")(e)
+  }
+
   // The operator is told at once (ntfy + email, #810); a failure never blocks the sign-up.
   void import("@/lib/operator-alerts")
     .then((m) => m.notifyOperator({
@@ -148,5 +163,5 @@ export async function confirmSignupRequest(token: string, now: Date = new Date()
     }))
     .catch(reportError("signup.operator_alert"))
 
-  return { ok: true, inviteUrl: inviteLink(appUrl(), setupToken), organizationSlug: result.org.slug }
+  return { ok: true, inviteUrl, organizationSlug: result.org.slug }
 }

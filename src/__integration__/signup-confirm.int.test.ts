@@ -33,6 +33,7 @@ describe.skipIf(!url)("sign-up confirmation on Postgres (#810)", () => {
   const orgIds: string[] = []
 
   afterAll(async () => {
+    await prisma.notificationOutbox.deleteMany({ where: { payload: { path: ["recipient", "email"], string_starts_with: tag } } })
     await prisma.signupRequest.deleteMany({ where: { email: { startsWith: tag } } })
     await prisma.adminUser.deleteMany({ where: { email: { startsWith: tag } } })
     await prisma.organization.deleteMany({ where: { id: { in: orgIds } } })
@@ -58,6 +59,15 @@ describe.skipIf(!url)("sign-up confirmation on Postgres (#810)", () => {
     expect(org.admins[0]).toMatchObject({ email: `${tag}-a@example.org`, role: "admin", isActive: false })
     expect(org.admins[0].setupTokenHash).toBeTruthy()
     expect(notify).toHaveBeenCalledWith(expect.objectContaining({ key: `signup:${org.id}`, priority: 4, message: expect.stringContaining("« Fête de village, une centaine de bénévoles. »") }))
+
+    // The link to choose a password also leaves by email, as a platform email (no organisation:
+    // the space awaits validation and the account is inactive), to the confirmed address only.
+    type Payload = { kind: string; recipient: { email: string }; data: { inviteUrl: string } }
+    const links = (await prisma.notificationOutbox.findMany({ where: { payload: { path: ["kind"], equals: "signup_account_link" } } }))
+      .filter((row) => (row.payload as Payload).recipient.email === `${tag}-a@example.org`)
+    expect(links).toHaveLength(1)
+    expect(links[0].organizationId).toBeNull()
+    expect((links[0].payload as Payload).data.inviteUrl).toBe(result.inviteUrl)
 
     // A second click: refused, nothing more created.
     expect(await confirmSignupRequest(`${tag}-a`)).toEqual({ ok: false, reason: "used" })

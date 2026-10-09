@@ -141,6 +141,7 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   release_available: "Nouvelle version disponible",
   operator_alert: "Alerte à l'opérateur",
   signup_confirmation: "Confirmation d'une demande d'espace",
+  signup_account_link: "Lien pour choisir son mot de passe après une demande d'espace",
   space_approved: "Espace activé",
   addresses_to_verify_summary: "Résumé quotidien des adresses à vérifier",
   open_shifts: "Créneaux à compléter proposés à des membres",

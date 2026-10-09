@@ -17,7 +17,7 @@ import { renderReminderJ2, renderReminderJ1, renderReminderDd, renderManualRemin
 import { renderWaitlistConfirmation, renderWaitlistOffered } from "./waitlist"
 import { renderSectorLeaderInvite, renderSectorLeaderNewSignup, renderSectorLeaderWithdrawal } from "./sector-leaders"
 import { renderOpenShifts } from "./open-shifts"
-import { renderAdminNotification, renderWithdrawalAdminNotice, renderPasswordReset, renderAdminWelcome, renderProductUpdate, renderReleaseAvailable, renderAddressesToVerifySummary, renderOperatorAlert, renderSignupConfirmation, renderSpaceApproved } from "./administration"
+import { renderAdminNotification, renderWithdrawalAdminNotice, renderPasswordReset, renderAdminWelcome, renderProductUpdate, renderReleaseAvailable, renderAddressesToVerifySummary, renderOperatorAlert, renderSignupConfirmation, renderSignupAccountLink, renderSpaceApproved } from "./administration"
 
 export type { RenderedEmail } from "./shared"
 
@@ -74,6 +74,8 @@ function renderKind(payload: NotificationPayload): RenderedEmail {
       return renderOperatorAlert(payload)
     case "signup_confirmation":
       return renderSignupConfirmation(payload)
+    case "signup_account_link":
+      return renderSignupAccountLink(payload)
     case "space_approved":
       return renderSpaceApproved(payload)
     case "registration_link_resend":
