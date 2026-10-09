@@ -21,8 +21,8 @@ vi.mock("@/lib/withdrawal-notifications", () => ({ buildWithdrawalNotifications 
 vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications, deliverAfterResponse }))
 
 const shift = { id: "s1", roleName: "Bar", label: "Bar", date: new Date("2026-07-04"), startTime: "10:00", endTime: "12:00", capacity: 2 }
-const event = { id: "e1", title: "Fête", organizationId: "org-1", organization: { slug: "org" } }
-const volunteer = { firstName: "Chloé", lastName: "Roy" }
+const event = { id: "e1", title: "Fête", organizationId: "org-1", organization: { slug: "org", timeZone: "Europe/Zurich" } }
+const volunteer = { firstName: "Chloé", lastName: "Roy", email: "chloe@example.com" }
 
 const del = (body?: unknown) =>
   new Request("http://localhost/api/public/registrations/tok", {
@@ -165,7 +165,41 @@ describe("DELETE /api/public/registrations/[token]", () => {
   it.each(["waiting", "offered"])("does not notify the organization when leaving the waitlist or declining an offer (%s)", async (status) => {
     await withdraw(status)
     expect(buildWithdrawalNotifications).not.toHaveBeenCalled()
-    expect(enqueueNotifications).not.toHaveBeenCalled()
+    expect(enqueueNotifications.mock.calls.flatMap(([payloads]) => payloads).map((p: { kind: string }) => p.kind)).toEqual(["registration_withdrawn"])
+  })
+
+  // ── Telling the volunteer (#809) ───────────────────────────────────────────
+
+  const volunteerEmail = () => enqueueNotifications.mock.calls.flatMap(([payloads]) => payloads).find((p: { kind: string }) => p.kind === "registration_withdrawn")
+
+  it.each([
+    ["active", "Ton inscription a été annulée"],
+    ["requested", "Ta demande d'inscription a été retirée"],
+    ["waiting", "Tu as quitté la liste d'attente"],
+    ["offered", "Tu as refusé la place qui t'était proposée"],
+  ])("tells the volunteer what was done from their link (%s)", async (status, what) => {
+    await withdraw(status)
+    expect(volunteerEmail()).toMatchObject({
+      recipient: { email: "chloe@example.com", name: "Chloé Roy" },
+      organizationId: "org-1",
+      volunteerId: "v1",
+      dedupeKey: "registration_withdrawn:r1",
+      data: { what, eventTitle: "Fête", shift: { roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00" } },
+    })
+    expect(volunteerEmail().data.when).toMatch(/^le \d{1,2} \S+ à \d{2}:\d{2}$/)
+  })
+
+  it("sends no confirmation to a volunteer without an email", async () => {
+    findFirst.mockResolvedValue({ id: "r1", eventId: "e1", shiftId: "s1", volunteerId: "v1", status: "waiting", shift, event, volunteer: { ...volunteer, email: null } })
+    const { DELETE } = await import("@/app/api/public/registrations/[token]/route")
+    expect((await DELETE(del(), { params: Promise.resolve({ token: "tok" }) })).status).toBe(200)
+    expect(volunteerEmail()).toBeUndefined()
+  })
+
+  it("a failing confirmation does not fail the withdrawal", async () => {
+    enqueueNotifications.mockRejectedValue(new Error("db down"))
+    const res = await withdraw("waiting")
+    expect(res.status).toBe(200)
   })
 
   it("a double DELETE (double click) sends one email: the second finds the registration already settled", async () => {

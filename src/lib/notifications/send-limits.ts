@@ -41,7 +41,7 @@ const BULK: readonly NotificationKind[] = ["targeted_message", "member_invite", 
 const ACCOUNT: readonly NotificationKind[] = ["admin_invite", "admin_welcome"]
 
 /** Kinds anyone can trigger from a public page: capped per recipient address. */
-export const PUBLIC_TRIGGERED: readonly NotificationKind[] = ["password_reset", "registration_confirmation", "registration_link_resend", "signup_confirmation", "signup_account_link"]
+export const PUBLIC_TRIGGERED: readonly NotificationKind[] = ["password_reset", "registration_confirmation", "registration_link_resend", "signup_confirmation", "signup_account_link", "registration_withdrawn"]
 
 export function sendCategory(kind: NotificationKind): SendCategory {
   if (BULK.includes(kind)) return "bulk"

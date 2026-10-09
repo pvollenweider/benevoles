@@ -215,6 +215,46 @@ export function renderRegistrationRemoved(p: NotificationPayload): RenderedEmail
   return { subject, html, text }
 }
 
+// ── Retrait fait par le bénévole depuis son lien ─────────────────────────────
+
+/**
+ * The volunteer cancelled, left a waitlist, refused an offered place or withdrew a request from
+ * their personal link (#809): what changed and when, and what to do if it wasn't them. Sent with
+ * the organisation's reply-to: answering reaches the organisers. No link: the one that was used
+ * may be in someone else's hands, and the organisers can put things back.
+ */
+export function renderRegistrationWithdrawn(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    volunteerName: string
+    eventTitle: string
+    what: string
+    when: string
+    shift: { roleName: string; label?: string | null; date: string; startTime: string; endTime: string }
+  }
+  const firstName = d.volunteerName.split(" ")[0]
+  const line = spokenShift(d.shift)
+  const subject = `${d.what} : ${d.eventTitle}`
+  const notYou = "Ce n'était pas toi ? Réponds à cet email pour prévenir l'organisation."
+
+  const text = [
+    `Hello ${firstName},`,
+    ``,
+    `${d.what}, ${d.when}, depuis ton lien personnel :`,
+    `- ${d.eventTitle}, ${line}`,
+    ``,
+    notYou,
+  ].join("\n")
+
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)},</h2>
+    <p style="color:#555">${escapeHtml(d.what)}, ${escapeHtml(d.when)}, depuis ton lien personnel :</p>
+    <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em"><li><strong>${escapeHtml(d.eventTitle)}</strong>, ${escapeHtml(line)}</li></ul>
+    <p style="color:#555">${escapeHtml(notYou)}</p>
+  `, `${d.what} : ${d.eventTitle}.`)
+
+  return { subject, html, text }
+}
+
 // ── Notif modification d'un shift ────────────────────────────────────────────
 
 export function renderShiftModified(p: NotificationPayload): RenderedEmail {

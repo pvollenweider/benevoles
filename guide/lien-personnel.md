@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: VOLUNTEER_SESSION_AVAILABILITY -->
 
-L'email de confirmation contient ton **lien personnel**. Il ouvre [ta page personnelle](ma-page-personnelle.md), où tu retrouves tes inscriptions et peux les annuler : **ne le partage pas**.
+L'email de confirmation contient ton **lien personnel**. Il ouvre [ta page personnelle](ma-page-personnelle.md), où tu retrouves tes inscriptions et peux les annuler : **ne le partage pas**. Chaque annulation faite avec ce lien t'est confirmée par email : si tu en reçois une que tu n'as pas faite, réponds à cet email pour prévenir l'organisation.
 
 Sur ta page personnelle, l'encadré **Ton lien personnel** rappelle la date du dernier email qui le contenait et propose **Recevoir ce lien par email** pour l'avoir à nouveau dans ta boîte (au plus trois envois par heure). Si l'organisation a indiqué une adresse de contact, un lien **Écrire à l'organisation** ouvre ta messagerie avec l'objet déjà rempli.
 

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import {
   WITHDRAWABLE_STATUSES, WITHDRAWAL_MESSAGE_MAX, planVolunteerWithdraw, withdrawCopy, withdrawDoneMessage,
-  withdrawFailureMessage, withdrawalMessageHint,
+  withdrawFailureMessage, withdrawalMessageHint, withdrawalConfirmation, withdrawalMoment,
 } from "../volunteer-withdraw"
 import { withdrawRequestSchema } from "../volunteer-withdraw-schema"
 
@@ -143,5 +143,20 @@ describe("withdraw wording", () => {
   it("no longer says « prévenu·e » when leaving the waitlist", () => {
     const c = withdrawCopy("waiting", "Bar")
     expect(c.confirmBefore + "Bar" + c.confirmAfter).toBe("Tu ne recevras plus de message si une place se libère sur le créneau Bar.")
+  })
+})
+
+describe("withdrawal confirmation sent to the volunteer (#809)", () => {
+  it("says what was done, by previous status", () => {
+    expect(withdrawalConfirmation("active")).toBe("Ton inscription a été annulée")
+    expect(withdrawalConfirmation("requested")).toBe("Ta demande d'inscription a été retirée")
+    expect(withdrawalConfirmation("waiting")).toBe("Tu as quitté la liste d'attente")
+    expect(withdrawalConfirmation("offered")).toBe("Tu as refusé la place qui t'était proposée")
+  })
+
+  it("dates the change in the organisation's time zone", () => {
+    const at = new Date("2026-10-09T22:30:00Z")
+    expect(withdrawalMoment(at, "Europe/Zurich")).toBe("le 10 octobre à 00:30")
+    expect(withdrawalMoment(at, "UTC")).toBe("le 9 octobre à 22:30")
   })
 })

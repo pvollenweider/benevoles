@@ -140,3 +140,23 @@ export function withdrawFailureMessage(i: { status?: number; network?: boolean }
   if (i.status === 429) return "Trop de tentatives : rien n'a été annulé. Réessaie dans une heure."
   return "L'annulation n'a pas abouti : rien n'a été annulé. Réessaie dans un moment."
 }
+
+/**
+ * What the volunteer just did from their personal link, said back to them by email (#809): a link
+ * passed on or seen by someone else can change a registration, so the volunteer learns of it.
+ */
+export function withdrawalConfirmation(previousStatus: string): string {
+  switch (previousStatus) {
+    case "requested": return "Ta demande d'inscription a été retirée"
+    case "waiting": return "Tu as quitté la liste d'attente"
+    case "offered": return "Tu as refusé la place qui t'était proposée"
+    default: return "Ton inscription a été annulée"
+  }
+}
+
+/** When the change was made, in the organisation's time zone: « le 9 octobre à 14:05 ». */
+export function withdrawalMoment(at: Date, timeZone: string): string {
+  const day = at.toLocaleDateString("fr-FR", { timeZone, day: "numeric", month: "long" })
+  const time = at.toLocaleTimeString("fr-FR", { timeZone, hour: "2-digit", minute: "2-digit" })
+  return `le ${day} à ${time}`
+}
