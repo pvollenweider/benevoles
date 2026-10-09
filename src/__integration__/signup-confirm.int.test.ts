@@ -63,6 +63,10 @@ describe.skipIf(!url)("sign-up confirmation on Postgres (#810)", () => {
     expect(org.publicationApprovedAt).toBeNull()
     expect(org.outboundEmailApprovedAt).toBeNull()
     expect(org.signupDescription).toBe("Fête de village, une centaine de bénévoles.")
+    // The statistics (#810): marked as a sign-up space, counted by the database triggers.
+    expect(org.signupAt).toBeInstanceOf(Date)
+    const counters = await prisma.platformCounter.findMany({ where: { metric: { in: ["signup_requests", "signup_spaces"] } } })
+    expect(counters.map((c) => c.metric).sort()).toEqual(["signup_requests", "signup_spaces"])
     expect(org.admins).toHaveLength(1)
     expect(org.admins[0]).toMatchObject({ email: `${tag}-a@example.org`, role: "admin", isActive: false })
     expect(org.admins[0].setupTokenHash).toBeTruthy()
