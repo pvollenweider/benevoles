@@ -42,7 +42,7 @@ export default async function InactivityPage() {
       {mode !== "off" && (rows.length === 0 ? (
         <p className="text-sm text-gray-700">Aucune organisation concernée.</p>
       ) : (
-        <div tabIndex={0} role="region" aria-labelledby="page-heading" className="bg-white border border-gray-200 rounded-2xl overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+        <div tabIndex={0} role="region" aria-label="Organisations concernées" className="bg-white border border-gray-200 rounded-2xl overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
           <table className="w-full text-sm">
             <caption className="sr-only">Organisations concernées, la plus proche de la première étape en premier</caption>
             <thead className="bg-gray-50 text-left text-gray-700">
