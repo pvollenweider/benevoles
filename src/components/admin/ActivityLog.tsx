@@ -32,6 +32,8 @@ export const ACTION_LABEL: Record<string, string> = {
   "member.deactivated": "a désactivé un membre",
   // #516: says that an erasure happened, never whose (the entry points to the organisation).
   "member.erased": "a effacé les données personnelles d'un membre",
+  "organization.suspended": "a suspendu l'organisation pour abus",
+  "organization.suspension_lifted": "a levé la suspension de l'organisation",
   "adminuser.invited": "a invité un admin",
   "notification.retried": "a renvoyé un email",
   "organization.notifications_updated": "a modifié les réglages de notification",

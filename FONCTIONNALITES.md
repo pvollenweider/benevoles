@@ -428,7 +428,8 @@ Accessible uniquement aux comptes avec rôle `super_admin` (protégé au niveau 
 - Création d'une organisation : nom, slug auto-généré, email + nom du premier admin
   - Génère un **lien d'invitation** à durée limitée (7 jours) pour le premier admin
   - Aucun mot de passe temporaire — le compte est activé lors de la première connexion
-- Activation / désactivation d'une organisation
+- Activation / désactivation d'une organisation ; la désactivation annule les emails encore en attente (#814)
+- **Suspension pour abus** (#810, `src/lib/org-suspension.ts`) : état distinct, avec la raison notée par l'opérateur ; mêmes effets qu'une désactivation, mais jamais effacée par le nettoyage nocturne et jamais réactivée par « Réactiver » : la suspension se lève d'abord, l'organisation restant désactivée jusqu'à une réactivation séparée. Inscrite au journal de l'organisation
 - **Édition inline** : nom et slug modifiables directement depuis la fiche organisation
 - **URLs par slug** : `/super-admin/organizations/<slug>` au lieu de l'identifiant interne
 - **Basculement d'organisation** : bouton « Gérer → » bascule le contexte admin vers l'organisation choisie (cookie `sa-org-id`) sans déconnexion

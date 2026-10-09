@@ -20,6 +20,8 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
       name: true,
       slug: true,
       active: true,
+      suspendedAt: true,
+      suspensionReason: true,
       createdAt: true,
       updatedAt: true,
       _count: {
@@ -51,6 +53,7 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
       org={{
         ...org,
         createdAt: org.createdAt.toISOString(),
+        suspendedAt: org.suspendedAt?.toISOString() ?? null,
         updatedAt: org.updatedAt.toISOString(),
         admins: org.admins.map((a) => ({ ...a, createdAt: a.createdAt.toISOString() })),
       }}

@@ -3,11 +3,13 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useState, useTransition } from "react"
+import { useEffect, useRef, useState, useTransition } from "react"
+import { flushSync } from "react-dom"
 import { RESENT_LINK_NOTICE } from "@/lib/invite-link"
 import { announce } from "@/lib/announce"
 import { requestJson } from "@/lib/use-submit"
-import { deleteOrgRecap, toggleOrgRecap } from "@/lib/action-recap"
+import { deleteOrgRecap, liftSuspensionRecap, suspendOrgRecap, toggleOrgRecap } from "@/lib/action-recap"
+import { ORG_STATUS_LABELS, orgStatus, SUSPENSION_REASON_MAX, SUSPENSION_REASON_MIN } from "@/lib/org-suspension"
 import { formatCount, type UsageRow } from "@/lib/usage-counters"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useRouter } from "next/navigation"
@@ -33,6 +35,8 @@ type Org = {
   name: string
   slug: string
   active: boolean
+  suspendedAt: string | null
+  suspensionReason: string | null
   createdAt: string
   updatedAt: string
   _count: OrgCount
@@ -45,7 +49,22 @@ export default function OrgDetail({ org, cumulative }: { org: Org; cumulative: U
   const [toggling, setToggling] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [deleteError, setDeleteError] = useState<string | null>(null)
-  const [confirming, setConfirming] = useState<"toggle" | "delete" | null>(null)
+  const [confirming, setConfirming] = useState<"toggle" | "delete" | "suspend" | "lift" | null>(null)
+  // Suspension for abuse (#810): its own action, with the operator's reason.
+  const [suspensionReason, setSuspensionReason] = useState("")
+  // The reason's own error, tied to the field (never the modal's error, which can't describe it).
+  const [reasonError, setReasonError] = useState<string | null>(null)
+  const reasonRef = useRef<HTMLTextAreaElement>(null)
+  const status = orgStatus(org)
+  // After a change of state, the button that opened the dialog is gone (« Suspendre pour abus »
+  // becomes « Lever la suspension », and back): focus goes to the page heading instead of <body>.
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  const previousStatus = useRef(status)
+  useEffect(() => {
+    if (previousStatus.current === status) return
+    previousStatus.current = status
+    headingRef.current?.focus()
+  }, [status])
   const [toggleError, setToggleError] = useState<string | null>(null)
   const [outcome, setOutcome] = useState("")
   // Resending the invite of a pending admin: the new link is shown (the old one is dead, #269).
@@ -102,6 +121,33 @@ export default function OrgDetail({ org, cumulative }: { org: Org; cumulative: U
     if (!result.ok) { setToggleError(result.error); return }
     setConfirming(null)
     announce(setOutcome, org.active ? "Organisation désactivée." : "Organisation réactivée.")
+    refresh()
+  }
+
+  function openSuspension(kind: "suspend" | "lift") {
+    setToggleError(null)
+    setReasonError(null)
+    setSuspensionReason("")
+    setConfirming(kind)
+  }
+
+  async function runSuspension(kind: "suspend" | "lift") {
+    if (kind === "suspend" && suspensionReason.trim().length < SUSPENSION_REASON_MIN) {
+      // Cleared then set, so the alert speaks again on a second failed try; focus to the field.
+      flushSync(() => setReasonError(null))
+      flushSync(() => setReasonError(`Indiquez la raison de la suspension, entre ${SUSPENSION_REASON_MIN} et ${SUSPENSION_REASON_MAX} caractères.`))
+      reasonRef.current?.focus()
+      return
+    }
+    setReasonError(null)
+    setToggling(true)
+    setToggleError(null)
+    const body = kind === "suspend" ? { suspended: true, suspensionReason: suspensionReason.trim() } : { suspended: false }
+    const result = await requestJson(() => patch(body), "La modification n'a pas été enregistrée.")
+    setToggling(false)
+    if (!result.ok) { setToggleError(result.error); return }
+    setConfirming(null)
+    announce(setOutcome, kind === "suspend" ? "Organisation suspendue." : "Suspension levée : l'organisation reste désactivée.")
     refresh()
   }
 
@@ -177,15 +223,14 @@ export default function OrgDetail({ org, cumulative }: { org: Org; cumulative: U
             <span className="text-gray-300">/</span>
             <span className="text-sm text-gray-600">{org.name}</span>
           </div>
-          <h1 className="text-xl font-bold text-gray-900 mt-1">{org.name}</h1>
+          <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 mt-1 focus:outline-none">{org.name}</h1>
           <div className="flex items-center gap-3 mt-1">
             <span className="font-mono text-xs text-gray-500">{org.slug}</span>
-            {org.active ? (
-              <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">Active</span>
-            ) : (
-              <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-medium">Désactivée</span>
-            )}
+            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${status === "active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>{ORG_STATUS_LABELS[status]}</span>
           </div>
+          {status === "suspended" && org.suspensionReason && (
+            <p className="text-sm text-gray-800 mt-1 break-words">Raison de la suspension : {org.suspensionReason}</p>
+          )}
           <p className="text-xs text-gray-500 mt-1">Créée le {createdAt}</p>
         </div>
 
@@ -197,15 +242,34 @@ export default function OrgDetail({ org, cumulative }: { org: Org; cumulative: U
           >
             Gérer →
           </a>
-          <button
-            type="button"
-            onClick={toggleActive}
-            className={`text-sm px-4 py-2 rounded-xl font-medium ${
-              org.active ? "bg-red-700 text-white hover:bg-red-800" : "bg-green-700 text-white hover:bg-green-800"
-            }`}
-          >
-            {org.active ? "Désactiver" : "Réactiver"}
-          </button>
+          {status === "suspended" ? (
+            <button
+              type="button"
+              onClick={() => openSuspension("lift")}
+              className="text-sm px-4 py-2 rounded-xl font-medium border border-gray-300 text-gray-800 hover:bg-gray-50"
+            >
+              Lever la suspension
+            </button>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={toggleActive}
+                className={`text-sm px-4 py-2 rounded-xl font-medium ${
+                  org.active ? "bg-red-700 text-white hover:bg-red-800" : "bg-green-700 text-white hover:bg-green-800"
+                }`}
+              >
+                {org.active ? "Désactiver" : "Réactiver"}
+              </button>
+              <button
+                type="button"
+                onClick={() => openSuspension("suspend")}
+                className="text-sm px-4 py-2 rounded-xl font-medium border border-red-300 text-red-700 hover:bg-red-50"
+              >
+                Suspendre pour abus
+              </button>
+            </>
+          )}
           {!org.active && (
             <button
               type="button"
@@ -220,6 +284,29 @@ export default function OrgDetail({ org, cumulative }: { org: Org; cumulative: U
       <p role="status" className={outcome ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2" : "sr-only"}>{outcome}</p>
       {confirming === "toggle" && (
         <ConfirmActionModal recap={toggleOrgRecap(org.name, org.active)} busy={toggling} error={toggleError} onConfirm={() => void runToggle()} onCancel={() => setConfirming(null)} />
+      )}
+      {confirming === "suspend" && (
+        <ConfirmActionModal recap={suspendOrgRecap(org.name)} busy={toggling} error={toggleError} onConfirm={() => void runSuspension("suspend")} onCancel={() => setConfirming(null)}>
+          <label htmlFor="suspension-reason" className="block text-sm font-medium text-gray-900">Raison de la suspension</label>
+          <p id="suspension-reason-hint" className="text-xs text-gray-600">Entre {SUSPENSION_REASON_MIN} et {SUSPENSION_REASON_MAX} caractères. Visible du super admin seulement. Pas de donnée personnelle inutile.</p>
+          <textarea
+            ref={reasonRef}
+            id="suspension-reason"
+            aria-describedby={reasonError ? "suspension-reason-hint suspension-reason-error" : "suspension-reason-hint"}
+            aria-invalid={reasonError ? true : undefined}
+            required
+            minLength={SUSPENSION_REASON_MIN}
+            maxLength={SUSPENSION_REASON_MAX}
+            rows={3}
+            value={suspensionReason}
+            onChange={(e) => setSuspensionReason(e.target.value)}
+            className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          />
+          <p id="suspension-reason-error" role="alert" className="text-sm text-red-800 mt-1">{reasonError}</p>
+        </ConfirmActionModal>
+      )}
+      {confirming === "lift" && (
+        <ConfirmActionModal recap={liftSuspensionRecap(org.name)} busy={toggling} error={toggleError} onConfirm={() => void runSuspension("lift")} onCancel={() => setConfirming(null)} />
       )}
       {confirming === "delete" && (
         <ConfirmActionModal
