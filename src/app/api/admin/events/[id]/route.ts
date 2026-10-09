@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { canPublish, PUBLICATION_PENDING_ERROR } from "@/lib/org-approval"
 import { NextResponse } from "next/server"
 import { localDateTimeToUtc, orgTimeZone } from "@/lib/time-zone"
 import { isValidWindow, localInputToUtc, WINDOW_ORDER_ERROR } from "@/lib/registration-window"
@@ -84,7 +85,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   const owned = await db.event.findFirst({
     where: { id },
-    select: { id: true, title: true, publicStatus: true, isListed: true, startDate: true, endDate: true, publicInstructions: true, remindersEnabled: true, requirePhone: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, organization: { select: { timeZone: true } } },
+    select: { id: true, title: true, publicStatus: true, isListed: true, startDate: true, endDate: true, publicInstructions: true, remindersEnabled: true, requirePhone: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, organization: { select: { timeZone: true, publicationApprovedAt: true } } },
   })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
@@ -92,6 +93,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // Whatever the interface (edit form, publish toggle, review page, direct call): no
   // publication without a live shift.
   if (isPublishing(owned.publicStatus, data.publicStatus)) {
+    // An organisation awaiting validation (#810) prepares everything but publishes nothing.
+    if (!canPublish(owned.organization)) return NextResponse.json({ error: PUBLICATION_PENDING_ERROR, code: "publication_pending" }, { status: 409 })
     const blocker = await publishBlocker(db, id)
     if (blocker) return NextResponse.json({ error: blocker }, { status: 409 })
   }

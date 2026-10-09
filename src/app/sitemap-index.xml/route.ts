@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { PUBLIC_ORG_WHERE } from "@/lib/org-approval"
 import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
 import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
@@ -26,7 +27,7 @@ export async function GET() {
   try {
     // Active organisations only: an inactive one has no public page (src/lib/resolve-org.ts).
     const rows = await prisma.organization.findMany({
-      where: { active: true },
+      where: PUBLIC_ORG_WHERE,
       select: {
         slug: true,
         updatedAt: true,

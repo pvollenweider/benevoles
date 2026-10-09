@@ -88,11 +88,15 @@ export async function POST(req: Request) {
   const setupTokenExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   const placeholderHash = await bcrypt.hash(generateToken(), 4)
 
+  // Created by the operator: both grants at once (#810, src/lib/org-approval.ts).
+  const approvedAt = new Date()
   const org = await db.organization.create({
     data: {
       name,
       slug,
       active: true,
+      publicationApprovedAt: approvedAt,
+      outboundEmailApprovedAt: approvedAt,
       admins: {
         create: {
           email: adminEmail,

@@ -36,7 +36,7 @@ describe("GET /sitemap-index.xml", () => {
       "https://lausanne-rocks.benevol.app/sitemap.xml",
     ])
     expect(xml).toContain("<lastmod>2026-10-01T00:00:00.000Z</lastmod>")
-    expect(m.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { active: true } }))
+    expect(m.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { active: true, publicationApprovedAt: { not: null } } }))
   })
 
   it("is a 404 on an organisation's host, on staging and on an unknown host", async () => {

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { ORG_INACTIVE_REASON } from "@/lib/outbox-org-cancel-reason"
+import { ORG_PENDING_REASON } from "@/lib/outbox-org-pending-reason"
 import { MAX_ATTEMPTS, type NotificationKind, type NotificationPayload } from "./notifications/types"
 import type { SmtpOutcome, SmtpReason } from "./notifications/smtp-outcome"
 import { MERGED_MEMBER_CANCEL_REASON } from "./outbox-merge-cancel-reason"
@@ -106,6 +107,7 @@ export function outboxErrorSentence(lastError: string | null): string | null {
   if (lastError === MEMBER_DELETED_CANCEL_REASON) return "Annulé : membre supprimé."
   if (lastError === "limit:recipient_per_hour") return "Annulé : trop de demandes pour cette adresse en une heure."
   if (lastError === ORG_INACTIVE_REASON) return "Annulé : organisation désactivée, jamais envoyé."
+  if (lastError === ORG_PENDING_REASON) return "Annulé : espace en attente de validation, les emails ne partent qu'à ses administrateurs."
   const decoded = decodeOutcomeReason(lastError)
   if (decoded) return sentenceFor(decoded)
   return "Échec technique de l'envoi (détail non disponible)."

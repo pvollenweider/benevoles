@@ -66,7 +66,7 @@ describe("GET /api/public/events — listed events of one organization", () => {
     const { GET } = await import("@/app/api/public/events/route")
     const res = await GET(new Request("http://localhost/api/public/events"))
     expect(res.status).toBe(200)
-    expect(publicFindMany.mock.calls[0][0].where).toEqual({ publicStatus: "published", isListed: true, organization: { slug: "fete", active: true } })
+    expect(publicFindMany.mock.calls[0][0].where).toEqual({ publicStatus: "published", isListed: true, organization: { slug: "fete", active: true, publicationApprovedAt: { not: null } } })
   })
 
   it("accepts ?org= and refuses a request without organization: no list across tenants", async () => {
@@ -75,6 +75,6 @@ describe("GET /api/public/events — listed events of one organization", () => {
     expect((await GET(new Request("http://localhost/api/public/events"))).status).toBe(404)
     expect(publicFindMany).not.toHaveBeenCalled()
     expect((await GET(new Request("http://localhost/api/public/events?org=fete"))).status).toBe(200)
-    expect(publicFindMany.mock.calls[0][0].where.organization).toEqual({ slug: "fete", active: true })
+    expect(publicFindMany.mock.calls[0][0].where.organization).toEqual({ slug: "fete", active: true, publicationApprovedAt: { not: null } })
   })
 })

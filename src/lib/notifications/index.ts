@@ -10,7 +10,7 @@
  */
 
 import { emailChannel } from "./channels/email"
-import { ORG_INACTIVE_REASON, organizationBlocksSending } from "./org-send-guard"
+import { organizationSendingVerdict } from "./org-send-guard"
 import { takeSendAllowance } from "./send-limits"
 import type { NotificationKind, NotificationPayload } from "./types"
 
@@ -25,9 +25,10 @@ import type { NotificationKind, NotificationPayload } from "./types"
 export async function sendNotification(
   payload: NotificationPayload,
 ): Promise<{ ok: true } | { ok: false; reason: string; permanent?: boolean; blocked?: true; held?: true; retryAfterMs?: number }> {
-  if (await organizationBlocksSending(payload.organizationId)) {
-    return { ok: false, reason: ORG_INACTIVE_REASON, permanent: true, blocked: true }
-  }
+  // Deactivated or missing organisation (#814), or one awaiting validation writing to someone other
+  // than its administrators (#810): refused, and the outbox cancels the row.
+  const refused = await organizationSendingVerdict(payload.organizationId, payload.recipient?.email)
+  if (refused) return { ok: false, reason: refused, permanent: true, blocked: true }
   const allowance = await takeSendAllowance(payload.organizationId, payload.kind, { recipientEmail: payload.recipient?.email })
   // Over the per-recipient cap: abandoned, like a cancellation (the outbox marks it « cancelled »,
   // never retried). Over any other limit: held until the window ends.
