@@ -123,6 +123,38 @@ export function sendWindows(organizationId: string | null | undefined, kind: Not
  */
 export type SendAllowance = { ok: true } | { ok: false; limit: string; retryAfterMs: number; drop?: true }
 
+const LIMIT_SENTENCES: Record<string, string> = {
+  recipient_per_hour: "trop de demandes publiques pour une même adresse en une heure",
+  global_per_minute: "plafond de la plateforme par minute",
+  org_per_minute: "plafond d'une organisation par minute",
+  org_per_day: "plafond d'une organisation par jour",
+  org_bulk_per_day: "plafond d'envois en masse d'une organisation par jour",
+  org_account_per_day: "plafond d'emails de compte d'une organisation par jour",
+}
+
+/**
+ * Default alert: Sentry, plus ntfy and email to the operator (#810). Called once per window (the
+ * first email held). The alert's key carries the hour: at most one operator email per limit,
+ * organisation and hour, whatever happens. Loaded lazily: operator-alerts queues through the
+ * outbox, which sends through this module.
+ */
+function alertOperator(limit: string, organizationId: string | null): void {
+  reportError(`email.limit.${limit}`)(new Error(`Email sending limit reached: ${limit}${organizationId ? ` (organisation ${organizationId})` : ""}`))
+  const base = (process.env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/$/, "")
+  const hour = new Date().toISOString().slice(0, 13)
+  void import("@/lib/operator-alerts")
+    .then((m) => m.notifyOperator({
+      key: `email-limit:${limit}:${organizationId ?? "platform"}:${hour}`,
+      title: "benevol.app : plafond d'envoi atteint",
+      message: limit === "recipient_per_hour"
+        ? `Emails abandonnés : ${LIMIT_SENTENCES[limit]}${organizationId ? ` (organisation ${organizationId})` : ""}. Les demandes suivantes pour cette adresse sont ignorées pendant l'heure.`
+        : `Emails retenus : ${LIMIT_SENTENCES[limit] ?? limit}${organizationId ? ` (organisation ${organizationId})` : ""}. Ils partiront à la fin de la fenêtre.`,
+      priority: 4,
+      url: base ? `${base}/super-admin/organizations` : undefined,
+    }))
+    .catch(reportError("email.limit.operator_alert"))
+}
+
 const defaultStore: RateLimitStore = process.env.NODE_ENV === "test" ? memoryStore() : postgresStore
 
 /**
@@ -142,7 +174,7 @@ export async function takeSendAllowance(
   opts: { store?: RateLimitStore; limits?: SendLimits; recipientEmail?: string | null; alert?: (limit: string, organizationId: string | null) => void } = {},
 ): Promise<SendAllowance> {
   const store = opts.store ?? defaultStore
-  const alert = opts.alert ?? ((limit, org) => reportError(`email.limit.${limit}`)(new Error(`Email sending limit reached: ${limit}${org ? ` (organisation ${org})` : ""}`)))
+  const alert = opts.alert ?? alertOperator
   const windows = sendWindows(organizationId, kind, opts.limits, opts.recipientEmail)
 
   // 1. Decide, from the windows as they are.

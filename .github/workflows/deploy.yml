@@ -162,6 +162,8 @@ jobs:
             --from-literal=EMAIL_FROM="${{ secrets.EMAIL_FROM }}" \
             --from-literal=EMAIL_REPLY_TO="${{ secrets.EMAIL_REPLY_TO }}" \
             --from-literal=ADMIN_NOTIFICATION_EMAIL="${{ secrets.ADMIN_NOTIFICATION_EMAIL }}" \
+            --from-literal=NTFY_URL="${{ secrets.NTFY_URL }}" \
+            --from-literal=NTFY_TOKEN="${{ secrets.NTFY_TOKEN }}" \
             --from-literal=CRON_SECRET="${{ secrets.CRON_SECRET }}" \
             --from-literal=VAPID_PUBLIC_KEY="${{ secrets.VAPID_PUBLIC_KEY }}" \
             --from-literal=VAPID_PRIVATE_KEY="${{ secrets.VAPID_PRIVATE_KEY }}" \

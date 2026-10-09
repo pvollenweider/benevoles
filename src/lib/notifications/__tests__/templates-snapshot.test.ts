@@ -410,6 +410,11 @@ const cases: [string, NotificationPayload][] = [
       editToken: null,
     },
   }],
+  ["operator_alert", {
+    kind: "operator_alert",
+    recipient: { email: "ops@example.org" },
+    data: { title: "benevol.app : plafond d'envoi atteint", message: "Le plafond org_per_minute est atteint.", url: "https://www.benevol.app/super-admin/organizations" },
+  }],
   ["release_available", {
     kind: "release_available",
     recipient,
@@ -484,6 +489,7 @@ describe("render — snapshot of every notification kind", () => {
       registration_refused: true,
       registration_removed: true,
       release_available: true,
+      operator_alert: true,
       addresses_to_verify_summary: true,
       open_shifts: true,
     }
