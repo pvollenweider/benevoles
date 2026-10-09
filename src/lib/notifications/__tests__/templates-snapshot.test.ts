@@ -410,6 +410,11 @@ const cases: [string, NotificationPayload][] = [
       editToken: null,
     },
   }],
+  ["space_approved", {
+    kind: "space_approved",
+    recipient: { email: "camille@example.org" },
+    data: { adminName: "Camille", organizationName: "Fête du village", adminUrl: "https://www.benevol.app/admin/events" },
+  }],
   ["signup_confirmation", {
     kind: "signup_confirmation",
     recipient: { email: "camille@example.org" },
@@ -496,6 +501,7 @@ describe("render — snapshot of every notification kind", () => {
       release_available: true,
       operator_alert: true,
       signup_confirmation: true,
+      space_approved: true,
       addresses_to_verify_summary: true,
       open_shifts: true,
     }

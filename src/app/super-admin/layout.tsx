@@ -1,4 +1,6 @@
 import { cookies } from "next/headers"
+import Link from "next/link"
+import { PENDING_ORG_WHERE } from "@/lib/org-review"
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import AdminNav from "@/components/admin/AdminNav"
@@ -34,10 +36,21 @@ export default async function SuperAdminLayout({ children }: { children: React.R
     dismissedVersion = admin?.releaseBannerDismissedVersion ?? null
   }
 
+  // #810: spaces created by self-service sign-up waiting for a validation.
+  const pendingCount = session.user?.role === "super_admin" ? await prisma.organization.count({ where: PENDING_ORG_WHERE }) : 0
+
   return (
     <div className="min-h-screen bg-gray-50">
       <SkipLink />
       <AdminNav userName={session.user?.name ?? "Super Admin"} role={session.user?.role} orgName={orgName} />
+      {pendingCount > 0 && (
+        <section aria-label="Espaces en attente de validation" className="bg-amber-50 border-b border-amber-200 px-4 py-3">
+          <p className="max-w-5xl mx-auto text-sm text-amber-950">
+            {pendingCount} espace{pendingCount > 1 ? "s attendent" : " attend"} une validation.{" "}
+            <Link href="/super-admin/organizations" className="font-medium underline underline-offset-2 hover:text-amber-800 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Voir les organisations</Link>
+          </p>
+        </section>
+      )}
       {releaseState && (
         <ReleaseBanner
           currentVersion={pkg.version}

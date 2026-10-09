@@ -19,6 +19,8 @@ export default async function SuperAdminOrgsPage() {
       active: true,
       suspendedAt: true,
       suspensionReason: true,
+      publicationApprovedAt: true,
+      outboundEmailApprovedAt: true,
       createdAt: true,
       _count: {
         select: {
@@ -36,6 +38,8 @@ export default async function SuperAdminOrgsPage() {
         ...o,
         createdAt: o.createdAt.toISOString(),
         suspendedAt: o.suspendedAt?.toISOString() ?? null,
+        publicationApprovedAt: o.publicationApprovedAt?.toISOString() ?? null,
+        outboundEmailApprovedAt: o.outboundEmailApprovedAt?.toISOString() ?? null,
       }))}
     />
   )

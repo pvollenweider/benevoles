@@ -8,7 +8,7 @@ import { flushSync } from "react-dom"
 import { RESENT_LINK_NOTICE } from "@/lib/invite-link"
 import { announce } from "@/lib/announce"
 import { requestJson } from "@/lib/use-submit"
-import { deleteOrgRecap, liftSuspensionRecap, suspendOrgRecap, toggleOrgRecap } from "@/lib/action-recap"
+import { approveOrgRecap, deleteOrgRecap, liftSuspensionRecap, refuseOrgRecap, suspendOrgRecap, toggleOrgRecap } from "@/lib/action-recap"
 import { ORG_STATUS_LABELS, orgStatus, SUSPENSION_REASON_MAX, SUSPENSION_REASON_MIN } from "@/lib/org-suspension"
 import { formatCount, type UsageRow } from "@/lib/usage-counters"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
@@ -37,6 +37,8 @@ type Org = {
   active: boolean
   suspendedAt: string | null
   suspensionReason: string | null
+  publicationApprovedAt: string | null
+  outboundEmailApprovedAt: string | null
   createdAt: string
   updatedAt: string
   _count: OrgCount
@@ -49,7 +51,7 @@ export default function OrgDetail({ org, cumulative }: { org: Org; cumulative: U
   const [toggling, setToggling] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [deleteError, setDeleteError] = useState<string | null>(null)
-  const [confirming, setConfirming] = useState<"toggle" | "delete" | "suspend" | "lift" | null>(null)
+  const [confirming, setConfirming] = useState<"toggle" | "delete" | "suspend" | "lift" | "approve" | "refuse" | null>(null)
   // Suspension for abuse (#810): its own action, with the operator's reason.
   const [suspensionReason, setSuspensionReason] = useState("")
   // The reason's own error, tied to the field (never the modal's error, which can't describe it).
@@ -151,6 +153,31 @@ export default function OrgDetail({ org, cumulative }: { org: Org; cumulative: U
     refresh()
   }
 
+  // Review of a space awaiting validation (#810): on this page, never from a link.
+  function openReview(kind: "approve" | "refuse") {
+    setToggleError(null)
+    setConfirming(kind)
+  }
+
+  async function runReview(kind: "approve" | "refuse") {
+    setToggling(true)
+    setToggleError(null)
+    const result = await requestJson(() => fetch(`/api/super-admin/organizations/${org.id}/review`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ decision: kind }),
+    }), "La décision n'a pas été enregistrée.")
+    setToggling(false)
+    if (!result.ok) { setToggleError(result.error); return }
+    setConfirming(null)
+    if (kind === "refuse") {
+      router.push("/super-admin/organizations")
+      return
+    }
+    announce(setOutcome, "Espace validé : ses administrateurs sont prévenus par email.")
+    refresh()
+  }
+
   function deleteOrg() {
     setDeleteError(null)
     setConfirming("delete")
@@ -226,7 +253,7 @@ export default function OrgDetail({ org, cumulative }: { org: Org; cumulative: U
           <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 mt-1 focus:outline-none">{org.name}</h1>
           <div className="flex items-center gap-3 mt-1">
             <span className="font-mono text-xs text-gray-500">{org.slug}</span>
-            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${status === "active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>{ORG_STATUS_LABELS[status]}</span>
+            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${status === "active" ? "bg-green-100 text-green-800" : status === "pending" ? "bg-amber-100 text-amber-900" : "bg-red-100 text-red-800"}`}>{ORG_STATUS_LABELS[status]}</span>
           </div>
           {status === "suspended" && org.suspensionReason && (
             <p className="text-sm text-gray-800 mt-1 break-words">Raison de la suspension : {org.suspensionReason}</p>
@@ -242,6 +269,24 @@ export default function OrgDetail({ org, cumulative }: { org: Org; cumulative: U
           >
             Gérer →
           </a>
+          {status === "pending" && (
+            <>
+              <button
+                type="button"
+                onClick={() => openReview("approve")}
+                className="text-sm px-4 py-2 rounded-xl font-medium bg-green-700 text-white hover:bg-green-800"
+              >
+                Valider l&apos;espace
+              </button>
+              <button
+                type="button"
+                onClick={() => openReview("refuse")}
+                className="text-sm px-4 py-2 rounded-xl font-medium border border-red-300 text-red-700 hover:bg-red-50"
+              >
+                Refuser et supprimer
+              </button>
+            </>
+          )}
           {status === "suspended" ? (
             <button
               type="button"
@@ -284,6 +329,19 @@ export default function OrgDetail({ org, cumulative }: { org: Org; cumulative: U
       <p role="status" className={outcome ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2" : "sr-only"}>{outcome}</p>
       {confirming === "toggle" && (
         <ConfirmActionModal recap={toggleOrgRecap(org.name, org.active)} busy={toggling} error={toggleError} onConfirm={() => void runToggle()} onCancel={() => setConfirming(null)} />
+      )}
+      {confirming === "approve" && (
+        <ConfirmActionModal recap={approveOrgRecap(org.name)} busy={toggling} error={toggleError} onConfirm={() => void runReview("approve")} onCancel={() => setConfirming(null)} />
+      )}
+      {confirming === "refuse" && (
+        <ConfirmActionModal
+          recap={refuseOrgRecap(org.name)}
+          challenge={{ label: `Pour confirmer, tapez l'identifiant « ${org.slug} »`, expected: org.slug }}
+          busy={toggling}
+          error={toggleError}
+          onConfirm={() => void runReview("refuse")}
+          onCancel={() => setConfirming(null)}
+        />
       )}
       {confirming === "suspend" && (
         <ConfirmActionModal recap={suspendOrgRecap(org.name)} busy={toggling} error={toggleError} onConfirm={() => void runSuspension("suspend")} onCancel={() => setConfirming(null)}>

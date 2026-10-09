@@ -22,6 +22,8 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
       active: true,
       suspendedAt: true,
       suspensionReason: true,
+      publicationApprovedAt: true,
+      outboundEmailApprovedAt: true,
       createdAt: true,
       updatedAt: true,
       _count: {
@@ -54,6 +56,8 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
         ...org,
         createdAt: org.createdAt.toISOString(),
         suspendedAt: org.suspendedAt?.toISOString() ?? null,
+        publicationApprovedAt: org.publicationApprovedAt?.toISOString() ?? null,
+        outboundEmailApprovedAt: org.outboundEmailApprovedAt?.toISOString() ?? null,
         updatedAt: org.updatedAt.toISOString(),
         admins: org.admins.map((a) => ({ ...a, createdAt: a.createdAt.toISOString() })),
       }}

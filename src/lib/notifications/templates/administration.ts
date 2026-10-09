@@ -288,3 +288,25 @@ export function renderSignupConfirmation(p: NotificationPayload): RenderedEmail 
   `, "Confirmez votre adresse pour créer votre espace benevol.app.")
   return { subject, html, text }
 }
+
+
+/** The operator validated a space created by self-service sign-up (#810): it can publish and email. */
+export function renderSpaceApproved(p: NotificationPayload): RenderedEmail {
+  const d = p.data as { adminName: string; organizationName: string; adminUrl: string }
+  const subject = "Votre espace benevol.app est activé"
+  const text = [
+    `Bonjour ${d.adminName},`,
+    ``,
+    `L'espace de ${d.organizationName} est activé : vous pouvez maintenant publier vos événements et écrire à vos bénévoles.`,
+    ``,
+    d.adminUrl,
+  ].join("\n")
+  const html = wrap(`
+    <h2 style="margin:0 0 0.5em">Votre espace est activé</h2>
+    <p>Bonjour ${escapeHtml(d.adminName)},</p>
+    <p>L'espace de <strong>${escapeHtml(d.organizationName)}</strong> est activé : vous pouvez maintenant publier vos événements et écrire à vos bénévoles.</p>
+    <p style="margin-top:1.5em">${btn(d.adminUrl, "Ouvrir mon espace")}</p>
+  `, `L'espace de ${d.organizationName} est activé.`)
+  return { subject, html, text }
+}
+
