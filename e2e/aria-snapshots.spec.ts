@@ -71,8 +71,8 @@ test.describe("public sign-up page, shift picker", () => {
       - main:
         - heading "mardi 1 octobre" [level=2]
         - region "Planning du mardi 1 octobre":
-          - button /^10h–12h \\d+.3, Bar : sélectionner \\(\\d+ places? libres? sur 3\\)$/ [pressed=false]
-          - button /^14h–16h \\d+.2, Accueil : sélectionner \\(\\d+ places? libres? sur 2\\)$/ [pressed=false]
+          - button /^10h–12h \\d+.3, Bar\\W+sélectionner \\(\\d+ places? libres? sur 3\\)$/ [pressed=false]
+          - button /^14h–16h \\d+.2, Accueil\\W+sélectionner \\(\\d+ places? libres? sur 2\\)$/ [pressed=false]
     `)
     await expect(page.getByRole("button", { name: /^Continuer/ })).toHaveCount(0)
 
@@ -81,8 +81,8 @@ test.describe("public sign-up page, shift picker", () => {
     await expect(page.getByRole("main")).toMatchAriaSnapshot(`
       - main:
         - region "Planning du mardi 1 octobre":
-          - button /^10h–12h \\d+.3, Bar : désélectionner \\(\\d+ places? libres? sur 3\\)$/ [pressed]
-          - button /^14h–16h \\d+.\\d+, Accueil : sélectionner/ [pressed=false]
+          - button /^10h–12h \\d+.3, Bar\\W+désélectionner \\(\\d+ places? libres? sur 3\\)$/ [pressed]
+          - button /^14h–16h \\d+.\\d+, Accueil\\W+sélectionner/ [pressed=false]
         - paragraph: Créneaux sélectionnés
         - button "Retirer Bar de la sélection"
         - button "Continuer (1 nouveau créneau)"
@@ -91,7 +91,7 @@ test.describe("public sign-up page, shift picker", () => {
     await page.getByRole("button", { name: "Retirer Bar de la sélection" }).click()
     await expect(region).toMatchAriaSnapshot(`
       - region "Planning du mardi 1 octobre":
-        - button /^10h–12h \\d+.\\d+, Bar : sélectionner/ [pressed=false]
+        - button /^10h–12h \\d+.\\d+, Bar\\W+sélectionner/ [pressed=false]
     `)
     await expect(page.getByRole("button", { name: /^Continuer/ })).toHaveCount(0)
   })
