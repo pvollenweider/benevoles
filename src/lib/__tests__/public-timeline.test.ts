@@ -110,3 +110,12 @@ describe("heldKinds", () => {
     expect([...held]).toEqual([["a", "active"], ["b", "requested"], ["c", "waiting"], ["d", "offered"]])
   })
 })
+
+// #808 review: a bar overlapping a chosen shift is disabled, its name must not offer to select it.
+describe("barText for a conflicting shift", () => {
+  it("says why it can't be chosen, and keeps « Complet » when full", () => {
+    const shift = { id: "s", roleName: "Bar", label: "Bar", startTime: "10:00", endTime: "12:00", status: "open", capacity: 3, registered: 1, spotsLeft: 2 }
+    expect(barText({ shift, selected: false, reserved: false, locked: false, conflict: true }).ariaLabel).toBe("10h–12h 1/3, Bar : chevauche un créneau déjà choisi")
+    expect(barText({ shift: { ...shift, status: "full", registered: 3, spotsLeft: 0 }, selected: false, reserved: false, locked: false, conflict: true }).ariaLabel).toBe("Complet, Bar 10h–12h")
+  })
+})

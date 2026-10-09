@@ -60,6 +60,8 @@ export type BarTextInput = {
   selected: boolean
   reserved: boolean
   locked: boolean
+  /** Overlaps a shift already chosen or held: shown, not offered (its name must not offer it). */
+  conflict?: boolean
   /** The role's limit per person, when it is reached (#466). */
   limitReached?: number
 }
@@ -79,7 +81,7 @@ export type BarText = {
  * state word (« Complet », « Fermé », « Réservé », « En attente »), then the role and what a press
  * does. A narrow bar shows only the start time, which the name contains too.
  */
-export function barText({ shift, held, selected, reserved, locked, limitReached }: BarTextInput): BarText {
+export function barText({ shift, held, selected, reserved, locked, conflict = false, limitReached }: BarTextInput): BarText {
   const hasLabel = shift.label !== shift.roleName
   const roleLabel = hasLabel ? `${shift.roleName} (${shift.label})` : shift.roleName
   const timeRange = `${fmt(shift.startTime)}–${fmt(shift.endTime)}`
@@ -115,6 +117,8 @@ export function barText({ shift, held, selected, reserved, locked, limitReached 
   let ariaLabel: string
   if (reserved) ariaLabel = `Réservé, ${roleLabel} ${timeSpoken} : ${RESERVED_LABEL}`
   else if (unavail && !selected) ariaLabel = `${isClosed ? "Fermé" : "Complet"}, ${roleLabel} ${timeSpoken}${minAgeSuffix}`
+  // A disabled bar must not offer an action: it says why it can't be chosen.
+  else if (conflict && !selected) ariaLabel = `${timeShown} ${count}, ${roleLabel}${minAgeSuffix} : chevauche un créneau déjà choisi`
   else if (locked && !selected) ariaLabel = `${timeShown} ${count}, ${roleLabel}${minAgeSuffix}${spotsSuffix}`
   else if (isWaitlistable) {
     ariaLabel = selected
