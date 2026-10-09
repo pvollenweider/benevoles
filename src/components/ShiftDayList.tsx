@@ -23,7 +23,8 @@ export default function ShiftDayList({
   conflicts,
   onToggle,
   locked = false,
-  describedBy,
+  lockedMessageId,
+  reservedMessageId,
   limitReachedRoles,
   reservedShiftIds,
   dayLabel,
@@ -35,7 +36,10 @@ export default function ShiftDayList({
   conflicts?: Set<string>
   onToggle: (id: string, status: string) => void
   locked?: boolean
-  describedBy?: string
+  /** The text saying registrations are closed: read with a shift that can't be chosen for it. */
+  lockedMessageId?: string
+  /** The text explaining reserved roles: read with a reserved shift. */
+  reservedMessageId?: string
   limitReachedRoles?: Map<string, number>
   reservedShiftIds?: Set<string>
   dayLabel: string
@@ -76,19 +80,24 @@ export default function ShiftDayList({
               data-shift-id={shift.id}
               aria-pressed={view.clickable ? view.selected : undefined}
               aria-disabled={view.clickable ? undefined : true}
-              aria-describedby={!view.clickable && (locked || view.reserved) ? describedBy : undefined}
+              aria-describedby={view.clickable ? undefined : view.reserved ? reservedMessageId : locked ? lockedMessageId : undefined}
               onClick={() => { if (view.clickable) onToggle(shift.id, shift.status) }}
-              className={`w-full min-h-11 rounded-xl border-2 px-4 py-2 text-left break-words focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${tone} ${view.clickable ? "cursor-pointer" : "cursor-default"}`}
+              className={`w-full min-h-11 rounded-xl border-2 px-4 py-2 text-left break-words forced-colors:aria-pressed:border-[Highlight] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${tone} ${view.clickable ? "cursor-pointer" : "cursor-default"}`}
             >
               <span className="block text-base font-medium text-gray-900">{text.title}</span>
               {/* Spaces between the lines: the accessible name reads them apart. */}
               {" "}
               <span className="mt-0.5 flex items-center gap-1 text-sm text-gray-800">
-                {(view.selected || view.held) && (
+                {view.held ? (
+                  // Held: a check in a circle, as on the timeline; selected: a plain check.
+                  <svg aria-hidden="true" className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                ) : view.selected ? (
                   <svg aria-hidden="true" className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                )}
+                ) : null}
                 <span>{text.status}</span>
               </span>
               {text.details && <>{" "}<span className="mt-0.5 block text-sm text-gray-700">{text.details}</span></>}

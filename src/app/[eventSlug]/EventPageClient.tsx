@@ -744,7 +744,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                           conflicts={conflictingShiftIds}
                           onToggle={toggleShift}
                           locked={!accepting}
-                          describedBy={[!accepting && "registration-window-msg", reservedShiftIds.size > 0 && "reserved-roles-msg"].filter(Boolean).join(" ") || undefined}
+                          lockedMessageId={!accepting ? "registration-window-msg" : undefined}
+                          reservedMessageId={reservedShiftIds.size > 0 ? "reserved-roles-msg" : undefined}
                           limitReachedRoles={limitReachedRoles}
                           reservedShiftIds={reservedShiftIds}
                           dayLabel={formatCalendarDay(day)}
