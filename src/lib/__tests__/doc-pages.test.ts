@@ -62,7 +62,7 @@ describe("every public page's link preview", () => {
   })
 
   it("declares privacy and terms, written in their page.tsx (no Markdown source)", () => {
-    expect(PUBLIC_PAGES.filter((p) => p.path.startsWith("/legal/")).map((p) => p.path)).toEqual(["/legal/privacy", "/legal/terms", "/legal/sous-traitance", "/legal/sous-traitants"])
+    expect(PUBLIC_PAGES.filter((p) => p.path.startsWith("/legal/")).map((p) => p.path)).toEqual(["/legal/exploitant", "/legal/privacy", "/legal/terms", "/legal/sous-traitance", "/legal/sous-traitants"])
     expect(PUBLIC_PAGES.find((p) => p.path === "/legal/privacy")?.source).toBeNull()
   })
 })

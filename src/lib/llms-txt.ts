@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { DOC_GUIDES, PUBLIC_PAGES, linkSourcesToRoutes, splitTitle } from "@/lib/doc-pages"
+import { DOC_GUIDES, PUBLIC_PAGES, linkSourcesToRoutes, pageAvailable, splitTitle } from "@/lib/doc-pages"
 import { DOC_GROUPS, docUnitAudience, sortDocUnits, type DocUnit } from "@/lib/doc-units"
 import { createHeadingSlugger } from "@/lib/heading-anchors"
 import { SITE_NAME, absoluteUrl } from "@/lib/seo-metadata"
@@ -57,7 +57,7 @@ export function portableMarkdown(markdown: string, base: string): string {
 
 const link = (title: string, url: string, note?: string) => `- [${title}](${url})${note ? `: ${note}` : ""}`
 
-const LEGAL_PATHS = ["/legal/privacy", "/legal/terms", "/legal/sous-traitance", "/legal/sous-traitants", "/accessibilite"]
+const LEGAL_PATHS = ["/legal/privacy", "/legal/terms", "/legal/sous-traitance", "/legal/sous-traitants", "/accessibilite", "/legal/exploitant"]
 
 /** /llms.txt: what benevol.app is, then every public page by theme, each with its one-line summary. */
 export function llmsTxt(s: LlmsSources): string {
@@ -73,7 +73,7 @@ export function llmsTxt(s: LlmsSources): string {
   out.push(link("Accueil", url("/"), "la présentation du service, ses questions fréquentes et comment commencer."))
   out.push(link(features.title, url(features.path), features.summary))
   for (const section of markdownSections(s.features)) out.push(`  ${link(section.title, url(`${features.path}#${section.id}`))}`)
-  out.push(link(planning.title, url(planning.path), planning.summary))
+  if (pageAvailable(planning)) out.push(link(planning.title, url(planning.path), planning.summary))
   out.push(link(news.title, url(news.path), news.summary))
   out.push("")
 
@@ -93,7 +93,7 @@ export function llmsTxt(s: LlmsSources): string {
   out.push("## Informations légales", "")
   for (const path of LEGAL_PATHS) {
     const page = PUBLIC_PAGES.find((p) => p.path === path)
-    if (page) out.push(link(page.title, url(page.path), page.summary))
+    if (page && pageAvailable(page)) out.push(link(page.title, url(page.path), page.summary))
   }
   out.push("")
 

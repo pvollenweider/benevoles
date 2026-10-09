@@ -1,15 +1,20 @@
 import type { Metadata } from "next"
-import { publicPageMetadata } from "@/lib/doc-pages"
+import { pageAvailable, publicPage, publicPageMetadata } from "@/lib/doc-pages"
 import { publicPageJsonLd } from "@/lib/structured-data"
 import { apexBaseUrl } from "@/lib/urls"
 import JsonLd from "@/components/public/JsonLd"
 import Link from "next/link"
+import { notFound } from "next/navigation"
+
+export const dynamic = "force-dynamic"
 
 export function generateMetadata(): Metadata {
   return publicPageMetadata("/legal/terms", apexBaseUrl())
 }
 
 export default function TermsPage() {
+  // The hosted service's own page (#760): absent on another instance, which has /legal/exploitant.
+  if (!pageAvailable(publicPage("/legal/terms"))) notFound()
   return (
     <>
       <JsonLd data={publicPageJsonLd("/legal/terms", apexBaseUrl())} />

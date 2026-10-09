@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
 import { llmsFullTxt, llmsTxt, markdownSections, portableMarkdown } from "../llms-txt"
-import { PUBLIC_PAGES } from "../doc-pages"
+import { PUBLIC_PAGES, pageAvailable } from "../doc-pages"
 import { DOC_GROUPS, loadDocUnits } from "../doc-units"
 import { headingIdsOf, renderPublicSource } from "../public-content"
 
@@ -27,7 +27,9 @@ describe("llmsTxt", () => {
   })
 
   it("links every public page and every unit by its absolute URL, with its summary", () => {
-    for (const p of PUBLIC_PAGES) expect(txt, p.path).toContain(`](${BASE}${p.path})`)
+    // The pages this instance shows (#760): the tests run as the hosted service.
+    for (const p of PUBLIC_PAGES.filter((page) => pageAvailable(page))) expect(txt, p.path).toContain(`](${BASE}${p.path})`)
+    expect(txt).not.toContain(`](${BASE}/legal/exploitant)`)
     for (const u of loadDocUnits()) expect(txt, u.slug).toContain(`- [${u.title}](${BASE}/doc/${u.slug}): ${u.summary}`)
     expect(txt).toContain(`](${BASE}/llms-full.txt)`)
   })

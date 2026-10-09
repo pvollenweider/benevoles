@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { SITE_NAME } from "@/lib/seo-metadata"
 import PublicFooter from "@/components/PublicFooter"
 // The shared prose recipe of the content pages (focus outline on links, scroll-mt on headings);
 // its dark: variants are inert here, the legal pages have no dark scope.
@@ -16,7 +17,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
       <header className="border-b border-gray-100">
         <div className={`${SITE_CONTAINER_CLASS} py-4 flex items-center justify-between`}>
           <Link href="/" className="inline-flex py-3 -my-3 text-sm font-semibold text-gray-900 hover:text-gray-600 transition-colors rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-            benevol.app
+            {SITE_NAME}
           </Link>
           <span className="text-xs text-gray-500">Documents légaux</span>
         </div>

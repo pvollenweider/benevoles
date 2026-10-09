@@ -5,6 +5,7 @@ import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import EventPageClient from "@/app/[eventSlug]/EventPageClient"
+import { consentPrivacyHref } from "@/lib/public-signup"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Aperçu bénévole", robots: { index: false, follow: false } }
@@ -24,6 +25,7 @@ export default async function EventPreviewPage({ params }: { params: Promise<{ i
 
   return (
     <EventPageClient
+      privacyHref={consentPrivacyHref()}
       orgSlug={event.organization.slug}
       eventSlug={event.slug}
       preview={{ eventId: event.id, adminEventUrl: `/admin/events/${event.id}` }}

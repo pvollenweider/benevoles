@@ -115,7 +115,9 @@ type PreviewResult = { subject: string; html: string; confirmationMessage: strin
  * it. The page is then server-rendered with its schedule; without it (the preview), the event is
  * fetched after mounting.
  */
-export default function EventPageClient({ orgSlug, eventSlug, preview, initialEvent }: {
+export default function EventPageClient({ orgSlug, eventSlug, preview, initialEvent, privacyHref = CONSENT_PRIVACY_HREF }: {
+  /** The consent's privacy link, from the server (#760: the operator page on another instance). */
+  privacyHref?: string
   orgSlug: string
   eventSlug: string
   preview?: { eventId: string; adminEventUrl: string }
@@ -977,7 +979,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 </label>
                 {/* Outside the label, so the checkbox name stays the sentence; a new tab, so the form is kept (#706). */}
                 <p className="pl-7 -mt-2 text-sm">
-                  <Link href={CONSENT_PRIVACY_HREF} target="_blank" className="text-blue-600 underline underline-offset-2 hover:text-blue-800 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                  <Link href={privacyHref} target="_blank" className="text-blue-600 underline underline-offset-2 hover:text-blue-800 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
                     Mes droits et combien de temps mes données sont gardées<span className="sr-only"> (ouvre dans un nouvel onglet)</span>
                   </Link>
                 </p>

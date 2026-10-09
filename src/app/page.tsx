@@ -18,6 +18,9 @@ import { loadDocUnits } from "@/lib/doc-units"
 import { landingQuickstartLink, landingStartLinks, landingVolunteerGuideLink } from "@/lib/landing-start-guides"
 import LandingStartGuides from "@/components/public/LandingStartGuides"
 import { SITE_CONTAINER_CLASS } from "@/components/public/site-container"
+import { isHostedService } from "@/lib/site"
+import { SITE_NAME, seoMetadata } from "@/lib/seo-metadata"
+import { signupOpen } from "@/lib/signup"
 
 export const dynamic = "force-dynamic"
 
@@ -36,7 +39,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const rawOrgSlug = (await headers()).get("x-org-slug")
   // The marketing home of the apex host: its own title, description, social card and structured
   // data (src/lib/landing-seo.ts), canonical on the apex.
-  if (!rawOrgSlug) return landingMetadata(apexBaseUrl())
+  if (!rawOrgSlug) return isHostedService() ? landingMetadata(apexBaseUrl()) : instanceHomeMetadata(apexBaseUrl())
   const resolved = await resolveOrgSlug(rawOrgSlug)
   if (!resolved || resolved.redirectUrl) return {}
   // The organisation's page shared in a message or found in a search (#564 for its events).
@@ -69,8 +72,8 @@ export default async function HomePage() {
     }
   }
 
-  // No org context → marketing landing page (no data needed)
-  if (!orgSlug) return <LandingPage />
+  // No org context → the hosted service's marketing landing page, or this instance's own home (#760).
+  if (!orgSlug) return isHostedService() ? <LandingPage /> : <InstanceHome />
 
   // Hide events that are already over: they would show "N places à pourvoir".
   const startOfToday = new Date()
@@ -206,6 +209,50 @@ const BENEFITS = [
     alt: "Page « Rapports » : export complet, archive de l'événement, plannings par jour, par poste et individuel, prêts à imprimer.",
   },
 ]
+
+/** The home of an instance that is not the hosted service (#760): its marketing describes that service. */
+function instanceHomeMetadata(base: string): Metadata {
+  return seoMetadata({
+    base,
+    path: "/",
+    title: "Planning et inscriptions des bénévoles",
+    description: `${SITE_NAME} : le planning des bénévoles, les inscriptions en ligne par créneau, les rappels et le jour J, pour les associations de cette instance.`,
+    type: "website",
+    imageAlt: SITE_NAME,
+  })
+}
+
+function InstanceHome() {
+  const links = [
+    { href: "/admin/login", label: "Espace organisateur" },
+    ...(signupOpen() ? [{ href: "/inscription", label: "Demander un espace" }] : []),
+    { href: "/fonctionnalites", label: "Fonctionnalités" },
+    { href: "/doc", label: "Documentation" },
+  ]
+  return (
+    <>
+      <main className={`${SITE_CONTAINER_CLASS} flex-1 py-16`}>
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">{SITE_NAME}</h1>
+        <p className="mt-4 max-w-[65ch] text-lg text-gray-700 leading-relaxed">
+          Le planning des bénévoles : les associations publient leurs créneaux, chaque bénévole
+          s&apos;inscrit en ligne, et les rappels partent tout seuls.
+        </p>
+        <ul className="mt-8 flex flex-wrap gap-3">
+          {links.map((l) => (
+            <li key={l.href}>
+              <Link href={l.href} className={`inline-flex items-center min-h-11 px-5 rounded-full border border-gray-300 text-base font-medium text-gray-900 hover:bg-gray-50 ${focusRing} focus-visible:outline-blue-700`}>
+                {l.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </main>
+      <div className={SITE_CONTAINER_CLASS}>
+        <PublicFooter variant="site" />
+      </div>
+    </>
+  )
+}
 
 function LandingPage() {
   // The documentation's entry points (#764): titles and summaries read from guide/.

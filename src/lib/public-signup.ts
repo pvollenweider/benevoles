@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { shiftsOverlap, shiftsTooYoungFor } from "./utils"
+import { INSTANCE_OPERATOR_PATH, isHostedService } from "@/lib/site"
 
 /**
  * Pure logic of the public sign-up page (EventPageClient), kept out of the component so it can
@@ -43,7 +44,13 @@ export type SignupForm = {
 
 /** Privacy policy section linked under the sign-up consent (#706): the volunteers' rights,
  *  followed by the retention section. The id lives in src/app/legal/privacy/page.tsx. */
+/** The privacy link of the volunteer's consent on the hosted service: the rights section. */
 export const CONSENT_PRIVACY_HREF = "/legal/privacy#droits"
+
+/** The same link on this instance (#760: the operator page outside the hosted service). Server only. */
+export function consentPrivacyHref(): string {
+  return isHostedService() ? CONSENT_PRIVACY_HREF : INSTANCE_OPERATOR_PATH
+}
 
 export const EMPTY_SIGNUP_FORM: SignupForm = {
   firstName: "", lastName: "", email: "", phone: "", birthDate: "", comment: "", consent: false,

@@ -3,6 +3,7 @@
 
 import type { Metadata, MetadataRoute } from "next"
 import { SITE_NAME, seoMetadata } from "@/lib/seo-metadata"
+import { isHostedService } from "@/lib/site"
 
 export { SITE_NAME }
 
@@ -30,9 +31,25 @@ export type PublicPage = {
   priority: number
   /** Listed in the doc index and its navigation (the guides). */
   guide: boolean
+  /**
+   * Where the page exists (#760): everywhere (default), on the hosted service only (its legal
+   * pages, accessibility statement, marketing), or on other instances only (the operator page).
+   */
+  availability?: "hosted" | "instance"
 }
 
 export const PUBLIC_PAGES: readonly PublicPage[] = [
+  {
+    path: "/legal/exploitant",
+    title: "Exploitant de cette instance",
+    summary: "Qui exploite cette instance, et à qui écrire pour vos données personnelles.",
+    metaTitle: "Exploitant de cette instance",
+    metaDescription: "Qui exploite cette instance du logiciel de planning bénévole, et à qui écrire pour une question sur le service ou sur vos données personnelles.",
+    source: null,
+    priority: 0.3,
+    guide: false,
+    availability: "instance",
+  },
   {
     path: "/fonctionnalites",
     title: "Fonctionnalités",
@@ -56,6 +73,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     source: "LOGICIEL-PLANNING-BENEVOLES.md",
     priority: 0.8,
     guide: false,
+    availability: "hosted",
   },
   {
     // Rendered from the released versions of CHANGELOG.md (#757, src/lib/changelog.ts).
@@ -77,6 +95,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     source: "ACCESSIBILITE.md",
     priority: 0.3,
     guide: false,
+    availability: "hosted",
   },
   {
     path: "/legal/privacy",
@@ -87,6 +106,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     source: null,
     priority: 0.3,
     guide: false,
+    availability: "hosted",
   },
   {
     path: "/legal/terms",
@@ -97,6 +117,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     source: null,
     priority: 0.2,
     guide: false,
+    availability: "hosted",
   },
   {
     path: "/legal/sous-traitance",
@@ -107,6 +128,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     source: "ACCORD-SOUS-TRAITANCE.md",
     priority: 0.2,
     guide: false,
+    availability: "hosted",
   },
   {
     path: "/legal/sous-traitants",
@@ -117,6 +139,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     source: "SOUS-TRAITANTS.md",
     priority: 0.2,
     guide: false,
+    availability: "hosted",
   },
   {
     path: "/doc",
@@ -159,6 +182,18 @@ export const DOC_GUIDES = PUBLIC_PAGES.filter((p) => p.guide)
 
 /** The header navigation of the public content pages: features, then the guides. */
 export const CONTENT_NAV = PUBLIC_PAGES.filter((p) => p.path === "/fonctionnalites" || p.guide)
+
+/** Whether a public page exists on this instance (#760). */
+export function pageAvailable(page: Pick<PublicPage, "availability">, hosted: boolean = isHostedService()): boolean {
+  if (page.availability === "hosted") return hosted
+  if (page.availability === "instance") return !hosted
+  return true
+}
+
+/** The public pages this instance shows: the sitemap, llms.txt and the doc index use them. */
+export function availablePublicPages(hosted: boolean = isHostedService()): PublicPage[] {
+  return PUBLIC_PAGES.filter((p) => pageAvailable(p, hosted))
+}
 
 export function publicPage(path: string): PublicPage {
   const page = PUBLIC_PAGES.find((p) => p.path === path)
@@ -225,6 +260,7 @@ export function apexSitemap(
   base: string,
   modifiedAt: (source: string) => Date | null,
   units: readonly { slug: string; source: string }[] = [],
+  hosted: boolean = isHostedService(),
 ): MetadataRoute.Sitemap {
   const root = base.replace(/\/+$/, "")
   const entry = (pagePath: string, source: string | null, priority: number) => {
@@ -233,7 +269,7 @@ export function apexSitemap(
   }
   return [
     { url: `${root}/`, changeFrequency: "weekly", priority: 1 },
-    ...PUBLIC_PAGES.map((p) => entry(p.path, p.source, p.priority)),
+    ...availablePublicPages(hosted).map((p) => entry(p.path, p.source, p.priority)),
     ...units.map((u) => entry(`/doc/${u.slug}`, u.source, DOC_UNIT_PRIORITY)),
   ]
 }

@@ -58,3 +58,25 @@ export function supportUrl(env: Env = runtimeEnv()): string | null {
     return null
   }
 }
+
+/**
+ * The hosted service of the upstream project (#760): `HOSTED_SERVICE=true` or `false`; unset, the
+ * upstream instance and an instance with no address (development, tests, video captures) are it,
+ * any other domain is not. Its legal pages (operator, applicable law, sub-processors), accessibility statement,
+ * marketing pages and support appeal describe that service: another instance does not show them,
+ * and a page « Exploitant de cette instance » says who to contact instead.
+ */
+export function isHostedService(env: Env = runtimeEnv()): boolean {
+  const explicit = env.HOSTED_SERVICE?.trim().toLowerCase()
+  if (explicit === "true") return true
+  if (explicit === "false") return false
+  return siteDomain(env) === UPSTREAM_DOMAIN
+}
+
+/** The instance page that replaces the hosted service's legal pages. */
+export const INSTANCE_OPERATOR_PATH = "/legal/exploitant"
+
+/** Where the « politique de confidentialité » links lead, here. */
+export function privacyHref(env: Env = runtimeEnv()): string {
+  return isHostedService(env) ? "/legal/privacy" : INSTANCE_OPERATOR_PATH
+}

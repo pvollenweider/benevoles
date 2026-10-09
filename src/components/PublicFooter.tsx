@@ -4,7 +4,7 @@
 import Link from "next/link"
 import { APP_VERSION } from "@/lib/app-version"
 import GitHubMark from "./GitHubMark"
-import { siteName, supportUrl } from "@/lib/site"
+import { INSTANCE_OPERATOR_PATH, isHostedService, siteName, supportUrl } from "@/lib/site"
 
 /**
  * Footer links: underlined (grey links must not rely on colour alone), the underline quiet at
@@ -19,14 +19,19 @@ const REPOSITORY_URL = "https://github.com/pvollenweider/benevoles"
 type FooterLink = { href: string; label: string; external?: boolean; github?: boolean }
 type FooterColumn = { id: string; title: string; links: readonly FooterLink[] }
 
-const LEGAL: FooterColumn = {
-  id: "legal",
-  title: "Informations légales",
-  links: [
-    { href: "/legal/privacy", label: "Confidentialité" },
-    { href: "/legal/terms", label: "CGU" },
-    { href: "/accessibilite", label: "Accessibilité" },
-  ],
+/** The hosted service's legal pages, or the instance's operator page elsewhere (#760). */
+function legalColumn(hosted: boolean = isHostedService()): FooterColumn {
+  return {
+    id: "legal",
+    title: "Informations légales",
+    links: hosted
+      ? [
+          { href: "/legal/privacy", label: "Confidentialité" },
+          { href: "/legal/terms", label: "CGU" },
+          { href: "/accessibilite", label: "Accessibilité" },
+        ]
+      : [{ href: INSTANCE_OPERATOR_PATH, label: "Exploitant de cette instance" }],
+  }
 }
 
 /**
@@ -53,22 +58,24 @@ export function footerSiteColumns(name: string = siteName(), support: string | n
         ...(support ? [{ href: support, label: "Soutenir le projet", external: true }] : []),
       ],
     },
-    LEGAL,
+    legalColumn(),
   ]
 }
 
 /** An organisation's pages: what its volunteers (and its organisers) need, then legal. */
-export const FOOTER_EVENT_COLUMNS: readonly FooterColumn[] = [
-  {
-    id: "help",
-    title: "Aide",
-    links: [
-      { href: "/doc/benevole", label: "Guide bénévole" },
-      { href: "/admin/login", label: "Espace organisateur" },
-    ],
-  },
-  LEGAL,
-]
+export function footerEventColumns(): readonly FooterColumn[] {
+  return [
+    {
+      id: "help",
+      title: "Aide",
+      links: [
+        { href: "/doc/benevole", label: "Guide bénévole" },
+        { href: "/admin/login", label: "Espace organisateur" },
+      ],
+    },
+    legalColumn(),
+  ]
+}
 
 function FooterAnchor({ link }: { link: FooterLink }) {
   if (!link.external) return <Link href={link.href} className={linkClass}>{link.label}</Link>
@@ -99,7 +106,7 @@ function FooterAnchor({ link }: { link: FooterLink }) {
  * header and the content; `event` at `max-w-xl`, with `px-4` when the page has no container.
  */
 export default function PublicFooter({ variant = "event" }: { variant?: "site" | "event" }) {
-  const columns = variant === "site" ? footerSiteColumns() : FOOTER_EVENT_COLUMNS
+  const columns = variant === "site" ? footerSiteColumns() : footerEventColumns()
   const width = variant === "site" ? "w-full" : "max-w-xl"
   return (
     <footer className={`${width} mx-auto mt-12 pt-8 pb-8 border-t border-gray-200 dark:border-gray-800 text-sm text-gray-600 dark:text-gray-300`}>

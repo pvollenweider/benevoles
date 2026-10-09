@@ -174,6 +174,7 @@ jobs:
             --from-literal=TOKEN_ENCRYPTION_PREVIOUS_KEYS="${{ secrets.TOKEN_ENCRYPTION_PREVIOUS_KEYS }}" \
             --from-literal=SENTRY_DSN="${{ secrets.SENTRY_DSN || secrets.NEXT_PUBLIC_SENTRY_DSN }}" \
             --from-literal=NEXT_PUBLIC_APP_URL="https://www.benevol.app" \
+            --from-literal=HOSTED_SERVICE="true" \
             --from-literal=AUTH_URL="https://www.benevol.app" \
             --from-literal=AUTH_TRUST_HOST="true" \
             --from-literal=VIDEO_MEDIA_BASE_URL="https://medias.benevol.app" \
