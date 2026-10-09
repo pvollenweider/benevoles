@@ -53,30 +53,52 @@ export function ntfyRequest(alert: OperatorAlert, config: NtfyConfig): { url: st
   return { url: config.url, init: { method: "POST", headers, body: alert.message } }
 }
 
-type Deps = { fetch?: typeof fetch; env?: Record<string, string | undefined> }
+type Deps = { fetch?: typeof fetch; env?: Record<string, string | undefined>; sleep?: (ms: number) => Promise<void> }
 
-/** The push, best effort: never throws, reports a failure once. */
+/**
+ * Waits before each new attempt of the push. A single attempt lost a sign-up alert in production
+ * (#810): ntfy.sh did not answer the connection for 10 seconds, then answered in half a second.
+ */
+export const NTFY_RETRY_DELAYS_MS = [2_000, 10_000]
+
+/** A refusal that a new attempt will not change (bad topic, access): no retry. */
+function retryable(status: number): boolean {
+  return status === 429 || status >= 500
+}
+
+/** The push, best effort: a few attempts, never throws, reports a final failure once. */
 export async function sendNtfy(alert: OperatorAlert, deps: Deps = {}): Promise<boolean> {
   const config = ntfyConfig(deps.env)
   if (!config) return false
   const { url, init } = ntfyRequest(alert, config)
-  try {
-    const res = await (deps.fetch ?? fetch)(url, { ...init, signal: AbortSignal.timeout(5000) })
-    if (!res.ok) throw new Error(`ntfy answered ${res.status}`)
-    return true
-  } catch (e) {
-    reportError("operator_alert.ntfy")(e)
-    return false
+  const sleep = deps.sleep ?? ((ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)))
+  let failure: unknown = null
+  for (let attempt = 0; attempt <= NTFY_RETRY_DELAYS_MS.length; attempt++) {
+    if (attempt > 0) await sleep(NTFY_RETRY_DELAYS_MS[attempt - 1])
+    try {
+      const res = await (deps.fetch ?? fetch)(url, { ...init, signal: AbortSignal.timeout(5000) })
+      if (res.ok) return true
+      failure = new Error(`ntfy answered ${res.status}`)
+      if (!retryable(res.status)) break
+    } catch (e) {
+      failure = e
+    }
   }
+  reportError("operator_alert.ntfy")(failure)
+  return false
 }
 
 /**
- * Push + email to the active super admins. The email goes through the outbox (sending limits and
- * all), queued with the alert's key so a repeat is stored once; delivered right after the request
- * when there is one, else by the next outbox run.
+ * Push + email to the active super admins, side by side: the push's retries never hold the email
+ * back. The email goes through the outbox (sending limits and all), queued with the alert's key so
+ * a repeat is stored once; delivered right after the request when there is one, else by the next
+ * outbox run.
  */
 export async function notifyOperator(alert: OperatorAlert, deps: Deps = {}): Promise<void> {
-  await sendNtfy(alert, deps)
+  await Promise.all([sendNtfy(alert, deps), emailOperator(alert)])
+}
+
+async function emailOperator(alert: OperatorAlert): Promise<void> {
   try {
     const admins = await prisma.adminUser.findMany({ where: { role: "super_admin", isActive: true }, select: { email: true } })
     const ids = await enqueueNotifications(
