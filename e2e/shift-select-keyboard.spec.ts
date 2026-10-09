@@ -94,7 +94,8 @@ test("the shift filter is named and works with the keyboard", async ({ page }) =
   await expect(filter).toContainText("Bar")
   await expect(page.getByText("Aucun résultat.")).toBeVisible()
   // The region holds the count alone, nothing next to it.
-  await expect(page.getByRole("status")).toHaveText("0 inscription affichée")
+  // Scoped: the page has a second status, the « Annulations récentes » one (#809).
+  await expect(page.getByRole("status").filter({ hasText: "affichée" })).toHaveText("0 inscription affichée")
 
   await page.keyboard.press("Home")
   await page.keyboard.press("Enter")
