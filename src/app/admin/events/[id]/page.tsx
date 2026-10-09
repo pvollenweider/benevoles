@@ -7,6 +7,7 @@ import { staffingHeadline, staffingSummary } from "@/lib/staffing"
 import { eventPublicUrl } from "@/lib/urls"
 import StatusBadge from "@/components/admin/StatusBadge"
 import PublishToggle from "@/components/admin/PublishToggle"
+import { canPublish as orgCanPublish } from "@/lib/org-approval"
 import ArchiveButton from "@/components/admin/ArchiveButton"
 import DeleteEventSection from "@/components/admin/DeleteEventSection"
 import SendReminderButton from "@/components/admin/SendReminderButton"
@@ -34,7 +35,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
   const event = await db.event.findFirst({
     where: { id },
     include: {
-      organization: { select: { slug: true, timeZone: true, notificationSettings: true } },
+      organization: { select: { slug: true, timeZone: true, publicationApprovedAt: true, notificationSettings: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
         include: {
@@ -131,7 +132,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
               non répertorié
             </span>
           )}
-          <PublishToggle eventId={event.id} currentStatus={event.publicStatus} />
+          <PublishToggle eventId={event.id} currentStatus={event.publicStatus} awaitingValidation={!orgCanPublish(event.organization)} />
           <ArchiveButton eventId={event.id} currentStatus={event.publicStatus} />
           <Link
             href={`/admin/events/${event.id}/edit`}

@@ -33,7 +33,7 @@ Vous arrivez ensuite directement sur la page où choisir votre mot de passe. Le 
 
 Votre espace est **en attente de validation**. Un bandeau le rappelle en haut de chaque page de l'administration. En attendant, vous pouvez tout préparer : événements, postes, créneaux, membres, pages, logo et aperçu. Deux choses attendent la validation :
 
-- **la publication** de vos événements : la page publique de votre espace ne répond pas encore ;
+- **la publication** de vos événements : la page publique de votre espace ne répond pas encore. Le bouton **Publier** d'un événement devient **Demander la publication** : il nous prévient que votre événement est prêt ;
 - **les emails à d'autres personnes** que les administrateurs de votre espace (invitations, messages et rappels aux bénévoles). Les emails destinés aux administrateurs qui ont déjà activé leur compte partent normalement.
 
 Dès que votre espace est validé, chacun de ses administrateurs reçoit l'email « Votre espace benevol.app est activé », et la publication devient possible. Pour la suite, voir [Créer son premier événement](creer-son-premier-evenement.md).

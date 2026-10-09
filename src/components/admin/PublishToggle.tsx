@@ -6,13 +6,50 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
-export default function PublishToggle({ eventId, currentStatus }: { eventId: string; currentStatus: string }) {
+/**
+ * Publish / unpublish an event. In a space awaiting validation (#810) the button becomes
+ * « Demander la publication »: it tells the operator and shows when publishing becomes possible.
+ */
+export default function PublishToggle({ eventId, currentStatus, awaitingValidation = false }: { eventId: string; currentStatus: string; awaitingValidation?: boolean }) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [confirming, setConfirming] = useState(false)
+  const [requested, setRequested] = useState<string | null>(null)
 
   const isPublished = currentStatus === "published"
+
+  async function requestPublication() {
+    if (loading) return
+    setLoading(true)
+    setError(null)
+    const res = await fetch(`/api/admin/events/${eventId}/publication-request`, { method: "POST" }).catch(() => null)
+    setLoading(false)
+    const data = res ? await res.json().catch(() => ({})) : null
+    if (!res?.ok) {
+      setError(typeof data?.error === "string" ? data.error : "La demande n'a pas pu être envoyée. Réessayez.")
+      return
+    }
+    setRequested(typeof data?.message === "string" ? data.message : "Demande envoyée.")
+  }
+
+  if (awaitingValidation && !isPublished) {
+    return (
+      <div className="flex flex-col items-end gap-1 max-w-md">
+        <button
+          type="button"
+          onClick={() => void requestPublication()}
+          aria-disabled={loading || undefined}
+          aria-describedby={requested ? `publish-request-${eventId}` : undefined}
+          className={`text-sm px-3 py-1.5 rounded-full font-medium bg-green-700 text-white hover:bg-green-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${loading ? "cursor-wait" : ""}`}
+        >
+          Demander la publication{loading && <span className="sr-only"> (en cours)</span>}
+        </button>
+        <p id={`publish-request-${eventId}`} role="status" className={requested ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2 text-right" : "sr-only"}>{requested ?? ""}</p>
+        {error && <p role="alert" className="text-xs text-red-700">{error}</p>}
+      </div>
+    )
+  }
 
   async function doToggle() {
     const newStatus = isPublished ? "draft" : "published"

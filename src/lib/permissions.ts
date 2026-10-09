@@ -61,6 +61,7 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "events/[id]/pages/[pageId]": { PATCH: "organizer", DELETE: "organizer" },
   "events/[id]/pages/reorder": { POST: "organizer" },
   "events/[id]/preview": { GET: "organizer", POST: "organizer" },
+  "events/[id]/publication-request": { POST: "organizer" },
   "events/[id]/qr": { GET: "organizer" },
   "events/[id]/questions": { GET: "organizer", POST: "organizer" },
   "events/[id]/questions/[questionId]": { PATCH: "organizer", DELETE: "organizer" },
