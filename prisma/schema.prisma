@@ -44,6 +44,11 @@ model Organization {
   // When the space was created by the self-service sign-up (#810): null for any other creation.
   // Feeds the sign-up indicators of the statistics (median validation delay, unused spaces).
   signupAt          DateTime?
+  // Periodic check that the space is still wanted (#811, src/lib/org-inactivity.ts): the latest
+  // meaningful activity (administrators' changes, volunteers' registrations; never scheduled jobs
+  // nor page views), and the latest « Conserver mon organisation », kept apart on purpose.
+  lastMeaningfulActivityAt DateTime?
+  lastRetentionConfirmedAt DateTime?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

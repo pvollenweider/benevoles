@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { prisma } from "./prisma"
+import { isMeaningfulWrite } from "./org-inactivity"
+import { touchOrgActivity } from "./org-activity"
 
 /**
  * Returns a Prisma client extended so every operation on a tenant-owned model is constrained
@@ -84,44 +86,56 @@ export function getOrgClient(organizationId: string) {
       $allModels: {
         async $allOperations({ model, operation, args, query }) {
           const m = (model.charAt(0).toLowerCase() + model.slice(1)) as ScopedModel
-          if (!isDirect(m) && !isEventOwned(m)) return query(args)
-          const a = (args ?? {}) as AnyArgs
-
-          if (MULTI_ROW_OPS.includes(operation)) {
-            a.where = a.where ? { AND: [a.where, orgFilter(m, organizationId)] } : orgFilter(m, organizationId)
-            return query(a)
+          // Meaningful activity of the organisation (#811): its own writes, after they succeed.
+          if (isMeaningfulWrite(m, operation) || (m === ("organization" as string) && operation === "update")) {
+            const result = await scoped(m, operation, args, query)
+            void touchOrgActivity(organizationId)
+            return result
           }
-
-          if (UNIQUE_OPS.includes(operation)) {
-            const owner = await ownerOf(m, a.where)
-            if (owner === organizationId) return query(a)
-            if (owner === undefined && operation === "upsert") {
-              // Row doesn't exist yet: the upsert will create it — same rules as create.
-              if (isDirect(m)) a.create = { ...a.create, organizationId }
-              else await assertEventsOwned([eventIdOf(a.create)], organizationId, model, operation)
-              return query(a)
-            }
-            if (operation === "findUnique") return null
-            throw new TenantAccessError(model, operation)
-          }
-
-          if (CREATE_OPS.includes(operation)) {
-            const rows: AnyArgs[] = Array.isArray(a.data) ? a.data : [a.data]
-            if (isDirect(m)) {
-              const forced = rows.map((d) => ({ ...d, organizationId }))
-              a.data = Array.isArray(a.data) ? forced : forced[0]
-            } else {
-              await assertEventsOwned(rows.map(eventIdOf), organizationId, model, operation)
-            }
-            return query(a)
-          }
-
-          // Any other operation on a tenant model is refused rather than silently unscoped.
-          throw new TenantAccessError(model, operation)
+          return scoped(m, operation, args, query)
         },
       },
     },
   })
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async function scoped(m: ScopedModel, operation: string, args: unknown, query: (a: any) => Promise<unknown>) {
+    const model = m.charAt(0).toUpperCase() + m.slice(1)
+    if (!isDirect(m) && !isEventOwned(m)) return query(args)
+    const a = (args ?? {}) as AnyArgs
+
+    if (MULTI_ROW_OPS.includes(operation)) {
+      a.where = a.where ? { AND: [a.where, orgFilter(m, organizationId)] } : orgFilter(m, organizationId)
+      return query(a)
+    }
+
+    if (UNIQUE_OPS.includes(operation)) {
+      const owner = await ownerOf(m, a.where)
+      if (owner === organizationId) return query(a)
+      if (owner === undefined && operation === "upsert") {
+        // Row doesn't exist yet: the upsert will create it — same rules as create.
+        if (isDirect(m)) a.create = { ...a.create, organizationId }
+        else await assertEventsOwned([eventIdOf(a.create)], organizationId, model, operation)
+        return query(a)
+      }
+      if (operation === "findUnique") return null
+      throw new TenantAccessError(model, operation)
+    }
+
+    if (CREATE_OPS.includes(operation)) {
+      const rows: AnyArgs[] = Array.isArray(a.data) ? a.data : [a.data]
+      if (isDirect(m)) {
+        const forced = rows.map((d) => ({ ...d, organizationId }))
+        a.data = Array.isArray(a.data) ? forced : forced[0]
+      } else {
+        await assertEventsOwned(rows.map(eventIdOf), organizationId, model, operation)
+      }
+      return query(a)
+    }
+
+    // Any other operation on a tenant model is refused rather than silently unscoped.
+    throw new TenantAccessError(model, operation)
+  }
 }
 
 export type OrgScopedPrisma = ReturnType<typeof getOrgClient>

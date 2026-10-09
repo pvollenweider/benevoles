@@ -19,6 +19,8 @@ import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/
 import { siteName } from "@/lib/site"
 import { pastEventSummary, pastEventTotals } from "@/lib/past-event-retention"
 import { observePastEvents } from "@/lib/past-event-retention-data"
+import { inactivityMode } from "@/lib/org-inactivity"
+import { loadInactivityReport } from "@/lib/org-inactivity-data"
 
 export const dynamic = "force-dynamic"
 
@@ -219,6 +221,18 @@ async function run(req: Request) {
     deliverAfterResponse(ids)
   }
 
+  // --- 8 bis. Periodic check of inactive organisations (#811), report mode: who it would write to.
+  let inactivity: Record<string, number> | null = null
+  if (inactivityMode() !== "off") {
+    try {
+      const rows = await loadInactivityReport(now)
+      inactivity = { soon: rows.filter((r) => r.assessment.state === "active").length }
+      for (const r of rows) if (r.assessment.state === "due") inactivity[r.assessment.step] = (inactivity[r.assessment.step] ?? 0) + 1
+    } catch (e) {
+      reportError("cleanup.inactivity_report")(e)
+    }
+  }
+
   // --- 9. Past events (#813), observation mode: what the 3-year rule would anonymise, nothing changed.
   let pastEvents: ReturnType<typeof pastEventTotals> | null = null
   try {
@@ -229,7 +243,7 @@ async function run(req: Request) {
 
   return NextResponse.json({
     runAt: now.toISOString(),
-    observed: { pastEvents, pastEventsSummary: pastEvents ? pastEventSummary(pastEvents) : null },
+    observed: { inactivity, pastEvents, pastEventsSummary: pastEvents ? pastEventSummary(pastEvents) : null },
     tokenEncryption,
     deleted: {
       notificationOutbox: deletedOutbox.count,

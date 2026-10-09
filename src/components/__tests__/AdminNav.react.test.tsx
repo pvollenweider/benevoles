@@ -52,7 +52,9 @@ describe("AdminNav — mobile menu", () => {
   it("adds the super-admin destinations for a super admin", () => {
     render(<AdminNav userName="Root" role="super_admin" />)
     fireEvent.click(toggle())
-    expect(within(panel()).getByRole("link", { name: /Organisations/ })).toHaveAttribute("href", "/super-admin/organizations")
+    expect(within(panel()).getByRole("link", { name: /^Organisations Super admin/ })).toHaveAttribute("href", "/super-admin/organizations")
+    // #811: the report of the periodic check.
+    expect(within(panel()).getByRole("link", { name: /Organisations bientôt inactives/ })).toHaveAttribute("href", "/super-admin/inactivity")
     expect(within(panel()).getByRole("link", { name: /Communications admin/ })).toBeInTheDocument()
     // #646: the video feedback view.
     expect(within(panel()).getByRole("link", { name: /Avis sur les vidéos/ })).toHaveAttribute("href", "/super-admin/video-feedback")

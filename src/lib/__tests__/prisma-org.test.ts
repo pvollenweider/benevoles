@@ -24,6 +24,9 @@ vi.mock("../prisma", () => ({
   },
 }))
 
+const touch = vi.hoisted(() => vi.fn())
+vi.mock("../org-activity", () => ({ touchOrgActivity: touch }))
+
 import { getOrgClient, TenantAccessError } from "../prisma-org"
 
 type Args = Record<string, unknown>
@@ -196,5 +199,28 @@ describe("getOrgClient", () => {
     const b = run("org-B", "Event", "findMany", {})
     await b.promise
     expect(b.query).toHaveBeenCalledWith({ where: { organizationId: "org-B" } })
+  })
+})
+
+// #811: the organisation's own writes are its meaningful activity; reads and logs are not.
+describe("getOrgClient and the organisation's activity", () => {
+  beforeEach(() => { touch.mockReset() })
+
+  it("records activity after a successful write on a meaningful model", async () => {
+    m.eventCount.mockResolvedValue(1)
+    await run("org-a", "Shift", "create", { data: { eventId: "evt-a", roleName: "Bar" } }).promise
+    expect(touch).toHaveBeenCalledWith("org-a")
+    touch.mockReset()
+    await run("org-a", "Organization", "update", { where: { id: "org-a" }, data: { name: "X" } }).promise
+    expect(touch).toHaveBeenCalledWith("org-a")
+  })
+
+  it("records nothing for a read or a log line, nor when the write fails", async () => {
+    await run("org-a", "Event", "findMany", {}).promise
+    await run("org-a", "OrgLog", "create", { data: { action: "x" } }).promise
+    expect(touch).not.toHaveBeenCalled()
+    m.eventCount.mockResolvedValue(0)
+    await expect(run("org-a", "Shift", "create", { data: { eventId: "evt-b" } }).promise).rejects.toBeInstanceOf(TenantAccessError)
+    expect(touch).not.toHaveBeenCalled()
   })
 })
