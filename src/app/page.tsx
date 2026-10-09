@@ -240,7 +240,7 @@ function InstanceHome() {
         <ul className="mt-8 flex flex-wrap gap-3">
           {links.map((l) => (
             <li key={l.href}>
-              <Link href={l.href} className={`inline-flex items-center min-h-11 px-5 rounded-full border border-gray-300 text-base font-medium text-gray-900 hover:bg-gray-50 ${focusRing} focus-visible:outline-blue-700`}>
+              <Link href={l.href} className={`inline-flex items-center min-h-11 px-5 rounded-full border border-gray-500 text-base font-medium text-gray-900 hover:bg-gray-50 ${focusRing} focus-visible:outline-blue-700`}>
                 {l.label}
               </Link>
             </li>
