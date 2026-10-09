@@ -11,7 +11,7 @@ import { confirmSignupRequest } from "@/lib/signup-server"
 const MESSAGES = {
   unknown: "Ce lien de confirmation n'est pas valable. Refaites une demande depuis la page d'inscription.",
   expired: "Ce lien de confirmation a expiré (24 heures). Refaites une demande depuis la page d'inscription.",
-  used: "Cette demande est déjà confirmée. Si vous n'avez pas encore choisi votre mot de passe, utilisez le lien de l'email « Choisissez votre mot de passe », valable 7 jours. Une fois votre mot de passe choisi, « Mot de passe oublié » sur la page de connexion vous en envoie un nouveau si besoin.",
+  used: "Cette demande est déjà confirmée. Si vous n'avez pas encore choisi votre mot de passe, utilisez le lien de l'email de bienvenue, valable 7 jours. Une fois votre mot de passe choisi, « Mot de passe oublié » sur la page de connexion vous en envoie un nouveau si besoin.",
   taken: "Un compte existe déjà avec cette adresse. Connectez-vous, ou utilisez « Mot de passe oublié ».",
 } as const
 

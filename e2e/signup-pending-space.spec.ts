@@ -35,7 +35,7 @@ test("a confirmed sign-up creates a space with no public page until it is valida
   await expect(page).toHaveURL(/\/admin\/accept-invite/)
 
   // The same activation link also arrives by email, for someone who closes the page.
-  await waitForMessage(`to:${email} subject:"Choisissez votre mot de passe"`)
+  await waitForMessage(`to:${email} subject:"Bienvenue sur"`)
 
   // No public page, not even with the address: the space awaits validation.
   const visitor = await browser.newContext()

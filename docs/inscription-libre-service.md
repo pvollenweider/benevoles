@@ -9,7 +9,7 @@ Une association crée son espace elle-même depuis `/inscription` (#810). Cette 
 3. **Confirmation** (`/inscription/confirmer?t=…`) : ouvrir le lien ne change rien (les antivirus de messagerie ouvrent les liens) ; le bouton **Confirmer et créer mon espace** (`POST /api/public/signup/confirm`, `confirmSignupRequest` dans `src/lib/signup-server.ts`) crée, une seule fois :
    - l'organisation, **en attente de validation** : `publicationApprovedAt` et `outboundEmailApprovedAt` à `null`, `signupDescription` recopiée de la demande ;
    - son compte propriétaire, **inactif**, avec un lien d'activation valable 7 jours.
-4. **Mot de passe** : le navigateur est envoyé directement sur la page d'activation habituelle (`/admin/accept-invite`). Le même lien part aussi par email (« Choisissez votre mot de passe benevol.app », type `signup_account_link`, email de la plateforme sans organisation, sans texte saisi), pour la personne qui fermerait la page.
+4. **Mot de passe** : le navigateur est envoyé directement sur la page d'activation habituelle (`/admin/accept-invite`). Le même lien part aussi par email (« Bienvenue sur benevol.app : choisissez votre mot de passe », type `signup_account_link`, email de la plateforme sans organisation, sans texte saisi ; il explique la validation en attente et donne les pages du guide pour démarrer, listées dans `src/lib/signup-welcome.ts`), pour la personne qui fermerait la page.
 5. **Alerte** à l'opérateur : « Nouvelle demande d'espace », par ntfy et par email, avec le nom de l'espace et le début de sa description (voir [deploiement.md](deploiement.md#alertes-à-lopérateur)).
 
 ## Espace en attente
@@ -43,7 +43,7 @@ Un espace créé par l'inscription porte `Organization.signupAt`. Pour les espac
 
 ## Lien d'activation perdu
 
-Si la personne ferme la page avant de choisir son mot de passe, l'email « Choisissez votre mot de passe benevol.app » lui donne le lien (7 jours) ; la page « Demande déjà confirmée » le lui rappelle. « Mot de passe oublié » ne sert pas à un compte inactif. Si le lien a expiré ou si l'email manque, la personne écrit à contact@benevol.app ; sur la fiche de l'espace, **Renvoyer l'invitation** crée un nouveau lien (l'ancien cesse de fonctionner) et l'affiche sous le tableau des administrateurs. L'email d'invitation peut ne pas partir, puisque l'espace en attente n'écrit qu'à ses administrateurs actifs : transmettre alors le lien affiché.
+Si la personne ferme la page avant de choisir son mot de passe, l'email « Bienvenue sur benevol.app : choisissez votre mot de passe » lui donne le lien (7 jours) ; la page « Demande déjà confirmée » le lui rappelle. « Mot de passe oublié » ne sert pas à un compte inactif. Si le lien a expiré ou si l'email manque, la personne écrit à contact@benevol.app ; sur la fiche de l'espace, **Renvoyer l'invitation** crée un nouveau lien (l'ancien cesse de fonctionner) et l'affiche sous le tableau des administrateurs. L'email d'invitation peut ne pas partir, puisque l'espace en attente n'écrit qu'à ses administrateurs actifs : transmettre alors le lien affiché.
 
 ## Protections contre les abus
 
