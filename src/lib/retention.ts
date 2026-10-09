@@ -87,6 +87,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
+    data: "Liste de blocage des inscriptions : adresse email ou domaine bloqué, empreinte d'une adresse IP (jamais l'adresse elle-même), raison",
+    purpose: "Empêcher les demandes d'espace abusives",
+    duration: "jusqu'au retrait par l'opérateur ou jusqu'à l'échéance choisie ; une adresse IP est toujours bloquée pour une durée limitée, 90 jours au plus",
+    trigger: "blocage par l'opérateur",
+    mechanism: "nettoyage quotidien des entrées échues (cron cleanup)",
+    backups: inBackups,
+    public: true,
+  },
+  {
     data: "Événement supprimé par un administrateur",
     purpose: "—",
     duration: "effacé immédiatement, avec ses créneaux, inscriptions, invitations, réponses aux questions, responsables, pages, jalons, messages ciblés et son journal",
