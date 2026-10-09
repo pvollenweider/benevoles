@@ -80,3 +80,22 @@ export const INSTANCE_OPERATOR_PATH = "/legal/exploitant"
 export function privacyHref(env: Env = runtimeEnv()): string {
   return isHostedService(env) ? "/legal/privacy" : INSTANCE_OPERATOR_PATH
 }
+
+/**
+ * The public texts written for the upstream instance (FEATURES.md, the guides), adapted to this
+ * one (#760): its contact address (or its operator page when it has none), its domain in example
+ * addresses, its name elsewhere. Unchanged on the upstream instance.
+ */
+export function localizeInstanceText(markdown: string, env: Env = runtimeEnv()): string {
+  const domain = siteDomain(env)
+  const name = siteName(env)
+  const contact = contactEmail(env)
+  if (domain === UPSTREAM_DOMAIN && name === UPSTREAM_DOMAIN && contact === UPSTREAM_CONTACT) return markdown
+  const contactLink = contact ? `[${contact}](mailto:${contact})` : `[l'exploitant de cette instance](${INSTANCE_OPERATOR_PATH})`
+  return markdown
+    .replaceAll(`[${UPSTREAM_CONTACT}](mailto:${UPSTREAM_CONTACT})`, contactLink)
+    .replaceAll(UPSTREAM_CONTACT, contact ?? "l'exploitant de cette instance")
+    .replaceAll(`://${UPSTREAM_DOMAIN}`, `://${domain}`)
+    .replaceAll(`.${UPSTREAM_DOMAIN}`, `.${domain}`)
+    .replaceAll(UPSTREAM_DOMAIN, name)
+}

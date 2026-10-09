@@ -14,6 +14,7 @@ import type { DocUnit } from "@/lib/doc-units"
 import { formatReleaseDate, parseChangelog, repositoryLinks } from "@/lib/changelog"
 import { REPOSITORY_URL } from "@/lib/structured-data"
 import { createRenderCache } from "@/lib/render-cache"
+import { localizeInstanceText } from "@/lib/site"
 
 // The catalogue doesn't change while the server runs (it's in the image), so production reads it
 // once; in development it's read again on each render, so editing videos/catalog.json shows up.
@@ -100,7 +101,7 @@ function renderDocUnitPartsNow(unit: DocUnit, mediaBaseUrl?: string | null): Doc
     players.set(id, player)
     return renderDocVideoSlot(id)
   }
-  const html = renderEventPageMarkdown(linkSourcesToRoutes(unit.body), { shiftHeadings: false, headingIds: true, videoCard: videoSlot, image: docImageHtml })
+  const html = renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(unit.body)), { shiftHeadings: false, headingIds: true, videoCard: videoSlot, image: docImageHtml })
   return splitAtDocVideoSlots(html, players)
 }
 
@@ -122,7 +123,7 @@ function renderPublicMarkdown(body: string, mediaBaseUrl?: string | null): strin
     const link = docVideoLink(id, catalog, hasRender)
     return link ? renderDocVideoCard(link) : ""
   }
-  return renderEventPageMarkdown(linkSourcesToRoutes(body), { shiftHeadings: false, headingIds: true, videoCard, image: docImageHtml })
+  return renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(body)), { shiftHeadings: false, headingIds: true, videoCard, image: docImageHtml })
 }
 
 /** A still of a video (its poster), as /fonctionnalites shows it: never a broken image. */
@@ -158,7 +159,8 @@ export function renderFeaturesPage(mediaBaseUrl?: string | null, source = "FEATU
 
 function renderFeaturesPageNow(mediaBaseUrl: string | null | undefined, source: string, fallbackTitle: string): RenderedFeaturesPage {
   const raw = fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), source), "utf-8")
-  const page = parseFeaturesPage(raw)
+  // The features were written for benevol.app: another instance reads its own name (#760).
+  const page = parseFeaturesPage(localizeInstanceText(raw))
   const catalog = videoCatalog()
   const still = (image: FeatureImage): FeatureStill | null => {
     const video = resolveVideoReference(image.videoId, catalog)

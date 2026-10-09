@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { contactEmail, siteDomain, siteName, supportUrl } from "../site"
+import { contactEmail, localizeInstanceText, siteDomain, siteName, supportUrl } from "../site"
 
 const upstream = { NEXT_PUBLIC_APP_URL: "https://www.benevol.app" }
 const other = { NEXT_PUBLIC_APP_URL: "https://benevoles.example.org" }
@@ -25,5 +25,24 @@ describe("instance values (#760)", () => {
     expect(supportUrl(other)).toBeNull()
     expect(supportUrl({ ...other, SUPPORT_URL: "https://liberapay.com/x" })).toBe("https://liberapay.com/x")
     expect(supportUrl({ ...other, SUPPORT_URL: "http://insecure.example" })).toBeNull()
+  })
+})
+
+describe("public texts on another instance (#760)", () => {
+  const md = "Écrivez à [contact@benevol.app](mailto:contact@benevol.app). Adresse du type `asso.benevol.app`. Ce que benevol.app ne fait pas. contact@benevol.app"
+
+  it("leaves the upstream instance's texts untouched", () => {
+    expect(localizeInstanceText(md, { NEXT_PUBLIC_APP_URL: "https://www.benevol.app" })).toBe(md)
+  })
+
+  it("puts this instance's name, domain and contact in their place", () => {
+    const out = localizeInstanceText(md, { NEXT_PUBLIC_APP_URL: "https://benevoles.example.org", SITE_NAME: "Bénévoles du Jura", CONTACT_EMAIL: "aide@example.org" })
+    expect(out).toBe("Écrivez à [aide@example.org](mailto:aide@example.org). Adresse du type `asso.benevoles.example.org`. Ce que Bénévoles du Jura ne fait pas. aide@example.org")
+  })
+
+  it("points to the operator page when the instance has no contact address", () => {
+    const out = localizeInstanceText(md, { NEXT_PUBLIC_APP_URL: "https://benevoles.example.org" })
+    expect(out).toContain("[l'exploitant de cette instance](/legal/exploitant)")
+    expect(out).not.toMatch(/benevol\.app/)
   })
 })
