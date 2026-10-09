@@ -45,6 +45,8 @@ Tes créneaux sont ensuite listés sous **Tous mes créneaux** ; celui de l'enca
 
 Pour une place confirmée ou une demande, la confirmation propose un champ facultatif « Un mot pour l'organisation ? » (300 caractères maximum) : un message comme « Paul peut me remplacer » est transmis par email à l'organisation et aux responsables du poste, mais n'est pas conservé une fois l'email envoyé. N'y écris pas d'informations de santé ni d'autres détails sensibles.
 
+Chaque annulation, retrait de demande, sortie de liste d'attente ou refus d'une place proposée t'est confirmé par email : ce qui a été fait, quand, et sur quel créneau. Si ce n'était pas toi, réponds à cet email : ta réponse va à l'organisation, qui saura que quelqu'un d'autre utilise ton lien.
+
 Si l'annulation n'aboutit pas (connexion coupée, par exemple), un message sous le créneau dit ce qui s'est passé et le créneau reste affiché ; recharge la page pour vérifier avant de réessayer.
 
 Quand tu annules ton dernier créneau, la page affiche « Toutes tes inscriptions ont été annulées » : pour participer à nouveau, retourne sur la page de l'événement et choisis tes créneaux.

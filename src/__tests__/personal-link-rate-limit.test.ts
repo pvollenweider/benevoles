@@ -18,6 +18,13 @@ vi.mock("@/lib/withdrawal-notifications", () => ({ buildWithdrawalNotifications:
 vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications: vi.fn().mockResolvedValue([]), deliverAfterResponse: vi.fn() }))
 
 const valid = { id: "r1", eventId: "e1", shiftId: "s1", volunteerId: "v1", status: "active" }
+// What the withdraw route reads: the volunteer is told of the withdrawal by email (#809).
+const withdrawable = {
+  ...valid,
+  volunteer: { firstName: "A", lastName: "B", email: "a@b.c" },
+  shift: { id: "s1", roleName: "Bar", label: "Bar", date: new Date("2026-07-04"), startTime: "10:00", endTime: "12:00", capacity: 2 },
+  event: { id: "e1", title: "T", organizationId: "o1", organization: { slug: "o", timeZone: "Europe/Zurich" } },
+}
 const page = {
   ...valid,
   volunteer: { firstName: "A", lastName: "B", email: "a@b.c", availabilityPeriods: [], availabilityNote: null, phone: null },
@@ -57,7 +64,7 @@ describe("personal-link API rate limits", () => {
       expect((await GET(request("GET", ip), params(`tok-read-${i % 3}`))).status).toBe(200)
     }
     for (let i = 0; i < 8; i++) {
-      findFirst.mockResolvedValueOnce(valid)
+      findFirst.mockResolvedValueOnce(withdrawable)
       expect((await DELETE(request("DELETE", ip), params(`tok-del-${i}`))).status).toBe(200)
     }
   })

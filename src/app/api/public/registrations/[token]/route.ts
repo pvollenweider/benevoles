@@ -13,7 +13,7 @@ import { contactPhone } from "@/lib/contact-phone"
 import { registrationToken } from "@/lib/token-vault"
 import { pickShiftInfo, withDayContact, withSectorLeaders } from "@/lib/shift-info"
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
-import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw } from "@/lib/volunteer-withdraw"
+import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw, withdrawalConfirmation, withdrawalMoment } from "@/lib/volunteer-withdraw"
 import { withdrawRequestSchema } from "@/lib/volunteer-withdraw-schema"
 import { buildWithdrawalNotifications } from "@/lib/withdrawal-notifications"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
@@ -141,9 +141,9 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
   const registration = await prisma.registration.findFirst({
     where: { ...registrationToken.where(token), status: { in: [...WITHDRAWABLE_STATUSES] } },
     include: {
-      volunteer: { select: { firstName: true, lastName: true } },
+      volunteer: { select: { firstName: true, lastName: true, email: true } },
       shift: { select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true } },
-      event: { select: { id: true, title: true, organizationId: true, organization: { select: { slug: true } } } },
+      event: { select: { id: true, title: true, organizationId: true, organization: { select: { slug: true, timeZone: true } } } },
     },
   })
   const plan = registration && planVolunteerWithdraw(registration.status)
@@ -205,6 +205,30 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
       deliverAfterResponse(outboxIds)
     } catch (e) {
       reportError("withdrawal.notify")(e)
+    }
+  }
+
+  // Says back to the volunteer what was just done from their link (#809): if the link is in
+  // someone else's hands, they learn it and can tell the organisation. Best-effort too.
+  if (registration.volunteer.email) {
+    try {
+      const outboxIds = await enqueueNotifications([{
+        kind: "registration_withdrawn",
+        recipient: { email: registration.volunteer.email, name: `${registration.volunteer.firstName} ${registration.volunteer.lastName}` },
+        organizationId: registration.event.organizationId,
+        volunteerId: registration.volunteerId,
+        dedupeKey: `registration_withdrawn:${registration.id}`,
+        data: {
+          volunteerName: `${registration.volunteer.firstName} ${registration.volunteer.lastName}`,
+          eventTitle: registration.event.title,
+          what: withdrawalConfirmation(registration.status),
+          when: withdrawalMoment(new Date(), orgTimeZone(registration.event.organization)),
+          shift: { roleName: registration.shift.roleName, label: registration.shift.label, date: registration.shift.date.toISOString().slice(0, 10), startTime: registration.shift.startTime, endTime: registration.shift.endTime },
+        },
+      }], prisma, { organizationId: registration.event.organizationId })
+      deliverAfterResponse(outboxIds)
+    } catch (e) {
+      reportError("withdrawal.confirm")(e)
     }
   }
 

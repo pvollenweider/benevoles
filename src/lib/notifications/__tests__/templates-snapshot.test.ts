@@ -381,6 +381,18 @@ const cases: [string, NotificationPayload][] = [
     recipient,
     data: { volunteerName: "Julie Martin", eventTitle: "Festival du Rhône", shiftLabel: "Accueil", note: null, orgSlug: "rhone", eventSlug: "festival-2026" },
   }],
+  // #809: the volunteer left a waitlist from their personal link; no link in the email.
+  ["registration_withdrawn", {
+    kind: "registration_withdrawn",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      what: "Tu as quitté la liste d'attente",
+      when: "le 9 octobre à 14:05",
+      shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" },
+    },
+  }],
   // #703: removed by the organization; one shift, other shifts still live (personal link).
   ["registration_removed", {
     kind: "registration_removed",
@@ -503,6 +515,7 @@ describe("render — snapshot of every notification kind", () => {
       registration_requested: true,
       registration_refused: true,
       registration_removed: true,
+    registration_withdrawn: true,
       release_available: true,
       operator_alert: true,
       signup_confirmation: true,
