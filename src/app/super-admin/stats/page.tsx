@@ -49,9 +49,9 @@ function UsageTable({ id, title, intro, rows }: { id: string; title: string; int
   return (
     <section className="space-y-2">
       <h2 id={id} className="text-lg font-semibold text-gray-900">{title}</h2>
-      {intro && <p className="text-sm text-gray-700">{intro}</p>}
+      {intro && <p id={`${id}-intro`} className="text-sm text-gray-700">{intro}</p>}
       <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-        <table className="w-full text-sm">
+        <table className="w-full text-sm" aria-describedby={intro ? `${id}-intro` : undefined}>
           <caption className="sr-only">{title}</caption>
           <thead className="bg-gray-50 text-left text-gray-700">
             <tr>
@@ -62,8 +62,8 @@ function UsageTable({ id, title, intro, rows }: { id: string; title: string; int
           <tbody className="divide-y divide-gray-100">
             {rows.map((r) => (
               <tr key={r.key}>
-                <th scope="row" className="px-4 py-2 text-left font-normal text-gray-900">{r.label}</th>
-                <td className="px-4 py-2 text-right tabular-nums font-medium text-gray-900">{typeof r.value === "number" ? formatCount(r.value) : r.value}</td>
+                <th scope="row" className="px-4 py-2 text-left font-normal text-gray-900 break-words">{r.label}</th>
+                <td className="px-4 py-2 text-right tabular-nums font-medium text-gray-900 break-words">{typeof r.value === "number" ? formatCount(r.value) : r.value}</td>
               </tr>
             ))}
           </tbody>
