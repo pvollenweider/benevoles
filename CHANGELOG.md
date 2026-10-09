@@ -37,6 +37,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Espaces jamais activés effacés** (#810) : un espace créé par l'inscription en libre-service dont le mot de passe n'était jamais choisi perdait son compte au bout de 30 jours, mais restait en attente de validation, sans administrateur, dans le compte des espaces en attente. Il est désormais effacé avec son compte.
 - **Lien pour choisir son mot de passe aussi envoyé par email** (#810) : après « Confirmer et créer mon espace », le lien pour choisir le mot de passe ne s'affichait que dans le navigateur ; une personne qui fermait la page restait bloquée. Il part désormais aussi par email, « Choisissez votre mot de passe benevol.app », valable 7 jours.
 - **Affiche d'une vidéo téléchargée une seule fois** : sur la page d'une vidéo, l'image affichée avant la lecture était préchargée sans le mode CORS du lecteur ; le navigateur ignorait ce préchargement (avertissement dans la console) et téléchargeait l'image une seconde fois. Préchargement et lecteur utilisent maintenant le même mode.
 

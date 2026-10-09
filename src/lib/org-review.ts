@@ -31,6 +31,24 @@ export const PENDING_ORG_WHERE: { active: true; suspendedAt: null; OR: ({ public
   OR: [{ publicationApprovedAt: null }, { outboundEmailApprovedAt: null }],
 }
 
+/**
+ * A space created by self-service sign-up whose owner never chose a password (#810): the space is
+ * created at the confirmation, the account stays inactive until the password, and the nightly
+ * cleanup deletes that account after `cutoff`. The space goes with it, or it would stay awaiting
+ * validation forever, with no administrator, in the operator's count and daily summary.
+ * Only a sign-up space matches: both grants null (any other creation grants them), not suspended.
+ */
+export function abandonedSignupSpaceWhere(cutoff: Date) {
+  return {
+    active: true,
+    suspendedAt: null,
+    publicationApprovedAt: null,
+    outboundEmailApprovedAt: null,
+    createdAt: { lt: cutoff },
+    admins: { none: { isActive: true } },
+  } as const
+}
+
 /** The daily summary sentence, or null when nothing waits (#810: one summary a day, not one per request). */
 export function pendingSummary(createdAts: readonly Date[], now: Date): string | null {
   if (createdAts.length === 0) return null

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { PENDING_ORG_WHERE, pendingSummary } from "@/lib/org-review"
+import { PENDING_ORG_WHERE, abandonedSignupSpaceWhere, pendingSummary } from "@/lib/org-review"
 import { notifyOperator } from "@/lib/operator-alerts"
 import { countsToFreeze } from "@/lib/message-history"
 import { daysAgo, RETENTION_DAYS } from "@/lib/retention"
@@ -65,6 +65,16 @@ async function run(req: Request) {
     const deletedOrgs = await tx.organization.deleteMany({ where: { id: { in: orgIds } } })
     const deletedOrgAdmins = await tx.adminUser.deleteMany({ where: { id: { in: admins.map((a) => a.id) } } })
     return { deletedOrgs, deletedOrgAdmins }
+  })
+
+  // --- 1b. Sign-up spaces never activated (#810): the owner never chose a password. Deleted with
+  // their inactive account (step 3 would remove the account alone and leave the space pending).
+  const deletedAbandonedSpaces = await prisma.$transaction(async (tx) => {
+    const orgs = await tx.organization.findMany({ where: abandonedSignupSpaceWhere(adminCutoff), select: { id: true } })
+    const orgIds = orgs.map((o) => o.id)
+    if (orgIds.length === 0) return { count: 0 }
+    await tx.adminUser.deleteMany({ where: { organizationId: { in: orgIds }, isActive: false } })
+    return tx.organization.deleteMany({ where: { id: { in: orgIds } } })
   })
 
   // --- 2. Orphan volunteers ---
@@ -215,6 +225,7 @@ async function run(req: Request) {
       signupRequests: deletedSignupRequests.count,
       signupBlocks: deletedSignupBlocks.count,
       organizations: deletedOrgs.count,
+      abandonedSignupSpaces: deletedAbandonedSpaces.count,
       volunteers: deletedVolunteers.count,
       mergedMemberTombstones: deletedMergedTombstones.count,
       adminUsers: deletedOrgAdmins.count + deletedAdmins.count,
