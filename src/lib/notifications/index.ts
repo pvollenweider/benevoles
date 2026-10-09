@@ -29,6 +29,9 @@ export async function sendNotification(
     return { ok: false, reason: ORG_INACTIVE_REASON, permanent: true, blocked: true }
   }
   const allowance = await takeSendAllowance(payload.organizationId, payload.kind, { recipientEmail: payload.recipient?.email })
+  // Over the per-recipient cap: abandoned, like a cancellation (the outbox marks it « cancelled »,
+  // never retried). Over any other limit: held until the window ends.
+  if (!allowance.ok && allowance.drop) return { ok: false, reason: `limit:${allowance.limit}`, permanent: true, blocked: true }
   if (!allowance.ok) return { ok: false, reason: `limit:${allowance.limit}`, held: true, retryAfterMs: allowance.retryAfterMs }
   return emailChannel.send(payload)
 }

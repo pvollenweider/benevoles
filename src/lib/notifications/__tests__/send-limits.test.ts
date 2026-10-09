@@ -82,12 +82,24 @@ describe("email sending limits (#810)", () => {
     const reset = (email: string) => takeSendAllowance("org-1", "password_reset", { store, limits, recipientEmail: email, alert: vi.fn() })
     expect((await reset("victim@example.org")).ok).toBe(true)
     expect((await reset("Victim@Example.org ")).ok).toBe(true)
-    expect(await reset("victim@example.org")).toMatchObject({ ok: false, limit: "recipient_per_hour" })
+    // Dropped, not held: a flood must not queue up and trickle out in front of a real request.
+    expect(await reset("victim@example.org")).toMatchObject({ ok: false, limit: "recipient_per_hour", drop: true })
     for (let i = 0; i < 10; i++) await reset("victim@example.org")
     // The flood used two emails of the organisation's day, no more; another administrator still resets.
     expect((await store.peek("email:org:org-1:day"))?.count).toBe(2)
     expect((await reset("other-admin@example.org")).ok).toBe(true)
     // An admin invitation is not touched by any of it.
     expect((await takeSendAllowance("org-1", "admin_invite", { store, limits, alert: vi.fn() })).ok).toBe(true)
+  })
+
+  // Security review of #817: a failing alert marker must not turn a held email into a sent one.
+  it("keeps a held email held when recording the alert fails, and lets it go only if the windows cannot be read", async () => {
+    const full = { peek: vi.fn().mockResolvedValue({ count: 99, msLeft: 30_000 }), hit: vi.fn().mockRejectedValue(new Error("db down")) }
+    expect(await takeSendAllowance("org-1", "reminder_j1", { store: full, limits: tight, alert: vi.fn() })).toMatchObject({ ok: false, limit: "global_per_minute" })
+    const unreadable = { peek: vi.fn().mockRejectedValue(new Error("db down")), hit: vi.fn() }
+    expect(await takeSendAllowance("org-1", "reminder_j1", { store: unreadable, limits: tight, alert: vi.fn() })).toEqual({ ok: true })
+    // Allowed, but counting fails: it still goes.
+    const empty = { peek: vi.fn().mockResolvedValue(null), hit: vi.fn().mockRejectedValue(new Error("db down")) }
+    expect(await takeSendAllowance("org-1", "reminder_j1", { store: empty, limits: tight, alert: vi.fn() })).toEqual({ ok: true })
   })
 })

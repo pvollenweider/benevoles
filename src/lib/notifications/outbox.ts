@@ -182,8 +182,8 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     }
 
     if (!outcome.ok && outcome.blocked) {
-      // Deactivated or deleted organisation (#814): cancelled for good, never retried, and never
-      // sent by a later reactivation.
+      // Deactivated or deleted organisation (#814), or a public-triggered email over its
+      // per-recipient cap (#810): cancelled for good, never retried, never sent later.
       await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: outcome.reason, claimedAt: null } })
       result.cancelled++
       continue

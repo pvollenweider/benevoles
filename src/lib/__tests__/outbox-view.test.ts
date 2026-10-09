@@ -117,6 +117,13 @@ describe("outbox view", () => {
     expect(outboxRowView({ ...base, status: "failed", attempts: 1, lastError: MEMBER_DELETED_CANCEL_REASON }, p).canRetry).toBe(false)
   })
 
+  it("explains an email dropped by the per-recipient cap (#810)", () => {
+    const row = { id: "x", status: "cancelled", attempts: 0, nextAttemptAt: new Date(), lastError: "limit:recipient_per_hour", sentAt: null, createdAt: new Date() }
+    const view = outboxRowView(row, { kind: "password_reset", recipient: { email: "a@b.ch" } })
+    expect(view.lastError).toBe("Annulé : trop de demandes pour cette adresse en une heure.")
+    expect(view.canRetry).toBe(false)
+  })
+
   it("never says every email left while some were cancelled", () => {
     expect(outboxHeadline({ pending: 0, retrying: 0, sent: 2, failed: 0, cancelled: 1 })).toBe("1 email annulé (organisation désactivée), jamais envoyé ; les autres sont partis.")
     expect(outboxHeadline({ pending: 0, retrying: 0, sent: 0, failed: 0, cancelled: 2 })).toBe("2 emails annulés (organisation désactivée), jamais envoyés.")

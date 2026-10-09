@@ -104,6 +104,7 @@ export function outboxErrorSentence(lastError: string | null): string | null {
   if (!lastError) return null
   if (lastError === MERGED_MEMBER_CANCEL_REASON) return "Annulé : fiche fusionnée avec une autre."
   if (lastError === MEMBER_DELETED_CANCEL_REASON) return "Annulé : membre supprimé."
+  if (lastError === "limit:recipient_per_hour") return "Annulé : trop de demandes pour cette adresse en une heure."
   if (lastError === ORG_INACTIVE_REASON) return "Annulé : organisation désactivée, jamais envoyé."
   const decoded = decodeOutcomeReason(lastError)
   if (decoded) return sentenceFor(decoded)

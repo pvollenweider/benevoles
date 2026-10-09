@@ -116,16 +116,25 @@ export function sendWindows(organizationId: string | null | undefined, kind: Not
   return windows
 }
 
-export type SendAllowance = { ok: true } | { ok: false; limit: string; retryAfterMs: number }
+/**
+ * `drop`: over the per-recipient cap, the email is abandoned instead of held. Holding it would
+ * queue every request of a flood and trickle them out hour after hour, each new reset link
+ * invalidating the previous one: the real request would wait behind them.
+ */
+export type SendAllowance = { ok: true } | { ok: false; limit: string; retryAfterMs: number; drop?: true }
 
 const defaultStore: RateLimitStore = process.env.NODE_ENV === "test" ? memoryStore() : postgresStore
 
 /**
  * Says whether one email may go, and counts it only if it does: every window is read first; if one
- * is full the email is held and nothing is counted, otherwise every window counts it. Two sends at
- * the same instant can overshoot a limit by a few emails, which is acceptable for a safety cap.
- * Over a limit, the first held email of the window raises one alert. If the store fails, the email
- * goes and the error is reported: a limiter must never be the reason no email leaves.
+ * is full the email is held (dropped for the per-recipient cap) and nothing is counted, otherwise
+ * every window counts it. Two sends at the same instant can overshoot a limit by a few emails,
+ * which is acceptable for a safety cap.
+ *
+ * Store failures never change a decision once it is made. Only when the windows cannot be read
+ * at all does the email go (fail open, reported): a limiter must never be the reason no email
+ * leaves. A failure to record the alert marker, or to count an email that goes, is reported and
+ * changes nothing: a held email stays held, an allowed one goes.
  */
 export async function takeSendAllowance(
   organizationId: string | null | undefined,
@@ -135,16 +144,33 @@ export async function takeSendAllowance(
   const store = opts.store ?? defaultStore
   const alert = opts.alert ?? ((limit, org) => reportError(`email.limit.${limit}`)(new Error(`Email sending limit reached: ${limit}${org ? ` (organisation ${org})` : ""}`)))
   const windows = sendWindows(organizationId, kind, opts.limits, opts.recipientEmail)
+
+  // 1. Decide, from the windows as they are.
+  let full: { window: Window; msLeft: number } | null = null
   try {
     for (const w of windows) {
       const state = await store.peek(w.key)
-      if (state && state.count >= w.limit) {
-        // One alert per window: the first email held marks the window, the next ones stay quiet.
-        const marker = await store.hit(`${w.key}:held`, Math.max(1000, Math.ceil(state.msLeft)))
-        if (marker.count === 1) alert(w.name, organizationId ?? null)
-        return { ok: false, limit: w.name, retryAfterMs: Math.max(1000, Math.ceil(state.msLeft)) }
-      }
+      if (state && state.count >= w.limit) { full = { window: w, msLeft: state.msLeft }; break }
     }
+  } catch (e) {
+    reportError("email.limit.store")(e)
+    return { ok: true }
+  }
+
+  // 2a. Held or dropped: one alert per window (the first email over the limit marks it).
+  if (full) {
+    const retryAfterMs = Math.max(1000, Math.ceil(full.msLeft))
+    try {
+      const marker = await store.hit(`${full.window.key}:held`, retryAfterMs)
+      if (marker.count === 1) alert(full.window.name, organizationId ?? null)
+    } catch (e) {
+      reportError("email.limit.alert_marker")(e)
+    }
+    return { ok: false, limit: full.window.name, retryAfterMs, ...(full.window.name === "recipient_per_hour" ? { drop: true as const } : {}) }
+  }
+
+  // 2b. Allowed: counted in every window.
+  try {
     for (const w of windows) await store.hit(w.key, w.windowMs)
   } catch (e) {
     reportError("email.limit.store")(e)
