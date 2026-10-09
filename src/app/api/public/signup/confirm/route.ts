@@ -4,10 +4,8 @@
 import { NextResponse } from "next/server"
 import { isSignupOpen } from "@/lib/signup-switch"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
-import { SIGNUP_CLOSED_MESSAGE } from "@/lib/signup"
+import { signupClosedMessage } from "@/lib/signup"
 import { contactEmail } from "@/lib/site"
-import { rateLimit, getClientIp } from "@/lib/rate-limit"
-import { signupOpen, signupClosedMessage } from "@/lib/signup"
 import { confirmSignupRequest } from "@/lib/signup-server"
 
 const MESSAGES = {
@@ -23,8 +21,7 @@ const MESSAGES = {
  * hands back the account activation link (choose a password).
  */
 export async function POST(req: Request) {
-  if (!(await isSignupOpen())) return NextResponse.json({ error: SIGNUP_CLOSED_MESSAGE, code: "signup_closed" }, { status: 403 })
-  if (!signupOpen()) return NextResponse.json({ error: signupClosedMessage(contactEmail()), code: "signup_closed" }, { status: 403 })
+  if (!(await isSignupOpen())) return NextResponse.json({ error: signupClosedMessage(contactEmail()), code: "signup_closed" }, { status: 403 })
   const ip = getClientIp(req)
   const rl = await rateLimit(ip, "signup-confirm", 20, 60 * 60 * 1000)
   if (!rl.ok) return NextResponse.json({ error: "Trop d'essais. Réessayez dans une heure." }, { status: 429 })

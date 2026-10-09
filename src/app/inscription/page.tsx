@@ -7,7 +7,7 @@ import { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
 import SignupForm from "@/components/public/signup/SignupForm"
 import { isSignupOpen } from "@/lib/signup-switch"
-import { signupClosedMessage, signupOpen } from "@/lib/signup"
+import { signupClosedMessage } from "@/lib/signup"
 import { contactEmail } from "@/lib/site"
 import { SITE_NAME } from "@/lib/seo-metadata"
 
@@ -30,8 +30,7 @@ export default async function SignupPage() {
               Votre espace est prêt dès que vous avez confirmé votre adresse : vous pouvez préparer votre événement tout de suite. Sa publication et l&apos;envoi d&apos;invitations seront possibles après une courte vérification de votre inscription ; vous recevrez un email dès que votre espace sera activé.
             </p>
           </div>
-          <SignupForm open={await isSignupOpen()} />
-          <SignupForm open={signupOpen()} closedMessage={signupClosedMessage(contactEmail())} />
+          <SignupForm open={await isSignupOpen()} closedMessage={signupClosedMessage(contactEmail())} />
         </div>
       </main>
     </ContentShell>

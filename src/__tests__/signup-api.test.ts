@@ -68,13 +68,12 @@ describe("POST /api/public/signup (#810, part 4b)", () => {
     process.env.SIGNUP = "off"
     const closed = await POST(post("http://localhost/api/public/signup", form()))
     expect(closed.status).toBe(403)
-    expect((await closed.json()).error).toBe(SIGNUP_CLOSED_MESSAGE)
+    expect((await closed.json()).error).toBe(signupClosedMessage("contact@benevol.app"))
     // The super admin's switch closes it too, without a deploy.
     delete process.env.SIGNUP
     setting.value = { closed: true }
     expect((await POST(post("http://localhost/api/public/signup", form()))).status).toBe(403)
     expect(server.createSignupRequest).not.toHaveBeenCalled()
-    expect((await closed.json()).error).toBe(signupClosedMessage("contact@benevol.app"))
   })
 })
 
