@@ -20,14 +20,15 @@ const MESSAGES = {
  */
 export async function POST(req: Request) {
   if (!signupOpen()) return NextResponse.json({ error: SIGNUP_CLOSED_MESSAGE, code: "signup_closed" }, { status: 403 })
-  const rl = await rateLimit(getClientIp(req), "signup-confirm", 20, 60 * 60 * 1000)
+  const ip = getClientIp(req)
+  const rl = await rateLimit(ip, "signup-confirm", 20, 60 * 60 * 1000)
   if (!rl.ok) return NextResponse.json({ error: "Trop d'essais. Réessayez dans une heure." }, { status: 429 })
 
   const body = await req.json().catch(() => null) as { token?: unknown } | null
   const token = typeof body?.token === "string" ? body.token : ""
   if (!token) return NextResponse.json({ error: MESSAGES.unknown, code: "unknown" }, { status: 400 })
 
-  const result = await confirmSignupRequest(token)
+  const result = await confirmSignupRequest(token, new Date(), ip)
   if (!result.ok) return NextResponse.json({ error: MESSAGES[result.reason], code: result.reason }, { status: result.reason === "unknown" ? 404 : 409 })
   return NextResponse.json({ ok: true, inviteUrl: result.inviteUrl })
 }

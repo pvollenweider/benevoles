@@ -833,3 +833,19 @@ model SignupRequest {
   @@index([createdAt])
 }
 
+// Block list of the self-service sign-up (#810, src/lib/signup-blocklist.ts). `value` is the
+// normalised address or domain, or the keyed hash of an IP (never the IP itself); `label` is what
+// the super admin sees (the address, the domain, or « IP …xx » for an IP). An IP entry always expires.
+model SignupBlock {
+  id          String    @id @default(cuid())
+  kind        String
+  value       String
+  label       String
+  reason      String
+  expiresAt   DateTime?
+  createdById String?
+  createdAt   DateTime  @default(now())
+
+  @@unique([kind, value])
+}
+

@@ -5,7 +5,7 @@ import { NextResponse } from "next/server"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { reportError } from "@/lib/report-error"
 import { looksAutomated, signupOpen, signupSchema, SIGNUP_ACCEPTED_MESSAGE, SIGNUP_CLOSED_MESSAGE } from "@/lib/signup"
-import { createSignupRequest } from "@/lib/signup-server"
+import { createSignupRequest, signupBlocked } from "@/lib/signup-server"
 
 /**
  * Self-service sign-up form (#810, part 4b): stores the request and emails a confirmation link.
@@ -23,10 +23,13 @@ export async function POST(req: Request) {
   }
 
   const accepted = NextResponse.json({ ok: true, message: SIGNUP_ACCEPTED_MESSAGE }, { status: 202 })
-  const rl = await rateLimit(getClientIp(req), "signup", 5, 60 * 60 * 1000)
+  const ip = getClientIp(req)
+  const rl = await rateLimit(ip, "signup", 5, 60 * 60 * 1000)
   if (!rl.ok || looksAutomated(parsed.data, Date.now())) return accepted
 
   try {
+    // Block list (#810, part 5): the same answer, nothing stored.
+    if (await signupBlocked(parsed.data.email, ip)) return accepted
     await createSignupRequest(parsed.data)
   } catch (e) {
     reportError("signup.create")(e)
