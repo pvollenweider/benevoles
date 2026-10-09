@@ -1,0 +1,57 @@
+import { describe, it, expect, vi } from "vitest"
+import { confirmable, looksAutomated, signupOpen, signupSchema, slugify, SIGNUP_MIN_FILL_MS } from "../signup"
+import { memoryStore } from "../rate-limit"
+import { sendWindows, takeSendAllowance, type SendLimits } from "../notifications/send-limits"
+
+describe("self-service sign-up rules (#810, part 4b)", () => {
+  it("validates and normalises the form, with a sentence per field", () => {
+    const ok = signupSchema.safeParse({ organizationName: "  Fête du village ", contactName: "Camille", email: " Camille@Example.ORG " })
+    expect(ok.success && ok.data).toMatchObject({ organizationName: "Fête du village", email: "camille@example.org" })
+    const bad = signupSchema.safeParse({ organizationName: "F", contactName: "Camille", email: "camille@example.org" })
+    expect(!bad.success && bad.error.issues[0].message).toBe("Indiquez le nom de l'association (2 caractères au moins).")
+    const mail = signupSchema.safeParse({ organizationName: "Fête", contactName: "Camille", email: "camille" })
+    expect(!mail.success && mail.error.issues[0].message).toBe("Indiquez une adresse email valide, par exemple nom@exemple.org.")
+  })
+
+  it("spots an automated submission: honeypot, missing or too short fill time", () => {
+    const now = 1_000_000
+    expect(looksAutomated({ website: "", startedAt: now - SIGNUP_MIN_FILL_MS - 1 }, now)).toBe(false)
+    expect(looksAutomated({ website: "http://spam", startedAt: now - 60_000 }, now)).toBe(true)
+    expect(looksAutomated({ startedAt: now - 500 }, now)).toBe(true)
+    expect(looksAutomated({}, now)).toBe(true)
+  })
+
+  it("is open unless SIGNUP=off", () => {
+    expect(signupOpen({})).toBe(true)
+    expect(signupOpen({ SIGNUP: "on" })).toBe(true)
+    expect(signupOpen({ SIGNUP: " OFF " })).toBe(false)
+  })
+
+  it("confirms a request once, before it expires", () => {
+    const now = new Date("2026-10-09T12:00:00Z")
+    expect(confirmable(null, now)).toBe("unknown")
+    expect(confirmable({ expiresAt: new Date("2026-10-09T13:00:00Z"), confirmedAt: null }, now)).toBe("ok")
+    expect(confirmable({ expiresAt: new Date("2026-10-09T11:00:00Z"), confirmedAt: null }, now)).toBe("expired")
+    expect(confirmable({ expiresAt: new Date("2026-10-09T13:00:00Z"), confirmedAt: now }, now)).toBe("used")
+  })
+
+  it("makes a subdomain from the name", () => {
+    expect(slugify("Fête du Village de Saint-Légier !")).toBe("fete-du-village-de-saint-legier")
+    expect(slugify("   ")).toBe("")
+  })
+})
+
+describe("sign-up confirmation emails and the sending limits (#810)", () => {
+  const limits: SendLimits = { orgPerMinute: 100, orgPerDay: 100, orgBulkPerDay: 100, orgAccountPerDay: 100, globalPerMinute: 100, recipientPerHour: 2, signupConfirmationsPerHour: 3 }
+
+  it("counts against the per-recipient and the platform's hourly sign-up caps, and drops over them", async () => {
+    expect(sendWindows(null, "signup_confirmation", limits, "a@b.ch").map((w) => w.name)).toEqual(["recipient_per_hour", "signup_per_hour", "global_per_minute"])
+    const store = memoryStore()
+    const send = (email: string) => takeSendAllowance(null, "signup_confirmation", { store, limits, recipientEmail: email, alert: vi.fn() })
+    expect((await send("a@example.org")).ok).toBe(true)
+    expect((await send("b@example.org")).ok).toBe(true)
+    expect((await send("c@example.org")).ok).toBe(true)
+    // The fourth address of the hour: dropped, not held (the form must not become a mail cannon).
+    expect(await send("d@example.org")).toMatchObject({ ok: false, limit: "signup_per_hour", drop: true })
+  })
+})

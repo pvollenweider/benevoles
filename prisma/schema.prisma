@@ -815,3 +815,21 @@ model OrganizationCounter {
 
   @@id([organizationId, metric])
 }
+
+// Self-service sign-up request (#810, src/lib/signup.ts): what was typed on /inscription, until the
+// address is confirmed. Only the token's hash is kept. No foreign key to the organisation it
+// creates: the request is deleted by the nightly cleanup 7 days after its creation either way.
+model SignupRequest {
+  id               String    @id @default(cuid())
+  organizationName String
+  contactName      String
+  email            String
+  tokenHash        String    @unique
+  expiresAt        DateTime
+  confirmedAt      DateTime?
+  organizationId   String?
+  createdAt        DateTime  @default(now())
+
+  @@index([createdAt])
+}
+

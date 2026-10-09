@@ -37,6 +37,7 @@ export type NotificationKind =
   | "addresses_to_verify_summary"
   | "open_shifts"
   | "operator_alert"
+  | "signup_confirmation"
 
 /** Delivery attempts before the outbox gives up (5 min, 10, 20, 40, 80 between them). */
 export const MAX_ATTEMPTS = 6

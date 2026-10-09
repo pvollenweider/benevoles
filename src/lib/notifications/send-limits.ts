@@ -40,7 +40,7 @@ const BULK: readonly NotificationKind[] = ["targeted_message", "member_invite", 
 const ACCOUNT: readonly NotificationKind[] = ["admin_invite", "admin_welcome"]
 
 /** Kinds anyone can trigger from a public page: capped per recipient address. */
-export const PUBLIC_TRIGGERED: readonly NotificationKind[] = ["password_reset", "registration_confirmation", "registration_link_resend"]
+export const PUBLIC_TRIGGERED: readonly NotificationKind[] = ["password_reset", "registration_confirmation", "registration_link_resend", "signup_confirmation"]
 
 export function sendCategory(kind: NotificationKind): SendCategory {
   if (BULK.includes(kind)) return "bulk"
@@ -61,6 +61,8 @@ export const DEFAULT_SEND_LIMITS = {
   globalPerMinute: 600,
   /** Emails triggered from a public page (password reset, confirmation, lost link) to one address, per hour. */
   recipientPerHour: 5,
+  /** Sign-up confirmation emails of the whole platform, per hour (#810): the form must not become a mail cannon. */
+  signupConfirmationsPerHour: 30,
 } as const
 
 export type SendLimits = { -readonly [K in keyof typeof DEFAULT_SEND_LIMITS]: number }
@@ -72,6 +74,7 @@ const ENV: Record<keyof SendLimits, string> = {
   orgAccountPerDay: "EMAIL_LIMIT_ORG_ACCOUNT_PER_DAY",
   globalPerMinute: "EMAIL_LIMIT_GLOBAL_PER_MINUTE",
   recipientPerHour: "EMAIL_LIMIT_RECIPIENT_PER_HOUR",
+  signupConfirmationsPerHour: "EMAIL_LIMIT_SIGNUP_PER_HOUR",
 }
 
 /** The limits in force: each default replaced by its variable when that is a positive integer. */
@@ -104,6 +107,9 @@ export function sendWindows(organizationId: string | null | undefined, kind: Not
   if (recipientEmail && PUBLIC_TRIGGERED.includes(kind)) {
     windows.push({ key: `email:recipient:${recipientKey(recipientEmail)}:${kind}:hour`, windowMs: HOUR, limit: limits.recipientPerHour, name: "recipient_per_hour" })
   }
+  if (kind === "signup_confirmation") {
+    windows.push({ key: "email:signup:hour", windowMs: HOUR, limit: limits.signupConfirmationsPerHour, name: "signup_per_hour" })
+  }
   windows.push({ key: "email:global:minute", windowMs: MINUTE, limit: limits.globalPerMinute, name: "global_per_minute" })
   if (!organizationId) return windows
   windows.push(
@@ -125,6 +131,7 @@ export type SendAllowance = { ok: true } | { ok: false; limit: string; retryAfte
 
 const LIMIT_SENTENCES: Record<string, string> = {
   recipient_per_hour: "trop de demandes publiques pour une même adresse en une heure",
+  signup_per_hour: "trop de demandes d'inscription sur la plateforme en une heure",
   global_per_minute: "plafond de la plateforme par minute",
   org_per_minute: "plafond d'une organisation par minute",
   org_per_day: "plafond d'une organisation par jour",
@@ -221,7 +228,8 @@ export async function takeSendAllowance(
     } catch (e) {
       reportError("email.limit.alert_marker")(e)
     }
-    return { ok: false, limit: full.window.name, retryAfterMs, ...(full.window.name === "recipient_per_hour" ? { drop: true as const } : {}) }
+    const drop = full.window.name === "recipient_per_hour" || full.window.name === "signup_per_hour"
+    return { ok: false, limit: full.window.name, retryAfterMs, ...(drop ? { drop: true as const } : {}) }
   }
 
   // 2b. Allowed: counted in every window.

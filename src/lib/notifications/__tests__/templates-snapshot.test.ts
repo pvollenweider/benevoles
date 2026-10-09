@@ -410,6 +410,11 @@ const cases: [string, NotificationPayload][] = [
       editToken: null,
     },
   }],
+  ["signup_confirmation", {
+    kind: "signup_confirmation",
+    recipient: { email: "camille@example.org" },
+    data: { contactName: "Camille", organizationName: "Fête du village", confirmUrl: "https://www.benevol.app/inscription/confirmer?t=tok-1", hours: 24 },
+  }],
   ["operator_alert", {
     kind: "operator_alert",
     recipient: { email: "ops@example.org" },
@@ -490,6 +495,7 @@ describe("render — snapshot of every notification kind", () => {
       registration_removed: true,
       release_available: true,
       operator_alert: true,
+      signup_confirmation: true,
       addresses_to_verify_summary: true,
       open_shifts: true,
     }
