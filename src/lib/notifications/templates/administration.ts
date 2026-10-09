@@ -8,7 +8,9 @@
 import type { NotificationPayload } from "../types"
 import { renderMarkdown } from "@/lib/markdown"
 import { clockTime } from "../../gantt-utils"
-import { escapeHtml, btn, wrap, adminShiftUrl, adminStaffingUrl, type RenderedEmail } from "./shared"
+import { escapeHtml, btn, wrap, adminShiftUrl, adminStaffingUrl, BASE_URL, type RenderedEmail } from "./shared"
+import { docUnitHref } from "@/lib/doc-href"
+import { WELCOME_HELP_SLUG, welcomeDocLinks } from "@/lib/signup-welcome"
 import { siteName } from "@/lib/site"
 
 // ── Notif admin (interne) ────────────────────────────────────────────────────
@@ -298,22 +300,39 @@ export function renderSignupConfirmation(p: NotificationPayload): RenderedEmail 
  */
 export function renderSignupAccountLink(p: NotificationPayload): RenderedEmail {
   const d = p.data as { inviteUrl: string; days: number }
-  const subject = `Choisissez votre mot de passe ${siteName()}`
+  const name = siteName()
+  const docs = welcomeDocLinks(BASE_URL)
+  const help = `${BASE_URL}${docUnitHref(WELCOME_HELP_SLUG)}`
+  const subject = `Bienvenue sur ${name} : choisissez votre mot de passe`
+  const waiting = "Nous vérifions rapidement chaque nouvel espace. En attendant, vous pouvez tout préparer : événements, postes, créneaux, membres et pages. La publication et les emails à vos bénévoles s'ouvrent dès la validation, annoncée par email."
   const text = [
+    `Bienvenue sur ${name}`,
+    ``,
     `Bonjour,`,
     ``,
-    `Votre espace ${siteName()} est créé. Si vous n'avez pas encore choisi votre mot de passe, ouvrez ce lien (valable ${d.days} jours) :`,
+    `Votre adresse est confirmée et votre espace ${name} est créé.`,
+    ``,
+    `Première étape : choisissez votre mot de passe avec ce lien, valable ${d.days} jours. Si c'est déjà fait, passez à la suite.`,
     d.inviteUrl,
     ``,
-    `Si vous l'avez déjà choisi, ignorez cet email.`,
+    waiting,
+    ``,
+    `Pour bien démarrer :`,
+    ...docs.map((l) => `- ${l.label} : ${l.url}`),
+    ``,
+    `Une question ? Voyez « Aide et retours » : ${help}`,
   ].join("\n")
   const html = wrap(`
-    <h2 style="margin:0 0 0.5em">Choisissez votre mot de passe</h2>
+    <h2 style="margin:0 0 0.5em">Bienvenue sur ${escapeHtml(name)}</h2>
     <p>Bonjour,</p>
-    <p>Votre espace ${siteName()} est créé. Si vous n'avez pas encore choisi votre mot de passe, ouvrez ce lien, valable ${d.days} jours :</p>
+    <p>Votre adresse est confirmée et votre espace ${escapeHtml(name)} est créé.</p>
+    <p>Première étape : choisissez votre mot de passe avec le bouton ci-dessous, valable ${d.days} jours. Si c'est déjà fait, passez à la suite.</p>
     <p style="margin-top:1.5em">${btn(d.inviteUrl, "Choisir mon mot de passe")}</p>
-    <p style="color:#4b5563;font-size:0.9em;margin-top:1.5em">Si vous l'avez déjà choisi, ignorez cet email.</p>
-  `, `Votre espace ${siteName()} est créé : choisissez votre mot de passe.`)
+    <p style="margin-top:1.5em">${escapeHtml(waiting)}</p>
+    <h3 style="margin:1.5em 0 0.5em;font-size:1em">Pour bien démarrer</h3>
+    <ul style="margin:0 0 1em 1.25em;padding-left:0">${docs.map((l) => `<li style="margin:0.25em 0"><a href="${escapeHtml(l.url)}" style="color:#1d4ed8;text-decoration:underline">${escapeHtml(l.label)}</a></li>`).join("")}</ul>
+    <p style="color:#4b5563;font-size:0.9em;margin-top:1.5em">Une question ? Voyez <a href="${escapeHtml(help)}" style="color:#1d4ed8;text-decoration:underline">Aide et retours</a>.</p>
+  `, `Votre espace ${name} est créé : choisissez votre mot de passe, puis suivez le guide.`)
   return { subject, html, text }
 }
 
