@@ -5,7 +5,7 @@
 
 import { getBarClasses } from "@/lib/roles"
 import { toMin, toMinEnd, fmt, assignLanes, crossesMidnight, hourLabel, type GanttShow } from "@/lib/gantt-utils"
-import { barText, type HeldKind, type TimelineShift } from "@/lib/public-timeline"
+import { barText, shiftViewState, type HeldKind, type TimelineShift } from "@/lib/public-timeline"
 
 export { fmt }
 export type { TimelineShift }
@@ -162,20 +162,22 @@ export default function DayTimeline({
                 {byRole[role].map((shift) => {
                   const heldKind        = held?.get(shift.id)
                   // Held wins over everything else: selected, full, waitlist, conflict, reserved.
+                  // The same rules as the list view (#808): src/lib/public-timeline.ts.
+                  const view            = shiftViewState({ shift, held: heldKind, selected: selected.has(shift.id), conflict: conflicts?.has(shift.id) ?? false, reserved: !!reservedShiftIds?.has(shift.id), locked })
                   const isRegistered    = !!heldKind
-                  const isConflict      = !isRegistered && (conflicts?.has(shift.id) ?? false)
-                  const isFull          = shift.status === "full"
-                  const isClosed        = shift.status === "closed"
-                  const isWaitlistable  = isFull && (shift.waitlistEnabled ?? false)
-                  const unavail         = !isRegistered && ((isFull && !isWaitlistable) || isClosed)
-                  const isSelected      = !isRegistered && selected.has(shift.id)
-                  const isReserved      = !isSelected && !isRegistered && !!reservedShiftIds?.has(shift.id)
-                  const state           = isSelected ? "selected" : (isConflict || unavail || isReserved) ? "unavailable" : "default"
+                  const isConflict      = view.conflict
+                  const isFull          = view.full
+                  const isClosed        = view.closed
+                  const isWaitlistable  = view.waitlistable
+                  const unavail         = view.unavailable
+                  const isSelected      = view.selected
+                  const isReserved      = view.reserved
+                  const state           = view.look
                   // A held bar does nothing: no hover darkening suggesting otherwise.
                   const barCls          = isRegistered
                     ? getBarClasses(shift.roleName, "default", shift.colorKey).replace(/\s*hover:\S+/g, "")
                     : getBarClasses(shift.roleName, state, shift.colorKey)
-                  const clickable       = !isRegistered && !isConflict && !unavail && !isReserved && (!locked || isSelected)
+                  const clickable       = view.clickable
                   const fullNoWaitlist  = !isRegistered && isFull && !isWaitlistable
                   const startMin        = toMin(shift.startTime)
                   const endMin          = toMinEnd(shift.endTime, shift.startTime)

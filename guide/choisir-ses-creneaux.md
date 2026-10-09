@@ -33,7 +33,7 @@ Si les inscriptions ne sont pas encore ouvertes, ou déjà fermées, un encadré
 
 Chaque créneau ouvert affiche aussi le nombre d'inscrits sur la capacité totale (par exemple « 3/5 ») : pratique pour repérer un créneau avec assez de place pour s'inscrire à plusieurs.
 
-Sur mobile, **fais défiler horizontalement** pour voir toutes les plages horaires de la journée.
+Sur mobile, **fais défiler horizontalement** pour voir toutes les plages horaires de la journée, ou appuie sur **Liste**, au-dessus du planning : les mêmes créneaux s'affichent les uns sous les autres, dans l'ordre des heures, et tu les choisis de la même façon. Ton choix est gardé sur ton téléphone.
 
 ![Planning public d'un événement affiché sur mobile, avec les créneaux du jour en barres colorées](/doc-img/public-timeline-mobile.png)
 
