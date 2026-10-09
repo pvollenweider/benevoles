@@ -9,7 +9,7 @@ import { inviteLink } from "@/lib/invite-link"
 import { isReservedOrgSlug } from "@/lib/org-subdomain"
 import { reportError } from "@/lib/report-error"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
-import { confirmable, plainLabel, slugify, SIGNUP_LINK_HOURS, type SignupInput } from "@/lib/signup"
+import { confirmable, signupAlertMessage, slugify, SIGNUP_LINK_HOURS, type SignupInput } from "@/lib/signup"
 import { blockApplies, signupKeys } from "@/lib/signup-blocklist"
 
 /**
@@ -50,7 +50,7 @@ export async function signupBlocked(email: string, ip: string | null, now: Date 
  * Stores the request and queues the confirmation email. Nothing is sent when the address already
  * has an account: the caller answers the same way, the form never tells.
  */
-export async function createSignupRequest(input: Pick<SignupInput, "organizationName" | "contactName" | "email">, now: Date = new Date()): Promise<{ queued: boolean }> {
+export async function createSignupRequest(input: Pick<SignupInput, "organizationName" | "contactName" | "email" | "description">, now: Date = new Date()): Promise<{ queued: boolean }> {
   const known = await prisma.adminUser.findUnique({ where: { email: input.email }, select: { id: true } })
   if (known) return { queued: false }
 
@@ -60,6 +60,7 @@ export async function createSignupRequest(input: Pick<SignupInput, "organization
       organizationName: input.organizationName,
       contactName: input.contactName,
       email: input.email,
+      description: input.description,
       tokenHash: hashToken(token),
       expiresAt: new Date(now.getTime() + SIGNUP_LINK_HOURS * HOUR),
     },
@@ -116,6 +117,7 @@ export async function confirmSignupRequest(token: string, now: Date = new Date()
         // Awaiting the operator's validation (#810, src/lib/org-approval.ts).
         publicationApprovedAt: null,
         outboundEmailApprovedAt: null,
+        signupDescription: req.description,
         admins: {
           create: {
             email: req.email,
@@ -140,7 +142,7 @@ export async function confirmSignupRequest(token: string, now: Date = new Date()
     .then((m) => m.notifyOperator({
       key: `signup:${result.org.id}`,
       title: "Nouvelle demande d'espace",
-      message: `${plainLabel(result.org.name)} a créé son espace et attend une validation.`,
+      message: signupAlertMessage(result.org.name, req.description),
       priority: 4,
       url: `${appUrl()}/super-admin/organizations/${result.org.slug}`,
     }))

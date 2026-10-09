@@ -29,10 +29,20 @@ export const SIGNUP_MIN_FILL_MS = 3000
 const LINKISH = /(https?:\/\/|www\.|@|[\r\n]|\.(com|net|org|ch|fr|io|ru|xyz|info|biz)\b)/i
 export const NO_LINK_MESSAGE = "Indiquez seulement un nom, sans lien ni adresse."
 
+/** « Votre association et votre besoin »: a few sentences, read by the operator before validating. */
+export const SIGNUP_DESCRIPTION_MIN = 20
+export const SIGNUP_DESCRIPTION_MAX = 1000
+export const DESCRIPTION_SHORT_MESSAGE = `Décrivez votre association et votre besoin en quelques phrases (${SIGNUP_DESCRIPTION_MIN} caractères au moins).`
+export const DESCRIPTION_LONG_MESSAGE = `La description est trop longue (${SIGNUP_DESCRIPTION_MAX} caractères au plus).`
+
 export const signupSchema = z.object({
   organizationName: z.string().trim().min(2, "Indiquez le nom de l'association (2 caractères au moins).").max(100, "Le nom de l'association est trop long (100 caractères au plus).").refine((v) => !LINKISH.test(v), NO_LINK_MESSAGE),
   contactName: z.string().trim().min(2, "Indiquez votre nom (2 caractères au moins).").max(100, "Votre nom est trop long (100 caractères au plus).").refine((v) => !LINKISH.test(v), NO_LINK_MESSAGE),
   email: z.string().trim().toLowerCase().email("Indiquez une adresse email valide, par exemple nom@exemple.org.").max(200),
+  // Free text: links and line breaks allowed (a website helps the validation). It is never put in
+  // an email, only shown as plain text in the super admin space, and shortened by plainLabel in
+  // the operator alert.
+  description: z.string({ error: DESCRIPTION_SHORT_MESSAGE }).trim().min(SIGNUP_DESCRIPTION_MIN, DESCRIPTION_SHORT_MESSAGE).max(SIGNUP_DESCRIPTION_MAX, DESCRIPTION_LONG_MESSAGE),
   /** Honeypot: hidden from people, filled by naive scripts. */
   website: z.string().optional(),
   /** When the form was shown (ms since epoch), set by the page. */
@@ -80,6 +90,12 @@ export function slugify(name: string): string {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 60)
+}
+
+/** The operator alert of a new space: its name and the start of its description, one line each. */
+export function signupAlertMessage(name: string, description: string | null): string {
+  const line = `${plainLabel(name)} a créé son espace et attend une validation.`
+  return description ? `${line}\n« ${plainLabel(description)} »` : line
 }
 
 /** Typed text shown in an operator alert: one line, no link-like part, 80 characters at most. */

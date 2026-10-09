@@ -1,16 +1,16 @@
 import { describe, it, expect, vi } from "vitest"
-import { confirmable, looksAutomated, NO_LINK_MESSAGE, plainLabel, signupOpen, signupSchema, slugify, SIGNUP_MIN_FILL_MS } from "../signup"
+import { confirmable, DESCRIPTION_LONG_MESSAGE, DESCRIPTION_SHORT_MESSAGE, looksAutomated, NO_LINK_MESSAGE, plainLabel, signupAlertMessage, signupOpen, signupSchema, slugify, SIGNUP_DESCRIPTION_MAX, SIGNUP_MIN_FILL_MS } from "../signup"
 import { render } from "../notifications/templates"
 import { memoryStore } from "../rate-limit"
 import { sendWindows, takeSendAllowance, type SendLimits } from "../notifications/send-limits"
 
 describe("self-service sign-up rules (#810, part 4b)", () => {
   it("validates and normalises the form, with a sentence per field", () => {
-    const ok = signupSchema.safeParse({ organizationName: "  Fête du village ", contactName: "Camille", email: " Camille@Example.ORG " })
+    const ok = signupSchema.safeParse({ organizationName: "  Fête du village ", contactName: "Camille", email: " Camille@Example.ORG ", description: "Fête de village, une centaine de bénévoles sur deux jours." })
     expect(ok.success && ok.data).toMatchObject({ organizationName: "Fête du village", email: "camille@example.org" })
-    const bad = signupSchema.safeParse({ organizationName: "F", contactName: "Camille", email: "camille@example.org" })
+    const bad = signupSchema.safeParse({ organizationName: "F", contactName: "Camille", email: "camille@example.org", description: "Fête de village, une centaine de bénévoles sur deux jours." })
     expect(!bad.success && bad.error.issues[0].message).toBe("Indiquez le nom de l'association (2 caractères au moins).")
-    const mail = signupSchema.safeParse({ organizationName: "Fête", contactName: "Camille", email: "camille" })
+    const mail = signupSchema.safeParse({ organizationName: "Fête", contactName: "Camille", email: "camille", description: "Fête de village, une centaine de bénévoles sur deux jours." })
     expect(!mail.success && mail.error.issues[0].message).toBe("Indiquez une adresse email valide, par exemple nom@exemple.org.")
   })
 
@@ -61,10 +61,10 @@ describe("sign-up confirmation emails and the sending limits (#810)", () => {
 describe("typed text and phishing (#810)", () => {
   it("refuses links, addresses and line breaks in the names", () => {
     for (const organizationName of ["Gagnez sur http://evil.example", "www.evil.example", "Fête chez bob@evil.example", "Fête\nCliquez", "evil.com"]) {
-      const r = signupSchema.safeParse({ organizationName, contactName: "Camille", email: "camille@example.org" })
+      const r = signupSchema.safeParse({ organizationName, contactName: "Camille", email: "camille@example.org", description: "Fête de village, une centaine de bénévoles sur deux jours." })
       expect(!r.success && r.error.issues[0].message).toBe(NO_LINK_MESSAGE)
     }
-    expect(signupSchema.safeParse({ organizationName: "Fête du village de Saint-Légier", contactName: "Camille Dupont-Muller", email: "c@example.org" }).success).toBe(true)
+    expect(signupSchema.safeParse({ organizationName: "Fête du village de Saint-Légier", contactName: "Camille Dupont-Muller", email: "c@example.org", description: "Fête de village, une centaine de bénévoles sur deux jours." }).success).toBe(true)
   })
 
   it("sends a confirmation email with no typed text at all", () => {
@@ -80,3 +80,28 @@ describe("typed text and phishing (#810)", () => {
   })
 })
 
+
+describe("« Votre association et votre besoin » (#810)", () => {
+  const base = { organizationName: "Fête du village", contactName: "Camille", email: "camille@example.org" }
+  const message = (description?: unknown) => {
+    const r = signupSchema.safeParse(description === undefined ? base : { ...base, description })
+    return r.success ? null : r.error.issues[0].message
+  }
+
+  it("is required, a few sentences, at most 1000 characters", () => {
+    expect(message()).toBe(DESCRIPTION_SHORT_MESSAGE)
+    expect(message("   Fête   ")).toBe(DESCRIPTION_SHORT_MESSAGE)
+    expect(message("x".repeat(SIGNUP_DESCRIPTION_MAX + 1))).toBe(DESCRIPTION_LONG_MESSAGE)
+    expect(message("x".repeat(SIGNUP_DESCRIPTION_MAX))).toBeNull()
+  })
+
+  it("keeps line breaks and a website, trimmed", () => {
+    const r = signupSchema.safeParse({ ...base, description: "  Festival de musique, 3 jours.\nNotre site : https://festival.example  " })
+    expect(r.success && r.data.description).toBe("Festival de musique, 3 jours.\nNotre site : https://festival.example")
+  })
+
+  it("goes into the operator alert on its own line, flattened, without links", () => {
+    expect(signupAlertMessage("Fête du village", "Une fête.\nVoir https://evil.example/x")).toBe("Fête du village a créé son espace et attend une validation.\n« Une fête. Voir [lien retiré] »")
+    expect(signupAlertMessage("Fête du village", null)).toBe("Fête du village a créé son espace et attend une validation.")
+  })
+})

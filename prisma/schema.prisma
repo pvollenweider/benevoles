@@ -38,6 +38,9 @@ model Organization {
   // the self-service sign-up creates an organisation with both explicitly null.
   publicationApprovedAt   DateTime? @default(now())
   outboundEmailApprovedAt DateTime? @default(now())
+  // What the association wrote about itself and its need when signing up (#810): helps the
+  // operator validate the space. Shown only in the super admin space; null for other spaces.
+  signupDescription String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -824,6 +827,7 @@ model SignupRequest {
   organizationName String
   contactName      String
   email            String
+  description      String?
   tokenHash        String    @unique
   expiresAt        DateTime
   confirmedAt      DateTime?

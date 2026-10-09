@@ -21,6 +21,7 @@ async function request(code: string, over: { email?: string; expiresAt?: Date } 
     data: {
       organizationName: `Fête ${tag}`,
       contactName: "Camille",
+      description: "Fête de village, une centaine de bénévoles.",
       email: over.email ?? `${tag}-${code}@example.org`,
       tokenHash: hashToken(`${tag}-${code}`),
       expiresAt: over.expiresAt ?? new Date(Date.now() + 60 * 60 * 1000),
@@ -52,10 +53,11 @@ describe.skipIf(!url)("sign-up confirmation on Postgres (#810)", () => {
     expect(org.active).toBe(true)
     expect(org.publicationApprovedAt).toBeNull()
     expect(org.outboundEmailApprovedAt).toBeNull()
+    expect(org.signupDescription).toBe("Fête de village, une centaine de bénévoles.")
     expect(org.admins).toHaveLength(1)
     expect(org.admins[0]).toMatchObject({ email: `${tag}-a@example.org`, role: "admin", isActive: false })
     expect(org.admins[0].setupTokenHash).toBeTruthy()
-    expect(notify).toHaveBeenCalledWith(expect.objectContaining({ key: `signup:${org.id}`, priority: 4 }))
+    expect(notify).toHaveBeenCalledWith(expect.objectContaining({ key: `signup:${org.id}`, priority: 4, message: expect.stringContaining("« Fête de village, une centaine de bénévoles. »") }))
 
     // A second click: refused, nothing more created.
     expect(await confirmSignupRequest(`${tag}-a`)).toEqual({ ok: false, reason: "used" })

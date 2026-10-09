@@ -37,6 +37,7 @@ type Org = {
   active: boolean
   suspendedAt: string | null
   suspensionReason: string | null
+  signupDescription: string | null
   publicationApprovedAt: string | null
   outboundEmailApprovedAt: string | null
   createdAt: string
@@ -375,6 +376,15 @@ export default function OrgDetail({ org, cumulative }: { org: Org; cumulative: U
           onConfirm={() => void runDelete()}
           onCancel={() => setConfirming(null)}
         />
+      )}
+
+      {/* What the association wrote when signing up (#810): typed text, shown as plain text only. */}
+      {org.signupDescription && (
+        <section aria-labelledby="org-signup-description" className="bg-white border border-gray-200 rounded-xl p-4">
+          <h2 id="org-signup-description" className="text-sm font-semibold text-gray-900">Demande d&apos;inscription</h2>
+          <p className="text-xs text-gray-600 mt-0.5">Ce que l&apos;association a écrit sur elle et son besoin en créant son espace.</p>
+          <p className="text-sm text-gray-800 mt-2 whitespace-pre-line break-words">{org.signupDescription}</p>
+        </section>
       )}
 
       {/* Stats */}

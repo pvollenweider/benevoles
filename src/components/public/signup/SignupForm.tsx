@@ -7,12 +7,12 @@ import { useEffect, useId, useRef, useState } from "react"
 import Link from "next/link"
 import { useSubmit } from "@/lib/use-submit"
 import FormStatus from "@/components/FormStatus"
-import { SIGNUP_ACCEPTED_MESSAGE, SIGNUP_CLOSED_MESSAGE } from "@/lib/signup"
+import { DESCRIPTION_LONG_MESSAGE, DESCRIPTION_SHORT_MESSAGE, SIGNUP_ACCEPTED_MESSAGE, SIGNUP_CLOSED_MESSAGE, SIGNUP_DESCRIPTION_MAX, SIGNUP_DESCRIPTION_MIN } from "@/lib/signup"
 
 const inputClass = "w-full rounded-xl border border-gray-500 bg-white px-3 py-3 text-base text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400 dark:border-gray-500 dark:bg-gray-800 dark:text-gray-100"
 const labelClass = "block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1"
 
-type Field = "organizationName" | "contactName" | "email"
+type Field = "organizationName" | "description" | "contactName" | "email"
 
 /**
  * The self-service sign-up form (#810, part 4b), on the forms pattern of the project (useSubmit,
@@ -23,10 +23,11 @@ type Field = "organizationName" | "contactName" | "email"
 export default function SignupForm({ open }: { open: boolean }) {
   const id = useId()
   const orgRef = useRef<HTMLInputElement>(null)
+  const descriptionRef = useRef<HTMLTextAreaElement>(null)
   const nameRef = useRef<HTMLInputElement>(null)
   const emailRef = useRef<HTMLInputElement>(null)
   const doneRef = useRef<HTMLHeadingElement>(null)
-  const [values, setValues] = useState({ organizationName: "", contactName: "", email: "", website: "" })
+  const [values, setValues] = useState({ organizationName: "", description: "", contactName: "", email: "", website: "" })
   const [startedAt] = useState(() => Date.now())
   const [done, setDone] = useState(false)
   const { submit, busy, error, fail, isInvalid } = useSubmit()
@@ -48,6 +49,9 @@ export default function SignupForm({ open }: { open: boolean }) {
 
   function check(): { field: Field; message: string } | null {
     if (values.organizationName.trim().length < 2) return { field: "organizationName", message: "Indiquez le nom de l'association (2 caractères au moins)." }
+    const description = values.description.trim().length
+    if (description < SIGNUP_DESCRIPTION_MIN) return { field: "description", message: DESCRIPTION_SHORT_MESSAGE }
+    if (description > SIGNUP_DESCRIPTION_MAX) return { field: "description", message: DESCRIPTION_LONG_MESSAGE }
     if (values.contactName.trim().length < 2) return { field: "contactName", message: "Indiquez votre nom (2 caractères au moins)." }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) return { field: "email", message: "Indiquez une adresse email valide, par exemple nom@exemple.org." }
     return null
@@ -59,7 +63,7 @@ export default function SignupForm({ open }: { open: boolean }) {
     if (busy) return
     const problem = check()
     if (problem) {
-      const el = problem.field === "organizationName" ? orgRef.current : problem.field === "contactName" ? nameRef.current : emailRef.current
+      const el = { organizationName: orgRef, description: descriptionRef, contactName: nameRef, email: emailRef }[problem.field].current
       fail(problem.message, problem.field, el)
       return
     }
@@ -82,6 +86,12 @@ export default function SignupForm({ open }: { open: boolean }) {
         <label htmlFor={`${id}-org`} className={labelClass}>Nom de l&apos;association</label>
         <input id={`${id}-org`} ref={orgRef} value={values.organizationName} onChange={(e) => setValues({ ...values, organizationName: e.target.value })}
           required maxLength={100} autoComplete="organization" aria-invalid={isInvalid("organizationName")} aria-describedby={describedBy("organizationName")} className={inputClass} />
+      </div>
+      <div>
+        <label htmlFor={`${id}-description`} className={labelClass}>Votre association et votre besoin</label>
+        <p id={`${id}-description-hint`} className="text-sm text-gray-700 dark:text-gray-300 mb-1">En quelques phrases : ce que fait votre association et pour quel événement vous cherchez des bénévoles. Nous le lisons avant de valider votre espace.</p>
+        <textarea id={`${id}-description`} ref={descriptionRef} value={values.description} onChange={(e) => setValues({ ...values, description: e.target.value })}
+          required rows={4} maxLength={SIGNUP_DESCRIPTION_MAX} aria-invalid={isInvalid("description")} aria-describedby={describedBy("description", `${id}-description-hint`)} className={inputClass} />
       </div>
       <div>
         <label htmlFor={`${id}-name`} className={labelClass}>Votre nom</label>
