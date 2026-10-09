@@ -44,6 +44,7 @@ import { RoleLimitError, roleLimitBreaches, roleLimitMessage, roleLimits } from 
 import { resolveCharterText } from "@/lib/volunteer-charter"
 import { hashCharterText } from "@/lib/charter-hash"
 import { lockSignupVolunteer } from "@/lib/signup-volunteer"
+import { touchOrgActivity } from "@/lib/org-activity"
 
 const schema = z.object({
   eventId: z.string(),
@@ -359,6 +360,9 @@ export async function POST(req: Request) {
       data: { firstName, lastName, phone, ...(birthDateValue ? { birthDate: birthDateValue } : {}) },
     })
   }
+
+  // A volunteer registering is the organisation in use (#811): its space is still wanted.
+  void touchOrgActivity(organizationId)
 
   // Clear tokens exist only in memory here (the DB keeps hash + encrypted copy, #290).
   const editToken = tokens.get(registrations[0].shiftId)!
