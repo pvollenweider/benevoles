@@ -17,6 +17,8 @@ export default async function SuperAdminOrgsPage() {
       name: true,
       slug: true,
       active: true,
+      suspendedAt: true,
+      suspensionReason: true,
       createdAt: true,
       _count: {
         select: {
@@ -33,6 +35,7 @@ export default async function SuperAdminOrgsPage() {
       initialOrgs={orgs.map((o) => ({
         ...o,
         createdAt: o.createdAt.toISOString(),
+        suspendedAt: o.suspendedAt?.toISOString() ?? null,
       }))}
     />
   )

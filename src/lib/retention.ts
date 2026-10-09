@@ -67,6 +67,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
+    data: "Les mêmes données, pour une organisation suspendue pour abus (envoi de spam, contenu abusif) ; la raison de la suspension, notée par l'opérateur",
+    purpose: "Enquête sur l'abus et défense des personnes visées",
+    duration: "conservées pendant la suspension, jusqu'à la décision de l'opérateur : levée de la suspension (la règle ordinaire s'applique alors) ou suppression définitive",
+    trigger: "suspension de l'organisation par l'opérateur",
+    mechanism: "aucune suppression automatique pendant la suspension ; suppression définitive par l'opérateur",
+    backups: inBackups,
+    public: true,
+  },
+  {
     data: "Événement supprimé par un administrateur",
     purpose: "—",
     duration: "effacé immédiatement, avec ses créneaux, inscriptions, invitations, réponses aux questions, responsables, pages, jalons, messages ciblés et son journal",

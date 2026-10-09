@@ -8,11 +8,15 @@ import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
 import { isReservedOrgSlug, RESERVED_SLUG_ERROR } from "@/lib/org-subdomain"
+import { decideSuspension, SUSPENSION_REASON_MAX } from "@/lib/org-suspension"
 
 const SLUG_RE = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/
 
 const patchSchema = z.object({
   active: z.boolean().optional(),
+  // Suspension for abuse (#810): with its reason; lifted with `suspended: false`.
+  suspended: z.boolean().optional(),
+  suspensionReason: z.string().max(SUSPENSION_REASON_MAX).optional(),
   name: z.string().min(2).max(100).optional(),
   slug: z.string().min(2).max(40).optional(),
 })
@@ -30,6 +34,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       name: true,
       slug: true,
       active: true,
+      suspendedAt: true,
+      suspensionReason: true,
       createdAt: true,
       updatedAt: true,
       _count: { select: { events: true, admins: true, volunteers: true } },
@@ -105,13 +111,15 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     return validationError(parsed.error)
   }
 
-  const existing = await prisma.organization.findUnique({ where: { id }, select: { id: true, slug: true } })
+  const existing = await prisma.organization.findUnique({ where: { id }, select: { id: true, slug: true, active: true, suspendedAt: true } })
   if (!existing) return NextResponse.json({ error: "Organisation non trouvée" }, { status: 404 })
 
-  const updates: { active?: boolean; name?: string; slug?: string } = {}
-  let oldSlug: string | null = null
+  // Activation, deactivation and suspension (#810): decided by src/lib/org-suspension.ts.
+  const decision = decideSuspension(existing, parsed.data)
+  if (!decision.ok) return NextResponse.json({ error: decision.error }, { status: decision.status })
 
-  if (parsed.data.active !== undefined) updates.active = parsed.data.active
+  const updates: { active?: boolean; name?: string; slug?: string; suspendedAt?: Date | null; suspensionReason?: string | null } = { ...decision.update }
+  let oldSlug: string | null = null
 
   if (parsed.data.name !== undefined) updates.name = parsed.data.name.trim()
 
@@ -139,8 +147,20 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   }
 
   const org = await prisma.$transaction(async (tx) => {
-    // Deactivation (#814): its queued emails are cancelled with it, never sent later.
-    if (updates.active === false) await cancelPendingOutboxForOrganization(tx, id)
+    // Deactivation and suspension (#814, #810): queued emails cancelled with it, never sent later.
+    if (decision.cancelQueuedEmails) await cancelPendingOutboxForOrganization(tx, id)
+    if (decision.event) {
+      await tx.orgLog.create({
+        data: {
+          organizationId: id,
+          actorType: "admin",
+          actorId: guard.session.user?.id ?? null,
+          action: decision.event === "suspended" ? "organization.suspended" : "organization.suspension_lifted",
+          entityType: "Organization",
+          entityId: id,
+        },
+      })
+    }
     if (oldSlug && updates.slug) {
       await tx.orgSlugHistory.deleteMany({ where: { slug: updates.slug, organizationId: id } })
       await tx.orgSlugHistory.create({ data: { slug: oldSlug, organizationId: id } })
@@ -148,7 +168,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     return tx.organization.update({
       where: { id },
       data: updates,
-      select: { id: true, name: true, slug: true, active: true, updatedAt: true },
+      select: { id: true, name: true, slug: true, active: true, suspendedAt: true, suspensionReason: true, updatedAt: true },
     })
   })
 

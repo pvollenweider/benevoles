@@ -28,6 +28,11 @@ model Organization {
   notificationSettings Json?
   // First-run checklist hidden by an admin (#369). Progress itself is derived from the data.
   onboardingDismissedAt DateTime?
+  // Suspension for abuse (#810, src/lib/org-suspension.ts): set only with active = false. Never
+  // lifted by « Réactiver » or a self-service flow, never erased by the nightly cleanup.
+  // The reason is the operator's note, shown only in the super admin space.
+  suspendedAt      DateTime?
+  suspensionReason String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

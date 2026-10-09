@@ -53,7 +53,8 @@ async function run(req: Request) {
   // only removes inactive ones), with its email and password hash kept indefinitely.
   const { deletedOrgs, deletedOrgAdmins } = await prisma.$transaction(async (tx) => {
     const orgs = await tx.organization.findMany({
-      where: { active: false, updatedAt: { lt: orgCutoff } },
+      // A suspended organisation (#810) is kept for the investigation: only the super admin deletes it.
+      where: { active: false, suspendedAt: null, updatedAt: { lt: orgCutoff } },
       select: { id: true },
     })
     const orgIds = orgs.map((o) => o.id)

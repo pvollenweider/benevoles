@@ -22,6 +22,7 @@ type Org = {
   name: string
   slug: string
   active: boolean
+  suspendedAt: string | null
   createdAt: string
   _count: OrgCount
 }
@@ -105,7 +106,7 @@ export default function OrgsManager({ initialOrgs }: Props) {
             </thead>
             <tbody>
               {orgs.map((org) => (
-                <tr key={org.id} className={`border-t border-gray-100 ${!org.active ? "opacity-50" : ""}`}>
+                <tr key={org.id} className="border-t border-gray-100" /* no opacity on an inactive row: it took the text under 4.5:1; the label says the state */>
                   <td className="px-4 py-3">
                     <Link
                       href={`/super-admin/organizations/${org.slug}`}
@@ -114,7 +115,7 @@ export default function OrgsManager({ initialOrgs }: Props) {
                       {org.name}
                     </Link>
                     {!org.active && (
-                      <span className="ml-2 text-xs text-red-500 font-normal">désactivée</span>
+                      <span className="ml-2 text-xs text-red-700 font-normal">{org.suspendedAt ? "suspendue" : "désactivée"}</span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-gray-500 font-mono text-xs">{org.slug}</td>
@@ -129,14 +130,17 @@ export default function OrgsManager({ initialOrgs }: Props) {
                       >
                         Détail
                       </Link>
-                      <button
-                        type="button"
-                        onClick={() => toggleActive(org)}
-                        aria-label={`${org.active ? "Désactiver" : "Réactiver"} l'organisation ${org.name}`}
-                        className={`text-xs ${org.active ? "text-gray-600 hover:text-red-700" : "text-gray-600 hover:text-green-700"}`}
-                      >
-                        {org.active ? "Désactiver" : "Réactiver"}
-                      </button>
+                      {/* A suspended organisation (#810) is only handled from its detail page. */}
+                      {!org.suspendedAt && (
+                        <button
+                          type="button"
+                          onClick={() => toggleActive(org)}
+                          aria-label={`${org.active ? "Désactiver" : "Réactiver"} l'organisation ${org.name}`}
+                          className={`text-xs ${org.active ? "text-gray-600 hover:text-red-700" : "text-gray-600 hover:text-green-700"}`}
+                        >
+                          {org.active ? "Désactiver" : "Réactiver"}
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>

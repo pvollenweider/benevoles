@@ -198,7 +198,7 @@ export function toggleOrgRecap(name: string, active: boolean): ActionRecap {
   return active
     ? {
         title: `Désactiver l'organisation « ${name} » ?`,
-        lines: ["Ses administrateurs ne peuvent plus se connecter et ses pages publiques ne répondent plus.", "Aucune donnée n'est supprimée : l'organisation peut être réactivée à tout moment.", "Aucun email n'est envoyé."],
+        lines: ["Ses administrateurs ne peuvent plus se connecter et ses pages publiques ne répondent plus.", "Ses emails en attente sont annulés et ne partiront jamais.", "Aucune donnée n'est supprimée : l'organisation peut être réactivée à tout moment, mais elle est effacée 30 jours après sa désactivation.", "Aucun email n'est envoyé."],
         confirmLabel: "Désactiver",
         danger: true,
       }
@@ -208,6 +208,35 @@ export function toggleOrgRecap(name: string, active: boolean): ActionRecap {
         confirmLabel: "Réactiver",
         danger: false,
       }
+}
+
+/** Suspension for abuse (#810): distinct from a deactivation, see src/lib/org-suspension.ts. */
+export function suspendOrgRecap(name: string): ActionRecap {
+  return {
+    title: `Suspendre l'organisation « ${name} » pour abus ?`,
+    lines: [
+      "Ses administrateurs ne peuvent plus se connecter et ses pages publiques ne répondent plus.",
+      "Ses emails en attente sont annulés et ne partiront jamais ; aucune inscription n'est plus possible.",
+      "Ses données sont conservées pour l'enquête : jamais effacées automatiquement.",
+      "Seul le super admin peut lever la suspension ; « Réactiver » reste impossible tant qu'elle dure.",
+      "Aucun email n'est envoyé.",
+    ],
+    confirmLabel: "Suspendre",
+    danger: true,
+  }
+}
+
+export function liftSuspensionRecap(name: string): ActionRecap {
+  return {
+    title: `Lever la suspension de « ${name} » ?`,
+    lines: [
+      "L'organisation reste désactivée : il faudra ensuite la réactiver, à part.",
+      "Elle redevient soumise au nettoyage : effacée 30 jours après sa désactivation si elle n'est pas réactivée.",
+      "Aucun email n'est envoyé.",
+    ],
+    confirmLabel: "Lever la suspension",
+    danger: false,
+  }
 }
 
 export function deleteOrgRecap(i: { name: string; events: number; volunteers: number; admins: number }): ActionRecap {
