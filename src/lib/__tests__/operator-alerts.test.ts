@@ -7,7 +7,7 @@ vi.mock("@/lib/prisma", () => ({ prisma: db }))
 vi.mock("@/lib/notifications/outbox", () => outbox)
 vi.mock("@/lib/report-error", () => ({ reportError: (tag: string) => (e: unknown) => reported(tag, e) }))
 
-import { notifyOperator, NTFY_RETRY_DELAYS_MS, ntfyConfig, ntfyRequest, sendNtfy, type OperatorAlert } from "../operator-alerts"
+import { notifyOperator, NTFY_RETRY_DELAYS_MS, operatorAlertRecipients, ntfyConfig, ntfyRequest, sendNtfy, type OperatorAlert } from "../operator-alerts"
 
 const alert: OperatorAlert = { key: "k1", title: "benevol.app : plafond", message: "Emails retenus.", priority: 4, url: "https://www.benevol.app/super-admin/organizations" }
 const TOPIC = "https://ntfy.sh/benevol-ops-test"
@@ -101,6 +101,17 @@ describe("operator alerts (#810)", () => {
     })
     // A platform email: no organisation, so no organisation check can hold it back.
     expect(payloads[0].organizationId).toBeUndefined()
+  })
+
+  // A super admin's login address may not be a real mailbox (the operator's is not): the alerts
+  // then go to the dedicated address, and only there.
+  it("emails only OPERATOR_ALERT_EMAIL when it is set", async () => {
+    const ok = vi.fn().mockResolvedValue({ ok: true, status: 200 })
+    await notifyOperator(alert, { fetch: ok as unknown as typeof fetch, env: { NTFY_URL: TOPIC, OPERATOR_ALERT_EMAIL: " Alertes@Example.org " } })
+    expect(db.adminUser.findMany).not.toHaveBeenCalled()
+    const payloads = outbox.enqueueNotifications.mock.calls[0][0]
+    expect(payloads).toEqual([expect.objectContaining({ recipient: { email: "alertes@example.org" }, dedupeKey: "operator_alert:k1:alertes@example.org" })])
+    expect(await operatorAlertRecipients({ OPERATOR_ALERT_EMAIL: "  " })).toEqual(["ops@example.org", "ops2@example.org"])
   })
 
   it("still emails when the push fails, and reports an email failure without throwing", async () => {

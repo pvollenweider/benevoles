@@ -16,6 +16,8 @@ import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/
  * - A failure never cascades: an ntfy error is reported to Sentry once and stops there; it never
  *   triggers another alert.
  * - Without `NTFY_URL` only the email goes (self-hosted instances, tests).
+ * - The email goes to `OPERATOR_ALERT_EMAIL` when set (a super admin's login address need not be a
+ *   real mailbox), else to every active super admin.
  */
 
 export type OperatorAlert = {
@@ -95,17 +97,25 @@ export async function sendNtfy(alert: OperatorAlert, deps: Deps = {}): Promise<b
  * outbox run.
  */
 export async function notifyOperator(alert: OperatorAlert, deps: Deps = {}): Promise<void> {
-  await Promise.all([sendNtfy(alert, deps), emailOperator(alert)])
+  await Promise.all([sendNtfy(alert, deps), emailOperator(alert, deps.env ?? process.env)])
 }
 
-async function emailOperator(alert: OperatorAlert): Promise<void> {
+/** The addresses of the alert email: the dedicated one, else the active super admins. */
+export async function operatorAlertRecipients(env: Record<string, string | undefined> = process.env): Promise<string[]> {
+  const dedicated = env.OPERATOR_ALERT_EMAIL?.trim().toLowerCase()
+  if (dedicated) return [dedicated]
+  const admins = await prisma.adminUser.findMany({ where: { role: "super_admin", isActive: true }, select: { email: true } })
+  return admins.map((a) => a.email)
+}
+
+async function emailOperator(alert: OperatorAlert, env: Record<string, string | undefined>): Promise<void> {
   try {
-    const admins = await prisma.adminUser.findMany({ where: { role: "super_admin", isActive: true }, select: { email: true } })
+    const recipients = await operatorAlertRecipients(env)
     const ids = await enqueueNotifications(
-      admins.map((a) => ({
+      recipients.map((email) => ({
         kind: "operator_alert" as const,
-        recipient: { email: a.email },
-        dedupeKey: `operator_alert:${alert.key}:${a.email}`,
+        recipient: { email },
+        dedupeKey: `operator_alert:${alert.key}:${email}`,
         data: { title: alert.title, message: alert.message, url: alert.url ?? null },
       })),
     )

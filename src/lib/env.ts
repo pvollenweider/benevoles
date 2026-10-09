@@ -24,6 +24,8 @@ const schema = z.object({
   // Operator alerts by ntfy (#810, src/lib/operator-alerts.ts): topic URL (https) and optional access value.
   NTFY_URL: z.string().optional(),
   NTFY_TOKEN: z.string().optional(),
+  // Where the operator's alert emails go (#810); unset = every active super admin's login address.
+  OPERATOR_ALERT_EMAIL: z.string().optional().refine((v) => !v?.trim() || z.email().safeParse(v.trim()).success, "OPERATOR_ALERT_EMAIL doit être une adresse email"),
   VAPID_PUBLIC_KEY: z.string().optional(),
   VAPID_PRIVATE_KEY: z.string().optional(),
   VAPID_EMAIL: z.string().optional(),
