@@ -89,7 +89,7 @@ export default function SignupForm({ open }: { open: boolean }) {
       </div>
       <div>
         <label htmlFor={`${id}-description`} className={labelClass}>Votre association et votre besoin</label>
-        <p id={`${id}-description-hint`} className="text-sm text-gray-700 dark:text-gray-300 mb-1">En quelques phrases : ce que fait votre association et pour quel événement vous cherchez des bénévoles. Nous le lisons avant de valider votre espace.</p>
+        <p id={`${id}-description-hint`} className="text-sm text-gray-700 dark:text-gray-300 mb-1">En quelques phrases : ce que fait votre association et pour quel événement vous cherchez des bénévoles. Nous le lisons avant de valider votre espace. Entre {SIGNUP_DESCRIPTION_MIN} et {SIGNUP_DESCRIPTION_MAX} caractères.</p>
         <textarea id={`${id}-description`} ref={descriptionRef} value={values.description} onChange={(e) => setValues({ ...values, description: e.target.value })}
           required rows={4} maxLength={SIGNUP_DESCRIPTION_MAX} aria-invalid={isInvalid("description")} aria-describedby={describedBy("description", `${id}-description-hint`)} className={inputClass} />
       </div>

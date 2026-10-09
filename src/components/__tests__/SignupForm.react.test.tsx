@@ -28,7 +28,8 @@ describe("SignupForm, « Votre association et votre besoin » (#810)", () => {
     await waitFor(() => expect(field).toHaveFocus())
     expect(field).toHaveAttribute("aria-invalid", "true")
     expect(field).toHaveAccessibleDescription(expect.stringContaining(DESCRIPTION_SHORT_MESSAGE))
-    expect(field).toHaveAccessibleDescription(expect.stringContaining("Nous le lisons avant de valider votre espace."))
+    // The length rule is said before any error (the field also stops at 1000 characters).
+    expect(field).toHaveAccessibleDescription(expect.stringContaining("Nous le lisons avant de valider votre espace. Entre 20 et 1000 caractères."))
     expect(fetch).not.toHaveBeenCalled()
   })
 
