@@ -17,6 +17,8 @@ import { parseNotificationSettings } from "@/lib/notification-settings"
 import { adminMembersToVerifyUrl } from "@/lib/notifications/templates/shared"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { siteName } from "@/lib/site"
+import { pastEventSummary, pastEventTotals } from "@/lib/past-event-retention"
+import { observePastEvents } from "@/lib/past-event-retention-data"
 
 export const dynamic = "force-dynamic"
 
@@ -217,8 +219,17 @@ async function run(req: Request) {
     deliverAfterResponse(ids)
   }
 
+  // --- 9. Past events (#813), observation mode: what the 3-year rule would anonymise, nothing changed.
+  let pastEvents: ReturnType<typeof pastEventTotals> | null = null
+  try {
+    pastEvents = pastEventTotals(await observePastEvents(now))
+  } catch (e) {
+    reportError("cleanup.past_events_observation")(e)
+  }
+
   return NextResponse.json({
     runAt: now.toISOString(),
+    observed: { pastEvents, pastEventsSummary: pastEvents ? pastEventSummary(pastEvents) : null },
     tokenEncryption,
     deleted: {
       notificationOutbox: deletedOutbox.count,

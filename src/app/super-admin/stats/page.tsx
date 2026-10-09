@@ -7,6 +7,8 @@ import { auth } from "@/auth"
 import { formatCount, type UsageRow } from "@/lib/usage-counters"
 import { loadPlatformUsage, loadSignupFacts } from "@/lib/usage-stats"
 import { signupIndicatorRows } from "@/lib/signup-indicators"
+import { observePastEvents } from "@/lib/past-event-retention-data"
+import PastEventRetentionTable from "@/components/super-admin/PastEventRetentionTable"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Statistiques" }
@@ -22,7 +24,7 @@ export default async function StatsPage() {
   if (!session?.user) redirect("/admin/login")
   if (session.user.role !== "super_admin") redirect("/admin/login")
 
-  const [{ cumulative, current }, signupFacts] = await Promise.all([loadPlatformUsage(), loadSignupFacts()])
+  const [{ cumulative, current }, signupFacts, pastEvents] = await Promise.all([loadPlatformUsage(), loadSignupFacts(), observePastEvents()])
   const signup = signupIndicatorRows(signupFacts)
 
   return (
@@ -41,6 +43,7 @@ export default async function StatsPage() {
         intro="Ce qui dit si la validation à la main reste nécessaire. Les décisions comptent sur 12 mois (le journal de l'opérateur les garde un an) ; un envoi reporté plusieurs fois compte à chaque fois."
         rows={signup}
       />
+      <PastEventRetentionTable rows={pastEvents} />
     </div>
   )
 }
