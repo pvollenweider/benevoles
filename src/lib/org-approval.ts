@@ -30,7 +30,7 @@ export const PUBLIC_ORG_WHERE = { active: true, publicationApprovedAt: { not: nu
 export const PUBLICATION_PENDING_ERROR =
   "Votre espace est en attente de validation : la publication sera possible dès qu'il sera activé. Vous recevrez un email."
 
-/** Whether a pending organisation may email this address: only one of its own administrator accounts. */
+/** Whether a pending organisation may email this address: only one of its own **active** administrator accounts (the caller passes those only). */
 export function pendingRecipientAllowed(recipientEmail: string | null | undefined, adminEmails: readonly string[]): boolean {
   if (!recipientEmail) return false
   const r = recipientEmail.trim().toLowerCase()

@@ -19,7 +19,9 @@ export { ORG_INACTIVE_REASON, ORG_PENDING_REASON }
  * organisation (platform emails: product updates, release check, super admin) is not concerned.
  *
  * An organisation awaiting validation (#810, src/lib/org-approval.ts) may only email its own
- * administrator accounts: anything else is refused the same way, and it sends no push at all.
+ * **active** administrator accounts (address confirmed): anything else is refused the same way,
+ * and it sends no push at all. Inactive accounts (an invitation not yet accepted) do not count:
+ * otherwise inviting any address as an organiser would let a pending organisation email it.
  */
 
 type OrgSendState = { active: boolean; outboundEmailApprovedAt: Date | string | null; admins?: { email: string }[] }
@@ -43,7 +45,7 @@ export function sendingVerdict(organizationId: string | null | undefined, org: O
 
 type OrgReader = {
   organization: {
-    findUnique(args: { where: { id: string }; select: { active: true; outboundEmailApprovedAt: true; admins: { select: { email: true } } } }): Promise<OrgSendState | null>
+    findUnique(args: { where: { id: string }; select: { active: true; outboundEmailApprovedAt: true; admins: { where: { isActive: true }; select: { email: true } } } }): Promise<OrgSendState | null>
   }
 }
 
@@ -52,7 +54,7 @@ export async function organizationSendingVerdict(organizationId: string | null |
   if (!organizationId) return null
   const org = await db.organization.findUnique({
     where: { id: organizationId },
-    select: { active: true, outboundEmailApprovedAt: true, admins: { select: { email: true } } },
+    select: { active: true, outboundEmailApprovedAt: true, admins: { where: { isActive: true }, select: { email: true } } },
   })
   return sendingVerdict(organizationId, org, recipientEmail)
 }

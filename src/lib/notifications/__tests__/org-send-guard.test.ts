@@ -27,7 +27,7 @@ describe("sending for a deactivated organisation (#814)", () => {
   it("reads the organisation at send time, and not at all for a platform message", async () => {
     findUnique.mockResolvedValueOnce({ active: false })
     expect(await organizationBlocksSending("org-1")).toBe(true)
-    expect(findUnique).toHaveBeenCalledWith({ where: { id: "org-1" }, select: { active: true, outboundEmailApprovedAt: true, admins: { select: { email: true } } } })
+    expect(findUnique).toHaveBeenCalledWith({ where: { id: "org-1" }, select: { active: true, outboundEmailApprovedAt: true, admins: { where: { isActive: true }, select: { email: true } } } })
     findUnique.mockClear()
     expect(await organizationBlocksSending(null)).toBe(false)
     expect(findUnique).not.toHaveBeenCalled()
