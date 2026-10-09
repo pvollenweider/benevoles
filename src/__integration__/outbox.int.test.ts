@@ -51,7 +51,7 @@ describe.skipIf(!url)("outbox on Postgres (#319)", () => {
     sent.mockResolvedValueOnce({ ok: false, reason: "smtp down" })
     const now = new Date()
 
-    expect(await deliverOutbox({ ids: [id], now })).toEqual({ sent: 0, retried: 1, failed: 0, cancelled: 0 })
+    expect(await deliverOutbox({ ids: [id], now })).toEqual({ sent: 0, retried: 1, failed: 0, cancelled: 0, held: 0 })
     const failed = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id } })
     expect(failed.status).toBe("pending")
     expect(failed.attempts).toBe(1)
@@ -59,9 +59,9 @@ describe.skipIf(!url)("outbox on Postgres (#319)", () => {
     expect(failed.nextAttemptAt.getTime()).toBe(now.getTime() + backoffMs(1))
 
     // Not due yet: nothing happens.
-    expect(await deliverOutbox({ ids: [id], now })).toEqual({ sent: 0, retried: 0, failed: 0, cancelled: 0 })
+    expect(await deliverOutbox({ ids: [id], now })).toEqual({ sent: 0, retried: 0, failed: 0, cancelled: 0, held: 0 })
     // Due: sent.
-    expect(await deliverOutbox({ ids: [id], now: new Date(now.getTime() + backoffMs(1)) })).toEqual({ sent: 1, retried: 0, failed: 0, cancelled: 0 })
+    expect(await deliverOutbox({ ids: [id], now: new Date(now.getTime() + backoffMs(1)) })).toEqual({ sent: 1, retried: 0, failed: 0, cancelled: 0, held: 0 })
   })
 
   it("a claim abandoned by a crashed delivery is picked up again after 15 minutes", async () => {
@@ -70,13 +70,13 @@ describe.skipIf(!url)("outbox on Postgres (#319)", () => {
     const crashedAt = new Date(Date.now() - 16 * 60 * 1000)
     await prisma.notificationOutbox.update({ where: { id }, data: { status: "sending", claimedAt: crashedAt } })
 
-    expect(await deliverOutbox({ ids: [id] })).toEqual({ sent: 1, retried: 0, failed: 0, cancelled: 0 })
+    expect(await deliverOutbox({ ids: [id] })).toEqual({ sent: 1, retried: 0, failed: 0, cancelled: 0, held: 0 })
 
     // A fresh claim (another delivery in progress) is left alone.
     const [id2] = await enqueueNotifications([payload(201)])
     ids.push(id2)
     await prisma.notificationOutbox.update({ where: { id: id2 }, data: { status: "sending", claimedAt: new Date() } })
-    expect(await deliverOutbox({ ids: [id2] })).toEqual({ sent: 0, retried: 0, failed: 0, cancelled: 0 })
+    expect(await deliverOutbox({ ids: [id2] })).toEqual({ sent: 0, retried: 0, failed: 0, cancelled: 0, held: 0 })
   })
 
   it("stored with a transaction's client, rows commit or roll back with it (#352)", async () => {
@@ -98,7 +98,7 @@ describe.skipIf(!url)("outbox on Postgres (#319)", () => {
     })
     ids.push(...rowIds)
     expect(rowIds).toHaveLength(1)
-    expect(await deliverOutbox({ ids: rowIds })).toEqual({ sent: 1, retried: 0, failed: 0, cancelled: 0 })
+    expect(await deliverOutbox({ ids: rowIds })).toEqual({ sent: 1, retried: 0, failed: 0, cancelled: 0, held: 0 })
   })
 
   it("a dedupe key is stored once even when enqueued concurrently", async () => {

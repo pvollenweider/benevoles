@@ -77,4 +77,4 @@ export type NotificationPayload<K extends NotificationKind = NotificationKind> =
  * `permanent` (#598): true when the failure is a permanent SMTP rejection — the outbox stops
  * retrying at once instead of spending ~2.5h on a backoff that can't succeed.
  */
-export type Send = (payload: NotificationPayload) => Promise<{ ok: true } | { ok: false; reason: string; permanent?: boolean; blocked?: true }>
+export type Send = (payload: NotificationPayload) => Promise<{ ok: true } | { ok: false; reason: string; permanent?: boolean; blocked?: true; held?: true; retryAfterMs?: number }>

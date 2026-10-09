@@ -53,7 +53,7 @@ describe.skipIf(!url)("outbox and deactivated organisations on Postgres (#814)",
 
     await prisma.organization.update({ where: { id: orgId }, data: { active: false } })
 
-    expect(await deliverOutbox({ ids })).toEqual({ sent: 0, retried: 0, failed: 0, cancelled: 3 })
+    expect(await deliverOutbox({ ids })).toEqual({ sent: 0, retried: 0, failed: 0, cancelled: 3, held: 0 })
     expect(smtp).not.toHaveBeenCalled()
     const rows = await prisma.notificationOutbox.findMany({ where: { id: { in: ids } } })
     expect(rows.every((r) => r.status === "cancelled" && r.lastError === ORG_INACTIVE_REASON && r.claimedAt === null)).toBe(true)
@@ -69,7 +69,7 @@ describe.skipIf(!url)("outbox and deactivated organisations on Postgres (#814)",
       return { ok: true }
     })
 
-    expect(await deliverOutbox({ ids })).toEqual({ sent: 1, retried: 0, failed: 0, cancelled: 2 })
+    expect(await deliverOutbox({ ids })).toEqual({ sent: 1, retried: 0, failed: 0, cancelled: 2, held: 0 })
     expect(smtp).toHaveBeenCalledTimes(1)
   })
 
@@ -85,7 +85,7 @@ describe.skipIf(!url)("outbox and deactivated organisations on Postgres (#814)",
     })
     await prisma.organization.update({ where: { id: orgId }, data: { active: true } })
 
-    expect(await deliverOutbox({ ids })).toEqual({ sent: 0, retried: 0, failed: 0, cancelled: 0 })
+    expect(await deliverOutbox({ ids })).toEqual({ sent: 0, retried: 0, failed: 0, cancelled: 0, held: 0 })
     expect(smtp).not.toHaveBeenCalled()
     const rows = await prisma.notificationOutbox.findMany({ where: { id: { in: ids } } })
     expect(rows.every((r) => r.status === "cancelled")).toBe(true)
@@ -96,7 +96,7 @@ describe.skipIf(!url)("outbox and deactivated organisations on Postgres (#814)",
     const [id] = await enqueueNotifications([payload(orgId, 30)])
     rowIds.push(id)
     smtp.mockResolvedValueOnce({ ok: false, reason: "smtp down" })
-    expect(await deliverOutbox({ ids: [id] })).toEqual({ sent: 0, retried: 1, failed: 0, cancelled: 0 })
+    expect(await deliverOutbox({ ids: [id] })).toEqual({ sent: 0, retried: 1, failed: 0, cancelled: 0, held: 0 })
 
     expect(await cancelPendingOutboxForOrganization(prisma, orgId)).toBe(1)
     expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id } })).status).toBe("cancelled")
@@ -108,7 +108,7 @@ describe.skipIf(!url)("outbox and deactivated organisations on Postgres (#814)",
     rowIds.push(...ids)
     await prisma.organization.delete({ where: { id: orgId } })
 
-    expect(await deliverOutbox({ ids })).toEqual({ sent: 0, retried: 0, failed: 0, cancelled: 1 })
+    expect(await deliverOutbox({ ids })).toEqual({ sent: 0, retried: 0, failed: 0, cancelled: 1, held: 0 })
     expect(smtp).not.toHaveBeenCalled()
   })
 

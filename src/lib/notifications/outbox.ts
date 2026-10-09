@@ -135,7 +135,7 @@ export function deliverAfterResponse(ids: string[]): void {
  * row is marked "sent" leaves it claimed, and the stale-claim pickup sends it again. A rare
  * duplicate email is the accepted trade-off against a lost one.
  */
-export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?: Date } = {}): Promise<{ sent: number; retried: number; failed: number; cancelled: number }> {
+export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?: Date } = {}): Promise<{ sent: number; retried: number; failed: number; cancelled: number; held: number }> {
   const now = opts.now ?? new Date()
   const due = await prisma.notificationOutbox.findMany({
     where: {
@@ -150,7 +150,7 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     select: { id: true, status: true, claimedAt: true },
   })
 
-  const result = { sent: 0, retried: 0, failed: 0, cancelled: 0 }
+  const result = { sent: 0, retried: 0, failed: 0, cancelled: 0, held: 0 }
   for (const row of due) {
     const { count } = await prisma.notificationOutbox.updateMany({
       where: { id: row.id, status: row.status, claimedAt: row.claimedAt },
@@ -167,12 +167,23 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
         return sendNotification({ ...payload, organizationId: claimed.organizationId ?? payload.organizationId ?? null, messageId: outboxMessageId(row.id), outboxId: row.id })
       })
       .catch(
-      (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e), permanent: undefined as true | undefined, blocked: undefined as true | undefined }),
+      (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e), permanent: undefined as true | undefined, blocked: undefined as true | undefined, held: undefined as true | undefined, retryAfterMs: undefined as number | undefined }),
     )
 
+    if (!outcome.ok && outcome.held) {
+      // Over a sending limit (#810): not an attempt, not a failure. Back to pending, tried again
+      // when the window ends; the attempts count is left as it was.
+      await prisma.notificationOutbox.update({
+        where: { id: row.id },
+        data: { status: "pending", claimedAt: null, nextAttemptAt: new Date(now.getTime() + (outcome.retryAfterMs ?? 60_000)) },
+      })
+      result.held++
+      continue
+    }
+
     if (!outcome.ok && outcome.blocked) {
-      // Deactivated or deleted organisation (#814): cancelled for good, never retried, and never
-      // sent by a later reactivation.
+      // Deactivated or deleted organisation (#814), or a public-triggered email over its
+      // per-recipient cap (#810): cancelled for good, never retried, never sent later.
       await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: outcome.reason, claimedAt: null } })
       result.cancelled++
       continue
