@@ -8,7 +8,7 @@ const COLUMNS: { key: keyof Omit<PastEventObservation, "organizationId" | "organ
   { key: "events", label: "Événements" },
   { key: "registrations", label: "Inscriptions" },
   { key: "members", label: "Membres" },
-  { key: "membersOnlyOld", label: "dont sans événement récent" },
+  { key: "membersOnlyOld", label: `Membres sans événement depuis ${PAST_EVENT_RETENTION_YEARS} ans` },
   { key: "answers", label: "Réponses aux questions" },
   { key: "invites", label: "Invitations" },
   { key: "sectorLeaders", label: "Responsables de secteur" },
@@ -28,7 +28,7 @@ export default function PastEventRetentionTable({ rows }: { rows: PastEventObser
         Observation, rien n&apos;est modifié : ce que la règle de conservation anonymiserait aujourd&apos;hui, par organisation. {pastEventSummary(totals)}
       </p>
       {rows.length > 0 && (
-        <div tabIndex={0} role="region" aria-label="Événements terminés depuis plus de 3 ans, par organisation" className="bg-white border border-gray-200 rounded-2xl overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+        <div tabIndex={0} role="region" aria-labelledby="stats-past-events" className="bg-white border border-gray-200 rounded-2xl overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
           <table className="w-full text-sm" aria-describedby="stats-past-events-intro">
             <caption className="sr-only">Ce que la règle anonymiserait, par organisation</caption>
             <thead className="bg-gray-50 text-left text-gray-700">
