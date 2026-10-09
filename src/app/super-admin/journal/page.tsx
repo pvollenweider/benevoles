@@ -59,8 +59,8 @@ export default async function OperatorJournalPage() {
                 </td>
                 <th scope="row" className="px-4 py-2 text-left font-medium text-gray-900">{operatorActionLabel(e.action)}</th>
                 <td className="px-4 py-2 text-gray-800 break-words">{e.target}</td>
-                <td className="px-4 py-2 text-gray-800 break-words">{e.detail ?? "—"}</td>
-                <td className="px-4 py-2 text-gray-800">{e.actorLabel ?? "—"}</td>
+                <td className="px-4 py-2 text-gray-800 break-words">{e.detail ?? <span className="text-gray-600">Aucune</span>}</td>
+                <td className="px-4 py-2 text-gray-800">{e.actorLabel ?? <span className="text-gray-600">Inconnu</span>}</td>
               </tr>
             ))}
           </tbody>
