@@ -162,6 +162,9 @@ async function run(req: Request) {
     where: { createdAt: { lt: daysAgo(now, RETENTION_DAYS.signupRequest) } },
   })
 
+  // --- 6d ter. The operator's log (#810), past its retention window.
+  const deletedOperatorLogs = await prisma.operatorLog.deleteMany({ where: { createdAt: { lt: daysAgo(now, RETENTION_DAYS.operatorLog) } } })
+
   // --- 6d bis. Expired entries of the sign-up block list (#810, part 5): IP entries always expire.
   const deletedSignupBlocks = await prisma.signupBlock.deleteMany({ where: { expiresAt: { lt: now } } })
 
@@ -224,6 +227,7 @@ async function run(req: Request) {
       videoFeedback: deletedVideoFeedback.count,
       signupRequests: deletedSignupRequests.count,
       signupBlocks: deletedSignupBlocks.count,
+      operatorLogs: deletedOperatorLogs.count,
       organizations: deletedOrgs.count,
       abandonedSignupSpaces: deletedAbandonedSpaces.count,
       volunteers: deletedVolunteers.count,

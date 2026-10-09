@@ -6,6 +6,7 @@ import { requireSuperAdmin } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { decideReview } from "@/lib/org-review"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { logOperator, organizationTarget } from "@/lib/operator-log"
 
 /**
  * Review of a space awaiting validation (#810, part 4c), from its super admin page, never from a
@@ -20,7 +21,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const org = await prisma.organization.findUnique({
     where: { id },
-    select: { id: true, name: true, active: true, suspendedAt: true, publicationApprovedAt: true, outboundEmailApprovedAt: true },
+    select: { id: true, name: true, slug: true, active: true, suspendedAt: true, publicationApprovedAt: true, outboundEmailApprovedAt: true },
   })
   if (!org) return NextResponse.json({ error: "Organisation non trouvée" }, { status: 404 })
 
@@ -32,6 +33,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       // Admins are only SET NULL by the organisation's deletion: removed with it, as the cleanup does.
       await tx.adminUser.deleteMany({ where: { organizationId: id } })
       await tx.organization.delete({ where: { id } })
+      // The organisation's own log goes with it: the decision is kept in the operator's log.
+      await logOperator(tx, { action: "organization.refused", actor: guard.session.user, entityType: "Organization", entityId: id, target: organizationTarget(org) })
     })
     return NextResponse.json({ ok: true, decision: "refuse" })
   }
@@ -42,6 +45,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     await tx.orgLog.create({
       data: { organizationId: id, actorType: "admin", actorId: guard.session.user?.id ?? null, action: "organization.approved", entityType: "Organization", entityId: id },
     })
+    await logOperator(tx, { action: "organization.approved", actor: guard.session.user, entityType: "Organization", entityId: id, target: organizationTarget(org) })
     const admins = await tx.adminUser.findMany({ where: { organizationId: id }, select: { email: true, name: true } })
     return enqueueNotifications(admins.map((a) => ({
       kind: "space_approved" as const,

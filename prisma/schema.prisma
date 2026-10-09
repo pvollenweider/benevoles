@@ -853,3 +853,19 @@ model SignupBlock {
   @@unique([kind, value])
 }
 
+// The operator's decisions (#810, src/lib/operator-log.ts): kept apart from OrgLog, which goes with
+// its organisation, so a refused or deleted space still leaves a trace. Labels are copied at the
+// decision. Deleted after RETENTION_DAYS.operatorLog by the nightly cleanup.
+model OperatorLog {
+  id         String   @id @default(cuid())
+  action     String
+  actorId    String?
+  actorLabel String?
+  entityType String
+  entityId   String
+  target     String
+  detail     String?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+}

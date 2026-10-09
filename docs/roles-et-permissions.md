@@ -133,6 +133,8 @@ Règles sur l'équipe :
 
 `EventLog` (par événement) et `OrgLog` (membres, équipe) ne stockent pas le nom de l'acteur : `actorId` est résolu à la lecture depuis `AdminUser` ou `Volunteer`. Si la fiche n'existe plus (admin retiré, bénévole effacé), l'interface affiche un libellé générique selon `actorType` (`admin`, `volunteer`, `system`).
 
+`OperatorLog` (#810, `src/lib/operator-log.ts`) garde les décisions de l'opérateur : espace validé, refusé, suspendu, suspension levée, désactivé, réactivé ou supprimé, ajout et retrait de la liste de blocage. Il ne dépend d'aucune organisation (`OrgLog` est supprimé avec la sienne : un refus n'y laisserait aucune trace) et copie au moment de la décision le nom de l'auteur, la cible (« Nom (identifiant) », ou le libellé de l'entrée bloquée, jamais une adresse IP en clair) et la raison. Lecture seule dans `/super-admin/journal` (200 dernières), effacé après `RETENTION_DAYS.operatorLog` jours.
+
 ## Conservation et suppression
 
 Les durées de conservation, ce qui les déclenche et ce qui efface chaque donnée sont décrites dans [retention.md](retention.md), généré depuis `src/lib/retention.ts` et vérifié par un test contre le nettoyage quotidien, les sauvegardes et la politique de confidentialité.

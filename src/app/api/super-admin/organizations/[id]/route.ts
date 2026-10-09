@@ -3,6 +3,7 @@
 
 import { cancelPendingOutboxForOrganization } from "@/lib/notifications/org-send-guard"
 import { NextResponse } from "next/server"
+import { logOperator, organizationTarget, type OperatorAction } from "@/lib/operator-log"
 import { requireSuperAdmin } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
@@ -62,7 +63,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 
   const org = await prisma.organization.findUnique({
     where: { id },
-    select: { id: true, slug: true, active: true },
+    select: { id: true, name: true, slug: true, active: true },
   })
   if (!org) return NextResponse.json({ error: "Organisation non trouvée" }, { status: 404 })
   if (org.active) {
@@ -95,6 +96,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 
     await tx.volunteer.deleteMany({ where: { id: { in: volunteers.map((v) => v.id) } } })
     await tx.adminUser.deleteMany({ where: { id: { in: admins.map((a) => a.id) } } })
+    await logOperator(tx, { action: "organization.deleted", actor: guard.session.user, entityType: "Organization", entityId: id, target: organizationTarget(org) })
   })
 
   return NextResponse.json({ success: true })
@@ -111,7 +113,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     return validationError(parsed.error)
   }
 
-  const existing = await prisma.organization.findUnique({ where: { id }, select: { id: true, slug: true, active: true, suspendedAt: true } })
+  const existing = await prisma.organization.findUnique({ where: { id }, select: { id: true, name: true, slug: true, active: true, suspendedAt: true } })
   if (!existing) return NextResponse.json({ error: "Organisation non trouvée" }, { status: 404 })
 
   // Activation, deactivation and suspension (#810): decided by src/lib/org-suspension.ts.
@@ -159,6 +161,21 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
           entityType: "Organization",
           entityId: id,
         },
+      })
+    }
+    const operatorAction: OperatorAction | null = decision.event === "suspended" ? "organization.suspended"
+      : decision.event === "suspension_lifted" ? "organization.suspension_lifted"
+      : decision.update.active === false && existing.active ? "organization.deactivated"
+      : decision.update.active === true && !existing.active ? "organization.reactivated"
+      : null
+    if (operatorAction) {
+      await logOperator(tx, {
+        action: operatorAction,
+        actor: guard.session.user,
+        entityType: "Organization",
+        entityId: id,
+        target: organizationTarget(existing),
+        detail: operatorAction === "organization.suspended" ? updates.suspensionReason : null,
       })
     }
     if (oldSlug && updates.slug) {

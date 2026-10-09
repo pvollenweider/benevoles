@@ -29,6 +29,7 @@ Les deux autorisations sont séparées pour pouvoir, plus tard, les accorder une
 - **Juger** : la fiche de l'espace (`/super-admin/organizations/<identifiant>`) montre le bloc « Demande d'inscription » (la description saisie, en texte brut, liens non cliquables), ses administrateurs et ses chiffres.
 - **Valider l'espace** : accorde la publication et les emails ; chaque administrateur de l'espace reçoit « Votre espace benevol.app est activé ».
 - **Refuser et supprimer** : l'espace est supprimé avec ses comptes, sans email.
+- **Journal de l'opérateur** (`/super-admin/journal`) : chaque décision (valider, refuser, suspendre, désactiver, supprimer, bloquer, débloquer) y reste, avec son auteur et sa raison, même quand l'espace a été supprimé depuis.
 
 ## Lien d'activation perdu
 

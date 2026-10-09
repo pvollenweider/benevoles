@@ -9,6 +9,7 @@ const m = vi.hoisted(() => ({
   adminDeleteMany: vi.fn(),
   adminFindMany: vi.fn(),
   logCreate: vi.fn(),
+  operatorLogCreate: vi.fn(),
   enqueue: vi.fn(),
   deliver: vi.fn(),
 }))
@@ -19,18 +20,19 @@ vi.mock("@/lib/prisma", () => {
     organization: { update: m.orgUpdate, delete: m.orgDelete },
     adminUser: { deleteMany: m.adminDeleteMany, findMany: m.adminFindMany },
     orgLog: { create: m.logCreate },
+    operatorLog: { create: m.operatorLogCreate },
   }
   return { prisma: { organization: { findUnique: m.findUnique }, $transaction: async (fn: (t: typeof tx) => unknown) => fn(tx) } }
 })
 
-const pending = { id: "org-1", name: "Fête", active: true, suspendedAt: null, publicationApprovedAt: null, outboundEmailApprovedAt: null }
+const pending = { id: "org-1", name: "Fête", slug: "fete", active: true, suspendedAt: null, publicationApprovedAt: null, outboundEmailApprovedAt: null }
 const post = (decision: unknown) => new Request("http://localhost/api/super-admin/organizations/org-1/review", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ decision }) })
 const params = { params: Promise.resolve({ id: "org-1" }) }
 
 describe("POST /api/super-admin/organizations/[id]/review (#810, part 4c)", () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    m.guard.mockResolvedValue({ db: {}, session: { user: { id: "sa-1", role: "super_admin" } } })
+    m.guard.mockResolvedValue({ db: {}, session: { user: { id: "sa-1", role: "super_admin", name: "Opérateur" } } })
     m.findUnique.mockResolvedValue(pending)
     m.adminFindMany.mockResolvedValue([{ email: "owner@example.org", name: "Camille" }])
     m.enqueue.mockResolvedValue(["o1"])
@@ -51,6 +53,7 @@ describe("POST /api/super-admin/organizations/[id]/review (#810, part 4c)", () =
     expect(data.publicationApprovedAt).toBeInstanceOf(Date)
     expect(data.outboundEmailApprovedAt).toBeInstanceOf(Date)
     expect(m.logCreate).toHaveBeenCalledWith({ data: expect.objectContaining({ action: "organization.approved", actorId: "sa-1", organizationId: "org-1" }) })
+    expect(m.operatorLogCreate).toHaveBeenCalledWith({ data: expect.objectContaining({ action: "organization.approved", actorId: "sa-1", actorLabel: "Opérateur", target: "Fête (fete)" }) })
     expect(m.enqueue.mock.calls[0][0]).toEqual([expect.objectContaining({ kind: "space_approved", organizationId: "org-1", recipient: { email: "owner@example.org", name: "Camille" } })])
     expect(m.deliver).toHaveBeenCalledWith(["o1"])
   })
@@ -62,6 +65,8 @@ describe("POST /api/super-admin/organizations/[id]/review (#810, part 4c)", () =
     expect(m.adminDeleteMany).toHaveBeenCalledWith({ where: { organizationId: "org-1" } })
     expect(m.orgDelete).toHaveBeenCalledWith({ where: { id: "org-1" } })
     expect(m.enqueue).not.toHaveBeenCalled()
+    // The organisation's own log is gone with it: the refusal stays in the operator's log.
+    expect(m.operatorLogCreate).toHaveBeenCalledWith({ data: expect.objectContaining({ action: "organization.refused", entityId: "org-1", target: "Fête (fete)" }) })
   })
 
   it("refuses an unknown organisation, an unknown decision and a space not pending", async () => {
