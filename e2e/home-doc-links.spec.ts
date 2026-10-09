@@ -13,7 +13,7 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 375, height: 667 
     const link = hero.getByRole("link", { name: "Guide : créer son premier événement" })
     await expect(link).toHaveAttribute("href", QUICKSTART)
     await expect(link).toBeInViewport()
-    // The mailto CTA stays first.
+    // The sign-up CTA (#810) stays first.
     await expect(hero.getByRole("link").first()).toHaveAccessibleName(/^Demander un espace/)
   })
 }

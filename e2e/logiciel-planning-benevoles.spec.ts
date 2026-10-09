@@ -20,10 +20,11 @@ test("answers the search with one title, its sections and the email request at t
   for (const heading of ["Pour l'organisateur : postes, créneaux et Frise", "Pour le bénévole : un lien, sans compte ni application", "Le jour J : feuilles imprimées et page sur le téléphone", "Après l'événement : heures, attestation et exports", "Un outil sur lequel compter", "Questions fréquentes"]) {
     await expect(page.getByRole("heading", { level: 2, name: heading })).toBeVisible()
   }
-  const requests = page.getByRole("link", { name: /^Demander un espace par email \(contact@benevol\.app\)/ })
+  const requests = page.getByRole("link", { name: /^Demander un espace/ })
   await expect(requests).toHaveCount(2)
   for (const href of await requests.evaluateAll((links) => links.map((a) => a.getAttribute("href")))) {
-    expect(href).toMatch(/^mailto:contact@benevol\.app\?subject=.+&body=.+/)
+    // #810: the self-service sign-up page, no longer an email.
+    expect(href).toBe("/inscription")
   }
 })
 

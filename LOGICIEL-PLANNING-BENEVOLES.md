@@ -5,7 +5,7 @@ benevol.app est un logiciel de planning pour les bénévoles d'un événement. V
 Il est pensé pour les événements d'une association, une fête de village, une buvette, un festival sur plusieurs jours ou une manifestation sportive, plutôt que pour les horaires d'une équipe salariée. Gratuit, open source (son code est public et libre de réutilisation) et hébergé en France.
 
 <!-- actions -->
-- [Demander un espace](mailto:contact@benevol.app?subject=Demande%20d%E2%80%99un%20espace%20sur%20benevol.app&body=Bonjour%2C%0A%0ANous%20aimerions%20essayer%20benevol.app%20pour%20organiser%20nos%20b%C3%A9n%C3%A9voles.%0A%0AAssociation%20%3A%0A%C3%89v%C3%A9nement%20%28nom%2C%20dates%2C%20nombre%20de%20b%C3%A9n%C3%A9voles%20environ%29%20%3A%0AAdresse%20souhait%C3%A9e%20%3A%20%E2%80%A6.benevol.app%0A%0AMerci%20%21)
+- [Demander un espace](/inscription)
 - [Voir les questions fréquentes](#questions-frequentes)
 
 <!-- image: VOLUNTEER_CHOOSE_SHIFTS | La page d'inscription d'un événement : les créneaux de chaque poste sur une frise par jour, et à droite le récapitulatif des créneaux choisis. -->
@@ -119,12 +119,12 @@ Oui, c'est l'usage prévu : des modèles existent pour un festival, une buvette,
 
 ### Comment commencer ?
 
-Écrivez à contact@benevol.app : on vous crée un espace à l'adresse de votre association, du type votre-association.benevol.app. La page [Créer son premier événement](guide/creer-son-premier-evenement.md) vous mène ensuite, étape par étape, jusqu'au lien partagé.
+Créez votre espace en ligne depuis la page [Demander un espace](/inscription) : il est prêt dès que vous avez confirmé votre adresse, à l'adresse de votre association, du type votre-association.benevol.app. Vous préparez votre événement tout de suite ; la publication suit une courte vérification. La page [Créer son premier événement](guide/creer-son-premier-evenement.md) vous mène ensuite, étape par étape, jusqu'au lien partagé.
 
 ## Démarrer
 
 Une question avant de vous lancer ? Les [tutoriels vidéo](/videos) montrent chaque étape en quelques minutes, et la page [Fonctionnalités](FEATURES.md) détaille tout ce que fait benevol.app.
 
 <!-- actions -->
-- [Demander un espace](mailto:contact@benevol.app?subject=Demande%20d%E2%80%99un%20espace%20sur%20benevol.app&body=Bonjour%2C%0A%0ANous%20aimerions%20essayer%20benevol.app%20pour%20organiser%20nos%20b%C3%A9n%C3%A9voles.%0A%0AAssociation%20%3A%0A%C3%89v%C3%A9nement%20%28nom%2C%20dates%2C%20nombre%20de%20b%C3%A9n%C3%A9voles%20environ%29%20%3A%0AAdresse%20souhait%C3%A9e%20%3A%20%E2%80%A6.benevol.app%0A%0AMerci%20%21)
+- [Demander un espace](/inscription)
 - [Créer son premier événement](guide/creer-son-premier-evenement.md)

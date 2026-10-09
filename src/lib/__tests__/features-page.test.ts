@@ -148,10 +148,10 @@ describe("FEATURES.md, as /fonctionnalites lays it out", () => {
   const page = parseFeaturesPage(read("FEATURES.md"))
   const catalog = loadVideoCatalog()
 
-  it("opens with the promise, two actions (the email request first) and the presentation video", () => {
+  it("opens with the promise, two actions (the sign-up first, #810) and the presentation video", () => {
     expect(page.title).toBe("Le planning de vos bénévoles, simplement")
     expect(page.intro.actions[0].label).toBe("Demander un espace")
-    expect(page.intro.actions[0].href).toMatch(/^mailto:contact@benevol\.app\?subject=[^\s()]+&body=[^\s()]+$/)
+    expect(page.intro.actions[0].href).toBe("/inscription")
     expect(page.intro.actions[1].href).toBe("#comment-ca-marche")
     expect(page.intro.videos).toHaveLength(1)
   })

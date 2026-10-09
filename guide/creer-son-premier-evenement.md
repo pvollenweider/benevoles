@@ -16,7 +16,7 @@ Les huit étapes ci-dessous mènent, dans l'ordre, d'une organisation toute neuv
 
 ## 1. Ouvrir votre espace
 
-L'espace de votre organisation est créé sur demande : écrivez à [contact@benevol.app](mailto:contact@benevol.app). Vous recevez ensuite l'email « Invitation à rejoindre… » : son bouton **Créer mon compte** vous fait choisir votre mot de passe. Voir [Se connecter](se-connecter.md).
+Créez l'espace de votre organisation depuis la page [Demander un espace](/inscription) : vous recevez un email pour confirmer votre adresse, puis vous choisissez votre mot de passe. Vous pouvez tout préparer tout de suite ; la publication et les emails à vos bénévoles sont possibles dès que l'espace est validé, après une courte vérification, et un email vous prévient. Si l'espace a été créé pour vous, l'email « Invitation à rejoindre… » et son bouton **Créer mon compte** font la même chose. Voir [Se connecter](se-connecter.md).
 
 Une fois connecté(e), la liste **Premiers pas** s'affiche en haut du tableau de bord et se coche au fur et à mesure : voir [Premiers pas](premiers-pas.md).
 

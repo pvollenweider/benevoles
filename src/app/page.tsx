@@ -235,12 +235,12 @@ function LandingPage() {
               comptent sur des bénévoles.
             </p>
             <div className="mt-10 flex flex-wrap gap-x-6 gap-y-4 items-center">
-              <a
-                href={`mailto:${CONTACT_EMAIL}`}
+              <Link
+                href="/inscription"
                 className={`inline-flex items-center gap-2 bg-white text-blue-900 text-base font-bold px-7 py-3.5 rounded-full hover:bg-blue-50 transition-colors ${focusRing} focus-visible:outline-white`}
               >
-                Demander un espace<span className="sr-only"> par email ({CONTACT_EMAIL})</span><span aria-hidden="true"> →</span>
-              </a>
+                Demander un espace<span aria-hidden="true"> →</span>
+              </Link>
               {quickstart && (
                 <Link
                   href={quickstart.href}
@@ -443,15 +443,19 @@ function LandingPage() {
               Votre prochain événement commence ici
             </h2>
             <p className="mt-4 text-lg text-blue-100 leading-relaxed">
-              Écrivez-nous : on vous crée un espace à l&apos;adresse de votre association, et une liste
-              de premiers pas vous guide jusqu&apos;à la publication.
+              Créez votre espace en ligne : il est prêt dès que vous avez confirmé votre adresse, et une
+              liste de premiers pas vous guide. La publication suit une courte vérification.
             </p>
-            <a
-              href={`mailto:${CONTACT_EMAIL}`}
+            <Link
+              href="/inscription"
               className={`mt-8 inline-flex items-center gap-2 bg-white text-blue-900 text-base font-bold px-7 py-3.5 rounded-full hover:bg-blue-50 transition-colors ${focusRing} focus-visible:outline-white`}
             >
-              {CONTACT_EMAIL}
-            </a>
+              Demander un espace<span aria-hidden="true"> →</span>
+            </Link>
+            <p className="mt-4 text-base text-blue-100">
+              Une question avant ?{" "}
+              <a href={`mailto:${CONTACT_EMAIL}`} className={`text-white font-semibold underline underline-offset-4 decoration-blue-300 hover:decoration-white rounded ${focusRing} focus-visible:outline-white`}>{CONTACT_EMAIL}</a>
+            </p>
           </div>
         </div>
       </section>
