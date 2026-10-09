@@ -28,6 +28,12 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   const owned = await db.registration.findFirst({ where: { id }, select: { id: true, status: true, comment: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
+  // Putting a registration back to a place goes through « Rétablir » (#809), which checks the
+  // shift hasn't started and a spot is free, or through the decision on a request (#484): this
+  // route would overbook silently and tell no one.
+  if (parsed.data.status === "active" && owned.status !== "active") {
+    return NextResponse.json({ error: "Utilisez « Rétablir » pour remettre une inscription annulée." }, { status: 409 })
+  }
 
   let registration
   try {

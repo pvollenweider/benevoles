@@ -393,6 +393,31 @@ const cases: [string, NotificationPayload][] = [
       shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" },
     },
   }],
+  // #809: an organiser put back a cancelled place.
+  ["registration_restored", {
+    kind: "registration_restored",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      status: "active",
+      shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" },
+      editToken: "edit-tok",
+    },
+  }],
+  ["registration_restored (request)", {
+    kind: "registration_restored",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      status: "requested",
+      shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" },
+      editToken: "edit-tok",
+    },
+  }],
   // #703: removed by the organization; one shift, other shifts still live (personal link).
   ["registration_removed", {
     kind: "registration_removed",
@@ -516,6 +541,7 @@ describe("render — snapshot of every notification kind", () => {
       registration_refused: true,
       registration_removed: true,
     registration_withdrawn: true,
+    registration_restored: true,
       release_available: true,
       operator_alert: true,
       signup_confirmation: true,
