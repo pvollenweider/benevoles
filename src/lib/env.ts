@@ -25,7 +25,9 @@ const schema = z.object({
   NTFY_URL: z.string().optional(),
   NTFY_TOKEN: z.string().optional(),
   // Where the operator's alert emails go (#810); unset = every active super admin's login address.
-  OPERATOR_ALERT_EMAIL: z.string().optional().refine((v) => !v?.trim() || z.email().safeParse(v.trim()).success, "OPERATOR_ALERT_EMAIL doit être une adresse email"),
+  // Not validated here: a typo must never stop the app (it did once, in production); an invalid
+  // value is reported and ignored by src/lib/operator-alerts.ts.
+  OPERATOR_ALERT_EMAIL: z.string().optional(),
   VAPID_PUBLIC_KEY: z.string().optional(),
   VAPID_PRIVATE_KEY: z.string().optional(),
   VAPID_EMAIL: z.string().optional(),
