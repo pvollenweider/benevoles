@@ -105,6 +105,40 @@ Le workflow n'applique pas `secret.yaml` (modèle), `traefik-config.yaml`, `cert
 
 Entre la migration et la fin du remplacement, l'ancienne version du code tourne sur le nouveau schéma : chaque migration doit rester compatible avec la version précédente (règles *expand/contract* dans [CONTRIBUTING.md](../CONTRIBUTING.md), vérifiées par la CI).
 
+### Changer un secret en production
+
+Les secrets de production sont les secrets GitHub du dépôt (Settings → Secrets and variables → Actions, ou `gh secret set`). Ils arrivent dans l'application en trois temps, et chacun peut être vérifié :
+
+1. **Secret GitHub** : `gh secret set NOM --repo <dépôt> --body "valeur"` (une valeur seule, sans guillemets dans la valeur, sans espace ni retour à la ligne autour). `gh secret list` montre la date de mise à jour, jamais la valeur.
+2. **Secret Kubernetes `benevoles-secret`** : recopié depuis GitHub à chaque déploiement (« Sync k8s secret »). Un secret GitHub nouveau ou modifié n'agit qu'au déploiement suivant. Un nouveau secret doit aussi figurer dans la commande `kubectl create secret` de `deploy.yml`, sinon il n'est jamais recopié.
+3. **Pod** : le pod lit `benevoles-secret` (`envFrom`) **à son démarrage seulement**. Un pod qui tourne garde l'ancienne valeur.
+
+Conséquence : pour qu'un secret modifié prenne effet,
+
+- un push sur `main` suffit (nouvelle image `sha-…`, donc nouveau pod) ;
+- relancer un déploiement du **même** commit (`gh run rerun <id>`) recopie le secret mais ne redémarre pas le pod (même image, spécification inchangée). Il faut alors redémarrer le pod après la relance :
+
+```bash
+kubectl -n benevoles rollout restart deployment/benevoles-app
+kubectl -n benevoles rollout status deployment/benevoles-app --timeout=300s
+```
+
+`deploy.yml` ne se lance pas à la main (pas de `workflow_dispatch`) : seulement par un push sur `main` ou par la relance d'une exécution existante.
+
+Vérifications, sans afficher les valeurs (sous zsh, les crochets doivent rester entre guillemets) :
+
+```bash
+# Version déployée : sha-<commit> attendu
+kubectl -n benevoles get deploy benevoles-app -o jsonpath='{.spec.template.spec.containers[0].image}{"\n"}'
+# Pods, image et heure de démarrage
+kubectl -n benevoles get pods -l app=benevoles-app -o 'custom-columns=POD:.metadata.name,IMAGE:.spec.containers[0].image,START:.status.startTime'
+# Valeur vue par le pod : seulement le début d'une URL, ou le domaine d'une adresse email
+kubectl -n benevoles exec deploy/benevoles-app -- sh -c 'printf "%s\n" "$NTFY_URL" | cut -c1-30'
+kubectl -n benevoles exec deploy/benevoles-app -- sh -c 'printf "%s\n" "${OPERATOR_ALERT_EMAIL#*@}"'
+```
+
+**Valeur invalide** : `src/lib/env.ts` vérifie les variables au démarrage. Une valeur refusée (par exemple une adresse email sans domaine complet) empêche le nouveau pod de démarrer : ses journaux disent « Variables d'environnement manquantes ou invalides » et nomment la variable, le pod redémarre en boucle (`CrashLoopBackOff`). L'ancien pod continue de servir le site (`maxUnavailable: 0`), et le déploiement échoue à « Wait for rollout » au bout de 300 s. Corriger le secret GitHub, puis relancer le déploiement : le pod en échec relit le secret à son prochain redémarrage. Comme l'attente entre deux redémarrages s'allonge, le déploiement peut encore se dire en échec alors que le pod finit par démarrer : vérifier l'image et l'état des pods plutôt que le seul statut du workflow.
+
 ### Mise en place manuelle
 
 Même ordre que `deploy.yml`, sans quoi une nouvelle version pourrait démarrer sur un schéma pas encore migré :
@@ -345,6 +379,44 @@ kubectl get apiservice v1alpha1.acme.bwolf.me   # AVAILABLE doit être True
 ```
 
 Retour arrière : `set image` avec l'empreinte de l'image précédente (`kubectl -n cert-manager get pod <pod> -o jsonpath='{.status.containerStatuses[0].imageID}'`, à noter avant la mise à jour). Le renouvellement du certificat wildcard (visible avec `kubectl -n benevoles get certificate benevol-app-wildcard`) est le seul test réel du webhook contre l'API Gandi.
+
+## Alertes à l'opérateur
+
+L'opérateur de l'instance est prévenu par une notification ntfy sur son téléphone et par un email (#810, `src/lib/operator-alerts.ts`) :
+
+| Alerte | Quand | Priorité ntfy |
+|---|---|---|
+| « Nouvelle demande d'espace » | une association confirme son inscription en libre-service ; le message reprend le nom de l'espace et le début de sa description, sans lien | 4 |
+| « plafond d'envoi atteint » | un plafond d'envoi d'emails est atteint (au plus une fois par heure, par plafond et par organisation) | 4 |
+| « espaces en attente » | récapitulatif quotidien, tant que des espaces attendent une validation (cron de nettoyage) | 3 |
+
+**Deux canaux, de rôles différents.** La notification ntfy prévient vite ; l'email est la garantie (iOS peut retenir une notification plusieurs minutes, et ntfy.sh peut ne pas répondre). Les deux partent en même temps : l'email n'attend jamais la notification. La notification est tentée trois fois (tout de suite, après 2 s, puis après 10 s) en cas de coupure réseau, de réponse 429 ou d'erreur 5xx de ntfy, une seule fois si ntfy refuse la demande ; un échec final est signalé une fois à Sentry (`operator_alert.ntfy`).
+
+**Destinataire de l'email** : `OPERATOR_ALERT_EMAIL` si elle est définie, sinon chaque super admin actif à son adresse de connexion. L'adresse de connexion d'un super admin n'est pas forcément une vraie boîte : dans ce cas, définir `OPERATOR_ALERT_EMAIL`. Ce n'est pas un compte, juste un destinataire : elle peut être une adresse déjà utilisée pour se connecter ailleurs sur l'instance.
+
+### Mise en place
+
+1. Choisir un sujet ntfy long et aléatoire : sur ntfy.sh, le nom du sujet tient lieu de mot de passe (quiconque le connaît peut lire et écrire). Ne jamais l'écrire dans le dépôt, un ticket ou une page publique.
+2. S'abonner au sujet dans l'application ntfy du téléphone, et vérifier qu'une notification de priorité 4 passe le mode « Ne pas déranger » si on le souhaite.
+3. Secrets GitHub (voir « Changer un secret en production ») :
+
+```bash
+gh secret set NTFY_URL --repo <dépôt> --body "https://ntfy.sh/<sujet>"
+gh secret set OPERATOR_ALERT_EMAIL --repo <dépôt> --body "operateur@exemple.org"
+```
+
+4. Déployer (push sur `main`), ou relancer le dernier déploiement puis redémarrer le pod.
+
+### Tester
+
+- La sortie réseau et le sujet, depuis le pod, sans passer par le code des alertes (envoie une vraie notification) :
+
+```bash
+kubectl -n benevoles exec deploy/benevoles-app -- node -e 'fetch(process.env.NTFY_URL,{method:"POST",headers:{Title:"Test depuis le pod",Priority:"4"},body:"Test"}).then(r=>console.log(r.status)).catch(e=>console.log("FAIL",e.cause?.code||e.name))'
+```
+
+- Le parcours complet : une demande sur `/inscription` avec une adresse jamais utilisée, puis « Confirmer » dans l'email reçu. La notification et l'email « Nouvelle demande d'espace » doivent arriver. Une demande confirmée avant la mise en place n'envoie rien de plus.
+- En cas d'absence : `kubectl -n benevoles logs deploy/benevoles-app | grep operator_alert` montre les échecs (par exemple `ConnectTimeoutError` si ntfy.sh n'a pas répondu, ou un statut HTTP de refus).
 
 ## CI/CD
 
