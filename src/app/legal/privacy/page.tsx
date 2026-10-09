@@ -4,6 +4,7 @@ import { publicPageJsonLd } from "@/lib/structured-data"
 import { apexBaseUrl } from "@/lib/urls"
 import JsonLd from "@/components/public/JsonLd"
 import Link from "next/link"
+import { IP_MAX_DAYS } from "@/lib/signup-blocklist"
 import { RETENTION, RETENTION_DAYS } from "@/lib/retention"
 
 export function generateMetadata(): Metadata {
@@ -15,7 +16,7 @@ export default function PrivacyPage() {
     <>
       <JsonLd data={publicPageJsonLd("/legal/privacy", apexBaseUrl())} />
       <h1>Politique de confidentialité</h1>
-      <p className="text-gray-500 text-sm">Dernière mise à jour : 6 octobre 2026</p>
+      <p className="text-gray-500 text-sm">Dernière mise à jour : 9 octobre 2026</p>
 
       <p>
         La présente politique décrit comment <strong>benevol.app</strong>, éditée par{" "}
@@ -76,7 +77,46 @@ export default function PrivacyPage() {
         </table>
       </div>
 
-      <h3>2.2 Cookies et stockage local</h3>
+      <h3 id="donnees-demandes-espace">2.2 Demandes d&apos;espace et prévention des abus</h3>
+      <p className="sm:hidden">Faites défiler le tableau horizontalement.</p>
+      <div role="region" aria-labelledby="donnees-demandes-espace" tabIndex={0} className="overflow-x-auto rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+        <table>
+          <thead>
+            <tr>
+              <th>Donnée</th>
+              <th>Finalité</th>
+              <th>Base légale</th>
+              <th>Durée</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Demande d&apos;espace : nom de l&apos;association, sa description et son besoin, votre nom et votre adresse e-mail</td>
+              <td>Vérifier l&apos;adresse, créer l&apos;espace et son compte, examiner la demande avant d&apos;activer l&apos;espace</td>
+              <td>Mesures précontractuelles prises à votre demande</td>
+              <td>{RETENTION_DAYS.signupRequest} jours après la demande, confirmée ou non ; la description reste ensuite sur la fiche de l&apos;espace, visible de l&apos;opérateur seulement, et suit l&apos;Organisation</td>
+            </tr>
+            <tr>
+              <td>Liste de blocage : adresse e-mail ou nom de domaine bloqué, ou empreinte d&apos;une adresse IP (jamais l&apos;adresse en clair), avec la raison et l&apos;échéance</td>
+              <td>Empêcher les demandes abusives (envoi de spam, usurpation)</td>
+              <td>Intérêt légitime</td>
+              <td>Jusqu&apos;au retrait de l&apos;entrée ou à son échéance ; une adresse IP est toujours bloquée pour une durée limitée ({IP_MAX_DAYS} jours au plus)</td>
+            </tr>
+            <tr>
+              <td>Adresse IP de la demande</td>
+              <td>Limiter le nombre de demandes par adresse</td>
+              <td>Intérêt légitime</td>
+              <td>Une heure (la durée de la limite), puis effacée par le nettoyage quotidien</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Une demande bloquée ou trop rapide reçoit la même réponse que les autres, et rien n&apos;est
+        enregistré. L&apos;e-mail de confirmation ne reprend aucun texte saisi dans le formulaire.
+      </p>
+
+      <h3>2.3 Cookies et stockage local</h3>
       <p>
         Nous utilisons un cookie de session (NextAuth) strictement nécessaire à
         l&apos;authentification. Aucun cookie de pistage, analytique ou publicitaire n&apos;est
