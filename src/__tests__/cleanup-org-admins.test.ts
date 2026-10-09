@@ -49,7 +49,7 @@ beforeEach(() => {
 describe("nightly cleanup of deactivated organizations", () => {
   it("deletes the organization's admins, active ones included, with it", async () => {
     // The deactivated organisations to delete; the pending-spaces summary (#810) finds none.
-    m.orgFindMany.mockImplementation(async ({ where }: { where: { OR?: unknown } }) => (where.OR ? [] : [{ id: "org-old" }]))
+    m.orgFindMany.mockImplementation(async ({ where }: { where: { OR?: unknown; admins?: unknown } }) => (where.OR || where.admins ? [] : [{ id: "org-old" }]))
     m.adminFindMany.mockResolvedValue([{ id: "owner-1" }, { id: "organizer-1" }])
     m.orgDeleteMany.mockResolvedValue({ count: 1 })
     m.adminDeleteMany.mockResolvedValueOnce({ count: 2 }).mockResolvedValueOnce({ count: 0 })
@@ -77,6 +77,24 @@ describe("nightly cleanup of deactivated organizations", () => {
     await run()
     const where = m.adminDeleteMany.mock.calls.at(-1)![0].where
     expect(where.OR).toContainEqual({ organizationId: null, role: { not: "super_admin" } })
+  })
+})
+
+// #810: a sign-up space whose owner never chose a password, deleted with that inactive account.
+describe("nightly cleanup of sign-up spaces never activated", () => {
+  it("deletes the space and its inactive accounts after RETENTION_DAYS.deactivatedAdmin, and counts it", async () => {
+    m.orgFindMany.mockImplementation(async ({ where }: { where: { admins?: unknown } }) => (where.admins ? [{ id: "org-abandoned" }] : []))
+    m.orgDeleteMany.mockResolvedValue({ count: 1 })
+    const before = Date.now()
+    const body = await (await run()).json()
+
+    const where = m.orgFindMany.mock.calls.find(([a]) => a.where.admins)![0].where
+    expect(where).toMatchObject({ active: true, suspendedAt: null, publicationApprovedAt: null, outboundEmailApprovedAt: null, admins: { none: { isActive: true } } })
+    const { RETENTION_DAYS, DAY_MS } = await import("@/lib/retention")
+    expect(before - where.createdAt.lt.getTime()).toBeGreaterThanOrEqual(RETENTION_DAYS.deactivatedAdmin * DAY_MS - 1000)
+    expect(m.adminDeleteMany).toHaveBeenCalledWith({ where: { organizationId: { in: ["org-abandoned"] }, isActive: false } })
+    expect(m.orgDeleteMany).toHaveBeenCalledWith({ where: { id: { in: ["org-abandoned"] } } })
+    expect(body.deleted.abandonedSignupSpaces).toBe(1)
   })
 })
 

@@ -44,6 +44,8 @@ Si la demande ne correspond pas à une association ou à un événement bénévo
 
 **Je n'ai pas reçu l'email de confirmation.** Regardez dans les indésirables. Si l'adresse a déjà un compte sur benevol.app, aucun email ne part : connectez-vous avec ce compte, ou utilisez « Mot de passe oublié » sur la page de connexion.
 
+**Je n'ai jamais choisi de mot de passe.** L'espace est créé dès la confirmation, mais sans mot de passe choisi, il est effacé avec son compte 30 jours après : refaites alors une demande.
+
 **Le lien dit « Lien expiré ».** Il était valable 24 heures : refaites une demande depuis la page d'inscription.
 
 **J'ai fermé la page avant de choisir mon mot de passe.** Ouvrez l'email « Choisissez votre mot de passe benevol.app » : son lien est valable 7 jours. « Mot de passe oublié » ne fonctionne qu'une fois le mot de passe choisi. Lien expiré ou email introuvable : écrivez à contact@benevol.app, un nouveau lien vous sera envoyé.

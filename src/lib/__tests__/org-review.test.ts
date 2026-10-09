@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { decideReview, pendingSummary, PENDING_ORG_WHERE } from "../org-review"
+import { abandonedSignupSpaceWhere, decideReview, pendingSummary, PENDING_ORG_WHERE } from "../org-review"
 import { orgStatus, ORG_STATUS_LABELS } from "../org-suspension"
 import { approveOrgRecap, refuseOrgRecap } from "../action-recap"
 
@@ -39,5 +39,19 @@ describe("review of a space awaiting validation (#810, part 4c)", () => {
   it("says what each decision does", () => {
     expect(approveOrgRecap("Fête").lines[2]).toBe("Ses administrateurs reçoivent un email « Votre espace benevol.app est activé ».")
     expect(refuseOrgRecap("Fête").lines).toContain("Aucun email n'est envoyé.")
+  })
+})
+
+describe("abandonedSignupSpaceWhere (#810)", () => {
+  it("matches only a sign-up space past the cutoff, with no active administrator", () => {
+    const cutoff = new Date("2026-09-09T00:00:00Z")
+    expect(abandonedSignupSpaceWhere(cutoff)).toEqual({
+      active: true,
+      suspendedAt: null,
+      publicationApprovedAt: null,
+      outboundEmailApprovedAt: null,
+      createdAt: { lt: cutoff },
+      admins: { none: { isActive: true } },
+    })
   })
 })

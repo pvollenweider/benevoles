@@ -59,4 +59,4 @@ kubectl -n benevoles set env deployment/benevoles-app SIGNUP-
 
 ## Conservation
 
-Une demande (confirmée ou non) est effacée 7 jours après sa création par le nettoyage quotidien. La description reste ensuite sur la fiche de l'espace, pour l'opérateur, et suit les règles de l'organisation (voir [retention.md](retention.md)).
+Une demande (confirmée ou non) est effacée 7 jours après sa création par le nettoyage quotidien. Un espace dont le propriétaire n'a jamais choisi son mot de passe est effacé avec son compte 30 jours après sa création (`abandonedSignupSpaceWhere`, `src/lib/org-review.ts`) : sans cela, il resterait en attente pour toujours, sans administrateur, dans le compte des espaces en attente. La description reste ensuite sur la fiche de l'espace, pour l'opérateur, et suit les règles de l'organisation (voir [retention.md](retention.md)).
