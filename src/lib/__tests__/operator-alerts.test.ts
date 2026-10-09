@@ -114,6 +114,12 @@ describe("operator alerts (#810)", () => {
     expect(await operatorAlertRecipients({ OPERATOR_ALERT_EMAIL: "  " })).toEqual(["ops@example.org", "ops2@example.org"])
   })
 
+  // Production, 9 October 2026: an address without a full domain stopped the app at startup.
+  it("ignores and reports an invalid OPERATOR_ALERT_EMAIL: the super admins get the alert", async () => {
+    expect(await operatorAlertRecipients({ OPERATOR_ALERT_EMAIL: "philippe@adresse" })).toEqual(["ops@example.org", "ops2@example.org"])
+    expect(reported).toHaveBeenCalledWith("operator_alert.invalid_address", expect.any(Error))
+  })
+
   it("still emails when the push fails, and reports an email failure without throwing", async () => {
     const throwing = vi.fn().mockRejectedValue(new Error("offline"))
     await notifyOperator(alert, { fetch: throwing as unknown as typeof fetch, env: { NTFY_URL: TOPIC }, sleep: noWait })

@@ -47,7 +47,7 @@ Pas de CAPTCHA (accessibilité, vie privée). À la place :
 
 ## Fermer l'inscription
 
-`SIGNUP=off` ferme l'inscription : la page affiche « Les inscriptions sont fermées pour le moment » avec l'adresse contact@benevol.app, et l'API répond 403. `deploy.yml` ne transmet pas cette variable au secret Kubernetes : en production, un secret GitHub `SIGNUP` seul n'a aucun effet. Pour fermer rapidement sans changer le workflow :
+`SIGNUP=off` ferme l'inscription : la page affiche « Les inscriptions sont fermées pour le moment » avec l'adresse contact@benevol.app, et l'API répond 403. En production, c'est le secret GitHub `SIGNUP`, recopié à chaque déploiement : il prend effet au déploiement suivant (voir [deploiement.md](deploiement.md#changer-un-secret-en-production)). Pour fermer tout de suite, sans attendre de déploiement :
 
 ```bash
 kubectl -n benevoles set env deployment/benevoles-app SIGNUP=off
@@ -55,7 +55,7 @@ kubectl -n benevoles set env deployment/benevoles-app SIGNUP=off
 kubectl -n benevoles set env deployment/benevoles-app SIGNUP-
 ```
 
-`set env` redémarre le pod. La variable ajoutée ainsi ne figure pas dans `k8s/deployment.yaml` : un déploiement suivant (`kubectl apply`) la laisse en place, l'inscription reste fermée jusqu'à `SIGNUP-`.
+`set env` redémarre le pod et l'emporte sur le secret. La variable ajoutée ainsi ne figure pas dans `k8s/deployment.yaml` : un déploiement suivant (`kubectl apply`) la laisse en place, l'inscription reste fermée jusqu'à `SIGNUP-`.
 
 ## Conservation
 

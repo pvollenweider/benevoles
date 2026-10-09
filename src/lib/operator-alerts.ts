@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { z } from "zod"
 import { prisma } from "@/lib/prisma"
 import { reportError } from "@/lib/report-error"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
@@ -100,10 +101,16 @@ export async function notifyOperator(alert: OperatorAlert, deps: Deps = {}): Pro
   await Promise.all([sendNtfy(alert, deps), emailOperator(alert, deps.env ?? process.env)])
 }
 
-/** The addresses of the alert email: the dedicated one, else the active super admins. */
+/**
+ * The addresses of the alert email: the dedicated one, else the active super admins. An invalid
+ * dedicated address is reported (Sentry) and ignored, so the alert still reaches someone.
+ */
 export async function operatorAlertRecipients(env: Record<string, string | undefined> = process.env): Promise<string[]> {
   const dedicated = env.OPERATOR_ALERT_EMAIL?.trim().toLowerCase()
-  if (dedicated) return [dedicated]
+  if (dedicated) {
+    if (z.email().safeParse(dedicated).success) return [dedicated]
+    reportError("operator_alert.invalid_address")(new Error("OPERATOR_ALERT_EMAIL is not an email address: alerts go to the super admins"))
+  }
   const admins = await prisma.adminUser.findMany({ where: { role: "super_admin", isActive: true }, select: { email: true } })
   return admins.map((a) => a.email)
 }

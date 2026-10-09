@@ -30,6 +30,17 @@ describe("env validation", () => {
     expect(exitSpy).not.toHaveBeenCalled()
   })
 
+  // #810 : une adresse d'alerte mal saisie a empêché l'application de démarrer en production.
+  it("démarre avec une OPERATOR_ALERT_EMAIL invalide (ignorée plus tard, jamais bloquante)", async () => {
+    vi.stubEnv("DATABASE_URL", VALID_ENV.DATABASE_URL)
+    vi.stubEnv("AUTH_SECRET", VALID_ENV.AUTH_SECRET)
+    vi.stubEnv("OPERATOR_ALERT_EMAIL", "philippe@adresse")
+
+    await import("../env")
+
+    expect(exitSpy).not.toHaveBeenCalled()
+  })
+
   it("appelle process.exit(1) si DATABASE_URL est absente", async () => {
     vi.stubEnv("DATABASE_URL", "")
     vi.stubEnv("AUTH_SECRET", VALID_ENV.AUTH_SECRET)
