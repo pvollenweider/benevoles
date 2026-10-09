@@ -132,27 +132,50 @@ const LIMIT_SENTENCES: Record<string, string> = {
   org_account_per_day: "plafond d'emails de compte d'une organisation par jour",
 }
 
+/** The alert's key: one per limit, organisation and hour, whatever the number of addresses or windows. */
+export function alertKey(limit: string, organizationId: string | null, now: Date = new Date()): string {
+  return `email-limit:${limit}:${organizationId ?? "platform"}:${now.toISOString().slice(0, 13)}`
+}
+
 /**
- * Default alert: Sentry, plus ntfy and email to the operator (#810). Called once per window (the
- * first email held). The alert's key carries the hour: at most one operator email per limit,
- * organisation and hour, whatever happens. Loaded lazily: operator-alerts queues through the
+ * Whether this alert is the first of its key: an atomic counter in the shared store, one hour
+ * long. Gates the whole alert (Sentry, push and email): the per-recipient cap has a window per
+ * address, so a flood over many addresses would otherwise push once per address. If the store
+ * fails, no alert (the failure itself is reported): a broken store must not turn into a flood.
+ */
+export async function firstAlertOfKey(key: string, store: RateLimitStore): Promise<boolean> {
+  try {
+    return (await store.hit(`alert:${key}`, HOUR)).count === 1
+  } catch (e) {
+    reportError("email.limit.alert_gate")(e)
+    return false
+  }
+}
+
+/**
+ * Default alert: Sentry, plus ntfy and email to the operator (#810), at most once per limit,
+ * organisation and hour (`firstAlertOfKey`). Loaded lazily: operator-alerts queues through the
  * outbox, which sends through this module.
  */
-function alertOperator(limit: string, organizationId: string | null): void {
+async function alertOperator(limit: string, organizationId: string | null, store: RateLimitStore): Promise<void> {
+  const key = alertKey(limit, organizationId)
+  if (!(await firstAlertOfKey(key, store))) return
   reportError(`email.limit.${limit}`)(new Error(`Email sending limit reached: ${limit}${organizationId ? ` (organisation ${organizationId})` : ""}`))
   const base = (process.env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/$/, "")
-  const hour = new Date().toISOString().slice(0, 13)
-  void import("@/lib/operator-alerts")
-    .then((m) => m.notifyOperator({
-      key: `email-limit:${limit}:${organizationId ?? "platform"}:${hour}`,
+  try {
+    const m = await import("@/lib/operator-alerts")
+    await m.notifyOperator({
+      key,
       title: "benevol.app : plafond d'envoi atteint",
       message: limit === "recipient_per_hour"
-        ? `Emails abandonnés : ${LIMIT_SENTENCES[limit]}${organizationId ? ` (organisation ${organizationId})` : ""}. Les demandes suivantes pour cette adresse sont ignorées pendant l'heure.`
+        ? `Emails abandonnés : ${LIMIT_SENTENCES[limit]}${organizationId ? ` (organisation ${organizationId})` : ""}. Pendant l'heure, les demandes suivantes pour une même adresse sont ignorées.`
         : `Emails retenus : ${LIMIT_SENTENCES[limit] ?? limit}${organizationId ? ` (organisation ${organizationId})` : ""}. Ils partiront à la fin de la fenêtre.`,
       priority: 4,
       url: base ? `${base}/super-admin/organizations` : undefined,
-    }))
-    .catch(reportError("email.limit.operator_alert"))
+    })
+  } catch (e) {
+    reportError("email.limit.operator_alert")(e)
+  }
 }
 
 const defaultStore: RateLimitStore = process.env.NODE_ENV === "test" ? memoryStore() : postgresStore
@@ -174,7 +197,7 @@ export async function takeSendAllowance(
   opts: { store?: RateLimitStore; limits?: SendLimits; recipientEmail?: string | null; alert?: (limit: string, organizationId: string | null) => void } = {},
 ): Promise<SendAllowance> {
   const store = opts.store ?? defaultStore
-  const alert = opts.alert ?? alertOperator
+  const alert = opts.alert ?? ((limit: string, org: string | null) => void alertOperator(limit, org, store))
   const windows = sendWindows(organizationId, kind, opts.limits, opts.recipientEmail)
 
   // 1. Decide, from the windows as they are.
