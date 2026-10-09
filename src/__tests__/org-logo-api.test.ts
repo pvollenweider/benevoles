@@ -125,7 +125,7 @@ describe("GET /api/public/organizations/[id]/logo", () => {
     const { GET } = await import("@/app/api/public/organizations/[id]/logo/route")
     const res = await GET(get(`/api/public/organizations/org-a/logo?v=${logoVersion(HASH)}`), params("org-a"))
     expect(res.status).toBe(200)
-    expect(findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { organizationId: "org-a", organization: { active: true } } }))
+    expect(findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { organizationId: "org-a", organization: { active: true, publicationApprovedAt: { not: null } } } }))
     expect(res.headers.get("Content-Type")).toBe("image/png")
     expect(res.headers.get("X-Content-Type-Options")).toBe("nosniff")
     expect(res.headers.get("Cache-Control")).toBe("public, max-age=31536000, immutable")

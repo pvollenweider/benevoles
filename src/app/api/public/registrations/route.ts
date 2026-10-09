@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { PUBLIC_ORG_WHERE } from "@/lib/org-approval"
 import { NextResponse } from "next/server"
 import { birthDateSchema } from "@/lib/civil-date"
 import { prisma } from "@/lib/prisma"
@@ -91,7 +92,7 @@ export async function POST(req: Request) {
   const { eventId, shiftIds, firstName, lastName, email, phone, birthDate, comment, inviteToken } = parsed.data
 
   const event = await prisma.event.findFirst({
-    where: { id: eventId, publicStatus: "published", organization: { active: true } },
+    where: { id: eventId, publicStatus: "published", organization: PUBLIC_ORG_WHERE },
     include: { organization: { select: { slug: true, timeZone: true, volunteerCharter: true } } },
   })
   if (!event) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })

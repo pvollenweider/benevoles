@@ -30,7 +30,7 @@ describe("push to a member of a deactivated organisation (#814)", () => {
   })
 
   it("sends when the organisation is active", async () => {
-    db.organization.findUnique.mockResolvedValue({ active: true })
+    db.organization.findUnique.mockResolvedValue({ active: true, outboundEmailApprovedAt: new Date("2026-01-01T00:00:00Z"), admins: [] })
     expect(await sendPushToVolunteer("v1", { title: "t", body: "b" })).toEqual({ sent: 1, failed: 0, removed: 0 })
     expect(webpushSend).toHaveBeenCalledTimes(1)
   })

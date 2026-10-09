@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { PUBLIC_ORG_WHERE } from "@/lib/org-approval"
 import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
@@ -21,7 +22,7 @@ export async function GET(
     where: {
       slug: eventSlug,
       publicStatus: "published",
-      organization: { slug: orgSlug, active: true },
+      organization: { slug: orgSlug, ...PUBLIC_ORG_WHERE },
     },
     include: publicEventInclude,
   })

@@ -33,6 +33,11 @@ model Organization {
   // The reason is the operator's note, shown only in the super admin space.
   suspendedAt      DateTime?
   suspensionReason String?
+  // Grants of an organisation awaiting validation (#810, src/lib/org-approval.ts): publishing and
+  // emailing third parties, separately. Null = not granted. Granted by default at creation; only
+  // the self-service sign-up creates an organisation with both explicitly null.
+  publicationApprovedAt   DateTime? @default(now())
+  outboundEmailApprovedAt DateTime? @default(now())
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

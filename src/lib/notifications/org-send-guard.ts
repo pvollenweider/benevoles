@@ -2,9 +2,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { ORG_INACTIVE_REASON } from "@/lib/outbox-org-cancel-reason"
+import { ORG_PENDING_REASON } from "@/lib/outbox-org-pending-reason"
+import { canEmailThirdParties, pendingRecipientAllowed } from "@/lib/org-approval"
 import { prisma } from "@/lib/prisma"
 
-export { ORG_INACTIVE_REASON }
+export { ORG_INACTIVE_REASON, ORG_PENDING_REASON }
 
 /**
  * No email or push for an organisation that is deactivated or no longer exists (#814). Checked
@@ -15,7 +17,14 @@ export { ORG_INACTIVE_REASON }
  * NotificationOutbox.organizationId is not a foreign key: rows of a deleted organisation stay in
  * the queue, so a missing organisation blocks like a deactivated one. A message without an
  * organisation (platform emails: product updates, release check, super admin) is not concerned.
+ *
+ * An organisation awaiting validation (#810, src/lib/org-approval.ts) may only email its own
+ * **active** administrator accounts (address confirmed): anything else is refused the same way,
+ * and it sends no push at all. Inactive accounts (an invitation not yet accepted) do not count:
+ * otherwise inviting any address as an organiser would let a pending organisation email it.
  */
+
+type OrgSendState = { active: boolean; outboundEmailApprovedAt: Date | string | null; admins?: { email: string }[] }
 
 /** The decision, from what the database says about the organisation (`null`: not found). */
 export function sendingBlocked(organizationId: string | null | undefined, org: { active: boolean } | null): boolean {
@@ -23,13 +32,36 @@ export function sendingBlocked(organizationId: string | null | undefined, org: {
   return !org || !org.active
 }
 
-type OrgReader = { organization: { findUnique(args: { where: { id: string }; select: { active: true } }): Promise<{ active: boolean } | null> } }
+/**
+ * Why an email may not go, or null: deactivated or missing organisation first, then a pending
+ * one writing to someone other than its administrators. `recipientEmail` undefined = a push.
+ */
+export function sendingVerdict(organizationId: string | null | undefined, org: OrgSendState | null, recipientEmail?: string | null): string | null {
+  if (!organizationId) return null
+  if (sendingBlocked(organizationId, org)) return ORG_INACTIVE_REASON
+  if (canEmailThirdParties(org!)) return null
+  return pendingRecipientAllowed(recipientEmail, (org!.admins ?? []).map((a) => a.email)) ? null : ORG_PENDING_REASON
+}
 
-/** Reads the organisation now and applies `sendingBlocked`. */
+type OrgReader = {
+  organization: {
+    findUnique(args: { where: { id: string }; select: { active: true; outboundEmailApprovedAt: true; admins: { where: { isActive: true }; select: { email: true } } } }): Promise<OrgSendState | null>
+  }
+}
+
+/** Reads the organisation now and applies `sendingVerdict`. */
+export async function organizationSendingVerdict(organizationId: string | null | undefined, recipientEmail?: string | null, db: OrgReader = prisma): Promise<string | null> {
+  if (!organizationId) return null
+  const org = await db.organization.findUnique({
+    where: { id: organizationId },
+    select: { active: true, outboundEmailApprovedAt: true, admins: { where: { isActive: true }, select: { email: true } } },
+  })
+  return sendingVerdict(organizationId, org, recipientEmail)
+}
+
+/** For a push (no address): deactivated, missing or pending organisation all block. */
 export async function organizationBlocksSending(organizationId: string | null | undefined, db: OrgReader = prisma): Promise<boolean> {
-  if (!organizationId) return false
-  const org = await db.organization.findUnique({ where: { id: organizationId }, select: { active: true } })
-  return sendingBlocked(organizationId, org)
+  return (await organizationSendingVerdict(organizationId, undefined, db)) !== null
 }
 
 type OutboxCanceller = {

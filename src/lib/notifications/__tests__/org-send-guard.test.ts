@@ -27,7 +27,7 @@ describe("sending for a deactivated organisation (#814)", () => {
   it("reads the organisation at send time, and not at all for a platform message", async () => {
     findUnique.mockResolvedValueOnce({ active: false })
     expect(await organizationBlocksSending("org-1")).toBe(true)
-    expect(findUnique).toHaveBeenCalledWith({ where: { id: "org-1" }, select: { active: true } })
+    expect(findUnique).toHaveBeenCalledWith({ where: { id: "org-1" }, select: { active: true, outboundEmailApprovedAt: true, admins: { where: { isActive: true }, select: { email: true } } } })
     findUnique.mockClear()
     expect(await organizationBlocksSending(null)).toBe(false)
     expect(findUnique).not.toHaveBeenCalled()
@@ -40,7 +40,7 @@ describe("sending for a deactivated organisation (#814)", () => {
   })
 
   it("sendNotification sends for an active organisation and for a platform message", async () => {
-    findUnique.mockResolvedValueOnce({ active: true })
+    findUnique.mockResolvedValueOnce({ active: true, outboundEmailApprovedAt: new Date("2026-01-01T00:00:00Z"), admins: [] })
     expect(await sendNotification(payload("org-1"))).toEqual({ ok: true })
     expect(await sendNotification(payload(null))).toEqual({ ok: true })
     expect(channelSend).toHaveBeenCalledTimes(2)

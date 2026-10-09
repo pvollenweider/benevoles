@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+import { PUBLICATION_PENDING_ERROR } from "@/lib/org-approval"
 import { isPublishing, publishBlocker, PUBLISH_WITHOUT_SHIFT_ERROR } from "@/lib/event-publish"
 
 const requireOrgSessionMock = vi.hoisted(() => vi.fn())
@@ -33,11 +34,31 @@ describe("PATCH /api/admin/events/[id] — publication rule", () => {
     update.mockImplementation(async ({ data }: { data: object }) => ({ id: "evt-a", publicStatus: "draft", ...data }))
     requireOrgSessionMock.mockResolvedValue({
       db: {
-        event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "F", publicStatus: "draft", startDate: new Date(), endDate: new Date(), publicInstructions: null, remindersEnabled: true, requirePhone: false }), update },
+        event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "F", publicStatus: "draft", startDate: new Date(), endDate: new Date(), publicInstructions: null, remindersEnabled: true, requirePhone: false, organization: { timeZone: null, publicationApprovedAt: new Date("2026-01-01T00:00:00Z") } }), update },
         shift: { count },
       },
       organizationId: "org-a", session: {},
     })
+  })
+
+  // #810: an organisation awaiting validation prepares everything but publishes nothing.
+  it("refuses to publish for an organisation awaiting validation, whatever the shifts, nothing saved", async () => {
+    count.mockResolvedValue(3)
+    requireOrgSessionMock.mockResolvedValue({
+      db: {
+        event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "F", publicStatus: "draft", startDate: new Date(), endDate: new Date(), publicInstructions: null, remindersEnabled: true, requirePhone: false, organization: { timeZone: null, publicationApprovedAt: null } }), update },
+        shift: { count },
+      },
+      organizationId: "org-a", session: {},
+    })
+    const { PATCH } = await import("@/app/api/admin/events/[id]/route")
+    const res = await PATCH(patch({ publicStatus: "published" }), params)
+    expect(res.status).toBe(409)
+    expect(await res.json()).toEqual({ error: PUBLICATION_PENDING_ERROR, code: "publication_pending" })
+    expect(update).not.toHaveBeenCalled()
+    // Other edits still go through.
+    const edit = await PATCH(patch({ title: "Fête 2027" }), params)
+    expect(edit.status).toBe(200)
   })
 
   it("answers 409 with the rule when publishing an event without shifts, and nothing is saved", async () => {
@@ -94,7 +115,7 @@ describe("PATCH /api/admin/events/[id] — dates", () => {
     update.mockImplementation(async ({ data }: { data: object }) => ({ id: "evt-a", publicStatus: "draft", ...data }))
     requireOrgSessionMock.mockResolvedValue({
       db: {
-        event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "F", publicStatus: "draft", startDate: new Date("2026-07-04T00:00:00Z"), endDate: new Date("2026-07-05T00:00:00Z"), publicInstructions: null, remindersEnabled: true, requirePhone: false }), update },
+        event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "F", publicStatus: "draft", startDate: new Date("2026-07-04T00:00:00Z"), endDate: new Date("2026-07-05T00:00:00Z"), publicInstructions: null, remindersEnabled: true, requirePhone: false, organization: { timeZone: null, publicationApprovedAt: new Date("2026-01-01T00:00:00Z") } }), update },
         shift: { count: vi.fn().mockResolvedValue(1) },
       },
       organizationId: "org-a", session: {},

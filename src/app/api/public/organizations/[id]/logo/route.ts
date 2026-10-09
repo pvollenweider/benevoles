@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { PUBLIC_ORG_WHERE } from "@/lib/org-approval"
 import { prisma } from "@/lib/prisma"
 import { etagMatches, logoCacheControl, logoEtag } from "@/lib/org-logo"
 
@@ -14,7 +15,7 @@ import { etagMatches, logoCacheControl, logoEtag } from "@/lib/org-logo"
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const logo = await prisma.organizationLogo.findFirst({
-    where: { organizationId: id, organization: { active: true } },
+    where: { organizationId: id, organization: PUBLIC_ORG_WHERE },
     select: { data: true, mimeType: true, hash: true },
   })
   if (!logo) {

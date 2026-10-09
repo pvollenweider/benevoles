@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { PUBLIC_ORG_WHERE } from "@/lib/org-approval"
 import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
@@ -15,7 +16,7 @@ export async function GET(req: Request) {
   if (!orgSlug) return NextResponse.json({ error: "Organisation introuvable" }, { status: 404 })
 
   const events = await prisma.event.findMany({
-    where: { ...PUBLIC_LIST_WHERE, organization: { slug: orgSlug, active: true } },
+    where: { ...PUBLIC_LIST_WHERE, organization: { slug: orgSlug, ...PUBLIC_ORG_WHERE } },
     include: {
       shifts: {
         where: { status: { in: ["open", "full"] } },
