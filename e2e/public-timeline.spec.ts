@@ -84,11 +84,11 @@ function coveredSides(page: Page) {
 
 test("a focused bar's outline is not covered by the role labels, the next bar or another lane (#583)", async ({ page }) => {
   await page.goto(publicUrl(event))
-  const first = page.getByRole("button", { name: /^Sélectionner — Bar 08h–10h/ })
+  const first = page.getByRole("button", { name: /^08h–10h \d+\/\d+, Bar : sélectionner/ })
   await waitForHydration(first)
 
   await first.focus()
-  const expected = [/^Sélectionner — Bar 08h–10h/, /^Sélectionner — Bar 09h–11h/, /^Sélectionner — Bar 10h–12h/]
+  const expected = [/^08h–10h \d+\/\d+, Bar : sélectionner/, /^09h–11h \d+\/\d+, Bar : sélectionner/, /^10h–12h \d+\/\d+, Bar : sélectionner/]
   for (const [i, name] of expected.entries()) {
     if (i > 0) await page.keyboard.press("Tab")
     const focused = page.locator(":focus")
@@ -110,10 +110,10 @@ test("a held shift is named and tagged as the visitor's own, and not offered (#5
   await page.goto(publicUrl(own))
 
   const held = page.getByRole("button", { name: /: inscription confirmée$/ })
-  await expect(held).toHaveAccessibleName("Bar 10h–12h : inscription confirmée")
+  await expect(held).toHaveAccessibleName("10h–12h, Bar : inscription confirmée")
   await expect(held).toBeDisabled()
   await expect(held).not.toHaveAttribute("aria-pressed")
   await expect(page.getByText("Ton créneau", { exact: true })).toBeVisible()
   // The other shift is still offered.
-  await expect(page.getByRole("button", { name: /^Sélectionner — Accueil 14h–16h/ })).toBeEnabled()
+  await expect(page.getByRole("button", { name: /^14h–16h \d+\/\d+, Accueil : sélectionner/ })).toBeEnabled()
 })

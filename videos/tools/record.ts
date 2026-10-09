@@ -424,7 +424,7 @@ async function main() {
       await page.screencast.showChapter(manifest.title, { description: "Le parcours bénévole, simplement", duration: 2_300 })
     })
 
-    const shift = page.getByRole("button", { name: /Sélectionner — Accueil 15h–18h/ })
+    const shift = page.getByRole("button", { name: /^15h–18h \d+\/\d+, Accueil : sélectionner/ })
     await scene("discover", async () => {
       await shift.scrollIntoViewIfNeeded()
       await page.waitForTimeout(700)
@@ -1612,7 +1612,7 @@ async function main() {
 
       await scene("age", async (at) => {
         await clearVolunteerSession()
-        const evening = page.getByRole("button", { name: /Buvette.*18h–22h.*18 ans minimum/ })
+        const evening = page.getByRole("button", { name: /18h–22h.*Buvette.*18 ans minimum/ })
         await evening.scrollIntoViewIfNeeded()
         await at(0.32)
         await tap(page, evening)
@@ -1656,7 +1656,7 @@ async function main() {
       await scene("eligible", async (at) => {
         await clearVolunteerSession()
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}&token=demo-invite-julien-security-0001`); await settle(page)
-        const security = page.getByRole("button", { name: /Sélectionner — Sécurité/ }).first()
+        const security = page.getByRole("button", { name: /, Sécurité[^:]* : sélectionner/ }).first()
         await security.waitFor()
         await security.scrollIntoViewIfNeeded()
         await at(0.34)
@@ -1748,7 +1748,7 @@ async function main() {
       })
 
       await scene("states", async (at) => {
-        const full = page.getByRole("button", { name: /Rejoindre la file d'attente/ }).first()
+        const full = page.getByRole("button", { name: /: rejoindre la file d'attente/ }).first()
         await full.scrollIntoViewIfNeeded()
         await full.focus()
         await at(0.24)
@@ -1784,13 +1784,13 @@ async function main() {
       await scene("invitation", async (at) => {
         await page.setViewportSize({ width: 1280, height: 800 })
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}&token=demo-invite-julien-security-0001`); await settle(page)
-        const security = page.getByRole("button", { name: /Sélectionner — Sécurité/ }).first()
+        const security = page.getByRole("button", { name: /, Sécurité[^:]* : sélectionner/ }).first()
         await security.scrollIntoViewIfNeeded()
         await at(0.24)
         await security.focus()
         await at(0.56)
         await tap(page, security)
-        await page.getByRole("button", { name: /Désélectionner — Sécurité/ }).waitFor()
+        await page.getByRole("button", { name: /, Sécurité[^:]* : désélectionner/ }).waitFor()
       })
 
       await scene("result", async (at) => {
@@ -1809,11 +1809,11 @@ async function main() {
 
       await page.screencast.showChapter("Composer son planning", { description: "Ajouter et retirer avant tout envoi", duration: 1_400 })
       await scene("select", async (at) => {
-        const accueil = page.getByRole("button", { name: /Sélectionner — Accueil 15h–18h/ })
+        const accueil = page.getByRole("button", { name: /^15h–18h \d+\/\d+, Accueil : sélectionner/ })
         await accueil.scrollIntoViewIfNeeded()
         await tap(page, accueil)
         await at(0.28)
-        const demontage = page.getByRole("button", { name: /Sélectionner — Démontage 15h–18h/ })
+        const demontage = page.getByRole("button", { name: /^15h–18h \d+\/\d+, Démontage : sélectionner/ })
         await demontage.scrollIntoViewIfNeeded()
         await tap(page, demontage)
         await at(0.55)
@@ -1823,7 +1823,7 @@ async function main() {
       })
 
       await scene("capacity", async (at) => {
-        const available = page.getByRole("button", { name: /Accueil 15h–18h.*2 places libres sur 3/ })
+        const available = page.getByRole("button", { name: /^15h–18h \d+\/\d+, Accueil.*2 places libres sur 3/ })
         await available.scrollIntoViewIfNeeded()
         await available.focus()
         await at(0.34)
@@ -1834,7 +1834,7 @@ async function main() {
       })
 
       await scene("waitlist", async (at) => {
-        const waiting = page.getByRole("button", { name: /Rejoindre la file d'attente — Buvette 10h–14h/ })
+        const waiting = page.getByRole("button", { name: /^10h–14h \d+\/\d+, Buvette : rejoindre la file d'attente/ })
         await waiting.scrollIntoViewIfNeeded()
         await tap(page, waiting)
         await at(0.40)
@@ -1844,7 +1844,7 @@ async function main() {
       })
 
       await scene("approval-reserved", async (at) => {
-        const approval = page.getByRole("button", { name: /Sélectionner — Navette.*sur validation/ }).first()
+        const approval = page.getByRole("button", { name: /, Navette[^:]*sur validation\) : sélectionner/ }).first()
         await approval.scrollIntoViewIfNeeded()
         await approval.focus()
         await at(0.38)
@@ -1856,17 +1856,17 @@ async function main() {
 
       await page.screencast.showChapter("Éviter les incompatibilités", { description: "Chevauchements et engagements existants", duration: 1_400 })
       await scene("conflict", async (at) => {
-        const current = page.getByRole("button", { name: /Désélectionner — Accueil 15h–18h/ })
+        const current = page.getByRole("button", { name: /^15h–18h \d+\/\d+, Accueil : désélectionner/ })
         if (await current.count()) await tap(page, current)
-        const morning = page.getByRole("button", { name: /Sélectionner — Accueil 09h–12h/ })
+        const morning = page.getByRole("button", { name: /^09h–12h \d+\/\d+, Accueil : sélectionner/ })
         await morning.scrollIntoViewIfNeeded()
         await tap(page, morning)
         await at(0.40)
-        const overlapping = page.getByRole("button", { name: /Navette.*08h–12h/ }).first()
+        const overlapping = page.getByRole("button", { name: /08h–12h.*Navette/ }).first()
         await overlapping.scrollIntoViewIfNeeded()
         await overlapping.focus()
         await at(0.72)
-        await tap(page, page.getByRole("button", { name: /Désélectionner — Accueil 09h–12h/ }))
+        await tap(page, page.getByRole("button", { name: /^09h–12h \d+\/\d+, Accueil : désélectionner/ }))
       })
 
       await scene("known", async (at) => {
@@ -1893,7 +1893,7 @@ async function main() {
       })
 
       await scene("result", async (at) => {
-        const extra = page.getByRole("button", { name: /Sélectionner — Montage 07h–09h/ })
+        const extra = page.getByRole("button", { name: /^07h–09h \d+\/\d+, Montage : sélectionner/ })
         await extra.scrollIntoViewIfNeeded()
         await tap(page, extra)
         await page.getByText("Créneaux sélectionnés").scrollIntoViewIfNeeded()
@@ -1910,7 +1910,7 @@ async function main() {
         await page.screencast.showChapter(manifest.title, { description: "Les bonnes informations et un engagement réaliste", duration: 2_300 })
       })
       await scene("selection", async (at) => {
-        for (const name of [/Sélectionner — Accueil 09h–12h/, /Sélectionner — Logistique/, /Sélectionner — Rangement/, /Sélectionner — Buvette 10h–14h/]) {
+        for (const name of [/^09h–12h \d+\/\d+, Accueil : sélectionner/, /, Logistique[^:]* : sélectionner/, /, Rangement[^:]* : sélectionner/, /^10h–14h \d+\/\d+, Buvette : sélectionner/]) {
           const button = page.getByRole("button", { name }).last()
           await tap(page, button)
           await page.waitForTimeout(800)
@@ -1957,7 +1957,7 @@ async function main() {
         await at(0.50)
         await tap(page, page.getByRole("button", { name: "Retour", exact: true }))
         await at(0.70)
-        await tap(page, page.getByRole("button", { name: /Désélectionner — Logistique/ }))
+        await tap(page, page.getByRole("button", { name: /, Logistique[^:]* : désélectionner/ }))
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
       })
       await scene("result", async (at) => {
@@ -2040,7 +2040,7 @@ async function main() {
         await settle(page)
         await page.getByRole("heading", { name: "Fête du village de Montvert", exact: true }).waitFor()
         await at(0.48)
-        await page.getByRole("button", { name: /Sélectionner —/ }).first().scrollIntoViewIfNeeded()
+        await page.getByRole("button", { name: /: sélectionner/ }).first().scrollIntoViewIfNeeded()
       })
     } else if (slug === "volunteer-calendar") {
       const personalUrl = `${baseUrl}/my/demo-volunteer-camille-0001`
@@ -2863,7 +2863,7 @@ async function main() {
         // Spoken "regarder les horaires, choisir un créneau" begins near 6.5s.
         // Keep the actual planning visible until that explanation, not the recap.
         await at(0.27)
-        await tap(page, page.getByRole("button", { name: /Sélectionner — Démontage/ }).first())
+        await tap(page, page.getByRole("button", { name: /, Démontage[^:]* : sélectionner/ }).first())
         await at(0.34)
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         if (await page.getByLabel("Email *", { exact: true }).inputValue() !== "video.membre.3@example.org") throw new Error("Invitation form not prefilled")
@@ -2884,7 +2884,7 @@ async function main() {
         }
         await at(0.27)
         await page.goto(nicolasLink); await settle(page)
-        await tap(page, page.getByRole("button", { name: /Sélectionner — Sécurité/ }).first())
+        await tap(page, page.getByRole("button", { name: /, Sécurité[^:]* : sélectionner/ }).first())
         await at(0.52)
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         if (await page.getByLabel("Email *", { exact: true }).inputValue() !== "video.membre.4@example.org") throw new Error("Reserved invitation identity missing")
@@ -3462,7 +3462,7 @@ async function main() {
       })
       await scene("new-signup", async (at) => {
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settle(page)
-        await tap(page, page.getByRole("button", { name: /Sélectionner — Buvette 10h–14h/ }).last())
+        await tap(page, page.getByRole("button", { name: /^10h–14h \d+\/\d+, Buvette : sélectionner/ }).last())
         await at(0.18)
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         await at(0.24)
@@ -3968,7 +3968,7 @@ async function main() {
       })
 
       await scene("preview-form", async (at) => {
-        await tap(page, page.getByRole("button", { name: /Sélectionner — Accueil 09h–12h/ }))
+        await tap(page, page.getByRole("button", { name: /^09h–12h \d+\/\d+, Accueil : sélectionner/ }))
         await at(0.10)
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         await page.getByRole("heading", { name: "Tes informations" }).waitFor()
@@ -4462,7 +4462,7 @@ async function main() {
         await tap(page, page.getByRole("link", { name: "Prévisualiser comme un bénévole" }))
         await page.waitForURL(/\/preview$/)
         await page.getByText(/Aperçu : la page telle que la verront les bénévoles/).waitFor()
-        const previewShift = page.getByRole("button", { name: /Sélectionner — Accueil/ }).first()
+        const previewShift = page.getByRole("button", { name: /, Accueil[^:]* : sélectionner/ }).first()
         await tap(page, previewShift)
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         await page.getByRole("heading", { name: "Tes informations" }).waitFor()
@@ -4984,7 +4984,7 @@ async function main() {
       await page.goto(onboardingPublicUrl); await settle(page)
       await scene("test", async (at) => {
         await page.getByRole("heading", { name: "Fête du parc" }).waitFor()
-        await tap(page, page.getByRole("button", { name: /Sélectionner — Accueil/ }))
+        await tap(page, page.getByRole("button", { name: /, Accueil[^:]* : sélectionner/ }))
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         await page.getByRole("heading", { name: "Tes informations" }).waitFor()
         await at(0.28)

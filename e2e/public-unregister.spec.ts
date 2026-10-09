@@ -90,7 +90,7 @@ test("withdrawing with the keyboard: trapped dialog, Escape back to the ✕, the
   }))
   expect(focused.body).toBe(false)
   expect(focused.shiftId).toBe(event.shifts.find((s) => s.label === "Accueil")!.id)
-  expect(focused.name).toMatch(/^Sélectionner — Accueil/)
+  expect(focused.name).toMatch(/^\S+ \d+\/\d+, Accueil : sélectionner/)
 })
 
 test("a message left on withdrawal reaches the organizer's email, escaped (#559)", async ({ page }) => {
@@ -143,7 +143,7 @@ test("a failed withdrawal stays in the dialog, says why and removes nothing", as
 
 test("the CTA's press scale is off with « reduce motion »", async ({ page }) => {
   await page.goto(publicUrl())
-  const vestiaire = page.getByRole("button", { name: /^Sélectionner — Vestiaire/ })
+  const vestiaire = page.getByRole("button", { name: /, Vestiaire : sélectionner/ })
   await waitForHydration(vestiaire)
   await vestiaire.click()
   const cta = page.getByRole("button", { name: /^Continuer/ })

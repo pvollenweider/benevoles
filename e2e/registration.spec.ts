@@ -26,7 +26,7 @@ test("volunteer registers for a shift, gets confirmation, org admin gets notifie
   await page.goto("/spectacle-cirque-2026?org=default")
 
   // A click before hydration selects nothing (#592).
-  const select = page.getByRole("button", { name: /Sélectionner.*Billetterie/ }).first()
+  const select = page.getByRole("button", { name: /, Billetterie[^:]* : sélectionner/ }).first()
   await waitForHydration(select)
   await select.click()
   await page.getByRole("button", { name: /^Continuer/ }).click()

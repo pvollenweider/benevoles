@@ -37,7 +37,7 @@ async function main() {
     const openForm = async (role: string, firstName: string, email: string) => {
       await page.goto("http://localhost:43102/atelier-inscription?org=formation-erreurs")
       await page.getByRole("heading", { name: "Inscription robuste — démonstration", exact: true }).waitFor()
-      await page.getByRole("button", { name: new RegExp(`^Sélectionner — ${role}`) }).click()
+      await page.getByRole("button", { name: new RegExp(`, ${role}[^:]* : sélectionner`) }).click()
       await page.getByRole("button", { name: /^Continuer/ }).click()
       await page.getByLabel("Prénom *", { exact: true }).fill(firstName)
       await page.getByLabel("Nom *", { exact: true }).fill("Exemple")

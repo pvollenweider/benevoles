@@ -63,7 +63,7 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
     }
     const form = async (role: string, name: string, email: string, token?: string) => {
       await go(`${publicPath}${token ? `&token=${encodeURIComponent(token)}` : ""}`)
-      await tap(page, page.getByRole("button", { name: new RegExp(`^Sélectionner — ${role}`) }))
+      await tap(page, page.getByRole("button", { name: new RegExp(`, ${role}[^:]* : sélectionner`) }))
       await tap(page, page.getByRole("button", { name: /^Continuer/ }))
       if (!token) {
         await write(page.getByLabel("Prénom *", { exact: true }), name)
@@ -92,7 +92,7 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
     }
     await scene("welcome", async () => { await page.screencast.showChapter(title, { description: "Comprendre l'erreur, reprendre et vérifier le résultat", duration: 2300 }) })
     await scene("form", async () => {
-      await tap(page, page.getByRole("button", { name: /^Sélectionner — Accueil/ }))
+      await tap(page, page.getByRole("button", { name: /, Accueil[^:]* : sélectionner/ }))
       await tap(page, page.getByRole("button", { name: /^Continuer/ }))
       await write(page.getByLabel("Prénom *", { exact: true }), "Alex")
       await write(page.getByLabel("Nom *", { exact: true }), "Exemple")

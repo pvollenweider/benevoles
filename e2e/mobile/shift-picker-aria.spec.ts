@@ -24,7 +24,7 @@ test("a tapped bar is pressed; the selection card and one « Continuer » follow
   await page.setExtraHTTPHeaders({ "x-forwarded-for": randomIp() })
   await page.goto(`/${event.slug}?org=default`)
   const region = page.getByRole("region", { name: "Planning du mardi 1 octobre" })
-  const bar = region.getByRole("button", { name: /Bar 10h–12h/ })
+  const bar = region.getByRole("button", { name: /^10h–12h \d+\/\d+, Bar\b/ })
   await waitForHydration(bar)
 
   await expect(page.getByRole("main")).toMatchAriaSnapshot(`
@@ -32,16 +32,16 @@ test("a tapped bar is pressed; the selection card and one « Continuer » follow
       - heading "mardi 1 octobre" [level=2]
       - paragraph: Fais défiler pour voir toutes les plages
       - region "Planning du mardi 1 octobre":
-        - button /^Sélectionner\\W+Bar 10h–12h/ [pressed=false]
-        - button /^Sélectionner\\W+Accueil 14h–16h/ [pressed=false]
+        - button /^10h–12h \\d+\\/\\d+, Bar : sélectionner/ [pressed=false]
+        - button /^14h–16h \\d+\\/\\d+, Accueil : sélectionner/ [pressed=false]
   `)
 
   await bar.tap()
   await expect(page.getByRole("main")).toMatchAriaSnapshot(`
     - main:
       - region "Planning du mardi 1 octobre":
-        - button /^Désélectionner\\W+Bar 10h–12h \\(\\d+ places? libres? sur 3\\)$/ [pressed]
-        - button /^Sélectionner\\W+Accueil 14h–16h/ [pressed=false]
+        - button /^10h–12h \\d+\\/3, Bar : désélectionner \\(\\d+ places? libres? sur 3\\)$/ [pressed]
+        - button /^14h–16h \\d+\\/\\d+, Accueil : sélectionner/ [pressed=false]
       - button "Retirer Bar de la sélection"
       - button "Continuer (1 nouveau créneau)"
   `)

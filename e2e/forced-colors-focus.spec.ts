@@ -181,10 +181,10 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
       }
       await shot(page, timeline, name("event", "timeline", "idle"))
       failures.push(...(await sweep(page, "event page", { min: 5 })).failures)
-      await page.getByRole("button", { name: /Sélectionner.*Bar/ }).first().click()
+      await page.getByRole("button", { name: /, Bar[^:]* : sélectionner/ }).first().click()
       await expect(page.getByRole("button", { name: /^Continuer/ }).first()).toBeVisible()
       await page.goto(publicUrl()) // a fresh start of the Tab order, the selection is not kept
-      await page.getByRole("button", { name: /Sélectionner.*Accueil/ }).first().click()
+      await page.getByRole("button", { name: /, Accueil[^:]* : sélectionner/ }).first().click()
       failures.push(...(await sweep(page, "event page with a selection", { min: 6 })).failures)
       failures.push(...(await checkSelectedStates(page, "event page")))
       await shot(page, timeline, name("event", "timeline", "selected"))
@@ -194,7 +194,7 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
     test("public sign-up form and its error state", async ({ page }) => {
       const failures: string[] = []
       await page.goto(publicUrl())
-      await page.getByRole("button", { name: /Sélectionner.*Accueil/ }).first().click()
+      await page.getByRole("button", { name: /, Accueil[^:]* : sélectionner/ }).first().click()
       await page.getByRole("button", { name: /^Continuer/ }).first().click()
       await expect(page.getByLabel("Prénom *", { exact: true })).toBeVisible()
       failures.push(...(await sweep(page, "sign-up form", { min: 8 })).failures)
@@ -224,7 +224,7 @@ for (const scheme of ["light", "dark"] as Scheme[]) {
     test("public sign-up: aria-disabled submit while sending", async ({ page }) => {
       const failures: string[] = []
       await page.goto(publicUrl())
-      await page.getByRole("button", { name: /Sélectionner.*Accueil/ }).first().click()
+      await page.getByRole("button", { name: /, Accueil[^:]* : sélectionner/ }).first().click()
       await page.getByRole("button", { name: /^Continuer/ }).first().click()
       await page.getByLabel("Prénom *", { exact: true }).fill("E2E")
       await page.getByLabel("Nom *", { exact: true }).fill("Envoi")

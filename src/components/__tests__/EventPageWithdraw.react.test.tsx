@@ -200,7 +200,7 @@ describe("EventPageClient — withdrawing a held shift", () => {
     expect(accueilX()).toHaveFocus()
     await waitFor(() => expect(notice()).toHaveTextContent("Créneau annulé : Bar, samedi 6 juillet, de 10h à 12h."))
     // The bar is offered again.
-    expect(document.querySelector('[data-shift-id="s-bar"]')).toHaveAccessibleName(/^Sélectionner — Bar/)
+    expect(document.querySelector('[data-shift-id="s-bar"]')).toHaveAccessibleName(/, Bar : sélectionner/)
   })
 
   it("on success with no row left: focus on the shift's bar in the schedule", async () => {
@@ -252,7 +252,7 @@ describe("EventPageClient — charter dialog", () => {
   async function openCharter() {
     stubFetch(() => Promise.resolve(json({})))
     render(<EventPageClient orgSlug="org" eventSlug="fete" />)
-    fireEvent.click((await screen.findAllByRole("button", { name: /^Sélectionner — Bar/ }))[0])
+    fireEvent.click((await screen.findAllByRole("button", { name: /, Bar : sélectionner/ }))[0])
     fireEvent.click(screen.getAllByRole("button", { name: /^Continuer/ })[0])
     const link = screen.getByRole("button", { name: "convention des bénévoles" })
     act(() => link.focus())
@@ -280,7 +280,7 @@ describe("EventPageClient — charter dialog", () => {
   it("a tap as WebKit does it (focus left on <main>) still gives focus back to its link (#534)", async () => {
     stubFetch(() => Promise.resolve(json({})))
     render(<EventPageClient orgSlug="org" eventSlug="fete" />)
-    fireEvent.click((await screen.findAllByRole("button", { name: /^Sélectionner — Bar/ }))[0])
+    fireEvent.click((await screen.findAllByRole("button", { name: /, Bar : sélectionner/ }))[0])
     fireEvent.click(screen.getAllByRole("button", { name: /^Continuer/ })[0])
     const link = screen.getByRole("button", { name: "convention des bénévoles" })
     const main = document.querySelector("main")!
