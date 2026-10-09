@@ -28,6 +28,11 @@ export function adminShiftUrl(eventId: string, shiftId: string): string {
   return `${BASE_URL}/admin/events/${eventId}/registrations?shift=${shiftId}`
 }
 
+/** The « Annulations récentes » section of an event's registrations page (#809). */
+export function adminRecentCancellationsUrl(eventId: string): string {
+  return `${BASE_URL}/admin/events/${eventId}/registrations#annulations`
+}
+
 export function adminStaffingUrl(eventId: string): string {
   return `${BASE_URL}/admin/events/${eventId}/staffing`
 }

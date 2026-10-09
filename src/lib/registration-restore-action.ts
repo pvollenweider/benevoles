@@ -5,9 +5,10 @@ import type { OrgScopedPrisma } from "./prisma-org"
 import { logEvent, type LogActor } from "./event-log"
 import { registrationToken } from "./token-vault"
 import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "./notifications/outbox"
-import { OCCUPYING_STATUSES, isUniqueViolation, lockShifts } from "./registration-capacity"
+import { LIVE_STATUSES, OCCUPYING_STATUSES, isUniqueViolation, lockShifts } from "./registration-capacity"
 import { cancelledFrom, planRestore, type RestoredStatus } from "./registration-restore"
 import { localDateTimeToUtc, orgTimeZone } from "./time-zone"
+import { generateToken } from "./utils"
 
 /**
  * « Rétablir » (#809): puts a cancelled place or request back, as it was. Server only. The
@@ -21,7 +22,16 @@ export type RestoreResult =
 
 export const ALREADY_LIVE = "Cette personne a déjà une inscription en cours sur ce créneau."
 
-export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, id: string, now: Date = new Date()): Promise<RestoreResult> {
+export type RestoreOptions = {
+  /**
+   * The link that cancelled was used by someone else: every live registration of the person on
+   * the event gets a new personal link, so the old one opens nothing any more. Off by default:
+   * most restores fix a mistake, and a new link breaks the ones in earlier emails and calendars.
+   */
+  newLink?: boolean
+}
+
+export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, id: string, now: Date = new Date(), options: RestoreOptions = {}): Promise<RestoreResult> {
   const reg = await db.registration.findFirst({
     where: { id },
     include: {
@@ -63,6 +73,17 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
 
       const { count } = await tx.registration.updateMany({ where: { id, status: "cancelled" }, data: { status: plan.status } })
       if (count === 0) return { ok: false as const, error: "Cette inscription n'est pas annulée." }
+      // New links for every live registration of the person on the event: the personal page
+      // opens all of them from any one link. Clear tokens only in memory, for the email.
+      let editToken = registrationToken.reveal(reg)
+      if (options.newLink) {
+        const live = await tx.registration.findMany({ where: { volunteerId: reg.volunteerId, eventId: reg.eventId, status: { in: [...LIVE_STATUSES] } }, select: { id: true } })
+        for (const row of live) {
+          const token = generateToken()
+          await tx.registration.update({ where: { id: row.id }, data: registrationToken.data(token) })
+          if (row.id === id) editToken = token
+        }
+      }
       // A place taken back can fill the shift: same rule as everywhere a place is added.
       if (plan.status === "active" && shift?.status === "open" && occupied + 1 >= (shift?.capacity ?? 0)) {
         await tx.shift.updateMany({ where: { id: reg.shiftId, status: "open" }, data: { status: "full" } })
@@ -89,7 +110,8 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
               startTime: reg.shift.startTime,
               endTime: reg.shift.endTime,
             },
-            editToken: registrationToken.reveal(reg),
+            editToken,
+            newLink: !!options.newLink,
           },
         })
       }
@@ -108,7 +130,11 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
     action: "registration.restored",
     entityType: "Registration",
     entityId: id,
-    changes: { status: { from: "cancelled", to: outcome.status }, shiftId: { from: reg.shiftId, to: reg.shiftId } },
+    changes: {
+      status: { from: "cancelled", to: outcome.status },
+      shiftId: { from: reg.shiftId, to: reg.shiftId },
+      ...(options.newLink ? { personalLink: { from: "(ancien)", to: "(renouvelé)" } } : {}),
+    },
   })
   deliverAfterResponse(outcome.outboxIds)
   return { ok: true, status: outcome.status }

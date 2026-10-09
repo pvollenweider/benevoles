@@ -337,3 +337,19 @@ export function removeLogoRecap(): ActionRecap {
     danger: true,
   }
 }
+
+/** « Rétablir » a cancelled place or request (#809). */
+export function restoreRecap(i: { name: string; shift: string; hasEmail: boolean; previousStatus: "active" | "requested" }): ActionRecap {
+  return {
+    title: `Rétablir l'inscription de ${i.name} ?`,
+    lines: [
+      i.previousStatus === "requested"
+        ? `La demande de ${i.name} sur « ${i.shift} » revient, en attente de votre réponse.`
+        : `${i.name} retrouve sa place sur « ${i.shift} ».`,
+      i.hasEmail ? "Un email le lui dit, avec son lien personnel." : "Aucun email : cette personne n'a pas d'adresse.",
+      LOGGED,
+    ],
+    confirmLabel: "Rétablir",
+    danger: false,
+  }
+}

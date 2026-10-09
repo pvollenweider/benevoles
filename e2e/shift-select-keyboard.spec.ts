@@ -94,12 +94,13 @@ test("the shift filter is named and works with the keyboard", async ({ page }) =
   await expect(filter).toContainText("Bar")
   await expect(page.getByText("Aucun résultat.")).toBeVisible()
   // The region holds the count alone, nothing next to it.
-  await expect(page.getByRole("status")).toHaveText("0 inscription affichée")
+  // Scoped: the page has a second status, the « Annulations récentes » one (#809).
+  await expect(page.getByRole("status").filter({ hasText: "affichée" })).toHaveText("0 inscription affichée")
 
   await page.keyboard.press("Home")
   await page.keyboard.press("Enter")
   await expect(filter).toContainText("Tous les créneaux")
-  await expect(page.getByRole("status")).toHaveText("1 inscription affichée")
+  await expect(page.getByRole("status").filter({ hasText: "affichée" })).toHaveText("1 inscription affichée")
 })
 
 /** The open list fits the 320 px screen: no page scroll sideways, no option cut, axe clean. */

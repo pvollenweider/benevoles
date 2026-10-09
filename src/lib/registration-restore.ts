@@ -48,3 +48,71 @@ export function cancelledFrom(changes: unknown): string | null {
   const from = (changes as { status?: { from?: unknown } } | null)?.status?.from
   return typeof from === "string" ? from : null
 }
+
+/** A cancelled registration as the page reads it, before the rules are applied. */
+export type CancelledRegistration = {
+  id: string
+  volunteerName: string
+  hasEmail: boolean
+  /** The shift, spoken: « Bar, samedi 4 juillet, de 10h à 12h ». */
+  shift: string
+  shiftStatus: string
+  shiftStart: Date
+  capacity: number
+  occupied: number
+  /** The person signed up again on this shift since: a restore would make two. */
+  liveAgainOnShift: boolean
+  /** The latest « registration.cancelled » entry: who, when, from what. */
+  cancellation: { actorType: string; at: Date; changes: unknown } | null
+}
+
+export type RecentCancellation = {
+  id: string
+  volunteerName: string
+  hasEmail: boolean
+  shift: string
+  previousStatus: RestoredStatus
+  /** « par la personne » or « par l'organisation », with the date. */
+  cancelled: string
+  /** Null when « Rétablir » can be offered; otherwise why not, shown in its place. */
+  blocked: string | null
+}
+
+const BY: Record<string, string> = { volunteer: "par la personne", admin: "par l'organisation" }
+
+/**
+ * The « Annulations récentes » list (#809): cancelled places and requests on shifts that haven't
+ * started, the latest cancellation first. What could never be restored (a waitlist entry, a
+ * started or cancelled shift, a row cancelled before the log existed) is left out; what can't be
+ * restored right now (full, signed up again) stays, with the reason.
+ */
+export function recentCancellations(rows: CancelledRegistration[], now: Date, timeZone: string): RecentCancellation[] {
+  const out: { at: number; row: RecentCancellation }[] = []
+  for (const r of rows) {
+    if (!r.cancellation) continue
+    const plan = planRestore({
+      status: "cancelled",
+      previousStatus: cancelledFrom(r.cancellation.changes),
+      shiftStatus: r.shiftStatus,
+      shiftStart: r.shiftStart,
+      capacity: r.capacity,
+      occupied: r.occupied,
+      now,
+    })
+    if (!plan.ok && plan.reason !== "full") continue
+    const day = r.cancellation.at.toLocaleDateString("fr-FR", { timeZone, day: "numeric", month: "long" })
+    const time = r.cancellation.at.toLocaleTimeString("fr-FR", { timeZone, hour: "2-digit", minute: "2-digit" })
+    out.push({ at: r.cancellation.at.getTime(), row: {
+      id: r.id,
+      volunteerName: r.volunteerName,
+      hasEmail: r.hasEmail,
+      shift: r.shift,
+      previousStatus: cancelledFrom(r.cancellation.changes) as RestoredStatus,
+      cancelled: `Annulée ${BY[r.cancellation.actorType] ?? ""} le ${day} à ${time}`.replace("  ", " "),
+      blocked: r.liveAgainOnShift
+        ? "Cette personne a une autre inscription en cours sur ce créneau."
+        : plan.ok ? null : "Complet : la place a été reprise.",
+    } })
+  }
+  return out.sort((a, b) => b.at - a.at).map((e) => e.row)
+}
